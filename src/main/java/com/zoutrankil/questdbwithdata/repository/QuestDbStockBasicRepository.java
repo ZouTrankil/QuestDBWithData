@@ -25,8 +25,8 @@ import java.util.List;
 /** Writes through QWP and reads through PGWire/JDBC. */
 @Repository
 public class QuestDbStockBasicRepository implements StockBasicLatestRepository {
-    public static final String TABLE = QuestDbSchemaInitializer.TABLE;
-    public static final String LATEST_VIEW = QuestDbSchemaInitializer.LATEST_VIEW;
+    public static final String TABLE = "java_tushare_stock_basic_qwp_test";
+    public static final String LATEST_VIEW = "java_tushare_stock_basic_latest_qwp_test";
     private static final DateTimeFormatter TUSHARE_DATE_FORMAT = DateTimeFormatter.BASIC_ISO_DATE;
     private static final String COUNT_SNAPSHOT_SQL =
             "SELECT count() FROM " + TABLE + " WHERE snapshot_ts = ?";
@@ -39,17 +39,14 @@ public class QuestDbStockBasicRepository implements StockBasicLatestRepository {
     private final JdbcTemplate jdbcTemplate;
     private final QuestDB questDB;
     private final QuestDbProperties properties;
-    private final QuestDbSchemaInitializer schemaInitializer;
 
     public QuestDbStockBasicRepository(
             JdbcTemplate jdbcTemplate,
             @Lazy QuestDB questDB,
-            QuestDbProperties properties,
-            QuestDbSchemaInitializer schemaInitializer) {
+            QuestDbProperties properties) {
         this.jdbcTemplate = jdbcTemplate;
         this.questDB = questDB;
         this.properties = properties;
-        this.schemaInitializer = schemaInitializer;
     }
 
     public StockBasicSyncReport storeAndVerify(List<StockBasic> stocks) throws InterruptedException {
@@ -57,8 +54,6 @@ public class QuestDbStockBasicRepository implements StockBasicLatestRepository {
                 .atStartOfDay()
                 .toInstant(ZoneOffset.UTC);
 
-        // Version-controlled DDL creates the table and dependent views before first use.
-        schemaInitializer.initialize();
         try (Sender sender = questDB.borrowSender()) {
             for (StockBasic stock : stocks) {
                 StockBasicSnapshot snapshotRow = new StockBasicSnapshot(snapshot, stock);
@@ -83,12 +78,7 @@ public class QuestDbStockBasicRepository implements StockBasicLatestRepository {
 
     @Override
     public List<StockBasicLatest> findLatest() {
-        schemaInitializer.initialize();
         return jdbcTemplate.query(SELECT_LATEST_SQL, this::mapSnapshotRows);
-    }
-
-    public void initializeSchema() {
-        schemaInitializer.initialize();
     }
 
     private List<StockBasicLatest> mapSnapshotRows(ResultSet resultSet) throws SQLException {
@@ -103,7 +93,8 @@ public class QuestDbStockBasicRepository implements StockBasicLatestRepository {
                     resultSet.getString("name"),
                     resultSet.getString("area"),
                     resultSet.getString("industry"),
-                    listDate == null ? null : LocalDate.parse(listDate, TUSHARE_DATE_FORMAT)));
+                    listDate == null || listDate.isBlank()
+                            ? null : LocalDate.parse(listDate, TUSHARE_DATE_FORMAT)));
         }
         return List.copyOf(rows);
     }

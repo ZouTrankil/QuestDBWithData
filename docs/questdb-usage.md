@@ -8,8 +8,11 @@
 | --- | --- | --- | ---: | --- |
 | 高吞吐写入 | `org.questdb:questdb-client` | QWP / WebSocket | 9000 | 同步股票快照行 |
 | SQL、DDL、查询 | Spring `JdbcTemplate` + HikariCP | PGWire | 8812 | 建表、探活、读取和写后可见性确认 |
+| 兼容性写入（当前不用） | ILP/TCP 客户端 | ILP over TCP | 9009 | 仅在复用现有 ILP/Telegraf 写入端时使用 |
 
 写入使用 QWP 原生 Java `Sender`；SQL 读取使用 `JdbcTemplate`。JDBC 在本项目中负责表结构和查询，不用于逐行写入。`QuestDB` 客户端作为 Spring 单例 Bean 在应用关闭时释放；PGWire 连接由 HikariCP 复用。
+
+当前 Java 客户端连接 `ws::addr=...:9000` 使用 QWP，因此**本项目不需要 `QUESTDB_ILP_PORT`**。9009 是 QuestDB ILP/TCP listener 的默认端口；本项目没有 ILP sender，也没有绑定/读取这个环境变量。QuestDB 官方将 ILP 定位为兼容协议，新 Java 接入建议用 QWP。只有要接现有 ILP/TCP 客户端时，才需要配置并开放 TCP 9009；ILP/HTTP 使用 HTTP listener 的 9000 端口，不是 9009。`QUESTDB_ILP_PORT` 是应用侧自定义名称，不会因设置环境变量就自动改变 QuestDB 服务端监听端口。
 
 ## 配置
 
@@ -33,7 +36,7 @@ app:
 
 ## 写入约定
 
-表和 view 的版本化变更可交给 Flyway，接入方式见 [Flyway schema 管理](flyway-schema-management.md)。当前项目仍使用初始化器；正式接管时应统一迁移入口，避免初始化器与 Flyway 同时管理 DDL。
+表和 view 由 Flyway 版本化 SQL 管理，执行方式见 [Flyway schema 管理](flyway-schema-management.md)。同步和 latest 查询由 service 先迁移再执行，repository 不再运行建表 DDL。
 
 1. 通过 QWP 客户端批量构造行，并在批次结束时关闭 `Sender` 或显式 `flush()`。`Sender` 不可跨线程共享；每个并发生产线程独立借用一个 sender。
 2. 时间列使用明确的 `Instant`，避免依赖隐式时区。本项目启动时将 JVM 默认时区设为 UTC；快照按 UTC 当日零点生成，并作为指定时间列 `snapshot_ts` 写入。
@@ -87,7 +90,30 @@ LIMIT ?;
 
 `LATEST ON`、`SAMPLE BY` 等 QuestDB SQL 是数据库特有语法，应封装在 repository 层并通过真实 QuestDB 版本验证。
 
-## 参考
+## 规范覆盖与当前限制
+
+| 项目 | 当前状态 |
+| --- | --- |
+| YAML、客户端生命周期、JDBC 连接池 | 已实现 |
+| QWP 写入 / JDBC 参数化查询 | 已实现 |
+| UTC 时间点、LocalDate 日期、显式 mapper | 已实现 |
+| WAL、快照组合去重键 | V1 SQL 定义；真实实例尚待验证 |
+| table/view 版本化管理 | Flyway 已接入；V1/V2 尚未在真实实例执行 |
+| 写后轮询 | 已实现行数核验，有下面列出的边界 |
+| Pydantic → Schema → Java | 已有约定，尚未接入真实 Pydantic 源模型或生成器 |
+
+读写规范还应遵循以下规则，当前代码未覆盖的部分不能当作已完成的生产保证：
+
+- 行数达到预期只能检查数量。同日旧快照行数相同的情况下，轮询可能在新值应用前成功。严格核验应比较本批业务键及字段值，或设计批次标识并在该标识下核验；不能用整表或日期内总数证明重写完成。
+- 当前快照由执行当天 UTC 日期决定；跨日重试会形成另一份快照。历史回补和跨日重放需要显式传入并固定业务快照时间，当前 CLI 尚不支持。
+- 入站业务 key 应非空、单批唯一，非法日期应拒绝，缺失日期应映射为 null。当前 mapper 已校验日期格式，但 key 非空/单批去重检查还未统一落地。
+- 轮询 deadline 控制再次查询的时机，不保证一个阻塞 JDBC 调用一定在 deadline 内返回。正式部署还要统一连接获取、socket、SQL 查询超时，细分可重试异常，并接入 QWP 异步错误监控。
+- latest 命令当前全量载入结果；大表查询应要求时间范围、限制条数或分批读取。
+- 上市状态删除、空批次和同一天源集合缩小需要明确业务语义；UPSERT 不会自动删除旧快照中未再次出现的代码。
+
+定义新模型时按 [新增模型与读写流程](model-development-workflow.md) 填写字段契约，并把对应 SQL 纳入 Flyway。
+
+## 官方参考
 
 - [QuestDB Java 客户端与 QWP](https://questdb.com/docs/connect/clients/java/)
 - [QuestDB Java 客户端写后读说明](https://questdb.com/docs/connect/clients/java/#read-after-write)

@@ -21,16 +21,19 @@ public class StockBasicSyncService {
     private final StockBasicMapper stockBasicMapper;
     private final QuestDbStockBasicRepository questDbRepository;
     private final StockBasicLatestRepository stockBasicLatestRepository;
+    private final SchemaMigrationService schemaMigrationService;
 
     public StockBasicSyncService(
             TushareClient tushareClient,
             StockBasicMapper stockBasicMapper,
             QuestDbStockBasicRepository questDbRepository,
-            StockBasicLatestRepository stockBasicLatestRepository) {
+            StockBasicLatestRepository stockBasicLatestRepository,
+            SchemaMigrationService schemaMigrationService) {
         this.tushareClient = tushareClient;
         this.stockBasicMapper = stockBasicMapper;
         this.questDbRepository = questDbRepository;
         this.stockBasicLatestRepository = stockBasicLatestRepository;
+        this.schemaMigrationService = schemaMigrationService;
     }
 
     public int syncToCsv(Path output) throws IOException {
@@ -41,6 +44,7 @@ public class StockBasicSyncService {
 
     public StockBasicSyncReport syncToQuestDb()
             throws IOException, InterruptedException {
+        schemaMigrationService.migrate();
         List<StockBasic> stocks = fetchDomainStocks();
         StockBasicSyncReport result =
                 questDbRepository.storeAndVerify(stocks);
@@ -56,10 +60,11 @@ public class StockBasicSyncService {
     }
 
     public void initializeQuestDbSchema() {
-        questDbRepository.initializeSchema();
+        schemaMigrationService.migrate();
     }
 
     public List<StockBasicLatest> loadLatestStocks() {
+        schemaMigrationService.migrate();
         return stockBasicLatestRepository.findLatest();
     }
 

@@ -1,0 +1,1677 @@
+{
+  "objectType": "VIEW",
+  "sourceSnapshot": "2026-09-28",
+  "serverBuild": "QuestDB 10.0.1",
+  "objects": [
+    {
+      "name": "v_backtest_daily",
+      "objectType": "VIEW",
+      "columns": [
+        {
+          "name": "trade_date",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ts_code",
+          "questdbType": "SYMBOL",
+          "javaType": "String",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "open",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "high",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "low",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "close",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "vol",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "amount",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "adj_factor",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "up_limit",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "down_limit",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "is_suspended",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "is_st",
+          "questdbType": "INT",
+          "javaType": "Integer",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "V",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "N/A"
+      },
+      "domainClass": "BacktestDailyView"
+    },
+    {
+      "name": "v_etf_market_overview_daily",
+      "objectType": "VIEW",
+      "columns": [
+        {
+          "name": "trade_date",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": true,
+          "upsertKey": false
+        },
+        {
+          "name": "etf_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_share",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_size_yi",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "V",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "N/A"
+      },
+      "domainClass": "EtfMarketOverviewDailyView"
+    },
+    {
+      "name": "v_macro_core_monthly",
+      "objectType": "VIEW",
+      "columns": [
+        {
+          "name": "month",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": true,
+          "upsertKey": false
+        },
+        {
+          "name": "cpi_yoy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ppi_yoy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "pmi_mfg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "gdp_yoy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "m2_yoy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "social_financing_stock",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "new_rmb_loan",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "social_financing_yoy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "V",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "N/A"
+      },
+      "domainClass": "MacroCoreMonthlyView"
+    },
+    {
+      "name": "v_macro_liquidity_credit_monthly",
+      "objectType": "VIEW",
+      "columns": [
+        {
+          "name": "month",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": true,
+          "upsertKey": false
+        },
+        {
+          "name": "rmb_index_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "rmb_index_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_on_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_1w_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_3m_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_1y_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "lpr_1y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "lpr_5y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_slope_1w_3m_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_slope_3m_1y_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "gov_3y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "gov_5y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "gov_7y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "gov_10y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_mtn_3y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_mtn_5y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_mtn_7y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_mtn_10y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_bank_3y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_bank_5y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_bank_7y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_bank_10y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "credit_spread_aaa_gov_3y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "credit_spread_aaa_gov_5y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "credit_spread_aaa_gov_7y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "credit_spread_aaa_gov_10y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_aaa_bank_gov_3y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_aaa_bank_gov_5y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_aaa_bank_gov_7y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_aaa_bank_gov_10y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_bank_mtn_3y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_bank_mtn_5y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_bank_mtn_7y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_bank_mtn_10y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "term_spread",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "V",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "N/A"
+      },
+      "domainClass": "MacroLiquidityCreditMonthlyView"
+    },
+    {
+      "name": "v_market_breadth_daily",
+      "objectType": "VIEW",
+      "columns": [
+        {
+          "name": "trade_date",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": true,
+          "upsertKey": false
+        },
+        {
+          "name": "stock_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "up_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "down_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "flat_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_pct_change",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_amount_yi",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "V",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "N/A"
+      },
+      "domainClass": "MarketBreadthDailyView"
+    },
+    {
+      "name": "v_market_breadth_monthly",
+      "objectType": "VIEW",
+      "columns": [
+        {
+          "name": "month",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": true,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_up_count",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_down_count",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_flat_count",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_up_down_ratio",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_limit_up_count",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_limit_down_count",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "month_total_amount",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_turnover_rate",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "median_turnover_rate",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_pct_positive_ratio",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_pct_negative_ratio",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "tradable_stock_count_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "V",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "N/A"
+      },
+      "domainClass": "MarketBreadthMonthlyView"
+    },
+    {
+      "name": "v_regime_features_monitor_daily",
+      "objectType": "VIEW",
+      "columns": [
+        {
+          "name": "trade_date",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": true,
+          "upsertKey": false
+        },
+        {
+          "name": "month",
+          "questdbType": "SYMBOL",
+          "javaType": "String",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "hs300_ret_mtd",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "zz500_ret_mtd",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_ret_mtd",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "cs1000_ret_mtd",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "small_large_ret_mtd",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "growth_value_ret_mtd",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_up_down_ratio_5d",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_limit_up_count_5d",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_limit_down_count_5d",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_turnover_rate_5d",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_pct_positive_ratio_5d",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_pct_negative_ratio_5d",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "northbound_net_buy_mtd",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "margin_balance_change_mtd",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_pe_ttm_percentile_latest",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_pb_percentile_latest",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "erp_latest",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "data_quality_flag",
+          "questdbType": "SYMBOL",
+          "javaType": "String",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "updated_at",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "V",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "N/A"
+      },
+      "domainClass": "RegimeFeaturesMonitorDailyView"
+    },
+    {
+      "name": "v_regime_features_monthly",
+      "objectType": "VIEW",
+      "columns": [
+        {
+          "name": "month",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": true,
+          "upsertKey": false
+        },
+        {
+          "name": "hs300_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "zz500_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "cs1000_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "small_large_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "mid_large_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "growth_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "value_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "growth_value_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "energy_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "materials_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "industrials_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "consumer_discretionary_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "consumer_staples_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "healthcare_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "financials_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "it_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "telecom_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "utilities_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "energy_vs_all_a_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "materials_vs_all_a_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "industrials_vs_all_a_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "consumer_discretionary_vs_all_a_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "consumer_staples_vs_all_a_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "healthcare_vs_all_a_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "financials_vs_all_a_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "it_vs_all_a_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "telecom_vs_all_a_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "utilities_vs_all_a_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_up_count",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_down_count",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_flat_count",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_up_down_ratio",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_limit_up_count",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_limit_down_count",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "month_total_amount",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_turnover_rate",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "median_turnover_rate",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_pct_positive_ratio",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_pct_negative_ratio",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "tradable_stock_count_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "usdcnh_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "usdcnh_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_on_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_1w_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_3m_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_1y_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "lpr_1y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "lpr_5y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_slope_1w_3m_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "shibor_slope_3m_1y_month_avg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "gov_3y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "gov_5y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "gov_7y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "gov_10y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_mtn_3y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_mtn_5y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_mtn_7y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_mtn_10y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_bank_3y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_bank_5y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_bank_7y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "aaa_bank_10y_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "credit_spread_aaa_gov_3y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "credit_spread_aaa_gov_5y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "credit_spread_aaa_gov_7y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "credit_spread_aaa_gov_10y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_aaa_bank_gov_3y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_aaa_bank_gov_5y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_aaa_bank_gov_7y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_aaa_bank_gov_10y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_bank_mtn_3y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_bank_mtn_5y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_bank_mtn_7y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "spread_bank_mtn_10y",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "cpi_yoy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ppi_yoy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "pmi_mfg",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "gdp_yoy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "m2_yoy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "social_financing_stock",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "new_rmb_loan",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "rmb_index_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "rmb_index_ret_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "social_financing_yoy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "term_spread",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "northbound_net_buy_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "margin_balance_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "margin_balance_change_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_pe_ttm_median",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_pb_median",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_pe_ttm_percentile",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_pb_percentile",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "erp",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "V",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "N/A"
+      },
+      "domainClass": "RegimeFeaturesMonthlyView"
+    },
+    {
+      "name": "v_regime_market_monthly",
+      "objectType": "VIEW",
+      "columns": [
+        {
+          "name": "month",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": true,
+          "upsertKey": false
+        },
+        {
+          "name": "northbound_net_buy_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "margin_balance_month_end",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "margin_balance_change_1m",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_pe_ttm_median",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_pb_median",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_pe_ttm_percentile",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "all_a_pb_percentile",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "erp",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "V",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "N/A"
+      },
+      "domainClass": "RegimeMarketMonthlyView"
+    },
+    {
+      "name": "v_retail_sentiment_daily",
+      "objectType": "VIEW",
+      "columns": [
+        {
+          "name": "trade_date",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": true,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_retail_ratio",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_retail_entropy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_retail_amount_yi",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_retail_net_inflow_yi",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_rel_aggro",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_q1",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_q3",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_wash_trade_ratio",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_spoof_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_manipulation_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_mfi_score",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_main_net_yi",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "V",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "N/A"
+      },
+      "domainClass": "RetailSentimentDailyView"
+    }
+  ]
+}

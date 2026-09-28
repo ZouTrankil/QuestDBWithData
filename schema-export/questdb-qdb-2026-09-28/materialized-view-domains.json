@@ -1,0 +1,173 @@
+{
+  "objectType": "MATERIALIZED_VIEW",
+  "sourceSnapshot": "2026-09-28",
+  "serverBuild": "QuestDB 10.0.1",
+  "objects": [
+    {
+      "name": "mv_market_breadth_daily_v1",
+      "objectType": "MATERIALIZED_VIEW",
+      "columns": [
+        {
+          "name": "trade_date",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": true,
+          "upsertKey": false
+        },
+        {
+          "name": "stock_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "up_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "down_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "flat_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_pct_change",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_amount_yi",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "M",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "MONTH"
+      },
+      "domainClass": "MarketBreadthDailyV1MaterializedView"
+    },
+    {
+      "name": "mv_retail_sentiment_daily_v1",
+      "objectType": "MATERIALIZED_VIEW",
+      "columns": [
+        {
+          "name": "trade_date",
+          "questdbType": "TIMESTAMP",
+          "javaType": "Instant",
+          "designatedTimestamp": true,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_retail_ratio",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_retail_entropy",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_retail_amount_yi",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_retail_net_inflow_yi",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_rel_aggro",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_q1",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_q3",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_wash_trade_ratio",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_spoof_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_manipulation_count",
+          "questdbType": "LONG",
+          "javaType": "Long",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "avg_mfi_score",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_main_net_yi",
+          "questdbType": "DOUBLE",
+          "javaType": "Double",
+          "designatedTimestamp": false,
+          "upsertKey": false
+        }
+      ],
+      "storage": {
+        "tableType": "M",
+        "walEnabled": true,
+        "dedup": false,
+        "partitionBy": "MONTH"
+      },
+      "domainClass": "RetailSentimentDailyV1MaterializedView"
+    }
+  ]
+}

@@ -89,16 +89,15 @@ WHERE view_name = 'trades_ohlc_1m';
 
 ### 在本项目 Java 代码中自动创建和使用
 
-本项目把 DDL 放在版本控制代码 [`QuestDbSchemaInitializer`](../src/main/java/com/zoutrankil/questdbwithdata/repository/QuestDbSchemaInitializer.java) 中，由 `JdbcTemplate` 执行。`JdbcTemplate` 使用 Spring Boot 自动配置的 `DataSource`；本项目 `spring.datasource.hikari` 配置的 HikariCP 是 PGWire/JDBC 的连接池。QWP `Sender` 单独负责批量写入，不经过 JDBC/Hikari。初始化先建表，再创建依赖它的普通 view。
+本项目已将建表与 latest view DDL 移至 `src/main/resources/db/migration/questdb/`，由 Spring 管理的 Flyway 通过现有 PGWire DataSource 执行。HikariCP 管理 JDBC 连接，QWP Sender 单独负责批量数据写入。
 
-- `./gradlew run --args='create-questdb-schema'` 显式初始化 schema。
-- `sync-stock-basic-questdb` 首次写入前也会自动执行相同初始化，不需要先运行建 schema 命令。
-- `./gradlew run --args='show-stock-basic-latest'` 查询 `java_tushare_stock_basic_latest_qwp_test` view，并映射到数据库无关的 [`StockBasicLatest`](../src/main/java/com/zoutrankil/questdbwithdata/domain/StockBasicLatest.java)。读取契约定义在 [`StockBasicLatestRepository`](../src/main/java/com/zoutrankil/questdbwithdata/repository/StockBasicLatestRepository.java)，QuestDB 实现负责 QuestDB SQL 和结果映射。
-- `CREATE ... IF NOT EXISTS` 是初始化保障，不是迁移系统：更改已存在 view 的 SQL 后它不会覆盖旧定义。需要版本化 DDL migration；变更前用 `SHOW CREATE VIEW ...` 核对，普通 view 用 `CREATE OR REPLACE VIEW` 或 `ALTER VIEW`。生产部署按顺序先建 base table 再建依赖视图。
+- `./gradlew run --args='migrate-questdb-schema'` 显式迁移；`create-questdb-schema` 保留为别名。
+- 数据库同步与 latest 查询会先迁移，成功后再读写；CSV 和 SELECT 1 探活不迁移。
+- 变更已有 view 时新增迁移文件，不修改已执行脚本。旧库接管、版本锁定和真实实例验证状态见 [Flyway 规范](flyway-schema-management.md)。
 
 需要区分“模型/视图的业务契约”和“数据库对象的物理实现”。Java domain record 与 repository interface 是可跨数据库复用的标准契约；QuestDB DDL、`LATEST ON`、WAL、dedup、`SAMPLE BY`、ASOF 等是适配器中的方言/特性。换数据库时应保留领域 record、字段名、类型、空值约定、key 和 view 输出契约，只替换 repository adapter、DDL migration，并为新数据库实现相同语义。不要把 QuestDB 特有注解或 SQL 放进 domain model。若要求 SQL 文本完全不变，只能限制到双方共同支持的 SQL 子集；时序语义（如 last-write-wins、late-data refresh、ASOF tolerance）仍须在适配层显式实现。
 
-当前 `stock_basic` 是快照表，所以项目实际创建的是普通 view（用标准窗口函数 `ROW_NUMBER()` 选每个代码的最新快照），而不是聚合型 materialized view。该查询语义可由其他支持窗口函数的关系数据库复用。若在 QuestDB 专用实现里优先追求时序查询性能，可以把 view SQL 换成 `LATEST ON`；这是方言优化，需要测量并保留通用实现作为语义基准。等真实分钟行情表就绪且聚合满足 QuestDB 约束后，可在 `QuestDbSchemaInitializer` 中追加物化视图 DDL，并确保基础表 DDL 先执行：
+当前 `stock_basic` 是快照表，所以项目实际创建的是普通 view（用标准窗口函数 `ROW_NUMBER()` 选每个代码的最新快照），而不是聚合型 materialized view。该查询语义可由其他支持窗口函数的关系数据库复用。若在 QuestDB 专用实现里优先追求时序查询性能，可以把 view SQL 换成 `LATEST ON`；这是方言优化，需要测量并保留通用实现作为语义基准。等真实分钟行情表就绪且聚合满足 QuestDB 约束后，可新增 Flyway 迁移文件定义物化视图，并确保基础表 DDL 先执行：
 
 ```java
 private static final String CREATE_MINUTE_BARS_SQL = """

@@ -6,7 +6,7 @@
 
 1. **API DTO** 表示 Pydantic/Tushare 对外字段和 JSON 表示法，负责入站字段名、必填项及格式校验。
 2. **Domain model** 表示 Java 业务语义，不依赖 JSON、Spring 或 QuestDB。当前 `StockBasic` 用 `LocalDate` 表示上市日期。
-3. **Persistence row/schema** 表示 QuestDB 表字段、designated timestamp 与 UPSERT KEYS。当前快照记录由 `StockBasicSnapshot` 表示，列名和 QuestDB 类型在 repository DDL 中定义。
+3. **Persistence row/schema** 表示 QuestDB 表字段、designated timestamp 与 UPSERT KEYS。当前快照记录由 `StockBasicSnapshot` 表示，列名和 QuestDB 类型在 Flyway SQL 中定义。
 
 DTO 到 domain、domain 到 persistence 的转换放在 client/service/repository 边界，不把数据库专用注解放进 domain model。
 
@@ -35,7 +35,7 @@ QuestDB 的 designated timestamp 是时间排序、分区和时序查询所需�
 
 ## Spring `@Entity` 是否适用
 
-`@Entity` 是 Jakarta Persistence/JPA 的 ORM 映射注解，不是所有 Spring 数据模型都要加的注解。本项目使用 QWP `Sender` 写入、`JdbcTemplate` 执行 SQL，没有使用 JPA/Hibernate；`StockBasic` 和 `StockBasicSnapshot` 是普通 Java domain record，仓储中的 DDL 才是 QuestDB 表结构定义。
+`@Entity` 是 Jakarta Persistence/JPA 的 ORM 映射注解，不是所有 Spring 数据模型都要加的注解。本项目使用 QWP `Sender` 写入、`JdbcTemplate` 执行 SQL，没有使用 JPA/Hibernate；`StockBasic` 和 `StockBasicSnapshot` 是普通 Java domain record，Flyway 迁移 SQL 是 QuestDB 表结构定义。
 
 即使 PGWire 能让 PostgreSQL JDBC 客户端连接，也不表示 QuestDB 等同 PostgreSQL。QuestDB 不支持传统 `PRIMARY KEY`、`FOREIGN KEY`、`NOT NULL` 约束；JPA 的 `@Id` 也不会生成或配置 QuestDB `DEDUP UPSERT KEYS`。因此本项目用显式的 `StockBasicKey` / `StockBasicSnapshotKey` 表达 Java 侧身份，并在 QuestDB DDL 中声明去重键。[QuestDB PostgreSQL compatibility](https://questdb.com/docs/schema-design-essentials/)
 
@@ -111,6 +111,16 @@ Pydantic 可由 `model_json_schema()` 生成 JSON Schema。该 schema 可表达�
 | DTO 映射 | `mapper.StockBasicMapper`，将 `list_date` 解析为 `LocalDate` |
 | Java domain | `StockBasic`、`StockBasicKey` |
 | 快照 domain | `StockBasicSnapshot`、`StockBasicSnapshotKey` |
-| QuestDB schema | `QuestDbStockBasicRepository` 的 DDL 与 UPSERT KEYS |
+| QuestDB schema | `db/migration/questdb/V1__create_stock_basic_table.sql` 的 DDL 与 UPSERT KEYS |
 
 拿到实际 Python/Pydantic 模型后，应以模型和真实响应为准生成 schema，再确定 DTO 生成器、字段别名和 vendor extension；不要凭当前 Java 类反推缺失的源契约。
+
+新模型的逐步落地示例见 [新增模型与读写流程](model-development-workflow.md)。
+
+## 当前实例 schema 快照
+
+已从配置的 `qdb` 实例只读导出 QuestDB 10.0.1 schema，快照见 [`schema-export/questdb-qdb-2026-09-28/`](../schema-export/questdb-qdb-2026-09-28/)。导出分为 table、view 和 materialized view，并额外保留按依赖顺序排列的完整 `schema.sql`。该实例有 321 张表、10 个普通 view、2 个 materialized view。
+
+`domain/table`、`domain/view`、`domain/materializedview` 下的 record 是从快照字段生成的 Java schema projections：分别生成 172 个非 backup/staging/WAL drill 表记录、10 个 view 读取模型、2 个 materialized-view 读取模型。149 个命名为备份、staging 或 WAL 演练的表仍在原始 schema 导出中，但不生成应用模型。生成器和分类规则见 [`generate_domain_models.py`](../tools/generate_domain_models.py) 与快照目录 README。
+
+这些 projection 方便读取映射、schema 对照和后续迁移，不自动等于经过业务确认的 domain。DDL 无法还原可靠的 nullability、单位、字段业务含义和 Python Pydantic 校验规则；canonical domain 仍应由业务/API 契约审核，必要时通过 mapper 在 schema projection 与 domain 之间转换。

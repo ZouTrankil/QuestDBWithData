@@ -12,7 +12,7 @@ com.zoutrankil.questdbwithdata
 ├── domain/                          # 业务数据模型
 ├── mapper/                          # 外部 DTO 与 domain 的显式转换
 ├── service/                         # 同步流程和业务编排
-├── repository/                      # QuestDB schema、写入与查询
+├── repository/                      # QuestDB 数据写入与查询
 └── storage/                         # CSV 等本地文件读写
 ```
 
@@ -43,3 +43,5 @@ com.zoutrankil.questdbwithdata
 ## 当前流程
 
 `CommandLineRunner` 解析 `sync-stock-basic`、`sync-stock-basic-questdb` 和 `verify-questdb-jdbc` 命令；`StockBasicSyncService` 协调取数、DTO 映射、CSV 持久化或 QuestDB 写入；`TushareClient` 和 `QuestDbStockBasicRepository` 各自封装外部服务边界。
+
+表与 view DDL 位于 `src/main/resources/db/migration/questdb/`。`SchemaMigrationService` 通过 Spring 管理的 Flyway Bean 运行迁移；同步和查询 service 先迁移再访问 repository。CSV 与 SELECT 1 探活不触发迁移。新增模型步骤见 [模型开发流程](model-development-workflow.md)。

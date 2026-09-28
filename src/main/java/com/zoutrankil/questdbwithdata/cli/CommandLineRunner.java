@@ -40,9 +40,9 @@ public class CommandLineRunner implements ApplicationRunner {
                         result.submittedRows(), result.visibleRows(),
                         result.snapshotTimestamp());
             }
-            case "create-questdb-schema" -> {
+            case "migrate-questdb-schema", "create-questdb-schema" -> {
                 syncService.initializeQuestDbSchema();
-                System.out.println("QuestDB table and views are ready");
+                System.out.println("QuestDB Flyway migrations completed");
             }
             case "show-stock-basic-latest" -> {
                 var rows = syncService.loadLatestStocks();
@@ -79,7 +79,7 @@ public class CommandLineRunner implements ApplicationRunner {
 
     private static String usage() {
         return "Usage: sync-stock-basic [--output PATH] OR "
-                + "sync-stock-basic-questdb OR create-questdb-schema OR "
+                + "sync-stock-basic-questdb OR migrate-questdb-schema OR "
                 + "show-stock-basic-latest OR verify-questdb-jdbc";
     }
 }
