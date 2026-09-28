@@ -1,0 +1,73 @@
+package com.zoutrankil.questdbwithdata.service;
+
+import com.zoutrankil.questdbwithdata.client.TushareClient;
+import com.zoutrankil.questdbwithdata.domain.StockBasic;
+import com.zoutrankil.questdbwithdata.domain.StockBasicLatest;
+import com.zoutrankil.questdbwithdata.domain.StockBasicSyncReport;
+import com.zoutrankil.questdbwithdata.mapper.StockBasicMapper;
+import com.zoutrankil.questdbwithdata.repository.QuestDbStockBasicRepository;
+import com.zoutrankil.questdbwithdata.repository.StockBasicLatestRepository;
+import com.zoutrankil.questdbwithdata.storage.StockBasicCsvWriter;
+import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class StockBasicSyncService {
+    private final TushareClient tushareClient;
+    private final StockBasicMapper stockBasicMapper;
+    private final QuestDbStockBasicRepository questDbRepository;
+    private final StockBasicLatestRepository stockBasicLatestRepository;
+
+    public StockBasicSyncService(
+            TushareClient tushareClient,
+            StockBasicMapper stockBasicMapper,
+            QuestDbStockBasicRepository questDbRepository,
+            StockBasicLatestRepository stockBasicLatestRepository) {
+        this.tushareClient = tushareClient;
+        this.stockBasicMapper = stockBasicMapper;
+        this.questDbRepository = questDbRepository;
+        this.stockBasicLatestRepository = stockBasicLatestRepository;
+    }
+
+    public int syncToCsv(Path output) throws IOException {
+        List<StockBasic> stocks = fetchDomainStocks();
+        StockBasicCsvWriter.write(output, stocks);
+        return stocks.size();
+    }
+
+    public StockBasicSyncReport syncToQuestDb()
+            throws IOException, InterruptedException {
+        List<StockBasic> stocks = fetchDomainStocks();
+        StockBasicSyncReport result =
+                questDbRepository.storeAndVerify(stocks);
+        if (result.submittedRows() != result.visibleRows()) {
+            throw new IllegalStateException("QuestDB visibility mismatch: submitted "
+                    + result.submittedRows() + ", visible " + result.visibleRows());
+        }
+        return result;
+    }
+
+    public void verifyQuestDbConnection() {
+        questDbRepository.verifyConnection();
+    }
+
+    public void initializeQuestDbSchema() {
+        questDbRepository.initializeSchema();
+    }
+
+    public List<StockBasicLatest> loadLatestStocks() {
+        return stockBasicLatestRepository.findLatest();
+    }
+
+    private List<StockBasic> fetchDomainStocks() throws IOException {
+        List<StockBasic> stocks = new ArrayList<>();
+        for (var source : tushareClient.fetchCurrentListedStocks()) {
+            stocks.add(stockBasicMapper.toDomain(source));
+        }
+        return List.copyOf(stocks);
+    }
+}

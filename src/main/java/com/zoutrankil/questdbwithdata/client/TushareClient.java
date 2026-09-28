@@ -1,52 +1,53 @@
-package com.zoutrankil.questdbwithdata;
+package com.zoutrankil.questdbwithdata.client;
 
+import com.zoutrankil.questdbwithdata.config.TushareProperties;
+import com.zoutrankil.questdbwithdata.client.dto.TushareStockBasicDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-final class TushareClient {
-    private static final URI API_URI = URI.create("https://api.tushare.pro");
+@Component
+public class TushareClient {
     private static final String FIELDS = "ts_code,symbol,name,area,industry,list_date";
 
-    private final HttpClient http = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(15))
-            .build();
+    private final WebClient webClient;
+    private final TushareProperties properties;
     private final ObjectMapper mapper = new ObjectMapper();
 
-    List<StockBasic> fetchCurrentListedStocks(String token)
-            throws IOException, InterruptedException {
+    public TushareClient(WebClient tushareWebClient, TushareProperties properties) {
+        this.webClient = tushareWebClient;
+        this.properties = properties;
+    }
+
+    public List<TushareStockBasicDto> fetchCurrentListedStocks() throws IOException {
         ObjectNode requestBody = mapper.createObjectNode();
         requestBody.put("api_name", "stock_basic");
-        requestBody.put("token", token);
+        requestBody.put("token", properties.getToken());
         requestBody.set("params", mapper.createObjectNode()
                 .put("exchange", "")
                 .put("list_status", "L"));
         requestBody.put("fields", FIELDS);
 
-        HttpRequest request = HttpRequest.newBuilder(API_URI)
-                .timeout(Duration.ofSeconds(45))
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(requestBody)))
-                .build();
-        HttpResponse<String> response = http.send(
-                request, HttpResponse.BodyHandlers.ofString());
-
-        if (response.statusCode() < 200 || response.statusCode() >= 300) {
-            throw new IOException("Tushare HTTP request failed with status " + response.statusCode());
+        String responseBody = webClient.post()
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(mapper.writeValueAsString(requestBody))
+                .retrieve()
+                .bodyToMono(String.class)
+                .block(properties.getRequestTimeout());
+        if (responseBody == null || responseBody.isBlank()) {
+            throw new IOException("Tushare returned an empty response");
         }
 
-        JsonNode root = mapper.readTree(response.body());
+        JsonNode root = mapper.readTree(responseBody);
         int code = root.path("code").asInt(Integer.MIN_VALUE);
         if (code != 0) {
             throw new IOException("Tushare API error " + code + ": "
@@ -60,9 +61,9 @@ final class TushareClient {
             throw new IOException("Tushare response is missing data.items");
         }
 
-        List<StockBasic> stocks = new ArrayList<>(items.size());
+        List<TushareStockBasicDto> stocks = new ArrayList<>(items.size());
         for (JsonNode row : items) {
-            stocks.add(new StockBasic(
+            stocks.add(new TushareStockBasicDto(
                     value(row, columns, "ts_code"),
                     value(row, columns, "symbol"),
                     value(row, columns, "name"),
@@ -93,4 +94,5 @@ final class TushareClient {
         JsonNode value = row.get(index);
         return value == null || value.isNull() ? "" : value.asText();
     }
+
 }

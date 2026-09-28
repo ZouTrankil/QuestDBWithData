@@ -1,18 +1,21 @@
-package com.zoutrankil.questdbwithdata;
+package com.zoutrankil.questdbwithdata.storage;
 
+import com.zoutrankil.questdbwithdata.domain.StockBasic;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-final class StockBasicCsv {
+public final class StockBasicCsvWriter {
     private static final String HEADER = "ts_code,symbol,name,area,industry,list_date";
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.BASIC_ISO_DATE;
 
-    private StockBasicCsv() {}
+    private StockBasicCsvWriter() {}
 
-    static void write(Path output, List<StockBasic> stocks) throws IOException {
+    public static void write(Path output, List<StockBasic> stocks) throws IOException {
         Path absolute = output.toAbsolutePath();
         Path parent = absolute.getParent();
         if (parent != null) {
@@ -43,7 +46,7 @@ final class StockBasicCsv {
                 escape(stock.name()),
                 escape(stock.area()),
                 escape(stock.industry()),
-                escape(stock.listDate()));
+                escape(stock.listDate() == null ? "" : DATE_FORMAT.format(stock.listDate())));
     }
 
     private static String escape(String value) {

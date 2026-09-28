@@ -1,0 +1,28 @@
+spring:
+  main:
+    web-application-type: none
+  datasource:
+    url: "jdbc:postgresql://${app.questdb.host}:${app.questdb.pg-port}/${app.questdb.database}?sslmode=disable"
+    username: "${app.questdb.username}"
+    password: "${app.questdb.password}"
+    hikari:
+      connection-timeout: 5000
+      maximum-pool-size: 4
+
+app:
+  tushare:
+    token: "replace-with-your-tushare-token"
+    api-url: "https://api.tushare.pro"
+    connect-timeout: 15s
+    response-timeout: 45s
+    request-timeout: 50s
+  questdb:
+    host: 127.0.0.1
+    pg-port: 8812
+    qwp-port: 9000
+    username: admin
+    # Replace this with the QuestDB password used by your instance.
+    password: "replace-with-your-questdb-password"
+    database: qdb
+    visibility-timeout: 10s
+    poll-interval: 100ms
