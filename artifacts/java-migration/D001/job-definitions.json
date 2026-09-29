@@ -4,7 +4,7 @@
   "datasetId" : "exchange_calendar",
   "datasetVersion" : 1,
   "owner" : "exchange_calendar_owner",
-  "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
+  "supportedModes" : [ "RECONCILE", "INCREMENTAL", "BACKFILL" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
     "exchanges" : {
@@ -12,7 +12,7 @@
       "required" : true,
       "maxLength" : 4,
       "maxItems" : 2,
-      "choices" : [ "SSE", "SZSE" ]
+      "choices" : [ "SZSE", "SSE" ]
     }
   },
   "ratePolicyRef" : "tushare.shared",
@@ -43,20 +43,20 @@
   "datasetId" : "index",
   "datasetVersion" : 1,
   "owner" : "index_catalog_owner",
-  "supportedModes" : [ "INCREMENTAL", "INGEST" ],
+  "supportedModes" : [ "INGEST", "INCREMENTAL" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
-    "file" : {
-      "type" : "STRING",
-      "required" : true,
-      "maxLength" : 4096,
-      "maxItems" : 1,
-      "choices" : [ ]
-    },
     "sha256" : {
       "type" : "STRING",
       "required" : true,
       "maxLength" : 64,
+      "maxItems" : 1,
+      "choices" : [ ]
+    },
+    "file" : {
+      "type" : "STRING",
+      "required" : true,
+      "maxLength" : 4096,
       "maxItems" : 1,
       "choices" : [ ]
     }
@@ -128,21 +128,21 @@
   "datasetId" : "stock_detail_info",
   "datasetVersion" : 1,
   "owner" : "stock_detail_info_owner",
-  "supportedModes" : [ "INCREMENTAL", "RECONCILE" ],
+  "supportedModes" : [ "RECONCILE", "INCREMENTAL" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
-    "discover" : {
-      "type" : "BOOLEAN",
-      "required" : true,
-      "maxLength" : 1,
-      "maxItems" : 1,
-      "choices" : [ ]
-    },
     "codes" : {
       "type" : "STRING_LIST",
       "required" : false,
       "maxLength" : 12,
       "maxItems" : 20,
+      "choices" : [ ]
+    },
+    "discover" : {
+      "type" : "BOOLEAN",
+      "required" : true,
+      "maxLength" : 1,
+      "maxItems" : 1,
       "choices" : [ ]
     }
   },
