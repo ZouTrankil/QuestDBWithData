@@ -1,0 +1,166 @@
+{
+  "test_projection" : {
+    "datasetId" : "daily_read_probe",
+    "schemaVersion" : 1,
+    "provider" : "questdb_existing",
+    "owner" : "F003_read_only_probe",
+    "objectName" : "daily",
+    "objectKind" : "TABLE",
+    "columns" : [ {
+      "sourceName" : "ts_code",
+      "logicalName" : "instrument",
+      "storageName" : "ts_code",
+      "storageType" : "SYMBOL",
+      "nullable" : false,
+      "meaning" : "Instrument code",
+      "temporal" : null
+    }, {
+      "sourceName" : "trade_date",
+      "logicalName" : "trading_date",
+      "storageName" : "trade_date",
+      "storageType" : "TIMESTAMP",
+      "nullable" : false,
+      "meaning" : "Trading calendar date",
+      "temporal" : {
+        "kind" : "BUSINESS_DATE",
+        "sourceFormat" : "ISO",
+        "zone" : "calendar",
+        "precision" : "DAY",
+        "meaning" : "Trading date"
+      }
+    }, {
+      "sourceName" : "close",
+      "logicalName" : "close_price",
+      "storageName" : "close",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Closing price",
+      "temporal" : null
+    } ],
+    "businessKey" : [ "instrument", "trading_date" ],
+    "dedupKey" : [ ],
+    "designatedTimestamp" : "trade_date",
+    "partition" : "NONE",
+    "wal" : false,
+    "capabilities" : [ "READ" ],
+    "dependencies" : [ ],
+    "storageRationale" : "Read-only three-column projection; no DDL or full daily contract claim"
+  },
+  "actual_responses" : [ {
+    "query" : "SELECT \"column\", \"type\" FROM table_columns('daily')",
+    "columns" : [ {
+      "name" : "column",
+      "type" : "STRING"
+    }, {
+      "name" : "type",
+      "type" : "STRING"
+    } ],
+    "timestamp" : -1,
+    "dataset" : [ [ "ts_code", "SYMBOL" ], [ "trade_date", "TIMESTAMP" ], [ "open", "DOUBLE" ], [ "high", "DOUBLE" ], [ "low", "DOUBLE" ], [ "close", "DOUBLE" ], [ "pre_close", "DOUBLE" ], [ "change", "DOUBLE" ], [ "pct_chg", "DOUBLE" ], [ "vol", "DOUBLE" ], [ "amount", "DOUBLE" ], [ "ah_vol", "DOUBLE" ], [ "ah_amount", "DOUBLE" ] ],
+    "count" : 13
+  }, {
+    "query" : "SELECT ts_code, trade_date, close FROM daily LIMIT 3",
+    "columns" : [ {
+      "name" : "ts_code",
+      "type" : "SYMBOL"
+    }, {
+      "name" : "trade_date",
+      "type" : "TIMESTAMP"
+    }, {
+      "name" : "close",
+      "type" : "DOUBLE"
+    } ],
+    "timestamp" : 1,
+    "dataset" : [ [ "603180.SH", "2018-01-02T00:00:00.000000Z", 134.18 ], [ "603578.SH", "2018-01-02T00:00:00.000000Z", 33.47 ], [ "603360.SH", "2018-01-02T00:00:00.000000Z", 22.75 ] ],
+    "count" : 3
+  } ],
+  "matched_rows" : 3,
+  "queries" : [ "SELECT \"column\", \"type\" FROM table_columns('daily')", "SELECT ts_code, trade_date, close FROM daily LIMIT 3" ],
+  "observed_at" : "2026-09-29T00:30:50.111314300Z",
+  "registered" : [ {
+    "datasetId" : "stock_basic_snapshot",
+    "schemaVersion" : 1,
+    "provider" : "tushare.stock_basic",
+    "owner" : "java_stock_basic_sample",
+    "objectName" : "java_tushare_stock_basic_qwp_test",
+    "objectKind" : "TABLE",
+    "columns" : [ {
+      "sourceName" : "derived:UTC_run_day",
+      "logicalName" : "snapshot_ts",
+      "storageName" : "snapshot_ts",
+      "storageType" : "TIMESTAMP",
+      "nullable" : false,
+      "meaning" : "UTC daily observation bucket, not source publication time",
+      "temporal" : {
+        "kind" : "INSTANT",
+        "sourceFormat" : "ISO_OFFSET_DATE_TIME",
+        "zone" : "UTC",
+        "precision" : "MICROS",
+        "meaning" : "run-day snapshot"
+      }
+    }, {
+      "sourceName" : "ts_code",
+      "logicalName" : "ts_code",
+      "storageName" : "ts_code",
+      "storageType" : "SYMBOL",
+      "nullable" : false,
+      "meaning" : "Tushare instrument code",
+      "temporal" : null
+    }, {
+      "sourceName" : "symbol",
+      "logicalName" : "symbol",
+      "storageName" : "symbol",
+      "storageType" : "SYMBOL",
+      "nullable" : true,
+      "meaning" : "Exchange code",
+      "temporal" : null
+    }, {
+      "sourceName" : "name",
+      "logicalName" : "name",
+      "storageName" : "name",
+      "storageType" : "STRING",
+      "nullable" : true,
+      "meaning" : "Instrument name",
+      "temporal" : null
+    }, {
+      "sourceName" : "area",
+      "logicalName" : "area",
+      "storageName" : "area",
+      "storageType" : "SYMBOL",
+      "nullable" : true,
+      "meaning" : "Registered area",
+      "temporal" : null
+    }, {
+      "sourceName" : "industry",
+      "logicalName" : "industry",
+      "storageName" : "industry",
+      "storageType" : "SYMBOL",
+      "nullable" : true,
+      "meaning" : "Source industry classification",
+      "temporal" : null
+    }, {
+      "sourceName" : "list_date",
+      "logicalName" : "list_date",
+      "storageName" : "list_date",
+      "storageType" : "STRING",
+      "nullable" : true,
+      "meaning" : "Listing calendar date",
+      "temporal" : {
+        "kind" : "BUSINESS_DATE",
+        "sourceFormat" : "BASIC",
+        "zone" : "calendar",
+        "precision" : "DAY",
+        "meaning" : "listing date"
+      }
+    } ],
+    "businessKey" : [ "snapshot_ts", "ts_code" ],
+    "dedupKey" : [ "snapshot_ts", "ts_code" ],
+    "designatedTimestamp" : "snapshot_ts",
+    "partition" : "DAY",
+    "wal" : true,
+    "capabilities" : [ "WRITE", "READ" ],
+    "dependencies" : [ ],
+    "storageRationale" : "Existing V1 sample DDL: daily UTC snapshot, full identity snapshot_ts + ts_code; latest view serves reads"
+  } ],
+  "scope" : "Definition/projection read only; full daily migration not implemented"
+}

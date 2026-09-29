@@ -1,0 +1,96 @@
+{
+  "task_id": "F008",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": null,
+  "run_id": "local-F008-20260929",
+  "attempt_id": null,
+  "logical_date": "2026-09-29T00:00:00Z",
+  "started_at": "2026-09-29T01:21:21.3037035Z",
+  "finished_at": "2026-09-29T01:37:24.9074563Z",
+  "target": {
+    "target_id": null,
+    "database_version": null,
+    "table": "java_f008_source_e09eb8491fed46b6a2125ea7fa63dc4c",
+    "isolated": true
+  },
+  "incremental": {
+    "mode": null,
+    "request_window": null,
+    "revision_overlap": null,
+    "checkpoint_before": null,
+    "checkpoint_after": null
+  },
+  "source": {
+    "provider": "tushare",
+    "endpoint": "stock_basic",
+    "request_evidence": "artifacts/java-migration/F008/source-write.json",
+    "response_evidence": "artifacts/java-migration/F008/source-write.json",
+    "returned_rows": 2,
+    "normalized_rows": 2,
+    "rejected_rows": 0,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": 4,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "acknowledged": true,
+    "delivery_status": "two source rows plus idempotent replay verified; physical rows remained 2"
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/F008/source-write.json",
+    "business_keys": [
+      "snapshot_ts",
+      "ts_code"
+    ],
+    "compared_columns": [
+      "snapshot_ts",
+      "ts_code",
+      "symbol",
+      "name",
+      "area",
+      "industry",
+      "list_date"
+    ],
+    "actual_rows": 2,
+    "matched_rows": 2,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": null,
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": true,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": null,
+    "resume": null,
+    "cancel": null,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "var/local-F008-preparation-build/test-results/test/TEST-com.zoutrankil.questdbwithdata.repository.DatasetWritePreparationTest.xml",
+    "var/local-F008-ack-gate-build/test-results/test/TEST-com.zoutrankil.questdbwithdata.repository.DatasetWriteComparisonTest.xml",
+    "var/local-F008-ack-gate-build/test-results/test/TEST-com.zoutrankil.questdbwithdata.service.VerifiedBatchExecutorTest.xml",
+    "var/local-F008-live-ack-build/test-results/test/TEST-com.zoutrankil.questdbwithdata.repository.StockBasicWriteLiveTest.xml",
+    "artifacts/java-migration/F008/live-write.json",
+    "artifacts/java-migration/F008/source-write.json",
+    "artifacts/java-migration/F008/schema-rejections.json",
+    "var/local-F008-source-build/test-results/test/TEST-com.zoutrankil.questdbwithdata.repository.StockBasicSourceWriteLiveTest.xml",
+    "var/local-F008-preflight-build/test-results/test/TEST-com.zoutrankil.questdbwithdata.repository.StockBasicSourceWriteLiveTest.xml",
+    "artifacts/java-migration/F008/review.md",
+    "var/local-F008-final-build/test-results/test"
+  ],
+  "attempt_history": [],
+  "next_manual_comparison": "F008公共写入功能已验收。真实源2行、全键7字段回读和幂等重跑，错误物理契约拒绝；全套74项65通过9外部未启用跳过0失败。bytes是应用编码预算而非QWP网络流量。未知发送默认IN_DOUBT不重放；持久化账本/checkpoint恢复属于F010/F012，第二次增量属于runner/数据任务。详见review.md，人工复核pending_review。"
+}

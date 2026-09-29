@@ -4,6 +4,8 @@ import com.zoutrankil.questdbwithdata.client.TushareClient;
 import com.zoutrankil.questdbwithdata.domain.StockBasic;
 import com.zoutrankil.questdbwithdata.domain.StockBasicLatest;
 import com.zoutrankil.questdbwithdata.domain.StockBasicSyncReport;
+import com.zoutrankil.questdbwithdata.domain.DatasetReadPage;
+import com.zoutrankil.questdbwithdata.domain.DatasetReadQuery;
 import com.zoutrankil.questdbwithdata.mapper.StockBasicMapper;
 import com.zoutrankil.questdbwithdata.repository.QuestDbStockBasicRepository;
 import com.zoutrankil.questdbwithdata.repository.StockBasicLatestRepository;
@@ -14,9 +16,19 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import com.zoutrankil.questdbwithdata.domain.SyncJobOwner;
+import com.zoutrankil.questdbwithdata.domain.SyncJobDefinition;
 
 @Service
-public class StockBasicSyncService {
+public class StockBasicSyncService implements SyncJobOwner {
+    @Override public String datasetId() { return "stock_basic_snapshot"; }
+    @Override public Set<SyncJobDefinition.Mode> supportedSyncModes() {
+        return Set.of(SyncJobDefinition.Mode.SNAPSHOT);
+    }
+    @Override public List<SyncJobDefinition> syncJobDefinitions() {
+        return List.of(StockBasicJobDefinition.DEFINITION);
+    }
     private final TushareClient tushareClient;
     private final StockBasicMapper stockBasicMapper;
     private final QuestDbStockBasicRepository questDbRepository;
@@ -66,6 +78,11 @@ public class StockBasicSyncService {
     public List<StockBasicLatest> loadLatestStocks() {
         schemaMigrationService.migrate();
         return stockBasicLatestRepository.findLatest();
+    }
+
+    public DatasetReadPage<StockBasicLatest> loadLatestStockPage(DatasetReadQuery query) {
+        schemaMigrationService.migrate();
+        return stockBasicLatestRepository.findLatestPage(query);
     }
 
     private List<StockBasic> fetchDomainStocks() throws IOException {

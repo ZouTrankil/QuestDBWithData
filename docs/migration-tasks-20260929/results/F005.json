@@ -1,0 +1,76 @@
+{
+  "task_id": "F005",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "real_source_pacing_and_failure_tests_verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": null,
+  "run_id": "local-F005-20260929",
+  "attempt_id": null,
+  "logical_date": null,
+  "started_at": null,
+  "finished_at": "2026-09-29T00:42:15.9331924Z",
+  "target": {
+    "target_id": null,
+    "database_version": null,
+    "table": null,
+    "isolated": null
+  },
+  "incremental": {
+    "mode": null,
+    "request_window": null,
+    "revision_overlap": null,
+    "checkpoint_before": null,
+    "checkpoint_after": null
+  },
+  "source": {
+    "provider": "tushare",
+    "endpoint": "stock_basic",
+    "request_evidence": "artifacts/java-migration/F005/source-http.json",
+    "response_evidence": "artifacts/java-migration/F005/source-http.json",
+    "returned_rows": 2,
+    "normalized_rows": 2,
+    "rejected_rows": 0,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": null,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "acknowledged": null,
+    "delivery_status": null
+  },
+  "questdb_readback": {
+    "query_evidence": null,
+    "business_keys": [],
+    "compared_columns": [],
+    "actual_rows": null,
+    "matched_rows": null,
+    "mismatched_rows": null,
+    "duplicate_keys": null,
+    "missing_keys": null,
+    "value_digest": null,
+    "passed": false
+  },
+  "checks": {
+    "nonempty_source_write_read": null,
+    "idempotent_rerun": null,
+    "second_incremental": null,
+    "rate_limit": true,
+    "retry": true,
+    "pagination": null,
+    "resume": null,
+    "cancel": true,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/F005/source-http.json",
+    "artifacts/java-migration/F005/review.md"
+  ],
+  "attempt_history": [],
+  "next_manual_comparison": "核对两次真实请求节流间隔、12项测试和多实例边界；数据库写入/checkpoint N/A"
+}

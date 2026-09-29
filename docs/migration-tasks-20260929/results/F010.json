@@ -1,0 +1,92 @@
+{
+  "task_id": "F010",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": null,
+  "run_id": "local-F010-20260929",
+  "attempt_id": "attempt-15bb99ac3c544db4afebb1467662a465",
+  "logical_date": "2026-09-29",
+  "started_at": "2026-09-29T01:52:21.823126Z",
+  "finished_at": "2026-09-29T02:01:18.4803660Z",
+  "target": {
+    "target_id": "isolated-questdb",
+    "database_version": null,
+    "table": "java_f010_15bb99ac3c544db4afebb1467662a465",
+    "isolated": true
+  },
+  "incremental": {
+    "mode": "N/A: F010 ledger contract",
+    "request_window": null,
+    "revision_overlap": null,
+    "checkpoint_before": null,
+    "checkpoint_after": null
+  },
+  "source": {
+    "provider": "tushare",
+    "endpoint": "stock_basic",
+    "request_evidence": "artifacts/java-migration/F010/live-ledger-15bb99ac3c544db4afebb1467662a465.json",
+    "response_evidence": "artifacts/java-migration/F010/live-ledger-15bb99ac3c544db4afebb1467662a465.json",
+    "returned_rows": 1,
+    "normalized_rows": 1,
+    "rejected_rows": 0,
+    "fingerprint": "2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad"
+  },
+  "write": {
+    "submitted_rows": 1,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "acknowledged": true,
+    "delivery_status": "ACKNOWLEDGED then VERIFIED by exact readback and WAL"
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/F010/live-ledger-15bb99ac3c544db4afebb1467662a465.json",
+    "business_keys": [
+      "snapshot_ts",
+      "ts_code"
+    ],
+    "compared_columns": [
+      "snapshot_ts",
+      "ts_code",
+      "symbol",
+      "name",
+      "area",
+      "industry",
+      "list_date"
+    ],
+    "actual_rows": 1,
+    "matched_rows": 1,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": "2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad",
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": null,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": null,
+    "resume": null,
+    "cancel": null,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "var/local-F010-evidence-build/test-results/test/TEST-com.zoutrankil.questdbwithdata.repository.SyncRunLedgerTest.xml",
+    "var/local-F010-live-build/test-results/test",
+    "var/local-F010-status-build/test-results/test",
+    "artifacts/java-migration/F010/live-ledger-15bb99ac3c544db4afebb1467662a465.json",
+    "build/test-results/test",
+    "artifacts/java-migration/F010/review.md",
+    "var/local-F010-final-build/test-results/test"
+  ],
+  "attempt_history": [],
+  "next_manual_comparison": "F010已验收：真实源1行写后7字段回读、账本重开恢复及7条slice事件；8项账本测试与实际CLI通过。全套91项82通过9未启用跳过0失败。账本不自行认证证据文件内容；F011接执行、F012恢复/checkpoint。人工复核pending_review。"
+}

@@ -1,0 +1,84 @@
+{
+  "task_id": "F007",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "real_questdb_keyset_read_verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "local-F007-20260929",
+  "attempt_id": null,
+  "logical_date": null,
+  "started_at": null,
+  "finished_at": "2026-09-29T01:18:18.0901834Z",
+  "target": {
+    "target_id": "configured-QuestDB-PGWire",
+    "database_version": null,
+    "table": "daily;etf_daily (read-only probes)",
+    "isolated": false
+  },
+  "incremental": {
+    "mode": null,
+    "request_window": null,
+    "revision_overlap": null,
+    "checkpoint_before": null,
+    "checkpoint_after": null
+  },
+  "source": {
+    "provider": null,
+    "endpoint": null,
+    "request_evidence": null,
+    "response_evidence": null,
+    "returned_rows": null,
+    "normalized_rows": null,
+    "rejected_rows": null,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": null,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "acknowledged": null,
+    "delivery_status": null
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/F007/live-read.json",
+    "business_keys": [
+      "trade_date/timestamp",
+      "ts_code"
+    ],
+    "compared_columns": [
+      "instrument",
+      "date",
+      "close",
+      "extra"
+    ],
+    "actual_rows": 14,
+    "matched_rows": 14,
+    "mismatched_rows": 0,
+    "duplicate_keys": null,
+    "missing_keys": null,
+    "value_digest": null,
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": null,
+    "idempotent_rerun": null,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": true,
+    "resume": null,
+    "cancel": null,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/F007/live-read.json",
+    "artifacts/java-migration/F007/review.md"
+  ],
+  "attempt_history": [],
+  "next_manual_comparison": "比对14行实际数据与独立SQL、null/日期/复合键；PG凭证仅子进程覆盖，sourceVersion未知；sync写入checkpoint N/A"
+}

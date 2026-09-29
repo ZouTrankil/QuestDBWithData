@@ -1,0 +1,18 @@
+{
+  "target" : "configured QuestDB, existing daily table, read only",
+  "query" : "SELECT ts_code, trade_date, close FROM daily WHERE trade_date >= ? AND trade_date < ? ORDER BY trade_date, ts_code LIMIT 3",
+  "range" : "[2026-09-01,2026-10-01)",
+  "rows" : [ {
+    "ts_code" : "000001.SZ",
+    "trade_date" : 1788192000000,
+    "close" : 11.92
+  }, {
+    "ts_code" : "000002.SZ",
+    "trade_date" : 1788192000000,
+    "close" : 3.16
+  }, {
+    "ts_code" : "000006.SZ",
+    "trade_date" : 1788192000000,
+    "close" : 7.2
+  } ]
+}

@@ -1,0 +1,50 @@
+{
+  "observed_at" : "2026-09-29T00:30:50.500614400Z",
+  "access" : "read_only_http_select",
+  "samples" : [ {
+    "business_date" : "2018-01-02",
+    "sql" : "SELECT trade_date FROM daily LIMIT 3",
+    "round_trip" : true,
+    "raw" : "2018-01-02T00:00:00.000000Z"
+  }, {
+    "business_date" : "2018-01-02",
+    "sql" : "SELECT trade_date FROM daily LIMIT 3",
+    "round_trip" : true,
+    "raw" : "2018-01-02T00:00:00.000000Z"
+  }, {
+    "business_date" : "2018-01-02",
+    "sql" : "SELECT trade_date FROM daily LIMIT 3",
+    "round_trip" : true,
+    "raw" : "2018-01-02T00:00:00.000000Z"
+  }, {
+    "business_date" : "2018-01-02",
+    "sql" : "SELECT timestamp FROM etf_daily LIMIT 3",
+    "round_trip" : true,
+    "raw" : "2018-01-02T00:00:00.000000000Z"
+  }, {
+    "business_date" : "2018-01-02",
+    "sql" : "SELECT timestamp FROM etf_daily LIMIT 3",
+    "round_trip" : true,
+    "raw" : "2018-01-02T00:00:00.000000000Z"
+  }, {
+    "business_date" : "2018-01-02",
+    "sql" : "SELECT timestamp FROM etf_daily LIMIT 3",
+    "round_trip" : true,
+    "raw" : "2018-01-02T00:00:00.000000000Z"
+  }, {
+    "business_date" : "1990-12-19",
+    "sql" : "SELECT cal_date FROM exchange_calendar LIMIT 3",
+    "round_trip" : true,
+    "raw" : "1990-12-19T00:00:00.000000Z"
+  }, {
+    "business_date" : "1990-12-20",
+    "sql" : "SELECT cal_date FROM exchange_calendar LIMIT 3",
+    "round_trip" : true,
+    "raw" : "1990-12-20T00:00:00.000000Z"
+  }, {
+    "business_date" : "1990-12-21",
+    "sql" : "SELECT cal_date FROM exchange_calendar LIMIT 3",
+    "round_trip" : true,
+    "raw" : "1990-12-21T00:00:00.000000Z"
+  } ]
+}

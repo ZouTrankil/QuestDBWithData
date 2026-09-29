@@ -1,6 +1,8 @@
 package com.zoutrankil.questdbwithdata.repository;
 
 import com.zoutrankil.questdbwithdata.domain.StockBasicLatest;
+import com.zoutrankil.questdbwithdata.domain.DatasetReadPage;
+import com.zoutrankil.questdbwithdata.domain.DatasetReadQuery;
 
 import java.util.List;
 
@@ -10,4 +12,5 @@ import java.util.List;
  */
 public interface StockBasicLatestRepository {
     List<StockBasicLatest> findLatest();
+    DatasetReadPage<StockBasicLatest> findLatestPage(DatasetReadQuery query);
 }

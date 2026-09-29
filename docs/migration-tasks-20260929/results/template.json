@@ -1,0 +1,73 @@
+{
+  "task_id": "填写计划ID",
+  "dataset_id": null,
+  "implementation_status": "planned",
+  "data_validation_status": "not_run",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": null,
+  "run_id": null,
+  "attempt_id": null,
+  "logical_date": null,
+  "started_at": null,
+  "finished_at": null,
+  "target": {
+    "target_id": null,
+    "database_version": null,
+    "table": null,
+    "isolated": null
+  },
+  "incremental": {
+    "mode": null,
+    "request_window": null,
+    "revision_overlap": null,
+    "checkpoint_before": null,
+    "checkpoint_after": null
+  },
+  "source": {
+    "provider": null,
+    "endpoint": null,
+    "request_evidence": null,
+    "response_evidence": null,
+    "returned_rows": null,
+    "normalized_rows": null,
+    "rejected_rows": null,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": null,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "acknowledged": null,
+    "delivery_status": null
+  },
+  "questdb_readback": {
+    "query_evidence": null,
+    "business_keys": [],
+    "compared_columns": [],
+    "actual_rows": null,
+    "matched_rows": null,
+    "mismatched_rows": null,
+    "duplicate_keys": null,
+    "missing_keys": null,
+    "value_digest": null,
+    "passed": false
+  },
+  "checks": {
+    "nonempty_source_write_read": null,
+    "idempotent_rerun": null,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": null,
+    "resume": null,
+    "cancel": null,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [],
+  "attempt_history": [],
+  "next_manual_comparison": null
+}

@@ -4,99 +4,88 @@ import com.zoutrankil.questdbwithdata.config.QuestDbProperties;
 import com.zoutrankil.questdbwithdata.domain.StockBasic;
 import com.zoutrankil.questdbwithdata.domain.StockBasicLatest;
 import com.zoutrankil.questdbwithdata.domain.StockBasicSnapshot;
-import com.zoutrankil.questdbwithdata.domain.StockBasicSnapshotKey;
 import com.zoutrankil.questdbwithdata.domain.StockBasicSyncReport;
+import com.zoutrankil.questdbwithdata.domain.DatasetDefinition;
+import com.zoutrankil.questdbwithdata.domain.StockBasicDataset;
+import com.zoutrankil.questdbwithdata.domain.DatasetImplementation;
+import com.zoutrankil.questdbwithdata.domain.DatasetReadQuery;
+import com.zoutrankil.questdbwithdata.domain.DatasetReadPage;
+import com.zoutrankil.questdbwithdata.service.VerifiedBatchExecutor;
 import io.questdb.client.QuestDB;
-import io.questdb.client.Sender;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /** Writes through QWP and reads through PGWire/JDBC. */
 @Repository
-public class QuestDbStockBasicRepository implements StockBasicLatestRepository {
-    public static final String TABLE = "java_tushare_stock_basic_qwp_test";
-    public static final String LATEST_VIEW = "java_tushare_stock_basic_latest_qwp_test";
-    private static final DateTimeFormatter TUSHARE_DATE_FORMAT = DateTimeFormatter.BASIC_ISO_DATE;
-    private static final String COUNT_SNAPSHOT_SQL =
-            "SELECT count() FROM " + TABLE + " WHERE snapshot_ts = ?";
-    private static final String SELECT_LATEST_SQL = """
-            SELECT snapshot_ts, ts_code, symbol, name, area, industry, list_date
-            FROM java_tushare_stock_basic_latest_qwp_test
-            ORDER BY ts_code
-            """;
+public class QuestDbStockBasicRepository implements StockBasicLatestRepository, DatasetImplementation {
+    public static final String TABLE = StockBasicDataset.DEFINITION.objectName();
+    public static final String LATEST_VIEW = StockBasicDataset.LATEST.objectName();
 
     private final JdbcTemplate jdbcTemplate;
     private final QuestDB questDB;
     private final QuestDbProperties properties;
+    private final QuestDbBoundedReader boundedReader;
 
     public QuestDbStockBasicRepository(
             JdbcTemplate jdbcTemplate,
             @Lazy QuestDB questDB,
-            QuestDbProperties properties) {
+            QuestDbProperties properties, QuestDbBoundedReader boundedReader) {
         this.jdbcTemplate = jdbcTemplate;
         this.questDB = questDB;
         this.properties = properties;
+        this.boundedReader = boundedReader;
     }
 
     public StockBasicSyncReport storeAndVerify(List<StockBasic> stocks) throws InterruptedException {
+        definition().requireCapability(DatasetDefinition.Capability.WRITE);
         Instant snapshot = LocalDate.now(ZoneOffset.UTC)
                 .atStartOfDay()
                 .toInstant(ZoneOffset.UTC);
-
-        try (Sender sender = questDB.borrowSender()) {
-            for (StockBasic stock : stocks) {
-                StockBasicSnapshot snapshotRow = new StockBasicSnapshot(snapshot, stock);
-                StockBasicSnapshotKey key = snapshotRow.key();
-                var row = sender.table(TABLE)
-                        .symbol("ts_code", key.tsCode())
-                        .symbol("symbol", stock.symbol())
-                        .stringColumn("name", stock.name())
-                        .symbol("area", stock.area())
-                        .symbol("industry", stock.industry());
-                // The Java QWP Sender has no DATE setter; retain YYYYMMDD as STRING in storage.
-                if (stock.listDate() != null) {
-                    row.stringColumn("list_date", TUSHARE_DATE_FORMAT.format(stock.listDate()));
-                }
-                row.at(key.snapshotTimestamp());
-            }
+        var result = writeDetailed(stocks, snapshot);
+        if (result.status() != VerifiedBatchExecutor.Status.VERIFIED
+                && result.status() != VerifiedBatchExecutor.Status.EMPTY) {
+            throw new IllegalStateException("QuestDB batch not verified: " + result.status() + "; " + result.reason()
+                    + "; submitted=" + result.submittedRows() + "; verified=" + result.verifiedRows()
+                    + "; do not replay an in-doubt batch");
         }
+        return new StockBasicSyncReport(result.submittedRows(), result.verifiedRows(), snapshot);
+    }
 
-        long visibleRows = awaitSnapshotVisibility(snapshot, stocks.size());
-        return new StockBasicSyncReport(stocks.size(), visibleRows, snapshot);
+    public VerifiedBatchExecutor.Result writeDetailed(List<StockBasic> stocks, Instant snapshot) {
+        definition().requireCapability(DatasetDefinition.Capability.WRITE);
+        var rows = stocks.stream().map(stock -> new StockBasicSnapshot(snapshot, stock)).iterator();
+        var policy = new VerifiedBatchExecutor.Policy(properties.getWriteBatchRows(),
+                properties.getWriteBatchBytes() / 4, properties.getWriteMaxBatches(),
+                properties.getVisibilityTimeout(), properties.getPollInterval());
+        var port = new StockBasicWritePort(TABLE, jdbcTemplate, questDB,
+                properties.getWriteBatchBytes(), properties.getVisibilityTimeout());
+        return new VerifiedBatchExecutor<>(policy, StockBasicWritePort.CODEC, port).execute(rows);
     }
 
     @Override
     public List<StockBasicLatest> findLatest() {
-        return jdbcTemplate.query(SELECT_LATEST_SQL, this::mapSnapshotRows);
+        var page = findLatestPage(new DatasetReadQuery(StockBasicDataset.LATEST.columns().stream()
+                .map(DatasetDefinition.Column::logicalName).toList(), Map.of(), null, null, null, 10000, null));
+        if (page.hasMore()) throw new IllegalStateException("Latest result exceeds 10000 rows; use findLatestPage with its cursor");
+        return page.rows();
     }
 
-    private List<StockBasicLatest> mapSnapshotRows(ResultSet resultSet) throws SQLException {
-        List<StockBasicLatest> rows = new ArrayList<>();
-        while (resultSet.next()) {
-            String listDate = resultSet.getString("list_date");
-            Instant snapshotTimestamp = resultSet.getTimestamp("snapshot_ts").toInstant();
-            rows.add(new StockBasicLatest(
-                    snapshotTimestamp,
-                    resultSet.getString("ts_code"),
-                    resultSet.getString("symbol"),
-                    resultSet.getString("name"),
-                    resultSet.getString("area"),
-                    resultSet.getString("industry"),
-                    listDate == null || listDate.isBlank()
-                            ? null : LocalDate.parse(listDate, TUSHARE_DATE_FORMAT)));
-        }
-        return List.copyOf(rows);
+    @Override
+    public DatasetDefinition definition() { return StockBasicDataset.DEFINITION; }
+
+    @Override
+    public DatasetReadPage<StockBasicLatest> findLatestPage(DatasetReadQuery query) {
+        return boundedReader.read(StockBasicDataset.LATEST, query, null, row -> new StockBasicLatest(
+                row.get("snapshot_ts", Instant.class), row.get("ts_code", String.class), row.get("symbol", String.class),
+                row.get("name", String.class), row.get("area", String.class), row.get("industry", String.class),
+                row.get("list_date", LocalDate.class)));
     }
 
     public void verifyConnection() {
@@ -106,28 +95,4 @@ public class QuestDbStockBasicRepository implements StockBasicLatestRepository {
         }
     }
 
-    private long awaitSnapshotVisibility(Instant snapshot, int expectedRows)
-            throws InterruptedException {
-        long deadline = System.nanoTime() + properties.getVisibilityTimeout().toNanos();
-        RuntimeException lastQueryFailure = null;
-        while (true) {
-            try {
-                Long visibleRows = jdbcTemplate.queryForObject(
-                        COUNT_SNAPSHOT_SQL, Long.class, Timestamp.from(snapshot));
-                if (visibleRows != null && visibleRows >= expectedRows) {
-                    return visibleRows;
-                }
-                lastQueryFailure = null;
-            } catch (RuntimeException queryFailure) {
-                lastQueryFailure = queryFailure;
-            }
-
-            if (System.nanoTime() >= deadline) {
-                throw new IllegalStateException(
-                        "Timed out waiting for QuestDB snapshot visibility; expected "
-                                + expectedRows + " rows", lastQueryFailure);
-            }
-            Thread.sleep(properties.getPollInterval().toMillis());
-        }
-    }
 }

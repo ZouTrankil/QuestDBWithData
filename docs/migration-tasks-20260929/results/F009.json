@@ -1,0 +1,77 @@
+{
+  "task_id": "F009",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "not_applicable",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "local-F009-20260929",
+  "attempt_id": null,
+  "logical_date": null,
+  "started_at": "2026-09-29T01:41:28.9562833Z",
+  "finished_at": "2026-09-29T01:47:28.6092945Z",
+  "target": {
+    "target_id": null,
+    "database_version": null,
+    "table": null,
+    "isolated": null
+  },
+  "incremental": {
+    "mode": null,
+    "request_window": null,
+    "revision_overlap": null,
+    "checkpoint_before": null,
+    "checkpoint_after": null
+  },
+  "source": {
+    "provider": null,
+    "endpoint": null,
+    "request_evidence": null,
+    "response_evidence": null,
+    "returned_rows": null,
+    "normalized_rows": null,
+    "rejected_rows": null,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": null,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "acknowledged": null,
+    "delivery_status": null
+  },
+  "questdb_readback": {
+    "query_evidence": null,
+    "business_keys": [],
+    "compared_columns": [],
+    "actual_rows": null,
+    "matched_rows": null,
+    "mismatched_rows": null,
+    "duplicate_keys": null,
+    "missing_keys": null,
+    "value_digest": null,
+    "passed": false
+  },
+  "checks": {
+    "nonempty_source_write_read": null,
+    "idempotent_rerun": null,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": null,
+    "resume": null,
+    "cancel": null,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/F009/job-definitions.json",
+    "artifacts/java-migration/F009/review.md",
+    "var/local-F009-application-fixed-build/test-results/test"
+  ],
+  "attempt_history": [],
+  "next_manual_comparison": "8项定向测试及实际SpringApplication查看命令通过。定义/版本功能N/A外部数据写入；sample任务disabled且仅snapshot，不声称全量增量runner已完成。历史落盘F010、执行F011、恢复F012后续实现，人工复核pending_review。"
+}

@@ -1,0 +1,76 @@
+{
+  "task_id": "F002",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "read_only_temporal_roundtrip_verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": null,
+  "run_id": "local-F002-20260929",
+  "attempt_id": null,
+  "logical_date": null,
+  "started_at": null,
+  "finished_at": "2026-09-29T00:16:57.4195304Z",
+  "target": {
+    "target_id": null,
+    "database_version": null,
+    "table": null,
+    "isolated": null
+  },
+  "incremental": {
+    "mode": null,
+    "request_window": null,
+    "revision_overlap": null,
+    "checkpoint_before": null,
+    "checkpoint_after": null
+  },
+  "source": {
+    "provider": null,
+    "endpoint": null,
+    "request_evidence": null,
+    "response_evidence": null,
+    "returned_rows": null,
+    "normalized_rows": null,
+    "rejected_rows": null,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": null,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "acknowledged": null,
+    "delivery_status": null
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/F002/live-read.json",
+    "business_keys": [],
+    "compared_columns": [],
+    "actual_rows": 9,
+    "matched_rows": 9,
+    "mismatched_rows": 0,
+    "duplicate_keys": null,
+    "missing_keys": null,
+    "value_digest": null,
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": null,
+    "idempotent_rerun": null,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": null,
+    "resume": null,
+    "cancel": null,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/F002/live-read.json",
+    "artifacts/java-migration/F002/review.md"
+  ],
+  "attempt_history": [],
+  "next_manual_comparison": "比对3个物理日期列的9行原始值和LocalDate；sync/写入/checkpoint对纯转换任务N/A"
+}

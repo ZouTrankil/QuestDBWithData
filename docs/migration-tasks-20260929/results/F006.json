@@ -1,0 +1,77 @@
+{
+  "task_id": "F006",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "bounded_real_source_page_verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": null,
+  "run_id": "local-F006-20260929",
+  "attempt_id": null,
+  "logical_date": null,
+  "started_at": null,
+  "finished_at": "2026-09-29T00:56:15.4348786Z",
+  "target": {
+    "target_id": null,
+    "database_version": null,
+    "table": null,
+    "isolated": null
+  },
+  "incremental": {
+    "mode": null,
+    "request_window": null,
+    "revision_overlap": null,
+    "checkpoint_before": null,
+    "checkpoint_after": null
+  },
+  "source": {
+    "provider": "tushare",
+    "endpoint": "stock_basic",
+    "request_evidence": "artifacts/java-migration/F006/source-pages.json",
+    "response_evidence": "artifacts/java-migration/F006/source-pages.json",
+    "returned_rows": 2,
+    "normalized_rows": 2,
+    "rejected_rows": 0,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": null,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "acknowledged": null,
+    "delivery_status": null
+  },
+  "questdb_readback": {
+    "query_evidence": null,
+    "business_keys": [],
+    "compared_columns": [],
+    "actual_rows": null,
+    "matched_rows": null,
+    "mismatched_rows": null,
+    "duplicate_keys": null,
+    "missing_keys": null,
+    "value_digest": null,
+    "passed": false
+  },
+  "checks": {
+    "nonempty_source_write_read": null,
+    "idempotent_rerun": null,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": "unit_boundary_verified; real_nonpaged_source_verified",
+    "resume": null,
+    "cancel": "verified",
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/F006/source-pages.json",
+    "artifacts/java-migration/F006/source-page.json",
+    "artifacts/java-migration/F006/review.md"
+  ],
+  "attempt_history": [],
+  "next_manual_comparison": "F006无数据库写入；offset/cursor仅通用执行器测试，具体来源能力在各数据卡核实；人工pending_review"
+}

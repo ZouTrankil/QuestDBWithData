@@ -1,0 +1,40 @@
+{
+  "charged_attempts" : 2,
+  "params" : {
+    "ts_code" : "000001.SZ",
+    "list_status" : "L"
+  },
+  "second_rows" : [ {
+    "list_date" : "19910403",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "ts_code" : "000001.SZ",
+    "industry" : "银行"
+  } ],
+  "observed_at" : "2026-09-29T00:40:42.494288700Z",
+  "expected_interval_ms" : 6000,
+  "actual_attempt_interval_ms" : 6001,
+  "connection_reused" : true,
+  "endpoint" : "stock_basic",
+  "first_rows" : [ {
+    "list_date" : "19910403",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "ts_code" : "000001.SZ",
+    "industry" : "银行"
+  } ],
+  "transport_events" : [ {
+    "time" : "2026-09-29T00:40:37.256118500Z",
+    "connection_id" : "9cc7d3fffeb51ea3-00007a70-00000007-0310e1f86843394a-b215ac3b",
+    "http_status" : 200,
+    "protocol" : "HTTP/2.0"
+  }, {
+    "time" : "2026-09-29T00:40:42.489476500Z",
+    "connection_id" : "9cc7d3fffeb51ea3-00007a70-00000007-0310e1f86843394a-b215ac3b",
+    "http_status" : 200,
+    "protocol" : "HTTP/2.0"
+  } ],
+  "fields" : [ "ts_code", "symbol", "name", "area", "industry", "list_date" ]
+}

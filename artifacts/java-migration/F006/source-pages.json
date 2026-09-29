@@ -1,0 +1,62 @@
+{
+  "contract" : {
+    "endpoint" : "stock_basic",
+    "fields" : [ "ts_code", "symbol", "name", "area", "industry", "list_date" ],
+    "businessKey" : [ "ts_code" ],
+    "allowedParameters" : [ "ts_code", "list_status" ],
+    "paging" : "NONE",
+    "completion" : "SHORT_PAGE",
+    "limitParameter" : null,
+    "positionParameter" : null,
+    "pageSize" : 2,
+    "sourceRowCap" : 2,
+    "maxPages" : 1,
+    "maxRows" : 2,
+    "capabilityEvidence" : "Existing single ts_code + list_status=L filter: one expected identity; safety cap=2, not global provider limit"
+  },
+  "observed_at" : "2026-09-29T00:53:12.332798900Z",
+  "slices" : [ {
+    "receipt" : {
+      "page" : 1,
+      "offset" : 0,
+      "cursor" : null,
+      "rows" : 1,
+      "digest" : "eb202defbe191833ceadddc2d8ddd3fac46ea5abf2186564dd97c8dbfdd4b40b",
+      "sourceVersion" : null
+    },
+    "source_rows" : [ {
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "area" : "深圳",
+      "ts_code" : "000001.SZ",
+      "industry" : "银行",
+      "list_date" : "19910403"
+    } ],
+    "params" : {
+      "ts_code" : "000001.SZ",
+      "list_status" : "L"
+    }
+  }, {
+    "receipt" : {
+      "page" : 1,
+      "offset" : 0,
+      "cursor" : null,
+      "rows" : 1,
+      "digest" : "573c75807d45a5a7aaa914b535a71b1c29981c78e5c0e8fe9b4e97265425b746",
+      "sourceVersion" : null
+    },
+    "source_rows" : [ {
+      "symbol" : "600000",
+      "name" : "浦发银行",
+      "area" : "上海",
+      "ts_code" : "600000.SH",
+      "industry" : "银行",
+      "list_date" : "19991110"
+    } ],
+    "params" : {
+      "ts_code" : "600000.SH",
+      "list_status" : "L"
+    }
+  } ],
+  "scope" : "Two bounded current snapshots; offset/cursor semantics tested separately, no database writes"
+}

@@ -1,0 +1,93 @@
+{
+  "observed_at" : "2026-09-29T01:59:28.616590300Z",
+  "logical_date" : "2026-09-29T00:00:00Z",
+  "endpoint" : "stock_basic",
+  "requests" : [ {
+    "ts_code" : "000001.SZ",
+    "list_status" : "L"
+  }, {
+    "ts_code" : "600000.SH",
+    "list_status" : "L"
+  } ],
+  "source_rows" : [ {
+    "list_date" : "19910403",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "ts_code" : "000001.SZ",
+    "industry" : "银行"
+  }, {
+    "list_date" : "19991110",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "ts_code" : "600000.SH",
+    "industry" : "银行"
+  } ],
+  "source_version" : null,
+  "status" : "verified",
+  "table" : "java_f008_source_261494bf25ca40189d256c5f77957bbb",
+  "first_write" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 1,
+      "verifiedRows" : 1,
+      "bytes" : 572,
+      "digest" : "2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad",
+      "delivery" : "ACKNOWLEDGED"
+    }, {
+      "batch" : 2,
+      "submittedRows" : 1,
+      "verifiedRows" : 1,
+      "bytes" : 572,
+      "digest" : "5ba4478a7082f8928fa73b8af9300b59afae97e9ac9dbb586403ac213fa16625",
+      "delivery" : "ACKNOWLEDGED"
+    } ],
+    "reason" : null
+  },
+  "repeat_write" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 1,
+      "verifiedRows" : 1,
+      "bytes" : 572,
+      "digest" : "2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad",
+      "delivery" : "ACKNOWLEDGED"
+    }, {
+      "batch" : 2,
+      "submittedRows" : 1,
+      "verifiedRows" : 1,
+      "bytes" : 572,
+      "digest" : "5ba4478a7082f8928fa73b8af9300b59afae97e9ac9dbb586403ac213fa16625",
+      "delivery" : "ACKNOWLEDGED"
+    } ],
+    "reason" : null
+  },
+  "physical_rows" : 2,
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "compared_columns" : [ "snapshot_ts", "ts_code", "symbol", "name", "area", "industry", "list_date" ],
+  "wal_settled" : true,
+  "owned_table_cleaned" : true
+}

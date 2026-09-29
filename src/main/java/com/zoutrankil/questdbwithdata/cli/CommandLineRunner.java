@@ -2,6 +2,9 @@ package com.zoutrankil.questdbwithdata.cli;
 
 import com.zoutrankil.questdbwithdata.domain.StockBasicSyncReport;
 import com.zoutrankil.questdbwithdata.service.StockBasicSyncService;
+import com.zoutrankil.questdbwithdata.service.DatasetRegistry;
+import com.zoutrankil.questdbwithdata.service.SyncJobRegistry;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -13,9 +16,14 @@ import java.util.Map;
 @Component
 public class CommandLineRunner implements ApplicationRunner {
     private final StockBasicSyncService syncService;
+    private final DatasetRegistry datasetRegistry;
+    private final SyncJobRegistry jobRegistry;
 
-    public CommandLineRunner(StockBasicSyncService syncService) {
+    public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasetRegistry,
+                             SyncJobRegistry jobRegistry) {
         this.syncService = syncService;
+        this.datasetRegistry = datasetRegistry;
+        this.jobRegistry = jobRegistry;
     }
 
     @Override
@@ -28,6 +36,21 @@ public class CommandLineRunner implements ApplicationRunner {
         String command = args[0];
         Map<String, String> options = parseOptions(args);
         switch (command) {
+            case "show-sync-run" -> {
+                if (!java.util.Set.of("--ledger", "--run", "--after", "--limit").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Unknown status query option");
+                String run = options.get("--run");
+                if (run == null) throw new IllegalArgumentException("--run is required");
+                var ledger = com.zoutrankil.questdbwithdata.repository.SyncRunLedger.openReadOnly(
+                        Path.of(options.getOrDefault("--ledger", "var/sync-ledger.sqlite3")));
+                int limit = Integer.parseInt(options.getOrDefault("--limit", "100"));
+                System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                        "run", ledger.getRun(run), "entries", ledger.entries(run, options.get("--after"), limit))));
+            }
+            case "show-sync-job-definitions" -> System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
+                    .writerWithDefaultPrettyPrinter().writeValueAsString(jobRegistry.definitions()));
+            case "show-dataset-definitions" -> System.out.println(new ObjectMapper()
+                    .writerWithDefaultPrettyPrinter().writeValueAsString(datasetRegistry.definitions()));
             case "sync-stock-basic" -> {
                 Path output = Path.of(options.getOrDefault("--output", "var/stock_basic.csv"));
                 int rows = syncService.syncToCsv(output);
@@ -80,6 +103,7 @@ public class CommandLineRunner implements ApplicationRunner {
     private static String usage() {
         return "Usage: sync-stock-basic [--output PATH] OR "
                 + "sync-stock-basic-questdb OR migrate-questdb-schema OR "
-                + "show-stock-basic-latest OR verify-questdb-jdbc";
+                + "show-stock-basic-latest OR verify-questdb-jdbc OR show-dataset-definitions OR show-sync-job-definitions OR "
+                + "show-sync-run --run ID [--ledger PATH] [--after ENTRY_ID] [--limit N]";
     }
 }
