@@ -1,0 +1,196 @@
+
+
+确认有哪一些表格？
+
+确认有哪些view，哪些materialView
+重复的view或者之前的cache,可以只需要一个
+
+
+每一个表格对应的数据。
+
+之前的python:D:\work\fund_2\back-monitor
+D:\work\fund_2\back-monitor\docs 之前可能有文档
+你可以看下代码（明确主要key）
+另外看下sync，wal, 分区方式，时间字段，时间字段是否需要统一
+还有有些接口是限流的，需要支持sync是限流版本的，支持多线程
+
+
+
+目标是在Java这里定义对应的
+table, view,materialView
+按照读写规范，可能读需要 result,每个字段对齐读取
+还有就是写规范，需要对应的write对应字段的数据，这类还需要注意 key,time,（以及前面说的时间字段尽量统一）
+
+
+
+这里sync需要从tushare
+需要逐个翻译对应的request，而且我们希望的复用http2
+传递参数可以参考每个数据table的sync
+
+
+还有就是level2的pipeline的读取，这里也是要复刻出来，写入questdb
+
+
+已整理完整产物：
+
+- 核对报告与收敛建议 (docs/02-research-user-guide/research-records/storage-views-audit-20260929.md)
+- 333 个对象逐表字典 (artifacts/storage-audit-20260929/object-dictionary.md)
+- 可筛选清单：数据含义、key、sync、WAL、分区、时间字段 (artifacts/storage-audit-20260929/objects.csv)
+
+本次未删表、清缓存或修改数据库；未确认的用途和消费者已在报告中标明。
+
+---
+
+## 字段规整与 Java 迁移任务（2026-09-29）
+
+本节为待执行任务。上文原始需求保留；勾选必须以实际验收证据为准。
+本次只整理文档，不代表已迁移数据库、实现 Java 同步或修复历史数据。
+
+### 依据与范围
+
+- Python 工作区：`D:/work/fund_2/back-monitor`。
+- 核对报告：`D:/work/fund_2/back-monitor/docs/02-research-user-guide/research-records/storage-views-audit-20260929.md`。
+- 逐对象字典：`D:/work/fund_2/back-monitor/artifacts/storage-audit-20260929/object-dictionary.md`。
+- 可筛选清单：`D:/work/fund_2/back-monitor/artifacts/storage-audit-20260929/objects.csv`。
+- 原始元数据：`D:/work/fund_2/back-monitor/artifacts/storage-audit-20260929/metadata.json`。
+- 333 个对象中，排除 61 个 backup、14 个 staging、74 个 WAL 测试/演练名称候选后，重点核对 184 个对象。
+- 上述排除只用于本轮规整范围，不是删除授权；184 个对象也不代表全部已确认活跃或必须迁移。
+- 存储状态来自 2026-09-29 审计快照，执行前必须重新核对，不能作为实时健康证明。
+
+### T01：冻结每个字段的语义契约
+
+- [ ] 为每张拟迁移表列明：来源字段、当前物理字段、Java 字段、目标字段、业务含义、类型、单位、可空性和转换规则。
+- [ ] 时间字段另列：业务日期/确切时刻/期间/技术占位、源时区、精度、输入格式、缺失值策略。
+- [ ] 分开登记 designated timestamp、业务身份、物理 UPSERT KEY、同步拉取依据和新鲜度判断依据。
+- [ ] 写明数据来源、写入 owner、读取调用方、关联 View/MV、源版本及缓存依赖。
+- [ ] Java 显式表达业务日期与时刻：日期使用 LocalDate，确切时刻使用 Instant 或具有明确偏移的输入类型；持久化映射单独声明。
+- [ ] 对照 Python `src/quant_platform/common/persistence/questdb_temporal.py` 的 BusinessDate、UTC_INSTANT 和 temporal_columns，统一转换语义，禁止依靠字段名猜类型。
+
+验收：拟迁移字段均有明确映射；不能确定语义的字段标记待核实，不进行物理改名或值转换。
+
+### T02：统一已经确认同义的交易日期字段
+
+依赖：T01。
+
+| 表 | 当前字段 | 建议目标 | 迁移注意 |
+| --- | --- | --- | --- |
+| etf_daily、etf_adj、etf_share | timestamp | trade_date | Python 同步代码把源 trade_date 改名为 timestamp；需同步调整日期过滤、写入和读取映射 |
+| stk_st_daily、stk_suspend | timestamp | trade_date | 表示证券当日状态；核对回测查询、关联条件和物理去重键 |
+| l2_daily_features | ts | trade_date | 模型定义为交易日期；单独批次处理 L2 写入、特征查询和依赖 MV |
+
+- [ ] 优先统一 Java 对外契约，通过显式映射兼容现有物理列。
+- [ ] 盘点 SQL、模型、同步 date_column、主时间列、UPSERT KEY、View/MV 和下游调用方。
+- [ ] 物理改名另行形成迁移批次；不能仅修改 Java 字段后假定数据库已完成迁移。
+- [ ] 按完整业务键核对迁移前后值、日期范围、空值和重复，不仅比较行数或最大日期。
+- [ ] etf_daily 当前 TIMESTAMP_NS 与其他日线 TIMESTAMP 的精度差异独立评估，不与改名混在一起改变。
+
+验收：同一交易日的读写、连接和去重结果一致，无日期偏移；旧调用方已有明确切换或兼容路径。
+
+### T03：规整容易误解的期间、指标日期与技术时间
+
+依赖：T01。
+
+- [ ] cn_gdp.report_date 改用明确的期间语义，建议 period_end_date；当前模型说明为季度末，代码从 quarter 推导，并非实际发布日期。
+- [ ] shibor、hibor 的 timestamp，以及 shibor_lpr、各 us_* 利率表的 date，先逐来源确认观察日期/公布日期，再选 observation_date 或 publication_date。
+- [ ] 月度表明确 month 的期间编码及物理首日/末日约定；保留期间粒度，不改成每日交易日期。
+- [ ] etf_basic、fut_basic 的 timestamp 默认 1970-01-01，显式登记 technical/sentinel；可评估 technical_ts 命名，不得用于业务新鲜度。
+- [ ] orders、trade_records 等的 create_time、update_time，在核实用途后统一为 created_at、updated_at。
+- [ ] index.import_time 在核实导入语义后统一为 imported_at。
+- [ ] 财报 end_date、f_ann_date 等 STRING 日期与其他表的 TIMESTAMP 日期统一逻辑格式、可空性和解析规则，物理类型迁移单独评估。
+- [ ] l2_dataset_manifest 的 trade_date:STRING 与 trade_date_ts:TIMESTAMP 明确唯一来源和派生关系，增加一致性校验，禁止各自赋值。
+
+验收：不会把报告期当发布日期、把占位时间当更新时间；不制造来源未提供的发布时间或历史可得时间。
+
+### T04：核清盘中时间、时区和区间边界
+
+依赖：T01；语义未确定前不得合并字段。
+
+- [ ] 核对 l2_intraday_bar_features、l2_event_response_features、l2_t0_training_labels 的 minute，以及 l2_live_micro_state_1m.trade_minute、分钟行情 bar_time。
+- [ ] 分别确认区间起点/终点、闭开规则、时区和标签预测起点；同义后才统一为 bar_start_at 或 bar_end_at 等明确名称。
+- [ ] l2_live_normalized_events.exchange_ts 与 recv_ts 分别保留交易所时刻和接收时刻，可映射为 exchange_at、received_at。
+- [ ] qmt_tick_data.time:LONG 与 tick_time:TIMESTAMP 核对数值单位、转换关系、源时区及原始值保留责任；不直接删掉其中一个。
+- [ ] eco_cal.date + time 核清源时区、时间文本及缺失情况；只有证据充分时才生成 event_at，缺失时间不得补成午夜。
+- [ ] 业务日期保持日历值，不做时区平移；确切时刻明确源时区后规范化 UTC，展示再按需要转换。
+- [ ] 历史无时区值不得直接假定 UTC；按来源和写入版本核查，不能全库统一加减 8 小时。
+- [ ] 区分 epoch 秒/毫秒/微秒/纳秒与持续时间；原始数值和耗时字段名称带单位，如 source_epoch_ms、latency_ms。
+- [ ] 用交易日边界、跨午夜、区间边界和精度敏感样例验证转换；涉及海外来源时覆盖其时区规则。
+
+验收：事件顺序、分钟连接、标签对齐及交易日归属一致；不因转换损失影响去重或排序的精度。
+
+### T05：保留不同业务时间轴，拆清同步配置
+
+依赖：T01。
+
+- [ ] 保留 ann_date、报告期、available_at、computed_at 的区别；公告日期不自动等于历史真实可得时刻。
+- [ ] 保留 signal_date、execution_date、valuation_date、entry_date 的区别，不能统一压成 trade_date。
+- [ ] index_weight 保留 trade_date 与 update_time：前者为权重快照日期，后者用于拉取频率控制。
+- [ ] etf_portfolio 保留 end_date 与 ann_date：前者为报告期，后者为同步依据，两者不同不等于配置错误。
+- [ ] Java 同步配置分别记录数据日期字段、源请求日期参数、增量游标、最后检查时刻、最后验证成功状态和覆盖区间。
+- [ ] 明确迟到公告、历史修订和重拉窗口；不能只用 MAX(业务日期) 判断增量完成或数据完整。
+- [ ] 日期列调整时同步核对任务账本、attempt/batch、logical_date 和完成验证逻辑。
+
+验收：重跑不会漏掉修订或改变任务所属日期；业务日期、拉取门控和验证状态各自有明确用途。
+
+### T06：Java 读写、Tushare 同步和 L2 管线对齐
+
+依赖：T01、T05；具体表还须通过对应的 T02/T03/T04。
+
+- [ ] 每张表定义显式读取结果与写入字段映射，核对列名、顺序、数值类型、空值、单位和代码格式。
+- [ ] 区分业务身份与 QuestDB 物理去重键，保留版本、批次等必要维度，不能仅以证券代码代替完整键。
+- [ ] 逐接口翻译 Tushare 请求参数、分页、返回字段、日期窗口、权限和限流行为，对照 Python 实际 sync 实现。
+- [ ] 复用 HTTP 客户端与连接池；核实服务端 HTTP/2 协商情况，不把客户端支持视为已启用。
+- [ ] 多线程共享适用的限流预算，明确接口/token 维度、并发上限、退避和重试；HTTP/2 不替代限流。
+- [ ] 区分空结果、请求失败、未验证写入和已验证完成；重试须保持幂等和可追溯批次身份。
+- [ ] L2 管线对齐源文件身份、解析器/特征版本、交易日、时间精度、业务键、写入结果和 lineage。
+- [ ] 定义 Python/Java 写入 owner 切换点，防止迁移期间两套调度重复写入。
+
+验收：按代表性接口及 L2 样例核对完整键和值；覆盖分页、限流、失败重试、迟到修订及重复执行。
+
+### T07：结构与运行状态前置核对
+
+依赖：审计快照重新核验；本任务通过前不以旧状态直接启动重建或重放。
+
+- [ ] 重新检查两个日频 MV 的 invalid 状态、基表身份、依赖和刷新证据；普通 View 可查询不代表底层 MV 新鲜。
+- [ ] 核对活动 L2 表 WAL 序列异常的当前状态，关联 attempt/batch、写入结束和数据证据，不凭计数自动重放。
+- [ ] 补齐 index_daily_basic、index_weight、margin_secs 的模型去重声明与物理键对应关系。
+- [ ] 核查 regime_features_monitor_daily 声明去重但物理 UPSERT KEY 缺失的差异，并扫描业务重复后决定修复。
+- [ ] 核查 moneyflow_hsgt、stk_limit、stk_suspend 的分区声明与物理差异，根据负载和修订模式确定目标。
+- [ ] fina_mainbz 核清 ts_code、end_date、bz_item、bz_code 的业务身份与历史空分类/碰撞；改键不能宣称旧数据已恢复。
+- [ ] View、MV、cache 按用途和调用方决定保留；稳定别名、覆盖记录与数据体不能只因名称相近而删除。
+- [ ] 分区粒度根据数据量、查询窗口、迟到修订和保留策略决定，不要求全库 DAY/MONTH/YEAR 一致。
+
+验收：每个异常都有可复核的当前结论和独立处置方案，不能以改名代替运行故障修复。
+
+### T08：分批切换、验证与回滚
+
+依赖：对应字段契约已冻结，T07 中影响该批次的前置问题已处理。
+
+- [ ] 第一批优先统一 Java 对外日期契约与兼容映射；第二批处理 ETF、ST/停牌；L2 与盘中时间单独批次。
+- [ ] 每批列出受影响模型、DDL、写入器、读取器、同步配置、UPSERT KEY、View/MV、缓存和数据产品契约。
+- [ ] 字段/类型变化后重新核对源指纹和缓存版本，不复用无法证明兼容的旧结果。
+- [ ] 比较完整业务键集合、逐键值、空值、重复、日期覆盖及来源版本；行数、MAX 时间、HTTP 200 或进程退出 0 均不足以验收。
+- [ ] 验证 Java 写入与 Python/Java 读取的交叉兼容，覆盖幂等重跑和故障恢复。
+- [ ] 每批记录切换时点、写入 owner、迁移结果、回滚步骤及回滚期间新增数据的处理方式。
+- [ ] 调用方切换完成、验证通过且回滚/审计保留要求满足后，再单独决定旧列、旧表或旧 cache 的退役。
+
+停止条件：时间语义不明、键发生未解释变化、日期偏移、值不一致、来源身份不明或 WAL/完成验证证据不足时，停止该批次切换并保留现场。
+
+最终交付：字段映射清单、Java 读写及同步契约、分批迁移清单、逐批验证证据、owner 切换记录和回滚说明。
+
+## 后续 Orca 串行任务入口（2026-09-29 追加）
+
+已按“功能阶段 → 每个数据单独一个任务”拆分，执行以以下任务卡为准；本文件 T01—T08 作为注意事项，不与任务卡重复派发。
+
+- [串行总计划与215张任务卡索引](migration-tasks-20260929/README.md)：17个公共功能任务、184个单数据任务、14个未落库模型待准入任务。
+- [公共执行与验收契约](migration-tasks-20260929/00-common-contract.md)：增量sync、有数据才写、限流、分片/分页、容错、断点恢复和真实QuestDB回读。
+- [同步定义与组合管理设计](migration-tasks-20260929/sync-management-design.md)：Dataset、单数据Job、组合、运行实例和调度分开定义。
+- [逐任务/逐表完成登记](migration-tasks-20260929/completion-register.md)：完成一项更新一行，供后续逐表比对，人工复核由用户填写。
+- [Orca计划清单](migration-tasks-20260929/manifest.json)：201项主线串行，14项待准入不自动执行；此文件不是已经导入Orca的运行记录。
+- [Review结果](migration-tasks-20260929/review.md)：覆盖、顺序、路径、容错与验收描述检查。
+
+Python参考项目：`D:/work/fund_2/back-monitor`。每张任务卡及执行提示均已写明绝对路径，AI可持续只读检索实际同步、模型、SQL、任务账本与测试。
+
+完成口径：不能只看Java编译、sync函数返回、HTTP成功或写入ACK。每个数据任务必须记录实际来源有效行、写入结果、增量checkpoint前后，并从QuestDB按完整业务键读取实际数据、逐字段比对。首次sync无数据不能冒充写入验收通过；已通过首次非空验收后的无新增运行可以单独记录verified_empty。
+
+本次只编写与Review任务计划，尚未派发Orca、执行同步或更改数据库。
+

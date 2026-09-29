@@ -13,10 +13,10 @@ public enum SyncRunState {
         boolean valid = switch (this) {
             case PENDING -> Set.of(RUNNING, FAILED, CANCELLED).contains(next);
             case RUNNING -> Set.of(FETCHED, VERIFIED, VERIFIED_EMPTY, PARTIAL, FAILED, CANCELLED, IN_DOUBT).contains(next);
-            case FETCHED -> Set.of(VALIDATED, VERIFIED_EMPTY, FAILED, CANCELLED).contains(next);
-            case VALIDATED -> Set.of(SUBMITTED, FAILED, CANCELLED).contains(next);
-            case SUBMITTED -> Set.of(ACKNOWLEDGED, IN_DOUBT).contains(next);
-            case ACKNOWLEDGED -> Set.of(VERIFIED, IN_DOUBT).contains(next);
+            case FETCHED -> Set.of(VALIDATED, VERIFIED_EMPTY, PARTIAL, FAILED, CANCELLED).contains(next);
+            case VALIDATED -> Set.of(SUBMITTED, VERIFIED, PARTIAL, FAILED, CANCELLED).contains(next);
+            case SUBMITTED -> Set.of(ACKNOWLEDGED, IN_DOUBT, PARTIAL).contains(next);
+            case ACKNOWLEDGED -> Set.of(VERIFIED, IN_DOUBT, PARTIAL).contains(next);
             case IN_DOUBT -> next == VERIFIED;
             default -> false;
         };

@@ -119,4 +119,15 @@ class SyncRunLedgerTest {
             assertEquals(0, ledger.get("run-1").revision());
         }
     }
+    @Test void cancellationPersistsWithoutPretendingWriterStopped() throws Exception {
+        Path path=root.resolve("ledger.sqlite3");
+        var ledger=new SyncRunLedger(path); ledger.createRun(run("run-1"));
+        ledger.transition("run-1",0,SyncRunState.RUNNING,"{}");
+        ledger.transition("run-1",1,SyncRunState.IN_DOUBT,"{}");
+        assertTrue(ledger.requestCancellation("run-1"));
+        var reopened=SyncRunLedger.openReadOnly(path);
+        assertTrue(reopened.cancellationRequested("run-1"));
+        assertEquals(SyncRunState.IN_DOUBT,reopened.get("run-1").state());
+        assertEquals(2,reopened.get("run-1").revision());
+    }
 }

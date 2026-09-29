@@ -1,26 +1,33 @@
 {
-  "firstRun" : {
-    "submitted" : 2,
-    "batches" : 2,
-    "verified" : 2,
-    "digests" : [ "ab3b144be1f0685ebdba6a295270266bb6ccc30f94b603f2ef58db80214c69c4", "03cbfd27fde1daa6b299462478c4dd016714e4e4a5b88a92e76cf0404e8edaf7" ]
-  },
   "source" : "bounded declared test rows",
-  "walSettled" : true,
-  "realSource" : {
-    "normalized" : 1,
-    "returned" : 1,
+  "firstRun" : {
+    "digests" : [ "ab3b144be1f0685ebdba6a295270266bb6ccc30f94b603f2ef58db80214c69c4", "03cbfd27fde1daa6b299462478c4dd016714e4e4a5b88a92e76cf0404e8edaf7" ],
+    "verified" : 2,
+    "batches" : 2,
+    "submitted" : 2
+  },
+  "target" : "configured QuestDB isolated WAL table",
+  "sourceRows" : 2,
+  "correction" : {
+    "readbackListDate" : "null",
     "verified" : 1,
-    "endpoint" : "stock_basic",
-    "readbackValues" : {
-      "snapshot_ts" : "2026-09-29T00:00:00Z",
-      "ts_code" : "000001.SZ",
-      "symbol" : "000001",
-      "name" : "平安银行",
-      "area" : "深圳",
-      "industry" : "银行",
-      "list_date" : "1991-04-03"
-    },
+    "physicalRows" : 2,
+    "readbackName" : "corrected",
+    "submitted" : 1
+  },
+  "table" : "java_f008_write_882215a55ebd47738dd50ce3e7525f07",
+  "rerun" : {
+    "physicalRows" : 2,
+    "submitted" : 2,
+    "verified" : 2
+  },
+  "realSource" : {
+    "returned" : 1,
+    "normalized" : 1,
+    "submitted" : 1,
+    "physicalRowsAfter" : 3,
+    "readbackKey" : "000001.SZ",
+    "code" : "000001.SZ",
     "normalizedValues" : {
       "snapshot_ts" : "2026-09-29T00:00:00Z",
       "ts_code" : "000001.SZ",
@@ -30,24 +37,17 @@
       "industry" : "银行",
       "list_date" : "1991-04-03"
     },
-    "code" : "000001.SZ",
-    "readbackKey" : "000001.SZ",
-    "physicalRowsAfter" : 3,
-    "submitted" : 1
+    "readbackValues" : {
+      "snapshot_ts" : "2026-09-29T00:00:00Z",
+      "ts_code" : "000001.SZ",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "area" : "深圳",
+      "industry" : "银行",
+      "list_date" : "1991-04-03"
+    },
+    "endpoint" : "stock_basic",
+    "verified" : 1
   },
-  "rerun" : {
-    "verified" : 2,
-    "submitted" : 2,
-    "physicalRows" : 2
-  },
-  "table" : "java_f008_write_1463dcc7d7744851a85d63dda4a9fc5c",
-  "correction" : {
-    "submitted" : 1,
-    "readbackName" : "corrected",
-    "physicalRows" : 2,
-    "verified" : 1,
-    "readbackListDate" : "null"
-  },
-  "sourceRows" : 2,
-  "target" : "configured QuestDB isolated WAL table"
+  "walSettled" : true
 }

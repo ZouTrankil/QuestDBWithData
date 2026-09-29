@@ -27,7 +27,7 @@ public class StockBasicSyncService implements SyncJobOwner {
         return Set.of(SyncJobDefinition.Mode.SNAPSHOT);
     }
     @Override public List<SyncJobDefinition> syncJobDefinitions() {
-        return List.of(StockBasicJobDefinition.DEFINITION);
+        return List.of(StockBasicJobDefinition.CURRENT);
     }
     private final TushareClient tushareClient;
     private final StockBasicMapper stockBasicMapper;

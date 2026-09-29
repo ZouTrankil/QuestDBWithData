@@ -52,6 +52,10 @@ public final class SyncRunLedger {
                     + "PRIMARY KEY(entry_id,revision))");
             s.execute("CREATE INDEX IF NOT EXISTS sync_entries_run ON sync_entries(run_id,kind,id)");
             s.execute("CREATE INDEX IF NOT EXISTS sync_entries_parent ON sync_entries(parent_id,state)");
+            s.execute("CREATE TABLE IF NOT EXISTS sync_cancellations(run_id TEXT PRIMARY KEY REFERENCES sync_runs(id), requested_at TEXT NOT NULL)");
+            s.execute("CREATE TABLE IF NOT EXISTS sync_group_members(parent_run_id TEXT NOT NULL REFERENCES sync_runs(id), "
+                    + "ordinal INTEGER NOT NULL, job_id TEXT NOT NULL, job_version INTEGER NOT NULL, "
+                    + "child_run_id TEXT, PRIMARY KEY(parent_run_id,ordinal), UNIQUE(parent_run_id,job_id))");
             c.commit();
         }
     }
@@ -71,11 +75,7 @@ public final class SyncRunLedger {
                           com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.FrozenRequest request)
             throws SQLException, IOException {
         Objects.requireNonNull(request);
-        var snapshot = new LinkedHashMap<String, Object>();
-        snapshot.put("definition", request.definition()); snapshot.put("mode", request.mode());
-        snapshot.put("parameters", request.parameters()); snapshot.put("from", request.from());
-        snapshot.put("to", request.to()); snapshot.put("logicalDate", request.logicalDate());
-        String frozen = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writeValueAsString(snapshot);
+        String frozen = com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(request);
         createRun(new Run(id, parentRunId, request.definition().jobId(), request.definition().version(),
                 request.logicalDate().toString(), targetId, frozen));
     }
@@ -85,12 +85,66 @@ public final class SyncRunLedger {
         LocalDate.parse(run.logicalDate()); json(run.frozenJson());
         if (run.parentRunId() != null) id(run.parentRunId());
         transaction(c -> {
-            try (var s = c.prepareStatement("INSERT INTO sync_runs VALUES(?,?,?,?,?,?,?)")) {
-                s.setString(1, run.id()); s.setString(2, run.parentRunId()); s.setString(3, run.jobId());
-                s.setInt(4, run.jobVersion()); s.setString(5, run.logicalDate()); s.setString(6, run.targetId());
-                s.setString(7, run.frozenJson()); s.executeUpdate();
+            insertRun(c, run);
+        });
+    }
+    private void insertRun(Connection c, Run run) throws SQLException {
+        try (var s = c.prepareStatement("INSERT INTO sync_runs VALUES(?,?,?,?,?,?,?)")) {
+            s.setString(1, run.id()); s.setString(2, run.parentRunId()); s.setString(3, run.jobId());
+            s.setInt(4, run.jobVersion()); s.setString(5, run.logicalDate()); s.setString(6, run.targetId());
+            s.setString(7, run.frozenJson()); s.executeUpdate();
+        }
+        insertEntry(c, run.id(), Kind.RUN, run.id(), null);
+    }
+
+    public record GroupMember(int ordinal, String jobId, int jobVersion, String childRunId) {}
+    /** Group parent and ordered member slots are committed together. */
+    public void createGroupRun(Run run, List<com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.JobRef> members)
+            throws SQLException {
+        id(run.id()); id(run.jobId()); id(run.targetId());
+        if (run.parentRunId() != null) id(run.parentRunId());
+        if (run.jobVersion() < 1 || members == null || members.isEmpty() || members.size() > 1000)
+            throw new IllegalArgumentException("Finite versioned group required");
+        LocalDate.parse(run.logicalDate()); json(run.frozenJson());
+        transaction(c -> {
+            insertRun(c, run);
+            try (var s = c.prepareStatement("INSERT INTO sync_group_members VALUES(?,?,?,?,NULL)")) {
+                for (int ordinal = 0; ordinal < members.size(); ordinal++) {
+                    var member = members.get(ordinal);
+                    id(member.jobId());
+                    s.setString(1, run.id()); s.setInt(2, ordinal); s.setString(3, member.jobId());
+                    s.setInt(4, member.version()); s.addBatch();
+                }
+                s.executeBatch();
             }
-            insertEntry(c, run.id(), Kind.RUN, run.id(), null);
+        });
+    }
+    public List<GroupMember> groupMembers(String parentRunId) throws SQLException {
+        id(parentRunId);
+        try (var c = connect(); var s = c.prepareStatement(
+                "SELECT ordinal,job_id,job_version,child_run_id FROM sync_group_members "
+                        + "WHERE parent_run_id=? ORDER BY ordinal LIMIT 1001")) {
+            s.setString(1, parentRunId);
+            var result = new ArrayList<GroupMember>();
+            try (var rows = s.executeQuery()) {
+                while (rows.next()) result.add(new GroupMember(rows.getInt(1), rows.getString(2),
+                        rows.getInt(3), rows.getString(4)));
+            }
+            if (result.size() > 1000) throw new IllegalStateException("Group exceeds ledger bound");
+            return List.copyOf(result);
+        }
+    }
+    /** Reserve the exact child ID before invoking its single-job runner. */
+    public void assignGroupMember(String parentRunId, int ordinal, String childRunId) throws SQLException {
+        id(parentRunId); id(childRunId);
+        transaction(c -> {
+            if (require(c, parentRunId).state() != SyncRunState.RUNNING)
+                throw new IllegalStateException("Group is not running");
+            try (var s = c.prepareStatement("UPDATE sync_group_members SET child_run_id=? "
+                    + "WHERE parent_run_id=? AND ordinal=? AND child_run_id IS NULL")) {
+                s.setString(1, childRunId); s.setString(2, parentRunId); s.setInt(3, ordinal);
+                if (s.executeUpdate() != 1) throw new IllegalStateException("Group member already assigned or absent");
+            }
         });
     }
     public void createChild(String id, Kind kind, String runId, String parentId) throws SQLException {
@@ -129,6 +183,25 @@ public final class SyncRunLedger {
                         if (r.next() && r.getLong(1) != 0) throw new IllegalStateException("Child work is not verified consistently");
                     }
                 }
+                if (previous.kind() == Kind.RUN) {
+                    try (var s = c.prepareStatement("""
+                            SELECT count(*), sum(CASE WHEN m.child_run_id IS NULL OR child.state IS NULL
+                                OR child_run.job_id<>m.job_id OR child_run.job_version<>m.job_version
+                                OR child_run.parent_run_id IS NULL
+                                OR child.state NOT IN ('VERIFIED','VERIFIED_EMPTY') THEN 1 ELSE 0 END)
+                            FROM sync_group_members m LEFT JOIN sync_runs child_run
+                              ON child_run.id=m.child_run_id
+                            LEFT JOIN sync_entries child
+                              ON child.id=m.child_run_id AND child.kind='RUN'
+                            WHERE m.parent_run_id=?
+                            """)) {
+                        s.setString(1, id);
+                        try (var rows = s.executeQuery()) {
+                            if (rows.next() && rows.getLong(1) > 0 && rows.getLong(2) > 0)
+                                throw new IllegalStateException("Group child run is incomplete");
+                        }
+                    }
+                }
             }
             String now = Instant.now().toString();
             try (var s = c.prepareStatement("UPDATE sync_entries SET state=?, revision=revision+1, payload_json=?, updated_at=? WHERE id=? AND revision=?")) {
@@ -146,6 +219,28 @@ public final class SyncRunLedger {
         }
     }
     public Entry get(String id) throws SQLException { id(id); try (var c = connect()) { return require(c, id); } }
+    /** Durable cancellation request; it never changes delivery evidence or releases interval locks. */
+    public boolean requestCancellation(String runId) throws SQLException {
+        id(runId);
+        boolean[] accepted = {false};
+        transaction(c -> {
+            var run = require(c, runId);
+            if (run.kind() != Kind.RUN) throw new IllegalArgumentException("Cancellation requires a run ID");
+            if (run.state().terminal()) return;
+            try (var s = c.prepareStatement("INSERT INTO sync_cancellations VALUES(?,?) ON CONFLICT(run_id) DO NOTHING")) {
+                s.setString(1, runId); s.setString(2, Instant.now().toString()); s.executeUpdate();
+            }
+            accepted[0] = true;
+        });
+        return accepted[0];
+    }
+    public boolean cancellationRequested(String runId) throws SQLException {
+        id(runId);
+        try (var c = connect(); var s = c.prepareStatement("SELECT 1 FROM sync_cancellations WHERE run_id=?")) {
+            s.setString(1, runId);
+            try (var r = s.executeQuery()) { return r.next(); }
+        }
+    }
     public List<Entry> entries(String runId, String afterId, int limit) throws SQLException {
         id(runId); if (afterId != null) id(afterId); pageSize(limit);
         try (var c = connect(); var s = c.prepareStatement(

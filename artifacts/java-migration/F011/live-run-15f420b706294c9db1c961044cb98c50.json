@@ -1,0 +1,65 @@
+{
+  "request" : {
+    "ts_code" : "000001.SZ",
+    "api" : "stock_basic"
+  },
+  "first" : {
+    "runId" : "run-6065f7d99cbf480ca97ddeb78b38cdbb",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "submittedRows" : 1,
+    "verifiedRows" : 1,
+    "reason" : null
+  },
+  "rerun" : {
+    "runId" : "run-f3d5fc92990d431bb470554b23099982",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "submittedRows" : 1,
+    "verifiedRows" : 1,
+    "reason" : null
+  },
+  "readback" : [ {
+    "snapshotTimestamp" : 1790640000.000000000,
+    "stock" : {
+      "tsCode" : "000001.SZ",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "area" : "深圳",
+      "industry" : "银行",
+      "listDate" : [ 1991, 4, 3 ]
+    }
+  } ],
+  "physicalRows" : 1,
+  "ledger" : "var\\F011-15f420b706294c9db1c961044cb98c50.sqlite3",
+  "firstEntry" : {
+    "id" : "run-6065f7d99cbf480ca97ddeb78b38cdbb",
+    "kind" : "RUN",
+    "runId" : "run-6065f7d99cbf480ca97ddeb78b38cdbb",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"sourceFingerprint\":\"235cb8acd93043efe711524674aaece7aacfa71a4f5b0e27d83acc44aded53f2\",\"matchedRows\":1,\"duplicateKeys\":0,\"passed\":true,\"mismatchedRows\":0,\"expectedRows\":1,\"readbackEvidence\":\"artifacts\\\\java-migration\\\\F011\\\\live-run-15f420b706294c9db1c961044cb98c50.json\",\"actualRows\":1}}",
+    "updatedAt" : "2026-09-29T02:15:46.432019100Z"
+  },
+  "firstEvents" : [ {
+    "entryId" : "run-6065f7d99cbf480ca97ddeb78b38cdbb",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payloadJson" : "{}",
+    "updatedAt" : "2026-09-29T02:15:43.841052Z"
+  }, {
+    "entryId" : "run-6065f7d99cbf480ca97ddeb78b38cdbb",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payloadJson" : "{}",
+    "updatedAt" : "2026-09-29T02:15:43.968955800Z"
+  }, {
+    "entryId" : "run-6065f7d99cbf480ca97ddeb78b38cdbb",
+    "revision" : 2,
+    "state" : "VERIFIED",
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"sourceFingerprint\":\"235cb8acd93043efe711524674aaece7aacfa71a4f5b0e27d83acc44aded53f2\",\"matchedRows\":1,\"duplicateKeys\":0,\"passed\":true,\"mismatchedRows\":0,\"expectedRows\":1,\"readbackEvidence\":\"artifacts\\\\java-migration\\\\F011\\\\live-run-15f420b706294c9db1c961044cb98c50.json\",\"actualRows\":1}}",
+    "updatedAt" : "2026-09-29T02:15:46.432019100Z"
+  } ],
+  "isolatedTableCleaned" : true
+}

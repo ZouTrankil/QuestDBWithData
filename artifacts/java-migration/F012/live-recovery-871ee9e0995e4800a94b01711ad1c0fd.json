@@ -1,0 +1,105 @@
+{
+  "first" : {
+    "runId" : "run-871ee9e0995e4800a94b01711ad1c0fd",
+    "state" : "PARTIAL",
+    "sourceRows" : 1,
+    "verifiedRows" : 1,
+    "errorCode" : "Incomplete",
+    "reusedRows" : 0
+  },
+  "sourceEvidence" : "artifacts\\java-migration\\F012\\run-a95a7b9e29b14b069e89cb0c7b22bdd4",
+  "resumedPhysicalSendCalls" : 1,
+  "ledgerPath" : "var\\F012-871ee9e0995e4800a94b01711ad1c0fd.sqlite3",
+  "reusedProof" : "{\"verification\":{\"actualRows\":1,\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"readbackEvidence\":\"ledger:slice-b0ace967-1491-45c8-89d2-c3dc2d1e57f1:revalidation\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-871ee9e0995e4800a94b01711ad1c0fd\",\"sliceId\":\"slice-3ea22e4e-366a-40cc-a425-98db94e1aa82\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}",
+  "resumed" : {
+    "runId" : "run-a95a7b9e29b14b069e89cb0c7b22bdd4",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 1
+  },
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "target" : "java_f012_871ee9e0995e4800a94b01711ad1c0fd",
+  "resumedRunEntries" : [ {
+    "id" : "attempt-bea235ef-550b-4f92-9265-59c2d72675a9",
+    "kind" : "ATTEMPT",
+    "runId" : "run-a95a7b9e29b14b069e89cb0c7b22bdd4",
+    "parentId" : "run-a95a7b9e29b14b069e89cb0c7b22bdd4",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"actualRows\":2,\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"readbackEvidence\":\"ledger:slice-b0ace967-1491-45c8-89d2-c3dc2d1e57f1:revalidation;ledger:slice-587aa32d-9df4-4563-9f84-7cb6ab1ee12c:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:58:53.597459600Z"
+  }, {
+    "id" : "run-a95a7b9e29b14b069e89cb0c7b22bdd4",
+    "kind" : "RUN",
+    "runId" : "run-a95a7b9e29b14b069e89cb0c7b22bdd4",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"actualRows\":2,\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"readbackEvidence\":\"ledger:slice-b0ace967-1491-45c8-89d2-c3dc2d1e57f1:revalidation;ledger:slice-587aa32d-9df4-4563-9f84-7cb6ab1ee12c:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:58:53.613376500Z"
+  }, {
+    "id" : "slice-587aa32d-9df4-4563-9f84-7cb6ab1ee12c",
+    "kind" : "SLICE",
+    "runId" : "run-a95a7b9e29b14b069e89cb0c7b22bdd4",
+    "parentId" : "attempt-bea235ef-550b-4f92-9265-59c2d72675a9",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"actualRows\":1,\"sourceFingerprint\":\"4058b77bd05ea92310d6a3dcbe446f23dd78bb36db22e0bd5f72dd03edbe0b1a\",\"readbackEvidence\":\"ledger:slice-587aa32d-9df4-4563-9f84-7cb6ab1ee12c:revision:5\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:58:53.568614700Z"
+  }, {
+    "id" : "slice-b0ace967-1491-45c8-89d2-c3dc2d1e57f1",
+    "kind" : "SLICE",
+    "runId" : "run-a95a7b9e29b14b069e89cb0c7b22bdd4",
+    "parentId" : "attempt-bea235ef-550b-4f92-9265-59c2d72675a9",
+    "state" : "VERIFIED",
+    "revision" : 4,
+    "payloadJson" : "{\"verification\":{\"actualRows\":1,\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"readbackEvidence\":\"ledger:slice-b0ace967-1491-45c8-89d2-c3dc2d1e57f1:revalidation\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-871ee9e0995e4800a94b01711ad1c0fd\",\"sliceId\":\"slice-3ea22e4e-366a-40cc-a425-98db94e1aa82\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}",
+    "updatedAt" : "2026-09-29T02:58:47.344900500Z"
+  } ],
+  "firstRunEntries" : [ {
+    "id" : "attempt-35c4916e-fa85-4c96-8eaf-8c99e109e5c1",
+    "kind" : "ATTEMPT",
+    "runId" : "run-871ee9e0995e4800a94b01711ad1c0fd",
+    "parentId" : "run-871ee9e0995e4800a94b01711ad1c0fd",
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T02:58:41.301162200Z"
+  }, {
+    "id" : "run-871ee9e0995e4800a94b01711ad1c0fd",
+    "kind" : "RUN",
+    "runId" : "run-871ee9e0995e4800a94b01711ad1c0fd",
+    "parentId" : null,
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T02:58:41.317019900Z"
+  }, {
+    "id" : "slice-3ea22e4e-366a-40cc-a425-98db94e1aa82",
+    "kind" : "SLICE",
+    "runId" : "run-871ee9e0995e4800a94b01711ad1c0fd",
+    "parentId" : "attempt-35c4916e-fa85-4c96-8eaf-8c99e109e5c1",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"actualRows\":1,\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"readbackEvidence\":\"ledger:slice-3ea22e4e-366a-40cc-a425-98db94e1aa82:revision:5\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:58:37.472360200Z"
+  } ]
+}

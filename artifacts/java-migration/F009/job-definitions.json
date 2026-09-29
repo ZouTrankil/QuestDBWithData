@@ -1,12 +1,20 @@
 [ {
   "jobId" : "data.stock_basic",
-  "version" : 1,
+  "version" : 2,
   "datasetId" : "stock_basic_snapshot",
   "datasetVersion" : 1,
   "owner" : "StockBasicSyncService",
   "supportedModes" : [ "SNAPSHOT" ],
   "defaultMode" : "SNAPSHOT",
-  "parameters" : { },
+  "parameters" : {
+    "codes" : {
+      "type" : "STRING_LIST",
+      "required" : true,
+      "maxLength" : 12,
+      "maxItems" : 100,
+      "choices" : [ ]
+    }
+  },
   "ratePolicyRef" : "tushare.shared",
   "slicePolicyRef" : "stock_basic.snapshot",
   "verificationPolicyRef" : "questdb.full_key_values",
@@ -15,18 +23,18 @@
     "backoff" : "PT1S",
     "maxElapsed" : "PT2M"
   },
-  "timeout" : "PT5M",
+  "timeout" : "PT20M",
   "budget" : {
     "maxWindowDays" : 1,
-    "maxSlices" : 1,
-    "maxPages" : 1,
-    "maxRows" : 10000,
+    "maxSlices" : 100,
+    "maxPages" : 100,
+    "maxRows" : 100,
     "maxBatchBytes" : 1048576
   },
   "revisionDays" : 0,
   "dependencies" : [ ],
   "frequency" : "MANUAL",
   "zone" : "Asia/Shanghai",
-  "enabled" : false,
+  "enabled" : true,
   "dailyEligible" : false
 } ]

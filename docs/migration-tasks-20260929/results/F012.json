@@ -1,0 +1,113 @@
+{
+  "task_id": "F012",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 2,
+  "run_id": "run-6ab8a992772c438ea661dc25bb1b72c7",
+  "attempt_id": "attempt-2ada47ee-4da3-45db-abb2-57da175c21a5",
+  "logical_date": "2026-09-29",
+  "started_at": "2026-09-29T02:35:12.698922Z",
+  "finished_at": "2026-09-29T02:54:28.894259+00:00",
+  "target": {
+    "target_id": "isolated-a46db9f8b45c440f9679da26d4d01e46",
+    "database_version": null,
+    "table": "java_f012_a46db9f8b45c440f9679da26d4d01e46",
+    "isolated": true
+  },
+  "incremental": {
+    "mode": "N/A: bounded current stock_basic snapshot",
+    "request_window": "codes=000001.SZ,600000.SH; logicalDate=2026-09-29",
+    "revision_overlap": "N/A: current snapshot",
+    "checkpoint_before": "slice-279a0684-aece-4990-981f-5e9be3e51b55",
+    "checkpoint_after": [
+      "slice-01bdf4c6-e2b9-411b-bd34-d34bd1ce792e",
+      "slice-b8ad299b-3d35-42bb-9c19-6921fe890c3f"
+    ]
+  },
+  "source": {
+    "provider": "tushare",
+    "endpoint": "stock_basic",
+    "request_evidence": "artifacts/java-migration/F012/run-6ab8a992772c438ea661dc25bb1b72c7/source-787e512c-0fde-4a65-9eae-a2a3db341853.json",
+    "response_evidence": "artifacts/java-migration/F012/run-6ab8a992772c438ea661dc25bb1b72c7/complete-7204d889-54f8-4dc9-82a8-35c938f9ea3b.json",
+    "returned_rows": 2,
+    "normalized_rows": 2,
+    "rejected_rows": 0,
+    "fingerprint": "7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e"
+  },
+  "write": {
+    "submitted_rows": 1,
+    "inserted_rows": 1,
+    "updated_rows": 0,
+    "unchanged_rows": 1,
+    "acknowledged": true,
+    "delivery_status": "one recovered slice revalidated without send; one new slice ACK plus full readback and settled WAL"
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/F012/live-recovery-a46db9f8b45c440f9679da26d4d01e46.json",
+    "business_keys": [
+      "snapshot_ts",
+      "ts_code"
+    ],
+    "compared_columns": [
+      "snapshot_ts",
+      "ts_code",
+      "symbol",
+      "name",
+      "area",
+      "industry",
+      "list_date"
+    ],
+    "actual_rows": 2,
+    "matched_rows": 2,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": null,
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": null,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": null,
+    "resume": true,
+    "cancel": true,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "var/local-F012-reopen-proof-build/test-results/test",
+    "artifacts/java-migration/F012/live-recovery-871ee9e0995e4800a94b01711ad1c0fd.json",
+    "var/local-F012-cancel-build/test-results/test",
+    "var/local-F012-identity-build/test-results/test",
+    "var/local-F012-reuse-build/test-results/test",
+    "var/local-F012-resume-entry-build/test-results/test",
+    "artifacts/java-migration/F012/live-recovery-a46db9f8b45c440f9679da26d4d01e46.json",
+    "artifacts/java-migration/F012/live-review.md",
+    "var/local-F012-final-build/test-results/test"
+  ],
+  "attempt_history": [
+    {
+      "run_id": "run-a46db9f8b45c440f9679da26d4d01e46",
+      "state": "partial",
+      "verified_slices": 1,
+      "source_rows": 1,
+      "verified_rows": 1
+    },
+    {
+      "run_id": "run-6ab8a992772c438ea661dc25bb1b72c7",
+      "state": "verified",
+      "verified_slices": 2,
+      "source_rows": 2,
+      "verified_rows": 2,
+      "reused_rows": 1
+    }
+  ],
+  "next_manual_comparison": "F012 actual Tushare two-code recovery: first run PARTIAL after injected second-page failure and one verified slice; resumed run re-fetched both, revalidated/reused first slice, wrote only second, all seven target columns matched, WAL settled, isolated table cleaned. Durable cancellation and unknown-write lock retention tests pass. Unknown delivery remains IN_DOUBT without writer-stop and exact-readback proof; no automatic replay. Full enabled suite 113 tests, 104 passed, 9 skipped, 0 failed. Human review pending."
+}

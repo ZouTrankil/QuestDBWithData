@@ -1,0 +1,86 @@
+{
+  "request" : {
+    "ts_code" : "000001.SZ",
+    "api" : "stock_basic"
+  },
+  "source" : {
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "ts_code" : "000001.SZ",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  },
+  "normalized" : {
+    "snapshotTimestamp" : 1.79064E9,
+    "stock" : {
+      "tsCode" : "000001.SZ",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "area" : "深圳",
+      "industry" : "银行",
+      "listDate" : [ 1991, 4, 3 ]
+    }
+  },
+  "table" : "java_f011_a5189695e8bb4973b57c3472d4ff8bb8",
+  "first" : {
+    "runId" : "run-1a5011f81998440ea612253b0dbf48ba",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "submittedRows" : 1,
+    "verifiedRows" : 1,
+    "reason" : null
+  },
+  "rerun" : {
+    "runId" : "run-fa9d8b06ffdf4b529aa1fbb3bd78fe0d",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "submittedRows" : 1,
+    "verifiedRows" : 1,
+    "reason" : null
+  },
+  "readback" : [ {
+    "snapshotTimestamp" : 1790640000.000000000,
+    "stock" : {
+      "tsCode" : "000001.SZ",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "area" : "深圳",
+      "industry" : "银行",
+      "listDate" : [ 1991, 4, 3 ]
+    }
+  } ],
+  "physicalRows" : 1,
+  "walSettled" : true,
+  "ledger" : "var\\F011-a5189695e8bb4973b57c3472d4ff8bb8.sqlite3",
+  "firstEntry" : {
+    "id" : "run-1a5011f81998440ea612253b0dbf48ba",
+    "kind" : "RUN",
+    "runId" : "run-1a5011f81998440ea612253b0dbf48ba",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":1,\"readbackEvidence\":\"artifacts\\\\java-migration\\\\F011\\\\live-run-a5189695e8bb4973b57c3472d4ff8bb8.json\",\"expectedRows\":1,\"mismatchedRows\":0,\"passed\":true,\"duplicateKeys\":0,\"matchedRows\":1,\"sourceFingerprint\":\"235cb8acd93043efe711524674aaece7aacfa71a4f5b0e27d83acc44aded53f2\"}}",
+    "updatedAt" : "2026-09-29T02:16:41.365523100Z"
+  },
+  "firstEvents" : [ {
+    "entryId" : "run-1a5011f81998440ea612253b0dbf48ba",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payloadJson" : "{}",
+    "updatedAt" : "2026-09-29T02:16:39.438319100Z"
+  }, {
+    "entryId" : "run-1a5011f81998440ea612253b0dbf48ba",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payloadJson" : "{}",
+    "updatedAt" : "2026-09-29T02:16:39.566369700Z"
+  }, {
+    "entryId" : "run-1a5011f81998440ea612253b0dbf48ba",
+    "revision" : 2,
+    "state" : "VERIFIED",
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":1,\"readbackEvidence\":\"artifacts\\\\java-migration\\\\F011\\\\live-run-a5189695e8bb4973b57c3472d4ff8bb8.json\",\"expectedRows\":1,\"mismatchedRows\":0,\"passed\":true,\"duplicateKeys\":0,\"matchedRows\":1,\"sourceFingerprint\":\"235cb8acd93043efe711524674aaece7aacfa71a4f5b0e27d83acc44aded53f2\"}}",
+    "updatedAt" : "2026-09-29T02:16:41.365523100Z"
+  } ],
+  "isolatedTableCleaned" : true
+}

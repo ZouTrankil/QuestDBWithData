@@ -1,0 +1,83 @@
+{
+  "rerun" : {
+    "runId" : "run-96f6f220005340b6b485fb3dbd9119e5",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "ledgerEntries" : [ {
+    "id" : "attempt-8790ce7a-889c-4c72-8a59-ce867adcb349",
+    "kind" : "ATTEMPT",
+    "runId" : "run-b4506b1f0a8c46b8b0677e97b1a418c0",
+    "parentId" : "run-b4506b1f0a8c46b8b0677e97b1a418c0",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"actualRows\":2,\"missingKeys\":0,\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-539fa3db-8174-47f2-b5a5-0f2e99929fd9:revision:5;ledger:slice-243a47e8-60be-4c18-b8a7-564bede1077a:revision:5\",\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\"}}",
+    "updatedAt" : "2026-09-29T02:52:21.828160900Z"
+  }, {
+    "id" : "run-b4506b1f0a8c46b8b0677e97b1a418c0",
+    "kind" : "RUN",
+    "runId" : "run-b4506b1f0a8c46b8b0677e97b1a418c0",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"actualRows\":2,\"missingKeys\":0,\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-539fa3db-8174-47f2-b5a5-0f2e99929fd9:revision:5;ledger:slice-243a47e8-60be-4c18-b8a7-564bede1077a:revision:5\",\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\"}}",
+    "updatedAt" : "2026-09-29T02:52:21.837027200Z"
+  }, {
+    "id" : "slice-243a47e8-60be-4c18-b8a7-564bede1077a",
+    "kind" : "SLICE",
+    "runId" : "run-b4506b1f0a8c46b8b0677e97b1a418c0",
+    "parentId" : "attempt-8790ce7a-889c-4c72-8a59-ce867adcb349",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-243a47e8-60be-4c18-b8a7-564bede1077a:revision:5\",\"sourceFingerprint\":\"4058b77bd05ea92310d6a3dcbe446f23dd78bb36db22e0bd5f72dd03edbe0b1a\"}}",
+    "updatedAt" : "2026-09-29T02:52:21.810199Z"
+  }, {
+    "id" : "slice-539fa3db-8174-47f2-b5a5-0f2e99929fd9",
+    "kind" : "SLICE",
+    "runId" : "run-b4506b1f0a8c46b8b0677e97b1a418c0",
+    "parentId" : "attempt-8790ce7a-889c-4c72-8a59-ce867adcb349",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-539fa3db-8174-47f2-b5a5-0f2e99929fd9:revision:5\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\"}}",
+    "updatedAt" : "2026-09-29T02:52:16.212177300Z"
+  } ],
+  "table" : "java_f011_b4506b1f0a8c46b8b0677e97b1a418c0",
+  "ledgerPath" : "var\\F011-b4506b1f0a8c46b8b0677e97b1a418c0.sqlite3",
+  "result" : {
+    "runId" : "run-b4506b1f0a8c46b8b0677e97b1a418c0",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "runSnapshot" : {
+    "id" : "run-b4506b1f0a8c46b8b0677e97b1a418c0",
+    "parentRunId" : null,
+    "jobId" : "data.stock_basic",
+    "jobVersion" : 2,
+    "logicalDate" : "2026-09-29",
+    "targetId" : "isolated-questdb",
+    "frozenJson" : "{\"definition\":{\"jobId\":\"data.stock_basic\",\"version\":2,\"datasetId\":\"stock_basic_snapshot\",\"datasetVersion\":1,\"owner\":\"StockBasicSyncService\",\"supportedModes\":[\"SNAPSHOT\"],\"defaultMode\":\"SNAPSHOT\",\"parameters\":{\"codes\":{\"type\":\"STRING_LIST\",\"required\":true,\"maxLength\":12,\"maxItems\":100,\"choices\":[]}},\"ratePolicyRef\":\"tushare.shared\",\"slicePolicyRef\":\"stock_basic.snapshot\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":3,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT2M\"},\"timeout\":\"PT20M\",\"budget\":{\"maxWindowDays\":1,\"maxSlices\":100,\"maxPages\":100,\"maxRows\":100,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"SNAPSHOT\",\"parameters\":{\"codes\":[\"000001.SZ\",\"600000.SH\"]},\"from\":null,\"to\":null,\"logicalDate\":\"2026-09-29\"}"
+  }
+}

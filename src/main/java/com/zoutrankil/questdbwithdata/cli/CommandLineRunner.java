@@ -18,12 +18,14 @@ public class CommandLineRunner implements ApplicationRunner {
     private final StockBasicSyncService syncService;
     private final DatasetRegistry datasetRegistry;
     private final SyncJobRegistry jobRegistry;
+    private final com.zoutrankil.questdbwithdata.service.StockBasicJobService jobService;
 
     public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasetRegistry,
-                             SyncJobRegistry jobRegistry) {
+                             SyncJobRegistry jobRegistry, com.zoutrankil.questdbwithdata.service.StockBasicJobService jobService) {
         this.syncService = syncService;
         this.datasetRegistry = datasetRegistry;
         this.jobRegistry = jobRegistry;
+        this.jobService = jobService;
     }
 
     @Override
@@ -36,6 +38,29 @@ public class CommandLineRunner implements ApplicationRunner {
         String command = args[0];
         Map<String, String> options = parseOptions(args);
         switch (command) {
+            case "cancel-sync-run" -> {
+                if (!java.util.Set.of("--ledger", "--run").containsAll(options.keySet()) || !options.containsKey("--run"))
+                    throw new IllegalArgumentException("--run required; optional --ledger");
+                Path path = Path.of(options.getOrDefault("--ledger", "var/sync-ledger.sqlite3"));
+                if (!java.nio.file.Files.isRegularFile(path)) throw new IllegalArgumentException("Ledger does not exist");
+                var ledger = new com.zoutrankil.questdbwithdata.repository.SyncRunLedger(path);
+                boolean accepted = ledger.requestCancellation(options.get("--run"));
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("runId",options.get("--run"),
+                        "cancellationRequested",accepted,"state",ledger.get(options.get("--run")).state())));
+            }
+            case "run-stock-basic-job" -> {
+                if (!options.keySet().containsAll(java.util.Set.of("--codes", "--logical-date"))
+                        || !java.util.Set.of("--codes", "--logical-date", "--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --codes and --logical-date are required");
+                var codes = java.util.Arrays.asList(options.get("--codes").split(",", -1));
+                var day = java.time.LocalDate.parse(options.get("--logical-date"));
+                var result = options.containsKey("--resume-from")
+                        ? jobService.resume(codes,day,options.get("--resume-from")) : jobService.run(codes,day);
+                System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                if (result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                        && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                    throw new IllegalStateException("Sync did not complete: " + result.state() + "; run=" + result.runId());
+            }
             case "show-sync-run" -> {
                 if (!java.util.Set.of("--ledger", "--run", "--after", "--limit").containsAll(options.keySet()))
                     throw new IllegalArgumentException("Unknown status query option");
@@ -104,6 +129,7 @@ public class CommandLineRunner implements ApplicationRunner {
         return "Usage: sync-stock-basic [--output PATH] OR "
                 + "sync-stock-basic-questdb OR migrate-questdb-schema OR "
                 + "show-stock-basic-latest OR verify-questdb-jdbc OR show-dataset-definitions OR show-sync-job-definitions OR "
-                + "show-sync-run --run ID [--ledger PATH] [--after ENTRY_ID] [--limit N]";
+                + "show-sync-run --run ID [--ledger PATH] [--after ENTRY_ID] [--limit N] OR "
+                + "run-stock-basic-job --codes CODE,CODE --logical-date YYYY-MM-DD [--resume-from RUN_ID] OR cancel-sync-run --run ID [--ledger PATH]";
     }
 }

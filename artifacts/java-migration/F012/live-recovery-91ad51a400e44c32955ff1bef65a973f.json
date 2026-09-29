@@ -1,0 +1,104 @@
+{
+  "target" : "java_f012_91ad51a400e44c32955ff1bef65a973f",
+  "resumed" : {
+    "runId" : "run-905d80111a134c8eadc0e8e566b688a6",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 1
+  },
+  "sourceEvidence" : "artifacts\\java-migration\\F012\\run-905d80111a134c8eadc0e8e566b688a6",
+  "ledgerPath" : "var\\F012-91ad51a400e44c32955ff1bef65a973f.sqlite3",
+  "reusedProof" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"readbackEvidence\":\"ledger:slice-91eb0d3e-59e0-4085-98a3-c558d6e38df2:revalidation\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-91ad51a400e44c32955ff1bef65a973f\",\"sliceId\":\"slice-9e38ca3c-3757-4679-88b3-d2e29f82c9c0\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}",
+  "firstRunEntries" : [ {
+    "id" : "attempt-62ec27e7-ef53-4b1b-ad35-3898ff7d91b5",
+    "kind" : "ATTEMPT",
+    "runId" : "run-91ad51a400e44c32955ff1bef65a973f",
+    "parentId" : "run-91ad51a400e44c32955ff1bef65a973f",
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T02:48:07.975837900Z"
+  }, {
+    "id" : "run-91ad51a400e44c32955ff1bef65a973f",
+    "kind" : "RUN",
+    "runId" : "run-91ad51a400e44c32955ff1bef65a973f",
+    "parentId" : null,
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T02:48:07.988089900Z"
+  }, {
+    "id" : "slice-9e38ca3c-3757-4679-88b3-d2e29f82c9c0",
+    "kind" : "SLICE",
+    "runId" : "run-91ad51a400e44c32955ff1bef65a973f",
+    "parentId" : "attempt-62ec27e7-ef53-4b1b-ad35-3898ff7d91b5",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"readbackEvidence\":\"ledger:slice-9e38ca3c-3757-4679-88b3-d2e29f82c9c0:revision:5\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:48:03.707471200Z"
+  } ],
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "first" : {
+    "runId" : "run-91ad51a400e44c32955ff1bef65a973f",
+    "state" : "PARTIAL",
+    "sourceRows" : 1,
+    "verifiedRows" : 1,
+    "errorCode" : "Incomplete",
+    "reusedRows" : 0
+  },
+  "resumedRunEntries" : [ {
+    "id" : "attempt-83e24d20-6d77-44f4-bc2f-504594d22115",
+    "kind" : "ATTEMPT",
+    "runId" : "run-905d80111a134c8eadc0e8e566b688a6",
+    "parentId" : "run-905d80111a134c8eadc0e8e566b688a6",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"readbackEvidence\":\"ledger:slice-91eb0d3e-59e0-4085-98a3-c558d6e38df2:revalidation;ledger:slice-98560c22-27db-4677-b596-26369dbd6d6e:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:48:20.320736800Z"
+  }, {
+    "id" : "run-905d80111a134c8eadc0e8e566b688a6",
+    "kind" : "RUN",
+    "runId" : "run-905d80111a134c8eadc0e8e566b688a6",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"readbackEvidence\":\"ledger:slice-91eb0d3e-59e0-4085-98a3-c558d6e38df2:revalidation;ledger:slice-98560c22-27db-4677-b596-26369dbd6d6e:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:48:20.330231300Z"
+  }, {
+    "id" : "slice-91eb0d3e-59e0-4085-98a3-c558d6e38df2",
+    "kind" : "SLICE",
+    "runId" : "run-905d80111a134c8eadc0e8e566b688a6",
+    "parentId" : "attempt-83e24d20-6d77-44f4-bc2f-504594d22115",
+    "state" : "VERIFIED",
+    "revision" : 4,
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"readbackEvidence\":\"ledger:slice-91eb0d3e-59e0-4085-98a3-c558d6e38df2:revalidation\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-91ad51a400e44c32955ff1bef65a973f\",\"sliceId\":\"slice-9e38ca3c-3757-4679-88b3-d2e29f82c9c0\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}",
+    "updatedAt" : "2026-09-29T02:48:14.019728100Z"
+  }, {
+    "id" : "slice-98560c22-27db-4677-b596-26369dbd6d6e",
+    "kind" : "SLICE",
+    "runId" : "run-905d80111a134c8eadc0e8e566b688a6",
+    "parentId" : "attempt-83e24d20-6d77-44f4-bc2f-504594d22115",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"4058b77bd05ea92310d6a3dcbe446f23dd78bb36db22e0bd5f72dd03edbe0b1a\",\"readbackEvidence\":\"ledger:slice-98560c22-27db-4677-b596-26369dbd6d6e:revision:5\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:48:20.304702500Z"
+  } ]
+}

@@ -1,0 +1,128 @@
+{
+  "run" : "run-c557affdefad4fb586d633a292931a4b",
+  "table" : "java_f010_c557affdefad4fb586d633a292931a4b",
+  "source" : {
+    "name" : "平安银行",
+    "area" : "深圳",
+    "ts_code" : "000001.SZ",
+    "industry" : "银行",
+    "list_date" : "19910403",
+    "symbol" : "000001"
+  },
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  } ],
+  "verification" : {
+    "passed" : true,
+    "duplicateKeys" : 0,
+    "matchedRows" : 1,
+    "sourceFingerprint" : "2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad",
+    "missingKeys" : 0,
+    "actualRows" : 1,
+    "readbackEvidence" : "artifacts\\java-migration\\F010\\live-ledger-c557affdefad4fb586d633a292931a4b.json",
+    "expectedRows" : 1,
+    "mismatchedRows" : 0
+  },
+  "writeReceipt" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 1,
+    "verifiedRows" : 1,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 1,
+      "verifiedRows" : 1,
+      "bytes" : 572,
+      "digest" : "2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad",
+      "delivery" : "ACKNOWLEDGED"
+    } ],
+    "reason" : null
+  },
+  "ledgerPath" : "var\\F010-c557affdefad4fb586d633a292931a4b.sqlite3",
+  "reopenedRun" : {
+    "id" : "run-c557affdefad4fb586d633a292931a4b",
+    "parentRunId" : null,
+    "jobId" : "data.stock_basic",
+    "jobVersion" : 1,
+    "logicalDate" : "2026-09-29",
+    "targetId" : "isolated-questdb",
+    "frozenJson" : "{\"definition\":{\"jobId\":\"data.stock_basic\",\"version\":1,\"datasetId\":\"stock_basic_snapshot\",\"datasetVersion\":1,\"owner\":\"StockBasicSyncService\",\"supportedModes\":[\"SNAPSHOT\"],\"defaultMode\":\"SNAPSHOT\",\"parameters\":{},\"ratePolicyRef\":\"tushare.shared\",\"slicePolicyRef\":\"stock_basic.snapshot\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":3,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT2M\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":1,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":10000,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":false,\"dailyEligible\":false},\"mode\":\"SNAPSHOT\",\"parameters\":{},\"from\":null,\"to\":null,\"logicalDate\":\"2026-09-29\"}"
+  },
+  "reopenedEntries" : [ {
+    "id" : "attempt-c557affdefad4fb586d633a292931a4b",
+    "kind" : "ATTEMPT",
+    "runId" : "run-c557affdefad4fb586d633a292931a4b",
+    "parentId" : "run-c557affdefad4fb586d633a292931a4b",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"duplicateKeys\":0,\"matchedRows\":1,\"sourceFingerprint\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\",\"missingKeys\":0,\"actualRows\":1,\"readbackEvidence\":\"artifacts\\\\java-migration\\\\F010\\\\live-ledger-c557affdefad4fb586d633a292931a4b.json\",\"expectedRows\":1,\"mismatchedRows\":0},\"writeReceipt\":{\"status\":\"VERIFIED\",\"submittedRows\":1,\"verifiedRows\":1,\"receipts\":[{\"batch\":1,\"submittedRows\":1,\"verifiedRows\":1,\"bytes\":572,\"digest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+    "updatedAt" : "2026-09-29T02:22:45.625093800Z"
+  }, {
+    "id" : "run-c557affdefad4fb586d633a292931a4b",
+    "kind" : "RUN",
+    "runId" : "run-c557affdefad4fb586d633a292931a4b",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"duplicateKeys\":0,\"matchedRows\":1,\"sourceFingerprint\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\",\"missingKeys\":0,\"actualRows\":1,\"readbackEvidence\":\"artifacts\\\\java-migration\\\\F010\\\\live-ledger-c557affdefad4fb586d633a292931a4b.json\",\"expectedRows\":1,\"mismatchedRows\":0},\"writeReceipt\":{\"status\":\"VERIFIED\",\"submittedRows\":1,\"verifiedRows\":1,\"receipts\":[{\"batch\":1,\"submittedRows\":1,\"verifiedRows\":1,\"bytes\":572,\"digest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+    "updatedAt" : "2026-09-29T02:22:45.633552Z"
+  }, {
+    "id" : "slice-c557affdefad4fb586d633a292931a4b",
+    "kind" : "SLICE",
+    "runId" : "run-c557affdefad4fb586d633a292931a4b",
+    "parentId" : "attempt-c557affdefad4fb586d633a292931a4b",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"duplicateKeys\":0,\"matchedRows\":1,\"sourceFingerprint\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\",\"missingKeys\":0,\"actualRows\":1,\"readbackEvidence\":\"artifacts\\\\java-migration\\\\F010\\\\live-ledger-c557affdefad4fb586d633a292931a4b.json\",\"expectedRows\":1,\"mismatchedRows\":0},\"writeReceipt\":{\"status\":\"VERIFIED\",\"submittedRows\":1,\"verifiedRows\":1,\"receipts\":[{\"batch\":1,\"submittedRows\":1,\"verifiedRows\":1,\"bytes\":572,\"digest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+    "updatedAt" : "2026-09-29T02:22:45.616945900Z"
+  } ],
+  "sliceEvents" : [ {
+    "entryId" : "slice-c557affdefad4fb586d633a292931a4b",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payloadJson" : "{}",
+    "updatedAt" : "2026-09-29T02:22:40.044966400Z"
+  }, {
+    "entryId" : "slice-c557affdefad4fb586d633a292931a4b",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payloadJson" : "{}",
+    "updatedAt" : "2026-09-29T02:22:40.052874800Z"
+  }, {
+    "entryId" : "slice-c557affdefad4fb586d633a292931a4b",
+    "revision" : 2,
+    "state" : "FETCHED",
+    "payloadJson" : "{\"returnedRows\":1}",
+    "updatedAt" : "2026-09-29T02:22:45.085945200Z"
+  }, {
+    "entryId" : "slice-c557affdefad4fb586d633a292931a4b",
+    "revision" : 3,
+    "state" : "VALIDATED",
+    "payloadJson" : "{\"normalizedRows\":1}",
+    "updatedAt" : "2026-09-29T02:22:45.096630800Z"
+  }, {
+    "entryId" : "slice-c557affdefad4fb586d633a292931a4b",
+    "revision" : 4,
+    "state" : "SUBMITTED",
+    "payloadJson" : "{\"submittedRows\":1}",
+    "updatedAt" : "2026-09-29T02:22:45.198349900Z"
+  }, {
+    "entryId" : "slice-c557affdefad4fb586d633a292931a4b",
+    "revision" : 5,
+    "state" : "ACKNOWLEDGED",
+    "payloadJson" : "{\"acknowledged\":true}",
+    "updatedAt" : "2026-09-29T02:22:45.595050900Z"
+  }, {
+    "entryId" : "slice-c557affdefad4fb586d633a292931a4b",
+    "revision" : 6,
+    "state" : "VERIFIED",
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"duplicateKeys\":0,\"matchedRows\":1,\"sourceFingerprint\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\",\"missingKeys\":0,\"actualRows\":1,\"readbackEvidence\":\"artifacts\\\\java-migration\\\\F010\\\\live-ledger-c557affdefad4fb586d633a292931a4b.json\",\"expectedRows\":1,\"mismatchedRows\":0},\"writeReceipt\":{\"status\":\"VERIFIED\",\"submittedRows\":1,\"verifiedRows\":1,\"receipts\":[{\"batch\":1,\"submittedRows\":1,\"verifiedRows\":1,\"bytes\":572,\"digest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+    "updatedAt" : "2026-09-29T02:22:45.616945900Z"
+  } ],
+  "ownedTableCleaned" : true
+}

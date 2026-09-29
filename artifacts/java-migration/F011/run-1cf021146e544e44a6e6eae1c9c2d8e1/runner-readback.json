@@ -1,0 +1,74 @@
+{
+  "result" : {
+    "runId" : "run-1cf021146e544e44a6e6eae1c9c2d8e1",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null
+  },
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "ledgerEntries" : [ {
+    "id" : "attempt-64fc3465-3e5c-4436-9fc8-7fc34edfa833",
+    "kind" : "ATTEMPT",
+    "runId" : "run-1cf021146e544e44a6e6eae1c9c2d8e1",
+    "parentId" : "run-1cf021146e544e44a6e6eae1c9c2d8e1",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-73f6e229-6bea-46d8-abcb-5605a73babf6:revision:5;ledger:slice-2bfa15ef-0785-4b2c-b9c3-96228ab4fd20:revision:5\",\"sourceFingerprint\":\"a23273b88261cc99f8bd432583c4c6aa6e66dc7d025211083ef0c9249548543d\",\"actualRows\":2,\"missingKeys\":0,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:20:22.147250100Z"
+  }, {
+    "id" : "run-1cf021146e544e44a6e6eae1c9c2d8e1",
+    "kind" : "RUN",
+    "runId" : "run-1cf021146e544e44a6e6eae1c9c2d8e1",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-73f6e229-6bea-46d8-abcb-5605a73babf6:revision:5;ledger:slice-2bfa15ef-0785-4b2c-b9c3-96228ab4fd20:revision:5\",\"sourceFingerprint\":\"a23273b88261cc99f8bd432583c4c6aa6e66dc7d025211083ef0c9249548543d\",\"actualRows\":2,\"missingKeys\":0,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:20:22.156774600Z"
+  }, {
+    "id" : "slice-2bfa15ef-0785-4b2c-b9c3-96228ab4fd20",
+    "kind" : "SLICE",
+    "runId" : "run-1cf021146e544e44a6e6eae1c9c2d8e1",
+    "parentId" : "attempt-64fc3465-3e5c-4436-9fc8-7fc34edfa833",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2bfa15ef-0785-4b2c-b9c3-96228ab4fd20:revision:5\",\"sourceFingerprint\":\"cc1f86e7ce6b82489ee7611e81abd218378aef97bacaf2b74c88e6282563cf55\",\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:20:22.135469600Z"
+  }, {
+    "id" : "slice-73f6e229-6bea-46d8-abcb-5605a73babf6",
+    "kind" : "SLICE",
+    "runId" : "run-1cf021146e544e44a6e6eae1c9c2d8e1",
+    "parentId" : "attempt-64fc3465-3e5c-4436-9fc8-7fc34edfa833",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-73f6e229-6bea-46d8-abcb-5605a73babf6:revision:5\",\"sourceFingerprint\":\"7efcde371cb0815a51bb35abf69b8e2daeb2b7446f70600a635d3a3ee0a70c9b\",\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T02:20:17.618288900Z"
+  } ],
+  "ledgerPath" : "var\\F011-1cf021146e544e44a6e6eae1c9c2d8e1.sqlite3",
+  "table" : "java_f011_1cf021146e544e44a6e6eae1c9c2d8e1",
+  "runSnapshot" : {
+    "id" : "run-1cf021146e544e44a6e6eae1c9c2d8e1",
+    "parentRunId" : null,
+    "jobId" : "data.stock_basic",
+    "jobVersion" : 2,
+    "logicalDate" : "2026-09-29",
+    "targetId" : "isolated-questdb",
+    "frozenJson" : "{\"definition\":{\"jobId\":\"data.stock_basic\",\"version\":2,\"datasetId\":\"stock_basic_snapshot\",\"datasetVersion\":1,\"owner\":\"StockBasicSyncService\",\"supportedModes\":[\"SNAPSHOT\"],\"defaultMode\":\"SNAPSHOT\",\"parameters\":{\"codes\":{\"type\":\"STRING_LIST\",\"required\":true,\"maxLength\":12,\"maxItems\":100,\"choices\":[]}},\"ratePolicyRef\":\"tushare.shared\",\"slicePolicyRef\":\"stock_basic.snapshot\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":3,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT2M\"},\"timeout\":\"PT20M\",\"budget\":{\"maxWindowDays\":1,\"maxSlices\":100,\"maxPages\":100,\"maxRows\":100,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"SNAPSHOT\",\"parameters\":{\"codes\":[\"000001.SZ\",\"600000.SH\"]},\"from\":null,\"to\":null,\"logicalDate\":\"2026-09-29\"}"
+  }
+}

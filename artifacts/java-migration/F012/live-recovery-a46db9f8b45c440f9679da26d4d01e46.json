@@ -1,0 +1,104 @@
+{
+  "ledgerPath" : "var\\F012-a46db9f8b45c440f9679da26d4d01e46.sqlite3",
+  "sourceEvidence" : "artifacts\\java-migration\\F012\\run-6ab8a992772c438ea661dc25bb1b72c7",
+  "resumed" : {
+    "runId" : "run-6ab8a992772c438ea661dc25bb1b72c7",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 1
+  },
+  "target" : "java_f012_a46db9f8b45c440f9679da26d4d01e46",
+  "resumedRunEntries" : [ {
+    "id" : "attempt-2ada47ee-4da3-45db-abb2-57da175c21a5",
+    "kind" : "ATTEMPT",
+    "runId" : "run-6ab8a992772c438ea661dc25bb1b72c7",
+    "parentId" : "run-6ab8a992772c438ea661dc25bb1b72c7",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"actualRows\":2,\"missingKeys\":0,\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-01bdf4c6-e2b9-411b-bd34-d34bd1ce792e:revalidation;ledger:slice-b8ad299b-3d35-42bb-9c19-6921fe890c3f:revision:5\",\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\"}}",
+    "updatedAt" : "2026-09-29T02:52:09.840388900Z"
+  }, {
+    "id" : "run-6ab8a992772c438ea661dc25bb1b72c7",
+    "kind" : "RUN",
+    "runId" : "run-6ab8a992772c438ea661dc25bb1b72c7",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"actualRows\":2,\"missingKeys\":0,\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-01bdf4c6-e2b9-411b-bd34-d34bd1ce792e:revalidation;ledger:slice-b8ad299b-3d35-42bb-9c19-6921fe890c3f:revision:5\",\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\"}}",
+    "updatedAt" : "2026-09-29T02:52:09.850375500Z"
+  }, {
+    "id" : "slice-01bdf4c6-e2b9-411b-bd34-d34bd1ce792e",
+    "kind" : "SLICE",
+    "runId" : "run-6ab8a992772c438ea661dc25bb1b72c7",
+    "parentId" : "attempt-2ada47ee-4da3-45db-abb2-57da175c21a5",
+    "state" : "VERIFIED",
+    "revision" : 4,
+    "payloadJson" : "{\"verification\":{\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-01bdf4c6-e2b9-411b-bd34-d34bd1ce792e:revalidation\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\"},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-a46db9f8b45c440f9679da26d4d01e46\",\"sliceId\":\"slice-279a0684-aece-4990-981f-5e9be3e51b55\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}",
+    "updatedAt" : "2026-09-29T02:52:03.650252700Z"
+  }, {
+    "id" : "slice-b8ad299b-3d35-42bb-9c19-6921fe890c3f",
+    "kind" : "SLICE",
+    "runId" : "run-6ab8a992772c438ea661dc25bb1b72c7",
+    "parentId" : "attempt-2ada47ee-4da3-45db-abb2-57da175c21a5",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-b8ad299b-3d35-42bb-9c19-6921fe890c3f:revision:5\",\"sourceFingerprint\":\"4058b77bd05ea92310d6a3dcbe446f23dd78bb36db22e0bd5f72dd03edbe0b1a\"}}",
+    "updatedAt" : "2026-09-29T02:52:09.823423Z"
+  } ],
+  "first" : {
+    "runId" : "run-a46db9f8b45c440f9679da26d4d01e46",
+    "state" : "PARTIAL",
+    "sourceRows" : 1,
+    "verifiedRows" : 1,
+    "errorCode" : "Incomplete",
+    "reusedRows" : 0
+  },
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "firstRunEntries" : [ {
+    "id" : "attempt-5f7d0400-e517-47db-8675-aabce2d92644",
+    "kind" : "ATTEMPT",
+    "runId" : "run-a46db9f8b45c440f9679da26d4d01e46",
+    "parentId" : "run-a46db9f8b45c440f9679da26d4d01e46",
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T02:51:57.624286700Z"
+  }, {
+    "id" : "run-a46db9f8b45c440f9679da26d4d01e46",
+    "kind" : "RUN",
+    "runId" : "run-a46db9f8b45c440f9679da26d4d01e46",
+    "parentId" : null,
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T02:51:57.633154900Z"
+  }, {
+    "id" : "slice-279a0684-aece-4990-981f-5e9be3e51b55",
+    "kind" : "SLICE",
+    "runId" : "run-a46db9f8b45c440f9679da26d4d01e46",
+    "parentId" : "attempt-5f7d0400-e517-47db-8675-aabce2d92644",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-279a0684-aece-4990-981f-5e9be3e51b55:revision:5\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\"}}",
+    "updatedAt" : "2026-09-29T02:51:52.157866Z"
+  } ],
+  "reusedProof" : "{\"verification\":{\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-01bdf4c6-e2b9-411b-bd34-d34bd1ce792e:revalidation\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\"},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-a46db9f8b45c440f9679da26d4d01e46\",\"sliceId\":\"slice-279a0684-aece-4990-981f-5e9be3e51b55\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}"
+}

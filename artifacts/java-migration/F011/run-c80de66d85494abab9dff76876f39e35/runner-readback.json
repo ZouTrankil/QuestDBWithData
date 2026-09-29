@@ -1,0 +1,74 @@
+{
+  "ledgerEntries" : [ {
+    "id" : "attempt-4d20cc77-c1b1-49a3-a1fd-1696ca832949",
+    "kind" : "ATTEMPT",
+    "runId" : "run-c80de66d85494abab9dff76876f39e35",
+    "parentId" : "run-c80de66d85494abab9dff76876f39e35",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"2ed53cd0480fca8331b564af1de88f2ec3961c7750024dff8886b7d7d0419a11\",\"readbackEvidence\":\"ledger:slice-98d8174a-a647-4e7c-99e3-e464e64d5274:revision:5;ledger:slice-175a4384-9fcd-433b-b42f-066df86d9757:revision:5\",\"mismatchedRows\":0}}",
+    "updatedAt" : "2026-09-29T02:22:57.088151500Z"
+  }, {
+    "id" : "run-c80de66d85494abab9dff76876f39e35",
+    "kind" : "RUN",
+    "runId" : "run-c80de66d85494abab9dff76876f39e35",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"2ed53cd0480fca8331b564af1de88f2ec3961c7750024dff8886b7d7d0419a11\",\"readbackEvidence\":\"ledger:slice-98d8174a-a647-4e7c-99e3-e464e64d5274:revision:5;ledger:slice-175a4384-9fcd-433b-b42f-066df86d9757:revision:5\",\"mismatchedRows\":0}}",
+    "updatedAt" : "2026-09-29T02:22:57.097498600Z"
+  }, {
+    "id" : "slice-175a4384-9fcd-433b-b42f-066df86d9757",
+    "kind" : "SLICE",
+    "runId" : "run-c80de66d85494abab9dff76876f39e35",
+    "parentId" : "attempt-4d20cc77-c1b1-49a3-a1fd-1696ca832949",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"407344261b362d5bdffa0e5cc68be35627011793d549fa3b1bd60bc8fa10131c\",\"readbackEvidence\":\"ledger:slice-175a4384-9fcd-433b-b42f-066df86d9757:revision:5\",\"mismatchedRows\":0}}",
+    "updatedAt" : "2026-09-29T02:22:57.074958200Z"
+  }, {
+    "id" : "slice-98d8174a-a647-4e7c-99e3-e464e64d5274",
+    "kind" : "SLICE",
+    "runId" : "run-c80de66d85494abab9dff76876f39e35",
+    "parentId" : "attempt-4d20cc77-c1b1-49a3-a1fd-1696ca832949",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"8d3b3154fc931e7fa6a538e58dded34273248c9fb996a283d0ae754bf222f948\",\"readbackEvidence\":\"ledger:slice-98d8174a-a647-4e7c-99e3-e464e64d5274:revision:5\",\"mismatchedRows\":0}}",
+    "updatedAt" : "2026-09-29T02:22:51.481971100Z"
+  } ],
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "result" : {
+    "runId" : "run-c80de66d85494abab9dff76876f39e35",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null
+  },
+  "runSnapshot" : {
+    "id" : "run-c80de66d85494abab9dff76876f39e35",
+    "parentRunId" : null,
+    "jobId" : "data.stock_basic",
+    "jobVersion" : 2,
+    "logicalDate" : "2026-09-29",
+    "targetId" : "isolated-questdb",
+    "frozenJson" : "{\"definition\":{\"jobId\":\"data.stock_basic\",\"version\":2,\"datasetId\":\"stock_basic_snapshot\",\"datasetVersion\":1,\"owner\":\"StockBasicSyncService\",\"supportedModes\":[\"SNAPSHOT\"],\"defaultMode\":\"SNAPSHOT\",\"parameters\":{\"codes\":{\"type\":\"STRING_LIST\",\"required\":true,\"maxLength\":12,\"maxItems\":100,\"choices\":[]}},\"ratePolicyRef\":\"tushare.shared\",\"slicePolicyRef\":\"stock_basic.snapshot\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":3,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT2M\"},\"timeout\":\"PT20M\",\"budget\":{\"maxWindowDays\":1,\"maxSlices\":100,\"maxPages\":100,\"maxRows\":100,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"SNAPSHOT\",\"parameters\":{\"codes\":[\"000001.SZ\",\"600000.SH\"]},\"from\":null,\"to\":null,\"logicalDate\":\"2026-09-29\"}"
+  },
+  "table" : "java_f011_c80de66d85494abab9dff76876f39e35",
+  "ledgerPath" : "var\\F011-c80de66d85494abab9dff76876f39e35.sqlite3"
+}

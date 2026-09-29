@@ -1,0 +1,127 @@
+{
+  "request" : {
+    "api" : "stock_basic",
+    "ts_code" : "000001.SZ"
+  },
+  "source" : {
+    "area" : "深圳",
+    "ts_code" : "000001.SZ",
+    "industry" : "银行",
+    "list_date" : "19910403",
+    "symbol" : "000001",
+    "name" : "平安银行"
+  },
+  "normalized" : {
+    "snapshotTimestamp" : 1.79064E9,
+    "stock" : {
+      "tsCode" : "000001.SZ",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "area" : "深圳",
+      "industry" : "银行",
+      "listDate" : [ 1991, 4, 3 ]
+    }
+  },
+  "table" : "java_f011_4feff0628aca42aabfae4367e167715b",
+  "first" : {
+    "runId" : "run-047b2b52e968468eb1f8e4cc53a4c40e",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "verifiedRows" : 1,
+    "errorCode" : null
+  },
+  "rerun" : {
+    "runId" : "run-a12693ccfe7742b187ba33b8f121d109",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "verifiedRows" : 1,
+    "errorCode" : null
+  },
+  "readback" : [ {
+    "snapshotTimestamp" : 1790640000.000000000,
+    "stock" : {
+      "tsCode" : "000001.SZ",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "area" : "深圳",
+      "industry" : "银行",
+      "listDate" : [ 1991, 4, 3 ]
+    }
+  } ],
+  "physicalRows" : 1,
+  "walSettled" : true,
+  "ledger" : "var\\F011-4feff0628aca42aabfae4367e167715b.sqlite3",
+  "firstEntry" : {
+    "id" : "run-047b2b52e968468eb1f8e4cc53a4c40e",
+    "kind" : "RUN",
+    "runId" : "run-047b2b52e968468eb1f8e4cc53a4c40e",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"artifacts\\\\java-migration\\\\F011\\\\live-run-4feff0628aca42aabfae4367e167715b.json\",\"readbackEvidence\":\"ledger:run-047b2b52e968468eb1f8e4cc53a4c40e\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1}}",
+    "updatedAt" : "2026-09-29T02:19:02.260688Z"
+  },
+  "firstEvents" : [ {
+    "entryId" : "run-047b2b52e968468eb1f8e4cc53a4c40e",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payloadJson" : "{}",
+    "updatedAt" : "2026-09-29T02:19:00.247441500Z"
+  }, {
+    "entryId" : "run-047b2b52e968468eb1f8e4cc53a4c40e",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payloadJson" : "{}",
+    "updatedAt" : "2026-09-29T02:19:00.391360900Z"
+  }, {
+    "entryId" : "run-047b2b52e968468eb1f8e4cc53a4c40e",
+    "revision" : 2,
+    "state" : "VERIFIED",
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"artifacts\\\\java-migration\\\\F011\\\\live-run-4feff0628aca42aabfae4367e167715b.json\",\"readbackEvidence\":\"ledger:run-047b2b52e968468eb1f8e4cc53a4c40e\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1}}",
+    "updatedAt" : "2026-09-29T02:19:02.260688Z"
+  } ],
+  "firstSliceEvents" : [ {
+    "entryId" : "slice-4e31a91f-e83e-496c-84d6-9c703735fc6c",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payloadJson" : "{}",
+    "updatedAt" : "2026-09-29T02:19:01.816775400Z"
+  }, {
+    "entryId" : "slice-4e31a91f-e83e-496c-84d6-9c703735fc6c",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payloadJson" : "{}",
+    "updatedAt" : "2026-09-29T02:19:01.825272400Z"
+  }, {
+    "entryId" : "slice-4e31a91f-e83e-496c-84d6-9c703735fc6c",
+    "revision" : 2,
+    "state" : "FETCHED",
+    "payloadJson" : "{\"returnedRows\":1,\"sourceFingerprint\":\"7bae70e2f32c38c7ee1ea5f7e2e215a3af45ccece0299d06eb0c50798330247b\",\"responseEvidence\":\"artifacts\\\\java-migration\\\\F011\\\\live-run-4feff0628aca42aabfae4367e167715b.json\",\"cursor\":\"stock-basic-one-code\"}",
+    "updatedAt" : "2026-09-29T02:19:01.833279500Z"
+  }, {
+    "entryId" : "slice-4e31a91f-e83e-496c-84d6-9c703735fc6c",
+    "revision" : 3,
+    "state" : "VALIDATED",
+    "payloadJson" : "{\"returnedRows\":1,\"sourceFingerprint\":\"7bae70e2f32c38c7ee1ea5f7e2e215a3af45ccece0299d06eb0c50798330247b\",\"responseEvidence\":\"artifacts\\\\java-migration\\\\F011\\\\live-run-4feff0628aca42aabfae4367e167715b.json\",\"cursor\":\"stock-basic-one-code\"}",
+    "updatedAt" : "2026-09-29T02:19:01.842410400Z"
+  }, {
+    "entryId" : "slice-4e31a91f-e83e-496c-84d6-9c703735fc6c",
+    "revision" : 4,
+    "state" : "SUBMITTED",
+    "payloadJson" : "{\"returnedRows\":1,\"sourceFingerprint\":\"7bae70e2f32c38c7ee1ea5f7e2e215a3af45ccece0299d06eb0c50798330247b\",\"responseEvidence\":\"artifacts\\\\java-migration\\\\F011\\\\live-run-4feff0628aca42aabfae4367e167715b.json\",\"cursor\":\"stock-basic-one-code\"}",
+    "updatedAt" : "2026-09-29T02:19:01.858992300Z"
+  }, {
+    "entryId" : "slice-4e31a91f-e83e-496c-84d6-9c703735fc6c",
+    "revision" : 5,
+    "state" : "ACKNOWLEDGED",
+    "payloadJson" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":1,\"verifiedRows\":1,\"receipts\":[{\"batch\":1,\"submittedRows\":1,\"verifiedRows\":1,\"bytes\":572,\"digest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+    "updatedAt" : "2026-09-29T02:19:02.222377300Z"
+  }, {
+    "entryId" : "slice-4e31a91f-e83e-496c-84d6-9c703735fc6c",
+    "revision" : 6,
+    "state" : "VERIFIED",
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"7bae70e2f32c38c7ee1ea5f7e2e215a3af45ccece0299d06eb0c50798330247b\",\"readbackEvidence\":\"ledger:slice-4e31a91f-e83e-496c-84d6-9c703735fc6c:revision:5\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1}}",
+    "updatedAt" : "2026-09-29T02:19:02.235379Z"
+  } ],
+  "isolatedTableCleaned" : true
+}

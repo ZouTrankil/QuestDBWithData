@@ -14,9 +14,9 @@ class SyncJobCatalogApplicationTest {
         app.setWebApplicationType(WebApplicationType.NONE);
         try (var context = app.run("show-sync-job-definitions")) {
             var registry = context.getBean(SyncJobRegistry.class);
-            var job = registry.require("data.stock_basic", 1);
+            var job = registry.require("data.stock_basic", 2);
             assertEquals(context.getBean(StockBasicSyncService.class).datasetId(), job.datasetId());
-            assertFalse(job.enabled());
+            assertTrue(job.enabled());
             assertFalse(job.dailyEligible());
             assertTrue(registry.dailyJobs().isEmpty());
             Path output = Path.of("artifacts/java-migration/F009/job-definitions.json");

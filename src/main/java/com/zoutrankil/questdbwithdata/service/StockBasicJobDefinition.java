@@ -8,6 +8,7 @@ import static com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.*;
 /** Existing directory source is snapshot-only. Activation belongs to the verified runner. */
 public final class StockBasicJobDefinition {
     private StockBasicJobDefinition() {}
+    public static final SyncJobDefinition CURRENT = StockBasicSyncAdapter.definition(true);
     public static final SyncJobDefinition DEFINITION = new SyncJobDefinition(
             "data.stock_basic", 1, "stock_basic_snapshot", 1, "StockBasicSyncService",
             Set.of(Mode.SNAPSHOT), Mode.SNAPSHOT, Map.of(), "tushare.shared", "stock_basic.snapshot",
