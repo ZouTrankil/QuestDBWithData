@@ -47,8 +47,12 @@ public final class SyncJobRunner<T, K> {
     }
     public Result resume(String runId,String priorRunId,String targetId,FrozenRequest request,
                          Adapter<T,K> adapter,BooleanSupplier cancelled) throws Exception {
+        return resume(runId, priorRunId, priorRunId, targetId, request, adapter, cancelled);
+    }
+    public Result resume(String runId, String parentRunId, String priorRunId, String targetId,
+                         FrozenRequest request, Adapter<T,K> adapter, BooleanSupplier cancelled) throws Exception {
         var recovery=VerifiedSliceRecovery.load(ledger,priorRunId,request,targetId);
-        return execute(runId,priorRunId,targetId,request,adapter,cancelled,recovery);
+        return execute(runId,parentRunId,targetId,request,adapter,cancelled,recovery);
     }
     private Result execute(String runId,String parentRunId,String targetId,FrozenRequest request,
                            Adapter<T,K> adapter,BooleanSupplier cancelled,VerifiedSliceRecovery recovery) throws Exception {

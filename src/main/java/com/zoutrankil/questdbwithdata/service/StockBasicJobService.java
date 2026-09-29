@@ -32,14 +32,20 @@ public class StockBasicJobService {
         this.questdb=questdb; this.target=target; this.ledgerPath=Path.of(ledgerPath).toAbsolutePath().normalize();
     }
     public SyncJobRunner.Result run(List<String> codes, LocalDate logicalDate) throws Exception {
-        return execute(codes,logicalDate,null);
+        return execute("run-"+UUID.randomUUID(),null,null,codes,logicalDate,targetId());
     }
     public SyncJobRunner.Result resume(List<String> codes,LocalDate logicalDate,String priorRunId) throws Exception {
-        return execute(codes,logicalDate,Objects.requireNonNull(priorRunId));
+        return execute("run-"+UUID.randomUUID(),null,Objects.requireNonNull(priorRunId),
+                codes,logicalDate,targetId());
     }
-    private SyncJobRunner.Result execute(List<String> codes,LocalDate logicalDate,String priorRunId) throws Exception {
-        var request=jobs.prepare("data.stock_basic",2,null,Map.of("codes",codes),null,null,logicalDate);
-        String run="run-"+UUID.randomUUID();
+    public SyncJobRunner.Result runAsGroupChild(String runId,String parentGroupRunId,String priorChildRunId,
+                                                String expectedTargetId,List<String> codes,LocalDate logicalDate)
+            throws Exception {
+        String actual=targetId();
+        if(!actual.equals(expectedTargetId)) throw new IllegalStateException("Group target changed before child run");
+        return execute(runId,parentGroupRunId,priorChildRunId,codes,logicalDate,actual);
+    }
+    public String targetId() throws Exception {
         String table=StockBasicDataset.DEFINITION.objectName();
         var objects=jdbc.queryForList("SELECT id, directoryName FROM tables() WHERE table_name = ?",table);
         if(objects.size()!=1 || !(objects.getFirst().get("id") instanceof Number)
@@ -47,14 +53,21 @@ public class StockBasicJobService {
             throw new IllegalStateException("Exact physical QuestDB target identity required");
         String address=target.getHost()+":"+target.getPgPort()+":"+target.getQwpPort()+":"+target.getDatabase()
                 +":"+table+":"+objects.getFirst().get("id")+":"+objects.getFirst().get("directoryName");
-        String targetId="questdb-"+HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
+        return "questdb-"+HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
                 .digest(address.getBytes(StandardCharsets.UTF_8)));
+    }
+    private SyncJobRunner.Result execute(String run,String parentRunId,String priorRunId,
+                                         List<String> codes,LocalDate logicalDate,String targetId) throws Exception {
+        var request=jobs.prepare("data.stock_basic",2,null,Map.of("codes",codes),null,null,logicalDate);
+        String table=StockBasicDataset.DEFINITION.objectName();
         var ledger=new SyncRunLedger(ledgerPath);
         var adapter=new StockBasicSyncAdapter(pages,mapper,
                 new StockBasicWritePort(table,jdbc,questdb),
                 ledgerPath.getParent().resolve("sync-evidence").resolve(run));
         var runner=new SyncJobRunner<StockBasicSnapshot,StockBasicSnapshotKey>(ledger,new DatasetIntervalLock(ledgerPath));
-        return priorRunId==null ? runner.run(run,null,targetId,request,adapter,()->Thread.currentThread().isInterrupted())
-                : runner.resume(run,priorRunId,targetId,request,adapter,()->Thread.currentThread().isInterrupted());
+        return priorRunId==null ? runner.run(run,parentRunId,targetId,request,adapter,
+                ()->Thread.currentThread().isInterrupted())
+                : runner.resume(run,parentRunId==null?priorRunId:parentRunId,priorRunId,targetId,
+                request,adapter,()->Thread.currentThread().isInterrupted());
     }
 }

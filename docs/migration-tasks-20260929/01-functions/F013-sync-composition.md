@@ -1,6 +1,6 @@
 # F013 · 批量同步组合定义与串行运行
 
-- 状态：planned，尚未派发。
+- 状态：running，本地执行；定义与冻结计划已实现，串行运行及真实链路验收进行中。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`F012`；前项验收后才执行本项。

@@ -103,3 +103,5 @@ F012继续：verified ledger slices作为持久化checkpoint，VerifiedSliceReco
 F012已验收：真实Tushare两代码首轮第二页注入失败，原run保留PARTIAL与一片VERIFIED；新run重新取数，按源指纹及当前QuestDB完整键/值/WAL复核首片，只补写第二片，7字段回读2/2一致，隔离表已清理。未知提交继续IN_DOUBT并保留跨进程区间锁，不因租约时间到期自动重放；取消请求持久化。local-F012-final全套113项104通过9跳过0失败。累计12项verified，下一项F013，第二批2/10；人工复核pending_review。
 
 F012补充复核：local-F012-reopen-proof真实验证通过。重开账本、重建区间锁和执行器后恢复；实际send调用1次，已验证首片不重写，QuestDB全值回读2行一致。证据live-recovery-871ee9e0995e4800a94b01711ad1c0fd.json。继续本地串行执行，不走Orca。
+
+F013进行中：版本化组合及SyncGroupPlan冻结共同参数/成员覆盖/窗口/逻辑日期，已接入串行执行器。local-F013-cancel-plan共12项通过、0失败、0跳过；SQLite父子账本、失败停止、恢复及持久化取消边界通过。外部组合链路与正式入口待验收，仍累计12项verified。复核见artifacts/java-migration/F013/plan-review.md。

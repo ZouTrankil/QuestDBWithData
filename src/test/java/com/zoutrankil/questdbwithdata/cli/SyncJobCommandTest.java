@@ -12,7 +12,7 @@ import static org.mockito.Mockito.*;
 class SyncJobCommandTest {
     @Test void missingBoundsNeverCallsSourceService() {
         var service=mock(StockBasicJobService.class);
-        var cli=new CommandLineRunner(mock(StockBasicSyncService.class),mock(DatasetRegistry.class),mock(SyncJobRegistry.class),service);
+        var cli=new CommandLineRunner(mock(StockBasicSyncService.class),mock(DatasetRegistry.class),mock(SyncJobRegistry.class),service,mock(StockBasicGroupService.class));
         assertThrows(IllegalArgumentException.class,()->cli.run(new DefaultApplicationArguments("run-stock-basic-job")));
         assertThrows(IllegalArgumentException.class,()->cli.run(new DefaultApplicationArguments(
                 "run-stock-basic-job","--codes","000001.SZ")));
@@ -20,7 +20,7 @@ class SyncJobCommandTest {
     }
     @Test void passesExplicitCodesAndLogicalDateAndFailsUncertainResult() throws Exception {
         var service=mock(StockBasicJobService.class);
-        var cli=new CommandLineRunner(mock(StockBasicSyncService.class),mock(DatasetRegistry.class),mock(SyncJobRegistry.class),service);
+        var cli=new CommandLineRunner(mock(StockBasicSyncService.class),mock(DatasetRegistry.class),mock(SyncJobRegistry.class),service,mock(StockBasicGroupService.class));
         var codes=List.of("000001.SZ","600000.SH");
         var day=LocalDate.of(2026,9,29);
         when(service.run(codes,day)).thenReturn(new SyncJobRunner.Result("run-test",SyncRunState.IN_DOUBT,2,0,"unknown"));
@@ -31,7 +31,7 @@ class SyncJobCommandTest {
 
     @Test void resumeCommandPassesPriorRunAndNeverStartsFreshRun() throws Exception {
         var service=mock(StockBasicJobService.class);
-        var cli=new CommandLineRunner(mock(StockBasicSyncService.class),mock(DatasetRegistry.class),mock(SyncJobRegistry.class),service);
+        var cli=new CommandLineRunner(mock(StockBasicSyncService.class),mock(DatasetRegistry.class),mock(SyncJobRegistry.class),service,mock(StockBasicGroupService.class));
         var codes=List.of("000001.SZ","600000.SH");
         var day=LocalDate.of(2026,9,29);
         when(service.resume(codes,day,"prior-run")).thenReturn(
@@ -40,5 +40,20 @@ class SyncJobCommandTest {
                 "--logical-date","2026-09-29","--resume-from","prior-run"));
         verify(service).resume(codes,day,"prior-run");
         verify(service,never()).run(anyList(),any());
+    }
+
+    @Test void groupCommandRequiresExplicitBoundsAndPassesResumeIdentity() throws Exception {
+        var group=mock(StockBasicGroupService.class);
+        var cli=new CommandLineRunner(mock(StockBasicSyncService.class),mock(DatasetRegistry.class),
+                mock(SyncJobRegistry.class),mock(StockBasicJobService.class),group);
+        assertThrows(IllegalArgumentException.class,
+                ()->cli.run(new DefaultApplicationArguments("run-stock-basic-group","--codes","000001.SZ")));
+        verifyNoInteractions(group);
+        var codes=List.of("000001.SZ"); var day=LocalDate.of(2026,9,29);
+        when(group.run(codes,day,"prior-group")).thenReturn(new SyncGroupRunner.Result(
+                "new-group",SyncRunState.VERIFIED,List.of()));
+        cli.run(new DefaultApplicationArguments("run-stock-basic-group","--codes","000001.SZ",
+                "--logical-date","2026-09-29","--resume-from","prior-group"));
+        verify(group).run(codes,day,"prior-group");
     }
 }

@@ -19,13 +19,16 @@ public class CommandLineRunner implements ApplicationRunner {
     private final DatasetRegistry datasetRegistry;
     private final SyncJobRegistry jobRegistry;
     private final com.zoutrankil.questdbwithdata.service.StockBasicJobService jobService;
+    private final com.zoutrankil.questdbwithdata.service.StockBasicGroupService groupService;
 
     public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasetRegistry,
-                             SyncJobRegistry jobRegistry, com.zoutrankil.questdbwithdata.service.StockBasicJobService jobService) {
+                             SyncJobRegistry jobRegistry, com.zoutrankil.questdbwithdata.service.StockBasicJobService jobService,
+                             com.zoutrankil.questdbwithdata.service.StockBasicGroupService groupService) {
         this.syncService = syncService;
         this.datasetRegistry = datasetRegistry;
         this.jobRegistry = jobRegistry;
         this.jobService = jobService;
+        this.groupService = groupService;
     }
 
     @Override
@@ -38,6 +41,19 @@ public class CommandLineRunner implements ApplicationRunner {
         String command = args[0];
         Map<String, String> options = parseOptions(args);
         switch (command) {
+            case "show-sync-group-definitions" -> System.out.println(new ObjectMapper()
+                    .writerWithDefaultPrettyPrinter().writeValueAsString(groupService.definitions()));
+            case "run-stock-basic-group" -> {
+                if (!options.keySet().containsAll(java.util.Set.of("--codes", "--logical-date"))
+                        || !java.util.Set.of("--codes", "--logical-date", "--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --codes and --logical-date are required");
+                var codes = java.util.Arrays.asList(options.get("--codes").split(",", -1));
+                var day = java.time.LocalDate.parse(options.get("--logical-date"));
+                var result = groupService.run(codes, day, options.get("--resume-from"));
+                System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                if (result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED)
+                    throw new IllegalStateException("Group did not complete: " + result.state() + "; run=" + result.runId());
+            }
             case "cancel-sync-run" -> {
                 if (!java.util.Set.of("--ledger", "--run").containsAll(options.keySet()) || !options.containsKey("--run"))
                     throw new IllegalArgumentException("--run required; optional --ledger");
@@ -129,6 +145,8 @@ public class CommandLineRunner implements ApplicationRunner {
         return "Usage: sync-stock-basic [--output PATH] OR "
                 + "sync-stock-basic-questdb OR migrate-questdb-schema OR "
                 + "show-stock-basic-latest OR verify-questdb-jdbc OR show-dataset-definitions OR show-sync-job-definitions OR "
+                + "show-sync-group-definitions OR run-stock-basic-group --codes CODE,CODE --logical-date YYYY-MM-DD "
+                + "[--resume-from GROUP_RUN_ID] OR "
                 + "show-sync-run --run ID [--ledger PATH] [--after ENTRY_ID] [--limit N] OR "
                 + "run-stock-basic-job --codes CODE,CODE --logical-date YYYY-MM-DD [--resume-from RUN_ID] OR cancel-sync-run --run ID [--ledger PATH]";
     }
