@@ -26,7 +26,8 @@ public class StockBasicGroupService {
             true, false);
 
     @org.springframework.beans.factory.annotation.Autowired
-    public StockBasicGroupService(SyncJobRegistry jobs, StockBasicJobService stock, ExchangeCalendarJobService calendar,
+    public StockBasicGroupService(@org.springframework.context.annotation.Lazy SyncJobRegistry jobs,
+            StockBasicJobService stock, ExchangeCalendarJobService calendar,
             StockDetailInfoJobService stockDetail, IndexCatalogJobService indexCatalog, ThsIndexJobService thsIndex,
             IndexMembershipJobService indexMembership, ThsMemberJobService thsMember,
             @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath) {

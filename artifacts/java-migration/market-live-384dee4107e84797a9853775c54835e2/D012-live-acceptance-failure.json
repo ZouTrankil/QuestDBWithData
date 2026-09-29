@@ -1,0 +1,16 @@
+{
+  "task" : "D012",
+  "job" : "data.stk_st_daily",
+  "table" : "java_d012_stk_st_daily_384dee4107e84797a9853775c54835e2",
+  "startedAt" : "2026-09-29T18:52:06.567172600Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-384dee4107e84797a9853775c54835e2\\sync-ledger.sqlite",
+  "requestWindows" : {
+    "initial" : [ "2026-09-28", "2026-09-28" ],
+    "incrementalTo" : "2026-09-29"
+  },
+  "result" : "FAILED",
+  "failure" : "org.springframework.jdbc.UncategorizedSQLException: StatementCallback; uncategorized SQLException for SQL [SELECT DISTINCT cast(timestamp AS long) AS timestamp_micros FROM \"java_d012_stk_st_daily_384dee4107e84797a9853775c54835e2\" ORDER BY timestamp LIMIT 10001]; SQL state [00000]; error code [0]; ERROR: ORDER BY expressions must appear in select list. Invalid column: timestamp\n  位置：133",
+  "finishedAt" : "2026-09-29T18:52:09.991393500Z"
+}

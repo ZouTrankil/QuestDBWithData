@@ -33,6 +33,17 @@ public class TushareProperties {
         var limits = new java.util.HashMap<>(endpointLimits);
         limits.put("trade_cal",Math.min(20,Math.min(endpointPerMinute,limits.getOrDefault("trade_cal",endpointPerMinute))));
         limits.put("stock_basic",Math.min(50,Math.min(endpointPerMinute,limits.getOrDefault("stock_basic",endpointPerMinute))));
+        limits.put("daily",Math.min(450,Math.min(endpointPerMinute,limits.getOrDefault("daily",endpointPerMinute))));
+        limits.put("daily_basic",Math.min(20,Math.min(endpointPerMinute,limits.getOrDefault("daily_basic",endpointPerMinute))));
+        limits.put("stk_factor",Math.min(10,Math.min(endpointPerMinute,limits.getOrDefault("stk_factor",endpointPerMinute))));
+        limits.put("stk_factor_pro",Math.min(25,Math.min(endpointPerMinute,limits.getOrDefault("stk_factor_pro",endpointPerMinute))));
+        limits.put("stk_limit",Math.min(50,Math.min(endpointPerMinute,limits.getOrDefault("stk_limit",endpointPerMinute))));
+        limits.put("fund_share",Math.min(200,Math.min(endpointPerMinute,limits.getOrDefault("fund_share",endpointPerMinute))));
+        limits.put("fund_adj",Math.min(20,Math.min(endpointPerMinute,limits.getOrDefault("fund_adj",endpointPerMinute))));
+        limits.put("fund_daily",Math.min(10,Math.min(endpointPerMinute,limits.getOrDefault("fund_daily",endpointPerMinute))));
+        limits.put("fund_basic",Math.min(20,Math.min(endpointPerMinute,limits.getOrDefault("fund_basic",endpointPerMinute))));
+        limits.put("namechange",Math.min(10,Math.min(endpointPerMinute,limits.getOrDefault("namechange",endpointPerMinute))));
+        limits.put("suspend_d",Math.min(10,Math.min(endpointPerMinute,limits.getOrDefault("suspend_d",endpointPerMinute))));
         limits.put("ths_index",Math.min(200,Math.min(endpointPerMinute,limits.getOrDefault("ths_index",endpointPerMinute))));
         limits.put("ths_member",Math.min(200,Math.min(endpointPerMinute,limits.getOrDefault("ths_member",endpointPerMinute))));
         limits.put("index_classify",Math.min(100,Math.min(endpointPerMinute,limits.getOrDefault("index_classify",endpointPerMinute))));

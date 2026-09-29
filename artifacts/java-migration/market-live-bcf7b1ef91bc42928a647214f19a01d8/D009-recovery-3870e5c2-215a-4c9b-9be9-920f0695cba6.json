@@ -1,0 +1,38 @@
+{
+  "task" : "D009",
+  "table" : "java_d009_factor_bcf7b1ef91bc42928a647214f19a01d8",
+  "startedAt" : "2026-09-29T18:01:20.600494900Z",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-bcf7b1ef91bc42928a647214f19a01d8\\recovery-3870e5c2-215a-4c9b-9be9-920f0695cba6.sqlite",
+  "faults" : "Explicitly injected at cancellation and post-send acknowledgement boundaries",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "rowsBefore" : 11114,
+  "cancelBeforeSource" : {
+    "runId" : "cancel-before-f6880e5b-ce0b-43d6-8ef2-923c5e3036ec",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterVerifiedPage" : {
+    "runId" : "cancel-after-page-54dde722-5611-4d11-99f3-79074c71b207",
+    "state" : "CANCELLED",
+    "sourceRows" : 5557,
+    "verifiedRows" : 5557,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "resume" : {
+    "runId" : "resume-d2334e6d-8970-44ad-9503-ca2352ed8bae",
+    "state" : "VERIFIED",
+    "sourceRows" : 5557,
+    "verifiedRows" : 5557,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "resumeSendCalls" : 23,
+  "status" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: Full page recovery must revalidate all keys with zero sends",
+  "finishedAt" : "2026-09-29T18:01:58.469767800Z"
+}

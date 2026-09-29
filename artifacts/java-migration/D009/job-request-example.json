@@ -1,0 +1,76 @@
+{
+  "illustrative_only": true,
+  "job": "data.stk_factor",
+  "version": 2,
+  "defaultMode": "INCREMENTAL",
+  "scope": "all-market",
+  "firstPlan": {
+    "mode": "INCREMENTAL",
+    "bootstrapFrom": "2026-09-21",
+    "requestedThrough": "2026-09-25",
+    "logicalDate": "2026-09-29",
+    "resolved": {
+      "from": "2026-09-21",
+      "to": "2026-09-25",
+      "checkpointAnchor": "2026-09-21",
+      "checkpointBefore": null,
+      "actualTargetRangeBefore": {
+        "minTradeDate": "2026-09-10",
+        "maxTradeDate": "2026-09-29"
+      },
+      "frozenParameters": {
+        "targetId": "static-v2-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "checkpointAnchor": "2026-09-21",
+        "targetMinBefore": "2026-09-10",
+        "targetMaxBefore": "2026-09-29"
+      },
+      "bootstrap": true,
+      "cappedByBudget": true,
+      "ceiling": "2026-09-29",
+      "nextPlanRequires": "verify this window before advancing the checkpoint"
+    }
+  },
+  "laterPlan": {
+    "mode": "INCREMENTAL",
+    "bootstrapFrom": null,
+    "requestedThrough": "2026-09-29",
+    "logicalDate": "2026-09-29",
+    "verifiedCheckpointBefore": "2026-09-25",
+    "checkpointAnchor": "2026-09-21",
+    "frozenParameters": {
+      "targetId": "static-v2-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "checkpointAnchor": "2026-09-21",
+      "checkpointBefore": "2026-09-25",
+      "targetMinBefore": "2026-09-21",
+      "targetMaxBefore": "2026-09-25"
+    },
+    "actualTargetRangeBefore": {
+      "minTradeDate": "2026-09-21",
+      "maxTradeDate": "2026-09-25"
+    },
+    "resolved": {
+      "from": "2026-09-23",
+      "to": "2026-09-27",
+      "revisionLookbackDays": 2,
+      "maximumWindowDays": 5,
+      "maximumForwardAdvanceDays": 2,
+      "bootstrap": false,
+      "cappedByBudget": true
+    }
+  },
+  "sourceContract": {
+    "endpoint": "stk_factor",
+    "route": "one trade_date per all-market call",
+    "sourceCallsInFirstPlan": 5,
+    "unpagedHardRowCap": 10000,
+    "sourceContractVersion": 2,
+    "field": "pct_change"
+  },
+  "expectedProtocol": {
+    "executionTarget": "must match the targetId frozen in the request",
+    "checkpointAdvancesOnlyAfter": "VERIFIED or VERIFIED_EMPTY complete run",
+    "sameWindowRerun": "full-key all-column readback must match without creating duplicates",
+    "dataValidation": "not_run",
+    "runStatusAfterCompleteReadback": "VERIFIED"
+  }
+}

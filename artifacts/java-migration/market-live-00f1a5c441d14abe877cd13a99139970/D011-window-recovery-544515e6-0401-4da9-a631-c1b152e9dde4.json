@@ -1,0 +1,59 @@
+{
+  "task" : "D011",
+  "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T19:12:55.885086400Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "injectedScenarios" : "Cancellation after staged page, explicit synthetic stale status, lost acknowledgement after sender closed; only owned isolated target",
+  "initialSnapshot" : {
+    "duplicateKeys" : 0,
+    "rows" : 25,
+    "sha256" : "898e8caeffc172c7d657d659cdd620490fac383b9bf9d140ef2f3f1ae775b9b0"
+  },
+  "cancelBeforeSource" : {
+    "runId" : "window-cancel-before-e240232b-0de8-4e8c-ae59-dea68c0d3a78",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterStagedPage" : {
+    "runId" : "window-cancel-after-567b156a-a794-4640-8ed7-addfa9c80364",
+    "state" : "CANCELLED",
+    "sourceRows" : 12,
+    "verifiedRows" : 12,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cliResume" : {
+    "runId" : "stk-suspend-71f066dd-0a70-44b0-ac3f-e97c2db4b31a",
+    "state" : "VERIFIED",
+    "sourceRows" : 12,
+    "verifiedRows" : 12,
+    "errorCode" : null,
+    "reusedRows" : 12
+  },
+  "pageReuseScope" : "Generic page send avoided after complete stage reconstruction and readback; stage creation may write rows",
+  "staleSeed" : {
+    "date" : "2026-09-28",
+    "synthetic" : true,
+    "ts_code" : "999999.SZ"
+  },
+  "staleWindowReplacement" : {
+    "runId" : "window-stale-2a8c10ed-1ff7-4033-ae57-9880d500d928",
+    "state" : "VERIFIED",
+    "sourceRows" : 12,
+    "verifiedRows" : 12,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "status" : "VERIFIED",
+  "finalSnapshot" : {
+    "duplicateKeys" : 0,
+    "rows" : 25,
+    "sha256" : "898e8caeffc172c7d657d659cdd620490fac383b9bf9d140ef2f3f1ae775b9b0"
+  },
+  "finishedAt" : "2026-09-29T19:13:12.701569900Z"
+}

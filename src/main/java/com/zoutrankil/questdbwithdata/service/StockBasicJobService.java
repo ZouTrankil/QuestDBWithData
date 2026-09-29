@@ -25,7 +25,7 @@ public class StockBasicJobService {
     private final QuestDB questdb;
     private final QuestDbProperties target;
     private final Path ledgerPath;
-    public StockBasicJobService(SyncJobRegistry jobs, TusharePageService pages, StockBasicMapper mapper,
+    public StockBasicJobService(@Lazy SyncJobRegistry jobs, TusharePageService pages, StockBasicMapper mapper,
                                JdbcTemplate jdbc, @Lazy QuestDB questdb, QuestDbProperties target,
                                @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath) {
         this.jobs=jobs; this.pages=pages; this.mapper=mapper; this.jdbc=jdbc;

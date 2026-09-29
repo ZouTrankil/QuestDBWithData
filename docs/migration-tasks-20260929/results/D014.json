@@ -1,0 +1,130 @@
+{
+  "task_id": "D014",
+  "dataset_id": "etf_daily",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "etf-daily-8d19ba3b-76a8-455f-9d78-a48a44b1adde",
+  "attempt_id": null,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-29T18:23:16.409026Z",
+  "finished_at": "2026-09-29T18:24:43.180538700Z",
+  "target": {
+    "target_id": "static-v2-379e933bd7eec77f15a58a12ff87398b45400e700d1d337a1e0f94cc832dbf27",
+    "database_version": "QuestDB 10.0.1",
+    "formal_table": "etf_daily",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d014_etf_daily_57f2a9e58977462b90e1a258cb77c626",
+    "isolated": true,
+    "questdb_readback": "verified_full_keys_and_all_columns"
+  },
+  "incremental": {
+    "mode": null,
+    "request_window": {
+      "incrementalTo": "2026-09-29",
+      "initial": [
+        "2026-09-28",
+        "2026-09-28"
+      ]
+    },
+    "revision_overlap": "5 calendar days, clamped to original bootstrap anchor",
+    "checkpoint_before": "2026-09-28",
+    "checkpoint_after": "2026-09-29",
+    "checkpoint_policy": "Verified contiguous receipt-backed coverage; not physical MAX alone"
+  },
+  "source": {
+    "provider": "Tushare",
+    "endpoint": "fund_daily",
+    "request_evidence": null,
+    "response_evidence": "artifacts/java-migration/market-live-57f2a9e58977462b90e1a258cb77c626/D014-independent-source-readback.json",
+    "returned_rows": 10788,
+    "normalized_rows": 10788,
+    "rejected_rows": 0,
+    "fingerprint": null,
+    "requests_sent": null,
+    "source_row_cap": 5000,
+    "pagination": "Explicit one-date nonpaged source; at-cap response fails closed",
+    "official_documentation": "https://tushare.pro/document/2?doc_id=127",
+    "requests_sent_note": "Completed source pages recorded; transport retries not inferred.",
+    "completed_source_pages": 7,
+    "row_count_scope": "Four acceptance runs including repeats; source-only diagnostic probes and recovery separately recorded"
+  },
+  "write": {
+    "submitted_rows": 10788,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "delivery_status": "verified_after_full_readback",
+    "batch_row_limit": 250,
+    "batch_byte_limit": 1048576,
+    "row_count_scope": "Four acceptance runs; no inferred insert/update split; recovery separately linked."
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/market-live-57f2a9e58977462b90e1a258cb77c626/D014-independent-source-readback.json",
+    "compared_columns": [
+      "ts_code",
+      "timestamp",
+      "pre_close",
+      "open",
+      "high",
+      "low",
+      "close",
+      "change",
+      "pct_chg",
+      "vol",
+      "amount"
+    ],
+    "actual_rows": 4299,
+    "matched_rows": 4299,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": "40378b77d4bf8b2aa5f979569a01d6cfb4afdcdfa5920b2ac411f60155296138",
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": true,
+    "second_incremental": true,
+    "rate_limit": "Configured endpoint 10/min and global 20/min used; no natural provider throttling claimed",
+    "retry": "Shared bounded retry path; natural transport retry not counted as a separate acceptance assertion",
+    "pagination": "Complete bounded one-date source responses below declared cap; no offset/cursor used",
+    "resume": "2163 refetched rows independently revalidated, zero resend",
+    "cancel": "Before-source zero rows and after-verified-page 2163 rows CANCELLED",
+    "unknown_write_reconcile": "Injected acknowledgement loss after sender closure; two actual rows read back UNKNOWN_RECONCILED",
+    "compilation": "D014 owned classes, shared wiring, operational acceptance compiled with Java24; no full-suite run",
+    "tests_run": false,
+    "live_source": "Two source-only probes plus all four acceptance and two recovery fetches; no source values filtered",
+    "live_questdb_isolated_readback": "Exact keys and every physical field MATCHED; whole isolated table census has no duplicate keys",
+    "independent_raw_source_comparison": true,
+    "live_tushare": "Four nonempty real source runs; original field values retained in receipts",
+    "gradle_build": "Task sources and operational tools compiled with Java 24 against private dependency snapshot; no full Gradle build or test-suite rerun claimed",
+    "receipt_identity": "Raw field values preserved; rows ordered by full business key and JSON maps sorted before hashing, making recovery insensitive to response order",
+    "fresh_process_cli_recovery": "VERIFIED; frozen prior request restored with --resume-from alone; 2163 rows reused and independently matched"
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/D014/source-contract.md",
+    "artifacts/java-migration/D014/source-probe-summary.json",
+    "artifacts/java-migration/D014/physical-schema-20260930.json",
+    "artifacts/java-migration/market-live-57f2a9e58977462b90e1a258cb77c626/D014-live-acceptance.json",
+    "artifacts/java-migration/market-live-57f2a9e58977462b90e1a258cb77c626/D014-independent-source-readback.json",
+    "artifacts/java-migration/market-live-57f2a9e58977462b90e1a258cb77c626/D014-recovery-3faf9b64-e9ee-4352-9d61-b704fce9710e.json",
+    "artifacts/java-migration/D014/final-review.md",
+    "artifacts/java-migration/market-live-57f2a9e58977462b90e1a258cb77c626/D014-cli-recovery-b4a16db6-1904-479f-a7b3-376f793b95e2.json"
+  ],
+  "attempt_history": [],
+  "next_manual_comparison": "用户可抽查保存的全字段来源收据和完整键 SELECT；人工复核 pending_review。正式表未修改，隔离表保留供复查。",
+  "current_progress": "首次非空、两次幂等重跑、再次增量、独立全字段来源核对及取消/恢复/发送后丢ACK回读通过。",
+  "remaining_live_acceptance": [],
+  "live_acceptance_attempt": {
+    "result": "verified",
+    "evidence": "artifacts/java-migration/market-live-57f2a9e58977462b90e1a258cb77c626/D014-live-acceptance.json",
+    "formal_tables_mutated": false
+  },
+  "recovery_acceptance": "artifacts/java-migration/market-live-57f2a9e58977462b90e1a258cb77c626/D014-recovery-3faf9b64-e9ee-4352-9d61-b704fce9710e.json",
+  "cli_recovery_acceptance": "artifacts/java-migration/market-live-57f2a9e58977462b90e1a258cb77c626/D014-cli-recovery-b4a16db6-1904-479f-a7b3-376f793b95e2.json"
+}

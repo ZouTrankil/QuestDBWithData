@@ -1,0 +1,249 @@
+{
+  "task" : "D011",
+  "job" : "data.stk_suspend",
+  "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+  "startedAt" : "2026-09-29T19:07:22.818551300Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-ledger.sqlite",
+  "requestWindows" : {
+    "initial" : [ "2026-09-28", "2026-09-28" ],
+    "incrementalTo" : "2026-09-29"
+  },
+  "initialPlan" : {
+    "plan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.stk_suspend",
+          "version" : 1,
+          "datasetId" : "stk_suspend",
+          "datasetVersion" : 1,
+          "owner" : "stk_suspend_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "physicalTargetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "daily.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT10M",
+          "budget" : {
+            "maxWindowDays" : 5,
+            "maxSlices" : 5,
+            "maxPages" : 5,
+            "maxRows" : 25000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 2,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-28",
+          "physicalTargetId" : "static-v2-9d5b67cf8eb7fa265f7e3fdc7ea05b4c673bf373695292ab51d13f8a41d83576",
+          "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416"
+        },
+        "from" : "2026-09-28",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416",
+      "physicalTargetId" : "static-v2-9d5b67cf8eb7fa265f7e3fdc7ea05b4c673bf373695292ab51d13f8a41d83576",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-28",
+      "targetMinDate" : null,
+      "targetMaxDate" : null,
+      "requestedThrough" : "2026-09-28",
+      "bootstrap" : true,
+      "cappedByBudget" : false
+    },
+    "dataVerified" : false,
+    "executed" : false,
+    "request" : {
+      "definition" : {
+        "jobId" : "data.stk_suspend",
+        "version" : 1,
+        "datasetId" : "stk_suspend",
+        "datasetVersion" : 1,
+        "owner" : "stk_suspend_owner",
+        "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "daily.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT10M",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 5,
+          "maxRows" : 25000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-28",
+        "physicalTargetId" : "static-v2-9d5b67cf8eb7fa265f7e3fdc7ea05b4c673bf373695292ab51d13f8a41d83576",
+        "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416"
+      },
+      "from" : "2026-09-28",
+      "to" : "2026-09-28",
+      "logicalDate" : "2026-09-30"
+    },
+    "status" : "PLANNED",
+    "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416"
+  },
+  "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416",
+  "runs" : [ {
+    "runId" : "stk-suspend-303c63a4-a3da-4f7f-8b68-ffaf0f77da68",
+    "state" : "VERIFIED",
+    "sourceRows" : 12,
+    "verifiedRows" : 12,
+    "errorCode" : null,
+    "reusedRows" : 0
+  } ],
+  "independentReadbacks" : [ {
+    "task" : "D011",
+    "runId" : "stk-suspend-303c63a4-a3da-4f7f-8b68-ffaf0f77da68",
+    "status" : "MATCHED",
+    "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+    "requestWindow" : {
+      "toInclusive" : "2026-09-28",
+      "fromInclusive" : "2026-09-28"
+    },
+    "sourceReceiptCount" : 1,
+    "sourceReceipts" : [ {
+      "rows" : 12,
+      "tradeDate" : "2026-09-28",
+      "fingerprint" : "3d7ec34e0c95fafe2f55f402c00f27aada58d0dca67259ee847c176e6e09575b",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-303c63a4-a3da-4f7f-8b68-ffaf0f77da68\\source\\source-193c9668-f509-41d9-84e8-100092a9fc70.json"
+    } ],
+    "sourceFingerprint" : "7015b284fa3a42049708aca2cd401578f8426f4df18b145a3ace8be1e6953925",
+    "sourceRows" : 12,
+    "actualRows" : 12,
+    "matchedRows" : 12,
+    "mismatchedRows" : 0,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "extraRows" : 0,
+    "comparedColumns" : [ "ts_code", "is_suspended", "timestamp" ],
+    "query" : "SELECT ts_code,is_suspended,cast(timestamp AS long) AS timestamp_micros FROM \"java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970\" WHERE timestamp>=cast('2026-09-28T00:00:00.000000Z' AS TIMESTAMP) AND timestamp<cast('2026-09-29T00:00:00.000000Z' AS TIMESTAMP) ORDER BY timestamp,ts_code",
+    "completionEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-303c63a4-a3da-4f7f-8b68-ffaf0f77da68\\complete-stk-suspend-303c63a4-a3da-4f7f-8b68-ffaf0f77da68.json",
+    "physicalTargetBefore" : "static-v2-9d5b67cf8eb7fa265f7e3fdc7ea05b4c673bf373695292ab51d13f8a41d83576",
+    "physicalTargetAfter" : "static-v2-1efd006d9f96ae804c7d399237a110fbba5704919e8aba2ced84e970b5a654c3"
+  } ],
+  "readbackAfterFirst" : {
+    "sha256" : "db850728dc89ca0b1aab92c2f2db3d2a86f4550bb4396ccc23f89504be355394",
+    "rows" : 12,
+    "duplicateKeys" : 0
+  },
+  "result" : "FAILED",
+  "failure" : "com.zoutrankil.questdbwithdata.cli.IncompleteCommandException: stk_suspend incomplete: FAILED; run=stk-suspend-ce324ef0-5f2b-452f-abd8-9d1f7c4fcede",
+  "finishedAt" : "2026-09-29T19:07:32.664203700Z"
+}

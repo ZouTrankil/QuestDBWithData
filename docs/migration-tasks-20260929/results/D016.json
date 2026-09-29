@@ -1,0 +1,151 @@
+{
+  "task_id": "D016",
+  "dataset_id": "etf_share",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 3,
+  "run_id": "etf-share-8dea63e1-a385-42fc-a61b-12bab7880c42",
+  "attempt_id": null,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-29T20:02:57.895766500Z",
+  "finished_at": "2026-09-29T20:13:46.822309600Z",
+  "target": {
+    "target_id": "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+    "database_version": "QuestDB 10.0.1",
+    "formal_table": "etf_share",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d016_etf_share_03920d258719454e8da565b45ebb0c2f",
+    "isolated": true,
+    "questdb_readback": "verified_full_keys_and_all_six_columns"
+  },
+  "incremental": {
+    "mode": "INCREMENTAL",
+    "request_window": {
+      "initial": [
+        "2026-09-17",
+        "2026-09-17"
+      ],
+      "incrementalTo": "2026-09-18"
+    },
+    "bootstrap_policy": "Requires explicit bounded --from when no verified same-target checkpoint exists; empty isolated target only; maximum 366 calendar days.",
+    "revision_overlap": "Re-fetch up to 5 calendar days before the verified checkpoint, clamped to the frozen bootstrap anchor.",
+    "checkpoint_policy": "Only contiguous same-target job-v3 VERIFIED/VERIFIED_EMPTY INCREMENTAL intervals with matching frozen anchor/calendar and complete date receipts advance. BACKFILL/RECONCILE receipts never advance the checkpoint; physical value validation overlays the newest valid same-target v3 receipt per date across all modes, ordered by summary updatedAt and runId only as stable tie-breaker.",
+    "target_range_policy": "Incremental planning records physical min/max and reconciles the complete distinct date inventory plus every row against the receipt chain, using the newest valid same-target v3 receipt per date across INCREMENTAL/BACKFILL/RECONCILE; unexplained keys, dates or values fail closed.",
+    "checkpoint_before": "2026-09-17",
+    "checkpoint_after": "2026-09-18"
+  },
+  "source": {
+    "provider": "Tushare",
+    "endpoint": "fund_share",
+    "python_call": "_get_etf_share_by_date(trade_date) calls pro.fund_share(trade_date=trade_date) once; Java requests market=SH/SZ/O per date because the bounded 2026-09-17 unfiltered source probe proved O rows are otherwise omitted.",
+    "python_rate_limit": "Connector decorator 200 requests per 60 seconds; YAML rate setting also 200/min and is not treated as an account authorization grant.",
+    "fields": [
+      "ts_code",
+      "trade_date",
+      "fd_share",
+      "fund_type",
+      "market"
+    ],
+    "request_evidence": null,
+    "response_evidence": "artifacts/java-migration/market-live-03920d258719454e8da565b45ebb0c2f/D016-live-acceptance.json",
+    "returned_rows": 8888,
+    "normalized_rows": 8888,
+    "rejected_rows": 0,
+    "fingerprint": null,
+    "official_documentation": "https://tushare.pro/document/2?doc_id=207",
+    "documented_request_cap": 2000,
+    "documented_total_cap": null,
+    "local_date_row_cap": 5997,
+    "pagination": "No offset/limit capability documented. SH/SZ/O market filters are requested separately; any 2000-row response fails closed. A terminal response is proven only below the cap. A bounded 2026-09-17 probe returned 1774 unfiltered rows split exactly SH=999, SZ=766, O=9; explicit market=O returned the same nine .OF rows. The production request asks all five source fields in each partition.",
+    "calendar_policy": "Matches Python get_trading_dates_between: complete SSE master calendar; SH/SZ/O fund_share filters are requested for each open date.",
+    "source_version": "No provider snapshot token is exposed through the fields/items client; receipt records null.",
+    "provider_extension_diagnostic": "Read-only field diagnostic on 2026-09-28 confirmed nullable fund_type and market support for SH/SZ and update_time CONTRACT failures. A separate unfiltered/explicit O scope probe on 2026-09-17 returned 1774=SH999+SZ766+O9; explicit market=O returned the same nine .OF records, including 007767.OF. Evidence: artifacts/java-migration/D016/provider-diagnostic/etf-share-field-probe-20260928-d15d24be-b894-4c7f-b849-d90750321f09.json and artifacts/java-migration/D016/provider-diagnostic/market-scope-e00c525f-97f9-483e-89b2-dff1562f460b.json. The final five-field three-partition v3 source passed real acceptance on 2026-09-17/18, including nine O rows on the first date. Empty fields remain unsupported by current Java transport.",
+    "requests_sent": null,
+    "completed_source_pages": 15,
+    "requests_sent_note": "Each completed date requests SH/SZ/O; transport retries are not inferred.",
+    "row_count_scope": "Four acceptance runs only; recovery/revision operations separately linked."
+  },
+  "mapping_drift": {
+    "fund_type": "Tushare doc 207 does not list it, but explicit field probes confirmed provider support. It is nullable: SH had 940/1001 nonnull values and SZ 747/775. Preserve provider nulls as revisions; do not enrich from current fund_basic.",
+    "market": "Explicit field probes confirmed the provider market field. The 2026-09-17 probe proves nine O rows use six-digit .OF codes; preserve market O and map .OF to O while rejecting mismatches.",
+    "update_time": "Explicit candidate request returned Tushare CONTRACT failure on both markets. Freeze UTC observedAt as technical update_time at microsecond precision so resume is deterministic."
+  },
+  "write": {
+    "submitted_rows": 8888,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "delivery_status": "verified_after_full_readback",
+    "batch_row_limit": 250,
+    "batch_byte_limit": 1048576,
+    "row_count_scope": "Four acceptance runs; no inferred insert/update split; recovery/revision separately linked."
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/market-live-03920d258719454e8da565b45ebb0c2f/D016-revision-6f4cd85c-9f3e-4d59-b13a-07ed3d27a1ae.json",
+    "compared_columns": [
+      "ts_code",
+      "timestamp",
+      "fd_share",
+      "fund_type",
+      "market",
+      "update_time"
+    ],
+    "actual_rows": 3566,
+    "matched_rows": 3566,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": "1ed14c98e6eb3b388f57b2fe3eef8aa6effb8b75f373be39eae07e66e2dec3d3",
+    "passed": true
+  },
+  "checks": {
+    "source_call": false,
+    "source_market_partition_live": false,
+    "isolated_nonempty_write_read": false,
+    "idempotent_rerun": true,
+    "incremental_checkpoint": false,
+    "revision_overlap": false,
+    "resume_cancel": false,
+    "unknown_write_reconcile": "Two actual source rows written before injected acknowledgement loss; sender closed and readback UNKNOWN_RECONCILED.",
+    "tests_run": false,
+    "gradle_build": "Scoped Java 24 compilation and real operational runs; no full Gradle build or test-suite run claimed.",
+    "compilation": "Coordinator reports prior D016 v2 registration/source acceptance. Job version 3, SH/SZ/O scope, .OF mapping, receipt overlay, and independent readback updates remain uncompiled per instruction.",
+    "formal_table_mutated": false,
+    "nonempty_source_write_read": true,
+    "second_incremental": true,
+    "independent_raw_source_comparison": true,
+    "pagination": "Three bounded market partitions per date; 2026-09-17 SH999/SZ766/O9, each below 2000; no offset paging claimed.",
+    "resume": "1774 rows revalidated, zero resend; independent JVM CLI preserves frozen request and exact target.",
+    "cancel": "Before source and after a fully verified page; durable CANCELLED receipts retained.",
+    "null_revision": "Controlled old nonnull classification on an owned source-backed null row was replaced by provider null; six-field table digest restored.",
+    "backfill_checkpoint": "Fresh BACKFILL updates observedAt; INCREMENTAL planning uses latest value receipts while checkpoint remains 2026-09-18; subsequent source run and independent readback MATCHED.",
+    "rate_limit": "Shared configured rate budget used; no natural provider throttle asserted."
+  },
+  "blockers": [],
+  "shared_integration_needed": [],
+  "remaining_live_acceptance": [],
+  "evidence_paths": [
+    "artifacts/java-migration/D016/source-contract-review.md",
+    "artifacts/java-migration/D016/implementation-review.md",
+    "artifacts/java-migration/D016/provider-diagnostic/etf-share-field-probe-20260928-d15d24be-b894-4c7f-b849-d90750321f09.json",
+    "artifacts/java-migration/D016/provider-diagnostic/market-scope-e00c525f-97f9-483e-89b2-dff1562f460b.json",
+    "artifacts/java-migration/market-live-03920d258719454e8da565b45ebb0c2f/D016-live-acceptance.json",
+    "artifacts/java-migration/market-live-03920d258719454e8da565b45ebb0c2f/D016-recovery-5c284dbe-0b8b-4af1-b2ff-696f60d64edb.json",
+    "artifacts/java-migration/market-live-03920d258719454e8da565b45ebb0c2f/D016-cli-recovery-69132040-d187-4d22-a416-ebd174585432.json",
+    "artifacts/java-migration/market-live-03920d258719454e8da565b45ebb0c2f/D016-revision-6f4cd85c-9f3e-4d59-b13a-07ed3d27a1ae.json",
+    "artifacts/java-migration/D016/final-review.md"
+  ],
+  "next_manual_comparison": "人工复核 pending_review；可抽查三个市场原始收据、六字段独立 SELECT 及恢复/空值修订证据。正式表未修改。",
+  "current_progress": "v3 三市场四轮真实来源、六字段回读、取消恢复、独立 CLI 续跑、空值修订及回补后增量全部通过。",
+  "live_acceptance_attempt": {
+    "result": "verified",
+    "evidence": "artifacts/java-migration/market-live-03920d258719454e8da565b45ebb0c2f/D016-live-acceptance.json",
+    "formal_tables_mutated": false
+  },
+  "recovery_acceptance": "artifacts/java-migration/market-live-03920d258719454e8da565b45ebb0c2f/D016-recovery-5c284dbe-0b8b-4af1-b2ff-696f60d64edb.json",
+  "cli_recovery_acceptance": "artifacts/java-migration/market-live-03920d258719454e8da565b45ebb0c2f/D016-cli-recovery-69132040-d187-4d22-a416-ebd174585432.json",
+  "revision_acceptance": "artifacts/java-migration/market-live-03920d258719454e8da565b45ebb0c2f/D016-revision-6f4cd85c-9f3e-4d59-b13a-07ed3d27a1ae.json"
+}

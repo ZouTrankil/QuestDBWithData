@@ -1,0 +1,36 @@
+{
+  "task" : "D013",
+  "table" : "java_d013_etf_basic_c6e3b1cdbe864651a2d34d035a14a9ee",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c6e3b1cdbe864651a2d34d035a14a9ee\\recovery-53d9c73a-07a1-46f5-bb0c-88f4079801ac.sqlite",
+  "priorRunId" : "cancel-after-page-a23b1dc6-04f6-4eaf-b231-a526ae1e9145",
+  "startedAt" : "2026-09-29T18:48:25.382359500Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "rowsBefore" : 2961,
+  "result" : {
+    "runId" : "etf-basic-612bb067-b007-4962-8a2f-f80e8c6c1b32",
+    "state" : "VERIFIED",
+    "sourceRows" : 2961,
+    "verifiedRows" : 2961,
+    "errorCode" : null,
+    "reusedRows" : 2961
+  },
+  "independentReadback" : {
+    "task" : "D013",
+    "runId" : "etf-basic-612bb067-b007-4962-8a2f-f80e8c6c1b32",
+    "status" : "MATCHED",
+    "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c6e3b1cdbe864651a2d34d035a14a9ee\\sync-evidence\\etf-basic-612bb067-b007-4962-8a2f-f80e8c6c1b32\\source\\source-c0f666ec-9568-482f-9673-10fc8b941702.json",
+    "sourceFingerprint" : "f6ab7fd50abd9802239e1f406d23ab5f8b9aa485e641e785e186d5ca46f22452",
+    "sourceRows" : 2961,
+    "matches" : 2961,
+    "comparedColumns" : [ "ts_code", "name", "management", "custodian", "fund_type", "found_date", "due_date", "list_date", "issue_date", "delist_date", "issue_amount", "m_fee", "c_fee", "duration_year", "p_value", "min_amount", "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate", "market", "timestamp", "update_time" ],
+    "nullStatusRows" : 46,
+    "mismatches" : 0,
+    "duplicateKeys" : 0,
+    "query" : "SELECT \"ts_code\",\"name\",\"management\",\"custodian\",\"fund_type\",\"found_date\",\"due_date\",\"list_date\",\"issue_date\",\"delist_date\",\"issue_amount\",\"m_fee\",\"c_fee\",\"duration_year\",\"p_value\",\"min_amount\",\"exp_return\",\"benchmark\",\"status\",\"invest_type\",\"type\",\"trustee\",\"purc_startdate\",\"redm_startdate\",\"market\",cast(timestamp AS long) AS timestamp,cast(update_time AS long) AS update_time FROM java_d013_etf_basic_c6e3b1cdbe864651a2d34d035a14a9ee ORDER BY ts_code,timestamp LIMIT 15001",
+    "sourceReceiptCount" : 1
+  },
+  "rowsAfter" : 2961,
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T18:48:39.754439900Z"
+}

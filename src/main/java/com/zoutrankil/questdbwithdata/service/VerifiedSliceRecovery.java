@@ -8,6 +8,8 @@ import java.util.*;
 
 /** Verified ledger slices are checkpoints; old offset cursors never skip fresh source reads. */
 public final class VerifiedSliceRecovery {
+    /** Conservative across typed ports; current concrete ports accept at least 250 complete keys. */
+    private static final int MAX_RECOVERY_READBACK_KEYS = 100;
     public record Checkpoint(String runId,String sliceId,String sourceFingerprint,int rows) {}
     public record Readback(Checkpoint checkpoint,String valueDigest) {}
     public record CompleteRevalidation(int pages,int sourceRows,int matchedRows,
@@ -60,15 +62,36 @@ public final class VerifiedSliceRecovery {
                 throw new IllegalStateException("Duplicate source checkpoint key");
         }
         port.preflight();
-        var actual=port.readback(List.copyOf(expected.keySet()));
-        if(actual==null || actual.size()!=expected.size()) throw new IllegalStateException("Checkpoint target rows changed");
+        var keys=List.copyOf(expected.keySet());
         var seen=new HashSet<K>();
-        for(T row:actual) {
-            K key=codec.key(row);
-            if(!seen.add(key) || !expected.containsKey(key) || !Arrays.equals(expected.get(key),codec.canonicalBytes(row)))
-                throw new IllegalStateException("Checkpoint target values changed; reconcile before writing");
+        int batchNumber=0, actualRows=0;
+        for(int start=0;start<keys.size();start+=MAX_RECOVERY_READBACK_KEYS) {
+            batchNumber++;
+            var batch=keys.subList(start,Math.min(keys.size(),start+MAX_RECOVERY_READBACK_KEYS));
+            var actual=port.readback(List.copyOf(batch));
+            if(actual==null) throw new IllegalStateException("Checkpoint target readback returned null for batch="
+                    +batchNumber+" requestedKeys="+batch.size());
+            actualRows=Math.addExact(actualRows,actual.size());
+            var batchSeen=new HashSet<K>();
+            for(T row:actual) {
+                K key=codec.key(row);
+                if(key==null || !batch.contains(key))
+                    throw new IllegalStateException("Checkpoint target returned an unexpected key; batch="+batchNumber);
+                if(!batchSeen.add(key) || !seen.add(key))
+                    throw new IllegalStateException("Checkpoint target contains a duplicate key; batch="+batchNumber);
+                if(!Arrays.equals(expected.get(key),codec.canonicalBytes(row)))
+                    throw new IllegalStateException("Checkpoint target field values changed; batch="+batchNumber
+                            +" requestedKeys="+batch.size()+" actualRows="+actual.size());
+            }
+            int missing=batch.size()-batchSeen.size();
+            if(missing!=0 || actual.size()!=batch.size())
+                throw new IllegalStateException("Checkpoint target has missing/extra rows; batch="+batchNumber
+                        +" requestedKeys="+batch.size()+" actualRows="+actual.size()+" missingKeys="+missing);
         }
-        if(!port.walSettled()) throw new IllegalStateException("Checkpoint target WAL not settled");
+        if(actualRows!=expected.size() || seen.size()!=expected.size())
+            throw new IllegalStateException("Checkpoint target complete-key count changed; requestedKeys="
+                    +expected.size()+" actualRows="+actualRows+" matchedKeys="+seen.size());
+        if(!port.walSettled()) throw new IllegalStateException("Checkpoint target WAL not settled after bounded readback; batches="+batchNumber);
         var hash=MessageDigest.getInstance("SHA-256");
         for(byte[] value:expected.values()) {
             hash.update(java.nio.ByteBuffer.allocate(4).putInt(value.length).array()); hash.update(value);

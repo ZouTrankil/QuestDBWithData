@@ -1,0 +1,145 @@
+{
+  "task_id": "D015",
+  "dataset_id": "etf_adj",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "etf-adj-2f6c16d7-60d7-4e9d-b6fd-07aaf48e95c5",
+  "attempt_id": null,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-29T19:37:07.011289100Z",
+  "finished_at": "2026-09-29T19:39:18.458532300Z",
+  "target": {
+    "target_id": "static-v2-4fb32560d81b9a884f9f120eaaff5fe8658bde01309d914c57d6296a1ae803e9",
+    "database_version": "QuestDB 10.0.1",
+    "formal_table": "etf_adj",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d015_etf_adj_0e27dd96a0934279b0f84c830bca2d60",
+    "isolated": true,
+    "questdb_readback": "verified_full_keys_and_all_columns"
+  },
+  "incremental": {
+    "mode": "INCREMENTAL",
+    "request_window": {
+      "initial": [
+        "2026-09-28",
+        "2026-09-28"
+      ],
+      "incrementalTo": "2026-09-29"
+    },
+    "bootstrap_policy": "Requires explicit bounded --from on empty isolated target without a same-target verified checkpoint; maximum 366 calendar days.",
+    "revision_overlap": "Re-fetch up to 5 calendar days before the verified checkpoint, clamped to the original bootstrap anchor.",
+    "checkpoint_policy": "Only same-target, same-definition, receipt-backed contiguous VERIFIED/VERIFIED_EMPTY INCREMENTAL runs with matching anchor/calendar advance; newest date receipt ordered by verified summary updatedAt, runId only a stable tie-breaker. BACKFILL/RECONCILE do not advance.",
+    "target_range_policy": "Incremental planning reads physical min/max and the full distinct date inventory; every existing date and all source values must be explained by the selected verified receipt chain or planning fails closed.",
+    "checkpoint_before": "2026-09-28",
+    "checkpoint_after": "2026-09-29"
+  },
+  "source": {
+    "provider": "Tushare",
+    "endpoint": "fund_adj",
+    "python_call": "_get_etf_adj_by_date(trade_date): _call_fund_adj(trade_date, limit=2000, offset=offset)",
+    "python_rate_limit": "Connector decorator 20 requests per 60 seconds; config/tables.py states 25/min and is not treated as the effective call limit.",
+    "fields": [
+      "ts_code",
+      "trade_date",
+      "adj_factor"
+    ],
+    "request_evidence": null,
+    "response_evidence": "artifacts/java-migration/market-live-0e27dd96a0934279b0f84c830bca2d60/D015-independent-source-readback.json",
+    "returned_rows": 10886,
+    "normalized_rows": 10886,
+    "rejected_rows": 0,
+    "fingerprint": null,
+    "official_documentation": "https://tushare.pro/document/2?doc_id=199",
+    "documented_page_cap": 2000,
+    "documented_total_cap": null,
+    "local_date_row_cap": 10000,
+    "source_version": "No source snapshot/version token is exposed by the current fields/items client; recorded as null and to be cross-checked against an independent full source read during acceptance.",
+    "pagination": "Documented offset/limit paging; six-request maximum per date (five full 2000-row pages plus terminal short/empty page). Fails closed if the 10000-row bound is exceeded or terminal short page is not observed.",
+    "calendar_policy": "Matches Python get_trading_dates_between: complete SSE master calendar, request one unfiltered all-market fund_adj date per SSE-open day; does not filter .SH/.SZ/.OF codes.",
+    "requests_sent": null,
+    "completed_source_pages": null,
+    "requests_sent_note": "Per-date offset/page counts retained in raw source receipts; no inference about transport retries.",
+    "row_count_scope": "Four acceptance runs including repeated keys; recovery separately recorded."
+  },
+  "write": {
+    "submitted_rows": 10886,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "delivery_status": "verified_after_full_readback",
+    "batch_row_limit": 250,
+    "batch_byte_limit": 1048576,
+    "row_count_scope": "Four acceptance runs; no inferred insert/update split; recovery separately linked."
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/market-live-0e27dd96a0934279b0f84c830bca2d60/D015-independent-source-readback.json",
+    "compared_columns": [
+      "ts_code",
+      "timestamp",
+      "adj_factor"
+    ],
+    "actual_rows": 4355,
+    "matched_rows": 4355,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": "2b6685d8dc67253c8967e747dbdd0600d6015cecc859bfa68f2bc9222d45cb5b",
+    "passed": true
+  },
+  "checks": {
+    "source_call": false,
+    "source_pagination_live": false,
+    "isolated_nonempty_write_read": false,
+    "idempotent_rerun": true,
+    "incremental_checkpoint": false,
+    "revision_overlap": false,
+    "resume_cancel": false,
+    "unknown_write_reconcile": "Injected acknowledgement loss after sender closure; two actual rows read back UNKNOWN_RECONCILED",
+    "tests_run": false,
+    "gradle_build": "Task sources and operational tools compiled with Java 24 against private dependency snapshot; no full Gradle build or test-suite rerun claimed",
+    "compilation": "Not run per coordinator instruction.",
+    "formal_table_mutated": false,
+    "nonempty_source_write_read": true,
+    "second_incremental": true,
+    "independent_raw_source_comparison": true,
+    "live_tushare": "Four nonempty real source runs; original field values retained in receipts",
+    "live_questdb_isolated_readback": "Exact keys and every physical field MATCHED; whole isolated table census has no duplicate keys",
+    "rate_limit": "Configured endpoint 10/min and global 20/min used; no natural provider throttling claimed",
+    "retry": "Shared bounded retry path; natural transport retry not counted as a separate acceptance assertion",
+    "pagination": "Actual 2000-row first pages followed by terminal short pages; offsets, page row counts, raw rows and date coverage independently checked; local bound 10000/date and 6 pages.",
+    "resume": "2177 refetched rows independently revalidated, zero resend",
+    "cancel": "Before-source zero rows and after-verified-page 2177 rows CANCELLED",
+    "receipt_identity": "Raw field values preserved; rows ordered by full business key and JSON maps sorted before hashing, making recovery insensitive to response order",
+    "fresh_process_cli_resume": "VERIFIED; --resume-from alone restores exact frozen request and reuses 2177 source rows; independent source readback MATCHED"
+  },
+  "blockers": [],
+  "shared_integration_needed": [
+    "DatasetConfiguration: register dataset/job owner and slice policy etf_adj.trade_date.",
+    "TushareProperties: endpoint fund_adj limit capped at 20/minute and bounded by current configured/global budget.",
+    "CommandLineRunner: add plan-etf-adj-job/run-etf-adj-job with frozen resume-from route.",
+    "Read/write group facade: add typed etf_adj dispatch if required by existing group entrypoints."
+  ],
+  "remaining_live_acceptance": [],
+  "evidence_paths": [
+    "artifacts/java-migration/D015/source-contract-review.md",
+    "artifacts/java-migration/D015/implementation-review.md",
+    "artifacts/java-migration/market-live-0e27dd96a0934279b0f84c830bca2d60/D015-live-acceptance.json",
+    "artifacts/java-migration/market-live-0e27dd96a0934279b0f84c830bca2d60/D015-independent-source-readback.json",
+    "artifacts/java-migration/market-live-0e27dd96a0934279b0f84c830bca2d60/D015-recovery-c61d4aaa-18e9-4a07-b487-15beaaa11740.json",
+    "artifacts/java-migration/D015/final-review.md",
+    "artifacts/java-migration/market-live-0e27dd96a0934279b0f84c830bca2d60/D015-cli-recovery-c52c99d8-0ad2-4cf9-96b1-7e22abdeea79.json"
+  ],
+  "next_manual_comparison": "用户可抽查保存的全字段来源收据和完整键 SELECT；人工复核 pending_review。正式表未修改，隔离表保留供复查。",
+  "current_progress": "首次非空、两次幂等重跑、再次增量、独立全字段来源核对及取消/恢复/发送后丢ACK回读通过。",
+  "live_acceptance_attempt": {
+    "result": "verified",
+    "evidence": "artifacts/java-migration/market-live-0e27dd96a0934279b0f84c830bca2d60/D015-live-acceptance.json",
+    "formal_tables_mutated": false
+  },
+  "recovery_acceptance": "artifacts/java-migration/market-live-0e27dd96a0934279b0f84c830bca2d60/D015-recovery-c61d4aaa-18e9-4a07-b487-15beaaa11740.json",
+  "cli_recovery_acceptance": "artifacts/java-migration/market-live-0e27dd96a0934279b0f84c830bca2d60/D015-cli-recovery-c52c99d8-0ad2-4cf9-96b1-7e22abdeea79.json"
+}

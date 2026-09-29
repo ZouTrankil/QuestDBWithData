@@ -37,10 +37,31 @@ public class CommandLineRunner implements ApplicationRunner {
     private com.zoutrankil.questdbwithdata.service.IndexMembershipJobService indexMembershipService;
     @Autowired(required=false)
     private com.zoutrankil.questdbwithdata.service.ThsMemberJobService thsMemberService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.DailyJobService dailyService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.DailyBasicJobService dailyBasicService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.StockFactorJobService stockFactorService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.StockLimitJobService stockLimitService;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private com.zoutrankil.questdbwithdata.service.EtfDailyJobService etfDailyService;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.EtfAdjJobService etfAdjService;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.EtfShareJobService etfShareService;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private com.zoutrankil.questdbwithdata.service.EtfBasicJobService etfBasicService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.StockStDailyJobService stockStDailyService;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.StockSuspendJobService stockSuspendService;
 
     @Autowired
     public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasetRegistry,
-                             SyncJobRegistry jobRegistry, com.zoutrankil.questdbwithdata.service.StockBasicJobService jobService,
+                             @org.springframework.context.annotation.Lazy SyncJobRegistry jobRegistry,
+                             com.zoutrankil.questdbwithdata.service.StockBasicJobService jobService,
                              com.zoutrankil.questdbwithdata.service.StockBasicGroupService groupService,
                              ReadGroupReader readGroupReader,
                              com.zoutrankil.questdbwithdata.service.StockBasicWriteGroupService writeGroupService,
@@ -248,12 +269,398 @@ public class CommandLineRunner implements ApplicationRunner {
                         "status", command.equals("plan-sync-job") ? "PLANNED" : "VALIDATED",
                         "executed", false, "dataVerified", false, "request", new ObjectMapper().readTree(frozen))));
             }
+            case "plan-daily-job", "run-daily-job" -> {
+                if(options.containsKey("--resume-from")) {
+                    if(dailyService==null || !command.equals("run-daily-job")
+                            || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from; the original frozen scope is restored");
+                    var restored=dailyService.resume(options.get("--resume-from"));
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(restored));
+                    if(restored.errorCode()!=null || !java.util.Set.of(com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY).contains(restored.state()))
+                        throw new IncompleteCommandException("daily resume incomplete: "+restored.state()+"; run="+restored.runId());
+                    return;
+                }
+                if (dailyService == null || !options.keySet().containsAll(java.util.Set.of("--from", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --from and --logical-date required; optional --to, --mode, and run-only --resume-from");
+                boolean planOnly = command.equals("plan-daily-job");
+                if (planOnly && options.containsKey("--resume-from")) throw new IllegalArgumentException("Planning cannot resume a run");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : null;
+                var plan = dailyService.plan(java.time.LocalDate.parse(options.get("--from")),
+                        options.containsKey("--to") ? java.time.LocalDate.parse(options.get("--to")) : null,
+                        java.time.LocalDate.parse(options.get("--logical-date")), mode);
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false,
+                            "targetId", plan.targetId(), "plan", plan,
+                            "request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? dailyService.resume(plan, options.get("--resume-from")) : dailyService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("daily sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "plan-daily-basic-job", "run-daily-basic-job" -> {
+                if(options.containsKey("--resume-from")) {
+                    if(dailyBasicService==null || !command.equals("run-daily-basic-job")
+                            || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from; the original frozen scope is restored");
+                    var restored=dailyBasicService.resume(options.get("--resume-from"));
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(restored));
+                    if(restored.errorCode()!=null || !java.util.Set.of(com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY).contains(restored.state()))
+                        throw new IncompleteCommandException("daily-basic resume incomplete: "+restored.state()+"; run="+restored.runId());
+                    return;
+                }
+                if (dailyBasicService == null || !options.keySet().containsAll(java.util.Set.of("--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --logical-date required; --from is required for bootstrap/backfill, optional --to, --mode, and run-only --resume-from");
+                boolean planOnly = command.equals("plan-daily-basic-job");
+                if (planOnly && options.containsKey("--resume-from")) throw new IllegalArgumentException("Planning cannot resume a run");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : null;
+                var logicalDate = java.time.LocalDate.parse(options.get("--logical-date"));
+                var end = options.containsKey("--to") ? java.time.LocalDate.parse(options.get("--to")) : logicalDate;
+                var plan = dailyBasicService.plan(options.containsKey("--from") ? java.time.LocalDate.parse(options.get("--from")) : null,
+                        end, logicalDate, mode);
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false,
+                            "targetId", plan.targetId(), "plan", plan,
+                            "request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? dailyBasicService.resume(plan, options.get("--resume-from")) : dailyBasicService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("daily_basic sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "plan-stk-factor-job", "run-stk-factor-job" -> {
+                if(options.containsKey("--resume-from")) {
+                    if(stockFactorService==null || !command.equals("run-stk-factor-job")
+                            || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from; the original frozen scope is restored");
+                    var restored=stockFactorService.resume(options.get("--resume-from"));
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(restored));
+                    if(restored.errorCode()!=null || !java.util.Set.of(com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY).contains(restored.state()))
+                        throw new IncompleteCommandException("stk-factor resume incomplete: "+restored.state()+"; run="+restored.runId());
+                    return;
+                }
+                if (stockFactorService == null || !options.keySet().containsAll(java.util.Set.of("--to", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--ts-code", "--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --to and --logical-date required; optional --from, --mode, --ts-code, and run-only --resume-from");
+                boolean planOnly = command.equals("plan-stk-factor-job");
+                if (planOnly && options.containsKey("--resume-from")) throw new IllegalArgumentException("Planning cannot resume a run");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : null;
+                var plan = stockFactorService.planDetailed(mode,
+                        options.containsKey("--from") ? java.time.LocalDate.parse(options.get("--from")) : null,
+                        java.time.LocalDate.parse(options.get("--to")),
+                        java.time.LocalDate.parse(options.get("--logical-date")), options.get("--ts-code"));
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false,
+                            "targetId", plan.targetId(), "plan", plan,
+                            "request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? stockFactorService.resume(plan.request(), options.get("--resume-from"))
+                            : stockFactorService.run(plan.request());
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("stk_factor sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "plan-stk-limit-job", "run-stk-limit-job" -> {
+                if(options.containsKey("--resume-from")) {
+                    if(stockLimitService==null || !command.equals("run-stk-limit-job")
+                            || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from; the original frozen scope is restored");
+                    var restored=stockLimitService.resume(options.get("--resume-from"));
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(restored));
+                    if(restored.errorCode()!=null || !java.util.Set.of(com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY).contains(restored.state()))
+                        throw new IncompleteCommandException("stk-limit resume incomplete: "+restored.state()+"; run="+restored.runId());
+                    return;
+                }
+                if (stockLimitService == null || !options.keySet().containsAll(java.util.Set.of("--to", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --to and --logical-date required; optional --from for bootstrap/backfill, --mode, and run-only --resume-from");
+                boolean planOnly = command.equals("plan-stk-limit-job");
+                if (planOnly && options.containsKey("--resume-from")) throw new IllegalArgumentException("Planning cannot resume a run");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : null;
+                var plan = stockLimitService.plan(mode,
+                        options.containsKey("--from") ? java.time.LocalDate.parse(options.get("--from")) : null,
+                        java.time.LocalDate.parse(options.get("--to")),
+                        java.time.LocalDate.parse(options.get("--logical-date")));
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false,
+                            "targetId", plan.targetId(), "plan", plan,
+                            "request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? stockLimitService.resume(plan, options.get("--resume-from")) : stockLimitService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("stk_limit sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "plan-etf-daily-job", "run-etf-daily-job" -> {
+                if(options.containsKey("--resume-from")) {
+                    if(etfDailyService==null || !command.equals("run-etf-daily-job")
+                            || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from; the original frozen scope is restored");
+                    var restored=etfDailyService.resume(options.get("--resume-from"));
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(restored));
+                    if(restored.errorCode()!=null || !java.util.Set.of(com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY).contains(restored.state()))
+                        throw new IncompleteCommandException("etf-daily resume incomplete: "+restored.state()+"; run="+restored.runId());
+                    return;
+                }
+                if (etfDailyService == null || !options.keySet().containsAll(java.util.Set.of("--to", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --to and --logical-date required; optional --from for bootstrap/backfill, --mode, and run-only --resume-from");
+                boolean planOnly = command.equals("plan-etf-daily-job");
+                if (planOnly && options.containsKey("--resume-from")) throw new IllegalArgumentException("Planning cannot resume a run");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : null;
+                var plan = etfDailyService.plan(mode,
+                        options.containsKey("--from") ? java.time.LocalDate.parse(options.get("--from")) : null,
+                        java.time.LocalDate.parse(options.get("--to")),
+                        java.time.LocalDate.parse(options.get("--logical-date")));
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false,
+                            "targetId", plan.targetId(), "plan", plan,
+                            "request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? etfDailyService.resume(plan, options.get("--resume-from")) : etfDailyService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("etf_daily sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "plan-etf-adj-job", "run-etf-adj-job" -> {
+                if(options.containsKey("--resume-from")) {
+                    if(etfAdjService==null || !command.equals("run-etf-adj-job")
+                            || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from; the original frozen scope is restored");
+                    var restored=etfAdjService.resume(options.get("--resume-from"));
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(restored));
+                    if(restored.errorCode()!=null || !java.util.Set.of(com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY).contains(restored.state()))
+                        throw new IncompleteCommandException("etf-adj resume incomplete: "+restored.state()+"; run="+restored.runId());
+                    return;
+                }
+                if (etfAdjService == null || !options.keySet().containsAll(java.util.Set.of("--to", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --to and --logical-date required; optional --from for bootstrap/backfill, --mode, and run-only --resume-from");
+                boolean planOnly = command.equals("plan-etf-adj-job");
+                if (planOnly && options.containsKey("--resume-from")) throw new IllegalArgumentException("Planning cannot resume a run");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : null;
+                var plan = etfAdjService.plan(mode,
+                        options.containsKey("--from") ? java.time.LocalDate.parse(options.get("--from")) : null,
+                        java.time.LocalDate.parse(options.get("--to")),
+                        java.time.LocalDate.parse(options.get("--logical-date")));
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false,
+                            "targetId", plan.targetId(), "plan", plan,
+                            "request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? etfAdjService.resume(plan, options.get("--resume-from")) : etfAdjService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("etf_adj sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "plan-etf-share-job", "run-etf-share-job" -> {
+                if(options.containsKey("--resume-from")) {
+                    if(etfShareService==null || !command.equals("run-etf-share-job")
+                            || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from; the original frozen scope is restored");
+                    var restored=etfShareService.resume(options.get("--resume-from"));
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(restored));
+                    if(restored.errorCode()!=null || !java.util.Set.of(com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY).contains(restored.state()))
+                        throw new IncompleteCommandException("etf-share resume incomplete: "+restored.state()+"; run="+restored.runId());
+                    return;
+                }
+                if (etfShareService == null || !options.keySet().containsAll(java.util.Set.of("--to", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --to and --logical-date required; optional --from for bootstrap/backfill, --mode, and run-only --resume-from");
+                boolean planOnly = command.equals("plan-etf-share-job");
+                if (planOnly && options.containsKey("--resume-from")) throw new IllegalArgumentException("Planning cannot resume a run");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : null;
+                var plan = etfShareService.plan(mode,
+                        options.containsKey("--from") ? java.time.LocalDate.parse(options.get("--from")) : null,
+                        java.time.LocalDate.parse(options.get("--to")),
+                        java.time.LocalDate.parse(options.get("--logical-date")));
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false,
+                            "targetId", plan.targetId(), "plan", plan,
+                            "request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                } else {
+                    var result = etfShareService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("etf_share sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "plan-etf-basic-job", "run-etf-basic-job" -> {
+                if (etfBasicService == null) throw new IllegalArgumentException("ETF basic service unavailable");
+                boolean planOnly = command.equals("plan-etf-basic-job");
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (options.containsKey("--resume-from")) {
+                    if (planOnly || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from; saved observation time and scope are restored");
+                    var result = etfBasicService.resume(options.get("--resume-from"));
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED)
+                        throw new IncompleteCommandException("etf_basic resume incomplete: " + result.state() + "; run=" + result.runId());
+                } else {
+                    if (!options.keySet().equals(java.util.Set.of("--logical-date")))
+                        throw new IllegalArgumentException("ETF basic snapshot requires --logical-date YYYY-MM-DD");
+                    var plan = etfBasicService.plan(java.time.LocalDate.parse(options.get("--logical-date")));
+                    if (planOnly) System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false, "targetId", plan.targetId(),
+                            "plan", plan, "request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                    else {
+                        var result = etfBasicService.run(plan);
+                        System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                        if (result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED)
+                            throw new IncompleteCommandException("etf_basic snapshot incomplete: " + result.state() + "; run=" + result.runId());
+                    }
+                }
+            }
+            case "plan-stk-st-daily-job", "run-stk-st-daily-job" -> {
+                if(options.containsKey("--resume-from")) {
+                    if(stockStDailyService==null || !command.equals("run-stk-st-daily-job")
+                            || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from; the original frozen scope is restored");
+                    String prior=options.get("--resume-from");
+                    var restored=stockStDailyService.resume(stockStDailyService.restorePlan(prior),prior);
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(restored));
+                    if(restored.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            &&restored.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("stk_st_daily resume incomplete: "+restored.state()+"; run="+restored.runId());
+                    return;
+                }
+                if (stockStDailyService == null || !options.containsKey("--logical-date")
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --logical-date required; optional --from, --to (defaults to --logical-date), --mode, and run-only --resume-from");
+                boolean planOnly = command.equals("plan-stk-st-daily-job");
+                if (planOnly && options.containsKey("--resume-from"))
+                    throw new IllegalArgumentException("Planning cannot resume a run");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : null;
+                var logicalDate = java.time.LocalDate.parse(options.get("--logical-date"));
+                var plan = stockStDailyService.plan(mode,
+                        options.containsKey("--from") ? java.time.LocalDate.parse(options.get("--from")) : null,
+                        options.containsKey("--to") ? java.time.LocalDate.parse(options.get("--to")) : null,
+                        logicalDate);
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false,
+                            "targetId", plan.targetId(), "plan", plan,
+                            "request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? stockStDailyService.resume(plan, options.get("--resume-from")) : stockStDailyService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("stk_st_daily sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "plan-stk-suspend-job", "run-stk-suspend-job" -> {
+                if(stockSuspendService==null) throw new IllegalArgumentException("Stock suspension service unavailable");
+                var json=com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if(options.containsKey("--resume-from")) {
+                    if(!command.equals("run-stk-suspend-job") || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from; the original frozen scope is restored");
+                    var result=stockSuspendService.resume(options.get("--resume-from"));
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if(result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            &&result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("stk_suspend resume incomplete: "+result.state()+"; run="+result.runId());
+                    return;
+                }
+                if(!options.containsKey("--to") || !options.containsKey("--logical-date")
+                        || !java.util.Set.of("--from","--to","--logical-date","--mode").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --to and --logical-date required; optional --from and --mode");
+                var mode=options.containsKey("--mode")?com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT)):null;
+                var plan=stockSuspendService.planDetailed(mode,
+                        options.containsKey("--from")?java.time.LocalDate.parse(options.get("--from")):null,
+                        java.time.LocalDate.parse(options.get("--to")),java.time.LocalDate.parse(options.get("--logical-date")));
+                if(command.equals("plan-stk-suspend-job")) {
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                            "status","PLANNED","executed",false,"dataVerified",false,"targetId",plan.targetId(),
+                            "plan",plan,"request",json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                } else {
+                    var result=stockSuspendService.run(plan.request());
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if(result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            &&result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("stk_suspend incomplete: "+result.state()+"; run="+result.runId());
+                }
+            }
             case "schedule-put" -> {
                 if (!options.keySet().equals(java.util.Set.of("--request")))
                     throw new IllegalArgumentException("Explicit --request JSON required");
                 scheduleService.put(Path.of(options.get("--request")));
                 System.out.println(new ObjectMapper().writeValueAsString(Map.of(
                         "status","STORED","executed",false,"dataVerified",false)));
+            }
+            case "finish-stk-suspend-publication", "finish-stk-st-daily-publication" -> {
+                if(!options.keySet().equals(java.util.Set.of("--run","--writer-stopped"))
+                        ||!"true".equals(options.get("--writer-stopped")))
+                    throw new IllegalArgumentException("Explicit --run and --writer-stopped true required");
+                var json=com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if(command.equals("finish-stk-suspend-publication")) {
+                    if(stockSuspendService==null)throw new IllegalArgumentException("Stock suspension service unavailable");
+                    stockSuspendService.finishPublication(options.get("--run"),true);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(stockSuspendService.status(options.get("--run"))));
+                } else {
+                    if(stockStDailyService==null)throw new IllegalArgumentException("ST daily service unavailable");
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(stockStDailyService.finishInterrupted(options.get("--run"),true)));
+                }
             }
             case "schedule-status" -> {
                 if (!options.keySet().equals(java.util.Set.of("--id")))
@@ -532,6 +939,17 @@ public class CommandLineRunner implements ApplicationRunner {
                 + "show-sync-history [--ledger PATH] [--job ID] [--after RUN_ID] [--limit N] OR "
                 + "show-sync-run --run ID [--ledger PATH] [--after ENTRY_ID] [--limit N] OR "
                 + "run-stock-basic-job --codes CODE,CODE --logical-date YYYY-MM-DD [--resume-from RUN_ID] OR "
+                + "plan-daily-job|run-daily-job --from YYYY-MM-DD [--to YYYY-MM-DD] --logical-date YYYY-MM-DD [--mode MODE] OR run-daily-job --resume-from RUN_ID OR "
+                + "plan-daily-basic-job|run-daily-basic-job [--from YYYY-MM-DD] [--to YYYY-MM-DD (defaults to --logical-date)] --logical-date YYYY-MM-DD [--mode MODE] OR run-daily-basic-job --resume-from RUN_ID OR "
+                + "plan-stk-factor-job|run-stk-factor-job --to YYYY-MM-DD --logical-date YYYY-MM-DD [--from YYYY-MM-DD] [--mode MODE] [--ts-code CODE] OR run-stk-factor-job --resume-from RUN_ID OR "
+                + "plan-stk-limit-job|run-stk-limit-job --to YYYY-MM-DD --logical-date YYYY-MM-DD [--from YYYY-MM-DD] [--mode MODE] OR run-stk-limit-job --resume-from RUN_ID OR "
+                + "plan-etf-daily-job|run-etf-daily-job --to YYYY-MM-DD --logical-date YYYY-MM-DD [--from YYYY-MM-DD] [--mode MODE] OR run-etf-daily-job --resume-from RUN_ID OR "
+                + "plan-etf-basic-job|run-etf-basic-job --logical-date YYYY-MM-DD OR run-etf-basic-job --resume-from RUN_ID OR "
+                + "plan-etf-share-job|run-etf-share-job --to YYYY-MM-DD --logical-date YYYY-MM-DD [--from YYYY-MM-DD] [--mode MODE] OR run-etf-share-job --resume-from RUN_ID OR "
+                + "plan-etf-adj-job|run-etf-adj-job --to YYYY-MM-DD --logical-date YYYY-MM-DD [--from YYYY-MM-DD] [--mode MODE] OR run-etf-adj-job --resume-from RUN_ID OR "
+                + "plan-stk-suspend-job|run-stk-suspend-job --to YYYY-MM-DD --logical-date YYYY-MM-DD [--from YYYY-MM-DD] [--mode MODE] OR run-stk-suspend-job --resume-from RUN_ID OR "
+                + "finish-stk-suspend-publication|finish-stk-st-daily-publication --run RUN_ID --writer-stopped true OR "
+                + "plan-stk-st-daily-job|run-stk-st-daily-job --logical-date YYYY-MM-DD [--from YYYY-MM-DD] [--to YYYY-MM-DD (defaults to --logical-date)] [--mode MODE] OR run-stk-st-daily-job --resume-from RUN_ID OR "
                 + "plan-ths-index-job|run-ths-index-job --logical-date YYYY-MM-DD [--resume-from ID] OR "
                 + "plan-ths-member-job|run-ths-member-job --board-code THS_CODE --logical-date YYYY-MM-DD OR "
                 + "finish-ths-member-publication --run ID --writer-stopped true OR "

@@ -1,0 +1,241 @@
+{
+  "task" : "D010",
+  "job" : "data.stk_limit",
+  "table" : "java_d010_stk_limit_6f4fe7d2d30e465e903ad6d510c2df7c",
+  "startedAt" : "2026-09-29T18:07:45.280463800Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-6f4fe7d2d30e465e903ad6d510c2df7c\\sync-ledger.sqlite",
+  "requestWindows" : {
+    "initial" : [ "2026-09-28", "2026-09-28" ],
+    "incrementalTo" : "2026-09-29"
+  },
+  "initialPlan" : {
+    "status" : "PLANNED",
+    "targetId" : "static-v2-ac04d2460e55a3ecdd1ec35213554899b748f7d3d095b78da5727f4e240ac710",
+    "plan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.stk_limit",
+          "version" : 1,
+          "datasetId" : "stk_limit",
+          "datasetVersion" : 1,
+          "owner" : "stk_limit_owner",
+          "supportedModes" : [ "INCREMENTAL", "BACKFILL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "trade_dates" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 4000,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "stk_limit.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 366,
+            "maxPages" : 366,
+            "maxRows" : 2122800,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ {
+            "jobId" : "data.exchange_calendar",
+            "version" : 1
+          } ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-28",
+          "targetId" : "static-v2-ac04d2460e55a3ecdd1ec35213554899b748f7d3d095b78da5727f4e240ac710",
+          "trade_dates" : "20260928"
+        },
+        "from" : "2026-09-28",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-ac04d2460e55a3ecdd1ec35213554899b748f7d3d095b78da5727f4e240ac710",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-28",
+      "targetMinDate" : null,
+      "targetMaxDate" : null,
+      "bootstrap" : true
+    },
+    "dataVerified" : false,
+    "executed" : false,
+    "request" : {
+      "definition" : {
+        "jobId" : "data.stk_limit",
+        "version" : 1,
+        "datasetId" : "stk_limit",
+        "datasetVersion" : 1,
+        "owner" : "stk_limit_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL", "RECONCILE" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 4000,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "stk_limit.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 366,
+          "maxPages" : 366,
+          "maxRows" : 2122800,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-28",
+        "targetId" : "static-v2-ac04d2460e55a3ecdd1ec35213554899b748f7d3d095b78da5727f4e240ac710",
+        "trade_dates" : "20260928"
+      },
+      "from" : "2026-09-28",
+      "to" : "2026-09-28",
+      "logicalDate" : "2026-09-30"
+    }
+  },
+  "targetId" : "static-v2-ac04d2460e55a3ecdd1ec35213554899b748f7d3d095b78da5727f4e240ac710",
+  "runs" : [ {
+    "runId" : "stk-limit-32ab0511-1e8c-4cbe-895e-25eee9e4ecb0",
+    "state" : "VERIFIED",
+    "sourceRows" : 5648,
+    "verifiedRows" : 5648,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "stk-limit-1ecc95a5-651a-4eb2-81c4-5c5adbfd21b7",
+    "state" : "VERIFIED",
+    "sourceRows" : 5648,
+    "verifiedRows" : 5648,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "stk-limit-2dbc3a27-d96d-466d-9307-8c4b34ed31fa",
+    "state" : "VERIFIED",
+    "sourceRows" : 5648,
+    "verifiedRows" : 5648,
+    "errorCode" : null,
+    "reusedRows" : 0
+  } ],
+  "readbackAfterFirst" : {
+    "rows" : 5648,
+    "duplicateKeys" : 0,
+    "sha256" : "42d3054fd2df1d6be71d981ec9f3c27ec2c11df4d7f4c9d3d2301814479fe4b6"
+  },
+  "readbackAfterIdempotentRepeat" : {
+    "rows" : 5648,
+    "duplicateKeys" : 0,
+    "sha256" : "42d3054fd2df1d6be71d981ec9f3c27ec2c11df4d7f4c9d3d2301814479fe4b6"
+  },
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: Invalid frozen stk_limit date",
+  "finishedAt" : "2026-09-29T18:08:10.358382600Z"
+}

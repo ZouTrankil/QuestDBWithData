@@ -1,0 +1,578 @@
+{
+  "task" : "D011",
+  "job" : "data.stk_suspend",
+  "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+  "startedAt" : "2026-09-29T19:07:22.818551300Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-ledger.sqlite",
+  "requestWindows" : {
+    "initial" : [ "2026-09-28", "2026-09-28" ],
+    "incrementalTo" : "2026-09-29"
+  },
+  "initialPlan" : {
+    "plan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.stk_suspend",
+          "version" : 1,
+          "datasetId" : "stk_suspend",
+          "datasetVersion" : 1,
+          "owner" : "stk_suspend_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "physicalTargetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "daily.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT10M",
+          "budget" : {
+            "maxWindowDays" : 5,
+            "maxSlices" : 5,
+            "maxPages" : 5,
+            "maxRows" : 25000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 2,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-28",
+          "physicalTargetId" : "static-v2-9d5b67cf8eb7fa265f7e3fdc7ea05b4c673bf373695292ab51d13f8a41d83576",
+          "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416"
+        },
+        "from" : "2026-09-28",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416",
+      "physicalTargetId" : "static-v2-9d5b67cf8eb7fa265f7e3fdc7ea05b4c673bf373695292ab51d13f8a41d83576",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-28",
+      "targetMinDate" : null,
+      "targetMaxDate" : null,
+      "requestedThrough" : "2026-09-28",
+      "bootstrap" : true,
+      "cappedByBudget" : false
+    },
+    "dataVerified" : false,
+    "executed" : false,
+    "request" : {
+      "definition" : {
+        "jobId" : "data.stk_suspend",
+        "version" : 1,
+        "datasetId" : "stk_suspend",
+        "datasetVersion" : 1,
+        "owner" : "stk_suspend_owner",
+        "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "daily.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT10M",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 5,
+          "maxRows" : 25000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-28",
+        "physicalTargetId" : "static-v2-9d5b67cf8eb7fa265f7e3fdc7ea05b4c673bf373695292ab51d13f8a41d83576",
+        "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416"
+      },
+      "from" : "2026-09-28",
+      "to" : "2026-09-28",
+      "logicalDate" : "2026-09-30"
+    },
+    "status" : "PLANNED",
+    "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416"
+  },
+  "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416",
+  "runs" : [ {
+    "runId" : "stk-suspend-303c63a4-a3da-4f7f-8b68-ffaf0f77da68",
+    "state" : "VERIFIED",
+    "sourceRows" : 12,
+    "verifiedRows" : 12,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "stk-suspend-6ae2c0cd-4dd6-4da6-a374-c23f50663ce5",
+    "state" : "VERIFIED",
+    "sourceRows" : 12,
+    "verifiedRows" : 12,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "stk-suspend-20b7af06-1f8e-4196-afaa-3ffee790ed50",
+    "state" : "VERIFIED",
+    "sourceRows" : 12,
+    "verifiedRows" : 12,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "stk-suspend-32825bee-e7ee-489e-9ade-8d7d50bf3c52",
+    "state" : "VERIFIED",
+    "sourceRows" : 25,
+    "verifiedRows" : 25,
+    "errorCode" : null,
+    "reusedRows" : 0
+  } ],
+  "independentReadbacks" : [ {
+    "task" : "D011",
+    "runId" : "stk-suspend-303c63a4-a3da-4f7f-8b68-ffaf0f77da68",
+    "status" : "MATCHED",
+    "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+    "requestWindow" : {
+      "toInclusive" : "2026-09-28",
+      "fromInclusive" : "2026-09-28"
+    },
+    "sourceReceiptCount" : 1,
+    "sourceReceipts" : [ {
+      "rows" : 12,
+      "tradeDate" : "2026-09-28",
+      "fingerprint" : "3d7ec34e0c95fafe2f55f402c00f27aada58d0dca67259ee847c176e6e09575b",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-303c63a4-a3da-4f7f-8b68-ffaf0f77da68\\source\\source-193c9668-f509-41d9-84e8-100092a9fc70.json"
+    } ],
+    "sourceFingerprint" : "7015b284fa3a42049708aca2cd401578f8426f4df18b145a3ace8be1e6953925",
+    "sourceRows" : 12,
+    "actualRows" : 12,
+    "matchedRows" : 12,
+    "mismatchedRows" : 0,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "extraRows" : 0,
+    "comparedColumns" : [ "ts_code", "is_suspended", "timestamp" ],
+    "query" : "SELECT ts_code,is_suspended,cast(timestamp AS long) AS timestamp_micros FROM \"java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970\" WHERE timestamp>=cast('2026-09-28T00:00:00.000000Z' AS TIMESTAMP) AND timestamp<cast('2026-09-29T00:00:00.000000Z' AS TIMESTAMP) ORDER BY timestamp,ts_code",
+    "completionEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-303c63a4-a3da-4f7f-8b68-ffaf0f77da68\\complete-stk-suspend-303c63a4-a3da-4f7f-8b68-ffaf0f77da68.json",
+    "physicalTargetBefore" : "static-v2-9d5b67cf8eb7fa265f7e3fdc7ea05b4c673bf373695292ab51d13f8a41d83576",
+    "physicalTargetAfter" : "static-v2-1efd006d9f96ae804c7d399237a110fbba5704919e8aba2ced84e970b5a654c3"
+  }, {
+    "task" : "D011",
+    "runId" : "stk-suspend-6ae2c0cd-4dd6-4da6-a374-c23f50663ce5",
+    "status" : "MATCHED",
+    "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+    "requestWindow" : {
+      "toInclusive" : "2026-09-28",
+      "fromInclusive" : "2026-09-28"
+    },
+    "sourceReceiptCount" : 1,
+    "sourceReceipts" : [ {
+      "rows" : 12,
+      "tradeDate" : "2026-09-28",
+      "fingerprint" : "3d7ec34e0c95fafe2f55f402c00f27aada58d0dca67259ee847c176e6e09575b",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-6ae2c0cd-4dd6-4da6-a374-c23f50663ce5\\source\\source-d3c22602-4c76-41f3-afb4-c26baf2a9abf.json"
+    } ],
+    "sourceFingerprint" : "7015b284fa3a42049708aca2cd401578f8426f4df18b145a3ace8be1e6953925",
+    "sourceRows" : 12,
+    "actualRows" : 12,
+    "matchedRows" : 12,
+    "mismatchedRows" : 0,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "extraRows" : 0,
+    "comparedColumns" : [ "ts_code", "is_suspended", "timestamp" ],
+    "query" : "SELECT ts_code,is_suspended,cast(timestamp AS long) AS timestamp_micros FROM \"java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970\" WHERE timestamp>=cast('2026-09-28T00:00:00.000000Z' AS TIMESTAMP) AND timestamp<cast('2026-09-29T00:00:00.000000Z' AS TIMESTAMP) ORDER BY timestamp,ts_code",
+    "completionEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-6ae2c0cd-4dd6-4da6-a374-c23f50663ce5\\complete-stk-suspend-6ae2c0cd-4dd6-4da6-a374-c23f50663ce5.json",
+    "physicalTargetBefore" : "static-v2-1efd006d9f96ae804c7d399237a110fbba5704919e8aba2ced84e970b5a654c3",
+    "physicalTargetAfter" : "static-v2-e60401631a430abe078da60a81a07c6c3981febfe40f150cda55a3d6bf0c2f34"
+  }, {
+    "task" : "D011",
+    "runId" : "stk-suspend-20b7af06-1f8e-4196-afaa-3ffee790ed50",
+    "status" : "MATCHED",
+    "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+    "requestWindow" : {
+      "toInclusive" : "2026-09-28",
+      "fromInclusive" : "2026-09-28"
+    },
+    "sourceReceiptCount" : 1,
+    "sourceReceipts" : [ {
+      "rows" : 12,
+      "tradeDate" : "2026-09-28",
+      "fingerprint" : "3d7ec34e0c95fafe2f55f402c00f27aada58d0dca67259ee847c176e6e09575b",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-20b7af06-1f8e-4196-afaa-3ffee790ed50\\source\\source-3865cdbd-aa15-481b-8007-c28b2ab72825.json"
+    } ],
+    "sourceFingerprint" : "7015b284fa3a42049708aca2cd401578f8426f4df18b145a3ace8be1e6953925",
+    "sourceRows" : 12,
+    "actualRows" : 12,
+    "matchedRows" : 12,
+    "mismatchedRows" : 0,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "extraRows" : 0,
+    "comparedColumns" : [ "ts_code", "is_suspended", "timestamp" ],
+    "query" : "SELECT ts_code,is_suspended,cast(timestamp AS long) AS timestamp_micros FROM \"java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970\" WHERE timestamp>=cast('2026-09-28T00:00:00.000000Z' AS TIMESTAMP) AND timestamp<cast('2026-09-29T00:00:00.000000Z' AS TIMESTAMP) ORDER BY timestamp,ts_code",
+    "completionEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-20b7af06-1f8e-4196-afaa-3ffee790ed50\\complete-stk-suspend-20b7af06-1f8e-4196-afaa-3ffee790ed50.json",
+    "physicalTargetBefore" : "static-v2-e60401631a430abe078da60a81a07c6c3981febfe40f150cda55a3d6bf0c2f34",
+    "physicalTargetAfter" : "static-v2-44df9c74ccb323c5fb3a1283b8db28a41659b481490d52c96ed423e47c12f1f6"
+  }, {
+    "task" : "D011",
+    "runId" : "stk-suspend-32825bee-e7ee-489e-9ade-8d7d50bf3c52",
+    "status" : "MATCHED",
+    "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+    "requestWindow" : {
+      "toInclusive" : "2026-09-29",
+      "fromInclusive" : "2026-09-26"
+    },
+    "sourceReceiptCount" : 4,
+    "sourceReceipts" : [ {
+      "rows" : 0,
+      "tradeDate" : "2026-09-26",
+      "fingerprint" : "c3b0b7baaab1e4a385f12cb7571836bfed51aa3b7a893d3e106622a603918262",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-32825bee-e7ee-489e-9ade-8d7d50bf3c52\\source\\empty-9e48c681-85bf-49b0-8caf-5a970913cc8c.json"
+    }, {
+      "rows" : 0,
+      "tradeDate" : "2026-09-27",
+      "fingerprint" : "d1a6536ce85caef081bd60aa3137a4f7edd07ac887e1e99c6e3be9f589c150fe",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-32825bee-e7ee-489e-9ade-8d7d50bf3c52\\source\\empty-9396d7df-420c-41e4-9732-8bbc2bf500fb.json"
+    }, {
+      "rows" : 12,
+      "tradeDate" : "2026-09-28",
+      "fingerprint" : "3d7ec34e0c95fafe2f55f402c00f27aada58d0dca67259ee847c176e6e09575b",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-32825bee-e7ee-489e-9ade-8d7d50bf3c52\\source\\source-9e825614-93ac-4168-9687-fdacf92bd922.json"
+    }, {
+      "rows" : 13,
+      "tradeDate" : "2026-09-29",
+      "fingerprint" : "1af985eeee642415f9258ef217304390831204bf99dc0856ac5d9d883e6869d1",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-32825bee-e7ee-489e-9ade-8d7d50bf3c52\\source\\source-e4579544-99b2-4ee1-8661-b950c3ba19db.json"
+    } ],
+    "sourceFingerprint" : "e057545a921f402c40c7ace48b760cada3ec72a859ce720bba3f5bd1fe5eae7f",
+    "sourceRows" : 25,
+    "actualRows" : 25,
+    "matchedRows" : 25,
+    "mismatchedRows" : 0,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "extraRows" : 0,
+    "comparedColumns" : [ "ts_code", "is_suspended", "timestamp" ],
+    "query" : "SELECT ts_code,is_suspended,cast(timestamp AS long) AS timestamp_micros FROM \"java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970\" WHERE timestamp>=cast('2026-09-26T00:00:00.000000Z' AS TIMESTAMP) AND timestamp<cast('2026-09-30T00:00:00.000000Z' AS TIMESTAMP) ORDER BY timestamp,ts_code",
+    "completionEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\stk-suspend-32825bee-e7ee-489e-9ade-8d7d50bf3c52\\complete-stk-suspend-32825bee-e7ee-489e-9ade-8d7d50bf3c52.json",
+    "physicalTargetBefore" : "static-v2-44df9c74ccb323c5fb3a1283b8db28a41659b481490d52c96ed423e47c12f1f6",
+    "physicalTargetAfter" : "static-v2-cd0ed530aa720c9d6754a7f1c30f9a31603f8c3cbfbeeaf2eaab775ceb7f60b9"
+  } ],
+  "readbackAfterFirst" : {
+    "sha256" : "db850728dc89ca0b1aab92c2f2db3d2a86f4550bb4396ccc23f89504be355394",
+    "rows" : 12,
+    "duplicateKeys" : 0
+  },
+  "result" : "VERIFIED",
+  "finishedAt" : "2026-09-29T19:09:20.895307400Z",
+  "readbackAfterIdempotentRepeat" : {
+    "sha256" : "db850728dc89ca0b1aab92c2f2db3d2a86f4550bb4396ccc23f89504be355394",
+    "rows" : 12,
+    "duplicateKeys" : 0
+  },
+  "incrementalPlan" : {
+    "plan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.stk_suspend",
+          "version" : 1,
+          "datasetId" : "stk_suspend",
+          "datasetVersion" : 1,
+          "owner" : "stk_suspend_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "physicalTargetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "daily.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT10M",
+          "budget" : {
+            "maxWindowDays" : 5,
+            "maxSlices" : 5,
+            "maxPages" : 5,
+            "maxRows" : 25000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 2,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-28",
+          "checkpointBefore" : "2026-09-28",
+          "physicalTargetId" : "static-v2-44df9c74ccb323c5fb3a1283b8db28a41659b481490d52c96ed423e47c12f1f6",
+          "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416",
+          "targetMaxBefore" : "2026-09-28",
+          "targetMinBefore" : "2026-09-28"
+        },
+        "from" : "2026-09-26",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416",
+      "physicalTargetId" : "static-v2-44df9c74ccb323c5fb3a1283b8db28a41659b481490d52c96ed423e47c12f1f6",
+      "checkpointBefore" : "2026-09-28",
+      "checkpointAnchor" : "2026-09-28",
+      "targetMinDate" : "2026-09-28",
+      "targetMaxDate" : "2026-09-28",
+      "requestedThrough" : "2026-09-29",
+      "bootstrap" : false,
+      "cappedByBudget" : false
+    },
+    "dataVerified" : false,
+    "executed" : false,
+    "request" : {
+      "definition" : {
+        "jobId" : "data.stk_suspend",
+        "version" : 1,
+        "datasetId" : "stk_suspend",
+        "datasetVersion" : 1,
+        "owner" : "stk_suspend_owner",
+        "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "daily.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT10M",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 5,
+          "maxRows" : 25000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-28",
+        "checkpointBefore" : "2026-09-28",
+        "physicalTargetId" : "static-v2-44df9c74ccb323c5fb3a1283b8db28a41659b481490d52c96ed423e47c12f1f6",
+        "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416",
+        "targetMaxBefore" : "2026-09-28",
+        "targetMinBefore" : "2026-09-28"
+      },
+      "from" : "2026-09-26",
+      "to" : "2026-09-29",
+      "logicalDate" : "2026-09-30"
+    },
+    "status" : "PLANNED",
+    "targetId" : "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416"
+  },
+  "readbackAfterIncremental" : {
+    "sha256" : "898e8caeffc172c7d657d659cdd620490fac383b9bf9d140ef2f3f1ae775b9b0",
+    "rows" : 25,
+    "duplicateKeys" : 0
+  },
+  "priorFailureReport" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\D011-live-acceptance-failure.json",
+  "allPhysicalColumnsSelected" : true
+}

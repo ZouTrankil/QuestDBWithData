@@ -1,0 +1,233 @@
+{
+  "task" : "D012",
+  "job" : "data.stk_st_daily",
+  "table" : "java_d012_stk_st_daily_7d7c294a104b4fbdb6932240a360f1c3",
+  "startedAt" : "2026-09-29T18:52:42.378143900Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-7d7c294a104b4fbdb6932240a360f1c3\\sync-ledger.sqlite",
+  "requestWindows" : {
+    "incrementalTo" : "2026-09-29",
+    "initial" : [ "2026-09-28", "2026-09-28" ]
+  },
+  "initialPlan" : {
+    "executed" : false,
+    "request" : {
+      "definition" : {
+        "jobId" : "data.stk_st_daily",
+        "version" : 1,
+        "datasetId" : "stk_st_daily",
+        "datasetVersion" : 1,
+        "owner" : "stk_st_daily_owner",
+        "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 4000,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "stk_st_daily.namechange_year_trade_dates",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2H"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 366,
+          "maxPages" : 366,
+          "maxRows" : 1000000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 30,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        }, {
+          "jobId" : "data.stock_detail_info",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-28",
+        "physicalTargetId" : "static-v2-33aeb115d3c839758a1f07b6583cc765f0515ac9f5b71af70db442e047014a0f",
+        "targetId" : "d012-logical-v1-19a3ae2a89ddc654010d4d91389123f2f700036681223cd60a6ed38efcfc4861",
+        "trade_dates" : "20260928"
+      },
+      "from" : "2026-09-28",
+      "to" : "2026-09-28",
+      "logicalDate" : "2026-09-30"
+    },
+    "status" : "PLANNED",
+    "targetId" : "d012-logical-v1-19a3ae2a89ddc654010d4d91389123f2f700036681223cd60a6ed38efcfc4861",
+    "plan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.stk_st_daily",
+          "version" : 1,
+          "datasetId" : "stk_st_daily",
+          "datasetVersion" : 1,
+          "owner" : "stk_st_daily_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "trade_dates" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 4000,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "physicalTargetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "stk_st_daily.namechange_year_trade_dates",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2H"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 366,
+            "maxPages" : 366,
+            "maxRows" : 1000000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 30,
+          "dependencies" : [ {
+            "jobId" : "data.exchange_calendar",
+            "version" : 1
+          }, {
+            "jobId" : "data.stock_detail_info",
+            "version" : 1
+          } ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-28",
+          "physicalTargetId" : "static-v2-33aeb115d3c839758a1f07b6583cc765f0515ac9f5b71af70db442e047014a0f",
+          "targetId" : "d012-logical-v1-19a3ae2a89ddc654010d4d91389123f2f700036681223cd60a6ed38efcfc4861",
+          "trade_dates" : "20260928"
+        },
+        "from" : "2026-09-28",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "d012-logical-v1-19a3ae2a89ddc654010d4d91389123f2f700036681223cd60a6ed38efcfc4861",
+      "physicalTargetId" : "static-v2-33aeb115d3c839758a1f07b6583cc765f0515ac9f5b71af70db442e047014a0f",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-28",
+      "targetMinDate" : null,
+      "targetMaxDate" : null,
+      "bootstrap" : true
+    },
+    "dataVerified" : false
+  },
+  "targetId" : "d012-logical-v1-19a3ae2a89ddc654010d4d91389123f2f700036681223cd60a6ed38efcfc4861",
+  "runs" : [ ],
+  "result" : "FAILED",
+  "failure" : "com.zoutrankil.questdbwithdata.cli.IncompleteCommandException: stk_st_daily sync incomplete: FAILED; run=stk-st-daily-f5ea9189-b2e5-470e-8162-58631e0badaa",
+  "finishedAt" : "2026-09-29T18:53:40.263741200Z"
+}

@@ -1,0 +1,16 @@
+{
+  "task" : "D010",
+  "job" : "data.stk_limit",
+  "table" : "java_d010_stk_limit_03a848b1a877463a85e9b9004c982294",
+  "startedAt" : "2026-09-29T18:07:10.470412400Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-03a848b1a877463a85e9b9004c982294\\sync-ledger.sqlite",
+  "requestWindows" : {
+    "initial" : [ "2026-09-28", "2026-09-28" ],
+    "incrementalTo" : "2026-09-29"
+  },
+  "result" : "FAILED",
+  "failure" : "org.springframework.jdbc.UncategorizedSQLException: StatementCallback; uncategorized SQLException for SQL [SELECT DISTINCT cast(trade_date as long) AS trade_date_micros FROM \"java_d010_stk_limit_03a848b1a877463a85e9b9004c982294\" ORDER BY trade_date LIMIT 10001]; SQL state [00000]; error code [0]; ERROR: ORDER BY expressions must appear in select list. Invalid column: trade_date\n  位置：132",
+  "finishedAt" : "2026-09-29T18:07:13.485054600Z"
+}

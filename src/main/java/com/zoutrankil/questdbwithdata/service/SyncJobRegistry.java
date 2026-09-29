@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 /** One immutable catalog generation. Replacing it cannot mutate existing frozen requests. */
-public final class SyncJobRegistry {
+public class SyncJobRegistry {
     public record Policies(Set<String> rate, Set<String> slice, Set<String> verification) {
         public Policies {
             rate = Set.copyOf(rate); slice = Set.copyOf(slice); verification = Set.copyOf(verification);

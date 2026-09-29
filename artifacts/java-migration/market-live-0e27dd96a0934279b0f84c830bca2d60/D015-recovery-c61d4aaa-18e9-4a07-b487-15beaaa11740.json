@@ -1,0 +1,82 @@
+{
+  "task" : "D015",
+  "table" : "java_d015_etf_adj_0e27dd96a0934279b0f84c830bca2d60",
+  "startedAt" : "2026-09-29T19:38:55.066383800Z",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-0e27dd96a0934279b0f84c830bca2d60\\recovery-c61d4aaa-18e9-4a07-b487-15beaaa11740.sqlite",
+  "faults" : "Explicitly injected at cancellation and post-send acknowledgement boundaries",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "rowsBefore" : 4355,
+  "cancelBeforeSource" : {
+    "runId" : "cancel-before-348aef1d-1999-469f-9b2f-c3ee0c508643",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterVerifiedPage" : {
+    "runId" : "cancel-after-page-3a54c73e-9d83-4aca-aefc-a57557117506",
+    "state" : "CANCELLED",
+    "sourceRows" : 2177,
+    "verifiedRows" : 2177,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "resume" : {
+    "runId" : "resume-fa922292-94ac-4448-8f74-9639d78d8ae8",
+    "state" : "VERIFIED",
+    "sourceRows" : 2177,
+    "verifiedRows" : 2177,
+    "errorCode" : null,
+    "reusedRows" : 2177
+  },
+  "resumeSendCalls" : 0,
+  "independentResumeReadback" : {
+    "task" : "D015",
+    "jobId" : "data.etf_adj",
+    "runId" : "resume-fa922292-94ac-4448-8f74-9639d78d8ae8",
+    "table" : "java_d015_etf_adj_0e27dd96a0934279b0f84c830bca2d60",
+    "status" : "MATCHED",
+    "sourceReceiptCount" : 1,
+    "sourceRows" : 2177,
+    "uniqueSourceKeys" : 2177,
+    "duplicateSourceKeys" : 0,
+    "receipts" : [ {
+      "sourceRows" : 2177,
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-0e27dd96a0934279b0f84c830bca2d60\\sync-evidence\\recovery-c61d4aaa-18e9-4a07-b487-15beaaa11740\\etf-adj-20260928-86c4bb94-8ff9-47ec-b65c-27bd461a3003.json",
+      "sliceId" : "slice-7cb3853d-b100-4fab-aaeb-d49aad985dd9",
+      "fingerprint" : "1ce8dd355474a15bd11530ad45512df708f752942588fa20cbce4dfbf70874d9"
+    } ],
+    "comparedColumns" : [ "ts_code", "timestamp", "adj_factor" ],
+    "queryKeyLimit" : 100,
+    "readbackScope" : "exact source keys; no full-table extra-row census",
+    "matches" : 2177,
+    "fieldMismatches" : 0,
+    "missingRows" : 0,
+    "duplicateTargetKeys" : 0,
+    "unexpectedTargetRows" : 0,
+    "mismatches" : 0,
+    "readbackQueries" : 22,
+    "queryBatchSizes" : [ 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 77 ],
+    "query" : "SELECT \"ts_code\",cast(\"timestamp\" as long) AS \"__trade_date_micros\",\"adj_factor\" FROM \"java_d015_etf_adj_0e27dd96a0934279b0f84c830bca2d60\" WHERE (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"timestamp\"=cast(? AS TIMESTAMP)) ORDER BY \"ts_code\",\"timestamp\" LIMIT 10001",
+    "mismatchSamples" : [ ]
+  },
+  "postSendLostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 784,
+      "digest" : "0104bae6d62b05ef44e44a881c8418ccebb0b1d3ac74dcc33f53d9f6840f7e6f",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "rowsAfter" : 4355,
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T19:39:18.458532300Z"
+}

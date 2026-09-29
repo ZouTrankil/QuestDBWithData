@@ -1,0 +1,51 @@
+{
+  "task" : "D007",
+  "table" : "java_d007_daily_c494e9686f614e6ebe0a13323d3dc48f",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c494e9686f614e6ebe0a13323d3dc48f\\recovery-e1fc25bb-5569-49b1-8a84-8929441eac5c.sqlite",
+  "priorRunId" : "cancel-after-page-c1cacc3b-dab6-489f-ad2d-4111bd087bc7",
+  "startedAt" : "2026-09-29T18:47:01.509869900Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "rowsBefore" : 11116,
+  "result" : {
+    "runId" : "daily-9dcb23cc-6de3-478e-8c81-65419962c244",
+    "state" : "VERIFIED",
+    "sourceRows" : 5557,
+    "verifiedRows" : 5557,
+    "errorCode" : null,
+    "reusedRows" : 5557
+  },
+  "independentReadback" : {
+    "task" : "D007",
+    "jobId" : "data.daily",
+    "runId" : "daily-9dcb23cc-6de3-478e-8c81-65419962c244",
+    "table" : "java_d007_daily_c494e9686f614e6ebe0a13323d3dc48f",
+    "status" : "MATCHED",
+    "sourceReceiptCount" : 1,
+    "sourceRows" : 5557,
+    "uniqueSourceKeys" : 5557,
+    "duplicateSourceKeys" : 0,
+    "receipts" : [ {
+      "sourceRows" : 5557,
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c494e9686f614e6ebe0a13323d3dc48f\\sync-evidence\\daily-9dcb23cc-6de3-478e-8c81-65419962c244\\daily-20260928-4d51dc2a-ad27-4fbe-8eb7-dcf3be1b9169.json",
+      "sliceId" : "slice-5f151c91-286c-4202-bf41-52a35216c848",
+      "fingerprint" : "9e0c80ff870fdcd4a28281e7fa7999e7e5c276b82a3d8b9e1264dffc9c6b6936"
+    } ],
+    "comparedColumns" : [ "ts_code", "trade_date", "open", "high", "low", "close", "pre_close", "change", "pct_chg", "vol", "amount", "ah_vol", "ah_amount" ],
+    "queryKeyLimit" : 100,
+    "readbackScope" : "exact source keys; no full-table extra-row census",
+    "matches" : 5557,
+    "fieldMismatches" : 0,
+    "missingRows" : 0,
+    "duplicateTargetKeys" : 0,
+    "unexpectedTargetRows" : 0,
+    "mismatches" : 0,
+    "readbackQueries" : 56,
+    "queryBatchSizes" : [ 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 57 ],
+    "query" : "SELECT \"ts_code\",cast(\"trade_date\" as long) AS \"__trade_date_micros\",\"open\",\"high\",\"low\",\"close\",\"pre_close\",\"change\",\"pct_chg\",\"vol\",\"amount\",\"ah_vol\",\"ah_amount\" FROM \"java_d007_daily_c494e9686f614e6ebe0a13323d3dc48f\" WHERE (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) OR (\"ts_code\"=? AND \"trade_date\"=cast(? AS TIMESTAMP)) ORDER BY \"ts_code\",\"trade_date\" LIMIT 10001",
+    "mismatchSamples" : [ ]
+  },
+  "rowsAfter" : 11116,
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T18:47:10.800996100Z"
+}

@@ -1,0 +1,132 @@
+{
+  "task_id": "D012",
+  "dataset_id": "stk_st_daily",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "stk-st-daily-b4f2194e-6971-4b23-8ff2-533d75647eb1",
+  "attempt_id": null,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-29T18:57:04.698684400Z",
+  "finished_at": "2026-09-29T19:36:15.588024200Z",
+  "target": {
+    "target_id": "d012-logical-v1-93ddde0d7d96653e477c46ef5a827319165c0aceda300c238a36e2c50f5f226d",
+    "database_version": "QuestDB 10.0.1",
+    "formal_table": "stk_st_daily",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d012_stk_st_daily_96fe6e81659b405e8431d8324dfeac24",
+    "isolated": true,
+    "publication": "journaled_window_replacement"
+  },
+  "incremental": {
+    "mode": null,
+    "request_window": {
+      "incrementalTo": "2026-09-29",
+      "initial": [
+        "2026-09-28",
+        "2026-09-28"
+      ]
+    },
+    "bootstrap_policy": "INCREMENTAL first use requires explicit bounded from/to and an empty isolated target; source history is still read from the fixed 20100101 anchor so older active ST intervals can be materialized.",
+    "revision_overlap": "Re-fetch 30 calendar days before verified-through, clipped to bootstrap anchor; intervals are re-expanded to each SSE open date.",
+    "checkpoint_policy": "Only contiguous exact-definition, exact-target VERIFIED/VERIFIED_EMPTY INCREMENTAL runs with matching frozen SSE date lists and hash-verified annual raw-source receipts advance the checkpoint; BACKFILL does not.",
+    "target_range_before": null,
+    "checkpoint_anchor": null,
+    "checkpoint_before": "2026-09-28",
+    "checkpoint_after": "2026-09-29"
+  },
+  "source": {
+    "provider": "Tushare",
+    "endpoint": "namechange",
+    "route_policy": "One non-paged natural-year request at a time from 20100101 through the frozen run end; fields ts_code,name,start_date,end_date; year responses are independently receipted and materialized into per-SSE-session positive ST rows.",
+    "python_rate_limit": "table config 10/minute and connector decorator 10/minute; current shared Java endpoint cap still needs coordinator integration",
+    "request_evidence": null,
+    "response_evidence": "artifacts/java-migration/market-live-96fe6e81659b405e8431d8324dfeac24/D012-independent-source-readback.json",
+    "returned_rows": 1399,
+    "normalized_rows": 1399,
+    "rejected_rows": 0,
+    "fingerprint": null,
+    "local_row_cap": 5000,
+    "cap_policy": "A response at 5000 is persisted as incomplete raw evidence and rejected. Responses above the shared decoder bound fail closed; raw wire bytes are not available to this adapter. The provider's current official cap was not live-verified.",
+    "interval_policy": "Uppercase name contains ST; start_date and nonempty end_date are inclusive; blank/null end_date remains active through frozen request end; overlapping periods deduplicate by full daily key.",
+    "evidence_policy": "Annual raw rows and maps are deterministically ordered; each daily receipt references annual evidence by one safe relative filename, year, returned-row count, and SHA-256. Identical raw source content has identical fingerprints across run directories. Reopen confines annual references to the daily receipt evidence root, verifies every hash, and re-derives each per-date row. 512 MiB total run evidence bound.",
+    "row_count_scope": "Four accepted source runs, including repeated business keys; cancellation/recovery separately evidenced; earlier rejected attempts retained."
+  },
+  "write": {
+    "submitted_rows": 1399,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "delivery_status": "verified_after_full_readback_and_publication",
+    "batch_row_limit": 250,
+    "batch_byte_limit": 1048576,
+    "row_count_scope": "Logical source rows in four acceptance runs; no inferred insert/update split or total stage-copy write count."
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/market-live-96fe6e81659b405e8431d8324dfeac24/D012-independent-source-readback.json",
+    "business_keys": [
+      "ts_code",
+      "timestamp"
+    ],
+    "compared_columns": [
+      "ts_code",
+      "timestamp",
+      "is_st"
+    ],
+    "actual_rows": 559,
+    "matched_rows": 559,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": "ac2b2006e3ababe3a4c53f1559f608265c1384c496700878f83b029184de44bc",
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": true,
+    "second_incremental": true,
+    "rate_limit": "Actual source used configured endpoint 10/min and shared global budget; no natural provider throttling claimed",
+    "retry": "Shared bounded retry implementation; no new test suite or natural retry fault assertion",
+    "pagination": "Bounded non-paged source responses below cap; cap guard implemented, cap-hit live fault not claimed",
+    "resume": "CLI --resume-from only, exact frozen request, 280 verified page rows reused after stage reconstruction; stage creation can write rows",
+    "cancel": "Before-source zero rows and after-staged-page cancellation both durable CANCELLED",
+    "unknown_write_reconcile": "Two actual source rows sent; injected lost acknowledgement after sender close; bounded readback UNKNOWN_RECONCILED",
+    "st_interval_retraction": "incremental/backfill source windows are staged as preserved outside rows plus complete authoritative inside-window ST rows; revoked keys disappear through a D012 journaled rename publication, without synthetic is_st=0 rows; not live verified",
+    "tests_run": false,
+    "gradle_build": "Java 24 scoped compilation and operational execution; no full Gradle build or new test-suite run claimed",
+    "independent_raw_source_comparison": true,
+    "empty_day": "VERIFIED_EMPTY with stale in-window row removed and outside snapshot unchanged",
+    "source_revocation": "Explicit synthetic obsolete key on owned target removed by complete real-source window replacement",
+    "scoped_replacement": "Real stage-to-target rename acknowledgement loss in nonempty and empty windows; IN_DOUBT -> verified, full readback, owned lease released",
+    "live_tushare": "Four source acceptance runs plus separately recorded recovery operations",
+    "live_questdb_isolated_readback": "MATCHED"
+  },
+  "blockers": [],
+  "remaining_live_acceptance": [],
+  "evidence_paths": [
+    "artifacts/java-migration/D012/source-contract-review.md",
+    "artifacts/java-migration/D012/implementation-review.md",
+    "artifacts/java-migration/market-live-96fe6e81659b405e8431d8324dfeac24/D012-live-acceptance.json",
+    "artifacts/java-migration/market-live-96fe6e81659b405e8431d8324dfeac24/D012-independent-source-readback.json",
+    "artifacts/java-migration/market-live-96fe6e81659b405e8431d8324dfeac24/D012-window-recovery-2af8d485-8a7d-43b6-925d-f663b5d3ae7a.json",
+    "artifacts/java-migration/market-live-96fe6e81659b405e8431d8324dfeac24/D012-empty-window-0fc0d2e7-e93c-4276-8f44-ec066e4c2e89.json",
+    "artifacts/java-migration/market-live-96fe6e81659b405e8431d8324dfeac24/D012-publication-recovery-5d4a0db1-5785-4668-94f7-6560a8fa5cfa.json",
+    "artifacts/java-migration/D012/final-review.md"
+  ],
+  "next_manual_comparison": "用户可抽查原始来源收据、按完整键查询和发布日志；人工复核 pending_review。",
+  "current_progress": "真实来源四次写读、幂等增量、取消恢复、撤回、空窗口及非空/空发布中断收尾均已完成。",
+  "integration_needed": {},
+  "live_acceptance_attempt": {
+    "result": "verified",
+    "evidence": "artifacts/java-migration/market-live-96fe6e81659b405e8431d8324dfeac24/D012-live-acceptance.json",
+    "formal_tables_mutated": false
+  },
+  "recovery_acceptance": [
+    "artifacts/java-migration/market-live-96fe6e81659b405e8431d8324dfeac24/D012-window-recovery-2af8d485-8a7d-43b6-925d-f663b5d3ae7a.json",
+    "artifacts/java-migration/market-live-96fe6e81659b405e8431d8324dfeac24/D012-empty-window-0fc0d2e7-e93c-4276-8f44-ec066e4c2e89.json",
+    "artifacts/java-migration/market-live-96fe6e81659b405e8431d8324dfeac24/D012-publication-recovery-5d4a0db1-5785-4668-94f7-6560a8fa5cfa.json"
+  ]
+}

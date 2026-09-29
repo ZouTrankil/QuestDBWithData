@@ -1,0 +1,65 @@
+{
+  "task" : "D012",
+  "table" : "java_d012_stk_st_daily_96fe6e81659b405e8431d8324dfeac24",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-96fe6e81659b405e8431d8324dfeac24\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T19:32:21.624971500Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "injectedScenarios" : "Cancellation after staged page, explicit synthetic stale status, lost acknowledgement after sender closed; only owned isolated target",
+  "initialSnapshot" : {
+    "duplicateKeys" : 0,
+    "rows" : 559,
+    "sha256" : "ac2b2006e3ababe3a4c53f1559f608265c1384c496700878f83b029184de44bc"
+  },
+  "priorFailedInjection" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-96fe6e81659b405e8431d8324dfeac24\\D012-window-recovery-bb517286-1f34-4486-88ce-1405f3141749.json",
+  "cancelBeforeSource" : {
+    "runId" : "window-cancel-before-e8aa49f5-77db-4568-97cc-de75de3d2126",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterStagedPage" : {
+    "runId" : "window-cancel-after-32af92db-b4a5-42c5-b5a0-8f10f2c767e4",
+    "state" : "CANCELLED",
+    "sourceRows" : 280,
+    "verifiedRows" : 280,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cliResume" : {
+    "runId" : "stk-st-daily-fc52e723-0373-4879-aa21-dd63cf041cd0",
+    "state" : "VERIFIED",
+    "sourceRows" : 280,
+    "verifiedRows" : 280,
+    "errorCode" : null,
+    "reusedRows" : 280
+  },
+  "pageReuseScope" : "Generic page send avoided after complete stage reconstruction and readback; stage creation may write rows",
+  "staleSeed" : {
+    "ts_code" : "999999.SZ",
+    "date" : "2026-09-28",
+    "synthetic" : true
+  },
+  "staleWindowReplacement" : {
+    "runId" : "window-stale-0a669170-4d9f-47b8-869a-3a25365096f5",
+    "state" : "VERIFIED",
+    "sourceRows" : 280,
+    "verifiedRows" : 280,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "replacementSnapshot" : {
+    "duplicateKeys" : 0,
+    "rows" : 559,
+    "sha256" : "ac2b2006e3ababe3a4c53f1559f608265c1384c496700878f83b029184de44bc"
+  },
+  "status" : "VERIFIED",
+  "finalSnapshot" : {
+    "duplicateKeys" : 0,
+    "rows" : 559,
+    "sha256" : "ac2b2006e3ababe3a4c53f1559f608265c1384c496700878f83b029184de44bc"
+  },
+  "finishedAt" : "2026-09-29T19:34:05.173878300Z"
+}

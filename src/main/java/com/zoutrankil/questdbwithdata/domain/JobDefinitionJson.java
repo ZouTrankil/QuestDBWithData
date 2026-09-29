@@ -3,6 +3,7 @@ package com.zoutrankil.questdbwithdata.domain;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import java.io.IOException;
 import java.time.*;
@@ -16,6 +17,20 @@ public final class JobDefinitionJson {
         temporal.addSerializer(ZoneId.class, stringSerializer(ZoneId.class));
         temporal.addSerializer(LocalDate.class, stringSerializer(LocalDate.class));
         temporal.addSerializer(Instant.class, stringSerializer(Instant.class));
+        temporal.addSerializer(SyncJobDefinition.FrozenRequest.class,
+                new StdSerializer<SyncJobDefinition.FrozenRequest>(SyncJobDefinition.FrozenRequest.class) {
+                    @Override public void serialize(SyncJobDefinition.FrozenRequest value, JsonGenerator output,
+                                                    SerializerProvider provider) throws IOException {
+                        output.writeStartObject(value);
+                        provider.defaultSerializeField("definition", value.definition(), output);
+                        provider.defaultSerializeField("mode", value.mode(), output);
+                        provider.defaultSerializeField("parameters", value.parameters(), output);
+                        provider.defaultSerializeField("from", value.from(), output);
+                        provider.defaultSerializeField("to", value.to(), output);
+                        provider.defaultSerializeField("logicalDate", value.logicalDate(), output);
+                        output.writeEndObject();
+                    }
+                });
         temporal.addDeserializer(Duration.class,stringDeserializer(Duration.class,Duration::parse));
         temporal.addDeserializer(ZoneId.class,stringDeserializer(ZoneId.class,ZoneId::of));
         temporal.addDeserializer(LocalDate.class,stringDeserializer(LocalDate.class,LocalDate::parse));

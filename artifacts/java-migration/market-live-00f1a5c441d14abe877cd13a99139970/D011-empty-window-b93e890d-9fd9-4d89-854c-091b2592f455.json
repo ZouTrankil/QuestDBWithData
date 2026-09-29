@@ -1,0 +1,79 @@
+{
+  "task" : "D011",
+  "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T19:15:58.986886Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "before" : {
+    "duplicateKeys" : 0,
+    "rows" : 25,
+    "sha256" : "898e8caeffc172c7d657d659cdd620490fac383b9bf9d140ef2f3f1ae775b9b0"
+  },
+  "priorFailedInjection" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\D011-empty-window-3a95bf86-d7de-46fd-af48-893a20126eb6.json",
+  "injectedStaleRow" : {
+    "purpose" : "Exercise complete empty-window retraction while preserving actual outside rows",
+    "date" : "2026-09-27",
+    "ts_code" : "999999.SZ",
+    "synthetic" : true
+  },
+  "run" : {
+    "runId" : "empty-window-e6139607-6c20-4523-a812-7f9745135ad7",
+    "state" : "VERIFIED_EMPTY",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "after" : {
+    "rows" : 25,
+    "sha256" : "898e8caeffc172c7d657d659cdd620490fac383b9bf9d140ef2f3f1ae775b9b0",
+    "duplicateKeys" : 0
+  },
+  "independentReadback" : {
+    "task" : "D011",
+    "runId" : "empty-window-e6139607-6c20-4523-a812-7f9745135ad7",
+    "status" : "MATCHED",
+    "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+    "requestWindow" : {
+      "toInclusive" : "2026-09-27",
+      "fromInclusive" : "2026-09-27"
+    },
+    "sourceReceiptCount" : 1,
+    "sourceReceipts" : [ {
+      "fingerprint" : "d1a6536ce85caef081bd60aa3137a4f7edd07ac887e1e99c6e3be9f589c150fe",
+      "tradeDate" : "2026-09-27",
+      "rows" : 0,
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\empty-window-e6139607-6c20-4523-a812-7f9745135ad7\\source\\empty-cb8ce847-469e-43f8-ac3f-1a3bc896e68b.json"
+    } ],
+    "sourceFingerprint" : "502bd20d990992e0de17ba5c00ae2ffcd62329a55811aecc5a8422140b26dc25",
+    "sourceRows" : 0,
+    "actualRows" : 0,
+    "matchedRows" : 0,
+    "mismatchedRows" : 0,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "extraRows" : 0,
+    "comparedColumns" : [ "ts_code", "is_suspended", "timestamp" ],
+    "query" : "SELECT ts_code,is_suspended,cast(timestamp AS long) AS timestamp_micros FROM \"java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970\" WHERE timestamp>=cast('2026-09-27T00:00:00.000000Z' AS TIMESTAMP) AND timestamp<cast('2026-09-28T00:00:00.000000Z' AS TIMESTAMP) ORDER BY timestamp,ts_code",
+    "completionEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\empty-window-e6139607-6c20-4523-a812-7f9745135ad7\\complete-empty-window-e6139607-6c20-4523-a812-7f9745135ad7.json",
+    "physicalTargetBefore" : "static-v2-9be2f61c6477728b0f7346ccd90dced54b40665040ffc11f12385d2c35d12730",
+    "physicalTargetAfter" : "static-v2-aeb20ea89ae223aac38b4d107c76d02c15d454c0d03e311c5213293d80bf90a9"
+  },
+  "lostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 784,
+      "digest" : "0ce91bdcc6f39447b43851822151bdbbd1777eb47fccdeea62e947a860fb2179",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T19:16:04.504643800Z"
+}

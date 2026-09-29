@@ -1,0 +1,513 @@
+{
+  "task" : "D016",
+  "table" : "java_d016_etf_share_03920d258719454e8da565b45ebb0c2f",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-03920d258719454e8da565b45ebb0c2f\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T20:02:57.895766500Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "requestWindows" : {
+    "initial" : [ "2026-09-17", "2026-09-17" ],
+    "incrementalTo" : "2026-09-18"
+  },
+  "initialPlan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.etf_share",
+        "version" : 3,
+        "datasetId" : "etf_share",
+        "datasetVersion" : 1,
+        "owner" : "etf_share_owner",
+        "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 4000,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "etf_share.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 366,
+          "maxPages" : 1098,
+          "maxRows" : 2194902,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "observedAt" : "2026-09-29T20:03:01.496240Z",
+        "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+        "trade_dates" : "20260917"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : "2026-09-17",
+    "targetMinDate" : null,
+    "targetMaxDate" : null,
+    "bootstrap" : true
+  },
+  "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+  "runs" : [ {
+    "runId" : "etf-share-f59fb5e9-86f0-4e26-bd2f-190603a3e72f",
+    "state" : "VERIFIED",
+    "sourceRows" : 1774,
+    "verifiedRows" : 1774,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "etf-share-858f06cf-66f0-49d8-b67d-c4ec891e5f2b",
+    "state" : "VERIFIED",
+    "sourceRows" : 1774,
+    "verifiedRows" : 1774,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "etf-share-4a1af7a1-563b-4acc-b24b-e979abe873a8",
+    "state" : "VERIFIED",
+    "sourceRows" : 1774,
+    "verifiedRows" : 1774,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "etf-share-5ea36f79-ad55-48e5-838a-a6473b04b17f",
+    "state" : "VERIFIED",
+    "sourceRows" : 3566,
+    "verifiedRows" : 3566,
+    "errorCode" : null,
+    "reusedRows" : 0
+  } ],
+  "independentReadbacks" : [ {
+    "task" : "D016",
+    "runId" : "etf-share-f59fb5e9-86f0-4e26-bd2f-190603a3e72f",
+    "target" : "java_d016_etf_share_03920d258719454e8da565b45ebb0c2f",
+    "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+    "status" : "MATCHED",
+    "windowFrom" : "2026-09-17",
+    "windowTo" : "2026-09-17",
+    "frozenSessions" : 1,
+    "sourceReceiptCount" : 1,
+    "sourceRows" : 1774,
+    "actualWindowRows" : 1774,
+    "actualWindowOverBound" : false,
+    "matchedRows" : 1774,
+    "mismatchedRows" : 0,
+    "mismatchedValues" : 0,
+    "mismatchedFieldCounts" : { },
+    "missingKeyCount" : 0,
+    "missingKeySamples" : [ ],
+    "extraKeyCount" : 0,
+    "extraKeySamples" : [ ],
+    "duplicateKeyCount" : 0,
+    "duplicateKeySamples" : [ ],
+    "mismatchSamples" : [ ],
+    "comparedColumns" : [ "ts_code", "timestamp", "fd_share", "fund_type", "market", "update_time" ],
+    "receipts" : [ {
+      "date" : "2026-09-17",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-03920d258719454e8da565b45ebb0c2f\\sync-evidence\\etf-share-f59fb5e9-86f0-4e26-bd2f-190603a3e72f\\source\\etf-share-20260917-a89747dd-53e4-4e87-994e-d08c0e218a16.json",
+      "fingerprint" : "b54d45dc5e010d9867f37d3c731288d93b2f9a264688b465d2f9afaad670cffa",
+      "rows" : 1774
+    } ],
+    "readOnlyQuery" : "SELECT ts_code, cast(timestamp AS long) AS timestamp_micros, fd_share, fund_type, market, cast(update_time AS long) AS update_time_micros FROM \"java_d016_etf_share_03920d258719454e8da565b45ebb0c2f\" WHERE timestamp >= cast(? AS TIMESTAMP) AND timestamp < cast(? AS TIMESTAMP) ORDER BY timestamp, ts_code LIMIT 5998"
+  }, {
+    "task" : "D016",
+    "runId" : "etf-share-858f06cf-66f0-49d8-b67d-c4ec891e5f2b",
+    "target" : "java_d016_etf_share_03920d258719454e8da565b45ebb0c2f",
+    "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+    "status" : "MATCHED",
+    "windowFrom" : "2026-09-17",
+    "windowTo" : "2026-09-17",
+    "frozenSessions" : 1,
+    "sourceReceiptCount" : 1,
+    "sourceRows" : 1774,
+    "actualWindowRows" : 1774,
+    "actualWindowOverBound" : false,
+    "matchedRows" : 1774,
+    "mismatchedRows" : 0,
+    "mismatchedValues" : 0,
+    "mismatchedFieldCounts" : { },
+    "missingKeyCount" : 0,
+    "missingKeySamples" : [ ],
+    "extraKeyCount" : 0,
+    "extraKeySamples" : [ ],
+    "duplicateKeyCount" : 0,
+    "duplicateKeySamples" : [ ],
+    "mismatchSamples" : [ ],
+    "comparedColumns" : [ "ts_code", "timestamp", "fd_share", "fund_type", "market", "update_time" ],
+    "receipts" : [ {
+      "date" : "2026-09-17",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-03920d258719454e8da565b45ebb0c2f\\sync-evidence\\etf-share-858f06cf-66f0-49d8-b67d-c4ec891e5f2b\\source\\etf-share-20260917-0043ad49-bf45-49f8-80f1-d9ff19a404cd.json",
+      "fingerprint" : "b54d45dc5e010d9867f37d3c731288d93b2f9a264688b465d2f9afaad670cffa",
+      "rows" : 1774
+    } ],
+    "readOnlyQuery" : "SELECT ts_code, cast(timestamp AS long) AS timestamp_micros, fd_share, fund_type, market, cast(update_time AS long) AS update_time_micros FROM \"java_d016_etf_share_03920d258719454e8da565b45ebb0c2f\" WHERE timestamp >= cast(? AS TIMESTAMP) AND timestamp < cast(? AS TIMESTAMP) ORDER BY timestamp, ts_code LIMIT 5998"
+  }, {
+    "task" : "D016",
+    "runId" : "etf-share-4a1af7a1-563b-4acc-b24b-e979abe873a8",
+    "target" : "java_d016_etf_share_03920d258719454e8da565b45ebb0c2f",
+    "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+    "status" : "MATCHED",
+    "windowFrom" : "2026-09-17",
+    "windowTo" : "2026-09-17",
+    "frozenSessions" : 1,
+    "sourceReceiptCount" : 1,
+    "sourceRows" : 1774,
+    "actualWindowRows" : 1774,
+    "actualWindowOverBound" : false,
+    "matchedRows" : 1774,
+    "mismatchedRows" : 0,
+    "mismatchedValues" : 0,
+    "mismatchedFieldCounts" : { },
+    "missingKeyCount" : 0,
+    "missingKeySamples" : [ ],
+    "extraKeyCount" : 0,
+    "extraKeySamples" : [ ],
+    "duplicateKeyCount" : 0,
+    "duplicateKeySamples" : [ ],
+    "mismatchSamples" : [ ],
+    "comparedColumns" : [ "ts_code", "timestamp", "fd_share", "fund_type", "market", "update_time" ],
+    "receipts" : [ {
+      "date" : "2026-09-17",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-03920d258719454e8da565b45ebb0c2f\\sync-evidence\\etf-share-4a1af7a1-563b-4acc-b24b-e979abe873a8\\source\\etf-share-20260917-e830ff62-8028-416d-b24d-d206b20153db.json",
+      "fingerprint" : "b54d45dc5e010d9867f37d3c731288d93b2f9a264688b465d2f9afaad670cffa",
+      "rows" : 1774
+    } ],
+    "readOnlyQuery" : "SELECT ts_code, cast(timestamp AS long) AS timestamp_micros, fd_share, fund_type, market, cast(update_time AS long) AS update_time_micros FROM \"java_d016_etf_share_03920d258719454e8da565b45ebb0c2f\" WHERE timestamp >= cast(? AS TIMESTAMP) AND timestamp < cast(? AS TIMESTAMP) ORDER BY timestamp, ts_code LIMIT 5998"
+  }, {
+    "task" : "D016",
+    "runId" : "etf-share-5ea36f79-ad55-48e5-838a-a6473b04b17f",
+    "target" : "java_d016_etf_share_03920d258719454e8da565b45ebb0c2f",
+    "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+    "status" : "MATCHED",
+    "windowFrom" : "2026-09-17",
+    "windowTo" : "2026-09-18",
+    "frozenSessions" : 2,
+    "sourceReceiptCount" : 2,
+    "sourceRows" : 3566,
+    "actualWindowRows" : 3566,
+    "actualWindowOverBound" : false,
+    "matchedRows" : 3566,
+    "mismatchedRows" : 0,
+    "mismatchedValues" : 0,
+    "mismatchedFieldCounts" : { },
+    "missingKeyCount" : 0,
+    "missingKeySamples" : [ ],
+    "extraKeyCount" : 0,
+    "extraKeySamples" : [ ],
+    "duplicateKeyCount" : 0,
+    "duplicateKeySamples" : [ ],
+    "mismatchSamples" : [ ],
+    "comparedColumns" : [ "ts_code", "timestamp", "fd_share", "fund_type", "market", "update_time" ],
+    "receipts" : [ {
+      "date" : "2026-09-18",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-03920d258719454e8da565b45ebb0c2f\\sync-evidence\\etf-share-5ea36f79-ad55-48e5-838a-a6473b04b17f\\source\\etf-share-20260918-daabbf31-50fe-4e0f-8eb9-a19482b47660.json",
+      "fingerprint" : "d270e702a945c40f011f63e90f3b7d2b35273d4d841d33aabb456cee6eec2fcb",
+      "rows" : 1792
+    }, {
+      "date" : "2026-09-17",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-03920d258719454e8da565b45ebb0c2f\\sync-evidence\\etf-share-5ea36f79-ad55-48e5-838a-a6473b04b17f\\source\\etf-share-20260917-126ab36a-696f-4838-bb39-4be7afbfe70e.json",
+      "fingerprint" : "c89a4e0ede76b8fe521dd96782c4e82a89f0c0c809a56b03b62b419d8b27c75f",
+      "rows" : 1774
+    } ],
+    "readOnlyQuery" : "SELECT ts_code, cast(timestamp AS long) AS timestamp_micros, fd_share, fund_type, market, cast(update_time AS long) AS update_time_micros FROM \"java_d016_etf_share_03920d258719454e8da565b45ebb0c2f\" WHERE timestamp >= cast(? AS TIMESTAMP) AND timestamp < cast(? AS TIMESTAMP) ORDER BY timestamp, ts_code LIMIT 11995"
+  } ],
+  "readbackAfterFirst" : {
+    "sha256" : "1038760d4038afbde748c302c01d72920838af21fbb9ba0aaa51fc2f86349d89",
+    "duplicateKeys" : 0,
+    "rows" : 1774
+  },
+  "repeatPlan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.etf_share",
+        "version" : 3,
+        "datasetId" : "etf_share",
+        "datasetVersion" : 1,
+        "owner" : "etf_share_owner",
+        "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 4000,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "etf_share.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 366,
+          "maxPages" : 1098,
+          "maxRows" : 2194902,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "observedAt" : "2026-09-29T20:03:01.496240Z",
+        "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+        "targetMaxBefore" : "2026-09-17",
+        "targetMinBefore" : "2026-09-17",
+        "trade_dates" : "20260917"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : null,
+    "targetMinDate" : "2026-09-17",
+    "targetMaxDate" : "2026-09-17",
+    "bootstrap" : false
+  },
+  "observationPolicy" : "Two repeats reuse the first frozen observation; fresh incremental run freezes its own timestamp. All six columns independently compared immediately after each run.",
+  "readbackAfterIdempotentRepeat" : {
+    "sha256" : "1038760d4038afbde748c302c01d72920838af21fbb9ba0aaa51fc2f86349d89",
+    "duplicateKeys" : 0,
+    "rows" : 1774
+  },
+  "incrementalPlan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.etf_share",
+        "version" : 3,
+        "datasetId" : "etf_share",
+        "datasetVersion" : 1,
+        "owner" : "etf_share_owner",
+        "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 4000,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "etf_share.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 366,
+          "maxPages" : 1098,
+          "maxRows" : 2194902,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "checkpointBefore" : "2026-09-17",
+        "observedAt" : "2026-09-29T20:03:54.192229Z",
+        "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+        "targetMaxBefore" : "2026-09-17",
+        "targetMinBefore" : "2026-09-17",
+        "trade_dates" : "20260917,20260918"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-18",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+    "checkpointBefore" : "2026-09-17",
+    "checkpointAnchor" : "2026-09-17",
+    "targetMinDate" : "2026-09-17",
+    "targetMaxDate" : "2026-09-17",
+    "bootstrap" : false
+  },
+  "readbackAfterIncremental" : {
+    "sha256" : "997cfef2b959f6d973ff438888627a61ce69e0f8417f317ff684299ee71cfce8",
+    "duplicateKeys" : 0,
+    "rows" : 3566
+  },
+  "result" : "VERIFIED",
+  "finishedAt" : "2026-09-29T20:04:31.068004600Z"
+}

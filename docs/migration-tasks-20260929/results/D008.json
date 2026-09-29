@@ -1,0 +1,195 @@
+{
+  "task_id": "D008",
+  "dataset_id": "daily_basic",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "job_id": "data.daily_basic",
+  "job_version": 1,
+  "dataset_version": 1,
+  "source": {
+    "provider": "Tushare",
+    "endpoint": "daily_basic",
+    "official_documentation": "https://tushare.pro/document/2?doc_id=32",
+    "request_shape": "One explicit trade_date per request; full 18-field response",
+    "official_max_rows_per_request": 6000,
+    "cap_behavior": "A response of 6000 rows is rejected as potentially truncated; raw response evidence is retained",
+    "python_rate_limit_annotation_per_minute": 20,
+    "yaml_rate_limit_snapshot_per_minute": 25,
+    "live_account_budget": "Java effective endpoint ceiling is min(audited cap 20/minute, configured endpoint default 10/minute, endpoint override); live account authorization and points remain unverified.",
+    "requests_sent": null,
+    "requests_sent_note": "Completed source pages recorded; underlying transport retry counts not inferred.",
+    "completed_source_pages": 26,
+    "returned_rows": 133243,
+    "rejected_rows": 0,
+    "response_evidence": "artifacts/java-migration/market-live-9b4cbc43e2224ae28b1d522fec0f38b3/D008-independent-source-readback.json",
+    "row_count_scope": "Four acceptance runs including repeated keys; recovery rows separately recorded.",
+    "normalized_rows": 133243
+  },
+  "contract": {
+    "columns": 18,
+    "business_key": [
+      "ts_code",
+      "trade_date"
+    ],
+    "physical_upsert_key": [
+      "ts_code",
+      "trade_date"
+    ],
+    "designated_timestamp": "trade_date",
+    "partition": "YEAR",
+    "wal": true,
+    "dedup": true,
+    "date_semantics": "LocalDate exchange business date stored as UTC midnight timestamp carrier",
+    "numeric_storage": "Nullable finite DOUBLE values; source units preserved",
+    "calendar_dependency": "exchange_calendar, both SSE and SZSE rows required for every date in the requested window",
+    "revision_overlap_days": 30
+  },
+  "target": {
+    "target_id": "questdb-e06e721856bebe2a2923fb35fdccf2fa3058dd6ba2d6e229f7cb7f9274ebd70b",
+    "database_version": "QuestDB 10.0.1",
+    "formal_table": "daily_basic",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d008_basic_9b4cbc43e2224ae28b1d522fec0f38b3",
+    "isolated": true,
+    "questdb_readback": "verified_full_keys_and_all_columns"
+  },
+  "checks": {
+    "mapping_tests_added": true,
+    "source_cap_and_empty_response_tests_added": true,
+    "calendar_coverage_tests_added": true,
+    "job_definition_tests_added": true,
+    "checkpoint_chain_tests_added": true,
+    "target_range_boundary_tests_added": true,
+    "receipt_backed_row_endpoint_tests_added": true,
+    "cli_default_and_future_end_tests_added": true,
+    "checkpoint_boundary_tests_run": true,
+    "post_audit_regression_tests_run": true,
+    "tests_run": true,
+    "gradle_build": "Historical full suite 409 total/286 passed/123 conditional skips. Subsequent live-driven fixes compiled. D007/D008 operational acceptance verified; latest multi-task Gradle live failed at D009 source contract. No full-suite rerun claimed.",
+    "live_tushare": "nonempty real source responses captured",
+    "live_questdb_isolated_readback": "verified",
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": true,
+    "second_incremental": true,
+    "independent_raw_source_comparison": true,
+    "rate_limit": "Shared configured endpoint 10/min and global 20/min; no provider throttling incident claimed",
+    "retry": "Shared bounded retry path and prior contract regression; no natural provider retry incident claimed",
+    "resume": "5557 rows fetched again and independently revalidated; zero resend",
+    "cancel": "Before-source zero rows and after-verified-page 5557 rows CANCELLED",
+    "unknown_write_reconcile": "Injected loss after sender closure; 2 actual isolated rows read back UNKNOWN_RECONCILED",
+    "pagination": "Single full-date response under cap; cap/invalid response regressions previously recorded",
+    "fresh_process_cli_recovery": "VERIFIED; frozen prior request restored with --resume-from alone; 5557 rows reused and independently matched"
+  },
+  "evidence": [
+    "artifacts/java-migration/D008/mapping-review.md",
+    "artifacts/java-migration/D008/daily_basic-isolated.sql",
+    "artifacts/java-migration/market-live-27353976694746f6a25c9633222814fc/batch-live-acceptance-failure.json",
+    "artifacts/java-migration/D001/job-definitions.json",
+    "artifacts/java-migration/market-live-e8970dc5629d4229b5b302bef716d4b1/batch-live-acceptance-failure.json"
+  ],
+  "shared_integration_required": [],
+  "remaining_acceptance": [
+    "Run the newly added D008 checkpoint-chain, source-receipt endpoint, CLI default/future-end, and actual-target-range regression tests in the serialized project build.",
+    "Restore valid QuestDB application credentials and repeat the read-only connection and schema preflight.",
+    "Verify the live daily_basic account entitlement and effective request budget without logging credentials.",
+    "Create an owned isolated YEAR/WAL/dedup table, run a nonempty bounded real-source window, compare every key and all 18 fields, repeat for idempotence, and run the later incremental overlap.",
+    "Record checkpoint movement and applicable retry, cancellation, resume, WAL visibility, and unknown-write evidence before changing the task status to verified."
+  ],
+  "prerequisite_note": "D007 was planned when D008 implementation began. The root coordinator authorized D008 implementation in the user-requested parallel batch; D008 has no D007 business-data dependency. Live acceptance remains deferred to the coordinator's ordered batch.",
+  "blockers": [],
+  "live_acceptance_attempt": {
+    "result": "verified",
+    "evidence": "artifacts/java-migration/market-live-9b4cbc43e2224ae28b1d522fec0f38b3/D008-live-acceptance.json",
+    "formal_tables_mutated": false
+  },
+  "live_acceptance_attempt_history": [
+    {
+      "source_requests_sent": 0,
+      "failure_category": "questdb_authentication_rejected",
+      "isolated_tables_created": 0,
+      "formal_tables_mutated": false,
+      "attempted_at": "2026-09-29T15:46:04Z",
+      "failure_detail": "Configured QuestDB credentials were rejected by the PostgreSQL wire endpoint during the read-only tables() preflight.",
+      "evidence": "artifacts/java-migration/market-live-27353976694746f6a25c9633222814fc/batch-live-acceptance-failure.json",
+      "result": "blocked_before_source_or_ddl"
+    },
+    {
+      "evidence": "artifacts/java-migration/market-live-e8970dc5629d4229b5b302bef716d4b1/batch-live-acceptance-failure.json",
+      "failure_category": "questdb_authentication_rejected",
+      "attempt_id": "e8970dc5629d4229b5b302bef716d4b1",
+      "attempted_at": "2026-09-29T16:06:30.369789100Z",
+      "result": "blocked_before_source_or_ddl",
+      "isolated_tables_created": 0,
+      "source_requests_sent": 0,
+      "failure_detail": "Read-only QuestDB tables() preflight rejected the configured credentials.",
+      "formal_tables_mutated": false
+    }
+  ],
+  "current_progress": "首次非空、两次幂等重跑、再次增量、独立全字段来源对照及取消/恢复/发送后丢ACK回读完成。",
+  "connection_recovery_evidence": "artifacts/java-migration/local-questdb-connection-20260930.json",
+  "run_id": "daily-basic-0aed6281-930e-49c7-952b-866eab2d4c04",
+  "logical_date": "2026-09-30",
+  "finished_at": "2026-09-29T17:37:36.648185100Z",
+  "write": {
+    "submitted_rows": 133243,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "delivery_status": "verified_after_full_readback",
+    "batch_row_limit": 250,
+    "batch_byte_limit": 1048576,
+    "row_count_scope": "Four acceptance runs; no inferred insert/update split; recovery separately linked."
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/market-live-9b4cbc43e2224ae28b1d522fec0f38b3/D008-independent-source-readback.json",
+    "compared_columns": [
+      "ts_code",
+      "trade_date",
+      "close",
+      "turnover_rate",
+      "turnover_rate_f",
+      "volume_ratio",
+      "pe",
+      "pe_ttm",
+      "pb",
+      "ps",
+      "ps_ttm",
+      "dv_ratio",
+      "dv_ttm",
+      "total_share",
+      "float_share",
+      "free_share",
+      "total_mv",
+      "circ_mv"
+    ],
+    "actual_rows": 116572,
+    "matched_rows": 116572,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": "d476e2f961faa652248a33a65f3dc47345241b1e2b2fc2def95483a617905ffc",
+    "passed": true
+  },
+  "incremental": {
+    "request_window": {
+      "incrementalTo": "2026-09-29",
+      "initial": [
+        "2026-09-28",
+        "2026-09-28"
+      ]
+    },
+    "checkpoint_before": "2026-09-28",
+    "checkpoint_after": "2026-09-29"
+  },
+  "recovery_acceptance": "artifacts/java-migration/market-live-9b4cbc43e2224ae28b1d522fec0f38b3/D008-recovery-80b74797-fd2b-400c-86df-c289895ba475.json",
+  "evidence_paths": [
+    "artifacts/java-migration/market-live-9b4cbc43e2224ae28b1d522fec0f38b3/D008-live-acceptance.json",
+    "artifacts/java-migration/market-live-9b4cbc43e2224ae28b1d522fec0f38b3/D008-independent-source-readback.json",
+    "artifacts/java-migration/market-live-9b4cbc43e2224ae28b1d522fec0f38b3/D008-recovery-80b74797-fd2b-400c-86df-c289895ba475.json",
+    "artifacts/java-migration/D008/final-review.md",
+    "artifacts/java-migration/market-live-9b4cbc43e2224ae28b1d522fec0f38b3/D008-cli-recovery-09d7ef7d-cdb8-466a-917f-1266b65bdebd.json"
+  ],
+  "next_manual_comparison": "用户可按独立来源报告抽查完整键/字段/空值及修订窗口；人工复核pending_review。正式表未修改，隔离表保留供复查。",
+  "cli_recovery_acceptance": "artifacts/java-migration/market-live-9b4cbc43e2224ae28b1d522fec0f38b3/D008-cli-recovery-09d7ef7d-cdb8-466a-917f-1266b65bdebd.json"
+}

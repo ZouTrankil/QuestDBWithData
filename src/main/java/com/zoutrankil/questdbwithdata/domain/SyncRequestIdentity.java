@@ -10,11 +10,8 @@ import java.util.*;
 public final class SyncRequestIdentity {
     private SyncRequestIdentity() {}
     public static String snapshotJson(SyncJobDefinition.FrozenRequest request) {
-        var snapshot=new LinkedHashMap<String,Object>();
-        snapshot.put("definition",request.definition()); snapshot.put("mode",request.mode());
-        snapshot.put("parameters",request.parameters()); snapshot.put("from",request.from());
-        snapshot.put("to",request.to()); snapshot.put("logicalDate",request.logicalDate());
-        try { return JobDefinitionJson.mapper().writeValueAsString(snapshot); }
+        Objects.requireNonNull(request,"Frozen request required");
+        try { return JobDefinitionJson.mapper().writeValueAsString(request); }
         catch (Exception error) { throw new IllegalArgumentException("Cannot serialize frozen request",error); }
     }
     public static String fingerprint(SyncJobDefinition.FrozenRequest request,String targetId) {

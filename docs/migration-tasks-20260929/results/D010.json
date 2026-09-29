@@ -1,0 +1,136 @@
+{
+  "task_id": "D010",
+  "dataset_id": "stk_limit",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "stk-limit-7e3972cb-f89a-4da5-8a36-f9ffd08127a3",
+  "attempt_id": null,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-29T18:07:45.280463800Z",
+  "finished_at": "2026-09-29T18:11:24.892294600Z",
+  "target": {
+    "target_id": "static-v2-ac04d2460e55a3ecdd1ec35213554899b748f7d3d095b78da5727f4e240ac710",
+    "database_version": "QuestDB 10.0.1",
+    "formal_table": "stk_limit",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d010_stk_limit_6f4fe7d2d30e465e903ad6d510c2df7c",
+    "isolated": true,
+    "questdb_readback": "verified_full_keys_and_all_columns"
+  },
+  "incremental": {
+    "mode": null,
+    "request_window": {
+      "initial": [
+        "2026-09-28",
+        "2026-09-28"
+      ],
+      "incrementalTo": "2026-09-29"
+    },
+    "bootstrap_policy": "first INCREMENTAL requires explicit bounded from/to and freezes from as checkpoint anchor; no unbounded history default",
+    "revision_overlap": "re-fetch from max(anchor, verifiedThrough - 5 calendar days) and advance only after all date slices and row readbacks verify",
+    "checkpoint_policy": "only contiguous same-target VERIFIED/VERIFIED_EMPTY INCREMENTAL intervals with exact frozen definition, bootstrap anchor, calendar dates and valid source receipts advance; BACKFILL/RECONCILE do not",
+    "target_range_policy": "reads actual distinct physical trade dates and reconciles every date/value against latest date-specific receipt in the selected incremental chain; latest receipt ordered by summary.updatedAt, run ID only stable tie-breaker; unexplained dates fail closed",
+    "target_range_before": null,
+    "checkpoint_anchor": null,
+    "checkpoint_before": "2026-09-28",
+    "checkpoint_after": "2026-09-29"
+  },
+  "completed_day_policy": {
+    "timezone": "Asia/Shanghai",
+    "completion_time": "20:30",
+    "rule": "programmatic null end defaults from frozen logicalDate; CLI still requires --to; both default and explicit end are capped at yesterday before 20:30 or today at/after 20:30, and final frozen end cannot exceed logicalDate",
+    "physical_target_guard": "incremental catch-up fails closed if existing max trade_date exceeds the completed-source ceiling"
+  },
+  "calendar_policy": {
+    "legacy_contract": "Python get_trading_dates_between uses complete SSE rows for every calendar day and returns SSE open dates only",
+    "d001_observation": "Read-only QuestDB inventory contains SSE and SZSE only, no BSE; bounded 2026-09-28..2026-09-30 query returned both exchanges open on all three dates and no BSE rows",
+    "d010_behavior": "Schedules one unfiltered all-market stk_limit request on each SSE open date; retains .BJ/BSE codes without filtering; does not union SSE/SZSE dates",
+    "limitation": "BSE-specific session parity is not proven without BSE calendar rows and remains a verification limitation"
+  },
+  "source": {
+    "provider": "Tushare",
+    "endpoint": "stk_limit",
+    "route_policy": "exact one-date all-market request with explicit fields ts_code,trade_date,up_limit,down_limit; undocumented paging/code inventory fallback is not used",
+    "request_evidence": null,
+    "response_evidence": "artifacts/java-migration/market-live-6f4fe7d2d30e465e903ad6d510c2df7c/D010-independent-source-readback.json",
+    "returned_rows": 28242,
+    "normalized_rows": 28242,
+    "rejected_rows": 0,
+    "fingerprint": null,
+    "api_row_cap": 5800,
+    "cap_policy": "response at 5800 rows is persisted as unverified raw evidence and rejected before row consumption/write",
+    "requests_sent": null,
+    "requests_sent_note": "Completed source pages recorded; transport retries not inferred.",
+    "completed_source_pages": 7,
+    "row_count_scope": "Four acceptance runs including repeated keys; recovery separately recorded."
+  },
+  "write": {
+    "submitted_rows": 28242,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "delivery_status": "verified_after_full_readback",
+    "batch_row_limit": 250,
+    "batch_byte_limit": 1048576,
+    "row_count_scope": "Four acceptance runs; no inferred insert/update split; recovery separately linked."
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/market-live-6f4fe7d2d30e465e903ad6d510c2df7c/D010-independent-source-readback.json",
+    "compared_columns": [
+      "ts_code",
+      "trade_date",
+      "up_limit",
+      "down_limit"
+    ],
+    "actual_rows": 11298,
+    "matched_rows": 11298,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": "109a62cd9510c746f58d731391a793425066cbf51caae120c0a8f85a3f2e5e93",
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": true,
+    "second_incremental": true,
+    "rate_limit": "Configured endpoint 10/min and global 20/min used; no natural provider throttling claimed",
+    "retry": "Shared bounded retry path; natural transport retry not counted as a separate acceptance assertion",
+    "pagination": "Complete bounded one-date source responses below declared cap; no offset/cursor used",
+    "resume": "5648 refetched rows independently revalidated, zero resend",
+    "cancel": "Before-source zero rows and after-verified-page 5648 rows CANCELLED",
+    "unknown_write_reconcile": "Injected acknowledgement loss after sender closure; two actual rows read back UNKNOWN_RECONCILED",
+    "tests_run": false,
+    "gradle_build": "Task sources and operational tools compiled with Java 24 against private dependency snapshot; no full Gradle build or test-suite rerun claimed",
+    "independent_raw_source_comparison": true,
+    "live_tushare": "Four nonempty real source runs; original field values retained in receipts",
+    "live_questdb_isolated_readback": "Exact keys and every physical field MATCHED; whole isolated table census has no duplicate keys",
+    "receipt_identity": "Raw field values preserved; rows ordered by full business key and JSON maps sorted before hashing, making recovery insensitive to response order",
+    "fresh_process_cli_recovery": "VERIFIED; frozen prior request restored with --resume-from alone; 5648 rows reused and independently matched"
+  },
+  "blockers": [],
+  "remaining_live_acceptance": [],
+  "evidence_paths": [
+    "artifacts/java-migration/D010/source-contract-review.md",
+    "artifacts/java-migration/D010/implementation-review.md",
+    "artifacts/java-migration/market-live-6f4fe7d2d30e465e903ad6d510c2df7c/D010-live-acceptance.json",
+    "artifacts/java-migration/market-live-6f4fe7d2d30e465e903ad6d510c2df7c/D010-independent-source-readback.json",
+    "artifacts/java-migration/market-live-6f4fe7d2d30e465e903ad6d510c2df7c/D010-recovery-9481afde-1d3b-4896-93fd-46608c291ba5.json",
+    "artifacts/java-migration/D010/final-review.md",
+    "artifacts/java-migration/market-live-6f4fe7d2d30e465e903ad6d510c2df7c/D010-cli-recovery-95300fe4-d0a0-4834-97e5-8623c172d964.json"
+  ],
+  "attempt_history": [],
+  "next_manual_comparison": "用户可抽查保存的全字段来源收据和完整键 SELECT；人工复核 pending_review。正式表未修改，隔离表保留供复查。",
+  "current_progress": "首次非空、两次幂等重跑、再次增量、独立全字段来源核对及取消/恢复/发送后丢ACK回读通过。",
+  "live_acceptance_attempt": {
+    "result": "verified",
+    "evidence": "artifacts/java-migration/market-live-6f4fe7d2d30e465e903ad6d510c2df7c/D010-live-acceptance.json",
+    "formal_tables_mutated": false
+  },
+  "recovery_acceptance": "artifacts/java-migration/market-live-6f4fe7d2d30e465e903ad6d510c2df7c/D010-recovery-9481afde-1d3b-4896-93fd-46608c291ba5.json",
+  "cli_recovery_acceptance": "artifacts/java-migration/market-live-6f4fe7d2d30e465e903ad6d510c2df7c/D010-cli-recovery-95300fe4-d0a0-4834-97e5-8623c172d964.json"
+}

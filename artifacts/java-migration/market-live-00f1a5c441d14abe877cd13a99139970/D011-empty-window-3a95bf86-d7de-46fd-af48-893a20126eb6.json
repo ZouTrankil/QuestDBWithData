@@ -1,0 +1,35 @@
+{
+  "task" : "D011",
+  "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T19:14:50.213688100Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "before" : {
+    "duplicateKeys" : 0,
+    "rows" : 25,
+    "sha256" : "898e8caeffc172c7d657d659cdd620490fac383b9bf9d140ef2f3f1ae775b9b0"
+  },
+  "injectedStaleRow" : {
+    "synthetic" : true,
+    "purpose" : "Exercise complete empty-window retraction while preserving actual outside rows",
+    "date" : "2026-09-27",
+    "ts_code" : "999999.SZ"
+  },
+  "run" : {
+    "runId" : "empty-window-2b1f9463-2c39-40ee-b0d9-135d06235c7d",
+    "state" : "FAILED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "IllegalStateException",
+    "reusedRows" : 0
+  },
+  "after" : {
+    "duplicateKeys" : 0,
+    "rows" : 25,
+    "sha256" : "898e8caeffc172c7d657d659cdd620490fac383b9bf9d140ef2f3f1ae775b9b0"
+  },
+  "status" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: Empty source failed to retract stale window while preserving outside target",
+  "finishedAt" : "2026-09-29T19:14:54.004452600Z"
+}

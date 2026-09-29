@@ -1,0 +1,33 @@
+{
+  "task" : "D012",
+  "table" : "java_d012_stk_st_daily_96fe6e81659b405e8431d8324dfeac24",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-96fe6e81659b405e8431d8324dfeac24\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T19:16:53.469455200Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "injectedScenarios" : "Cancellation after staged page, explicit synthetic stale status, lost acknowledgement after sender closed; only owned isolated target",
+  "initialSnapshot" : {
+    "sha256" : "ac2b2006e3ababe3a4c53f1559f608265c1384c496700878f83b029184de44bc",
+    "duplicateKeys" : 0,
+    "rows" : 559
+  },
+  "cancelBeforeSource" : {
+    "runId" : "window-cancel-before-32325f89-1400-410f-afa3-6dc17e74722f",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterStagedPage" : {
+    "runId" : "window-cancel-after-4b83c640-0d94-4740-bb7b-86c4f5fab5b6",
+    "state" : "FAILED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "IllegalStateException",
+    "reusedRows" : 0
+  },
+  "status" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: After-page staged cancellation failed",
+  "finishedAt" : "2026-09-29T19:18:36.719503600Z"
+}

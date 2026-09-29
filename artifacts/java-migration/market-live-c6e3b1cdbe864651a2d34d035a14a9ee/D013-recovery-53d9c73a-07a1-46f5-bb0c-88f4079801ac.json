@@ -1,0 +1,89 @@
+{
+  "task" : "D013",
+  "table" : "java_d013_etf_basic_c6e3b1cdbe864651a2d34d035a14a9ee",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c6e3b1cdbe864651a2d34d035a14a9ee\\recovery-53d9c73a-07a1-46f5-bb0c-88f4079801ac.sqlite",
+  "startedAt" : "2026-09-29T18:34:03.047274400Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "rowsBefore" : 2961,
+  "cancelBeforeSource" : {
+    "runId" : "cancel-before-0633888d-cf27-44bd-a036-c181f4da0925",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterVerifiedPage" : {
+    "runId" : "cancel-after-page-a23b1dc6-04f6-4eaf-b231-a526ae1e9145",
+    "state" : "CANCELLED",
+    "sourceRows" : 2961,
+    "verifiedRows" : 2961,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "resume" : {
+    "runId" : "resume-08a7ee1b-dc93-445f-8610-562035c2f75e",
+    "state" : "VERIFIED",
+    "sourceRows" : 2961,
+    "verifiedRows" : 2961,
+    "errorCode" : null,
+    "reusedRows" : 2961
+  },
+  "resumeSendCalls" : 0,
+  "independentResumeReadback" : {
+    "task" : "D013",
+    "runId" : "resume-08a7ee1b-dc93-445f-8610-562035c2f75e",
+    "status" : "MATCHED",
+    "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c6e3b1cdbe864651a2d34d035a14a9ee\\sync-evidence\\recovery-53d9c73a-07a1-46f5-bb0c-88f4079801ac\\source\\source-979fae5a-49a3-4148-b8e0-f42d901505ba.json",
+    "sourceFingerprint" : "f6ab7fd50abd9802239e1f406d23ab5f8b9aa485e641e785e186d5ca46f22452",
+    "sourceRows" : 2961,
+    "matches" : 2961,
+    "comparedColumns" : [ "ts_code", "name", "management", "custodian", "fund_type", "found_date", "due_date", "list_date", "issue_date", "delist_date", "issue_amount", "m_fee", "c_fee", "duration_year", "p_value", "min_amount", "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate", "market", "timestamp", "update_time" ],
+    "nullStatusRows" : 46,
+    "mismatches" : 0,
+    "duplicateKeys" : 0,
+    "query" : "SELECT \"ts_code\",\"name\",\"management\",\"custodian\",\"fund_type\",\"found_date\",\"due_date\",\"list_date\",\"issue_date\",\"delist_date\",\"issue_amount\",\"m_fee\",\"c_fee\",\"duration_year\",\"p_value\",\"min_amount\",\"exp_return\",\"benchmark\",\"status\",\"invest_type\",\"type\",\"trustee\",\"purc_startdate\",\"redm_startdate\",\"market\",cast(timestamp AS long) AS timestamp,cast(update_time AS long) AS update_time FROM java_d013_etf_basic_c6e3b1cdbe864651a2d34d035a14a9ee ORDER BY ts_code,timestamp LIMIT 15001",
+    "sourceReceiptCount" : 1
+  },
+  "postSendLostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 7416,
+      "digest" : "23ba4e30bbaa975c856f5eb02f97cbc93ddf0216a9ca938c8b79b5609d2431a4",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "cliResume" : {
+    "runId" : "etf-basic-de40283e-65d6-4fdb-a1b0-a6029f7e087a",
+    "state" : "VERIFIED",
+    "sourceRows" : 2961,
+    "verifiedRows" : 2961,
+    "errorCode" : null,
+    "reusedRows" : 2961
+  },
+  "independentCliResume" : {
+    "task" : "D013",
+    "runId" : "etf-basic-de40283e-65d6-4fdb-a1b0-a6029f7e087a",
+    "status" : "MATCHED",
+    "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c6e3b1cdbe864651a2d34d035a14a9ee\\sync-evidence\\etf-basic-de40283e-65d6-4fdb-a1b0-a6029f7e087a\\source\\source-f9cd0f9c-4be7-431f-a05a-2a02932802bb.json",
+    "sourceFingerprint" : "f6ab7fd50abd9802239e1f406d23ab5f8b9aa485e641e785e186d5ca46f22452",
+    "sourceRows" : 2961,
+    "matches" : 2961,
+    "comparedColumns" : [ "ts_code", "name", "management", "custodian", "fund_type", "found_date", "due_date", "list_date", "issue_date", "delist_date", "issue_amount", "m_fee", "c_fee", "duration_year", "p_value", "min_amount", "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate", "market", "timestamp", "update_time" ],
+    "nullStatusRows" : 46,
+    "mismatches" : 0,
+    "duplicateKeys" : 0,
+    "query" : "SELECT \"ts_code\",\"name\",\"management\",\"custodian\",\"fund_type\",\"found_date\",\"due_date\",\"list_date\",\"issue_date\",\"delist_date\",\"issue_amount\",\"m_fee\",\"c_fee\",\"duration_year\",\"p_value\",\"min_amount\",\"exp_return\",\"benchmark\",\"status\",\"invest_type\",\"type\",\"trustee\",\"purc_startdate\",\"redm_startdate\",\"market\",cast(timestamp AS long) AS timestamp,cast(update_time AS long) AS update_time FROM java_d013_etf_basic_c6e3b1cdbe864651a2d34d035a14a9ee ORDER BY ts_code,timestamp LIMIT 15001",
+    "sourceReceiptCount" : 1
+  },
+  "rowsAfter" : 2961,
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T18:34:31.097185600Z"
+}

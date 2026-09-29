@@ -1,0 +1,42 @@
+{
+  "task": "D011",
+  "endpoint": "suspend_d",
+  "source": "Tushare official interface documentation",
+  "url": "https://tushare.pro/document/2?doc_id=214",
+  "reviewedOn": "2026-09-30",
+  "facts": {
+    "singleQueryRowCap": 5000,
+    "inputParameters": [
+      "ts_code",
+      "trade_date",
+      "start_date",
+      "end_date",
+      "suspend_type"
+    ],
+    "dateQueryExample": "suspend_type=S, trade_date=YYYYMMDD",
+    "sourceFields": [
+      "ts_code",
+      "trade_date",
+      "suspend_timing",
+      "suspend_type"
+    ],
+    "suspendTypeSemantics": {
+      "S": "停牌",
+      "R": "复牌"
+    },
+    "tradeDateDescription": "停复牌日期，覆盖从停牌到覆盖期间的连续日期",
+    "suspendTimingDescription": "日内停牌时间段，日内停牌才有值，否则为空",
+    "updateFrequency": "不定期",
+    "minimumPoints": 2000,
+    "higherFrequencyPoints": 5000
+  },
+  "implementationNotes": [
+    "Java issues one bounded call per calendar date with suspend_type=S.",
+    "A returned S row normalizes to is_suspended=1 for that date; the flag does not assert full-day suspension.",
+    "Java uses a finite 5-calendar-day job window and 2-day revision overlap; current configured endpoint rate still needs root integration review."
+  ],
+  "limitations": [
+    "Official docs establish the endpoint field/cap semantics; no source request was made by this worker.",
+    "An isolated nonempty source-to-QuestDB readback has not been performed."
+  ]
+}

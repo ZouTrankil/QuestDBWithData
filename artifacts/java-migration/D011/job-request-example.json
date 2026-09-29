@@ -1,0 +1,67 @@
+{
+  "illustrative_only": true,
+  "job": "data.stk_suspend",
+  "jobVersion": 1,
+  "dataset": "stk_suspend",
+  "schemaVersion": 1,
+  "target": {
+    "table": "stk_suspend_d011_isolated",
+    "targetId": "static-v2-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "isolated": true
+  },
+  "firstPlan": {
+    "mode": "INCREMENTAL",
+    "bootstrapFrom": "2026-09-21",
+    "requestedThrough": "2026-09-25",
+    "logicalDate": "2026-09-29",
+    "frozenParameters": {
+      "targetId": "static-v2-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "checkpointAnchor": "2026-09-21",
+      "targetMinBefore": null,
+      "targetMaxBefore": null
+    },
+    "resolved": {
+      "from": "2026-09-21",
+      "to": "2026-09-25",
+      "maximumWindowDays": 5,
+      "sourceSlices": 5,
+      "sourceCallsPerSlice": 1,
+      "bootstrap": true,
+      "cappedByBudget": false
+    }
+  },
+  "laterPlan": {
+    "mode": "INCREMENTAL",
+    "verifiedCheckpointBefore": "2026-09-25",
+    "checkpointAnchor": "2026-09-21",
+    "frozenParameters": {
+      "targetId": "static-v2-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "checkpointAnchor": "2026-09-21",
+      "checkpointBefore": "2026-09-25"
+    },
+    "resolved": {
+      "from": "2026-09-23",
+      "to": "2026-09-27",
+      "revisionOverlapDays": 2,
+      "maximumForwardAdvanceDays": 2,
+      "maximumWindowDays": 5
+    }
+  },
+  "sourceContract": {
+    "endpoint": "suspend_d",
+    "parametersPerSlice": {
+      "trade_date": "20260924",
+      "suspend_type": "S"
+    },
+    "fields": ["ts_code", "trade_date", "suspend_timing", "suspend_type"],
+    "sourceRowCap": 5000,
+    "normalization": "Each S row becomes LONG is_suspended=1 for that business date; suspend_timing stays in evidence and does not imply a full-day halt."
+  },
+  "expectedProtocol": {
+    "emptyDay": "record a verified-empty slice only after a normal source response with zero rows",
+    "checkpointAdvancesOnlyAfter": "complete VERIFIED or VERIFIED_EMPTY run with receipt-backed coverage",
+    "sameWindowRerun": "full-key all-column readback remains identical and deduplicated",
+    "dataValidation": "not_run",
+    "runStatus": "implemented_not_verified"
+  }
+}

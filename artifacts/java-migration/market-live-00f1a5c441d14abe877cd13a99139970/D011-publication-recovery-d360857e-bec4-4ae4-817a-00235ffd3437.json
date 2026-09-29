@@ -1,0 +1,104 @@
+{
+  "task" : "D011",
+  "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+  "startedAt" : "2026-09-29T19:50:43.354451100Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "injectedFault" : "Lost rename acknowledgement after the actual stage-to-owned-target rename; private JDBC datasource wrapper",
+  "before" : {
+    "sha256" : "898e8caeffc172c7d657d659cdd620490fac383b9bf9d140ef2f3f1ae775b9b0",
+    "rows" : 25,
+    "duplicateKeys" : 0
+  },
+  "scenarios" : [ {
+    "empty" : false,
+    "runId" : "publication-fault-b666f0e3-0e98-4149-b82a-0039bcd54bee",
+    "resultBeforeRecovery" : {
+      "runId" : "publication-fault-b666f0e3-0e98-4149-b82a-0039bcd54bee",
+      "state" : "PARTIAL",
+      "sourceRows" : 12,
+      "verifiedRows" : 12,
+      "errorCode" : "IllegalStateException",
+      "reusedRows" : 0
+    },
+    "durableStateBeforeRecovery" : "IN_DOUBT",
+    "faultFired" : true,
+    "durableStateAfterRecovery" : "VERIFIED",
+    "independentReadback" : {
+      "task" : "D011",
+      "runId" : "publication-fault-b666f0e3-0e98-4149-b82a-0039bcd54bee",
+      "status" : "MATCHED",
+      "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+      "requestWindow" : {
+        "toInclusive" : "2026-09-28",
+        "fromInclusive" : "2026-09-28"
+      },
+      "sourceReceiptCount" : 1,
+      "sourceReceipts" : [ {
+        "rows" : 12,
+        "tradeDate" : "2026-09-28",
+        "fingerprint" : "3d7ec34e0c95fafe2f55f402c00f27aada58d0dca67259ee847c176e6e09575b",
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\publication-fault-b666f0e3-0e98-4149-b82a-0039bcd54bee\\source\\source-d29f4b02-0968-4606-9c09-3e88d3a12557.json"
+      } ],
+      "sourceFingerprint" : "7015b284fa3a42049708aca2cd401578f8426f4df18b145a3ace8be1e6953925",
+      "sourceRows" : 12,
+      "actualRows" : 12,
+      "matchedRows" : 12,
+      "mismatchedRows" : 0,
+      "duplicateKeys" : 0,
+      "missingKeys" : 0,
+      "extraRows" : 0,
+      "comparedColumns" : [ "ts_code", "is_suspended", "timestamp" ],
+      "query" : "SELECT ts_code,is_suspended,cast(timestamp AS long) AS timestamp_micros FROM \"java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970\" WHERE timestamp>=cast('2026-09-28T00:00:00.000000Z' AS TIMESTAMP) AND timestamp<cast('2026-09-29T00:00:00.000000Z' AS TIMESTAMP) ORDER BY timestamp,ts_code",
+      "completionEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\publication-fault-b666f0e3-0e98-4149-b82a-0039bcd54bee\\complete-publication-fault-b666f0e3-0e98-4149-b82a-0039bcd54bee.json",
+      "physicalTargetBefore" : "static-v2-969df58da12bc33662e81f80b937b7293c8e698174ee532406c0e03d45a79bd8",
+      "physicalTargetAfter" : "static-v2-df0915f76c6452cbaf9a58b032a728f94b6dd52e1ac35790be6c1067d4203da6"
+    }
+  }, {
+    "empty" : true,
+    "runId" : "publication-fault-b57c6346-99c4-4022-920d-8d7e16d9836f",
+    "resultBeforeRecovery" : {
+      "runId" : "publication-fault-b57c6346-99c4-4022-920d-8d7e16d9836f",
+      "state" : "FAILED",
+      "sourceRows" : 0,
+      "verifiedRows" : 0,
+      "errorCode" : "IllegalStateException",
+      "reusedRows" : 0
+    },
+    "durableStateBeforeRecovery" : "IN_DOUBT",
+    "faultFired" : true,
+    "durableStateAfterRecovery" : "VERIFIED_EMPTY",
+    "independentReadback" : {
+      "task" : "D011",
+      "runId" : "publication-fault-b57c6346-99c4-4022-920d-8d7e16d9836f",
+      "status" : "MATCHED",
+      "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+      "requestWindow" : {
+        "toInclusive" : "2026-09-27",
+        "fromInclusive" : "2026-09-27"
+      },
+      "sourceReceiptCount" : 1,
+      "sourceReceipts" : [ {
+        "rows" : 0,
+        "tradeDate" : "2026-09-27",
+        "fingerprint" : "d1a6536ce85caef081bd60aa3137a4f7edd07ac887e1e99c6e3be9f589c150fe",
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\publication-fault-b57c6346-99c4-4022-920d-8d7e16d9836f\\source\\empty-4ba6300e-c6ea-40c4-a35c-2bc4115f6982.json"
+      } ],
+      "sourceFingerprint" : "502bd20d990992e0de17ba5c00ae2ffcd62329a55811aecc5a8422140b26dc25",
+      "sourceRows" : 0,
+      "actualRows" : 0,
+      "matchedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateKeys" : 0,
+      "missingKeys" : 0,
+      "extraRows" : 0,
+      "comparedColumns" : [ "ts_code", "is_suspended", "timestamp" ],
+      "query" : "SELECT ts_code,is_suspended,cast(timestamp AS long) AS timestamp_micros FROM \"java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970\" WHERE timestamp>=cast('2026-09-27T00:00:00.000000Z' AS TIMESTAMP) AND timestamp<cast('2026-09-28T00:00:00.000000Z' AS TIMESTAMP) ORDER BY timestamp,ts_code",
+      "completionEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-00f1a5c441d14abe877cd13a99139970\\sync-evidence\\publication-fault-b57c6346-99c4-4022-920d-8d7e16d9836f\\complete-publication-fault-b57c6346-99c4-4022-920d-8d7e16d9836f.json",
+      "physicalTargetBefore" : "static-v2-df0915f76c6452cbaf9a58b032a728f94b6dd52e1ac35790be6c1067d4203da6",
+      "physicalTargetAfter" : "static-v2-d76f37e45ef15502055a6be9d9bd35653038565a68b835c876e768fd54db8439"
+    }
+  } ],
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T19:50:54.819680Z"
+}

@@ -1,0 +1,295 @@
+{
+  "task" : "D013",
+  "table" : "java_d013_etf_basic_c6e3b1cdbe864651a2d34d035a14a9ee",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c6e3b1cdbe864651a2d34d035a14a9ee\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T18:31:22.097464700Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "modeRationale" : "fund_basic has no change/date cursor; explicit whole-directory SNAPSHOT refresh, fixed epoch key, frozen observation time",
+  "runs" : [ {
+    "runId" : "etf-basic-eeeb2c5f-bf6c-433f-8766-958b78ca1e33",
+    "state" : "VERIFIED",
+    "sourceRows" : 2961,
+    "verifiedRows" : 2961,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "etf-basic-d58596e1-0279-4cb6-9a4e-3af1d8a1242d",
+    "state" : "VERIFIED",
+    "sourceRows" : 2961,
+    "verifiedRows" : 2961,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "etf-basic-8b1646af-11aa-4ae2-adfb-bf3047144d23",
+    "state" : "VERIFIED",
+    "sourceRows" : 2961,
+    "verifiedRows" : 2961,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "etf-basic-bdb10f1f-6ae3-4e35-9496-6ca8663b587a",
+    "state" : "VERIFIED",
+    "sourceRows" : 2961,
+    "verifiedRows" : 2961,
+    "errorCode" : null,
+    "reusedRows" : 0
+  } ],
+  "independentReadbacks" : [ {
+    "task" : "D013",
+    "runId" : "etf-basic-eeeb2c5f-bf6c-433f-8766-958b78ca1e33",
+    "status" : "MATCHED",
+    "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c6e3b1cdbe864651a2d34d035a14a9ee\\sync-evidence\\etf-basic-eeeb2c5f-bf6c-433f-8766-958b78ca1e33\\source\\source-d2947387-4267-4739-b4e7-56655b3c6674.json",
+    "sourceFingerprint" : "8e10016b75d237d0dec6ef0c3d4e6b71e4a649ec01945758d01a331fdcaa265d",
+    "sourceRows" : 2961,
+    "matches" : 2961,
+    "comparedColumns" : [ "ts_code", "name", "management", "custodian", "fund_type", "found_date", "due_date", "list_date", "issue_date", "delist_date", "issue_amount", "m_fee", "c_fee", "duration_year", "p_value", "min_amount", "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate", "market", "timestamp", "update_time" ],
+    "nullStatusRows" : 46,
+    "mismatches" : 0,
+    "duplicateKeys" : 0,
+    "query" : "SELECT \"ts_code\",\"name\",\"management\",\"custodian\",\"fund_type\",\"found_date\",\"due_date\",\"list_date\",\"issue_date\",\"delist_date\",\"issue_amount\",\"m_fee\",\"c_fee\",\"duration_year\",\"p_value\",\"min_amount\",\"exp_return\",\"benchmark\",\"status\",\"invest_type\",\"type\",\"trustee\",\"purc_startdate\",\"redm_startdate\",\"market\",cast(timestamp AS long) AS timestamp,cast(update_time AS long) AS update_time FROM java_d013_etf_basic_c6e3b1cdbe864651a2d34d035a14a9ee ORDER BY ts_code,timestamp LIMIT 15001",
+    "sourceReceiptCount" : 1
+  }, {
+    "task" : "D013",
+    "runId" : "etf-basic-d58596e1-0279-4cb6-9a4e-3af1d8a1242d",
+    "status" : "MATCHED",
+    "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c6e3b1cdbe864651a2d34d035a14a9ee\\sync-evidence\\etf-basic-d58596e1-0279-4cb6-9a4e-3af1d8a1242d\\source\\source-f538dd6e-aa7e-4af4-b309-6c20ba16ad6e.json",
+    "sourceFingerprint" : "8e10016b75d237d0dec6ef0c3d4e6b71e4a649ec01945758d01a331fdcaa265d",
+    "sourceRows" : 2961,
+    "matches" : 2961,
+    "comparedColumns" : [ "ts_code", "name", "management", "custodian", "fund_type", "found_date", "due_date", "list_date", "issue_date", "delist_date", "issue_amount", "m_fee", "c_fee", "duration_year", "p_value", "min_amount", "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate", "market", "timestamp", "update_time" ],
+    "nullStatusRows" : 46,
+    "mismatches" : 0,
+    "duplicateKeys" : 0,
+    "query" : "SELECT \"ts_code\",\"name\",\"management\",\"custodian\",\"fund_type\",\"found_date\",\"due_date\",\"list_date\",\"issue_date\",\"delist_date\",\"issue_amount\",\"m_fee\",\"c_fee\",\"duration_year\",\"p_value\",\"min_amount\",\"exp_return\",\"benchmark\",\"status\",\"invest_type\",\"type\",\"trustee\",\"purc_startdate\",\"redm_startdate\",\"market\",cast(timestamp AS long) AS timestamp,cast(update_time AS long) AS update_time FROM java_d013_etf_basic_c6e3b1cdbe864651a2d34d035a14a9ee ORDER BY ts_code,timestamp LIMIT 15001",
+    "sourceReceiptCount" : 1
+  }, {
+    "task" : "D013",
+    "runId" : "etf-basic-8b1646af-11aa-4ae2-adfb-bf3047144d23",
+    "status" : "MATCHED",
+    "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c6e3b1cdbe864651a2d34d035a14a9ee\\sync-evidence\\etf-basic-8b1646af-11aa-4ae2-adfb-bf3047144d23\\source\\source-26319c52-de2b-4804-b36a-c3cd8b593586.json",
+    "sourceFingerprint" : "8e10016b75d237d0dec6ef0c3d4e6b71e4a649ec01945758d01a331fdcaa265d",
+    "sourceRows" : 2961,
+    "matches" : 2961,
+    "comparedColumns" : [ "ts_code", "name", "management", "custodian", "fund_type", "found_date", "due_date", "list_date", "issue_date", "delist_date", "issue_amount", "m_fee", "c_fee", "duration_year", "p_value", "min_amount", "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate", "market", "timestamp", "update_time" ],
+    "nullStatusRows" : 46,
+    "mismatches" : 0,
+    "duplicateKeys" : 0,
+    "query" : "SELECT \"ts_code\",\"name\",\"management\",\"custodian\",\"fund_type\",\"found_date\",\"due_date\",\"list_date\",\"issue_date\",\"delist_date\",\"issue_amount\",\"m_fee\",\"c_fee\",\"duration_year\",\"p_value\",\"min_amount\",\"exp_return\",\"benchmark\",\"status\",\"invest_type\",\"type\",\"trustee\",\"purc_startdate\",\"redm_startdate\",\"market\",cast(timestamp AS long) AS timestamp,cast(update_time AS long) AS update_time FROM java_d013_etf_basic_c6e3b1cdbe864651a2d34d035a14a9ee ORDER BY ts_code,timestamp LIMIT 15001",
+    "sourceReceiptCount" : 1
+  }, {
+    "task" : "D013",
+    "runId" : "etf-basic-bdb10f1f-6ae3-4e35-9496-6ca8663b587a",
+    "status" : "MATCHED",
+    "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c6e3b1cdbe864651a2d34d035a14a9ee\\sync-evidence\\etf-basic-bdb10f1f-6ae3-4e35-9496-6ca8663b587a\\source\\source-7b77cb64-917c-4d83-88d4-f227253c780e.json",
+    "sourceFingerprint" : "2db83e921d1a0607341bf9f6180d29e87632e4c413a21ce9781630b1b1733e1e",
+    "sourceRows" : 2961,
+    "matches" : 2961,
+    "comparedColumns" : [ "ts_code", "name", "management", "custodian", "fund_type", "found_date", "due_date", "list_date", "issue_date", "delist_date", "issue_amount", "m_fee", "c_fee", "duration_year", "p_value", "min_amount", "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate", "market", "timestamp", "update_time" ],
+    "nullStatusRows" : 46,
+    "mismatches" : 0,
+    "duplicateKeys" : 0,
+    "query" : "SELECT \"ts_code\",\"name\",\"management\",\"custodian\",\"fund_type\",\"found_date\",\"due_date\",\"list_date\",\"issue_date\",\"delist_date\",\"issue_amount\",\"m_fee\",\"c_fee\",\"duration_year\",\"p_value\",\"min_amount\",\"exp_return\",\"benchmark\",\"status\",\"invest_type\",\"type\",\"trustee\",\"purc_startdate\",\"redm_startdate\",\"market\",cast(timestamp AS long) AS timestamp,cast(update_time AS long) AS update_time FROM java_d013_etf_basic_c6e3b1cdbe864651a2d34d035a14a9ee ORDER BY ts_code,timestamp LIMIT 15001",
+    "sourceReceiptCount" : 1
+  } ],
+  "cliPlanPreview" : {
+    "plan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.etf_basic",
+          "version" : 1,
+          "datasetId" : "etf_basic",
+          "datasetVersion" : 1,
+          "owner" : "etf_basic_owner",
+          "supportedModes" : [ "SNAPSHOT" ],
+          "defaultMode" : "SNAPSHOT",
+          "parameters" : {
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "observedAt" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 40,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "etf_basic.market_snapshot",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT30M",
+          "budget" : {
+            "maxWindowDays" : 1,
+            "maxSlices" : 2,
+            "maxPages" : 2,
+            "maxRows" : 15000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 0,
+          "dependencies" : [ ],
+          "frequency" : "WEEKLY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : false
+        },
+        "mode" : "SNAPSHOT",
+        "parameters" : {
+          "observedAt" : "2026-09-29T18:31:25.285302Z",
+          "targetId" : "static-v2-e4079e6349f95f8baf8a7d111f20f4d892bc248a3e5b966991c806f9fea08122"
+        },
+        "from" : null,
+        "to" : null,
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-e4079e6349f95f8baf8a7d111f20f4d892bc248a3e5b966991c806f9fea08122",
+      "observedAt" : "2026-09-29T18:31:25.285302Z"
+    },
+    "dataVerified" : false,
+    "executed" : false,
+    "request" : {
+      "definition" : {
+        "jobId" : "data.etf_basic",
+        "version" : 1,
+        "datasetId" : "etf_basic",
+        "datasetVersion" : 1,
+        "owner" : "etf_basic_owner",
+        "supportedModes" : [ "SNAPSHOT" ],
+        "defaultMode" : "SNAPSHOT",
+        "parameters" : {
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "etf_basic.market_snapshot",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 1,
+          "maxSlices" : 2,
+          "maxPages" : 2,
+          "maxRows" : 15000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 0,
+        "dependencies" : [ ],
+        "frequency" : "WEEKLY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : false
+      },
+      "mode" : "SNAPSHOT",
+      "parameters" : {
+        "observedAt" : "2026-09-29T18:31:25.285302Z",
+        "targetId" : "static-v2-e4079e6349f95f8baf8a7d111f20f4d892bc248a3e5b966991c806f9fea08122"
+      },
+      "from" : null,
+      "to" : null,
+      "logicalDate" : "2026-09-30"
+    },
+    "status" : "PLANNED",
+    "targetId" : "static-v2-e4079e6349f95f8baf8a7d111f20f4d892bc248a3e5b966991c806f9fea08122"
+  },
+  "targetId" : "static-v2-e4079e6349f95f8baf8a7d111f20f4d892bc248a3e5b966991c806f9fea08122",
+  "frozenRequest" : {
+    "definition" : {
+      "jobId" : "data.etf_basic",
+      "version" : 1,
+      "datasetId" : "etf_basic",
+      "datasetVersion" : 1,
+      "owner" : "etf_basic_owner",
+      "supportedModes" : [ "SNAPSHOT" ],
+      "defaultMode" : "SNAPSHOT",
+      "parameters" : {
+        "targetId" : {
+          "type" : "STRING",
+          "required" : true,
+          "maxLength" : 128,
+          "maxItems" : 1,
+          "choices" : [ ]
+        },
+        "observedAt" : {
+          "type" : "STRING",
+          "required" : true,
+          "maxLength" : 40,
+          "maxItems" : 1,
+          "choices" : [ ]
+        }
+      },
+      "ratePolicyRef" : "tushare.shared",
+      "slicePolicyRef" : "etf_basic.market_snapshot",
+      "verificationPolicyRef" : "questdb.full_key_values",
+      "retry" : {
+        "maxAttempts" : 3,
+        "backoff" : "PT1S",
+        "maxElapsed" : "PT2M"
+      },
+      "timeout" : "PT30M",
+      "budget" : {
+        "maxWindowDays" : 1,
+        "maxSlices" : 2,
+        "maxPages" : 2,
+        "maxRows" : 15000,
+        "maxBatchBytes" : 1048576
+      },
+      "revisionDays" : 0,
+      "dependencies" : [ ],
+      "frequency" : "WEEKLY",
+      "zone" : "Asia/Shanghai",
+      "enabled" : true,
+      "dailyEligible" : false
+    },
+    "mode" : "SNAPSHOT",
+    "parameters" : {
+      "observedAt" : "2026-09-29T18:31:25.349473Z",
+      "targetId" : "static-v2-e4079e6349f95f8baf8a7d111f20f4d892bc248a3e5b966991c806f9fea08122"
+    },
+    "from" : null,
+    "to" : null,
+    "logicalDate" : "2026-09-30"
+  },
+  "readbackAfterFirst" : {
+    "sha256" : "a95d6288cf9cc9ae2d4d460744439af62adb92d3bbbfe2922135dba38c60d878",
+    "rows" : 2961,
+    "duplicateKeys" : 0
+  },
+  "readbackAfterIdempotentRepeat" : {
+    "sha256" : "a95d6288cf9cc9ae2d4d460744439af62adb92d3bbbfe2922135dba38c60d878",
+    "rows" : 2961,
+    "duplicateKeys" : 0
+  },
+  "readbackAfterRefresh" : {
+    "sha256" : "c32d4d8434b026d6625ce27ac4b4c1973198a4961394b466ef8ff068e1b2e589",
+    "rows" : 2961,
+    "duplicateKeys" : 0
+  },
+  "refreshBehavior" : "Fresh source observation replaces same epoch keys; source-only values independently compared immediately after each run",
+  "result" : "VERIFIED",
+  "finishedAt" : "2026-09-29T18:32:11.066941100Z"
+}

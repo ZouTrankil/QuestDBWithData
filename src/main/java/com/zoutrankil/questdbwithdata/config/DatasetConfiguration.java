@@ -15,6 +15,7 @@ public class DatasetConfiguration {
         return new DatasetRegistry(implementations);
     }
     @Bean
+    @Lazy
     SyncJobRegistry syncJobRegistry(
             DatasetRegistry datasets, List<SyncJobOwner> owners) {
         var modes = new HashMap<String, Set<SyncJobDefinition.Mode>>();
@@ -29,7 +30,7 @@ public class DatasetConfiguration {
         }
         return new SyncJobRegistry(jobs, datasets, modes,
                 new SyncJobRegistry.Policies(
-                        Set.of("tushare.shared","file.bounded"), Set.of("stock_basic.snapshot","exchange_calendar.year","stock_detail_info.identity","index_catalog.file","ths_index.complete","index_member.l2_explicit","ths_member.board"),
+                        Set.of("tushare.shared","file.bounded"), Set.of("stock_basic.snapshot","exchange_calendar.year","stock_detail_info.identity","index_catalog.file","ths_index.complete","index_member.l2_explicit","ths_member.board","daily.trade_date","daily_basic.trade_date","stk_factor.daily","stk_limit.trade_date","etf_daily.trade_date","etf_adj.trade_date","etf_share.trade_date","etf_basic.market_snapshot","stk_st_daily.namechange_year_trade_dates"),
                         Set.of("questdb.full_key_values")));
     }
 }

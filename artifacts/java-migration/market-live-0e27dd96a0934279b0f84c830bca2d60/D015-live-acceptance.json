@@ -1,0 +1,451 @@
+{
+  "task" : "D015",
+  "job" : "data.etf_adj",
+  "table" : "java_d015_etf_adj_0e27dd96a0934279b0f84c830bca2d60",
+  "startedAt" : "2026-09-29T19:37:07.011289100Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-0e27dd96a0934279b0f84c830bca2d60\\sync-ledger.sqlite",
+  "requestWindows" : {
+    "initial" : [ "2026-09-28", "2026-09-28" ],
+    "incrementalTo" : "2026-09-29"
+  },
+  "initialPlan" : {
+    "status" : "PLANNED",
+    "targetId" : "static-v2-4fb32560d81b9a884f9f120eaaff5fe8658bde01309d914c57d6296a1ae803e9",
+    "plan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.etf_adj",
+          "version" : 1,
+          "datasetId" : "etf_adj",
+          "datasetVersion" : 1,
+          "owner" : "etf_adj_owner",
+          "supportedModes" : [ "RECONCILE", "INCREMENTAL", "BACKFILL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "trade_dates" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 4000,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "etf_adj.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 366,
+            "maxPages" : 2196,
+            "maxRows" : 3660000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ {
+            "jobId" : "data.exchange_calendar",
+            "version" : 1
+          } ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-28",
+          "targetId" : "static-v2-4fb32560d81b9a884f9f120eaaff5fe8658bde01309d914c57d6296a1ae803e9",
+          "trade_dates" : "20260928"
+        },
+        "from" : "2026-09-28",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-4fb32560d81b9a884f9f120eaaff5fe8658bde01309d914c57d6296a1ae803e9",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-28",
+      "targetMinDate" : null,
+      "targetMaxDate" : null,
+      "bootstrap" : true
+    },
+    "dataVerified" : false,
+    "executed" : false,
+    "request" : {
+      "definition" : {
+        "jobId" : "data.etf_adj",
+        "version" : 1,
+        "datasetId" : "etf_adj",
+        "datasetVersion" : 1,
+        "owner" : "etf_adj_owner",
+        "supportedModes" : [ "RECONCILE", "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 4000,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "etf_adj.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 366,
+          "maxPages" : 2196,
+          "maxRows" : 3660000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-28",
+        "targetId" : "static-v2-4fb32560d81b9a884f9f120eaaff5fe8658bde01309d914c57d6296a1ae803e9",
+        "trade_dates" : "20260928"
+      },
+      "from" : "2026-09-28",
+      "to" : "2026-09-28",
+      "logicalDate" : "2026-09-30"
+    }
+  },
+  "targetId" : "static-v2-4fb32560d81b9a884f9f120eaaff5fe8658bde01309d914c57d6296a1ae803e9",
+  "runs" : [ {
+    "runId" : "etf-adj-b33e7190-3ab6-4e81-ac8b-d6a3464818c6",
+    "state" : "VERIFIED",
+    "sourceRows" : 2177,
+    "verifiedRows" : 2177,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "etf-adj-ace2427e-7dbc-48d7-90ad-a3c98384c726",
+    "state" : "VERIFIED",
+    "sourceRows" : 2177,
+    "verifiedRows" : 2177,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "etf-adj-56b02452-ab58-4a34-b77c-6bebadbe5a82",
+    "state" : "VERIFIED",
+    "sourceRows" : 2177,
+    "verifiedRows" : 2177,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "etf-adj-2f6c16d7-60d7-4e9d-b6fd-07aaf48e95c5",
+    "state" : "VERIFIED",
+    "sourceRows" : 4355,
+    "verifiedRows" : 4355,
+    "errorCode" : null,
+    "reusedRows" : 0
+  } ],
+  "readbackAfterFirst" : {
+    "rows" : 2177,
+    "duplicateKeys" : 0,
+    "sha256" : "a376f895b81cf7c1dfc1364eef5c2fa018f1b45920cb90e5795b1c6080d078f0"
+  },
+  "readbackAfterIdempotentRepeat" : {
+    "rows" : 2177,
+    "duplicateKeys" : 0,
+    "sha256" : "a376f895b81cf7c1dfc1364eef5c2fa018f1b45920cb90e5795b1c6080d078f0"
+  },
+  "incrementalPlan" : {
+    "status" : "PLANNED",
+    "targetId" : "static-v2-4fb32560d81b9a884f9f120eaaff5fe8658bde01309d914c57d6296a1ae803e9",
+    "plan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.etf_adj",
+          "version" : 1,
+          "datasetId" : "etf_adj",
+          "datasetVersion" : 1,
+          "owner" : "etf_adj_owner",
+          "supportedModes" : [ "RECONCILE", "INCREMENTAL", "BACKFILL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "trade_dates" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 4000,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "etf_adj.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 366,
+            "maxPages" : 2196,
+            "maxRows" : 3660000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ {
+            "jobId" : "data.exchange_calendar",
+            "version" : 1
+          } ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-28",
+          "checkpointBefore" : "2026-09-28",
+          "targetId" : "static-v2-4fb32560d81b9a884f9f120eaaff5fe8658bde01309d914c57d6296a1ae803e9",
+          "targetMaxBefore" : "2026-09-28",
+          "targetMinBefore" : "2026-09-28",
+          "trade_dates" : "20260928,20260929"
+        },
+        "from" : "2026-09-28",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-4fb32560d81b9a884f9f120eaaff5fe8658bde01309d914c57d6296a1ae803e9",
+      "checkpointBefore" : "2026-09-28",
+      "checkpointAnchor" : "2026-09-28",
+      "targetMinDate" : "2026-09-28",
+      "targetMaxDate" : "2026-09-28",
+      "bootstrap" : false
+    },
+    "dataVerified" : false,
+    "executed" : false,
+    "request" : {
+      "definition" : {
+        "jobId" : "data.etf_adj",
+        "version" : 1,
+        "datasetId" : "etf_adj",
+        "datasetVersion" : 1,
+        "owner" : "etf_adj_owner",
+        "supportedModes" : [ "RECONCILE", "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 4000,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "etf_adj.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 366,
+          "maxPages" : 2196,
+          "maxRows" : 3660000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-28",
+        "checkpointBefore" : "2026-09-28",
+        "targetId" : "static-v2-4fb32560d81b9a884f9f120eaaff5fe8658bde01309d914c57d6296a1ae803e9",
+        "targetMaxBefore" : "2026-09-28",
+        "targetMinBefore" : "2026-09-28",
+        "trade_dates" : "20260928,20260929"
+      },
+      "from" : "2026-09-28",
+      "to" : "2026-09-29",
+      "logicalDate" : "2026-09-30"
+    }
+  },
+  "readbackAfterIncremental" : {
+    "rows" : 4355,
+    "duplicateKeys" : 0,
+    "sha256" : "2b6685d8dc67253c8967e747dbdd0600d6015cecc859bfa68f2bc9222d45cb5b"
+  },
+  "allPhysicalColumnsSelected" : true,
+  "result" : "VERIFIED",
+  "finishedAt" : "2026-09-29T19:38:11.116466800Z"
+}

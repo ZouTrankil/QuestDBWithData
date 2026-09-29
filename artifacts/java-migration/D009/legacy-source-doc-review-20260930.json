@@ -1,0 +1,44 @@
+{
+  "task": "D009",
+  "endpoint": "stk_factor",
+  "source": "Tushare official interface documentation",
+  "url": "https://tushare.pro/document/2?doc_id=296",
+  "reviewedOn": "2026-09-30",
+  "facts": {
+    "maxRowsPerCall": 10000,
+    "pagination": "Documented: can cycle or paginate",
+    "parameters": [
+      "ts_code",
+      "trade_date",
+      "start_date",
+      "end_date"
+    ],
+    "tradeDateFormat": "yyyymmdd",
+    "pctChangeField": "pct_change",
+    "volumeUnit": "lots/手",
+    "amountUnit": "thousand RMB/千元",
+    "technicalIndicatorBasis": "Forward-adjusted prices (qfq); documentation says these historical factor snapshots are not updated",
+    "rateTiers": [
+      {
+        "points": 5000,
+        "callsPerMinute": 100
+      },
+      {
+        "points": 8000,
+        "callsPerMinute": 500
+      }
+    ]
+  },
+  "implementationRelation": {
+    "javaSourceContractVersion": 2,
+    "javaHardRowCap": 10000,
+    "completionPolicy": "single bounded non-paged slice; reject response at cap unless explicit terminal evidence is available",
+    "configuredEndpointBudgetPerMinute": 10,
+    "budgetBelowListedTiers": true
+  },
+  "limitations": [
+    "This official page confirms the endpoint contract and cap, not the full-market response completeness of a specific date.",
+    "Exact-code probe and one-row physical comparison are saved separately.",
+    "The configured 10 calls/minute is a conservative application policy, not the user account entitlement."
+  ]
+}

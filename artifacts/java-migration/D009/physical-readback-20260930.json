@@ -1,0 +1,198 @@
+{
+  "evidenceType": "questdb_read_only_raw_row",
+  "endpoint": "stk_factor",
+  "parameters": {
+    "ts_code": "000001.SZ",
+    "start_date": "20260924",
+    "end_date": "20260924"
+  },
+  "query": "SELECT ts_code, trade_date, close, open, high, low, pre_close, change, pct_change, vol, amount, adj_factor, open_hfq, open_qfq, close_hfq, close_qfq, high_hfq, high_qfq, low_hfq, low_qfq, pre_close_hfq, pre_close_qfq, macd_dif, macd_dea, macd, kdj_k, kdj_d, kdj_j, rsi_6, rsi_12, rsi_24, boll_upper, boll_mid, boll_lower, cci FROM stk_factor WHERE ts_code='000001.SZ' AND trade_date='2026-09-24' LIMIT 2",
+  "response": {
+    "query": "SELECT ts_code, trade_date, close, open, high, low, pre_close, change, pct_change, vol, amount, adj_factor, open_hfq, open_qfq, close_hfq, close_qfq, high_hfq, high_qfq, low_hfq, low_qfq, pre_close_hfq, pre_close_qfq, macd_dif, macd_dea, macd, kdj_k, kdj_d, kdj_j, rsi_6, rsi_12, rsi_24, boll_upper, boll_mid, boll_lower, cci FROM stk_factor WHERE ts_code='000001.SZ' AND trade_date='2026-09-24' LIMIT 2",
+    "columns": [
+      {
+        "name": "ts_code",
+        "type": "SYMBOL"
+      },
+      {
+        "name": "trade_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "close",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "open",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "high",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "low",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pre_close",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "change",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pct_change",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "vol",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "amount",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "adj_factor",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "open_hfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "open_qfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "close_hfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "close_qfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "high_hfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "high_qfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "low_hfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "low_qfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pre_close_hfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pre_close_qfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "macd_dif",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "macd_dea",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "macd",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "kdj_k",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "kdj_d",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "kdj_j",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rsi_6",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rsi_12",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rsi_24",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "boll_upper",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "boll_mid",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "boll_lower",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "cci",
+        "type": "DOUBLE"
+      }
+    ],
+    "timestamp": 1,
+    "dataset": [
+      [
+        "000001.SZ",
+        "2026-09-24T00:00:00Z",
+        11.3,
+        11.35,
+        11.47,
+        11.29,
+        11.35,
+        -0.05,
+        -0.4405,
+        1043818.72,
+        1186736.9,
+        142.0699,
+        1612.49337,
+        11.35,
+        1605.38987,
+        11.3,
+        1629.54175,
+        11.47,
+        1603.96917,
+        11.29,
+        1612.49337,
+        11.35,
+        0.052,
+        0.098,
+        -0.093,
+        22.168,
+        31.689,
+        3.126,
+        32.461,
+        44.506,
+        51.891,
+        11.704,
+        11.497,
+        11.291,
+        -137.517
+      ]
+    ],
+    "count": 1
+  },
+  "sourceEvidence": "legacy-complete-probe-20260930.json",
+  "databaseWrites": 0
+}

@@ -1,0 +1,21 @@
+{
+  "task" : "D007",
+  "table" : "java_d007_daily_c494e9686f614e6ebe0a13323d3dc48f",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c494e9686f614e6ebe0a13323d3dc48f\\recovery-80aa9380-2f9b-47a4-ac06-0ceffa45cc05.sqlite",
+  "priorRunId" : "cancel-after-page-cfc6bc0a-b071-41ce-9de3-5a55e1191281",
+  "startedAt" : "2026-09-29T18:44:57.376178200Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "rowsBefore" : 11116,
+  "result" : {
+    "runId" : "daily-44a1a9a5-549e-4296-bac0-fc2de662547e",
+    "state" : "VERIFIED",
+    "sourceRows" : 5557,
+    "verifiedRows" : 5557,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "status" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: CLI did not reuse the entire previously verified page",
+  "finishedAt" : "2026-09-29T18:45:05.271660100Z"
+}

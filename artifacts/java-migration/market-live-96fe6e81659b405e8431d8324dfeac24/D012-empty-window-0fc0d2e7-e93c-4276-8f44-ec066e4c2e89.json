@@ -1,0 +1,81 @@
+{
+  "task" : "D012",
+  "table" : "java_d012_stk_st_daily_96fe6e81659b405e8431d8324dfeac24",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-96fe6e81659b405e8431d8324dfeac24\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T19:34:13.629994800Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "before" : {
+    "sha256" : "ac2b2006e3ababe3a4c53f1559f608265c1384c496700878f83b029184de44bc",
+    "rows" : 559,
+    "duplicateKeys" : 0
+  },
+  "injectedStaleRow" : {
+    "ts_code" : "999999.SZ",
+    "date" : "2026-09-27",
+    "purpose" : "Exercise complete empty-window retraction while preserving actual outside rows",
+    "synthetic" : true
+  },
+  "run" : {
+    "runId" : "empty-window-cabb918a-7341-485f-8bf8-3ed90bcab9b3",
+    "state" : "VERIFIED_EMPTY",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "after" : {
+    "sha256" : "ac2b2006e3ababe3a4c53f1559f608265c1384c496700878f83b029184de44bc",
+    "rows" : 559,
+    "duplicateKeys" : 0
+  },
+  "independentReadback" : {
+    "task" : "D012",
+    "requestFrom" : "2026-09-27",
+    "sourceEvidenceBytes" : 0,
+    "mismatches" : 0,
+    "sourceReceipts" : [ ],
+    "stageReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-96fe6e81659b405e8431d8324dfeac24\\sync-evidence\\empty-window-cabb918a-7341-485f-8bf8-3ed90bcab9b3\\java_d012_stk_st_daily_stage_9c85da74da554130a72437d137c26dae-verified.json",
+    "rawAnnualRows" : 0,
+    "publicationState" : "VERIFIED",
+    "sourceFingerprint" : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sourceRows" : 0,
+    "mismatchSamples" : [ ],
+    "currentGenerationMatchesRun" : true,
+    "annualReceiptCount" : 0,
+    "status" : "MATCHED",
+    "target" : "java_d012_stk_st_daily_96fe6e81659b405e8431d8324dfeac24",
+    "journalStagePhysicalTargetId" : "static-v2-699f9b8499126c78aec9e4a1047c000fc00df09c7f51201bdc0c5f565737c192",
+    "logicalTargetId" : "d012-logical-v1-93ddde0d7d96653e477c46ef5a827319165c0aceda300c238a36e2c50f5f226d",
+    "frozenPhysicalTargetId" : "static-v2-5269455600eca0ceac8f0c0a0140c4a7392b895fbe46934206dd4b287cddec54",
+    "sourcePages" : 0,
+    "matches" : 0,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "query" : "SELECT ts_code,is_st,cast(timestamp AS long) AS timestamp_micros FROM \"java_d012_stk_st_daily_96fe6e81659b405e8431d8324dfeac24\" WHERE timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP) ORDER BY timestamp,ts_code LIMIT 1000001",
+    "requestTo" : "2026-09-27",
+    "unexpectedKeys" : 0,
+    "currentPhysicalTargetId" : "static-v2-699f9b8499126c78aec9e4a1047c000fc00df09c7f51201bdc0c5f565737c192",
+    "tradeDates" : [ ],
+    "actualRows" : 0,
+    "runId" : "empty-window-cabb918a-7341-485f-8bf8-3ed90bcab9b3",
+    "comparedColumns" : [ "ts_code", "timestamp", "is_st" ],
+    "publicationId" : "stk-st-publication-a2fafa4e-d6df-4edf-975f-3242d5902f24"
+  },
+  "lostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 720,
+      "digest" : "d06797f61501263890b46f22305bf47dfdadab81f3737f665a45a8b57b4d64c9",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T19:34:20.032218100Z"
+}

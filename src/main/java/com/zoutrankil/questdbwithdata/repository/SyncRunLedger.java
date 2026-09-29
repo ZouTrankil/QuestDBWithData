@@ -364,6 +364,16 @@ public final class SyncRunLedger {
                     || count(root.path("returnedRows")) != 0 || count(root.path("submittedRows")) != 0
                     || root.path("responseEvidence").asText("").isBlank()))
                 throw new IllegalArgumentException("Complete empty source evidence required");
+            if (next == SyncRunState.VERIFIED_EMPTY && previous == SyncRunState.IN_DOUBT) {
+                var proof = root.path("verification");
+                if (!proof.path("writerStopped").asBoolean(false) || !proof.path("passed").asBoolean(false)
+                        || count(proof.path("expectedRows")) != 0 || count(proof.path("actualRows")) != 0
+                        || count(proof.path("matchedRows")) != 0 || count(proof.path("mismatchedRows")) != 0
+                        || count(proof.path("duplicateKeys")) != 0 || count(proof.path("missingKeys")) != 0
+                        || proof.path("readbackEvidence").asText("").isBlank()
+                        || proof.path("sourceFingerprint").asText("").isBlank())
+                    throw new IllegalArgumentException("Stopped writer and empty-window readback proof required for reconciliation");
+            }
         } catch (IOException e) { throw new IllegalArgumentException("Invalid ledger evidence"); }
     }
     private static long count(com.fasterxml.jackson.databind.JsonNode node) {

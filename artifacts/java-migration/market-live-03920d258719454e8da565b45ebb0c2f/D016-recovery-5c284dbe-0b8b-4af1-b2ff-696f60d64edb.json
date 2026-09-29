@@ -1,0 +1,94 @@
+{
+  "task" : "D016",
+  "table" : "java_d016_etf_share_03920d258719454e8da565b45ebb0c2f",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-03920d258719454e8da565b45ebb0c2f\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T20:11:26.446402400Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "before" : {
+    "sha256" : "997cfef2b959f6d973ff438888627a61ce69e0f8417f317ff684299ee71cfce8",
+    "rows" : 3566,
+    "duplicateKeys" : 0
+  },
+  "rowsBefore" : 3566,
+  "cancelBeforeSource" : {
+    "runId" : "cancel-before-28d26dc3-eb89-4aee-ab03-9dcd82170abe",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterVerifiedPage" : {
+    "runId" : "cancel-after-page-4f876ff1-50eb-4423-9842-657218741463",
+    "state" : "CANCELLED",
+    "sourceRows" : 1774,
+    "verifiedRows" : 1774,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "resume" : {
+    "runId" : "resume-a058f541-2282-4e81-88f5-d02efd7c1253",
+    "state" : "VERIFIED",
+    "sourceRows" : 1774,
+    "verifiedRows" : 1774,
+    "errorCode" : null,
+    "reusedRows" : 1774
+  },
+  "resumeSendCalls" : 0,
+  "independentResumeReadback" : {
+    "task" : "D016",
+    "runId" : "resume-a058f541-2282-4e81-88f5-d02efd7c1253",
+    "target" : "java_d016_etf_share_03920d258719454e8da565b45ebb0c2f",
+    "targetId" : "static-v2-49908ae06a981e8bdc405baaa05b04edb5f4b536fce8dfdd2d6880fe241e3cde",
+    "status" : "MATCHED",
+    "windowFrom" : "2026-09-17",
+    "windowTo" : "2026-09-17",
+    "frozenSessions" : 1,
+    "sourceReceiptCount" : 1,
+    "sourceRows" : 1774,
+    "actualWindowRows" : 1774,
+    "actualWindowOverBound" : false,
+    "matchedRows" : 1774,
+    "mismatchedRows" : 0,
+    "mismatchedValues" : 0,
+    "mismatchedFieldCounts" : { },
+    "missingKeyCount" : 0,
+    "missingKeySamples" : [ ],
+    "extraKeyCount" : 0,
+    "extraKeySamples" : [ ],
+    "duplicateKeyCount" : 0,
+    "duplicateKeySamples" : [ ],
+    "mismatchSamples" : [ ],
+    "comparedColumns" : [ "ts_code", "timestamp", "fd_share", "fund_type", "market", "update_time" ],
+    "receipts" : [ {
+      "date" : "2026-09-17",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-03920d258719454e8da565b45ebb0c2f\\sync-evidence\\recovery-197408f7-d554-4411-bb24-f4310064448d\\source\\etf-share-20260917-94e83463-337c-435b-b3ef-e73f38c53218.json",
+      "fingerprint" : "c89a4e0ede76b8fe521dd96782c4e82a89f0c0c809a56b03b62b419d8b27c75f",
+      "rows" : 1774
+    } ],
+    "readOnlyQuery" : "SELECT ts_code, cast(timestamp AS long) AS timestamp_micros, fd_share, fund_type, market, cast(update_time AS long) AS update_time_micros FROM \"java_d016_etf_share_03920d258719454e8da565b45ebb0c2f\" WHERE timestamp >= cast(? AS TIMESTAMP) AND timestamp < cast(? AS TIMESTAMP) ORDER BY timestamp, ts_code LIMIT 5998"
+  },
+  "postSendLostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 1608,
+      "digest" : "f036bc6c2373ac2ec030696beca5050be294fd295255cdd4c3b0ae286f575229",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "after" : {
+    "sha256" : "997cfef2b959f6d973ff438888627a61ce69e0f8417f317ff684299ee71cfce8",
+    "rows" : 3566,
+    "duplicateKeys" : 0
+  },
+  "rowsAfter" : 3566,
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T20:12:01.946265Z"
+}

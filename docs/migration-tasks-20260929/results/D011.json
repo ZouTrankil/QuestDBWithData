@@ -1,0 +1,127 @@
+{
+  "task_id": "D011",
+  "dataset_id": "stk_suspend",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "stk-suspend-32825bee-e7ee-489e-9ade-8d7d50bf3c52",
+  "attempt_id": null,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-29T19:07:22.818551300Z",
+  "finished_at": "2026-09-29T19:50:54.819680Z",
+  "target": {
+    "target_id": "static-v2-2314373a273efd62aba5a484a2635d7a5271ce0812ca04c009840a33a8842416",
+    "database_version": "QuestDB 10.0.1",
+    "formal_table": "stk_suspend",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+    "isolated": true,
+    "publication": "journaled_window_replacement"
+  },
+  "incremental": {
+    "mode": "INCREMENTAL",
+    "request_window": {
+      "initial": [
+        "2026-09-28",
+        "2026-09-28"
+      ],
+      "incrementalTo": "2026-09-29"
+    },
+    "bootstrap_policy": "first incremental plan requires explicit start; uses later of requestedThrough and scoped physical MAX as ceiling; logicalDate enforced; maximum five calendar days",
+    "revision_overlap": "re-read checkpoint date and two prior calendar days; forward advance is capped at two calendar days per verified run",
+    "checkpoint_policy": "only contiguous receipt-backed VERIFIED/VERIFIED_EMPTY coverage for the same frozen target, job/schema version, and bootstrap anchor advances checkpoint; BACKFILL/incomplete runs do not",
+    "checkpoint_before": "2026-09-28",
+    "checkpoint_after": "2026-09-29"
+  },
+  "source": {
+    "provider": "Tushare",
+    "endpoint": "suspend_d",
+    "route_policy": "one trade_date plus suspend_type=S request per calendar-day slice; each source response capped at 5000; raw suspend_timing retained as evidence",
+    "request_evidence": null,
+    "response_evidence": "artifacts/java-migration/market-live-00f1a5c441d14abe877cd13a99139970/D011-live-acceptance.json",
+    "returned_rows": 61,
+    "normalized_rows": 61,
+    "rejected_rows": 0,
+    "fingerprint": null,
+    "row_count_scope": "Four accepted source runs, including repeated business keys; cancellation/recovery separately evidenced; earlier rejected attempts retained."
+  },
+  "write": {
+    "submitted_rows": 61,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "delivery_status": "verified_after_full_readback_and_publication",
+    "batch_row_limit": 250,
+    "batch_byte_limit": 1048576,
+    "row_count_scope": "Logical source rows in four acceptance runs; no inferred insert/update split or total stage-copy write count."
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/market-live-00f1a5c441d14abe877cd13a99139970/D011-live-acceptance.json",
+    "business_keys": [
+      "ts_code",
+      "timestamp"
+    ],
+    "compared_columns": [
+      "ts_code",
+      "is_suspended",
+      "timestamp"
+    ],
+    "actual_rows": 25,
+    "matched_rows": 25,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": "898e8caeffc172c7d657d659cdd620490fac383b9bf9d140ef2f3f1ae775b9b0",
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "empty_day": "VERIFIED_EMPTY with stale in-window row removed and outside snapshot unchanged",
+    "idempotent_rerun": true,
+    "second_incremental": true,
+    "rate_limit": "Actual source used configured endpoint 10/min and shared global budget; no natural provider throttling claimed",
+    "retry": "Shared bounded retry implementation; no new test suite or natural retry fault assertion",
+    "pagination": "Bounded non-paged source responses below cap; cap guard implemented, cap-hit live fault not claimed",
+    "resume": "CLI --resume-from only, exact frozen request, 12 verified page rows reused after stage reconstruction; stage creation can write rows",
+    "cancel": "Before-source zero rows and after-staged-page cancellation both durable CANCELLED",
+    "unknown_write_reconcile": "Two actual source rows sent; injected lost acknowledgement after sender close; bounded readback UNKNOWN_RECONCILED",
+    "source_revocation": "Explicit synthetic obsolete key on owned target removed by complete real-source window replacement",
+    "scoped_replacement": "Real stage-to-target rename acknowledgement loss in nonempty and empty windows; IN_DOUBT -> verified, full readback, owned lease released",
+    "tests_run": false,
+    "gradle_build": "Java 24 scoped compilation and operational execution; no full Gradle build or new test-suite run claimed",
+    "live_tushare": "Four source acceptance runs plus separately recorded recovery operations",
+    "live_questdb_isolated_readback": "MATCHED",
+    "independent_raw_source_comparison": true
+  },
+  "blockers": [],
+  "remaining_live_acceptance": [],
+  "evidence_paths": [
+    "artifacts/java-migration/D011/source-contract.md",
+    "artifacts/java-migration/D011/source-doc-review-20260930.json",
+    "artifacts/java-migration/D011/job-request-example.json",
+    "docs/migration-tasks-20260929/03-equity/D011-stk_suspend.md",
+    "var/StockSuspendIndependentReadback.java",
+    "artifacts/java-migration/market-live-00f1a5c441d14abe877cd13a99139970/D011-live-acceptance.json",
+    "artifacts/java-migration/market-live-00f1a5c441d14abe877cd13a99139970/D011-window-recovery-544515e6-0401-4da9-a631-c1b152e9dde4.json",
+    "artifacts/java-migration/market-live-00f1a5c441d14abe877cd13a99139970/D011-empty-window-b93e890d-9fd9-4d89-854c-091b2592f455.json",
+    "artifacts/java-migration/market-live-00f1a5c441d14abe877cd13a99139970/D011-publication-recovery-d360857e-bec4-4ae4-817a-00235ffd3437.json",
+    "artifacts/java-migration/D011/final-review.md"
+  ],
+  "attempt_history": [],
+  "integration_needed": {},
+  "next_manual_comparison": "用户可抽查原始来源收据、按完整键查询和发布日志；人工复核 pending_review。",
+  "current_progress": "真实来源四次写读、幂等增量、取消恢复、撤回、空窗口及非空/空发布中断收尾均已完成。",
+  "live_acceptance_attempt": {
+    "result": "verified",
+    "evidence": "artifacts/java-migration/market-live-00f1a5c441d14abe877cd13a99139970/D011-live-acceptance.json",
+    "formal_tables_mutated": false
+  },
+  "recovery_acceptance": [
+    "artifacts/java-migration/market-live-00f1a5c441d14abe877cd13a99139970/D011-window-recovery-544515e6-0401-4da9-a631-c1b152e9dde4.json",
+    "artifacts/java-migration/market-live-00f1a5c441d14abe877cd13a99139970/D011-empty-window-b93e890d-9fd9-4d89-854c-091b2592f455.json",
+    "artifacts/java-migration/market-live-00f1a5c441d14abe877cd13a99139970/D011-publication-recovery-d360857e-bec4-4ae4-817a-00235ffd3437.json"
+  ]
+}

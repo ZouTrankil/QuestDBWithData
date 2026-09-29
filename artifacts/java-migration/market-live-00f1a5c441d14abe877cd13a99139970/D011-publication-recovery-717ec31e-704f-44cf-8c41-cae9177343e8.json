@@ -1,0 +1,30 @@
+{
+  "task" : "D011",
+  "table" : "java_d011_stk_suspend_00f1a5c441d14abe877cd13a99139970",
+  "startedAt" : "2026-09-29T19:43:55.810673300Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "injectedFault" : "Lost rename acknowledgement after the actual stage-to-owned-target rename; private JDBC datasource wrapper",
+  "before" : {
+    "rows" : 25,
+    "sha256" : "898e8caeffc172c7d657d659cdd620490fac383b9bf9d140ef2f3f1ae775b9b0",
+    "duplicateKeys" : 0
+  },
+  "scenarios" : [ {
+    "empty" : false,
+    "runId" : "publication-fault-825ee3e2-d18b-42c3-889b-cdcfc350e6df",
+    "resultBeforeRecovery" : {
+      "runId" : "publication-fault-825ee3e2-d18b-42c3-889b-cdcfc350e6df",
+      "state" : "PARTIAL",
+      "sourceRows" : 12,
+      "verifiedRows" : 12,
+      "errorCode" : "IllegalStateException",
+      "reusedRows" : 0
+    },
+    "durableStateBeforeRecovery" : "PARTIAL",
+    "faultFired" : true
+  } ],
+  "status" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: Lost rename acknowledgement must remain IN_DOUBT",
+  "finishedAt" : "2026-09-29T19:44:01.746793200Z"
+}

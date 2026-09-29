@@ -1,0 +1,353 @@
+{
+  "task": "D009",
+  "comparisonDate": "2026-09-24",
+  "tsCode": "000001.SZ",
+  "sourceEndpoint": "stk_factor",
+  "sourceEvidence": "legacy-complete-probe-20260930.json",
+  "physicalEvidence": "physical-readback-20260930.json",
+  "sourceFields": 35,
+  "physicalRows": 1,
+  "comparedFields": 35,
+  "mismatchCount": 0,
+  "status": "all_35_fields_exact_match",
+  "compared": [
+    {
+      "field": "ts_code",
+      "source": "000001.SZ",
+      "physical": "000001.SZ",
+      "equal": true
+    },
+    {
+      "field": "trade_date",
+      "source": "2026-09-24",
+      "physical": "2026-09-24",
+      "equal": true
+    },
+    {
+      "field": "close",
+      "source": 11.3,
+      "physical": 11.3,
+      "equal": true
+    },
+    {
+      "field": "open",
+      "source": 11.35,
+      "physical": 11.35,
+      "equal": true
+    },
+    {
+      "field": "high",
+      "source": 11.47,
+      "physical": 11.47,
+      "equal": true
+    },
+    {
+      "field": "low",
+      "source": 11.29,
+      "physical": 11.29,
+      "equal": true
+    },
+    {
+      "field": "pre_close",
+      "source": 11.35,
+      "physical": 11.35,
+      "equal": true
+    },
+    {
+      "field": "change",
+      "source": -0.05,
+      "physical": -0.05,
+      "equal": true
+    },
+    {
+      "field": "pct_change",
+      "source": -0.4405,
+      "physical": -0.4405,
+      "equal": true
+    },
+    {
+      "field": "vol",
+      "source": 1043818.72,
+      "physical": 1043818.72,
+      "equal": true
+    },
+    {
+      "field": "amount",
+      "source": 1186736.9,
+      "physical": 1186736.9,
+      "equal": true
+    },
+    {
+      "field": "adj_factor",
+      "source": 142.0699,
+      "physical": 142.0699,
+      "equal": true
+    },
+    {
+      "field": "open_hfq",
+      "source": 1612.49337,
+      "physical": 1612.49337,
+      "equal": true
+    },
+    {
+      "field": "open_qfq",
+      "source": 11.35,
+      "physical": 11.35,
+      "equal": true
+    },
+    {
+      "field": "close_hfq",
+      "source": 1605.38987,
+      "physical": 1605.38987,
+      "equal": true
+    },
+    {
+      "field": "close_qfq",
+      "source": 11.3,
+      "physical": 11.3,
+      "equal": true
+    },
+    {
+      "field": "high_hfq",
+      "source": 1629.54175,
+      "physical": 1629.54175,
+      "equal": true
+    },
+    {
+      "field": "high_qfq",
+      "source": 11.47,
+      "physical": 11.47,
+      "equal": true
+    },
+    {
+      "field": "low_hfq",
+      "source": 1603.96917,
+      "physical": 1603.96917,
+      "equal": true
+    },
+    {
+      "field": "low_qfq",
+      "source": 11.29,
+      "physical": 11.29,
+      "equal": true
+    },
+    {
+      "field": "pre_close_hfq",
+      "source": 1612.49337,
+      "physical": 1612.49337,
+      "equal": true
+    },
+    {
+      "field": "pre_close_qfq",
+      "source": 11.35,
+      "physical": 11.35,
+      "equal": true
+    },
+    {
+      "field": "macd_dif",
+      "source": 0.052,
+      "physical": 0.052,
+      "equal": true
+    },
+    {
+      "field": "macd_dea",
+      "source": 0.098,
+      "physical": 0.098,
+      "equal": true
+    },
+    {
+      "field": "macd",
+      "source": -0.093,
+      "physical": -0.093,
+      "equal": true
+    },
+    {
+      "field": "kdj_k",
+      "source": 22.168,
+      "physical": 22.168,
+      "equal": true
+    },
+    {
+      "field": "kdj_d",
+      "source": 31.689,
+      "physical": 31.689,
+      "equal": true
+    },
+    {
+      "field": "kdj_j",
+      "source": 3.126,
+      "physical": 3.126,
+      "equal": true
+    },
+    {
+      "field": "rsi_6",
+      "source": 32.461,
+      "physical": 32.461,
+      "equal": true
+    },
+    {
+      "field": "rsi_12",
+      "source": 44.506,
+      "physical": 44.506,
+      "equal": true
+    },
+    {
+      "field": "rsi_24",
+      "source": 51.891,
+      "physical": 51.891,
+      "equal": true
+    },
+    {
+      "field": "boll_upper",
+      "source": 11.704,
+      "physical": 11.704,
+      "equal": true
+    },
+    {
+      "field": "boll_mid",
+      "source": 11.497,
+      "physical": 11.497,
+      "equal": true
+    },
+    {
+      "field": "boll_lower",
+      "source": 11.291,
+      "physical": 11.291,
+      "equal": true
+    },
+    {
+      "field": "cci",
+      "source": -137.517,
+      "physical": -137.517,
+      "equal": true
+    }
+  ],
+  "mismatches": [],
+  "stkFactorProQfqComparison": {
+    "probe": "source-basis-probe-20260930.json",
+    "comparedFields": [
+      {
+        "physicalField": "macd_dif",
+        "proQfqField": "macd_dif_qfq",
+        "proValue": 0.052,
+        "physicalValue": 0.052,
+        "exact": true,
+        "roundedToThreeDecimals": 0.052,
+        "matchesThreeDecimals": true
+      },
+      {
+        "physicalField": "macd_dea",
+        "proQfqField": "macd_dea_qfq",
+        "proValue": 0.098,
+        "physicalValue": 0.098,
+        "exact": true,
+        "roundedToThreeDecimals": 0.098,
+        "matchesThreeDecimals": true
+      },
+      {
+        "physicalField": "macd",
+        "proQfqField": "macd_qfq",
+        "proValue": -0.093,
+        "physicalValue": -0.093,
+        "exact": true,
+        "roundedToThreeDecimals": -0.093,
+        "matchesThreeDecimals": true
+      },
+      {
+        "physicalField": "kdj_k",
+        "proQfqField": "kdj_k_qfq",
+        "proValue": 22.16805,
+        "physicalValue": 22.168,
+        "exact": false,
+        "roundedToThreeDecimals": 22.168,
+        "matchesThreeDecimals": true
+      },
+      {
+        "physicalField": "kdj_d",
+        "proQfqField": "kdj_d_qfq",
+        "proValue": 31.689,
+        "physicalValue": 31.689,
+        "exact": true,
+        "roundedToThreeDecimals": 31.689,
+        "matchesThreeDecimals": true
+      },
+      {
+        "physicalField": "kdj_j",
+        "proQfqField": "kdj_j_qfq",
+        "available": false,
+        "note": "not returned by stk_factor_pro response"
+      },
+      {
+        "physicalField": "rsi_6",
+        "proQfqField": "rsi_qfq_6",
+        "proValue": 32.461,
+        "physicalValue": 32.461,
+        "exact": true,
+        "roundedToThreeDecimals": 32.461,
+        "matchesThreeDecimals": true
+      },
+      {
+        "physicalField": "rsi_12",
+        "proQfqField": "rsi_qfq_12",
+        "proValue": 44.506,
+        "physicalValue": 44.506,
+        "exact": true,
+        "roundedToThreeDecimals": 44.506,
+        "matchesThreeDecimals": true
+      },
+      {
+        "physicalField": "rsi_24",
+        "proQfqField": "rsi_qfq_24",
+        "proValue": 51.891,
+        "physicalValue": 51.891,
+        "exact": true,
+        "roundedToThreeDecimals": 51.891,
+        "matchesThreeDecimals": true
+      },
+      {
+        "physicalField": "boll_upper",
+        "proQfqField": "boll_upper_qfq",
+        "proValue": 11.704,
+        "physicalValue": 11.704,
+        "exact": true,
+        "roundedToThreeDecimals": 11.704,
+        "matchesThreeDecimals": true
+      },
+      {
+        "physicalField": "boll_mid",
+        "proQfqField": "boll_mid_qfq",
+        "proValue": 11.497,
+        "physicalValue": 11.497,
+        "exact": true,
+        "roundedToThreeDecimals": 11.497,
+        "matchesThreeDecimals": true
+      },
+      {
+        "physicalField": "boll_lower",
+        "proQfqField": "boll_lower_qfq",
+        "proValue": 11.291,
+        "physicalValue": 11.291,
+        "exact": true,
+        "roundedToThreeDecimals": 11.291,
+        "matchesThreeDecimals": true
+      },
+      {
+        "physicalField": "cci",
+        "proQfqField": "cci_qfq",
+        "proValue": -137.51653,
+        "physicalValue": -137.517,
+        "exact": false,
+        "roundedToThreeDecimals": -137.517,
+        "matchesThreeDecimals": true
+      }
+    ],
+    "omittedFromResponse": [
+      "pre_close_hfq",
+      "pre_close_qfq",
+      "kdj_j_bfq",
+      "kdj_j_qfq",
+      "kdj_j_hfq"
+    ],
+    "note": "At this single sample, qfq values match physical values exactly or after three-decimal rounding for fields returned; this does not change Java source mapping, which uses legacy stk_factor fields directly."
+  }
+}
