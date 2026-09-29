@@ -1,0 +1,86 @@
+{
+  "incremental" : {
+    "runId" : "stock-detail-7c2f3181-ef89-4bfe-a7de-92ff039e4471",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "insertedRows" : 1,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 1,
+    "publicationId" : "publication-3bbf5320-44d7-4999-9b8f-14c818b48944",
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-7c2f3181-ef89-4bfe-a7de-92ff039e4471\\completion.json",
+    "errorCode" : null
+  },
+  "actual" : {
+    "identity" : {
+      "id" : 2153,
+      "directory" : "java_d002_owner_3d0d50dc81354b9d92ea8378c09838a9"
+    },
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "updateTime" : "2026-09-29T06:53:43.836843Z",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "L",
+      "listDate" : "19910403",
+      "fullname" : "平安银行股份有限公司",
+      "enname" : "Ping An Bank Co., Ltd.",
+      "cnspell" : "PAYH",
+      "area" : "深圳",
+      "industry" : "银行",
+      "currType" : "CNY",
+      "delistDate" : null,
+      "isHs" : "S",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    }, {
+      "tsCode" : "000003.SZ",
+      "updateTime" : "2026-09-29T06:54:14.174996Z",
+      "symbol" : "000003",
+      "name" : "PT金田A(退)",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "D",
+      "listDate" : "19910703",
+      "fullname" : "金田实业(集团)股份有限公司",
+      "enname" : "Gintian Industry (Group) Co., Ltd.",
+      "cnspell" : "ptjta",
+      "area" : null,
+      "industry" : null,
+      "currType" : "CNY",
+      "delistDate" : "20020614",
+      "isHs" : "N",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    } ],
+    "fingerprint" : "50c303c0093b0768db9ae1cd236f022435772f778528048e9580f5867ea7a6d2",
+    "bytes" : 838
+  },
+  "repeated" : {
+    "runId" : "stock-detail-e7a3e1bb-e4ab-4310-a0c7-bbd877ef3021",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "insertedRows" : 0,
+    "updatedRows" : 0,
+    "unchangedRows" : 1,
+    "verifiedRows" : 1,
+    "publicationId" : null,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-e7a3e1bb-e4ab-4310-a0c7-bbd877ef3021\\completion.json",
+    "errorCode" : null
+  },
+  "ledger" : "var\\D002-owner-3d0d50dc81354b9d92ea8378c09838a9.sqlite",
+  "first" : {
+    "runId" : "stock-detail-cda0bfc6-3186-46de-b631-69b593e36cc7",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "insertedRows" : 1,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 1,
+    "publicationId" : "publication-225c6040-1b3d-4f1c-8d5e-d10bc0ba9198",
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-cda0bfc6-3186-46de-b631-69b593e36cc7\\completion.json",
+    "errorCode" : null
+  }
+}

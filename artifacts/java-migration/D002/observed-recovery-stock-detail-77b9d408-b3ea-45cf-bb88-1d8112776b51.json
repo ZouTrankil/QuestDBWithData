@@ -1,0 +1,46 @@
+{
+  "actual" : {
+    "identity" : {
+      "id" : 2175,
+      "directory" : "java_d002_slice_recovery_407b4bffa2764c65a96b30dca67dfe41"
+    },
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "updateTime" : "2026-09-29T07:25:35.055138Z",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "L",
+      "listDate" : "19910403",
+      "fullname" : "平安银行股份有限公司",
+      "enname" : "Ping An Bank Co., Ltd.",
+      "cnspell" : "PAYH",
+      "area" : "深圳",
+      "industry" : "银行",
+      "currType" : "CNY",
+      "delistDate" : null,
+      "isHs" : "S",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    } ],
+    "fingerprint" : "74642e1b18b853cc4657759f4279670be4b1a5e0acdc2b00bc45dbd8dda8bad4",
+    "bytes" : 409
+  },
+  "writerProof" : "Original local-D002-slice-recovery-239c Gradle process returned terminal exit 1 before this recovery",
+  "result" : {
+    "runId" : "stock-detail-77b9d408-b3ea-45cf-bb88-1d8112776b51",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "insertedRows" : 1,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 1,
+    "publicationId" : "publication-5dcf9342-780b-415a-a7b6-d16d37b73b97",
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-77b9d408-b3ea-45cf-bb88-1d8112776b51\\completion.json",
+    "errorCode" : null
+  },
+  "newSourceRequests" : 0,
+  "table" : "java_d002_slice_recovery_407b4bffa2764c65a96b30dca67dfe41",
+  "questdbWrites" : 0
+}

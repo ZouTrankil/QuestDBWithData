@@ -19,7 +19,7 @@ public class ClientConfiguration {
     @Bean(destroyMethod = "close")
     SharedRequestBudget tushareRequestBudget(TushareProperties p) {
         return new SharedRequestBudget(new SharedRequestBudget.Policy(p.getGlobalPerMinute(), p.getEndpointPerMinute(),
-                p.getEndpointLimits(), p.getConcurrency(), p.getQueueCapacity(), p.getMaxAttempts(),
+                p.effectiveEndpointLimits(), p.getConcurrency(), p.getQueueCapacity(), p.getMaxAttempts(),
                 p.getTotalTimeout(), p.getRetryBase(), p.getRetryMax(), p.getRetryableBusinessCodes()),
                 java.nio.file.Path.of(System.getProperty("user.home"), ".questdbwithdata", "credential-budgets"));
     }

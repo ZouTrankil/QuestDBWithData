@@ -1,0 +1,31 @@
+{
+  "source_rows": 5910,
+  "questdb_stage_readback_rows": 5910,
+  "matched_business_keys": 5910,
+  "missing_keys": [],
+  "extra_keys": [],
+  "mismatched_fields": {},
+  "compared_columns": [
+    "ts_code",
+    "symbol",
+    "name",
+    "area",
+    "industry",
+    "fullname",
+    "enname",
+    "cnspell",
+    "market",
+    "exchange",
+    "curr_type",
+    "list_status",
+    "list_date",
+    "delist_date",
+    "is_hs",
+    "act_name",
+    "act_ent_type"
+  ],
+  "excluded_column": "update_time: local observation, not a source field",
+  "stage": "java_stock_detail_stage_2d2c70df68b5456d8c7757d05a253184",
+  "physical_snapshot_fingerprint": "0eca38a9c9ce1549609f94ef52e02e8e299af66189ebb611092f390d479f0187",
+  "passed": true
+}

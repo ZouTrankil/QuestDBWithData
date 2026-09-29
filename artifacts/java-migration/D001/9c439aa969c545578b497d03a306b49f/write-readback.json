@@ -1,0 +1,117 @@
+{
+  "table" : "java_d001_calendar_9c439aa969c545578b497d03a306b49f",
+  "duplicateKeys" : 0,
+  "matchedRows" : 8,
+  "expected" : [ {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-25",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-26",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-27",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-28",
+    "open" : true,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SZSE",
+    "calendarDate" : "2026-09-25",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SZSE",
+    "calendarDate" : "2026-09-26",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SZSE",
+    "calendarDate" : "2026-09-27",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SZSE",
+    "calendarDate" : "2026-09-28",
+    "open" : true,
+    "previousTradeDate" : "2026-09-24"
+  } ],
+  "mismatchedRows" : 0,
+  "readback" : [ {
+    "exchange" : "SSE",
+    "date_micros" : 1790294400000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790380800000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790467200000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790553600000000,
+    "is_open" : 1,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790294400000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790380800000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790467200000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790553600000000,
+    "is_open" : 1,
+    "pretrade_date" : "20260924"
+  } ],
+  "query" : "SELECT exchange,cast(cal_date as long) AS date_micros,is_open,pretrade_date FROM java_d001_calendar_9c439aa969c545578b497d03a306b49f ORDER BY exchange,cal_date LIMIT 9",
+  "repeated" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 8,
+    "verifiedRows" : 8,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 8,
+      "verifiedRows" : 8,
+      "bytes" : 3720,
+      "digest" : "f285286af938aa5b459d69a5c6095a10e4b95b2f89068da59fd6e065f63b1f33",
+      "delivery" : "ACKNOWLEDGED"
+    } ],
+    "reason" : null
+  },
+  "first" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 8,
+    "verifiedRows" : 8,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 8,
+      "verifiedRows" : 8,
+      "bytes" : 3720,
+      "digest" : "f285286af938aa5b459d69a5c6095a10e4b95b2f89068da59fd6e065f63b1f33",
+      "delivery" : "ACKNOWLEDGED"
+    } ],
+    "reason" : null
+  }
+}

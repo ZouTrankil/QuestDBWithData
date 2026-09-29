@@ -1,0 +1,17 @@
+# D002 bounded source and incremental merge
+
+Status: running, not verified as a complete dataset. No D002 QuestDB write occurred in these checks.
+
+StockDetailInfoMerge combines finite existing/source rows by ts_code, preserves codes omitted from the request, and rejects duplicate target/source identities. An unchanged business record retains its prior stored observation timestamp and does not require publication. Changed business values are accepted after source validation without comparing legacy and Java observation clocks: those clocks have different provenance and are not upstream revision versions. Insert/update/unchanged counts are derived from complete business values, excluding only the observation timestamp. Empty source does not delete target rows. Both input and merged row sets are bounded at 10,000 rows; publication still needs a transport/byte budget and durable recovery protocol.
+
+`local-D002-merge-719b`: six mapping/merge tests passed before the observation-clock correction. `local-D002-legacy-clock-fix`: three updated merge tests passed, including a changed business row with an earlier numeric observation clock. See `revision-clock-risk.md`.
+
+StockDetailInfoSource issues one exact-code request for each L/D/P listing state through the existing bounded HTTP/retry/shared-budget path. Each response must contain zero or one record matching the explicit code and status; all 17 requested source fields must be present. No offset, guessed pagination parameter, market-wide pull or date watermark is used. A record appearing in multiple states during a request sequence is rejected rather than silently deduplicated. A completed empty sequence yields an explicit empty page with its response/completion receipts; source failures do not become empty.
+
+The stock_basic endpoint limit is capped at the Python connector's 50/min ceiling, retaining stricter configured account/default/endpoint settings. The shared limiter/retry implementation is reused, with no separate unbounded loop.
+
+`local-D002-source-live-519d`: six real Tushare requests for 000001.SZ and 000003.SZ, each across L/D/P, produced two total records: listed 000001.SZ and delisted 000003.SZ. Optional delisting dates mapped correctly. Evidence: `source-ad8ff68f-ac06-4f67-a922-ee326a8ca182/source-validation.json` and its two source receipt files containing the three status responses per code. No nonempty suspended-stock example was observed; the P response path was exercised as empty.
+
+`local-D002-source-fault-716a`: source/limit selections passed. Controlled responses verify exact bounded parameters, explicit empty completion, exception propagation, cancellation before network access, rejection of another code and rejection of cross-status ambiguity. The ceiling respects a stricter 5/min configuration. These are implementation checks, separate from the real-source evidence.
+
+Remaining: non-WAL staged publication with full-value verification, preservation of unrelated physical rows, durable failure/recovery and target identity handling; actual read/group bindings, incremental owner/checkpoint management, isolated write and repeated incremental source-to-target acceptance. Exact-code requests do not discover new stock identities; a separate bounded discovery/reconciliation path is required for market-wide completeness (see `discovery-gap.md` and `source-boundary.md`). Existing production stock_detail_info remains unchanged.

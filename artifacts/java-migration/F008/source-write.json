@@ -1,5 +1,5 @@
 {
-  "observed_at" : "2026-09-29T04:31:25.617436600Z",
+  "observed_at" : "2026-09-29T04:53:37.789996100Z",
   "logical_date" : "2026-09-29T00:00:00Z",
   "endpoint" : "stock_basic",
   "requests" : [ {
@@ -10,23 +10,23 @@
     "ts_code" : "600000.SH"
   } ],
   "source_rows" : [ {
-    "area" : "深圳",
-    "ts_code" : "000001.SZ",
     "industry" : "银行",
     "list_date" : "19910403",
     "symbol" : "000001",
-    "name" : "平安银行"
+    "name" : "平安银行",
+    "area" : "深圳",
+    "ts_code" : "000001.SZ"
   }, {
-    "area" : "上海",
-    "ts_code" : "600000.SH",
     "industry" : "银行",
     "list_date" : "19991110",
     "symbol" : "600000",
-    "name" : "浦发银行"
+    "name" : "浦发银行",
+    "area" : "上海",
+    "ts_code" : "600000.SH"
   } ],
   "source_version" : null,
   "status" : "verified",
-  "table" : "java_f008_source_5d3388e5ad2f4cc7b210bb17ebb1e02e",
+  "table" : "java_f008_source_3eb6fb32775848fea81fac56ead48921",
   "first_write" : {
     "status" : "VERIFIED",
     "submittedRows" : 2,

@@ -1,0 +1,79 @@
+{
+  "source" : {
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "observedAt" : "2026-09-29T06:25:29.161275Z",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "L",
+      "listingDate" : "1991-04-03",
+      "fullname" : "平安银行股份有限公司",
+      "enname" : "Ping An Bank Co., Ltd.",
+      "cnspell" : "PAYH",
+      "area" : "深圳",
+      "industry" : "银行",
+      "currType" : "CNY",
+      "delistingDate" : null,
+      "isHs" : "S",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    } ],
+    "sourceFingerprint" : "b430b29fd0460581e55e5d25f9c1945f98fb6fda9fef3e83fd20661f3ed34ced",
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D002\\publication-6d5d805aabf944448f1c15aee49bec50\\source-bfe7ae09-2aa7-4562-beac-b07f7ee66ccf.json",
+    "cursor" : null
+  },
+  "ledger" : "var\\D002-publish-6d5d805aabf944448f1c15aee49bec50.sqlite",
+  "backupVerified" : true,
+  "result" : {
+    "entry" : {
+      "intent" : {
+        "id" : "publication-d8422f9b-7a7b-413b-bd33-a6fb7b6c0d9e",
+        "runId" : "publish-test",
+        "target" : "java_d002_publish_6d5d805aabf944448f1c15aee49bec50",
+        "backup" : "java_stock_detail_backup_fae8c73de81c473b9ae3faa6ba030f06",
+        "stage" : "java_stock_detail_stage_c60cbff0c9bb4cc6882700718bcd53f1",
+        "oldTableId" : 2136,
+        "newTableId" : 2137,
+        "beforeFingerprint" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "afterFingerprint" : "b93a874403a177ceb6a43e42fbeee95909f8df9c6cc534f1495df10904f3cfdb"
+      },
+      "state" : "VERIFIED",
+      "revision" : 3
+    },
+    "inspection" : {
+      "publicationId" : "publication-d8422f9b-7a7b-413b-bd33-a6fb7b6c0d9e",
+      "layout" : "PUBLISHED",
+      "detail" : "New target and prior backup both exactly match frozen fingerprints"
+    }
+  },
+  "actual" : {
+    "identity" : {
+      "id" : 2137,
+      "directory" : "java_d002_publish_6d5d805aabf944448f1c15aee49bec50"
+    },
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "updateTime" : "2026-09-29T06:25:29.161275Z",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "L",
+      "listDate" : "19910403",
+      "fullname" : "平安银行股份有限公司",
+      "enname" : "Ping An Bank Co., Ltd.",
+      "cnspell" : "PAYH",
+      "area" : "深圳",
+      "industry" : "银行",
+      "currType" : "CNY",
+      "delistDate" : null,
+      "isHs" : "S",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    } ],
+    "fingerprint" : "b93a874403a177ceb6a43e42fbeee95909f8df9c6cc534f1495df10904f3cfdb",
+    "bytes" : 409
+  }
+}

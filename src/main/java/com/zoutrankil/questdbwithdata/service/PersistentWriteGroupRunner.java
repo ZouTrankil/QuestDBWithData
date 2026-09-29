@@ -17,14 +17,20 @@ public final class PersistentWriteGroupRunner {
         this.datasets = Objects.requireNonNull(datasets);
     }
     public SyncGroupRunner.Result run(String runId, WriteGroupPlan plan,
-            Map<String,PreparedWriteAdapter<?,?>> adapters, String priorGroupRunId) throws Exception {
+            Map<String,? extends WriteGroupMemberAdapter> adapters, String priorGroupRunId) throws Exception {
+        boolean staticMemberSeen=false;
+        for(var member:plan.members()) {
+            if(staticMemberSeen) throw new IllegalArgumentException("Static replacement must be the final write-group member");
+            if(member.definition().capabilities().contains(DatasetDefinition.Capability.STATIC_REPLACE))
+                staticMemberSeen=true;
+        }
         var ids = new HashSet<String>(); plan.members().forEach(m -> ids.add(m.memberId()));
         if (!ids.equals(adapters.keySet())) throw new IllegalArgumentException("Exact prepared writer members required");
         var definitions = new ArrayList<SyncJobDefinition>();
         var modes = new LinkedHashMap<String,Set<SyncJobDefinition.Mode>>();
         var groupMembers = new ArrayList<SyncGroupDefinition.Member>();
         var inputs = new LinkedHashMap<String,SyncGroupRunner.MemberInput>();
-        var byJob = new LinkedHashMap<String,PreparedWriteAdapter<?,?>>();
+        var byJob = new LinkedHashMap<String,WriteGroupMemberAdapter>();
         for (var member : plan.members()) {
             var adapter = Objects.requireNonNull(adapters.get(member.memberId()));
             var bound = adapter.member();
@@ -44,7 +50,8 @@ public final class PersistentWriteGroupRunner {
         // Reject known target, schema, mapping and WAL problems before any member sends.
         for (var adapter : adapters.values()) adapter.preflight(adapter.request());
         var jobs = new SyncJobRegistry(definitions, datasets, modes, new SyncJobRegistry.Policies(
-                Set.of("prepared.local"), Set.of("prepared.single_page"), Set.of("questdb.full_key_values")));
+                Set.of("prepared.local"), Set.of("prepared.single_page","prepared.static"),
+                Set.of("questdb.full_key_values")));
         var definition = new SyncGroupDefinition("group.prepared_writes", 1, groupMembers, true, false);
         var groups = new SyncGroupRegistry(List.of(definition), jobs);
         var ledger = new SyncRunLedger(ledgerPath);
@@ -58,24 +65,17 @@ public final class PersistentWriteGroupRunner {
         var executor = new SyncGroupRunner.ChildExecutor() {
             public SyncJobRunner.Result execute(String child, String parent, String prior, String target,
                     SyncJobDefinition.FrozenRequest request) throws Exception {
-                return executeOne(ledger, locks, child, parent, prior, target, request,
-                        byJob.get(request.definition().jobId()), cancelled);
+                return byJob.get(request.definition().jobId()).execute(ledger,locks,child,parent,prior,
+                        target,request,cancelled);
             }
             public String revalidateCompleted(String prior, String target,
                     SyncJobDefinition.FrozenRequest request) throws Exception {
-                return VerifiedRunRecovery.revalidate(ledger, prior, target, request,
-                        byJob.get(request.definition().jobId()), cancelled, evidenceRoot.resolve(runId));
+                return byJob.get(request.definition().jobId()).revalidate(ledger,prior,target,request,
+                        cancelled,evidenceRoot.resolve(runId));
             }
         };
         var request = new SyncGroupRunner.Request(plan.logicalDate(), SyncGroupRunner.Window.none(), inputs);
         return priorGroupRunId == null ? runner.run(runId, definition.groupId(), definition.version(), request, executor)
                 : runner.resume(runId, priorGroupRunId, definition.groupId(), definition.version(), request, executor);
-    }
-    private static <T,K> SyncJobRunner.Result executeOne(SyncRunLedger ledger, DatasetIntervalLock locks,
-            String child, String parent, String prior, String target, SyncJobDefinition.FrozenRequest request,
-            PreparedWriteAdapter<T,K> adapter, BooleanSupplier cancelled) throws Exception {
-        var runner = new SyncJobRunner<T,K>(ledger, locks);
-        return prior == null ? runner.run(child, parent, target, request, adapter, cancelled)
-                : runner.resume(child, parent, prior, target, request, adapter, cancelled);
     }
 }

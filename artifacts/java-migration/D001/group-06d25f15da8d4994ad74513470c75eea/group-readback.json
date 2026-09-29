@@ -1,0 +1,71 @@
+{
+  "table" : "java_d001_group_06d25f15da8d4994ad74513470c75eea",
+  "expected" : [ {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-25",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-26",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-27",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-28",
+    "open" : true,
+    "previousTradeDate" : "2026-09-24"
+  } ],
+  "duplicateKeys" : 0,
+  "first" : {
+    "runId" : "write-group-07bee08b-0853-4c70-8551-f06dc746133b",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.exchange_calendar",
+      "childRunId" : "run-e8290d1f-413c-4f88-9abf-d77782c8e90b",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 4
+    } ]
+  },
+  "matchedRows" : 4,
+  "second" : {
+    "runId" : "write-group-c61bf39b-f6d1-4bb5-a40f-201c51622e78",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.exchange_calendar",
+      "childRunId" : "run-9978d4ed-9977-4cea-a8fc-60c621a5bca5",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 4
+    } ]
+  },
+  "physical" : [ {
+    "exchange" : "SSE",
+    "date_micros" : 1790294400000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790380800000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790467200000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790553600000000,
+    "is_open" : 1,
+    "pretrade_date" : "20260924"
+  } ]
+}

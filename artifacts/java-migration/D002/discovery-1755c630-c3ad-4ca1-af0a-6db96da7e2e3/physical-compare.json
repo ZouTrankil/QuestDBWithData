@@ -1,0 +1,44 @@
+{
+  "query": "SELECT ts_code,symbol,name,area,industry,fullname,enname,cnspell,market,exchange,curr_type,list_status,list_date,delist_date,is_hs,act_name,act_ent_type FROM stock_detail_info",
+  "read_only": true,
+  "source_rows": 5910,
+  "target_rows": 5908,
+  "matched_keys": 5908,
+  "same_values": 5892,
+  "changed_values": 16,
+  "changed_by_field": {
+    "act_name": 10,
+    "act_ent_type": 1,
+    "name": 4,
+    "cnspell": 4,
+    "fullname": 1,
+    "enname": 2,
+    "industry": 1
+  },
+  "changed_key_sample": [
+    "000550.SZ",
+    "002572.SZ",
+    "300096.SZ",
+    "300211.SZ",
+    "301049.SZ",
+    "301138.SZ",
+    "301339.SZ",
+    "301563.SZ",
+    "600228.SH",
+    "601777.SH",
+    "603095.SH",
+    "603137.SH",
+    "603435.SH",
+    "688697.SH",
+    "920038.BJ",
+    "920201.BJ"
+  ],
+  "source_only_keys": [
+    "301716.SZ",
+    "920202.BJ"
+  ],
+  "target_only_keys": [],
+  "comparison_excludes": [
+    "update_time: local observation, not source business field"
+  ]
+}

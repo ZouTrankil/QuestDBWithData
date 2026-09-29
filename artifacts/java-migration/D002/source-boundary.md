@@ -1,0 +1,5 @@
+# D002 source request boundary
+
+Read-only documentation check, 2026-09-29. [Tushare's `stock_basic` documentation](https://tushare.pro/document/1?doc_id=25) says each response is limited to 6,000 rows, accepts `list_status`, `exchange` and `ts_code`, and documents a 50 requests/minute permission tier. These are provider statements, not proof of the current account's quota. The Python owner requests status L/D/P; its one-request-per-status pattern can silently truncate if a status reaches 6,000 rows.
+
+For Java admission, explicitly bound each status by exchange (SSE, SZSE, BSE) and require every response below 6,000 rows, or split further by `ts_code` when a response touches the cap. A cap-sized response is incomplete until independently subdivided. Treat null/error responses separately from a valid empty exchange/status result. Deduplicate across responses by `ts_code` only after rejecting conflicting values; preserve request parameters and count evidence per slice. The official documentation also lists G and UN statuses; adding those would change the Python L/D/P dataset scope and needs an explicit contract decision.

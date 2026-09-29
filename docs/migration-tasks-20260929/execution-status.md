@@ -1,6 +1,6 @@
 # 本地串行执行状态（2026-09-29）
 
-当前：F001–F010已验收（10/201），第1批10项通过；下一项F011。全套91项82通过9跳过0失败。首批本地提交：8bd4f2d7f120f2773bb6a72c61a16e339f31fa53；未push。以下保留历史Orca故障，不代表当前阻塞。
+当前：F001–F017、D001–D002已验收（19/201），第2批9/10；下一项D003。D002最终默认回归256项：209通过、47项opt-in跳过、0失败；当前版本全市场隔离表测试及独立5910键比对通过。首批本地提交：8bd4f2d7f120f2773bb6a72c61a16e339f31fa53；未push。以下保留历史Orca故障，不代表当前阻塞。
 
 用户已授权立即本地串行执行，持续监督，每10项验收通过做一次本地提交，然后继续；不push。Q系列仍按原有逐对象准入条件处理。
 
@@ -131,3 +131,48 @@ F016继续：真实调度→既有runner→Tushare→QuestDB链路通过，1行7
 F016已验收：调度定义/启停/时区/日期适用性/有界misfire/重入/下次时点/结果历史及CLI完成。真实1行7字段回读一致，重开同槽不重发。最终回归{'tests': 173, 'failures': 0, 'errors': 0, 'skipped': 20}。累计16项verified，下一项F017，第二批6/10；人工复核pending_review。
 
 F017已开始：统一参数解析拒绝重复选项、空值和非法名称，避免后一个参数静默覆盖同步范围或启停值。local-F017-options-416b共10项CLI测试通过，无失败/跳过。统一plan/validate/history等管理能力待完成，累计16项verified。
+
+F017继续：plan-sync-job/validate-sync-job冻结注册定义和类型化参数，明确executed=false/dataVerified=false；show-sync-history只读有界分页读取真实账本状态。local-F017-plan-713d共14项通过，无失败/跳过，涵盖参数歧义、SQLite只读及分页。统一管理与退出码端到端验收待完成，仍16项verified。
+
+F017继续：增加job/group版本化show与list别名，JSON输出独立解析验证；修复plan启动时提前创建调度账本，改为按需加载。真实Spring启动确认计划不创建ledger/WAL。local-F017-startup-bf13共13项通过，无失败/跳过。进程退出码及组合计划待完成，仍16项verified。
+
+F017继续：main结束关闭资源，明确0成功/1运行故障/2参数错误/3未验证完成的退出码。真实Java子进程已验证plan=0、非法日期=2且不建账本；修复Windows内联JSON传参问题，增加有界parameters-file入口。local-F017-process-file-e84c定向测试通过；完整进程输出及F017最终验收待完成，仍16项verified。
+
+F017继续：真实子进程完整验证退出码0/1/2/3，stdout结果JSON与stderr日志分离；阻塞调度返回3且不派发。调度配置命令也返回executed=false的JSON。组合快照可显式清除继承窗口。local-F017-full-a817完整回归BUILD SUCCESSFUL；F017最终验收登记待逐条复核，累计仍16项verified。证据见artifacts/java-migration/F017/process-output-review.md。
+
+F017已验收：CLI逐项契约、四类进程退出码、JSON输出、计划不写、只读历史和取消/恢复路径通过。完整189项169通过20条件跳过0失败，最终控制补验通过。实际QDB证据按功能契约复用前置runner，未伪计新增写入。累计17项verified，下一项D001 exchange_calendar，第二批7/10；人工复核pending_review。
+
+D001已开始：已查Python trade_calendar_sync真实调用链并读取QuestDB现有4列schema和2026年9月SSE日历30行。关注按交易所增量、修订重叠及失败不能当empty；尚未新sync/写入。证据见artifacts/java-migration/D001/physical-baseline.json与baseline-review.md，累计17项verified。
+
+D001继续：完成业务LocalDate日历、完整exchange+calendar_date键、来源DTO和显式物理mapper；逻辑calendar_date/previous_trade_date兼容既有cal_date/pretrade_date。local-D001-mapping-e429三项通过，包括30行真实读取样本往返及非法日期/标记/非零点拒绝。未注册可执行owner，sync/读写/真实增量验收待完成，累计17项verified。
+
+D001继续：实现按exchange/year有限分片及按各交易所已验证覆盖重读修订窗口；精确每日覆盖检查拒绝缺日/重复/越界/空响应冒充完成。来源适配器接公共HTTP链路，保存响应指纹，未引入offset。local-D001-source-compile-d922映射/分片6项通过；真实来源、实际writer及checkpoint owner验收待完成，累计17项verified。
+
+D001继续：真实trade_cal按SSE/SZSE各4日返回8行，严格覆盖/日期映射通过，未写库。有效限流10/min且强制不高于Python20/min；更严格配置保留。修正测试对休市天数的周末假设，实际来源含3个休市日。源失败/取消/缺日/重复/越界/错误类型回归完成。证据见artifacts/java-migration/D001/source-live-review.md；实际writer和增量checkpoint待完成，仍17项verified。
+
+D001继续：ExchangeCalendarWritePort与公共schema/WAL检查接入既有VerifiedBatchExecutor。真实SSE/SZSE 8行写入隔离YEAR/WAL表并重跑，两次全值回读通过，最终8行0重复；原始来源与SQL四字段独立核对一致。local-D001-write-live-853d通过，隔离表成功后清理。持久化增量checkpoint、owner/组合/管理准入及任务验收待完成，仍17项verified。
+
+D001继续：日历单数据adapter接入既有runner，VERIFIED根任务重建按交易所连续覆盖，缺口/partial/其他目标不推进。local-D001-runner-live-f16a真实首次4行→重开账本+实际回读→重叠增量8行通过，两交易所checkpoint由09-26推进09-28；源与SQL四字段独立一致，隔离表清理。生产owner/组合/CLI及恢复准入待完成，仍17项verified。
+
+D001继续：生产owner自动回读checkpoint候选并绑定物理目标，CLI计划/运行/恢复已接入；真实owner首次4行、重开增量8行通过。组合入口支持日历子任务及父取消，local-D001-group-live-e805真实8行写入回读通过，恢复完成子任务重新核验后复用，最终仍8行。组合读写与完整容错验收待完成，累计仍17项verified，人工复核pending_review。证据见artifacts/java-migration/D001/owner-group-review.md。
+
+D001已验收：日期语义/键/分区、限流有界增量、typed读写及组合、管理与容错通过。真实owner4→8行，按完整键四字段独立比对一致；相同范围重跑和完成子任务恢复通过。完整回归{'tests': 214, 'failures': 0, 'errors': 0, 'skipped': 28, 'passed': 186}。累计18项verified，第二批8/10，下一项D002 stock_detail_info；人工复核pending_review。
+
+D002已开始：实际读取18列schema、5908行/5908代码及3行完整样本。该表无主时间、NONE分区、非WAL、无dedup，Python使用暂存表核验后替换；不可套用日历追加写。发现历史delist_date存在字符串None，update_time为本地采集时间且需追查Python无时区转换。尚未D002新sync或写入；证据见artifacts/java-migration/D002/baseline-review.md。
+
+D002继续：18字段DTO/domain/显式mapper和未注册定义完成；update_time映射observed_at Instant，上市/退市日期映射LocalDate。查实Python旧时间按naive-UTC兼容，Java保留存量epoch；仅旧日期None显式转空。local-D002-mapping-839e三项通过，含3行实际基线往返。尚未新来源/写入/增量验收，仍18项verified；证据见artifacts/java-migration/D002/mapping-review.md。
+
+D002继续：按ts_code有限增量合并完成，保留未请求记录、内容未变不发布、重复身份拒绝；旧Python时间与新Java时间不同源，不用观察时间大小误判业务修订，修正后合并3项复测通过。真实stock_basic对2个代码逐L/D/P执行6次请求，得到上市/退市各1行；限流50/min上限保留更严配置，来源故障/空响应/取消/身份漂移测试通过。尚未D002写库与非WAL发布验收，仍18项verified。证据见artifacts/java-migration/D002/source-merge-review.md。
+
+D002继续：有界原始快照读取通过实际5908行，发现并兼容历史T600018.SH。非WAL暂存写入真实1→2行、全18字段回读一致，重复输入2行未变化不创建新暂存表，原目标保持不变；取消/无变化不连接数据库测试通过。发布切换、持久恢复、owner与组合准入仍待完成，累计18项verified。证据见artifacts/java-migration/D002/storage-staging-review.md。
+
+D002继续：SQLite发布日志、整表锁校验、旧表备份→暂存改名→全值回读正常路径实际通过；注入旧表改名后异常，重开识别OLD_MOVED，要求写入者停止证明后恢复原表并精确回读，保留IN_DOUBT直至核验。进程崩溃/已发布回执丢失分支及owner/组合接入待完成，累计仍18项verified。证据见artifacts/java-migration/D002/publication-review.md。
+
+D002继续：非终态发布恢复与已发布回执丢失补记完成。local-D002-interrupted-live-218c在真实隔离QDB注入跳过异常处理的Error，分别恢复OLD_RENAMED原表及核验NEW_RENAMED新表；无停止证明拒绝恢复，完整字段回读一致。未实际杀OS进程，范围已注明。owner/run/checkpoint与组合管理接入待完成，仍18项verified；证据见artifacts/java-migration/D002/interrupted-publication-review.md。
+
+D002继续：正式owner已注册，整表锁覆盖来源→合并→发布→回读。首次真实owner暴露账本缺验证载荷，保留IN_DOUBT；修正后对原失败现场真实回读恢复VERIFIED，无新来源/数据写入。新隔离目标首次1行、重复不换表、增量第二代码后2行保留原记录，三个run/attempt均verified；注册/计划/锁回归通过。CLI/组合/发现模式完整验收待完成，累计仍18项verified。证据见artifacts/java-migration/D002/owner-review.md。
+
+D002继续：空结果/来源失败/取消/锁冲突的真实QuestDB保留数据验证通过。修正目标标识只含表ID的跨服务器混淆风险，static-v2绑定实际PG端点/数据库/表物理身份；恢复同时比对发布后的物理表身份。local-D002-target-binding-f831三项通过，local-D002-target-owner-b169真实来源首次/重复/增量及旧回执拒绝通过。完成表已更新当前实际进展，仍18项verified，D002未最终验收。证据见artifacts/java-migration/D002/target-identity-review.md。
+
+D002继续：整表发布slice已接入run/attempt/slice三级账本，实际组合写入和失败边界通过。注入发布后账本确认失败时三级保留IN_DOUBT；恢复暴露Instant反序列化缺失，已修复并对原失败现场执行零新取数/零QDB写入的真实回读恢复，三级VERIFIED且锁为0。全套回归252项（207通过/45条件跳过/0失败）在时间读取修复前通过，随后修复专项与原现场恢复通过。完成回执生成前的中断恢复和最终证据收敛仍需核验，累计18项verified。证据见artifacts/java-migration/D002/slice-ledger-recovery-review.md。
+D002已验收：5910条真实来源与隔离目标完整回读一致（新增2、修订16、未变5892）；补齐三级账本、缺完成回执、未完成改名和残缺暂存的显式停止写入者恢复。local-D002-final-regression-021a全套256项：209通过、47条件跳过、0失败。结果及完成表保持人工pending_review；累计19项verified，下一项D003，再完成1项达到第二批10项提交点。

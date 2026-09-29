@@ -1,0 +1,70 @@
+{
+  "checkpointAfter" : {
+    "SZSE" : "2026-09-28",
+    "SSE" : "2026-09-28"
+  },
+  "second" : {
+    "runId" : "second-d6626c8cac914a59aba2d296eac30986",
+    "state" : "VERIFIED",
+    "sourceRows" : 8,
+    "verifiedRows" : 8,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "revisionDays" : 366,
+  "first" : {
+    "runId" : "first-d6626c8cac914a59aba2d296eac30986",
+    "state" : "VERIFIED",
+    "sourceRows" : 4,
+    "verifiedRows" : 4,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "table" : "java_d001_runner_d6626c8cac914a59aba2d296eac30986",
+  "readback" : [ {
+    "exchange" : "SSE",
+    "date_micros" : 1790294400000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790380800000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790467200000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790553600000000,
+    "is_open" : 1,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790294400000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790380800000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790467200000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790553600000000,
+    "is_open" : 1,
+    "pretrade_date" : "20260924"
+  } ],
+  "ledger" : "var\\D001-d6626c8cac914a59aba2d296eac30986.sqlite",
+  "checkpointBefore" : {
+    "SZSE" : "2026-09-26",
+    "SSE" : "2026-09-26"
+  }
+}

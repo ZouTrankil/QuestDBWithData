@@ -1,0 +1,7 @@
+CREATE TABLE 'exchange_calendar' ( 
+	exchange SYMBOL,
+	cal_date TIMESTAMP,
+	is_open INT,
+	pretrade_date STRING
+) timestamp(cal_date) PARTITION BY YEAR
+DEDUP UPSERT KEYS(exchange,cal_date);

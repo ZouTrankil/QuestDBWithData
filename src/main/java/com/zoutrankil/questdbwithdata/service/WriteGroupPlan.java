@@ -32,8 +32,10 @@ public final class WriteGroupPlan {
             if (definition.schemaVersion() != member.definitionVersion())
                 throw new IllegalArgumentException("Write dataset version differs from registered owner");
             String target = ownerTargets.get(member.datasetId()); SyncJobDefinition.name(target);
-            var prepared = DatasetWritePreparation.prepare(definition, member.rows(), java.util.function.Function.identity(),
-                    new DatasetWritePreparation.Limits(10_000, 16 * 1024 * 1024));
+            var limits=new DatasetWritePreparation.Limits(10_000,16*1024*1024);
+            var prepared=definition.capabilities().contains(DatasetDefinition.Capability.STATIC_REPLACE)
+                    ? DatasetWritePreparation.prepareStatic(definition,member.rows(),java.util.function.Function.identity(),limits)
+                    : DatasetWritePreparation.prepare(definition,member.rows(),java.util.function.Function.identity(),limits);
             bytes += prepared.normalizedBytes();
             if (bytes > 64 * 1024 * 1024) throw new IllegalArgumentException("Combined write data exceeds 64 MiB");
             members.add(new Member(member.memberId(), member.batchId(), target, definition, prepared));

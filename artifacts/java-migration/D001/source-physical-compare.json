@@ -1,0 +1,10 @@
+{
+  "checkedAtUtc": "2026-09-29T05:03:56.923710+00:00",
+  "query": "SELECT exchange,cal_date,is_open,pretrade_date FROM exchange_calendar WHERE cal_date >= '2026-09-01' AND cal_date < '2026-09-08' AND exchange IN ('SSE','SZSE') ORDER BY exchange,cal_date LIMIT 16",
+  "sourceRows": 14,
+  "physicalRows": 14,
+  "allMidnight": true,
+  "missingSourceRows": [],
+  "extraPhysicalRows": [],
+  "note": "Read-only comparison against existing production table; not Java write acceptance."
+}

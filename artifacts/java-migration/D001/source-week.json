@@ -1,0 +1,125 @@
+{
+  "checkedAtUtc": "2026-09-29T05:02:57.327417+00:00",
+  "endpoint": "trade_cal",
+  "responses": [
+    {
+      "request": {
+        "exchange": "SSE",
+        "start_date": "20260901",
+        "end_date": "20260907"
+      },
+      "responseCode": 0,
+      "fields": [
+        "exchange",
+        "cal_date",
+        "is_open",
+        "pretrade_date"
+      ],
+      "items": [
+        [
+          "SSE",
+          "20260907",
+          1,
+          "20260904"
+        ],
+        [
+          "SSE",
+          "20260906",
+          0,
+          "20260904"
+        ],
+        [
+          "SSE",
+          "20260905",
+          0,
+          "20260904"
+        ],
+        [
+          "SSE",
+          "20260904",
+          1,
+          "20260903"
+        ],
+        [
+          "SSE",
+          "20260903",
+          1,
+          "20260902"
+        ],
+        [
+          "SSE",
+          "20260902",
+          1,
+          "20260901"
+        ],
+        [
+          "SSE",
+          "20260901",
+          1,
+          "20260831"
+        ]
+      ],
+      "message": null
+    },
+    {
+      "request": {
+        "exchange": "SZSE",
+        "start_date": "20260901",
+        "end_date": "20260907"
+      },
+      "responseCode": 0,
+      "fields": [
+        "exchange",
+        "cal_date",
+        "is_open",
+        "pretrade_date"
+      ],
+      "items": [
+        [
+          "SZSE",
+          "20260907",
+          1,
+          "20260904"
+        ],
+        [
+          "SZSE",
+          "20260906",
+          0,
+          "20260904"
+        ],
+        [
+          "SZSE",
+          "20260905",
+          0,
+          "20260904"
+        ],
+        [
+          "SZSE",
+          "20260904",
+          1,
+          "20260903"
+        ],
+        [
+          "SZSE",
+          "20260903",
+          1,
+          "20260902"
+        ],
+        [
+          "SZSE",
+          "20260902",
+          1,
+          "20260901"
+        ],
+        [
+          "SZSE",
+          "20260901",
+          1,
+          "20260831"
+        ]
+      ],
+      "message": null
+    }
+  ],
+  "note": "Read-only bounded Tushare source evidence; credential omitted. No Java sync or QuestDB write implied."
+}

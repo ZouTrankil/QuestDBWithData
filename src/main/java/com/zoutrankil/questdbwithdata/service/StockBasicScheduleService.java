@@ -14,6 +14,7 @@ import java.util.function.Predicate;
 
 /** Manual application entry. No timer, schedule, or exchange calendar is silently enabled. */
 @Service
+@org.springframework.context.annotation.Lazy
 public class StockBasicScheduleService {
     private final SyncScheduleManager manager;
     private final StockBasicJobService job;

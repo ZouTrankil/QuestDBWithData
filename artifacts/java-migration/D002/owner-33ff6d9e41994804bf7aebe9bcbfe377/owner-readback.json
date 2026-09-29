@@ -1,0 +1,86 @@
+{
+  "first" : {
+    "runId" : "stock-detail-7b75bbb8-fa0f-4d27-9f02-c2192aaf2f11",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "insertedRows" : 1,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 1,
+    "publicationId" : "publication-64840a31-918b-4189-8e23-729b82f119e4",
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-7b75bbb8-fa0f-4d27-9f02-c2192aaf2f11\\completion.json",
+    "errorCode" : null
+  },
+  "ledger" : "var\\D002-owner-33ff6d9e41994804bf7aebe9bcbfe377.sqlite",
+  "repeated" : {
+    "runId" : "stock-detail-fe50610d-f2fa-4bb7-8b32-317419bf740d",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "insertedRows" : 0,
+    "updatedRows" : 0,
+    "unchangedRows" : 1,
+    "verifiedRows" : 1,
+    "publicationId" : null,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-fe50610d-f2fa-4bb7-8b32-317419bf740d\\completion.json",
+    "errorCode" : null
+  },
+  "actual" : {
+    "identity" : {
+      "id" : 2164,
+      "directory" : "java_d002_owner_33ff6d9e41994804bf7aebe9bcbfe377"
+    },
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "updateTime" : "2026-09-29T07:19:04.606231Z",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "L",
+      "listDate" : "19910403",
+      "fullname" : "平安银行股份有限公司",
+      "enname" : "Ping An Bank Co., Ltd.",
+      "cnspell" : "PAYH",
+      "area" : "深圳",
+      "industry" : "银行",
+      "currType" : "CNY",
+      "delistDate" : null,
+      "isHs" : "S",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    }, {
+      "tsCode" : "000003.SZ",
+      "updateTime" : "2026-09-29T07:19:34.912957Z",
+      "symbol" : "000003",
+      "name" : "PT金田A(退)",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "D",
+      "listDate" : "19910703",
+      "fullname" : "金田实业(集团)股份有限公司",
+      "enname" : "Gintian Industry (Group) Co., Ltd.",
+      "cnspell" : "ptjta",
+      "area" : null,
+      "industry" : null,
+      "currType" : "CNY",
+      "delistDate" : "20020614",
+      "isHs" : "N",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    } ],
+    "fingerprint" : "f7691f234ea66636e243a0c495322fddb417559089c2a63ce09ba79a3fc342c9",
+    "bytes" : 838
+  },
+  "incremental" : {
+    "runId" : "stock-detail-f17fae32-eb79-44ea-b0ae-6265743930d6",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "insertedRows" : 1,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 1,
+    "publicationId" : "publication-43deecdb-6495-4595-8b9c-07cbf1baf9ac",
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-f17fae32-eb79-44ea-b0ae-6265743930d6\\completion.json",
+    "errorCode" : null
+  }
+}

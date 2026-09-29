@@ -1,0 +1,13 @@
+{
+  "query": "SELECT ts_code,symbol,name,exchange,list_status FROM stock_detail_info ORDER BY ts_code LIMIT 10001",
+  "rowsChecked": 5908,
+  "outsideInitialPattern": [
+    {
+      "ts_code": "T600018.SH",
+      "symbol": "T600018",
+      "name": "上港集箱(退)",
+      "exchange": "SSE",
+      "list_status": "D"
+    }
+  ]
+}

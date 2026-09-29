@@ -1,0 +1,125 @@
+[ {
+  "jobId" : "data.exchange_calendar",
+  "version" : 1,
+  "datasetId" : "exchange_calendar",
+  "datasetVersion" : 1,
+  "owner" : "exchange_calendar_owner",
+  "supportedModes" : [ "BACKFILL", "RECONCILE", "INCREMENTAL" ],
+  "defaultMode" : "INCREMENTAL",
+  "parameters" : {
+    "exchanges" : {
+      "type" : "STRING_LIST",
+      "required" : true,
+      "maxLength" : 4,
+      "maxItems" : 2,
+      "choices" : [ "SSE", "SZSE" ]
+    }
+  },
+  "ratePolicyRef" : "tushare.shared",
+  "slicePolicyRef" : "exchange_calendar.year",
+  "verificationPolicyRef" : "questdb.full_key_values",
+  "retry" : {
+    "maxAttempts" : 3,
+    "backoff" : "PT1S",
+    "maxElapsed" : "PT2M"
+  },
+  "timeout" : "PT20M",
+  "budget" : {
+    "maxWindowDays" : 3660,
+    "maxSlices" : 24,
+    "maxPages" : 24,
+    "maxRows" : 7320,
+    "maxBatchBytes" : 1048576
+  },
+  "revisionDays" : 366,
+  "dependencies" : [ ],
+  "frequency" : "DAILY",
+  "zone" : "Asia/Shanghai",
+  "enabled" : true,
+  "dailyEligible" : true
+}, {
+  "jobId" : "data.stock_basic",
+  "version" : 2,
+  "datasetId" : "stock_basic_snapshot",
+  "datasetVersion" : 1,
+  "owner" : "StockBasicSyncService",
+  "supportedModes" : [ "SNAPSHOT" ],
+  "defaultMode" : "SNAPSHOT",
+  "parameters" : {
+    "codes" : {
+      "type" : "STRING_LIST",
+      "required" : true,
+      "maxLength" : 12,
+      "maxItems" : 100,
+      "choices" : [ ]
+    }
+  },
+  "ratePolicyRef" : "tushare.shared",
+  "slicePolicyRef" : "stock_basic.snapshot",
+  "verificationPolicyRef" : "questdb.full_key_values",
+  "retry" : {
+    "maxAttempts" : 3,
+    "backoff" : "PT1S",
+    "maxElapsed" : "PT2M"
+  },
+  "timeout" : "PT20M",
+  "budget" : {
+    "maxWindowDays" : 1,
+    "maxSlices" : 100,
+    "maxPages" : 100,
+    "maxRows" : 100,
+    "maxBatchBytes" : 1048576
+  },
+  "revisionDays" : 0,
+  "dependencies" : [ ],
+  "frequency" : "MANUAL",
+  "zone" : "Asia/Shanghai",
+  "enabled" : true,
+  "dailyEligible" : false
+}, {
+  "jobId" : "data.stock_detail_info",
+  "version" : 1,
+  "datasetId" : "stock_detail_info",
+  "datasetVersion" : 1,
+  "owner" : "stock_detail_info_owner",
+  "supportedModes" : [ "INCREMENTAL", "RECONCILE" ],
+  "defaultMode" : "INCREMENTAL",
+  "parameters" : {
+    "codes" : {
+      "type" : "STRING_LIST",
+      "required" : false,
+      "maxLength" : 12,
+      "maxItems" : 20,
+      "choices" : [ ]
+    },
+    "discover" : {
+      "type" : "BOOLEAN",
+      "required" : true,
+      "maxLength" : 1,
+      "maxItems" : 1,
+      "choices" : [ ]
+    }
+  },
+  "ratePolicyRef" : "tushare.shared",
+  "slicePolicyRef" : "stock_detail_info.identity",
+  "verificationPolicyRef" : "questdb.full_key_values",
+  "retry" : {
+    "maxAttempts" : 3,
+    "backoff" : "PT1S",
+    "maxElapsed" : "PT2M"
+  },
+  "timeout" : "PT20M",
+  "budget" : {
+    "maxWindowDays" : 1,
+    "maxSlices" : 60,
+    "maxPages" : 60,
+    "maxRows" : 10000,
+    "maxBatchBytes" : 16777216
+  },
+  "revisionDays" : 0,
+  "dependencies" : [ ],
+  "frequency" : "WEEKLY",
+  "zone" : "Asia/Shanghai",
+  "enabled" : true,
+  "dailyEligible" : false
+} ]

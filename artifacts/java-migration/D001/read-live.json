@@ -1,0 +1,16 @@
+{
+  "queryRange" : "[2026-09-25,2026-09-29)",
+  "checks" : [ {
+    "matchedRows" : 4,
+    "pages" : 2,
+    "exchange" : "SSE",
+    "rows" : [ "ExchangeCalendar[exchange=SSE, calendarDate=2026-09-25, open=false, previousTradeDate=2026-09-24]", "ExchangeCalendar[exchange=SSE, calendarDate=2026-09-26, open=false, previousTradeDate=2026-09-24]", "ExchangeCalendar[exchange=SSE, calendarDate=2026-09-27, open=false, previousTradeDate=2026-09-24]", "ExchangeCalendar[exchange=SSE, calendarDate=2026-09-28, open=true, previousTradeDate=2026-09-24]" ]
+  }, {
+    "matchedRows" : 4,
+    "pages" : 2,
+    "exchange" : "SZSE",
+    "rows" : [ "ExchangeCalendar[exchange=SZSE, calendarDate=2026-09-25, open=false, previousTradeDate=2026-09-24]", "ExchangeCalendar[exchange=SZSE, calendarDate=2026-09-26, open=false, previousTradeDate=2026-09-24]", "ExchangeCalendar[exchange=SZSE, calendarDate=2026-09-27, open=false, previousTradeDate=2026-09-24]", "ExchangeCalendar[exchange=SZSE, calendarDate=2026-09-28, open=true, previousTradeDate=2026-09-24]" ]
+  } ],
+  "readOnly" : true,
+  "target" : "exchange_calendar"
+}

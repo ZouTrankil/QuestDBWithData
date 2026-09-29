@@ -87,7 +87,13 @@ public class QuestDbBoundedReader {
             var column = columns.get(entry.getKey());
             if (entry.getValue() == null) {
                 if (!column.nullable()) throw new IllegalArgumentException("Null filter on required field");
-                conditions.add(quoted(column.storageName()) + " IS NULL");
+                var nullCases = new ArrayList<String>();
+                nullCases.add(quoted(column.storageName()) + " IS NULL");
+                for (var sentinel : new TreeSet<>(column.legacyNullSentinels())) {
+                    nullCases.add(quoted(column.storageName()) + " = ?");
+                    parameters.add(new Bound(column, sentinel));
+                }
+                conditions.add("(" + String.join(" OR ", nullCases) + ")");
             } else conditions.add(comparison(column, "=", entry.getValue(), parameters));
         }
         if (query.rangeColumn() != null) {
@@ -236,6 +242,7 @@ public class QuestDbBoundedReader {
         if (c.temporal() == null) return raw;
         if (!isTemporalStorage(c)) {
             if (c.temporal().kind() != TemporalKind.BUSINESS_DATE) throw new SQLException("Unsupported non-timestamp temporal storage");
+            if (c.legacyNullSentinels().contains(raw)) return null;
             return TemporalValues.businessDate((String) raw, TemporalValues.DateFormat.valueOf(c.temporal().sourceFormat()));
         }
         var unit = c.storageType() == StorageType.TIMESTAMP_NS ? TemporalValues.EpochUnit.NANOS

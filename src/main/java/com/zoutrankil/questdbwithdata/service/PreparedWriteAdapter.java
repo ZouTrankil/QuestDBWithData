@@ -2,6 +2,7 @@ package com.zoutrankil.questdbwithdata.service;
 
 import com.zoutrankil.questdbwithdata.domain.*;
 import com.zoutrankil.questdbwithdata.repository.DatasetWritePreparation;
+import com.zoutrankil.questdbwithdata.repository.SyncRunLedger;
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;
@@ -9,7 +10,7 @@ import java.util.function.*;
 import static com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.*;
 
 /** A frozen typed write input becomes one bounded INGEST page in the existing verified runner. */
-public final class PreparedWriteAdapter<T,K> implements SyncJobRunner.Adapter<T,K> {
+public final class PreparedWriteAdapter<T,K> implements SyncJobRunner.Adapter<T,K>,WriteGroupMemberAdapter {
     private final WriteGroupPlan.Member member;
     private final FrozenRequest request;
     private final Function<DatasetValues,T> decode;
@@ -85,5 +86,16 @@ public final class PreparedWriteAdapter<T,K> implements SyncJobRunner.Adapter<T,
             public boolean walSettled() throws Exception { requireTarget(); return port.walSettled(); }
             public boolean uncertainSenderStopped() throws Exception { return port.uncertainSenderStopped(); }
         };
+    }
+    @Override public SyncJobRunner.Result execute(SyncRunLedger ledger,DatasetIntervalLock locks,
+            String child,String parent,String prior,String target,FrozenRequest actual,
+            BooleanSupplier cancelled) throws Exception {
+        var runner=new SyncJobRunner<T,K>(ledger,locks);
+        return prior==null ? runner.run(child,parent,target,actual,this,cancelled)
+                : runner.resume(child,parent,prior,target,actual,this,cancelled);
+    }
+    @Override public String revalidate(SyncRunLedger ledger,String prior,String target,
+            FrozenRequest actual,BooleanSupplier cancelled,Path evidence) throws Exception {
+        return VerifiedRunRecovery.revalidate(ledger,prior,target,actual,this,cancelled,evidence);
     }
 }

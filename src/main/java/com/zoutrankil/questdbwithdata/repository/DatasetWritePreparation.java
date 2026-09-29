@@ -30,6 +30,20 @@ public final class DatasetWritePreparation {
                 || definition.dedupKey().isEmpty() || definition.designatedTimestamp() == null) {
             throw new IllegalArgumentException("Idempotent writer requires an explicit WAL table, timestamp and full dedup key");
         }
+        return prepareRows(definition,input,mapper,limits);
+    }
+    /** Full-row validation for owners that publish an application-keyed static replacement. */
+    public static <T> Batch prepareStatic(DatasetDefinition definition, List<T> input,
+                                          Function<T, DatasetValues> mapper, Limits limits) {
+        definition.requireCapability(DatasetDefinition.Capability.STATIC_REPLACE);
+        if (definition.objectKind()!=DatasetDefinition.ObjectKind.TABLE || definition.wal()
+                || definition.partition()!=DatasetDefinition.Partition.NONE
+                || definition.designatedTimestamp()!=null || !definition.dedupKey().isEmpty())
+            throw new IllegalArgumentException("Static replacement requires a non-WAL whole-table owner");
+        return prepareRows(definition,input,mapper,limits);
+    }
+    private static <T> Batch prepareRows(DatasetDefinition definition, List<T> input,
+                                         Function<T, DatasetValues> mapper, Limits limits) {
         if (input.size() > limits.maxRows()) throw new IllegalArgumentException("Write page exceeds row bound");
         var required = new HashSet<>(definition.columns().stream().map(DatasetDefinition.Column::logicalName).toList());
         var rows = new ArrayList<DatasetValues>(input.size());

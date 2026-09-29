@@ -40,4 +40,5 @@ application {
 
 tasks.named('test') {
     useJUnitPlatform()
+    systemProperty 'cli.runtimeClasspath', sourceSets.main.runtimeClasspath.asPath
 }

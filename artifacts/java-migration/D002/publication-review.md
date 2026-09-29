@@ -1,0 +1,15 @@
+# D002 publication journal and observed-layout recovery
+
+Status: running. This component acceptance does not close D002 or its sync run.
+
+StockDetailPublicationJournal stores immutable target/stage/backup names, original/replacement physical table IDs and full-value fingerprints in the existing SQLite run ledger. Optimistic phase transitions reject stale revisions. Publication requires the run's whole-dataset stock_detail_info lease, verified from SQLite rather than trusting the in-memory lease. Normal phases are PREPARED → OLD_RENAMED → NEW_RENAMED → VERIFIED. Any caught publication failure retains an IN_DOUBT journal and interval lock.
+
+StockDetailInfoPublication rereads original and stage before mutation. It renames the old table to a unique backup, renames the verified stage to the target name, then checks both table identities and fingerprints through real full-row reads. Renaming can change a non-WAL directory name, so post-rename reconciliation uses immutable table IDs plus exact contents. Backups are retained; there is no claim of an atomic two-table rename or uninterrupted target-name availability.
+
+The read-only inspect operation classifies ORIGINAL, OLD_MOVED, PUBLISHED or CONFLICT from actual table existence, identity and data. restoreOriginal requires explicit stopped-writer evidence, the owning uncertain publication and intact old/stage content. It persists RESTORING_OLD before restoring the old name, verifies the original layout and records ROLLED_BACK. It refuses an already-published or conflicting target. The caller releases exclusion only after verified reconciliation.
+
+`local-D002-publication-live-86df` passed a real-source normal publication in an isolated table. `local-D002-publication-recover-74af` passed normal publication plus an injected synchronous failure after the old rename returned. Reopening the journal observed OLD_MOVED; recovery without stopped-writer proof was rejected. With the test-owned synchronous writer known stopped, the old target was restored and all values matched. Evidence: `publication-b07906bc76554e3b80f1533629f7bd84/publication-readback.json` plus source/stage receipts. Successful test-owned target/backup/stage tables were dropped after recording evidence. Production stock_detail_info was not renamed or written.
+
+`local-D002-publication-journal-491a` and the journal selection in 74af pass persisted intent, invalid phase, stale revision, reopen and uncertain-lease checks. These controlled tests are not substitutes for the separately recorded real QuestDB publication.
+
+Remaining: hard process termination can leave a nonterminal phase without a caught exception, so recovery must admit those observed states only after stopped-writer proof. A new target already published with a lost final acknowledgement needs read-only finalization. Also required: source-through-publication owner locking, run/checkpoint integration, read/write/sync composition admission and complete task acceptance. The test run ledger roots are component scaffolding, not claimed VERIFIED sync jobs.

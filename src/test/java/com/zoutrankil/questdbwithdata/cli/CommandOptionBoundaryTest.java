@@ -21,7 +21,12 @@ class CommandOptionBoundaryTest {
                 {"schedule-enable", "--id", "sample", "--enabled=true", "--enabled=false"},
                 {"write-dataset-group", "--request="},
                 {"write-dataset-group", "--request", "   "},
-                {"sync-stock-basic-questdb", "--=invalid"}
+                {"sync-stock-basic-questdb", "--=invalid"},
+                {"sync-stock-basic-questdb", "--unexpected", "value"},
+                {"migrate-questdb-schema", "--unexpected", "value"},
+                {"sync-stock-basic", "--unexpected", "value"},
+                {"show-stock-basic-latest", "--unexpected", "value"},
+                {"verify-questdb-jdbc", "--unexpected", "value"}
         }) assertThrows(IllegalArgumentException.class, () -> cli.run(new DefaultApplicationArguments(args)));
         verifyNoInteractions(legacy, jobs, groups, write, schedule);
     }

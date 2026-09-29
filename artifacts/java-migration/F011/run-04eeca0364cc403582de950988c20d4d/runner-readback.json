@@ -1,0 +1,83 @@
+{
+  "ledgerPath" : "var\\F011-04eeca0364cc403582de950988c20d4d.sqlite3",
+  "table" : "java_f011_04eeca0364cc403582de950988c20d4d",
+  "ledgerEntries" : [ {
+    "id" : "attempt-1d74c4cd-54e6-45ff-ba2c-c843ce12cced",
+    "kind" : "ATTEMPT",
+    "runId" : "run-04eeca0364cc403582de950988c20d4d",
+    "parentId" : "run-04eeca0364cc403582de950988c20d4d",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"readbackEvidence\":\"ledger:slice-8c5fb2a5-8517-43ba-9563-1ff05c2ae8aa:revision:5;ledger:slice-e605c04f-5abc-437a-9c42-9bdb9d1edde5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false}}",
+    "updatedAt" : "2026-09-29T04:55:28.423521600Z"
+  }, {
+    "id" : "run-04eeca0364cc403582de950988c20d4d",
+    "kind" : "RUN",
+    "runId" : "run-04eeca0364cc403582de950988c20d4d",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"readbackEvidence\":\"ledger:slice-8c5fb2a5-8517-43ba-9563-1ff05c2ae8aa:revision:5;ledger:slice-e605c04f-5abc-437a-9c42-9bdb9d1edde5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false}}",
+    "updatedAt" : "2026-09-29T04:55:28.435791200Z"
+  }, {
+    "id" : "slice-8c5fb2a5-8517-43ba-9563-1ff05c2ae8aa",
+    "kind" : "SLICE",
+    "runId" : "run-04eeca0364cc403582de950988c20d4d",
+    "parentId" : "attempt-1d74c4cd-54e6-45ff-ba2c-c843ce12cced",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"readbackEvidence\":\"ledger:slice-8c5fb2a5-8517-43ba-9563-1ff05c2ae8aa:revision:5\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false}}",
+    "updatedAt" : "2026-09-29T04:55:22.765324900Z"
+  }, {
+    "id" : "slice-e605c04f-5abc-437a-9c42-9bdb9d1edde5",
+    "kind" : "SLICE",
+    "runId" : "run-04eeca0364cc403582de950988c20d4d",
+    "parentId" : "attempt-1d74c4cd-54e6-45ff-ba2c-c843ce12cced",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"4058b77bd05ea92310d6a3dcbe446f23dd78bb36db22e0bd5f72dd03edbe0b1a\",\"readbackEvidence\":\"ledger:slice-e605c04f-5abc-437a-9c42-9bdb9d1edde5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1,\"passed\":true,\"writerStopped\":false}}",
+    "updatedAt" : "2026-09-29T04:55:28.401624Z"
+  } ],
+  "rerun" : {
+    "runId" : "run-9af8d51421bf4b6ea2565ab1345d325c",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "runSnapshot" : {
+    "id" : "run-04eeca0364cc403582de950988c20d4d",
+    "parentRunId" : null,
+    "jobId" : "data.stock_basic",
+    "jobVersion" : 2,
+    "logicalDate" : "2026-09-29",
+    "targetId" : "isolated-questdb",
+    "frozenJson" : "{\"definition\":{\"jobId\":\"data.stock_basic\",\"version\":2,\"datasetId\":\"stock_basic_snapshot\",\"datasetVersion\":1,\"owner\":\"StockBasicSyncService\",\"supportedModes\":[\"SNAPSHOT\"],\"defaultMode\":\"SNAPSHOT\",\"parameters\":{\"codes\":{\"type\":\"STRING_LIST\",\"required\":true,\"maxLength\":12,\"maxItems\":100,\"choices\":[]}},\"ratePolicyRef\":\"tushare.shared\",\"slicePolicyRef\":\"stock_basic.snapshot\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":3,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT2M\"},\"timeout\":\"PT20M\",\"budget\":{\"maxWindowDays\":1,\"maxSlices\":100,\"maxPages\":100,\"maxRows\":100,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"SNAPSHOT\",\"parameters\":{\"codes\":[\"000001.SZ\",\"600000.SH\"]},\"from\":null,\"to\":null,\"logicalDate\":\"2026-09-29\"}"
+  },
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "result" : {
+    "runId" : "run-04eeca0364cc403582de950988c20d4d",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }
+}

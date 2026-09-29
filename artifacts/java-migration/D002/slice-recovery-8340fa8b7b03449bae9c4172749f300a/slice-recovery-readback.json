@@ -1,0 +1,85 @@
+{
+  "beforeRecovery" : {
+    "identity" : {
+      "id" : 2180,
+      "directory" : "java_d002_slice_recovery_8340fa8b7b03449bae9c4172749f300a"
+    },
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "updateTime" : "2026-09-29T07:32:25.115249Z",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "L",
+      "listDate" : "19910403",
+      "fullname" : "平安银行股份有限公司",
+      "enname" : "Ping An Bank Co., Ltd.",
+      "cnspell" : "PAYH",
+      "area" : "深圳",
+      "industry" : "银行",
+      "currType" : "CNY",
+      "delistDate" : null,
+      "isHs" : "S",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    } ],
+    "fingerprint" : "b69a190d9ba9c0428e586f1331543c3552aa4dff62b40cfa131797812b5547e8",
+    "bytes" : 409
+  },
+  "afterRecovery" : {
+    "identity" : {
+      "id" : 2180,
+      "directory" : "java_d002_slice_recovery_8340fa8b7b03449bae9c4172749f300a"
+    },
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "updateTime" : "2026-09-29T07:32:25.115249Z",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "L",
+      "listDate" : "19910403",
+      "fullname" : "平安银行股份有限公司",
+      "enname" : "Ping An Bank Co., Ltd.",
+      "cnspell" : "PAYH",
+      "area" : "深圳",
+      "industry" : "银行",
+      "currType" : "CNY",
+      "delistDate" : null,
+      "isHs" : "S",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    } ],
+    "fingerprint" : "b69a190d9ba9c0428e586f1331543c3552aa4dff62b40cfa131797812b5547e8",
+    "bytes" : 409
+  },
+  "writerStoppedProof" : "Synchronous owner returned before recovery invocation",
+  "ledger" : "var\\D002-slice-recovery-8340fa8b7b03449bae9c4172749f300a.sqlite",
+  "recoveryDataWrites" : 0,
+  "recovered" : {
+    "runId" : "stock-detail-2ec03317-a467-4f05-9170-f5f798465cf0",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "insertedRows" : 1,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 1,
+    "publicationId" : "publication-9b9fb55e-4d72-40d0-8397-f4c6d0f3cd1e",
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-2ec03317-a467-4f05-9170-f5f798465cf0\\completion.json",
+    "errorCode" : null
+  },
+  "failed" : {
+    "runId" : "stock-detail-2ec03317-a467-4f05-9170-f5f798465cf0",
+    "state" : "IN_DOUBT",
+    "sourceRows" : 1,
+    "insertedRows" : 0,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 0,
+    "publicationId" : "publication-9b9fb55e-4d72-40d0-8397-f4c6d0f3cd1e",
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-2ec03317-a467-4f05-9170-f5f798465cf0",
+    "errorCode" : "SQLiteException"
+  }
+}

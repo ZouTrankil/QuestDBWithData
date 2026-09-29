@@ -1,6 +1,6 @@
 # D003 · index
 
-- 状态：planned，尚未派发。
+- 状态：running，本地执行；D002已验收。已核实历史CSV导入入口、当前2274行物理表和匹配17列的本地XLSX来源，见[基线](../../../artifacts/java-migration/D003/baseline-review.md)。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D002`；前项验收后才执行本项。
@@ -25,7 +25,7 @@
 
 ## 本数据sync模式与注意事项
 
-清单未匹配qsync；核实index_market_sync等实际写入入口、来源及代码列表，再定义有限快照任务，不能臆定source_api。
+已确认index_market_sync不写此表。历史owner为已移除的scripts/import/import_index_catalog.py，使用17列CSV按index_code导入；Java实现有界文件INGEST，不臆定Tushare API。本地候选来源C:/Users/zouqiang/Downloads/指数列表.xlsx已记录哈希并转换为有来源证据的CSV；2343个源代码中529个当前不存在，当前另有460个不在源文件中，禁止隐式删除。import_time仅为导入观察时间，不能代表latest_close/return_1m的行情日期。
 
 Python调用/限流证据（仅源码事实，未逐接口验证线上配额）：
 

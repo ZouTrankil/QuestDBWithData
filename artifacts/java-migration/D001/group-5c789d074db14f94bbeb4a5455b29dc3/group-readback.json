@@ -1,0 +1,71 @@
+{
+  "first" : {
+    "runId" : "write-group-72021b83-4215-4c08-bda6-3213f6ba459e",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.exchange_calendar",
+      "childRunId" : "run-c7995e3f-7d8a-4cad-b764-46c1a4eb00b1",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 4
+    } ]
+  },
+  "matchedRows" : 4,
+  "second" : {
+    "runId" : "write-group-b8119420-1284-47ce-b9fc-28d14cc54fa9",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.exchange_calendar",
+      "childRunId" : "run-077e9049-b6f9-4c1c-a14e-fc0f5468ccdb",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 4
+    } ]
+  },
+  "physical" : [ {
+    "exchange" : "SSE",
+    "date_micros" : 1790294400000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790380800000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790467200000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790553600000000,
+    "is_open" : 1,
+    "pretrade_date" : "20260924"
+  } ],
+  "table" : "java_d001_group_5c789d074db14f94bbeb4a5455b29dc3",
+  "expected" : [ {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-25",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-26",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-27",
+    "open" : false,
+    "previousTradeDate" : "2026-09-24"
+  }, {
+    "exchange" : "SSE",
+    "calendarDate" : "2026-09-28",
+    "open" : true,
+    "previousTradeDate" : "2026-09-24"
+  } ],
+  "duplicateKeys" : 0
+}

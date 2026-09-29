@@ -1,0 +1,284 @@
+{
+  "schema": {
+    "query": "SELECT * FROM table_columns('exchange_calendar')",
+    "rows": [
+      {
+        "column": "exchange",
+        "type": "SYMBOL",
+        "indexed": false,
+        "indexBlockCapacity": 256,
+        "symbolCached": true,
+        "symbolCapacity": 256,
+        "symbolTableSize": 2,
+        "designated": false,
+        "upsertKey": true,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "cal_date",
+        "type": "TIMESTAMP",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": true,
+        "upsertKey": true,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "is_open",
+        "type": "INT",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "pretrade_date",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      }
+    ]
+  },
+  "metadata": {
+    "query": "SELECT table_name,designatedTimestamp,partitionBy FROM tables() WHERE table_name='exchange_calendar'",
+    "rows": [
+      {
+        "table_name": "exchange_calendar",
+        "designatedTimestamp": "cal_date",
+        "partitionBy": "YEAR"
+      }
+    ]
+  },
+  "sample": {
+    "query": "SELECT exchange,cal_date,cast(cal_date as long) AS date_micros,is_open,pretrade_date FROM exchange_calendar WHERE exchange='SSE' AND cal_date >= '2026-09-01' AND cal_date < '2026-10-01' ORDER BY cal_date LIMIT 32",
+    "rows": [
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-01 00:00:00",
+        "date_micros": 1788220800000000,
+        "is_open": 1,
+        "pretrade_date": "20260831"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-02 00:00:00",
+        "date_micros": 1788307200000000,
+        "is_open": 1,
+        "pretrade_date": "20260901"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-03 00:00:00",
+        "date_micros": 1788393600000000,
+        "is_open": 1,
+        "pretrade_date": "20260902"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-04 00:00:00",
+        "date_micros": 1788480000000000,
+        "is_open": 1,
+        "pretrade_date": "20260903"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-05 00:00:00",
+        "date_micros": 1788566400000000,
+        "is_open": 0,
+        "pretrade_date": "20260904"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-06 00:00:00",
+        "date_micros": 1788652800000000,
+        "is_open": 0,
+        "pretrade_date": "20260904"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-07 00:00:00",
+        "date_micros": 1788739200000000,
+        "is_open": 1,
+        "pretrade_date": "20260904"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-08 00:00:00",
+        "date_micros": 1788825600000000,
+        "is_open": 1,
+        "pretrade_date": "20260907"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-09 00:00:00",
+        "date_micros": 1788912000000000,
+        "is_open": 1,
+        "pretrade_date": "20260908"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-10 00:00:00",
+        "date_micros": 1788998400000000,
+        "is_open": 1,
+        "pretrade_date": "20260909"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-11 00:00:00",
+        "date_micros": 1789084800000000,
+        "is_open": 1,
+        "pretrade_date": "20260910"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-12 00:00:00",
+        "date_micros": 1789171200000000,
+        "is_open": 0,
+        "pretrade_date": "20260911"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-13 00:00:00",
+        "date_micros": 1789257600000000,
+        "is_open": 0,
+        "pretrade_date": "20260911"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-14 00:00:00",
+        "date_micros": 1789344000000000,
+        "is_open": 1,
+        "pretrade_date": "20260911"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-15 00:00:00",
+        "date_micros": 1789430400000000,
+        "is_open": 1,
+        "pretrade_date": "20260914"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-16 00:00:00",
+        "date_micros": 1789516800000000,
+        "is_open": 1,
+        "pretrade_date": "20260915"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-17 00:00:00",
+        "date_micros": 1789603200000000,
+        "is_open": 1,
+        "pretrade_date": "20260916"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-18 00:00:00",
+        "date_micros": 1789689600000000,
+        "is_open": 1,
+        "pretrade_date": "20260917"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-19 00:00:00",
+        "date_micros": 1789776000000000,
+        "is_open": 0,
+        "pretrade_date": "20260918"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-20 00:00:00",
+        "date_micros": 1789862400000000,
+        "is_open": 0,
+        "pretrade_date": "20260918"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-21 00:00:00",
+        "date_micros": 1789948800000000,
+        "is_open": 1,
+        "pretrade_date": "20260918"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-22 00:00:00",
+        "date_micros": 1790035200000000,
+        "is_open": 1,
+        "pretrade_date": "20260921"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-23 00:00:00",
+        "date_micros": 1790121600000000,
+        "is_open": 1,
+        "pretrade_date": "20260922"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-24 00:00:00",
+        "date_micros": 1790208000000000,
+        "is_open": 1,
+        "pretrade_date": "20260923"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-25 00:00:00",
+        "date_micros": 1790294400000000,
+        "is_open": 0,
+        "pretrade_date": "20260924"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-26 00:00:00",
+        "date_micros": 1790380800000000,
+        "is_open": 0,
+        "pretrade_date": "20260924"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-27 00:00:00",
+        "date_micros": 1790467200000000,
+        "is_open": 0,
+        "pretrade_date": "20260924"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-28 00:00:00",
+        "date_micros": 1790553600000000,
+        "is_open": 1,
+        "pretrade_date": "20260924"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-29 00:00:00",
+        "date_micros": 1790640000000000,
+        "is_open": 1,
+        "pretrade_date": "20260928"
+      },
+      {
+        "exchange": "SSE",
+        "cal_date": "2026-09-30 00:00:00",
+        "date_micros": 1790726400000000,
+        "is_open": 1,
+        "pretrade_date": "20260929"
+      }
+    ]
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "cases" : [ {
+    "interruptedPhase" : "OLD_RENAMED",
+    "observed" : {
+      "publicationId" : "publication-a55aaec0-c27d-48be-9131-4554c0bc2732",
+      "layout" : "OLD_MOVED",
+      "detail" : "Original retained as backup; target name absent"
+    },
+    "actual" : {
+      "identity" : {
+        "id" : 2141,
+        "directory" : "java_d002_interrupt_old_renamed_cd40b2e34d424e05af601a02f0bb2834"
+      },
+      "rows" : [ ],
+      "fingerprint" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "bytes" : 2
+    },
+    "recovered" : {
+      "entry" : {
+        "intent" : {
+          "id" : "publication-a55aaec0-c27d-48be-9131-4554c0bc2732",
+          "runId" : "interrupted-OLD_RENAMED",
+          "target" : "java_d002_interrupt_old_renamed_cd40b2e34d424e05af601a02f0bb2834",
+          "backup" : "java_stock_detail_backup_854f81bd526849ac8b3092909e14f3dc",
+          "stage" : "java_stock_detail_stage_9182d6f41d03495f9476ab87dbaf5460",
+          "oldTableId" : 2141,
+          "newTableId" : 2142,
+          "beforeFingerprint" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "afterFingerprint" : "36335d4c51d0966f9daa052c3cecad32e213922a639309af13e17f0e1e5552f6"
+        },
+        "state" : "ROLLED_BACK",
+        "revision" : 4
+      },
+      "inspection" : {
+        "publicationId" : "publication-a55aaec0-c27d-48be-9131-4554c0bc2732",
+        "layout" : "ORIGINAL",
+        "detail" : "Original and staged values intact; no published change observed"
+      }
+    }
+  }, {
+    "interruptedPhase" : "NEW_RENAMED",
+    "observed" : {
+      "publicationId" : "publication-f660041e-c3de-48ea-ac35-8d1172948cf1",
+      "layout" : "PUBLISHED",
+      "detail" : "New target and prior backup both exactly match frozen fingerprints"
+    },
+    "actual" : {
+      "identity" : {
+        "id" : 2144,
+        "directory" : "java_d002_interrupt_new_renamed_cd40b2e34d424e05af601a02f0bb2834"
+      },
+      "rows" : [ {
+        "tsCode" : "000001.SZ",
+        "updateTime" : "2026-09-29T06:37:34.130159Z",
+        "symbol" : "000001",
+        "name" : "平安银行",
+        "market" : "主板",
+        "exchange" : "SZSE",
+        "listStatus" : "L",
+        "listDate" : "19910403",
+        "fullname" : "平安银行股份有限公司",
+        "enname" : "Ping An Bank Co., Ltd.",
+        "cnspell" : "PAYH",
+        "area" : "深圳",
+        "industry" : "银行",
+        "currType" : "CNY",
+        "delistDate" : null,
+        "isHs" : "S",
+        "actName" : "无实际控制人",
+        "actEntType" : "无"
+      } ],
+      "fingerprint" : "36335d4c51d0966f9daa052c3cecad32e213922a639309af13e17f0e1e5552f6",
+      "bytes" : 409
+    },
+    "recovered" : {
+      "entry" : {
+        "intent" : {
+          "id" : "publication-f660041e-c3de-48ea-ac35-8d1172948cf1",
+          "runId" : "interrupted-NEW_RENAMED",
+          "target" : "java_d002_interrupt_new_renamed_cd40b2e34d424e05af601a02f0bb2834",
+          "backup" : "java_stock_detail_backup_ef9db9b0b3354128abf43738e191d9df",
+          "stage" : "java_stock_detail_stage_03a45c76d89545f49863bbf103e0aedb",
+          "oldTableId" : 2143,
+          "newTableId" : 2144,
+          "beforeFingerprint" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "afterFingerprint" : "36335d4c51d0966f9daa052c3cecad32e213922a639309af13e17f0e1e5552f6"
+        },
+        "state" : "VERIFIED",
+        "revision" : 4
+      },
+      "inspection" : {
+        "publicationId" : "publication-f660041e-c3de-48ea-ac35-8d1172948cf1",
+        "layout" : "PUBLISHED",
+        "detail" : "New target and prior backup both exactly match frozen fingerprints"
+      }
+    }
+  } ],
+  "source" : {
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "observedAt" : "2026-09-29T06:37:34.130159Z",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "L",
+      "listingDate" : "1991-04-03",
+      "fullname" : "平安银行股份有限公司",
+      "enname" : "Ping An Bank Co., Ltd.",
+      "cnspell" : "PAYH",
+      "area" : "深圳",
+      "industry" : "银行",
+      "currType" : "CNY",
+      "delistingDate" : null,
+      "isHs" : "S",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    } ],
+    "sourceFingerprint" : "b430b29fd0460581e55e5d25f9c1945f98fb6fda9fef3e83fd20661f3ed34ced",
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D002\\interrupted-cd40b2e34d424e05af601a02f0bb2834\\source-cd78e529-8ab1-41a1-9f70-0231a7874d44.json",
+    "cursor" : null
+  },
+  "injection" : "Error after synchronous DDL; no OS process was killed"
+}

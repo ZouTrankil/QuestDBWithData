@@ -11,7 +11,7 @@ public record DatasetDefinition(
 
     public enum ObjectKind { TABLE, VIEW, MATERIALIZED_VIEW }
     public enum Partition { NONE, HOUR, DAY, WEEK, MONTH, YEAR }
-    public enum Capability { READ, WRITE }
+    public enum Capability { READ, WRITE, STATIC_REPLACE }
     public enum StorageType { BOOLEAN, BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, CHAR, STRING,
         VARCHAR, SYMBOL, UUID, LONG256, BINARY, IPV4, DATE, TIMESTAMP, TIMESTAMP_NS }
     public enum TemporalKind { BUSINESS_DATE, INSTANT, TECHNICAL }
@@ -33,7 +33,13 @@ public record DatasetDefinition(
 
     public record Column(String sourceName, String logicalName, String storageName,
                          StorageType storageType, boolean nullable, String meaning,
-                         TemporalContract temporal) {
+                         TemporalContract temporal, Set<String> legacyNullSentinels) {
+        public Column(String sourceName, String logicalName, String storageName,
+                      StorageType storageType, boolean nullable, String meaning,
+                      TemporalContract temporal) {
+            this(sourceName, logicalName, storageName, storageType, nullable, meaning,
+                    temporal, Set.of());
+        }
         public Column {
             requireText(sourceName, "source mapping (use derived:... for computed values)");
             identifier(logicalName);
@@ -43,6 +49,13 @@ public record DatasetDefinition(
             if (Set.of(StorageType.DATE, StorageType.TIMESTAMP, StorageType.TIMESTAMP_NS)
                     .contains(storageType) && temporal == null) {
                 throw new IllegalArgumentException("Temporal storage column requires semantic contract: " + storageName);
+            }
+            legacyNullSentinels = legacyNullSentinels == null ? Set.of() : Set.copyOf(legacyNullSentinels);
+            if (!legacyNullSentinels.isEmpty() && (!nullable
+                    || !Set.of(StorageType.STRING, StorageType.VARCHAR, StorageType.SYMBOL).contains(storageType)
+                    || temporal == null || temporal.kind() != TemporalKind.BUSINESS_DATE
+                    || legacyNullSentinels.stream().anyMatch(s -> s == null || s.isBlank()))) {
+                throw new IllegalArgumentException("Legacy date null sentinels require a nullable text business date");
             }
         }
     }
@@ -91,9 +104,13 @@ public record DatasetDefinition(
         if (!dedupKey.isEmpty() && (!wal || designatedTimestamp == null || !dedupKey.contains(designatedTimestamp))) {
             throw new IllegalArgumentException("Dedup requires WAL and designated timestamp in key");
         }
-        if (objectKind != ObjectKind.TABLE && (capabilities.contains(Capability.WRITE) || !dedupKey.isEmpty())) {
+        if (objectKind != ObjectKind.TABLE && (capabilities.contains(Capability.WRITE)
+                || capabilities.contains(Capability.STATIC_REPLACE) || !dedupKey.isEmpty())) {
             throw new IllegalArgumentException("Views and materialized views cannot be directly written or upserted");
         }
+        if (capabilities.contains(Capability.STATIC_REPLACE) && (capabilities.contains(Capability.WRITE)
+                || wal || partition != Partition.NONE || designatedTimestamp != null || !dedupKey.isEmpty()))
+            throw new IllegalArgumentException("Static replacement requires an unpartitioned non-WAL table without direct writes");
         if (objectKind == ObjectKind.VIEW && (partition != Partition.NONE || wal)) {
             throw new IllegalArgumentException("Ordinary view has no partition or WAL");
         }

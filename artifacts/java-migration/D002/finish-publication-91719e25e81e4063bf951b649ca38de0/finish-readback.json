@@ -1,0 +1,215 @@
+{
+  "source" : {
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "observedAt" : "2026-09-29T07:41:14.003559Z",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "L",
+      "listingDate" : "1991-04-03",
+      "fullname" : "平安银行股份有限公司",
+      "enname" : "Ping An Bank Co., Ltd.",
+      "cnspell" : "PAYH",
+      "area" : "深圳",
+      "industry" : "银行",
+      "currType" : "CNY",
+      "delistingDate" : null,
+      "isHs" : "S",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    } ],
+    "sourceFingerprint" : "b430b29fd0460581e55e5d25f9c1945f98fb6fda9fef3e83fd20661f3ed34ced",
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D002\\finish-publication-91719e25e81e4063bf951b649ca38de0\\source-7ff95ce9-fc0e-4e5e-a187-b337b96e11eb.json",
+    "cursor" : null
+  },
+  "injection" : "Error after durable phase; not OS process termination",
+  "cases" : [ {
+    "sourceReplayRequests" : 0,
+    "actual" : {
+      "identity" : {
+        "id" : 2192,
+        "directory" : "java_d002_finish_prepared_91719e25e81e4063bf951b649ca38de0"
+      },
+      "rows" : [ {
+        "tsCode" : "000001.SZ",
+        "updateTime" : "2026-09-29T07:41:14.003559Z",
+        "symbol" : "000001",
+        "name" : "平安银行",
+        "market" : "主板",
+        "exchange" : "SZSE",
+        "listStatus" : "L",
+        "listDate" : "19910403",
+        "fullname" : "平安银行股份有限公司",
+        "enname" : "Ping An Bank Co., Ltd.",
+        "cnspell" : "PAYH",
+        "area" : "深圳",
+        "industry" : "银行",
+        "currType" : "CNY",
+        "delistDate" : null,
+        "isHs" : "S",
+        "actName" : "无实际控制人",
+        "actEntType" : "无"
+      }, {
+        "tsCode" : "600000.SH",
+        "updateTime" : "1970-01-01T00:00:00Z",
+        "symbol" : null,
+        "name" : "retained fixture",
+        "market" : null,
+        "exchange" : null,
+        "listStatus" : null,
+        "listDate" : null,
+        "fullname" : null,
+        "enname" : null,
+        "cnspell" : null,
+        "area" : null,
+        "industry" : null,
+        "currType" : null,
+        "delistDate" : null,
+        "isHs" : null,
+        "actName" : null,
+        "actEntType" : null
+      } ],
+      "fingerprint" : "be2097fd99de85e23fcc7ee782a4b8ec2bd27d98d89d5015742020d2f2cc5c9d",
+      "bytes" : 724
+    },
+    "result" : {
+      "runId" : "finish-PREPARED-91719e25e81e4063bf951b649ca38de0",
+      "state" : "VERIFIED",
+      "sourceRows" : 1,
+      "insertedRows" : 1,
+      "updatedRows" : 0,
+      "unchangedRows" : 0,
+      "verifiedRows" : 1,
+      "publicationId" : "publication-65746d8b-1e98-46f5-9787-dabca3dc6129",
+      "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\finish-PREPARED-91719e25e81e4063bf951b649ca38de0\\completion.json",
+      "errorCode" : null
+    },
+    "interruptedPhase" : "PREPARED"
+  }, {
+    "sourceReplayRequests" : 0,
+    "actual" : {
+      "identity" : {
+        "id" : 2194,
+        "directory" : "java_d002_finish_old_renamed_91719e25e81e4063bf951b649ca38de0"
+      },
+      "rows" : [ {
+        "tsCode" : "000001.SZ",
+        "updateTime" : "2026-09-29T07:41:14.003559Z",
+        "symbol" : "000001",
+        "name" : "平安银行",
+        "market" : "主板",
+        "exchange" : "SZSE",
+        "listStatus" : "L",
+        "listDate" : "19910403",
+        "fullname" : "平安银行股份有限公司",
+        "enname" : "Ping An Bank Co., Ltd.",
+        "cnspell" : "PAYH",
+        "area" : "深圳",
+        "industry" : "银行",
+        "currType" : "CNY",
+        "delistDate" : null,
+        "isHs" : "S",
+        "actName" : "无实际控制人",
+        "actEntType" : "无"
+      }, {
+        "tsCode" : "600000.SH",
+        "updateTime" : "1970-01-01T00:00:00Z",
+        "symbol" : null,
+        "name" : "retained fixture",
+        "market" : null,
+        "exchange" : null,
+        "listStatus" : null,
+        "listDate" : null,
+        "fullname" : null,
+        "enname" : null,
+        "cnspell" : null,
+        "area" : null,
+        "industry" : null,
+        "currType" : null,
+        "delistDate" : null,
+        "isHs" : null,
+        "actName" : null,
+        "actEntType" : null
+      } ],
+      "fingerprint" : "be2097fd99de85e23fcc7ee782a4b8ec2bd27d98d89d5015742020d2f2cc5c9d",
+      "bytes" : 724
+    },
+    "result" : {
+      "runId" : "finish-OLD_RENAMED-91719e25e81e4063bf951b649ca38de0",
+      "state" : "VERIFIED",
+      "sourceRows" : 1,
+      "insertedRows" : 1,
+      "updatedRows" : 0,
+      "unchangedRows" : 0,
+      "verifiedRows" : 1,
+      "publicationId" : "publication-b2aad5b1-9b16-40d5-8e5a-e1870465e056",
+      "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\finish-OLD_RENAMED-91719e25e81e4063bf951b649ca38de0\\completion.json",
+      "errorCode" : null
+    },
+    "interruptedPhase" : "OLD_RENAMED"
+  }, {
+    "sourceReplayRequests" : 0,
+    "actual" : {
+      "identity" : {
+        "id" : 2197,
+        "directory" : "java_d002_finish_in_doubt_91719e25e81e4063bf951b649ca38de0"
+      },
+      "rows" : [ {
+        "tsCode" : "000001.SZ",
+        "updateTime" : "2026-09-29T07:41:14.003559Z",
+        "symbol" : "000001",
+        "name" : "平安银行",
+        "market" : "主板",
+        "exchange" : "SZSE",
+        "listStatus" : "L",
+        "listDate" : "19910403",
+        "fullname" : "平安银行股份有限公司",
+        "enname" : "Ping An Bank Co., Ltd.",
+        "cnspell" : "PAYH",
+        "area" : "深圳",
+        "industry" : "银行",
+        "currType" : "CNY",
+        "delistDate" : null,
+        "isHs" : "S",
+        "actName" : "无实际控制人",
+        "actEntType" : "无"
+      }, {
+        "tsCode" : "600000.SH",
+        "updateTime" : "1970-01-01T00:00:00Z",
+        "symbol" : null,
+        "name" : "retained fixture",
+        "market" : null,
+        "exchange" : null,
+        "listStatus" : null,
+        "listDate" : null,
+        "fullname" : null,
+        "enname" : null,
+        "cnspell" : null,
+        "area" : null,
+        "industry" : null,
+        "currType" : null,
+        "delistDate" : null,
+        "isHs" : null,
+        "actName" : null,
+        "actEntType" : null
+      } ],
+      "fingerprint" : "be2097fd99de85e23fcc7ee782a4b8ec2bd27d98d89d5015742020d2f2cc5c9d",
+      "bytes" : 724
+    },
+    "result" : {
+      "runId" : "finish-IN_DOUBT-91719e25e81e4063bf951b649ca38de0",
+      "state" : "VERIFIED",
+      "sourceRows" : 1,
+      "insertedRows" : 1,
+      "updatedRows" : 0,
+      "unchangedRows" : 0,
+      "verifiedRows" : 1,
+      "publicationId" : "publication-58e7fcc1-201d-4626-8cc9-65245f0f0ca1",
+      "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\finish-IN_DOUBT-91719e25e81e4063bf951b649ca38de0\\completion.json",
+      "errorCode" : null
+    },
+    "interruptedPhase" : "IN_DOUBT"
+  } ]
+}

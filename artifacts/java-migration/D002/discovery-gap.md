@@ -1,0 +1,5 @@
+# D002 code-scoped sync and discovery
+
+`StockDetailInfoSource.fetch(ts_code, ...)` is a safe bounded revision path for a known identity: it checks L, D and P separately and does not delete an absent row. It cannot discover newly listed `ts_code` values that are absent from the current QuestDB table or an explicit request. A run over only existing keys cannot establish a complete `stock_detail_info` current snapshot.
+
+`StockDetailInfoDiscovery` now implements the second path with finite status × exchange requests and the documented 6,000-row response-cap guard. Its live run found 5,910 source keys, including two absent from the current QuestDB table; full 5,910-row isolated staging and independent 17-field readback passed. `local-D002-full-owner-live` then exercised discovery through the canonical locked owner: it published 5,910 rows to an isolated target, including two inserts and 16 business revisions. The final full-table readback and independent source-value comparison passed; the production table stayed unchanged. D002 remains running until the remaining failure, resume and final regression gates are consolidated.

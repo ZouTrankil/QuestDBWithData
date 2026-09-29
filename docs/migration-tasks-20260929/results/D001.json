@@ -1,0 +1,145 @@
+{
+  "task_id": "D001",
+  "dataset_id": "exchange_calendar",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "calendar-93bc01ea-ce1e-46b3-b881-5f4060e73c06",
+  "attempt_id": "calendar-93bc01ea-ce1e-46b3-b881-5f4060e73c06",
+  "logical_date": "2026-09-28",
+  "started_at": "2026-09-29T05:27:14.966556600Z",
+  "finished_at": "2026-09-29T05:55:45.724632+00:00",
+  "target": {
+    "target_id": "questdb-5cb70ce1d9d958a167f1efcdd0ef694c5d8631b9f5241091b025d93c9383e53e",
+    "database_version": "Build Information: QuestDB 10.0.1, JDK 25.0.2, Commit Hash 7a391566ac827e0d8c269b91f2415c16b0a32a84",
+    "table": "java_d001_owner_f9a4ed4db14a447e9e1e0ce2a0877b92",
+    "isolated": true
+  },
+  "incremental": {
+    "mode": "INCREMENTAL",
+    "request_window": "2026-09-25..2026-09-28 inclusive; SSE,SZSE",
+    "revision_overlap": "366 days clipped by explicit bootstrap; observed 2-day overlap",
+    "checkpoint_before": {
+      "SZSE": "2026-09-26",
+      "SSE": "2026-09-26"
+    },
+    "checkpoint_after": {
+      "SZSE": "2026-09-28",
+      "SSE": "2026-09-28"
+    }
+  },
+  "source": {
+    "provider": "tushare",
+    "endpoint": "trade_cal",
+    "request_evidence": [
+      "artifacts/java-migration/D001/owner-f9a4ed4db14a447e9e1e0ce2a0877b92/second/source-c6b6a234-fef1-4ee2-a392-5f9bded385d4.json",
+      "artifacts/java-migration/D001/owner-f9a4ed4db14a447e9e1e0ce2a0877b92/second/source-ca2e0936-9bd5-4803-bec0-29c461bb243b.json"
+    ],
+    "response_evidence": [
+      "artifacts/java-migration/D001/owner-f9a4ed4db14a447e9e1e0ce2a0877b92/second/source-c6b6a234-fef1-4ee2-a392-5f9bded385d4.json",
+      "artifacts/java-migration/D001/owner-f9a4ed4db14a447e9e1e0ce2a0877b92/second/source-ca2e0936-9bd5-4803-bec0-29c461bb243b.json"
+    ],
+    "returned_rows": 8,
+    "normalized_rows": 8,
+    "rejected_rows": 0,
+    "fingerprint": {
+      "source-c6b6a234-fef1-4ee2-a392-5f9bded385d4.json": "017a719626110f02d1fa99cc74c96b5515ef0dd7b74af360dedb82bd9cf46011",
+      "source-ca2e0936-9bd5-4803-bec0-29c461bb243b.json": "99ea31529f18051df05f32dea6055d8f3c23f1938f7c5074041d1d425da6b091"
+    }
+  },
+  "write": {
+    "submitted_rows": 8,
+    "inserted_rows": "unknown: QWP acknowledgement does not distinguish inserts",
+    "updated_rows": "unknown: overlapping keys resubmitted",
+    "unchanged_rows": "unknown: not classified by writer",
+    "acknowledged": true,
+    "delivery_status": "VERIFIED by complete-key all-column readback and settled WAL; second owner run only"
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/D001/owner-f9a4ed4db14a447e9e1e0ce2a0877b92/owner-readback.json",
+    "business_keys": [
+      "exchange",
+      "calendar_date"
+    ],
+    "compared_columns": [
+      "exchange",
+      "cal_date",
+      "is_open",
+      "pretrade_date"
+    ],
+    "actual_rows": 8,
+    "matched_rows": 8,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": "0be7b66c76e85afcd4d1d4cef6c6faac4950265442add23260c92b48ce7b24a2",
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": true,
+    "second_incremental": true,
+    "rate_limit": true,
+    "retry": true,
+    "pagination": true,
+    "resume": true,
+    "cancel": true,
+    "unknown_write_reconcile": true
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/D001/owner-f9a4ed4db14a447e9e1e0ce2a0877b92",
+    "artifacts/java-migration/D001/usage-and-mapping.md",
+    "artifacts/java-migration/D001/final-review.md",
+    "artifacts/java-migration/D001/read-review.md",
+    "artifacts/java-migration/D001/write-group-review.md",
+    "artifacts/java-migration/D001/owner-group-review.md",
+    "artifacts/java-migration/D001/failure-review.md",
+    "artifacts/java-migration/D001/source-live-review.md",
+    "artifacts/java-migration/D001/source-contract-review.md",
+    "var/local-D001-final-suite-832b-build/test-results/test"
+  ],
+  "attempt_history": [
+    {
+      "attempt": "local-D001-full-regression-784a",
+      "status": "failed",
+      "reason": "Old catalog test assumed daily jobs empty"
+    },
+    {
+      "attempt": "local-D001-catalog-final-3841",
+      "status": "passed",
+      "reason": "Check registered daily eligibility"
+    },
+    {
+      "attempt": "local-D001-final-suite-832b",
+      "status": "passed",
+      "counts": {
+        "tests": 214,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 28,
+        "passed": 186
+      }
+    }
+  ],
+  "next_manual_comparison": "Compare retained second/source files against owner-readback and independent-values; verify 4→8 rows and SSE/SZSE 09-26→09-28 checkpoints. Review date names, UTC carrier, declared 366-day overlap, schema/keys, failure receipts. Human acceptance stays pending_review.",
+  "regression": {
+    "tests": 214,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 28,
+    "passed": 186
+  },
+  "check_scope": {
+    "retry": "Shared bounded HTTP retry tests plus calendar source failure propagation; no live fault injection",
+    "pagination": "trade_cal uses exchange/year slices with complete daily coverage, not offset paging; read uses keyset pages",
+    "unknown_write_reconcile": "Controlled IN_DOUBT transport test retains exclusion; no automatic resend. Real completed-child revalidation separately tested.",
+    "source_revision": "No natural revision observed; overlap refetch/new dates/idempotence verified",
+    "composition": "Calendar read/write/sync members live verified; mixed stock/calendar group not live verified",
+    "production": "Production calendar read only; successful acceptance writes used owned isolated tables, subsequently dropped",
+    "started_at": "Earliest retained entry last-update timestamp in owner ledger; not exact process launch time"
+  }
+}

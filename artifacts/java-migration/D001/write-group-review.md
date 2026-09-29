@@ -1,0 +1,7 @@
+# D001 prepared write group acceptance
+
+`write-dataset-group` now selects the registered typed writer for each requested dataset. The existing stock-basic path and its targeted write-group tests still pass. A calendar member uses `ExchangeCalendarMapper`, `ExchangeCalendarWritePort`, the calendar owner's physical target identity, and the shared `PersistentWriteGroupRunner`; members are preflighted before sends. Mixed stock-basic/calendar groups are structurally supported, but no cross-table atomicity is claimed.
+
+`ExchangeCalendarWriteGroupLiveTest` passed with a new isolated YEAR/WAL/DEDUP table. A real four-row SSE `trade_cal` response for 2026-09-25 through 2026-09-28 populated an explicit prepared-write JSON request. The first group run and same-input rerun both reached VERIFIED. The final table held four distinct keys. `group-06d25f15da8d4994ad74513470c75eea/group-readback.json` contains the results and SQL rows; its `independent-values.json` reconstructs all four source values and confirms zero mismatches. The test-owned table was dropped only after success.
+
+An earlier attempt pointed the QWP HTTP client at the Python project's ILP TCP port 9009 and failed before sending. The exact test-owned table `java_d001_group_78de24d2c5fe4c6db784c677c9b7f041` was checked at zero rows and dropped. The corrected attempt used the application's configured QWP HTTP port. These test results do not establish a real mixed-dataset group run or a production write.

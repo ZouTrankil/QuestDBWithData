@@ -28,6 +28,13 @@ public class TushareProperties {
     public int getEndpointPerMinute() { return endpointPerMinute; }
     public void setEndpointPerMinute(int value) { endpointPerMinute = value; }
     public java.util.Map<String, Integer> getEndpointLimits() { return endpointLimits; }
+    /** Dataset-specific ceilings must not be raised by a broader account/default setting. */
+    public java.util.Map<String,Integer> effectiveEndpointLimits() {
+        var limits = new java.util.HashMap<>(endpointLimits);
+        limits.put("trade_cal",Math.min(20,Math.min(endpointPerMinute,limits.getOrDefault("trade_cal",endpointPerMinute))));
+        limits.put("stock_basic",Math.min(50,Math.min(endpointPerMinute,limits.getOrDefault("stock_basic",endpointPerMinute))));
+        return java.util.Map.copyOf(limits);
+    }
     public void setEndpointLimits(java.util.Map<String, Integer> value) { endpointLimits = value; }
     public int getConcurrency() { return concurrency; }
     public void setConcurrency(int value) { concurrency = value; }

@@ -1,0 +1,109 @@
+{
+  "ledger" : "var\\D002-boundary-4f82fda0f4474adc909a3073390dad73.sqlite",
+  "before" : {
+    "identity" : {
+      "id" : 2167,
+      "directory" : "java_d002_boundary_4f82fda0f4474adc909a3073390dad73"
+    },
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "updateTime" : "1970-01-01T00:00:00Z",
+      "symbol" : null,
+      "name" : "preserved fixture",
+      "market" : null,
+      "exchange" : null,
+      "listStatus" : "L",
+      "listDate" : "19910403",
+      "fullname" : null,
+      "enname" : null,
+      "cnspell" : null,
+      "area" : null,
+      "industry" : null,
+      "currType" : null,
+      "delistDate" : "None",
+      "isHs" : null,
+      "actName" : null,
+      "actEntType" : null
+    } ],
+    "fingerprint" : "a59cd07987898efc883c6bd9ef44b589adba72c767a0a6a377fc7174561c052e",
+    "bytes" : 324
+  },
+  "sourceKind" : "synthetic provider outcomes",
+  "target" : "java_d002_boundary_4f82fda0f4474adc909a3073390dad73",
+  "failed" : {
+    "runId" : "stock-detail-677d83a6-4e16-41e1-ba33-fe179b834902",
+    "state" : "FAILED",
+    "sourceRows" : 0,
+    "insertedRows" : 0,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 0,
+    "publicationId" : null,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-677d83a6-4e16-41e1-ba33-fe179b834902",
+    "errorCode" : "Incomplete"
+  },
+  "cancelled" : {
+    "runId" : "cancel-4f82fda0f4474adc909a3073390dad73",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "insertedRows" : 0,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 0,
+    "publicationId" : null,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\cancel-4f82fda0f4474adc909a3073390dad73",
+    "errorCode" : "Incomplete"
+  },
+  "busy" : {
+    "runId" : "stock-detail-3fe84da9-dc31-43ba-ab02-1d1c8f4ff919",
+    "state" : "FAILED",
+    "sourceRows" : 0,
+    "insertedRows" : 0,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 0,
+    "publicationId" : null,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-3fe84da9-dc31-43ba-ab02-1d1c8f4ff919",
+    "errorCode" : "DATASET_INTERVAL_BUSY"
+  },
+  "empty" : {
+    "runId" : "stock-detail-3a909b33-c461-4b60-a125-f5857e49c621",
+    "state" : "VERIFIED_EMPTY",
+    "sourceRows" : 0,
+    "insertedRows" : 0,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 0,
+    "publicationId" : null,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-3a909b33-c461-4b60-a125-f5857e49c621\\completion.json",
+    "errorCode" : null
+  },
+  "after" : {
+    "identity" : {
+      "id" : 2167,
+      "directory" : "java_d002_boundary_4f82fda0f4474adc909a3073390dad73"
+    },
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "updateTime" : "1970-01-01T00:00:00Z",
+      "symbol" : null,
+      "name" : "preserved fixture",
+      "market" : null,
+      "exchange" : null,
+      "listStatus" : "L",
+      "listDate" : "19910403",
+      "fullname" : null,
+      "enname" : null,
+      "cnspell" : null,
+      "area" : null,
+      "industry" : null,
+      "currType" : null,
+      "delistDate" : "None",
+      "isHs" : null,
+      "actName" : null,
+      "actEntType" : null
+    } ],
+    "fingerprint" : "a59cd07987898efc883c6bd9ef44b589adba72c767a0a6a377fc7174561c052e",
+    "bytes" : 324
+  }
+}

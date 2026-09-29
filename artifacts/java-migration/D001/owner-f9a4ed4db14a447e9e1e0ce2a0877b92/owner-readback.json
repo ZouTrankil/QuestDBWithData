@@ -1,0 +1,72 @@
+{
+  "targetId" : "questdb-5cb70ce1d9d958a167f1efcdd0ef694c5d8631b9f5241091b025d93c9383e53e",
+  "first" : {
+    "runId" : "calendar-4050f1dd-4357-4409-955a-11cbb9fb0633",
+    "state" : "VERIFIED",
+    "sourceRows" : 4,
+    "verifiedRows" : 4,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "table" : "java_d001_owner_f9a4ed4db14a447e9e1e0ce2a0877b92",
+  "checkedAfter" : 8,
+  "checkedBefore" : 4,
+  "readback" : [ {
+    "exchange" : "SSE",
+    "date_micros" : 1790294400000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790380800000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790467200000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790553600000000,
+    "is_open" : 1,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790294400000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790380800000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790467200000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790553600000000,
+    "is_open" : 1,
+    "pretrade_date" : "20260924"
+  } ],
+  "checkpointAfter" : {
+    "SZSE" : "2026-09-28",
+    "SSE" : "2026-09-28"
+  },
+  "ledger" : "var\\D001-owner-f9a4ed4db14a447e9e1e0ce2a0877b92.sqlite",
+  "second" : {
+    "runId" : "calendar-93bc01ea-ce1e-46b3-b881-5f4060e73c06",
+    "state" : "VERIFIED",
+    "sourceRows" : 8,
+    "verifiedRows" : 8,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "checkpointBefore" : {
+    "SZSE" : "2026-09-26",
+    "SSE" : "2026-09-26"
+  }
+}

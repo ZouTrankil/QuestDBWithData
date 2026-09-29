@@ -1,0 +1,11 @@
+# D003 source mapping and live typed read
+
+The source DTO covers all 17 original file columns. The domain separately types base/publication dates as LocalDate and import observation as microsecond Instant. Catalog close and one-month return retain their supplied values and do not gain a market as-of date from import time. `-6.95` stays `-6.95` percentage points, not `-0.0695`. Physical sample_count remains DOUBLE with a domain requirement for a nonnegative integral value. Codes preserve leading zeros and accept the observed H-prefixed six-character identities.
+
+IndexCatalogFileSource accepts the exact 17-header UTF-8 CSV contract, with optional BOM, quoted commas/doubled quotes/newlines, a 5,000-row limit, 8 MiB byte limit and 32,768-character field limit. It freezes the exact bytes' SHA-256 and rejects duplicate normalized codes, malformed UTF-8, invalid dates/numbers, nonfinite numbers, incomplete rows and cancellation. It validates the whole bounded input before any writer receives rows. File input has no upstream API calls to rate-limit; future writes still require bounded batches and backpressure.
+
+`local-D003-source-mapping-336d` passed three tests, including all 2,343 actual extracted file rows mapped to and from all 18 storage fields. `local-D003-file-read-d314` passed four file tests including limits and malformed UTF-8; its read test was skipped because the initial opt-in flag was incorrect. This skip is not read evidence.
+
+`local-D003-read-actual-eac7` reran the live read test with the correct QUESTDB_BOUNDED_READ flag: one passed, none skipped. Two pages returned four unique codes, with all 18 fields compared to independent SQL, including exact import microseconds. A registered read-group projection returned the matching first page. `read-live.json` records the actual 2,274-row table and compared keys. No QuestDB writes occurred.
+
+During implementation, another workspace edit replaced the domain/mapper interface. The source methods were merged into that current interface rather than retaining duplicate models; source evidence corrected its numeric-only code restriction. D003 remains running: idempotent WAL write strategy, file job/management, write group, incremental and recovery acceptance are still required.

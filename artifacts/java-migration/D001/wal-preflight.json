@@ -1,0 +1,34 @@
+{
+  "checkedAtUtc": "2026-09-29T05:05:21.642094+00:00",
+  "queries": [
+    {
+      "sql": "SELECT table_name, walEnabled, table_suspended, wal_pending_row_count, table_txn, wal_txn, designatedTimestamp, partitionBy, id, directoryName FROM tables() WHERE table_name='exchange_calendar'",
+      "rows": [
+        {
+          "table_name": "exchange_calendar",
+          "walEnabled": true,
+          "table_suspended": false,
+          "wal_pending_row_count": 0,
+          "table_txn": 9,
+          "wal_txn": 9,
+          "designatedTimestamp": "cal_date",
+          "partitionBy": "YEAR",
+          "id": 296,
+          "directoryName": "exchange_calendar~296"
+        }
+      ]
+    },
+    {
+      "sql": "SELECT name,suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name='exchange_calendar'",
+      "rows": [
+        {
+          "name": "exchange_calendar",
+          "suspended": false,
+          "writerTxn": 9,
+          "sequencerTxn": 9,
+          "bufferedTxnSize": 0
+        }
+      ]
+    }
+  ]
+}

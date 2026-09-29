@@ -1,0 +1,5 @@
+# D002 read path and legacy date sentinel
+
+The generic `QuestDbBoundedReader.readValue` parses every STRING column declared `BUSINESS_DATE` with `TemporalValues.businessDate`. The actual `stock_detail_info.delist_date` contains the literal string `None` on many listed rows. Registering the current D002 definition with the generic read group will therefore fail before `StockDetailInfoMapper.fromValues` can apply its explicit legacy compatibility rule. A `delisting_date IS NULL` query would also miss physical `None` rows unless its predicate is explicitly widened.
+
+The D002 typed read and read-group binding now use an explicit column-level sentinel policy in the common reader, declared only for `delist_date`. New source parsing remains strict. `local-D002-read-live` passed the listed-row sentinel, delisted real date, keyset pages, null filter, and complete-field comparison to direct SQL. See `read-review.md`. This resolves the read compatibility gate; owner/publication and complete D002 acceptance remain separate.

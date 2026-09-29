@@ -1,0 +1,7 @@
+# D001 typed read evidence
+
+`ExchangeCalendarReadLiveTest` uses the D001 `DatasetDefinition` through `QuestDbBoundedReader` and `ExchangeCalendarMapper`. With `QUESTDB_BOUNDED_READ=1`, it paged the actual `exchange_calendar` table at two rows per page for each exchange over 2026-09-25 through 2026-09-28. An independent physical SQL query with explicit four-column projection matched all four rows per exchange and the Friday closure. `read-live.json` contains the bounded rows and counts.
+
+`ExchangeCalendarReadRepository` registers the D001 dataset and offers full-domain, bounded page reads. The application `ReadGroupReader` returns `DatasetValues` with declared Java field types, consistent with the other registered datasets. It supports both full fields and explicit subsets containing the complete business key. This avoids trying to construct a full domain record from a date-only projection. The opt-in live test exercises both projections and the next cursor against actual PGWire data.
+
+`local-D001-read-projection-48d3` passed all 11 selected tests on 2026-09-29, including both live read tests and existing read-group regressions. The preceding 48d2 attempt exposed an independent test using unset APP_QUESTDB environment variables; the test now obtains the actual application datasource and still compares with separate explicit physical SQL. This is read-only D04 evidence and dataset catalog registration. It does not establish job registration, write, source sync, or isolated target acceptance.

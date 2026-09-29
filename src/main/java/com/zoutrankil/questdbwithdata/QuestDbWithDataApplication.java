@@ -16,6 +16,14 @@ public class QuestDbWithDataApplication {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         SpringApplication application = new SpringApplication(QuestDbWithDataApplication.class);
         application.setWebApplicationType(WebApplicationType.NONE);
-        application.run(args);
+        application.setBannerMode(org.springframework.boot.Banner.Mode.OFF);
+        int exitCode = 0;
+        try (var context = application.run(args)) {
+            // A finite CLI command owns its context; release HTTP pools and database clients on exit.
+        } catch (RuntimeException failure) {
+            exitCode = com.zoutrankil.questdbwithdata.cli.CliExitStatus.failureCode(failure);
+            System.err.println("{\"status\":\"FAILED\",\"exitCode\":" + exitCode + "}");
+        }
+        if (exitCode != 0) System.exit(exitCode);
     }
 }

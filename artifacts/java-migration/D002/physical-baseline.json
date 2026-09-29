@@ -1,0 +1,327 @@
+{
+  "schema": {
+    "query": "SELECT * FROM table_columns('stock_detail_info')",
+    "rows": [
+      {
+        "column": "ts_code",
+        "type": "SYMBOL",
+        "indexed": false,
+        "indexBlockCapacity": 256,
+        "symbolCached": true,
+        "symbolCapacity": 4096,
+        "symbolTableSize": 5908,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "update_time",
+        "type": "TIMESTAMP",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "symbol",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "name",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "market",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "exchange",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "list_status",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "list_date",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "fullname",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "enname",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "cnspell",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "area",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "industry",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "curr_type",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "delist_date",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "is_hs",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "act_name",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      },
+      {
+        "column": "act_ent_type",
+        "type": "STRING",
+        "indexed": false,
+        "indexBlockCapacity": 0,
+        "symbolCached": false,
+        "symbolCapacity": 0,
+        "symbolTableSize": 0,
+        "designated": false,
+        "upsertKey": false,
+        "indexType": "",
+        "indexInclude": ""
+      }
+    ]
+  },
+  "metadata": {
+    "query": "SELECT table_name,designatedTimestamp,partitionBy,walEnabled,dedup FROM tables() WHERE table_name='stock_detail_info'",
+    "rows": [
+      {
+        "table_name": "stock_detail_info",
+        "designatedTimestamp": null,
+        "partitionBy": "NONE",
+        "walEnabled": false,
+        "dedup": false
+      }
+    ]
+  },
+  "profile": {
+    "query": "SELECT count() AS rows,count_distinct(ts_code) AS codes FROM stock_detail_info",
+    "rows": [
+      {
+        "rows": 5908,
+        "codes": 5908
+      }
+    ]
+  },
+  "sample": {
+    "query": "SELECT ts_code,cast(update_time as long) AS update_micros,symbol,name,market,exchange,list_status,list_date,fullname,enname,cnspell,area,industry,curr_type,delist_date,is_hs,act_name,act_ent_type FROM stock_detail_info WHERE ts_code IN ('000001.SZ','600000.SH','000003.SZ') ORDER BY ts_code LIMIT 10",
+    "rows": [
+      {
+        "ts_code": "000001.SZ",
+        "update_micros": 1790276619064503,
+        "symbol": "000001",
+        "name": "平安银行",
+        "market": "主板",
+        "exchange": "SZSE",
+        "list_status": "L",
+        "list_date": "19910403",
+        "fullname": "平安银行股份有限公司",
+        "enname": "Ping An Bank Co., Ltd.",
+        "cnspell": "PAYH",
+        "area": "深圳",
+        "industry": "银行",
+        "curr_type": "CNY",
+        "delist_date": "None",
+        "is_hs": "S",
+        "act_name": "无实际控制人",
+        "act_ent_type": "无"
+      },
+      {
+        "ts_code": "000003.SZ",
+        "update_micros": 1790276619077916,
+        "symbol": "000003",
+        "name": "PT金田A(退)",
+        "market": "主板",
+        "exchange": "SZSE",
+        "list_status": "D",
+        "list_date": "19910703",
+        "fullname": "金田实业(集团)股份有限公司",
+        "enname": "Gintian Industry (Group) Co., Ltd.",
+        "cnspell": "ptjta",
+        "area": null,
+        "industry": null,
+        "curr_type": "CNY",
+        "delist_date": "20020614",
+        "is_hs": "N",
+        "act_name": "无实际控制人",
+        "act_ent_type": "无"
+      },
+      {
+        "ts_code": "600000.SH",
+        "update_micros": 1790276618944387,
+        "symbol": "600000",
+        "name": "浦发银行",
+        "market": "主板",
+        "exchange": "SSE",
+        "list_status": "L",
+        "list_date": "19991110",
+        "fullname": "上海浦东发展银行股份有限公司",
+        "enname": "Shanghai Pudong Development Bank Co.,Ltd.",
+        "cnspell": "PFYH",
+        "area": "上海",
+        "industry": "银行",
+        "curr_type": "CNY",
+        "delist_date": "None",
+        "is_hs": "H",
+        "act_name": "无实际控制人",
+        "act_ent_type": "无"
+      }
+    ]
+  }
+}

@@ -2,6 +2,8 @@ package com.zoutrankil.questdbwithdata.service;
 
 import com.zoutrankil.questdbwithdata.domain.*;
 import com.zoutrankil.questdbwithdata.repository.StockBasicWritePort;
+import com.zoutrankil.questdbwithdata.repository.ExchangeCalendarWritePort;
+import com.zoutrankil.questdbwithdata.mapper.ExchangeCalendarMapper;
 import io.questdb.client.QuestDB;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -11,40 +13,80 @@ import java.nio.file.Path;
 import java.time.*;
 import java.util.*;
 
-/** Application entry for the existing registered writable sample; other owners must be admitted explicitly. */
+/** Application entry for admitted dataset writers; every member uses its owning typed port. */
 @Service
 public class StockBasicWriteGroupService {
     private final DatasetRegistry datasets;
     private final StockBasicJobService target;
+    private final ExchangeCalendarJobService calendarTarget;
+    private final StockDetailInfoJobService stockDetailTarget;
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
     private final Path ledger;
-    public StockBasicWriteGroupService(DatasetRegistry datasets, StockBasicJobService target, JdbcTemplate jdbc,
-            @Lazy QuestDB questdb, @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledger) {
+    @org.springframework.beans.factory.annotation.Autowired
+    public StockBasicWriteGroupService(DatasetRegistry datasets, StockBasicJobService target,
+            ExchangeCalendarJobService calendarTarget,StockDetailInfoJobService stockDetailTarget,
+            JdbcTemplate jdbc, @Lazy QuestDB questdb,
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledger) {
         this.datasets=datasets; this.target=target; this.jdbc=jdbc; this.questdb=questdb;
+        this.calendarTarget=calendarTarget;this.stockDetailTarget=stockDetailTarget;
+        this.ledger=Path.of(ledger).toAbsolutePath().normalize();
+    }
+    public StockBasicWriteGroupService(DatasetRegistry datasets, StockBasicJobService target,
+            ExchangeCalendarJobService calendarTarget,JdbcTemplate jdbc,QuestDB questdb,String ledger) {
+        this(datasets,target,calendarTarget,null,jdbc,questdb,ledger);
+    }
+    public StockBasicWriteGroupService(DatasetRegistry datasets, StockBasicJobService target, JdbcTemplate jdbc,
+            QuestDB questdb, String ledger) {
+        this.datasets=datasets; this.target=target; this.calendarTarget=null; this.jdbc=jdbc; this.questdb=questdb;
+        this.stockDetailTarget=null;
         this.ledger=Path.of(ledger).toAbsolutePath().normalize();
     }
     public SyncGroupRunner.Result run(Path file, String priorRun) throws Exception {
         var request = new WriteGroupJson(datasets).read(file);
-        if (request.members().stream().anyMatch(m -> !m.datasetId().equals(StockBasicDataset.DEFINITION.datasetId())))
-            throw new IllegalArgumentException("No admitted write owner for requested dataset");
+        var targets = new LinkedHashMap<String,String>();
         var frozenSnapshot = request.logicalDate().atStartOfDay(ZoneOffset.UTC).toInstant();
-        for (var member : request.members()) for (var row : member.rows())
-            if (!frozenSnapshot.equals(row.get("snapshot_ts", Instant.class)))
-                throw new IllegalArgumentException("Stock-basic snapshot differs from frozen logical date");
-        String targetId = target.targetId();
-        var plan = WriteGroupPlan.prepare(request, datasets, Map.of(StockBasicDataset.DEFINITION.datasetId(), targetId));
+        for (var member : request.members()) {
+            if (member.datasetId().equals(StockBasicDataset.DEFINITION.datasetId())) {
+                for (var row : member.rows()) if (!frozenSnapshot.equals(row.get("snapshot_ts", Instant.class)))
+                    throw new IllegalArgumentException("Stock-basic snapshot differs from frozen logical date");
+                targets.put(member.datasetId(), target.targetId());
+            } else if (member.datasetId().equals(ExchangeCalendarDataset.DEFINITION.datasetId())
+                    && calendarTarget != null) {
+                targets.put(member.datasetId(), calendarTarget.targetId());
+            } else if(member.datasetId().equals(StockDetailInfoDataset.DEFINITION.datasetId())
+                    && stockDetailTarget!=null) {
+                targets.put(member.datasetId(),stockDetailTarget.targetId());
+            } else throw new IllegalArgumentException("No admitted write owner for requested dataset");
+        }
+        var plan = WriteGroupPlan.prepare(request, datasets, targets);
         String run = "write-group-" + UUID.randomUUID();
         Path evidence = ledger.getParent().resolve("write-evidence");
-        var port = new StockBasicWritePort(StockBasicDataset.DEFINITION.objectName(), jdbc, questdb);
-        var member = plan.members().getFirst();
-        var adapter = new PreparedWriteAdapter<>(plan, member.memberId(), StockBasicWriteGroupService::decode,
-                StockBasicWriteGroupService::encode, StockBasicWritePort.CODEC, port, () -> {
-                    try { return target.targetId(); }
-                    catch (Exception failure) { throw new IllegalStateException("Cannot resolve current write target", failure); }
-                }, evidence.resolve(run));
+        var adapters = new LinkedHashMap<String,WriteGroupMemberAdapter>();
+        for (var member : plan.members()) {
+            if (member.definition().datasetId().equals(StockBasicDataset.DEFINITION.datasetId())) {
+                var port = new StockBasicWritePort(StockBasicDataset.DEFINITION.objectName(), jdbc, questdb);
+                adapters.put(member.memberId(), new PreparedWriteAdapter<>(plan, member.memberId(),
+                        StockBasicWriteGroupService::decode, StockBasicWriteGroupService::encode,
+                        StockBasicWritePort.CODEC, port, () -> {
+                            try { return target.targetId(); }
+                            catch (Exception failure) { throw new IllegalStateException("Cannot resolve stock target", failure); }
+                        }, evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(ExchangeCalendarDataset.DEFINITION.datasetId())) {
+                var mapper = new ExchangeCalendarMapper();
+                var port = new ExchangeCalendarWritePort(calendarTarget.tableName(), jdbc, questdb);
+                adapters.put(member.memberId(), new PreparedWriteAdapter<>(plan, member.memberId(),
+                        mapper::fromValues, mapper::values, ExchangeCalendarWritePort.CODEC, port, () -> {
+                            try { return calendarTarget.targetId(); }
+                            catch (Exception failure) { throw new IllegalStateException("Cannot resolve calendar target", failure); }
+                        }, evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(StockDetailInfoDataset.DEFINITION.datasetId())) {
+                adapters.put(member.memberId(),new StaticStockDetailWriteAdapter(plan,member.memberId(),
+                        stockDetailTarget,evidence.resolve(run)));
+            } else throw new IllegalArgumentException("No prepared adapter for dataset");
+        }
         return new PersistentWriteGroupRunner(ledger, evidence, datasets)
-                .run(run, plan, Map.of(member.memberId(), adapter), priorRun);
+                .run(run, plan, adapters, priorRun);
     }
     static StockBasicSnapshot decode(DatasetValues row) {
         return new StockBasicSnapshot(row.get("snapshot_ts", Instant.class), new StockBasic(row.get("ts_code", String.class),

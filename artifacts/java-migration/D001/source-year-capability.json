@@ -1,0 +1,22 @@
+{
+  "checkedAtUtc": "2026-09-29T05:08:24.112290+00:00",
+  "endpoint": "trade_cal",
+  "request": {
+    "exchange": "SSE",
+    "start_date": "20260101",
+    "end_date": "20261231"
+  },
+  "responseCode": 0,
+  "fields": [
+    "exchange",
+    "cal_date",
+    "is_open",
+    "pretrade_date"
+  ],
+  "rows": 365,
+  "uniqueDays": 365,
+  "minimumDate": "20260101",
+  "maximumDate": "20261231",
+  "payloadSha256": "1c7de74e100c44216d0e7a91c0dc134b860471b39c4e9b8dcb19ed17f659623c",
+  "note": "Bounded read-only source capability probe; no credential or full payload retained. Not Java sync acceptance."
+}

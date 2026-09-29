@@ -18,8 +18,11 @@ class SyncJobCatalogApplicationTest {
             assertEquals(context.getBean(StockBasicSyncService.class).datasetId(), job.datasetId());
             assertTrue(job.enabled());
             assertFalse(job.dailyEligible());
-            assertTrue(registry.dailyJobs().isEmpty());
-            Path output = Path.of("artifacts/java-migration/F009/job-definitions.json");
+            assertTrue(registry.dailyJobs().stream().noneMatch(daily -> daily.jobId().equals(job.jobId())));
+            var calendar = registry.require("data.exchange_calendar", 1);
+            assertEquals(context.getBean(ExchangeCalendarJobService.class).datasetId(), calendar.datasetId());
+            assertTrue(registry.dailyJobs().contains(calendar));
+            Path output = Path.of("artifacts/java-migration/D001/job-definitions.json");
             Files.createDirectories(output.getParent());
             com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter()
                     .writeValue(output.toFile(), registry.definitions());

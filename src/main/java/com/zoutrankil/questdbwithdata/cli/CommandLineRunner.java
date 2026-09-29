@@ -28,6 +28,8 @@ public class CommandLineRunner implements ApplicationRunner {
     private final ReadGroupReader readGroupReader;
     private final com.zoutrankil.questdbwithdata.service.StockBasicWriteGroupService writeGroupService;
     private final com.zoutrankil.questdbwithdata.service.StockBasicScheduleService scheduleService;
+    private final com.zoutrankil.questdbwithdata.service.ExchangeCalendarJobService calendarService;
+    private final com.zoutrankil.questdbwithdata.service.StockDetailInfoJobService stockDetailService;
 
     @Autowired
     public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasetRegistry,
@@ -35,7 +37,10 @@ public class CommandLineRunner implements ApplicationRunner {
                              com.zoutrankil.questdbwithdata.service.StockBasicGroupService groupService,
                              ReadGroupReader readGroupReader,
                              com.zoutrankil.questdbwithdata.service.StockBasicWriteGroupService writeGroupService,
-                             com.zoutrankil.questdbwithdata.service.StockBasicScheduleService scheduleService) {
+                             @org.springframework.context.annotation.Lazy
+                             com.zoutrankil.questdbwithdata.service.StockBasicScheduleService scheduleService,
+                             com.zoutrankil.questdbwithdata.service.ExchangeCalendarJobService calendarService,
+                             com.zoutrankil.questdbwithdata.service.StockDetailInfoJobService stockDetailService) {
         this.syncService = syncService;
         this.datasetRegistry = datasetRegistry;
         this.jobRegistry = jobRegistry;
@@ -44,6 +49,27 @@ public class CommandLineRunner implements ApplicationRunner {
         this.readGroupReader = readGroupReader;
         this.writeGroupService = writeGroupService;
         this.scheduleService = scheduleService;
+        this.calendarService = calendarService;
+        this.stockDetailService = stockDetailService;
+    }
+
+    public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasetRegistry,
+                             SyncJobRegistry jobRegistry, com.zoutrankil.questdbwithdata.service.StockBasicJobService jobService,
+                             com.zoutrankil.questdbwithdata.service.StockBasicGroupService groupService,
+                             ReadGroupReader readGroupReader,
+                             com.zoutrankil.questdbwithdata.service.StockBasicWriteGroupService writeGroupService,
+                             com.zoutrankil.questdbwithdata.service.StockBasicScheduleService scheduleService,
+                             com.zoutrankil.questdbwithdata.service.ExchangeCalendarJobService calendarService) {
+        this(syncService,datasetRegistry,jobRegistry,jobService,groupService,readGroupReader,writeGroupService,
+                scheduleService,calendarService,null);
+    }
+
+    public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasets, SyncJobRegistry jobs,
+            com.zoutrankil.questdbwithdata.service.StockBasicJobService job,
+            com.zoutrankil.questdbwithdata.service.StockBasicGroupService group,ReadGroupReader read,
+            com.zoutrankil.questdbwithdata.service.StockBasicWriteGroupService write,
+            com.zoutrankil.questdbwithdata.service.StockBasicScheduleService schedule) {
+        this(syncService,datasets,jobs,job,group,read,write,schedule,null);
     }
 
     public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasetRegistry,
@@ -64,11 +90,73 @@ public class CommandLineRunner implements ApplicationRunner {
         String command = args[0];
         Map<String, String> options = parseOptions(args);
         switch (command) {
+            case "run-exchange-calendar", "plan-exchange-calendar" -> {
+                if (!options.keySet().containsAll(java.util.Set.of("--exchanges","--from","--to","--logical-date"))
+                        || !java.util.Set.of("--exchanges","--from","--to","--logical-date","--mode","--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit exchanges, bootstrap from, to and logical-date required");
+                var exchanges=java.util.Arrays.asList(options.get("--exchanges").split(",",-1));
+                var from=java.time.LocalDate.parse(options.get("--from"));
+                var to=java.time.LocalDate.parse(options.get("--to"));
+                var date=java.time.LocalDate.parse(options.get("--logical-date"));
+                var mode=options.containsKey("--mode")?com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode
+                        .valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT)):null;
+                if(command.equals("plan-exchange-calendar")) {
+                    if(options.containsKey("--resume-from")) throw new IllegalArgumentException("Resume requires exact frozen run inputs");
+                    var plan=calendarService.plan(exchanges,from,to,date,mode);
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writeValueAsString(Map.of(
+                            "status","PLANNED","executed",false,"dataVerified",false,"targetId",plan.targetId(),
+                            "checkpointCandidates",plan.checkpointCandidates(),"checkedTargetRows",plan.checkedTargetRows(),
+                            "request",new ObjectMapper().readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                } else {
+                    com.zoutrankil.questdbwithdata.service.SyncJobRunner.Result result;
+                    if(options.containsKey("--resume-from")) {
+                        var frozen=com.zoutrankil.questdbwithdata.service.ExchangeCalendarSyncAdapter.definition(true)
+                                .freeze(mode,Map.of("exchanges",exchanges),from,to,date);
+                        result=calendarService.execute(new com.zoutrankil.questdbwithdata.service.ExchangeCalendarJobService.Plan(
+                                frozen,calendarService.targetId(),Map.of(),0),options.get("--resume-from"));
+                    } else result=calendarService.run(exchanges,from,to,date,mode);
+                    System.out.println(new ObjectMapper().writeValueAsString(result));
+                    if(result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("Calendar sync incomplete: "+result.state());
+                }
+            }
+            case "run-sync-group" -> {
+                var planningOptions=new java.util.LinkedHashMap<>(options);
+                String prior=planningOptions.remove("--resume-from");
+                var groups=new com.zoutrankil.questdbwithdata.service.SyncGroupRegistry(groupService.definitions(),jobRegistry);
+                var plan=com.zoutrankil.questdbwithdata.service.SyncGroupPlanning.prepare(groups,jobRegistry,planningOptions);
+                var result=groupService.runPlan(plan,prior);
+                System.out.println(new ObjectMapper().writeValueAsString(result));
+                if(result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED)
+                    throw new IncompleteCommandException("Sync group incomplete: "+result.state());
+            }
+            case "plan-sync-group", "validate-sync-group" -> {
+                var groups=new com.zoutrankil.questdbwithdata.service.SyncGroupRegistry(
+                        groupService.definitions(),jobRegistry);
+                var plan=com.zoutrankil.questdbwithdata.service.SyncGroupPlanning.prepare(groups,jobRegistry,options);
+                var frozen=new java.util.ArrayList<com.fasterxml.jackson.databind.JsonNode>();
+                var mapper=new ObjectMapper();
+                for (var request:plan.requests()) frozen.add(mapper.readTree(
+                        com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(request)));
+                System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                        "status",command.equals("plan-sync-group")?"PLANNED":"VALIDATED",
+                        "executed",false,"dataVerified",false,"group",plan.definition(),
+                        "logicalDate",plan.logicalDate().toString(),"requests",frozen)));
+            }
+            case "plan-sync-job", "validate-sync-job" -> {
+                var request = com.zoutrankil.questdbwithdata.service.SyncJobPlanning.prepare(jobRegistry, options);
+                String frozen = com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(request);
+                System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                        "status", command.equals("plan-sync-job") ? "PLANNED" : "VALIDATED",
+                        "executed", false, "dataVerified", false, "request", new ObjectMapper().readTree(frozen))));
+            }
             case "schedule-put" -> {
                 if (!options.keySet().equals(java.util.Set.of("--request")))
                     throw new IllegalArgumentException("Explicit --request JSON required");
                 scheduleService.put(Path.of(options.get("--request")));
-                System.out.println("Schedule definition stored; no execution started");
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of(
+                        "status","STORED","executed",false,"dataVerified",false)));
             }
             case "schedule-status" -> {
                 if (!options.keySet().equals(java.util.Set.of("--id")))
@@ -81,7 +169,9 @@ public class CommandLineRunner implements ApplicationRunner {
                         || !java.util.Set.of("true","false").contains(options.get("--enabled")))
                     throw new IllegalArgumentException("Explicit --id and boolean --enabled required");
                 scheduleService.setEnabled(options.get("--id"),Boolean.parseBoolean(options.get("--enabled")));
-                System.out.println("Schedule enabled="+options.get("--enabled")+"; no execution started");
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("status","CONFIGURED",
+                        "scheduleId",options.get("--id"),"enabled",Boolean.parseBoolean(options.get("--enabled")),
+                        "executed",false,"dataVerified",false)));
             }
             case "schedule-tick" -> {
                 if (!options.isEmpty()) throw new IllegalArgumentException("schedule-tick has no options");
@@ -90,7 +180,7 @@ public class CommandLineRunner implements ApplicationRunner {
                         .writerWithDefaultPrettyPrinter().writeValueAsString(outcomes));
                 if (outcomes.stream().anyMatch(o -> o.state()!=com.zoutrankil.questdbwithdata.repository.SyncScheduleStore.State.VERIFIED
                         && o.state()!=com.zoutrankil.questdbwithdata.repository.SyncScheduleStore.State.VERIFIED_EMPTY))
-                    throw new IllegalStateException("One or more schedule slots were not verified");
+                    throw new IncompleteCommandException("One or more schedule slots were not verified");
             }
             case "write-dataset-group" -> {
                 if (!options.containsKey("--request")
@@ -101,7 +191,7 @@ public class CommandLineRunner implements ApplicationRunner {
                         .writerWithDefaultPrettyPrinter().writeValueAsString(result));
                 if (result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
                         && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
-                    throw new IllegalStateException("Write group incomplete: " + result.state() + "; run=" + result.runId());
+                    throw new IncompleteCommandException("Write group incomplete: " + result.state() + "; run=" + result.runId());
             }
             case "read-dataset-group" -> {
                 if (!options.keySet().equals(java.util.Set.of("--request")))
@@ -112,7 +202,7 @@ public class CommandLineRunner implements ApplicationRunner {
                         .disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                         .writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
                                 "complete", result.complete(), "atomicSnapshot", false, "result", result)));
-                if (!result.complete()) throw new IllegalStateException("Read group contains unsuccessful members");
+                if (!result.complete()) throw new IncompleteCommandException("Read group contains unsuccessful members");
             }
             case "read-stock-basic-group" -> {
                 if (!options.keySet().equals(java.util.Set.of("--codes", "--from", "--to", "--page-size")))
@@ -135,10 +225,19 @@ public class CommandLineRunner implements ApplicationRunner {
                         .disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                         .writerWithDefaultPrettyPrinter()
                         .writeValueAsString(result));
-                if (!result.complete()) throw new IllegalStateException("Read group contains failed members");
+                if (!result.complete()) throw new IncompleteCommandException("Read group contains failed members");
             }
-            case "show-sync-group-definitions" -> System.out.println(new ObjectMapper()
-                    .writerWithDefaultPrettyPrinter().writeValueAsString(groupService.definitions()));
+            case "show-sync-group" -> {
+                if (!options.keySet().equals(java.util.Set.of("--group", "--version")))
+                    throw new IllegalArgumentException("Explicit group and version required");
+                var registry = new com.zoutrankil.questdbwithdata.service.SyncGroupRegistry(groupService.definitions(), jobRegistry);
+                System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(
+                        registry.require(options.get("--group"), Integer.parseInt(options.get("--version")))));
+            }
+            case "show-sync-group-definitions", "list-sync-groups" -> {
+                if (!options.isEmpty()) throw new IllegalArgumentException("Group list accepts no options");
+                System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(groupService.definitions()));
+            }
             case "run-stock-basic-group" -> {
                 if (!options.keySet().containsAll(java.util.Set.of("--codes", "--logical-date"))
                         || !java.util.Set.of("--codes", "--logical-date", "--resume-from").containsAll(options.keySet()))
@@ -148,7 +247,7 @@ public class CommandLineRunner implements ApplicationRunner {
                 var result = groupService.run(codes, day, options.get("--resume-from"));
                 System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(result));
                 if (result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED)
-                    throw new IllegalStateException("Group did not complete: " + result.state() + "; run=" + result.runId());
+                    throw new IncompleteCommandException("Group did not complete: " + result.state() + "; run=" + result.runId());
             }
             case "cancel-sync-run" -> {
                 if (!java.util.Set.of("--ledger", "--run").containsAll(options.keySet()) || !options.containsKey("--run"))
@@ -171,7 +270,58 @@ public class CommandLineRunner implements ApplicationRunner {
                 System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(result));
                 if (result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
                         && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
-                    throw new IllegalStateException("Sync did not complete: " + result.state() + "; run=" + result.runId());
+                    throw new IncompleteCommandException("Sync did not complete: " + result.state() + "; run=" + result.runId());
+            }
+            case "plan-stock-detail-job", "run-stock-detail-job" -> {
+                if (!options.containsKey("--logical-date")
+                        || !java.util.Set.of("--logical-date","--codes","--discover","--resume-from").containsAll(options.keySet())
+                        || options.containsKey("--codes") == options.containsKey("--discover"))
+                    throw new IllegalArgumentException("Specify --logical-date and exactly one of --codes or --discover true");
+                if(command.equals("plan-stock-detail-job") && options.containsKey("--resume-from"))
+                    throw new IllegalArgumentException("Planning cannot resume a run");
+                if (options.containsKey("--discover") && !"true".equals(options.get("--discover")))
+                    throw new IllegalArgumentException("Discovery requires --discover true");
+                var codes=options.containsKey("--codes")
+                        ? java.util.Arrays.asList(options.get("--codes").split(",",-1)) : java.util.List.<String>of();
+                var day=java.time.LocalDate.parse(options.get("--logical-date"));
+                var frozen=stockDetailService.plan(codes,options.containsKey("--discover"),day);
+                if (command.equals("plan-stock-detail-job")) {
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
+                            .writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                                    "status","PLANNED","executed",false,"dataVerified",false,
+                                    "targetId",stockDetailService.targetId(),"request",
+                                    new ObjectMapper().readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(frozen)))));
+                } else {
+                    var result=options.containsKey("--resume-from")
+                            ? stockDetailService.resume(frozen,options.get("--resume-from"))
+                            : stockDetailService.run(frozen);
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
+                            .writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("Stock-detail sync incomplete: "+result.state()+"; run="+result.runId());
+                }
+            }
+            case "reconcile-stock-detail-run", "finish-stock-detail-publication" -> {
+                if (!options.keySet().equals(java.util.Set.of("--run","--writer-stopped"))
+                        || !"true".equals(options.get("--writer-stopped")))
+                    throw new IllegalArgumentException("Explicit --run and --writer-stopped true required");
+                var result=command.equals("finish-stock-detail-publication")
+                        ?stockDetailService.finishInterrupted(options.get("--run"),true)
+                        :stockDetailService.reconcilePublished(options.get("--run"),true);
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
+                        .writerWithDefaultPrettyPrinter().writeValueAsString(result));
+            }
+            case "show-sync-history" -> {
+                if (!java.util.Set.of("--ledger", "--job", "--after", "--limit").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Unknown history option");
+                var ledger = com.zoutrankil.questdbwithdata.repository.SyncRunLedger.openReadOnly(
+                        Path.of(options.getOrDefault("--ledger", "var/sync-ledger.sqlite3")));
+                var rows = ledger.history(options.get("--job"), options.get("--after"),
+                        Integer.parseInt(options.getOrDefault("--limit", "100")));
+                System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                        "runs", rows, "order", "runIdAscending", "readOnly", true,
+                        "nextAfter", rows.isEmpty() ? "" : rows.getLast().id())));
             }
             case "show-sync-run" -> {
                 if (!java.util.Set.of("--ledger", "--run", "--after", "--limit").containsAll(options.keySet()))
@@ -184,16 +334,32 @@ public class CommandLineRunner implements ApplicationRunner {
                 System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
                         "run", ledger.getRun(run), "entries", ledger.entries(run, options.get("--after"), limit))));
             }
-            case "show-sync-job-definitions" -> System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
-                    .writerWithDefaultPrettyPrinter().writeValueAsString(jobRegistry.definitions()));
-            case "show-dataset-definitions" -> System.out.println(new ObjectMapper()
-                    .writerWithDefaultPrettyPrinter().writeValueAsString(datasetRegistry.definitions()));
+            case "show-sync-job" -> {
+                if (!options.keySet().equals(java.util.Set.of("--job", "--version")))
+                    throw new IllegalArgumentException("Explicit job and version required");
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
+                        .writerWithDefaultPrettyPrinter().writeValueAsString(jobRegistry.require(
+                                options.get("--job"), Integer.parseInt(options.get("--version")))));
+            }
+            case "show-sync-job-definitions", "list-sync-jobs" -> {
+                if (!options.isEmpty()) throw new IllegalArgumentException("Job list accepts no options");
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
+                        .writerWithDefaultPrettyPrinter().writeValueAsString(jobRegistry.definitions()));
+            }
+            case "show-dataset-definitions" -> {
+                if (!options.isEmpty()) throw new IllegalArgumentException("Dataset list accepts no options");
+                System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter()
+                        .writeValueAsString(datasetRegistry.definitions()));
+            }
             case "sync-stock-basic" -> {
+                if (!java.util.Set.of("--output").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Unknown stock-basic CSV option");
                 Path output = Path.of(options.getOrDefault("--output", "var/stock_basic.csv"));
                 int rows = syncService.syncToCsv(output);
                 System.out.printf("Fetched %d stocks; wrote %s%n", rows, output.toAbsolutePath());
             }
             case "sync-stock-basic-questdb", "sync-stock-basic-qwp", "sync-stock-basic-jdbc" -> {
+                if (!options.isEmpty()) throw new IllegalArgumentException("Legacy QuestDB sync accepts no options");
                 StockBasicSyncReport result = syncService.syncToQuestDb();
                 System.out.printf(
                         "Tushare rows=%d; QuestDB visible rows=%d; snapshot=%s%n",
@@ -201,15 +367,18 @@ public class CommandLineRunner implements ApplicationRunner {
                         result.snapshotTimestamp());
             }
             case "migrate-questdb-schema", "create-questdb-schema" -> {
+                if (!options.isEmpty()) throw new IllegalArgumentException("Schema command accepts no options");
                 syncService.initializeQuestDbSchema();
                 System.out.println("QuestDB Flyway migrations completed");
             }
             case "show-stock-basic-latest" -> {
+                if (!options.isEmpty()) throw new IllegalArgumentException("Stock-basic read accepts no options");
                 var rows = syncService.loadLatestStocks();
                 rows.forEach(System.out::println);
                 System.out.printf("Read %d rows from latest-stock view%n", rows.size());
             }
             case "verify-questdb-jdbc" -> {
+                if (!options.isEmpty()) throw new IllegalArgumentException("JDBC probe accepts no options");
                 syncService.verifyQuestDbConnection();
                 System.out.println("PostgreSQL JDBC connected; SELECT 1 passed");
             }
@@ -245,9 +414,12 @@ public class CommandLineRunner implements ApplicationRunner {
     }
 
     private static String usage() {
-        return "Usage: sync-stock-basic [--output PATH] OR "
+        return "Usage: run-exchange-calendar|plan-exchange-calendar --exchanges SSE,SZSE --from YYYY-MM-DD --to YYYY-MM-DD "
+                + "--logical-date YYYY-MM-DD [--mode incremental|backfill|reconcile] [--resume-from RUN_ID] OR sync-stock-basic [--output PATH] OR "
                 + "sync-stock-basic-questdb OR migrate-questdb-schema OR "
                 + "show-stock-basic-latest OR verify-questdb-jdbc OR show-dataset-definitions OR show-sync-job-definitions OR "
+                + "list-sync-jobs OR show-sync-job --job ID --version N OR "
+                + "list-sync-groups OR show-sync-group --group ID --version N OR "
                 + "show-sync-group-definitions OR run-stock-basic-group --codes CODE,CODE --logical-date YYYY-MM-DD "
                 + "[--resume-from GROUP_RUN_ID] OR "
                 + "read-dataset-group --request PATH OR "
@@ -255,7 +427,16 @@ public class CommandLineRunner implements ApplicationRunner {
                 + "schedule-put --request PATH OR schedule-status --id ID OR "
                 + "schedule-enable --id ID --enabled true|false OR schedule-tick OR "
                 + "read-stock-basic-group --codes CODE,CODE --from YYYY-MM-DD --to YYYY-MM-DD --page-size N OR "
+                + "plan-sync-job|validate-sync-job --job ID --version N --logical-date YYYY-MM-DD "
+                + "[--parameters JSON|--parameters-file PATH] [--mode MODE] [--from YYYY-MM-DD --to YYYY-MM-DD] OR "
+                + "plan-sync-group|validate-sync-group --group ID --version N --logical-date YYYY-MM-DD "
+                + "[--parameters JSON|--parameters-file PATH] [--overrides JSON|--overrides-file PATH] "
+                + "[--mode MODE] [--from YYYY-MM-DD --to YYYY-MM-DD] OR "
+                + "show-sync-history [--ledger PATH] [--job ID] [--after RUN_ID] [--limit N] OR "
                 + "show-sync-run --run ID [--ledger PATH] [--after ENTRY_ID] [--limit N] OR "
-                + "run-stock-basic-job --codes CODE,CODE --logical-date YYYY-MM-DD [--resume-from RUN_ID] OR cancel-sync-run --run ID [--ledger PATH]";
+                + "run-stock-basic-job --codes CODE,CODE --logical-date YYYY-MM-DD [--resume-from RUN_ID] OR "
+                + "plan-stock-detail-job|run-stock-detail-job --logical-date YYYY-MM-DD (--codes CODE,CODE|--discover true) "
+                + "[--resume-from FAILED_RUN_ID] OR "
+                + "reconcile-stock-detail-run|finish-stock-detail-publication --run ID --writer-stopped true OR cancel-sync-run --run ID [--ledger PATH]";
     }
 }

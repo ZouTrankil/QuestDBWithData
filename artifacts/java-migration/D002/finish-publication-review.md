@@ -1,0 +1,9 @@
+# D002 finishing an interrupted publication
+
+`finish-stock-detail-publication --run ID --writer-stopped true` is distinct from readback-only `reconcile-stock-detail-run`. The caller must establish that the previous writer stopped. The finish operation validates frozen prepared input, run/request/endpoint binding, single owned journal intent and retained lease. It rejects conflicting layouts. For ORIGINAL it executes the two outstanding renames; for OLD_MOVED it executes only the stage-to-target rename. A durable RESUMING phase permits another interruption to be inspected from actual physical layout. No new provider request or row insertion occurs.
+
+After exact published target/backup readback, the existing recovery path reconstructs a missing completion receipt and verifies slice, attempt and run. It then releases the retained lock. Published layouts use the normal readback path. A rolled-back publication is not implicitly reopened.
+
+`local-D002-finish-publication-4ae1` passed the live test and journal tests. One real Tushare source observation was used in two isolated cases: Error after PREPARED and Error after OLD_RENAMED. Both retained RUNNING run/attempt/slice entries and no completion receipt. False stopped-writer proof and readback-only reconciliation were rejected. The explicit finish operation completed both cases with full-row equality, three VERIFIED entries and no remaining lease. Successful isolated targets/backups were removed after saving `finish-publication-*/finish-readback.json`.
+
+The injection is a synchronous Error after a durable phase, not actual OS termination. No formal production table was changed. An interruption during incomplete staging before a publication intent exists remains a separate conservative boundary: this operation refuses to infer a publishable replacement from it.

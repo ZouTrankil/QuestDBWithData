@@ -269,6 +269,34 @@ public final class SyncRunLedger {
     private static void pageSize(int limit) {
         if (limit < 1 || limit > 1000) throw new IllegalArgumentException("Ledger page limit must be 1..1000");
     }
+    public record RunSummary(String id, String parentRunId, String jobId, int jobVersion,
+                             String logicalDate, String targetId, SyncRunState state,
+                             long revision, String updatedAt) {}
+
+    /** Bounded keyset browse ordered by immutable run ID, not by mutable update time. */
+    public List<RunSummary> history(String jobId, String afterId, int limit) throws SQLException {
+        if (limit < 1 || limit > 1000) throw new IllegalArgumentException("History limit must be 1..1000");
+        if (jobId != null) id(jobId);
+        if (afterId != null) id(afterId);
+        String sql = "SELECT r.id,r.parent_run_id,r.job_id,r.job_version,r.logical_date,r.target_id,"
+                + "e.state,e.revision,e.updated_at FROM sync_runs r JOIN sync_entries e ON e.id=r.id AND e.kind='RUN'"
+                + (jobId == null ? " WHERE 1=1" : " WHERE r.job_id=?")
+                + (afterId == null ? "" : " AND r.id>?") + " ORDER BY r.id LIMIT ?";
+        var rows = new ArrayList<RunSummary>();
+        try (var c = connect(); var s = c.prepareStatement(sql)) {
+            int index = 1;
+            if (jobId != null) s.setString(index++, jobId);
+            if (afterId != null) s.setString(index++, afterId);
+            s.setInt(index, limit);
+            try (var r = s.executeQuery()) {
+                while (r.next()) rows.add(new RunSummary(r.getString(1), r.getString(2), r.getString(3),
+                        r.getInt(4), r.getString(5), r.getString(6), SyncRunState.valueOf(r.getString(7)),
+                        r.getLong(8), r.getString(9)));
+            }
+        }
+        return List.copyOf(rows);
+    }
+
     public Run getRun(String id) throws SQLException {
         id(id);
         try (var c = connect(); var s = c.prepareStatement("SELECT * FROM sync_runs WHERE id=?")) {

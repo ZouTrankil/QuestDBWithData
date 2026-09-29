@@ -1,0 +1,20 @@
+[
+  {
+    "id": "calendar-4050f1dd-4357-4409-955a-11cbb9fb0633",
+    "parent_run_id": null,
+    "job_id": "data.exchange_calendar",
+    "job_version": 1,
+    "logical_date": "2026-09-28",
+    "target_id": "questdb-5cb70ce1d9d958a167f1efcdd0ef694c5d8631b9f5241091b025d93c9383e53e",
+    "frozen_json": "{\"definition\":{\"jobId\":\"data.exchange_calendar\",\"version\":1,\"datasetId\":\"exchange_calendar\",\"datasetVersion\":1,\"owner\":\"exchange_calendar_owner\",\"supportedModes\":[\"BACKFILL\",\"RECONCILE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"exchanges\":{\"type\":\"STRING_LIST\",\"required\":true,\"maxLength\":4,\"maxItems\":2,\"choices\":[\"SSE\",\"SZSE\"]}},\"ratePolicyRef\":\"tushare.shared\",\"slicePolicyRef\":\"exchange_calendar.year\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":3,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT2M\"},\"timeout\":\"PT20M\",\"budget\":{\"maxWindowDays\":3660,\"maxSlices\":24,\"maxPages\":24,\"maxRows\":7320,\"maxBatchBytes\":1048576},\"revisionDays\":366,\"dependencies\":[],\"frequency\":\"DAILY\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":true},\"mode\":\"INCREMENTAL\",\"parameters\":{\"exchanges\":[\"SSE\",\"SZSE\"]},\"from\":\"2026-09-25\",\"to\":\"2026-09-26\",\"logicalDate\":\"2026-09-28\"}"
+  },
+  {
+    "id": "calendar-93bc01ea-ce1e-46b3-b881-5f4060e73c06",
+    "parent_run_id": null,
+    "job_id": "data.exchange_calendar",
+    "job_version": 1,
+    "logical_date": "2026-09-28",
+    "target_id": "questdb-5cb70ce1d9d958a167f1efcdd0ef694c5d8631b9f5241091b025d93c9383e53e",
+    "frozen_json": "{\"definition\":{\"jobId\":\"data.exchange_calendar\",\"version\":1,\"datasetId\":\"exchange_calendar\",\"datasetVersion\":1,\"owner\":\"exchange_calendar_owner\",\"supportedModes\":[\"BACKFILL\",\"RECONCILE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"exchanges\":{\"type\":\"STRING_LIST\",\"required\":true,\"maxLength\":4,\"maxItems\":2,\"choices\":[\"SSE\",\"SZSE\"]}},\"ratePolicyRef\":\"tushare.shared\",\"slicePolicyRef\":\"exchange_calendar.year\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":3,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT2M\"},\"timeout\":\"PT20M\",\"budget\":{\"maxWindowDays\":3660,\"maxSlices\":24,\"maxPages\":24,\"maxRows\":7320,\"maxBatchBytes\":1048576},\"revisionDays\":366,\"dependencies\":[],\"frequency\":\"DAILY\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":true},\"mode\":\"INCREMENTAL\",\"parameters\":{\"exchanges\":[\"SSE\",\"SZSE\"]},\"from\":\"2026-09-25\",\"to\":\"2026-09-28\",\"logicalDate\":\"2026-09-28\"}"
+  }
+]

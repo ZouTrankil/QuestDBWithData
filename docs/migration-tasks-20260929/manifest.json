@@ -435,7 +435,7 @@
       "provider": null,
       "serial_after": "F016",
       "semantic_dependencies": [],
-      "status": "planned",
+      "status": "verified",
       "spec_path": "01-functions/F017-sync-cli.md",
       "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 F017：同步任务管理CLI。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/01-functions/F017-sync-cli.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 F016 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/F017.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。 本卡为公共功能，请按职责适用规则验收；F001只读核对，不为满足通用提示而启动sync或写入。"
     },
@@ -447,7 +447,7 @@
       "provider": "TUSHARE_TO_VERIFY",
       "serial_after": "F017",
       "semantic_dependencies": [],
-      "status": "planned",
+      "status": "verified",
       "spec_path": "02-reference/D001-exchange_calendar.md",
       "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D001：exchange_calendar。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/02-reference/D001-exchange_calendar.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 F017 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D001.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
     },
@@ -459,7 +459,7 @@
       "provider": "TUSHARE_TO_VERIFY",
       "serial_after": "D001",
       "semantic_dependencies": [],
-      "status": "planned",
+      "status": "verified",
       "spec_path": "02-reference/D002-stock_detail_info.md",
       "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D002：stock_detail_info。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/02-reference/D002-stock_detail_info.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D001 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D002.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
     },
@@ -471,7 +471,7 @@
       "provider": "OWNER_INGEST_OR_DERIVED_TO_VERIFY",
       "serial_after": "D002",
       "semantic_dependencies": [],
-      "status": "planned",
+      "status": "running",
       "spec_path": "02-reference/D003-index.md",
       "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D003：index。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/02-reference/D003-index.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D002 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D003.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
     },
@@ -2932,3 +2932,4 @@
   "note": "This is a local planning manifest, not a claimed Orca import schema or runtime Task/Dispatch receipt.",
   "execution_mode": "direct_local_serial"
 }
+

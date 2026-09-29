@@ -1,0 +1,69 @@
+{
+  "table" : "java_d001_group_08b7c5b182c442aaa9dd63efee350783",
+  "ledger" : "var\\D001-group-08b7c5b182c442aaa9dd63efee350783.sqlite",
+  "first" : {
+    "runId" : "group-run-50acc151-9cb4-4f77-80d0-c3592816e48f",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "data.exchange_calendar",
+      "childRunId" : "run-bad1e241-b9be-44b9-9705-ef2ad28c8d2a",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 8
+    } ]
+  },
+  "resumed" : {
+    "runId" : "group-run-182fd495-52db-4059-824b-6164a82f8d6a",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "data.exchange_calendar",
+      "childRunId" : "run-bad1e241-b9be-44b9-9705-ef2ad28c8d2a",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    } ]
+  },
+  "readback" : [ {
+    "exchange" : "SSE",
+    "date_micros" : 1790294400000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790380800000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790467200000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SSE",
+    "date_micros" : 1790553600000000,
+    "is_open" : 1,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790294400000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790380800000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790467200000000,
+    "is_open" : 0,
+    "pretrade_date" : "20260924"
+  }, {
+    "exchange" : "SZSE",
+    "date_micros" : 1790553600000000,
+    "is_open" : 1,
+    "pretrade_date" : "20260924"
+  } ]
+}

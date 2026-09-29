@@ -1,0 +1,109 @@
+{
+  "failed" : {
+    "runId" : "stock-detail-7be53cad-2172-4329-ab72-5cdd2f0942c7",
+    "state" : "FAILED",
+    "sourceRows" : 0,
+    "insertedRows" : 0,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 0,
+    "publicationId" : null,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-7be53cad-2172-4329-ab72-5cdd2f0942c7",
+    "errorCode" : "Incomplete"
+  },
+  "target" : "java_d002_boundary_9ef6ddaccb7c4efda61e825bbb6c1463",
+  "sourceKind" : "synthetic provider outcomes",
+  "before" : {
+    "identity" : {
+      "id" : 2161,
+      "directory" : "java_d002_boundary_9ef6ddaccb7c4efda61e825bbb6c1463"
+    },
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "updateTime" : "1970-01-01T00:00:00Z",
+      "symbol" : null,
+      "name" : "preserved fixture",
+      "market" : null,
+      "exchange" : null,
+      "listStatus" : "L",
+      "listDate" : "19910403",
+      "fullname" : null,
+      "enname" : null,
+      "cnspell" : null,
+      "area" : null,
+      "industry" : null,
+      "currType" : null,
+      "delistDate" : "None",
+      "isHs" : null,
+      "actName" : null,
+      "actEntType" : null
+    } ],
+    "fingerprint" : "a59cd07987898efc883c6bd9ef44b589adba72c767a0a6a377fc7174561c052e",
+    "bytes" : 324
+  },
+  "ledger" : "var\\D002-boundary-9ef6ddaccb7c4efda61e825bbb6c1463.sqlite",
+  "after" : {
+    "identity" : {
+      "id" : 2161,
+      "directory" : "java_d002_boundary_9ef6ddaccb7c4efda61e825bbb6c1463"
+    },
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "updateTime" : "1970-01-01T00:00:00Z",
+      "symbol" : null,
+      "name" : "preserved fixture",
+      "market" : null,
+      "exchange" : null,
+      "listStatus" : "L",
+      "listDate" : "19910403",
+      "fullname" : null,
+      "enname" : null,
+      "cnspell" : null,
+      "area" : null,
+      "industry" : null,
+      "currType" : null,
+      "delistDate" : "None",
+      "isHs" : null,
+      "actName" : null,
+      "actEntType" : null
+    } ],
+    "fingerprint" : "a59cd07987898efc883c6bd9ef44b589adba72c767a0a6a377fc7174561c052e",
+    "bytes" : 324
+  },
+  "empty" : {
+    "runId" : "stock-detail-4b20b8b8-c0bb-480f-bba9-ee1cb5c7bacd",
+    "state" : "VERIFIED_EMPTY",
+    "sourceRows" : 0,
+    "insertedRows" : 0,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 0,
+    "publicationId" : null,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-4b20b8b8-c0bb-480f-bba9-ee1cb5c7bacd\\completion.json",
+    "errorCode" : null
+  },
+  "busy" : {
+    "runId" : "stock-detail-84a5235d-28dd-4824-b6aa-5b19f054077a",
+    "state" : "FAILED",
+    "sourceRows" : 0,
+    "insertedRows" : 0,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 0,
+    "publicationId" : null,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\stock-detail-84a5235d-28dd-4824-b6aa-5b19f054077a",
+    "errorCode" : "DATASET_INTERVAL_BUSY"
+  },
+  "cancelled" : {
+    "runId" : "cancel-9ef6ddaccb7c4efda61e825bbb6c1463",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "insertedRows" : 0,
+    "updatedRows" : 0,
+    "unchangedRows" : 0,
+    "verifiedRows" : 0,
+    "publicationId" : null,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\sync-evidence\\cancel-9ef6ddaccb7c4efda61e825bbb6c1463",
+    "errorCode" : "Incomplete"
+  }
+}

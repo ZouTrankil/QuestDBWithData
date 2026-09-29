@@ -1,0 +1,58 @@
+{
+  "second" : {
+    "runId" : "write-group-17f38bfc-b78b-4071-9140-d60edb4cfa7b",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.stock_detail_info",
+      "childRunId" : "run-765b06e8-24fe-419f-a249-ccbe6a34e070",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    } ]
+  },
+  "productionUnchanged" : true,
+  "target" : "java_d002_write_group_b6de972f98bb4b84b0ed86c0a53a16b7",
+  "ledger" : "var\\D002-write-group-b6de972f98bb4b84b0ed86c0a53a16b7.sqlite",
+  "actual" : {
+    "identity" : {
+      "id" : 2160,
+      "directory" : "java_d002_write_group_b6de972f98bb4b84b0ed86c0a53a16b7"
+    },
+    "rows" : [ {
+      "tsCode" : "000001.SZ",
+      "updateTime" : "2026-09-24T19:03:39.064503Z",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "market" : "主板",
+      "exchange" : "SZSE",
+      "listStatus" : "L",
+      "listDate" : "19910403",
+      "fullname" : "平安银行股份有限公司",
+      "enname" : "Ping An Bank Co., Ltd.",
+      "cnspell" : "PAYH",
+      "area" : "深圳",
+      "industry" : "银行",
+      "currType" : "CNY",
+      "delistDate" : null,
+      "isHs" : "S",
+      "actName" : "无实际控制人",
+      "actEntType" : "无"
+    } ],
+    "fingerprint" : "0181b4cc4b3f49b52d60bd1147993509346300194ad808ad05f29b60e8b27b04",
+    "bytes" : 409
+  },
+  "first" : {
+    "runId" : "write-group-7667f456-0613-41f5-8b4d-9c40d2f10368",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.stock_detail_info",
+      "childRunId" : "run-88121035-331e-4ce5-b161-766c3af72712",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    } ]
+  },
+  "sourceKind" : "production-readback-copy"
+}

@@ -1,0 +1,9 @@
+# D002 incomplete staging recovery
+
+The explicit finish operation also handles a stopped writer with complete prepared evidence but no publication journal intent. It verifies that the current target's physical identity, all original rows and fingerprint still equal the frozen before snapshot. It retains previous partial stages, writes a fresh uniquely owned stage from the complete saved merge, verifies it, and publishes under the existing retained lease. It never fetches the source again or treats partial staging as complete. If an original target changed, or multiple publication intents exist, the operation refuses to proceed.
+
+The ordinary publisher still rejects uncertain leases. Its separate internal stopped-writer path admits such a lease only after the recovery entrypoint verifies writer termination and absence of a prior intent; normal schema, identity and full-value checks remain in force.
+
+`local-D002-staging-recovery-991b` passed the journal tests and expanded real QuestDB finish-publication test. The new staging case has one preserved fixture row plus one actual Tushare row in the complete two-row plan. An intentionally partial stage contains only the preserved row, with no publication intent; run/attempt/slice are IN_DOUBT. Explicit recovery writes a fresh stage, preserves the old partial stage unchanged, and returns three VERIFIED entries with no lease. The test saves evidence before cleaning up its isolated target, backup and owned partial stage. The PREPARED and OLD_RENAMED cases also pass in the same test.
+
+This is an intentionally constructed partial-stage failure state, not an OS-kill test. Evidence is in the newest `finish-publication-*/finish-readback.json`; distinguish its synthetic preexisting row from the actual provider row. Missing or corrupt complete prepared evidence remains an explicit failure, never an inferred success.

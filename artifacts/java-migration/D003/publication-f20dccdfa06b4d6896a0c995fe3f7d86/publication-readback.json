@@ -1,0 +1,144 @@
+{
+  "injection" : "Error after synchronous old-name rename; not OS process termination",
+  "cases" : [ {
+    "result" : {
+      "publication" : {
+        "intent" : {
+          "id" : "catalog-publication-e32a6eb1-2fff-4a1d-bb4a-b5e5f9dcc467",
+          "dataset" : "index",
+          "runId" : "catalog-publish-false-f20dccdfa06b4d6896a0c995fe3f7d86",
+          "target" : "java_d003_publish_false_f20dccdfa06b4d6896a0c995fe3f7d86",
+          "backup" : "java_index_catalog_backup_dbc34329145940299a0f0bf77669a586",
+          "stage" : "java_index_catalog_stage_64b2e1406f194c7f8e04b1349911efd3",
+          "initialTarget" : "static-v2-317c150fac15faf3daeca41191b77d3dc1d2e97d7973458b0bfcc247d9fe8b91",
+          "originalId" : 2223,
+          "originalDirectory" : "java_d003_publish_false_f20dccdfa06b4d6896a0c995fe3f7d86~2223",
+          "replacementId" : 2224,
+          "beforeFingerprint" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "afterFingerprint" : "f7f30245b6369b871f6bad2887d736d22a4ed851826a6b08b6b68cfb3feb9ed3"
+        },
+        "state" : "VERIFIED",
+        "revision" : 3
+      },
+      "actual" : {
+        "identity" : {
+          "id" : 2224,
+          "directory" : "java_index_catalog_stage_64b2e1406f194c7f8e04b1349911efd3~2224"
+        },
+        "rows" : [ {
+          "indexCode" : "000300",
+          "indexShortName" : "沪深300",
+          "indexFullName" : "沪深300指数",
+          "baseDate" : "2004-12-31",
+          "basePoint" : 1000.0,
+          "indexSeries" : "中证系列指数",
+          "sampleCount" : 300.0,
+          "latestClose" : 4598.32,
+          "return1m" : -6.95,
+          "assetClass" : "股票",
+          "indexHotspot" : null,
+          "currency" : "人民币",
+          "isCooperation" : "否",
+          "hasTrackingProduct" : "是",
+          "complianceStatus" : "IOSCO",
+          "indexCategory" : "规模",
+          "publishDate" : "2005-04-08",
+          "importTime" : "2026-09-29T08:17:32.829981Z"
+        }, {
+          "indexCode" : "000510",
+          "indexShortName" : "中证A500",
+          "indexFullName" : "中证A500指数",
+          "baseDate" : "2004-12-31",
+          "basePoint" : 1000.0,
+          "indexSeries" : "中证系列指数",
+          "sampleCount" : 500.0,
+          "latestClose" : 5622.82,
+          "return1m" : -9.6,
+          "assetClass" : "股票",
+          "indexHotspot" : null,
+          "currency" : "人民币",
+          "isCooperation" : "否",
+          "hasTrackingProduct" : "是",
+          "complianceStatus" : "无",
+          "indexCategory" : "规模",
+          "publishDate" : "2024-09-23",
+          "importTime" : "2026-09-29T08:17:32.829981Z"
+        } ],
+        "fingerprint" : "f7f30245b6369b871f6bad2887d736d22a4ed851826a6b08b6b68cfb3feb9ed3",
+        "bytes" : 918
+      }
+    },
+    "interrupted" : false,
+    "sourceHash" : "ad425d6fe165383e6af0ed698372d94741ab6691f16b5e124435406fe3c7608b"
+  }, {
+    "result" : {
+      "publication" : {
+        "intent" : {
+          "id" : "catalog-publication-a97fa573-dc38-43cc-9b72-2b34e2afb76e",
+          "dataset" : "index",
+          "runId" : "catalog-publish-true-f20dccdfa06b4d6896a0c995fe3f7d86",
+          "target" : "java_d003_publish_true_f20dccdfa06b4d6896a0c995fe3f7d86",
+          "backup" : "java_index_catalog_backup_fb190591794c4fc0a0b6f6e928fd3bd7",
+          "stage" : "java_index_catalog_stage_fe2621f5c4f74bb4b631686191b83ced",
+          "initialTarget" : "static-v2-c5df3067ecc7af30cbde490c948c088f7576c866ebba705f868b2d76961b7a71",
+          "originalId" : 2225,
+          "originalDirectory" : "java_d003_publish_true_f20dccdfa06b4d6896a0c995fe3f7d86~2225",
+          "replacementId" : 2226,
+          "beforeFingerprint" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "afterFingerprint" : "f7f30245b6369b871f6bad2887d736d22a4ed851826a6b08b6b68cfb3feb9ed3"
+        },
+        "state" : "VERIFIED",
+        "revision" : 5
+      },
+      "actual" : {
+        "identity" : {
+          "id" : 2226,
+          "directory" : "java_index_catalog_stage_fe2621f5c4f74bb4b631686191b83ced~2226"
+        },
+        "rows" : [ {
+          "indexCode" : "000300",
+          "indexShortName" : "沪深300",
+          "indexFullName" : "沪深300指数",
+          "baseDate" : "2004-12-31",
+          "basePoint" : 1000.0,
+          "indexSeries" : "中证系列指数",
+          "sampleCount" : 300.0,
+          "latestClose" : 4598.32,
+          "return1m" : -6.95,
+          "assetClass" : "股票",
+          "indexHotspot" : null,
+          "currency" : "人民币",
+          "isCooperation" : "否",
+          "hasTrackingProduct" : "是",
+          "complianceStatus" : "IOSCO",
+          "indexCategory" : "规模",
+          "publishDate" : "2005-04-08",
+          "importTime" : "2026-09-29T08:17:32.829981Z"
+        }, {
+          "indexCode" : "000510",
+          "indexShortName" : "中证A500",
+          "indexFullName" : "中证A500指数",
+          "baseDate" : "2004-12-31",
+          "basePoint" : 1000.0,
+          "indexSeries" : "中证系列指数",
+          "sampleCount" : 500.0,
+          "latestClose" : 5622.82,
+          "return1m" : -9.6,
+          "assetClass" : "股票",
+          "indexHotspot" : null,
+          "currency" : "人民币",
+          "isCooperation" : "否",
+          "hasTrackingProduct" : "是",
+          "complianceStatus" : "无",
+          "indexCategory" : "规模",
+          "publishDate" : "2024-09-23",
+          "importTime" : "2026-09-29T08:17:32.829981Z"
+        } ],
+        "fingerprint" : "f7f30245b6369b871f6bad2887d736d22a4ed851826a6b08b6b68cfb3feb9ed3",
+        "bytes" : 918
+      }
+    },
+    "interrupted" : true,
+    "sourceHash" : "ad425d6fe165383e6af0ed698372d94741ab6691f16b5e124435406fe3c7608b"
+  } ]
+}

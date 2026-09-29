@@ -1,0 +1,73 @@
+{
+  "newSourceRequests" : 0,
+  "writerStoppedProof" : "local-D003-publication-06fc Gradle process returned terminal exit 1 before this recovery",
+  "remainingRenames" : 1,
+  "newRowWrites" : 0,
+  "result" : {
+    "publication" : {
+      "intent" : {
+        "id" : "catalog-publication-06f3147f-3dd2-4e11-a131-32e350d6225e",
+        "dataset" : "index",
+        "runId" : "catalog-publish-true-3b1a3d99393346f6a586106e3d17fad8",
+        "target" : "java_d003_publish_true_3b1a3d99393346f6a586106e3d17fad8",
+        "backup" : "java_index_catalog_backup_d501661171584d6e83620c07981902a9",
+        "stage" : "java_index_catalog_stage_333b285782544a27972c3b866af1d02e",
+        "initialTarget" : "static-v2-6491e5b4f7f50b03b4bb12716e10669972d54acfb90acc4ff1e5997232c09f87",
+        "originalId" : 2213,
+        "originalDirectory" : "java_d003_publish_true_3b1a3d99393346f6a586106e3d17fad8~2213",
+        "replacementId" : 2214,
+        "beforeFingerprint" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "afterFingerprint" : "5f23e8a167df3b127ef1f32e90d3e0357501c5439a7a350bcb403c6b73799c26"
+      },
+      "state" : "VERIFIED",
+      "revision" : 5
+    },
+    "actual" : {
+      "identity" : {
+        "id" : 2214,
+        "directory" : "java_index_catalog_stage_333b285782544a27972c3b866af1d02e~2214"
+      },
+      "rows" : [ {
+        "indexCode" : "000300",
+        "indexShortName" : "沪深300",
+        "indexFullName" : "沪深300指数",
+        "baseDate" : "2004-12-31",
+        "basePoint" : 1000.0,
+        "indexSeries" : "中证系列指数",
+        "sampleCount" : 300.0,
+        "latestClose" : 4598.32,
+        "return1m" : -6.95,
+        "assetClass" : "股票",
+        "indexHotspot" : null,
+        "currency" : "人民币",
+        "isCooperation" : "否",
+        "hasTrackingProduct" : "是",
+        "complianceStatus" : "IOSCO",
+        "indexCategory" : "规模",
+        "publishDate" : "2005-04-08",
+        "importTime" : "2026-09-29T08:14:59.417293Z"
+      }, {
+        "indexCode" : "000510",
+        "indexShortName" : "中证A500",
+        "indexFullName" : "中证A500指数",
+        "baseDate" : "2004-12-31",
+        "basePoint" : 1000.0,
+        "indexSeries" : "中证系列指数",
+        "sampleCount" : 500.0,
+        "latestClose" : 5622.82,
+        "return1m" : -9.6,
+        "assetClass" : "股票",
+        "indexHotspot" : null,
+        "currency" : "人民币",
+        "isCooperation" : "否",
+        "hasTrackingProduct" : "是",
+        "complianceStatus" : "无",
+        "indexCategory" : "规模",
+        "publishDate" : "2024-09-23",
+        "importTime" : "2026-09-29T08:14:59.417293Z"
+      } ],
+      "fingerprint" : "5f23e8a167df3b127ef1f32e90d3e0357501c5439a7a350bcb403c6b73799c26",
+      "bytes" : 918
+    }
+  }
+}

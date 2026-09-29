@@ -1,0 +1,57 @@
+{
+  "passed" : true,
+  "effectiveEndpointPerMinute" : 10,
+  "sourceRows" : 8,
+  "pages" : [ {
+    "exchange" : "SSE",
+    "sourceFingerprint" : "99ea31529f18051df05f32dea6055d8f3c23f1938f7c5074041d1d425da6b091",
+    "rows" : [ {
+      "exchange" : "SSE",
+      "calendarDate" : "2026-09-25",
+      "open" : false,
+      "previousTradeDate" : "2026-09-24"
+    }, {
+      "exchange" : "SSE",
+      "calendarDate" : "2026-09-26",
+      "open" : false,
+      "previousTradeDate" : "2026-09-24"
+    }, {
+      "exchange" : "SSE",
+      "calendarDate" : "2026-09-27",
+      "open" : false,
+      "previousTradeDate" : "2026-09-24"
+    }, {
+      "exchange" : "SSE",
+      "calendarDate" : "2026-09-28",
+      "open" : true,
+      "previousTradeDate" : "2026-09-24"
+    } ],
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D001\\source-84aebc9e-ed57-4d0a-88d9-524e7c52b9a3\\source-8c4bddda-ff24-4c14-8ef9-c4f9a64442be.json"
+  }, {
+    "exchange" : "SZSE",
+    "sourceFingerprint" : "017a719626110f02d1fa99cc74c96b5515ef0dd7b74af360dedb82bd9cf46011",
+    "rows" : [ {
+      "exchange" : "SZSE",
+      "calendarDate" : "2026-09-25",
+      "open" : false,
+      "previousTradeDate" : "2026-09-24"
+    }, {
+      "exchange" : "SZSE",
+      "calendarDate" : "2026-09-26",
+      "open" : false,
+      "previousTradeDate" : "2026-09-24"
+    }, {
+      "exchange" : "SZSE",
+      "calendarDate" : "2026-09-27",
+      "open" : false,
+      "previousTradeDate" : "2026-09-24"
+    }, {
+      "exchange" : "SZSE",
+      "calendarDate" : "2026-09-28",
+      "open" : true,
+      "previousTradeDate" : "2026-09-24"
+    } ],
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D001\\source-84aebc9e-ed57-4d0a-88d9-524e7c52b9a3\\source-59954ec8-9b83-4fea-9e8b-483d5f3767b7.json"
+  } ],
+  "writes" : 0
+}

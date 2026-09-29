@@ -83,6 +83,18 @@ public final class DatasetIntervalLock {
         } catch (SQLException failure) { throw new IllegalStateException("Cannot acquire interval lock", failure); }
     }
 
+    public Lease findOwned(String runId,Scope scope) {
+        Objects.requireNonNull(runId);Objects.requireNonNull(scope);
+        try(var db=open();var query=db.prepareStatement("SELECT id,in_doubt FROM sync_interval_locks WHERE run_id=? AND dataset_id=? AND from_day=? AND to_day=?")) {
+            query.setString(1,runId);query.setString(2,scope.datasetId());query.setLong(3,scope.from().toEpochDay());query.setLong(4,scope.to().toEpochDay());
+            try(var rows=query.executeQuery()) {
+                if(!rows.next()) return null;
+                var lease=new Lease(rows.getString(1),runId,scope,rows.getInt(2)!=0);
+                if(rows.next()) throw new IllegalStateException("Multiple owned leases for the same scope");
+                return lease;
+            }
+        } catch(SQLException failure) { throw new IllegalStateException("Cannot read owned interval lock",failure); }
+    }
     /** Unknown transport outcome keeps the lock until explicit reconciliation. */
     public void retainInDoubt(Lease lease) {
         change(lease, false, false);

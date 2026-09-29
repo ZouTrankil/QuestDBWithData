@@ -1,0 +1,98 @@
+{
+  "task_id": "F017",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": null,
+  "attempt_id": null,
+  "logical_date": "2026-09-29",
+  "started_at": null,
+  "finished_at": "2026-09-29T04:57:13.218973+00:00",
+  "target": {
+    "target_id": null,
+    "database_version": null,
+    "table": null,
+    "isolated": null
+  },
+  "incremental": {
+    "mode": "N/A CLI control layer; execution retains each frozen job mode",
+    "request_window": "Explicit windows/logical date validated; no new data sync in F017",
+    "revision_overlap": "Owned by dataset runner",
+    "checkpoint_before": "N/A",
+    "checkpoint_after": "N/A"
+  },
+  "source": {
+    "provider": "N/A CLI control",
+    "endpoint": null,
+    "request_evidence": null,
+    "response_evidence": null,
+    "returned_rows": 0,
+    "normalized_rows": 0,
+    "rejected_rows": 0,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": 0,
+    "inserted_rows": 0,
+    "updated_rows": 0,
+    "unchanged_rows": 0,
+    "acknowledged": null,
+    "delivery_status": "No new business writes; control cancellation persisted and reopened"
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/F016/21766a9c38434835abd627e069706fcd/independent-values.json (reused prior runner evidence, not F017 write)",
+    "business_keys": [],
+    "compared_columns": [],
+    "actual_rows": null,
+    "matched_rows": null,
+    "mismatched_rows": null,
+    "duplicate_keys": null,
+    "missing_keys": null,
+    "value_digest": null,
+    "passed": null,
+    "applicability": "N/A: F017 adds CLI control and inspection; linked QuestDB readback belongs to the prior F016 runner acceptance"
+  },
+  "checks": {
+    "nonempty_source_write_read": null,
+    "idempotent_rerun": null,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": null,
+    "resume": true,
+    "cancel": true,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/F017/final-review.md",
+    "artifacts/java-migration/F017/process-output-review.md",
+    "var/local-F017-full-a817-build/test-results/test",
+    "var/local-F017-final-build/test-results/test",
+    "var/local-F017-cancel-final-657b-build/test-results/test",
+    "docs/migration-tasks-20260929/results/F013.json",
+    "docs/migration-tasks-20260929/results/F015.json",
+    "docs/migration-tasks-20260929/results/F016.json"
+  ],
+  "attempt_history": [],
+  "next_manual_comparison": "Check requirement matrix and XML evidence. Inspect exit codes 0/1/2/3, JSON status distinctions, read-only history and cancellationRequested versus actual run state. Prior live evidence is explicitly reused; no new F017 source counts. Human review remains pending.",
+  "validation_scope": "CLI planning/control/inspection and routed execution; actual SQLite plus child JVMs. Prior runner source/QuestDB evidence reused under functional-task contract.",
+  "regression": {
+    "tests": 189,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 8,
+    "passed": 181,
+    "latest_suite": "var/local-F017-final-build/test-results/test"
+  },
+  "final_control_checks": {
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

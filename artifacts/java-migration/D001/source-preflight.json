@@ -1,0 +1,13 @@
+{
+  "checkedAtLocalDate": "2026-09-29",
+  "endpoint": "trade_cal",
+  "request": {"exchange": "SSE", "start_date": "20260901", "end_date": "20260903", "fields": "exchange,cal_date,is_open,pretrade_date"},
+  "responseCode": 0,
+  "fields": ["exchange", "cal_date", "is_open", "pretrade_date"],
+  "items": [
+    ["SSE", "20260903", 1, "20260902"],
+    ["SSE", "20260902", 1, "20260901"],
+    ["SSE", "20260901", 1, "20260831"]
+  ],
+  "note": "Read-only bounded source preflight. No credential retained. Not Java sync or QuestDB write evidence."
+}

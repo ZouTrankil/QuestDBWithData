@@ -1,0 +1,13 @@
+# D003 index catalog owner and physical baseline
+
+The live table `index` has 18 columns, designated `import_time`, MONTH partitions, WAL enabled and no physical deduplication key. Read-only QuestDB audit found 2,274 rows and 2,274 unique `index_code` values; every row has import time 2026-04-02T13:14:45.221299Z. The bounded full baseline and exact queries are in physical-baseline.json. No data was written.
+
+The suggested index_market_sync.py is not this table's owner: it writes index_daily, index_daily_basic and macro_bond_yield. The Python model guide explicitly identifies `index` as a CSV catalog import whose temporary script was removed. Read-only Git inspection recovered the source of `scripts/import/import_index_catalog.py` at parent of removal commit ccffc7801 (last modification 870361a265242ba82a1f2c7ef543909f999647fc, 2026-07-16). Its contract maps 17 Chinese CSV headings, preserves numeric-code leading zeros, uses index_code as business identity, adds local import time and inserts only previously absent codes. Numeric parsing silently coerced malformed values and duplicate keys were silently dropped; the Java boundary should reject ambiguity instead. Do not restore that old Python entrypoint.
+
+A matching user-owned source candidate exists at `C:/Users/zouqiang/Downloads/指数列表.xlsx`. SHA-256: `4f8f19dc855e94fe9aa48d16712232c8e411b573ff8140c8bc69b47f6f7004eb`. Its exact 17 headers match the removed importer. Its declared worksheet dimension is incorrectly A1:A1; reading actual XML-backed cells yields 2,343 data rows, 17 columns and 2,343 unique codes. Codes include H-prefixed alphanumeric values, so stock-code suffix rules must not be reused.
+
+tools/prepare_index_catalog_source.py extracted bounded UTF-8 source-catalog.csv with file hashes and lineage in source-provenance.json. The XLSX file was read only. This does not prove it is the exact file used for the April import. Comparison finds 529 source-only codes and 460 target-only codes, with 1,814 overlapping codes. Missing source identities must not trigger implicit deletion.
+
+Semantic constraints: base_date and publish_date are business dates; import_time is an ingestion observation instant. latest_close and return_1m are values supplied by the catalog with no declared market as-of date. A new ingestion time does not make those values current market observations. Existing WAL/MONTH/no-dedup facts and the natural code identity must be reconciled explicitly before implementing idempotent writes.
+
+D003 is running. Java domain, source file contract, typed read/write, bounded incremental task and live write acceptance remain to implement. The physical table is not a Tushare stock_basic or index_daily substitute.
