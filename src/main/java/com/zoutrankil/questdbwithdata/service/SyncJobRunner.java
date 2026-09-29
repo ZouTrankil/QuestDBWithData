@@ -34,6 +34,8 @@ public final class SyncJobRunner<T, K> {
         SourceCompletion fetch(FrozenRequest request, PageConsumer<T> consumer, BooleanSupplier cancelled) throws Exception;
         VerifiedBatchExecutor.Codec<T, K> codec();
         VerifiedBatchExecutor.Port<T, K> port();
+        /** True when the dataset has a durable side effect that needs explicit reconciliation before retry. */
+        default boolean recoveryRequired(String runId) throws Exception { return false; }
     }
     private final SyncRunLedger ledger;
     private final DatasetIntervalLock locks;
@@ -115,21 +117,56 @@ public final class SyncJobRunner<T, K> {
         } catch (Exception failure) {
             // A submitted or unrecorded outcome retains exclusion; elapsed time never releases a writer.
             boolean uncertain = progress.uncertain;
+            boolean recoveryRequired = false;
+            try {
+                recoveryRequired = adapter.recoveryRequired(runId);
+                uncertain |= recoveryRequired;
+            } catch (Exception recoveryCheckFailure) {
+                recoveryRequired = true;
+                uncertain = true;
+                failure.addSuppressed(recoveryCheckFailure);
+            }
             var state = uncertain ? SyncRunState.IN_DOUBT : failure instanceof CancellationException
                     ? SyncRunState.CANCELLED : progress.verifiedRows > 0 ? SyncRunState.PARTIAL : SyncRunState.FAILED;
-            try {
-                if (progress.currentSlice != null) finishFailure(progress.currentSlice,
-                        uncertain ? SyncRunState.IN_DOUBT : failure instanceof CancellationException
-                                ? SyncRunState.CANCELLED : SyncRunState.FAILED, failure);
-                for (String emptySlice : progress.emptySlices) finishFailure(emptySlice,
-                        SyncRunState.FAILED, failure);
-                finishFailure(attempt, state, failure);
-                finishFailure(runId, state, failure);
-            } catch (Exception persistenceFailure) {
+            if (progress.currentSlice != null) {
+                try {
+                    finishFailure(progress.currentSlice,
+                            uncertain ? SyncRunState.IN_DOUBT : failure instanceof CancellationException
+                                    ? SyncRunState.CANCELLED : SyncRunState.FAILED, failure);
+                } catch (Exception persistenceFailure) {
+                    uncertain = true;
+                    failure.addSuppressed(persistenceFailure);
+                }
+            }
+            for (String emptySlice : progress.emptySlices) {
+                try { finishFailure(emptySlice, recoveryRequired ? SyncRunState.IN_DOUBT : SyncRunState.FAILED, failure); }
+                catch (Exception persistenceFailure) {
+                    uncertain = true;
+                    failure.addSuppressed(persistenceFailure);
+                }
+            }
+            // Preserve FETCHED/VALIDATED slices when IN_DOUBT is not a legal slice transition,
+            // but always try to put the owning attempt and run in doubt independently.
+            SyncRunState ownerState = uncertain ? SyncRunState.IN_DOUBT : state;
+            try { finishFailure(attempt, ownerState, failure); }
+            catch (Exception persistenceFailure) {
                 uncertain = true;
                 failure.addSuppressed(persistenceFailure);
             }
-            if (uncertain) locks.retainInDoubt(lease); else locks.releaseVerified(lease);
+            ownerState = uncertain ? SyncRunState.IN_DOUBT : state;
+            try { finishFailure(runId, ownerState, failure); }
+            catch (Exception persistenceFailure) {
+                uncertain = true;
+                failure.addSuppressed(persistenceFailure);
+            }
+            if (uncertain) {
+                // A publication adapter may already have retained this same lease while recording
+                // its durable journal. Re-read ownership before applying the idempotent outcome.
+                var currentLease = locks.findOwned(runId, lease.scope());
+                if (currentLease == null || !currentLease.id().equals(lease.id()))
+                    throw new IllegalStateException("Uncertain run no longer owns its original interval lease", failure);
+                if (!currentLease.inDoubt()) locks.retainInDoubt(currentLease);
+            } else locks.releaseVerified(lease);
             if (uncertain) state = SyncRunState.IN_DOUBT;
             return new Result(runId, state, progress.sourceRows, progress.verifiedRows, failure.getClass().getSimpleName(),progress.reusedRows);
         }
@@ -234,8 +271,13 @@ public final class SyncJobRunner<T, K> {
     }
     private void finishFailure(String id, SyncRunState state, Exception failure) throws Exception {
         var entry = ledger.get(id);
-        if (!entry.state().terminal() && entry.state() != SyncRunState.IN_DOUBT)
+        if (entry.state().terminal() || entry.state() == SyncRunState.IN_DOUBT) return;
+        if (state == SyncRunState.IN_DOUBT && !canTransitionToInDoubt(entry.state())) return;
+        if (!entry.state().terminal())
             ledger.transition(id, entry.revision(), state, error(failure));
+    }
+    private static boolean canTransitionToInDoubt(SyncRunState state) {
+        return Set.of(SyncRunState.RUNNING, SyncRunState.SUBMITTED, SyncRunState.ACKNOWLEDGED).contains(state);
     }
     private String error(Exception failure) throws Exception { return json.writeValueAsString(Map.of("errorCode", failure.getClass().getSimpleName())); }
     private static void check(BooleanSupplier stopped) {

@@ -1,0 +1,18 @@
+{
+  "task": "D018",
+  "runId": "etf-portfolio-74014c5e-30f5-4f29-8491-7749a2939ba1",
+  "table": "java_d018_etf_portfolio_42b6918526914b0493ce038f36670171",
+  "ledger": "artifacts/java-migration/market-live-42b6918526914b0493ce038f36670171/sync-ledger.sqlite",
+  "ledgerState": "IN_DOUBT",
+  "ledgerFailure": "Unknown write outcome after 250-row runner batch reached D018 200-row guard before QWP send",
+  "sourceRows": 10000,
+  "submittedRows": 250,
+  "verifiedRows": 0,
+  "isolatedRowsAfterReadOnlySelect": 0,
+  "readbackQuery": "SELECT count() AS rows FROM \"java_d018_etf_portfolio_42b6918526914b0493ce038f36670171\"",
+  "readbackEndpoint": "http://127.0.0.1:9000/exec",
+  "formalTableMutated": false,
+  "ledgerMutated": false,
+  "readOnlyPhysicalReadback": true,
+  "recoveryAdvice": "Keep the IN_DOUBT ledger and its interval lease unchanged. Do not resume/replay against this target; coordinator should use a fresh isolated table and frozen target identity after recompiling the 250-row D018 port fix."
+}

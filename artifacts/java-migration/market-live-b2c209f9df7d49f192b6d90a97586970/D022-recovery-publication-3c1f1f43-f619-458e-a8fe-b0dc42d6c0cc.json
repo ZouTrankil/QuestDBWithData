@@ -1,0 +1,509 @@
+{
+  "task" : "D022",
+  "table" : "java_d022_index_monthly_b2c209f9df7d49f192b6d90a97586970",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-b2c209f9df7d49f192b6d90a97586970\\sync-ledger.sqlite",
+  "action" : "publication",
+  "startedAt" : "2026-09-29T22:07:03.415320600Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "sha256" : "d80a4bf630704756faa19352ef4324370dc9df0260564d4f78c8d4e95ef9ec62",
+    "rows" : 9,
+    "duplicateKeys" : 0
+  },
+  "plan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.index_monthly",
+        "version" : 1,
+        "datasetId" : "index_monthly",
+        "datasetVersion" : 1,
+        "owner" : "index_monthly_owner",
+        "supportedModes" : [ "BACKFILL", "RECONCILE", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "tsCode" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ "932430.SH", "000918.SH", "000047.SH", "932400.SH", "000920.SH", "930846.SH", "000985.SH", "000993.SH", "930740.SH", "931155.SH", "930697.SH", "932494.SH", "930910.SH", "931847.SH", "000992.SH", "000984.SH", "930782.SH", "000989.SH", "000510.SH", "000991.SH", "399975.SZ", "931932.SH", "931375.SH", "931775.SH", "000829.SH", "000831.SH", "000988.SH", "932403.SH", "000990.SH", "000982.SH", "931931.SH", "000852.SH", "932432.SH", "932497.SH", "000828.SH", "932391.SH", "931528.SH", "000300.SH", "000987.SH", "000822.SH", "000995.SH", "000830.SH", "931936.SH", "932402.SH", "000906.SH", "932431.SH", "930985.SH", "000919.SH", "000821.SH", "000994.SH", "932401.SH", "931935.SH", "000921.SH", "000905.SH", "000986.SH" ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 32,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "index_monthly.month_window",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 3660,
+          "maxSlices" : 1,
+          "maxPages" : 1,
+          "maxRows" : 1000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 92,
+        "dependencies" : [ {
+          "jobId" : "data.index",
+          "version" : 1
+        } ],
+        "frequency" : "MONTHLY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : false
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "observedAt" : "2026-09-29T22:03:20.837428Z",
+        "physicalTargetId" : "static-v2-b38dfb6248a80a7c2d73bdeff28f4fe496d5fb5e052f2662e732238652c42ecd",
+        "targetId" : "static-v2-f163873b7c29ab18a61d6243af3765bc85c5f19310d9bb08a3a1fd0d5d2dbeef",
+        "targetMaxBefore" : "2026-08-31",
+        "targetMinBefore" : "2026-06-30",
+        "tsCode" : "000300.SH"
+      },
+      "from" : "2026-06-01",
+      "to" : "2026-07-31",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-f163873b7c29ab18a61d6243af3765bc85c5f19310d9bb08a3a1fd0d5d2dbeef",
+    "physicalTargetId" : "static-v2-b38dfb6248a80a7c2d73bdeff28f4fe496d5fb5e052f2662e732238652c42ecd",
+    "tsCode" : "000300.SH",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : null,
+    "physicalRange" : {
+      "min" : "2026-06-30",
+      "max" : "2026-08-31"
+    },
+    "bootstrap" : false
+  },
+  "beforeRecovery" : {
+    "runId" : "monthly-publication-85a92d17-0ad5-4e40-8765-42696196d833",
+    "state" : "IN_DOUBT",
+    "sourceRows" : 2,
+    "verifiedRows" : 0,
+    "errorCode" : "IllegalStateException",
+    "reusedRows" : 0
+  },
+  "faultFired" : true,
+  "finish" : {
+    "entry" : {
+      "intent" : {
+        "id" : "index-monthly-publication-0433bfc0-f0be-4063-b294-6e53a29ff6c3",
+        "dataset" : "index_monthly",
+        "runId" : "monthly-publication-85a92d17-0ad5-4e40-8765-42696196d833",
+        "target" : "java_d022_index_monthly_b2c209f9df7d49f192b6d90a97586970",
+        "backup" : "java_d022_index_monthly_backup_fbbc9d61ac1544b08c0b09b1eec6fd85",
+        "stage" : "java_d022_index_monthly_stage_bca74fe7d9664d2b9801bb77ec8af3ec",
+        "initialTarget" : "static-v2-b38dfb6248a80a7c2d73bdeff28f4fe496d5fb5e052f2662e732238652c42ecd",
+        "originalId" : 2971,
+        "originalDirectory" : "java_d022_index_monthly_stage_12a5bd53853d4493a20d15dda455318b~2971",
+        "replacementId" : 2972,
+        "beforeFingerprint" : "3c91ff91e76954e7ab92e9c6d49e90a00febdd77dfb49de3809981aa0593acc6",
+        "afterFingerprint" : "3c91ff91e76954e7ab92e9c6d49e90a00febdd77dfb49de3809981aa0593acc6",
+        "scope" : "{\"code\":\"000300.SH\",\"sourceReceipt\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\artifacts\\\\java-migration\\\\market-live-b2c209f9df7d49f192b6d90a97586970\\\\sync-evidence\\\\monthly-publication-85a92d17-0ad5-4e40-8765-42696196d833\\\\source\\\\index-monthly-000300-SH-20260601-20260731-6d7fceeb-ad5d-4889-925f-dbbdc378eaea.json\",\"stageDirectory\":\"java_d022_index_monthly_stage_bca74fe7d9664d2b9801bb77ec8af3ec~2972\",\"toInclusive\":\"2026-07-31\",\"fromInclusive\":\"2026-06-01\",\"sourceFingerprint\":\"58f6a9529165e9e40465633bb8d23de1fc2d5a99ffd20d05caf506a0ee8a705c\",\"stageReceipt\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\artifacts\\\\java-migration\\\\market-live-b2c209f9df7d49f192b6d90a97586970\\\\sync-evidence\\\\monthly-publication-85a92d17-0ad5-4e40-8765-42696196d833\\\\stage\\\\java_d022_index_monthly_stage_bca74fe7d9664d2b9801bb77ec8af3ec-verified.json\",\"stageReceiptFingerprint\":\"aa3b3b0b9d73a3dac00587ddc09ce353aa6ec2db76487a364e2b674ee657edfe\"}"
+      },
+      "state" : "VERIFIED",
+      "revision" : 5
+    },
+    "layout" : "PUBLISHED",
+    "target" : {
+      "identity" : {
+        "id" : 2972,
+        "directory" : "java_d022_index_monthly_stage_bca74fe7d9664d2b9801bb77ec8af3ec~2972",
+        "writerTxn" : 3
+      },
+      "rows" : [ {
+        "key" : {
+          "tsCode" : "000300.SH",
+          "tradeDate" : "2026-06-30"
+        },
+        "close" : 4979.4328,
+        "open" : 4897.8968,
+        "high" : 5064.2654,
+        "low" : 4677.5682,
+        "preClose" : 4892.1213,
+        "change" : 87.3115,
+        "pctChg" : 0.0178,
+        "vol" : 6.420768346E11,
+        "amount" : 1.8826130244804E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:20.837428Z"
+      }, {
+        "key" : {
+          "tsCode" : "000985.SH",
+          "tradeDate" : "2026-06-30"
+        },
+        "close" : 6551.6166,
+        "open" : 6367.4514,
+        "high" : 6626.3862,
+        "low" : 6061.3887,
+        "preClose" : 6368.8357,
+        "change" : 182.7809,
+        "pctChg" : 0.0287,
+        "vol" : 2.88978736619E12,
+        "amount" : 6.404287007372E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:44.810244Z"
+      }, {
+        "key" : {
+          "tsCode" : "399975.SZ",
+          "tradeDate" : "2026-06-30"
+        },
+        "close" : 785.569,
+        "open" : 724.2472,
+        "high" : 813.2866,
+        "low" : 697.8528,
+        "preClose" : 725.5921,
+        "change" : 59.9769,
+        "pctChg" : 0.0827,
+        "vol" : 8.5739250986E10,
+        "amount" : 1.041528799333E12,
+        "layer" : "industry_macro_map",
+        "bucket" : "macro_sensitive",
+        "updateTime" : "2026-09-29T22:04:09.101758Z"
+      }, {
+        "key" : {
+          "tsCode" : "000300.SH",
+          "tradeDate" : "2026-07-31"
+        },
+        "close" : 4588.1968,
+        "open" : 4972.6923,
+        "high" : 5017.3754,
+        "low" : 4478.2093,
+        "preClose" : 4979.4328,
+        "change" : -391.236,
+        "pctChg" : -0.0786,
+        "vol" : 6.407196789E11,
+        "amount" : 1.9851515758024E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:20.837428Z"
+      }, {
+        "key" : {
+          "tsCode" : "000985.SH",
+          "tradeDate" : "2026-07-31"
+        },
+        "close" : 5681.2411,
+        "open" : 6552.9988,
+        "high" : 6622.2241,
+        "low" : 5510.4002,
+        "preClose" : 6551.6166,
+        "change" : -870.3755,
+        "pctChg" : -0.1328,
+        "vol" : 2.875348162162E12,
+        "amount" : 6.008026814223E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:44.810244Z"
+      }, {
+        "key" : {
+          "tsCode" : "399975.SZ",
+          "tradeDate" : "2026-07-31"
+        },
+        "close" : 771.1732,
+        "open" : 784.9391,
+        "high" : 832.3297,
+        "low" : 755.3337,
+        "preClose" : 785.569,
+        "change" : -14.3958,
+        "pctChg" : -0.0183,
+        "vol" : 7.9403421824E10,
+        "amount" : 9.585618623956E11,
+        "layer" : "industry_macro_map",
+        "bucket" : "macro_sensitive",
+        "updateTime" : "2026-09-29T22:04:09.101758Z"
+      }, {
+        "key" : {
+          "tsCode" : "000300.SH",
+          "tradeDate" : "2026-08-31"
+        },
+        "close" : 4625.0862,
+        "open" : 4561.817,
+        "high" : 4744.0054,
+        "low" : 4523.0229,
+        "preClose" : 4588.1968,
+        "change" : 36.8894,
+        "pctChg" : 0.008,
+        "vol" : 4.433259981E11,
+        "amount" : 1.324669851027E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:20.837428Z"
+      }, {
+        "key" : {
+          "tsCode" : "000985.SH",
+          "tradeDate" : "2026-08-31"
+        },
+        "close" : 5969.3257,
+        "open" : 5656.9116,
+        "high" : 6124.0141,
+        "low" : 5632.602,
+        "preClose" : 5681.2411,
+        "change" : 288.0846,
+        "pctChg" : 0.0507,
+        "vol" : 2.360524497539E12,
+        "amount" : 4.549140336113E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:44.810244Z"
+      }, {
+        "key" : {
+          "tsCode" : "399975.SZ",
+          "tradeDate" : "2026-08-31"
+        },
+        "close" : 769.0488,
+        "open" : 764.6936,
+        "high" : 776.4061,
+        "low" : 734.2864,
+        "preClose" : 771.1732,
+        "change" : -2.1244,
+        "pctChg" : -0.0028,
+        "vol" : 4.700677165E10,
+        "amount" : 5.274305887702E11,
+        "layer" : "industry_macro_map",
+        "bucket" : "macro_sensitive",
+        "updateTime" : "2026-09-29T22:04:09.101758Z"
+      } ],
+      "fingerprint" : "3c91ff91e76954e7ab92e9c6d49e90a00febdd77dfb49de3809981aa0593acc6",
+      "bytes" : 2822
+    },
+    "backup" : {
+      "identity" : {
+        "id" : 2971,
+        "directory" : "java_d022_index_monthly_stage_12a5bd53853d4493a20d15dda455318b~2971",
+        "writerTxn" : 4
+      },
+      "rows" : [ {
+        "key" : {
+          "tsCode" : "000300.SH",
+          "tradeDate" : "2026-06-30"
+        },
+        "close" : 4979.4328,
+        "open" : 4897.8968,
+        "high" : 5064.2654,
+        "low" : 4677.5682,
+        "preClose" : 4892.1213,
+        "change" : 87.3115,
+        "pctChg" : 0.0178,
+        "vol" : 6.420768346E11,
+        "amount" : 1.8826130244804E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:20.837428Z"
+      }, {
+        "key" : {
+          "tsCode" : "000985.SH",
+          "tradeDate" : "2026-06-30"
+        },
+        "close" : 6551.6166,
+        "open" : 6367.4514,
+        "high" : 6626.3862,
+        "low" : 6061.3887,
+        "preClose" : 6368.8357,
+        "change" : 182.7809,
+        "pctChg" : 0.0287,
+        "vol" : 2.88978736619E12,
+        "amount" : 6.404287007372E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:44.810244Z"
+      }, {
+        "key" : {
+          "tsCode" : "399975.SZ",
+          "tradeDate" : "2026-06-30"
+        },
+        "close" : 785.569,
+        "open" : 724.2472,
+        "high" : 813.2866,
+        "low" : 697.8528,
+        "preClose" : 725.5921,
+        "change" : 59.9769,
+        "pctChg" : 0.0827,
+        "vol" : 8.5739250986E10,
+        "amount" : 1.041528799333E12,
+        "layer" : "industry_macro_map",
+        "bucket" : "macro_sensitive",
+        "updateTime" : "2026-09-29T22:04:09.101758Z"
+      }, {
+        "key" : {
+          "tsCode" : "000300.SH",
+          "tradeDate" : "2026-07-31"
+        },
+        "close" : 4588.1968,
+        "open" : 4972.6923,
+        "high" : 5017.3754,
+        "low" : 4478.2093,
+        "preClose" : 4979.4328,
+        "change" : -391.236,
+        "pctChg" : -0.0786,
+        "vol" : 6.407196789E11,
+        "amount" : 1.9851515758024E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:20.837428Z"
+      }, {
+        "key" : {
+          "tsCode" : "000985.SH",
+          "tradeDate" : "2026-07-31"
+        },
+        "close" : 5681.2411,
+        "open" : 6552.9988,
+        "high" : 6622.2241,
+        "low" : 5510.4002,
+        "preClose" : 6551.6166,
+        "change" : -870.3755,
+        "pctChg" : -0.1328,
+        "vol" : 2.875348162162E12,
+        "amount" : 6.008026814223E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:44.810244Z"
+      }, {
+        "key" : {
+          "tsCode" : "399975.SZ",
+          "tradeDate" : "2026-07-31"
+        },
+        "close" : 771.1732,
+        "open" : 784.9391,
+        "high" : 832.3297,
+        "low" : 755.3337,
+        "preClose" : 785.569,
+        "change" : -14.3958,
+        "pctChg" : -0.0183,
+        "vol" : 7.9403421824E10,
+        "amount" : 9.585618623956E11,
+        "layer" : "industry_macro_map",
+        "bucket" : "macro_sensitive",
+        "updateTime" : "2026-09-29T22:04:09.101758Z"
+      }, {
+        "key" : {
+          "tsCode" : "000300.SH",
+          "tradeDate" : "2026-08-31"
+        },
+        "close" : 4625.0862,
+        "open" : 4561.817,
+        "high" : 4744.0054,
+        "low" : 4523.0229,
+        "preClose" : 4588.1968,
+        "change" : 36.8894,
+        "pctChg" : 0.008,
+        "vol" : 4.433259981E11,
+        "amount" : 1.324669851027E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:20.837428Z"
+      }, {
+        "key" : {
+          "tsCode" : "000985.SH",
+          "tradeDate" : "2026-08-31"
+        },
+        "close" : 5969.3257,
+        "open" : 5656.9116,
+        "high" : 6124.0141,
+        "low" : 5632.602,
+        "preClose" : 5681.2411,
+        "change" : 288.0846,
+        "pctChg" : 0.0507,
+        "vol" : 2.360524497539E12,
+        "amount" : 4.549140336113E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T22:03:44.810244Z"
+      }, {
+        "key" : {
+          "tsCode" : "399975.SZ",
+          "tradeDate" : "2026-08-31"
+        },
+        "close" : 769.0488,
+        "open" : 764.6936,
+        "high" : 776.4061,
+        "low" : 734.2864,
+        "preClose" : 771.1732,
+        "change" : -2.1244,
+        "pctChg" : -0.0028,
+        "vol" : 4.700677165E10,
+        "amount" : 5.274305887702E11,
+        "layer" : "industry_macro_map",
+        "bucket" : "macro_sensitive",
+        "updateTime" : "2026-09-29T22:04:09.101758Z"
+      } ],
+      "fingerprint" : "3c91ff91e76954e7ab92e9c6d49e90a00febdd77dfb49de3809981aa0593acc6",
+      "bytes" : 2822
+    }
+  },
+  "durableStateAfter" : "VERIFIED",
+  "independentReadback" : {
+    "mismatches" : 0,
+    "formalTableMutated" : false,
+    "status" : "MATCHED",
+    "duplicates" : 0,
+    "passed" : true,
+    "rows" : 2,
+    "runId" : "monthly-publication-85a92d17-0ad5-4e40-8765-42696196d833",
+    "missing" : 0,
+    "extra" : 0,
+    "comparedColumns" : [ "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount", "layer", "bucket", "update_time" ],
+    "expectedRows" : 2
+  },
+  "after" : {
+    "sha256" : "d80a4bf630704756faa19352ef4324370dc9df0260564d4f78c8d4e95ef9ec62",
+    "rows" : 9,
+    "duplicateKeys" : 0
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T22:07:30.261752200Z"
+}

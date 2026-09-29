@@ -1,0 +1,140 @@
+{
+  "task" : "D022",
+  "table" : "java_d022_index_monthly_559311fe9faf42939030a0bdaca70e5f",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-559311fe9faf42939030a0bdaca70e5f\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T21:56:34.409028600Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "targetId" : "static-v2-2bc0fbe9edf526d8545d7d3e6c8d0b7a488b60bc8f065fa82f619d8f41d95e13",
+  "routes" : [ {
+    "requestedCode" : "000300.SH",
+    "runs" : [ ],
+    "independentReadbacks" : [ ],
+    "initialPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_monthly",
+          "version" : 1,
+          "datasetId" : "index_monthly",
+          "datasetVersion" : 1,
+          "owner" : "index_monthly_owner",
+          "supportedModes" : [ "RECONCILE", "INCREMENTAL", "BACKFILL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "physicalTargetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000822.SH", "000987.SH", "000300.SH", "931528.SH", "932391.SH", "000828.SH", "932497.SH", "932432.SH", "000852.SH", "931931.SH", "000982.SH", "000990.SH", "932403.SH", "000988.SH", "000831.SH", "000829.SH", "931775.SH", "931375.SH", "931932.SH", "399975.SZ", "000991.SH", "000510.SH", "000989.SH", "930782.SH", "000984.SH", "000992.SH", "931847.SH", "930910.SH", "932494.SH", "930697.SH", "931155.SH", "930740.SH", "000993.SH", "000985.SH", "930846.SH", "000920.SH", "932400.SH", "000047.SH", "000918.SH", "932430.SH", "000986.SH", "000905.SH", "000921.SH", "931935.SH", "932401.SH", "000994.SH", "000821.SH", "000919.SH", "930985.SH", "932431.SH", "000906.SH", "932402.SH", "931936.SH", "000830.SH", "000995.SH" ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "observedAt" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 32,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_monthly.month_window",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 3660,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 1000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 92,
+          "dependencies" : [ {
+            "jobId" : "data.index",
+            "version" : 1
+          } ],
+          "frequency" : "MONTHLY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : false
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-06-01",
+          "observedAt" : "2026-09-29T21:56:39.291104Z",
+          "physicalTargetId" : "static-v2-17ec6e20ada6c1f8241857c49aaa860fc275930886d3a9bb749ed2dee14a351b",
+          "targetId" : "static-v2-2bc0fbe9edf526d8545d7d3e6c8d0b7a488b60bc8f065fa82f619d8f41d95e13",
+          "tsCode" : "000300.SH"
+        },
+        "from" : "2026-06-01",
+        "to" : "2026-07-31",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-2bc0fbe9edf526d8545d7d3e6c8d0b7a488b60bc8f065fa82f619d8f41d95e13",
+      "physicalTargetId" : "static-v2-17ec6e20ada6c1f8241857c49aaa860fc275930886d3a9bb749ed2dee14a351b",
+      "tsCode" : "000300.SH",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-06-01",
+      "physicalRange" : {
+        "min" : null,
+        "max" : null
+      },
+      "bootstrap" : true
+    },
+    "providerCode" : "000300.SH",
+    "otherCodesBefore" : {
+      "sha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "duplicateKeys" : 0,
+      "rows" : 0
+    }
+  } ],
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: Nonempty monthly verified source required: Result[runId=index-monthly-5b307ec6-b5d8-4b4a-a77f-080c2c6db006, state=IN_DOUBT, sourceRows=2, verifiedRows=0, errorCode=IllegalStateException, reusedRows=0]",
+  "finishedAt" : "2026-09-29T21:57:01.322945900Z"
+}

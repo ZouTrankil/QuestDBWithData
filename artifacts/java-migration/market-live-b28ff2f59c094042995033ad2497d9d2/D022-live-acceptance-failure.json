@@ -1,0 +1,17 @@
+{
+  "task" : "D022",
+  "table" : "java_d022_index_monthly_b28ff2f59c094042995033ad2497d9d2",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-b28ff2f59c094042995033ad2497d9d2\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T21:55:51.461027500Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "targetId" : "static-v2-97f38327c7bce40b650c35e9b07f958887c3de794f8de32ffddffc1b51db8da9",
+  "routes" : [ {
+    "requestedCode" : "000300.SH",
+    "runs" : [ ],
+    "independentReadbacks" : [ ]
+  } ],
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalArgumentException: Existing run ledger required",
+  "finishedAt" : "2026-09-29T21:55:55.368514700Z"
+}

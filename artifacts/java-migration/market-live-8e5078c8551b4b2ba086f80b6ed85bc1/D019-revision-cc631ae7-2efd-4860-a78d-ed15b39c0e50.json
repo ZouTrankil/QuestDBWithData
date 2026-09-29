@@ -1,0 +1,423 @@
+{
+  "task" : "D019",
+  "table" : "java_d019_index_daily_market_8e5078c8551b4b2ba086f80b6ed85bc1",
+  "startedAt" : "2026-09-29T21:04:52.812133900Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "routes" : [ {
+    "code" : "000300.SH",
+    "backfill" : {
+      "runId" : "index-daily-market-230bc6b6-73fe-4fbf-9f18-2822fbf297ce",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "backfillReadback" : {
+      "tsCode" : "000300.SH",
+      "targetId" : "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+      "sourceFingerprint" : "fa9b508f3582ec5edb40322ebd3a2498fb5178f4e0fbd4ee66b6f0057e345ed6",
+      "from" : "2026-09-24",
+      "route" : "INDEX_DAILY",
+      "actualRows" : 2,
+      "runId" : "index-daily-market-230bc6b6-73fe-4fbf-9f18-2822fbf297ce",
+      "mismatchedKeys" : 0,
+      "mismatchKeySample" : [ ],
+      "matchedRows" : 2,
+      "observedAt" : "2026-09-29T21:04:57.433085Z",
+      "to" : "2026-09-28",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-230bc6b6-73fe-4fbf-9f18-2822fbf297ce\\source\\index-daily-000300-SH-20260924-20260928-0b3bdf29-d5d3-47bd-bf62-e30f51216426.json",
+      "sourceRows" : 2,
+      "status" : "MATCHED",
+      "table" : "java_d019_index_daily_market_8e5078c8551b4b2ba086f80b6ed85bc1"
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_market",
+          "version" : 1,
+          "datasetId" : "index_daily_market",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_market_owner",
+          "supportedModes" : [ "BACKFILL", "RECONCILE", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "observedAt" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 32,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "route" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 16,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_market.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 4000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ {
+            "jobId" : "data.index",
+            "version" : 1
+          }, {
+            "jobId" : "data.index_member",
+            "version" : 1
+          } ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-29",
+          "observedAt" : "2026-09-29T21:04:59.284844Z",
+          "route" : "INDEX_DAILY",
+          "targetId" : "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+          "targetMaxBefore" : "2026-09-29",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "000300.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+      "tsCode" : "000300.SH",
+      "route" : "INDEX_DAILY",
+      "checkpointBefore" : "2026-09-29",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-29"
+      },
+      "bootstrap" : false
+    },
+    "incremental" : {
+      "runId" : "index-daily-market-2e1f2a93-83c0-449c-b652-db56e485b171",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "incrementalReadback" : {
+      "tsCode" : "000300.SH",
+      "targetId" : "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+      "sourceFingerprint" : "b21274a9b775e73ffd02b75d6b175b0a344120a6bb8b2274c0312764222d191d",
+      "from" : "2026-09-24",
+      "route" : "INDEX_DAILY",
+      "actualRows" : 3,
+      "runId" : "index-daily-market-2e1f2a93-83c0-449c-b652-db56e485b171",
+      "mismatchedKeys" : 0,
+      "mismatchKeySample" : [ ],
+      "matchedRows" : 3,
+      "observedAt" : "2026-09-29T21:04:59.284844Z",
+      "to" : "2026-09-29",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-2e1f2a93-83c0-449c-b652-db56e485b171\\source\\index-daily-000300-SH-20260924-20260929-a00e0ecc-7530-4474-867d-eca6998c77da.json",
+      "sourceRows" : 3,
+      "status" : "MATCHED",
+      "table" : "java_d019_index_daily_market_8e5078c8551b4b2ba086f80b6ed85bc1"
+    },
+    "emptyWindow" : {
+      "runId" : "index-daily-market-b9cdc7fd-c7d6-449f-bcac-324e1dc9086f",
+      "state" : "VERIFIED_EMPTY",
+      "sourceRows" : 0,
+      "verifiedRows" : 0,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "emptyReadback" : {
+      "tsCode" : "000300.SH",
+      "targetId" : "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+      "sourceFingerprint" : "96339ab2be6add27fbca28e4a95198d56ae27d6fb6b9eb239978aaa248ead42f",
+      "from" : "2026-09-27",
+      "route" : "INDEX_DAILY",
+      "actualRows" : 0,
+      "runId" : "index-daily-market-b9cdc7fd-c7d6-449f-bcac-324e1dc9086f",
+      "mismatchedKeys" : 0,
+      "mismatchKeySample" : [ ],
+      "matchedRows" : 0,
+      "observedAt" : "2026-09-29T21:05:04.092929Z",
+      "to" : "2026-09-27",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-b9cdc7fd-c7d6-449f-bcac-324e1dc9086f\\source\\index-daily-000300-SH-20260927-20260927-58f643ae-c40b-4a26-b401-b9f891b41c25.json",
+      "sourceRows" : 0,
+      "status" : "MATCHED",
+      "table" : "java_d019_index_daily_market_8e5078c8551b4b2ba086f80b6ed85bc1"
+    },
+    "otherCodeUnchanged" : true
+  }, {
+    "code" : "801080.SI",
+    "backfill" : {
+      "runId" : "index-daily-market-b4a7a4dc-9a37-41d7-a6ac-3147f29e191f",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "backfillReadback" : {
+      "tsCode" : "801080.SI",
+      "targetId" : "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+      "sourceFingerprint" : "4d891d13a699e2deb9c235a4c6643f29a3569af412028df0bb3f3ca4a5c6d234",
+      "from" : "2026-09-24",
+      "route" : "SW_DAILY",
+      "actualRows" : 2,
+      "runId" : "index-daily-market-b4a7a4dc-9a37-41d7-a6ac-3147f29e191f",
+      "mismatchedKeys" : 0,
+      "mismatchKeySample" : [ ],
+      "matchedRows" : 2,
+      "observedAt" : "2026-09-29T21:05:09.886518Z",
+      "to" : "2026-09-28",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-b4a7a4dc-9a37-41d7-a6ac-3147f29e191f\\source\\index-daily-801080-SI-20260924-20260928-46c570e5-233d-4b5e-9ef3-157f8f8a6a89.json",
+      "sourceRows" : 2,
+      "status" : "MATCHED",
+      "table" : "java_d019_index_daily_market_8e5078c8551b4b2ba086f80b6ed85bc1"
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_market",
+          "version" : 1,
+          "datasetId" : "index_daily_market",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_market_owner",
+          "supportedModes" : [ "BACKFILL", "RECONCILE", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "observedAt" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 32,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "route" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 16,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_market.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 4000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ {
+            "jobId" : "data.index",
+            "version" : 1
+          }, {
+            "jobId" : "data.index_member",
+            "version" : 1
+          } ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-29",
+          "observedAt" : "2026-09-29T21:05:13.055039Z",
+          "route" : "SW_DAILY",
+          "targetId" : "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+          "targetMaxBefore" : "2026-09-29",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "801080.SI"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+      "tsCode" : "801080.SI",
+      "route" : "SW_DAILY",
+      "checkpointBefore" : "2026-09-29",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-29"
+      },
+      "bootstrap" : false
+    },
+    "incremental" : {
+      "runId" : "index-daily-market-38ffa16b-7fe0-4622-af42-ea3de1267497",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "incrementalReadback" : {
+      "tsCode" : "801080.SI",
+      "targetId" : "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+      "sourceFingerprint" : "cc32357c4879aff5b88de315886dbea6f51289590f5042fef93efa1def77bcd3",
+      "from" : "2026-09-24",
+      "route" : "SW_DAILY",
+      "actualRows" : 3,
+      "runId" : "index-daily-market-38ffa16b-7fe0-4622-af42-ea3de1267497",
+      "mismatchedKeys" : 0,
+      "mismatchKeySample" : [ ],
+      "matchedRows" : 3,
+      "observedAt" : "2026-09-29T21:05:13.055039Z",
+      "to" : "2026-09-29",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-38ffa16b-7fe0-4622-af42-ea3de1267497\\source\\index-daily-801080-SI-20260924-20260929-c2ee0d14-f192-476b-97ab-c05f550c43bc.json",
+      "sourceRows" : 3,
+      "status" : "MATCHED",
+      "table" : "java_d019_index_daily_market_8e5078c8551b4b2ba086f80b6ed85bc1"
+    },
+    "emptyWindow" : {
+      "runId" : "index-daily-market-8ffa006d-d725-4b83-b12c-d92923768dd7",
+      "state" : "VERIFIED_EMPTY",
+      "sourceRows" : 0,
+      "verifiedRows" : 0,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "emptyReadback" : {
+      "tsCode" : "801080.SI",
+      "targetId" : "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+      "sourceFingerprint" : "be92518d33b97b706f53c83f781b99435407b633710d27878f995bae2f84a166",
+      "from" : "2026-09-27",
+      "route" : "SW_DAILY",
+      "actualRows" : 0,
+      "runId" : "index-daily-market-8ffa006d-d725-4b83-b12c-d92923768dd7",
+      "mismatchedKeys" : 0,
+      "mismatchKeySample" : [ ],
+      "matchedRows" : 0,
+      "observedAt" : "2026-09-29T21:05:19.092810Z",
+      "to" : "2026-09-27",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-8ffa006d-d725-4b83-b12c-d92923768dd7\\source\\index-daily-801080-SI-20260927-20260927-7dd84fde-bebf-406e-bde9-fffe7aa19e15.json",
+      "sourceRows" : 0,
+      "status" : "MATCHED",
+      "table" : "java_d019_index_daily_market_8e5078c8551b4b2ba086f80b6ed85bc1"
+    },
+    "otherCodeUnchanged" : true
+  } ],
+  "wholeTarget" : {
+    "sha256" : "debea4ef4d58fd3f9d9c0da723a14872ab763c9fde3e6b3bbd3a9fda8a35dfd9",
+    "duplicateKeys" : 0,
+    "rows" : 6
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T21:05:24.727155600Z"
+}

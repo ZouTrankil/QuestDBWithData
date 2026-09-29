@@ -1,0 +1,17 @@
+{
+  "task" : "D022",
+  "table" : "java_d022_index_monthly_f6f36bbeccb848689ff60cd76d91d9a4",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-f6f36bbeccb848689ff60cd76d91d9a4\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T21:58:17.354303900Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "targetId" : "static-v2-5aadee78777748bdc4f0952909c9b283d578af7d4db7a89e5fbc5dae97394406",
+  "routes" : [ {
+    "requestedCode" : "000300.SH",
+    "runs" : [ ],
+    "independentReadbacks" : [ ]
+  } ],
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalArgumentException: WAL replacement requires partitioned WAL without direct writes",
+  "finishedAt" : "2026-09-29T21:58:21.832009900Z"
+}

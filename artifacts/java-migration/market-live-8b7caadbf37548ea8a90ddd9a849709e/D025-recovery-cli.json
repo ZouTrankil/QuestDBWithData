@@ -1,0 +1,57 @@
+{
+  "task" : "D025",
+  "table" : "java_d025_moneyflow_ths_8b7caadbf37548ea8a90ddd9a849709e",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8b7caadbf37548ea8a90ddd9a849709e\\sync-ledger.sqlite",
+  "action" : "cli",
+  "startedAt" : "2026-09-29T23:12:06.564485900Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "sha256" : "25ae47af438541202f9bfa848c6996eb0227e5f747a355e01958f917fe58b6be",
+    "rows" : 10432,
+    "duplicateKeys" : 0
+  },
+  "cliResult" : {
+    "runId" : "moneyflow-ths-71104bf4-a3ac-4b56-8462-532b46454e79",
+    "state" : "VERIFIED",
+    "sourceRows" : 5216,
+    "verifiedRows" : 5216,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "sameFrozenRequest" : true,
+  "independentReadback" : {
+    "query" : "SELECT ts_code,cast(trade_date AS long) AS trade_micros,name,pct_change,latest,net_amount,net_d5_amount,buy_lg_amount,buy_lg_amount_rate,buy_md_amount,buy_md_amount_rate,buy_sm_amount,buy_sm_amount_rate FROM \"java_d025_moneyflow_ths_8b7caadbf37548ea8a90ddd9a849709e\" WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP) ORDER BY trade_date,ts_code LIMIT 60001",
+    "mismatchSamples" : [ ],
+    "jobId" : "data.moneyflow_ths",
+    "sourceDuplicateKeys" : 0,
+    "passed" : true,
+    "sourceFingerprints" : [ "806d578aa9c0da33ab7cb8b5ad3d43eb45401f377d72cedcb9937165d946e6f9" ],
+    "duplicateKeys" : 0,
+    "dataset" : "moneyflow_ths",
+    "comparedColumns" : [ "ts_code", "trade_date", "name", "pct_change", "latest", "net_amount", "net_d5_amount", "buy_lg_amount", "buy_lg_amount_rate", "buy_md_amount", "buy_md_amount_rate", "buy_sm_amount", "buy_sm_amount_rate" ],
+    "completionEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8b7caadbf37548ea8a90ddd9a849709e\\sync-evidence\\moneyflow-ths-71104bf4-a3ac-4b56-8462-532b46454e79\\complete-window.json",
+    "fieldsCompared" : 67808,
+    "status" : "MATCHED",
+    "runId" : "moneyflow-ths-71104bf4-a3ac-4b56-8462-532b46454e79",
+    "table" : "java_d025_moneyflow_ths_8b7caadbf37548ea8a90ddd9a849709e",
+    "sseOpenDates" : [ "2026-09-17" ],
+    "mismatchedRows" : 0,
+    "sourceRows" : 5216,
+    "extraKeys" : 0,
+    "matchedRows" : 5216,
+    "actualRows" : 5216,
+    "uniqueSourceKeys" : 5216,
+    "receiptBytes" : 1551287,
+    "fromInclusive" : "2026-09-17",
+    "missingKeys" : 0,
+    "targetId" : "static-v2-15662cc574d854cbfa0450207abf54932ca4c4199dbbc59244d89fa46c539edb",
+    "toInclusive" : "2026-09-17"
+  },
+  "after" : {
+    "sha256" : "25ae47af438541202f9bfa848c6996eb0227e5f747a355e01958f917fe58b6be",
+    "rows" : 10432,
+    "duplicateKeys" : 0
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T23:12:18.861302100Z"
+}

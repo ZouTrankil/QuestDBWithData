@@ -1,0 +1,17 @@
+{
+  "task" : "D022",
+  "runId" : "index-monthly-07ac9e40-f27b-4e19-ba0c-22250650f5b1",
+  "table" : "java_d022_index_monthly_f474ede9865245d987ee0ab517289aa6",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-f474ede9865245d987ee0ab517289aa6\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T22:00:23.065818900Z",
+  "writerStopped" : true,
+  "formalTableMutated" : false,
+  "before" : {
+    "rows" : 0,
+    "duplicateKeys" : 0,
+    "sha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "status" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: D022 physical target/full snapshot changed since the stage-only intent",
+  "finishedAt" : "2026-09-29T22:00:27.439550700Z"
+}

@@ -1,0 +1,507 @@
+{
+  "task" : "D018",
+  "table" : "java_d018_etf_portfolio_d1639bce7aaf406c9421d1c393dfe0ef",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-d1639bce7aaf406c9421d1c393dfe0ef\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T20:18:51.657342800Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "requestWindows" : {
+    "incrementalTo" : "2026-08-28",
+    "initial" : [ "2026-08-27", "2026-08-27" ]
+  },
+  "initialPlan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.etf_portfolio",
+        "version" : 1,
+        "datasetId" : "etf_portfolio",
+        "datasetVersion" : 1,
+        "owner" : "etf_portfolio_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "ann_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 404,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "fund_portfolio.ann_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 45,
+          "maxSlices" : 1170,
+          "maxPages" : 1170,
+          "maxRows" : 1000000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 30,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "ann_dates" : "20260827",
+        "checkpointAnchor" : "2026-08-27",
+        "observedAt" : "2026-09-29T20:18:55.429757Z",
+        "targetId" : "static-v2-52c9c1358844d3b8e2841811d3608fe35d56e0f975e4ae8613a3e20e70185ee3"
+      },
+      "from" : "2026-08-27",
+      "to" : "2026-08-27",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-52c9c1358844d3b8e2841811d3608fe35d56e0f975e4ae8613a3e20e70185ee3",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : "2026-08-27",
+    "targetMinDate" : null,
+    "targetMaxDate" : null,
+    "bootstrap" : true
+  },
+  "targetId" : "static-v2-52c9c1358844d3b8e2841811d3608fe35d56e0f975e4ae8613a3e20e70185ee3",
+  "runs" : [ {
+    "runId" : "etf-portfolio-e60513c5-f12e-487b-97a6-141596c35f29",
+    "state" : "VERIFIED",
+    "sourceRows" : 18718,
+    "verifiedRows" : 18718,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "etf-portfolio-d71e856d-cf1b-49a3-a571-a8e56ca1ff46",
+    "state" : "VERIFIED",
+    "sourceRows" : 18718,
+    "verifiedRows" : 18718,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "etf-portfolio-586b0a46-3c3c-48d1-bdc4-749ad044678f",
+    "state" : "VERIFIED",
+    "sourceRows" : 18718,
+    "verifiedRows" : 18718,
+    "errorCode" : null,
+    "reusedRows" : 0
+  } ],
+  "independentReadbacks" : [ {
+    "status" : "MATCHED",
+    "emptyAnnouncementDates" : [ ],
+    "queryParameters" : [ "2026-08-27" ],
+    "sourceCalls" : 3,
+    "duplicateKeys" : 0,
+    "mode" : "INCREMENTAL",
+    "mismatchSamples" : [ ],
+    "sourceReceipts" : [ {
+      "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-d1639bce7aaf406c9421d1c393dfe0ef\\sync-evidence\\etf-portfolio-e60513c5-f12e-487b-97a6-141596c35f29\\source\\source-20260827-b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08.json",
+      "sourceRows" : 18718,
+      "sourceFingerprint" : "b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08",
+      "annDate" : "2026-08-27",
+      "runnerChunks" : [ {
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-d1639bce7aaf406c9421d1c393dfe0ef\\sync-evidence\\etf-portfolio-e60513c5-f12e-487b-97a6-141596c35f29\\source\\chunk-20260827-b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08-0.json",
+        "rows" : 10000,
+        "sha256" : "9274d1fcbe8184c459b80f1aba39ffde25a54b71ee5b38a96c15383c8ed2c9ab",
+        "index" : 0,
+        "cursor" : "20260827#0"
+      }, {
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-d1639bce7aaf406c9421d1c393dfe0ef\\sync-evidence\\etf-portfolio-e60513c5-f12e-487b-97a6-141596c35f29\\source\\chunk-20260827-b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08-1.json",
+        "rows" : 8718,
+        "sha256" : "bc1635cfb801f2264c1c19cf9fbc5eec234a3949d31d4194cb65fe161e0aebc0",
+        "index" : 1,
+        "cursor" : "20260827#1"
+      } ],
+      "sourcePages" : 3
+    } ],
+    "comparedColumns" : [ "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio", "update_time" ],
+    "targetId" : "static-v2-52c9c1358844d3b8e2841811d3608fe35d56e0f975e4ae8613a3e20e70185ee3",
+    "actualRows" : 18718,
+    "missingKeys" : 0,
+    "unexpectedKeys" : 0,
+    "sourceRows" : 18718,
+    "logicalDate" : "2026-09-30",
+    "matchedRows" : 18718,
+    "readbackQuery" : "SELECT ts_code,cast(ann_date AS long) AS ann_date_micros,cast(end_date AS long) AS end_date_micros,symbol,mkv,amount,stk_mkv_ratio,stk_float_ratio,cast(update_time AS long) AS update_time_micros FROM \"java_d018_etf_portfolio_d1639bce7aaf406c9421d1c393dfe0ef\" WHERE ann_date=cast(? AS TIMESTAMP) ORDER BY ts_code,end_date,symbol LIMIT 256001",
+    "task" : "D018",
+    "observedAt" : "2026-09-29T20:18:55.429757Z",
+    "runId" : "etf-portfolio-e60513c5-f12e-487b-97a6-141596c35f29",
+    "runnerChunks" : 2,
+    "announcementDates" : [ "2026-08-27" ],
+    "requestFrom" : "2026-08-27",
+    "passed" : true,
+    "target" : "java_d018_etf_portfolio_d1639bce7aaf406c9421d1c393dfe0ef",
+    "requestTo" : "2026-08-27",
+    "sourceDuplicateKeys" : 0,
+    "sourceEvidenceBytes" : 6105467,
+    "mismatches" : 0
+  }, {
+    "status" : "MATCHED",
+    "emptyAnnouncementDates" : [ ],
+    "queryParameters" : [ "2026-08-27" ],
+    "sourceCalls" : 3,
+    "duplicateKeys" : 0,
+    "mode" : "BACKFILL",
+    "mismatchSamples" : [ ],
+    "sourceReceipts" : [ {
+      "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-d1639bce7aaf406c9421d1c393dfe0ef\\sync-evidence\\etf-portfolio-d71e856d-cf1b-49a3-a571-a8e56ca1ff46\\source\\source-20260827-b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08.json",
+      "sourceRows" : 18718,
+      "sourceFingerprint" : "b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08",
+      "annDate" : "2026-08-27",
+      "runnerChunks" : [ {
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-d1639bce7aaf406c9421d1c393dfe0ef\\sync-evidence\\etf-portfolio-d71e856d-cf1b-49a3-a571-a8e56ca1ff46\\source\\chunk-20260827-b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08-0.json",
+        "rows" : 10000,
+        "sha256" : "9274d1fcbe8184c459b80f1aba39ffde25a54b71ee5b38a96c15383c8ed2c9ab",
+        "index" : 0,
+        "cursor" : "20260827#0"
+      }, {
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-d1639bce7aaf406c9421d1c393dfe0ef\\sync-evidence\\etf-portfolio-d71e856d-cf1b-49a3-a571-a8e56ca1ff46\\source\\chunk-20260827-b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08-1.json",
+        "rows" : 8718,
+        "sha256" : "bc1635cfb801f2264c1c19cf9fbc5eec234a3949d31d4194cb65fe161e0aebc0",
+        "index" : 1,
+        "cursor" : "20260827#1"
+      } ],
+      "sourcePages" : 3
+    } ],
+    "comparedColumns" : [ "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio", "update_time" ],
+    "targetId" : "static-v2-52c9c1358844d3b8e2841811d3608fe35d56e0f975e4ae8613a3e20e70185ee3",
+    "actualRows" : 18718,
+    "missingKeys" : 0,
+    "unexpectedKeys" : 0,
+    "sourceRows" : 18718,
+    "logicalDate" : "2026-09-30",
+    "matchedRows" : 18718,
+    "readbackQuery" : "SELECT ts_code,cast(ann_date AS long) AS ann_date_micros,cast(end_date AS long) AS end_date_micros,symbol,mkv,amount,stk_mkv_ratio,stk_float_ratio,cast(update_time AS long) AS update_time_micros FROM \"java_d018_etf_portfolio_d1639bce7aaf406c9421d1c393dfe0ef\" WHERE ann_date=cast(? AS TIMESTAMP) ORDER BY ts_code,end_date,symbol LIMIT 256001",
+    "task" : "D018",
+    "observedAt" : "2026-09-29T20:18:55.429757Z",
+    "runId" : "etf-portfolio-d71e856d-cf1b-49a3-a571-a8e56ca1ff46",
+    "runnerChunks" : 2,
+    "announcementDates" : [ "2026-08-27" ],
+    "requestFrom" : "2026-08-27",
+    "passed" : true,
+    "target" : "java_d018_etf_portfolio_d1639bce7aaf406c9421d1c393dfe0ef",
+    "requestTo" : "2026-08-27",
+    "sourceDuplicateKeys" : 0,
+    "sourceEvidenceBytes" : 6105467,
+    "mismatches" : 0
+  }, {
+    "status" : "MATCHED",
+    "emptyAnnouncementDates" : [ ],
+    "queryParameters" : [ "2026-08-27" ],
+    "sourceCalls" : 3,
+    "duplicateKeys" : 0,
+    "mode" : "BACKFILL",
+    "mismatchSamples" : [ ],
+    "sourceReceipts" : [ {
+      "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-d1639bce7aaf406c9421d1c393dfe0ef\\sync-evidence\\etf-portfolio-586b0a46-3c3c-48d1-bdc4-749ad044678f\\source\\source-20260827-b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08.json",
+      "sourceRows" : 18718,
+      "sourceFingerprint" : "b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08",
+      "annDate" : "2026-08-27",
+      "runnerChunks" : [ {
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-d1639bce7aaf406c9421d1c393dfe0ef\\sync-evidence\\etf-portfolio-586b0a46-3c3c-48d1-bdc4-749ad044678f\\source\\chunk-20260827-b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08-0.json",
+        "rows" : 10000,
+        "sha256" : "9274d1fcbe8184c459b80f1aba39ffde25a54b71ee5b38a96c15383c8ed2c9ab",
+        "index" : 0,
+        "cursor" : "20260827#0"
+      }, {
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-d1639bce7aaf406c9421d1c393dfe0ef\\sync-evidence\\etf-portfolio-586b0a46-3c3c-48d1-bdc4-749ad044678f\\source\\chunk-20260827-b45bddf3a190228f52c39aae5dd1e6246492dea0ad6363391126974be11dfb08-1.json",
+        "rows" : 8718,
+        "sha256" : "bc1635cfb801f2264c1c19cf9fbc5eec234a3949d31d4194cb65fe161e0aebc0",
+        "index" : 1,
+        "cursor" : "20260827#1"
+      } ],
+      "sourcePages" : 3
+    } ],
+    "comparedColumns" : [ "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio", "update_time" ],
+    "targetId" : "static-v2-52c9c1358844d3b8e2841811d3608fe35d56e0f975e4ae8613a3e20e70185ee3",
+    "actualRows" : 18718,
+    "missingKeys" : 0,
+    "unexpectedKeys" : 0,
+    "sourceRows" : 18718,
+    "logicalDate" : "2026-09-30",
+    "matchedRows" : 18718,
+    "readbackQuery" : "SELECT ts_code,cast(ann_date AS long) AS ann_date_micros,cast(end_date AS long) AS end_date_micros,symbol,mkv,amount,stk_mkv_ratio,stk_float_ratio,cast(update_time AS long) AS update_time_micros FROM \"java_d018_etf_portfolio_d1639bce7aaf406c9421d1c393dfe0ef\" WHERE ann_date=cast(? AS TIMESTAMP) ORDER BY ts_code,end_date,symbol LIMIT 256001",
+    "task" : "D018",
+    "observedAt" : "2026-09-29T20:18:55.429757Z",
+    "runId" : "etf-portfolio-586b0a46-3c3c-48d1-bdc4-749ad044678f",
+    "runnerChunks" : 2,
+    "announcementDates" : [ "2026-08-27" ],
+    "requestFrom" : "2026-08-27",
+    "passed" : true,
+    "target" : "java_d018_etf_portfolio_d1639bce7aaf406c9421d1c393dfe0ef",
+    "requestTo" : "2026-08-27",
+    "sourceDuplicateKeys" : 0,
+    "sourceEvidenceBytes" : 6105467,
+    "mismatches" : 0
+  } ],
+  "readbackAfterFirst" : {
+    "duplicateKeys" : 0,
+    "rows" : 18718,
+    "sha256" : "d5b5746b1ae91d7897f6eb900492c20e5cf763c3b6b59a73e75c1a72d7fdd0c1"
+  },
+  "repeatPlan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.etf_portfolio",
+        "version" : 1,
+        "datasetId" : "etf_portfolio",
+        "datasetVersion" : 1,
+        "owner" : "etf_portfolio_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "ann_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 404,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "fund_portfolio.ann_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 45,
+          "maxSlices" : 1170,
+          "maxPages" : 1170,
+          "maxRows" : 1000000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 30,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "ann_dates" : "20260827",
+        "observedAt" : "2026-09-29T20:18:55.429757Z",
+        "targetId" : "static-v2-52c9c1358844d3b8e2841811d3608fe35d56e0f975e4ae8613a3e20e70185ee3",
+        "targetMaxBefore" : "2026-08-27",
+        "targetMinBefore" : "2026-08-27"
+      },
+      "from" : "2026-08-27",
+      "to" : "2026-08-27",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-52c9c1358844d3b8e2841811d3608fe35d56e0f975e4ae8613a3e20e70185ee3",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : null,
+    "targetMinDate" : "2026-08-27",
+    "targetMaxDate" : "2026-08-27",
+    "bootstrap" : false
+  },
+  "observationPolicy" : "Two repeats reuse the first frozen observation; fresh incremental run freezes its own timestamp. All nine columns independently compared immediately after each run.",
+  "readbackAfterIdempotentRepeat" : {
+    "duplicateKeys" : 0,
+    "rows" : 18718,
+    "sha256" : "d5b5746b1ae91d7897f6eb900492c20e5cf763c3b6b59a73e75c1a72d7fdd0c1"
+  },
+  "incrementalPlan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.etf_portfolio",
+        "version" : 1,
+        "datasetId" : "etf_portfolio",
+        "datasetVersion" : 1,
+        "owner" : "etf_portfolio_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "ann_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 404,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "fund_portfolio.ann_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 45,
+          "maxSlices" : 1170,
+          "maxPages" : 1170,
+          "maxRows" : 1000000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 30,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "ann_dates" : "20260827,20260828",
+        "checkpointAnchor" : "2026-08-27",
+        "checkpointBefore" : "2026-08-27",
+        "observedAt" : "2026-09-29T20:20:32.970449Z",
+        "targetId" : "static-v2-52c9c1358844d3b8e2841811d3608fe35d56e0f975e4ae8613a3e20e70185ee3",
+        "targetMaxBefore" : "2026-08-27",
+        "targetMinBefore" : "2026-08-27"
+      },
+      "from" : "2026-08-27",
+      "to" : "2026-08-28",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-52c9c1358844d3b8e2841811d3608fe35d56e0f975e4ae8613a3e20e70185ee3",
+    "checkpointBefore" : "2026-08-27",
+    "checkpointAnchor" : "2026-08-27",
+    "targetMinDate" : "2026-08-27",
+    "targetMaxDate" : "2026-08-27",
+    "bootstrap" : false
+  },
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: Nonempty verified source required: Result[runId=etf-portfolio-ef180bc9-0a16-4538-870d-1a265bd8341b, state=PARTIAL, sourceRows=18718, verifiedRows=18718, errorCode=Incomplete, reusedRows=0]",
+  "finishedAt" : "2026-09-29T20:23:53.184700200Z"
+}

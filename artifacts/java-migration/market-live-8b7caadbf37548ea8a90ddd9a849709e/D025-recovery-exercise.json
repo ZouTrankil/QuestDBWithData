@@ -1,0 +1,180 @@
+{
+  "task" : "D025",
+  "table" : "java_d025_moneyflow_ths_8b7caadbf37548ea8a90ddd9a849709e",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8b7caadbf37548ea8a90ddd9a849709e\\sync-ledger.sqlite",
+  "action" : "exercise",
+  "startedAt" : "2026-09-29T23:11:24.942951700Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "duplicateKeys" : 0,
+    "rows" : 10432,
+    "sha256" : "25ae47af438541202f9bfa848c6996eb0227e5f747a355e01958f917fe58b6be"
+  },
+  "plan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_ths",
+        "version" : 1,
+        "datasetId" : "moneyflow_ths",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_ths_owner",
+        "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_ths.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT10M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 366,
+          "maxPages" : 366,
+          "maxRows" : 2196000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "targetId" : "static-v2-15662cc574d854cbfa0450207abf54932ca4c4199dbbc59244d89fa46c539edb",
+        "targetMaxBefore" : "2026-09-18",
+        "targetMinBefore" : "2026-09-17"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-15662cc574d854cbfa0450207abf54932ca4c4199dbbc59244d89fa46c539edb",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : null,
+    "physicalRange" : {
+      "min" : "2026-09-17",
+      "max" : "2026-09-18"
+    },
+    "bootstrap" : false,
+    "checkedPhysicalRows" : 10432
+  },
+  "cancelBeforeSource" : {
+    "runId" : "moneyflow-ths-cancel-before-c6116952-cd1e-410e-b869-318ca0397e28",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterVerifiedPage" : {
+    "runId" : "moneyflow-ths-cancel-page-dfd2e405-faeb-486a-8223-a7a84a1308a2",
+    "state" : "CANCELLED",
+    "sourceRows" : 5216,
+    "verifiedRows" : 5216,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "resume" : {
+    "runId" : "moneyflow-ths-resume-31ec6c29-f308-4066-a440-e678fdd540b3",
+    "state" : "VERIFIED",
+    "sourceRows" : 5216,
+    "verifiedRows" : 5216,
+    "errorCode" : null,
+    "reusedRows" : 5216
+  },
+  "resumeSendCalls" : 0,
+  "independentResumeReadback" : {
+    "sourceDuplicateKeys" : 0,
+    "jobId" : "data.moneyflow_ths",
+    "mismatchSamples" : [ ],
+    "query" : "SELECT ts_code,cast(trade_date AS long) AS trade_micros,name,pct_change,latest,net_amount,net_d5_amount,buy_lg_amount,buy_lg_amount_rate,buy_md_amount,buy_md_amount_rate,buy_sm_amount,buy_sm_amount_rate FROM \"java_d025_moneyflow_ths_8b7caadbf37548ea8a90ddd9a849709e\" WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP) ORDER BY trade_date,ts_code LIMIT 60001",
+    "toInclusive" : "2026-09-17",
+    "targetId" : "static-v2-15662cc574d854cbfa0450207abf54932ca4c4199dbbc59244d89fa46c539edb",
+    "missingKeys" : 0,
+    "fromInclusive" : "2026-09-17",
+    "receiptBytes" : 1551287,
+    "uniqueSourceKeys" : 5216,
+    "actualRows" : 5216,
+    "matchedRows" : 5216,
+    "extraKeys" : 0,
+    "sourceRows" : 5216,
+    "mismatchedRows" : 0,
+    "sseOpenDates" : [ "2026-09-17" ],
+    "table" : "java_d025_moneyflow_ths_8b7caadbf37548ea8a90ddd9a849709e",
+    "runId" : "moneyflow-ths-resume-31ec6c29-f308-4066-a440-e678fdd540b3",
+    "status" : "MATCHED",
+    "fieldsCompared" : 67808,
+    "completionEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8b7caadbf37548ea8a90ddd9a849709e\\sync-evidence\\moneyflow-ths-resume-31ec6c29-f308-4066-a440-e678fdd540b3\\complete-window.json",
+    "comparedColumns" : [ "ts_code", "trade_date", "name", "pct_change", "latest", "net_amount", "net_d5_amount", "buy_lg_amount", "buy_lg_amount_rate", "buy_md_amount", "buy_md_amount_rate", "buy_sm_amount", "buy_sm_amount_rate" ],
+    "dataset" : "moneyflow_ths",
+    "duplicateKeys" : 0,
+    "sourceFingerprints" : [ "806d578aa9c0da33ab7cb8b5ad3d43eb45401f377d72cedcb9937165d946e6f9" ],
+    "passed" : true
+  },
+  "postSendLostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 2668,
+      "digest" : "24a6a01cb999de7d0982cf97a61a20ffee04c033cbc0ccce3b036ddacf4bd1dd",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "after" : {
+    "duplicateKeys" : 0,
+    "rows" : 10432,
+    "sha256" : "25ae47af438541202f9bfa848c6996eb0227e5f747a355e01958f917fe58b6be"
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T23:11:43.233597300Z"
+}

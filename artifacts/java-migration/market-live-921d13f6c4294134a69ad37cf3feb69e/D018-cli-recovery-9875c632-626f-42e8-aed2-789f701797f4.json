@@ -1,0 +1,102 @@
+{
+  "task" : "D018",
+  "table" : "java_d018_etf_portfolio_921d13f6c4294134a69ad37cf3feb69e",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-921d13f6c4294134a69ad37cf3feb69e\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T20:44:58.046786600Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "multichunkEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-921d13f6c4294134a69ad37cf3feb69e\\D018-multichunk-recovery-72e1a33f6fa8.json",
+  "before" : {
+    "rows" : 22369,
+    "sha256" : "3843af7ecb8d0cb2837b8be0e37a6703dfc266bac4b646bf417ea642cc132dda",
+    "duplicateKeys" : 0
+  },
+  "priorRunId" : "d018-recovery-839c851f-e05a-445f-9e24-72e1a33f6fa8-cancelled",
+  "cliResume" : {
+    "runId" : "etf-portfolio-eb33a01f-a94f-4f20-9b96-e1a24070924b",
+    "state" : "VERIFIED",
+    "sourceRows" : 18718,
+    "verifiedRows" : 18718,
+    "errorCode" : null,
+    "reusedRows" : 10000
+  },
+  "independentCliReadback" : {
+    "targetId" : "static-v2-77628c3cabcb70140c3e2803cbb97e642937cfa88cb30aa6563afafe57fd31a8",
+    "actualRows" : 18718,
+    "missingKeys" : 0,
+    "unexpectedKeys" : 0,
+    "sourceRows" : 18718,
+    "logicalDate" : "2026-09-30",
+    "matchedRows" : 18718,
+    "readbackQuery" : "SELECT ts_code,cast(ann_date AS long) AS ann_date_micros,cast(end_date AS long) AS end_date_micros,symbol,mkv,amount,stk_mkv_ratio,stk_float_ratio,cast(update_time AS long) AS update_time_micros FROM \"java_d018_etf_portfolio_921d13f6c4294134a69ad37cf3feb69e\" WHERE ann_date=cast(? AS TIMESTAMP) ORDER BY ts_code,end_date,symbol LIMIT 256001",
+    "task" : "D018",
+    "observedAt" : "2026-09-29T20:38:53.863824Z",
+    "runId" : "etf-portfolio-eb33a01f-a94f-4f20-9b96-e1a24070924b",
+    "runnerChunks" : 2,
+    "announcementDates" : [ "2026-08-27" ],
+    "requestFrom" : "2026-08-27",
+    "passed" : true,
+    "target" : "java_d018_etf_portfolio_921d13f6c4294134a69ad37cf3feb69e",
+    "requestTo" : "2026-08-27",
+    "sourceDuplicateKeys" : 0,
+    "sourceEvidenceBytes" : 6105467,
+    "mismatches" : 0,
+    "status" : "MATCHED",
+    "emptyAnnouncementDates" : [ ],
+    "queryParameters" : [ "2026-08-27" ],
+    "sourceCalls" : 3,
+    "duplicateKeys" : 0,
+    "mode" : "BACKFILL",
+    "mismatchSamples" : [ ],
+    "sourceReceipts" : [ {
+      "sourceRows" : 18718,
+      "sourceFingerprint" : "9fe356d19ffaf3ca2f4873b73b29f9477d7c5208d7d2ee1cbd79eed72a5dc5de",
+      "annDate" : "2026-08-27",
+      "runnerChunks" : [ {
+        "index" : 0,
+        "cursor" : "20260827#0",
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-921d13f6c4294134a69ad37cf3feb69e\\sync-evidence\\etf-portfolio-eb33a01f-a94f-4f20-9b96-e1a24070924b\\source\\chunk-20260827-9fe356d19ffaf3ca2f4873b73b29f9477d7c5208d7d2ee1cbd79eed72a5dc5de-0.json",
+        "rows" : 10000,
+        "sha256" : "7df6faa8ef7fd0f64654f4527f666edeadcce5ff0d83da5368c2696b4ffdc355"
+      }, {
+        "index" : 1,
+        "cursor" : "20260827#1",
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-921d13f6c4294134a69ad37cf3feb69e\\sync-evidence\\etf-portfolio-eb33a01f-a94f-4f20-9b96-e1a24070924b\\source\\chunk-20260827-9fe356d19ffaf3ca2f4873b73b29f9477d7c5208d7d2ee1cbd79eed72a5dc5de-1.json",
+        "rows" : 8718,
+        "sha256" : "a31baca100f0e8d2a7e23dc224b3265388b1a05340eae70a9668f1dde7ed899e"
+      } ],
+      "sourcePages" : 3,
+      "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-921d13f6c4294134a69ad37cf3feb69e\\sync-evidence\\etf-portfolio-eb33a01f-a94f-4f20-9b96-e1a24070924b\\source\\source-20260827-9fe356d19ffaf3ca2f4873b73b29f9477d7c5208d7d2ee1cbd79eed72a5dc5de.json"
+    } ],
+    "comparedColumns" : [ "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio", "update_time" ]
+  },
+  "cancelBeforeSource" : {
+    "runId" : "cancel-before-0582f6b8-9837-4e5e-ac6d-1c80e3fcc0ae",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "postSendLostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 2108,
+      "digest" : "6f3e7bb1fd6312574fcacbf45ba03186eb024ff97b4fa8ab90ab09225ff7faac",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "after" : {
+    "rows" : 22369,
+    "sha256" : "3843af7ecb8d0cb2837b8be0e37a6703dfc266bac4b646bf417ea642cc132dda",
+    "duplicateKeys" : 0
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T20:45:28.283991Z"
+}

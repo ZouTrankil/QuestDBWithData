@@ -1,0 +1,193 @@
+{
+  "task_id": "D018",
+  "dataset_id": "etf_portfolio",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "etf-portfolio-a88d5461-36cc-4d90-a525-7c256c8acef6",
+  "attempt_id": null,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-29T20:36:18.047058900Z",
+  "finished_at": "2026-09-29T20:45:28.283991Z",
+  "target": {
+    "target_id": "static-v2-77628c3cabcb70140c3e2803cbb97e642937cfa88cb30aa6563afafe57fd31a8",
+    "database_version": "QuestDB 10.0.1",
+    "formal_table": "etf_portfolio",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d018_etf_portfolio_921d13f6c4294134a69ad37cf3feb69e",
+    "isolated": true,
+    "questdb_readback": "verified_complete_four_part_keys_all_nine_columns"
+  },
+  "incremental": {
+    "mode": "INCREMENTAL",
+    "request_window": {
+      "incrementalTo": "2026-08-27",
+      "initial": [
+        "2026-08-26",
+        "2026-08-26"
+      ]
+    },
+    "bootstrap_policy": "Requires explicit bounded --from without same-target verified checkpoint, and rejects a nonempty isolated target without receipt-backed coverage.",
+    "revision_overlap": "Re-fetch up to 30 calendar days before checkpoint through, clamped to frozen bootstrap anchor.",
+    "checkpoint_policy": "Only contiguous same-target, same-definition VERIFIED/VERIFIED_EMPTY INCREMENTAL runs with exact frozen calendar-day receipts advance; BACKFILL does not advance.",
+    "target_range_policy": "Compare target announcement-date inventory and every key/value against the complete receipt chain. Any unexplained date, key, or value fails closed.",
+    "checkpoint_before": "2026-08-26",
+    "checkpoint_after": "2026-08-27"
+  },
+  "source": {
+    "provider": "Tushare",
+    "endpoint": "fund_portfolio",
+    "python_call": "sync_etf_portfolio fetches each calendar ann_date; _get_etf_portfolio_by_ann_date uses limit=8000 and increasing offset.",
+    "python_rate_limit": "Connector decorator is 200 requests per 60 seconds; YAML schedule is 18:00 with 3600-second timeout. These settings are not treated as an account quota grant.",
+    "fields": [
+      "ts_code",
+      "ann_date",
+      "end_date",
+      "symbol",
+      "mkv",
+      "amount",
+      "stk_mkv_ratio",
+      "stk_float_ratio"
+    ],
+    "derived_physical_field": "update_time is frozen UTC Java observation time; Python preprocessing adds an ingestion-time field that is not from Tushare.",
+    "request_evidence": null,
+    "response_evidence": "artifacts/java-migration/market-live-921d13f6c4294134a69ad37cf3feb69e/D018-live-acceptance.json",
+    "returned_rows": 33322,
+    "normalized_rows": 33322,
+    "rejected_rows": 0,
+    "fingerprint": null,
+    "official_documentation": "https://tushare.pro/document/2?doc_id=121",
+    "documented_request_cap": null,
+    "documented_total_cap": null,
+    "python_page_size": 8000,
+    "local_announcement_date_row_cap": 256000,
+    "local_source_request_cap_per_announcement_date": 33,
+    "runner_chunk_rows": 10000,
+    "local_runner_chunks_per_announcement_date": 26,
+    "local_total_rows_per_run_cap": 1000000,
+    "local_receipt_byte_cap": 100663296,
+    "pagination": "Official docs do not specify offset/limit paging semantics or total cap. Java follows the observed Python connector parameters, requires a terminal short page and fails closed at 256,000 rows, 33 requests per date, 96 MiB per receipt, 1,000,000 rows per run, or incomplete evidence; full raw response and runner-sized chunks have SHA-256 receipts.",
+    "source_version": "Tushare fields/items transport does not expose a source snapshot token; null is retained in complete evidence.",
+    "requests_sent": null,
+    "completed_source_pages": 7,
+    "coordinator_source_only_diagnostic": {
+      "performed": true,
+      "questdb_accessed": false,
+      "dates": {
+        "2026-08-27": {
+          "returned_rows": 18718,
+          "page_rows": [
+            8000,
+            8000,
+            2718
+          ]
+        },
+        "2026-08-28": {
+          "result": "failed_closed_under_previous_64000_row_policy",
+          "captured_rows": 72000,
+          "request_offsets": [
+            0,
+            8000,
+            16000,
+            24000,
+            32000,
+            40000,
+            48000,
+            56000,
+            64000
+          ],
+          "complete_announcement_date_total": null
+        }
+      },
+      "evidence_directory": "artifacts/java-migration/D018/provider-diagnostic/00cd6407-a7e9-46ab-b463-c2286a70ef46"
+    },
+    "row_count_scope": "Four accepted runs only; negative source conflicts and recovery operations separately linked. No inferred transport retry count."
+  },
+  "mapping_drift": {
+    "business_key": "Complete source and physical key (ts_code, ann_date, end_date, symbol). ann_date is the sync date, end_date is the report-period date and designated timestamp.",
+    "calendar_dates": "ann_date and end_date are LocalDate values persisted as UTC-midnight TIMESTAMP carriers; they are not instants.",
+    "numeric_fields": "mkv, amount, stk_mkv_ratio, stk_float_ratio remain nullable finite provider DOUBLE values without scaling.",
+    "update_time": "Derived frozen UTC observation Instant at microsecond precision; excluded from the provider source field list but included in physical row verification.",
+    "source_revocations": "RECONCILE is not exposed because this upsert writer cannot remove keys safely. After-write complete date comparison rejects extra stale physical keys rather than accepting an incomplete match.",
+    "missing_ann_date": "Java rejects missing/blank ann_date instead of using the Python compatibility fallback to end_date; request-scope membership must be proven."
+  },
+  "write": {
+    "submitted_rows": 33322,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "delivery_status": "verified_after_full_readback",
+    "batch_row_limit": 250,
+    "batch_byte_limit": 1048576
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/market-live-921d13f6c4294134a69ad37cf3feb69e/D018-revision-45983799-1654-447b-81c1-1883b84da7b4.json",
+    "compared_columns": [
+      "ts_code",
+      "ann_date",
+      "end_date",
+      "symbol",
+      "mkv",
+      "amount",
+      "stk_mkv_ratio",
+      "stk_float_ratio",
+      "update_time"
+    ],
+    "actual_rows": 22369,
+    "matched_rows": 22369,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": "3843af7ecb8d0cb2837b8be0e37a6703dfc266bac4b646bf417ea642cc132dda",
+    "passed": true
+  },
+  "checks": {
+    "source_call": true,
+    "isolated_nonempty_write_read": true,
+    "idempotent_rerun": true,
+    "incremental_checkpoint": true,
+    "revision_overlap": true,
+    "resume_cancel": true,
+    "truncation_and_row_cap_fail_closed": false,
+    "unknown_write_reconcile": true,
+    "tests_run": false,
+    "gradle_build": "Not run by this implementation pass.",
+    "compilation": "Scoped Java 24 compilation and actual operations completed; no full Gradle/test suite run.",
+    "formal_table_mutated": false,
+    "independent_raw_source_comparison": true,
+    "fresh_process_cli_resume": true,
+    "pagination": "08-26:3651 rows/1 terminal short page; 08-27:18718 rows/8000+8000+2718. Raw offsets, complete terminal pages and runner chunks independently checked.",
+    "incomplete_source": "Old64000/date cap failed closed; new256000/33-page bound used. Actual08-28 conflict on page27 failed closed, that date has zero physical rows.",
+    "resume": "First10000-row chunk reused; only8718 remaining rows sent; nine-field snapshot unchanged; fresh-JVM CLI repeated the frozen-request recovery.",
+    "backfill_checkpoint": "New observedAt backfill did not advance checkpoint; next incremental planned at08-27 and completed independent nine-field readback.",
+    "unknown_write_reconcile_detail": "Two source-backed rows actually sent, sender closed, injected acknowledgement loss, exact readback UNKNOWN_RECONCILED."
+  },
+  "blockers": [],
+  "shared_integration_needed": [],
+  "remaining_live_acceptance": [],
+  "evidence_paths": [
+    "artifacts/java-migration/D018/source-contract-review.md",
+    "artifacts/java-migration/D018/implementation-review.md",
+    "artifacts/java-migration/market-live-921d13f6c4294134a69ad37cf3feb69e/D018-live-acceptance.json",
+    "artifacts/java-migration/market-live-921d13f6c4294134a69ad37cf3feb69e/D018-multichunk-recovery-72e1a33f6fa8.json",
+    "artifacts/java-migration/market-live-921d13f6c4294134a69ad37cf3feb69e/D018-cli-recovery-9875c632-626f-42e8-aed2-789f701797f4.json",
+    "artifacts/java-migration/market-live-921d13f6c4294134a69ad37cf3feb69e/D018-revision-45983799-1654-447b-81c1-1883b84da7b4.json",
+    "artifacts/java-migration/D018/source-conflict-20260828-summary.json",
+    "artifacts/java-migration/D018/rejected-attempts-physical-readback.json",
+    "artifacts/java-migration/D018/final-review.md"
+  ],
+  "next_manual_comparison": "人工复核 pending_review；可抽查完整四键九字段及08-28来源冲突。冲突日期必须提供额外来源版本依据后才能选择修订值，不能静默去重。",
+  "current_progress": "08-26/27四轮真实分页及九字段回读通过；多chunk取消复用10000行、仅补8718行；独立CLI、回补后增量及丢ACK均通过。08-28实际同键异值被拒绝，未写该日期。",
+  "live_acceptance_attempt": {
+    "result": "verified",
+    "evidence": "artifacts/java-migration/market-live-921d13f6c4294134a69ad37cf3feb69e/D018-live-acceptance.json",
+    "formal_tables_mutated": false
+  },
+  "recovery_acceptance": "artifacts/java-migration/market-live-921d13f6c4294134a69ad37cf3feb69e/D018-multichunk-recovery-72e1a33f6fa8.json",
+  "cli_recovery_acceptance": "artifacts/java-migration/market-live-921d13f6c4294134a69ad37cf3feb69e/D018-cli-recovery-9875c632-626f-42e8-aed2-789f701797f4.json",
+  "revision_acceptance": "artifacts/java-migration/market-live-921d13f6c4294134a69ad37cf3feb69e/D018-revision-45983799-1654-447b-81c1-1883b84da7b4.json",
+  "negative_source_acceptance": "artifacts/java-migration/D018/source-conflict-20260828-summary.json"
+}

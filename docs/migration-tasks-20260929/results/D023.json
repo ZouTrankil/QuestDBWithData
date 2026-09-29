@@ -1,0 +1,140 @@
+{
+  "task_id": "D023",
+  "dataset": "dc_index",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "started_at": "2026-09-29T22:27:39.481059300Z",
+  "finished_at": "2026-09-29T23:03:27.442102600Z",
+  "logical_date": "2026-09-30",
+  "run_id": "dc-index-0eabb4f5-4b36-4feb-b0b4-240d6bd6313e",
+  "target": {
+    "isolated_table": "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+    "logical_target_id": "static-v2-f7139b0e8c5effcd789c54674d5083917845676218261ed0c125ca769ccdd880",
+    "database_version": "QuestDB 10.0.1",
+    "partition": "YEAR",
+    "wal": true,
+    "dedup": false,
+    "natural_key": [
+      "ts_code",
+      "trade_date"
+    ],
+    "physical_upsert_keys": [],
+    "formal_table_mutated": false
+  },
+  "source": {
+    "endpoint": "dc_index",
+    "request_unit": "one unpaged trade_date",
+    "initial_date": "2026-09-17",
+    "incremental_through": "2026-09-18",
+    "daily_rows": 1031,
+    "primary_runs": 4,
+    "primary_returned_rows": 5155,
+    "primary_source_scopes": 5,
+    "count_scope": "Four primary runs only; recovery, revision and rejected operations are separately linked.",
+    "row_cap": 5000,
+    "max_calendar_days": 5,
+    "configured_requests_per_minute": 10,
+    "contract_note": "Actual dc_index(trade_date) returns the Python 11-column schema. Current dc_daily documentation describes another endpoint/schema; no substitution or unit scaling is performed."
+  },
+  "write": {
+    "primary_submitted_rows": 5155,
+    "strategy": "Verified DEDUP=false complete-window stage plus full outside rows, whole-dataset OS lock and journaled target/backup rename",
+    "batch_rows": 250,
+    "direct_write_policy": "Only source-job owned stage writes allowed"
+  },
+  "questdb_readback": {
+    "fields": [
+      "ts_code",
+      "trade_date",
+      "name",
+      "leading",
+      "leading_code",
+      "pct_change",
+      "leading_pct",
+      "total_mv",
+      "turnover_rate",
+      "up_num",
+      "down_num"
+    ],
+    "primary_independent_readbacks": 4,
+    "final_rows": 2062,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "extra_keys": 0,
+    "final_snapshot": {
+      "rows": 2062,
+      "duplicateKeys": 0,
+      "sha256": "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a"
+    },
+    "passed": true
+  },
+  "incremental": {
+    "default_mode": "INCREMENTAL",
+    "checkpoint": "receipt-backed complete SSE/SZSE open-date chain",
+    "revision_days": 2,
+    "clamped_to_anchor": true,
+    "backfill_overlay_does_not_advance": true
+  },
+  "checks": {
+    "scoped_javac": "passed",
+    "full_build_or_tests": "not_run",
+    "nonempty_source": true,
+    "two_idempotent_reruns": true,
+    "incremental": true,
+    "backfill_then_incremental": true,
+    "cancel_before_source": true,
+    "fresh_process_cli_resume": true,
+    "publication_lost_ack_recovery": true,
+    "post_publication_cancellation_recovery": true,
+    "post_publication_exception_recovery": true,
+    "stage_only_complete_write_recovery": true
+  },
+  "recovery": "Faulted publication/stage runs retain IN_DOUBT and their exact interval lease; actual source receipts and full snapshots are reconciled before publishing or closing. Stage-only orphans block new plans. Version 2 receipts bind the frozen run/request, physical stage and both outside/full snapshots. Published identity uses the frozen stage name with the actual physical identity; older verified journal proofs retain their original ID/directory/full-fingerprint checks. Generic runner re-reads the same lease and does not repeat an already-durable IN_DOUBT transition.",
+  "failed_attempts": [
+    {
+      "evidence": "artifacts/java-migration/D023/provider-diagnostic/e634c0bd9987419294b44819912ef031/source-operation.json",
+      "reason": "Wrong calendar canonical job reference prevented startup; fixed to data.exchange_calendar."
+    },
+    {
+      "evidence": "artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\D023-live-acceptance-failure.json",
+      "reason": "Write port global 251-row JDBC cap truncated full-date validation; corrected to 10001 with per-query limits; retained initial1031 rows and continued on the same target."
+    },
+    {
+      "evidence": "artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\D023-finish-23d69ef0-857e-4e69-890c-d33ce023a521.json",
+      "reason": "java.lang.IllegalStateException: Publication changed concurrently"
+    },
+    {
+      "evidence": "artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\D023-recovery-publication-0ce39a32-81da-45ae-b10e-946e01c3e60a.json",
+      "reason": "java.lang.IllegalStateException: Lease ownership or state changed"
+    },
+    {
+      "evidence": "artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\D023-recovery-publication-b3ea43c2-2091-4075-943b-187e0eb7e047.json",
+      "reason": "java.lang.IllegalStateException: Lease ownership or state changed"
+    }
+  ],
+  "limitations": [
+    "Bounded two-day sample, not full history.",
+    "No natural timeout/rate-limit/exact-cap error claimed.",
+    "No authoritative empty open date exercised; windows without calendar open dates are rejected.",
+    "No naturally changing historical provider value claimed; backfill overlay and invariant target were exercised.",
+    "Incomplete or conflicting stage snapshots remain fail-closed for manual reconciliation.",
+    "Formal table untouched; human review pending."
+  ],
+  "evidence_paths": [
+    "artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/D023-live-acceptance.json",
+    "artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/D023-cancel-prepare.json",
+    "artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/D023-recovery-cli-9a4d90eb-006c-4f1e-9e15-c326a14bec71.json",
+    "artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/D023-recovery-publication-cfe8f402-77f7-4af4-bf0c-4f444deecc12.json",
+    "artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/D023-recovery-post-cancel-bf7b93b4-9ce1-4bcd-a92b-303ca7ae5825.json",
+    "artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/D023-recovery-post-failure-f2fa40c9-0952-48b7-b7c3-7902b37319c4.json",
+    "artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/D023-recovery-stage-only-f5bf0392-6005-4d79-b346-9c24b822ecbd.json",
+    "artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/D023-revision-a8950087-c130-41f9-a32d-a8a6cbe66e95.json",
+    "artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/D023-finish-4c1471d9-a8d1-480d-894b-82fc814bacaa.json",
+    "artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/D023-finish-9e4af203-dda4-4751-a44d-a043b20d24db.json",
+    "artifacts/java-migration/D023/final-review.md"
+  ],
+  "blockers": [],
+  "remaining_acceptance": []
+}

@@ -39,6 +39,26 @@ public class StockBasicWriteGroupService {
     private EtfAdjJobService etfAdjTarget;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
     private EtfShareJobService etfShareTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private EtfFactorJobService etfFactorTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private IndexDailyMarketJobService indexDailyMarketTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private IndexDailyBasicJobService indexDailyBasicTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private IndexWeightJobService indexWeightTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private IndexMonthlyJobService indexMonthlyTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private DcIndexJobService dcIndexTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private MoneyflowDcJobService moneyflowDcTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private MoneyflowThsJobService moneyflowThsTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private MoneyflowJobService moneyflowTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private EtfPortfolioJobService etfPortfolioTarget;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
     private EtfBasicJobService etfBasicTarget;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
@@ -150,9 +170,41 @@ public class StockBasicWriteGroupService {
             } else if(member.datasetId().equals(EtfShareDataset.DEFINITION.datasetId()) && etfShareTarget!=null) {
                 if(priorRun==null) targets.put(member.datasetId(),etfShareTarget.targetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.etf_share"));
+            } else if(member.datasetId().equals(EtfFactorDataset.DEFINITION.datasetId()) && etfFactorTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),etfFactorTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.etf_factor"));
+            } else if(member.datasetId().equals(MoneyflowDcDataset.DEFINITION.datasetId()) && moneyflowDcTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),moneyflowDcTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.moneyflow_dc"));
+            } else if(member.datasetId().equals(MoneyflowThsDataset.DEFINITION.datasetId()) && moneyflowThsTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),moneyflowThsTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.moneyflow_ths"));
+            } else if(member.datasetId().equals(MoneyflowDataset.DEFINITION.datasetId()) && moneyflowTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),moneyflowTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.moneyflow"));
+            } else if(member.datasetId().equals(IndexDailyMarketDataset.DEFINITION.datasetId()) && indexDailyMarketTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),indexDailyMarketTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.index_daily_market"));
+            } else if(member.datasetId().equals(IndexDailyBasicDataset.DEFINITION.datasetId()) && indexDailyBasicTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),indexDailyBasicTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.index_daily_basic"));
+            } else if(member.datasetId().equals(IndexMonthlyDataset.DEFINITION.datasetId()) && indexMonthlyTarget!=null) {
+                new IndexMonthlyPublication(jdbc,ledger).requireNoPendingPublication();
+                if(priorRun==null) targets.put(member.datasetId(),indexMonthlyTarget.physicalTargetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.index_monthly"));
+            } else if(member.datasetId().equals(IndexWeightDataset.DEFINITION.datasetId()) && indexWeightTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),indexWeightTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.index_weight"));
+            } else if(member.datasetId().equals(EtfPortfolioDataset.DEFINITION.datasetId()) && etfPortfolioTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),etfPortfolioTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.etf_portfolio"));
             } else if(member.datasetId().equals(EtfBasicDataset.DEFINITION.datasetId()) && etfBasicTarget!=null) {
                 if(priorRun==null) targets.put(member.datasetId(),etfBasicTarget.targetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.etf_basic"));
+            } else if(member.datasetId().equals(DcIndexDataset.DEFINITION.datasetId()) && dcIndexTarget!=null) {
+                dcIndexTarget.requireNoPendingPublication();
+                if(priorRun==null) targets.put(member.datasetId(),dcIndexTarget.physicalTargetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.dc_index"));
             } else if(member.datasetId().equals(StockStDailyDataset.DEFINITION.datasetId()) && stockStDailyTarget!=null) {
                 stockStDailyTarget.requireNoPendingPublication();
                 if(priorRun==null) targets.put(member.datasetId(),stockStDailyTarget.physicalTargetId());
@@ -269,6 +321,86 @@ public class StockBasicWriteGroupService {
                             try { return etfShareTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_share target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(EtfFactorDataset.DEFINITION.datasetId())) {
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.EtfFactorMapper();
+                var port=new com.zoutrankil.questdbwithdata.repository.EtfFactorWritePort(
+                        etfFactorTarget.tableName(),member.targetId(),jdbc,questdb);
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.EtfFactorWritePort.CODEC,port,()->{
+                            try { return etfFactorTarget.targetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_factor target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(MoneyflowDcDataset.DEFINITION.datasetId())) {
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.MoneyflowDcMapper();
+                var port=new com.zoutrankil.questdbwithdata.repository.MoneyflowDcWritePort(
+                        moneyflowDcTarget.tableName(),member.targetId(),jdbc,questdb);
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.MoneyflowDcWritePort.CODEC,port,()->{
+                            try { return moneyflowDcTarget.targetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve moneyflow_dc target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(MoneyflowThsDataset.DEFINITION.datasetId())) {
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.MoneyflowThsMapper();
+                var port=new com.zoutrankil.questdbwithdata.repository.MoneyflowThsWritePort(
+                        moneyflowThsTarget.tableName(),member.targetId(),jdbc,questdb);
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.MoneyflowThsWritePort.CODEC,port,()->{
+                            try { return moneyflowThsTarget.targetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve moneyflow_ths target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(MoneyflowDataset.DEFINITION.datasetId())) {
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.MoneyflowMapper();
+                var port=new com.zoutrankil.questdbwithdata.repository.MoneyflowWritePort(
+                        moneyflowTarget.tableName(),member.targetId(),jdbc,questdb);
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.MoneyflowWritePort.CODEC,port,()->{
+                            try { return moneyflowTarget.targetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve moneyflow target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(IndexDailyMarketDataset.DEFINITION.datasetId())) {
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.IndexDailyMarketMapper();
+                var port=new com.zoutrankil.questdbwithdata.repository.IndexDailyMarketWritePort(
+                        indexDailyMarketTarget.tableName(),member.targetId(),jdbc,questdb);
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.IndexDailyMarketWritePort.CODEC,port,()->{
+                            try { return indexDailyMarketTarget.targetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve index_daily_market target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(IndexDailyBasicDataset.DEFINITION.datasetId())) {
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.IndexDailyBasicMapper();
+                var port=new com.zoutrankil.questdbwithdata.repository.IndexDailyBasicWritePort(
+                        indexDailyBasicTarget.tableName(),member.targetId(),jdbc,questdb);
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.IndexDailyBasicWritePort.CODEC,port,()->{
+                            try { return indexDailyBasicTarget.targetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve index_daily_basic target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(IndexWeightDataset.DEFINITION.datasetId())) {
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.IndexWeightMapper();
+                var port=new com.zoutrankil.questdbwithdata.repository.IndexWeightWritePort(
+                        indexWeightTarget.tableName(),member.targetId(),jdbc,questdb);
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.IndexWeightWritePort.CODEC,port,()->{
+                            try { return indexWeightTarget.targetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve index_weight target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(EtfPortfolioDataset.DEFINITION.datasetId())) {
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.EtfPortfolioMapper();
+                var port=new com.zoutrankil.questdbwithdata.repository.EtfPortfolioWritePort(
+                        etfPortfolioTarget.tableName(),member.targetId(),jdbc,questdb);
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.EtfPortfolioWritePort.CODEC,port,()->{
+                            try { return etfPortfolioTarget.targetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_portfolio target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(EtfBasicDataset.DEFINITION.datasetId())) {
                 var mapper=new com.zoutrankil.questdbwithdata.mapper.EtfBasicMapper();
                 var port=new com.zoutrankil.questdbwithdata.repository.EtfBasicWritePort(
@@ -278,6 +410,26 @@ public class StockBasicWriteGroupService {
                         com.zoutrankil.questdbwithdata.repository.EtfBasicWritePort.CODEC,port,()->{
                             try { return etfBasicTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_basic target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(IndexMonthlyDataset.DEFINITION.datasetId())) {
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.IndexMonthlyMapper();
+                var port=new com.zoutrankil.questdbwithdata.repository.IndexMonthlyWritePort(
+                        indexMonthlyTarget.tableName(),member.targetId(),jdbc,questdb);
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.IndexMonthlyWritePort.CODEC,port,()->{
+                            try { new IndexMonthlyPublication(jdbc,ledger).requireNoPendingPublication(); return indexMonthlyTarget.physicalTargetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve index_monthly target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(DcIndexDataset.DEFINITION.datasetId())) {
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.DcIndexMapper();
+                var port=new com.zoutrankil.questdbwithdata.repository.DcIndexWritePort(
+                        dcIndexTarget.tableName(),member.targetId(),jdbc,questdb);
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.DcIndexWritePort.CODEC,port,()->{
+                            try { dcIndexTarget.requireNoPendingPublication(); return dcIndexTarget.physicalTargetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve dc_index target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(StockStDailyDataset.DEFINITION.datasetId())) {
                 var mapper=new com.zoutrankil.questdbwithdata.mapper.StockStDailyMapper();

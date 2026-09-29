@@ -1,0 +1,18 @@
+{
+  "task" : "D023",
+  "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-ledger.sqlite",
+  "runId" : "dc-index-publication-e1c40977-9ad9-4cab-a4f4-5ee89cd69cda",
+  "writerStopped" : true,
+  "startedAt" : "2026-09-29T22:35:20.134318700Z",
+  "formalTableMutated" : false,
+  "stateBefore" : "IN_DOUBT",
+  "before" : {
+    "duplicateKeys" : 0,
+    "rows" : 2062,
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a"
+  },
+  "status" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: Publication changed concurrently",
+  "finishedAt" : "2026-09-29T22:35:26.370384600Z"
+}

@@ -1,0 +1,99 @@
+{
+  "task": "D018",
+  "endpoint": "fund_portfolio",
+  "announcementDate": "2026-08-28",
+  "runId": "etf-portfolio-ef180bc9-0a16-4538-870d-1a265bd8341b",
+  "runState": "PARTIAL",
+  "failure": "Duplicate business key within/across pages",
+  "sourceComplete": false,
+  "pageSize": 8000,
+  "capturedPageCount": 27,
+  "firstOffset": 0,
+  "lastOffset": 208000,
+  "capturedRows": 216000,
+  "uniqueBusinessKeys": 215998,
+  "duplicateBusinessKeyCount": 2,
+  "duplicateExtraRows": 2,
+  "identicalDuplicateKeys": 0,
+  "conflictingDuplicateKeys": 2,
+  "samePageDuplicateKeys": 0,
+  "crossPageDuplicateKeys": 2,
+  "duplicateKeys": [
+    {
+      "ts_code": "021461.OF",
+      "ann_date": "20260828",
+      "end_date": "20260630",
+      "symbol": "601112.SH",
+      "occurrences": 2,
+      "pageOffsets": [
+        48000,
+        208000
+      ],
+      "rowIndexes": [
+        6183,
+        4255
+      ],
+      "differentSourceFields": [
+        "mkv",
+        "amount"
+      ]
+    },
+    {
+      "ts_code": "161217.SZ",
+      "ann_date": "20260828",
+      "end_date": "20260630",
+      "symbol": "601112.SH",
+      "occurrences": 2,
+      "pageOffsets": [
+        48000,
+        208000
+      ],
+      "rowIndexes": [
+        6184,
+        4256
+      ],
+      "differentSourceFields": [
+        "mkv",
+        "amount"
+      ]
+    }
+  ],
+  "decision": "Preserve and reject. The repeated complete keys have conflicting mkv/amount values, so no provider-correct deduplication rule is established.",
+  "completeResponseTotalRows": null,
+  "pageOffsetsObserved": [
+    0,
+    8000,
+    16000,
+    24000,
+    32000,
+    40000,
+    48000,
+    56000,
+    64000,
+    72000,
+    80000,
+    88000,
+    96000,
+    104000,
+    112000,
+    120000,
+    128000,
+    136000,
+    144000,
+    152000,
+    160000,
+    168000,
+    176000,
+    184000,
+    192000,
+    200000,
+    208000
+  ],
+  "receipt": "artifacts/java-migration/market-live-d1639bce7aaf406c9421d1c393dfe0ef/sync-evidence/etf-portfolio-ef180bc9-0a16-4538-870d-1a265bd8341b/source/incomplete-20260828-d618f394-c403-49f2-b875-9e6addb32bd4.json",
+  "receiptBytes": 35287649,
+  "receiptSha256": "945300b31a9b491f481310b0850bfbf4de95133cf8be620559be3b145e824360",
+  "d018DateWriteEligible": false,
+  "reasonNoDateWrite": "EtfPortfolioSource.fetch failed before EtfPortfolioSyncAdapter received the complete date Result or emitted its chunks.",
+  "incrementalCheckpointAdvancedBeyondPriorVerifiedThrough": false,
+  "formalTableMutated": false
+}

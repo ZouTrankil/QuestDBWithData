@@ -1,0 +1,139 @@
+{
+  "task" : "D017",
+  "table" : "java_d017_etf_factor_779e998396d74251b53b0104914f49fe",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-779e998396d74251b53b0104914f49fe\\D017-recovery-0f4ff7d6-bdb8-418a-a6da-0bc2a5d2fc3b.sqlite",
+  "startedAt" : "2026-09-29T20:34:07.959457500Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "before" : {
+    "sha256" : "dce063320d218926f81c1cccdfe01fee03b22e70577e8d53e3490b0bab5ae949",
+    "rows" : 4299,
+    "duplicateKeys" : 0
+  },
+  "rowsBefore" : 4299,
+  "cancelBeforeSource" : {
+    "runId" : "cancel-before-d113a6e8-9fde-4f9b-907d-2dcc72207c94",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterVerifiedPage" : {
+    "runId" : "cancel-after-page-7f3899d1-1e68-49ef-9c68-0a57f6dc77c3",
+    "state" : "CANCELLED",
+    "sourceRows" : 2163,
+    "verifiedRows" : 2163,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "resume" : {
+    "runId" : "resume-557b7af7-bf41-4f6d-baa5-04f33033f375",
+    "state" : "VERIFIED",
+    "sourceRows" : 2163,
+    "verifiedRows" : 2163,
+    "errorCode" : null,
+    "reusedRows" : 2163
+  },
+  "resumeSendCalls" : 0,
+  "independentResumeReadback" : {
+    "actualRows" : 2163,
+    "passed" : true,
+    "tradeDates" : [ "2026-09-28" ],
+    "from" : "2026-09-28",
+    "mismatchedValues" : 0,
+    "mode" : "BACKFILL",
+    "targetId" : "static-v2-74d823d831bae4e1e188a49709727017b94405539e7cff78e49aba63bb677133",
+    "task" : "D017",
+    "sourceRows" : 2163,
+    "emptyTradeDates" : [ ],
+    "sourceEvidenceBytes" : 3786704,
+    "to" : "2026-09-28",
+    "matchedRows" : 2163,
+    "rangeRows" : 2163,
+    "logicalDate" : "2026-09-30",
+    "outOfPlanDateRows" : 0,
+    "extraKeys" : 0,
+    "table" : "java_d017_etf_factor_779e998396d74251b53b0104914f49fe",
+    "rangeCountQuery" : "SELECT count() AS row_count FROM \"java_d017_etf_factor_779e998396d74251b53b0104914f49fe\" WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP)",
+    "status" : "MATCHED",
+    "missingKeys" : 0,
+    "sourceDuplicateKeys" : 0,
+    "readbackQuery" : "SELECT ts_code,cast(trade_date AS long) AS trade_date_micros,open,high,low,close,pre_close,change,pct_change,vol,amount,asi_bfq,asit_bfq,bbi_bfq,bias1_bfq,bias2_bfq,bias3_bfq,brar_ar_bfq,brar_br_bfq,cr_bfq,dfma_dif_bfq,dfma_difma_bfq,dpo_bfq,madpo_bfq,ema_bfq_5,ema_bfq_10,ema_bfq_20,ema_bfq_30,ema_bfq_60,ema_bfq_90,ema_bfq_250,emv_bfq,maemv_bfq,expma_12_bfq,expma_50_bfq,ktn_down_bfq,ktn_mid_bfq,ktn_upper_bfq,ma_bfq_5,ma_bfq_10,ma_bfq_20,ma_bfq_30,ma_bfq_60,ma_bfq_90,ma_bfq_250,macd_bfq,macd_dif_bfq,macd_dea_bfq,kdj_bfq,kdj_k_bfq,kdj_d_bfq,rsi_bfq_6,rsi_bfq_12,rsi_bfq_24,boll_upper_bfq,boll_mid_bfq,boll_lower_bfq,atr_bfq,cci_bfq,dmi_pdi_bfq,dmi_mdi_bfq,dmi_adx_bfq,dmi_adxr_bfq,mass_bfq,ma_mass_bfq,mfi_bfq,mtm_bfq,mtmma_bfq,obv_bfq,psy_bfq,psyma_bfq,roc_bfq,maroc_bfq,taq_down_bfq,taq_mid_bfq,taq_up_bfq,trix_bfq,trma_bfq,vr_bfq,wr_bfq,wr1_bfq,xsii_td1_bfq,xsii_td2_bfq,xsii_td3_bfq,xsii_td4_bfq,updays,downdays,lowdays,topdays FROM \"java_d017_etf_factor_779e998396d74251b53b0104914f49fe\" WHERE trade_date=cast(? AS TIMESTAMP) ORDER BY ts_code LIMIT 8001",
+    "sourceReceipts" : [ {
+      "sha256" : "970f530919e95a28ed33acc79d8f9a4d8167ae35397c408a99845f8d7b76a28f",
+      "rows" : 2163,
+      "tradeDate" : "2026-09-28",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-779e998396d74251b53b0104914f49fe\\sync-evidence\\D017-recovery-0f4ff7d6-bdb8-418a-a6da-0bc2a5d2fc3b\\source\\fund-factor-pro-20260928-970f530919e95a28ed33acc79d8f9a4d8167ae35397c408a99845f8d7b76a28f.json"
+    } ],
+    "mismatchSamples" : [ ],
+    "runId" : "resume-557b7af7-bf41-4f6d-baa5-04f33033f375",
+    "duplicateKeys" : 0,
+    "comparedColumns" : [ "ts_code", "trade_date", "open", "high", "low", "close", "pre_close", "change", "pct_change", "vol", "amount", "asi_bfq", "asit_bfq", "bbi_bfq", "bias1_bfq", "bias2_bfq", "bias3_bfq", "brar_ar_bfq", "brar_br_bfq", "cr_bfq", "dfma_dif_bfq", "dfma_difma_bfq", "dpo_bfq", "madpo_bfq", "ema_bfq_5", "ema_bfq_10", "ema_bfq_20", "ema_bfq_30", "ema_bfq_60", "ema_bfq_90", "ema_bfq_250", "emv_bfq", "maemv_bfq", "expma_12_bfq", "expma_50_bfq", "ktn_down_bfq", "ktn_mid_bfq", "ktn_upper_bfq", "ma_bfq_5", "ma_bfq_10", "ma_bfq_20", "ma_bfq_30", "ma_bfq_60", "ma_bfq_90", "ma_bfq_250", "macd_bfq", "macd_dif_bfq", "macd_dea_bfq", "kdj_bfq", "kdj_k_bfq", "kdj_d_bfq", "rsi_bfq_6", "rsi_bfq_12", "rsi_bfq_24", "boll_upper_bfq", "boll_mid_bfq", "boll_lower_bfq", "atr_bfq", "cci_bfq", "dmi_pdi_bfq", "dmi_mdi_bfq", "dmi_adx_bfq", "dmi_adxr_bfq", "mass_bfq", "ma_mass_bfq", "mfi_bfq", "mtm_bfq", "mtmma_bfq", "obv_bfq", "psy_bfq", "psyma_bfq", "roc_bfq", "maroc_bfq", "taq_down_bfq", "taq_mid_bfq", "taq_up_bfq", "trix_bfq", "trma_bfq", "vr_bfq", "wr_bfq", "wr1_bfq", "xsii_td1_bfq", "xsii_td2_bfq", "xsii_td3_bfq", "xsii_td4_bfq", "updays", "downdays", "lowdays", "topdays" ]
+  },
+  "postSendLostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 3361,
+      "digest" : "e15ee71f26ad874cc75925112ceb6c2870cbdf9cb4eb43f341d9ba413aa54ead",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "cliResume" : {
+    "runId" : "etf-factor-cc8d4c35-6c3d-4579-b329-85e8f5d5574c",
+    "state" : "VERIFIED",
+    "sourceRows" : 2163,
+    "verifiedRows" : 2163,
+    "errorCode" : null,
+    "reusedRows" : 2163
+  },
+  "independentCliResumeReadback" : {
+    "actualRows" : 2163,
+    "passed" : true,
+    "tradeDates" : [ "2026-09-28" ],
+    "from" : "2026-09-28",
+    "mismatchedValues" : 0,
+    "mode" : "BACKFILL",
+    "targetId" : "static-v2-74d823d831bae4e1e188a49709727017b94405539e7cff78e49aba63bb677133",
+    "task" : "D017",
+    "sourceRows" : 2163,
+    "emptyTradeDates" : [ ],
+    "sourceEvidenceBytes" : 3786704,
+    "to" : "2026-09-28",
+    "matchedRows" : 2163,
+    "rangeRows" : 2163,
+    "logicalDate" : "2026-09-30",
+    "outOfPlanDateRows" : 0,
+    "extraKeys" : 0,
+    "table" : "java_d017_etf_factor_779e998396d74251b53b0104914f49fe",
+    "rangeCountQuery" : "SELECT count() AS row_count FROM \"java_d017_etf_factor_779e998396d74251b53b0104914f49fe\" WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP)",
+    "status" : "MATCHED",
+    "missingKeys" : 0,
+    "sourceDuplicateKeys" : 0,
+    "readbackQuery" : "SELECT ts_code,cast(trade_date AS long) AS trade_date_micros,open,high,low,close,pre_close,change,pct_change,vol,amount,asi_bfq,asit_bfq,bbi_bfq,bias1_bfq,bias2_bfq,bias3_bfq,brar_ar_bfq,brar_br_bfq,cr_bfq,dfma_dif_bfq,dfma_difma_bfq,dpo_bfq,madpo_bfq,ema_bfq_5,ema_bfq_10,ema_bfq_20,ema_bfq_30,ema_bfq_60,ema_bfq_90,ema_bfq_250,emv_bfq,maemv_bfq,expma_12_bfq,expma_50_bfq,ktn_down_bfq,ktn_mid_bfq,ktn_upper_bfq,ma_bfq_5,ma_bfq_10,ma_bfq_20,ma_bfq_30,ma_bfq_60,ma_bfq_90,ma_bfq_250,macd_bfq,macd_dif_bfq,macd_dea_bfq,kdj_bfq,kdj_k_bfq,kdj_d_bfq,rsi_bfq_6,rsi_bfq_12,rsi_bfq_24,boll_upper_bfq,boll_mid_bfq,boll_lower_bfq,atr_bfq,cci_bfq,dmi_pdi_bfq,dmi_mdi_bfq,dmi_adx_bfq,dmi_adxr_bfq,mass_bfq,ma_mass_bfq,mfi_bfq,mtm_bfq,mtmma_bfq,obv_bfq,psy_bfq,psyma_bfq,roc_bfq,maroc_bfq,taq_down_bfq,taq_mid_bfq,taq_up_bfq,trix_bfq,trma_bfq,vr_bfq,wr_bfq,wr1_bfq,xsii_td1_bfq,xsii_td2_bfq,xsii_td3_bfq,xsii_td4_bfq,updays,downdays,lowdays,topdays FROM \"java_d017_etf_factor_779e998396d74251b53b0104914f49fe\" WHERE trade_date=cast(? AS TIMESTAMP) ORDER BY ts_code LIMIT 8001",
+    "sourceReceipts" : [ {
+      "sha256" : "970f530919e95a28ed33acc79d8f9a4d8167ae35397c408a99845f8d7b76a28f",
+      "rows" : 2163,
+      "tradeDate" : "2026-09-28",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-779e998396d74251b53b0104914f49fe\\sync-evidence\\etf-factor-cc8d4c35-6c3d-4579-b329-85e8f5d5574c\\source\\fund-factor-pro-20260928-970f530919e95a28ed33acc79d8f9a4d8167ae35397c408a99845f8d7b76a28f.json"
+    } ],
+    "mismatchSamples" : [ ],
+    "runId" : "etf-factor-cc8d4c35-6c3d-4579-b329-85e8f5d5574c",
+    "duplicateKeys" : 0,
+    "comparedColumns" : [ "ts_code", "trade_date", "open", "high", "low", "close", "pre_close", "change", "pct_change", "vol", "amount", "asi_bfq", "asit_bfq", "bbi_bfq", "bias1_bfq", "bias2_bfq", "bias3_bfq", "brar_ar_bfq", "brar_br_bfq", "cr_bfq", "dfma_dif_bfq", "dfma_difma_bfq", "dpo_bfq", "madpo_bfq", "ema_bfq_5", "ema_bfq_10", "ema_bfq_20", "ema_bfq_30", "ema_bfq_60", "ema_bfq_90", "ema_bfq_250", "emv_bfq", "maemv_bfq", "expma_12_bfq", "expma_50_bfq", "ktn_down_bfq", "ktn_mid_bfq", "ktn_upper_bfq", "ma_bfq_5", "ma_bfq_10", "ma_bfq_20", "ma_bfq_30", "ma_bfq_60", "ma_bfq_90", "ma_bfq_250", "macd_bfq", "macd_dif_bfq", "macd_dea_bfq", "kdj_bfq", "kdj_k_bfq", "kdj_d_bfq", "rsi_bfq_6", "rsi_bfq_12", "rsi_bfq_24", "boll_upper_bfq", "boll_mid_bfq", "boll_lower_bfq", "atr_bfq", "cci_bfq", "dmi_pdi_bfq", "dmi_mdi_bfq", "dmi_adx_bfq", "dmi_adxr_bfq", "mass_bfq", "ma_mass_bfq", "mfi_bfq", "mtm_bfq", "mtmma_bfq", "obv_bfq", "psy_bfq", "psyma_bfq", "roc_bfq", "maroc_bfq", "taq_down_bfq", "taq_mid_bfq", "taq_up_bfq", "trix_bfq", "trma_bfq", "vr_bfq", "wr_bfq", "wr1_bfq", "xsii_td1_bfq", "xsii_td2_bfq", "xsii_td3_bfq", "xsii_td4_bfq", "updays", "downdays", "lowdays", "topdays" ]
+  },
+  "after" : {
+    "sha256" : "dce063320d218926f81c1cccdfe01fee03b22e70577e8d53e3490b0bab5ae949",
+    "rows" : 4299,
+    "duplicateKeys" : 0
+  },
+  "rowsAfter" : 4299,
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T20:34:28.885677100Z"
+}

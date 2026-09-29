@@ -1,0 +1,168 @@
+{
+  "task" : "D023",
+  "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-ledger.sqlite",
+  "action" : "publication",
+  "startedAt" : "2026-09-29T23:03:46.578484100Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a",
+    "duplicateKeys" : 0,
+    "rows" : 2062
+  },
+  "plan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.dc_index",
+        "version" : 1,
+        "datasetId" : "dc_index",
+        "datasetVersion" : 1,
+        "owner" : "dc_index_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "dc_index.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 1,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT5S"
+        },
+        "timeout" : "PT2H",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 5,
+          "maxRows" : 25000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "checkpointBefore" : "2026-09-18",
+        "physicalTargetId" : "static-v2-19a57159b84538e043bee59845a90d8cac35977f2c8d2501fd78a8272ca48137",
+        "targetId" : "static-v2-f7139b0e8c5effcd789c54674d5083917845676218261ed0c125ca769ccdd880",
+        "targetMaxBefore" : "2026-09-18",
+        "targetMinBefore" : "2026-09-17",
+        "trade_dates" : "20260917"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-f7139b0e8c5effcd789c54674d5083917845676218261ed0c125ca769ccdd880",
+    "physicalTargetId" : "static-v2-19a57159b84538e043bee59845a90d8cac35977f2c8d2501fd78a8272ca48137",
+    "checkpointBefore" : "2026-09-18",
+    "checkpointAnchor" : "2026-09-17",
+    "targetMinDate" : "2026-09-17",
+    "targetMaxDate" : "2026-09-18",
+    "requestedThrough" : "2026-09-17",
+    "bootstrap" : false,
+    "cappedByBudget" : false
+  },
+  "beforeRecovery" : {
+    "runId" : "dc-index-publication-e86f0bbd-fb9a-43eb-b19b-3360af5474ff",
+    "state" : "IN_DOUBT",
+    "sourceRows" : 1031,
+    "verifiedRows" : 1031,
+    "errorCode" : "IllegalStateException",
+    "reusedRows" : 0
+  },
+  "faultFired" : true,
+  "finish" : "completed",
+  "durableStateAfter" : "VERIFIED",
+  "independentReadback" : {
+    "tradeDates" : [ "2026-09-17" ],
+    "status" : "MATCHED",
+    "physicalTargetBefore" : "static-v2-19a57159b84538e043bee59845a90d8cac35977f2c8d2501fd78a8272ca48137",
+    "matchedRows" : 1031,
+    "mismatchSamples" : [ ],
+    "receipts" : [ {
+      "rows" : 1031,
+      "sha256" : "fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37",
+      "date" : "2026-09-17",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-evidence\\dc-index-publication-e86f0bbd-fb9a-43eb-b19b-3360af5474ff\\source\\dc-index-20260917-fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37.json"
+    } ],
+    "evidenceBytes" : 236915,
+    "extraKeys" : 0,
+    "mismatchedRows" : 0,
+    "actualRows" : 1031,
+    "sourceDuplicateKeys" : 0,
+    "runId" : "dc-index-publication-e86f0bbd-fb9a-43eb-b19b-3360af5474ff",
+    "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+    "missingKeys" : 0,
+    "duplicateKeys" : 0,
+    "sourceRows" : 1031,
+    "toInclusive" : "2026-09-17",
+    "physicalTargetAfter" : "static-v2-7ee9b56505a9eaf2a52c6b94e9b789050da4c03e7acd11e290ea0be2af1f860b",
+    "fromInclusive" : "2026-09-17"
+  },
+  "after" : {
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a",
+    "duplicateKeys" : 0,
+    "rows" : 2062
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T23:04:01.739652200Z"
+}

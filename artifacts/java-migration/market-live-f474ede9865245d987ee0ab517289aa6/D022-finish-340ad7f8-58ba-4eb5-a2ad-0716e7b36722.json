@@ -1,0 +1,110 @@
+{
+  "task" : "D022",
+  "runId" : "index-monthly-07ac9e40-f27b-4e19-ba0c-22250650f5b1",
+  "table" : "java_d022_index_monthly_f474ede9865245d987ee0ab517289aa6",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-f474ede9865245d987ee0ab517289aa6\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T22:02:21.121702900Z",
+  "writerStopped" : true,
+  "formalTableMutated" : false,
+  "before" : {
+    "sha256" : "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "duplicateKeys" : 0,
+    "rows" : 0
+  },
+  "recovery" : {
+    "entry" : {
+      "intent" : {
+        "id" : "index-monthly-publication-c78a18bc-0b5f-4de6-9313-3e3b8db63fee",
+        "dataset" : "index_monthly",
+        "runId" : "index-monthly-07ac9e40-f27b-4e19-ba0c-22250650f5b1",
+        "target" : "java_d022_index_monthly_f474ede9865245d987ee0ab517289aa6",
+        "backup" : "java_d022_index_monthly_backup_fd89b813e1d64d8ca2514deec2fa0d79",
+        "stage" : "java_d022_index_monthly_stage_30a49514bbaa49e387170dc9a1f1e03e",
+        "initialTarget" : "static-v2-ad73ebc5e080fe207c10d30eee20781c872ca913743a0f2f4f58c456d032344e",
+        "originalId" : 2956,
+        "originalDirectory" : "java_d022_index_monthly_f474ede9865245d987ee0ab517289aa6~2956",
+        "replacementId" : 2957,
+        "beforeFingerprint" : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "afterFingerprint" : "cb22828238a2e3ec0d7f5acee7428b500d39401bc1549efd443037c24e7e54f9",
+        "scope" : "{\"fromInclusive\":\"2026-06-01\",\"toInclusive\":\"2026-07-31\",\"stageDirectory\":\"java_d022_index_monthly_stage_30a49514bbaa49e387170dc9a1f1e03e~2957\",\"sourceReceipt\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\artifacts\\\\java-migration\\\\market-live-f474ede9865245d987ee0ab517289aa6\\\\sync-evidence\\\\index-monthly-07ac9e40-f27b-4e19-ba0c-22250650f5b1\\\\source\\\\index-monthly-000300-SH-20260601-20260731-1d1147a2-36f8-49de-b26e-f98bfc7c1f83.json\",\"code\":\"000300.SH\",\"stageReceiptFingerprint\":\"0161504d2c91166a58f13aff7b7a02024cbef23df8bf33bf073b0e8a5154e55e\",\"stageReceipt\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\artifacts\\\\java-migration\\\\market-live-f474ede9865245d987ee0ab517289aa6\\\\sync-evidence\\\\index-monthly-07ac9e40-f27b-4e19-ba0c-22250650f5b1\\\\stage\\\\recovery-83d11e01-73d8-4cad-94f1-a8aa07bae6ad\\\\java_d022_index_monthly_stage_30a49514bbaa49e387170dc9a1f1e03e-verified.json\",\"sourceFingerprint\":\"013948e4c80e9f0d6c15a21cb732998dd35ca87979263cc2a46188fa310897ed\"}"
+      },
+      "state" : "VERIFIED",
+      "revision" : 3
+    },
+    "layout" : "PUBLISHED",
+    "target" : {
+      "identity" : {
+        "id" : 2957,
+        "directory" : "java_d022_index_monthly_stage_30a49514bbaa49e387170dc9a1f1e03e~2957",
+        "writerTxn" : 2
+      },
+      "rows" : [ {
+        "key" : {
+          "tsCode" : "000300.SH",
+          "tradeDate" : "2026-06-30"
+        },
+        "close" : 4979.4328,
+        "open" : 4897.8968,
+        "high" : 5064.2654,
+        "low" : 4677.5682,
+        "preClose" : 4892.1213,
+        "change" : 87.3115,
+        "pctChg" : 0.0178,
+        "vol" : 6.420768346E11,
+        "amount" : 1.8826130244804E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T21:58:56.191896Z"
+      }, {
+        "key" : {
+          "tsCode" : "000300.SH",
+          "tradeDate" : "2026-07-31"
+        },
+        "close" : 4588.1968,
+        "open" : 4972.6923,
+        "high" : 5017.3754,
+        "low" : 4478.2093,
+        "preClose" : 4979.4328,
+        "change" : -391.236,
+        "pctChg" : -0.0786,
+        "vol" : 6.407196789E11,
+        "amount" : 1.9851515758024E13,
+        "layer" : "macro_core",
+        "bucket" : "broad_base",
+        "updateTime" : "2026-09-29T21:58:56.191896Z"
+      } ],
+      "fingerprint" : "cb22828238a2e3ec0d7f5acee7428b500d39401bc1549efd443037c24e7e54f9",
+      "bytes" : 622
+    },
+    "backup" : {
+      "identity" : {
+        "id" : 2956,
+        "directory" : "java_d022_index_monthly_f474ede9865245d987ee0ab517289aa6~2956",
+        "writerTxn" : 1
+      },
+      "rows" : [ ],
+      "fingerprint" : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes" : 0
+    }
+  },
+  "independentReadback" : {
+    "missing" : 0,
+    "runId" : "index-monthly-07ac9e40-f27b-4e19-ba0c-22250650f5b1",
+    "rows" : 2,
+    "passed" : true,
+    "duplicates" : 0,
+    "status" : "MATCHED",
+    "formalTableMutated" : false,
+    "mismatches" : 0,
+    "expectedRows" : 2,
+    "comparedColumns" : [ "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount", "layer", "bucket", "update_time" ],
+    "extra" : 0
+  },
+  "after" : {
+    "sha256" : "d23bbf2b9567a0b125a62ffb6e35355df049edd9c173ce64f1fc48b2ff2c81e6",
+    "duplicateKeys" : 0,
+    "rows" : 2
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T22:02:25.836843200Z"
+}

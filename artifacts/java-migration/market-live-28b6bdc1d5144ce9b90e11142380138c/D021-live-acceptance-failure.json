@@ -1,0 +1,585 @@
+{
+  "task" : "D021",
+  "table" : "java_d021_index_weight_28b6bdc1d5144ce9b90e11142380138c",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T21:44:52.950454900Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+  "runs" : [ {
+    "runId" : "index-weight-a1758410-799b-4f41-8b4a-de76dd97c450",
+    "state" : "VERIFIED",
+    "sourceRows" : 4450,
+    "verifiedRows" : 4450,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "index-weight-9cea759f-d24c-485c-9def-cd0b7a212703",
+    "state" : "VERIFIED",
+    "sourceRows" : 4450,
+    "verifiedRows" : 4450,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "index-weight-f78a7664-b394-449c-8259-b1b29623646c",
+    "state" : "VERIFIED",
+    "sourceRows" : 4450,
+    "verifiedRows" : 4450,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "index-weight-58a090e3-f695-4836-8e89-9616609f954f",
+    "state" : "VERIFIED",
+    "sourceRows" : 4450,
+    "verifiedRows" : 4450,
+    "errorCode" : null,
+    "reusedRows" : 0
+  } ],
+  "independentReadbacks" : [ {
+    "task" : "D021",
+    "runId" : "index-weight-a1758410-799b-4f41-8b4a-de76dd97c450",
+    "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+    "table" : "java_d021_index_weight_28b6bdc1d5144ce9b90e11142380138c",
+    "mode" : "SNAPSHOT",
+    "from" : null,
+    "to" : null,
+    "observedAt" : "2026-09-29T21:43:23.142948Z",
+    "sourceRows" : 4450,
+    "expectedRows" : 4450,
+    "actualRows" : 4450,
+    "matches" : 4450,
+    "mismatches" : 0,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "extraKeys" : 0,
+    "mismatchKeySample" : [ ],
+    "calls" : [ {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-a1758410-799b-4f41-8b4a-de76dd97c450\\source\\complete-csindex_oss_xls-000688-a432f139763bdc8b1a1d25c8895b1de1b3295c3a4a028131aafde7b7c0d58064.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "a432f139763bdc8b1a1d25c8895b1de1b3295c3a4a028131aafde7b7c0d58064",
+      "rows" : 50,
+      "indexCode" : "000688"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-a1758410-799b-4f41-8b4a-de76dd97c450\\source\\complete-csindex_oss_xls-000510-b8520b615c9291cbec7ff8373ab4fa3f1152ab7bf2c6ed2bd45b4186ff94dc51.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "b8520b615c9291cbec7ff8373ab4fa3f1152ab7bf2c6ed2bd45b4186ff94dc51",
+      "rows" : 500,
+      "indexCode" : "000510"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-a1758410-799b-4f41-8b4a-de76dd97c450\\source\\complete-csindex_oss_xls-000016-db40406b9e401355df79fd175d8d4c5247a595167e22e3ba13d1206fb8ac3db9.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "db40406b9e401355df79fd175d8d4c5247a595167e22e3ba13d1206fb8ac3db9",
+      "rows" : 50,
+      "indexCode" : "000016"
+    }, {
+      "route" : "TUSHARE_INDEX_WEIGHT",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-a1758410-799b-4f41-8b4a-de76dd97c450\\source\\complete-tushare_latest_snapshot-399673-c09e4bc7f0ed75e076dee5d40dce7f66a691de1723cafa2f6e084579784b5470.json",
+      "sourceKind" : "tushare",
+      "fingerprint" : "c09e4bc7f0ed75e076dee5d40dce7f66a691de1723cafa2f6e084579784b5470",
+      "rows" : 50,
+      "indexCode" : "399673"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-a1758410-799b-4f41-8b4a-de76dd97c450\\source\\complete-csindex_oss_xls-000905-5cb645b2363ed3c2243f78eda598ecadaf77b84d8a3d6d3ff755d9688ece42c5.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "5cb645b2363ed3c2243f78eda598ecadaf77b84d8a3d6d3ff755d9688ece42c5",
+      "rows" : 500,
+      "indexCode" : "000905"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-a1758410-799b-4f41-8b4a-de76dd97c450\\source\\complete-csindex_oss_xls-932000-55df91016c1edd8566a7e603b248c306139c98168df6031236d82a4febc70afd.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "55df91016c1edd8566a7e603b248c306139c98168df6031236d82a4febc70afd",
+      "rows" : 2000,
+      "indexCode" : "932000"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-a1758410-799b-4f41-8b4a-de76dd97c450\\source\\complete-csindex_oss_xls-000852-4ca93d755d8290250aaba8c382a6f65daff445420cdf8f73142ffed97243d223.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "4ca93d755d8290250aaba8c382a6f65daff445420cdf8f73142ffed97243d223",
+      "rows" : 1000,
+      "indexCode" : "000852"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-a1758410-799b-4f41-8b4a-de76dd97c450\\source\\complete-csindex_oss_xls-000300-ad161e19fafffc5dbd191e36b28076736544b955e8e6f27af9831166cfd1b162.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "ad161e19fafffc5dbd191e36b28076736544b955e8e6f27af9831166cfd1b162",
+      "rows" : 300,
+      "indexCode" : "000300"
+    } ],
+    "fieldsCompared" : [ "index_code", "con_code", "trade_date", "index_name", "index_name_en", "con_name", "con_name_en", "exchange", "exchange_en", "weight", "update_time" ],
+    "status" : "MATCHED"
+  }, {
+    "task" : "D021",
+    "runId" : "index-weight-9cea759f-d24c-485c-9def-cd0b7a212703",
+    "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+    "table" : "java_d021_index_weight_28b6bdc1d5144ce9b90e11142380138c",
+    "mode" : "SNAPSHOT",
+    "from" : null,
+    "to" : null,
+    "observedAt" : "2026-09-29T21:43:23.142948Z",
+    "sourceRows" : 4450,
+    "expectedRows" : 4450,
+    "actualRows" : 4450,
+    "matches" : 4450,
+    "mismatches" : 0,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "extraKeys" : 0,
+    "mismatchKeySample" : [ ],
+    "calls" : [ {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-9cea759f-d24c-485c-9def-cd0b7a212703\\source\\complete-csindex_oss_xls-932000-55df91016c1edd8566a7e603b248c306139c98168df6031236d82a4febc70afd.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "55df91016c1edd8566a7e603b248c306139c98168df6031236d82a4febc70afd",
+      "rows" : 2000,
+      "indexCode" : "932000"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-9cea759f-d24c-485c-9def-cd0b7a212703\\source\\complete-csindex_oss_xls-000905-5cb645b2363ed3c2243f78eda598ecadaf77b84d8a3d6d3ff755d9688ece42c5.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "5cb645b2363ed3c2243f78eda598ecadaf77b84d8a3d6d3ff755d9688ece42c5",
+      "rows" : 500,
+      "indexCode" : "000905"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-9cea759f-d24c-485c-9def-cd0b7a212703\\source\\complete-csindex_oss_xls-000688-a432f139763bdc8b1a1d25c8895b1de1b3295c3a4a028131aafde7b7c0d58064.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "a432f139763bdc8b1a1d25c8895b1de1b3295c3a4a028131aafde7b7c0d58064",
+      "rows" : 50,
+      "indexCode" : "000688"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-9cea759f-d24c-485c-9def-cd0b7a212703\\source\\complete-csindex_oss_xls-000016-db40406b9e401355df79fd175d8d4c5247a595167e22e3ba13d1206fb8ac3db9.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "db40406b9e401355df79fd175d8d4c5247a595167e22e3ba13d1206fb8ac3db9",
+      "rows" : 50,
+      "indexCode" : "000016"
+    }, {
+      "route" : "TUSHARE_INDEX_WEIGHT",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-9cea759f-d24c-485c-9def-cd0b7a212703\\source\\complete-tushare_latest_snapshot-399673-c09e4bc7f0ed75e076dee5d40dce7f66a691de1723cafa2f6e084579784b5470.json",
+      "sourceKind" : "tushare",
+      "fingerprint" : "c09e4bc7f0ed75e076dee5d40dce7f66a691de1723cafa2f6e084579784b5470",
+      "rows" : 50,
+      "indexCode" : "399673"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-9cea759f-d24c-485c-9def-cd0b7a212703\\source\\complete-csindex_oss_xls-000852-4ca93d755d8290250aaba8c382a6f65daff445420cdf8f73142ffed97243d223.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "4ca93d755d8290250aaba8c382a6f65daff445420cdf8f73142ffed97243d223",
+      "rows" : 1000,
+      "indexCode" : "000852"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-9cea759f-d24c-485c-9def-cd0b7a212703\\source\\complete-csindex_oss_xls-000510-b8520b615c9291cbec7ff8373ab4fa3f1152ab7bf2c6ed2bd45b4186ff94dc51.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "b8520b615c9291cbec7ff8373ab4fa3f1152ab7bf2c6ed2bd45b4186ff94dc51",
+      "rows" : 500,
+      "indexCode" : "000510"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-9cea759f-d24c-485c-9def-cd0b7a212703\\source\\complete-csindex_oss_xls-000300-ad161e19fafffc5dbd191e36b28076736544b955e8e6f27af9831166cfd1b162.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "ad161e19fafffc5dbd191e36b28076736544b955e8e6f27af9831166cfd1b162",
+      "rows" : 300,
+      "indexCode" : "000300"
+    } ],
+    "fieldsCompared" : [ "index_code", "con_code", "trade_date", "index_name", "index_name_en", "con_name", "con_name_en", "exchange", "exchange_en", "weight", "update_time" ],
+    "status" : "MATCHED"
+  }, {
+    "task" : "D021",
+    "runId" : "index-weight-f78a7664-b394-449c-8259-b1b29623646c",
+    "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+    "table" : "java_d021_index_weight_28b6bdc1d5144ce9b90e11142380138c",
+    "mode" : "SNAPSHOT",
+    "from" : null,
+    "to" : null,
+    "observedAt" : "2026-09-29T21:43:23.142948Z",
+    "sourceRows" : 4450,
+    "expectedRows" : 4450,
+    "actualRows" : 4450,
+    "matches" : 4450,
+    "mismatches" : 0,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "extraKeys" : 0,
+    "mismatchKeySample" : [ ],
+    "calls" : [ {
+      "route" : "TUSHARE_INDEX_WEIGHT",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-f78a7664-b394-449c-8259-b1b29623646c\\source\\complete-tushare_latest_snapshot-399673-c09e4bc7f0ed75e076dee5d40dce7f66a691de1723cafa2f6e084579784b5470.json",
+      "sourceKind" : "tushare",
+      "fingerprint" : "c09e4bc7f0ed75e076dee5d40dce7f66a691de1723cafa2f6e084579784b5470",
+      "rows" : 50,
+      "indexCode" : "399673"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-f78a7664-b394-449c-8259-b1b29623646c\\source\\complete-csindex_oss_xls-000300-ad161e19fafffc5dbd191e36b28076736544b955e8e6f27af9831166cfd1b162.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "ad161e19fafffc5dbd191e36b28076736544b955e8e6f27af9831166cfd1b162",
+      "rows" : 300,
+      "indexCode" : "000300"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-f78a7664-b394-449c-8259-b1b29623646c\\source\\complete-csindex_oss_xls-000905-5cb645b2363ed3c2243f78eda598ecadaf77b84d8a3d6d3ff755d9688ece42c5.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "5cb645b2363ed3c2243f78eda598ecadaf77b84d8a3d6d3ff755d9688ece42c5",
+      "rows" : 500,
+      "indexCode" : "000905"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-f78a7664-b394-449c-8259-b1b29623646c\\source\\complete-csindex_oss_xls-000016-db40406b9e401355df79fd175d8d4c5247a595167e22e3ba13d1206fb8ac3db9.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "db40406b9e401355df79fd175d8d4c5247a595167e22e3ba13d1206fb8ac3db9",
+      "rows" : 50,
+      "indexCode" : "000016"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-f78a7664-b394-449c-8259-b1b29623646c\\source\\complete-csindex_oss_xls-000510-b8520b615c9291cbec7ff8373ab4fa3f1152ab7bf2c6ed2bd45b4186ff94dc51.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "b8520b615c9291cbec7ff8373ab4fa3f1152ab7bf2c6ed2bd45b4186ff94dc51",
+      "rows" : 500,
+      "indexCode" : "000510"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-f78a7664-b394-449c-8259-b1b29623646c\\source\\complete-csindex_oss_xls-000688-a432f139763bdc8b1a1d25c8895b1de1b3295c3a4a028131aafde7b7c0d58064.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "a432f139763bdc8b1a1d25c8895b1de1b3295c3a4a028131aafde7b7c0d58064",
+      "rows" : 50,
+      "indexCode" : "000688"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-f78a7664-b394-449c-8259-b1b29623646c\\source\\complete-csindex_oss_xls-932000-55df91016c1edd8566a7e603b248c306139c98168df6031236d82a4febc70afd.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "55df91016c1edd8566a7e603b248c306139c98168df6031236d82a4febc70afd",
+      "rows" : 2000,
+      "indexCode" : "932000"
+    }, {
+      "route" : "CSINDEX_OSS_XLS",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-f78a7664-b394-449c-8259-b1b29623646c\\source\\complete-csindex_oss_xls-000852-4ca93d755d8290250aaba8c382a6f65daff445420cdf8f73142ffed97243d223.json",
+      "sourceKind" : "csindex_oss_xls",
+      "fingerprint" : "4ca93d755d8290250aaba8c382a6f65daff445420cdf8f73142ffed97243d223",
+      "rows" : 1000,
+      "indexCode" : "000852"
+    } ],
+    "fieldsCompared" : [ "index_code", "con_code", "trade_date", "index_name", "index_name_en", "con_name", "con_name_en", "exchange", "exchange_en", "weight", "update_time" ],
+    "status" : "MATCHED"
+  } ],
+  "initialPlan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.index_weight",
+        "version" : 1,
+        "datasetId" : "index_weight",
+        "datasetVersion" : 1,
+        "owner" : "index_weight_owner",
+        "supportedModes" : [ "BACKFILL", "SNAPSHOT" ],
+        "defaultMode" : "SNAPSHOT",
+        "parameters" : {
+          "stockDetailTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "force" : {
+            "type" : "BOOLEAN",
+            "required" : false,
+            "maxLength" : 5,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "index_weight.index_month",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 2,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT4M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 92,
+          "maxSlices" : 32,
+          "maxPages" : 32,
+          "maxRows" : 128000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 0,
+        "dependencies" : [ {
+          "jobId" : "data.index",
+          "version" : 1
+        }, {
+          "jobId" : "data.stock_detail_info",
+          "version" : 1
+        } ],
+        "frequency" : "WEEKLY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : false
+      },
+      "mode" : "SNAPSHOT",
+      "parameters" : {
+        "force" : false,
+        "observedAt" : "2026-09-29T21:43:23.142948Z",
+        "stockDetailTargetId" : "static-v2-ed7368d64ecfbc6c4535ad94159710d5c1ac2aac856a88ab7c4112fecc2af78b",
+        "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01"
+      },
+      "from" : null,
+      "to" : null,
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+    "targetMinBefore" : null,
+    "targetMaxBefore" : null,
+    "lastRefreshDate" : null,
+    "nextRefreshDate" : null,
+    "notDue" : false
+  },
+  "readbackAfterFirst" : {
+    "sha256" : "adfcdba4bec4444add651ff82d14079ec0b9ff50868abe6901178a45b6695722",
+    "rows" : 4450,
+    "duplicateKeys" : 0
+  },
+  "withinSevenDaysPlan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.index_weight",
+        "version" : 1,
+        "datasetId" : "index_weight",
+        "datasetVersion" : 1,
+        "owner" : "index_weight_owner",
+        "supportedModes" : [ "BACKFILL", "SNAPSHOT" ],
+        "defaultMode" : "SNAPSHOT",
+        "parameters" : {
+          "stockDetailTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "force" : {
+            "type" : "BOOLEAN",
+            "required" : false,
+            "maxLength" : 5,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "index_weight.index_month",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 2,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT4M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 92,
+          "maxSlices" : 32,
+          "maxPages" : 32,
+          "maxRows" : 128000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 0,
+        "dependencies" : [ {
+          "jobId" : "data.index",
+          "version" : 1
+        }, {
+          "jobId" : "data.stock_detail_info",
+          "version" : 1
+        } ],
+        "frequency" : "WEEKLY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : false
+      },
+      "mode" : "SNAPSHOT",
+      "parameters" : {
+        "force" : false,
+        "observedAt" : "2026-09-29T21:44:58.009237Z",
+        "stockDetailTargetId" : "static-v2-ed7368d64ecfbc6c4535ad94159710d5c1ac2aac856a88ab7c4112fecc2af78b",
+        "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+        "targetMaxBefore" : "2026-08-31",
+        "targetMinBefore" : "2026-08-31"
+      },
+      "from" : null,
+      "to" : null,
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+    "targetMinBefore" : "2026-08-31",
+    "targetMaxBefore" : "2026-08-31",
+    "lastRefreshDate" : "2026-09-30",
+    "nextRefreshDate" : "2026-10-07",
+    "notDue" : true
+  },
+  "historyPlan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.index_weight",
+        "version" : 1,
+        "datasetId" : "index_weight",
+        "datasetVersion" : 1,
+        "owner" : "index_weight_owner",
+        "supportedModes" : [ "BACKFILL", "SNAPSHOT" ],
+        "defaultMode" : "SNAPSHOT",
+        "parameters" : {
+          "stockDetailTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "force" : {
+            "type" : "BOOLEAN",
+            "required" : false,
+            "maxLength" : 5,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "index_weight.index_month",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 2,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT4M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 92,
+          "maxSlices" : 32,
+          "maxPages" : 32,
+          "maxRows" : 128000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 0,
+        "dependencies" : [ {
+          "jobId" : "data.index",
+          "version" : 1
+        }, {
+          "jobId" : "data.stock_detail_info",
+          "version" : 1
+        } ],
+        "frequency" : "WEEKLY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : false
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "force" : false,
+        "observedAt" : "2026-09-29T21:45:09.324317Z",
+        "stockDetailTargetId" : "static-v2-ed7368d64ecfbc6c4535ad94159710d5c1ac2aac856a88ab7c4112fecc2af78b",
+        "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+        "targetMaxBefore" : "2026-08-31",
+        "targetMinBefore" : "2026-08-31"
+      },
+      "from" : "2026-08-31",
+      "to" : "2026-08-31",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+    "targetMinBefore" : "2026-08-31",
+    "targetMaxBefore" : "2026-08-31",
+    "lastRefreshDate" : "2026-09-30",
+    "nextRefreshDate" : "2026-10-07",
+    "notDue" : false
+  },
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: D021 Tushare route differs from frozen universe",
+  "finishedAt" : "2026-09-29T21:46:02.118857500Z"
+}

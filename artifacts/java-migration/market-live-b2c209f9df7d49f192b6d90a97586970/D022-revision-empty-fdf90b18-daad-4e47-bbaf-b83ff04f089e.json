@@ -1,0 +1,316 @@
+{
+  "task" : "D022",
+  "table" : "java_d022_index_monthly_b2c209f9df7d49f192b6d90a97586970",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-b2c209f9df7d49f192b6d90a97586970\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T22:09:01.793152900Z",
+  "formalTableMutated" : false,
+  "routes" : [ {
+    "code" : "000300.SH",
+    "otherCodesBefore" : {
+      "rows" : 6,
+      "sha256" : "3f4719d5b9182a32b114bd7bd4b4cf23b224c63529e342b4a71464a0948e72d7",
+      "duplicateKeys" : 0
+    },
+    "checkpointBefore" : {
+      "anchor" : "2026-06-01",
+      "through" : "2026-08-31",
+      "latestVerifiedAt" : "2026-09-29T22:03:26.528617900Z"
+    },
+    "backfill" : {
+      "runId" : "index-monthly-8064c5d7-0e29-4918-8c98-47a88a293f14",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "backfillReadback" : {
+      "comparedColumns" : [ "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount", "layer", "bucket", "update_time" ],
+      "extra" : 0,
+      "missing" : 0,
+      "runId" : "index-monthly-8064c5d7-0e29-4918-8c98-47a88a293f14",
+      "rows" : 2,
+      "passed" : true,
+      "duplicates" : 0,
+      "status" : "MATCHED",
+      "formalTableMutated" : false,
+      "mismatches" : 0,
+      "expectedRows" : 2
+    },
+    "checkpointAfterBackfill" : {
+      "anchor" : "2026-06-01",
+      "through" : "2026-08-31",
+      "latestVerifiedAt" : "2026-09-29T22:03:26.528617900Z"
+    },
+    "incremental" : {
+      "runId" : "index-monthly-9654a50b-7299-4b27-b204-3075a79789ad",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "incrementalReadback" : {
+      "comparedColumns" : [ "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount", "layer", "bucket", "update_time" ],
+      "extra" : 0,
+      "missing" : 0,
+      "runId" : "index-monthly-9654a50b-7299-4b27-b204-3075a79789ad",
+      "rows" : 3,
+      "passed" : true,
+      "duplicates" : 0,
+      "status" : "MATCHED",
+      "formalTableMutated" : false,
+      "mismatches" : 0,
+      "expectedRows" : 3
+    },
+    "checkpointAfterIncremental" : {
+      "anchor" : "2026-06-01",
+      "through" : "2026-08-31",
+      "latestVerifiedAt" : "2026-09-29T22:09:13.570624100Z"
+    },
+    "preInceptionEmpty" : {
+      "runId" : "index-monthly-ec99f77b-5b1c-44f8-acc8-0c36563b707b",
+      "state" : "VERIFIED_EMPTY",
+      "sourceRows" : 0,
+      "verifiedRows" : 0,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "emptyReadback" : {
+      "comparedColumns" : [ "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount", "layer", "bucket", "update_time" ],
+      "extra" : 0,
+      "missing" : 0,
+      "runId" : "index-monthly-ec99f77b-5b1c-44f8-acc8-0c36563b707b",
+      "rows" : 0,
+      "passed" : true,
+      "duplicates" : 0,
+      "status" : "MATCHED",
+      "formalTableMutated" : false,
+      "mismatches" : 0,
+      "expectedRows" : 0
+    },
+    "emptyTargetBefore" : {
+      "rows" : 9,
+      "sha256" : "9e7e00d0d8e420a57d26b649c1e22a4e0a0084529a7fa61a4e66f32eebb394c4",
+      "duplicateKeys" : 0
+    },
+    "emptyTargetAfter" : {
+      "rows" : 9,
+      "sha256" : "9e7e00d0d8e420a57d26b649c1e22a4e0a0084529a7fa61a4e66f32eebb394c4",
+      "duplicateKeys" : 0
+    },
+    "otherCodesAfter" : {
+      "rows" : 6,
+      "sha256" : "3f4719d5b9182a32b114bd7bd4b4cf23b224c63529e342b4a71464a0948e72d7",
+      "duplicateKeys" : 0
+    }
+  }, {
+    "code" : "000985.SH",
+    "otherCodesBefore" : {
+      "rows" : 6,
+      "sha256" : "90bd26677a39514c31d825aa06d47d4a40d21e0b924ff4dcba6d57f4633eeee5",
+      "duplicateKeys" : 0
+    },
+    "checkpointBefore" : {
+      "anchor" : "2026-06-01",
+      "through" : "2026-08-31",
+      "latestVerifiedAt" : "2026-09-29T22:03:50.721068400Z"
+    },
+    "backfill" : {
+      "runId" : "index-monthly-094c24db-125c-49cc-a377-23f70b3763ef",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "backfillReadback" : {
+      "comparedColumns" : [ "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount", "layer", "bucket", "update_time" ],
+      "extra" : 0,
+      "missing" : 0,
+      "runId" : "index-monthly-094c24db-125c-49cc-a377-23f70b3763ef",
+      "rows" : 2,
+      "passed" : true,
+      "duplicates" : 0,
+      "status" : "MATCHED",
+      "formalTableMutated" : false,
+      "mismatches" : 0,
+      "expectedRows" : 2
+    },
+    "checkpointAfterBackfill" : {
+      "anchor" : "2026-06-01",
+      "through" : "2026-08-31",
+      "latestVerifiedAt" : "2026-09-29T22:03:50.721068400Z"
+    },
+    "incremental" : {
+      "runId" : "index-monthly-ec3b60c9-0201-43ff-bfa5-8e629943bb92",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "incrementalReadback" : {
+      "comparedColumns" : [ "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount", "layer", "bucket", "update_time" ],
+      "extra" : 0,
+      "missing" : 0,
+      "runId" : "index-monthly-ec3b60c9-0201-43ff-bfa5-8e629943bb92",
+      "rows" : 3,
+      "passed" : true,
+      "duplicates" : 0,
+      "status" : "MATCHED",
+      "formalTableMutated" : false,
+      "mismatches" : 0,
+      "expectedRows" : 3
+    },
+    "checkpointAfterIncremental" : {
+      "anchor" : "2026-06-01",
+      "through" : "2026-08-31",
+      "latestVerifiedAt" : "2026-09-29T22:09:31.506485500Z"
+    },
+    "preInceptionEmpty" : {
+      "runId" : "index-monthly-793262bd-20e0-4702-9a35-40a38ec5e8f6",
+      "state" : "VERIFIED_EMPTY",
+      "sourceRows" : 0,
+      "verifiedRows" : 0,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "emptyReadback" : {
+      "comparedColumns" : [ "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount", "layer", "bucket", "update_time" ],
+      "extra" : 0,
+      "missing" : 0,
+      "runId" : "index-monthly-793262bd-20e0-4702-9a35-40a38ec5e8f6",
+      "rows" : 0,
+      "passed" : true,
+      "duplicates" : 0,
+      "status" : "MATCHED",
+      "formalTableMutated" : false,
+      "mismatches" : 0,
+      "expectedRows" : 0
+    },
+    "emptyTargetBefore" : {
+      "rows" : 9,
+      "sha256" : "a9021460a5e5e9f88bfc929196a51e7e51f622367d2a0b0e5cae1dc990ff3d9a",
+      "duplicateKeys" : 0
+    },
+    "emptyTargetAfter" : {
+      "rows" : 9,
+      "sha256" : "a9021460a5e5e9f88bfc929196a51e7e51f622367d2a0b0e5cae1dc990ff3d9a",
+      "duplicateKeys" : 0
+    },
+    "otherCodesAfter" : {
+      "rows" : 6,
+      "sha256" : "90bd26677a39514c31d825aa06d47d4a40d21e0b924ff4dcba6d57f4633eeee5",
+      "duplicateKeys" : 0
+    }
+  }, {
+    "code" : "399975.SZ",
+    "otherCodesBefore" : {
+      "rows" : 6,
+      "sha256" : "4b5e93028cbcd56212ea3e011651d17ca5e12e11372e2e4923ab9e501b9559fa",
+      "duplicateKeys" : 0
+    },
+    "checkpointBefore" : {
+      "anchor" : "2026-06-01",
+      "through" : "2026-08-31",
+      "latestVerifiedAt" : "2026-09-29T22:04:14.815815900Z"
+    },
+    "backfill" : {
+      "runId" : "index-monthly-6478881a-c4b9-4517-afe0-649649ade54f",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "backfillReadback" : {
+      "comparedColumns" : [ "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount", "layer", "bucket", "update_time" ],
+      "extra" : 0,
+      "missing" : 0,
+      "runId" : "index-monthly-6478881a-c4b9-4517-afe0-649649ade54f",
+      "rows" : 2,
+      "passed" : true,
+      "duplicates" : 0,
+      "status" : "MATCHED",
+      "formalTableMutated" : false,
+      "mismatches" : 0,
+      "expectedRows" : 2
+    },
+    "checkpointAfterBackfill" : {
+      "anchor" : "2026-06-01",
+      "through" : "2026-08-31",
+      "latestVerifiedAt" : "2026-09-29T22:04:14.815815900Z"
+    },
+    "incremental" : {
+      "runId" : "index-monthly-a2220449-83ed-4d0d-934d-1e23e51c131a",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "incrementalReadback" : {
+      "comparedColumns" : [ "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount", "layer", "bucket", "update_time" ],
+      "extra" : 0,
+      "missing" : 0,
+      "runId" : "index-monthly-a2220449-83ed-4d0d-934d-1e23e51c131a",
+      "rows" : 3,
+      "passed" : true,
+      "duplicates" : 0,
+      "status" : "MATCHED",
+      "formalTableMutated" : false,
+      "mismatches" : 0,
+      "expectedRows" : 3
+    },
+    "checkpointAfterIncremental" : {
+      "anchor" : "2026-06-01",
+      "through" : "2026-08-31",
+      "latestVerifiedAt" : "2026-09-29T22:09:49.540492200Z"
+    },
+    "preInceptionEmpty" : {
+      "runId" : "index-monthly-ba40b169-a62c-4859-a20b-a9de7ba5d6dd",
+      "state" : "VERIFIED_EMPTY",
+      "sourceRows" : 0,
+      "verifiedRows" : 0,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "emptyReadback" : {
+      "comparedColumns" : [ "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount", "layer", "bucket", "update_time" ],
+      "extra" : 0,
+      "missing" : 0,
+      "runId" : "index-monthly-ba40b169-a62c-4859-a20b-a9de7ba5d6dd",
+      "rows" : 0,
+      "passed" : true,
+      "duplicates" : 0,
+      "status" : "MATCHED",
+      "formalTableMutated" : false,
+      "mismatches" : 0,
+      "expectedRows" : 0
+    },
+    "emptyTargetBefore" : {
+      "rows" : 9,
+      "sha256" : "db8aacd55f049d7032f8e1b4a2ab6aa759f6eb96cb730224080dcb3976b3c01b",
+      "duplicateKeys" : 0
+    },
+    "emptyTargetAfter" : {
+      "rows" : 9,
+      "sha256" : "db8aacd55f049d7032f8e1b4a2ab6aa759f6eb96cb730224080dcb3976b3c01b",
+      "duplicateKeys" : 0
+    },
+    "otherCodesAfter" : {
+      "rows" : 6,
+      "sha256" : "4b5e93028cbcd56212ea3e011651d17ca5e12e11372e2e4923ab9e501b9559fa",
+      "duplicateKeys" : 0
+    }
+  } ],
+  "incompleteMonthRejected" : "D022 --to includes an incomplete current month; month ceiling is 2026-08-31",
+  "finalSnapshot" : {
+    "rows" : 9,
+    "sha256" : "db8aacd55f049d7032f8e1b4a2ab6aa759f6eb96cb730224080dcb3976b3c01b",
+    "duplicateKeys" : 0
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T22:09:54.840283500Z"
+}

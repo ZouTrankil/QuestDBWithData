@@ -1,0 +1,97 @@
+{
+  "task" : "D018",
+  "operation" : "cancel_first_runner_chunk_resume_remaining_chunk",
+  "table" : "java_d018_etf_portfolio_921d13f6c4294134a69ad37cf3feb69e",
+  "targetId" : "static-v2-77628c3cabcb70140c3e2803cbb97e642937cfa88cb30aa6563afafe57fd31a8",
+  "date" : "2026-08-27",
+  "observedAt" : "2026-09-29T20:38:53.863824Z",
+  "originalIncrementalRunId" : "etf-portfolio-a88d5461-36cc-4d90-a525-7c256c8acef6",
+  "observedAtReference" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-921d13f6c4294134a69ad37cf3feb69e\\D018-revision-45983799-1654-447b-81c1-1883b84da7b4.json",
+  "frozenMode" : "BACKFILL",
+  "frozenFrom" : "2026-08-27",
+  "frozenTo" : "2026-08-27",
+  "cancelledRun" : {
+    "runId" : "d018-recovery-839c851f-e05a-445f-9e24-72e1a33f6fa8-cancelled",
+    "state" : "CANCELLED",
+    "sourceRows" : 10000,
+    "verifiedRows" : 10000,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelledSendRows" : 10000,
+  "resumedRun" : {
+    "runId" : "d018-recovery-839c851f-e05a-445f-9e24-72e1a33f6fa8-resumed",
+    "state" : "VERIFIED",
+    "sourceRows" : 18718,
+    "verifiedRows" : 18718,
+    "errorCode" : null,
+    "reusedRows" : 10000
+  },
+  "resumedSendRows" : 8718,
+  "expectedResumedSendRows" : 8718,
+  "reusedRows" : 10000,
+  "comparedColumns" : [ "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio", "update_time" ],
+  "beforeSnapshot" : {
+    "rows" : 18718,
+    "sha256" : "7aee36ea5c2e988e8075ead8f9346a29d81704425b6843a92e86bb3bb63db77a",
+    "observedAtMatches" : true
+  },
+  "afterSnapshot" : {
+    "rows" : 18718,
+    "sha256" : "7aee36ea5c2e988e8075ead8f9346a29d81704425b6843a92e86bb3bb63db77a",
+    "observedAtMatches" : true
+  },
+  "fullNineColumnSnapshotUnchanged" : true,
+  "independentSourceReadback" : {
+    "sourceRows" : 18718,
+    "unexpectedKeys" : 0,
+    "missingKeys" : 0,
+    "actualRows" : 18718,
+    "targetId" : "static-v2-77628c3cabcb70140c3e2803cbb97e642937cfa88cb30aa6563afafe57fd31a8",
+    "comparedColumns" : [ "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio", "update_time" ],
+    "sourceReceipts" : [ {
+      "sourceRows" : 18718,
+      "sourceReceipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-921d13f6c4294134a69ad37cf3feb69e\\sync-evidence\\d018-recovery-839c851f-e05a-445f-9e24-72e1a33f6fa8-resumed\\source\\source-20260827-9fe356d19ffaf3ca2f4873b73b29f9477d7c5208d7d2ee1cbd79eed72a5dc5de.json",
+      "sourcePages" : 3,
+      "runnerChunks" : [ {
+        "sha256" : "7df6faa8ef7fd0f64654f4527f666edeadcce5ff0d83da5368c2696b4ffdc355",
+        "rows" : 10000,
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-921d13f6c4294134a69ad37cf3feb69e\\sync-evidence\\d018-recovery-839c851f-e05a-445f-9e24-72e1a33f6fa8-resumed\\source\\chunk-20260827-9fe356d19ffaf3ca2f4873b73b29f9477d7c5208d7d2ee1cbd79eed72a5dc5de-0.json",
+        "cursor" : "20260827#0",
+        "index" : 0
+      }, {
+        "sha256" : "a31baca100f0e8d2a7e23dc224b3265388b1a05340eae70a9668f1dde7ed899e",
+        "rows" : 8718,
+        "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-921d13f6c4294134a69ad37cf3feb69e\\sync-evidence\\d018-recovery-839c851f-e05a-445f-9e24-72e1a33f6fa8-resumed\\source\\chunk-20260827-9fe356d19ffaf3ca2f4873b73b29f9477d7c5208d7d2ee1cbd79eed72a5dc5de-1.json",
+        "cursor" : "20260827#1",
+        "index" : 1
+      } ],
+      "annDate" : "2026-08-27",
+      "sourceFingerprint" : "9fe356d19ffaf3ca2f4873b73b29f9477d7c5208d7d2ee1cbd79eed72a5dc5de"
+    } ],
+    "mismatchSamples" : [ ],
+    "mode" : "BACKFILL",
+    "duplicateKeys" : 0,
+    "sourceCalls" : 3,
+    "queryParameters" : [ "2026-08-27" ],
+    "emptyAnnouncementDates" : [ ],
+    "status" : "MATCHED",
+    "mismatches" : 0,
+    "sourceEvidenceBytes" : 6105467,
+    "sourceDuplicateKeys" : 0,
+    "requestTo" : "2026-08-27",
+    "target" : "java_d018_etf_portfolio_921d13f6c4294134a69ad37cf3feb69e",
+    "passed" : true,
+    "requestFrom" : "2026-08-27",
+    "announcementDates" : [ "2026-08-27" ],
+    "runnerChunks" : 2,
+    "runId" : "d018-recovery-839c851f-e05a-445f-9e24-72e1a33f6fa8-resumed",
+    "observedAt" : "2026-09-29T20:38:53.863824Z",
+    "task" : "D018",
+    "readbackQuery" : "SELECT ts_code,cast(ann_date AS long) AS ann_date_micros,cast(end_date AS long) AS end_date_micros,symbol,mkv,amount,stk_mkv_ratio,stk_float_ratio,cast(update_time AS long) AS update_time_micros FROM \"java_d018_etf_portfolio_921d13f6c4294134a69ad37cf3feb69e\" WHERE ann_date=cast(? AS TIMESTAMP) ORDER BY ts_code,end_date,symbol LIMIT 256001",
+    "matchedRows" : 18718,
+    "logicalDate" : "2026-09-30"
+  },
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review"
+}

@@ -1,0 +1,127 @@
+{
+  "task" : "D023",
+  "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-ledger.sqlite",
+  "action" : "publication",
+  "startedAt" : "2026-09-29T22:33:23.101474200Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "rows" : 2062,
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a",
+    "duplicateKeys" : 0
+  },
+  "plan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.dc_index",
+        "version" : 1,
+        "datasetId" : "dc_index",
+        "datasetVersion" : 1,
+        "owner" : "dc_index_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "dc_index.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 1,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT5S"
+        },
+        "timeout" : "PT2H",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 5,
+          "maxRows" : 25000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "checkpointBefore" : "2026-09-18",
+        "physicalTargetId" : "static-v2-c151237ce34fd378f500bd5a003b3e0b00eebdd2870978e9aadd1df2dd22cd08",
+        "targetId" : "static-v2-f7139b0e8c5effcd789c54674d5083917845676218261ed0c125ca769ccdd880",
+        "targetMaxBefore" : "2026-09-18",
+        "targetMinBefore" : "2026-09-17",
+        "trade_dates" : "20260917"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-f7139b0e8c5effcd789c54674d5083917845676218261ed0c125ca769ccdd880",
+    "physicalTargetId" : "static-v2-c151237ce34fd378f500bd5a003b3e0b00eebdd2870978e9aadd1df2dd22cd08",
+    "checkpointBefore" : "2026-09-18",
+    "checkpointAnchor" : "2026-09-17",
+    "targetMinDate" : "2026-09-17",
+    "targetMaxDate" : "2026-09-18",
+    "requestedThrough" : "2026-09-17",
+    "bootstrap" : false,
+    "cappedByBudget" : false
+  },
+  "status" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: Lease ownership or state changed",
+  "finishedAt" : "2026-09-29T22:33:36.266684400Z"
+}

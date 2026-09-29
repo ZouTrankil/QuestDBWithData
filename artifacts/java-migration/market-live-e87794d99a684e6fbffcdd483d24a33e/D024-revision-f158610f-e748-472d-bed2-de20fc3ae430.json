@@ -1,0 +1,121 @@
+{
+  "task" : "D024",
+  "table" : "java_d024_moneyflow_e87794d99a684e6fbffcdd483d24a33e",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-e87794d99a684e6fbffcdd483d24a33e\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T23:08:26.794554500Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "sha256" : "a0735b91722a773ecdbafd6b8ac3c3b85e362f3bd96d488c1f98d44fc9d79659",
+    "rows" : 11106,
+    "duplicateKeys" : 0
+  },
+  "checkpointBefore" : {
+    "anchor" : "2026-09-17",
+    "through" : "2026-09-18",
+    "receipts" : {
+      "2026-09-17" : {
+        "path" : "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/sync-evidence/moneyflow-2c0166b7-ca5d-49c3-9be9-7074d5b8a322/source/moneyflow-20260917-54d7d33617cebcba9fc29f3b0c4ccee8ae7ea46892b897a01b7b62fb41af4a69.json",
+        "fingerprint" : "54d7d33617cebcba9fc29f3b0c4ccee8ae7ea46892b897a01b7b62fb41af4a69",
+        "date" : "2026-09-17",
+        "rows" : 5553
+      },
+      "2026-09-18" : {
+        "path" : "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/sync-evidence/moneyflow-4e4f1e95-35fe-4add-afa8-906f6aa89f88/source/moneyflow-20260918-50516d883294fade0805c4fc631a149bceadefc3dbc79832a4c4c2d5e75332ec.json",
+        "fingerprint" : "50516d883294fade0805c4fc631a149bceadefc3dbc79832a4c4c2d5e75332ec",
+        "date" : "2026-09-18",
+        "rows" : 5553
+      }
+    },
+    "expectedRows" : 11106,
+    "firstRowDate" : "2026-09-17",
+    "lastRowDate" : "2026-09-18",
+    "verifiedAt" : "2026-09-29T23:08:25.597469200Z"
+  },
+  "backfill" : {
+    "runId" : "moneyflow-b1cb3e91-55f8-4bbb-a419-237fed57920c",
+    "state" : "VERIFIED",
+    "sourceRows" : 5553,
+    "verifiedRows" : 5553,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "backfillReadback" : {
+    "toInclusive" : "2026-09-17",
+    "dataset" : "moneyflow",
+    "sourceRows" : 5553,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "table" : "java_d024_moneyflow_e87794d99a684e6fbffcdd483d24a33e",
+    "runId" : "moneyflow-b1cb3e91-55f8-4bbb-a419-237fed57920c",
+    "sourceDuplicateKeys" : 0,
+    "actualRows" : 5553,
+    "mismatchedRows" : 0,
+    "extraKeys" : 0,
+    "evidenceBytes" : 2422861,
+    "mismatchSamples" : [ ],
+    "matchedRows" : 5553,
+    "status" : "MATCHED",
+    "tradeDates" : [ "2026-09-17" ],
+    "fromInclusive" : "2026-09-17",
+    "targetId" : "static-v2-f8b04c8e7f1b45a97bc70f6da9307ec3e223b3236eb80bfbd1c682bc893b7550",
+    "receiptFingerprints" : [ "54d7d33617cebcba9fc29f3b0c4ccee8ae7ea46892b897a01b7b62fb41af4a69" ]
+  },
+  "checkpointAfterBackfill" : {
+    "anchor" : "2026-09-17",
+    "through" : "2026-09-18",
+    "receipts" : {
+      "2026-09-17" : {
+        "path" : "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/sync-evidence/moneyflow-b1cb3e91-55f8-4bbb-a419-237fed57920c/source/moneyflow-20260917-54d7d33617cebcba9fc29f3b0c4ccee8ae7ea46892b897a01b7b62fb41af4a69.json",
+        "fingerprint" : "54d7d33617cebcba9fc29f3b0c4ccee8ae7ea46892b897a01b7b62fb41af4a69",
+        "date" : "2026-09-17",
+        "rows" : 5553
+      },
+      "2026-09-18" : {
+        "path" : "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/sync-evidence/moneyflow-4e4f1e95-35fe-4add-afa8-906f6aa89f88/source/moneyflow-20260918-50516d883294fade0805c4fc631a149bceadefc3dbc79832a4c4c2d5e75332ec.json",
+        "fingerprint" : "50516d883294fade0805c4fc631a149bceadefc3dbc79832a4c4c2d5e75332ec",
+        "date" : "2026-09-18",
+        "rows" : 5553
+      }
+    },
+    "expectedRows" : 11106,
+    "firstRowDate" : "2026-09-17",
+    "lastRowDate" : "2026-09-18",
+    "verifiedAt" : "2026-09-29T23:08:42.517598600Z"
+  },
+  "incremental" : {
+    "runId" : "moneyflow-e7b0fd37-d4d7-4665-a2d4-f1b0fc9607ea",
+    "state" : "VERIFIED",
+    "sourceRows" : 11106,
+    "verifiedRows" : 11106,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "incrementalReadback" : {
+    "toInclusive" : "2026-09-18",
+    "dataset" : "moneyflow",
+    "sourceRows" : 11106,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "table" : "java_d024_moneyflow_e87794d99a684e6fbffcdd483d24a33e",
+    "runId" : "moneyflow-e7b0fd37-d4d7-4665-a2d4-f1b0fc9607ea",
+    "sourceDuplicateKeys" : 0,
+    "actualRows" : 11106,
+    "mismatchedRows" : 0,
+    "extraKeys" : 0,
+    "evidenceBytes" : 4853755,
+    "mismatchSamples" : [ ],
+    "matchedRows" : 11106,
+    "status" : "MATCHED",
+    "tradeDates" : [ "2026-09-17", "2026-09-18" ],
+    "fromInclusive" : "2026-09-17",
+    "targetId" : "static-v2-f8b04c8e7f1b45a97bc70f6da9307ec3e223b3236eb80bfbd1c682bc893b7550",
+    "receiptFingerprints" : [ "54d7d33617cebcba9fc29f3b0c4ccee8ae7ea46892b897a01b7b62fb41af4a69", "50516d883294fade0805c4fc631a149bceadefc3dbc79832a4c4c2d5e75332ec" ]
+  },
+  "after" : {
+    "sha256" : "a0735b91722a773ecdbafd6b8ac3c3b85e362f3bd96d488c1f98d44fc9d79659",
+    "rows" : 11106,
+    "duplicateKeys" : 0
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T23:08:57.883820Z"
+}

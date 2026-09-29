@@ -1,0 +1,965 @@
+{
+  "task" : "D020",
+  "table" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+  "startedAt" : "2026-09-29T21:12:38.499266300Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "routes" : [ {
+    "code" : "000300.SH",
+    "backfill" : {
+      "runId" : "index-daily-basic-50eb5926-6d6e-4cb3-9e11-3e655e2a67e9",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "backfillReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-50eb5926-6d6e-4cb3-9e11-3e655e2a67e9",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000300.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "c855d7d64e789a8b25290235c7e27888eade8956eb9d5f3e21100fa3a8d70d9e",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-29",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "targetMaxBefore" : "2026-09-29",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "000300.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000300.SH",
+      "checkpointBefore" : "2026-09-29",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-29"
+      },
+      "bootstrap" : false
+    },
+    "incremental" : {
+      "runId" : "index-daily-basic-220d67fe-6386-4528-a511-51c0dc20117d",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "incrementalReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-220d67fe-6386-4528-a511-51c0dc20117d",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000300.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-29",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "99b8f2473d585344093b49769c30a373fcd6709671bb67e1734dc2732dcc1f86",
+      "expectedRows" : 3,
+      "actualRows" : 3,
+      "matchedRows" : 3,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "emptyWindow" : {
+      "runId" : "index-daily-basic-976c0918-9875-480c-aaf2-e7be6a61a25f",
+      "state" : "VERIFIED_EMPTY",
+      "sourceRows" : 0,
+      "verifiedRows" : 0,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "emptyReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-976c0918-9875-480c-aaf2-e7be6a61a25f",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000300.SH",
+      "from" : "2026-09-27",
+      "to" : "2026-09-27",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "75bfc23c9ce2f043876951f36cb8f8a0ffc1adaea6afe798c24eb06af3cad178",
+      "expectedRows" : 0,
+      "actualRows" : 0,
+      "matchedRows" : 0,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "otherCodeUnchanged" : true
+  }, {
+    "code" : "000016.SH",
+    "backfill" : {
+      "runId" : "index-daily-basic-1cff64c0-e7fb-4fef-a13f-4c43c15d1907",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "backfillReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-1cff64c0-e7fb-4fef-a13f-4c43c15d1907",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000016.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "614844e3a5eafa427d4b271b0ae7a0ca41193f71768b6fecec1a8683fc12f0a4",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-29",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "targetMaxBefore" : "2026-09-29",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "000016.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000016.SH",
+      "checkpointBefore" : "2026-09-29",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-29"
+      },
+      "bootstrap" : false
+    },
+    "incremental" : {
+      "runId" : "index-daily-basic-d35226e7-fde1-431d-8a19-ceded8adb733",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "incrementalReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-d35226e7-fde1-431d-8a19-ceded8adb733",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000016.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-29",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "b6459a66be67d4fbd65c2ae6b45e82d03bcb4481c98edfa4888aa2d829b02353",
+      "expectedRows" : 3,
+      "actualRows" : 3,
+      "matchedRows" : 3,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "emptyWindow" : {
+      "runId" : "index-daily-basic-57ffc6cb-88e0-43f8-a102-c8464fb51b78",
+      "state" : "VERIFIED_EMPTY",
+      "sourceRows" : 0,
+      "verifiedRows" : 0,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "emptyReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-57ffc6cb-88e0-43f8-a102-c8464fb51b78",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000016.SH",
+      "from" : "2026-09-27",
+      "to" : "2026-09-27",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "4140a2256c465062896e11f9c56fca575179f4c430794af8d3357f6b07aee17e",
+      "expectedRows" : 0,
+      "actualRows" : 0,
+      "matchedRows" : 0,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "otherCodeUnchanged" : true
+  }, {
+    "code" : "399006.SZ",
+    "backfill" : {
+      "runId" : "index-daily-basic-ca7feb02-baeb-4e83-96bd-f4f9d1acf311",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "backfillReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-ca7feb02-baeb-4e83-96bd-f4f9d1acf311",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "399006.SZ",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "83d4d38b732d2a31ffddbd65243c303360f7dea4cb121d8d2af5985188cf036e",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-29",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "targetMaxBefore" : "2026-09-29",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "399006.SZ"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "399006.SZ",
+      "checkpointBefore" : "2026-09-29",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-29"
+      },
+      "bootstrap" : false
+    },
+    "incremental" : {
+      "runId" : "index-daily-basic-5911ad9e-ec83-492f-8cb7-511d699b664d",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "incrementalReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-5911ad9e-ec83-492f-8cb7-511d699b664d",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "399006.SZ",
+      "from" : "2026-09-24",
+      "to" : "2026-09-29",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "74ce53a09e3196e333af36c74d59be31bce30b757b32ed9cc1f68b1fb88e6486",
+      "expectedRows" : 3,
+      "actualRows" : 3,
+      "matchedRows" : 3,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "emptyWindow" : {
+      "runId" : "index-daily-basic-e2c8cffd-36d1-487c-bf6f-a5718aa4e9d6",
+      "state" : "VERIFIED_EMPTY",
+      "sourceRows" : 0,
+      "verifiedRows" : 0,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "emptyReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-e2c8cffd-36d1-487c-bf6f-a5718aa4e9d6",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "399006.SZ",
+      "from" : "2026-09-27",
+      "to" : "2026-09-27",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "6b217fe2e67a7859f3232baa101cc99d8d70ddad9e7b0e5eee2d0856ced97d51",
+      "expectedRows" : 0,
+      "actualRows" : 0,
+      "matchedRows" : 0,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "otherCodeUnchanged" : true
+  }, {
+    "code" : "000905.SH",
+    "backfill" : {
+      "runId" : "index-daily-basic-a54e3ab2-d106-460a-9c3a-aba6a48dfe95",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "backfillReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-a54e3ab2-d106-460a-9c3a-aba6a48dfe95",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000905.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "8934e2de5d3a12dbe055eb4d9b8c16b12037143d20d96a7390aed31703ea4695",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-29",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "targetMaxBefore" : "2026-09-29",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "000905.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000905.SH",
+      "checkpointBefore" : "2026-09-29",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-29"
+      },
+      "bootstrap" : false
+    },
+    "incremental" : {
+      "runId" : "index-daily-basic-5ef02f1c-548b-4668-98c1-9750a4141aba",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "incrementalReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-5ef02f1c-548b-4668-98c1-9750a4141aba",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000905.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-29",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "89f77aa6f1939f311f16f43e51eeadb7cf4e258a981d948ec1741ec64787a5a6",
+      "expectedRows" : 3,
+      "actualRows" : 3,
+      "matchedRows" : 3,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "emptyWindow" : {
+      "runId" : "index-daily-basic-12c1c2ad-0bef-4e5d-b3e2-8e430764e26c",
+      "state" : "VERIFIED_EMPTY",
+      "sourceRows" : 0,
+      "verifiedRows" : 0,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "emptyReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-12c1c2ad-0bef-4e5d-b3e2-8e430764e26c",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000905.SH",
+      "from" : "2026-09-27",
+      "to" : "2026-09-27",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "8fc4c982b3147031bb6ba7206ee72b70e7b8dbd9e36cf2e53b8a9723b858167a",
+      "expectedRows" : 0,
+      "actualRows" : 0,
+      "matchedRows" : 0,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "otherCodeUnchanged" : true
+  }, {
+    "code" : "000852.SH",
+    "backfill" : {
+      "runId" : "index-daily-basic-ab05ede5-eab0-4260-bb52-34b896d2f33c",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "backfillReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-ab05ede5-eab0-4260-bb52-34b896d2f33c",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000852.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "6e1e5c4fc6733325e0e0e60ccc1743c04d5e63769ac05d971621149c623855cb",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-29",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "targetMaxBefore" : "2026-09-29",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "000852.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000852.SH",
+      "checkpointBefore" : "2026-09-29",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-29"
+      },
+      "bootstrap" : false
+    },
+    "incremental" : {
+      "runId" : "index-daily-basic-f5906ab1-5267-4444-affd-cc9aedd3006b",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "incrementalReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-f5906ab1-5267-4444-affd-cc9aedd3006b",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000852.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-29",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "284022c06980f339c5b024975b30dedc06f5d0f1de8e91cfb6eb83717c4f0278",
+      "expectedRows" : 3,
+      "actualRows" : 3,
+      "matchedRows" : 3,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "emptyWindow" : {
+      "runId" : "index-daily-basic-642c0969-1bcd-47d0-b63b-ad65d46d2836",
+      "state" : "VERIFIED_EMPTY",
+      "sourceRows" : 0,
+      "verifiedRows" : 0,
+      "errorCode" : null,
+      "reusedRows" : 0
+    },
+    "emptyReadback" : {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-642c0969-1bcd-47d0-b63b-ad65d46d2836",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000852.SH",
+      "from" : "2026-09-27",
+      "to" : "2026-09-27",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "bb6c7d1c66f1d37c81e21482c7bf39c7e2d3a23f863ab0bbe19e0da3aea85583",
+      "expectedRows" : 0,
+      "actualRows" : 0,
+      "matchedRows" : 0,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    },
+    "otherCodeUnchanged" : true
+  } ],
+  "wholeTarget" : {
+    "sha256" : "d58b9ba9ddf5b62369d34efc8e58bb2a7cbad560b181e6e7e7b96b682ca7aecd",
+    "rows" : 15,
+    "duplicateKeys" : 0
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T21:14:07.557839700Z"
+}

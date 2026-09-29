@@ -1,0 +1,71 @@
+{
+  "task": "D021",
+  "runId": "index-weight-58a090e3-f695-4836-8e89-9616609f954f",
+  "table": "java_d021_index_weight_28b6bdc1d5144ce9b90e11142380138c",
+  "targetId": "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+  "status": "MATCHED",
+  "fieldsCompared": [
+    "index_code",
+    "con_code",
+    "trade_micros",
+    "index_name",
+    "index_name_en",
+    "con_name",
+    "con_name_en",
+    "exchange",
+    "exchange_en",
+    "weight",
+    "observed_micros"
+  ],
+  "expectedRows": 4450,
+  "actualRows": 4450,
+  "missingRows": 0,
+  "unexpectedRows": 0,
+  "mismatchedRows": 0,
+  "duplicateTargetKeys": 0,
+  "mismatchSample": [],
+  "sourceReceipts": [
+    {
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-58a090e3-f695-4836-8e89-9616609f954f\\source\\complete-tushare_history_month-000510-a11c85f14aa62956e48e7e3958acecd16b554cd38ef41469982e202c8b227fe6.json",
+      "rows": 500,
+      "sha256": "a11c85f14aa62956e48e7e3958acecd16b554cd38ef41469982e202c8b227fe6"
+    },
+    {
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-58a090e3-f695-4836-8e89-9616609f954f\\source\\complete-tushare_history_month-932000-6f84034c3ee20c977fb5e2b029cdb7b18ba8aab2196d0bc982bf4aabe01f55e5.json",
+      "rows": 2000,
+      "sha256": "6f84034c3ee20c977fb5e2b029cdb7b18ba8aab2196d0bc982bf4aabe01f55e5"
+    },
+    {
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-58a090e3-f695-4836-8e89-9616609f954f\\source\\complete-tushare_history_month-000852-b5e78df60a89e2a0b510edccf8d15bd6c4d7fb4c08a383b7e090739ecf23ee61.json",
+      "rows": 1000,
+      "sha256": "b5e78df60a89e2a0b510edccf8d15bd6c4d7fb4c08a383b7e090739ecf23ee61"
+    },
+    {
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-58a090e3-f695-4836-8e89-9616609f954f\\source\\complete-tushare_history_month-000016-37801d71ab17059a9320d5661fd999ebe1a5cd328fdc2cdc7d4a9ae53354a45a.json",
+      "rows": 50,
+      "sha256": "37801d71ab17059a9320d5661fd999ebe1a5cd328fdc2cdc7d4a9ae53354a45a"
+    },
+    {
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-58a090e3-f695-4836-8e89-9616609f954f\\source\\complete-tushare_history_month-000905-b52b7a412b8df19ed71403f4ef4791c9df41667befcf030c58f3b397d7eb946f.json",
+      "rows": 500,
+      "sha256": "b52b7a412b8df19ed71403f4ef4791c9df41667befcf030c58f3b397d7eb946f"
+    },
+    {
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-58a090e3-f695-4836-8e89-9616609f954f\\source\\complete-tushare_history_month-399673-4a823de6ea3085f25b83810622f6eeac7f6f99dd7c8910e5698913fe5a2a11d9.json",
+      "rows": 50,
+      "sha256": "4a823de6ea3085f25b83810622f6eeac7f6f99dd7c8910e5698913fe5a2a11d9"
+    },
+    {
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-58a090e3-f695-4836-8e89-9616609f954f\\source\\complete-tushare_history_month-000688-f6e6c639e940cb56fc89e73dd043ae95f313c330f46928d446bd60b96310c946.json",
+      "rows": 50,
+      "sha256": "f6e6c639e940cb56fc89e73dd043ae95f313c330f46928d446bd60b96310c946"
+    },
+    {
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-58a090e3-f695-4836-8e89-9616609f954f\\source\\complete-tushare_history_month-000300-507954052f2e16152792cf48c803497f4149a8dcb6f584d5b96ca5ed523e61d3.json",
+      "rows": 300,
+      "sha256": "507954052f2e16152792cf48c803497f4149a8dcb6f584d5b96ca5ed523e61d3"
+    }
+  ],
+  "independentImplementation": "Python pandas/xlrd source binary parsing and raw Tushare/D002 reference rows; no production mapper or normalizedRows used",
+  "query": "SELECT index_code,con_code,cast(trade_date AS long) AS trade_micros,index_name,index_name_en,con_name,con_name_en,exchange,exchange_en,weight,cast(update_time AS long) AS observed_micros FROM java_d021_index_weight_28b6bdc1d5144ce9b90e11142380138c ORDER BY index_code,trade_date,con_code LIMIT 500001"
+}

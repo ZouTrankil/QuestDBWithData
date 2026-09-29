@@ -112,13 +112,13 @@ class MarketRecoveryOperation {
             public VerifiedBatchExecutor.Port<T,K> port(){return trackedPort;}
         };
         var partial=runner.run(partialId,null,target,request,tracked,()->false); output.put("cancelAfterVerifiedPage",partial);
-        if(partial.state()!=SyncRunState.CANCELLED || partial.verifiedRows()<251)throw new IllegalStateException("Expected cancelled run with a large verified source page");
+        if(partial.state()!=SyncRunState.CANCELLED || partial.verifiedRows()<(Set.of("D019","D020").contains(task)?1:251))throw new IllegalStateException("Expected cancelled run with a large verified source page");
         stopAfterPage.set(false); sendCount.set(0);
         var recovered=runner.resume("resume-"+UUID.randomUUID(),partialId,target,request,tracked,()->false);
         output.put("resume",recovered); output.put("resumeSendCalls",sendCount.get());
         if(recovered.state()!=SyncRunState.VERIFIED || recovered.reusedRows()!=partial.verifiedRows() || sendCount.get()!=0)
             throw new IllegalStateException("Full page recovery must revalidate all keys with zero sends");
-        var independent=task.equals("D016")?EtfShareIndependentReadback.verify(jdbc,ledgerPath,table,recovered.runId()):task.equals("D013")?EtfBasicSourceReadback.verify(jdbc,ledgerPath,table,recovered.runId())
+        var independent=task.equals("D020")?com.zoutrankil.questdbwithdata.operations.IndexDailyBasicIndependentReadback.verify(jdbc,ledgerPath,table,recovered.runId()):task.equals("D019")?IndexDailyMarketIndependentReadback.verify(jdbc,ledgerPath,table,recovered.runId()):task.equals("D017")?EtfFactorIndependentReadback.verify(jdbc,ledgerPath,table,recovered.runId()):task.equals("D016")?EtfShareIndependentReadback.verify(jdbc,ledgerPath,table,recovered.runId()):task.equals("D013")?EtfBasicSourceReadback.verify(jdbc,ledgerPath,table,recovered.runId())
                 :MarketSourceReadbackVerifier.verify(jdbc,task,table,ledgerPath,recovered.runId());
         output.put("independentResumeReadback",independent);
         if(!"MATCHED".equals(independent.get("status")))throw new IllegalStateException("Independent resume source mismatch");

@@ -1,0 +1,229 @@
+{
+  "task_id": "D020",
+  "dataset_id": "index_daily_basic",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "index-daily-basic-07a5e8b7-e676-440f-800c-6bba6fe4be0b",
+  "attempt_id": null,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-29T21:05:49.509819400Z",
+  "finished_at": "2026-09-29T21:14:07.557839700Z",
+  "target": {
+    "target_id": "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+    "database_version": "QuestDB 10.0.1",
+    "formal_table": "index_daily_basic",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+    "isolated": true,
+    "questdb_readback": "verified_all_12_physical_columns"
+  },
+  "incremental": {
+    "mode": "INCREMENTAL",
+    "request_window": {
+      "initial": [
+        "2026-09-24",
+        "2026-09-28"
+      ],
+      "incrementalTo": "2026-09-29"
+    },
+    "bootstrap_policy": "Requires explicit bounded --from when no same-target receipt-backed checkpoint exists; first run is limited to 366 calendar days and the code target must be empty.",
+    "revision_overlap": "Re-fetch up to five calendar days before verified-through, clamped to the frozen bootstrap anchor.",
+    "checkpoint_policy": "Only contiguous same-target/same-definition VERIFIED or VERIFIED_EMPTY incremental source receipts for the same frozen code advance the watermark; BACKFILL and RECONCILE do not advance it.",
+    "target_range_policy": "Freeze static-v2 target identity and pre-run per-code physical min/max. Before planning, compare all existing physical keys and fields with the latest complete verified raw receipt covering each date; unexplained target rows/values fail closed.",
+    "checkpoint_before": {
+      "000300.SH": "2026-09-28",
+      "000016.SH": "2026-09-28",
+      "399006.SZ": "2026-09-28",
+      "000905.SH": "2026-09-28",
+      "000852.SH": "2026-09-28"
+    },
+    "checkpoint_after": {
+      "000300.SH": "2026-09-29",
+      "000016.SH": "2026-09-29",
+      "399006.SZ": "2026-09-29",
+      "000905.SH": "2026-09-29",
+      "000852.SH": "2026-09-29"
+    },
+    "backfill_checkpoint_unchanged": true,
+    "other_code_unchanged": true
+  },
+  "source": {
+    "provider": "Tushare",
+    "endpoint": "index_dailybasic",
+    "python_call": "index_market_sync.py::fetch_index_dailybasic calls pro.index_dailybasic(ts_code, start_date, end_date); sync_index_market iterates the five CORE_INDICES.",
+    "python_universe": [
+      "000300.SH",
+      "000016.SH",
+      "399006.SZ",
+      "000905.SH",
+      "000852.SH"
+    ],
+    "python_rate_limit": "50 requests per 60 seconds decorator; source-code fact, not current account authorization.",
+    "java_rate_limit": "Shared Tushare credential/endpoint budget; D020 does not raise the configured cap.",
+    "fields": [
+      "ts_code",
+      "trade_date",
+      "total_mv",
+      "float_mv",
+      "total_share",
+      "float_share",
+      "free_share",
+      "turnover_rate",
+      "turnover_rate_f",
+      "pe",
+      "pe_ttm",
+      "pb"
+    ],
+    "request_evidence": "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-live-acceptance.json",
+    "response_evidence": "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-live-acceptance.json",
+    "returned_rows": 45,
+    "normalized_rows": 45,
+    "rejected_rows": 0,
+    "fingerprint": null,
+    "official_documentation": "https://tushare.pro/document/2?doc_id=128",
+    "documented_request_cap": 3000,
+    "documented_total_cap": null,
+    "local_window_calendar_days": 366,
+    "pagination": "One unpaged request per frozen ts_code/date interval; no offset or cursor documented. A response reaching 3000 rows is treated as possibly truncated, preserved as unverified raw evidence, and rejected.",
+    "source_version": "Tushare fields/items response does not expose a provider snapshot token; complete receipt stores null.",
+    "requests_sent": 20,
+    "completed_source_pages": 20,
+    "count_scope": "Twenty primary acceptance requests; recovery/revision/empty-window requests linked separately; transport retries not inferred.",
+    "all_five_python_codes_nonempty": true
+  },
+  "mapping_drift": {
+    "source_and_physical_columns": "12 fields map one-to-one: ts_code SYMBOL, trade_date TIMESTAMP, and ten nullable DOUBLE metrics.",
+    "business_and_physical_key": [
+      "ts_code",
+      "trade_date"
+    ],
+    "date_semantics": "trade_date is YYYYMMDD business date stored as a UTC-midnight TIMESTAMP carrier; it is not an instant.",
+    "numeric_values": "total_mv/float_mv are yuan; total_share/float_share/free_share are shares; turnover_rate/turnover_rate_f preserve provider percentage values; pe/pe_ttm/pb remain ratios. No scaling or sentinel substitution; null stays null, nonfinite rejected.",
+    "source_revocations": "Before any page is consumed, full source keys must cover existing keys in that code/date window; omission including empty withdrawal fails without sending or advancing checkpoint. Explicit replacement is not claimed.",
+    "schema": "Audited YEAR partition, WAL enabled, DEDUP UPSERT (ts_code,trade_date). No formal-table DDL or Flyway migration; isolated-table DDL only."
+  },
+  "write": {
+    "submitted_rows": 45,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "delivery_status": "verified_after_full_readback",
+    "batch_row_limit": 250,
+    "batch_byte_limit": 1048576
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-live-acceptance.json",
+    "compared_columns": [
+      "ts_code",
+      "trade_date",
+      "total_mv",
+      "float_mv",
+      "total_share",
+      "float_share",
+      "free_share",
+      "turnover_rate",
+      "turnover_rate_f",
+      "pe",
+      "pe_ttm",
+      "pb"
+    ],
+    "actual_rows": 15,
+    "matched_rows": 15,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "passed": true,
+    "formal_table_readback_for_acceptance": false,
+    "final_snapshot": {
+      "sha256": "d58b9ba9ddf5b62369d34efc8e58bb2a7cbad560b181e6e7e7b96b682ca7aecd",
+      "rows": 15,
+      "duplicateKeys": 0
+    }
+  },
+  "independent_readback": {
+    "helper": "artifacts/java-migration/operations/IndexDailyBasicIndependentReadback.java",
+    "entry_point": "verify(JdbcTemplate, Path ledger, String isolatedTable, String runId)",
+    "expected_values_source": "SHA-256-verified raw index_dailybasic receipt; does not call D020 source, mapper, or write-port implementation.",
+    "compared_columns": 12,
+    "execution_status": "MATCHED_all_20_primary_runs_and_five_recoveries_and_CLI_and_revision_empty_windows"
+  },
+  "checks": {
+    "static_source_contract_review": true,
+    "java_build": "Not run by instruction; coordinator integration compilation is pending.",
+    "tests_run": false,
+    "source_call": false,
+    "isolated_nonempty_write_read": false,
+    "idempotent_rerun": false,
+    "incremental_checkpoint": false,
+    "revision_overlap": false,
+    "cancel_resume": false,
+    "truncation_cap_fail_closed": false,
+    "unknown_write_reconcile": false,
+    "formal_table_mutated": false,
+    "scoped_javac": "passed",
+    "full_build_or_tests": "not_run",
+    "source": true,
+    "all_five_codes": true,
+    "all_12_fields": true,
+    "idempotence": true,
+    "incremental": true,
+    "resume_cancel": true,
+    "fresh_process_cli_resume": true,
+    "unknown_ack_reconcile": true,
+    "empty_window": true,
+    "source_omission_guard": "Implemented before sends; final real revision/empty runs executed with guard. No natural source revocation claimed."
+  },
+  "blockers": [],
+  "shared_integration_needed": [],
+  "remaining_live_acceptance": [],
+  "evidence_paths": [
+    "artifacts/java-migration/D020/source-contract-review.md",
+    "artifacts/java-migration/D020/implementation-review.md",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-live-acceptance.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-recovery-000016-SH-33ff703c-a752-4ace-b2ac-23b45f777b8e.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-recovery-000300-SH-b170d521-c199-42de-818f-dfdff62237a3.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-recovery-000852-SH-3eaa8fe4-66e3-44be-bacc-4f63d232105c.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-recovery-000905-SH-1677cfb4-edfc-44c7-a517-0780cbac1379.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-recovery-399006-SZ-ca54e514-8f83-4eba-a137-e935060878df.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-cli-recovery-00753387-cc57-450c-a497-9d9c6b902502.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-cli-recovery-1e2ace58-f1aa-47c6-a033-147afa8c399e.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-cli-recovery-489cc518-1845-4ea3-b89b-5216500699da.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-cli-recovery-75d97a14-7aaa-4354-aeea-edef8c5b1407.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-cli-recovery-fbd41865-6504-40f5-ac8a-56eba616d6dc.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-revision-31f7a340-edba-403a-b2e2-322312234141.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-revision-32342915-686b-468d-8924-532a1b7fc2e2.json",
+    "artifacts/java-migration/D020/final-review.md"
+  ],
+  "next_manual_comparison": "人工复核 pending_review；可抽查五指数20轮来源收据与全部12物理列。正式表未修改。",
+  "current_progress": "五指数×四轮12字段独立回读，按代码checkpoint、取消恢复、独立CLI、回补后增量及空窗口均通过。",
+  "recovery_acceptance": [
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-recovery-000016-SH-33ff703c-a752-4ace-b2ac-23b45f777b8e.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-recovery-000300-SH-b170d521-c199-42de-818f-dfdff62237a3.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-recovery-000852-SH-3eaa8fe4-66e3-44be-bacc-4f63d232105c.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-recovery-000905-SH-1677cfb4-edfc-44c7-a517-0780cbac1379.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-recovery-399006-SZ-ca54e514-8f83-4eba-a137-e935060878df.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-cli-recovery-00753387-cc57-450c-a497-9d9c6b902502.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-cli-recovery-1e2ace58-f1aa-47c6-a033-147afa8c399e.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-cli-recovery-489cc518-1845-4ea3-b89b-5216500699da.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-cli-recovery-75d97a14-7aaa-4354-aeea-edef8c5b1407.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-cli-recovery-fbd41865-6504-40f5-ac8a-56eba616d6dc.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-revision-31f7a340-edba-403a-b2e2-322312234141.json",
+    "artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\D020-revision-32342915-686b-468d-8924-532a1b7fc2e2.json"
+  ],
+  "failed_attempts": [
+    {
+      "evidence": "artifacts/java-migration/market-live-10ce0890fb504f739b70c066a564f3a2/D020-live-acceptance-failure.json",
+      "reason": "Two source rows written and verified by writer, independent checker rejected Page.cursor=endpoint instead of code. Fixed fetch/reopen cursor and repeated in new owned target; old ledger retained."
+    }
+  ],
+  "limitations": [
+    "No provider numeric revision observed; repeats preserve actual returned values.",
+    "Configured shared quota used; no natural throttling, timeout or 3000-row cap fault claimed.",
+    "Bounded five-code window, not full history.",
+    "Formal table untouched; human review pending."
+  ]
+}

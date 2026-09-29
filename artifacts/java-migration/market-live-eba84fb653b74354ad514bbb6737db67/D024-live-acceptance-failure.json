@@ -1,0 +1,124 @@
+{
+  "task" : "D024",
+  "table" : "java_d024_moneyflow_eba84fb653b74354ad514bbb6737db67",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-eba84fb653b74354ad514bbb6737db67\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T23:04:32.766885800Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "targetId" : "static-v2-7aada2c3b5019999224de9a4be2e276d39256c1dad0532ff5f454b175067b379",
+  "runs" : [ ],
+  "independentReadbacks" : [ ],
+  "plans" : [ {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow",
+        "version" : 1,
+        "datasetId" : "moneyflow",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 5,
+          "maxRows" : 30000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "targetId" : "static-v2-7aada2c3b5019999224de9a4be2e276d39256c1dad0532ff5f454b175067b379",
+        "targetRowsBefore" : 0,
+        "trade_dates" : "20260917"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-7aada2c3b5019999224de9a4be2e276d39256c1dad0532ff5f454b175067b379",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "min" : null,
+      "max" : null,
+      "rows" : 0
+    },
+    "requestedThrough" : "2026-09-17",
+    "bootstrap" : true,
+    "cappedByBudget" : false
+  } ],
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: D024 nonempty verified source required: Result[runId=moneyflow-c77615f8-7622-4590-b20d-60d4d8a9cf22, state=FAILED, sourceRows=0, verifiedRows=0, errorCode=Incomplete, reusedRows=0]",
+  "finishedAt" : "2026-09-29T23:04:41.448515300Z"
+}

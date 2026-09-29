@@ -1,6 +1,6 @@
 # D020 · index_daily_basic
 
-- 状态：planned，尚未派发。
+- 状态：verified；五指数12字段独立回读、增量幂等和恢复通过；人工复核 pending_review。详见 results/D020.json。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D019`；前项验收后才执行本项。
@@ -33,15 +33,15 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 单数据交付清单
 
-- [ ] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
-- [ ] D02：本表业务Key、物理去重键、冲突/修订规则。
-- [ ] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
-- [ ] D04：本表按键/范围的typed read与分页，接入读取组合。
-- [ ] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
-- [ ] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
-- [ ] D07：注册 `index_daily_basic` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
-- [ ] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
-- [ ] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
+- [x] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
+- [x] D02：本表业务Key、物理去重键、冲突/修订规则。
+- [x] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
+- [x] D04：本表按键/范围的typed read与分页，接入读取组合。
+- [x] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
+- [x] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
+- [x] D07：注册 `index_daily_basic` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
+- [x] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
+- [x] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
 
 ## 可观察验收
 

@@ -1,0 +1,49 @@
+{
+  "task" : "D023",
+  "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-ledger.sqlite",
+  "runId" : "dc-index-publication-58f1615b-d9ba-4eaa-bb04-b55e6162aadc",
+  "writerStopped" : true,
+  "startedAt" : "2026-09-29T22:39:16.371418800Z",
+  "formalTableMutated" : false,
+  "stateBefore" : "IN_DOUBT",
+  "before" : {
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a",
+    "duplicateKeys" : 0,
+    "rows" : 2062
+  },
+  "stateAfter" : "VERIFIED",
+  "independentReadback" : {
+    "tradeDates" : [ "2026-09-17" ],
+    "status" : "MATCHED",
+    "physicalTargetBefore" : "static-v2-7513684b8dfbcf485f2e2a7c1f17801b349790411686a71618d8065db3506691",
+    "matchedRows" : 1031,
+    "mismatchSamples" : [ ],
+    "receipts" : [ {
+      "rows" : 1031,
+      "sha256" : "fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37",
+      "date" : "2026-09-17",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-evidence\\dc-index-publication-58f1615b-d9ba-4eaa-bb04-b55e6162aadc\\source\\dc-index-20260917-fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37.json"
+    } ],
+    "evidenceBytes" : 236915,
+    "extraKeys" : 0,
+    "mismatchedRows" : 0,
+    "actualRows" : 1031,
+    "sourceDuplicateKeys" : 0,
+    "runId" : "dc-index-publication-58f1615b-d9ba-4eaa-bb04-b55e6162aadc",
+    "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+    "missingKeys" : 0,
+    "duplicateKeys" : 0,
+    "sourceRows" : 1031,
+    "toInclusive" : "2026-09-17",
+    "physicalTargetAfter" : "static-v2-2097a8d2048c6db22327309bb87b53ceeb13f3c2d35ed7b31bacf2298d38e6dc",
+    "fromInclusive" : "2026-09-17"
+  },
+  "after" : {
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a",
+    "duplicateKeys" : 0,
+    "rows" : 2062
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T22:39:22.855374200Z"
+}

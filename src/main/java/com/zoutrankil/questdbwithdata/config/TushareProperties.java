@@ -38,7 +38,18 @@ public class TushareProperties {
         limits.put("stk_factor",Math.min(10,Math.min(endpointPerMinute,limits.getOrDefault("stk_factor",endpointPerMinute))));
         limits.put("stk_factor_pro",Math.min(25,Math.min(endpointPerMinute,limits.getOrDefault("stk_factor_pro",endpointPerMinute))));
         limits.put("stk_limit",Math.min(50,Math.min(endpointPerMinute,limits.getOrDefault("stk_limit",endpointPerMinute))));
+        limits.put("fund_portfolio",Math.min(10,Math.min(endpointPerMinute,limits.getOrDefault("fund_portfolio",endpointPerMinute))));
         limits.put("fund_share",Math.min(200,Math.min(endpointPerMinute,limits.getOrDefault("fund_share",endpointPerMinute))));
+        limits.put("fund_factor_pro",Math.min(30,Math.min(endpointPerMinute,limits.getOrDefault("fund_factor_pro",endpointPerMinute))));
+        limits.put("index_weight",Math.min(180,Math.min(endpointPerMinute,limits.getOrDefault("index_weight",endpointPerMinute))));
+        limits.put("index_monthly",Math.min(180,Math.min(endpointPerMinute,limits.getOrDefault("index_monthly",endpointPerMinute))));
+        limits.put("dc_index",Math.min(200,Math.min(endpointPerMinute,limits.getOrDefault("dc_index",endpointPerMinute))));
+        limits.put("moneyflow_dc",Math.min(150,Math.min(endpointPerMinute,limits.getOrDefault("moneyflow_dc",endpointPerMinute))));
+        limits.put("moneyflow_ths",Math.min(150,Math.min(endpointPerMinute,limits.getOrDefault("moneyflow_ths",endpointPerMinute))));
+        limits.put("moneyflow",Math.min(150,Math.min(endpointPerMinute,limits.getOrDefault("moneyflow",endpointPerMinute))));
+        limits.put("index_dailybasic",Math.min(50,Math.min(endpointPerMinute,limits.getOrDefault("index_dailybasic",endpointPerMinute))));
+        limits.put("index_daily",Math.min(180,Math.min(endpointPerMinute,limits.getOrDefault("index_daily",endpointPerMinute))));
+        limits.put("sw_daily",Math.min(180,Math.min(endpointPerMinute,limits.getOrDefault("sw_daily",endpointPerMinute))));
         limits.put("fund_adj",Math.min(20,Math.min(endpointPerMinute,limits.getOrDefault("fund_adj",endpointPerMinute))));
         limits.put("fund_daily",Math.min(10,Math.min(endpointPerMinute,limits.getOrDefault("fund_daily",endpointPerMinute))));
         limits.put("fund_basic",Math.min(20,Math.min(endpointPerMinute,limits.getOrDefault("fund_basic",endpointPerMinute))));

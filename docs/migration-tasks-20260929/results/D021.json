@@ -1,0 +1,160 @@
+{
+  "task_id": "D021",
+  "dataset": "index_weight",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "started_at": "2026-09-29T21:43:18.743241Z",
+  "finished_at": "2026-09-29T21:50:51.876937300Z",
+  "logical_date": "2026-09-30",
+  "run_id": "index-weight-b68b6261-2144-42f0-97ac-c13e1ccd9cf4",
+  "target": {
+    "isolated_table": "java_d021_index_weight_28b6bdc1d5144ce9b90e11142380138c",
+    "target_id": "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+    "database_version": "QuestDB 10.0.1",
+    "partition": "YEAR",
+    "wal": true,
+    "dedup": true,
+    "upsert_keys": [
+      "index_code",
+      "con_code",
+      "trade_date"
+    ],
+    "formal_table_mutated": false
+  },
+  "source": {
+    "routes": "SNAPSHOT: seven CSIndex OSS XLS downloads plus 399673.SZ Tushare latest within 75 days. BACKFILL: eight Tushare index_weight code/month calls.",
+    "index_codes": [
+      "000300",
+      "000016",
+      "000688",
+      "000905",
+      "000510",
+      "000852",
+      "932000",
+      "399673"
+    ],
+    "primary_runs": 5,
+    "primary_source_scopes": 40,
+    "returned_rows": 22250,
+    "count_scope": "Five primary runs only; recovery, empty and earlier rejected attempts are linked separately. Transport retries are not inferred.",
+    "snapshot_observation_date": "2026-08-31",
+    "history_window": [
+      "2026-08-31",
+      "2026-08-31"
+    ],
+    "name_enrichment": "Tushare names use bounded read-only existing D002 stock_detail_info L/D/P snapshot; physical target and exact reference rows plus sorted-key SHA-256 are retained. This deliberately reuses synchronized D002 instead of issuing Python stock_basic L/D/P HTTP calls.",
+    "limits": {
+      "snapshot_calls": 8,
+      "backfill_max_days": 92,
+      "backfill_max_code_month_calls": 32,
+      "tushare_exact_cap_rejected": 4000,
+      "max_xls_bytes": 16777216,
+      "snapshot_timeout_seconds": 90,
+      "configured_requests_per_minute": 10
+    }
+  },
+  "write": {
+    "submitted_rows": 22250,
+    "primary_runs": 5,
+    "delivery_status": "verified_after_full_readback",
+    "batch_rows": 250
+  },
+  "questdb_readback": {
+    "fields": [
+      "index_code",
+      "con_code",
+      "trade_date",
+      "index_name",
+      "index_name_en",
+      "con_name",
+      "con_name_en",
+      "exchange",
+      "exchange_en",
+      "weight",
+      "update_time"
+    ],
+    "actual_rows": 4450,
+    "matched_rows": 4450,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "passed": true,
+    "final_snapshot": {
+      "sha256": "694e88992e4b36796e42074c949adfc922c007d84bc672042a2587fe699cc567",
+      "rows": 4450,
+      "duplicateKeys": 0
+    },
+    "independent_implementations": [
+      "Java POI parses raw XLS and raw Tushare/D002 reference rows without production mapper/source",
+      "Python pandas/xlrd independently parses XLS and raw Tushare/D002 rows"
+    ]
+  },
+  "incremental": {
+    "default_mode": "SNAPSHOT",
+    "checkpoint_kind": "receipt-backed full eight-index snapshot observedAt, Asia/Shanghai calendar date",
+    "last_refresh_date": "2026-09-30",
+    "next_refresh_date": "2026-10-07",
+    "not_due_cli": "zero source requests, no new ledger run, executed=false and dataVerified=false",
+    "day_six_suppressed": true,
+    "day_seven_plan_due": true,
+    "backfill_does_not_advance_snapshot_gate": true
+  },
+  "checks": {
+    "scoped_javac": "passed",
+    "full_build_or_tests": "not_run",
+    "nonempty_source": true,
+    "all_11_fields": true,
+    "two_idempotent_reruns": true,
+    "history_then_snapshot": true,
+    "cancel_before_source": true,
+    "cancel_resume": {
+      "reused_rows": 300,
+      "sent_rows": 4150
+    },
+    "fresh_process_cli_resume": true,
+    "unknown_ack_reconciled": true,
+    "closed_window_empty": true
+  },
+  "mapping_drift": {
+    "exchange": "Physical SYMBOL retained despite Python model STRING; source strings preserved.",
+    "update_time": "Frozen microsecond Instant, not technical timestamp wrapper.",
+    "historical_names": "Existing synchronized D002 snapshot is used for names; receipt archives actual used references.",
+    "source_withdrawal": "Existing key omission is rejected before send. No automatic membership deletion or replacement is claimed."
+  },
+  "failed_attempts": [
+    {
+      "evidence": "artifacts/java-migration/D021/provider-diagnostic/e64d384cefce46d6aa7a36293b25dc3e/raw-workbook-inspection.json",
+      "reason": "Real XLS bilingual header differs from initial expected Chinese-only header; strict acceptance expanded to exact documented actual schema."
+    },
+    {
+      "evidence": "artifacts/java-migration/market-live-168b9d7dfdc84c4aa5d155dc4cb89fcd/independent-readback-rejection.json",
+      "reason": "Name fingerprint key order mismatch, fixed canonical sorted serialization; old actual 4450 rows and ledger retained, not accepted."
+    },
+    {
+      "evidence": "artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\D021-live-acceptance-operation-restore-failure.json",
+      "reason": "Continuation helper attempted failed-only FrozenRunRequest.restore on verified run; replaced by explicit frozen snapshot decoding."
+    },
+    {
+      "evidence": "artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\D021-live-acceptance-failure.json",
+      "reason": "Independent helper initially applied snapshot-only provider route restriction to historical all-Tushare path; corrected scope and independently rechecked real history."
+    }
+  ],
+  "limitations": [
+    "Bounded eight-index snapshot and one historical day, not full history.",
+    "No natural rate-limit/timeout/exact-cap fault claimed.",
+    "No natural membership withdrawal repair claimed.",
+    "Formal table untouched; human review pending."
+  ],
+  "evidence_paths": [
+    "artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\D021-live-acceptance.json",
+    "artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\D021-recovery-78c3b621-78de-428c-8935-43ddd014b52f.json",
+    "artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\D021-cli-recovery-7889c9ad-38a5-4e4f-be59-1ad56f429e21.json",
+    "artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\D021-gate-empty-1f1a447e-ca7c-44a2-aa05-6c973682d1c6.json",
+    "artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\D021-python-independent-index-weight-58a090e3-f695-4836-8e89-9616609f954f.json",
+    "artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\D021-python-independent-index-weight-a1758410-799b-4f41-8b4a-de76dd97c450.json",
+    "artifacts/java-migration/D021/final-review.md"
+  ],
+  "blockers": [],
+  "remaining_live_acceptance": []
+}

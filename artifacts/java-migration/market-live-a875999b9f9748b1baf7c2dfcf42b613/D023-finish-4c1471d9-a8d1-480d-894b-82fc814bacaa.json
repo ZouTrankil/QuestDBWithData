@@ -1,0 +1,49 @@
+{
+  "task" : "D023",
+  "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-ledger.sqlite",
+  "runId" : "dc-index-publication-e1c40977-9ad9-4cab-a4f4-5ee89cd69cda",
+  "writerStopped" : true,
+  "startedAt" : "2026-09-29T22:35:59.638833600Z",
+  "formalTableMutated" : false,
+  "stateBefore" : "IN_DOUBT",
+  "before" : {
+    "duplicateKeys" : 0,
+    "rows" : 2062,
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a"
+  },
+  "stateAfter" : "VERIFIED",
+  "independentReadback" : {
+    "actualRows" : 1031,
+    "sourceDuplicateKeys" : 0,
+    "runId" : "dc-index-publication-e1c40977-9ad9-4cab-a4f4-5ee89cd69cda",
+    "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+    "missingKeys" : 0,
+    "duplicateKeys" : 0,
+    "sourceRows" : 1031,
+    "toInclusive" : "2026-09-17",
+    "physicalTargetAfter" : "static-v2-c7aa48ccb615891af4ce92a7b9c7ffe92e0cf76f5b6a43dfa4f4f024ba0f4f03",
+    "fromInclusive" : "2026-09-17",
+    "tradeDates" : [ "2026-09-17" ],
+    "status" : "MATCHED",
+    "physicalTargetBefore" : "static-v2-c151237ce34fd378f500bd5a003b3e0b00eebdd2870978e9aadd1df2dd22cd08",
+    "matchedRows" : 1031,
+    "mismatchSamples" : [ ],
+    "receipts" : [ {
+      "sha256" : "fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37",
+      "date" : "2026-09-17",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-evidence\\dc-index-publication-e1c40977-9ad9-4cab-a4f4-5ee89cd69cda\\source\\dc-index-20260917-fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37.json",
+      "rows" : 1031
+    } ],
+    "evidenceBytes" : 236915,
+    "extraKeys" : 0,
+    "mismatchedRows" : 0
+  },
+  "after" : {
+    "duplicateKeys" : 0,
+    "rows" : 2062,
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a"
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T22:36:06.596896200Z"
+}

@@ -1,0 +1,192 @@
+{
+  "task" : "D026",
+  "table" : "java_d026_moneyflow_dc_865c042f5f534677a8755f084aabb45d",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-865c042f5f534677a8755f084aabb45d\\sync-ledger.sqlite",
+  "action" : "exercise",
+  "startedAt" : "2026-09-29T23:22:21.288967300Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "duplicateKeys" : 0,
+    "sha256" : "d41ed9337cce372be44e193b1dcbe893c6ab5a133d87fad7ed34ee69cb922814",
+    "rows" : 12036
+  },
+  "plan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_dc",
+        "version" : 2,
+        "datasetId" : "moneyflow_dc",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_dc_owner",
+        "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_dc.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 30,
+          "maxRows" : 50000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+        "targetMaxBefore" : "2026-09-18",
+        "targetMinBefore" : "2026-09-17",
+        "targetRowsBefore" : 12036,
+        "trade_dates" : "20260917"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "min" : "2026-09-17",
+      "max" : "2026-09-18",
+      "rows" : 12036
+    },
+    "requestedThrough" : "2026-09-17",
+    "bootstrap" : false,
+    "cappedByBudget" : false
+  },
+  "cancelBeforeSource" : {
+    "runId" : "moneyflow-dc-cancel-before-3e196696-dae1-45e2-addc-81c5f1c592ec",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterVerifiedPage" : {
+    "runId" : "moneyflow-dc-cancel-page-02f007d5-d65a-481e-bad2-fcddf0464b04",
+    "state" : "CANCELLED",
+    "sourceRows" : 6018,
+    "verifiedRows" : 6018,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "resume" : {
+    "runId" : "moneyflow-dc-resume-938f4a40-6e2a-498c-95fb-017993023f81",
+    "state" : "VERIFIED",
+    "sourceRows" : 6018,
+    "verifiedRows" : 6018,
+    "errorCode" : null,
+    "reusedRows" : 6018
+  },
+  "resumeSendCalls" : 0,
+  "independentResumeReadback" : {
+    "fromInclusive" : "2026-09-17",
+    "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "receiptFingerprints" : [ "499e56ed3d1d7db033cbacef9c80327f3fff6d0127a81eb0c442e0021ffbd2b7" ],
+    "toInclusive" : "2026-09-17",
+    "dataset" : "moneyflow_dc",
+    "sourceRows" : 6018,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "table" : "java_d026_moneyflow_dc_865c042f5f534677a8755f084aabb45d",
+    "runId" : "moneyflow-dc-resume-938f4a40-6e2a-498c-95fb-017993023f81",
+    "sourceDuplicateKeys" : 0,
+    "actualRows" : 6018,
+    "mismatchedRows" : 0,
+    "extraKeys" : 0,
+    "evidenceBytes" : 2198039,
+    "mismatchSamples" : [ ],
+    "matchedRows" : 6018,
+    "status" : "MATCHED",
+    "tradeDates" : [ "2026-09-17" ]
+  },
+  "postSendLostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 3308,
+      "digest" : "f99aaedd9c6b9b6792e247b49713303979c2ee5f6b4f4bec360d646baa92d385",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "after" : {
+    "duplicateKeys" : 0,
+    "sha256" : "d41ed9337cce372be44e193b1dcbe893c6ab5a133d87fad7ed34ee69cb922814",
+    "rows" : 12036
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T23:23:13.704212100Z"
+}

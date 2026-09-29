@@ -1,0 +1,146 @@
+{
+  "task" : "D022",
+  "table" : "java_d022_index_monthly_b2c209f9df7d49f192b6d90a97586970",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-b2c209f9df7d49f192b6d90a97586970\\sync-ledger.sqlite",
+  "action" : "prepare",
+  "startedAt" : "2026-09-29T22:06:36.991423700Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "duplicateKeys" : 0,
+    "sha256" : "d80a4bf630704756faa19352ef4324370dc9df0260564d4f78c8d4e95ef9ec62",
+    "rows" : 9
+  },
+  "plan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.index_monthly",
+        "version" : 1,
+        "datasetId" : "index_monthly",
+        "datasetVersion" : 1,
+        "owner" : "index_monthly_owner",
+        "supportedModes" : [ "RECONCILE", "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 32,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "tsCode" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ "932431.SH", "930985.SH", "000919.SH", "000821.SH", "000994.SH", "932401.SH", "931935.SH", "000921.SH", "000905.SH", "000986.SH", "932430.SH", "000918.SH", "000047.SH", "932400.SH", "000920.SH", "930846.SH", "000985.SH", "000993.SH", "930740.SH", "931155.SH", "930697.SH", "932494.SH", "930910.SH", "931847.SH", "000992.SH", "000984.SH", "930782.SH", "000989.SH", "000510.SH", "000991.SH", "399975.SZ", "931932.SH", "931375.SH", "931775.SH", "000829.SH", "000831.SH", "000988.SH", "932403.SH", "000990.SH", "000982.SH", "931931.SH", "000852.SH", "932432.SH", "932497.SH", "000828.SH", "932391.SH", "931528.SH", "000300.SH", "000987.SH", "000822.SH", "000995.SH", "000830.SH", "931936.SH", "932402.SH", "000906.SH" ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "index_monthly.month_window",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 3660,
+          "maxSlices" : 1,
+          "maxPages" : 1,
+          "maxRows" : 1000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 92,
+        "dependencies" : [ {
+          "jobId" : "data.index",
+          "version" : 1
+        } ],
+        "frequency" : "MONTHLY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : false
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "observedAt" : "2026-09-29T22:03:20.837428Z",
+        "physicalTargetId" : "static-v2-159b43d977901a01c78e6f47f6a4630fe91cede3426f987193c456bd414af0af",
+        "targetId" : "static-v2-f163873b7c29ab18a61d6243af3765bc85c5f19310d9bb08a3a1fd0d5d2dbeef",
+        "targetMaxBefore" : "2026-08-31",
+        "targetMinBefore" : "2026-06-30",
+        "tsCode" : "000300.SH"
+      },
+      "from" : "2026-06-01",
+      "to" : "2026-07-31",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-f163873b7c29ab18a61d6243af3765bc85c5f19310d9bb08a3a1fd0d5d2dbeef",
+    "physicalTargetId" : "static-v2-159b43d977901a01c78e6f47f6a4630fe91cede3426f987193c456bd414af0af",
+    "tsCode" : "000300.SH",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : null,
+    "physicalRange" : {
+      "min" : "2026-06-30",
+      "max" : "2026-08-31"
+    },
+    "bootstrap" : false
+  },
+  "cancelBeforeSource" : {
+    "runId" : "monthly-prepare-3da6c1ca-1899-427c-9048-340c0d575b19",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "after" : {
+    "duplicateKeys" : 0,
+    "sha256" : "d80a4bf630704756faa19352ef4324370dc9df0260564d4f78c8d4e95ef9ec62",
+    "rows" : 9
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T22:06:42.171291800Z"
+}

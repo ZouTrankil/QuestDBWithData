@@ -1,0 +1,151 @@
+{
+  "task_id": "D019",
+  "dataset_id": "index_daily_market",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "job_id": "data.index_daily_market",
+  "job_version": 1,
+  "run_id": "index-daily-market-b48d8914-18a6-42de-90e1-500edbc039c2",
+  "attempt_id": null,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-29T21:01:16.279210700Z",
+  "finished_at": "2026-09-29T21:05:24.727155600Z",
+  "serial_gate": {
+    "serial_after": "D018",
+    "status": "predecessor_verified",
+    "d018_result_status_at_implementation": "verified_before_live",
+    "live_execution_allowed": true
+  },
+  "target": {
+    "production_table_read_only": "index_daily_market",
+    "production_table_mutated": false,
+    "isolated_table_prefix": "java_d019_index_daily_market_",
+    "isolated_table": "java_d019_index_daily_market_8e5078c8551b4b2ba086f80b6ed85bc1",
+    "target_id": "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+    "database_version": "QuestDB 10.0.1",
+    "partition": "YEAR",
+    "designated_timestamp": "timestamp",
+    "wal": true,
+    "dedup": true,
+    "physical_dedup_key": [
+      "ts_code",
+      "timestamp"
+    ],
+    "actual_rows": 6
+  },
+  "source": {
+    "python_default_universe": "CORE57",
+    "python_explicit_universe": "SW2021_L1_31",
+    "canonical_work_unit": "one ts_code x one inclusive range of at most 366 calendar days",
+    "core_endpoint": "index_daily",
+    "sw_endpoint": "sw_daily",
+    "sw_field_alias": {
+      "pct_change": "pct_chg"
+    },
+    "sw_pre_close_policy": "Explicit null: sw_daily doc327 does not return pre_close; no value is inferred.",
+    "frozen_technical_field": "update_time from run observedAt; not returned by Tushare",
+    "source_calls": 8,
+    "source_rows": 18,
+    "source_receipts": [
+      "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-02abf4ea-1547-4311-837d-6815afaa899d\\source\\index-daily-000300-SH-20260924-20260928-1feab6b0-fe3a-4e6d-82b6-2b327f21085c.json",
+      "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-fc1683a4-4d61-4b35-924c-7ed3e4c82bff\\source\\index-daily-000300-SH-20260924-20260928-4894e0ed-9cfc-41e7-871c-f72c33423bad.json",
+      "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-46fd2bb2-2f44-4441-b526-e9226b953e16\\source\\index-daily-000300-SH-20260924-20260928-3eba7d3d-5ac0-44bb-8cc0-bab3d6444dd4.json",
+      "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-0292b514-452c-456b-8748-a74028d3624a\\source\\index-daily-000300-SH-20260924-20260929-569aecda-22e3-4c1f-994b-98fde206657b.json",
+      "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-3f29a936-30e4-44b6-9e8b-0d079f9cabd6\\source\\index-daily-801080-SI-20260924-20260928-d767f0b9-d045-4486-95e0-754d02695733.json",
+      "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-fd15a7cb-cdfc-4f52-8394-8569f5c0536b\\source\\index-daily-801080-SI-20260924-20260928-a7da3fbf-e47e-42aa-aa11-ddad04f3c7d2.json",
+      "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-ce10daa7-f96f-4a8c-9dcb-e3340de843a7\\source\\index-daily-801080-SI-20260924-20260928-4e584388-2b9c-4245-8853-e8b831da631b.json",
+      "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\index-daily-market-b48d8914-18a6-42de-90e1-500edbc039c2\\source\\index-daily-801080-SI-20260924-20260929-0ce24c84-df7c-4440-932c-9dc17bf76f30.json"
+    ],
+    "count_scope": "Eight primary acceptance requests; recovery, revision, empty-window and failed attempts linked separately. Transport retries not inferred."
+  },
+  "incremental": {
+    "mode": "INCREMENTAL",
+    "scope": "targetId + ts_code + endpoint route",
+    "bootstrap_policy": "Explicit bounded --from required without a verified checkpoint; selected-code target must be empty.",
+    "revision_overlap_calendar_days": 5,
+    "checkpoint_policy": "Only contiguous same-target/same-definition/same-code/same-route VERIFIED or VERIFIED_EMPTY incremental receipts with the exact frozen anchor advance the checkpoint.",
+    "backfill_reconcile_checkpoint": "Never advance; verified receipts may be the latest covering overlay for subsequent physical readback validation.",
+    "existing_target_policy": "Read actual existing rows for the selected ts_code; each covered day must match the newest valid receipt ordered by summary.updatedAt and stable run-ID tie-breaker; unexplained rows fail closed.",
+    "checkpoint_before_by_code": {
+      "000300.SH": "2026-09-28",
+      "801080.SI": "2026-09-28"
+    },
+    "checkpoint_after_by_code": {
+      "000300.SH": "2026-09-29",
+      "801080.SI": "2026-09-29"
+    },
+    "backfill_checkpoint_unchanged": true,
+    "other_code_unchanged": true
+  },
+  "implementation": {
+    "typed_business_mapping": true,
+    "typed_read_repository": true,
+    "typed_write_port": true,
+    "independent_readback_helper": "artifacts/java-migration/operations/IndexDailyMarketIndependentReadback.java",
+    "shared_cli_registry_integration": "completed",
+    "build_or_tests_run": false,
+    "live_source_or_questdb_operations_run": true,
+    "scoped_javac": "passed"
+  },
+  "evidence": [
+    "artifacts/java-migration/D019/source-contract-review.md",
+    "artifacts/java-migration/D019/implementation-review.md",
+    "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-live-acceptance.json",
+    "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-recovery-000300-SH-1d5ab040-e82f-42d9-9d07-e97e1d08099d.json",
+    "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-recovery-801080-SI-de9d944e-0a59-4fac-b54e-702d7398d5bb.json",
+    "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-cli-recovery-4816ce80-9f6d-4bf8-8ded-1fed1c813f9d.json",
+    "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-cli-recovery-945c271a-e8ef-4fea-8926-f6f028c06616.json",
+    "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-revision-cc631ae7-2efd-4860-a78d-ed15b39c0e50.json",
+    "artifacts/java-migration/D019/final-review.md"
+  ],
+  "remaining_acceptance": [],
+  "current_progress": "两条真实来源路线、八轮12字段独立回读、代码隔离checkpoint、取消恢复、独立CLI、回补后增量及空窗口均通过。",
+  "write": {
+    "submitted_rows": 18,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "delivery_status": "verified_after_full_readback",
+    "count_scope": "Eight primary acceptance runs"
+  },
+  "questdb_readback": {
+    "passed": true,
+    "all_physical_columns": 12,
+    "actual_rows": 6,
+    "mismatched_keys": 0,
+    "duplicates": 0,
+    "primary_acceptance": "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-live-acceptance.json",
+    "final_snapshot": {
+      "sha256": "debea4ef4d58fd3f9d9c0da723a14872ab763c9fde3e6b3bbd3a9fda8a35dfd9",
+      "duplicateKeys": 0,
+      "rows": 6
+    }
+  },
+  "recovery_acceptance": [
+    "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-recovery-000300-SH-1d5ab040-e82f-42d9-9d07-e97e1d08099d.json",
+    "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-recovery-801080-SI-de9d944e-0a59-4fac-b54e-702d7398d5bb.json",
+    "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-cli-recovery-4816ce80-9f6d-4bf8-8ded-1fed1c813f9d.json",
+    "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-cli-recovery-945c271a-e8ef-4fea-8926-f6f028c06616.json",
+    "artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\D019-revision-cc631ae7-2efd-4860-a78d-ed15b39c0e50.json"
+  ],
+  "failed_attempts": [
+    {
+      "evidence": "artifacts/java-migration/market-live-9df821da3471456fb3937bc55ad78058/D019-live-acceptance-failure.json",
+      "reason": "update_time temporal wrapper mismatch before send; actual target 0 rows; fixed INSTANT semantic contract"
+    },
+    {
+      "evidence": "artifacts/java-migration/market-live-390a0b6336a046d291b192e5a271e9a7/D019-live-acceptance-failure.json",
+      "reason": "SW requested unavailable pre_close; CORE four runs verified, SW failed before write; fixed SW ten-field contract and explicit null"
+    }
+  ],
+  "limitations": [
+    "Bounded acceptance uses one CORE and one SW code; not a full 88-code history backfill.",
+    "Shared configured quota used; no natural rate-limit or timeout injection claimed.",
+    "No full Gradle build or test suite run.",
+    "Formal table was not modified. Human review pending."
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "task_id": "D024",
+  "dataset": "moneyflow",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "started_at": "2026-09-29T23:06:09.838818800Z",
+  "finished_at": "2026-09-29T23:08:57.883820Z",
+  "run_id": "moneyflow-4e4f1e95-35fe-4add-afa8-906f6aa89f88",
+  "target": {
+    "isolated_table": "java_d024_moneyflow_e87794d99a684e6fbffcdd483d24a33e",
+    "target_id": "static-v2-f8b04c8e7f1b45a97bc70f6da9307ec3e223b3236eb80bfbd1c682bc893b7550",
+    "partition": "YEAR",
+    "wal": true,
+    "dedup": true,
+    "natural_key": [
+      "ts_code",
+      "trade_date"
+    ],
+    "formal_table_mutated": false
+  },
+  "source": {
+    "endpoint": "moneyflow",
+    "request_unit": "one unpaged trade_date",
+    "initial_date": "2026-09-17",
+    "incremental_through": "2026-09-18",
+    "initial_rows": 5553,
+    "primary_runs": 4,
+    "primary_returned_rows": 27765,
+    "row_cap": 6000,
+    "configured_requests_per_minute": 10,
+    "reference_ceiling_per_minute": 150,
+    "count_scope": "Primary four runs only; recovery and backfill operations linked separately."
+  },
+  "write": {
+    "primary_submitted_rows": 27765,
+    "strategy": "Exact typed WAL/DEDUP upsert with full business-key readback",
+    "resume_reused_rows": 5553,
+    "resume_send_calls": 0,
+    "accounting": "Primary runs contain no reused batches. Recovery counts come from runner and observed send calls, not source-row totals."
+  },
+  "questdb_readback": {
+    "fields": 20,
+    "primary_independent_readbacks": 4,
+    "final_rows": 11106,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "extra_keys": 0,
+    "final_snapshot": {
+      "rows": 11106,
+      "duplicateKeys": 0,
+      "sha256": "a0735b91722a773ecdbafd6b8ac3c3b85e362f3bd96d488c1f98d44fc9d79659"
+    },
+    "passed": true
+  },
+  "incremental": {
+    "default_mode": "INCREMENTAL",
+    "checkpoint": "receipt-backed open-date chain",
+    "checkpoint_before_backfill": {
+      "anchor": "2026-09-17",
+      "through": "2026-09-18",
+      "receipts": {
+        "2026-09-17": {
+          "path": "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/sync-evidence/moneyflow-2c0166b7-ca5d-49c3-9be9-7074d5b8a322/source/moneyflow-20260917-54d7d33617cebcba9fc29f3b0c4ccee8ae7ea46892b897a01b7b62fb41af4a69.json",
+          "fingerprint": "54d7d33617cebcba9fc29f3b0c4ccee8ae7ea46892b897a01b7b62fb41af4a69",
+          "date": "2026-09-17",
+          "rows": 5553
+        },
+        "2026-09-18": {
+          "path": "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/sync-evidence/moneyflow-4e4f1e95-35fe-4add-afa8-906f6aa89f88/source/moneyflow-20260918-50516d883294fade0805c4fc631a149bceadefc3dbc79832a4c4c2d5e75332ec.json",
+          "fingerprint": "50516d883294fade0805c4fc631a149bceadefc3dbc79832a4c4c2d5e75332ec",
+          "date": "2026-09-18",
+          "rows": 5553
+        }
+      },
+      "expectedRows": 11106,
+      "firstRowDate": "2026-09-17",
+      "lastRowDate": "2026-09-18",
+      "verifiedAt": "2026-09-29T23:08:25.597469200Z"
+    },
+    "checkpoint_after_backfill": {
+      "anchor": "2026-09-17",
+      "through": "2026-09-18",
+      "receipts": {
+        "2026-09-17": {
+          "path": "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/sync-evidence/moneyflow-b1cb3e91-55f8-4bbb-a419-237fed57920c/source/moneyflow-20260917-54d7d33617cebcba9fc29f3b0c4ccee8ae7ea46892b897a01b7b62fb41af4a69.json",
+          "fingerprint": "54d7d33617cebcba9fc29f3b0c4ccee8ae7ea46892b897a01b7b62fb41af4a69",
+          "date": "2026-09-17",
+          "rows": 5553
+        },
+        "2026-09-18": {
+          "path": "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/sync-evidence/moneyflow-4e4f1e95-35fe-4add-afa8-906f6aa89f88/source/moneyflow-20260918-50516d883294fade0805c4fc631a149bceadefc3dbc79832a4c4c2d5e75332ec.json",
+          "fingerprint": "50516d883294fade0805c4fc631a149bceadefc3dbc79832a4c4c2d5e75332ec",
+          "date": "2026-09-18",
+          "rows": 5553
+        }
+      },
+      "expectedRows": 11106,
+      "firstRowDate": "2026-09-17",
+      "lastRowDate": "2026-09-18",
+      "verifiedAt": "2026-09-29T23:08:42.517598600Z"
+    },
+    "backfill_does_not_advance": true,
+    "backfill_then_incremental": true
+  },
+  "checks": {
+    "scoped_javac": "passed",
+    "full_build_or_tests": "not_run",
+    "nonempty_source": true,
+    "two_idempotent_reruns": true,
+    "incremental": true,
+    "cancel_before_source": true,
+    "cancel_after_verified_page": true,
+    "frozen_resume_reuses_all_rows": true,
+    "fresh_process_cli_resume": true,
+    "actual_send_lost_ack_reconciled": true,
+    "all_fields_independent_readback": true
+  },
+  "failed_attempts": [
+    {
+      "evidence": "artifacts/java-migration/market-live-eba84fb653b74354ad514bbb6737db67/D024-live-acceptance-failure.json",
+      "reason": "Actual 5553-row response included BJ stocks; old SZ/SH-only validator rejected before writes. Source/domain/independent readback now accept observed BJ codes. Original incomplete receipt retained."
+    }
+  ],
+  "limitations": [
+    "Bounded two-day sample, not full history.",
+    "No natural timeout, rate-limit or exact-cap response claimed.",
+    "No authoritative empty source date or naturally changing historical provider values claimed.",
+    "Formal table untouched; human review pending."
+  ],
+  "evidence_paths": [
+    "artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/D024-live-acceptance.json",
+    "artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/D024-recovery-exercise.json",
+    "artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/D024-recovery-cli.json",
+    "artifacts/java-migration/market-live-e87794d99a684e6fbffcdd483d24a33e/D024-revision-f158610f-e748-472d-bed2-de20fc3ae430.json",
+    "artifacts/java-migration/D024/final-review.md"
+  ],
+  "blockers": [],
+  "remaining_acceptance": []
+}

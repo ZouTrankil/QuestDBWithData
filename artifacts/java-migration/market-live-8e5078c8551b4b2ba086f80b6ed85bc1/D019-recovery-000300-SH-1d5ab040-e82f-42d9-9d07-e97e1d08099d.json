@@ -1,0 +1,78 @@
+{
+  "task" : "D019",
+  "table" : "java_d019_index_daily_market_8e5078c8551b4b2ba086f80b6ed85bc1",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-ledger.sqlite",
+  "code" : "000300.SH",
+  "startedAt" : "2026-09-29T21:02:49.366432600Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "before" : {
+    "rows" : 6,
+    "duplicateKeys" : 0,
+    "sha256" : "712078989d321e4b0b5def8c4423a212bc0494af38ad8e4342dff560816bd83e"
+  },
+  "cancelBeforeSource" : {
+    "runId" : "cancel-before-ac4483fc-5ca8-4c40-a445-b37e21d1bb85",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterVerifiedPage" : {
+    "runId" : "cancel-after-page-f17ba064-a501-4d10-820a-0b761b6c75d7",
+    "state" : "CANCELLED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "resume" : {
+    "runId" : "resume-47b23d3c-1401-4bff-a79c-c22718348794",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 2
+  },
+  "resumeSendCalls" : 0,
+  "independentResumeReadback" : {
+    "from" : "2026-09-24",
+    "sourceFingerprint" : "a7e14f5e30721cfb2d8a89085db0505256a5f433fce481ea7f4ece25da09fdbe",
+    "targetId" : "static-v2-32258aaaa336310787aaf81abf1cde7f43ab48ce7a784c62f10362b91da43f20",
+    "tsCode" : "000300.SH",
+    "table" : "java_d019_index_daily_market_8e5078c8551b4b2ba086f80b6ed85bc1",
+    "status" : "MATCHED",
+    "sourceRows" : 2,
+    "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-8e5078c8551b4b2ba086f80b6ed85bc1\\sync-evidence\\recovery-1d5ab040-e82f-42d9-9d07-e97e1d08099d\\source\\index-daily-000300-SH-20260924-20260928-fd807b8b-a66c-4404-be16-774efa87d85f.json",
+    "to" : "2026-09-28",
+    "observedAt" : "2026-09-29T21:01:32.767301Z",
+    "matchedRows" : 2,
+    "mismatchKeySample" : [ ],
+    "mismatchedKeys" : 0,
+    "runId" : "resume-47b23d3c-1401-4bff-a79c-c22718348794",
+    "actualRows" : 2,
+    "route" : "INDEX_DAILY"
+  },
+  "postSendLostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 2492,
+      "digest" : "2ef21ddba4b58cbae89ef4f9953e481f11cedbf0a5318be3815cca37fc1ae7f7",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "after" : {
+    "rows" : 6,
+    "duplicateKeys" : 0,
+    "sha256" : "712078989d321e4b0b5def8c4423a212bc0494af38ad8e4342dff560816bd83e"
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T21:02:56.540691700Z"
+}

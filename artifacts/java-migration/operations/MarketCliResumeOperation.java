@@ -16,13 +16,13 @@ class MarketCliResumeOperation {
         Path input=Path.of(args[0]).toAbsolutePath().normalize(),root=input.getParent();
         var json=JobDefinitionJson.mapper();var prior=json.readTree(Files.readAllBytes(input));
         String task=prior.path("task").asText(),table=prior.path("table").asText();
-        var commands=Map.of("D007","daily","D008","daily-basic","D009","stk-factor","D010","stk-limit","D013","etf-basic","D014","etf-daily","D015","etf-adj","D016","etf-share");
+        var commands=Map.ofEntries(Map.entry("D007","daily"),Map.entry("D008","daily-basic"),Map.entry("D009","stk-factor"),Map.entry("D010","stk-limit"),Map.entry("D013","etf-basic"),Map.entry("D014","etf-daily"),Map.entry("D015","etf-adj"),Map.entry("D016","etf-share"),Map.entry("D017","etf-factor"),Map.entry("D019","index-daily-market"),Map.entry("D020","index-daily-basic"),Map.entry("D021","index-weight"));
         if(!prior.path("status").asText().equals("VERIFIED")||!commands.containsKey(task)
                 ||!table.matches("java_"+task.toLowerCase()+"_[a-z_]+_[a-f0-9]{32}"))throw new IllegalArgumentException("Verified owned target required");
         Path ledger=Path.of(prior.path("ledger").asText());String cancelled=prior.path("cancelAfterVerifiedPage").path("runId").asText();
         var report=new LinkedHashMap<String,Object>();report.put("task",task);report.put("table",table);report.put("ledger",ledger.toString());
         report.put("priorRunId",cancelled);report.put("startedAt",Instant.now().toString());report.put("formalTableMutated",false);report.put("humanReview","pending_review");
-        var app=new SpringApplication(task.equals("D016")?local.market.EtfShareOperationApplication.class:task.equals("D013")?local.market.EtfBasicOperationApplication.class:
+        var app=new SpringApplication(task.equals("D021")?local.market.IndexWeightOperationApplication.class:task.equals("D020")?local.market.IndexDailyBasicOperationApplication.class:task.equals("D019")?local.market.IndexDailyMarketOperationApplication.class:task.equals("D017")?local.market.EtfFactorOperationApplication.class:task.equals("D016")?local.market.EtfShareOperationApplication.class:task.equals("D013")?local.market.EtfBasicOperationApplication.class:
                 task.equals("D015")?local.market.EtfAdjOperationApplication.class:task.equals("D014")?local.market.EtfDailyOperationApplication.class:local.market.MarketOperationApplication.class);
         app.setWebApplicationType(WebApplicationType.NONE);app.setLogStartupInfo(false);
         app.addInitializers(c->c.getEnvironment().getPropertySources().addFirst(new MapPropertySource("cli-recovery",
@@ -38,7 +38,7 @@ class MarketCliResumeOperation {
             String resumed=result.path("runId").asText();var restored=SyncRunLedger.openReadOnly(ledger).getRun(resumed);
             if(!old.targetId().equals(restored.targetId())||!SyncRequestIdentity.fingerprint(old.frozenJson(),old.targetId()).equals(SyncRequestIdentity.fingerprint(restored.frozenJson(),restored.targetId())))
                 throw new IllegalStateException("CLI changed original frozen request");
-            var independent=task.equals("D016")?EtfShareIndependentReadback.verify(jdbc,ledger,table,resumed):task.equals("D013")?EtfBasicSourceReadback.verify(jdbc,ledger,table,resumed):MarketSourceReadbackVerifier.verify(jdbc,task,table,ledger,resumed);
+            var independent=task.equals("D021")?com.zoutrankil.questdbwithdata.operations.IndexWeightIndependentReadback.verify(jdbc,ledger,table,resumed):task.equals("D020")?com.zoutrankil.questdbwithdata.operations.IndexDailyBasicIndependentReadback.verify(jdbc,ledger,table,resumed):task.equals("D019")?IndexDailyMarketIndependentReadback.verify(jdbc,ledger,table,resumed):task.equals("D017")?EtfFactorIndependentReadback.verify(jdbc,ledger,table,resumed):task.equals("D016")?EtfShareIndependentReadback.verify(jdbc,ledger,table,resumed):task.equals("D013")?EtfBasicSourceReadback.verify(jdbc,ledger,table,resumed):MarketSourceReadbackVerifier.verify(jdbc,task,table,ledger,resumed);
             report.put("independentReadback",independent);
             long after=jdbc.queryForObject("SELECT count() FROM "+table,Long.class);report.put("rowsAfter",after);
             if(before!=after||!"MATCHED".equals(independent.get("status")))throw new IllegalStateException("CLI recovery readback mismatch");

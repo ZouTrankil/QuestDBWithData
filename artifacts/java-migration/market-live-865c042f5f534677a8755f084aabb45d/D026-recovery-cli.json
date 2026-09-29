@@ -1,0 +1,50 @@
+{
+  "task" : "D026",
+  "table" : "java_d026_moneyflow_dc_865c042f5f534677a8755f084aabb45d",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-865c042f5f534677a8755f084aabb45d\\sync-ledger.sqlite",
+  "action" : "cli",
+  "startedAt" : "2026-09-29T23:23:32.726068700Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "rows" : 12036,
+    "duplicateKeys" : 0,
+    "sha256" : "d41ed9337cce372be44e193b1dcbe893c6ab5a133d87fad7ed34ee69cb922814"
+  },
+  "cliResult" : {
+    "runId" : "moneyflow_dc-aab0fc31-ff3f-4643-8903-1d31e361a7dc",
+    "state" : "VERIFIED",
+    "sourceRows" : 6018,
+    "verifiedRows" : 6018,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "sameFrozenRequest" : true,
+  "independentReadback" : {
+    "matchedRows" : 6018,
+    "status" : "MATCHED",
+    "tradeDates" : [ "2026-09-17" ],
+    "fromInclusive" : "2026-09-17",
+    "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "receiptFingerprints" : [ "499e56ed3d1d7db033cbacef9c80327f3fff6d0127a81eb0c442e0021ffbd2b7" ],
+    "toInclusive" : "2026-09-17",
+    "dataset" : "moneyflow_dc",
+    "sourceRows" : 6018,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "table" : "java_d026_moneyflow_dc_865c042f5f534677a8755f084aabb45d",
+    "runId" : "moneyflow_dc-aab0fc31-ff3f-4643-8903-1d31e361a7dc",
+    "sourceDuplicateKeys" : 0,
+    "actualRows" : 6018,
+    "mismatchedRows" : 0,
+    "extraKeys" : 0,
+    "evidenceBytes" : 2198039,
+    "mismatchSamples" : [ ]
+  },
+  "after" : {
+    "rows" : 12036,
+    "duplicateKeys" : 0,
+    "sha256" : "d41ed9337cce372be44e193b1dcbe893c6ab5a133d87fad7ed34ee69cb922814"
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T23:24:00.661196900Z"
+}

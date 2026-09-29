@@ -1,0 +1,21 @@
+{
+  "checks": [
+    {
+      "query": "SELECT count() AS rows FROM java_d018_etf_portfolio_42b6918526914b0493ce038f36670171",
+      "rows": 0,
+      "purpose": "Batch 250/200 mismatch prior to actual send",
+      "readOnly": true,
+      "table": "java_d018_etf_portfolio_42b6918526914b0493ce038f36670171"
+    },
+    {
+      "query": "SELECT count() AS rows FROM java_d018_etf_portfolio_d1639bce7aaf406c9421d1c393dfe0ef WHERE ann_date=cast('2026-08-28' AS TIMESTAMP)",
+      "rows": 0,
+      "purpose": "Conflicting source date rejected before write",
+      "readOnly": true,
+      "table": "java_d018_etf_portfolio_d1639bce7aaf406c9421d1c393dfe0ef"
+    }
+  ],
+  "task": "D018",
+  "checkedAt": "2026-09-29T20:46:08.0208237+00:00",
+  "databaseWrites": 0
+}

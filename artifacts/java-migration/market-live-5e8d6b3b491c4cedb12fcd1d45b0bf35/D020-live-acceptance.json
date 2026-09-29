@@ -1,0 +1,1616 @@
+{
+  "task" : "D020",
+  "table" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T21:05:49.509819400Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+  "requestWindows" : {
+    "initial" : [ "2026-09-24", "2026-09-28" ],
+    "incrementalTo" : "2026-09-29"
+  },
+  "routes" : [ {
+    "code" : "000300.SH",
+    "initialPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "tsCode" : "000300.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000300.SH",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : null,
+        "max" : null
+      },
+      "bootstrap" : true
+    },
+    "runs" : [ {
+      "runId" : "index-daily-basic-a02fb307-36e6-4814-ad3c-c297301d3ec0",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-3c72a6f4-8800-45d2-a5c4-0c3e063bf487",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-3c143ec4-1067-4477-91b9-01ce74405fc8",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-32afc690-b298-45b0-b9b4-0748fc4ac15c",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    } ],
+    "independentReadbacks" : [ {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-a02fb307-36e6-4814-ad3c-c297301d3ec0",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000300.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "c855d7d64e789a8b25290235c7e27888eade8956eb9d5f3e21100fa3a8d70d9e",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-3c72a6f4-8800-45d2-a5c4-0c3e063bf487",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000300.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "c855d7d64e789a8b25290235c7e27888eade8956eb9d5f3e21100fa3a8d70d9e",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-3c143ec4-1067-4477-91b9-01ce74405fc8",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000300.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "c855d7d64e789a8b25290235c7e27888eade8956eb9d5f3e21100fa3a8d70d9e",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-32afc690-b298-45b0-b9b4-0748fc4ac15c",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000300.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-29",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "99b8f2473d585344093b49769c30a373fcd6709671bb67e1734dc2732dcc1f86",
+      "expectedRows" : 3,
+      "actualRows" : 3,
+      "matchedRows" : 3,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    } ],
+    "readbackAfterFirst" : {
+      "sha256" : "1f92703e40f3bba276d413bc14dcb464557e940240b21abc614150ded4d30f9f",
+      "rows" : 2,
+      "duplicateKeys" : 0
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-28",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "targetMaxBefore" : "2026-09-28",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "000300.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000300.SH",
+      "checkpointBefore" : "2026-09-28",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-28"
+      },
+      "bootstrap" : false
+    },
+    "readbackAfterIncremental" : {
+      "sha256" : "d36c4c2687731fc0720319a989badedc0f91e68267ec04f627359852adc9e40c",
+      "rows" : 3,
+      "duplicateKeys" : 0
+    }
+  }, {
+    "code" : "000016.SH",
+    "initialPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "tsCode" : "000016.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000016.SH",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : null,
+        "max" : null
+      },
+      "bootstrap" : true
+    },
+    "runs" : [ {
+      "runId" : "index-daily-basic-e12345c2-6737-47ee-967d-23d11c8334e1",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-e6a9c697-5ad5-4310-8a61-21d7e302c420",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-7c7be124-85db-43ae-9052-35f26f8fd217",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-928e78e0-e5c6-45f9-adc7-2935b69c64fa",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    } ],
+    "independentReadbacks" : [ {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-e12345c2-6737-47ee-967d-23d11c8334e1",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000016.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "614844e3a5eafa427d4b271b0ae7a0ca41193f71768b6fecec1a8683fc12f0a4",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-e6a9c697-5ad5-4310-8a61-21d7e302c420",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000016.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "614844e3a5eafa427d4b271b0ae7a0ca41193f71768b6fecec1a8683fc12f0a4",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-7c7be124-85db-43ae-9052-35f26f8fd217",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000016.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "614844e3a5eafa427d4b271b0ae7a0ca41193f71768b6fecec1a8683fc12f0a4",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-928e78e0-e5c6-45f9-adc7-2935b69c64fa",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000016.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-29",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "b6459a66be67d4fbd65c2ae6b45e82d03bcb4481c98edfa4888aa2d829b02353",
+      "expectedRows" : 3,
+      "actualRows" : 3,
+      "matchedRows" : 3,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    } ],
+    "readbackAfterFirst" : {
+      "sha256" : "bd925c0638a0f2251b844ab6f10b94ebd8f32ff1841a86874c26557c9c2558b6",
+      "rows" : 2,
+      "duplicateKeys" : 0
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-28",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "targetMaxBefore" : "2026-09-28",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "000016.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000016.SH",
+      "checkpointBefore" : "2026-09-28",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-28"
+      },
+      "bootstrap" : false
+    },
+    "readbackAfterIncremental" : {
+      "sha256" : "0762d4873c51cee9383b43a7fbd583768816f3ccd0307619109dbd90a503c8ed",
+      "rows" : 3,
+      "duplicateKeys" : 0
+    }
+  }, {
+    "code" : "399006.SZ",
+    "initialPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "tsCode" : "399006.SZ"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "399006.SZ",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : null,
+        "max" : null
+      },
+      "bootstrap" : true
+    },
+    "runs" : [ {
+      "runId" : "index-daily-basic-c3c14f5b-5fc2-4e38-a729-08d5439935c6",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-cde0daa1-5ff1-4127-902e-25a5ea8c16a2",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-f4635e0e-5a16-40ab-b153-1fe5cfbe2185",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-1f9787ed-cf88-4202-badd-f5a92b593f58",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    } ],
+    "independentReadbacks" : [ {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-c3c14f5b-5fc2-4e38-a729-08d5439935c6",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "399006.SZ",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "83d4d38b732d2a31ffddbd65243c303360f7dea4cb121d8d2af5985188cf036e",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-cde0daa1-5ff1-4127-902e-25a5ea8c16a2",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "399006.SZ",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "83d4d38b732d2a31ffddbd65243c303360f7dea4cb121d8d2af5985188cf036e",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-f4635e0e-5a16-40ab-b153-1fe5cfbe2185",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "399006.SZ",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "83d4d38b732d2a31ffddbd65243c303360f7dea4cb121d8d2af5985188cf036e",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-1f9787ed-cf88-4202-badd-f5a92b593f58",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "399006.SZ",
+      "from" : "2026-09-24",
+      "to" : "2026-09-29",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "74ce53a09e3196e333af36c74d59be31bce30b757b32ed9cc1f68b1fb88e6486",
+      "expectedRows" : 3,
+      "actualRows" : 3,
+      "matchedRows" : 3,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    } ],
+    "readbackAfterFirst" : {
+      "sha256" : "6e6f5546523ebe9388f905329358c726e5b8127d64cd84825f723f15fa4ede1b",
+      "rows" : 2,
+      "duplicateKeys" : 0
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-28",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "targetMaxBefore" : "2026-09-28",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "399006.SZ"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "399006.SZ",
+      "checkpointBefore" : "2026-09-28",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-28"
+      },
+      "bootstrap" : false
+    },
+    "readbackAfterIncremental" : {
+      "sha256" : "6c4ff61382be4e0262f3476c976ac23337812bff65c8c07ee7759cc49efcdd7a",
+      "rows" : 3,
+      "duplicateKeys" : 0
+    }
+  }, {
+    "code" : "000905.SH",
+    "initialPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "tsCode" : "000905.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000905.SH",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : null,
+        "max" : null
+      },
+      "bootstrap" : true
+    },
+    "runs" : [ {
+      "runId" : "index-daily-basic-22e456d3-dab3-4381-b021-c48afa7079fd",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-59c75fc0-b559-4514-87e5-f4c8e1e6ea4f",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-dcdd20da-dc48-4acd-b641-f641c0b611c5",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-7a313c92-8783-4c50-9982-2ccac8c09584",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    } ],
+    "independentReadbacks" : [ {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-22e456d3-dab3-4381-b021-c48afa7079fd",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000905.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "8934e2de5d3a12dbe055eb4d9b8c16b12037143d20d96a7390aed31703ea4695",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-59c75fc0-b559-4514-87e5-f4c8e1e6ea4f",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000905.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "8934e2de5d3a12dbe055eb4d9b8c16b12037143d20d96a7390aed31703ea4695",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-dcdd20da-dc48-4acd-b641-f641c0b611c5",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000905.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "8934e2de5d3a12dbe055eb4d9b8c16b12037143d20d96a7390aed31703ea4695",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-7a313c92-8783-4c50-9982-2ccac8c09584",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000905.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-29",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "89f77aa6f1939f311f16f43e51eeadb7cf4e258a981d948ec1741ec64787a5a6",
+      "expectedRows" : 3,
+      "actualRows" : 3,
+      "matchedRows" : 3,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    } ],
+    "readbackAfterFirst" : {
+      "sha256" : "1f0d353cf04a0a967c82c7bc1d7a444a6bdfc3fb3620a629e0d0a5e868c966dc",
+      "rows" : 2,
+      "duplicateKeys" : 0
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-28",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "targetMaxBefore" : "2026-09-28",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "000905.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000905.SH",
+      "checkpointBefore" : "2026-09-28",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-28"
+      },
+      "bootstrap" : false
+    },
+    "readbackAfterIncremental" : {
+      "sha256" : "fdaaaba5f48b8f09a1faa6ced98bf524d1f18f56724660fabcbda4672e926ea6",
+      "rows" : 3,
+      "duplicateKeys" : 0
+    }
+  }, {
+    "code" : "000852.SH",
+    "initialPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "tsCode" : "000852.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000852.SH",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : null,
+        "max" : null
+      },
+      "bootstrap" : true
+    },
+    "runs" : [ {
+      "runId" : "index-daily-basic-861a89f0-4adb-43a2-a3b0-c0577157b3b5",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-3fa656d6-2ada-4746-ab8b-e4ca4ace5b5b",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-7c3d4aac-d947-46fa-a223-b220f67dbf5c",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "index-daily-basic-07a5e8b7-e676-440f-800c-6bba6fe4be0b",
+      "state" : "VERIFIED",
+      "sourceRows" : 3,
+      "verifiedRows" : 3,
+      "errorCode" : null,
+      "reusedRows" : 0
+    } ],
+    "independentReadbacks" : [ {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-861a89f0-4adb-43a2-a3b0-c0577157b3b5",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000852.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "6e1e5c4fc6733325e0e0e60ccc1743c04d5e63769ac05d971621149c623855cb",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-3fa656d6-2ada-4746-ab8b-e4ca4ace5b5b",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000852.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "6e1e5c4fc6733325e0e0e60ccc1743c04d5e63769ac05d971621149c623855cb",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-7c3d4aac-d947-46fa-a223-b220f67dbf5c",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000852.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-28",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "6e1e5c4fc6733325e0e0e60ccc1743c04d5e63769ac05d971621149c623855cb",
+      "expectedRows" : 2,
+      "actualRows" : 2,
+      "matchedRows" : 2,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    }, {
+      "status" : "MATCHED",
+      "jobId" : "data.index_daily_basic",
+      "runId" : "index-daily-basic-07a5e8b7-e676-440f-800c-6bba6fe4be0b",
+      "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "endpoint" : "index_dailybasic",
+      "tsCode" : "000852.SH",
+      "from" : "2026-09-24",
+      "to" : "2026-09-29",
+      "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+      "sourceFingerprint" : "284022c06980f339c5b024975b30dedc06f5d0f1de8e91cfb6eb83717c4f0278",
+      "expectedRows" : 3,
+      "actualRows" : 3,
+      "matchedRows" : 3,
+      "missingRows" : 0,
+      "unexpectedRows" : 0,
+      "mismatchedRows" : 0,
+      "duplicateSourceKeys" : 0,
+      "duplicateTargetKeys" : 0
+    } ],
+    "readbackAfterFirst" : {
+      "sha256" : "14f156ac0cfc535d0a2da93916c3031097cd3cc17e3fd12bed26800dba8dfce9",
+      "rows" : 2,
+      "duplicateKeys" : 0
+    },
+    "incrementalPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000300.SH", "000905.SH", "000852.SH", "399006.SZ", "000016.SH" ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "checkpointBefore" : "2026-09-28",
+          "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+          "targetMaxBefore" : "2026-09-28",
+          "targetMinBefore" : "2026-09-24",
+          "tsCode" : "000852.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-29",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+      "tsCode" : "000852.SH",
+      "checkpointBefore" : "2026-09-28",
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : "2026-09-24",
+        "max" : "2026-09-28"
+      },
+      "bootstrap" : false
+    },
+    "readbackAfterIncremental" : {
+      "sha256" : "07c90403deeee7c174c958f51f69cfd16e1422913bf71c64aaa2a0affab4febb",
+      "rows" : 3,
+      "duplicateKeys" : 0
+    }
+  } ],
+  "wholeTarget" : {
+    "sha256" : "d58b9ba9ddf5b62369d34efc8e58bb2a7cbad560b181e6e7e7b96b682ca7aecd",
+    "rows" : 15,
+    "duplicateKeys" : 0
+  },
+  "result" : "VERIFIED",
+  "finishedAt" : "2026-09-29T21:07:48.362903400Z"
+}

@@ -1,0 +1,120 @@
+{
+  "task" : "D018",
+  "table" : "java_d018_etf_portfolio_42b6918526914b0493ce038f36670171",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-42b6918526914b0493ce038f36670171\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T20:15:20.252662400Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "requestWindows" : {
+    "incrementalTo" : "2026-08-28",
+    "initial" : [ "2026-08-27", "2026-08-27" ]
+  },
+  "initialPlan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.etf_portfolio",
+        "version" : 1,
+        "datasetId" : "etf_portfolio",
+        "datasetVersion" : 1,
+        "owner" : "etf_portfolio_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "ann_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 404,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "fund_portfolio.ann_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 45,
+          "maxSlices" : 1170,
+          "maxPages" : 1170,
+          "maxRows" : 1000000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 30,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "ann_dates" : "20260827",
+        "checkpointAnchor" : "2026-08-27",
+        "observedAt" : "2026-09-29T20:15:24.221525Z",
+        "targetId" : "static-v2-6d4bb95bb8aac30d1b9560601655e62e9282c8dc33461e9b21cf8054f3a6f66f"
+      },
+      "from" : "2026-08-27",
+      "to" : "2026-08-27",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-6d4bb95bb8aac30d1b9560601655e62e9282c8dc33461e9b21cf8054f3a6f66f",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : "2026-08-27",
+    "targetMinDate" : null,
+    "targetMaxDate" : null,
+    "bootstrap" : true
+  },
+  "targetId" : "static-v2-6d4bb95bb8aac30d1b9560601655e62e9282c8dc33461e9b21cf8054f3a6f66f",
+  "runs" : [ ],
+  "independentReadbacks" : [ ],
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: Nonempty verified source required: Result[runId=etf-portfolio-74014c5e-30f5-4f29-8491-7749a2939ba1, state=IN_DOUBT, sourceRows=10000, verifiedRows=0, errorCode=IllegalStateException, reusedRows=0]",
+  "finishedAt" : "2026-09-29T20:15:57.585987200Z"
+}

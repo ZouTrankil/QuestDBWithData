@@ -1,0 +1,11 @@
+{
+  "task" : "D022",
+  "table" : "java_d022_index_monthly_b589f2597ce746829709f4f1f52fed3f",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-b589f2597ce746829709f4f1f52fed3f\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T21:55:07.973271200Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "result" : "FAILED",
+  "failure" : "org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'commandLineRunner' defined in file [C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d022-classes\\com\\zoutrankil\\questdbwithdata\\cli\\CommandLineRunner.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'datasetRegistry' defined in class path resource [com/zoutrankil/questdbwithdata/config/DatasetConfiguration.class]: Unsatisfied dependency expressed through method 'datasetRegistry' parameter 0: Error creating bean with name 'indexMonthlyReadRepository' defined in file [C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d022-classes\\com\\zoutrankil\\questdbwithdata\\repository\\IndexMonthlyReadRepository.class]: Could not generate CGLIB subclass of class com.zoutrankil.questdbwithdata.repository.IndexMonthlyReadRepository: Common causes of this problem include using a final class or a non-visible class",
+  "finishedAt" : "2026-09-29T21:55:11.548878900Z"
+}

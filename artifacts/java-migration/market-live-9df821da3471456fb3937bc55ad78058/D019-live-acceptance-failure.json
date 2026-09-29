@@ -1,0 +1,142 @@
+{
+  "task" : "D019",
+  "table" : "java_d019_index_daily_market_9df821da3471456fb3937bc55ad78058",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-9df821da3471456fb3937bc55ad78058\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T20:47:56.958780500Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "targetId" : "static-v2-996d551e64d6e2d97f494a2e8e766b1fd4a674e81932a62a0787c5be9629bf8b",
+  "requestWindows" : {
+    "initial" : [ "2026-09-24", "2026-09-28" ],
+    "incrementalTo" : "2026-09-29"
+  },
+  "routes" : [ {
+    "code" : "000300.SH",
+    "route" : "INDEX_DAILY",
+    "initialPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_market",
+          "version" : 1,
+          "datasetId" : "index_daily_market",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_market_owner",
+          "supportedModes" : [ "INCREMENTAL", "BACKFILL", "RECONCILE" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "route" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 16,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "observedAt" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 32,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_market.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 4000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ {
+            "jobId" : "data.index",
+            "version" : 1
+          }, {
+            "jobId" : "data.index_member",
+            "version" : 1
+          } ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "observedAt" : "2026-09-29T20:48:00.892653Z",
+          "route" : "INDEX_DAILY",
+          "targetId" : "static-v2-996d551e64d6e2d97f494a2e8e766b1fd4a674e81932a62a0787c5be9629bf8b",
+          "tsCode" : "000300.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-996d551e64d6e2d97f494a2e8e766b1fd4a674e81932a62a0787c5be9629bf8b",
+      "tsCode" : "000300.SH",
+      "route" : "INDEX_DAILY",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : null,
+        "max" : null
+      },
+      "bootstrap" : true
+    },
+    "runs" : [ ],
+    "independentReadbacks" : [ ]
+  } ],
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: Nonempty verified source required: Result[runId=index-daily-market-0142d94b-eadb-4d24-babc-c52dfcdd7361, state=IN_DOUBT, sourceRows=2, verifiedRows=0, errorCode=IllegalStateException, reusedRows=0]",
+  "finishedAt" : "2026-09-29T20:48:22.546256500Z"
+}

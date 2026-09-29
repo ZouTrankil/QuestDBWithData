@@ -1,0 +1,577 @@
+{
+  "task" : "D026",
+  "table" : "java_d026_moneyflow_dc_865c042f5f534677a8755f084aabb45d",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-865c042f5f534677a8755f084aabb45d\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T23:19:54.321039500Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+  "runs" : [ {
+    "runId" : "moneyflow_dc-019eb891-a2cd-4415-a821-7a86f84dcfb6",
+    "state" : "VERIFIED",
+    "sourceRows" : 6018,
+    "verifiedRows" : 6018,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "moneyflow_dc-9b88a24c-de76-4389-bf53-a39962fee725",
+    "state" : "VERIFIED",
+    "sourceRows" : 6018,
+    "verifiedRows" : 6018,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "moneyflow_dc-1268efe4-694b-49ad-8b4f-cf22080b95b1",
+    "state" : "VERIFIED",
+    "sourceRows" : 6018,
+    "verifiedRows" : 6018,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "moneyflow_dc-7d2007eb-8447-495d-b8dd-e79122ba210d",
+    "state" : "VERIFIED",
+    "sourceRows" : 12036,
+    "verifiedRows" : 12036,
+    "errorCode" : null,
+    "reusedRows" : 0
+  } ],
+  "independentReadbacks" : [ {
+    "duplicateKeys" : 0,
+    "sourceRows" : 6018,
+    "dataset" : "moneyflow_dc",
+    "toInclusive" : "2026-09-17",
+    "receiptFingerprints" : [ "499e56ed3d1d7db033cbacef9c80327f3fff6d0127a81eb0c442e0021ffbd2b7" ],
+    "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "fromInclusive" : "2026-09-17",
+    "tradeDates" : [ "2026-09-17" ],
+    "status" : "MATCHED",
+    "matchedRows" : 6018,
+    "mismatchSamples" : [ ],
+    "evidenceBytes" : 2198039,
+    "extraKeys" : 0,
+    "mismatchedRows" : 0,
+    "actualRows" : 6018,
+    "sourceDuplicateKeys" : 0,
+    "runId" : "moneyflow_dc-019eb891-a2cd-4415-a821-7a86f84dcfb6",
+    "table" : "java_d026_moneyflow_dc_865c042f5f534677a8755f084aabb45d",
+    "missingKeys" : 0
+  }, {
+    "duplicateKeys" : 0,
+    "sourceRows" : 6018,
+    "dataset" : "moneyflow_dc",
+    "toInclusive" : "2026-09-17",
+    "receiptFingerprints" : [ "499e56ed3d1d7db033cbacef9c80327f3fff6d0127a81eb0c442e0021ffbd2b7" ],
+    "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "fromInclusive" : "2026-09-17",
+    "tradeDates" : [ "2026-09-17" ],
+    "status" : "MATCHED",
+    "matchedRows" : 6018,
+    "mismatchSamples" : [ ],
+    "evidenceBytes" : 2198039,
+    "extraKeys" : 0,
+    "mismatchedRows" : 0,
+    "actualRows" : 6018,
+    "sourceDuplicateKeys" : 0,
+    "runId" : "moneyflow_dc-9b88a24c-de76-4389-bf53-a39962fee725",
+    "table" : "java_d026_moneyflow_dc_865c042f5f534677a8755f084aabb45d",
+    "missingKeys" : 0
+  }, {
+    "duplicateKeys" : 0,
+    "sourceRows" : 6018,
+    "dataset" : "moneyflow_dc",
+    "toInclusive" : "2026-09-17",
+    "receiptFingerprints" : [ "499e56ed3d1d7db033cbacef9c80327f3fff6d0127a81eb0c442e0021ffbd2b7" ],
+    "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "fromInclusive" : "2026-09-17",
+    "tradeDates" : [ "2026-09-17" ],
+    "status" : "MATCHED",
+    "matchedRows" : 6018,
+    "mismatchSamples" : [ ],
+    "evidenceBytes" : 2198039,
+    "extraKeys" : 0,
+    "mismatchedRows" : 0,
+    "actualRows" : 6018,
+    "sourceDuplicateKeys" : 0,
+    "runId" : "moneyflow_dc-1268efe4-694b-49ad-8b4f-cf22080b95b1",
+    "table" : "java_d026_moneyflow_dc_865c042f5f534677a8755f084aabb45d",
+    "missingKeys" : 0
+  }, {
+    "duplicateKeys" : 0,
+    "sourceRows" : 12036,
+    "dataset" : "moneyflow_dc",
+    "toInclusive" : "2026-09-18",
+    "receiptFingerprints" : [ "499e56ed3d1d7db033cbacef9c80327f3fff6d0127a81eb0c442e0021ffbd2b7", "7e4e13a1f224e09f218c9dfebc5c7891b9e853f48724df247eb377566f9ff16f" ],
+    "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "fromInclusive" : "2026-09-17",
+    "tradeDates" : [ "2026-09-17", "2026-09-18" ],
+    "status" : "MATCHED",
+    "matchedRows" : 12036,
+    "mismatchSamples" : [ ],
+    "evidenceBytes" : 4394720,
+    "extraKeys" : 0,
+    "mismatchedRows" : 0,
+    "actualRows" : 12036,
+    "sourceDuplicateKeys" : 0,
+    "runId" : "moneyflow_dc-7d2007eb-8447-495d-b8dd-e79122ba210d",
+    "table" : "java_d026_moneyflow_dc_865c042f5f534677a8755f084aabb45d",
+    "missingKeys" : 0
+  } ],
+  "plans" : [ {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_dc",
+        "version" : 2,
+        "datasetId" : "moneyflow_dc",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_dc_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_dc.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 30,
+          "maxRows" : 50000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+        "targetRowsBefore" : 0,
+        "trade_dates" : "20260917"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "min" : null,
+      "max" : null,
+      "rows" : 0
+    },
+    "requestedThrough" : "2026-09-17",
+    "bootstrap" : true,
+    "cappedByBudget" : false
+  }, {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_dc",
+        "version" : 2,
+        "datasetId" : "moneyflow_dc",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_dc_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_dc.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 30,
+          "maxRows" : 50000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "checkpointBefore" : "2026-09-17",
+        "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+        "targetMaxBefore" : "2026-09-17",
+        "targetMinBefore" : "2026-09-17",
+        "targetRowsBefore" : 6018,
+        "trade_dates" : "20260917"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "checkpointBefore" : "2026-09-17",
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "min" : "2026-09-17",
+      "max" : "2026-09-17",
+      "rows" : 6018
+    },
+    "requestedThrough" : "2026-09-17",
+    "bootstrap" : false,
+    "cappedByBudget" : false
+  }, {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_dc",
+        "version" : 2,
+        "datasetId" : "moneyflow_dc",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_dc_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_dc.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 30,
+          "maxRows" : 50000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "checkpointBefore" : "2026-09-17",
+        "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+        "targetMaxBefore" : "2026-09-17",
+        "targetMinBefore" : "2026-09-17",
+        "targetRowsBefore" : 6018,
+        "trade_dates" : "20260917"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "checkpointBefore" : "2026-09-17",
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "min" : "2026-09-17",
+      "max" : "2026-09-17",
+      "rows" : 6018
+    },
+    "requestedThrough" : "2026-09-17",
+    "bootstrap" : false,
+    "cappedByBudget" : false
+  }, {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_dc",
+        "version" : 2,
+        "datasetId" : "moneyflow_dc",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_dc_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_dc.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 30,
+          "maxRows" : 50000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "checkpointBefore" : "2026-09-17",
+        "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+        "targetMaxBefore" : "2026-09-17",
+        "targetMinBefore" : "2026-09-17",
+        "targetRowsBefore" : 6018,
+        "trade_dates" : "20260917,20260918"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-18",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "checkpointBefore" : "2026-09-17",
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "min" : "2026-09-17",
+      "max" : "2026-09-17",
+      "rows" : 6018
+    },
+    "requestedThrough" : "2026-09-18",
+    "bootstrap" : false,
+    "cappedByBudget" : false
+  } ],
+  "afterFirst" : {
+    "duplicateKeys" : 0,
+    "rows" : 6018,
+    "sha256" : "2ed9e38d78696120e9effbc0faf827e488171240c2ef7470b2af47fdc8fe86cc"
+  },
+  "finalSnapshot" : {
+    "duplicateKeys" : 0,
+    "rows" : 12036,
+    "sha256" : "d41ed9337cce372be44e193b1dcbe893c6ab5a133d87fad7ed34ee69cb922814"
+  },
+  "result" : "VERIFIED",
+  "finishedAt" : "2026-09-29T23:22:11.247262400Z"
+}

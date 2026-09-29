@@ -1,0 +1,124 @@
+{
+  "task" : "D026",
+  "table" : "java_d026_moneyflow_dc_6451d1f4cda64aa194fcd21d1bb09dac",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-6451d1f4cda64aa194fcd21d1bb09dac\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T23:13:36.655582400Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "targetId" : "static-v2-d48fce82446a983860a708c952a0da1b9668f9aecfb92510bbed5ce654d54c20",
+  "runs" : [ ],
+  "independentReadbacks" : [ ],
+  "plans" : [ {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_dc",
+        "version" : 1,
+        "datasetId" : "moneyflow_dc",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_dc_owner",
+        "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_dc.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 5,
+          "maxRows" : 30000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "targetId" : "static-v2-d48fce82446a983860a708c952a0da1b9668f9aecfb92510bbed5ce654d54c20",
+        "targetRowsBefore" : 0,
+        "trade_dates" : "20260917"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-29"
+    },
+    "targetId" : "static-v2-d48fce82446a983860a708c952a0da1b9668f9aecfb92510bbed5ce654d54c20",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "min" : null,
+      "max" : null,
+      "rows" : 0
+    },
+    "requestedThrough" : "2026-09-17",
+    "bootstrap" : true,
+    "cappedByBudget" : false
+  } ],
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: D026 nonempty verified source required: Result[runId=moneyflow_dc-689b66c4-95d8-474b-be72-65c59b0f559c, state=FAILED, sourceRows=0, verifiedRows=0, errorCode=Incomplete, reusedRows=0]",
+  "finishedAt" : "2026-09-29T23:13:44.193111700Z"
+}

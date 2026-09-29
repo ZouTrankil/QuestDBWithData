@@ -1,0 +1,34 @@
+{
+  "status": "MATCHED",
+  "sourceDate": "2026-09-17",
+  "endpoint": "moneyflow_dc",
+  "pageSize": 2000,
+  "pageCounts": [
+    [
+      0,
+      2000
+    ],
+    [
+      2000,
+      2000
+    ],
+    [
+      4000,
+      2000
+    ],
+    [
+      6000,
+      18
+    ]
+  ],
+  "totalRows": 6018,
+  "distinctKeys": 6018,
+  "fullUnpagedAndPagedFieldsEqual": true,
+  "evidence": [
+    "artifacts\\java-migration\\D026\\provider-diagnostic\\59d80969fe3041d6b45d9bed8980df95\\source-operation.json",
+    "artifacts\\java-migration\\D026\\provider-diagnostic\\85585dbd8bb64143ba930e2eeb673751\\source-operation.json",
+    "artifacts\\java-migration\\D026\\provider-diagnostic\\3d30141ca04042dc8a672217e18717bc\\source-operation.json",
+    "artifacts\\java-migration\\D026\\provider-diagnostic\\764591ca5a7045439424c7dc3b18519f\\source-operation.json"
+  ],
+  "formalTableMutated": false
+}

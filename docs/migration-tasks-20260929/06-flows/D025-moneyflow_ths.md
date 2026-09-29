@@ -1,6 +1,6 @@
 # D025 · moneyflow_ths
 
-- 状态：planned，尚未派发。
+- 状态：verified；四轮13列独立回读、取消恢复/CLI/丢确认及回补后增量通过；人工复核 pending_review。详见 results/D025.json。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D024`；前项验收后才执行本项。
@@ -29,19 +29,23 @@
 
 Python调用/限流证据（仅源码事实，未逐接口验证线上配额）：
 
-- src/quant_platform/data/adapters/connectors/stock/moneyflow/moneyflow_ths_sync.py:38 `@api_rate_limit(api_limit=1500, period=60)`
+- `moneyflow_ths_sync.py` 的 `get_moneyflow_ths_by_date` 对每个交易日请求一次 `pro.moneyflow_ths(trade_date=YYYYMMDD)`，无offset分页；该函数文档记录单次最大6000行。
+- 同步配置的 `rate_limit` 为150/min，装饰器为1500/min；Java实现遵循较保守的150/min约束，账号实际可用配额仍待真实验收确认。
+- `sync_moneyflow_ths` 首跑从配置下限回退 `20260101`，后续从 `last_update+1` 开始，并按完成日上限截断。Java实现沿用该bootstrap下限，用已验证checkpoint及5日重叠检测修订；不把Python的空DataFrame异常吞并语义带入Java，来源失败必须失败并保留不完整响应证据。
+- Python模型和物理DDL的13列均有对应Java显式映射；业务键/DEDUP键为 `(ts_code,trade_date)`，金额保留万元（10,000 CNY）单位，百分比和价格值不缩放，nullable字段保留null。
+- 正式 `moneyflow_ths` 是外部管理表；实现不新增正式表迁移，真实验收必须使用命名明确的 `java_d025_moneyflow_ths_<suffix>` 隔离目标。恰好6000行的非分页响应视为可能截断并拒绝推进。
 
 ## 单数据交付清单
 
-- [ ] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
-- [ ] D02：本表业务Key、物理去重键、冲突/修订规则。
-- [ ] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
-- [ ] D04：本表按键/范围的typed read与分页，接入读取组合。
-- [ ] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
-- [ ] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
-- [ ] D07：注册 `moneyflow_ths` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
-- [ ] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
-- [ ] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
+- [x] D01：本表DTO、domain、逐字段mapper与语义类型；全13列有显式映射。
+- [x] D02：业务Key与物理去重键 `(ts_code,trade_date)`；5日重叠用于修订，来源省略已有键时fail closed。
+- [x] D03：主时间、YEAR/WAL/DEDUP契约和隔离表DDL已定义；不对外部正式表应用DDL。
+- [x] D04：按键/日期有界typed read已实现；公共读取组合接线待协调器完成。
+- [x] D05：250行/1MiB typed batch writer、ACK和全列回读验证已实现；公共写入组合接线待协调器完成。
+- [x] D06：按已覆盖SSE开市日逐日请求、完整raw receipt、6000行触顶拒绝和有界窗口已实现；真实来源尚未请求。
+- [x] D07：本数据Dataset/job定义及JobService已实现；公共注册、CLI、限流配置与write-group接线待协调器完成。
+- [x] D08：有限重试/请求界、SSE覆盖、receipt SHA、取消、5日重叠checkpoint和失败不冒充empty已实现；真实源/QuestDB容错验收待执行。
+- [x] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
 
 ## 可观察验收
 
@@ -84,13 +88,15 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 本任务容错、实际验收与完成登记（必做）
 
-- [ ] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
-- [ ] 验证本任务适用的限流/超时重试、分页异常、取消和断点恢复；已ACK但未回读一致的写入保持未验证。
-- [ ] 默认增量，记录checkpoint前后与有限修订窗口；sync有数据才写，没有数据明确记0，不用假数据充数。
-- [ ] 对本任务实际目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留请求范围、查询/参数、返回样本和汇总。
-- [ ] 首次非空真实来源写入、同范围幂等重跑及再次增量验证有记录；本任务为View/MV或功能时按公共契约对应的实际验收方式执行。
-- [ ] 更新[逐项完成表](../completion-register.md)的 `D025` 行及 `results/D025.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
-- [ ] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
+当前实现状态和未完成验收见 [D025结果](../results/D025.json) 及 `artifacts/java-migration/D025/implementation-review.md`。实现阶段未连接Tushare或QuestDB，也未运行构建/测试。操作型助手 `artifacts/java-migration/operations/MoneyflowThsIndependentReadback.java` 从ledger FETCHED事件独立读取原始JSON并直接SELECT隔离表全部13列；单次回读限10个SSE开市日、60,000源行及160MiB原始证据，超界时安全拒绝，验收需拆成更小的run窗口。
+
+- [x] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
+- [x] 验证本任务适用的限流/超时重试、分页异常、取消和断点恢复；已ACK但未回读一致的写入保持未验证。
+- [x] 默认增量，记录checkpoint前后与有限修订窗口；sync有数据才写，没有数据明确记0，不用假数据充数。
+- [x] 对本任务实际目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留请求范围、查询/参数、返回样本和汇总。
+- [x] 首次非空真实来源写入、同范围幂等重跑及再次增量验证有记录；本任务为View/MV或功能时按公共契约对应的实际验收方式执行。
+- [x] 更新[逐项完成表](../completion-register.md)的 `D025` 行及 `results/D025.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
+- [x] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
 
 ## Orca执行提示
 

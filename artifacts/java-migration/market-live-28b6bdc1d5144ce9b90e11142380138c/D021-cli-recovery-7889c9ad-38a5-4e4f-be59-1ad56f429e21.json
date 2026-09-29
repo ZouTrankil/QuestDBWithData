@@ -1,0 +1,99 @@
+{
+  "task" : "D021",
+  "table" : "java_d021_index_weight_28b6bdc1d5144ce9b90e11142380138c",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-ledger.sqlite",
+  "priorRunId" : "cancel-first-page-2a0da3fb-119a-4b3f-a46b-845b8fb14a03",
+  "startedAt" : "2026-09-29T21:48:45.016818200Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "rowsBefore" : 4450,
+  "result" : {
+    "runId" : "index-weight-35c0eef9-c593-4c4e-ad08-72f61a604bf1",
+    "state" : "VERIFIED",
+    "sourceRows" : 4450,
+    "verifiedRows" : 4450,
+    "errorCode" : null,
+    "reusedRows" : 300
+  },
+  "independentReadback" : {
+    "task" : "D021",
+    "runId" : "index-weight-35c0eef9-c593-4c4e-ad08-72f61a604bf1",
+    "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+    "table" : "java_d021_index_weight_28b6bdc1d5144ce9b90e11142380138c",
+    "mode" : "SNAPSHOT",
+    "from" : null,
+    "to" : null,
+    "observedAt" : "2026-09-29T21:47:34.277601Z",
+    "sourceRows" : 4450,
+    "expectedRows" : 4450,
+    "actualRows" : 4450,
+    "matches" : 4450,
+    "mismatches" : 0,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "extraKeys" : 0,
+    "mismatchKeySample" : [ ],
+    "calls" : [ {
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-35c0eef9-c593-4c4e-ad08-72f61a604bf1\\source\\complete-tushare_latest_snapshot-399673-d34f9d625c82a4506e2707820645a57d448645139b10bae39635e1d774259774.json",
+      "route" : "TUSHARE_INDEX_WEIGHT",
+      "indexCode" : "399673",
+      "rows" : 50,
+      "fingerprint" : "d34f9d625c82a4506e2707820645a57d448645139b10bae39635e1d774259774",
+      "sourceKind" : "tushare"
+    }, {
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-35c0eef9-c593-4c4e-ad08-72f61a604bf1\\source\\complete-csindex_oss_xls-000510-4a10091126c37816f5fbde731531d85918316d5467db448cfaf32700ce1d5a3a.json",
+      "route" : "CSINDEX_OSS_XLS",
+      "indexCode" : "000510",
+      "rows" : 500,
+      "fingerprint" : "4a10091126c37816f5fbde731531d85918316d5467db448cfaf32700ce1d5a3a",
+      "sourceKind" : "csindex_oss_xls"
+    }, {
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-35c0eef9-c593-4c4e-ad08-72f61a604bf1\\source\\complete-csindex_oss_xls-932000-8f53beaf91d6bbae5d9c676963065701761d646aed53cd64e4367a547a6e9bb0.json",
+      "route" : "CSINDEX_OSS_XLS",
+      "indexCode" : "932000",
+      "rows" : 2000,
+      "fingerprint" : "8f53beaf91d6bbae5d9c676963065701761d646aed53cd64e4367a547a6e9bb0",
+      "sourceKind" : "csindex_oss_xls"
+    }, {
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-35c0eef9-c593-4c4e-ad08-72f61a604bf1\\source\\complete-csindex_oss_xls-000905-674327aa7d68ea5163cdc41155caceee8cf0c98f7c219f94431a5bc2510f85f7.json",
+      "route" : "CSINDEX_OSS_XLS",
+      "indexCode" : "000905",
+      "rows" : 500,
+      "fingerprint" : "674327aa7d68ea5163cdc41155caceee8cf0c98f7c219f94431a5bc2510f85f7",
+      "sourceKind" : "csindex_oss_xls"
+    }, {
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-35c0eef9-c593-4c4e-ad08-72f61a604bf1\\source\\complete-csindex_oss_xls-000688-0442114eccff0e046cfc0aa42fd9962eaf1f35ace8501d7306e613cf3ae9aeee.json",
+      "route" : "CSINDEX_OSS_XLS",
+      "indexCode" : "000688",
+      "rows" : 50,
+      "fingerprint" : "0442114eccff0e046cfc0aa42fd9962eaf1f35ace8501d7306e613cf3ae9aeee",
+      "sourceKind" : "csindex_oss_xls"
+    }, {
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-35c0eef9-c593-4c4e-ad08-72f61a604bf1\\source\\complete-csindex_oss_xls-000852-76aa7aa13b8c56689103353f2f70e98cad5ed8a8cb302dd54c385f4f07e86cd5.json",
+      "route" : "CSINDEX_OSS_XLS",
+      "indexCode" : "000852",
+      "rows" : 1000,
+      "fingerprint" : "76aa7aa13b8c56689103353f2f70e98cad5ed8a8cb302dd54c385f4f07e86cd5",
+      "sourceKind" : "csindex_oss_xls"
+    }, {
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-35c0eef9-c593-4c4e-ad08-72f61a604bf1\\source\\complete-csindex_oss_xls-000300-226695f8a4ffb7cb5b3ad0a06e98a05a344a31c9fd30bcae0131ca8a0c1c573b.json",
+      "route" : "CSINDEX_OSS_XLS",
+      "indexCode" : "000300",
+      "rows" : 300,
+      "fingerprint" : "226695f8a4ffb7cb5b3ad0a06e98a05a344a31c9fd30bcae0131ca8a0c1c573b",
+      "sourceKind" : "csindex_oss_xls"
+    }, {
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-evidence\\index-weight-35c0eef9-c593-4c4e-ad08-72f61a604bf1\\source\\complete-csindex_oss_xls-000016-a322bc4f62c2dbf18e8003c07828c62736a2d4129c682b49794f5fde1d9e0e24.json",
+      "route" : "CSINDEX_OSS_XLS",
+      "indexCode" : "000016",
+      "rows" : 50,
+      "fingerprint" : "a322bc4f62c2dbf18e8003c07828c62736a2d4129c682b49794f5fde1d9e0e24",
+      "sourceKind" : "csindex_oss_xls"
+    } ],
+    "fieldsCompared" : [ "index_code", "con_code", "trade_date", "index_name", "index_name_en", "con_name", "con_name_en", "exchange", "exchange_en", "weight", "update_time" ],
+    "status" : "MATCHED"
+  },
+  "rowsAfter" : 4450,
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T21:48:56.093753800Z"
+}

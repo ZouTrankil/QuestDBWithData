@@ -1,0 +1,81 @@
+{
+  "task" : "D020",
+  "table" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\sync-ledger.sqlite",
+  "code" : "000905.SH",
+  "startedAt" : "2026-09-29T21:08:56.030619100Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "before" : {
+    "rows" : 15,
+    "sha256" : "d58b9ba9ddf5b62369d34efc8e58bb2a7cbad560b181e6e7e7b96b682ca7aecd",
+    "duplicateKeys" : 0
+  },
+  "cancelBeforeSource" : {
+    "runId" : "cancel-before-04c687b0-946c-4d04-8940-5d7d2d45cac0",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterVerifiedPage" : {
+    "runId" : "cancel-after-page-036d43c3-00eb-4503-ba52-faedf520bf9e",
+    "state" : "CANCELLED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "resume" : {
+    "runId" : "resume-02a6ae1a-a0a0-4b46-a622-0445108a3967",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 2
+  },
+  "resumeSendCalls" : 0,
+  "independentResumeReadback" : {
+    "status" : "MATCHED",
+    "jobId" : "data.index_daily_basic",
+    "runId" : "resume-02a6ae1a-a0a0-4b46-a622-0445108a3967",
+    "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+    "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+    "endpoint" : "index_dailybasic",
+    "tsCode" : "000905.SH",
+    "from" : "2026-09-24",
+    "to" : "2026-09-28",
+    "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+    "sourceFingerprint" : "8934e2de5d3a12dbe055eb4d9b8c16b12037143d20d96a7390aed31703ea4695",
+    "expectedRows" : 2,
+    "actualRows" : 2,
+    "matchedRows" : 2,
+    "missingRows" : 0,
+    "unexpectedRows" : 0,
+    "mismatchedRows" : 0,
+    "duplicateSourceKeys" : 0,
+    "duplicateTargetKeys" : 0
+  },
+  "postSendLostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 2872,
+      "digest" : "05b82e6fbb2637c39c9c5950a2c37a9f87a0de935857f3f3f4566dfbfc070753",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "after" : {
+    "rows" : 15,
+    "sha256" : "d58b9ba9ddf5b62369d34efc8e58bb2a7cbad560b181e6e7e7b96b682ca7aecd",
+    "duplicateKeys" : 0
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T21:09:08.013597500Z"
+}

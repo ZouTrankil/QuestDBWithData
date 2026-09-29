@@ -1,0 +1,102 @@
+{
+  "task_id": "D025",
+  "dataset": "moneyflow_ths",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "started_at": "2026-09-29T23:10:11.654634400Z",
+  "finished_at": "2026-09-29T23:12:46.697546800Z",
+  "run_id": "moneyflow-ths-cc037dac-f830-40c4-9813-ac2a73aa963b",
+  "target": {
+    "isolated_table": "java_d025_moneyflow_ths_8b7caadbf37548ea8a90ddd9a849709e",
+    "target_id": "static-v2-15662cc574d854cbfa0450207abf54932ca4c4199dbbc59244d89fa46c539edb",
+    "partition": "YEAR",
+    "wal": true,
+    "dedup": true,
+    "natural_key": [
+      "ts_code",
+      "trade_date"
+    ],
+    "formal_table_mutated": false
+  },
+  "source": {
+    "endpoint": "moneyflow_ths",
+    "request_unit": "one unpaged trade_date",
+    "initial_date": "2026-09-17",
+    "incremental_through": "2026-09-18",
+    "initial_rows": 5216,
+    "primary_runs": 4,
+    "primary_returned_rows": 26080,
+    "row_cap": 6000,
+    "configured_requests_per_minute": 10,
+    "reference_ceiling_per_minute": 150,
+    "count_scope": "Primary four runs only; recovery and backfill operations linked separately."
+  },
+  "write": {
+    "primary_submitted_rows": 26080,
+    "strategy": "Exact typed WAL/DEDUP upsert with full business-key readback",
+    "resume_reused_rows": 5216,
+    "resume_send_calls": 0,
+    "accounting": "Primary runs contain no reused batches. Recovery counts come from runner and observed send calls, not source-row totals."
+  },
+  "questdb_readback": {
+    "fields": 13,
+    "primary_independent_readbacks": 4,
+    "final_rows": 10432,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "extra_keys": 0,
+    "final_snapshot": {
+      "sha256": "25ae47af438541202f9bfa848c6996eb0227e5f747a355e01958f917fe58b6be",
+      "duplicateKeys": 0,
+      "rows": 10432
+    },
+    "passed": true
+  },
+  "incremental": {
+    "default_mode": "INCREMENTAL",
+    "checkpoint": "receipt-backed open-date chain",
+    "checkpoint_before_backfill": {
+      "anchor": "2026-09-17",
+      "through": "2026-09-18",
+      "latestVerifiedAt": "2026-09-29T23:11:01.829313900Z"
+    },
+    "checkpoint_after_backfill": {
+      "anchor": "2026-09-17",
+      "through": "2026-09-18",
+      "latestVerifiedAt": "2026-09-29T23:11:01.829313900Z"
+    },
+    "backfill_does_not_advance": true,
+    "backfill_then_incremental": true
+  },
+  "checks": {
+    "scoped_javac": "passed",
+    "full_build_or_tests": "not_run",
+    "nonempty_source": true,
+    "two_idempotent_reruns": true,
+    "incremental": true,
+    "cancel_before_source": true,
+    "cancel_after_verified_page": true,
+    "frozen_resume_reuses_all_rows": true,
+    "fresh_process_cli_resume": true,
+    "actual_send_lost_ack_reconciled": true,
+    "all_fields_independent_readback": true
+  },
+  "failed_attempts": [],
+  "limitations": [
+    "Bounded two-day sample, not full history.",
+    "No natural timeout, rate-limit or exact-cap response claimed.",
+    "No authoritative empty source date or naturally changing historical provider values claimed.",
+    "Formal table untouched; human review pending."
+  ],
+  "evidence_paths": [
+    "artifacts/java-migration/market-live-8b7caadbf37548ea8a90ddd9a849709e/D025-live-acceptance.json",
+    "artifacts/java-migration/market-live-8b7caadbf37548ea8a90ddd9a849709e/D025-recovery-exercise.json",
+    "artifacts/java-migration/market-live-8b7caadbf37548ea8a90ddd9a849709e/D025-recovery-cli.json",
+    "artifacts/java-migration/market-live-8b7caadbf37548ea8a90ddd9a849709e/D025-revision-71daa10f-a9e3-4f95-aacc-4c33eed35df0.json",
+    "artifacts/java-migration/D025/final-review.md"
+  ],
+  "blockers": [],
+  "remaining_acceptance": []
+}

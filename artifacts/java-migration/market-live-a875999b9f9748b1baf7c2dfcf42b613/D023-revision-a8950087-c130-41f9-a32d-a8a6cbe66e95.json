@@ -1,0 +1,126 @@
+{
+  "task" : "D023",
+  "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T22:32:03.343349200Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "duplicateKeys" : 0,
+    "rows" : 2062,
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a"
+  },
+  "checkpointBefore" : {
+    "anchor" : "2026-09-17",
+    "through" : "2026-09-18",
+    "receipts" : {
+      "2026-09-18" : {
+        "path" : "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/sync-evidence/dc-index-0eabb4f5-4b36-4feb-b0b4-240d6bd6313e/source/dc-index-20260918-2ae691d8dcc44c5ae82fcfe863c914b0c2e4370fd9767191fe8da43f4a661718.json",
+        "fingerprint" : "2ae691d8dcc44c5ae82fcfe863c914b0c2e4370fd9767191fe8da43f4a661718",
+        "date" : "2026-09-18"
+      },
+      "2026-09-17" : {
+        "path" : "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/sync-evidence/dc-index-ad4605f8-0b47-4b93-a869-6e1f899d0732/source/dc-index-20260917-fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37.json",
+        "fingerprint" : "fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37",
+        "date" : "2026-09-17"
+      }
+    },
+    "verifiedAt" : "2026-09-29T22:31:09.274139700Z"
+  },
+  "backfill" : {
+    "runId" : "dc-index-59c9c352-3672-4d9b-9ad2-bf0cb070e135",
+    "state" : "VERIFIED",
+    "sourceRows" : 1031,
+    "verifiedRows" : 1031,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "backfillReadback" : {
+    "evidenceBytes" : 236915,
+    "extraKeys" : 0,
+    "mismatchedRows" : 0,
+    "actualRows" : 1031,
+    "sourceDuplicateKeys" : 0,
+    "runId" : "dc-index-59c9c352-3672-4d9b-9ad2-bf0cb070e135",
+    "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+    "missingKeys" : 0,
+    "duplicateKeys" : 0,
+    "sourceRows" : 1031,
+    "toInclusive" : "2026-09-17",
+    "physicalTargetAfter" : "static-v2-f8bc41be4675e393bcc1eba28caccbac3739aa2c934084e5df0c7eacbc115e1b",
+    "fromInclusive" : "2026-09-17",
+    "tradeDates" : [ "2026-09-17" ],
+    "status" : "MATCHED",
+    "physicalTargetBefore" : "static-v2-3ddf2a9f00e98718c62cc5bb62ef3d4994147f06bd9f246638784723a5595023",
+    "matchedRows" : 1031,
+    "mismatchSamples" : [ ],
+    "receipts" : [ {
+      "sha256" : "fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37",
+      "date" : "2026-09-17",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-evidence\\dc-index-59c9c352-3672-4d9b-9ad2-bf0cb070e135\\source\\dc-index-20260917-fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37.json",
+      "rows" : 1031
+    } ]
+  },
+  "checkpointAfterBackfill" : {
+    "anchor" : "2026-09-17",
+    "through" : "2026-09-18",
+    "receipts" : {
+      "2026-09-18" : {
+        "path" : "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/sync-evidence/dc-index-0eabb4f5-4b36-4feb-b0b4-240d6bd6313e/source/dc-index-20260918-2ae691d8dcc44c5ae82fcfe863c914b0c2e4370fd9767191fe8da43f4a661718.json",
+        "fingerprint" : "2ae691d8dcc44c5ae82fcfe863c914b0c2e4370fd9767191fe8da43f4a661718",
+        "date" : "2026-09-18"
+      },
+      "2026-09-17" : {
+        "path" : "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-a875999b9f9748b1baf7c2dfcf42b613/sync-evidence/dc-index-59c9c352-3672-4d9b-9ad2-bf0cb070e135/source/dc-index-20260917-fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37.json",
+        "fingerprint" : "fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37",
+        "date" : "2026-09-17"
+      }
+    },
+    "verifiedAt" : "2026-09-29T22:32:17.080823Z"
+  },
+  "incremental" : {
+    "runId" : "dc-index-beee253c-d0c4-4416-9c2a-6ea8f1082dee",
+    "state" : "VERIFIED",
+    "sourceRows" : 2062,
+    "verifiedRows" : 2062,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "incrementalReadback" : {
+    "evidenceBytes" : 473298,
+    "extraKeys" : 0,
+    "mismatchedRows" : 0,
+    "actualRows" : 2062,
+    "sourceDuplicateKeys" : 0,
+    "runId" : "dc-index-beee253c-d0c4-4416-9c2a-6ea8f1082dee",
+    "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+    "missingKeys" : 0,
+    "duplicateKeys" : 0,
+    "sourceRows" : 2062,
+    "toInclusive" : "2026-09-18",
+    "physicalTargetAfter" : "static-v2-c151237ce34fd378f500bd5a003b3e0b00eebdd2870978e9aadd1df2dd22cd08",
+    "fromInclusive" : "2026-09-17",
+    "tradeDates" : [ "2026-09-17", "2026-09-18" ],
+    "status" : "MATCHED",
+    "physicalTargetBefore" : "static-v2-f8bc41be4675e393bcc1eba28caccbac3739aa2c934084e5df0c7eacbc115e1b",
+    "matchedRows" : 2062,
+    "mismatchSamples" : [ ],
+    "receipts" : [ {
+      "sha256" : "fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37",
+      "date" : "2026-09-17",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-evidence\\dc-index-beee253c-d0c4-4416-9c2a-6ea8f1082dee\\source\\dc-index-20260917-fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37.json",
+      "rows" : 1031
+    }, {
+      "sha256" : "2ae691d8dcc44c5ae82fcfe863c914b0c2e4370fd9767191fe8da43f4a661718",
+      "date" : "2026-09-18",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-evidence\\dc-index-beee253c-d0c4-4416-9c2a-6ea8f1082dee\\source\\dc-index-20260918-2ae691d8dcc44c5ae82fcfe863c914b0c2e4370fd9767191fe8da43f4a661718.json",
+      "rows" : 1031
+    } ]
+  },
+  "after" : {
+    "duplicateKeys" : 0,
+    "rows" : 2062,
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a"
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T22:32:31.918144200Z"
+}

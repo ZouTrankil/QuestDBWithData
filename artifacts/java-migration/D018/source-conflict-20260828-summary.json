@@ -1,0 +1,45 @@
+{
+  "task": "D018",
+  "source_receipt": "artifacts/java-migration/market-live-d1639bce7aaf406c9421d1c393dfe0ef/sync-evidence/etf-portfolio-ef180bc9-0a16-4538-870d-1a265bd8341b/source/incomplete-20260828-d618f394-c403-49f2-b875-9e6addb32bd4.json",
+  "source_complete": false,
+  "failure": "Duplicate business key within/across pages",
+  "captured_rows": 216000,
+  "unique_captured_keys": 215998,
+  "conflicts": [
+    {
+      "key": [
+        "021461.OF",
+        "20260828",
+        "20260630",
+        "601112.SH"
+      ],
+      "offsets": [
+        48000,
+        208000
+      ],
+      "identical": false,
+      "differing_fields": [
+        "amount",
+        "mkv"
+      ]
+    },
+    {
+      "key": [
+        "161217.SZ",
+        "20260828",
+        "20260630",
+        "601112.SH"
+      ],
+      "offsets": [
+        48000,
+        208000
+      ],
+      "identical": false,
+      "differing_fields": [
+        "amount",
+        "mkv"
+      ]
+    }
+  ],
+  "decision": "Fail closed: do not select first/last conflicting value, write the date, or advance its checkpoint. Normal acceptance uses 2026-08-26/27; 2026-08-28 is retained as a real negative completeness case."
+}

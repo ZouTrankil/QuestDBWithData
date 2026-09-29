@@ -1,0 +1,42 @@
+{
+  "task" : "D020",
+  "table" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-5e8d6b3b491c4cedb12fcd1d45b0bf35\\sync-ledger.sqlite",
+  "priorRunId" : "cancel-after-page-a269be0f-1a45-4799-9ac9-887898cdf5a4",
+  "startedAt" : "2026-09-29T21:09:46.958135300Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "rowsBefore" : 15,
+  "result" : {
+    "runId" : "index-daily-basic-77cc687a-ffa5-4a9a-b48f-cdacc41c52e4",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 2
+  },
+  "independentReadback" : {
+    "status" : "MATCHED",
+    "jobId" : "data.index_daily_basic",
+    "runId" : "index-daily-basic-77cc687a-ffa5-4a9a-b48f-cdacc41c52e4",
+    "targetTable" : "java_d020_index_daily_basic_5e8d6b3b491c4cedb12fcd1d45b0bf35",
+    "targetId" : "static-v2-26cbe9385d1c2b0375b43d1e73b2bd8e99f1b39731c9c8b73c87201abe8c3db3",
+    "endpoint" : "index_dailybasic",
+    "tsCode" : "399006.SZ",
+    "from" : "2026-09-24",
+    "to" : "2026-09-28",
+    "fieldsCompared" : [ "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share", "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb" ],
+    "sourceFingerprint" : "83d4d38b732d2a31ffddbd65243c303360f7dea4cb121d8d2af5985188cf036e",
+    "expectedRows" : 2,
+    "actualRows" : 2,
+    "matchedRows" : 2,
+    "missingRows" : 0,
+    "unexpectedRows" : 0,
+    "mismatchedRows" : 0,
+    "duplicateSourceKeys" : 0,
+    "duplicateTargetKeys" : 0
+  },
+  "rowsAfter" : 15,
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T21:09:52.443772600Z"
+}

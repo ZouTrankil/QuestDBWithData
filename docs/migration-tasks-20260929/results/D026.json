@@ -1,0 +1,149 @@
+{
+  "task_id": "D026",
+  "dataset": "moneyflow_dc",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "started_at": "2026-09-29T23:19:54.321039500Z",
+  "finished_at": "2026-09-29T23:25:20.461934500Z",
+  "run_id": "moneyflow_dc-7d2007eb-8447-495d-b8dd-e79122ba210d",
+  "target": {
+    "isolated_table": "java_d026_moneyflow_dc_865c042f5f534677a8755f084aabb45d",
+    "target_id": "static-v2-ab82c7f5536db3ab2ec8d0d4942d43df835c59628175fcaedeae575e6887181c",
+    "partition": "YEAR",
+    "wal": true,
+    "dedup": true,
+    "natural_key": [
+      "ts_code",
+      "trade_date"
+    ],
+    "formal_table_mutated": false
+  },
+  "source": {
+    "endpoint": "moneyflow_dc",
+    "job_version": 2,
+    "request_unit": "trade_date with bounded limit/offset pages",
+    "initial_date": "2026-09-17",
+    "incremental_through": "2026-09-18",
+    "initial_rows": 6018,
+    "primary_runs": 4,
+    "primary_returned_rows": 30090,
+    "row_cap": 10000,
+    "page_size": 2000,
+    "max_pages_per_day": 6,
+    "configured_requests_per_minute": 10,
+    "reference_ceiling_per_minute": 150,
+    "count_scope": "Primary four runs only; recovery and backfill operations linked separately."
+  },
+  "write": {
+    "primary_submitted_rows": 30090,
+    "strategy": "Exact typed WAL/DEDUP upsert with full business-key readback",
+    "resume_reused_rows": 6018,
+    "resume_send_calls": 0,
+    "accounting": "Primary runs contain no reused batches. Recovery counts come from runner and observed send calls, not source-row totals."
+  },
+  "questdb_readback": {
+    "fields": 15,
+    "primary_independent_readbacks": 4,
+    "final_rows": 12036,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "extra_keys": 0,
+    "final_snapshot": {
+      "duplicateKeys": 0,
+      "rows": 12036,
+      "sha256": "d41ed9337cce372be44e193b1dcbe893c6ab5a133d87fad7ed34ee69cb922814"
+    },
+    "passed": true
+  },
+  "incremental": {
+    "default_mode": "INCREMENTAL",
+    "checkpoint": "receipt-backed open-date chain",
+    "checkpoint_before_backfill": {
+      "anchor": "2026-09-17",
+      "through": "2026-09-18",
+      "receipts": {
+        "2026-09-18": {
+          "path": "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-865c042f5f534677a8755f084aabb45d/sync-evidence/moneyflow_dc-7d2007eb-8447-495d-b8dd-e79122ba210d/source/moneyflow-dc-20260918-7e4e13a1f224e09f218c9dfebc5c7891b9e853f48724df247eb377566f9ff16f.json",
+          "fingerprint": "7e4e13a1f224e09f218c9dfebc5c7891b9e853f48724df247eb377566f9ff16f",
+          "date": "2026-09-18",
+          "rows": 6018
+        },
+        "2026-09-17": {
+          "path": "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-865c042f5f534677a8755f084aabb45d/sync-evidence/moneyflow_dc-aab0fc31-ff3f-4643-8903-1d31e361a7dc/source/moneyflow-dc-20260917-499e56ed3d1d7db033cbacef9c80327f3fff6d0127a81eb0c442e0021ffbd2b7.json",
+          "fingerprint": "499e56ed3d1d7db033cbacef9c80327f3fff6d0127a81eb0c442e0021ffbd2b7",
+          "date": "2026-09-17",
+          "rows": 6018
+        }
+      },
+      "expectedRows": 12036,
+      "firstRowDate": "2026-09-17",
+      "lastRowDate": "2026-09-18",
+      "verifiedAt": "2026-09-29T23:24:00.308443300Z"
+    },
+    "checkpoint_after_backfill": {
+      "anchor": "2026-09-17",
+      "through": "2026-09-18",
+      "receipts": {
+        "2026-09-18": {
+          "path": "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-865c042f5f534677a8755f084aabb45d/sync-evidence/moneyflow_dc-7d2007eb-8447-495d-b8dd-e79122ba210d/source/moneyflow-dc-20260918-7e4e13a1f224e09f218c9dfebc5c7891b9e853f48724df247eb377566f9ff16f.json",
+          "fingerprint": "7e4e13a1f224e09f218c9dfebc5c7891b9e853f48724df247eb377566f9ff16f",
+          "date": "2026-09-18",
+          "rows": 6018
+        },
+        "2026-09-17": {
+          "path": "file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/market-live-865c042f5f534677a8755f084aabb45d/sync-evidence/moneyflow_dc-eeac12c0-cbc2-4363-b0af-6f3f465ed954/source/moneyflow-dc-20260917-499e56ed3d1d7db033cbacef9c80327f3fff6d0127a81eb0c442e0021ffbd2b7.json",
+          "fingerprint": "499e56ed3d1d7db033cbacef9c80327f3fff6d0127a81eb0c442e0021ffbd2b7",
+          "date": "2026-09-17",
+          "rows": 6018
+        }
+      },
+      "expectedRows": 12036,
+      "firstRowDate": "2026-09-17",
+      "lastRowDate": "2026-09-18",
+      "verifiedAt": "2026-09-29T23:24:32.739129300Z"
+    },
+    "backfill_does_not_advance": true,
+    "backfill_then_incremental": true
+  },
+  "checks": {
+    "scoped_javac": "passed",
+    "full_build_or_tests": "not_run",
+    "nonempty_source": true,
+    "two_idempotent_reruns": true,
+    "incremental": true,
+    "cancel_before_source": true,
+    "cancel_after_verified_page": true,
+    "frozen_resume_reuses_all_rows": true,
+    "fresh_process_cli_resume": true,
+    "actual_send_lost_ack_reconciled": true,
+    "all_fields_independent_readback": true
+  },
+  "failed_attempts": [
+    {
+      "evidence": "artifacts/java-migration/market-live-6451d1f4cda64aa194fcd21d1bb09dac/D026-live-acceptance-failure.json",
+      "reason": "Actual 6018-row response exceeded old 6000-row unpaged bound; no writes. Bounded diagnostic captured SH/SZ/BJ distinct keys and four real offset pages equalled the full 15-field response."
+    },
+    {
+      "evidence": "artifacts/java-migration/market-live-cf2ec1dfce4140e28887158003ad3d1a/D026-live-acceptance-failure.json",
+      "reason": "First v2 startup exposed missing declared limit/offset parameters in PageContract; corrected before source/write."
+    }
+  ],
+  "limitations": [
+    "Bounded two-day sample, not full history.",
+    "No natural timeout, rate-limit or exact-cap response claimed.",
+    "No authoritative empty source date or naturally changing historical provider values claimed.",
+    "Formal table untouched; human review pending."
+  ],
+  "evidence_paths": [
+    "artifacts/java-migration/market-live-865c042f5f534677a8755f084aabb45d/D026-live-acceptance.json",
+    "artifacts/java-migration/market-live-865c042f5f534677a8755f084aabb45d/D026-recovery-exercise.json",
+    "artifacts/java-migration/market-live-865c042f5f534677a8755f084aabb45d/D026-recovery-cli.json",
+    "artifacts/java-migration/market-live-865c042f5f534677a8755f084aabb45d/D026-revision-c548d691-3cd6-42cb-b3ab-a51ef2c27413.json",
+    "artifacts/java-migration/D026/provider-diagnostic/offset-pagination-proof.json",
+    "artifacts/java-migration/D026/final-review.md"
+  ],
+  "blockers": [],
+  "remaining_acceptance": []
+}

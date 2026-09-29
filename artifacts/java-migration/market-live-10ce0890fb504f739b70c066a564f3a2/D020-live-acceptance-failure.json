@@ -1,0 +1,125 @@
+{
+  "task" : "D020",
+  "table" : "java_d020_index_daily_basic_10ce0890fb504f739b70c066a564f3a2",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-10ce0890fb504f739b70c066a564f3a2\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T21:03:48.056763500Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "targetId" : "static-v2-a79dcd3dabf2d21c65e566105f69ef0e7e230e9d7b820fadbfbfdf8aa0b4aca1",
+  "requestWindows" : {
+    "incrementalTo" : "2026-09-29",
+    "initial" : [ "2026-09-24", "2026-09-28" ]
+  },
+  "routes" : [ {
+    "code" : "000300.SH",
+    "initialPlan" : {
+      "request" : {
+        "definition" : {
+          "jobId" : "data.index_daily_basic",
+          "version" : 1,
+          "datasetId" : "index_daily_basic",
+          "datasetVersion" : 1,
+          "owner" : "index_daily_basic_owner",
+          "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+          "defaultMode" : "INCREMENTAL",
+          "parameters" : {
+            "tsCode" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ "000016.SH", "399006.SZ", "000852.SH", "000905.SH", "000300.SH" ]
+            },
+            "targetMaxBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointAnchor" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetId" : {
+              "type" : "STRING",
+              "required" : true,
+              "maxLength" : 128,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "checkpointBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            },
+            "targetMinBefore" : {
+              "type" : "DATE",
+              "required" : false,
+              "maxLength" : 10,
+              "maxItems" : 1,
+              "choices" : [ ]
+            }
+          },
+          "ratePolicyRef" : "tushare.shared",
+          "slicePolicyRef" : "index_daily_basic.trade_date",
+          "verificationPolicyRef" : "questdb.full_key_values",
+          "retry" : {
+            "maxAttempts" : 3,
+            "backoff" : "PT1S",
+            "maxElapsed" : "PT2M"
+          },
+          "timeout" : "PT12H",
+          "budget" : {
+            "maxWindowDays" : 366,
+            "maxSlices" : 1,
+            "maxPages" : 1,
+            "maxRows" : 3000,
+            "maxBatchBytes" : 1048576
+          },
+          "revisionDays" : 5,
+          "dependencies" : [ ],
+          "frequency" : "DAILY",
+          "zone" : "Asia/Shanghai",
+          "enabled" : true,
+          "dailyEligible" : true
+        },
+        "mode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointAnchor" : "2026-09-24",
+          "targetId" : "static-v2-a79dcd3dabf2d21c65e566105f69ef0e7e230e9d7b820fadbfbfdf8aa0b4aca1",
+          "tsCode" : "000300.SH"
+        },
+        "from" : "2026-09-24",
+        "to" : "2026-09-28",
+        "logicalDate" : "2026-09-30"
+      },
+      "targetId" : "static-v2-a79dcd3dabf2d21c65e566105f69ef0e7e230e9d7b820fadbfbfdf8aa0b4aca1",
+      "tsCode" : "000300.SH",
+      "checkpointBefore" : null,
+      "checkpointAnchor" : "2026-09-24",
+      "physicalRange" : {
+        "min" : null,
+        "max" : null
+      },
+      "bootstrap" : true
+    },
+    "runs" : [ {
+      "runId" : "index-daily-basic-7444c02f-b7e0-4625-8b58-e51419fb0303",
+      "state" : "VERIFIED",
+      "sourceRows" : 2,
+      "verifiedRows" : 2,
+      "errorCode" : null,
+      "reusedRows" : 0
+    } ],
+    "independentReadbacks" : [ ]
+  } ],
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: D020 fetched code differs",
+  "finishedAt" : "2026-09-29T21:03:53.898358700Z"
+}

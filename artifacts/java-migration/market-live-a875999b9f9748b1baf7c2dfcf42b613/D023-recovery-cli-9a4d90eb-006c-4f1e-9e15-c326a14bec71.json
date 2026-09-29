@@ -1,0 +1,56 @@
+{
+  "task" : "D023",
+  "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-ledger.sqlite",
+  "action" : "cli",
+  "startedAt" : "2026-09-29T22:30:56.437775100Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a",
+    "duplicateKeys" : 0,
+    "rows" : 2062
+  },
+  "cliResult" : {
+    "runId" : "dc-index-ad4605f8-0b47-4b93-a869-6e1f899d0732",
+    "state" : "VERIFIED",
+    "sourceRows" : 1031,
+    "verifiedRows" : 1031,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "independentReadback" : {
+    "matchedRows" : 1031,
+    "mismatchSamples" : [ ],
+    "receipts" : [ {
+      "rows" : 1031,
+      "sha256" : "fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37",
+      "date" : "2026-09-17",
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-a875999b9f9748b1baf7c2dfcf42b613\\sync-evidence\\dc-index-ad4605f8-0b47-4b93-a869-6e1f899d0732\\source\\dc-index-20260917-fb09d9cc75eb1e675426a135eccc75094375602de69221d382f15ea883c8bd37.json"
+    } ],
+    "evidenceBytes" : 236915,
+    "extraKeys" : 0,
+    "mismatchedRows" : 0,
+    "actualRows" : 1031,
+    "sourceDuplicateKeys" : 0,
+    "runId" : "dc-index-ad4605f8-0b47-4b93-a869-6e1f899d0732",
+    "table" : "java_d023_dc_index_a875999b9f9748b1baf7c2dfcf42b613",
+    "missingKeys" : 0,
+    "duplicateKeys" : 0,
+    "sourceRows" : 1031,
+    "toInclusive" : "2026-09-17",
+    "physicalTargetAfter" : "static-v2-3ddf2a9f00e98718c62cc5bb62ef3d4994147f06bd9f246638784723a5595023",
+    "fromInclusive" : "2026-09-17",
+    "tradeDates" : [ "2026-09-17" ],
+    "status" : "MATCHED",
+    "physicalTargetBefore" : "static-v2-9b2482799c9919e33925e28144d5830153124df5acf829f9b561ab106133dc8c"
+  },
+  "originalRunId" : "dc-index-prepare-92236ddf-6626-44b6-a705-cdc22cf89a1b",
+  "sameFrozenRequest" : true,
+  "after" : {
+    "sha256" : "153705870212561d3b70205463928b7de113fe2ede1f91b3a4c1f47e6074613a",
+    "duplicateKeys" : 0,
+    "rows" : 2062
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T22:31:09.393011Z"
+}

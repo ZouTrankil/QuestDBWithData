@@ -1,0 +1,192 @@
+{
+  "task" : "D024",
+  "table" : "java_d024_moneyflow_e87794d99a684e6fbffcdd483d24a33e",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-e87794d99a684e6fbffcdd483d24a33e\\sync-ledger.sqlite",
+  "action" : "exercise",
+  "startedAt" : "2026-09-29T23:07:39.141079600Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "sha256" : "a0735b91722a773ecdbafd6b8ac3c3b85e362f3bd96d488c1f98d44fc9d79659",
+    "rows" : 11106,
+    "duplicateKeys" : 0
+  },
+  "plan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow",
+        "version" : 1,
+        "datasetId" : "moneyflow",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_owner",
+        "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 5,
+          "maxRows" : 30000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "targetId" : "static-v2-f8b04c8e7f1b45a97bc70f6da9307ec3e223b3236eb80bfbd1c682bc893b7550",
+        "targetMaxBefore" : "2026-09-18",
+        "targetMinBefore" : "2026-09-17",
+        "targetRowsBefore" : 11106,
+        "trade_dates" : "20260917"
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-f8b04c8e7f1b45a97bc70f6da9307ec3e223b3236eb80bfbd1c682bc893b7550",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "min" : "2026-09-17",
+      "max" : "2026-09-18",
+      "rows" : 11106
+    },
+    "requestedThrough" : "2026-09-17",
+    "bootstrap" : false,
+    "cappedByBudget" : false
+  },
+  "cancelBeforeSource" : {
+    "runId" : "moneyflow-cancel-before-c2bb14e7-391e-4d95-8e5b-ba8f6148e6f0",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "cancelAfterVerifiedPage" : {
+    "runId" : "moneyflow-cancel-page-bb1e9c14-62fc-49f3-b561-d48d55b7dba0",
+    "state" : "CANCELLED",
+    "sourceRows" : 5553,
+    "verifiedRows" : 5553,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "resume" : {
+    "runId" : "moneyflow-resume-d465370e-6de0-4d06-b5fd-cc21afc1357d",
+    "state" : "VERIFIED",
+    "sourceRows" : 5553,
+    "verifiedRows" : 5553,
+    "errorCode" : null,
+    "reusedRows" : 5553
+  },
+  "resumeSendCalls" : 0,
+  "independentResumeReadback" : {
+    "actualRows" : 5553,
+    "mismatchedRows" : 0,
+    "extraKeys" : 0,
+    "evidenceBytes" : 2422861,
+    "mismatchSamples" : [ ],
+    "matchedRows" : 5553,
+    "status" : "MATCHED",
+    "tradeDates" : [ "2026-09-17" ],
+    "fromInclusive" : "2026-09-17",
+    "targetId" : "static-v2-f8b04c8e7f1b45a97bc70f6da9307ec3e223b3236eb80bfbd1c682bc893b7550",
+    "receiptFingerprints" : [ "54d7d33617cebcba9fc29f3b0c4ccee8ae7ea46892b897a01b7b62fb41af4a69" ],
+    "toInclusive" : "2026-09-17",
+    "dataset" : "moneyflow",
+    "sourceRows" : 5553,
+    "duplicateKeys" : 0,
+    "missingKeys" : 0,
+    "table" : "java_d024_moneyflow_e87794d99a684e6fbffcdd483d24a33e",
+    "runId" : "moneyflow-resume-d465370e-6de0-4d06-b5fd-cc21afc1357d",
+    "sourceDuplicateKeys" : 0
+  },
+  "postSendLostAcknowledgement" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 2,
+    "verifiedRows" : 2,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 2,
+      "verifiedRows" : 2,
+      "bytes" : 4184,
+      "digest" : "99b636e116364b001dc2baca04da9eff911841ac9c14dbbdb424ff78c363f46e",
+      "delivery" : "UNKNOWN_RECONCILED"
+    } ],
+    "reason" : null
+  },
+  "after" : {
+    "sha256" : "a0735b91722a773ecdbafd6b8ac3c3b85e362f3bd96d488c1f98d44fc9d79659",
+    "rows" : 11106,
+    "duplicateKeys" : 0
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T23:07:57.927243600Z"
+}

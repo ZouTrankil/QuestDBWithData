@@ -1,0 +1,182 @@
+{
+  "task_id": "D022",
+  "dataset_id": "index_monthly",
+  "job_id": "data.index_monthly",
+  "job_version": 1,
+  "implementation": {
+    "typed_dto_domain_mapper_read": true,
+    "typed_write_port": true,
+    "stable_logical_and_frozen_physical_target_ids": true,
+    "source_contract": "index_monthly one unpaged request per provider code and bounded interval; exact 55-code Python monthly universe",
+    "source_page_cap": 1000,
+    "max_window_calendar_days": 3660,
+    "natural_key": [
+      "ts_code",
+      "trade_date"
+    ],
+    "write_strategy": "whole-target outside-window copy to YEAR/WAL/DEDUP=false stage; exact full snapshot verification; journaled target-to-backup and stage-to-target rename",
+    "dataset_publication_lock": "OS lock held from stage clone through full outside/readback verification and publication across every code and date window",
+    "incremental": "same logical target and code receipt-backed contiguous checkpoint; re-fetch two prior months, clamped to frozen anchor",
+    "backfill_reconcile_checkpoint": "verified receipts may overlay later physical validation; do not advance incremental checkpoint",
+    "omission_policy": "Existing natural keys omitted by a complete source window fail closed before stage creation",
+    "recovery_entry_point": "IndexMonthlyJobService.finishInterrupted(runId, writerStopped)",
+    "stage_only_recovery": "A single durable READY intent binds the frozen request fingerprint, FETCHED raw-source receipt, target generation/full pre-snapshot, exact stage generation and preserved outside rows; under the dataset OS lock recovery publishes only after full stage equality with outside rows plus the reopened source window; normal planning/publication blocks orphan intents from other runs",
+    "direct_write_policy": "IndexMonthlyWritePort refuses writes unless bound to a distinct frozen stage with the full-snapshot publication callback",
+    "independent_readback": "artifacts/java-migration/operations/IndexMonthlyIndependentReadback.java::verify(JdbcTemplate, Path, String, String)"
+  },
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "started_at": "2026-09-29T22:03:03.211946300Z",
+  "finished_at": "2026-09-29T22:17:19.514658400Z",
+  "logical_date": "2026-09-30",
+  "run_id": "index-monthly-61ccf90d-1b40-4044-8e4b-cf25234e1d3d",
+  "serial_gate": {
+    "serial_after": "D021",
+    "status": "verified",
+    "live_execution_allowed": true
+  },
+  "target": {
+    "isolated_table": "java_d022_index_monthly_b2c209f9df7d49f192b6d90a97586970",
+    "logical_target_id": "static-v2-f163873b7c29ab18a61d6243af3765bc85c5f19310d9bb08a3a1fd0d5d2dbeef",
+    "database_version": "QuestDB 10.0.1",
+    "partition": "YEAR",
+    "wal": true,
+    "dedup": false,
+    "natural_key": [
+      "ts_code",
+      "trade_date"
+    ],
+    "physical_upsert_keys": [],
+    "formal_table_mutated": false
+  },
+  "source": {
+    "endpoint": "index_monthly",
+    "requested_codes": [
+      "000300.SH",
+      "000985.CSI",
+      "399975.SZ"
+    ],
+    "provider_codes": [
+      "000300.SH",
+      "000985.SH",
+      "399975.SZ"
+    ],
+    "initial_window": [
+      "2026-06-01",
+      "2026-07-31"
+    ],
+    "incremental_through": "2026-08-31",
+    "primary_runs": 12,
+    "primary_source_rows": 27,
+    "count_scope": "Twelve primary runs only; recovery, backfill, empty and failed attempts are separate linked evidence.",
+    "max_unpaged_rows": 1000,
+    "exact_cap_rejected": true,
+    "configured_requests_per_minute": 10
+  },
+  "write": {
+    "primary_submitted_rows": 27,
+    "strategy": "Full target outside-window copy plus verified DEDUP=false stage, dataset-wide OS lock, journaled rename publication"
+  },
+  "questdb_readback": {
+    "fields": [
+      "ts_code",
+      "trade_date",
+      "close",
+      "open",
+      "high",
+      "low",
+      "pre_close",
+      "change",
+      "pct_chg",
+      "vol",
+      "amount",
+      "layer",
+      "bucket",
+      "update_time"
+    ],
+    "primary_independent_readbacks": 12,
+    "final_rows": 9,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "extra_keys": 0,
+    "final_snapshot": {
+      "sha256": "db8aacd55f049d7032f8e1b4a2ab6aa759f6eb96cb730224080dcb3976b3c01b",
+      "duplicateKeys": 0,
+      "rows": 9
+    },
+    "passed": true
+  },
+  "incremental": {
+    "default_mode": "INCREMENTAL",
+    "scope": "logical target and provider code",
+    "revision_window": "two prior months clamped to frozen checkpoint anchor",
+    "backfill_does_not_advance": true,
+    "incomplete_current_month_rejected": true
+  },
+  "checks": {
+    "scoped_javac": "passed",
+    "full_build_or_tests": "not_run",
+    "nonempty_source": true,
+    "two_idempotent_reruns_per_code": true,
+    "incremental_per_code": true,
+    "outside_code_and_window_preserved": true,
+    "fresh_observed_time_backfill_then_incremental": true,
+    "pre_inception_empty_three_codes": true,
+    "cancel_before_source": true,
+    "fresh_process_cli_resume": true,
+    "rename_lost_ack_recovery": true,
+    "actual_stage_only_failure_recovery": true,
+    "post_publication_cancellation_recovery": true,
+    "post_publication_exception_recovery": true
+  },
+  "mapping_drift": {
+    "alias": "000985.CSI explicitly maps to provider 000985.SH",
+    "units": "Python monthly unit conversions retained and independently calculated from raw receipts",
+    "update_time": "Frozen microsecond Instant",
+    "dedup": "Audited DEDUP=false retained; direct writes rejected, source job stages full replacement"
+  },
+  "failed_attempts": [
+    {
+      "base": "market-live-b589f2597ce746829709f4f1f52fed3f",
+      "reason": "Final Spring repository proxy rejected before target creation; removed final"
+    },
+    {
+      "base": "market-live-b28ff2f59c094042995033ad2497d9d2",
+      "reason": "Publication journal required ledger initialization before planning; initialized ledger"
+    },
+    {
+      "base": "market-live-559311fe9faf42939030a0bdaca70e5f",
+      "reason": "DEDUP write preparation rejected DEDUP=false before send; actual target/stage counts zero, old IN_DOUBT retained, not accepted"
+    },
+    {
+      "base": "market-live-f6f36bbeccb848689ff60cd76d91d9a4",
+      "reason": "Invalid WRITE plus WAL_REPLACE capabilities rejected before source; changed to READ/WAL_REPLACE"
+    },
+    {
+      "base": "market-live-f474ede9865245d987ee0ab517289aa6",
+      "reason": "Logical-vs-physical target evidence mismatch left target zero/stage two; corrected identity and numeric proof comparison; actual stage-only recovery independently verified"
+    }
+  ],
+  "limitations": [
+    "Bounded three-code sample, not all 55 configured monthly codes or full history.",
+    "No natural timeout/rate-limit/exact-cap failure claimed.",
+    "Earlier zero-write IN_DOUBT diagnostic remains isolated and retained.",
+    "Formal table untouched; human review pending."
+  ],
+  "evidence_paths": [
+    "artifacts/java-migration/market-live-b2c209f9df7d49f192b6d90a97586970/D022-cancel-prepare.json",
+    "artifacts/java-migration/market-live-b2c209f9df7d49f192b6d90a97586970/D022-live-acceptance.json",
+    "artifacts/java-migration/market-live-b2c209f9df7d49f192b6d90a97586970/D022-recovery-cli-355b4016-290c-451d-aa7a-306a419af384.json",
+    "artifacts/java-migration/market-live-b2c209f9df7d49f192b6d90a97586970/D022-recovery-post-cancel-69aa34a1-f7d5-43e7-9bf3-477e44ef712d.json",
+    "artifacts/java-migration/market-live-b2c209f9df7d49f192b6d90a97586970/D022-recovery-post-failure-11497e26-08bc-4287-a6cc-8467a67bc607.json",
+    "artifacts/java-migration/market-live-b2c209f9df7d49f192b6d90a97586970/D022-recovery-publication-3c1f1f43-f619-458e-a8fe-b0dc42d6c0cc.json",
+    "artifacts/java-migration/market-live-b2c209f9df7d49f192b6d90a97586970/D022-revision-empty-fdf90b18-daad-4e47-bbaf-b83ff04f089e.json",
+    "artifacts/java-migration/market-live-f474ede9865245d987ee0ab517289aa6/D022-finish-340ad7f8-58ba-4eb5-a2ad-0716e7b36722.json",
+    "artifacts/java-migration/market-live-f474ede9865245d987ee0ab517289aa6/target-stage-physical-counts.json",
+    "artifacts/java-migration/D022/final-review.md"
+  ],
+  "blockers": [],
+  "remaining_acceptance": []
+}
