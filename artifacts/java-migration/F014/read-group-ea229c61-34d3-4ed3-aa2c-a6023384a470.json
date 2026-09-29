@@ -1,0 +1,81 @@
+{
+  "actual" : {
+    "daily" : [ {
+      "instrument" : "000001.SZ",
+      "date" : "2018-01-02",
+      "close" : 13.7
+    }, {
+      "instrument" : "000001.SZ",
+      "date" : "2018-01-03",
+      "close" : 13.33
+    }, {
+      "instrument" : "000001.SZ",
+      "date" : "2018-01-04",
+      "close" : 13.25
+    }, {
+      "instrument" : "000001.SZ",
+      "date" : "2018-01-05",
+      "close" : 13.3
+    } ],
+    "etf" : [ {
+      "instrument" : "159949.SZ",
+      "date" : "2018-01-02",
+      "close" : 0.677
+    }, {
+      "instrument" : "159949.SZ",
+      "date" : "2018-01-03",
+      "close" : 0.686
+    }, {
+      "instrument" : "159949.SZ",
+      "date" : "2018-01-04",
+      "close" : 0.682
+    }, {
+      "instrument" : "159949.SZ",
+      "date" : "2018-01-05",
+      "close" : 0.684
+    } ]
+  },
+  "atomicSnapshot" : false,
+  "independentReference" : {
+    "daily" : [ {
+      "instrument" : "000001.SZ",
+      "date" : "2018-01-02",
+      "close" : 13.7
+    }, {
+      "instrument" : "000001.SZ",
+      "date" : "2018-01-03",
+      "close" : 13.33
+    }, {
+      "instrument" : "000001.SZ",
+      "date" : "2018-01-04",
+      "close" : 13.25
+    }, {
+      "instrument" : "000001.SZ",
+      "date" : "2018-01-05",
+      "close" : 13.3
+    } ],
+    "etf" : [ {
+      "instrument" : "159949.SZ",
+      "date" : "2018-01-02",
+      "close" : 0.677
+    }, {
+      "instrument" : "159949.SZ",
+      "date" : "2018-01-03",
+      "close" : 0.686
+    }, {
+      "instrument" : "159949.SZ",
+      "date" : "2018-01-04",
+      "close" : 0.682
+    }, {
+      "instrument" : "159949.SZ",
+      "date" : "2018-01-05",
+      "close" : 0.684
+    } ]
+  },
+  "sql" : [ "SELECT \"close\" AS \"close\", \"ts_code\" AS \"instrument\", cast(\"trade_date\" as long) AS \"date\" FROM \"daily\" WHERE \"ts_code\" = ? AND \"trade_date\" >= cast(? as TIMESTAMP) AND \"trade_date\" < cast(? as TIMESTAMP) ORDER BY \"trade_date\" ASC, \"ts_code\" ASC LIMIT 2", "SELECT \"close\" AS \"close\", \"ts_code\" AS \"instrument\", cast(\"timestamp\" as long) AS \"date\" FROM \"etf_daily\" WHERE \"ts_code\" = ? AND \"timestamp\" >= cast(? as TIMESTAMP_NS) AND \"timestamp\" < cast(? as TIMESTAMP_NS) ORDER BY \"timestamp\" ASC, \"ts_code\" ASC LIMIT 3", "SELECT \"close\" AS \"close\", \"ts_code\" AS \"instrument\", cast(\"trade_date\" as long) AS \"date\" FROM \"daily\" WHERE \"ts_code\" = ? AND \"trade_date\" >= cast(? as TIMESTAMP) AND \"trade_date\" < cast(? as TIMESTAMP) AND ((\"trade_date\" > cast(? as TIMESTAMP)) OR (\"trade_date\" = cast(? as TIMESTAMP) AND \"ts_code\" > ?)) ORDER BY \"trade_date\" ASC, \"ts_code\" ASC LIMIT 2", "SELECT \"close\" AS \"close\", \"ts_code\" AS \"instrument\", cast(\"timestamp\" as long) AS \"date\" FROM \"etf_daily\" WHERE \"ts_code\" = ? AND \"timestamp\" >= cast(? as TIMESTAMP_NS) AND \"timestamp\" < cast(? as TIMESTAMP_NS) AND ((\"timestamp\" > cast(? as TIMESTAMP_NS)) OR (\"timestamp\" = cast(? as TIMESTAMP_NS) AND \"ts_code\" > ?)) ORDER BY \"timestamp\" ASC, \"ts_code\" ASC LIMIT 3", "SELECT \"close\" AS \"close\", \"ts_code\" AS \"instrument\", cast(\"trade_date\" as long) AS \"date\" FROM \"daily\" WHERE \"ts_code\" = ? AND \"trade_date\" >= cast(? as TIMESTAMP) AND \"trade_date\" < cast(? as TIMESTAMP) AND ((\"trade_date\" > cast(? as TIMESTAMP)) OR (\"trade_date\" = cast(? as TIMESTAMP) AND \"ts_code\" > ?)) ORDER BY \"trade_date\" ASC, \"ts_code\" ASC LIMIT 2", "SELECT \"close\" AS \"close\", \"ts_code\" AS \"instrument\", cast(\"trade_date\" as long) AS \"date\" FROM \"daily\" WHERE \"ts_code\" = ? AND \"trade_date\" >= cast(? as TIMESTAMP) AND \"trade_date\" < cast(? as TIMESTAMP) AND ((\"trade_date\" > cast(? as TIMESTAMP)) OR (\"trade_date\" = cast(? as TIMESTAMP) AND \"ts_code\" > ?)) ORDER BY \"trade_date\" ASC, \"ts_code\" ASC LIMIT 2", "SELECT ts_code, cast(trade_date as string) AS day_text, close FROM daily WHERE ts_code=? AND trade_date>='2018-01-02' AND trade_date<'2018-01-06' ORDER BY trade_date,ts_code LIMIT 20", "SELECT ts_code, cast(timestamp as string) AS day_text, close FROM etf_daily WHERE ts_code=? AND timestamp>='2018-01-02' AND timestamp<'2018-01-06' ORDER BY timestamp,ts_code LIMIT 20" ],
+  "codes" : {
+    "etf" : "159949.SZ",
+    "daily" : "000001.SZ"
+  },
+  "pages" : [ {
+    "startedAt"

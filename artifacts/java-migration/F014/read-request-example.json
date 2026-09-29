@@ -1,0 +1,28 @@
+{
+  "timeoutMillis": 30000,
+  "members": [
+    {
+      "memberId": "snapshot",
+      "datasetId": "stock_basic_snapshot",
+      "definitionVersion": 1,
+      "query": {
+        "columns": ["snapshot_ts", "ts_code", "name"],
+        "equalities": {"ts_code": "000001.SZ"},
+        "rangeColumn": "snapshot_ts",
+        "fromInclusive": "2026-09-29T00:00:00Z",
+        "toExclusive": "2026-09-30T00:00:00Z",
+        "pageSize": 2
+      }
+    },
+    {
+      "memberId": "latest",
+      "datasetId": "stock_basic_latest",
+      "definitionVersion": 1,
+      "query": {
+        "columns": ["ts_code", "name"],
+        "equalities": {"ts_code": "000001.SZ"},
+        "pageSize": 1
+      }
+    }
+  ]
+}

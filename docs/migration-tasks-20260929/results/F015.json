@@ -1,0 +1,205 @@
+{
+  "task_id": "F015",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "repeated-d9f7a5e107734669b54b34e245ed9df9",
+  "attempt_id": null,
+  "logical_date": "2026-09-29",
+  "started_at": null,
+  "finished_at": "2026-09-29T04:07:40.011301+00:00",
+  "target": {
+    "target_id": null,
+    "database_version": null,
+    "table": "java_f015_a_d9f7a5e107734669b54b34e245ed9df9;java_f015_b_d9f7a5e107734669b54b34e245ed9df9",
+    "isolated": true
+  },
+  "incremental": {
+    "mode": "INGEST: frozen prepared batch; snapshot source for functional acceptance",
+    "request_window": "Two explicit stock codes; snapshot logicalDate=2026-09-29",
+    "revision_overlap": "N/A current snapshot",
+    "checkpoint_before": [
+      {
+        "ordinal": 0,
+        "jobId": "write.java_f015_a_d9f7a5e107734669b54b34e245ed9df9",
+        "childRunId": "run-b453a887-ca08-42e6-b501-04a956794b99",
+        "state": "VERIFIED",
+        "reused": false,
+        "verifiedRows": 1
+      },
+      {
+        "ordinal": 1,
+        "jobId": "write.java_f015_b_d9f7a5e107734669b54b34e245ed9df9",
+        "childRunId": "run-a5afd929-e8fd-4c4c-a765-67193fb54b01",
+        "state": "FAILED",
+        "reused": false,
+        "verifiedRows": 0
+      }
+    ],
+    "checkpoint_after": [
+      {
+        "ordinal": 0,
+        "jobId": "write.java_f015_a_d9f7a5e107734669b54b34e245ed9df9",
+        "childRunId": "run-b453a887-ca08-42e6-b501-04a956794b99",
+        "state": "VERIFIED",
+        "reused": true,
+        "verifiedRows": 0
+      },
+      {
+        "ordinal": 1,
+        "jobId": "write.java_f015_b_d9f7a5e107734669b54b34e245ed9df9",
+        "childRunId": "run-cc5b77e5-e331-4943-aa8f-d5545f073b0d",
+        "state": "VERIFIED",
+        "reused": true,
+        "verifiedRows": 0
+      }
+    ]
+  },
+  "source": {
+    "provider": "tushare",
+    "endpoint": "stock_basic",
+    "request_evidence": "artifacts/java-migration/F015/d9f7a5e107734669b54b34e245ed9df9/tushare-source",
+    "response_evidence": "artifacts/java-migration/F015/d9f7a5e107734669b54b34e245ed9df9/write-request.json",
+    "returned_rows": 2,
+    "normalized_rows": 2,
+    "rejected_rows": 0,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": 2,
+    "inserted_rows": 2,
+    "updated_rows": 0,
+    "unchanged_rows": 0,
+    "acknowledged": true,
+    "delivery_status": "Each table sent once, full-key/value plus settled WAL verified; repeated recovery revalidated without send"
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/F015/d9f7a5e107734669b54b34e245ed9df9/independent-values.json",
+    "business_keys": [
+      "snapshot_ts",
+      "ts_code"
+    ],
+    "compared_columns": [
+      "snapshot_micros",
+      "ts_code",
+      "symbol",
+      "name",
+      "area",
+      "industry",
+      "list_date"
+    ],
+    "actual_rows": 2,
+    "matched_rows": 2,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": null,
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": true,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": null,
+    "resume": true,
+    "cancel": null,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/F015/d9f7a5e107734669b54b34e245ed9df9/write-group-readback.json",
+    "artifacts/java-migration/F015/d9f7a5e107734669b54b34e245ed9df9/independent-values.json",
+    "artifacts/java-migration/F015/d9f7a5e107734669b54b34e245ed9df9/write-request.json",
+    "artifacts/java-migration/F015/final-review.md",
+    "var/local-F015-json-live-4cd2-build/test-results/test",
+    "var/local-F015-final-8c71-build/test-results/test",
+    "var/local-F015-verified-latest-build/test-results/test",
+    "artifacts/java-migration/F015/21381336bae144e8a94aed2608194f49/independent-values.json"
+  ],
+  "attempt_history": [
+    {
+      "runId": "first-d9f7a5e107734669b54b34e245ed9df9",
+      "state": "PARTIAL",
+      "members": [
+        {
+          "ordinal": 0,
+          "jobId": "write.java_f015_a_d9f7a5e107734669b54b34e245ed9df9",
+          "childRunId": "run-b453a887-ca08-42e6-b501-04a956794b99",
+          "state": "VERIFIED",
+          "reused": false,
+          "verifiedRows": 1
+        },
+        {
+          "ordinal": 1,
+          "jobId": "write.java_f015_b_d9f7a5e107734669b54b34e245ed9df9",
+          "childRunId": "run-a5afd929-e8fd-4c4c-a765-67193fb54b01",
+          "state": "FAILED",
+          "reused": false,
+          "verifiedRows": 0
+        }
+      ]
+    },
+    {
+      "runId": "resumed-d9f7a5e107734669b54b34e245ed9df9",
+      "state": "VERIFIED",
+      "members": [
+        {
+          "ordinal": 0,
+          "jobId": "write.java_f015_a_d9f7a5e107734669b54b34e245ed9df9",
+          "childRunId": "run-b453a887-ca08-42e6-b501-04a956794b99",
+          "state": "VERIFIED",
+          "reused": true,
+          "verifiedRows": 0
+        },
+        {
+          "ordinal": 1,
+          "jobId": "write.java_f015_b_d9f7a5e107734669b54b34e245ed9df9",
+          "childRunId": "run-cc5b77e5-e331-4943-aa8f-d5545f073b0d",
+          "state": "VERIFIED",
+          "reused": false,
+          "verifiedRows": 1
+        }
+      ]
+    },
+    {
+      "runId": "repeated-d9f7a5e107734669b54b34e245ed9df9",
+      "state": "VERIFIED",
+      "members": [
+        {
+          "ordinal": 0,
+          "jobId": "write.java_f015_a_d9f7a5e107734669b54b34e245ed9df9",
+          "childRunId": "run-b453a887-ca08-42e6-b501-04a956794b99",
+          "state": "VERIFIED",
+          "reused": true,
+          "verifiedRows": 0
+        },
+        {
+          "ordinal": 1,
+          "jobId": "write.java_f015_b_d9f7a5e107734669b54b34e245ed9df9",
+          "childRunId": "run-cc5b77e5-e331-4943-aa8f-d5545f073b0d",
+          "state": "VERIFIED",
+          "reused": true,
+          "verifiedRows": 0
+        }
+      ]
+    }
+  ],
+  "next_manual_comparison": "Compare original Tushare source JSON with actual SQL rows and independent-values.json. Check PARTIAL then two VERIFIED parents, retained old children and one physical send per table. Unknown delivery test remains IN_DOUBT and rejects replay. CLI supports explicit request and resume-from. Human review pending.",
+  "counting_scope": "Two business writes across initial and resumed groups; repeated recovery performs only readback.",
+  "latest_revalidation": {
+    "suite": "var/local-F015-verified-latest-build/test-results/test",
+    "tests": 155,
+    "passed": 147,
+    "skipped": 8,
+    "failures": 0,
+    "errors": 0,
+    "live_source_and_readback": "artifacts/java-migration/F015/21381336bae144e8a94aed2608194f49/independent-values.json",
+    "physical_target_identity": "SHA-256 of physical table name, id, and directory name"
+  }
+}

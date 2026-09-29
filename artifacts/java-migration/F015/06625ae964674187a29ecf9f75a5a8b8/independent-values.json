@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "matched_rows": 2,
+  "matched_tables": 2,
+  "columns": [
+    "snapshot_micros",
+    "ts_code",
+    "symbol",
+    "name",
+    "area",
+    "industry",
+    "list_date"
+  ],
+  "mismatched_rows": 0,
+  "missing_keys": 0,
+  "duplicate_keys": 0,
+  "physical_send_calls": {
+    "a": 1,
+    "b": 1
+  },
+  "source_files": [
+    "tushare-source/source-3d1ed068-74c9-41a9-b8d2-be1ed335bd4f.json",
+    "tushare-source/source-e1f0bf9b-60b7-42a4-8e2a-1275c822dced.json"
+  ]
+}

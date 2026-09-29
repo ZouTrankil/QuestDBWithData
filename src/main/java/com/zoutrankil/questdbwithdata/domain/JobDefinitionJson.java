@@ -15,6 +15,7 @@ public final class JobDefinitionJson {
         temporal.addSerializer(Duration.class, stringSerializer(Duration.class));
         temporal.addSerializer(ZoneId.class, stringSerializer(ZoneId.class));
         temporal.addSerializer(LocalDate.class, stringSerializer(LocalDate.class));
+        temporal.addSerializer(Instant.class, stringSerializer(Instant.class));
         return new ObjectMapper().registerModule(temporal);
     }
     private static <T> JsonSerializer<T> stringSerializer(Class<T> type) {

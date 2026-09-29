@@ -1,0 +1,19 @@
+{
+  "priorRunId" : "run-d1e03f18-beb3-4e9a-a5fd-50dc12b8a83e",
+  "expectedRows" : 1,
+  "verifiedAt" : "2026-09-29T03:55:49.777185500Z",
+  "targetId" : "target-b-acb6ee1f124149c0a1c1e797cf9b2ef7",
+  "passed" : true,
+  "pages" : 1,
+  "sliceReadbacks" : [ {
+    "checkpoint" : {
+      "runId" : "run-d1e03f18-beb3-4e9a-a5fd-50dc12b8a83e",
+      "sliceId" : "slice-204bb8b4-0908-4f9e-86da-ad4fb8f5df04",
+      "sourceFingerprint" : "0e2c5d39185baf7c276fc836968dbf89341cb3be3e1d3266297ff53012fd4cbd",
+      "rows" : 1
+    },
+    "valueDigest" : "5ba4478a7082f8928fa73b8af9300b59afae97e9ac9dbb586403ac213fa16625"
+  } ],
+  "sourceEvidence" : "artifacts\\java-migration\\F015\\acb6ee1f124149c0a1c1e797cf9b2ef7\\member-b\\prepared-input-b0fa05f9-9cd2-418b-a6ab-a8f77496b8e3.json",
+  "actualRows" : 1
+}

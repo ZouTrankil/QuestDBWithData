@@ -1,0 +1,40 @@
+{
+  "history" : [ {
+    "scheduleId" : "f016.live",
+    "dueAt" : 1790645400.000000000,
+    "state" : "VERIFIED",
+    "runId" : "scheduled-345386ace01d4786a63b9ea434f7fdb7",
+    "detail" : "same-runner-result"
+  } ],
+  "schedule" : {
+    "scheduleId" : "f016.live",
+    "target" : "JOB",
+    "targetId" : "data.stock_basic",
+    "targetVersion" : 2,
+    "enabled" : true,
+    "zone" : "Asia/Shanghai",
+    "kind" : "DAILY",
+    "time" : [ 9, 30 ],
+    "days" : [ ],
+    "dayRule" : "EXCHANGE_SESSION",
+    "misfire" : "RUN_ONCE",
+    "maxLateness" : 300.000000000,
+    "parameters" : {
+      "codes" : "000001.SZ"
+    },
+    "intervalMinutes" : 0
+  },
+  "dispatchCalls" : 1,
+  "rows" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  } ],
+  "table" : "java_f016_schedule_345386ace01d4786a63b9ea434f7fdb7",
+  "ledger" : "var\\F016-345386ace01d4786a63b9ea434f7fdb7.sqlite3",
+  "targetId" : "questdb-cd63e61319122992b57304525a01c9d22d138900287920397dfecc2b00b918da"
+}

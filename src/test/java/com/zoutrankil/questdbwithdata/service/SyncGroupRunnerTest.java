@@ -78,19 +78,33 @@ class SyncGroupRunnerTest {
         called.clear();
         var resumed = new SyncGroupRunner(registry, catalog, new SyncRunLedger(path))
                 .resume("group-resumed", "group-first", "group.test", 1,
-                        request("job.a", "job.b", "job.c"), (child, parent, prior, target, frozen) -> {
+                        request("job.a", "job.b", "job.c"), new SyncGroupRunner.ChildExecutor() {
+                          public SyncJobRunner.Result execute(String child, String parent, String prior, String target,
+                                  FrozenRequest frozen) throws Exception {
                             String id = frozen.definition().jobId(); called.add(id);
                             if (id.equals("job.b")) assertEquals(slots.get(1).childRunId(), prior);
                             ledger.createRun(child, parent, target, frozen);
                             ledger.transition(child, 0, SyncRunState.RUNNING, "{}");
                             ledger.transition(child, 1, SyncRunState.VERIFIED, verifiedProof(child));
                             return new SyncJobRunner.Result(child, SyncRunState.VERIFIED, 1, 1, null);
+                          }
+                          public String revalidateCompleted(String child, String target, FrozenRequest frozen) {
+                              assertEquals(slots.getFirst().childRunId(), child);
+                              return "unit-fixture-current-readback";
+                          }
                         });
         assertEquals(SyncRunState.VERIFIED, resumed.state());
         assertEquals(List.of("job.b", "job.c"), called);
         assertTrue(resumed.members().get(0).reused());
         assertEquals(slots.get(0).childRunId(), ledger.groupMembers(resumed.runId()).get(0).childRunId());
         assertEquals("group-first", ledger.getRun(resumed.runId()).parentRunId());
+        assertTrue(ledger.get(resumed.runId()).payloadJson().contains("unit-fixture-current-readback"));
+        var rejected = runner.resume("group-without-recheck", "group-first", "group.test", 1,
+                request("job.a", "job.b", "job.c"), (child, parent, prior, target, frozen) -> {
+                    fail("Missing current readback must reject before any child executes");
+                    return null;
+                });
+        assertEquals(SyncRunState.FAILED, rejected.state());
     }
 
     @Test void unknownJobsAndEnabledDailySelectorsRemainDistinct() {
@@ -135,5 +149,23 @@ class SyncGroupRunnerTest {
         assertEquals(List.of("job.a"), called);
         assertEquals(SyncRunState.VERIFIED, ledger.get(result.members().getFirst().childRunId()).state());
         assertNull(ledger.groupMembers(result.runId()).get(1).childRunId());
+    }
+
+    @Test void allEmptyChildrenProduceEmptyParentWithoutWriteSuccessClaim() throws Exception {
+        var catalog = jobs(job("job.empty", true, false, List.of()));
+        var group = new SyncGroupDefinition("group.empty", 1, List.of(member("job.empty")), true, false);
+        var ledger = new SyncRunLedger(root.resolve("empty.sqlite3"));
+        var runner = new SyncGroupRunner(new SyncGroupRegistry(List.of(group), catalog), catalog, ledger);
+        var result = runner.run("group-empty", "group.empty", 1, request("job.empty"),
+                (child, parent, prior, target, frozen) -> {
+                    ledger.createRun(child, parent, target, frozen);
+                    ledger.transition(child, 0, SyncRunState.RUNNING, "{}");
+                    ledger.transition(child, 1, SyncRunState.VERIFIED_EMPTY,
+                            "{\"sourceComplete\":true,\"returnedRows\":0,\"submittedRows\":0,"
+                                    + "\"responseEvidence\":\"unit-empty-source\"}");
+                    return new SyncJobRunner.Result(child, SyncRunState.VERIFIED_EMPTY, 0, 0, null);
+                });
+        assertEquals(SyncRunState.VERIFIED_EMPTY, result.state());
+        assertEquals(SyncRunState.VERIFIED_EMPTY, ledger.get(result.runId()).state());
     }
 }

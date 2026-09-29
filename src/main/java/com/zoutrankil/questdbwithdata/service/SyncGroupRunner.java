@@ -42,6 +42,11 @@ public final class SyncGroupRunner {
     @FunctionalInterface public interface ChildExecutor {
         SyncJobRunner.Result execute(String childRunId, String parentRunId, String priorChildRunId,
                                      String targetId, SyncJobDefinition.FrozenRequest request) throws Exception;
+        /** Read-only source/target verification, returning a durable receipt path. Never replay writes here. */
+        default String revalidateCompleted(String priorChildRunId, String targetId,
+                                           SyncJobDefinition.FrozenRequest request) throws Exception {
+            throw new IllegalStateException("Completed child requires current readback verification");
+        }
     }
     private record Prepared(int ordinal, SyncGroupDefinition.Member member,
                             String targetId, SyncJobDefinition.FrozenRequest request) {}
@@ -82,6 +87,7 @@ public final class SyncGroupRunner {
                 prepared.stream().map(p -> p.member().job()).toList());
         ledger.transition(runId, 0, SyncRunState.RUNNING, "{}");
         var outcomes = new ArrayList<MemberOutcome>();
+        var reusedEvidence = new LinkedHashMap<String, String>();
         for (var member : prepared) {
             if (Thread.currentThread().isInterrupted() || ledger.cancellationRequested(runId))
                 return stop(runId, SyncRunState.CANCELLED, outcomes, "group-cancelled-before-next-child");
@@ -90,6 +96,15 @@ public final class SyncGroupRunner {
             SyncRunState oldState = oldChild == null ? null : childStateIfPresent(oldChild);
             if (oldState == SyncRunState.VERIFIED || oldState == SyncRunState.VERIFIED_EMPTY) {
                 requireChildIdentity(oldChild, member, null);
+                try {
+                    String receipt = executor.revalidateCompleted(oldChild, member.targetId(), member.request());
+                    if (receipt == null || receipt.isBlank() || receipt.length() > 4096)
+                        throw new IllegalStateException("Current child readback receipt required");
+                    reusedEvidence.put(oldChild, receipt);
+                } catch (Exception failedReadback) {
+                    return stop(runId, outcomes.isEmpty() ? SyncRunState.FAILED : SyncRunState.PARTIAL,
+                            outcomes, "completed-child-readback:" + failedReadback.getClass().getSimpleName());
+                }
                 ledger.assignGroupMember(runId, member.ordinal(), oldChild);
                 outcomes.add(new MemberOutcome(member.ordinal(), member.member().job().jobId(),
                         oldChild, oldState, true, 0));
@@ -120,7 +135,15 @@ public final class SyncGroupRunner {
         String refs = String.join(";", outcomes.stream().map(o -> "ledger:" + o.childRunId()).toList());
         String digest = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
                 .digest(frozenJson.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
-        String proof = json.writeValueAsString(Map.of("metric", "verifiedChildRuns", "verification", Map.of(
+        if (outcomes.stream().allMatch(o -> o.state() == SyncRunState.VERIFIED_EMPTY)) {
+            String emptyProof = json.writeValueAsString(Map.of("sourceComplete", true,
+                    "returnedRows", 0, "submittedRows", 0, "responseEvidence", refs,
+                    "reusedChildReadback", reusedEvidence, "sourceFingerprint", digest));
+            ledger.transition(runId, ledger.get(runId).revision(), SyncRunState.VERIFIED_EMPTY, emptyProof);
+            return new Result(runId, SyncRunState.VERIFIED_EMPTY, outcomes);
+        }
+        String proof = json.writeValueAsString(Map.of("metric", "verifiedChildRuns",
+                "reusedChildReadback", reusedEvidence, "verification", Map.of(
                 "passed", true, "expectedRows", outcomes.size(), "actualRows", outcomes.size(),
                 "matchedRows", outcomes.size(), "mismatchedRows", 0, "duplicateKeys", 0,
                 "missingKeys", 0, "sourceFingerprint", digest, "readbackEvidence", refs)));

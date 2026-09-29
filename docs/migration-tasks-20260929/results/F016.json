@@ -1,0 +1,108 @@
+{
+  "task_id": "F016",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "schedule-run-21766a9c38434835abd627e069706fcd",
+  "attempt_id": null,
+  "logical_date": "2026-09-29",
+  "started_at": null,
+  "finished_at": "2026-09-29T04:33:54.263639+00:00",
+  "target": {
+    "target_id": "java_f016_21766a9c38434835abd627e069706fcd",
+    "database_version": null,
+    "table": "java_f016_21766a9c38434835abd627e069706fcd",
+    "isolated": true
+  },
+  "incremental": {
+    "mode": "SNAPSHOT: bounded existing sample for schedule acceptance",
+    "request_window": "One explicit code 000001.SZ; logicalDate 2026-09-29",
+    "revision_overlap": "N/A schedule infrastructure and current snapshot",
+    "checkpoint_before": "No slot history",
+    "checkpoint_after": [
+      {
+        "scheduleId": "live.schedule",
+        "dueAt": "2026-09-28T16:30:00Z",
+        "state": "VERIFIED",
+        "runId": "schedule-run-21766a9c38434835abd627e069706fcd",
+        "detail": "same-runner-result"
+      }
+    ]
+  },
+  "source": {
+    "provider": "tushare",
+    "endpoint": "stock_basic",
+    "request_evidence": "artifacts/java-migration/F016/21766a9c38434835abd627e069706fcd",
+    "response_evidence": "artifacts/java-migration/F016/21766a9c38434835abd627e069706fcd/source-b198e308-8580-4a1d-890c-073a88411dba.json",
+    "returned_rows": 1,
+    "normalized_rows": 1,
+    "rejected_rows": 0,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": 1,
+    "inserted_rows": 1,
+    "updated_rows": 0,
+    "unchanged_rows": 0,
+    "acknowledged": true,
+    "delivery_status": "Existing runner verified full values and WAL; reopened slot not dispatched again"
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/F016/21766a9c38434835abd627e069706fcd/schedule-readback.json",
+    "business_keys": [
+      "snapshot_ts",
+      "ts_code"
+    ],
+    "compared_columns": [
+      "snapshot_micros",
+      "ts_code",
+      "symbol",
+      "name",
+      "area",
+      "industry",
+      "list_date"
+    ],
+    "actual_rows": 1,
+    "matched_rows": 1,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": null,
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": true,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": null,
+    "resume": true,
+    "cancel": null,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/F016/21766a9c38434835abd627e069706fcd/schedule-readback.json",
+    "artifacts/java-migration/F016/21766a9c38434835abd627e069706fcd/independent-values.json",
+    "artifacts/java-migration/F016/final-review.md",
+    "var/local-F016-dispatch-live-d251-build/test-results/test",
+    "var/local-F016-closeout-6e42-build/test-results/test",
+    "var/local-F016-final-build/test-results/test",
+    "artifacts/java-migration/F016/afd79db68c8d4e1dbf7a67bba431426c/independent-values.json"
+  ],
+  "attempt_history": [],
+  "next_manual_comparison": "Compare original source with seven actual SQL fields and schedule history runId/logicalDate. Verify disabled registration, miss/reentry cases and no duplicate dispatch. Exchange calendar is an injected interface; sample service refuses EXCHANGE_SESSION until a calendar owner is admitted. No background timer enabled.",
+  "regression": {
+    "tests": 173,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 8,
+    "passed": 165,
+    "latest_suite": "var/local-F016-final-build/test-results/test"
+  }
+}

@@ -105,3 +105,29 @@ F012已验收：真实Tushare两代码首轮第二页注入失败，原run保留
 F012补充复核：local-F012-reopen-proof真实验证通过。重开账本、重建区间锁和执行器后恢复；实际send调用1次，已验证首片不重写，QuestDB全值回读2行一致。证据live-recovery-871ee9e0995e4800a94b01711ad1c0fd.json。继续本地串行执行，不走Orca。
 
 F013进行中：版本化组合及SyncGroupPlan冻结共同参数/成员覆盖/窗口/逻辑日期，已接入串行执行器。local-F013-cancel-plan共12项通过、0失败、0跳过；SQLite父子账本、失败停止、恢复及持久化取消边界通过。外部组合链路与正式入口待验收，仍累计12项verified。复核见artifacts/java-migration/F013/plan-review.md。
+
+F013继续：真实两成员组合失败/重开账本恢复通过，只执行未完成第二项；源响应与QuestDB实际回读7字段2行独立核对一致。local-F013-full-review为127项111通过16跳过0失败。生产恢复路径仍需对旧VERIFIED子任务重新核对当前目标值，F013保持running，累计仍12项verified。证据见artifacts/java-migration/F013/recovery-review.md。
+
+F013已验收：生产组合恢复强制重新有限取源及QuestDB全值/WAL复核，复用凭据进入父任务记录；真实两成员恢复与目标漂移拒绝通过。local-F013-recheck-final全套128项112通过16条件跳过0失败；真实测试另行通过。累计13项verified，下一项F014批量读取，第二批3/10。人工复核pending_review，详见results/F013.json及artifacts/java-migration/F013/final-review.md。
+
+F014进行中：ReadGroupRequest/ReadGroupReader实现独立typed结果、版本、错误和游标。4项核心测试及真实QuestDB双表独立分页/独立SQL对照通过；错误投影未掩盖为空页。修复Instant结果导出。正式入口和请求/游标解析待完成，累计仍13项verified。证据见artifacts/java-migration/F014/core-review.md。
+
+F014已验收：read-dataset-group JSON入口支持逐成员定义、投影、类型化过滤及游标；严格拒绝歧义日期/精度/重复属性/不匹配游标。真实QuestDB双表JSON续页8行与独立SQL一致。local-F014-json-final-73d8全套138项121通过17条件跳过0失败；真实测试另行通过。累计14项verified，下一项F015批量写入，第二批4/10。人工复核pending_review。
+
+F015进行中：WriteGroupRequest/WriteGroupPlan冻结有界多数据写入批次、目标身份、完整定义及行指纹，复用完整字段/主键/日期类型校验，拒绝View/MV。local-F015-plan-canonical-2a10共6项通过，未调用writer。执行器、恢复与真实回读待完成，累计仍14项verified。证据见artifacts/java-migration/F015/plan-review.md。
+
+F015继续：PreparedWriteAdapter将冻结批次接入既有SyncJobRunner，保留SQLite状态/区间锁/写后核验，往返映射与目标身份变更发送前拒绝。local-F015-adapter-b72c共6项通过；重开账本恢复不重发、空批次不写。组级持久化关联及真实组合写入待验收，仍14项verified。
+
+F015继续：PersistentWriteGroupRunner复用SQLite父子账本与单数据锁，真实Tushare两行分别写入两隔离表，第二项故障后重开恢复、重复恢复均通过，send各1次。原始来源与SELECT独立核对2表2行7字段一致，隔离表清理。未知提交拒绝自动重放的定向回归通过。正式入口及完整回归待完成，仍14项verified。证据见artifacts/java-migration/F015/persistent-live-review.md。
+
+F015已验收：write-dataset-group JSON正式入口及恢复入口完成，目标由已准入owner解析，严格完整字段/类型/日期/版本校验。真实来源经JSON解析、双隔离表写入、故障恢复和重复恢复通过，2表2行7字段一致、send各1次。local-F015-final-8c71全套155项137通过18条件跳过0失败；真实测试另行通过。累计15项verified，下一项F016调度定义，第二批5/10，人工复核pending_review。
+
+F016进行中：修复SQLite调度重入检查，将IN_DOUBT与CLAIMED共同拦截。local-F016-boundaries-84ef三项测试通过，覆盖重开存储、DST缺失/重叠时间、交易日与跨UTC逻辑日期。未启动真实定时同步；调度入口和runner结果关联待完成，累计仍15项verified。证据见artifacts/java-migration/F016/calendar-store-review.md。
+
+F016继续：local-F016-service-728c共11项通过、0失败/跳过。覆盖定义导入与持久化启停、重复/非法JSON拒绝、限定misfire、PARTIAL/IN_DOUBT保留、重开后的禁止重放，以及独立SQLite连接同槽并发只认领一次。未启动真实sync；正式命令和实际runner关联验收待完成，仍15项verified。证据见artifacts/java-migration/F016/management-boundary-review.md。
+
+F016继续：真实调度→既有runner→Tushare→QuestDB链路通过，1行7字段独立核对一致，重开同槽不重发；完整回归170项151通过19条件跳过0失败。CLI及job/group服务路由验证通过。复核新增分钟间隔发现370槽扫描截断，已扩至有界7天分钟槽并补回归。证据见artifacts/java-migration/F016/live-dispatch-review.md；最终登记待复核，仍15项verified。
+
+F016已验收：调度定义/启停/时区/日期适用性/有界misfire/重入/下次时点/结果历史及CLI完成。真实1行7字段回读一致，重开同槽不重发。最终回归{'tests': 173, 'failures': 0, 'errors': 0, 'skipped': 20}。累计16项verified，下一项F017，第二批6/10；人工复核pending_review。
+
+F017已开始：统一参数解析拒绝重复选项、空值和非法名称，避免后一个参数静默覆盖同步范围或启停值。local-F017-options-416b共10项CLI测试通过，无失败/跳过。统一plan/validate/history等管理能力待完成，累计16项verified。

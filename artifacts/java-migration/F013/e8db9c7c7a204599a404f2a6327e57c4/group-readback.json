@@ -1,0 +1,83 @@
+{
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "firstSlots" : [ {
+    "ordinal" : 0,
+    "jobId" : "sample.first",
+    "jobVersion" : 2,
+    "childRunId" : "run-fa04eab6-e172-463a-9d3e-32b2c1184a74"
+  }, {
+    "ordinal" : 1,
+    "jobId" : "sample.second",
+    "jobVersion" : 2,
+    "childRunId" : "run-781d23fd-5e08-49d0-b65a-208f8b81d106"
+  } ],
+  "parentProof" : "{\"verification\":{\"expectedRows\":2,\"readbackEvidence\":\"ledger:run-fa04eab6-e172-463a-9d3e-32b2c1184a74;ledger:run-8be18f4b-110e-4472-b167-6d22832f714c\",\"actualRows\":2,\"missingKeys\":0,\"sourceFingerprint\":\"a746e2d286d181db23fbe4def16b470786d2cf4694d6148f2acb7d0031a8c86c\",\"matchedRows\":2,\"duplicateKeys\":0,\"passed\":true,\"mismatchedRows\":0},\"metric\":\"verifiedChildRuns\"}",
+  "ledger" : "var\\F013-group-e8db9c7c7a204599a404f2a6327e57c4.sqlite3",
+  "resumedSlots" : [ {
+    "ordinal" : 0,
+    "jobId" : "sample.first",
+    "jobVersion" : 2,
+    "childRunId" : "run-fa04eab6-e172-463a-9d3e-32b2c1184a74"
+  }, {
+    "ordinal" : 1,
+    "jobId" : "sample.second",
+    "jobVersion" : 2,
+    "childRunId" : "run-8be18f4b-110e-4472-b167-6d22832f714c"
+  } ],
+  "resumed" : {
+    "runId" : "group-resumed-e8db9c7c7a204599a404f2a6327e57c4",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "sample.first",
+      "childRunId" : "run-fa04eab6-e172-463a-9d3e-32b2c1184a74",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    }, {
+      "ordinal" : 1,
+      "jobId" : "sample.second",
+      "childRunId" : "run-8be18f4b-110e-4472-b167-6d22832f714c",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    } ]
+  },
+  "target" : "java_f013_group_e8db9c7c7a204599a404f2a6327e57c4",
+  "resumedExecutedJobs" : [ "sample.second" ],
+  "first" : {
+    "runId" : "group-first-e8db9c7c7a204599a404f2a6327e57c4",
+    "state" : "PARTIAL",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "sample.first",
+      "childRunId" : "run-fa04eab6-e172-463a-9d3e-32b2c1184a74",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    }, {
+      "ordinal" : 1,
+      "jobId" : "sample.second",
+      "childRunId" : "run-781d23fd-5e08-49d0-b65a-208f8b81d106",
+      "state" : "FAILED",
+      "reused" : false,
+      "verifiedRows" : 0
+    } ]
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "actual" : {
+    "java_f015_a_21381336bae144e8a94aed2608194f49" : [ {
+      "snapshot_micros" : 1790640000000000,
+      "ts_code" : "000001.SZ",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "area" : "深圳",
+      "industry" : "银行",
+      "list_date" : "19910403"
+    } ],
+    "java_f015_b_21381336bae144e8a94aed2608194f49" : [ {
+      "snapshot_micros" : 1790640000000000,
+      "ts_code" : "600000.SH",
+      "symbol" : "600000",
+      "name" : "浦发银行",
+      "area" : "上海",
+      "industry" : "银行",
+      "list_date" : "19991110"
+    } ]
+  },
+  "sourceRows" : [ {
+    "snapshotTimestamp" : "2026-09-29T00:00:00Z",
+    "stock" : {
+      "tsCode" : "000001.SZ",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "area" : "深圳",
+      "industry" : "银行",
+      "listDate" : "1991-04-03"
+    }
+  }, {
+    "snapshotTimestamp" : "2026-09-29T00:00:00Z",
+    "stock" : {
+      "tsCode" : "600000.SH",
+      "symbol" : "600000",
+      "name" : "浦发银行",
+      "area" : "上海",
+      "industry" : "银行",
+      "listDate" : "1999-11-10"
+    }
+  } ],
+  "resumed" : {
+    "runId" : "resumed-21381336bae144e8a94aed2608194f49",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.java_f015_a_21381336bae144e8a94aed2608194f49",
+      "childRunId" : "run-48cf3692-2c43-4120-963a-fb7b820b75a5",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    }, {
+      "ordinal" : 1,
+      "jobId" : "write.java_f015_b_21381336bae144e8a94aed2608194f49",
+      "childRunId" : "run-23ed125f-1319-4e4e-97c8-21848d0981dc",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    } ]
+  },
+  "physicalSendCalls" : {
+    "b" : 1,
+    "a" : 1
+  },
+  "ledger" : "var\\F015-21381336bae144e8a94aed2608194f49.sqlite3",
+  "repeated" : {
+    "runId" : "repeated-21381336bae144e8a94aed2608194f49",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.java_f015_a_21381336bae144e8a94aed2608194f49",
+      "childRunId" : "run-48cf3692-2c43-4120-963a-fb7b820b75a5",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    }, {
+      "ordinal" : 1,
+      "jobId" : "write.java_f015_b_21381336bae144e8a94aed2608194f49",
+      "childRunId" : "run-23ed125f-1319-4e4e-97c8-21848d0981dc",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    } ]
+  },
+  "first" : {
+    "runId" : "first-21381336bae144e8a94aed2608194f49",
+    "state" : "PARTIAL",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.java_f015_a_21381336bae144e8a94aed2608194f49",
+      "childRunId" : "run-48cf3692-2c43-4120-963a-fb7b820b75a5",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    }, {
+      "ordinal" : 1,
+      "jobId" : "write.java_f015_b_21381336bae144e8a94aed2608194f49",
+      "childRunId" : "run-8a214690-1342-48fd-81c4-4caaa876b14d",
+      "state" : "FAILED",
+      "reused" : false,
+      "verifiedRows" : 0
+    } ]
+  },
+  "sourceCompletion" : {
+    "pages" : 2,
+    "rows" : 2,
+    "complete" : true,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\F015\\21381336bae144e8a94aed2608194f49\\tushare-source\\complete-2e9efb7a-d2bc-43e5-b574-f0a4083ecaac.json"
+  },
+  "targets" : [ "java_f015_a_21381336bae144e8a94aed2608194f49", "java_f015_b_21381336bae144e8a94aed2608194f49" ]
+}

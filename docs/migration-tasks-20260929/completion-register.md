@@ -18,10 +18,10 @@
 | F010 | 同步运行账本与状态查询 | verified | 真实stock_basic 1行 | run/attempt/slice及完整快照 | 提交1 | 匹配1 | N/A：F012 | SQL事务/恢复/状态CLI通过 | local-F010-20260929 | [验收记录](results/F010.json) | pending_review |
 | F011 | 单任务执行与互斥 | verified | 真实2代码/2行 | v2手动快照/冻结日期 | 提交2 | 全字段匹配2 | N/A：F012 | 互斥/超时未知/取消通过 | local-F011-20260929 | [验收记录](results/F011.json) | pending_review |
 | F012 | 断点恢复与任务取消 | verified | 真实2代码/2行，第二页注入失败后恢复 | v2快照/源指纹/目标身份 | 首片复用1，补写1 | 7字段匹配2，WAL settled | checkpoint：已验证片1→2 | 113项104通过9跳过0失败；未知写入保锁 | run-6ab8a992772c438ea661dc25bb1b72c7 | [验收记录](results/F012.json) | pending_review |
-| F013 | 批量同步组合定义与串行运行 | running | v1定义/冻结计划 | 有序成员、共同参数及覆盖 | 待真实链路 | 待真实回读 | 待填 | 定义/参数/排序定向测试通过 | 串行运行/恢复待验收 | [任务卡](01-functions/F013-sync-composition.md) | pending_review |
-| F014 | 批量读取组合 | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](01-functions/F014-read-composition.md) | pending_review |
-| F015 | 批量写入组合 | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](01-functions/F015-write-composition.md) | pending_review |
-| F016 | 同步计划管理 | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](01-functions/F016-schedule-management.md) | pending_review |
+| F013 | 批量同步组合定义与串行运行 | verified | group v1 / child v2 | 有序组合、冻结参数、串行失败停止 | 2条业务源行 | 2条写入并回读 | 已完成项重新复核后复用 | 正常恢复/真实漂移拒绝 | 7字段2行一致 | [验收记录](results/F013.json) | pending_review |
+| F014 | 批量读取组合 | verified | ReadGroupRequest v1 | 独立filter/projection/pageSize/cursor | N/A只读功能 | QuestDB 8行 | 独立游标含JSON续页 | 核心/错误/取消/入口通过 | 两表8行全值一致 | [验收记录](results/F014.json) | pending_review |
+| F015 | 批量写入组合 | verified | WriteGroupRequest/Plan v1 | 批次/目标/完整定义/行指纹 | Tushare 2行 | 2表2行完整回读 | 原片重核验后复用 | 故障恢复/重复提交/未知写入保护 | 7字段一致，send各1次 | [验收记录](results/F015.json) | pending_review |
+| F016 | 同步计划管理 | verified | java_f016_21766a9c38434835abd627e069706fcd（隔离，已清理） | SNAPSHOT/1显式code | 1/1 | 1/0（7字段） | 无→VERIFIED槽 | DST/停用/misfire/并发/未知提交/重开 | 2026-09-29T04:33:54.263639+00:00 / schedule-run-21766a9c38434835abd627e069706fcd | [结果](results/F016.json) | pending_review |
 | F017 | 同步任务管理CLI | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](01-functions/F017-sync-cli.md) | pending_review |
 | D001 | exchange_calendar | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](02-reference/D001-exchange_calendar.md) | pending_review |
 | D002 | stock_detail_info | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](02-reference/D002-stock_detail_info.md) | pending_review |

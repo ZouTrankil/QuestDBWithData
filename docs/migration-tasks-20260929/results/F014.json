@@ -1,0 +1,67 @@
+{
+  "task_id": "F014",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "run_id": "local-F014-final",
+  "finished_at": "2026-09-29T03:38:52Z",
+  "definition_version": 1,
+  "scope": "ReadGroupRequest and ReadGroupReader with independent typed member pages, filters, projections, source versions, cursors and failure states",
+  "target": {
+    "tables": ["daily", "etf_daily"],
+    "access": "read_only_existing_questdb",
+    "isolation": "bounded 2018-01-02 inclusive to 2018-01-06 exclusive and one instrument per table",
+    "source_version": null,
+    "source_version_note": "Existing QuestDB probes expose no versioned source snapshot; no cross-query atomic consistency is claimed"
+  },
+  "source": {
+    "provider": "QuestDB PGWire",
+    "request_evidence": "artifacts/java-migration/F014/read-group-1b52bbe2-329e-4a2c-846d-10755d61a875.json",
+    "returned_rows": 8,
+    "normalized_rows": 8,
+    "rejected_rows": 0
+  },
+  "write": {
+    "status": "N/A: read-only public function",
+    "submitted_rows": 0,
+    "acknowledged": null
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/F014/read-group-1b52bbe2-329e-4a2c-846d-10755d61a875.json",
+    "daily_rows": 4,
+    "etf_daily_rows": 4,
+    "actual_rows": 8,
+    "matched_rows": 8,
+    "mismatched_rows": 0,
+    "passed": true,
+    "comparison": "Typed member pages matched independent explicit SQL results for both datasets"
+  },
+  "checks": {
+    "independent_pagination": true,
+    "independent_cursor": true,
+    "bad_projection_is_failure_not_empty": true,
+    "cancellation_boundary": true,
+    "bounded_request_and_json_type_validation": true,
+    "cli_request_route": true,
+    "cross_query_atomic_snapshot": false
+  },
+  "test_summary": {
+    "suite": "var/local-F014-final-build/test-results/test",
+    "tests": 138,
+    "passed": 130,
+    "skipped": 8,
+    "failures": 0,
+    "errors": 0,
+    "enabled": ["QUESTDB_BOUNDED_READ", "QUESTDB_WRITE_LIVE"]
+  },
+  "evidence_paths": [
+    "artifacts/java-migration/F014/read-group-1b52bbe2-329e-4a2c-846d-10755d61a875.json",
+    "artifacts/java-migration/F014/read-request-example.json",
+    "artifacts/java-migration/F014/json-entry-review.md",
+    "var/local-F014-final-build/test-results/test",
+    "build/test-results/test/TEST-com.zoutrankil.questdbwithdata.service.SyncJobCatalogApplicationTest.xml"
+  ],
+  "blockers": [],
+  "next_manual_comparison": "Review the eight real QuestDB rows against the independent daily and etf_daily SQL outputs. Read group performs no writes; member versions and cursors are independent. Only already implemented stock_basic is registered for the production CLI until later dataset tasks are admitted."
+}

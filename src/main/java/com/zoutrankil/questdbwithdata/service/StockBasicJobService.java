@@ -56,6 +56,18 @@ public class StockBasicJobService {
         return "questdb-"+HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
                 .digest(address.getBytes(StandardCharsets.UTF_8)));
     }
+    public String revalidateGroupChild(String priorChild, String expectedTarget,
+            SyncJobDefinition.FrozenRequest request, String parentGroupRunId) throws Exception {
+        if (!targetId().equals(expectedTarget)) throw new IllegalStateException("Group target identity changed");
+        var ledger = new SyncRunLedger(ledgerPath);
+        var evidence = ledgerPath.getParent().resolve("sync-evidence").resolve("recheck-" + UUID.randomUUID());
+        var adapter = new StockBasicSyncAdapter(pages, mapper,
+                new StockBasicWritePort(StockBasicDataset.DEFINITION.objectName(), jdbc, questdb), evidence);
+        return VerifiedRunRecovery.revalidate(ledger, priorChild, expectedTarget, request, adapter, () -> {
+            try { return ledger.cancellationRequested(parentGroupRunId); }
+            catch (java.sql.SQLException failure) { throw new IllegalStateException("Cannot read group cancellation", failure); }
+        }, evidence);
+    }
     private SyncJobRunner.Result execute(String run,String parentRunId,String priorRunId,
                                          List<String> codes,LocalDate logicalDate,String targetId) throws Exception {
         var request=jobs.prepare("data.stock_basic",2,null,Map.of("codes",codes),null,null,logicalDate);
@@ -65,9 +77,17 @@ public class StockBasicJobService {
                 new StockBasicWritePort(table,jdbc,questdb),
                 ledgerPath.getParent().resolve("sync-evidence").resolve(run));
         var runner=new SyncJobRunner<StockBasicSnapshot,StockBasicSnapshotKey>(ledger,new DatasetIntervalLock(ledgerPath));
+        java.util.function.BooleanSupplier cancelled = () -> {
+            if (Thread.currentThread().isInterrupted()) return true;
+            if (parentRunId == null) return false;
+            try { return ledger.cancellationRequested(parentRunId); }
+            catch (java.sql.SQLException failure) {
+                throw new IllegalStateException("Cannot read parent group cancellation", failure);
+            }
+        };
         return priorRunId==null ? runner.run(run,parentRunId,targetId,request,adapter,
-                ()->Thread.currentThread().isInterrupted())
+                cancelled)
                 : runner.resume(run,parentRunId==null?priorRunId:parentRunId,priorRunId,targetId,
-                request,adapter,()->Thread.currentThread().isInterrupted());
+                request,adapter,cancelled);
     }
 }

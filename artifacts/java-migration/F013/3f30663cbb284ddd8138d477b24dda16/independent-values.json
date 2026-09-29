@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "matched_rows": 2,
+  "compared_columns": [
+    "snapshot_micros",
+    "ts_code",
+    "symbol",
+    "name",
+    "area",
+    "industry",
+    "list_date"
+  ],
+  "source_files": [
+    "run-3578bbb7-887b-4999-92ca-5758208cad75\\source-cd814f1f-1c6a-48df-89a1-6d7529e4c01e.json",
+    "run-b9026920-c154-45d5-ae84-6bd039b5435d\\source-f28afc3e-7d49-4bdb-b9ad-03bda7549b92.json"
+  ],
+  "readback_file": "group-readback.json",
+  "mismatched_rows": 0,
+  "duplicate_keys": 0,
+  "missing_keys": 0,
+  "resumed_executed_jobs": [
+    "sample.second"
+  ]
+}

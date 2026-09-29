@@ -1,0 +1,105 @@
+{
+  "resumedRunEntries" : [ {
+    "id" : "attempt-b3287ec6-d49c-4d83-9fa6-803ec57df466",
+    "kind" : "ATTEMPT",
+    "runId" : "run-4b5be3d3b4fb4b82879044461d3dec8d",
+    "parentId" : "run-4b5be3d3b4fb4b82879044461d3dec8d",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-493b0c9b-97bc-4e84-a382-f4fac3fa6109:revalidation;ledger:slice-c92dbaae-c7c1-405c-9c4d-12f49f97c4dc:revision:5\",\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"actualRows\":2,\"missingKeys\":0,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T03:22:08.450645600Z"
+  }, {
+    "id" : "run-4b5be3d3b4fb4b82879044461d3dec8d",
+    "kind" : "RUN",
+    "runId" : "run-4b5be3d3b4fb4b82879044461d3dec8d",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-493b0c9b-97bc-4e84-a382-f4fac3fa6109:revalidation;ledger:slice-c92dbaae-c7c1-405c-9c4d-12f49f97c4dc:revision:5\",\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"actualRows\":2,\"missingKeys\":0,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T03:22:08.463648200Z"
+  }, {
+    "id" : "slice-493b0c9b-97bc-4e84-a382-f4fac3fa6109",
+    "kind" : "SLICE",
+    "runId" : "run-4b5be3d3b4fb4b82879044461d3dec8d",
+    "parentId" : "attempt-b3287ec6-d49c-4d83-9fa6-803ec57df466",
+    "state" : "VERIFIED",
+    "revision" : 4,
+    "payloadJson" : "{\"verification\":{\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-493b0c9b-97bc-4e84-a382-f4fac3fa6109:revalidation\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-c5fe06bd51254f7e957457dc8b5adbae\",\"sliceId\":\"slice-a3abbda7-fcbb-40d1-a603-1303d3ec3aef\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}",
+    "updatedAt" : "2026-09-29T03:22:02.244479900Z"
+  }, {
+    "id" : "slice-c92dbaae-c7c1-405c-9c4d-12f49f97c4dc",
+    "kind" : "SLICE",
+    "runId" : "run-4b5be3d3b4fb4b82879044461d3dec8d",
+    "parentId" : "attempt-b3287ec6-d49c-4d83-9fa6-803ec57df466",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-c92dbaae-c7c1-405c-9c4d-12f49f97c4dc:revision:5\",\"sourceFingerprint\":\"4058b77bd05ea92310d6a3dcbe446f23dd78bb36db22e0bd5f72dd03edbe0b1a\",\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T03:22:08.430476200Z"
+  } ],
+  "target" : "java_f012_c5fe06bd51254f7e957457dc8b5adbae",
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "resumed" : {
+    "runId" : "run-4b5be3d3b4fb4b82879044461d3dec8d",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 1
+  },
+  "reusedProof" : "{\"verification\":{\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-493b0c9b-97bc-4e84-a382-f4fac3fa6109:revalidation\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-c5fe06bd51254f7e957457dc8b5adbae\",\"sliceId\":\"slice-a3abbda7-fcbb-40d1-a603-1303d3ec3aef\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}",
+  "ledgerPath" : "var\\F012-c5fe06bd51254f7e957457dc8b5adbae.sqlite3",
+  "resumedPhysicalSendCalls" : 1,
+  "sourceEvidence" : "artifacts\\java-migration\\F012\\run-4b5be3d3b4fb4b82879044461d3dec8d",
+  "first" : {
+    "runId" : "run-c5fe06bd51254f7e957457dc8b5adbae",
+    "state" : "PARTIAL",
+    "sourceRows" : 1,
+    "verifiedRows" : 1,
+    "errorCode" : "Incomplete",
+    "reusedRows" : 0
+  },
+  "firstRunEntries" : [ {
+    "id" : "attempt-49af2623-1196-47a3-a1e6-74e356cf33ed",
+    "kind" : "ATTEMPT",
+    "runId" : "run-c5fe06bd51254f7e957457dc8b5adbae",
+    "parentId" : "run-c5fe06bd51254f7e957457dc8b5adbae",
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T03:21:56.195753Z"
+  }, {
+    "id" : "run-c5fe06bd51254f7e957457dc8b5adbae",
+    "kind" : "RUN",
+    "runId" : "run-c5fe06bd51254f7e957457dc8b5adbae",
+    "parentId" : null,
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T03:21:56.206897500Z"
+  }, {
+    "id" : "slice-a3abbda7-fcbb-40d1-a603-1303d3ec3aef",
+    "kind" : "SLICE",
+    "runId" : "run-c5fe06bd51254f7e957457dc8b5adbae",
+    "parentId" : "attempt-49af2623-1196-47a3-a1e6-74e356cf33ed",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-a3abbda7-fcbb-40d1-a603-1303d3ec3aef:revision:5\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"actualRows\":1,\"missingKeys\":0,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-09-29T03:21:50.771267200Z"
+  } ]
+}

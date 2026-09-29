@@ -1,0 +1,105 @@
+{
+  "resumedRunEntries" : [ {
+    "id" : "attempt-c76d3024-8c01-4b83-b1b4-af20f7a7161f",
+    "kind" : "ATTEMPT",
+    "runId" : "run-15f0dd929f4b434e8e80ea8ba5860ee8",
+    "parentId" : "run-15f0dd929f4b434e8e80ea8ba5860ee8",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-181f3a76-fca5-4cbd-9da0-69c470309144:revalidation;ledger:slice-404d1896-a330-4b80-83da-37965ce76b27:revision:5\",\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"actualRows\":2,\"missingKeys\":0}}",
+    "updatedAt" : "2026-09-29T03:12:43.943318600Z"
+  }, {
+    "id" : "run-15f0dd929f4b434e8e80ea8ba5860ee8",
+    "kind" : "RUN",
+    "runId" : "run-15f0dd929f4b434e8e80ea8ba5860ee8",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-181f3a76-fca5-4cbd-9da0-69c470309144:revalidation;ledger:slice-404d1896-a330-4b80-83da-37965ce76b27:revision:5\",\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"actualRows\":2,\"missingKeys\":0}}",
+    "updatedAt" : "2026-09-29T03:12:43.957336300Z"
+  }, {
+    "id" : "slice-181f3a76-fca5-4cbd-9da0-69c470309144",
+    "kind" : "SLICE",
+    "runId" : "run-15f0dd929f4b434e8e80ea8ba5860ee8",
+    "parentId" : "attempt-c76d3024-8c01-4b83-b1b4-af20f7a7161f",
+    "state" : "VERIFIED",
+    "revision" : 4,
+    "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-181f3a76-fca5-4cbd-9da0-69c470309144:revalidation\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"actualRows\":1,\"missingKeys\":0},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-4401a3fda9074d02adb9595e99d5a6b8\",\"sliceId\":\"slice-2c4753cc-29d9-46a3-ab7e-4e077baf6ec0\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}",
+    "updatedAt" : "2026-09-29T03:12:37.780971600Z"
+  }, {
+    "id" : "slice-404d1896-a330-4b80-83da-37965ce76b27",
+    "kind" : "SLICE",
+    "runId" : "run-15f0dd929f4b434e8e80ea8ba5860ee8",
+    "parentId" : "attempt-c76d3024-8c01-4b83-b1b4-af20f7a7161f",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-404d1896-a330-4b80-83da-37965ce76b27:revision:5\",\"sourceFingerprint\":\"4058b77bd05ea92310d6a3dcbe446f23dd78bb36db22e0bd5f72dd03edbe0b1a\",\"actualRows\":1,\"missingKeys\":0}}",
+    "updatedAt" : "2026-09-29T03:12:43.922004100Z"
+  } ],
+  "target" : "java_f012_4401a3fda9074d02adb9595e99d5a6b8",
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "resumed" : {
+    "runId" : "run-15f0dd929f4b434e8e80ea8ba5860ee8",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 1
+  },
+  "reusedProof" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-181f3a76-fca5-4cbd-9da0-69c470309144:revalidation\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"actualRows\":1,\"missingKeys\":0},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-4401a3fda9074d02adb9595e99d5a6b8\",\"sliceId\":\"slice-2c4753cc-29d9-46a3-ab7e-4e077baf6ec0\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}",
+  "ledgerPath" : "var\\F012-4401a3fda9074d02adb9595e99d5a6b8.sqlite3",
+  "resumedPhysicalSendCalls" : 1,
+  "sourceEvidence" : "artifacts\\java-migration\\F012\\run-15f0dd929f4b434e8e80ea8ba5860ee8",
+  "first" : {
+    "runId" : "run-4401a3fda9074d02adb9595e99d5a6b8",
+    "state" : "PARTIAL",
+    "sourceRows" : 1,
+    "verifiedRows" : 1,
+    "errorCode" : "Incomplete",
+    "reusedRows" : 0
+  },
+  "firstRunEntries" : [ {
+    "id" : "attempt-1eeb28e8-eb6a-448a-889d-1d8076f00333",
+    "kind" : "ATTEMPT",
+    "runId" : "run-4401a3fda9074d02adb9595e99d5a6b8",
+    "parentId" : "run-4401a3fda9074d02adb9595e99d5a6b8",
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T03:12:31.740117500Z"
+  }, {
+    "id" : "run-4401a3fda9074d02adb9595e99d5a6b8",
+    "kind" : "RUN",
+    "runId" : "run-4401a3fda9074d02adb9595e99d5a6b8",
+    "parentId" : null,
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T03:12:31.759895900Z"
+  }, {
+    "id" : "slice-2c4753cc-29d9-46a3-ab7e-4e077baf6ec0",
+    "kind" : "SLICE",
+    "runId" : "run-4401a3fda9074d02adb9595e99d5a6b8",
+    "parentId" : "attempt-1eeb28e8-eb6a-448a-889d-1d8076f00333",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2c4753cc-29d9-46a3-ab7e-4e077baf6ec0:revision:5\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"actualRows\":1,\"missingKeys\":0}}",
+    "updatedAt" : "2026-09-29T03:12:26.300670500Z"
+  } ]
+}

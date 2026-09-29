@@ -33,12 +33,19 @@ public class StockBasicGroupService {
                 Map.of("data.stock_basic",input));
         var runner=new SyncGroupRunner(registry,jobs,new SyncRunLedger(ledgerPath));
         String groupRunId="group-run-"+UUID.randomUUID();
-        SyncGroupRunner.ChildExecutor child=(childId,parentId,priorChild,target,frozen)-> {
+        SyncGroupRunner.ChildExecutor child=new SyncGroupRunner.ChildExecutor() {
+          public SyncJobRunner.Result execute(String childId,String parentId,String priorChild,String target,
+                  SyncJobDefinition.FrozenRequest frozen) throws Exception {
             if (!frozen.definition().jobId().equals("data.stock_basic"))
                 throw new IllegalArgumentException("Unsupported sample group member");
             @SuppressWarnings("unchecked")
             List<String> childCodes=(List<String>) frozen.parameters().get("codes");
             return stock.runAsGroupChild(childId,parentId,priorChild,target,childCodes,frozen.logicalDate());
+          }
+          public String revalidateCompleted(String priorChild,String target,
+                  SyncJobDefinition.FrozenRequest frozen) throws Exception {
+              return stock.revalidateGroupChild(priorChild,target,frozen,groupRunId);
+          }
         };
         return priorGroupRunId==null
                 ? runner.run(groupRunId,SAMPLE.groupId(),SAMPLE.version(),request,child)

@@ -1,5 +1,6 @@
 {
-  "observed_at" : "2026-09-29T01:16:09.511477900Z",
+  "consistency" : "Unversioned live SELECTs; no cross-query atomic snapshot guarantee",
+  "writes" : "none",
   "checks" : [ {
     "actual_rows" : [ {
       "instrument" : "000001.SZ",
@@ -22,13 +23,13 @@
       "close" : 13.3,
       "extra" : null
     } ],
-    "matched_rows" : 4,
-    "table" : "daily",
-    "page_sql" : [ "SELECT \"close\" AS \"close\", \"ah_amount\" AS \"extra\", \"ts_code\" AS \"instrument\", cast(\"trade_date\" as long) AS \"date\" FROM \"daily\" WHERE \"ts_code\" = ? AND \"trade_date\" >= cast(? as TIMESTAMP) AND \"trade_date\" < cast(? as TIMESTAMP) ORDER BY \"trade_date\" ASC, \"ts_code\" ASC LIMIT 3", "SELECT \"close\" AS \"close\", \"ah_amount\" AS \"extra\", \"ts_code\" AS \"instrument\", cast(\"trade_date\" as long) AS \"date\" FROM \"daily\" WHERE \"ts_code\" = ? AND \"trade_date\" >= cast(? as TIMESTAMP) AND \"trade_date\" < cast(? as TIMESTAMP) AND ((\"trade_date\" > cast(? as TIMESTAMP)) OR (\"trade_date\" = cast(? as TIMESTAMP) AND \"ts_code\" > ?)) ORDER BY \"trade_date\" ASC, \"ts_code\" ASC LIMIT 3" ],
-    "reference_sql" : "SELECT ts_code, cast(trade_date as string) AS date_text, close, ah_amount FROM daily WHERE ts_code=? AND trade_date >= '2018-01-02' AND trade_date < '2018-01-06' ORDER BY trade_date, ts_code LIMIT 100",
     "params" : {
       "instrument" : "000001.SZ"
-    }
+    },
+    "reference_sql" : "SELECT ts_code, cast(trade_date as string) AS date_text, close, ah_amount FROM daily WHERE ts_code=? AND trade_date >= '2018-01-02' AND trade_date < '2018-01-06' ORDER BY trade_date, ts_code LIMIT 100",
+    "page_sql" : [ "SELECT \"close\" AS \"close\", \"ah_amount\" AS \"extra\", \"ts_code\" AS \"instrument\", cast(\"trade_date\" as long) AS \"date\" FROM \"daily\" WHERE \"ts_code\" = ? AND \"trade_date\" >= cast(? as TIMESTAMP) AND \"trade_date\" < cast(? as TIMESTAMP) ORDER BY \"trade_date\" ASC, \"ts_code\" ASC LIMIT 3", "SELECT \"close\" AS \"close\", \"ah_amount\" AS \"extra\", \"ts_code\" AS \"instrument\", cast(\"trade_date\" as long) AS \"date\" FROM \"daily\" WHERE \"ts_code\" = ? AND \"trade_date\" >= cast(? as TIMESTAMP) AND \"trade_date\" < cast(? as TIMESTAMP) AND ((\"trade_date\" > cast(? as TIMESTAMP)) OR (\"trade_date\" = cast(? as TIMESTAMP) AND \"ts_code\" > ?)) ORDER BY \"trade_date\" ASC, \"ts_code\" ASC LIMIT 3" ],
+    "table" : "daily",
+    "matched_rows" : 4
   }, {
     "actual_rows" : [ {
       "instrument" : "159949.SZ",
@@ -51,22 +52,21 @@
       "close" : 0.684,
       "extra" : null
     } ],
-    "matched_rows" : 4,
-    "table" : "etf_daily",
-    "page_sql" : [ "SELECT \"close\" AS \"close\", \"ts_code\" AS \"instrument\", cast(\"timestamp\" as long) AS \"date\" FROM \"etf_daily\" WHERE \"ts_code\" = ? AND \"timestamp\" >= cast(? as TIMESTAMP_NS) AND \"timestamp\" < cast(? as TIMESTAMP_NS) ORDER BY \"timestamp\" ASC, \"ts_code\" ASC LIMIT 3", "SELECT \"close\" AS \"close\", \"ts_code\" AS \"instrument\", cast(\"timestamp\" as long) AS \"date\" FROM \"etf_daily\" WHERE \"ts_code\" = ? AND \"timestamp\" >= cast(? as TIMESTAMP_NS) AND \"timestamp\" < cast(? as TIMESTAMP_NS) AND ((\"timestamp\" > cast(? as TIMESTAMP_NS)) OR (\"timestamp\" = cast(? as TIMESTAMP_NS) AND \"ts_code\" > ?)) ORDER BY \"timestamp\" ASC, \"ts_code\" ASC LIMIT 3" ],
-    "reference_sql" : "SELECT ts_code, cast(timestamp as string) AS date_text, close FROM etf_daily WHERE ts_code=? AND timestamp >= '2018-01-02' AND timestamp < '2018-01-06' ORDER BY timestamp, ts_code LIMIT 100",
     "params" : {
       "instrument" : "159949.SZ"
-    }
+    },
+    "reference_sql" : "SELECT ts_code, cast(timestamp as string) AS date_text, close FROM etf_daily WHERE ts_code=? AND timestamp >= '2018-01-02' AND timestamp < '2018-01-06' ORDER BY timestamp, ts_code LIMIT 100",
+    "page_sql" : [ "SELECT \"close\" AS \"close\", \"ts_code\" AS \"instrument\", cast(\"timestamp\" as long) AS \"date\" FROM \"etf_daily\" WHERE \"ts_code\" = ? AND \"timestamp\" >= cast(? as TIMESTAMP_NS) AND \"timestamp\" < cast(? as TIMESTAMP_NS) ORDER BY \"timestamp\" ASC, \"ts_code\" ASC LIMIT 3", "SELECT \"close\" AS \"close\", \"ts_code\" AS \"instrument\", cast(\"timestamp\" as long) AS \"date\" FROM \"etf_daily\" WHERE \"ts_code\" = ? AND \"timestamp\" >= cast(? as TIMESTAMP_NS) AND \"timestamp\" < cast(? as TIMESTAMP_NS) AND ((\"timestamp\" > cast(? as TIMESTAMP_NS)) OR (\"timestamp\" = cast(? as TIMESTAMP_NS) AND \"ts_code\" > ?)) ORDER BY \"timestamp\" ASC, \"ts_code\" ASC LIMIT 3" ],
+    "table" : "etf_daily",
+    "matched_rows" : 4
   }, {
-    "matched_rows" : 6,
+    "case" : "same_date_compound_key_prefix",
     "instruments" : [ "000001.SZ", "000002.SZ", "000004.SZ", "000005.SZ", "000008.SZ", "000009.SZ" ],
-    "case" : "same_date_compound_key_prefix"
+    "matched_rows" : 6
   }, {
-    "value" : "1790643723123456789",
+    "scope" : "SQL literal precision probe, not a source record",
     "case" : "server_literal_nanosecond_transport_probe",
-    "scope" : "SQL literal precision probe, not a source record"
+    "value" : "1790643723123456789"
   } ],
-  "writes" : "none",
-  "consistency" : "Unversioned live SELECTs; no cross-query atomic snapshot guarantee"
+  "observed_at" : "2026-09-29T04:31:18.458223800Z"
 }

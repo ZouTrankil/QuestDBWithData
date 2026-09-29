@@ -18,4 +18,10 @@ public final class DatasetValues {
         return type.cast(value instanceof byte[] bytes ? bytes.clone() : value);
     }
     public Set<String> columns() { return values.keySet(); }
+    @com.fasterxml.jackson.annotation.JsonValue
+    public Map<String,Object> asMap() {
+        var copy = new LinkedHashMap<String,Object>();
+        values.forEach((key, value) -> copy.put(key, value instanceof byte[] bytes ? bytes.clone() : value));
+        return Collections.unmodifiableMap(copy);
+    }
 }

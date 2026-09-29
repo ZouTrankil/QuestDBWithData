@@ -1,0 +1,25 @@
+{
+  "parentEvidence" : "{\"errorCode\":\"completed-child-readback:Incomplete\"}",
+  "result" : {
+    "runId" : "group-drift-89bcc8bf5d544857a678d64e98e5b433",
+    "state" : "FAILED",
+    "members" : [ ]
+  },
+  "targetValueAfterRejection" : "F013 injected drift",
+  "executedJobs" : [ ],
+  "oldParentState" : "VERIFIED",
+  "injectedMutation" : {
+    "status" : "VERIFIED",
+    "submittedRows" : 1,
+    "verifiedRows" : 1,
+    "receipts" : [ {
+      "batch" : 1,
+      "submittedRows" : 1,
+      "verifiedRows" : 1,
+      "bytes" : 600,
+      "digest" : "31b8d6a0eeadf35a949cfed95731f807e931c39bd27ef1c05f3603dc46b33189",
+      "delivery" : "ACKNOWLEDGED"
+    } ],
+    "reason" : null
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "task_id": "F013",
+  "dataset_id": null,
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "run_id": "group-resumed-3f30663cbb284ddd8138d477b24dda16",
+  "attempt_id": null,
+  "logical_date": "2026-09-29",
+  "started_at": null,
+  "finished_at": "2026-09-29T03:21:52.443854+00:00",
+  "target": {
+    "target_id": "isolated-3f30663cbb284ddd8138d477b24dda16",
+    "database_version": null,
+    "table": "java_f013_group_3f30663cbb284ddd8138d477b24dda16",
+    "isolated": true
+  },
+  "incremental": {
+    "mode": "N/A: bounded current stock_basic snapshot used for common group acceptance",
+    "request_window": "000001.SZ,600000.SH; logicalDate=2026-09-29",
+    "revision_overlap": "N/A: current snapshot",
+    "checkpoint_before": [
+      {
+        "ordinal": 0,
+        "jobId": "sample.first",
+        "jobVersion": 2,
+        "childRunId": "run-b9026920-c154-45d5-ae84-6bd039b5435d"
+      },
+      {
+        "ordinal": 1,
+        "jobId": "sample.second",
+        "jobVersion": 2,
+        "childRunId": "run-b0c7cd77-2bb7-4707-a7e7-a124d64a4d34"
+      }
+    ],
+    "checkpoint_after": [
+      {
+        "ordinal": 0,
+        "jobId": "sample.first",
+        "jobVersion": 2,
+        "childRunId": "run-b9026920-c154-45d5-ae84-6bd039b5435d"
+      },
+      {
+        "ordinal": 1,
+        "jobId": "sample.second",
+        "jobVersion": 2,
+        "childRunId": "run-3578bbb7-887b-4999-92ca-5758208cad75"
+      }
+    ]
+  },
+  "source": {
+    "provider": "tushare",
+    "endpoint": "stock_basic",
+    "request_evidence": "artifacts/java-migration/F013/3f30663cbb284ddd8138d477b24dda16",
+    "response_evidence": "artifacts/java-migration/F013/3f30663cbb284ddd8138d477b24dda16/group-readback.json",
+    "returned_rows": 2,
+    "normalized_rows": 2,
+    "rejected_rows": 0,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": 2,
+    "inserted_rows": 2,
+    "updated_rows": 0,
+    "unchanged_rows": 0,
+    "acknowledged": true,
+    "delivery_status": "Two business rows ACK plus exact readback; completed child revalidation is read-only. A separate one-row drift fixture was verified and subsequent group reuse rejected."
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/F013/3f30663cbb284ddd8138d477b24dda16/independent-values.json",
+    "business_keys": [
+      "snapshot_ts",
+      "ts_code"
+    ],
+    "compared_columns": [
+      "snapshot_micros",
+      "ts_code",
+      "symbol",
+      "name",
+      "area",
+      "industry",
+      "list_date"
+    ],
+    "actual_rows": 2,
+    "matched_rows": 2,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "value_digest": null,
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": null,
+    "second_incremental": null,
+    "rate_limit": null,
+    "retry": null,
+    "pagination": null,
+    "resume": true,
+    "cancel": true,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/F013/3f30663cbb284ddd8138d477b24dda16/group-readback.json",
+    "artifacts/java-migration/F013/3f30663cbb284ddd8138d477b24dda16/independent-values.json",
+    "artifacts/java-migration/F013/3f30663cbb284ddd8138d477b24dda16/drift-rejected.json",
+    "artifacts/java-migration/F013/3f30663cbb284ddd8138d477b24dda16/rechecks",
+    "artifacts/java-migration/F013/final-review.md",
+    "var/local-F013-drift-live-build/test-results/test",
+    "var/local-F013-recheck-final-build/test-results/test"
+  ],
+  "attempt_history": [
+    {
+      "runId": "group-first-3f30663cbb284ddd8138d477b24dda16",
+      "state": "PARTIAL",
+      "members": [
+        {
+          "ordinal": 0,
+          "jobId": "sample.first",
+          "childRunId": "run-b9026920-c154-45d5-ae84-6bd039b5435d",
+          "state": "VERIFIED",
+          "reused": false,
+          "verifiedRows": 1
+        },
+        {
+          "ordinal": 1,
+          "jobId": "sample.second",
+          "childRunId": "run-b0c7cd77-2bb7-4707-a7e7-a124d64a4d34",
+          "state": "FAILED",
+          "reused": false,
+          "verifiedRows": 0
+        }
+      ]
+    },
+    {
+      "runId": "group-resumed-3f30663cbb284ddd8138d477b24dda16",
+      "state": "VERIFIED",
+      "members": [
+        {
+          "ordinal": 0,
+          "jobId": "sample.first",
+          "childRunId": "run-b9026920-c154-45d5-ae84-6bd039b5435d",
+          "state": "VERIFIED",
+          "reused": true,
+          "verifiedRows": 0
+        },
+        {
+          "ordinal": 1,
+          "jobId": "sample.second",
+          "childRunId": "run-3578bbb7-887b-4999-92ca-5758208cad75",
+          "state": "VERIFIED",
+          "reused": false,
+          "verifiedRows": 1
+        }
+      ]
+    }
+  ],
+  "next_manual_comparison": "Review both business source files against all seven readback fields, completed-child fresh recheck receipt, parent/child run references, and drift-rejected.json. Formal CLI: show-sync-group-definitions; run-stock-basic-group with explicit codes/date and optional resume-from. Human review remains pending_review.",
+  "counting_scope": "Two business child writes across original/resumed groups; read-only rechecks and the intentional drift fixture are separate evidence."
+}

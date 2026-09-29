@@ -1,0 +1,83 @@
+{
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "first" : {
+    "runId" : "group-first-7091a7caffe94730958205b0c2481b67",
+    "state" : "PARTIAL",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "sample.first",
+      "childRunId" : "run-29121c9e-d437-4faf-bc3e-36ceeedeb7e7",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    }, {
+      "ordinal" : 1,
+      "jobId" : "sample.second",
+      "childRunId" : "run-82ad2d56-48ea-4b5f-af6a-4cf7738b9c86",
+      "state" : "FAILED",
+      "reused" : false,
+      "verifiedRows" : 0
+    } ]
+  },
+  "resumedExecutedJobs" : [ "sample.second" ],
+  "target" : "java_f013_group_7091a7caffe94730958205b0c2481b67",
+  "resumed" : {
+    "runId" : "group-resumed-7091a7caffe94730958205b0c2481b67",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "sample.first",
+      "childRunId" : "run-29121c9e-d437-4faf-bc3e-36ceeedeb7e7",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    }, {
+      "ordinal" : 1,
+      "jobId" : "sample.second",
+      "childRunId" : "run-172e4a40-ef79-494c-953e-055d56861074",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    } ]
+  },
+  "resumedSlots" : [ {
+    "ordinal" : 0,
+    "jobId" : "sample.first",
+    "jobVersion" : 2,
+    "childRunId" : "run-29121c9e-d437-4faf-bc3e-36ceeedeb7e7"
+  }, {
+    "ordinal" : 1,
+    "jobId" : "sample.second",
+    "jobVersion" : 2,
+    "childRunId" : "run-172e4a40-ef79-494c-953e-055d56861074"
+  } ],
+  "ledger" : "var\\F013-group-7091a7caffe94730958205b0c2481b67.sqlite3",
+  "parentProof" : "{\"metric\":\"verifiedChildRuns\",\"verification\":{\"expectedRows\":2,\"mismatchedRows\":0,\"passed\":true,\"duplicateKeys\":0,\"matchedRows\":2,\"sourceFingerprint\":\"915da5e717a0a494e79c0c7e638d24e1e99b94d5b31aad9c1844e7b7dadab39a\",\"missingKeys\":0,\"actualRows\":2,\"readbackEvidence\":\"ledger:run-29121c9e-d437-4faf-bc3e-36ceeedeb7e7;ledger:run-172e4a40-ef79-494c-953e-055d56861074\"}}",
+  "firstSlots" : [ {
+    "ordinal" : 0,
+    "jobId" : "sample.first",
+    "jobVersion" : 2,
+    "childRunId" : "run-29121c9e-d437-4faf-bc3e-36ceeedeb7e7"
+  }, {
+    "ordinal" : 1,
+    "jobId" : "sample.second",
+    "jobVersion" : 2,
+    "childRunId" : "run-82ad2d56-48ea-4b5f-af6a-4cf7738b9c86"
+  } ]
+}

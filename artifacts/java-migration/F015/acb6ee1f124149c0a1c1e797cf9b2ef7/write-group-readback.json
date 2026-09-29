@@ -1,0 +1,112 @@
+{
+  "repeated" : {
+    "runId" : "repeated-acb6ee1f124149c0a1c1e797cf9b2ef7",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.java_f015_a_acb6ee1f124149c0a1c1e797cf9b2ef7",
+      "childRunId" : "run-8c6f0cdf-c743-4b95-bc2b-a1f57f5172bb",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    }, {
+      "ordinal" : 1,
+      "jobId" : "write.java_f015_b_acb6ee1f124149c0a1c1e797cf9b2ef7",
+      "childRunId" : "run-d1e03f18-beb3-4e9a-a5fd-50dc12b8a83e",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    } ]
+  },
+  "first" : {
+    "runId" : "first-acb6ee1f124149c0a1c1e797cf9b2ef7",
+    "state" : "PARTIAL",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.java_f015_a_acb6ee1f124149c0a1c1e797cf9b2ef7",
+      "childRunId" : "run-8c6f0cdf-c743-4b95-bc2b-a1f57f5172bb",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    }, {
+      "ordinal" : 1,
+      "jobId" : "write.java_f015_b_acb6ee1f124149c0a1c1e797cf9b2ef7",
+      "childRunId" : "run-7bab1cc1-45ac-416b-855d-3f836988f50d",
+      "state" : "FAILED",
+      "reused" : false,
+      "verifiedRows" : 0
+    } ]
+  },
+  "sourceCompletion" : {
+    "pages" : 2,
+    "rows" : 2,
+    "complete" : true,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\F015\\acb6ee1f124149c0a1c1e797cf9b2ef7\\tushare-source\\complete-b967da63-3ace-4a67-8f5d-78923ff0dfb4.json"
+  },
+  "targets" : [ "java_f015_a_acb6ee1f124149c0a1c1e797cf9b2ef7", "java_f015_b_acb6ee1f124149c0a1c1e797cf9b2ef7" ],
+  "actual" : {
+    "java_f015_a_acb6ee1f124149c0a1c1e797cf9b2ef7" : [ {
+      "snapshot_micros" : 1790640000000000,
+      "ts_code" : "000001.SZ",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "area" : "深圳",
+      "industry" : "银行",
+      "list_date" : "19910403"
+    } ],
+    "java_f015_b_acb6ee1f124149c0a1c1e797cf9b2ef7" : [ {
+      "snapshot_micros" : 1790640000000000,
+      "ts_code" : "600000.SH",
+      "symbol" : "600000",
+      "name" : "浦发银行",
+      "area" : "上海",
+      "industry" : "银行",
+      "list_date" : "19991110"
+    } ]
+  },
+  "sourceRows" : [ {
+    "snapshotTimestamp" : "2026-09-29T00:00:00Z",
+    "stock" : {
+      "tsCode" : "000001.SZ",
+      "symbol" : "000001",
+      "name" : "平安银行",
+      "area" : "深圳",
+      "industry" : "银行",
+      "listDate" : "1991-04-03"
+    }
+  }, {
+    "snapshotTimestamp" : "2026-09-29T00:00:00Z",
+    "stock" : {
+      "tsCode" : "600000.SH",
+      "symbol" : "600000",
+      "name" : "浦发银行",
+      "area" : "上海",
+      "industry" : "银行",
+      "listDate" : "1999-11-10"
+    }
+  } ],
+  "resumed" : {
+    "runId" : "resumed-acb6ee1f124149c0a1c1e797cf9b2ef7",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.java_f015_a_acb6ee1f124149c0a1c1e797cf9b2ef7",
+      "childRunId" : "run-8c6f0cdf-c743-4b95-bc2b-a1f57f5172bb",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    }, {
+      "ordinal" : 1,
+      "jobId" : "write.java_f015_b_acb6ee1f124149c0a1c1e797cf9b2ef7",
+      "childRunId" : "run-d1e03f18-beb3-4e9a-a5fd-50dc12b8a83e",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    } ]
+  },
+  "physicalSendCalls" : {
+    "a" : 1,
+    "b" : 1
+  },
+  "ledger" : "var\\F015-acb6ee1f124149c0a1c1e797cf9b2ef7.sqlite3"
+}

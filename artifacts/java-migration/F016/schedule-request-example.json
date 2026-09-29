@@ -1,0 +1,16 @@
+{
+  "scheduleId": "stock-basic-morning-example",
+  "target": "JOB",
+  "targetId": "data.stock_basic",
+  "targetVersion": 2,
+  "enabled": false,
+  "zone": "Asia/Shanghai",
+  "kind": "DAILY",
+  "time": "09:30:00",
+  "days": [],
+  "dayRule": "WEEKDAY",
+  "misfire": "RUN_ONCE",
+  "maxLateness": "PT5M",
+  "parameters": {"codes": "000001.SZ"},
+  "intervalMinutes": 0
+}

@@ -1,6 +1,6 @@
 # F015 · 批量写入组合
 
-- 状态：planned，尚未派发。
+- 状态：verified，本地执行；人工复核 pending_review。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`F014`；前项验收后才执行本项。
@@ -14,10 +14,10 @@
 
 ## 实施清单
 
-- [ ] 明确接口、配置及依赖，保持现有包职责。
-- [ ] 实现本功能并接入已有入口；不附带实现新数据集。
-- [ ] 提供本功能独立测试与调用示例。
-- [ ] 记录边界、失败语义及后续数据任务使用方式。
+- [x] 明确接口、配置及依赖，保持现有包职责。
+- [x] 实现本功能并接入已有入口；不附带实现新数据集。
+- [x] 提供本功能独立测试与调用示例。
+- [x] 记录边界、失败语义及后续数据任务使用方式。
 
 ## 验收
 
@@ -29,11 +29,11 @@ docs/questdb-usage.md。Java文件相对本工作区，其余src/quant_platform�
 
 ## 本功能容错、实际验收与完成登记
 
-- [ ] 按本卡功能验证参数错误、异常、取消/恢复等适用分支，不把mock成功当真实外部链路成功。
-- [ ] F001只读QuestDB schema和有界样本；其他功能按公共契约“公共功能按职责验收”执行。实际涉及读写时必须读取QuestDB真实数据，涉及写入时必须写后回读。
-- [ ] 复用已有stock_basic或前置功能的隔离验证链路，不提前实现后面的其他数据；不适用sync/写入的功能在记录中注明N/A及原因。
-- [ ] 更新[逐项完成表](../completion-register.md)的 `F015` 行与 `results/F015.json`，保留真实请求、查询、容错和完成证据。
-- [ ] 只有本功能适用验收全部满足才记verified；无实际证据记implemented_not_verified/blocked，人工复核保持pending_review。
+- [x] 按本卡功能验证参数错误、异常、取消/恢复等适用分支，不把mock成功当真实外部链路成功。
+- [x] F001只读QuestDB schema和有界样本；其他功能按公共契约“公共功能按职责验收”执行。实际涉及读写时必须读取QuestDB真实数据，涉及写入时必须写后回读。
+- [x] 复用已有stock_basic或前置功能的隔离验证链路，不提前实现后面的其他数据；不适用sync/写入的功能在记录中注明N/A及原因。
+- [x] 更新[逐项完成表](../completion-register.md)的 `F015` 行与 `results/F015.json`，保留真实请求、查询、容错和完成证据。
+- [x] 只有本功能适用验收全部满足才记verified；无实际证据记implemented_not_verified/blocked，人工复核保持pending_review。
 
 ## Orca执行提示
 

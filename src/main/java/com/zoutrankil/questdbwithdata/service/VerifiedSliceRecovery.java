@@ -10,6 +10,10 @@ import java.util.*;
 public final class VerifiedSliceRecovery {
     public record Checkpoint(String runId,String sliceId,String sourceFingerprint,int rows) {}
     public record Readback(Checkpoint checkpoint,String valueDigest) {}
+    public record CompleteRevalidation(int pages,int sourceRows,int matchedRows,
+                                       String sourceCompletionEvidence,List<Readback> readbacks) {
+        public CompleteRevalidation { readbacks=List.copyOf(readbacks); }
+    }
     private final Map<String,Checkpoint> byFingerprint;
     private VerifiedSliceRecovery(Map<String,Checkpoint> checkpoints) { byFingerprint=Map.copyOf(checkpoints); }
     public static VerifiedSliceRecovery none() { return new VerifiedSliceRecovery(Map.of()); }
@@ -70,5 +74,46 @@ public final class VerifiedSliceRecovery {
             hash.update(java.nio.ByteBuffer.allocate(4).putInt(value.length).array()); hash.update(value);
         }
         return new Readback(checkpoint,HexFormat.of().formatHex(hash.digest()));
+    }
+
+    /** Re-fetch every bounded page and verify current target values before reusing a child. */
+    public static <T,K> CompleteRevalidation verifyWhole(SyncRunLedger ledger,String priorRun,
+            SyncJobDefinition.FrozenRequest request,String targetId,SyncJobRunner.Adapter<T,K> adapter,
+            java.util.function.BooleanSupplier cancelled) throws Exception {
+        var oldState=ledger.get(priorRun).state();
+        if(oldState!=SyncRunState.VERIFIED && oldState!=SyncRunState.VERIFIED_EMPTY)
+            throw new IllegalStateException("Only completed child runs can be reused");
+        var checkpoints=load(ledger,priorRun,request,targetId);
+        adapter.preflight(request);
+        int[] counts={0,0,0};
+        var seenKeys=new HashSet<K>();
+        var seenCheckpoints=new HashSet<String>();
+        var proofs=new ArrayList<Readback>();
+        var completion=adapter.fetch(request,page->{
+            if(cancelled.getAsBoolean() || Thread.currentThread().isInterrupted())
+                throw new java.util.concurrent.CancellationException("Group child revalidation cancelled");
+            var budget=request.definition().budget();
+            if(counts[0]>=Math.min(budget.maxPages(),budget.maxSlices())
+                    || (long)counts[1]+page.rows().size()>budget.maxRows())
+                throw new IllegalArgumentException("Recovery source exceeds frozen budget");
+            counts[0]++; counts[1]+=page.rows().size();
+            for(T row:page.rows()) {
+                var key=Objects.requireNonNull(adapter.codec().key(row));
+                if(!seenKeys.add(key)) throw new IllegalArgumentException("Duplicate key in refreshed source");
+            }
+            if(!page.rows().isEmpty()) {
+                var proof=checkpoints.revalidate(page,adapter.codec(),adapter.port());
+                if(proof==null || !seenCheckpoints.add(proof.checkpoint().sliceId()))
+                    throw new IllegalStateException("Completed child source changed or repeated");
+                proofs.add(proof); counts[2]+=page.rows().size();
+            }
+        },cancelled);
+        if(completion==null || !completion.complete() || completion.pages()!=counts[0]
+                || completion.rows()!=counts[1] || completion.evidence()==null
+                || completion.evidence().isBlank() || seenCheckpoints.size()!=checkpoints.byFingerprint.size()
+                || counts[2]!=counts[1] || oldState==SyncRunState.VERIFIED && counts[2]<1
+                || oldState==SyncRunState.VERIFIED_EMPTY && counts[1]!=0)
+            throw new IllegalStateException("Completed child source or checkpoint coverage changed");
+        return new CompleteRevalidation(counts[0],counts[1],counts[2],completion.evidence(),proofs);
     }
 }

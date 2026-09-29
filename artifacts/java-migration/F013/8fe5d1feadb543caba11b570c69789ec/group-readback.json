@@ -1,0 +1,83 @@
+{
+  "target" : "java_f013_group_8fe5d1feadb543caba11b570c69789ec",
+  "resumed" : {
+    "runId" : "group-resumed-8fe5d1feadb543caba11b570c69789ec",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "sample.first",
+      "childRunId" : "run-6e6ce58e-9e05-4c20-b69c-9955775d264a",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    }, {
+      "ordinal" : 1,
+      "jobId" : "sample.second",
+      "childRunId" : "run-b11316fd-965a-47b1-a53d-b075911dcae7",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    } ]
+  },
+  "resumedSlots" : [ {
+    "ordinal" : 0,
+    "jobId" : "sample.first",
+    "jobVersion" : 2,
+    "childRunId" : "run-6e6ce58e-9e05-4c20-b69c-9955775d264a"
+  }, {
+    "ordinal" : 1,
+    "jobId" : "sample.second",
+    "jobVersion" : 2,
+    "childRunId" : "run-b11316fd-965a-47b1-a53d-b075911dcae7"
+  } ],
+  "ledger" : "var\\F013-group-8fe5d1feadb543caba11b570c69789ec.sqlite3",
+  "parentProof" : "{\"metric\":\"verifiedChildRuns\",\"reusedChildReadback\":{\"run-6e6ce58e-9e05-4c20-b69c-9955775d264a\":\"artifacts\\\\java-migration\\\\F013\\\\8fe5d1feadb543caba11b570c69789ec\\\\rechecks\\\\revalidated-7586819e-97f8-4b92-b67c-2105f010cd4a.json\"},\"verification\":{\"duplicateKeys\":0,\"matchedRows\":2,\"sourceFingerprint\":\"7ce4de8a1f998d58a21e2a45d74b8e9a79722ee754b17168e3ff4c58a513c2fd\",\"missingKeys\":0,\"actualRows\":2,\"readbackEvidence\":\"ledger:run-6e6ce58e-9e05-4c20-b69c-9955775d264a;ledger:run-b11316fd-965a-47b1-a53d-b075911dcae7\",\"expectedRows\":2,\"mismatchedRows\":0,\"passed\":true}}",
+  "firstSlots" : [ {
+    "ordinal" : 0,
+    "jobId" : "sample.first",
+    "jobVersion" : 2,
+    "childRunId" : "run-6e6ce58e-9e05-4c20-b69c-9955775d264a"
+  }, {
+    "ordinal" : 1,
+    "jobId" : "sample.second",
+    "jobVersion" : 2,
+    "childRunId" : "run-dad55ba2-5287-4e04-ad1c-c6ba636a30e6"
+  } ],
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "first" : {
+    "runId" : "group-first-8fe5d1feadb543caba11b570c69789ec",
+    "state" : "PARTIAL",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "sample.first",
+      "childRunId" : "run-6e6ce58e-9e05-4c20-b69c-9955775d264a",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 1
+    }, {
+      "ordinal" : 1,
+      "jobId" : "sample.second",
+      "childRunId" : "run-dad55ba2-5287-4e04-ad1c-c6ba636a30e6",
+      "state" : "FAILED",
+      "reused" : false,
+      "verifiedRows" : 0
+    } ]
+  },
+  "resumedExecutedJobs" : [ "sample.second" ]
+}

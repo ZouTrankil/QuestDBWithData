@@ -1,0 +1,105 @@
+{
+  "reusedProof" : "{\"verification\":{\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"readbackEvidence\":\"ledger:slice-f86a4ed6-624f-437d-8ba8-f16f9cb53727:revalidation\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-3205532ace234c0da22c6ba7c5b9b53e\",\"sliceId\":\"slice-c65efeb7-a140-4eaa-9200-416321afa472\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}",
+  "resumed" : {
+    "runId" : "run-e2bb55ccf0564732aac30cc67049d3dc",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 1
+  },
+  "readback" : [ {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "000001.SZ",
+    "symbol" : "000001",
+    "name" : "平安银行",
+    "area" : "深圳",
+    "industry" : "银行",
+    "list_date" : "19910403"
+  }, {
+    "snapshot_micros" : 1790640000000000,
+    "ts_code" : "600000.SH",
+    "symbol" : "600000",
+    "name" : "浦发银行",
+    "area" : "上海",
+    "industry" : "银行",
+    "list_date" : "19991110"
+  } ],
+  "target" : "java_f012_3205532ace234c0da22c6ba7c5b9b53e",
+  "resumedRunEntries" : [ {
+    "id" : "attempt-a0fc3b85-1aa9-47f0-90df-7d3dd72cb7f1",
+    "kind" : "ATTEMPT",
+    "runId" : "run-e2bb55ccf0564732aac30cc67049d3dc",
+    "parentId" : "run-e2bb55ccf0564732aac30cc67049d3dc",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"readbackEvidence\":\"ledger:slice-f86a4ed6-624f-437d-8ba8-f16f9cb53727:revalidation;ledger:slice-afc743ac-ccb9-41e3-9190-60981c5f306a:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2}}",
+    "updatedAt" : "2026-09-29T04:33:03.547271100Z"
+  }, {
+    "id" : "run-e2bb55ccf0564732aac30cc67049d3dc",
+    "kind" : "RUN",
+    "runId" : "run-e2bb55ccf0564732aac30cc67049d3dc",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"7753a91724e025a7fd35a6d79f8919d461ca7b085b90a77f99068e558bd9bd6e\",\"readbackEvidence\":\"ledger:slice-f86a4ed6-624f-437d-8ba8-f16f9cb53727:revalidation;ledger:slice-afc743ac-ccb9-41e3-9190-60981c5f306a:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2}}",
+    "updatedAt" : "2026-09-29T04:33:03.556914400Z"
+  }, {
+    "id" : "slice-afc743ac-ccb9-41e3-9190-60981c5f306a",
+    "kind" : "SLICE",
+    "runId" : "run-e2bb55ccf0564732aac30cc67049d3dc",
+    "parentId" : "attempt-a0fc3b85-1aa9-47f0-90df-7d3dd72cb7f1",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"4058b77bd05ea92310d6a3dcbe446f23dd78bb36db22e0bd5f72dd03edbe0b1a\",\"readbackEvidence\":\"ledger:slice-afc743ac-ccb9-41e3-9190-60981c5f306a:revision:5\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1}}",
+    "updatedAt" : "2026-09-29T04:33:03.532399600Z"
+  }, {
+    "id" : "slice-f86a4ed6-624f-437d-8ba8-f16f9cb53727",
+    "kind" : "SLICE",
+    "runId" : "run-e2bb55ccf0564732aac30cc67049d3dc",
+    "parentId" : "attempt-a0fc3b85-1aa9-47f0-90df-7d3dd72cb7f1",
+    "state" : "VERIFIED",
+    "revision" : 4,
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"readbackEvidence\":\"ledger:slice-f86a4ed6-624f-437d-8ba8-f16f9cb53727:revalidation\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1},\"reusedCheckpoint\":{\"checkpoint\":{\"runId\":\"run-3205532ace234c0da22c6ba7c5b9b53e\",\"sliceId\":\"slice-c65efeb7-a140-4eaa-9200-416321afa472\",\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"rows\":1},\"valueDigest\":\"2310efdbff09f31da41fd773dbcac44bd1653e571979c65664f06ae23ee57dad\"}}",
+    "updatedAt" : "2026-09-29T04:32:57.395750800Z"
+  } ],
+  "firstRunEntries" : [ {
+    "id" : "attempt-75abeae4-7da6-49be-8e7a-3aa241394220",
+    "kind" : "ATTEMPT",
+    "runId" : "run-3205532ace234c0da22c6ba7c5b9b53e",
+    "parentId" : "run-3205532ace234c0da22c6ba7c5b9b53e",
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T04:32:51.792203Z"
+  }, {
+    "id" : "run-3205532ace234c0da22c6ba7c5b9b53e",
+    "kind" : "RUN",
+    "runId" : "run-3205532ace234c0da22c6ba7c5b9b53e",
+    "parentId" : null,
+    "state" : "PARTIAL",
+    "revision" : 2,
+    "payloadJson" : "{\"errorCode\":\"Incomplete\"}",
+    "updatedAt" : "2026-09-29T04:32:51.802897700Z"
+  }, {
+    "id" : "slice-c65efeb7-a140-4eaa-9200-416321afa472",
+    "kind" : "SLICE",
+    "runId" : "run-3205532ace234c0da22c6ba7c5b9b53e",
+    "parentId" : "attempt-75abeae4-7da6-49be-8e7a-3aa241394220",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":1,\"sourceFingerprint\":\"c48da59889dc49ca2310cb62f8fa7ec64de626be8d7472b2e05d6a963f8d756c\",\"readbackEvidence\":\"ledger:slice-c65efeb7-a140-4eaa-9200-416321afa472:revision:5\",\"mismatchedRows\":0,\"matchedRows\":1,\"expectedRows\":1}}",
+    "updatedAt" : "2026-09-29T04:32:45.743241900Z"
+  } ],
+  "first" : {
+    "runId" : "run-3205532ace234c0da22c6ba7c5b9b53e",
+    "state" : "PARTIAL",
+    "sourceRows" : 1,
+    "verifiedRows" : 1,
+    "errorCode" : "Incomplete",
+    "reusedRows" : 0
+  },
+  "sourceEvidence" : "artifacts\\java-migration\\F012\\run-e2bb55ccf0564732aac30cc67049d3dc",
+  "resumedPhysicalSendCalls" : 1,
+  "ledgerPath" : "var\\F012-3205532ace234c0da22c6ba7c5b9b53e.sqlite3"
+}

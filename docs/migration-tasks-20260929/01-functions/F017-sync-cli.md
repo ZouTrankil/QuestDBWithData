@@ -1,6 +1,6 @@
 # F017 · 同步任务管理CLI
 
-- 状态：planned，尚未派发。
+- 状态：running，本地串行执行；F016已验收，CLI输入边界已加固，统一管理接口待完成。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`F016`；前项验收后才执行本项。
