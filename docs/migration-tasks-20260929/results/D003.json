@@ -97,7 +97,7 @@
     "http_rate_limit": "N/A: confirmed local file owner; bounded 8 MiB/5000 rows; no network fetch"
   },
   "regression": {
-    "build": "local-D003-final-regression-0930",
+    "build": "local-D003-current-regression",
     "tests": 278,
     "failures": 0,
     "errors": 0,
@@ -110,9 +110,12 @@
     "artifacts/java-migration/D003/source-mapping-read-review.md",
     "artifacts/java-migration/D003/merge-staging-review.md",
     "artifacts/java-migration/D003/publication-review.md",
+    "artifacts/java-migration/D003/prepared-write-review.md",
+    "artifacts/java-migration/D003/production-final-readonly.json",
     "var/local-D003-no-write-recovery-0930-build/test-results/test",
     "var/local-D003-write-regression-0930-build/test-results/test",
     "var/local-D003-prepared-recovery-build/test-results/test",
+    "var/local-D003-prepared-final-build/test-results/test",
     "var/local-D003-boundary-0930-build/test-results/test",
     "var/local-D003-group-live-0930-build/test-results/test"
   ],

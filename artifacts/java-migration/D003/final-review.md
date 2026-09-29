@@ -20,13 +20,15 @@
 
 ## 验证记录
 
-- 完整回归 `local-D003-final-regression-0930`：278 项，216 通过、62 条件跳过、0 失败、0 错误。真实库专项已单独启用执行，未把跳过当通过。
+- 完整回归 `local-D003-current-regression`：278 项，216 通过、62 条件跳过、0 失败、0 错误。真实库专项已单独启用执行，未把跳过当通过。
 - 完整 owner：`local-D003-owner-check-0930`。
 - CLI/注册：`local-D003-cli-group-0930c`；sync 组合：`local-D003-group-live-0930`。
 - 边界/三级恢复：`local-D003-boundary-0930`。
 - 发布前恢复：`local-D003-early-recovery-0930b`；原失败现场恢复：`local-D003-early-observed-0930`。
 - 无写入恢复：`local-D003-no-write-recovery-0930`。
 - 准备数据组合与文件恢复复测：`local-D003-write-regression-0930`；准备数据回执恢复：`local-D003-prepared-recovery`。
+- 最终 prepared 入口写入、组合复用和中断恢复：`local-D003-prepared-final`，2/2 真实隔离表测试通过；详见[prepared 写入组验收](../../../artifacts/java-migration/D003/prepared-write-review.md)。
+- 最终只读核验：正式 `index` 物理 ID 332、2274 行，与原基线全部 18 列逐键比对 0 差异；见[正式表只读回执](../../../artifacts/java-migration/D003/production-final-readonly.json)。
 - 完整结果和逐条比对入口：[D003.json](../../../docs/migration-tasks-20260929/results/D003.json)。
 
 限制：候选文件没有行情 as-of，不能证明最新行情；未切生产表；测试构造了真实持久中断状态并使用 Error 注入，但没有实际杀 OS 进程。保留的失败现场和备份见早期恢复报告，不自动处理其他会话的现场。
