@@ -1,0 +1,103 @@
+{
+  "task_id": "D006",
+  "dataset_id": "ths_member",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "job_id": "data.ths_member",
+  "job_version": 1,
+  "run_id": "ths-member-bc579bc6-7f4e-45bf-8b7e-70277d793c09",
+  "logical_date": "2026-09-29",
+  "acceptance_recorded_at": "2026-09-29T13:59:18Z",
+  "target": {
+    "formal_table_read_only": "ths_member",
+    "formal_rows_after": 416612,
+    "formal_physical_id_after": 1779,
+    "formal_directory_after": "ths_member_stage_20260916_000918_ed422f99~1779",
+    "formal_wal_writer_txn_after": 3,
+    "formal_board_rows": 506,
+    "isolated": true,
+    "isolated_table": "java_d006_job_49b3c2e910334332ab6de72cb3d83a3b",
+    "isolated_before_physical_id": 2781,
+    "isolated_after_physical_id": 2782,
+    "isolated_successful_test_tables_removed": true,
+    "wal": true,
+    "partition": "MONTH",
+    "designated_timestamp": "update_time",
+    "business_key": ["board_code", "constituent_code"],
+    "physical_dedup_key": ["ts_code", "con_code", "update_time"],
+    "formal_unchanged": true
+  },
+  "source": {
+    "kind": "real Tushare one-board response",
+    "endpoint": "ths_member",
+    "parameters": {"ts_code": "885800.TI"},
+    "fields": ["ts_code", "con_code", "con_name", "weight", "in_date", "out_date", "is_new"],
+    "returned_rows": 506,
+    "normalized_rows": 506,
+    "rejected_rows": 0,
+    "receipt": "var/sync-evidence/ths-member-bc579bc6-7f4e-45bf-8b7e-70277d793c09/source-2d3ad8ee-7017-44a0-bf33-676db6dc0999.json",
+    "sha256": "349d507d805d6e254be6a6f2999137cec05cedb23e467fb2921801a560801c9e",
+    "large_board_preflight_rows": 5565,
+    "unpaged_response_cap": 10000,
+    "upstream_snapshot_version": null
+  },
+  "incremental": {
+    "mode": "INCREMENTAL",
+    "scope": "one exact current THS board; compare all business values, then replace only that board in a full-table WAL stage",
+    "checkpoint_before": "1fa6087e6de38a5950106de222192705672c9058b2297b775729d99241a8c080",
+    "checkpoint_after": "4a7d092c80a5b5a845802ae6d57e3b457d4e592252f8759e70e8ec610a03a198",
+    "checkpoint_kind": "verified physical identity, WAL transaction and complete row fingerprint",
+    "repeat_source_rows": 506,
+    "repeat_stage_rows": 0,
+    "repeat_physical_identity_unchanged": true,
+    "implicit_board_deletes": 0,
+    "observation_time_is_not_source_cursor": true
+  },
+  "write": {
+    "replaced_board_rows": 506,
+    "copied_unaffected_rows": 5565,
+    "verified_target_rows": 6071,
+    "batch_row_limit": 250,
+    "batches": 3,
+    "publication_id": "ths-member-publication-800b7ee0-ffd6-4bfe-b626-920f71014c20"
+  },
+  "questdb_readback": {
+    "board_rows": 506,
+    "matched_complete_business_keys": 506,
+    "missing_keys": 0,
+    "mismatched_fields": 0,
+    "physical_columns": 8,
+    "unaffected_rows_stream_fingerprint_matched": true,
+    "evidence": "var/sync-evidence/ths-member-bc579bc6-7f4e-45bf-8b7e-70277d793c09/completion.json",
+    "independent_read_only_comparison": "artifacts/java-migration/D006/read-live.json"
+  },
+  "checks": {
+    "typed_read_and_read_group": true,
+    "real_source_owner_and_idempotent_rerun": true,
+    "prepared_write_group": true,
+    "manual_sync_group": true,
+    "stage_full_field_and_unaffected_copy": true,
+    "publication_and_stopped_writer_recovery": true,
+    "prejournal_stage_recovery": true,
+    "source_cap_duplicate_scope_cancel_fail_closed": true,
+    "formal_write_guard": true,
+    "cli_plan_without_ledger": true,
+    "project_regression": "371 tests; 249 passed, 122 conditional skipped, 0 failed"
+  },
+  "limitations": [
+    "Only one board was accepted in an isolated live run; provider-wide snapshot atomicity is not claimed.",
+    "The provider response has no upstream version or change cursor.",
+    "Formal 416612-row publication and consumer cutover were not executed."
+  ],
+  "evidence": [
+    "artifacts/java-migration/D006/baseline-review.md",
+    "artifacts/java-migration/D006/physical-scan.json",
+    "artifacts/java-migration/D006/board-comparison.json",
+    "artifacts/java-migration/D006/job-49b3c2e910334332ab6de72cb3d83a3b.json",
+    "artifacts/java-migration/D006/final-review.md"
+  ]
+}

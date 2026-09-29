@@ -1,0 +1,16 @@
+{
+  "observedAt": "2026-09-29T10:18:01.651207+00:00",
+  "access": "read_only_http_select",
+  "sourceReceipt": "artifacts/java-migration/D005/classification-preflight-54cf133f-d2c6-4101-9713-f3379f73c8a4/source-review.json",
+  "sourceReceiptSha256": "053208f1af9eba223a7376e4f054fd8f53b331b180e7387986e02bb96c010235",
+  "targetQuery": "SELECT DISTINCT index_code FROM index_member ORDER BY index_code LIMIT 2000",
+  "sourceL2Count": 134,
+  "targetL2Count": 131,
+  "sourceOnly": [
+    "801217.SI",
+    "801768.SI",
+    "801786.SI"
+  ],
+  "targetOnly": [],
+  "questdbWrites": 0
+}

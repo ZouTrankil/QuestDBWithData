@@ -1,0 +1,27 @@
+{
+  "task_id": "D004",
+  "observed_at": "2026-09-29T09:11:32.800954+00:00",
+  "source_rows": 2517,
+  "source_sha256": "d7a10eea092c1c957ea01e2103671942aa756606a3db3cd1ce801d904a7a6f80",
+  "physical_rows": 2517,
+  "overlap_codes": 2517,
+  "source_only_codes": 0,
+  "physical_only_codes": 0,
+  "field_differences": {},
+  "physical_update_times": [
+    "2026-09-11T18:20:59.807013Z"
+  ],
+  "source_null_counts": {
+    "ts_code": 0,
+    "name": 0,
+    "count": 12,
+    "exchange": 0,
+    "list_date": 0,
+    "type": 0
+  },
+  "source_cap": 5000,
+  "source_hit_cap": false,
+  "candidate_current_business_equal": true,
+  "source_receipt": "source-preflight.json",
+  "physical_receipt": "physical-baseline.json"
+}

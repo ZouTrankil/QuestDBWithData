@@ -1,0 +1,118 @@
+{
+  "task_id": "D004",
+  "dataset_id": "ths_index",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData",
+  "definition_version": 1,
+  "job_id": "data.ths_index",
+  "job_version": 1,
+  "run_id": "ths-index-f5bbc6e9-c449-4d25-b36f-a05022968700",
+  "logical_date": "2026-09-29",
+  "acceptance_recorded_at": "2026-09-29T10:03:25.861056+00:00",
+  "target": {
+    "production_table_read_only": "ths_index",
+    "isolated": true,
+    "isolated_table": "java_d004_owner_7f8f2ab2aed24e21a94e81e482a933b0",
+    "before_identity": {
+      "id": 2287,
+      "directory": "java_d004_owner_7f8f2ab2aed24e21a94e81e482a933b0~2287"
+    },
+    "after_identity": {
+      "id": 2288,
+      "directory": "java_ths_index_stage_056eee596d85436aa9c829fcd08ba432~2288"
+    },
+    "wal": true,
+    "partition": "MONTH",
+    "designated_timestamp": "update_time",
+    "dedup": true,
+    "business_key": [
+      "ts_code"
+    ],
+    "physical_dedup_key": [
+      "ts_code",
+      "update_time"
+    ],
+    "production_unchanged": true,
+    "successful_test_tables_removed": true
+  },
+  "source": {
+    "kind": "Tushare current directory bounded single request",
+    "endpoint": "ths_index",
+    "parameters": {},
+    "returned_rows": 2517,
+    "normalized_rows": 2517,
+    "rejected_rows": 0,
+    "receipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D004\\owner-7f8f2ab2aed24e21a94e81e482a933b0\\sync-evidence\\ths-index-f5bbc6e9-c449-4d25-b36f-a05022968700\\source-033d0d58-4b4a-42c4-9ce1-c04c85931ab4.json",
+    "sha256": "44842ba87fe48f03b380fd3160595af3aa67f9841149a5b2ae7a7f662deaa384",
+    "row_cap": 5000,
+    "byte_cap": 8388608
+  },
+  "incremental": {
+    "mode": "INCREMENTAL",
+    "kind": "content upsert; absent identities retained",
+    "checkpoint_before": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "checkpoint_after": "54093baa40729e3eb703f14692c524fa414a7d2dd0492e01e913b4155bde89c8",
+    "checkpoint_kind": "verified physical identity and full content fingerprint",
+    "implicit_deletes": 0,
+    "repeat_inserted": 0,
+    "repeat_revised": 0,
+    "repeat_unchanged": 2517,
+    "repeat_physical_identity_unchanged": true
+  },
+  "write": {
+    "inserted_rows": 2517,
+    "revised_rows": 0,
+    "staged_rows": 2517,
+    "batch_row_limit": 250,
+    "estimated_batch_payload_limit": 262144,
+    "publication_id": "ths-publication-d7142405-13da-4a34-92b2-279060d9c2b3"
+  },
+  "questdb_readback": {
+    "actual_rows": 2517,
+    "matched_source_keys": 2517,
+    "missing_keys": 0,
+    "extra_keys": 0,
+    "mismatched_fields": 0,
+    "physical_columns": 7,
+    "evidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D004\\owner-7f8f2ab2aed24e21a94e81e482a933b0\\sync-evidence\\ths-index-f5bbc6e9-c449-4d25-b36f-a05022968700\\completion.json",
+    "independent_comparison": "artifacts\\java-migration\\D004\\staging-66492e153e1d42a0bddb2997c9a34325\\independent-source-values.json"
+  },
+  "checks": {
+    "typed_read_and_group": true,
+    "real_source_owner": true,
+    "sync_group_revalidated_resume": true,
+    "prepared_write_group": true,
+    "prepared_write_failure_recovery": true,
+    "changed_receipt_rejected": true,
+    "cli_plan_without_ledger": true,
+    "empty_failure_cancel_lock": true,
+    "early_stage_recovery": true,
+    "published_missing_receipt_recovery": true,
+    "no_write_recovery": true,
+    "absent_rows_retained": true
+  },
+  "regression": {
+    "build": "local-D004-final-regression-1015",
+    "tests": 306,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 80,
+    "passed": 226
+  },
+  "evidence_paths": [
+    "artifacts/java-migration/D004/final-review.md",
+    "artifacts/java-migration/D004/incremental-owner-boundary-review.md",
+    "artifacts/java-migration/D004/recovery-composition-review.md"
+  ],
+  "validation_limits": {
+    "real_upstream_revision": "not observed; controlled tests only",
+    "production_cutover": "not performed",
+    "process_kill": "durable interruptions and fault injection, no OS kill",
+    "failed_scenes": "retained, history not rewritten"
+  },
+  "blockers": [],
+  "next_manual_comparison": "Compare all seven fields, natural keys, null counts, timestamps, checkpoints and recovery ledger; human approval remains pending_review"
+}

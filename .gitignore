@@ -5,3 +5,22 @@ build/
 *.log
 .idea/
 *.iml
+
+# Per-attempt migration captures are local scratch; keep task-level reviews/results.
+/artifacts/java-migration/D004/*-*/
+/artifacts/java-migration/D005/*-*/
+/artifacts/java-migration/D006/*-*/
+/artifacts/java-migration/D006/job-*.json
+
+# Large local readback/source snapshots; compact summaries live beside them.
+/artifacts/java-migration/D004/merge-readonly.json
+/artifacts/java-migration/D004/read-live.json
+/artifacts/java-migration/D004/source-preflight.json
+/artifacts/java-migration/D005/physical-baseline.json
+/artifacts/java-migration/D005/read-live.json
+/artifacts/java-migration/D005/storage-readback.json
+
+# SQLite ledgers and their transient WAL/shared-memory files are local run state.
+/artifacts/java-migration/D004/**/*.sqlite*
+/artifacts/java-migration/D005/**/*.sqlite*
+/artifacts/java-migration/D006/**/*.sqlite*
