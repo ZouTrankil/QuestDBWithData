@@ -21,7 +21,8 @@ public final class PersistentWriteGroupRunner {
         boolean staticMemberSeen=false;
         for(var member:plan.members()) {
             if(staticMemberSeen) throw new IllegalArgumentException("Static replacement must be the final write-group member");
-            if(member.definition().capabilities().contains(DatasetDefinition.Capability.STATIC_REPLACE))
+            if(member.definition().capabilities().contains(DatasetDefinition.Capability.STATIC_REPLACE)
+                    || member.definition().capabilities().contains(DatasetDefinition.Capability.WAL_REPLACE))
                 staticMemberSeen=true;
         }
         var ids = new HashSet<String>(); plan.members().forEach(m -> ids.add(m.memberId()));

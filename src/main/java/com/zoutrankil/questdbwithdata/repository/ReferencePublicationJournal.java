@@ -53,10 +53,13 @@ public final class ReferencePublicationJournal {
         return new Entry(intent,State.PREPARED,0);
     }
     public Entry forRun(String run) throws Exception {
+        return findForRun(run).orElseThrow(()->new IllegalStateException("No publication for dataset/run"));
+    }
+    public Optional<Entry> findForRun(String run) throws Exception {
         try(var db=open();var s=db.prepareStatement("SELECT intent_json,state,revision FROM reference_publications WHERE dataset=? AND run_id=?")) {
             s.setString(1,dataset);s.setString(2,run);try(var rows=s.executeQuery()) {
-                if(!rows.next()) throw new IllegalStateException("No publication for dataset/run");
-                return new Entry(JobDefinitionJson.mapper().readValue(rows.getString(1),Intent.class),State.valueOf(rows.getString(2)),rows.getLong(3));
+                if(!rows.next()) return Optional.empty();
+                return Optional.of(new Entry(JobDefinitionJson.mapper().readValue(rows.getString(1),Intent.class),State.valueOf(rows.getString(2)),rows.getLong(3)));
             }
         }
     }

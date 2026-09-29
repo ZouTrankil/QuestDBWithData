@@ -1,0 +1,41 @@
+{
+  "backup" : "java_index_catalog_backup_6066c57d39ad455fa107a736761fcf43",
+  "before" : {
+    "id" : 2227,
+    "directory" : "java_d003_owner_8388e761040142e192273e88fd99bdae~2227"
+  },
+  "productionUnchanged" : true,
+  "first" : {
+    "runId" : "index-catalog-f0532119-bf33-415c-996c-7665c9ba2cec",
+    "state" : "VERIFIED",
+    "sourceRows" : 2343,
+    "inserted" : 529,
+    "revised" : 1814,
+    "unchanged" : 0,
+    "retainedAbsent" : 460,
+    "verifiedRows" : 2343,
+    "publicationId" : "catalog-publication-1eee6a8e-c779-4fdd-bca9-7d7bb1ce529b",
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D003\\owner-8388e761040142e192273e88fd99bdae\\sync-evidence\\index-catalog-f0532119-bf33-415c-996c-7665c9ba2cec\\completion.json",
+    "errorCode" : null
+  },
+  "afterFingerprint" : "cd3479e24213dadc908be2db442089c05bd2341f812fc9bc0ca4370f4432dac9",
+  "after" : {
+    "id" : 2228,
+    "directory" : "java_index_catalog_stage_d302f030cd1049349d984d80af90f243~2228"
+  },
+  "second" : {
+    "runId" : "index-catalog-2654b31f-1f0a-45cf-a8de-9474ce888b73",
+    "state" : "VERIFIED",
+    "sourceRows" : 2343,
+    "inserted" : 0,
+    "revised" : 0,
+    "unchanged" : 2343,
+    "retainedAbsent" : 460,
+    "verifiedRows" : 2343,
+    "publicationId" : null,
+    "evidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D003\\owner-8388e761040142e192273e88fd99bdae\\sync-evidence\\index-catalog-2654b31f-1f0a-45cf-a8de-9474ce888b73\\completion.json",
+    "errorCode" : null
+  },
+  "beforeFingerprint" : "36a2349c308cdd7bddfeea985b7c1fb4597581060fb9093e98050c24edff18f8",
+  "backupVerified" : true
+}

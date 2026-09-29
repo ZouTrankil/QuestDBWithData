@@ -42,6 +42,16 @@ public final class DatasetWritePreparation {
             throw new IllegalArgumentException("Static replacement requires a non-WAL whole-table owner");
         return prepareRows(definition,input,mapper,limits);
     }
+    /** Full-row admission for a verified partitioned-WAL stage and whole-table publication. */
+    public static <T> Batch prepareWalReplace(DatasetDefinition definition,List<T> input,
+                                              Function<T,DatasetValues> mapper,Limits limits) {
+        definition.requireCapability(DatasetDefinition.Capability.WAL_REPLACE);
+        if(definition.objectKind()!=DatasetDefinition.ObjectKind.TABLE || !definition.wal()
+                || definition.partition()==DatasetDefinition.Partition.NONE
+                || definition.designatedTimestamp()==null || !definition.dedupKey().isEmpty())
+            throw new IllegalArgumentException("Partitioned WAL replacement contract required");
+        return prepareRows(definition,input,mapper,limits);
+    }
     private static <T> Batch prepareRows(DatasetDefinition definition, List<T> input,
                                          Function<T, DatasetValues> mapper, Limits limits) {
         if (input.size() > limits.maxRows()) throw new IllegalArgumentException("Write page exceeds row bound");

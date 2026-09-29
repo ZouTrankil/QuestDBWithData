@@ -19,6 +19,13 @@ public final class IndexCatalogFileSource {
     public record Input(String path,String sha256,int bytes,List<IndexCatalogEntry> rows) {
         public Input { rows=List.copyOf(rows); }
     }
+    static byte[] readBounded(Path path,int limit) throws java.io.IOException {
+        if(limit<1 || limit>64*1024*1024) throw new IllegalArgumentException("Bounded catalog input limit required");
+        byte[] bytes;
+        try(var input=Files.newInputStream(path)) { bytes=input.readNBytes(limit+1); }
+        if(bytes.length>limit) throw new IllegalArgumentException("Catalog input exceeds byte bound");
+        return bytes;
+    }
     public Input read(Path path,Instant importedAt,BooleanSupplier cancelled) throws Exception {
         Objects.requireNonNull(importedAt);check(cancelled);byte[] bytes;
         try(var input=Files.newInputStream(path)) { bytes=input.readNBytes(MAX_BYTES+1); }

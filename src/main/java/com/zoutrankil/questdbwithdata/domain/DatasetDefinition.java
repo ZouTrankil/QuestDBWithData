@@ -11,7 +11,7 @@ public record DatasetDefinition(
 
     public enum ObjectKind { TABLE, VIEW, MATERIALIZED_VIEW }
     public enum Partition { NONE, HOUR, DAY, WEEK, MONTH, YEAR }
-    public enum Capability { READ, WRITE, STATIC_REPLACE }
+    public enum Capability { READ, WRITE, STATIC_REPLACE, WAL_REPLACE }
     public enum StorageType { BOOLEAN, BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, CHAR, STRING,
         VARCHAR, SYMBOL, UUID, LONG256, BINARY, IPV4, DATE, TIMESTAMP, TIMESTAMP_NS }
     public enum TemporalKind { BUSINESS_DATE, INSTANT, TECHNICAL }
@@ -105,12 +105,17 @@ public record DatasetDefinition(
             throw new IllegalArgumentException("Dedup requires WAL and designated timestamp in key");
         }
         if (objectKind != ObjectKind.TABLE && (capabilities.contains(Capability.WRITE)
-                || capabilities.contains(Capability.STATIC_REPLACE) || !dedupKey.isEmpty())) {
+                || capabilities.contains(Capability.STATIC_REPLACE) || capabilities.contains(Capability.WAL_REPLACE)
+                || !dedupKey.isEmpty())) {
             throw new IllegalArgumentException("Views and materialized views cannot be directly written or upserted");
         }
         if (capabilities.contains(Capability.STATIC_REPLACE) && (capabilities.contains(Capability.WRITE)
                 || wal || partition != Partition.NONE || designatedTimestamp != null || !dedupKey.isEmpty()))
             throw new IllegalArgumentException("Static replacement requires an unpartitioned non-WAL table without direct writes");
+        if (capabilities.contains(Capability.WAL_REPLACE) && (capabilities.contains(Capability.WRITE)
+                || capabilities.contains(Capability.STATIC_REPLACE) || !wal || partition == Partition.NONE
+                || designatedTimestamp == null || !dedupKey.isEmpty()))
+            throw new IllegalArgumentException("WAL replacement requires partitioned WAL without direct writes or dedup");
         if (objectKind == ObjectKind.VIEW && (partition != Partition.NONE || wal)) {
             throw new IllegalArgumentException("Ordinary view has no partition or WAL");
         }

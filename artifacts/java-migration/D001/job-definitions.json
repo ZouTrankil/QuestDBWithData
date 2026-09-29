@@ -4,7 +4,7 @@
   "datasetId" : "exchange_calendar",
   "datasetVersion" : 1,
   "owner" : "exchange_calendar_owner",
-  "supportedModes" : [ "BACKFILL", "RECONCILE", "INCREMENTAL" ],
+  "supportedModes" : [ "BACKFILL", "INCREMENTAL", "RECONCILE" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
     "exchanges" : {
@@ -37,6 +37,52 @@
   "zone" : "Asia/Shanghai",
   "enabled" : true,
   "dailyEligible" : true
+}, {
+  "jobId" : "data.index",
+  "version" : 1,
+  "datasetId" : "index",
+  "datasetVersion" : 1,
+  "owner" : "index_catalog_owner",
+  "supportedModes" : [ "INCREMENTAL", "INGEST" ],
+  "defaultMode" : "INCREMENTAL",
+  "parameters" : {
+    "file" : {
+      "type" : "STRING",
+      "required" : true,
+      "maxLength" : 4096,
+      "maxItems" : 1,
+      "choices" : [ ]
+    },
+    "sha256" : {
+      "type" : "STRING",
+      "required" : true,
+      "maxLength" : 64,
+      "maxItems" : 1,
+      "choices" : [ ]
+    }
+  },
+  "ratePolicyRef" : "file.bounded",
+  "slicePolicyRef" : "index_catalog.file",
+  "verificationPolicyRef" : "questdb.full_key_values",
+  "retry" : {
+    "maxAttempts" : 1,
+    "backoff" : "PT1S",
+    "maxElapsed" : "PT1S"
+  },
+  "timeout" : "PT20M",
+  "budget" : {
+    "maxWindowDays" : 1,
+    "maxSlices" : 1,
+    "maxPages" : 20,
+    "maxRows" : 5000,
+    "maxBatchBytes" : 8388608
+  },
+  "revisionDays" : 0,
+  "dependencies" : [ ],
+  "frequency" : "MANUAL",
+  "zone" : "Asia/Shanghai",
+  "enabled" : true,
+  "dailyEligible" : false
 }, {
   "jobId" : "data.stock_basic",
   "version" : 2,
@@ -85,18 +131,18 @@
   "supportedModes" : [ "INCREMENTAL", "RECONCILE" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
-    "codes" : {
-      "type" : "STRING_LIST",
-      "required" : false,
-      "maxLength" : 12,
-      "maxItems" : 20,
-      "choices" : [ ]
-    },
     "discover" : {
       "type" : "BOOLEAN",
       "required" : true,
       "maxLength" : 1,
       "maxItems" : 1,
+      "choices" : [ ]
+    },
+    "codes" : {
+      "type" : "STRING_LIST",
+      "required" : false,
+      "maxLength" : 12,
+      "maxItems" : 20,
       "choices" : [ ]
     }
   },

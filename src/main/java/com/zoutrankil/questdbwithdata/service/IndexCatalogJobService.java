@@ -54,9 +54,60 @@ public final class IndexCatalogJobService implements SyncJobOwner {
                 || !((String)request.parameters().get("sha256")).matches("[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen absolute file/hash and observation day required");
     }
+    private record PreparedInput(List<IndexCatalogEntry> rows,String receipt,String fingerprint) {
+        private PreparedInput { rows=List.copyOf(rows);Objects.requireNonNull(receipt);Objects.requireNonNull(fingerprint); }
+    }
+    public Result executePrepared(String run,String parent,FrozenRequest request,
+                                  List<IndexCatalogEntry> rows,String receipt) throws Exception {
+        validatePrepared(request);
+        var mapper=new com.zoutrankil.questdbwithdata.mapper.IndexCatalogMapper();
+        var batch=DatasetWritePreparation.prepareWalReplace(IndexCatalogDataset.DEFINITION,rows,mapper::values,
+                new DatasetWritePreparation.Limits(IndexCatalogFileSource.MAX_ROWS,16*1024*1024));
+        var fingerprint=(String)request.parameters().get("payloadFingerprint");
+        if(!batch.fingerprint().equals(fingerprint))
+            throw new IllegalArgumentException("Prepared catalog rows differ from frozen fingerprint");
+        var proof=JobDefinitionJson.mapper().readTree(IndexCatalogFileSource.readBounded(Path.of(receipt),16*1024*1024));
+        if(!batch.fingerprint().equals(proof.path("fingerprint").asText())
+                || !JobDefinitionJson.mapper().valueToTree(batch.rows()).equals(proof.path("rows")))
+            throw new IllegalArgumentException("Prepared catalog input differs from source receipt");
+        return executeInternal(run,parent,request,new PreparedInput(rows,receipt,fingerprint));
+    }
+    private static void validatePrepared(FrozenRequest request) {
+        if(!request.definition().jobId().equals("write.index") || request.definition().version()!=1
+                || !request.definition().datasetId().equals("index")
+                || request.definition().datasetVersion()!=IndexCatalogDataset.DEFINITION.schemaVersion()
+                || request.mode()!=Mode.INGEST || request.from()!=null || request.to()!=null
+                || !(request.parameters().get("payloadFingerprint") instanceof String hash)
+                || !hash.matches("[0-9a-f]{64}"))
+            throw new IllegalArgumentException("Prepared catalog write job contract required");
+    }
     public Result run(FrozenRequest request) throws Exception { return execute("index-catalog-"+UUID.randomUUID(),null,request); }
     public Result finishInterrupted(String run,boolean writerStopped) throws Exception {
         return IndexCatalogRunRecovery.finish(jdbc,path,table,run,writerStopped);
+    }
+    public SyncJobRunner.Result runAsGroupChild(String child,String parent,String expectedTarget,FrozenRequest request) throws Exception {
+        if(!targetId().equals(expectedTarget)) throw new IllegalStateException("Catalog group target changed before execution");
+        var result=execute(child,parent,request);
+        return new SyncJobRunner.Result(result.runId(),result.state(),result.sourceRows(),result.verifiedRows(),result.errorCode());
+    }
+    public String revalidateGroupChild(String child,String expectedTarget,FrozenRequest request) throws Exception {
+        if(request.definition().jobId().equals("write.index")) validatePrepared(request);else validate(request);
+        var ledger=SyncRunLedger.openReadOnly(path);var prior=ledger.getRun(child);
+        if(!Set.of(SyncRunState.VERIFIED,SyncRunState.VERIFIED_EMPTY).contains(ledger.get(child).state())
+                || !prior.targetId().equals(expectedTarget) || !prior.frozenJson().equals(SyncRequestIdentity.snapshotJson(request)))
+            throw new IllegalStateException("Prior catalog child differs from frozen member");
+        var folder=path.getParent().resolve("sync-evidence").resolve(child);var json=JobDefinitionJson.mapper();
+        var prepared=json.readTree(folder.resolve("prepared.json").toFile());
+        Path receipt=folder.resolve("completion.json");var proof=json.readTree(receipt.toFile());
+        if(!prepared.path("runId").asText().equals(child) || !prepared.path("request").asText().equals(prior.frozenJson())
+                || !prepared.path("targetId").asText().equals(expectedTarget) || !proof.path("runId").asText().equals(child))
+            throw new IllegalStateException("Catalog completion differs from frozen run");
+        var before=json.treeToValue(proof.path("before"),IndexCatalogStorage.Snapshot.class);
+        var saved=json.treeToValue(proof.path("actual"),IndexCatalogStorage.Snapshot.class);
+        var actual=new IndexCatalogStorage(jdbc,table).snapshot();
+        if(!expectedTarget.equals(StaticTargetIdentity.identify(jdbc,table,before.identity().id(),before.identity().directory()))
+                || !saved.equals(actual)) throw new IllegalStateException("Completed catalog target drifted");
+        return receipt.toString();
     }
     public Result resume(FrozenRequest request,String priorRun) throws Exception {
         validate(request);var ledger=SyncRunLedger.openReadOnly(path);var prior=ledger.getRun(priorRun);
@@ -72,7 +123,11 @@ public final class IndexCatalogJobService implements SyncJobOwner {
         return execute(next,null,request);
     }
     public Result execute(String run,String parent,FrozenRequest request) throws Exception {
-        validate(request);String target=targetId();var storage=new IndexCatalogStorage(jdbc,table);
+        return executeInternal(run,parent,request,null);
+    }
+    private Result executeInternal(String run,String parent,FrozenRequest request,PreparedInput input) throws Exception {
+        if(input==null) validate(request);
+        String target=targetId();var storage=new IndexCatalogStorage(jdbc,table);
         var ledger=new SyncRunLedger(path);var locks=new DatasetIntervalLock(path);ledger.createRun(run,parent,target,request);
         var folder=path.getParent().resolve("sync-evidence").resolve(run);
         var lease=locks.acquire(run,DatasetIntervalLock.Scope.allDates(datasetId()));
@@ -92,9 +147,26 @@ public final class IndexCatalogJobService implements SyncJobOwner {
             move(ledger,run,SyncRunState.RUNNING,Map.of());
             ledger.createChild(attempt,SyncRunLedger.Kind.ATTEMPT,run,run);entries.addFirst(attempt);move(ledger,attempt,SyncRunState.RUNNING,Map.of());
             ledger.createChild(slice,SyncRunLedger.Kind.SLICE,run,attempt);entries.addFirst(slice);move(ledger,slice,SyncRunState.RUNNING,Map.of("unit","complete merged catalog"));
-            check(cancelled);var source=new IndexCatalogFileSource().read(Path.of((String)request.parameters().get("file")),
-                    Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS),cancelled);
-            if(!source.sha256().equals(request.parameters().get("sha256"))) throw new IllegalStateException("Source file changed after planning");
+            check(cancelled);IndexCatalogFileSource.Input source;
+            if(input==null) {
+                source=new IndexCatalogFileSource().read(Path.of((String)request.parameters().get("file")),
+                        Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS),cancelled);
+                if(!source.sha256().equals(request.parameters().get("sha256")))
+                    throw new IllegalStateException("Source file changed after planning");
+            } else {
+                Path receipt=Path.of(input.receipt()).toAbsolutePath().normalize();
+                byte[] bytes=IndexCatalogFileSource.readBounded(receipt,16*1024*1024);
+                var proof=JobDefinitionJson.mapper().readTree(bytes);
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.IndexCatalogMapper();
+                if(!proof.path("sourceKind").asText().equals("prepared-write-request")
+                        || !proof.path("targetId").asText().equals(target)
+                        || !proof.path("fingerprint").asText().equals(input.fingerprint())
+                        || !JobDefinitionJson.mapper().valueToTree(input.rows().stream().map(mapper::values).toList())
+                                .equals(proof.path("rows")))
+                    throw new IllegalStateException("Prepared catalog receipt changed after admission");
+                String hash=HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+                source=new IndexCatalogFileSource.Input(receipt.toString(),hash,bytes.length,input.rows());
+            }
             sourceCount=source.rows().size();var before=storage.snapshot();
             if(!target.equals(StaticTargetIdentity.identify(jdbc,table,before.identity().id(),before.identity().directory())))
                 throw new IllegalStateException("Target changed after run creation");

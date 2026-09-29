@@ -35,6 +35,8 @@ public final class WriteGroupPlan {
             var limits=new DatasetWritePreparation.Limits(10_000,16*1024*1024);
             var prepared=definition.capabilities().contains(DatasetDefinition.Capability.STATIC_REPLACE)
                     ? DatasetWritePreparation.prepareStatic(definition,member.rows(),java.util.function.Function.identity(),limits)
+                    : definition.capabilities().contains(DatasetDefinition.Capability.WAL_REPLACE)
+                    ? DatasetWritePreparation.prepareWalReplace(definition,member.rows(),java.util.function.Function.identity(),limits)
                     : DatasetWritePreparation.prepare(definition,member.rows(),java.util.function.Function.identity(),limits);
             bytes += prepared.normalizedBytes();
             if (bytes > 64 * 1024 * 1024) throw new IllegalArgumentException("Combined write data exceeds 64 MiB");

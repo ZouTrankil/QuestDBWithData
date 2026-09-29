@@ -42,7 +42,8 @@ public final class IndexCatalogDataset {
                             "One batch import observation, not an upstream revision cursor",
                             new TemporalContract(TemporalKind.INSTANT,"ISO_INSTANT","UTC","MICROS","Import observation"))),
             List.of("index_code"),List.of(),"import_time",Partition.MONTH,true,
-            Set.of(Capability.READ),List.of(),
+            Set.of(Capability.READ,Capability.WAL_REPLACE),List.of(),
             "Current table is monthly WAL without physical dedup. Historical import inserted only new codes. "
-                    + "Read rejects duplicate business identities; write admission awaits a verified source and revision policy.");
+                    + "Read rejects duplicate business identities; writes require bounded full-row WAL staging,"
+                    + " exact readback and journaled whole-table publication.");
 }

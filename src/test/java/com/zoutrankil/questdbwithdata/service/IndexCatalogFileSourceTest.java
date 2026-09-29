@@ -1,6 +1,8 @@
 package com.zoutrankil.questdbwithdata.service;
 
 import com.zoutrankil.questdbwithdata.mapper.IndexCatalogMapper;
+import com.zoutrankil.questdbwithdata.domain.IndexCatalogDataset;
+import com.zoutrankil.questdbwithdata.repository.DatasetWritePreparation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.*;
@@ -48,6 +50,12 @@ class IndexCatalogFileSourceTest {
         assertEquals(2343,input.rows().size());
         var mapper=new IndexCatalogMapper();
         for(var row:input.rows()) assertEquals(row,mapper.fromStorage(mapper.toStorage(row)));
+        var prepared=DatasetWritePreparation.prepareWalReplace(IndexCatalogDataset.DEFINITION,input.rows(),
+                mapper::values,new DatasetWritePreparation.Limits(5000,8*1024*1024));
+        assertEquals(2343,prepared.rows().size());
+        assertThrows(IllegalArgumentException.class,()->DatasetWritePreparation.prepareWalReplace(
+                IndexCatalogDataset.DEFINITION,java.util.List.of(input.rows().getFirst(),input.rows().getFirst()),
+                mapper::values,new DatasetWritePreparation.Limits(5000,8*1024*1024)));
     }
     @Test void boundsAndMalformedUtf8FailBeforeRowsAreAdmitted() throws Exception {
         var rowLimit=assertThrows(IllegalArgumentException.class,()->read(header+row("000300","300","1")

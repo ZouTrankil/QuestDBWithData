@@ -45,6 +45,8 @@ public final class WriteGroupJson {
             var limits=new DatasetWritePreparation.Limits(10000,16*1024*1024);
             var checked=definition.capabilities().contains(DatasetDefinition.Capability.STATIC_REPLACE)
                     ? DatasetWritePreparation.prepareStatic(definition,rows,java.util.function.Function.identity(),limits)
+                    : definition.capabilities().contains(DatasetDefinition.Capability.WAL_REPLACE)
+                    ? DatasetWritePreparation.prepareWalReplace(definition,rows,java.util.function.Function.identity(),limits)
                     : DatasetWritePreparation.prepare(definition,rows,java.util.function.Function.identity(),limits);
             normalizedBytes += checked.normalizedBytes();
             if (normalizedBytes > 64 * 1024 * 1024) throw new IllegalArgumentException("Normalized write group exceeds 64 MiB");

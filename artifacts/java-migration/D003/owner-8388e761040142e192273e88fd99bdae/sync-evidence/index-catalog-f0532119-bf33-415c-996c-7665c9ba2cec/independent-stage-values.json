@@ -1,0 +1,33 @@
+{
+  "source_rows": 2343,
+  "baseline_rows": 2274,
+  "stage_rows": 2803,
+  "matched_source_keys": 2343,
+  "missing_source_keys": [],
+  "retained_target_only_keys": 460,
+  "missing_retained_keys": [],
+  "extra_stage_keys": [],
+  "source_field_differences": {},
+  "retained_field_differences": {},
+  "source_compared_fields": [
+    "index_code",
+    "index_short_name",
+    "index_full_name",
+    "base_date",
+    "base_point",
+    "index_series",
+    "sample_count",
+    "latest_close",
+    "return_1m",
+    "asset_class",
+    "index_hotspot",
+    "currency",
+    "is_cooperation",
+    "has_tracking_product",
+    "compliance_status",
+    "index_category",
+    "publish_date"
+  ],
+  "import_time_rule": "retained rows unchanged; changed rows carry the test import observation",
+  "passed": true
+}

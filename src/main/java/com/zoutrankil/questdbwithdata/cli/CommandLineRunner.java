@@ -30,6 +30,7 @@ public class CommandLineRunner implements ApplicationRunner {
     private final com.zoutrankil.questdbwithdata.service.StockBasicScheduleService scheduleService;
     private final com.zoutrankil.questdbwithdata.service.ExchangeCalendarJobService calendarService;
     private final com.zoutrankil.questdbwithdata.service.StockDetailInfoJobService stockDetailService;
+    private final com.zoutrankil.questdbwithdata.service.IndexCatalogJobService indexCatalogService;
 
     @Autowired
     public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasetRegistry,
@@ -40,7 +41,8 @@ public class CommandLineRunner implements ApplicationRunner {
                              @org.springframework.context.annotation.Lazy
                              com.zoutrankil.questdbwithdata.service.StockBasicScheduleService scheduleService,
                              com.zoutrankil.questdbwithdata.service.ExchangeCalendarJobService calendarService,
-                             com.zoutrankil.questdbwithdata.service.StockDetailInfoJobService stockDetailService) {
+                             com.zoutrankil.questdbwithdata.service.StockDetailInfoJobService stockDetailService,
+                             com.zoutrankil.questdbwithdata.service.IndexCatalogJobService indexCatalogService) {
         this.syncService = syncService;
         this.datasetRegistry = datasetRegistry;
         this.jobRegistry = jobRegistry;
@@ -51,6 +53,17 @@ public class CommandLineRunner implements ApplicationRunner {
         this.scheduleService = scheduleService;
         this.calendarService = calendarService;
         this.stockDetailService = stockDetailService;
+        this.indexCatalogService = indexCatalogService;
+    }
+
+    public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasets, SyncJobRegistry jobs,
+            com.zoutrankil.questdbwithdata.service.StockBasicJobService job,
+            com.zoutrankil.questdbwithdata.service.StockBasicGroupService group, ReadGroupReader read,
+            com.zoutrankil.questdbwithdata.service.StockBasicWriteGroupService write,
+            com.zoutrankil.questdbwithdata.service.StockBasicScheduleService schedule,
+            com.zoutrankil.questdbwithdata.service.ExchangeCalendarJobService calendar,
+            com.zoutrankil.questdbwithdata.service.StockDetailInfoJobService detail) {
+        this(syncService,datasets,jobs,job,group,read,write,schedule,calendar,detail,null);
     }
 
     public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasetRegistry,
@@ -90,6 +103,32 @@ public class CommandLineRunner implements ApplicationRunner {
         String command = args[0];
         Map<String, String> options = parseOptions(args);
         switch (command) {
+            case "plan-index-catalog-job", "run-index-catalog-job" -> {
+                if(!options.keySet().containsAll(java.util.Set.of("--file","--logical-date"))
+                        || !java.util.Set.of("--file","--logical-date","--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit catalog file and logical-date required");
+                boolean plan=command.equals("plan-index-catalog-job");
+                if(plan && options.containsKey("--resume-from")) throw new IllegalArgumentException("Resume is an execution option");
+                var request=indexCatalogService.plan(Path.of(options.get("--file")),java.time.LocalDate.parse(options.get("--logical-date")));
+                var json=com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if(plan) System.out.println(json.writeValueAsString(Map.of("status","PLANNED","executed",false,
+                        "dataVerified",false,"request",json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(request)))));
+                else {
+                    var result=options.containsKey("--resume-from")
+                            ? indexCatalogService.resume(request,options.get("--resume-from")) : indexCatalogService.run(request);
+                    System.out.println(json.writeValueAsString(result));
+                    if(result.errorCode()!=null || result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("Catalog sync incomplete: "+result.state());
+                }
+            }
+            case "finish-index-catalog-publication" -> {
+                if(!options.keySet().equals(java.util.Set.of("--run","--writer-stopped"))
+                        || !"true".equals(options.get("--writer-stopped")))
+                    throw new IllegalArgumentException("Explicit run and writer-stopped true required");
+                var result=indexCatalogService.finishInterrupted(options.get("--run"),true);
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writeValueAsString(result));
+            }
             case "run-exchange-calendar", "plan-exchange-calendar" -> {
                 if (!options.keySet().containsAll(java.util.Set.of("--exchanges","--from","--to","--logical-date"))
                         || !java.util.Set.of("--exchanges","--from","--to","--logical-date","--mode","--resume-from").containsAll(options.keySet()))
@@ -435,6 +474,8 @@ public class CommandLineRunner implements ApplicationRunner {
                 + "show-sync-history [--ledger PATH] [--job ID] [--after RUN_ID] [--limit N] OR "
                 + "show-sync-run --run ID [--ledger PATH] [--after ENTRY_ID] [--limit N] OR "
                 + "run-stock-basic-job --codes CODE,CODE --logical-date YYYY-MM-DD [--resume-from RUN_ID] OR "
+                + "plan-index-catalog-job|run-index-catalog-job --file PATH --logical-date YYYY-MM-DD [--resume-from ID] OR "
+                + "finish-index-catalog-publication --run ID --writer-stopped true OR "
                 + "plan-stock-detail-job|run-stock-detail-job --logical-date YYYY-MM-DD (--codes CODE,CODE|--discover true) "
                 + "[--resume-from FAILED_RUN_ID] OR "
                 + "reconcile-stock-detail-run|finish-stock-detail-publication --run ID --writer-stopped true OR cancel-sync-run --run ID [--ledger PATH]";
