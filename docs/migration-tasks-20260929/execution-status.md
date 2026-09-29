@@ -180,3 +180,53 @@ D002已验收：5910条真实来源与隔离目标完整回读一致（新增2�
 D003继续：直接本地执行。真实目录文件2343行合并原2274行，新增529、修订1814、保留缺席460，隔离发布2803行全字段回读一致；重跑不换表。正式index仍只读。已接入三级任务账本、文件SHA256冻结、CLI和sync组合；组合恢复复用原子任务前实际回读。发布后账本失败保留IN_DOUBT，确认写入者停止后零新来源/零行插入恢复VERIFIED。空源、文件漂移、父取消、锁冲突均验证原目标未变，写入前失败安全重跑通过。组合写入及暂存早期中断恢复仍待完成，D003保持running，累计19项verified，尚未达到第二批提交点。证据：artifacts/java-migration/D003/owner-management-review.md。
 
 D003已验收：真实文件2343行→隔离合并2803行，全字段及独立来源比对一致；job/CLI/读写组合、无变化/空源、取消/锁、阶段恢复通过。最终回归278项：216通过/62条件跳过/0失败。累计20项verified，第二批达到10项提交点；人工pending_review，下一项D004。既有F011–D002部分已由工作区其他本地提交保存，保留其历史，本批仅提交尚未提交的D003收敛变更，不push。
+
+第二批本地收敛提交：2593014，无push。D004已开始：读取ths_index实际2517行、7列和物理键，发现有效字母后缀代码；2517行mapper往返与非法值两项测试通过。官方接口不声明分页且不建议循环，先实现单显式范围有界来源请求。累计仍20项verified，D004未完成。
+
+D004继续：2517行typed分页和独立7列SQL比对通过；来源边界、限流及内容合并测试通过。真实保留来源在隔离库暂存1→2517行，新增2516，11批写入回读一致，Python六来源列独立核对0差异（含12条count为空）。正式表未变；发布阶段恢复、owner与组合管理仍待验收。累计20项verified。
+
+D004继续：修正完整目录观察的缺席代码保留语义与取消误记FAILED。正式owner真实首次2517及重跑通过；受控缺席一条后实际2517行7字段不变；空源/来源失败/取消/锁冲突实际隔离库保留数据与三级账本通过。当前全套299项：225通过/74条件跳过/0失败；正式owner恢复及组合仍待验收，累计20项verified。详见artifacts/java-migration/D004/incremental-owner-boundary-review.md。
+
+D004继续：已接入sync组合，真实首次同步及组合恢复通过，恢复未重新取数。发布后缺回执、发布前完整stage复用/残缺stage重建、无变化中断均实际回读恢复通过，三级账本VERIFIED且锁释放。typed组合写2条实际已有数据及恢复通过。CLI计划/参数专项通过；prepared写入失败恢复与最终回归待收敛，累计仍20项verified。证据见artifacts/java-migration/D004/recovery-composition-review.md。
+
+D004已验收：实际2517条首次owner及重跑、1→2517增量、完整7字段回读和独立来源核对、sync/typed写组合及恢复、CLI管理、空源/取消/锁/发布前后中断与prepared回执漂移拒绝通过。最新全套306项：226通过/80条件跳过/0失败；1016实际增量保留专项通过。累计21项verified，第三批1/10；人工pending_review，下一项D005 index_member。
+
+D005已开始：实际只读5902条/131行业/14列，YEAR/WAL无dedup，全部L2与is_new=Y。查明Python未传is_new，不能将完整历史注释当证据；out_date有旧None字符串，weight/con_code为空。冻结逐L2显式Y/N取数与日期/观察时间分离方向，尚未新增来源或写入，累计21项verified。
+
+D005继续：单L2=801011.SI显式Y/N真实请求分别4/3条，通过共享Java限流HTTP路径，无QDB写入。DTO/domain/mapper完成，键加入纳入日期，退出日可修订；旧None仅存量兼容，来源非法日期拒绝。local-D005-mapping-1019三项通过（7条源与100条存量）；分类来源、读写owner/组合及恢复待完成，累计仍21项verified。
+
+D005继续：仅READ的数据定义/typed repository/read group接入。local-D005-read-1021实际5902条24页、14字段独立SQL全部一致，5902个旧None日期按声明转null。发现并显式兼容历史T00018.SH；未改码或丢行。现有Python部分调用方未筛is_new，历史N仅可隔离验收。writer/owner及恢复待完成，累计21项verified。
+
+D005继续：成员期间增量merge完成，退出日期修订不换键、重新纳入分期间、缺席不删除、来源不提供的weight/con_code保留。local-D005-merge-1022五项通过；1023保存的真实Y4/N3与5902行回读合并新增3历史期间，结果5905（未落库），重跑7条未变。来源adapter/写入owner与恢复待完成，累计21项verified。
+
+D005继续：单L2的IndexMembershipSource支持显式CURRENT/HISTORICAL/BOTH，逐Y/N一页有界请求，分响应与完整slice保存SHA回执；第二请求失败不生成完整回执。1024四项边界通过；1025真实adapter当前4/历史3条通过，无QDB写入。分类发现/任务owner/隔离写入及恢复仍待，累计21项verified。
+
+D005继续：分类adapter固定SW2021/L2有界观察并保存SHA，选择1..32个明确行业scope，is_pub=0不丢弃。1026两项边界及实际分类134→林业ⅡY/N共7条链路通过。正式job分类SHA绑定、逐行业checkpoint及隔离写入/恢复待完成，累计21项verified。
+
+D005继续：物理快照5902条原始值精确读取通过；有界stage写入24批5905条，新增3历史期间、未变4，完整14列实际回读相等。独立Python核对源9字段0差异及5902原始旧行全部保留。重跑不写，正式表未变。stage尚未发布，owner/checkpoint/组合及恢复待完成，累计21项verified。
+
+D005继续：local-D005-publication-1033实际隔离4→7行发布通过，正常及PREPARED/OLD_MOVED/PUBLISHED三阶段中断恢复全14列一致，原4行及备份保留；重复恢复一致、发布前取消不改表。1030/1031测试准备中名称复用后的WAL未就绪现场保留，1033使用已验证seed表规避该准备问题，未宣称底层根因修复。正式owner/checkpoint/CLI/组合待完成，累计21项verified。见artifacts/java-migration/D005/publication-recovery-review.md。
+
+D005继续：分类SHA重新加载与范围冻结4项边界通过；单行业执行器接入三级账本/整表锁/回读后checkpoint。local-D005-slice-owner-1037实际首次7条、重跑7条0写入、另一行业真实空源0条且原7条保留通过，独立源字段0差异。1036因来源opt-in跳过未计验收。多行业串行协调、owner恢复、CLI及读写组合仍待完成；累计21项verified。见artifacts/java-migration/D005/slice-owner-review.md。
+
+D005继续：冻结Y/N原始凭据重建与owner恢复接入。1038发布后未确认恢复实际7条、0新请求/0WAL事务、三级VERIFIED；1041完整stage复用及CREATE后中断重新建stage两项实际通过。来源漂移/未停写证明拒绝。1040 TRUNCATE模拟未完成stage遇WAL未就绪现场保留、不计通过；1041改为实际CREATE后故障注入。无写入恢复、多行业/CLI/组合待完成，累计21项verified。见artifacts/java-migration/D005/owner-recovery-review.md。
+
+D005继续：无变化/真实空来源中断恢复及写入前失败安全重试接入。local-D005-no-write-1043实际三种场景通过，已有7条全14列/身份/WAL事务不变；恢复0新来源请求，重试同范围真实7条未变，换范围和已完成run重试拒绝。三级账本/锁核验通过。多行业串行与复用、CLI/组合及最终回归待完成，累计21项verified。见artifacts/java-migration/D005/no-write-recovery-review.md。
+
+D005继续：多行业批次/父slot及逐行业复用实现。修复IntNode/LongNode表ID快照比较误报，1046原失败现场只读通过；1047实际801011(Y/N)后801217(Y/N)按序4请求、目标7条，整批恢复复用2子run且0新请求、快照不变。批次失败/取消/中断及多个非空行业连续发布待验，CLI/跨数据组合仍待完成；累计21项verified。见artifacts/java-migration/D005/batch-review.md。
+
+D005继续：1049正常/第二行业失败/首行业后取消3场景通过；失败取消均停止后续，恢复仅继续未验行业。1051协调任务与恢复过程再次中断专项通过，旧批次PARTIAL、新批次VERIFIED，已验首行业不重新取数，实际7条全值不变。多个非空行业、更早批次中断、CLI/组合待完成；累计21项verified。见artifacts/java-migration/D005/batch-boundary-review.md。
+
+D005继续：1052两个非空行业4+2连续发布/整表链及外部漂移拒绝通过；1054经注册CLI实际取数写入6条、整批复用及任务查询通过，离线计划无DB/无账本。1053计划误访问尚不存在隔离目标已通过分离离线入口修正并重验。跨数据sync/typed-write组合、更早批次中断及最终回归待完成；累计21项verified。见artifacts/java-migration/D005/cli-chain-review.md。
+
+D005继续：1055本地直接执行组合入口实际通过（1项、0跳过）；两个行业2次真实请求、隔离QuestDB全14字段6条，组合恢复复用原批次且0新请求，完整快照一致、正式表不变。跨不同数据集组合、typed-write组合、更早批次中断及最终回归待完成；累计仍21项verified。见artifacts/java-migration/D005/group-review.md。
+
+D005继续：1056跨数据sync组合实际2517条同花顺指数→6条成员按账本顺序完成，3次请求，恢复两个子任务均复用/0新请求。1057写入策略漏注册及1058强类型快照误比已修复，1059单成员typed-write真实2条回读/恢复不重复写入通过；多数据集typed-write、早期中断及最终回归仍待。累计21项verified，见artifacts/java-migration/D005/group-review.md。
+
+D005继续：1060两个WAL数据typed-write组合实际2+2条完整回读/恢复均复用通过；1061第二数据锁冲突→PARTIAL→释放本次测试锁恢复，仅重试第二数据，首数据原run及完整快照不变，再恢复均复用。早期中断、未创建子任务恢复边界及最终回归仍待；累计21项verified。证据见artifacts/java-migration/D005/group-review.md。
+
+D005继续：1062写入组合第一项验收后取消、第二项childRunId=null的实际恢复通过；改为从原组合冻结记录读取目标身份，首项不重写，第二项新建写入2条，再恢复全部复用。sync同类边界、批次早期退出及最终回归待完成；累计21项verified。证据见artifacts/java-migration/D005/group-review.md。
+
+D005已验收：单行业真实来源 Y4/N3 首次隔离写入7条、同范围真实重跑0写入，空行业0行；14字段QuestDB回读与独立9来源字段核对均无差异。多行业及跨数据sync组合、typed-write双WAL数据组合、部分失败及早期中断恢复通过。准备写入暂存后与已发布后中断恢复各1项通过；批次计划后及slot后首子任务前恢复各1项通过。`local-D005-full-live-build` 48项中46通过、2只读条件跳过、0失败；`local-D005-final-read-build` 补跑2项通过；项目常规回归351项中244通过、107条件跳过、0失败。正式index_member保持5902行、ID1760、WAL writer/sequencer=2且无积压；结果见results/D005.json与artifacts/java-migration/D005/final-review.md。累计22项verified，第三批2/10；人工pending_review。下一项D006 ths_member。
+
+D006已验收：同花顺 `ths_member` 以显式单板块切片请求，真实来源 `885800.TI` 返回506键、`700001.TI` 大板块预检5565行；隔离表首次替换506行并完整复制另5565行，8字段回读与流式原值指纹一致，重跑506行无再次发布。正常/旧表改名后/暂存后与账本失败后恢复、prepared写入组合、sync组合及来源触顶/重复键/取消边界通过。项目常规回归371项中249通过、122条件跳过、0失败；最终正式表只读扫描416612行、ID1779、WAL writerTxn=3，未作正式表发布。结果见results/D006.json与artifacts/java-migration/D006/final-review.md。累计23项verified，第三批3/10；人工pending_review。下一项D007 daily。

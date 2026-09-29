@@ -21,8 +21,9 @@ public final class PersistentWriteGroupRunner {
         boolean staticMemberSeen=false;
         for(var member:plan.members()) {
             if(staticMemberSeen) throw new IllegalArgumentException("Static replacement must be the final write-group member");
-            if(member.definition().capabilities().contains(DatasetDefinition.Capability.STATIC_REPLACE)
-                    || member.definition().capabilities().contains(DatasetDefinition.Capability.WAL_REPLACE))
+            // WAL replacement owners retain original target identities and revalidate published
+            // snapshots on resume, so another independent dataset may follow their publication.
+            if(member.definition().capabilities().contains(DatasetDefinition.Capability.STATIC_REPLACE))
                 staticMemberSeen=true;
         }
         var ids = new HashSet<String>(); plan.members().forEach(m -> ids.add(m.memberId()));
@@ -51,7 +52,7 @@ public final class PersistentWriteGroupRunner {
         // Reject known target, schema, mapping and WAL problems before any member sends.
         for (var adapter : adapters.values()) adapter.preflight(adapter.request());
         var jobs = new SyncJobRegistry(definitions, datasets, modes, new SyncJobRegistry.Policies(
-                Set.of("prepared.local"), Set.of("prepared.single_page","prepared.static"),
+                Set.of("prepared.local"), Set.of("prepared.single_page","prepared.static","prepared.membership.l2"),
                 Set.of("questdb.full_key_values")));
         var definition = new SyncGroupDefinition("group.prepared_writes", 1, groupMembers, true, false);
         var groups = new SyncGroupRegistry(List.of(definition), jobs);

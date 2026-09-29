@@ -17,6 +17,9 @@ public class StockBasicGroupService {
     private final ExchangeCalendarJobService calendar;
     private final StockDetailInfoJobService stockDetail;
     private final IndexCatalogJobService indexCatalog;
+    private final ThsIndexJobService thsIndex;
+    private final IndexMembershipJobService indexMembership;
+    private final ThsMemberJobService thsMember;
     private final Path ledgerPath;
     private static final SyncGroupDefinition SAMPLE = new SyncGroupDefinition("group.stock_basic_manual", 1,
             List.of(new SyncGroupDefinition.Member(new SyncJobDefinition.JobRef("data.stock_basic", 2), List.of())),
@@ -24,11 +27,29 @@ public class StockBasicGroupService {
 
     @org.springframework.beans.factory.annotation.Autowired
     public StockBasicGroupService(SyncJobRegistry jobs, StockBasicJobService stock, ExchangeCalendarJobService calendar,
-            StockDetailInfoJobService stockDetail, IndexCatalogJobService indexCatalog,
+            StockDetailInfoJobService stockDetail, IndexCatalogJobService indexCatalog, ThsIndexJobService thsIndex,
+            IndexMembershipJobService indexMembership, ThsMemberJobService thsMember,
             @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath) {
         this.jobs=jobs; this.stock=stock; this.calendar=calendar; this.stockDetail=stockDetail;
         this.indexCatalog=indexCatalog;
+        this.thsIndex=thsIndex;
+        this.indexMembership=indexMembership;
+        this.thsMember=thsMember;
         this.ledgerPath=Path.of(ledgerPath).toAbsolutePath().normalize();
+    }
+    public StockBasicGroupService(SyncJobRegistry jobs, StockBasicJobService stock, ExchangeCalendarJobService calendar,
+            StockDetailInfoJobService stockDetail, IndexCatalogJobService indexCatalog, ThsIndexJobService thsIndex,
+            IndexMembershipJobService indexMembership, String ledgerPath) {
+        this(jobs,stock,calendar,stockDetail,indexCatalog,thsIndex,indexMembership,null,ledgerPath);
+    }
+    public StockBasicGroupService(SyncJobRegistry jobs, StockBasicJobService stock, ExchangeCalendarJobService calendar,
+            StockDetailInfoJobService stockDetail, IndexCatalogJobService indexCatalog, ThsIndexJobService thsIndex,
+            String ledgerPath) {
+        this(jobs,stock,calendar,stockDetail,indexCatalog,thsIndex,null,null,ledgerPath);
+    }
+    public StockBasicGroupService(SyncJobRegistry jobs,StockBasicJobService stock,ExchangeCalendarJobService calendar,
+                                 StockDetailInfoJobService detail,IndexCatalogJobService catalog,String ledgerPath) {
+        this(jobs,stock,calendar,detail,catalog,null,ledgerPath);
     }
     public StockBasicGroupService(SyncJobRegistry jobs,StockBasicJobService stock,ExchangeCalendarJobService calendar,
                                  StockDetailInfoJobService detail,String ledgerPath) {
@@ -42,8 +63,20 @@ public class StockBasicGroupService {
         this(jobs,stock,null,ledgerPath);
     }
     public List<SyncGroupDefinition> definitions() {
-        if(calendar==null && stockDetail==null && indexCatalog==null) return List.of(SAMPLE);
+        if(calendar==null && stockDetail==null && indexCatalog==null && thsIndex==null && indexMembership==null && thsMember==null) return List.of(SAMPLE);
         var definitions=new ArrayList<SyncGroupDefinition>();definitions.add(SAMPLE);
+        if(thsIndex!=null && indexMembership!=null) {
+            var catalog=new SyncJobDefinition.JobRef("data.ths_index",1);
+            definitions.add(new SyncGroupDefinition("group.market_classification_manual",1,List.of(
+                    new SyncGroupDefinition.Member(catalog,List.of()),
+                    new SyncGroupDefinition.Member(new SyncJobDefinition.JobRef("data.index_member",1),List.of(catalog))),true,false));
+        }
+        if(indexMembership!=null) definitions.add(new SyncGroupDefinition("group.index_member_manual",1,
+                List.of(new SyncGroupDefinition.Member(new SyncJobDefinition.JobRef("data.index_member",1),List.of())),true,false));
+        if(thsMember!=null) definitions.add(new SyncGroupDefinition("group.ths_member_manual",1,
+                List.of(new SyncGroupDefinition.Member(new SyncJobDefinition.JobRef("data.ths_member",1),List.of())),true,false));
+        if(thsIndex!=null) definitions.add(new SyncGroupDefinition("group.ths_index_manual",1,
+                List.of(new SyncGroupDefinition.Member(new SyncJobDefinition.JobRef("data.ths_index",1),List.of())),true,false));
         if(indexCatalog!=null) definitions.add(new SyncGroupDefinition("group.index_catalog_manual",1,
                 List.of(new SyncGroupDefinition.Member(new SyncJobDefinition.JobRef("data.index",1),List.of())),true,false));
         if(calendar!=null) {
@@ -77,6 +110,18 @@ public class StockBasicGroupService {
                   SyncJobDefinition.FrozenRequest frozen) throws Exception {
             if(frozen.definition().jobId().equals("data.exchange_calendar") && calendar!=null)
                 return calendar.runAsGroupChild(childId,parentId,priorChild,target,frozen);
+            if(frozen.definition().jobId().equals("data.ths_index") && thsIndex!=null) {
+                if(priorChild!=null) throw new IllegalStateException("Uncertain THS child needs explicit reconciliation");
+                return thsIndex.runAsGroupChild(childId,parentId,target,frozen);
+            }
+            if(frozen.definition().jobId().equals("data.index_member") && indexMembership!=null) {
+                if(priorChild!=null) throw new IllegalStateException("Uncertain membership child needs explicit reconciliation");
+                return indexMembership.runAsGroupChild(childId,parentId,target,frozen);
+            }
+            if(frozen.definition().jobId().equals("data.ths_member") && thsMember!=null) {
+                if(priorChild!=null) throw new IllegalStateException("Uncertain THS member child needs explicit reconciliation");
+                return thsMember.runAsGroupChild(childId,parentId,target,frozen);
+            }
             if(frozen.definition().jobId().equals("data.index") && indexCatalog!=null) {
                 if(priorChild!=null) throw new IllegalStateException("Uncertain catalog child needs explicit reconciliation");
                 return indexCatalog.runAsGroupChild(childId,parentId,target,frozen);
@@ -93,6 +138,12 @@ public class StockBasicGroupService {
           }
           public String revalidateCompleted(String priorChild,String target,
                   SyncJobDefinition.FrozenRequest frozen) throws Exception {
+              if(frozen.definition().jobId().equals("data.ths_index") && thsIndex!=null)
+                  return thsIndex.revalidateGroupChild(priorChild,target,frozen);
+              if(frozen.definition().jobId().equals("data.index_member") && indexMembership!=null)
+                  return indexMembership.revalidateGroupChild(priorChild,target,frozen);
+              if(frozen.definition().jobId().equals("data.ths_member") && thsMember!=null)
+                  return thsMember.revalidateGroupChild(priorChild,target,frozen);
               if(frozen.definition().jobId().equals("data.index") && indexCatalog!=null)
                   return indexCatalog.revalidateGroupChild(priorChild,target,frozen);
               if(frozen.definition().jobId().equals("data.exchange_calendar") && calendar!=null)
@@ -122,13 +173,19 @@ public class StockBasicGroupService {
             } else if(jobId.equals("data.stock_basic")) target=stock.targetId();
             else if(jobId.equals("data.index") && indexCatalog!=null) {
                 if(priorGroupRunId==null) target=indexCatalog.targetId();
-                else {
-                    var ledger=SyncRunLedger.openReadOnly(ledgerPath);
-                    var prior=ledger.groupMembers(priorGroupRunId).stream().filter(m->m.jobId().equals("data.index")).toList();
-                    if(prior.size()!=1 || prior.getFirst().childRunId()==null)
-                        throw new IllegalStateException("Prior catalog child identity required for group recovery");
-                    target=ledger.getRun(prior.getFirst().childRunId()).targetId();
-                }
+                else target=SyncGroupTargetIdentity.frozen(ledgerPath,priorGroupRunId,jobId);
+            }
+            else if(jobId.equals("data.ths_index") && thsIndex!=null) {
+                if(priorGroupRunId==null) target=thsIndex.targetId();
+                else target=SyncGroupTargetIdentity.frozen(ledgerPath,priorGroupRunId,jobId);
+            }
+            else if(jobId.equals("data.index_member") && indexMembership!=null) {
+                if(priorGroupRunId==null) target=indexMembership.targetId();
+                else target=SyncGroupTargetIdentity.frozen(ledgerPath,priorGroupRunId,jobId);
+            }
+            else if(jobId.equals("data.ths_member") && thsMember!=null) {
+                if(priorGroupRunId==null) target=thsMember.targetId();
+                else target=SyncGroupTargetIdentity.frozen(ledgerPath,priorGroupRunId,jobId);
             }
             else if(jobId.equals("data.stock_detail_info") && stockDetail!=null) target=stockDetail.targetId();
             else throw new IllegalArgumentException("Unsupported group member");

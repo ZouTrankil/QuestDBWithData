@@ -114,8 +114,8 @@ public record DatasetDefinition(
             throw new IllegalArgumentException("Static replacement requires an unpartitioned non-WAL table without direct writes");
         if (capabilities.contains(Capability.WAL_REPLACE) && (capabilities.contains(Capability.WRITE)
                 || capabilities.contains(Capability.STATIC_REPLACE) || !wal || partition == Partition.NONE
-                || designatedTimestamp == null || !dedupKey.isEmpty()))
-            throw new IllegalArgumentException("WAL replacement requires partitioned WAL without direct writes or dedup");
+                || designatedTimestamp == null))
+            throw new IllegalArgumentException("WAL replacement requires partitioned WAL without direct writes");
         if (objectKind == ObjectKind.VIEW && (partition != Partition.NONE || wal)) {
             throw new IllegalArgumentException("Ordinary view has no partition or WAL");
         }

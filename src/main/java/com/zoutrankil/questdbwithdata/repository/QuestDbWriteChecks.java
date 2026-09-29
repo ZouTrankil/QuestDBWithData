@@ -31,7 +31,13 @@ public final class QuestDbWriteChecks {
         var logs=jdbc.queryForList("SELECT suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name=?",table);
         if(tables.size()!=1 || logs.size()!=1) return false;
         var t=tables.getFirst();var w=logs.getFirst();
-        boolean counters=t.get("table_txn")==null && t.get("wal_txn")==null || same(t.get("table_txn"),t.get("wal_txn"));
+        // QuestDB may omit one tables() counter after a WAL table rename. In that
+        // case the remaining counter must agree with the applied wal_tables txn.
+        Object tableTxn=t.get("table_txn"),walTxn=t.get("wal_txn"),writerTxn=w.get("writerTxn");
+        boolean counters=tableTxn==null && walTxn==null
+                || tableTxn!=null && walTxn!=null && same(tableTxn,walTxn)
+                || tableTxn!=null && walTxn==null && same(tableTxn,writerTxn)
+                || tableTxn==null && walTxn!=null && same(walTxn,writerTxn);
         return Boolean.TRUE.equals(t.get("walEnabled")) && Boolean.FALSE.equals(t.get("table_suspended"))
                 && zero(t.get("wal_pending_row_count")) && counters && Boolean.FALSE.equals(w.get("suspended"))
                 && zero(w.get("bufferedTxnSize")) && same(w.get("writerTxn"),w.get("sequencerTxn"));

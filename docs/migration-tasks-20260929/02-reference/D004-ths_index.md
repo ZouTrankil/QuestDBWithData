@@ -1,6 +1,6 @@
 # D004 · ths_index
 
-- 状态：planned，尚未派发。
+- 状态：verified，本地隔离QuestDB实际验收；人工pending_review。结果见[逐项结果](../results/D004.json)与[最终核对](../../../artifacts/java-migration/D004/final-review.md)。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D003`；前项验收后才执行本项。
@@ -25,6 +25,10 @@
 
 ## 本数据sync模式与注意事项
 
+执行契约：默认 INCREMENTAL 为按 ts_code 的内容 upsert。即使接口返回完整目录，也不代表授权删除本次缺席的旧代码；必须保留并登记 retainedAbsent。完整响应缩水超过 2% 或为空时拒绝其完整性，不发布。删除需要另行定义显式 reconcile 契约，本任务未准入。不要把 Python 快照覆盖行为直接移植为增量删除。
+
+接口没有声明历史日期游标/分页，单次有界完整目录观察上限 5000，触顶拒绝；不能伪造 offset/limit，也不能用 update_time 当上游修订时间。按完整业务值比较，未变化不写，变化以不超过 250 行/约 256 KiB 批次暂存，WAL 可见后全字段回读并发布。
+
 以本卡Python入口为准逐参数翻译；实现代码/日期/月份等可支持的有限分片和分页能力声明。先冻结真实request例子及结束条件，不能根据表名套默认全量请求。
 
 Python调用/限流证据（仅源码事实，未逐接口验证线上配额）：
@@ -33,15 +37,15 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 单数据交付清单
 
-- [ ] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
-- [ ] D02：本表业务Key、物理去重键、冲突/修订规则。
-- [ ] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
-- [ ] D04：本表按键/范围的typed read与分页，接入读取组合。
-- [ ] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
-- [ ] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
-- [ ] D07：注册 `ths_index` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
-- [ ] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
-- [ ] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
+- [x] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
+- [x] D02：本表业务Key、物理去重键、冲突/修订规则。
+- [x] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
+- [x] D04：本表按键/范围的typed read与分页，接入读取组合。
+- [x] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
+- [x] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
+- [x] D07：注册 `ths_index` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
+- [x] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
+- [x] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
 
 ## 可观察验收
 
@@ -53,13 +57,13 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 | 当前列 | 快照类型 | 任务要求 |
 | --- | --- | --- |
-| `ts_code` | `SYMBOL` | 待逐字段映射与语义核验 |
-| `name` | `STRING` | 待逐字段映射与语义核验 |
-| `count` | `INT` | 待逐字段映射与语义核验 |
-| `exchange` | `STRING` | 待逐字段映射与语义核验 |
-| `list_date` | `STRING` | 待逐字段映射与语义核验 |
-| `type` | `STRING` | 待逐字段映射与语义核验 |
-| `update_time` | `TIMESTAMP` | 待逐字段映射与语义核验 |
+| `ts_code` | `SYMBOL` | `ts_code` / String；非空自然键，保留数字后字母后缀，不套六位纯数字规则 |
+| `name` | `STRING` | `name` / nullable String；名称，不参与版本判断 |
+| `count` | `INT` | `member_count` / nullable Integer；非负成分数量，不把空值填0 |
+| `exchange` | `STRING` | `exchange` / nullable String；A/HK/US |
+| `list_date` | `STRING` | `listing_date` / LocalDate；YYYYMMDD业务日期，无时区，空值保留 |
+| `type` | `STRING` | `index_type` / nullable String；N/I/R/S/ST/TH/BB |
+| `update_time` | `TIMESTAMP` | `observed_at` / Instant；UTC微秒采集时间，不是交易日或来源修订游标 |
 
 ## 只读参考入口
 
@@ -78,13 +82,13 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 本任务容错、实际验收与完成登记（必做）
 
-- [ ] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
-- [ ] 验证本任务适用的限流/超时重试、分页异常、取消和断点恢复；已ACK但未回读一致的写入保持未验证。
-- [ ] 默认增量，记录checkpoint前后与有限修订窗口；sync有数据才写，没有数据明确记0，不用假数据充数。
-- [ ] 对本任务实际目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留请求范围、查询/参数、返回样本和汇总。
-- [ ] 首次非空真实来源写入、同范围幂等重跑及再次增量验证有记录；本任务为View/MV或功能时按公共契约对应的实际验收方式执行。
-- [ ] 更新[逐项完成表](../completion-register.md)的 `D004` 行及 `results/D004.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
-- [ ] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
+- [x] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
+- [x] 验证本任务适用的限流/超时重试、分页异常、取消和断点恢复；已ACK但未回读一致的写入保持未验证。
+- [x] 默认增量，记录checkpoint前后与有限修订窗口；sync有数据才写，没有数据明确记0，不用假数据充数。
+- [x] 对本任务实际目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留请求范围、查询/参数、返回样本和汇总。
+- [x] 首次非空真实来源写入、同范围幂等重跑及再次增量验证有记录；本任务为View/MV或功能时按公共契约对应的实际验收方式执行。
+- [x] 更新[逐项完成表](../completion-register.md)的 `D004` 行及 `results/D004.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
+- [x] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
 
 ## Orca执行提示
 

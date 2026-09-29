@@ -31,6 +31,12 @@ public class CommandLineRunner implements ApplicationRunner {
     private final com.zoutrankil.questdbwithdata.service.ExchangeCalendarJobService calendarService;
     private final com.zoutrankil.questdbwithdata.service.StockDetailInfoJobService stockDetailService;
     private final com.zoutrankil.questdbwithdata.service.IndexCatalogJobService indexCatalogService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.ThsIndexJobService thsIndexService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.IndexMembershipJobService indexMembershipService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.ThsMemberJobService thsMemberService;
 
     @Autowired
     public CommandLineRunner(StockBasicSyncService syncService, DatasetRegistry datasetRegistry,
@@ -103,6 +109,58 @@ public class CommandLineRunner implements ApplicationRunner {
         String command = args[0];
         Map<String, String> options = parseOptions(args);
         switch (command) {
+            case "plan-ths-member-job", "run-ths-member-job" -> {
+                if (thsMemberService == null || !options.keySet().equals(java.util.Set.of("--board-code", "--logical-date")))
+                    throw new IllegalArgumentException("Exact THS board and logical date required");
+                var request = thsMemberService.plan(options.get("--board-code"),
+                        java.time.LocalDate.parse(options.get("--logical-date")));
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (command.equals("plan-ths-member-job"))
+                    System.out.println(json.writeValueAsString(Map.of("status", "PLANNED", "executed", false,
+                            "dataVerified", false, "targetId", thsMemberService.targetId(),
+                            "request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(request)))));
+                else {
+                    var result = thsMemberService.run(request);
+                    System.out.println(json.writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("THS member sync incomplete: " + result.state());
+                }
+            }
+            case "finish-ths-member-publication" -> {
+                if (thsMemberService == null || !options.keySet().equals(java.util.Set.of("--run", "--writer-stopped"))
+                        || !"true".equals(options.get("--writer-stopped")))
+                    throw new IllegalArgumentException("Explicit THS member run and stopped writer proof required");
+                var result = thsMemberService.finishInterrupted(options.get("--run"), true);
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writeValueAsString(result));
+            }
+            case "discover-index-member-catalog", "plan-index-member-job", "run-index-member-job", "finish-index-member-child", "finish-index-member-prepared" ->
+                    IndexMembershipCommands.execute(command,options,indexMembershipService);
+            case "plan-ths-index-job", "run-ths-index-job" -> {
+                if(thsIndexService==null || !options.keySet().contains("--logical-date")
+                        || !java.util.Set.of("--logical-date","--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit THS logical-date and registered owner required");
+                boolean plan=command.equals("plan-ths-index-job");
+                if(plan && options.containsKey("--resume-from")) throw new IllegalArgumentException("Resume is an execution option");
+                var request=thsIndexService.plan(java.time.LocalDate.parse(options.get("--logical-date")));
+                var json=com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if(plan) System.out.println(json.writeValueAsString(Map.of("status","PLANNED","executed",false,
+                        "dataVerified",false,"request",json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(request)))));
+                else {
+                    var result=options.containsKey("--resume-from")
+                            ? thsIndexService.resume(request,options.get("--resume-from")) : thsIndexService.run(request);
+                    System.out.println(json.writeValueAsString(result));
+                    if(result.errorCode()!=null || result.state()!=com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED)
+                        throw new IncompleteCommandException("THS sync incomplete: "+result.state());
+                }
+            }
+            case "finish-ths-index-publication" -> {
+                if(thsIndexService==null || !options.keySet().equals(java.util.Set.of("--run","--writer-stopped"))
+                        || !"true".equals(options.get("--writer-stopped")))
+                    throw new IllegalArgumentException("Explicit run and writer-stopped true required");
+                var result=thsIndexService.finishInterrupted(options.get("--run"),true);
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writeValueAsString(result));
+            }
             case "plan-index-catalog-job", "run-index-catalog-job" -> {
                 if(!options.keySet().containsAll(java.util.Set.of("--file","--logical-date"))
                         || !java.util.Set.of("--file","--logical-date","--resume-from").containsAll(options.keySet()))
@@ -474,6 +532,14 @@ public class CommandLineRunner implements ApplicationRunner {
                 + "show-sync-history [--ledger PATH] [--job ID] [--after RUN_ID] [--limit N] OR "
                 + "show-sync-run --run ID [--ledger PATH] [--after ENTRY_ID] [--limit N] OR "
                 + "run-stock-basic-job --codes CODE,CODE --logical-date YYYY-MM-DD [--resume-from RUN_ID] OR "
+                + "plan-ths-index-job|run-ths-index-job --logical-date YYYY-MM-DD [--resume-from ID] OR "
+                + "plan-ths-member-job|run-ths-member-job --board-code THS_CODE --logical-date YYYY-MM-DD OR "
+                + "finish-ths-member-publication --run ID --writer-stopped true OR "
+                + "discover-index-member-catalog --output-directory PATH OR "
+                + "plan-index-member-job|run-index-member-job --classification-receipt PATH --classification-sha256 SHA "
+                + "--industries CODE,CODE --selection CURRENT|HISTORICAL|BOTH --logical-date YYYY-MM-DD "
+                + "[--resume-from ID [--writer-stopped true]] OR finish-index-member-child|finish-index-member-prepared --run ID --writer-stopped true OR "
+                + "finish-ths-index-publication --run ID --writer-stopped true OR "
                 + "plan-index-catalog-job|run-index-catalog-job --file PATH --logical-date YYYY-MM-DD [--resume-from ID] OR "
                 + "finish-index-catalog-publication --run ID --writer-stopped true OR "
                 + "plan-stock-detail-job|run-stock-detail-job --logical-date YYYY-MM-DD (--codes CODE,CODE|--discover true) "

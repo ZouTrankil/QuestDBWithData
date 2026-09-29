@@ -33,6 +33,10 @@ public class TushareProperties {
         var limits = new java.util.HashMap<>(endpointLimits);
         limits.put("trade_cal",Math.min(20,Math.min(endpointPerMinute,limits.getOrDefault("trade_cal",endpointPerMinute))));
         limits.put("stock_basic",Math.min(50,Math.min(endpointPerMinute,limits.getOrDefault("stock_basic",endpointPerMinute))));
+        limits.put("ths_index",Math.min(200,Math.min(endpointPerMinute,limits.getOrDefault("ths_index",endpointPerMinute))));
+        limits.put("ths_member",Math.min(200,Math.min(endpointPerMinute,limits.getOrDefault("ths_member",endpointPerMinute))));
+        limits.put("index_classify",Math.min(100,Math.min(endpointPerMinute,limits.getOrDefault("index_classify",endpointPerMinute))));
+        limits.put("index_member_all",Math.min(5000,Math.min(endpointPerMinute,limits.getOrDefault("index_member_all",endpointPerMinute))));
         return java.util.Map.copyOf(limits);
     }
     public void setEndpointLimits(java.util.Map<String, Integer> value) { endpointLimits = value; }

@@ -48,7 +48,7 @@ public final class DatasetWritePreparation {
         definition.requireCapability(DatasetDefinition.Capability.WAL_REPLACE);
         if(definition.objectKind()!=DatasetDefinition.ObjectKind.TABLE || !definition.wal()
                 || definition.partition()==DatasetDefinition.Partition.NONE
-                || definition.designatedTimestamp()==null || !definition.dedupKey().isEmpty())
+                || definition.designatedTimestamp()==null)
             throw new IllegalArgumentException("Partitioned WAL replacement contract required");
         return prepareRows(definition,input,mapper,limits);
     }

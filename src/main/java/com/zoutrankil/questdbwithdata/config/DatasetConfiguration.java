@@ -29,7 +29,7 @@ public class DatasetConfiguration {
         }
         return new SyncJobRegistry(jobs, datasets, modes,
                 new SyncJobRegistry.Policies(
-                        Set.of("tushare.shared","file.bounded"), Set.of("stock_basic.snapshot","exchange_calendar.year","stock_detail_info.identity","index_catalog.file"),
+                        Set.of("tushare.shared","file.bounded"), Set.of("stock_basic.snapshot","exchange_calendar.year","stock_detail_info.identity","index_catalog.file","ths_index.complete","index_member.l2_explicit","ths_member.board"),
                         Set.of("questdb.full_key_values")));
     }
 }

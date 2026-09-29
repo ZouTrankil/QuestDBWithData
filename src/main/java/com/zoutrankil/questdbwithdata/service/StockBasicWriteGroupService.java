@@ -22,19 +22,45 @@ public class StockBasicWriteGroupService {
     private final ExchangeCalendarJobService calendarTarget;
     private final StockDetailInfoJobService stockDetailTarget;
     private final IndexCatalogJobService indexCatalogTarget;
+    private final ThsIndexJobService thsIndexTarget;
+    private final IndexMembershipJobService indexMembershipTarget;
+    private final ThsMemberJobService thsMemberTarget;
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
     private final Path ledger;
     @org.springframework.beans.factory.annotation.Autowired
     public StockBasicWriteGroupService(DatasetRegistry datasets, StockBasicJobService target,
             ExchangeCalendarJobService calendarTarget,StockDetailInfoJobService stockDetailTarget,
-            IndexCatalogJobService indexCatalogTarget,
+            IndexCatalogJobService indexCatalogTarget,ThsIndexJobService thsIndexTarget,
+            IndexMembershipJobService indexMembershipTarget,ThsMemberJobService thsMemberTarget,
             JdbcTemplate jdbc, @Lazy QuestDB questdb,
             @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledger) {
         this.datasets=datasets; this.target=target; this.jdbc=jdbc; this.questdb=questdb;
         this.calendarTarget=calendarTarget;this.stockDetailTarget=stockDetailTarget;
         this.indexCatalogTarget=indexCatalogTarget;
+        this.thsIndexTarget=thsIndexTarget;
+        this.indexMembershipTarget=indexMembershipTarget;
+        this.thsMemberTarget=thsMemberTarget;
         this.ledger=Path.of(ledger).toAbsolutePath().normalize();
+    }
+    public StockBasicWriteGroupService(DatasetRegistry datasets, StockBasicJobService target,
+            ExchangeCalendarJobService calendarTarget,StockDetailInfoJobService stockDetailTarget,
+            IndexCatalogJobService indexCatalogTarget,ThsIndexJobService thsIndexTarget,
+            IndexMembershipJobService indexMembershipTarget,
+            JdbcTemplate jdbc,QuestDB questdb,String ledger) {
+        this(datasets,target,calendarTarget,stockDetailTarget,indexCatalogTarget,thsIndexTarget,
+                indexMembershipTarget,null,jdbc,questdb,ledger);
+    }
+    public StockBasicWriteGroupService(DatasetRegistry datasets, StockBasicJobService target,
+            ExchangeCalendarJobService calendarTarget,StockDetailInfoJobService stockDetailTarget,
+            IndexCatalogJobService indexCatalogTarget,ThsIndexJobService thsIndexTarget,
+            JdbcTemplate jdbc,QuestDB questdb,String ledger) {
+        this(datasets,target,calendarTarget,stockDetailTarget,indexCatalogTarget,thsIndexTarget,null,null,jdbc,questdb,ledger);
+    }
+    public StockBasicWriteGroupService(DatasetRegistry datasets, StockBasicJobService target,
+            ExchangeCalendarJobService calendarTarget,StockDetailInfoJobService stockDetailTarget,
+            IndexCatalogJobService indexCatalogTarget,JdbcTemplate jdbc,QuestDB questdb,String ledger) {
+        this(datasets,target,calendarTarget,stockDetailTarget,indexCatalogTarget,null,null,null,jdbc,questdb,ledger);
     }
     public StockBasicWriteGroupService(DatasetRegistry datasets, StockBasicJobService target,
             ExchangeCalendarJobService calendarTarget,StockDetailInfoJobService stockDetailTarget,
@@ -48,7 +74,8 @@ public class StockBasicWriteGroupService {
     public StockBasicWriteGroupService(DatasetRegistry datasets, StockBasicJobService target, JdbcTemplate jdbc,
             QuestDB questdb, String ledger) {
         this.datasets=datasets; this.target=target; this.calendarTarget=null; this.jdbc=jdbc; this.questdb=questdb;
-        this.stockDetailTarget=null;this.indexCatalogTarget=null;
+        this.stockDetailTarget=null;this.indexCatalogTarget=null;this.thsIndexTarget=null;this.indexMembershipTarget=null;
+        this.thsMemberTarget=null;
         this.ledger=Path.of(ledger).toAbsolutePath().normalize();
     }
     public SyncGroupRunner.Result run(Path file, String priorRun) throws Exception {
@@ -69,14 +96,19 @@ public class StockBasicWriteGroupService {
             } else if(member.datasetId().equals(IndexCatalogDataset.DEFINITION.datasetId())
                     && indexCatalogTarget!=null) {
                 if(priorRun==null) targets.put(member.datasetId(),indexCatalogTarget.targetId());
-                else {
-                    var prior=SyncRunLedger.openReadOnly(ledger).groupMembers(priorRun).stream()
-                            .filter(m->m.jobId().equals("write.index")).toList();
-                    if(prior.size()!=1 || prior.getFirst().childRunId()==null)
-                        throw new IllegalStateException("Prior catalog write child identity required");
-                    targets.put(member.datasetId(),SyncRunLedger.openReadOnly(ledger)
-                            .getRun(prior.getFirst().childRunId()).targetId());
-                }
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.index"));
+            } else if(member.datasetId().equals(ThsIndexDataset.DEFINITION.datasetId())
+                    && thsIndexTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),thsIndexTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.ths_index"));
+            } else if(member.datasetId().equals(IndexMembershipDataset.DEFINITION.datasetId())
+                    && indexMembershipTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),indexMembershipTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.index_member"));
+            } else if(member.datasetId().equals(ThsMemberDataset.DEFINITION.datasetId())
+                    && thsMemberTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),thsMemberTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.ths_member"));
             } else throw new IllegalArgumentException("No admitted write owner for requested dataset");
         }
         var plan = WriteGroupPlan.prepare(request, datasets, targets);
@@ -106,6 +138,15 @@ public class StockBasicWriteGroupService {
             } else if(member.definition().datasetId().equals(IndexCatalogDataset.DEFINITION.datasetId())) {
                 adapters.put(member.memberId(),new IndexCatalogPreparedWriteAdapter(plan,member.memberId(),
                         indexCatalogTarget,evidence.resolve(run),priorRun!=null));
+            } else if(member.definition().datasetId().equals(ThsIndexDataset.DEFINITION.datasetId())) {
+                adapters.put(member.memberId(),new ThsIndexPreparedWriteAdapter(plan,member.memberId(),
+                        thsIndexTarget,evidence.resolve(run),priorRun!=null));
+            } else if(member.definition().datasetId().equals(IndexMembershipDataset.DEFINITION.datasetId())) {
+                adapters.put(member.memberId(),new IndexMembershipPreparedWriteAdapter(plan,member.memberId(),
+                        indexMembershipTarget,evidence.resolve(run),priorRun!=null));
+            } else if(member.definition().datasetId().equals(ThsMemberDataset.DEFINITION.datasetId())) {
+                adapters.put(member.memberId(),new ThsMemberPreparedWriteAdapter(plan,member.memberId(),
+                        thsMemberTarget,evidence.resolve(run),priorRun!=null));
             } else throw new IllegalArgumentException("No prepared adapter for dataset");
         }
         return new PersistentWriteGroupRunner(ledger, evidence, datasets)

@@ -11,7 +11,14 @@ import java.util.*;
 public final class ReferencePublicationJournal {
     public enum State { PREPARED,OLD_MOVED,PUBLISHED,VERIFIED,IN_DOUBT,RESUMING }
     public record Intent(String id,String dataset,String runId,String target,String backup,String stage,
-                         String initialTarget,long originalId,String originalDirectory,long replacementId,String beforeFingerprint,String afterFingerprint) {
+                         String initialTarget,long originalId,String originalDirectory,long replacementId,String beforeFingerprint,
+                         String afterFingerprint,String scope) {
+        public Intent(String id,String dataset,String runId,String target,String backup,String stage,
+                      String initialTarget,long originalId,String originalDirectory,long replacementId,
+                      String beforeFingerprint,String afterFingerprint) {
+            this(id,dataset,runId,target,backup,stage,initialTarget,originalId,originalDirectory,
+                    replacementId,beforeFingerprint,afterFingerprint,null);
+        }
         public Intent {
             DatasetDefinition.identifier(dataset);DatasetDefinition.identifier(target);
             DatasetDefinition.identifier(backup);DatasetDefinition.identifier(stage);
