@@ -1,0 +1,74 @@
+{
+  "actual" : {
+    "identity" : {
+      "id" : 2267,
+      "directory" : "java_index_catalog_stage_2468f84ddd3549ab856fbdfa12271109~2267"
+    },
+    "rows" : [ {
+      "indexCode" : "000300",
+      "indexShortName" : "沪深300",
+      "indexFullName" : "沪深300指数",
+      "baseDate" : "2004-12-31",
+      "basePoint" : 1000.0,
+      "indexSeries" : "中证系列指数",
+      "sampleCount" : 300.0,
+      "latestClose" : 4598.32,
+      "return1m" : -6.95,
+      "assetClass" : "股票",
+      "indexHotspot" : null,
+      "currency" : "人民币",
+      "isCooperation" : "否",
+      "hasTrackingProduct" : "是",
+      "complianceStatus" : "IOSCO",
+      "indexCategory" : "规模",
+      "publishDate" : "2005-04-08",
+      "importTime" : "2026-09-29T08:57:53.490711Z"
+    }, {
+      "indexCode" : "000510",
+      "indexShortName" : "中证A500",
+      "indexFullName" : "中证A500指数",
+      "baseDate" : "2004-12-31",
+      "basePoint" : 1000.0,
+      "indexSeries" : "中证系列指数",
+      "sampleCount" : 500.0,
+      "latestClose" : 5622.82,
+      "return1m" : -9.6,
+      "assetClass" : "股票",
+      "indexHotspot" : null,
+      "currency" : "人民币",
+      "isCooperation" : "否",
+      "hasTrackingProduct" : "是",
+      "complianceStatus" : "无",
+      "indexCategory" : "规模",
+      "publishDate" : "2024-09-23",
+      "importTime" : "2026-09-29T08:57:53.490711Z"
+    } ],
+    "fingerprint" : "ebc0ea06d91b368e18ad0023e9a3a665ee8c46b0ca55693a395aed897443aa92",
+    "bytes" : 918
+  },
+  "first" : {
+    "runId" : "write-group-79af3e29-156d-4374-9f9d-143c2379b789",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.index",
+      "childRunId" : "run-417819fd-11fb-4edc-9673-47fce0ab2656",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 2
+    } ]
+  },
+  "input" : "artifacts\\java-migration\\D003\\prepared-397b3044e0514892a13475450b7b496b\\write-group.json",
+  "second" : {
+    "runId" : "write-group-4aeb053b-adb2-410b-8e26-4d6146864cab",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.index",
+      "childRunId" : "run-417819fd-11fb-4edc-9673-47fce0ab2656",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    } ]
+  }
+}

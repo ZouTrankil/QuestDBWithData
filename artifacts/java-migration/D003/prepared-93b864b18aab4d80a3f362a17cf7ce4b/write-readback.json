@@ -1,0 +1,74 @@
+{
+  "first" : {
+    "runId" : "write-group-5c838189-7c2a-45fe-8053-a221b22230e2",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.index",
+      "childRunId" : "run-c725db97-099f-4381-96c3-23da3bc39ee4",
+      "state" : "VERIFIED",
+      "reused" : false,
+      "verifiedRows" : 2
+    } ]
+  },
+  "input" : "artifacts\\java-migration\\D003\\prepared-93b864b18aab4d80a3f362a17cf7ce4b\\write-group.json",
+  "second" : {
+    "runId" : "write-group-2eacf590-61ba-45be-bf48-a929abfbfcc2",
+    "state" : "VERIFIED",
+    "members" : [ {
+      "ordinal" : 0,
+      "jobId" : "write.index",
+      "childRunId" : "run-c725db97-099f-4381-96c3-23da3bc39ee4",
+      "state" : "VERIFIED",
+      "reused" : true,
+      "verifiedRows" : 0
+    } ]
+  },
+  "actual" : {
+    "identity" : {
+      "id" : 2257,
+      "directory" : "java_index_catalog_stage_effd1dd5ba7d448a9413bd81578cf9ad~2257"
+    },
+    "rows" : [ {
+      "indexCode" : "000300",
+      "indexShortName" : "沪深300",
+      "indexFullName" : "沪深300指数",
+      "baseDate" : "2004-12-31",
+      "basePoint" : 1000.0,
+      "indexSeries" : "中证系列指数",
+      "sampleCount" : 300.0,
+      "latestClose" : 4598.32,
+      "return1m" : -6.95,
+      "assetClass" : "股票",
+      "indexHotspot" : null,
+      "currency" : "人民币",
+      "isCooperation" : "否",
+      "hasTrackingProduct" : "是",
+      "complianceStatus" : "IOSCO",
+      "indexCategory" : "规模",
+      "publishDate" : "2005-04-08",
+      "importTime" : "2026-09-29T08:52:27.473457Z"
+    }, {
+      "indexCode" : "000510",
+      "indexShortName" : "中证A500",
+      "indexFullName" : "中证A500指数",
+      "baseDate" : "2004-12-31",
+      "basePoint" : 1000.0,
+      "indexSeries" : "中证系列指数",
+      "sampleCount" : 500.0,
+      "latestClose" : 5622.82,
+      "return1m" : -9.6,
+      "assetClass" : "股票",
+      "indexHotspot" : null,
+      "currency" : "人民币",
+      "isCooperation" : "否",
+      "hasTrackingProduct" : "是",
+      "complianceStatus" : "无",
+      "indexCategory" : "规模",
+      "publishDate" : "2024-09-23",
+      "importTime" : "2026-09-29T08:52:27.473457Z"
+    } ],
+    "fingerprint" : "a44df340dcde44d71c4b71dfec2275928242a282eeb5bb7e9c918df46caadad3",
+    "bytes" : 918
+  }
+}

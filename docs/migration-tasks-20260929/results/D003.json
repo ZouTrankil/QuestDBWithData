@@ -1,0 +1,128 @@
+{
+  "task_id": "D003",
+  "dataset_id": "index",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "job_id": "data.index",
+  "job_version": 1,
+  "run_id": "index-catalog-f0532119-bf33-415c-996c-7665c9ba2cec",
+  "logical_date": "2026-09-29",
+  "acceptance_recorded_at": "2026-09-29T08:57:58.405119+00:00",
+  "completion_receipt_time": "2026-09-29T08:25:46.315070+00:00",
+  "target": {
+    "production_table_read_only": "index",
+    "isolated": true,
+    "isolated_table": "java_d003_owner_8388e761040142e192273e88fd99bdae",
+    "before_identity": {
+      "id": 2227,
+      "directory": "java_d003_owner_8388e761040142e192273e88fd99bdae~2227"
+    },
+    "after_identity": {
+      "id": 2228,
+      "directory": "java_index_catalog_stage_d302f030cd1049349d984d80af90f243~2228"
+    },
+    "wal": true,
+    "partition": "MONTH",
+    "designated_timestamp": "import_time",
+    "dedup": false,
+    "business_key": [
+      "index_code"
+    ],
+    "production_unchanged": true,
+    "successful_test_tables_removed": true
+  },
+  "source": {
+    "kind": "bounded explicit historical catalog file; not Tushare",
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D003\\source-catalog.csv",
+    "sha256": "ad425d6fe165383e6af0ed698372d94741ab6691f16b5e124435406fe3c7608b",
+    "returned_rows": 2343,
+    "normalized_rows": 2343,
+    "rejected_rows": 0,
+    "xlsx_provenance": "artifacts/java-migration/D003/source-provenance.json",
+    "market_as_of": "not declared by source; import_time is observation only"
+  },
+  "incremental": {
+    "mode": "INCREMENTAL",
+    "kind": "bounded file content merge by index_code",
+    "checkpoint_before": "36a2349c308cdd7bddfeea985b7c1fb4597581060fb9093e98050c24edff18f8",
+    "checkpoint_after": "cd3479e24213dadc908be2db442089c05bd2341f812fc9bc0ca4370f4432dac9",
+    "checkpoint_kind": "verified physical identity and complete content fingerprint",
+    "retained_absent_rows": 460,
+    "implicit_deletes": 0,
+    "repeat_inserted": 0,
+    "repeat_revised": 0,
+    "repeat_physical_identity_unchanged": true
+  },
+  "write": {
+    "inserted_rows": 529,
+    "revised_rows": 1814,
+    "staged_rows": 2803,
+    "batch_row_limit": 250,
+    "estimated_batch_payload_limit": 262144,
+    "publication_id": "catalog-publication-1eee6a8e-c779-4fdd-bca9-7d7bb1ce529b",
+    "backup_verified": true
+  },
+  "questdb_readback": {
+    "actual_rows": 2803,
+    "matched_source_keys": 2343,
+    "retained_keys": 460,
+    "missing_keys": 0,
+    "extra_keys": 0,
+    "mismatched_fields": 0,
+    "physical_columns": 18,
+    "independent_source_fields": 17,
+    "retained_import_time_unchanged": true,
+    "evidence": "artifacts/java-migration/D003/owner-8388e761040142e192273e88fd99bdae/sync-evidence/index-catalog-f0532119-bf33-415c-996c-7665c9ba2cec/completion.json",
+    "independent_comparison": "artifacts/java-migration/D003/owner-8388e761040142e192273e88fd99bdae/sync-evidence/index-catalog-f0532119-bf33-415c-996c-7665c9ba2cec/independent-stage-values.json"
+  },
+  "checks": {
+    "typed_read_and_read_group": true,
+    "file_owner_and_three_level_ledger": true,
+    "sync_group_and_revalidated_resume": true,
+    "prepared_write_group_and_resume": true,
+    "cli_plan_without_ledger_creation": true,
+    "empty_source_preserves_target": true,
+    "changed_file_rejected": true,
+    "parent_cancel_and_busy_lock": true,
+    "safe_prewrite_failure_replay": true,
+    "published_missing_receipt_recovery": true,
+    "old_moved_publication_recovery": true,
+    "full_stage_reuse": true,
+    "incomplete_stage_preserved_and_rebuilt": true,
+    "no_write_and_empty_observation_recovery": true,
+    "http_rate_limit": "N/A: confirmed local file owner; bounded 8 MiB/5000 rows; no network fetch"
+  },
+  "regression": {
+    "build": "local-D003-final-regression-0930",
+    "tests": 278,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 62,
+    "passed": 216
+  },
+  "evidence_paths": [
+    "artifacts/java-migration/D003/owner-management-review.md",
+    "artifacts/java-migration/D003/early-recovery-review.md",
+    "artifacts/java-migration/D003/source-mapping-read-review.md",
+    "artifacts/java-migration/D003/merge-staging-review.md",
+    "artifacts/java-migration/D003/publication-review.md",
+    "var/local-D003-no-write-recovery-0930-build/test-results/test",
+    "var/local-D003-write-regression-0930-build/test-results/test",
+    "var/local-D003-prepared-recovery-build/test-results/test",
+    "var/local-D003-boundary-0930-build/test-results/test",
+    "var/local-D003-group-live-0930-build/test-results/test"
+  ],
+  "validation_limits": {
+    "production_cutover": "not performed",
+    "source_freshness": "file selected explicitly; no market as-of is declared",
+    "process_kill": "durable interrupted states and Error injection; no OS process kill",
+    "write_group_sample": "two real file rows; full-file owner acceptance uses all 2343 rows",
+    "failed_scene": "owned early failure reconciled; retained target/backup documented; unrelated scenes untouched"
+  },
+  "blockers": [],
+  "next_manual_comparison": "Compare source provenance, all 17 source fields, 529 new and 1814 revised codes, 460 retained codes and timestamps; inspect full owner/group/recovery receipts. Human acceptance remains pending_review."
+}
