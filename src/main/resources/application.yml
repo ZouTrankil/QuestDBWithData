@@ -1,6 +1,4 @@
 spring:
-  main:
-    web-application-type: none
   datasource:
     url: "jdbc:postgresql://${app.questdb.host}:${app.questdb.pg-port}/${app.questdb.database}?sslmode=disable"
     username: "${app.questdb.username}"
@@ -9,7 +7,16 @@ spring:
       connection-timeout: 5000
       maximum-pool-size: 4
 
+server:
+  port: ${APP_PORT:8080}
+
 app:
+  web:
+    enabled: true
+    # Empty means development mode without authentication. Set APP_API_TOKEN in production.
+    api-token: ${APP_API_TOKEN:}
+    allowed-origins: ${APP_ALLOWED_ORIGINS:*}
+
   time:
     business-zone: Asia/Shanghai
   migration:

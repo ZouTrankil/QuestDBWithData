@@ -20,6 +20,7 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql:42.7.7'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-webclient'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.batch:spring-batch-core'
     implementation 'org.springframework:spring-context-support'
     implementation 'org.quartz-scheduler:quartz'
@@ -50,7 +51,14 @@ java {
 }
 
 application {
-    mainClass = 'com.zoutrankil.questdbwithdata.QuestDbWithDataApplication'
+    mainClass = 'com.zoutrankil.data.QuestDataApplication'
+}
+
+tasks.register('webRun', JavaExec) {
+    group = 'application'
+    description = 'Start the external Spring WebFlux API on the configured HTTP port.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.zoutrankil.data.QuestDataApplication'
 }
 
 tasks.named('test') {

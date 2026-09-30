@@ -42,6 +42,20 @@ See [docs/questdb-usage.md](docs/questdb-usage.md) for QuestDB conventions, [doc
 
 For the current migration status, including implemented framework capabilities and data/business functions not yet migrated, see [docs/java-migration-status.md](docs/java-migration-status.md). The generic sync/read/write and scheduling infrastructure is ahead of the original stock_basic vertical slice, but the 184 audited business data objects have not yet passed their individual migration acceptance.
 
+## Spring WebFlux API
+
+`app.web.enabled: true` in `application.yml` makes `com.zoutrankil.data.QuestDataApplication` start the WebFlux API without arguments, including from IntelliJ. Start it from Gradle with:
+
+```bash
+APP_API_TOKEN='replace-with-at-least-24-characters' ./gradlew webRun
+```
+
+It listens on `APP_PORT` (default `8080`). `GET /api/v1/health` is public for probes. When `APP_API_TOKEN` is set, all other `/api/v1/**` routes require `Authorization: Bearer <token>`; leaving it empty is convenient for local development only.
+
+CLI commands still run through the same main class when a command is supplied, for example `./gradlew run --args='show-sync-job-definitions'`.
+
+Useful smoke-test routes are `GET /api/v1/info`, `GET /api/v1/datasets`, `GET /api/v1/jobs`, `GET /api/v1/stock-basic/latest`, and `POST /api/v1/stock-basic/sync`. The last two access QuestDB or Tushare and run on a bounded-elastic scheduler so blocking database/client calls do not occupy the WebFlux event loop.
+
 Flyway configuration, version pins and existing-database adoption are documented in [docs/flyway-schema-management.md](docs/flyway-schema-management.md). Follow [docs/model-development-workflow.md](docs/model-development-workflow.md) to define a new model and its read/write mappings. Runtime plugin tests pass; migrations have not yet been exercised against a live QuestDB instance.
 
 Spring Batch job metadata uses a local SQLite database; no PostgreSQL server is required for Batch. The PostgreSQL JDBC driver remains in the main application only for QuestDB PGWire schema/query operations, and is excluded from the standalone Batch distribution.

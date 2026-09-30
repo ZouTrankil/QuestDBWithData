@@ -13,12 +13,14 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
 
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@ConditionalOnNotWebApplication
 public class CommandLineRunner implements ApplicationRunner {
     private final StockBasicSyncService syncService;
     private final DatasetRegistry datasetRegistry;
