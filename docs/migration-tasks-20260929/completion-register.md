@@ -1,6 +1,10 @@
 # 逐任务与逐表完成登记
 
-现改为当前会话直接本地串行执行。F001已完成只读基线，其余按前置验收继续。历史Orca失败保留在执行记录；每项必须更新本表及results，人工复核由用户完成。
+范围切换前的历史计划曾覆盖 F001–F017、D001–D084；此前各项状态继续保留在本全局登记表中，当前执行范围以用户最新指令为准。
+
+当前执行范围：用户指定 D085–D184（10-l2、11-derived、12-factor、13-strategy、14-runtime，共100项）由本会话按目录顺序串行完成，从 D085 开始。此顺序覆盖任务卡中的 D084 跨范围前置；D007–D084 状态保持不变。下表继续保留全局状态，任务只有按证据验收后才更新为 verified。
+
+当前执行范围 D085–D184 按指定目录顺序逐项串行；每项验收后更新本表、任务卡和对应results文件。D007–D084保持已有状态，人工复核由用户完成。
 
 状态：planned / running / implemented_not_verified / verified / blocked / conditional；正常无新增运行记verified_empty在结果明细中，首次0行不自动通过数据任务。
 
@@ -107,13 +111,13 @@
 | D082 | fut_settle | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](09-futures/D082-fut_settle.md) | pending_review |
 | D083 | ft_limit | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](09-futures/D083-ft_limit.md) | pending_review |
 | D084 | fut_holding | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](09-futures/D084-fut_holding.md) | pending_review |
-| D085 | l2_dataset_manifest | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](10-l2/D085-l2_dataset_manifest.md) | pending_review |
-| D086 | l2_daily_features | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](10-l2/D086-l2_daily_features.md) | pending_review |
-| D087 | l2_intraday_bar_features | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](10-l2/D087-l2_intraday_bar_features.md) | pending_review |
-| D088 | l2_event_response_features | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](10-l2/D088-l2_event_response_features.md) | pending_review |
-| D089 | l2_t0_training_labels | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](10-l2/D089-l2_t0_training_labels.md) | pending_review |
-| D090 | backtest_daily | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](11-derived/D090-backtest_daily.md) | pending_review |
-| D091 | backtest_daily_cache_coverage | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](11-derived/D091-backtest_daily_cache_coverage.md) | pending_review |
+| D085 | l2_dataset_manifest | verified | 本地QuestDB / `java_d085_l2_dataset_manifest_acceptance_20260930`（隔离） | BACKFILL 2026-09-21..23；重复回填；INCREMENTAL 2026-09-21..24（三日重叠） | 三次运行合计10行 | 4 / 0，16列逐字段一致 | 无→2026-09-23→2026-09-24 | 三次VERIFIED；相同范围重跑；取消边界测试；定向测试通过 | 2026-09-29T18:19:21Z / 三个runId见结果文件 | [D085结果](results/D085.json) | pending_review |
+| D086 | l2_daily_features | verified | 本地QuestDB / `java_d086_l2_daily_features_acceptance_final8_20260930`（隔离） | BACKFILL 09-21..23；幂等重跑；INCREMENTAL 09-21..24（三日重叠）；精确resume | 新写10行；resume复用4行；最终4行 | 独立Parquet样例4/0，110列×4=440字段一致 | 无→09-23→09-24 | 4页；取消/源指纹漂移拒绝；resume VERIFIED；job/run/slice管理入口通过 | 2026-09-29T19:45Z / 四个runId见结果 | [D086结果](results/D086.json) | pending_review |
+| D087 | l2_intraday_bar_features | verified | 本地QuestDB / `java_d087_l2_intraday_bar_features_20260930044414_f3a0942e`（隔离；正式表未修改） | BACKFILL 09-21..23；幂等重跑；INCREMENTAL 09-21..24（三日重叠）；RESUME；write-group 09-21 | 759+759+1014；resume提交0并复用1014；write-group提交253 | 1014/0，60列×1014=60,840值一致；D085正式样例15,180/15,180一致 | 09-23→09-24 | 8页；取消/过期指纹/不完整写组拒绝；精确resume；管理入口通过 | 2026-09-30 04:45 +08 / 四个runId见结果 | [D087结果](results/D087.json) | pending_review |
+| D088 | l2_event_response_features | verified | 本地QuestDB / `java_d088_l2_event_response_features_20260930053712_9ced7f2a`（隔离；正式表未改） | BACKFILL 09-21..23；幂等重跑；INCREMENTAL 09-21..24（三日重叠）；RESUME；write-group 09-21 | backfill 268；incremental 354；resume复用354；write-group 101 | 354/0，73列×354=25,842值一致 | 09-23→09-24 | 4页；取消/过期指纹/不完整写组拒绝；管理入口通过；正式表114,123,728行未变 | 2026-09-30 05:37 +08 / 四个runId见结果 | [D088结果](results/D088.json) | pending_review |
+| D089 | l2_t0_training_labels | verified | 本地QuestDB / `java_d089_l2_t0_training_labels_804a7fe8`（隔离；正式表未改） | BACKFILL 09-21..23；幂等重跑；INCREMENTAL 09-21..24（三日重叠）；RESUME | 759+759+1014；resume复用1014 | 1014/0，62列×1014=62,868值一致；独立Parquet全字段对照 | 09-23→09-24 | 8页；取消/过期指纹拒绝；job registry/owner status与slice可见；正式表181,049,686行前后未变；写入组合分支已接入但未端到端运行 | 2026-09-30 06:36 +08 / 四个runId见结果 | [D089结果](results/D089.json) | pending_review |
+| D090 | backtest_daily | verified | 本机QuestDB正式表 `backtest_daily`（只读兼容；未建隔离写表） | BOUNDED_READ_COMPATIBILITY 2026-09-17 | formal 200 + `v_backtest_daily` 200；写入0 | 200/0；13列×200=2,600值全匹配，typed ReadGroup一致 | checkpoint N/A（无Java sync owner） | 表行数10,355,884及table_txn=17读前后不变；旧Python物化路径保留，Java无WRITE/job | 2026-09-30 07:08 +08 / 见结果与live证据 | [D090结果](results/D090.json)；[任务卡](11-derived/D090-backtest_daily.md) | pending_review |
+| D091 | backtest_daily_cache_coverage | running | 只读owner/schema核验中 | 只读验收中 | 执行中 | 未写入 | 待确认 | Python coverage发布路径与实表待核验 | 2026-09-30开始 | [任务卡](11-derived/D091-backtest_daily_cache_coverage.md) | pending_review |
 | D092 | backtest_daily_cache | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](11-derived/D092-backtest_daily_cache.md) | pending_review |
 | D093 | v_backtest_daily | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](11-derived/D093-v_backtest_daily.md) | pending_review |
 | D094 | market_barometer_cache_coverage | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](11-derived/D094-market_barometer_cache_coverage.md) | pending_review |

@@ -44,6 +44,16 @@ public class CommandLineRunner implements ApplicationRunner {
     @Autowired(required=false)
     private com.zoutrankil.questdbwithdata.service.StockFactorJobService stockFactorService;
     @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.L2DatasetManifestJobService l2ManifestService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.L2DailyFeaturesJobService l2DailyFeaturesService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.L2IntradayBarFeaturesJobService l2IntradayBarFeaturesService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.L2EventResponseFeaturesJobService l2EventResponseFeaturesService;
+    @Autowired(required=false)
+    private com.zoutrankil.questdbwithdata.service.L2T0TrainingLabelsJobService l2T0TrainingLabelsService;
+    @Autowired(required=false)
     private com.zoutrankil.questdbwithdata.service.StockLimitJobService stockLimitService;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
     private com.zoutrankil.questdbwithdata.service.EtfDailyJobService etfDailyService;
@@ -63,6 +73,8 @@ public class CommandLineRunner implements ApplicationRunner {
     private com.zoutrankil.questdbwithdata.service.IndexMonthlyJobService indexMonthlyService;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
     private com.zoutrankil.questdbwithdata.service.DcIndexJobService dcIndexService;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private com.zoutrankil.questdbwithdata.service.MoneyflowHsgtJobService moneyflowHsgtService;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
     private com.zoutrankil.questdbwithdata.service.MoneyflowDcJobService moneyflowDcService;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
@@ -288,6 +300,323 @@ public class CommandLineRunner implements ApplicationRunner {
                 System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
                         "status", command.equals("plan-sync-job") ? "PLANNED" : "VALIDATED",
                         "executed", false, "dataVerified", false, "request", new ObjectMapper().readTree(frozen))));
+            }
+            case "create-l2-manifest-test-target" -> {
+                if (l2ManifestService == null || !options.keySet().equals(java.util.Set.of("--table")))
+                    throw new IllegalArgumentException("Exact isolated D085 --table required");
+                l2ManifestService.createIsolatedTarget(options.get("--table"));
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("status", "READY",
+                        "table", options.get("--table"), "executed", true, "dataVerified", false)));
+            }
+            case "plan-l2-manifest-job", "run-l2-manifest-job" -> {
+                if (l2ManifestService == null
+                        || !options.keySet().containsAll(java.util.Set.of("--from", "--to", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--symbols", "--resume-from")
+                                .containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit D085 --from, --to and --logical-date required; "
+                            + "optional --mode, --symbols, and run-only --resume-from");
+                boolean planOnly = command.equals("plan-l2-manifest-job");
+                if (planOnly && options.containsKey("--resume-from"))
+                    throw new IllegalArgumentException("Planning cannot resume a D085 run");
+                var from = java.time.LocalDate.parse(options.get("--from"));
+                var to = java.time.LocalDate.parse(options.get("--to"));
+                var logicalDate = java.time.LocalDate.parse(options.get("--logical-date"));
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode
+                                .valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT)) : null;
+                var symbols = options.containsKey("--symbols")
+                        ? java.util.Arrays.asList(options.get("--symbols").split(",", -1)) : java.util.List.<String>of();
+                var plan = l2ManifestService.plan(from, to, logicalDate, mode, symbols);
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    var output = new java.util.LinkedHashMap<String,Object>();
+                    output.put("status", "PLANNED"); output.put("executed", false); output.put("dataVerified", false);
+                    output.put("targetId", plan.targetId()); output.put("bootstrapFrom", plan.bootstrapFrom().toString());
+                    output.put("verifiedThrough", plan.verifiedThrough() == null ? null : plan.verifiedThrough().toString());
+                    output.put("targetDatesChecked", plan.targetDatesChecked());
+                    output.put("source", Map.of("rows", plan.source().sourceRows(), "selectedRows", plan.source().selectedRows(),
+                            "files", plan.source().files(), "pages", plan.source().pages(),
+                            "bytes", plan.source().sourceBytes(), "sourceFingerprint", plan.source().sourceFingerprint(),
+                            "schemaFingerprint", plan.source().schemaFingerprint(), "dates", plan.source().dates()));
+                    output.put("request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity
+                            .snapshotJson(plan.request())));
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(output));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? l2ManifestService.resume(plan, options.get("--resume-from"))
+                            : l2ManifestService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("D085 sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "l2-manifest-job-status" -> {
+                if (l2ManifestService == null || !options.keySet().equals(java.util.Set.of("--run")))
+                    throw new IllegalArgumentException("Exact D085 --run required");
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
+                        .writerWithDefaultPrettyPrinter().writeValueAsString(l2ManifestService.status(options.get("--run"))));
+            }
+            case "cancel-l2-manifest-run" -> {
+                if (l2ManifestService == null || !options.keySet().equals(java.util.Set.of("--run")))
+                    throw new IllegalArgumentException("Exact D085 --run required");
+                boolean accepted = l2ManifestService.cancel(options.get("--run"));
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("status", accepted ? "CANCEL_REQUESTED" : "ALREADY_TERMINAL",
+                        "runId", options.get("--run"), "executed", false, "dataVerified", false)));
+            }
+            case "create-l2-daily-features-test-target" -> {
+                if (l2DailyFeaturesService == null || !options.keySet().equals(java.util.Set.of("--table")))
+                    throw new IllegalArgumentException("Exact isolated D086 --table required");
+                l2DailyFeaturesService.createIsolatedTarget(options.get("--table"));
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("status", "READY",
+                        "table", options.get("--table"), "executed", true, "dataVerified", false)));
+            }
+            case "plan-l2-daily-features-job", "run-l2-daily-features-job" -> {
+                if (l2DailyFeaturesService == null
+                        || !options.keySet().containsAll(java.util.Set.of("--from", "--to", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--symbols", "--resume-from")
+                                .containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit D086 --from, --to and --logical-date required; "
+                            + "optional --mode, --symbols, and run-only --resume-from");
+                boolean planOnly = command.equals("plan-l2-daily-features-job");
+                if (planOnly && options.containsKey("--resume-from"))
+                    throw new IllegalArgumentException("Planning cannot resume a D086 run");
+                var from = java.time.LocalDate.parse(options.get("--from"));
+                var to = java.time.LocalDate.parse(options.get("--to"));
+                var logicalDate = java.time.LocalDate.parse(options.get("--logical-date"));
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode
+                                .valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT)) : null;
+                var symbols = options.containsKey("--symbols")
+                        ? java.util.Arrays.asList(options.get("--symbols").split(",", -1)) : java.util.List.<String>of();
+                var plan = l2DailyFeaturesService.plan(from, to, logicalDate, mode, symbols);
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    var output = new java.util.LinkedHashMap<String,Object>();
+                    output.put("status", "PLANNED"); output.put("executed", false); output.put("dataVerified", false);
+                    output.put("targetId", plan.targetId()); output.put("bootstrapFrom", plan.bootstrapFrom().toString());
+                    output.put("verifiedThrough", plan.verifiedThrough() == null ? null : plan.verifiedThrough().toString());
+                    output.put("targetDatesChecked", plan.targetDatesChecked());
+                    output.put("source", Map.of("rows", plan.source().sourceRows(), "selectedRows", plan.source().selectedRows(),
+                            "files", plan.source().files(), "pages", plan.source().pages(),
+                            "bytes", plan.source().sourceBytes(), "sourceFingerprint", plan.source().sourceFingerprint(),
+                            "schemaFingerprint", plan.source().schemaFingerprint(), "dates", plan.source().dates(),
+                            "completeForSelectedSymbols", plan.source().completeForSelectedSymbols()));
+                    output.put("request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity
+                            .snapshotJson(plan.request())));
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(output));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? l2DailyFeaturesService.resume(plan, options.get("--resume-from"))
+                            : l2DailyFeaturesService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("D086 sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "l2-daily-features-job-status" -> {
+                if (l2DailyFeaturesService == null || !options.keySet().equals(java.util.Set.of("--run")))
+                    throw new IllegalArgumentException("Exact D086 --run required");
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
+                        .writerWithDefaultPrettyPrinter().writeValueAsString(l2DailyFeaturesService.status(options.get("--run"))));
+            }
+            case "cancel-l2-daily-features-run" -> {
+                if (l2DailyFeaturesService == null || !options.keySet().equals(java.util.Set.of("--run")))
+                    throw new IllegalArgumentException("Exact D086 --run required");
+                boolean accepted = l2DailyFeaturesService.cancel(options.get("--run"));
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("status", accepted ? "CANCEL_REQUESTED" : "ALREADY_TERMINAL",
+                        "runId", options.get("--run"), "executed", false, "dataVerified", false)));
+            }
+            case "create-l2-intraday-bar-features-test-target" -> {
+                if (l2IntradayBarFeaturesService == null || !options.keySet().equals(java.util.Set.of("--table")))
+                    throw new IllegalArgumentException("Exact isolated D087 --table required");
+                l2IntradayBarFeaturesService.createIsolatedTarget(options.get("--table"));
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("status", "READY",
+                        "table", options.get("--table"), "executed", true, "dataVerified", false)));
+            }
+            case "plan-l2-intraday-bar-features-job", "run-l2-intraday-bar-features-job" -> {
+                if (l2IntradayBarFeaturesService == null
+                        || !options.keySet().containsAll(java.util.Set.of("--from", "--to", "--logical-date", "--symbols"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--symbols", "--resume-from")
+                                .containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit D087 --from, --to, --logical-date and --symbols required; "
+                            + "optional --mode and run-only --resume-from");
+                boolean planOnly = command.equals("plan-l2-intraday-bar-features-job");
+                if (planOnly && options.containsKey("--resume-from"))
+                    throw new IllegalArgumentException("Planning cannot resume a D087 run");
+                var from = java.time.LocalDate.parse(options.get("--from"));
+                var to = java.time.LocalDate.parse(options.get("--to"));
+                var logicalDate = java.time.LocalDate.parse(options.get("--logical-date"));
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode
+                                .valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT)) : null;
+                var symbols = java.util.Arrays.asList(options.get("--symbols").split(",", -1));
+                var plan = l2IntradayBarFeaturesService.plan(from, to, logicalDate, mode, symbols);
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    var output = new java.util.LinkedHashMap<String,Object>();
+                    output.put("status", "PLANNED"); output.put("executed", false); output.put("dataVerified", false);
+                    output.put("targetId", plan.targetId()); output.put("bootstrapFrom", plan.bootstrapFrom().toString());
+                    output.put("verifiedThrough", plan.verifiedThrough() == null ? null : plan.verifiedThrough().toString());
+                    output.put("targetRowsChecked", plan.targetDatesChecked());
+                    output.put("source", Map.of("rows", plan.source().sourceRows(), "selectedRows", plan.source().selectedRows(),
+                            "files", plan.source().files(), "pages", plan.source().pages(),
+                            "bytes", plan.source().sourceBytes(), "sourceFingerprint", plan.source().sourceFingerprint(),
+                            "schemaFingerprint", plan.source().schemaFingerprint(), "dates", plan.source().dates(),
+                            "completeForSelectedSymbols", plan.source().completeForSelectedSymbols()));
+                    output.put("request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity
+                            .snapshotJson(plan.request())));
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(output));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? l2IntradayBarFeaturesService.resume(plan, options.get("--resume-from"))
+                            : l2IntradayBarFeaturesService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("D087 sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "l2-intraday-bar-features-job-status" -> {
+                if (l2IntradayBarFeaturesService == null || !options.keySet().equals(java.util.Set.of("--run")))
+                    throw new IllegalArgumentException("Exact D087 --run required");
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
+                        .writerWithDefaultPrettyPrinter().writeValueAsString(l2IntradayBarFeaturesService.status(options.get("--run"))));
+            }
+            case "cancel-l2-intraday-bar-features-run" -> {
+                if (l2IntradayBarFeaturesService == null || !options.keySet().equals(java.util.Set.of("--run")))
+                    throw new IllegalArgumentException("Exact D087 --run required");
+                boolean accepted = l2IntradayBarFeaturesService.cancel(options.get("--run"));
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("status", accepted ? "CANCEL_REQUESTED" : "ALREADY_TERMINAL",
+                        "runId", options.get("--run"), "executed", false, "dataVerified", false)));
+            }
+            case "create-l2-event-response-features-test-target" -> {
+                if (l2EventResponseFeaturesService == null || !options.keySet().equals(java.util.Set.of("--table")))
+                    throw new IllegalArgumentException("Exact isolated D088 --table required");
+                l2EventResponseFeaturesService.createIsolatedTarget(options.get("--table"));
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("status", "READY",
+                        "table", options.get("--table"), "executed", true, "dataVerified", false)));
+            }
+            case "plan-l2-event-response-features-job", "run-l2-event-response-features-job" -> {
+                if (l2EventResponseFeaturesService == null
+                        || !options.keySet().containsAll(java.util.Set.of("--from", "--to", "--logical-date", "--symbols"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--symbols", "--resume-from")
+                                .containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit D088 --from, --to, --logical-date and --symbols required; "
+                            + "optional --mode and run-only --resume-from");
+                boolean planOnly = command.equals("plan-l2-event-response-features-job");
+                if (planOnly && options.containsKey("--resume-from"))
+                    throw new IllegalArgumentException("Planning cannot resume a D088 run");
+                var from = java.time.LocalDate.parse(options.get("--from"));
+                var to = java.time.LocalDate.parse(options.get("--to"));
+                var logicalDate = java.time.LocalDate.parse(options.get("--logical-date"));
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode
+                                .valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT)) : null;
+                var symbols = java.util.Arrays.asList(options.get("--symbols").split(",", -1));
+                var plan = l2EventResponseFeaturesService.plan(from, to, logicalDate, mode, symbols);
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    var output = new java.util.LinkedHashMap<String,Object>();
+                    output.put("status", "PLANNED"); output.put("executed", false); output.put("dataVerified", false);
+                    output.put("targetId", plan.targetId()); output.put("bootstrapFrom", plan.bootstrapFrom().toString());
+                    output.put("verifiedThrough", plan.verifiedThrough() == null ? null : plan.verifiedThrough().toString());
+                    output.put("targetRowsChecked", plan.targetDatesChecked());
+                    output.put("source", Map.of("rows", plan.source().sourceRows(), "selectedRows", plan.source().selectedRows(),
+                            "files", plan.source().files(), "pages", plan.source().pages(),
+                            "bytes", plan.source().sourceBytes(), "sourceFingerprint", plan.source().sourceFingerprint(),
+                            "schemaFingerprint", plan.source().schemaFingerprint(), "dates", plan.source().dates(),
+                            "completeForSelectedSymbols", plan.source().completeForSelectedSymbols()));
+                    output.put("request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity
+                            .snapshotJson(plan.request())));
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(output));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? l2EventResponseFeaturesService.resume(plan, options.get("--resume-from"))
+                            : l2EventResponseFeaturesService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("D088 sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "l2-event-response-features-job-status" -> {
+                if (l2EventResponseFeaturesService == null || !options.keySet().equals(java.util.Set.of("--run")))
+                    throw new IllegalArgumentException("Exact D088 --run required");
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
+                        .writerWithDefaultPrettyPrinter().writeValueAsString(l2EventResponseFeaturesService.status(options.get("--run"))));
+            }
+            case "cancel-l2-event-response-features-run" -> {
+                if (l2EventResponseFeaturesService == null || !options.keySet().equals(java.util.Set.of("--run")))
+                    throw new IllegalArgumentException("Exact D088 --run required");
+                boolean accepted = l2EventResponseFeaturesService.cancel(options.get("--run"));
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("status", accepted ? "CANCEL_REQUESTED" : "ALREADY_TERMINAL",
+                        "runId", options.get("--run"), "executed", false, "dataVerified", false)));
+            }
+            case "create-l2-t0-training-labels-test-target" -> {
+                if (l2T0TrainingLabelsService == null || !options.keySet().equals(java.util.Set.of("--table")))
+                    throw new IllegalArgumentException("Exact isolated D089 --table required");
+                l2T0TrainingLabelsService.createIsolatedTarget(options.get("--table"));
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("status", "READY",
+                        "table", options.get("--table"), "executed", true, "dataVerified", false)));
+            }
+            case "plan-l2-t0-training-labels-job", "run-l2-t0-training-labels-job" -> {
+                if (l2T0TrainingLabelsService == null
+                        || !options.keySet().containsAll(java.util.Set.of("--from", "--to", "--logical-date", "--symbols"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--symbols", "--resume-from")
+                                .containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit D089 --from, --to, --logical-date and --symbols required; "
+                            + "optional --mode and run-only --resume-from");
+                boolean planOnly = command.equals("plan-l2-t0-training-labels-job");
+                if (planOnly && options.containsKey("--resume-from"))
+                    throw new IllegalArgumentException("Planning cannot resume a D089 run");
+                var from = java.time.LocalDate.parse(options.get("--from"));
+                var to = java.time.LocalDate.parse(options.get("--to"));
+                var logicalDate = java.time.LocalDate.parse(options.get("--logical-date"));
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode
+                                .valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT)) : null;
+                var symbols = java.util.Arrays.asList(options.get("--symbols").split(",", -1));
+                var plan = l2T0TrainingLabelsService.plan(from, to, logicalDate, mode, symbols);
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    var output = new java.util.LinkedHashMap<String,Object>();
+                    output.put("status", "PLANNED"); output.put("executed", false); output.put("dataVerified", false);
+                    output.put("targetId", plan.targetId()); output.put("bootstrapFrom", plan.bootstrapFrom().toString());
+                    output.put("verifiedThrough", plan.verifiedThrough() == null ? null : plan.verifiedThrough().toString());
+                    output.put("targetRowsChecked", plan.targetDatesChecked());
+                    output.put("source", Map.of("rows", plan.source().sourceRows(), "selectedRows", plan.source().selectedRows(),
+                            "files", plan.source().files(), "pages", plan.source().pages(),
+                            "bytes", plan.source().sourceBytes(), "sourceFingerprint", plan.source().sourceFingerprint(),
+                            "schemaFingerprint", plan.source().schemaFingerprint(), "dates", plan.source().dates(),
+                            "completeForSelectedSymbols", plan.source().completeForSelectedSymbols(),
+                            "outcomeCoverageByHorizon", plan.source().outcomeCoverageByHorizon()));
+                    output.put("request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity
+                            .snapshotJson(plan.request())));
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(output));
+                } else {
+                    var result = options.containsKey("--resume-from")
+                            ? l2T0TrainingLabelsService.resume(plan, options.get("--resume-from"))
+                            : l2T0TrainingLabelsService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("D089 sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "l2-t0-training-labels-job-status" -> {
+                if (l2T0TrainingLabelsService == null || !options.keySet().equals(java.util.Set.of("--run")))
+                    throw new IllegalArgumentException("Exact D089 --run required");
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper()
+                        .writerWithDefaultPrettyPrinter().writeValueAsString(l2T0TrainingLabelsService.status(options.get("--run"))));
+            }
+            case "cancel-l2-t0-training-labels-run" -> {
+                if (l2T0TrainingLabelsService == null || !options.keySet().equals(java.util.Set.of("--run")))
+                    throw new IllegalArgumentException("Exact D089 --run required");
+                boolean accepted = l2T0TrainingLabelsService.cancel(options.get("--run"));
+                System.out.println(new ObjectMapper().writeValueAsString(Map.of("status", accepted ? "CANCEL_REQUESTED" : "ALREADY_TERMINAL",
+                        "runId", options.get("--run"), "executed", false, "dataVerified", false)));
             }
             case "plan-daily-job", "run-daily-job" -> {
                 if(options.containsKey("--resume-from")) {
@@ -597,6 +926,44 @@ public class CommandLineRunner implements ApplicationRunner {
                     if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
                             && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
                         throw new IncompleteCommandException("etf_factor sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "plan-moneyflow-hsgt-job", "run-moneyflow-hsgt-job" -> {
+                if(options.containsKey("--resume-from")) {
+                    if(moneyflowHsgtService==null || !command.equals("run-moneyflow-hsgt-job")
+                            || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from; the original frozen scope is restored");
+                    var restored=moneyflowHsgtService.resume(options.get("--resume-from"));
+                    System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(restored));
+                    if(restored.errorCode()!=null || !java.util.Set.of(com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY).contains(restored.state()))
+                        throw new IncompleteCommandException("moneyflow-hsgt resume incomplete: "+restored.state()+"; run="+restored.runId());
+                    return;
+                }
+                if (moneyflowHsgtService == null || !options.keySet().containsAll(java.util.Set.of("--to", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--resume-from").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --to and --logical-date required; optional --from for bootstrap/backfill, --mode, and run-only --resume-from");
+                boolean planOnly = command.equals("plan-moneyflow-hsgt-job");
+                if (planOnly && options.containsKey("--resume-from")) throw new IllegalArgumentException("Planning cannot resume a run");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.questdbwithdata.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : null;
+                var plan = moneyflowHsgtService.plan(mode,
+                        options.containsKey("--from") ? java.time.LocalDate.parse(options.get("--from")) : null,
+                        java.time.LocalDate.parse(options.get("--to")),
+                        java.time.LocalDate.parse(options.get("--logical-date")));
+                var json = com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper();
+                if (planOnly) {
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false,
+                            "targetId", plan.targetId(), "plan", plan,
+                            "request", json.readTree(com.zoutrankil.questdbwithdata.domain.SyncRequestIdentity.snapshotJson(plan.request())))));
+                } else {
+                    var result = moneyflowHsgtService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED
+                            && result.state() != com.zoutrankil.questdbwithdata.domain.SyncRunState.VERIFIED_EMPTY)
+                        throw new IncompleteCommandException("moneyflow_hsgt sync incomplete: " + result.state() + "; run=" + result.runId());
                 }
             }
             case "plan-moneyflow-dc-job", "run-moneyflow-dc-job" -> {
@@ -1062,6 +1429,12 @@ public class CommandLineRunner implements ApplicationRunner {
                 System.out.println(new ObjectMapper().writeValueAsString(Map.of(
                         "status","STORED","executed",false,"dataVerified",false)));
             }
+            case "finish-moneyflow-hsgt-publication" -> {
+                if(moneyflowHsgtService==null||!options.keySet().equals(java.util.Set.of("--run","--writer-stopped"))||!"true".equals(options.get("--writer-stopped")))
+                    throw new IllegalArgumentException("Explicit --run and --writer-stopped true required");
+                moneyflowHsgtService.finishInterrupted(options.get("--run"),true);
+                System.out.println(com.zoutrankil.questdbwithdata.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(moneyflowHsgtService.status(options.get("--run"))));
+            }
             case "finish-index-monthly-publication", "finish-dc-index-publication" -> {
                 if(!options.keySet().equals(java.util.Set.of("--run","--writer-stopped")) || !"true".equals(options.get("--writer-stopped")))
                     throw new IllegalArgumentException("Explicit --run and --writer-stopped true required");
@@ -1397,6 +1770,26 @@ public class CommandLineRunner implements ApplicationRunner {
                 + "finish-index-catalog-publication --run ID --writer-stopped true OR "
                 + "plan-stock-detail-job|run-stock-detail-job --logical-date YYYY-MM-DD (--codes CODE,CODE|--discover true) "
                 + "[--resume-from FAILED_RUN_ID] OR "
+                + "create-l2-manifest-test-target --table java_d085_l2_dataset_manifest_SUFFIX OR "
+                + "plan-l2-manifest-job|run-l2-manifest-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD "
+                + "[--mode incremental|backfill|reconcile|ingest] [--symbols CODE,CODE] [--resume-from RUN_ID] OR "
+                + "l2-manifest-job-status --run RUN_ID OR cancel-l2-manifest-run --run RUN_ID OR "
+                + "create-l2-daily-features-test-target --table java_d086_l2_daily_features_SUFFIX OR "
+                + "plan-l2-daily-features-job|run-l2-daily-features-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD "
+                + "[--mode incremental|backfill|reconcile|ingest] [--symbols CODE,CODE] [--resume-from RUN_ID] OR "
+                + "l2-daily-features-job-status --run RUN_ID OR cancel-l2-daily-features-run --run RUN_ID OR "
+                + "create-l2-intraday-bar-features-test-target --table java_d087_l2_intraday_bar_features_SUFFIX OR "
+                + "plan-l2-intraday-bar-features-job|run-l2-intraday-bar-features-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD "
+                + "--symbols CODE,CODE [--mode incremental|backfill|reconcile|ingest] [--resume-from RUN_ID] OR "
+                + "l2-intraday-bar-features-job-status --run RUN_ID OR cancel-l2-intraday-bar-features-run --run RUN_ID OR "
+                + "create-l2-event-response-features-test-target --table java_d088_l2_event_response_features_SUFFIX OR "
+                + "plan-l2-event-response-features-job|run-l2-event-response-features-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD "
+                + "--symbols CODE,CODE [--mode incremental|backfill|reconcile|ingest] [--resume-from RUN_ID] OR "
+                + "l2-event-response-features-job-status --run RUN_ID OR cancel-l2-event-response-features-run --run RUN_ID OR "
+                + "create-l2-t0-training-labels-test-target --table java_d089_l2_t0_training_labels_SUFFIX OR "
+                + "plan-l2-t0-training-labels-job|run-l2-t0-training-labels-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD "
+                + "--symbols CODE,CODE [--mode incremental|backfill|reconcile|ingest] [--resume-from RUN_ID] OR "
+                + "l2-t0-training-labels-job-status --run RUN_ID OR cancel-l2-t0-training-labels-run --run RUN_ID OR "
                 + "reconcile-stock-detail-run|finish-stock-detail-publication --run ID --writer-stopped true OR cancel-sync-run --run ID [--ledger PATH]";
     }
 }

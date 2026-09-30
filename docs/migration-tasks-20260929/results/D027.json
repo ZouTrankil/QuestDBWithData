@@ -1,0 +1,67 @@
+{
+  "task_id": "D027",
+  "dataset": "moneyflow_hsgt",
+  "implementation_status": "implemented_not_verified",
+  "data_validation_status": "not_run",
+  "target_table": "java_d027_moneyflow_hsgt_<explicit-isolated-suffix>",
+  "target_identity": null,
+  "request_window": null,
+  "checkpoint_before": null,
+  "checkpoint_after": null,
+  "source_rows": null,
+  "submitted_rows": null,
+  "questdb_readback_rows": null,
+  "matched_rows": null,
+  "duplicate_source_keys": null,
+  "duplicate_target_keys": null,
+  "run_id": null,
+  "runtime_seconds": null,
+  "evidence": [
+    "artifacts/java-migration/D027/implementation-review.md",
+    "artifacts/java-migration/operations/MoneyflowHsgtIndependentReadback.java",
+    "artifacts/java-migration/flows-schema-preflight-20260930.json"
+  ],
+  "checks_run": [
+    "Read-only Python moneyflow_hsgt connector/model contract review",
+    "Static review of D027 dataset, source receipts, mapper, stage writer, coverage, job service and publication journal",
+    "Targeted javac of D027-owned sources and independent readback helper into var/d027-agent-classes"
+  ],
+  "checks_not_run": [
+    "D026 serial acceptance gate",
+    "Gradle build and tests",
+    "Tushare source request",
+    "QuestDB schema query or isolated write/readback",
+    "Cancellation, resume, empty-window and journal-recovery live acceptance"
+  ],
+  "remaining_acceptance": [
+    "Complete the D026 serial gate before D027 live acceptance",
+    "Coordinator-owned DatasetConfiguration, CLI, endpoint limiter/slice policy and write-group integration",
+    "Confirm current account permission and effective moneyflow_hsgt request quota",
+    "Run a bounded nonempty range into the explicit isolated DAY/WAL/DEDUP=false target",
+    "Compare raw source receipts independently against all seven physical columns",
+    "Verify same-window rerun, later incremental with five-day overlap, and source correction behavior",
+    "Exercise a valid empty source window, source failure, cancellation/stage restart and publication-journal recovery",
+    "Record actual source rows, submitted rows, readback, target identity, checkpoint and evidence before changing status to verified"
+  ],
+  "known_limitations": [
+    "The Python connector is unpaged and the implementation fails closed at 300 rows per request; requests are therefore split into at most 31 calendar days.",
+    "The Python model says YEAR while the verified physical schema is DAY/WAL/DEDUP=false; the Java isolated target preserves the physical layout and no formal migration is proposed.",
+    "The natural key is trade_date, but the physical target has no UPSERT key. Updates require a verified same-schema full-snapshot stage and journaled table replacement.",
+    "Full-table stage snapshots are bounded at 100000 rows and 64 MiB; larger target snapshots fail closed.",
+    "The five-day revision overlap is calendar days and is limited to existing verified coverage.",
+    "The independent operational helper and publication/recovery paths have not been exercised against a live D027 target."
+  ],
+  "human_review": "pending_review",
+  "coordinator_integration": {
+    "status": "pending_root_wiring_and_serial_acceptance",
+    "cli": false,
+    "write_group": false,
+    "slice_policy": false,
+    "endpoint_ceiling_per_minute": 150,
+    "effective_requests_per_minute": null,
+    "scoped_javac": "passed",
+    "full_build_or_tests": "not_run",
+    "source_or_questdb_acceptance": "not_started",
+    "explicit_bootstrap_required": true
+  }
+}

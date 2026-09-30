@@ -1,0 +1,13 @@
+allprojects {
+    tasks.withType(org.gradle.api.tasks.compile.JavaCompile).configureEach {
+        exclude '**/DcIndexReadRepository.java'
+        exclude '**/DcIndexStaging.java'
+        exclude '**/DcIndexSyncJobOwner.java'
+        exclude '**/DcIndexWritePort.java'
+        exclude '**/IndexMonthlyPublication.java'
+        exclude '**/IndexMonthlySyncAdapter.java'
+        exclude '**/IndexMonthlyWritePort.java'
+        exclude '**/IndexWeightJobService.java'
+        exclude '**/IndexWeightSource.java'
+    }
+}

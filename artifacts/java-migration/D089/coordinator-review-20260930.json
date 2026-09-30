@@ -1,0 +1,40 @@
+{
+  "task_id": "D089",
+  "reviewer": "primary-coordinator",
+  "reviewed_at": "2026-09-30T06:46:15+08:00",
+  "decision": "accepted_for_serial_progress",
+  "task_status": "verified",
+  "human_review": "pending_review",
+  "review_basis": {
+    "predecessor_gate": "D088 coordinator gate accepted before D089 started",
+    "source_rows": 1014,
+    "source_pages": 8,
+    "field_count": 62,
+    "full_field_values_compared": 62868,
+    "mismatched_values": 0,
+    "target_table": "java_d089_l2_t0_training_labels_804a7fe8",
+    "target_rows": 1014,
+    "formal_table_rows_before": 181049686,
+    "formal_table_rows_after": 181049686,
+    "formal_table_mutated": false,
+    "target_metadata_assertions_passed": true,
+    "backfill_idempotent_incremental_resume": "all VERIFIED; resume reused 1014 rows",
+    "source_cancellation_and_stale_fingerprint": "both rejected as expected",
+    "mapping_tests": "3 passed",
+    "live_acceptance_test": "1 passed"
+  },
+  "limitations_reviewed": [
+    "The full-workspace Gradle compile currently fails on unrelated incomplete Moneyflow/D024/D026 sources; the D089 dependency slice compiled with --release 24 and live acceptance passed.",
+    "The write-group D089 source-certification branch is registered and statically reviewed; the write-group runtime route was not separately executed.",
+    "The source schema has no maturity flag. Missing alpha values map to opportunity label 0, so consumer interpretation requires the recorded coverage counts and human semantic review."
+  ],
+  "evidence": [
+    "docs/migration-tasks-20260929/results/D089.json",
+    "artifacts/java-migration/D089/live-acceptance-20260930.json",
+    "artifacts/java-migration/D089/commands/target-census-20260930.json",
+    "artifacts/java-migration/D089/commands/source-inspection-20260921-24.jsonl",
+    "artifacts/java-migration/D089/commands/source-parquet-20260921-24.jsonl"
+  ],
+  "next_task": "D090",
+  "next_directory": "11-derived"
+}

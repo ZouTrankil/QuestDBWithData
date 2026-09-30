@@ -1,0 +1,17 @@
+gradle.projectsEvaluated {
+    def configuredClasspath = rootProject.files('build/d088-classes', 'build/d088-test-classes') + rootProject.configurations.testRuntimeClasspath
+    rootProject.tasks.register('testD088Mapping', org.gradle.api.tasks.testing.Test) {
+        testClassesDirs = rootProject.files('build/d088-test-classes')
+        classpath = configuredClasspath
+        useJUnitPlatform()
+        include '**/L2EventResponseFeaturesMappingTest.class'
+        workingDir = rootProject.projectDir
+    }
+    rootProject.tasks.register('testD088Live', org.gradle.api.tasks.testing.Test) {
+        testClassesDirs = rootProject.files('build/d088-test-classes')
+        classpath = configuredClasspath
+        useJUnitPlatform()
+        include '**/L2EventResponseFeaturesLiveAcceptanceTest.class'
+        workingDir = rootProject.projectDir
+    }
+}

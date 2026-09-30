@@ -1,9 +1,9 @@
 # D029 · margin_detail
 
-- 状态：planned，尚未派发。
+- 状态：implemented_not_verified；核心实现已落地，真实来源与隔离库验收未执行。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
-- 串行前置：`D028`；前项验收后才执行本项。
+- 串行前置：`D028`；协调器授权并行实现，实际运行/验收仍由协调器按串行顺序安排。
 - 数据对象：`margin_detail`。
 - 业务依赖：本卡来源与公共功能契约；未发现的外部依赖须在实施时登记。
 - 必读：[公共契约](../00-common-contract.md)、[总体计划](../README.md)。
@@ -33,17 +33,27 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 - src/quant_platform/data/adapters/connectors/stock/margin/margin_sync.py:147 `@api_rate_limit(api_limit=150, period=60)`
 - src/quant_platform/data/adapters/connectors/stock/margin/margin_sync.py:159 `@api_rate_limit(api_limit=150, period=60)`
 
+## D029实施合同（实现快照）
+
+- 唯一canonical job为`data.margin_detail`；Python配置中的`margin_stock`是禁用别名，调用相同`sync_margin_stock`并写入同一张`margin_detail`表，不重复注册job。
+- 来源每个SSE开市日独立调用一次`margin_detail(trade_date=YYYYMMDD)`，无offset/cursor。官方接口单次最多6,000行；原始响应达到6,000行即保留未验证证据并拒绝完成。
+- 按Python归一逻辑仅剔除严格匹配`日期：YYYY-MM-DD.BJ`且8个数值列全为空的页脚。代码支持`.SH/.SZ/.BJ`，同日自然键`(ts_code,trade_date)`重复、错日期、额外/缺少字段、数值非法均失败。
+- Python在空响应时将该交易日记为skipped/unverified。Java保留同等fail-closed语义：空结果/只有页脚不产生`VERIFIED_EMPTY`或checkpoint推进。
+- 初始增量默认从Python配置日期`2026-01-01`开始；每计划最多14个日历日。后续增量重取7个日历日重叠，覆盖周五深市/北交所数据可能延迟至周一的修订。只有已验证的incremental连续区间推进checkpoint；BACKFILL限定在既有区间内，更新来源回执但不推进checkpoint。
+- 正式表DDL仅审计；代码只能写`java_d029_margin_detail_<suffix>`显式隔离表。目标需YEAR/WAL/DEDUP=true，物理UPSERT KEY为`(ts_code,trade_date)`，不新增生产migration。
+- 独立读回助手从FETCHED原始receipt校验SHA/合同并直接按日期查询QuestDB的11列，和来源代码/mapper/write port隔离。
+
 ## 单数据交付清单
 
-- [ ] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
-- [ ] D02：本表业务Key、物理去重键、冲突/修订规则。
-- [ ] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
-- [ ] D04：本表按键/范围的typed read与分页，接入读取组合。
-- [ ] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
-- [ ] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
-- [ ] D07：注册 `margin_detail` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
-- [ ] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
-- [ ] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
+- [x] D01：D029 typed DTO/domain/逐字段mapper；映射逐列列于实现审阅。
+- [x] D02：自然键及物理UPSERT KEY均为`(ts_code,trade_date)`；拒绝同日重复键。
+- [x] D03：YEAR/WAL/DEDUP=true；只提供显式隔离表建表SQL，不迁移正式表。
+- [x] D04：显式列的typed按键/日期范围/分页读取，有界500行API和完整键读取。
+- [x] D05：250行/1MiB上限的typed QWP写入，确认ACK后逐键逐值回读；仅允许隔离表。
+- [x] D06：每SSE开市日单请求；6,000行cap fail-closed；空响应/异常不映射成已完成空区间。
+- [x] D07：定义单canonical `margin_detail` job和显式隔离计划/运行/状态/取消/恢复服务；共享CLI/group接线由协调器完成。
+- [x] D08：有限重试、7日重叠、14日窗口、SHA收据、checkpoint/Backfill overlay、目标身份冻结和终态切片的幂等恢复已实现；未解决写入保持`IN_DOUBT`与锁，自动闭账待明确停止写入并全键回读的恢复方案。
+- [ ] D09：独立原始收据→QuestDB回读helper已实现；真实来源、独立库读写、恢复及幂等验收待协调器执行。
 
 ## 可观察验收
 
@@ -81,6 +91,7 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 - 全量引用和字段依据：`D:/work/fund_2/back-monitor/artifacts/storage-audit-20260929/objects.csv` 中 `margin_detail` 对应行。
 - 字典依据：`D:/work/fund_2/back-monitor/artifacts/storage-audit-20260929/object-dictionary.md` 的 `margin_detail` 小节。
+- 官方接口契约：<https://tushare.pro/document/2?doc_id=59>。
 
 ## 本任务容错、实际验收与完成登记（必做）
 

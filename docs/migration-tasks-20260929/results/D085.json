@@ -1,0 +1,172 @@
+{
+  "task_id": "D085",
+  "dataset_id": "l2_dataset_manifest",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-29T18:11:05.295Z",
+  "finished_at": "2026-09-29T18:40:38Z",
+  "scope_override": "User specified serial execution from D085 in directory order; this overrides the task card's cross-scope D084 ordering prerequisite. Existing D007-D084 statuses were not changed by this override.",
+  "target": {
+    "target_id": "questdb-42c140c7e58bdb33b84bdf82f4d122b1886707343c61b59c513e096cbed4257c",
+    "formal_table": "l2_dataset_manifest",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d085_l2_dataset_manifest_acceptance_20260930",
+    "isolated": true,
+    "final_unique_rows": 4,
+    "questdb_readback": "verified_full_keys_and_all_columns"
+  },
+  "runs": [
+    {
+      "run_id": "d085-20260929T181127922Z-2794f0fa-0121-412d-b8ef-2e0cfa4fad3d",
+      "mode": "BACKFILL",
+      "window": ["2026-09-21", "2026-09-23"],
+      "source_rows": 3,
+      "submitted_rows": 3,
+      "verified_rows": 3,
+      "state": "VERIFIED"
+    },
+    {
+      "run_id": "d085-20260929T181429598Z-99974eb0-dcfd-4493-8605-beeca2c815bb",
+      "mode": "BACKFILL",
+      "window": ["2026-09-21", "2026-09-23"],
+      "source_rows": 3,
+      "submitted_rows": 3,
+      "verified_rows": 3,
+      "state": "VERIFIED",
+      "purpose": "same-range idempotent rerun"
+    },
+    {
+      "run_id": "d085-20260929T181911036Z-52c70efd-821d-4dfa-b380-8322189deb68",
+      "mode": "INCREMENTAL",
+      "window": ["2026-09-21", "2026-09-24"],
+      "source_rows": 4,
+      "submitted_rows": 4,
+      "verified_rows": 4,
+      "state": "VERIFIED"
+    }
+  ],
+  "incremental": {
+    "revision_overlap": "3 calendar days",
+    "checkpoint_before": "2026-09-23",
+    "checkpoint_after": "2026-09-24",
+    "checkpoint_policy": "Receipt-backed verified coverage with bounded overlap; not physical MAX alone"
+  },
+  "source": {
+    "provider": "Local PyArrow Parquet dataset",
+    "root": "D:/work/fund_2/back-monitor/artifacts/level2_t0_dataset",
+    "selected_rows": 4,
+    "normalized_rows": 4,
+    "rejected_rows": 0,
+    "selected_dates": ["2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24"],
+    "symbol_filter": "000001.SZ",
+    "files_scanned": 1589,
+    "source_rows_scanned": 31731,
+    "source_bytes_scanned": 21945806,
+    "source_fingerprint": "63dc7538453e9c69c0057e45202a2dc132e300dd2a37ada784af37bec1a7a5e5",
+    "schema_fingerprint": "253a804be11f8ab50c2a8facdcd7d9ad6775e9b6043cdcf12244abd12a3c20e5",
+    "parser_version": "l2-dataset-manifest-parquet-v1",
+    "complete_for_discovered_files": true,
+    "external_completion_manifest": false,
+    "pagination": "Four bounded JSONL pages for four selected rows; page size 200; source file and row budgets enforced",
+    "receipt_evidence": "artifacts/java-migration/D085/source-manifest-20260921-24.jsonl"
+  },
+  "write": {
+    "submitted_rows": 10,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "delivery_status": "three runs acknowledged and verified by complete-key readback",
+    "batch_row_limit": 200,
+    "batch_byte_limit": 1048576,
+    "retry_policy": "No automatic retry for this local source job; failure remains visible and must be reconciled before resubmission"
+  },
+  "questdb_readback": {
+    "query_evidence": "artifacts/java-migration/D085/commands/readback-request.json",
+    "test_evidence": "artifacts/java-migration/D085/commands/typed-read-live-test.log",
+    "compared_columns": [
+      "trade_date",
+      "symbol",
+      "market",
+      "board",
+      "source_root",
+      "output_root",
+      "feature_version",
+      "daily_feature_ok",
+      "t0_ok",
+      "raw_row_counts",
+      "output_paths",
+      "cost_config",
+      "horizons_min",
+      "errors",
+      "batch_id",
+      "trade_date_ts"
+    ],
+    "actual_rows": 4,
+    "matched_rows": 4,
+    "mismatched_rows": 0,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": true,
+    "second_incremental": true,
+    "source_completeness_and_caps": "Four-date bounded scan completed below configured file/row/byte limits; source receipt marked complete",
+    "cancel": "Cancellation before the first writable page raised CancellationException after bounded process termination; temporary Windows output-file cleanup no longer masks cancellation",
+    "unknown_write_reconcile": "All submitted rows were reconciled by full-key and full-column readback before runs became VERIFIED",
+    "tests_run": true,
+    "test_classes": [
+      "L2DatasetManifestMappingTest",
+      "L2DatasetManifestLiveAcceptanceTest",
+      "VerifiedBatchExecutorTest",
+      "SyncJobRunnerBoundaryTest"
+    ],
+    "targeted_tests": "Passed in an isolated test copy; D085 files matched the workspace. A temporary compile-only adaptation for unrelated in-progress D011/D012 calls was applied only in that copy and was not copied back.",
+    "live_questdb_isolated_readback": "Exact source keys and all 16 columns matched; four unique rows remained in the isolated table",
+    "formal_table_mutated": false
+  },
+  "attempt_history": [
+    {
+      "attempt": "initial_cancel_boundary_test",
+      "result": "failed",
+      "reason": "On Windows, a redirected temp output file remained briefly locked and cleanup IOException masked the expected cancellation signal.",
+      "resolution": "Preserved the primary cancellation exception and registered locked temporary files for JVM-exit cleanup; the rerun passed."
+    },
+    {
+      "attempt": "Spring_group_readback_command",
+      "result": "failed_before_D085_query",
+      "reason": "An unrelated ETF dataset static initializer failed during Spring group construction while other task sources were changing.",
+      "resolution": "Ran the dedicated D085 typed live acceptance test directly against the isolated table; all four full rows and all columns matched."
+    }
+  ],
+  "integration_build_note": "The full current workspace Gradle test run is not claimed. Concurrent D011/D012 source edits caused unrelated project-wide compile failures; targeted D085 and shared-boundary tests passed in an isolated copy with a local-only compatibility adaptation for those unrelated call sites.",
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/D085/commands/create-target.log",
+    "artifacts/java-migration/D085/commands/plan-filtered-20260921-23.log",
+    "artifacts/java-migration/D085/commands/run-backfill-20260921-23.log",
+    "artifacts/java-migration/D085/commands/status-backfill-20260921-23.log",
+    "artifacts/java-migration/D085/commands/run-idempotent-backfill-20260921-23.log",
+    "artifacts/java-migration/D085/commands/plan-incremental-20260921-24.log",
+    "artifacts/java-migration/D085/commands/run-incremental-20260921-24.log",
+    "artifacts/java-migration/D085/commands/readback-request.json",
+    "artifacts/java-migration/D085/commands/typed-read-live-test.log",
+    "artifacts/java-migration/D085/commands/targeted-d085-cancellation-test.log",
+    "artifacts/java-migration/D085/commands/targeted-d085-and-shared-fault-tests.log",
+    "artifacts/java-migration/D085/source-manifest-20260921-24.jsonl"
+  ],
+  "next_manual_comparison": "User may inspect the saved Parquet receipt and compare its four source rows with the isolated QuestDB typed read. Human review remains pending_review.",
+  "current_progress": "Bounded local Parquet source, first nonempty backfill, idempotent rerun, incremental overlap, typed readback, cancellation boundary and targeted tests verified.",
+  "remaining_live_acceptance": [],
+  "live_acceptance_attempt": {
+    "result": "verified",
+    "formal_tables_mutated": false,
+    "isolated_table": "java_d085_l2_dataset_manifest_acceptance_20260930"
+  }
+}

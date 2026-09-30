@@ -1,0 +1,174 @@
+{
+  "task_id": "D090",
+  "dataset_id": "backtest_daily",
+  "job_id": null,
+  "implementation_status": "retained_compatibility",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-30T06:51:47+08:00",
+  "finished_at": "2026-09-30T07:17:17+08:00",
+  "disposition": {
+    "decision": "retained_compatibility",
+    "reason": "Python owns the current source-version read-through path through v_backtest_daily and backtest_daily_cache; a new Java materializer/writer would create a competing computation owner.",
+    "java_surface": "Typed READ-only compatibility definition and bounded repository for the retained physical backtest_daily table.",
+    "legacy_materializer": "Still manually callable in Python; not registered as the current readthrough owner. Its full rebuild path drops backtest_daily, so it was not invoked.",
+    "current_quality_rule": "Legacy backtest_daily quality check is disabled; current data checks target v_backtest_daily."
+  },
+  "target": {
+    "formal_table": "backtest_daily",
+    "formal_table_mutated": false,
+    "formal_rows_before": 10355884,
+    "formal_rows_after": 10355884,
+    "formal_table_txn_before": 17,
+    "formal_table_txn_after": 17,
+    "formal_range": ["2010-01-29", "2026-09-17"],
+    "isolated_table": null,
+    "isolated": null,
+    "reason_no_isolated_target": "The selected disposition is read-only compatibility validation; no write, DDL, or cache-fill operation was performed.",
+    "written_rows": 0
+  },
+  "contract": {
+    "field_count": 13,
+    "business_key": ["trade_date", "ts_code"],
+    "physical_dedup_key": ["trade_date", "ts_code"],
+    "designated_timestamp": "trade_date",
+    "partition": "DAY",
+    "wal": true,
+    "dedup": true,
+    "capabilities": ["READ"],
+    "time_semantics": "Exchange business date. Physical TIMESTAMP is a UTC-midnight calendar-date carrier, not an event instant.",
+    "numeric_semantics": "Unadjusted prices and limits in CNY/share; Tushare volume in lots and amount in thousand CNY; adj_factor dimensionless. Suspended synthetic rows carry previous close and zero vol/amount.",
+    "nullable_fields": ["open", "high", "low", "close", "vol", "amount", "adj_factor", "up_limit", "down_limit", "is_suspended", "is_st"],
+    "flag_type_compatibility": "Formal table is INT; active view reports is_suspended as LONG. Live comparison converted with Math.toIntExact and matched."
+  },
+  "python_owner": {
+    "registry": "src/quant_platform/data/adapters/materializers/registry.py",
+    "registry_backend": "readthrough",
+    "owner_job": null,
+    "refresh_policy": "source_version_on_read",
+    "output": "backtest_daily_cache",
+    "read_path": "dataset_snapshots.py rewrites the legacy logical table read to cache rows for the calculated source_version; cache misses are built from v_backtest_daily.",
+    "cache_verification": "Python validates source version stability, unique keys, row count, content digest and settled WAL before publishing coverage.",
+    "legacy_cli": "quant_platform.data.derived.market.backtest_daily.run_backtest_daily remains callable; it is not a scheduled registry owner."
+  },
+  "read_acceptance": {
+    "checked_at": "2026-09-30T07:08:48+08:00",
+    "database_access": "Local configured QuestDB over JDBC; SELECT only.",
+    "date": "2026-09-17",
+    "formal_table_rows": 200,
+    "active_view_rows": 200,
+    "compared_columns": 13,
+    "matched_field_values": 2600,
+    "mismatched_field_values": 0,
+    "duplicate_or_missing_keys": 0,
+    "read_group_typed_binding": "passed",
+    "formal_table_row_count_before_after": [10355884, 10355884],
+    "formal_table_txn_before_after": [17, 17],
+    "sample_rows": [
+      {
+        "trade_date": "2026-09-17",
+        "ts_code": "000001.SZ",
+        "open": 11.68,
+        "high": 11.74,
+        "low": 11.57,
+        "close": 11.61,
+        "vol": 691925.35,
+        "amount": 806153.13,
+        "adj_factor": 139.008,
+        "up_limit": 12.87,
+        "down_limit": 10.53,
+        "is_suspended": 0,
+        "is_st": 0
+      },
+      {
+        "trade_date": "2026-09-17",
+        "ts_code": "000002.SZ",
+        "open": 3.01,
+        "high": 3.03,
+        "low": 3.0,
+        "close": 3.02,
+        "vol": 553289.76,
+        "amount": 166930.84,
+        "adj_factor": 181.704,
+        "up_limit": 3.33,
+        "down_limit": 2.73,
+        "is_suspended": 0,
+        "is_st": 0
+      },
+      {
+        "trade_date": "2026-09-17",
+        "ts_code": "000006.SZ",
+        "open": 6.68,
+        "high": 6.96,
+        "low": 6.66,
+        "close": 6.87,
+        "vol": 130855.24,
+        "amount": 89394.09,
+        "adj_factor": 39.74,
+        "up_limit": 7.41,
+        "down_limit": 6.07,
+        "is_suspended": 0,
+        "is_st": 0
+      }
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "d090-readonly-20260930T230848Z",
+      "mode": "BOUNDED_READ_COMPATIBILITY",
+      "window": ["2026-09-17", "2026-09-17"],
+      "formal_rows": 200,
+      "view_rows": 200,
+      "written_rows": 0,
+      "verified_rows": 200,
+      "state": "VERIFIED",
+      "comparison": "All 13 fields matched on complete (trade_date, ts_code) keys; typed ReadGroup page equalled direct typed repository page."
+    }
+  ],
+  "checkpoint": {
+    "before": null,
+    "after": null,
+    "applicability": "Not applicable: Java performs no source sync or materialization and does not own the Python source-version cache checkpoint."
+  },
+  "checks": {
+    "d01_typed_model_definition_and_all_13_mappings": true,
+    "d02_business_and_physical_key": true,
+    "d03_existing_day_wal_dedup_preserved_without_ddl": true,
+    "d04_bounded_typed_key_date_range_read_and_read_group": true,
+    "d05_direct_java_write": "not_applicable_by_retained_compatibility_decision; WRITE capability rejected",
+    "d06_java_source_sync_or_materializer": "not_applicable; Python remains current readthrough/materialization owner",
+    "d07_dataset_registered_single_data_sync_job": "dataset registered; sync job intentionally absent because no Java sync owner exists",
+    "d08_read_timeout_page_bound_cursor_and_duplicate_key_guard": true,
+    "d09_nonempty_live_read_and_full_field_view_comparison": true,
+    "formal_table_mutated": false,
+    "active_cache_written": false,
+    "human_review": "pending_review"
+  },
+  "build_and_test": {
+    "java_runtime": "25.0.2",
+    "target_release": 24,
+    "focused_compilation": "D090 main, read-group configuration, mapping tests and live read test compiled via javac --release 24.",
+    "mapping_tests": "4 passed, 0 failed",
+    "live_acceptance_tests": "1 passed, 0 failed",
+    "full_workspace_gradle": "Not run for D090; D089 records the current unrelated incomplete Moneyflow/D024/D026 source blockers to full compile."
+  },
+  "evidence": [
+    "artifacts/java-migration/D090/commands/live-compatibility-20260930.json",
+    "artifacts/java-migration/D090/commands/java-live-read-20260930.json",
+    "artifacts/java-migration/D090/commands/focused-compile-20260930.log",
+    "artifacts/java-migration/D090/commands/focused-tests-20260930.log",
+    "artifacts/java-migration/D090/commands/mapping-test-20260930.log",
+    "artifacts/java-migration/D090/coordinator-review-20260930.json"
+  ],
+  "known_limitations": [
+    "The Java typed repository reads the retained physical compatibility table; it does not reproduce Python source-version isolation and is not a substitute for the active Python research readthrough path.",
+    "The direct live comparison covered one real date and its first 200 ordered keys; it was bounded by design and does not claim whole-history equivalence.",
+    "The Python readthrough owner can populate its cache on a cache miss. D090 did not invoke that potentially writing path.",
+    "The legacy Python CLI materializer remains manually callable; its full rebuild branch is destructive. It was not invoked.",
+    "Human review remains pending."
+  ]
+}

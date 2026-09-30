@@ -1,0 +1,1125 @@
+{
+  "dataset_id": "l2_daily_features",
+  "source_root": "D:\\work\\fund_2\\back-monitor\\artifacts\\level2_t0_dataset",
+  "python_model": "src/quant_platform/data/adapters/questdb/models/stock/l2_features.py:L2DailyFeatures",
+  "table": "l2_daily_features",
+  "timestamp_column": "ts",
+  "partition_by": "DAY",
+  "dedup_keys": [
+    "ts",
+    "symbol"
+  ],
+  "questdb_census": {
+    "rows": 4924676,
+    "min_ts": "2023-01-03 00:00:00",
+    "max_ts": "2026-09-24 00:00:00"
+  },
+  "fields": [
+    {
+      "name": "ts",
+      "storage_type": "TIMESTAMP",
+      "nullable": false,
+      "meaning": "交易日期时间戳"
+    },
+    {
+      "name": "symbol",
+      "storage_type": "SYMBOL",
+      "nullable": false,
+      "meaning": "股票代码"
+    },
+    {
+      "name": "has_deal",
+      "storage_type": "BOOLEAN",
+      "nullable": true,
+      "meaning": "当日是否存在成交数据"
+    },
+    {
+      "name": "has_order",
+      "storage_type": "BOOLEAN",
+      "nullable": true,
+      "meaning": "当日是否存在委托数据"
+    },
+    {
+      "name": "has_snapshot",
+      "storage_type": "BOOLEAN",
+      "nullable": true,
+      "meaning": "当日是否存在快照数据"
+    },
+    {
+      "name": "deal_records",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "原始成交记录数"
+    },
+    {
+      "name": "order_records",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "原始委托记录数"
+    },
+    {
+      "name": "snapshot_records",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "原始快照记录数"
+    },
+    {
+      "name": "continuous_auction_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "连续竞价记录占比"
+    },
+    {
+      "name": "crossed_quote_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "盘口倒挂占比"
+    },
+    {
+      "name": "locked_quote_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "盘口锁定占比"
+    },
+    {
+      "name": "missing_top5_quote_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "前五档盘口缺失占比"
+    },
+    {
+      "name": "feature_version",
+      "storage_type": "STRING",
+      "nullable": true,
+      "meaning": "特征管线版本号"
+    },
+    {
+      "name": "parser_version",
+      "storage_type": "STRING",
+      "nullable": true,
+      "meaning": "解析器版本号"
+    },
+    {
+      "name": "order_link_coverage",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "可建立订单链路的委托记录占比"
+    },
+    {
+      "name": "deal_order_match_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "成交可回连到委托单号的占比"
+    },
+    {
+      "name": "nonnegative_depth_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "盘口深度非负记录占比"
+    },
+    {
+      "name": "valid_spread_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "买一卖一价差有效记录占比"
+    },
+    {
+      "name": "orphan_execution_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "无法回连委托的成交占比"
+    },
+    {
+      "name": "cancel_without_fill_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "未成交即撤销的订单占比"
+    },
+    {
+      "name": "partial_fill_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "部分成交后终止的订单占比"
+    },
+    {
+      "name": "median_cancel_time_ms",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "提交到取消的中位耗时(毫秒)"
+    },
+    {
+      "name": "median_first_fill_time_ms",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "提交到首次成交的中位耗时(毫秒)"
+    },
+    {
+      "name": "passive_fill_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "被动成交量占总成交量比例"
+    },
+    {
+      "name": "large_order_fill_rate",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "大额订单成交量占提交量比例"
+    },
+    {
+      "name": "partial_cancel_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "发生部分撤单的订单占比"
+    },
+    {
+      "name": "replace_like_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "撤旧挂新类行为占比(近似代理)"
+    },
+    {
+      "name": "open_30m_spread_mean",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "开盘前30分钟平均相对价差"
+    },
+    {
+      "name": "close_30m_obi_mean",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "尾盘前30分钟盘口失衡均值"
+    },
+    {
+      "name": "midday_liquidity_drop",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "午间相对开盘的流动性下滑幅度"
+    },
+    {
+      "name": "afternoon_ofi_reversal",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "午后OFI相对上午是否反转"
+    },
+    {
+      "name": "open_close_vol_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "开盘成交量与尾盘成交量比"
+    },
+    {
+      "name": "close_30m_impact_mean",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "尾盘30秒价格冲击均值"
+    },
+    {
+      "name": "aggressor_label_match_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "供应商主动方向与盘口推断方向一致占比"
+    },
+    {
+      "name": "mid_cross_match_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "中间价附近成交经tick rule判向后的一致占比"
+    },
+    {
+      "name": "tick_rule_fallback_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "需要tick rule回退判向的成交占比"
+    },
+    {
+      "name": "unclassified_trade_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "无法稳定归类主动方向的成交占比"
+    },
+    {
+      "name": "depth_recovery_5s",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "最优盘口深度受冲击后5秒恢复比例"
+    },
+    {
+      "name": "best_quote_depletion_rate",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "买一卖一深度被显著耗尽的频率"
+    },
+    {
+      "name": "add_cancel_execute_ratio_top1",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "近端新增挂单相对撤单与成交消耗的比例"
+    },
+    {
+      "name": "depth_turnover_top5",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "前五档盘口深度换手速度"
+    },
+    {
+      "name": "book_pressure_decay",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "盘口压力一阶衰减强度"
+    },
+    {
+      "name": "queue_depletion_speed",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "最优档位队列消耗速度"
+    },
+    {
+      "name": "mean_rel_aggro",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "平均主买/主卖侵略性 (0~1)"
+    },
+    {
+      "name": "median_inter_arrival_ms",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "同方向订单到达毫秒级中位数耗时 (评判高频竞争度)"
+    },
+    {
+      "name": "algo_windows",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "被判定为机器/算法主导的 5 分钟时间窗数量 (低熵)"
+    },
+    {
+      "name": "total_windows",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "全天有效的 5 分钟时间窗总数"
+    },
+    {
+      "name": "mean_algo_entropy",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "算法单区域的平均香农时间熵"
+    },
+    {
+      "name": "mean_retail_entropy",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "散户单区域的平均香农时间熵"
+    },
+    {
+      "name": "algo_total_amount",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "算法(低熵)时段内促成的总成交金额"
+    },
+    {
+      "name": "retail_total_amount",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "散户(高熵)时段内促成的总成交金额"
+    },
+    {
+      "name": "wash_trade_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "全天虚假对倒交易占总成交的比例"
+    },
+    {
+      "name": "wash_amount",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "判定为虚假对倒成交的总金额"
+    },
+    {
+      "name": "clean_amount",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "剥离水分后的真实有效成交金额"
+    },
+    {
+      "name": "spoof_count",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "发生严重撤单欺诈的时间窗总数"
+    },
+    {
+      "name": "fake_pressure_count",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "假压单(上方大额挂单后撤单，诱导卖出)的发生次数"
+    },
+    {
+      "name": "fake_support_count",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "假托底(下方大额挂单后撤单，诱导买入)的发生次数"
+    },
+    {
+      "name": "mean_sell_otr",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "卖方全天平均 OTR 撤单比"
+    },
+    {
+      "name": "mean_buy_otr",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "买方全天平均 OTR 撤单比"
+    },
+    {
+      "name": "mean_cancel_distance_ticks",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "均值撤单价格距离最优盘口的偏离跳数 (鉴别真假做市)"
+    },
+    {
+      "name": "total_net_flow",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "取消噪音后的全天真实中枢流向"
+    },
+    {
+      "name": "q2_accumulation",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "仅在 Q2静默吸筹(主力进+小阴跌) 时期的净买入量"
+    },
+    {
+      "name": "mean_vwap_skew",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "VWAP 偏度 (正值表示当日量价重心在上方)"
+    },
+    {
+      "name": "q1_count",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "出现 主动拉升(流入+涨) 的时间窗数量"
+    },
+    {
+      "name": "q2_count",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "出现 静默吸筹(流入+跌) 的时间窗数量"
+    },
+    {
+      "name": "q3_count",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "出现 主动出货(流出+跌) 的时间窗数量"
+    },
+    {
+      "name": "q4_count",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "出现 拉高出货(流出+涨) 的时间窗数量"
+    },
+    {
+      "name": "main_net_inflow",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "超大单(>100万)净流入金额"
+    },
+    {
+      "name": "retail_funds_net_inflow",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "散户小单净流入金额 (反向参考)"
+    },
+    {
+      "name": "main_funds_buy_amount",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "主动扫盘的超大单总买额"
+    },
+    {
+      "name": "main_funds_sell_amount",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "主动砸盘的超大单总卖额"
+    },
+    {
+      "name": "mid_tier_net_inflow",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "中单(20w~100w)净买入，防范 TWAP 拆单隐藏"
+    },
+    {
+      "name": "trade_size_gini",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "成交分配基尼系数 (0极散，1极度寡头包揽)"
+    },
+    {
+      "name": "open_auction_net_inflow",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "集合竞价开盘净流入"
+    },
+    {
+      "name": "close_auction_net_inflow",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "集合竞价收盘净流入"
+    },
+    {
+      "name": "mean_spread",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "全天平均相对买卖价差 Spread"
+    },
+    {
+      "name": "mean_obi_top5",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "前五档买压 vs 卖压失衡比 (OBI, 短期极强预测)"
+    },
+    {
+      "name": "amihud_illiquidity",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "Amihud流动性冲击因子 (全天均值，厚度反指标)"
+    },
+    {
+      "name": "obi_top1_mean",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "买一卖一失衡均值"
+    },
+    {
+      "name": "obi_top5_std",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "前五档失衡波动"
+    },
+    {
+      "name": "obi_top1_std",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "买一卖一失衡波动"
+    },
+    {
+      "name": "depth_top1_mean",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "一档总深度均值"
+    },
+    {
+      "name": "depth_top5_mean",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "前五档总深度均值"
+    },
+    {
+      "name": "depth_slope",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "深度曲线相对斜率"
+    },
+    {
+      "name": "depth_convexity",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "深度曲线相对凸性"
+    },
+    {
+      "name": "microprice_minus_mid_mean",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "微价格相对中间价偏移均值"
+    },
+    {
+      "name": "microprice_minus_mid_std",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "微价格相对中间价偏移波动"
+    },
+    {
+      "name": "effective_spread_mean",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "成交相对中间价的有效价差均值"
+    },
+    {
+      "name": "realized_spread_1m",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "1分钟实现价差均值"
+    },
+    {
+      "name": "impact_30s",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "30秒价格冲击均值"
+    },
+    {
+      "name": "impact_5m",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "5分钟价格冲击均值"
+    },
+    {
+      "name": "orderbook_replenish_speed",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "盘口被吃后恢复速度"
+    },
+    {
+      "name": "ofi_mean",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "盘口 OFI 均值"
+    },
+    {
+      "name": "ofi_std",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "盘口 OFI 波动"
+    },
+    {
+      "name": "ofi_persistence",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "盘口 OFI 一阶持续性"
+    },
+    {
+      "name": "ofi_positive_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "OFI 为正占比"
+    },
+    {
+      "name": "ofi_negative_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "OFI 为负占比"
+    },
+    {
+      "name": "near_touch_cancel_add_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "最优盘口附近撤单与新增挂单之比"
+    },
+    {
+      "name": "gmm_main_force_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "主力资金成交量占比 (GMM 识别)"
+    },
+    {
+      "name": "gmm_hft_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "高频/算法成交量占比 (GMM 识别)"
+    },
+    {
+      "name": "gmm_retail_ratio",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "散户成交量占比 (GMM 识别)"
+    },
+    {
+      "name": "gmm_main_force_net_inflow",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "GMM 识别后的主力净流入金额"
+    },
+    {
+      "name": "mfi_pulse",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "能量脉冲 (由极其激进的扫盘成交聚合而来)"
+    },
+    {
+      "name": "mfi_escort",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "护盘底气 (巨额买单一挡二挡承接力测试)"
+    },
+    {
+      "name": "mfi_precip",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "资金沉淀 (累积定单流失衡正向溢价)"
+    },
+    {
+      "name": "mfi_score",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "综合主力进场强度打分(0-1)"
+    },
+    {
+      "name": "ofi_slope",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "meaning": "订单流不平衡 (OFI) 斜率 (5分钟窗口 OLS Beta)"
+    },
+    {
+      "name": "total_records",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "原始逐笔成交总数"
+    },
+    {
+      "name": "clean_records",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "清洗过滤后有效总数"
+    },
+    {
+      "name": "large_order_records",
+      "storage_type": "LONG",
+      "nullable": true,
+      "meaning": "符合大单的发生次数"
+    }
+  ],
+  "parquet_schema": [
+    {
+      "name": "ts",
+      "type": "timestamp[ns]"
+    },
+    {
+      "name": "symbol",
+      "type": "string"
+    },
+    {
+      "name": "has_deal",
+      "type": "bool"
+    },
+    {
+      "name": "has_order",
+      "type": "bool"
+    },
+    {
+      "name": "has_snapshot",
+      "type": "bool"
+    },
+    {
+      "name": "deal_records",
+      "type": "int64"
+    },
+    {
+      "name": "order_records",
+      "type": "int64"
+    },
+    {
+      "name": "snapshot_records",
+      "type": "int64"
+    },
+    {
+      "name": "continuous_auction_ratio",
+      "type": "double"
+    },
+    {
+      "name": "crossed_quote_ratio",
+      "type": "double"
+    },
+    {
+      "name": "locked_quote_ratio",
+      "type": "double"
+    },
+    {
+      "name": "missing_top5_quote_ratio",
+      "type": "double"
+    },
+    {
+      "name": "feature_version",
+      "type": "string"
+    },
+    {
+      "name": "parser_version",
+      "type": "string"
+    },
+    {
+      "name": "order_link_coverage",
+      "type": "double"
+    },
+    {
+      "name": "deal_order_match_ratio",
+      "type": "double"
+    },
+    {
+      "name": "nonnegative_depth_ratio",
+      "type": "double"
+    },
+    {
+      "name": "valid_spread_ratio",
+      "type": "double"
+    },
+    {
+      "name": "orphan_execution_ratio",
+      "type": "double"
+    },
+    {
+      "name": "cancel_without_fill_ratio",
+      "type": "double"
+    },
+    {
+      "name": "partial_fill_ratio",
+      "type": "double"
+    },
+    {
+      "name": "median_cancel_time_ms",
+      "type": "double"
+    },
+    {
+      "name": "median_first_fill_time_ms",
+      "type": "double"
+    },
+    {
+      "name": "passive_fill_ratio",
+      "type": "double"
+    },
+    {
+      "name": "large_order_fill_rate",
+      "type": "double"
+    },
+    {
+      "name": "partial_cancel_ratio",
+      "type": "double"
+    },
+    {
+      "name": "replace_like_ratio",
+      "type": "double"
+    },
+    {
+      "name": "open_30m_spread_mean",
+      "type": "double"
+    },
+    {
+      "name": "close_30m_obi_mean",
+      "type": "double"
+    },
+    {
+      "name": "midday_liquidity_drop",
+      "type": "double"
+    },
+    {
+      "name": "afternoon_ofi_reversal",
+      "type": "double"
+    },
+    {
+      "name": "open_close_vol_ratio",
+      "type": "double"
+    },
+    {
+      "name": "close_30m_impact_mean",
+      "type": "double"
+    },
+    {
+      "name": "aggressor_label_match_ratio",
+      "type": "double"
+    },
+    {
+      "name": "mid_cross_match_ratio",
+      "type": "double"
+    },
+    {
+      "name": "tick_rule_fallback_ratio",
+      "type": "double"
+    },
+    {
+      "name": "unclassified_trade_ratio",
+      "type": "double"
+    },
+    {
+      "name": "depth_recovery_5s",
+      "type": "double"
+    },
+    {
+      "name": "best_quote_depletion_rate",
+      "type": "double"
+    },
+    {
+      "name": "add_cancel_execute_ratio_top1",
+      "type": "double"
+    },
+    {
+      "name": "depth_turnover_top5",
+      "type": "double"
+    },
+    {
+      "name": "book_pressure_decay",
+      "type": "double"
+    },
+    {
+      "name": "queue_depletion_speed",
+      "type": "double"
+    },
+    {
+      "name": "mean_rel_aggro",
+      "type": "double"
+    },
+    {
+      "name": "median_inter_arrival_ms",
+      "type": "double"
+    },
+    {
+      "name": "algo_windows",
+      "type": "int64"
+    },
+    {
+      "name": "total_windows",
+      "type": "int64"
+    },
+    {
+      "name": "mean_algo_entropy",
+      "type": "double"
+    },
+    {
+      "name": "mean_retail_entropy",
+      "type": "double"
+    },
+    {
+      "name": "algo_total_amount",
+      "type": "double"
+    },
+    {
+      "name": "retail_total_amount",
+      "type": "double"
+    },
+    {
+      "name": "wash_trade_ratio",
+      "type": "double"
+    },
+    {
+      "name": "wash_amount",
+      "type": "double"
+    },
+    {
+      "name": "clean_amount",
+      "type": "double"
+    },
+    {
+      "name": "spoof_count",
+      "type": "int64"
+    },
+    {
+      "name": "fake_pressure_count",
+      "type": "int64"
+    },
+    {
+      "name": "fake_support_count",
+      "type": "int64"
+    },
+    {
+      "name": "mean_sell_otr",
+      "type": "double"
+    },
+    {
+      "name": "mean_buy_otr",
+      "type": "double"
+    },
+    {
+      "name": "mean_cancel_distance_ticks",
+      "type": "double"
+    },
+    {
+      "name": "total_net_flow",
+      "type": "double"
+    },
+    {
+      "name": "q2_accumulation",
+      "type": "double"
+    },
+    {
+      "name": "mean_vwap_skew",
+      "type": "double"
+    },
+    {
+      "name": "q1_count",
+      "type": "int64"
+    },
+    {
+      "name": "q2_count",
+      "type": "int64"
+    },
+    {
+      "name": "q3_count",
+      "type": "int64"
+    },
+    {
+      "name": "q4_count",
+      "type": "int64"
+    },
+    {
+      "name": "main_net_inflow",
+      "type": "double"
+    },
+    {
+      "name": "retail_funds_net_inflow",
+      "type": "double"
+    },
+    {
+      "name": "main_funds_buy_amount",
+      "type": "double"
+    },
+    {
+      "name": "main_funds_sell_amount",
+      "type": "double"
+    },
+    {
+      "name": "mid_tier_net_inflow",
+      "type": "double"
+    },
+    {
+      "name": "trade_size_gini",
+      "type": "double"
+    },
+    {
+      "name": "open_auction_net_inflow",
+      "type": "double"
+    },
+    {
+      "name": "close_auction_net_inflow",
+      "type": "double"
+    },
+    {
+      "name": "mean_spread",
+      "type": "double"
+    },
+    {
+      "name": "mean_obi_top5",
+      "type": "double"
+    },
+    {
+      "name": "amihud_illiquidity",
+      "type": "double"
+    },
+    {
+      "name": "obi_top1_mean",
+      "type": "double"
+    },
+    {
+      "name": "obi_top5_std",
+      "type": "double"
+    },
+    {
+      "name": "obi_top1_std",
+      "type": "double"
+    },
+    {
+      "name": "depth_top1_mean",
+      "type": "double"
+    },
+    {
+      "name": "depth_top5_mean",
+      "type": "double"
+    },
+    {
+      "name": "depth_slope",
+      "type": "double"
+    },
+    {
+      "name": "depth_convexity",
+      "type": "double"
+    },
+    {
+      "name": "microprice_minus_mid_mean",
+      "type": "double"
+    },
+    {
+      "name": "microprice_minus_mid_std",
+      "type": "double"
+    },
+    {
+      "name": "effective_spread_mean",
+      "type": "double"
+    },
+    {
+      "name": "realized_spread_1m",
+      "type": "double"
+    },
+    {
+      "name": "impact_30s",
+      "type": "double"
+    },
+    {
+      "name": "impact_5m",
+      "type": "double"
+    },
+    {
+      "name": "orderbook_replenish_speed",
+      "type": "double"
+    },
+    {
+      "name": "ofi_mean",
+      "type": "double"
+    },
+    {
+      "name": "ofi_std",
+      "type": "double"
+    },
+    {
+      "name": "ofi_persistence",
+      "type": "double"
+    },
+    {
+      "name": "ofi_positive_ratio",
+      "type": "double"
+    },
+    {
+      "name": "ofi_negative_ratio",
+      "type": "double"
+    },
+    {
+      "name": "near_touch_cancel_add_ratio",
+      "type": "double"
+    },
+    {
+      "name": "gmm_main_force_ratio",
+      "type": "double"
+    },
+    {
+      "name": "gmm_hft_ratio",
+      "type": "double"
+    },
+    {
+      "name": "gmm_retail_ratio",
+      "type": "double"
+    },
+    {
+      "name": "gmm_main_force_net_inflow",
+      "type": "double"
+    },
+    {
+      "name": "mfi_pulse",
+      "type": "double"
+    },
+    {
+      "name": "mfi_escort",
+      "type": "double"
+    },
+    {
+      "name": "mfi_precip",
+      "type": "double"
+    },
+    {
+      "name": "mfi_score",
+      "type": "double"
+    },
+    {
+      "name": "ofi_slope",
+      "type": "double"
+    },
+    {
+      "name": "total_records",
+      "type": "int64"
+    },
+    {
+      "name": "clean_records",
+      "type": "int64"
+    },
+    {
+      "name": "large_order_records",
+      "type": "int64"
+    }
+  ],
+  "schema_match": true,
+  "source_row_date_for_acceptance": "2026-09-24",
+  "source_row_date_file_count": 397,
+  "source_row_date_file_bytes": 33349511
+}

@@ -1,8 +1,16 @@
-# 本地串行执行状态（2026-09-29）
+# 本地任务执行状态（2026-09-30）
 
-当前：F001–F017、D001–D003已验收（20/201），第2批10/10；下一项D004。D003当前代码默认回归278项：216通过、62项opt-in跳过、0失败；真实来源与隔离目标2803行全字段比对通过，正式 `index` 仍为2274行且与原基线18列逐键一致。首批本地提交：8bd4f2d7f120f2773bb6a72c61a16e339f31fa53；未push。以下保留历史Orca故障，不代表当前阻塞。
+范围切换前的历史计划曾覆盖 F001–F017、D001–D084；此前条目的状态继续保留在全局清单，当前执行范围以用户最新指令为准。
 
-用户已授权立即本地串行执行，持续监督，每10项验收通过做一次本地提交，然后继续；不push。Q系列仍按原有逐对象准入条件处理。
+最新用户范围：按目录顺序串行执行 D085–D184（10-l2、11-derived、12-factor、13-strategy、14-runtime，共100项）。用户明确覆盖任务卡中 D084 的跨范围前置安排；D007–D084保持原状态。
+
+D085 `l2_dataset_manifest` 已完成隔离验收：本地QuestDB隔离表创建成功；2026-09-21至23回填、同范围幂等重跑、覆盖至09-24的增量运行均为VERIFIED。累计提交10行，隔离表4个唯一键；独立typed read逐字段比较16列、4/4匹配。取消边界与D085及共享批处理边界定向测试通过。正式表未修改。结果和证据见 `results/D085.json`；人工复核pending_review。D086 `l2_daily_features` 已完成：隔离表 `java_d086_l2_daily_features_acceptance_final8_20260930` 共4行，110列×4的独立源对照全部一致；首次回填、幂等重跑、三日重叠增量和精确resume均VERIFIED，源取消/指纹漂移检查及job/run/slice管理入口通过。主工作区编译和全应用启动仍受未完成ETF类型及final Repository代理问题阻断；D086测试在临时隔离副本通过，未将编译垫片带回。正式表未修改，详见 `results/D086.json`；人工复核pending_review。按序转入D087 `l2_intraday_bar_features`。
+
+连接恢复：已定位本机Windows服务 `QuestDB`，配置为 `D:/tool/questdb/db/data/conf/server.conf`。localhost:9000 的 SELECT 1 与 localhost:8812/qdb 的 PostgreSQL只读查询均成功；认证值从本机服务配置/注明的默认值读取，仅通过当前子进程环境覆盖Java项目中的占位值。D007–D009隔离验收已重新启动，最终结果待运行完成。
+
+范围切换前的进度快照：F001–F017、D001–D010、D013–D014已验收，共29项；其余条目按全局清单原状态保留。人工复核pending_review。
+
+本次 D085–D184 按目录串行推进，不启动并行任务。Q系列仍需单独准入。
 
 ## 历史Orca启动记录
 
@@ -33,7 +41,7 @@
 ## 后续监督及提交规则
 
 1. 继续前读取本文件、manifest和completion-register，确认当前任务与实际Orca Task/Dispatch映射，不从F002跳过F001。
-2. 同时只有一个当前任务worker；验收通过后立刻派发下一卡。worker提前停下时核实退出与证据，再恢复当前任务，不能静默跳项。
+2. 每批最多三个互不依赖的实现worker；协调器独占共享接线，live验收一次只跑一个。worker提前停下时核实退出与证据，批次遇阻后续验收暂停。
 3. 每10项验收通过，运行该批适用检查、审查diff、只暂存本批任务产物并本地commit；末批不足10项完成后也提交。不得git add .或把用户无关修改捎入提交，不push。
 4. 每批记录任务ID、commit hash、验证证据和未解决项；写入ACK/fixture/只生成record不计完成。
 5. 完成登记中的human_review保持pending_review，由用户逐表复核。
@@ -229,4 +237,31 @@ D005继续：1062写入组合第一项验收后取消、第二项childRunId=null
 
 D005已验收：单行业真实来源 Y4/N3 首次隔离写入7条、同范围真实重跑0写入，空行业0行；14字段QuestDB回读与独立9来源字段核对均无差异。多行业及跨数据sync组合、typed-write双WAL数据组合、部分失败及早期中断恢复通过。准备写入暂存后与已发布后中断恢复各1项通过；批次计划后及slot后首子任务前恢复各1项通过。`local-D005-full-live-build` 48项中46通过、2只读条件跳过、0失败；`local-D005-final-read-build` 补跑2项通过；项目常规回归351项中244通过、107条件跳过、0失败。正式index_member保持5902行、ID1760、WAL writer/sequencer=2且无积压；结果见results/D005.json与artifacts/java-migration/D005/final-review.md。累计22项verified，第三批2/10；人工pending_review。下一项D006 ths_member。
 
-D006已验收：同花顺 `ths_member` 以显式单板块切片请求，真实来源 `885800.TI` 返回506键、`700001.TI` 大板块预检5565行；隔离表首次替换506行并完整复制另5565行，8字段回读与流式原值指纹一致，重跑506行无再次发布。正常/旧表改名后/暂存后与账本失败后恢复、prepared写入组合、sync组合及来源触顶/重复键/取消边界通过。项目常规回归371项中249通过、122条件跳过、0失败；最终正式表只读扫描416612行、ID1779、WAL writerTxn=3，未作正式表发布。结果见results/D006.json与artifacts/java-migration/D006/final-review.md。累计23项verified，第三批3/10；人工pending_review。下一项D007 daily。
+D006已验收：同花顺 `ths_member` 以显式单板块切片请求，真实来源 `885800.TI` 返回506键、`700001.TI` 大板块预检5565行；隔离表首次替换506行并完整复制另5565行，8字段回读与流式原值指纹一致，重跑506行无再次发布。正常/旧表改名后/暂存后与账本失败后恢复、prepared写入组合、sync组合及来源触顶/重复键/取消边界通过。项目常规回归371项中249通过、122条件跳过、0失败；最终正式表只读扫描416612行、ID1779、WAL writerTxn=3，未作正式表发布。结果见results/D006.json与artifacts/java-migration/D006/final-review.md。累计23项verified，第三批3/10；人工pending_review。下一批实现从D007–D009开始。
+
+## 用户授权的并行批次（2026-09-29）
+
+- 批次1：D007 `daily`、D008 `daily_basic`、D009 `stk_factor` 并行实现；共享注册、CLI和写组路由由协调器集成，来源预算和QuestDB验收保持串行。
+- 完成：三个owner/DTO/domain/mapper/read/write/source/CLI入口已接线；D008后续增量CLI允许由checkpoint推导30日修订重叠起点。完整 `gradlew test`：409项、0失败、123项条件跳过（286通过）；审计修正后于2026-09-30复跑通过；CLI专项与live验收harness编译通过。
+- live预检：2026-09-29T15:46Z，连接池查询 `tables()` 时QuestDB返回invalid username/password。证据：`artifacts/java-migration/market-live-27353976694746f6a25c9633222814fc/batch-live-acceptance-failure.json`。发生在DDL和Tushare请求之前：0来源请求、0隔离表创建、正式表无修改。
+- 恢复后再次预检：2026-09-29T16:06Z，同一只读连接仍返回invalid username/password；本地未设置 `APP_QUESTDB_PASSWORD`，`application.yml` 当前密码项仍为占位值。第二次仍为0来源请求、0隔离表创建、正式表无修改；证据：`artifacts/java-migration/market-live-e8970dc5629d4229b5b302bef716d4b1/batch-live-acceptance-failure.json`。
+- 2026-09-30审计复跑：先修正StockFactorSyncAdapter中的pattern-variable编译错误，再运行 `gradlew test`，409项、0失败、123项条件跳过（286通过）。最新测试报告覆盖D007–D009审计修正和新增回归测试；`git diff --check`及三份结果JSON解析均通过。
+- 当前下一步：修复本地QuestDB凭证后，从D007隔离验收重新启动；D007通过后依次验收D008和D009。未完成前这三项继续计入178项未完成主线。
+
+## 用户最新指定串行范围（2026-09-30）
+
+用户将当前执行范围切换为 `10-l2` → `11-derived` → `12-factor` → `13-strategy` → `14-runtime`，从D085开始逐项串行。本节按该最新指令更新，前面D007–D009批次记录保留为历史状态，不作为当前调度顺序。
+
+- D085 `l2_dataset_manifest`：verified。
+- D086 `l2_daily_features`：verified；独立证据见 `results/D086.json`。
+- D087 `l2_intraday_bar_features`：verified；正式表只读，隔离样本1014行、60列逐字段回读匹配，幂等回灌/增量/续跑及写组入口通过；人工复核 `pending_review`。证据见 `results/D087.json`。
+- D087验收期间三张失败尝试隔离表和一张最终验收表均保留，未修改正式表。详见D087 target census。
+- D087协调器验收门槛已通过；用户总体迁移目标仍在执行，D088已按顺序启动。D087人工复核仍为 `pending_review`。
+- D087 Java与测试源码在JDK24下成功编译（临时排除工作区已有未跟踪的不完整D019源文件；`build.gradle`已还原）；定向映射与live测试5项通过。默认全工作区编译仍受上述未跟踪源文件阻塞，详见D087结果文件。
+- D088 `l2_event_response_features`：verified；隔离表354行、73列全字段回读一致（25,842值），backfill/幂等重跑/incremental/resume/write-group通过；正式表只读，前后均114,123,728行。运行与核验记录见 `results/D088.json` 和 `artifacts/java-migration/D088/commands/target-census-20260930.json`。
+- D088语义核验记录了六类事件阈值；`future_mid_return_*` 按Python实际公式是未来VWAP/事件分钟mid−1，未来收益为前视结果。无Parquet part按错误处理，不冒充空成功。限流不适用于本地文件源；单次尝试、有限行/文件/页/字节/时间预算、取消和断点/重放已验收。
+- D088定向映射与live验收各1项通过。默认全工作区编译仍受无关且不完整的D019/D020源影响；D088 focused compile和验收测试通过，详情见结果文件。Orca主协调器核验当前QuestDB 354行隔离目标、25,842个字段比较、正式表114,123,728行及验收报告后接受D088门槛；记录见 `artifacts/java-migration/D088/coordinator-review-20260930.json`。人工 `pending_review` 保留；D089现按目录顺序启动。
+- D089 `l2_t0_training_labels`：verified。D085回执认证来源在2026-09-21..24为000001.SZ返回1,014行/8页；隔离表62列逐完整键回读1,014/1,014，全值62,868/62,868一致；正式表前后181,049,686行。BACKFILL/幂等重跑/INCREMENTAL/RESUME均VERIFIED，resume复用1,014行；取消与旧source fingerprint按预期拒绝。结果见 `results/D089.json` 和 `artifacts/java-migration/D089/commands/target-census-20260930.json`。
+- D089 outcome有前视语义且无maturity列：30m窗口有294行双侧alpha缺失但二元label为0，消费者须按非空coverage解释，人工复核仍pending_review。D089定向映射3项、真实live acceptance 1项通过。默认全工作区Gradle编译仍被既有不完整Moneyflow/D024/D026源阻断；D089依赖切片使用`javac --release 24`编译通过。写入组合分支已注册和静态复核，组合端到端未运行，结果内如实记录。
+- Orca主协调器复核D089来源、目标回读、formal row count及运行证据后接受D089串行门槛；记录见 `artifacts/java-migration/D089/coordinator-review-20260930.json`。下一项按指定目录顺序为D090 `backtest_daily`（`11-derived`）；D089人工复核保持pending_review。
+- D090 `backtest_daily`：按实际Python registry/readthrough/cache调用链确定为 `retained_compatibility`。保留旧正式表只读兼容定义；不新建Java writer、sync job或compute owner。Java bounded typed read与ReadGroup接入；本机QuestDB 2026-09-17有界读取200行，与`v_backtest_daily`按完整键比较13列、2,600个字段值全部匹配；正式表行数10,355,884及table_txn=17前后不变。映射测试4项和本机只读验收1项通过，focused compile通过。Python owner当前用source_version读取`backtest_daily_cache`，cache miss由`v_backtest_daily`填充；旧CLI materializer仍可手动运行但未调用。证据见`results/D090.json`与`artifacts/java-migration/D090/`。primary-coordinator gate接受串行推进；用户人工复核保持`pending_review`；下一项D091 `backtest_daily_cache_coverage`（`11-derived`）。

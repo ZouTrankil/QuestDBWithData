@@ -1,0 +1,74 @@
+{
+  "status" : "VERIFIED",
+  "humanReview" : "pending_review",
+  "targetTable" : "java_d088_l2_event_response_features_20260930053712_9ced7f2a",
+  "targetId" : "questdb-e4c997106f6f01208b68d5706b0ebd4d03433a19d869c08cb8fe892a05942a57",
+  "sourceRootIdentity" : "86d0d3d12084092eebd95a3de9037cd61e7fd3db3833550c8384b01090983a5b",
+  "sourceFingerprint" : "3f7faac071bb826971e008e7912f32d5ceb7cd7045118995cce689cf5441b5bf",
+  "schemaFingerprint" : "b2876ebe2905466f69f9b6088fe218570a765af88bb96852a80e67ac5ee65a29",
+  "sourceWindow" : [ "2026-09-21", "2026-09-24" ],
+  "sourceSelectedRows" : 354,
+  "manifestSourceRows" : 31731,
+  "sourceFiles" : 1593,
+  "sourceBytes" : 25674923,
+  "boundedPages" : 4,
+  "pageRows" : 200,
+  "fieldCount" : 73,
+  "independentFullFieldComparisons" : 25842,
+  "sourceCancellationObserved" : true,
+  "staleFingerprintRejected" : true,
+  "datasetAndJobRegistered" : true,
+  "managementPlanPreviewAndJobDetails" : true,
+  "managementRunStatusAndSlices" : true,
+  "targetReadbackRows" : 354,
+  "targetReadbackFullFieldEquality" : true,
+  "writeGroup" : {
+    "rejectedInput" : "commands\\write-group-incomplete-rejected-20260921.json",
+    "omittedSourceKeyRejected" : true,
+    "targetUnchangedAfterRejection" : true,
+    "acceptedInput" : "commands\\write-group-certified-sample-20260921.json",
+    "verifiedRows" : 101,
+    "state" : "VERIFIED"
+  },
+  "retryPolicy" : "maxAttempts=1; deterministic local Parquet errors remain visible for explicit reconciliation",
+  "rateLimit" : "not applicable: local manifest/Parquet source; process, page, file, row and byte budgets are finite",
+  "runEvidence" : {
+    "resume" : {
+      "reusedRows" : 354,
+      "sourceRows" : 354,
+      "verifiedRows" : 354,
+      "state" : "VERIFIED",
+      "runId" : "d088-20260929T213739000Z-2aced831-9149-4328-a53e-40e61551e433"
+    },
+    "incremental" : {
+      "reusedRows" : 0,
+      "sourceRows" : 354,
+      "verifiedRows" : 354,
+      "state" : "VERIFIED",
+      "runId" : "d088-20260929T213733430Z-54c31633-96ce-464e-856f-830a75f1e690"
+    },
+    "idempotentBackfill" : {
+      "reusedRows" : 0,
+      "sourceRows" : 268,
+      "verifiedRows" : 268,
+      "state" : "VERIFIED",
+      "runId" : "d088-20260929T213726687Z-af03a0e3-5adf-4217-a6ca-ab0f5e034e3b"
+    },
+    "backfill" : {
+      "reusedRows" : 0,
+      "sourceRows" : 268,
+      "verifiedRows" : 268,
+      "state" : "VERIFIED",
+      "runId" : "d088-20260929T213718659Z-59d99619-2777-41d0-a167-2020c863151b"
+    }
+  },
+  "checkpoint" : {
+    "replayedFrom" : "2026-09-21",
+    "through" : "2026-09-24",
+    "beforeIncremental" : "2026-09-23",
+    "revisionOverlapCalendarDays" : 3
+  },
+  "startedAt" : "2026-09-29T21:37:14.265733100Z",
+  "finishedAt" : "2026-09-29T21:37:55.163523500Z",
+  "evidence" : [ "commands/preflight-source-20260930.json", "commands/source-parquet-20260921-24.jsonl", "commands/target-census-20260930.json", "live-acceptance-20260930.json" ]
+}

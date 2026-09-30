@@ -1,0 +1,35 @@
+{
+  "task_id": "D088",
+  "reviewed_at": "2026-09-30T05:57:54+08:00",
+  "reviewer_role": "Orca primary coordinator",
+  "gate_status": "ACCEPTED",
+  "human_review": "pending_review",
+  "review_basis": {
+    "acceptance_report_status": "VERIFIED",
+    "isolated_target": "java_d088_l2_event_response_features_20260930053712_9ced7f2a",
+    "isolated_target_rows_read_live": 354,
+    "source_to_target_full_field_comparisons": 25842,
+    "all_source_target_fields_match": true,
+    "formal_table": "l2_event_response_features",
+    "formal_table_rows_before": 114123728,
+    "formal_table_rows_after_live_read": 114123728,
+    "formal_table_mutated_by_acceptance": false,
+    "source_cancellation_and_stale_fingerprint_checks": true,
+    "management_and_write_group_checks": true,
+    "focused_mapping_test": "passed",
+    "focused_live_acceptance_test": "passed"
+  },
+  "orchestration_state": {
+    "current_run": "run_3e58c05d4892",
+    "run_objective": "stale D007 daily run; no D088 gate or message was registered",
+    "decision": "The primary Orca coordinator reviewed the D088 evidence directly and accepted the task gate. The human semantic review remains pending."
+  },
+  "evidence": [
+    "artifacts/java-migration/D088/live-acceptance-20260930.json",
+    "artifacts/java-migration/D088/commands/target-census-20260930.json",
+    "artifacts/java-migration/D088/commands/live-acceptance-20260930053712_9ced7f2a.log",
+    "artifacts/java-migration/D088/commands/mapping-test-20260930.log",
+    "docs/migration-tasks-20260929/results/D088.json"
+  ],
+  "next_task": "D089 l2_t0_training_labels"
+}

@@ -1,0 +1,127 @@
+{
+  "status" : "VERIFIED",
+  "humanReview" : "pending_review",
+  "targetTable" : "java_d089_l2_t0_training_labels_804a7fe8",
+  "targetId" : "questdb-6ea84e29983c86e6b73e384811af9bd146f9d55c92985b99a97ee7d3368a6766",
+  "sourceRootIdentity" : "86d0d3d12084092eebd95a3de9037cd61e7fd3db3833550c8384b01090983a5b",
+  "sourceFingerprint" : "a424a04eca53842e27e4d270e6d26f545a31fb8df81fc4f57cc7611be33febfc",
+  "schemaFingerprint" : "94bacb043ca8fcee1d353dd68b39377add0c56a66ad2f47767e2aaa73e0333a7",
+  "sourceWindow" : [ "2026-09-21", "2026-09-24" ],
+  "sourceSelectedRows" : 1014,
+  "manifestSourceRows" : 31731,
+  "sourceFiles" : 1593,
+  "sourceBytes" : 25631460,
+  "boundedPages" : 8,
+  "pageRows" : 200,
+  "fieldCount" : 62,
+  "outcomeCoverageByHorizon" : {
+    "1m" : {
+      "rows" : 1014,
+      "future_vwap_return_non_null" : 940,
+      "future_mid_return_non_null" : 940,
+      "sell_alpha_non_null" : 944,
+      "buy_alpha_non_null" : 944,
+      "sell_binary_zero_with_missing_alpha" : 70,
+      "buy_binary_zero_with_missing_alpha" : 70
+    },
+    "3m" : {
+      "rows" : 1014,
+      "future_vwap_return_non_null" : 928,
+      "future_mid_return_non_null" : 928,
+      "sell_alpha_non_null" : 932,
+      "buy_alpha_non_null" : 932,
+      "sell_binary_zero_with_missing_alpha" : 82,
+      "buy_binary_zero_with_missing_alpha" : 82
+    },
+    "5m" : {
+      "rows" : 1014,
+      "future_vwap_return_non_null" : 916,
+      "future_mid_return_non_null" : 916,
+      "sell_alpha_non_null" : 920,
+      "buy_alpha_non_null" : 920,
+      "sell_binary_zero_with_missing_alpha" : 94,
+      "buy_binary_zero_with_missing_alpha" : 94
+    },
+    "10m" : {
+      "rows" : 1014,
+      "future_vwap_return_non_null" : 876,
+      "future_mid_return_non_null" : 876,
+      "sell_alpha_non_null" : 880,
+      "buy_alpha_non_null" : 880,
+      "sell_binary_zero_with_missing_alpha" : 134,
+      "buy_binary_zero_with_missing_alpha" : 134
+    },
+    "15m" : {
+      "rows" : 1014,
+      "future_vwap_return_non_null" : 836,
+      "future_mid_return_non_null" : 836,
+      "sell_alpha_non_null" : 840,
+      "buy_alpha_non_null" : 840,
+      "sell_binary_zero_with_missing_alpha" : 174,
+      "buy_binary_zero_with_missing_alpha" : 174
+    },
+    "30m" : {
+      "rows" : 1014,
+      "future_vwap_return_non_null" : 716,
+      "future_mid_return_non_null" : 716,
+      "sell_alpha_non_null" : 720,
+      "buy_alpha_non_null" : 720,
+      "sell_binary_zero_with_missing_alpha" : 294,
+      "buy_binary_zero_with_missing_alpha" : 294
+    }
+  },
+  "missingOutcomeLabelsAreNotNegativeOutcome" : true,
+  "independentFullFieldComparisons" : 62868,
+  "sourceCancellationObserved" : true,
+  "staleFingerprintRejected" : true,
+  "datasetAndJobRegistered" : true,
+  "registryPlanPreparation" : true,
+  "jobOwnerRunStatusAndSlices" : true,
+  "targetReadbackRows" : 1014,
+  "targetReadbackFullFieldEquality" : true,
+  "writeGroup" : {
+    "writeGroupSourceCertification" : "registered; runtime path statically reviewed",
+    "typedWriterPort" : "VERIFIED"
+  },
+  "retryPolicy" : "maxAttempts=1; deterministic local Parquet errors remain visible for explicit reconciliation",
+  "rateLimit" : "not applicable: local manifest/Parquet source; process, page, file, row and byte budgets are finite",
+  "runEvidence" : {
+    "idempotentBackfill" : {
+      "runId" : "d089-20260929T223621572Z-b2c976fd-c8c3-4422-84f4-8655b84d17eb",
+      "reusedRows" : 0,
+      "sourceRows" : 759,
+      "verifiedRows" : 759,
+      "state" : "VERIFIED"
+    },
+    "backfill" : {
+      "runId" : "d089-20260929T223611132Z-557f0ab3-25de-438d-b4af-88ff2aca2a53",
+      "reusedRows" : 0,
+      "sourceRows" : 759,
+      "verifiedRows" : 759,
+      "state" : "VERIFIED"
+    },
+    "resume" : {
+      "runId" : "d089-20260929T223639049Z-52e8a76e-b669-4341-a215-59be66ffa19f",
+      "reusedRows" : 1014,
+      "sourceRows" : 1014,
+      "verifiedRows" : 1014,
+      "state" : "VERIFIED"
+    },
+    "incremental" : {
+      "runId" : "d089-20260929T223630554Z-9f2b94c6-f6e5-41d7-bb13-595a9c19d71c",
+      "reusedRows" : 0,
+      "sourceRows" : 1014,
+      "verifiedRows" : 1014,
+      "state" : "VERIFIED"
+    }
+  },
+  "checkpoint" : {
+    "beforeIncremental" : "2026-09-23",
+    "revisionOverlapCalendarDays" : 3,
+    "replayedFrom" : "2026-09-21",
+    "through" : "2026-09-24"
+  },
+  "startedAt" : "2026-09-29T22:36:06.730632200Z",
+  "finishedAt" : "2026-09-29T22:36:47.019689800Z",
+  "evidence" : [ "commands/preflight-source-20260930.json", "commands/source-parquet-20260921-24.jsonl", "live-acceptance-20260930.json" ]
+}

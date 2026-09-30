@@ -1,0 +1,186 @@
+{
+  "task_id": "D086",
+  "dataset_id": "l2_daily_features",
+  "job_id": "data.l2_daily_features",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-29T19:45:28.413Z",
+  "finished_at": "2026-09-29T19:45:59.761Z",
+  "scope_override": "User-directed serial order D085 onward in 10-l2, 11-derived, 12-factor, 13-strategy, 14-runtime; D085 verified first. D007-D084 unchanged.",
+  "target": {
+    "formal_table": "l2_daily_features",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d086_l2_daily_features_acceptance_final8_20260930",
+    "isolated": true,
+    "final_unique_rows": 4,
+    "questdb_readback": "verified_full_keys_and_all_110_columns"
+  },
+  "source": {
+    "provider": "Local PyArrow Parquet plus D085 manifest receipts",
+    "root": "D:/work/fund_2/back-monitor/artifacts/level2_t0_dataset",
+    "selected_symbol": "000001.SZ",
+    "selected_dates": [
+      "2026-09-21",
+      "2026-09-22",
+      "2026-09-23",
+      "2026-09-24"
+    ],
+    "selected_rows": 4,
+    "rows_scanned": 31731,
+    "files_scanned": 1593,
+    "source_bytes_scanned": 22283980,
+    "source_fingerprint": "c2cca97dac41c37ca8abc436a04e89406f608987f9013b74b0b9ae4de842ad9a",
+    "schema_fingerprint": "79b8834bca176bb335232c7796ef1b86e2cfb0e0243456687e2f543c98de1a1d",
+    "parser_version": "l2-daily-features-parquet-v1",
+    "pages": 4,
+    "complete_for_selected_symbols": true,
+    "field_count": 110
+  },
+  "runs": [
+    {
+      "run_id": "d086-20260929T194533314Z-36e68021-428b-4fb3-a265-73a68569caa4",
+      "mode": "BACKFILL",
+      "window": [
+        "2026-09-21",
+        "2026-09-23"
+      ],
+      "source_rows": 3,
+      "submitted_rows": 3,
+      "verified_rows": 3,
+      "reused_rows": 0,
+      "state": "VERIFIED"
+    },
+    {
+      "run_id": "d086-20260929T194541515Z-2d4226ee-ff3d-449b-a7e1-e0e632ae34c3",
+      "mode": "BACKFILL",
+      "window": [
+        "2026-09-21",
+        "2026-09-23"
+      ],
+      "source_rows": 3,
+      "submitted_rows": 3,
+      "verified_rows": 3,
+      "reused_rows": 0,
+      "state": "VERIFIED",
+      "purpose": "same-range idempotent rerun"
+    },
+    {
+      "run_id": "d086-20260929T194547709Z-52d5cc03-a727-4d96-8a27-ecbc4ce81951",
+      "mode": "INCREMENTAL",
+      "window": [
+        "2026-09-21",
+        "2026-09-24"
+      ],
+      "source_rows": 4,
+      "submitted_rows": 4,
+      "verified_rows": 4,
+      "reused_rows": 0,
+      "state": "VERIFIED"
+    },
+    {
+      "run_id": "d086-20260929T194552967Z-0658f53f-d285-49a8-abbd-8cbea13e8768",
+      "mode": "RESUME",
+      "window": [
+        "2026-09-21",
+        "2026-09-24"
+      ],
+      "source_rows": 4,
+      "submitted_rows": 0,
+      "verified_rows": 4,
+      "reused_rows": 4,
+      "state": "VERIFIED",
+      "resumed_from": "d086-20260929T194547709Z-52d5cc03-a727-4d96-8a27-ecbc4ce81951"
+    }
+  ],
+  "checkpoint": {
+    "before_incremental": "2026-09-23",
+    "after_incremental": "2026-09-24",
+    "overlap": "3 calendar days",
+    "policy": "Receipt-backed latest verified run with three-day replay; verified resume re-fetches source pages and readback-checks before reusing slices."
+  },
+  "write": {
+    "submitted_rows": 10,
+    "final_rows": 4,
+    "delivery_status": "All new writes received QWP acknowledgement and full-key/full-column readback; resume reused four independently revalidated rows.",
+    "batch_row_limit": 200,
+    "batch_byte_limit": 1048576,
+    "retry_policy": "One attempt: deterministic local Parquet/manifest failures remain visible; no remote API rate limit applies."
+  },
+  "questdb_readback": {
+    "evidence": "artifacts/java-migration/D086/live-acceptance-20260930.json",
+    "independent_source_evidence": "artifacts/java-migration/D086/commands/source-parquet-20260921-24.jsonl",
+    "formal_table_comparison": "artifacts/java-migration/D086/commands/parquet-vs-formal-readback.json",
+    "actual_rows": 4,
+    "matched_rows": 4,
+    "mismatched_rows": 0,
+    "compared_columns": 110,
+    "matched_field_values": 440,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "passed": true
+  },
+  "checks": {
+    "nonempty_source_write_read": true,
+    "idempotent_rerun": true,
+    "second_incremental": true,
+    "verified_slice_resume": "New run re-fetched the four pages, compared current typed target values, and reused four verified rows.",
+    "source_cancellation": "Immediate cancellation raised CancellationException before a writable page.",
+    "source_failure": "Stale expected source fingerprint was rejected as a visible reader failure; no empty success.",
+    "pagination": "Four bounded pages; source completion matched page, row, file and fingerprint census.",
+    "dataset_and_job_registration": "DatasetRegistry and SyncJobRegistry both returned the D086 dataset/job; CommandLineRunner list, detail, plan preview, status and run/slice ledger commands passed.",
+    "retry_and_rate_limit": "Not applicable to local file source; automatic retry count is one attempt and failure remains visible.",
+    "independent_full_field_comparison": "Four typed QuestDB rows strictly equal the independent PyArrow source capture across 110 fields per row.",
+    "formal_table_mutated": false,
+    "tests_run": true,
+    "test_classes": [
+      "L2DailyFeaturesLiveAcceptanceTest"
+    ],
+    "targeted_tests": "Passed in isolated test copy; all three BACKFILL/INCREMENTAL runs and exact resume VERIFIED. Production compile used temporary compile-only shims for unrelated unfinished ETF source files; none copied to the workspace."
+  },
+  "attempt_history": [
+    {
+      "attempt": "resume_checkpoint_identity",
+      "result": "failed_then_fixed",
+      "reason": "The first recovery test showed each D086 Parquet page reused the whole-scan fingerprint, making checkpoints ambiguous.",
+      "resolution": "Page fingerprints now hash whole-source fingerprint, page cursor and canonical row values; exact resume verified and reused all four rows."
+    },
+    {
+      "attempt": "workspace_compile",
+      "result": "unrelated_compile_failure",
+      "reason": "Main workspace compileJava reports unfinished ETF symbols/types (EtfFactorJobService, missing EtfPortfolioDataset import/source symbols); no D086 compile errors.",
+      "resolution": "Compiled and ran D086 in an isolated copy with compile-only ETF shims; no shims copied back."
+    },
+    {
+      "attempt": "full_spring_cli_boot",
+      "result": "unrelated_bootstrap_failure",
+      "reason": "The application context cannot proxy an existing final ETF @Repository with CGLIB. D086 command dispatcher and registries were exercised directly in the live acceptance harness.",
+      "resolution": "No out-of-scope Spring/ETF edits made."
+    }
+  ],
+  "blockers": [],
+  "evidence_paths": [
+    "artifacts/java-migration/D086/live-acceptance-20260930.json",
+    "artifacts/java-migration/D086/source-contract-20260924.json",
+    "artifacts/java-migration/D086/commands/source-inspection-20260921-24.json",
+    "artifacts/java-migration/D086/commands/source-parquet-20260921-24.jsonl",
+    "artifacts/java-migration/D086/commands/parquet-vs-formal-readback.json",
+    "artifacts/java-migration/D086/commands/isolated-compile.log",
+    "artifacts/java-migration/D086/commands/live-acceptance-final8.log",
+    "artifacts/java-migration/D086/commands/invoke-d086-local.ps1",
+    "artifacts/java-migration/D086/commands/live-acceptance-final7.log"
+  ],
+  "next_manual_comparison": "Human review may compare the saved four-row independent Parquet sample and typed QuestDB readback; human review remains pending_review.",
+  "current_progress": "D086 local Parquet source, typed mapping for 110 fields, isolated QuestDB write/readback, idempotent rerun, revision-overlap increment, exact resume, failure/cancel checks and management dispatcher all verified.",
+  "remaining_live_acceptance": [],
+  "live_acceptance_attempt": {
+    "result": "verified",
+    "formal_tables_mutated": false,
+    "isolated_table": "java_d086_l2_daily_features_acceptance_final8_20260930",
+    "independent_full_field_comparisons": 440
+  }
+}

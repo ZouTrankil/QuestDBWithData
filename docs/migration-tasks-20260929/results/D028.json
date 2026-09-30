@@ -1,0 +1,65 @@
+{
+  "task_id": "D028",
+  "dataset": "margin_all",
+  "implementation_status": "implemented_not_verified",
+  "data_validation_status": "not_run",
+  "target_table": "java_d028_margin_all_<explicit-isolated-suffix>",
+  "target_identity": null,
+  "request_window": null,
+  "checkpoint_before": null,
+  "checkpoint_after": null,
+  "source_rows": null,
+  "submitted_rows": null,
+  "questdb_readback_rows": null,
+  "matched_rows": null,
+  "duplicate_source_keys": null,
+  "duplicate_target_keys": null,
+  "run_id": null,
+  "runtime_seconds": null,
+  "evidence": [
+    "artifacts/java-migration/D028/source-contract-review.md",
+    "artifacts/java-migration/D028/implementation-review.md",
+    "artifacts/java-migration/operations/MarginAllIndependentReadback.java"
+  ],
+  "checks_run": [
+    "Read-only D028 card/common-contract/Python connector/model review",
+    "Read-only schema audit and root-reported physical metadata confirmation",
+    "Scoped javac of D028 Java sources and independent readback helper into var/d028-agent-classes"
+  ],
+  "checks_not_run": [
+    "D027 serial acceptance gate",
+    "Tushare source request",
+    "QuestDB isolated target create/write/readback",
+    "Tests",
+    "Cancellation/recovery/unknown-write live acceptance"
+  ],
+  "remaining_acceptance": [
+    "Coordinator integration for dataset/read registry, CLI route, isolated table config, shared 150/minute endpoint budget, and write group",
+    "Complete the D027 serial gate before D028 live acceptance",
+    "Perform a nonempty isolated source/write/publication and independent nine-column readback",
+    "Verify an identical frozen-window rerun and subsequent bounded incremental overlap/checkpoint",
+    "Exercise stage-only discard, journal recovery, cancellation, and unknown-write reconciliation with stopped-writer evidence",
+    "Confirm current-account margin endpoint permission and effective pacing"
+  ],
+  "known_limitations": [
+    "No live source or QuestDB result is claimed; status remains implemented_not_verified.",
+    "Exact per-day trade_date is used on the same margin endpoint instead of Python's start_date/end_date range request; official endpoint supports trade_date, but this needs real-source acceptance.",
+    "The Tushare request cap of 4,000 is documented endpoint evidence; a response at cap is rejected as potentially truncated.",
+    "When a later provider response omits an existing exchange key, the no-DEDUP publisher fails closed because Python defines no deletion/tombstone behavior.",
+    "No formal-table migration or Flyway DDL is included; only an explicit isolated YEAR/WAL/non-DEDUP target is writable."
+  ],
+  "human_review": "pending_review",
+  "coordinator_integration": {
+    "status": "pending",
+    "cli": false,
+    "read_group": false,
+    "write_group": false,
+    "dataset_policy": false,
+    "endpoint_ceiling_per_minute": 150,
+    "target_prefix": "java_d028_margin_all_",
+    "default_bootstrap_from": "2026-01-01",
+    "scoped_javac": "passed",
+    "full_build_or_tests": "not_run",
+    "source_or_questdb_acceptance": "not_started"
+  }
+}

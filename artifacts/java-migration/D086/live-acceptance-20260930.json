@@ -1,0 +1,61 @@
+{
+  "status" : "VERIFIED",
+  "targetTable" : "java_d086_l2_daily_features_acceptance_final8_20260930",
+  "sourceRootIdentity" : "86d0d3d12084092eebd95a3de9037cd61e7fd3db3833550c8384b01090983a5b",
+  "sourceFingerprint" : "c2cca97dac41c37ca8abc436a04e89406f608987f9013b74b0b9ae4de842ad9a",
+  "schemaFingerprint" : "79b8834bca176bb335232c7796ef1b86e2cfb0e0243456687e2f543c98de1a1d",
+  "sourceWindow" : [ "2026-09-21", "2026-09-24" ],
+  "sourceSelectedRows" : 4,
+  "sourceFiles" : 1593,
+  "sourceBytes" : 22283980,
+  "fieldCount" : 110,
+  "independentFullFieldComparisons" : 440,
+  "boundedPages" : 4,
+  "sourceCancellationObserved" : true,
+  "staleFingerprintRejected" : true,
+  "datasetAndJobRegistered" : true,
+  "managementPlanPreviewAndJobDetails" : true,
+  "managementRunStatusAndSlices" : true,
+  "rateLimit" : "not applicable: source is local bounded Parquet/manifest IO; no remote API calls",
+  "automaticRetry" : "disabled: deterministic local source failure remains visible for reconciliation",
+  "firstBackfill" : {
+    "runId" : "d086-20260929T194533314Z-36e68021-428b-4fb3-a265-73a68569caa4",
+    "state" : "VERIFIED",
+    "sourceRows" : 3,
+    "verifiedRows" : 3,
+    "reusedRows" : 0
+  },
+  "idempotentBackfill" : {
+    "runId" : "d086-20260929T194541515Z-2d4226ee-ff3d-449b-a7e1-e0e632ae34c3",
+    "state" : "VERIFIED",
+    "sourceRows" : 3,
+    "verifiedRows" : 3,
+    "reusedRows" : 0
+  },
+  "incremental" : {
+    "from" : "2026-09-21",
+    "to" : "2026-09-24",
+    "replayedRevisionDays" : 3,
+    "checkpointBefore" : "2026-09-23",
+    "run" : {
+      "runId" : "d086-20260929T194547709Z-52d5cc03-a727-4d96-8a27-ecbc4ce81951",
+      "state" : "VERIFIED",
+      "sourceRows" : 4,
+      "verifiedRows" : 4,
+      "reusedRows" : 0
+    }
+  },
+  "resume" : {
+    "runId" : "d086-20260929T194552967Z-0658f53f-d285-49a8-abbd-8cbea13e8768",
+    "state" : "VERIFIED",
+    "sourceRows" : 4,
+    "verifiedRows" : 4,
+    "reusedRows" : 4
+  },
+  "readbackRows" : {
+    "independentSource" : 4,
+    "afterBackfill" : 3,
+    "afterIncremental" : 4,
+    "afterRepeatedBackfill" : 3
+  }
+}

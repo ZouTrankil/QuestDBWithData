@@ -1,0 +1,210 @@
+{
+  "task_id": "D088",
+  "dataset_id": "l2_event_response_features",
+  "job_id": "data.l2_event_response_features",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-30T05:37:12.5140380+08:00",
+  "finished_at": "2026-09-30T05:37:55.3099069+08:00",
+  "target": {
+    "formal_table": "l2_event_response_features",
+    "formal_table_mutated": false,
+    "formal_rows_before": 114123728,
+    "formal_rows_after": 114123728,
+    "formal_min_minute": "2026-02-02T01:15:00Z",
+    "formal_max_minute": "2026-09-21T07:00:00Z",
+    "isolated_table": "java_d088_l2_event_response_features_20260930053712_9ced7f2a",
+    "isolated": true,
+    "target_id": "questdb-e4c997106f6f01208b68d5706b0ebd4d03433a19d869c08cb8fe892a05942a57",
+    "final_unique_rows": 354,
+    "min_minute": "2026-09-21T01:16:00Z",
+    "max_minute": "2026-09-24T06:57:00Z",
+    "questdb_readback": "verified_full_keys_and_all_73_columns"
+  },
+  "contract": {
+    "field_count": 73,
+    "business_key": ["symbol", "minute UTC instant", "event_type"],
+    "physical_dedup_key": ["symbol", "minute", "event_type"],
+    "designated_timestamp": "minute",
+    "partition": "DAY",
+    "wal": true,
+    "dedup": true,
+    "event_types": [
+      "large_active_buy",
+      "large_active_sell",
+      "large_turnover",
+      "bid_depth_depletion",
+      "ask_depth_depletion",
+      "high_cancel_ratio"
+    ],
+    "event_rules": {
+      "large_trade_amount": "per-symbol/trade-day amount quantile 0.95; active buy or sell ratio >= 0.65 chooses directional event, otherwise large_turnover",
+      "bid_depth_depletion": "ofi_1m < -0.5 * abs(depth_1)",
+      "ask_depth_depletion": "ofi_1m > 0.5 * abs(depth_1)",
+      "high_cancel_ratio": "cancel_ratio >= 0.5"
+    },
+    "future_return_horizons_minutes": [1, 3, 5, 10, 15, 30],
+    "future_vwap_return_formula": "future VWAP / event-minute VWAP - 1",
+    "future_mid_return_formula": "future VWAP / event-minute mid - 1 (source field name retained though the numerator is VWAP)",
+    "availability_boundary": "future return fields are look-ahead outcomes unavailable at event time and must not be treated as point-in-time features",
+    "future_lookup": "forward as-of lookup with tolerance bounded by the requested horizon in minutes",
+    "missing_partition_behavior": "missing expected Parquet partition/part is an error; it is not treated as a verified empty source"
+  },
+  "source": {
+    "provider": "Local PyArrow Parquet plus D085 per-symbol/date manifest receipts",
+    "owner": "level2_batch_processor calls build_event_response_features from t0_dataset.py",
+    "root": "D:/work/fund_2/back-monitor/artifacts/level2_t0_dataset",
+    "selected_symbol": "000001.SZ",
+    "selected_dates": ["2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24"],
+    "selected_rows": 354,
+    "manifest_rows_scanned": 31731,
+    "files_scanned": 1593,
+    "source_bytes_scanned": 25674923,
+    "source_fingerprint": "3f7faac071bb826971e008e7912f32d5ceb7cd7045118995cce689cf5441b5bf",
+    "schema_fingerprint": "b2876ebe2905466f69f9b6088fe218570a765af88bb96852a80e67ac5ee65a29",
+    "root_identity": "86d0d3d12084092eebd95a3de9037cd61e7fd3db3833550c8384b01090983a5b",
+    "parser_version": "l2-event-response-features-parquet-v1",
+    "pages": 4,
+    "page_rows": 200,
+    "complete_for_selected_symbols": true,
+    "preflight_formal_table": {
+      "rows": 114123728,
+      "min_minute": "2026-02-02T01:15:00Z",
+      "max_minute": "2026-09-21T07:00:00Z",
+      "columns": 73,
+      "designated_timestamp": "minute",
+      "partition_by": "DAY",
+      "wal": true,
+      "dedup": true,
+      "physical_keys": ["symbol", "minute", "event_type"]
+    }
+  },
+  "runs": [
+    {
+      "run_id": "d088-20260929T213718659Z-59d99619-2777-41d0-a167-2020c863151b",
+      "mode": "BACKFILL",
+      "window": ["2026-09-21", "2026-09-23"],
+      "source_rows": 268,
+      "verified_rows": 268,
+      "reused_rows": 0,
+      "state": "VERIFIED"
+    },
+    {
+      "run_id": "d088-20260929T213726687Z-af03a0e3-5adf-4217-a6ca-ab0f5e034e3b",
+      "mode": "BACKFILL",
+      "window": ["2026-09-21", "2026-09-23"],
+      "source_rows": 268,
+      "verified_rows": 268,
+      "reused_rows": 0,
+      "state": "VERIFIED",
+      "purpose": "same-range idempotent rerun"
+    },
+    {
+      "run_id": "d088-20260929T213733430Z-54c31633-96ce-464e-856f-830a75f1e690",
+      "mode": "INCREMENTAL",
+      "window": ["2026-09-21", "2026-09-24"],
+      "source_rows": 354,
+      "verified_rows": 354,
+      "reused_rows": 0,
+      "state": "VERIFIED"
+    },
+    {
+      "run_id": "d088-20260929T213739000Z-2aced831-9149-4328-a53e-40e61551e433",
+      "mode": "RESUME",
+      "window": ["2026-09-21", "2026-09-24"],
+      "source_rows": 354,
+      "verified_rows": 354,
+      "reused_rows": 354,
+      "state": "VERIFIED",
+      "resumed_from": "d088-20260929T213733430Z-54c31633-96ce-464e-856f-830a75f1e690"
+    }
+  ],
+  "write_group": {
+    "job_id": "write.l2_event_response_features",
+    "source_rows": 101,
+    "verified_rows": 101,
+    "state": "VERIFIED",
+    "incomplete_payload_missing_one_source_key_rejected_before_send": true,
+    "target_unchanged_after_rejection": true,
+    "accepted_input": "artifacts/java-migration/D088/commands/write-group-certified-sample-20260921.json",
+    "rejected_input": "artifacts/java-migration/D088/commands/write-group-incomplete-rejected-20260921.json"
+  },
+  "checkpoint": {
+    "before_incremental": "2026-09-23",
+    "after_incremental": "2026-09-24",
+    "revision_overlap": "3 calendar days",
+    "resume": "all previously verified pages were re-read, current target values checked, and 354 rows reused"
+  },
+  "questdb_readback": {
+    "actual_rows": 354,
+    "matched_rows": 354,
+    "mismatched_rows": 0,
+    "compared_columns": 73,
+    "matched_field_values": 25842,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "final_independent_census": "artifacts/java-migration/D088/commands/target-census-20260930.json",
+    "independent_source_evidence": "artifacts/java-migration/D088/commands/source-parquet-20260921-24.jsonl",
+    "passed": true
+  },
+  "checks": {
+    "d01_dto_domain_all_73_field_mappings": true,
+    "d02_complete_symbol_minute_event_type_key_and_revision_upsert": true,
+    "d03_day_wal_dedup_physical_layout_preserved": true,
+    "d04_typed_bounded_keyset_read_and_read_group_binding": true,
+    "d05_typed_full_column_write_and_write_group_source_validation": true,
+    "d06_real_d085_manifest_certified_local_parquet_source": true,
+    "d07_dataset_job_plan_run_status_and_slice_management": true,
+    "d08_finite_process_page_file_row_byte_budgets_cancellation_resume_and_source_integrity": true,
+    "d09_nonempty_isolated_live_roundtrip_and_full_field_source_comparison": true,
+    "source_cancellation_observed": true,
+    "stale_source_fingerprint_rejected": true,
+    "same_range_idempotent_rerun": true,
+    "write_group_rejects_incomplete_certified_rows": true,
+    "formal_table_mutated": false,
+    "human_review": "pending_review"
+  },
+  "retry_and_rate_limit": {
+    "applicability": "Local manifest/Parquet source; remote API quota and server rate limits do not apply.",
+    "max_attempts": 1,
+    "behavior": "Deterministic source errors remain visible for explicit reconciliation; missing parts and malformed lineage do not become empty success.",
+    "bounds": "31 calendar days, 100 symbols, 300000 rows, 10000 slices/files, 25000 pages, 200 rows/page, configured write-byte cap, two-hour job deadline."
+  },
+  "failed_isolated_acceptance_attempts": [
+    {
+      "target_table": "java_d088_l2_event_response_features_20260930053444_ef4f1ae3",
+      "rows_at_review": 354,
+      "cause": "Sync and source readback completed, but the temporary acceptance DatasetRegistry omitted the D087 read repository dependency; the harness was corrected and the later isolated acceptance passed.",
+      "formal_table_mutated": false,
+      "table_preserved": true
+    }
+  ],
+  "build_and_test": {
+    "java_version": "24.0.2",
+    "mapping_tests": 1,
+    "live_acceptance_tests": 1,
+    "latest_targeted_test_result": "2 targeted tests passed; 0 failed",
+    "focused_java_and_test_compilation": "passed using scoped javac/test classpaths; the D088 live acceptance task executed successfully",
+    "full_compile_note": "Default whole-workspace Gradle compile remains blocked by unrelated incomplete D019/D020 sources already present in the worktree; D088 focused compilation and acceptance passed.",
+    "mapping_test_log": "artifacts/java-migration/D088/commands/mapping-test-20260930.log",
+    "live_test_log": "artifacts/java-migration/D088/commands/live-acceptance-20260930053712_9ced7f2a.log"
+  },
+  "evidence": [
+    "artifacts/java-migration/D088/commands/preflight-live-20260930.json",
+    "artifacts/java-migration/D088/commands/preflight-source-20260930.json",
+    "artifacts/java-migration/D088/commands/source-parquet-20260921-24.jsonl",
+    "artifacts/java-migration/D088/commands/live-run-context-20260930053712_9ced7f2a.json",
+    "artifacts/java-migration/D088/commands/target-census-20260930.json",
+    "artifacts/java-migration/D088/commands/failed-target-census.json",
+    "artifacts/java-migration/D088/live-acceptance-20260930.json"
+  ],
+  "known_limitations": [
+    "Full-workspace Gradle compile is blocked by unrelated incomplete D019/D020 sources; targeted D088 compilation and tests passed.",
+    "Human semantic review remains pending, particularly confirmation that consumers keep future-return outcomes out of point-in-time feature sets."
+  ]
+}

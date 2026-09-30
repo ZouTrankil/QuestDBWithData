@@ -1,6 +1,6 @@
 # D087 · l2_intraday_bar_features
 
-- 状态：planned，尚未派发。
+- 状态：verified；隔离QuestDB真实验收通过，人工复核保持 `pending_review`。依任务卡要求停止于D087，等待Orca协调器验收后再决定D088。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D086`；前项验收后才执行本项。
@@ -33,15 +33,15 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 单数据交付清单
 
-- [ ] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
-- [ ] D02：本表业务Key、物理去重键、冲突/修订规则。
-- [ ] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
-- [ ] D04：本表按键/范围的typed read与分页，接入读取组合。
-- [ ] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
-- [ ] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
-- [ ] D07：注册 `l2_intraday_bar_features` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
-- [ ] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
-- [ ] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
+- [x] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
+- [x] D02：本表业务Key、物理去重键、冲突/修订规则。
+- [x] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
+- [x] D04：本表按键/范围的typed read与分页，接入读取组合。
+- [x] D05：本表typed batch write及逐键值验证，接入写入组合；完整性验证拒绝缺源键。
+- [x] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
+- [x] D07：注册 `l2_intraday_bar_features` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
+- [x] D08：本表有限处理预算、显式失败、断点、取消和完整性证据；不吞失败为empty。
+- [x] D09：本表有界示例、隔离库读写及来源样例对照，完成本卡结果。
 
 ## 可观察验收
 
@@ -49,70 +49,70 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 物理字段清单
 
-下表是待映射输入，不是已经确认的Java业务类型。标准名称与物理名称可以通过显式mapper兼容。
+下表保留执行前的物理审计快照。字段语义和Java类型已由 `L2IntradayBarFeatureField` 与mapper冻结，并与Parquet样例和正式QuestDB表逐字段核验。
 
 | 当前列 | 快照类型 | 任务要求 |
 | --- | --- | --- |
-| `trade_date` | `STRING` | 待逐字段映射与语义核验 |
-| `symbol` | `SYMBOL` | 待逐字段映射与语义核验 |
-| `market` | `STRING` | 待逐字段映射与语义核验 |
-| `board` | `STRING` | 待逐字段映射与语义核验 |
-| `minute` | `TIMESTAMP` | 待逐字段映射与语义核验 |
-| `open` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `high` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `low` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `close` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `volume` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `amount` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `tick_count` | `LONG` | 待逐字段映射与语义核验 |
-| `active_buy_amount` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `active_sell_amount` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vwap` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `has_trade_1m` | `LONG` | 待逐字段映射与语义核验 |
-| `bid1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ask1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `mid` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `spread` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `microprice` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `bid_depth_1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ask_depth_1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `depth_1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `obi_1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `bid_depth_5` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ask_depth_5` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `depth_5` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `obi_5` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `bid_depth_10` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ask_depth_10` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `depth_10` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `obi_10` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `quote_count` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ofi_1m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `active_buy_ratio` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `active_sell_ratio` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vwap_gap_to_mid` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vwap_gap_to_open` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vwap_slope_3m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vwap_slope_5m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_1m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_1m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_1m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_3m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_3m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_3m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_5m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_5m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_5m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_10m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_10m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_10m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_15m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_15m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_15m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_30m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_30m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_30m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `cancel_ratio` | `DOUBLE` | 待逐字段映射与语义核验 |
+| `trade_date` | `STRING` | 已核验；完整样例字段值对照通过 |
+| `symbol` | `SYMBOL` | 已核验；完整样例字段值对照通过 |
+| `market` | `STRING` | 已核验；完整样例字段值对照通过 |
+| `board` | `STRING` | 已核验；完整样例字段值对照通过 |
+| `minute` | `TIMESTAMP` | 已核验；完整样例字段值对照通过 |
+| `open` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `high` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `low` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `close` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `volume` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `amount` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `tick_count` | `LONG` | 已核验；完整样例字段值对照通过 |
+| `active_buy_amount` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `active_sell_amount` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `vwap` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `has_trade_1m` | `LONG` | 已核验；完整样例字段值对照通过 |
+| `bid1` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `ask1` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `mid` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `spread` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `microprice` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `bid_depth_1` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `ask_depth_1` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `depth_1` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `obi_1` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `bid_depth_5` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `ask_depth_5` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `depth_5` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `obi_5` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `bid_depth_10` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `ask_depth_10` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `depth_10` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `obi_10` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `quote_count` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `ofi_1m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `active_buy_ratio` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `active_sell_ratio` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `vwap_gap_to_mid` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `vwap_gap_to_open` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `vwap_slope_3m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `vwap_slope_5m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `ret_1m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `vol_ratio_1m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `range_1m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `ret_3m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `vol_ratio_3m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `range_3m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `ret_5m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `vol_ratio_5m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `range_5m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `ret_10m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `vol_ratio_10m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `range_10m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `ret_15m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `vol_ratio_15m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `range_15m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `ret_30m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `vol_ratio_30m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `range_30m` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
+| `cancel_ratio` | `DOUBLE` | 已核验；完整样例字段值对照通过 |
 
 ## 只读参考入口
 
@@ -130,16 +130,29 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 本任务容错、实际验收与完成登记（必做）
 
-- [ ] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
-- [ ] 验证本任务适用的限流/超时重试、分页异常、取消和断点恢复；已ACK但未回读一致的写入保持未验证。
-- [ ] 默认增量，记录checkpoint前后与有限修订窗口；sync有数据才写，没有数据明确记0，不用假数据充数。
-- [ ] 对本任务实际目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留请求范围、查询/参数、返回样本和汇总。
-- [ ] 首次非空真实来源写入、同范围幂等重跑及再次增量验证有记录；本任务为View/MV或功能时按公共契约对应的实际验收方式执行。
-- [ ] 更新[逐项完成表](../completion-register.md)的 `D087` 行及 `results/D087.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
-- [ ] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
+- [x] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
+- [x] 验证适用的超时、分页完整性、取消和断点恢复；已ACK但未回读一致的写入保持未验证。来源为本地Parquet/manifest，无远程限流；确定性本地错误不自动重试，最多一次执行并明确失败。
+- [x] 默认增量，记录checkpoint前后与三日修订窗口；有源数据才写入，没有假造数据。
+- [x] 对隔离目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留范围、参数、独立样本和汇总。
+- [x] 首次非空真实来源写入、同范围幂等重跑、再次增量和精确resume均有记录。
+- [x] 更新[逐项完成表](../completion-register.md)的 `D087` 行及 `results/D087.json`；记录目标、源/提交行、回读、checkpoint、容错证据和人工待办。
+- [x] 真实来源和QuestDB验收通过，D087状态为verified；人工复核仍由用户决定。
+
+## 执行验收结果（2026-09-30）
+
+- 源：`D:/work/fund_2/back-monitor/artifacts/level2_t0_dataset`，通过D085逐股票/交易日manifest收据选择完整Parquet来源；样例 `000001.SZ`，2026-09-21至24共1014行，8页，每页上限200，源字节28,105,645。
+- 冻结契约：60列，DAY/WAL/DEDUP，主时间 `minute`，完整键 `(symbol, minute UTC instant)`；Parquet上海本地时间显式转UTC，`trade_date`与分钟上海交易日一致。
+- 正式表只读预检：物理表158,752,546行；2026-09-21的253行、60列与Parquet逐值相同（15,180/15,180，无差异）。正式表未写入。
+- 目标：`java_d087_l2_intraday_bar_features_20260930044414_f3a0942e`；非正式隔离表。BACKFILL 759行，幂等重跑759行，INCREMENTAL提交1014行，RESUME复核并复用1014行；最终1014行全60列匹配独立Parquet捕获（60,840个字段值，0缺失/重复/差异）。
+- 写组入口：额外提交并回读2026-09-21的253行；省略一个来源键的prepared数据被发送前拒绝，目标保持不变。
+- 容错：源取消、过期指纹、缺失来源键均被拒绝；状态、计划、job和slice管理命令通过。账本提交计数见 `artifacts/java-migration/D087/commands/ledger-summary-20260930044414_f3a0942e.json`。
+- 失败现场：三次早期验收尝试的隔离表均保留；一张0行（发现并修复空表`max(minute)`响应处理），两张1014行（同步通过，测试注册表最初漏D085/D001依赖）。各表计数和原因见 `artifacts/java-migration/D087/commands/live-target-census-20260930.json`。没有触碰正式表。
+- 测试：4项映射测试和1项本地QuestDB live验收通过。使用JDK 24；为编译D087临时排除了工作区中与D087无关且未完成的未跟踪 `IndexDailyMarketReadRepository.java` 与 `IndexDailyBasic*.java`，之后删除临时排除配置并保留原有 `build.gradle` 改动。默认全工作区编译仍会被这些既有未跟踪源文件阻塞。
+- 详细结果：[results/D087.json](../results/D087.json)；独立来源、live、账本及schema证据见 `artifacts/java-migration/D087/`。人工复核状态：`pending_review`。
 
 ## Orca执行提示
 
 ```text
 在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D087：l2_intraday_bar_features。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/10-l2/D087-l2_intraday_bar_features.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D086 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D087.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。
 ```
+

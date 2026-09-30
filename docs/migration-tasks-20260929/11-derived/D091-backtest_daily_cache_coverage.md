@@ -1,6 +1,6 @@
 # D091 · backtest_daily_cache_coverage
 
-- 状态：planned，尚未派发。
+- 状态：running；D090协调器验收门槛已通过；正在核对Python cache publisher、coverage实表及完整性语义。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D090`；前项验收后才执行本项。

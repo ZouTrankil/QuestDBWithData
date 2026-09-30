@@ -1,0 +1,146 @@
+{
+  "task_id": "D089",
+  "dataset_id": "l2_t0_training_labels",
+  "job_id": "data.l2_t0_training_labels",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-30T06:36:06+08:00",
+  "finished_at": "2026-09-30T06:46:15+08:00",
+  "target": {
+    "formal_table": "l2_t0_training_labels",
+    "formal_table_mutated": false,
+    "formal_rows_before": 181049686,
+    "formal_rows_after": 181049686,
+    "formal_min_minute": "2026-01-08T00:15:00Z",
+    "formal_max_minute": "2026-09-21T07:00:00Z",
+    "isolated_table": "java_d089_l2_t0_training_labels_804a7fe8",
+    "isolated": true,
+    "target_id": "questdb-6ea84e29983c86e6b73e384811af9bd146f9d55c92985b99a97ee7d3368a6766",
+    "final_unique_rows": 1014,
+    "min_minute": "2026-09-21T01:15:00Z",
+    "max_minute": "2026-09-24T07:00:00Z",
+    "questdb_readback": "verified_full_keys_and_all_62_columns"
+  },
+  "contract": {
+    "field_count": 62,
+    "business_key": ["symbol", "minute UTC instant"],
+    "physical_dedup_key": ["symbol", "minute"],
+    "designated_timestamp": "minute",
+    "partition": "DAY",
+    "wal": true,
+    "dedup": true,
+    "time_semantics": "Parquet minute is timezone-naive Asia/Shanghai wall time; Java stores the equivalent UTC instant at whole-minute precision.",
+    "future_return_horizons_minutes": [1, 3, 5, 10, 15, 30],
+    "future_vwap_return_formula": "forward as-of future VWAP at minute+h, within h minutes, divided by entry VWAP minus one",
+    "future_mid_return_formula": "future VWAP divided by event-minute mid minus one; source field name retained although numerator is VWAP",
+    "roundtrip_cost_formula": "2 * commission_rate + stamp_tax_rate + slippage_bps / 10000",
+    "opportunity_rule": "gross alpha strictly greater than roundtrip cost; Python maps missing gross alpha to binary label 0",
+    "maturity": "The physical schema has no maturity flag. A missing future alpha and label 0 must not be interpreted as a negative outcome; consumers must use non-null outcome coverage."
+  },
+  "source": {
+    "provider": "Local PyArrow Parquet plus D085 per-symbol/date manifest receipts",
+    "owner": "level2_batch_processor calls build_t0_training_labels from research/adapters/level2/t0_dataset.py",
+    "root": "D:/work/fund_2/back-monitor/artifacts/level2_t0_dataset",
+    "selected_symbol": "000001.SZ",
+    "selected_dates": ["2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24"],
+    "selected_rows": 1014,
+    "manifest_rows_scanned": 31731,
+    "files_scanned": 1593,
+    "source_bytes_scanned": 25631460,
+    "source_fingerprint": "a424a04eca53842e27e4d270e6d26f545a31fb8df81fc4f57cc7611be33febfc",
+    "schema_fingerprint": "94bacb043ca8fcee1d353dd68b39377add0c56a66ad2f47767e2aaa73e0333a7",
+    "root_identity": "86d0d3d12084092eebd95a3de9037cd61e7fd3db3833550c8384b01090983a5b",
+    "parser_version": "l2-t0-training-labels-parquet-v1",
+    "pages": 8,
+    "page_rows": 200,
+    "source_complete_for_selected_symbol": true,
+    "outcome_coverage_by_horizon": {
+      "1m": {"rows": 1014, "future_vwap_return_non_null": 940, "future_mid_return_non_null": 940, "sell_alpha_non_null": 944, "buy_alpha_non_null": 944, "sell_binary_zero_with_missing_alpha": 70, "buy_binary_zero_with_missing_alpha": 70},
+      "3m": {"rows": 1014, "future_vwap_return_non_null": 928, "future_mid_return_non_null": 928, "sell_alpha_non_null": 932, "buy_alpha_non_null": 932, "sell_binary_zero_with_missing_alpha": 82, "buy_binary_zero_with_missing_alpha": 82},
+      "5m": {"rows": 1014, "future_vwap_return_non_null": 916, "future_mid_return_non_null": 916, "sell_alpha_non_null": 920, "buy_alpha_non_null": 920, "sell_binary_zero_with_missing_alpha": 94, "buy_binary_zero_with_missing_alpha": 94},
+      "10m": {"rows": 1014, "future_vwap_return_non_null": 876, "future_mid_return_non_null": 876, "sell_alpha_non_null": 880, "buy_alpha_non_null": 880, "sell_binary_zero_with_missing_alpha": 134, "buy_binary_zero_with_missing_alpha": 134},
+      "15m": {"rows": 1014, "future_vwap_return_non_null": 836, "future_mid_return_non_null": 836, "sell_alpha_non_null": 840, "buy_alpha_non_null": 840, "sell_binary_zero_with_missing_alpha": 174, "buy_binary_zero_with_missing_alpha": 174},
+      "30m": {"rows": 1014, "future_vwap_return_non_null": 716, "future_mid_return_non_null": 716, "sell_alpha_non_null": 720, "buy_alpha_non_null": 720, "sell_binary_zero_with_missing_alpha": 294, "buy_binary_zero_with_missing_alpha": 294}
+    }
+  },
+  "runs": [
+    {"run_id": "d089-20260929T223611132Z-557f0ab3-25de-438d-b4af-88ff2aca2a53", "mode": "BACKFILL", "window": ["2026-09-21", "2026-09-23"], "source_rows": 759, "verified_rows": 759, "reused_rows": 0, "state": "VERIFIED"},
+    {"run_id": "d089-20260929T223621572Z-b2c976fd-c8c3-4422-84f4-8655b84d17eb", "mode": "BACKFILL", "window": ["2026-09-21", "2026-09-23"], "source_rows": 759, "verified_rows": 759, "reused_rows": 0, "state": "VERIFIED", "purpose": "same-range idempotent rerun"},
+    {"run_id": "d089-20260929T223630554Z-9f2b94c6-f6e5-41d7-bb13-595a9c19d71c", "mode": "INCREMENTAL", "window": ["2026-09-21", "2026-09-24"], "source_rows": 1014, "verified_rows": 1014, "reused_rows": 0, "state": "VERIFIED"},
+    {"run_id": "d089-20260929T223639049Z-52e8a76e-b669-4341-a215-15be66ffa19f", "mode": "RESUME", "window": ["2026-09-21", "2026-09-24"], "source_rows": 1014, "verified_rows": 1014, "reused_rows": 1014, "state": "VERIFIED", "resumed_from": "d089-20260929T223630554Z-9f2b94c6-f6e5-41d7-bb13-595a9c19d71c"}
+  ],
+  "checkpoint": {
+    "before_incremental": "2026-09-23",
+    "after_incremental": "2026-09-24",
+    "revision_overlap_calendar_days": 3,
+    "resume": "All previously verified pages were re-read, target keys and values checked, and 1014 rows reused."
+  },
+  "questdb_readback": {
+    "actual_rows": 1014,
+    "matched_rows": 1014,
+    "mismatched_rows": 0,
+    "compared_columns": 62,
+    "matched_field_values": 62868,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "isolated_target_metadata_and_formal_table_census": "artifacts/java-migration/D089/commands/target-census-20260930.json",
+    "independent_source_evidence": "artifacts/java-migration/D089/commands/source-parquet-20260921-24.jsonl",
+    "passed": true
+  },
+  "checks": {
+    "d01_dto_domain_and_all_62_field_mappings": true,
+    "d02_symbol_minute_key_and_revision_upsert": true,
+    "d03_day_wal_dedup_layout_preserved": true,
+    "d04_typed_bounded_read_and_read_group_binding": true,
+    "d05_typed_batch_write_and_write_group_registration": true,
+    "d06_real_d085_manifest_certified_parquet_source": true,
+    "d07_dataset_job_registry_plan_status_and_slice_access": true,
+    "d08_finite_budgets_cancellation_resume_and_source_fingerprint": true,
+    "d09_nonempty_isolated_roundtrip_and_full_field_comparison": true,
+    "source_cancellation_observed": true,
+    "stale_source_fingerprint_rejected": true,
+    "same_range_idempotent_rerun": true,
+    "formal_table_mutated": false,
+    "human_review": "pending_review"
+  },
+  "write_group": {
+    "registered": true,
+    "source_receipt_and_complete_key_validation": "implemented; static path review passed",
+    "live_write_group_execution": "not exercised; the default whole-workspace compile is blocked by unrelated existing Moneyflow/D024/D026 sources",
+    "typed_job_writer_live_execution": "VERIFIED"
+  },
+  "retry_and_rate_limit": {
+    "applicability": "Local manifest/Parquet source; remote API quota and server rate limits do not apply.",
+    "max_attempts": 1,
+    "behavior": "Deterministic source errors remain visible for explicit reconciliation; missing parts and malformed lineage do not become empty success.",
+    "bounds": "31 calendar days, 100 symbols, 300000 rows, 10000 files, 25000 pages, 200 rows/page, 64 MiB source and output bytes, two-hour job deadline."
+  },
+  "build_and_test": {
+    "java_runtime": "25.0.2",
+    "target_release": 24,
+    "mapping_tests": "3 passed, 0 failed",
+    "live_acceptance_tests": "1 passed, 0 failed",
+    "focused_compilation": "D089 main/test dependency slice compiled via javac --release 24; live QuestDB acceptance executed.",
+    "full_compile_note": "Default Gradle compileJava is blocked by unrelated incomplete Moneyflow/D024/D026 types already present in the worktree; no D089 compilation errors were reported.",
+    "live_test_summary": "artifacts/java-migration/D089/commands/live-acceptance-test-summary-20260930.json",
+    "mapping_test_log": "artifacts/java-migration/D089/commands/mapping-test-20260930.log"
+  },
+  "evidence": [
+    "artifacts/java-migration/D089/commands/preflight-live-20260930.json",
+    "artifacts/java-migration/D089/commands/source-inspection-20260921-24.jsonl",
+    "artifacts/java-migration/D089/commands/source-parquet-20260921-24.jsonl",
+    "artifacts/java-migration/D089/commands/target-census-20260930.json",
+    "artifacts/java-migration/D089/coordinator-review-20260930.json",
+    "artifacts/java-migration/D089/live-acceptance-20260930.json"
+  ],
+  "known_limitations": [
+    "The source schema has no maturity field; missing future alpha with label zero is not a negative outcome and must be interpreted using coverage counts.",
+    "The live write-group batch path is registered and statically reviewed but could not be executed because the default whole-workspace compile is blocked by unrelated existing Moneyflow/D024/D026 source errors.",
+    "Human semantic review remains pending."
+  ]
+}

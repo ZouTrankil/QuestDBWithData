@@ -1,0 +1,9 @@
+gradle.projectsEvaluated {
+    rootProject.tasks.register('writeD088CompileClasspath') {
+        doLast {
+            def output = rootProject.file('artifacts/java-migration/D088/commands/compile-classpath.txt')
+            output.parentFile.mkdirs()
+            output.setText(rootProject.sourceSets.main.compileClasspath.asPath, 'UTF-8')
+        }
+    }
+}

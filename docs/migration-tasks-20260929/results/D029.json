@@ -1,0 +1,73 @@
+{
+  "task_id": "D029",
+  "dataset": "margin_detail",
+  "implementation_status": "implemented_not_verified",
+  "data_validation_status": "not_run",
+  "target_table": "java_d029_margin_detail_<explicit-isolated-suffix>",
+  "target_identity": null,
+  "request_window": null,
+  "checkpoint_before": null,
+  "checkpoint_after": null,
+  "source_rows": null,
+  "submitted_rows": null,
+  "questdb_readback_rows": null,
+  "matched_rows": null,
+  "duplicate_source_keys": null,
+  "duplicate_target_keys": null,
+  "run_id": null,
+  "runtime_seconds": null,
+  "evidence": [
+    "artifacts/java-migration/D029/source-contract-review.md",
+    "artifacts/java-migration/D029/implementation-review.md",
+    "artifacts/java-migration/operations/MarginDetailIndependentReadback.java"
+  ],
+  "checks_run": [
+    "Read-only Python margin connector/model/config/data-quality audit",
+    "Official Tushare margin_detail endpoint documentation review",
+    "Static D029 source/mapper/schema/checkpoint implementation inspection",
+    "D029-only javac to var/d029-agent-classes using var/d024-classpath.args"
+  ],
+  "checks_not_run": [
+    "D028 serial live-acceptance gate",
+    "Tushare source request or current-account permission check",
+    "QuestDB schema query or isolated target write/readback",
+    "Gradle/full build or tests",
+    "Cancellation/resume and unknown-write live acceptance"
+  ],
+  "remaining_acceptance": [
+    "Coordinator shared integration: dataset/read registration, CLI route, isolated table config, endpoint budget, and write-group registration",
+    "Confirm D028 ordering gate before D029 live acceptance",
+    "Confirm margin_detail permission and effective endpoint pacing for the current Tushare account",
+    "Run a nonempty isolated request below the 6000-row cap, then compare all 11 columns with MarginDetailIndependentReadback.verify",
+    "Verify frozen-window idempotent rerun and next incremental window with seven-calendar-day overlap",
+    "Exercise cancellation/resume on the isolated target",
+    "Confirm unknown writes remain IN_DOUBT until stopped-writer exact reconciliation; this handoff does not implement automatic IN_DOUBT closure",
+    "Update completion-register.md with coordinator integration and real evidence; retain human_review=pending_review"
+  ],
+  "known_limitations": [
+    "No source or QuestDB result is claimed; status remains implemented_not_verified.",
+    "Python config and connector decorator both state 150 requests/minute, while the shared Java endpoint's effective runtime ceiling/account grant is coordinator-owned and unverified here.",
+    "A response at 6000 rows is treated as possibly truncated; this call path has no verified pagination mechanism.",
+    "An empty response for an SSE open date is fail-closed because Python records it as skipped/unverified, not as evidence of complete coverage.",
+    "Source omission of previously stored keys is rejected because Python defines no deletion/tombstone behavior.",
+    "Unknown QWP writes retain the generic IN_DOUBT lease. Automatic D029-specific closure is not implemented; a stopped-writer exact-readback procedure is required before replay.",
+    "Formal production schema is read-only audit evidence; only explicit java_d029_margin_detail_* isolated targets may be written."
+  ],
+  "human_review": "pending_review",
+  "coordinator_integration": {
+    "status": "pending",
+    "cli": false,
+    "read_group": false,
+    "write_group": false,
+    "dataset_policy": false,
+    "endpoint_configured_requests_per_minute": 150,
+    "endpoint_default_shared_requests_per_minute": 10,
+    "target_prefix": "java_d029_margin_detail_",
+    "default_bootstrap_from": "2026-01-01",
+    "max_window_calendar_days": 14,
+    "revision_overlap_calendar_days": 7,
+    "scoped_javac": "passed_to_var/d029-agent-classes",
+    "full_build_or_tests": "not_run",
+    "source_or_questdb_acceptance": "not_started"
+  }
+}

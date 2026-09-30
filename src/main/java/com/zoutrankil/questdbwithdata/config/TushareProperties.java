@@ -45,6 +45,7 @@ public class TushareProperties {
         limits.put("index_monthly",Math.min(180,Math.min(endpointPerMinute,limits.getOrDefault("index_monthly",endpointPerMinute))));
         limits.put("dc_index",Math.min(200,Math.min(endpointPerMinute,limits.getOrDefault("dc_index",endpointPerMinute))));
         limits.put("moneyflow_dc",Math.min(150,Math.min(endpointPerMinute,limits.getOrDefault("moneyflow_dc",endpointPerMinute))));
+        limits.put("moneyflow_hsgt",Math.min(150,Math.min(endpointPerMinute,limits.getOrDefault("moneyflow_hsgt",endpointPerMinute))));
         limits.put("moneyflow_ths",Math.min(150,Math.min(endpointPerMinute,limits.getOrDefault("moneyflow_ths",endpointPerMinute))));
         limits.put("moneyflow",Math.min(150,Math.min(endpointPerMinute,limits.getOrDefault("moneyflow",endpointPerMinute))));
         limits.put("index_dailybasic",Math.min(50,Math.min(endpointPerMinute,limits.getOrDefault("index_dailybasic",endpointPerMinute))));

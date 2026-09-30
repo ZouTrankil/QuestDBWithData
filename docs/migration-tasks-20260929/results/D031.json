@@ -1,0 +1,88 @@
+{
+  "task_id": "D031",
+  "dataset": "margin_zrz",
+  "implementation_status": "implemented_not_verified",
+  "data_validation_status": "not_run",
+  "human_review": "pending_review",
+  "started_at": "2026-09-30",
+  "finished_at": null,
+  "run_id": null,
+  "target": {
+    "isolated_table_prefix": "java_d031_margin_zrz_",
+    "target_id": null,
+    "partition": "YEAR",
+    "wal": true,
+    "dedup": false,
+    "natural_key": ["trade_date"],
+    "formal_table_mutated": false
+  },
+  "source": {
+    "endpoint": "slb_len",
+    "job_version": 1,
+    "request_unit": "one bounded inclusive start_date/end_date range",
+    "audited_source_range": {
+      "from": "2023-01-03",
+      "through": "2025-07-25"
+    },
+    "request_cap_rows": 5000,
+    "max_window_calendar_days": 366,
+    "max_source_slices": 1,
+    "source_rows": null,
+    "requests": 0,
+    "lifecycle": "retired_source",
+    "enabled": false,
+    "daily_eligible": false,
+    "empty_response_policy": "fail_closed_unverified_no_publication_or_checkpoint"
+  },
+  "write": {
+    "submitted_rows": null,
+    "strategy": "full target snapshot copied to same-layout isolated stage; replace frozen date window; verify and journaled rename publication",
+    "formal_table_mutated": false
+  },
+  "questdb_readback": {
+    "fields": 6,
+    "independent_readback": "MarginZrzIndependentReadback.verify(jdbc, ledgerPath, table, runId)",
+    "passed": null
+  },
+  "incremental": {
+    "default_mode": "INCREMENTAL",
+    "bootstrap_requires_explicit_from_and_to": true,
+    "revision_overlap_calendar_days": 5,
+    "checkpoint": "same-target verified INCREMENTAL range receipts only",
+    "backfill_or_reconcile_advances_checkpoint": false,
+    "latest_value_receipt_order": "verified summary.updatedAt, stable runId tie-break"
+  },
+  "checks": {
+    "source_contract_review": "completed_from_local_python_source_and_task_audit",
+    "static_review": "completed",
+    "scoped_javac": "pending",
+    "gradle_build_or_tests": "not_run",
+    "real_source_request": "not_run",
+    "questdb_write_or_readback": "not_run",
+    "historical_nonempty_acceptance": "not_run",
+    "idempotent_rerun": "not_run",
+    "incremental_acceptance": "not_run",
+    "cancel_and_recovery": "not_run",
+    "unknown_publication_recovery": "not_run"
+  },
+  "evidence_paths": [
+    "artifacts/java-migration/D031/source-contract-review.md",
+    "artifacts/java-migration/D031/implementation-review.md",
+    "artifacts/java-migration/operations/MarginZrzIndependentReadback.java"
+  ],
+  "limitations": [
+    "Python marks slb_len as a retired disabled source; current provider access and grant are unverified.",
+    "The 2025-07-25 end ceiling is the last date in the audited local target snapshot; no live source was queried to confirm current endpoint behavior.",
+    "Shared DatasetConfiguration policy registration and a manual CLI route remain coordinator-owned integration work.",
+    "No source request or QuestDB operation was performed by this implementation handoff."
+  ],
+  "blockers": [
+    "Coordinator must run the bounded historical request against the source and explicit isolated QuestDB target before data validation can be marked passed."
+  ],
+  "remaining_acceptance": [
+    "Shared owner/policy/dataset and manual CLI integration.",
+    "Scoped javac after shared integration.",
+    "Nonempty historical source request and six-column independent isolated readback.",
+    "Same-window rerun, receipt-backed incremental progression, cancellation/resume, and stage/publication recovery."
+  ]
+}

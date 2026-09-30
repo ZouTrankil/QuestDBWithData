@@ -2,9 +2,33 @@
   "plan_id": "questdb-java-serial-20260929",
   "schema_version": 1,
   "status": "executing_local",
+  "current_thread_scope": {
+    "included_mainline": [
+      "D085-D184"
+    ],
+    "remaining_mainline": "D091-D184",
+    "directory_order": [
+      "10-l2",
+      "11-derived",
+      "12-factor",
+      "13-strategy",
+      "14-runtime"
+    ],
+    "preserved_prior_ranges": [
+      "F001-F017",
+      "D001-D084"
+    ],
+    "excluded_directories": [],
+    "excluded_task_range": "",
+    "excluded_task_count": 0,
+    "excluded_owner": null,
+    "exclusion_is_completion": false,
+    "conditional_tasks_require_separate_admission": true,
+    "owner_thread_id": "01a0ed88-7350-7432-8742-606c0937bee3"
+  },
   "workspace": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
   "max_active_dispatches": 1,
-  "execution_policy": "serial; predecessor acceptance required; stop on failed/blocked; no automatic conditional dispatch",
+  "execution_policy": "User-directed serial execution in directory_order; complete and record one task before starting the next; live acceptance uses isolated QuestDB and bounded real-source windows; conditional tasks require separate admission",
   "primary_order": [
     "F001",
     "F002",
@@ -1472,9 +1496,9 @@
       "phase": "10-l2",
       "dataset": "l2_dataset_manifest",
       "provider": "LEVEL2",
-      "serial_after": "D084",
+      "serial_after": null,
       "semantic_dependencies": [],
-      "status": "planned",
+      "status": "verified",
       "spec_path": "10-l2/D085-l2_dataset_manifest.md",
       "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D085：l2_dataset_manifest。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/10-l2/D085-l2_dataset_manifest.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D084 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D085.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
     },
@@ -1488,7 +1512,7 @@
       "semantic_dependencies": [
         "D085:l2_dataset_manifest"
       ],
-      "status": "planned",
+      "status": "verified",
       "spec_path": "10-l2/D086-l2_daily_features.md",
       "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D086：l2_daily_features。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/10-l2/D086-l2_daily_features.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D085 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D086.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
     },
@@ -1502,7 +1526,7 @@
       "semantic_dependencies": [
         "D085:l2_dataset_manifest"
       ],
-      "status": "planned",
+      "status": "verified",
       "spec_path": "10-l2/D087-l2_intraday_bar_features.md",
       "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D087：l2_intraday_bar_features。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/10-l2/D087-l2_intraday_bar_features.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D086 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D087.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
     },
@@ -1516,7 +1540,7 @@
       "semantic_dependencies": [
         "D087:l2_intraday_bar_features"
       ],
-      "status": "planned",
+      "status": "verified",
       "spec_path": "10-l2/D088-l2_event_response_features.md",
       "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D088：l2_event_response_features。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/10-l2/D088-l2_event_response_features.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D087 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D088.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
     },
@@ -1530,7 +1554,7 @@
       "semantic_dependencies": [
         "D087:l2_intraday_bar_features"
       ],
-      "status": "planned",
+      "status": "verified",
       "spec_path": "10-l2/D089-l2_t0_training_labels.md",
       "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D089：l2_t0_training_labels。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/10-l2/D089-l2_t0_training_labels.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D088 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D089.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
     },
@@ -1542,7 +1566,7 @@
       "provider": "OWNER_INGEST_OR_DERIVED_TO_VERIFY",
       "serial_after": "D089",
       "semantic_dependencies": [],
-      "status": "planned",
+      "status": "verified",
       "spec_path": "11-derived/D090-backtest_daily.md",
       "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D090：backtest_daily。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/11-derived/D090-backtest_daily.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D089 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D090.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
     },
@@ -1554,7 +1578,7 @@
       "provider": "OWNER_INGEST_OR_DERIVED_TO_VERIFY",
       "serial_after": "D090",
       "semantic_dependencies": [],
-      "status": "planned",
+      "status": "running",
       "spec_path": "11-derived/D091-backtest_daily_cache_coverage.md",
       "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D091：backtest_daily_cache_coverage。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/11-derived/D091-backtest_daily_cache_coverage.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D090 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D091.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
     },
@@ -2932,4 +2956,3 @@
   "note": "This is a local planning manifest, not a claimed Orca import schema or runtime Task/Dispatch receipt.",
   "execution_mode": "direct_local_serial"
 }
-

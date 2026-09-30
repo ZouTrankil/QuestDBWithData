@@ -1,10 +1,93 @@
 [ {
+  "jobId" : "data.daily_basic",
+  "version" : 1,
+  "datasetId" : "daily_basic",
+  "datasetVersion" : 1,
+  "owner" : "daily_basic_owner",
+  "supportedModes" : [ "BACKFILL", "RECONCILE", "INCREMENTAL" ],
+  "defaultMode" : "INCREMENTAL",
+  "parameters" : {
+    "checkpointAnchor" : {
+      "type" : "DATE",
+      "required" : false,
+      "maxLength" : 10,
+      "maxItems" : 1,
+      "choices" : [ ]
+    },
+    "trade_dates" : {
+      "type" : "STRING",
+      "required" : true,
+      "maxLength" : 4096,
+      "maxItems" : 1,
+      "choices" : [ ]
+    }
+  },
+  "ratePolicyRef" : "tushare.shared",
+  "slicePolicyRef" : "daily_basic.trade_date",
+  "verificationPolicyRef" : "questdb.full_key_values",
+  "retry" : {
+    "maxAttempts" : 3,
+    "backoff" : "PT1S",
+    "maxElapsed" : "PT2M"
+  },
+  "timeout" : "PT12H",
+  "budget" : {
+    "maxWindowDays" : 366,
+    "maxSlices" : 366,
+    "maxPages" : 366,
+    "maxRows" : 2196000,
+    "maxBatchBytes" : 1048576
+  },
+  "revisionDays" : 30,
+  "dependencies" : [ {
+    "jobId" : "data.exchange_calendar",
+    "version" : 1
+  } ],
+  "frequency" : "DAILY",
+  "zone" : "Asia/Shanghai",
+  "enabled" : true,
+  "dailyEligible" : true
+}, {
+  "jobId" : "data.daily",
+  "version" : 1,
+  "datasetId" : "daily",
+  "datasetVersion" : 1,
+  "owner" : "daily_owner",
+  "supportedModes" : [ "BACKFILL", "RECONCILE", "INCREMENTAL" ],
+  "defaultMode" : "INCREMENTAL",
+  "parameters" : { },
+  "ratePolicyRef" : "tushare.shared",
+  "slicePolicyRef" : "daily.trade_date",
+  "verificationPolicyRef" : "questdb.full_key_values",
+  "retry" : {
+    "maxAttempts" : 3,
+    "backoff" : "PT1S",
+    "maxElapsed" : "PT2M"
+  },
+  "timeout" : "PT23H",
+  "budget" : {
+    "maxWindowDays" : 366,
+    "maxSlices" : 366,
+    "maxPages" : 366,
+    "maxRows" : 3660000,
+    "maxBatchBytes" : 1048576
+  },
+  "revisionDays" : 5,
+  "dependencies" : [ {
+    "jobId" : "data.exchange_calendar",
+    "version" : 1
+  } ],
+  "frequency" : "DAILY",
+  "zone" : "Asia/Shanghai",
+  "enabled" : true,
+  "dailyEligible" : true
+}, {
   "jobId" : "data.exchange_calendar",
   "version" : 1,
   "datasetId" : "exchange_calendar",
   "datasetVersion" : 1,
   "owner" : "exchange_calendar_owner",
-  "supportedModes" : [ "INCREMENTAL", "BACKFILL", "RECONCILE" ],
+  "supportedModes" : [ "BACKFILL", "RECONCILE", "INCREMENTAL" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
     "exchanges" : {
@@ -46,17 +129,17 @@
   "supportedModes" : [ "INCREMENTAL", "INGEST" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
-    "sha256" : {
-      "type" : "STRING",
-      "required" : true,
-      "maxLength" : 64,
-      "maxItems" : 1,
-      "choices" : [ ]
-    },
     "file" : {
       "type" : "STRING",
       "required" : true,
       "maxLength" : 4096,
+      "maxItems" : 1,
+      "choices" : [ ]
+    },
+    "sha256" : {
+      "type" : "STRING",
+      "required" : true,
+      "maxLength" : 64,
       "maxItems" : 1,
       "choices" : [ ]
     }
@@ -92,6 +175,20 @@
   "supportedModes" : [ "INCREMENTAL" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
+    "selection" : {
+      "type" : "STRING",
+      "required" : true,
+      "maxLength" : 16,
+      "maxItems" : 1,
+      "choices" : [ "BOTH", "HISTORICAL", "CURRENT" ]
+    },
+    "classificationReceipt" : {
+      "type" : "STRING",
+      "required" : true,
+      "maxLength" : 4096,
+      "maxItems" : 1,
+      "choices" : [ ]
+    },
     "industryCodes" : {
       "type" : "STRING_LIST",
       "required" : true,
@@ -103,20 +200,6 @@
       "type" : "STRING",
       "required" : true,
       "maxLength" : 64,
-      "maxItems" : 1,
-      "choices" : [ ]
-    },
-    "selection" : {
-      "type" : "STRING",
-      "required" : true,
-      "maxLength" : 16,
-      "maxItems" : 1,
-      "choices" : [ "HISTORICAL", "CURRENT", "BOTH" ]
-    },
-    "classificationReceipt" : {
-      "type" : "STRING",
-      "required" : true,
-      "maxLength" : 4096,
       "maxItems" : 1,
       "choices" : [ ]
     }
@@ -191,18 +274,18 @@
   "supportedModes" : [ "INCREMENTAL", "RECONCILE" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
-    "codes" : {
-      "type" : "STRING_LIST",
-      "required" : false,
-      "maxLength" : 12,
-      "maxItems" : 20,
-      "choices" : [ ]
-    },
     "discover" : {
       "type" : "BOOLEAN",
       "required" : true,
       "maxLength" : 1,
       "maxItems" : 1,
+      "choices" : [ ]
+    },
+    "codes" : {
+      "type" : "STRING_LIST",
+      "required" : false,
+      "maxLength" : 12,
+      "maxItems" : 20,
       "choices" : [ ]
     }
   },
@@ -225,6 +308,80 @@
   "revisionDays" : 0,
   "dependencies" : [ ],
   "frequency" : "WEEKLY",
+  "zone" : "Asia/Shanghai",
+  "enabled" : true,
+  "dailyEligible" : false
+}, {
+  "jobId" : "data.stk_factor",
+  "version" : 1,
+  "datasetId" : "stk_factor",
+  "datasetVersion" : 1,
+  "owner" : "stk_factor_owner",
+  "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+  "defaultMode" : "INCREMENTAL",
+  "parameters" : {
+    "checkpointBefore" : {
+      "type" : "DATE",
+      "required" : false,
+      "maxLength" : 10,
+      "maxItems" : 1,
+      "choices" : [ ]
+    },
+    "targetMinBefore" : {
+      "type" : "DATE",
+      "required" : false,
+      "maxLength" : 10,
+      "maxItems" : 1,
+      "choices" : [ ]
+    },
+    "tsCode" : {
+      "type" : "STRING",
+      "required" : false,
+      "maxLength" : 12,
+      "maxItems" : 1,
+      "choices" : [ ]
+    },
+    "targetMaxBefore" : {
+      "type" : "DATE",
+      "required" : false,
+      "maxLength" : 10,
+      "maxItems" : 1,
+      "choices" : [ ]
+    },
+    "checkpointAnchor" : {
+      "type" : "DATE",
+      "required" : false,
+      "maxLength" : 10,
+      "maxItems" : 1,
+      "choices" : [ ]
+    },
+    "targetId" : {
+      "type" : "STRING",
+      "required" : true,
+      "maxLength" : 128,
+      "maxItems" : 1,
+      "choices" : [ ]
+    }
+  },
+  "ratePolicyRef" : "tushare.shared",
+  "slicePolicyRef" : "stk_factor.daily",
+  "verificationPolicyRef" : "questdb.full_key_values",
+  "retry" : {
+    "maxAttempts" : 3,
+    "backoff" : "PT1S",
+    "maxElapsed" : "PT2M"
+  },
+  "timeout" : "PT10M",
+  "budget" : {
+    "maxWindowDays" : 5,
+    "maxSlices" : 5,
+    "maxPages" : 5,
+    "maxRows" : 50000,
+    "maxBatchBytes" : 16777216
+  },
+  "revisionDays" : 2,
+  "dependencies" : [ ],
+  "frequency" : "DAILY",
   "zone" : "Asia/Shanghai",
   "enabled" : true,
   "dailyEligible" : false

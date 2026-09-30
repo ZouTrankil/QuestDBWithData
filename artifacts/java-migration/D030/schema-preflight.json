@@ -1,0 +1,143 @@
+[
+  {
+    "query": "select table_name,designatedTimestamp,partitionBy,walEnabled,dedup from tables() where table_name = 'margin_secs'",
+    "columns": [
+      {
+        "name": "table_name",
+        "type": "STRING"
+      },
+      {
+        "name": "designatedTimestamp",
+        "type": "STRING"
+      },
+      {
+        "name": "partitionBy",
+        "type": "STRING"
+      },
+      {
+        "name": "walEnabled",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "dedup",
+        "type": "BOOLEAN"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "margin_secs",
+        "trade_date",
+        "YEAR",
+        true,
+        true
+      ]
+    ],
+    "count": 1
+  },
+  {
+    "query": "select * from table_columns('margin_secs')",
+    "columns": [
+      {
+        "name": "column",
+        "type": "STRING"
+      },
+      {
+        "name": "type",
+        "type": "STRING"
+      },
+      {
+        "name": "indexed",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexBlockCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolCached",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "symbolCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolTableSize",
+        "type": "INT"
+      },
+      {
+        "name": "designated",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "upsertKey",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexType",
+        "type": "STRING"
+      },
+      {
+        "name": "indexInclude",
+        "type": "STRING"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "trade_date",
+        "TIMESTAMP",
+        false,
+        0,
+        false,
+        0,
+        0,
+        true,
+        true,
+        "",
+        ""
+      ],
+      [
+        "ts_code",
+        "SYMBOL",
+        false,
+        256,
+        true,
+        8192,
+        4963,
+        false,
+        true,
+        "",
+        ""
+      ],
+      [
+        "name",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "exchange",
+        "SYMBOL",
+        false,
+        256,
+        true,
+        256,
+        3,
+        false,
+        false,
+        "",
+        ""
+      ]
+    ],
+    "count": 4
+  }
+]

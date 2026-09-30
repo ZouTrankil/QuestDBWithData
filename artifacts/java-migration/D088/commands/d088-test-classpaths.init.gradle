@@ -1,0 +1,11 @@
+gradle.projectsEvaluated {
+    rootProject.tasks.register('writeD088TestClasspaths') {
+        doLast {
+            def compile = rootProject.file('artifacts/java-migration/D088/commands/test-compile-classpath.txt')
+            def runtime = rootProject.file('artifacts/java-migration/D088/commands/test-runtime-classpath.txt')
+            compile.parentFile.mkdirs()
+            compile.setText(rootProject.sourceSets.test.compileClasspath.asPath, 'UTF-8')
+            runtime.setText(rootProject.sourceSets.test.runtimeClasspath.asPath, 'UTF-8')
+        }
+    }
+}

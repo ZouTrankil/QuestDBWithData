@@ -1,0 +1,206 @@
+{
+  "task_id": "D087",
+  "dataset_id": "l2_intraday_bar_features",
+  "job_id": "data.l2_intraday_bar_features",
+  "implementation_status": "verified",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "logical_date": "2026-09-30",
+  "started_at": "2026-09-30T04:44:14.9907433+08:00",
+  "finished_at": "2026-09-30T04:45:01.5760991+08:00",
+  "target": {
+    "formal_table": "l2_intraday_bar_features",
+    "formal_table_mutated": false,
+    "isolated_table": "java_d087_l2_intraday_bar_features_20260930044414_f3a0942e",
+    "isolated": true,
+    "target_id": "questdb-446564a580c6cb9afcdf0b3d8c8fd39ea2e0d1dca93656acfbbb4d4e340dc099",
+    "final_unique_rows": 1014,
+    "questdb_readback": "verified_full_keys_and_all_60_columns"
+  },
+  "contract": {
+    "field_count": 60,
+    "business_key": ["symbol", "minute UTC instant"],
+    "physical_dedup_key": ["symbol", "minute"],
+    "designated_timestamp": "minute",
+    "partition": "DAY",
+    "wal": true,
+    "dedup": true,
+    "trade_date": "YYYYMMDD business date; equals minute interpreted in Asia/Shanghai",
+    "source_minute_conversion": "naive Asia/Shanghai Parquet wall time localized to Asia/Shanghai then converted to UTC at whole-minute precision",
+    "integer_arrow_fields_mapped_to_double": "exactly for physical DOUBLE columns; tick_count and has_trade_1m remain LONG"
+  },
+  "source": {
+    "provider": "Local PyArrow Parquet plus D085 per-symbol/date manifest receipts",
+    "root": "D:/work/fund_2/back-monitor/artifacts/level2_t0_dataset",
+    "selected_symbol": "000001.SZ",
+    "selected_dates": ["2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24"],
+    "selected_rows": 1014,
+    "manifest_rows_scanned": 31731,
+    "files_scanned": 1593,
+    "source_bytes_scanned": 28105645,
+    "source_fingerprint": "842a052ac3d848eeef6ad960b1a783129d49cce2daff6be8ab07c3e057597f4f",
+    "schema_fingerprint": "6004381887d7c1f0548baa16a0d8590909557c3b084a85564c83843da871031e",
+    "root_identity": "86d0d3d12084092eebd95a3de9037cd61e7fd3db3833550c8384b01090983a5b",
+    "parser_version": "l2-intraday-bar-features-parquet-v1",
+    "pages": 8,
+    "page_rows": 200,
+    "complete_for_selected_symbols": true,
+    "preflight_formal_table_census": {
+      "rows": 158752546,
+      "min_minute": "2026-02-02 01:14:00",
+      "max_minute": "2026-09-21 07:00:00"
+    },
+    "preflight_formal_sample_comparison": {
+      "symbol": "000001.SZ",
+      "trade_date": "2026-09-21",
+      "compared_rows": 253,
+      "compared_fields_per_row": 60,
+      "matched_values": 15180,
+      "mismatches": 0,
+      "passed": true
+    }
+  },
+  "runs": [
+    {
+      "run_id": "d087-20260929T204421265Z-27d72c4a-d9f0-41fa-bacd-a26d8eb9a7fa",
+      "mode": "BACKFILL",
+      "window": ["2026-09-21", "2026-09-23"],
+      "source_rows": 759,
+      "submitted_rows": 759,
+      "verified_rows": 759,
+      "reused_rows": 0,
+      "acknowledged_batches": 12,
+      "state": "VERIFIED"
+    },
+    {
+      "run_id": "d087-20260929T204430013Z-1378d233-3e55-469f-a36a-e1d1295bb77f",
+      "mode": "BACKFILL",
+      "window": ["2026-09-21", "2026-09-23"],
+      "source_rows": 759,
+      "submitted_rows": 759,
+      "verified_rows": 759,
+      "reused_rows": 0,
+      "acknowledged_batches": 12,
+      "state": "VERIFIED",
+      "purpose": "same-range idempotent rerun"
+    },
+    {
+      "run_id": "d087-20260929T204437632Z-fbb0b565-25aa-4ac7-8f55-7a3993c347d6",
+      "mode": "INCREMENTAL",
+      "window": ["2026-09-21", "2026-09-24"],
+      "source_rows": 1014,
+      "submitted_rows": 1014,
+      "verified_rows": 1014,
+      "reused_rows": 0,
+      "acknowledged_batches": 16,
+      "state": "VERIFIED"
+    },
+    {
+      "run_id": "d087-20260929T204443885Z-37a0c879-bf05-4bd8-81c8-424e3993fa95",
+      "mode": "RESUME",
+      "window": ["2026-09-21", "2026-09-24"],
+      "source_rows": 1014,
+      "submitted_rows": 0,
+      "verified_rows": 1014,
+      "reused_rows": 1014,
+      "acknowledged_batches": 0,
+      "state": "VERIFIED",
+      "resumed_from": "d087-20260929T204437632Z-fbb0b565-25aa-4ac7-8f55-7a3993c347d6"
+    }
+  ],
+  "write_group": {
+    "job_id": "write.l2_intraday_bar_features",
+    "child_run_id": "run-89b78c65-d2fa-4729-8860-119f8e5a569a",
+    "source_rows": 253,
+    "submitted_rows": 253,
+    "verified_rows": 253,
+    "state": "VERIFIED",
+    "incomplete_payload_missing_one_source_key_rejected_before_send": true,
+    "target_unchanged_after_rejection": true,
+    "accepted_input": "artifacts/java-migration/D087/commands/write-group-certified-sample-20260921.json",
+    "rejected_input": "artifacts/java-migration/D087/commands/write-group-incomplete-rejected-20260921.json"
+  },
+  "checkpoint": {
+    "before_incremental": "2026-09-23",
+    "after_incremental": "2026-09-24",
+    "revision_overlap": "3 calendar days",
+    "resume": "all eight already-verified source pages were re-fetched, current target values checked, and 1014 rows reused"
+  },
+  "questdb_readback": {
+    "actual_rows": 1014,
+    "matched_rows": 1014,
+    "mismatched_rows": 0,
+    "compared_columns": 60,
+    "matched_field_values": 60840,
+    "duplicate_keys": 0,
+    "missing_keys": 0,
+    "independent_source_evidence": "artifacts/java-migration/D087/commands/source-parquet-20260921-24.jsonl",
+    "ledger_write_totals": "artifacts/java-migration/D087/commands/ledger-summary-20260930044414_f3a0942e.json",
+    "passed": true
+  },
+  "checks": {
+    "d01_dto_domain_all_field_mappings": true,
+    "d02_complete_symbol_minute_key_and_revision_upsert": true,
+    "d03_day_wal_dedup_physical_layout_preserved": true,
+    "d04_typed_bounded_keyset_read_and_read_group_binding": true,
+    "d05_typed_full_column_write_and_write_group_source_validation": true,
+    "d06_real_manifest_certified_local_parquet_source": true,
+    "d07_dataset_job_plan_run_status_and_slice_management": true,
+    "d08_finite_process_page_file_row_byte_budgets_cancellation_resume_and_source_integrity": true,
+    "d09_nonempty_isolated_live_roundtrip_and_full_field_source_comparison": true,
+    "source_cancellation_observed": true,
+    "stale_source_fingerprint_rejected": true,
+    "same_range_idempotent_rerun": true,
+    "write_group_rejects_incomplete_certified_rows": true,
+    "formal_table_mutated": false,
+    "human_review": "pending_review"
+  },
+  "retry_and_rate_limit": {
+    "applicability": "Local file/manifest source; no remote API quota or server rate limit applies.",
+    "max_attempts": 1,
+    "behavior": "Deterministic source errors remain visible for explicit reconciliation; no empty success is fabricated.",
+    "bounds": "31 calendar days, 100 symbols, 300000 rows, 10000 slices/files, 25000 pages, 200 rows/page, 64 MiB source/output, two-hour job deadline."
+  },
+  "failed_isolated_acceptance_attempts": [
+    {
+      "target_table": "java_d087_l2_intraday_bar_features_20260930043747_40237641",
+      "rows_at_review": 0,
+      "cause": "First live run found QuestDB returns zero rows for max(minute) on an empty target; D087 planning was corrected to handle an empty aggregate result.",
+      "formal_table_mutated": false,
+      "table_preserved": true
+    },
+    {
+      "target_table": "java_d087_l2_intraday_bar_features_20260930044024_c3f582fd",
+      "rows_at_review": 1014,
+      "cause": "Sync acceptance passed through resume; the test's temporary DatasetRegistry omitted the D085 dependency.",
+      "formal_table_mutated": false,
+      "table_preserved": true
+    },
+    {
+      "target_table": "java_d087_l2_intraday_bar_features_20260930044235_5a5e3f74",
+      "rows_at_review": 1014,
+      "cause": "Sync acceptance passed through resume; the test registry included D085 but omitted its D001 calendar dependency.",
+      "formal_table_mutated": false,
+      "table_preserved": true
+    }
+  ],
+  "build_and_test": {
+    "java_version": "24.0.2",
+    "mapping_tests": 4,
+    "live_acceptance_tests": 1,
+    "latest_targeted_test_result": "5 tests, 0 skipped, 0 failed",
+    "full_compile_note": "D087 Java and tests compiled successfully with temporary source exclusions for unrelated, incomplete untracked IndexDailyMarketReadRepository.java and IndexDailyBasic*.java files. The temporary sourceSets exclusion was removed afterward and pre-existing build.gradle changes were preserved; the live test ran against the compiled D087 classes. Default whole-workspace compile remains blocked by those unrelated untracked sources.",
+    "live_test_log": "artifacts/java-migration/D087/commands/live-acceptance-20260930044414_f3a0942e.log"
+  },
+  "evidence": [
+    "artifacts/java-migration/D087/commands/preflight-source-20260930.json",
+    "artifacts/java-migration/D087/commands/source-parquet-20260921-24.jsonl",
+    "artifacts/java-migration/D087/commands/ledger-summary-20260930044414_f3a0942e.json",
+    "artifacts/java-migration/D087/live-acceptance-20260930.json",
+    "artifacts/java-migration/D087/commands/live-target-census-20260930.json",
+    "artifacts/java-migration/D087/commands/live-run-context-20260930044414_f3a0942e.json"
+  ]
+}

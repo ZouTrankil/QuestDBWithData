@@ -1,0 +1,6 @@
+allprojects {
+    tasks.named('compileJava', org.gradle.api.tasks.compile.JavaCompile).configure {
+        exclude 'com/zoutrankil/questdbwithdata/service/StockSuspendSyncAdapter.java'
+        exclude 'com/zoutrankil/questdbwithdata/service/StockSuspendJobService.java'
+    }
+}

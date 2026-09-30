@@ -1,6 +1,6 @@
 # D030 · margin_secs
 
-- 状态：planned，尚未派发。
+- 状态：implemented_not_verified。仅完成D030自有Java实现与静态证据；共享注册和D029串行验收由协调器处理。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D029`；前项验收后才执行本项。
@@ -15,8 +15,8 @@
 ## 当前证据（2026-09-29快照，执行前复核）
 
 - 分类：`data_model`；来源类别：`TUSHARE_TO_VERIFY`。
-- 物理主时间列：`trade_date`；物理分区：`YEAR`；WAL：`True`；DEDUP：`True`。
-- 物理UPSERT KEY：`trade_date,ts_code`。
+- 物理主时间列：`trade_date`；物理分区：`YEAR`；WAL：`True`；DEDUP：`True`（2026-09-30根协调器只读metadata证据：`artifacts/java-migration/D030/schema-preflight.json`）。
+- 物理UPSERT KEY：`trade_date,ts_code`（`table_columns('margin_secs')`逐列证据见上述metadata文件）。
 - Python声明键：`未声明/未匹配`。
 - 模型与物理差异：`dedup_keys`。
 - 配置source_api：`margin_secs`；sync_function：`sync_margin_secs`。
@@ -33,14 +33,14 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 单数据交付清单
 
-- [ ] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
-- [ ] D02：本表业务Key、物理去重键、冲突/修订规则。
-- [ ] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
-- [ ] D04：本表按键/范围的typed read与分页，接入读取组合。
-- [ ] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
-- [ ] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
+- [x] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
+- [x] D02：本表业务Key、物理去重键、冲突/修订规则。
+- [x] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
+- [x] D04：本表按键/范围的typed read与分页；共享read组合接入待协调器完成。
+- [x] D05：本表typed batch write及逐键值验证；共享write组合接入待协调器完成。
+- [x] D06：本表真实来源sync能力的有限实现（尚未请求真实来源）；窗口/每日请求/批及截断检测有界。
 - [ ] D07：注册 `margin_secs` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
-- [ ] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
+- [x] D08：本表复用共享限流、重试、账本、断点和取消；unknown write保持IN_DOUBT，不能吞失败为empty。
 - [ ] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
 
 ## 可观察验收
@@ -53,10 +53,10 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 | 当前列 | 快照类型 | 任务要求 |
 | --- | --- | --- |
-| `trade_date` | `TIMESTAMP` | 待逐字段映射与语义核验 |
-| `ts_code` | `SYMBOL` | 待逐字段映射与语义核验 |
-| `name` | `STRING` | 待逐字段映射与语义核验 |
-| `exchange` | `SYMBOL` | 待逐字段映射与语义核验 |
+| `trade_date` | `TIMESTAMP` | BASIC或`YYYY-MM-DD`源日期映射为上海业务日的UTC午夜日历时间戳；主时间、物理UPSERT KEY |
+| `ts_code` | `SYMBOL` | 业务Key代码，要求六位数字加`.SH`/`.SZ`/`.BJ`；物理UPSERT KEY |
+| `name` | `STRING` | nullable；源null原样保留，不填充 |
+| `exchange` | `SYMBOL` | 必填且不得trim变换；保留来源标签 |
 
 ## 只读参考入口
 

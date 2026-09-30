@@ -1,0 +1,45 @@
+{
+  "task_id": "D090",
+  "reviewer": "primary-coordinator",
+  "reviewed_at": "2026-09-30T07:17:17+08:00",
+  "decision": "accepted_for_serial_progress",
+  "task_status": "verified",
+  "implementation_status": "retained_compatibility",
+  "human_review": "pending_review",
+  "review_basis": {
+    "predecessor_gate": "D089 coordinator gate accepted before D090",
+    "python_owner_path_reviewed": true,
+    "formal_table": "backtest_daily",
+    "active_view": "v_backtest_daily",
+    "versioned_cache": "backtest_daily_cache",
+    "formal_sample_rows": 200,
+    "active_view_sample_rows": 200,
+    "field_count": 13,
+    "matched_field_values": 2600,
+    "mismatched_values": 0,
+    "typed_repository_and_read_group": "passed",
+    "formal_rows_before_after": [10355884, 10355884],
+    "formal_txn_before_after": [17, 17],
+    "formal_table_or_cache_mutated": false,
+    "mapping_tests": "4 passed",
+    "local_questdb_read_acceptance": "1 passed"
+  },
+  "decision_rationale": "Python owns the current versioned readthrough/materialization behavior. The D090 Java definition is read-only and preserves the old physical object for compatibility; no second Java writer or compute owner was introduced. Evidence verifies the bounded live compatibility read against the current view.",
+  "limitations_reviewed": [
+    "The physical-table comparison covers the first 200 ordered keys on one real date, not the full historical table.",
+    "The Python cache-fill path was not invoked because a cache miss may write; its owner and source-version safeguards were inspected in source.",
+    "The callable legacy Python materializer remains and its full rebuild branch can drop the formal table; D090 did not run it.",
+    "The default whole-workspace Gradle compile remains blocked by unrelated incomplete Moneyflow/D024/D026 sources documented in D089; the D090 dependency slice compiled with --release 24.",
+    "Human semantic review remains pending."
+  ],
+  "evidence": [
+    "docs/migration-tasks-20260929/results/D090.json",
+    "artifacts/java-migration/D090/commands/java-live-read-20260930.json",
+    "artifacts/java-migration/D090/commands/live-compatibility-20260930.json",
+    "artifacts/java-migration/D090/commands/focused-compile-20260930.log",
+    "artifacts/java-migration/D090/commands/focused-tests-20260930.log",
+    "artifacts/java-migration/D090/commands/mapping-test-20260930.log"
+  ],
+  "next_task": "D091",
+  "next_directory": "11-derived"
+}

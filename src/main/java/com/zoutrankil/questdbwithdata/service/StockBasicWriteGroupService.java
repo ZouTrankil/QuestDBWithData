@@ -52,6 +52,8 @@ public class StockBasicWriteGroupService {
     @org.springframework.beans.factory.annotation.Autowired(required=false)
     private DcIndexJobService dcIndexTarget;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private MoneyflowHsgtJobService moneyflowHsgtTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
     private MoneyflowDcJobService moneyflowDcTarget;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
     private MoneyflowThsJobService moneyflowThsTarget;
@@ -61,6 +63,12 @@ public class StockBasicWriteGroupService {
     private EtfPortfolioJobService etfPortfolioTarget;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
     private EtfBasicJobService etfBasicTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private L2IntradayBarFeaturesJobService l2IntradayBarFeaturesTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private L2EventResponseFeaturesJobService l2EventResponseFeaturesTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private L2T0TrainingLabelsJobService l2T0TrainingLabelsTarget;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
     private StockStDailyJobService stockStDailyTarget;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
@@ -149,6 +157,19 @@ public class StockBasicWriteGroupService {
                     && thsMemberTarget!=null) {
                 if(priorRun==null) targets.put(member.datasetId(),thsMemberTarget.targetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.ths_member"));
+            } else if(member.datasetId().equals(L2IntradayBarFeaturesDataset.DEFINITION.datasetId())
+                    && l2IntradayBarFeaturesTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),l2IntradayBarFeaturesTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.l2_intraday_bar_features"));
+
+            } else if(member.datasetId().equals(L2EventResponseFeaturesDataset.DEFINITION.datasetId())
+                    && l2EventResponseFeaturesTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),l2EventResponseFeaturesTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.l2_event_response_features"));
+            } else if(member.datasetId().equals(L2T0TrainingLabelsDataset.DEFINITION.datasetId())
+                    && l2T0TrainingLabelsTarget!=null) {
+                if(priorRun==null) targets.put(member.datasetId(),l2T0TrainingLabelsTarget.targetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.l2_t0_training_labels"));
             } else if(member.datasetId().equals(DailyDataset.DEFINITION.datasetId()) && dailyTarget!=null) {
                 if(priorRun==null) targets.put(member.datasetId(),dailyTarget.targetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.daily"));
@@ -205,6 +226,10 @@ public class StockBasicWriteGroupService {
                 dcIndexTarget.requireNoPendingPublication();
                 if(priorRun==null) targets.put(member.datasetId(),dcIndexTarget.physicalTargetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.dc_index"));
+            } else if(member.datasetId().equals(MoneyflowHsgtDataset.DEFINITION.datasetId()) && moneyflowHsgtTarget!=null) {
+                new MoneyflowHsgtPublication(jdbc,ledger).requireNoPendingPublication();
+                if(priorRun==null) targets.put(member.datasetId(),moneyflowHsgtTarget.physicalTargetId());
+                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.moneyflow_hsgt"));
             } else if(member.datasetId().equals(StockStDailyDataset.DEFINITION.datasetId()) && stockStDailyTarget!=null) {
                 stockStDailyTarget.requireNoPendingPublication();
                 if(priorRun==null) targets.put(member.datasetId(),stockStDailyTarget.physicalTargetId());
@@ -251,6 +276,45 @@ public class StockBasicWriteGroupService {
             } else if(member.definition().datasetId().equals(ThsMemberDataset.DEFINITION.datasetId())) {
                 adapters.put(member.memberId(),new ThsMemberPreparedWriteAdapter(plan,member.memberId(),
                         thsMemberTarget,evidence.resolve(run),priorRun!=null));
+            } else if(member.definition().datasetId().equals(L2IntradayBarFeaturesDataset.DEFINITION.datasetId())) {
+                var mapper = new com.zoutrankil.questdbwithdata.mapper.L2IntradayBarFeaturesMapper();
+                var port = new com.zoutrankil.questdbwithdata.repository.L2IntradayBarFeaturesWritePort(
+                        l2IntradayBarFeaturesTarget.isolatedTableName(), jdbc, questdb);
+                var prepared = new PreparedWriteAdapter<>(plan, member.memberId(),
+                        mapper::fromValues, mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.L2IntradayBarFeaturesWritePort.CODEC,
+                        port, () -> {
+                            try { return l2IntradayBarFeaturesTarget.targetId(); }
+                            catch (Exception failure) { throw new IllegalStateException("Cannot resolve D087 target", failure); }
+                        }, evidence.resolve(run).resolve(member.memberId()));
+                adapters.put(member.memberId(), new L2IntradayBarFeaturesPreparedWriteAdapter(
+                        l2IntradayBarFeaturesTarget, prepared));
+            } else if(member.definition().datasetId().equals(L2EventResponseFeaturesDataset.DEFINITION.datasetId())) {
+                var mapper = new com.zoutrankil.questdbwithdata.mapper.L2EventResponseFeaturesMapper();
+                var port = new com.zoutrankil.questdbwithdata.repository.L2EventResponseFeaturesWritePort(
+                        l2EventResponseFeaturesTarget.isolatedTableName(), jdbc, questdb);
+                var prepared = new PreparedWriteAdapter<>(plan, member.memberId(),
+                        mapper::fromValues, mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.L2EventResponseFeaturesWritePort.CODEC,
+                        port, () -> {
+                            try { return l2EventResponseFeaturesTarget.targetId(); }
+                            catch (Exception failure) { throw new IllegalStateException("Cannot resolve D088 target", failure); }
+                        }, evidence.resolve(run).resolve(member.memberId()));
+                adapters.put(member.memberId(), new L2EventResponseFeaturesPreparedWriteAdapter(
+                        l2EventResponseFeaturesTarget, prepared));
+            } else if(member.definition().datasetId().equals(L2T0TrainingLabelsDataset.DEFINITION.datasetId())) {
+                var mapper = new com.zoutrankil.questdbwithdata.mapper.L2T0TrainingLabelsMapper();
+                var port = new com.zoutrankil.questdbwithdata.repository.L2T0TrainingLabelsWritePort(
+                        l2T0TrainingLabelsTarget.isolatedTableName(), jdbc, questdb);
+                var prepared = new PreparedWriteAdapter<>(plan, member.memberId(),
+                        mapper::fromValues, mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.L2T0TrainingLabelsWritePort.CODEC,
+                        port, () -> {
+                            try { return l2T0TrainingLabelsTarget.targetId(); }
+                            catch (Exception failure) { throw new IllegalStateException("Cannot resolve D089 target", failure); }
+                        }, evidence.resolve(run).resolve(member.memberId()));
+                adapters.put(member.memberId(), new L2T0TrainingLabelsPreparedWriteAdapter(
+                        l2T0TrainingLabelsTarget, prepared));
             } else if(member.definition().datasetId().equals(DailyDataset.DEFINITION.datasetId())) {
                 var mapper=new com.zoutrankil.questdbwithdata.mapper.DailyMapper();
                 var port=new com.zoutrankil.questdbwithdata.repository.DailyWritePort(
@@ -430,6 +494,16 @@ public class StockBasicWriteGroupService {
                         com.zoutrankil.questdbwithdata.repository.DcIndexWritePort.CODEC,port,()->{
                             try { dcIndexTarget.requireNoPendingPublication(); return dcIndexTarget.physicalTargetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve dc_index target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(MoneyflowHsgtDataset.DEFINITION.datasetId())) {
+                var mapper=new com.zoutrankil.questdbwithdata.mapper.MoneyflowHsgtMapper();
+                var port=new com.zoutrankil.questdbwithdata.repository.MoneyflowHsgtWritePort(
+                        moneyflowHsgtTarget.tableName(),member.targetId(),jdbc,questdb);
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.questdbwithdata.repository.MoneyflowHsgtWritePort.CODEC,port,()->{
+                            try { new MoneyflowHsgtPublication(jdbc,ledger).requireNoPendingPublication(); return moneyflowHsgtTarget.physicalTargetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve moneyflow_hsgt target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(StockStDailyDataset.DEFINITION.datasetId())) {
                 var mapper=new com.zoutrankil.questdbwithdata.mapper.StockStDailyMapper();

@@ -1,6 +1,6 @@
 # D088 · l2_event_response_features
 
-- 状态：planned，尚未派发。
+- 状态：verified；D088实现、隔离目标与来源逐字段回读已通过。Orca主协调器验收门槛于2026-09-30通过，人工复核仍为 `pending_review`；已按序启动D089。门槛复核记录见 `artifacts/java-migration/D088/coordinator-review-20260930.json`。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D087`；前项验收后才执行本项。
@@ -12,36 +12,44 @@
 
 只完成 `l2_event_response_features` 一个数据对象的Java业务定义、来源任务、分区/键、读取、写入和验收。已有projection不等于完成。公共D01—D09全部适用；不在本卡实现其他数据。
 
-## 当前证据（2026-09-29快照，执行前复核）
+## 执行前快照与完成证据（2026-09-30复核）
 
 - 分类：`other_domain_or_unclassified`；来源类别：`LEVEL2`。
 - 物理主时间列：`minute`；物理分区：`DAY`；WAL：`True`；DEDUP：`True`。
 - 物理UPSERT KEY：`symbol,minute,event_type`。
-- Python声明键：`未声明/未匹配`。
-- 模型与物理差异：`清单未发现已比较项差异；不代表全部字段一致`。
-- 配置source_api：`无匹配`；sync_function：`无匹配，须查实际owner`。
-- 配置同步日期列：`无匹配`；衍生源记录：`未登记`。
+- Python物理唯一键：`symbol,minute,event_type`，与QuestDB UPSERT键一致。
+- D088隔离表与来源样例完成73列逐字段回读；执行前模型快照的比较范围限制不影响本次实际比对。
+- 实际来源owner：`level2_batch_processor` 调用 `build_event_response_features`，物化到D085认证的本地Parquet。
+- 配置同步日期列：`minute`对应的本地交易日分区；不是远程API，因此无服务端配额。
 - 配置事实（数组表示匹配记录，非当前授权额度）：`{}`。
 
 ## 本数据sync模式与注意事项
 
 事件响应粒度含event_type，不能沿用分钟表两列键；明确响应窗口与可得时间、未来信息边界。
 
-Python调用/限流证据（仅源码事实，未逐接口验证线上配额）：
+Python调用/限流结论（基于已核验调用链）：
 
-- 未提取到独立装饰器/页长声明；不得解释为无限流。实施时沿调用链核实。
+- 来源为本地manifest/Parquet，无远端接口配额；Java任务配置`maxAttempts=1`，以固定超时、行/文件/页/字节预算和两小时deadline限制执行。
+
+已核实的Python业务语义：
+
+- 每个symbol/交易日的amount 95分位用于大额事件；active buy或sell占比分别至少0.65时标记主动买/卖，否则记 `large_turnover`。
+- OFI低于 `-0.5 * abs(depth_1)` 标记 `bid_depth_depletion`，高于 `0.5 * abs(depth_1)` 标记 `ask_depth_depletion`；`cancel_ratio >= 0.5` 标记 `high_cancel_ratio`。完整事件类别为 `large_active_buy`、`large_active_sell`、`large_turnover`、`bid_depth_depletion`、`ask_depth_depletion`、`high_cancel_ratio`。
+- 完整业务键为 `(symbol, minute, event_type)`。相同事件键的源修订按QuestDB DEDUP UPSERT覆盖。
+- `future_vwap_return_{1,3,5,10,15,30}m` 是未来VWAP相对事件分钟VWAP的收益；源字段 `future_mid_return_*` 实际也是未来VWAP，但分母为事件分钟mid。两组未来收益均是前视结果，不可作为事件时点可得特征；源函数按时间向前取值，允许不超过该horizon分钟的容差。
+- Python未产出事件行时可能没有Parquet part；D088对分区或part缺失采取失败，不把缺文件解释成已验证空结果。
 
 ## 单数据交付清单
 
-- [ ] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
-- [ ] D02：本表业务Key、物理去重键、冲突/修订规则。
-- [ ] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
-- [ ] D04：本表按键/范围的typed read与分页，接入读取组合。
-- [ ] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
-- [ ] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
-- [ ] D07：注册 `l2_event_response_features` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
-- [ ] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
-- [ ] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
+- [x] D01：73字段DTO、domain、显式mapper与逐字段语义已核对。
+- [x] D02：完整键 `(symbol,minute,event_type)`、QuestDB物理UPSERT键与修订覆盖已核实。
+- [x] D03：`minute`主时间、DAY/WAL/DEDUP及隔离DDL与在线快照一致。
+- [x] D04：本表typed key/range read、分页和read group已接入。
+- [x] D05：73列typed batch write、逐键值回读和写组完整源键验证已接入；不适用View/MV直写检查。
+- [x] D06：D085 manifest认证的本地Parquet真实来源、有限窗口/页/文件/行/字节和完整性检查已接入。
+- [x] D07：Dataset/job注册，管理、计划预览、运行、状态及slice查询通过live验收。
+- [x] D08：本地来源采用 `maxAttempts=1`，有限超时/预算；取消、过期fingerprint拒绝、断点及未知写入核验通过；远端限流不适用。
+- [x] D09：非空隔离样例backfill、幂等重跑、增量、resume、写组和全73列QuestDB回读对照均通过。
 
 ## 可观察验收
 
@@ -49,83 +57,83 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 物理字段清单
 
-下表是待映射输入，不是已经确认的Java业务类型。标准名称与物理名称可以通过显式mapper兼容。
+下表字段已对照本地Parquet、QuestDB物理表与显式Java mapper逐字段核验。标准名称与物理名称通过显式mapper兼容。
 
 | 当前列 | 快照类型 | 任务要求 |
 | --- | --- | --- |
-| `trade_date` | `STRING` | 待逐字段映射与语义核验 |
-| `symbol` | `SYMBOL` | 待逐字段映射与语义核验 |
-| `market` | `STRING` | 待逐字段映射与语义核验 |
-| `board` | `STRING` | 待逐字段映射与语义核验 |
-| `minute` | `TIMESTAMP` | 待逐字段映射与语义核验 |
-| `open` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `high` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `low` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `close` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `volume` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `amount` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `tick_count` | `LONG` | 待逐字段映射与语义核验 |
-| `active_buy_amount` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `active_sell_amount` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vwap` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `has_trade_1m` | `LONG` | 待逐字段映射与语义核验 |
-| `bid1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ask1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `mid` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `spread` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `microprice` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `bid_depth_1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ask_depth_1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `depth_1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `obi_1` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `bid_depth_5` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ask_depth_5` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `depth_5` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `obi_5` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `bid_depth_10` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ask_depth_10` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `depth_10` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `obi_10` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `quote_count` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ofi_1m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `active_buy_ratio` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `active_sell_ratio` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vwap_gap_to_mid` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vwap_gap_to_open` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vwap_slope_3m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vwap_slope_5m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_1m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_1m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_1m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_3m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_3m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_3m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_5m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_5m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_5m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_10m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_10m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_10m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_15m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_15m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_15m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `ret_30m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `vol_ratio_30m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `range_30m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `cancel_ratio` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `event_type` | `STRING` | 待逐字段映射与语义核验 |
-| `future_vwap_return_1m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `future_mid_return_1m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `future_vwap_return_3m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `future_mid_return_3m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `future_vwap_return_5m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `future_mid_return_5m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `future_vwap_return_10m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `future_mid_return_10m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `future_vwap_return_15m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `future_mid_return_15m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `future_vwap_return_30m` | `DOUBLE` | 待逐字段映射与语义核验 |
-| `future_mid_return_30m` | `DOUBLE` | 待逐字段映射与语义核验 |
+| `trade_date` | `STRING` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `symbol` | `SYMBOL` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `market` | `STRING` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `board` | `STRING` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `minute` | `TIMESTAMP` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `open` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `high` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `low` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `close` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `volume` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `amount` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `tick_count` | `LONG` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `active_buy_amount` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `active_sell_amount` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `vwap` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `has_trade_1m` | `LONG` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `bid1` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `ask1` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `mid` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `spread` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `microprice` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `bid_depth_1` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `ask_depth_1` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `depth_1` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `obi_1` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `bid_depth_5` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `ask_depth_5` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `depth_5` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `obi_5` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `bid_depth_10` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `ask_depth_10` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `depth_10` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `obi_10` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `quote_count` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `ofi_1m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `active_buy_ratio` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `active_sell_ratio` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `vwap_gap_to_mid` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `vwap_gap_to_open` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `vwap_slope_3m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `vwap_slope_5m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `ret_1m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `vol_ratio_1m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `range_1m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `ret_3m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `vol_ratio_3m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `range_3m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `ret_5m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `vol_ratio_5m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `range_5m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `ret_10m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `vol_ratio_10m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `range_10m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `ret_15m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `vol_ratio_15m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `range_15m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `ret_30m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `vol_ratio_30m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `range_30m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `cancel_ratio` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `event_type` | `STRING` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_vwap_return_1m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_mid_return_1m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_vwap_return_3m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_mid_return_3m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_vwap_return_5m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_mid_return_5m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_vwap_return_10m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_mid_return_10m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_vwap_return_15m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_mid_return_15m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_vwap_return_30m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
+| `future_mid_return_30m` | `DOUBLE` | 已逐字段核验；显式映射见 `L2EventResponseFeatureField` |
 
 ## 只读参考入口
 

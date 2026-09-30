@@ -1,0 +1,71 @@
+{
+  "task_id": "D030",
+  "dataset": "margin_secs",
+  "implementation_status": "implemented_not_verified",
+  "data_validation_status": "not_run",
+  "target_table": "java_d030_margin_secs_<explicit-isolated-suffix>",
+  "target_identity": null,
+  "request_window": null,
+  "checkpoint_before": null,
+  "checkpoint_after": null,
+  "source_rows": null,
+  "submitted_rows": null,
+  "questdb_readback_rows": null,
+  "matched_rows": null,
+  "duplicate_source_keys": null,
+  "duplicate_target_keys": null,
+  "run_id": null,
+  "runtime_seconds": null,
+  "evidence": [
+    "artifacts/java-migration/D030/schema-preflight.json",
+    "artifacts/java-migration/D030/source-contract-review.md",
+    "artifacts/java-migration/D030/implementation-review.md",
+    "artifacts/java-migration/operations/MarginSecsIndependentReadback.java"
+  ],
+  "checks_run": [
+    "Read-only D030 task-card and common-contract review",
+    "Read-only Python margin_secs connector, model, configuration and table-definition review",
+    "Coordinator-provided read-only QuestDB metadata review confirming YEAR/WAL/DEDUP=true and exact four-column schema",
+    "Scoped javac of D030-owned Java and independent helper into var/d030-agent-classes using var/d024-classpath.args"
+  ],
+  "checks_not_run": [
+    "D029 serial acceptance gate",
+    "Shared CLI/registry/read-group/write-group integration",
+    "Tushare source request or current-account permission/pacing check",
+    "D030 QuestDB isolated target write/readback",
+    "Tests, Gradle or build",
+    "Cancellation/resume and unknown-write live acceptance"
+  ],
+  "remaining_acceptance": [
+    "Coordinator registers D030 dataset/job, isolated table setting, CLI, read/write groups and effective Tushare endpoint policy",
+    "Complete D029 serial gate before D030 source/write acceptance",
+    "Confirm current-account margin_secs permission and effective request pacing",
+    "Run a nonempty bounded isolated request below the conservative 6000-row daily cap and compare all four columns with MarginSecsIndependentReadback.verify",
+    "Verify exact-window idempotent rerun and a later incremental run with five-calendar-day revision overlap",
+    "Exercise cancellation and frozen-request recovery; unknown writes must remain blocked pending stopped-writer exact reconciliation",
+    "Record real source/write/readback/checkpoint evidence and update completion-register.md; keep human_review=pending_review"
+  ],
+  "known_limitations": [
+    "No D030 source or QuestDB result is claimed; status remains implemented_not_verified.",
+    "The 6000-row daily ceiling is conservative evidence from the adjacent Python historical reader, not a verified API maximum; exact-cap responses fail closed and the endpoint has no offset support in the primary connector.",
+    "A source response that omits a previously stored natural key fails closed because Python defines no deletion/tombstone policy.",
+    "The D030 job does not add a custom IN_DOUBT finisher; uncertain QWP results require an explicit stopped-writer exact readback/reconciliation before replay.",
+    "The formal margin_secs table was inspected read-only; only explicit java_d030_margin_secs_* tables are writable."
+  ],
+  "human_review": "pending_review",
+  "coordinator_integration": {
+    "status": "pending",
+    "cli": false,
+    "read_group": false,
+    "write_group": false,
+    "dataset_policy": false,
+    "python_connector_rate_per_minute": 50,
+    "target_prefix": "java_d030_margin_secs_",
+    "max_window_calendar_days": 31,
+    "revision_overlap_calendar_days": 5,
+    "max_source_rows_per_day": 5999,
+    "scoped_javac": "passed_to_var/d030-agent-classes",
+    "full_build_or_tests": "not_run",
+    "source_or_questdb_acceptance": "not_started"
+  }
+}

@@ -1,6 +1,6 @@
 # D031 · margin_zrz
 
-- 状态：planned，尚未派发。
+- 状态：implemented_not_verified；Java业务面已实现，来源和隔离QuestDB验收待协调器执行。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D030`；前项验收后才执行本项。
@@ -14,7 +14,7 @@
 
 ## 当前证据（2026-09-29快照，执行前复核）
 
-- 分类：`data_model`；来源类别：`TUSHARE_TO_VERIFY`。
+- 分类：`data_model`；来源生命周期：`retired_source`；Java owner 保留 `enabled=false,dailyEligible=false`，仅允许显式隔离目标上的有界历史操作。
 - 物理主时间列：`trade_date`；物理分区：`YEAR`；WAL：`True`；DEDUP：`False`。
 - 物理UPSERT KEY：`快照未声明；必须核实自然身份与幂等方案，不凭空添加`。
 - Python声明键：`未声明/未匹配`。
@@ -22,6 +22,7 @@
 - 配置source_api：`slb_len`；sync_function：`sync_margin_zrz`。
 - 配置同步日期列：`trade_date`；衍生源记录：`未登记`。
 - 配置事实（数组表示匹配记录，非当前授权额度）：`{"api": ["slb_len"], "date_column": ["trade_date"], "frequency": ["daily"], "time": ["20:00"], "rate_limit": [150], "timeout": [600]}`。
+- 本地审计快照观察到的历史区间为 2023-01-03 至 2025-07-25；Java手动计划将来源窗口限制在此已观察范围，且空隔离目标必须显式给出 `--from` 与 `--to`。这不代表当前 Tushare 权限或来源可用性已验证。
 
 ## 本数据sync模式与注意事项
 
