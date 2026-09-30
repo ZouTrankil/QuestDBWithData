@@ -1,0 +1,47 @@
+{
+  "task_id": "D091",
+  "status": "VERIFIED",
+  "algorithm": "Python backtest_cache.content_digest (canonical sorted pandas hash_pandas_object bytes)",
+  "trade_date": "2026-09-21",
+  "source_version": "17794bbc8f35be23a1e0d23e13d661fefa547f1c738f58d534ff117a3bc5de29",
+  "expected_row_count": 5565,
+  "actual_row_count": 5565,
+  "unique_business_keys": 5565,
+  "expected_content_digest": "84e330b50b369e42943de531efbee720a29e33bd7ba0585ef7bcb171071dee01",
+  "actual_content_digest": "84e330b50b369e42943de531efbee720a29e33bd7ba0585ef7bcb171071dee01",
+  "digest_matches": true,
+  "input_sha256": "1f99e094b3bd10f895f2eb4e0224866037e0049f738437e1e929f78be0b15215",
+  "uncompressed_payload_sha256": "5a9a9b1aa7e79957c583ad5839179949244f25188afa4c35724fafefa77ba0e6",
+  "input_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D091\\commands\\cache-slice-for-digest-20260930.json.gz",
+  "checked_fields": [
+    "trade_date",
+    "ts_code",
+    "open",
+    "high",
+    "low",
+    "close",
+    "vol",
+    "amount",
+    "adj_factor",
+    "up_limit",
+    "down_limit",
+    "is_suspended",
+    "is_st"
+  ],
+  "sample_keys": [
+    [
+      "2026-09-21",
+      "000001.SZ"
+    ],
+    [
+      "2026-09-21",
+      "000002.SZ"
+    ],
+    [
+      "2026-09-21",
+      "000006.SZ"
+    ]
+  ],
+  "database_access": "none; input captured by bounded Java SELECTs",
+  "writes": "none"
+}

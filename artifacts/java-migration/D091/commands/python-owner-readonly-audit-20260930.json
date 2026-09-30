@@ -1,0 +1,51 @@
+{
+  "task_id": "D091",
+  "status": "VERIFIED",
+  "source_owner": "Python BacktestReadThroughCache",
+  "checked_at": "2026-09-30T09:07:41.971456+00:00",
+  "database_operations": "SELECT only; install/read/write entry points were not called",
+  "receipt_trade_date": "2026-09-21",
+  "receipt_source_version": "17794bbc8f35be23a1e0d23e13d661fefa547f1c738f58d534ff117a3bc5de29",
+  "current_source_version": "5e73b258c9cbad31e236b3cb70abef5a9ac0c642cddfa9e9d20c1c25969dcc5c",
+  "receipt_matches_current_source_version": false,
+  "owner_cached_read_accepted": true,
+  "owner_read_row_count": 5565,
+  "current_source_version_cache_hit": false,
+  "current_source_version_cache_rows": null,
+  "input_digest": "84e330b50b369e42943de531efbee720a29e33bd7ba0585ef7bcb171071dee01",
+  "owner_read_digest": "84e330b50b369e42943de531efbee720a29e33bd7ba0585ef7bcb171071dee01",
+  "receipt_content_digest": "84e330b50b369e42943de531efbee720a29e33bd7ba0585ef7bcb171071dee01",
+  "digest_values_match": true,
+  "source_state_tables": [
+    "stk_factor",
+    "stk_limit",
+    "stk_st_daily",
+    "stk_suspend"
+  ],
+  "table_metadata_before": [
+    {
+      "table_name": "backtest_daily_cache_coverage",
+      "table_row_count": 1367,
+      "table_txn": 4
+    },
+    {
+      "table_name": "backtest_daily_cache",
+      "table_row_count": 7531793,
+      "table_txn": 48
+    }
+  ],
+  "table_metadata_after": [
+    {
+      "table_name": "backtest_daily_cache_coverage",
+      "table_row_count": 1367,
+      "table_txn": 4
+    },
+    {
+      "table_name": "backtest_daily_cache",
+      "table_row_count": 7531793,
+      "table_txn": 48
+    }
+  ],
+  "table_counts_and_txns_unchanged": true,
+  "writes": "none"
+}

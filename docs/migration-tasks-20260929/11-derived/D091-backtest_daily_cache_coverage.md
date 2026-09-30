@@ -1,6 +1,6 @@
 # D091 · backtest_daily_cache_coverage
 
-- 状态：running；D090协调器验收门槛已通过；正在核对Python cache publisher、coverage实表及完整性语义。
+- 状态：verified（`retained_compatibility`）；D090协调器验收门槛已通过；Python owner、Java只读模型、实表及历史回执完整性已验收。人工复核仍为 `pending_review`。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D090`；前项验收后才执行本项。
@@ -25,7 +25,9 @@
 
 ## 本数据sync模式与注意事项
 
-Tushare不适用或入口未确认；先沿本卡源码引用核实实际owner和上游，已确认衍生表定义bounded materialize，服务结果表定义typed ingest，未确认则阻塞，不虚构API。
+本表不是独立来源或可任意重算的同步目标。Python `BacktestReadThroughCache._publish` 先写 `backtest_daily_cache`，等WAL和内容摘要可见后才发布 coverage 回执；`_cached` 以完整 `(trade_date, source_version)` 找回执，校验行数、唯一证券键和内容摘要。Java只提供READ能力及有界读取，不发布另一份完整性声明。
+
+2026-09-30本机只读验收：coverage 实表为MONTH/WAL/DEDUP，4列类型和完整去重键与Python模型一致；最新存储回执日期 `2026-09-21`，该版本5,565行，5,565个唯一证券键，Python原版摘要复算一致。coverage表1,367行/table_txn=4、cache表7,531,793行/table_txn=48，前后未变化。当前上游指纹与这条已存回执不同，因此当前版本 `_cached` 返回cache miss；仅证明已存历史版本完整，不声明当前版本已有热缓存，也未触发可能写入的重建。
 
 Python调用/限流证据（仅源码事实，未逐接口验证线上配额）：
 
@@ -33,15 +35,15 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 单数据交付清单
 
-- [ ] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
-- [ ] D02：本表业务Key、物理去重键、冲突/修订规则。
-- [ ] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
-- [ ] D04：本表按键/范围的typed read与分页，接入读取组合。
-- [ ] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
-- [ ] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
-- [ ] D07：注册 `backtest_daily_cache_coverage` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
-- [ ] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
-- [ ] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
+- [x] D01：4列只读业务record和逐字段mapper，日期为交易所business date、来源/摘要为64位小写SHA-256、行数为正LONG。
+- [x] D02：业务Key和物理DEDUP键均为 `(trade_date, source_version)`；同键修订由Python发布者负责，Java不写。
+- [x] D03：现场确认 `trade_date` designated TIMESTAMP、MONTH/WAL/DEDUP及完整UPSERT KEY；无DDL变更。
+- [x] D04：按完整Key、日期、范围的有界typed read和稳定cursor分页；ReadGroup强类型绑定通过实库验收。
+- [x] D05：N/A；此回执是Python在cache内容核验后发布的完整性断言，Java直写会伪造或竞争该断言；DatasetDefinition仅READ。
+- [x] D06：N/A；来源与发布者为Python `BacktestReadThroughCache`，没有独立Java source/sync；真实调用链已复核。
+- [x] D07：注册READ-only DatasetDefinition，不创建无来源所有权的Java SyncJobDefinition；此表按回执读取使用。
+- [x] D08：Java共享有界读取器负责页长、超时及cursor约束；Python owner 的唯一键、行数、摘要、WAL可见性在实库只读路径得到核验。写入重试/断点/取消对本Java只读裁决不适用。
+- [x] D09：本机QuestDB实表、5,565行cache切片与Python原版摘要复算通过；只读前后行数和table_txn不变。结果见 `../results/D091.json`。
 
 ## 可观察验收
 
@@ -53,10 +55,10 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 | 当前列 | 快照类型 | 任务要求 |
 | --- | --- | --- |
-| `trade_date` | `TIMESTAMP` | 待逐字段映射与语义核验 |
-| `source_version` | `SYMBOL` | 待逐字段映射与语义核验 |
-| `row_count` | `LONG` | 待逐字段映射与语义核验 |
-| `content_digest` | `STRING` | 待逐字段映射与语义核验 |
+| `trade_date` | `TIMESTAMP` | `LocalDate`；交易所business date，UTC零点仅为存储载体；非空、键 |
+| `source_version` | `SYMBOL` | `String`；视图定义和来源表分区状态的SHA-256；非空、键 |
+| `row_count` | `LONG` | `long`；已验证cache行数，必须大于0 |
+| `content_digest` | `STRING` | `String`；排序后pandas内容哈希字节的SHA-256；64位小写十六进制 |
 
 ## 只读参考入口
 
@@ -69,13 +71,13 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 本任务容错、实际验收与完成登记（必做）
 
-- [ ] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
-- [ ] 验证本任务适用的限流/超时重试、分页异常、取消和断点恢复；已ACK但未回读一致的写入保持未验证。
-- [ ] 默认增量，记录checkpoint前后与有限修订窗口；sync有数据才写，没有数据明确记0，不用假数据充数。
-- [ ] 对本任务实际目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留请求范围、查询/参数、返回样本和汇总。
-- [ ] 首次非空真实来源写入、同范围幂等重跑及再次增量验证有记录；本任务为View/MV或功能时按公共契约对应的实际验收方式执行。
-- [ ] 更新[逐项完成表](../completion-register.md)的 `D091` 行及 `results/D091.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
-- [ ] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
+- [x] 已核实Python owner、QuestDB连接、实表schema、键和实际回执日期。
+- [x] 适用的Java有界读、分页与超时约束及Python owner完整性检查已核验；Java没有写入或网络取源。
+- [x] checkpoint、增量窗口、幂等写入对只读回执不适用；写入0行，未触发Python cache重建。
+- [x] QuestDB按完整 `(trade_date, source_version)` SELECT回读5,565行对应切片，键唯一、行数和13字段内容摘要匹配。
+- [x] 非空写入验收对 `retained_compatibility` 不适用；核验真实已发布回执及相关cache切片。
+- [x] 已更新完成表和 `results/D091.json`，保留原始Java/Python/QuestDB证据与当前版本cache miss事实。
+- [x] 状态为verified（只读兼容与已存回执完整性）；人工复核保持 `pending_review`。
 
 ## Orca执行提示
 
