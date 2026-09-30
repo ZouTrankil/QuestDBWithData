@@ -1,0 +1,36 @@
+@baseUrl = http://localhost:8080
+# If APP_API_TOKEN is configured, set the same token here and add the Authorization header
+# to protected requests. Do not commit a real token.
+@token = replace-with-your-api-token
+
+### Web service health (does not query QuestDB)
+GET {{baseUrl}}/api/v1/health
+
+### API route list
+GET {{baseUrl}}/api/v1/info
+Authorization: Bearer {{token}}
+
+### Check QuestDB connectivity (read-only SELECT 1)
+GET {{baseUrl}}/api/v1/questdb/ping
+Authorization: Bearer {{token}}
+
+### Registered dataset definitions
+GET {{baseUrl}}/api/v1/datasets
+Authorization: Bearer {{token}}
+
+### Sample at most 10 rows from the stock basic latest view
+GET {{baseUrl}}/api/v1/datasets/stock_basic_latest/sample?limit=10
+Authorization: Bearer {{token}}
+
+### Sample at most 10 rows from the stock basic snapshot table
+GET {{baseUrl}}/api/v1/datasets/stock_basic_snapshot/sample?limit=10
+Authorization: Bearer {{token}}
+
+### Registered sync job definitions
+GET {{baseUrl}}/api/v1/jobs
+Authorization: Bearer {{token}}
+
+### Write operation: fetch Tushare stock basic and synchronize to QuestDB.
+### Run only when you intend to change QuestDB data.
+# POST {{baseUrl}}/api/v1/stock-basic/sync
+# Authorization: Bearer {{token}}
