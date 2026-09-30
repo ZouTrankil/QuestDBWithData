@@ -1,0 +1,34 @@
+{
+  "dataset": "stk_suspend",
+  "version": "stk_suspend-v1",
+  "endpoint": "suspend_d",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "timestamp",
+  "pageSize": 5000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 20000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=214",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "is_suspended",
+      "target": "is_suspended",
+      "type": "LONG",
+      "key": false
+    },
+    {
+      "source": "trade_date",
+      "target": "timestamp",
+      "type": "TIMESTAMP",
+      "key": true
+    }
+  ]
+}

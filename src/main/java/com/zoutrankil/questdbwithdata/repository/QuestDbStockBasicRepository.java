@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneOffset;
+import com.zoutrankil.questdbwithdata.domain.temporal.BusinessTime;
 import java.util.List;
 import java.util.Map;
 
@@ -32,22 +32,22 @@ public class QuestDbStockBasicRepository implements StockBasicLatestRepository, 
     private final QuestDB questDB;
     private final QuestDbProperties properties;
     private final QuestDbBoundedReader boundedReader;
+    private final BusinessTime businessTime;
 
     public QuestDbStockBasicRepository(
             JdbcTemplate jdbcTemplate,
             @Lazy QuestDB questDB,
-            QuestDbProperties properties, QuestDbBoundedReader boundedReader) {
+            QuestDbProperties properties, QuestDbBoundedReader boundedReader, BusinessTime businessTime) {
         this.jdbcTemplate = jdbcTemplate;
         this.questDB = questDB;
         this.properties = properties;
         this.boundedReader = boundedReader;
+        this.businessTime = businessTime;
     }
 
     public StockBasicSyncReport storeAndVerify(List<StockBasic> stocks) throws InterruptedException {
         definition().requireCapability(DatasetDefinition.Capability.WRITE);
-        Instant snapshot = LocalDate.now(ZoneOffset.UTC)
-                .atStartOfDay()
-                .toInstant(ZoneOffset.UTC);
+        Instant snapshot = businessTime.todaySnapshotMarker();
         var result = writeDetailed(stocks, snapshot);
         if (result.status() != VerifiedBatchExecutor.Status.VERIFIED
                 && result.status() != VerifiedBatchExecutor.Status.EMPTY) {

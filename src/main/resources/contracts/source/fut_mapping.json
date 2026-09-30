@@ -1,0 +1,20 @@
+{
+  "dataset": "fut_mapping",
+  "version": "fut_mapping-v1",
+  "endpoint": "fut_mapping",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 2000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 2000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=189; bounded first release requests one continuous contract for one trade date; update_time is generated at publication.",
+  "columns": [
+    { "source": "ts_code", "target": "ts_code", "type": "SYMBOL", "key": true },
+    { "source": "trade_date", "target": "trade_date", "type": "TIMESTAMP", "key": true },
+    { "source": "mapping_ts_code", "target": "mapping_ts_code", "type": "SYMBOL", "key": false },
+    { "source": "update_time", "target": "update_time", "type": "TIMESTAMP", "key": false }
+  ]
+}

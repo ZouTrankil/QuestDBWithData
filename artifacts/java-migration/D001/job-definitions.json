@@ -12,7 +12,7 @@
       "required" : true,
       "maxLength" : 4,
       "maxItems" : 2,
-      "choices" : [ "SSE", "SZSE" ]
+      "choices" : [ "SZSE", "SSE" ]
     }
   },
   "ratePolicyRef" : "tushare.shared",
@@ -43,7 +43,7 @@
   "datasetId" : "index",
   "datasetVersion" : 1,
   "owner" : "index_catalog_owner",
-  "supportedModes" : [ "INCREMENTAL", "INGEST" ],
+  "supportedModes" : [ "INGEST", "INCREMENTAL" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
     "sha256" : {
@@ -92,12 +92,12 @@
   "supportedModes" : [ "INCREMENTAL" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
-    "industryCodes" : {
-      "type" : "STRING_LIST",
+    "selection" : {
+      "type" : "STRING",
       "required" : true,
-      "maxLength" : 9,
-      "maxItems" : 32,
-      "choices" : [ ]
+      "maxLength" : 16,
+      "maxItems" : 1,
+      "choices" : [ "CURRENT", "HISTORICAL", "BOTH" ]
     },
     "classificationFingerprint" : {
       "type" : "STRING",
@@ -106,12 +106,12 @@
       "maxItems" : 1,
       "choices" : [ ]
     },
-    "selection" : {
-      "type" : "STRING",
+    "industryCodes" : {
+      "type" : "STRING_LIST",
       "required" : true,
-      "maxLength" : 16,
-      "maxItems" : 1,
-      "choices" : [ "HISTORICAL", "CURRENT", "BOTH" ]
+      "maxLength" : 9,
+      "maxItems" : 32,
+      "choices" : [ ]
     },
     "classificationReceipt" : {
       "type" : "STRING",
@@ -188,7 +188,7 @@
   "datasetId" : "stock_detail_info",
   "datasetVersion" : 1,
   "owner" : "stock_detail_info_owner",
-  "supportedModes" : [ "INCREMENTAL", "RECONCILE" ],
+  "supportedModes" : [ "RECONCILE", "INCREMENTAL" ],
   "defaultMode" : "INCREMENTAL",
   "parameters" : {
     "codes" : {

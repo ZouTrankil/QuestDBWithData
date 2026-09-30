@@ -5,6 +5,7 @@ import com.zoutrankil.questdbwithdata.client.TushareClient;
 import com.zoutrankil.questdbwithdata.client.dto.TushareStockBasicDto;
 import com.zoutrankil.questdbwithdata.domain.*;
 import com.zoutrankil.questdbwithdata.mapper.StockBasicMapper;
+import com.zoutrankil.questdbwithdata.domain.temporal.TemporalValues;
 import com.zoutrankil.questdbwithdata.repository.StockBasicWritePort;
 import java.nio.file.*;
 import java.security.MessageDigest;
@@ -70,7 +71,7 @@ public final class StockBasicSyncAdapter implements SyncJobRunner.Adapter<StockB
                 for (var row : page.rows()) {
                     var dto = new TushareStockBasicDto(text(row,"ts_code"), text(row,"symbol"), text(row,"name"),
                             text(row,"area"), text(row,"industry"), text(row,"list_date"));
-                    typed.add(new StockBasicSnapshot(request.logicalDate().atStartOfDay().toInstant(ZoneOffset.UTC), mapper.toDomain(dto)));
+                    typed.add(new StockBasicSnapshot(new TemporalValues.CalendarTimestamp(request.logicalDate()).storageCarrier(), mapper.toDomain(dto)));
                 }
                 byte[] body = json.writeValueAsBytes(Map.of("endpoint","stock_basic", "parameters", params,
                         "logicalDate", request.logicalDate().toString(), "rows", page.rows()));

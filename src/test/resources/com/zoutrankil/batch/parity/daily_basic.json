@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "dataset": "daily_basic",
+  "logicalDate": "2026-09-28",
+  "code": "000001.SZ",
+  "capturedAt": "2026-09-29T11:11:36.728409+00:00",
+  "provider": "real-tushare",
+  "reference": "existing QuestDB read-only output, prior producer ownership not proven by this snapshot",
+  "referenceKind": "stored-output-snapshot-not-execution-of-python-on-frozen-input",
+  "floatingTolerance": 0.0,
+  "sourcePages": [
+    [
+      {
+        "pb": 0.4683,
+        "pe": 5.1436,
+        "dv_ratio": 5.2922,
+        "ts_code": "000001.SZ",
+        "trade_date": "20260928",
+        "turnover_rate": 0.3686,
+        "total_mv": 21928687.566,
+        "circ_mv": 21928424.05,
+        "dv_ttm": 5.3893,
+        "total_share": 1940591.8198,
+        "float_share": 1940568.4991,
+        "ps": 1.6683,
+        "close": 11.3,
+        "pe_ttm": 5.0458,
+        "ps_ttm": 1.6528,
+        "volume_ratio": 0.82,
+        "free_share": 816056.5553,
+        "turnover_rate_f": 0.8766
+      }
+    ]
+  ],
+  "referenceQuery": {
+    "query": "SELECT \"ts_code\",\"trade_date\",\"close\",\"turnover_rate\",\"turnover_rate_f\",\"volume_ratio\",\"pe\",\"pe_ttm\",\"pb\",\"ps\",\"ps_ttm\",\"dv_ratio\",\"dv_ttm\",\"total_share\",\"float_share\",\"free_share\",\"total_mv\",\"circ_mv\" FROM daily_basic WHERE ts_code='000001.SZ' AND trade_date='2026-09-28T00:00:00.000000Z' LIMIT 2",
+    "columns": [
+      {
+        "name": "ts_code",
+        "type": "SYMBOL"
+      },
+      {
+        "name": "trade_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "close",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "turnover_rate",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "turnover_rate_f",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "volume_ratio",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pe",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pe_ttm",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pb",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ps",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ps_ttm",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "dv_ratio",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "dv_ttm",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "total_share",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "float_share",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "free_share",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "total_mv",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "circ_mv",
+        "type": "DOUBLE"
+      }
+    ],
+    "timestamp": 1,
+    "dataset": [],
+    "count": 0
+  }
+}

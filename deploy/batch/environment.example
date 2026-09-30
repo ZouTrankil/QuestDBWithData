@@ -1,0 +1,30 @@
+# SQLite must be a persistent local file; the process creates its parent directory.
+JDB_METADATA_URL=jdbc:sqlite:/var/lib/questdb-batch/metadata.sqlite
+JDB_API_TOKEN=
+JDB_API_PORT=9085
+JDB_ARCHIVE_ROOT=/absolute/path/to/jdb-isolated-archive
+JDB_CALENDAR_FILE=/absolute/path/to/validated-calendar.json
+JDB_SCHEDULING_ENABLED=false
+JDB_CORE_SOURCE_FANOUT_ENABLED=true
+# The runtime has no production-enabled mode; fixtures exist only in src/test.
+# Optional native source producers; token stays outside the source repository.
+JDB_TUSHARE_TOKEN=
+JDB_QUESTDB_HTTP_URL=http://127.0.0.1:19000
+JDB_QUESTDB_HTTP_AUTHORIZATION=
+JDB_QUESTDB_VISIBILITY_TIMEOUT=10s
+JDB_QUESTDB_POLL_INTERVAL=100ms
+# Optional share-to-own-drive transfer adapter. Keep disabled until private local settings exist.
+JDB_BAIDU_ENABLED=false
+JDB_BAIDU_DOWNLOAD_ENABLED=false
+JDB_BAIDU_COOKIE_FILE=/absolute/path/to/private/baidu-cookies.txt
+JDB_BAIDU_SHARE_URL=
+JDB_BAIDU_SHARE_PASSWORD=
+# Empty means the documented default {year}/{month}.
+JDB_BAIDU_SOURCE_PATH=
+JDB_BAIDU_UNWRAP_SINGLE_FOLDER=false
+JDB_BAIDU_REMOTE_ROOT=/
+JDB_BAIDU_MINIMUM_SIZE_BYTES=1000000000
+JDB_BAIDUPCS_GO_EXECUTABLE=/absolute/path/to/BaiduPCS-Go
+JDB_BAIDUPCS_GO_CONFIG_DIRECTORY=/absolute/path/to/private/baidupcs-config
+JDB_BAIDUPCS_GO_EXPECTED_UID=
+JDB_BAIDUPCS_GO_DOWNLOAD_TIMEOUT=12h

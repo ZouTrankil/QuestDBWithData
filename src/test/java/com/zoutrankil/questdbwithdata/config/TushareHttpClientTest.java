@@ -116,6 +116,15 @@ class TushareHttpClientTest {
         assertFalse(events.toString().contains(properties.getToken()));
     }
 
+    @Test void acceptsProviderFieldsWithNumericLeadingTenorNames() throws Exception {
+        var shibor = new TushareRequest("shibor", Map.of("start_date", "20260928", "end_date", "20260928"),
+                List.of("date", "on", "1w", "3m"), 1);
+        respond("{\"code\":0,\"data\":{\"fields\":[\"1w\",\"date\",\"on\",\"3m\"],\"items\":[[1.5,\"20260928\",1.25,1.8]]}}");
+        var row=client.request(shibor).rows().getFirst();
+        assertEquals(1.5,row.get("1w").doubleValue());
+        assertEquals("20260928",row.get("date").asText());
+    }
+
     @Test void malformedSchemaIsNotEmptySuccess() {
         for (var body : List.of("{}", "not-json", "{\"code\":0,\"data\":{\"fields\":[\"ts_code\"],\"items\":[]}}",
                 "{\"code\":0,\"data\":{\"fields\":[\"ts_code\",\"name\",\"name\"],\"items\":[]}}",

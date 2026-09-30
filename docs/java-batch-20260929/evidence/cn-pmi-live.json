@@ -1,0 +1,42 @@
+{
+  "dataset": "cn_pmi",
+  "job": "source_cn_pmi",
+  "dateParameter": {
+    "logicalDate": "2026-07-01",
+    "providerParameter": {
+      "m": "202607"
+    },
+    "meaning": "one observation month; month timestamp normalized to first day"
+  },
+  "source": {
+    "kind": "real Tushare",
+    "documentation": "https://tushare.pro/document/41?doc_id=325",
+    "fingerprint": "d9c67e5458e969614ff073843c7ce73f1706ddad17051af2e8bd877c5b033154",
+    "pages": 1,
+    "rows": 1,
+    "completeProbe": true
+  },
+  "target": {
+    "kind": "isolated QuestDB test table",
+    "table": "jdb_test_90225d50966647da_cn_pmi_d7d34143de4ada7aaa77f6250112f5ba5cd5e76a2fee6942c3019c132d7dc65c",
+    "columns": 60,
+    "readRows": 1,
+    "writtenRows": 1,
+    "physicallyVisible": true,
+    "qualityPassed": true
+  },
+  "result": {
+    "businessState": "VERIFIED",
+    "sendAttempts": 1,
+    "repeatLaunchResent": false
+  },
+  "physicalSchemaVerified": false,
+  "pythonBaselineCompared": false,
+  "remaining": [
+    "full monthly history and publication/revision backfill",
+    "contiguous completeness watermark",
+    "legacy Python frozen-output parity",
+    "production physical schema verification"
+  ],
+  "sideEffects": "Wrote one bounded observation month to an isolated jdb_test_* QuestDB table and a temporary SQLite metadata database; no production target or schedule changed."
+}

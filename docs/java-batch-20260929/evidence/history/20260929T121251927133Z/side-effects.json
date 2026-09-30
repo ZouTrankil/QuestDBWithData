@@ -1,0 +1,494 @@
+{
+  "questdb_test_tables": [
+    {
+      "table": "jdb_test_59e45c82f9ad43a2_daily_01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+      "dataset": "daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/4a79972e-5bfb-4819-8aa8-77109bf2e429/results.json"
+    },
+    {
+      "table": "jdb_test_59e45c82f9ad43a2_daily_basic_bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+      "dataset": "daily_basic",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/4a79972e-5bfb-4819-8aa8-77109bf2e429/results.json"
+    },
+    {
+      "table": "jdb_test_59e45c82f9ad43a2_etf_daily_b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+      "dataset": "etf_daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/4a79972e-5bfb-4819-8aa8-77109bf2e429/results.json"
+    },
+    {
+      "table": "jdb_test_e41ed8be40fd48e0_daily_01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+      "dataset": "daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/cb627e27-4cb2-4461-921b-5cb713b4a9b7/results.json"
+    },
+    {
+      "table": "jdb_test_e41ed8be40fd48e0_daily_basic_bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+      "dataset": "daily_basic",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/cb627e27-4cb2-4461-921b-5cb713b4a9b7/results.json"
+    },
+    {
+      "table": "jdb_test_e41ed8be40fd48e0_etf_daily_b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+      "dataset": "etf_daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/cb627e27-4cb2-4461-921b-5cb713b4a9b7/results.json"
+    },
+    {
+      "table": "jdb_test_461e3a62469e4f7c_daily_01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+      "dataset": "daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e4031197-d32d-4f5f-83a3-43f27b1dbf31/results.json"
+    },
+    {
+      "table": "jdb_test_461e3a62469e4f7c_daily_basic_bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+      "dataset": "daily_basic",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e4031197-d32d-4f5f-83a3-43f27b1dbf31/results.json"
+    },
+    {
+      "table": "jdb_test_461e3a62469e4f7c_etf_daily_b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+      "dataset": "etf_daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e4031197-d32d-4f5f-83a3-43f27b1dbf31/results.json"
+    },
+    {
+      "table": "jdb_test_protocol_4f603e2589e94f90935629cf09e40e74",
+      "dataset": "protocol-test",
+      "rows": 1,
+      "evidence": "docs/java-batch-20260929/evidence/questdb-protocol.json"
+    },
+    {
+      "table": "jdb_test_protocol_9031514699f8438994c9a54be5c69f92",
+      "dataset": "protocol-test",
+      "rows": 1,
+      "evidence": "docs/java-batch-20260929/evidence/history/questdb-protocol-bootstrap.json"
+    },
+    {
+      "table": "jdb_test_protocol_e5ef3bc18f69428bb138ab0a97263cc3",
+      "dataset": "protocol-test",
+      "rows": 1,
+      "evidence": "docs/java-batch-20260929/evidence/history/questdb-protocol-five-sources-first.json"
+    },
+    {
+      "table": "jdb_test_40f23afd19b848bd_daily_01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+      "dataset": "daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/1f33d808-8fab-4650-889c-f57197948060/writes/01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3/certificate.json"
+    },
+    {
+      "table": "jdb_test_40f23afd19b848bd_etf_adj_62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26",
+      "dataset": "etf_adj",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/1f33d808-8fab-4650-889c-f57197948060/writes/62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26/certificate.json"
+    },
+    {
+      "table": "jdb_test_40f23afd19b848bd_stk_limit_14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532",
+      "dataset": "stk_limit",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/1f33d808-8fab-4650-889c-f57197948060/writes/14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532/certificate.json"
+    },
+    {
+      "table": "jdb_test_40f23afd19b848bd_daily_basic_bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+      "dataset": "daily_basic",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/1f33d808-8fab-4650-889c-f57197948060/writes/bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c/certificate.json"
+    },
+    {
+      "table": "jdb_test_40f23afd19b848bd_etf_daily_b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+      "dataset": "etf_daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/1f33d808-8fab-4650-889c-f57197948060/writes/b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12/certificate.json"
+    },
+    {
+      "table": "jdb_test_46ab6a02e97449bc_daily_01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+      "dataset": "daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/3adb35c6-297e-489b-9450-863abb3efbe9/writes/01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3/certificate.json"
+    },
+    {
+      "table": "jdb_test_46ab6a02e97449bc_etf_adj_62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26",
+      "dataset": "etf_adj",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/3adb35c6-297e-489b-9450-863abb3efbe9/writes/62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26/certificate.json"
+    },
+    {
+      "table": "jdb_test_46ab6a02e97449bc_stk_limit_14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532",
+      "dataset": "stk_limit",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/3adb35c6-297e-489b-9450-863abb3efbe9/writes/14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532/certificate.json"
+    },
+    {
+      "table": "jdb_test_46ab6a02e97449bc_daily_basic_bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+      "dataset": "daily_basic",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/3adb35c6-297e-489b-9450-863abb3efbe9/writes/bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c/certificate.json"
+    },
+    {
+      "table": "jdb_test_46ab6a02e97449bc_etf_daily_b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+      "dataset": "etf_daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/3adb35c6-297e-489b-9450-863abb3efbe9/writes/b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12/certificate.json"
+    },
+    {
+      "table": "jdb_test_protocol_5f55cf007ffb4e76bbfeda3baf05894c",
+      "dataset": "protocol-test",
+      "rows": 1,
+      "evidence": "First five-source run: build report inspected before repeat; sendAttempts=1, delivery=VERIFIED, visibleRows=1; full run failed only Integer/Long unit assertion"
+    },
+    {
+      "table": "jdb_test_e3f277be66f8454d_daily_01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+      "dataset": "daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e0327f33-6b30-4cf4-a62f-fb00f292e1ff/writes/01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3/certificate.json"
+    },
+    {
+      "table": "jdb_test_e3f277be66f8454d_etf_factor_dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8",
+      "dataset": "etf_factor",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e0327f33-6b30-4cf4-a62f-fb00f292e1ff/writes/dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8/certificate.json"
+    },
+    {
+      "table": "jdb_test_e3f277be66f8454d_etf_adj_62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26",
+      "dataset": "etf_adj",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e0327f33-6b30-4cf4-a62f-fb00f292e1ff/writes/62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26/certificate.json"
+    },
+    {
+      "table": "jdb_test_e3f277be66f8454d_moneyflow_fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d",
+      "dataset": "moneyflow",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e0327f33-6b30-4cf4-a62f-fb00f292e1ff/writes/fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d/certificate.json"
+    },
+    {
+      "table": "jdb_test_e3f277be66f8454d_stk_limit_14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532",
+      "dataset": "stk_limit",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e0327f33-6b30-4cf4-a62f-fb00f292e1ff/writes/14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532/certificate.json"
+    },
+    {
+      "table": "jdb_test_e3f277be66f8454d_daily_basic_bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+      "dataset": "daily_basic",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e0327f33-6b30-4cf4-a62f-fb00f292e1ff/writes/bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c/certificate.json"
+    },
+    {
+      "table": "jdb_test_e3f277be66f8454d_etf_daily_b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+      "dataset": "etf_daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e0327f33-6b30-4cf4-a62f-fb00f292e1ff/writes/b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12/certificate.json"
+    },
+    {
+      "table": "jdb_test_protocol_9857a9956739496cbc320e6e872562ac",
+      "dataset": "protocol-test",
+      "rows": 1,
+      "evidence": "docs/java-batch-20260929/evidence/questdb-protocol.json"
+    },
+    {
+      "table": "jdb_test_95c0e07329e64358_daily_01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+      "dataset": "daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d1f8c42c-9f50-4b5e-aacd-e296849cb8d7/writes/01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3/certificate.json"
+    },
+    {
+      "table": "jdb_test_95c0e07329e64358_etf_factor_dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8",
+      "dataset": "etf_factor",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d1f8c42c-9f50-4b5e-aacd-e296849cb8d7/writes/dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8/certificate.json"
+    },
+    {
+      "table": "jdb_test_95c0e07329e64358_etf_adj_62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26",
+      "dataset": "etf_adj",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d1f8c42c-9f50-4b5e-aacd-e296849cb8d7/writes/62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26/certificate.json"
+    },
+    {
+      "table": "jdb_test_95c0e07329e64358_moneyflow_fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d",
+      "dataset": "moneyflow",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d1f8c42c-9f50-4b5e-aacd-e296849cb8d7/writes/fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d/certificate.json"
+    },
+    {
+      "table": "jdb_test_95c0e07329e64358_stk_limit_14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532",
+      "dataset": "stk_limit",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d1f8c42c-9f50-4b5e-aacd-e296849cb8d7/writes/14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532/certificate.json"
+    },
+    {
+      "table": "jdb_test_95c0e07329e64358_margin_detail_88d1ef677a9b2b114a7310552b80bc01780f9aa1d4d173ef2577d9fa0e9e1a9f",
+      "dataset": "margin_detail",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d1f8c42c-9f50-4b5e-aacd-e296849cb8d7/writes/88d1ef677a9b2b114a7310552b80bc01780f9aa1d4d173ef2577d9fa0e9e1a9f/certificate.json"
+    },
+    {
+      "table": "jdb_test_95c0e07329e64358_daily_basic_bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+      "dataset": "daily_basic",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d1f8c42c-9f50-4b5e-aacd-e296849cb8d7/writes/bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c/certificate.json"
+    },
+    {
+      "table": "jdb_test_95c0e07329e64358_etf_daily_b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+      "dataset": "etf_daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d1f8c42c-9f50-4b5e-aacd-e296849cb8d7/writes/b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12/certificate.json"
+    },
+    {
+      "table": "jdb_test_protocol_2cae203e8c014dcf89de22c6d6f400a7",
+      "dataset": "protocol-test",
+      "rows": 1,
+      "evidence": "docs/java-batch-20260929/evidence/history/20260929T114449191924Z/verified-questdb-protocol.json"
+    },
+    {
+      "table": "jdb_test_0c8502b20c894364_daily_01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+      "dataset": "daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/96d0908d-be2b-44f1-99eb-a86763720724/writes/01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3/certificate.json"
+    },
+    {
+      "table": "jdb_test_0c8502b20c894364_etf_factor_dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8",
+      "dataset": "etf_factor",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/96d0908d-be2b-44f1-99eb-a86763720724/writes/dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8/certificate.json"
+    },
+    {
+      "table": "jdb_test_0c8502b20c894364_etf_adj_62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26",
+      "dataset": "etf_adj",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/96d0908d-be2b-44f1-99eb-a86763720724/writes/62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26/certificate.json"
+    },
+    {
+      "table": "jdb_test_0c8502b20c894364_moneyflow_fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d",
+      "dataset": "moneyflow",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/96d0908d-be2b-44f1-99eb-a86763720724/writes/fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d/certificate.json"
+    },
+    {
+      "table": "jdb_test_0c8502b20c894364_stk_limit_14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532",
+      "dataset": "stk_limit",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/96d0908d-be2b-44f1-99eb-a86763720724/writes/14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532/certificate.json"
+    },
+    {
+      "table": "jdb_test_0c8502b20c894364_margin_detail_88d1ef677a9b2b114a7310552b80bc01780f9aa1d4d173ef2577d9fa0e9e1a9f",
+      "dataset": "margin_detail",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/96d0908d-be2b-44f1-99eb-a86763720724/writes/88d1ef677a9b2b114a7310552b80bc01780f9aa1d4d173ef2577d9fa0e9e1a9f/certificate.json"
+    },
+    {
+      "table": "jdb_test_0c8502b20c894364_daily_basic_bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+      "dataset": "daily_basic",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/96d0908d-be2b-44f1-99eb-a86763720724/writes/bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c/certificate.json"
+    },
+    {
+      "table": "jdb_test_0c8502b20c894364_moneyflow_hsgt_357fa8b6a005a284076322d2e5e27a9fa5c0b7cee1e4728cdf2f733e8057c3be",
+      "dataset": "moneyflow_hsgt",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/96d0908d-be2b-44f1-99eb-a86763720724/writes/357fa8b6a005a284076322d2e5e27a9fa5c0b7cee1e4728cdf2f733e8057c3be/certificate.json"
+    },
+    {
+      "table": "jdb_test_0c8502b20c894364_etf_daily_b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+      "dataset": "etf_daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/96d0908d-be2b-44f1-99eb-a86763720724/writes/b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12/certificate.json"
+    },
+    {
+      "table": "jdb_test_ff7d2323705f4b1f_daily_01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+      "dataset": "daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/8a5709dd-a9d8-441b-8c36-4d4b912bb42f/writes/01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3/certificate.json"
+    },
+    {
+      "table": "jdb_test_ff7d2323705f4b1f_etf_factor_dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8",
+      "dataset": "etf_factor",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/8a5709dd-a9d8-441b-8c36-4d4b912bb42f/writes/dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8/certificate.json"
+    },
+    {
+      "table": "jdb_test_ff7d2323705f4b1f_etf_adj_62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26",
+      "dataset": "etf_adj",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/8a5709dd-a9d8-441b-8c36-4d4b912bb42f/writes/62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26/certificate.json"
+    },
+    {
+      "table": "jdb_test_ff7d2323705f4b1f_moneyflow_fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d",
+      "dataset": "moneyflow",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/8a5709dd-a9d8-441b-8c36-4d4b912bb42f/writes/fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d/certificate.json"
+    },
+    {
+      "table": "jdb_test_ff7d2323705f4b1f_margin_detail_88d1ef677a9b2b114a7310552b80bc01780f9aa1d4d173ef2577d9fa0e9e1a9f",
+      "dataset": "margin_detail",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/8a5709dd-a9d8-441b-8c36-4d4b912bb42f/writes/88d1ef677a9b2b114a7310552b80bc01780f9aa1d4d173ef2577d9fa0e9e1a9f/certificate.json"
+    },
+    {
+      "table": "jdb_test_ff7d2323705f4b1f_daily_basic_bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+      "dataset": "daily_basic",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/8a5709dd-a9d8-441b-8c36-4d4b912bb42f/writes/bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c/certificate.json"
+    },
+    {
+      "table": "jdb_test_ff7d2323705f4b1f_etf_daily_b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+      "dataset": "etf_daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/8a5709dd-a9d8-441b-8c36-4d4b912bb42f/writes/b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12/certificate.json"
+    },
+    {
+      "table": "jdb_test_protocol_b35d5104012c4943bc887912af0b8c7c",
+      "dataset": "protocol-test",
+      "rows": 1,
+      "evidence": "docs/java-batch-20260929/evidence/history/20260929T115203748937Z/verified-questdb-protocol.json"
+    },
+    {
+      "table": "jdb_test_protocol_9d0d43ad423e4a12a15a32e7115c8e2f",
+      "dataset": "protocol-test",
+      "rows": 1,
+      "evidence": "docs/java-batch-20260929/evidence/history/questdb-protocol-hsgt-initial.json"
+    },
+    {
+      "table": "jdb_test_e1ccf9089d0948b6_daily_01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+      "dataset": "daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d495a08a-95c8-4171-a613-a66a513eb6b5/writes/01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3/certificate.json"
+    },
+    {
+      "table": "jdb_test_e1ccf9089d0948b6_etf_factor_dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8",
+      "dataset": "etf_factor",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d495a08a-95c8-4171-a613-a66a513eb6b5/writes/dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8/certificate.json"
+    },
+    {
+      "table": "jdb_test_e1ccf9089d0948b6_etf_adj_62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26",
+      "dataset": "etf_adj",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d495a08a-95c8-4171-a613-a66a513eb6b5/writes/62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26/certificate.json"
+    },
+    {
+      "table": "jdb_test_e1ccf9089d0948b6_moneyflow_fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d",
+      "dataset": "moneyflow",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d495a08a-95c8-4171-a613-a66a513eb6b5/writes/fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d/certificate.json"
+    },
+    {
+      "table": "jdb_test_e1ccf9089d0948b6_stk_limit_14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532",
+      "dataset": "stk_limit",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d495a08a-95c8-4171-a613-a66a513eb6b5/writes/14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532/certificate.json"
+    },
+    {
+      "table": "jdb_test_e1ccf9089d0948b6_margin_detail_88d1ef677a9b2b114a7310552b80bc01780f9aa1d4d173ef2577d9fa0e9e1a9f",
+      "dataset": "margin_detail",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d495a08a-95c8-4171-a613-a66a513eb6b5/writes/88d1ef677a9b2b114a7310552b80bc01780f9aa1d4d173ef2577d9fa0e9e1a9f/certificate.json"
+    },
+    {
+      "table": "jdb_test_e1ccf9089d0948b6_daily_basic_bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+      "dataset": "daily_basic",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d495a08a-95c8-4171-a613-a66a513eb6b5/writes/bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c/certificate.json"
+    },
+    {
+      "table": "jdb_test_e1ccf9089d0948b6_stk_suspend_4f4dd04e6393960e16673df55114e2ede70cfc07f17c1a4fd81839860595057e",
+      "dataset": "stk_suspend",
+      "rows": 0,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d495a08a-95c8-4171-a613-a66a513eb6b5/writes/4f4dd04e6393960e16673df55114e2ede70cfc07f17c1a4fd81839860595057e/certificate.json"
+    },
+    {
+      "table": "jdb_test_e1ccf9089d0948b6_moneyflow_hsgt_357fa8b6a005a284076322d2e5e27a9fa5c0b7cee1e4728cdf2f733e8057c3be",
+      "dataset": "moneyflow_hsgt",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d495a08a-95c8-4171-a613-a66a513eb6b5/writes/357fa8b6a005a284076322d2e5e27a9fa5c0b7cee1e4728cdf2f733e8057c3be/certificate.json"
+    },
+    {
+      "table": "jdb_test_e1ccf9089d0948b6_etf_daily_b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+      "dataset": "etf_daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d495a08a-95c8-4171-a613-a66a513eb6b5/writes/b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12/certificate.json"
+    },
+    {
+      "table": "jdb_test_protocol_e9e7979dd1d54f40ab14a737b7cbddcd",
+      "dataset": "protocol-test",
+      "rows": 1,
+      "evidence": "docs/java-batch-20260929/evidence/history/20260929T115824143650Z/verified-questdb-protocol.json"
+    },
+    {
+      "table": "jdb_test_d20423a3c23d4544_daily_01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+      "dataset": "daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d248a5e0-b45b-4ef7-853b-8081503e8a2f/writes/01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3/certificate.json"
+    },
+    {
+      "table": "jdb_test_d20423a3c23d4544_etf_factor_dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8",
+      "dataset": "etf_factor",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d248a5e0-b45b-4ef7-853b-8081503e8a2f/writes/dde7eedad0adc5f30a431de475a7bbb84c9d9496d53ceeb14167e8ecb79227a8/certificate.json"
+    },
+    {
+      "table": "jdb_test_d20423a3c23d4544_etf_portfolio_751db5b8588a58052865b1d10a7f312f81188fd2ed40b2fe38e62c509ebaff2f",
+      "dataset": "etf_portfolio",
+      "rows": 324,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d248a5e0-b45b-4ef7-853b-8081503e8a2f/writes/751db5b8588a58052865b1d10a7f312f81188fd2ed40b2fe38e62c509ebaff2f/certificate.json"
+    },
+    {
+      "table": "jdb_test_d20423a3c23d4544_etf_adj_62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26",
+      "dataset": "etf_adj",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d248a5e0-b45b-4ef7-853b-8081503e8a2f/writes/62a1276f54b9d3386cc6d7c4e934497ea65437bf1bc6c92e995f058a3100ba26/certificate.json"
+    },
+    {
+      "table": "jdb_test_d20423a3c23d4544_moneyflow_fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d",
+      "dataset": "moneyflow",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d248a5e0-b45b-4ef7-853b-8081503e8a2f/writes/fe75ba080e4f086d146b90f27aacedf8cd12092c2cce8d3d8ffc5a7219e80a7d/certificate.json"
+    },
+    {
+      "table": "jdb_test_d20423a3c23d4544_stk_limit_14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532",
+      "dataset": "stk_limit",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d248a5e0-b45b-4ef7-853b-8081503e8a2f/writes/14d6f332cb9efbf2435f658474b89f962a2ff142743d087151088aac700af532/certificate.json"
+    },
+    {
+      "table": "jdb_test_d20423a3c23d4544_margin_detail_88d1ef677a9b2b114a7310552b80bc01780f9aa1d4d173ef2577d9fa0e9e1a9f",
+      "dataset": "margin_detail",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d248a5e0-b45b-4ef7-853b-8081503e8a2f/writes/88d1ef677a9b2b114a7310552b80bc01780f9aa1d4d173ef2577d9fa0e9e1a9f/certificate.json"
+    },
+    {
+      "table": "jdb_test_d20423a3c23d4544_daily_basic_bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+      "dataset": "daily_basic",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d248a5e0-b45b-4ef7-853b-8081503e8a2f/writes/bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c/certificate.json"
+    },
+    {
+      "table": "jdb_test_d20423a3c23d4544_stk_suspend_4f4dd04e6393960e16673df55114e2ede70cfc07f17c1a4fd81839860595057e",
+      "dataset": "stk_suspend",
+      "rows": 0,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d248a5e0-b45b-4ef7-853b-8081503e8a2f/writes/4f4dd04e6393960e16673df55114e2ede70cfc07f17c1a4fd81839860595057e/certificate.json"
+    },
+    {
+      "table": "jdb_test_d20423a3c23d4544_moneyflow_hsgt_357fa8b6a005a284076322d2e5e27a9fa5c0b7cee1e4728cdf2f733e8057c3be",
+      "dataset": "moneyflow_hsgt",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d248a5e0-b45b-4ef7-853b-8081503e8a2f/writes/357fa8b6a005a284076322d2e5e27a9fa5c0b7cee1e4728cdf2f733e8057c3be/certificate.json"
+    },
+    {
+      "table": "jdb_test_d20423a3c23d4544_etf_daily_b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+      "dataset": "etf_daily",
+      "rows": 1,
+      "evidence": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d248a5e0-b45b-4ef7-853b-8081503e8a2f/writes/b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12/certificate.json"
+    },
+    {
+      "table": "jdb_test_protocol_e6bb5a176fe44a8a92a69726492e73b3",
+      "dataset": "protocol-test",
+      "rows": 1,
+      "evidence": "docs/java-batch-20260929/evidence/history/20260929T120545603737Z/verified-questdb-protocol.json"
+    }
+  ],
+  "production_table_writes": false,
+  "python_repository_writes": false,
+  "permanent_schedules_enabled": false,
+  "temporary_postgresql": "closed after tests"
+}

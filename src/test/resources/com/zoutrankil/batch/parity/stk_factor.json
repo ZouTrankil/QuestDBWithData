@@ -1,0 +1,237 @@
+{
+  "schemaVersion": 1,
+  "dataset": "stk_factor",
+  "logicalDate": "2026-09-24",
+  "code": "000001.SZ",
+  "capturedAt": "2026-09-29T12:09:38.319878+00:00",
+  "provider": "real-tushare-stk_factor",
+  "referenceKind": "stored-output-snapshot-not-execution-of-python-on-frozen-input",
+  "floatingTolerance": 0.0,
+  "sourcePages": [
+    [
+      {
+        "ts_code": "000001.SZ",
+        "trade_date": "20260924",
+        "close": 11.3,
+        "open": 11.35,
+        "high": 11.47,
+        "low": 11.29,
+        "pre_close": 11.35,
+        "change": -0.05,
+        "pct_change": -0.4405,
+        "vol": 1043818.72,
+        "amount": 1186736.9,
+        "adj_factor": 142.0699,
+        "open_hfq": 1612.49337,
+        "open_qfq": 11.35,
+        "close_hfq": 1605.38987,
+        "close_qfq": 11.3,
+        "high_hfq": 1629.54175,
+        "high_qfq": 11.47,
+        "low_hfq": 1603.96917,
+        "low_qfq": 11.29,
+        "pre_close_hfq": 1612.49337,
+        "pre_close_qfq": 11.35,
+        "macd_dif": 0.052,
+        "macd_dea": 0.098,
+        "macd": -0.093,
+        "kdj_k": 22.168,
+        "kdj_d": 31.689,
+        "kdj_j": 3.126,
+        "rsi_6": 32.461,
+        "rsi_12": 44.506,
+        "rsi_24": 51.891,
+        "boll_upper": 11.704,
+        "boll_mid": 11.497,
+        "boll_lower": 11.291,
+        "cci": -137.517
+      }
+    ]
+  ],
+  "referenceQuery": {
+    "query": "select * from stk_factor where ts_code='000001.SZ' order by trade_date desc limit 1",
+    "columns": [
+      {
+        "name": "ts_code",
+        "type": "SYMBOL"
+      },
+      {
+        "name": "trade_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "close",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "open",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "high",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "low",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pre_close",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "change",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pct_change",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "vol",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "amount",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "adj_factor",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "open_hfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "open_qfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "close_hfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "close_qfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "high_hfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "high_qfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "low_hfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "low_qfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pre_close_hfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pre_close_qfq",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "macd_dif",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "macd_dea",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "macd",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "kdj_k",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "kdj_d",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "kdj_j",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rsi_6",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rsi_12",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rsi_24",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "boll_upper",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "boll_mid",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "boll_lower",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "cci",
+        "type": "DOUBLE"
+      }
+    ],
+    "timestamp": 1,
+    "dataset": [
+      [
+        "000001.SZ",
+        "2026-09-24T00:00:00.000000Z",
+        11.3,
+        11.35,
+        11.47,
+        11.29,
+        11.35,
+        -0.05,
+        -0.4405,
+        1043818.72,
+        1186736.9,
+        142.0699,
+        1612.49337,
+        11.35,
+        1605.38987,
+        11.3,
+        1629.54175,
+        11.47,
+        1603.96917,
+        11.29,
+        1612.49337,
+        11.35,
+        0.052,
+        0.098,
+        -0.093,
+        22.168,
+        31.689,
+        3.126,
+        32.461,
+        44.506,
+        51.891,
+        11.704,
+        11.497,
+        11.291,
+        -137.517
+      ]
+    ],
+    "count": 1
+  }
+}

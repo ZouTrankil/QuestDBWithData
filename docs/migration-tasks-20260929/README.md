@@ -6,7 +6,7 @@
 
 ## 数量和边界
 
-- 17个公共功能任务，184个审计内单数据任务，14个未落库模型的独立待准入任务，共215张任务卡。主线201项，待准入项不自动执行。
+- 17个公共功能任务、184个主线数据任务；Q001–Q003为3个活跃专项准入对象，Q004–Q014为11个已退出落库候选的历史任务卡。共215张登记卡（含归档卡）；主线201项。详见[Q对象处置记录](q-object-disposition.md)。
 
 - 149个backup/staging/WAL测试候选不参与应用迁移；原件保留，不自动删除。
 - Java已有184个schema projection，只有部分stock_basic示例读写链路；projection存在不算数据任务完成。
@@ -30,7 +30,7 @@
 - max_active_dispatches=1；忽略通用指南的并行偏好，遵守用户本次串行要求。
 - 任务spec由公共契约和单卡正文组成。worker只完成当前卡，报告证据后结束，协调器验收后才派发下一卡。
 - blocked/in_doubt/来源不明不自动跳过、不自动重放；记录原因并修复前置，不能把后续任务标完成。
-- Q系列需有逐对象准入记录；主线完成不意味着Q系列获准。
+- Q001–Q003需有逐对象准入记录；Q004–Q014已标记retired_with_evidence，不在活跃执行顺序中。
 
 ## 后续批量组合
 
@@ -256,17 +256,19 @@ F013实现SyncGroupDefinition，F014实现批量读取，F015实现批量写入�
 | Q001 | 15-conditional | alpha_research_admission_v1（未落库，待准入） | D184 | [任务卡](15-conditional/Q001-alpha_research_admission_v1.md) |
 | Q002 | 15-conditional | alpha_source_definition_v1（未落库，待准入） | Q001 | [任务卡](15-conditional/Q002-alpha_source_definition_v1.md) |
 | Q003 | 15-conditional | alpha_source_member_v1（未落库，待准入） | Q002 | [任务卡](15-conditional/Q003-alpha_source_member_v1.md) |
-| Q004 | 15-conditional | eco_cal_daily_agg（未落库，待准入） | Q003 | [任务卡](15-conditional/Q004-eco_cal_daily_agg.md) |
-| Q005 | 15-conditional | eco_cal_quantified（未落库，待准入） | Q004 | [任务卡](15-conditional/Q005-eco_cal_quantified.md) |
-| Q006 | 15-conditional | factor_exposure_snapshot_daily（未落库，待准入） | Q005 | [任务卡](15-conditional/Q006-factor_exposure_snapshot_daily.md) |
-| Q007 | 15-conditional | factor_lifecycle_event（未落库，待准入） | Q006 | [任务卡](15-conditional/Q007-factor_lifecycle_event.md) |
-| Q008 | 15-conditional | index_daily（未落库，待准入） | Q007 | [任务卡](15-conditional/Q008-index_daily.md) |
-| Q009 | 15-conditional | macro_bond_yield（未落库，待准入） | Q008 | [任务卡](15-conditional/Q009-macro_bond_yield.md) |
-| Q010 | 15-conditional | macro_news（未落库，待准入） | Q009 | [任务卡](15-conditional/Q010-macro_news.md) |
-| Q011 | 15-conditional | prediction_observation_v1（未落库，待准入） | Q010 | [任务卡](15-conditional/Q011-prediction_observation_v1.md) |
-| Q012 | 15-conditional | report_rc（未落库，待准入） | Q011 | [任务卡](15-conditional/Q012-report_rc.md) |
-| Q013 | 15-conditional | stock_news（未落库，待准入） | Q012 | [任务卡](15-conditional/Q013-stock_news.md) |
-| Q014 | 15-conditional | swan_industry（未落库，待准入） | Q013 | [任务卡](15-conditional/Q014-swan_industry.md) |
+| Q004 | 15-conditional | eco_cal_daily_agg（已退出落库候选） | Q003 | [任务卡](15-conditional/Q004-eco_cal_daily_agg.md) |
+| Q005 | 15-conditional | eco_cal_quantified（已退出落库候选） | Q004 | [任务卡](15-conditional/Q005-eco_cal_quantified.md) |
+| Q006 | 15-conditional | factor_exposure_snapshot_daily（已退出落库候选） | Q005 | [任务卡](15-conditional/Q006-factor_exposure_snapshot_daily.md) |
+| Q007 | 15-conditional | factor_lifecycle_event（已退出落库候选） | Q006 | [任务卡](15-conditional/Q007-factor_lifecycle_event.md) |
+| Q008 | 15-conditional | index_daily（已退出落库候选） | Q007 | [任务卡](15-conditional/Q008-index_daily.md) |
+| Q009 | 15-conditional | macro_bond_yield（已退出落库候选） | Q008 | [任务卡](15-conditional/Q009-macro_bond_yield.md) |
+| Q010 | 15-conditional | macro_news（已退出落库候选） | Q009 | [任务卡](15-conditional/Q010-macro_news.md) |
+| Q011 | 15-conditional | prediction_observation_v1（已退出落库候选） | Q010 | [任务卡](15-conditional/Q011-prediction_observation_v1.md) |
+| Q012 | 15-conditional | report_rc（已退出落库候选） | Q011 | [任务卡](15-conditional/Q012-report_rc.md) |
+| Q013 | 15-conditional | stock_news（已退出落库候选） | Q012 | [任务卡](15-conditional/Q013-stock_news.md) |
+| Q014 | 15-conditional | swan_industry（已退出落库候选） | Q013 | [任务卡](15-conditional/Q014-swan_industry.md) |
+
+Q001–Q003仍为活跃专项准入；Q004–Q014表格行仅保留历史任务卡入口，不应执行建表。原因见[Q对象处置记录](q-object-disposition.md)。
 
 ## 用户逐表复核入口
 

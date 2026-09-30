@@ -1,0 +1,550 @@
+{
+  "dataset": "etf_factor",
+  "version": "etf_factor-v1",
+  "endpoint": "fund_factor_pro",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 8000,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 20000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=359",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "open",
+      "target": "open",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "high",
+      "target": "high",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "low",
+      "target": "low",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "close",
+      "target": "close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pre_close",
+      "target": "pre_close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "change",
+      "target": "change",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pct_change",
+      "target": "pct_change",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "vol",
+      "target": "vol",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "amount",
+      "target": "amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "asi_bfq",
+      "target": "asi_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "asit_bfq",
+      "target": "asit_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "bbi_bfq",
+      "target": "bbi_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "bias1_bfq",
+      "target": "bias1_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "bias2_bfq",
+      "target": "bias2_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "bias3_bfq",
+      "target": "bias3_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "brar_ar_bfq",
+      "target": "brar_ar_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "brar_br_bfq",
+      "target": "brar_br_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "cr_bfq",
+      "target": "cr_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "dfma_dif_bfq",
+      "target": "dfma_dif_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "dfma_difma_bfq",
+      "target": "dfma_difma_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "dpo_bfq",
+      "target": "dpo_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "madpo_bfq",
+      "target": "madpo_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ema_bfq_5",
+      "target": "ema_bfq_5",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ema_bfq_10",
+      "target": "ema_bfq_10",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ema_bfq_20",
+      "target": "ema_bfq_20",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ema_bfq_30",
+      "target": "ema_bfq_30",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ema_bfq_60",
+      "target": "ema_bfq_60",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ema_bfq_90",
+      "target": "ema_bfq_90",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ema_bfq_250",
+      "target": "ema_bfq_250",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "emv_bfq",
+      "target": "emv_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "maemv_bfq",
+      "target": "maemv_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "expma_12_bfq",
+      "target": "expma_12_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "expma_50_bfq",
+      "target": "expma_50_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ktn_down_bfq",
+      "target": "ktn_down_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ktn_mid_bfq",
+      "target": "ktn_mid_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ktn_upper_bfq",
+      "target": "ktn_upper_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ma_bfq_5",
+      "target": "ma_bfq_5",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ma_bfq_10",
+      "target": "ma_bfq_10",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ma_bfq_20",
+      "target": "ma_bfq_20",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ma_bfq_30",
+      "target": "ma_bfq_30",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ma_bfq_60",
+      "target": "ma_bfq_60",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ma_bfq_90",
+      "target": "ma_bfq_90",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ma_bfq_250",
+      "target": "ma_bfq_250",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "macd_bfq",
+      "target": "macd_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "macd_dif_bfq",
+      "target": "macd_dif_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "macd_dea_bfq",
+      "target": "macd_dea_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "kdj_bfq",
+      "target": "kdj_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "kdj_k_bfq",
+      "target": "kdj_k_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "kdj_d_bfq",
+      "target": "kdj_d_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rsi_bfq_6",
+      "target": "rsi_bfq_6",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rsi_bfq_12",
+      "target": "rsi_bfq_12",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rsi_bfq_24",
+      "target": "rsi_bfq_24",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "boll_upper_bfq",
+      "target": "boll_upper_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "boll_mid_bfq",
+      "target": "boll_mid_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "boll_lower_bfq",
+      "target": "boll_lower_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "atr_bfq",
+      "target": "atr_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "cci_bfq",
+      "target": "cci_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "dmi_pdi_bfq",
+      "target": "dmi_pdi_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "dmi_mdi_bfq",
+      "target": "dmi_mdi_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "dmi_adx_bfq",
+      "target": "dmi_adx_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "dmi_adxr_bfq",
+      "target": "dmi_adxr_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "mass_bfq",
+      "target": "mass_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ma_mass_bfq",
+      "target": "ma_mass_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "mfi_bfq",
+      "target": "mfi_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "mtm_bfq",
+      "target": "mtm_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "mtmma_bfq",
+      "target": "mtmma_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "obv_bfq",
+      "target": "obv_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "psy_bfq",
+      "target": "psy_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "psyma_bfq",
+      "target": "psyma_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "roc_bfq",
+      "target": "roc_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "maroc_bfq",
+      "target": "maroc_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "taq_down_bfq",
+      "target": "taq_down_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "taq_mid_bfq",
+      "target": "taq_mid_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "taq_up_bfq",
+      "target": "taq_up_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "trix_bfq",
+      "target": "trix_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "trma_bfq",
+      "target": "trma_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "vr_bfq",
+      "target": "vr_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "wr_bfq",
+      "target": "wr_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "wr1_bfq",
+      "target": "wr1_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "xsii_td1_bfq",
+      "target": "xsii_td1_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "xsii_td2_bfq",
+      "target": "xsii_td2_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "xsii_td3_bfq",
+      "target": "xsii_td3_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "xsii_td4_bfq",
+      "target": "xsii_td4_bfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "updays",
+      "target": "updays",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "downdays",
+      "target": "downdays",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "lowdays",
+      "target": "lowdays",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "topdays",
+      "target": "topdays",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

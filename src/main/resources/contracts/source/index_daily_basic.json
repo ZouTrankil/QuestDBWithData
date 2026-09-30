@@ -1,0 +1,88 @@
+{
+  "dataset": "index_daily_basic",
+  "version": "index_daily_basic-v1",
+  "endpoint": "index_dailybasic",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 1000,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 1000,
+  "maxBytes": 8388608,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=128",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "total_mv",
+      "target": "total_mv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "float_mv",
+      "target": "float_mv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "total_share",
+      "target": "total_share",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "float_share",
+      "target": "float_share",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "free_share",
+      "target": "free_share",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "turnover_rate",
+      "target": "turnover_rate",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "turnover_rate_f",
+      "target": "turnover_rate_f",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pe",
+      "target": "pe",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pe_ttm",
+      "target": "pe_ttm",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pb",
+      "target": "pb",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

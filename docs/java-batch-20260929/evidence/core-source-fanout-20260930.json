@@ -1,0 +1,34 @@
+{
+  "date": "2026-09-30",
+  "commands": [
+    "./gradlew test --tests com.zoutrankil.batch.CoreSourceFanoutTest --tests com.zoutrankil.batch.SqliteRuntimeTest",
+    "./gradlew check"
+  ],
+  "result": "BUILD SUCCESSFUL",
+  "fullSuite": {
+    "tests": 398,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 66
+  },
+  "fixtureCoverage": [
+    "exactly 14 core source tables plus exchange_calendar are required",
+    "source definition versions are pinned",
+    "the raw frozen plan hash and date/calendar/zone identity are validated",
+    "all 15 frozen source requests are built and passed to the source-launcher callback",
+    "duplicate delivery of the same requestId reuses its persisted probe, while a new trigger requestId creates a fresh read probe under the same business instance",
+    "missing or changed plan blocks before any source probe",
+    "default SQLite runtime blocks missing plans before source probes and before Spring Batch job creation"
+  ],
+  "distribution": {
+    "zip": "build/distributions/QuestDBWithData-batch-0.1.0.zip",
+    "bytes": 56796511,
+    "sha256": "917379c6f71bb5bc94590b49157422382c36056a83be50f305163e5d701b6685",
+    "sqliteJdbcIncluded": true,
+    "postgresqlJdbcIncluded": false,
+    "coreSourceFanoutClassIncluded": true,
+    "postCloseSourcePlanClassIncluded": true,
+    "batchRuntimeConfigurationIncluded": true
+  },
+  "externalServices": "No live Tushare requests or QuestDB writes were performed; source service and source ledger outcomes in the fan-out orchestration test are fixtures."
+}

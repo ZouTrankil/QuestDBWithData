@@ -1,0 +1,44 @@
+{
+  "acceptance": "bounded real-source and isolated QuestDB acceptance; not full-market or Python parity",
+  "source": {
+    "provider": "Tushare fut_basic",
+    "exchange": "CFFEX",
+    "logicalDate": "2026-09-28",
+    "rows": 692,
+    "pages": 1,
+    "completeCoverage": true,
+    "sourceFingerprint": "f32fccbc56317357e4b6cbdd4d91bfa6f92d02613bf7214845dbec0554507c80"
+  },
+  "runtime": {
+    "metadata": "temporary SQLite file",
+    "batchJob": "source_fut_basic",
+    "businessState": "VERIFIED",
+    "attempts": 1,
+    "writtenRows": 692,
+    "physicallyVisible": true,
+    "qualityPassed": true,
+    "sourceProbeComplete": true
+  },
+  "questdb": {
+    "version": null,
+    "target": "jdb_test_c91d41ecde254a4a_fut_basic_b147d42f7ee38264e3832f573ab35f1cf6ffc321fe112fd2a84b740eea7b3ac8",
+    "verifiedRows": 692,
+    "schema": null,
+    "sourceArtifact": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/9c96a084-4afa-40b4-99a3-a67df39227fe/sources/f32fccbc56317357e4b6cbdd4d91bfa6f92d02613bf7214845dbec0554507c80.json"
+  },
+  "request": {
+    "sourceDate": "2026-09-28",
+    "futType": "1",
+    "scope": "CFFEX"
+  },
+  "evidenceFiles": {
+    "report": "build/reports/jdb-fut-basic-live.json",
+    "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/9c96a084-4afa-40b4-99a3-a67df39227fe/writes/b147d42f7ee38264e3832f573ab35f1cf6ffc321fe112fd2a84b740eea7b3ac8/certificate.json"
+  },
+  "pythonBaselineCompared": false,
+  "limitations": [
+    "one exchange and one snapshot date only",
+    "no full-universe history or revision acceptance",
+    "not a full JDB-06 acceptance"
+  ]
+}

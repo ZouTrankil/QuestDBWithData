@@ -1,0 +1,41 @@
+spring:
+  main:
+    web-application-type: none
+    banner-mode: off
+jdb:
+  metadata-url: ${JDB_METADATA_URL:jdbc:sqlite:./var/jdb-metadata.sqlite}
+  api-token: ${JDB_API_TOKEN:}
+  api-port: ${JDB_API_PORT:9085}
+  archive-root: ${JDB_ARCHIVE_ROOT:./var/jdb-isolated}
+  l2-settle-age: ${JDB_L2_SETTLE_AGE:5m}
+  l2-max-archive-bytes: ${JDB_L2_MAX_ARCHIVE_BYTES:8589934592}
+  l2-max-expanded-bytes: ${JDB_L2_MAX_EXPANDED_BYTES:34359738368}
+  l2-max-materialized-bytes: ${JDB_L2_MAX_MATERIALIZED_BYTES:34359738368}
+  calendar-file: ${JDB_CALENDAR_FILE:}
+  scheduling-enabled: ${JDB_SCHEDULING_ENABLED:false}
+  core-source-fanout-enabled: ${JDB_CORE_SOURCE_FANOUT_ENABLED:true}
+  production-enabled: false
+  external:
+    # Empty command catalog keeps research stages BLOCKED until a reviewed fixed argv is configured.
+    commands-json: ${JDB_EXTERNAL_COMMANDS_JSON:{}}
+    environment-json: ${JDB_EXTERNAL_ENVIRONMENT_JSON:{}}
+    timeout: ${JDB_EXTERNAL_TIMEOUT:12h}
+  tushare-token: ${JDB_TUSHARE_TOKEN:}
+  questdb-http-url: ${JDB_QUESTDB_HTTP_URL:}
+  questdb-http-authorization: ${JDB_QUESTDB_HTTP_AUTHORIZATION:}
+  questdb-visibility-timeout: ${JDB_QUESTDB_VISIBILITY_TIMEOUT:10s}
+  questdb-poll-interval: ${JDB_QUESTDB_POLL_INTERVAL:100ms}
+  baidu:
+    enabled: ${JDB_BAIDU_ENABLED:false}
+    download-enabled: ${JDB_BAIDU_DOWNLOAD_ENABLED:false}
+    cookie-file: ${JDB_BAIDU_COOKIE_FILE:}
+    share-url: ${JDB_BAIDU_SHARE_URL:}
+    share-password: ${JDB_BAIDU_SHARE_PASSWORD:}
+    source-path: ${JDB_BAIDU_SOURCE_PATH:}
+    unwrap-single-folder: ${JDB_BAIDU_UNWRAP_SINGLE_FOLDER:false}
+    remote-root: ${JDB_BAIDU_REMOTE_ROOT:/}
+    minimum-size-bytes: ${JDB_BAIDU_MINIMUM_SIZE_BYTES:1000000000}
+    pcs-executable: ${JDB_BAIDUPCS_GO_EXECUTABLE:}
+    pcs-config-directory: ${JDB_BAIDUPCS_GO_CONFIG_DIRECTORY:}
+    expected-account-uid: ${JDB_BAIDUPCS_GO_EXPECTED_UID:}
+    download-timeout: ${JDB_BAIDUPCS_GO_DOWNLOAD_TIMEOUT:12h}

@@ -112,7 +112,7 @@ public class TushareClient {
         if (!fields.isArray() || !items.isArray()) throw new TushareFailure(CONTRACT, null, "Missing fields/items arrays");
         var names = new ArrayList<String>();
         for (var field : fields) {
-            if (!field.isTextual() || !field.asText().matches("[A-Za-z_][A-Za-z0-9_]*") || names.contains(field.asText())) {
+            if (!field.isTextual() || !field.asText().matches("[A-Za-z0-9_][A-Za-z0-9_]*") || names.contains(field.asText())) {
                 throw new TushareFailure(CONTRACT, null, "Invalid or duplicate response field");
             }
             names.add(field.asText());

@@ -1,0 +1,23 @@
+{
+  "dataset": "etf_share",
+  "version": "etf_share-v1",
+  "endpoint": "fund_share",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "timestamp",
+  "pageSize": 2000,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 2000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=207; one trade_date full-market response; single-call vendor limit 2000; source total cannot be inferred at the cap",
+  "partitionBy": "YEAR",
+  "columns": [
+    {"source": "ts_code", "target": "ts_code", "type": "SYMBOL", "key": true},
+    {"source": "trade_date", "target": "timestamp", "type": "TIMESTAMP", "key": true},
+    {"source": "fd_share", "target": "fd_share", "type": "DOUBLE", "key": false},
+    {"source": "fund_type", "target": "fund_type", "type": "STRING", "key": false},
+    {"source": "market", "target": "market", "type": "SYMBOL", "key": false},
+    {"source": "update_time", "target": "update_time", "type": "TIMESTAMP", "key": false}
+  ]
+}

@@ -31,7 +31,31 @@ QuestDB 的 designated timestamp 是时间排序、分区和时序查询所需�
 - `StockBasicKey(tsCode)`：一只股票在源系统中的自然标识，`ts_code`。
 - `StockBasicSnapshotKey(snapshotTimestamp, tsCode)`：历史快照表中的行身份，对应 SQL `DEDUP UPSERT KEYS(snapshot_ts, ts_code)`。
 
-`snapshot_ts` 是本项目每天生成的 UTC 快照时间；同一日期中每个 `ts_code` 只保留一行，而不同日期的快照可以同时存在。若改成“当前状态表”，去重语义和时间设计需要重新评估，不能直接套用这个组合键。
+`snapshot_ts` 是逻辑快照日期的 UTC 零点编码，不代表实际采集时刻或北京时间零点。同一逻辑日期中每个 `ts_code` 只保留一行，而不同日期的快照可以同时存在。直接同步入口按 `app.time.business-zone` 确定今天；任务入口使用冻结请求的 `logicalDate`，重试时不能重新计算今天。若改成“当前状态表”，去重语义和时间设计需要重新评估，不能直接套用这个组合键。
+
+### 统一业务时间入口
+
+通过构造器注入 Spring 管理的 `BusinessTime`，业务代码无需重复写时区：
+
+```yaml
+app:
+  time:
+    business-zone: Asia/Shanghai
+```
+
+```java
+businessTime.now();                  // 实际当前时刻，Instant
+businessTime.today();                // 配置时区下的今天，LocalDate
+businessTime.startOfDay(date);       // 业务日零点对应的 Instant
+businessTime.inBusinessZone(instant);// 转为业务时区供展示
+businessTime.todaySnapshotMarker();  // 当前快照表专用的日期标记
+```
+
+日期标记统一使用 `new TemporalValues.CalendarTimestamp(date).storageCarrier()` 编解码。例如逻辑日期 `2026-09-29` 编码为 `2026-09-29T00:00:00Z`；北京时间当天实际零点则是 `2026-09-28T16:00:00Z`。两者用途不同，不可互换。实际事件时间应使用 `Instant`，不可截到零点。
+
+本次保留历史日期标记编码和去重键形式。直接同步入口默认按北京时间选日期，因此凌晨 00:00–08:00 将选北京时间当天，不再选 UTC 前一天；历史记录不会自动重标日期。任务定义自己的时区属于任务契约，不随此默认配置修改；显式 `logicalDate` 始终优先。修改业务时区会影响未来默认日期的选择，应作为业务规则变更处理。
+
+JVM/JDBC 的 UTC 设置继续保留，它与业务日期的时区配置职责不同。日期型字段（上市日、交易日）仍使用 `LocalDate`，不按展示时区平移。`BusinessTime` 接受 `Clock`，需要验证时间边界时可传入固定时钟。
 
 ## Spring `@Entity` 是否适用
 

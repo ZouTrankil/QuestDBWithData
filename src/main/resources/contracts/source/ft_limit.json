@@ -1,0 +1,25 @@
+{
+  "dataset": "ft_limit",
+  "version": "ft_limit-v1",
+  "endpoint": "ft_limit",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 4000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 4000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=368; bounded first release requests one explicit contract for one trade date; update_time is generated at publication.",
+  "columns": [
+    { "source": "trade_date", "target": "trade_date", "type": "TIMESTAMP", "key": true },
+    { "source": "ts_code", "target": "ts_code", "type": "SYMBOL", "key": true },
+    { "source": "name", "target": "name", "type": "STRING", "key": false },
+    { "source": "up_limit", "target": "up_limit", "type": "DOUBLE", "key": false },
+    { "source": "down_limit", "target": "down_limit", "type": "DOUBLE", "key": false },
+    { "source": "m_ratio", "target": "m_ratio", "type": "DOUBLE", "key": false },
+    { "source": "cont", "target": "cont", "type": "SYMBOL", "key": false },
+    { "source": "exchange", "target": "exchange", "type": "SYMBOL", "key": false },
+    { "source": "update_time", "target": "update_time", "type": "TIMESTAMP", "key": false }
+  ]
+}

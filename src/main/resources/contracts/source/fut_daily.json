@@ -1,0 +1,33 @@
+{
+  "dataset": "fut_daily",
+  "version": "fut_daily-v1",
+  "endpoint": "fut_daily",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 2000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 2000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=138; bounded first release requests one explicit dated futures contract; update_time is generated at publication.",
+  "columns": [
+    { "source": "ts_code", "target": "ts_code", "type": "SYMBOL", "key": true },
+    { "source": "trade_date", "target": "trade_date", "type": "TIMESTAMP", "key": true },
+    { "source": "pre_close", "target": "pre_close", "type": "DOUBLE", "key": false },
+    { "source": "pre_settle", "target": "pre_settle", "type": "DOUBLE", "key": false },
+    { "source": "open", "target": "open", "type": "DOUBLE", "key": false },
+    { "source": "high", "target": "high", "type": "DOUBLE", "key": false },
+    { "source": "low", "target": "low", "type": "DOUBLE", "key": false },
+    { "source": "close", "target": "close", "type": "DOUBLE", "key": false },
+    { "source": "settle", "target": "settle", "type": "DOUBLE", "key": false },
+    { "source": "change1", "target": "change1", "type": "DOUBLE", "key": false },
+    { "source": "change2", "target": "change2", "type": "DOUBLE", "key": false },
+    { "source": "vol", "target": "vol", "type": "DOUBLE", "key": false },
+    { "source": "amount", "target": "amount", "type": "DOUBLE", "key": false },
+    { "source": "oi", "target": "oi", "type": "DOUBLE", "key": false },
+    { "source": "oi_chg", "target": "oi_chg", "type": "DOUBLE", "key": false },
+    { "source": "delv_settle", "target": "delv_settle", "type": "DOUBLE", "key": false },
+    { "source": "update_time", "target": "update_time", "type": "TIMESTAMP", "key": false }
+  ]
+}

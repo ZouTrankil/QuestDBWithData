@@ -1,0 +1,605 @@
+{
+  "kind": "read-only-stored-output-snapshot-not-frozen-python-execution",
+  "queries": {
+    "moneyflow": {
+      "query": "select * from moneyflow where ts_code='000001.SZ' and trade_date='2026-09-28'",
+      "columns": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "buy_sm_vol",
+          "type": "LONG"
+        },
+        {
+          "name": "buy_sm_amount",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "sell_sm_vol",
+          "type": "LONG"
+        },
+        {
+          "name": "sell_sm_amount",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "buy_md_vol",
+          "type": "LONG"
+        },
+        {
+          "name": "buy_md_amount",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "sell_md_vol",
+          "type": "LONG"
+        },
+        {
+          "name": "sell_md_amount",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "buy_lg_vol",
+          "type": "LONG"
+        },
+        {
+          "name": "buy_lg_amount",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "sell_lg_vol",
+          "type": "LONG"
+        },
+        {
+          "name": "sell_lg_amount",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "buy_elg_vol",
+          "type": "LONG"
+        },
+        {
+          "name": "buy_elg_amount",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "sell_elg_vol",
+          "type": "LONG"
+        },
+        {
+          "name": "sell_elg_amount",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "net_mf_vol",
+          "type": "LONG"
+        },
+        {
+          "name": "net_mf_amount",
+          "type": "DOUBLE"
+        }
+      ],
+      "timestamp": 1,
+      "dataset": [],
+      "count": 0
+    },
+    "etf_factor": {
+      "query": "select * from etf_factor where ts_code='510300.SH' and trade_date='2026-09-28'",
+      "columns": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "open",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "high",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "low",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "close",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pre_close",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "change",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_change",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "vol",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "amount",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "asi_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "asit_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "bbi_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "bias1_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "bias2_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "bias3_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "brar_ar_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "brar_br_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "cr_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "dfma_dif_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "dfma_difma_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "dpo_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "madpo_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ema_bfq_5",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ema_bfq_10",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ema_bfq_20",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ema_bfq_30",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ema_bfq_60",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ema_bfq_90",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ema_bfq_250",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "emv_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "maemv_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "expma_12_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "expma_50_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ktn_down_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ktn_mid_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ktn_upper_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ma_bfq_5",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ma_bfq_10",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ma_bfq_20",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ma_bfq_30",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ma_bfq_60",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ma_bfq_90",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ma_bfq_250",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "macd_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "macd_dif_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "macd_dea_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "kdj_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "kdj_k_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "kdj_d_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "rsi_bfq_6",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "rsi_bfq_12",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "rsi_bfq_24",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "boll_upper_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "boll_mid_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "boll_lower_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "atr_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "cci_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "dmi_pdi_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "dmi_mdi_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "dmi_adx_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "dmi_adxr_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "mass_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ma_mass_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "mfi_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "mtm_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "mtmma_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "obv_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "psy_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "psyma_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "roc_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "maroc_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "taq_down_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "taq_mid_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "taq_up_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "trix_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "trma_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "vr_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "wr_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "wr1_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "xsii_td1_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "xsii_td2_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "xsii_td3_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "xsii_td4_bfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "updays",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "downdays",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "lowdays",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "topdays",
+          "type": "DOUBLE"
+        }
+      ],
+      "timestamp": 1,
+      "dataset": [],
+      "count": 0
+    },
+    "stk_factor": {
+      "query": "select * from stk_factor where ts_code='000001.SZ' and trade_date='2026-09-28'",
+      "columns": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "close",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "open",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "high",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "low",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pre_close",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "change",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pct_change",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "vol",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "amount",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "adj_factor",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "open_hfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "open_qfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "close_hfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "close_qfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "high_hfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "high_qfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "low_hfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "low_qfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pre_close_hfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pre_close_qfq",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "macd_dif",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "macd_dea",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "macd",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "kdj_k",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "kdj_d",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "kdj_j",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "rsi_6",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "rsi_12",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "rsi_24",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "boll_upper",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "boll_mid",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "boll_lower",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "cci",
+          "type": "DOUBLE"
+        }
+      ],
+      "timestamp": 1,
+      "dataset": [],
+      "count": 0
+    }
+  }
+}

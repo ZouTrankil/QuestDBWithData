@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-30",
+  "scope": "Local full test suite and Batch distribution packaging after registering native fut_holding source contract, validation and runtime job. Does not pass the non-empty live source acceptance.",
+  "tests": {
+    "tests": 385,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 66
+  },
+  "build": "SUCCESSFUL",
+  "distribution": "build/distributions/QuestDBWithData-batch-0.1.0.zip",
+  "distributionBytes": 56767890,
+  "distributionSha256": "52199d56e89e3b7f202973e2e44d4d5f672420da41f24ecab4fae26085dfda79",
+  "batchZipIncludesFutHoldingContract": true,
+  "batchZipIncludesSQLiteJdbc": true,
+  "batchZipIncludesPostgresJdbc": false,
+  "liveSourceAcceptance": "NOT_VERIFIED_EMPTY_SOURCE_PROBES"
+}

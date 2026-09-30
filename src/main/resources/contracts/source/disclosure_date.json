@@ -1,0 +1,59 @@
+{
+  "dataset": "disclosure_date",
+  "version": "disclosure_date-v1",
+  "endpoint": "disclosure_date",
+  "dateParameter": "end_date",
+  "sourceDate": "end_date",
+  "timestampColumn": "ann_date",
+  "pageSize": 6000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 6000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=162; query one exact quarter-end end_date per request, maximum 6000 rows, no paging; physical ann_date timestamp and legacy key (ts_code,ann_date,end_date)",
+  "partitionBy": "YEAR",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "ann_date",
+      "target": "ann_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "end_date",
+      "target": "end_date",
+      "type": "STRING",
+      "key": true
+    },
+    {
+      "source": "pre_date",
+      "target": "pre_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "actual_date",
+      "target": "actual_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "modify_date",
+      "target": "modify_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "update_time",
+      "target": "update_time",
+      "type": "TIMESTAMP",
+      "key": false
+    }
+  ]
+}

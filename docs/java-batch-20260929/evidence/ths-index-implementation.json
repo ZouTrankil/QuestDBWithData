@@ -1,0 +1,30 @@
+{
+  "dataset": "ths_index",
+  "status": "implemented-awaiting-full-acceptance",
+  "contract": "ths_index-v1",
+  "legacyReference": {
+    "checkout": "back-monitor",
+    "head": "e7aa8729",
+    "connector": "src/quant_platform/data/adapters/connectors/index/ths_index_sync.py",
+    "model": "src/quant_platform/data/adapters/questdb/models/index/ths.py",
+    "behavior": "unfiltered pro.ths_index() full static snapshot; source documentation caps one request at 5000 rows; generated update_time; monthly partition; keys (ts_code, update_time)"
+  },
+  "batchImplementation": [
+    "bounded unpaged request with no provider parameters",
+    "a response reaching 5000 rows is rejected as potentially truncated",
+    "maps six provider fields and generates physical update_time at publication",
+    "isolated per-instance target and exact typed readback continue through the durable writer",
+    "source job is registered in RunRequest, Spring Batch and management task listing"
+  ],
+  "verification": {
+    "command": "./gradlew test --tests com.zoutrankil.batch.NativeSourceTest --tests com.zoutrankil.batch.SqliteRuntimeTest",
+    "result": "BUILD SUCCESSFUL",
+    "tests": 59,
+    "failures": 0,
+    "skipped": 0,
+    "live_source_or_questdb": false
+  },
+  "physical_schema_verified": false,
+  "full_catalog_completeness_verified": false,
+  "notes": "No Tushare credentials or QuestDB writes were used. A short page proves a bounded response, not vendor-side catalog completeness; source total/change detection and real target schema readback remain outstanding."
+}

@@ -1,0 +1,48 @@
+{
+  "job": "l2_archive_integrity",
+  "batch_steps": [
+    "L2ArchiveIntegrity",
+    "L2ArchiveSemanticMaterialization"
+  ],
+  "implementation": "src/main/java/com/zoutrankil/batch/L2ArchiveMaterializer.java",
+  "targeted_command": "./gradlew --no-daemon test --tests com.zoutrankil.batch.DfcfCsvParserTest --tests com.zoutrankil.batch.DfcfCsvInspectorTest --tests com.zoutrankil.batch.L2ArchiveAdmissionTest --tests com.zoutrankil.batch.SqliteRuntimeTest",
+  "result": "passed",
+  "verified": [
+    "ZIP and 7z archives produce deals/orders/quotes gzip JSON Lines using the Java semantic mapper",
+    "manifest records source SHA-256, parser version, date/member/symbol counts, per-table row counts, class distributions and artifact SHA-256/size",
+    "content-addressed output directory publishes atomically; verified replay reuses it and output tampering is rejected",
+    "settle-time, archive root, CRC, member completeness and expanded/materialized byte budgets are enforced before durable publish",
+    "management API response exposes parser version, manifest reference and table row counts after the Spring Batch job"
+  ],
+  "targeted_test_methods": {
+    "L2ArchiveAdmissionTest": [
+      "rejectsUnsettledIncompleteAndPathTraversalArchives()",
+      "semanticMaterializationSupportsSevenZipWithoutExternalTools()",
+      "rejectsCorruptedSevenZipAfterMemberCrcCheck()",
+      "rejectsArchivesOutsideConfiguredRootAndWrongNames()",
+      "rejectsZipBombByExpandedByteBoundWithoutBufferingArchiveInMemory()",
+      "recordsChangedSameDateArchiveAsExplicitRevision()",
+      "validatesSevenZipMembersAndBoundedExpansionWithoutExternalExecutable()",
+      "semanticMaterializationWritesThreeBoundedArtifactsAndReusesVerifiedManifest()",
+      "rejectsIncompleteSevenZipWithoutAdmittingIt()",
+      "verifiesBoundedCompleteZipAndDeduplicatesByContentFingerprint()"
+    ],
+    "SqliteRuntimeTest": [
+      "sqliteLaunchRestartQuartzPauseAndApiAuth"
+    ]
+  },
+  "not_verified": [
+    "No QuestDB writes are performed by this materialization step.",
+    "No real DFCF vendor archive was available for semantic output parity.",
+    "No feature computation, coverage Ready certificate, or real-time L2 collector is implemented. The Baidu share/PCS downloader is implemented behind disabled-by-default management configuration but has no real account/download acceptance yet."
+  ],
+  "artifact_contract": {
+    "root": "<JDB_ARCHIVE_ROOT>/parsed/<archive-sha256>/",
+    "files": [
+      "deals.ndjson.gz",
+      "orders.ndjson.gz",
+      "quotes.ndjson.gz",
+      "manifest.json"
+    ]
+  }
+}

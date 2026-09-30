@@ -1,0 +1,53 @@
+{
+  "atUtc": "2026-09-29T16:45:58.133527+00:00",
+  "questdb": {
+    "version": "10.0.1",
+    "endpoint": "http://100.97.201.8:9000",
+    "scope": "isolated jdb_test_l2_* tables only"
+  },
+  "validation": {
+    "command": "JDB_QUESTDB_TEST_URL=http://100.97.201.8:9000 ./gradlew --no-daemon test --tests 'com.zoutrankil.batch.L2QuestDbLiveTest' --tests 'com.zoutrankil.batch.L2QuestDbTablePortTest'",
+    "liveTests": 2,
+    "liveFailures": 0,
+    "liveErrors": 0,
+    "liveSkipped": 0,
+    "unitTests": 2,
+    "unitFailures": 0,
+    "unitErrors": 0,
+    "unitSkipped": 0
+  },
+  "directPort": {
+    "status": "VERIFIED",
+    "rowsPerTable": 1,
+    "tables": {
+      "deals": "jdb_test_l2_a8eadcef0b0740f8_deals",
+      "orders": "jdb_test_l2_a8eadcef0b0740f8_orders",
+      "quotes": "jdb_test_l2_a8eadcef0b0740f8_quotes"
+    },
+    "metadata": "temporary SQLite file"
+  },
+  "semanticArtifactIngest": {
+    "status": "VERIFIED",
+    "source": "synthetic semantic JSONL fixture; no real DFCF archive was available",
+    "archiveSha256": "046b556d79eeccbf68ae88b094e602b9dd61b26745235577038dac7b4b93025a",
+    "tradeDate": "2026-09-29",
+    "rows": {
+      "quotes": 1,
+      "orders": 1,
+      "deals": 1
+    },
+    "targets": {
+      "quotes": "jdb_test_l2_046b556d79eeccbf_quotes",
+      "orders": "jdb_test_l2_046b556d79eeccbf_orders",
+      "deals": "jdb_test_l2_046b556d79eeccbf_deals"
+    },
+    "metadata": "temporary SQLite file",
+    "coverageCertificate": "l2-coverage-certificate.json",
+    "coverageCertificateSha256": "d48702af8b05967952b857a0079ac2d39fb58c2a9a18d6acdb90d2225580dfb6"
+  },
+  "limits": [
+    "This proves typed L2 writer integration against QuestDB, not parity with a real DFCF daily archive.",
+    "Batch response reports NOT_CONFIGURED and does not claim Ready when JDB_QUESTDB_HTTP_URL is empty.",
+    "The endpoints use archive-hash test tables; no business table was read or modified by the L2 acceptance."
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "archive": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/a6b29d10-577b-44f6-81ae-b65469f45ac4",
+  "products": [
+    {
+      "dataset": "cn_gdp",
+      "code": "aggregate-no-security-dimension",
+      "source": {
+        "fingerprint": "767fe2e77988c48a7e5b0e6564092a3eac1f8f2dfd868fa3c320853b95ecff9d",
+        "artifact": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/a6b29d10-577b-44f6-81ae-b65469f45ac4/sources/767fe2e77988c48a7e5b0e6564092a3eac1f8f2dfd868fa3c320853b95ecff9d.json",
+        "rows": 138,
+        "pages": 1,
+        "completeCoverage": true,
+        "scopeIdentity": "01abf057f50d4d4c0a648911af8f7a5c7069babc79e54e41b46ad3777caf170f",
+        "state": "VERIFYING"
+      },
+      "result": {
+        "instance_id": "d79846bfe0bef8ae34a90469227754299a3325ffaedeb898468a7912cb61b9e0",
+        "job": "source_cn_gdp",
+        "logical_date": "2026-06-30",
+        "definition_version": "cn_gdp-v1",
+        "revision": "0",
+        "supersedes": null,
+        "revision_reason": null,
+        "input_identity": "a50bf3f02571ea75b7b66edfe79e49680b0350ad9ef49622d50d0654acafde50",
+        "request_json": "{\"requestId\":\"live-cn_gdp-87669a0f8f6ba1a4e057d6c61637524a1e2a59dfc61f88c042a5134bf7a40dcf\",\"job\":\"source_cn_gdp\",\"logicalDate\":\"2026-06-30\",\"rangeStart\":\"1992-03-31\",\"rangeEnd\":\"2026-06-30\",\"definitionVersion\":\"cn_gdp-v1\",\"revision\":\"0\",\"supersedes\":null,\"revisionReason\":null,\"inputFingerprint\":\"767fe2e77988c48a7e5b0e6564092a3eac1f8f2dfd868fa3c320853b95ecff9d\",\"calendarVersion\":\"frozen-calendar-20260928\",\"zone\":\"Asia/Shanghai\",\"scheduledAt\":\"2026-09-29T19:50:54.156435Z\",\"triggeredAt\":\"2026-09-29T19:50:54.156435Z\",\"scopeIdentity\":\"01abf057f50d4d4c0a648911af8f7a5c7069babc79e54e41b46ad3777caf170f\"}",
+        "business_state": "VERIFIED",
+        "batch_execution_id": 2,
+        "reason": null,
+        "created_at": "2026-09-29 19:50:54",
+        "updated_at": "2026-09-29 19:50:57",
+        "steps": [
+          {
+            "instance_id": "d79846bfe0bef8ae34a90469227754299a3325ffaedeb898468a7912cb61b9e0",
+            "stage": "Source:cn_gdp",
+            "business_state": "VERIFIED",
+            "evidence_json": "{\"schemaVersion\":1,\"producer\":\"java-source:cn_gdp\",\"instanceId\":\"d79846bfe0bef8ae34a90469227754299a3325ffaedeb898468a7912cb61b9e0\",\"stage\":\"Source:cn_gdp\",\"batchId\":\"b83969da1bb3ecf267d8c731c5df32ad77a48268eee7f2475ed6b06ce119e452\",\"logicalDate\":\"2026-06-30\",\"requestedStart\":\"1992-03-31\",\"requestedEnd\":\"2026-06-30\",\"actualStart\":\"1992-03-31\",\"actualEnd\":\"2026-06-30\",\"definitionVersion\":\"cn_gdp-v1\",\"sourceVersion\":\"767fe2e77988c48a7e5b0e6564092a3eac1f8f2dfd868fa3c320853b95ecff9d\",\"inputFingerprint\":\"767fe2e77988c48a7e5b0e6564092a3eac1f8f2dfd868fa3c320853b95ecff9d\",\"readRows\":138,\"writtenRows\":138,\"uniqueKeys\":true,\"completeCoverage\":true,\"physicallyVisible\":true,\"qualityPassed\":true,\"sourceProbeComplete\":true,\"emptyAllowed\":true,\"availableAt\":\"2026-09-29T19:50:57.517453Z\",\"state\":\"VERIFIED\",\"artifact\":\"/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/a6b29d10-577b-44f6-81ae-b65469f45ac4/writes/d79846bfe0bef8ae34a90469227754299a3325ffaedeb898468a7912cb61b9e0/certificate.json\",\"error\":null}",
+            "reason": null,
+            "updated_at": "2026-09-29 19:50:57"
+          }
+        ],
+        "triggers": [
+          {
+            "request_id": "live-cn_gdp-87669a0f8f6ba1a4e057d6c61637524a1e2a59dfc61f88c042a5134bf7a40dcf",
+            "instance_id": "d79846bfe0bef8ae34a90469227754299a3325ffaedeb898468a7912cb61b9e0",
+            "request_json": "{\"requestId\":\"live-cn_gdp-87669a0f8f6ba1a4e057d6c61637524a1e2a59dfc61f88c042a5134bf7a40dcf\",\"job\":\"source_cn_gdp\",\"logicalDate\":\"2026-06-30\",\"rangeStart\":\"1992-03-31\",\"rangeEnd\":\"2026-06-30\",\"definitionVersion\":\"cn_gdp-v1\",\"revision\":\"0\",\"supersedes\":null,\"revisionReason\":null,\"inputFingerprint\":\"767fe2e77988c48a7e5b0e6564092a3eac1f8f2dfd868fa3c320853b95ecff9d\",\"calendarVersion\":\"frozen-calendar-20260928\",\"zone\":\"Asia/Shanghai\",\"scheduledAt\":\"2026-09-29T19:50:54.156435Z\",\"triggeredAt\":\"2026-09-29T19:50:54.156435Z\",\"scopeIdentity\":\"01abf057f50d4d4c0a648911af8f7a5c7069babc79e54e41b46ad3777caf170f\"}",
+            "received_at": "2026-09-29 19:50:54"
+          }
+        ],
+        "auditEvents": [
+          {
+            "action": "business-state",
+            "detail": "RUNNING: ",
+            "occurred_at": "2026-09-29 19:50:54"
+          },
+          {
+            "action": "business-state",
+            "detail": "VERIFYING: batch:0c8169409bd628538c517029e874d5a91416dbb43fc125c4101ccd9a584ee389:ACKNOWLEDGED",
+            "occurred_at": "2026-09-29 19:50:54"
+          },
+          {
+            "action": "business-state",
+            "detail": "RUNNING: ",
+            "occurred_at": "2026-09-29 19:50:54"
+          },
+          {
+            "action": "business-state",
+            "detail": "VERIFIED: ",
+            "occurred_at": "2026-09-29 19:50:57"
+          }
+        ]
+      },
+      "sendAttempts": 1,
+      "dataPostCount": 1,
+      "physicalColumns": [
+        {
+          "source": "quarter",
+          "target": "quarter",
+          "type": "STRING",
+          "key": false
+        },
+        {
+          "source": "report_date",
+          "target": "report_date",
+          "type": "TIMESTAMP",
+          "key": true
+        },
+        {
+          "source": "gdp",
+          "target": "gdp",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "gdp_yoy",
+          "target": "gdp_yoy",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pi",
+          "target": "pi",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pi_yoy",
+          "target": "pi_yoy",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "si",
+          "target": "si",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "si_yoy",
+          "target": "si_yoy",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "ti",
+          "target": "ti",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "ti_yoy",
+          "target": "ti_yoy",
+          "type": "DOUBLE",
+          "key": false
+        }
+      ],
+      "persistedCoverage": {
+        "dataset": "cn_gdp",
+        "definitionVersion": "cn_gdp-v1",
+        "scopeIdentity": "01abf057f50d4d4c0a648911af8f7a5c7069babc79e54e41b46ad3777caf170f",
+        "verifiedSegments": [
+          {
+            "start": "1992-03-31",
+            "end": "2026-06-30",
+            "quarters": 138
+          }
+        ],
+        "verifiedQuarters": 138
+      },
+      "sourceKind": "real-tushare",
+      "pythonBaselineCompared": false
+    }
+  ],
+  "coverage": "bounded requested windows; monthly aggregates support contiguous month ranges; security datasets remain explicitly scoped; not full-market acceptance",
+  "historicalCoverageNote": "Tushare returned 138 consecutive quarter observations from 1992Q1 through 2026Q2. A wider 1953Q1–2026Q2 probe returned only 177 rows (annual Q4 records before 1992 plus complete quarterly records thereafter), failed contiguous-coverage validation, and was rejected before any QuestDB write."
+}

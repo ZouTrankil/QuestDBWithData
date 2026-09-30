@@ -55,7 +55,7 @@ public final class PageExecutor {
             try { page = fetcher.fetch(Collections.unmodifiableMap(params)); }
             catch (Exception failure) {
                 if (failure instanceof InterruptedException) Thread.currentThread().interrupt();
-                throw new Incomplete("Source page failed (" + failure.getClass().getSimpleName() + ")", pages, rows);
+                throw new Incomplete("Source page failed (" + failureTypes(failure) + ")", pages, rows);
             }
             if (page == null) throw new Incomplete("Null source page", pages, rows);
             if (cancelled.getAsBoolean()) throw new Incomplete("Slice cancelled after fetch", pages, rows);
@@ -110,6 +110,11 @@ public final class PageExecutor {
             offset = Math.addExact(offset, count);
             cursor = page.nextCursor();
         }
+    }
+    private static String failureTypes(Throwable failure) {
+        var types=new ArrayList<String>();var seen=Collections.newSetFromMap(new IdentityHashMap<Throwable,Boolean>());
+        for(Throwable current=failure;current!=null&&types.size()<4&&seen.add(current);current=current.getCause()) types.add(current.getClass().getSimpleName());
+        return String.join("->",types);
     }
     private static String digest(Object value) throws Exception {
         return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")

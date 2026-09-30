@@ -1,0 +1,124 @@
+{
+  "dataset": "daily_basic",
+  "version": "daily_basic-v1",
+  "endpoint": "daily_basic",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 6000,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 20000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=32",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "close",
+      "target": "close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "turnover_rate",
+      "target": "turnover_rate",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "turnover_rate_f",
+      "target": "turnover_rate_f",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "volume_ratio",
+      "target": "volume_ratio",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pe",
+      "target": "pe",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pe_ttm",
+      "target": "pe_ttm",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pb",
+      "target": "pb",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ps",
+      "target": "ps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ps_ttm",
+      "target": "ps_ttm",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "dv_ratio",
+      "target": "dv_ratio",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "dv_ttm",
+      "target": "dv_ttm",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "total_share",
+      "target": "total_share",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "float_share",
+      "target": "float_share",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "free_share",
+      "target": "free_share",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "total_mv",
+      "target": "total_mv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "circ_mv",
+      "target": "circ_mv",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

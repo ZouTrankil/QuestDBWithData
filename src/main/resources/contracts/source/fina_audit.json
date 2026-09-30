@@ -1,0 +1,23 @@
+{
+  "dataset": "fina_audit",
+  "version": "fina_audit-v1",
+  "endpoint": "fina_audit",
+  "dateParameter": "ann_date",
+  "sourceDate": "ann_date",
+  "timestampColumn": "ann_date",
+  "pageSize": 1000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 1000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=80; query a bounded announcement day for one explicit security, retain revision-capable business key ts_code/ann_date/end_date; historical PIT is not certified",
+  "columns": [
+    { "source": "ts_code", "target": "ts_code", "type": "SYMBOL", "key": true },
+    { "source": "ann_date", "target": "ann_date", "type": "TIMESTAMP", "key": true },
+    { "source": "end_date", "target": "end_date", "type": "STRING", "key": true },
+    { "source": "audit_result", "target": "audit_result", "type": "STRING", "key": false },
+    { "source": "audit_fees", "target": "audit_fees", "type": "DOUBLE", "key": false },
+    { "source": "audit_agency", "target": "audit_agency", "type": "STRING", "key": false },
+    { "source": "audit_sign", "target": "audit_sign", "type": "STRING", "key": false }
+  ]
+}

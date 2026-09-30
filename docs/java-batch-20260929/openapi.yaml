@@ -1,0 +1,297 @@
+openapi: 3.1.0
+info:
+  title: Java isolated batch management
+  version: 0.1.0
+  description: Business state is independent of Spring Batch technical state. All endpoints require a bearer token. Bound to loopback only.
+servers:
+  - url: http://localhost:9085
+security:
+  - bearerAuth: []
+paths:
+  /v1/health:
+    get:
+      summary: Check the persistent metadata store and report scheduler posture
+      responses:
+        '200': {description: Health status; always reports production disabled}
+        '401': {description: Missing or invalid token}
+        '503': {description: Metadata or scheduler state unavailable}
+  /v1/metrics:
+    get:
+      summary: Query business, source-probe and durable-write states
+      responses:
+        '200': {description: Persisted state counts and scheduler posture; read only}
+        '401': {description: Missing or invalid token}
+  /v1/metrics/prometheus:
+    get:
+      summary: Export persisted business, source-probe, write, monthly/quarterly coverage and runtime gauges in Prometheus text format
+      responses:
+        '200': {description: Prometheus 0.0.4 text exposition; read only}
+        '401': {description: Missing or invalid token}
+  /v1/coverage/monthly:
+    get:
+      summary: Query persisted, physically verified monthly source coverage ranges
+      responses:
+        '200': {description: Continuous verified segments grouped by dataset, definition version and frozen scope; gaps remain separate}
+        '401': {description: Missing or invalid token}
+  /v1/coverage/quarterly:
+    get:
+      summary: Query persisted, physically verified quarterly source coverage ranges
+      responses:
+        '200': {description: Continuous verified segments grouped by dataset, definition version and frozen scope; gaps remain separate}
+        '401': {description: Missing or invalid token}
+  /v1/backfills/plan:
+    post:
+      summary: Dry-run a bounded native-source backfill using a versioned trading calendar, month-start policy for monthly aggregates, or quarter-end policy for quarterly aggregates; never enqueues work
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [job, start, end, maxPartitions, calendarVersion]
+              properties:
+                job: {type: string, pattern: '^source_[a-z0-9_]+$'}
+                start: {type: string, format: date}
+                end: {type: string, format: date}
+                maxPartitions: {type: integer, minimum: 1, maximum: 2000}
+                calendarVersion: {type: string, minLength: 1}
+      responses:
+        '200': {description: Bounded partition list with dryRun=true and enqueued=false}
+        '400': {description: Invalid job, date range, quota or absent/mismatched calendar}
+        '401': {description: Missing or invalid token}
+        '413': {description: Request exceeds 4 KiB}
+  /v1/tasks:
+    get:
+      summary: List registered jobs; no producer side effects
+      responses:
+        '200': {description: Registered jobs and production-disabled flag}
+  /v1/sources:
+    get:
+      summary: List native source contracts, columns, business keys and request bounds
+      responses:
+        '200': {description: Registered source contracts; no provider request is made}
+  /v1/sources/collect:
+    post:
+      summary: Collect and freeze one logical date, or a bounded contiguous month/quarter range for periodic aggregates; does not write QuestDB
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: {type: string, minLength: 1, maxLength: 256}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [dataset, logicalDate, rangeStart, rangeEnd, expectedCodes, universeVersion]
+              properties:
+                dataset: {type: string, enum: [daily, daily_basic, etf_daily, stk_limit, etf_adj, moneyflow, etf_factor, margin_detail, moneyflow_hsgt, stk_suspend, etf_portfolio, stk_factor, stk_st_daily, cn_bond_yield_curve, cyq_perf, index_daily_market, index_daily_basic, exchange_calendar, fina_mainbz, dividend, shibor, shibor_lpr, hibor, cn_cpi, cn_ppi, cn_pmi, cn_m, cn_gdp]}
+                logicalDate: {type: string, format: date}
+                rangeStart: {type: string, format: date, description: Optional inclusive period start; monthly aggregates require first-of-month and quarterly GDP requires quarter end}
+                rangeEnd: {type: string, format: date, description: Optional inclusive period end; must equal logicalDate}
+                expectedCodes:
+                  type: array
+                  minItems: 0
+                  maxItems: 20000
+                  uniqueItems: true
+                  items: {type: string, pattern: '^([0-9]{6}\.(SH|SZ|BJ|OF)|SSE|SZSE)$'}
+                universeVersion: {type: string, minLength: 1}
+                tsCode: {type: [string, 'null']}
+              allOf:
+                - if:
+                    properties:
+                      dataset: {enum: [moneyflow_hsgt, cn_bond_yield_curve]}
+                  then:
+                    properties:
+                      expectedCodes: {maxItems: 0}
+                      tsCode: {type: 'null'}
+                  else:
+                    properties:
+                      expectedCodes: {minItems: 1}
+                - if:
+                    properties:
+                      dataset: {const: etf_portfolio}
+                  then:
+                    properties:
+                      expectedCodes:
+                        items: {type: string, pattern: '^[0-9]{6}\.(SH|SZ|BJ|OF)$'}
+                  else:
+                    properties:
+                      expectedCodes:
+                        items: {type: string, pattern: '^[0-9]{6}\.(SH|SZ|BJ)$'}
+      responses:
+        '200': {description: Persisted source probe, content fingerprint and artifact path. VERIFYING is not Ready. Repeated request keys reuse the original probe.}
+        '400': {description: Scope/contract error or idempotency conflict}
+        '401': {description: Missing or invalid token}
+        '413': {description: Source scope request exceeds 1 MiB}
+        '503': {description: Provider/metadata unavailable; errors are not treated as empty source results}
+  /v1/l2/archives/inspect:
+    post:
+      summary: Run the Spring Batch integrity and semantic materialization job for one DFCF ZIP or 7z archive; stages typed compressed JSON Lines and does not write QuestDB
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [path]
+              properties:
+                path: {type: string, minLength: 1, maxLength: 2048, description: Absolute path under configured JDB_ARCHIVE_ROOT}
+      responses:
+        '200': {description: Batch execution ID, frozen content-addressed archive path, integrity counts, parser version, semantic per-table row counts, immutable compressed JSON Lines manifest and duplicate/revision status persisted to SQLite}
+        '400': {description: Invalid request or path}
+        '401': {description: Missing or invalid token}
+        '409': {description: Batch execution retained; archive identity has not remained unchanged through the configured settle interval; retry after settle age}
+        '413': {description: Request exceeds 4 KiB}
+        '422': {description: Archive is corrupt, incomplete or exceeds configured bounds}
+        '503': {description: SQLite archive ledger unavailable}
+  /v1/l2/subscription/transfer:
+    post:
+      summary: Plan or transfer one date-named archive from the configured Baidu share to the configured own-drive root; does not download or ingest locally
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [date, dryRun]
+              properties:
+                date: {type: string, format: date}
+                dryRun: {type: boolean, description: Required explicitly; true performs no remote write}
+      responses:
+        '200': {description: WAITING, PLANNED, PRESENT, or SAVED status and remote path; SAVED means own-drive size was verified, not locally downloaded or ingested}
+        '400': {description: Adapter disabled, invalid date, or invalid request}
+        '401': {description: Missing or invalid token}
+        '413': {description: Request exceeds 4 KiB}
+        '503': {description: Provider/authentication/transfer outcome unavailable; inspect before retry}
+  /v1/l2/subscription/download:
+    post:
+      summary: Transfer when needed then download to a unique archive-root/.incoming/baidu staging directory; archive inspection remains a separate settle-age-gated Batch step
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [date, dryRun]
+              properties:
+                date: {type: string, format: date}
+                dryRun: {type: boolean, description: Required explicitly; true makes no remote or local write}
+      responses:
+        '200': {description: WAITING/PLANNED/PRESENT or DOWNLOADED_UNVALIDATED with staged path and size; only later archive inspection may admit it}
+        '400': {description: Adapter disabled, invalid date, account mismatch, or invalid request}
+        '401': {description: Missing or invalid token}
+        '413': {description: Request exceeds 4 KiB}
+        '503': {description: Provider/process/transfer/download outcome unavailable; inspect intent and staging directory before retry}
+  /v1/runs:
+    get:
+      summary: List latest 100 business instances
+      responses:
+        '200': {description: Business state, blocking reason and Batch execution correlation}
+    post:
+      summary: Run or recover the same business instance through the shared launch entry
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: {type: string}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/RunRequest'}
+      responses:
+        '200': {description: Current business outcome or already-running disposition; HTTP 200 does not imply Ready}
+        '400': {description: Invalid contract or conflicting idempotency/input identity}
+        '401': {description: Missing or invalid bearer token}
+        '413': {description: Request exceeds 64 KiB}
+        '503': {description: Operation unavailable or commit uncertain; query before retry}
+  /v1/reconciliation:
+    get:
+      summary: List bounded unresolved write intents, orphan source/post-close Batch executions and external executions for manual physical-side-effect review; does not mutate or resend
+      responses:
+        '200': {description: Up to 500 unresolved write intents, 500 orphan Batch executions and 500 nonterminal/blocked external executions}
+        '401': {description: Missing or invalid token}
+  /v1/runs/{instance}:
+    get:
+      summary: Query instance, step evidence, trigger history and audit events
+      parameters:
+        - in: path
+          name: instance
+          required: true
+          schema: {type: string, pattern: '^[a-f0-9]{64}$'}
+      responses:
+        '200': {description: Persisted business status and step certificates}
+        '404': {description: Instance does not exist}
+  /v1/schedules:
+    get:
+      summary: Query persistent trigger state and next fire time
+      responses:
+        '200': {description: Quartz trigger states; no trigger is executed by this read}
+  /v1/schedules/{job}/pause:
+    post:
+      summary: Pause future triggers; does not cancel a running process
+      parameters:
+        - in: path
+          name: job
+          required: true
+          schema: {type: string, enum: [post_close, source_cyq_perf, post_close_recovery, post_close_recovery_final]}
+      responses:
+        '200': {description: Persistent pause state}
+        '404': {description: Unknown schedule}
+  /v1/schedules/{job}/resume:
+    post:
+      summary: Resume future triggers; requires enabled isolated scheduler and explicit calendar
+      parameters:
+        - in: path
+          name: job
+          required: true
+          schema: {type: string, enum: [post_close, source_cyq_perf, post_close_recovery, post_close_recovery_final]}
+      responses:
+        '200': {description: Persistent resumed state}
+        '400': {description: Calendar absent or scheduling disabled}
+        '404': {description: Unknown schedule}
+components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer}
+  schemas:
+    BusinessState:
+      type: string
+      enum: [WAITING_SOURCE, WAITING_UPSTREAM, RUNNING, VERIFYING, VERIFIED, VERIFIED_EMPTY, PARTIAL, BLOCKED, FAILED, IN_DOUBT]
+    RunRequest:
+      type: object
+      additionalProperties: false
+      required: [requestId, job, logicalDate, rangeStart, rangeEnd, definitionVersion, revision, inputFingerprint, calendarVersion, zone, scheduledAt, triggeredAt]
+      properties:
+        requestId: {type: string, minLength: 1, maxLength: 256}
+        job: {type: string, enum: [post_close, pre_open_acceptance, source_daily, source_daily_basic, source_etf_daily, source_stk_limit, source_etf_adj, source_moneyflow, source_etf_factor, source_margin_detail, source_moneyflow_hsgt, source_stk_suspend, source_etf_portfolio, source_stk_factor, source_stk_st_daily, source_cn_bond_yield_curve, source_cyq_perf, source_index_daily_market, source_index_daily_basic, source_exchange_calendar, source_fina_mainbz, source_fina_audit, source_dividend, source_share_float, source_shibor, source_shibor_lpr, source_hibor, source_cn_cpi, source_cn_ppi, source_cn_pmi, source_cn_m, source_cn_gdp, source_fut_daily, source_fut_settle, source_fut_mapping, source_ft_limit, source_fut_holding, source_fut_basic, source_etf_basic, source_disclosure_date, source_ths_index, source_etf_share, source_us_tbr]}
+        logicalDate: {type: string, format: date}
+        rangeStart: {type: string, format: date}
+        rangeEnd: {type: string, format: date}
+        definitionVersion: {type: string, minLength: 1, maxLength: 256}
+        revision: {type: string, minLength: 1, maxLength: 256}
+        supersedes: {type: [string, 'null']}
+        revisionReason: {type: [string, 'null']}
+        inputFingerprint: {type: string, minLength: 1, maxLength: 256, description: 'For post_close, SHA-256 of the exact core-source plan file bytes.'}
+        scopeIdentity: {type: string, pattern: '^[a-f0-9]{64}$', description: 'For post_close, required and equal to the core-source plan SHA-256. For source jobs, optional SHA-256 of dataset, frozen universe version and expected entity set; the service derives and verifies it from the source artifact.'}
+        calendarVersion: {type: string, minLength: 1, maxLength: 256}
+        zone: {type: string}
+        scheduledAt: {type: string, format: date-time}
+        triggeredAt: {type: string, format: date-time}
+      allOf:
+        - if:
+            properties:
+              job: {const: post_close}
+          then:
+            required: [scopeIdentity]
+            properties:
+              rangeStart: {description: Must equal logicalDate for the daily core-source plan}
+              rangeEnd: {description: Must equal logicalDate for the daily core-source plan}
+              inputFingerprint: {type: string, pattern: '^[a-f0-9]{64}$'}
+              scopeIdentity: {type: string, pattern: '^[a-f0-9]{64}$'}

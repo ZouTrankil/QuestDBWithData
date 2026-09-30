@@ -20,7 +20,12 @@ public record PageContract(String endpoint, List<String> fields, List<String> bu
                 || new HashSet<>(fields).size() != fields.size() || new HashSet<>(businessKey).size() != businessKey.size()) {
             throw new IllegalArgumentException("Unique fields and complete business key required");
         }
-        fields.forEach(DatasetDefinition::identifier);
+        // Some provider schemas (e.g. SHIBOR tenors `1w`/`3m`) begin with digits.
+        // They stay in the same restricted ASCII identifier alphabet; SQL sinks quote them.
+        fields.forEach(field -> {
+            if(field==null || !field.matches("[A-Za-z0-9_][A-Za-z0-9_]*"))
+                throw new IllegalArgumentException("Invalid provider field identifier");
+        });
         allowedParameters.forEach(DatasetDefinition::identifier);
         if (pageSize < 1 || sourceRowCap < pageSize || sourceRowCap > 100000 || maxPages < 1 || maxPages > 1000
                 || maxRows < pageSize || maxRows > 1000000 || capabilityEvidence == null || capabilityEvidence.isBlank()) {

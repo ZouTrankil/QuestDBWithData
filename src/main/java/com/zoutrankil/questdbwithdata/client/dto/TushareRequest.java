@@ -10,7 +10,7 @@ public record TushareRequest(String apiName, Map<String, Object> params, List<St
         fields = List.copyOf(fields);
         if (fields.isEmpty() || new HashSet<>(fields).size() != fields.size()) throw new IllegalArgumentException("Unique fields required");
         for (String field : fields) {
-            if (!field.matches("[a-zA-Z_][a-zA-Z0-9_]*")) throw new IllegalArgumentException("Invalid field name");
+            if (!field.matches("[a-zA-Z0-9_][a-zA-Z0-9_]*")) throw new IllegalArgumentException("Invalid field name");
         }
         if (maxRows < 1 || maxRows > 100_000) throw new IllegalArgumentException("Response row bound required (1..100000)");
         for (var entry : params.entrySet()) {

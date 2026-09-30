@@ -1,0 +1,33 @@
+{
+  "component": "DataReadiness",
+  "status": "implemented-awaiting-integration-acceptance",
+  "requiredSources": "PostCloseGraph.CORE_TABLES plus exchange_calendar (14 core products plus trading calendar)",
+  "acceptanceRules": [
+    "same logical date and exact one-day range",
+    "latest revision per source takes precedence, including a failed newer revision",
+    "VERIFIED or contractually legal VERIFIED_EMPTY source result only",
+    "matching source contract version, calendar version, zone, and frozen scope identity",
+    "source certificate and frozen source artifact must resolve inside archive root",
+    "source certificate target must match this SQLite runtime namespace, dataset, and source instance",
+    "certificate verified row count must equal CompletionEvidence; aggregate requires at least one written core row",
+    "DataReady emits a versioned aggregate artifact with immutable fingerprint-derived path",
+    "raw frozen artifact SHA-256 must equal its registered source fingerprint; certificate and source hashes are included in aggregate identity",
+    "file hashing is streaming and bounded by contract byte limits",
+    "VERIFIED_EMPTY is accepted only where both source contract and source certificate allow empty"
+  ],
+  "runtime": "Default StageExecutor routes DataReady to DataReadiness; other stages retain existing adapters. Missing or stale source evidence returns BLOCKED.",
+  "verification": {
+    "commands": [
+      "./gradlew test --tests 'com.zoutrankil.batch.DataReadinessTest'",
+      "./gradlew test --tests 'com.zoutrankil.batch.LatestSourceCertificateTest'",
+      "./gradlew test --tests 'com.zoutrankil.batch.SqliteRuntimeTest'"
+    ],
+    "result": "BUILD SUCCESSFUL",
+    "liveSourceOrQuestdb": false
+  },
+  "limitations": [
+    "post_close does not yet fan out and launch the required source jobs",
+    "complete derivative/product coverage and source revision invalidation remain outstanding",
+    "no real core-source certificates were assembled as an end-to-end DataReady acceptance"
+  ]
+}

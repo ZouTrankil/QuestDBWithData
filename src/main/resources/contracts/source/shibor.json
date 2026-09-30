@@ -1,0 +1,25 @@
+{
+  "dataset": "shibor",
+  "version": "shibor-v1",
+  "endpoint": "shibor",
+  "dateParameter": "start_date",
+  "sourceDate": "date",
+  "timestampColumn": "timestamp",
+  "pageSize": 2000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 2000,
+  "maxBytes": 8388608,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=149; one requested date per bounded source query; original numeric-leading tenor names retained as quoted QuestDB identifiers",
+  "columns": [
+    { "source": "date", "target": "timestamp", "type": "TIMESTAMP", "key": true },
+    { "source": "on", "target": "on", "type": "DOUBLE", "key": false },
+    { "source": "1w", "target": "1w", "type": "DOUBLE", "key": false },
+    { "source": "2w", "target": "2w", "type": "DOUBLE", "key": false },
+    { "source": "1m", "target": "1m", "type": "DOUBLE", "key": false },
+    { "source": "3m", "target": "3m", "type": "DOUBLE", "key": false },
+    { "source": "6m", "target": "6m", "type": "DOUBLE", "key": false },
+    { "source": "9m", "target": "9m", "type": "DOUBLE", "key": false },
+    { "source": "1y", "target": "1y", "type": "DOUBLE", "key": false }
+  ]
+}

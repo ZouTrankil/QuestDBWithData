@@ -11,7 +11,8 @@ class CliProcessTest {
     @TempDir(cleanup=org.junit.jupiter.api.io.CleanupMode.ON_SUCCESS) Path temp;
     private int run(String name, String... args) throws Exception {
         var command = new ArrayList<String>();
-        command.add(Path.of(System.getProperty("java.home"),"bin","java.exe").toString());
+        String javaExecutable=System.getProperty("os.name","").toLowerCase(Locale.ROOT).contains("win")?"java.exe":"java";
+        command.add(Path.of(System.getProperty("java.home"),"bin",javaExecutable).toString());
         command.add("-cp"); command.add(System.getProperty("cli.runtimeClasspath"));
         command.add("com.zoutrankil.questdbwithdata.QuestDbWithDataApplication");
         command.addAll(List.of(args));

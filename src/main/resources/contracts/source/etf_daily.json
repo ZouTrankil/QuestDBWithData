@@ -1,0 +1,82 @@
+{
+  "dataset": "etf_daily",
+  "version": "etf_daily-v1",
+  "endpoint": "fund_daily",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "timestamp",
+  "pageSize": 2000,
+  "paged": true,
+  "emptyAllowed": false,
+  "maxRows": 20000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=127",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "timestamp",
+      "type": "TIMESTAMP_NS",
+      "key": true
+    },
+    {
+      "source": "pre_close",
+      "target": "pre_close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "open",
+      "target": "open",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "high",
+      "target": "high",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "low",
+      "target": "low",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "close",
+      "target": "close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "change",
+      "target": "change",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pct_chg",
+      "target": "pct_chg",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "vol",
+      "target": "vol",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "amount",
+      "target": "amount",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

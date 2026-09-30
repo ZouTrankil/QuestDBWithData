@@ -1,0 +1,39 @@
+{
+  "kind": "read-only-existing-output-not-python-frozen-execution",
+  "query": {
+    "query": "select * from moneyflow_hsgt where trade_date='2026-09-28'",
+    "columns": [
+      {
+        "name": "trade_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "ggt_ss",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ggt_sz",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "hgt",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "sgt",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "north_money",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "south_money",
+        "type": "DOUBLE"
+      }
+    ],
+    "timestamp": 0,
+    "dataset": [],
+    "count": 0
+  }
+}

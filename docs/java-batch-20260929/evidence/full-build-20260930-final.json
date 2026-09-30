@@ -1,0 +1,31 @@
+{
+  "atUtc": "2026-09-30",
+  "command": "./gradlew check",
+  "result": "BUILD SUCCESSFUL",
+  "counts": {
+    "tests": 403,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 66
+  },
+  "externalServiceEnvironment": "Full regression used no live-source opt-in. Previous 31 real-source/isolated-QuestDB acceptance samples remain in their per-source evidence. etf_basic, disclosure_date, ths_index and etf_share remain fixture-verified only; DataReady aggregation used synthetic certificate fixtures and a real SQLite revision-ledger test; no live requests or QuestDB writes were performed in this run.",
+  "package": {
+    "path": "build/distributions/QuestDBWithData-batch-0.1.0.zip",
+    "bytes": 56803071,
+    "sha256": "52ddd9a3f78f016c5686a3cec56c96a95a135899d7d13f76500a9d3679a9a616",
+    "sqliteJdbcIncluded": true,
+    "postgresqlJdbcIncluded": false,
+    "futBasicContractIncluded": true,
+    "etfBasicContractIncluded": true,
+    "disclosureDateContractIncluded": true,
+    "thsIndexContractIncluded": true,
+    "etfShareContractIncluded": true,
+    "dataReadinessClassIncluded": true,
+    "coreSourceFanoutClassIncluded": true,
+    "postCloseSourcePlanClassIncluded": true,
+    "batchRuntimeConfigurationIncluded": true,
+    "postCloseRecoveryCoordinatorClassIncluded": true,
+    "postCloseRecoveryMigrationIncluded": true
+  },
+  "scope": "Full local regression and isolated SQLite-backed Batch distribution after adding the bounded etf_share trade-date producer, DataReadiness core-source certificate gate, and frozen-plan post_close core-source fan-out. The fan-out validates an immutable, content-addressed plan for exactly 14 core tables plus exchange_calendar, runs each probe and source Batch job through LaunchService, and blocks post_close before its Batch job starts on missing/invalid plans or any non-ready source. Synthetic fan-out tests exercise all 15 child requests, same-request probe idempotency, and a new-trigger read retry that keeps the business identity; the SQLite runtime test verifies missing-plan blocking with no source probe or Batch execution. This is fixture evidence, not a live 15-source run. DataReadiness checks latest source revision, exact logical date/calendar/zone, scope and definition versions, archived raw and certificate files, per-instance isolated QuestDB target namespace, and verified row counts before publishing a fingerprinted aggregate DataReady certificate. etf_share maps fund_share(trade_date) to the legacy YEAR-partitioned (ts_code,timestamp) key, rejects the 2000-row unpaged cap, and blocks empty responses; physical schema and live completeness remain unverified. etf_basic uses fund_basic(market=E), 15000-row nonpaged cap, legacy epoch key and YEAR partition. disclosure_date queries one exact quarter end at a time with a 6000-row cap. ths_index is a no-parameter static snapshot capped at 5000 rows and generates update_time at publication. Spring Batch metadata runs on SQLite; PostgreSQL JDBC remains excluded from the standalone Batch package and is retained by the main application for QuestDB PGWire. Live Tushare/QuestDB 15-source fan-out acceptance, deployed schema verification, historical reconciliation and legacy-output parity remain outstanding. JDB-01—15 remain incomplete. A follow-up regression added durable SQLite post_close recovery attempt/trigger ledgers, 19:00–23:45 quarter-hour and 23:55 Quartz triggers (initially paused), stale/misfire and state eligibility checks, bounded 21-attempt policy, and preservation of a fresh trigger request ID while reusing canonical business input identity. The recovery coordinator, Quartz schedule, and V11 migration were confirmed in the standalone ZIP; focused coordinator/LaunchService/SQLite tests and the full check passed. This remains a limited recovery path, not complete N1/N2, strategy-gap recovery, or executable historical backfill."
+}

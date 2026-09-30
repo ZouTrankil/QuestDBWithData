@@ -1,0 +1,82 @@
+{
+  "dataset": "margin_detail",
+  "version": "margin_detail-v1",
+  "endpoint": "margin_detail",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 6000,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 20000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=59",
+  "columns": [
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "name",
+      "target": "name",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "rzye",
+      "target": "rzye",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rzmre",
+      "target": "rzmre",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rzche",
+      "target": "rzche",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rqye",
+      "target": "rqye",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rqyl",
+      "target": "rqyl",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rqchl",
+      "target": "rqchl",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rqmcl",
+      "target": "rqmcl",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rzrqye",
+      "target": "rzrqye",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

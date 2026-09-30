@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "dataset": "fut_holding",
+  "definitionVersion": "fut_holding-v1",
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=139",
+  "sourceKind": "real-tushare",
+  "scope": "one product IF, one trade date, CFFEX",
+  "attempts": [
+    {
+      "logicalDate": "2019-01-02",
+      "requestedProduct": "IF",
+      "exchange": "CFFEX",
+      "provider": "Tushare Pro",
+      "providerPages": 1,
+      "providerRows": 0,
+      "normalizedRows": 0,
+      "probeComplete": true,
+      "sourceFingerprint": "789a374aab79d7a8c5526efc40d1c9764adb24b1bf6cb055e97e03520766596b",
+      "sourceArtifact": "var/jdb-source-acceptance/b4244a95-3d68-4e25-a7e9-7722cdbbf6ed/sources/789a374aab79d7a8c5526efc40d1c9764adb24b1bf6cb055e97e03520766596b.json",
+      "observedAtUtc": "2026-09-29T21:14:41.949424Z"
+    },
+    {
+      "logicalDate": "2024-01-02",
+      "requestedProduct": "IF",
+      "exchange": "CFFEX",
+      "provider": "Tushare Pro",
+      "providerPages": 1,
+      "providerRows": 0,
+      "normalizedRows": 0,
+      "probeComplete": true,
+      "sourceFingerprint": "ecdc0f5b9612190d6f934d095039dc9653fc810697544c00c161975703e32e19",
+      "sourceArtifact": "var/jdb-source-acceptance/5dbe2069-e860-4c07-86c9-119ca446f142/sources/ecdc0f5b9612190d6f934d095039dc9653fc810697544c00c161975703e32e19.json",
+      "observedAtUtc": "2026-09-29T21:14:24.159525Z"
+    },
+    {
+      "logicalDate": "2026-09-01",
+      "requestedProduct": "IF",
+      "exchange": "CFFEX",
+      "provider": "Tushare Pro",
+      "providerPages": 1,
+      "providerRows": 0,
+      "normalizedRows": 0,
+      "probeComplete": true,
+      "sourceFingerprint": "a67f4777ce0cfca2210e6d95e1921969d0a2b65040238ea232c6eb1507e5ab0e",
+      "sourceArtifact": "var/jdb-source-acceptance/4f281833-ee1c-4426-b43a-1bb056c49b80/sources/a67f4777ce0cfca2210e6d95e1921969d0a2b65040238ea232c6eb1507e5ab0e.json",
+      "observedAtUtc": "2026-09-29T21:13:46.555433Z"
+    },
+    {
+      "logicalDate": "2026-09-28",
+      "requestedProduct": "IF",
+      "exchange": "CFFEX",
+      "provider": "Tushare Pro",
+      "providerPages": 1,
+      "providerRows": 0,
+      "normalizedRows": 0,
+      "probeComplete": true,
+      "sourceFingerprint": "280a4fdd64627b25db8c4664abb493459c982fb8ca99ee1a5d2b45f27758646a",
+      "sourceArtifact": "var/jdb-source-acceptance/a4d3acc5-3c7e-457a-8c6c-03859becefd4/sources/280a4fdd64627b25db8c4664abb493459c982fb8ca99ee1a5d2b45f27758646a.json",
+      "observedAtUtc": "2026-09-29T21:13:01.392178Z"
+    }
+  ],
+  "outcome": "source-probed-empty",
+  "questdbWrites": 0,
+  "questdbTarget": null,
+  "businessAcceptance": "not-verified",
+  "reason": "Each provider probe completed without an API error but returned zero rows. Live test stopped at the required non-empty assertion before creating a QuestDB target or sending writes. Empty response is retained as unverified source availability, not certified as verified-empty."
+}

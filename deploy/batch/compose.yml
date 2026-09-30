@@ -1,0 +1,12 @@
+# Optional isolated QuestDB only. Batch metadata lives in a persistent local SQLite file.
+name: jdb-isolated
+services:
+  questdb:
+    image: questdb/questdb:10.0.1
+    ports:
+      - "127.0.0.1:19000:9000"
+      - "127.0.0.1:18812:8812"
+    volumes:
+      - questdb:/var/lib/questdb
+volumes:
+  questdb:

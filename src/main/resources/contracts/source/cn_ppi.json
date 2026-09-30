@@ -1,0 +1,202 @@
+{
+  "dataset": "cn_ppi",
+  "version": "cn_ppi-v1",
+  "endpoint": "cn_ppi",
+  "dateParameter": "m",
+  "sourceDate": "month",
+  "timestampColumn": "month",
+  "pageSize": 5000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 5000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/wctapi/documents/245.md; one exact observation month; legacy month timestamp normalized to first day",
+  "columns": [
+    {
+      "source": "month",
+      "target": "month",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "ppi_yoy",
+      "target": "ppi_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_yoy",
+      "target": "ppi_mp_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_qm_yoy",
+      "target": "ppi_mp_qm_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_rm_yoy",
+      "target": "ppi_mp_rm_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_p_yoy",
+      "target": "ppi_mp_p_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_yoy",
+      "target": "ppi_cg_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_f_yoy",
+      "target": "ppi_cg_f_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_c_yoy",
+      "target": "ppi_cg_c_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_adu_yoy",
+      "target": "ppi_cg_adu_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_dcg_yoy",
+      "target": "ppi_cg_dcg_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mom",
+      "target": "ppi_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_mom",
+      "target": "ppi_mp_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_qm_mom",
+      "target": "ppi_mp_qm_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_rm_mom",
+      "target": "ppi_mp_rm_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_p_mom",
+      "target": "ppi_mp_p_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_mom",
+      "target": "ppi_cg_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_f_mom",
+      "target": "ppi_cg_f_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_c_mom",
+      "target": "ppi_cg_c_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_adu_mom",
+      "target": "ppi_cg_adu_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_dcg_mom",
+      "target": "ppi_cg_dcg_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_accu",
+      "target": "ppi_accu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_accu",
+      "target": "ppi_mp_accu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_qm_accu",
+      "target": "ppi_mp_qm_accu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_rm_accu",
+      "target": "ppi_mp_rm_accu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_mp_p_accu",
+      "target": "ppi_mp_p_accu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_accu",
+      "target": "ppi_cg_accu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_f_accu",
+      "target": "ppi_cg_f_accu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_c_accu",
+      "target": "ppi_cg_c_accu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_adu_accu",
+      "target": "ppi_cg_adu_accu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ppi_cg_dcg_accu",
+      "target": "ppi_cg_dcg_accu",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

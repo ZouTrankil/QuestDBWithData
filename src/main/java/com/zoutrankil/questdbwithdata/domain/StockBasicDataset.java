@@ -9,8 +9,8 @@ public final class StockBasicDataset {
     public static final DatasetDefinition DEFINITION = new DatasetDefinition(
             "stock_basic_snapshot", 1, "tushare.stock_basic", "java_stock_basic_sample",
             "java_tushare_stock_basic_qwp_test", ObjectKind.TABLE,
-            List.of(new Column("derived:UTC_run_day", "snapshot_ts", "snapshot_ts", StorageType.TIMESTAMP,
-                            false, "UTC daily observation bucket, not source publication time",
+            List.of(new Column("derived:logical_date", "snapshot_ts", "snapshot_ts", StorageType.TIMESTAMP,
+                            false, "Logical date encoded at UTC midnight; not an event time or local midnight",
                             new TemporalContract(TemporalKind.INSTANT, "ISO_OFFSET_DATE_TIME", "UTC", "MICROS", "run-day snapshot")),
                     column("ts_code", StorageType.SYMBOL, false, "Tushare instrument code"),
                     column("symbol", StorageType.SYMBOL, true, "Exchange code"),
@@ -21,7 +21,7 @@ public final class StockBasicDataset {
                             new TemporalContract(TemporalKind.BUSINESS_DATE, "BASIC", "calendar", "DAY", "listing date"))),
             List.of("snapshot_ts", "ts_code"), List.of("snapshot_ts", "ts_code"), "snapshot_ts", Partition.DAY, true,
             Set.of(Capability.READ, Capability.WRITE), List.of(),
-            "Existing V1 sample DDL: daily UTC snapshot, full identity snapshot_ts + ts_code; latest view serves reads");
+            "Existing V1 sample DDL: logical date as UTC midnight marker, full identity snapshot_ts + ts_code; latest view serves reads");
 
     public static final DatasetDefinition LATEST = new DatasetDefinition(
             "stock_basic_latest", 1, DEFINITION.provider(), DEFINITION.owner(),

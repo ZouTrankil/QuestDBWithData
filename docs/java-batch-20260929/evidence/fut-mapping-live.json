@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "acceptedAtUtc": "2026-09-29T20:56:46.138318Z",
+  "dataset": "fut_mapping",
+  "definitionVersion": "fut_mapping-v1",
+  "provider": "Tushare Pro",
+  "sourceKind": "real-tushare",
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=189",
+  "code": "IF.CFX",
+  "logicalDate": "2026-09-28",
+  "sourceFingerprint": "b160ce79a6f93ea0b2149766d1aa8ef81fd18c4a3741e3313f978f73f57dae4e",
+  "sourceRows": 1,
+  "sourcePages": 1,
+  "completeCoverage": true,
+  "target": "jdb_test_0e84bde7b9fb448f_fut_mapping_209d4cee352ae76ba3802ffd59f528b59e695a212c90336e267b77b9c98ddc73",
+  "writtenRows": 1,
+  "physicallyVisible": true,
+  "qualityPassed": true,
+  "delivery": "VERIFIED",
+  "sendAttempts": 1,
+  "dataPostCount": 1,
+  "pythonBaselineCompared": false,
+  "scope": "One explicitly requested continuous contract and one trade date; not full-contract history or full-market acceptance.",
+  "archiveArtifact": "var/jdb-source-acceptance/52862ab3-6f64-4566-b70f-217c1f3addce/writes/209d4cee352ae76ba3802ffd59f528b59e695a212c90336e267b77b9c98ddc73/certificate.json",
+  "sourceArtifact": "var/jdb-source-acceptance/52862ab3-6f64-4566-b70f-217c1f3addce/sources/b160ce79a6f93ea0b2149766d1aa8ef81fd18c4a3741e3313f978f73f57dae4e.json",
+  "physicalColumns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "mapping_ts_code",
+      "target": "mapping_ts_code",
+      "type": "SYMBOL",
+      "key": false
+    },
+    {
+      "source": "update_time",
+      "target": "update_time",
+      "type": "TIMESTAMP",
+      "key": false
+    }
+  ]
+}

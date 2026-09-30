@@ -1,0 +1,55 @@
+{
+  "kind": "read-only-existing-output-not-python-frozen-execution",
+  "query": {
+    "query": "select * from margin_detail where ts_code='000001.SZ' and trade_date='2026-09-28'",
+    "columns": [
+      {
+        "name": "trade_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "ts_code",
+        "type": "SYMBOL"
+      },
+      {
+        "name": "name",
+        "type": "STRING"
+      },
+      {
+        "name": "rzye",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rzmre",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rzche",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rqye",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rqyl",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rqchl",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rqmcl",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "rzrqye",
+        "type": "DOUBLE"
+      }
+    ],
+    "timestamp": 0,
+    "dataset": [],
+    "count": 0
+  }
+}

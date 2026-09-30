@@ -1,0 +1,179 @@
+{
+  "dataset": "etf_basic",
+  "version": "etf_basic-v1",
+  "endpoint": "fund_basic",
+  "dateParameter": "market",
+  "sourceDate": "timestamp",
+  "timestampColumn": "timestamp",
+  "pageSize": 15000,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 15000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/1?doc_id=19; fund_basic market=E returns on-exchange fund master; maximum 15000 rows, no offset paging; fixed legacy timestamp sentinel 1970-01-01 and update_time generated at publication",
+  "partitionBy": "YEAR",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "name",
+      "target": "name",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "management",
+      "target": "management",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "custodian",
+      "target": "custodian",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "fund_type",
+      "target": "fund_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "found_date",
+      "target": "found_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "due_date",
+      "target": "due_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "list_date",
+      "target": "list_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "issue_date",
+      "target": "issue_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "delist_date",
+      "target": "delist_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "issue_amount",
+      "target": "issue_amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "m_fee",
+      "target": "m_fee",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "c_fee",
+      "target": "c_fee",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "duration_year",
+      "target": "duration_year",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "p_value",
+      "target": "p_value",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "min_amount",
+      "target": "min_amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "exp_return",
+      "target": "exp_return",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "benchmark",
+      "target": "benchmark",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "status",
+      "target": "status",
+      "type": "SYMBOL",
+      "key": false
+    },
+    {
+      "source": "invest_type",
+      "target": "invest_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "type",
+      "target": "type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "trustee",
+      "target": "trustee",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "purc_startdate",
+      "target": "purc_startdate",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "redm_startdate",
+      "target": "redm_startdate",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "market",
+      "target": "market",
+      "type": "SYMBOL",
+      "key": false
+    },
+    {
+      "source": "timestamp",
+      "target": "timestamp",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "update_time",
+      "target": "update_time",
+      "type": "TIMESTAMP",
+      "key": false
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "acceptedAtUtc": "2026-09-29T18:04:50Z",
+  "dataset": "exchange_calendar",
+  "definitionVersion": "exchange_calendar-v1",
+  "logicalDate": "2026-09-28",
+  "sourceKind": "real-tushare",
+  "endpoint": "trade_cal",
+  "documentation": "https://tushare.pro/document/2?doc_id=26",
+  "expectedExchanges": [
+    "SSE",
+    "SZSE"
+  ],
+  "universeVersion": "frozen-universe-v1",
+  "sourceRows": 2,
+  "sourcePages": 2,
+  "completeCoverage": true,
+  "sourceFingerprint": "484e3b51be1838f16557ebd5297f4699c6d3670375f7987861a4eb15b7098e5b",
+  "scopeIdentity": "96b3f41c242e5e6119ebf7e8f1895e3da59b20f4b395ccfcae9616c0fa0baf40",
+  "sourceRowsNormalized": [
+    {
+      "exchange": "SSE",
+      "cal_date": "2026-09-28",
+      "is_open": 1,
+      "pretrade_date": "20260924"
+    },
+    {
+      "exchange": "SZSE",
+      "cal_date": "2026-09-28",
+      "is_open": 1,
+      "pretrade_date": "20260924"
+    }
+  ],
+  "businessState": "VERIFIED",
+  "readRows": 2,
+  "writtenRows": 2,
+  "uniqueKeys": true,
+  "physicallyVisible": true,
+  "qualityPassed": true,
+  "sendAttempts": 1,
+  "repeatLaunchPreservedSingleSend": true,
+  "isolatedTarget": "jdb_test_67a04a649b684bd6_exchange_calendar_2f4b70df871a370ba352fe342a7f9c496cafb4b988d4cf673f070c50d47266ef",
+  "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/9c5d7f2f-2aa0-497a-bb5f-8c30fb62d401/writes/2f4b70df871a370ba352fe342a7f9c496cafb4b988d4cf673f070c50d47266ef/certificate.json",
+  "physicalColumns": [
+    {
+      "source": "exchange",
+      "target": "exchange",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "cal_date",
+      "target": "cal_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "is_open",
+      "target": "is_open",
+      "type": "INT",
+      "key": false
+    },
+    {
+      "source": "pretrade_date",
+      "target": "pretrade_date",
+      "type": "STRING",
+      "key": false
+    }
+  ],
+  "sourceArtifact": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/9c5d7f2f-2aa0-497a-bb5f-8c30fb62d401/sources/484e3b51be1838f16557ebd5297f4699c6d3670375f7987861a4eb15b7098e5b.json",
+  "gradleTest": "./gradlew --no-daemon cleanTest test --tests com.zoutrankil.batch.NativeProducerLiveTest --console=plain with JDB_SOURCE_LIVE=1 and JDB_SOURCE_DATASETS=exchange_calendar",
+  "testResult": "BUILD SUCCESSFUL; real Tushare rows were frozen, written to a namespaced isolated QuestDB table, read back and verified; repeated launch retained one write attempt.",
+  "reportSha256": "411deaecb5e2540aa01e6a76677bb4bd73c6f940065ba8be0834a3df6edaf081",
+  "credentialsRecorded": false,
+  "scopeLimit": "One date and the two exchanges currently admitted by the existing Java calendar owner. Does not establish full-history calendar coverage, incremental checkpointing in the batch runtime, calendar-version publication to TradingCalendar, or legacy-output parity."
+}

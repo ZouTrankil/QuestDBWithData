@@ -1,6 +1,8 @@
+> **处置：已退出当前落库候选（retired_with_evidence）。不要按本历史任务卡创建表或执行迁移。** 依据：[Q对象处置记录](../q-object-disposition.md)。保留此卡仅用于审计/兼容追踪。
+
 # Q012 · report_rc（未落库，待准入）
 
-- 状态：conditional，未准入。
+- 状态：retired_with_evidence，不再活跃准入。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`Q011`；前项验收后才执行本项。
@@ -30,8 +32,6 @@ Python声明了 `report_rc`，但审计现场没有同名对象。先确认是�
 - [ ] 更新[逐项完成表](../completion-register.md)的 `Q012` 行及 `results/Q012.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
 - [ ] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
 
-## Orca执行提示
+## 历史执行提示（已失效）
 
-```text
-在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q012：report_rc（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q012-report_rc.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q011 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q012.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。
-```
+本卡已归档，不派发、不执行建表。后续如出现新的生产者与研究消费者证据，先更新 [Q对象处置记录](../q-object-disposition.md) 并新建准入决策。

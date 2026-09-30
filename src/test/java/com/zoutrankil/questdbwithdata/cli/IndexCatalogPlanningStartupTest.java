@@ -25,7 +25,7 @@ class IndexCatalogPlanningStartupTest {
             var owner=context.getBean(IndexCatalogJobService.class);
             var plan=owner.plan(Path.of(file),LocalDate.of(2026,9,29));
             assertEquals(SyncJobDefinition.Mode.INCREMENTAL,plan.mode());
-            assertEquals("ad425d6fe165383e6af0ed698372d94741ab6691f16b5e124435406fe3c7608b",plan.parameters().get("sha256"));
+            assertEquals("5eb2dc5e25329d626aed89d4320882e1f92e96ebb61e9d2d6815ce4f23506e81",plan.parameters().get("sha256"));
             assertEquals(Path.of(file).toAbsolutePath().normalize().toString(),plan.parameters().get("file"));
             var mapper=JobDefinitionJson.mapper();
             var frozen=mapper.readTree(SyncRequestIdentity.snapshotJson(plan));

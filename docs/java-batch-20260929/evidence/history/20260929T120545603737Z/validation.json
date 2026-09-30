@@ -1,0 +1,100 @@
+{
+  "at_utc": "2026-09-29T11:58:24.143650+00:00",
+  "overall_requirement_status": "incomplete",
+  "goal_turn_classification": "progress",
+  "command": "JDB_SOURCE_LIVE=1 JDB_QUESTDB_TEST_URL=<authorized-test-host> JDB_TUSHARE_TOKEN=<from-existing-local-config-without-logging> ./gradlew test installBatchDist batchDistZip --console=plain",
+  "outcome": "passed",
+  "counts": {
+    "tests": 208,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 20
+  },
+  "native_test_classes": [
+    {
+      "class": "com.zoutrankil.batch.QuestDbProtocolTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.FrozenSourceParityTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.ContractsTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.NativeSourceTest",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.PostgresRuntimeTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.EmptySnapshotPortTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.NativeProducerLiveTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "artifacts": {
+    "build/distributions/QuestDBWithData-batch-0.1.0.zip": {
+      "sha256": "2359cb36480cac11a16465547ee58ef8353ef0ac211749782a147a99eb090753",
+      "bytes": 55003851
+    },
+    "build/libs/QuestDBWithData-0.1.0-batch.jar": {
+      "sha256": "05373ef38f628ee242cc883137d571dababbae4962fb24bbc2d69a9f8d84d0d2",
+      "bytes": 839007
+    },
+    "gradle.lockfile": {
+      "sha256": "f54822aae7b3e40614bc95e56c0fb3150c5f4a8b9a751ae18bcad13dc5ca2f59",
+      "bytes": 12877
+    }
+  },
+  "native_source_evidence": "native-producers.json",
+  "source_parity": {
+    "daily": "exact-match-stored-output-snapshot",
+    "etf_daily": "exact-match-stored-output-snapshot",
+    "daily_basic": "missing-existing-output-for-2026-09-28",
+    "etf_adj": "exact-match-stored-output-snapshot",
+    "stk_limit": "missing-existing-output-for-2026-09-28",
+    "etf_factor": "missing-existing-output-for-2026-09-28",
+    "moneyflow": "missing-existing-output-for-2026-09-28",
+    "margin_detail": "missing-existing-output-for-2026-09-28",
+    "moneyflow_hsgt": "missing-existing-output-for-2026-09-28",
+    "stk_suspend": "real-empty-source-and-isolated-empty-table; nonempty and frozen-Python parity not yet established"
+  },
+  "not_achieved": [
+    "remaining 4 core sources",
+    "full-market source coverage and official Python frozen-input parity",
+    "remaining JDB-06..15 requirements and complete JDB-01..04 audit",
+    "full fault and capacity matrix",
+    "deployment upgrade/rollback drill"
+  ],
+  "side_effects": "side-effects.json",
+  "validation_log_sha256": "3efe03b62049d46c376f405d6f4222056b632d2d21c020fde980f8949d80be56"
+}

@@ -1,0 +1,45 @@
+{
+  "implementation": "src/main/java/com/zoutrankil/batch/DfcfCsvParser.java",
+  "test_class": "com.zoutrankil.batch.DfcfCsvParserTest",
+  "test_command": "./gradlew --no-daemon test --tests com.zoutrankil.batch.DfcfCsvParserTest --tests com.zoutrankil.batch.DfcfCsvInspectorTest",
+  "targeted_result": "passed",
+  "read_only_baseline": [
+    "/Users/Apple/zq/fun/back-monitor/src/quant_platform/data/adapters/connectors/level2/sources/dfcf_csv_source.py",
+    "/Users/Apple/zq/fun/back-monitor/src/quant_platform/data/adapters/connectors/level2/kuake_parser.py"
+  ],
+  "semantics": [
+    "GB18030, bounded streaming rows; date and row-width validation",
+    "DFCF integer price representation is normalized to CNY by dividing by 10000, matching old source /100 followed by Kuake parser /100",
+    "DFCF prefix-based exchange normalization handles mislabeled Shanghai ETFs such as 588220.SZ",
+    "Shanghai A/D and Shenzhen 0/1/U order-kind mappings preserve recognized Kuake codes",
+    "unknown deal side and unknown order type are retained as explicit UNKNOWN records instead of dropped",
+    "ten quote levels, source totals and nonnegative source-order tick delta are represented; no research features are calculated"
+  ],
+  "cases": [
+    {
+      "test": "wrongDateAndFractionalIntegerFieldsAreRejected()",
+      "result": "passed"
+    },
+    {
+      "test": "shenzhenOrderTypesAndSubmissionCodesMatchTheExistingSourceContract()",
+      "result": "passed"
+    },
+    {
+      "test": "quoteMappingPreservesTenLevelsAndClampsOutOfOrderTickDelta()",
+      "result": "passed"
+    },
+    {
+      "test": "dealMappingScalesPriceAndRetainsCancelsAndUnclassifiedRows()",
+      "result": "passed"
+    },
+    {
+      "test": "shanghaiEtfWithWrongVendorSuffixUsesShanghaiOrderCodes()",
+      "result": "passed"
+    }
+  ],
+  "limitations": [
+    "Parser is not yet connected to l2_archive_integrity or a persistent normalized artifact.",
+    "No DFCF member from a real vendor archive has been parsed by this Java mapper.",
+    "No QuestDB writes, feature generation, coverage certificate or resume checkpoint are produced by this mapper."
+  ]
+}

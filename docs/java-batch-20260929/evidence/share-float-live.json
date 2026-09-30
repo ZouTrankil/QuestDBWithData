@@ -1,0 +1,62 @@
+{
+  "dataset": "share_float",
+  "acceptanceAtUtc": "2026-09-29T20:25:59Z",
+  "source": "Tushare Pro share_float (real remote source)",
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=160",
+  "request": {
+    "ann_date": "20181220",
+    "ts_code": "000998.SZ",
+    "logicalDate": "2018-12-20",
+    "definitionVersion": "share_float-v1"
+  },
+  "collection": {
+    "rows": 45,
+    "pages": 1,
+    "completeCoverage": true,
+    "fingerprint": "3720550d0a1dceab22a4eb8b5e4738f5a2763493c39a7b91fef61ea7ce240460"
+  },
+  "isolatedQuestDb": {
+    "endpoint": "http://100.97.201.8:9000",
+    "target": "jdb_test_9481752fc3c94d7f_share_float_77f0d287d3ae3f804d3a54c03fc9ac2d5b1726e241202ff93a7e8b41d17a69fb",
+    "verifiedRows": 45,
+    "floatingTolerance": 0.0
+  },
+  "execution": {
+    "businessState": "VERIFIED",
+    "sendAttempts": 1,
+    "relaunchSendAttempts": 1,
+    "physicalEvidence": {
+      "schemaVersion": 1,
+      "producer": "java-source:share_float",
+      "instanceId": "77f0d287d3ae3f804d3a54c03fc9ac2d5b1726e241202ff93a7e8b41d17a69fb",
+      "stage": "Source:share_float",
+      "batchId": "0a2912116300ab3a583aafdeb777e092c51e026c1aca94fc79a2c2af8c6a8b60",
+      "logicalDate": "2018-12-20",
+      "requestedStart": "2018-12-20",
+      "requestedEnd": "2018-12-20",
+      "actualStart": "2018-12-20",
+      "actualEnd": "2018-12-20",
+      "definitionVersion": "share_float-v1",
+      "sourceVersion": "3720550d0a1dceab22a4eb8b5e4738f5a2763493c39a7b91fef61ea7ce240460",
+      "inputFingerprint": "3720550d0a1dceab22a4eb8b5e4738f5a2763493c39a7b91fef61ea7ce240460",
+      "readRows": 45,
+      "writtenRows": 45,
+      "uniqueKeys": true,
+      "completeCoverage": true,
+      "physicallyVisible": true,
+      "qualityPassed": true,
+      "sourceProbeComplete": true,
+      "emptyAllowed": true,
+      "availableAt": "2026-09-29T20:25:59.928961Z",
+      "state": "VERIFIED",
+      "artifact": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/69f3372b-7252-4ef0-bab4-b20bf863680a/writes/77f0d287d3ae3f804d3a54c03fc9ac2d5b1726e241202ff93a7e8b41d17a69fb/certificate.json",
+      "error": null
+    }
+  },
+  "scopeLimitations": [
+    "one explicit security and announcement date only",
+    "not a full history or full-market coverage acceptance",
+    "Python frozen-output parity not compared",
+    "does not verify the legacy production table schema in place"
+  ]
+}

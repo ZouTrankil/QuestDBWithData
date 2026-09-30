@@ -95,7 +95,7 @@
 | D070 | cn_gdp | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](08-macro/D070-cn_gdp.md) | pending_review |
 | D071 | eco_cal | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](08-macro/D071-eco_cal.md) | pending_review |
 | D072 | sge_daily | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](08-macro/D072-sge_daily.md) | pending_review |
-| D073 | us_tbr | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](08-macro/D073-us_tbr.md) | pending_review |
+| D073 | us_tbr | implemented_not_verified | us_tbr-v1 / 13 fields / exact-date query | isolated table contract: YEAR partition, date key (snapshot audit only; physical deployment pending) | fixture: 1 normalized row | 1 planned; live write not run | fixture readback only | no real QuestDB query | [Java fixture evidence](../java-batch-20260929/evidence/us-tbr-fixture.json) | pending_review |
 | D074 | us_tltr | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](08-macro/D074-us_tltr.md) | pending_review |
 | D075 | us_trltr | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](08-macro/D075-us_trltr.md) | pending_review |
 | D076 | us_trycr | planned | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](08-macro/D076-us_trycr.md) | pending_review |
@@ -210,14 +210,14 @@
 | Q001 | alpha_research_admission_v1 | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q001-alpha_research_admission_v1.md) | pending_review |
 | Q002 | alpha_source_definition_v1 | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q002-alpha_source_definition_v1.md) | pending_review |
 | Q003 | alpha_source_member_v1 | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q003-alpha_source_member_v1.md) | pending_review |
-| Q004 | eco_cal_daily_agg | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q004-eco_cal_daily_agg.md) | pending_review |
-| Q005 | eco_cal_quantified | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q005-eco_cal_quantified.md) | pending_review |
-| Q006 | factor_exposure_snapshot_daily | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q006-factor_exposure_snapshot_daily.md) | pending_review |
-| Q007 | factor_lifecycle_event | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q007-factor_lifecycle_event.md) | pending_review |
-| Q008 | index_daily | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q008-index_daily.md) | pending_review |
-| Q009 | macro_bond_yield | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q009-macro_bond_yield.md) | pending_review |
-| Q010 | macro_news | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q010-macro_news.md) | pending_review |
-| Q011 | prediction_observation_v1 | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q011-prediction_observation_v1.md) | pending_review |
-| Q012 | report_rc | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q012-report_rc.md) | pending_review |
-| Q013 | stock_news | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q013-stock_news.md) | pending_review |
-| Q014 | swan_industry | conditional | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q014-swan_industry.md) | pending_review |
+| Q004 | eco_cal_daily_agg | retired_with_evidence | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q004-eco_cal_daily_agg.md) | pending_review |
+| Q005 | eco_cal_quantified | retired_with_evidence | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q005-eco_cal_quantified.md) | pending_review |
+| Q006 | factor_exposure_snapshot_daily | retired_with_evidence | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q006-factor_exposure_snapshot_daily.md) | pending_review |
+| Q007 | factor_lifecycle_event | retired_with_evidence | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q007-factor_lifecycle_event.md) | pending_review |
+| Q008 | index_daily | retired_with_evidence | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q008-index_daily.md) | pending_review |
+| Q009 | macro_bond_yield | retired_with_evidence | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q009-macro_bond_yield.md) | pending_review |
+| Q010 | macro_news | retired_with_evidence | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q010-macro_news.md) | pending_review |
+| Q011 | prediction_observation_v1 | retired_with_evidence | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q011-prediction_observation_v1.md) | pending_review |
+| Q012 | report_rc | retired_with_evidence | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q012-report_rc.md) | pending_review |
+| Q013 | stock_news | retired_with_evidence | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q013-stock_news.md) | pending_review |
+| Q014 | swan_industry | retired_with_evidence | 待填 | 待填 | 未执行 | 未执行 | 待填 | 未执行 | 未执行 | [任务卡](15-conditional/Q014-swan_industry.md) | pending_review |

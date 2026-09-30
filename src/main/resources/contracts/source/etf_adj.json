@@ -1,0 +1,34 @@
+{
+  "dataset": "etf_adj",
+  "version": "etf_adj-v1",
+  "endpoint": "fund_adj",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "timestamp",
+  "pageSize": 2000,
+  "paged": true,
+  "emptyAllowed": false,
+  "maxRows": 20000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=199",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "adj_factor",
+      "target": "adj_factor",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "trade_date",
+      "target": "timestamp",
+      "type": "TIMESTAMP",
+      "key": true
+    }
+  ]
+}

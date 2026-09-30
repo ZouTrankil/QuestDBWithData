@@ -10,6 +10,8 @@ spring:
       maximum-pool-size: 4
 
 app:
+  time:
+    business-zone: Asia/Shanghai
   migration:
     location: classpath:db/migration/questdb
     history-table: java_tushare_schema_history
@@ -26,7 +28,7 @@ app:
 
     username: admin
     # Replace this with the QuestDB password used by your instance.
-    password: "replace-with-your-questdb-password"
+    password: "quest"
     database: qdb
     visibility-timeout: 10s
     poll-interval: 100ms
