@@ -1,7 +1,7 @@
 package com.zoutrankil.batch;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zoutrankil.questdbwithdata.domain.PageContract;
+import com.zoutrankil.data.domain.PageContract;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;

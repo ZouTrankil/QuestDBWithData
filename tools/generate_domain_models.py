@@ -81,7 +81,7 @@ def main() -> None:
             continue
         folder, suffix = PACKAGE_BY_TYPE[kind]
         obj["snapshotDate"] = catalog["snapshotDate"]
-        package = f"com.zoutrankil.questdbwithdata.domain.{folder}"
+        package = f"com.zoutrankil.data.domain.{folder}"
         class_name = obj["domainClass"]
         path = PACKAGE_ROOT / folder / f"{class_name}.java"
         path.parent.mkdir(parents=True, exist_ok=True)

@@ -3,7 +3,7 @@ package com.zoutrankil.batch;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.boot.SpringApplication;
-import com.zoutrankil.questdbwithdata.service.TusharePageService;
+import com.zoutrankil.data.service.TusharePageService;
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;

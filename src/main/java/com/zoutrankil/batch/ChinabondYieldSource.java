@@ -1,10 +1,9 @@
 package com.zoutrankil.batch;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zoutrankil.questdbwithdata.client.SharedRequestBudget;
-import com.zoutrankil.questdbwithdata.client.TushareFailure;
-import com.zoutrankil.questdbwithdata.config.TushareProperties;
-import com.zoutrankil.questdbwithdata.service.PageExecutor;
+import com.zoutrankil.data.client.SharedRequestBudget;
+import com.zoutrankil.data.config.TushareProperties;
+import com.zoutrankil.data.service.PageExecutor;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.http.HttpStatusCode;
 import javax.swing.text.*;

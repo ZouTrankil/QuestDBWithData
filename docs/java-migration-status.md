@@ -56,7 +56,7 @@ Python 的 `data/adapters/materializers`、`data/application/level2_features`、
 ## 依据
 
 - [`completion-register.md`](migration-tasks-20260929/completion-register.md)、[`manifest.json`](migration-tasks-20260929/manifest.json)、[`execution-status.md`](migration-tasks-20260929/execution-status.md)
-- Java CLI 与注册：[CommandLineRunner](../src/main/java/com/zoutrankil/questdbwithdata/cli/CommandLineRunner.java)、[ReadGroupConfiguration](../src/main/java/com/zoutrankil/questdbwithdata/config/ReadGroupConfiguration.java)、[StockBasicSyncAdapter](../src/main/java/com/zoutrankil/questdbwithdata/service/StockBasicSyncAdapter.java)
+- Java CLI 与注册：[CommandLineRunner](../src/main/java/com/zoutrankil/data/cli/CommandLineRunner.java)、[ReadGroupConfiguration](../src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java)、[StockBasicSyncAdapter](../src/main/java/com/zoutrankil/data/service/StockBasicSyncAdapter.java)
 - 数据库迁移：[`db/migration/questdb`](../src/main/resources/db/migration/questdb/)
 - 现场结构投影：[`schema-export/questdb-qdb-2026-09-28`](../schema-export/questdb-qdb-2026-09-28/README.md)
 - Python 参考根目录（只读检查）：`/Users/Apple/zq/fun/back-monitor/src/quant_platform/data/`

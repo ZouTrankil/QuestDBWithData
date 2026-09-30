@@ -1,6 +1,6 @@
 package com.zoutrankil.batch;
 
-import com.zoutrankil.questdbwithdata.service.TusharePageService;
+import com.zoutrankil.data.service.TusharePageService;
 import java.util.*;
 
 /** Idempotent native source probes. A successful source response is not product Ready. */

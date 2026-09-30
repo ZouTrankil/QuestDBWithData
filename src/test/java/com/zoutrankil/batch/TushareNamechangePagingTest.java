@@ -1,9 +1,9 @@
 package com.zoutrankil.batch;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zoutrankil.questdbwithdata.client.TushareClient;
-import com.zoutrankil.questdbwithdata.client.dto.*;
-import com.zoutrankil.questdbwithdata.service.*;
+import com.zoutrankil.data.client.TushareClient;
+import com.zoutrankil.data.client.dto.*;
+import com.zoutrankil.data.service.*;
 import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;

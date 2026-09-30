@@ -1,8 +1,8 @@
 package com.zoutrankil.batch;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zoutrankil.questdbwithdata.service.PageExecutor;
-import com.zoutrankil.questdbwithdata.domain.PageContract;
+import com.zoutrankil.data.service.PageExecutor;
+import com.zoutrankil.data.domain.PageContract;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.*;
@@ -549,7 +549,7 @@ class NativeSourceTest {
         assertEquals("2026-09-29T00:00:00Z",physical.get("update_time"));
         assertThrows(IllegalArgumentException.class,() -> new SourceCollector.Request("dividend",LocalDate.of(2026,9,28),
                 Set.of("000001.SZ","000002.SZ"),"universe-v1",null));
-        assertThrows(com.zoutrankil.questdbwithdata.service.PageExecutor.Incomplete.class,() -> new SourceCollector(archive).collect(request,(provider,params) -> {
+        assertThrows(com.zoutrankil.data.service.PageExecutor.Incomplete.class,() -> new SourceCollector(archive).collect(request,(provider, params) -> {
             var first=row("dividend","000001.SZ");first.put("end_date",Json.MAPPER.valueToTree("20251231"));
             var second=row("dividend","000001.SZ");second.put("end_date",Json.MAPPER.valueToTree("20251231"));
             second.put("div_proc",Json.MAPPER.valueToTree("实施"));

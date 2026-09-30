@@ -449,12 +449,12 @@ class SqliteRuntimeTest {
 
     @Test void sourceCollectionUsesOneProbePerIdempotencyKey() throws Exception {
         try(var context=start()) {
-            var ledger=context.getBean(SqliteLedger.class);var source=org.mockito.Mockito.mock(com.zoutrankil.questdbwithdata.service.TusharePageService.class);
+            var ledger=context.getBean(SqliteLedger.class);var source=org.mockito.Mockito.mock(com.zoutrankil.data.service.TusharePageService.class);
             var calls=new AtomicInteger();
             org.mockito.Mockito.when(source.fetcher(org.mockito.ArgumentMatchers.any(),org.mockito.ArgumentMatchers.any()))
                     .thenReturn(parameters -> {
                         calls.incrementAndGet();
-                        return new com.zoutrankil.questdbwithdata.service.PageExecutor.Page(List.of(NativeSourceTest.row("daily","000001.SZ")),null,false,null);
+                        return new com.zoutrankil.data.service.PageExecutor.Page(List.of(NativeSourceTest.row("daily","000001.SZ")),null,false,null);
                     });
             var service=new NativeSourceService(ledger,new SourceCollector(archive),source);
             var request=NativeSourceTest.request("daily",Set.of("000001.SZ"));
@@ -469,11 +469,11 @@ class SqliteRuntimeTest {
         try(var context=start()) {
             var collector=context.getBean(SourceCollector.class);var ledger=context.getBean(SqliteLedger.class);var launch=context.getBean(LaunchService.class);
             var scope=NativeSourceTest.request("daily",Set.of("000001.SZ","000002.SZ"));
-            var first=collector.collect(scope,p -> new com.zoutrankil.questdbwithdata.service.PageExecutor.Page(List.of(NativeSourceTest.row("daily","000001.SZ")),null,false,null));
+            var first=collector.collect(scope,p -> new com.zoutrankil.data.service.PageExecutor.Page(List.of(NativeSourceTest.row("daily","000001.SZ")),null,false,null));
             var date=scope.logicalDate();var instant=java.time.Instant.parse("2026-09-29T10:30:00Z");
             var request=new RunRequest("late-first","source_daily",date,date,date,"daily-v1","0",null,null,first.fingerprint(),"cal","Asia/Shanghai",instant,instant,first.scopeIdentity());
             assertEquals("PARTIAL",launch.launch(request).get("business_state"));
-            var second=collector.collect(scope,p -> new com.zoutrankil.questdbwithdata.service.PageExecutor.Page(List.of(NativeSourceTest.row("daily","000001.SZ"),NativeSourceTest.row("daily","000002.SZ")),null,false,null));
+            var second=collector.collect(scope,p -> new com.zoutrankil.data.service.PageExecutor.Page(List.of(NativeSourceTest.row("daily","000001.SZ"),NativeSourceTest.row("daily","000002.SZ")),null,false,null));
             var retry=new RunRequest("late-second","source_daily",date,date,date,"daily-v1","0",null,null,second.fingerprint(),"cal","Asia/Shanghai",instant,instant,second.scopeIdentity());
             assertEquals("BLOCKED",launch.launch(retry).get("business_state")); // Complete input, but no QDB writer configured in this test.
             assertEquals(request.instanceId(),retry.instanceId());

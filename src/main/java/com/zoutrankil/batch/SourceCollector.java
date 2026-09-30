@@ -1,6 +1,6 @@
 package com.zoutrankil.batch;
 
-import com.zoutrankil.questdbwithdata.service.PageExecutor;
+import com.zoutrankil.data.service.PageExecutor;
 import java.nio.file.*;
 import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
@@ -12,7 +12,7 @@ import java.util.*;
 /** Native Java collection, normalization and immutable source retention; never calls Python. */
 public final class SourceCollector {
     @FunctionalInterface public interface ContractFetcher {
-        PageExecutor.Page fetch(com.zoutrankil.questdbwithdata.domain.PageContract providerContract,
+        PageExecutor.Page fetch(com.zoutrankil.data.domain.PageContract providerContract,
                                 Map<String,Object> params) throws Exception;
     }
     public record Request(String dataset,LocalDate logicalDate,Set<String> expectedCodes,String universeVersion,String tsCode,
