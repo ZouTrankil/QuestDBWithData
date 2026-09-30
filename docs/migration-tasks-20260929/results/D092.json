@@ -1,0 +1,102 @@
+{
+  "task_id": "D092",
+  "dataset_id": "backtest_daily_cache",
+  "job_id": null,
+  "implementation_status": "retained_compatibility",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "logical_date": "2026-09-30",
+  "finished_at": "2026-09-30T17:30:00+08:00",
+  "disposition": {
+    "decision": "retained_compatibility",
+    "reason": "Python BacktestReadThroughCache owns source-version calculation, cache fill, WAL/content visibility check and D091 coverage publication. A separate Java writer would create a competing generation or an unreceipted slice.",
+    "java_surface": "Fourteen-field typed READ-only definition, complete versioned key, bounded repository and ReadGroup binding.",
+    "java_writer_or_sync_job": null,
+    "write_rejection": "DatasetDefinition declares READ only; WRITE capability check rejects direct Java writes."
+  },
+  "contract": {
+    "field_count": 14,
+    "business_key": ["trade_date", "ts_code", "source_version"],
+    "physical_dedup_key": ["trade_date", "ts_code", "source_version"],
+    "designated_timestamp": "trade_date",
+    "partition": "MONTH",
+    "wal": true,
+    "dedup": true,
+    "capabilities": ["READ"],
+    "time_semantics": "Exchange business date in a UTC-midnight TIMESTAMP carrier, not an event instant.",
+    "numeric_semantics": "Unadjusted CNY/share prices and limits; Tushare volume in lots and amount in thousand CNY; dimensionless adjustment factor.",
+    "source_version": "Lowercase SHA-256 of the current view definition and relevant source table/partition state."
+  },
+  "python_owner": {
+    "class": "BacktestReadThroughCache",
+    "registry_backend": "readthrough",
+    "owner_job": null,
+    "refresh_policy": "source_version_on_read",
+    "source_tables": ["stk_factor", "stk_limit", "stk_suspend", "stk_st_daily"],
+    "read_path": "_cached validates coverage, matching row count, unique (trade_date, ts_code) keys and pandas content digest for one version.",
+    "miss_path": "read fetches v_backtest_daily after checking source fingerprint, writes the versioned cache, waits for WAL/content visibility and publishes D091 coverage.",
+    "checkpoint": "No independent Java source-ingest checkpoint applies."
+  },
+  "target": {
+    "formal_table": "backtest_daily_cache",
+    "related_coverage_table": "backtest_daily_cache_coverage",
+    "formal_table_mutated": false,
+    "coverage_table_mutated": false,
+    "cache_rows_before_after": [7531793, 7531793],
+    "cache_txn_before_after": [48, 48],
+    "coverage_rows_before_after": [1367, 1367],
+    "coverage_txn_before_after": [4, 4],
+    "written_rows": 0,
+    "reason_no_isolated_write_target": "Only the Python owner may publish the versioned cache and coverage; D092 validates a real stored version with SELECT only."
+  },
+  "read_acceptance": {
+    "checked_at": "2026-09-30T17:27:22+08:00",
+    "database_access": "Configured local QuestDB over JDBC; SELECT only.",
+    "receipt_date": "2026-09-21",
+    "stored_source_version": "17794bbc8f35be23a1e0d23e13d661fefa547f1c738f58d534ff117a3bc5de29",
+    "current_source_version": "5e73b258c9cbad31e236b3cb70abef5a9ac0c642cddfa9e9d20c1c25969dcc5c",
+    "stored_version_is_current": false,
+    "receipt_row_count": 5565,
+    "typed_cache_rows_read": 5565,
+    "matched_field_values": 77910,
+    "mismatched_field_values": 0,
+    "missing_or_duplicate_keys": 0,
+    "compared_against": "D091 complete cache slice independently verified by Python owner content_digest.",
+    "read_group_typed_binding": "passed",
+    "sample_keys": ["000001.SZ", "000002.SZ", "000006.SZ"]
+  },
+  "checks": {
+    "d01_fourteen_field_model_and_mapping": true,
+    "d02_complete_versioned_key": true,
+    "d03_month_wal_dedup_schema_confirmed_no_ddl": true,
+    "d04_bounded_typed_key_version_range_read_and_read_group": true,
+    "d05_java_write": "not_applicable_by_retained_compatibility_decision",
+    "d06_java_source_sync": "not_applicable_python_owner_retained",
+    "d07_dataset_registered_sync_job": "read_only_dataset_registered; no_java_sync_job",
+    "d08_bounded_read_and_python_owner_integrity_checks": true,
+    "d09_full_live_slice_comparison": true,
+    "human_review": "pending_review"
+  },
+  "build_and_test": {
+    "java_toolchain": 24,
+    "full_workspace_compileJava": "passed",
+    "full_workspace_compileTestJava": "passed",
+    "focused_mapping_tests": "3 passed, 0 failed",
+    "focused_live_tests": "1 passed, 0 failed"
+  },
+  "evidence": [
+    "artifacts/java-migration/D092/commands/java-live-read-20260930.json",
+    "artifacts/java-migration/D092/commands/gradle-tests-20260930.log",
+    "artifacts/java-migration/D091/commands/cache-slice-for-digest-20260930.json.gz",
+    "artifacts/java-migration/D091/commands/python-digest-verification-20260930.json",
+    "artifacts/java-migration/D091/commands/python-owner-readonly-audit-20260930.json"
+  ],
+  "known_limitations": [
+    "The verified historical source_version is stale relative to the current view/source fingerprint, so current-version reads will cache miss and Python may rebuild; this writing path was not invoked.",
+    "The acceptance covers the latest stored date and its complete 5,565-row versioned slice, not every historical version.",
+    "Java intentionally does not publish, repair or refresh cache data; human semantic review remains pending."
+  ]
+}

@@ -50,6 +50,11 @@ public class ReadGroupConfiguration {
                 bindings.add(new ReadGroupReader.Binding<>(definition,
                         com.zoutrankil.data.domain.BacktestDailyCacheCoverage.class,
                         mapper::fromValues, () -> null));
+            } else if (definition.datasetId().equals("backtest_daily_cache")) {
+                var mapper = new com.zoutrankil.data.mapper.BacktestDailyCacheMapper();
+                bindings.add(new ReadGroupReader.Binding<>(definition,
+                        com.zoutrankil.data.domain.BacktestDailyCache.class,
+                        mapper::fromValues, () -> null));
             } else if (definition.capabilities().contains(DatasetDefinition.Capability.READ))
                 bindings.add(new ReadGroupReader.Binding<>(definition, DatasetValues.class,
                         java.util.function.Function.identity(), () -> null));
