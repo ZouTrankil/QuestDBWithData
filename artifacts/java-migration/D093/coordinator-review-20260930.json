@@ -1,0 +1,40 @@
+{
+  "task_id": "D093",
+  "reviewer": "primary-coordinator",
+  "reviewed_at": "2026-09-30T17:52:00+08:00",
+  "decision": "accepted_for_serial_progress",
+  "task_status": "verified",
+  "implementation_status": "retained_compatibility",
+  "human_review": "pending_review",
+  "review_basis": {
+    "predecessor_gate": "D092 coordinator gate accepted before D093",
+    "python_view_select_matches_live_catalog": true,
+    "view_catalog_status": "valid",
+    "view_sql_sha256": "3fdd642eec364d0443e8e8174614e4cf003c67b3226d1ff011c65d01fc9e85fa",
+    "source_unique_key_guard": "passed for stk_factor, stk_limit and stk_st_daily",
+    "sample_date": "2026-09-17",
+    "python_http_rows": 200,
+    "java_jdbc_typed_rows": 200,
+    "matched_field_values": 2600,
+    "mismatched_field_values": 0,
+    "missing_or_duplicate_keys": 0,
+    "read_group_typed_binding": "passed",
+    "source_row_counts_and_txns_unchanged": true,
+    "mapping_tests": "3 passed",
+    "local_questdb_read_acceptance": "1 passed"
+  },
+  "decision_rationale": "The current live ordinary view is valid and its SQL equals the Python authoritative definition. Java reads the existing view through a typed bounded contract; an independent DDL or writer was not introduced.",
+  "limitations_reviewed": [
+    "The Java/Python row comparison covers the first 200 ordered keys on one real date, not the full view history.",
+    "The view has no physical WAL, partition, DEDUP or designated timestamp despite the old audit snapshot's WAL field.",
+    "Human semantic review remains pending."
+  ],
+  "evidence": [
+    "docs/migration-tasks-20260929/results/D093.json",
+    "artifacts/java-migration/D093/commands/python-view-audit-20260930.json",
+    "artifacts/java-migration/D093/commands/java-live-read-20260930.json",
+    "artifacts/java-migration/D093/commands/gradle-tests-20260930.log"
+  ],
+  "next_task": "D094",
+  "next_directory": "11-derived"
+}

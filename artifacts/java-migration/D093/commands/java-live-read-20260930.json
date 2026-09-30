@@ -1,0 +1,30 @@
+{
+  "task_id" : "D093",
+  "checked_at" : "2026-09-30T09:46:17.598744400Z",
+  "mode" : "read_only",
+  "view" : "v_backtest_daily",
+  "python_view_sql_sha256" : "3fdd642eec364d0443e8e8174614e4cf003c67b3226d1ff011c65d01fc9e85fa",
+  "java_catalog_view_sql_sha256" : "3fdd642eec364d0443e8e8174614e4cf003c67b3226d1ff011c65d01fc9e85fa",
+  "sample_date" : "2026-09-17",
+  "python_qwp_rows" : 200,
+  "java_jdbc_typed_rows" : 200,
+  "matched_field_values" : 2600,
+  "mismatched_field_values" : 0,
+  "missing_or_duplicate_keys" : 0,
+  "read_group_typed_binding" : "verified",
+  "source_tables_before_after" : {
+    "after" : {
+      "stk_factor" : [ 10265031, 14 ],
+      "stk_limit" : [ 12327500, 76 ],
+      "stk_suspend" : [ 128414, 5 ],
+      "stk_st_daily" : [ 829876, 4 ]
+    },
+    "before" : {
+      "stk_factor" : [ 10265031, 14 ],
+      "stk_limit" : [ 12327500, 76 ],
+      "stk_suspend" : [ 128414, 5 ],
+      "stk_st_daily" : [ 829876, 4 ]
+    }
+  },
+  "writes" : "none"
+}
