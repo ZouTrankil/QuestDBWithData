@@ -1,0 +1,149 @@
+{
+  "task_id": "D094",
+  "status": "VERIFIED",
+  "checked_at": "2026-09-30T10:00:27.172402+00:00",
+  "database_operations": "SELECT only",
+  "python_owner": "MarketBarometerReadThroughCache",
+  "physical_types": {
+    "trade_date": "TIMESTAMP",
+    "dataset_id": "SYMBOL",
+    "source_version": "SYMBOL",
+    "row_count": "LONG",
+    "content_digest": "STRING"
+  },
+  "physical_upsert_keys": [
+    "dataset_id",
+    "source_version",
+    "trade_date"
+  ],
+  "designated_timestamp": "trade_date",
+  "selected_receipts": [
+    {
+      "dataset_id": "market_breadth_daily",
+      "cache_table": "market_breadth_daily_cache",
+      "trade_date": "2026-09-18",
+      "source_version": "b4e1289c73b2b09f6356269db7eca8b7a4fdd97559e3a4e04650b8f16afe18c3",
+      "receipt_row_count": 1,
+      "matching_cache_rows": 1,
+      "expected_content_digest": "4616d9ea908e8917c4ddcf9589071d396f712e21257c52e840298318212db371",
+      "actual_python_content_digest": "4616d9ea908e8917c4ddcf9589071d396f712e21257c52e840298318212db371",
+      "cache_rows": [
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4234,
+          "down_count": 1152,
+          "flat_count": 167,
+          "avg_pct_change": 1.5667630109850548,
+          "total_amount_yi": 20929.055246700013
+        }
+      ]
+    },
+    {
+      "dataset_id": "etf_market_overview_daily",
+      "cache_table": "etf_market_overview_daily_cache",
+      "trade_date": "2026-09-18",
+      "source_version": "867614b6e1fd1794a3ae204124560a8429154d659146f07c25db8f8e99eed851",
+      "receipt_row_count": 1,
+      "matching_cache_rows": 1,
+      "expected_content_digest": "1b98950be15cdcb0081e3bb6ec722ee7ecfda356982528dc11092b28ea66b5d7",
+      "actual_python_content_digest": "1b98950be15cdcb0081e3bb6ec722ee7ecfda356982528dc11092b28ea66b5d7",
+      "cache_rows": [
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "etf_count": 766,
+          "total_share": 117398455.14079998,
+          "total_size_yi": 16737.5072611578
+        }
+      ]
+    },
+    {
+      "dataset_id": "retail_sentiment_daily",
+      "cache_table": "retail_sentiment_daily_cache",
+      "trade_date": "2026-09-17",
+      "source_version": "60f2a1de36487a939dde420418d2fa3f254b981742429a03f690062c04d146a1",
+      "receipt_row_count": 1,
+      "matching_cache_rows": 1,
+      "expected_content_digest": "ff216ca96766cb975ae18819be77cd16049925d07f7bab81f4513acf58c3e029",
+      "actual_python_content_digest": "ff216ca96766cb975ae18819be77cd16049925d07f7bab81f4513acf58c3e029",
+      "cache_rows": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "avg_retail_ratio": 0.14872828742309663,
+          "avg_retail_entropy": 1.5887293306111185,
+          "total_retail_amount_yi": 17180.146931124484,
+          "total_retail_net_inflow_yi": -840.5730231482075,
+          "avg_rel_aggro": 0.47941408989623885,
+          "total_q1": 82969,
+          "total_q3": 102472,
+          "avg_wash_trade_ratio": 0.0890907463904475,
+          "total_spoof_count": 310560,
+          "total_manipulation_count": 310560,
+          "avg_mfi_score": 0.2899259408318833,
+          "total_main_net_yi": -162.51056215948003
+        }
+      ]
+    }
+  ],
+  "tables_before": {
+    "market_barometer_cache_coverage": {
+      "table_name": "market_barometer_cache_coverage",
+      "table_row_count": 2466,
+      "table_txn": 13,
+      "partitionBy": "MONTH",
+      "walEnabled": true
+    },
+    "market_breadth_daily_cache": {
+      "table_name": "market_breadth_daily_cache",
+      "table_row_count": 922,
+      "table_txn": 7,
+      "partitionBy": "MONTH",
+      "walEnabled": true
+    },
+    "etf_market_overview_daily_cache": {
+      "table_name": "etf_market_overview_daily_cache",
+      "table_row_count": 1181,
+      "table_txn": 6,
+      "partitionBy": "MONTH",
+      "walEnabled": true
+    },
+    "retail_sentiment_daily_cache": {
+      "table_name": "retail_sentiment_daily_cache",
+      "table_row_count": 338,
+      "table_txn": 1,
+      "partitionBy": "MONTH",
+      "walEnabled": true
+    }
+  },
+  "tables_after": {
+    "market_barometer_cache_coverage": {
+      "table_name": "market_barometer_cache_coverage",
+      "table_row_count": 2466,
+      "table_txn": 13,
+      "partitionBy": "MONTH",
+      "walEnabled": true
+    },
+    "market_breadth_daily_cache": {
+      "table_name": "market_breadth_daily_cache",
+      "table_row_count": 922,
+      "table_txn": 7,
+      "partitionBy": "MONTH",
+      "walEnabled": true
+    },
+    "etf_market_overview_daily_cache": {
+      "table_name": "etf_market_overview_daily_cache",
+      "table_row_count": 1181,
+      "table_txn": 6,
+      "partitionBy": "MONTH",
+      "walEnabled": true
+    },
+    "retail_sentiment_daily_cache": {
+      "table_name": "retail_sentiment_daily_cache",
+      "table_row_count": 338,
+      "table_txn": 1,
+      "partitionBy": "MONTH",
+      "walEnabled": true
+    }
+  },
+  "writes": "none"
+}

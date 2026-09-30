@@ -1,0 +1,37 @@
+{
+  "task_id": "D094",
+  "reviewer": "primary-coordinator",
+  "reviewed_at": "2026-09-30T18:12:00+08:00",
+  "decision": "accepted_for_serial_progress",
+  "task_status": "verified",
+  "implementation_status": "retained_compatibility",
+  "human_review": "pending_review",
+  "review_basis": {
+    "predecessor_gate": "D093 coordinator gate accepted before D094",
+    "python_three_product_owner_path_reviewed": true,
+    "physical_schema_and_complete_upsert_key_checked": true,
+    "distinct_products_verified": 3,
+    "nonempty_receipts_verified": 3,
+    "matching_cache_rows": 3,
+    "python_original_record_digests_match": 3,
+    "java_typed_receipts_match": 3,
+    "typed_read_group": "passed",
+    "coverage_and_three_cache_tables_unchanged": true,
+    "mapping_tests": "3 passed",
+    "local_questdb_read_acceptance": "1 passed"
+  },
+  "decision_rationale": "The Java contract only reads owner-published multi-product integrity receipts. Each selected real receipt matches the corresponding product cache row and exact Python digest; no competing writer or data mutation was introduced.",
+  "limitations_reviewed": [
+    "The audit sampled one latest stored version for each product, not all historical dates or current source fingerprints.",
+    "The zero-row branch was validated in code and mapping tests, but selected real receipts were nonempty.",
+    "Human semantic review remains pending."
+  ],
+  "evidence": [
+    "docs/migration-tasks-20260929/results/D094.json",
+    "artifacts/java-migration/D094/commands/python-owner-audit-20260930.json",
+    "artifacts/java-migration/D094/commands/java-live-read-20260930.json",
+    "artifacts/java-migration/D094/commands/gradle-tests-20260930.log"
+  ],
+  "next_task": "D095",
+  "next_directory": "11-derived"
+}

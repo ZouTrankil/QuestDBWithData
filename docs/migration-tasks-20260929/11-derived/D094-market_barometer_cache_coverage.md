@@ -1,6 +1,6 @@
 # D094 · market_barometer_cache_coverage
 
-- 状态：planned，尚未派发。
+- 状态：verified（`retained_compatibility`）；D093协调器验收门槛已通过，Python多dataset发布者、零行回执语义、Java只读模型及本机QuestDB三产品回执已验收。人工复核 `pending_review`。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D093`；前项验收后才执行本项。
@@ -25,7 +25,9 @@
 
 ## 本数据sync模式与注意事项
 
-Tushare不适用或入口未确认；先沿本卡源码引用核实实际owner和上游，已确认衍生表定义bounded materialize，服务结果表定义typed ingest，未确认则阻塞，不虚构API。
+本表是Python `MarketBarometerReadThroughCache` 对 `market_breadth_daily`、`etf_market_overview_daily`、`retail_sentiment_daily` 三种产品的共享完整性回执。发布者先写对应cache表，等WAL可见且原版摘要一致后发布coverage。每日期/版本缓存为0或1条；零行日期仍可发布 `row_count=0` 与空内容摘要。Java只读回执，不成为第二个publisher。
+
+2026-09-30本机QuestDB：coverage实表MONTH/WAL/DEDUP，5列，完整UPSERT KEY `(trade_date,dataset_id,source_version)`；2,466行/table_txn=13。三个产品最新已存非空回执分别为市场宽度2026-09-18、ETF概览2026-09-18、零售情绪2026-09-17，每个row_count=1，实际对应cache各1条且Python原版 `_record_digest` 与回执摘要一致。Java typed repository按完整键读出三条，ReadGroup一致；coverage及三张cache行数/table_txn前后不变。本次仅验证已存版本，不声明它们就是当前来源指纹；未触发可能写入的cache miss重建。
 
 Python调用/限流证据（仅源码事实，未逐接口验证线上配额）：
 
@@ -33,15 +35,15 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 单数据交付清单
 
-- [ ] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
-- [ ] D02：本表业务Key、物理去重键、冲突/修订规则。
-- [ ] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
-- [ ] D04：本表按键/范围的typed read与分页，接入读取组合。
-- [ ] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
-- [ ] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
-- [ ] D07：注册 `market_barometer_cache_coverage` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
-- [ ] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
-- [ ] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
+- [x] D01：5列只读业务record和逐字段mapper，`row_count` 允许0或1、SHA-256摘要显式校验。
+- [x] D02：完整业务Key和物理DEDUP键均为 `(trade_date,dataset_id,source_version)`；同版本内容校验与修订由Python publisher负责。
+- [x] D03：现场确认 `trade_date` designated TIMESTAMP、MONTH/WAL/DEDUP及完整UPSERT KEY；无DDL变更。
+- [x] D04：按完整Key、日期和范围的有界typed read，稳定cursor分页；ReadGroup三产品强类型绑定通过。
+- [x] D05：N/A；coverage是Python在cache内容核验后发布的断言，Java直写会伪造或竞争；DatasetDefinition仅READ。
+- [x] D06：N/A；Python `MarketBarometerReadThroughCache` 是三产品唯一readthrough/materialize owner；无独立Java source/sync。
+- [x] D07：注册READ-only DatasetDefinition，不创建无来源所有权的Java SyncJobDefinition。
+- [x] D08：共享有界reader负责页长、超时和cursor；Python publisher的WAL可见性及摘要保护按真实已存回执核验。网络限流、写入重试/断点/取消对Java只读裁决不适用。
+- [x] D09：本机QuestDB三产品各一条真实非空回执及cache记录、Python原版摘要全匹配；Java typed read/ReadGroup通过，四表行数及txn不变。结果见 `../results/D094.json`。
 
 ## 可观察验收
 
@@ -53,11 +55,11 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 | 当前列 | 快照类型 | 任务要求 |
 | --- | --- | --- |
-| `trade_date` | `TIMESTAMP` | 待逐字段映射与语义核验 |
-| `dataset_id` | `SYMBOL` | 待逐字段映射与语义核验 |
-| `source_version` | `SYMBOL` | 待逐字段映射与语义核验 |
-| `row_count` | `LONG` | 待逐字段映射与语义核验 |
-| `content_digest` | `STRING` | 待逐字段映射与语义核验 |
+| `trade_date` | `TIMESTAMP` | `LocalDate`；交易所business date，UTC零点仅为存储载体；键 |
+| `dataset_id` | `SYMBOL` | `String`；三产品之一；键 |
+| `source_version` | `SYMBOL` | `String`；来源与视图指纹SHA-256；键 |
+| `row_count` | `LONG` | `long`；每日版本化cache记录数，允许0或1 |
+| `content_digest` | `STRING` | `String`；Python规范化记录或空内容的SHA-256 |
 
 ## 只读参考入口
 
@@ -70,13 +72,13 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 本任务容错、实际验收与完成登记（必做）
 
-- [ ] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
-- [ ] 验证本任务适用的限流/超时重试、分页异常、取消和断点恢复；已ACK但未回读一致的写入保持未验证。
-- [ ] 默认增量，记录checkpoint前后与有限修订窗口；sync有数据才写，没有数据明确记0，不用假数据充数。
-- [ ] 对本任务实际目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留请求范围、查询/参数、返回样本和汇总。
-- [ ] 首次非空真实来源写入、同范围幂等重跑及再次增量验证有记录；本任务为View/MV或功能时按公共契约对应的实际验收方式执行。
-- [ ] 更新[逐项完成表](../completion-register.md)的 `D094` 行及 `results/D094.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
-- [ ] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
+- [x] Python发布者、三产品规格、QuestDB连接、实表schema/键和真实最新已存回执已核实。
+- [x] Java有界读和Python publisher摘要/WAL保护已核验；Java没有网络取源或写入。
+- [x] checkpoint、增量窗口、幂等写入对只读回执不适用；本次写入0行。
+- [x] QuestDB按三个完整版本化键SELECT，对应cache记录与Python原版摘要逐项相等。
+- [x] 首次非空Java写入验收对 `retained_compatibility` 不适用；以三条真实非空已发布回执验收。
+- [x] 已更新完成表和 `results/D094.json`，保留Python/Java/QuestDB证据。
+- [x] 状态为verified（只读兼容与已存回执完整性），人工复核 `pending_review`。
 
 ## Orca执行提示
 

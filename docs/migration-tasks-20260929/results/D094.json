@@ -1,0 +1,121 @@
+{
+  "task_id": "D094",
+  "dataset_id": "market_barometer_cache_coverage",
+  "job_id": null,
+  "implementation_status": "retained_compatibility",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "logical_date": "2026-09-30",
+  "finished_at": "2026-09-30T18:12:00+08:00",
+  "disposition": {
+    "decision": "retained_compatibility",
+    "reason": "Python MarketBarometerReadThroughCache owns three cache tables and publishes shared coverage only after matching cache rows are WAL-visible and content-verified. Java must not create competing integrity receipts.",
+    "java_surface": "Five-field typed READ-only definition, complete versioned key, bounded repository and ReadGroup binding.",
+    "java_writer_or_sync_job": null,
+    "write_rejection": "DatasetDefinition declares READ only; direct Java WRITE is rejected."
+  },
+  "contract": {
+    "business_key": ["trade_date", "dataset_id", "source_version"],
+    "physical_dedup_key": ["trade_date", "dataset_id", "source_version"],
+    "designated_timestamp": "trade_date",
+    "partition": "MONTH",
+    "wal": true,
+    "dedup": true,
+    "physical_columns": {
+      "trade_date": "TIMESTAMP",
+      "dataset_id": "SYMBOL",
+      "source_version": "SYMBOL",
+      "row_count": "LONG",
+      "content_digest": "STRING"
+    },
+    "capabilities": ["READ"],
+    "zero_row_semantics": "Python may publish row_count=0 and the empty-frame digest for a date with no cache record; Java model accepts zero and one, rejects larger values."
+  },
+  "python_owner": {
+    "class": "MarketBarometerReadThroughCache",
+    "products": ["market_breadth_daily", "etf_market_overview_daily", "retail_sentiment_daily"],
+    "publisher": "_publish writes each product cache, waits for WAL-visible rows and exact digest, then writes shared coverage.",
+    "reader": "_load_cached selects exact (date, dataset_id, source_version) receipt and validates zero-or-one cache record with _record_digest.",
+    "checkpoint": "Not an independent source-ingest checkpoint; no Java checkpoint applies."
+  },
+  "target": {
+    "formal_table": "market_barometer_cache_coverage",
+    "related_cache_tables": ["market_breadth_daily_cache", "etf_market_overview_daily_cache", "retail_sentiment_daily_cache"],
+    "formal_table_mutated": false,
+    "related_cache_tables_mutated": false,
+    "row_count_and_txn_before_after": {
+      "market_barometer_cache_coverage": [[2466, 13], [2466, 13]],
+      "market_breadth_daily_cache": [[922, 7], [922, 7]],
+      "etf_market_overview_daily_cache": [[1181, 6], [1181, 6]],
+      "retail_sentiment_daily_cache": [[338, 1], [338, 1]]
+    },
+    "written_rows": 0,
+    "reason_no_isolated_write_target": "The selected disposition verifies existing Python-published receipts and matching cache records by SELECT only."
+  },
+  "read_acceptance": {
+    "checked_at": "2026-09-30T18:09:25+08:00",
+    "database_access": "Configured local QuestDB through HTTP/QWP and JDBC; SELECT only.",
+    "selected_receipts": [
+      {
+        "dataset_id": "market_breadth_daily",
+        "trade_date": "2026-09-18",
+        "source_version": "b4e1289c73b2b09f6356269db7eca8b7a4fdd97559e3a4e04650b8f16afe18c3",
+        "receipt_row_count": 1,
+        "matching_cache_rows": 1,
+        "content_digest": "4616d9ea908e8917c4ddcf9589071d396f712e21257c52e840298318212db371"
+      },
+      {
+        "dataset_id": "etf_market_overview_daily",
+        "trade_date": "2026-09-18",
+        "source_version": "867614b6e1fd1794a3ae204124560a8429154d659146f07c25db8f8e99eed851",
+        "receipt_row_count": 1,
+        "matching_cache_rows": 1,
+        "content_digest": "1b98950be15cdcb0081e3bb6ec722ee7ecfda356982528dc11092b28ea66b5d7"
+      },
+      {
+        "dataset_id": "retail_sentiment_daily",
+        "trade_date": "2026-09-17",
+        "source_version": "60f2a1de36487a939dde420418d2fa3f254b981742429a03f690062c04d146a1",
+        "receipt_row_count": 1,
+        "matching_cache_rows": 1,
+        "content_digest": "ff216ca96766cb975ae18819be77cd16049925d07f7bab81f4513acf58c3e029"
+      }
+    ],
+    "python_original_record_digest_matches": 3,
+    "java_typed_receipts_match": 3,
+    "typed_read_group": "passed",
+    "current_source_versions_checked": false
+  },
+  "checks": {
+    "d01_five_field_model_and_mapping": true,
+    "d02_complete_three_part_key": true,
+    "d03_month_wal_dedup_schema_confirmed_no_ddl": true,
+    "d04_bounded_typed_key_date_range_read_and_read_group": true,
+    "d05_java_write": "not_applicable_by_retained_compatibility_decision",
+    "d06_java_source_sync": "not_applicable_python_owner_retained",
+    "d07_dataset_registered_sync_job": "read_only_dataset_registered; no_java_sync_job",
+    "d08_read_bounds_and_python_owner_integrity_checks": true,
+    "d09_three_nonempty_live_receipt_digest_comparisons": true,
+    "human_review": "pending_review"
+  },
+  "build_and_test": {
+    "java_toolchain": 24,
+    "full_workspace_compileJava": "passed",
+    "full_workspace_compileTestJava": "passed",
+    "focused_mapping_tests": "3 passed, 0 failed",
+    "focused_live_tests": "1 passed, 0 failed"
+  },
+  "evidence": [
+    "artifacts/java-migration/D094/commands/python-owner-audit-20260930.json",
+    "artifacts/java-migration/D094/commands/java-live-read-20260930.json",
+    "artifacts/java-migration/D094/commands/gradle-tests-20260930.log"
+  ],
+  "known_limitations": [
+    "The live audit covers the latest selected stored receipt for each of the three products; current source-version cache readiness was not computed.",
+    "The zero-row publication branch was confirmed from Python source and Java validation tests, but the selected real receipts each contained one row.",
+    "Java intentionally does not publish or repair cache coverage; human semantic review remains pending."
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "task_id" : "D094",
+  "checked_at" : "2026-09-30T10:09:25.429427300Z",
+  "mode" : "read_only",
+  "coverage_table" : "market_barometer_cache_coverage",
+  "physical_partition" : "MONTH",
+  "wal_enabled" : true,
+  "physical_types" : {
+    "content_digest" : "STRING",
+    "dataset_id" : "SYMBOL",
+    "row_count" : "LONG",
+    "source_version" : "SYMBOL",
+    "trade_date" : "TIMESTAMP"
+  },
+  "physical_upsert_keys" : [ "dataset_id", "source_version", "trade_date" ],
+  "designated_timestamp" : "trade_date",
+  "selected_dataset_ids" : [ "market_breadth_daily", "etf_market_overview_daily", "retail_sentiment_daily" ],
+  "typed_receipts" : 3,
+  "python_digest_matches" : 3,
+  "read_group_typed_binding" : "verified",
+  "tables_before_after" : {
+    "after" : {
+      "market_barometer_cache_coverage" : [ 2466, 13 ],
+      "market_breadth_daily_cache" : [ 922, 7 ],
+      "etf_market_overview_daily_cache" : [ 1181, 6 ],
+      "retail_sentiment_daily_cache" : [ 338, 1 ]
+    },
+    "before" : {
+      "market_barometer_cache_coverage" : [ 2466, 13 ],
+      "market_breadth_daily_cache" : [ 922, 7 ],
+      "etf_market_overview_daily_cache" : [ 1181, 6 ],
+      "retail_sentiment_daily_cache" : [ 338, 1 ]
+    }
+  },
+  "writes" : "none"
+}
