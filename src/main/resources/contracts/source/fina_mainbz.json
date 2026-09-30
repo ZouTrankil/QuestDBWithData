@@ -1,0 +1,25 @@
+{
+  "dataset": "fina_mainbz",
+  "version": "fina_mainbz-v1",
+  "endpoint": "fina_mainbz",
+  "dateParameter": "period",
+  "sourceDate": "end_date",
+  "timestampColumn": "end_date",
+  "pageSize": 100,
+  "paged": true,
+  "emptyAllowed": true,
+  "maxRows": 4000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=81; one explicit ts_code per scope; collect P and D categories independently and reject collisions under legacy key",
+  "columns": [
+    { "source": "ts_code", "target": "ts_code", "type": "SYMBOL", "key": true },
+    { "source": "end_date", "target": "end_date", "type": "TIMESTAMP", "key": true },
+    { "source": "bz_item", "target": "bz_item", "type": "STRING", "key": true },
+    { "source": "bz_sales", "target": "bz_sales", "type": "DOUBLE", "key": false },
+    { "source": "bz_profit", "target": "bz_profit", "type": "DOUBLE", "key": false },
+    { "source": "bz_cost", "target": "bz_cost", "type": "DOUBLE", "key": false },
+    { "source": "curr_type", "target": "curr_type", "type": "STRING", "key": false },
+    { "source": "update_flag", "target": "update_flag", "type": "STRING", "key": false },
+    { "source": "bz_code", "target": "bz_code", "type": "STRING", "key": false }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "dataset": "shibor_lpr",
+  "definitionVersion": "shibor_lpr-v1",
+  "verifiedAtLocal": "2026-09-30 Asia/Shanghai",
+  "acceptanceScope": "one published monthly observation; not complete monthly history",
+  "provider": {
+    "name": "Tushare Pro",
+    "endpoint": "shibor_lpr",
+    "requestedStart": "2026-08-20",
+    "requestedEnd": "2026-08-20",
+    "rows": 1,
+    "pages": 1,
+    "completeCoverage": true,
+    "sourceFingerprint": "602cbc15614f0d6174de87ad1f072593920ab5158a478921f35ba580be0ffab0",
+    "sourceArtifactSha256": "602cbc15614f0d6174de87ad1f072593920ab5158a478921f35ba580be0ffab0"
+  },
+  "sample": {
+    "date": "2026-08-20",
+    "1y": 3.0,
+    "5y": 3.5
+  },
+  "questdb": {
+    "isolatedTarget": "jdb_test_0e3b49fae2df4b09_shibor_lpr_99bb8b59ed74930a3241e3363eac25e34f2f2988f51dbd4b779ebee2ca4cf3de",
+    "businessState": "VERIFIED",
+    "verifiedRows": 1,
+    "physicallyVisible": true,
+    "qualityPassed": true,
+    "uniqueKeys": true,
+    "sendAttempts": 1,
+    "repeatLaunchDidNotResend": true,
+    "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/3d871a82-159a-4c28-a866-da464eaed12b/writes/99bb8b59ed74930a3241e3363eac25e34f2f2988f51dbd4b779ebee2ca4cf3de/certificate.json"
+  },
+  "physicalSchemaVerified": false,
+  "limitations": [
+    "One published date only",
+    "No complete month-by-month backfill or publication checkpoint",
+    "No Python frozen-output comparison",
+    "Production table not probed or modified"
+  ],
+  "credentialHandling": "token read from local application.yml in memory; omitted from report and artifacts"
+}

@@ -1,0 +1,30 @@
+{
+  "dataset": "us_tbr",
+  "version": "us_tbr-v1",
+  "endpoint": "us_tbr",
+  "dateParameter": "date",
+  "sourceDate": "date",
+  "timestampColumn": "date",
+  "pageSize": 2000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 2000,
+  "maxBytes": 8388608,
+  "sourceDocumentation": "https://www.tushare.pro/document/2?doc_id=221; exact-date snapshot; official endpoint cap is 2000 rows; native request budget remains bounded by shared Tushare limiter",
+  "columns": [
+    { "source": "date", "target": "date", "type": "TIMESTAMP", "key": true },
+    { "source": "w4_bd", "target": "w4_bd", "type": "DOUBLE", "key": false },
+    { "source": "w4_ce", "target": "w4_ce", "type": "DOUBLE", "key": false },
+    { "source": "w8_bd", "target": "w8_bd", "type": "DOUBLE", "key": false },
+    { "source": "w8_ce", "target": "w8_ce", "type": "DOUBLE", "key": false },
+    { "source": "w13_bd", "target": "w13_bd", "type": "DOUBLE", "key": false },
+    { "source": "w13_ce", "target": "w13_ce", "type": "DOUBLE", "key": false },
+    { "source": "w17_bd", "target": "w17_bd", "type": "DOUBLE", "key": false },
+    { "source": "w17_ce", "target": "w17_ce", "type": "DOUBLE", "key": false },
+    { "source": "w26_bd", "target": "w26_bd", "type": "DOUBLE", "key": false },
+    { "source": "w26_ce", "target": "w26_ce", "type": "DOUBLE", "key": false },
+    { "source": "w52_bd", "target": "w52_bd", "type": "DOUBLE", "key": false },
+    { "source": "w52_ce", "target": "w52_ce", "type": "DOUBLE", "key": false }
+  ],
+  "partitionBy": "YEAR"
+}

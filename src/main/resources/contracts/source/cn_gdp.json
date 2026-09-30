@@ -1,0 +1,26 @@
+{
+  "dataset": "cn_gdp",
+  "version": "cn_gdp-v1",
+  "endpoint": "cn_gdp",
+  "dateParameter": "q",
+  "sourceDate": "report_date",
+  "timestampColumn": "report_date",
+  "pageSize": 1000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 1000,
+  "maxBytes": 8388608,
+  "sourceDocumentation": "https://tushare.pro/wctapi/documents/227.md; one exact quarter; quarter is transformed to the legacy quarter-end report_date",
+  "columns": [
+    { "source": "quarter", "target": "quarter", "type": "STRING", "key": false },
+    { "source": "report_date", "target": "report_date", "type": "TIMESTAMP", "key": true },
+    { "source": "gdp", "target": "gdp", "type": "DOUBLE", "key": false },
+    { "source": "gdp_yoy", "target": "gdp_yoy", "type": "DOUBLE", "key": false },
+    { "source": "pi", "target": "pi", "type": "DOUBLE", "key": false },
+    { "source": "pi_yoy", "target": "pi_yoy", "type": "DOUBLE", "key": false },
+    { "source": "si", "target": "si", "type": "DOUBLE", "key": false },
+    { "source": "si_yoy", "target": "si_yoy", "type": "DOUBLE", "key": false },
+    { "source": "ti", "target": "ti", "type": "DOUBLE", "key": false },
+    { "source": "ti_yoy", "target": "ti_yoy", "type": "DOUBLE", "key": false }
+  ]
+}

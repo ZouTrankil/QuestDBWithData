@@ -1,0 +1,84 @@
+{
+  "at_utc": "2026-09-29T10:56:21.991823+00:00",
+  "overall_requirement_status": "incomplete",
+  "commands": [
+    {
+      "command": "./gradlew test installBatchDist batchDistZip --console=plain",
+      "outcome": "passed",
+      "counts": {
+        "tests": 188,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 21
+      }
+    },
+    {
+      "command": "JDB_QUESTDB_TEST_URL=http://100.97.201.8:9000 ./gradlew test --tests com.zoutrankil.batch.QuestDbProtocolTest",
+      "outcome": "passed",
+      "tests": 1,
+      "kind": "real-postgresql-and-questdb-protocol-test"
+    },
+    {
+      "command": "build/install/QuestDBWithData-batch/bin/questdb-batch --jdb.production-enabled=true",
+      "outcome": "expected-startup-rejection-before-database-connect"
+    }
+  ],
+  "new_tests_in_full_run": {
+    "tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1
+  },
+  "new_test_classes": [
+    {
+      "name": "com.zoutrankil.batch.ContractsTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.zoutrankil.batch.PostgresRuntimeTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.zoutrankil.batch.QuestDbProtocolTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    }
+  ],
+  "artifacts": {
+    "build/distributions/QuestDBWithData-batch-0.1.0.zip": {
+      "sha256": "85969a7055e74372a91cdba348ce99762f5b29f52a6264bdec7b1bf0554aefd8",
+      "bytes": 54949285
+    },
+    "build/libs/QuestDBWithData-0.1.0-batch.jar": {
+      "sha256": "025deddb223c136a4c19aa2cea41446cea299cc85f42c9cf4f81194ac7f237cf",
+      "bytes": 782603
+    },
+    "gradle.lockfile": {
+      "sha256": "f54822aae7b3e40614bc95e56c0fb3150c5f4a8b9a751ae18bcad13dc5ca2f59",
+      "bytes": 12877
+    }
+  },
+  "not_run": [
+    "full per-product frozen-source comparison",
+    "full required crash/WAL/child recovery matrix",
+    "production Python integration (excluded)",
+    "capacity/SLA benchmark",
+    "persistent deployment and upgrade/rollback drills"
+  ],
+  "side_effects": {
+    "reference_repository_writes": false,
+    "production_table_writes": false,
+    "dedicated_questdb_test_table_created": true,
+    "external_notifications": false,
+    "permanent_schedules_enabled": false,
+    "temporary_real_postgresql_processes": "closed after tests"
+  }
+}

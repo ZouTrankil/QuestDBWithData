@@ -14,9 +14,16 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3'
     implementation 'org.xerial:sqlite-jdbc:3.53.4.0'
+    implementation 'org.apache.commons:commons-compress:1.28.0'
+    implementation 'org.tukaani:xz:1.12'
+    // PostgreSQL JDBC remains for the legacy QuestDB PGWire adapter in the main app.
     runtimeOnly 'org.postgresql:postgresql:42.7.7'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-webclient'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.batch:spring-batch-core'
+    implementation 'org.springframework:spring-context-support'
+    implementation 'org.quartz-scheduler:quartz'
     implementation 'org.questdb:questdb-client:1.3.8'
     // D021 reads the provider's bounded legacy .xls constituent-weight files.
     implementation 'org.apache.poi:poi:5.5.1'
@@ -30,6 +37,15 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+configurations {
+    batchRuntimeClasspath {
+        extendsFrom runtimeClasspath
+        // The legacy application uses PostgreSQL JDBC only to speak QuestDB PGWire.
+        // The isolated Batch service uses SQLite and must not package this driver.
+        exclude group: 'org.postgresql'
+    }
+}
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(24)
@@ -37,10 +53,88 @@ java {
 }
 
 application {
-    mainClass = 'com.zoutrankil.questdbwithdata.QuestDbWithDataApplication'
+    mainClass = 'com.zoutrankil.data.QuestDataApplication'
+}
+
+tasks.register('webRun', JavaExec) {
+    group = 'application'
+    description = 'Start the external Spring WebFlux API on the configured HTTP port.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.zoutrankil.data.QuestDataApplication'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
     systemProperty 'cli.runtimeClasspath', sourceSets.main.runtimeClasspath.asPath
+}
+
+tasks.register('batchRun', JavaExec) {
+    group = 'application'
+    description = 'Start the isolated SQLite-backed batch runtime (no legacy components).'
+    classpath = sourceSets.main.output + configurations.batchRuntimeClasspath
+    mainClass = 'com.zoutrankil.batch.BatchApplication'
+}
+
+dependencyLocking { lockAllConfigurations() }
+
+tasks.register('batchControl', JavaExec) {
+    group = 'application'
+    classpath = sourceSets.main.output + configurations.batchRuntimeClasspath
+    mainClass = 'com.zoutrankil.batch.BatchControl'
+}
+
+// Isolated distribution from this same project; do not package legacy application.yml credentials.
+tasks.register('batchRuntimeJar', Jar) {
+    archiveClassifier = 'batch'
+    from(sourceSets.main.output) { exclude 'application.yml' }
+}
+
+tasks.register('batchStartScripts', CreateStartScripts) {
+    applicationName = 'questdb-batch'
+    mainClass = 'com.zoutrankil.batch.BatchApplication'
+    classpath = files(tasks.named('batchRuntimeJar').flatMap { it.archiveFile }) + configurations.batchRuntimeClasspath
+    outputDir = layout.buildDirectory.dir('batch-scripts').get().asFile
+}
+tasks.register('batchControlScripts', CreateStartScripts) {
+    applicationName = 'questdb-batch-control'
+    mainClass = 'com.zoutrankil.batch.BatchControl'
+    classpath = files(tasks.named('batchRuntimeJar').flatMap { it.archiveFile }) + configurations.batchRuntimeClasspath
+    outputDir = layout.buildDirectory.dir('batch-control-scripts').get().asFile
+}
+distributions {
+    batch {
+        distributionBaseName = 'QuestDBWithData-batch'
+        contents {
+            from(tasks.named('batchStartScripts')) { into 'bin'; fileMode = 0755 }
+            from(tasks.named('batchControlScripts')) { into 'bin'; fileMode = 0755 }
+            from(tasks.named('batchRuntimeJar')) { into 'lib' }
+            from(configurations.batchRuntimeClasspath) { into 'lib' }
+            from('deploy/batch') { into 'config-examples' }
+        }
+    }
+}
+
+tasks.register('verifyBatchDistributionDatabaseDrivers') {
+    group = 'verification'
+    description = 'Assert the standalone Batch distribution uses SQLite and does not package PostgreSQL JDBC.'
+    dependsOn tasks.named('batchDistZip')
+    doLast {
+        def archive = tasks.named('batchDistZip').get().archiveFile.get().asFile
+        def entries = zipTree(archive).matching { include '**/*.jar' }.files.collect { it.name }
+        if (!entries.any { it.startsWith('sqlite-jdbc-') }) {
+            throw new GradleException("Batch distribution is missing SQLite JDBC: ${archive}")
+        }
+        if (entries.any { it.startsWith('postgresql-') }) {
+            throw new GradleException("Batch distribution must not contain PostgreSQL JDBC: ${archive}")
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('verifyBatchDistributionDatabaseDrivers')
+}
+
+tasks.register('resolveDependencyLocks') {
+    description = 'Resolve and freeze all resolvable dependency configurations; use --write-locks.'
+    doLast { configurations.findAll { it.canBeResolved }.each { it.resolve() } }
 }

@@ -1,0 +1,20 @@
+{
+  "dataset": "disclosure_date",
+  "status": "implemented-awaiting-full-acceptance",
+  "contract": "disclosure_date-v1",
+  "validation": {
+    "targeted_tests": "NativeSourceTest focused cases passed; full-suite validation pending",
+    "checks": [
+      "one exact quarter-end end_date per request",
+      "unpaged response bounded at 6000 rows",
+      "physical timestamp ann_date kept distinct from requested report end_date",
+      "business key (ts_code,ann_date,end_date)",
+      "empty matching quarter is a valid source result",
+      "bad quarter, malformed dates and out-of-scope rows are rejected"
+    ]
+  },
+  "live_source_requested": false,
+  "questdb_written": false,
+  "physical_schema_verified": false,
+  "notes": "No credentials or external database were used. Live Tushare sampling, isolated QuestDB typed write/readback, legacy Python parity, full historical coverage and deployed physical schema verification remain outstanding."
+}

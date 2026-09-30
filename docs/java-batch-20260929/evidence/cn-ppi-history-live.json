@@ -1,0 +1,38 @@
+{
+  "dataset": "cn_ppi",
+  "job": "source_cn_ppi",
+  "requestedRange": {
+    "start": "2016-01-01",
+    "end": "2026-07-01"
+  },
+  "providerRequest": {
+    "start_m": "201601",
+    "end_m": "202607"
+  },
+  "sourceRows": 127,
+  "sourcePages": 1,
+  "continuousMonthCoverage": true,
+  "persistedMonthlyCoverage": {
+    "dataset": "cn_ppi",
+    "definitionVersion": "cn_ppi-v1",
+    "scopeIdentity": "6b798fb1a6ab5c51af92d13722ba268bdaa4bed04cff578824c8541c32d566fd",
+    "verifiedSegments": [
+      {
+        "start": "2016-01-01",
+        "end": "2026-07-01",
+        "months": 127
+      }
+    ],
+    "verifiedMonths": 127
+  },
+  "verifiedRows": 127,
+  "physicallyVisible": true,
+  "qualityPassed": true,
+  "state": "VERIFIED",
+  "sendAttempts": 1,
+  "dataPostCount": 1,
+  "questDbTable": "jdb_test_04d75d7af55c4ee2_cn_ppi_5868c2e56e1a52306c76cb817d9d2a485a98658fc830610e1a71570576e1069b",
+  "sqliteMetadata": "temporary test-local SQLite file",
+  "pythonBaselineCompared": false,
+  "sideEffects": "Wrote 127 bounded PPI observations to an isolated jdb_test_* QuestDB table and temporary SQLite metadata file; no production target or schedule changed."
+}

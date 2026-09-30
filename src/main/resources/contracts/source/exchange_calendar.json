@@ -1,0 +1,20 @@
+{
+  "dataset": "exchange_calendar",
+  "version": "exchange_calendar-v1",
+  "endpoint": "trade_cal",
+  "dateParameter": "start_date",
+  "sourceDate": "cal_date",
+  "timestampColumn": "cal_date",
+  "pageSize": 367,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 367,
+  "maxBytes": 8388608,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=26; Java owner currently admits SSE and SZSE",
+  "columns": [
+    { "source": "exchange", "target": "exchange", "type": "SYMBOL", "key": true },
+    { "source": "cal_date", "target": "cal_date", "type": "TIMESTAMP", "key": true },
+    { "source": "is_open", "target": "is_open", "type": "INT", "key": false },
+    { "source": "pretrade_date", "target": "pretrade_date", "type": "STRING", "key": false }
+  ]
+}

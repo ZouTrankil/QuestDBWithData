@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "dataset": "hibor",
+  "definitionVersion": "hibor-v1",
+  "verifiedAtLocal": "2026-09-30 Asia/Shanghai",
+  "acceptanceScope": "one HIBOR observation date; not a complete daily series",
+  "provider": {
+    "name": "Tushare Pro",
+    "endpoint": "hibor",
+    "requestedStart": "2026-09-28",
+    "requestedEnd": "2026-09-28",
+    "rows": 1,
+    "pages": 1,
+    "completeCoverage": true,
+    "sourceFingerprint": "ccaa7ac7189e8135a627f69288511814b6ba3dc46ed3a18b516275b5e3baaf1d",
+    "sourceArtifactSha256": "ccaa7ac7189e8135a627f69288511814b6ba3dc46ed3a18b516275b5e3baaf1d"
+  },
+  "sample": {
+    "timestamp": "2026-09-28",
+    "on": 2.7,
+    "1w": 3.25548,
+    "2w": 3.08649,
+    "1m": 3.0175,
+    "2m": 3.13268,
+    "3m": 3.23435,
+    "6m": 3.52964,
+    "12m": 3.13268
+  },
+  "questdb": {
+    "isolatedTarget": "jdb_test_fa5233c4424f42d3_hibor_59155b5982415f213fdb9f78d5a1b715cfe84f49df447ae258009a0408923c5f",
+    "businessState": "VERIFIED",
+    "verifiedRows": 1,
+    "physicallyVisible": true,
+    "qualityPassed": true,
+    "uniqueKeys": true,
+    "sendAttempts": 1,
+    "repeatLaunchDidNotResend": true,
+    "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/2c1a3ec1-2318-4a9a-a430-a7ab58558c90/writes/59155b5982415f213fdb9f78d5a1b715cfe84f49df447ae258009a0408923c5f/certificate.json",
+    "numericLeadingColumnsVerified": [
+      "1w",
+      "2w",
+      "1m",
+      "2m",
+      "3m",
+      "6m",
+      "12m"
+    ]
+  },
+  "physicalSchemaVerified": false,
+  "limitations": [
+    "One date only",
+    "No full daily history or calendar integration",
+    "No incremental checkpoint/revision window",
+    "No legacy Python frozen-output comparison",
+    "Production table not probed or modified"
+  ],
+  "credentialHandling": "token read from local application.yml in memory; omitted from report and artifacts"
+}

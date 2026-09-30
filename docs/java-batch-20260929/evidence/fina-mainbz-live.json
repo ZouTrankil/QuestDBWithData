@@ -1,0 +1,94 @@
+{
+  "acceptedAtUtc": "2026-09-30T00:00:00Z",
+  "dataset": "fina_mainbz",
+  "definitionVersion": "fina_mainbz-v1",
+  "logicalDate": "2026-06-30",
+  "universeVersion": "frozen-universe-v1",
+  "expectedCodes": [
+    "000001.SZ"
+  ],
+  "sourceKind": "real-tushare",
+  "endpoint": "fina_mainbz",
+  "reportPeriod": "2026Q2",
+  "sourceRows": 32,
+  "sourcePages": 2,
+  "categoryRowCounts": {
+    "D": 6,
+    "P": 26
+  },
+  "completeCoverage": true,
+  "sourceFingerprint": "577f7ceab90fabc17672bc605d396d6bb888023a06d4207cf314710b822902d7",
+  "scopeIdentity": "07c4bbdddf77899f43461a37942b5b6aa50eaa3955a91994c65b8a652552d878",
+  "businessState": "VERIFIED",
+  "verifiedRows": 32,
+  "uniqueKeys": true,
+  "physicallyVisible": true,
+  "qualityPassed": true,
+  "sendAttempts": 1,
+  "repeatLaunchPreservedSingleSend": true,
+  "isolatedTarget": "jdb_test_6d15c46594a94837_fina_mainbz_0b9cabef137c4f061118bfb80e5a44a1b8333d7f9a305a105b072f0f2e815998",
+  "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/358cc1bb-c602-4194-97c1-e920589afa87/writes/0b9cabef137c4f061118bfb80e5a44a1b8333d7f9a305a105b072f0f2e815998/certificate.json",
+  "sourceArtifact": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/358cc1bb-c602-4194-97c1-e920589afa87/sources/577f7ceab90fabc17672bc605d396d6bb888023a06d4207cf314710b822902d7.json",
+  "physicalColumns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "end_date",
+      "target": "end_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "bz_item",
+      "target": "bz_item",
+      "type": "STRING",
+      "key": true
+    },
+    {
+      "source": "bz_sales",
+      "target": "bz_sales",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "bz_profit",
+      "target": "bz_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "bz_cost",
+      "target": "bz_cost",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "curr_type",
+      "target": "curr_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "update_flag",
+      "target": "update_flag",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "bz_code",
+      "target": "bz_code",
+      "type": "STRING",
+      "key": false
+    }
+  ],
+  "legacyKeySemantics": "Business key remains ts_code,end_date,bz_item. P and D are queried separately; category disagreement under the same key aborts the whole frozen source instead of silently dropping one category.",
+  "gradleTest": "./gradlew --no-daemon cleanTest test --tests com.zoutrankil.batch.NativeProducerLiveTest --console=plain with JDB_SOURCE_LIVE=1 and JDB_SOURCE_DATASETS=fina_mainbz",
+  "testResult": "BUILD SUCCESSFUL; real 000001.SZ 2026-06-30 P/D source pages were frozen, written to a namespaced isolated QuestDB target, read back and verified; repeat launch sent once.",
+  "reportSha256": "f98ad9e70308111dc44a3a089056c81402b01f08890deb96ff9a522711566641",
+  "credentialsRecorded": false,
+  "scopeLimit": "One security and one report period only. Full-market VIP producer, incremental report-period checkpointing, historical restatement comparison and old Python frozen-output parity remain open."
+}

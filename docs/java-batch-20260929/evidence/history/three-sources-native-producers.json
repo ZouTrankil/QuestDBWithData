@@ -1,0 +1,411 @@
+{
+  "products": [
+    {
+      "dataset": "daily",
+      "code": "000001.SZ",
+      "source": {
+        "fingerprint": "2e6ee70e6b4bd6d68e9e781f96f07a045aabaff9c705e0fc0b5dbc971690a431",
+        "artifact": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e4031197-d32d-4f5f-83a3-43f27b1dbf31/sources/2e6ee70e6b4bd6d68e9e781f96f07a045aabaff9c705e0fc0b5dbc971690a431.json",
+        "rows": 1,
+        "pages": 1,
+        "completeCoverage": true,
+        "state": "VERIFYING"
+      },
+      "result": {
+        "instance_id": "01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+        "job": "source_daily",
+        "logical_date": "2026-09-28",
+        "definition_version": "daily-v1",
+        "revision": "0",
+        "supersedes": null,
+        "revision_reason": null,
+        "input_identity": "304aa0e9d9ce720506ee6b12c98c8fdaddad6fcdf7c5d5ad867be2b22bde4ded",
+        "request_json": "{\"requestId\":\"live-daily\",\"job\":\"source_daily\",\"logicalDate\":\"2026-09-28\",\"rangeStart\":\"2026-09-28\",\"rangeEnd\":\"2026-09-28\",\"definitionVersion\":\"daily-v1\",\"revision\":\"0\",\"supersedes\":null,\"revisionReason\":null,\"inputFingerprint\":\"2e6ee70e6b4bd6d68e9e781f96f07a045aabaff9c705e0fc0b5dbc971690a431\",\"calendarVersion\":\"frozen-calendar-20260928\",\"zone\":\"Asia/Shanghai\",\"scheduledAt\":\"2026-09-29T11:20:35.854861Z\",\"triggeredAt\":\"2026-09-29T11:20:35.854861Z\"}",
+        "business_state": "VERIFIED",
+        "batch_execution_id": 1,
+        "reason": null,
+        "created_at": "2026-09-29T11:20:35.857+00:00",
+        "updated_at": "2026-09-29T11:20:37.591+00:00",
+        "steps": [
+          {
+            "instance_id": "01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+            "stage": "Source:daily",
+            "business_state": "VERIFIED",
+            "evidence_json": "{\"schemaVersion\":1,\"producer\":\"java-source:daily\",\"instanceId\":\"01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3\",\"stage\":\"Source:daily\",\"batchId\":\"1ffc0a3ebe6a17965b913b5b47152dbd932856a88e3824a0b8499b038b839ee4\",\"logicalDate\":\"2026-09-28\",\"requestedStart\":\"2026-09-28\",\"requestedEnd\":\"2026-09-28\",\"actualStart\":\"2026-09-28\",\"actualEnd\":\"2026-09-28\",\"definitionVersion\":\"daily-v1\",\"sourceVersion\":\"2e6ee70e6b4bd6d68e9e781f96f07a045aabaff9c705e0fc0b5dbc971690a431\",\"inputFingerprint\":\"2e6ee70e6b4bd6d68e9e781f96f07a045aabaff9c705e0fc0b5dbc971690a431\",\"readRows\":1,\"writtenRows\":1,\"uniqueKeys\":true,\"completeCoverage\":true,\"physicallyVisible\":true,\"qualityPassed\":true,\"sourceProbeComplete\":true,\"emptyAllowed\":false,\"availableAt\":\"2026-09-29T11:20:37.579284Z\",\"state\":\"VERIFIED\",\"artifact\":\"/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e4031197-d32d-4f5f-83a3-43f27b1dbf31/writes/01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3/certificate.json\",\"error\":null}",
+            "reason": null,
+            "updated_at": "2026-09-29T11:20:37.586+00:00"
+          }
+        ],
+        "triggers": [
+          {
+            "request_id": "live-daily",
+            "instance_id": "01e9d5c4132ae98f36f2aae5e9e5074ac4d2b195539c7f8ee565ba29d68c16d3",
+            "request_json": "{\"requestId\":\"live-daily\",\"job\":\"source_daily\",\"logicalDate\":\"2026-09-28\",\"rangeStart\":\"2026-09-28\",\"rangeEnd\":\"2026-09-28\",\"definitionVersion\":\"daily-v1\",\"revision\":\"0\",\"supersedes\":null,\"revisionReason\":null,\"inputFingerprint\":\"2e6ee70e6b4bd6d68e9e781f96f07a045aabaff9c705e0fc0b5dbc971690a431\",\"calendarVersion\":\"frozen-calendar-20260928\",\"zone\":\"Asia/Shanghai\",\"scheduledAt\":\"2026-09-29T11:20:35.854861Z\",\"triggeredAt\":\"2026-09-29T11:20:35.854861Z\"}",
+            "received_at": "2026-09-29T11:20:35.857+00:00"
+          }
+        ]
+      },
+      "sendAttempts": 1,
+      "physicalColumns": [
+        {
+          "source": "ts_code",
+          "target": "ts_code",
+          "type": "SYMBOL",
+          "key": true
+        },
+        {
+          "source": "trade_date",
+          "target": "trade_date",
+          "type": "TIMESTAMP",
+          "key": true
+        },
+        {
+          "source": "open",
+          "target": "open",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "high",
+          "target": "high",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "low",
+          "target": "low",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "close",
+          "target": "close",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pre_close",
+          "target": "pre_close",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "change",
+          "target": "change",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pct_chg",
+          "target": "pct_chg",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "vol",
+          "target": "vol",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "amount",
+          "target": "amount",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "ah_vol",
+          "target": "ah_vol",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "ah_amount",
+          "target": "ah_amount",
+          "type": "DOUBLE",
+          "key": false
+        }
+      ],
+      "sourceKind": "real-tushare",
+      "pythonBaselineCompared": false
+    },
+    {
+      "dataset": "daily_basic",
+      "code": "000001.SZ",
+      "source": {
+        "fingerprint": "cc942fb8ae86444e05721c508150d983dc2b4ad07a55db3ac727b2ed8b5ab8ec",
+        "artifact": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e4031197-d32d-4f5f-83a3-43f27b1dbf31/sources/cc942fb8ae86444e05721c508150d983dc2b4ad07a55db3ac727b2ed8b5ab8ec.json",
+        "rows": 1,
+        "pages": 1,
+        "completeCoverage": true,
+        "state": "VERIFYING"
+      },
+      "result": {
+        "instance_id": "bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+        "job": "source_daily_basic",
+        "logical_date": "2026-09-28",
+        "definition_version": "daily_basic-v1",
+        "revision": "0",
+        "supersedes": null,
+        "revision_reason": null,
+        "input_identity": "b6a385a634914f1945a97d9c806f5c0d2f67b5d9dd7b84bfa35121ac69461a8c",
+        "request_json": "{\"requestId\":\"live-daily_basic\",\"job\":\"source_daily_basic\",\"logicalDate\":\"2026-09-28\",\"rangeStart\":\"2026-09-28\",\"rangeEnd\":\"2026-09-28\",\"definitionVersion\":\"daily_basic-v1\",\"revision\":\"0\",\"supersedes\":null,\"revisionReason\":null,\"inputFingerprint\":\"cc942fb8ae86444e05721c508150d983dc2b4ad07a55db3ac727b2ed8b5ab8ec\",\"calendarVersion\":\"frozen-calendar-20260928\",\"zone\":\"Asia/Shanghai\",\"scheduledAt\":\"2026-09-29T11:20:37.750931Z\",\"triggeredAt\":\"2026-09-29T11:20:37.750931Z\"}",
+        "business_state": "VERIFIED",
+        "batch_execution_id": 2,
+        "reason": null,
+        "created_at": "2026-09-29T11:20:37.752+00:00",
+        "updated_at": "2026-09-29T11:20:39.453+00:00",
+        "steps": [
+          {
+            "instance_id": "bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+            "stage": "Source:daily_basic",
+            "business_state": "VERIFIED",
+            "evidence_json": "{\"schemaVersion\":1,\"producer\":\"java-source:daily_basic\",\"instanceId\":\"bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c\",\"stage\":\"Source:daily_basic\",\"batchId\":\"3aa7965f5f2cb1a822cfbc07e0605e5a537919c7b032abc10a63052190466a8e\",\"logicalDate\":\"2026-09-28\",\"requestedStart\":\"2026-09-28\",\"requestedEnd\":\"2026-09-28\",\"actualStart\":\"2026-09-28\",\"actualEnd\":\"2026-09-28\",\"definitionVersion\":\"daily_basic-v1\",\"sourceVersion\":\"cc942fb8ae86444e05721c508150d983dc2b4ad07a55db3ac727b2ed8b5ab8ec\",\"inputFingerprint\":\"cc942fb8ae86444e05721c508150d983dc2b4ad07a55db3ac727b2ed8b5ab8ec\",\"readRows\":1,\"writtenRows\":1,\"uniqueKeys\":true,\"completeCoverage\":true,\"physicallyVisible\":true,\"qualityPassed\":true,\"sourceProbeComplete\":true,\"emptyAllowed\":false,\"availableAt\":\"2026-09-29T11:20:39.450933Z\",\"state\":\"VERIFIED\",\"artifact\":\"/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e4031197-d32d-4f5f-83a3-43f27b1dbf31/writes/bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c/certificate.json\",\"error\":null}",
+            "reason": null,
+            "updated_at": "2026-09-29T11:20:39.452+00:00"
+          }
+        ],
+        "triggers": [
+          {
+            "request_id": "live-daily_basic",
+            "instance_id": "bea2f82f8a7deedd52721687cc20b7e7a7f1368d82533d094809dc9dd9e1360c",
+            "request_json": "{\"requestId\":\"live-daily_basic\",\"job\":\"source_daily_basic\",\"logicalDate\":\"2026-09-28\",\"rangeStart\":\"2026-09-28\",\"rangeEnd\":\"2026-09-28\",\"definitionVersion\":\"daily_basic-v1\",\"revision\":\"0\",\"supersedes\":null,\"revisionReason\":null,\"inputFingerprint\":\"cc942fb8ae86444e05721c508150d983dc2b4ad07a55db3ac727b2ed8b5ab8ec\",\"calendarVersion\":\"frozen-calendar-20260928\",\"zone\":\"Asia/Shanghai\",\"scheduledAt\":\"2026-09-29T11:20:37.750931Z\",\"triggeredAt\":\"2026-09-29T11:20:37.750931Z\"}",
+            "received_at": "2026-09-29T11:20:37.752+00:00"
+          }
+        ]
+      },
+      "sendAttempts": 1,
+      "physicalColumns": [
+        {
+          "source": "ts_code",
+          "target": "ts_code",
+          "type": "SYMBOL",
+          "key": true
+        },
+        {
+          "source": "trade_date",
+          "target": "trade_date",
+          "type": "TIMESTAMP",
+          "key": true
+        },
+        {
+          "source": "close",
+          "target": "close",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "turnover_rate",
+          "target": "turnover_rate",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "turnover_rate_f",
+          "target": "turnover_rate_f",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "volume_ratio",
+          "target": "volume_ratio",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pe",
+          "target": "pe",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pe_ttm",
+          "target": "pe_ttm",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pb",
+          "target": "pb",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "ps",
+          "target": "ps",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "ps_ttm",
+          "target": "ps_ttm",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "dv_ratio",
+          "target": "dv_ratio",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "dv_ttm",
+          "target": "dv_ttm",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "total_share",
+          "target": "total_share",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "float_share",
+          "target": "float_share",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "free_share",
+          "target": "free_share",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "total_mv",
+          "target": "total_mv",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "circ_mv",
+          "target": "circ_mv",
+          "type": "DOUBLE",
+          "key": false
+        }
+      ],
+      "sourceKind": "real-tushare",
+      "pythonBaselineCompared": false
+    },
+    {
+      "dataset": "etf_daily",
+      "code": "510300.SH",
+      "source": {
+        "fingerprint": "6ed00bf78e3307c135cf52182b144408d106185a98fe075f4ce6a42800074b1c",
+        "artifact": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e4031197-d32d-4f5f-83a3-43f27b1dbf31/sources/6ed00bf78e3307c135cf52182b144408d106185a98fe075f4ce6a42800074b1c.json",
+        "rows": 1,
+        "pages": 1,
+        "completeCoverage": true,
+        "state": "VERIFYING"
+      },
+      "result": {
+        "instance_id": "b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+        "job": "source_etf_daily",
+        "logical_date": "2026-09-28",
+        "definition_version": "etf_daily-v1",
+        "revision": "0",
+        "supersedes": null,
+        "revision_reason": null,
+        "input_identity": "6014ceacce204a0f85123fad14f45e2b6cdc6fcc976321cf91c208ca6674d5f0",
+        "request_json": "{\"requestId\":\"live-etf_daily\",\"job\":\"source_etf_daily\",\"logicalDate\":\"2026-09-28\",\"rangeStart\":\"2026-09-28\",\"rangeEnd\":\"2026-09-28\",\"definitionVersion\":\"etf_daily-v1\",\"revision\":\"0\",\"supersedes\":null,\"revisionReason\":null,\"inputFingerprint\":\"6ed00bf78e3307c135cf52182b144408d106185a98fe075f4ce6a42800074b1c\",\"calendarVersion\":\"frozen-calendar-20260928\",\"zone\":\"Asia/Shanghai\",\"scheduledAt\":\"2026-09-29T11:20:40.724542Z\",\"triggeredAt\":\"2026-09-29T11:20:40.724542Z\"}",
+        "business_state": "VERIFIED",
+        "batch_execution_id": 3,
+        "reason": null,
+        "created_at": "2026-09-29T11:20:40.727+00:00",
+        "updated_at": "2026-09-29T11:20:42.365+00:00",
+        "steps": [
+          {
+            "instance_id": "b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+            "stage": "Source:etf_daily",
+            "business_state": "VERIFIED",
+            "evidence_json": "{\"schemaVersion\":1,\"producer\":\"java-source:etf_daily\",\"instanceId\":\"b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12\",\"stage\":\"Source:etf_daily\",\"batchId\":\"f8bb29db1d94ed7b51255e027e4dc71b37eff716f24cf1ada9b7b040d71fe11b\",\"logicalDate\":\"2026-09-28\",\"requestedStart\":\"2026-09-28\",\"requestedEnd\":\"2026-09-28\",\"actualStart\":\"2026-09-28\",\"actualEnd\":\"2026-09-28\",\"definitionVersion\":\"etf_daily-v1\",\"sourceVersion\":\"6ed00bf78e3307c135cf52182b144408d106185a98fe075f4ce6a42800074b1c\",\"inputFingerprint\":\"6ed00bf78e3307c135cf52182b144408d106185a98fe075f4ce6a42800074b1c\",\"readRows\":1,\"writtenRows\":1,\"uniqueKeys\":true,\"completeCoverage\":true,\"physicallyVisible\":true,\"qualityPassed\":true,\"sourceProbeComplete\":true,\"emptyAllowed\":false,\"availableAt\":\"2026-09-29T11:20:42.361914Z\",\"state\":\"VERIFIED\",\"artifact\":\"/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e4031197-d32d-4f5f-83a3-43f27b1dbf31/writes/b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12/certificate.json\",\"error\":null}",
+            "reason": null,
+            "updated_at": "2026-09-29T11:20:42.363+00:00"
+          }
+        ],
+        "triggers": [
+          {
+            "request_id": "live-etf_daily",
+            "instance_id": "b3ed987ffcab453ce5136294c3df3c9eada84d5bbe3f420dc3b850520854fe12",
+            "request_json": "{\"requestId\":\"live-etf_daily\",\"job\":\"source_etf_daily\",\"logicalDate\":\"2026-09-28\",\"rangeStart\":\"2026-09-28\",\"rangeEnd\":\"2026-09-28\",\"definitionVersion\":\"etf_daily-v1\",\"revision\":\"0\",\"supersedes\":null,\"revisionReason\":null,\"inputFingerprint\":\"6ed00bf78e3307c135cf52182b144408d106185a98fe075f4ce6a42800074b1c\",\"calendarVersion\":\"frozen-calendar-20260928\",\"zone\":\"Asia/Shanghai\",\"scheduledAt\":\"2026-09-29T11:20:40.724542Z\",\"triggeredAt\":\"2026-09-29T11:20:40.724542Z\"}",
+            "received_at": "2026-09-29T11:20:40.727+00:00"
+          }
+        ]
+      },
+      "sendAttempts": 1,
+      "physicalColumns": [
+        {
+          "source": "ts_code",
+          "target": "ts_code",
+          "type": "SYMBOL",
+          "key": true
+        },
+        {
+          "source": "trade_date",
+          "target": "timestamp",
+          "type": "TIMESTAMP_NS",
+          "key": true
+        },
+        {
+          "source": "pre_close",
+          "target": "pre_close",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "open",
+          "target": "open",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "high",
+          "target": "high",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "low",
+          "target": "low",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "close",
+          "target": "close",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "change",
+          "target": "change",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pct_chg",
+          "target": "pct_chg",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "vol",
+          "target": "vol",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "amount",
+          "target": "amount",
+          "type": "DOUBLE",
+          "key": false
+        }
+      ],
+      "sourceKind": "real-tushare",
+      "pythonBaselineCompared": false
+    }
+  ],
+  "archive": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/e4031197-d32d-4f5f-83a3-43f27b1dbf31",
+  "coverage": "one explicit security and one day per source; not full-market acceptance"
+}

@@ -1,0 +1,23 @@
+{
+  "dataset": "share_float",
+  "version": "share_float-v1",
+  "endpoint": "share_float",
+  "dateParameter": "ann_date",
+  "sourceDate": "ann_date",
+  "timestampColumn": "float_date",
+  "pageSize": 6000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 6000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=160; query by announcement date (availability time), retain future float_date as QuestDB event timestamp; sparse events retain an explicit frozen security universe",
+  "columns": [
+    { "source": "ts_code", "target": "ts_code", "type": "SYMBOL", "key": true },
+    { "source": "ann_date", "target": "ann_date", "type": "STRING", "key": true },
+    { "source": "float_date", "target": "float_date", "type": "TIMESTAMP", "key": true },
+    { "source": "float_share", "target": "float_share", "type": "DOUBLE", "key": false },
+    { "source": "float_ratio", "target": "float_ratio", "type": "DOUBLE", "key": false },
+    { "source": "holder_name", "target": "holder_name", "type": "STRING", "key": true },
+    { "source": "share_type", "target": "share_type", "type": "SYMBOL", "key": false }
+  ]
+}

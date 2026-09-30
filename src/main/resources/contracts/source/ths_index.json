@@ -1,0 +1,59 @@
+{
+  "dataset": "ths_index",
+  "version": "ths_index-v1",
+  "endpoint": "ths_index",
+  "dateParameter": "update_time",
+  "sourceDate": "update_time",
+  "timestampColumn": "update_time",
+  "pageSize": 5000,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 5000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=259; full static catalog request without parameters, one unpaged response capped at 5000; vendor enumeration completeness cannot be inferred at the cap",
+  "partitionBy": "MONTH",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "name",
+      "target": "name",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "count",
+      "target": "count",
+      "type": "INT",
+      "key": false
+    },
+    {
+      "source": "exchange",
+      "target": "exchange",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "list_date",
+      "target": "list_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "type",
+      "target": "type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "source": "update_time",
+      "target": "update_time",
+      "type": "TIMESTAMP",
+      "key": true
+    }
+  ]
+}

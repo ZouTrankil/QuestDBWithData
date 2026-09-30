@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-30",
+  "implementation": "SQLite-backed, per-business-instance post_close recovery attempt/trigger ledger with atomic claim-before-launch.",
+  "schedules": {
+    "post_close_recovery": "0 0/15 19-23 ? * MON-FRI",
+    "post_close_recovery_final": "0 55 23 ? * MON-FRI",
+    "zone": "Asia/Shanghai",
+    "misfire": "DO_NOTHING",
+    "initialState": "PAUSED"
+  },
+  "policy": {
+    "maxAttemptsPerNight": 21,
+    "normalMinimumInterval": "15m",
+    "finalWindowMinimumInterval": "10m",
+    "eligibleBusinessStates": [
+      "BLOCKED",
+      "PARTIAL",
+      "WAITING_SOURCE",
+      "WAITING_UPSTREAM"
+    ],
+    "excludedBusinessStates": [
+      "RUNNING",
+      "IN_DOUBT",
+      "FAILED"
+    ],
+    "staleCrossMidnightMisfire": "skip"
+  },
+  "identity": "Recovery gets a fresh trigger request ID, reuses the canonical ledger input/business instance identity, and only retries the read-only source probe through LaunchService. Unknown writes are not replayed.",
+  "tests": {
+    "focusedCommand": "./gradlew test --tests com.zoutrankil.batch.PostCloseRecoveryCoordinatorTest --tests com.zoutrankil.batch.LaunchServiceRecoveryTriggerTest --tests com.zoutrankil.batch.SqliteRuntimeTest",
+    "focusedResult": "BUILD SUCCESSFUL",
+    "fullCommand": "./gradlew check",
+    "fullResult": "BUILD SUCCESSFUL",
+    "counts": {
+      "tests": 403,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 66
+    }
+  },
+  "distribution": {
+    "path": "build/distributions/QuestDBWithData-batch-0.1.0.zip",
+    "bytes": 56803071,
+    "sha256": "52ddd9a3f78f016c5686a3cec56c96a95a135899d7d13f76500a9d3679a9a616",
+    "sqliteJdbcIncluded": true,
+    "postgresqlJdbcIncluded": false,
+    "coordinatorClassIncluded": true,
+    "V11MigrationIncluded": true
+  },
+  "limitations": "Schedules remain disabled/paused by default and were not enabled in a deployed runtime. Does not implement N1/N2, main-strategy gap recovery, historical backfill execution/quotas, or production takeover."
+}

@@ -1,0 +1,36 @@
+{
+  "implementation": [
+    "src/main/java/com/zoutrankil/batch/BaiduShareClient.java",
+    "src/main/java/com/zoutrankil/batch/BaiduL2Subscription.java",
+    "src/main/java/com/zoutrankil/batch/BaiduPcsGoDownloader.java",
+    "src/main/java/com/zoutrankil/batch/BaiduL2ArchiveDownloader.java",
+    "src/main/java/com/zoutrankil/batch/BaiduTransferIntentStore.java",
+    "src/main/java/com/zoutrankil/batch/ManagementServer.java",
+    "src/main/java/com/zoutrankil/batch/RuntimeConfiguration.java"
+  ],
+  "test": {
+    "command": "./gradlew --no-daemon test installBatchDist batchDistZip --console=plain",
+    "suiteTests": 355,
+    "baiduAndRuntimeTests": 24,
+    "failures": 0,
+    "errors": 0,
+    "environment": "loopback HTTP protocol fixture"
+  },
+  "verified": [
+    "Only https://pan.baidu.com share URLs are accepted; direct and /share/init?surl= forms normalize to a canonical path.",
+    "Cookie input is an explicitly configured local regular file, rejects symlinks and group/other POSIX permissions, has a size bound, and requires BDUSS and STOKEN.",
+    "Share root truncation, malformed listings, duplicate paths, and excessive pagination fail closed.",
+    "A bounded dry-run discovers a date-named archive and makes no transfer or directory-creation request.",
+    "Non-dry-run transfer creates own-drive directories, uses ondup=fail, and verifies remote visibility and exact source size before reporting SAVED.",
+    "SQLite transfer intent is durably advanced to UNKNOWN before remote send; a restarted store cannot reclaim it for blind resend and only exact remote size verification can mark it VERIFIED.",
+    "BaiduPCS-Go adapter verifies configured UID, has bounded timeout/size/free-space checks, uses argv without a shell or overwrite option, and stages each download under a unique isolated .incoming directory.",
+    "A local download-intent manifest records remote path, date, account UID, expected size, and final content fingerprint; after restart a verified staged file is reused, while unknown process outcome or same-size tampering blocks another download.",
+    "Authenticated management routes are disabled unless configured and require explicit date and dryRun fields."
+  ],
+  "not_verified": [
+    "No real Baidu account, Cookie, share link, transfer, or BaiduPCS-Go download was used.",
+    "The BaiduPCS-Go process was replaced by an injected runner in tests; no real download was performed. The API returns DOWNLOADED_UNVALIDATED and requires a later settle-age-gated archive inspection before ingestion.",
+    "Baidu web API response stability and authentication behavior require a real account integration run before this capability can be enabled."
+  ],
+  "side_effects": "No network requests were made outside local loopback tests; no real share or drive was modified."
+}

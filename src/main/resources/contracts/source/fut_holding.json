@@ -1,0 +1,27 @@
+{
+  "dataset": "fut_holding",
+  "version": "fut_holding-v1",
+  "endpoint": "fut_holding",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 2000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 2000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=139; bounded first release requests one CFFEX futures product for one trade date; update_time is generated at publication.",
+  "columns": [
+    { "source": "trade_date", "target": "trade_date", "type": "TIMESTAMP", "key": true },
+    { "source": "symbol", "target": "symbol", "type": "SYMBOL", "key": true },
+    { "source": "broker", "target": "broker", "type": "SYMBOL", "key": true },
+    { "source": "vol", "target": "vol", "type": "LONG", "key": false },
+    { "source": "vol_chg", "target": "vol_chg", "type": "LONG", "key": false },
+    { "source": "long_hld", "target": "long_hld", "type": "LONG", "key": false },
+    { "source": "long_chg", "target": "long_chg", "type": "LONG", "key": false },
+    { "source": "short_hld", "target": "short_hld", "type": "LONG", "key": false },
+    { "source": "short_chg", "target": "short_chg", "type": "LONG", "key": false },
+    { "source": "exchange", "target": "exchange", "type": "SYMBOL", "key": false },
+    { "source": "update_time", "target": "update_time", "type": "TIMESTAMP", "key": false }
+  ]
+}

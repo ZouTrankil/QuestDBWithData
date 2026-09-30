@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "dataset": "daily",
+  "logicalDate": "2026-09-28",
+  "code": "000001.SZ",
+  "capturedAt": "2026-09-29T11:11:36.402149+00:00",
+  "provider": "real-tushare",
+  "reference": "existing QuestDB read-only output, prior producer ownership not proven by this snapshot",
+  "referenceKind": "stored-output-snapshot-not-execution-of-python-on-frozen-input",
+  "floatingTolerance": 0.0,
+  "sourcePages": [
+    [
+      {
+        "vol": 715341.43,
+        "amount": 810575.7964,
+        "ah_amount": 25.99,
+        "trade_date": "20260928",
+        "ah_vol": 23.0,
+        "high": 11.41,
+        "low": 11.27,
+        "close": 11.3,
+        "pct_chg": 0.0,
+        "pre_close": 11.3,
+        "ts_code": "000001.SZ",
+        "open": 11.28,
+        "change": 0.0
+      }
+    ]
+  ],
+  "referenceQuery": {
+    "query": "SELECT \"ts_code\",\"trade_date\",\"open\",\"high\",\"low\",\"close\",\"pre_close\",\"change\",\"pct_chg\",\"vol\",\"amount\",\"ah_vol\",\"ah_amount\" FROM daily WHERE ts_code='000001.SZ' AND trade_date='2026-09-28T00:00:00.000000Z' LIMIT 2",
+    "columns": [
+      {
+        "name": "ts_code",
+        "type": "SYMBOL"
+      },
+      {
+        "name": "trade_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "open",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "high",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "low",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "close",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pre_close",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "change",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pct_chg",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "vol",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "amount",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ah_vol",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "ah_amount",
+        "type": "DOUBLE"
+      }
+    ],
+    "timestamp": 1,
+    "dataset": [
+      [
+        "000001.SZ",
+        "2026-09-28T00:00:00.000000Z",
+        11.28,
+        11.41,
+        11.27,
+        11.3,
+        11.3,
+        0.0,
+        0.0,
+        715341.43,
+        810575.7964,
+        23.0,
+        25.99
+      ]
+    ],
+    "count": 1
+  }
+}

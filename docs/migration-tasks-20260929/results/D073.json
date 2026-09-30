@@ -1,0 +1,104 @@
+{
+  "task_id": "D073",
+  "dataset_id": "us_tbr",
+  "implementation_status": "implemented_not_verified",
+  "data_validation_status": "fixture_only",
+  "human_review": "pending_review",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "/Users/Apple/zq/fun/QuestDBWithData",
+  "definition_version": "us_tbr-v1",
+  "run_id": null,
+  "attempt_id": null,
+  "logical_date": "2026-09-28",
+  "started_at": null,
+  "finished_at": null,
+  "target": {
+    "target_id": "not_created",
+    "database_version": null,
+    "table": "jdb_test_<namespace>_us_tbr_<business-instance>",
+    "isolated": true
+  },
+  "incremental": {
+    "mode": "exact-date snapshot; no multi-day incremental range enabled",
+    "request_window": {
+      "date": "20260928"
+    },
+    "revision_overlap": null,
+    "checkpoint_before": null,
+    "checkpoint_after": null
+  },
+  "source": {
+    "provider": "Tushare Pro (fixture only; no API request)",
+    "endpoint": "us_tbr",
+    "request_evidence": "NativeSourceTest fixture asserts {date: 20260928}",
+    "response_evidence": "docs/java-batch-20260929/evidence/us-tbr-fixture.json",
+    "returned_rows": 1,
+    "normalized_rows": 1,
+    "rejected_rows": 0,
+    "fingerprint": null
+  },
+  "write": {
+    "submitted_rows": 0,
+    "inserted_rows": null,
+    "updated_rows": null,
+    "unchanged_rows": null,
+    "acknowledged": false,
+    "delivery_status": "NOT_RUN"
+  },
+  "questdb_readback": {
+    "query_evidence": null,
+    "business_keys": [
+      "date"
+    ],
+    "compared_columns": [
+      "date",
+      "w4_bd",
+      "w4_ce",
+      "w8_bd",
+      "w8_ce",
+      "w13_bd",
+      "w13_ce",
+      "w17_bd",
+      "w17_ce",
+      "w26_bd",
+      "w26_ce",
+      "w52_bd",
+      "w52_ce"
+    ],
+    "actual_rows": null,
+    "matched_rows": null,
+    "mismatched_rows": null,
+    "duplicate_keys": null,
+    "missing_keys": null,
+    "value_digest": null,
+    "passed": false
+  },
+  "checks": {
+    "nonempty_source_write_read": false,
+    "idempotent_rerun": null,
+    "second_incremental": null,
+    "rate_limit": "shared limiter applies; live limit not exercised",
+    "retry": null,
+    "pagination": "not applicable: exact-date response is unpaged and hard-bounded at 2000 rows",
+    "resume": null,
+    "cancel": null,
+    "unknown_write_reconcile": null
+  },
+  "blockers": [
+    "Tushare token unavailable in local environment",
+    "QuestDB password remains placeholder; no authenticated query/write attempted",
+    "D072 serial prerequisite acceptance is not recorded"
+  ],
+  "evidence_paths": [
+    "docs/java-batch-20260929/evidence/us-tbr-fixture.json",
+    "build/test-results/test/TEST-com.zoutrankil.batch.NativeSourceTest.xml",
+    "build/test-results/test/TEST-com.zoutrankil.batch.SqliteRuntimeTest.xml"
+  ],
+  "attempt_history": [
+    {
+      "kind": "contract and fixture implementation",
+      "outcome": "fixture checks passed after correcting date-only provider parameter contract"
+    }
+  ],
+  "next_manual_comparison": "On a known published date, compare all 13 provider/QuestDB fields and the date key on an explicitly isolated QuestDB instance; verify same-date retry and next-date incremental behavior."
+}

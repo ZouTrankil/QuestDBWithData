@@ -1,0 +1,76 @@
+{
+  "dataset": "cn_m",
+  "version": "cn_m-v1",
+  "endpoint": "cn_m",
+  "dateParameter": "m",
+  "sourceDate": "month",
+  "timestampColumn": "month",
+  "pageSize": 5000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 5000,
+  "maxBytes": 8388608,
+  "sourceDocumentation": "https://tushare.pro/wctapi/documents/242.md; one exact observation month; legacy month timestamp normalized to first day",
+  "columns": [
+    {
+      "source": "month",
+      "target": "month",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "m0",
+      "target": "m0",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "m0_yoy",
+      "target": "m0_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "m0_mom",
+      "target": "m0_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "m1",
+      "target": "m1",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "m1_yoy",
+      "target": "m1_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "m1_mom",
+      "target": "m1_mom",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "m2",
+      "target": "m2",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "m2_yoy",
+      "target": "m2_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "m2_mom",
+      "target": "m2_mom",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

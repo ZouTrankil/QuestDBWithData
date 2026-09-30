@@ -1,0 +1,29 @@
+{
+  "dataset": "fut_settle",
+  "version": "fut_settle-v1",
+  "endpoint": "fut_settle",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 1600,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 1600,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=141; bounded first release requests one explicit contract for one trade date; update_time is generated at publication.",
+  "columns": [
+    { "source": "ts_code", "target": "ts_code", "type": "SYMBOL", "key": true },
+    { "source": "trade_date", "target": "trade_date", "type": "TIMESTAMP", "key": true },
+    { "source": "settle", "target": "settle", "type": "DOUBLE", "key": false },
+    { "source": "trading_fee_rate", "target": "trading_fee_rate", "type": "DOUBLE", "key": false },
+    { "source": "trading_fee", "target": "trading_fee", "type": "DOUBLE", "key": false },
+    { "source": "delivery_fee", "target": "delivery_fee", "type": "DOUBLE", "key": false },
+    { "source": "b_hedging_margin_rate", "target": "b_hedging_margin_rate", "type": "DOUBLE", "key": false },
+    { "source": "s_hedging_margin_rate", "target": "s_hedging_margin_rate", "type": "DOUBLE", "key": false },
+    { "source": "long_margin_rate", "target": "long_margin_rate", "type": "DOUBLE", "key": false },
+    { "source": "short_margin_rate", "target": "short_margin_rate", "type": "DOUBLE", "key": false },
+    { "source": "offset_today_fee", "target": "offset_today_fee", "type": "DOUBLE", "key": false },
+    { "source": "exchange", "target": "exchange", "type": "SYMBOL", "key": false },
+    { "source": "update_time", "target": "update_time", "type": "TIMESTAMP", "key": false }
+  ]
+}

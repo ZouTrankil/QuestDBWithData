@@ -1,0 +1,38 @@
+{
+  "dataset": "cn_pmi",
+  "job": "source_cn_pmi",
+  "requestedRange": {
+    "start": "2016-01-01",
+    "end": "2026-07-01"
+  },
+  "providerRequest": {
+    "start_m": "201601",
+    "end_m": "202607"
+  },
+  "sourceRows": 127,
+  "sourcePages": 1,
+  "continuousMonthCoverage": true,
+  "persistedMonthlyCoverage": {
+    "dataset": "cn_pmi",
+    "definitionVersion": "cn_pmi-v1",
+    "scopeIdentity": "82208a3c4204860a0db41a53d16a48f201adf7e35b3ccedf1b1a8060c785c5fc",
+    "verifiedSegments": [
+      {
+        "start": "2016-01-01",
+        "end": "2026-07-01",
+        "months": 127
+      }
+    ],
+    "verifiedMonths": 127
+  },
+  "verifiedRows": 127,
+  "physicallyVisible": true,
+  "qualityPassed": true,
+  "state": "VERIFIED",
+  "sendAttempts": 1,
+  "dataPostCount": 1,
+  "questDbTable": "jdb_test_c3c30798c3e744ec_cn_pmi_7e34f12980f7858106f63aeba7d1ed8c5d6a96d87f8653d45765a86c8acea891",
+  "sqliteMetadata": "temporary test-local SQLite file",
+  "pythonBaselineCompared": false,
+  "sideEffects": "Wrote 127 bounded PMI observations to an isolated jdb_test_* QuestDB table and temporary SQLite metadata file; no production target or schedule changed."
+}

@@ -1,0 +1,175 @@
+{
+  "at_utc": "2026-09-29T16:45:58.141396+00:00",
+  "overall_requirement_status": "incomplete",
+  "goal_turn_classification": "progress",
+  "command": "JDB_QUESTDB_TEST_URL=http://100.97.201.8:9000 ./gradlew --no-daemon test installBatchDist batchDistZip --write-locks --console=plain",
+  "outcome": "passed",
+  "counts": {
+    "tests": 341,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 63
+  },
+  "native_test_classes": [
+    {
+      "class": "com.zoutrankil.batch.QuestDbProtocolTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.ChinabondYieldSourceTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.FrozenSourceParityTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.TushareNamechangePagingTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.SqliteRuntimeTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.ContractsTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.NativeSourceTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.L2QuestDbTablePortTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.L2QuestDbLiveTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.EmptySnapshotPortTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.DfcfCsvInspectorTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.DfcfCsvParserTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.NativeProducerLiveTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "class": "com.zoutrankil.batch.L2ArchiveAdmissionTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "artifacts": {
+    "build/distributions/QuestDBWithData-batch-0.1.0.zip": {
+      "sha256": "7bdf4f93973dbde4f3d12f0297408869f993e9af289c150b983093897103d3ea",
+      "bytes": 56673773
+    },
+    "build/libs/QuestDBWithData-0.1.0-batch.jar": {
+      "sha256": "31e03ee07e34a6e46301bbd4ab941f70183ed4e05b095535d2a718028b6986e3",
+      "bytes": 1238498
+    },
+    "gradle.lockfile": {
+      "sha256": "40e446426b749018aa7bc6a7b1866dd3c459fd7c5613f4c0ee0b7fa9c66ae355",
+      "bytes": 14489
+    }
+  },
+  "native_source_evidence": "native-producers.json",
+  "source_parity": {
+    "daily": "exact-match-stored-output-snapshot",
+    "etf_daily": "exact-match-stored-output-snapshot",
+    "daily_basic": "missing-existing-output-for-2026-09-28",
+    "etf_adj": "exact-match-stored-output-snapshot",
+    "stk_limit": "missing-existing-output-for-2026-09-28",
+    "etf_factor": "missing-existing-output-for-2026-09-28",
+    "moneyflow": "missing-existing-output-for-2026-09-28",
+    "margin_detail": "missing-existing-output-for-2026-09-28",
+    "moneyflow_hsgt": "missing-existing-output-for-2026-09-28",
+    "stk_suspend": "real-empty-source-and-isolated-empty-table; nonempty and frozen-Python parity not yet established",
+    "stk_st_daily": "real 17-announcement-year scan; isolated single-security VERIFIED_EMPTY; nonempty historical and frozen-output parity not yet established",
+    "etf_portfolio": "82 common business rows exact; 242 source-only rows; full parity not established",
+    "stk_factor": "exact-match-frozen-existing-output-snapshot; 35 columns, zero tolerance",
+    "cn_bond_yield_curve": "real public-source single-day acceptance; 23 rows written and verified; frozen Python parity not established",
+    "cyq_perf": "real Tushare 2026-09-28 one-security acceptance; one row written/verified; full-market and frozen Python parity not established"
+  },
+  "not_achieved": [
+    "full-market core coverage",
+    "full-market source coverage and official Python frozen-input parity",
+    "remaining JDB-06..15 requirements and complete JDB-01..04 audit",
+    "full fault and capacity matrix",
+    "deployment upgrade/rollback drill"
+  ],
+  "side_effects": "side-effects.json",
+  "metadata_store": "SQLite local persistent file; standalone distribution includes sqlite-jdbc and Commons Compress/XZ for Java archive validation, excludes postgresql-jdbc. This opt-in full suite recorded 341 tests, 0 failures, 0 errors, 63 environment skips; QuestDB protocol and L2 isolated integration tests executed live; native-provider test skipped because this run did not enable provider credentials. The latest no-opt-in full build recorded 380 tests, 0 failures/errors and 66 environment skips after adding JDB-09 executor fault fixtures and the `share_float`/`fina_audit` source jobs; see full-build-20260930.json. Their isolated real-source/QuestDB samples are recorded in share-float-live.json and fina-audit-live.json. Separate real 127-month Tushare/SQLite/isolated QuestDB acceptances for cn_cpi, cn_ppi, cn_pmi and cn_m are recorded in their source history evidence; cn_m also has a three-month range acceptance. GDP has a real 138-quarter range acceptance from 1992Q1 to 2026Q2; a sparse pre-1992 range was correctly blocked before write.",
+  "packaged_runtime_smoke": "Started from installed distribution with SQLite; Quartz reported persistent nonclustered JDBC JobStore; graceful SIGTERM shutdown",
+  "batch_distribution_excludes_postgresql_jdbc": true,
+  "additional_source_evidence": [
+    "native-producers-20260929-matrix.json",
+    "cyq-perf-live.json",
+    "chinabond-yield-live.json",
+    "external-execution.json",
+    "management-api.json",
+    "dfcf-semantic-parser.json",
+    "l2-materialization.json",
+    "l2-ingest-live.json",
+    "l2-coverage-certificate.json",
+    "cn-cpi-live.json",
+    "cn-ppi-live.json",
+    "cn-pmi-live.json",
+    "cn-m-live.json",
+    "cn-gdp-live.json",
+    "cn-gdp-history-live.json",
+    "fina-audit-live.json",
+    "share-float-live.json"
+  ]
+}

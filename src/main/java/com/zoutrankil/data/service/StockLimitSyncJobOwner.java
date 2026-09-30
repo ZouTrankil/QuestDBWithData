@@ -1,0 +1,32 @@
+package com.zoutrankil.data.service;
+
+import com.zoutrankil.data.domain.SyncJobDefinition;
+import com.zoutrankil.data.domain.SyncJobOwner;
+import java.time.Duration;
+import java.time.ZoneId;
+import java.util.*;
+import static com.zoutrankil.data.domain.SyncJobDefinition.*;
+
+/** Canonical D010 job declaration; registration is wired by the shared application configuration. */
+@org.springframework.stereotype.Service
+public final class StockLimitSyncJobOwner implements SyncJobOwner {
+    public static final int MAX_WINDOW_DAYS = 366;
+    public static final int REVISION_DAYS = 5;
+    public static final SyncJobDefinition DEFINITION = new SyncJobDefinition(
+            "data.stk_limit", 1, "stk_limit", 1, "stk_limit_owner",
+            Set.of(Mode.INCREMENTAL, Mode.BACKFILL, Mode.RECONCILE), Mode.INCREMENTAL,
+            Map.of("targetId", new Parameter(ParameterType.STRING, true, 128, 1, Set.of()),
+                    "trade_dates", new Parameter(ParameterType.STRING, true, 4000, 1, Set.of()),
+                    "checkpointAnchor", new Parameter(ParameterType.DATE, false, 10, 1, Set.of()),
+                    "checkpointBefore", new Parameter(ParameterType.DATE, false, 10, 1, Set.of()),
+                    "targetMinBefore", new Parameter(ParameterType.DATE, false, 10, 1, Set.of()),
+                    "targetMaxBefore", new Parameter(ParameterType.DATE, false, 10, 1, Set.of())),
+            "tushare.shared", "stk_limit.trade_date", "questdb.full_key_values",
+            new RetryPolicy(3, Duration.ofSeconds(1), Duration.ofMinutes(2)), Duration.ofHours(12),
+            new Budget(MAX_WINDOW_DAYS, MAX_WINDOW_DAYS, MAX_WINDOW_DAYS,
+                    MAX_WINDOW_DAYS * StockLimitSource.API_ROW_CAP, 1024 * 1024), REVISION_DAYS,
+            List.of(new JobRef("data.exchange_calendar", 1)), Frequency.DAILY, ZoneId.of("Asia/Shanghai"), true, true);
+    @Override public String datasetId() { return "stk_limit"; }
+    @Override public Set<Mode> supportedSyncModes() { return DEFINITION.supportedModes(); }
+    @Override public List<SyncJobDefinition> syncJobDefinitions() { return List.of(DEFINITION); }
+}

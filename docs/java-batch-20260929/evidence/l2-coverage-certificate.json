@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "status": "VERIFIED",
+  "businessInstanceId": "8d1dda147b6acda4f60ba7ba26c031da1b0d6511117c34b6ae0735a3f95e5c33",
+  "tradeDate": "2026-09-29",
+  "parserVersion": "dfcf-csv-mapper-v1",
+  "archiveSha256": "046b556d79eeccbf68ae88b094e602b9dd61b26745235577038dac7b4b93025a",
+  "archiveMembers": 3,
+  "symbols": 1,
+  "sourceRows": {
+    "quotes": 1,
+    "orders": 1,
+    "deals": 1
+  },
+  "products": {
+    "quotes": {
+      "sourceArtifactSha256": "46da8c06991309668ba24b57c5a3b68fbd7f3791421bba95c9c2a311fc99501b",
+      "rows": 1,
+      "target": "jdb_test_l2_046b556d79eeccbf_quotes",
+      "verifiedBatches": [
+        "046b556d79eeccbf68ae88b094e602b9dd61b26745235577038dac7b4b93025a-quotes-000000"
+      ],
+      "exactPhysicalReadback": true
+    },
+    "orders": {
+      "sourceArtifactSha256": "8309ed516f04fcea78c14439cb3772c11a675976983464bf7a017bb976bc6bc8",
+      "rows": 1,
+      "target": "jdb_test_l2_046b556d79eeccbf_orders",
+      "verifiedBatches": [
+        "046b556d79eeccbf68ae88b094e602b9dd61b26745235577038dac7b4b93025a-orders-000000"
+      ],
+      "exactPhysicalReadback": true
+    },
+    "deals": {
+      "sourceArtifactSha256": "74197d41289508d162ca024a5d0d7ec07247ffc7a57a235215db3cf3e6a12296",
+      "rows": 1,
+      "target": "jdb_test_l2_046b556d79eeccbf_deals",
+      "verifiedBatches": [
+        "046b556d79eeccbf68ae88b094e602b9dd61b26745235577038dac7b4b93025a-deals-000000"
+      ],
+      "exactPhysicalReadback": true
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "dataset": "cn_bond_yield_curve",
+  "version": "cn_bond_yield_curve-v1",
+  "endpoint": "bond_china_yield",
+  "dateParameter": "start_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 1000,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 1000,
+  "maxBytes": 8388608,
+  "sourceDocumentation": "https://yield.chinabond.com.cn/cbweb-pbc-web/pbc/historyQuery; ChinaBond history range limited to less than one year; raw curves mapped to legacy physical curves and tenor points",
+  "columns": [
+    { "source": "trade_date", "target": "trade_date", "type": "TIMESTAMP", "key": true },
+    { "source": "curve_name", "target": "curve_name", "type": "SYMBOL", "key": false },
+    { "source": "curve_code", "target": "curve_code", "type": "SYMBOL", "key": true },
+    { "source": "tenor", "target": "tenor", "type": "SYMBOL", "key": true },
+    { "source": "yield_value", "target": "yield_value", "type": "DOUBLE", "key": false },
+    { "source": "source", "target": "source", "type": "SYMBOL", "key": false }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "migration": "src/main/resources/db/migration/batch/V7__external_execution_registry.sql",
+  "implementation": "src/main/java/com/zoutrankil/batch/ExternalExecutionStore.java",
+  "test_class": "com.zoutrankil.batch.SqliteRuntimeTest",
+  "test_command": "./gradlew --no-daemon test --tests 'com.zoutrankil.batch.SqliteRuntimeTest.restrictedExternalExecutorAcceptsOnlyMatchingChildScopedEvidence' --tests 'com.zoutrankil.batch.SqliteRuntimeTest.externalTimeoutIsDiagnosticAndNeverKillsOrDuplicatesLiveChild'",
+  "test_result": "passed",
+  "methods": {
+    "restrictedExternalExecutorAcceptsOnlyMatchingChildScopedEvidence": "passed; Java-only subprocess modes verified, partial preserved, wrong date/version and stale artifact blocked",
+    "externalTimeoutIsDiagnosticAndNeverKillsOrDuplicatesLiveChild": "passed; configured timeout recorded a diagnostic while retaining the same live child until its result arrived"
+  },
+  "verified": [
+    "SQLite reservation is committed before any process-start call",
+    "same business instance and stage cannot mint a second child ID",
+    "parent restart re-associates a live PID only when the kernel process start instant matches",
+    "an unstarted/vanished child reservation becomes IN_DOUBT and cannot be reclaimed for a new child",
+    "process exit code is recorded as diagnostic and does not itself certify Ready",
+    "completed evidence is returned only with the persisted original run/stage identity",
+    "fixed argv launches a Java-only test subprocess without a shell; no production Python entry point was invoked",
+    "structured progress is persisted and process output is attached to the reserved child log path",
+    "matching child-scoped certificate is accepted; partial remains PARTIAL; wrong date, definition-version drift and stale artifact are BLOCKED",
+    "timeout is diagnostic only: live child remains attached and a second observe retains the same child identity"
+  ],
+  "limits": [
+    "dedicated Java fixture tests do not connect or certify any production research runner",
+    "full launch-crash, process-tree termination, symlink, protocol-size and network-disconnect fault matrix remains incomplete",
+    "SQLite integration used temporary local files; no production external computation was started"
+  ]
+}

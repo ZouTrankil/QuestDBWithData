@@ -1,0 +1,29 @@
+{
+  "dataset": "cn_cpi",
+  "version": "cn_cpi-v1",
+  "endpoint": "cn_cpi",
+  "dateParameter": "m",
+  "sourceDate": "month",
+  "timestampColumn": "month",
+  "pageSize": 5000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 5000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/41?doc_id=228; one exact observation month, empty only after complete monthly probe; legacy month timestamp is normalized to first day of month",
+  "columns": [
+    { "source": "month", "target": "month", "type": "TIMESTAMP", "key": true },
+    { "source": "nt_val", "target": "nt_val", "type": "DOUBLE", "key": false },
+    { "source": "nt_yoy", "target": "nt_yoy", "type": "DOUBLE", "key": false },
+    { "source": "nt_mom", "target": "nt_mom", "type": "DOUBLE", "key": false },
+    { "source": "nt_accu", "target": "nt_accu", "type": "DOUBLE", "key": false },
+    { "source": "town_val", "target": "town_val", "type": "DOUBLE", "key": false },
+    { "source": "town_yoy", "target": "town_yoy", "type": "DOUBLE", "key": false },
+    { "source": "town_mom", "target": "town_mom", "type": "DOUBLE", "key": false },
+    { "source": "town_accu", "target": "town_accu", "type": "DOUBLE", "key": false },
+    { "source": "cnt_val", "target": "cnt_val", "type": "DOUBLE", "key": false },
+    { "source": "cnt_yoy", "target": "cnt_yoy", "type": "DOUBLE", "key": false },
+    { "source": "cnt_mom", "target": "cnt_mom", "type": "DOUBLE", "key": false },
+    { "source": "cnt_accu", "target": "cnt_accu", "type": "DOUBLE", "key": false }
+  ]
+}

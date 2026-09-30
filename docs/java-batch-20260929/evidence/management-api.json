@@ -1,0 +1,15 @@
+{
+  "test_class": "com.zoutrankil.batch.SqliteRuntimeTest",
+  "command": "./gradlew --no-daemon test --tests com.zoutrankil.batch.SqliteRuntimeTest",
+  "result": "passed",
+  "verified": {
+    "prometheus": "Authenticated /v1/metrics/prometheus returns Prometheus text exposition, persisted BLOCKED business-state gauge and production_enabled=0.",
+    "backfill_plan": "Versioned trading calendar produces a bounded three-date source_daily plan with dryRun=true and enqueued=false; business_instance count is unchanged.",
+    "calendar_gate": "Missing calendarVersion is rejected with HTTP 400.",
+    "api_auth": "The surrounding management API test verifies unauthenticated access is rejected."
+  },
+  "not_verified": [
+    "No backfill is enqueued or executed by this plan endpoint.",
+    "No external Prometheus server scrape or alert rule was configured."
+  ]
+}

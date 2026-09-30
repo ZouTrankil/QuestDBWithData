@@ -1,0 +1,226 @@
+{
+  "dataset": "stk_factor",
+  "version": "stk_factor-v1",
+  "endpoint": "stk_factor",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 10000,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 20000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=296",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "close",
+      "target": "close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "open",
+      "target": "open",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "high",
+      "target": "high",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "low",
+      "target": "low",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pre_close",
+      "target": "pre_close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "change",
+      "target": "change",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pct_change",
+      "target": "pct_change",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "vol",
+      "target": "vol",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "amount",
+      "target": "amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "adj_factor",
+      "target": "adj_factor",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "open_hfq",
+      "target": "open_hfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "open_qfq",
+      "target": "open_qfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "close_hfq",
+      "target": "close_hfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "close_qfq",
+      "target": "close_qfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "high_hfq",
+      "target": "high_hfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "high_qfq",
+      "target": "high_qfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "low_hfq",
+      "target": "low_hfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "low_qfq",
+      "target": "low_qfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pre_close_hfq",
+      "target": "pre_close_hfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pre_close_qfq",
+      "target": "pre_close_qfq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "macd_dif",
+      "target": "macd_dif",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "macd_dea",
+      "target": "macd_dea",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "macd",
+      "target": "macd",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "kdj_k",
+      "target": "kdj_k",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "kdj_d",
+      "target": "kdj_d",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "kdj_j",
+      "target": "kdj_j",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rsi_6",
+      "target": "rsi_6",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rsi_12",
+      "target": "rsi_12",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "rsi_24",
+      "target": "rsi_24",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "boll_upper",
+      "target": "boll_upper",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "boll_mid",
+      "target": "boll_mid",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "boll_lower",
+      "target": "boll_lower",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "cci",
+      "target": "cci",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

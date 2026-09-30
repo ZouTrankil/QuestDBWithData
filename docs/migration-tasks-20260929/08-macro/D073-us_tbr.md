@@ -23,6 +23,10 @@
 - 配置同步日期列：`date`；衍生源记录：`未登记`。
 - 配置事实（数组表示匹配记录，非当前授权额度）：`{"api": ["us_tbr"], "date_column": ["date"], "frequency": ["daily"], "time": ["21:35"], "rate_limit": [60]}`。
 
+## Java 实现进展（2026-09-30；尚未实库验收）
+
+现有 Java Batch 增加 `us_tbr-v1` 来源契约、完整 13 字段映射、精确 `date` 查询、2000 行/8 MiB 硬界、空窗口来源探测语义、全部利率空值质量阻断、`source_us_tbr` Job、管理 API 和默认暂停的工作日 21:35 Quartz trigger。自动化 fixture 覆盖源字段、目标时间键、ILP 类型、合法空响应和全空利率阻断。实现证据：[us_tbr fixture](../java-batch-20260929/evidence/us-tbr-fixture.json)。本机 Tushare token 和 QuestDB 凭证尚未配置，因此真实来源、隔离 QuestDB 回读、幂等重跑与增量验收均未执行；D072 前置和人工复核仍未解决。本段不改变下方 D01—D09 的真实验收勾选状态。
+
 ## 本数据sync模式与注意事项
 
 以本卡Python入口为准逐参数翻译；实现代码/日期/月份等可支持的有限分片和分页能力声明。先冻结真实request例子及结束条件，不能根据表名套默认全量请求。

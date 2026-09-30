@@ -1,0 +1,85 @@
+{
+  "at_utc": "2026-09-29T11:23:56.466566+00:00",
+  "overall_requirement_status": "incomplete",
+  "goal_turn_classification": "progress",
+  "command": "JDB_SOURCE_LIVE=1 JDB_QUESTDB_TEST_URL=<authorized-test-host> JDB_TUSHARE_TOKEN=<from-existing-local-config-without-logging> ./gradlew test installBatchDist batchDistZip --console=plain",
+  "outcome": "passed",
+  "counts": {
+    "tests": 198,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 20
+  },
+  "native_test_classes": [
+    {
+      "class": "com.zoutrankil.batch.ContractsTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.FrozenSourceParityTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.NativeProducerLiveTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.NativeSourceTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.PostgresRuntimeTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.QuestDbProtocolTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "artifacts": {
+    "build/distributions/QuestDBWithData-batch-0.1.0.zip": {
+      "sha256": "fc9bbf3d15f77e1788025ee0ecbe6d6860025aed228b9103941db7ff780a25e6",
+      "bytes": 54995457
+    },
+    "build/libs/QuestDBWithData-0.1.0-batch.jar": {
+      "sha256": "c6e026665122457abc50b0613decba6ce944d16a7848667fca5446c49b041ea9",
+      "bytes": 830106
+    },
+    "gradle.lockfile": {
+      "sha256": "f54822aae7b3e40614bc95e56c0fb3150c5f4a8b9a751ae18bcad13dc5ca2f59",
+      "bytes": 12877
+    }
+  },
+  "native_source_evidence": "native-producers.json",
+  "source_parity": {
+    "daily": "exact-match-stored-output-snapshot",
+    "etf_daily": "exact-match-stored-output-snapshot",
+    "daily_basic": "missing-existing-output-for-2026-09-28"
+  },
+  "not_achieved": [
+    "remaining 11 core sources",
+    "full-market source coverage and official Python frozen-input parity",
+    "remaining JDB-06..15 requirements and complete JDB-01..04 audit",
+    "full fault and capacity matrix",
+    "deployment upgrade/rollback drill"
+  ],
+  "side_effects": "side-effects.json"
+}

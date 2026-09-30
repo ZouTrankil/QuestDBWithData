@@ -1,0 +1,28 @@
+{
+  "date": "2026-09-30",
+  "commands": [
+    "./gradlew clean verifyBatchDistributionDatabaseDrivers",
+    "./gradlew check"
+  ],
+  "result": "BUILD SUCCESSFUL (latest check; 403 tests, 0 failures/errors, 66 environment skips)",
+  "tests": {
+    "tests": 403,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 66
+  },
+  "batchDistribution": {
+    "path": "build/distributions/QuestDBWithData-batch-0.1.0.zip",
+    "bytes": 56803071,
+    "sha256": "52ddd9a3f78f016c5686a3cec56c96a95a135899d7d13f76500a9d3679a9a616",
+    "sqliteJdbc": "sqlite-jdbc-3.53.4.0.jar",
+    "postgresqlJdbcPresent": false,
+    "coreSourceFanoutClassIncluded": true,
+    "postCloseSourcePlanClassIncluded": true,
+    "batchRuntimeConfigurationIncluded": true,
+    "postCloseRecoveryCoordinatorClassIncluded": true,
+    "postCloseRecoveryMigrationIncluded": true
+  },
+  "verification": "Gradle check now depends on verifyBatchDistributionDatabaseDrivers. The task inspects the built ZIP and fails if SQLite JDBC is absent or any PostgreSQL JDBC jar is present.",
+  "externalServices": "No live source or QuestDB access was used."
+}

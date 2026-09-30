@@ -1,0 +1,33 @@
+{
+  "dataset": "dividend",
+  "version": "dividend-v1",
+  "endpoint": "dividend",
+  "dateParameter": "ann_date",
+  "sourceDate": "ann_date",
+  "timestampColumn": "ann_date",
+  "pageSize": 2000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 2000,
+  "maxBytes": 16777216,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=103; one explicit stock and announcement day per bounded request; legacy physical key collisions fail closed",
+  "columns": [
+    { "source": "ts_code", "target": "ts_code", "type": "SYMBOL", "key": true },
+    { "source": "end_date", "target": "end_date", "type": "STRING", "key": true },
+    { "source": "ann_date", "target": "ann_date", "type": "TIMESTAMP", "key": true },
+    { "source": "div_proc", "target": "div_proc", "type": "STRING", "key": false },
+    { "source": "stk_div", "target": "stk_div", "type": "DOUBLE", "key": false },
+    { "source": "stk_bo_rate", "target": "stk_bo_rate", "type": "DOUBLE", "key": false },
+    { "source": "stk_co_rate", "target": "stk_co_rate", "type": "DOUBLE", "key": false },
+    { "source": "cash_div", "target": "cash_div", "type": "DOUBLE", "key": false },
+    { "source": "cash_div_tax", "target": "cash_div_tax", "type": "DOUBLE", "key": false },
+    { "source": "record_date", "target": "record_date", "type": "STRING", "key": false },
+    { "source": "ex_date", "target": "ex_date", "type": "STRING", "key": false },
+    { "source": "pay_date", "target": "pay_date", "type": "STRING", "key": false },
+    { "source": "div_listdate", "target": "div_listdate", "type": "STRING", "key": false },
+    { "source": "imp_ann_date", "target": "imp_ann_date", "type": "STRING", "key": false },
+    { "source": "base_date", "target": "base_date", "type": "STRING", "key": false },
+    { "source": "base_share", "target": "base_share", "type": "DOUBLE", "key": false },
+    { "source": "update_time", "target": "update_time", "type": "TIMESTAMP", "key": false }
+  ]
+}

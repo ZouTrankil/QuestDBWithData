@@ -1,0 +1,39 @@
+{
+  "date": "2026-09-30",
+  "asset": "us_tbr",
+  "status": "implemented_not_verified",
+  "implementation": {
+    "definitionVersion": "us_tbr-v1",
+    "fields": 13,
+    "logicalDateKey": "date",
+    "questdbPartition": "YEAR",
+    "request": "one exact date, no paging, unpaged hard cap 2000 rows / 8 MiB raw archive",
+    "emptyWindow": "allowed only after a successful completed provider response; records with every rate null are quality-blocked",
+    "runtime": "SQLite archived source probe and business ledger; Spring Batch source_us_tbr job; management task and OpenAPI registration; Quartz 21:35 Asia/Shanghai weekdays trigger starts PAUSED"
+  },
+  "references": {
+    "officialProviderDocumentation": "https://www.tushare.pro/document/2?doc_id=221",
+    "contractSha256": "d36b4cfb316ca4a53da0cb17228d177bca3a14ac7c5f418cd8510ff7fe7a7195",
+    "sourceCardSha256": "c9974236639d64539788e4dea377af253089df3f60a56f24e93831c11a2c633b"
+  },
+  "validation": {
+    "fixtureTests": [
+      "NativeSourceTest.usTbrUsesExactDateSnapshotAndPreservesAllLegacyRateFields",
+      "NativeSourceTest.allRegisteredMappingsAreTypedAndEtfKeepsItsDateColumn",
+      "SqliteRuntimeTest"
+    ],
+    "sourceAndQuestDbLiveAcceptance": "not run: local Tushare token and QuestDB credentials are not configured; YAML password is placeholder. QuestDB ports were reachable, but no authenticated query or write was attempted.",
+    "deploymentSchedule": "not enabled; runtime tests only asserted the persisted test SQLite trigger and PAUSED state"
+  },
+  "sideEffects": {
+    "productionDatabaseWrites": false,
+    "scheduleChangesOutsideTemporaryTestDatabase": false,
+    "externalNotifications": false
+  },
+  "remaining": [
+    "Tushare source sample on a known published date",
+    "full exact-key field readback from an explicitly isolated QuestDB target",
+    "idempotent repeated probe and second-date incremental acceptance",
+    "D072 prerequisite and human review remain unresolved"
+  ]
+}

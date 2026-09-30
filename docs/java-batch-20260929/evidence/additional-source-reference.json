@@ -1,0 +1,61 @@
+{
+  "kind": "read-only-stored-output-snapshot-not-frozen-python-execution",
+  "queries": {
+    "stk_limit": {
+      "query": "select * from stk_limit where ts_code='000001.SZ' and trade_date='2026-09-28'",
+      "columns": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "up_limit",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "down_limit",
+          "type": "DOUBLE"
+        }
+      ],
+      "timestamp": 1,
+      "dataset": [],
+      "count": 0
+    },
+    "etf_adj": {
+      "query": "select * from etf_adj where ts_code='510300.SH' and timestamp='2026-09-28'",
+      "columns": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "adj_factor",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "timestamp",
+          "type": "TIMESTAMP"
+        }
+      ],
+      "timestamp": 2,
+      "dataset": [
+        [
+          "510300.SH",
+          1.2671,
+          "2026-09-28T00:00:00.000000Z"
+        ]
+      ],
+      "count": 1
+    }
+  },
+  "comparison": {
+    "etf_adj": "all three columns exact match after trade_date to timestamp mapping",
+    "stk_limit": "no existing row for 2026-09-28; parity not established",
+    "sourceArtifact": "var/jdb-source-acceptance/1f33d808-8fab-4650-889c-f57197948060/etf_adj-provider.json",
+    "floatingTolerance": 0.0
+  }
+}

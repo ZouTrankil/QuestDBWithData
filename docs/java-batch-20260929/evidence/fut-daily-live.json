@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "acceptedAtUtc": "2026-09-29T20:49:09.835068Z",
+  "dataset": "fut_daily",
+  "definitionVersion": "fut_daily-v1",
+  "provider": "Tushare Pro",
+  "sourceKind": "real-tushare",
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=138",
+  "code": "IF2610.CFX",
+  "logicalDate": "2026-09-28",
+  "sourceFingerprint": "fa1694620506aee2b53dddcea1ea18d7e1f61fab648951a531f255fd45994ada",
+  "sourceRows": 1,
+  "sourcePages": 1,
+  "completeCoverage": true,
+  "target": "jdb_test_52ab43ec4047450d_fut_daily_fab803be29cd705346834092c2a8e1398a5cab08d592f737842e80e678ea1423",
+  "writtenRows": 1,
+  "physicallyVisible": true,
+  "qualityPassed": true,
+  "delivery": "VERIFIED",
+  "sendAttempts": 1,
+  "dataPostCount": 1,
+  "pythonBaselineCompared": false,
+  "scope": "One explicitly requested contract and one trade date; not full-market or historical acceptance.",
+  "archiveArtifact": "var/jdb-source-acceptance/98907406-bf4a-4344-b541-3e84c0f9f09f/writes/fab803be29cd705346834092c2a8e1398a5cab08d592f737842e80e678ea1423/certificate.json",
+  "sourceArtifact": "var/jdb-source-acceptance/98907406-bf4a-4344-b541-3e84c0f9f09f/sources/fa1694620506aee2b53dddcea1ea18d7e1f61fab648951a531f255fd45994ada.json",
+  "physicalColumns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "pre_close",
+      "target": "pre_close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pre_settle",
+      "target": "pre_settle",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "open",
+      "target": "open",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "high",
+      "target": "high",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "low",
+      "target": "low",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "close",
+      "target": "close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "settle",
+      "target": "settle",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "change1",
+      "target": "change1",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "change2",
+      "target": "change2",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "vol",
+      "target": "vol",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "amount",
+      "target": "amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "oi",
+      "target": "oi",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "oi_chg",
+      "target": "oi_chg",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "delv_settle",
+      "target": "delv_settle",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "update_time",
+      "target": "update_time",
+      "type": "TIMESTAMP",
+      "key": false
+    }
+  ]
+}

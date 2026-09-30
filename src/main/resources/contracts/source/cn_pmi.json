@@ -1,0 +1,376 @@
+{
+  "dataset": "cn_pmi",
+  "version": "cn_pmi-v1",
+  "endpoint": "cn_pmi",
+  "dateParameter": "m",
+  "sourceDate": "month",
+  "timestampColumn": "month",
+  "pageSize": 2000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 2000,
+  "maxBytes": 8388608,
+  "sourceDocumentation": "https://tushare.pro/document/41?doc_id=325; one exact observation month; legacy month timestamp normalized to first day",
+  "columns": [
+    {
+      "source": "month",
+      "target": "month",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "pmi010000",
+      "target": "pmi010000",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010100",
+      "target": "pmi010100",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010200",
+      "target": "pmi010200",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010300",
+      "target": "pmi010300",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010400",
+      "target": "pmi010400",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010401",
+      "target": "pmi010401",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010402",
+      "target": "pmi010402",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010403",
+      "target": "pmi010403",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010500",
+      "target": "pmi010500",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010501",
+      "target": "pmi010501",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010502",
+      "target": "pmi010502",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010503",
+      "target": "pmi010503",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010600",
+      "target": "pmi010600",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010601",
+      "target": "pmi010601",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010602",
+      "target": "pmi010602",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010603",
+      "target": "pmi010603",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010700",
+      "target": "pmi010700",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010701",
+      "target": "pmi010701",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010702",
+      "target": "pmi010702",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010703",
+      "target": "pmi010703",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010800",
+      "target": "pmi010800",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010801",
+      "target": "pmi010801",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010802",
+      "target": "pmi010802",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010803",
+      "target": "pmi010803",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi010900",
+      "target": "pmi010900",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi011000",
+      "target": "pmi011000",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi011100",
+      "target": "pmi011100",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi011200",
+      "target": "pmi011200",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi011300",
+      "target": "pmi011300",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi011400",
+      "target": "pmi011400",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi011500",
+      "target": "pmi011500",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi011600",
+      "target": "pmi011600",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi011700",
+      "target": "pmi011700",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi011800",
+      "target": "pmi011800",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi011900",
+      "target": "pmi011900",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi012000",
+      "target": "pmi012000",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020100",
+      "target": "pmi020100",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020101",
+      "target": "pmi020101",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020102",
+      "target": "pmi020102",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020200",
+      "target": "pmi020200",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020201",
+      "target": "pmi020201",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020202",
+      "target": "pmi020202",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020300",
+      "target": "pmi020300",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020301",
+      "target": "pmi020301",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020302",
+      "target": "pmi020302",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020400",
+      "target": "pmi020400",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020401",
+      "target": "pmi020401",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020402",
+      "target": "pmi020402",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020500",
+      "target": "pmi020500",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020501",
+      "target": "pmi020501",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020502",
+      "target": "pmi020502",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020600",
+      "target": "pmi020600",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020601",
+      "target": "pmi020601",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020602",
+      "target": "pmi020602",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020700",
+      "target": "pmi020700",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020800",
+      "target": "pmi020800",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi020900",
+      "target": "pmi020900",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi021000",
+      "target": "pmi021000",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pmi030000",
+      "target": "pmi030000",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

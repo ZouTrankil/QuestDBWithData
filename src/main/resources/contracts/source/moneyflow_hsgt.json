@@ -1,0 +1,58 @@
+{
+  "dataset": "moneyflow_hsgt",
+  "version": "moneyflow_hsgt-v1",
+  "endpoint": "moneyflow_hsgt",
+  "dateParameter": "start_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 300,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 20000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "back-monitor/src/quant_platform/data/adapters/connectors/stock/moneyflow/moneyflow_hsgt_sync.py (read-only frozen contract; official doc_id=47 unavailable 2026-09-29)",
+  "columns": [
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "ggt_ss",
+      "target": "ggt_ss",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "ggt_sz",
+      "target": "ggt_sz",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "hgt",
+      "target": "hgt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "sgt",
+      "target": "sgt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "north_money",
+      "target": "north_money",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "south_money",
+      "target": "south_money",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

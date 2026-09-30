@@ -1,0 +1,122 @@
+{
+  "at_utc": "2026-09-29T13:37:35+00:00",
+  "overall_requirement_status": "incomplete",
+  "goal_turn_classification": "progress",
+  "command": "JDB_SOURCE_LIVE=1 JDB_SOURCE_DATASETS=cyq_perf JDB_SOURCE_REPORT=build/reports/jdb-cyq-perf-live.json JDB_QUESTDB_TEST_URL=<authorized-test-host> (Tushare token supplied from application.yml to child environment only); ./gradlew --no-daemon test installBatchDist batchDistZip",
+  "outcome": "passed",
+  "counts": {
+    "tests": 317,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 64
+  },
+  "native_test_classes": [
+    {
+      "class": "com.zoutrankil.batch.QuestDbProtocolTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    {
+      "class": "com.zoutrankil.batch.ChinabondYieldSourceTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.FrozenSourceParityTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.TushareNamechangePagingTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.SqliteRuntimeTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.ContractsTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.NativeSourceTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.EmptySnapshotPortTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.batch.NativeProducerLiveTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    }
+  ],
+  "artifacts": {
+    "build/distributions/QuestDBWithData-batch-0.1.0.zip": {
+      "sha256": "98e87491c473131f852541f2197ce1b4e80ef073fb9ecf93c4acf209daac9b85",
+      "bytes": 53931643
+    },
+    "build/libs/QuestDBWithData-0.1.0-batch.jar": {
+      "sha256": "7f9f937906cb773b09ee8db5eae5a8783b0fc2133f50421765e56a91189f2b35",
+      "bytes": 1129719
+    },
+    "gradle.lockfile": {
+      "sha256": "787c28cd03351373796757972c82b8349d0a72966ee6238051d177fa65071f6e",
+      "bytes": 13832
+    }
+  },
+  "native_source_evidence": "native-producers.json",
+  "source_parity": {
+    "daily": "exact-match-stored-output-snapshot",
+    "etf_daily": "exact-match-stored-output-snapshot",
+    "daily_basic": "missing-existing-output-for-2026-09-28",
+    "etf_adj": "exact-match-stored-output-snapshot",
+    "stk_limit": "missing-existing-output-for-2026-09-28",
+    "etf_factor": "missing-existing-output-for-2026-09-28",
+    "moneyflow": "missing-existing-output-for-2026-09-28",
+    "margin_detail": "missing-existing-output-for-2026-09-28",
+    "moneyflow_hsgt": "missing-existing-output-for-2026-09-28",
+    "stk_suspend": "real-empty-source-and-isolated-empty-table; nonempty and frozen-Python parity not yet established",
+    "stk_st_daily": "real 17-announcement-year scan; isolated single-security VERIFIED_EMPTY; nonempty historical and frozen-output parity not yet established",
+    "etf_portfolio": "82 common business rows exact; 242 source-only rows; full parity not established",
+    "stk_factor": "exact-match-frozen-existing-output-snapshot; 35 columns, zero tolerance",
+    "cn_bond_yield_curve": "real public-source single-day acceptance; 23 rows written and verified; frozen Python parity not established",
+    "cyq_perf": "real Tushare 2026-09-28 one-security acceptance; one row written/verified; full-market and frozen Python parity not established"
+  },
+  "not_achieved": [
+    "full-market core coverage",
+    "full-market source coverage and official Python frozen-input parity",
+    "remaining JDB-06..15 requirements and complete JDB-01..04 audit",
+    "full fault and capacity matrix",
+    "deployment upgrade/rollback drill"
+  ],
+  "side_effects": "side-effects.json",
+  "validation_log_sha256": "bc2245fcab979bc4441e9605cc8cc877b8f0ac0f98260ec0685e7d1d382b2cfe",
+  "metadata_store": "SQLite local persistent file; 317 tests completed with 0 failures/errors and 64 environment skips; dataset-scoped real-source/QDB evidence; standalone ZIP includes sqlite-jdbc and excludes postgresql-jdbc",
+  "packaged_runtime_smoke": "Started from installed distribution with SQLite; Quartz reported persistent nonclustered JDBC JobStore; graceful SIGTERM shutdown",
+  "batch_distribution_excludes_postgresql_jdbc": true
+}

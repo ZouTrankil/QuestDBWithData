@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "dataset": "etf_daily",
+  "logicalDate": "2026-09-28",
+  "code": "510300.SH",
+  "capturedAt": "2026-09-29T11:11:37.132181+00:00",
+  "provider": "real-tushare",
+  "reference": "existing QuestDB read-only output, prior producer ownership not proven by this snapshot",
+  "referenceKind": "stored-output-snapshot-not-execution-of-python-on-frozen-input",
+  "floatingTolerance": 0.0,
+  "sourcePages": [
+    [
+      {
+        "amount": 4373095.288,
+        "ts_code": "510300.SH",
+        "low": 4.397,
+        "trade_date": "20260928",
+        "close": 4.417,
+        "pre_close": 4.515,
+        "high": 4.503,
+        "vol": 9864089.0,
+        "open": 4.499,
+        "change": -0.098,
+        "pct_chg": -2.17
+      }
+    ]
+  ],
+  "referenceQuery": {
+    "query": "SELECT \"ts_code\",\"timestamp\",\"pre_close\",\"open\",\"high\",\"low\",\"close\",\"change\",\"pct_chg\",\"vol\",\"amount\" FROM etf_daily WHERE ts_code='510300.SH' AND timestamp='2026-09-28T00:00:00.000000Z' LIMIT 2",
+    "columns": [
+      {
+        "name": "ts_code",
+        "type": "SYMBOL"
+      },
+      {
+        "name": "timestamp",
+        "type": "TIMESTAMP_NS"
+      },
+      {
+        "name": "pre_close",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "open",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "high",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "low",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "close",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "change",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pct_chg",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "vol",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "amount",
+        "type": "DOUBLE"
+      }
+    ],
+    "timestamp": 1,
+    "dataset": [
+      [
+        "510300.SH",
+        "2026-09-28T00:00:00.000000000Z",
+        4.515,
+        4.499,
+        4.503,
+        4.397,
+        4.417,
+        -0.098,
+        -2.17,
+        9864089.0,
+        4373095.288
+      ]
+    ],
+    "count": 1
+  }
+}

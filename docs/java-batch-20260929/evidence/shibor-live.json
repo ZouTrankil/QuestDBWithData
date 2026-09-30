@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "dataset": "shibor",
+  "definitionVersion": "shibor-v1",
+  "verifiedAtLocal": "2026-09-30 Asia/Shanghai",
+  "acceptanceScope": "one source date; no multi-year/history coverage claim",
+  "provider": {
+    "name": "Tushare Pro",
+    "endpoint": "shibor",
+    "requestedStart": "2026-09-28",
+    "requestedEnd": "2026-09-28",
+    "rows": 1,
+    "pages": 1,
+    "completeCoverage": true,
+    "sourceFingerprint": "50d7a027e38d916e4cbf35d6c7a95223cb2c3e36e85ec9f69cc789e5ae0aa549",
+    "sourceArtifactSha256": "50d7a027e38d916e4cbf35d6c7a95223cb2c3e36e85ec9f69cc789e5ae0aa549"
+  },
+  "sample": {
+    "timestamp": "2026-09-28",
+    "on": 1.361,
+    "1w": 1.3893,
+    "2w": 1.399,
+    "1m": 1.4266,
+    "3m": 1.43,
+    "6m": 1.45,
+    "9m": 1.47,
+    "1y": 1.48
+  },
+  "questdb": {
+    "isolatedTarget": "jdb_test_13fa7bf05e69404f_shibor_461f9b52aee1795c91913ff8b3fe9a91d3400d75a6794360de87d7e3570b1d71",
+    "businessState": "VERIFIED",
+    "verifiedRows": 1,
+    "physicallyVisible": true,
+    "qualityPassed": true,
+    "uniqueKeys": true,
+    "sendAttempts": 1,
+    "repeatLaunchDidNotResend": true,
+    "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/654a7b66-832e-47c6-84ff-8c30932b937a/writes/461f9b52aee1795c91913ff8b3fe9a91d3400d75a6794360de87d7e3570b1d71/certificate.json",
+    "numericLeadingColumnsVerified": [
+      "1w",
+      "2w",
+      "1m",
+      "3m",
+      "6m",
+      "9m",
+      "1y"
+    ]
+  },
+  "physicalSchemaVerified": false,
+  "limitations": [
+    "Only 2026-09-28 was accepted",
+    "No incremental checkpoint/revision window is wired",
+    "No legacy Python frozen-output comparison",
+    "Production table was not read or written"
+  ],
+  "credentialHandling": "token read from local application.yml in memory; not included in report"
+}

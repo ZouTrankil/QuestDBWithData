@@ -1,0 +1,37 @@
+{
+  "dataset": "etf_share",
+  "status": "implemented-awaiting-full-acceptance",
+  "contract": "etf_share-v1",
+  "legacyReference": {
+    "checkout": "back-monitor",
+    "head": "e7aa8729",
+    "connector": "src/quant_platform/data/adapters/connectors/etf/etf_share_sync.py",
+    "model": "src/quant_platform/data/adapters/questdb/models/etf/market_data.py",
+    "behavior": "daily fund_share(trade_date) full-market snapshot; physical timestamp is legacy trade_date; YEAR partition; dedup key (ts_code,timestamp); legacy schema also has nullable fund_type and market fields"
+  },
+  "providerContract": {
+    "endpoint": "fund_share",
+    "requestParameters": [
+      "trade_date"
+    ],
+    "paging": "none",
+    "maxRows": 2000,
+    "maxBytes": 16777216,
+    "emptyResponse": "not ready; emptyAllowed=false",
+    "capBehavior": "response at 2000 is rejected as potentially truncated"
+  },
+  "batchImplementation": [
+    "maps provider trade_date to QuestDB timestamp",
+    "preserves fd_share precision as DOUBLE and legacy nullable fund_type/market columns",
+    "generates update_time at publication",
+    "registers source_etf_share in Batch and management task/source APIs"
+  ],
+  "verification": {
+    "command": "./gradlew test --tests 'com.zoutrankil.batch.NativeSourceTest'",
+    "result": "BUILD SUCCESSFUL",
+    "liveSourceOrQuestdb": false
+  },
+  "physicalSchemaVerified": false,
+  "checkpointAndRangeSyncImplemented": false,
+  "notes": "No Tushare credentials, live requests, or QuestDB writes were used. Exact physical schema, source completeness, date coverage, history/revision behavior, checkpointing, and Python baseline parity remain outstanding."
+}

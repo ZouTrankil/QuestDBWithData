@@ -1,0 +1,47 @@
+{
+  "dataset": "cn_gdp",
+  "job": "source_cn_gdp",
+  "dateParameter": {
+    "logicalDate": "2026-06-30",
+    "providerParameter": {
+      "q": "2026Q2"
+    },
+    "meaning": "single GDP quarter; quarter converted to legacy quarter-end report_date"
+  },
+  "source": {
+    "kind": "real Tushare",
+    "documentation": "https://tushare.pro/wctapi/documents/227.md",
+    "fingerprint": "4674d94746fece1fab0b4606a3cb29bb0f9ee2f077e240d1fd1b21ea1779c44a",
+    "pages": 1,
+    "rows": 1,
+    "completeProbe": true
+  },
+  "target": {
+    "kind": "isolated QuestDB test table",
+    "table": "jdb_test_d4ec610a4a1c4b88_cn_gdp_62ffa68dbb6d050a18d2d98c4dd44b8bbe2492d5d107ebd2647ae06228fc9a83",
+    "columns": 10,
+    "readRows": 1,
+    "writtenRows": 1,
+    "physicallyVisible": true,
+    "qualityPassed": true
+  },
+  "result": {
+    "businessState": "VERIFIED",
+    "sendAttempts": 1,
+    "repeatLaunchResent": false
+  },
+  "transformation": {
+    "quarter": "2026Q2",
+    "report_date": "2026-06-30"
+  },
+  "physicalSchemaVerified": false,
+  "pythonBaselineCompared": false,
+  "remaining": [
+    "full quarterly history and revision/backfill coverage",
+    "quarterly availability/PIT review",
+    "contiguous completeness watermark",
+    "legacy Python frozen-output parity",
+    "production physical schema verification"
+  ],
+  "sideEffects": "Wrote one bounded quarter to an isolated jdb_test_* QuestDB table and a temporary SQLite metadata database; no production target or schedule changed."
+}

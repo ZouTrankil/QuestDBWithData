@@ -1,0 +1,179 @@
+{
+  "dataset": "etf_basic",
+  "status": "implemented-awaiting-full-acceptance",
+  "source": "Tushare fund_basic",
+  "providerParameters": {
+    "market": "E"
+  },
+  "rowLimit": 15000,
+  "paging": "none; a response at the cap without explicit completion is rejected as truncated",
+  "businessIdentity": "(ts_code, fixed timestamp sentinel 1970-01-01)",
+  "targetSchema": {
+    "partition": "YEAR",
+    "wal": true,
+    "dedupKeys": [
+      "ts_code",
+      "timestamp"
+    ],
+    "columns": [
+      {
+        "name": "ts_code",
+        "type": "SYMBOL",
+        "key": true
+      },
+      {
+        "name": "name",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "management",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "custodian",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "fund_type",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "found_date",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "due_date",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "list_date",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "issue_date",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "delist_date",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "issue_amount",
+        "type": "DOUBLE",
+        "key": false
+      },
+      {
+        "name": "m_fee",
+        "type": "DOUBLE",
+        "key": false
+      },
+      {
+        "name": "c_fee",
+        "type": "DOUBLE",
+        "key": false
+      },
+      {
+        "name": "duration_year",
+        "type": "DOUBLE",
+        "key": false
+      },
+      {
+        "name": "p_value",
+        "type": "DOUBLE",
+        "key": false
+      },
+      {
+        "name": "min_amount",
+        "type": "DOUBLE",
+        "key": false
+      },
+      {
+        "name": "exp_return",
+        "type": "DOUBLE",
+        "key": false
+      },
+      {
+        "name": "benchmark",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "status",
+        "type": "SYMBOL",
+        "key": false
+      },
+      {
+        "name": "invest_type",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "type",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "trustee",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "purc_startdate",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "redm_startdate",
+        "type": "STRING",
+        "key": false
+      },
+      {
+        "name": "market",
+        "type": "SYMBOL",
+        "key": false
+      },
+      {
+        "name": "timestamp",
+        "type": "TIMESTAMP",
+        "key": true
+      },
+      {
+        "name": "update_time",
+        "type": "TIMESTAMP",
+        "key": false
+      }
+    ]
+  },
+  "sourceDateSemantics": "logicalDate is the snapshot acquisition date; the physical timestamp is a fixed legacy deduplication sentinel and update_time is generated on publication",
+  "verification": {
+    "command": "./gradlew --no-daemon test --tests com.zoutrankil.batch.NativeSourceTest --tests com.zoutrankil.batch.SqliteRuntimeTest --console=plain",
+    "result": "BUILD SUCCESSFUL",
+    "tests": 57,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "coverage": [
+      "provider contract, fields, parameters and row cap",
+      "typed frozen row and quality rules",
+      "fixed timestamp, update_time, YEAR partition and dedup keys",
+      "snapshot runner logical-date handling",
+      "management job/source API registration"
+    ]
+  },
+  "liveAcceptance": false,
+  "writesPerformed": false,
+  "limitations": [
+    "no real Tushare request or QuestDB target write in this acceptance",
+    "legacy physical schema has not been compared with a live QuestDB catalog",
+    "source credentials require rotation before a new live acceptance"
+  ]
+}

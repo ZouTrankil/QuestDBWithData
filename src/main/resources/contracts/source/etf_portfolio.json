@@ -1,0 +1,70 @@
+{
+  "dataset": "etf_portfolio",
+  "version": "etf_portfolio-v1",
+  "endpoint": "fund_portfolio",
+  "dateParameter": "ann_date",
+  "sourceDate": "ann_date",
+  "timestampColumn": "end_date",
+  "pageSize": 8000,
+  "paged": true,
+  "emptyAllowed": true,
+  "maxRows": 100000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=121",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "ann_date",
+      "target": "ann_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "end_date",
+      "target": "end_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "symbol",
+      "target": "symbol",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "mkv",
+      "target": "mkv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "amount",
+      "target": "amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "stk_mkv_ratio",
+      "target": "stk_mkv_ratio",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "stk_float_ratio",
+      "target": "stk_float_ratio",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "update_time",
+      "target": "update_time",
+      "type": "TIMESTAMP",
+      "key": false
+    }
+  ]
+}

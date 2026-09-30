@@ -3,7 +3,7 @@
 项目使用 `com.zoutrankil.questdbwithdata` 作为根包。应用启动 Spring Boot 非 Web 上下文，业务流程由 CLI 命令触发。
 
 ```text
-com.zoutrankil.questdbwithdata
+com.zoutrankil.data
 ├── QuestDbWithDataApplication.java  # Spring Boot 启动与配置属性注册
 ├── cli/                             # 命令解析和命令行输出
 ├── config/                          # YAML 属性类、WebClient 和 QuestDB Bean

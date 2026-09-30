@@ -1,0 +1,136 @@
+{
+  "dataset": "moneyflow",
+  "version": "moneyflow-v1",
+  "endpoint": "moneyflow",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 6000,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 20000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=170",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "buy_sm_vol",
+      "target": "buy_sm_vol",
+      "type": "LONG",
+      "key": false
+    },
+    {
+      "source": "buy_sm_amount",
+      "target": "buy_sm_amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "sell_sm_vol",
+      "target": "sell_sm_vol",
+      "type": "LONG",
+      "key": false
+    },
+    {
+      "source": "sell_sm_amount",
+      "target": "sell_sm_amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "buy_md_vol",
+      "target": "buy_md_vol",
+      "type": "LONG",
+      "key": false
+    },
+    {
+      "source": "buy_md_amount",
+      "target": "buy_md_amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "sell_md_vol",
+      "target": "sell_md_vol",
+      "type": "LONG",
+      "key": false
+    },
+    {
+      "source": "sell_md_amount",
+      "target": "sell_md_amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "buy_lg_vol",
+      "target": "buy_lg_vol",
+      "type": "LONG",
+      "key": false
+    },
+    {
+      "source": "buy_lg_amount",
+      "target": "buy_lg_amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "sell_lg_vol",
+      "target": "sell_lg_vol",
+      "type": "LONG",
+      "key": false
+    },
+    {
+      "source": "sell_lg_amount",
+      "target": "sell_lg_amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "buy_elg_vol",
+      "target": "buy_elg_vol",
+      "type": "LONG",
+      "key": false
+    },
+    {
+      "source": "buy_elg_amount",
+      "target": "buy_elg_amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "sell_elg_vol",
+      "target": "sell_elg_vol",
+      "type": "LONG",
+      "key": false
+    },
+    {
+      "source": "sell_elg_amount",
+      "target": "sell_elg_amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "net_mf_vol",
+      "target": "net_mf_vol",
+      "type": "LONG",
+      "key": false
+    },
+    {
+      "source": "net_mf_amount",
+      "target": "net_mf_amount",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

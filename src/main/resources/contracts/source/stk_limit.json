@@ -1,0 +1,40 @@
+{
+  "dataset": "stk_limit",
+  "version": "stk_limit-v1",
+  "endpoint": "stk_limit",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 5800,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 20000,
+  "maxBytes": 33554432,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=183",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "up_limit",
+      "target": "up_limit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "down_limit",
+      "target": "down_limit",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "dataset": "index_daily_market",
+  "version": "index_daily_market-v1",
+  "endpoint": "index_daily",
+  "dateParameter": "trade_date",
+  "sourceDate": "trade_date",
+  "timestampColumn": "trade_date",
+  "pageSize": 1000,
+  "paged": false,
+  "emptyAllowed": false,
+  "maxRows": 1000,
+  "maxBytes": 8388608,
+  "sourceDocumentation": "https://tushare.pro/document/1?doc_id=95",
+  "columns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "close",
+      "target": "close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "open",
+      "target": "open",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "high",
+      "target": "high",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "low",
+      "target": "low",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pre_close",
+      "target": "pre_close",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "change",
+      "target": "change",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "pct_chg",
+      "target": "pct_chg",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "vol",
+      "target": "vol",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "amount",
+      "target": "amount",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "update_time",
+      "target": "update_time",
+      "type": "TIMESTAMP",
+      "key": false
+    }
+  ]
+}

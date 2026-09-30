@@ -1,0 +1,62 @@
+{
+  "dataset": "fina_audit",
+  "acceptanceAtUtc": "2026-09-29T20:32:00Z",
+  "source": "Tushare Pro fina_audit (real remote source)",
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=80",
+  "request": {
+    "ts_code": "600000.SH",
+    "ann_date": "20180428",
+    "logicalDate": "2018-04-28",
+    "definitionVersion": "fina_audit-v1"
+  },
+  "collection": {
+    "rows": 1,
+    "pages": 1,
+    "completeCoverage": true,
+    "fingerprint": "2153203d7563317534923d419d87f8fab222a3a4f830285d47d721cb2fe1cdb4"
+  },
+  "isolatedQuestDb": {
+    "endpoint": "http://100.97.201.8:9000",
+    "target": "jdb_test_eb3562d142b04ed6_fina_audit_3a6b49babe8e820515de43c5078ec1c1e4dbf1229913c90d69292ec12882fdbd",
+    "verifiedRows": 1,
+    "floatingTolerance": 0.0
+  },
+  "execution": {
+    "businessState": "VERIFIED",
+    "sendAttempts": 1,
+    "relaunchSendAttempts": 1,
+    "physicalEvidence": {
+      "schemaVersion": 1,
+      "producer": "java-source:fina_audit",
+      "instanceId": "3a6b49babe8e820515de43c5078ec1c1e4dbf1229913c90d69292ec12882fdbd",
+      "stage": "Source:fina_audit",
+      "batchId": "5f2a8e66159c4f4dffcc1968694a34bd7a822bb202767bede6de4090aed3a96b",
+      "logicalDate": "2018-04-28",
+      "requestedStart": "2018-04-28",
+      "requestedEnd": "2018-04-28",
+      "actualStart": "2018-04-28",
+      "actualEnd": "2018-04-28",
+      "definitionVersion": "fina_audit-v1",
+      "sourceVersion": "2153203d7563317534923d419d87f8fab222a3a4f830285d47d721cb2fe1cdb4",
+      "inputFingerprint": "2153203d7563317534923d419d87f8fab222a3a4f830285d47d721cb2fe1cdb4",
+      "readRows": 1,
+      "writtenRows": 1,
+      "uniqueKeys": true,
+      "completeCoverage": true,
+      "physicallyVisible": true,
+      "qualityPassed": true,
+      "sourceProbeComplete": true,
+      "emptyAllowed": true,
+      "availableAt": "2026-09-29T20:31:32.596996Z",
+      "state": "VERIFIED",
+      "artifact": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/b0508afe-7107-4bd2-81a1-0360ee9bb01b/writes/3a6b49babe8e820515de43c5078ec1c1e4dbf1229913c90d69292ec12882fdbd/certificate.json",
+      "error": null
+    }
+  },
+  "scopeLimitations": [
+    "one explicit security and announcement date only",
+    "not a full historical or full-market acceptance",
+    "historical PIT/revision propagation and Python frozen-output parity not compared",
+    "legacy physical schema reference verified statically, not against an existing production table"
+  ]
+}

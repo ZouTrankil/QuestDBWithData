@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "acceptedAtUtc": "2026-09-29T20:49:11.288698Z",
+  "dataset": "fut_settle",
+  "definitionVersion": "fut_settle-v1",
+  "provider": "Tushare Pro",
+  "sourceKind": "real-tushare",
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=141",
+  "code": "IF2610.CFX",
+  "logicalDate": "2026-09-28",
+  "sourceFingerprint": "86e739490040c4d86e69a9078d5d86a09a22028eda5a40bac9462effff30a91c",
+  "sourceRows": 1,
+  "sourcePages": 1,
+  "completeCoverage": true,
+  "target": "jdb_test_52ab43ec4047450d_fut_settle_9502b083a26ecfb1b5eb3b84a17c954e7efe37311b6714114db4d87587c32494",
+  "writtenRows": 1,
+  "physicallyVisible": true,
+  "qualityPassed": true,
+  "delivery": "VERIFIED",
+  "sendAttempts": 1,
+  "dataPostCount": 1,
+  "pythonBaselineCompared": false,
+  "scope": "One explicitly requested contract and one trade date; not full-market or historical acceptance.",
+  "archiveArtifact": "var/jdb-source-acceptance/98907406-bf4a-4344-b541-3e84c0f9f09f/writes/9502b083a26ecfb1b5eb3b84a17c954e7efe37311b6714114db4d87587c32494/certificate.json",
+  "sourceArtifact": "var/jdb-source-acceptance/98907406-bf4a-4344-b541-3e84c0f9f09f/sources/86e739490040c4d86e69a9078d5d86a09a22028eda5a40bac9462effff30a91c.json",
+  "physicalColumns": [
+    {
+      "source": "ts_code",
+      "target": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "source": "trade_date",
+      "target": "trade_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "settle",
+      "target": "settle",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "trading_fee_rate",
+      "target": "trading_fee_rate",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "trading_fee",
+      "target": "trading_fee",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "delivery_fee",
+      "target": "delivery_fee",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "b_hedging_margin_rate",
+      "target": "b_hedging_margin_rate",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "s_hedging_margin_rate",
+      "target": "s_hedging_margin_rate",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "long_margin_rate",
+      "target": "long_margin_rate",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "short_margin_rate",
+      "target": "short_margin_rate",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "offset_today_fee",
+      "target": "offset_today_fee",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "exchange",
+      "target": "exchange",
+      "type": "SYMBOL",
+      "key": false
+    },
+    {
+      "source": "update_time",
+      "target": "update_time",
+      "type": "TIMESTAMP",
+      "key": false
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "dataset": "cn_m",
+  "job": "source_cn_m",
+  "requestedRange": {
+    "start": "2026-05-01",
+    "end": "2026-07-01"
+  },
+  "providerRequest": {
+    "start_m": "202605",
+    "end_m": "202607"
+  },
+  "sourceRows": 3,
+  "sourcePages": 1,
+  "continuousMonthCoverage": true,
+  "verifiedRows": 3,
+  "physicallyVisible": true,
+  "qualityPassed": true,
+  "state": "VERIFIED",
+  "sendAttempts": 1,
+  "dataPostCount": 1,
+  "questDbTable": "jdb_test_b0c40ffc2c9a4aba_cn_m_6dd22e113efb407dd5b1fec2a9c7296d50b4862e18a5eb130f93fe848f04200c",
+  "sqliteMetadata": "temporary test-local SQLite file",
+  "pythonBaselineCompared": false,
+  "sideEffects": "Wrote three bounded monthly observations to an isolated jdb_test_* QuestDB table; no production target or schedule changed.",
+  "persistedMonthlyCoverage": {
+    "dataset": "cn_m",
+    "definitionVersion": "cn_m-v1",
+    "scopeIdentity": "cb68d10761c5ce8506bc449b3a70760a631fefed1ce9ffefcb6c6bd4bdcde290",
+    "verifiedSegments": [
+      {
+        "start": "2026-05-01",
+        "end": "2026-07-01",
+        "months": 3
+      }
+    ],
+    "verifiedMonths": 3
+  },
+  "sqliteCoverageRecordedAtomicallyWithVerifiedState": true
+}

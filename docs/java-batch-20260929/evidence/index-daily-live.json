@@ -1,0 +1,708 @@
+{
+  "acceptedAtUtc": "2026-09-29T17:54:59Z",
+  "acceptanceScope": "Real Tushare and isolated QuestDB acceptance for core index universe plus canonical CSI and one SW .SI code. Includes a one-day multi-code run for both index products; this is not full configured universe or legacy-output comparison.",
+  "products": [
+    {
+      "dataset": "index_daily_market",
+      "logicalDate": "2026-09-28",
+      "code": "000300.SH",
+      "sourceKind": "real-tushare",
+      "sourceRows": 1,
+      "sourcePages": 1,
+      "sourceFingerprint": "24ffa94226f66ac9574ce382ff4f0d3c6b8cb530a5e616522c32832a1d65e5f7",
+      "businessState": "VERIFIED",
+      "verifiedRows": 1,
+      "physicallyVisible": true,
+      "qualityPassed": true,
+      "sendAttempts": 1,
+      "repeatLaunchPreservedSingleSend": true,
+      "target": "jdb_test_a35b479c820e4b8c_index_daily_market_14cae537b99f640d7e196ee2c065ee747bb7e4fd033d3f852cd8f195675686b1",
+      "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/46c4d133-7368-4dd3-bee3-86ffe1242b7a/writes/14cae537b99f640d7e196ee2c065ee747bb7e4fd033d3f852cd8f195675686b1/certificate.json",
+      "physicalColumns": [
+        {
+          "source": "ts_code",
+          "target": "ts_code",
+          "type": "SYMBOL",
+          "key": true
+        },
+        {
+          "source": "trade_date",
+          "target": "trade_date",
+          "type": "TIMESTAMP",
+          "key": true
+        },
+        {
+          "source": "close",
+          "target": "close",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "open",
+          "target": "open",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "high",
+          "target": "high",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "low",
+          "target": "low",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pre_close",
+          "target": "pre_close",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "change",
+          "target": "change",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pct_chg",
+          "target": "pct_chg",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "vol",
+          "target": "vol",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "amount",
+          "target": "amount",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "update_time",
+          "target": "update_time",
+          "type": "TIMESTAMP",
+          "key": false
+        }
+      ]
+    },
+    {
+      "dataset": "index_daily_basic",
+      "logicalDate": "2026-09-28",
+      "code": "000300.SH",
+      "sourceKind": "real-tushare",
+      "sourceRows": 1,
+      "sourcePages": 1,
+      "sourceFingerprint": "a886032eb3a760e1a5682ba3ea99479f54e9cff5fd26c356f380909fc4588781",
+      "businessState": "VERIFIED",
+      "verifiedRows": 1,
+      "physicallyVisible": true,
+      "qualityPassed": true,
+      "sendAttempts": 1,
+      "repeatLaunchPreservedSingleSend": true,
+      "target": "jdb_test_a35b479c820e4b8c_index_daily_basic_6650b4d351185787b815ac0dc2c7c0a307f7c1fd8d0b2bd29be3b68ad3157831",
+      "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/46c4d133-7368-4dd3-bee3-86ffe1242b7a/writes/6650b4d351185787b815ac0dc2c7c0a307f7c1fd8d0b2bd29be3b68ad3157831/certificate.json",
+      "physicalColumns": [
+        {
+          "source": "ts_code",
+          "target": "ts_code",
+          "type": "SYMBOL",
+          "key": true
+        },
+        {
+          "source": "trade_date",
+          "target": "trade_date",
+          "type": "TIMESTAMP",
+          "key": true
+        },
+        {
+          "source": "total_mv",
+          "target": "total_mv",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "float_mv",
+          "target": "float_mv",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "total_share",
+          "target": "total_share",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "float_share",
+          "target": "float_share",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "free_share",
+          "target": "free_share",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "turnover_rate",
+          "target": "turnover_rate",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "turnover_rate_f",
+          "target": "turnover_rate_f",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pe",
+          "target": "pe",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pe_ttm",
+          "target": "pe_ttm",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pb",
+          "target": "pb",
+          "type": "DOUBLE",
+          "key": false
+        }
+      ]
+    },
+    {
+      "dataset": "index_daily_market",
+      "logicalDate": "2026-09-28",
+      "code": "000985.CSI",
+      "sourceKind": "real-tushare",
+      "sourceRows": 1,
+      "sourcePages": 1,
+      "sourceFingerprint": "2efbb157bf4aafcc8ae2a9d7ed8ffb7b0a4f18c5c0c63d57d5d0ed8679168ac6",
+      "businessState": "VERIFIED",
+      "verifiedRows": 1,
+      "physicallyVisible": true,
+      "qualityPassed": true,
+      "sendAttempts": 1,
+      "repeatLaunchPreservedSingleSend": true,
+      "target": "jdb_test_9a5d0220a3b54e52_index_daily_market_14cae537b99f640d7e196ee2c065ee747bb7e4fd033d3f852cd8f195675686b1",
+      "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/cdf983c9-664f-486b-9c2a-34c1b4c7d6ae/writes/14cae537b99f640d7e196ee2c065ee747bb7e4fd033d3f852cd8f195675686b1/certificate.json",
+      "frozenExpectedCodes": [
+        "000985.CSI"
+      ],
+      "physicalColumns": [
+        {
+          "source": "ts_code",
+          "target": "ts_code",
+          "type": "SYMBOL",
+          "key": true
+        },
+        {
+          "source": "trade_date",
+          "target": "trade_date",
+          "type": "TIMESTAMP",
+          "key": true
+        },
+        {
+          "source": "close",
+          "target": "close",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "open",
+          "target": "open",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "high",
+          "target": "high",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "low",
+          "target": "low",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pre_close",
+          "target": "pre_close",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "change",
+          "target": "change",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "pct_chg",
+          "target": "pct_chg",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "vol",
+          "target": "vol",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "amount",
+          "target": "amount",
+          "type": "DOUBLE",
+          "key": false
+        },
+        {
+          "source": "update_time",
+          "target": "update_time",
+          "type": "TIMESTAMP",
+          "key": false
+        }
+      ]
+    }
+  ],
+  "gradleTest": "./gradlew --no-daemon test --tests com.zoutrankil.batch.NativeProducerLiveTest --console=plain",
+  "testResult": "BUILD SUCCESSFUL; test selected only index_daily_market,index_daily_basic",
+  "reportSha256": "5e68146f786a04e707c16d517161100b454aef85081dc32a1e3f2bc565e5850e",
+  "credentialsRecorded": false,
+  "additionalGradleTest": "./gradlew --no-daemon test --tests com.zoutrankil.batch.NativeProducerLiveTest --console=plain with JDB_SOURCE_DATASETS=index_daily_market and JDB_SOURCE_CODE=000985.CSI",
+  "additionalTestResult": "BUILD SUCCESSFUL; real Tushare row and isolated QuestDB readback verified",
+  "csiReportSha256": "3d1bfc9e7f04cf8e4ffacb8f95b21bfa9004c3f9d6d0af5636d5978648cf26f7",
+  "multiCodeAcceptance": {
+    "scope": "Legacy five core indices for both products plus configured CSI index 000985.CSI for index_daily_market; one date per product, one frozen multi-code manifest and one scoped business instance per product.",
+    "testResult": "BUILD SUCCESSFUL; each source response was independently queried by ts_code, aggregated into one frozen scope, written to an isolated QuestDB snapshot and read back; repeated launch left one send per product.",
+    "products": [
+      {
+        "dataset": "index_daily_market",
+        "logicalDate": "2026-09-28",
+        "expectedCodes": [
+          "000016.SH",
+          "000300.SH",
+          "000852.SH",
+          "000905.SH",
+          "000985.CSI",
+          "399006.SZ"
+        ],
+        "universeVersion": "core-index-universe-v1",
+        "scopeIdentity": "ff026142d760498ca74b64923c782469e51e2283531f85e6480ff766e1b9ac9f",
+        "sourceFingerprint": "1e1fe2eea87aae807bc55812083c6588244794d647335cefb4428941f434ef5f",
+        "sourceRows": 6,
+        "sourcePages": 6,
+        "businessState": "VERIFIED",
+        "verifiedRows": 6,
+        "physicallyVisible": true,
+        "qualityPassed": true,
+        "sendAttempts": 1,
+        "target": "jdb_test_a28d8ebc7ffa4340_index_daily_market_2bd4ee1c40444f5f3f1bd05bb0b3ef96232ba62e70a3753f027009074d33a0a4",
+        "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/df35cc8d-0245-4038-b601-8e58acd8a716/writes/2bd4ee1c40444f5f3f1bd05bb0b3ef96232ba62e70a3753f027009074d33a0a4/certificate.json",
+        "physicalColumns": [
+          {
+            "source": "ts_code",
+            "target": "ts_code",
+            "type": "SYMBOL",
+            "key": true
+          },
+          {
+            "source": "trade_date",
+            "target": "trade_date",
+            "type": "TIMESTAMP",
+            "key": true
+          },
+          {
+            "source": "close",
+            "target": "close",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "open",
+            "target": "open",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "high",
+            "target": "high",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "low",
+            "target": "low",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "pre_close",
+            "target": "pre_close",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "change",
+            "target": "change",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "pct_chg",
+            "target": "pct_chg",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "vol",
+            "target": "vol",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "amount",
+            "target": "amount",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "update_time",
+            "target": "update_time",
+            "type": "TIMESTAMP",
+            "key": false
+          }
+        ]
+      },
+      {
+        "dataset": "index_daily_basic",
+        "logicalDate": "2026-09-28",
+        "expectedCodes": [
+          "000016.SH",
+          "000300.SH",
+          "000852.SH",
+          "000905.SH",
+          "399006.SZ"
+        ],
+        "universeVersion": "core-index-universe-v1",
+        "scopeIdentity": "c677776ce1bb3e0b58b0a731cedd3128d90b8a49632b5eea199256baba00dd7e",
+        "sourceFingerprint": "394c0474d7c9c7a0aef4696bc6a8456537f89137fb6c623885ffc994bd40bf5b",
+        "sourceRows": 5,
+        "sourcePages": 5,
+        "businessState": "VERIFIED",
+        "verifiedRows": 5,
+        "physicallyVisible": true,
+        "qualityPassed": true,
+        "sendAttempts": 1,
+        "target": "jdb_test_a28d8ebc7ffa4340_index_daily_basic_84eb573b485b543ab2e528ac170644a77d7efcd08b8f1e1afc9a115dd3b94115",
+        "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/df35cc8d-0245-4038-b601-8e58acd8a716/writes/84eb573b485b543ab2e528ac170644a77d7efcd08b8f1e1afc9a115dd3b94115/certificate.json",
+        "physicalColumns": [
+          {
+            "source": "ts_code",
+            "target": "ts_code",
+            "type": "SYMBOL",
+            "key": true
+          },
+          {
+            "source": "trade_date",
+            "target": "trade_date",
+            "type": "TIMESTAMP",
+            "key": true
+          },
+          {
+            "source": "total_mv",
+            "target": "total_mv",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "float_mv",
+            "target": "float_mv",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "total_share",
+            "target": "total_share",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "float_share",
+            "target": "float_share",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "free_share",
+            "target": "free_share",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "turnover_rate",
+            "target": "turnover_rate",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "turnover_rate_f",
+            "target": "turnover_rate_f",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "pe",
+            "target": "pe",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "pe_ttm",
+            "target": "pe_ttm",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "pb",
+            "target": "pb",
+            "type": "DOUBLE",
+            "key": false
+          }
+        ]
+      }
+    ],
+    "gradleTest": "./gradlew --no-daemon test --tests com.zoutrankil.batch.NativeProducerLiveTest --console=plain",
+    "reportSha256": "f84bfa3c6b3f96147f6e0174e9b860c0da6e792a488018fcf317e01b6e87cd3e"
+  },
+  "swMixedCodeAcceptance": {
+    "acceptedAtUtc": "2026-09-29T17:54:59Z",
+    "scope": "One 2026-09-28 multi-code snapshot for index_daily_market including core five, 000985.CSI, and 801080.SI via sw_daily; index_daily_basic core five. Same per-product frozen manifest/scope and one business instance each.",
+    "testResult": "BUILD SUCCESSFUL; 7/7 market rows and 5/5 basic rows physically visible and quality-verified in isolated QuestDB; repeat launch produced one QWP send per product.",
+    "providerContract": {
+      "swCode": "801080.SI",
+      "endpoint": "sw_daily",
+      "providerPctField": "pct_change",
+      "normalizedPctField": "pct_chg",
+      "preClose": "null because sw_daily does not supply pre_close",
+      "volumeAndAmount": "No unit conversion; preserves legacy connector semantics."
+    },
+    "swFrozenRowPresent": true,
+    "products": [
+      {
+        "dataset": "index_daily_market",
+        "logicalDate": "2026-09-28",
+        "expectedCodes": [
+          "000016.SH",
+          "000300.SH",
+          "000852.SH",
+          "000905.SH",
+          "000985.CSI",
+          "399006.SZ",
+          "801080.SI"
+        ],
+        "sourceRows": 7,
+        "sourcePages": 7,
+        "scopeIdentity": "66819fe2bdba0a6a36ac4eb4dfbd0bd888cb897a73581271a3ce368a0a6f45b9",
+        "sourceFingerprint": "7525630d8558e2c90a8f4b914b2755437f0fa4598cb17da990773f4676e69d8c",
+        "businessState": "VERIFIED",
+        "verifiedRows": 7,
+        "physicallyVisible": true,
+        "qualityPassed": true,
+        "sendAttempts": 1,
+        "dataPostCount": 1,
+        "target": null,
+        "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d98f9ade-765f-40d5-838f-35b8209093c4/writes/b71959859d4d00e521f429850c6234269fe5ad7e2246da069ab37e5b4ec54535/certificate.json",
+        "physicalColumns": [
+          {
+            "source": "ts_code",
+            "target": "ts_code",
+            "type": "SYMBOL",
+            "key": true
+          },
+          {
+            "source": "trade_date",
+            "target": "trade_date",
+            "type": "TIMESTAMP",
+            "key": true
+          },
+          {
+            "source": "close",
+            "target": "close",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "open",
+            "target": "open",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "high",
+            "target": "high",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "low",
+            "target": "low",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "pre_close",
+            "target": "pre_close",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "change",
+            "target": "change",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "pct_chg",
+            "target": "pct_chg",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "vol",
+            "target": "vol",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "amount",
+            "target": "amount",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "update_time",
+            "target": "update_time",
+            "type": "TIMESTAMP",
+            "key": false
+          }
+        ]
+      },
+      {
+        "dataset": "index_daily_basic",
+        "logicalDate": "2026-09-28",
+        "expectedCodes": [
+          "000016.SH",
+          "000300.SH",
+          "000852.SH",
+          "000905.SH",
+          "399006.SZ"
+        ],
+        "sourceRows": 5,
+        "sourcePages": 5,
+        "scopeIdentity": "89616e8a1598339ea7116e5f8075866e5d5fe0c608edb67c8a483969f22fb5b6",
+        "sourceFingerprint": "f39cbe3a37b02a34a56a75c05f6045bff0788ab86d1fd659e4d002d33a031966",
+        "businessState": "VERIFIED",
+        "verifiedRows": 5,
+        "physicallyVisible": true,
+        "qualityPassed": true,
+        "sendAttempts": 1,
+        "dataPostCount": 1,
+        "target": null,
+        "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/d98f9ade-765f-40d5-838f-35b8209093c4/writes/fd167006c73e9d0ef2c1944ac1d28428fef5cf23930a04f8284b2e3d2da31652/certificate.json",
+        "physicalColumns": [
+          {
+            "source": "ts_code",
+            "target": "ts_code",
+            "type": "SYMBOL",
+            "key": true
+          },
+          {
+            "source": "trade_date",
+            "target": "trade_date",
+            "type": "TIMESTAMP",
+            "key": true
+          },
+          {
+            "source": "total_mv",
+            "target": "total_mv",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "float_mv",
+            "target": "float_mv",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "total_share",
+            "target": "total_share",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "float_share",
+            "target": "float_share",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "free_share",
+            "target": "free_share",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "turnover_rate",
+            "target": "turnover_rate",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "turnover_rate_f",
+            "target": "turnover_rate_f",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "pe",
+            "target": "pe",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "pe_ttm",
+            "target": "pe_ttm",
+            "type": "DOUBLE",
+            "key": false
+          },
+          {
+            "source": "pb",
+            "target": "pb",
+            "type": "DOUBLE",
+            "key": false
+          }
+        ]
+      }
+    ],
+    "gradleTest": "./gradlew --no-daemon cleanTest test --tests com.zoutrankil.batch.NativeProducerLiveTest --console=plain with JDB_SOURCE_LIVE=1, index_daily_market,index_daily_basic",
+    "reportSha256": "32128f7dc493bc3de81dd4f2ae0ec95f5e517df9d8c7afdfb4e5448f0438de81",
+    "credentialsRecorded": false,
+    "scopeLimit": "One SW index code and one date only; full 31-code SW universe, history, Python baseline comparison remain open."
+  }
+}

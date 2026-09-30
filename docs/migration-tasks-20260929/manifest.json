@@ -235,24 +235,14 @@
   "conditional_order": [
     "Q001",
     "Q002",
-    "Q003",
-    "Q004",
-    "Q005",
-    "Q006",
-    "Q007",
-    "Q008",
-    "Q009",
-    "Q010",
-    "Q011",
-    "Q012",
-    "Q013",
-    "Q014"
+    "Q003"
   ],
   "counts": {
     "functional": 17,
     "audited_data": 184,
-    "conditional_data": 14,
-    "total": 215
+    "conditional_data": 3,
+    "total": 215,
+    "retired_data": 11
   },
   "audit_sha256": {
     "objects.csv": "ccfe3d2c885f8e87d4bb1206529bd4513cf4e7809f32c6cd4ffc9004d958657a",
@@ -2828,9 +2818,9 @@
       "provider": "UNCONFIRMED",
       "serial_after": "Q003",
       "semantic_dependencies": [],
-      "status": "conditional",
+      "status": "retired_with_evidence",
       "spec_path": "15-conditional/Q004-eco_cal_daily_agg.md",
-      "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q004：eco_cal_daily_agg（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q004-eco_cal_daily_agg.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q003 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q004.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
+      "prompt": "已归档：Q004（eco_cal_daily_agg）状态为 retired_with_evidence，不属于活跃迁移/准入顺序；禁止按旧任务提示创建表或执行迁移。处置依据见 docs/migration-tasks-20260929/q-object-disposition.md。仅在未来出现新的生产者与研究消费者证据后，另行发起新准入。"
     },
     {
       "id": "Q005",
@@ -2840,9 +2830,9 @@
       "provider": "UNCONFIRMED",
       "serial_after": "Q004",
       "semantic_dependencies": [],
-      "status": "conditional",
+      "status": "retired_with_evidence",
       "spec_path": "15-conditional/Q005-eco_cal_quantified.md",
-      "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q005：eco_cal_quantified（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q005-eco_cal_quantified.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q004 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q005.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
+      "prompt": "已归档：Q005（eco_cal_quantified）状态为 retired_with_evidence，不属于活跃迁移/准入顺序；禁止按旧任务提示创建表或执行迁移。处置依据见 docs/migration-tasks-20260929/q-object-disposition.md。仅在未来出现新的生产者与研究消费者证据后，另行发起新准入。"
     },
     {
       "id": "Q006",
@@ -2852,9 +2842,9 @@
       "provider": "UNCONFIRMED",
       "serial_after": "Q005",
       "semantic_dependencies": [],
-      "status": "conditional",
+      "status": "retired_with_evidence",
       "spec_path": "15-conditional/Q006-factor_exposure_snapshot_daily.md",
-      "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q006：factor_exposure_snapshot_daily（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q006-factor_exposure_snapshot_daily.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q005 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q006.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
+      "prompt": "已归档：Q006（factor_exposure_snapshot_daily）状态为 retired_with_evidence，不属于活跃迁移/准入顺序；禁止按旧任务提示创建表或执行迁移。处置依据见 docs/migration-tasks-20260929/q-object-disposition.md。仅在未来出现新的生产者与研究消费者证据后，另行发起新准入。"
     },
     {
       "id": "Q007",
@@ -2864,9 +2854,9 @@
       "provider": "UNCONFIRMED",
       "serial_after": "Q006",
       "semantic_dependencies": [],
-      "status": "conditional",
+      "status": "retired_with_evidence",
       "spec_path": "15-conditional/Q007-factor_lifecycle_event.md",
-      "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q007：factor_lifecycle_event（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q007-factor_lifecycle_event.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q006 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q007.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
+      "prompt": "已归档：Q007（factor_lifecycle_event）状态为 retired_with_evidence，不属于活跃迁移/准入顺序；禁止按旧任务提示创建表或执行迁移。处置依据见 docs/migration-tasks-20260929/q-object-disposition.md。仅在未来出现新的生产者与研究消费者证据后，另行发起新准入。"
     },
     {
       "id": "Q008",
@@ -2876,9 +2866,9 @@
       "provider": "UNCONFIRMED",
       "serial_after": "Q007",
       "semantic_dependencies": [],
-      "status": "conditional",
+      "status": "retired_with_evidence",
       "spec_path": "15-conditional/Q008-index_daily.md",
-      "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q008：index_daily（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q008-index_daily.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q007 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q008.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
+      "prompt": "已归档：Q008（index_daily）状态为 retired_with_evidence，不属于活跃迁移/准入顺序；禁止按旧任务提示创建表或执行迁移。处置依据见 docs/migration-tasks-20260929/q-object-disposition.md。仅在未来出现新的生产者与研究消费者证据后，另行发起新准入。"
     },
     {
       "id": "Q009",
@@ -2888,9 +2878,9 @@
       "provider": "UNCONFIRMED",
       "serial_after": "Q008",
       "semantic_dependencies": [],
-      "status": "conditional",
+      "status": "retired_with_evidence",
       "spec_path": "15-conditional/Q009-macro_bond_yield.md",
-      "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q009：macro_bond_yield（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q009-macro_bond_yield.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q008 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q009.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
+      "prompt": "已归档：Q009（macro_bond_yield）状态为 retired_with_evidence，不属于活跃迁移/准入顺序；禁止按旧任务提示创建表或执行迁移。处置依据见 docs/migration-tasks-20260929/q-object-disposition.md。仅在未来出现新的生产者与研究消费者证据后，另行发起新准入。"
     },
     {
       "id": "Q010",
@@ -2900,9 +2890,9 @@
       "provider": "UNCONFIRMED",
       "serial_after": "Q009",
       "semantic_dependencies": [],
-      "status": "conditional",
+      "status": "retired_with_evidence",
       "spec_path": "15-conditional/Q010-macro_news.md",
-      "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q010：macro_news（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q010-macro_news.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q009 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q010.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
+      "prompt": "已归档：Q010（macro_news）状态为 retired_with_evidence，不属于活跃迁移/准入顺序；禁止按旧任务提示创建表或执行迁移。处置依据见 docs/migration-tasks-20260929/q-object-disposition.md。仅在未来出现新的生产者与研究消费者证据后，另行发起新准入。"
     },
     {
       "id": "Q011",
@@ -2912,9 +2902,9 @@
       "provider": "UNCONFIRMED",
       "serial_after": "Q010",
       "semantic_dependencies": [],
-      "status": "conditional",
+      "status": "retired_with_evidence",
       "spec_path": "15-conditional/Q011-prediction_observation_v1.md",
-      "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q011：prediction_observation_v1（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q011-prediction_observation_v1.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q010 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q011.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
+      "prompt": "已归档：Q011（prediction_observation_v1）状态为 retired_with_evidence，不属于活跃迁移/准入顺序；禁止按旧任务提示创建表或执行迁移。处置依据见 docs/migration-tasks-20260929/q-object-disposition.md。仅在未来出现新的生产者与研究消费者证据后，另行发起新准入。"
     },
     {
       "id": "Q012",
@@ -2924,9 +2914,9 @@
       "provider": "UNCONFIRMED",
       "serial_after": "Q011",
       "semantic_dependencies": [],
-      "status": "conditional",
+      "status": "retired_with_evidence",
       "spec_path": "15-conditional/Q012-report_rc.md",
-      "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q012：report_rc（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q012-report_rc.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q011 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q012.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
+      "prompt": "已归档：Q012（report_rc）状态为 retired_with_evidence，不属于活跃迁移/准入顺序；禁止按旧任务提示创建表或执行迁移。处置依据见 docs/migration-tasks-20260929/q-object-disposition.md。仅在未来出现新的生产者与研究消费者证据后，另行发起新准入。"
     },
     {
       "id": "Q013",
@@ -2936,9 +2926,9 @@
       "provider": "UNCONFIRMED",
       "serial_after": "Q012",
       "semantic_dependencies": [],
-      "status": "conditional",
+      "status": "retired_with_evidence",
       "spec_path": "15-conditional/Q013-stock_news.md",
-      "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q013：stock_news（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q013-stock_news.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q012 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q013.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
+      "prompt": "已归档：Q013（stock_news）状态为 retired_with_evidence，不属于活跃迁移/准入顺序；禁止按旧任务提示创建表或执行迁移。处置依据见 docs/migration-tasks-20260929/q-object-disposition.md。仅在未来出现新的生产者与研究消费者证据后，另行发起新准入。"
     },
     {
       "id": "Q014",
@@ -2948,11 +2938,24 @@
       "provider": "UNCONFIRMED",
       "serial_after": "Q013",
       "semantic_dependencies": [],
-      "status": "conditional",
+      "status": "retired_with_evidence",
       "spec_path": "15-conditional/Q014-swan_industry.md",
-      "prompt": "在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 Q014：swan_industry（未落库，待准入）。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/15-conditional/Q014-swan_industry.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 Q013 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/Q014.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。"
+      "prompt": "已归档：Q014（swan_industry）状态为 retired_with_evidence，不属于活跃迁移/准入顺序；禁止按旧任务提示创建表或执行迁移。处置依据见 docs/migration-tasks-20260929/q-object-disposition.md。仅在未来出现新的生产者与研究消费者证据后，另行发起新准入。"
     }
   ],
-  "note": "This is a local planning manifest, not a claimed Orca import schema or runtime Task/Dispatch receipt.",
-  "execution_mode": "direct_local_serial"
+  "note": "This is a local planning manifest, not a claimed Orca import schema or runtime Task/Dispatch receipt. 14项Q卡中仅Q001–Q003仍在条件准入顺序；Q004–Q014已基于源码调用链审查退出落库候选，保留任务卡作为审计历史。total仍包含这11张归档卡。",
+  "execution_mode": "direct_local_serial",
+  "retired_order": [
+    "Q004",
+    "Q005",
+    "Q006",
+    "Q007",
+    "Q008",
+    "Q009",
+    "Q010",
+    "Q011",
+    "Q012",
+    "Q013",
+    "Q014"
+  ]
 }

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "verifiedAtLocal": "2026-09-30 Asia/Shanghai",
+  "dataset": "dividend",
+  "definitionVersion": "dividend-v1",
+  "acceptanceScope": "single-security, single-announcement-date; not full history or universe coverage",
+  "source": {
+    "provider": "Tushare Pro",
+    "endpoint": "dividend",
+    "security": "000001.SZ",
+    "logicalDate": "2026-05-23",
+    "rows": 1,
+    "pages": 1,
+    "completeCoverage": true,
+    "sourceFingerprint": "fa9cebd8942154d71311f1baf1d97dc0b1fe95f409ffb4e976db39b818e68bdb",
+    "frozenArtifactSha256": "fa9cebd8942154d71311f1baf1d97dc0b1fe95f409ffb4e976db39b818e68bdb"
+  },
+  "write": {
+    "isolatedTarget": "jdb_test_636f37ac81bd4c4e_dividend_9a0990772c0f96b7bccbdfbe8dbe6b6830dac1e3d1fedd35bd2c6360125224a2",
+    "businessState": "VERIFIED",
+    "verifiedRows": 1,
+    "physicallyVisible": true,
+    "qualityPassed": true,
+    "sendAttempts": 1,
+    "repeatLaunchDidNotResend": true,
+    "certificate": "/Users/Apple/zq/fun/QuestDBWithData/var/jdb-source-acceptance/61dcee08-5a96-4ad0-8473-820de7ae6a5e/writes/9a0990772c0f96b7bccbdfbe8dbe6b6830dac1e3d1fedd35bd2c6360125224a2/certificate.json"
+  },
+  "legacyKeyProbe": {
+    "key": [
+      "ts_code",
+      "end_date",
+      "ann_date"
+    ],
+    "realSourceResponses": [
+      {
+        "logicalDate": "2026-05-23",
+        "responseRows": 1,
+        "legacyKeyDistinct": 1,
+        "legacyKeyCollisions": 0
+      },
+      {
+        "logicalDate": "2026-08-15",
+        "responseRows": 3,
+        "legacyKeyDistinct": 1,
+        "legacyKeyCollisions": 2
+      }
+    ],
+    "policy": "reject a response whose records collide under the checked-in QuestDB dedup key; do not silently discard plan/progress variants"
+  },
+  "compatibility": {
+    "nullEndDate": "normalized to legacy sentinel \"unknown\" before business-key validation",
+    "physicalSchemaVerified": false,
+    "reason": "isolated acceptance table generated from the Java contract; the production table schema was not probed"
+  },
+  "credentialHandling": "token read in memory from local application.yml; omitted from report and artifacts",
+  "limitations": [
+    "One security and one announcement date only",
+    "No complete monthly/backfill schedule or checkpoint",
+    "No parity comparison with frozen legacy Python output",
+    "A collision-bearing source window remains blocked until ownership/key semantics are resolved"
+  ]
+}

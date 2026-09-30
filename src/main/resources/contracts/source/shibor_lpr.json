@@ -1,0 +1,19 @@
+{
+  "dataset": "shibor_lpr",
+  "version": "shibor_lpr-v1",
+  "endpoint": "shibor_lpr",
+  "dateParameter": "start_date",
+  "sourceDate": "date",
+  "timestampColumn": "date",
+  "pageSize": 2000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 2000,
+  "maxBytes": 8388608,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=151; one bounded observation date, monthly publication dates may be empty",
+  "columns": [
+    { "source": "date", "target": "date", "type": "TIMESTAMP", "key": true },
+    { "source": "1y", "target": "1y", "type": "DOUBLE", "key": false },
+    { "source": "5y", "target": "5y", "type": "DOUBLE", "key": false }
+  ]
+}
