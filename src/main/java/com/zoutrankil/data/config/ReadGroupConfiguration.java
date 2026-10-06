@@ -65,6 +65,11 @@ public class ReadGroupConfiguration {
                 bindings.add(new ReadGroupReader.Binding<>(definition,
                         com.zoutrankil.data.domain.MarketBarometerCacheCoverage.class,
                         mapper::fromValues, () -> null));
+            } else if (definition.datasetId().equals("equity_style_monthly")) {
+                var mapper = new com.zoutrankil.data.mapper.EquityStyleMonthlyMapper();
+                bindings.add(new ReadGroupReader.Binding<>(definition,
+                        com.zoutrankil.data.domain.EquityStyleMonthly.class,
+                        mapper::fromValues, () -> null));
             } else if (definition.datasetId().equals("v_etf_market_overview_daily")) {
                 var mapper = new com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMapper();
                 bindings.add(new ReadGroupReader.Binding<>(definition,

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -53,6 +54,7 @@ public class QuestDbBoundedReader {
     public <T> DatasetReadPage<T> read(DatasetDefinition definition, DatasetReadQuery query, String sourceVersion,
                                       Function<DatasetValues, T> mapper) {
         validateEtfAggregateQuery(definition, query);
+        QuestDbEquityStyleReadGuard.validate(definition, query);
         validateCacheGenerationFilters(definition, query);
         String guardedBefore = guardedSourceVersion(definition);
         String effectiveSourceVersion = guardedBefore == null ? sourceVersion : guardedBefore;
@@ -131,6 +133,8 @@ public class QuestDbBoundedReader {
     }
 
     private String guardedSourceVersion(DatasetDefinition definition) {
+        if (QuestDbEquityStyleReadGuard.applies(definition))
+            return QuestDbEquityStyleReadGuard.version(jdbc, definition);
         if (definition.objectKind() == ObjectKind.MATERIALIZED_VIEW)
             return requireCurrentMaterializedView(definition.objectName()).sourceVersion();
         if (definition.objectKind() == ObjectKind.VIEW && GUARDED_MATERIALIZED_ALIASES.containsKey(definition.objectName()))
@@ -156,8 +160,8 @@ public class QuestDbBoundedReader {
     }
 
     private AliasState etfAggregateViewState() {
-        return jdbc.query("SELECT view_sql,view_table_dir_name,view_status,invalidation_reason,"
-                + "view_status_update_time FROM views() WHERE view_name='" + GUARDED_ETF_AGGREGATE_VIEW + "'", rs -> {
+        return queryEtfMetadata("SELECT view_sql,view_table_dir_name,view_status,invalidation_reason,"
+                + "view_status_update_time FROM views() WHERE view_name='" + GUARDED_ETF_AGGREGATE_VIEW + "'", 2, rs -> {
             if (!rs.next()) throw new IllegalStateException("Guarded ETF aggregate view is absent");
             String sql = rs.getString("view_sql");
             String directory = rs.getString("view_table_dir_name");
@@ -191,14 +195,14 @@ public class QuestDbBoundedReader {
     }
 
     private String requireEtfAggregateSource(String table, DatasetDefinition expected) {
-        String version = jdbc.query("SELECT t.id AS table_id,t.directoryName AS table_directory,"
+        String version = queryEtfMetadata("SELECT t.id AS table_id,t.directoryName AS table_directory,"
                 + "t.table_txn AS table_physical_txn,t.table_suspended AS table_suspended,"
                 + "t.wal_pending_row_count AS table_pending_rows,t.walEnabled AS table_wal_enabled,"
                 + "t.partitionBy AS table_partition,t.designatedTimestamp AS table_timestamp,"
                 + "t.dedup AS table_dedup,t.matView AS table_is_materialized,"
                 + "w.sequencerTxn AS table_seq_txn,w.writerTxn AS table_writer_txn,"
                 + "w.bufferedTxnSize AS table_buffered_txns,w.suspended AS table_wal_suspended "
-                + "FROM tables() t JOIN wal_tables() w ON w.name=t.table_name WHERE t.table_name='" + table + "'", rs -> {
+                + "FROM tables() t JOIN wal_tables() w ON w.name=t.table_name WHERE t.table_name='" + table + "'", 2, rs -> {
             if (!rs.next()) throw new IllegalStateException("ETF aggregate source table or WAL metadata is absent");
             long id = requiredCounter(rs, "table_id");
             String directory = rs.getString("table_directory");
@@ -223,7 +227,7 @@ public class QuestDbBoundedReader {
     }
 
     private void requireEtfSourceSchema(String table, DatasetDefinition expected) {
-        jdbc.query("SELECT column,type,designated,upsertKey FROM table_columns('" + table + "')", rs -> {
+        queryEtfMetadata("SELECT \"column\",\"type\",designated,upsertKey FROM table_columns('" + table + "') LIMIT 18", 18, rs -> {
             var types = new LinkedHashMap<String, String>();
             var designated = new ArrayList<String>();
             var upsertKeys = new HashSet<String>();
@@ -242,6 +246,16 @@ public class QuestDbBoundedReader {
                 throw new IllegalStateException("ETF aggregate source full schema, timestamp precision or complete key differs");
             return Boolean.TRUE;
         });
+    }
+
+    private <T> T queryEtfMetadata(String sql, int rowLimit, ResultSetExtractor<T> extractor) {
+        return jdbc.query(connection -> {
+            var statement = connection.prepareStatement(sql);
+            statement.setQueryTimeout(20);
+            statement.setMaxRows(rowLimit);
+            statement.setFetchSize(rowLimit);
+            return statement;
+        }, extractor);
     }
 
     /** This is a physical cache snapshot, independent of the row's source_version and current upstream freshness. */
@@ -409,6 +423,7 @@ public class QuestDbBoundedReader {
     public PreparedRead prepare(DatasetDefinition definition, DatasetReadQuery query, String sourceVersion) {
         definition.requireCapability(Capability.READ);
         validateEtfAggregateQuery(definition, query);
+        QuestDbEquityStyleReadGuard.validate(definition, query);
         validateCacheGenerationFilters(definition, query);
         var columns = columns(definition);
         if (!columns.keySet().containsAll(query.columns()) || !columns.keySet().containsAll(query.equalities().keySet())

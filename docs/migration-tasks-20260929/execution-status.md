@@ -301,3 +301,11 @@ D100 最终独立证据复核通过，协调gate `accepted_for_serial_progress`�
 Java typed READ与原Python唯一owner委托管理/断言WRITE全部实现。私有8764初始实源→新增2903实源，最终11667行/164180完整字段匹配；FIRST2miss/4ACK、新HIT2hit/0发布、全前缀增量3miss/6ACK、配置typed3hit/0发布通过。cache/coverage各5完整历史键、25字段值及5原digest一致，PG参考和独立JDBC各20double原位比对，旧txn2物理游标在txn5前拒绝，checkpoint至9/21，0保留lease。184纯+6现场共190Java、43桥+32夹具共75Python唯一PASS，旧失败归档不增计。
 
 Windows启动器/桥OS身份及晚UNKNOWN重复采样已修复。旧首日HIT真实IN_DOUBT现场经严格进程调查与fresh两日全部字段/WAL/来源的显式只读恢复结算，0新owner/0业务DB写；RUN/ATTEMPT proof2与原实际slice1分开，未补造第二日提交，不当作HIT2。之后新run完整HIT2独立通过。所有历史失败文件及旧false标记SHA保持；正常ACK的原ledger writerStopped=false默认值未伪改，实际Gateway停止证明独立。第三日每批硬绑定成功HIT/预检/准入SHA并检查所有ledger/producer/targets，7ACK无UNKNOWN。正式历史5代次3匹配/2摘要异常保留，无正式修复/current/latest认证、生产切换或同键源值修订现场声明。最终typed与数据证据独立复核通过，协调gate accepted_for_serial_progress，按序准许D102，人工pending_review。剩余主线D102–D184共83项，Q仍须独立准入。
+
+## D102 verified，按序准许 D103（2026-10-06）
+
+四列typed普通VIEW READ/ReadGroup完成，51Dataset/40jobs/viewjob0。私有23388/19020/18832唯一CREATE ACK1；11667实源/164180字段，private/formal各三日12字段6DOUBLE、Java独立JDBC及三页/真实cursor/ReadGroup/取消拒写均通过；130唯一Java+81Python0fail/error/skip。五表源frontier及view定义/目录/状态跨阶段固定。三次前CREATE失败原件保留；显式历史身份规则466eligible/9harddeny且每边界freshbirth>全部旧STOP，不借UNKNOWN恢复或按名字豁免。没有来源/cache/coverage/owner/formal业务写入、没有D102源修订；第三日窗口复用D101真实增量。跨private/formal保留4项native聚合ULP差异，各target内0tol，不认证跨布局全局bits稳定/全历史/生产切换。最终独立数据/交付复核及根协调gate通过，accepted_for_serial_progress，按序准许D103，人工pending_review。剩余主线D103–D184共82项，Q仍须独立准入。
+
+## D103 执行中（2026-10-06）
+
+D102最终协调gate accepted_for_serial_progress 后，按序进入 equity_style_monthly。直接本地串行完成该对象的真实有界衍生、typed读写及隔离验收；未准入D104。人工pending_review。

@@ -28,6 +28,8 @@ public class CommandLineRunner implements ApplicationRunner {
     private com.zoutrankil.data.service.RetailSentimentDailyV1JobService retailSentimentDailyService;
     @Autowired(required=false)
     private com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService;
+    @Autowired(required=false)
+    private com.zoutrankil.data.service.EquityStyleMonthlyJobService equityStyleMonthlyService;
     private final StockBasicSyncService syncService;
     private final DatasetRegistry datasetRegistry;
     private final SyncJobRegistry jobRegistry;
@@ -170,6 +172,9 @@ public class CommandLineRunner implements ApplicationRunner {
         String command = args[0];
         Map<String, String> options = parseOptions(args);
         switch (command) {
+            case "install-equity-style-monthly-isolated", "plan-equity-style-monthly-job", "run-equity-style-monthly-job",
+                 "equity-style-monthly-job-status", "cancel-equity-style-monthly-run", "resume-equity-style-monthly-run",
+                 "reconcile-equity-style-monthly-run" -> EquityStyleMonthlyCommands.execute(command,options,equityStyleMonthlyService);
             case "plan-ths-member-job", "run-ths-member-job" -> {
                 if (thsMemberService == null || !options.keySet().equals(java.util.Set.of("--board-code", "--logical-date")))
                     throw new IllegalArgumentException("Exact THS board and logical date required");

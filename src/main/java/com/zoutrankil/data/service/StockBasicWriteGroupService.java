@@ -74,6 +74,8 @@ public class StockBasicWriteGroupService {
     private StockSuspendJobService stockSuspendTarget;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
     private EtfMarketOverviewDailyCacheJobService etfMarketOverviewCacheTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private EquityStyleMonthlyJobService equityStyleMonthlyTarget;
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
     private final Path ledger;
@@ -244,6 +246,12 @@ public class StockBasicWriteGroupService {
                 if (priorRun == null) targets.put(member.datasetId(), etfMarketOverviewCacheTarget.targetId());
                 else targets.put(member.datasetId(), SyncGroupTargetIdentity.frozen(ledger, priorRun,
                         "write.etf_market_overview_daily_cache"));
+            } else if(member.datasetId().equals(EquityStyleMonthlyDataset.DEFINITION.datasetId()) && equityStyleMonthlyTarget!=null) {
+                var mapper=new com.zoutrankil.data.mapper.EquityStyleMonthlyMapper();
+                com.zoutrankil.data.repository.EquityStyleMonthlyWritePort.requireBatch(
+                        member.rows().stream().map(mapper::fromValues).toList());
+                equityStyleMonthlyTarget.requireNoPendingPublication();
+                targets.put(member.datasetId(),equityStyleMonthlyTarget.targetId());
             } else throw new IllegalArgumentException("No admitted write owner for requested dataset");
         }
         var plan = WriteGroupPlan.prepare(request, datasets, targets);
@@ -537,6 +545,17 @@ public class StockBasicWriteGroupService {
                 adapters.put(member.memberId(), new EtfMarketOverviewCachePreparedWriteAdapter(plan,
                         member.memberId(), etfMarketOverviewCacheTarget.delegatedPort(),
                         evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(EquityStyleMonthlyDataset.DEFINITION.datasetId())) {
+                if(equityStyleMonthlyTarget==null)throw new IllegalArgumentException("Registered D103 write owner required");
+                var mapper=new com.zoutrankil.data.mapper.EquityStyleMonthlyMapper();
+                var port=equityStyleMonthlyTarget.writePort();
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.data.repository.EquityStyleMonthlyWritePort.CODEC,port,
+                        () -> {
+                            try { return equityStyleMonthlyTarget.targetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve D103 target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
             } else throw new IllegalArgumentException("No prepared adapter for dataset");
         }
         return new PersistentWriteGroupRunner(ledger, evidence, datasets)

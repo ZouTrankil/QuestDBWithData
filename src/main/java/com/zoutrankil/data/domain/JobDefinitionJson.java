@@ -17,6 +17,13 @@ public final class JobDefinitionJson {
         temporal.addSerializer(ZoneId.class, stringSerializer(ZoneId.class));
         temporal.addSerializer(LocalDate.class, stringSerializer(LocalDate.class));
         temporal.addSerializer(Instant.class, stringSerializer(Instant.class));
+        temporal.addSerializer(YearMonth.class,new StdScalarSerializer<YearMonth>(YearMonth.class) {
+            @Override public void serialize(YearMonth value,JsonGenerator output,SerializerProvider provider) throws IOException {
+                if(value.getYear()<1 || value.getYear()>9999)
+                    provider.reportMappingProblem("YearMonth requires a positive four-digit YYYY-MM year");
+                output.writeString(value.toString());
+            }
+        });
         temporal.addSerializer(SyncJobDefinition.FrozenRequest.class,
                 new StdSerializer<SyncJobDefinition.FrozenRequest>(SyncJobDefinition.FrozenRequest.class) {
                     @Override public void serialize(SyncJobDefinition.FrozenRequest value, JsonGenerator output,
@@ -35,6 +42,13 @@ public final class JobDefinitionJson {
         temporal.addDeserializer(ZoneId.class,stringDeserializer(ZoneId.class,ZoneId::of));
         temporal.addDeserializer(LocalDate.class,stringDeserializer(LocalDate.class,LocalDate::parse));
         temporal.addDeserializer(Instant.class,stringDeserializer(Instant.class,Instant::parse));
+        temporal.addDeserializer(YearMonth.class,stringDeserializer(YearMonth.class,value -> {
+            if(!value.matches("[0-9]{4}-(0[1-9]|1[0-2])"))
+                throw new DateTimeException("Exact YYYY-MM month required");
+            YearMonth month=YearMonth.parse(value);
+            if(month.getYear()<1)throw new DateTimeException("Positive four-digit year required");
+            return month;
+        }));
         return new ObjectMapper().registerModule(temporal);
     }
     private static <T> JsonDeserializer<T> stringDeserializer(Class<T> type,java.util.function.Function<String,T> parse) {
