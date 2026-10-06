@@ -1,6 +1,6 @@
 # D096 · v_market_breadth_daily
 
-- 状态：planned，尚未派发。
+- 状态：verified；七字段 Java typed READ、公开别名与底层 MV 契约/版本护栏、实际分页及 ReadGroup 验收通过。正式 MV 失效单独保留，人工复核 pending_review。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D095`；前项验收后才执行本项。
@@ -33,15 +33,15 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 单数据交付清单
 
-- [ ] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
-- [ ] D02：本表业务Key、物理去重键、冲突/修订规则。
-- [ ] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
-- [ ] D04：本表按键/范围的typed read与分页，接入读取组合。
-- [ ] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
-- [ ] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
-- [ ] D07：注册 `v_market_breadth_daily` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
-- [ ] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
-- [ ] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
+- [x] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
+- [x] D02：本表业务Key、物理去重键、冲突/修订规则。
+- [x] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
+- [x] D04：本表按键/范围的typed read与分页，接入读取组合。
+- [x] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
+- [x] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
+- [x] D07：注册 `v_market_breadth_daily` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
+- [x] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
+- [x] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
 
 ## 可观察验收
 
@@ -76,16 +76,26 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 本任务容错、实际验收与完成登记（必做）
 
-- [ ] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
-- [ ] 验证本任务适用的限流/超时重试、分页异常、取消和断点恢复；已ACK但未回读一致的写入保持未验证。
-- [ ] 默认增量，记录checkpoint前后与有限修订窗口；sync有数据才写，没有数据明确记0，不用假数据充数。
-- [ ] 对本任务实际目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留请求范围、查询/参数、返回样本和汇总。
-- [ ] 首次非空真实来源写入、同范围幂等重跑及再次增量验证有记录；本任务为View/MV或功能时按公共契约对应的实际验收方式执行。
-- [ ] 更新[逐项完成表](../completion-register.md)的 `D096` 行及 `results/D096.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
-- [ ] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
+- [x] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
+- [x] 验证本任务适用的限流/超时重试、分页异常、取消和断点恢复；已ACK但未回读一致的写入保持未验证。
+- [x] 默认增量，记录checkpoint前后与有限修订窗口；sync有数据才写，没有数据明确记0，不用假数据充数。
+- [x] 对本任务实际目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留请求范围、查询/参数、返回样本和汇总。
+- [x] 首次非空真实来源写入、同范围幂等重跑及再次增量验证有记录；本任务为View/MV或功能时按公共契约对应的实际验收方式执行。
+- [x] 更新[逐项完成表](../completion-register.md)的 `D096` 行及 `results/D096.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
+- [x] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
 
 ## Orca执行提示
 
 ```text
 在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D096：v_market_breadth_daily。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/11-derived/D096-v_market_breadth_daily.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D095 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D096.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。
 ```
+
+## 实施与验收（2026-10-06）
+
+- 普通 VIEW 无自己的分区、WAL、DEDUP 或直写；自然键是一个 trade_date 日桶。七字段显式透传，LONG 必填，两个 DOUBLE 可空，日期是 UTC 午夜载体；不再次换算单位。
+- 实际 SQL 为 SELECT * FROM mv_market_breadth_daily_v1。Java 同时校验 alias 的状态、目录身份/SQL及 D095 的基表、聚合公式、WAL/刷新版本；首次定义漂移或分页版本漂移均拒绝。既有 stock_basic_latest 普通视图回归通过。
+- D05/D06/D07 的本视图写入和独立 sync 为 N/A：READ-only 禁止 DML，来源刷新引用 canonical data.mv_market_breadth_daily_v1 v1 的 plan/run/status/resume/cancel/reconcile，不另造一个 writer 或 checkpoint。DatasetDefinition、typed repository 和 ReadGroup 注册已从实际管理目录核验。
+- 隔离 QuestDB 10.0.1 复用 D095 三个完整真实源日、16658 行。alias↔MV↔base 三组各 21 字段值匹配；Java 分三页读取 3 行、21 值匹配，实际配置 ReadGroup 和 JSON 请求一致。源码/失败边界加真实验收共 40 项测试，0 失败/错误/跳过。
+- 正式实例仅 SELECT：alias valid，但底层 MV invalid、txn 12/14，本窗口 alias 两桶而来源三桶。Java typed read 与 ReadGroup 都拒绝，失败不变成成功空数据。正式写入 0。
+- 请求示例：artifacts/java-migration/D096/commands/read-group-request.json，可由 read-dataset-group --request PATH 执行。窗口 [2026-09-17,2026-09-22)，pageSize 31；有界继续读取用返回 nextCursor。底层生产 MV 修复尚未完成，当前正式调用会按约束失败。
+- 结果见 results/D096.json；协调器验收 accepted_for_serial_progress，人工 pending_review。下一项 D097。

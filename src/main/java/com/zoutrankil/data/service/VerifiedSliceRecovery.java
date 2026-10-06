@@ -56,10 +56,12 @@ public final class VerifiedSliceRecovery {
         if(checkpoint==null) return null;
         if(page.rows().size()!=checkpoint.rows()) throw new IllegalStateException("Checkpoint source row count changed");
         var expected=new LinkedHashMap<K,byte[]>();
+        var expectedRows=new LinkedHashMap<K,T>();
         for(T row:page.rows()) {
             var key=Objects.requireNonNull(codec.key(row));
             if(expected.putIfAbsent(key,codec.canonicalBytes(row))!=null)
                 throw new IllegalStateException("Duplicate source checkpoint key");
+            expectedRows.put(key,row);
         }
         port.preflight();
         var keys=List.copyOf(expected.keySet());
@@ -79,7 +81,7 @@ public final class VerifiedSliceRecovery {
                     throw new IllegalStateException("Checkpoint target returned an unexpected key; batch="+batchNumber);
                 if(!batchSeen.add(key) || !seen.add(key))
                     throw new IllegalStateException("Checkpoint target contains a duplicate key; batch="+batchNumber);
-                if(!Arrays.equals(expected.get(key),codec.canonicalBytes(row)))
+                if(!codec.equivalent(expectedRows.get(key),row))
                     throw new IllegalStateException("Checkpoint target field values changed; batch="+batchNumber
                             +" requestedKeys="+batch.size()+" actualRows="+actual.size());
             }

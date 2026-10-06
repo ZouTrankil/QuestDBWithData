@@ -72,6 +72,8 @@ public class StockBasicWriteGroupService {
     private StockStDailyJobService stockStDailyTarget;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
     private StockSuspendJobService stockSuspendTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private EtfMarketOverviewDailyCacheJobService etfMarketOverviewCacheTarget;
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
     private final Path ledger;
@@ -237,6 +239,11 @@ public class StockBasicWriteGroupService {
                 stockSuspendTarget.requireNoPendingPublication();
                 if(priorRun==null) targets.put(member.datasetId(),stockSuspendTarget.physicalTargetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.stk_suspend"));
+            } else if (member.datasetId().equals(EtfMarketOverviewDailyCacheDataset.DEFINITION.datasetId())
+                    && etfMarketOverviewCacheTarget != null) {
+                if (priorRun == null) targets.put(member.datasetId(), etfMarketOverviewCacheTarget.targetId());
+                else targets.put(member.datasetId(), SyncGroupTargetIdentity.frozen(ledger, priorRun,
+                        "write.etf_market_overview_daily_cache"));
             } else throw new IllegalArgumentException("No admitted write owner for requested dataset");
         }
         var plan = WriteGroupPlan.prepare(request, datasets, targets);
@@ -524,6 +531,12 @@ public class StockBasicWriteGroupService {
                             try { stockSuspendTarget.requireNoPendingPublication(); return stockSuspendTarget.physicalTargetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve stk_suspend target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
+            } else if (member.definition().datasetId().equals(EtfMarketOverviewDailyCacheDataset.DEFINITION.datasetId())) {
+                if (etfMarketOverviewCacheTarget == null)
+                    throw new IllegalArgumentException("Registered D101 delegated owner required");
+                adapters.put(member.memberId(), new EtfMarketOverviewCachePreparedWriteAdapter(plan,
+                        member.memberId(), etfMarketOverviewCacheTarget.delegatedPort(),
+                        evidence.resolve(run).resolve(member.memberId())));
             } else throw new IllegalArgumentException("No prepared adapter for dataset");
         }
         return new PersistentWriteGroupRunner(ledger, evidence, datasets)

@@ -65,6 +65,46 @@ public class ReadGroupConfiguration {
                 bindings.add(new ReadGroupReader.Binding<>(definition,
                         com.zoutrankil.data.domain.MarketBarometerCacheCoverage.class,
                         mapper::fromValues, () -> null));
+            } else if (definition.datasetId().equals("v_etf_market_overview_daily")) {
+                var mapper = new com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMapper();
+                bindings.add(new ReadGroupReader.Binding<>(definition,
+                        com.zoutrankil.data.domain.EtfMarketOverviewDailyView.class,
+                        mapper::fromValues, () -> null));
+            } else if (definition.datasetId().equals("etf_market_overview_daily_cache")) {
+                var mapper = new com.zoutrankil.data.mapper.EtfMarketOverviewDailyCacheMapper();
+                bindings.add(new ReadGroupReader.Binding<>(definition,
+                        com.zoutrankil.data.domain.EtfMarketOverviewDailyCache.class,
+                        mapper::fromValues, () -> null));
+            } else if (definition.datasetId().equals("retail_sentiment_daily_cache")) {
+                var mapper = new com.zoutrankil.data.mapper.RetailSentimentDailyCacheMapper();
+                bindings.add(new ReadGroupReader.Binding<>(definition,
+                        com.zoutrankil.data.domain.RetailSentimentDailyCache.class,
+                        mapper::fromValues, () -> null));
+            } else if (definition.datasetId().equals("v_retail_sentiment_daily")) {
+                var mapper = new com.zoutrankil.data.mapper.RetailSentimentDailyViewMapper();
+                bindings.add(new ReadGroupReader.Binding<>(definition,
+                        com.zoutrankil.data.domain.RetailSentimentDailyView.class,
+                        mapper::fromValues, () -> null));
+            } else if (definition.datasetId().equals("mv_retail_sentiment_daily_v1")) {
+                var mapper = new com.zoutrankil.data.mapper.RetailSentimentDailyV1Mapper();
+                bindings.add(new ReadGroupReader.Binding<>(definition,
+                        com.zoutrankil.data.domain.RetailSentimentDailyV1.class,
+                        mapper::fromValues, () -> null));
+            } else if (definition.datasetId().equals("mv_market_breadth_daily_v1")) {
+                var mapper = new com.zoutrankil.data.mapper.MarketBreadthDailyV1Mapper();
+                bindings.add(new ReadGroupReader.Binding<>(definition,
+                        com.zoutrankil.data.domain.MarketBreadthDailyV1.class,
+                        mapper::fromValues, () -> null));
+            } else if (definition.datasetId().equals("market_breadth_daily_cache")) {
+                var mapper = new com.zoutrankil.data.mapper.MarketBreadthDailyCacheMapper();
+                bindings.add(new ReadGroupReader.Binding<>(definition,
+                        com.zoutrankil.data.domain.MarketBreadthDailyCache.class,
+                        mapper::fromValues, () -> null));
+            } else if (definition.datasetId().equals("v_market_breadth_daily")) {
+                var mapper = new com.zoutrankil.data.mapper.MarketBreadthDailyViewMapper();
+                bindings.add(new ReadGroupReader.Binding<>(definition,
+                        com.zoutrankil.data.domain.MarketBreadthDailyView.class,
+                        mapper::fromValues, () -> null));
             } else if (definition.capabilities().contains(DatasetDefinition.Capability.READ))
                 bindings.add(new ReadGroupReader.Binding<>(definition, DatasetValues.class,
                         java.util.function.Function.identity(), () -> null));

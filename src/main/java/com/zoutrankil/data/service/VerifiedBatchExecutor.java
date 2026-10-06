@@ -43,10 +43,27 @@ public final class VerifiedBatchExecutor<T, K> {
         K key(T row);
         /** Deterministic encoding of all business columns, including null markers. */
         byte[] canonicalBytes(T row);
+        /** Dataset value comparison; exact bytes remain the default for ordinary writes. */
+        default boolean equivalent(T expected, T actual) {
+            return Arrays.equals(canonicalBytes(expected), canonicalBytes(actual));
+        }
         /** Application byte budget including adapter overhead; not an exact wire-byte measurement. */
         default int estimatedTransportBytes(T row, byte[] canonical) { return canonical.length; }
     }
+    /** Context supplied only after the shared SQLite submission transaction commits. */
+    public record Submission(java.nio.file.Path ledgerPath, String runId, String sliceId,
+                             long revision, String sourceFingerprint) {
+        public Submission {
+            ledgerPath = Objects.requireNonNull(ledgerPath).toAbsolutePath().normalize();
+            if (runId == null || runId.isBlank() || sliceId == null || sliceId.isBlank()
+                    || revision < 1 || sourceFingerprint == null || sourceFingerprint.isBlank())
+                throw new IllegalArgumentException("Complete durable submission context required");
+        }
+    }
     public interface Port<T, K> {
+        /** Delegates independently inspect this SQLite authority before starting external publication. */
+        default void submissionRecorded(Submission submission) throws Exception {}
+
         /** Must fail before sending if schema, WAL, target or ownership is not ready. */
         void preflight() throws Exception;
         /** One finite batch. An exception after the call begins has unknown delivery. */
@@ -82,6 +99,7 @@ public final class VerifiedBatchExecutor<T, K> {
             var rows = new ArrayList<T>();
             var keys = new ArrayList<K>();
             var expected = new HashMap<K, byte[]>();
+            var expectedRows = new HashMap<K, T>();
             int bytes = 0;
             try {
             while (pending != null || source.hasNext()) {
@@ -106,6 +124,7 @@ public final class VerifiedBatchExecutor<T, K> {
                 rows.add(row);
                 keys.add(key);
                 expected.put(key, encoded.clone());
+                expectedRows.put(key, row);
                 bytes += estimatedBytes;
             }
             } catch (RuntimeException invalidSource) {
@@ -138,7 +157,7 @@ public final class VerifiedBatchExecutor<T, K> {
             do {
                 try {
                     matched = (acknowledged || port.uncertainSenderStopped())
-                            && exactMatch(keys, expected, port.readback(keys)) && port.walSettled();
+                            && exactMatch(keys, expectedRows, port.readback(keys)) && port.walSettled();
                 } catch (Exception transientReadFailure) {
                     matched = false;
                 }
@@ -174,13 +193,13 @@ public final class VerifiedBatchExecutor<T, K> {
         return new Result(Status.PARTIAL, submitted, verified, receipts, "maximum batch count reached");
     }
 
-    private boolean exactMatch(List<K> keys, Map<K, byte[]> expected, List<T> actual) {
+    private boolean exactMatch(List<K> keys, Map<K, T> expected, List<T> actual) {
         if (actual == null || actual.size() != keys.size()) return false;
         var found = new HashSet<K>();
         for (T row : actual) {
             K key = codec.key(row);
             if (!found.add(key) || !expected.containsKey(key)
-                    || !Arrays.equals(expected.get(key), codec.canonicalBytes(row))) return false;
+                    || !codec.equivalent(expected.get(key), row)) return false;
         }
         return found.size() == keys.size();
     }

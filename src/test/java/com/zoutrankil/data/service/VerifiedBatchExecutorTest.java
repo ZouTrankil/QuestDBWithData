@@ -180,4 +180,58 @@ class VerifiedBatchExecutorTest {
             assertEquals(1, after.sends);
         } finally { Thread.interrupted(); }
     }
+    private VerifiedBatchExecutor.Codec<Row, String> tolerantCodec() {
+        return new VerifiedBatchExecutor.Codec<>() {
+            public String key(Row row) { return codec.key(row); }
+            public byte[] canonicalBytes(Row row) { return codec.canonicalBytes(row); }
+            @Override public boolean equivalent(Row expected, Row actual) {
+                double left = Double.parseDouble(expected.value()), right = Double.parseDouble(actual.value());
+                return java.util.Objects.equals(expected.key(), actual.key()) && Double.isFinite(left)
+                        && Double.isFinite(right) && Math.abs(left - right) <= 1e-8;
+            }
+        };
+    }
+
+    @Test void defaultComparisonRejectsEvenSmallNumericReadbackDifferences() {
+        var source = new Row("a", "1.0");
+        var port = new Port() {
+            @Override public List<Row> readback(List<String> keys) {
+                return List.of(new Row("a", "1.000000001"));
+            }
+        };
+        var result = new VerifiedBatchExecutor<>(policy(), codec, port).execute(List.of(source).iterator());
+        assertEquals(VerifiedBatchExecutor.Status.IN_DOUBT, result.status());
+        assertEquals(0, result.verifiedRows());
+        assertEquals(1, port.sends);
+    }
+
+    @Test void optInToleranceAcceptsRoundingOnlyAndPreservesTheSourceDigest() {
+        var source = new Row("a", "1.0");
+        var exact = new VerifiedBatchExecutor<>(policy(), codec, new Port()).execute(List.of(source).iterator());
+        var rounded = new Port() {
+            @Override public List<Row> readback(List<String> keys) {
+                return List.of(new Row("a", "1.000000001"));
+            }
+        };
+        var result = new VerifiedBatchExecutor<>(policy(), tolerantCodec(), rounded)
+                .execute(List.of(source).iterator());
+        assertEquals(VerifiedBatchExecutor.Status.VERIFIED, result.status());
+        assertEquals(1, result.verifiedRows());
+        assertEquals(1, rounded.sends);
+        assertEquals(exact.receipts().getFirst().digest(), result.receipts().getFirst().digest(),
+                "Tolerance must not replace the canonical source receipt with rounded readback values");
+    }
+
+    @Test void optInToleranceStillRejectsOutOfToleranceValuesAndDifferentKeys() {
+        for (Row actual : List.of(new Row("a", "1.001"), new Row("b", "1.000000001"))) {
+            var port = new Port() {
+                @Override public List<Row> readback(List<String> keys) { return List.of(actual); }
+            };
+            var result = new VerifiedBatchExecutor<>(policy(), tolerantCodec(), port)
+                    .execute(List.of(new Row("a", "1.0")).iterator());
+            assertEquals(VerifiedBatchExecutor.Status.IN_DOUBT, result.status());
+            assertEquals(0, result.verifiedRows());
+            assertEquals(1, port.sends);
+        }
+    }
 }

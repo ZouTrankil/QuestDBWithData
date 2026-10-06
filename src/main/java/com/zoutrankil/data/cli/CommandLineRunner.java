@@ -22,6 +22,12 @@ import java.util.Map;
 @Component
 @ConditionalOnNotWebApplication
 public class CommandLineRunner implements ApplicationRunner {
+    @Autowired(required=false)
+    private com.zoutrankil.data.service.MarketBreadthDailyV1JobService marketBreadthDailyService;
+    @Autowired(required=false)
+    private com.zoutrankil.data.service.RetailSentimentDailyV1JobService retailSentimentDailyService;
+    @Autowired(required=false)
+    private com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService;
     private final StockBasicSyncService syncService;
     private final DatasetRegistry datasetRegistry;
     private final SyncJobRegistry jobRegistry;
@@ -366,6 +372,20 @@ public class CommandLineRunner implements ApplicationRunner {
                 System.out.println(new ObjectMapper().writeValueAsString(Map.of("status", accepted ? "CANCEL_REQUESTED" : "ALREADY_TERMINAL",
                         "runId", options.get("--run"), "executed", false, "dataVerified", false)));
             }
+            case "plan-etf-market-overview-cache-job", "run-etf-market-overview-cache-job",
+                 "etf-market-overview-cache-job-status", "cancel-etf-market-overview-cache-run",
+                 "resume-etf-market-overview-cache-run", "reconcile-etf-market-overview-cache-run" ->
+                    EtfMarketOverviewDailyCacheCommands.execute(command, options, etfMarketOverviewDailyCacheService);
+            case "install-retail-sentiment-daily-isolated", "repair-retail-sentiment-daily-isolated",
+                 "plan-retail-sentiment-daily-job", "run-retail-sentiment-daily-job",
+                 "retail-sentiment-daily-job-status", "cancel-retail-sentiment-daily-run",
+                 "resume-retail-sentiment-daily-run", "reconcile-retail-sentiment-daily-run" ->
+                    RetailSentimentDailyV1Commands.execute(command, options, retailSentimentDailyService);
+            case "install-market-breadth-daily-isolated", "repair-market-breadth-daily-isolated",
+                 "plan-market-breadth-daily-job", "run-market-breadth-daily-job",
+                 "market-breadth-daily-job-status", "cancel-market-breadth-daily-run",
+                 "resume-market-breadth-daily-run", "reconcile-market-breadth-daily-run" ->
+                    MarketBreadthDailyV1Commands.execute(command, options, marketBreadthDailyService);
             case "create-l2-daily-features-test-target" -> {
                 if (l2DailyFeaturesService == null || !options.keySet().equals(java.util.Set.of("--table")))
                     throw new IllegalArgumentException("Exact isolated D086 --table required");
@@ -1776,6 +1796,10 @@ public class CommandLineRunner implements ApplicationRunner {
                 + "plan-l2-manifest-job|run-l2-manifest-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD "
                 + "[--mode incremental|backfill|reconcile|ingest] [--symbols CODE,CODE] [--resume-from RUN_ID] OR "
                 + "l2-manifest-job-status --run RUN_ID OR cancel-l2-manifest-run --run RUN_ID OR "
+                + "plan-market-breadth-daily-job|run-market-breadth-daily-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD [--mode INCREMENTAL|MATERIALIZE|RECONCILE] OR "
+                + "market-breadth-daily-job-status|cancel-market-breadth-daily-run|resume-market-breadth-daily-run --run RUN_ID OR "
+                + "reconcile-market-breadth-daily-run --run RUN_ID --writer-stopped true OR "
+                + "install-market-breadth-daily-isolated|repair-market-breadth-daily-isolated OR "
                 + "create-l2-daily-features-test-target --table java_d086_l2_daily_features_SUFFIX OR "
                 + "plan-l2-daily-features-job|run-l2-daily-features-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD "
                 + "[--mode incremental|backfill|reconcile|ingest] [--symbols CODE,CODE] [--resume-from RUN_ID] OR "

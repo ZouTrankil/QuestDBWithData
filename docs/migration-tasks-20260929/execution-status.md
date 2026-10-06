@@ -271,3 +271,33 @@ D006已验收：同花顺 `ths_member` 以显式单板块切片请求，真实�
 - D092 `backtest_daily_cache`：按Python readthrough owner裁决为 `retained_compatibility`，仅Java typed READ和ReadGroup。实表MONTH/WAL/DEDUP及14列、完整版本化UPSERT KEY现场确认。2026-09-21已存版本完整5,565行经Java typed repository读取，与D091已由Python原版摘要核验的切片逐字段比对77,910值全部匹配；ReadGroup一致。Java映射3项、本机只读验收1项通过；cache和coverage表行数/table_txn均未变化。当前来源指纹与已存版本不同，未触发可能写入的重建。证据见`results/D092.json`及`artifacts/java-migration/D092/`。协调器验收门槛接受串行推进，人工复核`pending_review`；下一项D093 `v_backtest_daily`（`11-derived`）。
 - D093 `v_backtest_daily`：普通VIEW裁决为 `retained_compatibility`，Python `VIEW_SELECT` 保持权威DDL owner，Java提供13字段typed READ和ReadGroup。QuestDB `views()` 状态valid、SQL哈希与Python定义一致；上游 `stk_factor`、`stk_limit`、`stk_st_daily` 唯一键满足Python安装守卫。2026-09-17 Python HTTP及Java JDBC实读各200个完整键，13列共2,600值全部匹配，ReadGroup一致。视图无物理WAL/分区/DEDUP，来源表行数/table_txn读前后不变，未执行DDL或写入。映射3项、实库1项通过。证据见`results/D093.json`及`artifacts/java-migration/D093/`。协调器验收门槛接受串行推进，人工复核`pending_review`；下一项D094 `market_barometer_cache_coverage`（`11-derived`）。
 - D094 `market_barometer_cache_coverage`：Python `MarketBarometerReadThroughCache` 的三产品共享完整性回执，裁决 `retained_compatibility`。Java仅提供5字段typed READ和ReadGroup，零行回执语义在模型/测试中保留。实表MONTH/WAL/DEDUP及完整三段UPSERT KEY现场一致；市场宽度、ETF概览、零售情绪各选最新已存非空回执，分别与对应cache记录及Python原版摘要匹配，Java按完整键读取及ReadGroup一致。coverage与三cache表行数/table_txn前后不变，映射3项和本机只读验收1项通过。当前来源指纹未核定、未触发可能写入的重建。证据见`results/D094.json`及`artifacts/java-migration/D094/`。协调器验收门槛接受串行推进，人工复核`pending_review`；下一项D095 `mv_market_breadth_daily_v1`（`11-derived`）。
+- D095 `mv_market_breadth_daily_v1`（2026-10-06）：Java canonical job `data.mv_market_breadth_daily_v1 v1`及7字段typed READ、稳定分页/ReadGroup、共享runner/账本/status/cancel/resume/reconcile、隔离FULL均已实现；依赖真实`stk_factor v2`与交易日历。私有QuestDB10.0.1完整复制9/17–9/18的11105源行，4字段44420值匹配及重复重放幂等；新增9/21的5553行再逐字段22212值匹配。SSE日历20行80值核对，首次/重跑2日桶14字段值、增量/FULL/恢复3日桶21字段值与真实聚合一致；首次、重跑、增量、FULL、恢复5个run VERIFIED，空源1个VERIFIED_EMPTY，缺交易日和失效2个FAILED。checkpoint9/18→9/21，修订窗口from9/19；缺交易日不推进。最新first run `d095-d1b97554-dd38-43a9-a887-684f528f9c98`、FULL `d095-9fa46685-6f3f-4106-9077-9386cd6cdebc`，完整run/slice见结果及`var/d095-java-1203ad29-7f39-4792-bfa8-27e141a1a603.sqlite3`。Java90项0失败/0错误/0跳过与Python15项保护检查通过（全MV锁改动后）；未知ACK/FULL超时保留IN_DOUBT且拒绝重发。QuestDB10.0.1 RANGE存在refreshing状态限制，采用原生INCREMENTAL，完成仍要求valid/caughtUp，不宣称任意历史窗口强制重算。正式库只读复核仍invalid、10265031源行、缺4个交易日，不满足受控刷新预算，正式修复和生产切换未验收；正式FULL授权不作为本卡迁移门槛。D095为`verified`，全MV排他锁回归与实际38项管理catalog均通过；协调器accepted_for_serial_progress，manifest剩余D096–D184，按序进入D096，人工复核pending_review。证据见`results/D095.json`与`artifacts/java-migration/D095/commands/`。 早期RANGE诊断`d095-452b0bba-078c-4c11-bd2e-30718d672c44`及`var/d095-java-568c69ff-8453-459b-a0dd-4fc2aabb13c6.sqlite3`仍IN_DOUBT/旧窄lease保留；源版本重置后不得用新数据释放旧锁。
+
+- D096 `v_market_breadth_daily`：verified。Java七字段typed READ及实际ReadGroup接入；公开别名与D095基表/聚合公式/有效刷新/身份及物理版本共同校验。私有真实16658源行对应3桶，Java3页21值、Python三组63值全部匹配；40项测试0失败/错误/跳过。正式alias valid但MV invalid，被typed read和ReadGroup拒绝，正式写入0；视图无独立writer/checkpoint，刷新引用D095 canonical job。见 `results/D096.json` 与 D096/coordinator-review-20261006.json。协调器接受串行推进，人工pending_review；下一项D097。
+
+## D097 完成与串行推进（2026-10-06）
+
+D097 market_breadth_daily_cache 已 verified（retained_compatibility）。Java八字段历史READ、完整日期/源版本键、typed ReadGroup及物理/WAL版本分页完成；原Python唯一publisher在owned私有QuestDB用16658真实源行验收首次2日→重跑2日→新增9/21一日，完整键2→2→3，cache/coverage各提交5行。Pythonphase56值/原摘要与Java48值匹配，真实旧物理游标拒绝；Java63项+Python10项0失败/错误/跳过，正式及Java写入0。
+
+正式五条历史回执中两条原内容摘要不一致，HTTP/PG对照已排除表示差异；全失败证据保留，未修正式数据，也未认证current cache hit/latest。该生产历史完整性限制与隔离迁移验收分开记录。结果/协调器gate见results/D097.json与artifacts/java-migration/D097/，人工pending_review。当前串行范围仍D085–D184，已登记D085–D097，下一项D098；Orca runtime未就绪，execution_mode保持direct_local_serial，不新建重复Dispatch。
+
+## D098 完成（2026-10-06T15:08:44.592579+08:00）
+
+D098已通过独立QuestDB真实Java物化及读取验收：23773实源行/3日/15必要字段356595值精确再核对；MV13列39值、typed READ39值/3页及ReadGroup全部一致。首次、重放、真实取消恢复、CLI精确恢复实际preflight失败、增量、空窗、拒缺源、失效拒读和受账本跟踪FULL恢复均有记录。Java162唯一测试+Python31纯mock通过。正式MVinvalid、4.9m源及六个缺输出日保持只读，生产未认证；source15/110夹具不认证D086全域。结果results/D098.json；人工复核pending_review。协调器复核后按序转入D099，Q系列未准入。
+
+
+## D099 完成（2026-10-06T15:27:37.610566+08:00）
+
+D099 `v_retail_sentiment_daily` verified：隔离 ordinary alias 仅缺失CREATE一次ACK，复用D098三日23773真实源，三方117字段值一致；Java三页39精确+39基表对照、typed ReadGroup、取消/禁止写及正式invalid拒读通过。90 Java +23 Python护栏均无失败或跳过；Dataset48/job39，唯一刷新入口D098。源/MV和正式库0写，正式MV仍invalid，source universe未认证。人工pending_review；下一项D100仅在协调gate后执行。
+
+## D100 完成（2026-10-06T16:17:50.839735+08:00）
+
+D100 `retail_sentiment_daily_cache` retained_compatibility verified：原Python owner仍唯一publisher，Java十四列typed历史READ+ReadGroup，cachejob0。隔离23773实源/3桶；first2→实际Java游标捕获→同代次重放2→第三日增量3；cache/coverage各5提交、6ACK，42cache+15receipt/3digest一致，Java三页42字段及真实旧物理游标拒绝。126唯一Java+35唯一Pythonpure均0失败/跳过；catalog49/job39。空表metadata-null的初始2DDLACK/0publisher失败原文件保留，经实际COUNT0/全列0和独立review后新first，无UNKNOWN重试、无新DDL。源/MV/alias/正式0数据写；正式5既存代次70字段/5digest只读通过，不claim current hit/latest；源15/110不认证全域。结果results/D100.json，人工pending_review；D101仅在最终协调gate通过后执行，Q仍须独立准入。
+
+D100 最终独立证据复核通过，协调gate `accepted_for_serial_progress`；按既定目录和编号顺序准许转D101，人工复核仍pending_review。
+
+## D101 verified，按序准许 D102（2026-10-06）
+
+Java typed READ与原Python唯一owner委托管理/断言WRITE全部实现。私有8764初始实源→新增2903实源，最终11667行/164180完整字段匹配；FIRST2miss/4ACK、新HIT2hit/0发布、全前缀增量3miss/6ACK、配置typed3hit/0发布通过。cache/coverage各5完整历史键、25字段值及5原digest一致，PG参考和独立JDBC各20double原位比对，旧txn2物理游标在txn5前拒绝，checkpoint至9/21，0保留lease。184纯+6现场共190Java、43桥+32夹具共75Python唯一PASS，旧失败归档不增计。
+
+Windows启动器/桥OS身份及晚UNKNOWN重复采样已修复。旧首日HIT真实IN_DOUBT现场经严格进程调查与fresh两日全部字段/WAL/来源的显式只读恢复结算，0新owner/0业务DB写；RUN/ATTEMPT proof2与原实际slice1分开，未补造第二日提交，不当作HIT2。之后新run完整HIT2独立通过。所有历史失败文件及旧false标记SHA保持；正常ACK的原ledger writerStopped=false默认值未伪改，实际Gateway停止证明独立。第三日每批硬绑定成功HIT/预检/准入SHA并检查所有ledger/producer/targets，7ACK无UNKNOWN。正式历史5代次3匹配/2摘要异常保留，无正式修复/current/latest认证、生产切换或同键源值修订现场声明。最终typed与数据证据独立复核通过，协调gate accepted_for_serial_progress，按序准许D102，人工pending_review。剩余主线D102–D184共83项，Q仍须独立准入。

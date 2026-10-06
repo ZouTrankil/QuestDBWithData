@@ -29,13 +29,14 @@ public class SyncJobRegistry {
                 throw new IllegalArgumentException("Job declares modes absent from its adapter");
             if (!policies.rate().contains(job.ratePolicyRef()) || !policies.slice().contains(job.slicePolicyRef())
                     || !policies.verification().contains(job.verificationPolicyRef()))
-                throw new IllegalArgumentException("Unknown job policy reference");
+                throw new IllegalArgumentException("Unknown job policy reference for " + job.jobId() + ": "
+                        + job.ratePolicyRef() + ", " + job.slicePolicyRef() + ", " + job.verificationPolicyRef());
         }
         for (var job : entries.values()) {
             for (var dependency : job.dependencies()) {
                 var target = entries.get(dependency.jobId());
                 if (target == null || target.version() != dependency.version())
-                    throw new IllegalArgumentException("Unknown dependency or dependency version");
+                    throw new IllegalArgumentException("Unknown dependency or dependency version for " + job.jobId() + ": " + dependency.jobId() + " v" + dependency.version());
             }
         }
         var visited = new HashSet<String>();

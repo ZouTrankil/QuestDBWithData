@@ -34,6 +34,13 @@ public final class SyncJobRunner<T, K> {
         SourceCompletion fetch(FrozenRequest request, PageConsumer<T> consumer, BooleanSupplier cancelled) throws Exception;
         VerifiedBatchExecutor.Codec<T, K> codec();
         VerifiedBatchExecutor.Port<T, K> port();
+        /** Conflict exclusion may cover more dates than the bounded source request. */
+        default DatasetIntervalLock.Scope conflictScope(FrozenRequest request) {
+            return request.from() == null ? DatasetIntervalLock.Scope.allDates(request.definition().datasetId())
+                    : new DatasetIntervalLock.Scope(request.definition().datasetId(), request.from(), request.to());
+        }
+        /** Native asynchronous materialization can request a longer bounded visibility wait. */
+        default Duration visibilityTimeout() { return Duration.ofSeconds(20); }
         /** True when the dataset has a durable side effect that needs explicit reconciliation before retry. */
         default boolean recoveryRequired(String runId) throws Exception { return false; }
     }
@@ -69,14 +76,23 @@ public final class SyncJobRunner<T, K> {
             catch (java.sql.SQLException failure) { throw new IllegalStateException("Cannot read cancellation state", failure); }
         };
         ledger.createRun(runId, parentRunId, targetId, request);
-        try { check(stopped); adapter.preflight(request); check(stopped); }
+        DatasetIntervalLock.Scope scope;
+        try {
+            check(stopped);
+            adapter.preflight(request);
+            scope = adapter.conflictScope(request);
+            if (scope == null || !request.definition().datasetId().equals(scope.datasetId())
+                    || (request.from() == null
+                        ? !scope.equals(DatasetIntervalLock.Scope.allDates(request.definition().datasetId()))
+                        : scope.from().isAfter(request.from()) || scope.to().isBefore(request.to())))
+                throw new IllegalArgumentException("Conflict scope must cover the request in the same dataset");
+            check(stopped);
+        }
         catch (Exception failure) {
             var state = failure instanceof CancellationException ? SyncRunState.CANCELLED : SyncRunState.FAILED;
             ledger.transition(runId, 0, state, error(failure));
             return new Result(runId, state, 0, 0, failure.getClass().getSimpleName());
         }
-        var scope = request.from() == null ? DatasetIntervalLock.Scope.allDates(request.definition().datasetId())
-                : new DatasetIntervalLock.Scope(request.definition().datasetId(), request.from(), request.to());
         var lease = locks.acquire(runId, scope);
         if (lease == null) {
             ledger.transition(runId, 0, SyncRunState.FAILED, "{\"errorCode\":\"DATASET_INTERVAL_BUSY\"}");
@@ -231,6 +247,8 @@ public final class SyncJobRunner<T, K> {
                     ledger.transition(slice, 3, SyncRunState.SUBMITTED, json.writeValueAsString(source));
                     submitted[0] = true; progress.uncertain = true;
                 }
+                port.submissionRecorded(new VerifiedBatchExecutor.Submission(ledger.path(), run, slice,
+                        ledger.get(slice).revision(), page.sourceFingerprint()));
                 port.send(rows);
             }
             public List<T> readback(List<K> keys) throws Exception { return port.readback(keys); }
@@ -240,7 +258,11 @@ public final class SyncJobRunner<T, K> {
         int batchRows = Math.min(250, page.rows().size());
         long remainingNanos = durationNanos - (System.nanoTime() - startedNanos);
         if (remainingNanos < 1_000_000) throw new CancellationException("Write deadline reached");
-        var visibilityTimeout = Duration.ofNanos(Math.min(Duration.ofSeconds(20).toNanos(), remainingNanos));
+        var requestedVisibility = adapter.visibilityTimeout();
+        if (requestedVisibility == null || requestedVisibility.isZero() || requestedVisibility.isNegative()
+                || requestedVisibility.compareTo(Duration.ofMinutes(5)) > 0)
+            throw new IllegalArgumentException("Positive visibility timeout of at most five minutes required");
+        var visibilityTimeout = Duration.ofNanos(Math.min(requestedVisibility.toNanos(), remainingNanos));
         var poll = Duration.ofMillis(Math.min(100, Math.max(1, visibilityTimeout.toMillis())));
         var policy = new VerifiedBatchExecutor.Policy(batchRows, budget.maxBatchBytes(),
                 Math.min(100000 / batchRows, page.rows().size()), visibilityTimeout, poll);

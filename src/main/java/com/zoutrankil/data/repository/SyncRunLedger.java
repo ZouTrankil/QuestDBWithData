@@ -22,6 +22,9 @@ public final class SyncRunLedger {
     public SyncRunLedger(Path path) throws IOException, SQLException {
         this(path, false);
     }
+    /** Resolved local authority path for delegates that verify durable submission directly. */
+    public Path path() { return path.toAbsolutePath().normalize(); }
+
     public static SyncRunLedger openReadOnly(Path path) throws IOException, SQLException {
         return new SyncRunLedger(path, true);
     }

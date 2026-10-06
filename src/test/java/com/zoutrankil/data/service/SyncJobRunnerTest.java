@@ -19,11 +19,14 @@ class SyncJobRunnerTest {
         return request(Duration.ofMinutes(1));
     }
     FrozenRequest request(Duration timeout) {
+        return request(timeout, null, null);
+    }
+    FrozenRequest request(Duration timeout, LocalDate from, LocalDate to) {
         return new SyncJobDefinition("test.job", 1, "test_dataset", 1, "test_adapter",
                 Set.of(Mode.SNAPSHOT), Mode.SNAPSHOT, Map.of(), "rate", "slice", "verify",
                 new RetryPolicy(1, Duration.ofMillis(1), Duration.ofSeconds(1)), timeout,
-                new Budget(1, 5, 5, 10, 4096), 0, List.of(), Frequency.MANUAL, ZoneOffset.UTC, true, false)
-                .freeze(null, Map.of(), null, null, LocalDate.of(2026, 9, 29));
+                new Budget(from == null ? 1 : 3, 5, 5, 10, 4096), 0, List.of(), Frequency.MANUAL, ZoneOffset.UTC, true, false)
+                .freeze(null, Map.of(), from, to, LocalDate.of(2026, 9, 29));
     }
     static class Adapter implements SyncJobRunner.Adapter<Row,String>, VerifiedBatchExecutor.Port<Row,String> {
         final Map<String,Row> stored = new LinkedHashMap<>();
@@ -51,6 +54,52 @@ class SyncJobRunnerTest {
         public List<Row> readback(List<String> keys) { return keys.stream().map(stored::get).filter(Objects::nonNull).toList(); }
         public boolean walSettled() { return true; }
     }
+    @Test void delegateSeesCommittedSubmissionBeforeEverySend() throws Exception {
+        Path path = root.resolve("delegate.sqlite3");
+        var ledger = new SyncRunLedger(path);
+        var adapter = new Adapter() {
+            VerifiedBatchExecutor.Submission submitted;
+            @Override public void submissionRecorded(VerifiedBatchExecutor.Submission context) throws Exception {
+                assertEquals(path.toAbsolutePath().normalize(), context.ledgerPath());
+                var authority = SyncRunLedger.openReadOnly(context.ledgerPath());
+                var entry = authority.get(context.sliceId());
+                assertEquals(SyncRunLedger.Kind.SLICE, entry.kind());
+                assertEquals(SyncRunState.SUBMITTED, entry.state());
+                assertEquals(4, entry.revision());
+                assertEquals(entry.revision(), context.revision());
+                assertEquals(context.runId(), entry.runId());
+                assertTrue(entry.payloadJson().contains(context.sourceFingerprint()));
+                assertEquals("delegated", authority.getRun(context.runId()).id());
+                submitted = context;
+            }
+            @Override public void send(List<Row> rows) {
+                assertNotNull(submitted, "Committed authority must precede delegate publication");
+                super.send(rows);
+                submitted = null;
+            }
+        };
+        var result = new SyncJobRunner<Row,String>(ledger, new DatasetIntervalLock(path))
+                .run("delegated", null, "target", request(), adapter, () -> false);
+        assertEquals(SyncRunState.VERIFIED, result.state());
+        assertEquals(2, adapter.sends);
+    }
+    @Test void failedDelegateSubmissionGuardRetainsUncertaintyWithoutSending() throws Exception {
+        Path path = root.resolve("delegate-rejected.sqlite3");
+        var ledger = new SyncRunLedger(path);
+        var locks = new DatasetIntervalLock(path);
+        var adapter = new Adapter() {
+            @Override public Duration visibilityTimeout() { return Duration.ofMillis(1); }
+            @Override public void submissionRecorded(VerifiedBatchExecutor.Submission context) {
+                throw new IllegalStateException("Delegate durable-intent guard rejected");
+            }
+        };
+        var result = new SyncJobRunner<Row,String>(ledger, locks)
+                .run("delegate-rejected", null, "target", request(), adapter, () -> false);
+        assertEquals(SyncRunState.IN_DOUBT, result.state());
+        assertEquals(0, adapter.sends);
+        assertNotNull(locks.findOwned("delegate-rejected", adapter.conflictScope(request())));
+    }
+
     @Test void sequentialPagesConvergeIntoLedgerAndPreserveLogicalDate() throws Exception {
         Path path = root.resolve("ledger.sqlite3");
         var ledger = new SyncRunLedger(path); var locks = new DatasetIntervalLock(path);
@@ -62,6 +111,66 @@ class SyncJobRunnerTest {
         assertEquals(4, ledger.entries("run-1", null, 10).size());
         assertTrue(ledger.entries("run-1", null, 10).stream().allMatch(e -> e.state() == SyncRunState.VERIFIED));
         assertEquals(SyncRunState.VERIFIED, runner.run("run-2", null, "target", request(), new Adapter(), () -> false).state());
+    }
+    @Test void defaultConflictScopePreservesExactBoundedWindowAndAllDatesForUnboundedRequest() throws Exception {
+        Path path = root.resolve("ledger.sqlite3");
+        var ledger = new SyncRunLedger(path); var locks = new DatasetIntervalLock(path);
+        var runner = new SyncJobRunner<Row,String>(ledger, locks);
+        LocalDate from = LocalDate.of(2026, 9, 27), to = from.plusDays(2);
+        int index = 0;
+        for (var frozen : List.of(request(), request(Duration.ofMinutes(1), from, to))) {
+            String runId = "scope-" + index++;
+            var expected = frozen.from() == null ? DatasetIntervalLock.Scope.allDates("test_dataset")
+                    : new DatasetIntervalLock.Scope("test_dataset", from, to);
+            var adapter = new Adapter() {
+                @Override public SyncJobRunner.SourceCompletion fetch(FrozenRequest request,
+                        SyncJobRunner.PageConsumer<Row> consumer, BooleanSupplier cancelled) throws Exception {
+                    assertEquals(expected, conflictScope(request));
+                    assertNotNull(locks.findOwned(runId, expected));
+                    return super.fetch(request, consumer, cancelled);
+                }
+            };
+            assertEquals(SyncRunState.VERIFIED, runner.run(runId, null, "target", frozen, adapter, () -> false).state());
+            assertNull(locks.findOwned(runId, expected));
+        }
+    }
+    @Test void narrowedConflictScopeFailsDurablyBeforeFetchingOrSending() throws Exception {
+        Path path = root.resolve("ledger.sqlite3");
+        var ledger = new SyncRunLedger(path); var locks = new DatasetIntervalLock(path);
+        var runner = new SyncJobRunner<Row,String>(ledger, locks);
+        LocalDate from = LocalDate.of(2026, 9, 27), to = from.plusDays(2);
+        var adapter = new Adapter() {
+            @Override public DatasetIntervalLock.Scope conflictScope(FrozenRequest request) {
+                return new DatasetIntervalLock.Scope("test_dataset", from.plusDays(1), to);
+            }
+        };
+        var result = runner.run("narrowed", null, "target", request(Duration.ofMinutes(1), from, to), adapter, () -> false);
+        assertEquals(SyncRunState.FAILED, result.state());
+        assertEquals("IllegalArgumentException", result.errorCode());
+        assertEquals(SyncRunState.FAILED, ledger.get("narrowed").state());
+        assertEquals(1, ledger.entries("narrowed", null, 10).size());
+        assertEquals(0, adapter.fetches); assertEquals(0, adapter.sends);
+        assertNull(locks.findOwned("narrowed", adapter.conflictScope(request())));
+    }
+    @Test void differentDatasetOrBoundedScopeForUnboundedRequestIsRejectedBeforeLocking() throws Exception {
+        Path path = root.resolve("ledger.sqlite3");
+        var ledger = new SyncRunLedger(path); var locks = new DatasetIntervalLock(path);
+        var runner = new SyncJobRunner<Row,String>(ledger, locks);
+        LocalDate date = LocalDate.of(2026, 9, 29);
+        int index = 0;
+        for (var invalid : List.of(DatasetIntervalLock.Scope.allDates("other_dataset"),
+                new DatasetIntervalLock.Scope("test_dataset", date, date))) {
+            String runId = "invalid-scope-" + index++;
+            var adapter = new Adapter() {
+                @Override public DatasetIntervalLock.Scope conflictScope(FrozenRequest request) { return invalid; }
+            };
+            var result = runner.run(runId, null, "target", request(), adapter, () -> false);
+            assertEquals(SyncRunState.FAILED, result.state());
+            assertEquals("IllegalArgumentException", result.errorCode());
+            assertEquals(SyncRunState.FAILED, ledger.get(runId).state());
+            assertEquals(0, adapter.fetches); assertEquals(0, adapter.sends);
+            assertNull(locks.findOwned(runId, invalid));
+        }
     }
     @Test void sourceFailureIsFailedAndPreflightCancellationNeverFetches() throws Exception {
         Path path = root.resolve("ledger.sqlite3"); var ledger = new SyncRunLedger(path);
