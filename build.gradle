@@ -83,6 +83,23 @@ tasks.register('batchControl', JavaExec) {
     mainClass = 'com.zoutrankil.batch.BatchControl'
 }
 
+tasks.register('l2DailyFeatureCompute', JavaExec) {
+    group = 'application'
+    description = 'Compute native Python-compatible daily L2 features from bounded extracted DFCF CSV samples.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.zoutrankil.batch.l2.L2DailyFeatureCli'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(24) }
+}
+
+tasks.register('l2DailyFeatureBatch', JavaExec) {
+    group = 'application'
+    description = 'Compute daily L2 features from extracted date directories with bounded workers and verified resume.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.zoutrankil.batch.l2.L2DailyFeatureBatchCli'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(24) }
+    jvmArgs '-Xms1g', "-Xmx${providers.gradleProperty('l2BatchHeap').getOrElse('24g')}"
+}
+
 // Isolated distribution from this same project; do not package legacy application.yml credentials.
 tasks.register('batchRuntimeJar', Jar) {
     archiveClassifier = 'batch'

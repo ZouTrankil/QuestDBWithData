@@ -76,6 +76,8 @@ public class StockBasicWriteGroupService {
     private EtfMarketOverviewDailyCacheJobService etfMarketOverviewCacheTarget;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
     private EquityStyleMonthlyJobService equityStyleMonthlyTarget;
+    @org.springframework.beans.factory.annotation.Autowired(required=false)
+    private MacroCoreMonthlyJobService macroCoreMonthlyTarget;
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
     private final Path ledger;
@@ -246,6 +248,12 @@ public class StockBasicWriteGroupService {
                 if (priorRun == null) targets.put(member.datasetId(), etfMarketOverviewCacheTarget.targetId());
                 else targets.put(member.datasetId(), SyncGroupTargetIdentity.frozen(ledger, priorRun,
                         "write.etf_market_overview_daily_cache"));
+            } else if(member.datasetId().equals(MacroCoreMonthlyDataset.DEFINITION.datasetId()) && macroCoreMonthlyTarget!=null) {
+                var mapper=new com.zoutrankil.data.mapper.MacroCoreMonthlyMapper();
+                com.zoutrankil.data.repository.MacroCoreMonthlyWritePort.requireBatch(
+                        member.rows().stream().map(mapper::fromValues).toList());
+                macroCoreMonthlyTarget.requireNoPendingPublication();
+                targets.put(member.datasetId(),macroCoreMonthlyTarget.targetId());
             } else if(member.datasetId().equals(EquityStyleMonthlyDataset.DEFINITION.datasetId()) && equityStyleMonthlyTarget!=null) {
                 var mapper=new com.zoutrankil.data.mapper.EquityStyleMonthlyMapper();
                 com.zoutrankil.data.repository.EquityStyleMonthlyWritePort.requireBatch(
@@ -545,6 +553,17 @@ public class StockBasicWriteGroupService {
                 adapters.put(member.memberId(), new EtfMarketOverviewCachePreparedWriteAdapter(plan,
                         member.memberId(), etfMarketOverviewCacheTarget.delegatedPort(),
                         evidence.resolve(run).resolve(member.memberId())));
+            } else if(member.definition().datasetId().equals(MacroCoreMonthlyDataset.DEFINITION.datasetId())) {
+                if(macroCoreMonthlyTarget==null)throw new IllegalArgumentException("Registered D104 write owner required");
+                var mapper=new com.zoutrankil.data.mapper.MacroCoreMonthlyMapper();
+                var port=macroCoreMonthlyTarget.writePort();
+                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
+                        mapper::fromValues,mapper::values,
+                        com.zoutrankil.data.repository.MacroCoreMonthlyWritePort.CODEC,port,
+                        () -> {
+                            try { return macroCoreMonthlyTarget.targetId(); }
+                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve D104 target",failure); }
+                        },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(EquityStyleMonthlyDataset.DEFINITION.datasetId())) {
                 if(equityStyleMonthlyTarget==null)throw new IllegalArgumentException("Registered D103 write owner required");
                 var mapper=new com.zoutrankil.data.mapper.EquityStyleMonthlyMapper();

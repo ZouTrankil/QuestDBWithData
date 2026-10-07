@@ -1,6 +1,6 @@
 # D105 · v_macro_core_monthly
 
-- 状态：planned，尚未派发。
+- 状态：in_progress（2026-10-07）；D104协调gate已准入，当前会话直接本地串行执行，人工 pending_review。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D104`；前项验收后才执行本项。

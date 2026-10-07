@@ -30,6 +30,8 @@ public class CommandLineRunner implements ApplicationRunner {
     private com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService;
     @Autowired(required=false)
     private com.zoutrankil.data.service.EquityStyleMonthlyJobService equityStyleMonthlyService;
+    @Autowired(required=false)
+    private com.zoutrankil.data.service.MacroCoreMonthlyJobService macroCoreMonthlyService;
     private final StockBasicSyncService syncService;
     private final DatasetRegistry datasetRegistry;
     private final SyncJobRegistry jobRegistry;
@@ -172,6 +174,9 @@ public class CommandLineRunner implements ApplicationRunner {
         String command = args[0];
         Map<String, String> options = parseOptions(args);
         switch (command) {
+            case "install-macro-core-monthly-isolated", "plan-macro-core-monthly-job", "run-macro-core-monthly-job",
+                 "macro-core-monthly-job-status", "cancel-macro-core-monthly-run", "resume-macro-core-monthly-run",
+                 "reconcile-macro-core-monthly-run" -> MacroCoreMonthlyCommands.execute(command,options,macroCoreMonthlyService);
             case "install-equity-style-monthly-isolated", "plan-equity-style-monthly-job", "run-equity-style-monthly-job",
                  "equity-style-monthly-job-status", "cancel-equity-style-monthly-run", "resume-equity-style-monthly-run",
                  "reconcile-equity-style-monthly-run" -> EquityStyleMonthlyCommands.execute(command,options,equityStyleMonthlyService);

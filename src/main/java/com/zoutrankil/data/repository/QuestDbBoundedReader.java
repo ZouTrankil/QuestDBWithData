@@ -55,6 +55,8 @@ public class QuestDbBoundedReader {
                                       Function<DatasetValues, T> mapper) {
         validateEtfAggregateQuery(definition, query);
         QuestDbEquityStyleReadGuard.validate(definition, query);
+        QuestDbMacroCoreReadGuard.validate(definition, query);
+        QuestDbMacroCoreViewReadGuard.validate(definition, query);
         validateCacheGenerationFilters(definition, query);
         String guardedBefore = guardedSourceVersion(definition);
         String effectiveSourceVersion = guardedBefore == null ? sourceVersion : guardedBefore;
@@ -135,6 +137,10 @@ public class QuestDbBoundedReader {
     private String guardedSourceVersion(DatasetDefinition definition) {
         if (QuestDbEquityStyleReadGuard.applies(definition))
             return QuestDbEquityStyleReadGuard.version(jdbc, definition);
+        if (QuestDbMacroCoreReadGuard.applies(definition))
+            return QuestDbMacroCoreReadGuard.version(jdbc, definition);
+        if (QuestDbMacroCoreViewReadGuard.applies(definition))
+            return QuestDbMacroCoreViewReadGuard.version(jdbc, definition);
         if (definition.objectKind() == ObjectKind.MATERIALIZED_VIEW)
             return requireCurrentMaterializedView(definition.objectName()).sourceVersion();
         if (definition.objectKind() == ObjectKind.VIEW && GUARDED_MATERIALIZED_ALIASES.containsKey(definition.objectName()))
@@ -424,6 +430,8 @@ public class QuestDbBoundedReader {
         definition.requireCapability(Capability.READ);
         validateEtfAggregateQuery(definition, query);
         QuestDbEquityStyleReadGuard.validate(definition, query);
+        QuestDbMacroCoreReadGuard.validate(definition, query);
+        QuestDbMacroCoreViewReadGuard.validate(definition, query);
         validateCacheGenerationFilters(definition, query);
         var columns = columns(definition);
         if (!columns.keySet().containsAll(query.columns()) || !columns.keySet().containsAll(query.equalities().keySet())

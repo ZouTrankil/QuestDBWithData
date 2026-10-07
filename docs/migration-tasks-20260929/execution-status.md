@@ -309,3 +309,33 @@ Windows启动器/桥OS身份及晚UNKNOWN重复采样已修复。旧首日HIT真
 ## D103 执行中（2026-10-06）
 
 D102最终协调gate accepted_for_serial_progress 后，按序进入 equity_style_monthly。直接本地串行完成该对象的真实有界衍生、typed读写及隔离验收；未准入D104。人工pending_review。
+
+## D103 verified，按序准许 D104（2026-10-06）
+
+30列typed读写、组合、canonical job v1及管理完成。48实源/672字段/432bits，初始两月实际操作经冻结账本与fresh Java只读恢复核实；新增八月并重叠七月的实际INCREMENTAL通过，最终三月90字段/87bits原位一致。125唯一Java+122Python保护检查PASS，最终9runs/21entries/85events/1group/0leases。原source INSERT ACK UNKNOWN和原initial Java最终序列化失败保持，不重发初始写入、不伪造旧JVM身份。正式库只读、旧六月/七月缺口保留；无FULL/生产切换/真实旧期来源修订声明。独立交付复核及根协调gate accepted_for_serial_progress，人工pending_review。剩余主线D104–D184共81项；Q须独立准入。
+
+## D104 执行中（2026-10-06）
+
+D103最终协调gate准入后，按序开始macro_core_monthly真实owner/source语义调查、Java实现与隔离有界验收。直接本地串行；未准入D105。
+
+## D104 verified，按序准许 D105（2026-10-07）
+
+状态：verified（隔离有界验收）；协调器 accepted_for_serial_progress，按序准许 D105；人工 pending_review。
+
+- D01—D09 完成：9列 typed domain/key/mapper/read/write、ReadGroup/WriteGroup、canonical job与管理入口。
+- 六个实际来源：June/July 初始23行，经5个August INSERT新增5行至28行；完整412字段、383 nullable DOUBLE槽位，非空位比较338。GDP未新增，来源增量0DDL。
+- 初次、同范围重跑、取消后精确恢复、只读reconcile和typed WriteGroup真实通过；增量run `d104-04c432e7-4096-4f09-b56d-35cedfa4d8e4` 重叠July并新增August，VERIFIED2行，checkpoint July→August。
+- 最终3月27字段、24 nullable DOUBLE槽位、22非空DOUBLE位值一致，容差0；最终账本 9 runs / 21 entries / 85 events / 1 groups / 0 leases。
+- 123唯一Java方法（122pure+1live），124通过调用（live初始/增量各一次）；Python44+35+31+49=159个唯一保护方法通过。
+- 原initial source FAILED的2个CPI已知ACK保持；只读确认后另外续接5个缺失来源10newACK，CPI未重发。原pure测试fixture失败保持，最终121pure与catalog1独立PASS。
+- D065—D070 Java owner未实现；注册依赖graph为空，六个物理源受schema/WAL/hash完整治理。正式0写、FULL0；UNKNOWN恢复和旧前缀source revision本次未发生，仅pure覆盖。
+- GDP仅report_date本月、不ffill；SF YoY按前12条physical observation，new_rmb_loan兼容旧名实为总社融inc_month；原存储单位不缩放。
+
+
+[D104协调准入](../../artifacts/java-migration/D104/coordinator-review-20261007.json) · [D104任务结果](results/D104.json)
+
+剩余主线 D105—D184 共80项；Q须独立准入。
+
+## D105 执行中（2026-10-07）
+
+D104最终协调gate准入后，按序开始 v_macro_core_monthly 的真实普通View定义/typed read调查与有限验收；未准入D106。

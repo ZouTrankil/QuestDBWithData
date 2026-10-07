@@ -1,6 +1,6 @@
 # D103 · equity_style_monthly
 
-- 状态：in_progress（2026-10-06）；D102协调gate已准入，当前会话直接串行执行，人工pending_review。
+- 状态：verified（2026-10-06，隔离有界验收）；协调器 accepted_for_serial_progress，按序准许 D104；人工 pending_review。
 - 工作区：`C:/Users/zouqiang/IdeaProjects/QuestDBWithData`。
 - Python项目目录（持续只读查找）：`D:/work/fund_2/back-monitor`；同步配置、connectors、模型、读写SQL和测试均可沿实际调用链检索。
 - 串行前置：`D102`；前项验收后才执行本项。
@@ -33,15 +33,15 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 单数据交付清单
 
-- [ ] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
-- [ ] D02：本表业务Key、物理去重键、冲突/修订规则。
-- [ ] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
-- [ ] D04：本表按键/范围的typed read与分页，接入读取组合。
-- [ ] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
-- [ ] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
-- [ ] D07：注册 `equity_style_monthly` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
-- [ ] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
-- [ ] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
+- [x] D01：本表DTO、domain、逐字段mapper与语义类型；核对下方全部物理列。
+- [x] D02：本表业务Key、物理去重键、冲突/修订规则。
+- [x] D03：本表主时间、WAL、分区、DDL及兼容方案；确认快照漂移。
+- [x] D04：本表按键/范围的typed read与分页，接入读取组合。
+- [x] D05：本表typed batch write及逐键值验证，接入写入组合；View/MV提供拒绝直写的验证。
+- [x] D06：本表真实来源sync/ingest/materialize，有限窗口/页/批及截断检测。
+- [x] D07：注册 `equity_style_monthly` DatasetDefinition和单数据job，支持管理、计划预览、运行与状态查询。
+- [x] D08：本表限流、重试、断点、取消和完整性证据；不吞失败为empty。
+- [x] D09：本表有界示例、隔离库读写及来源样例对照，完成后提交本卡结果。
 
 ## 可观察验收
 
@@ -100,16 +100,35 @@ Python调用/限流证据（仅源码事实，未逐接口验证线上配额）�
 
 ## 本任务容错、实际验收与完成登记（必做）
 
-- [ ] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
-- [ ] 验证本任务适用的限流/超时重试、分页异常、取消和断点恢复；已ACK但未回读一致的写入保持未验证。
-- [ ] 默认增量，记录checkpoint前后与有限修订窗口；sync有数据才写，没有数据明确记0，不用假数据充数。
-- [ ] 对本任务实际目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留请求范围、查询/参数、返回样本和汇总。
-- [ ] 首次非空真实来源写入、同范围幂等重跑及再次增量验证有记录；本任务为View/MV或功能时按公共契约对应的实际验收方式执行。
-- [ ] 更新[逐项完成表](../completion-register.md)的 `D103` 行及 `results/D103.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
-- [ ] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
+- [x] 先核实本任务所需来源、权限、schema、键、参数和QuestDB连接；有阻塞即记录，不能盲目继续。
+- [x] 验证本任务适用的限流/超时重试、分页异常、取消和断点恢复；已ACK但未回读一致的写入保持未验证。
+- [x] 默认增量，记录checkpoint前后与有限修订窗口；sync有数据才写，没有数据明确记0，不用假数据充数。
+- [x] 对本任务实际目标进行QuestDB SELECT，按完整业务键逐字段比对源规范化数据；保留请求范围、查询/参数、返回样本和汇总。
+- [x] 首次非空真实来源写入、同范围幂等重跑及再次增量验证有记录；本任务为View/MV或功能时按公共契约对应的实际验收方式执行。
+- [x] 更新[逐项完成表](../completion-register.md)的 `D103` 行及 `results/D103.json`；填写完成状态、表名、源行/写入行、回读结果、运行时间、证据、问题及人工比对待办。
+- [x] 仅实现测试通过记implemented_not_verified；来源不可用记blocked；只有实际验收通过记verified。人工复核始终由用户决定。
 
 ## Orca执行提示
 
 ```text
 在 C:/Users/zouqiang/IdeaProjects/QuestDBWithData 执行计划任务 D103：equity_style_monthly。Python参考项目为 D:/work/fund_2/back-monitor，请持续按真实调用链只读查找，不只依赖摘要。先读取 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/11-derived/D103-equity_style_monthly.md 和 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/00-common-contract.md，核验串行前置 D102 的验收记录。只完成本卡功能或单个数据，不代做后续任务。保留已有用户修改，使用明确目标的隔离QuestDB和有界真实来源样例。默认增量sync，有有效数据才写入，按完整键实际SELECT回读逐字段核对；首次0行不能认定写入验收完成。实现有限重试/限流/断点/取消/未知写入核验，验收失败保留现场并停止。更新 C:/Users/zouqiang/IdeaProjects/QuestDBWithData/docs/migration-tasks-20260929/completion-register.md 和 results/D103.json，记录源返回、写入、QuestDB回读、checkpoint及证据，人工复核保持pending_review。若本卡为conditional，先核验显式准入记录；无记录不实施。完成后停止，由Orca协调器验收再决定下一项。
 ```
+
+## 实际验收完成登记（2026-10-06）
+
+状态：verified（隔离有界验收），协调器 accepted_for_serial_progress；人工 pending_review。按序准许 D104。
+
+- 30 列 typed domain/key/mapper/read/write、ReadGroup/WriteGroup、canonical job 和管理入口完成。
+- 真实 D022 来源：2026-06 至 2026-08，48 行、672 字段值、432 个 DOUBLE 位值。
+- 首次两月、同范围重跑、取消恢复、只读 reconcile、typed WriteGroup 的原实际操作，由冻结账本及 fresh Java 只读恢复逐字段核实；恢复没有 DDL/DML 或账本改写。
+- 实际增量 run `d103-9a1915a5-31f0-4e0c-9412-ae4fc64c366b`：重叠七月并新增八月，VERIFIED 2 行；最终三月 90 字段、87 个 DOUBLE 位值一致，容差 0。
+- 最终账本 9 runs / 21 entries / 85 events / 1 group / 0 leases；125 个唯一 Java 方法和 122 个 Python 保护检查通过。
+- 正式库只读；六月/七月既存输出缺口保留。没有 FULL、正式修复、生产切换或真实旧期来源修订声明。
+- 原 source INSERT 的 UNKNOWN ACK 与原 Java initial 最终 YearMonth 序列化失败均保留；没有重发初始写入或将原失败改为成功。
+- 来源 pct_chg 不换算、不舍入；采用 stored-units 补充契约，保留原增长/价值代码绑定。
+
+[最新协调准入](../../../artifacts/java-migration/D103/coordinator-review-20261006.json) · [任务结果](../results/D103.json)
+
+`README.md`、初始 mapping-contract 和增量 mapping-contract 均为此前冻结截止点，其 gate pending 描述不是当前状态；以本完成登记与最新协调准入为准。
+
+完整证据：[结果](../results/D103.json)、[完成登记](../../../artifacts/java-migration/D103/completion-summary-20261006.md)、[协调准入](../../../artifacts/java-migration/D103/coordinator-review-20261006.json)。
