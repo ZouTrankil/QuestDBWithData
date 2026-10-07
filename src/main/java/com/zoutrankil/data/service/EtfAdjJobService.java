@@ -56,7 +56,7 @@ public final class EtfAdjJobService {
         this.jobs = Objects.requireNonNull(jobs); this.pages = Objects.requireNonNull(pages);
         this.tradingDates = new EtfAdjTradingDates(calendars); this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb);
-        this.ledgerPath = ledgerPath.toAbsolutePath().normalize(); requireIsolatedTableName(table); this.table = table;
+        this.ledgerPath = ledgerPath.toAbsolutePath().normalize(); requireAdmittedTableName(table); this.table = table;
     }
 
     public String tableName() { return table; }
@@ -67,8 +67,19 @@ public final class EtfAdjJobService {
             throw new IllegalStateException("D015 execution requires a dedicated java_d015_etf_adj_<suffix> isolated target");
     }
 
-    public String targetId() throws Exception {
+    /** Exact external formal target; all other targets retain the isolated namespace requirement. */
+    public static void requireAdmittedTableName(String table) {
+        if ("etf_adj".equals(table)) return;
         requireIsolatedTableName(table);
+    }
+
+    private void requireAdmittedMode(Mode mode) {
+        if ("etf_adj".equals(table) && mode != Mode.BACKFILL && mode != Mode.RECONCILE)
+            throw new IllegalArgumentException("Formal etf_adj requires an explicit bounded BACKFILL/RECONCILE; incremental checkpoints remain receipt-backed isolated behavior");
+    }
+
+    public String targetId() throws Exception {
+        requireAdmittedTableName(table);
         var rows = jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name = ?", table);
         if (rows.size() != 1 || !(rows.getFirst().get("id") instanceof Number id)
                 || !(rows.getFirst().get("directoryName") instanceof String directory))
@@ -89,6 +100,7 @@ public final class EtfAdjJobService {
         SyncJobDefinition definition = EtfAdjSyncJobOwner.DEFINITION;
         Mode mode = requestedMode == null ? definition.defaultMode() : requestedMode;
         if (!definition.supportedModes().contains(mode)) throw new IllegalArgumentException("Unsupported etf_adj mode");
+        requireAdmittedMode(mode);
         if ((mode == Mode.BACKFILL || mode == Mode.RECONCILE) && requestedThrough == null)
             throw new IllegalArgumentException("Bounded etf_adj backfill/reconcile requires explicit --to");
         if (mode == Mode.INCREMENTAL && bootstrapFrom != null
@@ -204,6 +216,7 @@ public final class EtfAdjJobService {
         return new SyncRunLedger(ledgerPath).requestCancellation(Objects.requireNonNull(runId));
     }
     private SyncJobRunner.Result execute(String runId, String priorRunId, Plan plan) throws Exception {
+        requireAdmittedMode(plan.request().mode());
         if (!plan.request().definition().equals(EtfAdjSyncJobOwner.DEFINITION)
                 || !plan.targetId().equals(plan.request().parameters().get("targetId"))
                 || !plan.targetId().equals(targetId()))

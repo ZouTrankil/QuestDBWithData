@@ -75,6 +75,15 @@ public final class LaunchService {
                     return ledger.detail(request.instanceId());
                 }
                 var states=ledger.stages(request.instanceId());
+                if (MainStrategyDailyWork.JOB.equals(request.job())) {
+                    boolean ready=MainStrategyDailyWork.STAGES.stream()
+                            .allMatch(stage -> states.getOrDefault(stage,BusinessState.WAITING_UPSTREAM).ready());
+                    if (ready) ledger.state(request.instanceId(),BusinessState.VERIFIED,execution.getId(),null);
+                    else if (ledger.state(request.instanceId())==BusinessState.RUNNING)
+                        ledger.state(request.instanceId(),BusinessState.IN_DOUBT,execution.getId(),
+                                "Main-strategy batch ended without five authoritative stage certificates");
+                    return ledger.detail(request.instanceId());
+                }
                 boolean allReady=PostCloseGraph.STAGES.stream().allMatch(s -> states.getOrDefault(s.id(),BusinessState.WAITING_UPSTREAM).ready());
                 boolean criticalReady=PostCloseGraph.STAGES.stream().filter(PostCloseGraph.Stage::critical)
                         .allMatch(s -> states.getOrDefault(s.id(),BusinessState.WAITING_UPSTREAM).ready());

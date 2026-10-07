@@ -502,8 +502,6 @@ public final class StockSuspendRunRecovery {
     }
 
     private static void requireIsolatedTableName(String table) {
-        DatasetDefinition.identifier(table);
-        if (!table.matches("(?:java_d011_stk_suspend_|stk_suspend_d011_)[A-Za-z0-9_]+"))
-            throw new IllegalArgumentException("D011 recovery requires an explicitly isolated target");
+        StockSuspendJobService.requireAdmittedTableName(table);
     }
 }

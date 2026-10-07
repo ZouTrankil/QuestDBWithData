@@ -11,6 +11,15 @@ server:
   port: ${APP_PORT:8080}
 
 app:
+  sync:
+    batch:
+      enabled: ${APP_SYNC_BATCH_ENABLED:true}
+      startup-catchup: ${APP_SYNC_BATCH_STARTUP_CATCHUP:true}
+      ledger-path: ${APP_SYNC_BATCH_LEDGER_PATH:var/main-strategy-batch.sqlite}
+      cron: "${APP_SYNC_BATCH_CRON:0 35 20 * * ?}"
+      retry-cron: "${APP_SYNC_BATCH_RETRY_CRON:0 0/15 21-23 * * ?}"
+      completion-cutoff: "20:30"
+      maximum-recovery-attempts: 12
   web:
     enabled: true
     # Empty means development mode without authentication. Set APP_API_TOKEN in production.

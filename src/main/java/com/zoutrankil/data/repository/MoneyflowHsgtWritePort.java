@@ -44,7 +44,7 @@ public final class MoneyflowHsgtWritePort implements VerifiedBatchExecutor.Port<
     private final MoneyflowHsgtMapper mapper = new MoneyflowHsgtMapper();
     private volatile boolean senderStopped;
     public MoneyflowHsgtWritePort(String formalTable, String frozenTargetId, JdbcTemplate jdbc, QuestDB questdb) {
-        MoneyflowHsgtDataset.requireIsolatedTable(formalTable);
+        MoneyflowHsgtDataset.requireAdmittedTable(formalTable);
         if (frozenTargetId == null || !frozenTargetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen D027 logical target id required");
         this.formalTable = formalTable; this.frozenTargetId = frozenTargetId;
@@ -64,7 +64,7 @@ public final class MoneyflowHsgtWritePort implements VerifiedBatchExecutor.Port<
     public String stageTable() { return writeTable; }
     @Override public void preflight() {
         requireWriteTarget();
-        QuestDbWriteChecks.preflight(jdbc, writeTable, MoneyflowHsgtDataset.isolatedWriteDefinition(writeTable));
+        QuestDbWriteChecks.preflight(jdbc, writeTable, MoneyflowHsgtDataset.admittedWriteDefinition(writeTable));
         requireWriteTarget();
     }
     @Override public void send(List<MoneyflowHsgt> rows) throws Exception {
@@ -148,7 +148,7 @@ public final class MoneyflowHsgtWritePort implements VerifiedBatchExecutor.Port<
     private void requireTableIdentity(String table) {
         var rows=jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name=?",table);
         if(rows.size()!=1||!(rows.getFirst().get("id") instanceof Number id)||!(rows.getFirst().get("directoryName") instanceof String dir)
-                ||!writeTargetId.equals(StaticTargetIdentity.identify(jdbc,table,id.longValue(),dir)))
+                ||!(table.equals(formalTable)?frozenTargetId:writeTargetId).equals(StaticTargetIdentity.identify(jdbc,table,id.longValue(),dir)))
             throw new IllegalStateException("D027 physical table generation changed");
     }
     private static long micros(LocalDate day){return new TemporalValues.CalendarTimestamp(day).storageEpoch(TemporalValues.EpochUnit.MICROS);}

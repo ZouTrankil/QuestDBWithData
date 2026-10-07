@@ -56,7 +56,7 @@ public final class StockStDailyJobService implements SyncJobOwner {
         this.jobs = Objects.requireNonNull(jobs); this.pages = Objects.requireNonNull(pages);
         this.tradingDates = new StockStTradingDates(calendars); this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb); this.ledgerPath = ledgerPath.toAbsolutePath().normalize();
-        requireIsolatedTableName(table); this.table = table;
+        requireAdmittedTableName(table); this.table = table;
     }
 
     @Override public String datasetId() { return "stk_st_daily"; }
@@ -70,16 +70,26 @@ public final class StockStDailyJobService implements SyncJobOwner {
             throw new IllegalStateException("D012 execution requires a dedicated java_d012_stk_st_daily_<suffix> isolated target");
     }
 
+    public static void requireAdmittedTableName(String table) {
+        if ("stk_st_daily".equals(table)) return;
+        requireIsolatedTableName(table);
+    }
+
+    private void requireAdmittedMode(Mode mode) {
+        if ("stk_st_daily".equals(table) && mode != Mode.BACKFILL)
+            throw new IllegalArgumentException("Formal stk_st_daily requires an explicit bounded source-certified BACKFILL");
+    }
+
     /** Stable endpoint/table identity used by the ledger across journaled table generations. */
     public String targetId() {
-        requireIsolatedTableName(table);
+        requireAdmittedTableName(table);
         String physical = StaticTargetIdentity.identify(jdbc, table, 0L, "d012-logical-target-v1");
         return "d012-logical-v1-" + physical.substring("static-v2-".length());
     }
 
     /** Exact current QuestDB generation; frozen separately from the stable logical checkpoint identity. */
     public String physicalTargetId() {
-        requireIsolatedTableName(table);
+        requireAdmittedTableName(table);
         var identity = new StockStDailyStorage(jdbc, table).preflight();
         return StockStDailyStorage.targetId(jdbc, table, identity);
     }
@@ -92,10 +102,14 @@ public final class StockStDailyJobService implements SyncJobOwner {
         var definition = StockStDailySyncJobOwner.DEFINITION;
         Mode mode = requestedMode == null ? definition.defaultMode() : requestedMode;
         if (!definition.supportedModes().contains(mode)) throw new IllegalArgumentException("Unsupported stk_st_daily mode");
+        requireAdmittedMode(mode);
         if (requestedThrough == null && mode == Mode.BACKFILL)
             throw new IllegalArgumentException("Bounded stk_st_daily BACKFILL requires explicit --to");
         LocalDate resolvedThrough = requestedThrough == null ? logicalDate : requestedThrough;
         if (resolvedThrough.isAfter(logicalDate)) throw new IllegalArgumentException("stk_st_daily --to exceeds logical date");
+        if ("stk_st_daily".equals(table) && resolvedThrough.isAfter(DailySyncEndDate.resolve(null,
+                java.time.ZonedDateTime.now(DailySyncEndDate.ZONE))))
+            throw new IllegalArgumentException("Formal stk_st_daily cannot include an incomplete source date");
         if (bootstrapFrom != null && bootstrapFrom.isAfter(resolvedThrough))
             throw new IllegalArgumentException("stk_st_daily --from is after --to");
         if ((mode == Mode.BACKFILL) && bootstrapFrom == null)
@@ -138,13 +152,16 @@ public final class StockStDailyJobService implements SyncJobOwner {
             }
         } else if (mode == Mode.BACKFILL) {
             from = bootstrapFrom;
-            if (physical.min() != null) {
+            if (physical.min() != null && !"stk_st_daily".equals(table)) {
                 if (saved.isEmpty()) {
                     if (StockStDailyCoverage.hasHistorySchema(ledgerPath))
                         saved = StockStDailyCoverage.checkpoint(ledgerPath, target, tradingDates);
                 }
                 StockStDailyCoverage.validateExistingTarget(saved.orElse(null), tradingDates, writer);
             }
+            // A bounded formal repair is certified by its complete source window and exact full stage
+            // comparison. It does not adopt legacy outside rows as an incremental checkpoint.
+            if ("stk_st_daily".equals(table)) new StockStDailyStorage(jdbc, table).snapshot();
         }
         long span = ChronoUnit.DAYS.between(from, to) + 1;
         if (span < 1 || span > definition.budget().maxWindowDays() || from.isBefore(StockStDailySource.HISTORY_ANCHOR))
@@ -244,6 +261,7 @@ public final class StockStDailyJobService implements SyncJobOwner {
         return StockStDailyRunRecovery.finishInterrupted(jdbc, questdb, ledgerPath, table, runId, writerStopped);
     }
     private SyncJobRunner.Result execute(String runId, String priorRunId, Plan plan) throws Exception {
+        requireAdmittedMode(plan.request().mode());
         if (!plan.request().definition().equals(StockStDailySyncJobOwner.DEFINITION)
                 || !plan.targetId().equals(plan.request().parameters().get("targetId"))
                 || !plan.physicalTargetId().equals(plan.request().parameters().get("physicalTargetId"))

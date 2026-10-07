@@ -22,6 +22,12 @@ public final class MoneyflowHsgtDataset {
 
     public static DatasetDefinition isolatedWriteDefinition(String table) {
         requireIsolatedTable(table);
+        return admittedWriteDefinition(table);
+    }
+
+    /** Formal writes are stage replacement only; layout and natural identity are unchanged. */
+    public static DatasetDefinition admittedWriteDefinition(String table) {
+        requireAdmittedTable(table);
         return new DatasetDefinition("moneyflow_hsgt", 1, "tushare.moneyflow_hsgt", "moneyflow_hsgt_owner",
                 table, ObjectKind.TABLE, columns(), List.of("trade_date"), List.of(), "trade_date", Partition.DAY,
                 true, Set.of(Capability.READ, Capability.WAL_REPLACE), List.of(),
@@ -45,6 +51,10 @@ public final class MoneyflowHsgtDataset {
         DatasetDefinition.identifier(table);
         if (!table.startsWith(ISOLATED_PREFIX) || table.length() <= ISOLATED_PREFIX.length())
             throw new IllegalArgumentException("D027 requires java_d027_moneyflow_hsgt_<explicit suffix> isolated target");
+    }
+    public static void requireAdmittedTable(String table) {
+        if ("moneyflow_hsgt".equals(table)) return;
+        requireIsolatedTable(table);
     }
     public static String createIsolatedTableSql(String table) {
         requireIsolatedTable(table);

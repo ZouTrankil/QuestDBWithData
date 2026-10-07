@@ -29,7 +29,7 @@ public class EtfAdjReadRepository implements DatasetImplementation {
     public EtfAdjReadRepository(QuestDbBoundedReader reader,
             @Value("${app.sync.etf-adj-table:java_d015_etf_adj_acceptance}") String table) {
         this.reader = Objects.requireNonNull(reader);
-        com.zoutrankil.data.service.EtfAdjJobService.requireIsolatedTableName(table);
+        com.zoutrankil.data.service.EtfAdjJobService.requireAdmittedTableName(table);
         this.table = table;
     }
     @Override public DatasetDefinition definition() { return EtfAdjDataset.definition(table); }

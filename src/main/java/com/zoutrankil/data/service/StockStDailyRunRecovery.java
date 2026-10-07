@@ -20,7 +20,7 @@ public final class StockStDailyRunRecovery {
     public static Result finishInterrupted(JdbcTemplate jdbc, QuestDB questdb, Path ledgerPath, String table,
                                             String runId, boolean writerStopped) throws Exception {
         if (!writerStopped) throw new IllegalStateException("Stopped D012 writer proof required");
-        ledgerPath = ledgerPath.toAbsolutePath().normalize(); StockStDailyJobService.requireIsolatedTableName(table);
+        ledgerPath = ledgerPath.toAbsolutePath().normalize(); StockStDailyJobService.requireAdmittedTableName(table);
         var ledger = new SyncRunLedger(ledgerPath); var root = ledger.get(runId); var run = ledger.getRun(runId);
         if (!Set.of(SyncRunState.RUNNING, SyncRunState.IN_DOUBT).contains(root.state())
                 || !"data.stk_st_daily".equals(run.jobId()) || run.jobVersion() != 1)

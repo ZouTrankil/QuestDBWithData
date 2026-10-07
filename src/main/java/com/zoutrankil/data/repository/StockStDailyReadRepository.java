@@ -22,7 +22,7 @@ public class StockStDailyReadRepository implements DatasetImplementation {
     public StockStDailyReadRepository(QuestDbBoundedReader reader,
             @Value("${app.sync.stk-st-daily-table:java_d012_stk_st_daily_acceptance}") String table) {
         this.reader = Objects.requireNonNull(reader);
-        com.zoutrankil.data.service.StockStDailyJobService.requireIsolatedTableName(table);
+        com.zoutrankil.data.service.StockStDailyJobService.requireAdmittedTableName(table);
         this.table = table;
     }
     @Override public DatasetDefinition definition() { return StockStDailyDataset.definition(table); }

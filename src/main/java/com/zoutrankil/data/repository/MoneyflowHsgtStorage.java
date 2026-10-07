@@ -35,7 +35,7 @@ public final class MoneyflowHsgtStorage {
         this.jdbc.setQueryTimeout(120); this.jdbc.setMaxRows(MAX_ROWS+1);
     }
     public Identity preflight() {
-        QuestDbWriteChecks.preflight(jdbc,table,MoneyflowHsgtDataset.isolatedWriteDefinition(table));
+        QuestDbWriteChecks.preflight(jdbc,table,MoneyflowHsgtDataset.admittedWriteDefinition(table));
         var objects=jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name=?",table);
         var wal=jdbc.queryForList("SELECT writerTxn FROM wal_tables() WHERE name=?",table);
         if(objects.size()!=1||wal.size()!=1||!(objects.getFirst().get("id") instanceof Number id)

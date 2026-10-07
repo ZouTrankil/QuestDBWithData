@@ -25,7 +25,7 @@ public final class StockSuspendWritePort implements VerifiedBatchExecutor.Port<S
     private volatile boolean uncertainSenderStopped;
 
     public StockSuspendWritePort(String table, JdbcTemplate jdbc, QuestDB questDb, String expectedTargetId) {
-        DatasetDefinition.identifier(table);
+        com.zoutrankil.data.service.StockSuspendJobService.requireAdmittedTableName(table);
         this.table = table;
         this.jdbc = new JdbcTemplate(Objects.requireNonNull(jdbc.getDataSource()));
         this.jdbc.setQueryTimeout(20); this.jdbc.setMaxRows(251);

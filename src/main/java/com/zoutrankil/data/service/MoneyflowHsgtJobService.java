@@ -54,10 +54,17 @@ public class MoneyflowHsgtJobService {
     }
     public MoneyflowHsgtJobService(SyncJobRegistry jobs,TusharePageService pages,JdbcTemplate jdbc,QuestDB questdb,Path ledgerPath,String table){
         this.jobs=Objects.requireNonNull(jobs);this.pages=Objects.requireNonNull(pages);this.jdbc=Objects.requireNonNull(jdbc);this.questdb=Objects.requireNonNull(questdb);
-        this.ledgerPath=ledgerPath.toAbsolutePath().normalize();MoneyflowHsgtDataset.requireIsolatedTable(table);this.table=table;
+        this.ledgerPath=ledgerPath.toAbsolutePath().normalize();MoneyflowHsgtDataset.requireAdmittedTable(table);this.table=table;
     }
     public String datasetId(){return "moneyflow_hsgt";}public String tableName(){return table;}
     public static void requireIsolatedTableName(String value){MoneyflowHsgtDataset.requireIsolatedTable(value);}
+    public static void requireAdmittedTableName(String value){MoneyflowHsgtDataset.requireAdmittedTable(value);}
+    private void requireAdmittedMode(Mode mode,LocalDate from,LocalDate to){
+        if(!"moneyflow_hsgt".equals(table))return;
+        if((mode!=Mode.BACKFILL&&mode!=Mode.RECONCILE)||from==null||to==null||from.isAfter(to)
+                ||ChronoUnit.DAYS.between(from,to)+1>MoneyflowHsgtSource.MAX_RANGE_DAYS)
+            throw new IllegalArgumentException("Formal moneyflow_hsgt requires explicit source-certified BACKFILL/RECONCILE of at most 31 days");
+    }
     public String targetId(){return MoneyflowHsgtTargetIdentity.logical(jdbc,table);}
     public String physicalTargetId(){try{var snapshot=new MoneyflowHsgtStorage(jdbc,table).snapshot();return MoneyflowHsgtStorage.physicalTargetId(jdbc,table,snapshot.identity());}
         catch(Exception failure){throw new IllegalStateException("Cannot prove D027 physical target identity",failure);}}
@@ -71,6 +78,7 @@ public class MoneyflowHsgtJobService {
         LocalDate to=requestedTo==null?completed:requestedTo;if(to.isAfter(logicalDate))to=logicalDate;
         var definition=MoneyflowHsgtSyncJobOwner.DEFINITION;Mode mode=requestedMode==null?definition.defaultMode():requestedMode;
         if(!definition.supportedModes().contains(mode))throw new IllegalArgumentException("Unsupported D027 sync mode");
+        requireAdmittedMode(mode,bootstrapFrom,requestedTo);
         if((mode==Mode.BACKFILL||mode==Mode.RECONCILE)&&(bootstrapFrom==null||requestedTo==null))
             throw new IllegalArgumentException("D027 BACKFILL/RECONCILE require explicit --from and --to");
         var publisher=new MoneyflowHsgtPublication(jdbc,ledgerPath);publisher.requireNoPendingPublication();
@@ -80,7 +88,11 @@ public class MoneyflowHsgtJobService {
         if(!before.rows().isEmpty()&&(range.max().isAfter(logicalDate)||range.max().isAfter(completed)))
             throw new IllegalStateException("D027 target contains a date beyond the frozen completed-source ceiling");
         var checkpoint=MoneyflowHsgtCoverage.checkpoint(ledgerPath,logical);
-        MoneyflowHsgtCoverage.validateTarget(ledgerPath,logical,before);
+        if(!"moneyflow_hsgt".equals(table))MoneyflowHsgtCoverage.validateTarget(ledgerPath,logical,before);
+        else {
+            var keys=new java.util.HashSet<com.zoutrankil.data.domain.MoneyflowHsgtKey>();
+            for(var row:before.rows())if(!keys.add(row.key()))throw new IllegalStateException("Formal moneyflow_hsgt has duplicate existing business dates");
+        }
         LocalDate from=bootstrapFrom,anchor=null,checkpointBefore=null;boolean bootstrap=false;
         if(mode==Mode.INCREMENTAL){
             if(checkpoint==null){
@@ -94,8 +106,11 @@ public class MoneyflowHsgtJobService {
                 from=checkpointBefore.minusDays(MoneyflowHsgtSyncJobOwner.REVISION_DAYS-1L);if(from.isBefore(anchor))from=anchor;
             }
         }else{
-            from=Objects.requireNonNull(bootstrapFrom);if(checkpoint==null)throw new IllegalStateException("D027 bounded correction requires a receipt-backed incremental checkpoint");
-            anchor=checkpoint.anchor();if(from.isBefore(anchor)||to.isAfter(checkpoint.through()))throw new IllegalArgumentException("D027 BACKFILL/RECONCILE must remain inside verified coverage");
+            from=Objects.requireNonNull(bootstrapFrom);
+            if(!"moneyflow_hsgt".equals(table)){
+                if(checkpoint==null)throw new IllegalStateException("D027 bounded correction requires a receipt-backed incremental checkpoint");
+                anchor=checkpoint.anchor();if(from.isBefore(anchor)||to.isAfter(checkpoint.through()))throw new IllegalArgumentException("D027 BACKFILL/RECONCILE must remain inside verified coverage");
+            }
         }
         long span=ChronoUnit.DAYS.between(from,to)+1;
         if(from.isAfter(to)||span<1||span>MoneyflowHsgtSyncJobOwner.MAX_WINDOW_DAYS||to.isAfter(completed)||to.isAfter(logicalDate))
@@ -150,6 +165,7 @@ public class MoneyflowHsgtJobService {
         return execute(childRunId,parentRunId,null,plan);
     }
     private SyncJobRunner.Result execute(String runId,String parentRunId,String priorRunId,Plan plan)throws Exception {
+        requireAdmittedMode(plan.request().mode(),plan.request().from(),plan.request().to());
         if(!plan.request().definition().equals(MoneyflowHsgtSyncJobOwner.DEFINITION)||!plan.targetId().equals(targetId())
                 ||!plan.physicalTargetId().equals(physicalTargetId())||!plan.physicalTargetId().equals(plan.request().parameters().get("physicalTargetId")))
             throw new IllegalStateException("Frozen D027 plan or target generation changed before execution");

@@ -55,10 +55,19 @@ public final class StockSuspendJobService {
         this.jobs = Objects.requireNonNull(jobs); this.pages = Objects.requireNonNull(pages);
         this.jdbc = Objects.requireNonNull(jdbc); this.questdb = Objects.requireNonNull(questdb);
         this.ledgerPath = ledgerPath.toAbsolutePath().normalize();
-        DatasetDefinition.identifier(table);
-        if(!table.matches("(?:java_d011_stk_suspend_|stk_suspend_d011_)[A-Za-z0-9_]+"))
-            throw new IllegalArgumentException("D011 requires an explicitly isolated suspension target");
+        requireAdmittedTableName(table);
         this.table = table;
+    }
+
+    public static void requireAdmittedTableName(String table) {
+        DatasetDefinition.identifier(table);
+        if (!"stk_suspend".equals(table) && !table.matches("(?:java_d011_stk_suspend_|stk_suspend_d011_)[A-Za-z0-9_]+"))
+            throw new IllegalArgumentException("D011 target must be exact formal stk_suspend or an explicitly isolated suspension target");
+    }
+
+    private void requireAdmittedMode(Mode mode) {
+        if ("stk_suspend".equals(table) && mode != Mode.BACKFILL)
+            throw new IllegalArgumentException("Formal stk_suspend requires an explicit source-certified five-day BACKFILL");
     }
 
     public String tableName() { return table; }
@@ -74,7 +83,11 @@ public final class StockSuspendJobService {
         Mode mode = requestedMode == null ? StockSuspendSyncJobOwner.DEFINITION.defaultMode() : requestedMode;
         if (!StockSuspendSyncJobOwner.DEFINITION.supportedModes().contains(mode))
             throw new IllegalArgumentException("Unsupported stk_suspend sync mode");
+        requireAdmittedMode(mode);
         if (requestedThrough.isAfter(logicalDate)) throw new IllegalArgumentException("stk_suspend window cannot exceed logicalDate");
+        if ("stk_suspend".equals(table) && requestedThrough.isAfter(DailySyncEndDate.resolve(null,
+                java.time.ZonedDateTime.now(DailySyncEndDate.ZONE))))
+            throw new IllegalArgumentException("Formal stk_suspend cannot include an incomplete source date");
 
         String target = targetId();
         String frozenPhysical = physicalTargetId();
@@ -180,6 +193,7 @@ public final class StockSuspendJobService {
     }
 
     public SyncJobRunner.Result run(FrozenRequest request) throws Exception {
+        requireAdmittedMode(request.mode());
         validate(request); String expected = frozenTargetId(request);String expectedPhysical=frozenPhysicalTargetId(request);
         requireSameTarget(expected, targetId());requireSameTarget(expectedPhysical,physicalTargetId());
         StockSuspendPublication.verifyCurrentTarget(ledgerPath,jdbc,table,expected,expectedPhysical);
@@ -188,6 +202,7 @@ public final class StockSuspendJobService {
     }
 
     public SyncJobRunner.Result resume(FrozenRequest request, String priorRun) throws Exception {
+        requireAdmittedMode(request.mode());
         validate(request);
         SyncRunLedger ledger = SyncRunLedger.openReadOnly(ledgerPath);
         var prior = ledger.getRun(priorRun); var entry = ledger.get(priorRun);
@@ -235,6 +250,7 @@ public final class StockSuspendJobService {
 
     private SyncJobRunner.Result execute(String run, String parent, String prior, FrozenRequest request,
                                          String expectedLogical,String expectedPhysical) throws Exception {
+        requireAdmittedMode(request.mode());
         requireSameTarget(expectedLogical, targetId());requireSameTarget(expectedPhysical,physicalTargetId());
         var ledger = new SyncRunLedger(ledgerPath);
         var port = new StockSuspendWritePort(table, jdbc, questdb, expectedPhysical);

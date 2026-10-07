@@ -37,7 +37,7 @@ public final class MoneyflowHsgtStaging {
 
     public Prepared prepare(String target,String logicalTargetId,String physicalTargetId,String runId,
             SyncJobDefinition.FrozenRequest request,Path runEvidence,BooleanSupplier cancelled)throws Exception {
-        com.zoutrankil.data.domain.MoneyflowHsgtDataset.requireIsolatedTable(target);
+        com.zoutrankil.data.domain.MoneyflowHsgtDataset.requireAdmittedTable(target);
         Objects.requireNonNull(request);check(cancelled);Path root=runEvidence.toAbsolutePath().normalize();
         Files.createDirectories(root);if(Files.isSymbolicLink(root))throw new IOException("D027 evidence root cannot be symlinked");
         String requestFingerprint=SyncRequestIdentity.fingerprint(request,logicalTargetId);

@@ -27,6 +27,9 @@ public class RuntimeConfiguration {
         if (env.getProperty("jdb.production-enabled",Boolean.class,false))
             throw new IllegalArgumentException("Production triggers are not supported in this delivery");
         String url=env.getRequiredProperty("jdb.metadata-url");
+        return metadataDataSource(url);
+    }
+    static DataSource metadataDataSource(String url) {
         validateMetadataUrl(url);
         var sqlite=new org.sqlite.SQLiteConfig();
         sqlite.setBusyTimeout(10_000); sqlite.setJournalMode(org.sqlite.SQLiteConfig.JournalMode.WAL);
@@ -37,6 +40,9 @@ public class RuntimeConfiguration {
         return new HikariDataSource(config);
     }
     @Bean(destroyMethod="close") SqliteOwnershipLock.Handle sqliteRuntimeLease(DataSource dataSource) throws java.sql.SQLException {
+        return metadataRuntimeLease(dataSource);
+    }
+    static SqliteOwnershipLock.Handle metadataRuntimeLease(DataSource dataSource) throws java.sql.SQLException {
         String url;
         try(var connection=dataSource.getConnection()) { url=connection.getMetaData().getURL(); }
         return SqliteOwnershipLock.tryAcquire(url,"runtime")
@@ -52,6 +58,9 @@ public class RuntimeConfiguration {
         catch (java.io.IOException error) { throw new IllegalArgumentException("Cannot create SQLite metadata directory",error); }
     }
     @Bean(initMethod="migrate") Flyway metadataMigrations(DataSource dataSource,SqliteOwnershipLock.Handle sqliteRuntimeLease) {
+        return metadataFlyway(dataSource);
+    }
+    static Flyway metadataFlyway(DataSource dataSource) {
         return Flyway.configure().dataSource(dataSource)
                 .locations("classpath:db/migration/batch").cleanDisabled(true).baselineOnMigrate(false).load();
     }

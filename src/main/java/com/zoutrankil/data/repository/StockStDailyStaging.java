@@ -41,7 +41,7 @@ public final class StockStDailyStaging {
     }
 
     public Prepared prepare(String target, String expectedPhysicalTarget, LocalDate from, LocalDate to) throws Exception {
-        StockStDailyJobService.requireIsolatedTableName(target);
+        StockStDailyJobService.requireAdmittedTableName(target);
         Objects.requireNonNull(expectedPhysicalTarget); Objects.requireNonNull(from); Objects.requireNonNull(to);
         if (from.isAfter(to) || from.isBefore(com.zoutrankil.data.service.StockStDailySource.HISTORY_ANCHOR)
                 || java.time.temporal.ChronoUnit.DAYS.between(from, to) + 1 > 366)

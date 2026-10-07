@@ -88,7 +88,9 @@ public final class EtfAdjSyncAdapter implements SyncJobRunner.Adapter<EtfAdj, Et
         for (var date : dates) {
             if (cancelled.getAsBoolean() || Thread.currentThread().isInterrupted())
                 throw new CancellationException("etf_adj date slice cancelled");
-            var page = source.fetch(date, cancelled); consumer.accept(page);
+            var page = source.fetch(date, cancelled);
+            port.requireCompatibleFormalDate(date, page.rows());
+            consumer.accept(page);
             rows = Math.addExact(rows, page.rows().size()); evidence.add(page.responseEvidence());
         }
         Files.createDirectories(evidenceRoot);

@@ -45,7 +45,7 @@ public final class EtfAdjWritePort implements VerifiedBatchExecutor.Port<EtfAdj,
     private volatile boolean uncertainSenderStopped;
 
     public EtfAdjWritePort(String table, String expectedTargetId, JdbcTemplate jdbc, QuestDB questdb) {
-        EtfAdjJobService.requireIsolatedTableName(table);
+        EtfAdjJobService.requireAdmittedTableName(table);
         if (expectedTargetId == null || !expectedTargetId.startsWith("static-v2-"))
             throw new IllegalArgumentException("Frozen isolated etf_adj target identity required");
         this.table = table; this.expectedTargetId = expectedTargetId;
@@ -115,6 +115,21 @@ public final class EtfAdjWritePort implements VerifiedBatchExecutor.Port<EtfAdj,
         var result = jdbc.query(sql, (rs, index) -> physical(rs), micros);
         if (result.size() > MAX_ROWS_PER_DATE) throw new IllegalStateException("etf_adj date exceeds bounded 10000-row readback cap");
         return List.copyOf(result);
+    }
+    public boolean formalTarget() { return "etf_adj".equals(table); }
+
+    /** Source-certified upserts cannot silently leave unexplained legacy keys in the requested date. */
+    public void requireCompatibleFormalDate(LocalDate date, List<EtfAdj> expected) {
+        if (!formalTarget()) return;
+        if (expected.isEmpty()) throw new IllegalStateException("Formal etf_adj source is empty on an expected SSE open date: " + date);
+        var expectedKeys = new HashSet<EtfAdjKey>();
+        for (var row : expected) if (!date.equals(row.tradeDate()) || !expectedKeys.add(row.key()))
+            throw new IllegalArgumentException("Formal etf_adj requires unique keys in the exact source date");
+        var actualKeys = new HashSet<EtfAdjKey>();
+        for (var row : readDate(date)) {
+            if (!actualKeys.add(row.key())) throw new IllegalStateException("Formal etf_adj contains duplicate existing business keys on " + date);
+            if (!expectedKeys.contains(row.key())) throw new IllegalStateException("Formal etf_adj contains a key absent from the complete current source on " + date + "; reconcile source coverage before a retraction");
+        }
     }
     @Override public boolean walSettled() { requireExpectedTarget(); return QuestDbWriteChecks.walSettled(jdbc, table); }
     @Override public boolean uncertainSenderStopped() { return uncertainSenderStopped; }

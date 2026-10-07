@@ -38,7 +38,7 @@ public final class StockStDailyWritePort implements VerifiedBatchExecutor.Port<S
     private volatile boolean uncertainSenderStopped;
 
     public StockStDailyWritePort(String table, String expectedTargetId, JdbcTemplate jdbc, QuestDB questdb) {
-        StockStDailyJobService.requireIsolatedTableName(table);
+        StockStDailyJobService.requireAdmittedTableName(table);
         if (expectedTargetId == null || !expectedTargetId.startsWith("static-v2-"))
             throw new IllegalArgumentException("Frozen isolated stk_st_daily target identity required");
         this.table = table; this.expectedTargetId = expectedTargetId;

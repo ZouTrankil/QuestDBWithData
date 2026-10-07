@@ -63,6 +63,7 @@ public final class MoneyflowHsgtSyncAdapter implements SyncJobRunner.Adapter<Mon
                 check(cancelled);LocalDate to=from.plusDays(MoneyflowHsgtSource.MAX_RANGE_DAYS-1L);
                 if(to.isAfter(request.to()))to=request.to();
                 var page=source.fetch(from,to,cancelled);
+                if("moneyflow_hsgt".equals(port.formalTable()))requireFormalCalendarCoverage(from,to,page.rows());
                 for(var row:page.rows())if(!seen.add(row.key()))throw new IllegalStateException("D027 duplicate natural trade date across source slices");
                 consumer.accept(page);
                 var actual=port.readWindow(prepared.stage(),from,to);
@@ -119,4 +120,28 @@ public final class MoneyflowHsgtSyncAdapter implements SyncJobRunner.Adapter<Mon
         else if(p.get("checkpointAnchor")!=null||p.get("checkpointBefore")!=null)throw new IllegalArgumentException("D027 non-incremental request cannot carry checkpoint fields");
     }
     private static void check(BooleanSupplier cancelled){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new CancellationException("D027 cancelled between bounded source slices");}
+
+    /** A short provider response alone cannot certify missing aggregate dates in the formal product. */
+    private void requireFormalCalendarCoverage(LocalDate from,LocalDate to,List<MoneyflowHsgt> rows){
+        var natural=new HashSet<LocalDate>();var expected=new HashSet<LocalDate>();
+        long lower=new com.zoutrankil.data.domain.temporal.TemporalValues.CalendarTimestamp(from)
+                .storageEpoch(com.zoutrankil.data.domain.temporal.TemporalValues.EpochUnit.MICROS);
+        long upper=new com.zoutrankil.data.domain.temporal.TemporalValues.CalendarTimestamp(to.plusDays(1))
+                .storageEpoch(com.zoutrankil.data.domain.temporal.TemporalValues.EpochUnit.MICROS);
+        jdbc.query("SELECT cast(cal_date AS long) AS cal_micros,is_open FROM exchange_calendar WHERE exchange='SSE' AND cal_date>=cast(? AS TIMESTAMP) AND cal_date<cast(? AS TIMESTAMP) ORDER BY cal_date LIMIT 33",
+                (org.springframework.jdbc.core.RowCallbackHandler)rs->{
+                    Object raw=rs.getObject("cal_micros"),flag=rs.getObject("is_open");
+                    if(!(raw instanceof Number n)||!(flag instanceof Number open)||open.intValue()!=0&&open.intValue()!=1)
+                        throw new IllegalStateException("Formal northbound coverage requires typed SSE calendar rows");
+                    LocalDate date=com.zoutrankil.data.domain.temporal.TemporalValues.CalendarTimestamp.fromStorageEpoch(n.longValue(),
+                            com.zoutrankil.data.domain.temporal.TemporalValues.EpochUnit.MICROS).date();
+                    if(!natural.add(date))throw new IllegalStateException("Duplicate SSE calendar business date");
+                    if(open.intValue()==1)expected.add(date);
+                },lower,upper);
+        for(LocalDate date=from;!date.isAfter(to);date=date.plusDays(1))
+            if(!natural.contains(date))throw new IllegalStateException("Missing SSE calendar coverage on "+date);
+        var returned=new HashSet<LocalDate>();for(var row:rows)returned.add(row.tradeDate());
+        expected.removeAll(returned);
+        if(!expected.isEmpty())throw new IllegalStateException("SOURCE_INCOMPLETE: formal northbound aggregate lacks SSE open dates "+expected+"; confirm cross-border source availability before publication");
+    }
 }
