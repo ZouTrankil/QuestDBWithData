@@ -2,10 +2,10 @@ package com.zoutrankil.data.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.zoutrankil.data.mapper.EquityStyleMonthlyMapper;
-import com.zoutrankil.data.repository.EquityStyleMonthlyWritePort;
-import com.zoutrankil.data.service.EquityStyleMonthlySource;
-import com.zoutrankil.data.service.EquityStyleMonthlyJobService;
+import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
+import com.zoutrankil.data.derived.storage.EquityStyleMonthlyWritePort;
+import com.zoutrankil.data.derived.domain.EquityStyleMonthlySourceData;
+import com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService;
 import com.zoutrankil.data.service.SyncJobRunner;
 import java.time.YearMonth;
 import java.util.*;
@@ -29,8 +29,8 @@ class JobDefinitionYearMonthJsonTest {
     @Test void actualD103SourceBatchNestedMonthlyRowsSerializeAndDeserializeExactly()throws Exception{
         var json=JobDefinitionJson.mapper();var batch=batch();String encoded=json.writeValueAsString(batch);
         var tree=json.readTree(encoded);assertEquals("2026-06",tree.path("rows").get(0).path("month").textValue());
-        assertEquals(batch,json.readValue(encoded,EquityStyleMonthlySource.Batch.class));
-        assertEquals(Double.doubleToRawLongBits(-0.0),Double.doubleToRawLongBits(json.readValue(encoded,EquityStyleMonthlySource.Batch.class).rows().getFirst().hs300Ret1m()));
+        assertEquals(batch,json.readValue(encoded,EquityStyleMonthlySourceData.Batch.class));
+        assertEquals(Double.doubleToRawLongBits(-0.0),Double.doubleToRawLongBits(json.readValue(encoded,EquityStyleMonthlySourceData.Batch.class).rows().getFirst().hs300Ret1m()));
     }
     @Test void actualD103MaterializationResultHasCanonicalNestedMonthAndStableRoundTrip()throws Exception{
         var json=JobDefinitionJson.mapper();var result=new EquityStyleMonthlyJobService.MaterializationResult(
@@ -40,10 +40,10 @@ class JobDefinitionYearMonthJsonTest {
         assertEquals("VERIFIED",tree.path("result").path("state").textValue());assertEquals("2026-06",tree.path("source").path("rows").get(0).path("month").textValue());
         assertEquals(result,json.readValue(encoded,EquityStyleMonthlyJobService.MaterializationResult.class));
     }
-    private static EquityStyleMonthlySource.Batch batch(){
+    private static EquityStyleMonthlySourceData.Batch batch(){
         var values=new LinkedHashMap<String,Object>();values.put("month",YearMonth.of(2026,6).atDay(1));
         EquityStyleMonthlyDataset.STORAGE_COLUMNS.subList(1,30).forEach(field->values.put(field,null));values.put("hs300_ret_1m",-0.0);values.put("value_ret_1m",0.0641);
         var row=new EquityStyleMonthlyMapper().fromValues(values);
-        return new EquityStyleMonthlySource.Batch(new EquityStyleMonthlySource.Snapshot("index_monthly",5,"index_monthly~5",1,1,"a".repeat(64)),"d".repeat(64),16,List.of(row));
+        return new EquityStyleMonthlySourceData.Batch(new EquityStyleMonthlySourceData.Snapshot("index_monthly",5,"index_monthly~5",1,1,"a".repeat(64)),"d".repeat(64),16,List.of(row));
     }
 }

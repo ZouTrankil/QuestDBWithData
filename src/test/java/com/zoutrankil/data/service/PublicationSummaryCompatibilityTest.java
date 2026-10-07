@@ -1,5 +1,11 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.flow.application.MoneyflowHsgtPublication;
+import com.zoutrankil.data.margin.application.MarginAllPublication;
+import com.zoutrankil.data.margin.application.MarginZrzPublication;
+
+import com.zoutrankil.data.index.application.IndexMonthlyPublication;
+
 import com.zoutrankil.data.repository.ReferencePublicationJournal;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -23,10 +29,10 @@ class PublicationSummaryCompatibilityTest {
     @Test void pendingFailuresAndRecoveryExceptionsKeepTheirDatasetSpecificContracts() throws Exception {
         var path=root.resolve("pending.sqlite3");
         var jdbc=new JdbcTemplate(new DriverManagerDataSource("jdbc:sqlite:"+root.resolve("unused-target.sqlite3")));
-        var monthly=new IndexMonthlyPublication(jdbc,path);
-        var all=new MarginAllPublication(jdbc,path);
-        var zrz=new MarginZrzPublication(jdbc,path);
-        var moneyflow=new MoneyflowHsgtPublication(jdbc,path);
+        var monthly=new IndexMonthlyPublication(org.mockito.Mockito.mock(com.zoutrankil.data.index.port.IndexMonthlyTables.class),path);
+        var all=new MarginAllPublication(org.mockito.Mockito.mock(com.zoutrankil.data.margin.port.MarginAllStagingPort.class),path);
+        var zrz=new MarginZrzPublication(org.mockito.Mockito.mock(com.zoutrankil.data.margin.port.MarginZrzStagingPort.class),path);
+        var moneyflow=new MoneyflowHsgtPublication(org.mockito.Mockito.mock(com.zoutrankil.data.flow.port.MoneyflowHsgtStagingPort.class),path);
         var gates=List.of(
                 new Gate("index_monthly","Unresolved D022 publication requires finish: run",
                         monthly::requireNoPendingPublication,monthly::beginStageRecoveryOperation),
@@ -47,7 +53,7 @@ class PublicationSummaryCompatibilityTest {
     @Test void moneyflowCountsThe1001stRowBeforeSkippingItsRecoveryRun() throws Exception {
         var path=root.resolve("bounded.sqlite3");
         var jdbc=new JdbcTemplate(new DriverManagerDataSource("jdbc:sqlite:"+root.resolve("unused-target.sqlite3")));
-        var publication=new MoneyflowHsgtPublication(jdbc,path);
+        var publication=new MoneyflowHsgtPublication(org.mockito.Mockito.mock(com.zoutrankil.data.flow.port.MoneyflowHsgtStagingPort.class),path);
         try(var db=DriverManager.getConnection("jdbc:sqlite:"+path);
             var run=db.prepareStatement("INSERT INTO sync_runs VALUES(?,NULL,'job',1,'2026-10-07','target','{}')");
             var entry=db.prepareStatement("INSERT INTO sync_entries VALUES(?,'RUN',?,NULL,'VERIFIED',0,'{}','2026-10-07T00:00:00Z')");

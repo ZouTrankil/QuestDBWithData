@@ -17,4 +17,9 @@ public final class IndexDailyBasicUniverse {
         return MEMBERS.contains(canonical) ? canonical : null;
     }
     public static boolean valid(String code) { return resolve(code) != null; }
+    public static String requireCode(String code) {
+        String canonical = resolve(code);
+        if (canonical == null) throw new IllegalArgumentException("D020 code must be one of the frozen Python CORE_INDICES");
+        return canonical;
+    }
 }

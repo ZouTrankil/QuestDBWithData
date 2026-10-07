@@ -1,5 +1,8 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.index.application.IndexCompatibilityTestAccess;
+import com.zoutrankil.data.index.application.IndexDailyMarketCoverage;
+
 import com.zoutrankil.data.stock.application.DailyCheckpoint;
 import com.zoutrankil.data.stock.application.DailyBasicCoverage;
 import com.zoutrankil.data.stock.application.StockLimitCoverage;
@@ -40,7 +43,7 @@ class LedgerSchemaCompatibilityTest {
             new Admission(StockLimitCoverage::hasHistorySchema, 4, true, IllegalStateException.class, "Partial sync-run ledger schema"),
             new Admission(StockStDailyCoverage::hasHistorySchema, 4, true, IllegalStateException.class, "Partial D012 sync ledger schema"),
             new Admission(EtfCoverageTestAccess::factorHasHistorySchema, 4, false, IllegalStateException.class, "Partial D017 sync ledger schema"),
-            new Admission(DcIndexCoverage::hasLedger, 4, false, IllegalStateException.class, "Partial D023 sync ledger schema"));
+            new Admission(IndexCompatibilityTestAccess::dcHasLedger, 4, false, IllegalStateException.class, "Partial D023 sync ledger schema"));
 
     @Test void missingFilesKeepEachEntrypointsExistingContract() throws Exception {
         var path = root.resolve("missing.sqlite3");

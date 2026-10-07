@@ -1,18 +1,16 @@
 package com.zoutrankil.data.stock.application;
 
-import com.zoutrankil.data.stock.storage.StockSuspendWritePort;
 
 import com.zoutrankil.data.service.*;
+import com.zoutrankil.data.stock.domain.StockSuspendState.Range;
+import com.zoutrankil.data.stock.port.StockSuspendTarget;
 
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
-import com.zoutrankil.data.repository.StaticTargetIdentity;
 import com.zoutrankil.data.stock.domain.policy.StockSuspendTablePolicy;
-import io.questdb.client.QuestDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -35,32 +33,25 @@ public final class StockSuspendJobService {
         }
     }
     record BootstrapWindow(LocalDate from, LocalDate to, boolean cappedByBudget) {}
-    private record TargetRange(LocalDate min, LocalDate max) {
-        private TargetRange {
-            if ((min == null) != (max == null) || min != null && min.isAfter(max))
-                throw new IllegalStateException("Invalid stk_suspend physical date range");
-        }
-    }
 
     private final SyncJobRegistry jobs;
     private final TusharePageService pages;
-    private final JdbcTemplate jdbc;
-    private final QuestDB questdb;
+    private final StockSuspendTarget target;
     private final String table;
     private final Path ledgerPath;
 
     @Autowired
-    public StockSuspendJobService(@Lazy SyncJobRegistry jobs, TusharePageService pages, JdbcTemplate jdbc, @Lazy QuestDB questdb,
-            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath,
-            @Value("${app.sync.stk-suspend-table:stk_suspend_d011_isolated}") String table) {
-        this(jobs, pages, jdbc, questdb, Path.of(ledgerPath), table);
+    public StockSuspendJobService(@Lazy SyncJobRegistry jobs, TusharePageService pages, StockSuspendTarget target,
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath) {
+        this(jobs, pages, target, Path.of(ledgerPath));
     }
 
-    public StockSuspendJobService(SyncJobRegistry jobs, TusharePageService pages, JdbcTemplate jdbc, QuestDB questdb,
-                                  Path ledgerPath, String table) {
+    public StockSuspendJobService(SyncJobRegistry jobs, TusharePageService pages, StockSuspendTarget target,
+                                  Path ledgerPath) {
         this.jobs = Objects.requireNonNull(jobs); this.pages = Objects.requireNonNull(pages);
-        this.jdbc = Objects.requireNonNull(jdbc); this.questdb = Objects.requireNonNull(questdb);
+        this.target = Objects.requireNonNull(target);
         this.ledgerPath = ledgerPath.toAbsolutePath().normalize();
+        String table = target.tableName();
         requireAdmittedTableName(table);
         this.table = table;
     }
@@ -96,8 +87,8 @@ public final class StockSuspendJobService {
         String target = targetId();
         String frozenPhysical = physicalTargetId();
         if (java.nio.file.Files.isRegularFile(ledgerPath))
-            StockSuspendPublication.verifyCurrentTarget(ledgerPath,jdbc,table,target,frozenPhysical);
-        TargetRange physical = readTargetRange();
+            StockSuspendPublication.verifyCurrentTarget(ledgerPath,this.target,target,frozenPhysical);
+        Range physical = readTargetRange();
         requireSameTarget(target, targetId());requireSameTarget(frozenPhysical,physicalTargetId());
         if (physical.max() != null && physical.max().isAfter(logicalDate))
             throw new IllegalStateException("stk_suspend physical target contains a date after logicalDate");
@@ -169,38 +160,18 @@ public final class StockSuspendJobService {
         return request;
     }
 
-    private TargetRange readTargetRange() {
-        String sql = "SELECT cast(min(timestamp) AS long) AS min_micros,cast(max(timestamp) AS long) AS max_micros FROM \"" + table + "\"";
-        return jdbc.query(sql, rs -> {
-            if (!rs.next()) throw new IllegalStateException("QuestDB did not return stk_suspend date range aggregate");
-            Object min = rs.getObject("min_micros"), max = rs.getObject("max_micros");
-            if (min == null && max == null) return new TargetRange(null, null);
-            if (!(min instanceof Number minValue) || !(max instanceof Number maxValue))
-                throw new IllegalStateException("QuestDB stk_suspend range is not a timestamp epoch");
-            return new TargetRange(com.zoutrankil.data.domain.temporal.TemporalValues.CalendarTimestamp
-                    .fromStorageEpoch(minValue.longValue(), com.zoutrankil.data.domain.temporal.TemporalValues.EpochUnit.MICROS).date(),
-                    com.zoutrankil.data.domain.temporal.TemporalValues.CalendarTimestamp
-                            .fromStorageEpoch(maxValue.longValue(), com.zoutrankil.data.domain.temporal.TemporalValues.EpochUnit.MICROS).date());
-        });
-    }
+    private Range readTargetRange() { return target.range(); }
 
     /** Stable logical identity; physical table generations are frozen separately. */
-    public String targetId() { return StockSuspendTargetIdentity.logical(jdbc,table); }
+    public String targetId() { return target.targetId(); }
 
-    public String physicalTargetId() {
-        QuestDbWriteChecks.preflight(jdbc, table, StockSuspendDataset.definition(table));
-        var rows = jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name=?", table);
-        if (rows.size() != 1 || !(rows.getFirst().get("id") instanceof Number id)
-                || !(rows.getFirst().get("directoryName") instanceof String directory))
-            throw new IllegalStateException("Exact isolated stk_suspend QuestDB target identity required");
-        return StaticTargetIdentity.identify(jdbc, table, id.longValue(), directory);
-    }
+    public String physicalTargetId() { return target.physicalTargetId(); }
 
     public SyncJobRunner.Result run(FrozenRequest request) throws Exception {
         requireAdmittedMode(request.mode());
         validate(request); String expected = frozenTargetId(request);String expectedPhysical=frozenPhysicalTargetId(request);
         requireSameTarget(expected, targetId());requireSameTarget(expectedPhysical,physicalTargetId());
-        StockSuspendPublication.verifyCurrentTarget(ledgerPath,jdbc,table,expected,expectedPhysical);
+        StockSuspendPublication.verifyCurrentTarget(ledgerPath,this.target,expected,expectedPhysical);
         String run = "stk-suspend-" + UUID.randomUUID();
         return execute(run, null, null, request, expected,expectedPhysical);
     }
@@ -221,14 +192,14 @@ public final class StockSuspendJobService {
             throw new IllegalStateException("Reconcile uncertain stk_suspend writes before resuming");
         String frozenPhysical=frozenPhysicalTargetId(request);
         requireSameTarget(expected, prior.targetId()); requireSameTarget(expected, targetId());
-        StockSuspendPublication.recoverIfPresent(ledgerPath,jdbc,table,priorRun,true);
+        StockSuspendPublication.recoverIfPresent(ledgerPath,target,priorRun,true);
         String currentPhysical=physicalTargetId();
         if(!frozenPhysical.equals(currentPhysical)) {
-            StockSuspendPublication.finish(ledgerPath,jdbc,table,priorRun,true);
+            StockSuspendPublication.finish(ledgerPath,target,priorRun,true);
             currentPhysical=physicalTargetId();
             if(!StockSuspendPublication.authorizesResume(ledgerPath,priorRun,expected,frozenPhysical,currentPhysical))
                 throw new IllegalStateException("stk_suspend resume physical target transition is not journal verified");
-        } else StockSuspendPublication.verifyCurrentTarget(ledgerPath,jdbc,table,expected,currentPhysical);
+        } else StockSuspendPublication.verifyCurrentTarget(ledgerPath,this.target,expected,currentPhysical);
         String run = "stk-suspend-" + UUID.randomUUID();
         return execute(run, priorRun, priorRun, request, expected,currentPhysical);
     }
@@ -246,10 +217,10 @@ public final class StockSuspendJobService {
     public void finishPublication(String runId,boolean writerStopped)throws Exception {
         var state=SyncRunLedger.openReadOnly(ledgerPath).get(runId).state();
         if(state==SyncRunState.VERIFIED||state==SyncRunState.VERIFIED_EMPTY) {
-            StockSuspendPublication.finish(ledgerPath,jdbc,table,runId,writerStopped);
+            StockSuspendPublication.finish(ledgerPath,target,runId,writerStopped);
             return;
         }
-        StockSuspendRunRecovery.finishInterrupted(jdbc,ledgerPath,table,runId,writerStopped);
+        StockSuspendRunRecovery.finishInterrupted(target,ledgerPath,runId,writerStopped);
     }
 
     private SyncJobRunner.Result execute(String run, String parent, String prior, FrozenRequest request,
@@ -257,10 +228,10 @@ public final class StockSuspendJobService {
         requireAdmittedMode(request.mode());
         requireSameTarget(expectedLogical, targetId());requireSameTarget(expectedPhysical,physicalTargetId());
         var ledger = new SyncRunLedger(ledgerPath);
-        var port = new StockSuspendWritePort(table, jdbc, questdb, expectedPhysical);
+        var port = target.newWriter(expectedPhysical);
         var adapter = new StockSuspendSyncAdapter(pages, port,
                 ledgerPath.getParent().resolve("sync-evidence").resolve(run), ledgerPath, table, run,
-                expectedLogical, expectedPhysical, jdbc);
+                expectedLogical, expectedPhysical, target);
         var runner = new SyncJobRunner<StockSuspend,StockSuspendKey>(ledger, new DatasetIntervalLock(ledgerPath));
         return prior == null ? runner.run(run, parent, expectedLogical, request, adapter, () -> Thread.currentThread().isInterrupted())
                 : runner.resume(run, parent, prior, expectedLogical, request, adapter, () -> Thread.currentThread().isInterrupted());

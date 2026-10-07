@@ -1,5 +1,7 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.index.application.IndexCatalogJobService;
+
 import com.zoutrankil.data.stock.application.StockBasicJobService;
 import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
 import com.zoutrankil.data.stock.application.StockBasicSyncService;

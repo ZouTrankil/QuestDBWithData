@@ -1,12 +1,16 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.derived.storage.MarketBreadthDailyV1MaterializationPort;
+
+import com.zoutrankil.data.derived.storage.MarketBreadthDailyCacheReadRepository;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.Mockito.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.MarketBreadthDailyCacheMapper;
+import com.zoutrankil.data.derived.mapper.MarketBreadthDailyCacheMapper;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
 import java.nio.file.*;

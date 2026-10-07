@@ -1,5 +1,11 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.flow.application.MoneyflowJobService;
+import com.zoutrankil.data.flow.application.MoneyflowThsJobService;
+import com.zoutrankil.data.flow.application.MoneyflowDcJobService;
+import com.zoutrankil.data.flow.application.MoneyflowHsgtJobService;
+import com.zoutrankil.data.margin.application.MarginDetailJobService;
+
 import java.util.Map;
 import org.springframework.stereotype.Component;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
@@ -13,19 +19,19 @@ public final class FlowCommands implements CliCommandFamily {
             "plan-moneyflow-hsgt-job", "run-moneyflow-hsgt-job", "plan-moneyflow-dc-job",
             "run-moneyflow-dc-job", "plan-moneyflow-ths-job", "run-moneyflow-ths-job",
             "plan-moneyflow-job", "run-moneyflow-job", "finish-moneyflow-hsgt-publication");
-    private final com.zoutrankil.data.service.MoneyflowHsgtJobService moneyflowHsgtService;
-    private final com.zoutrankil.data.service.MoneyflowDcJobService moneyflowDcService;
-    private final com.zoutrankil.data.service.MoneyflowThsJobService moneyflowThsService;
-    private final com.zoutrankil.data.service.MoneyflowJobService moneyflowService;
+    private final com.zoutrankil.data.flow.application.MoneyflowHsgtJobService moneyflowHsgtService;
+    private final com.zoutrankil.data.flow.application.MoneyflowDcJobService moneyflowDcService;
+    private final com.zoutrankil.data.flow.application.MoneyflowThsJobService moneyflowThsService;
+    private final com.zoutrankil.data.flow.application.MoneyflowJobService moneyflowService;
 
-    private final com.zoutrankil.data.service.MarginDetailJobService marginDetailService;
+    private final com.zoutrankil.data.margin.application.MarginDetailJobService marginDetailService;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public FlowCommands(@org.springframework.lang.Nullable com.zoutrankil.data.service.MoneyflowHsgtJobService moneyflowHsgtService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.MoneyflowDcJobService moneyflowDcService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.MoneyflowThsJobService moneyflowThsService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.MoneyflowJobService moneyflowService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.MarginDetailJobService marginDetailService) {
+    public FlowCommands(@org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowHsgtJobService moneyflowHsgtService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowDcJobService moneyflowDcService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowThsJobService moneyflowThsService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowJobService moneyflowService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.margin.application.MarginDetailJobService marginDetailService) {
         this.moneyflowHsgtService = moneyflowHsgtService;
         this.moneyflowDcService = moneyflowDcService;
         this.moneyflowThsService = moneyflowThsService;
@@ -33,10 +39,10 @@ public final class FlowCommands implements CliCommandFamily {
         this.marginDetailService = marginDetailService;
     }
 
-    public FlowCommands(@org.springframework.lang.Nullable com.zoutrankil.data.service.MoneyflowHsgtJobService moneyflowHsgtService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.MoneyflowDcJobService moneyflowDcService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.MoneyflowThsJobService moneyflowThsService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.MoneyflowJobService moneyflowService) {
+    public FlowCommands(@org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowHsgtJobService moneyflowHsgtService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowDcJobService moneyflowDcService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowThsJobService moneyflowThsService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowJobService moneyflowService) {
         this(moneyflowHsgtService, moneyflowDcService, moneyflowThsService, moneyflowService, null);
     }
 

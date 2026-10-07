@@ -1,5 +1,12 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.flow.application.MoneyflowHsgtStaging;
+import com.zoutrankil.data.margin.application.MarginAllStaging;
+import com.zoutrankil.data.margin.application.MarginZrzStaging;
+
+import com.zoutrankil.data.index.storage.DcIndexStaging;
+import com.zoutrankil.data.index.application.IndexMonthlyStaging;
+
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

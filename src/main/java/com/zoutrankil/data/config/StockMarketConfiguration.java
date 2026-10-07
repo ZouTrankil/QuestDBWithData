@@ -3,9 +3,11 @@ package com.zoutrankil.data.config;
 import com.zoutrankil.data.stock.port.StockFactorTarget;
 import com.zoutrankil.data.stock.port.StockLimitTarget;
 import com.zoutrankil.data.stock.port.StockStDailyTarget;
+import com.zoutrankil.data.stock.port.StockSuspendTarget;
 import com.zoutrankil.data.stock.storage.QuestDbStockFactorTarget;
 import com.zoutrankil.data.stock.storage.QuestDbStockLimitTarget;
 import com.zoutrankil.data.stock.storage.QuestDbStockStDailyTarget;
+import com.zoutrankil.data.stock.storage.QuestDbStockSuspendTarget;
 import io.questdb.client.QuestDB;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,5 +28,9 @@ public class StockMarketConfiguration {
     @Bean StockStDailyTarget stockStDailyTarget(JdbcTemplate jdbc, @Lazy QuestDB questdb,
             @Value("${app.sync.stk-st-daily-table:java_d012_stk_st_daily_acceptance}") String table) {
         return new QuestDbStockStDailyTarget(table, jdbc, questdb);
+    }
+    @Bean StockSuspendTarget stockSuspendTarget(JdbcTemplate jdbc, @Lazy QuestDB questdb,
+            @Value("${app.sync.stk-suspend-table:stk_suspend_d011_isolated}") String table) {
+        return new QuestDbStockSuspendTarget(table, jdbc, questdb);
     }
 }

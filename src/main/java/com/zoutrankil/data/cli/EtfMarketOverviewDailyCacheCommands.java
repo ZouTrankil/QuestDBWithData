@@ -3,7 +3,7 @@ package com.zoutrankil.data.cli;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
-import com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobService;
+import com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService;
 import java.time.LocalDate;
 import java.util.*;
 

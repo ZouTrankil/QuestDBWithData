@@ -1,5 +1,11 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService;
+import com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService;
+import com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService;
+import com.zoutrankil.data.derived.application.MarketBreadthDailyV1JobService;
+import com.zoutrankil.data.derived.application.RetailSentimentDailyV1JobService;
+
 import java.util.Map;
 import org.springframework.stereotype.Component;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
@@ -22,21 +28,21 @@ public final class MaterializationCommands implements CliCommandFamily {
             "reconcile-retail-sentiment-daily-run", "install-market-breadth-daily-isolated", "repair-market-breadth-daily-isolated",
             "plan-market-breadth-daily-job", "run-market-breadth-daily-job", "market-breadth-daily-job-status",
             "cancel-market-breadth-daily-run", "resume-market-breadth-daily-run", "reconcile-market-breadth-daily-run");
-    private final com.zoutrankil.data.service.MarketBreadthDailyV1JobService marketBreadthDailyService;
-    private final com.zoutrankil.data.service.RetailSentimentDailyV1JobService retailSentimentDailyService;
-    private final com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService;
-    private final com.zoutrankil.data.service.EquityStyleMonthlyJobService equityStyleMonthlyService;
-    private final com.zoutrankil.data.service.MacroCoreMonthlyJobService macroCoreMonthlyService;
+    private final com.zoutrankil.data.derived.application.MarketBreadthDailyV1JobService marketBreadthDailyService;
+    private final com.zoutrankil.data.derived.application.RetailSentimentDailyV1JobService retailSentimentDailyService;
+    private final com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService;
+    private final com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService equityStyleMonthlyService;
+    private final com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService macroCoreMonthlyService;
 
     private final com.zoutrankil.data.service.MarketSentimentDailyJobService marketSentimentService;
     private final com.zoutrankil.data.service.RegimeFeaturesMonitorDailyJobService regimeMonitorService;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public MaterializationCommands(@org.springframework.lang.Nullable com.zoutrankil.data.service.MarketBreadthDailyV1JobService marketBreadthDailyService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.RetailSentimentDailyV1JobService retailSentimentDailyService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.EquityStyleMonthlyJobService equityStyleMonthlyService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.MacroCoreMonthlyJobService macroCoreMonthlyService,
+    public MaterializationCommands(@org.springframework.lang.Nullable com.zoutrankil.data.derived.application.MarketBreadthDailyV1JobService marketBreadthDailyService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.RetailSentimentDailyV1JobService retailSentimentDailyService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService equityStyleMonthlyService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService macroCoreMonthlyService,
             @org.springframework.lang.Nullable com.zoutrankil.data.service.MarketSentimentDailyJobService marketSentimentService,
             @org.springframework.lang.Nullable com.zoutrankil.data.service.RegimeFeaturesMonitorDailyJobService regimeMonitorService) {
         this.marketBreadthDailyService = marketBreadthDailyService;
@@ -48,11 +54,11 @@ public final class MaterializationCommands implements CliCommandFamily {
         this.regimeMonitorService = regimeMonitorService;
     }
 
-    public MaterializationCommands(@org.springframework.lang.Nullable com.zoutrankil.data.service.MarketBreadthDailyV1JobService marketBreadthDailyService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.RetailSentimentDailyV1JobService retailSentimentDailyService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.EquityStyleMonthlyJobService equityStyleMonthlyService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.service.MacroCoreMonthlyJobService macroCoreMonthlyService) {
+    public MaterializationCommands(@org.springframework.lang.Nullable com.zoutrankil.data.derived.application.MarketBreadthDailyV1JobService marketBreadthDailyService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.RetailSentimentDailyV1JobService retailSentimentDailyService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService equityStyleMonthlyService,
+            @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService macroCoreMonthlyService) {
         this(marketBreadthDailyService, retailSentimentDailyService, etfMarketOverviewDailyCacheService, equityStyleMonthlyService, macroCoreMonthlyService, null, null);
     }
 

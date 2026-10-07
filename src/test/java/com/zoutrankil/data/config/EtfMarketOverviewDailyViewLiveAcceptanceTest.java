@@ -1,5 +1,7 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.derived.storage.EtfMarketOverviewDailyViewReadRepository;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -8,7 +10,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-import com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMapper;
+import com.zoutrankil.data.derived.mapper.EtfMarketOverviewDailyViewMapper;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
 import java.nio.file.*;

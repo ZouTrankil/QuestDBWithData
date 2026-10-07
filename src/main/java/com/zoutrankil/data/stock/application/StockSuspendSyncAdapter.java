@@ -1,16 +1,14 @@
 package com.zoutrankil.data.stock.application;
 import com.zoutrankil.data.stock.domain.StockSuspendState;
+import com.zoutrankil.data.stock.port.StockSuspendTarget;
+import com.zoutrankil.data.stock.port.StockSuspendWriteSession;
 
 import com.zoutrankil.data.service.*;
-import com.zoutrankil.data.stock.storage.StockSuspendStaging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.stock.storage.StockSuspendStorage;
-import com.zoutrankil.data.stock.storage.StockSuspendWritePort;
 import com.zoutrankil.data.repository.ReferencePublicationJournal;
 import com.zoutrankil.data.repository.SyncRunLedger;
-import org.springframework.jdbc.core.JdbcTemplate;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.*;
@@ -20,7 +18,7 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 /** Executes one suspend_d date request at a time and emits receipts for both empty and nonempty dates. */
 public final class StockSuspendSyncAdapter implements SyncJobRunner.Adapter<StockSuspend,StockSuspendKey> {
     private final StockSuspendSource source;
-    private final StockSuspendWritePort originalPort;
+    private final StockSuspendWriteSession originalPort;
     private volatile VerifiedBatchExecutor.Port<StockSuspend,StockSuspendKey> port;
     private final Path evidenceRoot;
     private final Path ledgerPath;
@@ -28,18 +26,18 @@ public final class StockSuspendSyncAdapter implements SyncJobRunner.Adapter<Stoc
     private final String runId;
     private final String logicalTargetId;
     private final String physicalTargetId;
-    private final JdbcTemplate jdbc;
+    private final StockSuspendTarget target;
     private final ObjectMapper json = JobDefinitionJson.mapper();
 
-    public StockSuspendSyncAdapter(TusharePageService pages, StockSuspendWritePort port, Path evidenceRoot,
+    public StockSuspendSyncAdapter(TusharePageService pages, StockSuspendWriteSession port, Path evidenceRoot,
                                    Path ledgerPath,String table,String runId,String logicalTargetId,
-                                   String physicalTargetId,JdbcTemplate jdbc) {
+                                   String physicalTargetId,StockSuspendTarget target) {
         this.source = new StockSuspendSource(pages, evidenceRoot.resolve("source"));
         this.originalPort = Objects.requireNonNull(port);this.port=port;
         this.evidenceRoot = evidenceRoot.toAbsolutePath().normalize();
         this.ledgerPath=ledgerPath.toAbsolutePath().normalize();this.table=Objects.requireNonNull(table);
         this.runId=Objects.requireNonNull(runId);this.logicalTargetId=Objects.requireNonNull(logicalTargetId);
-        this.physicalTargetId=Objects.requireNonNull(physicalTargetId);this.jdbc=Objects.requireNonNull(jdbc);
+        this.physicalTargetId=Objects.requireNonNull(physicalTargetId);this.target=Objects.requireNonNull(target);
     }
 
     public static void validateRequest(FrozenRequest request) {
@@ -98,10 +96,10 @@ public final class StockSuspendSyncAdapter implements SyncJobRunner.Adapter<Stoc
         var bufferedPages=new ArrayList<SyncJobRunner.Page<StockSuspend>>();
         int[] totals = {0, 0};
         var allRows=new ArrayList<StockSuspend>();
-        var publication=new StockSuspendPublication(jdbc,ledgerPath,evidenceRoot,table,logicalTargetId,runId);
+        var publication=new StockSuspendPublication(target.newPublicationTables(),ledgerPath,evidenceRoot,table,logicalTargetId,runId);
         try(var publicationLock=publication.acquire()) {
-        var before=new StockSuspendStorage(jdbc,table).snapshot();
-        if(!physicalTargetId.equals(StockSuspendStorage.physicalTargetId(jdbc,table,before.identity())))
+        var before=target.openTable(table).snapshot();
+        if(!physicalTargetId.equals(target.physicalTargetId(table,before.identity())))
             throw new IllegalStateException("stk_suspend physical target differs from the frozen generation");
         for (LocalDate date = request.from(); !date.isAfter(request.to()); date = date.plusDays(1)) {
             if (cancelled.getAsBoolean() || Thread.currentThread().isInterrupted())
@@ -122,11 +120,11 @@ public final class StockSuspendSyncAdapter implements SyncJobRunner.Adapter<Stoc
             throw new IllegalStateException("stk_suspend completion is missing a daily source slice");
         Files.createDirectories(evidenceRoot);
         String sourceFingerprint=combineFingerprints(sourceFingerprints);
-        var current=new StockSuspendStorage(jdbc,table).snapshot();
+        var current=target.openTable(table).snapshot();
         if(!before.equals(current))throw new IllegalStateException("stk_suspend logical target changed while source pages were being buffered");
-        var prepared=StockSuspendStaging.prepare(before,current,allRows,request.from(),request.to());
-        var stage=new StockSuspendStaging(jdbc,table).write(prepared,evidenceRoot.resolve("publication"),cancelled);
-        String stagePhysical=StockSuspendStorage.physicalTargetId(jdbc,stage.table(),stage.snapshot().identity());
+        var prepared=target.prepare(before,current,allRows,request.from(),request.to());
+        var stage=target.newStaging().write(prepared,evidenceRoot.resolve("publication"),cancelled);
+        String stagePhysical=target.physicalTargetId(stage.table(),stage.snapshot().identity());
         this.port=originalPort.forTarget(stage.table(),stagePhysical);
         for(var page:bufferedPages){
             if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())
@@ -260,6 +258,6 @@ public final class StockSuspendSyncAdapter implements SyncJobRunner.Adapter<Stoc
     }
 
 
-    @Override public VerifiedBatchExecutor.Codec<StockSuspend,StockSuspendKey> codec() { return StockSuspendWritePort.CODEC; }
+    @Override public VerifiedBatchExecutor.Codec<StockSuspend,StockSuspendKey> codec() { return originalPort.codec(); }
     @Override public VerifiedBatchExecutor.Port<StockSuspend,StockSuspendKey> port() { return port; }
 }

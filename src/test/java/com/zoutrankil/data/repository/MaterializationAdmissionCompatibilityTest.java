@@ -1,5 +1,9 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyV1MaterializationPort;
+
+import com.zoutrankil.data.derived.storage.MarketBreadthDailyV1MaterializationPort;
+
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import org.junit.jupiter.api.Test;

@@ -129,7 +129,11 @@ public final class StockStDailyRunRecovery {
             SyncRunState desired = rows == 0 ? SyncRunState.VERIFIED_EMPTY : SyncRunState.VERIFIED;
             var current = ledger.get(entry.id());
             if (current.state() != desired) {
-                if (current.state() != SyncRunState.RUNNING && current.state() != SyncRunState.IN_DOUBT)
+                // A hard stop bypasses the adapter's catch; an empty slice can still be FETCHED.
+                // Its immutable receipt and published empty window have both been verified above.
+                boolean fetchedEmpty = isFetchedEmpty(current.state(), fetched);
+                if (current.state() != SyncRunState.RUNNING && current.state() != SyncRunState.IN_DOUBT
+                        && !fetchedEmpty)
                     throw new IllegalStateException("D012 slice state cannot be reconciled from publication");
                 var sliceProof = sliceProof(fetched, desired, intent.id(), stageReceipt.toString(), true);
                 ledger.transition(entry.id(), current.revision(), desired, json.writeValueAsString(sliceProof));
@@ -175,11 +179,17 @@ public final class StockStDailyRunRecovery {
                     || !Path.of(fetched.path("responseEvidence").asText()).toRealPath()
                     .equals(Path.of(source.path("path").asText()).toRealPath()))
                 throw new IllegalStateException("D012 source receipt differs from its immutable FETCHED ledger event");
-            if (!Set.of(SyncRunState.RUNNING, SyncRunState.IN_DOUBT, SyncRunState.VERIFIED,
+            boolean fetchedEmpty = isFetchedEmpty(entry.state(), fetched);
+            if (!fetchedEmpty && !Set.of(SyncRunState.RUNNING, SyncRunState.IN_DOUBT, SyncRunState.VERIFIED,
                     SyncRunState.VERIFIED_EMPTY).contains(entry.state()))
                 throw new IllegalStateException("D012 slice state is not publication-recoverable");
         }
         if (!found.equals(new HashSet<>(dates))) throw new IllegalStateException("D012 ledger omits a trade-date slice");
+    }
+    private static boolean isFetchedEmpty(SyncRunState state, JsonNode fetched) {
+        JsonNode rows = fetched.path("returnedRows");
+        return state == SyncRunState.FETCHED && rows.isIntegralNumber()
+                && rows.canConvertToInt() && rows.intValue() == 0;
     }
     private static JsonNode fetchEvent(SyncRunLedger ledger, String id) throws Exception {
         JsonNode fetched = null;

@@ -39,10 +39,9 @@ class StockCalendarApplicationWiringTest {
         });
         try (var context = application.run("plan-sync-job", "--job", "data.stock_basic", "--version", "2",
                 "--logical-date", "2026-09-28", "--parameters", "{\"codes\":[\"000001.SZ\"]}")) {
-            // Suspend still uses its legacy adapter until the remaining T15 vertical is complete.
             for (var type : List.of(DailyTarget.class, DailyBasicTarget.class, StockBasicTarget.class,
                     ExchangeCalendarTarget.class, StockFactorTarget.class, StockLimitTarget.class,
-                    StockStDailyTarget.class, StockDetailTarget.class)) {
+                    StockStDailyTarget.class, StockDetailTarget.class, StockSuspendTarget.class)) {
                 assertEquals(1, context.getBeansOfType(type).size(), type.getName());
             }
             for (var type : List.of(DailyJobService.class, DailyBasicJobService.class, StockBasicJobService.class,

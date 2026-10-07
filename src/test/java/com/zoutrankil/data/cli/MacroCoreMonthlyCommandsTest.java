@@ -1,6 +1,6 @@
 package com.zoutrankil.data.cli;
 
-import com.zoutrankil.data.service.MacroCoreMonthlyJobService;
+import com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

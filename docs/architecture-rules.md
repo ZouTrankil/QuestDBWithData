@@ -50,7 +50,7 @@ compact/pretty 与时间格式分别选择，避免改变已有输出。`CliExit
 ## 数据集读取注册
 
 `ReadBindingCatalog` 明确登记 dataset ID、schemaVersion、Java 行类型、映射函数和来源版本 supplier。
-`DefaultReadBindings` 保留现有 20 个类型化和 34 个通用 `DatasetValues` 表示；新数据集必须显式选择表示。
+`DefaultReadBindings` 当前登记 20 个类型化和 36 个通用 `DatasetValues` 表示；新数据集必须显式选择表示。
 Spring 扩展可提供 `ReadBindingCatalog.Registration<?>` Bean，重复 ID 会导致装配失败。
 绑定时使用当前 `DatasetRegistry` 的完整定义，以保留隔离物理表名和部署配置。
 未启用的数据集可以留在目录中，已启用的 READ 数据集缺少注册或版本不符则拒绝启动。
@@ -98,6 +98,65 @@ portfolio 的日期指公告日期，share 的日期指交易日期。每次 `ne
 计划、目标和恢复校验，并由工厂按顺序创建 writer、证据路径、source 和 adapter。
 daily/adj/factor 的检查和预算处理存在已固定的差异，不能为了共用流程而合并它们。
 
+## 股票和交易日历业务包
+
+`data.stock` 与 `data.calendar` 各自组织 application、port、storage、mapper，覆盖八个股票目标和一个日历目标。
+应用通过 target 取得身份、物理范围和独立 writer/session；存储实现拥有 JDBC、QuestDB、物理解码与 SQL。
+映射和注册元数据可以共享，writer 的发送状态及每次运行的证据上下文必须独立。
+
+Detail、ST 和 Suspend 的发布及恢复状态机仍由 application 决定，table/staging 端口只提供物理操作。
+各族的正式表准入、逻辑身份、物理代际、WAL 等待、空源证明和取消方式保持独立。
+Suspend 的公开目标工厂与内部 stage writer 准入分别检查，冻结的物理身份传入工厂，不能在工厂中重新规划。
+
+ST 的硬中断恢复仅允许已完整核验的整数零行 `FETCHED` 凭证进入 `VERIFIED_EMPTY`。
+恢复先核验全部阶段、每日与年度来源凭证，再核对发布后的整表、窗口及窗口外内容，完成台账后释放租约。
+非空 `FETCHED`、损坏凭证或无法确定的物理布局不能触发后续重命名。
+
+跨业务族的 group 装配仍待 T15 后续统一整理；业务包内的数据库依赖清除不能证明共享装配已经完成。
+
+## 指数业务包
+
+`data.index` 的 application、port、storage、mapper 与 domain 分别组织业务编排、目标契约、
+物理操作、映射及纯策略。`IndexConfiguration` 装配九个目标，应用服务通过端口取得身份、
+范围、table/staging 和独立写入会话；构造和计划不打开连接或创建台账。
+
+Catalog、Membership、THS Index 和 THS Member 使用不同的快照、合并及发布证据，不能共享可变执行状态。
+纯记录、字段投影、预算和合并规则可以共享；每次 staging、writer 及运行证据上下文分别创建。
+THS Member 的完整空响应只允许核验已为空的板块，不能删除已有成员；正常完成和停止后恢复均需
+写入 `sourceComplete`、整数零行计数及 `responseEvidence`，核验其他板块后才完成台账和释放租约。
+
+DailyMarket、DailyBasic 和 Weight 的 session 保留各自的范围和读回契约。
+Weight 通过 `StockDetailNameReadPort` 按原有预算读取名称，并在每批读取前后核对冻结身份。
+Monthly 保留 READY/source 恢复、每次会话的 stage 绑定及完整读回后的发布回调；
+DcIndex 保留完整窗口替换、物理代际和不同版本的发布证据，并通过 `ExchangeCalendarReadPort` 读取交易日。
+各族的逻辑身份、WAL 等待、取消位置和正式表准入分别校验，不合并成通用发布协议。
+
+DailyMarket/DailyBasic 的 group-child prior/parent 传递仍按既有行为固定；修正这一行为需要单独审阅。
+跨族 group 直接构造存储组件的装配仍属于 T15 后续工作。
+
+## 资金流和融资融券业务包
+
+`data.flow` 和 `data.margin` 分别组织 application、port、storage、mapper 与 domain。
+`FlowConfiguration`、`MarginConfiguration` 装配八个目标；应用通过目标取得逻辑/物理身份、
+范围及独立写入会话，数据库客户端和 SQL 留在存储实现中。
+目标、纯字段映射、codec、预算与不可变记录可以共享；每次 writer、stage 绑定、发送状态和来源证据上下文独立创建。
+完整分页日历和 HSGT 有界流式 SSE 日历使用不同端口，保留原有覆盖与读取预算。
+
+Moneyflow 正式表只允许有界 BACKFILL，不能将已有物理行推断为增量检查点。
+MarginDetail 保留正式表修复窗口、发送前物理证据和原字符串行数表示。
+MoneyflowDc 保留 v2 分页请求及逐页凭证；THS 的覆盖判定使用真实交易日历。
+MarginZrz 保留退休日期和禁用状态，分包不自动启用任务。
+
+HSGT、MarginAll 和 MarginZrz 的来源、stage 验证及恢复决定属于 application；
+table/staging 端口只执行物理读取、建表、WAL、重命名和删除。
+All/Zrz 仅在冻结运行、逻辑身份、物理代际和目标未改变均获证明后删除所属未发布 stage，再重新采集。
+HSGT 完成中断发布前，先核验冻结 owner/request、run/attempt/slice 归属、唯一不可变 FETCHED、
+原始凭证及完整连续窗口。仅严格整数零行的 FETCHED 可以按空源恢复；
+非空或可被强制转换为零的凭证不能授权剩余重命名。
+完整发布读回后才完成切片、attempt 和 run，并释放所属租约。
+
+各任务原有取消和 parent/prior 传递方式仍分别保留；跨族 group 装配和父任务取消传播留在 T15 后续整理。
+
 ## 自动检查
 
 ```powershell
@@ -121,3 +180,11 @@ daily/adj/factor 的检查和预算处理存在已固定的差异，不能为了
 每次运行生成 `build/reports/architecture/current-violations.tsv` 供审阅。
 
 模块依赖和资源隔离在 T17 由 Gradle 项目依赖与发行包内容检查进一步约束；仅通过包检查不能证明两个发行包已经隔离。
+
+## 派生族的端口与可变状态
+
+月度 source SQL 位于 `derived.storage`，纯推导和冻结请求位于 `derived.application`；快照记录、字段投影和规范化值位于 `derived.domain`。D103 保持每个查询的原预算，D104 多次读源与前后快照保持同一绝对 deadline。Target 工厂按运行创建 writer，恢复校验使用同一 writer/session。
+
+原生 MV 的会话保留物理源快照、目标绑定、PID 见证、refresh 与读回的实例状态；私有 attestor 通过窄接口创建，每个会话单独保存 PID 历史。日历覆盖顺序为 version-before、窗口读取与比较、version-after，不能移入通用物理 MV 写入器执行应用流程。
+
+ETF delegated cache 的持久 claim、冻结身份和禁止重发语义由应用层拥有。进程端口负责实际进程控制，物理 target 负责有界 SELECT 读回。Session 的 attempted/unresolved/cancellation 状态不作为共享单例，三个 stopped-process 证明和释放 lease 前的最终复核保持原顺序。构造与 DI 装配不查询或启动进程；plan/preview 仍可能运行原有只读预览。

@@ -1,8 +1,8 @@
 package com.zoutrankil.data.stock.application;
 import com.zoutrankil.data.stock.domain.StockSuspendState;
+import com.zoutrankil.data.stock.port.StockSuspendTables;
+import com.zoutrankil.data.stock.port.StockSuspendTarget;
 
-import com.zoutrankil.data.stock.storage.StockSuspendStaging;
-import com.zoutrankil.data.stock.storage.StockSuspendStorage;
 import com.zoutrankil.data.stock.storage.StockSuspendTargetTransitionStore;
 
 import com.zoutrankil.data.service.*;
@@ -10,7 +10,6 @@ import com.zoutrankil.data.service.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
-import org.springframework.jdbc.core.JdbcTemplate;
 import java.nio.channels.*;
 import java.nio.file.*;
 import java.time.*;
@@ -28,7 +27,7 @@ public final class StockSuspendPublication {
                              int duplicateKeys,int missingKeys,String readbackEvidence,
                              String sourceFingerprint,String fullTargetFingerprint,boolean writerStopped,boolean passed) {}
     private record Scope(LocalDate from, LocalDate to) {}
-    private final JdbcTemplate jdbc;
+    private final StockSuspendTables tables;
     private final Path ledgerPath;
     private final Path evidenceRoot;
     private final String table;
@@ -38,9 +37,9 @@ public final class StockSuspendPublication {
     private final DatasetIntervalLock intervalLocks;
     private final StockSuspendTargetTransitionStore transitions;
 
-    public StockSuspendPublication(JdbcTemplate jdbc, Path ledgerPath, Path evidenceRoot, String table,
+    public StockSuspendPublication(StockSuspendTables tables, Path ledgerPath, Path evidenceRoot, String table,
                                    String logicalTargetId, String runId) throws Exception {
-        this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());this.jdbc.setQueryTimeout(20);
+        this.tables=Objects.requireNonNull(tables);
         this.ledgerPath=ledgerPath.toAbsolutePath().normalize();this.evidenceRoot=evidenceRoot.toAbsolutePath().normalize();
         DatasetDefinition.identifier(table);this.table=table;this.logicalTargetId=Objects.requireNonNull(logicalTargetId);
         this.runId=Objects.requireNonNull(runId);
@@ -76,15 +75,15 @@ public final class StockSuspendPublication {
                                      String sourceFingerprint,String completionEvidencePath,
                                      BooleanSupplier cancelled) throws Exception {
         check(cancelled);
-        if(!logicalTargetId.equals(StockSuspendTargetIdentity.logical(jdbc,table)))
+        if(!logicalTargetId.equals(tables.logicalTargetId(table)))
             throw new IllegalStateException("stk_suspend logical target changed during the frozen run");
         String currentPhysical=currentPhysicalTargetId();
         if(!expectedPhysicalTarget.equals(currentPhysical)
-                ||!StockSuspendStorage.physicalTargetId(jdbc,table,before.identity()).equals(expectedPhysicalTarget))
+                ||!tables.physicalTargetId(table,before.identity()).equals(expectedPhysicalTarget))
             throw new IllegalStateException("stk_suspend physical target changed before scoped replacement");
-        var storage=new StockSuspendStorage(jdbc,table);var current=storage.snapshot();
+        var storage=tables.openTable(table);var current=storage.snapshot();
         if(!before.equals(current))throw new IllegalStateException("stk_suspend logical target changed while source pages were staged");
-        var prepared=StockSuspendStaging.prepare(before,current,source,from,to);
+        var prepared=tables.prepare(before,current,source,from,to);
         check(cancelled);requireRunLease(from,to);
         var currentAgain=storage.snapshot();
         if(!before.equals(currentAgain))throw new IllegalStateException("stk_suspend target changed while source pages were staged");
@@ -92,7 +91,7 @@ public final class StockSuspendPublication {
         if(!stageReceipt.startsWith(evidenceRoot)||!Files.isRegularFile(stageReceipt)
                 ||Files.size(stageReceipt)>StockSuspendSource.MAX_EVIDENCE_BYTES)
             throw new IllegalStateException("stk_suspend verified stage receipt is absent, oversized or outside the run evidence directory");
-        var stageAgain=new StockSuspendStorage(jdbc,stage.table()).snapshot();
+        var stageAgain=tables.openTable(stage.table()).snapshot();
         if(!stage.snapshot().equals(stageAgain)||!stageAgain.rows().equals(prepared.expected()))
             throw new IllegalStateException("stk_suspend complete stage differs from preserved outside rows plus authoritative source window");
         var oldIdentity=current.identity();var newIdentity=stage.snapshot().identity();
@@ -118,7 +117,7 @@ public final class StockSuspendPublication {
             String readback=stage.receipt();
             if(!scoped.equals(prepared.source()))throw new IllegalStateException("Published stk_suspend date window differs from complete source snapshot");
             return new WindowProof(logicalTargetId,expectedPhysicalTarget,
-                    StockSuspendStorage.physicalTargetId(jdbc,table,after.identity()),from,to,true,
+                    tables.physicalTargetId(table,after.identity()),from,to,true,
                     source.size(),scoped.size(),source.size(),0,0,0,readback,sourceFingerprint,after.fingerprint(),true,true);
         } catch(Exception failure) {
             markInDoubt(runId,failure);
@@ -170,11 +169,11 @@ public final class StockSuspendPublication {
         }
     }
 
-    public static void verifyCurrentTarget(Path ledgerPath,JdbcTemplate jdbc,String table,
+    public static void verifyCurrentTarget(Path ledgerPath,StockSuspendTarget target,
                                            String logicalTargetId,String currentPhysicalId)throws Exception {
         if(!Files.isRegularFile(ledgerPath))return;
-        var publication=new StockSuspendPublication(jdbc,ledgerPath,
-                ledgerPath.toAbsolutePath().normalize().getParent().resolve("sync-evidence"),table,logicalTargetId,"identity-check");
+        var publication=new StockSuspendPublication(target.newPublicationTables(),ledgerPath,
+                ledgerPath.toAbsolutePath().normalize().getParent().resolve("sync-evidence"),target.tableName(),logicalTargetId,"identity-check");
         publication.verifyCurrentTarget(logicalTargetId,currentPhysicalId);
     }
 
@@ -190,11 +189,11 @@ public final class StockSuspendPublication {
         return journal.forRun(runId).state()==State.VERIFIED;
     }
 
-    public static void finish(Path ledgerPath,JdbcTemplate jdbc,String table,String runId,boolean writerStopped)throws Exception {
+    public static void finish(Path ledgerPath,StockSuspendTarget target,String runId,boolean writerStopped)throws Exception {
         var run=SyncRunLedger.openReadOnly(ledgerPath).getRun(runId);
         var intent=new ReferencePublicationJournal(ledgerPath,"stk_suspend").forRun(runId).intent();
-        var publisher=new StockSuspendPublication(jdbc,ledgerPath,
-                ledgerPath.toAbsolutePath().normalize().getParent().resolve("sync-evidence").resolve(runId),table,
+        var publisher=new StockSuspendPublication(target.newPublicationTables(),ledgerPath,
+                ledgerPath.toAbsolutePath().normalize().getParent().resolve("sync-evidence").resolve(runId),target.tableName(),
                 intent.initialTarget(),runId);
         publisher.finish(runId,writerStopped);
     }
@@ -206,28 +205,28 @@ public final class StockSuspendPublication {
         if(pending.transitionRunId()!=null)throw new IllegalStateException("Unverified stk_suspend target transition for run "+pending.transitionRunId());
     }
 
-    public static boolean recoverIfPresent(Path ledgerPath,JdbcTemplate jdbc,String table,String runId,
+    public static boolean recoverIfPresent(Path ledgerPath,StockSuspendTarget target,String runId,
                                            boolean writerStopped)throws Exception {
         if(!Files.isRegularFile(ledgerPath))return false;
         var journal=new ReferencePublicationJournal(ledgerPath,"stk_suspend");
         if(journal.findForRun(runId).isEmpty())return false;
-        finish(ledgerPath,jdbc,table,runId,writerStopped);return true;
+        finish(ledgerPath,target,runId,writerStopped);return true;
     }
 
     private StockSuspendState.Snapshot completePublished(ReferencePublicationJournal.Entry entry,String physicalBefore)throws Exception {
         if(inspect(entry.intent().runId())!=Layout.PUBLISHED)
             throw new IllegalStateException("stk_suspend published target differs from journaled replacement");
-        var actual=new StockSuspendStorage(jdbc,table).snapshot();
+        var actual=tables.openTable(table).snapshot();
         if(actual.identity().id()!=entry.intent().replacementId()||!actual.fingerprint().equals(entry.intent().afterFingerprint()))
             throw new IllegalStateException("stk_suspend renamed target identity or full snapshot differs from stage");
-        String actualPhysical=StockSuspendStorage.physicalTargetId(jdbc,table,actual.identity());
+        String actualPhysical=tables.physicalTargetId(table,actual.identity());
         completeTransition(entry,entry.intent().scope(),physicalBefore,actual,actualPhysical);
         return actual;
     }
 
     private StockSuspendState.Snapshot completeTransition(ReferencePublicationJournal.Entry entry,String scopeJson)throws Exception {
-        String before=parsePhysicalBefore(scopeJson);var actual=new StockSuspendStorage(jdbc,table).snapshot();
-        completeTransition(entry,scopeJson,before,actual,StockSuspendStorage.physicalTargetId(jdbc,table,actual.identity()));
+        String before=parsePhysicalBefore(scopeJson);var actual=tables.openTable(table).snapshot();
+        completeTransition(entry,scopeJson,before,actual,tables.physicalTargetId(table,actual.identity()));
         return actual;
     }
 
@@ -316,7 +315,7 @@ public final class StockSuspendPublication {
         if(!recomputedSource.equals(requiredScopeText(intent.scope(),"sourceFingerprint")))
             throw new IllegalStateException("stk_suspend recovery source fingerprint differs from the publication intent");
 
-        String physicalAfter=StockSuspendStorage.physicalTargetId(jdbc,table,after.identity());
+        String physicalAfter=tables.physicalTargetId(table,after.identity());
         String physicalBefore=parsePhysicalBefore(intent.scope());
         String readbackEvidence="questdb-full-snapshot:"+after.fingerprint();
         var verification=Map.of("passed",true,"writerStopped",true,"expectedRows",0,"actualRows",0,
@@ -415,7 +414,7 @@ public final class StockSuspendPublication {
 
     private void verifyCurrentTarget(String logical,String physical)throws Exception {
         requireNoUnresolved();
-        if(!logical.equals(StockSuspendTargetIdentity.logical(jdbc,table)))throw new IllegalStateException("stk_suspend logical endpoint/table identity changed");
+        if(!logical.equals(tables.logicalTargetId(table)))throw new IllegalStateException("stk_suspend logical endpoint/table identity changed");
         String prior=null;
         for(var transition:transitions.lineage(logical)) {
             var intent=transition.intent();
@@ -462,23 +461,15 @@ public final class StockSuspendPublication {
         if(lease==null||lease.inDoubt())throw new IllegalStateException("Current stk_suspend date-window lease is absent or uncertain");
     }
     private String currentPhysicalTargetId() {
-        var identity=new StockSuspendStorage(jdbc,table).preflight();
-        return StockSuspendStorage.physicalTargetId(jdbc,table,identity);
+        var identity=tables.openTable(table).preflight();
+        return tables.physicalTargetId(table,identity);
     }
-    private StockSuspendState.Snapshot optional(String tableName)throws Exception {
-        if(jdbc.queryForList("SELECT id FROM tables() WHERE table_name=?",tableName).isEmpty())return null;
-        long deadline=System.nanoTime()+Duration.ofSeconds(60).toNanos();
-        while(!QuestDbWriteChecks.walSettled(jdbc,tableName)) {
-            if(System.nanoTime()>deadline)throw new IllegalStateException("Renamed stk_suspend WAL unresolved; keep publication journal");
-            Thread.sleep(50);
-        }
-        return new StockSuspendStorage(jdbc,tableName).snapshot();
-    }
+    private StockSuspendState.Snapshot optional(String tableName)throws Exception { return tables.snapshotIfPresent(tableName); }
     private static boolean matches(StockSuspendState.Snapshot snapshot,long id,String directory,String fingerprint) {
         return snapshot!=null&&snapshot.identity().id()==id&&(directory==null||snapshot.identity().directory().equals(directory))
                 &&snapshot.fingerprint().equals(fingerprint);
     }
-    private void rename(String from,String to){jdbc.execute("RENAME TABLE \""+from+"\" TO \""+to+"\"");}
+    private void rename(String from,String to){tables.rename(from,to);}
     private void markInDoubt(String run,Exception failure) {
         try { var current=journal.forRun(run);if(current.state()!=State.IN_DOUBT&&current.state()!=State.VERIFIED)journal.advance(current,State.IN_DOUBT); }
         catch(Exception journalFailure){failure.addSuppressed(journalFailure);}

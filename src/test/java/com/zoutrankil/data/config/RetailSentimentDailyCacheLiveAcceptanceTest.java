@@ -1,5 +1,9 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyV1MaterializationPort;
+
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyCacheReadRepository;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.Mockito.*;
@@ -8,7 +12,7 @@ import static org.mockito.ArgumentMatchers.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.RetailSentimentDailyCacheMapper;
+import com.zoutrankil.data.derived.mapper.RetailSentimentDailyCacheMapper;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
 import java.nio.file.*;

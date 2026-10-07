@@ -1,5 +1,7 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.derived.storage.MarketBreadthDailyV1MaterializationPort;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;

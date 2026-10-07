@@ -1,8 +1,13 @@
 package com.zoutrankil.data.config;
+import com.zoutrankil.data.derived.storage.QuestDbEquityStyleMonthlySourceReader;
+import com.zoutrankil.data.derived.storage.QuestDbEquityStyleMonthlyTarget;
+
+import com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService;
+import com.zoutrankil.data.derived.storage.EquityStyleMonthlyReadRepository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.EquityStyleMonthlyMapper;
+import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
 import java.nio.file.*;
@@ -51,7 +56,7 @@ class EquityStyleMonthlyInitialReadOnlyRecoveryTest {
             try(var privatePool=pool("d103-private-recovery",18842,"admin","quest");var formalPool=pool("d103-formal-recovery",8812,required("APP_QUESTDB_USERNAME"),required("APP_QUESTDB_PASSWORD"))) {
                 var privateJdbc=jdbc(privatePool);var formalJdbc=jdbc(formalPool);var formalBefore=formalSnapshot(formalJdbc);
                 var properties=new QuestDbProperties();properties.setHost("127.0.0.1");properties.setPgPort(18842);properties.setQwpPort(19030);properties.setUsername("admin");properties.setPassword("quest");
-                var owner=new EquityStyleMonthlyJobService(privateJdbc,properties,"index_monthly",TABLE,LEDGER);
+                var owner=new EquityStyleMonthlyJobService(new QuestDbEquityStyleMonthlySourceReader(privateJdbc,"index_monthly"),new QuestDbEquityStyleMonthlyTarget(privateJdbc,properties,TABLE),LEDGER);
                 owner.requireNoPendingPublication();var batch=owner.source().read(JUNE,JULY);assertEquals(32,batch.rawRows());assertRows(expected,batch.rows());
                 var sourceState=fixture.required("private_after").required("index_monthly");
                 assertEquals(sourceState.required("physical").required("id").asLong(),batch.snapshot().tableId());assertEquals(sourceState.required("physical").required("directoryName").asText(),batch.snapshot().directory());

@@ -1,8 +1,7 @@
 package com.zoutrankil.data.stock.application;
 import com.zoutrankil.data.stock.domain.StockSuspendState;
+import com.zoutrankil.data.stock.port.StockSuspendTarget;
 
-import com.zoutrankil.data.stock.storage.StockSuspendStaging;
-import com.zoutrankil.data.stock.storage.StockSuspendStorage;
 
 import com.zoutrankil.data.service.*;
 
@@ -11,7 +10,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
 import com.zoutrankil.data.repository.*;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.nio.file.*;
 import java.security.MessageDigest;
@@ -36,10 +34,11 @@ public final class StockSuspendRunRecovery {
      * the rename/journal first; this method then proves every daily source receipt against the full
      * replacement snapshot, closes active ledger entries and releases only this run's interval lease.
      */
-    public static Result finishInterrupted(JdbcTemplate jdbc, Path ledgerPath, String table,
+    public static Result finishInterrupted(StockSuspendTarget target, Path ledgerPath,
                                             String runId, boolean writerStopped) throws Exception {
         if (!writerStopped) throw new IllegalStateException("Stopped stk_suspend writer proof required");
-        Objects.requireNonNull(jdbc); Objects.requireNonNull(ledgerPath); Objects.requireNonNull(runId);
+        Objects.requireNonNull(target); Objects.requireNonNull(ledgerPath); Objects.requireNonNull(runId);
+        String table = target.tableName();
         requireIsolatedTableName(table);
         ledgerPath = ledgerPath.toAbsolutePath().normalize();
         var ledger = new SyncRunLedger(ledgerPath);
@@ -83,7 +82,7 @@ public final class StockSuspendRunRecovery {
         if (!"stk_suspend".equals(intent.dataset()) || !runId.equals(intent.runId())
                 || !table.equals(intent.target()) || !logicalTarget.equals(intent.initialTarget()))
             throw new IllegalStateException("D011 publication intent differs from the frozen run/target");
-        if (!logicalTarget.equals(StockSuspendTargetIdentity.logical(jdbc, table)))
+        if (!logicalTarget.equals(target.targetId()))
             throw new IllegalStateException("D011 frozen logical target differs from the configured PGWire endpoint/table");
         JsonNode scope = JobDefinitionJson.mapper().readTree(intent.scope());
         if (!logicalTarget.equals(scope.path("logicalTargetId").asText())
@@ -100,7 +99,7 @@ public final class StockSuspendRunRecovery {
         Path stageReceipt = resolveUnder(runEvidence, realEvidence, requiredText(scope, "stageReceipt"), null);
 
         var stageProof = readStageProof(stageReceipt, intent, table, from, to);
-        var publication = new StockSuspendPublication(jdbc, ledgerPath, runEvidence, table, logicalTarget, runId);
+        var publication = new StockSuspendPublication(target.newPublicationTables(), ledgerPath, runEvidence, table, logicalTarget, runId);
         StockSuspendPublication.Layout layout = publication.inspect(runId);
         if (layout == StockSuspendPublication.Layout.CONFLICT)
             throw new IllegalStateException("D011 target/backup/stage layout conflicts with the publication journal");
@@ -133,17 +132,17 @@ public final class StockSuspendRunRecovery {
             throw new IllegalStateException("D011 raw receipts differ from the publication source fingerprint/row count");
 
         String beforeTable = layout == StockSuspendPublication.Layout.ORIGINAL ? intent.target() : intent.backup();
-        var before = new StockSuspendStorage(jdbc, beforeTable).snapshot();
+        var before = target.openTable(beforeTable).snapshot();
         if (before.identity().id() != intent.originalId()
                 || !before.identity().directory().equals(intent.originalDirectory())
                 || !before.fingerprint().equals(intent.beforeFingerprint())
-                || !StockSuspendStorage.physicalTargetId(jdbc, table, before.identity()).equals(physicalBefore))
+                || !target.physicalTargetId(table, before.identity()).equals(physicalBefore))
             throw new IllegalStateException("D011 publication backup no longer proves the frozen physical target");
-        var prepared = StockSuspendStaging.prepare(before, before,
-                StockSuspendStorage.sortedUnique(sourceRows), from, to);
+        var prepared = target.prepare(before, before,
+                StockSuspendState.sortedUnique(sourceRows), from, to);
         if (!stageProof.path("actual").isObject()
                 || stageProof.path("preservedOutsideRows").asInt(-1)
-                != StockSuspendStorage.outside(before.rows(), from, to.plusDays(1)).size())
+                != StockSuspendState.outside(before.rows(), from, to.plusDays(1)).size())
             throw new IllegalStateException("D011 stage receipt differs from source plus preserved outside rows");
         StockSuspendState.Snapshot staged = JobDefinitionJson.mapper().treeToValue(
                 stageProof.path("actual"), StockSuspendState.Snapshot.class);
@@ -152,12 +151,12 @@ public final class StockSuspendRunRecovery {
             throw new IllegalStateException("D011 verified stage differs from receipt-backed source and outside rows");
 
         // All immutable receipts and the verified stage are now proven before any recovery rename.
-        StockSuspendPublication.finish(ledgerPath, jdbc, table, runId, true);
-        var after = new StockSuspendStorage(jdbc, table).snapshot();
+        StockSuspendPublication.finish(ledgerPath, target, runId, true);
+        var after = target.openTable(table).snapshot();
         if (after.identity().id() != intent.replacementId() || !after.rows().equals(prepared.expected())
                 || !after.fingerprint().equals(intent.afterFingerprint()) || staged.bytes() != after.bytes())
             throw new IllegalStateException("Published D011 target differs from receipt-backed full snapshot");
-        String physicalAfter = StockSuspendStorage.physicalTargetId(jdbc, table, after.identity());
+        String physicalAfter = target.physicalTargetId(table, after.identity());
         if (!StockSuspendPublication.authorizesResume(ledgerPath, runId, logicalTarget, physicalBefore, physicalAfter))
             throw new IllegalStateException("D011 physical target generation transition lacks verified journal lineage");
 

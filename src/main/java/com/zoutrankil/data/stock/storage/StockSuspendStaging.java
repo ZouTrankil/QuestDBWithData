@@ -16,7 +16,7 @@ import java.util.concurrent.CancellationException;
 import java.util.function.BooleanSupplier;
 
 /** Builds and fully reads back an authoritative D011 date-window replacement stage. */
-public final class StockSuspendStaging {
+public final class StockSuspendStaging implements com.zoutrankil.data.stock.port.StockSuspendStagingPort {
     private static final DateTimeFormatter TIMESTAMP_LITERAL=DateTimeFormatter
             .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",Locale.ROOT).withZone(ZoneOffset.UTC);
 

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 /** Bounded full-table snapshot used only by D011's scoped, journaled replacement. */
-public final class StockSuspendStorage {
+public final class StockSuspendStorage implements com.zoutrankil.data.stock.port.StockSuspendTables.Table {
     public static final int MAX_ROWS = 100_000;
     public static final int MAX_BYTES = 32 * 1024 * 1024;
     private final JdbcTemplate jdbc;
@@ -56,16 +56,11 @@ public final class StockSuspendStorage {
     }
 
     public static List<StockSuspend> outside(List<StockSuspend> rows, LocalDate fromInclusive, LocalDate toExclusive) {
-        return rows.stream().filter(row -> row.tradeDate().isBefore(fromInclusive) || !row.tradeDate().isBefore(toExclusive)).toList();
+        return StockSuspendState.outside(rows,fromInclusive,toExclusive);
     }
 
     public static List<StockSuspend> sortedUnique(Collection<StockSuspend> rows) {
-        if (rows == null || rows.stream().anyMatch(Objects::isNull))
-            throw new IllegalArgumentException("Null stk_suspend row");
-        var sorted = rows.stream().sorted(Comparator.comparing(StockSuspend::tradeDate).thenComparing(StockSuspend::tsCode)).toList();
-        var keys = new HashSet<StockSuspendKey>();
-        for (var row : sorted) if (!keys.add(row.key())) throw new IllegalArgumentException("Duplicate stk_suspend full key");
-        return sorted;
+        return StockSuspendState.sortedUnique(rows);
     }
 
     public static byte[] canonical(List<StockSuspend> rows) throws Exception {

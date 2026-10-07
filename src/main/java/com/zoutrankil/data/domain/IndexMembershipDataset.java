@@ -4,6 +4,8 @@ import java.util.*;
 import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
 public final class IndexMembershipDataset {
+    public static final int MAX_ROWS=100_000,MAX_BYTES=32*1024*1024;
+
     private IndexMembershipDataset() {}
     public static final DatasetDefinition DEFINITION=new DatasetDefinition(
             "index_member",1,"tushare.index_member_all","index_membership_owner","index_member",ObjectKind.TABLE,

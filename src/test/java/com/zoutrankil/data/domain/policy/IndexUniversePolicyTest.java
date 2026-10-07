@@ -1,6 +1,6 @@
 package com.zoutrankil.data.domain.policy;
 
-import com.zoutrankil.data.mapper.IndexWeightMapper;
+import com.zoutrankil.data.index.mapper.IndexWeightMapper;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;

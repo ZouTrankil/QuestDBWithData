@@ -1,5 +1,9 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.index.application.IndexMembershipJobPlan;
+import com.zoutrankil.data.index.application.IndexMembershipJobService;
+import com.zoutrankil.data.index.application.IndexMembershipSource;
+
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.service.*;

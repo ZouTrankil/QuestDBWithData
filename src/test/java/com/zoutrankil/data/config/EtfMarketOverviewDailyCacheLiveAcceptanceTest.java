@@ -1,5 +1,10 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.derived.application.EtfMarketOverviewCacheOwnerGateway;
+import com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService;
+import com.zoutrankil.data.derived.storage.EtfMarketOverviewDailyCacheReadRepository;
+import com.zoutrankil.data.derived.storage.MarketBarometerCacheCoverageReadRepository;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.ArgumentMatchers.*;
@@ -9,8 +14,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.EtfMarketOverviewDailyCacheMapper;
-import com.zoutrankil.data.mapper.MarketBarometerCacheCoverageMapper;
+import com.zoutrankil.data.derived.mapper.EtfMarketOverviewDailyCacheMapper;
+import com.zoutrankil.data.derived.mapper.MarketBarometerCacheCoverageMapper;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
 import java.nio.file.*;
@@ -73,10 +78,10 @@ class EtfMarketOverviewDailyCacheLiveAcceptanceTest {
             assertEquals("VERIFIED_CANONICAL_FULL_PREFIX_INCREMENT", increment.required("status").asText());
             Path output = COMMANDS.resolve("java-readthrough-typed-write-20261006.json"); assertFalse(Files.exists(output));
             var config = json.treeToValue(increment.required("bridge_config"), EtfMarketOverviewCacheOwnerGateway.Config.class);
-            var gateway = new EtfMarketOverviewCacheOwnerGateway(config);
+            var gateway = new EtfMarketOverviewCacheOwnerGateway(config, new com.zoutrankil.data.derived.storage.EtfMarketOverviewOwnerProcess(config.pythonExecutable(), config.bridgeScript(), config.timeout()));
             var jdbc = new JdbcTemplate(pool); jdbc.setQueryTimeout(20);
             Path ledgerPath = Path.of(increment.required("ledger_path").asText()).toAbsolutePath().normalize();
-            var owner = new EtfMarketOverviewDailyCacheJobService(gateway, jdbc, ledgerPath.toString());
+            var owner = new EtfMarketOverviewDailyCacheJobService(gateway, initial -> new com.zoutrankil.data.derived.application.DefaultEtfMarketOverviewPublicationSession(gateway, gateway, new com.zoutrankil.data.derived.storage.QuestDbEtfMarketOverviewPublicationTarget(jdbc), initial), ledgerPath.toString());
             var reader = new QuestDbBoundedReader(jdbc);
             var repository = new EtfMarketOverviewDailyCacheReadRepository(reader);
             var coverage = new MarketBarometerCacheCoverageReadRepository(reader);
@@ -182,11 +187,11 @@ class EtfMarketOverviewDailyCacheLiveAcceptanceTest {
             if (first != null) assertEquals("VERIFIED_CANONICAL_FIRST_MISSES", first.required("status").asText());
             if (hit != null) assertEquals("VERIFIED_CANONICAL_HITS_ZERO_PUBLISH", hit.required("status").asText());
             var config = first == null ? initialConfig() : json.treeToValue(first.required("bridge_config"), EtfMarketOverviewCacheOwnerGateway.Config.class);
-            var gateway = new EtfMarketOverviewCacheOwnerGateway(config);
+            var gateway = new EtfMarketOverviewCacheOwnerGateway(config, new com.zoutrankil.data.derived.storage.EtfMarketOverviewOwnerProcess(config.pythonExecutable(), config.bridgeScript(), config.timeout()));
             Path ledgerPath = first == null ? Path.of("var/d101-java-" + UUID.randomUUID() + ".sqlite3").toAbsolutePath().normalize()
                     : Path.of(first.required("ledger_path").asText()).toAbsolutePath().normalize();
             if (first != null) assertTrue(Files.isRegularFile(ledgerPath), "Original SQLite authority is required");
-            var owner = new EtfMarketOverviewDailyCacheJobService(gateway, jdbc, ledgerPath.toString());
+            var owner = new EtfMarketOverviewDailyCacheJobService(gateway, initial -> new com.zoutrankil.data.derived.application.DefaultEtfMarketOverviewPublicationSession(gateway, gateway, new com.zoutrankil.data.derived.storage.QuestDbEtfMarketOverviewPublicationTarget(jdbc), initial), ledgerPath.toString());
             evidence.put("ledger_path", ledgerPath.toString()); evidence.put("bridge_config", config);
             if (first != null) { evidence.put("first_artifact", FIRST); evidence.put("first_artifact_sha256", sha(Files.readAllBytes(FIRST))); }
             if (hit != null) { evidence.put("hit_artifact", HIT); evidence.put("hit_artifact_sha256", sha(Files.readAllBytes(HIT))); }

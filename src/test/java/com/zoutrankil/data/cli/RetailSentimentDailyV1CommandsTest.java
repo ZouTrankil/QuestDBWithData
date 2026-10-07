@@ -8,8 +8,8 @@ import static org.mockito.Mockito.*;
 
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
-import com.zoutrankil.data.repository.RetailSentimentDailyV1MaterializationPort;
-import com.zoutrankil.data.service.RetailSentimentDailyV1JobService;
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyV1MaterializationPort;
+import com.zoutrankil.data.derived.application.RetailSentimentDailyV1JobService;
 import com.zoutrankil.data.service.SyncJobRunner;
 import java.time.LocalDate;
 import java.util.Map;

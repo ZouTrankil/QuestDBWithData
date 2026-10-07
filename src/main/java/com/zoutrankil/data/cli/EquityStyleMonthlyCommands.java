@@ -3,7 +3,7 @@ package com.zoutrankil.data.cli;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
-import com.zoutrankil.data.service.EquityStyleMonthlyJobService;
+import com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService;
 import java.time.LocalDate;
 import java.util.*;
 

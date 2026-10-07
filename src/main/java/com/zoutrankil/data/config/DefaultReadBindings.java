@@ -1,5 +1,22 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.derived.mapper.BacktestDailyCacheCoverageMapper;
+import com.zoutrankil.data.derived.mapper.BacktestDailyCacheMapper;
+import com.zoutrankil.data.derived.mapper.BacktestDailyMapper;
+import com.zoutrankil.data.derived.mapper.BacktestDailyViewMapper;
+import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
+import com.zoutrankil.data.derived.mapper.EtfMarketOverviewDailyCacheMapper;
+import com.zoutrankil.data.derived.mapper.EtfMarketOverviewDailyViewMapper;
+import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
+import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyViewMapper;
+import com.zoutrankil.data.derived.mapper.MarketBarometerCacheCoverageMapper;
+import com.zoutrankil.data.derived.mapper.MarketBreadthDailyCacheMapper;
+import com.zoutrankil.data.derived.mapper.MarketBreadthDailyV1Mapper;
+import com.zoutrankil.data.derived.mapper.MarketBreadthDailyViewMapper;
+import com.zoutrankil.data.derived.mapper.RetailSentimentDailyCacheMapper;
+import com.zoutrankil.data.derived.mapper.RetailSentimentDailyV1Mapper;
+import com.zoutrankil.data.derived.mapper.RetailSentimentDailyViewMapper;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.*;
 import com.zoutrankil.data.service.ReadBindingCatalog;

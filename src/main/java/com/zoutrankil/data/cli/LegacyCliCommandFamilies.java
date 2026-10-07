@@ -1,5 +1,7 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.index.application.IndexCatalogJobService;
+
 import com.zoutrankil.data.stock.application.StockBasicJobService;
 import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
 import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
@@ -24,7 +26,7 @@ final class LegacyCliCommandFamilies {
             com.zoutrankil.data.service.StockBasicScheduleService scheduleService,
             com.zoutrankil.data.calendar.application.ExchangeCalendarJobService calendarService,
             com.zoutrankil.data.stock.application.StockDetailInfoJobService stockDetailService,
-            com.zoutrankil.data.service.IndexCatalogJobService indexCatalogService,
+            com.zoutrankil.data.index.application.IndexCatalogJobService indexCatalogService,
             LedgerManagementService ledgerManagementService) {
         java.util.Objects.requireNonNull(ledgerManagementService);
         return new CliCommandRegistry(java.util.List.of(

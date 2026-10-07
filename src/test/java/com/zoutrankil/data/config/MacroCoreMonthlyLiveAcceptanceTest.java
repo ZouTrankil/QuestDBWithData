@@ -1,9 +1,20 @@
 package com.zoutrankil.data.config;
+import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData;
+import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData.*;
+import com.zoutrankil.data.derived.port.MacroCoreMonthlySourceReadPort;
+import com.zoutrankil.data.derived.storage.QuestDbMacroCoreMonthlySourceReader;
+import com.zoutrankil.data.derived.storage.QuestDbMacroCoreMonthlyTarget;
+
+import com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService;
+import com.zoutrankil.data.derived.application.MacroCoreMonthlyMaterializeAdapter;
+import com.zoutrankil.data.derived.application.MacroCoreMonthlySource;
+import com.zoutrankil.data.derived.storage.MacroCoreMonthlyReadRepository;
+import com.zoutrankil.data.derived.storage.MacroCoreMonthlyWritePort;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.*;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.MacroCoreMonthlyMapper;
+import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
 import java.nio.charset.StandardCharsets;
@@ -27,28 +38,28 @@ class MacroCoreMonthlyLiveAcceptanceTest {
         "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyKey.java",
         "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyDataset.java",
         "src/main/java/com/zoutrankil/data/domain/JobDefinitionJson.java",
-        "src/main/java/com/zoutrankil/data/mapper/MacroCoreMonthlyMapper.java",
-        "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyReadRepository.java",
-        "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyWritePort.java",
+        "src/main/java/com/zoutrankil/data/derived/mapper/MacroCoreMonthlyMapper.java",
+        "src/main/java/com/zoutrankil/data/derived/storage/MacroCoreMonthlyReadRepository.java",
+        "src/main/java/com/zoutrankil/data/derived/storage/MacroCoreMonthlyWritePort.java",
         "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuard.java",
         "src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
-        "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlySource.java",
-        "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyMaterializeAdapter.java",
-        "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyJobService.java",
+        "src/main/java/com/zoutrankil/data/derived/application/MacroCoreMonthlySource.java",
+        "src/main/java/com/zoutrankil/data/derived/application/MacroCoreMonthlyMaterializeAdapter.java",
+        "src/main/java/com/zoutrankil/data/derived/application/MacroCoreMonthlyJobService.java",
         "src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
         "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
         "src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
         "src/main/java/com/zoutrankil/data/cli/MacroCoreMonthlyCommands.java",
         "src/main/java/com/zoutrankil/data/cli/CommandLineRunner.java",
-        "src/test/java/com/zoutrankil/data/mapper/MacroCoreMonthlyMappingTest.java",
-        "src/test/java/com/zoutrankil/data/repository/MacroCoreMonthlyReadRepositoryTest.java",
-        "src/test/java/com/zoutrankil/data/repository/MacroCoreMonthlyWritePortTest.java",
+        "src/test/java/com/zoutrankil/data/derived/mapper/MacroCoreMonthlyMappingTest.java",
+        "src/test/java/com/zoutrankil/data/derived/storage/MacroCoreMonthlyReadRepositoryTest.java",
+        "src/test/java/com/zoutrankil/data/derived/storage/MacroCoreMonthlyWritePortTest.java",
         "src/test/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuardTest.java",
-        "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlySourceTest.java",
-        "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyMaterializeAdapterTest.java",
-        "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyJobServiceTest.java",
-        "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyWriteGroupPreflightTest.java",
-        "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyCatalogStartupTest.java",
+        "src/test/java/com/zoutrankil/data/derived/application/MacroCoreMonthlySourceTest.java",
+        "src/test/java/com/zoutrankil/data/derived/application/MacroCoreMonthlyMaterializeAdapterTest.java",
+        "src/test/java/com/zoutrankil/data/derived/application/MacroCoreMonthlyJobServiceTest.java",
+        "src/test/java/com/zoutrankil/data/derived/application/MacroCoreMonthlyWriteGroupPreflightTest.java",
+        "src/test/java/com/zoutrankil/data/derived/application/MacroCoreMonthlyCatalogStartupTest.java",
         "src/test/java/com/zoutrankil/data/cli/MacroCoreMonthlyCommandsTest.java",
         "src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyLiveAcceptanceTest.java");
     private static final String TABLE="java_d104_macro_core_monthly_acceptance";
@@ -121,10 +132,10 @@ class MacroCoreMonthlyLiveAcceptanceTest {
             var jdbc=jdbc(privatePool);var formal=jdbc(formalPool);var formalBefore=formalSnapshot(formal);evidence.put("formal_before",formalBefore);
             var properties=new QuestDbProperties();properties.setHost("127.0.0.1");properties.setPgPort(18852);properties.setQwpPort(19040);
             properties.setUsername("admin");properties.setPassword("quest");
-            var owner=new MacroCoreMonthlyJobService(jdbc,properties,TABLE,LEDGER);
+            var owner=new MacroCoreMonthlyJobService(new QuestDbMacroCoreMonthlySourceReader(jdbc),new QuestDbMacroCoreMonthlyTarget(jdbc,properties,TABLE),LEDGER);
             var admittedSource=owner.source().read(JUNE,initial?JULY:AUGUST);
             assertRows(oracle(baseline,initial?2:3),admittedSource.rows());assertEquals(initial?23:28,admittedSource.rawRows());
-            var formalSource=new MacroCoreMonthlySource(formal).read(JUNE,initial?JULY:AUGUST);
+            var formalSource=new MacroCoreMonthlySource(new QuestDbMacroCoreMonthlySourceReader(formal)).read(JUNE,initial?JULY:AUGUST);
             assertEquals(formalSource.rawFingerprint(),admittedSource.rawFingerprint(),
                     "Complete six-source raw window and SF context must equal real formal capture");
             assertRows(admittedSource.rows(),formalSource.rows());
@@ -211,7 +222,7 @@ class MacroCoreMonthlyLiveAcceptanceTest {
             }
             assertRows(expected,owner.writePort().readActualRange(YearMonth.of(2026,6),YearMonth.of(2026,initial?7:8)));
             assertEquals(sourceBefore,owner.source().read(JUNE,initial?JULY:AUGUST));
-            assertEquals(formalSource,new MacroCoreMonthlySource(formal).read(JUNE,initial?JULY:AUGUST));
+            assertEquals(formalSource,new MacroCoreMonthlySource(new QuestDbMacroCoreMonthlySourceReader(formal)).read(JUNE,initial?JULY:AUGUST));
             var formalAfter=formalSnapshot(formal);assertEquals(formalBefore,formalAfter);evidence.put("formal_after",formalAfter);
             var ledger=SyncRunLedger.openReadOnly(LEDGER);for(var id:runs) {
                 var state=ledger.get(id).state();assertTrue(Set.of(SyncRunState.VERIFIED,SyncRunState.CANCELLED).contains(state));

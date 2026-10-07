@@ -5,6 +5,7 @@ import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.ExchangeCalendar;
 import com.zoutrankil.data.domain.ExchangeCalendarDataset;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -16,6 +17,12 @@ public final class DailyTradingSessions {
     private DailyTradingSessions() {}
 
     public static List<LocalDate> read(ExchangeCalendarReadRepository calendars,
+                                      LocalDate fromInclusive, LocalDate toInclusive) {
+        Objects.requireNonNull(calendars);
+        return read((ExchangeCalendarReadPort) calendars::findPage, fromInclusive, toInclusive);
+    }
+
+    public static List<LocalDate> read(ExchangeCalendarReadPort calendars,
                                       LocalDate fromInclusive, LocalDate toInclusive) {
         Objects.requireNonNull(calendars);
         Objects.requireNonNull(fromInclusive);

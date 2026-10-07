@@ -1,5 +1,8 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.derived.storage.MacroCoreMonthlyReadRepository;
+import com.zoutrankil.data.derived.storage.MacroCoreMonthlyViewReadRepository;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.Mockito.*;
@@ -7,8 +10,8 @@ import static org.mockito.Mockito.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.MacroCoreMonthlyMapper;
-import com.zoutrankil.data.mapper.MacroCoreMonthlyViewMapper;
+import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
+import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyViewMapper;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
 import java.nio.file.*;
@@ -472,8 +475,8 @@ class MacroCoreMonthlyViewLiveReadAcceptanceTest {
         for (String required : List.of("src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyView.java",
                 "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewKey.java",
                 "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewDataset.java",
-                "src/main/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMapper.java",
-                "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyViewReadRepository.java",
+                "src/main/java/com/zoutrankil/data/derived/mapper/MacroCoreMonthlyViewMapper.java",
+                "src/main/java/com/zoutrankil/data/derived/storage/MacroCoreMonthlyViewReadRepository.java",
                 "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuard.java",
                 "src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
                 "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java"))

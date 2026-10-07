@@ -2,7 +2,7 @@ package com.zoutrankil.data.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGateway;
+import com.zoutrankil.data.derived.application.EtfMarketOverviewCacheOwnerGateway;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -51,7 +51,7 @@ class EtfMarketOverviewCacheProcessLivePreviewTest {
                     "bridge_script", config.bridgeScript().toString(), "artifact_root", config.artifactRoot().toString(),
                     "private_root", config.privateRoot().toString(), "expected_pid", config.expectedPid(),
                     "timeout", config.timeout().toString(), "max_source_rows", config.maxSourceRows()));
-            var gateway = new EtfMarketOverviewCacheOwnerGateway(config);
+            var gateway = new EtfMarketOverviewCacheOwnerGateway(config, new com.zoutrankil.data.derived.storage.EtfMarketOverviewOwnerProcess(config.pythonExecutable(), config.bridgeScript(), config.timeout()));
             var envelope = gateway.preview(LocalDate.of(2026, 9, 17));
             JsonNode preview = envelope.previewResponse();
             evidence.put("preview", preview); evidence.put("preview_path", envelope.previewPath().toString());

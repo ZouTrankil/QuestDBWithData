@@ -1,13 +1,18 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.derived.application.EtfMarketOverviewCacheOwnerGateway;
+import com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService;
+import com.zoutrankil.data.derived.storage.EtfMarketOverviewDailyCacheReadRepository;
+import com.zoutrankil.data.derived.storage.MarketBarometerCacheCoverageReadRepository;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.EtfMarketOverviewDailyCacheMapper;
-import com.zoutrankil.data.mapper.MarketBarometerCacheCoverageMapper;
+import com.zoutrankil.data.derived.mapper.EtfMarketOverviewDailyCacheMapper;
+import com.zoutrankil.data.derived.mapper.MarketBarometerCacheCoverageMapper;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
 import java.nio.file.*;
@@ -68,7 +73,7 @@ class EtfMarketOverviewCacheHitReadOnlyRecoveryTest {
             var config = json.treeToValue(first.required("bridge_config"), EtfMarketOverviewCacheOwnerGateway.Config.class);
             assertEquals(23388, config.expectedPid());
             assertEquals(Path.of("var/d101-isolated-questdb").toAbsolutePath().normalize(), config.privateRoot());
-            var gateway = new EtfMarketOverviewCacheOwnerGateway(config);
+            var gateway = new EtfMarketOverviewCacheOwnerGateway(config, new com.zoutrankil.data.derived.storage.EtfMarketOverviewOwnerProcess(config.pythonExecutable(), config.bridgeScript(), config.timeout()));
             Path responsePath = config.artifactRoot().resolve("java-owner-publish-" + INVOCATION + ".response.json");
             Path stoppedPath = responsePath.resolveSibling(responsePath.getFileName().toString().replace(".response.json", ".process-stopped.json"));
             var response = read(responsePath); var stopped = read(stoppedPath);
@@ -187,7 +192,7 @@ class EtfMarketOverviewCacheHitReadOnlyRecoveryTest {
             evidence.put("new_process_investigations", newProofs);
             evidence.put("original_writer_stopped_after_explicit_investigation", true);
 
-            var owner = new EtfMarketOverviewDailyCacheJobService(gateway, jdbc, ledgerPath.toString());
+            var owner = new EtfMarketOverviewDailyCacheJobService(gateway, initial -> new com.zoutrankil.data.derived.application.DefaultEtfMarketOverviewPublicationSession(gateway, gateway, new com.zoutrankil.data.derived.storage.QuestDbEtfMarketOverviewPublicationTarget(jdbc), initial), ledgerPath.toString());
             var status = owner.reconcile(RUN, true); // Actual fresh source/cache/receipt/WAL SELECT proof plus SQLite transitions.
             assertEquals(SyncRunState.VERIFIED, status.state());
             assertEquals(1, status.verifiedPublicationUnits(), "One real submitted SLICE; never invent the second owner hit");

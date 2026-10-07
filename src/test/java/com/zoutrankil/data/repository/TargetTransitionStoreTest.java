@@ -1,8 +1,10 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.index.storage.DcIndexTargetTransitionStore;
+
 import com.zoutrankil.data.stock.storage.StockSuspendTargetTransitionStore;
 
-import com.zoutrankil.data.service.DcIndexPublication;
+import com.zoutrankil.data.index.application.DcIndexPublication;
 import com.zoutrankil.data.stock.application.StockSuspendPublication;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

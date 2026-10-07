@@ -1,5 +1,7 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.index.storage.IndexMembershipStorage;
+
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;

@@ -1,5 +1,53 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService;
+import com.zoutrankil.data.derived.application.EtfMarketOverviewCachePreparedWriteAdapter;
+import com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService;
+import com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService;
+import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
+import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
+import com.zoutrankil.data.derived.storage.EquityStyleMonthlyWritePort;
+import com.zoutrankil.data.derived.storage.MacroCoreMonthlyWritePort;
+
+import com.zoutrankil.data.flow.application.MoneyflowJobService;
+import com.zoutrankil.data.flow.storage.MoneyflowWritePort;
+import com.zoutrankil.data.flow.mapper.MoneyflowMapper;
+import com.zoutrankil.data.flow.application.MoneyflowThsJobService;
+import com.zoutrankil.data.flow.storage.MoneyflowThsWritePort;
+import com.zoutrankil.data.flow.mapper.MoneyflowThsMapper;
+import com.zoutrankil.data.flow.application.MoneyflowDcJobService;
+import com.zoutrankil.data.flow.storage.MoneyflowDcWritePort;
+import com.zoutrankil.data.flow.mapper.MoneyflowDcMapper;
+import com.zoutrankil.data.flow.application.MoneyflowHsgtJobService;
+import com.zoutrankil.data.flow.application.MoneyflowHsgtPublication;
+import com.zoutrankil.data.flow.storage.MoneyflowHsgtWritePort;
+import com.zoutrankil.data.flow.mapper.MoneyflowHsgtMapper;
+
+import com.zoutrankil.data.index.application.DcIndexJobService;
+import com.zoutrankil.data.index.application.IndexCatalogJobService;
+import com.zoutrankil.data.index.application.IndexCatalogPreparedWriteAdapter;
+import com.zoutrankil.data.index.application.IndexDailyBasicJobService;
+import com.zoutrankil.data.index.application.IndexDailyMarketJobService;
+import com.zoutrankil.data.index.application.IndexMembershipJobService;
+import com.zoutrankil.data.index.application.IndexMembershipPreparedWriteAdapter;
+import com.zoutrankil.data.index.application.IndexMonthlyJobService;
+import com.zoutrankil.data.index.application.IndexMonthlyPublication;
+import com.zoutrankil.data.index.application.IndexWeightJobService;
+import com.zoutrankil.data.index.application.ThsIndexJobService;
+import com.zoutrankil.data.index.application.ThsIndexPreparedWriteAdapter;
+import com.zoutrankil.data.index.application.ThsMemberJobService;
+import com.zoutrankil.data.index.application.ThsMemberPreparedWriteAdapter;
+import com.zoutrankil.data.index.storage.DcIndexWritePort;
+import com.zoutrankil.data.index.storage.IndexDailyBasicWritePort;
+import com.zoutrankil.data.index.storage.IndexDailyMarketWritePort;
+import com.zoutrankil.data.index.storage.IndexMonthlyWritePort;
+import com.zoutrankil.data.index.storage.IndexWeightWritePort;
+import com.zoutrankil.data.index.mapper.DcIndexMapper;
+import com.zoutrankil.data.index.mapper.IndexDailyBasicMapper;
+import com.zoutrankil.data.index.mapper.IndexDailyMarketMapper;
+import com.zoutrankil.data.index.mapper.IndexMonthlyMapper;
+import com.zoutrankil.data.index.mapper.IndexWeightMapper;
+
 import com.zoutrankil.data.stock.application.DailyJobService;
 import com.zoutrankil.data.stock.application.DailyBasicJobService;
 import com.zoutrankil.data.stock.application.StockBasicJobService;
@@ -258,7 +306,7 @@ public class StockBasicWriteGroupService {
                 if(priorRun==null) targets.put(member.datasetId(),indexDailyBasicTarget.targetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.index_daily_basic"));
             } else if(member.datasetId().equals(IndexMonthlyDataset.DEFINITION.datasetId()) && indexMonthlyTarget!=null) {
-                new IndexMonthlyPublication(jdbc,ledger).requireNoPendingPublication();
+                new IndexMonthlyPublication(new com.zoutrankil.data.index.storage.QuestDbIndexMonthlyTables(jdbc),ledger).requireNoPendingPublication();
                 if(priorRun==null) targets.put(member.datasetId(),indexMonthlyTarget.physicalTargetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.index_monthly"));
             } else if(member.datasetId().equals(IndexWeightDataset.DEFINITION.datasetId()) && indexWeightTarget!=null) {
@@ -275,7 +323,7 @@ public class StockBasicWriteGroupService {
                 if(priorRun==null) targets.put(member.datasetId(),dcIndexTarget.physicalTargetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.dc_index"));
             } else if(member.datasetId().equals(MoneyflowHsgtDataset.DEFINITION.datasetId()) && moneyflowHsgtTarget!=null) {
-                new MoneyflowHsgtPublication(jdbc,ledger).requireNoPendingPublication();
+                new MoneyflowHsgtPublication(new com.zoutrankil.data.flow.storage.QuestDbMoneyflowHsgtTables(jdbc),ledger).requireNoPendingPublication();
                 if(priorRun==null) targets.put(member.datasetId(),moneyflowHsgtTarget.physicalTargetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.moneyflow_hsgt"));
             } else if(member.datasetId().equals(StockStDailyDataset.DEFINITION.datasetId()) && stockStDailyTarget!=null) {
@@ -292,14 +340,14 @@ public class StockBasicWriteGroupService {
                 else targets.put(member.datasetId(), SyncGroupTargetIdentity.frozen(ledger, priorRun,
                         "write.etf_market_overview_daily_cache"));
             } else if(member.datasetId().equals(MacroCoreMonthlyDataset.DEFINITION.datasetId()) && macroCoreMonthlyTarget!=null) {
-                var mapper=new com.zoutrankil.data.mapper.MacroCoreMonthlyMapper();
-                com.zoutrankil.data.repository.MacroCoreMonthlyWritePort.requireBatch(
+                var mapper=new com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper();
+                com.zoutrankil.data.derived.domain.MacroCoreMonthlyRows.requireBatch(
                         member.rows().stream().map(mapper::fromValues).toList());
                 macroCoreMonthlyTarget.requireNoPendingPublication();
                 targets.put(member.datasetId(),macroCoreMonthlyTarget.targetId());
             } else if(member.datasetId().equals(EquityStyleMonthlyDataset.DEFINITION.datasetId()) && equityStyleMonthlyTarget!=null) {
-                var mapper=new com.zoutrankil.data.mapper.EquityStyleMonthlyMapper();
-                com.zoutrankil.data.repository.EquityStyleMonthlyWritePort.requireBatch(
+                var mapper=new com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper();
+                com.zoutrankil.data.derived.domain.EquityStyleMonthlyRows.requireBatch(
                         member.rows().stream().map(mapper::fromValues).toList());
                 equityStyleMonthlyTarget.requireNoPendingPublication();
                 targets.put(member.datasetId(),equityStyleMonthlyTarget.targetId());
@@ -461,62 +509,62 @@ public class StockBasicWriteGroupService {
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_factor target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(MoneyflowDcDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.MoneyflowDcMapper();
-                var port=new com.zoutrankil.data.repository.MoneyflowDcWritePort(
+                var mapper=new com.zoutrankil.data.flow.mapper.MoneyflowDcMapper();
+                var port=new com.zoutrankil.data.flow.storage.MoneyflowDcWritePort(
                         moneyflowDcTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.MoneyflowDcWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.flow.storage.MoneyflowDcWritePort.CODEC,port,()->{
                             try { return moneyflowDcTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve moneyflow_dc target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(MoneyflowThsDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.MoneyflowThsMapper();
-                var port=new com.zoutrankil.data.repository.MoneyflowThsWritePort(
+                var mapper=new com.zoutrankil.data.flow.mapper.MoneyflowThsMapper();
+                var port=new com.zoutrankil.data.flow.storage.MoneyflowThsWritePort(
                         moneyflowThsTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.MoneyflowThsWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.flow.storage.MoneyflowThsWritePort.CODEC,port,()->{
                             try { return moneyflowThsTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve moneyflow_ths target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(MoneyflowDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.MoneyflowMapper();
-                var port=new com.zoutrankil.data.repository.MoneyflowWritePort(
+                var mapper=new com.zoutrankil.data.flow.mapper.MoneyflowMapper();
+                var port=new com.zoutrankil.data.flow.storage.MoneyflowWritePort(
                         moneyflowTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.MoneyflowWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.flow.storage.MoneyflowWritePort.CODEC,port,()->{
                             try { return moneyflowTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve moneyflow target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(IndexDailyMarketDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.IndexDailyMarketMapper();
-                var port=new com.zoutrankil.data.repository.IndexDailyMarketWritePort(
+                var mapper=new com.zoutrankil.data.index.mapper.IndexDailyMarketMapper();
+                var port=new com.zoutrankil.data.index.storage.IndexDailyMarketWritePort(
                         indexDailyMarketTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.IndexDailyMarketWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.index.storage.IndexDailyMarketWritePort.CODEC,port,()->{
                             try { return indexDailyMarketTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve index_daily_market target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(IndexDailyBasicDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.IndexDailyBasicMapper();
-                var port=new com.zoutrankil.data.repository.IndexDailyBasicWritePort(
+                var mapper=new com.zoutrankil.data.index.mapper.IndexDailyBasicMapper();
+                var port=new com.zoutrankil.data.index.storage.IndexDailyBasicWritePort(
                         indexDailyBasicTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.IndexDailyBasicWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.index.storage.IndexDailyBasicWritePort.CODEC,port,()->{
                             try { return indexDailyBasicTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve index_daily_basic target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(IndexWeightDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.IndexWeightMapper();
-                var port=new com.zoutrankil.data.repository.IndexWeightWritePort(
+                var mapper=new com.zoutrankil.data.index.mapper.IndexWeightMapper();
+                var port=new com.zoutrankil.data.index.storage.IndexWeightWritePort(
                         indexWeightTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.IndexWeightWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.index.storage.IndexWeightWritePort.CODEC,port,()->{
                             try { return indexWeightTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve index_weight target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
@@ -541,33 +589,33 @@ public class StockBasicWriteGroupService {
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_basic target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(IndexMonthlyDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.IndexMonthlyMapper();
-                var port=new com.zoutrankil.data.repository.IndexMonthlyWritePort(
+                var mapper=new com.zoutrankil.data.index.mapper.IndexMonthlyMapper();
+                var port=new com.zoutrankil.data.index.storage.IndexMonthlyWritePort(
                         indexMonthlyTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.IndexMonthlyWritePort.CODEC,port,()->{
-                            try { new IndexMonthlyPublication(jdbc,ledger).requireNoPendingPublication(); return indexMonthlyTarget.physicalTargetId(); }
+                        com.zoutrankil.data.index.storage.IndexMonthlyWritePort.CODEC,port,()->{
+                            try { new IndexMonthlyPublication(new com.zoutrankil.data.index.storage.QuestDbIndexMonthlyTables(jdbc),ledger).requireNoPendingPublication(); return indexMonthlyTarget.physicalTargetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve index_monthly target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(DcIndexDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.DcIndexMapper();
-                var port=new com.zoutrankil.data.repository.DcIndexWritePort(
+                var mapper=new com.zoutrankil.data.index.mapper.DcIndexMapper();
+                var port=new com.zoutrankil.data.index.storage.DcIndexWritePort(
                         dcIndexTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.DcIndexWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.index.storage.DcIndexWritePort.CODEC,port,()->{
                             try { dcIndexTarget.requireNoPendingPublication(); return dcIndexTarget.physicalTargetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve dc_index target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(MoneyflowHsgtDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.MoneyflowHsgtMapper();
-                var port=new com.zoutrankil.data.repository.MoneyflowHsgtWritePort(
+                var mapper=new com.zoutrankil.data.flow.mapper.MoneyflowHsgtMapper();
+                var port=new com.zoutrankil.data.flow.storage.MoneyflowHsgtWritePort(
                         moneyflowHsgtTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.MoneyflowHsgtWritePort.CODEC,port,()->{
-                            try { new MoneyflowHsgtPublication(jdbc,ledger).requireNoPendingPublication(); return moneyflowHsgtTarget.physicalTargetId(); }
+                        com.zoutrankil.data.flow.storage.MoneyflowHsgtWritePort.CODEC,port,()->{
+                            try { new MoneyflowHsgtPublication(new com.zoutrankil.data.flow.storage.QuestDbMoneyflowHsgtTables(jdbc),ledger).requireNoPendingPublication(); return moneyflowHsgtTarget.physicalTargetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve moneyflow_hsgt target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(StockStDailyDataset.DEFINITION.datasetId())) {
@@ -598,22 +646,22 @@ public class StockBasicWriteGroupService {
                         evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(MacroCoreMonthlyDataset.DEFINITION.datasetId())) {
                 if(macroCoreMonthlyTarget==null)throw new IllegalArgumentException("Registered D104 write owner required");
-                var mapper=new com.zoutrankil.data.mapper.MacroCoreMonthlyMapper();
+                var mapper=new com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper();
                 var port=macroCoreMonthlyTarget.writePort();
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.MacroCoreMonthlyWritePort.CODEC,port,
+                        port.codec(),port,
                         () -> {
                             try { return macroCoreMonthlyTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve D104 target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(EquityStyleMonthlyDataset.DEFINITION.datasetId())) {
                 if(equityStyleMonthlyTarget==null)throw new IllegalArgumentException("Registered D103 write owner required");
-                var mapper=new com.zoutrankil.data.mapper.EquityStyleMonthlyMapper();
+                var mapper=new com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper();
                 var port=equityStyleMonthlyTarget.writePort();
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.EquityStyleMonthlyWritePort.CODEC,port,
+                        port.codec(),port,
                         () -> {
                             try { return equityStyleMonthlyTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve D103 target",failure); }

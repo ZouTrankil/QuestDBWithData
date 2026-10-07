@@ -1,5 +1,7 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.derived.application.MarketBreadthDailyV1JobService;
+
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRunState;

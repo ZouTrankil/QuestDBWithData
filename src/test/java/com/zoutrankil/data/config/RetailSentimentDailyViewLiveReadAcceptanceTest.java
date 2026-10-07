@@ -1,5 +1,11 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyV1MaterializationPort;
+
+import com.zoutrankil.data.derived.application.RetailSentimentDailyV1JobService;
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyV1ReadRepository;
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyViewReadRepository;
+
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,8 +13,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import com.zaxxer.hikari.HikariDataSource;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.RetailSentimentDailyViewMapper;
-import com.zoutrankil.data.mapper.RetailSentimentDailyV1Mapper;
+import com.zoutrankil.data.derived.mapper.RetailSentimentDailyViewMapper;
+import com.zoutrankil.data.derived.mapper.RetailSentimentDailyV1Mapper;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
 import java.nio.file.Files;

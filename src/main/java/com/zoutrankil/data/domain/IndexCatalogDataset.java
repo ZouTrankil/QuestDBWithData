@@ -6,6 +6,8 @@ import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
 /** D003 physical read contract; source ingestion remains gated on an identified CSV snapshot. */
 public final class IndexCatalogDataset {
+    public static final int MAX_ROWS=5000,MAX_BYTES=8*1024*1024,MAX_FIELD_CHARS=32768;
+
     private IndexCatalogDataset() {}
     private static Column text(String source, String logical, String storage, String meaning) {
         return new Column(source,logical,storage,StorageType.STRING,true,meaning,null);

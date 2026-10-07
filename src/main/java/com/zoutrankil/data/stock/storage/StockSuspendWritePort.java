@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 /** Typed WAL writer with complete-key and all-column readback; no schema creation or repair. */
-public final class StockSuspendWritePort implements VerifiedBatchExecutor.Port<StockSuspend,StockSuspendKey> {
+public final class StockSuspendWritePort implements com.zoutrankil.data.stock.port.StockSuspendWriteSession {
     private final String table;
     private final JdbcTemplate jdbc;
     private final QuestDB questDb;
@@ -60,6 +60,8 @@ public final class StockSuspendWritePort implements VerifiedBatchExecutor.Port<S
             return Math.addExact(Math.multiplyExact(canonical.length, 4), 128);
         }
     };
+
+    @Override public VerifiedBatchExecutor.Codec<StockSuspend,StockSuspendKey> codec() { return CODEC; }
 
     @Override public void preflight() {
         QuestDbWriteChecks.preflight(jdbc, table, StockSuspendDataset.definition(table));

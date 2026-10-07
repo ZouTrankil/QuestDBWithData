@@ -1,9 +1,16 @@
 package com.zoutrankil.data.config;
+import com.zoutrankil.data.derived.storage.QuestDbEquityStyleMonthlySourceReader;
+import com.zoutrankil.data.derived.storage.QuestDbEquityStyleMonthlyTarget;
+
+import com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService;
+import com.zoutrankil.data.derived.application.EquityStyleMonthlyMaterializeAdapter;
+import com.zoutrankil.data.derived.storage.EquityStyleMonthlyReadRepository;
+import com.zoutrankil.data.derived.storage.EquityStyleMonthlyWritePort;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.*;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.EquityStyleMonthlyMapper;
+import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
 import java.nio.charset.StandardCharsets;
@@ -88,7 +95,7 @@ class EquityStyleMonthlyLiveAcceptanceTest {
             assertEquals(initial?32L:48L,jdbc.queryForObject("SELECT count() FROM index_monthly",Long.class));
             var properties=new QuestDbProperties();properties.setHost("127.0.0.1");properties.setPgPort(18842);properties.setQwpPort(19030);
             properties.setUsername("admin");properties.setPassword("quest");
-            var owner=new EquityStyleMonthlyJobService(jdbc,properties,"index_monthly",TABLE,LEDGER);
+            var owner=new EquityStyleMonthlyJobService(new QuestDbEquityStyleMonthlySourceReader(jdbc,"index_monthly"),new QuestDbEquityStyleMonthlyTarget(jdbc,properties,TABLE),LEDGER);
             var admittedSource=owner.source().read(JUNE,initial?JULY:AUGUST);
             assertRows(oracle(baseline,initial?2:3),admittedSource.rows());assertEquals(initial?32:48,admittedSource.rawRows());
             var admittedState=fixtureEvidence.required("private_after").required("index_monthly");

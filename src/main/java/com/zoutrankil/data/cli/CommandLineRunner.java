@@ -1,5 +1,7 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.index.application.IndexCatalogJobService;
+
 import com.zoutrankil.data.stock.application.StockBasicJobService;
 import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
 import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
@@ -35,7 +37,7 @@ public class CommandLineRunner implements ApplicationRunner {
                              com.zoutrankil.data.service.StockBasicScheduleService scheduleService,
                              com.zoutrankil.data.calendar.application.ExchangeCalendarJobService calendarService,
                              com.zoutrankil.data.stock.application.StockDetailInfoJobService stockDetailService,
-                             com.zoutrankil.data.service.IndexCatalogJobService indexCatalogService,
+                             com.zoutrankil.data.index.application.IndexCatalogJobService indexCatalogService,
                              LedgerManagementService ledgerManagementService) {
         this(LegacyCliCommandFamilies.create(syncService, datasetRegistry, jobRegistry, jobService, groupService, readGroupReader, writeGroupService, scheduleService, calendarService, stockDetailService, indexCatalogService, ledgerManagementService));
     }
@@ -48,7 +50,7 @@ public class CommandLineRunner implements ApplicationRunner {
                              com.zoutrankil.data.service.StockBasicScheduleService scheduleService,
                              com.zoutrankil.data.calendar.application.ExchangeCalendarJobService calendarService,
                              com.zoutrankil.data.stock.application.StockDetailInfoJobService stockDetailService,
-                             com.zoutrankil.data.service.IndexCatalogJobService indexCatalogService) {
+                             com.zoutrankil.data.index.application.IndexCatalogJobService indexCatalogService) {
         this(syncService, datasetRegistry, jobRegistry, jobService, groupService, readGroupReader, writeGroupService,
                 scheduleService, calendarService, stockDetailService, indexCatalogService,
                 new LedgerManagementService(LedgerManagementService.DEFAULT_LEDGER_PATH));
