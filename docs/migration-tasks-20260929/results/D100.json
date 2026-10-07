@@ -1,0 +1,539 @@
+{
+  "task_id": "D100",
+  "dataset_id": "retail_sentiment_daily_cache",
+  "definition_version": 1,
+  "implementation_status": "implemented",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "logical_date": "2026-10-06",
+  "finished_at": "2026-10-06T16:17:50.839735+08:00",
+  "blocker": null,
+  "job_id": null,
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "disposition": {
+    "decision": "retained_compatibility",
+    "basis": "Actual native caller bypasses cache through D099 alias/D098 MV; nonnative compatibility caller retains original Python publisher. Common contract permits evidenced retained compatibility.",
+    "java_surface": "Fourteen-field typed historical READ, complete date/generation key, bounded date/range pagination and configured ReadGroup.",
+    "publisher": "original Python MarketBarometerReadThroughCache._publish",
+    "java_writer_or_job": null,
+    "write_capabilities": "WRITE, STATIC_REPLACE and WAL_REPLACE rejected",
+    "raw_read_scope": "Historical stored generations only; no implicit latest, coverage authorization, current cache-hit or production freshness claim."
+  },
+  "contract": {
+    "definition": {
+      "datasetId": "retail_sentiment_daily_cache",
+      "schemaVersion": 1,
+      "provider": "python.derived.market_barometer_cache",
+      "owner": "python.MarketBarometerReadThroughCache._publish",
+      "objectName": "retail_sentiment_daily_cache",
+      "objectKind": "TABLE",
+      "columns": [
+        {
+          "sourceName": "trade_date",
+          "logicalName": "trade_date",
+          "storageName": "trade_date",
+          "storageType": "TIMESTAMP",
+          "nullable": false,
+          "meaning": "Daily calendar bucket in the complete date/source-generation key",
+          "temporal": {
+            "kind": "BUSINESS_DATE",
+            "sourceFormat": "BASIC",
+            "zone": "calendar",
+            "precision": "DAY",
+            "meaning": "Python SAMPLE BY daily aggregation date; exact UTC-midnight TIMESTAMP carrier"
+          },
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "avg_retail_ratio",
+          "logicalName": "avg_retail_ratio",
+          "storageName": "avg_retail_ratio",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Mean GMM retail volume ratio; dimensionless",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "avg_retail_entropy",
+          "logicalName": "avg_retail_entropy",
+          "storageName": "avg_retail_entropy",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Mean retail Shannon time entropy in bits",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "total_retail_amount_yi",
+          "logicalName": "total_retail_amount_yi",
+          "storageName": "total_retail_amount_yi",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Yi yuan; source yuan converted by Python aggregate exactly once",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "total_retail_net_inflow_yi",
+          "logicalName": "total_retail_net_inflow_yi",
+          "storageName": "total_retail_net_inflow_yi",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Signed retail net inflow in yi yuan; no second conversion",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "avg_rel_aggro",
+          "logicalName": "avg_rel_aggro",
+          "storageName": "avg_rel_aggro",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Mean relative aggression; source metric scale retained",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "total_q1",
+          "logicalName": "total_q1",
+          "storageName": "total_q1",
+          "storageType": "LONG",
+          "nullable": false,
+          "meaning": "Required exact sum of Q1 windows with inflow and price rise",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "total_q3",
+          "logicalName": "total_q3",
+          "storageName": "total_q3",
+          "storageType": "LONG",
+          "nullable": false,
+          "meaning": "Required exact sum of Q3 windows with outflow and price decline",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "avg_wash_trade_ratio",
+          "logicalName": "avg_wash_trade_ratio",
+          "storageName": "avg_wash_trade_ratio",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Mean wash trade ratio; dimensionless",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "total_spoof_count",
+          "logicalName": "total_spoof_count",
+          "storageName": "total_spoof_count",
+          "storageType": "LONG",
+          "nullable": false,
+          "meaning": "Required exact severe spoofing count",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "total_manipulation_count",
+          "logicalName": "total_manipulation_count",
+          "storageName": "total_manipulation_count",
+          "storageType": "LONG",
+          "nullable": false,
+          "meaning": "Required rowwise fake-support plus fake-pressure sum; no COALESCE or split SUM",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "avg_mfi_score",
+          "logicalName": "avg_mfi_score",
+          "storageName": "avg_mfi_score",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Mean main force intensity; source score scale retained",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "total_main_net_yi",
+          "logicalName": "total_main_net_yi",
+          "storageName": "total_main_net_yi",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Signed main net inflow in yi yuan; no second conversion",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "source_version",
+          "logicalName": "source_version",
+          "storageName": "source_version",
+          "storageType": "SYMBOL",
+          "nullable": false,
+          "meaning": "Complete lowercase SHA-256 of Python product SQL and relevant source identity/partition state",
+          "temporal": null,
+          "legacyNullSentinels": []
+        }
+      ],
+      "businessKey": [
+        "trade_date",
+        "source_version"
+      ],
+      "dedupKey": [
+        "trade_date",
+        "source_version"
+      ],
+      "designatedTimestamp": "trade_date",
+      "partition": "MONTH",
+      "wal": true,
+      "capabilities": [
+        "READ"
+      ],
+      "dependencies": [],
+      "storageRationale": "Retained compatibility for Python's MONTH/WAL/DEDUP historical cache. Active native alias bypasses this publisher. Python remains the sole cache and coverage owner; Java adds no competing writer or job. Four required LONG counts follow the actual Python model, while eight DOUBLE fields retain nulls. Raw historical rows alone do not certify a published receipt, current freshness or production latest. Pagination binds actual table identity and physical/WAL frontier, independently of business source_version."
+    },
+    "mapping_contract": "artifacts/java-migration/D100/mapping-contract-20261006.json",
+    "required_counts": "Four exact required nonnegative LONG counts follow actual Python model/row validation; historical NULL explicitly rejected. D098/D099 SUM columns remain nullable independently.",
+    "nullable_doubles": "Eight finite nullable Double fields; preserve signed flow and units with no second 1e8 conversion.",
+    "business_version": "Original Python SHA256 SQL/source physical id/relevant partition payload; independent of global source9:36 and cache physical paging token.",
+    "cursor": "Actual queryFingerprint/complete date+generation key/physical table id+directory+txn+settled WAL frontier."
+  },
+  "python_owner": {
+    "path": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_cache.py",
+    "sha256": "5971761ed070f7b178892c90a9114b0609a3dcb2cbf8767867432279371b5bee",
+    "frozen_source_files": {
+      "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_cache.py": "5971761ed070f7b178892c90a9114b0609a3dcb2cbf8767867432279371b5bee",
+      "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\models\\market_barometer_cache.py": "d930b1cf639735699c378692978762d31f31b4f970a66cf968869d1e9cb36fe1",
+      "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_views.py": "c2c280376f1642b37e892a87a5b98190f2acad7f954640a88d1624845c0d3dda",
+      "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\common\\persistence\\questdb_model.py": "f29d21ca141302ea1d508ee85f09a4f44375ff5d94b1a4a30cfc880a6605fc92"
+    },
+    "versions": {
+      "20260917": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906",
+      "20260918": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22",
+      "20260921": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba"
+    },
+    "execution_scope": "Original _source_state/_versions/_publish/model normalization/visibility/digest with allowlisted bounded private transport adapter; original production WriteCoordinator lifecycle is not exercised."
+  },
+  "acceptance": {
+    "scope": "isolated_actual_QuestDB_original_Python_owner_D098_frozen_real_source_compatibility",
+    "questdb_version": "10.0.1",
+    "target": "private-127.0.0.1:19010/18822",
+    "attestation": {
+      "pid": 31760,
+      "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d098-isolated-questdb",
+      "address": "127.0.0.1",
+      "http_port": 19010,
+      "pg_port": 18822
+    },
+    "range_from_inclusive": "2026-09-17",
+    "range_to_exclusive": "2026-09-22",
+    "source_raw_rows": 23773,
+    "source_projection_columns": 15,
+    "formal_source_physical_columns": 110,
+    "source_universe_ready_certified": false,
+    "normalized_aggregate_rows": 3,
+    "rejected_rows": 0,
+    "cache_submitted_rows": 5,
+    "coverage_submitted_rows": 5,
+    "physical_inserted_rows": "unknown; actual unique keys and submitted rows are recorded independently",
+    "physical_updated_rows": "unknown; exact same original generation replay follows owner DEDUP",
+    "owner_ilp_acknowledged_batches": 6,
+    "unknown_batches": 0,
+    "historical_ddl_submissions": 2,
+    "historical_ddl_ack": "ACKNOWLEDGED; retained DDL-only failed attempt",
+    "accepted_first_and_continue_ddl_submissions": 0,
+    "source_mv_alias_writes": 0,
+    "formal_writes": 0,
+    "java_written_rows": 0,
+    "checkpoint_before": null,
+    "checkpoint_after": null,
+    "checkpoint_applicability": "N/A retained original Python publisher; no Java source-ingest checkpoint/job. Actual read resume is the captured physical-version-bound cursor.",
+    "phases": [
+      {
+        "phase": "first",
+        "submitted_cache_rows": 2,
+        "submitted_coverage_rows": 2,
+        "visible_selected_keys": 2,
+        "cache_field_comparisons": 28,
+        "receipt_field_comparisons": 10,
+        "cache_snapshot": {
+          "physical": {
+            "id": 13,
+            "directoryName": "retail_sentiment_daily_cache~13",
+            "table_txn": 1,
+            "table_row_count": 2,
+            "partitionBy": "MONTH",
+            "walEnabled": true,
+            "dedup": true,
+            "designatedTimestamp": "trade_date",
+            "table_suspended": false,
+            "wal_pending_row_count": 0
+          },
+          "wal": {
+            "sequencerTxn": 1,
+            "writerTxn": 1,
+            "bufferedTxnSize": 0,
+            "suspended": false
+          },
+          "settled": true
+        },
+        "coverage_snapshot": {
+          "physical": {
+            "id": 14,
+            "directoryName": "market_barometer_cache_coverage~14",
+            "table_txn": 1,
+            "table_row_count": 2,
+            "partitionBy": "MONTH",
+            "walEnabled": true,
+            "dedup": true,
+            "designatedTimestamp": "trade_date",
+            "table_suspended": false,
+            "wal_pending_row_count": 0
+          },
+          "wal": {
+            "sequencerTxn": 1,
+            "writerTxn": 1,
+            "bufferedTxnSize": 0,
+            "suspended": false
+          },
+          "settled": true
+        }
+      },
+      {
+        "phase": "replay",
+        "submitted_cache_rows": 2,
+        "submitted_coverage_rows": 2,
+        "visible_selected_keys": 2,
+        "cache_field_comparisons": 28,
+        "receipt_field_comparisons": 10,
+        "cache_snapshot": {
+          "physical": {
+            "id": 13,
+            "directoryName": "retail_sentiment_daily_cache~13",
+            "table_txn": 2,
+            "table_row_count": 2,
+            "partitionBy": "MONTH",
+            "walEnabled": true,
+            "dedup": true,
+            "designatedTimestamp": "trade_date",
+            "table_suspended": false,
+            "wal_pending_row_count": 0
+          },
+          "wal": {
+            "sequencerTxn": 2,
+            "writerTxn": 2,
+            "bufferedTxnSize": 0,
+            "suspended": false
+          },
+          "settled": true
+        },
+        "coverage_snapshot": {
+          "physical": {
+            "id": 14,
+            "directoryName": "market_barometer_cache_coverage~14",
+            "table_txn": 2,
+            "table_row_count": 2,
+            "partitionBy": "MONTH",
+            "walEnabled": true,
+            "dedup": true,
+            "designatedTimestamp": "trade_date",
+            "table_suspended": false,
+            "wal_pending_row_count": 0
+          },
+          "wal": {
+            "sequencerTxn": 2,
+            "writerTxn": 2,
+            "bufferedTxnSize": 0,
+            "suspended": false
+          },
+          "settled": true
+        }
+      },
+      {
+        "phase": "increment",
+        "submitted_cache_rows": 1,
+        "submitted_coverage_rows": 1,
+        "visible_selected_keys": 3,
+        "cache_field_comparisons": 42,
+        "receipt_field_comparisons": 15,
+        "cache_snapshot": {
+          "physical": {
+            "id": 13,
+            "directoryName": "retail_sentiment_daily_cache~13",
+            "table_txn": 3,
+            "table_row_count": 3,
+            "partitionBy": "MONTH",
+            "walEnabled": true,
+            "dedup": true,
+            "designatedTimestamp": "trade_date",
+            "table_suspended": false,
+            "wal_pending_row_count": 0
+          },
+          "wal": {
+            "sequencerTxn": 3,
+            "writerTxn": 3,
+            "bufferedTxnSize": 0,
+            "suspended": false
+          },
+          "settled": true
+        },
+        "coverage_snapshot": {
+          "physical": {
+            "id": 14,
+            "directoryName": "market_barometer_cache_coverage~14",
+            "table_txn": 3,
+            "table_row_count": 3,
+            "partitionBy": "MONTH",
+            "walEnabled": true,
+            "dedup": true,
+            "designatedTimestamp": "trade_date",
+            "table_suspended": false,
+            "wal_pending_row_count": 0
+          },
+          "wal": {
+            "sequencerTxn": 3,
+            "writerTxn": 3,
+            "bufferedTxnSize": 0,
+            "suspended": false
+          },
+          "settled": true
+        }
+      }
+    ],
+    "cache_rows": 3,
+    "coverage_rows": 3,
+    "cache_field_comparisons": 42,
+    "receipt_field_comparisons": 15,
+    "original_owner_digests_matched": 3,
+    "java_pages": 3,
+    "java_unique_fields": 42,
+    "java_exact_and_range_field_comparisons": 84,
+    "java_reference_binary64_bit_comparisons": 48,
+    "java_independent_storage_binary64_bit_comparisons": 48,
+    "double_count_semantics": "24 unique Double values, each compared in exact-key and range paths; 48 actual bit comparisons per comparison category. Capture separately checked 8 Double values.",
+    "java_double_tolerance_comparisons": 0,
+    "configured_read_group_matched": true,
+    "actual_first_cursor": {
+      "queryFingerprint": "c0fb4a97f8d89a42175bca678fe28ea71efb36553496a72eb826a4903548a3fb",
+      "keyValues": [
+        "2026-09-17",
+        "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+      ],
+      "sourceVersion": "table:retail_sentiment_daily_cache:id:13:directory:retail_sentiment_daily_cache~13:txn:1:wal-seq:1"
+    },
+    "actual_captured_cursor_rejected_before_row_query": true,
+    "old_physical_token": "table:retail_sentiment_daily_cache:id:13:directory:retail_sentiment_daily_cache~13:txn:1:wal-seq:1",
+    "final_physical_token": "table:retail_sentiment_daily_cache:id:13:directory:retail_sentiment_daily_cache~13:txn:3:wal-seq:3",
+    "cache_snapshot_before_java": {
+      "id": 13,
+      "directory": "retail_sentiment_daily_cache~13",
+      "physicalTxn": 3,
+      "rowCount": 3,
+      "sequenceTxn": 3,
+      "writerTxn": 3,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "cache_snapshot_after_java": {
+      "id": 13,
+      "directory": "retail_sentiment_daily_cache~13",
+      "physicalTxn": 3,
+      "rowCount": 3,
+      "sequenceTxn": 3,
+      "writerTxn": 3,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "protected_source_mv_alias_unchanged": true,
+    "formal_unchanged": true,
+    "current_cache_hit_certified": false,
+    "production_latest_certified": false
+  },
+  "formal_readonly": {
+    "status": "VERIFIED_STORED_GENERATIONS",
+    "stored_generation_count": 5,
+    "cache_field_comparisons": 70,
+    "original_owner_digests_matched": 5,
+    "formal_rows": 338,
+    "scope": "Five nonempty existing generations Sep11/14/15/16/17; no read-through invocation or repair; no current hit/latest certification.",
+    "writes": 0
+  },
+  "fault_tolerance": {
+    "java_tests": {
+      "tests": 126,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "python_unique_pure_mock_tests": {
+      "tests": 35,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": [
+      "All fourteen columns; UTC-midnight date, exact required LONGs, null Double, finite values, complete SHA/key.",
+      "Physical cache/WAL guards before and after actual SELECT; stale cursor/recreation/midread revision/unsettled/suspended state rejected.",
+      "Original owner first/replay/real third-day increment; full cache and receipt key/value/digest visibility verified.",
+      "Actual Java first cursor retained with FIRST/query payload SHA and physical snapshot; final old token rejected before row query.",
+      "Typed ReadGroup strict version/property/generation validation before JDBC; cancelled request has no page; write/replacement rejected.",
+      "PID/root/ports/marker attested before mutation; UNKNOWN durable before single flush; retry_timeout0 and no automatic publisher/DDL retry.",
+      "New empty table metadata null explicitly preserved; actual COUNT0 and full-field0 proof required for explicit new first after acknowledged DDL-only failure."
+    ],
+    "retained_initial_failure": {
+      "artifact": "commands/cache-isolated-first-20261006.json",
+      "sha256": "7dd5448858185059217fd4b9d3206ecef6032375b113611bade2db17630e0e65",
+      "reason": "First publication requires empty newly installed owner sample tables; no reset or overwrite allowed",
+      "ddl_acknowledged": 2,
+      "owner_intents": 0,
+      "recovery_audit": "commands/cache-isolated-first-recovery-readonly-20261006.json",
+      "new_first_artifact": "commands/cache-isolated-first-resume-20261006.json",
+      "failed_original_preserved": true,
+      "unknown_retried": false
+    },
+    "retained_runtime_start_failure": "commands/private-server-restart-runtime-module-failure-20261006.json; recovered same data root without source/formal mutation"
+  },
+  "registrations": {
+    "dataset_catalog_size": 49,
+    "job_catalog_size": 39,
+    "cache_java_job_count": 0
+  },
+  "coordinator_gate": "accepted_for_serial_progress",
+  "evidence": [
+    "artifacts/java-migration/D100/mapping-contract-20261006.json",
+    "artifacts/java-migration/D100/README.md",
+    "artifacts/java-migration/D100/coordinator-empty-ddl-recovery-review-20261006.json",
+    "artifacts/java-migration/D100/commands/cache-readonly-audit-20261006.json",
+    "artifacts/java-migration/D100/commands/private-server-restart-20261006.json",
+    "artifacts/java-migration/D100/commands/private-server-restart-state-20261006.json",
+    "artifacts/java-migration/D100/commands/private-server-restart-runtime-module-failure-20261006.json",
+    "artifacts/java-migration/D100/commands/cache-isolated-first-20261006.json",
+    "artifacts/java-migration/D100/commands/cache-isolated-first-recovery-readonly-20261006.json",
+    "artifacts/java-migration/D100/commands/cache-isolated-first-resume-20261006.json",
+    "artifacts/java-migration/D100/commands/java-cache-cursor-first-20261006.json",
+    "artifacts/java-migration/D100/commands/cache-isolated-acceptance-20261006.json",
+    "artifacts/java-migration/D100/commands/java-cache-read-acceptance-20261006.json",
+    "artifacts/java-migration/D100/commands/target-tests-20261006.json",
+    "artifacts/java-migration/D100/commands/python-script-guards-20261006.json",
+    "artifacts/java-migration/D100/commands/python-script-guards-resume-20261006.json",
+    "artifacts/java-migration/D100/commands/java-dataset-registration-20261006.json",
+    "artifacts/java-migration/D100/commands/java-job-registration-20261006.json",
+    "artifacts/java-migration/D100/coordinator-review-20261006.json"
+  ],
+  "known_limitations": [
+    "Raw historical Java cache reads do not certify current receipts, cache-hit or production latest.",
+    "Formal native parent remains invalid as preserved D099 diagnostic; no formal refresh or repair.",
+    "Real fixture contains 15 necessary columns of formal110; D086/provider/full symbol-universe readiness is not certified.",
+    "Original Python production coordinator lifecycle and real source revisions are not exercised; same-generation replay and real absent third-day increment are verified."
+  ],
+  "manual_comparison_todo": [
+    "Review retained compatibility disposition and required cache counts vs nullable native MV counts.",
+    "Review actual three date/generation keys, original digests and first/capture/final SHA chain.",
+    "Review formal five historical generations separately from production freshness and provider coverage."
+  ]
+}

@@ -1,0 +1,1090 @@
+{
+  "task_id": "D095",
+  "dataset_id": "mv_market_breadth_daily_v1",
+  "job_id": "data.mv_market_breadth_daily_v1",
+  "implementation_status": "implemented",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "logical_date": "2026-10-06",
+  "state_at": "2026-10-06T13:14:04.484555+08:00",
+  "blocker": null,
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "definition_version": 1,
+  "disposition": {
+    "decision": "java_implemented",
+    "reason": "The Java canonical job owns bounded native materialization through the shared runner/ledger, while the Python SQL remains the authoritative compatibility contract. The production switch is not enabled or claimed verified.",
+    "java_surface": "Seven-field typed definition/mapper, valid bounded paginated repository and ReadGroup, native materialization job/run/slice/status/cancel/resume/reconcile, and isolated FULL repair through the same durable runner.",
+    "direct_write": "Forbidden: native materialized view rows are never written through typed row DML.",
+    "refresh_owner": "data.mv_market_breadth_daily_v1 v1 / market_breadth_daily_owner; native REFRESH INCREMENTAL. FULL_ISOLATED is an explicit bounded private-instance repair operation.",
+    "production_mutations_default": "app.sync.market-breadth-daily.mutations-enabled=false; formal native admission also requires exact expected-target-id."
+  },
+  "contract": {
+    "source": "stk_factor",
+    "source_key": [
+      "trade_date",
+      "ts_code"
+    ],
+    "mv_business_key": [
+      "trade_date"
+    ],
+    "mv_physical_dedup_key": [],
+    "designated_timestamp": "trade_date",
+    "partition": "MONTH",
+    "wal": true,
+    "dedup": false,
+    "physical_columns": {
+      "trade_date": "TIMESTAMP",
+      "stock_count": "LONG",
+      "up_count": "LONG",
+      "down_count": "LONG",
+      "flat_count": "LONG",
+      "avg_pct_change": "DOUBLE",
+      "total_amount_yi": "DOUBLE"
+    },
+    "time_semantics": "QuestDB SAMPLE BY 1d ALIGN TO CALENDAR; business date carried by UTC-midnight TIMESTAMP",
+    "refresh": "REFRESH EVERY 1m; Java uses native REFRESH INCREMENTAL, with valid/caughtUp and both WAL frontiers settled required at completion."
+  },
+  "formal_readonly_audit": {
+    "questdb_target": "configured local formal QuestDB",
+    "mutated": false,
+    "mv_status": "invalid",
+    "invalidation_reason": "materialized view is ahead of base table and cannot be synchronized",
+    "mv_refresh_base_table_txn": 12,
+    "source_base_table_txn": 14,
+    "source_rows": 10265031,
+    "mv_rows": 2212,
+    "source_max_date": "2026-09-24",
+    "mv_max_date": "2026-09-18",
+    "python_mv_sql_matches_catalog": true,
+    "public_alias_points_to_mv": true,
+    "matched_existing_day_values": 12,
+    "missing_recent_source_days": 4,
+    "missing_recent_mv_days": 4,
+    "checkpoint_before_after": "Java production checkpoint was not created or advanced; isolated Java ledger checkpoint is separate.",
+    "written_rows": 0,
+    "checked_at": "2026-10-06T05:08:49.435639+00:00",
+    "source_before_after": "stk_factor table_txn=14 remained unchanged across real-source extraction/acceptance; formal writes=0.",
+    "production_readiness": "not_verified",
+    "production_budget": "10,265,031 source rows exceed the guarded 200,000-row whole-source pending-refresh budget; historical span also exceeds 31 days.",
+    "migration_gate": "Formal invalidity is preserved as an independent production limitation, not a requirement to issue formal FULL during this task."
+  },
+  "isolated_acceptance": {
+    "questdb_target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d",
+    "questdb_version": "10.0.1",
+    "isolation": "workspace/var/d095-isolated-questdb; loopback HTTP 19000 and PGwire 18812; same process and exact private -d root attested before mutations.",
+    "private_identity": {
+      "pid": 16980,
+      "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d095-isolated-questdb",
+      "http_port": 19000,
+      "pg_port": 18812,
+      "address": "127.0.0.1"
+    },
+    "initial_range_from_inclusive": "2026-09-17",
+    "initial_range_to_exclusive": "2026-09-19",
+    "initial_raw_source_rows": 11105,
+    "initial_unique_complete_keys": 11105,
+    "source_columns": [
+      "trade_date",
+      "ts_code",
+      "pct_change",
+      "amount"
+    ],
+    "source_full_field_comparisons": 44420,
+    "source_replay_field_comparisons": 44420,
+    "source_replay_rows": 11105,
+    "source_rejected_rows": 0,
+    "fixture_physical_inserted_or_updated_rows": "unknown: import/replay submits raw rows, but native DEDUP and MV refresh insertion/update counts are not inferred from submissions.",
+    "calendar": {
+      "source": "formal SELECT of SSE exchange_calendar, stable source frontier",
+      "from_inclusive": "2026-09-17",
+      "to_exclusive": "2026-10-07",
+      "rows": 20,
+      "compared_fields": 80,
+      "columns": [
+        "exchange",
+        "cal_date",
+        "is_open",
+        "pretrade_date"
+      ],
+      "frozen_version": "calendar-11:9:9:2d6dbc50f44c160474e8ddf222cddc09dd2bdac629593cb5b3af19a37a31259d"
+    },
+    "initial_java_output_rows": 2,
+    "initial_all_seven_field_comparisons": 14,
+    "initial_measure_comparisons_excluding_key": 12,
+    "new_real_source_date": "2026-09-21",
+    "new_raw_source_rows": 5553,
+    "new_raw_four_field_comparisons": 22212,
+    "total_raw_source_rows": 16658,
+    "incremental_java_output_rows": 3,
+    "incremental_all_seven_field_comparisons": 21,
+    "readback": "Explicit full business-key/date coverage and all seven output fields; nulls and finite floating-point tolerance are checked. Row counts do not substitute for field parity.",
+    "idempotence": "Repeated raw-source replay keeps 11,105 complete keys; Java same-window rerun keeps two unique day buckets and passes real readback.",
+    "typed_read_and_read_group": "Dynamic physical source/MV versions; 2 rows x 7 fields matched, stable one-row pages and typed ReadGroup matched.",
+    "initial_copy_restored_after_fault": true,
+    "invalidation_reproduction": "A controlled private UPDATE makes the native MV invalid; the modified amount is restored before the Java FULL repair. This is a fault experiment, not evidence of a naturally occurring source revision.",
+    "java_full_repair": {
+      "run_id": "d095-9fa46685-6f3f-4106-9077-9386cd6cdebc",
+      "state": "VERIFIED",
+      "mode": "MATERIALIZE",
+      "native_refresh": "FULL_ISOLATED",
+      "whole_source_rows": 16658,
+      "window": [
+        "2026-09-17",
+        "2026-09-21"
+      ],
+      "verified_day_rows": 3,
+      "all_seven_field_comparisons": 21,
+      "before_valid": false,
+      "after_valid": true,
+      "after_caught_up": true,
+      "shared_ledger": "var\\d095-java-1203ad29-7f39-4792-bfa8-27e141a1a603.sqlite3"
+    },
+    "formal_target_validated": false,
+    "formal_mutated": false
+  },
+  "java_checks": {
+    "compile_and_targeted_tests": "Passed on JDK 24 after whole-MV lock correction, including real private QuestDB reads/materialization and the shared runner regressions.",
+    "tests": 90,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "com.zoutrankil.data.mapper.MarketBreadthDailyV1MappingTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.zoutrankil.data.repository.MarketBreadthDailyV1LiveReadAcceptanceTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.zoutrankil.data.service.MarketBreadthDailyV1JobServiceTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.zoutrankil.data.service.MarketBreadthDailyV1LiveMaterializeAcceptanceTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.zoutrankil.data.service.MarketBreadthDailyV1MaterializeAdapterTest",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.zoutrankil.data.service.SyncJobRegistryTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.zoutrankil.data.service.SyncJobRunnerTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.zoutrankil.data.service.VerifiedBatchExecutorTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "com.zoutrankil.data.service.VerifiedSliceRecoveryTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "python_guard_tests": {
+      "tests": 15,
+      "failures": 0,
+      "database_access": "none; mocks cover source/MV stability, ambiguous ACK non-retry, complete fields and private target guards"
+    },
+    "cursor_binding": "Physical base/MV IDs and directories, their table txns, WAL frontiers, refresh checkpoint and refresh start/finish; snapshots are checked before and after reads.",
+    "read_state_guard": "READ rejects invalid, lagging or unsettled WAL. Materialize may begin valid+lagging only within whole-source work budget; completion still requires valid+caughtUp.",
+    "tests_after_global_lock_change": "passed",
+    "management_catalog_gate": "passed",
+    "management_catalog_proof": "artifacts/java-migration/D095/commands/java-job-registration-20261006.json",
+    "final_test_evidence": "artifacts/java-migration/D095/commands/target-tests-20261006.json"
+  },
+  "repair_plan": {
+    "script": "tools/repair_d095_mv_after_approval.py",
+    "formal_refresh_submitted": false,
+    "role": "Independent optional operational repair tool; not a prerequisite for this Java migration acceptance.",
+    "verification": "One FULL submission, ambiguous ACK stays in_doubt without resubmission. SELECT-only parity retries use unchanged base and MV-own physical transactions plus stable refresh metadata across source and output reads.",
+    "production_acceptance": "Not performed; production source coordination, workload sizing and explicit deployment admission remain outside this isolated result."
+  },
+  "evidence": [
+    "artifacts/java-migration/D095/commands/formal-readonly-audit-20261006.json",
+    "artifacts/java-migration/D095/commands/formal-readonly-full-20261006.json",
+    "artifacts/java-migration/D095/commands/isolated-acceptance-20261006.json",
+    "artifacts/java-migration/D095/commands/java-materialize-acceptance-20261006.json",
+    "artifacts/java-migration/D095/commands/target-tests-before-global-lock-20261006.json",
+    "var\\d095-java-1203ad29-7f39-4792-bfa8-27e141a1a603.sqlite3",
+    "tools/audit_d095_mv_readonly.py",
+    "tools/accept_d095_mv_isolated.py",
+    "tools/repair_d095_mv_after_approval.py",
+    "tools/test_d095_script_guards.py",
+    "src/test/java/com/zoutrankil/data/service/MarketBreadthDailyV1LiveMaterializeAcceptanceTest.java",
+    "artifacts/java-migration/D095/commands/java-job-registration-20261006.json",
+    "var/d095-java-568c69ff-8453-459b-a0dd-4fc2aabb13c6.sqlite3",
+    "artifacts/java-migration/D095/commands/target-tests-20261006.json",
+    "artifacts/java-migration/D095/coordinator-review-20261006.json"
+  ],
+  "known_limitations": [
+    "QuestDB 10.0.1 user RANGE refresh can leave refreshing catalog status; Java uses native INCREMENTAL and requires valid/caughtUp at completion rather than relaxing the guard.",
+    "Native INCREMENTAL processes WAL history since its checkpoint and does not force arbitrary historical-range recomputation. Without a source WAL change, historical output drift is rejected by actual parity; isolated FULL is the explicit repair path.",
+    "Pending native refresh and isolated FULL are admitted only when the complete physical source is <=200,000 rows and spans <=31 days. The formal invalid 10.3-million-row/history target is not production-accepted.",
+    "Existing Python production consumer still selects its public native alias; the formal invalid MV remains stale with four missing recent trading days. No formal write or production switch occurred.",
+    "Whole-MV exclusion regression and management catalog admission passed. Human review remains pending_review; production readiness remains unverified.",
+    "Source input is the bounded physical stk_factor data and its actual exchange calendar. This does not verify upstream Tushare freshness or a naturally occurring historical revision.",
+    "The earlier RANGE diagnostic run d095-452b0bba-078c-4c11-bd2e-30718d672c44 remains IN_DOUBT with its legacy narrow lease in an independent retained ledger. Source reset changed its frozen version; later green runs do not reconcile or release that old record."
+  ],
+  "job_version": 1,
+  "coordinator_gate": {
+    "status": "accepted_for_serial_progress",
+    "may_advance": true,
+    "next_task": "D096",
+    "remaining_checks": [],
+    "remaining_mainline": "D096-D184",
+    "management_catalog": "passed: actual list-sync-jobs startup exposes D095 v1 with exact stk_factor v2 and exchange_calendar v1 dependencies",
+    "evidence": "artifacts/java-migration/D095/coordinator-review-20261006.json"
+  },
+  "canonical_job": {
+    "job_id": "data.mv_market_breadth_daily_v1",
+    "version": 1,
+    "dataset_version": 1,
+    "owner": "market_breadth_daily_owner",
+    "default_mode": "INCREMENTAL",
+    "supported_modes": [
+      "INCREMENTAL",
+      "MATERIALIZE",
+      "RECONCILE"
+    ],
+    "dependencies": [
+      {
+        "job_id": "data.stk_factor",
+        "version": 2
+      },
+      {
+        "job_id": "data.exchange_calendar",
+        "version": 1
+      }
+    ],
+    "budgets": {
+      "max_window_days": 31,
+      "max_slices": 1,
+      "max_pages": 1,
+      "max_aggregate_rows": 31,
+      "max_batch_bytes": 65536,
+      "max_raw_source_rows": 200000,
+      "retry_max_attempts": 1,
+      "job_timeout_seconds": 300,
+      "visibility_timeout_seconds": 180
+    },
+    "frozen_parameters": [
+      "source_version",
+      "target_id",
+      "bootstrap_from",
+      "calendar_version for INCREMENTAL",
+      "checkpoint_before if present",
+      "native_refresh if FULL_ISOLATED"
+    ],
+    "checkpoint": "Only contiguous verified INCREMENTAL coverage from the explicit bootstrap can advance; calendar version and every real open-session bucket are checked.",
+    "revision_days": 3,
+    "native_refresh": "REFRESH MATERIALIZED VIEW mv_market_breadth_daily_v1 INCREMENTAL",
+    "empty": "No native submission for zero expected rows; actual output must also be empty with stable valid/caught-up state.",
+    "conflict_scope_status": "Verified: D095 native refresh uses shared-runner allDates exclusion. Disjoint native windows cannot bypass an uncertain lease; legacy narrow-lease reconciliation requires real stable readback before release."
+  },
+  "checkpoint": {
+    "before": "2026-09-18",
+    "after": "2026-09-21",
+    "next_revision_from": "2026-09-19",
+    "bootstrap_from": "2026-09-17",
+    "revision_days": 3,
+    "scope": "same physical isolated target; verified INCREMENTAL coverage only",
+    "missing_bucket_run": "d095-9bc9c031-c16b-4ffe-90f4-dca9c1ee625f",
+    "missing_bucket_state": "FAILED",
+    "missing_bucket_effect": "Checkpoint stayed 2026-09-21; later missing open-session buckets did not advance it.",
+    "empty_run_effect": "2026-09-20 MATERIALIZE -> VERIFIED_EMPTY, zero refresh submission, no incremental checkpoint advance."
+  },
+  "runs": [
+    {
+      "purpose": "first",
+      "run_id": "d095-d1b97554-dd38-43a9-a887-684f528f9c98",
+      "mode": "INCREMENTAL",
+      "window_from_inclusive": "2026-09-17",
+      "window_to_inclusive": "2026-09-18",
+      "logical_date": "2026-10-06",
+      "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d",
+      "source_raw_rows": 11105,
+      "source_aggregate_rows": 2,
+      "verified_output_rows": 2,
+      "submitted_projection_rows": 2,
+      "native_refresh_submissions": 1,
+      "physical_mv_inserted_or_updated_rows": "unknown; actual expected keys and all field values are verified independently",
+      "state": "VERIFIED",
+      "error_code": null,
+      "frozen_parameters": {
+        "bootstrap_from": "2026-09-17",
+        "calendar_version": "calendar-11:9:9:2d6dbc50f44c160474e8ddf222cddc09dd2bdac629593cb5b3af19a37a31259d",
+        "source_version": "9:97",
+        "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d"
+      },
+      "source_version": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 97,
+        "sourceSeqTxn": 97,
+        "sourceWriterTxn": 97,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 68,
+        "mvSeqTxn": 68,
+        "mvWriterTxn": 68,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:09:36.081091",
+        "refreshFinished": "2026-10-06 05:09:36.083801",
+        "refreshBaseTxn": 97,
+        "reportedBaseTxn": 97,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "verified_snapshot": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 97,
+        "sourceSeqTxn": 97,
+        "sourceWriterTxn": 97,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 68,
+        "mvSeqTxn": 68,
+        "mvWriterTxn": 68,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:09:36.081091",
+        "refreshFinished": "2026-10-06 05:09:36.083801",
+        "refreshBaseTxn": 97,
+        "reportedBaseTxn": 97,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "slices": [
+        {
+          "slice_id": "slice-3c80dce5-ac95-412f-a637-4654ac732301",
+          "state": "VERIFIED",
+          "verification": {
+            "duplicateKeys": 0,
+            "writerStopped": false,
+            "passed": true,
+            "expectedRows": 2,
+            "matchedRows": 2,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-3c80dce5-ac95-412f-a637-4654ac732301:revision:5",
+            "sourceFingerprint": "e205d619afcf24fc040ef3cfe7228977fd5795fbf94ff06fce87c954f08138d7",
+            "actualRows": 2,
+            "missingKeys": 0
+          },
+          "updated_at": "2026-10-06T05:10:08.381381400Z"
+        }
+      ]
+    },
+    {
+      "purpose": "replay",
+      "run_id": "d095-dd874fea-0dc8-434c-8ef5-885f7a82ef72",
+      "mode": "INCREMENTAL",
+      "window_from_inclusive": "2026-09-17",
+      "window_to_inclusive": "2026-09-18",
+      "logical_date": "2026-10-06",
+      "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d",
+      "source_raw_rows": 11105,
+      "source_aggregate_rows": 2,
+      "verified_output_rows": 2,
+      "submitted_projection_rows": 2,
+      "native_refresh_submissions": 1,
+      "physical_mv_inserted_or_updated_rows": "unknown; actual expected keys and all field values are verified independently",
+      "state": "VERIFIED",
+      "error_code": null,
+      "frozen_parameters": {
+        "bootstrap_from": "2026-09-17",
+        "calendar_version": "calendar-11:9:9:2d6dbc50f44c160474e8ddf222cddc09dd2bdac629593cb5b3af19a37a31259d",
+        "checkpoint_before": "2026-09-18",
+        "source_version": "9:97",
+        "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d"
+      },
+      "source_version": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 97,
+        "sourceSeqTxn": 97,
+        "sourceWriterTxn": 97,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 68,
+        "mvSeqTxn": 68,
+        "mvWriterTxn": 68,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:09:36.081091",
+        "refreshFinished": "2026-10-06 05:09:36.083801",
+        "refreshBaseTxn": 97,
+        "reportedBaseTxn": 97,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "verified_snapshot": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 97,
+        "sourceSeqTxn": 97,
+        "sourceWriterTxn": 97,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 68,
+        "mvSeqTxn": 68,
+        "mvWriterTxn": 68,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:09:36.081091",
+        "refreshFinished": "2026-10-06 05:09:36.083801",
+        "refreshBaseTxn": 97,
+        "reportedBaseTxn": 97,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "slices": [
+        {
+          "slice_id": "slice-3a42fe8a-762d-45c2-bb38-67179c51017c",
+          "state": "VERIFIED",
+          "verification": {
+            "duplicateKeys": 0,
+            "writerStopped": false,
+            "passed": true,
+            "expectedRows": 2,
+            "matchedRows": 2,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-3a42fe8a-762d-45c2-bb38-67179c51017c:revision:5",
+            "sourceFingerprint": "e205d619afcf24fc040ef3cfe7228977fd5795fbf94ff06fce87c954f08138d7",
+            "actualRows": 2,
+            "missingKeys": 0
+          },
+          "updated_at": "2026-10-06T05:10:20.655244400Z"
+        }
+      ]
+    },
+    {
+      "purpose": "incremental",
+      "run_id": "d095-ae8670a2-013b-4b26-977b-588f8370363f",
+      "mode": "INCREMENTAL",
+      "window_from_inclusive": "2026-09-17",
+      "window_to_inclusive": "2026-09-21",
+      "logical_date": "2026-10-06",
+      "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d",
+      "source_raw_rows": 16658,
+      "source_aggregate_rows": 3,
+      "verified_output_rows": 3,
+      "submitted_projection_rows": 3,
+      "native_refresh_submissions": 1,
+      "physical_mv_inserted_or_updated_rows": "unknown; actual expected keys and all field values are verified independently",
+      "state": "VERIFIED",
+      "error_code": null,
+      "frozen_parameters": {
+        "bootstrap_from": "2026-09-17",
+        "calendar_version": "calendar-11:9:9:2d6dbc50f44c160474e8ddf222cddc09dd2bdac629593cb5b3af19a37a31259d",
+        "checkpoint_before": "2026-09-18",
+        "source_version": "9:120",
+        "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d"
+      },
+      "source_version": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 120,
+        "sourceSeqTxn": 120,
+        "sourceWriterTxn": 120,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 68,
+        "mvSeqTxn": 68,
+        "mvWriterTxn": 68,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": false,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:09:36.081091",
+        "refreshFinished": "2026-10-06 05:09:36.083801",
+        "refreshBaseTxn": 97,
+        "reportedBaseTxn": 120,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "verified_snapshot": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 120,
+        "sourceSeqTxn": 120,
+        "sourceWriterTxn": 120,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 70,
+        "mvSeqTxn": 70,
+        "mvWriterTxn": 70,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:10:26.036083",
+        "refreshFinished": "2026-10-06 05:10:26.037402",
+        "refreshBaseTxn": 120,
+        "reportedBaseTxn": 120,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "slices": [
+        {
+          "slice_id": "slice-eb96163e-5118-430c-8a44-7526dbbc13b8",
+          "state": "VERIFIED",
+          "verification": {
+            "duplicateKeys": 0,
+            "writerStopped": false,
+            "passed": true,
+            "expectedRows": 3,
+            "matchedRows": 3,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-eb96163e-5118-430c-8a44-7526dbbc13b8:revision:5",
+            "sourceFingerprint": "c338451b25966fbbc624714cdb187a331e83efd7bc761a58ad9c24ca4b3ffbe0",
+            "actualRows": 3,
+            "missingKeys": 0
+          },
+          "updated_at": "2026-10-06T05:10:35.434906800Z"
+        }
+      ]
+    },
+    {
+      "purpose": "missingDatesRejected",
+      "run_id": "d095-9bc9c031-c16b-4ffe-90f4-dca9c1ee625f",
+      "mode": "INCREMENTAL",
+      "window_from_inclusive": "2026-09-19",
+      "window_to_inclusive": "2026-10-06",
+      "logical_date": "2026-10-06",
+      "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d",
+      "source_raw_rows": 5553,
+      "source_aggregate_rows": 0,
+      "verified_output_rows": 0,
+      "submitted_projection_rows": 0,
+      "native_refresh_submissions": 0,
+      "physical_mv_inserted_or_updated_rows": "unknown; actual expected keys and all field values are verified independently",
+      "state": "FAILED",
+      "error_code": "IllegalStateException",
+      "frozen_parameters": {
+        "bootstrap_from": "2026-09-17",
+        "calendar_version": "calendar-11:9:9:2d6dbc50f44c160474e8ddf222cddc09dd2bdac629593cb5b3af19a37a31259d",
+        "checkpoint_before": "2026-09-21",
+        "source_version": "9:120",
+        "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d"
+      },
+      "source_version": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 120,
+        "sourceSeqTxn": 120,
+        "sourceWriterTxn": 120,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 70,
+        "mvSeqTxn": 70,
+        "mvWriterTxn": 70,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:10:26.036083",
+        "refreshFinished": "2026-10-06 05:10:26.037402",
+        "refreshBaseTxn": 120,
+        "reportedBaseTxn": 120,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "verified_snapshot": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 120,
+        "sourceSeqTxn": 120,
+        "sourceWriterTxn": 120,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 70,
+        "mvSeqTxn": 70,
+        "mvWriterTxn": 70,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:10:26.036083",
+        "refreshFinished": "2026-10-06 05:10:26.037402",
+        "refreshBaseTxn": 120,
+        "reportedBaseTxn": 120,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "slices": []
+    },
+    {
+      "purpose": "empty",
+      "run_id": "d095-56a56eea-beb3-43e9-9388-93e157feac43",
+      "mode": "MATERIALIZE",
+      "window_from_inclusive": "2026-09-20",
+      "window_to_inclusive": "2026-09-20",
+      "logical_date": "2026-10-06",
+      "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d",
+      "source_raw_rows": 0,
+      "source_aggregate_rows": 0,
+      "verified_output_rows": 0,
+      "submitted_projection_rows": 0,
+      "native_refresh_submissions": 0,
+      "physical_mv_inserted_or_updated_rows": "unknown; actual expected keys and all field values are verified independently",
+      "state": "VERIFIED_EMPTY",
+      "error_code": null,
+      "frozen_parameters": {
+        "bootstrap_from": "2026-09-20",
+        "source_version": "9:120",
+        "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d"
+      },
+      "source_version": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 120,
+        "sourceSeqTxn": 120,
+        "sourceWriterTxn": 120,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 70,
+        "mvSeqTxn": 70,
+        "mvWriterTxn": 70,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:10:26.036083",
+        "refreshFinished": "2026-10-06 05:10:26.037402",
+        "refreshBaseTxn": 120,
+        "reportedBaseTxn": 120,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "verified_snapshot": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 120,
+        "sourceSeqTxn": 120,
+        "sourceWriterTxn": 120,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 70,
+        "mvSeqTxn": 70,
+        "mvWriterTxn": 70,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:10:26.036083",
+        "refreshFinished": "2026-10-06 05:10:26.037402",
+        "refreshBaseTxn": 120,
+        "reportedBaseTxn": 120,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "slices": [
+        {
+          "slice_id": "slice-682dad4f-d148-482c-b50f-ba715eca355c",
+          "state": "VERIFIED_EMPTY",
+          "verification": null,
+          "updated_at": "2026-10-06T05:10:46.582957Z"
+        }
+      ]
+    },
+    {
+      "purpose": "invalidRejected",
+      "run_id": "d095-d0059935-70cf-42c5-b1a4-a118a8afafdd",
+      "mode": "RECONCILE",
+      "window_from_inclusive": "2026-09-17",
+      "window_to_inclusive": "2026-09-18",
+      "logical_date": "2026-10-06",
+      "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d",
+      "source_raw_rows": 0,
+      "source_aggregate_rows": 0,
+      "verified_output_rows": 0,
+      "submitted_projection_rows": 0,
+      "native_refresh_submissions": 0,
+      "physical_mv_inserted_or_updated_rows": "unknown; actual expected keys and all field values are verified independently",
+      "state": "FAILED",
+      "error_code": "IllegalStateException",
+      "frozen_parameters": {
+        "bootstrap_from": "2026-09-17",
+        "checkpoint_before": "2026-09-21",
+        "source_version": "9:121",
+        "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d"
+      },
+      "source_version": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 121,
+        "sourceSeqTxn": 121,
+        "sourceWriterTxn": 121,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 71,
+        "mvSeqTxn": 71,
+        "mvWriterTxn": 71,
+        "mvSettled": true,
+        "valid": false,
+        "caughtUp": false,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:10:46.664467",
+        "refreshFinished": "2026-10-06 05:10:46.664467",
+        "refreshBaseTxn": 120,
+        "reportedBaseTxn": 121,
+        "sourcePartition": "MONTH",
+        "viewStatus": "invalid"
+      },
+      "verified_snapshot": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 121,
+        "sourceSeqTxn": 121,
+        "sourceWriterTxn": 121,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 71,
+        "mvSeqTxn": 71,
+        "mvWriterTxn": 71,
+        "mvSettled": true,
+        "valid": false,
+        "caughtUp": false,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:10:46.664467",
+        "refreshFinished": "2026-10-06 05:10:46.664467",
+        "refreshBaseTxn": 120,
+        "reportedBaseTxn": 121,
+        "sourcePartition": "MONTH",
+        "viewStatus": "invalid"
+      },
+      "slices": []
+    },
+    {
+      "purpose": "fullRepair",
+      "run_id": "d095-9fa46685-6f3f-4106-9077-9386cd6cdebc",
+      "mode": "MATERIALIZE",
+      "window_from_inclusive": "2026-09-17",
+      "window_to_inclusive": "2026-09-21",
+      "logical_date": "2026-10-06",
+      "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d",
+      "source_raw_rows": 16658,
+      "source_aggregate_rows": 3,
+      "verified_output_rows": 3,
+      "submitted_projection_rows": 3,
+      "native_refresh_submissions": 1,
+      "physical_mv_inserted_or_updated_rows": "unknown; actual expected keys and all field values are verified independently",
+      "state": "VERIFIED",
+      "error_code": null,
+      "frozen_parameters": {
+        "bootstrap_from": "2026-09-17",
+        "native_refresh": "FULL_ISOLATED",
+        "source_version": "9:122",
+        "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d"
+      },
+      "source_version": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 122,
+        "sourceSeqTxn": 122,
+        "sourceWriterTxn": 122,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 71,
+        "mvSeqTxn": 71,
+        "mvWriterTxn": 71,
+        "mvSettled": true,
+        "valid": false,
+        "caughtUp": false,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:10:46.664467",
+        "refreshFinished": "2026-10-06 05:10:46.664467",
+        "refreshBaseTxn": 120,
+        "reportedBaseTxn": 122,
+        "sourcePartition": "MONTH",
+        "viewStatus": "invalid"
+      },
+      "verified_snapshot": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 122,
+        "sourceSeqTxn": 122,
+        "sourceWriterTxn": 122,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 74,
+        "mvSeqTxn": 74,
+        "mvWriterTxn": 74,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:11:39.116462",
+        "refreshFinished": "2026-10-06 05:11:39.118417",
+        "refreshBaseTxn": 122,
+        "reportedBaseTxn": 122,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "slices": [
+        {
+          "slice_id": "slice-b1c57d4b-bba9-42c5-bd58-e1e2d92838aa",
+          "state": "VERIFIED",
+          "verification": {
+            "duplicateKeys": 0,
+            "writerStopped": false,
+            "passed": true,
+            "expectedRows": 3,
+            "matchedRows": 3,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-b1c57d4b-bba9-42c5-bd58-e1e2d92838aa:revision:5",
+            "sourceFingerprint": "bff8679fe195b00aedbdd4e9293c260c4f2c8f4119671c7f7f3607e572d46cc2",
+            "actualRows": 3,
+            "missingKeys": 0
+          },
+          "updated_at": "2026-10-06T05:11:39.329049Z"
+        }
+      ]
+    },
+    {
+      "purpose": "recovery",
+      "run_id": "d095-3598a9a7-b082-457b-b13f-c4396e1c7064",
+      "mode": "RECONCILE",
+      "window_from_inclusive": "2026-09-17",
+      "window_to_inclusive": "2026-09-21",
+      "logical_date": "2026-10-06",
+      "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d",
+      "source_raw_rows": 16658,
+      "source_aggregate_rows": 3,
+      "verified_output_rows": 3,
+      "submitted_projection_rows": 3,
+      "native_refresh_submissions": 1,
+      "physical_mv_inserted_or_updated_rows": "unknown; actual expected keys and all field values are verified independently",
+      "state": "VERIFIED",
+      "error_code": null,
+      "frozen_parameters": {
+        "bootstrap_from": "2026-09-17",
+        "checkpoint_before": "2026-09-21",
+        "source_version": "9:122",
+        "target_id": "questdb-58838080a90347a12be2c6cdc19552f9db077b023673161be2d72005e134d73d"
+      },
+      "source_version": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 122,
+        "sourceSeqTxn": 122,
+        "sourceWriterTxn": 122,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 74,
+        "mvSeqTxn": 74,
+        "mvWriterTxn": 74,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:11:39.116462",
+        "refreshFinished": "2026-10-06 05:11:39.118417",
+        "refreshBaseTxn": 122,
+        "reportedBaseTxn": 122,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "verified_snapshot": {
+        "sourceId": 9,
+        "sourceDirectory": "stk_factor~9",
+        "sourceTableTxn": 122,
+        "sourceSeqTxn": 122,
+        "sourceWriterTxn": 122,
+        "sourceSettled": true,
+        "mvId": 10,
+        "mvDirectory": "mv_market_breadth_daily_v1~10",
+        "mvTxn": 74,
+        "mvSeqTxn": 74,
+        "mvWriterTxn": 74,
+        "mvSettled": true,
+        "valid": true,
+        "caughtUp": true,
+        "definitionSha": "1b28e8b6fb71b04362fd5be56d9f8c976230f69918e120f8eb4367ee128449a7",
+        "refreshStarted": "2026-10-06 05:11:39.116462",
+        "refreshFinished": "2026-10-06 05:11:39.118417",
+        "refreshBaseTxn": 122,
+        "reportedBaseTxn": 122,
+        "sourcePartition": "MONTH",
+        "viewStatus": "valid"
+      },
+      "slices": [
+        {
+          "slice_id": "slice-9349741c-dd80-47cd-b188-d35e31959eb0",
+          "state": "VERIFIED",
+          "verification": {
+            "duplicateKeys": 0,
+            "writerStopped": false,
+            "passed": true,
+            "expectedRows": 3,
+            "matchedRows": 3,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-9349741c-dd80-47cd-b188-d35e31959eb0:revision:5",
+            "sourceFingerprint": "96e98c1099bf86521920a58d4ed089e00d5629a6e2764abd3e8d8b4b9c5b4b0b",
+            "actualRows": 3,
+            "missingKeys": 0
+          },
+          "updated_at": "2026-10-06T05:11:59.575110100Z"
+        }
+      ]
+    }
+  ],
+  "ledger": {
+    "path": "var\\d095-java-1203ad29-7f39-4792-bfa8-27e141a1a603.sqlite3",
+    "kind_state_counts": [
+      {
+        "kind": "ATTEMPT",
+        "state": "FAILED",
+        "count": 1
+      },
+      {
+        "kind": "ATTEMPT",
+        "state": "VERIFIED",
+        "count": 5
+      },
+      {
+        "kind": "ATTEMPT",
+        "state": "VERIFIED_EMPTY",
+        "count": 1
+      },
+      {
+        "kind": "RUN",
+        "state": "FAILED",
+        "count": 2
+      },
+      {
+        "kind": "RUN",
+        "state": "VERIFIED",
+        "count": 5
+      },
+      {
+        "kind": "RUN",
+        "state": "VERIFIED_EMPTY",
+        "count": 1
+      },
+      {
+        "kind": "SLICE",
+        "state": "VERIFIED",
+        "count": 5
+      },
+      {
+        "kind": "SLICE",
+        "state": "VERIFIED_EMPTY",
+        "count": 1
+      }
+    ],
+    "retained_locks_at_live_acceptance_end": 0,
+    "durable_intent": "RUN -> ATTEMPT -> SLICE submission intent precedes native side effects; unknown ACK and visibility timeout retain IN_DOUBT exclusion and cannot be resumed/replayed as fresh writes.",
+    "unknown_ack_test_scope": "Targeted pure fault tests, including FULL ACK loss/timeout and no-resubmission, pass; the live private FULL covers the acknowledged real-server repair/readback path.",
+    "reconcile": "Requires explicit stopped-writer proof, exact frozen target/source/calendar, stable complete actual parity and retained ownership before clearing uncertainty."
+  },
+  "management_catalog": {
+    "catalog_size": 38,
+    "job_id": "data.mv_market_breadth_daily_v1",
+    "version": 1,
+    "exact_dependency_versions": [
+      {
+        "job_id": "data.stk_factor",
+        "version": 2
+      },
+      {
+        "job_id": "data.exchange_calendar",
+        "version": 1
+      }
+    ],
+    "actual_application_startup": "passed; list-sync-jobs and Gradle BUILD SUCCESSFUL",
+    "evidence": "artifacts/java-migration/D095/commands/java-job-registration-20261006.json"
+  },
+  "diagnostic_runs_preserved": [
+    {
+      "run_id": "d095-452b0bba-078c-4c11-bd2e-30718d672c44",
+      "ledger": "var/d095-java-568c69ff-8453-459b-a0dd-4fc2aabb13c6.sqlite3",
+      "native_command": "legacy RANGE diagnostic; removed from the current materializer",
+      "persisted_state": "IN_DOUBT",
+      "frozen_source_version": "9:8",
+      "window": [
+        "2026-09-17",
+        "2026-09-18"
+      ],
+      "retained_lease": {
+        "id": "e3f45661-d460-49a9-b8cd-9ce6925204fe",
+        "scope": [
+          "2026-09-17",
+          "2026-09-18"
+        ],
+        "in_doubt": true
+      },
+      "writer_process": "old private PID39144 stopped; restarted private PID16980 belongs to later independent acceptance",
+      "source_after_reset": "Source version changed after private sample reset; new source data cannot release the old frozen run/lease.",
+      "resolution": "Not reconciled, not verified, not deleted. Its old narrow lease is retained as diagnostic evidence.",
+      "formal_mutated": false
+    }
+  ],
+  "finished_at": "2026-10-06T13:14:04.484555+08:00"
+}

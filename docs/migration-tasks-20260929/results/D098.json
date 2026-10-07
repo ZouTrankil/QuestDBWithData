@@ -1,0 +1,642 @@
+{
+  "task_id": "D098",
+  "dataset_id": "mv_retail_sentiment_daily_v1",
+  "definition_version": 1,
+  "implementation_status": "implemented",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "logical_date": "2026-10-06",
+  "finished_at": "2026-10-06T15:08:44.592579+08:00",
+  "blocker": null,
+  "job_id": "data.mv_retail_sentiment_daily_v1",
+  "job_version": 1,
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "contract": {
+    "definition": {
+      "datasetId": "mv_retail_sentiment_daily_v1",
+      "schemaVersion": 1,
+      "provider": "python.derived.market_barometer_views",
+      "owner": "retail_sentiment_daily_owner",
+      "objectName": "mv_retail_sentiment_daily_v1",
+      "objectKind": "MATERIALIZED_VIEW",
+      "columns": [
+        {
+          "sourceName": "l2_daily_features.ts",
+          "logicalName": "trade_date",
+          "storageName": "trade_date",
+          "storageType": "TIMESTAMP",
+          "nullable": false,
+          "meaning": "Calendar-day bucket identity; no event-time conversion",
+          "temporal": {
+            "kind": "BUSINESS_DATE",
+            "sourceFormat": "BASIC",
+            "zone": "calendar",
+            "precision": "DAY",
+            "meaning": "SAMPLE BY 1d ALIGN TO CALENDAR of l2_daily_features.ts; exact UTC midnight date carrier"
+          },
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:avg(gmm_retail_ratio)",
+          "logicalName": "avg_retail_ratio",
+          "storageName": "avg_retail_ratio",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Arithmetic mean of GMM retail volume ratio; dimensionless",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:avg(mean_retail_entropy)",
+          "logicalName": "avg_retail_entropy",
+          "storageName": "avg_retail_entropy",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Arithmetic mean of retail Shannon time entropy in bits",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:sum(retail_total_amount)/100000000.0",
+          "logicalName": "total_retail_amount_yi",
+          "storageName": "total_retail_amount_yi",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Retail turnover in yi yuan; source yuan divided by 100000000 exactly once",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:sum(retail_funds_net_inflow)/100000000.0",
+          "logicalName": "total_retail_net_inflow_yi",
+          "storageName": "total_retail_net_inflow_yi",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Signed retail net inflow in yi yuan; source yuan divided by 100000000",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:avg(mean_rel_aggro)",
+          "logicalName": "avg_rel_aggro",
+          "storageName": "avg_rel_aggro",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Arithmetic mean of relative buy/sell aggression; source metric scale retained",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:sum(q1_count)",
+          "logicalName": "total_q1",
+          "storageName": "total_q1",
+          "storageType": "LONG",
+          "nullable": true,
+          "meaning": "Sum of Q1 windows with net inflow and price rise; SQL SUM null stays null",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:sum(q3_count)",
+          "logicalName": "total_q3",
+          "storageName": "total_q3",
+          "storageType": "LONG",
+          "nullable": true,
+          "meaning": "Sum of Q3 windows with net outflow and price decline; SQL SUM null stays null",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:avg(wash_trade_ratio)",
+          "logicalName": "avg_wash_trade_ratio",
+          "storageName": "avg_wash_trade_ratio",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Arithmetic mean of wash trade ratio; dimensionless",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:sum(spoof_count)",
+          "logicalName": "total_spoof_count",
+          "storageName": "total_spoof_count",
+          "storageType": "LONG",
+          "nullable": true,
+          "meaning": "Sum of severe spoofing windows; SQL SUM null stays null",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:sum(fake_support_count+fake_pressure_count)",
+          "logicalName": "total_manipulation_count",
+          "storageName": "total_manipulation_count",
+          "storageType": "LONG",
+          "nullable": true,
+          "meaning": "Sum of rowwise fake support plus fake pressure counts; either null makes that row expression null",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:avg(mfi_score)",
+          "logicalName": "avg_mfi_score",
+          "storageName": "avg_mfi_score",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Arithmetic mean of main force intensity score; source score scale retained",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "derived:sum(main_net_inflow)/100000000.0",
+          "logicalName": "total_main_net_yi",
+          "storageName": "total_main_net_yi",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "Signed main net inflow in yi yuan; source yuan divided by 100000000",
+          "temporal": null,
+          "legacyNullSentinels": []
+        }
+      ],
+      "businessKey": [
+        "trade_date"
+      ],
+      "dedupKey": [],
+      "designatedTimestamp": "trade_date",
+      "partition": "MONTH",
+      "wal": true,
+      "capabilities": [
+        "READ"
+      ],
+      "dependencies": [
+        "l2_daily_features"
+      ],
+      "storageRationale": "One calendar-day aggregation is the natural business key. Native MV is MONTH/WAL without DEDUP or UPSERT keys. Direct row writes and replacements are forbidden; the canonical job provides bounded native MATERIALIZE. Read requires valid, caught-up refresh state and stable source and MV physical versions. Nullable SUM/AVG results are retained without zero filling or additional unit conversion."
+    },
+    "job": {
+      "jobId": "data.mv_retail_sentiment_daily_v1",
+      "version": 1,
+      "datasetId": "mv_retail_sentiment_daily_v1",
+      "datasetVersion": 1,
+      "owner": "retail_sentiment_daily_owner",
+      "supportedModes": [
+        "RECONCILE",
+        "INCREMENTAL",
+        "MATERIALIZE"
+      ],
+      "defaultMode": "INCREMENTAL",
+      "parameters": {
+        "native_refresh": {
+          "type": "STRING",
+          "required": false,
+          "maxLength": 32,
+          "maxItems": 1,
+          "choices": [
+            "FULL_ISOLATED",
+            "INCREMENTAL"
+          ]
+        },
+        "bootstrap_from": {
+          "type": "DATE",
+          "required": true,
+          "maxLength": 10,
+          "maxItems": 1,
+          "choices": []
+        },
+        "source_version": {
+          "type": "STRING",
+          "required": true,
+          "maxLength": 128,
+          "maxItems": 1,
+          "choices": []
+        },
+        "calendar_version": {
+          "type": "STRING",
+          "required": false,
+          "maxLength": 128,
+          "maxItems": 1,
+          "choices": []
+        },
+        "checkpoint_before": {
+          "type": "DATE",
+          "required": false,
+          "maxLength": 10,
+          "maxItems": 1,
+          "choices": []
+        },
+        "target_id": {
+          "type": "STRING",
+          "required": true,
+          "maxLength": 128,
+          "maxItems": 1,
+          "choices": []
+        }
+      },
+      "ratePolicyRef": "questdb.materialize",
+      "slicePolicyRef": "retail_sentiment_daily.range31",
+      "verificationPolicyRef": "questdb.full_key_values",
+      "retry": {
+        "maxAttempts": 1,
+        "backoff": "PT1S",
+        "maxElapsed": "PT1S"
+      },
+      "timeout": "PT5M",
+      "budget": {
+        "maxWindowDays": 31,
+        "maxSlices": 1,
+        "maxPages": 1,
+        "maxRows": 31,
+        "maxBatchBytes": 65536
+      },
+      "revisionDays": 3,
+      "dependencies": [
+        {
+          "jobId": "data.l2_daily_features",
+          "version": 1
+        },
+        {
+          "jobId": "data.exchange_calendar",
+          "version": 1
+        }
+      ],
+      "frequency": "MANUAL",
+      "zone": "Asia/Shanghai",
+      "enabled": true,
+      "dailyEligible": false
+    },
+    "kind": "MATERIALIZED_VIEW",
+    "natural_key": [
+      "trade_date"
+    ],
+    "upsert_keys": [],
+    "partition": "MONTH",
+    "wal": true,
+    "dedup": false,
+    "capabilities": [
+      "READ"
+    ],
+    "materialize_is_job_mode": true,
+    "columns": [
+      "trade_date",
+      "avg_retail_ratio",
+      "avg_retail_entropy",
+      "total_retail_amount_yi",
+      "total_retail_net_inflow_yi",
+      "avg_rel_aggro",
+      "total_q1",
+      "total_q3",
+      "avg_wash_trade_ratio",
+      "total_spoof_count",
+      "total_manipulation_count",
+      "avg_mfi_score",
+      "total_main_net_yi"
+    ],
+    "nullable_output_fields": 12,
+    "source": "l2_daily_features",
+    "source_partition": "DAY",
+    "source_upsert_keys": [
+      "ts",
+      "symbol"
+    ],
+    "time_semantics": "Exact UTC midnight calendar-day TIMESTAMP carrier; business LocalDate, no event-time shift",
+    "units": "Original source yuan divided by 100000000 once; entropy in bits; signed flows preserved; nullable SUM/AVG preserved; pairwise fake count SQL null semantics unchanged",
+    "long_safety": "Per-source nonnegative nullable LONG operands, Math.addExact rowwise manipulation pair and independent BigInteger daily sums; positive wraps cannot pass native parity alone",
+    "native_sql_sha256": "871f00b9d08484e8e651e56a546aa8391b925d91eb64fdc75987c41228f51664"
+  },
+  "acceptance": {
+    "scope": "isolated_actual_QuestDB_Java_native_owner_real_bounded_base_projection",
+    "questdb_version": "10.0.1",
+    "target_id": "questdb-1c7dde8d059c7b3807076edb2bd49a6b44a381e1a278a842a77bcceff3d332d0",
+    "private_target": {
+      "pid": 37904,
+      "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d098-isolated-questdb",
+      "address": "127.0.0.1",
+      "http_port": 19010,
+      "pg_port": 18822
+    },
+    "range_from_inclusive": "2026-09-17",
+    "range_to_exclusive": "2026-09-22",
+    "source_raw_rows": 23773,
+    "source_necessary_fields": 15,
+    "formal_source_physical_fields": 110,
+    "source_universe_ready_certified": false,
+    "initial_real_rows": 15828,
+    "new_real_rows": 7945,
+    "initial_source_field_comparisons": 237420,
+    "replay_source_field_comparisons": 237420,
+    "increment_source_field_comparisons": 119175,
+    "continuation_whole_source_field_comparisons": 356595,
+    "fixture_submitted_insert_rows": 39601,
+    "private_fixture_source_unique_keys": 23773,
+    "private_fault_update_keys": 1,
+    "private_fault_update_statements": 2,
+    "real_source_value_restored": true,
+    "java_direct_mv_row_writes": 0,
+    "native_projected_rows_not_physical_insert_count": 15,
+    "physical_inserted_rows": "unknown; native refresh and exact output readback recorded separately",
+    "physical_updated_rows": "unknown; replay and isolated native FULL proved actual key/value parity",
+    "phases": [
+      {
+        "phase": "first",
+        "result": {
+          "runId": "d098-5478d9f2-24b6-435a-b71b-fd272bc21206",
+          "state": "VERIFIED",
+          "sourceRows": 2,
+          "verifiedRows": 2,
+          "errorCode": null,
+          "reusedRows": 0
+        },
+        "source_raw_rows": 15828,
+        "canonical_aggregate_rows": 2,
+        "verified_output_rows": 2
+      },
+      {
+        "phase": "replay",
+        "result": {
+          "runId": "d098-5045c783-a963-4212-bc03-c327cd42dc4f",
+          "state": "VERIFIED",
+          "sourceRows": 2,
+          "verifiedRows": 2,
+          "errorCode": null,
+          "reusedRows": 0
+        },
+        "source_raw_rows": 15828,
+        "canonical_aggregate_rows": 2,
+        "verified_output_rows": 2
+      },
+      {
+        "phase": "preSubmissionCancelled",
+        "result": {
+          "runId": "d098-pre-submit-cancel-478b5dd2-3f8a-4994-ad7a-8eb1569ebffa",
+          "state": "CANCELLED",
+          "sourceRows": 0,
+          "verifiedRows": 0,
+          "errorCode": "CancellationException",
+          "reusedRows": 0
+        },
+        "source_raw_rows": 0,
+        "canonical_aggregate_rows": 0,
+        "verified_output_rows": 0
+      },
+      {
+        "phase": "resume",
+        "result": {
+          "runId": "d098-3c344f7b-557c-40a6-b1d2-72bcab1c9d9f",
+          "state": "VERIFIED",
+          "sourceRows": 2,
+          "verifiedRows": 2,
+          "errorCode": null,
+          "reusedRows": 0
+        },
+        "source_raw_rows": 15828,
+        "canonical_aggregate_rows": 2,
+        "verified_output_rows": 2
+      },
+      {
+        "phase": "incremental",
+        "result": {
+          "runId": "d098-eea0c8a9-0645-4acb-b9d9-2fa8d7e91bc6",
+          "state": "VERIFIED",
+          "sourceRows": 3,
+          "verifiedRows": 3,
+          "errorCode": null,
+          "reusedRows": 0
+        },
+        "source_raw_rows": 23773,
+        "canonical_aggregate_rows": 3,
+        "verified_output_rows": 3
+      },
+      {
+        "phase": "missingOpenDateRejected",
+        "result": {
+          "runId": "d098-8c2b0118-e6ef-48f2-810f-9e1fb603e2a0",
+          "state": "FAILED",
+          "sourceRows": 0,
+          "verifiedRows": 0,
+          "errorCode": "IllegalStateException",
+          "reusedRows": 0
+        },
+        "source_raw_rows": 7945,
+        "canonical_aggregate_rows": 0,
+        "verified_output_rows": 0
+      },
+      {
+        "phase": "empty",
+        "result": {
+          "runId": "d098-1dd57776-7af3-42b3-adbe-bebc3f8c4614",
+          "state": "VERIFIED_EMPTY",
+          "sourceRows": 0,
+          "verifiedRows": 0,
+          "errorCode": null,
+          "reusedRows": 0
+        },
+        "source_raw_rows": 0,
+        "canonical_aggregate_rows": 0,
+        "verified_output_rows": 0
+      },
+      {
+        "phase": "invalidRejected",
+        "result": {
+          "runId": "d098-08704d39-dd4d-44c0-ba1b-23848ec7d1c5",
+          "state": "FAILED",
+          "sourceRows": 0,
+          "verifiedRows": 0,
+          "errorCode": "IllegalStateException",
+          "reusedRows": 0
+        },
+        "source_raw_rows": 0,
+        "canonical_aggregate_rows": 0,
+        "verified_output_rows": 0
+      },
+      {
+        "phase": "fullRepair",
+        "result": {
+          "runId": "d098-7ffb07e4-4a9c-4075-8493-0d74fb009e7a",
+          "state": "VERIFIED",
+          "sourceRows": 3,
+          "verifiedRows": 3,
+          "errorCode": null,
+          "reusedRows": 0
+        },
+        "source_raw_rows": 23773,
+        "canonical_aggregate_rows": 3,
+        "verified_output_rows": 3
+      },
+      {
+        "phase": "recovery",
+        "result": {
+          "runId": "d098-3d2cfcee-103b-4a72-ae09-d99d776c8f3d",
+          "state": "VERIFIED",
+          "sourceRows": 3,
+          "verifiedRows": 3,
+          "errorCode": null,
+          "reusedRows": 0
+        },
+        "source_raw_rows": 23773,
+        "canonical_aggregate_rows": 3,
+        "verified_output_rows": 3
+      }
+    ],
+    "native_output_rows": 3,
+    "native_field_comparisons": 39,
+    "typed_read_field_comparisons": 39,
+    "typed_read_pages": 3,
+    "configured_read_group_matched": true,
+    "formal_invalid_mv_rejected": true,
+    "source_and_mv_unchanged_during_read": true,
+    "ledger": "var\\d098-java-309eeca7-687f-406c-9a1c-850681d6f248.sqlite3",
+    "final_snapshot": {
+      "sourceId": 9,
+      "sourceDirectory": "l2_daily_features~9",
+      "sourceTableTxn": 36,
+      "sourceSeqTxn": 36,
+      "sourceWriterTxn": 36,
+      "sourceSettled": true,
+      "mvId": 11,
+      "mvDirectory": "mv_retail_sentiment_daily_v1~11",
+      "mvTxn": 11,
+      "mvSeqTxn": 11,
+      "mvWriterTxn": 11,
+      "mvSettled": true,
+      "valid": true,
+      "caughtUp": true,
+      "definitionSha": "871f00b9d08484e8e651e56a546aa8391b925d91eb64fdc75987c41228f51664",
+      "refreshStarted": "2026-10-06 07:00:08.919357",
+      "refreshFinished": "2026-10-06 07:00:08.922411",
+      "refreshBaseTxn": 36,
+      "reportedBaseTxn": 36,
+      "sourcePartition": "DAY",
+      "viewStatus": "valid"
+    },
+    "formal_written_rows": 0
+  },
+  "incremental": {
+    "checkpoint_before": "2026-09-18",
+    "checkpoint_after": "2026-09-21",
+    "next_revision_from": "2026-09-19",
+    "revision_days": 3,
+    "checkpoint_basis": "Only contiguous VERIFIED/VERIFIED_EMPTY INCREMENTAL windows with identical physical target/bootstrap and current exact calendar_version. MATERIALIZE and RECONCILE cannot advance",
+    "calendar_change_behavior": "Invalidate old prefix; revalidate from bootstrap within31days, otherwise reject and require explicit bounded coverage handling",
+    "failed_native_preflight": {
+      "run_id": "d098-3ba8f639-5c8b-4d29-9b28-26e232228b2c",
+      "state": "FAILED",
+      "attempts": 0,
+      "slices": 0,
+      "retained_locks": 0,
+      "source_version": "9:34",
+      "error_code": "IllegalStateException",
+      "diagnostic": "MV physical txn advanced5→6 around preflight while base34 stayed stable; exact exception message was not retained, metadata race is an inference",
+      "recovery": "Actual CLI resume child d098-eea0c8a9-0645-4acb-b9d9-2fa8d7e91bc6 VERIFIED3 under identical frozen request; original failed run retained"
+    }
+  },
+  "failure_boundaries": {
+    "max_window_days": 31,
+    "max_source_rows": 200000,
+    "max_source_pages": 1,
+    "max_output_rows": 31,
+    "max_attempts": 1,
+    "job_timeout_seconds": 300,
+    "visibility_timeout_seconds": 180,
+    "native_conflict_scope": "allDates for this complete physical MV",
+    "ack_unknown": "Retain IN_DOUBT and whole MV exclusion; no blind refresh retry",
+    "source_mutation_admission": "Disabled by default; automatic private admission requires exact marker/config/loopback listeners/PID/data-root. Formal requires explicit target admission; FULL remains private only",
+    "ddl": "Missing-owner private MV DDL only after complete source types/key/DAY/WAL/DEDUP/settled stable physical preflight",
+    "direct_write_and_replacement_rejected": true,
+    "actual_pre_submit_cancel_and_original_resume": true,
+    "verified_resume_rejected": true,
+    "actual_missing_open_day_rejected": true,
+    "actual_sunday_empty_no_refresh": true,
+    "actual_private_update_invalidates_and_refuses_read": true,
+    "tracked_isolated_full_and_reconcile": true
+  },
+  "tests": {
+    "unique_java": {
+      "tests": 162,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "materialize_and_unit_invocation": {
+      "tests": 116,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "read_and_regression_invocation": {
+      "tests": 161,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "pure_python_script_guards": {
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "actual_db_operations": 0
+    },
+    "registered_datasets": 47,
+    "registered_jobs": 39
+  },
+  "formal_diagnostic": {
+    "source_id": 1665,
+    "source_directory": "l2_daily_features_recovery_20260911~1665",
+    "source_rows": 4924676,
+    "source_txn": 11266,
+    "mv_id": 1813,
+    "mv_rows": 886,
+    "mv_end": "2026-08-31",
+    "mv_status": "invalid",
+    "reason": "materialized view is ahead of base table and cannot be synchronized",
+    "refresh_base_table_txn": 10206,
+    "reported_base_table_txn": 11266,
+    "audited_source_days": "2026-09-17/18/21/22/23/24",
+    "source_window_rows": 47559,
+    "expected_daily_rows": 6,
+    "actual_mv_window_rows": 0,
+    "formal_mutated": false,
+    "formal_production_ready": false
+  },
+  "limitations": [
+    "Verification covers materialization relative to a stable bounded real base; the15-column fixture is not a110-column D086 provider ingest or full universe readiness certification.",
+    "Formal MV remains invalid and its full4.9m-row source was not refreshed or certified.",
+    "Live required projection had no nulls; nullable/all-null/count overflow cases are unit/mock coverage, not invented live rows.",
+    "Native INCREMENTAL may no-op when timer already caught up; complete real output parity remains mandatory.",
+    "Initial fixture preparation predates per-batch script marker hardening; its successful phase ACKs and full exact readback are preserved. The hardened script was checked by31 pure mock tests without replaying DB.",
+    "Failed initial test literals/calendar-start/VERIFIED-resume assumptions and actual failed increment preflight are preserved as separate artifacts; no failed or uncertain operation was silently claimed successful."
+  ],
+  "evidence": [
+    "artifacts/java-migration/D098/mapping-contract-20261006.json",
+    "artifacts/java-migration/D098/README.md",
+    "artifacts/java-migration/D098/commands/mv-readonly-audit-20261006.json",
+    "artifacts/java-migration/D098/commands/source-fixture-20261006.json",
+    "artifacts/java-migration/D098/commands/real-source-initial-20261006.json",
+    "artifacts/java-migration/D098/commands/real-source-increment-20261006.json",
+    "artifacts/java-migration/D098/commands/java-materialize-acceptance-20261006.json",
+    "artifacts/java-migration/D098/commands/java-cli-increment-resume-20261006.json",
+    "artifacts/java-migration/D098/commands/java-cli-increment-resume-20261006.log",
+    "artifacts/java-migration/D098/commands/java-mv-read-acceptance-20261006.json",
+    "artifacts/java-migration/D098/commands/strictread-group-request-D098.json",
+    "artifacts/java-migration/D098/commands/target-tests-20261006.json",
+    "artifacts/java-migration/D098/commands/java-materialize-and-unit-tests-20261006.log",
+    "artifacts/java-migration/D098/commands/java-read-and-regression-tests-20261006.log",
+    "artifacts/java-migration/D098/commands/python-script-guards-20261006.json",
+    "artifacts/java-migration/D098/commands/python-script-guards-20261006.log",
+    "artifacts/java-migration/D098/commands/java-dataset-registration-20261006.json",
+    "artifacts/java-migration/D098/commands/java-job-registration-20261006.json",
+    "artifacts/java-migration/D098/commands/calendar-preflight-failure-java-materialize-acceptance-20261006.json",
+    "artifacts/java-migration/D098/commands/verified-resume-rejected-java-materialize-acceptance-20261006.json",
+    "artifacts/java-migration/D098/commands/increment-preflight-failure-java-materialize-acceptance-20261006.json",
+    "artifacts/java-migration/D098/commands/unit-tests-initial-failures-20261006.log"
+  ],
+  "human_comparison_pending": [
+    "Review13columns/unit/null/count semantics and three real date bucket samples.",
+    "Approve or reject isolated verification separately from any formal recovery/cutover."
+  ],
+  "initial_calendar_failure_ledger_scope": {
+    "declared_path": "var/d098-java-9252488d-8fdc-4a3b-973e-1cf131da8ec7.sqlite3",
+    "file_created": false,
+    "canonical_run_created": false,
+    "reason": "calendar() rejected before install/plan/run and before first SyncRunLedger creation; constructor only stores Path"
+  }
+}

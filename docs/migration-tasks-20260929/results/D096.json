@@ -1,0 +1,208 @@
+{
+  "task_id": "D096",
+  "dataset_id": "v_market_breadth_daily",
+  "definition_version": 1,
+  "implementation_status": "implemented",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "logical_date": "2026-10-06",
+  "finished_at": "2026-10-06T13:28:49.848596+08:00",
+  "blocker": null,
+  "job_id": null,
+  "canonical_base_job": {
+    "job_id": "data.mv_market_breadth_daily_v1",
+    "version": 1,
+    "reason": "Ordinary view has no persistence or independent refresh; it reads the D095 MV.",
+    "status_resume_cancel": "D095 shared runner/ledger lifecycle; D096 read continuation uses a version-bound cursor."
+  },
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "contract": {
+    "kind": "VIEW",
+    "view_sql": "SELECT * FROM mv_market_breadth_daily_v1",
+    "business_key": [
+      "trade_date"
+    ],
+    "physical_partition_wal_dedup": "N/A: ordinary view; no physical write or UPSERT key",
+    "projected_date": "trade_date TIMESTAMP carrying a calendar date at UTC midnight",
+    "capabilities": [
+      "READ"
+    ],
+    "dependencies": [
+      "mv_market_breadth_daily_v1"
+    ],
+    "columns": {
+      "trade_date": "TIMESTAMP",
+      "stock_count": "LONG",
+      "up_count": "LONG",
+      "down_count": "LONG",
+      "flat_count": "LONG",
+      "avg_pct_change": "DOUBLE",
+      "total_amount_yi": "DOUBLE"
+    },
+    "nullability": "Required date and four LONG counts; avg_pct_change and total_amount_yi preserve null.",
+    "units": "avg_pct_change remains percentage points; total_amount_yi already equals source amount/100000, no second conversion.",
+    "ddl": "Existing formal alias retained and strictly checked; only missing private fixture alias created. No formal CREATE/ALTER/REPLACE."
+  },
+  "source_owner": {
+    "native_product": "market_breadth_daily; stk_factor -> mv_market_breadth_daily_v1 -> v_market_breadth_daily",
+    "python_evidence": [
+      "src/quant_platform/data/adapters/materializers/registry.py:31",
+      "src/quant_platform/data/adapters/questdb/derived.py:400",
+      "src/quant_platform/data/adapters/questdb/market_barometer.py:60",
+      "src/quant_platform/data/adapters/questdb/market_barometer_views.py:7",
+      "src/quant_platform/data/application/market_barometer.py:37",
+      "src/quant_platform/api/services/market_ui.py:121"
+    ],
+    "call_chain": "CLI lifecycle installs/validates MV and activates alias; native repository branch SELECTs alias; application and market_ui consume breadth history and KPI.",
+    "python_native_read_limitation": "Native SELECT branch identifies alias by MV name in SQL and does not independently refuse an invalid MV. Java checks the exact alias and native contract plus freshness.",
+    "cache_fallback": "Python cache applies to non-native path; no Java cache publication in D096."
+  },
+  "acceptance": {
+    "scope": "isolated_actual_QuestDB_real_source",
+    "questdb_version": "10.0.1",
+    "target_id": "private-127.0.0.1:19000 / PG18812",
+    "attestation": {
+      "pid": 16980,
+      "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d095-isolated-questdb",
+      "http_port": 19000,
+      "pg_port": 18812,
+      "address": "127.0.0.1"
+    },
+    "from_inclusive": "2026-09-17",
+    "to_exclusive": "2026-09-22",
+    "source_raw_rows": 16658,
+    "source_evidence": "D095 final real-source acceptance; complete 11105+5553 rows, not synthetic rows.",
+    "source_aggregate_rows": 3,
+    "normalized_rows": 3,
+    "rejected_rows": 0,
+    "write_submitted_rows": 0,
+    "inserted_rows": 0,
+    "updated_rows": 0,
+    "actual_alias_rows": [
+      {
+        "trade_date": "2026-09-17",
+        "stock_count": 5552,
+        "up_count": 2575,
+        "down_count": 2820,
+        "flat_count": 157,
+        "avg_pct_change": 0.12166565201729095,
+        "total_amount_yi": 18343.331240500032
+      },
+      {
+        "trade_date": "2026-09-18",
+        "stock_count": 5553,
+        "up_count": 4234,
+        "down_count": 1152,
+        "flat_count": 167,
+        "avg_pct_change": 1.5667630109850548,
+        "total_amount_yi": 20929.055246700038
+      },
+      {
+        "trade_date": "2026-09-21",
+        "stock_count": 5553,
+        "up_count": 4536,
+        "down_count": 936,
+        "flat_count": 81,
+        "avg_pct_change": 1.918254601116519,
+        "total_amount_yi": 20481.336778100012
+      }
+    ],
+    "java_field_comparisons": 21,
+    "python_three_way_comparisons": {
+      "alias_vs_mv": {
+        "passed": true,
+        "rows": 3,
+        "fields": [
+          "trade_date",
+          "stock_count",
+          "up_count",
+          "down_count",
+          "flat_count",
+          "avg_pct_change",
+          "total_amount_yi"
+        ],
+        "field_comparisons": 21
+      },
+      "alias_vs_direct_base": {
+        "passed": true,
+        "rows": 3,
+        "fields": [
+          "trade_date",
+          "stock_count",
+          "up_count",
+          "down_count",
+          "flat_count",
+          "avg_pct_change",
+          "total_amount_yi"
+        ],
+        "field_comparisons": 21
+      },
+      "mv_vs_direct_base": {
+        "passed": true,
+        "rows": 3,
+        "fields": [
+          "trade_date",
+          "stock_count",
+          "up_count",
+          "down_count",
+          "flat_count",
+          "avg_pct_change",
+          "total_amount_yi"
+        ],
+        "field_comparisons": 21
+      }
+    },
+    "java_pages": 3,
+    "configured_read_group_matched": true,
+    "source_version": "view-dir:v_market_breadth_daily~12:view-sql:ef2d5b111665ca56541a75ef344508595c8e2c50ee8609ed89c8f183ca6375e6:view-status-updated:2026-10-06 05:21:00.364325:dependency:mv_market_breadth_daily_v1:base-id:9:base-txn:122:base-seq-txn:122:refresh-txn:122:mv-id:10:mv-txn:74:mv-seq-txn:74",
+    "source_and_mv_stable_before_after": true,
+    "direct_write": "Rejected by READ-only DatasetDefinition; no view DML.",
+    "checkpoint_before_after": "N/A for ordinary view; no new checkpoint or materialization run. D095 existing verified coverage remains separate.",
+    "read_resume": "nextCursor contains full date key, query fingerprint and alias+MV version; drift rejects continuation.",
+    "fixture_alias_created": true
+  },
+  "formal_readonly": {
+    "alias_status": "valid",
+    "mv_status": "invalid",
+    "refresh_base_txn": 12,
+    "base_txn": 14,
+    "actual_alias_rows_in_range": 2,
+    "direct_base_rows_in_range": 3,
+    "java_read_rejected": true,
+    "read_group_state": "FAILED, no page; not successful empty",
+    "written_rows": 0,
+    "production_ready": false
+  },
+  "fault_checks": {
+    "alias_contract": "Fixed alias policy; wrong/missing dependency, invalid alias, wrong SQL, SQL/directory/status drift rejected.",
+    "native_contract": "D095 base must be stk_factor and aggregate SQL must match the frozen native contract; wrong base or aggregation rejected at first read.",
+    "mv_state": "Invalid/lagging/unsettled/suspended MV rejected; base/MV rebuild or physical change invalidates cursor.",
+    "typed_mapping": "Seven fields, required values, UTC midnight, null aggregates, counts, overflow and nonfinite values tested.",
+    "read_group": "Actual configured typed binding and strict JSON request parsing verified; cancellation refuses reads.",
+    "legacy_views": "StockBasicDataset.LATEST ordinary-table dependency retains original reader behavior.",
+    "network_retry": "Bounded SELECT/JDBC timeout; no write retry or unknown ACK in a VIEW-only read."
+  },
+  "java_tests": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "coordinator_gate": "accepted_for_serial_progress",
+  "evidence": [
+    "artifacts/java-migration/D096/coordinator-review-20261006.json",
+    "artifacts/java-migration/D096/commands/alias-audit-20261006.json",
+    "artifacts/java-migration/D096/commands/java-alias-read-acceptance-20261006.json",
+    "artifacts/java-migration/D096/commands/read-group-request.json",
+    "artifacts/java-migration/D096/commands/target-tests-20261006.json",
+    "artifacts/java-migration/D096/commands/java-tests-20261006.log",
+    "artifacts/java-migration/D096/commands/java-dataset-registration-20261006.json",
+    "tools/audit_d096_breadth_alias.py"
+  ],
+  "known_limitations": [
+    "Formal MV remains invalid and stale; isolated acceptance does not repair formal production data.",
+    "D096 owns typed reads and resumes using a guarded cursor; native refresh uses the canonical D095 job, without a second writer.",
+    "Actual live samples contain non-null measures; null and malformed carriers are implementation fault tests."
+  ]
+}

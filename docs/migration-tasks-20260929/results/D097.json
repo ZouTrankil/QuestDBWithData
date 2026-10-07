@@ -1,0 +1,380 @@
+{
+  "task_id": "D097",
+  "dataset_id": "market_breadth_daily_cache",
+  "definition_version": 1,
+  "implementation_status": "retained_compatibility",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "logical_date": "2026-10-06",
+  "finished_at": "2026-10-06T13:58:55.815149+08:00",
+  "blocker": null,
+  "job_id": null,
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData",
+  "disposition": {
+    "decision": "retained_compatibility",
+    "basis": "Native public alias bypasses the read-through cache. Python owns legacy cache/receipt publication; compatibility and rollback callers remain. Common contract explicitly permits an evidenced retained_compatibility decision.",
+    "java_surface": "Eight-field typed historical READ, complete versioned key, explicit bounded range/date queries and configured ReadGroup.",
+    "java_writer_or_sync_job": null,
+    "publisher": "original Python MarketBarometerReadThroughCache._publish",
+    "write_rejection": "READ-only DatasetDefinition rejects WRITE and WAL_REPLACE. No Java publisher or source-ingest checkpoint is introduced.",
+    "raw_read_semantics": "Historical raw values only. No automatic latest generation, coverage certification, cache-hit or current-source freshness claim."
+  },
+  "contract": {
+    "kind": "TABLE",
+    "columns": {
+      "trade_date": "TIMESTAMP",
+      "stock_count": "LONG",
+      "up_count": "LONG",
+      "down_count": "LONG",
+      "flat_count": "LONG",
+      "avg_pct_change": "DOUBLE",
+      "total_amount_yi": "DOUBLE",
+      "source_version": "SYMBOL"
+    },
+    "business_key": [
+      "trade_date",
+      "source_version"
+    ],
+    "dedup_key": [
+      "trade_date",
+      "source_version"
+    ],
+    "designated_timestamp": "trade_date",
+    "partition": "MONTH",
+    "wal": true,
+    "dedup": true,
+    "capabilities": [
+      "READ"
+    ],
+    "source_version": "Complete lowercase SHA-256 of original VIEW_SELECTS SQL, source table id and relevant partition metadata; not a physical snapshot token.",
+    "page_version": "Cache object name/id/directoryName/table_txn/WAL sequencerTxn pinned before/after each read and in nextCursor; physical and WAL counters are independently bound.",
+    "time_semantics": "Calendar date in an exact UTC-midnight TIMESTAMP carrier; not an event-time conversion.",
+    "nullability": "Required date/four LONG counts/source_version; avg_pct_change and total_amount_yi preserve null.",
+    "units": "Average percentage points and already converted yi yuan; no repeated amount/100000 conversion.",
+    "ddl": "Existing formal schema checked with SELECT only. Missing original cache/coverage model tables created only in attested private instance; no formal DDL."
+  },
+  "python_owner": {
+    "class": "MarketBarometerReadThroughCache",
+    "owner_file": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_cache.py",
+    "owner_file_sha256": "5971761ed070f7b178892c90a9114b0609a3dcb2cbf8767867432279371b5bee",
+    "call_chain": [
+      "market_barometer.py native alias branch bypasses cache",
+      "nonnative read/read_latest -> cache.read -> _load_cached validates complete generation and content receipt",
+      "read misses -> original bounded VIEW_SELECTS -> frozen partition _versions -> _publish cache -> WAL/content check -> coverage"
+    ],
+    "original_record_digest": "Seven business values serialize with original _record_digest; source_version is separately validated as the complete receipt/cache generation key.",
+    "source_tables": [
+      "stk_factor"
+    ],
+    "related_receipt": "D094 market_barometer_cache_coverage; preserved Python owner"
+  },
+  "acceptance": {
+    "scope": "isolated_actual_QuestDB_original_Python_owner_real_source_compatibility",
+    "questdb_version": "10.0.1",
+    "target_id": "private-127.0.0.1:19000/18812",
+    "attestation": {
+      "pid": 16980,
+      "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d095-isolated-questdb",
+      "http_port": 19000,
+      "pg_port": 18812,
+      "address": "127.0.0.1"
+    },
+    "range_from_inclusive": "2026-09-17",
+    "range_to_exclusive": "2026-09-22",
+    "source_raw_rows": 16658,
+    "normalized_aggregate_rows": 3,
+    "rejected_rows": 0,
+    "cache_submitted_rows": 5,
+    "coverage_submitted_rows": 5,
+    "physical_inserted_rows": "unknown; newly created table and actual unique key counts are recorded",
+    "physical_updated_rows": "unknown; identical key/value replay verified",
+    "java_written_rows": 0,
+    "canonical_java_job_checkpoint": "N/A retained Python publisher; typed read resume is a snapshot-bound cursor",
+    "phases": [
+      {
+        "phase": "first",
+        "submitted_cache_rows": 2,
+        "submitted_coverage_rows": 2,
+        "verified_selected_keys": 2,
+        "actual_cache_rows": 2,
+        "cache_field_comparisons": 16,
+        "receipt_field_comparisons": 10,
+        "cache_snapshot": {
+          "physical": {
+            "id": 13,
+            "directoryName": "market_breadth_daily_cache~13",
+            "table_txn": 1,
+            "table_row_count": 2,
+            "partitionBy": "MONTH",
+            "walEnabled": true,
+            "dedup": true,
+            "designatedTimestamp": "trade_date",
+            "table_suspended": false,
+            "wal_pending_row_count": 0
+          },
+          "wal": {
+            "sequencerTxn": 1,
+            "writerTxn": 1,
+            "bufferedTxnSize": 0,
+            "suspended": false
+          },
+          "settled": true
+        }
+      },
+      {
+        "phase": "replay",
+        "submitted_cache_rows": 2,
+        "submitted_coverage_rows": 2,
+        "verified_selected_keys": 2,
+        "actual_cache_rows": 2,
+        "cache_field_comparisons": 16,
+        "receipt_field_comparisons": 10,
+        "cache_snapshot": {
+          "physical": {
+            "id": 13,
+            "directoryName": "market_breadth_daily_cache~13",
+            "table_txn": 2,
+            "table_row_count": 2,
+            "partitionBy": "MONTH",
+            "walEnabled": true,
+            "dedup": true,
+            "designatedTimestamp": "trade_date",
+            "table_suspended": false,
+            "wal_pending_row_count": 0
+          },
+          "wal": {
+            "sequencerTxn": 2,
+            "writerTxn": 2,
+            "bufferedTxnSize": 0,
+            "suspended": false
+          },
+          "settled": true
+        }
+      },
+      {
+        "phase": "increment",
+        "submitted_cache_rows": 1,
+        "submitted_coverage_rows": 1,
+        "verified_selected_keys": 3,
+        "actual_cache_rows": 3,
+        "cache_field_comparisons": 24,
+        "receipt_field_comparisons": 15,
+        "cache_snapshot": {
+          "physical": {
+            "id": 13,
+            "directoryName": "market_breadth_daily_cache~13",
+            "table_txn": 3,
+            "table_row_count": 3,
+            "partitionBy": "MONTH",
+            "walEnabled": true,
+            "dedup": true,
+            "designatedTimestamp": "trade_date",
+            "table_suspended": false,
+            "wal_pending_row_count": 0
+          },
+          "wal": {
+            "sequencerTxn": 3,
+            "writerTxn": 3,
+            "bufferedTxnSize": 0,
+            "suspended": false
+          },
+          "settled": true
+        }
+      }
+    ],
+    "python_phase_cache_field_comparisons": 56,
+    "python_phase_receipt_field_comparisons": 35,
+    "actual_cache_rows": [
+      {
+        "trade_date": "2026-09-17T00:00:00.000000Z",
+        "stock_count": 5552,
+        "up_count": 2575,
+        "down_count": 2820,
+        "flat_count": 157,
+        "avg_pct_change": 0.12166565201729095,
+        "total_amount_yi": 18343.331240500032,
+        "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+      },
+      {
+        "trade_date": "2026-09-18T00:00:00.000000Z",
+        "stock_count": 5553,
+        "up_count": 4234,
+        "down_count": 1152,
+        "flat_count": 167,
+        "avg_pct_change": 1.5667630109850548,
+        "total_amount_yi": 20929.055246700038,
+        "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+      },
+      {
+        "trade_date": "2026-09-21T00:00:00.000000Z",
+        "stock_count": 5553,
+        "up_count": 4536,
+        "down_count": 936,
+        "flat_count": 81,
+        "avg_pct_change": 1.918254601116519,
+        "total_amount_yi": 20481.336778100012,
+        "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+      }
+    ],
+    "java_field_comparisons": 48,
+    "java_pages": 3,
+    "java_double_bit_exact_comparisons": 12,
+    "java_double_tolerance_comparisons": 0,
+    "jdbc_storage_double_bit_comparisons": 12,
+    "actual_old_cursor_rejected": true,
+    "old_cursor_version": "table:market_breadth_daily_cache:id:13:directory:market_breadth_daily_cache~13:txn:1:wal-seq:1",
+    "current_page_version": "table:market_breadth_daily_cache:id:13:directory:market_breadth_daily_cache~13:txn:3:wal-seq:3",
+    "configured_read_group_matched": true,
+    "source_mv_alias_unchanged": true,
+    "cache_receipt_snapshot_stable_after_publication": true,
+    "writer_transport": "Original owner business logic/model normalization with allowlisted private HTTP ILP client; production QuestDBWriteCoordinator is not exercised.",
+    "source_provenance": "D095 bounded real stk_factor fixture, 11105+5553 raw rows previously compared across all four source fields; D097 neither changes source nor installs/replaces native aliases."
+  },
+  "formal_readonly": {
+    "status": "FAILED_STORED_RECEIPT_INTEGRITY",
+    "sampled_generations": 5,
+    "matching_generations": 3,
+    "failed_generations": 2,
+    "reread_field_comparisons": 40,
+    "cache_and_coverage_and_source_stable": true,
+    "table_states": {
+      "market_breadth_daily_cache": {
+        "physical": {
+          "id": 1799,
+          "directoryName": "market_breadth_daily_cache~1799",
+          "table_txn": 7,
+          "table_row_count": 922,
+          "table_min_timestamp": "2025-05-06T00:00:00.000000Z",
+          "table_max_timestamp": "2026-09-18T00:00:00.000000Z",
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 7,
+          "writerTxn": 7,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "market_barometer_cache_coverage": {
+        "physical": {
+          "id": 1802,
+          "directoryName": "market_barometer_cache_coverage~1802",
+          "table_txn": 13,
+          "table_row_count": 2466,
+          "table_min_timestamp": "2025-05-06T00:00:00.000000Z",
+          "table_max_timestamp": "2026-09-18T00:00:00.000000Z",
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 13,
+          "writerTxn": 13,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "stk_factor": {
+        "physical": {
+          "id": 1722,
+          "directoryName": "stk_factor~1722",
+          "table_txn": 14,
+          "table_row_count": 10265031,
+          "table_min_timestamp": "2010-01-29T00:00:00.000000Z",
+          "table_max_timestamp": "2026-09-24T00:00:00.000000Z",
+          "partitionBy": "YEAR",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 14,
+          "writerTxn": 14,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      }
+    },
+    "written_rows": 0,
+    "failures": [
+      {
+        "trade_date": "2026-09-17T00:00:00.000000Z",
+        "source_version": "fea0009c606c0c9b40d1de709b930015d0ca4f28ca5698d74bb9f11fc489b5c6",
+        "receipt_digest": "d25bd1563f9170a4392bbcf5129476781dba05ef7b28650f385b93550d6ba661",
+        "actual_cache_digest": "a7143162978e2786c112973f3972999a48d1834b4e6c0b7438a26c44466909d0",
+        "reason": "Python original seven-field _record_digest differs from stored receipt"
+      },
+      {
+        "trade_date": "2026-09-17T00:00:00.000000Z",
+        "source_version": "d986d0bb8380856a8adaed1d9c02eac9825e1bdaed5a3287262b8e37863171bb",
+        "receipt_digest": "d25bd1563f9170a4392bbcf5129476781dba05ef7b28650f385b93550d6ba661",
+        "actual_cache_digest": "a7143162978e2786c112973f3972999a48d1834b4e6c0b7438a26c44466909d0",
+        "reason": "Python original seven-field _record_digest differs from stored receipt"
+      }
+    ],
+    "protocol_diagnostic": "Independent HTTP and PG numeric values, original serialization and digests are identical; receipt mismatch is real, not a timestamp/dtype/transport representation artifact.",
+    "current_source_versions": {
+      "20260918": "7ebe1e10d2a8f7af49df2c798e2c5bb5516d538d2045b05d72d4f060f221aa99",
+      "20260917": "7ebe1e10d2a8f7af49df2c798e2c5bb5516d538d2045b05d72d4f060f221aa99"
+    },
+    "current_cache_hit_certified": false,
+    "production_latest_certified": false,
+    "repair_performed": false
+  },
+  "fault_checks": {
+    "business_version": "Key/repository/general query/ReadGroup/cursor reject malformed lowercase64SHA before DB; wrong data/date types, null required fields, overflow and nonfinite numbers fail.",
+    "physical_snapshot": "Missing/unsettled/suspended table/WAL, table identity or directory rebuild, physical or independent WAL counter change, and query drift reject continuation; unrelated TABLE behavior retained.",
+    "live_cursor": "Real original publisher phases changed cache txn/WAL 1 -> 2 -> 3; old phase-one token rejected under the same actual query.",
+    "read_group": "Actual configured typed binding and strict request parser verified; cancellation returns no page; bad schema/unknown property/source version rejected before JDBC.",
+    "transport": "Private ownership and model/batch allowlists, one explicit flush, no automatic retry, UNKNOWN ACK saved before transport and close(flush=false) tested.",
+    "preflight_failure": "Original multiline SELECT recognition initially failed before any submission/DDL. Failure preserved; first-keyword SELECT guard corrected and original publisher rerun succeeded.",
+    "normal_empty": "No invented zero cache row; only actual source days published. Nullable/invalid field behavior covered by implementation tests."
+  },
+  "java_tests": {
+    "tests": 63,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "python_script_tests": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "scope": "Pure mocked failure boundaries; no actual DB/CIM/HTTP"
+  },
+  "coordinator_gate": "accepted_for_serial_progress",
+  "evidence": [
+    "artifacts/java-migration/D097/coordinator-review-20261006.json",
+    "artifacts/java-migration/D097/commands/cache-isolated-acceptance-20261006.json",
+    "artifacts/java-migration/D097/commands/java-cache-read-acceptance-20261006.json",
+    "artifacts/java-migration/D097/commands/read-group-request.json",
+    "artifacts/java-migration/D097/commands/cache-readonly-audit-20261006.json",
+    "artifacts/java-migration/D097/commands/cache-digest-diagnostic-20261006.json",
+    "artifacts/java-migration/D097/commands/cache-isolated-preflight-failure-select-20261006.json",
+    "artifacts/java-migration/D097/commands/target-tests-20261006.json",
+    "artifacts/java-migration/D097/commands/java-tests-20261006.log",
+    "artifacts/java-migration/D097/commands/python-script-guards-20261006.log",
+    "artifacts/java-migration/D097/commands/java-dataset-registration-20261006.json"
+  ],
+  "known_limitations": [
+    "Two sampled formal historical receipts fail original content digest; their data and evidence remain unchanged. Isolated compatibility acceptance does not repair or certify formal generations.",
+    "No new Java cache producer/sync job is part of this retained_compatibility decision. Original Python publisher and its receipt lifecycle remain necessary for nonnative callers.",
+    "Source revisions and concurrent producer races were not exercised with real source changes; identity/physical cursor drift and malformed/revised generation keys are covered by tests.",
+    "Actual sample measures are non-null; null/invalid aggregate carriers are implementation fault tests."
+  ]
+}

@@ -1,0 +1,695 @@
+{
+  "task_id": "D103",
+  "dataset_id": "equity_style_monthly",
+  "definition_version": 1,
+  "implementation_status": "implemented",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "coordinator_gate": "accepted_for_serial_progress",
+  "next_task_admitted": true,
+  "next_task": "D104",
+  "blocker": null,
+  "updated_at": "2026-10-06T15:59:10.944842+00:00",
+  "python_project": "D:/work/fund_2/back-monitor",
+  "java_project": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData",
+  "contract": {
+    "columns": [
+      {
+        "name": "month",
+        "java": "YearMonth",
+        "storage": "TIMESTAMP",
+        "nullable": false,
+        "meaning": "Monthly period identity",
+        "ordinal": 1,
+        "java_accessor": "month",
+        "logical_name": "month",
+        "storage_name": "month",
+        "storage_carrier": "LocalDate first day of YearMonth at exact UTC midnight, TIMESTAMP micros",
+        "json": "YYYY-MM domain; YYYY-MM-01 storage values"
+      },
+      {
+        "name": "hs300_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000300.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 2,
+        "java_accessor": "hs300Ret1m",
+        "logical_name": "hs300_ret_1m",
+        "storage_name": "hs300_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "zz500_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000905.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 3,
+        "java_accessor": "zz500Ret1m",
+        "logical_name": "zz500_ret_1m",
+        "storage_name": "zz500_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "all_a_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000985.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 4,
+        "java_accessor": "allARet1m",
+        "logical_name": "all_a_ret_1m",
+        "storage_name": "all_a_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "cs1000_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000852.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 5,
+        "java_accessor": "cs1000Ret1m",
+        "logical_name": "cs1000_ret_1m",
+        "storage_name": "cs1000_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "small_large_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "cs1000_ret_1m - hs300_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:84",
+        "ordinal": 6,
+        "java_accessor": "smallLargeRet1m",
+        "logical_name": "small_large_ret_1m",
+        "storage_name": "small_large_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "mid_large_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "zz500_ret_1m - hs300_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:85",
+        "ordinal": 7,
+        "java_accessor": "midLargeRet1m",
+        "logical_name": "mid_large_ret_1m",
+        "storage_name": "mid_large_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "growth_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000921.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 8,
+        "java_accessor": "growthRet1m",
+        "logical_name": "growth_ret_1m",
+        "storage_name": "growth_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "value_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000920.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 9,
+        "java_accessor": "valueRet1m",
+        "logical_name": "value_ret_1m",
+        "storage_name": "value_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "growth_value_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "growth_ret_1m - value_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:86",
+        "ordinal": 10,
+        "java_accessor": "growthValueRet1m",
+        "logical_name": "growth_value_ret_1m",
+        "storage_name": "growth_value_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "energy_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000986.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 11,
+        "java_accessor": "energyRet1m",
+        "logical_name": "energy_ret_1m",
+        "storage_name": "energy_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "materials_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000987.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 12,
+        "java_accessor": "materialsRet1m",
+        "logical_name": "materials_ret_1m",
+        "storage_name": "materials_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "industrials_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000988.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 13,
+        "java_accessor": "industrialsRet1m",
+        "logical_name": "industrials_ret_1m",
+        "storage_name": "industrials_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "consumer_discretionary_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000989.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 14,
+        "java_accessor": "consumerDiscretionaryRet1m",
+        "logical_name": "consumer_discretionary_ret_1m",
+        "storage_name": "consumer_discretionary_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "consumer_staples_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000990.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 15,
+        "java_accessor": "consumerStaplesRet1m",
+        "logical_name": "consumer_staples_ret_1m",
+        "storage_name": "consumer_staples_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "healthcare_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000991.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 16,
+        "java_accessor": "healthcareRet1m",
+        "logical_name": "healthcare_ret_1m",
+        "storage_name": "healthcare_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "financials_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000992.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 17,
+        "java_accessor": "financialsRet1m",
+        "logical_name": "financials_ret_1m",
+        "storage_name": "financials_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "it_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000993.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 18,
+        "java_accessor": "itRet1m",
+        "logical_name": "it_ret_1m",
+        "storage_name": "it_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "telecom_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000994.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 19,
+        "java_accessor": "telecomRet1m",
+        "logical_name": "telecom_ret_1m",
+        "storage_name": "telecom_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "utilities_ret_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "unchanged stored index_monthly.pct_chg units",
+        "source_code": "000995.SH",
+        "formula": "last non-null index_monthly.pct_chg within month",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+        "ordinal": 20,
+        "java_accessor": "utilitiesRet1m",
+        "logical_name": "utilities_ret_1m",
+        "storage_name": "utilities_ret_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "energy_vs_all_a_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "energy_ret_1m - all_a_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+        "ordinal": 21,
+        "java_accessor": "energyVsAllA1m",
+        "logical_name": "energy_vs_all_a_1m",
+        "storage_name": "energy_vs_all_a_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "materials_vs_all_a_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "materials_ret_1m - all_a_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+        "ordinal": 22,
+        "java_accessor": "materialsVsAllA1m",
+        "logical_name": "materials_vs_all_a_1m",
+        "storage_name": "materials_vs_all_a_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "industrials_vs_all_a_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "industrials_ret_1m - all_a_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+        "ordinal": 23,
+        "java_accessor": "industrialsVsAllA1m",
+        "logical_name": "industrials_vs_all_a_1m",
+        "storage_name": "industrials_vs_all_a_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "consumer_discretionary_vs_all_a_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "consumer_discretionary_ret_1m - all_a_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+        "ordinal": 24,
+        "java_accessor": "consumerDiscretionaryVsAllA1m",
+        "logical_name": "consumer_discretionary_vs_all_a_1m",
+        "storage_name": "consumer_discretionary_vs_all_a_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "consumer_staples_vs_all_a_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "consumer_staples_ret_1m - all_a_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+        "ordinal": 25,
+        "java_accessor": "consumerStaplesVsAllA1m",
+        "logical_name": "consumer_staples_vs_all_a_1m",
+        "storage_name": "consumer_staples_vs_all_a_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "healthcare_vs_all_a_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "healthcare_ret_1m - all_a_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+        "ordinal": 26,
+        "java_accessor": "healthcareVsAllA1m",
+        "logical_name": "healthcare_vs_all_a_1m",
+        "storage_name": "healthcare_vs_all_a_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "financials_vs_all_a_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "financials_ret_1m - all_a_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+        "ordinal": 27,
+        "java_accessor": "financialsVsAllA1m",
+        "logical_name": "financials_vs_all_a_1m",
+        "storage_name": "financials_vs_all_a_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "it_vs_all_a_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "it_ret_1m - all_a_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+        "ordinal": 28,
+        "java_accessor": "itVsAllA1m",
+        "logical_name": "it_vs_all_a_1m",
+        "storage_name": "it_vs_all_a_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "telecom_vs_all_a_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "telecom_ret_1m - all_a_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+        "ordinal": 29,
+        "java_accessor": "telecomVsAllA1m",
+        "logical_name": "telecom_vs_all_a_1m",
+        "storage_name": "telecom_vs_all_a_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      },
+      {
+        "name": "utilities_vs_all_a_1m",
+        "java": "Double",
+        "storage": "DOUBLE",
+        "nullable": true,
+        "unit": "difference in stored index_monthly.pct_chg units",
+        "source_code": null,
+        "formula": "utilities_ret_1m - all_a_ret_1m",
+        "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+        "ordinal": 30,
+        "java_accessor": "utilitiesVsAllA1m",
+        "logical_name": "utilities_vs_all_a_1m",
+        "storage_name": "utilities_vs_all_a_1m",
+        "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+      }
+    ],
+    "key": {
+      "business_key": [
+        "month"
+      ],
+      "domain": "YearMonth",
+      "valid_years": [
+        1,
+        9999
+      ],
+      "domain_json": "YYYY-MM",
+      "storage_values_carrier": "LocalDate YYYY-MM-01",
+      "storage_timestamp_unit": "MICROS",
+      "utc_midnight": true,
+      "first_calendar_day_required": true,
+      "not_availability_time": true,
+      "ordering": [
+        "month ASC"
+      ]
+    },
+    "physical": {
+      "object_kind": "TABLE",
+      "column_count": 30,
+      "nullable_finite_double_count": 29,
+      "designated_timestamp": "month",
+      "partition": "YEAR",
+      "wal": true,
+      "dedup": true,
+      "upsert_keys": [
+        "month"
+      ],
+      "ddl": "CREATE TABLE \"<explicit isolated table>\" (\"month\" TIMESTAMP,\"hs300_ret_1m\" DOUBLE,\"zz500_ret_1m\" DOUBLE,\"all_a_ret_1m\" DOUBLE,\"cs1000_ret_1m\" DOUBLE,\"small_large_ret_1m\" DOUBLE,\"mid_large_ret_1m\" DOUBLE,\"growth_ret_1m\" DOUBLE,\"value_ret_1m\" DOUBLE,\"growth_value_ret_1m\" DOUBLE,\"energy_ret_1m\" DOUBLE,\"materials_ret_1m\" DOUBLE,\"industrials_ret_1m\" DOUBLE,\"consumer_discretionary_ret_1m\" DOUBLE,\"consumer_staples_ret_1m\" DOUBLE,\"healthcare_ret_1m\" DOUBLE,\"financials_ret_1m\" DOUBLE,\"it_ret_1m\" DOUBLE,\"telecom_ret_1m\" DOUBLE,\"utilities_ret_1m\" DOUBLE,\"energy_vs_all_a_1m\" DOUBLE,\"materials_vs_all_a_1m\" DOUBLE,\"industrials_vs_all_a_1m\" DOUBLE,\"consumer_discretionary_vs_all_a_1m\" DOUBLE,\"consumer_staples_vs_all_a_1m\" DOUBLE,\"healthcare_vs_all_a_1m\" DOUBLE,\"financials_vs_all_a_1m\" DOUBLE,\"it_vs_all_a_1m\" DOUBLE,\"telecom_vs_all_a_1m\" DOUBLE,\"utilities_vs_all_a_1m\" DOUBLE) TIMESTAMP(month) PARTITION BY YEAR WAL DEDUP UPSERT KEYS(month)",
+      "ddl_policy": "Missing-only create; existing target checked in place, no reset/ALTER/repair."
+    },
+    "canonical_job": {
+      "job_id": "data.equity_style_monthly",
+      "version": 1,
+      "owner": "equity_style_monthly_owner",
+      "dataset_id": "equity_style_monthly",
+      "dataset_version": 1,
+      "dependency": [
+        {
+          "job_id": "data.index_monthly",
+          "version": 1
+        }
+      ],
+      "modes": [
+        "MATERIALIZE",
+        "INCREMENTAL",
+        "RECONCILE"
+      ],
+      "default_mode": "INCREMENTAL",
+      "frequency": "MANUAL",
+      "daily_eligible": false,
+      "rate_policy": "questdb.materialize",
+      "slice_policy": "equity_style_monthly.month_window",
+      "verification_policy": "questdb.full_key_values",
+      "interval_conflict_scope": "all dates of equity_style_monthly for both canonical and prepared writes",
+      "max_attempts": 1,
+      "deadline_seconds": 300,
+      "commands": [
+        "install-equity-style-monthly-isolated",
+        "plan-equity-style-monthly-job",
+        "run-equity-style-monthly-job",
+        "equity-style-monthly-job-status",
+        "cancel-equity-style-monthly-run",
+        "resume-equity-style-monthly-run",
+        "reconcile-equity-style-monthly-run"
+      ]
+    }
+  },
+  "delivery_matrix": {
+    "D01": "Explicit 30-column YearMonth domain/key/mapper; exact null/finite binary64 values and stored units.",
+    "D02": "Month business and physical UPSERT key; first calendar day at exact UTC midnight, strict YYYY-MM JSON.",
+    "D03": "Isolated missing-only YEAR/WAL/DEDUP(month) target; stable physical identity and independent empty COUNT proof.",
+    "D04": "Typed key/range/stable cursor/page and actual configured ReadGroup verified; maximum 12 months/page.",
+    "D05": "Bounded 12-row/1MiB typed batch, prepared WriteGroup, single synchronous HTTP flush, ACK then complete-key bitwise readback.",
+    "D06": "Finite real D022 full14 source capture; 16 index last-non-null monthly returns and 13 unchanged-unit spreads.",
+    "D07": "Canonical data.equity_style_monthly v1, 52 datasets/41 jobs, manual management/plan/run/status/cancel/resume/reconcile.",
+    "D08": "Closed-month completeness, full source-prefix hash and old target checks, overlap checkpoint, durable UNKNOWN/cancel/resume scope.",
+    "D09": "Actual first/replay/resume/reconcile/typed WriteGroup proved by immutable ledger and fresh read-only recovery; live July overlap/August append passed."
+  },
+  "target": {
+    "table": "java_d103_equity_style_monthly_acceptance",
+    "target_id": "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+    "server_pid": 41560,
+    "server_birth_utc": "2026-10-06T14:15:29.583498Z",
+    "server_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-isolated-questdb",
+    "http_port": 19030,
+    "pg_port": 18842,
+    "table_id": 10,
+    "directory": "java_d103_equity_style_monthly_acceptance~10",
+    "physical_txn": 5,
+    "sequencer_txn": 5,
+    "writer_txn": 5,
+    "rows": 3
+  },
+  "request_window": {
+    "from": "2026-06",
+    "to_inclusive": "2026-08",
+    "max_months": 12
+  },
+  "source": {
+    "dataset": "index_monthly",
+    "initial_rows": 32,
+    "appended_rows": 16,
+    "final_rows": 48,
+    "full_field_values": 672,
+    "double_bits": 432,
+    "source_txn_before": 1,
+    "source_txn_after": 2
+  },
+  "runs": {
+    "first": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+    "replay": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+    "resume": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+    "reconcile": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+    "write_group": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+    "increment": "d103-9a1915a5-31f0-4e0c-9412-ae4fc64c366b"
+  },
+  "incremental": {
+    "reason": "VERIFIED_PREFIX_APPEND",
+    "checkpoint_before": "2026-07",
+    "checkpoint_after": "2026-08",
+    "effective_from": "2026-07-01",
+    "effective_to": "2026-08-01",
+    "submitted_rows": 2,
+    "verified_rows": 2,
+    "new_months_observed": 1,
+    "overlap_months_observed": 1,
+    "inserted_updated_transport_counts": "unknown; complete before/after readback distinguishes new August key and unchanged July overlap",
+    "actual_old_prefix_source_revision": false
+  },
+  "readback": {
+    "rows": 3,
+    "field_values": 90,
+    "double_bits": 87,
+    "matched": true,
+    "tolerance": 0,
+    "typed_key_range_page_readgroup": "PASS",
+    "wal_settled": true
+  },
+  "tests": {
+    "java_unique": 125,
+    "java_pure": 123,
+    "d103_java_pure": 96,
+    "shared_java_pure": 27,
+    "java_live": 2,
+    "python_unique": 122,
+    "passing_current_inventory_failures": 0,
+    "original_initial_java_failure": "preserved; final receipt serialization failed after actual operations"
+  },
+  "final_ledger": {
+    "runs": 9,
+    "entries": 21,
+    "events": 85,
+    "groups": 1,
+    "leases": 0
+  },
+  "formal_writes": 0,
+  "full_runs": 0,
+  "limitations": [
+    "Only isolated bounded June-August 2026 acceptance; no formal writes, FULL, production cutover or full-history certification.",
+    "Formal June/July output gaps remain unmodified; bounded August comparison is exact.",
+    "Stored source pct_chg units remain unchanged; corrected stored-unit supplement supersedes old percent claims without modifying historical evidence.",
+    "Legacy growth=000921.SH/value=000920.SH binding remains explicit despite index-universe naming conflict.",
+    "Original initial source INSERT ACK remains UNKNOWN; landed source admitted by separate read-only reconciliation, never resubmitted.",
+    "Original Java initial JUnit remains FAILED_FINAL_RECEIPT_SERIALIZATION; original operations are independently validated by fresh read-only recovery, not rerun.",
+    "Original first Java JVM native PID/birth was lost; scoped synchronous executor completion is preserved, not fabricated native absence.",
+    "Actual source append was verified; old-prefix source revision is pure-test coverage only, not a live revision claim.",
+    "Point-in-time availability, complete upstream provider readiness and consumer admission are not certified."
+  ],
+  "evidence": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\coordinator-final-delivery-static-review-20261006.json",
+      "sha256": "9a377e15ce27aa86fa5ee119d4849a009630a8fef0602ef1038505a4878a9c80"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\validation-inventory-20261006.json",
+      "sha256": "cd2d4e399495d3a539a913a0cbb179db690b931347c70b5ccf93b2393faa6872"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-readonly-recovery-20261006.json",
+      "sha256": "59dcdd9257c198c72944828f67226e74be05d760fb0bb37475f032b162aec7b4"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-increment-acceptance-20261006.json",
+      "sha256": "a13875847e736ba3848190071800fb8968fb6dfde879344e0338fbda647549e5"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-increment-20261006.json",
+      "sha256": "b04f0d4b5dac39a6d1defc879ad182113a79d170ebecffc7743e63883ef8d6b3"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\final-java-process-and-ledger-review-20261006.json",
+      "sha256": "473fec15bf5a6e9ce8ad8f523c8d58fee88c0bac3841bc2cc021b23e9b6abe61"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\coordinator-initial-java-receipt-failure-recovery-20261006.json",
+      "sha256": "d449e9713a69d478e511f485b0a1bc52d24a0d68e86ecb72cac2dfc47227c893"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\coordinator-increment-after-readonly-recovery-admission-20261006.json",
+      "sha256": "df7686a861627b1feea8f5dd87f0773039933981e0d884e788774da400c1fd53"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\source-contract-stored-units-20261006.json",
+      "sha256": "8cd85288b3fcc6c8bc6b1bc574bd2e422fe178e531782e6639114a5b7f6d8997"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\mapping-contract.json",
+      "sha256": "f7498a35e0f41f896fe2f2ef879cef2bd0b11aedd3fa418b500bcb413217d581"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\mapping-contract-increment-update-20261006.json",
+      "sha256": "3679dde5389e476c6eb6e2b02767ede371090748086d7fd442c7afe6a90f8e6e"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\README.md",
+      "sha256": "951471fcbdabf31090dd71fa205fbc7eb3802abe4a83aa81652de64506e75944"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\coordinator-review-20261006.json",
+      "sha256": "551067a7100083dec30d732dec7ac5ac6b163a628134fcd33ddad3850ab11d8c"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\completion-summary-20261006.md",
+      "sha256": "d1dca1a907e1a8b02621a6e1a22d0dbd47797b0cda9d7e630624f05364a61dbe"
+    }
+  ]
+}

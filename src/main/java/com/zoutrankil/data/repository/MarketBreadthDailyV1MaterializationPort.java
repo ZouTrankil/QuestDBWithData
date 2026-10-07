@@ -1,0 +1,672 @@
+package com.zoutrankil.data.repository;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zoutrankil.data.config.QuestDbProperties;
+import com.zoutrankil.data.domain.MarketBreadthDailyV1;
+import com.zoutrankil.data.service.DailyTradingSessions;
+import com.zoutrankil.data.service.VerifiedBatchExecutor;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.Duration;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.HexFormat;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TimeZone;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BooleanSupplier;
+import java.util.regex.Pattern;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+/** One explicitly enabled native refresh, followed by bounded real QuestDB readback. */
+public final class MarketBreadthDailyV1MaterializationPort
+        implements VerifiedBatchExecutor.Port<MarketBreadthDailyV1, LocalDate> {
+    public static final String SOURCE = "stk_factor";
+    public static final String OUTPUT = "mv_market_breadth_daily_v1";
+    public static final int MAX_WINDOW_DAYS = 31;
+    public static final long MAX_SOURCE_ROWS = 200_000;
+    private static final String COLUMNS = "trade_date,stock_count,up_count,down_count,flat_count,avg_pct_change,total_amount_yi";
+    private static final String AGGREGATES = "trade_date, count() AS stock_count, "
+            + "sum(CASE WHEN pct_change > 0 THEN 1 ELSE 0 END) AS up_count, "
+            + "sum(CASE WHEN pct_change < 0 THEN 1 ELSE 0 END) AS down_count, "
+            + "sum(CASE WHEN pct_change = 0 THEN 1 ELSE 0 END) AS flat_count, "
+            + "avg(pct_change) AS avg_pct_change, sum(amount) / 100000.0 AS total_amount_yi";
+    public static final String DEFINITION_SQL = "SELECT " + AGGREGATES + " FROM " + SOURCE
+            + " SAMPLE BY 1d ALIGN TO CALENDAR";
+    public static final String DEFINITION_SHA = sha(normalized(DEFINITION_SQL));
+
+    /** Captures both source and output versions: RANGE may change the output without changing its base checkpoint. */
+    public record Snapshot(long sourceId, String sourceDirectory, long sourceTableTxn,
+                           long sourceSeqTxn, long sourceWriterTxn, boolean sourceSettled,
+                           long mvId, String mvDirectory, long mvTxn, long mvSeqTxn,
+                           long mvWriterTxn, boolean mvSettled, boolean valid, boolean caughtUp,
+                           String definitionSha, String refreshStarted, String refreshFinished,
+                           long refreshBaseTxn, long reportedBaseTxn, String sourcePartition, String viewStatus) {
+        public String sourceVersion() { return sourceId + ":" + sourceSeqTxn; }
+        public boolean sourceUnchanged(Snapshot other) {
+            return other != null && sourceId == other.sourceId
+                    && Objects.equals(sourceDirectory, other.sourceDirectory)
+                    && Objects.equals(sourcePartition, other.sourcePartition)
+                    && sourceTableTxn == other.sourceTableTxn && sourceSeqTxn == other.sourceSeqTxn
+                    && sourceWriterTxn == other.sourceWriterTxn && sourceSettled && other.sourceSettled;
+        }
+        public String stableVersion() {
+            return sourceVersion() + ":" + sourceTableTxn + ":" + mvId + ":" + mvTxn
+                    + ":" + mvSeqTxn + ":" + refreshBaseTxn + ":" + refreshStarted + ":" + refreshFinished;
+        }
+    }
+
+    private record Physical(long id, String directory, long txn, boolean suspended, long pendingRows,
+                            String partition, boolean wal, boolean dedup) {}
+    private record Wal(long sequencer, long writer, long buffered, boolean suspended) {}
+    private record Refresh(String status, String reason, String source, String sql, String type,
+                           long interval, String unit, long refreshed, long base,
+                           String started, String finished) {}
+    private record Metadata(Physical source, Wal sourceWal, Physical output, Wal outputWal, Refresh refresh) {}
+
+    private final JdbcTemplate jdbc;
+    private final QuestDbProperties properties;
+    private final boolean mutationsEnabled;
+    private final String expectedTargetId;
+    private Long privateProcessId;
+    private LocalDate from, to;
+    private Snapshot frozen, submittedAt, readbackSnapshot, verifiedSnapshot;
+    private boolean submitted, acknowledged;
+    private boolean fullIsolated;
+    private List<MarketBreadthDailyV1> submittedRows = List.of();
+    private BooleanSupplier cancelled = () -> false;
+
+    public MarketBreadthDailyV1MaterializationPort(JdbcTemplate jdbc, QuestDbProperties properties,
+                                                  boolean mutationsEnabled) {
+        this(jdbc, properties, mutationsEnabled, null);
+    }
+
+    /** A supplied physical target identity is explicit deployment admission; the default three-argument port is isolated only. */
+    public MarketBreadthDailyV1MaterializationPort(JdbcTemplate jdbc, QuestDbProperties properties,
+                                                  boolean mutationsEnabled, String expectedTargetId) {
+        this.jdbc = Objects.requireNonNull(jdbc);
+        this.properties = Objects.requireNonNull(properties);
+        this.mutationsEnabled = mutationsEnabled;
+        if (expectedTargetId != null && !expectedTargetId.matches("questdb-[0-9a-f]{64}"))
+            throw new IllegalArgumentException("D095 exact expected physical target identity required");
+        this.expectedTargetId = expectedTargetId;
+    }
+
+    public Snapshot snapshot() {
+        requireSourceSchema();
+        requireOutputSchema();
+        Metadata first = metadata();
+        Metadata second = metadata();
+        if (!first.equals(second)) throw new IllegalStateException("D095 metadata changed during snapshot");
+        return snapshot(first);
+    }
+
+    private Snapshot snapshot(Metadata state) {
+        var source = state.source;
+        var output = state.output;
+        var sourceWal = state.sourceWal;
+        var outputWal = state.outputWal;
+        var refresh = state.refresh;
+        if (!Set.of("MONTH", "YEAR").contains(source.partition.toUpperCase(Locale.ROOT)) || !source.wal || !source.dedup
+                || !"MONTH".equalsIgnoreCase(output.partition) || !output.wal || output.dedup)
+            throw new IllegalStateException("D095 source or MV physical contract differs");
+        if (!SOURCE.equals(refresh.source) || !"timer".equalsIgnoreCase(refresh.type)
+                || refresh.interval != 1 || !"MINUTE".equalsIgnoreCase(refresh.unit)
+                || !normalized(DEFINITION_SQL).equals(normalized(refresh.sql)))
+            throw new IllegalStateException("D095 MV definition or timer policy differs from authoritative SQL");
+        boolean sourceSettled = !source.suspended && !sourceWal.suspended && source.pendingRows == 0
+                && sourceWal.buffered == 0 && sourceWal.writer == sourceWal.sequencer;
+        boolean outputSettled = !output.suspended && !outputWal.suspended && output.pendingRows == 0
+                && outputWal.buffered == 0 && outputWal.writer == outputWal.sequencer;
+        boolean valid = "valid".equalsIgnoreCase(refresh.status) && blank(refresh.reason);
+        boolean caughtUp = valid && sourceSettled && outputSettled
+                && refresh.refreshed == sourceWal.sequencer && refresh.base == sourceWal.sequencer;
+        return new Snapshot(source.id, source.directory, source.txn, sourceWal.sequencer, sourceWal.writer,
+                sourceSettled, output.id, output.directory, output.txn, outputWal.sequencer,
+                outputWal.writer, outputSettled, valid, caughtUp, sha(normalized(refresh.sql)),
+                refresh.started, refresh.finished, refresh.refreshed, refresh.base, source.partition, refresh.status);
+    }
+
+    public String targetId() {
+        Snapshot state = snapshot();
+        return "questdb-" + sha(properties.getHost() + ":" + properties.getPgPort() + ":"
+                + properties.getQwpPort() + ":" + properties.getDatabase() + ":" + SOURCE + ":"
+                + state.sourceId + ":" + state.sourceDirectory + ":" + OUTPUT + ":"
+                + state.mvId + ":" + state.mvDirectory + ":" + state.definitionSha);
+    }
+
+    /** The real calendar has an independent WAL frontier; source settlement does not certify calendar coverage. */
+    public String calendarVersion() {
+        Physical before = physical("exchange_calendar");
+        Wal walBefore = wal("exchange_calendar");
+        var keys = jdbc.queryForList("SELECT \"column\",designated,upsertKey FROM table_columns('exchange_calendar')");
+        var upsertKeys = new HashSet<String>();
+        var designated = new HashSet<String>();
+        for (var column : keys) {
+            if (Boolean.TRUE.equals(column.get("upsertKey"))) upsertKeys.add(column.get("column").toString());
+            if (Boolean.TRUE.equals(column.get("designated"))) designated.add(column.get("column").toString());
+        }
+        var types = schema("exchange_calendar");
+        if (!"SYMBOL".equals(types.get("exchange")) || !"TIMESTAMP".equals(types.get("cal_date"))
+                || !"INT".equals(types.get("is_open")) || !"STRING".equals(types.get("pretrade_date"))
+                || !upsertKeys.equals(Set.of("exchange", "cal_date")) || !designated.equals(Set.of("cal_date"))
+                || !"YEAR".equalsIgnoreCase(before.partition) || !before.wal || !before.dedup)
+            throw new IllegalStateException("D095 exchange calendar physical schema, timestamp or complete key differs");
+        Physical after = physical("exchange_calendar");
+        Wal walAfter = wal("exchange_calendar");
+        if (!before.equals(after) || !walBefore.equals(walAfter) || after.suspended || walAfter.suspended
+                || after.pendingRows != 0 || walAfter.buffered != 0 || walAfter.writer != walAfter.sequencer)
+            throw new IllegalStateException("D095 exchange calendar version changed or has unsettled/suspended WAL");
+        return "calendar-" + after.id + ":" + walAfter.sequencer + ":" + after.txn + ":"
+                + sha(after.directory + ":" + types);
+    }
+
+    /** Every calendar day must exist, and every recorded open session must have exactly one real source daily bucket. */
+    public void requireCalendarCoverage(LocalDate start, LocalDate end, List<LocalDate> expectedDates) {
+        window(start, end);
+        Objects.requireNonNull(expectedDates);
+        String before = calendarVersion();
+        var calendars = new ExchangeCalendarReadRepository(new QuestDbBoundedReader(jdbc));
+        List<LocalDate> sessions = DailyTradingSessions.read(calendars, start, end);
+        if (!sessions.equals(expectedDates))
+            throw new IllegalStateException("D095 source daily buckets do not cover the complete real SSE trading calendar");
+        if (!before.equals(calendarVersion()))
+            throw new IllegalStateException("D095 exchange calendar changed during coverage verification");
+    }
+
+    public long sourceRawRows(LocalDate start, LocalDate end) {
+        window(start, end);
+        Long count = jdbc.query(connection -> {
+            var statement = connection.prepareStatement("SELECT count() FROM " + SOURCE
+                    + " WHERE trade_date >= ? AND trade_date < ?");
+            bounds(statement, start, end);
+            return statement;
+        }, rows -> {
+            if (!rows.next()) throw new IllegalStateException("D095 source count is absent");
+            long value = rows.getLong(1);
+            if (rows.wasNull() || value < 0 || rows.next())
+                throw new IllegalStateException("Invalid D095 source row count");
+            return value;
+        });
+        if (count == null || count > MAX_SOURCE_ROWS)
+            throw new IllegalStateException("D095 source exceeds the 200000-row finite refresh budget");
+        Boolean invalidKeys = jdbc.query(connection -> {
+            var statement = connection.prepareStatement("SELECT trade_date,ts_code,key_rows FROM ("
+                    + "SELECT trade_date,ts_code,count() AS key_rows FROM " + SOURCE
+                    + " WHERE trade_date >= ? AND trade_date < ? GROUP BY trade_date,ts_code) "
+                    + "WHERE key_rows <> 1 OR ts_code IS NULL OR ts_code = '' "
+                    + "OR cast(trade_date AS long) % 86400000000 <> 0 LIMIT 1");
+            bounds(statement, start, end);
+            statement.setMaxRows(1);
+            return statement;
+        }, (org.springframework.jdbc.core.ResultSetExtractor<Boolean>) rows -> rows.next());
+        if (Boolean.TRUE.equals(invalidKeys))
+            throw new IllegalStateException("D095 source has null/duplicate complete keys or non-calendar timestamps");
+        return count;
+    }
+
+    public List<MarketBreadthDailyV1> expected(LocalDate start, LocalDate end) {
+        window(start, end);
+        sourceRawRows(start, end);
+        return rows("SELECT " + AGGREGATES + " FROM " + SOURCE
+                + " WHERE trade_date >= ? AND trade_date < ? SAMPLE BY 1d ALIGN TO CALENDAR"
+                + " ORDER BY trade_date LIMIT 32", start, end);
+    }
+
+    /** Reads the entire bounded output interval, including unexpected rows and duplicates. */
+    public List<MarketBreadthDailyV1> actual(LocalDate start, LocalDate end) {
+        window(start, end);
+        return rows("SELECT " + COLUMNS + " FROM " + OUTPUT
+                + " WHERE trade_date >= ? AND trade_date < ? ORDER BY trade_date LIMIT 32", start, end);
+    }
+
+    public long outputRowCount() {
+        Long count = jdbc.query("SELECT count() FROM " + OUTPUT, rs -> {
+            if (!rs.next()) throw new IllegalStateException("D095 full output row count is absent");
+            long value = rs.getLong(1);
+            if (rs.wasNull() || value < 0 || rs.next()) throw new IllegalStateException("D095 output row count differs");
+            return value;
+        });
+        if (count == null) throw new IllegalStateException("D095 output row count is absent");
+        return count;
+    }
+
+    public void bind(LocalDate start, LocalDate end, Snapshot expected) {
+        window(start, end);
+        Objects.requireNonNull(expected);
+        if (submitted || frozen != null && (!from.equals(start) || !to.equals(end) || !frozen.equals(expected)))
+            throw new IllegalStateException("D095 port cannot change or reuse its bound refresh request");
+        from = start;
+        to = end;
+        frozen = expected;
+    }
+
+    public void cancellationProbe(BooleanSupplier probe) { cancelled = Objects.requireNonNull(probe); }
+
+    /** DDL is an explicit isolated installation operation; reads never install or redefine objects. */
+    public void createIsolatedTarget() {
+        requireIsolatedMutation();
+        requireSourceSchema();
+        var found = jdbc.queryForList("SELECT view_name FROM materialized_views() WHERE view_name='" + OUTPUT + "'");
+        if (found.size() > 1) throw new IllegalStateException("Duplicate D095 MV identity");
+        if (found.isEmpty()) jdbc.execute("CREATE MATERIALIZED VIEW " + OUTPUT
+                + " REFRESH EVERY 1m AS (" + DEFINITION_SQL + ") PARTITION BY MONTH");
+        else snapshot();
+    }
+
+    /** Selects a repair operation before binding; submission still goes through the shared durable runner. */
+    public void configureFullIsolated() {
+        requireIsolatedMutation();
+        if (submitted || frozen != null || fullIsolated)
+            throw new IllegalStateException("D095 FULL repair must be selected on a fresh isolated port");
+        fullIsolated = true;
+    }
+
+    public record FullSourceScope(LocalDate from, LocalDate to, long rawRows) {
+        public FullSourceScope {
+            window(from, to);
+            if (rawRows < 1 || rawRows > MAX_SOURCE_ROWS)
+                throw new IllegalArgumentException("D095 FULL requires nonempty finite complete source rows");
+        }
+    }
+
+    /** FULL is bounded by the complete physical source, never by a convenient subset. Empty sources are rejected. */
+    public FullSourceScope fullSourceScope() {
+        requireIsolatedMutation();
+        Snapshot before = snapshot();
+        FullSourceScope scope = jdbc.query("SELECT count() AS n,min(trade_date) AS lo,max(trade_date) AS hi FROM " + SOURCE, rs -> {
+            if (!rs.next()) throw new IllegalStateException("D095 full-source bounds are absent");
+            long count = requiredLong(rs, "n");
+            if (count < 1 || count > MAX_SOURCE_ROWS)
+                throw new IllegalStateException("D095 FULL requires a nonempty complete source of at most 200000 rows");
+            Timestamp first = rs.getTimestamp("lo", utc()), last = rs.getTimestamp("hi", utc());
+            if (first == null || last == null || rs.next())
+                throw new IllegalStateException("D095 FULL requires exact complete source date bounds");
+            var start = first.toInstant().atOffset(ZoneOffset.UTC).toLocalDate();
+            var end = last.toInstant().atOffset(ZoneOffset.UTC).toLocalDate();
+            window(start, end);
+            return new FullSourceScope(start, end, count);
+        });
+        if (scope.rawRows != sourceRawRows(scope.from, scope.to) || !before.sourceUnchanged(snapshot()))
+            throw new IllegalStateException("D095 complete source changed while bounding isolated FULL repair");
+        return scope;
+    }
+
+    @Override public void preflight() {
+        if (frozen == null) throw new IllegalStateException("D095 refresh interval is not frozen");
+        if (fullIsolated) requireIsolatedMutation();
+        else requireAdmittedMutation();
+        Snapshot current = snapshot();
+        requireFrozenSource(current);
+        if ((!fullIsolated && !current.valid) || "refreshing".equalsIgnoreCase(current.viewStatus)
+                || !current.sourceSettled || !current.mvSettled)
+            throw new IllegalStateException("D095 MV is invalid, refreshing or WAL is unsettled");
+        if (fullIsolated) {
+            FullSourceScope scope = fullSourceScope();
+            if (!scope.from.equals(from) || !scope.to.equals(to))
+                throw new IllegalStateException("D095 FULL frozen window must cover the entire complete physical source");
+            requireFrozenSource(snapshot());
+        } else requireFinitePendingRefresh(current);
+    }
+
+    /** The native WAL refresh may visit the whole source; lagging sources therefore have a global work bound. */
+    private void requireFinitePendingRefresh(Snapshot current) {
+        if (current.caughtUp) return;
+        var scope = jdbc.queryForMap("SELECT count() AS n,min(trade_date) AS lo,max(trade_date) AS hi FROM " + SOURCE);
+        long count = ((Number) scope.get("n")).longValue();
+        if (count < 0 || count > MAX_SOURCE_ROWS) throw new IllegalStateException("D095 pending native refresh exceeds global source budget");
+        if (count > 0) {
+            var lo = ((java.sql.Timestamp) scope.get("lo")).toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+            var hi = ((java.sql.Timestamp) scope.get("hi")).toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+            if (ChronoUnit.DAYS.between(lo, hi) >= MAX_WINDOW_DAYS)
+                throw new IllegalStateException("D095 pending native refresh exceeds the global 31-day span budget");
+        }
+    }
+
+    @Override public void send(List<MarketBreadthDailyV1> rows) {
+        if (submitted || rows == null || rows.isEmpty() || rows.size() > MAX_WINDOW_DAYS)
+            throw new IllegalStateException("D095 requires exactly one nonempty finite native refresh submission");
+        preflight();
+        var expected = expected(from, to);
+        if (expected.size() != rows.size()) throw new IllegalStateException("D095 source row count changed before submission");
+        for (int index = 0; index < rows.size(); index++)
+            if (!equivalent(expected.get(index), rows.get(index)))
+                throw new IllegalStateException("D095 source values changed before submission");
+        submittedAt = snapshot();
+        requireFrozenSource(submittedAt);
+        submittedRows = List.copyOf(rows);
+        submitted = true;
+        // QuestDB 10.0.1 RANGE persists a start but not its finish. INCREMENTAL preserves valid-state evidence.
+        // Do not work around this by treating a refreshing view as valid or by issuing a formal FULL.
+        jdbc.execute("REFRESH MATERIALIZED VIEW " + OUTPUT + (fullIsolated ? " FULL" : " INCREMENTAL"));
+        acknowledged = true;
+    }
+
+    @Override public List<MarketBreadthDailyV1> readback(List<LocalDate> keys) {
+        if (cancelled.getAsBoolean() || Thread.currentThread().isInterrupted()) {
+            // The shared batch executor retains the uncertain slice when its polling sleep is interrupted.
+            Thread.currentThread().interrupt();
+            throw new CancellationException("D095 refresh cancelled after submission; reconcile before replay");
+        }
+        if (frozen == null || keys == null || keys.isEmpty() || keys.size() > MAX_WINDOW_DAYS
+                || keys.stream().anyMatch(Objects::isNull) || new HashSet<>(keys).size() != keys.size())
+            throw new IllegalArgumentException("D095 bounded complete date keys required");
+        if (submitted && !submittedRows.stream().map(MarketBreadthDailyV1::tradeDate).toList().equals(keys))
+            throw new IllegalArgumentException("D095 refresh readback must cover the complete submitted window");
+        Snapshot before = snapshot();
+        requireFrozenSource(before);
+        requireReadable(before);
+        var actual = actual(from, to);
+        Snapshot after = snapshot();
+        if (!before.equals(after)) throw new IllegalStateException("D095 output changed during real readback");
+        requireFrozenSource(after);
+        readbackSnapshot = after;
+        return actual;
+    }
+
+    @Override public boolean walSettled() {
+        if (cancelled.getAsBoolean() || Thread.currentThread().isInterrupted()) {
+            Thread.currentThread().interrupt();
+            return false;
+        }
+        if (readbackSnapshot == null) return false;
+        Snapshot current = snapshot();
+        requireFrozenSource(current);
+        if (!current.equals(readbackSnapshot) || !current.valid || !current.caughtUp) return false;
+        if (submitted && (!acknowledged || !refreshCompleted(current))) return false;
+        verifiedSnapshot = current;
+        return true;
+    }
+
+    private boolean refreshCompleted(Snapshot current) {
+        boolean ready = submittedAt != null && acknowledged && current.valid && current.caughtUp
+                && frozen.sourceUnchanged(current) && current.mvSettled;
+        return ready && (!fullIsolated || current.mvTxn != submittedAt.mvTxn
+                || !Objects.equals(current.refreshFinished, submittedAt.refreshFinished));
+        // A caught-up INCREMENTAL can be a no-op. Its unchanged txn is accepted only with complete real value readback.
+    }
+
+    /** A lost asynchronous refresh response does not prove that its server-side writer has stopped. */
+    @Override public boolean uncertainSenderStopped() {
+        if (cancelled.getAsBoolean()) Thread.currentThread().interrupt();
+        return false;
+    }
+    public boolean unresolved() { return submitted && verifiedSnapshot == null; }
+    public Snapshot verifiedSnapshot() { return verifiedSnapshot; }
+    public Duration visibilityTimeout() { return Duration.ofMinutes(3); }
+
+    private void requireFrozenSource(Snapshot state) {
+        if (!frozen.sourceUnchanged(state) || frozen.mvId != state.mvId
+                || !Objects.equals(frozen.mvDirectory, state.mvDirectory)
+                || !Objects.equals(frozen.definitionSha, state.definitionSha))
+            throw new IllegalStateException("D095 frozen source version, physical identity or definition changed");
+    }
+
+    private static void requireReadable(Snapshot state) {
+        if (!state.valid || !state.caughtUp || !state.sourceSettled || !state.mvSettled)
+            throw new IllegalStateException("D095 MV is invalid, lagging or has unsettled/suspended WAL");
+    }
+
+    public void verifyPrivateInstance() { requireIsolatedMutation(); }
+
+    private void requireIsolatedMutation() {
+        if (!mutationsEnabled || !Set.of("127.0.0.1", "localhost", "::1").contains(properties.getHost())
+                || properties.getPgPort() != 18812 || properties.getQwpPort() != 19000)
+            throw new IllegalStateException("D095 mutations require the explicitly enabled local private instance on 18812/19000");
+        attestPrivateProcess();
+    }
+
+    private void requireAdmittedMutation() {
+        if (!mutationsEnabled) throw new IllegalStateException("D095 materialization mutations are disabled");
+        if (expectedTargetId == null) requireIsolatedMutation();
+        else if (!expectedTargetId.equals(targetId()))
+            throw new IllegalStateException("D095 admitted physical target identity differs from the actual instance");
+    }
+
+    private void attestPrivateProcess() {
+        if (!System.getProperty("os.name", "").toLowerCase(Locale.ROOT).contains("win"))
+            throw new IllegalStateException("D095 implicit private-instance admission requires Windows process attestation");
+        try {
+            Path root = Path.of("var", "d095-isolated-questdb").toAbsolutePath().normalize().toRealPath();
+            Path workspaceVar = Path.of("var").toAbsolutePath().normalize().toRealPath();
+            if (!root.startsWith(workspaceVar)) throw new IllegalStateException("D095 private data root is outside workspace var");
+            var config = new LinkedHashMap<String, String>();
+            for (String line : Files.readAllLines(root.resolve("conf/server.conf"), StandardCharsets.UTF_8)) {
+                String text = line.replace("\uFEFF", "").trim();
+                int equal = text.indexOf('=');
+                if (equal > 0 && !text.startsWith("#")) config.put(text.substring(0, equal).trim(), text.substring(equal + 1).trim());
+            }
+            if (!"127.0.0.1:19000".equals(config.get("http.net.bind.to"))
+                    || !"127.0.0.1:18812".equals(config.get("pg.net.bind.to")))
+                throw new IllegalStateException("D095 private data root does not bind the expected loopback listeners");
+            String script = """
+                    $ErrorActionPreference='Stop'
+                    $listeners=@(Get-NetTCPConnection -LocalPort 19000,18812 -State Listen -ErrorAction Stop)
+                    $records=@(foreach($port in @(19000,18812)) {
+                      $matches=@($listeners | Where-Object LocalPort -eq $port)
+                      if($matches.Count -ne 1) { throw 'Ambiguous private listener' }
+                      $listener=$matches[0]
+                      $proc=Get-CimInstance Win32_Process -Filter "ProcessId=$($listener.OwningProcess)"
+                      [pscustomobject]@{port=$port;address=$listener.LocalAddress;pid=$proc.ProcessId;name=$proc.Name;command=$proc.CommandLine}
+                    })
+                    ConvertTo-Json -InputObject $records -Compress
+                    """;
+            Path powershell = Path.of(Objects.requireNonNull(System.getenv("SystemRoot")),
+                    "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
+            Process process = new ProcessBuilder(powershell.toString(), "-NoProfile", "-NonInteractive", "-Command", script)
+                    .redirectErrorStream(true).start();
+            if (!process.waitFor(10, TimeUnit.SECONDS)) {
+                process.destroyForcibly();
+                throw new IllegalStateException("D095 private listener attestation timed out");
+            }
+            byte[] output = process.getInputStream().readNBytes(32_769);
+            if (process.exitValue() != 0 || output.length > 32_768)
+                throw new IllegalStateException("D095 private listener attestation failed");
+            var records = new ObjectMapper().readTree(output);
+            if (!records.isArray() || records.size() != 2) throw new IllegalStateException("D095 private listeners differ");
+            Long observedPid = null;
+            var observedPorts = new HashSet<Integer>();
+            var dataRootArgument = Pattern.compile("(?:^|\\s)-d\\s+(?:\"([^\"]+)\"|(\\S+))(?=\\s|$)");
+            for (var record : records) {
+                long processId = record.path("pid").asLong(-1);
+                String name = record.path("name").asText("").toLowerCase(Locale.ROOT);
+                if (!"127.0.0.1".equals(record.path("address").asText()) || processId < 1
+                        || !Set.of("questdb.exe", "java.exe").contains(name)
+                        || observedPid != null && observedPid != processId
+                        || !observedPorts.add(record.path("port").asInt(-1)))
+                    throw new IllegalStateException("D095 private listeners do not belong to one loopback QuestDB process");
+                var argument = dataRootArgument.matcher(record.path("command").asText(""));
+                if (!argument.find()) throw new IllegalStateException("D095 private process has no explicit data root");
+                String directory = argument.group(1) == null ? argument.group(2) : argument.group(1);
+                if (!root.equals(Path.of(directory).toAbsolutePath().normalize().toRealPath()) || argument.find())
+                    throw new IllegalStateException("D095 private process belongs to a different data root");
+                observedPid = processId;
+            }
+            if (!observedPorts.equals(Set.of(19000, 18812))
+                    || privateProcessId != null && !privateProcessId.equals(observedPid))
+                throw new IllegalStateException("D095 private QuestDB process changed during this operation");
+            privateProcessId = observedPid;
+        } catch (InterruptedException cancelled) {
+            Thread.currentThread().interrupt();
+            throw new CancellationException("D095 private listener attestation cancelled");
+        } catch (java.io.IOException failure) {
+            throw new IllegalStateException("Cannot attest D095 private QuestDB data root and process", failure);
+        }
+    }
+
+    private Metadata metadata() {
+        return new Metadata(physical(SOURCE), wal(SOURCE), physical(OUTPUT), wal(OUTPUT), refresh());
+    }
+
+    private Physical physical(String name) {
+        return jdbc.query("SELECT id,directoryName,table_txn,table_suspended,wal_pending_row_count,"
+                + "partitionBy,walEnabled,dedup FROM tables() WHERE table_name='" + name + "'", rs -> {
+            if (!rs.next()) throw new IllegalStateException("Missing D095 physical table: " + name);
+            var result = new Physical(requiredLong(rs, "id"), requiredText(rs, "directoryName"),
+                    requiredLong(rs, "table_txn"), rs.getBoolean("table_suspended"),
+                    requiredLong(rs, "wal_pending_row_count"), requiredText(rs, "partitionBy"),
+                    rs.getBoolean("walEnabled"), rs.getBoolean("dedup"));
+            if (rs.next()) throw new IllegalStateException("Duplicate D095 physical table: " + name);
+            return result;
+        });
+    }
+
+    private Wal wal(String name) {
+        return jdbc.query("SELECT sequencerTxn,writerTxn,bufferedTxnSize,suspended FROM wal_tables() WHERE name='"
+                + name + "'", rs -> {
+            if (!rs.next()) throw new IllegalStateException("Missing D095 WAL table: " + name);
+            var result = new Wal(requiredLong(rs, "sequencerTxn"), requiredLong(rs, "writerTxn"),
+                    requiredLong(rs, "bufferedTxnSize"), rs.getBoolean("suspended"));
+            if (rs.next()) throw new IllegalStateException("Duplicate D095 WAL table: " + name);
+            return result;
+        });
+    }
+
+    private Refresh refresh() {
+        return jdbc.query("SELECT view_status,invalidation_reason,base_table_name,view_sql,refresh_type,"
+                + "timer_interval,timer_interval_unit,refresh_base_table_txn,base_table_txn,"
+                + "last_refresh_start_timestamp,last_refresh_finish_timestamp FROM materialized_views() WHERE view_name='"
+                + OUTPUT + "'", rs -> {
+            if (!rs.next()) throw new IllegalStateException("Missing D095 native MV metadata");
+            var result = new Refresh(requiredText(rs, "view_status"), rs.getString("invalidation_reason"),
+                    requiredText(rs, "base_table_name"), requiredText(rs, "view_sql"), requiredText(rs, "refresh_type"),
+                    requiredLong(rs, "timer_interval"), requiredText(rs, "timer_interval_unit"),
+                    optionalTxn(rs, "refresh_base_table_txn"), optionalTxn(rs, "base_table_txn"),
+                    rs.getString("last_refresh_start_timestamp"), rs.getString("last_refresh_finish_timestamp"));
+            if (rs.next()) throw new IllegalStateException("Duplicate D095 native MV metadata");
+            return result;
+        });
+    }
+
+    private void requireSourceSchema() {
+        var schema = schema(SOURCE);
+        for (var expected : Map.of("trade_date", "TIMESTAMP", "ts_code", "SYMBOL",
+                "pct_change", "DOUBLE", "amount", "DOUBLE").entrySet())
+            if (!expected.getValue().equals(schema.get(expected.getKey())))
+                throw new IllegalStateException("D095 base source column/type differs: " + expected.getKey());
+        var keys = jdbc.queryForList("SELECT \"column\",designated,upsertKey FROM table_columns('" + SOURCE + "')");
+        var upsertKeys = new HashSet<String>();
+        var designated = new HashSet<String>();
+        for (var column : keys) {
+            if (Boolean.TRUE.equals(column.get("upsertKey"))) upsertKeys.add(column.get("column").toString());
+            if (Boolean.TRUE.equals(column.get("designated"))) designated.add(column.get("column").toString());
+        }
+        if (!upsertKeys.equals(Set.of("trade_date", "ts_code")) || !designated.equals(Set.of("trade_date")))
+            throw new IllegalStateException("D095 source complete UPSERT key or designated timestamp differs");
+    }
+
+    private void requireOutputSchema() {
+        var expected = new LinkedHashMap<String, String>();
+        expected.put("trade_date", "TIMESTAMP");
+        for (String name : List.of("stock_count", "up_count", "down_count", "flat_count")) expected.put(name, "LONG");
+        expected.put("avg_pct_change", "DOUBLE");
+        expected.put("total_amount_yi", "DOUBLE");
+        if (!expected.equals(schema(OUTPUT))) throw new IllegalStateException("D095 MV seven-column schema differs");
+        var metadata = jdbc.queryForList("SELECT \"column\",designated,upsertKey FROM table_columns('" + OUTPUT + "')");
+        var designated = new HashSet<String>();
+        for (var column : metadata) {
+            if (Boolean.TRUE.equals(column.get("upsertKey"))) throw new IllegalStateException("Native D095 MV must not declare UPSERT keys");
+            if (Boolean.TRUE.equals(column.get("designated"))) designated.add(column.get("column").toString());
+        }
+        if (!designated.equals(Set.of("trade_date"))) throw new IllegalStateException("D095 MV timestamp differs");
+    }
+
+    private Map<String, String> schema(String name) {
+        var result = new LinkedHashMap<String, String>();
+        jdbc.query("SELECT \"column\",\"type\" FROM table_columns('" + name + "')", rs -> {
+            String column = rs.getString(1);
+            if (result.putIfAbsent(column, rs.getString(2).toUpperCase(Locale.ROOT)) != null)
+                throw new IllegalStateException("Duplicate D095 schema column");
+        });
+        return result;
+    }
+
+    private List<MarketBreadthDailyV1> rows(String sql, LocalDate start, LocalDate end) {
+        List<MarketBreadthDailyV1> values = jdbc.query(connection -> {
+            var statement = connection.prepareStatement(sql);
+            bounds(statement, start, end);
+            statement.setMaxRows(32);
+            return statement;
+        }, (rs, row) -> {
+            Timestamp stamp = rs.getTimestamp("trade_date", utc());
+            if (stamp == null) throw new IllegalStateException("Null D095 day key");
+            var calendar = stamp.toInstant().atOffset(ZoneOffset.UTC);
+            if (!calendar.toLocalTime().equals(java.time.LocalTime.MIDNIGHT))
+                throw new IllegalStateException("D095 day bucket is not an exact calendar midnight");
+            return new MarketBreadthDailyV1(calendar.toLocalDate(), requiredLong(rs, "stock_count"),
+                    requiredLong(rs, "up_count"), requiredLong(rs, "down_count"), requiredLong(rs, "flat_count"),
+                    nullableDouble(rs, "avg_pct_change"), nullableDouble(rs, "total_amount_yi"));
+        });
+        if (values.size() > ChronoUnit.DAYS.between(start, end) + 1)
+            throw new IllegalStateException("D095 daily aggregation exceeds its bounded date count");
+        var keys = new HashSet<LocalDate>();
+        for (var value : values)
+            if (value.tradeDate().isBefore(start) || value.tradeDate().isAfter(end) || !keys.add(value.tradeDate()))
+                throw new IllegalStateException("D095 output has duplicate or out-of-window dates");
+        return List.copyOf(values);
+    }
+
+    private static void bounds(PreparedStatement statement, LocalDate start, LocalDate end) throws SQLException {
+        statement.setQueryTimeout(20);
+        statement.setTimestamp(1, Timestamp.from(start.atStartOfDay().toInstant(ZoneOffset.UTC)), utc());
+        statement.setTimestamp(2, Timestamp.from(end.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC)), utc());
+    }
+    private static Calendar utc() { return Calendar.getInstance(TimeZone.getTimeZone("UTC")); }
+    private static long requiredLong(ResultSet rs, String column) throws SQLException {
+        long value = rs.getLong(column);
+        if (rs.wasNull()) throw new IllegalStateException("Null D095 required number: " + column);
+        return value;
+    }
+    private static String requiredText(ResultSet rs, String column) throws SQLException {
+        String value = rs.getString(column);
+        if (blank(value)) throw new IllegalStateException("Null D095 required metadata: " + column);
+        return value;
+    }
+    private static Double nullableDouble(ResultSet rs, String column) throws SQLException {
+        double value = rs.getDouble(column);
+        if (rs.wasNull()) return null;
+        if (!Double.isFinite(value)) throw new IllegalStateException("Non-finite D095 aggregate: " + column);
+        return value;
+    }
+    private static long optionalTxn(ResultSet rs, String column) throws SQLException {
+        long value = rs.getLong(column);
+        return rs.wasNull() ? -1 : value;
+    }
+    public static boolean equivalent(MarketBreadthDailyV1 left, MarketBreadthDailyV1 right) {
+        return left != null && right != null && left.tradeDate().equals(right.tradeDate())
+                && left.stockCount() == right.stockCount() && left.upCount() == right.upCount()
+                && left.downCount() == right.downCount() && left.flatCount() == right.flatCount()
+                && close(left.avgPctChange(), right.avgPctChange()) && close(left.totalAmountYi(), right.totalAmountYi());
+    }
+    private static boolean close(Double expected, Double actual) {
+        if (expected == null || actual == null) return expected == actual;
+        return Double.isFinite(expected) && Double.isFinite(actual)
+                && Math.abs(actual - expected) <= 1e-8 + 1e-10 * Math.abs(expected);
+    }
+    private static void window(LocalDate start, LocalDate end) {
+        if (start == null || end == null || end.isBefore(start)
+                || ChronoUnit.DAYS.between(start, end) + 1 > MAX_WINDOW_DAYS)
+            throw new IllegalArgumentException("D095 requires an explicit nonempty window of at most 31 days");
+    }
+    private static boolean blank(String value) { return value == null || value.isBlank(); }
+    private static String normalized(String value) { return value == null ? "" : value.trim().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT); }
+    private static String sha(String text) {
+        try { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8))); }
+        catch (Exception impossible) { throw new IllegalStateException(impossible); }
+    }
+}
