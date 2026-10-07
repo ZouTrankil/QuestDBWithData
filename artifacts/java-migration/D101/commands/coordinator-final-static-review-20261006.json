@@ -1,0 +1,297 @@
+{
+  "task_id": "D101",
+  "status": "PASS",
+  "review_type": "static review only",
+  "checked_at": "2026-10-06T11:04:28.502985+00:00",
+  "scope": "Frozen D101 canonical owner, materialize adapter, original-owner Gateway/Port and run/intent isolation; dedicated prepared WRITE, shared submission hook, registry and CLI wiring. No D102 work.",
+  "findings": [],
+  "code_bindings": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewDailyCacheJobService.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EtfMarketOverviewDailyCacheJobService.java",
+      "sha256": "6f4b4d6881ae7ee93b47b67c54a0cc09bf3383b6ec940dcf9ffcf34e16a780e4",
+      "line_count": 334
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewDailyCacheMaterializeAdapter.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EtfMarketOverviewDailyCacheMaterializeAdapter.java",
+      "sha256": "8f2cbd1d464d3420d4d145ec0ef0daf0e8ea1a51df51f29200c6f28c34d6ccd3",
+      "line_count": 174
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewCachePreparedWriteAdapter.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EtfMarketOverviewCachePreparedWriteAdapter.java",
+      "sha256": "5b376135ce59f07b8d91da46088fa20bfae1ac870716a2a79677a0673ce5adb3",
+      "line_count": 175
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewCacheOwnerGateway.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EtfMarketOverviewCacheOwnerGateway.java",
+      "sha256": "ea273485bc6fbe32f9ac21adf0a23d6afedce412348a4ae1f3b786bf7192d8f3",
+      "line_count": 629
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/EtfMarketOverviewCacheDelegatedPort.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\EtfMarketOverviewCacheDelegatedPort.java",
+      "sha256": "06f19cbae38d7793ac1ce8395162f760b8c1cbc12c531aba6f8363c50f720c1d",
+      "line_count": 167
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/SyncJobRunner.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\SyncJobRunner.java",
+      "sha256": "b42149cf76025559edcad56886e0bdf498e3cf975156e572bf7b9f01e70d1414",
+      "line_count": 318
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\StockBasicWriteGroupService.java",
+      "sha256": "8960a1f6a70b71690fdf55c77c38c9bcbc3ce24d40eb4d07c7014afa28651464",
+      "line_count": 557
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\config\\ReadGroupConfiguration.java",
+      "sha256": "6c6d1c3931b44a0344f42d8212f68e564ba107ebebd34585e6af7ea0ce7cef74",
+      "line_count": 110
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\config\\DatasetConfiguration.java",
+      "sha256": "6758e4448c5c15b670c1de286f0d4b7620a0dd17d984fcf672534b4ed58492a3",
+      "line_count": 36
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/EtfMarketOverviewCacheOwnerConfiguration.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\config\\EtfMarketOverviewCacheOwnerConfiguration.java",
+      "sha256": "e0c8bd93810d4edc099699e06d168a934bd563448d5e8d49982ef762d3f1c65c",
+      "line_count": 26
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/cli/EtfMarketOverviewDailyCacheCommands.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EtfMarketOverviewDailyCacheCommands.java",
+      "sha256": "00358ad6fc3ced1b88584473ce1d45d7eaa3347ea8d39066be3489f67f789276",
+      "line_count": 69
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/cli/CommandLineRunner.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\cli\\CommandLineRunner.java",
+      "sha256": "8f4a6d27424977d5c94271eb59bbcf47124225798554faae8aa84c6461e8ea32",
+      "line_count": 1821
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/EtfMarketOverviewDailyCacheDataset.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\EtfMarketOverviewDailyCacheDataset.java",
+      "sha256": "2acb361556fbcc92008669bcd1ad27c45f49ff10a1f03989e70c173c29e6fe22",
+      "line_count": 41
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/SyncRequestIdentity.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\SyncRequestIdentity.java",
+      "sha256": "59e43b3b60395738645010d018bb2632032f82e51335fb282214f772ab30ed18",
+      "line_count": 55
+    }
+  ],
+  "checks": [
+    {
+      "scope": "Fresh-run and historical-intent isolation",
+      "bindings": [
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewDailyCacheJobService.java",
+          "line": 112,
+          "source_line": "        String runId = \"d101-\" + UUID.randomUUID();",
+          "file_sha256": "6f4b4d6881ae7ee93b47b67c54a0cc09bf3383b6ec940dcf9ffcf34e16a780e4"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewCacheOwnerGateway.java",
+          "line": 393,
+          "source_line": "    private void claimSubmission(VerifiedBatchExecutor.Submission submission,Invocation call)throws IOException{",
+          "file_sha256": "ea273485bc6fbe32f9ac21adf0a23d6afedce412348a4ae1f3b786bf7192d8f3"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewCacheOwnerGateway.java",
+          "line": 62,
+          "source_line": "        requireNoEarlierIntent(submission);",
+          "file_sha256": "ea273485bc6fbe32f9ac21adf0a23d6afedce412348a4ae1f3b786bf7192d8f3"
+        }
+      ],
+      "conclusion": "Each canonical execution creates a fresh run UUID; atomic claims bind normalized ledger identity, run, slice and revision4. Prior-slice replay is rejected; old explicit investigation proof is run-scoped and does not authorize a new run to reuse an old intent."
+    },
+    {
+      "scope": "Canonical whole-prefix source revalidation",
+      "bindings": [
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewDailyCacheJobService.java",
+          "line": 89,
+          "source_line": "        // A checkpoint is diagnostic only: each incremental request starts at its complete bootstrap anchor.",
+          "file_sha256": "6f4b4d6881ae7ee93b47b67c54a0cc09bf3383b6ec940dcf9ffcf34e16a780e4"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewDailyCacheMaterializeAdapter.java",
+          "line": 53,
+          "source_line": "        for (LocalDate day = request.from(); !day.isAfter(request.to()); day = day.plusDays(1)) {",
+          "file_sha256": "8f2cbd1d464d3420d4d145ec0ef0daf0e8ea1a51df51f29200c6f28c34d6ccd3"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewDailyCacheMaterializeAdapter.java",
+          "line": 69,
+          "source_line": "        requireFrozen(before);",
+          "file_sha256": "8f2cbd1d464d3420d4d145ec0ef0daf0e8ea1a51df51f29200c6f28c34d6ccd3"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewDailyCacheJobService.java",
+          "line": 275,
+          "source_line": "            for (var item : history) {",
+          "file_sha256": "6f4b4d6881ae7ee93b47b67c54a0cc09bf3383b6ec940dcf9ffcf34e16a780e4"
+        }
+      ],
+      "conclusion": "Each INCREMENTAL request retains its complete bootstrap prefix. The diagnostic checkpoint never advances the fetch start; current source vector/target identity is checked for each date and complete cache+receipt parity/WAL stability is verified again. YEAR or timeless-basic source changes require fresh generations for old dates."
+    },
+    {
+      "scope": "Prepared WRITE is an exact original-owner assertion",
+      "bindings": [
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewCachePreparedWriteAdapter.java",
+          "line": 69,
+          "source_line": "    private EtfMarketOverviewCachePublicationEnvelope requireExpected(EtfMarketOverviewDailyCache row) throws Exception {",
+          "file_sha256": "5b376135ce59f07b8d91da46088fa20bfae1ac870716a2a79677a0673ce5adb3"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewCachePreparedWriteAdapter.java",
+          "line": 87,
+          "source_line": "        var canonicalLines = new ArrayList<String>();",
+          "file_sha256": "5b376135ce59f07b8d91da46088fa20bfae1ac870716a2a79677a0673ce5adb3"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewCachePreparedWriteAdapter.java",
+          "line": 117,
+          "source_line": "        for (var row : input) {",
+          "file_sha256": "5b376135ce59f07b8d91da46088fa20bfae1ac870716a2a79677a0673ce5adb3"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewCachePreparedWriteAdapter.java",
+          "line": 135,
+          "source_line": "        for (var expected : units) {",
+          "file_sha256": "5b376135ce59f07b8d91da46088fa20bfae1ac870716a2a79677a0673ce5adb3"
+        }
+      ],
+      "conclusion": "Current original-owner previews must exactly match all five typed caller fields, generation and target; a single source vector is retained across the prepared input. Publication order may be date-sorted, while canonical prepared payload hashing and evidence preserve original caller order. Complete cache/receipt readback follows all emitted publication units."
+    },
+    {
+      "scope": "Durable submission and sole original publisher",
+      "bindings": [
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/SyncJobRunner.java",
+          "line": 246,
+          "source_line": "                if (!submitted[0]) {",
+          "file_sha256": "b42149cf76025559edcad56886e0bdf498e3cf975156e572bf7b9f01e70d1414"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/SyncJobRunner.java",
+          "line": 250,
+          "source_line": "                port.submissionRecorded(new VerifiedBatchExecutor.Submission(ledger.path(), run, slice,",
+          "file_sha256": "b42149cf76025559edcad56886e0bdf498e3cf975156e572bf7b9f01e70d1414"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/repository/EtfMarketOverviewCacheDelegatedPort.java",
+          "line": 67,
+          "source_line": "        var result=gateway.publish(bound,submission,cancelled);",
+          "file_sha256": "06f19cbae38d7793ac1ce8395162f760b8c1cbc12c531aba6f8363c50f720c1d"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewCacheOwnerGateway.java",
+          "line": 323,
+          "source_line": "        if (!envelope.knownSourceDate() || submission.revision()!=4 || !envelope.sourceFingerprint().equals(submission.sourceFingerprint()))",
+          "file_sha256": "ea273485bc6fbe32f9ac21adf0a23d6afedce412348a4ae1f3b786bf7192d8f3"
+        }
+      ],
+      "conclusion": "Shared runner persists actual SQLite SUBMITTED before the hook validates the revision4 authority and before the delegated port calls Gateway.publish. Java does not instantiate an independent cache/receipt sender. The process bridge invokes the original Python read-through owner only for known publication units."
+    },
+    {
+      "scope": "Explicit recovery remains separate from new HIT proof",
+      "bindings": [
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewDailyCacheJobService.java",
+          "line": 163,
+          "source_line": "        port.reconciliationContext(ledgerPath, runId);",
+          "file_sha256": "6f4b4d6881ae7ee93b47b67c54a0cc09bf3383b6ec940dcf9ffcf34e16a780e4"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewDailyCacheJobService.java",
+          "line": 166,
+          "source_line": "        var completion = adapter.revalidateOnly(request, () -> false);",
+          "file_sha256": "6f4b4d6881ae7ee93b47b67c54a0cc09bf3383b6ec940dcf9ffcf34e16a780e4"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewDailyCacheJobService.java",
+          "line": 209,
+          "source_line": "        locks.releaseAfterReconciliation(lease, true, true);",
+          "file_sha256": "6f4b4d6881ae7ee93b47b67c54a0cc09bf3383b6ec940dcf9ffcf34e16a780e4"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/EtfMarketOverviewDailyCacheJobService.java",
+          "line": 136,
+          "source_line": "            if (entry.kind() != SyncRunLedger.Kind.SLICE) continue;",
+          "file_sha256": "6f4b4d6881ae7ee93b47b67c54a0cc09bf3383b6ec940dcf9ffcf34e16a780e4"
+        }
+      ],
+      "conclusion": "Run-scoped actual writer-stop proof and fresh whole-window source/cache/receipt/WAL verification are required before uncertain ledger transitions and lease release. The status counts actual verified SLICE units; full-window readback cannot be relabeled as a second original-owner call."
+    },
+    {
+      "scope": "Target identity, registry and CLI wiring",
+      "bindings": [
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
+          "line": 243,
+          "source_line": "                    && etfMarketOverviewCacheTarget != null) {",
+          "file_sha256": "8960a1f6a70b71690fdf55c77c38c9bcbc3ce24d40eb4d07c7014afa28651464"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
+          "line": 537,
+          "source_line": "                adapters.put(member.memberId(), new EtfMarketOverviewCachePreparedWriteAdapter(plan,",
+          "file_sha256": "8960a1f6a70b71690fdf55c77c38c9bcbc3ce24d40eb4d07c7014afa28651464"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+          "line": 68,
+          "source_line": "            } else if (definition.datasetId().equals(\"etf_market_overview_daily_cache\")) {",
+          "file_sha256": "6c6d1c3931b44a0344f42d8212f68e564ba107ebebd34585e6af7ea0ce7cef74"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
+          "line": 33,
+          "source_line": "                        Set.of(\"tushare.shared\",\"file.bounded\",\"questdb.materialize\"), Set.of(\"stock_basic.snapshot\",\"exchange_calendar.year\",\"stock_detail_info.identity\",\"index_catalog.file\",\"ths_index.complete\",\"index_member.l2_explicit\",\"ths_member.board\",\"daily.trade_date\",\"daily_basic.trade_date\",\"stk_factor.daily\",\"stk_limit.trade_date\",\"etf_daily.trade_date\",\"etf_adj.trade_date\",\"etf_share.trade_date\",\"etf_factor.trade_date\",\"index_daily_market.trade_date\",\"index_daily_basic.trade_date\",\"index_weight.index_month\",\"index_monthly.month_window\",\"dc_index.trade_date\",\"moneyflow_hsgt.range31\",\"moneyflow_dc.trade_date\",\"moneyflow_ths.trade_date\",\"moneyflow.trade_date\",\"fund_portfolio.ann_date\",\"etf_basic.market_snapshot\",\"l2_manifest.parquet_date\",\"l2_daily_features.parquet_date\",\"l2_intraday_bar_features.parquet_date\",\"l2_event_response_features.parquet_date\",\"l2_t0_training_labels.parquet_date\",\"stk_st_daily.namechange_year_trade_dates\",\"market_breadth_daily.range31\",\"retail_sentiment_daily.range31\",\"etf_market_overview_daily.range31\",\"margin.trade_date.daily\",\"margin_detail.trade_date\",\"slb_len.start_end.bounded_range\"),",
+          "file_sha256": "6758e4448c5c15b670c1de286f0d4b7620a0dd17d984fcf672534b4ed58492a3"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/cli/CommandLineRunner.java",
+          "line": 378,
+          "source_line": "                    EtfMarketOverviewDailyCacheCommands.execute(command, options, etfMarketOverviewDailyCacheService);",
+          "file_sha256": "8f4a6d27424977d5c94271eb59bbcf47124225798554faae8aa84c6461e8ea32"
+        },
+        {
+          "path": "src/main/java/com/zoutrankil/data/cli/EtfMarketOverviewDailyCacheCommands.java",
+          "line": 38,
+          "source_line": "            case \"plan-etf-market-overview-cache-job\", \"run-etf-market-overview-cache-job\" -> {",
+          "file_sha256": "00358ad6fc3ced1b88584473ce1d45d7eaa3347ea8d39066be3489f67f789276"
+        }
+      ],
+      "conclusion": "Prepared group resume retains the previous frozen physical target and binds the dedicated delegated adapter. D101 typed reads, bounded job policy and finite plan/run/status/cancel/resume/reconcile CLI commands are registered. Default unconfigured PID0 cannot start a source-preview or publishing process."
+    }
+  ],
+  "database_queries": 0,
+  "database_writes": 0,
+  "publisher_invocations": 0,
+  "Gradle_runs": 0,
+  "actual_database_acceptance_performed_by_this_review": false,
+  "review_changes": "Only this new review artifact; no production, tests, bridge, task card, status, result or existing evidence changes.",
+  "recommendation": "No newly confirmed executable defect blocks the coordinator-authorized staged D101 live acceptance. Final D101 acceptance still requires separate actual new-HIT, real-source increment and typed-WRITE evidence.",
+  "nextadmission": false,
+  "next_task_admission": false,
+  "D102_may_start": false,
+  "human_confirmation": "pending",
+  "limitations": [
+    "Static review does not certify actual hit/miss counts, database state, output parity, process termination or full runtime acceptance.",
+    "The earlier failed HIT and its explicit readonly recovery remain separately preserved and are not a two-hit acceptance."
+  ]
+}

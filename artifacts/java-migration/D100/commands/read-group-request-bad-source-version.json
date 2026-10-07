@@ -1,0 +1,19 @@
+{
+  "timeoutMillis" : 30000,
+  "members" : [ {
+    "memberId" : "cache",
+    "datasetId" : "retail_sentiment_daily_cache",
+    "definitionVersion" : 1,
+    "query" : {
+      "columns" : [ "trade_date", "avg_retail_ratio", "avg_retail_entropy", "total_retail_amount_yi", "total_retail_net_inflow_yi", "avg_rel_aggro", "total_q1", "total_q3", "avg_wash_trade_ratio", "total_spoof_count", "total_manipulation_count", "avg_mfi_score", "total_main_net_yi", "source_version" ],
+      "equalities" : {
+        "source_version" : "bad-version"
+      },
+      "rangeColumn" : "trade_date",
+      "fromInclusive" : "2026-09-17",
+      "toExclusive" : "2026-09-22",
+      "pageSize" : 3,
+      "cursor" : null
+    }
+  } ]
+}

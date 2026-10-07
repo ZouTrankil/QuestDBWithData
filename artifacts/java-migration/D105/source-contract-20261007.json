@@ -1,0 +1,487 @@
+{
+  "task_id": "D105",
+  "record_date": "2026-10-07",
+  "status": "VERIFIED_BOUNDED_VIEW_READ_COORDINATOR_PENDING",
+  "scope": "File-grounded alias source contract plus root actual bounded READ evidence. Document author implemented DTO/mapping/repository and does not independently review that implementation.",
+  "reference_access": {
+    "files_only": true,
+    "reference_imports": 0,
+    "reference_writes": 0,
+    "provider_requests": 0
+  },
+  "identity": {
+    "dataset_id": "v_macro_core_monthly",
+    "canonical_dependency": "macro_core_monthly",
+    "natural_key": [
+      "month"
+    ],
+    "upsert_key": [],
+    "python_period": "YYYYMM inherited from base",
+    "domain": "YearMonth",
+    "dataset_values": "LocalDate, exact first calendar day",
+    "storage": "TIMESTAMP microseconds, exact first calendar day UTC midnight",
+    "json": "positive four-digit YYYY-MM",
+    "year_bounds": [
+      1,
+      9999
+    ],
+    "publication_time": false
+  },
+  "original_sql": {
+    "declaration": "CREATE OR REPLACE VIEW v_macro_core_monthly AS (SELECT * FROM macro_core_monthly);",
+    "select": "SELECT * FROM macro_core_monthly",
+    "fields": 9,
+    "filters": false,
+    "joins": false,
+    "aggregation": false,
+    "fill": false,
+    "scale": false,
+    "round": false,
+    "source_binding": {
+      "path": "D:/work/fund_2/back-monitor/sql/questdb/derived/create_monthly_derived_views.sql",
+      "sha256": "cab9a70d8bda8e0ac8c96720e38a500407431aaf2e7f18f1ac1eb05c8f55fc3e",
+      "lines": [
+        1,
+        3,
+        13,
+        15
+      ],
+      "role": "Original ordinary view declaration; direct SELECT * alias"
+    }
+  },
+  "references": [
+    {
+      "path": "D:/work/fund_2/back-monitor/sql/questdb/derived/create_monthly_derived_views.sql",
+      "sha256": "cab9a70d8bda8e0ac8c96720e38a500407431aaf2e7f18f1ac1eb05c8f55fc3e",
+      "lines": [
+        1,
+        3,
+        13,
+        15
+      ],
+      "role": "Original ordinary view declaration; direct SELECT * alias"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/models/macro/macro_core_monthly.py",
+      "sha256": "2eebcf7e231b00c1b031dc3fa43672c56b19aa498241c9b72445d122ae86c0d3",
+      "lines": [
+        16,
+        27,
+        29,
+        49
+      ],
+      "role": "Nine ordered base fields, YYYYMM and nullable float model; not a separate view writer"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/macro_core_monthly.py",
+      "sha256": "ba8afd819e3ac373783141bdbcb94a32cef454659d92cc7fb47c36373cc9ac50",
+      "lines": [
+        44,
+        69,
+        73,
+        128,
+        132,
+        168
+      ],
+      "role": "Original base builder semantics; mandatory six, GDP own month, SF prior12 observation ratio and base writer"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/registry.py",
+      "sha256": "474dda15e8bb77a848bbd015f1b650feb5e1998d95ce197e3cc9df072d65614d",
+      "lines": [
+        65,
+        146,
+        159
+      ],
+      "role": "Base source product and monthly_views schema/deployment_only ownerNone product"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/config/yaml/data/data_quality_rules.yaml",
+      "sha256": "976d19c80aba18a6c8b61acac695a4840579083c5e53bed03a00d59ce045b813",
+      "lines": [
+        453,
+        461
+      ],
+      "role": "Configured consistency source macro_core_monthly and uniqueness key month; PIT/backtest flags are source configuration only"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/queries/macro.py",
+      "sha256": "7f9ce369a7d65838a4775c8899ccfd10ee92ed5687a7b7fe8b1a4d38fc350afd",
+      "lines": [
+        21,
+        34,
+        64,
+        108
+      ],
+      "role": "Approved macro alias/base query API; fetch_view_first catches Exception and falls back"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/tests/unit/quant_platform/test_data_sample.py",
+      "sha256": "35d5f03f39901c0c17d95c55e688848d90a0dbfe058486f3c6217869b8e25066",
+      "lines": [
+        30,
+        59
+      ],
+      "role": "File-grounded fallback test, not executed by document author"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/composition/query.py",
+      "sha256": "b9ec33789b8cad4e5cb92a66f411c77eafccc285870fe2625b09168b8fad2caf",
+      "lines": [
+        7,
+        15,
+        23
+      ],
+      "role": "Public query service factory with QuestDbRecordQuery"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/composition/__init__.py",
+      "sha256": "941f67522142046ebecca01bdafffab2e2ce1ed2ba7c3b636af116a3dd3a93b3",
+      "lines": [
+        87,
+        108,
+        228,
+        229
+      ],
+      "role": "Additional composition factory; no caller cutover claim"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/scripts/tools/data/recover_macro_core_monthly.py",
+      "sha256": "e2c666914ab3899d53b65759369e9db608ad25c78566f9847765b58c3047376d",
+      "lines": [
+        44,
+        50,
+        155,
+        169
+      ],
+      "role": "Managed recovery script reads alias after base cutover. Script writes and its 1e-12 comparison are not invoked or adopted by D105"
+    }
+  ],
+  "field_contract": [
+    {
+      "order": 1,
+      "source": "macro_core_monthly.month",
+      "storage": "month",
+      "accessor": "month",
+      "java_type": "YearMonth",
+      "storage_type": "TIMESTAMP",
+      "nullable": false,
+      "unit": "observation month",
+      "meaning": "Exact first calendar day UTC midnight; DatasetValues first-day LocalDate; canonical JSON YYYY-MM"
+    },
+    {
+      "order": 2,
+      "source": "macro_core_monthly.cpi_yoy",
+      "storage": "cpi_yoy",
+      "accessor": "cpiYoy",
+      "java_type": "Double",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored source value; historical local source declares percent",
+      "meaning": "Direct alias of base CPI YoY"
+    },
+    {
+      "order": 3,
+      "source": "macro_core_monthly.ppi_yoy",
+      "storage": "ppi_yoy",
+      "accessor": "ppiYoy",
+      "java_type": "Double",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored monthly YoY",
+      "meaning": "Direct alias of base PPI YoY; no scaling"
+    },
+    {
+      "order": 4,
+      "source": "macro_core_monthly.pmi_mfg",
+      "storage": "pmi_mfg",
+      "accessor": "pmiMfg",
+      "java_type": "Double",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "unit": "manufacturing PMI level",
+      "meaning": "Direct alias of base manufacturing PMI"
+    },
+    {
+      "order": 5,
+      "source": "macro_core_monthly.gdp_yoy",
+      "storage": "gdp_yoy",
+      "accessor": "gdpYoy",
+      "java_type": "Double",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored source value; historical local source declares percent",
+      "meaning": "Base report_date own-month GDP only; NULL remains NULL and no forward fill"
+    },
+    {
+      "order": 6,
+      "source": "macro_core_monthly.m2_yoy",
+      "storage": "m2_yoy",
+      "accessor": "m2Yoy",
+      "java_type": "Double",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored source value; historical local source declares percent",
+      "meaning": "Direct alias of base M2 YoY"
+    },
+    {
+      "order": 7,
+      "source": "macro_core_monthly.social_financing_stock",
+      "storage": "social_financing_stock",
+      "accessor": "socialFinancingStock",
+      "java_type": "Double",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored value; historical local source declares 万亿元",
+      "meaning": "Base total social financing stock"
+    },
+    {
+      "order": 8,
+      "source": "macro_core_monthly.new_rmb_loan",
+      "storage": "new_rmb_loan",
+      "accessor": "newRmbLoan",
+      "java_type": "Double",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored value; historical local source declares 亿元",
+      "meaning": "Legacy compatibility name for total social financing inc_month, not a separate RMB loan series"
+    },
+    {
+      "order": 9,
+      "source": "macro_core_monthly.social_financing_yoy",
+      "storage": "social_financing_yoy",
+      "accessor": "socialFinancingYoy",
+      "java_type": "Double",
+      "storage_type": "DOUBLE",
+      "nullable": true,
+      "unit": "dimensionless fractional ratio",
+      "meaning": "Base current stock / preceding twelfth sorted physical observation stock - 1; no multiplication by100"
+    }
+  ],
+  "base_semantics": {
+    "D104_reference": "../D104/source-contract-20261007.json",
+    "view_computation": "No recomputation. Preserve all nine actually stored base values including historical required-component NULLs.",
+    "required_base_publication_fields": [
+      "cpi_yoy",
+      "ppi_yoy",
+      "pmi_mfg",
+      "m2_yoy",
+      "social_financing_stock",
+      "new_rmb_loan"
+    ],
+    "view_read_required_values": [],
+    "gdp": "Own report_date month only, no carry/forward-fill",
+    "social_financing_yoy": "Base fractional change relative to preceding twelfth physical observation; no calendar-gap filling or *100",
+    "legacy_new_rmb_loan": "Original sf_month.inc_month total social financing increment; compatibility name retained",
+    "unit_scope": "Historical local source declarations only; no current global provider-unit certificate; alias does not scale stored values"
+  },
+  "owner_and_refresh": {
+    "view_owner": "schema.monthly_views.deployment_only",
+    "independent_view_sync_job": false,
+    "canonical_base_job": {
+      "job_id": "data.macro_core_monthly",
+      "version": 1,
+      "task": "D104",
+      "manual": true,
+      "default_mode": "INCREMENTAL",
+      "daily_eligible": false
+    },
+    "DDL": "Original CREATE OR REPLACE is a declaration only; D105 actual isolated setup is root-owned, missing-only and separately admitted. No DTO/repository DDL writer.",
+    "checkpoint": "N/A for ordinary view. D104 owns source materialization/checkpoint.",
+    "provider": "N/A direct view provider sync; D104 six governed sources are not certified migrated Java upstream owners"
+  },
+  "caller_behavior": {
+    "Python": "MacroQueryService permits approved view/base reads; fetch_view_first catches any Exception then queries supplied fallback; current test confirms view→base fallback.",
+    "Java": "Actual view/schema/source errors propagate. No fallback to base or empty page.",
+    "caller_cutover_certified": false
+  },
+  "formal_metadata": {
+    "evidence": {
+      "path": "commands/root-formal-view-metadata-20261007.json",
+      "sha256": "9ce66ed64413732c8577e19bb53b72b44d2e35a11c9a040320e9009a9866059f"
+    },
+    "provenance": "Root actual SELECT-only observation; document author read the saved artifact only",
+    "directory": "v_macro_core_monthly~1806",
+    "id": 1806,
+    "view_sql": "SELECT * FROM macro_core_monthly",
+    "status": "valid",
+    "invalidation_reason": null,
+    "status_update": "2026-09-30T01:27:52.535072Z",
+    "schema": "TIMESTAMP month designated, eight DOUBLE; all upsertKey=false",
+    "native_partition": "N/A",
+    "native_wal_enabled": true,
+    "native_dedup": false,
+    "native_mat_view": false,
+    "contract": "Ordinary VIEW partition/WAL/DEDUP/write N/A; native walEnabled=true is observed view metadata, not a persistence or publication capability.",
+    "formal_writes": 0
+  },
+  "bounded_read": {
+    "months_max": 12,
+    "page_rows_max": 12,
+    "projection": "All ordered nine columns",
+    "key": "LocalDate first-day equality only",
+    "range": "Increasing LocalDate first-day [from,to) of1..12 months",
+    "physical_version": "Shared D105-only view/base guard pins actual view SQL/id/directory/status/schema plus D104 base metadata/schema/WAL vector before/after and in actual cursor",
+    "caller_business_version": "No source_version output column; repository passes null caller version to shared reader",
+    "pairs": [
+      {
+        "view": "v_macro_core_monthly",
+        "base": "macro_core_monthly"
+      },
+      {
+        "view": "java_d105_v_macro_core_monthly_acceptance",
+        "base": "java_d104_macro_core_monthly_acceptance"
+      }
+    ]
+  },
+  "prior_base_evidence": {
+    "task": "D104",
+    "gate": {
+      "path": "../D104/coordinator-review-20261007.json",
+      "sha256": "a5fd14527a068185f222abf54292c0f8532a50d8ae2eb49f14e4fc6b369d1bde"
+    },
+    "increment": {
+      "path": "../D104/commands/java-increment-acceptance-20261007.json",
+      "sha256": "b1aec9b83be584059cbe2aad5d18240a14167915b5c37ad9f02568e586c318ca"
+    },
+    "source_window": "2026-06..2026-08 plus preceding12 SF observations",
+    "base_target": "java_d104_macro_core_monthly_acceptance",
+    "base_rows": 3,
+    "base_fields": 27,
+    "nullable_double_slots": 24,
+    "nonnull_double_bits": 22,
+    "scope": "Prior D104 actual August source append and base materialization evidence only. D105 reads an existing frozen base; no D105 append, source revision, writer or checkpoint is claimed."
+  },
+  "limits": [
+    "Only actual June..August bounded view/base/original-oracle parity at each target is certified. Formal base has other rows; complete history/provider universe is not certified.",
+    "Production READ requires first-day month identity and increasing range of1..12 months/page<=12; no logical-date closed-month gate is imposed. Actual June..August is a closed-month sample.",
+    "No D105 source append or source revision occurred. D104 actual August source/base increment is reused as separate prior evidence.",
+    "No new view job, direct business writer, checkpoint or view FULL is introduced. Missing-only private alias setup had one separately admitted acknowledged CREATE; subsequent Java and terminal scopes are SELECT-only.",
+    "Canonical data.macro_core_monthly v1 is an existing explicit isolated-target base owner. No automatic formal source refresh, six migrated upstream Java owners, consumer cutover or D106 admission is certified.",
+    "Cancellation is pre-cancelled token refusal before reader invocation only; no in-flight cancellation evidence.",
+    "SQL timeout20seconds bounds each guarded query; it is not a single aggregate20second deadline or global atomic cross-query snapshot.",
+    "Actual UTC month values and view status microseconds use native scalar/string carriers. Native view walEnabled=true remains metadata, not a view publication capability.",
+    "No publication availability/PIT/backtest certification follows from historical DQ configuration flags.",
+    "Returned row caps do not certify internal engine scan volume; original Python managed recovery writer and its numerical tolerance were not executed or adopted."
+  ],
+  "actual_D105_acceptance": {
+    "status": "VERIFIED_BOUNDED_VIEW_READ_COORDINATOR_PENDING",
+    "execution_owner": "root; document author transcribes immutable saved evidence only and performed no tests, DB/native calls or owner invocation",
+    "private_setup": {
+      "receipt": {
+        "path": "commands/view-isolated-acceptance-20261007.json",
+        "sha256": "191475bf1496c53a78044139f865bd31f050c13dc6fe1701f4846eb5a832536a"
+      },
+      "attempted_DDL": 1,
+      "acknowledged_DDL": 1,
+      "DML": 0,
+      "ILP": 0,
+      "base_writes": 0,
+      "formal_writes": 0,
+      "unknown_create_retry": false,
+      "view_id": 16,
+      "view_directory": "java_d105_v_macro_core_monthly_acceptance~16"
+    },
+    "formal_select_only_audit": {
+      "path": "commands/view-formal-readonly-audit-20261007.json",
+      "sha256": "4b3aec1c690ae34a0b69e35df34d535d7a881454e2e549623e11724eb9be437d"
+    },
+    "java_private": {
+      "path": "commands/java-view-read-private-acceptance-20261007.json",
+      "sha256": "84fe5329f4440c053da258da9f53b9c5a8b126aa2f3dd0d559b9262b5adf78a3"
+    },
+    "java_formal": {
+      "path": "commands/java-view-read-formal-acceptance-20261007.json",
+      "sha256": "bc60e0dc9fed69a599a33ed8dddf4ecc54ff821dba93a9b174acebc9c1d43e1c"
+    },
+    "final_readonly_closure": {
+      "path": "commands/java-readers-process-and-final-readonly-review-20261007.json",
+      "sha256": "51573babd16c9d2af10a18a6732d541319df003f1c914a37f0e718bbc5823355"
+    },
+    "inventory": {
+      "path": "commands/validation-inventory-20261007.json",
+      "sha256": "00a6af0e173b55b97824ab29484d93226675cd72bc5cca45c447a96884ce8da0"
+    },
+    "window": {
+      "from": "2026-06-01",
+      "to_exclusive": "2026-09-01",
+      "first_and_replay": "June..July",
+      "later_read_window": "July..August",
+      "empty": "September",
+      "closed_months_sample_only": true,
+      "source_increment": false,
+      "source_revision": false
+    },
+    "per_scope": {
+      "rows": 3,
+      "fields": 27,
+      "nullable_double_slots": 24,
+      "nonnull_double_rawbits": 22,
+      "null_double_values": 2,
+      "double_tolerance": 0,
+      "full_range_pages": 3,
+      "key_range_and_base_oracle_exact": true,
+      "configured_read_group": true,
+      "changed_query_cursor_rejected": true,
+      "typed_write_and_replacement_rejected": true
+    },
+    "cancellation_scope": "Pre-cancelled token before reader invocation only; no in-flight cancellation certification",
+    "D105_business_writes": 0,
+    "Java_read_scope_DDL": 0,
+    "formal_mutations": 0,
+    "owner_invocations": 0,
+    "ledger_initialized": false,
+    "protected_tables_per_target": 7,
+    "D104_ledger_counts_unchanged": {
+      "runs": 9,
+      "entries": 21,
+      "events": 85,
+      "groups": 1,
+      "leases": 0
+    },
+    "retained_leases": 0,
+    "reader_and_creator_original_instances_stopped": "Root fresh original PID+birth absence evidence; later PID reuse is not the original instance",
+    "coordinator_gate": "PENDING root final registration",
+    "human_review": "pending_review",
+    "D106_admitted": false,
+    "private_full_source_field_comparisons": 412,
+    "formal_full_source_field_readback": "not_performed; metadata_and_schema_stability_only; original D104 formal source capture remains frozen predecessor evidence"
+  },
+  "validation_inventory": {
+    "owned_unique_methods": 20,
+    "mapping_methods": 12,
+    "repository_methods": 8,
+    "executed_by_author": false,
+    "root_execution_status": "PASS; actual immutable XML/log inventory bound below",
+    "java_pure_unique_methods": 60,
+    "java_live_unique_methods": 1,
+    "java_live_actual_scope_invocations": 2,
+    "java_unique_passing_methods": 61,
+    "java_PASS_invocations": 62,
+    "python_unique_pure_guards": 44,
+    "current_failures": 0,
+    "current_errors": 0,
+    "current_skips": 0,
+    "inventory": {
+      "path": "commands/validation-inventory-20261007.json",
+      "sha256": "00a6af0e173b55b97824ab29484d93226675cd72bc5cca45c447a96884ce8da0"
+    },
+    "original_java_import_compile_failure": {
+      "path": "commands/java-pure-tests-20261007.log",
+      "sha256": "3da8fa536d3e7d7237da40e4150d932b0bff7120815b75da94e9188505003b7b"
+    },
+    "corrected_actual_java_pure_log": {
+      "path": "commands/java-pure-tests-import-correction-20261007.log",
+      "sha256": "6fb76742c89d018435ec532ed037959f0cf6a991b7eae14c57ec9926de87fb4e"
+    },
+    "original_python_43_subset_not_added": {
+      "path": "commands/python-view-guards-20261007.log",
+      "sha256": "3f8566f32f39436fe4374afe796684596e1fb43ef1148fb3730d569285b7c25d"
+    },
+    "current_python_44_log": {
+      "path": "commands/python-view-guards-private-identity-correction-20261007.log",
+      "sha256": "1dce52a154fb93ac664f87df35286bc76fcbfcf58ecb61785e1e9d9d82eb295d"
+    },
+    "counting": "Two actual live scopes reuse one unique JUnit method; failed compilation ran no tests, old43 Python subset is included in current44 and is not added"
+  }
+}

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" tests="8" skipped="0" failures="7" errors="0" timestamp="2026-10-06T09:38:01.192Z" hostname="AMD395" time="0.147">
+  <properties/>
+  <testcase name="oldSourceGenerationFailsBeforeSend()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.068">
+    <failure message="java.lang.IllegalArgumentException: Unknown dependency: etf_share" type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: Unknown dependency: etf_share
+	at com.zoutrankil.data.service.DatasetRegistry.&lt;init&gt;(DatasetRegistry.java:23)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.setup(EtfMarketOverviewCachePreparedWriteAdapterTest.java:39)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.oldSourceGenerationFailsBeforeSend(EtfMarketOverviewCachePreparedWriteAdapterTest.java:84)
+</failure>
+  </testcase>
+  <testcase name="duplicateDayDifferentGenerationAndWindowOverflowAreRejected()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.029"/>
+  <testcase name="canonicalPreparedDefinitionAdmitsOnlyBoundedIngest()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.009">
+    <failure message="java.lang.IllegalArgumentException: Unknown dependency: etf_share" type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: Unknown dependency: etf_share
+	at com.zoutrankil.data.service.DatasetRegistry.&lt;init&gt;(DatasetRegistry.java:23)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.setup(EtfMarketOverviewCachePreparedWriteAdapterTest.java:39)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.canonicalPreparedDefinitionAdmitsOnlyBoundedIngest(EtfMarketOverviewCachePreparedWriteAdapterTest.java:71)
+</failure>
+  </testcase>
+  <testcase name="wrongFiveFieldCallerAssertionFailsBeforeAnyOwnerSend()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.008">
+    <failure message="java.lang.IllegalArgumentException: Unknown dependency: etf_share" type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: Unknown dependency: etf_share
+	at com.zoutrankil.data.service.DatasetRegistry.&lt;init&gt;(DatasetRegistry.java:23)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.setup(EtfMarketOverviewCachePreparedWriteAdapterTest.java:39)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.wrongFiveFieldCallerAssertionFailsBeforeAnyOwnerSend(EtfMarketOverviewCachePreparedWriteAdapterTest.java:79)
+</failure>
+  </testcase>
+  <testcase name="realPersistentGroupBindsEveryPublicationToCanonicalInputAndSubmittedAuthority()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.007">
+    <failure message="java.lang.IllegalArgumentException: Unknown dependency: etf_share" type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: Unknown dependency: etf_share
+	at com.zoutrankil.data.service.DatasetRegistry.&lt;init&gt;(DatasetRegistry.java:23)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.setup(EtfMarketOverviewCachePreparedWriteAdapterTest.java:39)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.realPersistentGroupBindsEveryPublicationToCanonicalInputAndSubmittedAuthority(EtfMarketOverviewCachePreparedWriteAdapterTest.java:112)
+</failure>
+  </testcase>
+  <testcase name="sourceVectorChangeAcrossPreparedRowsStopsAllSubmissions()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.007">
+    <failure message="java.lang.IllegalArgumentException: Unknown dependency: etf_share" type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: Unknown dependency: etf_share
+	at com.zoutrankil.data.service.DatasetRegistry.&lt;init&gt;(DatasetRegistry.java:23)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.setup(EtfMarketOverviewCachePreparedWriteAdapterTest.java:39)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.sourceVectorChangeAcrossPreparedRowsStopsAllSubmissions(EtfMarketOverviewCachePreparedWriteAdapterTest.java:103)
+</failure>
+  </testcase>
+  <testcase name="signedZeroCannotBeChangedByCaller()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.006">
+    <failure message="java.lang.IllegalArgumentException: Unknown dependency: etf_share" type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: Unknown dependency: etf_share
+	at com.zoutrankil.data.service.DatasetRegistry.&lt;init&gt;(DatasetRegistry.java:23)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.setup(EtfMarketOverviewCachePreparedWriteAdapterTest.java:39)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.signedZeroCannotBeChangedByCaller(EtfMarketOverviewCachePreparedWriteAdapterTest.java:89)
+</failure>
+  </testcase>
+  <testcase name="missingSourceDayDoesNotInventPreparedCacheOrReceipt()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.006">
+    <failure message="java.lang.IllegalArgumentException: Unknown dependency: etf_share" type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: Unknown dependency: etf_share
+	at com.zoutrankil.data.service.DatasetRegistry.&lt;init&gt;(DatasetRegistry.java:23)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.setup(EtfMarketOverviewCachePreparedWriteAdapterTest.java:39)
+	at com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.missingSourceDayDoesNotInventPreparedCacheOrReceipt(EtfMarketOverviewCachePreparedWriteAdapterTest.java:94)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,217 @@
+{
+  "task_id": "D098",
+  "artifact_kind": "mapping_contract",
+  "captured_local_date": "2026-10-06",
+  "dataset_id": "mv_retail_sentiment_daily_v1",
+  "definition_version": 1,
+  "scope": "Source and output semantics for D098. This artifact records the mapping contract; task result, execution status and acceptance gate are maintained separately.",
+  "authoritative_python": {
+    "sql": {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/market_barometer_views.py",
+      "entry": "VIEW_SELECTS[v_retail_sentiment_daily]",
+      "verified_lines": [31, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 48, 55]
+    },
+    "source_model": {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/models/stock/l2_features.py",
+      "class": "L2DailyFeatures",
+      "nullable_source_declaration_lines": [93, 100, 102, 105, 110, 111, 112, 121, 123, 127, 128, 164, 171],
+      "source_storage_type_lines": [238, 245, 247, 250, 255, 256, 257, 266, 268, 272, 273, 309, 316]
+    },
+    "builders": {
+      "amount_and_aggression": {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/level2_features/p0_wide_table_builder.py",
+        "verified_lines": [25, 27, 34, 70, 71, 94, 95, 101, 102, 103, 109]
+      },
+      "entropy": {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/level2_features/p1_entropy_builder.py",
+        "verified_lines": [50, 57, 85, 96]
+      },
+      "wash_trade_ratio": {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/level2_features/p2_wash_trade_builder.py",
+        "verified_lines": [90, 91, 95]
+      },
+      "spoof_and_manipulation": {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/level2_features/p3_spoofing_builder.py",
+        "verified_lines": [84, 86, 88, 89, 90]
+      },
+      "quadrant_counts": {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/level2_features/p4_net_flow_builder.py",
+        "verified_lines": [52, 54, 58, 60, 85, 87]
+      },
+      "signed_net_flows": {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/level2_features/p5_main_funds_builder.py",
+        "verified_lines": [35, 36, 37, 41, 67, 68]
+      },
+      "gmm_retail_volume_ratio": {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/level2_features/p7_gmm_behavior_builder.py",
+        "verified_lines": [64, 69, 81]
+      },
+      "main_force_intensity": {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/level2_features/p8_main_force_intensity_builder.py",
+        "verified_lines": [155, 156]
+      }
+    },
+    "price_unit_chain": [
+      {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/connectors/level2/sources/dfcf_csv_source.py",
+        "verified_lines": [53, 366, 367],
+        "meaning": "DFCF raw prices are yuan multiplied by 10000; conversion divides by 100 before the Kuake parser."
+      },
+      {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/connectors/level2/kuake_parser.py",
+        "verified_lines": [24, 208, 209, 402],
+        "meaning": "The Kuake parser divides price columns by 100; P0 Amount then uses normalized Price times Volume or supplied Turnover."
+      }
+    ]
+  },
+  "identity_and_storage": {
+    "object_kind": "MATERIALIZED_VIEW",
+    "business_key": ["trade_date"],
+    "grain": "One nonempty calendar-day SAMPLE BY bucket across all physical l2_daily_features rows in the bounded interval.",
+    "source_complete_key": ["ts", "symbol"],
+    "designated_timestamp": "trade_date",
+    "partition": "MONTH",
+    "wal": true,
+    "dedup_key": [],
+    "direct_write": "Rejected; no WRITE, STATIC_REPLACE or WAL_REPLACE capability.",
+    "materialization": "Native refresh is exposed through the canonical data.mv_retail_sentiment_daily_v1 job in MATERIALIZE/INCREMENTAL/RECONCILE modes; MATERIALIZE is a job mode, not a DatasetDefinition capability.",
+    "dependencies": ["l2_daily_features"],
+    "dataset_source": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/RetailSentimentDailyV1Dataset.java",
+    "verified_dataset_lines": [48, 49]
+  },
+  "date_contract": {
+    "source_expression": "ts AS trade_date ... SAMPLE BY 1d ALIGN TO CALENDAR",
+    "source_sql_lines": [33, 46, 48, 55],
+    "java_type": "java.time.LocalDate",
+    "storage_type": "TIMESTAMP",
+    "carrier": "Exact midnight at UTC carries a business calendar date; it is not an event-time instant and is not shifted into Asia/Shanghai.",
+    "range": "Repository start is inclusive, end is exclusive; the native job/port frozen window uses an inclusive final date.",
+    "invalid_carriers": "Null, non-midnight and sub-midnight microsecond timestamps fail; no truncation or timezone guessing.",
+    "temporal_source": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/temporal/TemporalValues.java",
+    "verified_temporal_lines": [99, 103, 106, 108, 111]
+  },
+  "outputs_in_card_order": [
+    {
+      "ordinal": 1, "column": "trade_date", "java_accessor": "tradeDate",
+      "source_expression": "ts AS trade_date", "python_sql_line": 33, "java_dataset_line": 19,
+      "storage_type": "TIMESTAMP", "java_type": "LocalDate", "nullable": false,
+      "unit": "business calendar day", "meaning": "Natural identity of the daily aggregation; exact UTC midnight storage carrier."
+    },
+    {
+      "ordinal": 2, "column": "avg_retail_ratio", "java_accessor": "avgRetailRatio",
+      "source_expression": "avg(gmm_retail_ratio)", "python_sql_line": 34, "python_model_line": 164, "java_dataset_line": 21,
+      "storage_type": "DOUBLE", "java_type": "Double", "nullable": true,
+      "unit": "dimensionless fraction", "meaning": "Arithmetic mean of each source row's GMM retail Volume / total Volume ratio; not percentage points and not a new volume-weighted cross-symbol ratio."
+    },
+    {
+      "ordinal": 3, "column": "avg_retail_entropy", "java_accessor": "avgRetailEntropy",
+      "source_expression": "avg(mean_retail_entropy)", "python_sql_line": 35, "python_model_line": 100, "java_dataset_line": 23,
+      "storage_type": "DOUBLE", "java_type": "Double", "nullable": true,
+      "unit": "bits", "meaning": "Arithmetic mean of source retail time Shannon entropy values; the P1 builder uses base=2. It does not reconstruct one combined raw-event entropy."
+    },
+    {
+      "ordinal": 4, "column": "total_retail_amount_yi", "java_accessor": "totalRetailAmountYi",
+      "source_expression": "sum(retail_total_amount) / 100000000.0", "python_sql_line": 36, "python_model_line": 102, "java_dataset_line": 25,
+      "storage_type": "DOUBLE", "java_type": "Double", "nullable": true,
+      "unit": "yi yuan", "meaning": "Source retail turnover in yuan is divided by 100000000 once in SQL; Java passes the stored result through without scaling."
+    },
+    {
+      "ordinal": 5, "column": "total_retail_net_inflow_yi", "java_accessor": "totalRetailNetInflowYi",
+      "source_expression": "sum(retail_funds_net_inflow) / 100000000.0", "python_sql_line": 37, "python_model_line": 128, "java_dataset_line": 28,
+      "storage_type": "DOUBLE", "java_type": "Double", "nullable": true,
+      "unit": "yi yuan", "meaning": "Signed retail small-order buy amount minus sell amount, summed then converted from yuan. Negative net outflow is preserved."
+    },
+    {
+      "ordinal": 6, "column": "avg_rel_aggro", "java_accessor": "avgRelAggro",
+      "source_expression": "avg(mean_rel_aggro)", "python_sql_line": 38, "python_model_line": 93, "java_dataset_line": 31,
+      "storage_type": "DOUBLE", "java_type": "Double", "nullable": true,
+      "unit": "dimensionless source metric", "meaning": "Arithmetic mean of source relative aggression. P0 derives quote-relative (price-bid)/spread, with a buy-amount share fallback; Java applies no further clamping."
+    },
+    {
+      "ordinal": 7, "column": "total_q1", "java_accessor": "totalQ1",
+      "source_expression": "sum(q1_count)", "python_sql_line": 39, "python_model_line": 121, "java_dataset_line": 33,
+      "storage_type": "LONG", "java_type": "Long", "nullable": true,
+      "unit": "window count", "meaning": "Sum of Q1 windows with net inflow and price rise. Null remains null; nonnull results must be nonnegative and fit exactly in signed 64 bits."
+    },
+    {
+      "ordinal": 8, "column": "total_q3", "java_accessor": "totalQ3",
+      "source_expression": "sum(q3_count)", "python_sql_line": 40, "python_model_line": 123, "java_dataset_line": 35,
+      "storage_type": "LONG", "java_type": "Long", "nullable": true,
+      "unit": "window count", "meaning": "Sum of Q3 windows with net outflow and price decline. Null remains null; nonnull results must be nonnegative and fit exactly in signed 64 bits."
+    },
+    {
+      "ordinal": 9, "column": "avg_wash_trade_ratio", "java_accessor": "avgWashTradeRatio",
+      "source_expression": "avg(wash_trade_ratio)", "python_sql_line": 41, "python_model_line": 105, "java_dataset_line": 37,
+      "storage_type": "DOUBLE", "java_type": "Double", "nullable": true,
+      "unit": "dimensionless fraction", "meaning": "Arithmetic mean of each source wash ratio. P2 uses wash Amount / total Amount; Java does not rebuild a whole-market weighted amount ratio."
+    },
+    {
+      "ordinal": 10, "column": "total_spoof_count", "java_accessor": "totalSpoofCount",
+      "source_expression": "sum(spoof_count)", "python_sql_line": 42, "python_model_line": 110, "java_dataset_line": 39,
+      "storage_type": "LONG", "java_type": "Long", "nullable": true,
+      "unit": "occurrence count", "meaning": "Sum of source spoofing counts. Null remains null; nonnull results must be nonnegative and fit exactly in signed 64 bits."
+    },
+    {
+      "ordinal": 11, "column": "total_manipulation_count", "java_accessor": "totalManipulationCount",
+      "source_expression": "sum(fake_support_count + fake_pressure_count)", "python_sql_line": 43,
+      "python_model_lines": [111, 112], "java_dataset_line": 41,
+      "storage_type": "LONG", "java_type": "Long", "nullable": true,
+      "unit": "occurrence count", "meaning": "Add support and pressure within each row, then SUM. Either null operand makes that row's pair expression null. No COALESCE and no sum(support)+sum(pressure) rewrite."
+    },
+    {
+      "ordinal": 12, "column": "avg_mfi_score", "java_accessor": "avgMfiScore",
+      "source_expression": "avg(mfi_score)", "python_sql_line": 44, "python_model_line": 171, "java_dataset_line": 44,
+      "storage_type": "DOUBLE", "java_type": "Double", "nullable": true,
+      "unit": "dimensionless source score", "meaning": "Arithmetic mean of source main-force intensity scores. P8 weights three normalized components and uses max(0, final_mfi), without an upper clamp of one; Java preserves the stored scale."
+    },
+    {
+      "ordinal": 13, "column": "total_main_net_yi", "java_accessor": "totalMainNetYi",
+      "source_expression": "sum(main_net_inflow) / 100000000.0", "python_sql_line": 45, "python_model_line": 127, "java_dataset_line": 46,
+      "storage_type": "DOUBLE", "java_type": "Double", "nullable": true,
+      "unit": "yi yuan", "meaning": "Signed large-order buy amount minus sell amount, summed then converted from yuan. Negative net outflow is preserved."
+    }
+  ],
+  "null_precision_and_validation": {
+    "aggregate_types": "Eight nullable Double and four nullable Long fields; tradeDate is required.",
+    "null_rule": "SQL SUM/AVG null results remain null through generated projection, typed domain, DatasetValues, readback and canonical bytes. Null is different from numeric zero; Java never fills absent metrics with zero.",
+    "double_rule": "Nonnull Double must be finite. NaN/infinity fail; no rounding, percent conversion, extra currency scaling, positivity check or inferred 0..1 restriction is added.",
+    "long_rule": "Nonnull output counts must be nonnegative. The complete bounded source census uses BigInteger totals and longValueExact, and the rowwise manipulation pair uses Math.addExact; overflow fails instead of allowing native LONG wrap to validate against itself.",
+    "exact_count_source": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/RetailSentimentDailyV1MaterializationPort.java",
+    "verified_exact_count_lines": [236, 283, 292, 307],
+    "readback_comparison": "Date and nullable Long are exact; nullable finite Double comparison uses atol=1e-8 and rtol=1e-10. Canonical bytes retain the actual source double values and explicit null markers.",
+    "domain_source": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/RetailSentimentDailyV1.java",
+    "verified_domain_lines": [7, 25, 29, 30, 31, 32, 35],
+    "mapper_source": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/mapper/RetailSentimentDailyV1Mapper.java",
+    "verified_mapper_lines": [12, 14, 39],
+    "generated_projection": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/materializedview/RetailSentimentDailyV1MaterializedView.java",
+    "generated_projection_hand_edited": false
+  },
+  "physical_source_and_fixture_scope": {
+    "formal_source_physical_column_count": 110,
+    "formal_schema_evidence": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D098/commands/mv-readonly-audit-20261006.json",
+    "verified_formal_column_count_line": 307,
+    "needed_source_columns": ["ts", "symbol", "gmm_retail_ratio", "mean_retail_entropy", "retail_total_amount", "retail_funds_net_inflow", "mean_rel_aggro", "q1_count", "q3_count", "wash_trade_ratio", "spoof_count", "fake_support_count", "fake_pressure_count", "mfi_score", "main_net_inflow"],
+    "needed_source_column_count": 15,
+    "needed_source_type_counts": {"TIMESTAMP": 1, "SYMBOL": 1, "DOUBLE": 8, "LONG": 5},
+    "source_key_and_storage": "Source uses complete (ts,symbol) identity, ts designated TIMESTAMP, DAY partition, WAL and DEDUP on (ts,symbol). The fixture preserves all fifteen D098 dependency inputs including nulls.",
+    "private_target": "127.0.0.1:19010/18822; workspace var/d098-isolated-questdb, attested Windows PID/listeners/-d root and fixture marker before mutation.",
+    "initial_capture": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D098/commands/real-source-initial-20261006.json",
+    "initial_real_days": ["2026-09-17", "2026-09-18"],
+    "initial_real_rows": 15828,
+    "increment_capture": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D098/commands/real-source-increment-20261006.json",
+    "increment_real_day": "2026-09-21",
+    "increment_real_rows": 7945,
+    "fixture_setup_evidence": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D098/commands/source-fixture-20261006.json",
+    "scope_limit": "The fifteen-column real physical source projection supports this MV's thirteen outputs. It does not certify the full 110-column D086 model or upstream symbol universe. The already invalid formal MV is retained and receives no repair or writes from this mapping artifact."
+  },
+  "implementation_test_evidence": {
+    "test_source": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/mapper/RetailSentimentDailyV1MappingTest.java",
+    "verified_test_lines": [40, 61, 75, 92, 107, 118, 131, 144, 177, 201],
+    "mapping_tests": 10,
+    "mapping_failures": 0,
+    "mapping_errors": 0,
+    "mapping_skipped": 0,
+    "report": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D098/commands/unit-test-summary-20261006.json",
+    "test_scope": "Field order and lossless mapping, null versus zero, units/signed flow/no clamping, strict numeric types and overflow boundaries, all nonfinite double fields, UTC midnight carrier, read-only native storage/key definition, and bounded repository key/range/cursor forwarding. Unit evidence is distinct from live materialization and read acceptance."
+  }
+}

@@ -1,0 +1,764 @@
+{
+  "dataset": "l2_intraday_bar_features",
+  "source_root": "D:\\work\\fund_2\\back-monitor\\artifacts\\level2_t0_dataset",
+  "selected_date": "20260921",
+  "selected_symbol": "000001.SZ",
+  "manifest_rows": 1,
+  "complete_receipt_parts": 1,
+  "selected_part": "D:\\work\\fund_2\\back-monitor\\artifacts\\level2_t0_dataset\\l2_intraday_bar_features\\year=2026\\month=09\\trade_date=20260921\\part-00000.parquet",
+  "selected_part_bytes": 1537916,
+  "selected_row_count": 253,
+  "selected_minute_range": [
+    "2026-09-21T09:15:00",
+    "2026-09-21T15:00:00"
+  ],
+  "selected_source_columns": [
+    {
+      "name": "trade_date",
+      "type": "string"
+    },
+    {
+      "name": "symbol",
+      "type": "string"
+    },
+    {
+      "name": "market",
+      "type": "string"
+    },
+    {
+      "name": "board",
+      "type": "string"
+    },
+    {
+      "name": "minute",
+      "type": "timestamp[ns]"
+    },
+    {
+      "name": "open",
+      "type": "double"
+    },
+    {
+      "name": "high",
+      "type": "double"
+    },
+    {
+      "name": "low",
+      "type": "double"
+    },
+    {
+      "name": "close",
+      "type": "double"
+    },
+    {
+      "name": "volume",
+      "type": "double"
+    },
+    {
+      "name": "amount",
+      "type": "double"
+    },
+    {
+      "name": "tick_count",
+      "type": "int64"
+    },
+    {
+      "name": "active_buy_amount",
+      "type": "double"
+    },
+    {
+      "name": "active_sell_amount",
+      "type": "double"
+    },
+    {
+      "name": "vwap",
+      "type": "double"
+    },
+    {
+      "name": "has_trade_1m",
+      "type": "int64"
+    },
+    {
+      "name": "bid1",
+      "type": "double"
+    },
+    {
+      "name": "ask1",
+      "type": "double"
+    },
+    {
+      "name": "mid",
+      "type": "double"
+    },
+    {
+      "name": "spread",
+      "type": "double"
+    },
+    {
+      "name": "microprice",
+      "type": "double"
+    },
+    {
+      "name": "bid_depth_1",
+      "type": "int64"
+    },
+    {
+      "name": "ask_depth_1",
+      "type": "int64"
+    },
+    {
+      "name": "depth_1",
+      "type": "int64"
+    },
+    {
+      "name": "obi_1",
+      "type": "double"
+    },
+    {
+      "name": "bid_depth_5",
+      "type": "int64"
+    },
+    {
+      "name": "ask_depth_5",
+      "type": "int64"
+    },
+    {
+      "name": "depth_5",
+      "type": "int64"
+    },
+    {
+      "name": "obi_5",
+      "type": "double"
+    },
+    {
+      "name": "bid_depth_10",
+      "type": "int64"
+    },
+    {
+      "name": "ask_depth_10",
+      "type": "int64"
+    },
+    {
+      "name": "depth_10",
+      "type": "int64"
+    },
+    {
+      "name": "obi_10",
+      "type": "double"
+    },
+    {
+      "name": "quote_count",
+      "type": "int64"
+    },
+    {
+      "name": "ofi_1m",
+      "type": "double"
+    },
+    {
+      "name": "active_buy_ratio",
+      "type": "double"
+    },
+    {
+      "name": "active_sell_ratio",
+      "type": "double"
+    },
+    {
+      "name": "vwap_gap_to_mid",
+      "type": "double"
+    },
+    {
+      "name": "vwap_gap_to_open",
+      "type": "double"
+    },
+    {
+      "name": "vwap_slope_3m",
+      "type": "double"
+    },
+    {
+      "name": "vwap_slope_5m",
+      "type": "double"
+    },
+    {
+      "name": "ret_1m",
+      "type": "double"
+    },
+    {
+      "name": "vol_ratio_1m",
+      "type": "double"
+    },
+    {
+      "name": "range_1m",
+      "type": "double"
+    },
+    {
+      "name": "ret_3m",
+      "type": "double"
+    },
+    {
+      "name": "vol_ratio_3m",
+      "type": "double"
+    },
+    {
+      "name": "range_3m",
+      "type": "double"
+    },
+    {
+      "name": "ret_5m",
+      "type": "double"
+    },
+    {
+      "name": "vol_ratio_5m",
+      "type": "double"
+    },
+    {
+      "name": "range_5m",
+      "type": "double"
+    },
+    {
+      "name": "ret_10m",
+      "type": "double"
+    },
+    {
+      "name": "vol_ratio_10m",
+      "type": "double"
+    },
+    {
+      "name": "range_10m",
+      "type": "double"
+    },
+    {
+      "name": "ret_15m",
+      "type": "double"
+    },
+    {
+      "name": "vol_ratio_15m",
+      "type": "double"
+    },
+    {
+      "name": "range_15m",
+      "type": "double"
+    },
+    {
+      "name": "ret_30m",
+      "type": "double"
+    },
+    {
+      "name": "vol_ratio_30m",
+      "type": "double"
+    },
+    {
+      "name": "range_30m",
+      "type": "double"
+    },
+    {
+      "name": "cancel_ratio",
+      "type": "double"
+    }
+  ],
+  "unique_symbol_minute_keys": 253,
+  "live_questdb_columns": [
+    {
+      "name": "trade_date",
+      "type": "STRING"
+    },
+    {
+      "name": "symbol",
+      "type": "SYMBOL"
+    },
+    {
+      "name": "market",
+      "type": "STRING"
+    },
+    {
+      "name": "board",
+      "type": "STRING"
+    },
+    {
+      "name": "minute",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "open",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "high",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "low",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "close",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "volume",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "amount",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "tick_count",
+      "type": "LONG"
+    },
+    {
+      "name": "active_buy_amount",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "active_sell_amount",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "vwap",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "has_trade_1m",
+      "type": "LONG"
+    },
+    {
+      "name": "bid1",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "ask1",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "mid",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "spread",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "microprice",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "bid_depth_1",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "ask_depth_1",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "depth_1",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "obi_1",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "bid_depth_5",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "ask_depth_5",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "depth_5",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "obi_5",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "bid_depth_10",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "ask_depth_10",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "depth_10",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "obi_10",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "quote_count",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "ofi_1m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "active_buy_ratio",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "active_sell_ratio",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "vwap_gap_to_mid",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "vwap_gap_to_open",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "vwap_slope_3m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "vwap_slope_5m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "ret_1m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "vol_ratio_1m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "range_1m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "ret_3m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "vol_ratio_3m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "range_3m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "ret_5m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "vol_ratio_5m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "range_5m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "ret_10m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "vol_ratio_10m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "range_10m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "ret_15m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "vol_ratio_15m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "range_15m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "ret_30m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "vol_ratio_30m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "range_30m",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "cancel_ratio",
+      "type": "DOUBLE"
+    }
+  ],
+  "live_questdb_census": {
+    "rows": 158752546,
+    "min_minute": "2026-02-02 01:14:00",
+    "max_minute": "2026-09-21 07:00:00"
+  },
+  "formal_sample_rows_for_selected_symbol_date": 253,
+  "formal_full_field_comparison": {
+    "compared_rows": 253,
+    "compared_fields": 60,
+    "matched_values": 15180,
+    "mismatches": [],
+    "passed": true,
+    "minute_conversion": "Asia/Shanghai local Parquet wall-time -> UTC QuestDB TIMESTAMP"
+  },
+  "live_formal_sample": [
+    {
+      "trade_date": "20260921",
+      "symbol": "000001.SZ",
+      "market": "SZ",
+      "board": "MAIN",
+      "minute": "2026-09-21 01:15:00",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": null,
+      "volume": 0.0,
+      "amount": 0.0,
+      "tick_count": 0,
+      "active_buy_amount": null,
+      "active_sell_amount": null,
+      "vwap": null,
+      "has_trade_1m": 0,
+      "bid1": null,
+      "ask1": null,
+      "mid": null,
+      "spread": null,
+      "microprice": null,
+      "bid_depth_1": 59461.0,
+      "ask_depth_1": 59461.0,
+      "depth_1": 118922.0,
+      "obi_1": 0.0,
+      "bid_depth_5": 68100.0,
+      "ask_depth_5": 59461.0,
+      "depth_5": 127561.0,
+      "obi_5": 0.06772446123815273,
+      "bid_depth_10": 68100.0,
+      "ask_depth_10": 59461.0,
+      "depth_10": 127561.0,
+      "obi_10": 0.06772446123815273,
+      "quote_count": 6.0,
+      "ofi_1m": 0.0,
+      "active_buy_ratio": null,
+      "active_sell_ratio": null,
+      "vwap_gap_to_mid": null,
+      "vwap_gap_to_open": null,
+      "vwap_slope_3m": null,
+      "vwap_slope_5m": null,
+      "ret_1m": null,
+      "vol_ratio_1m": null,
+      "range_1m": null,
+      "ret_3m": null,
+      "vol_ratio_3m": null,
+      "range_3m": null,
+      "ret_5m": null,
+      "vol_ratio_5m": null,
+      "range_5m": null,
+      "ret_10m": null,
+      "vol_ratio_10m": null,
+      "range_10m": null,
+      "ret_15m": null,
+      "vol_ratio_15m": null,
+      "range_15m": null,
+      "ret_30m": null,
+      "vol_ratio_30m": null,
+      "range_30m": null,
+      "cancel_ratio": 0.05164207520228463
+    },
+    {
+      "trade_date": "20260921",
+      "symbol": "000001.SZ",
+      "market": "SZ",
+      "board": "MAIN",
+      "minute": "2026-09-21 01:16:00",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": null,
+      "volume": 0.0,
+      "amount": 0.0,
+      "tick_count": 0,
+      "active_buy_amount": null,
+      "active_sell_amount": null,
+      "vwap": null,
+      "has_trade_1m": 0,
+      "bid1": null,
+      "ask1": null,
+      "mid": null,
+      "spread": null,
+      "microprice": null,
+      "bid_depth_1": 228400.0,
+      "ask_depth_1": 228400.0,
+      "depth_1": 456800.0,
+      "obi_1": 0.0,
+      "bid_depth_5": 277100.0,
+      "ask_depth_5": 228400.0,
+      "depth_5": 505500.0,
+      "obi_5": 0.0963402571711177,
+      "bid_depth_10": 277100.0,
+      "ask_depth_10": 228400.0,
+      "depth_10": 505500.0,
+      "obi_10": 0.0963402571711177,
+      "quote_count": 6.0,
+      "ofi_1m": 0.0,
+      "active_buy_ratio": null,
+      "active_sell_ratio": null,
+      "vwap_gap_to_mid": null,
+      "vwap_gap_to_open": null,
+      "vwap_slope_3m": null,
+      "vwap_slope_5m": null,
+      "ret_1m": null,
+      "vol_ratio_1m": null,
+      "range_1m": null,
+      "ret_3m": null,
+      "vol_ratio_3m": null,
+      "range_3m": null,
+      "ret_5m": null,
+      "vol_ratio_5m": null,
+      "range_5m": null,
+      "ret_10m": null,
+      "vol_ratio_10m": null,
+      "range_10m": null,
+      "ret_15m": null,
+      "vol_ratio_15m": null,
+      "range_15m": null,
+      "ret_30m": null,
+      "vol_ratio_30m": null,
+      "range_30m": null,
+      "cancel_ratio": 0.6099439775910365
+    },
+    {
+      "trade_date": "20260921",
+      "symbol": "000001.SZ",
+      "market": "SZ",
+      "board": "MAIN",
+      "minute": "2026-09-21 01:17:00",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": null,
+      "volume": 0.0,
+      "amount": 0.0,
+      "tick_count": 0,
+      "active_buy_amount": null,
+      "active_sell_amount": null,
+      "vwap": null,
+      "has_trade_1m": 0,
+      "bid1": null,
+      "ask1": null,
+      "mid": null,
+      "spread": null,
+      "microprice": null,
+      "bid_depth_1": 59761.0,
+      "ask_depth_1": 59761.0,
+      "depth_1": 119522.0,
+      "obi_1": 0.0,
+      "bid_depth_5": 61000.0,
+      "ask_depth_5": 59761.0,
+      "depth_5": 120761.0,
+      "obi_5": 0.01025993491276157,
+      "bid_depth_10": 61000.0,
+      "ask_depth_10": 59761.0,
+      "depth_10": 120761.0,
+      "obi_10": 0.01025993491276157,
+      "quote_count": 3.0,
+      "ofi_1m": 0.0,
+      "active_buy_ratio": null,
+      "active_sell_ratio": null,
+      "vwap_gap_to_mid": null,
+      "vwap_gap_to_open": null,
+      "vwap_slope_3m": null,
+      "vwap_slope_5m": null,
+      "ret_1m": null,
+      "vol_ratio_1m": null,
+      "range_1m": null,
+      "ret_3m": null,
+      "vol_ratio_3m": null,
+      "range_3m": null,
+      "ret_5m": null,
+      "vol_ratio_5m": null,
+      "range_5m": null,
+      "ret_10m": null,
+      "vol_ratio_10m": null,
+      "range_10m": null,
+      "ret_15m": null,
+      "vol_ratio_15m": null,
+      "range_15m": null,
+      "ret_30m": null,
+      "vol_ratio_30m": null,
+      "range_30m": null,
+      "cancel_ratio": 0.6542553191489362
+    }
+  ],
+  "formal_sample_columns": [
+    "trade_date",
+    "symbol",
+    "market",
+    "board",
+    "minute",
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "amount",
+    "tick_count",
+    "active_buy_amount",
+    "active_sell_amount",
+    "vwap",
+    "has_trade_1m",
+    "bid1",
+    "ask1",
+    "mid",
+    "spread",
+    "microprice",
+    "bid_depth_1",
+    "ask_depth_1",
+    "depth_1",
+    "obi_1",
+    "bid_depth_5",
+    "ask_depth_5",
+    "depth_5",
+    "obi_5",
+    "bid_depth_10",
+    "ask_depth_10",
+    "depth_10",
+    "obi_10",
+    "quote_count",
+    "ofi_1m",
+    "active_buy_ratio",
+    "active_sell_ratio",
+    "vwap_gap_to_mid",
+    "vwap_gap_to_open",
+    "vwap_slope_3m",
+    "vwap_slope_5m",
+    "ret_1m",
+    "vol_ratio_1m",
+    "range_1m",
+    "ret_3m",
+    "vol_ratio_3m",
+    "range_3m",
+    "ret_5m",
+    "vol_ratio_5m",
+    "range_5m",
+    "ret_10m",
+    "vol_ratio_10m",
+    "range_10m",
+    "ret_15m",
+    "vol_ratio_15m",
+    "range_15m",
+    "ret_30m",
+    "vol_ratio_30m",
+    "range_30m",
+    "cancel_ratio"
+  ]
+}

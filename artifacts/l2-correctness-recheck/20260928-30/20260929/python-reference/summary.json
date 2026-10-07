@@ -1,0 +1,162 @@
+{
+  "date": "20260929",
+  "input": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw",
+  "pipeline_api": "KuakeSyncPipeline(source=DfcfCsvLevel2Source(input)).process_symbol_date(symbol, datetime.strptime(date, yyyyMMdd), load_snapshot=True)",
+  "field_count": 110,
+  "symbols": {
+    "000001.SZ": {
+      "success": true,
+      "elapsed_seconds": 8.820536700077355,
+      "nonfinite_fields_converted_to_null": [],
+      "null_fields": [],
+      "populated_fields": 110,
+      "raw_records": {
+        "deal": 88754,
+        "order": 117719,
+        "snapshot": 4813
+      },
+      "feature_records": {
+        "deal_records": 88754,
+        "order_records": 117719,
+        "snapshot_records": 4813,
+        "total_records": 67663,
+        "clean_records": 67643,
+        "large_order_records": 15
+      },
+      "feature_version": "v1.3",
+      "parser_version": "dfcf_csv_v1.2"
+    },
+    "600000.SH": {
+      "success": true,
+      "elapsed_seconds": 4.704478400060907,
+      "nonfinite_fields_converted_to_null": [],
+      "null_fields": [],
+      "populated_fields": 110,
+      "raw_records": {
+        "deal": 70061,
+        "order": 97704,
+        "snapshot": 4987
+      },
+      "feature_records": {
+        "deal_records": 70061,
+        "order_records": 97704,
+        "snapshot_records": 4987,
+        "total_records": 70061,
+        "clean_records": 70000,
+        "large_order_records": 23
+      },
+      "feature_version": "v1.3",
+      "parser_version": "dfcf_csv_v1.2"
+    },
+    "300750.SZ": {
+      "success": true,
+      "elapsed_seconds": 11.963881799951196,
+      "nonfinite_fields_converted_to_null": [],
+      "null_fields": [],
+      "populated_fields": 110,
+      "raw_records": {
+        "deal": 203637,
+        "order": 309608,
+        "snapshot": 4831
+      },
+      "feature_records": {
+        "deal_records": 203637,
+        "order_records": 309608,
+        "snapshot_records": 4831,
+        "total_records": 143121,
+        "clean_records": 141234,
+        "large_order_records": 308
+      },
+      "feature_version": "v1.3",
+      "parser_version": "dfcf_csv_v1.2"
+    },
+    "688981.SH": {
+      "success": true,
+      "elapsed_seconds": 4.013600999955088,
+      "nonfinite_fields_converted_to_null": [],
+      "null_fields": [],
+      "populated_fields": 110,
+      "raw_records": {
+        "deal": 55828,
+        "order": 160134,
+        "snapshot": 4991
+      },
+      "feature_records": {
+        "deal_records": 55828,
+        "order_records": 160134,
+        "snapshot_records": 4991,
+        "total_records": 55828,
+        "clean_records": 55806,
+        "large_order_records": 44
+      },
+      "feature_version": "v1.3",
+      "parser_version": "dfcf_csv_v1.2"
+    },
+    "510300.SH": {
+      "success": true,
+      "elapsed_seconds": 5.917583100032061,
+      "nonfinite_fields_converted_to_null": [],
+      "null_fields": [],
+      "populated_fields": 110,
+      "raw_records": {
+        "deal": 67441,
+        "order": 262151,
+        "snapshot": 5006
+      },
+      "feature_records": {
+        "deal_records": 67441,
+        "order_records": 262151,
+        "snapshot_records": 5006,
+        "total_records": 67441,
+        "clean_records": 67441,
+        "large_order_records": 827
+      },
+      "feature_version": "v1.3",
+      "parser_version": "dfcf_csv_v1.2"
+    },
+    "159915.SZ": {
+      "success": true,
+      "elapsed_seconds": 13.413001700071618,
+      "nonfinite_fields_converted_to_null": [],
+      "null_fields": [],
+      "populated_fields": 110,
+      "raw_records": {
+        "deal": 290799,
+        "order": 492499,
+        "snapshot": 4841
+      },
+      "feature_records": {
+        "deal_records": 290799,
+        "order_records": 492499,
+        "snapshot_records": 4841,
+        "total_records": 106907,
+        "clean_records": 106907,
+        "large_order_records": 3477
+      },
+      "feature_version": "v1.3",
+      "parser_version": "dfcf_csv_v1.2"
+    },
+    "588000.SH": {
+      "success": true,
+      "elapsed_seconds": 11.355534799979068,
+      "nonfinite_fields_converted_to_null": [],
+      "null_fields": [],
+      "populated_fields": 110,
+      "raw_records": {
+        "deal": 182777,
+        "order": 457655,
+        "snapshot": 5005
+      },
+      "feature_records": {
+        "deal_records": 182777,
+        "order_records": 457655,
+        "snapshot_records": 5005,
+        "total_records": 182777,
+        "clean_records": 182777,
+        "large_order_records": 8125
+      },
+      "feature_version": "v1.3",
+      "parser_version": "dfcf_csv_v1.2"
+    }
+  }
+}

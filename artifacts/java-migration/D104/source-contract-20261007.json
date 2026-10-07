@@ -1,0 +1,461 @@
+{
+  "task_id": "D104",
+  "status": "VERIFIED_BOUNDED_SOURCE_CONTRACT_DELIVERY_PENDING",
+  "record_date": "2026-10-07",
+  "scope": "File-grounded single-dataset source contract. This author supplied the DTO/storage implementation; this document is not its independent review.",
+  "reference_access": {
+    "files_only": true,
+    "reference_imports": 0,
+    "reference_writes": 0,
+    "provider_requests": 0
+  },
+  "owner": {
+    "entrypoint": "quant_platform.data.derived.macro.macro_core_monthly:build_macro_core_monthly",
+    "implementation": "quant_platform.data.adapters.materializers.macro_core_monthly:build_macro_core_monthly",
+    "parameters": [],
+    "python_policy": "task / month_end / scheduled",
+    "java_policy": "data.macro_core_monthly v1; manual, enabled, not daily eligible; default INCREMENTAL",
+    "call_chain": [
+      {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/catalog.py",
+        "lines": [
+          17,
+          19,
+          38,
+          44
+        ],
+        "sha256": "19a75be0fdf9f6512786a86c313152952aabb0eecb62eeeefe2d46856e508152"
+      },
+      {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/registry.py",
+        "lines": [
+          6,
+          24,
+          64,
+          66
+        ],
+        "sha256": "474dda15e8bb77a848bbd015f1b650feb5e1998d95ce197e3cc9df072d65614d"
+      },
+      {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/derived/macro/macro_core_monthly.py",
+        "lines": [
+          1,
+          5
+        ],
+        "sha256": "58b03cca7f26f11dd4338b57f5c04c97a9e42d0086502e52b58be8ea12cc33af"
+      },
+      {
+        "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/derived/workflows.py",
+        "lines": [
+          32,
+          41,
+          54,
+          58,
+          73,
+          80
+        ],
+        "sha256": "feaacb0fb3cec88dd632ffefeee3a4b991515fd9817d048ffb8dcfbaf05c3036"
+      }
+    ],
+    "mutation_boundary": "Original builder reads all history, then ensure_table_exists at line163 and write_model at lines164-168. Read-only oracle compiles only original AST before that boundary with an exact bounded DataFrame shim; it does not invoke/import the public writer."
+  },
+  "reference_bindings": [
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/macro_core_monthly.py",
+      "sha256": "ba8afd819e3ac373783141bdbcb94a32cef454659d92cc7fb47c36373cc9ac50",
+      "lines": [
+        25,
+        41,
+        44,
+        69,
+        73,
+        128,
+        132,
+        170
+      ]
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/models/macro/macro_core_monthly.py",
+      "sha256": "2eebcf7e231b00c1b031dc3fa43672c56b19aa498241c9b72445d122ae86c0d3",
+      "lines": [
+        16,
+        27,
+        29,
+        49
+      ]
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/tests/unit/data/test_macro_core_monthly.py",
+      "sha256": "d0a5315cf1b4e80a38352ddacdd0fd2059b50816967490a80f49d63ad5b7e85c",
+      "lines": [
+        6,
+        28
+      ]
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/derived/regime/features_monthly.py",
+      "sha256": "75bd8a70570dab3b78fbc2afb4c67512124b6126e0016da4188daad68c5b623c",
+      "lines": [
+        15,
+        21,
+        39,
+        52,
+        57,
+        85
+      ]
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/queries/macro.py",
+      "sha256": "7f9ce369a7d65838a4775c8899ccfd10ee92ed5687a7b7fe8b1a4d38fc350afd",
+      "lines": [
+        24,
+        34,
+        64,
+        108
+      ]
+    }
+  ],
+  "identity": {
+    "business_key": [
+      "month"
+    ],
+    "upsert_key": [
+      "month"
+    ],
+    "python_period": "YYYYMM",
+    "domain": "YearMonth",
+    "json": "positive four-digit YYYY-MM",
+    "dataset_values": "LocalDate at first calendar day",
+    "storage": "TIMESTAMP micros at exact first calendar day UTC midnight",
+    "year_bounds": [
+      1,
+      9999
+    ],
+    "not_publication_time": true
+  },
+  "physical_inputs": [
+    {
+      "table": "cn_cpi",
+      "task": "D065",
+      "physical_fields": 13,
+      "period": "month",
+      "direct_metrics": {
+        "cpi_yoy": "nt_yoy"
+      },
+      "owner_lines": [
+        73,
+        76
+      ]
+    },
+    {
+      "table": "cn_ppi",
+      "task": "D066",
+      "physical_fields": 31,
+      "period": "month",
+      "direct_metrics": {
+        "ppi_yoy": "ppi_yoy"
+      },
+      "owner_lines": [
+        80,
+        82
+      ]
+    },
+    {
+      "table": "cn_pmi",
+      "task": "D067",
+      "physical_fields": 60,
+      "period": "month",
+      "direct_metrics": {
+        "pmi_mfg": "pmi010000"
+      },
+      "owner_lines": [
+        86,
+        89
+      ]
+    },
+    {
+      "table": "cn_m",
+      "task": "D068",
+      "physical_fields": 10,
+      "period": "month",
+      "direct_metrics": {
+        "m2_yoy": "m2_yoy"
+      },
+      "owner_lines": [
+        93,
+        95
+      ]
+    },
+    {
+      "table": "cn_gdp",
+      "task": "D070",
+      "physical_fields": 10,
+      "period": "report_date",
+      "direct_metrics": {
+        "gdp_yoy": "gdp_yoy"
+      },
+      "owner_lines": [
+        99,
+        105
+      ]
+    },
+    {
+      "table": "sf_month",
+      "task": "D069",
+      "physical_fields": 4,
+      "period": "month",
+      "direct_metrics": {
+        "social_financing_stock": "stk_endval",
+        "new_rmb_loan": "inc_month"
+      },
+      "owner_lines": [
+        109,
+        128
+      ]
+    }
+  ],
+  "registered_dependency_graph": {
+    "dataset_dependencies": [],
+    "job_dependencies": [],
+    "reason": "D065-D070 Java upstream owners remain unregistered. All six physical inputs are governed explicitly by Source schema/WAL/version/hash checks and SOURCE_TABLES, without fake registrations or provider ingestion claims."
+  },
+  "formulas_and_nulls": {
+    "direct_values": "Rename only, preserving stored binary64 units, nulls and signed zero; no scaling, rounding or positivity/range assumptions.",
+    "gdp": "Use report_date own month only. Java also checks quarter string agrees with exact quarter-end date. No forward fill/carry into subsequent months.",
+    "new_rmb_loan": "Compatibility column name for sf_month.inc_month, total social financing increment; not a distinct RMB-loan series.",
+    "social_financing_yoy": "current stk_endval / preceding twelfth sorted physical observation stk_endval - 1. Original pct_change(12,fill_method=None) occurs before monthly dedup. Fractional ratio, no multiplication by100; missing/null baseline produces null, zero denominator/nonfinite result is rejected.",
+    "duplicates": "Python sorts then groupby(month).tail(1), with no tie breaker for duplicate normalized periods. Java bounded contract rejects duplicate or unordered physical periods instead of arbitrarily reproducing a tie.",
+    "merge": "Outer merge on month; add absent output columns as null; order all nine outputs by model schema; withhold candidates missing any required six monthly values.",
+    "required_publication_fields": [
+      "cpi_yoy",
+      "ppi_yoy",
+      "pmi_mfg",
+      "m2_yoy",
+      "social_financing_stock",
+      "new_rmb_loan"
+    ],
+    "optional_publication_fields": [
+      "gdp_yoy",
+      "social_financing_yoy"
+    ],
+    "read_compatibility": "All eight metrics remain nullable finite Double for historical typed READ. New typed WRITE and Source publication enforce the required six.",
+    "incremental": "Entire closed-month bootstrap prefix must contain each expected month with six required values. Missing/withheld months fail before publication; they do not become empty success or advance checkpoint."
+  },
+  "unit_references": {
+    "scope": "Historical local upstream specifications explain declared units, not a current provider-wide certification. Mapper preserves actual stored values unchanged.",
+    "percent_declared": [
+      "cn_cpi.nt_yoy",
+      "cn_gdp.gdp_yoy",
+      "cn_m.m2_yoy"
+    ],
+    "ppi": "Stored PPI monthly YoY value unchanged; source specification names 当月同比 without a new conversion.",
+    "pmi": "Manufacturing PMI level unchanged.",
+    "social_financing_stock": "Stored stk_endval unchanged; local sf_month specification declares 万亿元.",
+    "new_rmb_loan": "Stored inc_month unchanged; local sf_month specification declares 亿元.",
+    "social_financing_yoy": "Dimensionless fractional ratio derived from same-unit stocks.",
+    "bindings": [
+      {
+        "path": "D:/work/fund_2/back-monitor/docs/02-research-user-guide/guides/data/models/specs/inputs/macro/cn_cpi.md",
+        "line": 28,
+        "sha256": "b128d78286c7bf9209379634258d5815f8169fc37afe436926d25916ae1ccb00"
+      },
+      {
+        "path": "D:/work/fund_2/back-monitor/docs/02-research-user-guide/guides/data/models/specs/inputs/macro/cn_ppi.md",
+        "line": 23,
+        "sha256": "d139d3c5e8faf514ec1f0c33ec447e1c3cf6871899f0fe49a30b3359afd6208d"
+      },
+      {
+        "path": "D:/work/fund_2/back-monitor/docs/02-research-user-guide/guides/data/models/specs/inputs/macro/cn_pmi.md",
+        "line": 23,
+        "sha256": "88636585f4ee66001024bc67e6d0214cdb99efff2a7426bd5bf16b4c32c7041e"
+      },
+      {
+        "path": "D:/work/fund_2/back-monitor/docs/02-research-user-guide/guides/data/models/specs/inputs/macro/cn_m.md",
+        "line": 31,
+        "sha256": "26d403e0853d64ea5e505f6bd3cc13963b8fd72bf667755d0f741cf9346ca54f"
+      },
+      {
+        "path": "D:/work/fund_2/back-monitor/docs/02-research-user-guide/guides/data/models/specs/inputs/macro/cn_gdp.md",
+        "line": 29,
+        "sha256": "0ff907f136432b973b6bcf2926cb5f1daeba820e5d98bf2fdff71cecf96d9498"
+      },
+      {
+        "path": "D:/work/fund_2/back-monitor/docs/02-research-user-guide/guides/data/models/specs/inputs/macro/sf_month.md",
+        "lines": [
+          27,
+          29
+        ],
+        "sha256": "a50d253f057ed58a64d62dfec0ef81005a213593e3423e1fcd854b552c5f1a21"
+      }
+    ]
+  },
+  "bounded_java_source": {
+    "months": 12,
+    "window_rows_per_source": 12,
+    "window_sentinel_limit": 13,
+    "sf_preceding_observations": 12,
+    "total_raw_rows_max": 84,
+    "output_rows_max": 12,
+    "pages": 1,
+    "batch_bytes_max": 1048576,
+    "complete_source_read_deadline_seconds": 20,
+    "per_target_statement_seconds": 20,
+    "job_timeout_seconds": 300,
+    "version": "Stable six-source table id/directory/schema/physicalTxn/raw WAL vector",
+    "raw_hash": "All full physical fields including auxiliary nulls/binary64 bits, plus complete SF context; excludes physical IDs so same stored values may be compared across targets.",
+    "scan_limit_caveat": "Returned-row caps and deadlines do not certify internal database scan volume."
+  },
+  "checkpoint_and_unknown": {
+    "checkpoint": "Only closed contiguous VERIFIED full prefix with exact saved source/raw context and target9-field values. Unchanged old raw prefix permits one-month overlap; source revision returns to finite bootstrap; target drift rejects.",
+    "empty": "Empty source may emit one empty FETCHED source page/slice, completed as VERIFIED_EMPTY; zero SUBMITTED publication/HTTP and no checkpoint advancement.",
+    "publication": "Shared runner SQLite SUBMITTED intent before one synchronous HTTP flush; autoFlush disabled, retry timeout0, reset/close discards buffered rows.",
+    "unknown": "IN_DOUBT/allDates exclusion retained, no automatic retry/resend. Reconcile requires original same-service-instance stopped sender plus frozen source/full-prefix exact target/WAL proof; a fresh JVM cannot manufacture this proof."
+  },
+  "actual_evidence_so_far": {
+    "formal_preflight": "commands/macro-core-readonly-preflight-20261007.json",
+    "formal_source_rows": 28,
+    "formal_full_source_fields": 412,
+    "formal_existing_output_fields": 27,
+    "formal_output_tolerance": 0,
+    "complete_initial_source_review": {
+      "path": "commands/coordinator-complete-initial-source-readonly-review-20261007.json",
+      "sha256": "7a69e5bc874ad824d200a61fe55d1fc75952c446920d81c1520034e99180ed7b",
+      "rows": 23,
+      "full_fields": 294,
+      "nullable_double_slots": 270,
+      "non_null_double_bits": 240
+    },
+    "java_initial": {
+      "path": "commands/java-initial-acceptance-20261007.json",
+      "sha256": "2ef5ded567bf02de76170516e0acd4fedd3a4b3242133a79bafac4986bc559b1",
+      "status": "VERIFIED_ISOLATED_INITIAL_REPLAY",
+      "output_rows": 2,
+      "output_fields": 18,
+      "nullable_double_slots": 16,
+      "non_null_double_bits": 15
+    },
+    "actual_august_increment": {
+      "status": "VERIFIED_ISOLATED_INCREMENTAL",
+      "source_fixture": {
+        "path": "commands/source-fixture-increment-20261007.json",
+        "sha256": "a42dfaf524efa873173ee2f896d223057fb54ce251fbb585870f3aa36bb10fcc"
+      },
+      "complete_source_readonly_review": {
+        "path": "commands/coordinator-complete-increment-source-readonly-review-20261007.json",
+        "sha256": "501e3cebf4b9118f50178234a23117faa219e0c3ce6ca4f6065f48dd7abf7d00"
+      },
+      "java_receipt": {
+        "path": "commands/java-increment-acceptance-20261007.json",
+        "sha256": "b1aec9b83be584059cbe2aad5d18240a14167915b5c37ad9f02568e586c318ca"
+      },
+      "source_INSERT_ACKs": 5,
+      "source_added_rows": 5,
+      "GDP_added_rows": 0,
+      "DDL": 0,
+      "fixture_output_writes": 0,
+      "source_rows": 28,
+      "source_full_fields": 412,
+      "source_nullable_double_slots": 383,
+      "source_nonnull_double_bits": 338,
+      "source_NULL_slots": 45,
+      "source_window": "2026-06..2026-08 with preceding12 SF observations",
+      "effective_from": "2026-07-01",
+      "effective_to_inclusive": "2026-08-01",
+      "logical_date": "2026-10-07",
+      "checkpoint_before": "2026-07-01",
+      "checkpoint_after": "2026-08-01",
+      "checkpoint_reason": "VERIFIED_PREFIX_APPEND",
+      "parent_run": "d104-da436947-022d-470c-b8da-23387419d834",
+      "parent_kind": "prior exact readonly RECONCILE full-prefix proof",
+      "run_id": "d104-04c432e7-4096-4f09-b56d-35cedfa4d8e4",
+      "run_state": "VERIFIED",
+      "verified_submitted_rows": 2,
+      "reused_rows": 0,
+      "source_version": "2b55c59496e1806bb6555a78dc26cb19020376a01ac71e4500832d3b879026a0",
+      "full_raw_fingerprint": "648c609a0ca308bf003be8f11ef55c6497c15c6d29ae4c2bf69f3ef20ada4d1e",
+      "output_rows": 3,
+      "output_fields": 27,
+      "output_nullable_double_slots": 24,
+      "output_nonnull_double_bits": 22,
+      "output_NULL_slots": 2,
+      "double_tolerance": 0,
+      "target_table_id": 15,
+      "target_physical_txn": 5,
+      "target_wal_sequence": 5,
+      "configured_typed_read_group": "READ 3rows with full9fields",
+      "actual_source_increment": true,
+      "actual_source_revision": false,
+      "formal_writes": 0,
+      "reference_project_writes": 0
+    },
+    "actual_source_revision": false,
+    "formal_writes": 0,
+    "provider_ingestion_certified": false,
+    "final_coordinator_gate": "PENDING",
+    "human_review": "pending_review",
+    "next_task_admitted": false,
+    "final_terminal": {
+      "evidence": {
+        "path": "commands/increment-java-process-and-ledger-review-20261007.json",
+        "sha256": "9242676d38e609336efd4b2c0276e4d43fa5ea1d981e1e993adc5689625251db"
+      },
+      "sqlite_snapshot": {
+        "path": "commands/increment-java-terminal-ledger-20261007.json",
+        "sha256": "c2bf40dba7d4c2561c8e3dafedaf7ce24670a86731b9875db38d1b42adcdd728"
+      },
+      "runs": 9,
+      "entries": 21,
+      "events": 85,
+      "groups": 1,
+      "retained_leases": 0,
+      "previous8runs_preserved": true,
+      "known_jvm_pid": 37064,
+      "known_jvm_birth_utc": "2026-10-06T17:19:59.210502Z",
+      "original_jvm_stopped": true,
+      "proof_scope": "Root previously captured exact JVM birth, native absence and executor exit0/JUnit1PASS; document author did not rerun native/ledger checks."
+    },
+    "validation_inventory": {
+      "evidence": {
+        "path": "commands/validation-inventory-20261007.json",
+        "sha256": "16b78883f5d9add95ba76b3f8ed8ad622e4c45af1280836d1046269ca5173b08"
+      },
+      "java_unique_passing_methods": 123,
+      "java_pure_unique_methods": 122,
+      "java_live_unique_methods": 1,
+      "java_live_actual_stage_invocations": 2,
+      "java_PASS_invocations": 124,
+      "python_unique_pure_guards": 159,
+      "python_components": [
+        44,
+        35,
+        31,
+        49
+      ],
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "executed_by_document_author": false,
+      "provenance": "Root archived reports and summary only. Same live method executed initial and increment stages; do not count it as two unique methods. Historical rerun logs remain preserved and are not added."
+    },
+    "preserved_increment_audit_diagnostic": {
+      "kind": "READONLY_INCREMENT_AUDIT_EXECUTOR_LOG_PATH_FAILURE",
+      "evidence": {
+        "path": "commands/coordinator-complete-increment-source-readonly-review-actual-20261007.log",
+        "sha256": "d9d03c9eeef2bab83b8a4363c1e54bc6a05e42fd00e6286ea7ae4e86a19802d0"
+      },
+      "failure": "After all28rows/412fields compared, executor evidence save expected source-fixture-increment-20261007.log while actual Tee log used -actual. No source resend or data mismatch; five original source ACKs remain known successful.",
+      "recovery": "CREATE_NEW byte-identical log binding plus a new SELECT-only full audit, with a new native-stop supplement; original failed log and helper bytes remain unchanged.",
+      "new_success": {
+        "path": "commands/coordinator-complete-increment-source-readonly-review-20261007.json",
+        "sha256": "501e3cebf4b9118f50178234a23117faa219e0c3ce6ca4f6065f48dd7abf7d00"
+      },
+      "new_log": {
+        "path": "commands/coordinator-complete-increment-source-readonly-review-supplement-20261007.log",
+        "sha256": "abb8052b7f2d8d9e460870fc95862114fb9c52eabc532c528572e046114180cc"
+      },
+      "DDL_DML_in_recovery": 0,
+      "unknown_source_ACK": false
+    },
+    "current_delivery": "Actual initial+August append verified in the admitted private fixture. Final coordinator gate/human review remain pending; D105 not admitted by this document."
+  }
+}

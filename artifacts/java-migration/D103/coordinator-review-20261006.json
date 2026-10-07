@@ -1,0 +1,325 @@
+{
+  "task_id": "D103",
+  "dataset_id": "equity_style_monthly",
+  "checked_at": "2026-10-06T15:59:10.944842+00:00",
+  "decision": "accepted_for_serial_progress",
+  "implementation_status": "implemented",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "blockers": [],
+  "execution_mode": "direct_local_serial",
+  "next_task": "D104",
+  "next_task_may_start": true,
+  "next_task_admitted": true,
+  "delivery_matrix": {
+    "D01": "Explicit 30-column YearMonth domain/key/mapper; exact null/finite binary64 values and stored units.",
+    "D02": "Month business and physical UPSERT key; first calendar day at exact UTC midnight, strict YYYY-MM JSON.",
+    "D03": "Isolated missing-only YEAR/WAL/DEDUP(month) target; stable physical identity and independent empty COUNT proof.",
+    "D04": "Typed key/range/stable cursor/page and actual configured ReadGroup verified; maximum 12 months/page.",
+    "D05": "Bounded 12-row/1MiB typed batch, prepared WriteGroup, single synchronous HTTP flush, ACK then complete-key bitwise readback.",
+    "D06": "Finite real D022 full14 source capture; 16 index last-non-null monthly returns and 13 unchanged-unit spreads.",
+    "D07": "Canonical data.equity_style_monthly v1, 52 datasets/41 jobs, manual management/plan/run/status/cancel/resume/reconcile.",
+    "D08": "Closed-month completeness, full source-prefix hash and old target checks, overlap checkpoint, durable UNKNOWN/cancel/resume scope.",
+    "D09": "Actual first/replay/resume/reconcile/typed WriteGroup proved by immutable ledger and fresh read-only recovery; live July overlap/August append passed."
+  },
+  "root_independent_review": {
+    "scope": "Domain/key/dataset/mapper/read repository/write port authored by another agent; root wiring remains covered by independent final delivery reviewer.",
+    "findings": [],
+    "checks": [
+      "All 30 positions mapped explicitly both ways; finite nullable DOUBLEs and signed zero retained.",
+      "Exact first-day UTC month; key/range/projection/page/batch constraints reject before transport.",
+      "One HTTP flush, auto flush disabled, zero retry, reset before close; uncertain send remains unresolved.",
+      "Physical identity/schema/WAL/count before and after complete-key readback; independent empty table proof."
+    ]
+  },
+  "binding_counts": {
+    "reviewed_code": 30,
+    "author_inventory": 10,
+    "review_evidence": 30,
+    "passing_xml": 21
+  },
+  "java_unique_passing_methods": 125,
+  "python_unique_pure_guards": 122,
+  "actual_target_rows": 3,
+  "actual_target_field_values": 90,
+  "actual_target_double_bits": 87,
+  "tolerance": 0,
+  "source_rows": 48,
+  "source_field_values": 672,
+  "source_double_bits": 432,
+  "final_ledger": {
+    "runs": 9,
+    "entries": 21,
+    "events": 85,
+    "groups": 1,
+    "leases": 0
+  },
+  "actual_source_revision": false,
+  "formal_writes": 0,
+  "full_runs": 0,
+  "original_initial_source_ack": "UNKNOWN_PRESERVED",
+  "original_initial_java_junit": "FAILED_FINAL_RECEIPT_SERIALIZATION_PRESERVED",
+  "evidence": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\coordinator-final-delivery-static-review-20261006.json",
+      "sha256": "9a377e15ce27aa86fa5ee119d4849a009630a8fef0602ef1038505a4878a9c80"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\validation-inventory-20261006.json",
+      "sha256": "cd2d4e399495d3a539a913a0cbb179db690b931347c70b5ccf93b2393faa6872"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-readonly-recovery-20261006.json",
+      "sha256": "59dcdd9257c198c72944828f67226e74be05d760fb0bb37475f032b162aec7b4"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-increment-acceptance-20261006.json",
+      "sha256": "a13875847e736ba3848190071800fb8968fb6dfde879344e0338fbda647549e5"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-increment-20261006.json",
+      "sha256": "b04f0d4b5dac39a6d1defc879ad182113a79d170ebecffc7743e63883ef8d6b3"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\final-java-process-and-ledger-review-20261006.json",
+      "sha256": "473fec15bf5a6e9ce8ad8f523c8d58fee88c0bac3841bc2cc021b23e9b6abe61"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\coordinator-initial-java-receipt-failure-recovery-20261006.json",
+      "sha256": "d449e9713a69d478e511f485b0a1bc52d24a0d68e86ecb72cac2dfc47227c893"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\coordinator-increment-after-readonly-recovery-admission-20261006.json",
+      "sha256": "df7686a861627b1feea8f5dd87f0773039933981e0d884e788774da400c1fd53"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\source-contract-stored-units-20261006.json",
+      "sha256": "8cd85288b3fcc6c8bc6b1bc574bd2e422fe178e531782e6639114a5b7f6d8997"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\mapping-contract.json",
+      "sha256": "f7498a35e0f41f896fe2f2ef879cef2bd0b11aedd3fa418b500bcb413217d581"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\mapping-contract-increment-update-20261006.json",
+      "sha256": "3679dde5389e476c6eb6e2b02767ede371090748086d7fd442c7afe6a90f8e6e"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\README.md",
+      "sha256": "951471fcbdabf31090dd71fa205fbc7eb3802abe4a83aa81652de64506e75944"
+    }
+  ],
+  "code_bindings": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EquityStyleMonthlySource.java",
+      "sha256": "4ec7c9b429ac1d9d34e3c104842abb966091598f3e9785576dfd115e12da8b38",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EquityStyleMonthlyMaterializeAdapter.java",
+      "sha256": "705e0f179b22043f816ab3718140a16de6951aefea858b948348408f795ee7de",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EquityStyleMonthlyJobService.java",
+      "sha256": "8382266e67d04a102ea0d771244556766a23fa783ac0fe0cfce5ad631163d174",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\QuestDbEquityStyleReadGuard.java",
+      "sha256": "8bca0233968bb8a660b027857e2ce04b878d8e76b3c42951b5b68f6dadaa0f5e",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\QuestDbBoundedReader.java",
+      "sha256": "935a5e9dbc3a185b80cf69e0bdcded60db61f9fd614e8215a28664e1626e2117",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\config\\DatasetConfiguration.java",
+      "sha256": "22d249ca75b623db137e80b406b2cbc66728c495396cef313e71d15631b72c36",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\config\\ReadGroupConfiguration.java",
+      "sha256": "4fefb426c4d63a3e8602ce93eaab8fbce47cc760035e46fb31afcad7dff83e7b",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\StockBasicWriteGroupService.java",
+      "sha256": "d41d66a1db4e563da918d126f9f0da768734d94f6d1174ae2e3a5457551fe1fd",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\PreparedWriteAdapter.java",
+      "sha256": "91c316e03b3344e63782f5aee205b5c3421bf33f98644c2d17d4116d66e26f97",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\WriteGroupPlan.java",
+      "sha256": "46a84c7ec02d6b5a078caf99465fa8bd610f69bb58e3e5e80cae9fd65bb8f6f7",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\SyncJobRunner.java",
+      "sha256": "b42149cf76025559edcad56886e0bdf498e3cf975156e572bf7b9f01e70d1414",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\SyncRunLedger.java",
+      "sha256": "c6fd1a2ee39b3ba0def7b7000e511abf7bdbe15004752fcba09a4c1ea39a298e",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\SyncRunState.java",
+      "sha256": "f382651cd18a2a56b2fca52419b1eb042a7033884c635427cbd4f73afdc4089d",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\JobDefinitionJson.java",
+      "sha256": "f97fd8d9202b9ab29367922fa083d46cc2a1a0f98ff5c8b7891ecdf160ecfbaf",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EquityStyleMonthlyCommands.java",
+      "sha256": "09c6a797ccacec72521e7a95e3cacbbdc3e45ac7bdd4b385381ebcd200d72d84",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\cli\\CommandLineRunner.java",
+      "sha256": "4df35dd41cb84a06de0c129ec5c7e3b98f56de99a369de3c117f01ff9533469d",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\IndexMonthlyDataset.java",
+      "sha256": "4b21a015626993a588fff04ac95c9d57dc5d76d0a15360482e866fa6f0b56f33",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\IndexMonthlySyncJobOwner.java",
+      "sha256": "6439908cfb8c3c729dd0b32ea546069c83c8a8d5316f77424c5f8675c049bab8",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\service\\EquityStyleMonthlySourceTest.java",
+      "sha256": "313e403da0b666d10b137218bf3c551b8c7f0cba1b79c77b6aec64c17c3d2d7e",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\service\\EquityStyleMonthlyMaterializeAdapterTest.java",
+      "sha256": "267101cae5cb1bba97ee2a897186add334d762678ccf0a124e11df22abdf97bb",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\service\\EquityStyleMonthlyJobServiceTest.java",
+      "sha256": "e3cb5626e028605e07bc0ec63feeb76576dc150f789c4236ee4b6c183d665cd1",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\service\\EquityStyleMonthlyWriteGroupPreflightTest.java",
+      "sha256": "3f8670463d670f1c494b8923e9c9977ee2e5c80f56beb2b68c33c3ba797b401c",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\service\\EquityStyleMonthlyCatalogStartupTest.java",
+      "sha256": "3c5f0a5b722758a5135531f8c269d1da3d48f12352fad3ee3a615d2c12fca172",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\repository\\QuestDbEquityStyleReadGuardTest.java",
+      "sha256": "9533bcf13ba7c551c6e6543505aee59d98fa9afcd50e4fe41b0edb85703efc18",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\domain\\JobDefinitionYearMonthJsonTest.java",
+      "sha256": "72d1d03d79349c09f3840a5effd1ead4061e128fafc6d49c3c878d8b94087039",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\EquityStyleMonthlyLiveAcceptanceTest.java",
+      "sha256": "0ab657d3aa4b8b3fd20c5fbbc8ee2c5fb27001d778c406cb0526d4f02e6ed984",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\EquityStyleMonthlyInitialReadOnlyRecoveryTest.java",
+      "sha256": "0635ef8d03038b92b049d30c744abe637519c93f7825ce3a25803525a18c42c7",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d103_equity_style_increment_after_readonly_recovery.py",
+      "sha256": "220ebe0bc09e0a6ff13fa3c20b1e53c43a34adec86c3d9ab32b0febe40c0ee31",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d103_equity_style_increment_isolated.py",
+      "sha256": "98d1adf7d4ab431d390b4ec6b51b195180b88c4b7d20ed7aebc5b9fff822988e",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\reconcile_d103_initial_source_readonly.py",
+      "sha256": "ed912df9fc1116110b4e1b4a5986b2e86221010124a6f68ce3ba5c44bd80401d",
+      "scope": "independent scope: D103 branches and referenced shared contracts; other datasets excluded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\EquityStyleMonthly.java",
+      "sha256": "23e4f5e28094ac111f5c229f2575caa6a146ed263f883a119e3df3fac53c5fb9",
+      "scope": "SHA inventory only; own DTO/mapper/read/write implementation and generated projection not independently re-reviewed"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\EquityStyleMonthlyKey.java",
+      "sha256": "09b023aff54a7887aa61544993c3f192fbe375d27c61dd9a912e3c86519806ad",
+      "scope": "SHA inventory only; own DTO/mapper/read/write implementation and generated projection not independently re-reviewed"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\EquityStyleMonthlyDataset.java",
+      "sha256": "628c521a61701274007e9b34b935553501abbf647932a0c52eb4bd80accc0f29",
+      "scope": "SHA inventory only; own DTO/mapper/read/write implementation and generated projection not independently re-reviewed"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\mapper\\EquityStyleMonthlyMapper.java",
+      "sha256": "d425aa872d45f48e9223602633e99479314ddd6b7dbc32028c741299d39f3c78",
+      "scope": "SHA inventory only; own DTO/mapper/read/write implementation and generated projection not independently re-reviewed"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\EquityStyleMonthlyReadRepository.java",
+      "sha256": "b424f8efb0918465430899ae86a398ac54d6c894a045ff695a6877033b77b6c2",
+      "scope": "SHA inventory only; own DTO/mapper/read/write implementation and generated projection not independently re-reviewed"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\EquityStyleMonthlyWritePort.java",
+      "sha256": "5874eace9fd07c6701652341411be85b821ea4181fda19aea0566e9dc5e216a8",
+      "scope": "SHA inventory only; own DTO/mapper/read/write implementation and generated projection not independently re-reviewed"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\table\\EquityStyleMonthlyRow.java",
+      "sha256": "c52bb5d5aa2e370b052c32bbf9cb30149d1f5a6dd38e4e6c461ce281520a79d4",
+      "scope": "SHA inventory only; own DTO/mapper/read/write implementation and generated projection not independently re-reviewed"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\mapper\\EquityStyleMonthlyMappingTest.java",
+      "sha256": "96b31f62ddbb175d0a3bca094378de1af59e6ba103b45e88cbbfa45d1670b3a3",
+      "scope": "SHA inventory only; own DTO/mapper/read/write implementation and generated projection not independently re-reviewed"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\repository\\EquityStyleMonthlyReadRepositoryTest.java",
+      "sha256": "ae6529051ad066f4cd98a9da0038b9402e7332458d59843f7ee389ce08d7c217",
+      "scope": "SHA inventory only; own DTO/mapper/read/write implementation and generated projection not independently re-reviewed"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\repository\\EquityStyleMonthlyWritePortTest.java",
+      "sha256": "df0d9c85de37091db47ac296a57d25225289605178c14bff7708032f870c12f4",
+      "scope": "SHA inventory only; own DTO/mapper/read/write implementation and generated projection not independently re-reviewed"
+    }
+  ],
+  "limitations": [
+    "Only isolated bounded June-August 2026 acceptance; no formal writes, FULL, production cutover or full-history certification.",
+    "Formal June/July output gaps remain unmodified; bounded August comparison is exact.",
+    "Stored source pct_chg units remain unchanged; corrected stored-unit supplement supersedes old percent claims without modifying historical evidence.",
+    "Legacy growth=000921.SH/value=000920.SH binding remains explicit despite index-universe naming conflict.",
+    "Original initial source INSERT ACK remains UNKNOWN; landed source admitted by separate read-only reconciliation, never resubmitted.",
+    "Original Java initial JUnit remains FAILED_FINAL_RECEIPT_SERIALIZATION; original operations are independently validated by fresh read-only recovery, not rerun.",
+    "Original first Java JVM native PID/birth was lost; scoped synchronous executor completion is preserved, not fabricated native absence.",
+    "Actual source append was verified; old-prefix source revision is pure-test coverage only, not a live revision claim.",
+    "Point-in-time availability, complete upstream provider readiness and consumer admission are not certified."
+  ]
+}

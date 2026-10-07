@@ -1,0 +1,91 @@
+{
+  "task_id": "D101",
+  "status": "CONTRACT_STATIC_REVIEW_PASSED_PENDING_CASE23_EXECUTION",
+  "checked_at": "2026-10-06T10:38:50.705378+00:00",
+  "scope": "Independent filesystem/code/artifact review only; no DB, CIM, publisher, recovery or test execution by this reviewer",
+  "correction": "An unsubmitted second date is not equivalent to a missing second current publication; complete fresh original-request READ proof can establish the existing outcome without inventing a second submission",
+  "reviewed_unchanged_service_contract": {
+    "before_any_sqlite_outcome_transition": "Restore exact original frozen request; obtain fresh preview, actual stopped-producer proof, and revalidateOnly over the complete inclusive original from/to window",
+    "required_current_value_proof": "Every known-source date has the exact original-owner current generation, complete (trade_date,source_version) cache key and all5fields, complete dataset/date/version receipt key and all5fields, matching original digest, settled WAL and frozen source/target identities",
+    "complete_window_recheck": "All dates are freshly previewed and read back twice with stable target frontiers; original submitted source fingerprints must match verifiedUnits; verification snapshot and stopped-writer proof are rechecked before and after outcome transitions",
+    "case_with_existing_complete_two_day_publications": "completion.rows=2; RUN/ATTEMPT proof expectedRows=matchedRows=2; the one actual SLICE proof expectedRows=matchedRows=1; status verifiedPublicationUnits=1",
+    "second_day_submission_or_second_hit_invented": false,
+    "successful_business_database_operations": "SELECT only; successful explicitly authorized reconciliation may update original SQLite outcome entries and release its existing allDates lease",
+    "missing_second_current_publication": "Throw before any outcome transition; original entries/events remain IN_DOUBT and retained allDates lease remains unchanged",
+    "automatic_resend_or_recovery": false
+  },
+  "strict_native_investigation_contract": {
+    "old_false_marker_auto_admitted": false,
+    "new_proof_create_new_fsync": true,
+    "old_evidence_preserved": true,
+    "unknown_tombstone_admission": "Only a later UNKNOWN observation of the same uniquely known original PID with complete OS birth/parent/exit evidence; fresh all original and duplicate PIDs must be absent",
+    "reject": "New UNKNOWN PID, alive or reused current PID, multiple known births, missing/changed parent, reversed observations, changed original SHA chain or changed actual bridge identity",
+    "source_of_truth": "Actual claim/intent/request/start/stop/response and observed sidecar SHA chain; response actual bridge must bind known native ancestry",
+    "writer_stopped_fallback": "Requires already explicitly created proof; revalidates all original SHAs and fresh native absence every time",
+    "publication_invoke_investigation_shortcut": false
+  },
+  "pure_test_evidence": {
+    "prior_group_tests_passed": 94,
+    "gateway": 43,
+    "port": 21,
+    "prepared": 8,
+    "job_before_new_case": 22,
+    "case22_missing_second_publication_passed": true,
+    "case23_complete_existing_two_day_publications": "Static reviewed; actual execution pending root",
+    "case23_does_not_modify_service": true
+  },
+  "recommendation": "Only READONLY_RECOVERY after case23 passes and root explicitly admits that operation",
+  "readonly_recovery_authorized_by_this_review": false,
+  "new_two_hit_run_authorized": false,
+  "source_increment_authorized": false,
+  "current_live_recovery_executed": false,
+  "preserved_failure_review_unchanged": true,
+  "failure_review_recovery_authorized_false": "Accurate historical fact before subsequent root contract review; original failure review is not rewritten",
+  "human_review": "pending_review",
+  "evidence": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EtfMarketOverviewDailyCacheJobService.java",
+      "sha256": "6f4b4d6881ae7ee93b47b67c54a0cc09bf3383b6ec940dcf9ffcf34e16a780e4"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EtfMarketOverviewDailyCacheMaterializeAdapter.java",
+      "sha256": "8f2cbd1d464d3420d4d145ec0ef0daf0e8ea1a51df51f29200c6f28c34d6ccd3"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EtfMarketOverviewCacheOwnerGateway.java",
+      "sha256": "ea273485bc6fbe32f9ac21adf0a23d6afedce412348a4ae1f3b786bf7192d8f3"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\service\\EtfMarketOverviewDailyCacheJobServiceTest.java",
+      "sha256": "a77c6ab4a349d693dcf0135744acd89619dc9db9823d2cd7e73665b98e5b7346"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\service\\EtfMarketOverviewCacheOwnerGatewayTest.java",
+      "sha256": "5a3d4be678a5af81327c3ce6debfdf21141e40fd24c13dbb0fa110cce123adb9"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\README.md",
+      "sha256": "e9900ac8c679491634dba7ae332279cf12f3c952e3fc027a8e7937e387d1fb16"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\mapping-contract-20261006.json",
+      "sha256": "ac03488633984abc23d0e16f6a64eb41290f667191b51c414b0e49a020e056a4"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-tombstone-investigation-guards-20261006.json",
+      "sha256": "d3a4b5d2946f4792d0c9ab6246dac7b9398281b2169ab2f17f1c094b3aabf39b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-hit-failed-sqlite-readonly-20261006.json",
+      "sha256": "6ac89914f04956f2f2784581d46cf15c997329f3d591efd1814c62506ef8e262"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-hit-failed-native-check-20261006.json",
+      "sha256": "c333d700c877d6384c23892f8afc77747245071603f77aafcd89b9a0c1a5b8a1"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\coordinator-hit-failure-review-20261006.json",
+      "sha256": "dcd93d2aa88c2d2bb8050914e428f8cde15c735bb25b09fa63f8bd2cb2e80c6d"
+    }
+  ]
+}

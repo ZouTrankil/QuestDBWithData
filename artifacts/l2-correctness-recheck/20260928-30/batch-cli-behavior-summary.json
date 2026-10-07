@@ -1,0 +1,378 @@
+{
+  "recordedAt": "2026-10-07T09:19:19.929682+00:00",
+  "status": "passed",
+  "errors": [],
+  "completedBehaviorCases": 15,
+  "classDirectory": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\gradle-build\\classes\\java\\main",
+  "java": "C:\\Users\\zouqiang\\.jdks\\jdk-24.0.2\\bin\\java.exe",
+  "fixtureSource": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\resources\\l2-daily-pipeline\\20260924",
+  "validationRun": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103",
+  "cases": [
+    {
+      "name": "01-fresh",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "elapsedSeconds": 1.3602101999567822,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\01-fresh.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-output",
+      "dates": {
+        "20260924": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 2,
+            "empty": 0,
+            "failed": 0,
+            "resumed": 0
+          },
+          "aggregateSha256": "978d57fbe422c92aaffb80f1aa4eaa26997f8d02fe87e9e163ca65a88721a92b",
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "02-resume",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "elapsedSeconds": 0.8386295000091195,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\02-resume.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-output",
+      "dates": {
+        "20260924": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 2,
+            "empty": 0,
+            "failed": 0,
+            "resumed": 2
+          },
+          "aggregateSha256": "978d57fbe422c92aaffb80f1aa4eaa26997f8d02fe87e9e163ca65a88721a92b",
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "03-tampered-result",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "elapsedSeconds": 1.1082924000220373,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\03-tampered-result.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-output",
+      "dates": {
+        "20260924": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 2,
+            "empty": 0,
+            "failed": 0,
+            "resumed": 1
+          },
+          "aggregateSha256": "978d57fbe422c92aaffb80f1aa4eaa26997f8d02fe87e9e163ca65a88721a92b",
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "04-stale-computation-fingerprint",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "elapsedSeconds": 1.0927908000303432,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\04-stale-computation-fingerprint.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-output",
+      "dates": {
+        "20260924": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 2,
+            "empty": 0,
+            "failed": 0,
+            "resumed": 1
+          },
+          "aggregateSha256": "978d57fbe422c92aaffb80f1aa4eaa26997f8d02fe87e9e163ca65a88721a92b",
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "05-changed-valid-input",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "elapsedSeconds": 1.076307600014843,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\05-changed-valid-input.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-output",
+      "dates": {
+        "20260924": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 2,
+            "empty": 0,
+            "failed": 0,
+            "resumed": 1
+          },
+          "aggregateSha256": "2b6baaccd9357ebf03a7c95eb45555594f10c567ee9cf372efdcf323f8fa582b",
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "06-restored-input",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "elapsedSeconds": 1.1161013999953866,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\06-restored-input.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-output",
+      "dates": {
+        "20260924": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 2,
+            "empty": 0,
+            "failed": 0,
+            "resumed": 1
+          },
+          "aggregateSha256": "978d57fbe422c92aaffb80f1aa4eaa26997f8d02fe87e9e163ca65a88721a92b",
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "07-identical-canonical-alias-and-empty",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "elapsedSeconds": 1.2106765999924392,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\07-identical-canonical-alias-and-empty.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\aliases-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\aliases-output",
+      "dates": {
+        "20260924": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 2,
+            "empty": 1,
+            "failed": 0,
+            "resumed": 0
+          },
+          "aggregateSha256": "978d57fbe422c92aaffb80f1aa4eaa26997f8d02fe87e9e163ca65a88721a92b",
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "08-conflicting-canonical-alias",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "elapsedSeconds": 0.8020655999425799,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\08-conflicting-canonical-alias.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\aliases-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\aliases-output",
+      "dates": {
+        "20260924": {
+          "status": "FAILED",
+          "published": false,
+          "counts": {
+            "success": 1,
+            "empty": 1,
+            "failed": 1,
+            "resumed": 2
+          },
+          "aggregateSha256": null,
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "09-bad-symbol-does-not-stop-neighbors",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "elapsedSeconds": 1.189918200019747,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\09-bad-symbol-does-not-stop-neighbors.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\bad-symbol-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\bad-symbol-output",
+      "dates": {
+        "20260924": {
+          "status": "FAILED",
+          "published": false,
+          "counts": {
+            "success": 2,
+            "empty": 0,
+            "failed": 1,
+            "resumed": 0
+          },
+          "aggregateSha256": null,
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "10-resume-incomplete-day",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "elapsedSeconds": 0.7405956999864429,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\10-resume-incomplete-day.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\bad-symbol-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\bad-symbol-output",
+      "dates": {
+        "20260924": {
+          "status": "FAILED",
+          "published": false,
+          "counts": {
+            "success": 2,
+            "empty": 0,
+            "failed": 1,
+            "resumed": 2
+          },
+          "aggregateSha256": null,
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "11-repaired-symbol-completes-day",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "elapsedSeconds": 1.1198459999868646,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\11-repaired-symbol-completes-day.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\bad-symbol-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\bad-symbol-output",
+      "dates": {
+        "20260924": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 3,
+            "empty": 0,
+            "failed": 0,
+            "resumed": 2
+          },
+          "aggregateSha256": "85a4c6f5ee95d0119a858e2c4c41d74f5eecefa7a48f44c26aa32aae8a2057f4",
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "12-failed-date-does-not-stop-next-date",
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "elapsedSeconds": 1.3244677000911906,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\12-failed-date-does-not-stop-next-date.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\multiple-dates-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\multiple-dates-output",
+      "dates": {
+        "20260924": {
+          "status": "FAILED",
+          "published": false,
+          "counts": {
+            "success": 2,
+            "empty": 0,
+            "failed": 1,
+            "resumed": 0
+          },
+          "aggregateSha256": null,
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        },
+        "20260925": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 1,
+            "empty": 0,
+            "failed": 0,
+            "resumed": 0
+          },
+          "aggregateSha256": "6cedc39c3501d2eeabb2e345caf5c3870603846e5b5acfef770ef81711dc4ba3",
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "13-whitelist-intersection",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "elapsedSeconds": 1.1173239999916404,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\13-whitelist-intersection.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\selected-output",
+      "dates": {
+        "20260924": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 1,
+            "empty": 0,
+            "failed": 0,
+            "resumed": 0
+          },
+          "aggregateSha256": "9a25e944dc8cf8680ccd313d87d5e8fb1f5a741ac5d2b08b221d88d0df102328",
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    },
+    {
+      "name": "14-loaded-synthetic-helper-bytecode-change",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "elapsedSeconds": 1.355063800001517,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\14-loaded-synthetic-helper-bytecode-change.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-output",
+      "dates": {
+        "20260924": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 2,
+            "empty": 0,
+            "failed": 0,
+            "resumed": 0
+          },
+          "aggregateSha256": "978d57fbe422c92aaffb80f1aa4eaa26997f8d02fe87e9e163ca65a88721a92b",
+          "computeFingerprint": "103291241972240a5b77000565c342d3e1b9dee04170aed2c132c99ec3c9a5a3"
+        }
+      }
+    },
+    {
+      "name": "15-original-loaded-helper-restored",
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "elapsedSeconds": 1.248983799945563,
+      "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\15-original-loaded-helper-restored.log",
+      "source": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-source",
+      "output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\resume-output",
+      "dates": {
+        "20260924": {
+          "status": "COMPLETE",
+          "published": true,
+          "counts": {
+            "success": 2,
+            "empty": 0,
+            "failed": 0,
+            "resumed": 0
+          },
+          "aggregateSha256": "978d57fbe422c92aaffb80f1aa4eaa26997f8d02fe87e9e163ca65a88721a92b",
+          "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+        }
+      }
+    }
+  ],
+  "syntheticHelperFingerprintProbe": {
+    "changedLoadedClassOnly": "com.zoutrankil.batch.l2.L2DailyFeaturePipeline$1",
+    "originalSha256": "0cb9037feb4c9b8db874607068ea96ba8033b310d09b2ac7a9d46f23e24d48bd",
+    "alternateSha256": "9320c3b6503b6079dee145ad0081d3e6e689760db7a66429eaa6a4bb7902a760",
+    "method": "Compile copied pipeline with javac -g:none; prepend only its $1 helper class",
+    "originalClass": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\gradle-build\\classes\\java\\main\\com\\zoutrankil\\batch\\l2\\L2DailyFeaturePipeline$1.class",
+    "alternateClass": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\batch-cli-recheck\\run-20261007-091901-462103\\alternate-helper-only-classpath\\com\\zoutrankil\\batch\\l2\\L2DailyFeaturePipeline$1.class"
+  },
+  "databaseWrites": "none: native batch CLI computes local copied fixtures and files only"
+}

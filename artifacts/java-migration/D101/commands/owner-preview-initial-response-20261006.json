@@ -1,0 +1,22 @@
+{
+  "protocol_version": 1,
+  "status": "FAILED_PRECONDITION",
+  "owner_invoked": false,
+  "owner_submissions": [],
+  "formal_mutated": false,
+  "source_mutated": false,
+  "ddl_operations": 0,
+  "automatic_retry": false,
+  "bridge_process": {
+    "pid": 11704,
+    "started_at": "2026-10-06T09:15:04.047187+00:00",
+    "exit_observed": false,
+    "terminal_response_written": true,
+    "exit_code": 1
+  },
+  "owner_sender_stopped": true,
+  "request_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\owner-preview-initial-request-20261006.json",
+  "request_sha256": "68cc45d0d9b01f9e46f3814576f805e8beb20690fd743cae62e0698c87858776",
+  "error_code": "ValueError",
+  "error": "year 58680 is out of range"
+}

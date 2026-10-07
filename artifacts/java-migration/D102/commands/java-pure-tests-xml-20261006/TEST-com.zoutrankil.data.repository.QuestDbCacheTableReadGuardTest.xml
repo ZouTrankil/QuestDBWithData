@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" tests="12" skipped="0" failures="0" errors="0" timestamp="2026-10-06T12:26:48.528Z" hostname="AMD395" time="0.201">
+  <properties/>
+  <testcase name="dedupRevisionDuringActualReadRejectsTheFetchedPage()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.035"/>
+  <testcase name="absentOrIncompletePhysicalMetadataCannotBecomeAnEmptyOrReadableCache()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.034"/>
+  <testcase name="stableCacheBindsIndependentPhysicalAndWalIdentityRatherThanBusinessVersion()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.009"/>
+  <testcase name="malformedCursorGenerationOrIncompleteKeyFailsDuringSqlPreparationWithoutDatabaseReads()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.008"/>
+  <testcase name="tableIdentityOrDirectoryRecreationCannotReuseMatchingTransactionCounters()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.025"/>
+  <testcase name="existingUnregisteredStockBasicTableKeepsItsCallerVersionWithoutCacheMetadata()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.008"/>
+  <testcase name="unsettledSuspendedOrNonWalCacheFailsBeforeFetchingRows()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.014"/>
+  <testcase name="changedBusinessVersionFilterCannotReuseCursorEvenWhenPhysicalVersionIsUnchanged()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.011"/>
+  <testcase name="physicalCommitOrWalFrontierChangeIndependentlyInvalidatesAnOldCursor()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.021"/>
+  <testcase name="sameBusinessVersionDedupRevisionBetweenPagesRejectsTheCursorBeforeAnotherSelect()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.012"/>
+  <testcase name="cacheThatBecomesUnsettledDuringReadCannotReturnAStablePage()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.009"/>
+  <testcase name="invalidBusinessVersionEqualityFailsBeforeAnyMetadataSchemaOrRowQuery()" classname="com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

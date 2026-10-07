@@ -1,0 +1,254 @@
+{
+  "task_id": "D104",
+  "protocol_version": 1,
+  "status": "PASS",
+  "record_date": "2026-10-07",
+  "reviewed_at": "2026-10-06T16:41:34.912913+00:00",
+  "review_kind": "Independent static source-closure, Java acceptance harness and file-only admission review",
+  "reviewer": "mv_reader_guard",
+  "blockers": [],
+  "recommendation": "PASS_STATIC_REVIEW_ONLY",
+  "static_only": true,
+  "next_task_admitted": false,
+  "D105_admitted": false,
+  "code_bindings": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\review_d104_completed_initial_sources_readonly.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\review_d104_completed_initial_sources_readonly.py",
+      "sha256": "35f9d33f1f697d9399b6583b800dc1e8114ccf295a695768c331bfcb26be5682"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\record_d104_java_terminal_readonly.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\record_d104_java_terminal_readonly.py",
+      "sha256": "25679aa699d8a50232fd2700fda23ff4687432f6035e2723ae8c1afb1786d973"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\admit_d104_java_stage.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\admit_d104_java_stage.py",
+      "sha256": "9fed957db99cdffb6daf065ae73558f2d35f3ce9e2d226c275e29d111d5f97fc"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\MacroCoreMonthlyLiveAcceptanceTest.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\MacroCoreMonthlyLiveAcceptanceTest.java",
+      "sha256": "16d58149057ae21b990fac244b47a348d92afff232bcf3969914597062027c3a"
+    }
+  ],
+  "checks": [
+    {
+      "id": "READ_ONLY_COMPLETE_INITIAL_SOURCE_CLOSURE",
+      "result": "PASS",
+      "details": "Root closure code only reads source/formal metadata, bounded full-field SELECTs, frozen receipt/claims/raw responses and exact native identities. It does not call mutation submission or owner materialization. Original two CPI ACKs and ten new remaining-source ACKs are validated against exact SQL/full-source SHA and raw HTTP 200 response bytes. Twelve known ACK operations, 23 source rows, 294 fields and 270 nullable DOUBLE slots match the six fixed schemas; original FAILED and claims remain preserved."
+    },
+    {
+      "id": "ACTUAL_EXTERNAL_SOURCE_CLOSURE_BINDINGS",
+      "result": "PASS",
+      "details": "As a file-only independent audit, the existing root-executed source review and all referenced frozen source claims/raw responses, fixture, startup, preflight, producer stop and completed-executor evidence were SHA-checked. The current native stop JSON records producer10272 birth2026-10-06T16:34:15.9246870Z absent with matches[]. This reviewer did not make a fresh native or DB observation."
+    },
+    {
+      "id": "JAVA_GATE_BEFORE_CONNECTIONS",
+      "result": "PASS",
+      "details": "Exact stage admission path/SHA/protocol/task/decision, fixed table and row bounds, zero source/formal writes, no automatic retry, source-fixture/preflight/startup/review links and exact 28 unique Java code files (17 production/11 tests) with per-file SHA are required before connections. Source review taskD104/protocol1/stage status and fixture SHA are explicitly checked. The harness then independently pins exact private listener PID/birth/root and rechecks source full raw fingerprint and typed expected values before admitted writes."
+    },
+    {
+      "id": "EIGHT_INITIAL_NINE_INCREMENT_RUNS",
+      "result": "PASS",
+      "details": "Initial lifecycle creates first, replay, pre-submission cancellation for resume, resumed child, readonly reconcile, prepared group parent+member, and final pre-source cancellation: eight ledger runs. The recorded harness list has seven IDs because the member is represented by its group, while the recorder inspects all actual eight runs. Increment adds one canonical run, yielding nine. The terminal recorder reads SQLite mode=ro/query_only in a single snapshot, requires all entries terminal and zero leases, checks actual target identity and preserves all initial runs/entries/events/groups as a subset after increment."
+    },
+    {
+      "id": "KNOWN_JVM_STOP_AND_JUNIT",
+      "result": "PASS",
+      "details": "Terminal recorder requires successful stage receipt and exact row/field/null/bit counts, binds the saved native JVM identity, checks one actual JUnit case with zero failures/errors/skips and root-transcribed exit0, and obtains fresh native PID/birth evidence showing the original identified JVM absent. A reused PID is distinguished by its OS birth. It publishes new-only stage stop/ledger/executor review artifacts and never sends DB writes. No actual Java live or stopped-JVM result is claimed by this static review."
+    },
+    {
+      "id": "FILE_ONLY_ADMISSION_GENERATOR",
+      "result": "PASS",
+      "details": "The admission generator only reads frozen source/review/proof files and archived test XML/catalog; it creates a new gate file. It checks complete-source stage and fixture SHA, producer stop/executor/preflight/startup hashes, independent static review status/blockers/code hashes, exact nine final suites plus one preserved passed catalog case totaling122 unique cases, catalog53datasets/42jobs with zero connections/no ledger, and 28 unique code paths parsed from the final frozen harness. Initial scope permits missing-only output CREATE1, HTTPflush4/max submittedrows7/max batchrows2; incremental scope is flush1/max submittedrows2/noDDL. Increment additionally requires the known initial JVM terminal0lease review. No source writes, formal replacement, FULL or D105 is admitted."
+    }
+  ],
+  "external_execution_evidence": {
+    "executor": "root",
+    "reviewer_executed": false,
+    "source_review": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-complete-initial-source-readonly-review-20261007.json",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-complete-initial-source-readonly-review-20261007.json",
+      "sha256": "7a69e5bc874ad824d200a61fe55d1fc75952c446920d81c1520034e99180ed7b"
+    },
+    "source_fixture": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-after-known-partial-20261007.json",
+      "sha256": "050cd029e0ec639bd1e11dcd2b8d4b8e5336ee45554abae22b430c075de8f006"
+    },
+    "source_native_stop": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\remaining-initial-source-producer-native-stop-20261007.json",
+      "sha256": "2ff622c25dddecf57a9af3eea787ab217d88bae0fb71a0de6c554e96fe4af642"
+    },
+    "source_executor_completion": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\remaining-initial-source-executor-completion-20261007.json",
+      "sha256": "60fb5a067cf50b4b1a14c03f1455a66949319efc9edc6a3486567ccdfeb0d67d"
+    },
+    "source_comparison_counts": {
+      "source_rows": 23,
+      "full_fields": 294,
+      "nullable_double_slots": 270,
+      "nonnull_double_bits": 240,
+      "known_ACK_operations": 12,
+      "CPI_resubmissions": 0
+    },
+    "java_archived_junit": [
+      {
+        "evidence": {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.cli.MacroCoreMonthlyCommandsTest.xml",
+          "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.cli.MacroCoreMonthlyCommandsTest.xml",
+          "sha256": "876bf63df47257ad0b7cccaa976b7ca38d7a357747bebdb01912ffb42d4299d5"
+        },
+        "class": "com.zoutrankil.data.cli.MacroCoreMonthlyCommandsTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "evidence": {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyMappingTest.xml",
+          "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyMappingTest.xml",
+          "sha256": "2d9fab7792de871e0200fe16f579f72eb82186cc781040ade8059698ebc94f85"
+        },
+        "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyMappingTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "evidence": {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyReadRepositoryTest.xml",
+          "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyReadRepositoryTest.xml",
+          "sha256": "57ae7aa9afb4f4970527ce828af04010de6bef1a66a4e65128d1804d7f2112ff"
+        },
+        "class": "com.zoutrankil.data.repository.MacroCoreMonthlyReadRepositoryTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "evidence": {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest.xml",
+          "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest.xml",
+          "sha256": "e5ac0a5b0b39a2206b794fa4aea60b43abf9a1fee0013ee85ab54199cfe0a237"
+        },
+        "class": "com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "evidence": {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreReadGuardTest.xml",
+          "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreReadGuardTest.xml",
+          "sha256": "356f32a14d8ff644a3c5c95c6130da8bd2e6eee01db14efd553acf373ac0697f"
+        },
+        "class": "com.zoutrankil.data.repository.QuestDbMacroCoreReadGuardTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "evidence": {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest.xml",
+          "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest.xml",
+          "sha256": "3658342177ced780a6eed6ff4ac1a68d05488010d9063b18a34b24fbf1d21ad7"
+        },
+        "class": "com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "evidence": {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyMaterializeAdapterTest.xml",
+          "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyMaterializeAdapterTest.xml",
+          "sha256": "e76975740d54b5c6708fc19a6e4146a3899423742e7cc48214123669697f317e"
+        },
+        "class": "com.zoutrankil.data.service.MacroCoreMonthlyMaterializeAdapterTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "evidence": {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlySourceTest.xml",
+          "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlySourceTest.xml",
+          "sha256": "604caaa8fe27199275aed2e7c7c89949be6a10cb33528d8e280b65cb0d39139b"
+        },
+        "class": "com.zoutrankil.data.service.MacroCoreMonthlySourceTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "evidence": {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyWriteGroupPreflightTest.xml",
+          "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyWriteGroupPreflightTest.xml",
+          "sha256": "40185192da83db3a345fd8a7bedce083841542248b9f63f447d6e32c7ba2e18c"
+        },
+        "class": "com.zoutrankil.data.service.MacroCoreMonthlyWriteGroupPreflightTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "evidence": {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-initial-failed-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyCatalogStartupTest.xml",
+          "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-initial-failed-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyCatalogStartupTest.xml",
+          "sha256": "781ee14e177705c71069947b953d5d223f0506d28b2b684ec5ff81852923264c"
+        },
+        "class": "com.zoutrankil.data.service.MacroCoreMonthlyCatalogStartupTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "java_pure_unique_PASS": 122,
+    "java_final_nine_suite_tests": 121,
+    "catalog": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-catalog-startup-final-20261007.json",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-catalog-startup-final-20261007.json",
+      "sha256": "0432551f09403d2b8af1432b46f0fde2122a2c0365d2895e05eb8a048d9e837f"
+    },
+    "catalog_case_tests": 1,
+    "dataset_count": 53,
+    "job_count": 42,
+    "final_pure_executor": {
+      "session_id": 25382,
+      "chunk_id": "773946",
+      "exit_code": 0,
+      "provenance": "Parent root report; archived XML independently read, not executed by reviewer"
+    },
+    "catalog_executor": {
+      "session_id": 49615,
+      "chunk_id": "be578d",
+      "exit_code": 1,
+      "scope": "Catalog one-case passed XML is preserved from initial run with a separate source-test fixture failure; corrected final121 suite XML is distinct."
+    }
+  },
+  "reviewer_operations": {
+    "file_reads_and_new_review_only": true,
+    "test_runs": 0,
+    "Gradle_runs": 0,
+    "database_queries": 0,
+    "database_writes": 0,
+    "native_queries": 0,
+    "owner_invocations": 0,
+    "implementation_mutations": 0
+  },
+  "actual_java_live_claimed": false,
+  "source_revision_certification": false,
+  "human_review": "pending_review"
+}

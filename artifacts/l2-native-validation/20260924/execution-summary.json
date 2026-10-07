@@ -1,0 +1,187 @@
+{
+  "recorded_at_utc": "2026-10-07T06:21:19.301523+00:00",
+  "data_date": "20260924",
+  "source_archive": {
+    "path": "D:\\BaiduNetdiskDownload\\202609\\20260924.7z",
+    "bytes": 4769610384
+  },
+  "source_root": "var/l2-real-sample-validation/python-ref/20260924",
+  "reference_root": "D:/work/fund_2/back-monitor",
+  "feature_version": "v1.3",
+  "parser_version": "dfcf_csv_v1.2",
+  "java_version": "openjdk version \"24.0.2\" 2025-07-15\nOpenJDK Runtime Environment (build 24.0.2+12-54)\nOpenJDK 64-Bit Server VM (build 24.0.2+12-54, mixed mode, sharing)",
+  "classfile_major": 68,
+  "gradle_version": "8.14.3",
+  "gradle_task": "l2DailyFeatureCompute",
+  "compute_is_native_java": true,
+  "database_writes": false,
+  "rows_generated": 7,
+  "fields_compared": 770,
+  "differences": 0,
+  "relative_tolerance": 1e-10,
+  "absolute_tolerance": 1e-09,
+  "tests": {
+    "total": 42,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "samples": [
+    {
+      "raw_symbol": "000001.SZ",
+      "symbol": "000001.SZ",
+      "deals": 115965,
+      "orders": 154628,
+      "snapshots": 4833
+    },
+    {
+      "raw_symbol": "600000.SH",
+      "symbol": "600000.SH",
+      "deals": 47397,
+      "orders": 61789,
+      "snapshots": 4968
+    },
+    {
+      "raw_symbol": "300750.SZ",
+      "symbol": "300750.SZ",
+      "deals": 198897,
+      "orders": 298492,
+      "snapshots": 4833
+    },
+    {
+      "raw_symbol": "688981.SH",
+      "symbol": "688981.SH",
+      "deals": 58366,
+      "orders": 187762,
+      "snapshots": 4998
+    },
+    {
+      "raw_symbol": "510300.SZ",
+      "symbol": "510300.SH",
+      "deals": 131641,
+      "orders": 316155,
+      "snapshots": 5007
+    },
+    {
+      "raw_symbol": "159915.SZ",
+      "symbol": "159915.SZ",
+      "deals": 310269,
+      "orders": 490531,
+      "snapshots": 4843
+    },
+    {
+      "raw_symbol": "588000.SZ",
+      "symbol": "588000.SH",
+      "deals": 233236,
+      "orders": 458395,
+      "snapshots": 5009
+    }
+  ],
+  "source_admission": "Finite decimal source numbers, bounded files, valid required schema/date; integral order IDs/time.",
+  "acceptance_boundary": "Selected symbols on 20260924; not whole archive/month or formal QuestDB ingestion.",
+  "input_files": {
+    "000001.SZ/行情.csv": {
+      "bytes": 2084817,
+      "sha256": "a10b6473402b9b7460ebd1a6131f36fce5e0a2e37d2532c9841ccfbaea745561"
+    },
+    "000001.SZ/逐笔委托.csv": {
+      "bytes": 7884258,
+      "sha256": "298cfe038019ad4d8eccc26f63cd1d301c2b275124335b313910bacf94342612"
+    },
+    "000001.SZ/逐笔成交.csv": {
+      "bytes": 9046086,
+      "sha256": "44349ebbdaad713639ba1f6e3b988def836a7c29f023e0e0436fa4517a6cec2f"
+    },
+    "600000.SH/行情.csv": {
+      "bytes": 1974756,
+      "sha256": "c4fddc20e76b4ec05f1e55101c7de5b6ab8847a92f144e8ae44985a2d4858921"
+    },
+    "600000.SH/逐笔委托.csv": {
+      "bytes": 3854082,
+      "sha256": "dc4bdc289b5336d71581333fb697ad9581abc64ab1de2411e384196929747a4c"
+    },
+    "600000.SH/逐笔成交.csv": {
+      "bytes": 3763142,
+      "sha256": "f9f5bf7c8cfe2113a33647909be9e4466542b92934e85c82b8a28be5fc39ca48"
+    },
+    "300750.SZ/行情.csv": {
+      "bytes": 1975711,
+      "sha256": "dc5da293dab24bda02f44642a38c867e641b5cb71e061c4b9ccc7f121b086916"
+    },
+    "300750.SZ/逐笔委托.csv": {
+      "bytes": 15669023,
+      "sha256": "31ebeed13b876a038352f930628fae65ecc780aa17a9d47084db71db25c96eda"
+    },
+    "300750.SZ/逐笔成交.csv": {
+      "bytes": 15627661,
+      "sha256": "f3a1fe82cf853fd4406152fc98e7701dadbd33ebc1f596db19c8f2295cfbad37"
+    },
+    "688981.SH/行情.csv": {
+      "bytes": 2001155,
+      "sha256": "4dce81b41d430163efd57ab48fbbcf240f18b1994530b868149896d7029a4693"
+    },
+    "688981.SH/逐笔委托.csv": {
+      "bytes": 12068241,
+      "sha256": "bc12afbf4f6d65d1584d6b27795393f2abacf2850a2979c00cc773ae88f58e7c"
+    },
+    "688981.SH/逐笔成交.csv": {
+      "bytes": 4714302,
+      "sha256": "4bf5b89c272e030c805016ffe4834dca462dea70f7b77aa80e49297668669e26"
+    },
+    "510300.SZ/行情.csv": {
+      "bytes": 2046890,
+      "sha256": "6aa1587c8b9616d087e5ce7c23136e9bfa7830d87504116e224fe2ff52c9f396"
+    },
+    "510300.SZ/逐笔委托.csv": {
+      "bytes": 20169855,
+      "sha256": "f9a4e2fcbda568a5d8fbd60f88880572b5e5b8ff9ffeded276cf0db995208e54"
+    },
+    "510300.SZ/逐笔成交.csv": {
+      "bytes": 10500573,
+      "sha256": "c172c957f20d11f33c8702a3bcf5c72adc0ad661d4034dc714d4a998d907f837"
+    },
+    "159915.SZ/行情.csv": {
+      "bytes": 2017823,
+      "sha256": "f161e2f0987ed13e3204fc4e6fd8743ca13f1ac758e9197894a27e713820a447"
+    },
+    "159915.SZ/逐笔委托.csv": {
+      "bytes": 20331970,
+      "sha256": "da607b47853b3af7ad152f279ef0f5c2ab384fddafae518c82b1754ef8644f40"
+    },
+    "159915.SZ/逐笔成交.csv": {
+      "bytes": 22777807,
+      "sha256": "20eed87d76c6d3182ec4b02b0ccb7c92680917fca5723978274ddf46598463f0"
+    },
+    "588000.SZ/行情.csv": {
+      "bytes": 2127892,
+      "sha256": "d9379b2564ff4e30489eab198a745ad391bc42faf7602cc0aafd913a05e5dcec"
+    },
+    "588000.SZ/逐笔委托.csv": {
+      "bytes": 29265158,
+      "sha256": "fe759707f21dde7958f57a2ff737394860f23ac43bb387bddd8ff3d3b5dee0da"
+    },
+    "588000.SZ/逐笔成交.csv": {
+      "bytes": 18626614,
+      "sha256": "a4a8ca60c5eb1c467edc432502e4d62acc139d6a2589df0b27148842ada8e619"
+    }
+  },
+  "java_source_hashes": {
+    "src/main/java/com/zoutrankil/batch/DfcfCsvParser.java": "c9e83d6b65b6e761d36d5fcd5f808ccec81b73d2a1d4e28962e74aa5c4c21f53",
+    "src/main/java/com/zoutrankil/batch/l2/L2DailyFeatureCli.java": "9e6c62553bb3c124c9d56391201699a262cbb54439078bd632fb9fa312a77953",
+    "src/main/java/com/zoutrankil/batch/l2/L2DailyFeaturePipeline.java": "412dabf31d5ce5f3b374a76482f3d01973adb025ee49754949b884ce39802f07",
+    "src/main/java/com/zoutrankil/batch/l2/L2FeatureData.java": "f1f5981b56dcb2814396723b94c95a00ab9efee6ec11c34429322a15409ac15e",
+    "src/main/java/com/zoutrankil/batch/l2/L2FeatureMath.java": "e5c40d840b8ace994787eb5d616d9f29bce5f3764eb7ca64a0de533d99219a34",
+    "src/main/java/com/zoutrankil/batch/l2/L2GmmFeatures.java": "885b848d4ab103aae257eb5c6c694724f159d3c708e3036846de9ccac55c7ead",
+    "src/main/java/com/zoutrankil/batch/l2/L2IntensityFeatures.java": "0b61cbb7376c78f606058a1fc41e6f96c2fd7210968b90f7395230b8075745e3",
+    "src/main/java/com/zoutrankil/batch/l2/L2IntradayFeatures.java": "cbcc5cc5bb97dc36b6a26b22373a46c4d4ce9daec96404c4e8baf93744cc7d11",
+    "src/main/java/com/zoutrankil/batch/l2/L2LifecycleFeatures.java": "2a310662a355f6bb7b32cf036cca05591e3ff52de154924805d4065a2b09a7fa",
+    "src/main/java/com/zoutrankil/batch/l2/L2LobTransitionFeatures.java": "737c214ac838dfba084322fd5e5106c763abbc0dc38333308190b0d0a0cd1fd5",
+    "src/main/java/com/zoutrankil/batch/l2/L2MicrostructureFeatures.java": "af6a84eb37ea3b8ff208024d3908e981d32e022ba5a2bb2fdd7fc044bf52005e",
+    "src/main/java/com/zoutrankil/batch/l2/L2NumpySort.java": "2b6b3d966a8366b9f62525c493656b8009afb500a5cadef748592f28604385d3",
+    "src/main/java/com/zoutrankil/batch/l2/L2QualityFeatures.java": "a396a6a1cf403fa8229c2b7c5b158ef74ae93ee621a3a6d9078abf47632b969b",
+    "src/main/java/com/zoutrankil/batch/l2/L2SpoofingFeatures.java": "925d8787effad7d2ebc1fcaf37235c3f541a212ca22ac8a2f01420ab3f96fd56",
+    "src/main/java/com/zoutrankil/batch/l2/L2TradeSignFeatures.java": "bdc3b78937e938a7fa20885fd59b0ba47ebec4528edeee05afd0960e45b9e9e5",
+    "src/main/java/com/zoutrankil/batch/l2/L2WideFeatures.java": "94d091399806d9d6b7992f9963aab802e976f166cb85101380abcf763de89d2b"
+  },
+  "output_sha256": "9487a3f8af016e6ed9950a5032355da9ffac0b98bbafcf821bcd32dc5ff287c5"
+}

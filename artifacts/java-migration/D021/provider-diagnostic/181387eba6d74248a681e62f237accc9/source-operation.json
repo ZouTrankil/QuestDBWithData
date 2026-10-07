@@ -1,0 +1,202 @@
+{
+  "task" : "D021",
+  "startedAt" : "2026-09-29T21:25:15.528844500Z",
+  "table" : "java_d021_index_weight_181387eba6d74248a681e62f237accc9",
+  "dataRowsWritten" : 0,
+  "formalTableMutated" : false,
+  "plan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.index_weight",
+        "version" : 1,
+        "datasetId" : "index_weight",
+        "datasetVersion" : 1,
+        "owner" : "index_weight_owner",
+        "supportedModes" : [ "BACKFILL", "SNAPSHOT" ],
+        "defaultMode" : "SNAPSHOT",
+        "parameters" : {
+          "stockDetailTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "force" : {
+            "type" : "BOOLEAN",
+            "required" : false,
+            "maxLength" : 5,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "index_weight.index_month",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 2,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT4M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 92,
+          "maxSlices" : 32,
+          "maxPages" : 32,
+          "maxRows" : 128000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 0,
+        "dependencies" : [ {
+          "jobId" : "data.index",
+          "version" : 1
+        }, {
+          "jobId" : "data.stock_detail_info",
+          "version" : 1
+        } ],
+        "frequency" : "WEEKLY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : false
+      },
+      "mode" : "SNAPSHOT",
+      "parameters" : {
+        "force" : false,
+        "observedAt" : "2026-09-29T21:25:19.853088Z",
+        "stockDetailTargetId" : "static-v2-ed7368d64ecfbc6c4535ad94159710d5c1ac2aac856a88ab7c4112fecc2af78b",
+        "targetId" : "static-v2-17de9f529ed0ccec20bdf6909582fd0c715b0d78db9d31b7d516d00a53853a7f"
+      },
+      "from" : null,
+      "to" : null,
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-17de9f529ed0ccec20bdf6909582fd0c715b0d78db9d31b7d516d00a53853a7f",
+    "targetMinBefore" : null,
+    "targetMaxBefore" : null,
+    "lastRefreshDate" : null,
+    "nextRefreshDate" : null,
+    "notDue" : false
+  },
+  "calls" : [ {
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D021\\provider-diagnostic\\181387eba6d74248a681e62f237accc9\\source\\complete-csindex_oss_xls-000300-36688a467699196f37c683ecb6a8d7622b3ed4b6e7e3e43c2532e7da557b4ac4.json",
+    "parameters" : {
+      "index_code" : "000300",
+      "url" : "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/file/autofile/closeweight/000300closeweight.xls"
+    },
+    "responseRows" : 300,
+    "selectedRows" : 300,
+    "indexCode" : "000300",
+    "route" : "CSINDEX_OSS_XLS",
+    "fingerprint" : "36688a467699196f37c683ecb6a8d7622b3ed4b6e7e3e43c2532e7da557b4ac4"
+  }, {
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D021\\provider-diagnostic\\181387eba6d74248a681e62f237accc9\\source\\complete-csindex_oss_xls-000016-cdd50af97fd149983a8a87ad237d313ad3eec19c4b41dc3100ab3564d1697ae9.json",
+    "parameters" : {
+      "index_code" : "000016",
+      "url" : "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/file/autofile/closeweight/000016closeweight.xls"
+    },
+    "responseRows" : 50,
+    "selectedRows" : 50,
+    "indexCode" : "000016",
+    "route" : "CSINDEX_OSS_XLS",
+    "fingerprint" : "cdd50af97fd149983a8a87ad237d313ad3eec19c4b41dc3100ab3564d1697ae9"
+  }, {
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D021\\provider-diagnostic\\181387eba6d74248a681e62f237accc9\\source\\complete-csindex_oss_xls-000688-a2a53230a2b54e52030e8f65c5e700b301e2da58b3303163f7d17267502c5406.json",
+    "parameters" : {
+      "index_code" : "000688",
+      "url" : "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/file/autofile/closeweight/000688closeweight.xls"
+    },
+    "responseRows" : 50,
+    "selectedRows" : 50,
+    "indexCode" : "000688",
+    "route" : "CSINDEX_OSS_XLS",
+    "fingerprint" : "a2a53230a2b54e52030e8f65c5e700b301e2da58b3303163f7d17267502c5406"
+  }, {
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D021\\provider-diagnostic\\181387eba6d74248a681e62f237accc9\\source\\complete-csindex_oss_xls-000905-0433b85c2f7543365a676515b0a1be13d40950b7e8d15e86d4706d42ed4cf71c.json",
+    "parameters" : {
+      "index_code" : "000905",
+      "url" : "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/file/autofile/closeweight/000905closeweight.xls"
+    },
+    "responseRows" : 500,
+    "selectedRows" : 500,
+    "indexCode" : "000905",
+    "route" : "CSINDEX_OSS_XLS",
+    "fingerprint" : "0433b85c2f7543365a676515b0a1be13d40950b7e8d15e86d4706d42ed4cf71c"
+  }, {
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D021\\provider-diagnostic\\181387eba6d74248a681e62f237accc9\\source\\complete-csindex_oss_xls-000510-8058b43d819fffaaf6a716a983fbdaccb59e6fd1761e323896057ff3f3ddf50e.json",
+    "parameters" : {
+      "index_code" : "000510",
+      "url" : "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/file/autofile/closeweight/000510closeweight.xls"
+    },
+    "responseRows" : 500,
+    "selectedRows" : 500,
+    "indexCode" : "000510",
+    "route" : "CSINDEX_OSS_XLS",
+    "fingerprint" : "8058b43d819fffaaf6a716a983fbdaccb59e6fd1761e323896057ff3f3ddf50e"
+  }, {
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D021\\provider-diagnostic\\181387eba6d74248a681e62f237accc9\\source\\complete-csindex_oss_xls-000852-c8fc40edf49079cb268cf7db37ebd1bbe4a301193c18d106b60e3897bf62e7d6.json",
+    "parameters" : {
+      "index_code" : "000852",
+      "url" : "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/file/autofile/closeweight/000852closeweight.xls"
+    },
+    "responseRows" : 1000,
+    "selectedRows" : 1000,
+    "indexCode" : "000852",
+    "route" : "CSINDEX_OSS_XLS",
+    "fingerprint" : "c8fc40edf49079cb268cf7db37ebd1bbe4a301193c18d106b60e3897bf62e7d6"
+  }, {
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D021\\provider-diagnostic\\181387eba6d74248a681e62f237accc9\\source\\complete-csindex_oss_xls-932000-326b1efcadc3cc9859809ea603345965d42287caf8a7dbc20beaa69a66211367.json",
+    "parameters" : {
+      "index_code" : "932000",
+      "url" : "https://oss-ch.csindex.com.cn/static/html/csindex/public/uploads/file/autofile/closeweight/932000closeweight.xls"
+    },
+    "responseRows" : 2000,
+    "selectedRows" : 2000,
+    "indexCode" : "932000",
+    "route" : "CSINDEX_OSS_XLS",
+    "fingerprint" : "326b1efcadc3cc9859809ea603345965d42287caf8a7dbc20beaa69a66211367"
+  }, {
+    "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D021\\provider-diagnostic\\181387eba6d74248a681e62f237accc9\\source\\complete-tushare_latest_snapshot-399673-faf42258c3b7e29c547ea8b14923cbe7d961a8365a6e6de19fb32d51884e7d90.json",
+    "parameters" : {
+      "start_date" : "20260717",
+      "index_code" : "399673.SZ",
+      "end_date" : "20260930"
+    },
+    "responseRows" : 100,
+    "selectedRows" : 50,
+    "indexCode" : "399673",
+    "route" : "tushare_latest_snapshot",
+    "fingerprint" : "faf42258c3b7e29c547ea8b14923cbe7d961a8365a6e6de19fb32d51884e7d90"
+  } ],
+  "sourceRows" : 4450,
+  "status" : "SOURCE_COMPLETE",
+  "physicalRowsAfter" : 0,
+  "finishedAt" : "2026-09-29T21:25:23.766299700Z"
+}

@@ -1,0 +1,236 @@
+{
+  "task_id": "D104",
+  "protocol_version": 1,
+  "status": "PASS",
+  "checked_at": "2026-10-06T17:10:33.546479+00:00",
+  "reviewer": "/root/mv_reader_guard",
+  "static_only": true,
+  "blockers": [],
+  "recommendation": "accepted_for_bounded_source_increment",
+  "bindings": [
+    {
+      "path": "tools/admit_d104_source_increment.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\admit_d104_source_increment.py",
+      "sha256": "11ce609e916431f8d2948ca8184bfa36f39ca8c95a3fc53f23aced74a562d40d"
+    },
+    {
+      "path": "tools/review_d104_completed_increment_sources_readonly.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\review_d104_completed_increment_sources_readonly.py",
+      "sha256": "09945fc84fb60294aab1469ba0361808c13937e66d7dedad7c92b6ac01d0a478"
+    },
+    {
+      "path": "tools/prepare_d104_macro_core_increment_isolated.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d104_macro_core_increment_isolated.py",
+      "sha256": "adf45f32d4ade8b96b91ac200e26f6db12789ea4f6b12ff3da344cd9dceb8645"
+    },
+    {
+      "path": "tools/test_d104_increment_guards.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d104_increment_guards.py",
+      "sha256": "d0166580101465181741d03e601c3cb1ea5658bf908575955d0cd70ae75a9e13"
+    },
+    {
+      "path": "tools/prepare_d104_macro_core_initial_after_known_partial.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d104_macro_core_initial_after_known_partial.py",
+      "sha256": "d813f0363ad5dc0558001b2b9f8c6a4225187ddf1c8fe4520d6898feb7ffac32"
+    },
+    {
+      "path": "tools/prepare_d104_macro_core_isolated.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d104_macro_core_isolated.py",
+      "sha256": "23389881d8c6b8401dfb8b482378f6cdbe911f79e0b72269e46dcc6573388922"
+    },
+    {
+      "path": "tools/preflight_d104_macro_core_readonly.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\preflight_d104_macro_core_readonly.py",
+      "sha256": "245607f62dd3366746c712839351ecfc8d302a95c4a8f5d1e16125acbe676f91"
+    },
+    {
+      "path": "tools/preflight_d103_equity_style_readonly.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\preflight_d103_equity_style_readonly.py",
+      "sha256": "d832e236fb927af8beedcfe7984413969262be50d9812b9bfd9173ce8961546c"
+    },
+    {
+      "path": "tools/prepare_d103_equity_style_isolated.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d103_equity_style_isolated.py",
+      "sha256": "bb3fc799711ebf3637feca63f9fe29304341bfd9d4bbbab6b001b8f2722e6210"
+    }
+  ],
+  "external_evidence_bindings": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\python-source-increment-guards-frozen-20261007.log",
+      "sha256": "d2d063bb1b80484cac569af1e753e959b67b35c0171e3ffd955b76959f5c5bd3"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-after-known-partial-20261007.json",
+      "sha256": "050cd029e0ec639bd1e11dcd2b8d4b8e5336ee45554abae22b430c075de8f006"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-initial-acceptance-20261007.json",
+      "sha256": "2ef5ded567bf02de76170516e0acd4fedd3a4b3242133a79bafac4986bc559b1"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\initial-java-process-and-ledger-review-20261007.json",
+      "sha256": "738744cd9f782ae0f47faa1a76064cc80b8fa7772aebb3f173fcd0798831f1e2"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\initial-java-native-stop-20261007.json",
+      "sha256": "ea47b14e71cdba66b8bfcbdcc5a7ae5390930ae90a9040dd345204fdfd812726"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\initial-java-executor-completion-20261007.json",
+      "sha256": "cd0be778553191edb27920972c7046d0f27d0dab821b70d1dc9ac55011a739bb"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-initial-result-20261007\\TEST-com.zoutrankil.data.config.MacroCoreMonthlyLiveAcceptanceTest.xml",
+      "sha256": "a8fb9c32859c79b0d5317035a0f98a7466f644b6e681c19f8b4e770b95cdd9db"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\initial-java-terminal-ledger-20261007.json",
+      "sha256": "20497f292f31bb50531691b7c5b487d540989c6182382efa235acfd29f0f0d6c"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-remaining-initial-source-admission-20261007.json",
+      "sha256": "77ba12f5e25e2bb326e156f17911cea4f06b395bf0ea060f906eddb38cc433ab"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-20261007.json",
+      "sha256": "516195048104e45c61ed0d7ff5796f32eca6d72dabc493c16b2a3f1e3667c534"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007.json",
+      "sha256": "fc4b839c44254aee9f221e1246c5279738cf33704eb12749f2f70691347f530b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\private-server-start-20261007.json",
+      "sha256": "9dccda7261b680798924e7632c4f8dd646c15e8f0442e737b80ba701f36f51f7"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-complete-initial-source-readonly-review-20261007.json",
+      "sha256": "7a69e5bc874ad824d200a61fe55d1fc75952c446920d81c1520034e99180ed7b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-source-closure-java-acceptance-static-review-20261007.json",
+      "sha256": "0353b518fb6b0f4f02d19ce6b7d03858436bcf8529ec96601d557696fa235eda"
+    }
+  ],
+  "scope": {
+    "reviewed": "Frozen increment mutation guards and admission consumer, root file-only gate producer and independent SELECT-only completed-source closure.",
+    "excluded": "This review does not independently assess reviewer-authored MacroCoreMonthlySource/MaterializeAdapter/JobService.",
+    "tests_executed_by_reviewer": 0,
+    "database_queries_by_reviewer": 0,
+    "database_writes_by_reviewer": 0,
+    "native_queries_by_reviewer": 0,
+    "owner_calls_by_reviewer": 0,
+    "review_artifacts_created": 1
+  },
+  "external_execution": {
+    "executor": "root coordinator, not this static reviewer",
+    "guard_log": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\python-source-increment-guards-frozen-20261007.log",
+      "sha256": "d2d063bb1b80484cac569af1e753e959b67b35c0171e3ffd955b76959f5c5bd3"
+    },
+    "guard_methods": 49,
+    "passed": 49,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "reported_exit_code": 0,
+    "reported_chunk_id": "6d3e2d",
+    "basis": "Root reported execution plus immutable log containing 49 individual ok lines and Ran 49 tests / OK."
+  },
+  "initial_actual_evidence": {
+    "basis": "Immutable root actual source, Java, native, SQLite and JUnit evidence files; no fresh service query by reviewer.",
+    "source_fixture": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-after-known-partial-20261007.json",
+      "sha256": "050cd029e0ec639bd1e11dcd2b8d4b8e5336ee45554abae22b430c075de8f006"
+    },
+    "java_initial": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-initial-acceptance-20261007.json",
+      "sha256": "2ef5ded567bf02de76170516e0acd4fedd3a4b3242133a79bafac4986bc559b1"
+    },
+    "terminal": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\initial-java-process-and-ledger-review-20261007.json",
+      "sha256": "738744cd9f782ae0f47faa1a76064cc80b8fa7772aebb3f173fcd0798831f1e2"
+    },
+    "known_ACKs": 12,
+    "source_rows": 23,
+    "full_source_fields": 294,
+    "nullable_source_double_slots": 270,
+    "CPI_resubmissions": 0,
+    "continuation_gate": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-remaining-initial-source-admission-20261007.json",
+      "sha256": "77ba12f5e25e2bb326e156f17911cea4f06b395bf0ea060f906eddb38cc433ab"
+    },
+    "continuation_script_sha256": "d813f0363ad5dc0558001b2b9f8c6a4225187ddf1c8fe4520d6898feb7ffac32",
+    "continuation_receipt_gate_current_code_match": true,
+    "ledger_runs": 8,
+    "ledger_entries": 18,
+    "ledger_events": 72,
+    "retained_leases": 0,
+    "known_JVM_pid": 47260,
+    "known_JVM_birth_utc": "2026-10-06T16:42:49.533552Z",
+    "original_identity_absent_in_external_native_evidence": true,
+    "target_rows": 2,
+    "target_full_fields": 18,
+    "nullable_target_double_slots": 16,
+    "nonnull_target_double_bits": 15,
+    "formal_unchanged_in_external_receipt": true,
+    "old_failed_initial_preserved": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-20261007.json",
+      "sha256": "516195048104e45c61ed0d7ff5796f32eca6d72dabc493c16b2a3f1e3667c534"
+    }
+  },
+  "checks": [
+    {
+      "name": "Concrete code admission and file-only protocol",
+      "conclusion": "PASS",
+      "detail": "Root gate binds fixed initial/Java/terminal SHA, exact script/guard source, singular guard_log under commands and independent review. After CREATE_NEW it calls the actual admission_inputs pure file-only parser and requires returned gate equal authored gate. Consumer checks exact script/review SHA and bounded unique tools bindings including script, guard and five helpers before launch and every batch."
+    },
+    {
+      "name": "Five bounded source-only mutations and UNKNOWN preservation",
+      "conclusion": "PASS",
+      "detail": "Only one captured August row each in cn_cpi/cn_ppi/cn_pmi/cn_m/sf_month. GDP, DDL, output mutations, duplicate table attempts, old claims, cancellation and service/producer/admission drift are rejected before durable UNKNOWN intent. A single HTTP attempt follows; raw bytes are durable before ACK parsing. UNKNOWN is retained without retry or resend."
+    },
+    {
+      "name": "Closing source/target/formal/ledger proof",
+      "conclusion": "PASS",
+      "detail": "Each batch rechecks complete current six-source fields and prefix, two-month output exact fields/null bits, formal state, five SQLite tables, native service and original JVM absence. Final all-eight private metadata/COUNT vector and fresh exact ledger are read after complete fields. Own acknowledged source adds exactly one transaction retaining ID/directory/schema; GDP and outputs stay unchanged."
+    },
+    {
+      "name": "Completed-source SELECT-only closure executable interface",
+      "conclusion": "PASS",
+      "detail": "Root closure matches frozen APIs and receipt fields. It binds each of five claim/raw bytes/SQL/source-record SHA ACKs; independently checks original producer birth absence, original JVM absence, private target attestation and actual mode=ro five-table ledger. Its private/formal readers are read-only. Six full source reads/schema, target fields, formal state and metadata/ledger frontiers are checked before new-only evidence persistence."
+    },
+    {
+      "name": "Source count and legacy context",
+      "conclusion": "PASS",
+      "detail": "Five captured August observations change 23 source rows to 28 rows/412 fields/383 DOUBLE slots. GDP remains one June report; SF retains 12 preceding observations plus three window observations. DOUBLE slots: CPI36+PPI90+PMI177+M27+GDP8+SF45=383. These tools introduce no scaling or forward-fill."
+    }
+  ],
+  "resolved_findings": [
+    {
+      "issue": "Draft did not consume approved code/review bindings before process launch.",
+      "resolution": "validate_admitted_code now validates gate.script, independent_static_review and complete bounded tools binding set; admission_inputs invokes it at every boundary."
+    },
+    {
+      "issue": "Root had an absent guard filename and consumer applied the commands evidence scope to a tools guard.",
+      "resolution": "Root and frozen GUARDS use tools/test_d104_increment_guards.py. gate.guards uses exact tools path plus reviewed SHA; singular guard_log uses commands evidence proof. Two focused pure guards added."
+    }
+  ],
+  "future_execution_recommendation": {
+    "completed_source_readonly_tool": "tools/review_d104_completed_increment_sources_readonly.py",
+    "may_execute_by_coordinator_after": "New verified source-increment receipt with exact five known ACKs and actual producer terminal evidence. This is a static executable-interface recommendation, not a claim increment or closure already executed.",
+    "expected_source_rows": 28,
+    "expected_full_fields": 412,
+    "expected_nullable_double_slots": 383,
+    "expected_new_source_ACKs": 5,
+    "expected_GDP_INSERT_rows": 0,
+    "expected_original_target_rows": 2,
+    "DDL_DML_in_readonly_tool": 0
+  },
+  "source_increment_executed_by_this_review": false,
+  "java_incremental_writes_admitted_by_this_review": false,
+  "next_task_admitted": false,
+  "D105_admitted": false,
+  "human_acceptance": "pending",
+  "coordinator_final_gate": "pending"
+}

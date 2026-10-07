@@ -1,0 +1,417 @@
+{
+  "task_id": "D098",
+  "status": "PREPARED_REAL_SOURCE",
+  "checked_at": "2026-10-06T06:21:29.272275+00:00",
+  "formal_mutated": false,
+  "native_refresh_submitted": false,
+  "java_materializer_verified": false,
+  "fixture_submissions": [
+    {
+      "phase": "initial_two_real_days",
+      "table": "l2_daily_features",
+      "submitted_rows": 15828,
+      "ack": "ACKNOWLEDGED",
+      "purpose": "real source fixture only; not Java materializer acceptance",
+      "automatic_retry": false
+    },
+    {
+      "phase": "duplicate_source_fixture_replay",
+      "table": "l2_daily_features",
+      "submitted_rows": 15828,
+      "ack": "ACKNOWLEDGED",
+      "purpose": "real source fixture only; not Java materializer acceptance",
+      "automatic_retry": false
+    },
+    {
+      "phase": "real_sse_calendar",
+      "table": "exchange_calendar",
+      "submitted_rows": 20,
+      "ack": "ACKNOWLEDGED",
+      "purpose": "real source fixture only; not Java materializer acceptance",
+      "automatic_retry": false
+    }
+  ],
+  "source_projection_scope": "15 necessary physical fields including complete ts/symbol keys; formal source has 110 fields",
+  "formal_snapshot_before": {
+    "tables": {
+      "l2_daily_features": {
+        "id": 1665,
+        "directoryName": "l2_daily_features_recovery_20260911~1665",
+        "table_txn": 11266,
+        "table_row_count": 4924676,
+        "table_min_timestamp": "2023-01-03T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-24T00:00:00.000000Z",
+        "partitionBy": "DAY",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "ts",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "id": 1813,
+        "directoryName": "mv_retail_sentiment_daily_v1~1813",
+        "table_txn": 252,
+        "table_row_count": 886,
+        "table_min_timestamp": "2023-01-03T00:00:00.000000Z",
+        "table_max_timestamp": "2026-08-31T00:00:00.000000Z",
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": false,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      }
+    },
+    "wal": {
+      "l2_daily_features": {
+        "sequencerTxn": 11266,
+        "writerTxn": 11266,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "sequencerTxn": 252,
+        "writerTxn": 252,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    "mv": {
+      "view_name": "mv_retail_sentiment_daily_v1",
+      "refresh_type": "timer",
+      "base_table_name": "l2_daily_features",
+      "last_refresh_start_timestamp": null,
+      "last_refresh_finish_timestamp": "2026-09-21T23:56:50.310362Z",
+      "view_sql": "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "view_table_dir_name": "mv_retail_sentiment_daily_v1~1813",
+      "invalidation_reason": "materialized view is ahead of base table and cannot be synchronized",
+      "view_status": "invalid",
+      "refresh_period_hi": null,
+      "refresh_base_table_txn": 10206,
+      "base_table_txn": 11266,
+      "refresh_limit": 0,
+      "refresh_limit_unit": null,
+      "timer_time_zone": null,
+      "timer_start": "2026-09-18T15:32:22.955712Z",
+      "timer_interval": 1,
+      "timer_interval_unit": "MINUTE",
+      "period_length": 0,
+      "period_length_unit": null,
+      "period_delay": 0,
+      "period_delay_unit": null,
+      "refresh_avg_commit_nanos": 0,
+      "refresh_avg_scan_sample_nanos": 0,
+      "refresh_avg_scan_range_ts_units": 0,
+      "refresh_gap_threshold_ts_units": 2000000
+    },
+    "alias_readonly": [
+      {
+        "view_name": "v_retail_sentiment_daily",
+        "view_sql": "SELECT * FROM mv_retail_sentiment_daily_v1",
+        "view_table_dir_name": "v_retail_sentiment_daily~240",
+        "invalidation_reason": null,
+        "view_status": "valid",
+        "view_status_update_time": "2026-09-30T01:27:52.538878Z"
+      }
+    ]
+  },
+  "formal_snapshot_after": {
+    "tables": {
+      "l2_daily_features": {
+        "id": 1665,
+        "directoryName": "l2_daily_features_recovery_20260911~1665",
+        "table_txn": 11266,
+        "table_row_count": 4924676,
+        "table_min_timestamp": "2023-01-03T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-24T00:00:00.000000Z",
+        "partitionBy": "DAY",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "ts",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "id": 1813,
+        "directoryName": "mv_retail_sentiment_daily_v1~1813",
+        "table_txn": 252,
+        "table_row_count": 886,
+        "table_min_timestamp": "2023-01-03T00:00:00.000000Z",
+        "table_max_timestamp": "2026-08-31T00:00:00.000000Z",
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": false,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      }
+    },
+    "wal": {
+      "l2_daily_features": {
+        "sequencerTxn": 11266,
+        "writerTxn": 11266,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "sequencerTxn": 252,
+        "writerTxn": 252,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    "mv": {
+      "view_name": "mv_retail_sentiment_daily_v1",
+      "refresh_type": "timer",
+      "base_table_name": "l2_daily_features",
+      "last_refresh_start_timestamp": null,
+      "last_refresh_finish_timestamp": "2026-09-21T23:56:50.310362Z",
+      "view_sql": "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "view_table_dir_name": "mv_retail_sentiment_daily_v1~1813",
+      "invalidation_reason": "materialized view is ahead of base table and cannot be synchronized",
+      "view_status": "invalid",
+      "refresh_period_hi": null,
+      "refresh_base_table_txn": 10206,
+      "base_table_txn": 11266,
+      "refresh_limit": 0,
+      "refresh_limit_unit": null,
+      "timer_time_zone": null,
+      "timer_start": "2026-09-18T15:32:22.955712Z",
+      "timer_interval": 1,
+      "timer_interval_unit": "MINUTE",
+      "period_length": 0,
+      "period_length_unit": null,
+      "period_delay": 0,
+      "period_delay_unit": null,
+      "refresh_avg_commit_nanos": 0,
+      "refresh_avg_scan_sample_nanos": 0,
+      "refresh_avg_scan_range_ts_units": 0,
+      "refresh_gap_threshold_ts_units": 2000000
+    },
+    "alias_readonly": [
+      {
+        "view_name": "v_retail_sentiment_daily",
+        "view_sql": "SELECT * FROM mv_retail_sentiment_daily_v1",
+        "view_table_dir_name": "v_retail_sentiment_daily~240",
+        "invalidation_reason": null,
+        "view_status": "valid",
+        "view_status_update_time": "2026-09-30T01:27:52.538878Z"
+      }
+    ]
+  },
+  "formal_source_metadata_stable": true,
+  "source_required_types": {
+    "ts": "TIMESTAMP",
+    "symbol": "SYMBOL",
+    "gmm_retail_ratio": "DOUBLE",
+    "mean_retail_entropy": "DOUBLE",
+    "retail_total_amount": "DOUBLE",
+    "retail_funds_net_inflow": "DOUBLE",
+    "mean_rel_aggro": "DOUBLE",
+    "q1_count": "LONG",
+    "q3_count": "LONG",
+    "wash_trade_ratio": "DOUBLE",
+    "spoof_count": "LONG",
+    "fake_support_count": "LONG",
+    "fake_pressure_count": "LONG",
+    "mfi_score": "DOUBLE",
+    "main_net_inflow": "DOUBLE"
+  },
+  "initial_capture": {
+    "row_count": 15828,
+    "strict_capture_sha256": "a83d95317ad9a56fc3bb7532b4552775649cdd1963d7274e42b3d86d3a6d108a",
+    "range_from_inclusive": "2026-09-17",
+    "range_to_exclusive": "2026-09-19",
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D098\\commands\\real-source-initial-20261006.json"
+  },
+  "increment_capture": {
+    "row_count": 7945,
+    "strict_capture_sha256": "8c521b6a53adb5d9db2ff5b84a4adb49d2ed2cbde907db9135e4a9ad7d97827f",
+    "range_from_inclusive": "2026-09-21",
+    "range_to_exclusive": "2026-09-22",
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D098\\commands\\real-source-increment-20261006.json"
+  },
+  "source_full_capture_rows": 23773,
+  "source_full_capture_field_values": 356595,
+  "source_full_capture_sha256": "3b6a2d31d1079446a74a0ec17d97526edf41ca86e8e2d284a9c35dda2859f9d8",
+  "formal_expected_daily_rows": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14872828742309663,
+      "avg_retail_entropy": 1.5887293306111185,
+      "total_retail_amount_yi": 17180.146931124484,
+      "total_retail_net_inflow_yi": -840.5730231482075,
+      "avg_rel_aggro": 0.47941408989623885,
+      "total_q1": 82969,
+      "total_q3": 102472,
+      "avg_wash_trade_ratio": 0.0890907463904475,
+      "total_spoof_count": 310560,
+      "total_manipulation_count": 310560,
+      "avg_mfi_score": 0.2899259408318833,
+      "total_main_net_yi": -162.51056215948003
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14827789558793317,
+      "avg_retail_entropy": 1.6019713571723597,
+      "total_retail_amount_yi": 19172.44018200697,
+      "total_retail_net_inflow_yi": 531.8261319477779,
+      "avg_rel_aggro": 0.5069840285517648,
+      "total_q1": 91116,
+      "total_q3": 90850,
+      "avg_wash_trade_ratio": 0.08654103091502366,
+      "total_spoof_count": 306949,
+      "total_manipulation_count": 306949,
+      "avg_mfi_score": 0.32047066705334454,
+      "total_main_net_yi": 36.62509322704004
+    },
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14394985138572158,
+      "avg_retail_entropy": 1.6135276823615954,
+      "total_retail_amount_yi": 19321.916918843424,
+      "total_retail_net_inflow_yi": -115.10705471652979,
+      "avg_rel_aggro": 0.5078168096077663,
+      "total_q1": 91729,
+      "total_q3": 88207,
+      "avg_wash_trade_ratio": 0.08664339640749662,
+      "total_spoof_count": 294851,
+      "total_manipulation_count": 294851,
+      "avg_mfi_score": 0.32359121054157375,
+      "total_main_net_yi": 81.97984425612003
+    }
+  ],
+  "private_target_attestation": {
+    "pid": 37904,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d098-isolated-questdb",
+    "address": "127.0.0.1",
+    "http_port": 19010,
+    "pg_port": 18822
+  },
+  "source_table": {
+    "created": true,
+    "types": {
+      "ts": "TIMESTAMP",
+      "symbol": "SYMBOL",
+      "gmm_retail_ratio": "DOUBLE",
+      "mean_retail_entropy": "DOUBLE",
+      "retail_total_amount": "DOUBLE",
+      "retail_funds_net_inflow": "DOUBLE",
+      "mean_rel_aggro": "DOUBLE",
+      "q1_count": "LONG",
+      "q3_count": "LONG",
+      "wash_trade_ratio": "DOUBLE",
+      "spoof_count": "LONG",
+      "fake_support_count": "LONG",
+      "fake_pressure_count": "LONG",
+      "mfi_score": "DOUBLE",
+      "main_net_inflow": "DOUBLE"
+    },
+    "partition": "DAY",
+    "dedup_keys": [
+      "ts",
+      "symbol"
+    ]
+  },
+  "calendar_table": {
+    "created": true,
+    "types": {
+      "exchange": "SYMBOL",
+      "cal_date": "TIMESTAMP",
+      "is_open": "INT",
+      "pretrade_date": "STRING"
+    },
+    "partition": "YEAR",
+    "dedup_keys": [
+      "exchange",
+      "cal_date"
+    ]
+  },
+  "initial_source_field_comparisons": 237420,
+  "initial_private_source_sha256": "a83d95317ad9a56fc3bb7532b4552775649cdd1963d7274e42b3d86d3a6d108a",
+  "replay_source_field_comparisons": 237420,
+  "replay_private_source_sha256": "a83d95317ad9a56fc3bb7532b4552775649cdd1963d7274e42b3d86d3a6d108a",
+  "private_source_rows_after_replay": 15828,
+  "calendar_field_comparisons": 80,
+  "calendar_rows": 20,
+  "native_mv_created": true,
+  "native_mv_initial_state": {
+    "view_name": "mv_retail_sentiment_daily_v1",
+    "refresh_type": "timer",
+    "base_table_name": "l2_daily_features",
+    "last_refresh_start_timestamp": null,
+    "last_refresh_finish_timestamp": null,
+    "view_sql": "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+    "view_table_dir_name": "mv_retail_sentiment_daily_v1~11",
+    "invalidation_reason": null,
+    "view_status": "valid",
+    "refresh_period_hi": null,
+    "refresh_base_table_txn": -1,
+    "base_table_txn": 2,
+    "refresh_limit": 0,
+    "refresh_limit_unit": null,
+    "timer_time_zone": null,
+    "timer_start": "2026-10-06T06:25:13.799662Z",
+    "timer_interval": 1,
+    "timer_interval_unit": "MINUTE",
+    "period_length": 0,
+    "period_length_unit": null,
+    "period_delay": 0,
+    "period_delay_unit": null,
+    "refresh_avg_commit_nanos": 0,
+    "refresh_avg_scan_sample_nanos": 0,
+    "refresh_avg_scan_range_ts_units": 0,
+    "refresh_gap_threshold_ts_units": 2000000
+  },
+  "private_source_snapshot": {
+    "id": 9,
+    "table_name": "l2_daily_features",
+    "designatedTimestamp": "ts",
+    "partitionBy": "DAY",
+    "walEnabled": true,
+    "dedup": true,
+    "ttlValue": 0,
+    "ttlUnit": "HOUR",
+    "matView": false,
+    "directoryName": "l2_daily_features~9",
+    "maxUncommittedRows": 500000,
+    "o3MaxLag": 600000000,
+    "table_suspended": false,
+    "table_type": "T",
+    "table_row_count": 15828,
+    "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+    "table_max_timestamp": "2026-09-18T00:00:00.000000Z",
+    "table_last_write_timestamp": "2026-10-06T06:25:03.489112Z",
+    "table_txn": 2,
+    "table_memory_pressure_level": 0,
+    "table_write_amp_count": 1,
+    "table_write_amp_p50": 1.0078125,
+    "table_write_amp_p90": 1.0078125,
+    "table_write_amp_p99": 1.0078125,
+    "table_write_amp_max": 1.0078125,
+    "table_merge_rate_count": 2,
+    "table_merge_rate_p50": 143359,
+    "table_merge_rate_p90": 143359,
+    "table_merge_rate_p99": 143359,
+    "table_merge_rate_max": 444415,
+    "wal_pending_row_count": 0,
+    "wal_dedup_row_count_since_start": 15828,
+    "wal_txn": 2,
+    "wal_max_timestamp": "2026-09-18T00:00:00.000000Z",
+    "wal_tx_count": 2,
+    "wal_tx_size_p50": 15871,
+    "wal_tx_size_p90": 15871,
+    "wal_tx_size_p99": 15871,
+    "wal_tx_size_max": 15871,
+    "replica_batch_count": 0,
+    "replica_batch_size_p50": 0,
+    "replica_batch_size_p90": 0,
+    "replica_batch_size_p99": 0,
+    "replica_batch_size_max": 0,
+    "replica_more_pending": false
+  },
+  "native_mv_initialization_scope": "missing owner MV DDL only; no Python REFRESH and no Java job acceptance claim",
+  "third_real_day_inserted": false,
+  "increment_field_values_captured": 119175
+}

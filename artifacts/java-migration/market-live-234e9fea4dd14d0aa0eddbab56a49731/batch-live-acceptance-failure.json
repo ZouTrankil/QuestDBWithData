@@ -1,0 +1,27 @@
+{
+  "acceptanceId" : "234e9fea4dd14d0aa0eddbab56a49731",
+  "startedAt" : "2026-09-29T17:03:59.356806600Z",
+  "formalTablesMutated" : false,
+  "humanReview" : "pending_review",
+  "isolatedTables" : [ "java_d007_daily_234e9fea4dd14d0aa0eddbab56a49731", "java_d008_basic_234e9fea4dd14d0aa0eddbab56a49731", "java_d009_factor_234e9fea4dd14d0aa0eddbab56a49731" ],
+  "isolatedTablesCreated" : [ "java_d007_daily_234e9fea4dd14d0aa0eddbab56a49731", "java_d008_basic_234e9fea4dd14d0aa0eddbab56a49731", "java_d009_factor_234e9fea4dd14d0aa0eddbab56a49731" ],
+  "sourceSyncMayHaveStarted" : true,
+  "ledger" : "sync-ledger.sqlite",
+  "preflight" : {
+    "questdbObjectsReadable" : 566,
+    "tushareCredentialConfigured" : true,
+    "effectiveRateLimitsPerMinute" : {
+      "endpointPerMinute" : 10,
+      "globalPerMinute" : 20,
+      "stk_factor_pro" : 10,
+      "daily" : 10,
+      "daily_basic" : 10
+    },
+    "liveEndpoints" : "daily, daily_basic, stk_factor_pro"
+  },
+  "failedAt" : "2026-09-29T17:04:01.958711300Z",
+  "result" : "failed_during_or_after_live_acceptance",
+  "failureType" : "com.fasterxml.jackson.databind.exc.InvalidDefinitionException",
+  "failure" : "No serializer found for class com.zoutrankil.questdbwithdata.domain.SyncJobDefinition$FrozenRequest and no properties discovered to create BeanSerializer (to avoid exception, disable SerializationFeature.FAIL_ON_EMPTY_BEANS) (through reference chain: java.util.ImmutableCollections$MapN[\"plan\"]->com.zoutrankil.questdbwithdata.service.DailyJobService$Plan[\"request\"])",
+  "failureCategory" : "InvalidDefinitionException"
+}

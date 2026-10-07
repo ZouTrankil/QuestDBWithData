@@ -1,0 +1,17 @@
+{
+  "task": "D022",
+  "phase": "before-recovery",
+  "formalTableMutated": false,
+  "counts": [
+    {
+      "table": "java_d022_index_monthly_f474ede9865245d987ee0ab517289aa6",
+      "rows": 0,
+      "query": "SELECT count() FROM java_d022_index_monthly_f474ede9865245d987ee0ab517289aa6"
+    },
+    {
+      "table": "java_d022_index_monthly_stage_30a49514bbaa49e387170dc9a1f1e03e",
+      "rows": 2,
+      "query": "SELECT count() FROM java_d022_index_monthly_stage_30a49514bbaa49e387170dc9a1f1e03e"
+    }
+  ]
+}

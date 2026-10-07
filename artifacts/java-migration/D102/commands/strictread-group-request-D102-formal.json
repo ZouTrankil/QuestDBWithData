@@ -1,0 +1,17 @@
+{
+  "timeoutMillis" : 30000,
+  "members" : [ {
+    "query" : {
+      "columns" : [ "trade_date", "etf_count", "total_share", "total_size_yi" ],
+      "equalities" : { },
+      "rangeColumn" : "trade_date",
+      "fromInclusive" : "2026-09-17",
+      "toExclusive" : "2026-09-22",
+      "pageSize" : 31,
+      "cursor" : null
+    },
+    "definitionVersion" : 1,
+    "memberId" : "etf",
+    "datasetId" : "v_etf_market_overview_daily"
+  } ]
+}

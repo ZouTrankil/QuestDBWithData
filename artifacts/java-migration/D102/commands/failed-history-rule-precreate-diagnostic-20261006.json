@@ -1,0 +1,133 @@
+{
+  "task_id": "D102",
+  "status": "READONLY_PRECREATE_DIAGNOSTIC",
+  "checked_at": "2026-10-06T13:38:09.920970+00:00",
+  "failed_evidence_sha256": "c37014e6c236eba748ac7048b393c07a6cd8330e0ea063aa674288f94eec5e82",
+  "process_identity_review": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-completed-producer-identity-review-20261006.json",
+    "sha256": "810c456a7c024a497a375a2369000f0991779bdea8a1975a440efec006e28cad"
+  },
+  "native_matches": [
+    {
+      "pid": 19272,
+      "parent_pid": 2304,
+      "name": "svchost.exe",
+      "birth": "2026-10-06T11:05:07.4004850Z",
+      "executable": null
+    },
+    {
+      "pid": 23832,
+      "parent_pid": 7340,
+      "name": "node.exe",
+      "birth": "2026-10-06T12:27:48.3086350Z",
+      "executable": "C:\\Users\\zouqiang\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\71e3f41277f96d73\\bin\\node.exe"
+    },
+    {
+      "pid": 27028,
+      "parent_pid": 43212,
+      "name": "conhost.exe",
+      "birth": "2026-10-06T12:27:48.2663960Z",
+      "executable": "C:\\WINDOWS\\system32\\conhost.exe"
+    },
+    {
+      "pid": 32256,
+      "parent_pid": 44908,
+      "name": "powershell.exe",
+      "birth": "2026-10-06T13:38:08.7017610Z",
+      "executable": "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+    },
+    {
+      "pid": 43212,
+      "parent_pid": 33148,
+      "name": "node.exe",
+      "birth": "2026-10-06T12:27:48.2562940Z",
+      "executable": "C:\\Users\\zouqiang\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\71e3f41277f96d73\\bin\\node.exe"
+    },
+    {
+      "pid": 46684,
+      "parent_pid": 33148,
+      "name": "node_repl.exe",
+      "birth": "2026-10-06T12:22:26.3377980Z",
+      "executable": "C:\\Users\\zouqiang\\AppData\\Local\\OpenAI\\Codex\\runtimes\\cua_node\\71e3f41277f96d73\\bin\\node_repl.exe"
+    }
+  ],
+  "currently_refused": [],
+  "private_tables": {
+    "etf_share": {
+      "table": "etf_share",
+      "id": 9,
+      "directory": "etf_share~9",
+      "physicalTxn": 6,
+      "metadataRows": 2297,
+      "actualRows": 2297,
+      "sequenceTxn": 6,
+      "writerTxn": 6,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "etf_daily": {
+      "table": "etf_daily",
+      "id": 10,
+      "directory": "etf_daily~10",
+      "physicalTxn": 14,
+      "metadataRows": 6412,
+      "actualRows": 6412,
+      "sequenceTxn": 14,
+      "writerTxn": 14,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "etf_basic": {
+      "table": "etf_basic",
+      "id": 11,
+      "directory": "etf_basic~11",
+      "physicalTxn": 6,
+      "metadataRows": 2958,
+      "actualRows": 2958,
+      "sequenceTxn": 6,
+      "writerTxn": 6,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "etf_market_overview_daily_cache": {
+      "table": "etf_market_overview_daily_cache",
+      "id": 12,
+      "directory": "etf_market_overview_daily_cache~12",
+      "physicalTxn": 5,
+      "metadataRows": 5,
+      "actualRows": 5,
+      "sequenceTxn": 5,
+      "writerTxn": 5,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "market_barometer_cache_coverage": {
+      "table": "market_barometer_cache_coverage",
+      "id": 13,
+      "directory": "market_barometer_cache_coverage~13",
+      "physicalTxn": 5,
+      "metadataRows": 5,
+      "actualRows": 5,
+      "sequenceTxn": 5,
+      "writerTxn": 5,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    }
+  },
+  "tables_equal_accepted_typed": true,
+  "private_view": null,
+  "create_claim_exists": false,
+  "ddl_attempts": 0,
+  "owner_invocations": 0,
+  "automatic_retry": false
+}

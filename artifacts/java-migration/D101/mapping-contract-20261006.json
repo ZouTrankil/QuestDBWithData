@@ -1,0 +1,577 @@
+{
+  "task_id": "D101",
+  "status": "VERIFIED_ISOLATED",
+  "owner": "original Python MarketBarometerReadThroughCache.read",
+  "java_scope": "Five-field typed READ and bounded canonical Java management plus prepared typed WRITE assertions verified through the unique original Python owner; no production caller cutover",
+  "fields": [
+    {
+      "name": "trade_date",
+      "storage": "TIMESTAMP",
+      "java": "LocalDate",
+      "nullable": false,
+      "meaning": "Exact UTC-midnight business date; complete key with source_version"
+    },
+    {
+      "name": "etf_count",
+      "storage": "LONG",
+      "java": "long",
+      "nullable": false,
+      "meaning": "Exact nonnegative count_distinct of full ETF code after same-code/same-timestamp INNER JOIN"
+    },
+    {
+      "name": "total_share",
+      "storage": "DOUBLE",
+      "java": "Double",
+      "nullable": true,
+      "unit": "万份",
+      "meaning": "sum(s.fd_share) over joined records; preserve null/signed values"
+    },
+    {
+      "name": "total_size_yi",
+      "storage": "DOUBLE",
+      "java": "Double",
+      "nullable": true,
+      "unit": "亿元",
+      "meaning": "sum(s.fd_share * d.close)/10000.0; no extra mapper conversion"
+    },
+    {
+      "name": "source_version",
+      "storage": "SYMBOL",
+      "java": "String",
+      "nullable": false,
+      "meaning": "Complete lowercase64SHA of original SQL/table IDs/relevant partitions, all timeless etf_basic partitions"
+    }
+  ],
+  "complete_key": [
+    "trade_date",
+    "source_version"
+  ],
+  "physical_schema": {
+    "physical_types": {
+      "trade_date": "TIMESTAMP",
+      "etf_count": "LONG",
+      "total_share": "DOUBLE",
+      "total_size_yi": "DOUBLE",
+      "source_version": "SYMBOL"
+    },
+    "physical_upsert_keys": [
+      "trade_date",
+      "source_version"
+    ],
+    "designated_timestamp": "trade_date",
+    "partition": "MONTH",
+    "wal": true,
+    "dedup": true,
+    "actual_select_count": 1181
+  },
+  "business_sql": "SELECT\n    s.timestamp AS trade_date,\n    count_distinct(s.ts_code) AS etf_count,\n    sum(s.fd_share) AS total_share,\n    sum(s.fd_share * d.close) / 10000.0 AS total_size_yi\nFROM etf_share s\nJOIN etf_daily d ON s.ts_code = d.ts_code AND s.timestamp = d.timestamp\n{where}\nSAMPLE BY 1d ALIGN TO CALENDAR",
+  "business_sql_sha256": "6c9ffa3b89fe450d1db6428f3692f420d7276457bac675dae6997f602cb566f2",
+  "digest_fields": [
+    "trade_date",
+    "etf_count",
+    "total_share",
+    "total_size_yi"
+  ],
+  "digest_serialization": "Original Python _serialized_record/.17g/U+001F; null <NA>; dates BASIC",
+  "sources": [
+    "etf_share",
+    "etf_daily",
+    "etf_basic"
+  ],
+  "timeless_sources": [
+    "etf_basic"
+  ],
+  "timestamp_join": "share TIMESTAMP microseconds and daily TIMESTAMP_NS nanoseconds; same exact calendar timestamp identity; no unit reinterpretation/truncation",
+  "source_plan": {
+    "status": "BOUNDED_REAL_SOURCE_READY",
+    "days": [
+      "2026-09-17",
+      "2026-09-18",
+      "2026-09-21"
+    ],
+    "aggregate_rows": [
+      {
+        "trade_date": "2026-09-17T00:00:00Z",
+        "etf_count": 765,
+        "total_share": 117458005.02090001,
+        "total_size_yi": 16500.88711511208
+      },
+      {
+        "trade_date": "2026-09-18T00:00:00Z",
+        "etf_count": 766,
+        "total_share": 117398455.14079998,
+        "total_size_yi": 16737.5072611578
+      },
+      {
+        "trade_date": "2026-09-21T00:00:00Z",
+        "etf_count": 765,
+        "total_share": 117060738.76619999,
+        "total_size_yi": 16834.981514634914
+      }
+    ],
+    "source_version_state": {
+      "etf_share": [
+        1850,
+        [
+          {
+            "name": "2026",
+            "numRows": 252565,
+            "minTimestamp": "2026-01-04T00:00:00Z",
+            "maxTimestamp": "2026-09-21T00:00:00Z",
+            "seqTxn": 6
+          }
+        ]
+      ],
+      "etf_daily": [
+        1686,
+        [
+          {
+            "name": "2026",
+            "numRows": 361352,
+            "minTimestamp": "2026-01-05T00:00:00Z",
+            "maxTimestamp": "2026-09-30T00:00:00Z",
+            "seqTxn": 13
+          }
+        ]
+      ],
+      "etf_basic": [
+        1685,
+        [
+          {
+            "name": "1970",
+            "numRows": 2958,
+            "minTimestamp": "1970-01-01T00:00:00Z",
+            "maxTimestamp": "1970-01-01T00:00:00Z",
+            "seqTxn": 8
+          }
+        ]
+      ]
+    },
+    "original_python_versions": {
+      "20260917": "19e9e35dfc23ee361902773a234bcc0261b6fb725fed0eaef646483a10167fc2",
+      "20260918": "19e9e35dfc23ee361902773a234bcc0261b6fb725fed0eaef646483a10167fc2",
+      "20260921": "19e9e35dfc23ee361902773a234bcc0261b6fb725fed0eaef646483a10167fc2"
+    },
+    "etf_basic_global_version_participation": true,
+    "sources": {
+      "etf_basic": {
+        "fields": [
+          "ts_code",
+          "name",
+          "management",
+          "custodian",
+          "fund_type",
+          "found_date",
+          "due_date",
+          "list_date",
+          "issue_date",
+          "delist_date",
+          "issue_amount",
+          "m_fee",
+          "c_fee",
+          "duration_year",
+          "p_value",
+          "min_amount",
+          "exp_return",
+          "benchmark",
+          "status",
+          "invest_type",
+          "type",
+          "trustee",
+          "purc_startdate",
+          "redm_startdate",
+          "market",
+          "timestamp",
+          "update_time"
+        ],
+        "physical_types": {
+          "ts_code": "SYMBOL",
+          "name": "STRING",
+          "management": "STRING",
+          "custodian": "STRING",
+          "fund_type": "STRING",
+          "found_date": "STRING",
+          "due_date": "STRING",
+          "list_date": "STRING",
+          "issue_date": "STRING",
+          "delist_date": "STRING",
+          "issue_amount": "DOUBLE",
+          "m_fee": "DOUBLE",
+          "c_fee": "DOUBLE",
+          "duration_year": "DOUBLE",
+          "p_value": "DOUBLE",
+          "min_amount": "DOUBLE",
+          "exp_return": "DOUBLE",
+          "benchmark": "STRING",
+          "status": "SYMBOL",
+          "invest_type": "STRING",
+          "type": "STRING",
+          "trustee": "STRING",
+          "purc_startdate": "STRING",
+          "redm_startdate": "STRING",
+          "market": "SYMBOL",
+          "timestamp": "TIMESTAMP",
+          "update_time": "TIMESTAMP"
+        },
+        "actual_select_count": 2958,
+        "full_field_selected_count": 2958,
+        "complete_key_count": 2958,
+        "field_comparisons_if_fixture_copied": 79866,
+        "row_cap": 50000,
+        "full_field_capture_sha256": "b516b34516f7309c1ffe0e6a370bb8038d65c5ffc8f3b6cb0b48830bacf38714",
+        "null_counts": {
+          "ts_code": 0,
+          "name": 0,
+          "management": 0,
+          "custodian": 0,
+          "fund_type": 0,
+          "found_date": 43,
+          "due_date": 2278,
+          "list_date": 149,
+          "issue_date": 315,
+          "delist_date": 2329,
+          "issue_amount": 569,
+          "m_fee": 776,
+          "c_fee": 684,
+          "duration_year": 2282,
+          "p_value": 51,
+          "min_amount": 315,
+          "exp_return": 2958,
+          "benchmark": 0,
+          "status": 43,
+          "invest_type": 435,
+          "type": 51,
+          "trustee": 2958,
+          "purc_startdate": 611,
+          "redm_startdate": 609,
+          "market": 0,
+          "timestamp": 0,
+          "update_time": 0
+        },
+        "sample_first_two_rows": [
+          {
+            "ts_code": "150001.SZ",
+            "name": "国投瑞银瑞福深证100指数分级-进取",
+            "management": "国投瑞银基金管理有限公司",
+            "custodian": "中国工商银行股份有限公司",
+            "fund_type": "股票型",
+            "found_date": "20120717",
+            "due_date": "20150813",
+            "list_date": "20120817",
+            "issue_date": null,
+            "delist_date": "20150814",
+            "issue_amount": null,
+            "m_fee": null,
+            "c_fee": null,
+            "duration_year": 3.0,
+            "p_value": 1.0,
+            "min_amount": null,
+            "exp_return": null,
+            "benchmark": "深证100价格指数收益率×95%+银行活期存款利率(税后)×5%",
+            "status": "D",
+            "invest_type": "被动指数型",
+            "type": "股票型",
+            "trustee": null,
+            "purc_startdate": "20120725",
+            "redm_startdate": "20120717",
+            "market": "E",
+            "timestamp": "1970-01-01T00:00:00Z",
+            "update_time": "2026-09-24T19:03:46.832032Z"
+          },
+          {
+            "ts_code": "1500011.SZ",
+            "name": "国投瑞银瑞福分级封闭-瑞福进取",
+            "management": "国投瑞银基金管理有限公司",
+            "custodian": "中国工商银行股份有限公司",
+            "fund_type": "股票型",
+            "found_date": "20070717",
+            "due_date": "20120716",
+            "list_date": "20070921",
+            "issue_date": "20070710",
+            "delist_date": "20120717",
+            "issue_amount": 30.005,
+            "m_fee": null,
+            "c_fee": null,
+            "duration_year": 5.0,
+            "p_value": 1.0,
+            "min_amount": 0.1,
+            "exp_return": null,
+            "benchmark": "沪深300指数×80%+中信标普全债指数×20%",
+            "status": "D",
+            "invest_type": null,
+            "type": "股票型",
+            "trustee": null,
+            "purc_startdate": null,
+            "redm_startdate": null,
+            "market": "E",
+            "timestamp": "1970-01-01T00:00:00Z",
+            "update_time": "2026-09-24T19:03:46.836531Z"
+          }
+        ],
+        "scope": "complete global basic snapshot"
+      },
+      "etf_daily": {
+        "fields": [
+          "ts_code",
+          "timestamp",
+          "pre_close",
+          "open",
+          "high",
+          "low",
+          "close",
+          "change",
+          "pct_chg",
+          "vol",
+          "amount"
+        ],
+        "physical_types": {
+          "ts_code": "SYMBOL",
+          "timestamp": "TIMESTAMP_NS",
+          "pre_close": "DOUBLE",
+          "open": "DOUBLE",
+          "high": "DOUBLE",
+          "low": "DOUBLE",
+          "close": "DOUBLE",
+          "change": "DOUBLE",
+          "pct_chg": "DOUBLE",
+          "vol": "DOUBLE",
+          "amount": "DOUBLE"
+        },
+        "actual_select_count": 6412,
+        "full_field_selected_count": 6412,
+        "complete_key_count": 6412,
+        "field_comparisons_if_fixture_copied": 70532,
+        "row_cap": 50000,
+        "full_field_capture_sha256": "f3c72e5093b30b7ad769917d8074257bc94733dc511e4e2a26d6bcfe4b8648ce",
+        "null_counts": {
+          "ts_code": 0,
+          "timestamp": 0,
+          "pre_close": 0,
+          "open": 0,
+          "high": 0,
+          "low": 0,
+          "close": 0,
+          "change": 0,
+          "pct_chg": 0,
+          "vol": 0,
+          "amount": 0
+        },
+        "sample_first_two_rows": [
+          {
+            "ts_code": "158000.SZ",
+            "timestamp": "2026-09-17T00:00:00Z",
+            "pre_close": 1.023,
+            "open": 1.014,
+            "high": 1.023,
+            "low": 1.01,
+            "close": 1.02,
+            "change": -0.003,
+            "pct_chg": -0.29,
+            "vol": 40887.45,
+            "amount": 4166.5704
+          },
+          {
+            "ts_code": "158001.SZ",
+            "timestamp": "2026-09-17T00:00:00Z",
+            "pre_close": 0.985,
+            "open": 0.976,
+            "high": 0.982,
+            "low": 0.976,
+            "close": 0.979,
+            "change": -0.006,
+            "pct_chg": -0.61,
+            "vol": 7912.11,
+            "amount": 774.919
+          }
+        ],
+        "scope": "complete exact three-day source keys"
+      },
+      "etf_share": {
+        "fields": [
+          "ts_code",
+          "timestamp",
+          "fd_share",
+          "fund_type",
+          "market",
+          "update_time"
+        ],
+        "physical_types": {
+          "ts_code": "SYMBOL",
+          "timestamp": "TIMESTAMP",
+          "fd_share": "DOUBLE",
+          "fund_type": "STRING",
+          "market": "SYMBOL",
+          "update_time": "TIMESTAMP"
+        },
+        "actual_select_count": 2297,
+        "full_field_selected_count": 2297,
+        "complete_key_count": 2297,
+        "field_comparisons_if_fixture_copied": 13782,
+        "row_cap": 50000,
+        "full_field_capture_sha256": "14f8546e20dec590fe7e78f99e7dd9d269bb35b56dec550f6c85691a38af08ae",
+        "null_counts": {
+          "ts_code": 0,
+          "timestamp": 0,
+          "fd_share": 0,
+          "fund_type": 84,
+          "market": 0,
+          "update_time": 0
+        },
+        "sample_first_two_rows": [
+          {
+            "ts_code": "007767.OF",
+            "timestamp": "2026-09-17T00:00:00Z",
+            "fd_share": 3983.5843,
+            "fund_type": "(带固定封闭期)",
+            "market": "O",
+            "update_time": "2026-09-17T18:32:49.707336Z"
+          },
+          {
+            "ts_code": "158000.SZ",
+            "timestamp": "2026-09-17T00:00:00Z",
+            "fd_share": 6992.5835,
+            "fund_type": "ETF",
+            "market": "SZ",
+            "update_time": "2026-09-17T18:32:49.706806Z"
+          }
+        ],
+        "scope": "complete exact three-day source keys"
+      }
+    }
+  },
+  "formal_diagnostic": {
+    "status": "FAILED",
+    "verified_generations": 3,
+    "failed_generations": 2,
+    "formal_mutated": false,
+    "current_hit_certified": false,
+    "latest_certified": false
+  },
+  "incremental_policy": "Complete bounded bootstrap anchor prefix, at most31calendar days; generation verification cannot be skipped by date checkpoint",
+  "shared_coverage_contract": "D094 remains READ-only; no independent Java coverage publisher",
+  "actual_publisher_acceptance": "VERIFIED_FIRST_HIT_FULL_PREFIX_INCREMENT_AND_TYPED_ASSERTIONS",
+  "first_live_attempt": {
+    "status": "KNOWN_PREPUBLICATION_FAILURE",
+    "reason": "Windows venv launcher PID15328 and actual Python bridge PID15144 differed; the original process identity guard rejected the SELECT-only preview",
+    "owner_invoked": false,
+    "owner_submissions": 0,
+    "owner_acknowledgements": 0,
+    "publish_intents": 0,
+    "atomic_submission_claims": 0,
+    "canonical_ledger_created": false,
+    "ddl_operations": 0,
+    "source_mutations": 0,
+    "formal_written_rows": 0,
+    "target_actual_row_counts_before_and_after": 0,
+    "raw_null_target_txn_and_row_count_preserved": true,
+    "target_wal_sequence_and_writer_zero": true,
+    "after_proof_scope": "verified-preview-stability-derived; not an independent postfailure SQL audit",
+    "authoritative_failed_processes_absent": true,
+    "private_pid_and_ports_unchanged": true,
+    "review_evidence": "commands/coordinator-first-readonly-failure-review-20261006.json",
+    "review_evidence_sha256": "506bcd8e9e2e868faa2663a5f05b106bac7b915d2de56bbda7971f519b8290e7",
+    "source_fixture_sha256_unchanged": "c38a61f792ef6be689e1ed1cdb335dabf3da7f9b44c886a11fd4c84669f945f4"
+  },
+  "process_identity_repair": {
+    "implementation_status": "VERIFIED_PRIVATE_PROCESS_PREVIEW_AND_CANONICAL_STAGES",
+    "new_live_acceptance": "PASSED",
+    "contract": "Bind actual bridge PID to an observed OS birth identity and complete parent chain; prove every observed process exited; unknown identity does not authorize killing a guessed PID; legacy wrapper-only stop markers cannot prove a new publication stopped"
+  },
+  "multi_day_unknown_boundary": {
+    "scenario": "First day may have persisted while remaining requested dates were never submitted",
+    "unsubmitted_date_is_not_equivalent_to_absent_current_publication": true,
+    "readonly_reconcile": "FAIL_CLOSED_IF_FULL_REQUEST_EVIDENCE_INCOMPLETE",
+    "incomplete_proof_condition": "Any requested known-source date lacks its complete current-generation cache/receipt, or source/version/WAL/producer-stop proof is incomplete or changes",
+    "preserved_state": "IN_DOUBT",
+    "preserved_conflict_scope": "allDates",
+    "state_and_lease_preservation_applies_when_proof_incomplete": true,
+    "explicit_recovery_with_complete_current_publications": "Permitted only after immutable native stopped-tree investigation and fresh complete frozen-window source/key/all-five-cache-and-receipt-field/generation/WAL proof, followed by unchanged-frontier and stopped-writer rechecks",
+    "business_database_recovery_operations": "SELECT only; explicit successful reconciliation may update SQLite outcome entries and release the retained lease",
+    "this_two_day_run_proof_counts": {
+      "fresh_full_window_read_matched_units": 2,
+      "actual_submitted_slice_units": 1,
+      "status_verified_publication_units": 1,
+      "second_day_submission_or_second_owner_hit_fabricated": false,
+      "full_window_fresh_proof_required_before_any_outcome_transition": true
+    },
+    "explicit_live_recovery_status": "VERIFIED_READONLY_ORIGINAL_HIT_RECOVERY",
+    "recovery_is_two_hit_acceptance": false,
+    "new_two_hit_acceptance_and_source_increment_admitted": true,
+    "automatic_resend": false,
+    "automatic_recovery_claimed": false,
+    "partial_date_parity_is_full_request_completion": false
+  },
+  "human_review": "pending_review",
+  "final_test_counts": {
+    "java_pure": 184,
+    "java_live": 6,
+    "java_unique": 190,
+    "python_bridge": 43,
+    "python_fixture": 32,
+    "python_unique": 75
+  },
+  "actual_validation": {
+    "scope": "Dedicated private QuestDB, bounded real formal-source copies; no production cutover",
+    "first": {
+      "actual_misses": 2,
+      "cache_submitted": 2,
+      "coverage_submitted": 2,
+      "acknowledgement_count": 4
+    },
+    "hit": {
+      "actual_hits": 2,
+      "cache_submitted": 0,
+      "coverage_submitted": 0
+    },
+    "increment": {
+      "actual_misses": 3,
+      "cache_submitted": 3,
+      "coverage_submitted": 3,
+      "acknowledgement_count": 6,
+      "current_days": 3,
+      "stored_cache_keys": 5,
+      "stored_receipt_keys": 5,
+      "unique_cache_field_values": 25,
+      "unique_receipt_field_values": 25,
+      "cache_key_and_range_field_comparisons": 50,
+      "pg_reference_double_rawbit_comparisons": 20,
+      "independent_jdbc_double_rawbit_comparisons": 20,
+      "source_scan_rows_with_repeated_timeless_basic": 17583,
+      "source_vector": "310919a6ff3468ffa59dffdf1dad4dce2581cca677e7bc048480538748f0dd33",
+      "old_actual_cursor_rejected_before_row_query": true,
+      "physical_source_version": "table:etf_market_overview_daily_cache:id:12:directory:etf_market_overview_daily_cache~12:txn:5:wal-seq:5"
+    },
+    "typed": {
+      "group_members": 1,
+      "verified_assertion_rows": 3,
+      "actual_hits": 3,
+      "cache_submitted": 0,
+      "coverage_submitted": 0,
+      "exact_ingest_parameters": [
+        "groupBatch",
+        "memberBatch",
+        "planFingerprint",
+        "payloadFingerprint"
+      ],
+      "rejection_database_effects": 0,
+      "rejected": [
+        "spoof",
+        "historical generation",
+        "malformed SHA",
+        "standalone D094 writer"
+      ]
+    },
+    "retained_leases": 0,
+    "double_tolerance": 0,
+    "ddl_by_java_owner": 0,
+    "source_mutations_by_java": 0,
+    "cache_and_receipt_publish_owner": "Original Python MarketBarometerReadThroughCache.read",
+    "raw_normal_ack_ledger_writerStopped": false,
+    "actual_stopped_proof": "Separate Gateway OS birth/parent/exit evidence and live writerStopped checks; normal ACK proof default is preserved",
+    "insert_update_breakdown": "Driver does not classify physical inserts/updates; actual five full business keys and before/after values are verified",
+    "same_key_source_value_correction_live_tested": false,
+    "source_revision_live_scope": "Actual third-day append changes YEAR partition generation and revalidates all three dates; timeless basic unchanged",
+    "full_history_or_production_current_certified": false
+  },
+  "coordinator_gate": "accepted_for_serial_progress"
+}

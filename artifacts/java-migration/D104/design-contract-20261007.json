@@ -1,0 +1,74 @@
+{
+  "task_id": "D104",
+  "status": "BUSINESS_CONTRACT_FROZEN_SOURCE_PREFLIGHT_PENDING",
+  "serial_admission": "D103 coordinator-review-20261006.json",
+  "logical_date": "2026-10-07",
+  "target_table": "java_d104_macro_core_monthly_acceptance",
+  "target_ports": {
+    "pg": 18852,
+    "http": 19040
+  },
+  "columns": [
+    "month",
+    "cpi_yoy",
+    "ppi_yoy",
+    "pmi_mfg",
+    "gdp_yoy",
+    "m2_yoy",
+    "social_financing_stock",
+    "new_rmb_loan",
+    "social_financing_yoy"
+  ],
+  "key": {
+    "dedup": [
+      "month"
+    ],
+    "storage": "Exact first calendar day UTC midnight TIMESTAMP micros",
+    "json": "YYYY-MM",
+    "domain": "YearMonth"
+  },
+  "layout": {
+    "dedup": true,
+    "wal": true,
+    "partition": "YEAR"
+  },
+  "required_monthly": [
+    "cpi_yoy",
+    "ppi_yoy",
+    "pmi_mfg",
+    "m2_yoy",
+    "social_financing_stock",
+    "new_rmb_loan"
+  ],
+  "physical_inputs": [
+    "cn_cpi",
+    "cn_ppi",
+    "cn_pmi",
+    "cn_m",
+    "cn_gdp",
+    "sf_month"
+  ],
+  "registered_dataset_dependencies": [],
+  "registered_job_dependencies": [],
+  "dependency_limit": "D065-D070 Java owners remain planned; physical dependency census is explicit and verified, no fake graph registration.",
+  "gdp": "Only cn_gdp.report_date own month; no carry/forward fill",
+  "social_financing_yoy": "Current stock / preceding twelfth physical observation stock - 1; original pre-dedup pct_change(12,fill_method=None), no calendar fill or percent scaling",
+  "legacy_new_rmb_loan": "sf_month.inc_month total social financing increment, compatibility name preserved",
+  "source_read": "Full raw fields from each bounded source window; SF additionally exactly up to12 preceding physical observations; reject duplicate normalized month/nonfinite/order/extra/truncation, stable six-source physical/schema/WAL vector",
+  "completeness": "MATERIALIZE/RECONCILE may withhold incomplete months explicitly; INCREMENTAL requires full contiguous closed-month bootstrap-prefix completeness",
+  "budgets": {
+    "statementSeconds": 20,
+    "pages": 1,
+    "batchRows": 12,
+    "pageRows": 12,
+    "batchBytes": 1048576,
+    "months": 12,
+    "jobSeconds": 300
+  },
+  "checkpoint": "Durable verified full-prefix source/context and target exact bits; append uses one-month overlap; old source revision bounded bootstrap; old target drift rejects",
+  "unknown": "One synchronous HTTP flush/no retry/reset-before-close; retain IN_DOUBT lease; only original same-instance stopped sender and original frozen evidence may reconcile",
+  "source_readiness_sha256": "55f2c6774099abf187c2e671e560ceb2488f74dd74ba2ed188e3d46019fd0bae",
+  "formal_writes": 0,
+  "full_runs": 0,
+  "human_review": "pending_review"
+}

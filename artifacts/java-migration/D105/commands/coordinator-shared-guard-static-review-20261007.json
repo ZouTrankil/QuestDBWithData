@@ -1,0 +1,233 @@
+{
+  "task_id": "D105",
+  "protocol": 1,
+  "record_date": "2026-10-07",
+  "status": "PASS",
+  "review_type": "independent_static_file_review_only",
+  "blockers": [],
+  "findings": [],
+  "scope": "Other-author shared D105 guard and37guard methods; root sharedReader/ReadGroup/registry/catalog/direct-write-rejection integration. Excludes this review author's five business DTO/key/dataset/mapper/repository files, own20tests and delivery docs.",
+  "author_exclusions": [
+    "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyView.java",
+    "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewKey.java",
+    "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewDataset.java",
+    "src/main/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMapper.java",
+    "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyViewReadRepository.java",
+    "src/test/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMappingTest.java",
+    "src/test/java/com/zoutrankil/data/repository/MacroCoreMonthlyViewReadRepositoryTest.java",
+    "artifacts/java-migration/D105/README.md",
+    "artifacts/java-migration/D105/source-contract-20261007.json",
+    "artifacts/java-migration/D105/mapping-contract-20261007.json"
+  ],
+  "checks": [
+    {
+      "topic": "before-JDBC request bounds",
+      "locations": [
+        "QuestDbMacroCoreViewReadGuard.java:31",
+        "QuestDbBoundedReader.java:59",
+        "QuestDbBoundedReader.java:434"
+      ],
+      "conclusion": "Exact admitted definition; all ordered9columns; first-day LocalDate equality or increasing≤12months range; page≤12; full month cursor; unsupported definitions/filter/carriers rejected before metadata."
+    },
+    {
+      "topic": "actual ordinary-view identity and SQL",
+      "locations": [
+        "QuestDbMacroCoreViewReadGuard.java:82",
+        "QuestDbMacroCoreViewReadGuard.java:109",
+        "QuestDbMacroCoreViewReadGuard.java:133"
+      ],
+      "conclusion": "Fixed formal/private view-base pair; validstatus/reason and complete alias id/directory/status-history; exact source-only SELECT* lexical body, full9 orderednative types/designated/no-upsert flags. No filtering/join/comments/qualification/fallback."
+    },
+    {
+      "topic": "physical dependency/cursor stability",
+      "locations": [
+        "QuestDbMacroCoreViewReadGuard.java:61",
+        "QuestDbMacroCoreReadGuard.java:47",
+        "QuestDbBoundedReader.java:93",
+        "QuestDbBoundedReader.java:443"
+      ],
+      "conclusion": "Pin rawSQLbody and normalized definition hashes plus actual view identity/status/schema and D104 base physical/WAL vector. Recheck generation after row fetch before business mapping/page. Changed actual view or base rejects oldcursor; duplicate fullkeys reject."
+    },
+    {
+      "topic": "nullable empty base frontier",
+      "locations": [
+        "QuestDbMacroCoreReadGuard.java:80",
+        "QuestDbMacroCoreViewReadGuardTest.java:243"
+      ],
+      "conclusion": "Preserve nullable raw table/wal/count. Require independently stable COUNT0, everyWALcounter0, physicalTxnNULL/0; nonzero physical even COUNT0 rejects. No NULL→txn0 normalization."
+    },
+    {
+      "topic": "configured typed ReadGroup",
+      "locations": [
+        "ReadGroupConfiguration.java:68"
+      ],
+      "conclusion": "Actual business MacroCoreMonthlyView mapper binding and nullcaller version let shared guard derive actual view/base token; no new materializer binding."
+    },
+    {
+      "topic": "registry and direct WRITE refusal",
+      "locations": [
+        "MacroCoreMonthlyViewCatalogStartupTest.java:20",
+        "MacroCoreMonthlyViewWriteRejectionTest.java:23",
+        "WriteGroupJson.java:45",
+        "StockBasicWriteGroupService.java:134"
+      ],
+      "conclusion": "Static catalog assertion54datasets42jobs/singleD104baseowner/noaliasjob, no startupConnection/ledger. Full typed publication/staticreplace/walreplace and real WriteGroup parser reject ordinaryVIEW before ownerquery/ledger."
+    },
+    {
+      "topic": "native metadata interpretation",
+      "evidence": "root-formal-view-metadata-20261007.json",
+      "conclusion": "Actual metadata records ordinaryVIEW N/Apartition, walEnabledtrue, dedupfalse, matViewfalse, native designatedmonth. Guard follows actual ordinarytype/schema without treating nativeWALflag as writer capability."
+    }
+  ],
+  "test_scope": {
+    "guard_methods": 37,
+    "root_catalog_methods": 1,
+    "root_write_rejection_methods": 2,
+    "executed_by_reviewer": false,
+    "test_PASS_asserted": false
+  },
+  "bindings": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuard.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuard.java",
+      "sha256": "71c7ea91a09eb97de58e9e83128aa00e17318a75dc3bff6873fcc8404eda8b08",
+      "lines": [
+        28,
+        60,
+        61,
+        80,
+        82,
+        107,
+        109,
+        130,
+        133,
+        148,
+        165,
+        173
+      ]
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuardTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuardTest.java",
+      "sha256": "c157f774f3c87ff215600282a4324139dfebe8d8547b5d8dee0f410d4663188a",
+      "lines": [
+        31,
+        97,
+        99,
+        117,
+        118,
+        169,
+        170,
+        241,
+        243,
+        278
+      ]
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuard.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuard.java",
+      "sha256": "7e2baa42f6e79efae168524eecf2acefc397c790ebb2df18280319aeb7277d4f",
+      "lines": [
+        47,
+        78,
+        80,
+        95,
+        97,
+        135
+      ]
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+      "sha256": "9bc606c5a640de5659f5b0235aead8680bf6b166b1dc7cc819718c4bd59bae9e",
+      "lines": [
+        54,
+        97,
+        137,
+        143,
+        429,
+        446
+      ]
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+      "sha256": "1590de0606e4a9b326b3917fcd0fdbb866d2f8f6bf2d070fd282d58b6e5f5c46",
+      "lines": [
+        68,
+        72
+      ]
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
+      "sha256": "2fef4e79679dbd8c19ea96d8aceb19b1aa9633be3fac8b184fddf3bdd9ba8502",
+      "lines": [
+        14,
+        42
+      ]
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
+      "sha256": "8c0c3f00a6d029822f89f26da785a67bf4d62244edc60d94be1339f2c547c92b",
+      "lines": [
+        134,
+        139
+      ]
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/WriteGroupJson.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/service/WriteGroupJson.java",
+      "sha256": "2199c22d921b056b8399f2f41266b42651cb90665d1f1ad128820912db6edf53",
+      "lines": [
+        45,
+        55
+      ]
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewCatalogStartupTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewCatalogStartupTest.java",
+      "sha256": "ee35391237e96bb9861e8205e55582ed0b1160cd6a3f270954b75013e76d649c",
+      "lines": [
+        20,
+        64
+      ]
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewWriteRejectionTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewWriteRejectionTest.java",
+      "sha256": "4ecb77abf7c4ec0efd44de27e8b97734e5537e1d34a4a439a87cb4ed15567ab6",
+      "lines": [
+        23,
+        56
+      ]
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/root-formal-view-metadata-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/root-formal-view-metadata-20261007.json",
+      "sha256": "9ce66ed64413732c8577e19bb53b72b44d2e35a11c9a040320e9009a9866059f",
+      "lines": []
+    }
+  ],
+  "limitations": [
+    "Static source review cannot certify DB acceptance, native process identity, actual alias setup or runtime test passing.",
+    "20seconds is a per-SQL JDBC timeout, not an end-to-end readdeadline; bounded metadata rows do not certify internal engine scan volume.",
+    "Interruption probes cover query-boundary/prelaunch cancellation, not independent proof of in-flight driver cancellation.",
+    "No cross-query atomic snapshot, full history/provider universe/PIT/source-revision/caller-cutover certification.",
+    "D104 actual source append remains prior base evidence; this review does not claim newD105append/write/checkpoint."
+  ],
+  "runtime_actions": {
+    "DB_queries": 0,
+    "DDL": 0,
+    "DML": 0,
+    "native_checks": 0,
+    "tests": 0,
+    "Gradle": 0,
+    "Python_imports": 0,
+    "owner_invocations": 0
+  },
+  "recommendation": "No static blocker to root's finite D105 pure tests. Actual schema setup/live admission and finalserialgate remain separate root decisions.",
+  "D106_admitted": false,
+  "next_task_admission": false
+}

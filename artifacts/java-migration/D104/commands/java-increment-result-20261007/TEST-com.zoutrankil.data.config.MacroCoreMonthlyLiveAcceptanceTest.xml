@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.config.MacroCoreMonthlyLiveAcceptanceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-06T17:20:00.425Z" hostname="AMD395" time="12.487">
+  <properties/>
+  <testcase name="actualBoundedMaterializationUsesCanonicalRunnerTypedReadsAndComposition()" classname="com.zoutrankil.data.config.MacroCoreMonthlyLiveAcceptanceTest" time="12.487"/>
+  <system-out><![CDATA[01:20:04.412 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d104-private - Starting...
+01:20:04.461 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d104-private - Start completed.
+01:20:04.462 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d104-formal - Starting...
+01:20:04.463 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d104-formal - Start completed.
+01:20:12.852 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d104-formal - Shutdown initiated...
+01:20:12.855 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d104-formal - Shutdown completed.
+01:20:12.855 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d104-private - Shutdown initiated...
+01:20:12.856 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d104-private - Shutdown completed.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,26 @@
+{
+  "task_id": "D100",
+  "reviewed_at": "2026-10-06T08:08:02.145682+00:00",
+  "decision": "approved_explicit_fresh_first_after_proven_ddl_only_failure",
+  "reviewer": "primary coordinator + independent read-only review",
+  "prior_failed_artifact_preserved": true,
+  "prior_ddl_acknowledged": 2,
+  "prior_owner_intents": 0,
+  "unknown_submissions_retried": 0,
+  "database_mutations_by_review": 0,
+  "private_pid": 31760,
+  "both_actual_count_and_complete_field_reads_zero": true,
+  "raw_empty_table_metadata_count": null,
+  "protected_source_mv_alias_formal_stable": true,
+  "fresh_first_artifact": "commands/cache-isolated-first-resume-20261006.json",
+  "new_first_ddl_allowed": false,
+  "new_first_limit": "original Python owner publishes Sept17+18 only; then stop for actual Java cursor capture",
+  "continue_authorized": false,
+  "human_review": "pending_review",
+  "evidence_sha256": {
+    "artifacts\\java-migration\\D100\\commands\\cache-isolated-first-20261006.json": "7dd5448858185059217fd4b9d3206ecef6032375b113611bade2db17630e0e65",
+    "artifacts\\java-migration\\D100\\commands\\cache-isolated-first-recovery-readonly-20261006.json": "086469ef98e2919bb5cfefbd0da3c0ffdbe74e3f8f1de64f4f15721ac921f3fb",
+    "artifacts\\java-migration\\D100\\commands\\python-script-guards-resume-20261006.json": "c73630295ab33b92d2cff8086563c965f7b53bbb6e2b7ceeb4ebce48f8203ca5",
+    "tools\\accept_d100_cache_isolated.py": "db2dc64e684684cef1ab4465143bb3a0760d64456bd9bb6fa253e115a04552a1"
+  }
+}

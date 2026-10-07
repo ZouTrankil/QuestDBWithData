@@ -1,0 +1,149 @@
+{
+  "protocol_version": 1,
+  "task_id": "D105",
+  "decision": "accepted_for_private_view_create_once",
+  "checked_at": "2026-10-06T18:01:12.320515+00:00",
+  "new_DDL": 1,
+  "new_DML": 0,
+  "new_ILP": 0,
+  "base_writes": 0,
+  "formal_writes": 0,
+  "source_writes": 0,
+  "automatic_retry": false,
+  "audit": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\view-isolated-preflight-20261007.json",
+    "sha256": "ed596b6e2e48573b1ec34da33c2ae3184ad675a79f20bd87dc11ad93df02a09c"
+  },
+  "formal_audit": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\view-formal-readonly-audit-20261007.json",
+    "sha256": "4b3aec1c690ae34a0b69e35df34d535d7a881454e2e549623e11724eb9be437d"
+  },
+  "script": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d105_macro_core_view_isolated.py",
+    "sha256": "4a741225f9c76bd3565749dee62b78a4a5d4a60771ad9a6119cfe05213a0a1f0"
+  },
+  "independent_static_review": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\coordinator-view-tools-static-review-20261007.json",
+    "sha256": "d1ff167a5ad40dcbbf8a08997780ba2f99b47693249478e27a59ea7eb3fd958b"
+  },
+  "target": {
+    "pid": 43084,
+    "birth_utc": "2026-10-06T16:04:24.4330550Z",
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19040,
+    "pg_port": 18852
+  },
+  "private_view": "java_d105_v_macro_core_monthly_acceptance",
+  "base": "java_d104_macro_core_monthly_acceptance",
+  "owner_contract": {
+    "owner_sql": "SELECT * FROM macro_core_monthly",
+    "owner_sql_sha256": "5ccbdb3b41651ecee45b1cc62cd9d653df6e3a8694f2d7709f36c3bfbd25124e",
+    "owner_file": {
+      "path": "D:\\work\\fund_2\\back-monitor\\sql\\questdb\\derived\\create_monthly_derived_views.sql",
+      "sha256": "cab9a70d8bda8e0ac8c96720e38a500407431aaf2e7f18f1ac1eb05c8f55fc3e"
+    },
+    "caller_file": {
+      "path": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\application\\queries\\macro.py",
+      "sha256": "7f9ce369a7d65838a4775c8899ccfd10ee92ed5687a7b7fe8b1a4d38fc350afd"
+    },
+    "private_select": "SELECT * FROM java_d104_macro_core_monthly_acceptance",
+    "private_ddl": "CREATE VIEW java_d105_v_macro_core_monthly_acceptance AS (SELECT * FROM java_d104_macro_core_monthly_acceptance)",
+    "adaptation": "Only ordinary view/base identifiers replaced; missing-only CREATE instead of original CREATE OR REPLACE. No business computation/filter/refresh.",
+    "caller": "MacroQueryService whitelist and fetch_view_first broad-exception base fallback; audit has no fallback.",
+    "partition": "N/A",
+    "view_wal": "N/A",
+    "view_upsert": "N/A",
+    "job_checkpoint_writer": "N/A"
+  },
+  "d104_evidence": {
+    "gate": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\coordinator-review-20261007.json",
+      "sha256": "a5fd14527a068185f222abf54292c0f8532a50d8ae2eb49f14e4fc6b369d1bde"
+    },
+    "results": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\docs\\migration-tasks-20260929\\results\\D104.json",
+      "sha256": "438b7b1baa6427d64a25198171b237fc4ee0b5436f7a5c68db305958e3f80fdf"
+    },
+    "java_final": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-increment-acceptance-20261007.json",
+      "sha256": "b1aec9b83be584059cbe2aad5d18240a14167915b5c37ad9f02568e586c318ca"
+    },
+    "terminal": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\increment-java-process-and-ledger-review-20261007.json",
+      "sha256": "9242676d38e609336efd4b2c0276e4d43fa5ea1d981e1e993adc5689625251db"
+    },
+    "preflight": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007.json",
+      "sha256": "fc4b839c44254aee9f221e1246c5279738cf33704eb12749f2f70691347f530b"
+    },
+    "startup": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\private-server-start-20261007.json",
+      "sha256": "9dccda7261b680798924e7632c4f8dd646c15e8f0442e737b80ba701f36f51f7"
+    }
+  },
+  "java_pure_unique_PASS": 60,
+  "python_pure_unique_PASS": 44,
+  "pure_junit_bindings": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+      "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+      "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+      "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyViewCatalogStartupTest.xml",
+      "sha256": "ed223496f4a55c3f419991510283c651710e9b0f56606a1c39e671975455ca05"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyViewWriteRejectionTest.xml",
+      "sha256": "78f8a8ece5dcbca637ccc32c1b5f7618c507dd452998428b123b99194db9f146"
+    }
+  ],
+  "catalog": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-catalog-startup-20261007.json",
+    "sha256": "b35f51b1ede68156b31fa8bd982170c4e2e6e16526bf42c87171752cdc6c4524"
+  },
+  "python_guards_log": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\python-view-guards-private-identity-correction-20261007.log",
+    "sha256": "1dce52a154fb93ac664f87df35286bc76fcbfcf58ecb61785e1e9d9d82eb295d"
+  },
+  "pure_java_executor": {
+    "session_id": 24454,
+    "chunk_id": "e25f14",
+    "exit_code": 0
+  },
+  "python_guards_executor": {
+    "chunk_id": "6de455",
+    "exit_code": 0
+  },
+  "formal_audit_executor": {
+    "chunk_id": "d47864",
+    "exit_code": 0
+  },
+  "private_audit_executor": {
+    "session_id": 91248,
+    "chunk_id": "fc565d",
+    "exit_code": 0
+  },
+  "formal_audit_private_identity_adaptation_note": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\formal-audit-private-identity-adaptation-note-20261007.json",
+    "sha256": "9e0c1950ebb2a6707148dea62c8022f21d7027bd967972b08743cd2c435b7d2d"
+  },
+  "preserved_compile_failure": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-20261007.log",
+    "sha256": "3da8fa536d3e7d7237da40e4150d932b0bff7120815b75da94e9188505003b7b"
+  },
+  "coordinator_mode": "direct_local_serial",
+  "human_comparison_status": "pending_review",
+  "FULL_admitted": false,
+  "formal_replacement_admitted": false,
+  "D106_admitted": false,
+  "invocation_scope": "One missing-only private ordinary identity VIEW CREATE. No business rows, ledger, formal objects or reference files may be written. Any UNKNOWN claim prevents resend."
+}

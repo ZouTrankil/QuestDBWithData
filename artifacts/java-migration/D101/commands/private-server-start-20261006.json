@@ -1,0 +1,27 @@
+{
+  "task_id": "D101",
+  "status": "STARTED_AWAITING_HEALTH",
+  "pid": 23388,
+  "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb",
+  "http_port": 19020,
+  "pg_port": 18832,
+  "formal_mutated": false,
+  "data_mutated": false,
+  "started_at": "2026-10-06T16:47:32.6311878+08:00",
+  "arguments": [
+    "-XX:+UnlockExperimentalVMOptions",
+    "-XX:+AlwaysPreTouch",
+    "-XX:+UseParallelGC",
+    "--sun-misc-unsafe-memory-access=allow",
+    "--enable-native-access=io.questdb",
+    "--add-opens=java.base/java.lang=io.questdb",
+    "--add-opens=java.base/java.lang.reflect=io.questdb",
+    "--add-opens=java.base/java.nio=io.questdb",
+    "--add-opens=java.base/java.time.zone=io.questdb",
+    "--add-exports=java.base/jdk.internal.vm=io.questdb",
+    "-m",
+    "io.questdb/io.questdb.ServerMain",
+    "-d",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb"
+  ]
+}

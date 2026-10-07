@@ -1,0 +1,112 @@
+{
+  "planOnly": false,
+  "skipExtract": true,
+  "archiveRoot": "D:\\BaiduNetdiskDownload\\202609",
+  "rawRoot": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw",
+  "outputRoot": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\native-fresh",
+  "dates": [
+    "20260928",
+    "20260929",
+    "20260930"
+  ],
+  "workers": 4,
+  "archives": [
+    {
+      "date": "20260928",
+      "path": "D:\\BaiduNetdiskDownload\\202609\\20260928.7z",
+      "exists": true,
+      "compressedBytes": 5054614541,
+      "modifiedUtc": "2026-10-06T18:41:17.6640327Z",
+      "extractionExecutable": "C:\\Program Files\\7-Zip\\7z.exe",
+      "extractionArguments": [
+        "x",
+        "-y",
+        "D:\\BaiduNetdiskDownload\\202609\\20260928.7z",
+        "-oC:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw",
+        "-bsp0"
+      ],
+      "extractedDateDirectory": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw\\20260928"
+    },
+    {
+      "date": "20260929",
+      "path": "D:\\BaiduNetdiskDownload\\202609\\20260929.7z",
+      "exists": true,
+      "compressedBytes": 4565383460,
+      "modifiedUtc": "2026-09-29T15:47:59.7254899Z",
+      "extractionExecutable": "C:\\Program Files\\7-Zip\\7z.exe",
+      "extractionArguments": [
+        "x",
+        "-y",
+        "D:\\BaiduNetdiskDownload\\202609\\20260929.7z",
+        "-oC:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw",
+        "-bsp0"
+      ],
+      "extractedDateDirectory": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw\\20260929"
+    },
+    {
+      "date": "20260930",
+      "path": "D:\\BaiduNetdiskDownload\\202609\\20260930.7z",
+      "exists": true,
+      "compressedBytes": 4501980409,
+      "modifiedUtc": "2026-10-06T18:35:39.1532733Z",
+      "extractionExecutable": "C:\\Program Files\\7-Zip\\7z.exe",
+      "extractionArguments": [
+        "x",
+        "-y",
+        "D:\\BaiduNetdiskDownload\\202609\\20260930.7z",
+        "-oC:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw",
+        "-bsp0"
+      ],
+      "extractedDateDirectory": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw\\20260930"
+    }
+  ],
+  "rawDrive": {
+    "root": "C:\\",
+    "freeBytes": 1376178106368,
+    "totalBytes": 1999227654144
+  },
+  "outputDrive": {
+    "root": "C:\\",
+    "freeBytes": 1376178106368,
+    "totalBytes": 1999227654144
+  },
+  "minimumFreeBytesForExtraction": 0,
+  "extractionCapacitySufficient": true,
+  "archiveExpandedBytes": null,
+  "capacityNote": "Expanded size is not inferred from prior archives. The extraction free-space gate reserves 160 GB; compressed file sizes above are read from the requested archives.",
+  "nativeTask": "l2DailyFeatureBatch",
+  "nativeArguments": [
+    "--source-root",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw",
+    "--output-root",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\native-fresh",
+    "--dates",
+    "20260928,20260929,20260930",
+    "--workers",
+    "4",
+    "--resume",
+    "true",
+    "--symbols-file",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\core-symbols.txt"
+  ],
+  "resume": true,
+  "nativeInvocation": {
+    "executable": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\gradlew.bat",
+    "workingDirectory": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData",
+    "task": "l2DailyFeatureBatch",
+    "arguments": [
+      "--no-daemon",
+      "--console=plain",
+      "--project-cache-dir",
+      "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\native-fresh\\run-20261007-171244-d74b9634\\gradle-project-cache",
+      "--init-script",
+      "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\native-fresh\\run-20261007-171244-d74b9634\\native-arguments.init.gradle",
+      "-Pl2CleaningArgumentsFile=C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\native-fresh\\run-20261007-171244-d74b9634\\native-arguments.json",
+      "-Pl2CleaningBuildDirectory=C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\native-fresh\\run-20261007-171244-d74b9634\\gradle-build",
+      "l2DailyFeatureBatch"
+    ],
+    "isolatedBuildDirectory": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\native-fresh\\run-20261007-171244-d74b9634\\gradle-build",
+    "projectCacheDirectory": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\native-fresh\\run-20261007-171244-d74b9634\\gradle-project-cache",
+    "argumentsTransport": "UTF-8 JSON file read by a temporary Gradle init script; no shell command interpolation."
+  }
+}

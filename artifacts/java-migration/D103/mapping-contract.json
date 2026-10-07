@@ -1,0 +1,1167 @@
+{
+  "protocol_version": 1,
+  "task_id": "D103",
+  "dataset_id": "equity_style_monthly",
+  "schema_version": 1,
+  "record_date": "2026-10-06",
+  "document_state": "INITIAL_AND_READONLY_RECOVERY_EVIDENCE; ACTUAL_INCREMENT_PENDING",
+  "scope": "Implementation mapping and immutable initial/recovery evidence only; no final migration/coordinator acceptance or downstream cutover.",
+  "implementation_bindings": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/EquityStyleMonthly.java",
+      "sha256": "23e4f5e28094ac111f5c229f2575caa6a146ed263f883a119e3df3fac53c5fb9"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/EquityStyleMonthlyKey.java",
+      "sha256": "09b023aff54a7887aa61544993c3f192fbe375d27c61dd9a912e3c86519806ad"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/EquityStyleMonthlyDataset.java",
+      "sha256": "628c521a61701274007e9b34b935553501abbf647932a0c52eb4bd80accc0f29"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/table/EquityStyleMonthlyRow.java",
+      "sha256": "c52bb5d5aa2e370b052c32bbf9cb30149d1f5a6dd38e4e6c461ce281520a79d4"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/mapper/EquityStyleMonthlyMapper.java",
+      "sha256": "d425aa872d45f48e9223602633e99479314ddd6b7dbc32028c741299d39f3c78"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/EquityStyleMonthlyReadRepository.java",
+      "sha256": "b424f8efb0918465430899ae86a398ac54d6c894a045ff695a6877033b77b6c2"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/EquityStyleMonthlyWritePort.java",
+      "sha256": "5874eace9fd07c6701652341411be85b821ea4181fda19aea0566e9dc5e216a8"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbEquityStyleReadGuard.java",
+      "sha256": "8bca0233968bb8a660b027857e2ce04b878d8e76b3c42951b5b68f6dadaa0f5e"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+      "sha256": "935a5e9dbc3a185b80cf69e0bdcded60db61f9fd614e8215a28664e1626e2117"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlySource.java",
+      "sha256": "4ec7c9b429ac1d9d34e3c104842abb966091598f3e9785576dfd115e12da8b38"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlyMaterializeAdapter.java",
+      "sha256": "705e0f179b22043f816ab3718140a16de6951aefea858b948348408f795ee7de"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlyJobService.java",
+      "sha256": "8382266e67d04a102ea0d771244556766a23fa783ac0fe0cfce5ad631163d174"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
+      "sha256": "d41d66a1db4e563da918d126f9f0da768734d94f6d1174ae2e3a5457551fe1fd"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+      "sha256": "4fefb426c4d63a3e8602ce93eaab8fbce47cc760035e46fb31afcad7dff83e7b"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
+      "sha256": "22d249ca75b623db137e80b406b2cbc66728c495396cef313e71d15631b72c36"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/cli/EquityStyleMonthlyCommands.java",
+      "sha256": "09c6a797ccacec72521e7a95e3cacbbdc3e45ac7bdd4b385381ebcd200d72d84"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/cli/CommandLineRunner.java",
+      "sha256": "4df35dd41cb84a06de0c129ec5c7e3b98f56de99a369de3c117f01ff9533469d"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/JobDefinitionJson.java",
+      "sha256": "f97fd8d9202b9ab29367922fa083d46cc2a1a0f98ff5c8b7891ecdf160ecfbaf"
+    }
+  ],
+  "canonical_job": {
+    "job_id": "data.equity_style_monthly",
+    "version": 1,
+    "owner": "equity_style_monthly_owner",
+    "dataset_id": "equity_style_monthly",
+    "dataset_version": 1,
+    "dependency": [
+      {
+        "job_id": "data.index_monthly",
+        "version": 1
+      }
+    ],
+    "modes": [
+      "MATERIALIZE",
+      "INCREMENTAL",
+      "RECONCILE"
+    ],
+    "default_mode": "INCREMENTAL",
+    "frequency": "MANUAL",
+    "daily_eligible": false,
+    "rate_policy": "questdb.materialize",
+    "slice_policy": "equity_style_monthly.month_window",
+    "verification_policy": "questdb.full_key_values",
+    "interval_conflict_scope": "all dates of equity_style_monthly for both canonical and prepared writes",
+    "max_attempts": 1,
+    "deadline_seconds": 300,
+    "commands": [
+      "install-equity-style-monthly-isolated",
+      "plan-equity-style-monthly-job",
+      "run-equity-style-monthly-job",
+      "equity-style-monthly-job-status",
+      "cancel-equity-style-monthly-run",
+      "resume-equity-style-monthly-run",
+      "reconcile-equity-style-monthly-run"
+    ]
+  },
+  "configuration": {
+    "source_table_property": "app.sync.equity-style-monthly.source-table",
+    "source_default": "index_monthly",
+    "job_write_target_property": "app.sync.equity-style-monthly.target-table",
+    "job_write_target_default": "",
+    "read_target_default": "equity_style_monthly",
+    "allowed_write_table_pattern": "java_d103_equity_style_monthly_[a-z0-9]{1,64}",
+    "endpoint_check": "PGWire connection URL host/port/database must equal configured ILP target properties; actual private instance is separately attested by acceptance artifacts",
+    "ledger_property": "app.sync.ledger-path",
+    "read_group_binding": "ReadGroupConfiguration -> EquityStyleMonthlyMapper.fromValues; physical version supplied by reader guard",
+    "write_group_binding": "StockBasicWriteGroupService -> PreparedWriteAdapter<EquityStyleMonthly,YearMonth>, exact CODEC, registered isolated owner and pending-publication admission",
+    "typed_write_scope": "Explicit caller payload verification; prepared writes do not certify source-oracle correctness."
+  },
+  "key": {
+    "business_key": [
+      "month"
+    ],
+    "domain": "YearMonth",
+    "valid_years": [
+      1,
+      9999
+    ],
+    "domain_json": "YYYY-MM",
+    "storage_values_carrier": "LocalDate YYYY-MM-01",
+    "storage_timestamp_unit": "MICROS",
+    "utc_midnight": true,
+    "first_calendar_day_required": true,
+    "not_availability_time": true,
+    "ordering": [
+      "month ASC"
+    ]
+  },
+  "physical_contract": {
+    "object_kind": "TABLE",
+    "column_count": 30,
+    "nullable_finite_double_count": 29,
+    "designated_timestamp": "month",
+    "partition": "YEAR",
+    "wal": true,
+    "dedup": true,
+    "upsert_keys": [
+      "month"
+    ],
+    "ddl": "CREATE TABLE \"<explicit isolated table>\" (\"month\" TIMESTAMP,\"hs300_ret_1m\" DOUBLE,\"zz500_ret_1m\" DOUBLE,\"all_a_ret_1m\" DOUBLE,\"cs1000_ret_1m\" DOUBLE,\"small_large_ret_1m\" DOUBLE,\"mid_large_ret_1m\" DOUBLE,\"growth_ret_1m\" DOUBLE,\"value_ret_1m\" DOUBLE,\"growth_value_ret_1m\" DOUBLE,\"energy_ret_1m\" DOUBLE,\"materials_ret_1m\" DOUBLE,\"industrials_ret_1m\" DOUBLE,\"consumer_discretionary_ret_1m\" DOUBLE,\"consumer_staples_ret_1m\" DOUBLE,\"healthcare_ret_1m\" DOUBLE,\"financials_ret_1m\" DOUBLE,\"it_ret_1m\" DOUBLE,\"telecom_ret_1m\" DOUBLE,\"utilities_ret_1m\" DOUBLE,\"energy_vs_all_a_1m\" DOUBLE,\"materials_vs_all_a_1m\" DOUBLE,\"industrials_vs_all_a_1m\" DOUBLE,\"consumer_discretionary_vs_all_a_1m\" DOUBLE,\"consumer_staples_vs_all_a_1m\" DOUBLE,\"healthcare_vs_all_a_1m\" DOUBLE,\"financials_vs_all_a_1m\" DOUBLE,\"it_vs_all_a_1m\" DOUBLE,\"telecom_vs_all_a_1m\" DOUBLE,\"utilities_vs_all_a_1m\" DOUBLE) TIMESTAMP(month) PARTITION BY YEAR WAL DEDUP UPSERT KEYS(month)",
+    "ddl_policy": "Missing-only create; existing target checked in place, no reset/ALTER/repair."
+  },
+  "columns": [
+    {
+      "name": "month",
+      "java": "YearMonth",
+      "storage": "TIMESTAMP",
+      "nullable": false,
+      "meaning": "Monthly period identity",
+      "ordinal": 1,
+      "java_accessor": "month",
+      "logical_name": "month",
+      "storage_name": "month",
+      "storage_carrier": "LocalDate first day of YearMonth at exact UTC midnight, TIMESTAMP micros",
+      "json": "YYYY-MM domain; YYYY-MM-01 storage values"
+    },
+    {
+      "name": "hs300_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000300.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 2,
+      "java_accessor": "hs300Ret1m",
+      "logical_name": "hs300_ret_1m",
+      "storage_name": "hs300_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "zz500_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000905.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 3,
+      "java_accessor": "zz500Ret1m",
+      "logical_name": "zz500_ret_1m",
+      "storage_name": "zz500_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "all_a_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000985.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 4,
+      "java_accessor": "allARet1m",
+      "logical_name": "all_a_ret_1m",
+      "storage_name": "all_a_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "cs1000_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000852.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 5,
+      "java_accessor": "cs1000Ret1m",
+      "logical_name": "cs1000_ret_1m",
+      "storage_name": "cs1000_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "small_large_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "cs1000_ret_1m - hs300_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:84",
+      "ordinal": 6,
+      "java_accessor": "smallLargeRet1m",
+      "logical_name": "small_large_ret_1m",
+      "storage_name": "small_large_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "mid_large_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "zz500_ret_1m - hs300_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:85",
+      "ordinal": 7,
+      "java_accessor": "midLargeRet1m",
+      "logical_name": "mid_large_ret_1m",
+      "storage_name": "mid_large_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "growth_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000921.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 8,
+      "java_accessor": "growthRet1m",
+      "logical_name": "growth_ret_1m",
+      "storage_name": "growth_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "value_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000920.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 9,
+      "java_accessor": "valueRet1m",
+      "logical_name": "value_ret_1m",
+      "storage_name": "value_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "growth_value_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "growth_ret_1m - value_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:86",
+      "ordinal": 10,
+      "java_accessor": "growthValueRet1m",
+      "logical_name": "growth_value_ret_1m",
+      "storage_name": "growth_value_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "energy_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000986.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 11,
+      "java_accessor": "energyRet1m",
+      "logical_name": "energy_ret_1m",
+      "storage_name": "energy_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "materials_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000987.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 12,
+      "java_accessor": "materialsRet1m",
+      "logical_name": "materials_ret_1m",
+      "storage_name": "materials_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "industrials_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000988.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 13,
+      "java_accessor": "industrialsRet1m",
+      "logical_name": "industrials_ret_1m",
+      "storage_name": "industrials_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "consumer_discretionary_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000989.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 14,
+      "java_accessor": "consumerDiscretionaryRet1m",
+      "logical_name": "consumer_discretionary_ret_1m",
+      "storage_name": "consumer_discretionary_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "consumer_staples_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000990.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 15,
+      "java_accessor": "consumerStaplesRet1m",
+      "logical_name": "consumer_staples_ret_1m",
+      "storage_name": "consumer_staples_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "healthcare_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000991.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 16,
+      "java_accessor": "healthcareRet1m",
+      "logical_name": "healthcare_ret_1m",
+      "storage_name": "healthcare_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "financials_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000992.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 17,
+      "java_accessor": "financialsRet1m",
+      "logical_name": "financials_ret_1m",
+      "storage_name": "financials_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "it_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000993.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 18,
+      "java_accessor": "itRet1m",
+      "logical_name": "it_ret_1m",
+      "storage_name": "it_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "telecom_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000994.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 19,
+      "java_accessor": "telecomRet1m",
+      "logical_name": "telecom_ret_1m",
+      "storage_name": "telecom_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "utilities_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000995.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38",
+      "ordinal": 20,
+      "java_accessor": "utilitiesRet1m",
+      "logical_name": "utilities_ret_1m",
+      "storage_name": "utilities_ret_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "energy_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "energy_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+      "ordinal": 21,
+      "java_accessor": "energyVsAllA1m",
+      "logical_name": "energy_vs_all_a_1m",
+      "storage_name": "energy_vs_all_a_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "materials_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "materials_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+      "ordinal": 22,
+      "java_accessor": "materialsVsAllA1m",
+      "logical_name": "materials_vs_all_a_1m",
+      "storage_name": "materials_vs_all_a_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "industrials_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "industrials_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+      "ordinal": 23,
+      "java_accessor": "industrialsVsAllA1m",
+      "logical_name": "industrials_vs_all_a_1m",
+      "storage_name": "industrials_vs_all_a_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "consumer_discretionary_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "consumer_discretionary_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+      "ordinal": 24,
+      "java_accessor": "consumerDiscretionaryVsAllA1m",
+      "logical_name": "consumer_discretionary_vs_all_a_1m",
+      "storage_name": "consumer_discretionary_vs_all_a_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "consumer_staples_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "consumer_staples_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+      "ordinal": 25,
+      "java_accessor": "consumerStaplesVsAllA1m",
+      "logical_name": "consumer_staples_vs_all_a_1m",
+      "storage_name": "consumer_staples_vs_all_a_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "healthcare_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "healthcare_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+      "ordinal": 26,
+      "java_accessor": "healthcareVsAllA1m",
+      "logical_name": "healthcare_vs_all_a_1m",
+      "storage_name": "healthcare_vs_all_a_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "financials_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "financials_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+      "ordinal": 27,
+      "java_accessor": "financialsVsAllA1m",
+      "logical_name": "financials_vs_all_a_1m",
+      "storage_name": "financials_vs_all_a_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "it_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "it_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+      "ordinal": 28,
+      "java_accessor": "itVsAllA1m",
+      "logical_name": "it_vs_all_a_1m",
+      "storage_name": "it_vs_all_a_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "telecom_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "telecom_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+      "ordinal": 29,
+      "java_accessor": "telecomVsAllA1m",
+      "logical_name": "telecom_vs_all_a_1m",
+      "storage_name": "telecom_vs_all_a_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    },
+    {
+      "name": "utilities_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "utilities_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100",
+      "ordinal": 30,
+      "java_accessor": "utilitiesVsAllA1m",
+      "logical_name": "utilities_vs_all_a_1m",
+      "storage_name": "utilities_vs_all_a_1m",
+      "transport_and_comparison": "Explicit nullable Double; finite only; no scale/round/coercion; exact null bitmap and IEEE754 raw bits"
+    }
+  ],
+  "python_lineage": {
+    "source_contract_original": {
+      "path": "artifacts/java-migration/D103/source-contract-20261006.json",
+      "sha256": "9a7bd7cf8bae8b96296bf305a909a4eee3153ebf14de0b155eb365a4f7995405"
+    },
+    "stored_unit_semantic_supplement": {
+      "path": "artifacts/java-migration/D103/source-contract-stored-units-20261006.json",
+      "sha256": "8cd85288b3fcc6c8bc6b1bc574bd2e422fe178e531782e6639114a5b7f6d8997"
+    },
+    "source_unit_lineage_review": {
+      "path": "artifacts/java-migration/D103/commands/source-stored-unit-lineage-review-20261006.json",
+      "sha256": "4f0d5c7180ad2a673c94502396df0287b297fb649982eabf468e5306afd06613"
+    },
+    "original_owner": {
+      "actual_module": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py",
+      "entry": "build_equity_style_monthly(start_month=None,end_month=None)",
+      "backend": "task",
+      "schedule_owner": "month_end",
+      "active_chain": [
+        "catalog.py:22,38-47 -> materialization.py:40-65 -> build_equity_style_monthly",
+        "derived/workflows.py:45-76 run_regime_features_monthly -> equity style -> regime_features_monthly",
+        "scripts/pipeline/run_month_end_pipeline.ps1 bounded month-end command"
+      ],
+      "empty_behavior": "No feature rows -> returns empty before DDL/write (111-128). Errors must not become VERIFIED_EMPTY.",
+      "write_behavior": "Nonempty -> missing-only ensure_table_exists(force=False) then original questdb_client.write_model; returned frame/row count alone does not verify ACK.",
+      "mode_warning": "Original entry accepts only start_month/end_month. Generic catalog signature-filter can silently drop --no-write/full/force; do not invoke build as a read-only oracle."
+    },
+    "source_to_field_codes": {
+      "hs300_ret_1m": "000300.SH",
+      "zz500_ret_1m": "000905.SH",
+      "all_a_ret_1m": "000985.SH",
+      "cs1000_ret_1m": "000852.SH",
+      "growth_ret_1m": "000921.SH",
+      "value_ret_1m": "000920.SH",
+      "energy_ret_1m": "000986.SH",
+      "materials_ret_1m": "000987.SH",
+      "industrials_ret_1m": "000988.SH",
+      "consumer_discretionary_ret_1m": "000989.SH",
+      "consumer_staples_ret_1m": "000990.SH",
+      "healthcare_ret_1m": "000991.SH",
+      "financials_ret_1m": "000992.SH",
+      "it_ret_1m": "000993.SH",
+      "telecom_ret_1m": "000994.SH",
+      "utilities_ret_1m": "000995.SH"
+    },
+    "pivot": "Original ordered dates -> pivot_table aggfunc=last with skipna=True, no fill; Java takes last finite non-null pct_chg in each code/month. A later NULL does not erase an earlier value.",
+    "duplicate_keys": "Reject all (ts_code,trade_date) duplicates; original non-deduplicating source has no deterministic tie breaker.",
+    "unit_decision": "Preserve stored index_monthly.pct_chg unchanged; all 13 spreads are differences in those same stored units. No divide100, multiply100, close-return recomputation or rounding.",
+    "legacy_unit_declaration": "Python source-model comment and previous D022/source-contract metadata say percent. Actual captured provider JSON and stored source are ratio-like; ratio diagnostics are not a universal semantic-unit certification. D022 semantics outside D103 were not changed.",
+    "code_conflict": "Preserve legacy value=000920.SH and growth=000921.SH; preserve growth(921)-value(920). Do not silently replace with index-universe names.",
+    "ui_scaling": "Existing UI multiplication by100 is consumer display behavior, not mapper/materializer scaling."
+  },
+  "bounded_source": {
+    "table": "index_monthly (or explicit configured compatible table)",
+    "dependency": "D022 data.index_monthly v1",
+    "fields": [
+      "ts_code",
+      "trade_date",
+      "close",
+      "open",
+      "high",
+      "low",
+      "pre_close",
+      "change",
+      "pct_chg",
+      "vol",
+      "amount",
+      "layer",
+      "bucket",
+      "update_time"
+    ],
+    "schema_exact_columns": 14,
+    "physical_types": {
+      "ts_code": "SYMBOL",
+      "trade_date": "TIMESTAMP",
+      "close": "DOUBLE",
+      "open": "DOUBLE",
+      "high": "DOUBLE",
+      "low": "DOUBLE",
+      "pre_close": "DOUBLE",
+      "change": "DOUBLE",
+      "pct_chg": "DOUBLE",
+      "vol": "DOUBLE",
+      "amount": "DOUBLE",
+      "layer": "SYMBOL",
+      "bucket": "SYMBOL",
+      "update_time": "TIMESTAMP"
+    },
+    "partition": "YEAR",
+    "wal": true,
+    "dedup": false,
+    "designated_timestamp": "trade_date",
+    "codes": 16,
+    "job_window": "First-day LocalDate from/to inclusive, 1..12 months; SQL uses exclusive next month boundary",
+    "max_source_returned_rows": 6200,
+    "sentinel_limit": 6201,
+    "prepared_query_timeout_seconds": 20,
+    "max_schema_rows": 15,
+    "max_metadata_rows": 2,
+    "entire_table_scan_row_cap_claimed": false,
+    "source_frozen_vector": [
+      "table",
+      "tableId",
+      "directory",
+      "physicalTxn",
+      "sequenceTxn",
+      "schemaHash"
+    ],
+    "wal_settled_checks": [
+      "writerTxn=sequencerTxn",
+      "bufferedTxnSize=0",
+      "wal_pending_row_count=0",
+      "source and WAL not suspended"
+    ],
+    "raw_hash": "All fourteen ordered typed values and full source keys, explicit NULLs, both timestamp micros carriers, all nine DOUBLE raw bits; includes fields not used in pct_chg formula.",
+    "checks": "Source vector and all14 raw fingerprint frozen at plan; re-read around preflight/fetch/send/readback/WAL and final full-prefix verification."
+  },
+  "mode_admission": {
+    "closed_months_all_modes": "to month must precede YearMonth(logicalDate); reject current/future months before send.",
+    "MATERIALIZE": "Retain legacy historical nullable cells/omitted entirely empty months, subject to finite bounded source/global required-code availability. Whole-window emptiness never advances checkpoint.",
+    "INCREMENTAL": "Every anchor..to month must be continuous with all16 direct source cells finite/non-null. Missing month/code/all-null code-month rejects before send.",
+    "RECONCILE": "Bounded readonly comparison of frozen source-derived full-prefix targets; no publisher send.",
+    "historical_read": "29 finite nullable DOUBLE cells may be NULL, including all-null historical records; this is not source readiness.",
+    "prepared_write": "1..12 unique months, <=1MiB, typed finite nullable cells; a timestamp-only all29-NULL record is rejected."
+  },
+  "read_and_cursor": {
+    "projection": "Exact ordered full30 storage columns",
+    "exact_filter": "month first-day LocalDate",
+    "range": "month first-day LocalDate from inclusive/to exclusive, 1..12 months",
+    "max_page_rows": 12,
+    "physical_pin": [
+      "table id",
+      "directory",
+      "table_txn including explicit uninitialized marker",
+      "raw wal_txn",
+      "raw table_row_count",
+      "writerTxn",
+      "sequencerTxn",
+      "exact schema/layout"
+    ],
+    "version_checks": "Before and after schema/row reads; cursor fingerprint binds physical token plus request and last complete month key. Reject a stale token before row query.",
+    "empty_new_table": "Null physical txn retained as uninitialized, accepted only independently COUNT0, writer/seq/pending/buffer0, raw wal_txn/raw rowcount null or0 and unchanged raw metadata around COUNT. Never coerce null txn to0.",
+    "purpose": "Physical read stability and historical integrity; no provider-currentness or full-history claim."
+  },
+  "checkpoint_and_verification": {
+    "candidate_state": "VERIFIED only; never VERIFIED_EMPTY",
+    "candidate_checks": [
+      "exact current job definition/version and target identity",
+      "same bootstrap anchor and candidate range within new bounded range",
+      "original durable FETCHED page fingerprint and full-prefix evidence",
+      "old expected prefix is closed/continuous and16 direct non-null cells per month",
+      "target old prefix stable/settled and all30 key/values exactly equal original expected"
+    ],
+    "source_prefix_unchanged": "Recompute old all14 raw fingerprint and29 derived values; if unchanged and only appended source, start at old checkpoint month itself for one-month overlap. Record VERIFIED_PREFIX_APPEND and parent/source version.",
+    "source_prefix_revised": "Any old raw14 or derived change, or source identity/schema change -> rebuild bounded bootstrap <=12 months. Record SOURCE_PREFIX_REVISED.",
+    "target_prefix_drift": "Reject, rather than silently regenerate a checkpoint from drifted targets.",
+    "page_fingerprint": "SHA256(SHA256(source_version + newline + source_hash) + newline + from + newline + to)",
+    "verification": "Exact full month keys, NULL bitmap and DOUBLE raw bits; zero tolerance. Full anchor..to target readback, stable settled target and final same source proof occur inside adapter.fetch before shared runner can mark VERIFIED.",
+    "revision_evidence": "Pure tests cover source-only raw-field revisions, closed/continuous-prefix reuse, source changes, target drift and empty cases; actual August increment not yet accepted at this document cutoff."
+  },
+  "unknown_and_serial_terminal": {
+    "submission": "Shared runner writes durable SUBMITTED intent before invoking typed writer. Single HTTP flush, retryTimeout0, autoFlush disabled, timeout20s.",
+    "ack_rule": "Unknown transport/sender outcome retains IN_DOUBT and dataset-wide exclusion; never automatically resend or resume an unknown writer.",
+    "sender_stop": "Actual same owned writer must have completed reset/close. New port/JVM does not provide historical stopped proof.",
+    "reconcile": "Same-instance stopped writer plus frozen source/all-prefix exact target/WAL proof. Reentrant finalization can finish already-verified slice/run and ATTEMPT RUNNING or IN_DOUBT using existing ledger child guards; no forced CLI writer-stopped override.",
+    "fixture_unknown": "Original initial source INSERT claim remains UNKNOWN even after exact readonly delivery proof; no reconstructed ACK and no retry.",
+    "initial_java_failure": "Original live JUnit remains FAILED_RECEIPT_SERIALIZATION; original JVM PID/birth not recorded. Scoped coordinator failure recovery acknowledges only this finished synchronous pipeline, never fabricated original native absence.",
+    "fresh_readonly_process": "Fresh JVM pid47280/birth2026-10-06T15:31:02.250865Z independently bound to receipt, successful XML, executor exit0 and native stop evidence.",
+    "next_increment_boundary": "Only explicit scoped source-increment admission with all frozen evidence, unchanged terminal actual SQLite, fresh stopped recovery JVM, private target identity and full source/target/formal proof; durable UNKNOWN write claim cannot be retried."
+  },
+  "observed_evidence": {
+    "cutoff": "Initial source delivery and Java readonly receipt recovery; before actual August increment",
+    "formal_readonly": {
+      "months": [
+        "2026-06",
+        "2026-07",
+        "2026-08"
+      ],
+      "source_rows": 48,
+      "source_field_values": 672,
+      "source_double_values": 432,
+      "duplicate_keys": 0,
+      "existing_output_rows": 1,
+      "existing_august_full_field_comparisons": 30,
+      "existing_august_double_raw_bit_comparisons": 29,
+      "missing_formal_months": [
+        "2026-06",
+        "2026-07"
+      ],
+      "formal_parity_passed": false,
+      "formal_mutated": false,
+      "unit_note": "Original preflight percent wording superseded by stored-unit lineage; numeric captures unchanged."
+    },
+    "private_initial": {
+      "host": "127.0.0.1",
+      "http_port": 19030,
+      "pg_port": 18842,
+      "pid": 41560,
+      "data_root": "var/d103-isolated-questdb",
+      "source_rows": 32,
+      "source_field_values": 448,
+      "source_double_values": 288,
+      "source_id": 9,
+      "source_directory": "index_monthly~9",
+      "source_txn": 1,
+      "write_target": "java_d103_equity_style_monthly_acceptance",
+      "target_rows": 2,
+      "target_id": "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "target_table_id": 10,
+      "target_directory": "java_d103_equity_style_monthly_acceptance~10",
+      "target_physical_txn": 4,
+      "ledger_runs": 8,
+      "ledger_entries": 18,
+      "ledger_events": 72,
+      "ledger_groups": 1,
+      "retained_leases": 0,
+      "operations": [
+        {
+          "role": "first",
+          "run_id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+          "state": "VERIFIED",
+          "verified_rows": 2,
+          "mode": "MATERIALIZE",
+          "parent_run_id": null
+        },
+        {
+          "role": "same_range_replay",
+          "run_id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+          "state": "VERIFIED",
+          "verified_rows": 2,
+          "mode": "MATERIALIZE",
+          "parent_run_id": null
+        },
+        {
+          "role": "cancelled_for_resume",
+          "run_id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+          "state": "CANCELLED",
+          "verified_rows": 0,
+          "mode": "MATERIALIZE",
+          "parent_run_id": null
+        },
+        {
+          "role": "exact_resume",
+          "run_id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+          "state": "VERIFIED",
+          "verified_rows": 2,
+          "mode": "MATERIALIZE",
+          "parent_run_id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b"
+        },
+        {
+          "role": "readonly_reconcile",
+          "run_id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+          "state": "VERIFIED",
+          "verified_rows": 2,
+          "mode": "RECONCILE",
+          "parent_run_id": null
+        },
+        {
+          "role": "configured_write_group",
+          "run_id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+          "state": "VERIFIED",
+          "verified_rows": 1,
+          "mode": null,
+          "parent_run_id": null
+        },
+        {
+          "role": "typed_write_child",
+          "run_id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+          "state": "VERIFIED",
+          "verified_rows": 1,
+          "mode": "INGEST",
+          "parent_run_id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74"
+        },
+        {
+          "role": "cancelled_before_source",
+          "run_id": "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+          "state": "CANCELLED",
+          "verified_rows": 0,
+          "mode": "MATERIALIZE",
+          "parent_run_id": null
+        }
+      ]
+    },
+    "fresh_java_readonly_recovery": {
+      "receipt": {
+        "path": "artifacts/java-migration/D103/commands/java-initial-readonly-recovery-20261006.json",
+        "sha256": "59dcdd9257c198c72944828f67226e74be05d760fb0bb37475f032b162aec7b4"
+      },
+      "source_rows": 32,
+      "target_rows": 2,
+      "full_field_comparisons": 60,
+      "double_raw_bit_comparisons": 58,
+      "double_tolerance": 0,
+      "new_ddl": 0,
+      "new_dml": 0,
+      "new_ilp_batches": 0,
+      "new_materialization_runs": 0,
+      "ledger_mutated": false,
+      "original_junit_status": "FAILED_RECEIPT_SERIALIZATION",
+      "original_sender_pid_birth_known": false
+    },
+    "held_august_source": {
+      "rows": 16,
+      "field_values": 224,
+      "double_values": 144,
+      "actual_append": "PENDING",
+      "actual_canonical_increment": "PENDING",
+      "final_gate": "PENDING"
+    }
+  },
+  "test_evidence": {
+    "d103_unique_pure_java": 96,
+    "java_de_duplication": "Final D103 suites92 (guard19 replaces earlier13) plus4 new YearMonth tests. Earlier reruns and unrelated shared regressions excluded.",
+    "java_xml": [
+      {
+        "path": "artifacts/java-migration/D103/commands/java-unit-stored-units-result-20261006/TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+        "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e",
+        "class": "com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-unit-stored-units-result-20261006/TEST-com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest.xml",
+        "sha256": "47e227e5bbd1598d3b91a7278fd6a6ffc4861fa70e9d0234ee5cc5db3e76a7db",
+        "class": "com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-unit-stored-units-result-20261006/TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+        "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c",
+        "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-unit-stored-units-result-20261006/TEST-com.zoutrankil.data.service.EquityStyleMonthlyCatalogStartupTest.xml",
+        "sha256": "620ca570c20db8828c668397ec01a34fc5171008cbb06dd12a0487c27322fd58",
+        "class": "com.zoutrankil.data.service.EquityStyleMonthlyCatalogStartupTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-unit-stored-units-result-20261006/TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+        "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50",
+        "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-unit-stored-units-result-20261006/TEST-com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest.xml",
+        "sha256": "7f058e920da5f736f869b045b860cba9c82f524fd1f9140b72d406667882d020",
+        "class": "com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-unit-stored-units-result-20261006/TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+        "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226",
+        "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-unit-stored-units-result-20261006/TEST-com.zoutrankil.data.service.EquityStyleMonthlyWriteGroupPreflightTest.xml",
+        "sha256": "bd9cf5899ab47d3faa0bd9afb8e91c7c52b6999138266c6311247e15958583bf",
+        "class": "com.zoutrankil.data.service.EquityStyleMonthlyWriteGroupPreflightTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-empty-target-shared-result-20261006/TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+        "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d",
+        "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-year-month-json-result-20261006/TEST-com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest.xml",
+        "sha256": "03eb5b6d0f19fe1c2dfaa800717b2f9ccc0c751df80e179604f9eac098213d00",
+        "class": "com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "unique_pure_python": 122,
+    "python_log": {
+      "path": "artifacts/java-migration/D103/commands/python-all-d103-guards-20261006.log",
+      "sha256": "0483c4f8d63e32b3a276b25a54eaa8940d2316038a481f75ebec5b3c3e299e9e"
+    },
+    "all_listed_pure_failures": 0,
+    "all_listed_pure_errors": 0,
+    "all_listed_pure_skips": 0,
+    "original_live_junit": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "fresh_readonly_live_junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "catalog_startup": "Actual canonical owner/Dataset registration observed with0 DB connections and no ledger creation; no global/shared aggregate counts inferred."
+  },
+  "evidence_bindings": [
+    {
+      "path": "artifacts/java-migration/D103/commands/equity-style-readonly-preflight-20261006.json",
+      "sha256": "61a3e91753074598b6db0d5bdc7867ff45d90d144628629a36316a0bf091b0db"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/equity-style-readonly-preflight-20261006-source.jsonl",
+      "sha256": "03f01be342248eeb9a39cff91affb549da0b563c3224a71d9ad3b5687f6a9d82"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/equity-style-readonly-preflight-20261006-oracle.jsonl",
+      "sha256": "4725f6c78018e11b6462502358abad912f8680290f08b6eb6a91f3003a510289"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/source-stored-unit-lineage-review-20261006.json",
+      "sha256": "4f0d5c7180ad2a673c94502396df0287b297fb649982eabf468e5306afd06613"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/source-stored-unit-diagnostic-20261006.json",
+      "sha256": "cdc9ed4265442a0190892282760184b032e2bd35b0db170f6236bb36749f29e2"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/source-fixture-initial-20261006.json",
+      "sha256": "13f05b7bd5586450b66f694d1e6b4582de26cb3aea6d9ede5898acd32be54ac8"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/index-monthly-create-once-20261006.json",
+      "sha256": "e6093b23285aafabdb2b5352a686dc3c2c501f5bf420e1c15ea808975c335877"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/index-monthly-initial-insert-once-20261006.json",
+      "sha256": "3601c017b74ad57964eb08599ab5e609fdf9f32e5d9aaa8602993bc84680a0d1"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/source-fixture-initial-readonly-reconciliation-20261006.json",
+      "sha256": "e2a2099b7c39526414594bb9816718481e40131a34c5d563161a600c6484f236"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/source-fixture-initial-20261006-source-initial.jsonl",
+      "sha256": "09df1a5db702e3840b18fd2ddee9989e983acf7e933fce772f956a89cbbc526d"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/source-fixture-initial-20261006-source-august-held.jsonl",
+      "sha256": "0b9de3e66ef9e0827bff47cda54a4a7e3b7a96243cab48fa738c80226f739246"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-output-create-once-20261006.json",
+      "sha256": "2db4308cd8793d6e10ac42df0984d37830562f83ad3674606ceac08a48a4f623"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/original-initial-java-terminal-ledger-20261006.json",
+      "sha256": "5069f1ee1356575d555278fabadd3928c125091c11029ab1e94140427c8ad585"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/original-initial-java-executor-completion-20261006.json",
+      "sha256": "ec0e2e5e5f99d6ad5da96af5bd1ecf76beafc04726a1dcc817d9e170c7ebf44f"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/coordinator-initial-java-receipt-failure-recovery-20261006.json",
+      "sha256": "d449e9713a69d478e511f485b0a1bc52d24a0d68e86ecb72cac2dfc47227c893"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-initial-readonly-recovery-20261006.json",
+      "sha256": "59dcdd9257c198c72944828f67226e74be05d760fb0bb37475f032b162aec7b4"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-readonly-recovery-jvm-identity-20261006.json",
+      "sha256": "354dc19eb7b3c0738b4c5bd07e4c882bb35dd53856377bed5b7605019373155e"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/readonly-recovery-java-executor-completion-20261006.json",
+      "sha256": "1ffbec6fd09df449a3193e5d771998fea5a2cf316d0027e89a0a34217cdfaae4"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/readonly-recovery-java-native-stop-20261006.json",
+      "sha256": "3e8d0d87a838dabc753051a2149c6dd8cdba123bbad9478a56c603c1803e838c"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/readonly-recovery-java-terminal-ledger-20261006.json",
+      "sha256": "69d8424dfb0725d91d6de9f5b8a500e1b7e58fbeb0b8b4c4bdbc1f19a793e9fa"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/read-group-initial-20261006.json",
+      "sha256": "8b8634c1b040cb641b82aa22b0540a3f34fc8de4f7b20917225ca8a031a28fbe"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/write-group-initial-20261006.json",
+      "sha256": "59f051a046a9fc73ec986079bbef2a21fdf2f03fea584ff032894fb060e4871c"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-catalog-startup-final-20261006.json",
+      "sha256": "4a1f5b79c7df8ab0847cf62d909de96eb8de501c3bc8f2f608bbb2f8c6b15b0c"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/python-all-d103-guards-20261006.log",
+      "sha256": "0483c4f8d63e32b3a276b25a54eaa8940d2316038a481f75ebec5b3c3e299e9e"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-initial-live-20261006.log",
+      "sha256": "171f529e68b08b77a9758964a55928457501bdfafa4f8e9dffdc53a96fa1f92c"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-initial-readonly-recovery-live-20261006.log",
+      "sha256": "e81b1e555163cc0368c4199c3cf550404e91c5f319732e0fd788b07036be81b9"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-year-month-json-20261006.log",
+      "sha256": "9ba80ae358e019f724ae81ada378bc2faae1374e98a7cf63ebf4d510f259dc3f"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-initial-failed-result-20261006/TEST-com.zoutrankil.data.config.EquityStyleMonthlyLiveAcceptanceTest.xml",
+      "sha256": "8d773bf9d93248f88c18ddb565d32978dc8401f80570745111abdee024fefc0e"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-initial-readonly-recovery-result-20261006/TEST-com.zoutrankil.data.config.EquityStyleMonthlyInitialReadOnlyRecoveryTest.xml",
+      "sha256": "8b3eb1b5ffb574572143208c7dc38735e608861c58c70cf278897a671ca12fca"
+    }
+  ],
+  "limitations": [
+    "Actual August source append and canonical Java increment remain pending at this document cutoff.",
+    "Formal missing June/July output remains unchanged; this document does not grant a formal writer or output repair.",
+    "Original initial source UNKNOWN claim and original live JUnit failure are preserved.",
+    "Source/provider completeness, full history, point-in-time availability and consumer cutover are not certified.",
+    "No final migration gate or next-task admission is issued by this mapping document."
+  ]
+}

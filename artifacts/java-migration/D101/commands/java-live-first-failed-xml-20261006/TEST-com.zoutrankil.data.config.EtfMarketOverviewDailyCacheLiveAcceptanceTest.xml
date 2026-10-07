@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.config.EtfMarketOverviewDailyCacheLiveAcceptanceTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2026-10-06T09:44:04.818Z" hostname="AMD395" time="11.642">
+  <properties/>
+  <testcase name="firstCanonicalMissesPublishTwoVerifiedGenerationsAndCaptureActualCursor()" classname="com.zoutrankil.data.config.EtfMarketOverviewDailyCacheLiveAcceptanceTest" time="11.642">
+    <failure message="java.io.IOException: Response does not bind the actual exited bridge process" type="java.io.IOException">java.io.IOException: Response does not bind the actual exited bridge process
+	at com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGateway.invoke(EtfMarketOverviewCacheOwnerGateway.java:275)
+	at com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGateway.preview(EtfMarketOverviewCacheOwnerGateway.java:51)
+	at com.zoutrankil.data.config.EtfMarketOverviewDailyCacheLiveAcceptanceTest.executeStage(EtfMarketOverviewDailyCacheLiveAcceptanceTest.java:208)
+	at com.zoutrankil.data.config.EtfMarketOverviewDailyCacheLiveAcceptanceTest.firstCanonicalMissesPublishTwoVerifiedGenerationsAndCaptureActualCursor(EtfMarketOverviewDailyCacheLiveAcceptanceTest.java:52)
+</failure>
+  </testcase>
+  <system-out><![CDATA[17:44:05.301 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d101-first - Starting...
+17:44:05.423 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d101-first - Start completed.
+17:44:16.383 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d101-first - Shutdown initiated...
+17:44:16.386 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d101-first - Shutdown completed.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

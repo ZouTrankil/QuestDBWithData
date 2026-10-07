@@ -1,0 +1,52 @@
+{
+  "suites": [
+    {
+      "suite": "com.zoutrankil.data.cli.RetailSentimentDailyV1CommandsTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "com.zoutrankil.data.mapper.RetailSentimentDailyV1MappingTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "com.zoutrankil.data.repository.QuestDbRetailSentimentMvReadGuardTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "com.zoutrankil.data.repository.RetailSentimentDailyV1MaterializationPortTest",
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "com.zoutrankil.data.service.RetailSentimentDailyV1JobServiceTest",
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "com.zoutrankil.data.service.RetailSentimentDailyV1MaterializeAdapterTest",
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "tests": 111,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

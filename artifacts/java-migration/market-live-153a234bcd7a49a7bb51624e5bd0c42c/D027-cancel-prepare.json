@@ -1,0 +1,168 @@
+{
+  "task" : "D027",
+  "table" : "java_d027_moneyflow_hsgt_153a234bcd7a49a7bb51624e5bd0c42c",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-153a234bcd7a49a7bb51624e5bd0c42c\\sync-ledger.sqlite",
+  "action" : "prepare",
+  "startedAt" : "2026-09-29T23:34:39.043918600Z",
+  "formalTableMutated" : false,
+  "before" : {
+    "duplicateKeys" : 0,
+    "rows" : 2,
+    "sha256" : "4336c15607a2f9ceb5959e95356edf20d8b070fca7677cf980a7caabaedd9158"
+  },
+  "plan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_hsgt",
+        "version" : 1,
+        "datasetId" : "moneyflow_hsgt",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_hsgt_owner",
+        "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetFingerprint" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_hsgt.range31",
+        "verificationPolicyRef" : "questdb.full_row_stage_replace",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT10M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 12,
+          "maxPages" : 12,
+          "maxRows" : 366,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "physicalTargetId" : "static-v2-9a064d02c43c31824753ca61503187a33062c57ffeed6db3c98248d03c7433db",
+        "targetFingerprint" : "b27224e9eb78b8c24b6e6c97cc56bb2c31a24aee3fbd94055dea981b8985dfef",
+        "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+        "targetMaxBefore" : "2026-09-18",
+        "targetMinBefore" : "2026-09-17",
+        "targetRowsBefore" : 2
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+    "physicalTargetId" : "static-v2-9a064d02c43c31824753ca61503187a33062c57ffeed6db3c98248d03c7433db",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "identity" : {
+        "id" : 3008,
+        "directory" : "java_d027_moneyflow_hsgt_stage_fb41e9dfa56642bb8f379a35049442ef~3008",
+        "writerTxn" : 2
+      },
+      "rows" : [ {
+        "key" : {
+          "tradeDate" : "2026-09-17"
+        },
+        "ggtSs" : 32165.59,
+        "ggtSz" : 22965.11,
+        "hgt" : 120233.94,
+        "sgt" : 139631.89,
+        "northMoney" : 259865.83,
+        "southMoney" : 55130.7
+      }, {
+        "key" : {
+          "tradeDate" : "2026-09-18"
+        },
+        "ggtSs" : 32165.76,
+        "ggtSz" : 22976.88,
+        "hgt" : 161171.29,
+        "sgt" : 172753.06,
+        "northMoney" : 333924.35,
+        "southMoney" : 55142.63
+      } ],
+      "fingerprint" : "b27224e9eb78b8c24b6e6c97cc56bb2c31a24aee3fbd94055dea981b8985dfef",
+      "bytes" : 285
+    },
+    "bootstrap" : false
+  },
+  "cancelBeforeSource" : {
+    "runId" : "moneyflow-hsgt-prepare-52e7816f-9d60-4931-8a4d-ff5d62290e30",
+    "state" : "CANCELLED",
+    "sourceRows" : 0,
+    "verifiedRows" : 0,
+    "errorCode" : "CancellationException",
+    "reusedRows" : 0
+  },
+  "after" : {
+    "duplicateKeys" : 0,
+    "rows" : 2,
+    "sha256" : "4336c15607a2f9ceb5959e95356edf20d8b070fca7677cf980a7caabaedd9158"
+  },
+  "status" : "VERIFIED",
+  "finishedAt" : "2026-09-29T23:34:44.696922800Z"
+}

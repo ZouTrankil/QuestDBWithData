@@ -1,0 +1,64 @@
+{
+  "task_id": "D105",
+  "protocol_version": 1,
+  "status": "PASS",
+  "record_date": "2026-10-07",
+  "reviewed_at_utc": "2026-10-06T17:58:31.164517+00:00",
+  "review_type": "independent_static_import_correction_supplement",
+  "static_only": true,
+  "blockers": [],
+  "findings": [],
+  "prior_review": {
+    "path": "artifacts/java-migration/D105/commands/coordinator-domain-wiring-static-review-20261007.json",
+    "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/coordinator-domain-wiring-static-review-20261007.json",
+    "sha256": "222decb401ef87164260eba4170814c99294ddb8887231cd9f470fc2bf09d4ac",
+    "role": "Original review preserved; supersede only the two corrected test bindings"
+  },
+  "code_bindings": [
+    {
+      "path": "src/test/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMappingTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMappingTest.java",
+      "sha256": "2e4e71b3256640e3a8811aca5507d1e18d273c8d9143890ac033ae3b70a2f975",
+      "role": "Other-author test corrected import com.zoutrankil.data.domain.JobDefinitionJson; 12 methods remain"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewWriteRejectionTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewWriteRejectionTest.java",
+      "sha256": "97793dd6836a76aa1714faadb529e2090126208128d69924f81a8844f5ab2aeb",
+      "role": "Root test added com.zoutrankil.data.repository.DatasetWritePreparation import; 2 methods remain"
+    }
+  ],
+  "bindings": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/JobDefinitionJson.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/JobDefinitionJson.java",
+      "sha256": "f97fd8d9202b9ab29367922fa083d46cc2a1a0f98ff5c8b7891ecdf160ecfbaf",
+      "role": "Actual public domain JSON class resolves corrected mapping-test import"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/DatasetWritePreparation.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/DatasetWritePreparation.java",
+      "sha256": "a98950cbf18569f039158a98370504860f5bdfa213fd487e4f162e604c7c4621",
+      "role": "Actual public repository preparation class resolves corrected write-rejection test import"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-20261007.log",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/java-pure-tests-20261007.log",
+      "sha256": "3da8fa536d3e7d7237da40e4150d932b0bff7120815b75da94e9188505003b7b",
+      "role": "Root external first compile failure log preserved; five import compilation errors, no test execution in that attempt"
+    }
+  ],
+  "correction": "First root compile attempt failed with five errors in these two test imports. Root corrected the imports only. The two test source files remain 12 and 2 unique methods; production behavior conclusions are unchanged. First failure evidence is not overwritten.",
+  "execution": {
+    "reviewer_tests_run": 0,
+    "reviewer_gradle_runs": 0,
+    "reviewer_database_queries": 0,
+    "reviewer_native_queries": 0,
+    "second_root_run": "In progress at record creation; no passing count asserted here"
+  },
+  "document_binding_scope": "Original three draft bindings remain historical snapshots. Draft mapping contract test SHA must be refreshed by document author before final delivery to include this import correction.",
+  "recommendation": "No static blocker remains from these import corrections. Actual tests and D105 view acceptance remain root-managed and pending.",
+  "human_review": "PENDING",
+  "next_task_admitted": false,
+  "D106_admitted": false
+}

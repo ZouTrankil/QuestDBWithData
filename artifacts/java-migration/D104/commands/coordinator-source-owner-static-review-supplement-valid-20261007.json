@@ -1,0 +1,175 @@
+{
+  "task_id": "D104",
+  "protocol_version": 1,
+  "status": "PASS",
+  "review_kind": "independent file-only other-author source/adapter/job final supplement",
+  "recommendation": "accepted_for_coordinator_static_scope",
+  "blockers": [],
+  "findings": [],
+  "next_task_admission": false,
+  "reviewer_scope": {
+    "included": [
+      "MacroCoreMonthlySource",
+      "MacroCoreMonthlyMaterializeAdapter",
+      "MacroCoreMonthlyJobService",
+      "their three tests"
+    ],
+    "excluded_author_owned": [
+      "MacroCoreMonthly DTO/key/dataset",
+      "MacroCoreMonthlyMapper",
+      "MacroCoreMonthlyReadRepository",
+      "MacroCoreMonthlyWritePort",
+      "author-owned mapping/source/README documents"
+    ],
+    "independent_review_of_own_implementation": false
+  },
+  "bindings": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlySource.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/service/MacroCoreMonthlySource.java",
+      "sha256": "346d30361bd8b93716a8ed8fb3bbc515a90415b95656ada582619ee4b9633f7d"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyMaterializeAdapter.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyMaterializeAdapter.java",
+      "sha256": "e2159f02b82a635b2f9b62d599f0f1d4f5e1c084d83e44925839dcaa7227d354"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyJobService.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyJobService.java",
+      "sha256": "f94129a0ce97cc8d2eefb0f5ea2125b82ba9c7c5551584f2a849fbd857938d2b"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlySourceTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/service/MacroCoreMonthlySourceTest.java",
+      "sha256": "9c76589e1236b0783b454d458d46cf8c219c17352e1538fc11dd1534b8b0f14b"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyMaterializeAdapterTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyMaterializeAdapterTest.java",
+      "sha256": "d96dc39ec04bcf327035865bdf8f067b024d7bfb3474710adf4b17b2525adfb2"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyJobServiceTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyJobServiceTest.java",
+      "sha256": "f79959af6036671efe4948b27f7ef265225e88dc4fc3006773fdb6b13dfd9b71"
+    }
+  ],
+  "checks": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlySource.java",
+      "lines": "17-32,60-88,93-150,153-162",
+      "result": "PASS",
+      "detail": "Fixed six ordered full schemas; 12-month inclusive closed window, source LIMIT13 truncation sentinel, prior 12 real SF observations, total84 returned raw cap; exact typed UTC carriers and GDP quarter end, nullable finite raw doubles and all-field/signed-zero fingerprint; complete read shares 20-second deadline and before/after six-source physical vector."
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlySource.java",
+      "lines": "68-79,118-139",
+      "result": "PASS",
+      "detail": "NULL frontier remains NULL; only independently COUNT0, all WAL0, known physical/metadata frontier NULL or0 and stable metadata allows empty optional source. SF current/prior12th observation ratio has no scaling/fill; missing baseline NULL, zero/nonfinite reject; required6 withheld while GDP/SFYoY optional."
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyMaterializeAdapter.java",
+      "lines": "22-42,44-61,70-92",
+      "result": "PASS",
+      "detail": "AllDates exclusion does not enlarge finite fetch. Exact frozen definition/source vector/raw hash/target; one page, full bootstrap prefix target readback and stable target/source before complete. RECONCILE send wrapper performs SELECT only. Missing/duplicate/stale key or rawbits mismatch cannot return verified completion."
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyJobService.java",
+      "lines": "58-111,179-226",
+      "result": "PASS",
+      "detail": "Manual enabled non-daily default INCREMENTAL with no invented upstream JobRefs. Frozen resume forbids implicit replan; checkpoint original source fingerprint and saved full prefix verified against current target; changed old raw/context or identity returns bounded bootstrap while unchanged prefix uses one-month overlap."
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyJobService.java",
+      "lines": "122-177",
+      "result": "PASS",
+      "detail": "Dataset-wide pending/retained prepared publication guards; durable submitted single nonempty slice required for UNKNOWN reconciliation. Original same-instance writer stopped plus frozen full source/target/WAL repeated before state completion and lease release; new service/JVM lacks owned proof, source drift or incomplete target retains uncertainty. RUNNING attempt commit-gap and already-verified slice completion supported without resend."
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyJobService.java",
+      "lines": "28-31,109-111,136-144,232-235",
+      "result": "PASS",
+      "detail": "Decorative target snapshot errors preserve canonical persisted run result/status and expose error class; terminal success is distinct from current target observation."
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlySourceTest.java",
+      "lines": "47-157",
+      "result": "PASS",
+      "detail": "24 source methods cover units/no GDP carry/SF observation gaps/null/zero ratio/duplicates/raw fingerprint/budgets, exact source metadata and empty NULL frontier/count drift. Previously wrong-carrier fixture now directly calls derive; production checks unchanged."
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyMaterializeAdapterTest.java",
+      "lines": "39-87",
+      "result": "PASS",
+      "detail": "10 adapter methods cover whole-prefix-before-complete, old-prefix omissions, post-send source drift, exact keys/signed zero, read-only reconcile, cancellation/empty and required6 withholding."
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyJobServiceTest.java",
+      "lines": "24-145",
+      "result": "PASS",
+      "detail": "19 real SQLite runner lifecycle methods cover checkpoint append/source/context revision, target drift, month gaps, empty/frozen/cancelled resume, same-instance-only UNKNOWN, retained prepared lease and partial attempt commit-gap; no automatic resend."
+    }
+  ],
+  "prior_review": {
+    "path": "artifacts/java-migration/D104/commands/coordinator-current-java-static-review-supplement-20261007.json",
+    "sha256": "3a1dc97312ff19b497f40103de1bbe7b05f3828de9dc5b6dfef57618786008d7",
+    "preserved": true
+  },
+  "generation_diagnostic": {
+    "path": "artifacts/java-migration/D104/commands/coordinator-source-owner-static-review-supplement-20261007.json",
+    "sha256": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+    "status": "INVALID_NULL_JSON_PRESERVED",
+    "cause": "PowerShell unprefixed boolean constant during artifact construction; no implementation, database or runtime action."
+  },
+  "external_validation": {
+    "unique_other_author_pure_methods": 53,
+    "archived_xml": [
+      {
+        "path": "artifacts/java-migration/D104/commands/java-pure-tests-final-20261007/TEST-com.zoutrankil.data.service.MacroCoreMonthlySourceTest.xml",
+        "sha256": "604caaa8fe27199275aed2e7c7c89949be6a10cb33528d8e280b65cb0d39139b",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "execution": "external root execution; independently read archived XML only"
+      },
+      {
+        "path": "artifacts/java-migration/D104/commands/java-pure-tests-final-20261007/TEST-com.zoutrankil.data.service.MacroCoreMonthlyMaterializeAdapterTest.xml",
+        "sha256": "e76975740d54b5c6708fc19a6e4146a3899423742e7cc48214123669697f317e",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "execution": "external root execution; independently read archived XML only"
+      },
+      {
+        "path": "artifacts/java-migration/D104/commands/java-pure-tests-final-20261007/TEST-com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest.xml",
+        "sha256": "3658342177ced780a6eed6ff4ac1a68d05488010d9063b18a34b24fbf1d21ad7",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "execution": "external root execution; independently read archived XML only"
+      }
+    ],
+    "executed_by_reviewer": false
+  },
+  "actions": {
+    "file_reads": true,
+    "new_artifact_write": true,
+    "implementation_edits": false,
+    "gradle": false,
+    "tests": false,
+    "database": false,
+    "native_process_checks": false,
+    "owner": false
+  },
+  "limitations": [
+    "Static scope supplements prior root wiring review; no claim of independently executing live acceptance.",
+    "Production Source/Adapter/Job and tests only; own DTO/storage excluded and separately reviewed by sibling.",
+    "Source revision and UNKNOWN same-instance recovery are pure-test boundaries, not actual source revision/recovery claims in D104.",
+    "No formal writer/full history/provider completeness/upstream migration or D105 admission."
+  ],
+  "checked_at": "2026-10-06T17:23:40.1674835Z"
+}

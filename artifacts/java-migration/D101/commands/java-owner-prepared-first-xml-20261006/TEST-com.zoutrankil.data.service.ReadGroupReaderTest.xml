@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.ReadGroupReaderTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-06T09:27:56.163Z" hostname="AMD395" time="0.01">
+  <properties/>
+  <testcase name="cancellationPreservesCompletedPageAndDoesNotReadLaterMembers()" classname="com.zoutrankil.data.service.ReadGroupReaderTest" time="0.006"/>
+  <testcase name="failuresRemainDistinctFromEmptyPagesAndDoNotHideOtherMembers()" classname="com.zoutrankil.data.service.ReadGroupReaderTest" time="0.002"/>
+  <testcase name="heterogeneousRowsKeepTheirOwnQueriesVersionsAndCursors()" classname="com.zoutrankil.data.service.ReadGroupReaderTest" time="0.001"/>
+  <testcase name="duplicateMembersAndUnboundedAggregateRequestsAreRejected()" classname="com.zoutrankil.data.service.ReadGroupReaderTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

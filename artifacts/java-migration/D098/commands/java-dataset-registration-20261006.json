@@ -1,0 +1,163 @@
+{
+  "registeredDatasets": 47,
+  "definition": {
+    "datasetId": "mv_retail_sentiment_daily_v1",
+    "schemaVersion": 1,
+    "provider": "python.derived.market_barometer_views",
+    "owner": "retail_sentiment_daily_owner",
+    "objectName": "mv_retail_sentiment_daily_v1",
+    "objectKind": "MATERIALIZED_VIEW",
+    "columns": [
+      {
+        "sourceName": "l2_daily_features.ts",
+        "logicalName": "trade_date",
+        "storageName": "trade_date",
+        "storageType": "TIMESTAMP",
+        "nullable": false,
+        "meaning": "Calendar-day bucket identity; no event-time conversion",
+        "temporal": {
+          "kind": "BUSINESS_DATE",
+          "sourceFormat": "BASIC",
+          "zone": "calendar",
+          "precision": "DAY",
+          "meaning": "SAMPLE BY 1d ALIGN TO CALENDAR of l2_daily_features.ts; exact UTC midnight date carrier"
+        },
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:avg(gmm_retail_ratio)",
+        "logicalName": "avg_retail_ratio",
+        "storageName": "avg_retail_ratio",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Arithmetic mean of GMM retail volume ratio; dimensionless",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:avg(mean_retail_entropy)",
+        "logicalName": "avg_retail_entropy",
+        "storageName": "avg_retail_entropy",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Arithmetic mean of retail Shannon time entropy in bits",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:sum(retail_total_amount)/100000000.0",
+        "logicalName": "total_retail_amount_yi",
+        "storageName": "total_retail_amount_yi",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Retail turnover in yi yuan; source yuan divided by 100000000 exactly once",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:sum(retail_funds_net_inflow)/100000000.0",
+        "logicalName": "total_retail_net_inflow_yi",
+        "storageName": "total_retail_net_inflow_yi",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Signed retail net inflow in yi yuan; source yuan divided by 100000000",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:avg(mean_rel_aggro)",
+        "logicalName": "avg_rel_aggro",
+        "storageName": "avg_rel_aggro",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Arithmetic mean of relative buy/sell aggression; source metric scale retained",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:sum(q1_count)",
+        "logicalName": "total_q1",
+        "storageName": "total_q1",
+        "storageType": "LONG",
+        "nullable": true,
+        "meaning": "Sum of Q1 windows with net inflow and price rise; SQL SUM null stays null",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:sum(q3_count)",
+        "logicalName": "total_q3",
+        "storageName": "total_q3",
+        "storageType": "LONG",
+        "nullable": true,
+        "meaning": "Sum of Q3 windows with net outflow and price decline; SQL SUM null stays null",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:avg(wash_trade_ratio)",
+        "logicalName": "avg_wash_trade_ratio",
+        "storageName": "avg_wash_trade_ratio",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Arithmetic mean of wash trade ratio; dimensionless",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:sum(spoof_count)",
+        "logicalName": "total_spoof_count",
+        "storageName": "total_spoof_count",
+        "storageType": "LONG",
+        "nullable": true,
+        "meaning": "Sum of severe spoofing windows; SQL SUM null stays null",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:sum(fake_support_count+fake_pressure_count)",
+        "logicalName": "total_manipulation_count",
+        "storageName": "total_manipulation_count",
+        "storageType": "LONG",
+        "nullable": true,
+        "meaning": "Sum of rowwise fake support plus fake pressure counts; either null makes that row expression null",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:avg(mfi_score)",
+        "logicalName": "avg_mfi_score",
+        "storageName": "avg_mfi_score",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Arithmetic mean of main force intensity score; source score scale retained",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:sum(main_net_inflow)/100000000.0",
+        "logicalName": "total_main_net_yi",
+        "storageName": "total_main_net_yi",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Signed main net inflow in yi yuan; source yuan divided by 100000000",
+        "temporal": null,
+        "legacyNullSentinels": []
+      }
+    ],
+    "businessKey": [
+      "trade_date"
+    ],
+    "dedupKey": [],
+    "designatedTimestamp": "trade_date",
+    "partition": "MONTH",
+    "wal": true,
+    "capabilities": [
+      "READ"
+    ],
+    "dependencies": [
+      "l2_daily_features"
+    ],
+    "storageRationale": "One calendar-day aggregation is the natural business key. Native MV is MONTH/WAL without DEDUP or UPSERT keys. Direct row writes and replacements are forbidden; the canonical job provides bounded native MATERIALIZE. Read requires valid, caught-up refresh state and stable source and MV physical versions. Nullable SUM/AVG results are retained without zero filling or additional unit conversion."
+  }
+}

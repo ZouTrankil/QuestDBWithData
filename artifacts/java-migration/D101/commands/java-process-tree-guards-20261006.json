@@ -1,0 +1,39 @@
+{
+  "database_mutations": 0,
+  "errors": 0.0,
+  "status": "PASS",
+  "log_path": "artifacts/java-migration/D101/commands/java-process-tree-guards-20261006.log",
+  "source_mutations": 0,
+  "skipped": 0.0,
+  "checked_at": "2026-10-06T10:01:22.5320545Z",
+  "task_id": "D101",
+  "failures": 0.0,
+  "classes": [
+    {
+      "skipped": 0,
+      "tests": 33,
+      "xml_sha256": "ae3c7836ed19995b57beb94f8845e5b9a029cea6903c43dd55c97cebb16e4623",
+      "errors": 0,
+      "failures": 0,
+      "class": "com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest"
+    },
+    {
+      "skipped": 0,
+      "tests": 21,
+      "xml_sha256": "68673ec6d1fdbc4abde36e429f99c4bf58ed7189eb8010577507fa999c553d76",
+      "errors": 0,
+      "failures": 0,
+      "class": "com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest"
+    },
+    {
+      "skipped": 0,
+      "tests": 8,
+      "xml_sha256": "b70ff457c6ccbefce2640a257adf8e1a3bcb28e9d94a373a066349c390d5619e",
+      "errors": 0,
+      "failures": 0,
+      "class": "com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest"
+    }
+  ],
+  "log_sha256": "525454ac1791817c0dc25320dda56931f896e2277b096b50b8989871f7fce1ab",
+  "tests": 62.0
+}

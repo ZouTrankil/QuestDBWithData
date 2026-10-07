@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-06T07:51:29.549Z" hostname="AMD395" time="0.084">
+  <properties/>
+  <testcase name="recreatedViewOrBaseCannotReuseMatchingTransactionCounters()" classname="com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest" time="0.029"/>
+  <testcase name="fixedNativeMvSqlAllowsOnlyWhitespaceAndCaseNormalization()" classname="com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest" time="0.01"/>
+  <testcase name="missingPhysicalVersionFailsBeforeFetchingRows()" classname="com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest" time="0.003"/>
+  <testcase name="independentPhysicalAndWalCountersAreAcceptedWhenWalIsSettled()" classname="com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest" time="0.004"/>
+  <testcase name="rangeRefreshBetweenPagesRejectsCursorEvenWithTheSameBaseCheckpoint()" classname="com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest" time="0.008"/>
+  <testcase name="sameNameFreshMvWithWrongBaseOrAggregationFailsOnItsFirstPage()" classname="com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest" time="0.003"/>
+  <testcase name="fullRefreshDuringReadRejectsThePageEvenWithTheSameBaseCheckpoint()" classname="com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest" time="0.005"/>
+  <testcase name="stableSnapshotBindsCursorToBaseAndPhysicalMvIdentityAndVersion()" classname="com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest" time="0.005"/>
+  <testcase name="invalidLaggingOrUnappliedWalStatesFailBeforeFetchingRows()" classname="com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest" time="0.013"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

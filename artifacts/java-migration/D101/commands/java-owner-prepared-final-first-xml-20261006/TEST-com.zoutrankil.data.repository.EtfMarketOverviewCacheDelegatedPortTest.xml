@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2026-10-06T09:38:02.496Z" hostname="AMD395" time="1.49">
+  <properties/>
+  <testcase name="cancellationBeforeBoundaryNeverInvokesOwner()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.593"/>
+  <testcase name="constructorAndBindPerformNoIoAndUnknownAnchorPreflightIsReadonly()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.019"/>
+  <testcase name="exactCodecExcludesLegalTargetTxnAndPreviewNonceButKeepsAllBusinessValues()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.008"/>
+  <testcase name="unknownAckStaysInDoubtUntilExplicitRunScopedStoppedProof()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.046"/>
+  <testcase name="sourceTxnSeqOrIdentityChangeIsRejectedEvenWhenSourceGenerationMatches()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.531"/>
+  <testcase name="missingCacheAndAlteredCountOrReceiptDigestAreRejected()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.014"/>
+  <testcase name="nullTargetMetadataNeedsIndependentCountZeroAndRemainsNullBeforeFirstWrite()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.039"/>
+  <testcase name="targetCanAdvanceOwnSettledTxnButCannotRebuildOrRegress()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.029"/>
+  <testcase name="failedTerminationProofDoesNotBecomeAcknowledged()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.011"/>
+  <testcase name="knownEmptyRequiresExactZeroReceiptAndActualCacheAbsence()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.007"/>
+  <testcase name="mismatchedRequestedCompleteKeyRejectedBeforeIo()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.008"/>
+  <testcase name="pendingBufferedOrSuspendedSourceAndTargetFailBeforeOwner()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.044"/>
+  <testcase name="nullTargetCanBecomeNonNullButInitializedTargetCannotReturnToNull()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.023"/>
+  <testcase name="exactCodecDistinguishesNullableDoubleAndRawSignedZero()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.006"/>
+  <testcase name="duplicateCompleteKeysAndPhysicalRaceCannotReturnVerifiedRows()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.01"/>
+  <testcase name="preparedCallerRequiresCurrentGenerationAndAllFiveValues()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.012"/>
+  <testcase name="nullTargetCountNonzeroOrChangedMetadataRejectsBeforePublication()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.025"/>
+  <testcase name="sendRequiresDurableHookAndOneKnownUnit()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.012"/>
+  <testcase name="metadataAcceptsPythonIntNodesAndPgLongsWithoutComparingTableTxnToWal()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.02"/>
+  <testcase name="readbackRequiresReceiptAndFullRawBitsCacheValues()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.006"/>
+  <testcase name="knownSuccessfulDelegationCallsOriginalGatewayExactlyOnce()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.01"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" tests="18" skipped="0" failures="0" errors="0" timestamp="2026-10-06T09:27:27.259Z" hostname="AMD395" time="1.474">
+  <properties/>
+  <testcase name="cancellationBeforeBoundaryNeverInvokesOwner()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.619"/>
+  <testcase name="constructorAndBindPerformNoIoAndUnknownAnchorPreflightIsReadonly()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.018"/>
+  <testcase name="exactCodecExcludesLegalTargetTxnAndPreviewNonceButKeepsAllBusinessValues()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.008"/>
+  <testcase name="unknownAckStaysInDoubtUntilExplicitRunScopedStoppedProof()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.051"/>
+  <testcase name="sourceTxnSeqOrIdentityChangeIsRejectedEvenWhenSourceGenerationMatches()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.548"/>
+  <testcase name="missingCacheAndAlteredCountOrReceiptDigestAreRejected()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.009"/>
+  <testcase name="targetCanAdvanceOwnSettledTxnButCannotRebuildOrRegress()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.038"/>
+  <testcase name="failedTerminationProofDoesNotBecomeAcknowledged()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.012"/>
+  <testcase name="knownEmptyRequiresExactZeroReceiptAndActualCacheAbsence()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.006"/>
+  <testcase name="mismatchedRequestedCompleteKeyRejectedBeforeIo()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.009"/>
+  <testcase name="pendingBufferedOrSuspendedSourceAndTargetFailBeforeOwner()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.056"/>
+  <testcase name="exactCodecDistinguishesNullableDoubleAndRawSignedZero()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.007"/>
+  <testcase name="duplicateCompleteKeysAndPhysicalRaceCannotReturnVerifiedRows()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.01"/>
+  <testcase name="preparedCallerRequiresCurrentGenerationAndAllFiveValues()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.014"/>
+  <testcase name="sendRequiresDurableHookAndOneKnownUnit()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.012"/>
+  <testcase name="metadataAcceptsPythonIntNodesAndPgLongsWithoutComparingTableTxnToWal()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.024"/>
+  <testcase name="readbackRequiresReceiptAndFullRawBitsCacheValues()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.008"/>
+  <testcase name="knownSuccessfulDelegationCallsOriginalGatewayExactlyOnce()" classname="com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest" time="0.009"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

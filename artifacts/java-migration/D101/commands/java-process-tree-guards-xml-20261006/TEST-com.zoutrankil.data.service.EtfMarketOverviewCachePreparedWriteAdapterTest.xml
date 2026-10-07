@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-10-06T10:00:45.255Z" hostname="AMD395" time="0.741">
+  <properties/>
+  <testcase name="oldSourceGenerationFailsBeforeSend()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.12"/>
+  <testcase name="duplicateDayDifferentGenerationAndWindowOverflowAreRejected()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.018"/>
+  <testcase name="canonicalPreparedDefinitionAdmitsOnlyBoundedIngest()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.013"/>
+  <testcase name="wrongFiveFieldCallerAssertionFailsBeforeAnyOwnerSend()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.023"/>
+  <testcase name="realPersistentGroupBindsEveryPublicationToCanonicalInputAndSubmittedAuthority()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.513"/>
+  <testcase name="sourceVectorChangeAcrossPreparedRowsStopsAllSubmissions()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.02"/>
+  <testcase name="signedZeroCannotBeChangedByCaller()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.015"/>
+  <testcase name="missingSourceDayDoesNotInventPreparedCacheOrReceipt()" classname="com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest" time="0.015"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

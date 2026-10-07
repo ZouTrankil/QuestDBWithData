@@ -1,0 +1,64 @@
+{
+  "task_id": "D104",
+  "decision": "accepted_for_bounded_initial_source_preparation",
+  "checked_at": "2026-10-06T16:19:11.3008499+00:00",
+  "execution_mode": "direct_local_serial",
+  "scope": "Only real June/July source23rows plus SF12-observation context into six missing tables of dedicated private server; six one-shot CREATE and six one-shot INSERT. No output/formal writes, retry, materializer or initial rerun.",
+  "script_sha256": "23389881d8c6b8401dfb8b482378f6cdbe911f79e0b72269e46dcc6573388922",
+  "preflight_sha256": "fc4b839c44254aee9f221e1246c5279738cf33704eb12749f2f70691347f530b",
+  "private_server": {
+    "root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-isolated-questdb",
+    "http": 19040,
+    "birth_utc": "2026-10-06T16:04:24.4330550Z",
+    "pid": 43084,
+    "pg": 18852
+  },
+  "pure_python_guards": {
+    "fixture": 35,
+    "failures": 0,
+    "preflight": 44
+  },
+  "reviewed_controls": [
+    "Frozen complete six-source files/rawbits and original AST oracle",
+    "Native server root/PID/birth and originalproducer pre-IO identity at each boundary",
+    "Fixed durable UNKNOWN claims before one HTTP operation",
+    "Raw HTTP ACK bytes fsynced before parse, DDL and DML response shapes separate",
+    "Entire full-source readback+known ACK+stable WAL and all protected outputs/formal unchanged",
+    "No retries or replacement; failure preserves现场"
+  ],
+  "bindings": [
+    {
+      "sha256": "245607f62dd3366746c712839351ecfc8d302a95c4a8f5d1e16125acbe676f91",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\preflight_d104_macro_core_readonly.py"
+    },
+    {
+      "sha256": "23389881d8c6b8401dfb8b482378f6cdbe911f79e0b72269e46dcc6573388922",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d104_macro_core_isolated.py"
+    },
+    {
+      "sha256": "2415b1d8bd5c96d284af5a29be639abf5a048997c1204c3fd12a1c8eeedd733a",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d104_preflight_guards.py"
+    },
+    {
+      "sha256": "579db8c151e76af692b1e30523d481f80e33c8a691973eddf0ddad0ab944a22a",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d104_fixture_guards.py"
+    },
+    {
+      "sha256": "fc4b839c44254aee9f221e1246c5279738cf33704eb12749f2f70691347f530b",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007.json"
+    },
+    {
+      "sha256": "9dccda7261b680798924e7632c4f8dd646c15e8f0442e737b80ba701f36f51f7",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\private-server-start-20261007.json"
+    },
+    {
+      "sha256": "03885416258116828faaffa6882f622ba1b38da28903599f19993a4510069695",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\python-preflight-guards-20261007.log"
+    },
+    {
+      "sha256": "7c25a06597cb50237121ff6de87fb8b4b274161c1c2e34984fd7e003546f35f7",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\python-initial-fixture-guards-20261007.log"
+    }
+  ],
+  "human_review": "pending_review"
+}

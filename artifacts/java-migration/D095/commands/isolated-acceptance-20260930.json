@@ -1,0 +1,114 @@
+{
+  "target_id": "local-isolated-127.0.0.1:19000",
+  "range": [
+    "2026-09-17",
+    "2026-09-19"
+  ],
+  "formal_mutated": false,
+  "questdb_version": "10.0.1",
+  "source_rows": 11105,
+  "source_key_count": 11105,
+  "formal_daily_aggregate": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "stock_count": 5552,
+      "up_count": 2575,
+      "down_count": 2820,
+      "flat_count": 157,
+      "avg_pct_change": 0.12166565201729085,
+      "total_amount_yi": 18343.331240500058
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4234,
+      "down_count": 1152,
+      "flat_count": 167,
+      "avg_pct_change": 1.5667630109850548,
+      "total_amount_yi": 20929.055246700013
+    }
+  ],
+  "isolated_source_rows": 11105,
+  "initial_value_comparisons": 12,
+  "initial_status": {
+    "view_status": "valid",
+    "invalidation_reason": null,
+    "refresh_base_table_txn": 2,
+    "base_table_txn": 2
+  },
+  "initial_mv_rows": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "stock_count": 5552,
+      "up_count": 2575,
+      "down_count": 2820,
+      "flat_count": 157,
+      "avg_pct_change": 0.12166565201729095,
+      "total_amount_yi": 18343.331240500032
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4234,
+      "down_count": 1152,
+      "flat_count": 167,
+      "avg_pct_change": 1.5667630109850548,
+      "total_amount_yi": 20929.055246700038
+    }
+  ],
+  "isolated_update_key": {
+    "trade_date": "2026-09-17",
+    "ts_code": "000001.SZ"
+  },
+  "invalid_status": {
+    "view_status": "invalid",
+    "invalidation_reason": "update operation",
+    "refresh_base_table_txn": 2,
+    "base_table_txn": 3
+  },
+  "restored_status": {
+    "view_status": "valid",
+    "invalidation_reason": null,
+    "refresh_base_table_txn": 3,
+    "base_table_txn": 3
+  },
+  "restored_value_comparisons": 12,
+  "restored_mv_rows": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "stock_count": 5552,
+      "up_count": 2575,
+      "down_count": 2820,
+      "flat_count": 157,
+      "avg_pct_change": 0.12166565201729095,
+      "total_amount_yi": 18343.331250500032
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4234,
+      "down_count": 1152,
+      "flat_count": 167,
+      "avg_pct_change": 1.5667630109850548,
+      "total_amount_yi": 20929.055246700038
+    }
+  ],
+  "isolated_table_metadata": [
+    {
+      "table_name": "mv_market_breadth_daily_v1",
+      "table_row_count": 2,
+      "partitionBy": "MONTH",
+      "walEnabled": true,
+      "dedup": false,
+      "table_txn": 5
+    },
+    {
+      "table_name": "stk_factor",
+      "table_row_count": 11105,
+      "partitionBy": "MONTH",
+      "walEnabled": true,
+      "dedup": true,
+      "table_txn": 3
+    }
+  ]
+}

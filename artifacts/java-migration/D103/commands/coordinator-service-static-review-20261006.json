@@ -1,0 +1,294 @@
+{
+  "task": "D103",
+  "record_date": "2026-10-06",
+  "status": "PASS",
+  "review_method": "independent_static_file_only",
+  "recommendation": "ready_for_root_bounded_verification",
+  "blockers": [],
+  "review_scope": [
+    "Other-author source derivation, materialize adapter and canonical job lifecycle",
+    "Root dedicated TABLE read guard and shared reader integration",
+    "Root dataset/read/write registrations and management CLI",
+    "Relevant source/adapter/job/read-guard/typed-write pure test assertions, inspected without execution"
+  ],
+  "independence_exclusions": [
+    "Reviewer-authored EquityStyleMonthly DTO, key, dataset, mapper, read repository and write port are not claimed as independently reviewed implementations",
+    "Reviewer-authored source-contract artifact is cited only as mapping investigation basis"
+  ],
+  "operations": {
+    "database_queries": 0,
+    "database_writes": 0,
+    "cim_or_native_process_queries": 0,
+    "owner_invocations": 0,
+    "gradle_or_test_executions": 0,
+    "implementation_edits": 0,
+    "new_review_files": 1
+  },
+  "checks": [
+    {
+      "id": "source_contract",
+      "result": "PASS",
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlySource.java",
+      "lines": [
+        16,
+        26,
+        53,
+        107,
+        116,
+        149,
+        176
+      ],
+      "detail": "Fixed 16 legacy codes and full 14 ordered upstream fields are frozen; literal bounded SQL uses validated identifiers and LocalDate only. Twelve-month/6200-row budgets, exact UTC carriers, finite nullable values, before/after source physical snapshots and full raw-value fingerprint are enforced. Duplicate code/date keys are refused; last non-null by strictly ordered source date preserves legacy pivot semantics. Absolute returns retain percent and spreads percentage points, without rescaling."
+    },
+    {
+      "id": "closed_contiguous_incremental",
+      "result": "PASS",
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlySource.java",
+      "lines": [
+        154,
+        162,
+        164,
+        174
+      ],
+      "detail": "All modes end before the logical-date month. INCREMENTAL requires every month from bootstrap through to with all 16 source return cells finite and non-null. Legacy nullable derivation remains available for bounded historical MATERIALIZE; it is not silently promoted to complete incremental coverage."
+    },
+    {
+      "id": "canonical_full_prefix_verification",
+      "result": "PASS",
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlyMaterializeAdapter.java",
+      "lines": [
+        22,
+        23,
+        42,
+        44,
+        60,
+        62,
+        81
+      ],
+      "detail": "All-date conflict exclusion protects the shared table while fetch remains bounded. One actual page is submitted through the shared runner. After its consumer returns, complete bootstrap-to-end actual target values, source identity/raw hash and target WAL/frontier stability are rechecked before fetch completes and the owning run can become VERIFIED. RECONCILE's port performs SELECT verification rather than sender publication."
+    },
+    {
+      "id": "checkpoint_prefix_and_revision",
+      "result": "PASS",
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlyJobService.java",
+      "lines": [
+        76,
+        98,
+        181,
+        208
+      ],
+      "detail": "A checkpoint candidate must match actual job/version/target/bootstrap, its single verified slice, nested page/source fingerprints, and complete frozen prefix evidence. Only closed contiguous 16-return prefixes are eligible, including eligible verified history from another mode. Actual old-prefix target values are read again; a changed old-prefix source raw hash, derived values or physical identity marks revision and restarts from bootstrap. Unchanged prefix retains bounded overlap rather than skipping all prefix verification."
+    },
+    {
+      "id": "durable_lifecycle_and_pending_exclusion",
+      "result": "PASS",
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlyJobService.java",
+      "lines": [
+        100,
+        118,
+        123,
+        145
+      ],
+      "detail": "Run/resume uses frozen requests and the canonical SQLite runner; changed frozen sources are rejected rather than silently replanned. Plan and prepared writes refuse retained shared-dataset leases or pending submissions/runs. Cancel is durable management; decorative target snapshot errors preserve the actual persisted run result and run ID."
+    },
+    {
+      "id": "honest_uncertain_recovery",
+      "result": "PASS",
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlyJobService.java",
+      "lines": [
+        146,
+        178
+      ],
+      "detail": "Recovery requires the original same-instance publication object and actual sender termination, exact frozen identity, full current source/target parity, stable WAL and its retained all-date in-doubt lease. Exactly one original submitted page is required. A partially committed VERIFIED slice/run remains reentrant. ATTEMPT RUNNING or IN_DOUBT can complete only after the full proof and verified slice via existing ledger guards. Source/target/stop proof is repeated after transitions before releasing exclusion. A new JVM cannot invent original writer-stop proof and must retain uncertainty."
+    },
+    {
+      "id": "table_read_snapshot_and_bounds",
+      "result": "PASS",
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbEquityStyleReadGuard.java",
+      "lines": [
+        16,
+        42,
+        50,
+        93,
+        96,
+        116
+      ],
+      "detail": "Dedicated equity-style policy requires the exact registered 30-field TABLE definition, first-of-month LocalDate key/range, at most 12 months and page size 12 before JDBC. It verifies ordered schema, designated/upsert month, YEAR/WAL/DEDUP/no-MV flags and settled physical/WAL frontiers. Actual ID/directory/transaction/sequence vectors bind cursors and reads before/after; every metadata SQL has its own finite timeout and row cap."
+    },
+    {
+      "id": "shared_read_registration",
+      "result": "PASS",
+      "paths": [
+        "src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+        "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+        "src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java"
+      ],
+      "lines": {
+        "QuestDbBoundedReader.java": [
+          57,
+          136,
+          137,
+          426
+        ],
+        "ReadGroupConfiguration.java": [
+          68,
+          73
+        ],
+        "DatasetConfiguration.java": [
+          33
+        ]
+      },
+      "detail": "Both read and prepare invoke the dedicated early D103 guard. Configured typed bindings use the explicit mapper and no caller-supplied snapshot substitute; actual physical metadata controls the cursor version. The existing source dependency definition remains explicit."
+    },
+    {
+      "id": "prepared_typed_write_preflight",
+      "result": "PASS",
+      "path": "src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
+      "lines": [
+        249,
+        256,
+        548,
+        560
+      ],
+      "detail": "D103 mapper and requireBatch run before target resolution and durable group planning, so over-12-row batches, duplicate/malformed keys and all-null timestamp-only ILP rows fail before SUBMITTED. Typed INGEST subsequently uses the same isolated port, exact codec and shared prepared runner; no independent formal writer is introduced. Unlike D101 delegated assertions, D103 typed writes accept explicitly supplied valid 30-field values within this isolated contract."
+    },
+    {
+      "id": "public_management_commands",
+      "result": "PASS",
+      "path": "src/main/java/com/zoutrankil/data/cli/EquityStyleMonthlyCommands.java",
+      "lines": [
+        1
+      ],
+      "detail": "Registered finite plan/run/status/cancel/resume/reconcile/install command dispatch uses exact supported options and requires explicit bounded dates/mode as applicable. Installation remains a separate management operation. Incomplete run outcomes retain their printed persisted result and cause command failure rather than claiming verified completion. D022 upstream job references use the actual owner constants."
+    }
+  ],
+  "resolved_findings": [
+    {
+      "issue": "Incremental checkpoint could cross a missing month or nullable required-code month",
+      "resolution": "Closed-month and exact contiguous all-16-source-return coverage enforced at plan/preflight and checkpoint eligibility"
+    },
+    {
+      "issue": "Typed WRITE over-budget/all-null payload could be rejected only after SUBMITTED",
+      "resolution": "Root D103 mapper/requireBatch validation added before target resolution and group planning"
+    },
+    {
+      "issue": "Reconciliation could be stuck after partial slice/run verification commits",
+      "resolution": "Same-instance exact-proof reconciliation is reentrant for verified records with retained in-doubt lease, with fresh frontier checks before release"
+    },
+    {
+      "issue": "Checkpoint page fingerprint omitted the inner source/raw hash",
+      "resolution": "Nested hash now matches the actual adapter page fingerprint and verifies FETCHED plus original slice proof"
+    },
+    {
+      "issue": "Attempt IN_DOUBT transaction failure could leave durable ATTEMPT RUNNING",
+      "resolution": "Existing legal RUNNING-to-VERIFIED attempt transition is admitted only after original submitted slice and full source/target/stop proof; new real SQLite regression covers this state"
+    }
+  ],
+  "limitations": [
+    "This record is static review only; it does not claim compilation, test success, actual publication, database acceptance or provider readiness.",
+    "Twenty-second SQL/visibility bounds are per operation and runner boundaries; they are not a new hard total-work deadline. The job timeout remains the existing five-minute contract.",
+    "Unknown publication from another JVM cannot be cleared by a caller boolean or automatically resent. Durable uncertainty and shared-table exclusion remain until real original stopped-writer evidence is available.",
+    "Global source history, provider universe completeness, historical point-in-time correctness, formal writer promotion and application caller cutover are outside this review.",
+    "Legacy nullable MATERIALIZE output and complete INCREMENTAL coverage have distinct admissibility rules. Only complete closed verified prefixes can become checkpoint candidates.",
+    "An unchanged incremental prefix can resend its bounded overlap month; all-date exclusion does not expand its source or row budget.",
+    "Root actual missing-only setup requires its separate durable CREATE intent/claim evidence; this static review does not authorize a retry of unknown DDL.",
+    "Own DTO/mapper/repository/port implementation must be reviewed by another author and actual finite acceptance must be executed by the root coordinator."
+  ],
+  "actual_acceptance_admitted": false,
+  "next_task_admitted": false,
+  "human_acceptance": "pending",
+  "bindings": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlySource.java",
+      "sha256": "4ec7c9b429ac1d9d34e3c104842abb966091598f3e9785576dfd115e12da8b38"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlyMaterializeAdapter.java",
+      "sha256": "705e0f179b22043f816ab3718140a16de6951aefea858b948348408f795ee7de"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlyJobService.java",
+      "sha256": "8382266e67d04a102ea0d771244556766a23fa783ac0fe0cfce5ad631163d174"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbEquityStyleReadGuard.java",
+      "sha256": "870bc19e88fd2c46f943f3df0eb4d4594212ae94b4f8dc990a1c804545d2f1dc"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+      "sha256": "935a5e9dbc3a185b80cf69e0bdcded60db61f9fd614e8215a28664e1626e2117"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
+      "sha256": "22d249ca75b623db137e80b406b2cbc66728c495396cef313e71d15631b72c36"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+      "sha256": "4fefb426c4d63a3e8602ce93eaab8fbce47cc760035e46fb31afcad7dff83e7b"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/cli/EquityStyleMonthlyCommands.java",
+      "sha256": "09c6a797ccacec72521e7a95e3cacbbdc3e45ac7bdd4b385381ebcd200d72d84"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/cli/CommandLineRunner.java",
+      "sha256": "4df35dd41cb84a06de0c129ec5c7e3b98f56de99a369de3c117f01ff9533469d"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
+      "sha256": "d41d66a1db4e563da918d126f9f0da768734d94f6d1174ae2e3a5457551fe1fd"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/SyncJobRunner.java",
+      "sha256": "b42149cf76025559edcad56886e0bdf498e3cf975156e572bf7b9f01e70d1414"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/PreparedWriteAdapter.java",
+      "sha256": "91c316e03b3344e63782f5aee205b5c3421bf33f98644c2d17d4116d66e26f97"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/WriteGroupPlan.java",
+      "sha256": "46a84c7ec02d6b5a078caf99465fa8bd610f69bb58e3e5e80cae9fd65bb8f6f7"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/SyncRunLedger.java",
+      "sha256": "c6fd1a2ee39b3ba0def7b7000e511abf7bdbe15004752fcba09a4c1ea39a298e"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/SyncRunState.java",
+      "sha256": "f382651cd18a2a56b2fca52419b1eb042a7033884c635427cbd4f73afdc4089d"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/IndexMonthlyDataset.java",
+      "sha256": "4b21a015626993a588fff04ac95c9d57dc5d76d0a15360482e866fa6f0b56f33"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/IndexMonthlySyncJobOwner.java",
+      "sha256": "6439908cfb8c3c729dd0b32ea546069c83c8a8d5316f77424c5f8675c049bab8"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/EquityStyleMonthlySourceTest.java",
+      "sha256": "313e403da0b666d10b137218bf3c551b8c7f0cba1b79c77b6aec64c17c3d2d7e"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/EquityStyleMonthlyMaterializeAdapterTest.java",
+      "sha256": "267101cae5cb1bba97ee2a897186add334d762678ccf0a124e11df22abdf97bb"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/EquityStyleMonthlyJobServiceTest.java",
+      "sha256": "e3cb5626e028605e07bc0ec63feeb76576dc150f789c4236ee4b6c183d665cd1"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/EquityStyleMonthlyWriteGroupPreflightTest.java",
+      "sha256": "3f8670463d670f1c494b8923e9c9977ee2e5c80f56beb2b68c33c3ba797b401c"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/repository/QuestDbEquityStyleReadGuardTest.java",
+      "sha256": "775af7a2dc5edeb5f31b915f54473d95103039a90fffb88c87f1085785499288"
+    },
+    {
+      "path": "artifacts/java-migration/D103/source-contract-20261006.json",
+      "sha256": "9a7bd7cf8bae8b96296bf305a909a4eee3153ebf14de0b155eb365a4f7995405"
+    }
+  ]
+}

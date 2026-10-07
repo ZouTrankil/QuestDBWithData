@@ -1,0 +1,27 @@
+{
+  "protocol_version": 1,
+  "task_id": "D103",
+  "invocation_id": "085ac0f1-db2b-4015-9fec-d997f709da32",
+  "kind": "SOURCE_CREATE",
+  "table": "index_monthly",
+  "sql": "CREATE TABLE index_monthly (ts_code SYMBOL,trade_date TIMESTAMP,close DOUBLE,open DOUBLE,high DOUBLE,low DOUBLE,pre_close DOUBLE,change DOUBLE,pct_chg DOUBLE,vol DOUBLE,amount DOUBLE,layer SYMBOL,bucket SYMBOL,update_time TIMESTAMP) TIMESTAMP(trade_date) PARTITION BY YEAR WAL",
+  "sql_sha256": "c42de35725d54436290964f6de929eb2fd0aa38303e5cee4d14d766ef1200066",
+  "rows": 0,
+  "ack": "ACKNOWLEDGED",
+  "attempted": true,
+  "private_target": {
+    "pid": 41560,
+    "birth_utc": "2026-10-06T14:15:29.5834980Z",
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19030,
+    "pg_port": 18842
+  },
+  "created_at": "2026-10-06T14:42:02.566966+00:00",
+  "automatic_retry": false,
+  "attempt_started_at": "2026-10-06T14:42:05.546433+00:00",
+  "ack_at": "2026-10-06T14:42:05.644235+00:00",
+  "response": {
+    "ddl": "OK"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "recordedAt" : "2026-10-07T08:38:39.499052700Z",
+  "status" : "SUCCESS",
+  "error" : null,
+  "wallSeconds" : 73.3193973,
+  "processCpuSeconds" : 331.984375,
+  "gcCount" : 56,
+  "gcMillis" : 6453,
+  "heapPeakBytes" : 15149826048,
+  "rssPeakBytes" : 17476018176,
+  "jvmLifetimeRssPeakBytes" : 17476030464,
+  "heapMaxBytes" : 25769803776,
+  "jvmArgs" : [ "--enable-native-access=ALL-UNNAMED", "-Xms1g", "-Xmx24g" ],
+  "nativeArgs" : [ "--source-root", "var/l2-performance-validation/raw", "--dates", "20260928,20260929,20260930", "--output-root", "var/l2-performance-validation/batch-real", "--workers", "4", "--resume", "true" ],
+  "includes" : [ "CSV parsing", "P0-P13", "input SHA256 before and after computation", "per-symbol atomic fsync checkpoint", "daily manifest and ordered JSONL aggregation" ]
+}

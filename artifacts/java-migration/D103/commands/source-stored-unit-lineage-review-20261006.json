@@ -1,0 +1,1059 @@
+{
+  "protocol_version": 1,
+  "task_id": "D103",
+  "reviewed_at": "2026-10-06T14:57:02.199207+00:00",
+  "status": "VERIFIED_SOURCE_STORED_UNIT_LINEAGE_REVIEW",
+  "decision": "preserve_unconverted_source_stored_values_and_same_unit_differences",
+  "actions": {
+    "provider_requests": 0,
+    "DB_queries": 0,
+    "DB_mutations": 0,
+    "owner_invocations": 0,
+    "tests_or_Gradle": 0,
+    "production_code_changes": 0,
+    "reference_writes": 0
+  },
+  "source_model_declared_unit": "percent (legacy Python description and existing D022 metadata; these declarations are not numerical transformation code)",
+  "stored_input_output_unit": "unconverted source-stored pct_chg; the 48 bounded physical records and matching D022 raw provider response are ratio-like observed values",
+  "unit_policy": {
+    "divide_by_100": false,
+    "multiply_by_100": false,
+    "recalculate_return_from_close": false,
+    "base_features": "original stored pct_chg binary64 preserved",
+    "derived_spreads": "subtraction in the same source-stored unit",
+    "legacy_value_code": "000920.SH",
+    "legacy_growth_code": "000921.SH"
+  },
+  "preflight": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\equity-style-readonly-preflight-20261006.json",
+    "sha256": "61a3e91753074598b6db0d5bdc7867ff45d90d144628629a36316a0bf091b0db"
+  },
+  "source_capture": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\equity-style-readonly-preflight-20261006-source.jsonl",
+    "sha256": "03f01be342248eeb9a39cff91affb549da0b563c3224a71d9ad3b5687f6a9d82",
+    "rows": 48,
+    "ordered_physical_fields": [
+      "ts_code",
+      "trade_date",
+      "close",
+      "open",
+      "high",
+      "low",
+      "pre_close",
+      "change",
+      "pct_chg",
+      "vol",
+      "amount",
+      "layer",
+      "bucket",
+      "update_time"
+    ]
+  },
+  "prior_D022_raw_provider_evidence": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-f474ede9865245d987ee0ab517289aa6\\sync-evidence\\index-monthly-07ac9e40-f27b-4e19-ba0c-22250650f5b1\\source\\index-monthly-000300-SH-20260601-20260731-1d1147a2-36f8-49de-b26e-f98bfc7c1f83.json",
+    "sha256": "013948e4c80e9f0d6c15a21cb732998dd35ca87979263cc2a46188fa310897ed",
+    "sourceKind": "tushare",
+    "endpoint": "index_monthly",
+    "sourceComplete": true,
+    "observedAt": "2026-09-29T21:58:56.191896Z",
+    "provider_rows": 2,
+    "double_field_comparisons": 18,
+    "comparisons": [
+      {
+        "ts_code": "000300.SH",
+        "provider_trade_date": "20260630",
+        "stored_trade_date": "2026-06-30T00:00:00Z",
+        "provider_pct_chg": 0.0178,
+        "stored_pct_chg": 0.0178,
+        "provider_double_fields_compared": [
+          {
+            "field": "close",
+            "provider_raw_bits": "40b3736ecbfb15b5",
+            "stored_raw_bits": "40b3736ecbfb15b5",
+            "exact": true
+          },
+          {
+            "field": "open",
+            "provider_raw_bits": "40b321e594af4f0e",
+            "stored_raw_bits": "40b321e594af4f0e",
+            "exact": true
+          },
+          {
+            "field": "high",
+            "provider_raw_bits": "40b3c843f141205c",
+            "stored_raw_bits": "40b3c843f141205c",
+            "exact": true
+          },
+          {
+            "field": "low",
+            "provider_raw_bits": "40b24591758e2196",
+            "stored_raw_bits": "40b24591758e2196",
+            "exact": true
+          },
+          {
+            "field": "pre_close",
+            "provider_raw_bits": "40b31c1f0d844d01",
+            "stored_raw_bits": "40b31c1f0d844d01",
+            "exact": true
+          },
+          {
+            "field": "change",
+            "provider_raw_bits": "4055d3ef9db22d0e",
+            "stored_raw_bits": "4055d3ef9db22d0e",
+            "exact": true
+          },
+          {
+            "field": "pct_chg",
+            "provider_raw_bits": "3f923a29c779a6b5",
+            "stored_raw_bits": "3f923a29c779a6b5",
+            "exact": true
+          },
+          {
+            "field": "vol",
+            "provider_raw_bits": "4262afd85f650000",
+            "stored_raw_bits": "4262afd85f650000",
+            "exact": true
+          },
+          {
+            "field": "amount",
+            "provider_raw_bits": "42b11f4cce44c400",
+            "stored_raw_bits": "42b11f4cce44c400",
+            "exact": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "ts_code": "000300.SH",
+        "provider_trade_date": "20260731",
+        "stored_trade_date": "2026-07-31T00:00:00Z",
+        "provider_pct_chg": -0.0786,
+        "stored_pct_chg": -0.0786,
+        "provider_double_fields_compared": [
+          {
+            "field": "close",
+            "provider_raw_bits": "40b1ec32617c1bda",
+            "stored_raw_bits": "40b1ec32617c1bda",
+            "exact": true
+          },
+          {
+            "field": "open",
+            "provider_raw_bits": "40b36cb13a92a305",
+            "stored_raw_bits": "40b36cb13a92a305",
+            "exact": true
+          },
+          {
+            "field": "high",
+            "provider_raw_bits": "40b399601a36e2eb",
+            "stored_raw_bits": "40b399601a36e2eb",
+            "exact": true
+          },
+          {
+            "field": "low",
+            "provider_raw_bits": "40b17e3594af4f0e",
+            "stored_raw_bits": "40b17e3594af4f0e",
+            "exact": true
+          },
+          {
+            "field": "pre_close",
+            "provider_raw_bits": "40b3736ecbfb15b5",
+            "stored_raw_bits": "40b3736ecbfb15b5",
+            "exact": true
+          },
+          {
+            "field": "change",
+            "provider_raw_bits": "c07873c6a7ef9db2",
+            "stored_raw_bits": "c07873c6a7ef9db2",
+            "exact": true
+          },
+          {
+            "field": "pct_chg",
+            "provider_raw_bits": "bfb41f212d773190",
+            "stored_raw_bits": "bfb41f212d773190",
+            "exact": true
+          },
+          {
+            "field": "vol",
+            "provider_raw_bits": "4262a5bbcdb68000",
+            "stored_raw_bits": "4262a5bbcdb68000",
+            "exact": true
+          },
+          {
+            "field": "amount",
+            "provider_raw_bits": "42b20e0a8b85c800",
+            "stored_raw_bits": "42b20e0a8b85c800",
+            "exact": true
+          }
+        ],
+        "passed": true
+      }
+    ]
+  },
+  "source_and_document_evidence": {
+    "python_provider_and_sync": {
+      "path": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\connectors\\index\\index_monthly_sync.py",
+      "sha256": "0f6de9705a22892884cb6f0cf8da3c901ccf2db029a405c90590cc0d30533879",
+      "line_evidence": [
+        {
+          "line": 38,
+          "source": "def _get_index_monthly("
+        },
+        {
+          "line": 48,
+          "source": "            df = pro.index_monthly(ts_code=ts_code, start_date=start_date, end_date=end_date)"
+        },
+        {
+          "line": 93,
+          "source": "    merged = preprocess_dataframe(merged)"
+        },
+        {
+          "line": 127,
+          "source": "        frame = _get_index_monthly("
+        },
+        {
+          "line": 179,
+          "source": "    df = preprocess_dataframe(df)"
+        },
+        {
+          "line": 185,
+          "source": "    result: Dict[str, object] = questdb_client.write_model(IndexMonthly, df, table_name=table_name)"
+        }
+      ]
+    },
+    "python_provider_factory_and_preprocessor": {
+      "path": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\connectors\\support.py",
+      "sha256": "a8089a0b92f0b8d4c40f177d5ffc88ac105dca10b449bbdfe0a197dbffc36296",
+      "line_evidence": [
+        {
+          "line": 230,
+          "source": "def preprocess_dataframe(df: pd.DataFrame) -> pd.DataFrame:"
+        },
+        {
+          "line": 245,
+          "source": ""
+        },
+        {
+          "line": 249,
+          "source": ""
+        },
+        {
+          "line": 257,
+          "source": ""
+        },
+        {
+          "line": 663,
+          "source": "def get_tushare_pro(token: Optional[str] = None) -> Optional[Any]:"
+        },
+        {
+          "line": 691,
+          "source": "        _tushare_pro_instance = ts.pro_api(token=token)"
+        }
+      ]
+    },
+    "python_source_model_legacy_unit_metadata": {
+      "path": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\models\\index\\monthly.py",
+      "sha256": "8203bf1cc40532a51d3e352adedfdaa75f7a1ef0bd91146b825e8ec5810b65d7",
+      "line_evidence": [
+        {
+          "line": 43,
+          "source": "    pct_chg: Optional[float] = Field(None, description=\"涨跌幅（%）\")"
+        },
+        {
+          "line": 67,
+          "source": "                \"pct_chg\": \"DOUBLE\","
+        }
+      ]
+    },
+    "python_shared_model_float_coercion": {
+      "path": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\common\\persistence\\questdb_model.py",
+      "sha256": "f29d21ca141302ea1d508ee85f09a4f44375ff5d94b1a4a30cfc880a6605fc92",
+      "line_evidence": [
+        {
+          "line": 132,
+          "source": "    def prepare_questdb_dataframe(cls, df: pd.DataFrame) -> pd.DataFrame:"
+        },
+        {
+          "line": 151,
+          "source": "            try:"
+        },
+        {
+          "line": 161,
+          "source": "                if column not in normalized_record and column in model_input:"
+        },
+        {
+          "line": 179,
+          "source": ""
+        },
+        {
+          "line": 286,
+          "source": "    @classmethod"
+        },
+        {
+          "line": 304,
+          "source": "                result[column] = cls._coerce_string_series(series)"
+        },
+        {
+          "line": 333,
+          "source": "    def _coerce_float_series(cls, series: pd.Series, *, column_name: str) -> pd.Series:"
+        },
+        {
+          "line": 335,
+          "source": "        numeric = pd.to_numeric(series, errors=\"coerce\")"
+        },
+        {
+          "line": 342,
+          "source": "        return numeric"
+        }
+      ]
+    },
+    "cached_tushare_index_monthly_interface": {
+      "path": "C:\\Users\\zouqiang\\.agents\\skills\\tushare\\references\\指数专题\\指数月线行情.md",
+      "sha256": "3ed81369f0d5732df6e3a8ca27549aca15042a42df5360abf839b92b01b7b401",
+      "line_evidence": [
+        {
+          "line": 4,
+          "source": "接口：index_monthly"
+        },
+        {
+          "line": 36,
+          "source": "pct_chg | float | Y | 涨跌幅"
+        },
+        {
+          "line": 48,
+          "source": "df = pro.index_monthly(ts_code='000001.SH', start_date='20180101', end_date='20190330', fields='ts_code,trade_date,open,high,low,close,vol,amount')"
+        },
+        {
+          "line": 56,
+          "source": "df = pro.index_monthly(trade_date='20190329', fields='ts_code,trade_date,open,high,low,close,vol,amount')"
+        }
+      ]
+    },
+    "python_original_materializer": {
+      "path": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\materializers\\equity_style_monthly.py",
+      "sha256": "ef690f93c28cd71d310d80997d2138432051a4ab82be08158bf74bf1bdf92b3f",
+      "line_evidence": [
+        {
+          "line": 26,
+          "source": "    \"value_ret_1m\": \"000920.SH\","
+        },
+        {
+          "line": 27,
+          "source": "    \"growth_ret_1m\": \"000921.SH\","
+        },
+        {
+          "line": 48,
+          "source": "        SELECT ts_code, trade_date, pct_chg"
+        },
+        {
+          "line": 66,
+          "source": "        values=\"pct_chg\","
+        },
+        {
+          "line": 67,
+          "source": "        aggfunc=\"last\","
+        },
+        {
+          "line": 84,
+          "source": "    df[\"small_large_ret_1m\"] = df[\"cs1000_ret_1m\"] - df[\"hs300_ret_1m\"]"
+        },
+        {
+          "line": 85,
+          "source": "    df[\"mid_large_ret_1m\"] = df[\"zz500_ret_1m\"] - df[\"hs300_ret_1m\"]"
+        },
+        {
+          "line": 86,
+          "source": "    df[\"growth_value_ret_1m\"] = df[\"growth_ret_1m\"] - df[\"value_ret_1m\"]"
+        },
+        {
+          "line": 101,
+          "source": ""
+        }
+      ]
+    },
+    "existing_java_D022_unconverted_mapper": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\mapper\\IndexMonthlyMapper.java",
+      "sha256": "b72760033c528fe3a434a85f6738181bb83c778e3117b9d59e740eccfa9e39ec",
+      "line_evidence": [
+        {
+          "line": 20,
+          "source": "        return new TushareIndexMonthlyDto(text(row,\"ts_code\"),text(row,\"trade_date\"),number(row,\"close\"),number(row,\"open\"),"
+        },
+        {
+          "line": 29,
+          "source": "                source.preClose(),source.change(),source.pctChg(),source.vol(),source.amount(),index.layer(),index.bucket(),observedAt);"
+        },
+        {
+          "line": 35,
+          "source": "        values.put(\"vol\",row.vol());values.put(\"amount\",row.amount());values.put(\"layer\",row.layer());values.put(\"bucket\",row.bucket());"
+        },
+        {
+          "line": 52,
+          "source": "        JsonNode value=row.get(field); if(value==null||value.isNull())return null;"
+        }
+      ]
+    },
+    "existing_java_D022_legacy_unit_metadata_not_changed": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\IndexMonthlyDataset.java",
+      "sha256": "4b21a015626993a588fff04ac95c9d57dc5d76d0a15360482e866fa6f0b56f33",
+      "line_evidence": [
+        {
+          "line": 45,
+          "source": "                number(\"pct_chg\", \"Percentage change in provider percentage points\"),"
+        }
+      ]
+    }
+  },
+  "lineage_findings": [
+    "_get_index_monthly obtains pro.index_monthly and returns its DataFrame without return scaling; pro is the direct ts.pro_api instance.",
+    "preprocess_dataframe only formats dates, replaces NaN/infinity with null, and adds update_time; it does not scale pct_chg.",
+    "IndexMonthly has an Optional[float] pct_chg declaration and no field validator that scales it; BaseDataModel float coercion uses pd.to_numeric without multiplication or division.",
+    "The cached index_monthly interface document describes pct_chg as change rate without an explicit percent unit; its sample projection omits pct_chg and does not resolve the ambiguity.",
+    "The original materializer pivots stored pct_chg and subtracts the stored values without scaling; the D103 Java numerical algorithm follows that behavior.",
+    "The preserved D022 actual raw response contains hs300 June0.0178/July-0.0786 before its unconverted Java mapper; all18 numeric fields match corresponding current stored records bit for bit."
+  ],
+  "ratio_diagnostic": {
+    "scope": "48 captured rows; no new SELECT or provider call",
+    "is_semantic_proof": false,
+    "formula": "change / pre_close",
+    "rounding": "Python round(binary64 ratio,4); diagnostic only",
+    "four_decimal_matches": 48,
+    "rows": 48,
+    "maximum_absolute_ratio_error": 4.901296313558623e-05,
+    "minimum_absolute_percent_scaled_error": 0.018325676479417487,
+    "canonical_diagnostic_rows_sha256": "ee4bc6ec0403f6e0b394f4fe34748c5f6ceefdba0da476ec6c8fdbb67b7d538e",
+    "canonicalization": "UTF8 JSON sort_keys=true compact separators ensure_ascii=false allow_nan=false of diagnostic_rows",
+    "diagnostic_rows": [
+      {
+        "ts_code": "000920.SH",
+        "trade_date": "2026-06-29T00:00:00Z",
+        "stored_pct_chg": 0.0641,
+        "stored_pct_chg_raw_bits": "3fb068db8bac710d",
+        "change": 312.7433,
+        "pre_close": 4878.7161,
+        "diagnostic_change_over_pre_close": 0.06410360709449767,
+        "rounded_four_decimal_ratio": 0.0641,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 3.6070944976623887e-06,
+        "absolute_percent_scaled_error": 6.3462607094497665
+      },
+      {
+        "ts_code": "000921.SH",
+        "trade_date": "2026-06-29T00:00:00Z",
+        "stored_pct_chg": -0.047,
+        "stored_pct_chg_raw_bits": "bfa810624dd2f1aa",
+        "change": -200.4885,
+        "pre_close": 4270.1444,
+        "diagnostic_change_over_pre_close": -0.046951222539453226,
+        "rounded_four_decimal_ratio": -0.047,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.8777460546774176e-05,
+        "absolute_percent_scaled_error": 4.648122253945323
+      },
+      {
+        "ts_code": "000300.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": 0.0178,
+        "stored_pct_chg_raw_bits": "3f923a29c779a6b5",
+        "change": 87.3115,
+        "pre_close": 4892.1213,
+        "diagnostic_change_over_pre_close": 0.01784737021954055,
+        "rounded_four_decimal_ratio": 0.0178,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.7370219540550373e-05,
+        "absolute_percent_scaled_error": 1.766937021954055
+      },
+      {
+        "ts_code": "000852.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": 0.0477,
+        "stored_pct_chg_raw_bits": "3fa86c226809d495",
+        "change": 401.0502,
+        "pre_close": 8408.7357,
+        "diagnostic_change_over_pre_close": 0.04769447088222788,
+        "rounded_four_decimal_ratio": 0.0477,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 5.52911777212256e-06,
+        "absolute_percent_scaled_error": 4.721747088222788
+      },
+      {
+        "ts_code": "000905.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": 0.0804,
+        "stored_pct_chg_raw_bits": "3fb495182a9930be",
+        "change": 671.8192,
+        "pre_close": 8359.5596,
+        "diagnostic_change_over_pre_close": 0.08036538192753599,
+        "rounded_four_decimal_ratio": 0.0804,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 3.4618072464007166e-05,
+        "absolute_percent_scaled_error": 7.9561381927536
+      },
+      {
+        "ts_code": "000985.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": 0.0287,
+        "stored_pct_chg_raw_bits": "3f9d63886594af4f",
+        "change": 182.7809,
+        "pre_close": 6368.8357,
+        "diagnostic_change_over_pre_close": 0.02869926445111467,
+        "rounded_four_decimal_ratio": 0.0287,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 7.355488853312553e-07,
+        "absolute_percent_scaled_error": 2.8412264451114666
+      },
+      {
+        "ts_code": "000986.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": -0.1491,
+        "stored_pct_chg_raw_bits": "bfc315b573eab368",
+        "change": -405.3948,
+        "pre_close": 2719.3881,
+        "diagnostic_change_over_pre_close": -0.14907574244367694,
+        "rounded_four_decimal_ratio": -0.1491,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 2.4257556323070695e-05,
+        "absolute_percent_scaled_error": 14.758474244367694
+      },
+      {
+        "ts_code": "000987.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": 0.0024,
+        "stored_pct_chg_raw_bits": "3f63a92a30553261",
+        "change": 12.5733,
+        "pre_close": 5148.121,
+        "diagnostic_change_over_pre_close": 0.002442308562677528,
+        "rounded_four_decimal_ratio": 0.0024,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.2308562677528284e-05,
+        "absolute_percent_scaled_error": 0.2418308562677528
+      },
+      {
+        "ts_code": "000988.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": -0.034,
+        "stored_pct_chg_raw_bits": "bfa16872b020c49c",
+        "change": -148.7233,
+        "pre_close": 4377.0567,
+        "diagnostic_change_over_pre_close": -0.03397792402369382,
+        "rounded_four_decimal_ratio": -0.034,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 2.2075976306185074e-05,
+        "absolute_percent_scaled_error": 3.363792402369382
+      },
+      {
+        "ts_code": "000989.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": -0.0822,
+        "stored_pct_chg_raw_bits": "bfb50b0f27bb2fec",
+        "change": -411.5104,
+        "pre_close": 5005.7384,
+        "diagnostic_change_over_pre_close": -0.08220773183033296,
+        "rounded_four_decimal_ratio": -0.0822,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 7.731830332965983e-06,
+        "absolute_percent_scaled_error": 8.138573183033296
+      },
+      {
+        "ts_code": "000990.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": -0.1165,
+        "stored_pct_chg_raw_bits": "bfbdd2f1a9fbe76d",
+        "change": -1292.1904,
+        "pre_close": 11093.4844,
+        "diagnostic_change_over_pre_close": -0.1164819233891923,
+        "rounded_four_decimal_ratio": -0.1165,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 1.8076610807701843e-05,
+        "absolute_percent_scaled_error": 11.53169233891923
+      },
+      {
+        "ts_code": "000991.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": -0.006,
+        "stored_pct_chg_raw_bits": "bf789374bc6a7efa",
+        "change": -47.8267,
+        "pre_close": 8016.8435,
+        "diagnostic_change_over_pre_close": -0.00596577692953592,
+        "rounded_four_decimal_ratio": -0.006,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 3.4223070464079776e-05,
+        "absolute_percent_scaled_error": 0.5905776929535921
+      },
+      {
+        "ts_code": "000992.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": -0.027,
+        "stored_pct_chg_raw_bits": "bf9ba5e353f7ced9",
+        "change": -142.632,
+        "pre_close": 5285.3122,
+        "diagnostic_change_over_pre_close": -0.026986485301662973,
+        "rounded_four_decimal_ratio": -0.027,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 1.3514698337026287e-05,
+        "absolute_percent_scaled_error": 2.6716485301662973
+      },
+      {
+        "ts_code": "000993.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": 0.2427,
+        "stored_pct_chg_raw_bits": "3fcf10cb295e9e1b",
+        "change": 2749.9597,
+        "pre_close": 11332.4027,
+        "diagnostic_change_over_pre_close": 0.24266342917729175,
+        "rounded_four_decimal_ratio": 0.2427,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 3.657082270824841e-05,
+        "absolute_percent_scaled_error": 24.023642917729177
+      },
+      {
+        "ts_code": "000994.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": 0.087,
+        "stored_pct_chg_raw_bits": "3fb645a1cac08312",
+        "change": 1355.368,
+        "pre_close": 15582.7108,
+        "diagnostic_change_over_pre_close": 0.08697896132423891,
+        "rounded_four_decimal_ratio": 0.087,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 2.1038675761086978e-05,
+        "absolute_percent_scaled_error": 8.61089613242389
+      },
+      {
+        "ts_code": "000995.SH",
+        "trade_date": "2026-06-30T00:00:00Z",
+        "stored_pct_chg": -0.1489,
+        "stored_pct_chg_raw_bits": "bfc30f27bb2fec57",
+        "change": -452.0229,
+        "pre_close": 3036.697,
+        "diagnostic_change_over_pre_close": -0.14885347467989068,
+        "rounded_four_decimal_ratio": -0.1489,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.6525320109319646e-05,
+        "absolute_percent_scaled_error": 14.73644746798907
+      },
+      {
+        "ts_code": "000300.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": -0.0786,
+        "stored_pct_chg_raw_bits": "bfb41f212d773190",
+        "change": -391.236,
+        "pre_close": 4979.4328,
+        "diagnostic_change_over_pre_close": -0.0785703946039798,
+        "rounded_four_decimal_ratio": -0.0786,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 2.9605396020204733e-05,
+        "absolute_percent_scaled_error": 7.77843946039798
+      },
+      {
+        "ts_code": "000852.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": -0.1969,
+        "stored_pct_chg_raw_bits": "bfc93404ea4a8c15",
+        "change": -1734.2794,
+        "pre_close": 8809.7859,
+        "diagnostic_change_over_pre_close": -0.19685829141432368,
+        "rounded_four_decimal_ratio": -0.1969,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.1708585676314414e-05,
+        "absolute_percent_scaled_error": 19.48892914143237
+      },
+      {
+        "ts_code": "000905.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": -0.1702,
+        "stored_pct_chg_raw_bits": "bfc5c91d14e3bcd3",
+        "change": -1537.3938,
+        "pre_close": 9031.3788,
+        "diagnostic_change_over_pre_close": -0.17022802764069644,
+        "rounded_four_decimal_ratio": -0.1702,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 2.8027640696454137e-05,
+        "absolute_percent_scaled_error": 16.852602764069644
+      },
+      {
+        "ts_code": "000920.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": -0.2,
+        "stored_pct_chg_raw_bits": "bfc999999999999a",
+        "change": -1067.2416,
+        "pre_close": 5335.5279,
+        "diagnostic_change_over_pre_close": -0.20002549326000152,
+        "rounded_four_decimal_ratio": -0.2,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 2.5493260001507867e-05,
+        "absolute_percent_scaled_error": 19.802549326000154
+      },
+      {
+        "ts_code": "000921.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": 0.0695,
+        "stored_pct_chg_raw_bits": "3fb1cac083126e98",
+        "change": 280.0853,
+        "pre_close": 4029.7125,
+        "diagnostic_change_over_pre_close": 0.069505032927287,
+        "rounded_four_decimal_ratio": 0.0695,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 5.0329272869992225e-06,
+        "absolute_percent_scaled_error": 6.881003292728701
+      },
+      {
+        "ts_code": "000985.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": -0.1328,
+        "stored_pct_chg_raw_bits": "bfc0ff972474538f",
+        "change": -870.3755,
+        "pre_close": 6551.6166,
+        "diagnostic_change_over_pre_close": -0.1328489673831036,
+        "rounded_four_decimal_ratio": -0.1328,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.89673831035875e-05,
+        "absolute_percent_scaled_error": 13.152096738310359
+      },
+      {
+        "ts_code": "000986.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": 0.1345,
+        "stored_pct_chg_raw_bits": "3fc1374bc6a7ef9e",
+        "change": 311.2126,
+        "pre_close": 2313.9933,
+        "diagnostic_change_over_pre_close": 0.13449157350628457,
+        "rounded_four_decimal_ratio": 0.1345,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 8.426493715435468e-06,
+        "absolute_percent_scaled_error": 13.314657350628458
+      },
+      {
+        "ts_code": "000987.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": -0.0821,
+        "stored_pct_chg_raw_bits": "bfb504816f0068dc",
+        "change": -423.8437,
+        "pre_close": 5160.6943,
+        "diagnostic_change_over_pre_close": -0.08212920110381272,
+        "rounded_four_decimal_ratio": -0.0821,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 2.92011038127149e-05,
+        "absolute_percent_scaled_error": 8.130820110381272
+      },
+      {
+        "ts_code": "000988.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": -0.1037,
+        "stored_pct_chg_raw_bits": "bfba8c154c985f07",
+        "change": -438.4583,
+        "pre_close": 4228.3334,
+        "diagnostic_change_over_pre_close": -0.10369529990232085,
+        "rounded_four_decimal_ratio": -0.1037,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.700097679152804e-06,
+        "absolute_percent_scaled_error": 10.265829990232085
+      },
+      {
+        "ts_code": "000989.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": 0.0322,
+        "stored_pct_chg_raw_bits": "3fa07c84b5dcc63f",
+        "change": 148.1194,
+        "pre_close": 4594.228,
+        "diagnostic_change_over_pre_close": 0.032240324163276185,
+        "rounded_four_decimal_ratio": 0.0322,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.032416327618554e-05,
+        "absolute_percent_scaled_error": 3.1918324163276184
+      },
+      {
+        "ts_code": "000990.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": 0.1212,
+        "stored_pct_chg_raw_bits": "3fbf06f694467382",
+        "change": 1187.5439,
+        "pre_close": 9801.294,
+        "diagnostic_change_over_pre_close": 0.1211619506567194,
+        "rounded_four_decimal_ratio": 0.1212,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 3.8049343280596726e-05,
+        "absolute_percent_scaled_error": 11.99499506567194
+      },
+      {
+        "ts_code": "000991.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": 0.0717,
+        "stored_pct_chg_raw_bits": "3fb25aee631f8a09",
+        "change": 571.5159,
+        "pre_close": 7969.0168,
+        "diagnostic_change_over_pre_close": 0.07171724120345686,
+        "rounded_four_decimal_ratio": 0.0717,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 1.724120345686364e-05,
+        "absolute_percent_scaled_error": 7.100024120345687
+      },
+      {
+        "ts_code": "000992.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": 0.069,
+        "stored_pct_chg_raw_bits": "3fb1a9fbe76c8b44",
+        "change": 354.9895,
+        "pre_close": 5142.6802,
+        "diagnostic_change_over_pre_close": 0.06902811106162114,
+        "rounded_four_decimal_ratio": 0.069,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 2.811106162113608e-05,
+        "absolute_percent_scaled_error": 6.8338111061621145
+      },
+      {
+        "ts_code": "000993.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": -0.2995,
+        "stored_pct_chg_raw_bits": "bfd32b020c49ba5e",
+        "change": -4217.0205,
+        "pre_close": 14082.3624,
+        "diagnostic_change_over_pre_close": -0.29945405324890656,
+        "rounded_four_decimal_ratio": -0.2995,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.5946751093428606e-05,
+        "absolute_percent_scaled_error": 29.64590532489066
+      },
+      {
+        "ts_code": "000994.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": -0.2591,
+        "stored_pct_chg_raw_bits": "bfd095182a9930be",
+        "change": -4388.2221,
+        "pre_close": 16938.0788,
+        "diagnostic_change_over_pre_close": -0.2590743703471258,
+        "rounded_four_decimal_ratio": -0.2591,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 2.5629652874170628e-05,
+        "absolute_percent_scaled_error": 25.648337034712583
+      },
+      {
+        "ts_code": "000995.SH",
+        "trade_date": "2026-07-31T00:00:00Z",
+        "stored_pct_chg": 0.0304,
+        "stored_pct_chg_raw_bits": "3f9f212d77318fc5",
+        "change": 78.4928,
+        "pre_close": 2584.6741,
+        "diagnostic_change_over_pre_close": 0.030368548204974855,
+        "rounded_four_decimal_ratio": 0.0304,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 3.1451795025144724e-05,
+        "absolute_percent_scaled_error": 3.0064548204974852
+      },
+      {
+        "ts_code": "000300.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": 0.008,
+        "stored_pct_chg_raw_bits": "3f80624dd2f1a9fc",
+        "change": 36.8894,
+        "pre_close": 4588.1968,
+        "diagnostic_change_over_pre_close": 0.00804006488998031,
+        "rounded_four_decimal_ratio": 0.008,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.006488998030931e-05,
+        "absolute_percent_scaled_error": 0.796006488998031
+      },
+      {
+        "ts_code": "000852.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": 0.0982,
+        "stored_pct_chg_raw_bits": "3fb923a29c779a6b",
+        "change": 694.9153,
+        "pre_close": 7075.5065,
+        "diagnostic_change_over_pre_close": 0.09821421265035937,
+        "rounded_four_decimal_ratio": 0.0982,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 1.4212650359377021e-05,
+        "absolute_percent_scaled_error": 9.723221265035937
+      },
+      {
+        "ts_code": "000905.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": 0.0611,
+        "stored_pct_chg_raw_bits": "3faf487fcb923a2a",
+        "change": 458.1136,
+        "pre_close": 7493.985,
+        "diagnostic_change_over_pre_close": 0.061130840267227655,
+        "rounded_four_decimal_ratio": 0.0611,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 3.084026722765393e-05,
+        "absolute_percent_scaled_error": 6.051984026722766
+      },
+      {
+        "ts_code": "000920.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": 0.0273,
+        "stored_pct_chg_raw_bits": "3f9bf487fcb923a3",
+        "change": 116.5656,
+        "pre_close": 4268.2863,
+        "diagnostic_change_over_pre_close": 0.027309695696842082,
+        "rounded_four_decimal_ratio": 0.0273,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 9.695696842081103e-06,
+        "absolute_percent_scaled_error": 2.7036695696842084
+      },
+      {
+        "ts_code": "000921.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": -0.0085,
+        "stored_pct_chg_raw_bits": "bf816872b020c49c",
+        "change": -36.7117,
+        "pre_close": 4309.7978,
+        "diagnostic_change_over_pre_close": -0.00851819544759153,
+        "rounded_four_decimal_ratio": -0.0085,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 1.8195447591530176e-05,
+        "absolute_percent_scaled_error": 0.8433195447591532
+      },
+      {
+        "ts_code": "000985.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": 0.0507,
+        "stored_pct_chg_raw_bits": "3fa9f559b3d07c85",
+        "change": 288.0846,
+        "pre_close": 5681.2411,
+        "diagnostic_change_over_pre_close": 0.050708039833056905,
+        "rounded_four_decimal_ratio": 0.0507,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 8.03983305690259e-06,
+        "absolute_percent_scaled_error": 5.020103983305691
+      },
+      {
+        "ts_code": "000986.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": 0.0832,
+        "stored_pct_chg_raw_bits": "3fb54c985f06f694",
+        "change": 218.5458,
+        "pre_close": 2625.2059,
+        "diagnostic_change_over_pre_close": 0.08324901296313558,
+        "rounded_four_decimal_ratio": 0.0832,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.901296313558623e-05,
+        "absolute_percent_scaled_error": 8.24170129631356
+      },
+      {
+        "ts_code": "000987.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": 0.0779,
+        "stored_pct_chg_raw_bits": "3fb3f141205bc01a",
+        "change": 369.1091,
+        "pre_close": 4736.8506,
+        "diagnostic_change_over_pre_close": 0.07792289248050172,
+        "rounded_four_decimal_ratio": 0.0779,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 2.2892480501718326e-05,
+        "absolute_percent_scaled_error": 7.714389248050172
+      },
+      {
+        "ts_code": "000988.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": -0.0002,
+        "stored_pct_chg_raw_bits": "bf2a36e2eb1c432d",
+        "change": -0.7021,
+        "pre_close": 3789.8751,
+        "diagnostic_change_over_pre_close": -0.00018525676479417487,
+        "rounded_four_decimal_ratio": -0.0002,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 1.4743235205825144e-05,
+        "absolute_percent_scaled_error": 0.018325676479417487
+      },
+      {
+        "ts_code": "000989.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": -0.0181,
+        "stored_pct_chg_raw_bits": "bf9288ce703afb7f",
+        "change": -85.7973,
+        "pre_close": 4742.3474,
+        "diagnostic_change_over_pre_close": -0.01809173659441314,
+        "rounded_four_decimal_ratio": -0.0181,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 8.263405586860645e-06,
+        "absolute_percent_scaled_error": 1.7910736594413141
+      },
+      {
+        "ts_code": "000990.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": -0.0401,
+        "stored_pct_chg_raw_bits": "bfa487fcb923a29c",
+        "change": -440.8086,
+        "pre_close": 10988.8379,
+        "diagnostic_change_over_pre_close": -0.040114214443003116,
+        "rounded_four_decimal_ratio": -0.0401,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 1.4214443003118804e-05,
+        "absolute_percent_scaled_error": 3.9713214443003118
+      },
+      {
+        "ts_code": "000991.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": -0.0021,
+        "stored_pct_chg_raw_bits": "bf613404ea4a8c15",
+        "change": -18.3268,
+        "pre_close": 8540.5327,
+        "diagnostic_change_over_pre_close": -0.002145861463653198,
+        "rounded_four_decimal_ratio": -0.0021,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.5861463653198205e-05,
+        "absolute_percent_scaled_error": 0.21248614636531982
+      },
+      {
+        "ts_code": "000992.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": 0.0003,
+        "stored_pct_chg_raw_bits": "3f33a92a30553261",
+        "change": 1.5818,
+        "pre_close": 5497.6697,
+        "diagnostic_change_over_pre_close": 0.0002877219051555607,
+        "rounded_four_decimal_ratio": 0.0003,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 1.2278094844439275e-05,
+        "absolute_percent_scaled_error": 0.028472190515556068
+      },
+      {
+        "ts_code": "000993.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": 0.0812,
+        "stored_pct_chg_raw_bits": "3fb4c985f06f6944",
+        "change": 800.9033,
+        "pre_close": 9865.3419,
+        "diagnostic_change_over_pre_close": 0.08118353201727352,
+        "rounded_four_decimal_ratio": 0.0812,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 1.646798272647576e-05,
+        "absolute_percent_scaled_error": 8.037153201727351
+      },
+      {
+        "ts_code": "000994.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": 0.0926,
+        "stored_pct_chg_raw_bits": "3fb7b4a2339c0ebf",
+        "change": 1162.5607,
+        "pre_close": 12549.8567,
+        "diagnostic_change_over_pre_close": 0.09263537646609143,
+        "rounded_four_decimal_ratio": 0.0926,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 3.537646609143297e-05,
+        "absolute_percent_scaled_error": 9.170937646609145
+      },
+      {
+        "ts_code": "000995.SH",
+        "trade_date": "2026-08-31T00:00:00Z",
+        "stored_pct_chg": -0.0298,
+        "stored_pct_chg_raw_bits": "bf9e83e425aee632",
+        "change": -79.3512,
+        "pre_close": 2663.1669,
+        "diagnostic_change_over_pre_close": -0.029795804386123906,
+        "rounded_four_decimal_ratio": -0.0298,
+        "four_decimal_ratio_matches_stored_value": true,
+        "absolute_ratio_error": 4.195613876094295e-06,
+        "absolute_percent_scaled_error": 2.949780438612391
+      }
+    ]
+  },
+  "known_limits": [
+    "The ratio agreement is mathematical diagnostics on a bounded historical capture, not a certification of the documented provider unit or all historical source lineage.",
+    "Only two existing D022 provider rows have an independently preserved raw-response lineage comparison here; no new provider request is made.",
+    "Existing D022/Python legacy percent metadata is identified but not changed; correction beyond D103 remains outside this migration task.",
+    "D103 metadata/comments/results should state source-stored unit and same-unit differences; changing units or legacy code bindings would change the existing owner result.",
+    "This review does not certify current source freshness, complete provider history, formal output parity, or completion of D103."
+  ]
+}

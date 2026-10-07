@@ -1,0 +1,194 @@
+{
+  "task_id": "D101",
+  "status": "VERIFIED_READONLY_PROCESS_PREVIEW_REVIEW",
+  "checked_at": "2026-10-06T10:05:39.871398+00:00",
+  "review_scope": "Independent file/hash/XML/code-flow and readonly OS process inventory review. No DB queries, Gradle execution or production edits.",
+  "recommendation": "accepted_for_new_first_identity",
+  "blockers": [],
+  "new_first_identity_required": true,
+  "first_not_executed_by_this_review": true,
+  "root_process": {
+    "pid": 13532,
+    "os_birth": "2026-10-06T10:01:30.371Z",
+    "exit_observed": true,
+    "forced": false
+  },
+  "actual_bridge_process": {
+    "pid": 26932,
+    "os_birth": "2026-10-06T10:01:30.425Z",
+    "parent_pid": 13532,
+    "response_pid_uniquely_bound": true
+  },
+  "observed_descendants": [
+    {
+      "pid": 30820,
+      "process_start": "2026-10-06T10:01:30.390Z",
+      "parent_pid": 13532,
+      "exit_observed": true,
+      "evidence_sha256": "bcfe0cd7ed1953e65aff2d7de46566faec571a87cbab87760450287d88c21356"
+    },
+    {
+      "pid": 26932,
+      "process_start": "2026-10-06T10:01:30.425Z",
+      "parent_pid": 13532,
+      "exit_observed": true,
+      "evidence_sha256": "56e86f20bd33db667e4ee469b9285ed6fd31469011d2632ccd7eb297be9c6acf"
+    },
+    {
+      "pid": 46004,
+      "process_start": "2026-10-06T10:01:31.635Z",
+      "parent_pid": 26932,
+      "exit_observed": true,
+      "evidence_sha256": "9bb5a43595ecd50e33018ce1d87d82b9a8b1b666f1a2e78ade34ac3ee85b1cdf"
+    },
+    {
+      "pid": 37376,
+      "process_start": "2026-10-06T10:01:34.623Z",
+      "parent_pid": 26932,
+      "exit_observed": true,
+      "evidence_sha256": "22b4041a9d048eb24e82cd81b6093030729f8caaf064b51b21e58a1d2af721ee"
+    },
+    {
+      "pid": 22772,
+      "process_start": "2026-10-06T10:01:38.507Z",
+      "parent_pid": 26932,
+      "exit_observed": true,
+      "evidence_sha256": "b162aa7ff8281298f7aadcae1a70c3b44af85285caf14201c0c9e9acdac103c6"
+    }
+  ],
+  "all_descendant_parent_chains_reach_observed_root": true,
+  "all_process_exit_proof_hashes_verified": true,
+  "native_inventory_all_six_processes_absent": true,
+  "private_pid_and_listener_ports_match": true,
+  "wrapper_artifact_sha256": "2eba5d81cea5256ea92f014ba7defb255d35b4eed94a94e83a85361e59805576",
+  "python_response_sha256": "0bd267f6a354246d84530acf7103d4214916ea942b6995faa7bf923f79b028c5",
+  "target_actual_row_counts_before": {
+    "etf_market_overview_daily_cache": 0,
+    "market_barometer_cache_coverage": 0
+  },
+  "target_actual_row_counts_after": {
+    "etf_market_overview_daily_cache": 0,
+    "market_barometer_cache_coverage": 0
+  },
+  "raw_null_target_txn_and_row_count_preserved": true,
+  "target_wal_zero_settled": true,
+  "one_day_source_complete_census_rows": {
+    "etf_basic": 2958,
+    "etf_daily": 2132,
+    "etf_share": 766
+  },
+  "one_day_source_complete_census_total": 5856,
+  "source_full_table_metadata_rows": {
+    "etf_share": 1532,
+    "etf_daily": 4274,
+    "etf_basic": 2958
+  },
+  "source_full_table_total": 8764,
+  "source_stability_proof_scope": "Frozen bridge performs complete per-source SELECT count and full-field census and compares all three source physical/WAL and both target snapshots before/after. No independent postpreview database query is claimed.",
+  "raw_timestamp_display_scope": "Retained raw etf_daily tables() min/max carrier display is not interpreted as business time; native TIMESTAMP_NS original_source_state/partitions and complete census remain authoritative.",
+  "sources_fingerprint": "40ea432abd94e78faf7994fe74cf68fbcc981113340d312a57ff7184a2358e93",
+  "unit_source_fingerprint": "8e072be155557154cac3cf9525b4364663f2d845a9b3fba5a23bf8519175ae0c",
+  "business_generation": "c61e15b6474623ef4a8b25be1b81bf1c3367fd1da2754fbcdf497b86756c6cc1",
+  "target_id": "questdb-012f0bebfa498858a5ebe3040de1b5b3c9dc18dabfc6f7cbcd31ad2899d41af9",
+  "publisher_invocations": 0,
+  "owner_submissions": [],
+  "publish_intents": 0,
+  "atomic_claims_for_this_preview": 0,
+  "database_mutations": 0,
+  "ledger_creations": 0,
+  "ddl_operations": 0,
+  "canonical_d101_ledgers_present": [],
+  "prior_failed_first_preserved": true,
+  "prior_failed_evidence_sha_count": 12,
+  "prior_declared_uncreated_ledger": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-0a328481-ecf5-4920-8226-23860d7e0a96.sqlite3",
+  "prior_ledger_remains_absent": true,
+  "pure_tests": {
+    "tests": 62,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "actual_readonly_process_test": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "new_first_conditions": [
+    "Use new invocation/run/ledger identities and preserve all FAILED artifacts",
+    "Perform fresh readonly preview and current private PID/root/port attestation before publication",
+    "Keep durable SUBMITTED revision4, new-only intent and cross-instance atomic claim before original Python owner publication",
+    "Any uncertain stage remains IN_DOUBT without automatic resend; explicit reconciliation requires actual complete process-tree exit and readonly whole-value/source proof"
+  ],
+  "human_review": "pending_review",
+  "evidence": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-20261006.json",
+      "sha256": "2eba5d81cea5256ea92f014ba7defb255d35b4eed94a94e83a85361e59805576"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-7652aba3-b1a8-4d50-918e-e5581044193d\\java-owner-preview-04482f1d-90cf-417f-8981-04e02fd1bc54.response.json",
+      "sha256": "0bd267f6a354246d84530acf7103d4214916ea942b6995faa7bf923f79b028c5"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-xml-20261006\\TEST-com.zoutrankil.data.config.EtfMarketOverviewCacheProcessLivePreviewTest.xml",
+      "sha256": "1d893dbda744bf47792e7c4786d062a7c54e311311f877717255a4880eaee406"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-20261006.log",
+      "sha256": "683f2c3ae1e846680bb5b6b597b5ea9e1744761045d6e2a392d8845877dcaf12"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-tree-guards-20261006.json",
+      "sha256": "8ce8cf7f8b7df770c764b74c86eb177150545cb7095ad1bacc24076e44e27409"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-native-check-20261006.json",
+      "sha256": "d60f929f62bfdac6e448aec32b606868ccffe5cdc96550eb060e93560ed8ebd7"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\coordinator-first-readonly-failure-review-20261006.json",
+      "sha256": "506bcd8e9e2e868faa2663a5f05b106bac7b915d2de56bbda7971f519b8290e7"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\d101_etf_cache_owner_bridge.py",
+      "sha256": "df9bb4349d0881ac8fb09b5b47ce4571140abe0b3f5898b6a28b3b4b245c1fdd"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\EtfMarketOverviewCacheProcessLivePreviewTest.java",
+      "sha256": "2b9cabe426549577d71c9c16e3d1d6976c3ae9323fd1e4dca67aa6e0689b0075"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-7652aba3-b1a8-4d50-918e-e5581044193d\\java-owner-preview-04482f1d-90cf-417f-8981-04e02fd1bc54.request.json",
+      "sha256": "cb35fbcca95b3dd81807e7c323a8aaac794cb3895a9d1527960b6d8dece2a060"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-7652aba3-b1a8-4d50-918e-e5581044193d\\java-owner-preview-04482f1d-90cf-417f-8981-04e02fd1bc54.process-started.json",
+      "sha256": "12ee83dadf453de037e003623397beb0c3893903ac32602a938ac6d1cbeb1cb7"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-7652aba3-b1a8-4d50-918e-e5581044193d\\java-owner-preview-04482f1d-90cf-417f-8981-04e02fd1bc54.process-stopped.json",
+      "sha256": "0e27399b479a403800103a414843ca3ae26ad55b2cfd20ba045715d612e11794"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-7652aba3-b1a8-4d50-918e-e5581044193d\\java-owner-preview-04482f1d-90cf-417f-8981-04e02fd1bc54.process-observed-0.json",
+      "sha256": "bcfe0cd7ed1953e65aff2d7de46566faec571a87cbab87760450287d88c21356"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-7652aba3-b1a8-4d50-918e-e5581044193d\\java-owner-preview-04482f1d-90cf-417f-8981-04e02fd1bc54.process-observed-1.json",
+      "sha256": "56e86f20bd33db667e4ee469b9285ed6fd31469011d2632ccd7eb297be9c6acf"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-7652aba3-b1a8-4d50-918e-e5581044193d\\java-owner-preview-04482f1d-90cf-417f-8981-04e02fd1bc54.process-observed-2.json",
+      "sha256": "9bb5a43595ecd50e33018ce1d87d82b9a8b1b666f1a2e78ade34ac3ee85b1cdf"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-7652aba3-b1a8-4d50-918e-e5581044193d\\java-owner-preview-04482f1d-90cf-417f-8981-04e02fd1bc54.process-observed-3.json",
+      "sha256": "22b4041a9d048eb24e82cd81b6093030729f8caaf064b51b21e58a1d2af721ee"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-process-preview-7652aba3-b1a8-4d50-918e-e5581044193d\\java-owner-preview-04482f1d-90cf-417f-8981-04e02fd1bc54.process-observed-4.json",
+      "sha256": "b162aa7ff8281298f7aadcae1a70c3b44af85285caf14201c0c9e9acdac103c6"
+    }
+  ]
+}

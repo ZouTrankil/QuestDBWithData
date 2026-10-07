@@ -1,0 +1,193 @@
+{
+  "definition" : {
+    "datasetId" : "macro_core_monthly",
+    "schemaVersion" : 1,
+    "provider" : "derived.macro.six_source_monthly",
+    "owner" : "java.macro_core_monthly.bounded_materializer",
+    "objectName" : "macro_core_monthly",
+    "objectKind" : "TABLE",
+    "columns" : [ {
+      "sourceName" : "source.month:YYYYMM / cn_gdp.report_date:own_month",
+      "logicalName" : "month",
+      "storageName" : "month",
+      "storageType" : "TIMESTAMP",
+      "nullable" : false,
+      "meaning" : "Observation-period identity at exact first-day UTC midnight",
+      "temporal" : {
+        "kind" : "BUSINESS_DATE",
+        "sourceFormat" : "BASIC",
+        "zone" : "calendar",
+        "precision" : "MONTH",
+        "meaning" : "Original YYYYMM period becomes a first-day LocalDate; not a publication instant"
+      },
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "cn_cpi.nt_yoy",
+      "logicalName" : "cpi_yoy",
+      "storageName" : "cpi_yoy",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "CPI national YoY; unchanged stored upstream value (source declares percent)",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "cn_ppi.ppi_yoy",
+      "logicalName" : "ppi_yoy",
+      "storageName" : "ppi_yoy",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "PPI YoY; unchanged stored upstream value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "cn_pmi.pmi010000",
+      "logicalName" : "pmi_mfg",
+      "storageName" : "pmi_mfg",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Manufacturing PMI level; unchanged stored upstream value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "cn_gdp.gdp_yoy[report_date:own_month]",
+      "logicalName" : "gdp_yoy",
+      "storageName" : "gdp_yoy",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "GDP YoY in its report-date month only, nullable without carry; unchanged stored value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "cn_m.m2_yoy",
+      "logicalName" : "m2_yoy",
+      "storageName" : "m2_yoy",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "M2 YoY; unchanged stored upstream value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "sf_month.stk_endval",
+      "logicalName" : "social_financing_stock",
+      "storageName" : "social_financing_stock",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Total social-financing closing stock; unchanged stored value (local source specification declares 万亿元)",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "sf_month.inc_month",
+      "logicalName" : "new_rmb_loan",
+      "storageName" : "new_rmb_loan",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Compatibility name for total social-financing monthly increment, not a distinct RMB-loan series; unchanged stored value (local specification declares 亿元)",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:(current_stk_endval/prior_12th_observation_stk_endval)-1",
+      "logicalName" : "social_financing_yoy",
+      "storageName" : "social_financing_yoy",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Fractional stock change: current stock / prior twelfth sorted observation - 1; nullable absent/null baseline, no percent scaling",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    } ],
+    "businessKey" : [ "month" ],
+    "dedupKey" : [ "month" ],
+    "designatedTimestamp" : "month",
+    "partition" : "YEAR",
+    "wal" : true,
+    "capabilities" : [ "WRITE", "READ" ],
+    "dependencies" : [ ],
+    "storageRationale" : "YYYYMM observation period at the first calendar day at exact UTC midnight, not publication time. Eight nullable finite DOUBLEs retain stored units, nulls and signed zero without scaling or rounding. New publication requires all six monthly fields; GDP and social-financing YoY remain optional. GDP belongs only to its report_date month, with no forward fill. Legacy new_rmb_loan names total social-financing increment from sf_month.inc_month. Social-financing YoY is a fractional ratio to the prior twelfth observation, with no multiplication by 100. Six governed physical inputs are cn_cpi, cn_ppi, cn_pmi, cn_m, cn_gdp and sf_month; their Java Dataset/job owners are not registered, so no implemented upstream graph edges are declared. Only isolated java_d104_macro_core_monthly_<suffix> targets and bounded 12-month reads/batches are admitted. No formal replacement, provider readiness, automatic source refresh, full history or consumer cutover is implied."
+  },
+  "dataset_count" : 53,
+  "job" : {
+    "jobId" : "data.macro_core_monthly",
+    "version" : 1,
+    "datasetId" : "macro_core_monthly",
+    "datasetVersion" : 1,
+    "owner" : "macro_core_monthly_owner",
+    "supportedModes" : [ "INCREMENTAL", "MATERIALIZE", "RECONCILE" ],
+    "defaultMode" : "INCREMENTAL",
+    "parameters" : {
+      "parent_source_version" : {
+        "type" : "STRING",
+        "required" : false,
+        "maxLength" : 128,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "target_id" : {
+        "type" : "STRING",
+        "required" : true,
+        "maxLength" : 128,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "source_hash" : {
+        "type" : "STRING",
+        "required" : true,
+        "maxLength" : 64,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "checkpoint_reason" : {
+        "type" : "STRING",
+        "required" : false,
+        "maxLength" : 64,
+        "maxItems" : 1,
+        "choices" : [ "SOURCE_PREFIX_REVISED", "VERIFIED_PREFIX_APPEND" ]
+      },
+      "bootstrap_from" : {
+        "type" : "DATE",
+        "required" : true,
+        "maxLength" : 10,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "source_version" : {
+        "type" : "STRING",
+        "required" : true,
+        "maxLength" : 128,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "checkpoint_before" : {
+        "type" : "DATE",
+        "required" : false,
+        "maxLength" : 10,
+        "maxItems" : 1,
+        "choices" : [ ]
+      }
+    },
+    "ratePolicyRef" : "questdb.materialize",
+    "slicePolicyRef" : "macro_core_monthly.month_window",
+    "verificationPolicyRef" : "questdb.full_key_values",
+    "retry" : {
+      "maxAttempts" : 1,
+      "backoff" : "PT1S",
+      "maxElapsed" : "PT1S"
+    },
+    "timeout" : "PT5M",
+    "budget" : {
+      "maxWindowDays" : 366,
+      "maxSlices" : 1,
+      "maxPages" : 1,
+      "maxRows" : 12,
+      "maxBatchBytes" : 1048576
+    },
+    "revisionDays" : 31,
+    "dependencies" : [ ],
+    "frequency" : "MANUAL",
+    "zone" : "Asia/Shanghai",
+    "enabled" : true,
+    "dailyEligible" : false
+  },
+  "database_connections" : 0,
+  "task_id" : "D104",
+  "ledger_created" : false,
+  "job_count" : 42
+}

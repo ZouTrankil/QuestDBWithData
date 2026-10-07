@@ -1,0 +1,20 @@
+{
+  "task_id": "D101",
+  "decision": "accepted_real_source_fixture_only",
+  "fixture_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\source-fixture-initial-20261006.json",
+  "fixture_sha256": "c38a61f792ef6be689e1ed1cdb335dabf3da7f9b44c886a11fd4c84669f945f4",
+  "executed_script_snapshot": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\fixture-script-initial-20261006.py",
+  "executed_script_sha256": "1c4ebc18d5936e3a19da62f700c2286d74db1383cea393e7337782f67ca13e95",
+  "private_pid": 23388,
+  "source_rows": 8764,
+  "source_full_field_value_comparisons": 136072,
+  "acknowledged_ddl": 5,
+  "acknowledged_source_batches": 19,
+  "publisher_invocations": 0,
+  "cache_rows": 0,
+  "coverage_rows": 0,
+  "formal_changed": false,
+  "unknown_or_retry": false,
+  "next_permitted_step": "Java canonical first readthrough after pure protocol/gateway tests pass",
+  "review": "Root reviewed full SHA/key/schema/PG bit validation and PID/root guard; independent scripts review reports no initial blocker; source-only target stability and physical partition/WAL guards are present."
+}

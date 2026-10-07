@@ -1,0 +1,43 @@
+{
+  "protocol_version": 1,
+  "status": "FAILED_PRECONDITION",
+  "owner_invoked": false,
+  "owner_submissions": [],
+  "formal_mutated": false,
+  "source_mutated": false,
+  "ddl_operations": 0,
+  "automatic_retry": false,
+  "bridge_process": {
+    "pid": 36672,
+    "started_at": "2026-10-06T09:21:32.498422+00:00",
+    "exit_observed": false,
+    "terminal_response_written": true,
+    "exit_code": 1
+  },
+  "owner_sender_stopped": true,
+  "request_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\owner-preview-native-metadata-request-20261006.json",
+  "request_sha256": "1c346b483416f43dd07a1c339f30c36a19d4f2ca68f308cff0a394a3dbd3e5c7",
+  "failed_readonly_select": {
+    "sql": "SELECT * FROM tables()",
+    "executed_sql": "SELECT id,table_name,designatedTimestamp,partitionBy,walEnabled,dedup,ttlValue,ttlUnit,matView,directoryName,maxUncommittedRows,o3MaxLag,table_suspended,table_type,table_row_count,cast(table_min_timestamp AS LONG) AS table_min_timestamp,cast(table_max_timestamp AS LONG) AS table_max_timestamp,table_last_write_timestamp,table_txn,table_memory_pressure_level,table_write_amp_count,table_write_amp_p50,table_write_amp_p90,table_write_amp_p99,table_write_amp_max,table_merge_rate_count,table_merge_rate_p50,table_merge_rate_p90,table_merge_rate_p99,table_merge_rate_max,wal_pending_row_count,wal_dedup_row_count_since_start,wal_txn,wal_max_timestamp,wal_tx_count,wal_tx_size_p50,wal_tx_size_p90,wal_tx_size_p99,wal_tx_size_max,replica_batch_count,replica_batch_size_p50,replica_batch_size_p90,replica_batch_size_p99,replica_batch_size_max,replica_more_pending FROM tables()",
+    "parameters": null
+  },
+  "error_code": "ValueError",
+  "error": "year 58683 is out of range",
+  "error_traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\d101_etf_cache_owner_bridge.py\", line 571, in main\n    execute(request, result, persist)\n  File \"C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\d101_etf_cache_owner_bridge.py\", line 503, in execute\n    fresh = build_preview(request, target, client)\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\d101_etf_cache_owner_bridge.py\", line 321, in build_preview\n    state = owner._source_state(SPEC, version_dates.min(), version_dates.max())\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_cache.py\", line 180, in _source_state\n    metadata = self._client.fetch_df(\"SELECT * FROM tables()\").set_index(\"table_name\")\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\d101_etf_cache_owner_bridge.py\", line 172, in fetch_df\n    records = cursor.fetchmany(50001)\n              ^^^^^^^^^^^^^^^^^^^^^^^\nValueError: year 58683 is out of range\n",
+  "metadata_transport_adaptation_applied": false,
+  "timestamp_transport_evidence": {
+    "initial_failed_preview": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\owner-preview-initial-response-20261006.json",
+      "sha256": "fd2c851e75bfbb3d6439eb144807a1c0878c7bfe1d7fc66457a4335b0a346864"
+    },
+    "initial_failed_preview_request": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\owner-preview-initial-request-20261006.json",
+      "sha256": "68cc45d0d9b01f9e46f3814576f805e8beb20690fd743cae62e0698c87858776"
+    },
+    "readonly_native_carrier_diagnostic": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\owner-timestamp-carrier-diagnostic-20261006.json",
+      "sha256": "bd63c77e4ae4ae687e15cc292cda8da051d935c4126632851dc727347defcce4"
+    }
+  }
+}

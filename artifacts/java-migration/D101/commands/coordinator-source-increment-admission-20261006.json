@@ -1,0 +1,79 @@
+{
+  "java_increment_stage_admitted": false,
+  "private_target": {
+    "pid": 23388,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19020,
+    "pg_port": 18832
+  },
+  "initial_source_fixture": {
+    "sha256": "c38a61f792ef6be689e1ed1cdb335dabf3da7f9b44c886a11fd4c84669f945f4",
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\source-fixture-initial-20261006.json"
+  },
+  "preflight": {
+    "sha256": "90ac7e6d5a77b2c19478025317772f2eb63c9e9b0e2389c42f32364fce381ecb",
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\source-increment-preflight-readonly-20261006.json"
+  },
+  "target_id": "questdb-012f0bebfa498858a5ebe3040de1b5b3c9dc18dabfc6f7cbcd31ad2899d41af9",
+  "decision": "accepted_for_isolated_source_increment",
+  "hit": {
+    "sha256": "42fc13b797379f964e84ea5514d4199c7d7b6eb87fd3405ab692b22dd89ef1bb",
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-hit-20261006.json"
+  },
+  "checked_at": "2026-10-06T11:13:00.6374633Z",
+  "evidence": [
+    {
+      "sha256": "c67d89f793d37f15176bb8f7561db783a335258c57cb310875c45e6b407785a7",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\coordinator-hit-readonly-recovery-review-20261006.json"
+    },
+    {
+      "sha256": "6bc5ba02c2f46db6b73c4622305390bb441ae768f101ec88401bd97af4abc29d",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-hit-readonly-recovery-20261006.json"
+    },
+    {
+      "sha256": "83811728c2840b21a768408ead0546a409053d708be544c962e441a7ef4c53fd",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\coordinator-hit-new-run-review-20261006.json"
+    },
+    {
+      "sha256": "de5777ea29aebf3e3c3197abc25016496d0b314294c6dbd3bef1f170132bc7ef",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\coordinator-source-increment-preflight-review-20261006.json"
+    },
+    {
+      "sha256": "95ab76d0c803c9d96b8852866ee1b973997bc464fc7b4389196b454f96426a90",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\python-fixture-admission-guards-20261006.json"
+    }
+  ],
+  "required_runtime": "Exact 7 SOURCE_INSERT ACKs/2903 rows with fresh all-ledger and native producer absence checks before every batch; current targets remain two; frozen formal full-field captures/source metadata revalidated; any UNKNOWN retained without replay",
+  "sources_fingerprint": "40ea432abd94e78faf7994fe74cf68fbcc981113340d312a57ff7184a2358e93",
+  "protected_tables": [
+    "etf_market_overview_daily_cache",
+    "market_barometer_cache_coverage"
+  ],
+  "python_unique": 75,
+  "human_review": "pending_review",
+  "increment": {
+    "max_batches": 7,
+    "max_rows": 2903,
+    "tables": [
+      "etf_share",
+      "etf_daily"
+    ],
+    "batch_rows": 500,
+    "trade_dates": [
+      "2026-09-21"
+    ]
+  },
+  "cache_or_coverage_writes_admitted": false,
+  "formal_writes_admitted": false,
+  "next_task_admitted": false,
+  "task_id": "D101",
+  "script_sha256": "f868895a29ff81257d70202c0c9aebd2d04cbda81239140f2eb42ef2446752de",
+  "java_ledger_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-45e5e7ce-b273-4510-8d15-e1abe5397550.sqlite3",
+  "java_pure_unique": 184,
+  "protocol_version": 1,
+  "first": {
+    "sha256": "50be7fef72f5891cc97f61256240f3aa0eb1d9946acee1f0c210f3913ba5860b",
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-first-20261006.json"
+  }
+}

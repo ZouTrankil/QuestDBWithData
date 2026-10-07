@@ -1,0 +1,36 @@
+{
+  "task_id": "D102",
+  "decision": "accepted_for_one_new_guarded_private_missing_view_attempt",
+  "checked_at": "2026-10-06T13:45:37.707064+00:00",
+  "independent_review": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-precreate-new-attempt-review-20261006.json",
+    "sha256": "314b3ba15781c105d94960a812d65d9117e2042d931674f8b70c9fa73379c56c"
+  },
+  "evidence": {
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-history-rule-20261006.json": "c37014e6c236eba748ac7048b393c07a6cd8330e0ea063aa674288f94eec5e82",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\failed-history-rule-precreate-diagnostic-20261006.json": "a1f82c66ec7c8029f00401ccee681b212abeac08353ab320ea18ddfc49779c26",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-completed-producer-identity-review-20261006.json": "810c456a7c024a497a375a2369000f0991779bdea8a1975a440efec006e28cad",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\audit_d102_etf_view.py": "818e4216602ab2bbdee840d650093e0eb1cb11366bad633cb8488b4d8d8549cb",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d102_script_guards.py": "bb90338c52f97f2c599bbe3927ca2d52f38a0bac62d1a97ad4f9c4029e41cbc9",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\python-historical-identity-leaf-guards-20261006.json": "da716be168adc3ad7ece00d45f5cd1143dc4d78fad340b23165156468da4ff53",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\python-historical-identity-leaf-guards-20261006.log": "ac77e7a9db41cae7ab187e5ef4937ec5d75bea1a010edb0809e05aaebb872e73",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-historical-identity-rule-review-20261006.json": "a3f4e0a5992e64562467f761779503dda084ef84618951f55e2fe58947d7411b",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\actual-historical-proof-consumption-20261006.json": "1562d9a876efa1714ef8899257910ab514c7984562408f47d8a05ba4264d27bf",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\coordinator-review-20261006.json": "2201c05e5e05c4b056a5f3170be86ed86c230fb08e1d7dcf42f93c7228fccaef",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-typed-write-20261006.json": "6914f8cddb9d1bf638d70d6db7a8100cc3ea3631f141267b4d145ec70dce0cf5"
+  },
+  "new_output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-history-rule-new-attempt-20261006.json",
+  "private_target": {
+    "pid": 23388,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19020,
+    "pg_port": 18832
+  },
+  "fresh_identity_rule_unchanged": true,
+  "earlier_actual_ddl_attempts": 0,
+  "max_ddl_attempts": 1,
+  "automatic_retry": false,
+  "unknown_ack_policy": "Retain UNKNOWN and stop; no resend or reset",
+  "next_task_admitted": false
+}

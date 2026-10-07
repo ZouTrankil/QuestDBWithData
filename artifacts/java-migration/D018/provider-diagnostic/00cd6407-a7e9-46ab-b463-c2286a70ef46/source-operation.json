@@ -1,0 +1,16 @@
+{
+  "task" : "D018",
+  "startedAt" : "2026-09-29T20:00:22.839450800Z",
+  "databaseWrites" : 0,
+  "dates" : [ {
+    "sourcePages" : 3,
+    "runnerChunks" : 2,
+    "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D018\\provider-diagnostic\\00cd6407-a7e9-46ab-b463-c2286a70ef46\\source\\source-20260827-82d03043144c7e8e8593d9c7547793e56bf6da7a20845c4483f07d767f7042e0.json",
+    "date" : "2026-08-27",
+    "fingerprint" : "82d03043144c7e8e8593d9c7547793e56bf6da7a20845c4483f07d767f7042e0",
+    "rows" : 18718
+  } ],
+  "status" : "FAILED",
+  "failure" : "com.zoutrankil.questdbwithdata.service.PageExecutor$Incomplete: Page or row bound exceeded",
+  "finishedAt" : "2026-09-29T20:01:33.892582100Z"
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.PreparedWriteAdapterTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-06T15:09:37.533Z" hostname="AMD395" time="0.642">
+  <properties/>
+  <testcase name="emptyPreparedBatchCompletesWithoutAWrite()" classname="com.zoutrankil.data.service.PreparedWriteAdapterTest" time="0.195"/>
+  <testcase name="lossyOwnerMappingAndTargetDriftAreRejectedBeforeSending()" classname="com.zoutrankil.data.service.PreparedWriteAdapterTest" time="0.029"/>
+  <testcase name="preparedRowsUseVerifiedRunnerAndResumeWithoutAnotherSend()" classname="com.zoutrankil.data.service.PreparedWriteAdapterTest" time="0.416"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" tests="23" skipped="0" failures="0" errors="0" timestamp="2026-10-06T10:38:09.666Z" hostname="AMD395" time="7.516">
+  <properties/>
+  <testcase name="unanchoredOrDifferentSourceHistoryAndZeroSourceCannotAdvanceCheckpoint()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="2.681"/>
+  <testcase name="alreadyVerifiedOutcomeWithRetainedLeaseCanBeReverifiedAndReleased()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.398"/>
+  <testcase name="decorativeMetadataFailureDoesNotHideADurableRunOrStatus()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.108"/>
+  <testcase name="reconcileModeVerifiesOnlySelectsAndNeverCallsPublisherOrSubmissionHook()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.27"/>
+  <testcase name="callerStoppedFlagCannotReleaseUnknownWithoutActualSenderProof()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.166"/>
+  <testcase name="activeCancellationIsDurableWithoutInventingCompletion()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.066"/>
+  <testcase name="unknownOwnerDeliveryRetainsWholeDatasetLockAndRejectsAnUnrelatedWindow()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.302"/>
+  <testcase name="checkpointCannotPermitAnOldAnchorToExceedThirtyOneDayBudget()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.107"/>
+  <testcase name="unknownFirstHitCanReconcileTwoFreshCompleteDaysWithoutInventingASecondSubmission()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.393"/>
+  <testcase name="incrementalAlwaysRevalidatesTheEntireAnchorDespiteAPriorCheckpoint()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.12"/>
+  <testcase name="anUnknownFutureTailDoesNotMoveCheckpointPastTheLastActuallyVerifiedSourceDay()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.227"/>
+  <testcase name="partialResumeReReadsTheWholePrefixAndReusesOnlyActuallyVerifiedUnits()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.517"/>
+  <testcase name="noSourceDaysAreExplicitVerifiedEmptyAndNeverInvokeTheOwner()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.126"/>
+  <testcase name="unknownFirstUnitOfTwoKnownDaysCannotReconcileAnUnsubmittedPrefixOrReplay()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.312"/>
+  <testcase name="sourceDriftDuringReconciliationKeepsUnknownAndExclusion()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.144"/>
+  <testcase name="terminalCancelAndVerifiedResumeDoNotAlterACompletedRun()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.132"/>
+  <testcase name="realStoppedAndExactReadOnlyProofReconcilesUnknownAndReleasesLease()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.238"/>
+  <testcase name="everyKnownDateIncludingEmptyJoinIsOneDurablySubmittedUnit()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.308"/>
+  <testcase name="resumeChangedGlobalSourceFailsDurablyWithoutReplanningOrPublication()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.134"/>
+  <testcase name="canonicalPreSubmissionCancellationCanResumeWithoutAFalseVerifiedCheckpoint()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.248"/>
+  <testcase name="reconciliationCanFinishSubmittedSliceAndRunningAttemptAfterAnOutcomePersistenceFailure()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.234"/>
+  <testcase name="definitionHasExactlyTheExistingThreeSourceJobsAndFiniteManualBudgets()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.004"/>
+  <testcase name="failedRunResumePreservesEveryFrozenParameterAndParent()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.256"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\zouqiang\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.18.11\82212e5b3633e7a65fca8bec525762cfb6c9bae4\byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

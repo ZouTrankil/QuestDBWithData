@@ -1,0 +1,936 @@
+{
+  "runs": [
+    {
+      "id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "parent_run_id": null,
+      "job_id": "data.equity_style_monthly",
+      "job_version": 1,
+      "logical_date": "2026-10-06",
+      "target_id": "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json": "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    },
+    {
+      "id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "parent_run_id": null,
+      "job_id": "data.equity_style_monthly",
+      "job_version": 1,
+      "logical_date": "2026-10-06",
+      "target_id": "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json": "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    },
+    {
+      "id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "parent_run_id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "job_id": "data.equity_style_monthly",
+      "job_version": 1,
+      "logical_date": "2026-10-06",
+      "target_id": "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json": "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    },
+    {
+      "id": "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "parent_run_id": null,
+      "job_id": "data.equity_style_monthly",
+      "job_version": 1,
+      "logical_date": "2026-10-06",
+      "target_id": "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json": "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    },
+    {
+      "id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "parent_run_id": null,
+      "job_id": "data.equity_style_monthly",
+      "job_version": 1,
+      "logical_date": "2026-10-06",
+      "target_id": "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json": "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    },
+    {
+      "id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "parent_run_id": null,
+      "job_id": "data.equity_style_monthly",
+      "job_version": 1,
+      "logical_date": "2026-10-06",
+      "target_id": "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json": "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"RECONCILE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    },
+    {
+      "id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "parent_run_id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "job_id": "write.equity_style_monthly",
+      "job_version": 1,
+      "logical_date": "2026-10-06",
+      "target_id": "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json": "{\"definition\":{\"jobId\":\"write.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"java.equity_style_monthly.bounded_materializer\",\"supportedModes\":[\"INGEST\"],\"defaultMode\":\"INGEST\",\"parameters\":{\"payloadFingerprint\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"memberBatch\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"groupBatch\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"planFingerprint\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"prepared.local\",\"slicePolicyRef\":\"prepared.single_page\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT30S\"},\"timeout\":\"PT20M\",\"budget\":{\"maxWindowDays\":1,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":1,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"MANUAL\",\"zone\":\"Z\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"INGEST\",\"parameters\":{\"groupBatch\":\"d103-actual-june\",\"memberBatch\":\"d103-actual-june-member\",\"payloadFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"planFingerprint\":\"4cddc997848a8995bdacdcabd0927a8a2e5bfd1662f7c957c2d1e07c3fa17776\"},\"from\":null,\"to\":null,\"logicalDate\":\"2026-10-06\"}"
+    },
+    {
+      "id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "parent_run_id": null,
+      "job_id": "group.prepared_writes",
+      "job_version": 1,
+      "logical_date": "2026-10-06",
+      "target_id": "group-control",
+      "frozen_json": "{\"group\":{\"groupId\":\"group.prepared_writes\",\"version\":1,\"members\":[{\"job\":{\"jobId\":\"write.equity_style_monthly\",\"version\":1},\"after\":[]}],\"enabled\":true,\"dailyEligible\":false},\"logicalDate\":\"2026-10-06\",\"members\":[{\"frozenRequest\":\"{\\\"definition\\\":{\\\"jobId\\\":\\\"write.equity_style_monthly\\\",\\\"version\\\":1,\\\"datasetId\\\":\\\"equity_style_monthly\\\",\\\"datasetVersion\\\":1,\\\"owner\\\":\\\"java.equity_style_monthly.bounded_materializer\\\",\\\"supportedModes\\\":[\\\"INGEST\\\"],\\\"defaultMode\\\":\\\"INGEST\\\",\\\"parameters\\\":{\\\"payloadFingerprint\\\":{\\\"type\\\":\\\"STRING\\\",\\\"required\\\":true,\\\"maxLength\\\":128,\\\"maxItems\\\":1,\\\"choices\\\":[]},\\\"memberBatch\\\":{\\\"type\\\":\\\"STRING\\\",\\\"required\\\":true,\\\"maxLength\\\":128,\\\"maxItems\\\":1,\\\"choices\\\":[]},\\\"groupBatch\\\":{\\\"type\\\":\\\"STRING\\\",\\\"required\\\":true,\\\"maxLength\\\":128,\\\"maxItems\\\":1,\\\"choices\\\":[]},\\\"planFingerprint\\\":{\\\"type\\\":\\\"STRING\\\",\\\"required\\\":true,\\\"maxLength\\\":128,\\\"maxItems\\\":1,\\\"choices\\\":[]}},\\\"ratePolicyRef\\\":\\\"prepared.local\\\",\\\"slicePolicyRef\\\":\\\"prepared.single_page\\\",\\\"verificationPolicyRef\\\":\\\"questdb.full_key_values\\\",\\\"retry\\\":{\\\"maxAttempts\\\":1,\\\"backoff\\\":\\\"PT1S\\\",\\\"maxElapsed\\\":\\\"PT30S\\\"},\\\"timeout\\\":\\\"PT20M\\\",\\\"budget\\\":{\\\"maxWindowDays\\\":1,\\\"maxSlices\\\":1,\\\"maxPages\\\":1,\\\"maxRows\\\":1,\\\"maxBatchBytes\\\":1048576},\\\"revisionDays\\\":0,\\\"dependencies\\\":[],\\\"frequency\\\":\\\"MANUAL\\\",\\\"zone\\\":\\\"Z\\\",\\\"enabled\\\":true,\\\"dailyEligible\\\":false},\\\"mode\\\":\\\"INGEST\\\",\\\"parameters\\\":{\\\"groupBatch\\\":\\\"d103-actual-june\\\",\\\"memberBatch\\\":\\\"d103-actual-june-member\\\",\\\"payloadFingerprint\\\":\\\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\\\",\\\"planFingerprint\\\":\\\"4cddc997848a8995bdacdcabd0927a8a2e5bfd1662f7c957c2d1e07c3fa17776\\\"},\\\"from\\\":null,\\\"to\\\":null,\\\"logicalDate\\\":\\\"2026-10-06\\\"}\",\"jobId\":\"write.equity_style_monthly\",\"ordinal\":0,\"targetId\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"}]}"
+    }
+  ],
+  "entries": [
+    {
+      "id": "attempt-4b49b3e5-3a30-49f4-a51a-05329095f296",
+      "kind": "ATTEMPT",
+      "run_id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "parent_id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"65efc99d8addeea814af0bc42b6a5a0d62f0a3ba578730112e4fbb69728d517a\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:06.905545500Z"
+    },
+    {
+      "id": "attempt-4dd3ec55-313d-46f9-8846-ecc6ebe7a68b",
+      "kind": "ATTEMPT",
+      "run_id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "parent_id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.857940300Z"
+    },
+    {
+      "id": "attempt-579d0a61-dd96-4c82-97ee-1b23ea0c6d2d",
+      "kind": "ATTEMPT",
+      "run_id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "parent_id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:54.958553800Z"
+    },
+    {
+      "id": "attempt-592a4371-25cd-44bc-811e-796949953b84",
+      "kind": "ATTEMPT",
+      "run_id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "parent_id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.556109500Z"
+    },
+    {
+      "id": "attempt-bac7ead1-69ef-4a06-9fe8-2b4634e8da7c",
+      "kind": "ATTEMPT",
+      "run_id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "parent_id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:58.781231100Z"
+    },
+    {
+      "id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "kind": "RUN",
+      "run_id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "parent_id": null,
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:58.792534200Z"
+    },
+    {
+      "id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "kind": "RUN",
+      "run_id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "parent_id": null,
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:54.973281300Z"
+    },
+    {
+      "id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "kind": "RUN",
+      "run_id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "parent_id": null,
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.567556800Z"
+    },
+    {
+      "id": "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "kind": "RUN",
+      "run_id": "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "parent_id": null,
+      "state": "CANCELLED",
+      "revision": 1,
+      "payload_json": "{\"errorCode\":\"CancellationException\"}",
+      "updated_at": "2026-10-06T15:12:07.011770Z"
+    },
+    {
+      "id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "kind": "RUN",
+      "run_id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "parent_id": null,
+      "state": "CANCELLED",
+      "revision": 1,
+      "payload_json": "{\"errorCode\":\"CancellationException\"}",
+      "updated_at": "2026-10-06T15:11:58.883566700Z"
+    },
+    {
+      "id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "kind": "RUN",
+      "run_id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "parent_id": null,
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.870390100Z"
+    },
+    {
+      "id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "kind": "RUN",
+      "run_id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "parent_id": null,
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"65efc99d8addeea814af0bc42b6a5a0d62f0a3ba578730112e4fbb69728d517a\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:06.916978Z"
+    },
+    {
+      "id": "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "kind": "SLICE",
+      "run_id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "parent_id": "attempt-4dd3ec55-313d-46f9-8846-ecc6ebe7a68b",
+      "state": "VERIFIED",
+      "revision": 6,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.824768700Z"
+    },
+    {
+      "id": "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "kind": "SLICE",
+      "run_id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "parent_id": "attempt-592a4371-25cd-44bc-811e-796949953b84",
+      "state": "VERIFIED",
+      "revision": 6,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.521370800Z"
+    },
+    {
+      "id": "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "kind": "SLICE",
+      "run_id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "parent_id": "attempt-bac7ead1-69ef-4a06-9fe8-2b4634e8da7c",
+      "state": "VERIFIED",
+      "revision": 6,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:58.744878200Z"
+    },
+    {
+      "id": "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "kind": "SLICE",
+      "run_id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "parent_id": "attempt-579d0a61-dd96-4c82-97ee-1b23ea0c6d2d",
+      "state": "VERIFIED",
+      "revision": 6,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:54.907323800Z"
+    },
+    {
+      "id": "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "kind": "SLICE",
+      "run_id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "parent_id": "attempt-4b49b3e5-3a30-49f4-a51a-05329095f296",
+      "state": "VERIFIED",
+      "revision": 6,
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:06.887486200Z"
+    },
+    {
+      "id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "kind": "RUN",
+      "run_id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "parent_id": null,
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"matchedRows\":1,\"duplicateKeys\":0,\"passed\":true,\"mismatchedRows\":0,\"expectedRows\":1,\"readbackEvidence\":\"ledger:run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1\",\"actualRows\":1,\"missingKeys\":0,\"sourceFingerprint\":\"21563b4215d15ffc3d17826e1cff67ea0fb4b51e9248bd2c203b01d8203e61de\"},\"reusedChildReadback\":{},\"metric\":\"verifiedChildRuns\"}",
+      "updated_at": "2026-10-06T15:12:06.949470Z"
+    }
+  ],
+  "events": [
+    {
+      "entry_id": "attempt-4b49b3e5-3a30-49f4-a51a-05329095f296",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:06.579463700Z"
+    },
+    {
+      "entry_id": "attempt-4b49b3e5-3a30-49f4-a51a-05329095f296",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:06.588670600Z"
+    },
+    {
+      "entry_id": "attempt-4b49b3e5-3a30-49f4-a51a-05329095f296",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"65efc99d8addeea814af0bc42b6a5a0d62f0a3ba578730112e4fbb69728d517a\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:06.905545500Z"
+    },
+    {
+      "entry_id": "attempt-4dd3ec55-313d-46f9-8846-ecc6ebe7a68b",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.673101800Z"
+    },
+    {
+      "entry_id": "attempt-4dd3ec55-313d-46f9-8846-ecc6ebe7a68b",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.680744400Z"
+    },
+    {
+      "entry_id": "attempt-4dd3ec55-313d-46f9-8846-ecc6ebe7a68b",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.857940300Z"
+    },
+    {
+      "entry_id": "attempt-579d0a61-dd96-4c82-97ee-1b23ea0c6d2d",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:54.319271500Z"
+    },
+    {
+      "entry_id": "attempt-579d0a61-dd96-4c82-97ee-1b23ea0c6d2d",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:54.327522400Z"
+    },
+    {
+      "entry_id": "attempt-579d0a61-dd96-4c82-97ee-1b23ea0c6d2d",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:54.958553800Z"
+    },
+    {
+      "entry_id": "attempt-592a4371-25cd-44bc-811e-796949953b84",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.340162300Z"
+    },
+    {
+      "entry_id": "attempt-592a4371-25cd-44bc-811e-796949953b84",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.348582300Z"
+    },
+    {
+      "entry_id": "attempt-592a4371-25cd-44bc-811e-796949953b84",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.556109500Z"
+    },
+    {
+      "entry_id": "attempt-bac7ead1-69ef-4a06-9fe8-2b4634e8da7c",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:58.438224600Z"
+    },
+    {
+      "entry_id": "attempt-bac7ead1-69ef-4a06-9fe8-2b4634e8da7c",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:58.445874600Z"
+    },
+    {
+      "entry_id": "attempt-bac7ead1-69ef-4a06-9fe8-2b4634e8da7c",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:58.781231100Z"
+    },
+    {
+      "entry_id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:58.382210400Z"
+    },
+    {
+      "entry_id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:58.430069100Z"
+    },
+    {
+      "entry_id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:58.792534200Z"
+    },
+    {
+      "entry_id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:54.230243Z"
+    },
+    {
+      "entry_id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:54.309077800Z"
+    },
+    {
+      "entry_id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:54.973281300Z"
+    },
+    {
+      "entry_id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.290907300Z"
+    },
+    {
+      "entry_id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.332734500Z"
+    },
+    {
+      "entry_id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.567556800Z"
+    },
+    {
+      "entry_id": "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:07.002126200Z"
+    },
+    {
+      "entry_id": "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "revision": 1,
+      "state": "CANCELLED",
+      "payload_json": "{\"errorCode\":\"CancellationException\"}",
+      "updated_at": "2026-10-06T15:12:07.011770Z"
+    },
+    {
+      "entry_id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:58.872569Z"
+    },
+    {
+      "entry_id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "revision": 1,
+      "state": "CANCELLED",
+      "payload_json": "{\"errorCode\":\"CancellationException\"}",
+      "updated_at": "2026-10-06T15:11:58.883566700Z"
+    },
+    {
+      "entry_id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.623888700Z"
+    },
+    {
+      "entry_id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.665933Z"
+    },
+    {
+      "entry_id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.870390100Z"
+    },
+    {
+      "entry_id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:06.521492600Z"
+    },
+    {
+      "entry_id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:06.571119100Z"
+    },
+    {
+      "entry_id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"65efc99d8addeea814af0bc42b6a5a0d62f0a3ba578730112e4fbb69728d517a\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:06.916978Z"
+    },
+    {
+      "entry_id": "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.702751600Z"
+    },
+    {
+      "entry_id": "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.710916200Z"
+    },
+    {
+      "entry_id": "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision": 2,
+      "state": "FETCHED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:12:02.718701600Z"
+    },
+    {
+      "entry_id": "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision": 3,
+      "state": "VALIDATED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:12:02.726821300Z"
+    },
+    {
+      "entry_id": "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision": 4,
+      "state": "SUBMITTED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:12:02.759607700Z"
+    },
+    {
+      "entry_id": "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision": 5,
+      "state": "ACKNOWLEDGED",
+      "payload_json": "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at": "2026-10-06T15:12:02.815453600Z"
+    },
+    {
+      "entry_id": "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision": 6,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.824768700Z"
+    },
+    {
+      "entry_id": "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.373230Z"
+    },
+    {
+      "entry_id": "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:02.383530500Z"
+    },
+    {
+      "entry_id": "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision": 2,
+      "state": "FETCHED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:12:02.391442200Z"
+    },
+    {
+      "entry_id": "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision": 3,
+      "state": "VALIDATED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:12:02.398533700Z"
+    },
+    {
+      "entry_id": "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision": 4,
+      "state": "SUBMITTED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:12:02.433608700Z"
+    },
+    {
+      "entry_id": "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision": 5,
+      "state": "ACKNOWLEDGED",
+      "payload_json": "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at": "2026-10-06T15:12:02.511557400Z"
+    },
+    {
+      "entry_id": "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision": 6,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:02.521370800Z"
+    },
+    {
+      "entry_id": "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:58.472145Z"
+    },
+    {
+      "entry_id": "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:58.480136100Z"
+    },
+    {
+      "entry_id": "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision": 2,
+      "state": "FETCHED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:11:58.490249500Z"
+    },
+    {
+      "entry_id": "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision": 3,
+      "state": "VALIDATED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:11:58.499400600Z"
+    },
+    {
+      "entry_id": "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision": 4,
+      "state": "SUBMITTED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:11:58.536106600Z"
+    },
+    {
+      "entry_id": "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision": 5,
+      "state": "ACKNOWLEDGED",
+      "payload_json": "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at": "2026-10-06T15:11:58.735516400Z"
+    },
+    {
+      "entry_id": "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision": 6,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:58.744878200Z"
+    },
+    {
+      "entry_id": "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:54.369587200Z"
+    },
+    {
+      "entry_id": "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:11:54.380422100Z"
+    },
+    {
+      "entry_id": "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision": 2,
+      "state": "FETCHED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:11:54.391863900Z"
+    },
+    {
+      "entry_id": "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision": 3,
+      "state": "VALIDATED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:11:54.402119200Z"
+    },
+    {
+      "entry_id": "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision": 4,
+      "state": "SUBMITTED",
+      "payload_json": "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at": "2026-10-06T15:11:54.451451Z"
+    },
+    {
+      "entry_id": "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision": 5,
+      "state": "ACKNOWLEDGED",
+      "payload_json": "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at": "2026-10-06T15:11:54.895976900Z"
+    },
+    {
+      "entry_id": "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision": 6,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:11:54.907323800Z"
+    },
+    {
+      "entry_id": "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:06.650109Z"
+    },
+    {
+      "entry_id": "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:06.659173500Z"
+    },
+    {
+      "entry_id": "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision": 2,
+      "state": "FETCHED",
+      "payload_json": "{\"returnedRows\":1,\"sourceFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\write-evidence\\\\write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74\\\\styles\\\\prepared-input-28462e3b-df2c-48e2-a4a4-790fcd4a72f3.json\",\"cursor\":null}",
+      "updated_at": "2026-10-06T15:12:06.667043900Z"
+    },
+    {
+      "entry_id": "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision": 3,
+      "state": "VALIDATED",
+      "payload_json": "{\"returnedRows\":1,\"sourceFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\write-evidence\\\\write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74\\\\styles\\\\prepared-input-28462e3b-df2c-48e2-a4a4-790fcd4a72f3.json\",\"cursor\":null}",
+      "updated_at": "2026-10-06T15:12:06.676904Z"
+    },
+    {
+      "entry_id": "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision": 4,
+      "state": "SUBMITTED",
+      "payload_json": "{\"returnedRows\":1,\"sourceFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\write-evidence\\\\write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74\\\\styles\\\\prepared-input-28462e3b-df2c-48e2-a4a4-790fcd4a72f3.json\",\"cursor\":null}",
+      "updated_at": "2026-10-06T15:12:06.714130400Z"
+    },
+    {
+      "entry_id": "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision": 5,
+      "state": "ACKNOWLEDGED",
+      "payload_json": "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":1,\"verifiedRows\":1,\"receipts\":[{\"batch\":1,\"submittedRows\":1,\"verifiedRows\":1,\"bytes\":3012,\"digest\":\"2944645a3159c6c4149dce547a4f01adfe750e47269010c74ff4af278656e26c\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at": "2026-10-06T15:12:06.879326800Z"
+    },
+    {
+      "entry_id": "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision": 6,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at": "2026-10-06T15:12:06.887486200Z"
+    },
+    {
+      "entry_id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:06.484725100Z"
+    },
+    {
+      "entry_id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T15:12:06.497025600Z"
+    },
+    {
+      "entry_id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"matchedRows\":1,\"duplicateKeys\":0,\"passed\":true,\"mismatchedRows\":0,\"expectedRows\":1,\"readbackEvidence\":\"ledger:run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1\",\"actualRows\":1,\"missingKeys\":0,\"sourceFingerprint\":\"21563b4215d15ffc3d17826e1cff67ea0fb4b51e9248bd2c203b01d8203e61de\"},\"reusedChildReadback\":{},\"metric\":\"verifiedChildRuns\"}",
+      "updated_at": "2026-10-06T15:12:06.949470Z"
+    }
+  ],
+  "groups": [
+    {
+      "parent_run_id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "ordinal": 0,
+      "job_id": "write.equity_style_monthly",
+      "job_version": 1,
+      "child_run_id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1"
+    }
+  ],
+  "leases": [],
+  "ledger_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-java-acceptance.sqlite3",
+  "run_ids": [
+    "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+    "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+    "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+    "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+    "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+    "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+    "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+    "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e"
+  ],
+  "original_operations": [
+    {
+      "role": "first",
+      "run_id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "state": "VERIFIED",
+      "verified_rows": 2,
+      "mode": "MATERIALIZE",
+      "parent_run_id": null,
+      "ledger_entry": {
+        "id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+        "kind": "RUN",
+        "run_id": "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+        "parent_id": null,
+        "state": "VERIFIED",
+        "revision": 2,
+        "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+        "updated_at": "2026-10-06T15:11:54.973281300Z"
+      }
+    },
+    {
+      "role": "same_range_replay",
+      "run_id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "state": "VERIFIED",
+      "verified_rows": 2,
+      "mode": "MATERIALIZE",
+      "parent_run_id": null,
+      "ledger_entry": {
+        "id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+        "kind": "RUN",
+        "run_id": "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+        "parent_id": null,
+        "state": "VERIFIED",
+        "revision": 2,
+        "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+        "updated_at": "2026-10-06T15:11:58.792534200Z"
+      }
+    },
+    {
+      "role": "cancelled_for_resume",
+      "run_id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "state": "CANCELLED",
+      "verified_rows": 0,
+      "mode": "MATERIALIZE",
+      "parent_run_id": null,
+      "ledger_entry": {
+        "id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+        "kind": "RUN",
+        "run_id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+        "parent_id": null,
+        "state": "CANCELLED",
+        "revision": 1,
+        "payload_json": "{\"errorCode\":\"CancellationException\"}",
+        "updated_at": "2026-10-06T15:11:58.883566700Z"
+      }
+    },
+    {
+      "role": "exact_resume",
+      "run_id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "state": "VERIFIED",
+      "verified_rows": 2,
+      "mode": "MATERIALIZE",
+      "parent_run_id": "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "ledger_entry": {
+        "id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+        "kind": "RUN",
+        "run_id": "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+        "parent_id": null,
+        "state": "VERIFIED",
+        "revision": 2,
+        "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+        "updated_at": "2026-10-06T15:12:02.567556800Z"
+      }
+    },
+    {
+      "role": "readonly_reconcile",
+      "run_id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "state": "VERIFIED",
+      "verified_rows": 2,
+      "mode": "RECONCILE",
+      "parent_run_id": null,
+      "ledger_entry": {
+        "id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+        "kind": "RUN",
+        "run_id": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+        "parent_id": null,
+        "state": "VERIFIED",
+        "revision": 2,
+        "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+        "updated_at": "2026-10-06T15:12:02.870390100Z"
+      }
+    },
+    {
+      "role": "configured_write_group",
+      "run_id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "state": "VERIFIED",
+      "verified_rows": 1,
+      "mode": null,
+      "parent_run_id": null,
+      "ledger_entry": {
+        "id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+        "kind": "RUN",
+        "run_id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+        "parent_id": null,
+        "state": "VERIFIED",
+        "revision": 2,
+        "payload_json": "{\"verification\":{\"matchedRows\":1,\"duplicateKeys\":0,\"passed\":true,\"mismatchedRows\":0,\"expectedRows\":1,\"readbackEvidence\":\"ledger:run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1\",\"actualRows\":1,\"missingKeys\":0,\"sourceFingerprint\":\"21563b4215d15ffc3d17826e1cff67ea0fb4b51e9248bd2c203b01d8203e61de\"},\"reusedChildReadback\":{},\"metric\":\"verifiedChildRuns\"}",
+        "updated_at": "2026-10-06T15:12:06.949470Z"
+      }
+    },
+    {
+      "role": "typed_write_child",
+      "run_id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "state": "VERIFIED",
+      "verified_rows": 1,
+      "mode": "INGEST",
+      "parent_run_id": "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "ledger_entry": {
+        "id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+        "kind": "RUN",
+        "run_id": "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+        "parent_id": null,
+        "state": "VERIFIED",
+        "revision": 2,
+        "payload_json": "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"65efc99d8addeea814af0bc42b6a5a0d62f0a3ba578730112e4fbb69728d517a\",\"actualRows\":1,\"missingKeys\":0}}",
+        "updated_at": "2026-10-06T15:12:06.916978Z"
+      }
+    },
+    {
+      "role": "cancelled_before_source",
+      "run_id": "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "state": "CANCELLED",
+      "verified_rows": 0,
+      "mode": "MATERIALIZE",
+      "parent_run_id": null,
+      "ledger_entry": {
+        "id": "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+        "kind": "RUN",
+        "run_id": "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+        "parent_id": null,
+        "state": "CANCELLED",
+        "revision": 1,
+        "payload_json": "{\"errorCode\":\"CancellationException\"}",
+        "updated_at": "2026-10-06T15:12:07.011770Z"
+      }
+    }
+  ],
+  "all_entries_terminal": true,
+  "retained_leases": 0,
+  "mode": "ro",
+  "query_only": true,
+  "observed_at": "2026-10-06T15:21:03.349667+00:00"
+}

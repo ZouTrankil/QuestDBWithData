@@ -1,0 +1,176 @@
+{
+  "dataset_catalog_size": 49,
+  "definition": {
+    "datasetId": "retail_sentiment_daily_cache",
+    "schemaVersion": 1,
+    "provider": "python.derived.market_barometer_cache",
+    "owner": "python.MarketBarometerReadThroughCache._publish",
+    "objectName": "retail_sentiment_daily_cache",
+    "objectKind": "TABLE",
+    "columns": [
+      {
+        "sourceName": "trade_date",
+        "logicalName": "trade_date",
+        "storageName": "trade_date",
+        "storageType": "TIMESTAMP",
+        "nullable": false,
+        "meaning": "Daily calendar bucket in the complete date/source-generation key",
+        "temporal": {
+          "kind": "BUSINESS_DATE",
+          "sourceFormat": "BASIC",
+          "zone": "calendar",
+          "precision": "DAY",
+          "meaning": "Python SAMPLE BY daily aggregation date; exact UTC-midnight TIMESTAMP carrier"
+        },
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "avg_retail_ratio",
+        "logicalName": "avg_retail_ratio",
+        "storageName": "avg_retail_ratio",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Mean GMM retail volume ratio; dimensionless",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "avg_retail_entropy",
+        "logicalName": "avg_retail_entropy",
+        "storageName": "avg_retail_entropy",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Mean retail Shannon time entropy in bits",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "total_retail_amount_yi",
+        "logicalName": "total_retail_amount_yi",
+        "storageName": "total_retail_amount_yi",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Yi yuan; source yuan converted by Python aggregate exactly once",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "total_retail_net_inflow_yi",
+        "logicalName": "total_retail_net_inflow_yi",
+        "storageName": "total_retail_net_inflow_yi",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Signed retail net inflow in yi yuan; no second conversion",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "avg_rel_aggro",
+        "logicalName": "avg_rel_aggro",
+        "storageName": "avg_rel_aggro",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Mean relative aggression; source metric scale retained",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "total_q1",
+        "logicalName": "total_q1",
+        "storageName": "total_q1",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Required exact sum of Q1 windows with inflow and price rise",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "total_q3",
+        "logicalName": "total_q3",
+        "storageName": "total_q3",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Required exact sum of Q3 windows with outflow and price decline",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "avg_wash_trade_ratio",
+        "logicalName": "avg_wash_trade_ratio",
+        "storageName": "avg_wash_trade_ratio",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Mean wash trade ratio; dimensionless",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "total_spoof_count",
+        "logicalName": "total_spoof_count",
+        "storageName": "total_spoof_count",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Required exact severe spoofing count",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "total_manipulation_count",
+        "logicalName": "total_manipulation_count",
+        "storageName": "total_manipulation_count",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Required rowwise fake-support plus fake-pressure sum; no COALESCE or split SUM",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "avg_mfi_score",
+        "logicalName": "avg_mfi_score",
+        "storageName": "avg_mfi_score",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Mean main force intensity; source score scale retained",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "total_main_net_yi",
+        "logicalName": "total_main_net_yi",
+        "storageName": "total_main_net_yi",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Signed main net inflow in yi yuan; no second conversion",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "source_version",
+        "logicalName": "source_version",
+        "storageName": "source_version",
+        "storageType": "SYMBOL",
+        "nullable": false,
+        "meaning": "Complete lowercase SHA-256 of Python product SQL and relevant source identity/partition state",
+        "temporal": null,
+        "legacyNullSentinels": []
+      }
+    ],
+    "businessKey": [
+      "trade_date",
+      "source_version"
+    ],
+    "dedupKey": [
+      "trade_date",
+      "source_version"
+    ],
+    "designatedTimestamp": "trade_date",
+    "partition": "MONTH",
+    "wal": true,
+    "capabilities": [
+      "READ"
+    ],
+    "dependencies": [],
+    "storageRationale": "Retained compatibility for Python's MONTH/WAL/DEDUP historical cache. Active native alias bypasses this publisher. Python remains the sole cache and coverage owner; Java adds no competing writer or job. Four required LONG counts follow the actual Python model, while eight DOUBLE fields retain nulls. Raw historical rows alone do not certify a published receipt, current freshness or production latest. Pagination binds actual table identity and physical/WAL frontier, independently of business source_version."
+  },
+  "build_successful": true
+}

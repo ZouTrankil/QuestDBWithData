@@ -1,0 +1,20 @@
+{
+  "acceptanceId": "e8970dc5629d4229b5b302bef716d4b1",
+  "startedAt": "2026-09-29T16:06:30.369789100Z",
+  "formalTablesMutated": false,
+  "humanReview": "pending_review",
+  "isolatedTables": [
+    "java_d007_daily_e8970dc5629d4229b5b302bef716d4b1",
+    "java_d008_basic_e8970dc5629d4229b5b302bef716d4b1",
+    "java_d009_factor_e8970dc5629d4229b5b302bef716d4b1"
+  ],
+  "isolatedTablesCreated": [],
+  "sourceSyncMayHaveStarted": false,
+  "ledger": "sync-ledger.sqlite",
+  "failedAt": "2026-09-29T16:06:34.775402400Z",
+  "failureType": "org.springframework.jdbc.CannotGetJdbcConnectionException",
+  "failure": "Failed to obtain JDBC Connection",
+  "failureCategory": "questdb_authentication_rejected",
+  "sourceRequestsSent": 0,
+  "result": "blocked_before_source_or_ddl"
+}

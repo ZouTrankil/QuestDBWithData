@@ -1,0 +1,44 @@
+{
+  "ledger_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-45e5e7ce-b273-4510-8d15-e1abe5397550.sqlite3",
+  "source_vector": "310919a6ff3468ffa59dffdf1dad4dce2581cca677e7bc048480538748f0dd33",
+  "evidence": [
+    {
+      "sha256": "66fd525f51d94e3b4db4ae33aa5257d67f62062a588504ba14cb9f7334edcb9b",
+      "path": "artifacts\\java-migration\\D101\\commands\\java-readthrough-increment-20261006.json"
+    },
+    {
+      "sha256": "cc3fa764e5f81072e537c95304cedb6c2c63c86eea6bddfb81f05f5faa4f4d63",
+      "path": "artifacts\\java-migration\\D101\\commands\\coordinator-java-increment-data-review-20261006.json"
+    },
+    {
+      "sha256": "4b09c8b6f3443f176f1f1562bff3b79a3ef084fc2c108cec470ea990147770bc",
+      "path": "artifacts\\java-migration\\D101\\commands\\coordinator-source-increment-data-review-20261006.json"
+    },
+    {
+      "sha256": "f93d25f443819442df18aba1b66b44f2c776b020d89ec6f2461aebda1d4d3e8b",
+      "path": "artifacts\\java-migration\\D101\\commands\\coordinator-final-static-review-20261006.json"
+    }
+  ],
+  "private_pid": 23388,
+  "bounds": {
+    "row_count": 3,
+    "automatic_replays": 0,
+    "member_count": 1,
+    "cache_submissions": 0,
+    "ddl": 0,
+    "coverage_submissions": 0,
+    "expected_actual_owner_hits": 3,
+    "source_or_formal_mutations": 0,
+    "trade_dates": [
+      "2026-09-17",
+      "2026-09-18",
+      "2026-09-21"
+    ]
+  },
+  "task_id": "D101",
+  "next_task_admitted": false,
+  "required_runtime": "Actual configured WriteGroup calls dedicated prepared adapter and original Python read; native prepared full five-field JSON-lines path/SHA and exact4 INGEST params bound into actual shared child ledger; new group/run/claims; each slice rev4 SUBMITTED before read; whole current fields/WAL unchanged; spoof/oldSHA/malformed/standaloneD094 rejected before run/publisher; all processes stopped and no leases",
+  "checked_at": "2026-10-06T11:44:00.2217428Z",
+  "human_review": "pending_review",
+  "decision": "admitted_configured_prepared_typed_write_assertions_only"
+}

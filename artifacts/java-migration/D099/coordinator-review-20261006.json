@@ -1,0 +1,42 @@
+{
+  "task_id": "D099",
+  "reviewed_at": "2026-10-06T15:29:08.330719+08:00",
+  "reviewer": "primary-coordinator + independent-read-only-review",
+  "decision": "accepted_for_serial_progress",
+  "human_review": "pending_review",
+  "validation_scope": "isolated_actual_QuestDB_ordinary_alias_of_D098_frozen_real_source_MV",
+  "tests": {
+    "java": 90,
+    "python_pure_mock_guards": 23,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "source_rows": 23773,
+  "alias_rows": 3,
+  "python_three_way_field_comparisons": 117,
+  "java_alias_parent_field_comparisons": 39,
+  "java_alias_direct_base_field_comparisons": 39,
+  "actual_pages": 3,
+  "alias_ddl_submissions": 1,
+  "alias_ddl_ack": "ACKNOWLEDGED",
+  "source_row_writes": 0,
+  "native_refresh_submissions": 0,
+  "formal_writes": 0,
+  "configured_read_group_verified": true,
+  "formal_invalid_rejected": true,
+  "production_ready": false,
+  "known_limitations": [
+    "Formal parent MV remains invalid; ordinary alias valid flag alone does not prove current output.",
+    "Required real source fixture has 15 of 110 physical columns and does not certify provider or full symbol universe readiness."
+  ],
+  "evidence": [
+    "commands/alias-audit-20261006.json",
+    "commands/java-alias-read-acceptance-20261006.json",
+    "commands/target-tests-20261006.json",
+    "commands/python-script-guards-20261006.json",
+    "commands/java-dataset-registration-20261006.json",
+    "commands/java-job-registration-20261006.json"
+  ],
+  "next_task": "D100"
+}

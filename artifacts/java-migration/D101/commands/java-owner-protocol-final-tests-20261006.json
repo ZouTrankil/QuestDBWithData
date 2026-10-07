@@ -1,0 +1,82 @@
+{
+  "task_id": "D101",
+  "status": "PASSED",
+  "classes": [
+    {
+      "name": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyCacheMappingTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPortTest",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.zoutrankil.data.service.EtfMarketOverviewCacheCatalogStartupTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.zoutrankil.data.service.PersistentWriteGroupRunnerTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.zoutrankil.data.service.ReadGroupReaderTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.zoutrankil.data.service.SyncJobRegistryTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "errors": 0,
+      "name": "com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest",
+      "skipped": 0,
+      "failures": 0,
+      "tests": 8
+    }
+  ],
+  "unique_tests": 97,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "scope": "Latest finite owner/port/caller/job/mapping/catalog + group/read/registry regression, composite by unique testcase classes",
+  "xml_archives": [
+    "artifacts/java-migration/D101/commands/java-owner-prepared-complete-deps-xml-20261006",
+    "artifacts/java-migration/D101/commands/java-prepared-caller-final-xml-20261006"
+  ],
+  "latest_prepared_log": "artifacts/java-migration/D101/commands/java-prepared-caller-final-tests-20261006.log",
+  "other_classes_log": "artifacts/java-migration/D101/commands/java-owner-prepared-final-tests-complete-deps-20261006.log",
+  "retained_failures": "Missing test dependencies, Mockito override stubs and unavailable test annotation fixed; original logs/XML retained",
+  "database_publishing": 0
+}

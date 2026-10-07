@@ -1,0 +1,57 @@
+{
+  "table": "etf_basic",
+  "fields": [
+    "ts_code",
+    "name",
+    "management",
+    "custodian",
+    "fund_type",
+    "found_date",
+    "due_date",
+    "list_date",
+    "issue_date",
+    "delist_date",
+    "issue_amount",
+    "m_fee",
+    "c_fee",
+    "duration_year",
+    "p_value",
+    "min_amount",
+    "exp_return",
+    "benchmark",
+    "status",
+    "invest_type",
+    "type",
+    "trustee",
+    "purc_startdate",
+    "redm_startdate",
+    "market",
+    "timestamp",
+    "update_time"
+  ],
+  "rows": [],
+  "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "formal_identity": {
+    "physical": {
+      "id": 1685,
+      "directoryName": "etf_basic~1685",
+      "table_txn": 8,
+      "table_row_count": 2958,
+      "table_min_timestamp": "1970-01-01T00:00:00.000000Z",
+      "table_max_timestamp": "1970-01-01T00:00:00.000000Z",
+      "partitionBy": "YEAR",
+      "designatedTimestamp": "timestamp",
+      "walEnabled": true,
+      "dedup": true,
+      "table_suspended": false,
+      "wal_pending_row_count": 0
+    },
+    "wal": {
+      "sequencerTxn": 8,
+      "writerTxn": 8,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "settled": true
+  }
+}

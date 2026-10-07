@@ -1,0 +1,327 @@
+{
+  "task_id": "D100",
+  "owner": "original MarketBarometerReadThroughCache._publish",
+  "owner_submissions": [],
+  "ddl_submissions": [
+    {
+      "table": "retail_sentiment_daily_cache",
+      "sql": "CREATE TABLE retail_sentiment_daily_cache (trade_date TIMESTAMP,avg_retail_ratio DOUBLE,avg_retail_entropy DOUBLE,total_retail_amount_yi DOUBLE,total_retail_net_inflow_yi DOUBLE,avg_rel_aggro DOUBLE,total_q1 LONG,total_q3 LONG,avg_wash_trade_ratio DOUBLE,total_spoof_count LONG,total_manipulation_count LONG,avg_mfi_score DOUBLE,total_main_net_yi DOUBLE,source_version SYMBOL) TIMESTAMP(trade_date) PARTITION BY MONTH WAL DEDUP UPSERT KEYS(trade_date,source_version)",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false
+    },
+    {
+      "table": "market_barometer_cache_coverage",
+      "sql": "CREATE TABLE market_barometer_cache_coverage (trade_date TIMESTAMP,dataset_id SYMBOL,source_version SYMBOL,row_count LONG,content_digest STRING) TIMESTAMP(trade_date) PARTITION BY MONTH WAL DEDUP UPSERT KEYS(trade_date,dataset_id,source_version)",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false
+    }
+  ],
+  "phases": [],
+  "current_cache_hit_certified": false,
+  "production_latest_certified": false,
+  "java_writer_exercised": false,
+  "java_checkpoint_exercised": false,
+  "formal_mutated": false,
+  "target": "private-127.0.0.1:19010/18822",
+  "source_projection_scope": "15 necessary real physical fields of formal110; provider/universe readiness not certified",
+  "status": "FAILED",
+  "stage": "first",
+  "checked_at": "2026-10-06T08:01:10.548562+00:00",
+  "private_target_attestation": {
+    "pid": 31760,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d098-isolated-questdb",
+    "address": "127.0.0.1",
+    "http_port": 19010,
+    "pg_port": 18822
+  },
+  "input_target": {
+    "pid": 31760,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d098-isolated-questdb",
+    "address": "127.0.0.1",
+    "http_port": 19010,
+    "pg_port": 18822
+  },
+  "startup_attestation": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D100\\commands\\private-server-restart-20261006.json",
+    "sha256": "8cb32eafd8b509d7809150104ac01d5095927575e9fcae508738349a79cf5c27",
+    "expected_pid": 31760
+  },
+  "formal_source_mv_alias_before": {
+    "tables": {
+      "l2_daily_features": {
+        "id": 1665,
+        "directoryName": "l2_daily_features_recovery_20260911~1665",
+        "table_txn": 11266,
+        "table_row_count": 4924676,
+        "table_min_timestamp": "2023-01-03T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-24T00:00:00.000000Z",
+        "partitionBy": "DAY",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "ts",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "id": 1813,
+        "directoryName": "mv_retail_sentiment_daily_v1~1813",
+        "table_txn": 252,
+        "table_row_count": 886,
+        "table_min_timestamp": "2023-01-03T00:00:00.000000Z",
+        "table_max_timestamp": "2026-08-31T00:00:00.000000Z",
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": false,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      }
+    },
+    "wal": {
+      "l2_daily_features": {
+        "sequencerTxn": 11266,
+        "writerTxn": 11266,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "sequencerTxn": 252,
+        "writerTxn": 252,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    "mv": {
+      "view_name": "mv_retail_sentiment_daily_v1",
+      "view_status": "invalid",
+      "invalidation_reason": "materialized view is ahead of base table and cannot be synchronized",
+      "base_table_name": "l2_daily_features",
+      "view_table_dir_name": "mv_retail_sentiment_daily_v1~1813",
+      "refresh_base_table_txn": 10206,
+      "base_table_txn": 11266,
+      "refresh_type": "timer",
+      "timer_interval": 1,
+      "timer_interval_unit": "MINUTE",
+      "view_sql": "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "view_sql_sha256": "8dc9eb43e0b093b2c2656239f5b49e7e454d699ed157a4eb7c08a50d06c753bc",
+      "definition_matches_python_exact": true
+    },
+    "alias": {
+      "view_name": "v_retail_sentiment_daily",
+      "view_sql": "SELECT * FROM mv_retail_sentiment_daily_v1",
+      "view_table_dir_name": "v_retail_sentiment_daily~240",
+      "invalidation_reason": null,
+      "view_status": "valid",
+      "view_status_update_time": "2026-09-30T01:27:52.538878Z"
+    }
+  },
+  "source_mv_alias_before": {
+    "tables": {
+      "l2_daily_features": {
+        "id": 9,
+        "directoryName": "l2_daily_features~9",
+        "table_txn": 36,
+        "table_row_count": 23773,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "partitionBy": "DAY",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "ts",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "id": 11,
+        "directoryName": "mv_retail_sentiment_daily_v1~11",
+        "table_txn": 11,
+        "table_row_count": 3,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": false,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      }
+    },
+    "wal": {
+      "l2_daily_features": {
+        "sequencerTxn": 36,
+        "writerTxn": 36,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "sequencerTxn": 11,
+        "writerTxn": 11,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    "mv": {
+      "view_name": "mv_retail_sentiment_daily_v1",
+      "view_status": "valid",
+      "invalidation_reason": null,
+      "base_table_name": "l2_daily_features",
+      "view_table_dir_name": "mv_retail_sentiment_daily_v1~11",
+      "refresh_base_table_txn": 36,
+      "base_table_txn": 36,
+      "refresh_type": "timer",
+      "timer_interval": 1,
+      "timer_interval_unit": "MINUTE",
+      "view_sql": "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "view_sql_sha256": "8dc9eb43e0b093b2c2656239f5b49e7e454d699ed157a4eb7c08a50d06c753bc",
+      "definition_matches_python_exact": true
+    },
+    "alias": {
+      "view_name": "v_retail_sentiment_daily",
+      "view_sql": "SELECT * FROM mv_retail_sentiment_daily_v1",
+      "view_table_dir_name": "v_retail_sentiment_daily~12",
+      "invalidation_reason": null,
+      "view_status": "valid",
+      "view_status_update_time": "2026-10-06T07:44:46.384351Z"
+    }
+  },
+  "frozen_python_owner_files_sha256": {
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_cache.py": "5971761ed070f7b178892c90a9114b0609a3dcb2cbf8767867432279371b5bee",
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\models\\market_barometer_cache.py": "d930b1cf639735699c378692978762d31f31b4f970a66cf968869d1e9cb36fe1",
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_views.py": "c2c280376f1642b37e892a87a5b98190f2acad7f954640a88d1624845c0d3dda",
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\common\\persistence\\questdb_model.py": "f29d21ca141302ea1d508ee85f09a4f44375ff5d94b1a4a30cfc880a6605fc92"
+  },
+  "python_owner_file": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_cache.py",
+  "python_owner_file_sha256": "5971761ed070f7b178892c90a9114b0609a3dcb2cbf8767867432279371b5bee",
+  "original_source_frames": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14872828742309666,
+      "avg_retail_entropy": 1.5887293306111183,
+      "total_retail_amount_yi": 17180.14693112448,
+      "total_retail_net_inflow_yi": -840.5730231482072,
+      "avg_rel_aggro": 0.4794140898962389,
+      "total_q1": 82969,
+      "total_q3": 102472,
+      "avg_wash_trade_ratio": 0.08909074639044749,
+      "total_spoof_count": 310560,
+      "total_manipulation_count": 310560,
+      "avg_mfi_score": 0.28992594083188344,
+      "total_main_net_yi": -162.51056215947986
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "avg_retail_ratio": 0.1482778955879337,
+      "avg_retail_entropy": 1.601971357172353,
+      "total_retail_amount_yi": 19172.440182006954,
+      "total_retail_net_inflow_yi": 531.826131947779,
+      "avg_rel_aggro": 0.5069840285517629,
+      "total_q1": 91116,
+      "total_q3": 90850,
+      "avg_wash_trade_ratio": 0.08654103091502331,
+      "total_spoof_count": 306949,
+      "total_manipulation_count": 306949,
+      "avg_mfi_score": 0.32047066705334354,
+      "total_main_net_yi": 36.62509322703998
+    },
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14394985138572083,
+      "avg_retail_entropy": 1.6135276823615923,
+      "total_retail_amount_yi": 19321.916918843424,
+      "total_retail_net_inflow_yi": -115.10705471653013,
+      "avg_rel_aggro": 0.5078168096077674,
+      "total_q1": 91729,
+      "total_q3": 88207,
+      "avg_wash_trade_ratio": 0.08664339640749684,
+      "total_spoof_count": 294851,
+      "total_manipulation_count": 294851,
+      "avg_mfi_score": 0.32359121054157386,
+      "total_main_net_yi": 81.97984425612
+    }
+  ],
+  "original_source_partition_versions": {
+    "20260917": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906",
+    "20260918": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22",
+    "20260921": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba"
+  },
+  "original_source_partition_state": {
+    "l2_daily_features": [
+      9,
+      [
+        {
+          "name": "2026-09-17",
+          "numRows": 7926,
+          "minTimestamp": "2026-09-17T00:00:00.000000Z",
+          "maxTimestamp": "2026-09-17T00:00:00.000000Z",
+          "seqTxn": 36
+        },
+        {
+          "name": "2026-09-18",
+          "numRows": 7902,
+          "minTimestamp": "2026-09-18T00:00:00.000000Z",
+          "maxTimestamp": "2026-09-18T00:00:00.000000Z",
+          "seqTxn": 1
+        },
+        {
+          "name": "2026-09-21",
+          "numRows": 7945,
+          "minTimestamp": "2026-09-21T00:00:00.000000Z",
+          "maxTimestamp": "2026-09-21T00:00:00.000000Z",
+          "seqTxn": 34
+        }
+      ]
+    ]
+  },
+  "source_raw_rows": 23773,
+  "d099_real_source_evidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D099\\commands\\alias-audit-20261006.json",
+  "d099_real_source_evidence_sha256": "19acc3daa5af2d63990da8f8b44bb39b80266da9686dd38c765be6ac94613d52",
+  "installed_owner_tables": [
+    {
+      "table": "retail_sentiment_daily_cache",
+      "created": true,
+      "physical_types": {
+        "trade_date": "TIMESTAMP",
+        "avg_retail_ratio": "DOUBLE",
+        "avg_retail_entropy": "DOUBLE",
+        "total_retail_amount_yi": "DOUBLE",
+        "total_retail_net_inflow_yi": "DOUBLE",
+        "avg_rel_aggro": "DOUBLE",
+        "total_q1": "LONG",
+        "total_q3": "LONG",
+        "avg_wash_trade_ratio": "DOUBLE",
+        "total_spoof_count": "LONG",
+        "total_manipulation_count": "LONG",
+        "avg_mfi_score": "DOUBLE",
+        "total_main_net_yi": "DOUBLE",
+        "source_version": "SYMBOL"
+      },
+      "physical_upsert_keys": [
+        "source_version",
+        "trade_date"
+      ],
+      "schema_sha256": "611358a0b5a7fab456dc6f9c1e649f9f34825f223b16a4b0f8927b50014cbe03"
+    },
+    {
+      "table": "market_barometer_cache_coverage",
+      "created": true,
+      "physical_types": {
+        "trade_date": "TIMESTAMP",
+        "dataset_id": "SYMBOL",
+        "source_version": "SYMBOL",
+        "row_count": "LONG",
+        "content_digest": "STRING"
+      },
+      "physical_upsert_keys": [
+        "dataset_id",
+        "source_version",
+        "trade_date"
+      ],
+      "schema_sha256": "3bb3bfdbe6abf3c67c107803290e36af67c0b645f8742661886a9cb083a636a3"
+    }
+  ],
+  "resume_existing_records": {
+    "cache_rows": null,
+    "coverage_dataset_rows": 0
+  },
+  "error": "First publication requires empty newly installed owner sample tables; no reset or overwrite allowed"
+}

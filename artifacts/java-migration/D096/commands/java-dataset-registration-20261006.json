@@ -1,0 +1,104 @@
+{
+  "dataset_catalog_size": 45,
+  "definition": {
+    "datasetId": "v_market_breadth_daily",
+    "schemaVersion": 1,
+    "provider": "python.derived.market_barometer_views",
+    "owner": "market_breadth_daily_owner",
+    "objectName": "v_market_breadth_daily",
+    "objectKind": "VIEW",
+    "columns": [
+      {
+        "sourceName": "mv_market_breadth_daily_v1.trade_date",
+        "logicalName": "trade_date",
+        "storageName": "trade_date",
+        "storageType": "TIMESTAMP",
+        "nullable": false,
+        "meaning": "Calendar-day identity; no event-time conversion",
+        "temporal": {
+          "kind": "BUSINESS_DATE",
+          "sourceFormat": "BASIC",
+          "zone": "calendar",
+          "precision": "DAY",
+          "meaning": "Pass-through native SAMPLE BY 1d calendar bucket; TIMESTAMP carries the date at UTC midnight exactly"
+        },
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "mv_market_breadth_daily_v1.stock_count",
+        "logicalName": "stock_count",
+        "storageName": "stock_count",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Rows in the source daily bucket, including null pct_change",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "mv_market_breadth_daily_v1.up_count",
+        "logicalName": "up_count",
+        "storageName": "up_count",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Rows with positive source pct_change",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "mv_market_breadth_daily_v1.down_count",
+        "logicalName": "down_count",
+        "storageName": "down_count",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Rows with negative source pct_change",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "mv_market_breadth_daily_v1.flat_count",
+        "logicalName": "flat_count",
+        "storageName": "flat_count",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Rows with zero source pct_change; null is not flat",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "mv_market_breadth_daily_v1.avg_pct_change",
+        "logicalName": "avg_pct_change",
+        "storageName": "avg_pct_change",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Mean source percentage change in percentage points; null stays null",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "mv_market_breadth_daily_v1.total_amount_yi",
+        "logicalName": "total_amount_yi",
+        "storageName": "total_amount_yi",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Yi yuan aggregate already converted by D095 sum(amount)/100000; no second conversion",
+        "temporal": null,
+        "legacyNullSentinels": []
+      }
+    ],
+    "businessKey": [
+      "trade_date"
+    ],
+    "dedupKey": [],
+    "designatedTimestamp": "trade_date",
+    "partition": "NONE",
+    "wal": false,
+    "capabilities": [
+      "READ"
+    ],
+    "dependencies": [
+      "mv_market_breadth_daily_v1"
+    ],
+    "storageRationale": "Ordinary SELECT * alias of mv_market_breadth_daily_v1 with one calendar bucket per date. The view has no physical partition, WAL or UPSERT key and rejects direct writes. D095 is the canonical native refresh job; D096 adds no competing writer. Reads verify the exact alias binding and the base MV validity, catch-up and stable source/output version."
+  },
+  "build_successful": true
+}

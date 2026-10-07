@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-10-06T15:01:01.028Z" hostname="AMD395" time="0.795">
+  <properties/>
+  <testcase name="explicitAcknowledgedFlushOccursOnceAndCloseDoesNotSubmitAgain()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.643"/>
+  <testcase name="targetIdentityIsStableLegalBoundedAndChangesWithEndpointSchemaOrGeneration()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.007"/>
+  <testcase name="senderConstructionFailureHasNoSubmissionAndLeavesStoppedState()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.004"/>
+  <testcase name="allNullHistoricalRowCannotBecomeTimestampOnlyIlpButRemainsTypedReadable()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.005"/>
+  <testcase name="constructingRowsFailureDiscardsBufferWithoutCallingFlush()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.009"/>
+  <testcase name="unknownAckRetainsUnresolvedAndNeverAutomaticallyFlushesOrReplays()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.012"/>
+  <testcase name="emptyPhysicalTxnRemainsNullAndRequiresIndependentZeroRowsAndZeroWal()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.001"/>
+  <testcase name="twelveRowsRemainBelowOneMiBBudgetAndDistinctCanonicalKeys()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.006"/>
+  <testcase name="invalidReadbackKeysAndRangeFailBeforeJdbc()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.015"/>
+  <testcase name="closeFailureCannotClaimWriterStoppedEvenWhenFlushAcknowledged()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.012"/>
+  <testcase name="nonemptySnapshotsPreservePhysicalWalDifferencesAndRejectPendingOrSuspended()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.002"/>
+  <testcase name="batchIsOneToTwelveUniqueMonthsAndRejectsEmptyNullDuplicateAndOverflowBeforeSend()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.013"/>
+  <testcase name="freshPortHasNoHistoricalWriterStoppedProof()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.003"/>
+  <testcase name="onlyExplicitIsolatedNameIsAdmittedBeforeAnyConnectionOrSender()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest" time="0.052"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,124 @@
+{
+  "task_id": "D102",
+  "status": "VERIFIED_BOUNDED_VIEW_READ",
+  "definition": {
+    "datasetId": "v_etf_market_overview_daily",
+    "schemaVersion": 1,
+    "provider": "python.derived.market_barometer_views",
+    "owner": "python.market_barometer_views.install_views",
+    "objectName": "v_etf_market_overview_daily",
+    "objectKind": "VIEW",
+    "columns": [
+      {
+        "sourceName": "etf_share.timestamp",
+        "logicalName": "trade_date",
+        "storageName": "trade_date",
+        "storageType": "TIMESTAMP",
+        "nullable": false,
+        "meaning": "Calendar-day identity of the direct join aggregate",
+        "temporal": {
+          "kind": "BUSINESS_DATE",
+          "sourceFormat": "BASIC",
+          "zone": "calendar",
+          "precision": "DAY",
+          "meaning": "SAMPLE BY 1d ALIGN TO CALENDAR aggregate date carried at exact UTC midnight; not an event timestamp"
+        },
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:count_distinct(etf_share.ts_code)",
+        "logicalName": "etf_count",
+        "storageName": "etf_count",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Exact nonnegative distinct full-code count after same-code/same-timestamp INNER JOIN",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:sum(etf_share.fd_share)",
+        "logicalName": "total_share",
+        "storageName": "total_share",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Joined ETF shares in ten-thousand-share units (涓囦唤); preserve SQL null and signed values",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "derived:sum(etf_share.fd_share*etf_daily.close)/10000.0",
+        "logicalName": "total_size_yi",
+        "storageName": "total_size_yi",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Joined ETF market value in yi yuan (浜垮厓); division belongs to source SQL, no mapper scaling",
+        "temporal": null,
+        "legacyNullSentinels": []
+      }
+    ],
+    "businessKey": [
+      "trade_date"
+    ],
+    "dedupKey": [],
+    "designatedTimestamp": "trade_date",
+    "partition": "NONE",
+    "wal": false,
+    "capabilities": [
+      "READ"
+    ],
+    "dependencies": [
+      "etf_share",
+      "etf_daily"
+    ],
+    "storageRationale": "Ordinary direct share/daily view, SAMPLE BY 1d ALIGN TO CALENDAR after an INNER JOIN on complete timestamp and ts_code. No basic JOIN, code/type filter, cache/receipt dependency, physical partition, WAL or UPSERT key. Direct writes and replacements are forbidden. Existing base owners refresh share/daily; D101 prewarms its separate cache and does not materialize this view. Reads bind the exact view SQL and both base tables' stable physical/WAL versions; date alone is the natural identity. Typed reads require the four columns and a date equality or a bounded date range of at most 31 days, with pages of at most 31 rows. Nullable finite DOUBLE aggregates retain exact binary64 values, signed zero, units and SQL nulls."
+  },
+  "original_SQL": "SELECT\n    s.timestamp AS trade_date,\n    count_distinct(s.ts_code) AS etf_count,\n    sum(s.fd_share) AS total_share,\n    sum(s.fd_share * d.close) / 10000.0 AS total_size_yi\nFROM etf_share s\nJOIN etf_daily d ON s.ts_code = d.ts_code AND s.timestamp = d.timestamp\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+  "original_SQL_sha256": "8a4bb855ba31ead1862a8f62d1f672ba5a883942c55ee12d54158f460a7c0d56",
+  "python_callchain_file_sha256": {
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_views.py": "c2c280376f1642b37e892a87a5b98190f2acad7f954640a88d1624845c0d3dda",
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_cache.py": "5971761ed070f7b178892c90a9114b0609a3dcb2cbf8767867432279371b5bee",
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer.py": "2c89d781a559d38ee2d3a3243c33bad1bcdab7a2cdbd8f265cc15f7e9a75b398",
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\derived.py": "d13aec5a16f71c04b4d4f3f7933247fb7a423549b68da7399e7fdb6fdf74bb53",
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\materializers\\market_barometer.py": "9535c9f392fbbf59d0b0fd3d421411cd7ce86d7681c772f59a72813c1dfb4e60",
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\application\\market_barometer.py": "0d48664b43ed1b804dd28ff7db3e56da08cbcf1c9a8a59a255a335affdb4d5b6"
+  },
+  "source_census_scope": "D101 three real-source days plus original timeless basic for protected baseline; basic not a dependency of view query",
+  "direct_view_dependencies": [
+    "etf_share",
+    "etf_daily"
+  ],
+  "active_python_consumer": "ETF readthrough cache remains original caller; direct view supports explicit bounded read/fallback",
+  "raw_double_semantics": "nullable finite binary64, exact bits and signed zero; no rounding or unit rescaling",
+  "timestamp_precision": {
+    "view": "TIMESTAMP UTC midnight",
+    "share": "TIMESTAMP microseconds",
+    "daily": "TIMESTAMP_NS nanoseconds"
+  },
+  "schema_snapshot_correction": "Ordinary view has no own WAL, physical partition, DEDUP or writer; audit inherited WAL metadata is not a view write contract",
+  "provider_completeness_certified": false,
+  "source_revision_during_D102_live_tested": false,
+  "cancellation_scope": "ReadGroup cancellation before member launch; in-flight interrupt is not certified",
+  "statement_deadline_seconds": 20,
+  "request_total_deadline_certified": false,
+  "scope_limitations": [
+    "No production caller cutover/current cache-hit/latest certification",
+    "No full-history or provider universe certification",
+    "D101 third-day actual source append reused; D102 performs no source mutations",
+    "Formal historical D101 receipt anomalies remain unrepaired"
+  ],
+  "double_scope": {
+    "within_each_target": "Original source SQL/view/Java independent JDBC/typed DTO/ReadGroup exact binary64, tolerance0",
+    "between_targets": "Four actual aggregate DOUBLE bit differences retained: Sep17 size +7 ULP; Sep18 share +1 ULP and size -2 ULP; Sep21 size -4 ULP (private minus formal)",
+    "cross_target_bit_stability_certified": false,
+    "inference": "Identical captured inputs and different physical layouts can yield different native DOUBLE SUM reduction order; execution-plan cause was not independently certified"
+  },
+  "actual_java_and_private_view_verified": true,
+  "metadata_transport_scope": {
+    "raw_jdbc_snapshot_timestamp_json": "Epoch millisecond carrier differs by -8 hours from the native UTC timestamp and loses sub-millisecond digits",
+    "authoritative_guard": "Reader uses getString and binds the complete correct UTC microsecond status text in sourceVersion; independently matched both targets to Python native metadata",
+    "cross_transport_raw_epoch_is_utc_authority": false,
+    "business_date_mapper_affected": false,
+    "verification": "Metadata table IDs/directories/transactions/rows/WAL match exactly across stages; full view status time compared through sourceVersion token, not the raw epoch carrier"
+  },
+  "coordinator_gate": "accepted_for_serial_progress"
+}

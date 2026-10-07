@@ -1,0 +1,153 @@
+{
+  "task_id": "D101",
+  "status": "VERIFIED_READONLY_FAILED_HIT_SQLITE_STATE",
+  "checked_at": "2026-10-06T10:25:38.792291+00:00",
+  "run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+  "ledger_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-45e5e7ce-b273-4510-8d15-e1abe5397550.sqlite3",
+  "sqlite_read_only": true,
+  "query_only": true,
+  "database_writes": 0,
+  "owner_invocations": 0,
+  "run": {
+    "id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+    "parent_run_id": null,
+    "job_id": "data.etf_market_overview_daily_cache",
+    "job_version": 1,
+    "logical_date": "2026-09-19",
+    "target_id": "questdb-012f0bebfa498858a5ebe3040de1b5b3c9dc18dabfc6f7cbcd31ad2899d41af9",
+    "frozen_json": "{\"definition\":{\"jobId\":\"data.etf_market_overview_daily_cache\",\"version\":1,\"datasetId\":\"etf_market_overview_daily_cache\",\"datasetVersion\":1,\"owner\":\"etf_market_overview_cache_owner\",\"supportedModes\":[\"MATERIALIZE\",\"RECONCILE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"etf_market_overview_daily.range31\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":31,\"maxSlices\":31,\"maxPages\":31,\"maxRows\":31,\"maxBatchBytes\":65536},\"revisionDays\":0,\"dependencies\":[{\"jobId\":\"data.etf_share\",\"version\":3},{\"jobId\":\"data.etf_daily\",\"version\":1},{\"jobId\":\"data.etf_basic\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"INCREMENTAL\",\"parameters\":{\"bootstrap_from\":\"2026-09-17\",\"checkpoint_before\":\"2026-09-18\",\"source_version\":\"40ea432abd94e78faf7994fe74cf68fbcc981113340d312a57ff7184a2358e93\",\"target_id\":\"questdb-012f0bebfa498858a5ebe3040de1b5b3c9dc18dabfc6f7cbcd31ad2899d41af9\"},\"from\":\"2026-09-17\",\"to\":\"2026-09-18\",\"logicalDate\":\"2026-09-19\"}"
+  },
+  "entries": [
+    {
+      "id": "attempt-86516af8-49bf-453e-be69-9284978be066",
+      "kind": "ATTEMPT",
+      "run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+      "parent_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+      "state": "IN_DOUBT",
+      "revision": 2,
+      "payload_json": "{\"errorCode\":\"IllegalStateException\"}",
+      "updated_at": "2026-10-06T10:19:00.016331900Z"
+    },
+    {
+      "id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+      "kind": "RUN",
+      "run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+      "parent_id": null,
+      "state": "IN_DOUBT",
+      "revision": 2,
+      "payload_json": "{\"errorCode\":\"IllegalStateException\"}",
+      "updated_at": "2026-10-06T10:19:00.029316Z"
+    },
+    {
+      "id": "slice-5c5d6c88-b2e2-46dd-ba8c-42a781c5a4ad",
+      "kind": "SLICE",
+      "run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+      "parent_id": "attempt-86516af8-49bf-453e-be69-9284978be066",
+      "state": "IN_DOUBT",
+      "revision": 5,
+      "payload_json": "{\"writeResult\":{\"status\":\"IN_DOUBT\",\"submittedRows\":1,\"verifiedRows\":0,\"receipts\":[{\"batch\":1,\"submittedRows\":1,\"verifiedRows\":0,\"bytes\":285,\"digest\":\"41e479ebd2029d9cb62e724d1c5a99aeace4d7d8558648d0aa5814432bccc956\",\"delivery\":\"UNKNOWN_UNRESOLVED\"}],\"reason\":\"batch values or WAL frontier not verified before deadline; do not replay\"}}",
+      "updated_at": "2026-10-06T10:18:59.996150900Z"
+    }
+  ],
+  "events": [
+    {
+      "entry_id": "attempt-86516af8-49bf-453e-be69-9284978be066",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T10:18:03.727197800Z"
+    },
+    {
+      "entry_id": "attempt-86516af8-49bf-453e-be69-9284978be066",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T10:18:03.736287500Z"
+    },
+    {
+      "entry_id": "attempt-86516af8-49bf-453e-be69-9284978be066",
+      "revision": 2,
+      "state": "IN_DOUBT",
+      "payload_json": "{\"errorCode\":\"IllegalStateException\"}",
+      "updated_at": "2026-10-06T10:19:00.016331900Z"
+    },
+    {
+      "entry_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T10:17:52.343929200Z"
+    },
+    {
+      "entry_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T10:18:03.717136600Z"
+    },
+    {
+      "entry_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+      "revision": 2,
+      "state": "IN_DOUBT",
+      "payload_json": "{\"errorCode\":\"IllegalStateException\"}",
+      "updated_at": "2026-10-06T10:19:00.029316Z"
+    },
+    {
+      "entry_id": "slice-5c5d6c88-b2e2-46dd-ba8c-42a781c5a4ad",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T10:18:14.868858300Z"
+    },
+    {
+      "entry_id": "slice-5c5d6c88-b2e2-46dd-ba8c-42a781c5a4ad",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "updated_at": "2026-10-06T10:18:14.878356600Z"
+    },
+    {
+      "entry_id": "slice-5c5d6c88-b2e2-46dd-ba8c-42a781c5a4ad",
+      "revision": 2,
+      "state": "FETCHED",
+      "payload_json": "{\"returnedRows\":1,\"sourceFingerprint\":\"8e072be155557154cac3cf9525b4364663f2d845a9b3fba5a23bf8519175ae0c\",\"responseEvidence\":\"{\\\"preview_sha256\\\":\\\"a22051c161f32c978537ca6d67f365ddce0a4012dc6c08033431587ccce53507\\\",\\\"preview_path\\\":\\\"C:\\\\\\\\Users\\\\\\\\zouqiang\\\\\\\\IdeaProjects\\\\\\\\QuestDBWithData\\\\\\\\artifacts\\\\\\\\java-migration\\\\\\\\D101\\\\\\\\commands\\\\\\\\java-owner-bridge\\\\\\\\java-owner-preview-6e2c1549-25aa-4ef1-a7cd-f9b1778171f2.response.json\\\"}\",\"cursor\":\"2026-09-17\"}",
+      "updated_at": "2026-10-06T10:18:14.888545500Z"
+    },
+    {
+      "entry_id": "slice-5c5d6c88-b2e2-46dd-ba8c-42a781c5a4ad",
+      "revision": 3,
+      "state": "VALIDATED",
+      "payload_json": "{\"returnedRows\":1,\"sourceFingerprint\":\"8e072be155557154cac3cf9525b4364663f2d845a9b3fba5a23bf8519175ae0c\",\"responseEvidence\":\"{\\\"preview_sha256\\\":\\\"a22051c161f32c978537ca6d67f365ddce0a4012dc6c08033431587ccce53507\\\",\\\"preview_path\\\":\\\"C:\\\\\\\\Users\\\\\\\\zouqiang\\\\\\\\IdeaProjects\\\\\\\\QuestDBWithData\\\\\\\\artifacts\\\\\\\\java-migration\\\\\\\\D101\\\\\\\\commands\\\\\\\\java-owner-bridge\\\\\\\\java-owner-preview-6e2c1549-25aa-4ef1-a7cd-f9b1778171f2.response.json\\\"}\",\"cursor\":\"2026-09-17\"}",
+      "updated_at": "2026-10-06T10:18:14.898041100Z"
+    },
+    {
+      "entry_id": "slice-5c5d6c88-b2e2-46dd-ba8c-42a781c5a4ad",
+      "revision": 4,
+      "state": "SUBMITTED",
+      "payload_json": "{\"returnedRows\":1,\"sourceFingerprint\":\"8e072be155557154cac3cf9525b4364663f2d845a9b3fba5a23bf8519175ae0c\",\"responseEvidence\":\"{\\\"preview_sha256\\\":\\\"a22051c161f32c978537ca6d67f365ddce0a4012dc6c08033431587ccce53507\\\",\\\"preview_path\\\":\\\"C:\\\\\\\\Users\\\\\\\\zouqiang\\\\\\\\IdeaProjects\\\\\\\\QuestDBWithData\\\\\\\\artifacts\\\\\\\\java-migration\\\\\\\\D101\\\\\\\\commands\\\\\\\\java-owner-bridge\\\\\\\\java-owner-preview-6e2c1549-25aa-4ef1-a7cd-f9b1778171f2.response.json\\\"}\",\"cursor\":\"2026-09-17\"}",
+      "updated_at": "2026-10-06T10:18:14.929626600Z"
+    },
+    {
+      "entry_id": "slice-5c5d6c88-b2e2-46dd-ba8c-42a781c5a4ad",
+      "revision": 5,
+      "state": "IN_DOUBT",
+      "payload_json": "{\"writeResult\":{\"status\":\"IN_DOUBT\",\"submittedRows\":1,\"verifiedRows\":0,\"receipts\":[{\"batch\":1,\"submittedRows\":1,\"verifiedRows\":0,\"bytes\":285,\"digest\":\"41e479ebd2029d9cb62e724d1c5a99aeace4d7d8558648d0aa5814432bccc956\",\"delivery\":\"UNKNOWN_UNRESOLVED\"}],\"reason\":\"batch values or WAL frontier not verified before deadline; do not replay\"}}",
+      "updated_at": "2026-10-06T10:18:59.996150900Z"
+    }
+  ],
+  "leases": [
+    {
+      "id": "f1ae1edf-f08b-4150-97ab-5a870c98a0d4",
+      "run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+      "dataset_id": "etf_market_overview_daily_cache",
+      "from_day": -365243219162,
+      "to_day": 365241780471,
+      "in_doubt": 1,
+      "acquired_at": "2026-10-06T10:18:03.706423600Z"
+    }
+  ],
+  "submitted_slices": 1,
+  "second_day_submission": false,
+  "recovery_authorized": false,
+  "earlier_readonly_diagnostic_error": "no such column owner_run_id; corrected to actual shared schema run_id before artifact creation; no mutations"
+}

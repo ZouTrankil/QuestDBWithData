@@ -1,0 +1,275 @@
+{
+  "protocol_version": 1,
+  "task_id": "D103",
+  "dataset_id": "equity_style_monthly",
+  "schema_version": 1,
+  "record_date": "2026-10-06",
+  "document_state": "ACTUAL_ISOLATED_INCREMENT_PASSED; FINAL_COORDINATOR_AND_HUMAN_ACCEPTANCE_PENDING",
+  "base_contract": {
+    "path": "artifacts/java-migration/D103/mapping-contract.json",
+    "sha256": "f7498a35e0f41f896fe2f2ef879cef2bd0b11aedd3fa418b500bcb413217d581"
+  },
+  "supersedes": "Only base contract actual increment PENDING observations. Base implementation/type/unit/UNKNOWN contracts and immutable initial failure history are retained.",
+  "actual_source_increment": {
+    "receipt": {
+      "path": "artifacts/java-migration/D103/commands/source-fixture-increment-20261006.json",
+      "sha256": "b04f0d4b5dac39a6d1defc879ad182113a79d170ebecffc7743e63883ef8d6b3"
+    },
+    "status": "VERIFIED_ISOLATED_SOURCE_INCREMENT",
+    "sole_operation": "SOURCE_AUGUST_INSERT",
+    "source_table": "index_monthly",
+    "added_month": "2026-08",
+    "added_rows": 16,
+    "attempted_rows": 16,
+    "acknowledged_rows": 16,
+    "acknowledged_operations": 1,
+    "DDL": 0,
+    "formal_writes": 0,
+    "private_output_writes": 0,
+    "initial_resubmissions": 0,
+    "automatic_retry": false,
+    "source_rows_before": 32,
+    "source_rows_after": 48,
+    "physical_txn_before": 1,
+    "physical_txn_after": 2,
+    "wal_before": {
+      "sequencerTxn": 1,
+      "writerTxn": 1,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "wal_after": {
+      "sequencerTxn": 2,
+      "writerTxn": 2,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "complete_source_readback": {
+      "rows": 48,
+      "full_field_comparisons": 672,
+      "double_rawbit_comparisons": 432,
+      "double_tolerance": 0,
+      "canonical_records_sha256": "98f50a7744cb64ffb451d4ccf1380324f6975d8ed28cdfcf9598bc879411ba2f"
+    },
+    "protected_output_before_after_equal": true,
+    "formal_before_after_equal": true,
+    "original_initial_insert_ack": "UNKNOWN",
+    "original_initial_jvm_pid_birth_not_recorded": true
+  },
+  "actual_canonical_increment": {
+    "receipt": {
+      "path": "artifacts/java-migration/D103/commands/java-increment-acceptance-20261006.json",
+      "sha256": "a13875847e736ba3848190071800fb8968fb6dfde879344e0338fbda647549e5"
+    },
+    "status": "VERIFIED_ISOLATED_INCREMENTAL",
+    "job_id": "data.equity_style_monthly",
+    "job_version": 1,
+    "mode": "INCREMENTAL",
+    "bootstrap_from": "2026-06-01",
+    "effective_from": "2026-07-01",
+    "to_inclusive": "2026-08-01",
+    "logical_date": "2026-10-06",
+    "checkpoint_before": "2026-07-01",
+    "checkpoint_reason": "VERIFIED_PREFIX_APPEND",
+    "checkpoint_parent_run": "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+    "parent_source_version": "816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697",
+    "source_version": "f2d8b3cb160bd0d4edc0ae11dd5c515222b0fe8ea7d1a2464014904729fc3ea4",
+    "source_hash": "7718cb59d96c5b4a9dbe64e8685568edd218a533990e71a9750dc106c52c229c",
+    "result": {
+      "runId": "d103-9a1915a5-31f0-4e0c-9412-ae4fc64c366b",
+      "state": "VERIFIED",
+      "sourceRows": 2,
+      "verifiedRows": 2,
+      "errorCode": null,
+      "reusedRows": 0
+    },
+    "source_raw_rows": 48,
+    "source_snapshot": {
+      "table": "index_monthly",
+      "tableId": 9,
+      "directory": "index_monthly~9",
+      "physicalTxn": 2,
+      "sequenceTxn": 2,
+      "schemaHash": "23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285"
+    },
+    "target_snapshot": {
+      "targetId": "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "tableId": 10,
+      "directory": "java_d103_equity_style_monthly_acceptance~10",
+      "schemaHash": "1398f2216b2a635e887dabc9075c9e4d8e6ac1f030105294edc2e3e0c995b6cd",
+      "physicalTxn": 5,
+      "walTxn": 5,
+      "sequenceTxn": 5,
+      "writerTxn": 5,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "suspended": false,
+      "rowCount": 3,
+      "metadataRowCount": 3
+    },
+    "whole_prefix_months": [
+      "2026-06",
+      "2026-07",
+      "2026-08"
+    ],
+    "whole_prefix_key_and_full_field_comparisons": 90,
+    "whole_prefix_double_raw_bit_comparisons": 87,
+    "double_tolerance": 0,
+    "configured_read_group_observed": true,
+    "formal_before_after_equal": true,
+    "formal_mutated": false,
+    "reference_project_mutated": false,
+    "actual_source_increment": true,
+    "actual_source_revision": false,
+    "revision_scenario_scope": "Source-prefix revision fallback is covered by pure guards; this actual run proves append/overlap, not a live source revision."
+  },
+  "process_completion": {
+    "jvm_pid": 43596,
+    "jvm_birth_utc": "2026-10-06T15:41:06.753605Z",
+    "native_start_before_write_after_write_attestations": 3,
+    "executor": {
+      "path": "artifacts/java-migration/D103/commands/final-increment-java-executor-completion-20261006.json",
+      "sha256": "0bf5b2dc0c59e2fc20f3c886094fb0c51f7e8e3c6af07e3e9ca55c06edfcdfcb"
+    },
+    "native_stopped": {
+      "path": "artifacts/java-migration/D103/commands/final-increment-java-native-stop-20261006.json",
+      "sha256": "2b3abbb12d66402457f13ff2ed563a2b2f6bd7c0e34922129dd4c480547a1fff"
+    },
+    "XML": {
+      "path": "artifacts/java-migration/D103/commands/java-increment-result-20261006/TEST-com.zoutrankil.data.config.EquityStyleMonthlyLiveAcceptanceTest.xml",
+      "sha256": "9e90c07fbd08f23ecf0600980ed28db3b664ba6ce2bb35afa2ac8d573b1d6ee5"
+    },
+    "xml_tests": 1,
+    "xml_failures": 0,
+    "xml_errors": 0,
+    "xml_skipped": 0
+  },
+  "test_counts": {
+    "unique_pure_java_d103": 96,
+    "unique_shared_regressions": 27,
+    "unique_pure_java_total": 123,
+    "pure_java_de_duplication": "Guard19 replaces earlier13; YearMonth4 is D103-specific; JobTemporalRoundTrip1 and archived unrelated shared26 are separate. Reruns not added.",
+    "shared_xml": [
+      {
+        "path": "artifacts/java-migration/D103/commands/java-empty-target-shared-result-20261006/TEST-com.zoutrankil.data.domain.temporal.TemporalValuesTest.xml",
+        "sha256": "e04613c7e85368a0c70263d9c734071db91caeb204a593c40ed7952e1ef0bdeb",
+        "class": "com.zoutrankil.data.domain.temporal.TemporalValuesTest",
+        "tests": 3
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-empty-target-shared-result-20261006/TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest.xml",
+        "sha256": "bd351f0a671e9b7a5bc51d49719793115594c8e642e10635336ff0116b104445",
+        "class": "com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest",
+        "tests": 2
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-empty-target-shared-result-20261006/TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderTest.xml",
+        "sha256": "745091cc473bb7423cf9e2bfb0c0eaa778db44b95c8a8dd49cc30733ca059a6b",
+        "class": "com.zoutrankil.data.repository.QuestDbBoundedReaderTest",
+        "tests": 3
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-empty-target-shared-result-20261006/TEST-com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.xml",
+        "sha256": "dd761bcb5660a572ce0b9b85c534d8cbd4e8109af8f1846215dafd8b622b4fc9",
+        "class": "com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest",
+        "tests": 8
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-empty-target-shared-result-20261006/TEST-com.zoutrankil.data.service.PreparedWriteAdapterTest.xml",
+        "sha256": "cae237a2a7b83e8beabb4fc75b2f31d747decf3d2af46a88d892ad81ec20d76f",
+        "class": "com.zoutrankil.data.service.PreparedWriteAdapterTest",
+        "tests": 3
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-empty-target-shared-result-20261006/TEST-com.zoutrankil.data.service.ReadGroupJsonTest.xml",
+        "sha256": "b91ed05bb4cc5dbd64f6507132782620db2820b9fd9856accd75723690fe87c9",
+        "class": "com.zoutrankil.data.service.ReadGroupJsonTest",
+        "tests": 3
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-empty-target-shared-result-20261006/TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+        "sha256": "47f35b98a410d3b2468e34e8fd7ceb41ea93e67a7a73902c56c85301e8b50105",
+        "class": "com.zoutrankil.data.service.ReadGroupReaderTest",
+        "tests": 4
+      },
+      {
+        "path": "artifacts/java-migration/D103/commands/java-year-month-json-result-20261006/TEST-com.zoutrankil.data.domain.JobTemporalRoundTripTest.xml",
+        "sha256": "08b53e0578660d25a723be66695d40058f193bd34e9748a81875fd3894ab4c79",
+        "class": "com.zoutrankil.data.domain.JobTemporalRoundTripTest",
+        "tests": 1
+      }
+    ],
+    "fresh_readonly_recovery_live_passed": 1,
+    "actual_increment_live_passed": 1,
+    "unique_passed_java_total": 125,
+    "unique_pure_python_passed": 122,
+    "original_initial_live_junit_failures_retained": 1,
+    "original_compile_failure_log_retained": {
+      "path": "artifacts/java-migration/D103/commands/java-unit-catalog-20261006.log",
+      "sha256": "b03fb56c5e3f8e3379ec729f0cdf63135022fd298bf65495f8c22546017062df"
+    },
+    "failures_excluded_from_pass_total": true
+  },
+  "history_limits": {
+    "original_mapping_preserved": true,
+    "original_source_insert_ack_unchanged": "UNKNOWN",
+    "original_initial_live_junit_unchanged": "FAILED_RECEIPT_SERIALIZATION",
+    "original_jvm_pid_birth_known": false,
+    "fresh_recovery_does_not_upgrade_original_ACK_or_JUnit": true,
+    "formal_missing_june_july_output_repaired": false,
+    "formal_existing_august_output_unchanged": true,
+    "source_units": "Unconverted stored input/output units; no100 scaling or close recomputation",
+    "consumer_cutover_certified": false,
+    "full_history_or_provider_readiness_certified": false,
+    "point_in_time_availability_certified": false,
+    "final_coordinator_gate": "PENDING",
+    "human_acceptance": "PENDING",
+    "next_task_admitted": false
+  },
+  "evidence_bindings": [
+    {
+      "path": "artifacts/java-migration/D103/commands/source-fixture-increment-20261006.json",
+      "sha256": "b04f0d4b5dac39a6d1defc879ad182113a79d170ebecffc7743e63883ef8d6b3"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-increment-acceptance-20261006.json",
+      "sha256": "a13875847e736ba3848190071800fb8968fb6dfde879344e0338fbda647549e5"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/index-monthly-august-insert-once-20261006.json",
+      "sha256": "f4da7cb5646eb46c13eceeb888790859b50569c4f0597df7e009a135fdfe19b2"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/coordinator-increment-after-readonly-recovery-admission-20261006.json",
+      "sha256": "df7686a861627b1feea8f5dd87f0773039933981e0d884e788774da400c1fd53"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/coordinator-increment-after-recovery-static-review-20261006.json",
+      "sha256": "74b58fa4b1cea77ba18904347f21c9d69384405933e8ba9071880f721709e3de"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-increment-jvm-identity-20261006.json",
+      "sha256": "765084564c85582f61db6bdd6450980f585f7016980ea5478ea28c0dc57ea8f5"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/final-increment-java-executor-completion-20261006.json",
+      "sha256": "0bf5b2dc0c59e2fc20f3c886094fb0c51f7e8e3c6af07e3e9ca55c06edfcdfcb"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/final-increment-java-native-stop-20261006.json",
+      "sha256": "2b3abbb12d66402457f13ff2ed563a2b2f6bd7c0e34922129dd4c480547a1fff"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/read-group-increment-20261006.json",
+      "sha256": "fa78ab2eeef1fa6db187045f00c4e85065db163d4e0b21bbd9849473b810da8b"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-increment-live-20261006.log",
+      "sha256": "1a1f04ad03f91dc75fa8a62ea95ace0a9cde57465d9f1ada083ad3fbabfb52f9"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/java-unit-catalog-20261006.log",
+      "sha256": "b03fb56c5e3f8e3379ec729f0cdf63135022fd298bf65495f8c22546017062df"
+    }
+  ]
+}

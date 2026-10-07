@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.batch.l2.L2DailyFeaturePipelineTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-07T06:18:38.008Z" hostname="AMD395" time="1.12">
+  <properties/>
+  <testcase name="cliRejectsDuplicateCanonicalEtfAliasesBeforePublishing()" classname="com.zoutrankil.batch.l2.L2DailyFeaturePipelineTest" time="0.02"/>
+  <testcase name="cliRejectsCaseInsensitiveDuplicateSymbolsBeforePublishing()" classname="com.zoutrankil.batch.l2.L2DailyFeaturePipelineTest" time="0.005"/>
+  <testcase name="cliGeneratesOneCompleteNormalizedEtfRow()" classname="com.zoutrankil.batch.l2.L2DailyFeaturePipelineTest" time="0.472"/>
+  <testcase name="completeShenzhenEtfPipelineIncludesReconstructedCancelsAndMatchesAllFields()" classname="com.zoutrankil.batch.l2.L2DailyFeaturePipelineTest" time="0.188"/>
+  <testcase name="failingLaterSymbolDoesNotPublishPartialNewOutput()" classname="com.zoutrankil.batch.l2.L2DailyFeaturePipelineTest" time="0.152"/>
+  <testcase name="completeShanghaiEtfPipelineMatchesAllFrozenPythonFields()" classname="com.zoutrankil.batch.l2.L2DailyFeaturePipelineTest" time="0.14"/>
+  <testcase name="failingLaterSymbolKeepsExistingOutputAtomic()" classname="com.zoutrankil.batch.l2.L2DailyFeaturePipelineTest" time="0.137"/>
+  <system-out><![CDATA[510300.SZ date=20260924 normalized=510300.SH deals=825 orders=3330 quotes=990 fields=110 elapsedSeconds=0.435
+generated_rows=1 output=C:\Users\zouqiang\AppData\Local\Temp\junit-11939743471137485228\daily.jsonl
+510300.SZ date=20260924 normalized=510300.SH deals=825 orders=3330 quotes=990 fields=110 elapsedSeconds=0.134
+510300.SZ date=20260924 normalized=510300.SH deals=825 orders=3330 quotes=990 fields=110 elapsedSeconds=0.112
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

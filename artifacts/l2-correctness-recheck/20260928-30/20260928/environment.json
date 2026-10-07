@@ -1,0 +1,21 @@
+{
+  "pythonExecutable": "D:\\work\\fund_2\\back-monitor\\.venv\\Scripts\\python.exe",
+  "pythonVersion": "3.12.12 (main, Jan 14 2026, 19:30:21) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scipy": "1.16.3",
+    "scikit-learn": "1.7.2",
+    "Bottleneck": "1.6.0",
+    "pydantic": "2.12.4"
+  },
+  "referenceProcessEnvironment": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "canonicalRepository": "D:/work/fund_2/back-monitor",
+  "referenceScript": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\20260928\\generate_reference.py",
+  "canonicalAPI": "KuakeSyncPipeline(source=DfcfCsvLevel2Source(rawRoot)).process_symbol_date(symbol, datetime(2026,9,28), load_snapshot=True)"
+}

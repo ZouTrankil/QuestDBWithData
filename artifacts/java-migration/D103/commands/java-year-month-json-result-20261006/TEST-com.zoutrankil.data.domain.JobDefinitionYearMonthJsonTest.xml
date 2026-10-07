@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-06T15:19:39.174Z" hostname="AMD395" time="0.526">
+  <properties/>
+  <testcase name="actualD103SourceBatchNestedMonthlyRowsSerializeAndDeserializeExactly()" classname="com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest" time="0.46"/>
+  <testcase name="yearMonthRejectsInvalidDatesNoncanonicalStringsAndNonstringCarriers()" classname="com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest" time="0.008"/>
+  <testcase name="yearMonthRoundTripsCanonicalPositiveFourDigitIsoWithoutAnOptionalTimeModule()" classname="com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest" time="0.004"/>
+  <testcase name="actualD103MaterializationResultHasCanonicalNestedMonthAndStableRoundTrip()" classname="com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest" time="0.052"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,118 @@
+{
+  "dataset_catalog_size": 46,
+  "definition": {
+    "datasetId": "market_breadth_daily_cache",
+    "schemaVersion": 1,
+    "provider": "python.derived.market_barometer_cache",
+    "owner": "python.MarketBarometerReadThroughCache._publish",
+    "objectName": "market_breadth_daily_cache",
+    "objectKind": "TABLE",
+    "columns": [
+      {
+        "sourceName": "trade_date",
+        "logicalName": "trade_date",
+        "storageName": "trade_date",
+        "storageType": "TIMESTAMP",
+        "nullable": false,
+        "meaning": "Daily SAMPLE BY calendar bucket and versioned cache key",
+        "temporal": {
+          "kind": "BUSINESS_DATE",
+          "sourceFormat": "BASIC",
+          "zone": "calendar",
+          "precision": "DAY",
+          "meaning": "Python daily aggregation date; TIMESTAMP stores its exact UTC-midnight carrier"
+        },
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "stock_count",
+        "logicalName": "stock_count",
+        "storageName": "stock_count",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Source daily row count, including null pct_change",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "up_count",
+        "logicalName": "up_count",
+        "storageName": "up_count",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Rows with positive source pct_change",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "down_count",
+        "logicalName": "down_count",
+        "storageName": "down_count",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Rows with negative source pct_change",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "flat_count",
+        "logicalName": "flat_count",
+        "storageName": "flat_count",
+        "storageType": "LONG",
+        "nullable": false,
+        "meaning": "Rows with zero source pct_change; null is not flat",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "avg_pct_change",
+        "logicalName": "avg_pct_change",
+        "storageName": "avg_pct_change",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Mean source percentage change in percentage points; pass through or null",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "total_amount_yi",
+        "logicalName": "total_amount_yi",
+        "storageName": "total_amount_yi",
+        "storageType": "DOUBLE",
+        "nullable": true,
+        "meaning": "Yi yuan: Python sum(amount)/100000; pass through without another conversion",
+        "temporal": null,
+        "legacyNullSentinels": []
+      },
+      {
+        "sourceName": "source_version",
+        "logicalName": "source_version",
+        "storageName": "source_version",
+        "storageType": "SYMBOL",
+        "nullable": false,
+        "meaning": "Lowercase SHA-256 of product SQL and relevant source table identity/partition state",
+        "temporal": null,
+        "legacyNullSentinels": []
+      }
+    ],
+    "businessKey": [
+      "trade_date",
+      "source_version"
+    ],
+    "dedupKey": [
+      "trade_date",
+      "source_version"
+    ],
+    "designatedTimestamp": "trade_date",
+    "partition": "MONTH",
+    "wal": true,
+    "capabilities": [
+      "READ"
+    ],
+    "dependencies": [],
+    "storageRationale": "Retain Python's legacy MONTH/WAL/DEDUP cache with the complete date/source-generation key. The active native alias bypasses the read-through cache. Python remains its only publisher, verifies WAL-visible row content before publishing market_barometer_cache_coverage, and does not write a cache row for an empty day. Java reads historical generations only; a cache row alone does not certify current source freshness or a published coverage receipt. Bounded pagination pins the actual cache table identity and physical/WAL version."
+  },
+  "build_successful": true,
+  "java_job_id": null,
+  "compatibility_publisher": "Python MarketBarometerReadThroughCache._publish retained"
+}

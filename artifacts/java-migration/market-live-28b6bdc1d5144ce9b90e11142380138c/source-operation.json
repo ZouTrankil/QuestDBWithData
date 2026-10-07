@@ -1,0 +1,121 @@
+{
+  "task" : "D021",
+  "startedAt" : "2026-09-29T21:43:18.743241Z",
+  "table" : "java_d021_index_weight_28b6bdc1d5144ce9b90e11142380138c",
+  "dataRowsWritten" : 4450,
+  "formalTableMutated" : false,
+  "plan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.index_weight",
+        "version" : 1,
+        "datasetId" : "index_weight",
+        "datasetVersion" : 1,
+        "owner" : "index_weight_owner",
+        "supportedModes" : [ "SNAPSHOT", "BACKFILL" ],
+        "defaultMode" : "SNAPSHOT",
+        "parameters" : {
+          "force" : {
+            "type" : "BOOLEAN",
+            "required" : false,
+            "maxLength" : 5,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "stockDetailTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "index_weight.index_month",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 2,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT4M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 92,
+          "maxSlices" : 32,
+          "maxPages" : 32,
+          "maxRows" : 128000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 0,
+        "dependencies" : [ {
+          "jobId" : "data.index",
+          "version" : 1
+        }, {
+          "jobId" : "data.stock_detail_info",
+          "version" : 1
+        } ],
+        "frequency" : "WEEKLY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : false
+      },
+      "mode" : "SNAPSHOT",
+      "parameters" : {
+        "force" : false,
+        "observedAt" : "2026-09-29T21:43:23.142948Z",
+        "stockDetailTargetId" : "static-v2-ed7368d64ecfbc6c4535ad94159710d5c1ac2aac856a88ab7c4112fecc2af78b",
+        "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01"
+      },
+      "from" : null,
+      "to" : null,
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+    "targetMinBefore" : null,
+    "targetMaxBefore" : null,
+    "lastRefreshDate" : null,
+    "nextRefreshDate" : null,
+    "notDue" : false
+  },
+  "run" : {
+    "runId" : "index-weight-a1758410-799b-4f41-8b4a-de76dd97c450",
+    "state" : "VERIFIED",
+    "sourceRows" : 4450,
+    "verifiedRows" : 4450,
+    "errorCode" : null,
+    "reusedRows" : 0
+  },
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-28b6bdc1d5144ce9b90e11142380138c\\sync-ledger.sqlite",
+  "targetId" : "static-v2-171f673a186462b032420b4ff8f1676f2a4258ba6099265985cbd1a516cdda01",
+  "status" : "WRITE_VERIFIED_PENDING_INDEPENDENT_READBACK",
+  "physicalRowsAfter" : 4450,
+  "finishedAt" : "2026-09-29T21:43:40.108344700Z"
+}

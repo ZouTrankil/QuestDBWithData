@@ -1,0 +1,1353 @@
+{
+  "generatedAt": "2026-10-07T08:45:09.475604+00:00",
+  "guard": {
+    "status": "passed",
+    "schemaFields": 110,
+    "featureVersion": "v1.3",
+    "parserVersion": "dfcf_csv_v1.2",
+    "floatTolerance": 0,
+    "checksumPolicy": "exact SHA-256 across every measured round and worker",
+    "comparedTaskResults": 150,
+    "uniqueSymbolDays": 15,
+    "fullOutputRows": 15,
+    "errors": []
+  },
+  "runs": {
+    "optimized-w1": {
+      "workers": 1,
+      "requestedMeasuredRounds": 2,
+      "completedMeasuredRounds": 2,
+      "provisional": false,
+      "jobCount": 15,
+      "heapMaxGiB": 24.0,
+      "wallSeconds": {
+        "n": 2,
+        "min": 55.527070699999996,
+        "median": 55.820230699999996,
+        "max": 56.113390700000004
+      },
+      "symbolsPerSecond": {
+        "n": 2,
+        "min": 0.2673158726086392,
+        "median": 0.26872719001159284,
+        "max": 0.27013850741454654
+      },
+      "sourceMiBPerSecond": {
+        "n": 2,
+        "min": 15.930970604822594,
+        "median": 16.01507954994852,
+        "max": 16.099188495074447
+      },
+      "processCpuSeconds": {
+        "n": 2,
+        "min": 87.890625,
+        "median": 90.0,
+        "max": 92.109375
+      },
+      "threadCpuSeconds": {
+        "n": 2,
+        "min": 53.046875,
+        "median": 53.234375,
+        "max": 53.421875
+      },
+      "gcCount": {
+        "n": 2,
+        "min": 18.0,
+        "median": 28.0,
+        "max": 38.0
+      },
+      "gcSeconds": {
+        "n": 2,
+        "min": 1.671,
+        "median": 1.771,
+        "max": 1.871
+      },
+      "heapPeakGiB": {
+        "n": 2,
+        "min": 3.8969736248254776,
+        "median": 4.592082172632217,
+        "max": 5.287190720438957
+      },
+      "rssPeakGiB": {
+        "n": 2,
+        "min": 5.686393737792969,
+        "median": 6.231569290161133,
+        "max": 6.776744842529297
+      },
+      "allocatedGiB": {
+        "n": 2,
+        "min": 25.010871328413486,
+        "median": 25.01087238267064,
+        "max": 25.010873436927795
+      },
+      "parseAllocatedGiB": {
+        "n": 2,
+        "min": 16.934660583734512,
+        "median": 16.934660591185093,
+        "max": 16.934660598635674
+      },
+      "featureAllocatedGiB": {
+        "n": 2,
+        "min": 8.07584261894226,
+        "median": 8.07584286853671,
+        "max": 8.07584311813116
+      },
+      "parseShareOfTaskWall": {
+        "n": 2,
+        "min": 0.7590042104834969,
+        "median": 0.7613630864017187,
+        "max": 0.7637219623199404
+      },
+      "featureShareOfTaskWall": {
+        "n": 2,
+        "min": 0.2361439109837592,
+        "median": 0.23850069517864497,
+        "max": 0.24085747937353075
+      },
+      "slowestObservedTasks": [
+        {
+          "date": "20260928",
+          "sourceSymbol": "204001.SZ",
+          "symbol": "204001.SZ",
+          "round": 2,
+          "wallMs": 18922.9384,
+          "parseWallMs": 16323.3745,
+          "featureWallMs": 2598.9236,
+          "sourceBytes": 366529938
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "204001.SZ",
+          "symbol": "204001.SZ",
+          "round": 1,
+          "wallMs": 18433.05,
+          "parseWallMs": 15856.5524,
+          "featureWallMs": 2575.7461,
+          "sourceBytes": 366529938
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "111024.SZ",
+          "symbol": "111024.SH",
+          "round": 2,
+          "wallMs": 9707.2829,
+          "parseWallMs": 7063.0708,
+          "featureWallMs": 2643.5019,
+          "sourceBytes": 153127843
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "111024.SZ",
+          "symbol": "111024.SH",
+          "round": 1,
+          "wallMs": 9415.6883,
+          "parseWallMs": 6880.4048,
+          "featureWallMs": 2534.6981,
+          "sourceBytes": 153127843
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "000725.SZ",
+          "symbol": "000725.SZ",
+          "round": 2,
+          "wallMs": 8987.6763,
+          "parseWallMs": 6159.7983,
+          "featureWallMs": 2827.143,
+          "sourceBytes": 123159261
+        }
+      ],
+      "generatedAt": "2026-10-07T08:29:44.346042500Z"
+    },
+    "optimized-w2": {
+      "workers": 2,
+      "requestedMeasuredRounds": 2,
+      "completedMeasuredRounds": 2,
+      "provisional": false,
+      "jobCount": 15,
+      "heapMaxGiB": 24.0,
+      "wallSeconds": {
+        "n": 2,
+        "min": 30.2232543,
+        "median": 30.7188309,
+        "max": 31.2144075
+      },
+      "symbolsPerSecond": {
+        "n": 2,
+        "min": 0.48054732418034846,
+        "median": 0.4884269524524235,
+        "max": 0.4963065807244986
+      },
+      "sourceMiBPerSecond": {
+        "n": 2,
+        "min": 28.638723249147866,
+        "median": 29.108317984224215,
+        "max": 29.577912719300564
+      },
+      "processCpuSeconds": {
+        "n": 2,
+        "min": 91.796875,
+        "median": 92.171875,
+        "max": 92.546875
+      },
+      "threadCpuSeconds": {
+        "n": 2,
+        "min": 54.984375,
+        "median": 55.7421875,
+        "max": 56.5
+      },
+      "gcCount": {
+        "n": 2,
+        "min": 14.0,
+        "median": 14.5,
+        "max": 15.0
+      },
+      "gcSeconds": {
+        "n": 2,
+        "min": 1.917,
+        "median": 1.951,
+        "max": 1.985
+      },
+      "heapPeakGiB": {
+        "n": 2,
+        "min": 7.820493400096893,
+        "median": 8.621184200048447,
+        "max": 9.421875
+      },
+      "rssPeakGiB": {
+        "n": 2,
+        "min": 9.84964370727539,
+        "median": 10.543132781982422,
+        "max": 11.236621856689453
+      },
+      "allocatedGiB": {
+        "n": 2,
+        "min": 25.135212011635303,
+        "median": 25.13521656766534,
+        "max": 25.135221123695374
+      },
+      "parseAllocatedGiB": {
+        "n": 2,
+        "min": 17.059003472328186,
+        "median": 17.059003479778767,
+        "max": 17.059003487229347
+      },
+      "featureAllocatedGiB": {
+        "n": 2,
+        "min": 8.075840413570404,
+        "median": 8.075840555131435,
+        "max": 8.075840696692467
+      },
+      "parseShareOfTaskWall": {
+        "n": 2,
+        "min": 0.7366389660160921,
+        "median": 0.7373648160646928,
+        "max": 0.7380906661132937
+      },
+      "featureShareOfTaskWall": {
+        "n": 2,
+        "min": 0.26179268679312445,
+        "median": 0.26251115102579825,
+        "max": 0.2632296152584721
+      },
+      "slowestObservedTasks": [
+        {
+          "date": "20260928",
+          "sourceSymbol": "204001.SZ",
+          "symbol": "204001.SZ",
+          "round": 1,
+          "wallMs": 20362.9265,
+          "parseWallMs": 17154.2895,
+          "featureWallMs": 3208.2371,
+          "sourceBytes": 366529938
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "204001.SZ",
+          "symbol": "204001.SZ",
+          "round": 2,
+          "wallMs": 19869.872,
+          "parseWallMs": 16778.9256,
+          "featureWallMs": 3090.1659,
+          "sourceBytes": 366529938
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "111024.SZ",
+          "symbol": "111024.SH",
+          "round": 1,
+          "wallMs": 10418.5431,
+          "parseWallMs": 7314.9427,
+          "featureWallMs": 3102.835,
+          "sourceBytes": 153127843
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "000725.SZ",
+          "symbol": "000725.SZ",
+          "round": 2,
+          "wallMs": 10111.8613,
+          "parseWallMs": 6323.2486,
+          "featureWallMs": 3788.2276,
+          "sourceBytes": 123159261
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "000725.SZ",
+          "symbol": "000725.SZ",
+          "round": 1,
+          "wallMs": 10036.0931,
+          "parseWallMs": 6580.027,
+          "featureWallMs": 3455.6187,
+          "sourceBytes": 123159261
+        }
+      ],
+      "generatedAt": "2026-10-07T08:31:18.736406300Z"
+    },
+    "optimized-w4": {
+      "workers": 4,
+      "requestedMeasuredRounds": 2,
+      "completedMeasuredRounds": 2,
+      "provisional": false,
+      "jobCount": 15,
+      "heapMaxGiB": 24.0,
+      "wallSeconds": {
+        "n": 2,
+        "min": 22.9948967,
+        "median": 23.1532513,
+        "max": 23.3116059
+      },
+      "symbolsPerSecond": {
+        "n": 2,
+        "min": 0.6434563137497104,
+        "median": 0.6478874824786096,
+        "max": 0.652318651207509
+      },
+      "sourceMiBPerSecond": {
+        "n": 2,
+        "min": 38.34745583866556,
+        "median": 38.6115359999976,
+        "max": 38.87561616132963
+      },
+      "processCpuSeconds": {
+        "n": 2,
+        "min": 92.421875,
+        "median": 92.7421875,
+        "max": 93.0625
+      },
+      "threadCpuSeconds": {
+        "n": 2,
+        "min": 55.9375,
+        "median": 56.421875,
+        "max": 56.90625
+      },
+      "gcCount": {
+        "n": 2,
+        "min": 12.0,
+        "median": 13.0,
+        "max": 14.0
+      },
+      "gcSeconds": {
+        "n": 2,
+        "min": 1.981,
+        "median": 2.0555,
+        "max": 2.13
+      },
+      "heapPeakGiB": {
+        "n": 2,
+        "min": 10.036973960697651,
+        "median": 12.758549775928259,
+        "max": 15.480125591158867
+      },
+      "rssPeakGiB": {
+        "n": 2,
+        "min": 15.6519775390625,
+        "median": 16.805343627929688,
+        "max": 17.958709716796875
+      },
+      "allocatedGiB": {
+        "n": 2,
+        "min": 25.13521921634674,
+        "median": 25.13522021472454,
+        "max": 25.13522121310234
+      },
+      "parseAllocatedGiB": {
+        "n": 2,
+        "min": 17.059003472328186,
+        "median": 17.059003479778767,
+        "max": 17.059003487229347
+      },
+      "featureAllocatedGiB": {
+        "n": 2,
+        "min": 8.075840413570404,
+        "median": 8.0758406072855,
+        "max": 8.075840801000595
+      },
+      "parseShareOfTaskWall": {
+        "n": 2,
+        "min": 0.7421366158526397,
+        "median": 0.7449151472196818,
+        "max": 0.7476936785867238
+      },
+      "featureShareOfTaskWall": {
+        "n": 2,
+        "min": 0.2521888237151027,
+        "median": 0.25496806562261076,
+        "max": 0.2577473075301189
+      },
+      "slowestObservedTasks": [
+        {
+          "date": "20260928",
+          "sourceSymbol": "204001.SZ",
+          "symbol": "204001.SZ",
+          "round": 1,
+          "wallMs": 20530.341,
+          "parseWallMs": 17700.1912,
+          "featureWallMs": 2829.5737,
+          "sourceBytes": 366529938
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "204001.SZ",
+          "symbol": "204001.SZ",
+          "round": 2,
+          "wallMs": 19914.1455,
+          "parseWallMs": 17256.7589,
+          "featureWallMs": 2656.7359,
+          "sourceBytes": 366529938
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "111024.SZ",
+          "symbol": "111024.SH",
+          "round": 1,
+          "wallMs": 10907.3232,
+          "parseWallMs": 7896.9777,
+          "featureWallMs": 3009.8125,
+          "sourceBytes": 153127843
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "111024.SZ",
+          "symbol": "111024.SH",
+          "round": 2,
+          "wallMs": 10791.131,
+          "parseWallMs": 7684.4714,
+          "featureWallMs": 3106.1878,
+          "sourceBytes": 153127843
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "000725.SZ",
+          "symbol": "000725.SZ",
+          "round": 2,
+          "wallMs": 10064.3401,
+          "parseWallMs": 6795.805,
+          "featureWallMs": 3268.1189,
+          "sourceBytes": 123159261
+        }
+      ],
+      "generatedAt": "2026-10-07T08:32:33.303167800Z"
+    },
+    "optimized-w8": {
+      "workers": 8,
+      "requestedMeasuredRounds": 2,
+      "completedMeasuredRounds": 2,
+      "provisional": false,
+      "jobCount": 15,
+      "heapMaxGiB": 24.0,
+      "wallSeconds": {
+        "n": 2,
+        "min": 21.0964286,
+        "median": 21.1389482,
+        "max": 21.1814678
+      },
+      "symbolsPerSecond": {
+        "n": 2,
+        "min": 0.7081662206620072,
+        "median": 0.70959352122586,
+        "max": 0.7110208217897128
+      },
+      "sourceMiBPerSecond": {
+        "n": 2,
+        "min": 42.20391080634296,
+        "median": 42.28897228475459,
+        "max": 42.374033763166224
+      },
+      "processCpuSeconds": {
+        "n": 2,
+        "min": 93.671875,
+        "median": 99.6328125,
+        "max": 105.59375
+      },
+      "threadCpuSeconds": {
+        "n": 2,
+        "min": 57.828125,
+        "median": 58.65625,
+        "max": 59.484375
+      },
+      "gcCount": {
+        "n": 2,
+        "min": 12.0,
+        "median": 14.0,
+        "max": 16.0
+      },
+      "gcSeconds": {
+        "n": 2,
+        "min": 2.137,
+        "median": 2.2695,
+        "max": 2.402
+      },
+      "heapPeakGiB": {
+        "n": 2,
+        "min": 10.109375,
+        "median": 10.511724568903446,
+        "max": 10.914074137806892
+      },
+      "rssPeakGiB": {
+        "n": 2,
+        "min": 15.149158477783203,
+        "median": 16.885587692260742,
+        "max": 18.62201690673828
+      },
+      "allocatedGiB": {
+        "n": 2,
+        "min": 25.029270455241203,
+        "median": 25.02931423485279,
+        "max": 25.02935801446438
+      },
+      "parseAllocatedGiB": {
+        "n": 2,
+        "min": 17.051209926605225,
+        "median": 17.05125802755356,
+        "max": 17.051306128501892
+      },
+      "featureAllocatedGiB": {
+        "n": 2,
+        "min": 7.977676093578339,
+        "median": 7.97767623141408,
+        "max": 7.977676369249821
+      },
+      "parseShareOfTaskWall": {
+        "n": 2,
+        "min": 0.7473924474213258,
+        "median": 0.750493564826521,
+        "max": 0.7535946822317161
+      },
+      "featureShareOfTaskWall": {
+        "n": 2,
+        "min": 0.24628657595974993,
+        "median": 0.24939244630869556,
+        "max": 0.25249831665764116
+      },
+      "slowestObservedTasks": [
+        {
+          "date": "20260928",
+          "sourceSymbol": "204001.SZ",
+          "symbol": "204001.SZ",
+          "round": 2,
+          "wallMs": 21180.2167,
+          "parseWallMs": 17966.0549,
+          "featureWallMs": 3213.7365,
+          "sourceBytes": 366529938
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "204001.SZ",
+          "symbol": "204001.SZ",
+          "round": 1,
+          "wallMs": 21095.0008,
+          "parseWallMs": 18614.3301,
+          "featureWallMs": 2480.0605,
+          "sourceBytes": 366529938
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "111024.SZ",
+          "symbol": "111024.SH",
+          "round": 1,
+          "wallMs": 12251.0546,
+          "parseWallMs": 8764.4784,
+          "featureWallMs": 3486.1282,
+          "sourceBytes": 153127843
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "111024.SZ",
+          "symbol": "111024.SH",
+          "round": 2,
+          "wallMs": 11402.3527,
+          "parseWallMs": 8333.8182,
+          "featureWallMs": 3068.0864,
+          "sourceBytes": 153127843
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "000725.SZ",
+          "symbol": "000725.SZ",
+          "round": 1,
+          "wallMs": 11266.8671,
+          "parseWallMs": 7598.9498,
+          "featureWallMs": 3667.3513,
+          "sourceBytes": 123159261
+        }
+      ],
+      "generatedAt": "2026-10-07T08:33:46.635111Z"
+    },
+    "w1": {
+      "workers": 1,
+      "requestedMeasuredRounds": 2,
+      "completedMeasuredRounds": 2,
+      "provisional": false,
+      "jobCount": 15,
+      "heapMaxGiB": 24.0,
+      "wallSeconds": {
+        "n": 2,
+        "min": 90.5150572,
+        "median": 90.99173815,
+        "max": 91.4684191
+      },
+      "symbolsPerSecond": {
+        "n": 2,
+        "min": 0.16399102715004724,
+        "median": 0.16485465582169062,
+        "max": 0.165718284493334
+      },
+      "sourceMiBPerSecond": {
+        "n": 2,
+        "min": 9.773217757281927,
+        "median": 9.824686616377981,
+        "max": 9.876155475474034
+      },
+      "processCpuSeconds": {
+        "n": 2,
+        "min": 152.921875,
+        "median": 153.5234375,
+        "max": 154.125
+      },
+      "threadCpuSeconds": {
+        "n": 2,
+        "min": 86.0625,
+        "median": 86.1953125,
+        "max": 86.328125
+      },
+      "gcCount": {
+        "n": 2,
+        "min": 82.0,
+        "median": 103.0,
+        "max": 124.0
+      },
+      "gcSeconds": {
+        "n": 2,
+        "min": 3.298,
+        "median": 3.5235000000000003,
+        "max": 3.749
+      },
+      "heapPeakGiB": {
+        "n": 2,
+        "min": 5.928511835634708,
+        "median": 6.269867479801178,
+        "max": 6.6112231239676476
+      },
+      "rssPeakGiB": {
+        "n": 2,
+        "min": 6.5477752685546875,
+        "median": 7.066083908081055,
+        "max": 7.584392547607422
+      },
+      "allocatedGiB": {
+        "n": 2,
+        "min": 129.23018596321344,
+        "median": 129.23018711060286,
+        "max": 129.23018825799227
+      },
+      "parseAllocatedGiB": {
+        "n": 2,
+        "min": 121.15397641807795,
+        "median": 121.15397642552853,
+        "max": 121.1539764329791
+      },
+      "featureAllocatedGiB": {
+        "n": 2,
+        "min": 8.075841419398785,
+        "median": 8.075841762125492,
+        "max": 8.0758421048522
+      },
+      "parseShareOfTaskWall": {
+        "n": 2,
+        "min": 0.8514465425406974,
+        "median": 0.8530223559085823,
+        "max": 0.8545981692764673
+      },
+      "featureShareOfTaskWall": {
+        "n": 2,
+        "min": 0.1453051291567884,
+        "median": 0.14688043726455224,
+        "max": 0.14845574537231612
+      },
+      "slowestObservedTasks": [
+        {
+          "date": "20260928",
+          "sourceSymbol": "204001.SZ",
+          "symbol": "204001.SZ",
+          "round": 2,
+          "wallMs": 32286.7393,
+          "parseWallMs": 29317.2965,
+          "featureWallMs": 2968.7816,
+          "sourceBytes": 366529938
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "204001.SZ",
+          "symbol": "204001.SZ",
+          "round": 1,
+          "wallMs": 32031.9559,
+          "parseWallMs": 29304.5245,
+          "featureWallMs": 2726.6186,
+          "sourceBytes": 366529938
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "111024.SZ",
+          "symbol": "111024.SH",
+          "round": 2,
+          "wallMs": 16080.7593,
+          "parseWallMs": 13449.047,
+          "featureWallMs": 2630.8915,
+          "sourceBytes": 153127843
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "111024.SZ",
+          "symbol": "111024.SH",
+          "round": 1,
+          "wallMs": 15716.4907,
+          "parseWallMs": 13221.839,
+          "featureWallMs": 2493.9805,
+          "sourceBytes": 153127843
+        },
+        {
+          "date": "20260928",
+          "sourceSymbol": "000725.SZ",
+          "symbol": "000725.SZ",
+          "round": 1,
+          "wallMs": 13654.7502,
+          "parseWallMs": 10891.6132,
+          "featureWallMs": 2762.498,
+          "sourceBytes": 123159261
+        }
+      ],
+      "generatedAt": "2026-10-07T08:25:51.259219Z"
+    }
+  },
+  "parserOptimization": {
+    "sameJobSet": true,
+    "medianSpeedup": 1.630085311524877,
+    "wallReductionFraction": 0.38653517522678515,
+    "allocationReductionFraction": 0.806462615725652
+  },
+  "concurrencySpeedups": {
+    "optimized-w2": {
+      "workers": 2,
+      "median": 1.8171339554462014,
+      "range": [
+        1.778892349630535,
+        1.8566296714116588
+      ],
+      "sameJobSet": true,
+      "provisional": false
+    },
+    "optimized-w4": {
+      "workers": 4,
+      "median": 2.410902467939783,
+      "range": [
+        2.3819496150627697,
+        2.4402540890735986
+      ],
+      "sameJobSet": true,
+      "provisional": false
+    },
+    "optimized-w8": {
+      "workers": 8,
+      "median": 2.640634253505574,
+      "range": [
+        2.6214930534700716,
+        2.659852611261415
+      ],
+      "sameJobSet": true,
+      "provisional": false
+    }
+  },
+  "serialWallModel": {
+    "status": "fitted",
+    "response": "wallSeconds",
+    "sampleSymbolDays": 15,
+    "units": "seconds; nonnegative coefficients for constant per symbol plus DEAL/ORDER/QUOTE MiB",
+    "fitAlgorithm": "Four-column NNLS by exhaustive active-set least squares with normalized columns",
+    "coefficients": {
+      "constant_per_symbol": 0.0,
+      "DEAL_MiB": 0.045900852849702606,
+      "ORDER_MiB": 0.06376769351867186,
+      "QUOTE_MiB": 0.2801376348682872
+    },
+    "maeSeconds": 0.44629513673942506,
+    "weightedAbsolutePercentageError": 0.11993591497036948,
+    "relativeResidualQ10Q90": [
+      0.4052678918164932,
+      1.1524639744891958
+    ],
+    "planningMarginFloor": 0.35,
+    "planningRangeMethod": "Envelope of +/-35% systematic margin, residual Q10/Q90 and leave-one-out workload Q10/Q90; expanded by measured round variation. Not a confidence interval.",
+    "fixedCostPerSymbolSeconds": 0.0,
+    "sampleFeatureRangesMiB": {
+      "DEAL_MiB": [
+        0.009229660034179688,
+        178.8318691253662
+      ],
+      "ORDER_MiB": [
+        0.04282665252685547,
+        168.7018985748291
+      ],
+      "QUOTE_MiB": [
+        0.11696243286132812,
+        2.016420364379883
+      ]
+    },
+    "sampleObservations": [
+      {
+        "date": "20260928",
+        "rawSymbol": "000001.SZ",
+        "actualSeconds": 1.0214031,
+        "predictedSeconds": 1.3034151339829114,
+        "residualSeconds": -0.2820120339829115
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "600000.SH",
+        "actualSeconds": 0.7503469,
+        "predictedSeconds": 1.1067221104033895,
+        "residualSeconds": -0.3563752104033895
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "300750.SZ",
+        "actualSeconds": 2.4624821,
+        "predictedSeconds": 2.3212099146804617,
+        "residualSeconds": 0.14127218531953822
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "688981.SH",
+        "actualSeconds": 1.2019303,
+        "predictedSeconds": 1.603466235709152,
+        "residualSeconds": -0.40153593570915214
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "510300.SZ",
+        "actualSeconds": 2.57851945,
+        "predictedSeconds": 2.7373147708518597,
+        "residualSeconds": -0.15879532085185977
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "159915.SZ",
+        "actualSeconds": 5.1895916,
+        "predictedSeconds": 4.276434568138004,
+        "residualSeconds": 0.9131570318619957
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "588000.SZ",
+        "actualSeconds": 4.05190365,
+        "predictedSeconds": 4.0651518788065175,
+        "residualSeconds": -0.013248228806517659
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "204001.SZ",
+        "actualSeconds": 18.6779942,
+        "predictedSeconds": 19.531141505676104,
+        "residualSeconds": -0.853147305676103
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "111024.SZ",
+        "actualSeconds": 9.561485600000001,
+        "predictedSeconds": 9.430695575227707,
+        "residualSeconds": 0.13079002477229373
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "000725.SZ",
+        "actualSeconds": 8.88678495,
+        "predictedSeconds": 6.823625536480957,
+        "residualSeconds": 2.063159413519042
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "511690.SZ",
+        "actualSeconds": 0.01355085,
+        "predictedSeconds": 0.03592018543005813,
+        "residualSeconds": -0.02236933543005813
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "605305.SH",
+        "actualSeconds": 0.1307234,
+        "predictedSeconds": 0.42583983015278526,
+        "residualSeconds": -0.29511643015278527
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "158056.SZ",
+        "actualSeconds": 0.24449370000000004,
+        "predictedSeconds": 0.5466033285985779,
+        "residualSeconds": -0.3021096285985778
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "515800.SZ",
+        "actualSeconds": 0.42691270000000003,
+        "predictedSeconds": 0.7763849180298046,
+        "residualSeconds": -0.34947221802980455
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "600930.SH",
+        "actualSeconds": 0.61857805,
+        "predictedSeconds": 1.0304447979773468,
+        "residualSeconds": -0.4118667479773468
+      }
+    ],
+    "byDate": {
+      "20260928": {
+        "archiveSymbols": 7926,
+        "sourceGiB": 42.536002192646265,
+        "pointSeconds": 4743.832305886774,
+        "planningRangeSeconds": [
+          1912.4260977945387,
+          6437.807431955557
+        ],
+        "approxMinutesRounded10": [
+          80,
+          30,
+          110
+        ],
+        "leaveOneOutPointRangeSeconds": [
+          2438.838719017511,
+          5284.8647945008515
+        ],
+        "largestPredictedSymbol": "204001.SZ",
+        "largestPredictedSymbolSeconds": 19.531141505676104
+      },
+      "20260929": {
+        "archiveSymbols": 7918,
+        "sourceGiB": 38.81417562253773,
+        "pointSeconds": 4464.120040049536,
+        "planningRangeSeconds": [
+          1799.6630398768789,
+          6058.212710282637
+        ],
+        "approxMinutesRounded10": [
+          70,
+          20,
+          110
+        ],
+        "leaveOneOutPointRangeSeconds": [
+          2176.9158298611974,
+          4984.898035589999
+        ],
+        "largestPredictedSymbol": "204001.SZ",
+        "largestPredictedSymbolSeconds": 24.23934795106336
+      },
+      "20260930": {
+        "archiveSymbols": 7888,
+        "sourceGiB": 38.389061169698834,
+        "pointSeconds": 4425.170247223561,
+        "planningRangeSeconds": [
+          1783.9608405787185,
+          6005.3543355426555
+        ],
+        "approxMinutesRounded10": [
+          70,
+          20,
+          110
+        ],
+        "leaveOneOutPointRangeSeconds": [
+          2150.9937303289944,
+          4950.231085980296
+        ],
+        "largestPredictedSymbol": "204001.SZ",
+        "largestPredictedSymbolSeconds": 19.29554618545044
+      }
+    },
+    "allThreeDates": {
+      "archiveSymbols": 23732,
+      "pointSeconds": 13633.122593159871,
+      "planningRangeSeconds": [
+        5496.049978250136,
+        18501.37447778085
+      ],
+      "approxMinutesRounded10": [
+        230,
+        90,
+        310
+      ]
+    }
+  },
+  "workerCpuModel": {
+    "status": "fitted",
+    "response": "cpuSeconds",
+    "sampleSymbolDays": 15,
+    "units": "seconds; nonnegative coefficients for constant per symbol plus DEAL/ORDER/QUOTE MiB",
+    "fitAlgorithm": "Four-column NNLS by exhaustive active-set least squares with normalized columns",
+    "coefficients": {
+      "constant_per_symbol": 0.0,
+      "DEAL_MiB": 0.042655213802167094,
+      "ORDER_MiB": 0.06070130136173684,
+      "QUOTE_MiB": 0.28629957107832826
+    },
+    "maeSeconds": 0.43134800560705955,
+    "weightedAbsolutePercentageError": 0.12154214422740744,
+    "relativeResidualQ10Q90": [
+      0.42605543434201393,
+      1.1706718497020918
+    ],
+    "planningMarginFloor": 0.35,
+    "planningRangeMethod": "Envelope of +/-35% systematic margin, residual Q10/Q90 and leave-one-out workload Q10/Q90; expanded by measured round variation. Not a confidence interval.",
+    "fixedCostPerSymbolSeconds": 0.0,
+    "sampleFeatureRangesMiB": {
+      "DEAL_MiB": [
+        0.009229660034179688,
+        178.8318691253662
+      ],
+      "ORDER_MiB": [
+        0.04282665252685547,
+        168.7018985748291
+      ],
+      "QUOTE_MiB": [
+        0.11696243286132812,
+        2.016420364379883
+      ]
+    },
+    "sampleObservations": [
+      {
+        "date": "20260928",
+        "rawSymbol": "000001.SZ",
+        "actualSeconds": 1.015625,
+        "predictedSeconds": 1.2718386157862558,
+        "residualSeconds": -0.2562136157862558
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "600000.SH",
+        "actualSeconds": 0.7421875,
+        "predictedSeconds": 1.0853994083195428,
+        "residualSeconds": -0.34321190831954285
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "300750.SZ",
+        "actualSeconds": 2.359375,
+        "predictedSeconds": 2.2292739006666094,
+        "residualSeconds": 0.13010109933339065
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "688981.SH",
+        "actualSeconds": 1.1953125,
+        "predictedSeconds": 1.5579022145772201,
+        "residualSeconds": -0.3625897145772201
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "510300.SZ",
+        "actualSeconds": 2.515625,
+        "predictedSeconds": 2.6290693303388517,
+        "residualSeconds": -0.1134443303388517
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "159915.SZ",
+        "actualSeconds": 5.0703125,
+        "predictedSeconds": 4.070754212990555,
+        "residualSeconds": 0.999558287009445
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "588000.SZ",
+        "actualSeconds": 3.9375,
+        "predictedSeconds": 3.885112994509993,
+        "residualSeconds": 0.05238700549000708
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "204001.SZ",
+        "actualSeconds": 17.640625,
+        "predictedSeconds": 18.445836683307093,
+        "residualSeconds": -0.8052116833070926
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "111024.SZ",
+        "actualSeconds": 9.109375,
+        "predictedSeconds": 8.995940968183515,
+        "residualSeconds": 0.11343403181648526
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "000725.SZ",
+        "actualSeconds": 8.3046875,
+        "predictedSeconds": 6.470701054922082,
+        "residualSeconds": 1.833986445077918
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "511690.SZ",
+        "actualSeconds": 0.015625,
+        "predictedSeconds": 0.0364796210239023,
+        "residualSeconds": -0.0208546210239023
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "605305.SH",
+        "actualSeconds": 0.125,
+        "predictedSeconds": 0.43108108936440775,
+        "residualSeconds": -0.30608108936440775
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "158056.SZ",
+        "actualSeconds": 0.25,
+        "predictedSeconds": 0.5485924065406088,
+        "residualSeconds": -0.2985924065406088
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "515800.SZ",
+        "actualSeconds": 0.328125,
+        "predictedSeconds": 0.7728865696102212,
+        "residualSeconds": -0.4447615696102212
+      },
+      {
+        "date": "20260928",
+        "rawSymbol": "600930.SH",
+        "actualSeconds": 0.625,
+        "predictedSeconds": 1.0147922765105442,
+        "residualSeconds": -0.38979227651054416
+      }
+    ],
+    "byDate": {
+      "20260928": {
+        "archiveSymbols": 7926,
+        "sourceGiB": 42.536002192646265,
+        "pointSeconds": 4702.55961950468,
+        "planningRangeSeconds": [
+          2003.5510812072823,
+          6348.455486331319
+        ],
+        "approxMinutesRounded10": [
+          80,
+          30,
+          110
+        ],
+        "leaveOneOutPointRangeSeconds": [
+          2368.0502983589713,
+          5171.796448796904
+        ],
+        "largestPredictedSymbol": "204001.SZ",
+        "largestPredictedSymbolSeconds": 18.445836683307093
+      },
+      "20260929": {
+        "archiveSymbols": 7918,
+        "sourceGiB": 38.81417562253773,
+        "pointSeconds": 4431.933384818487,
+        "planningRangeSeconds": [
+          1888.2493032437123,
+          5983.110069504958
+        ],
+        "approxMinutesRounded10": [
+          70,
+          30,
+          100
+        ],
+        "leaveOneOutPointRangeSeconds": [
+          2119.3057848372982,
+          4883.603516530071
+        ],
+        "largestPredictedSymbol": "204001.SZ",
+        "largestPredictedSymbolSeconds": 22.904738169796644
+      },
+      "20260930": {
+        "archiveSymbols": 7888,
+        "sourceGiB": 38.389061169698834,
+        "pointSeconds": 4393.789067232794,
+        "planningRangeSeconds": [
+          1871.9977094470603,
+          5931.615240764272
+        ],
+        "approxMinutesRounded10": [
+          70,
+          30,
+          100
+        ],
+        "leaveOneOutPointRangeSeconds": [
+          2094.4294733669904,
+          4849.1737037355915
+        ],
+        "largestPredictedSymbol": "204001.SZ",
+        "largestPredictedSymbolSeconds": 18.22721073954669
+      }
+    },
+    "allThreeDates": {
+      "archiveSymbols": 23732,
+      "pointSeconds": 13528.282071555961,
+      "planningRangeSeconds": [
+        5763.7980938980545,
+        18263.18079660055
+      ],
+      "approxMinutesRounded10": [
+        230,
+        90,
+        310
+      ]
+    },
+    "inputPolicy": "optimized-w1 per-symbol medians; add new full-selected symbol-days using worker CPU only, never parallel task wall"
+  },
+  "parallelAllArchiveForecasts": {
+    "optimized-w2": {
+      "workers": 2,
+      "provisional": false,
+      "allThreeDatesPointSeconds": 7502.541324650018,
+      "planningRangeSeconds": [
+        2960.2295292799568,
+        10400.50258332016
+      ],
+      "approxMinutesRounded10": [
+        130,
+        40,
+        180
+      ],
+      "assumption": "Divide serial all-archive model by speedup measured on the identical selected job set; schedule scaling remains unverified",
+      "byDate": {
+        "20260928": {
+          "pointSeconds": 2610.612328094389,
+          "planningRangeSeconds": [
+            1030.0525340309011,
+            3618.997761889667
+          ]
+        },
+        "20260929": {
+          "pointSeconds": 2456.6818679877465,
+          "planningRangeSeconds": [
+            969.3171813356477,
+            3405.6095139994786
+          ]
+        },
+        "20260930": {
+          "pointSeconds": 2435.247128567883,
+          "planningRangeSeconds": [
+            960.8598139134081,
+            3375.8953074310148
+          ]
+        }
+      }
+    },
+    "optimized-w4": {
+      "workers": 4,
+      "provisional": false,
+      "allThreeDatesPointSeconds": 5654.779807334946,
+      "planningRangeSeconds": [
+        2252.244962055004,
+        7767.324027671885
+      ],
+      "approxMinutesRounded10": [
+        90,
+        30,
+        130
+      ],
+      "assumption": "Divide serial all-archive model by speedup measured on the identical selected job set; schedule scaling remains unverified",
+      "byDate": {
+        "20260928": {
+          "pointSeconds": 1967.6583225453232,
+          "planningRangeSeconds": [
+            783.6995771700803,
+            2702.74710734631
+          ]
+        },
+        "20260929": {
+          "pointSeconds": 1851.638587381062,
+          "planningRangeSeconds": [
+            737.4900211969691,
+            2543.3840715908636
+          ]
+        },
+        "20260930": {
+          "pointSeconds": 1835.4828974085601,
+          "planningRangeSeconds": [
+            731.0553636879548,
+            2521.1928487347122
+          ]
+        }
+      }
+    },
+    "optimized-w8": {
+      "workers": 8,
+      "provisional": false,
+      "allThreeDatesPointSeconds": 5162.821233217444,
+      "planningRangeSeconds": [
+        2066.2986945143834,
+        7057.571429872977
+      ],
+      "approxMinutesRounded10": [
+        90,
+        30,
+        120
+      ],
+      "assumption": "Divide serial all-archive model by speedup measured on the identical selected job set; schedule scaling remains unverified",
+      "byDate": {
+        "20260928": {
+          "pointSeconds": 1796.4745778742738,
+          "planningRangeSeconds": [
+            718.9970187436758,
+            2455.7789399570706
+          ]
+        },
+        "20260929": {
+          "pointSeconds": 1690.5484105279609,
+          "planningRangeSeconds": [
+            676.6025426587086,
+            2310.977975800233
+          ]
+        },
+        "20260930": {
+          "pointSeconds": 1675.7982448152093,
+          "planningRangeSeconds": [
+            670.6991331119992,
+            2290.814514115674
+          ]
+        }
+      }
+    }
+  },
+  "universe": {
+    "status": "unconfirmed",
+    "estimateScope": "all archive instruments as an upper workload scenario; no stock/ETF-only filter inferred",
+    "countsByDate": {
+      "20260928": 7926,
+      "20260929": 7918,
+      "20260930": 7888
+    },
+    "allThreeDatesSymbolDays": 23732
+  },
+  "caveats": [
+    "The measured rounds exclude JVM warmup and use already-extracted files, usually warm OS cache. Extraction, cold storage, database ingestion and verification are not included.",
+    "The serial wall model starts with only 15 selected symbol-days on 09/28. Even a later 45-sample CPU fit does not validate serial wall behavior on 09/29 or 09/30.",
+    "Largest symbols are stragglers; same-sample speedup need not transfer to thousands of smaller symbols or a filtered stock/ETF universe.",
+    "The constant and quote-size terms can be hard to separate; small-symbol fixed costs/JIT effects may dominate full-archive extrapolation.",
+    "The ranges are deliberately broad planning envelopes, not statistical confidence intervals or guaranteed runtimes.",
+    "Worker thread CPU excludes GC/compiler CPU. Process CPU and per-round GC are the aggregate JVM measures; do not sum overlapping per-task GC.",
+    "Heap/RSS are sampled every 20 ms, and memory-pool peaks differ from simultaneous heap peak. Windows lifetime RSS includes warmup.",
+    "Pending or partial runs are marked provisional. Rerun this script after the benchmark writes more complete rounds."
+  ]
+}

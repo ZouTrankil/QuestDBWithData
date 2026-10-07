@@ -1,0 +1,80 @@
+{
+  "date": "20260928",
+  "input": "D:\\l2-native-raw",
+  "pipeline_api": "KuakeSyncPipeline(source=DfcfCsvLevel2Source(input)).process_symbol_date(symbol, datetime(2026,9,28), load_snapshot=True)",
+  "field_count": 110,
+  "symbols": {
+    "160515.SZ": {
+      "success": true,
+      "elapsed_seconds": 0.5591353999916464,
+      "nonfinite_fields_converted_to_null": [],
+      "null_fields": [
+        "ofi_slope"
+      ],
+      "populated_fields": 109,
+      "raw_records": {
+        "deal": 7,
+        "order": 32,
+        "snapshot": 18
+      },
+      "feature_records": {
+        "deal_records": 7,
+        "order_records": 32,
+        "snapshot_records": 18,
+        "total_records": 0,
+        "clean_records": 0,
+        "large_order_records": 0
+      },
+      "feature_version": "v1.3",
+      "parser_version": "dfcf_csv_v1.2"
+    },
+    "185640.SZ": {
+      "success": true,
+      "elapsed_seconds": 0.21984650008380413,
+      "nonfinite_fields_converted_to_null": [],
+      "null_fields": [
+        "ofi_slope"
+      ],
+      "populated_fields": 109,
+      "raw_records": {
+        "deal": 4,
+        "order": 0,
+        "snapshot": 7
+      },
+      "feature_records": {
+        "deal_records": 4,
+        "order_records": 0,
+        "snapshot_records": 7,
+        "total_records": 4,
+        "clean_records": 4,
+        "large_order_records": 0
+      },
+      "feature_version": "v1.3",
+      "parser_version": "dfcf_csv_v1.2"
+    },
+    "246132.SZ": {
+      "success": true,
+      "elapsed_seconds": 0.20711139997001737,
+      "nonfinite_fields_converted_to_null": [],
+      "null_fields": [
+        "ofi_slope"
+      ],
+      "populated_fields": 109,
+      "raw_records": {
+        "deal": 1,
+        "order": 0,
+        "snapshot": 5
+      },
+      "feature_records": {
+        "deal_records": 1,
+        "order_records": 0,
+        "snapshot_records": 5,
+        "total_records": 1,
+        "clean_records": 1,
+        "large_order_records": 1
+      },
+      "feature_version": "v1.3",
+      "parser_version": "dfcf_csv_v1.2"
+    }
+  }
+}

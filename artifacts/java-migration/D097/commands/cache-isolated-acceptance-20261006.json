@@ -1,0 +1,995 @@
+{
+  "task_id": "D097",
+  "status": "VERIFIED_STORED_GENERATIONS",
+  "checked_at": "2026-10-06T05:53:10.419120+00:00",
+  "target": "private-127.0.0.1:19000/18812",
+  "formal_mutated": false,
+  "owner": "original MarketBarometerReadThroughCache._publish",
+  "owner_submissions": [
+    {
+      "phase": "first",
+      "table": "market_breadth_daily_cache",
+      "submitted_rows": 2,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false
+    },
+    {
+      "phase": "first",
+      "table": "market_barometer_cache_coverage",
+      "submitted_rows": 2,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false
+    },
+    {
+      "phase": "replay",
+      "table": "market_breadth_daily_cache",
+      "submitted_rows": 2,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false
+    },
+    {
+      "phase": "replay",
+      "table": "market_barometer_cache_coverage",
+      "submitted_rows": 2,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false
+    },
+    {
+      "phase": "increment",
+      "table": "market_breadth_daily_cache",
+      "submitted_rows": 1,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false
+    },
+    {
+      "phase": "increment",
+      "table": "market_barometer_cache_coverage",
+      "submitted_rows": 1,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false
+    }
+  ],
+  "phases": [
+    {
+      "phase": "first",
+      "submitted_cache_rows": 2,
+      "submitted_coverage_rows": 2,
+      "visible_selected_keys": 2,
+      "cache_snapshot": {
+        "physical": {
+          "id": 13,
+          "directoryName": "market_breadth_daily_cache~13",
+          "table_txn": 1,
+          "table_row_count": 2,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 1,
+          "writerTxn": 1,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "coverage_snapshot": {
+        "physical": {
+          "id": 14,
+          "directoryName": "market_barometer_cache_coverage~14",
+          "table_txn": 1,
+          "table_row_count": 2,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 1,
+          "writerTxn": 1,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "cache_rows": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "stock_count": 5552,
+          "up_count": 2575,
+          "down_count": 2820,
+          "flat_count": 157,
+          "avg_pct_change": 0.12166565201729095,
+          "total_amount_yi": 18343.331240500032,
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4234,
+          "down_count": 1152,
+          "flat_count": 167,
+          "avg_pct_change": 1.5667630109850548,
+          "total_amount_yi": 20929.055246700038,
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+        }
+      ],
+      "coverage_receipts": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "dataset_id": "market_breadth_daily",
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+          "row_count": 1,
+          "content_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "dataset_id": "market_breadth_daily",
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+          "row_count": 1,
+          "content_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9"
+        }
+      ],
+      "verified_generations": [
+        {
+          "receipt": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "dataset_id": "market_breadth_daily",
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+            "row_count": 1,
+            "content_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "stock_count": 5552,
+            "up_count": 2575,
+            "down_count": 2820,
+            "flat_count": 157,
+            "avg_pct_change": 0.12166565201729095,
+            "total_amount_yi": 18343.331240500032,
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e",
+          "eight_field_comparisons": 8,
+          "current_cache_hit_certified": false
+        },
+        {
+          "receipt": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "dataset_id": "market_breadth_daily",
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+            "row_count": 1,
+            "content_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "stock_count": 5553,
+            "up_count": 4234,
+            "down_count": 1152,
+            "flat_count": 167,
+            "avg_pct_change": 1.5667630109850548,
+            "total_amount_yi": 20929.055246700038,
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9",
+          "eight_field_comparisons": 8,
+          "current_cache_hit_certified": false
+        }
+      ],
+      "cache_field_comparisons": 16,
+      "receipt_field_comparisons": 10
+    },
+    {
+      "phase": "replay",
+      "submitted_cache_rows": 2,
+      "submitted_coverage_rows": 2,
+      "visible_selected_keys": 2,
+      "cache_snapshot": {
+        "physical": {
+          "id": 13,
+          "directoryName": "market_breadth_daily_cache~13",
+          "table_txn": 2,
+          "table_row_count": 2,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 2,
+          "writerTxn": 2,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "coverage_snapshot": {
+        "physical": {
+          "id": 14,
+          "directoryName": "market_barometer_cache_coverage~14",
+          "table_txn": 2,
+          "table_row_count": 2,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 2,
+          "writerTxn": 2,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "cache_rows": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "stock_count": 5552,
+          "up_count": 2575,
+          "down_count": 2820,
+          "flat_count": 157,
+          "avg_pct_change": 0.12166565201729095,
+          "total_amount_yi": 18343.331240500032,
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4234,
+          "down_count": 1152,
+          "flat_count": 167,
+          "avg_pct_change": 1.5667630109850548,
+          "total_amount_yi": 20929.055246700038,
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+        }
+      ],
+      "coverage_receipts": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "dataset_id": "market_breadth_daily",
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+          "row_count": 1,
+          "content_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "dataset_id": "market_breadth_daily",
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+          "row_count": 1,
+          "content_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9"
+        }
+      ],
+      "verified_generations": [
+        {
+          "receipt": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "dataset_id": "market_breadth_daily",
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+            "row_count": 1,
+            "content_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "stock_count": 5552,
+            "up_count": 2575,
+            "down_count": 2820,
+            "flat_count": 157,
+            "avg_pct_change": 0.12166565201729095,
+            "total_amount_yi": 18343.331240500032,
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e",
+          "eight_field_comparisons": 8,
+          "current_cache_hit_certified": false
+        },
+        {
+          "receipt": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "dataset_id": "market_breadth_daily",
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+            "row_count": 1,
+            "content_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "stock_count": 5553,
+            "up_count": 4234,
+            "down_count": 1152,
+            "flat_count": 167,
+            "avg_pct_change": 1.5667630109850548,
+            "total_amount_yi": 20929.055246700038,
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9",
+          "eight_field_comparisons": 8,
+          "current_cache_hit_certified": false
+        }
+      ],
+      "cache_field_comparisons": 16,
+      "receipt_field_comparisons": 10
+    },
+    {
+      "phase": "increment",
+      "submitted_cache_rows": 1,
+      "submitted_coverage_rows": 1,
+      "visible_selected_keys": 3,
+      "cache_snapshot": {
+        "physical": {
+          "id": 13,
+          "directoryName": "market_breadth_daily_cache~13",
+          "table_txn": 3,
+          "table_row_count": 3,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 3,
+          "writerTxn": 3,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "coverage_snapshot": {
+        "physical": {
+          "id": 14,
+          "directoryName": "market_barometer_cache_coverage~14",
+          "table_txn": 3,
+          "table_row_count": 3,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 3,
+          "writerTxn": 3,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "cache_rows": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "stock_count": 5552,
+          "up_count": 2575,
+          "down_count": 2820,
+          "flat_count": 157,
+          "avg_pct_change": 0.12166565201729095,
+          "total_amount_yi": 18343.331240500032,
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4234,
+          "down_count": 1152,
+          "flat_count": 167,
+          "avg_pct_change": 1.5667630109850548,
+          "total_amount_yi": 20929.055246700038,
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+        },
+        {
+          "trade_date": "2026-09-21T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4536,
+          "down_count": 936,
+          "flat_count": 81,
+          "avg_pct_change": 1.918254601116519,
+          "total_amount_yi": 20481.336778100012,
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+        }
+      ],
+      "coverage_receipts": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "dataset_id": "market_breadth_daily",
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+          "row_count": 1,
+          "content_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "dataset_id": "market_breadth_daily",
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+          "row_count": 1,
+          "content_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9"
+        },
+        {
+          "trade_date": "2026-09-21T00:00:00.000000Z",
+          "dataset_id": "market_breadth_daily",
+          "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+          "row_count": 1,
+          "content_digest": "7f11961fb6dfb247f12bdec18eb951a1f8c7fea47655c62b195bc62ff2864df3"
+        }
+      ],
+      "verified_generations": [
+        {
+          "receipt": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "dataset_id": "market_breadth_daily",
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+            "row_count": 1,
+            "content_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "stock_count": 5552,
+            "up_count": 2575,
+            "down_count": 2820,
+            "flat_count": 157,
+            "avg_pct_change": 0.12166565201729095,
+            "total_amount_yi": 18343.331240500032,
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e",
+          "eight_field_comparisons": 8,
+          "current_cache_hit_certified": false
+        },
+        {
+          "receipt": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "dataset_id": "market_breadth_daily",
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+            "row_count": 1,
+            "content_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "stock_count": 5553,
+            "up_count": 4234,
+            "down_count": 1152,
+            "flat_count": 167,
+            "avg_pct_change": 1.5667630109850548,
+            "total_amount_yi": 20929.055246700038,
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9",
+          "eight_field_comparisons": 8,
+          "current_cache_hit_certified": false
+        },
+        {
+          "receipt": {
+            "trade_date": "2026-09-21T00:00:00.000000Z",
+            "dataset_id": "market_breadth_daily",
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+            "row_count": 1,
+            "content_digest": "7f11961fb6dfb247f12bdec18eb951a1f8c7fea47655c62b195bc62ff2864df3"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-21T00:00:00.000000Z",
+            "stock_count": 5553,
+            "up_count": 4536,
+            "down_count": 936,
+            "flat_count": 81,
+            "avg_pct_change": 1.918254601116519,
+            "total_amount_yi": 20481.336778100012,
+            "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "7f11961fb6dfb247f12bdec18eb951a1f8c7fea47655c62b195bc62ff2864df3",
+          "eight_field_comparisons": 8,
+          "current_cache_hit_certified": false
+        }
+      ],
+      "cache_field_comparisons": 24,
+      "receipt_field_comparisons": 15
+    }
+  ],
+  "current_cache_hit_certified": false,
+  "production_latest_certified": false,
+  "java_writer_exercised": false,
+  "java_checkpoint_exercised": false,
+  "private_target_attestation": {
+    "pid": 16980,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d095-isolated-questdb",
+    "http_port": 19000,
+    "pg_port": 18812,
+    "address": "127.0.0.1"
+  },
+  "input_target": {
+    "pid": 16980,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d095-isolated-questdb",
+    "http_port": 19000,
+    "pg_port": 18812,
+    "address": "127.0.0.1"
+  },
+  "source_mv_alias_before": {
+    "tables": {
+      "stk_factor": {
+        "id": 9,
+        "directoryName": "stk_factor~9",
+        "table_txn": 122,
+        "table_row_count": 16658,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "mv_market_breadth_daily_v1": {
+        "id": 10,
+        "directoryName": "mv_market_breadth_daily_v1~10",
+        "table_txn": 74,
+        "table_row_count": 3,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      }
+    },
+    "wal": {
+      "stk_factor": {
+        "sequencerTxn": 122,
+        "writerTxn": 122,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "mv_market_breadth_daily_v1": {
+        "sequencerTxn": 74,
+        "writerTxn": 74,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    "mv": {
+      "view_name": "mv_market_breadth_daily_v1",
+      "view_status": "valid",
+      "invalidation_reason": null,
+      "base_table_name": "stk_factor",
+      "view_directory_name": null,
+      "refresh_base_table_txn": 122,
+      "base_table_txn": 122,
+      "refresh_type": "timer",
+      "timer_interval": 1,
+      "timer_interval_unit": "MINUTE",
+      "view_sql_sha256": "f7e7d1f84e29f72a0df4613ada216076c0a0dc2ccb3f9cbc18a00d719939b139",
+      "definition_matches_python": true
+    },
+    "alias": {
+      "view_name": "v_market_breadth_daily",
+      "view_sql": "SELECT * FROM mv_market_breadth_daily_v1",
+      "view_table_dir_name": "v_market_breadth_daily~12",
+      "invalidation_reason": null,
+      "view_status": "valid",
+      "view_status_update_time": "2026-10-06T05:21:00.364325Z"
+    }
+  },
+  "python_owner_file": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_cache.py",
+  "python_owner_file_sha256": "5971761ed070f7b178892c90a9114b0609a3dcb2cbf8767867432279371b5bee",
+  "original_source_frames": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "stock_count": 5552,
+      "up_count": 2575,
+      "down_count": 2820,
+      "flat_count": 157,
+      "avg_pct_change": 0.12166565201729095,
+      "total_amount_yi": 18343.331240500032
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4234,
+      "down_count": 1152,
+      "flat_count": 167,
+      "avg_pct_change": 1.5667630109850548,
+      "total_amount_yi": 20929.055246700038
+    },
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4536,
+      "down_count": 936,
+      "flat_count": 81,
+      "avg_pct_change": 1.918254601116519,
+      "total_amount_yi": 20481.336778100012
+    }
+  ],
+  "source_raw_rows": 16658,
+  "d095_real_source_evidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D095\\commands\\java-materialize-acceptance-20261006.json",
+  "d095_real_source_evidence_sha256": "3c3db554353f2598d8612e387383ae3bd3c4d41f3bdf1adc67ce356115577e69",
+  "original_source_partition_versions": {
+    "20260917": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+    "20260918": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+    "20260921": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+  },
+  "installed_owner_tables": [
+    {
+      "table": "market_breadth_daily_cache",
+      "created": true,
+      "physical_types": {
+        "trade_date": "TIMESTAMP",
+        "stock_count": "LONG",
+        "up_count": "LONG",
+        "down_count": "LONG",
+        "flat_count": "LONG",
+        "avg_pct_change": "DOUBLE",
+        "total_amount_yi": "DOUBLE",
+        "source_version": "SYMBOL"
+      },
+      "physical_upsert_keys": [
+        "source_version",
+        "trade_date"
+      ],
+      "schema_sha256": "e1400b20fa33b3f298bba0076936e6859fd26e994a1a8bfd4e631721e4b27fc5"
+    },
+    {
+      "table": "market_barometer_cache_coverage",
+      "created": true,
+      "physical_types": {
+        "trade_date": "TIMESTAMP",
+        "dataset_id": "SYMBOL",
+        "source_version": "SYMBOL",
+        "row_count": "LONG",
+        "content_digest": "STRING"
+      },
+      "physical_upsert_keys": [
+        "dataset_id",
+        "source_version",
+        "trade_date"
+      ],
+      "schema_sha256": "3bb3bfdbe6abf3c67c107803290e36af67c0b645f8742661886a9cb083a636a3"
+    }
+  ],
+  "resume_existing_records": {
+    "cache_rows": null,
+    "coverage_dataset_rows": 0
+  },
+  "tables_before": {
+    "market_breadth_daily_cache": {
+      "physical": {
+        "id": 13,
+        "directoryName": "market_breadth_daily_cache~13",
+        "table_txn": 3,
+        "table_row_count": 3,
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "wal": {
+        "sequencerTxn": 3,
+        "writerTxn": 3,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "settled": true
+    },
+    "market_barometer_cache_coverage": {
+      "physical": {
+        "id": 14,
+        "directoryName": "market_barometer_cache_coverage~14",
+        "table_txn": 3,
+        "table_row_count": 3,
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "wal": {
+        "sequencerTxn": 3,
+        "writerTxn": 3,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "settled": true
+    }
+  },
+  "cache_rows": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "stock_count": 5552,
+      "up_count": 2575,
+      "down_count": 2820,
+      "flat_count": 157,
+      "avg_pct_change": 0.12166565201729095,
+      "total_amount_yi": 18343.331240500032,
+      "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4234,
+      "down_count": 1152,
+      "flat_count": 167,
+      "avg_pct_change": 1.5667630109850548,
+      "total_amount_yi": 20929.055246700038,
+      "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+    },
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4536,
+      "down_count": 936,
+      "flat_count": 81,
+      "avg_pct_change": 1.918254601116519,
+      "total_amount_yi": 20481.336778100012,
+      "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+    }
+  ],
+  "coverage_receipts": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "dataset_id": "market_breadth_daily",
+      "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+      "row_count": 1,
+      "content_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e"
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "dataset_id": "market_breadth_daily",
+      "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+      "row_count": 1,
+      "content_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9"
+    },
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "dataset_id": "market_breadth_daily",
+      "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+      "row_count": 1,
+      "content_digest": "7f11961fb6dfb247f12bdec18eb951a1f8c7fea47655c62b195bc62ff2864df3"
+    }
+  ],
+  "verified_generations": [
+    {
+      "receipt": {
+        "trade_date": "2026-09-17T00:00:00.000000Z",
+        "dataset_id": "market_breadth_daily",
+        "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+        "row_count": 1,
+        "content_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e"
+      },
+      "cache_record": {
+        "trade_date": "2026-09-17T00:00:00.000000Z",
+        "stock_count": 5552,
+        "up_count": 2575,
+        "down_count": 2820,
+        "flat_count": 157,
+        "avg_pct_change": 0.12166565201729095,
+        "total_amount_yi": 18343.331240500032,
+        "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+      },
+      "receipt_digest_matches": true,
+      "exact_key_row_count": 1,
+      "actual_python_record_digest": "43c052eee94797a6f8761f29be0702576a35c737ceda6464c7a4235e1eba290e",
+      "eight_field_comparisons": 8,
+      "current_cache_hit_certified": false
+    },
+    {
+      "receipt": {
+        "trade_date": "2026-09-18T00:00:00.000000Z",
+        "dataset_id": "market_breadth_daily",
+        "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+        "row_count": 1,
+        "content_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9"
+      },
+      "cache_record": {
+        "trade_date": "2026-09-18T00:00:00.000000Z",
+        "stock_count": 5553,
+        "up_count": 4234,
+        "down_count": 1152,
+        "flat_count": 167,
+        "avg_pct_change": 1.5667630109850548,
+        "total_amount_yi": 20929.055246700038,
+        "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+      },
+      "receipt_digest_matches": true,
+      "exact_key_row_count": 1,
+      "actual_python_record_digest": "e521237dca71f20ae85f498af520760a63720c1b9cfbabc9177f2fc3e7b8dda9",
+      "eight_field_comparisons": 8,
+      "current_cache_hit_certified": false
+    },
+    {
+      "receipt": {
+        "trade_date": "2026-09-21T00:00:00.000000Z",
+        "dataset_id": "market_breadth_daily",
+        "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41",
+        "row_count": 1,
+        "content_digest": "7f11961fb6dfb247f12bdec18eb951a1f8c7fea47655c62b195bc62ff2864df3"
+      },
+      "cache_record": {
+        "trade_date": "2026-09-21T00:00:00.000000Z",
+        "stock_count": 5553,
+        "up_count": 4536,
+        "down_count": 936,
+        "flat_count": 81,
+        "avg_pct_change": 1.918254601116519,
+        "total_amount_yi": 20481.336778100012,
+        "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+      },
+      "receipt_digest_matches": true,
+      "exact_key_row_count": 1,
+      "actual_python_record_digest": "7f11961fb6dfb247f12bdec18eb951a1f8c7fea47655c62b195bc62ff2864df3",
+      "eight_field_comparisons": 8,
+      "current_cache_hit_certified": false
+    }
+  ],
+  "cache_field_comparisons": 24,
+  "receipt_field_comparisons": 15,
+  "range_from_inclusive": "2026-09-17",
+  "range_to_exclusive": "2026-09-22",
+  "range_rows": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "stock_count": 5552,
+      "up_count": 2575,
+      "down_count": 2820,
+      "flat_count": 157,
+      "avg_pct_change": 0.12166565201729095,
+      "total_amount_yi": 18343.331240500032,
+      "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4234,
+      "down_count": 1152,
+      "flat_count": 167,
+      "avg_pct_change": 1.5667630109850548,
+      "total_amount_yi": 20929.055246700038,
+      "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+    },
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4536,
+      "down_count": 936,
+      "flat_count": 81,
+      "avg_pct_change": 1.918254601116519,
+      "total_amount_yi": 20481.336778100012,
+      "source_version": "a8b094527a21b646a20c6b17b782266b7dbf2f23be7d5ba9813e64845ecb5b41"
+    }
+  ],
+  "range_complete_keys": 3,
+  "tables_after": {
+    "market_breadth_daily_cache": {
+      "physical": {
+        "id": 13,
+        "directoryName": "market_breadth_daily_cache~13",
+        "table_txn": 3,
+        "table_row_count": 3,
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "wal": {
+        "sequencerTxn": 3,
+        "writerTxn": 3,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "settled": true
+    },
+    "market_barometer_cache_coverage": {
+      "physical": {
+        "id": 14,
+        "directoryName": "market_barometer_cache_coverage~14",
+        "table_txn": 3,
+        "table_row_count": 3,
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "wal": {
+        "sequencerTxn": 3,
+        "writerTxn": 3,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "settled": true
+    }
+  },
+  "source_mv_alias_after": {
+    "tables": {
+      "stk_factor": {
+        "id": 9,
+        "directoryName": "stk_factor~9",
+        "table_txn": 122,
+        "table_row_count": 16658,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "mv_market_breadth_daily_v1": {
+        "id": 10,
+        "directoryName": "mv_market_breadth_daily_v1~10",
+        "table_txn": 74,
+        "table_row_count": 3,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      }
+    },
+    "wal": {
+      "stk_factor": {
+        "sequencerTxn": 122,
+        "writerTxn": 122,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "mv_market_breadth_daily_v1": {
+        "sequencerTxn": 74,
+        "writerTxn": 74,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    "mv": {
+      "view_name": "mv_market_breadth_daily_v1",
+      "view_status": "valid",
+      "invalidation_reason": null,
+      "base_table_name": "stk_factor",
+      "view_directory_name": null,
+      "refresh_base_table_txn": 122,
+      "base_table_txn": 122,
+      "refresh_type": "timer",
+      "timer_interval": 1,
+      "timer_interval_unit": "MINUTE",
+      "view_sql_sha256": "f7e7d1f84e29f72a0df4613ada216076c0a0dc2ccb3f9cbc18a00d719939b139",
+      "definition_matches_python": true
+    },
+    "alias": {
+      "view_name": "v_market_breadth_daily",
+      "view_sql": "SELECT * FROM mv_market_breadth_daily_v1",
+      "view_table_dir_name": "v_market_breadth_daily~12",
+      "invalidation_reason": null,
+      "view_status": "valid",
+      "view_status_update_time": "2026-10-06T05:21:00.364325Z"
+    }
+  },
+  "stable_physical_and_wal_versions": true,
+  "source_mv_alias_unchanged": true,
+  "cache_submitted_rows": 5,
+  "coverage_submitted_rows": 5,
+  "physical_inserted_rows": "unknown; submitted batches and verified complete keys are recorded",
+  "physical_updated_rows": "unknown; duplicate replay follows owner DEDUP contract",
+  "generation_count": 3
+}

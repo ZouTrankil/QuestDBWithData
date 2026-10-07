@@ -1,0 +1,18 @@
+{
+  "timeoutMillis" : 30000,
+  "members" : [ {
+    "memberId" : "cache",
+    "datasetId" : "market_breadth_daily_cache",
+    "definitionVersion" : 1,
+    "query" : {
+      "columns" : [ "trade_date", "stock_count", "up_count", "down_count", "flat_count", "avg_pct_change", "total_amount_yi", "source_version" ],
+      "equalities" : { },
+      "rangeColumn" : "trade_date",
+      "fromInclusive" : "2026-09-17",
+      "toExclusive" : "2026-09-22",
+      "pageSize" : 3,
+      "cursor" : null
+    }
+  } ],
+  "unexpected" : true
+}

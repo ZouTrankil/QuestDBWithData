@@ -1,0 +1,30 @@
+{
+  "timeoutMillis" : 30000,
+  "members" : [ {
+    "memberId" : "cache",
+    "datasetId" : "etf_market_overview_daily_cache",
+    "definitionVersion" : 2,
+    "query" : {
+      "columns" : [ "trade_date", "etf_count", "total_share", "total_size_yi", "source_version" ],
+      "equalities" : { },
+      "rangeColumn" : "trade_date",
+      "fromInclusive" : "2026-09-17",
+      "toExclusive" : "2026-09-22",
+      "pageSize" : 2,
+      "cursor" : null
+    }
+  }, {
+    "memberId" : "receipt",
+    "datasetId" : "market_barometer_cache_coverage",
+    "definitionVersion" : 1,
+    "query" : {
+      "columns" : [ "trade_date", "dataset_id", "source_version", "row_count", "content_digest" ],
+      "equalities" : { },
+      "rangeColumn" : "trade_date",
+      "fromInclusive" : "2026-09-17",
+      "toExclusive" : "2026-09-22",
+      "pageSize" : 2,
+      "cursor" : null
+    }
+  } ]
+}

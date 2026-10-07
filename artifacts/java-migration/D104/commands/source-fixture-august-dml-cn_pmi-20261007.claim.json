@@ -1,0 +1,53 @@
+{
+  "task_id": "D104",
+  "stage": "august_source_increment",
+  "invocation_id": "2700ee54-dd1f-4bf7-90b8-86e2b939a575",
+  "kind": "DML",
+  "table": "cn_pmi",
+  "rows": 1,
+  "ack": "ACKNOWLEDGED",
+  "created_at": "2026-10-06T17:14:25.897421+00:00",
+  "automatic_retry": false,
+  "target": {
+    "pid": 43084,
+    "birth_utc": "2026-10-06T16:04:24.4330550Z",
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19040,
+    "pg_port": 18852
+  },
+  "producer_identity": {
+    "pid": 19084,
+    "parent_pid": 48360,
+    "name": "python.exe",
+    "birth_utc": "2026-10-06T17:13:55.8312790Z"
+  },
+  "increment_admission": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-source-increment-admission-20261007.json",
+    "sha256": "4a5233f688eb0d2cda1e485cd9acf0cdbf3d4ca5cb9ad991fc139b1e03e4e65f"
+  },
+  "initial_fixture": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-after-known-partial-20261007.json",
+    "sha256": "050cd029e0ec639bd1e11dcd2b8d4b8e5336ee45554abae22b430c075de8f006"
+  },
+  "java_initial": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-initial-acceptance-20261007.json",
+    "sha256": "2ef5ded567bf02de76170516e0acd4fedd3a4b3242133a79bafac4986bc559b1"
+  },
+  "terminal_review": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\initial-java-process-and-ledger-review-20261007.json",
+    "sha256": "738744cd9f782ae0f47faa1a76064cc80b8fa7772aebb3f173fcd0798831f1e2"
+  },
+  "sql_sha256": "10ef1ef142c89a2d024f35ea0ed0aadc40ff63e4f8956f6f549cc1ba5710a7be",
+  "source_records_sha256": "108bc4f2bf12728fd2ffbd39ff939331de407409775f9ddacbc8fb1e2b052545",
+  "raw_response": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-august-dml-cn_pmi-20261007.claim.response.bin",
+    "sha256": "bf28704bb78cb86d6fe251c332a0c9800f40dfd4ce7e5ec64083d0f11a5b348d",
+    "bytes": 12
+  },
+  "http_status": 200,
+  "ack_at": "2026-10-06T17:14:26.001509+00:00",
+  "response": {
+    "dml": "OK"
+  }
+}

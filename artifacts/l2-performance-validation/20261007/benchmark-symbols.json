@@ -1,0 +1,230 @@
+[
+  {
+    "date": "20260928",
+    "source_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw",
+    "symbols": [
+      "000001.SZ",
+      "600000.SH",
+      "300750.SZ",
+      "688981.SH",
+      "510300.SZ",
+      "159915.SZ",
+      "588000.SZ",
+      "204001.SZ",
+      "111024.SZ",
+      "000725.SZ",
+      "511690.SZ",
+      "605305.SH",
+      "158056.SZ",
+      "515800.SZ",
+      "600930.SH"
+    ],
+    "initial_symbols": [
+      "000001.SZ",
+      "600000.SH",
+      "300750.SZ",
+      "688981.SH",
+      "510300.SZ",
+      "159915.SZ",
+      "588000.SZ",
+      "204001.SZ",
+      "111024.SZ",
+      "000725.SZ"
+    ],
+    "quantile_samples": [
+      {
+        "quantile": 0.05,
+        "target_bytes_all_instruments": 177339.75,
+        "raw_symbol": "511690.SZ",
+        "actual_csv_bytes": 177229,
+        "deviation_bytes": -110.75,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.25,
+        "target_bytes_all_instruments": 2388051.0,
+        "raw_symbol": "605305.SH",
+        "actual_csv_bytes": 2388025,
+        "deviation_bytes": -26.0,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.5,
+        "target_bytes_all_instruments": 3992627.5,
+        "raw_symbol": "158056.SZ",
+        "actual_csv_bytes": 3992054,
+        "deviation_bytes": -573.5,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.75,
+        "target_bytes_all_instruments": 6663322.5,
+        "raw_symbol": "515800.SZ",
+        "actual_csv_bytes": 6663558,
+        "deviation_bytes": 235.5,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.9,
+        "target_bytes_all_instruments": 11236922.0,
+        "raw_symbol": "600930.SH",
+        "actual_csv_bytes": 11235248,
+        "deviation_bytes": -1674.0,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      }
+    ],
+    "selected_csv_bytes": 937364845
+  },
+  {
+    "date": "20260929",
+    "source_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw",
+    "symbols": [
+      "000001.SZ",
+      "600000.SH",
+      "300750.SZ",
+      "688981.SH",
+      "510300.SZ",
+      "159915.SZ",
+      "588000.SZ",
+      "204001.SZ",
+      "111024.SZ",
+      "113701.SZ",
+      "501043.SZ",
+      "158027.SZ",
+      "511100.SZ",
+      "300314.SZ",
+      "516150.SZ"
+    ],
+    "initial_symbols": [
+      "000001.SZ",
+      "600000.SH",
+      "300750.SZ",
+      "688981.SH",
+      "510300.SZ",
+      "159915.SZ",
+      "588000.SZ",
+      "204001.SZ",
+      "111024.SZ",
+      "113701.SZ"
+    ],
+    "quantile_samples": [
+      {
+        "quantile": 0.05,
+        "target_bytes_all_instruments": 131678.80000000005,
+        "raw_symbol": "501043.SZ",
+        "actual_csv_bytes": 132414,
+        "deviation_bytes": 735.1999999999534,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.25,
+        "target_bytes_all_instruments": 2160846.25,
+        "raw_symbol": "158027.SZ",
+        "actual_csv_bytes": 2160726,
+        "deviation_bytes": -120.25,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.5,
+        "target_bytes_all_instruments": 3609185.5,
+        "raw_symbol": "511100.SZ",
+        "actual_csv_bytes": 3609378,
+        "deviation_bytes": 192.5,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.75,
+        "target_bytes_all_instruments": 6049843.25,
+        "raw_symbol": "300314.SZ",
+        "actual_csv_bytes": 6050298,
+        "deviation_bytes": 454.75,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.9,
+        "target_bytes_all_instruments": 10251188.600000001,
+        "raw_symbol": "516150.SZ",
+        "actual_csv_bytes": 10247675,
+        "deviation_bytes": -3513.60000000149,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      }
+    ],
+    "selected_csv_bytes": 1002665411
+  },
+  {
+    "date": "20260930",
+    "source_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw",
+    "symbols": [
+      "000001.SZ",
+      "600000.SH",
+      "300750.SZ",
+      "688981.SH",
+      "510300.SZ",
+      "159915.SZ",
+      "588000.SZ",
+      "204001.SZ",
+      "001246.SZ",
+      "111024.SZ",
+      "508093.SZ",
+      "301026.SZ",
+      "516000.SZ",
+      "600985.SH",
+      "603737.SH"
+    ],
+    "initial_symbols": [
+      "000001.SZ",
+      "600000.SH",
+      "300750.SZ",
+      "688981.SH",
+      "510300.SZ",
+      "159915.SZ",
+      "588000.SZ",
+      "204001.SZ",
+      "001246.SZ",
+      "111024.SZ"
+    ],
+    "quantile_samples": [
+      {
+        "quantile": 0.05,
+        "target_bytes_all_instruments": 166933.25000000006,
+        "raw_symbol": "508093.SZ",
+        "actual_csv_bytes": 172273,
+        "deviation_bytes": 5339.749999999942,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.25,
+        "target_bytes_all_instruments": 2071193.5,
+        "raw_symbol": "301026.SZ",
+        "actual_csv_bytes": 2071341,
+        "deviation_bytes": 147.5,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.5,
+        "target_bytes_all_instruments": 3549085.0,
+        "raw_symbol": "516000.SZ",
+        "actual_csv_bytes": 3548683,
+        "deviation_bytes": -402.0,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.75,
+        "target_bytes_all_instruments": 6048525.75,
+        "raw_symbol": "600985.SH",
+        "actual_csv_bytes": 6047337,
+        "deviation_bytes": -1188.75,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      },
+      {
+        "quantile": 0.9,
+        "target_bytes_all_instruments": 10274651.9,
+        "raw_symbol": "603737.SH",
+        "actual_csv_bytes": 10273721,
+        "deviation_bytes": -930.9000000003725,
+        "selection_note": "Nearest unused candidate from stock/ETF-like code prefixes; table-byte quantiles use all archive instruments."
+      }
+    ],
+    "selected_csv_bytes": 943133650
+  }
+]

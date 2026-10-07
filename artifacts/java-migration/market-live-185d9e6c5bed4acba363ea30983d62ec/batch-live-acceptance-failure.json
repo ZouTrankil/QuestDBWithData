@@ -1,0 +1,27 @@
+{
+  "acceptanceId" : "185d9e6c5bed4acba363ea30983d62ec",
+  "startedAt" : "2026-09-29T17:10:30.047609100Z",
+  "formalTablesMutated" : false,
+  "humanReview" : "pending_review",
+  "isolatedTables" : [ "java_d007_daily_185d9e6c5bed4acba363ea30983d62ec", "java_d008_basic_185d9e6c5bed4acba363ea30983d62ec", "java_d009_factor_185d9e6c5bed4acba363ea30983d62ec" ],
+  "isolatedTablesCreated" : [ "java_d007_daily_185d9e6c5bed4acba363ea30983d62ec", "java_d008_basic_185d9e6c5bed4acba363ea30983d62ec", "java_d009_factor_185d9e6c5bed4acba363ea30983d62ec" ],
+  "sourceSyncMayHaveStarted" : true,
+  "ledger" : "sync-ledger.sqlite",
+  "preflight" : {
+    "questdbObjectsReadable" : 566,
+    "tushareCredentialConfigured" : true,
+    "effectiveRateLimitsPerMinute" : {
+      "daily_basic" : 10,
+      "endpointPerMinute" : 10,
+      "globalPerMinute" : 20,
+      "stk_factor_pro" : 10,
+      "daily" : 10
+    },
+    "liveEndpoints" : "daily, daily_basic, stk_factor_pro"
+  },
+  "failedAt" : "2026-09-29T17:11:04.513805100Z",
+  "result" : "failed_during_or_after_live_acceptance",
+  "failureType" : "java.lang.ClassCastException",
+  "failure" : "class com.zoutrankil.questdbwithdata.domain.DailyMarketBar$Key cannot be cast to class java.lang.Comparable (com.zoutrankil.questdbwithdata.domain.DailyMarketBar$Key is in unnamed module of loader 'app'; java.lang.Comparable is in module java.base of loader 'bootstrap')",
+  "failureCategory" : "ClassCastException"
+}

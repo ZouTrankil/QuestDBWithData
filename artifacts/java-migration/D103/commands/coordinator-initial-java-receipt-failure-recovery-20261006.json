@@ -1,0 +1,61 @@
+{
+  "protocol_version": 1,
+  "task_id": "D103",
+  "decision": "accepted_for_readonly_receipt_recovery",
+  "checked_at": "2026-10-06T15:21:03.349667+00:00",
+  "failed_junit": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-failed-result-20261006\\TEST-com.zoutrankil.data.config.EquityStyleMonthlyLiveAcceptanceTest.xml",
+    "sha256": "8d773bf9d93248f88c18ddb565d32978dc8401f80570745111abdee024fefc0e"
+  },
+  "log": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-live-20261006.log",
+    "sha256": "171f529e68b08b77a9758964a55928457501bdfafa4f8e9dffdc53a96fa1f92c"
+  },
+  "executed_test_source": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\failed-initial-producer-java-20261006.txt",
+    "sha256": "f103618ef3006e505c9aa26677f497370d62b1ff65ce597747c29a781a08858f"
+  },
+  "port_source": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\EquityStyleMonthlyWritePort.java",
+    "sha256": "5874eace9fd07c6701652341411be85b821ea4181fda19aea0566e9dc5e216a8"
+  },
+  "adapter_source": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EquityStyleMonthlyMaterializeAdapter.java",
+    "sha256": "705e0f179b22043f816ab3718140a16de6951aefea858b948348408f795ee7de"
+  },
+  "runner_source": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\SyncJobRunner.java",
+    "sha256": "b42149cf76025559edcad56886e0bdf498e3cf975156e572bf7b9f01e70d1414"
+  },
+  "typed_adapter_source": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\PreparedWriteAdapter.java",
+    "sha256": "91c316e03b3344e63782f5aee205b5c3421bf33f98644c2d17d4116d66e26f97"
+  },
+  "original_executor_completion": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\original-initial-java-executor-completion-20261006.json",
+    "sha256": "ec0e2e5e5f99d6ad5da96af5bd1ecf76beafc04726a1dcc817d9e170c7ebf44f"
+  },
+  "ledger_snapshot": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\original-initial-java-terminal-ledger-20261006.json",
+    "sha256": "5069f1ee1356575d555278fabadd3928c125091c11029ab1e94140427c8ad585"
+  },
+  "create_claim": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-output-create-once-20261006.json",
+    "sha256": "2db4308cd8793d6e10ac42df0984d37830562f83ad3674606ceac08a48a4f623"
+  },
+  "initial_source_recovery": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-initial-readonly-reconciliation-20261006.json",
+    "sha256": "e2a2099b7c39526414594bb9816718481e40131a34c5d563161a600c6484f236"
+  },
+  "original_jvm_pid_birth_not_recorded": true,
+  "retry_forbidden": true,
+  "all_original_operations_finished_before_serialization_failure": true,
+  "sender_ownership": {
+    "synchronous_flush": true,
+    "auto_flush_disabled": true,
+    "retry_timeout_zero": true,
+    "close_in_finally": true,
+    "no_business_writer_child": true
+  },
+  "scope": "Only this completed synchronous initial test: original JUnit remains FAILED. No original PID/native absence is invented. Fresh Java SELECT-only recovery may revalidate original exact ledger/source/target; no resend, DDL, ledger transition or August admission."
+}

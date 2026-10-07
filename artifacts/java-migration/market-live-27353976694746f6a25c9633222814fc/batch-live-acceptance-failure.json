@@ -1,0 +1,22 @@
+{
+  "acceptanceId": "27353976694746f6a25c9633222814fc",
+  "startedAt": "2026-09-29T15:46:04.928259500Z",
+  "formalTablesMutated": false,
+  "humanReview": "pending_review",
+  "isolatedTables": [
+    "java_d007_daily_27353976694746f6a25c9633222814fc",
+    "java_d008_basic_27353976694746f6a25c9633222814fc",
+    "java_d009_factor_27353976694746f6a25c9633222814fc"
+  ],
+  "ledger": "sync-ledger.sqlite",
+  "failedAt": "2026-09-29T15:46:09.582311900Z",
+  "failureType": "org.springframework.jdbc.CannotGetJdbcConnectionException",
+  "failure": "Failed to obtain JDBC Connection",
+  "failure_category": "questdb_authentication_rejected",
+  "failure_detail": "Read-only tables() preflight failed with invalid username/password.",
+  "source_requests_sent": 0,
+  "isolated_tables_created": [],
+  "formal_tables_mutated": false,
+  "source_sync_may_have_started": false,
+  "result": "blocked_before_source_or_ddl"
+}

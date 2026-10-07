@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" tests="18" skipped="0" failures="0" errors="0" timestamp="2026-10-06T15:05:10.229Z" hostname="AMD395" time="4.576">
+  <properties/>
+  <testcase name="cancelledFrozenRequestResumesSameIdentityAndUnknownNeverAutomaticallyResumes()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.753"/>
+  <testcase name="catalogConstructionWithBlankTargetDoesNotConnectOrCreateLedger()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.006"/>
+  <testcase name="sameInstanceReconciliationCompletesRunningAttemptAfterItsDoubtCommitFailed()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.359"/>
+  <testcase name="onlyAppendedSourceMonthsReuseCheckpointWithRealOneMonthOverlap()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.482"/>
+  <testcase name="incompleteMonthsAreHistoricalMaterializeRowsButNeverIncrementalCheckpoint()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.226"/>
+  <testcase name="retainedPreparedWriteLeaseBlocksNewJobRegardlessOfItsJobId()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.09"/>
+  <testcase name="unknownReconciliationRejectsSourceRevisionAndPreservesOldEvidence()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.239"/>
+  <testcase name="readonlyReconcileJobChecksActualValuesAndNeverSends()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.416"/>
+  <testcase name="firstRunIsDurablyVerifiedOnlyAfterFullPrefixAndSharedExclusionReleased()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.245"/>
+  <testcase name="currentFutureNonFirstAndThirteenthMonthsFailBeforeMetadata()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.006"/>
+  <testcase name="externallyChangedTargetPrefixRejectsCheckpointAndDoesNotWrite()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.241"/>
+  <testcase name="anyOldRawFieldRevisionRebuildsWholeFinitePrefixEvenIfOutputUnchanged()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.45"/>
+  <testcase name="canonicalDefinitionUsesD022OwnerAndFiniteIsolatedMaterializationPolicies()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.005"/>
+  <testcase name="frozenSourceChangeIsDurableFailureRatherThanAutomaticReplan()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.047"/>
+  <testcase name="absentOrAllNullMonthCannotAdvanceAcrossARealMonthlyGap()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.185"/>
+  <testcase name="readonlyReconciliationCompletesAPreviouslyVerifiedSliceWithoutResend()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.315"/>
+  <testcase name="emptyHistoricalWindowIsVerifiedEmptyAndNeverSuppliesCheckpoint()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.156"/>
+  <testcase name="unknownOutcomeRetainsDatasetLeaseAndRequiresActualSameInstanceStoppedProof()" classname="com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest" time="0.345"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

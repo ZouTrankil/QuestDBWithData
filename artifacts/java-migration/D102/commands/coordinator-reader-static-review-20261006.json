@@ -1,0 +1,132 @@
+{
+  "task_id": "D102",
+  "status": "PASS",
+  "review_type": "independent_static_review_only",
+  "reviewed_at": "2026-10-06",
+  "recommendation": "no_static_blocker_for_coordinator_review",
+  "blockers": [],
+  "next_admission": false,
+  "ddl_admission": false,
+  "live_admission": false,
+  "next_task_may_start": false,
+  "scope": "D102 changes in the shared bounded reader, configured ReadGroup binding, root-owned live acceptance and catalog startup tests. Own D102 DTO/Dataset/Key/mapper/repository and mapping/repository tests are excluded from this independent conclusion.",
+  "actions": {
+    "implementation_edits": 0,
+    "gradle_runs": 0,
+    "test_runs": 0,
+    "database_queries": 0,
+    "database_mutations": 0,
+    "native_process_checks": 0,
+    "owner_invocations": 0,
+    "review_evidence_file_created": 1
+  },
+  "code_bindings": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+      "sha256": "393b453aad756e4c0ce9a566e1ddb842bb182106b6e00ced9c271fcc7f27fe06",
+      "reviewed_lines": "23-44,53-115,133-243,409-495"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+      "sha256": "7b8517ee3f0039e0fcc96d385f046e369bec2c0c876b630d604c035ffdad7be0",
+      "reviewed_lines": "19-23,68-72,108-112"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/config/EtfMarketOverviewDailyViewLiveAcceptanceTest.java",
+      "sha256": "1b8f69ffc4e594f8498e400500c658c3816f2a653b84bc7b0021101fa47a1662",
+      "reviewed_lines": "25-67,69-154,156-207,210-248"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/EtfMarketOverviewViewCatalogStartupTest.java",
+      "sha256": "4cf84f6dc0ba5d16376c7e2ee5d3cc1aa5ea920d5f434a79970f609eba394243",
+      "reviewed_lines": "23-54"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/repository/QuestDbEtfMarketOverviewViewReadGuardTest.java",
+      "sha256": "d03144d0d260a1ce5a740065c09943a1f04867539f9e1d5bc1fdbde6325e599f",
+      "reviewed_lines": "116-174,186-425"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/EtfMarketOverviewCacheCatalogStartupTest.java",
+      "sha256": "36ec2fe0c57e61c79eff95af1f21263996d0fdf1f42fd151f52fcd34f4fbd083",
+      "reviewed_lines": "85-94",
+      "role": "Referenced profile-scoped no-connection catalog configuration"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/ReadGroupJson.java",
+      "sha256": "5ff9d7325052edeb9f6dfcb2f0cabc6e9940441b749ba0e182c001cc5fae3ea3",
+      "reviewed_lines": "19-79,85-126",
+      "role": "Existing strict request boundary"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/ReadGroupReader.java",
+      "sha256": "fcd44f8dde5f2c29e280862425449ecc9466da6d88b713d80879db9488fc7bfe",
+      "reviewed_lines": "12-20,45-89",
+      "role": "Existing binding and cancellation behavior"
+    }
+  ],
+  "checks": [
+    {
+      "check": "Bounded requests before JDBC",
+      "result": "PASS",
+      "evidence": "Reader:55,97-115,409-412 validates the ordinary VIEW kind, exact ordered share/daily dependencies, all four fields, page <=31, and LocalDate equality or increasing date range <=31 days. Unbounded/partial/wrong-type/oversized requests are rejected in read and prepare."
+    },
+    {
+      "check": "Exact original ordinary VIEW SQL",
+      "result": "PASS",
+      "evidence": "Reader:145-190 binds view directory, SQL hash and status history; admits only lexical whitespace/case and known identifier quotes. It requires count_distinct, both date/code JOIN keys, original share and size formulas and calendar SAMPLE BY 1d without extra filters, basic/cache/MV dependencies or replacement writer."
+    },
+    {
+      "check": "Both source frontiers and schemas",
+      "result": "PASS",
+      "evidence": "Reader:193-243 requires unique source metadata, non-null physical/seq/writer counters, zero pending/buffered rows, settled non-suspended WAL, original YEAR/designated timestamp/DEDUP keys and exact full physical schema with share TIMESTAMP versus daily TIMESTAMP_NS."
+    },
+    {
+      "check": "Readback and actual cursor scope",
+      "result": "PASS",
+      "evidence": "Reader:57-59,83-93,419-423 pins actual metadata vector rather than a caller token, rechecks it after the bounded row SELECT, and rejects query/schema/source mismatch before another row SELECT. Shared guard tests cover either source revision, recreation, invalidation and view definition/status changes."
+    },
+    {
+      "check": "Configured typed ReadGroup",
+      "result": "PASS",
+      "evidence": "ReadGroupConfiguration:68-72 installs the dedicated business DTO mapper with null caller sourceVersion; Reader supplies the actual vector. Live:116-136 uses the real configured binding and strict JSON parser and checks typed values, vector equality and pre-start cancellation without a page."
+    },
+    {
+      "check": "Live acceptance assertions and evidence",
+      "result": "PASS",
+      "evidence": "Live:69-154 compares three real date buckets, three pages, exact keys, direct two-base aggregate and independent VIEW JDBC using date/count equality and nullable Double raw bits; checks actual changed-range cursor rejection and READ-only preparation/replacement rejection. Lines141-143 now assert and record one identical after snapshot."
+    },
+    {
+      "check": "Catalog startup isolation",
+      "result": "PASS",
+      "evidence": "Catalog:23-54 exercises actual finite show-sync-job-definitions startup, registers READ-only D102 without an independent view job, retains share/daily/cache owners, verifies no DataSource connection and no ledger. Referenced mock configuration is explicitly scoped to d101-catalog-test."
+    }
+  ],
+  "resolved_finding": {
+    "priority": "P2",
+    "location": "src/test/java/com/zoutrankil/data/config/EtfMarketOverviewDailyViewLiveAcceptanceTest.java:141-143",
+    "original_problem": "The asserted after snapshot and persisted metadata_after were two different reads; a concurrent change between them could leave unasserted evidence in an otherwise successful artifact.",
+    "resolution": "Root computed after once, asserted equality with before and persisted that same value before live execution. The code binding above is the repaired file.",
+    "outstanding": false
+  },
+  "observed_existing_evidence": [
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-20261006.json",
+      "sha256": "f2e1f1a2e88dad02f4d861a89839f3b168504df37c7598b4c69b82d5c6a338cc",
+      "observation": "Root execution summary reports 128 unique Java pure/regression cases, zero failures/errors/skips. Read-only review of summary; no rerun and no independent live execution."
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/identifier-case-readonly-20261006.json",
+      "sha256": "1b277ba64b50aa4c55693d330135d26b8c7faba928bd7f3f7ee8c6b0a8903da8",
+      "observation": "Root's actual SELECT-only diagnostic reports quoted uppercase ETF_SHARE resolves to the same 2297 private rows. This supports lexical case handling; reviewer did not execute it."
+    }
+  ],
+  "caveats": [
+    "This is static code review, not D102 live acceptance or schema mutation admission. Coordinator must separately review/freeze script guards and run admitted live acceptance.",
+    "The live test explicitly sets actual_source_revision_during_D102_test=false. It reuses the accepted D101 third-day source append; it does not claim a newly induced physical-source revision or an actual stale-source cursor experiment in D102. Actual changed-range cursor rejection is a different claim; source-drift refusal is covered by shared guard pure tests.",
+    "Date bounds and page limits bound output daily buckets. LIMIT is not proof of a bounded native JOIN scan or raw-source census; this is stated at Reader:96.",
+    "Source completeness, provider universe readiness and production cutover are not certified. The ordinary VIEW's authoritative dependencies are fixed physical etf_share and etf_daily; basic/cache/coverage are only unchanged-fixture observations in live evidence.",
+    "Cancellation checked by live acceptance is cancellation before a ReadGroup member starts, not cancellation of an in-flight JDBC statement. Existing ReadGroup results are independent reads, not an atomic cross-member snapshot.",
+    "No separate D102 writer, refresh job, cache publisher, FULL path or owner invocation is introduced or admitted by this review."
+  ]
+}

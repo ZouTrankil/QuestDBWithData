@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-09-30T05:21:30.0376235+08:00",
+  "table": "l2_event_response_features",
+  "columns": 73,
+  "rowCount": 114123728,
+  "minMinute": "2026-02-02T01:15:00Z",
+  "maxMinute": "2026-09-21T07:00:00Z",
+  "designatedTimestamp": "minute",
+  "partitionBy": "DAY",
+  "walEnabled": true,
+  "dedup": true,
+  "tableSuspended": false,
+  "walPendingRowCount": 0,
+  "keyColumns": [
+    "symbol",
+    "minute",
+    "event_type"
+  ],
+  "physicalKeys": [
+    {
+      "upsertKey": true,
+      "type": "SYMBOL",
+      "column": "symbol",
+      "designated": false
+    },
+    {
+      "upsertKey": true,
+      "type": "TIMESTAMP",
+      "column": "minute",
+      "designated": true
+    },
+    {
+      "upsertKey": true,
+      "type": "STRING",
+      "column": "event_type",
+      "designated": false
+    }
+  ]
+}

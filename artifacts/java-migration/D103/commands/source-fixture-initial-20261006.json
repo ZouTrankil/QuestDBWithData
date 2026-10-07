@@ -1,0 +1,843 @@
+{
+  "protocol_version": 1,
+  "task_id": "D103",
+  "stage": "initial",
+  "invocation_id": "085ac0f1-db2b-4015-9fec-d997f709da32",
+  "checked_at": "2026-10-06T14:41:50.533113+00:00",
+  "status": "FAILED",
+  "purpose": "complete real source fixture only",
+  "operations": [
+    {
+      "kind": "SOURCE_CREATE",
+      "table": "index_monthly",
+      "rows": 0,
+      "claim_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\index-monthly-create-once-20261006.json",
+      "intent_sha256": "a818de580a1e8eed8c55670ee45452b74aafaa3bd3d9ac363afe446f23ccae15",
+      "ack": "ACKNOWLEDGED",
+      "attempted": true,
+      "claim_sha256": "e6093b23285aafabdb2b5352a686dc3c2c501f5bf420e1c15ea808975c335877"
+    },
+    {
+      "kind": "SOURCE_INITIAL_INSERT",
+      "table": "index_monthly",
+      "rows": 32,
+      "claim_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\index-monthly-initial-insert-once-20261006.json",
+      "intent_sha256": "0e2485ee9f9be4d8543042f916f50f10f3a60441dd63704f2fecb8f97ae55b9f",
+      "ack": "UNKNOWN",
+      "attempted": true
+    }
+  ],
+  "automatic_retry": false,
+  "planned_source_rows": 32,
+  "formal_mutated": false,
+  "private_output_mutated": false,
+  "java_materialization_verified": false,
+  "native_refresh_submitted": false,
+  "HTTP_socket_timeout_seconds": 20,
+  "HTTP_response_byte_cap": 1048576,
+  "native_PG_statement_absolute_deadline_seconds": 20,
+  "WAL_visibility_absolute_deadline_seconds": 30,
+  "increment_admission_contract": {
+    "executable_in_this_script_version": false,
+    "stage": "increment",
+    "trade_months": [
+      "202608"
+    ],
+    "source_only_rows": 16,
+    "DDL": 0,
+    "source_insert_attempts": 1,
+    "automatic_resend": false,
+    "required_new_manifest": {
+      "protocol_version": 1,
+      "task_id": "D103",
+      "decision": "accepted_for_bounded_source_increment",
+      "initial_fixture": "actual initial path plus SHA",
+      "first_and_replay": "two distinct VERIFIED Java actual run summaries, paths plus SHA, same source/target IDs and native SQLite ledger",
+      "ledger_proof": "actual mode=ro/query_only terminal runs, entries and zero interval leases, exact run IDs and ledger path",
+      "producer_proof": "scoped D103 first/replay actual process birth/complete STOP artifacts plus fresh native absence, paths plus SHA; no D101 PID inheritance",
+      "private_frontier": "exact existing32 complete source fields/bits/SHA plus unchanged two-month java_d103_equity_style_monthly_acceptance output identity/values/WAL",
+      "bounded_source": "original held August16 capture path plus SHA and full48 canonical source SHA",
+      "target": "same native PID/birth/root/ports; every mutation boundary rechecks the immutable manifest and actual source/output frontiers"
+    }
+  },
+  "private_target_attestation": {
+    "pid": 41560,
+    "birth_utc": "2026-10-06T14:15:29.5834980Z",
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19030,
+    "pg_port": 18842
+  },
+  "preflight_evidence": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\equity-style-readonly-preflight-20261006.json",
+    "sha256": "61a3e91753074598b6db0d5bdc7867ff45d90d144628629a36316a0bf091b0db"
+  },
+  "startup_evidence": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\private-server-start-20261006.json",
+    "sha256": "9db4a1f4b13a18e0b093f84823c35facb3a849dce0753e1b7efc4ed4fd624b9d"
+  },
+  "whole_real_source": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\equity-style-readonly-preflight-20261006-source.jsonl",
+    "sha256": "03f01be342248eeb9a39cff91affb549da0b563c3224a71d9ad3b5687f6a9d82",
+    "rows": 48,
+    "field_values": 672,
+    "canonical_records_sha256": "98f50a7744cb64ffb451d4ccf1380324f6975d8ed28cdfcf9598bc879411ba2f",
+    "physical_types": {
+      "ts_code": "SYMBOL",
+      "trade_date": "TIMESTAMP",
+      "close": "DOUBLE",
+      "open": "DOUBLE",
+      "high": "DOUBLE",
+      "low": "DOUBLE",
+      "pre_close": "DOUBLE",
+      "change": "DOUBLE",
+      "pct_chg": "DOUBLE",
+      "vol": "DOUBLE",
+      "amount": "DOUBLE",
+      "layer": "SYMBOL",
+      "bucket": "SYMBOL",
+      "update_time": "TIMESTAMP"
+    },
+    "JSONL_shape": "values=all ordered physical columns; raw_double_bits=big-endian IEEE754 hex or explicit null"
+  },
+  "formal_historical_output_parity": {
+    "passed": false,
+    "expected_rows": 3,
+    "actual_rows": 1,
+    "full_field_comparisons": 30,
+    "double_rawbit_comparisons": 29,
+    "double_tolerance": 0,
+    "differences": [
+      {
+        "month": "202606",
+        "reason": "missing_output"
+      },
+      {
+        "month": "202607",
+        "reason": "missing_output"
+      }
+    ]
+  },
+  "formal_before": {
+    "tables": {
+      "index_monthly": {
+        "exists": true,
+        "physical": {
+          "id": 334,
+          "directoryName": "index_monthly~334",
+          "table_txn": 11,
+          "table_row_count": 6506,
+          "partitionBy": "YEAR",
+          "designatedTimestamp": "trade_date",
+          "walEnabled": true,
+          "dedup": false,
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 11,
+          "writerTxn": 11,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "actual_select_count": 6506,
+        "settled": true
+      },
+      "equity_style_monthly": {
+        "exists": true,
+        "physical": {
+          "id": 335,
+          "directoryName": "equity_style_monthly~335",
+          "table_txn": 8,
+          "table_row_count": 198,
+          "partitionBy": "YEAR",
+          "designatedTimestamp": "month",
+          "walEnabled": true,
+          "dedup": true,
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 8,
+          "writerTxn": 8,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "actual_select_count": 198,
+        "settled": true
+      }
+    },
+    "schemas": {
+      "index_monthly": [
+        {
+          "column": "ts_code",
+          "type": "SYMBOL",
+          "indexed": false,
+          "indexBlockCapacity": 256,
+          "symbolCached": true,
+          "symbolCapacity": 256,
+          "symbolTableSize": 55,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "trade_date",
+          "type": "TIMESTAMP",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": true,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "close",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "open",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "high",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "low",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "pre_close",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "change",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "pct_chg",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "vol",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "amount",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "layer",
+          "type": "SYMBOL",
+          "indexed": false,
+          "indexBlockCapacity": 256,
+          "symbolCached": true,
+          "symbolCapacity": 256,
+          "symbolTableSize": 3,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "bucket",
+          "type": "SYMBOL",
+          "indexed": false,
+          "indexBlockCapacity": 256,
+          "symbolCached": true,
+          "symbolCapacity": 256,
+          "symbolTableSize": 7,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "update_time",
+          "type": "TIMESTAMP",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        }
+      ],
+      "equity_style_monthly": [
+        {
+          "column": "month",
+          "type": "TIMESTAMP",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": true,
+          "upsertKey": true,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "hs300_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "zz500_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "all_a_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "cs1000_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "small_large_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "mid_large_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "growth_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "value_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "growth_value_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "energy_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "materials_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "industrials_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "consumer_discretionary_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "consumer_staples_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "healthcare_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "financials_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "it_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "telecom_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "utilities_ret_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "energy_vs_all_a_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "materials_vs_all_a_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "industrials_vs_all_a_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "consumer_discretionary_vs_all_a_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "consumer_staples_vs_all_a_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "healthcare_vs_all_a_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "financials_vs_all_a_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "it_vs_all_a_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "telecom_vs_all_a_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        },
+        {
+          "column": "utilities_vs_all_a_1m",
+          "type": "DOUBLE",
+          "indexed": false,
+          "indexBlockCapacity": 0,
+          "symbolCached": false,
+          "symbolCapacity": 0,
+          "symbolTableSize": 0,
+          "designated": false,
+          "upsertKey": false,
+          "indexType": "",
+          "indexInclude": ""
+        }
+      ]
+    }
+  },
+  "private_before": {
+    "index_monthly": {
+      "exists": false
+    },
+    "equity_style_monthly": {
+      "exists": false
+    },
+    "java_d103_equity_style_monthly_acceptance": {
+      "exists": false
+    }
+  },
+  "protected_output_schema_before": {
+    "equity_style_monthly": [],
+    "java_d103_equity_style_monthly_acceptance": []
+  },
+  "initial_capture": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-initial-20261006-source-initial.jsonl",
+    "sha256": "09df1a5db702e3840b18fd2ddee9989e983acf7e933fce772f956a89cbbc526d",
+    "rows": 32,
+    "field_values": 448,
+    "canonical_records_sha256": "5758b732c42b3b1fc127b2672d68a5aa3e5a70297d5b1e3e8e1967aafa3b634f",
+    "physical_types": {
+      "ts_code": "SYMBOL",
+      "trade_date": "TIMESTAMP",
+      "close": "DOUBLE",
+      "open": "DOUBLE",
+      "high": "DOUBLE",
+      "low": "DOUBLE",
+      "pre_close": "DOUBLE",
+      "change": "DOUBLE",
+      "pct_chg": "DOUBLE",
+      "vol": "DOUBLE",
+      "amount": "DOUBLE",
+      "layer": "SYMBOL",
+      "bucket": "SYMBOL",
+      "update_time": "TIMESTAMP"
+    },
+    "JSONL_shape": "values=all ordered physical columns; raw_double_bits=big-endian IEEE754 hex or explicit null"
+  },
+  "held_increment_capture": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-initial-20261006-source-august-held.jsonl",
+    "sha256": "0b9de3e66ef9e0827bff47cda54a4a7e3b7a96243cab48fa738c80226f739246",
+    "rows": 16,
+    "field_values": 224,
+    "canonical_records_sha256": "3a667911284636c7d37d43f1a742ef2b3c1494c967d9f7b5f749b64c5180afb0",
+    "physical_types": {
+      "ts_code": "SYMBOL",
+      "trade_date": "TIMESTAMP",
+      "close": "DOUBLE",
+      "open": "DOUBLE",
+      "high": "DOUBLE",
+      "low": "DOUBLE",
+      "pre_close": "DOUBLE",
+      "change": "DOUBLE",
+      "pct_chg": "DOUBLE",
+      "vol": "DOUBLE",
+      "amount": "DOUBLE",
+      "layer": "SYMBOL",
+      "bucket": "SYMBOL",
+      "update_time": "TIMESTAMP"
+    },
+    "JSONL_shape": "values=all ordered physical columns; raw_double_bits=big-endian IEEE754 hex or explicit null"
+  },
+  "private_source_empty_after_create": {
+    "exists": true,
+    "physical": {
+      "id": 9,
+      "directoryName": "index_monthly~9",
+      "table_txn": null,
+      "table_row_count": null,
+      "partitionBy": "YEAR",
+      "designatedTimestamp": "trade_date",
+      "walEnabled": true,
+      "dedup": false,
+      "table_suspended": false,
+      "wal_pending_row_count": 0
+    },
+    "wal": {
+      "sequencerTxn": 0,
+      "writerTxn": 0,
+      "bufferedTxnSize": 0,
+      "suspended": false
+    },
+    "actual_select_count": 0,
+    "settled": true
+  },
+  "error": {
+    "type": "RuntimeError",
+    "message": "Private mutation ACK is not confirmed"
+  },
+  "durable_intent_source_rows": 32,
+  "attempted_source_rows": 32,
+  "acknowledged_source_rows": 0,
+  "acknowledged_operations": 1
+}

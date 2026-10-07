@@ -1,0 +1,627 @@
+{
+  "task_id" : "D102",
+  "checked_at" : "2026-10-06T13:48:14.378821800Z",
+  "D101_gate_sha256" : "2201c05e5e05c4b056a5f3170be86ed86c230fb08e1d7dcf42f93c7228fccaef",
+  "private_attestation_before" : [ {
+    "port" : 19020,
+    "address" : "127.0.0.1",
+    "pid" : 23388,
+    "name" : "java.exe",
+    "command" : "\"D:\\tool\\questdb\\db\\bin\\java.exe\" -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:+UseParallelGC --sun-misc-unsafe-memory-access=allow --enable-native-access=io.questdb --add-opens=java.base/java.lang=io.questdb --add-opens=java.base/java.lang.reflect=io.questdb --add-opens=java.base/java.nio=io.questdb --add-opens=java.base/java.time.zone=io.questdb --add-exports=java.base/jdk.internal.vm=io.questdb -m io.questdb/io.questdb.ServerMain -d C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb",
+    "birth" : "2026-10-06T08:47:32.6148290Z"
+  }, {
+    "port" : 18832,
+    "address" : "127.0.0.1",
+    "pid" : 23388,
+    "name" : "java.exe",
+    "command" : "\"D:\\tool\\questdb\\db\\bin\\java.exe\" -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:+UseParallelGC --sun-misc-unsafe-memory-access=allow --enable-native-access=io.questdb --add-opens=java.base/java.lang=io.questdb --add-opens=java.base/java.lang.reflect=io.questdb --add-opens=java.base/java.nio=io.questdb --add-opens=java.base/java.time.zone=io.questdb --add-exports=java.base/jdk.internal.vm=io.questdb -m io.questdb/io.questdb.ServerMain -d C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb",
+    "birth" : "2026-10-06T08:47:32.6148290Z"
+  } ],
+  "private" : {
+    "metadata_after" : {
+      "etf_share" : [ {
+        "id" : 9,
+        "directoryName" : "etf_share~9",
+        "table_txn" : 6,
+        "table_row_count" : 2297,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 6,
+        "writerTxn" : 6,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_daily" : [ {
+        "id" : 10,
+        "directoryName" : "etf_daily~10",
+        "table_txn" : 14,
+        "table_row_count" : 6412,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 14,
+        "writerTxn" : 14,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_basic" : [ {
+        "id" : 11,
+        "directoryName" : "etf_basic~11",
+        "table_txn" : 6,
+        "table_row_count" : 2958,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 6,
+        "writerTxn" : 6,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_market_overview_daily_cache" : [ {
+        "id" : 12,
+        "directoryName" : "etf_market_overview_daily_cache~12",
+        "table_txn" : 5,
+        "table_row_count" : 5,
+        "partitionBy" : "MONTH",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "trade_date",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 5,
+        "writerTxn" : 5,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "market_barometer_cache_coverage" : [ {
+        "id" : 13,
+        "directoryName" : "market_barometer_cache_coverage~13",
+        "table_txn" : 5,
+        "table_row_count" : 5,
+        "partitionBy" : "MONTH",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "trade_date",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 5,
+        "writerTxn" : 5,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "view" : [ {
+        "view_name" : "v_etf_market_overview_daily",
+        "view_sql" : "SELECT\n    s.timestamp AS trade_date,\n    count_distinct(s.ts_code) AS etf_count,\n    sum(s.fd_share) AS total_share,\n    sum(s.fd_share * d.close) / 10000.0 AS total_size_yi\nFROM etf_share s\nJOIN etf_daily d ON s.ts_code = d.ts_code AND s.timestamp = d.timestamp\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+        "view_table_dir_name" : "v_etf_market_overview_daily~14",
+        "invalidation_reason" : null,
+        "view_status" : "valid",
+        "view_status_update_time" : 1791265593962
+      } ],
+      "columns" : [ {
+        "column" : "trade_date",
+        "type" : "TIMESTAMP"
+      }, {
+        "column" : "etf_count",
+        "type" : "LONG"
+      }, {
+        "column" : "total_share",
+        "type" : "DOUBLE"
+      }, {
+        "column" : "total_size_yi",
+        "type" : "DOUBLE"
+      } ]
+    },
+    "from_inclusive" : "2026-09-17",
+    "to_exclusive" : "2026-09-22",
+    "cancelled_member_has_no_page" : true,
+    "configured_read_group_matched" : true,
+    "actual_view_rows" : [ {
+      "trade_date" : "2026-09-17",
+      "etf_count" : 765,
+      "total_share" : 1.1745800502090001E8,
+      "total_size_yi" : 16500.887115112106
+    }, {
+      "trade_date" : "2026-09-18",
+      "etf_count" : 766,
+      "total_share" : 1.173984551408E8,
+      "total_size_yi" : 16737.507261157793
+    }, {
+      "trade_date" : "2026-09-21",
+      "etf_count" : 765,
+      "total_share" : 1.1706073876619999E8,
+      "total_size_yi" : 16834.9815146349
+    } ],
+    "actual_first_cursor" : {
+      "queryFingerprint" : "04d50af435720d7bd722cd96b61295d8f51bf2397b647e17b8cc22f2d77b3ffb",
+      "keyValues" : [ "2026-09-17" ],
+      "sourceVersion" : "view-dir:v_etf_market_overview_daily~14:view-sql:8a4bb855ba31ead1862a8f62d1f672ba5a883942c55ee12d54158f460a7c0d56:view-status-updated:2026-10-06 13:46:33.962174:source:etf_share:id:9:directory:etf_share~9:txn:6:wal-seq:6:source:etf_daily:id:10:directory:etf_daily~10:txn:14:wal-seq:14"
+    },
+    "source_field_comparisons" : 12,
+    "metadata_before" : {
+      "etf_share" : [ {
+        "id" : 9,
+        "directoryName" : "etf_share~9",
+        "table_txn" : 6,
+        "table_row_count" : 2297,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 6,
+        "writerTxn" : 6,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_daily" : [ {
+        "id" : 10,
+        "directoryName" : "etf_daily~10",
+        "table_txn" : 14,
+        "table_row_count" : 6412,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 14,
+        "writerTxn" : 14,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_basic" : [ {
+        "id" : 11,
+        "directoryName" : "etf_basic~11",
+        "table_txn" : 6,
+        "table_row_count" : 2958,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 6,
+        "writerTxn" : 6,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_market_overview_daily_cache" : [ {
+        "id" : 12,
+        "directoryName" : "etf_market_overview_daily_cache~12",
+        "table_txn" : 5,
+        "table_row_count" : 5,
+        "partitionBy" : "MONTH",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "trade_date",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 5,
+        "writerTxn" : 5,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "market_barometer_cache_coverage" : [ {
+        "id" : 13,
+        "directoryName" : "market_barometer_cache_coverage~13",
+        "table_txn" : 5,
+        "table_row_count" : 5,
+        "partitionBy" : "MONTH",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "trade_date",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 5,
+        "writerTxn" : 5,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "view" : [ {
+        "view_name" : "v_etf_market_overview_daily",
+        "view_sql" : "SELECT\n    s.timestamp AS trade_date,\n    count_distinct(s.ts_code) AS etf_count,\n    sum(s.fd_share) AS total_share,\n    sum(s.fd_share * d.close) / 10000.0 AS total_size_yi\nFROM etf_share s\nJOIN etf_daily d ON s.ts_code = d.ts_code AND s.timestamp = d.timestamp\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+        "view_table_dir_name" : "v_etf_market_overview_daily~14",
+        "invalidation_reason" : null,
+        "view_status" : "valid",
+        "view_status_update_time" : 1791265593962
+      } ],
+      "columns" : [ {
+        "column" : "trade_date",
+        "type" : "TIMESTAMP"
+      }, {
+        "column" : "etf_count",
+        "type" : "LONG"
+      }, {
+        "column" : "total_share",
+        "type" : "DOUBLE"
+      }, {
+        "column" : "total_size_yi",
+        "type" : "DOUBLE"
+      } ]
+    },
+    "write_and_replacement_preparation_rejected" : true,
+    "actual_double_bits" : [ [ "2026-09-17", "419c0111541566d0", "40d01d38c67e7692" ], [ "2026-09-18", "419bfd6edc902de0", "40d0586076f780d0" ], [ "2026-09-21", "419be8d20b1096bb", "40d070bed122c25c" ] ],
+    "independent_jdbc_double_rawbit_comparisons" : 6,
+    "source_completeness_certified" : false,
+    "pages" : [ {
+      "page" : 1,
+      "date" : "2026-09-17",
+      "source_version" : "view-dir:v_etf_market_overview_daily~14:view-sql:8a4bb855ba31ead1862a8f62d1f672ba5a883942c55ee12d54158f460a7c0d56:view-status-updated:2026-10-06 13:46:33.962174:source:etf_share:id:9:directory:etf_share~9:txn:6:wal-seq:6:source:etf_daily:id:10:directory:etf_daily~10:txn:14:wal-seq:14",
+      "has_more" : true
+    }, {
+      "page" : 2,
+      "date" : "2026-09-18",
+      "source_version" : "view-dir:v_etf_market_overview_daily~14:view-sql:8a4bb855ba31ead1862a8f62d1f672ba5a883942c55ee12d54158f460a7c0d56:view-status-updated:2026-10-06 13:46:33.962174:source:etf_share:id:9:directory:etf_share~9:txn:6:wal-seq:6:source:etf_daily:id:10:directory:etf_daily~10:txn:14:wal-seq:14",
+      "has_more" : true
+    }, {
+      "page" : 3,
+      "date" : "2026-09-21",
+      "source_version" : "view-dir:v_etf_market_overview_daily~14:view-sql:8a4bb855ba31ead1862a8f62d1f672ba5a883942c55ee12d54158f460a7c0d56:view-status-updated:2026-10-06 13:46:33.962174:source:etf_share:id:9:directory:etf_share~9:txn:6:wal-seq:6:source:etf_daily:id:10:directory:etf_daily~10:txn:14:wal-seq:14",
+      "has_more" : false
+    } ],
+    "expected_source_rows" : [ {
+      "trade_date" : "2026-09-17",
+      "etf_count" : 765,
+      "total_share" : 1.1745800502090001E8,
+      "total_size_yi" : 16500.887115112106
+    }, {
+      "trade_date" : "2026-09-18",
+      "etf_count" : 766,
+      "total_share" : 1.173984551408E8,
+      "total_size_yi" : 16737.507261157793
+    }, {
+      "trade_date" : "2026-09-21",
+      "etf_count" : 765,
+      "total_share" : 1.1706073876619999E8,
+      "total_size_yi" : 16834.9815146349
+    } ],
+    "independent_jdbc_view_rows" : [ {
+      "trade_date" : "2026-09-17",
+      "etf_count" : 765,
+      "total_share" : 1.1745800502090001E8,
+      "total_size_yi" : 16500.887115112106
+    }, {
+      "trade_date" : "2026-09-18",
+      "etf_count" : 766,
+      "total_share" : 1.173984551408E8,
+      "total_size_yi" : 16737.507261157793
+    }, {
+      "trade_date" : "2026-09-21",
+      "etf_count" : 765,
+      "total_share" : 1.1706073876619999E8,
+      "total_size_yi" : 16834.9815146349
+    } ],
+    "changed_range_cursor_rejected" : true,
+    "third_day_window_extension_matched" : true,
+    "first_two_day_read_replayed_exact" : true,
+    "source_sql" : "SELECT s.timestamp AS trade_date,count_distinct(s.ts_code) AS etf_count,\nsum(s.fd_share) AS total_share,sum(s.fd_share*d.close)/10000.0 AS total_size_yi\nFROM etf_share s JOIN etf_daily d ON s.ts_code=d.ts_code AND s.timestamp=d.timestamp\nWHERE s.timestamp>=? AND s.timestamp<? SAMPLE BY 1d ALIGN TO CALENDAR ORDER BY trade_date\n",
+    "source_double_rawbit_comparisons" : 6,
+    "physical_source_version" : "view-dir:v_etf_market_overview_daily~14:view-sql:8a4bb855ba31ead1862a8f62d1f672ba5a883942c55ee12d54158f460a7c0d56:view-status-updated:2026-10-06 13:46:33.962174:source:etf_share:id:9:directory:etf_share~9:txn:6:wal-seq:6:source:etf_daily:id:10:directory:etf_daily~10:txn:14:wal-seq:14"
+  },
+  "formal" : {
+    "metadata_after" : {
+      "etf_share" : [ {
+        "id" : 1850,
+        "directoryName" : "etf_share_stage_20260928_174145_144587~1850",
+        "table_txn" : 8,
+        "table_row_count" : 326396,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 8,
+        "writerTxn" : 8,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_daily" : [ {
+        "id" : 1686,
+        "directoryName" : "etf_daily~1686",
+        "table_txn" : 13,
+        "table_row_count" : 2134931,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 13,
+        "writerTxn" : 13,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_basic" : [ {
+        "id" : 1685,
+        "directoryName" : "etf_basic~1685",
+        "table_txn" : 8,
+        "table_row_count" : 2958,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 8,
+        "writerTxn" : 8,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_market_overview_daily_cache" : [ {
+        "id" : 1800,
+        "directoryName" : "etf_market_overview_daily_cache~1800",
+        "table_txn" : 6,
+        "table_row_count" : 1181,
+        "partitionBy" : "MONTH",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "trade_date",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 6,
+        "writerTxn" : 6,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "market_barometer_cache_coverage" : [ {
+        "id" : 1802,
+        "directoryName" : "market_barometer_cache_coverage~1802",
+        "table_txn" : 13,
+        "table_row_count" : 2466,
+        "partitionBy" : "MONTH",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "trade_date",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 13,
+        "writerTxn" : 13,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "view" : [ {
+        "view_name" : "v_etf_market_overview_daily",
+        "view_sql" : "SELECT\n    s.timestamp AS trade_date,\n    count_distinct(s.ts_code) AS etf_count,\n    sum(s.fd_share) AS total_share,\n    sum(s.fd_share * d.close) / 10000.0 AS total_size_yi\nFROM etf_share s\nJOIN etf_daily d ON s.ts_code = d.ts_code AND s.timestamp = d.timestamp\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+        "view_table_dir_name" : "v_etf_market_overview_daily~239",
+        "invalidation_reason" : null,
+        "view_status" : "valid",
+        "view_status_update_time" : 1790702872510
+      } ],
+      "columns" : [ {
+        "column" : "trade_date",
+        "type" : "TIMESTAMP"
+      }, {
+        "column" : "etf_count",
+        "type" : "LONG"
+      }, {
+        "column" : "total_share",
+        "type" : "DOUBLE"
+      }, {
+        "column" : "total_size_yi",
+        "type" : "DOUBLE"
+      } ]
+    },
+    "from_inclusive" : "2026-09-17",
+    "to_exclusive" : "2026-09-22",
+    "cancelled_member_has_no_page" : true,
+    "configured_read_group_matched" : true,
+    "actual_view_rows" : [ {
+      "trade_date" : "2026-09-17",
+      "etf_count" : 765,
+      "total_share" : 1.1745800502090001E8,
+      "total_size_yi" : 16500.88711511208
+    }, {
+      "trade_date" : "2026-09-18",
+      "etf_count" : 766,
+      "total_share" : 1.1739845514079998E8,
+      "total_size_yi" : 16737.5072611578
+    }, {
+      "trade_date" : "2026-09-21",
+      "etf_count" : 765,
+      "total_share" : 1.1706073876619999E8,
+      "total_size_yi" : 16834.981514634914
+    } ],
+    "actual_first_cursor" : {
+      "queryFingerprint" : "04d50af435720d7bd722cd96b61295d8f51bf2397b647e17b8cc22f2d77b3ffb",
+      "keyValues" : [ "2026-09-17" ],
+      "sourceVersion" : "view-dir:v_etf_market_overview_daily~239:view-sql:8a4bb855ba31ead1862a8f62d1f672ba5a883942c55ee12d54158f460a7c0d56:view-status-updated:2026-09-30 01:27:52.510561:source:etf_share:id:1850:directory:etf_share_stage_20260928_174145_144587~1850:txn:8:wal-seq:8:source:etf_daily:id:1686:directory:etf_daily~1686:txn:13:wal-seq:13"
+    },
+    "source_field_comparisons" : 12,
+    "metadata_before" : {
+      "etf_share" : [ {
+        "id" : 1850,
+        "directoryName" : "etf_share_stage_20260928_174145_144587~1850",
+        "table_txn" : 8,
+        "table_row_count" : 326396,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 8,
+        "writerTxn" : 8,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_daily" : [ {
+        "id" : 1686,
+        "directoryName" : "etf_daily~1686",
+        "table_txn" : 13,
+        "table_row_count" : 2134931,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 13,
+        "writerTxn" : 13,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_basic" : [ {
+        "id" : 1685,
+        "directoryName" : "etf_basic~1685",
+        "table_txn" : 8,
+        "table_row_count" : 2958,
+        "partitionBy" : "YEAR",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "timestamp",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 8,
+        "writerTxn" : 8,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "etf_market_overview_daily_cache" : [ {
+        "id" : 1800,
+        "directoryName" : "etf_market_overview_daily_cache~1800",
+        "table_txn" : 6,
+        "table_row_count" : 1181,
+        "partitionBy" : "MONTH",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "trade_date",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 6,
+        "writerTxn" : 6,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "market_barometer_cache_coverage" : [ {
+        "id" : 1802,
+        "directoryName" : "market_barometer_cache_coverage~1802",
+        "table_txn" : 13,
+        "table_row_count" : 2466,
+        "partitionBy" : "MONTH",
+        "walEnabled" : true,
+        "dedup" : true,
+        "designatedTimestamp" : "trade_date",
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0,
+        "sequencerTxn" : 13,
+        "writerTxn" : 13,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ],
+      "view" : [ {
+        "view_name" : "v_etf_market_overview_daily",
+        "view_sql" : "SELECT\n    s.timestamp AS trade_date,\n    count_distinct(s.ts_code) AS etf_count,\n    sum(s.fd_share) AS total_share,\n    sum(s.fd_share * d.close) / 10000.0 AS total_size_yi\nFROM etf_share s\nJOIN etf_daily d ON s.ts_code = d.ts_code AND s.timestamp = d.timestamp\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+        "view_table_dir_name" : "v_etf_market_overview_daily~239",
+        "invalidation_reason" : null,
+        "view_status" : "valid",
+        "view_status_update_time" : 1790702872510
+      } ],
+      "columns" : [ {
+        "column" : "trade_date",
+        "type" : "TIMESTAMP"
+      }, {
+        "column" : "etf_count",
+        "type" : "LONG"
+      }, {
+        "column" : "total_share",
+        "type" : "DOUBLE"
+      }, {
+        "column" : "total_size_yi",
+        "type" : "DOUBLE"
+      } ]
+    },
+    "write_and_replacement_preparation_rejected" : true,
+    "actual_double_bits" : [ [ "2026-09-17", "419c0111541566d0", "40d01d38c67e768b" ], [ "2026-09-18", "419bfd6edc902ddf", "40d0586076f780d2" ], [ "2026-09-21", "419be8d20b1096bb", "40d070bed122c260" ] ],
+    "independent_jdbc_double_rawbit_comparisons" : 6,
+    "source_completeness_certified" : false,
+    "pages" : [ {
+      "page" : 1,
+      "date" : "2026-09-17",
+      "source_version" : "view-dir:v_etf_market_overview_daily~239:view-sql:8a4bb855ba31ead1862a8f62d1f672ba5a883942c55ee12d54158f460a7c0d56:view-status-updated:2026-09-30 01:27:52.510561:source:etf_share:id:1850:directory:etf_share_stage_20260928_174145_144587~1850:txn:8:wal-seq:8:source:etf_daily:id:1686:directory:etf_daily~1686:txn:13:wal-seq:13",
+      "has_more" : true
+    }, {
+      "page" : 2,
+      "date" : "2026-09-18",
+      "source_version" : "view-dir:v_etf_market_overview_daily~239:view-sql:8a4bb855ba31ead1862a8f62d1f672ba5a883942c55ee12d54158f460a7c0d56:view-status-updated:2026-09-30 01:27:52.510561:source:etf_share:id:1850:directory:etf_share_stage_20260928_174145_144587~1850:txn:8:wal-seq:8:source:etf_daily:id:1686:directory:etf_daily~1686:txn:13:wal-seq:13",
+      "has_more" : true
+    }, {
+      "page" : 3,
+      "date" : "2026-09-21",
+      "source_version" : "view-dir:v_etf_market_overview_daily~239:view-sql:8a4bb855ba31ead1862a8f62d1f672ba5a883942c55ee12d54158f460a7c0d56:view-status-updated:2026-09-30 01:27:52.510561:source:etf_share:id:1850:directory:etf_share_stage_20260928_174145_144587~1850:txn:8:wal-seq:8:source:etf_daily:id:1686:directory:etf_daily~1686:txn:13:wal-seq:13",
+      "has_more" : false
+    } ],
+    "expected_source_rows" : [ {
+      "trade_date" : "2026-09-17",
+      "etf_count" : 765,
+      "total_share" : 1.1745800502090001E8,
+      "total_size_yi" : 16500.88711511208
+    }, {
+      "trade_date" : "2026-09-18",
+      "etf_count" : 766,
+      "total_share" : 1.1739845514079998E8,
+      "total_size_yi" : 16737.5072611578
+    }, {
+      "trade_date" : "2026-09-21",
+      "etf_count" : 765,
+      "total_share" : 1.1706073876619999E8,
+      "total_size_yi" : 16834.981514634914
+    } ],
+    "independent_jdbc_view_rows" : [ {
+      "trade_date" : "2026-09-17",
+      "etf_count" : 765,
+      "total_share" : 1.1745800502090001E8,
+      "total_size_yi" : 16500.88711511208
+    }, {
+      "trade_date" : "2026-09-18",
+      "etf_count" : 766,
+      "total_share" : 1.1739845514079998E8,
+      "total_size_yi" : 16737.5072611578
+    }, {
+      "trade_date" : "2026-09-21",
+      "etf_count" : 765,
+      "total_share" : 1.1706073876619999E8,
+      "total_size_yi" : 16834.981514634914
+    } ],
+    "changed_range_cursor_rejected" : true,
+    "third_day_window_extension_matched" : true,
+    "first_two_day_read_replayed_exact" : true,
+    "source_sql" : "SELECT s.timestamp AS trade_date,count_distinct(s.ts_code) AS etf_count,\nsum(s.fd_share) AS total_share,sum(s.fd_share*d.close)/10000.0 AS total_size_yi\nFROM etf_share s JOIN etf_daily d ON s.ts_code=d.ts_code AND s.timestamp=d.timestamp\nWHERE s.timestamp>=? AND s.timestamp<? SAMPLE BY 1d ALIGN TO CALENDAR ORDER BY trade_date\n",
+    "source_double_rawbit_comparisons" : 6,
+    "physical_source_version" : "view-dir:v_etf_market_overview_daily~239:view-sql:8a4bb855ba31ead1862a8f62d1f672ba5a883942c55ee12d54158f460a7c0d56:view-status-updated:2026-09-30 01:27:52.510561:source:etf_share:id:1850:directory:etf_share_stage_20260928_174145_144587~1850:txn:8:wal-seq:8:source:etf_daily:id:1686:directory:etf_daily~1686:txn:13:wal-seq:13"
+  },
+  "private_attestation_after" : [ {
+    "port" : 19020,
+    "address" : "127.0.0.1",
+    "pid" : 23388,
+    "name" : "java.exe",
+    "command" : "\"D:\\tool\\questdb\\db\\bin\\java.exe\" -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:+UseParallelGC --sun-misc-unsafe-memory-access=allow --enable-native-access=io.questdb --add-opens=java.base/java.lang=io.questdb --add-opens=java.base/java.lang.reflect=io.questdb --add-opens=java.base/java.nio=io.questdb --add-opens=java.base/java.time.zone=io.questdb --add-exports=java.base/jdk.internal.vm=io.questdb -m io.questdb/io.questdb.ServerMain -d C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb",
+    "birth" : "2026-10-06T08:47:32.6148290Z"
+  }, {
+    "port" : 18832,
+    "address" : "127.0.0.1",
+    "pid" : 23388,
+    "name" : "java.exe",
+    "command" : "\"D:\\tool\\questdb\\db\\bin\\java.exe\" -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:+UseParallelGC --sun-misc-unsafe-memory-access=allow --enable-native-access=io.questdb --add-opens=java.base/java.lang=io.questdb --add-opens=java.base/java.lang.reflect=io.questdb --add-opens=java.base/java.nio=io.questdb --add-opens=java.base/java.time.zone=io.questdb --add-exports=java.base/jdk.internal.vm=io.questdb -m io.questdb/io.questdb.ServerMain -d C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb",
+    "birth" : "2026-10-06T08:47:32.6148290Z"
+  } ],
+  "status" : "VERIFIED_PRIVATE_AND_FORMAL_BOUNDED_VIEW_READ",
+  "source_inserts" : 0,
+  "ddl" : 0,
+  "cache_publications" : 0,
+  "formal_writes" : 0,
+  "double_tolerance" : 0,
+  "actual_source_revision_during_D102_test" : false,
+  "source_increment_provenance" : "D101 accepted actual third-day source append, reused unchanged"
+}

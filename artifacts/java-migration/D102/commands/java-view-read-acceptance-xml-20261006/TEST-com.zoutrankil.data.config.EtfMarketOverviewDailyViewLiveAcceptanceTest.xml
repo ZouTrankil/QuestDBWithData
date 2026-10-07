@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.config.EtfMarketOverviewDailyViewLiveAcceptanceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-06T13:48:10.695Z" hostname="AMD395" time="14.116">
+  <properties/>
+  <testcase name="actualViewMatchesBothBasesInPrivateAndFormalBoundedReads()" classname="com.zoutrankil.data.config.EtfMarketOverviewDailyViewLiveAcceptanceTest" time="14.116"/>
+  <system-out><![CDATA[21:48:14.553 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d102-private - Starting...
+21:48:14.697 [Test worker] INFO com.zaxxer.hikari.pool.HikariPool -- d102-private - Added connection org.postgresql.jdbc.PgConnection@10876a6
+21:48:14.701 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d102-private - Start completed.
+21:48:15.258 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d102-formal - Starting...
+21:48:15.264 [Test worker] INFO com.zaxxer.hikari.pool.HikariPool -- d102-formal - Added connection org.postgresql.jdbc.PgConnection@41bf79da
+21:48:15.264 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d102-formal - Start completed.
+21:48:21.731 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d102-formal - Shutdown initiated...
+21:48:21.735 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d102-formal - Shutdown completed.
+21:48:21.735 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d102-private - Shutdown initiated...
+21:48:21.736 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d102-private - Shutdown completed.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

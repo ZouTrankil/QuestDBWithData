@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-06T07:51:28.222Z" hostname="AMD395" time="0.084">
+  <properties/>
+  <testcase name="dateCarrierAndEveryMissingOrWrongFieldFailWithoutCoercion()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" time="0.011"/>
+  <testcase name="repositoryPreservesKeyBusinessGenerationFiniteRangeAndPhysicalCursorSeparately()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" time="0.014"/>
+  <testcase name="nullableDoublesRemainNullAndRequiredZeroCountsRemainZero()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" time="0.006"/>
+  <testcase name="allDoubleFieldsRejectNonfiniteValues()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" time="0.006"/>
+  <testcase name="historicalNullCountsAreExplicitlyInvalidRatherThanFilledWithZero()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" time="0.007"/>
+  <testcase name="allFourteenFieldsRoundTripInCardOrderWithExactDoubleBits()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" time="0.003"/>
+  <testcase name="invalidKeyVersionDateRangeAndPageBudgetAreRejectedBeforeDatabaseRead()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" time="0.015"/>
+  <testcase name="completeIdentityPreservesDistinctGenerationsAndRejectsMalformedSha()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" time="0.004"/>
+  <testcase name="tableRetainsFourteenFieldsMonthWalCompleteDedupKeyAndSolePythonOwner()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" time="0.002"/>
+  <testcase name="signedUnitsAndSourceMetricScalesPassThroughWithoutConversionOrClamp()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" time="0.001"/>
+  <testcase name="countsRejectNegativeWrappedOrCoercedNumbersAndKeepMaxLongExactly()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyCacheMappingTest" time="0.008"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

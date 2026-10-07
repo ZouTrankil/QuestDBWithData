@@ -1,0 +1,541 @@
+{
+  "task" : "D027",
+  "table" : "java_d027_moneyflow_hsgt_153a234bcd7a49a7bb51624e5bd0c42c",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-153a234bcd7a49a7bb51624e5bd0c42c\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T23:27:16.115092700Z",
+  "formalTableMutated" : false,
+  "priorFailure" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-153a234bcd7a49a7bb51624e5bd0c42c\\D027-live-acceptance-failure.json",
+  "firstRecoveryState" : "VERIFIED",
+  "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+  "runs" : [ {
+    "sourceRows" : 1,
+    "recoveredOriginalPublication" : true,
+    "verifiedRows" : 1,
+    "state" : "VERIFIED",
+    "runId" : "moneyflow-hsgt-2cff451f-ff18-489e-b56a-bdcbc19c4352"
+  }, {
+    "runId" : "moneyflow-hsgt-208adee2-1cac-4f11-9d7c-0fd96f8c34d0",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "verifiedRows" : 1,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "moneyflow-hsgt-273f6f27-628f-479e-9f3f-b13b11aa049d",
+    "state" : "VERIFIED",
+    "sourceRows" : 1,
+    "verifiedRows" : 1,
+    "errorCode" : null,
+    "reusedRows" : 0
+  }, {
+    "runId" : "moneyflow-hsgt-cbb20799-f4f4-4822-8ef1-57c3a22aa2fc",
+    "state" : "VERIFIED",
+    "sourceRows" : 2,
+    "verifiedRows" : 2,
+    "errorCode" : null,
+    "reusedRows" : 0
+  } ],
+  "independentReadbacks" : [ {
+    "slices" : [ {
+      "sourceRows" : 1,
+      "matches" : 1,
+      "fromInclusive" : "2026-09-17",
+      "sourceFingerprint" : "e648fb2a7046640ff888d1a11066e3afc1479a55c64fbfc94da9747a78e35556",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-153a234bcd7a49a7bb51624e5bd0c42c\\sync-evidence\\moneyflow-hsgt-2cff451f-ff18-489e-b56a-bdcbc19c4352\\source\\moneyflow-hsgt-20260917-20260917-e648fb2a7046640ff888d1a11066e3afc1479a55c64fbfc94da9747a78e35556.json",
+      "toInclusive" : "2026-09-17"
+    } ],
+    "duplicateKeys" : 0,
+    "dedup" : false,
+    "mismatches" : 0,
+    "journalState" : "VERIFIED",
+    "missingKeys" : 0,
+    "fieldsCompared" : 7,
+    "sourceRows" : 1,
+    "matches" : 1,
+    "status" : "MATCHED",
+    "expectedRows" : 1,
+    "fieldNames" : [ "trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money" ],
+    "table" : "java_d027_moneyflow_hsgt_153a234bcd7a49a7bb51624e5bd0c42c",
+    "actualRows" : 1,
+    "runId" : "moneyflow-hsgt-2cff451f-ff18-489e-b56a-bdcbc19c4352",
+    "task" : "D027"
+  }, {
+    "slices" : [ {
+      "sourceRows" : 1,
+      "matches" : 1,
+      "fromInclusive" : "2026-09-17",
+      "sourceFingerprint" : "e648fb2a7046640ff888d1a11066e3afc1479a55c64fbfc94da9747a78e35556",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-153a234bcd7a49a7bb51624e5bd0c42c\\sync-evidence\\moneyflow-hsgt-208adee2-1cac-4f11-9d7c-0fd96f8c34d0\\source\\moneyflow-hsgt-20260917-20260917-e648fb2a7046640ff888d1a11066e3afc1479a55c64fbfc94da9747a78e35556.json",
+      "toInclusive" : "2026-09-17"
+    } ],
+    "duplicateKeys" : 0,
+    "dedup" : false,
+    "mismatches" : 0,
+    "journalState" : "VERIFIED",
+    "missingKeys" : 0,
+    "fieldsCompared" : 7,
+    "sourceRows" : 1,
+    "matches" : 1,
+    "status" : "MATCHED",
+    "expectedRows" : 1,
+    "fieldNames" : [ "trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money" ],
+    "table" : "java_d027_moneyflow_hsgt_153a234bcd7a49a7bb51624e5bd0c42c",
+    "actualRows" : 1,
+    "runId" : "moneyflow-hsgt-208adee2-1cac-4f11-9d7c-0fd96f8c34d0",
+    "task" : "D027"
+  }, {
+    "slices" : [ {
+      "sourceRows" : 1,
+      "matches" : 1,
+      "fromInclusive" : "2026-09-17",
+      "sourceFingerprint" : "e648fb2a7046640ff888d1a11066e3afc1479a55c64fbfc94da9747a78e35556",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-153a234bcd7a49a7bb51624e5bd0c42c\\sync-evidence\\moneyflow-hsgt-273f6f27-628f-479e-9f3f-b13b11aa049d\\source\\moneyflow-hsgt-20260917-20260917-e648fb2a7046640ff888d1a11066e3afc1479a55c64fbfc94da9747a78e35556.json",
+      "toInclusive" : "2026-09-17"
+    } ],
+    "duplicateKeys" : 0,
+    "dedup" : false,
+    "mismatches" : 0,
+    "journalState" : "VERIFIED",
+    "missingKeys" : 0,
+    "fieldsCompared" : 7,
+    "sourceRows" : 1,
+    "matches" : 1,
+    "status" : "MATCHED",
+    "expectedRows" : 1,
+    "fieldNames" : [ "trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money" ],
+    "table" : "java_d027_moneyflow_hsgt_153a234bcd7a49a7bb51624e5bd0c42c",
+    "actualRows" : 1,
+    "runId" : "moneyflow-hsgt-273f6f27-628f-479e-9f3f-b13b11aa049d",
+    "task" : "D027"
+  }, {
+    "slices" : [ {
+      "sourceRows" : 2,
+      "matches" : 2,
+      "fromInclusive" : "2026-09-17",
+      "sourceFingerprint" : "5dc3da8df9a57ae170e08a74e8dab0853afb202ab6080099bec81d8179b850c3",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-153a234bcd7a49a7bb51624e5bd0c42c\\sync-evidence\\moneyflow-hsgt-cbb20799-f4f4-4822-8ef1-57c3a22aa2fc\\source\\moneyflow-hsgt-20260917-20260918-5dc3da8df9a57ae170e08a74e8dab0853afb202ab6080099bec81d8179b850c3.json",
+      "toInclusive" : "2026-09-18"
+    } ],
+    "duplicateKeys" : 0,
+    "dedup" : false,
+    "mismatches" : 0,
+    "journalState" : "VERIFIED",
+    "missingKeys" : 0,
+    "fieldsCompared" : 7,
+    "sourceRows" : 2,
+    "matches" : 2,
+    "status" : "MATCHED",
+    "expectedRows" : 2,
+    "fieldNames" : [ "trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money" ],
+    "table" : "java_d027_moneyflow_hsgt_153a234bcd7a49a7bb51624e5bd0c42c",
+    "actualRows" : 2,
+    "runId" : "moneyflow-hsgt-cbb20799-f4f4-4822-8ef1-57c3a22aa2fc",
+    "task" : "D027"
+  } ],
+  "plans" : [ {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_hsgt",
+        "version" : 1,
+        "datasetId" : "moneyflow_hsgt",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_hsgt_owner",
+        "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetFingerprint" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_hsgt.range31",
+        "verificationPolicyRef" : "questdb.full_row_stage_replace",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT10M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 12,
+          "maxPages" : 12,
+          "maxRows" : 366,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "checkpointBefore" : "2026-09-17",
+        "physicalTargetId" : "static-v2-fab9b7721f9c0dcad9bb8a74c861aa11573be3ec34e1ce9b1cc8e2d96b55de33",
+        "targetFingerprint" : "48306bf4cc98f73a9a05296761c48194c28a82fcaaf75f7242ade9dd4f73d430",
+        "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+        "targetMaxBefore" : "2026-09-17",
+        "targetMinBefore" : "2026-09-17",
+        "targetRowsBefore" : 1
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+    "physicalTargetId" : "static-v2-fab9b7721f9c0dcad9bb8a74c861aa11573be3ec34e1ce9b1cc8e2d96b55de33",
+    "checkpointBefore" : "2026-09-17",
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "identity" : {
+        "id" : 3005,
+        "directory" : "java_d027_moneyflow_hsgt_stage_e2a7459e9e604f7d93e78891061d2aef~3005",
+        "writerTxn" : 2
+      },
+      "rows" : [ {
+        "key" : {
+          "tradeDate" : "2026-09-17"
+        },
+        "ggtSs" : 32165.59,
+        "ggtSz" : 22965.11,
+        "hgt" : 120233.94,
+        "sgt" : 139631.89,
+        "northMoney" : 259865.83,
+        "southMoney" : 55130.7
+      } ],
+      "fingerprint" : "48306bf4cc98f73a9a05296761c48194c28a82fcaaf75f7242ade9dd4f73d430",
+      "bytes" : 142
+    },
+    "bootstrap" : false
+  }, {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_hsgt",
+        "version" : 1,
+        "datasetId" : "moneyflow_hsgt",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_hsgt_owner",
+        "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetFingerprint" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_hsgt.range31",
+        "verificationPolicyRef" : "questdb.full_row_stage_replace",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT10M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 12,
+          "maxPages" : 12,
+          "maxRows" : 366,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "checkpointBefore" : "2026-09-17",
+        "physicalTargetId" : "static-v2-a20ab11f8c57df1b45b02161ad47b90b9e4ea9031f281724cc136561a24c6d6f",
+        "targetFingerprint" : "48306bf4cc98f73a9a05296761c48194c28a82fcaaf75f7242ade9dd4f73d430",
+        "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+        "targetMaxBefore" : "2026-09-17",
+        "targetMinBefore" : "2026-09-17",
+        "targetRowsBefore" : 1
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+    "physicalTargetId" : "static-v2-a20ab11f8c57df1b45b02161ad47b90b9e4ea9031f281724cc136561a24c6d6f",
+    "checkpointBefore" : "2026-09-17",
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "identity" : {
+        "id" : 3006,
+        "directory" : "java_d027_moneyflow_hsgt_stage_4aa8f8371892401f93cae56e685e337c~3006",
+        "writerTxn" : 2
+      },
+      "rows" : [ {
+        "key" : {
+          "tradeDate" : "2026-09-17"
+        },
+        "ggtSs" : 32165.59,
+        "ggtSz" : 22965.11,
+        "hgt" : 120233.94,
+        "sgt" : 139631.89,
+        "northMoney" : 259865.83,
+        "southMoney" : 55130.7
+      } ],
+      "fingerprint" : "48306bf4cc98f73a9a05296761c48194c28a82fcaaf75f7242ade9dd4f73d430",
+      "bytes" : 142
+    },
+    "bootstrap" : false
+  }, {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_hsgt",
+        "version" : 1,
+        "datasetId" : "moneyflow_hsgt",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_hsgt_owner",
+        "supportedModes" : [ "RECONCILE", "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetFingerprint" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_hsgt.range31",
+        "verificationPolicyRef" : "questdb.full_row_stage_replace",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT10M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 12,
+          "maxPages" : 12,
+          "maxRows" : 366,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "checkpointBefore" : "2026-09-17",
+        "physicalTargetId" : "static-v2-ff35edc7c25c5afd64ed4007d87f40718701237c7cd3a8766fe4384b94cae7bf",
+        "targetFingerprint" : "48306bf4cc98f73a9a05296761c48194c28a82fcaaf75f7242ade9dd4f73d430",
+        "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+        "targetMaxBefore" : "2026-09-17",
+        "targetMinBefore" : "2026-09-17",
+        "targetRowsBefore" : 1
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-18",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+    "physicalTargetId" : "static-v2-ff35edc7c25c5afd64ed4007d87f40718701237c7cd3a8766fe4384b94cae7bf",
+    "checkpointBefore" : "2026-09-17",
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "identity" : {
+        "id" : 3007,
+        "directory" : "java_d027_moneyflow_hsgt_stage_5c26a64d072346aba2ced8f333174e71~3007",
+        "writerTxn" : 2
+      },
+      "rows" : [ {
+        "key" : {
+          "tradeDate" : "2026-09-17"
+        },
+        "ggtSs" : 32165.59,
+        "ggtSz" : 22965.11,
+        "hgt" : 120233.94,
+        "sgt" : 139631.89,
+        "northMoney" : 259865.83,
+        "southMoney" : 55130.7
+      } ],
+      "fingerprint" : "48306bf4cc98f73a9a05296761c48194c28a82fcaaf75f7242ade9dd4f73d430",
+      "bytes" : 142
+    },
+    "bootstrap" : false
+  } ],
+  "afterFirst" : {
+    "duplicateKeys" : 0,
+    "rows" : 1,
+    "sha256" : "239f9ea4e58a67bf17ad06dd10857f0885de659e06717048057621f48e76fffd"
+  },
+  "finalSnapshot" : {
+    "duplicateKeys" : 0,
+    "rows" : 2,
+    "sha256" : "4336c15607a2f9ceb5959e95356edf20d8b070fca7677cf980a7caabaedd9158"
+  },
+  "result" : "VERIFIED",
+  "finishedAt" : "2026-09-29T23:30:33.041272400Z"
+}

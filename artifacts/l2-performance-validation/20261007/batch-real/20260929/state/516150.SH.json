@@ -1,0 +1,38 @@
+{
+  "symbol" : "516150.SH",
+  "status" : "SUCCESS",
+  "resumed" : false,
+  "sourceDirectories" : [ "516150.SZ" ],
+  "inputFingerprint" : "8b5c392122313ac7e228fd40c1180f44f4aef90ad6df742f152b131424634883",
+  "inputFiles" : {
+    "逐笔成交.csv" : {
+      "sha256" : "777560eb56cfd71404b997e3850af3aa743e4cc9bfb5101a0fca8f4c70142447",
+      "bytes" : 288501,
+      "present" : true
+    },
+    "逐笔委托.csv" : {
+      "sha256" : "b06017e607e583e75b51c2ad2874427ed3e2be1c4d54dc4daca9713bc92521ac",
+      "bytes" : 8061219,
+      "present" : true
+    },
+    "行情.csv" : {
+      "sha256" : "c3de6541874865569729b426a088111912c62c48cbbc16fe01105403cb8648b3",
+      "bytes" : 1897955,
+      "present" : true
+    }
+  },
+  "resultSha256" : "535d210beb1b1a89fa15b987ca4527f5759444b564503c0b0ab88498c05c12e0",
+  "rows" : {
+    "rawQuotes" : 4800,
+    "orders" : 124054,
+    "rawOrders" : 124059,
+    "deals" : 3622,
+    "rawDeals" : 3622,
+    "quotes" : 4800
+  },
+  "elapsedSeconds" : 0.6139939,
+  "error" : null,
+  "checkpointVersion" : "l2-native-batch-v1",
+  "date" : "20260929",
+  "computeFingerprint" : "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+}

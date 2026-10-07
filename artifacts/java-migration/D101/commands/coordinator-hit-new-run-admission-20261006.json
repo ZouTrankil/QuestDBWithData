@@ -1,0 +1,59 @@
+{
+  "java_pure_unique": 184,
+  "coverage_rows_before": 2,
+  "private_root": "var/d101-isolated-questdb",
+  "proofs": [
+    {
+      "sha256": "50be7fef72f5891cc97f61256240f3aa0eb1d9946acee1f0c210f3913ba5860b",
+      "path": "artifacts\\java-migration\\D101\\commands\\java-readthrough-first-20261006.json"
+    },
+    {
+      "sha256": "6bc5ba02c2f46db6b73c4622305390bb441ae768f101ec88401bd97af4abc29d",
+      "path": "artifacts\\java-migration\\D101\\commands\\java-hit-readonly-recovery-20261006.json"
+    },
+    {
+      "sha256": "c67d89f793d37f15176bb8f7561db783a335258c57cb310875c45e6b407785a7",
+      "path": "artifacts\\java-migration\\D101\\commands\\coordinator-hit-readonly-recovery-review-20261006.json"
+    },
+    {
+      "sha256": "d3a4b5d2946f4792d0c9ab6246dac7b9398281b2169ab2f17f1c094b3aabf39b",
+      "path": "artifacts\\java-migration\\D101\\commands\\java-tombstone-investigation-guards-20261006.json"
+    },
+    {
+      "sha256": "68db3f6a21e853ec208e47a0cb9cbf7055a2296288a60b90ccce324d2d3ba320",
+      "path": "artifacts\\java-migration\\D101\\commands\\java-job-full-prefix-reconcile-guards-20261006.json"
+    }
+  ],
+  "decision": "admitted_new_identity_two_day_hit_only_after_explicit_readonly_recovery",
+  "checked_at": "2026-10-06T10:58:52.0024996Z",
+  "ports": [
+    19020,
+    18832
+  ],
+  "task_id": "D101",
+  "private_pid": 23388,
+  "human_review": "pending_review",
+  "bounds": {
+    "ddl": 0,
+    "formal_writes": 0,
+    "original_intent_reuses": 0,
+    "automatic_replays": 0,
+    "expected_actual_owner_hits": 2,
+    "source_writes": 0,
+    "coverage_submissions": 0,
+    "dates": [
+      "2026-09-17",
+      "2026-09-18"
+    ],
+    "cache_submissions": 0
+  },
+  "cache_rows_before": 2,
+  "required_runtime": "New UUID run and atomic claims; fresh PID/root/source/target/WAL and process birth/exit proofs; durable SQLite SUBMITTED before unique original owner read; all historical failure/markers immutable; any UNKNOWN retained without replay",
+  "python_unique": 63,
+  "ledger_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-45e5e7ce-b273-4510-8d15-e1abe5397550.sqlite3",
+  "next_task_admitted": false,
+  "original_recovered_run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+  "source_increment_admitted": false,
+  "source_fixture_rows": 8764,
+  "retained_all_ledger_leases": 0
+}

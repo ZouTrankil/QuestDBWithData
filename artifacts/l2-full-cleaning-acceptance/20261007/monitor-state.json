@@ -1,0 +1,93 @@
+{
+  "observedAt": "2026-10-07T18:30:17.2408371+08:00",
+  "runStatus": "SUCCEEDED",
+  "wrapperAlive": false,
+  "wrapperCreationMatches": false,
+  "phase": "SUCCEEDED",
+  "runDirectory": "D:\\l2-native-features\\run-20261007-174121-7a951b53",
+  "dates": [
+    {
+      "date": "20260928",
+      "status": "COMPLETE",
+      "selected": 7926,
+      "completed": 7926,
+      "success": 7926,
+      "empty": 0,
+      "failed": 0,
+      "resumed": 0,
+      "published": true,
+      "updatedAt": "2026-10-07T10:00:18.656929300Z",
+      "errorBytes": 0,
+      "completedDelta": 0
+    },
+    {
+      "date": "20260929",
+      "status": "COMPLETE",
+      "selected": 7918,
+      "completed": 7918,
+      "success": 7918,
+      "empty": 0,
+      "failed": 0,
+      "resumed": 0,
+      "published": true,
+      "updatedAt": "2026-10-07T10:13:30.968739200Z",
+      "errorBytes": 0,
+      "completedDelta": 0
+    },
+    {
+      "date": "20260930",
+      "status": "COMPLETE",
+      "selected": 7888,
+      "completed": 7888,
+      "success": 7888,
+      "empty": 0,
+      "failed": 0,
+      "resumed": 0,
+      "published": true,
+      "updatedAt": "2026-10-07T10:27:08.907867600Z",
+      "errorBytes": 0,
+      "completedDelta": 1378
+    }
+  ],
+  "processes": [],
+  "diskFreeBytes": 718648004608,
+  "freePhysicalBytes": 60943585280,
+  "extractions": [
+    {
+      "date": "20260928",
+      "archive": "D:\\BaiduNetdiskDownload\\202609\\20260928.7z",
+      "sourceBytes": 5054614541,
+      "sourceModifiedUtc": "2026-10-06T18:41:17.6640327Z",
+      "sourceSha256": "b923003c1e06689a6e389249813568db3ba881fac346d1a4ab596ba18dc91cdf",
+      "hashElapsedSeconds": 7.9804185,
+      "extractElapsedSeconds": 70.6554489,
+      "exitCode": 0,
+      "sourceMetadataStable": true,
+      "log": "D:\\l2-native-features\\run-20261007-174121-7a951b53\\extract-20260928.log"
+    },
+    {
+      "date": "20260929",
+      "archive": "D:\\BaiduNetdiskDownload\\202609\\20260929.7z",
+      "sourceBytes": 4565383460,
+      "sourceModifiedUtc": "2026-09-29T15:47:59.7254899Z",
+      "sourceSha256": "1a53fb98d88a8e68e7fb6ceaa4510d70754ce5d184b9d3451581dd1a84cc3096",
+      "hashElapsedSeconds": 9.6409144,
+      "extractElapsedSeconds": 64.310393,
+      "exitCode": 0,
+      "sourceMetadataStable": true,
+      "log": "D:\\l2-native-features\\run-20261007-174121-7a951b53\\extract-20260929.log"
+    },
+    {
+      "date": "20260930",
+      "archive": "D:\\BaiduNetdiskDownload\\202609\\20260930.7z",
+      "sourceBytes": 4501980409,
+      "sourceModifiedUtc": "2026-10-06T18:35:39.1532733Z",
+      "sourceSha256": "128e72d59448c8add999ed0d6f249e17b444abfa69aabd67bd72b4a60593a3b3",
+      "hashElapsedSeconds": 7.547035,
+      "extractElapsedSeconds": 90.0971589,
+      "exitCode": 0,
+      "sourceMetadataStable": true,
+      "log": "D:\\l2-native-features\\run-20261007-174121-7a951b53\\extract-20260930.log"
+    }
+  ]
+}

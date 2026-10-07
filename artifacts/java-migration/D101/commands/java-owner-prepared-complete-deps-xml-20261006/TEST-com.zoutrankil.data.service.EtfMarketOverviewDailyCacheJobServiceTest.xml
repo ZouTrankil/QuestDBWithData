@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2026-10-06T09:40:24.842Z" hostname="AMD395" time="3.879">
+  <properties/>
+  <testcase name="unanchoredOrDifferentSourceHistoryAndZeroSourceCannotAdvanceCheckpoint()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.327"/>
+  <testcase name="alreadyVerifiedOutcomeWithRetainedLeaseCanBeReverifiedAndReleased()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.227"/>
+  <testcase name="decorativeMetadataFailureDoesNotHideADurableRunOrStatus()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.074"/>
+  <testcase name="reconcileModeVerifiesOnlySelectsAndNeverCallsPublisherOrSubmissionHook()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.203"/>
+  <testcase name="callerStoppedFlagCannotReleaseUnknownWithoutActualSenderProof()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.146"/>
+  <testcase name="activeCancellationIsDurableWithoutInventingCompletion()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.057"/>
+  <testcase name="unknownOwnerDeliveryRetainsWholeDatasetLockAndRejectsAnUnrelatedWindow()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.284"/>
+  <testcase name="checkpointCannotPermitAnOldAnchorToExceedThirtyOneDayBudget()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.091"/>
+  <testcase name="incrementalAlwaysRevalidatesTheEntireAnchorDespiteAPriorCheckpoint()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.11"/>
+  <testcase name="anUnknownFutureTailDoesNotMoveCheckpointPastTheLastActuallyVerifiedSourceDay()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.21"/>
+  <testcase name="partialResumeReReadsTheWholePrefixAndReusesOnlyActuallyVerifiedUnits()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.478"/>
+  <testcase name="noSourceDaysAreExplicitVerifiedEmptyAndNeverInvokeTheOwner()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.124"/>
+  <testcase name="sourceDriftDuringReconciliationKeepsUnknownAndExclusion()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.131"/>
+  <testcase name="terminalCancelAndVerifiedResumeDoNotAlterACompletedRun()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.114"/>
+  <testcase name="realStoppedAndExactReadOnlyProofReconcilesUnknownAndReleasesLease()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.206"/>
+  <testcase name="everyKnownDateIncludingEmptyJoinIsOneDurablySubmittedUnit()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.283"/>
+  <testcase name="resumeChangedGlobalSourceFailsDurablyWithoutReplanningOrPublication()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.119"/>
+  <testcase name="canonicalPreSubmissionCancellationCanResumeWithoutAFalseVerifiedCheckpoint()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.219"/>
+  <testcase name="reconciliationCanFinishSubmittedSliceAndRunningAttemptAfterAnOutcomePersistenceFailure()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.226"/>
+  <testcase name="definitionHasExactlyTheExistingThreeSourceJobsAndFiniteManualBudgets()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.004"/>
+  <testcase name="failedRunResumePreservesEveryFrozenParameterAndParent()" classname="com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest" time="0.234"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

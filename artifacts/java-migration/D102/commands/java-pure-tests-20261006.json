@@ -1,0 +1,137 @@
+{
+  "task_id": "D102",
+  "status": "PASSED_JAVA_PURE_AND_SHARED_READER_REGRESSIONS",
+  "checked_at": "2026-10-06T12:27:17.687747+00:00",
+  "java_unique": 128,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "xml": [
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "sha256": "cbd7b46697ee215e05922461b3e0b64083a0893e5131663c8c52766d8758f3d2",
+      "classname": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest.xml",
+      "sha256": "75fd0ca04288b14df33c40f1f7aedd7552e0a608b1fa64b2308299de0b9786b6",
+      "classname": "com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest.xml",
+      "sha256": "0208cfeb36434676dfa378689febbc4b684e1a47595fb9ca6bd083fd49b9c087",
+      "classname": "com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderTest.xml",
+      "sha256": "269f4d949c2eecfd44cb6e259e04d841b35dc66696094211147cdf285649b5e3",
+      "classname": "com.zoutrankil.data.repository.QuestDbBoundedReaderTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "sha256": "fb02067d973b4873bcd2eab863d62de2673ebb18097b487e9c5732ea1441f252",
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "sha256": "4f69fe4be7ae5840420fd6237863c6b0007d1fc0f2887d577099c92583d3de19",
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "sha256": "e1368596d93eaa0060aa726b83e4c0c4057028bdc73b83ae48254e6d2c41d886",
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest.xml",
+      "sha256": "1aa490b8ff5a0c00977c7d9f756b9566ba6aa52c7c2de37d62bae018b92a7cf7",
+      "classname": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "sha256": "94588806cdb715a46387801a68fa45e5765fe285b48e0b412fe5624a740d1ed2",
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "sha256": "4345617f46bce7dc7060c537894c44ca4ee1321b21b3c33ae105ee31a2de50e0",
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "sha256": "966f6994180418c303ae359c9dc6cf596d4cd1a7eb944b6ff49a02a15c674614",
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.service.EtfMarketOverviewViewCatalogStartupTest.xml",
+      "sha256": "f769a1061d90acf507d29cf3574aef83ced5a7ebe473ba19d1f18b97ea0deb1f",
+      "classname": "com.zoutrankil.data.service.EtfMarketOverviewViewCatalogStartupTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.service.ReadGroupJsonTest.xml",
+      "sha256": "391c49d4fc73ed6b32bd92b3fba98ab28d28e0266d09e7385485be6e425a884d",
+      "classname": "com.zoutrankil.data.service.ReadGroupJsonTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/java-pure-tests-xml-20261006/TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+      "sha256": "845e5e4a31e7daf019d3ed472652fa70141cd4d8d5d9bb954515c46bd69109c8",
+      "classname": "com.zoutrankil.data.service.ReadGroupReaderTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ]
+}

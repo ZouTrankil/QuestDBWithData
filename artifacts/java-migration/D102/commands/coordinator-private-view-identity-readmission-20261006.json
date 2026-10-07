@@ -1,0 +1,73 @@
+{
+  "task_id": "D102",
+  "checked_at": "2026-10-06T13:08:40.897026+00:00",
+  "decision": "accepted_for_new_private_missing_view_attempt_only",
+  "scope": "One fixed original CREATE VIEW on attested D101 private target if missing; current reused PIDs must exactly match independently approved OS identities at each boundary",
+  "private_target": {
+    "pid": 23388,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb",
+    "http_port": 19020,
+    "pg_port": 18832
+  },
+  "evidence": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-precreate-process-identity-review-20261006.json",
+      "sha256": "4e3dccf0fc6c4f12c86954bcd49cffff8ee2a1980905e8f491d35932c7dee753"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-identity-admission-delta-review-20261006.json",
+      "sha256": "cb5ee503443a557a36568225e3f3b9ba66ad8e99b3d8068d56e63a321aafad22"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\python-identity-guards-20261006.json",
+      "sha256": "7a28a801a789b60c36553d522d4953903bd4852720a0d5092065f7c72868d5e8"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\python-identity-guards-20261006.log",
+      "sha256": "2e50af077e9a12e4bdd97951ae77e4cdee795191057353fb2fd70c8d257043d9"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-formal-readonly-audit-20261006.json",
+      "sha256": "24cde1b8140db92224a4756b2d680c36cf339d9b93bbabe0fd960545def81170"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-20261006.json",
+      "sha256": "26b337b392b304e940c6430cc0adc2b8ecd9b381ed4fd6e0e26b8a83575609ae"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\failed-precreate-process-diagnostic-20261006.json",
+      "sha256": "cb6cfd6158ff5d6b93d9a8844b57d31636d20c5d609533bb7cf04526e42fceca"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\audit_d102_etf_view.py",
+      "sha256": "841fa6ff015ef8d584b5d1e861da615670adc55583f799727ec41ffeaca89300"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d102_script_guards.py",
+      "sha256": "69eb4ac1e80c91fd711c4c945cc65fa6bd4b2554cb0249a624d0a662bb6cf35f"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\coordinator-review-20261006.json",
+      "sha256": "2201c05e5e05c4b056a5f3170be86ed86c230fb08e1d7dcf42f93c7228fccaef"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-typed-write-20261006.json",
+      "sha256": "6914f8cddb9d1bf638d70d6db7a8100cc3ea3631f141267b4d145ec70dce0cf5"
+    }
+  ],
+  "python_unique": 59,
+  "reviewed_current_identities": 7,
+  "original_completed_identities": 8,
+  "source_rows": 11667,
+  "source_full_fields": 164180,
+  "formal_writes": 0,
+  "source_cache_coverage_or_owner_writes": 0,
+  "max_ddl_attempts": 1,
+  "prior_failure_retained": true,
+  "prior_failure_was_before_create": true,
+  "automatic_retry": false,
+  "unknown_ack_policy": "Retain UNKNOWN claim and stop; never resend or reset",
+  "new_output": "view-isolated-acceptance-new-identity-20261006.json",
+  "java_live_admitted": false,
+  "next_task_admitted": false
+}

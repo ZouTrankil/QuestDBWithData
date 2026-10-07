@@ -1,0 +1,28 @@
+{
+  "jvm_pid" : 47280,
+  "purpose" : "SELECT-only initial receipt recovery",
+  "native" : {
+    "attestation_child_stopped" : true,
+    "records" : [ {
+      "port" : 19030,
+      "address" : "127.0.0.1",
+      "pid" : 41560,
+      "name" : "java.exe",
+      "command" : "\"D:\\tool\\questdb\\db\\bin\\java.exe\" -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:+UseParallelGC --sun-misc-unsafe-memory-access=allow --enable-native-access=io.questdb --add-opens=java.base/java.lang=io.questdb --add-opens=java.base/java.lang.reflect=io.questdb --add-opens=java.base/java.nio=io.questdb --add-opens=java.base/java.time.zone=io.questdb --add-exports=java.base/jdk.internal.vm=io.questdb -m io.questdb/io.questdb.ServerMain -d C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-isolated-questdb",
+      "birth" : "2026-10-06T14:15:29.5834980Z"
+    }, {
+      "port" : 18842,
+      "address" : "127.0.0.1",
+      "pid" : 41560,
+      "name" : "java.exe",
+      "command" : "\"D:\\tool\\questdb\\db\\bin\\java.exe\" -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:+UseParallelGC --sun-misc-unsafe-memory-access=allow --enable-native-access=io.questdb --add-opens=java.base/java.lang=io.questdb --add-opens=java.base/java.lang.reflect=io.questdb --add-opens=java.base/java.nio=io.questdb --add-opens=java.base/java.time.zone=io.questdb --add-exports=java.base/jdk.internal.vm=io.questdb -m io.questdb/io.questdb.ServerMain -d C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-isolated-questdb",
+      "birth" : "2026-10-06T14:15:29.5834980Z"
+    } ],
+    "attestation_child_pid" : 30044,
+    "observed_at" : "2026-10-06T15:31:08.804623900Z",
+    "jvm_birth_utc" : "2026-10-06T15:31:02.250865Z",
+    "phase" : "readonly_recovery_start"
+  },
+  "jvm_birth_utc" : "2026-10-06T15:31:02.250865Z",
+  "task_id" : "D103"
+}

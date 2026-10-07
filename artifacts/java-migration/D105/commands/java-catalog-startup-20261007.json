@@ -1,0 +1,194 @@
+{
+  "database_connections" : 0,
+  "ledger_created" : false,
+  "definition" : {
+    "datasetId" : "v_macro_core_monthly",
+    "schemaVersion" : 1,
+    "provider" : "derived.macro_core_monthly.alias",
+    "owner" : "schema.monthly_views.deployment_only",
+    "objectName" : "v_macro_core_monthly",
+    "objectKind" : "VIEW",
+    "columns" : [ {
+      "sourceName" : "macro_core_monthly.month",
+      "logicalName" : "month",
+      "storageName" : "month",
+      "storageType" : "TIMESTAMP",
+      "nullable" : false,
+      "meaning" : "Base observation-month identity, exact first-day UTC midnight",
+      "temporal" : {
+        "kind" : "BUSINESS_DATE",
+        "sourceFormat" : "BASIC",
+        "zone" : "calendar",
+        "precision" : "MONTH",
+        "meaning" : "Base YYYYMM observation becomes first-day LocalDate; not a publication instant"
+      },
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "macro_core_monthly.cpi_yoy",
+      "logicalName" : "cpi_yoy",
+      "storageName" : "cpi_yoy",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Base CPI YoY; unchanged stored value, source declares percent",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "macro_core_monthly.ppi_yoy",
+      "logicalName" : "ppi_yoy",
+      "storageName" : "ppi_yoy",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Base PPI YoY; unchanged stored value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "macro_core_monthly.pmi_mfg",
+      "logicalName" : "pmi_mfg",
+      "storageName" : "pmi_mfg",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Base manufacturing PMI level; unchanged stored value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "macro_core_monthly.gdp_yoy",
+      "logicalName" : "gdp_yoy",
+      "storageName" : "gdp_yoy",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Base GDP YoY in report-date own month only, nullable without forward fill",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "macro_core_monthly.m2_yoy",
+      "logicalName" : "m2_yoy",
+      "storageName" : "m2_yoy",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Base M2 YoY; unchanged stored value, source declares percent",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "macro_core_monthly.social_financing_stock",
+      "logicalName" : "social_financing_stock",
+      "storageName" : "social_financing_stock",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Base total social-financing stock; unchanged stored value, local source declares 万亿元",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "macro_core_monthly.new_rmb_loan",
+      "logicalName" : "new_rmb_loan",
+      "storageName" : "new_rmb_loan",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Compatibility name for base total social-financing monthly increment; local source declares 亿元",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "macro_core_monthly.social_financing_yoy",
+      "logicalName" : "social_financing_yoy",
+      "storageName" : "social_financing_yoy",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Base fractional stock change to prior twelfth observation; nullable, no percent scaling",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    } ],
+    "businessKey" : [ "month" ],
+    "dedupKey" : [ ],
+    "designatedTimestamp" : "month",
+    "partition" : "NONE",
+    "wal" : false,
+    "capabilities" : [ "READ" ],
+    "dependencies" : [ "macro_core_monthly" ],
+    "storageRationale" : "Ordinary SELECT * FROM macro_core_monthly alias with nine exact base fields. No filters, joins, aggregation, deduplication, filling, scaling or rounding. Month is the base observation period at its exact first calendar day UTC midnight; not a publication instant. Eight nullable finite DOUBLEs preserve base units, NULL and signed zero, including historical required-source NULLs. GDP has no forward fill; legacy new_rmb_loan denotes total social-financing increment; social-financing YoY remains a fractional ratio with no multiplication by 100. An ordinary view has no physical partition, WAL, UPSERT key, direct writer or checkpoint. Canonical source refresh delegates to data.macro_core_monthly v1; no competing view sync job is registered. Reads require all nine columns, a first-day month equality or at most twelve increasing months, pages of at most twelve rows, and the exact view SQL plus stable base physical/WAL/schema token. Only the formal alias or explicit D105 private alias is admitted. No provider completeness, full history, automatic formal refresh or consumer cutover is certified."
+  },
+  "task_id" : "D105",
+  "view_independent_jobs" : 0,
+  "dataset_count" : 54,
+  "base_refresh_job" : {
+    "jobId" : "data.macro_core_monthly",
+    "version" : 1,
+    "datasetId" : "macro_core_monthly",
+    "datasetVersion" : 1,
+    "owner" : "macro_core_monthly_owner",
+    "supportedModes" : [ "MATERIALIZE", "RECONCILE", "INCREMENTAL" ],
+    "defaultMode" : "INCREMENTAL",
+    "parameters" : {
+      "target_id" : {
+        "type" : "STRING",
+        "required" : true,
+        "maxLength" : 128,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "source_hash" : {
+        "type" : "STRING",
+        "required" : true,
+        "maxLength" : 64,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "checkpoint_reason" : {
+        "type" : "STRING",
+        "required" : false,
+        "maxLength" : 64,
+        "maxItems" : 1,
+        "choices" : [ "SOURCE_PREFIX_REVISED", "VERIFIED_PREFIX_APPEND" ]
+      },
+      "bootstrap_from" : {
+        "type" : "DATE",
+        "required" : true,
+        "maxLength" : 10,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "source_version" : {
+        "type" : "STRING",
+        "required" : true,
+        "maxLength" : 128,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "checkpoint_before" : {
+        "type" : "DATE",
+        "required" : false,
+        "maxLength" : 10,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "parent_source_version" : {
+        "type" : "STRING",
+        "required" : false,
+        "maxLength" : 128,
+        "maxItems" : 1,
+        "choices" : [ ]
+      }
+    },
+    "ratePolicyRef" : "questdb.materialize",
+    "slicePolicyRef" : "macro_core_monthly.month_window",
+    "verificationPolicyRef" : "questdb.full_key_values",
+    "retry" : {
+      "maxAttempts" : 1,
+      "backoff" : "PT1S",
+      "maxElapsed" : "PT1S"
+    },
+    "timeout" : "PT5M",
+    "budget" : {
+      "maxWindowDays" : 366,
+      "maxSlices" : 1,
+      "maxPages" : 1,
+      "maxRows" : 12,
+      "maxBatchBytes" : 1048576
+    },
+    "revisionDays" : 31,
+    "dependencies" : [ ],
+    "frequency" : "MANUAL",
+    "zone" : "Asia/Shanghai",
+    "enabled" : true,
+    "dailyEligible" : false
+  },
+  "job_count" : 42
+}

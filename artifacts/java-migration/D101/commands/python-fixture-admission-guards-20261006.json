@@ -1,0 +1,17 @@
+{
+  "log_sha256": "c84ab149255a59b0810264b17f1706ec3b0f36fed98d522b7e8ce2debd2e9ce6",
+  "task_id": "D101",
+  "skipped": 0,
+  "previous_20_tests_are_subset": true,
+  "log": "artifacts/java-migration/D101/commands/python-fixture-admission-guards-20261006.log",
+  "test_sha256": "0e7939814b6011fa36249cb30df09ec29504a2b57d214611fa47e2c2b7783acd",
+  "checked_at": "2026-10-06T11:12:20.9722363Z",
+  "status": "PASSED",
+  "scope": "Pure admission, actual local temporary SQLite and mocked native/service checks; missing or spoofed preflight/gate and old failed HIT refuse; per batch all-ledger, producer and target frontier guards",
+  "failures": 0,
+  "errors": 0,
+  "unique_python_total": 75,
+  "script_sha256": "f868895a29ff81257d70202c0c9aebd2d04cbda81239140f2eb42ef2446752de",
+  "source_or_formal_writes": 0,
+  "unique_tests": 32
+}

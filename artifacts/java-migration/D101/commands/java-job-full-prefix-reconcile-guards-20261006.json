@@ -1,0 +1,17 @@
+{
+  "task_id": "D101",
+  "database_mutations": 0,
+  "failures": 0,
+  "status": "PASS",
+  "skipped": 0,
+  "class": "com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest",
+  "tests": 23,
+  "log_sha256": "e35d62f34808dc34a9d18ab91275b5bc2da094ceeda06d493d01a31281b4d243",
+  "checked_at": "2026-10-06T10:39:26.8842991Z",
+  "xml_sha256": "1b884d3c6664e254d3bc31d164ef9316e2649d17f59616408c15ccd4ef6cfebb",
+  "errors": 0,
+  "boundaries": [
+    "Second known day absent: reject readonly reconciliation and retain IN_DOUBT/allDates lease",
+    "Both current days fully verified by fresh readonly prefix: owner proof2/original slice1/zero replay"
+  ]
+}

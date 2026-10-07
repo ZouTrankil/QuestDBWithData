@@ -1,0 +1,211 @@
+{
+  "task_id": "D101",
+  "stage": "first",
+  "status": "VERIFIED_INDEPENDENT_FIRST_DATA_REVIEW",
+  "checked_at": "2026-10-06T10:15:58.908651+00:00",
+  "review_mode": "Local immutable files/SHA, SQLite mode=ro and query_only, exact binary64/owner digest/queryFingerprint recomputation; no QuestDB/Gradle/publisher",
+  "first_artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-first-20261006.json",
+  "first_artifact_sha256": "50be7fef72f5891cc97f61256240f3aa0eb1d9946acee1f0c210f3913ba5860b",
+  "archived_live_xml": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-live-first-new-identity-xml-20261006\\TEST-com.zoutrankil.data.config.EtfMarketOverviewDailyCacheLiveAcceptanceTest.xml",
+  "archived_live_xml_sha256": "7be683b9426b2fa06821f157e74cfede155e3e4d5a408f613d8e729f417308d8",
+  "actual_live_tests": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "run_id": "d101-3a2751d4-f3fa-473d-b5b7-bca65bfe39cd",
+  "ledger_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-45e5e7ce-b273-4510-8d15-e1abe5397550.sqlite3",
+  "sqlite": {
+    "read_only": true,
+    "counts": {
+      "sync_runs": 1,
+      "sync_entries": 4,
+      "sync_events": 20,
+      "sync_interval_locks": 0,
+      "sync_cancellations": 0
+    },
+    "all_entries_verified": true,
+    "exact_frozen_JSON_and_parent_hierarchy": true,
+    "SUBMITTED_slices": 2,
+    "SUBMITTED_revision": 4,
+    "retained_leases": 0
+  },
+  "publication_proofs": [
+    {
+      "day": "2026-09-17",
+      "slice_id": "slice-181e5428-4ab6-464e-ba5d-86e83051d714",
+      "submitted_revision": 4,
+      "submitted_at": "2026-10-06T10:07:14.195901500Z",
+      "slice_event_states": [
+        "PENDING",
+        "RUNNING",
+        "FETCHED",
+        "VALIDATED",
+        "SUBMITTED",
+        "ACKNOWLEDGED",
+        "VERIFIED"
+      ],
+      "response_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-81128046-9fd3-4438-bf98-41a858bad9fa.response.json",
+      "response_sha256": "479b0633d6db8a6dc2e0d78f5104b7572780dc8343ca907d9f9818a6d465a444",
+      "intent_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-81128046-9fd3-4438-bf98-41a858bad9fa.intent.json",
+      "intent_sha256": "cf27c3fdd07c41de3609ee1e62ffe5502349fea77b026e47ee750106d47e45b4",
+      "preview_sha256": "de1ddf2020fc5953635b167a5bd91d8153fdc4285a732cde979b6bcdaa184e2e",
+      "atomic_claim_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-owner-intent-claims\\674d09968cd499c16951e9fe2d063e056dc17b9a667652790d5a5b6d5d48118c.claim.json",
+      "atomic_claim_sha256": "19e8d9ad098d898fab7fc0b295e4764829c07103a408433eb24d7b117d73268e",
+      "process_started_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-81128046-9fd3-4438-bf98-41a858bad9fa.process-started.json",
+      "process_started_sha256": "38326030837236842cab0a39289fe20abd6908393f13cace78a17ec4234431ca",
+      "process_stopped_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-81128046-9fd3-4438-bf98-41a858bad9fa.process-stopped.json",
+      "process_stopped_sha256": "a145d7d2404b18dfbc5f391310de02ddbd68dde9e98e01c2a7396493343299b9",
+      "root_pid": 4836,
+      "actual_bridge_pid": 35720,
+      "root_os_start": "2026-10-06T10:07:14.276Z",
+      "exited_observed_children": 10,
+      "original_owner_ACK_flushes": 2,
+      "cache_binary64": {
+        "total_share": "419c0111541566d0",
+        "total_size_yi": "40d01d38c67e7692"
+      },
+      "recomputed_original_fourfield_digest": "60a4a0e36e03e7a50955fcb3cfc81b1af3a2d2a5aa2b09e566437f59b43e7277"
+    },
+    {
+      "day": "2026-09-18",
+      "slice_id": "slice-d72504ad-e9ba-4139-9b19-1df934ee1498",
+      "submitted_revision": 4,
+      "submitted_at": "2026-10-06T10:07:53.776495700Z",
+      "slice_event_states": [
+        "PENDING",
+        "RUNNING",
+        "FETCHED",
+        "VALIDATED",
+        "SUBMITTED",
+        "ACKNOWLEDGED",
+        "VERIFIED"
+      ],
+      "response_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-809d7a39-b84c-4d31-a442-a7f8b8a2d324.response.json",
+      "response_sha256": "72c3fa27277e5e596503e670b15292d830f49a4f91d114934559798b2f05ee8a",
+      "intent_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-809d7a39-b84c-4d31-a442-a7f8b8a2d324.intent.json",
+      "intent_sha256": "28cd8ffcdd9c99aff0d25902184ebf22b9c18990ccba7237c8633bc82573131e",
+      "preview_sha256": "e4d58877840793f80eb6950e3bc9943cdd8766276855b8ac65f370b559fe54ac",
+      "atomic_claim_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-owner-intent-claims\\704177cdad63d6e64ba2c8b3bda1f0a390a882f02e9c833d39d5c3427e4a49f6.claim.json",
+      "atomic_claim_sha256": "f5ed1937a678cc3720ee567f3401bbf4f6ce239e06bba32149b09abc306dd654",
+      "process_started_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-809d7a39-b84c-4d31-a442-a7f8b8a2d324.process-started.json",
+      "process_started_sha256": "51dbfbcb2b19ad551ae6252efd38c7d50b9d5e85e481e099202efb342a68c6ad",
+      "process_stopped_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-809d7a39-b84c-4d31-a442-a7f8b8a2d324.process-stopped.json",
+      "process_stopped_sha256": "2bb4f6f37c401b7af9986cfa830c353105b22b79695322d2256adfa9fa285c6e",
+      "root_pid": 19368,
+      "actual_bridge_pid": 43024,
+      "root_os_start": "2026-10-06T10:07:53.835Z",
+      "exited_observed_children": 10,
+      "original_owner_ACK_flushes": 2,
+      "cache_binary64": {
+        "total_share": "419bfd6edc902de0",
+        "total_size_yi": "40d0586076f780d0"
+      },
+      "recomputed_original_fourfield_digest": "532eea00f9542812a42f8d5595e462d1e28e56a4da9af22e0f9c42ef5383b100"
+    }
+  ],
+  "original_owner_misses": 2,
+  "original_owner_hits": 0,
+  "original_owner_ACK_flushes": 4,
+  "cache_rows": 2,
+  "receipt_rows": 2,
+  "full_cache_and_receipt_field_crosscomparisons": 60,
+  "independent_binary64_crosscomparisons": 12,
+  "original_owner_fourfield_digest_recomputed": true,
+  "live_key_and_range_comparisons": 20,
+  "live_reference_rawbits": 8,
+  "live_storage_rawbits": 8,
+  "double_tolerance": 0,
+  "source_actual_counts": {
+    "etf_share": 1532,
+    "etf_daily": 4274,
+    "etf_basic": 2958
+  },
+  "source_physical_metadata_stable": true,
+  "empty_target_original_NULL_preserved": true,
+  "target_final_physical_and_WAL_txn": 2,
+  "actual_cursor": {
+    "queryFingerprint": "9676f0659142ebe0b9d7db6a14692c6b35dfeb586e270f4377e22a7263a370b7",
+    "keyValues": [
+      "2026-09-17",
+      "c61e15b6474623ef4a8b25be1b81bf1c3367fd1da2754fbcdf497b86756c6cc1"
+    ],
+    "sourceVersion": "table:etf_market_overview_daily_cache:id:12:directory:etf_market_overview_daily_cache~12:txn:2:wal-seq:2"
+  },
+  "independently_recomputed_queryFingerprint": "9676f0659142ebe0b9d7db6a14692c6b35dfeb586e270f4377e22a7263a370b7",
+  "queryFingerprint_parts": [
+    "etf_market_overview_daily_cache",
+    1,
+    "etf_market_overview_daily_cache",
+    "[Column[sourceName=trade_date, logicalName=trade_date, storageName=trade_date, storageType=TIMESTAMP, nullable=false, meaning=Daily joined ETF overview bucket and complete generation key, temporal=TemporalContract[kind=BUSINESS_DATE, sourceFormat=BASIC, zone=calendar, precision=DAY, meaning=Original Python daily SAMPLE BY date; exact UTC-midnight TIMESTAMP calendar carrier], legacyNullSentinels=[]], Column[sourceName=etf_count, logicalName=etf_count, storageName=etf_count, storageType=LONG, nullable=false, meaning=Required exact count_distinct of full etf_share.ts_code after the date/code INNER JOIN, temporal=null, legacyNullSentinels=[]], Column[sourceName=total_share, logicalName=total_share, storageName=total_share, storageType=DOUBLE, nullable=true, meaning=Sum of joined etf_share.fd_share in ten-thousand-share units; no additional conversion, temporal=null, legacyNullSentinels=[]], Column[sourceName=total_size_yi, logicalName=total_size_yi, storageName=total_size_yi, storageType=DOUBLE, nullable=true, meaning=Yi yuan: original sum(fd_share * etf_daily.close)/10000.0; preserve nulls and stored values, temporal=null, legacyNullSentinels=[]], Column[sourceName=source_version, logicalName=source_version, storageName=source_version, storageType=SYMBOL, nullable=false, meaning=Complete lowercase SHA-256 of original SQL and etf_share/etf_daily/relevant timeless etf_basic partition state, temporal=null, legacyNullSentinels=[]]]",
+    [
+      "trade_date",
+      "source_version"
+    ],
+    [
+      "trade_date",
+      "etf_count",
+      "total_share",
+      "total_size_yi",
+      "source_version"
+    ],
+    [
+      "trade_date",
+      "java.time.LocalDate:2026-09-17",
+      "java.time.LocalDate:2026-09-22"
+    ]
+  ],
+  "process_stop": {
+    "immutable_root_and_child_hashes_bound": true,
+    "actual_bridge_OS_birth_and_ancestry_proved": true,
+    "all_exit_observed": true,
+    "readonly_GetProcess_PIDs": [
+      4836,
+      11136,
+      35720,
+      35964,
+      17260,
+      42416,
+      24012,
+      35788,
+      27652,
+      31224,
+      48052,
+      19368,
+      23600,
+      43024,
+      11392,
+      28612,
+      43368,
+      41128,
+      33868,
+      44832,
+      47412,
+      39624
+    ],
+    "readonly_GetProcess_checked_count": 22,
+    "readonly_GetProcess_existing_matches": 0,
+    "readonly_OS_check_method": "PowerShell Get-Process -Id for both actual root PIDs plus all 20 observed child PIDs, with -ErrorAction SilentlyContinue; zero existing PID matches returned. No process termination or service interaction."
+  },
+  "checkpoint_after": "2026-09-18",
+  "formal_written_rows": 0,
+  "review_database_writes": 0,
+  "findings": [],
+  "prior_failure_preserved_paths": [
+    "commands/java-live-first-20261006.log",
+    "commands/java-live-first-failed-xml-20261006",
+    "commands/coordinator-first-readonly-failure-review-20261006.json"
+  ],
+  "recommendation": "accepted_for_hit_stage: retain the same ledger and frozen source identity for the finite HIT stage. Human confirmation remains pending; D102 may not start.",
+  "scope": "Private frozen real-source snapshot/original read-through publisher, no formal current-hit or provider universe claim",
+  "notes": [
+    "Digest follows actual Python SPECS.fields: trade_date,etf_count,total_share,total_size_yi; source_version is complete business key and not part of this original record digest.",
+    "Immutable original invocation claim remains UNKNOWN as no-replay intent; final ACKs are in separate actual response and actual process exit in stopped proof.",
+    "Normal known-ACK ledger verification.writerStopped=false is complemented by actual Gateway tree-stop proof and independent readonly OS process absence."
+  ],
+  "coordinator_recommendation": "accepted_for_hit_stage",
+  "human_confirmation": "pending",
+  "D102_may_start": false,
+  "review_output_created_new_only": true
+}

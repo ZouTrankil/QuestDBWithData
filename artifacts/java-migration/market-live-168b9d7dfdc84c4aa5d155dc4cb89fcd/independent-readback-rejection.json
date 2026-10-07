@@ -1,0 +1,11 @@
+{
+  "task": "D021",
+  "status": "INDEPENDENT_READBACK_REJECTED",
+  "rowsWritten": 4450,
+  "formalTableMutated": false,
+  "failure": "D002 reference fingerprint was computed with insertion-order keys while retained receipt uses sorted map keys. Independent verifier and seven-day receipt validation reject mismatch.",
+  "recordedReferenceFingerprint": "d004ac6855c6269fa4648cfe1339515431574c100c0b1b107c417ac0f691da90",
+  "retainedSortedReferenceFingerprint": "4c8bfe2b7818ec1dd3666a6a267e883494981dedf190f387db9d2fe63fc809f0",
+  "fix": "NameResolver explicitly canonicalizes map keys before hashing. Original receipts, target and ledger remain unchanged; new isolated acceptance run required.",
+  "accepted": false
+}

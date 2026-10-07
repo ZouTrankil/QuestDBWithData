@@ -1,0 +1,213 @@
+{
+  "task_id": "D095",
+  "checked_at": "2026-10-06T05:08:49.435639+00:00",
+  "mode": "formal_instance_read_only",
+  "formal_mutated": false,
+  "mv_state": {
+    "view_name": "mv_market_breadth_daily_v1",
+    "refresh_type": "timer",
+    "base_table_name": "stk_factor",
+    "last_refresh_start_timestamp": null,
+    "last_refresh_finish_timestamp": "2026-09-21T23:56:50.310426Z",
+    "view_sql": "SELECT\n    trade_date,\n    count() AS stock_count,\n    sum(CASE WHEN pct_change > 0 THEN 1 ELSE 0 END) AS up_count,\n    sum(CASE WHEN pct_change < 0 THEN 1 ELSE 0 END) AS down_count,\n    sum(CASE WHEN pct_change = 0 THEN 1 ELSE 0 END) AS flat_count,\n    avg(pct_change) AS avg_pct_change,\n    sum(amount) / 100000.0 AS total_amount_yi\nFROM stk_factor\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+    "view_table_dir_name": "mv_market_breadth_daily_v1~1812",
+    "invalidation_reason": "materialized view is ahead of base table and cannot be synchronized",
+    "view_status": "invalid",
+    "refresh_period_hi": null,
+    "refresh_base_table_txn": 12,
+    "base_table_txn": 14,
+    "refresh_limit": 0,
+    "refresh_limit_unit": null,
+    "timer_time_zone": null,
+    "timer_start": "2026-09-18T15:32:22.866888Z",
+    "timer_interval": 1,
+    "timer_interval_unit": "MINUTE",
+    "period_length": 0,
+    "period_length_unit": null,
+    "period_delay": 0,
+    "period_delay_unit": null,
+    "refresh_avg_commit_nanos": 0,
+    "refresh_avg_scan_sample_nanos": 0,
+    "refresh_avg_scan_range_ts_units": 0,
+    "refresh_gap_threshold_ts_units": 2000000
+  },
+  "public_alias": {
+    "view_name": "v_market_breadth_daily",
+    "view_sql": "SELECT * FROM mv_market_breadth_daily_v1",
+    "view_status": "valid"
+  },
+  "python_sql_sha256": "f7e7d1f84e29f72a0df4613ada216076c0a0dc2ccb3f9cbc18a00d719939b139",
+  "catalog_sql_sha256": "f7e7d1f84e29f72a0df4613ada216076c0a0dc2ccb3f9cbc18a00d719939b139",
+  "catalog_sql_matches_python": true,
+  "tables": [
+    {
+      "table_name": "mv_market_breadth_daily_v1",
+      "table_row_count": 2212,
+      "table_txn": 2,
+      "partitionBy": "MONTH",
+      "walEnabled": true,
+      "dedup": false,
+      "table_min_timestamp": "2010-01-29T00:00:00.000000Z",
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z",
+      "table_suspended": false
+    },
+    {
+      "table_name": "stk_factor",
+      "table_row_count": 10265031,
+      "table_txn": 14,
+      "partitionBy": "YEAR",
+      "walEnabled": true,
+      "dedup": true,
+      "table_min_timestamp": "2010-01-29T00:00:00.000000Z",
+      "table_max_timestamp": "2026-09-24T00:00:00.000000Z",
+      "table_suspended": false
+    }
+  ],
+  "mv_columns": [
+    {
+      "column": "trade_date",
+      "type": "TIMESTAMP",
+      "designated": true,
+      "upsertKey": false
+    },
+    {
+      "column": "stock_count",
+      "type": "LONG",
+      "designated": false,
+      "upsertKey": false
+    },
+    {
+      "column": "up_count",
+      "type": "LONG",
+      "designated": false,
+      "upsertKey": false
+    },
+    {
+      "column": "down_count",
+      "type": "LONG",
+      "designated": false,
+      "upsertKey": false
+    },
+    {
+      "column": "flat_count",
+      "type": "LONG",
+      "designated": false,
+      "upsertKey": false
+    },
+    {
+      "column": "avg_pct_change",
+      "type": "DOUBLE",
+      "designated": false,
+      "upsertKey": false
+    },
+    {
+      "column": "total_amount_yi",
+      "type": "DOUBLE",
+      "designated": false,
+      "upsertKey": false
+    }
+  ],
+  "source_key_columns": [
+    {
+      "column": "ts_code",
+      "type": "SYMBOL",
+      "designated": false,
+      "upsertKey": true
+    },
+    {
+      "column": "trade_date",
+      "type": "TIMESTAMP",
+      "designated": true,
+      "upsertKey": true
+    }
+  ],
+  "bounded_range": [
+    "2026-09-17",
+    "2026-09-19"
+  ],
+  "source_aggregate_rows": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "stock_count": 5552,
+      "up_count": 2575,
+      "down_count": 2820,
+      "flat_count": 157,
+      "avg_pct_change": 0.12166565201729085,
+      "total_amount_yi": 18343.331240500058
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4234,
+      "down_count": 1152,
+      "flat_count": 167,
+      "avg_pct_change": 1.5667630109850548,
+      "total_amount_yi": 20929.055246700013
+    }
+  ],
+  "materialized_rows": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "stock_count": 5552,
+      "up_count": 2575,
+      "down_count": 2820,
+      "flat_count": 157,
+      "avg_pct_change": 0.12166565201729085,
+      "total_amount_yi": 18343.331240500058
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4234,
+      "down_count": 1152,
+      "flat_count": 167,
+      "avg_pct_change": 1.5667630109850548,
+      "total_amount_yi": 20929.055246700013
+    }
+  ],
+  "compared_values": 12,
+  "bounded_values_match": true,
+  "gap_range": [
+    "2026-09-19",
+    "2026-09-25"
+  ],
+  "gap_source_aggregate_rows": [
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "stock_count": 5553,
+      "up_count": 4536,
+      "down_count": 936,
+      "flat_count": 81,
+      "avg_pct_change": 1.9182546011165114,
+      "total_amount_yi": 20481.336778100027
+    },
+    {
+      "trade_date": "2026-09-22T00:00:00.000000Z",
+      "stock_count": 4808,
+      "up_count": 2116,
+      "down_count": 2573,
+      "flat_count": 119,
+      "avg_pct_change": 0.20026601497504148,
+      "total_amount_yi": 18295.655161899987
+    },
+    {
+      "trade_date": "2026-09-23T00:00:00.000000Z",
+      "stock_count": 5555,
+      "up_count": 1890,
+      "down_count": 3564,
+      "flat_count": 101,
+      "avg_pct_change": -0.36771620162016333,
+      "total_amount_yi": 17815.785291599976
+    },
+    {
+      "trade_date": "2026-09-24T00:00:00.000000Z",
+      "stock_count": 5556,
+      "up_count": 1119,
+      "down_count": 4306,
+      "flat_count": 131,
+      "avg_pct_change": -1.2657974982001485,
+      "total_amount_yi": 16685.03285399999
+    }
+  ],
+  "gap_materialized_rows": []
+}

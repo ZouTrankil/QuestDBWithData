@@ -1,0 +1,22 @@
+{
+  "timeoutMillis": 30000,
+  "members": [
+    {
+      "memberId": "d085_isolated_manifest",
+      "datasetId": "l2_dataset_manifest",
+      "definitionVersion": 1,
+      "query": {
+        "columns": [
+          "trade_date", "symbol", "market", "board", "source_root", "output_root",
+          "feature_version", "daily_feature_ok", "t0_ok", "raw_row_counts", "output_paths",
+          "cost_config", "horizons_min", "errors", "batch_id", "trade_date_ts"
+        ],
+        "equalities": { "symbol": "000001.SZ" },
+        "rangeColumn": "trade_date",
+        "fromInclusive": "2026-09-21",
+        "toExclusive": "2026-09-25",
+        "pageSize": 10
+      }
+    }
+  ]
+}

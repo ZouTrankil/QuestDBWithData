@@ -1,0 +1,398 @@
+{
+  "protocol_version": 1,
+  "task_id": "D102",
+  "checked_at": "2026-10-06T13:41:35.860958+00:00",
+  "status": "VERIFIED_UNSUBMITTED_PRECREATE_FAILURE_REVIEW",
+  "decision": "accepted_for_new_guarded_precreate_attempt_only",
+  "blockers": [],
+  "review_scope": "Local filesystem immutable evidence and actual project SQLite mode=ro/query_only only; no service/native/owner/test/Gradle calls.",
+  "new_output": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-history-rule-new-attempt-20261006.json",
+  "new_output_exists_before_review": false,
+  "failed_evidence": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-history-rule-20261006.json",
+    "sha256": "c37014e6c236eba748ac7048b393c07a6cd8330e0ea063aa674288f94eec5e82"
+  },
+  "readonly_diagnostic": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\failed-history-rule-precreate-diagnostic-20261006.json",
+    "sha256": "a1f82c66ec7c8029f00401ccee681b212abeac08353ab320ea18ddfc49779c26"
+  },
+  "process_identity_review": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-completed-producer-identity-review-20261006.json",
+    "sha256": "810c456a7c024a497a375a2369000f0991779bdea8a1975a440efec006e28cad"
+  },
+  "script": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\audit_d102_etf_view.py",
+    "sha256": "818e4216602ab2bbdee840d650093e0eb1cb11366bad633cb8488b4d8d8549cb"
+  },
+  "pure_tests": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d102_script_guards.py",
+    "sha256": "bb90338c52f97f2c599bbe3927ca2d52f38a0bac62d1a97ad4f9c4029e41cbc9"
+  },
+  "python_guards": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\python-historical-identity-leaf-guards-20261006.json",
+    "sha256": "da716be168adc3ad7ece00d45f5cd1143dc4d78fad340b23165156468da4ff53"
+  },
+  "python_guard_log": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\python-historical-identity-leaf-guards-20261006.log",
+    "sha256": "ac77e7a9db41cae7ab187e5ef4937ec5d75bea1a010edb0809e05aaebb872e73"
+  },
+  "static_review": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-historical-identity-rule-review-20261006.json",
+    "sha256": "a3f4e0a5992e64562467f761779503dda084ef84618951f55e2fe58947d7411b"
+  },
+  "real_file_only_history_consumption": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\actual-historical-proof-consumption-20261006.json",
+    "sha256": "1562d9a876efa1714ef8899257910ab514c7984562408f47d8a05ba4264d27bf"
+  },
+  "d101_gate": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\coordinator-review-20261006.json",
+    "sha256": "2201c05e5e05c4b056a5f3170be86ed86c230fb08e1d7dcf42f93c7228fccaef"
+  },
+  "d101_typed_frontier": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-typed-write-20261006.json",
+    "sha256": "6914f8cddb9d1bf638d70d6db7a8100cc3ea3631f141267b4d145ec70dce0cf5"
+  },
+  "private_target": {
+    "pid": 23388,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19020,
+    "pg_port": 18832
+  },
+  "unchanged_bindings": {
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-history-rule-20261006.json": "c37014e6c236eba748ac7048b393c07a6cd8330e0ea063aa674288f94eec5e82",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\failed-history-rule-precreate-diagnostic-20261006.json": "a1f82c66ec7c8029f00401ccee681b212abeac08353ab320ea18ddfc49779c26",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-completed-producer-identity-review-20261006.json": "810c456a7c024a497a375a2369000f0991779bdea8a1975a440efec006e28cad",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\audit_d102_etf_view.py": "818e4216602ab2bbdee840d650093e0eb1cb11366bad633cb8488b4d8d8549cb",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d102_script_guards.py": "bb90338c52f97f2c599bbe3927ca2d52f38a0bac62d1a97ad4f9c4029e41cbc9",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\python-historical-identity-leaf-guards-20261006.json": "da716be168adc3ad7ece00d45f5cd1143dc4d78fad340b23165156468da4ff53",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\python-historical-identity-leaf-guards-20261006.log": "ac77e7a9db41cae7ab187e5ef4937ec5d75bea1a010edb0809e05aaebb872e73",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-historical-identity-rule-review-20261006.json": "a3f4e0a5992e64562467f761779503dda084ef84618951f55e2fe58947d7411b",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\actual-historical-proof-consumption-20261006.json": "1562d9a876efa1714ef8899257910ab514c7984562408f47d8a05ba4264d27bf",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\coordinator-review-20261006.json": "2201c05e5e05c4b056a5f3170be86ed86c230fb08e1d7dcf42f93c7228fccaef",
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-typed-write-20261006.json": "6914f8cddb9d1bf638d70d6db7a8100cc3ea3631f141267b4d145ec70dce0cf5"
+  },
+  "historical_process_file_count": 659,
+  "historical_response_file_count": 90,
+  "eligible_identity_count": 556,
+  "eligible_pids": 466,
+  "hard_deny_pids": [
+    1960,
+    2504,
+    15144,
+    15328,
+    17572,
+    23980,
+    27172,
+    29156,
+    45192
+  ],
+  "historical_pid_census": 475,
+  "full_historical_file_and_identity_bindings_unchanged": true,
+  "original_two_failed_attempt_bindings_unchanged": true,
+  "failed_before_first_quiescence_completed": true,
+  "failed_artifact_isolated_keys": [
+    "private_target_attestation"
+  ],
+  "create_once_claim_absent_in_diagnostic_and_current_filesystem": true,
+  "create_once_claim_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\v_etf_market_overview_daily-create-once.json",
+  "prior_create_submissions": 0,
+  "durable_unknown_ack_exists": false,
+  "previous_failure_offending_native_match_recorded": false,
+  "specific_rejected_pid_at_original_failure_known": false,
+  "later_diagnostic_saved_native_checks": [
+    {
+      "pid": 19272,
+      "saved_current_birth": "2026-10-06T11:05:07.4004850Z",
+      "all_original_stop_count": 1,
+      "latest_original_stop": "2026-10-06T11:02:08.519950200Z",
+      "strictly_later": true
+    },
+    {
+      "pid": 23832,
+      "saved_current_birth": "2026-10-06T12:27:48.3086350Z",
+      "all_original_stop_count": 1,
+      "latest_original_stop": "2026-10-06T10:18:03.668374700Z",
+      "strictly_later": true
+    },
+    {
+      "pid": 27028,
+      "saved_current_birth": "2026-10-06T12:27:48.2663960Z",
+      "all_original_stop_count": 1,
+      "latest_original_stop": "2026-10-06T10:09:36.077659Z",
+      "strictly_later": true
+    },
+    {
+      "pid": 32256,
+      "saved_current_birth": "2026-10-06T13:38:08.7017610Z",
+      "all_original_stop_count": 1,
+      "latest_original_stop": "2026-10-06T11:01:55.951000600Z",
+      "strictly_later": true
+    },
+    {
+      "pid": 43212,
+      "saved_current_birth": "2026-10-06T12:27:48.2562940Z",
+      "all_original_stop_count": 2,
+      "latest_original_stop": "2026-10-06T11:24:54.753157900Z",
+      "strictly_later": true
+    },
+    {
+      "pid": 46684,
+      "saved_current_birth": "2026-10-06T12:22:26.3377980Z",
+      "all_original_stop_count": 1,
+      "latest_original_stop": "2026-10-06T11:45:49.086911400Z",
+      "strictly_later": true
+    }
+  ],
+  "later_diagnostic_is_not_original_failure_pid_proof": true,
+  "readonly_ledger_proofs": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-45e5e7ce-b273-4510-8d15-e1abe5397550.sqlite3",
+      "access": "mode=ro; PRAGMA query_only=ON",
+      "runs": [
+        {
+          "id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+          "parent_run_id": null,
+          "job_id": "data.etf_market_overview_daily_cache",
+          "job_version": 1,
+          "target_id": "questdb-012f0bebfa498858a5ebe3040de1b5b3c9dc18dabfc6f7cbcd31ad2899d41af9"
+        },
+        {
+          "id": "d101-3a2751d4-f3fa-473d-b5b7-bca65bfe39cd",
+          "parent_run_id": null,
+          "job_id": "data.etf_market_overview_daily_cache",
+          "job_version": 1,
+          "target_id": "questdb-012f0bebfa498858a5ebe3040de1b5b3c9dc18dabfc6f7cbcd31ad2899d41af9"
+        },
+        {
+          "id": "d101-66903d41-b564-4c6e-8a7d-f7b8422bad88",
+          "parent_run_id": null,
+          "job_id": "data.etf_market_overview_daily_cache",
+          "job_version": 1,
+          "target_id": "questdb-012f0bebfa498858a5ebe3040de1b5b3c9dc18dabfc6f7cbcd31ad2899d41af9"
+        },
+        {
+          "id": "d101-f8d5bfff-c7f8-4be0-b263-5984335f254f",
+          "parent_run_id": null,
+          "job_id": "data.etf_market_overview_daily_cache",
+          "job_version": 1,
+          "target_id": "questdb-012f0bebfa498858a5ebe3040de1b5b3c9dc18dabfc6f7cbcd31ad2899d41af9"
+        },
+        {
+          "id": "run-7cab5bf5-4941-47c5-abfd-2a4b07288c79",
+          "parent_run_id": "write-group-6a6770da-bf75-40ae-beea-dded35f5feb3",
+          "job_id": "write.etf_market_overview_daily_cache",
+          "job_version": 1,
+          "target_id": "questdb-012f0bebfa498858a5ebe3040de1b5b3c9dc18dabfc6f7cbcd31ad2899d41af9"
+        },
+        {
+          "id": "write-group-6a6770da-bf75-40ae-beea-dded35f5feb3",
+          "parent_run_id": null,
+          "job_id": "group.prepared_writes",
+          "job_version": 1,
+          "target_id": "group-control"
+        }
+      ],
+      "entries": [
+        {
+          "id": "attempt-86516af8-49bf-453e-be69-9284978be066",
+          "kind": "ATTEMPT",
+          "run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+          "state": "VERIFIED",
+          "revision": 3
+        },
+        {
+          "id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+          "kind": "RUN",
+          "run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+          "state": "VERIFIED",
+          "revision": 3
+        },
+        {
+          "id": "slice-5c5d6c88-b2e2-46dd-ba8c-42a781c5a4ad",
+          "kind": "SLICE",
+          "run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+          "state": "VERIFIED",
+          "revision": 6
+        },
+        {
+          "id": "attempt-149bae3a-831b-4abc-a4e8-c6c96b239ada",
+          "kind": "ATTEMPT",
+          "run_id": "d101-3a2751d4-f3fa-473d-b5b7-bca65bfe39cd",
+          "state": "VERIFIED",
+          "revision": 2
+        },
+        {
+          "id": "d101-3a2751d4-f3fa-473d-b5b7-bca65bfe39cd",
+          "kind": "RUN",
+          "run_id": "d101-3a2751d4-f3fa-473d-b5b7-bca65bfe39cd",
+          "state": "VERIFIED",
+          "revision": 2
+        },
+        {
+          "id": "slice-181e5428-4ab6-464e-ba5d-86e83051d714",
+          "kind": "SLICE",
+          "run_id": "d101-3a2751d4-f3fa-473d-b5b7-bca65bfe39cd",
+          "state": "VERIFIED",
+          "revision": 6
+        },
+        {
+          "id": "slice-d72504ad-e9ba-4139-9b19-1df934ee1498",
+          "kind": "SLICE",
+          "run_id": "d101-3a2751d4-f3fa-473d-b5b7-bca65bfe39cd",
+          "state": "VERIFIED",
+          "revision": 6
+        },
+        {
+          "id": "attempt-1b698d82-436f-46d1-922c-6a60a014b4ad",
+          "kind": "ATTEMPT",
+          "run_id": "d101-66903d41-b564-4c6e-8a7d-f7b8422bad88",
+          "state": "VERIFIED",
+          "revision": 2
+        },
+        {
+          "id": "d101-66903d41-b564-4c6e-8a7d-f7b8422bad88",
+          "kind": "RUN",
+          "run_id": "d101-66903d41-b564-4c6e-8a7d-f7b8422bad88",
+          "state": "VERIFIED",
+          "revision": 2
+        },
+        {
+          "id": "slice-b4c6fb07-6003-4f35-a985-772a6f14eec1",
+          "kind": "SLICE",
+          "run_id": "d101-66903d41-b564-4c6e-8a7d-f7b8422bad88",
+          "state": "VERIFIED",
+          "revision": 6
+        },
+        {
+          "id": "slice-f7ddf9fc-62e7-4ba5-ac65-e41404831f3e",
+          "kind": "SLICE",
+          "run_id": "d101-66903d41-b564-4c6e-8a7d-f7b8422bad88",
+          "state": "VERIFIED",
+          "revision": 6
+        },
+        {
+          "id": "attempt-1c3ca843-8440-425e-8d1a-1089eb95c9a9",
+          "kind": "ATTEMPT",
+          "run_id": "d101-f8d5bfff-c7f8-4be0-b263-5984335f254f",
+          "state": "VERIFIED",
+          "revision": 2
+        },
+        {
+          "id": "d101-f8d5bfff-c7f8-4be0-b263-5984335f254f",
+          "kind": "RUN",
+          "run_id": "d101-f8d5bfff-c7f8-4be0-b263-5984335f254f",
+          "state": "VERIFIED",
+          "revision": 2
+        },
+        {
+          "id": "slice-0098365e-4611-4493-b8eb-68778fd129e5",
+          "kind": "SLICE",
+          "run_id": "d101-f8d5bfff-c7f8-4be0-b263-5984335f254f",
+          "state": "VERIFIED",
+          "revision": 6
+        },
+        {
+          "id": "slice-116033e7-9a05-490b-a9f8-451ef425e71c",
+          "kind": "SLICE",
+          "run_id": "d101-f8d5bfff-c7f8-4be0-b263-5984335f254f",
+          "state": "VERIFIED",
+          "revision": 6
+        },
+        {
+          "id": "slice-b165b263-936c-4093-9a98-daef74477812",
+          "kind": "SLICE",
+          "run_id": "d101-f8d5bfff-c7f8-4be0-b263-5984335f254f",
+          "state": "VERIFIED",
+          "revision": 6
+        },
+        {
+          "id": "attempt-d0e8e2d5-edcf-4d23-adcf-3a4f5a11a373",
+          "kind": "ATTEMPT",
+          "run_id": "run-7cab5bf5-4941-47c5-abfd-2a4b07288c79",
+          "state": "VERIFIED",
+          "revision": 2
+        },
+        {
+          "id": "run-7cab5bf5-4941-47c5-abfd-2a4b07288c79",
+          "kind": "RUN",
+          "run_id": "run-7cab5bf5-4941-47c5-abfd-2a4b07288c79",
+          "state": "VERIFIED",
+          "revision": 2
+        },
+        {
+          "id": "slice-219b5b66-bfe4-4a50-ba10-47cba772d68e",
+          "kind": "SLICE",
+          "run_id": "run-7cab5bf5-4941-47c5-abfd-2a4b07288c79",
+          "state": "VERIFIED",
+          "revision": 6
+        },
+        {
+          "id": "slice-35c1de43-8aaf-4d25-bed4-dda8122d0a00",
+          "kind": "SLICE",
+          "run_id": "run-7cab5bf5-4941-47c5-abfd-2a4b07288c79",
+          "state": "VERIFIED",
+          "revision": 6
+        },
+        {
+          "id": "slice-b5f008e8-2c6d-4d16-8e75-105324895d69",
+          "kind": "SLICE",
+          "run_id": "run-7cab5bf5-4941-47c5-abfd-2a4b07288c79",
+          "state": "VERIFIED",
+          "revision": 6
+        },
+        {
+          "id": "write-group-6a6770da-bf75-40ae-beea-dded35f5feb3",
+          "kind": "RUN",
+          "run_id": "write-group-6a6770da-bf75-40ae-beea-dded35f5feb3",
+          "state": "VERIFIED",
+          "revision": 2
+        }
+      ],
+      "run_count": 6,
+      "entry_count": 22,
+      "states": {
+        "VERIFIED": 22
+      },
+      "interval_leases": 0,
+      "cancellations": 0,
+      "equals_frozen_identity_review_ledger": true
+    }
+  ],
+  "five_protected_table_frontiers_equal_accepted_typed": true,
+  "saved_private_view_absent": true,
+  "saved_native_currently_refused": [],
+  "python_unique_guard_cases": 81,
+  "automatic_retry": false,
+  "next_task_admitted": false,
+  "java_live_admitted": false,
+  "max_new_create_attempts": 1,
+  "required_unchanged_policy": "Exact existing protocol2 birth-after-all-complete-STOP rule only. Default rejection, nine hard-denied PIDs, unknown/missing OS birth, native unavailability, ledger/history/frontier change, cancellation and UNKNOWN CREATE remain fail-closed. No process-name, parent or executable exemption.",
+  "required_at_every_execution_boundary": [
+    "Native attestation of PID23388/private root/listeners",
+    "All historical process and response SHA bindings and protocol2 review SHA",
+    "Actual ledger quiescence and fixed protected five table frontiers",
+    "Fresh complete PID census sampling: present hard-denied PIDs refuse; every other match must have known birth strictly later than all reviewed old STOPs",
+    "Missing-only exact ordinary CREATE, durable UNKNOWN before at most one driver submit; stop without retry on exception"
+  ],
+  "limits": [
+    "The third failed artifact did not retain its offending native match, so this review does not identify the refused PID or replace the original failure with the later six-match diagnostic.",
+    "Six later saved native rows independently satisfy the unchanged policy at that diagnostic time; they are diagnostic evidence, not a current or future allowlist.",
+    "This review recommends one explicitly admitted new guarded output identity after a known unsubmitted failure. It does not automatically retry, rename, overwrite or repair any earlier failed attempt.",
+    "Private CREATE and Java live acceptance have not passed; no data PASS, universe/cache/freshness/cutover or D103 admission is claimed."
+  ],
+  "actions": {
+    "artifact_writes": 1,
+    "old_evidence_overwrites": 0,
+    "code_edits": 0,
+    "questdb_queries": 0,
+    "native_queries": 0,
+    "owner_invocations": 0,
+    "tests": 0,
+    "gradle": 0,
+    "ledger_writes": 0,
+    "ddl_submissions": 0,
+    "source_writes": 0,
+    "formal_writes": 0
+  }
+}

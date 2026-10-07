@@ -1,0 +1,48 @@
+{
+  "source_dataset": "D:\\work\\fund_2\\back-monitor\\artifacts\\level2_t0_dataset\\l2_daily_features",
+  "target_table": "l2_daily_features",
+  "target_read_only": true,
+  "symbol": "000001.SZ",
+  "dates": [
+    "20260921",
+    "20260922",
+    "20260923",
+    "20260924"
+  ],
+  "comparison": "all 110 fields; null and floating NaN are equivalent; doubles use rel_tol=1e-6 and abs_tol=1e-9",
+  "source_rows": 4,
+  "target_rows": 4,
+  "fields_compared": 440,
+  "mismatches": [],
+  "per_date": [
+    {
+      "date": "20260921",
+      "source_rows": 1,
+      "target_rows": 1,
+      "columns": 110,
+      "mismatches": 0
+    },
+    {
+      "date": "20260922",
+      "source_rows": 1,
+      "target_rows": 1,
+      "columns": 110,
+      "mismatches": 0
+    },
+    {
+      "date": "20260923",
+      "source_rows": 1,
+      "target_rows": 1,
+      "columns": 110,
+      "mismatches": 0
+    },
+    {
+      "date": "20260924",
+      "source_rows": 1,
+      "target_rows": 1,
+      "columns": 110,
+      "mismatches": 0
+    }
+  ],
+  "passed": true
+}

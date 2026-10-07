@@ -1,0 +1,48 @@
+{
+  "task_id": "D098",
+  "reviewed_at": "2026-10-06T15:13:35.556290+08:00",
+  "reviewer": "primary-coordinator + independent-read-only-review",
+  "decision": "accepted_for_serial_progress",
+  "human_review": "pending_review",
+  "validation_scope": "isolated_actual_QuestDB_native_MV_from_frozen_real_15_column_source",
+  "tests": {
+    "unique_java": 162,
+    "python_pure_mock_guards": 31,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "source_rows": 23773,
+  "source_field_comparisons": 356595,
+  "aggregate_field_comparisons": 39,
+  "typed_read_field_comparisons": 39,
+  "main_ledger_runs": {
+    "VERIFIED": 6,
+    "VERIFIED_EMPTY": 1,
+    "FAILED": 3,
+    "CANCELLED": 1,
+    "IN_DOUBT": 0
+  },
+  "retained_interval_leases": 0,
+  "configured_read_group_verified": true,
+  "actual_cli_failed_increment_resume_verified": true,
+  "formal_invalid_rejected": true,
+  "formal_writes": 0,
+  "production_ready": false,
+  "known_limitations": [
+    "Formal MV remains invalid; no formal repair or FULL was executed.",
+    "Source fixture includes required 15 of 110 columns; source universe/provider readiness is not certified.",
+    "Historical initial fixture ran before added per-batch script markers; whole-phase ACK and exact readback retained. Java real increment has 16 durable batch ACKs.",
+    "Initial calendar failure allocated a ledger path but did not create a ledger or run."
+  ],
+  "evidence": [
+    "commands/java-materialize-acceptance-20261006.json",
+    "commands/java-cli-increment-resume-20261006.json",
+    "commands/java-mv-read-acceptance-20261006.json",
+    "commands/target-tests-20261006.json",
+    "commands/python-script-guards-20261006.json",
+    "commands/java-dataset-registration-20261006.json",
+    "commands/java-job-registration-20261006.json"
+  ],
+  "next_task": "D099"
+}

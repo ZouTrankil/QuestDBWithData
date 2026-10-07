@@ -1,0 +1,202 @@
+{
+  "task_id": "D103",
+  "status": "PASS",
+  "review_type": "INDEPENDENT_STATIC_FILE_ONLY",
+  "reviewed_at": "2026-10-06T15:39:30.2882629Z",
+  "recommendation": "eligible_for_root_bounded_source_increment_after_required_gates",
+  "blockers": [],
+  "findings": [],
+  "bindings": [
+    {
+      "kind": "protocol2_script",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d103_equity_style_increment_after_readonly_recovery.py",
+      "sha256": "220ebe0bc09e0a6ff13fa3c20b1e53c43a34adec86c3d9ab32b0febe40c0ee31"
+    },
+    {
+      "kind": "frozen_v1_helpers",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d103_equity_style_increment_isolated.py",
+      "sha256": "98d1adf7d4ab431d390b4ec6b51b195180b88c4b7d20ed7aebc5b9fff822988e"
+    },
+    {
+      "kind": "original_fixture_producer",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d103_equity_style_isolated.py",
+      "sha256": "bb3fc799711ebf3637feca63f9fe29304341bfd9d4bbbab6b001b8f2722e6210"
+    },
+    {
+      "kind": "original_source_readonly_recovery_tool",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\reconcile_d103_initial_source_readonly.py",
+      "sha256": "ed912df9fc1116110b4e1b4a5986b2e86221010124a6f68ce3ba5c44bd80401d"
+    },
+    {
+      "kind": "actual_java_readonly_success",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-readonly-recovery-20261006.json",
+      "sha256": "59dcdd9257c198c72944828f67226e74be05d760fb0bb37475f032b162aec7b4"
+    },
+    {
+      "kind": "actual_java_readonly_jvm_identity",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-readonly-recovery-jvm-identity-20261006.json",
+      "sha256": "354dc19eb7b3c0738b4c5bd07e4c882bb35dd53856377bed5b7605019373155e"
+    },
+    {
+      "kind": "actual_java_readonly_junit",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-readonly-recovery-result-20261006\\TEST-com.zoutrankil.data.config.EquityStyleMonthlyInitialReadOnlyRecoveryTest.xml",
+      "sha256": "8b3eb1b5ffb574572143208c7dc38735e608861c58c70cf278897a671ca12fca"
+    },
+    {
+      "kind": "actual_java_readonly_log",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-readonly-recovery-live-20261006.log",
+      "sha256": "e81b1e555163cc0368c4199c3cf550404e91c5f319732e0fd788b07036be81b9"
+    },
+    {
+      "kind": "root_readonly_native_stop",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\readonly-recovery-java-native-stop-20261006.json",
+      "sha256": "3e8d0d87a838dabc753051a2149c6dd8cdba123bbad9478a56c603c1803e838c"
+    },
+    {
+      "kind": "root_readonly_executor_completion",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\readonly-recovery-java-executor-completion-20261006.json",
+      "sha256": "1ffbec6fd09df449a3193e5d771998fea5a2cf316d0027e89a0a34217cdfaae4"
+    },
+    {
+      "kind": "root_readonly_terminal_ledger_evidence",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\readonly-recovery-java-terminal-ledger-20261006.json",
+      "sha256": "69d8424dfb0725d91d6de9f5b8a500e1b7e58fbeb0b8b4c4bdbc1f19a793e9fa"
+    },
+    {
+      "kind": "root_protocol2_bounded_admission",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\coordinator-increment-after-readonly-recovery-admission-20261006.json",
+      "sha256": "df7686a861627b1feea8f5dd87f0773039933981e0d884e788774da400c1fd53"
+    },
+    {
+      "kind": "original_failed_final_receipt_gate",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\coordinator-initial-java-receipt-failure-recovery-20261006.json",
+      "sha256": "d449e9713a69d478e511f485b0a1bc52d24a0d68e86ecb72cac2dfc47227c893"
+    },
+    {
+      "kind": "original_terminal_ledger_all_five_tables",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\original-initial-java-terminal-ledger-20261006.json",
+      "sha256": "5069f1ee1356575d555278fabadd3928c125091c11029ab1e94140427c8ad585"
+    },
+    {
+      "kind": "original_executed_java_producer_archive",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\failed-initial-producer-java-20261006.txt",
+      "sha256": "f103618ef3006e505c9aa26677f497370d62b1ff65ce597747c29a781a08858f"
+    },
+    {
+      "kind": "original_source_readonly_delivery",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-initial-readonly-reconciliation-20261006.json",
+      "sha256": "e2a2099b7c39526414594bb9816718481e40131a34c5d563161a600c6484f236"
+    },
+    {
+      "kind": "original_create_ack_claim",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-output-create-once-20261006.json",
+      "sha256": "2db4308cd8793d6e10ac42df0984d37830562f83ad3674606ceac08a48a4f623"
+    },
+    {
+      "kind": "bounded_source_preflight",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\equity-style-readonly-preflight-20261006.json",
+      "sha256": "61a3e91753074598b6db0d5bdc7867ff45d90d144628629a36316a0bf091b0db"
+    },
+    {
+      "kind": "held_real_august_full_fourteen_fields",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-initial-20261006-source-august-held.jsonl",
+      "sha256": "0b9de3e66ef9e0827bff47cda54a4a7e3b7a96243cab48fa738c80226f739246"
+    },
+    {
+      "kind": "corrected_stored_unit_contract",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\source-contract-stored-units-20261006.json",
+      "sha256": "8cd85288b3fcc6c8bc6b1bc574bd2e422fe178e531782e6639114a5b7f6d8997"
+    },
+    {
+      "kind": "independent_stored_unit_lineage",
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-stored-unit-lineage-review-20261006.json",
+      "sha256": "4f0d5c7180ad2a673c94502396df0287b297fb649982eabf468e5306afd06613"
+    }
+  ],
+  "checks": [
+    {
+      "id": "P2_SCOPE",
+      "lines": "protocol2:196-265,268-294",
+      "result": "PASS",
+      "detail": "Exact original/source-recovery/fresh-Java-recovery bindings, original private server identity, successful read-only receipt, exact closed June/July source and target, held August capture, and explicit protocol2 admission are required before the separately bounded source append."
+    },
+    {
+      "id": "ORIGINAL_LEDGER_CLOSURE",
+      "lines": "protocol2:49-77,80-126,231-261,298-309,326-330",
+      "result": "PASS",
+      "detail": "All five original ledger tables (runs, entries, events, groups, leases) must match both the historical authority and fresh read-only receipt, including all eight operations/eighteen entries, parent links, canonical requests and recorded ACK proofs. Before/after current file-only SQLite inspections require terminal states and zero leases; each pre-write boundary repeats the full five-table equality."
+    },
+    {
+      "id": "PRESERVED_FAILURE_IDENTITIES",
+      "lines": "protocol2:129-165,196-213,244-253,298-305",
+      "result": "PASS",
+      "detail": "Original final-serialization JUnit failure, source INSERT UNKNOWN, and unavailable original Java PID/birth remain explicit. The completed foreground executor and frozen synchronous sender lifecycle scope prove only the retained original initial-test boundary. The fresh known read-only JVM STOP is validated against its own prewritten exact PID/birth, successful executor and JUnit, then rechecked at write boundaries; it does not replace or invent the original producer identity."
+    },
+    {
+      "id": "ONE_AUGUST_SOURCE_INSERT",
+      "lines": "v1:48-61,235-286; protocol2:268-272,310-322",
+      "result": "PASS",
+      "detail": "Only sixteen actual August rows covering the sixteen fixed codes and all fourteen physical fields can be submitted, in one finite INSERT INTO index_monthly. The fixed CREATE_NEW claim denies any existing ACK/UNKNOWN claim replay. No target/output/formal DDL or DML is admitted; the final source must grow by exactly one physical/WAL transaction to forty-eight rows."
+    },
+    {
+      "id": "RAW_ACK_PERSISTENCE",
+      "lines": "v1:235-286",
+      "result": "PASS",
+      "detail": "A durable unknown intent precedes the single HTTP attempt. Actual response bytes, HTTP status, byte count and body SHA are saved to the claim before JSON parsing or acknowledgment. Status/cap, duplicate JSON keys and exact DML OK shape/count are checked before ACK; failure stops without automatic resend."
+    },
+    {
+      "id": "CURRENT_FULL_VALUES_AND_FRONTIERS",
+      "lines": "protocol2:285-334; v1:209-232",
+      "result": "PASS",
+      "detail": "Fresh initial source schema/frontier and full thirty-two-row fourteen-field transport, Java output schema/frontier and two-row thirty-field oracle, protected ordinary output, formal whole-source/output authority, five-table ledger and server identity are checked before intent and before send. After the append, all forty-eight source rows/bits and complete three-month coverage must match the captured formal source; protected outputs/formal/ledger identities and values stay unchanged."
+    },
+    {
+      "id": "UNIT_SEMANTICS",
+      "lines": "source-contract-stored-units-20261006.json; source-stored-unit-lineage-review-20261006.json",
+      "result": "PASS",
+      "detail": "The new supplement overrides the older percent/percentage-point wording: all returns are unchanged stored index_monthly.pct_chg values; spreads use those same stored units. No division/multiplication by 100, rounding or signed-zero normalization is introduced."
+    }
+  ],
+  "actual_readonly_evidence": {
+    "status": "VERIFIED_ISOLATED_INITIAL_BY_READONLY_RECOVERY",
+    "source_rows": 32,
+    "target_rows": 2,
+    "target_physical_txn": 4,
+    "unique_output_fields": 60,
+    "unique_double_bits": 58,
+    "tolerance": 0,
+    "original_runs": 8,
+    "original_entries": 18,
+    "original_events": 72,
+    "original_groups": 1,
+    "retained_leases": 0,
+    "fresh_jvm_pid": 47280,
+    "fresh_jvm_birth_utc": "2026-10-06T15:31:02.250865Z",
+    "new_ddl": 0,
+    "new_dml": 0,
+    "new_materialization_runs": 0,
+    "scope": "Referenced actual root-run SELECT-only evidence, not executed by this review"
+  },
+  "limitations": [
+    "Static review only. No source append, Java materialization, DB query, native query, owner invocation, Gradle or tests were run by this reviewer.",
+    "The old source INSERT ACK remains UNKNOWN and the original Java JUnit remains FAILED_RECEIPT_SERIALIZATION; the missing original Java PID/birth is not reconstructed.",
+    "Fresh read-only JVM STOP refers solely to the documented read-only recovery process. Dynamic gates must continue to revalidate its identity evidence, the current service identity and all immutable proof hashes before the one admitted append.",
+    "The append prepares isolated August source data only; it does not verify a new Java output/checkpoint, admit a later task, certify formal refresh, provider universe, point-in-time history or caller cutover.",
+    "Formal June/July derived-output gaps remain diagnosed and unrepaired. Original Python numeric values are compared without scaling, rounding or tolerance.",
+    "HTTP timeout20 is a socket timeout, not a whole-operation deadline; the existing bounded PG helper and finite WAL visibility wait remain separate controls."
+  ],
+  "operations": {
+    "db_queries": 0,
+    "native_queries": 0,
+    "owner_invocations": 0,
+    "tests": 0,
+    "gradle": 0,
+    "implementation_edits": 0,
+    "old_evidence_edits": 0,
+    "new_review_files": 1
+  },
+  "source_increment_executed_by_reviewer": false,
+  "actual_materialization_verified_by_this_review": false,
+  "next_task_admission": false,
+  "human_confirmation": "pending"
+}

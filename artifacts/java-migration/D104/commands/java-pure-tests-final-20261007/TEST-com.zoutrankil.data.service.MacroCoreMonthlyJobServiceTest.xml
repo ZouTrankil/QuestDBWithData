@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" tests="19" skipped="0" failures="0" errors="0" timestamp="2026-10-06T16:32:21.864Z" hostname="AMD395" time="5.502">
+  <properties/>
+  <testcase name="cancelledFrozenRequestResumesSameIdentityAndUnknownNeverAutomaticallyResumes()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="1.434"/>
+  <testcase name="priorPhysicalSfObservationRevisionInvalidatesCheckpointEvenWhenDerivedValuesUnchanged()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.487"/>
+  <testcase name="catalogConstructionWithBlankTargetDoesNotConnectOrCreateLedger()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.006"/>
+  <testcase name="sameInstanceReconciliationCompletesRunningAttemptAfterItsDoubtCommitFailed()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.337"/>
+  <testcase name="onlyAppendedSourceMonthsReuseCheckpointWithRealOneMonthOverlap()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.447"/>
+  <testcase name="incompleteMonthsAreHistoricalMaterializeRowsButNeverIncrementalCheckpoint()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.189"/>
+  <testcase name="retainedPreparedWriteLeaseBlocksNewJobRegardlessOfItsJobId()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.083"/>
+  <testcase name="unknownReconciliationRejectsSourceRevisionAndPreservesOldEvidence()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.218"/>
+  <testcase name="readonlyReconcileJobChecksActualValuesAndNeverSends()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.406"/>
+  <testcase name="firstRunIsDurablyVerifiedOnlyAfterFullPrefixAndSharedExclusionReleased()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.226"/>
+  <testcase name="currentFutureNonFirstAndThirteenthMonthsFailBeforeMetadata()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.005"/>
+  <testcase name="canonicalDefinitionDeclaresUnmigratedUpstreamBoundaryAndFiniteMaterializationPolicies()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.004"/>
+  <testcase name="externallyChangedTargetPrefixRejectsCheckpointAndDoesNotWrite()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.238"/>
+  <testcase name="anyOldRawFieldRevisionRebuildsWholeFinitePrefixEvenIfOutputUnchanged()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.418"/>
+  <testcase name="frozenSourceChangeIsDurableFailureRatherThanAutomaticReplan()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.045"/>
+  <testcase name="absentOrAllNullMonthCannotAdvanceAcrossARealMonthlyGap()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.171"/>
+  <testcase name="readonlyReconciliationCompletesAPreviouslyVerifiedSliceWithoutResend()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.279"/>
+  <testcase name="emptyHistoricalWindowIsVerifiedEmptyAndNeverSuppliesCheckpoint()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.15"/>
+  <testcase name="unknownOutcomeRetainsDatasetLeaseAndRequiresActualSameInstanceStoppedProof()" classname="com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest" time="0.349"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

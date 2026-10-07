@@ -1,0 +1,176 @@
+{
+  "task_id": "D105",
+  "protocol_version": 1,
+  "status": "PASS",
+  "record_date": "2026-10-07",
+  "reviewed_at_utc": "2026-10-06T18:00:35.715099+00:00",
+  "reviewer": "/root/mv_reader_guard",
+  "review_type": "independent_static_python_private_view_create_audit_helpers",
+  "static_only": true,
+  "blockers": [],
+  "findings": [],
+  "bindings": [
+    {
+      "path": "tools/prepare_d105_macro_core_view_isolated.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/prepare_d105_macro_core_view_isolated.py",
+      "sha256": "4a741225f9c76bd3565749dee62b78a4a5d4a60771ad9a6119cfe05213a0a1f0",
+      "role": "D105 one-shot private missing-only ordinary VIEW CREATE and durable claim"
+    },
+    {
+      "path": "tools/test_d105_view_script_guards.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/test_d105_view_script_guards.py",
+      "sha256": "f6062bcc4985b3c5cb1717c73c79d5400c690887c48806d89be1dde7691a5113",
+      "role": "D105 44 mocked guard cases inspected, not executed by reviewer"
+    },
+    {
+      "path": "tools/audit_d105_macro_core_view.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/audit_d105_macro_core_view.py",
+      "sha256": "3540ddb34ccbec4d777a2ce00e236b3ef6b76ccf190cc82006c14ba43d0d949b",
+      "role": "D105 SELECT-only formal/private complete view-base and protected-source audit"
+    },
+    {
+      "path": "tools/prepare_d104_macro_core_increment_isolated.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/prepare_d104_macro_core_increment_isolated.py",
+      "sha256": "adf45f32d4ade8b96b91ac200e26f6db12789ea4f6b12ff3da344cd9dceb8645",
+      "role": "Inherited helper use only: SQLite table specification and exact Java source-vector validator; no D104 run/main invoked"
+    },
+    {
+      "path": "tools/prepare_d104_macro_core_initial_after_known_partial.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/prepare_d104_macro_core_initial_after_known_partial.py",
+      "sha256": "d813f0363ad5dc0558001b2b9f8c6a4225187ddf1c8fe4520d6898feb7ffac32",
+      "role": "Inherited helper use only: stable metadata/COUNT read and actual old JVM identity absence; no continuation invoked"
+    },
+    {
+      "path": "tools/prepare_d104_macro_core_isolated.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/prepare_d104_macro_core_isolated.py",
+      "sha256": "23389881d8c6b8401dfb8b482378f6cdbe911f79e0b72269e46dcc6573388922",
+      "role": "Inherited helper use only: pinned private server/producer identity, bounded SELECT reader, full captured-source and strict rawbits compare; no fixture writes invoked"
+    },
+    {
+      "path": "tools/preflight_d104_macro_core_readonly.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/preflight_d104_macro_core_readonly.py",
+      "sha256": "245607f62dd3366746c712839351ecfc8d302a95c4a8f5d1e16125acbe676f91",
+      "role": "Inherited full ordered macro schema, finite source/base values and exact binary64/null comparisons"
+    },
+    {
+      "path": "tools/prepare_d103_equity_style_isolated.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/prepare_d103_equity_style_isolated.py",
+      "sha256": "bb3fc799711ebf3637feca63f9fe29304341bfd9d4bbbab6b001b8f2722e6210",
+      "role": "Inherited native helper use only: seven-digit OS birth canonicalization and native argv parser; no D103 run/main invoked"
+    },
+    {
+      "path": "tools/preflight_d103_equity_style_readonly.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/preflight_d103_equity_style_readonly.py",
+      "sha256": "d832e236fb927af8beedcfe7984413969262be50d9812b9bfd9173ce8961546c",
+      "role": "Inherited transport use only: SELECT-only restriction, finite fetch sentinel, absolute PG deadline, cancellation, SHA/CREATE_NEW/fsync and rawbits"
+    }
+  ],
+  "evidence_bindings": [
+    {
+      "path": "artifacts/java-migration/D105/commands/view-formal-readonly-audit-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/view-formal-readonly-audit-20261007.json",
+      "sha256": "4b3aec1c690ae34a0b69e35df34d535d7a881454e2e549623e11724eb9be437d",
+      "role": "Root-executed external formal SELECT-only audit under prior 9cb825 implementation; original not overwritten"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/formal-audit-private-identity-adaptation-note-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/formal-audit-private-identity-adaptation-note-20261007.json",
+      "sha256": "9e0c1950ebb2a6707148dea62c8022f21d7027bd967972b08743cd2c435b7d2d",
+      "role": "Author change note only; independently reviewed private-target adaptation, not a PASS execution claim"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/root-formal-view-metadata-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/root-formal-view-metadata-20261007.json",
+      "sha256": "9ce66ed64413732c8577e19bb53b72b44d2e35a11c9a040320e9009a9866059f",
+      "role": "Root external ordinary-view metadata observation"
+    },
+    {
+      "path": "artifacts/java-migration/D104/coordinator-review-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D104/coordinator-review-20261007.json",
+      "sha256": "a5fd14527a068185f222abf54292c0f8532a50d8ae2eb49f14e4fc6b369d1bde",
+      "role": "Accepted prior D104 gate"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/java-increment-acceptance-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D104/commands/java-increment-acceptance-20261007.json",
+      "sha256": "b1aec9b83be584059cbe2aad5d18240a14167915b5c37ad9f02568e586c318ca",
+      "role": "Actual prior D104 three-month target and native_attestations"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/increment-java-process-and-ledger-review-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D104/commands/increment-java-process-and-ledger-review-20261007.json",
+      "sha256": "9242676d38e609336efd4b2c0276e4d43fa5ea1d981e1e993adc5689625251db",
+      "role": "Actual D104 terminal ledger/original JVM completion proof"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/macro-core-readonly-preflight-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D104/commands/macro-core-readonly-preflight-20261007.json",
+      "sha256": "fc4b839c44254aee9f221e1246c5279738cf33704eb12749f2f70691347f530b",
+      "role": "Frozen six-source real full-field capture and nine-field original oracle"
+    }
+  ],
+  "checks": [
+    {
+      "area": "strict_admission_and_code_identity",
+      "result": "PASS",
+      "detail": "Creator requires explicit protocol1/task D105/accepted_for_private_view_create_once, exact one DDL and zero DML/ILP/base/formal writes, automatic_retry false, accepted prior D104 facts, both stable actual audit bindings, and independently reviewed current full nine tool/helper SHA bindings. Every CREATE boundary re-reads these immutable inputs."
+    },
+    {
+      "area": "native_target_birth",
+      "result": "PASS",
+      "detail": "Only original dedicated D104 private root, PID43084 and localhost HTTP19040/PG18852 are admitted. Native birth is canonicalized to seven decimal digits without discarding precision. Fresh exact listener PID/name/module/-d root checks are compared with results.private_target and each actual Java final native_attestations records; each attestation child must have stopped. Current code does not require the nonexistent Java-final private_target field."
+    },
+    {
+      "area": "source_target_ledger_closure",
+      "result": "PASS",
+      "detail": "Before and after reads, seven protected formal and private source/base states plus exact full schema are checked for settled WAL and stable physical identity/count. Private six-source 28-row/412-field frozen capture is independently read and compared by complete fields/NULL/rawbits, along with view/base nine-field zero-tolerance parity. All five scoped original SQLite tables are read mode=ro/query_only within one read transaction and must equal terminal evidence; retained leases or state drift block CREATE. Fresh native check proves original known D104 Java JVM instance absent."
+    },
+    {
+      "area": "only_missing_private_alias",
+      "result": "PASS",
+      "detail": "One exact fixed private SELECT * identity alias may be created, with no replace/drop/filter/join/business write. Existing alias or existing claim prevents publication. Formal calls are SELECT-only, with actual view/base matching the frozen three-month oracle and no fallback."
+    },
+    {
+      "area": "durable_unknown_and_ack",
+      "result": "PASS",
+      "detail": "CREATE_NEW fsynced UNKNOWN claim and invocation journal precede the sole synchronous HTTP call. request_started is durably recorded before that call. Actual response bytes are saved new-only before parse; only HTTP200 and exact duplicate-key-free native ddl OK acknowledge. Network error, truncation, malformed/wrong ACK or cancellation preserves uncertainty and prohibits retry. Visibility polling is SELECT-only after ACK."
+    },
+    {
+      "area": "bounded_transport_and_cancellation",
+      "result": "PASS",
+      "detail": "PG readers enforce one SELECT, finite row caps with sentinel, explicit ordered fields, duplicate-key rejection, exact first-day closed bounded month windows, and absolute twenty-second read deadlines with callback restoration/owned connection close. HTTP uses twenty-second socket timeout and 1MiB response cap. Cancellation is checked before reads/claim/request; no read polling reissues DDL."
+    },
+    {
+      "area": "complete_post_create_readback",
+      "result": "PASS",
+      "detail": "Post-CREATE view SQL/status/native identity/schema and all-nine values are read twice consistently; final protected formal/private frontiers and view metadata/schema are rechecked after complete formal/private reads. Same final original ledger and native target are required. No D105 source append/revision/checkpoint is claimed."
+    },
+    {
+      "area": "external_formal_old_version_boundary",
+      "result": "PASS",
+      "detail": "Original formal audit receipt binds prior audit9cb825 and remains immutable. Current audit3540 private_target change only consumes actual native_attestations instead of a nonexistent Java-final key; formal audit behavior and saved formal results are unchanged. Author adaptation note is not treated as independent execution proof."
+    }
+  ],
+  "guard_test_inventory": {
+    "current_unique_methods": 44,
+    "reviewer_execution": false,
+    "root_reported_current_run": "44 passed, exit0 chunk6de455 (external root report; not executed by reviewer)",
+    "previous_43_not_double_counted": true
+  },
+  "execution": {
+    "tests_run": 0,
+    "gradle_runs": 0,
+    "database_queries": 0,
+    "database_mutations": 0,
+    "native_process_queries": 0,
+    "reference_imports": 0,
+    "reference_writes": 0,
+    "tool_imports": 0,
+    "action": "Read files/AST for static structure and computed SHA256 only; created this review artifact."
+  },
+  "recommendation": "No static blocker found for separately admitted finite missing-only private ordinary VIEW CREATE and complete readback. This review is a creator admission prerequisite, not proof the CREATE or actual D105 Java read has happened.",
+  "coordinator_gate": "PENDING",
+  "human_review": "PENDING",
+  "next_task_admitted": false,
+  "D106_admitted": false
+}

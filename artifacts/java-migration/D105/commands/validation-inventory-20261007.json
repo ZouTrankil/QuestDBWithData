@@ -1,0 +1,702 @@
+{
+  "protocol_version": 1,
+  "task_id": "D105",
+  "status": "VERIFIED_CURRENT_UNIQUE_TEST_INVENTORY",
+  "checked_at": "2026-10-06T18:14:51.287113+00:00",
+  "java_unique_passing_methods": 61,
+  "java_pure_unique_methods": 60,
+  "java_live_unique_methods": 1,
+  "java_live_actual_stage_invocations": 2,
+  "java_PASS_invocations": 62,
+  "python_unique_pure_guards": 44,
+  "current_inventory_failures": 0,
+  "current_inventory_errors": 0,
+  "current_inventory_skips": 0,
+  "java_reports": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+      "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+      "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+      "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyViewCatalogStartupTest.xml",
+      "sha256": "ed223496f4a55c3f419991510283c651710e9b0f56606a1c39e671975455ca05"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyViewWriteRejectionTest.xml",
+      "sha256": "78f8a8ece5dcbca637ccc32c1b5f7618c507dd452998428b123b99194db9f146"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-view-read-private-result-20261007\\TEST-com.zoutrankil.data.config.MacroCoreMonthlyViewLiveReadAcceptanceTest.xml",
+      "sha256": "63061b10955ee6634f1e1df923c067cec2c7c26e090119b62b195b5ada995179"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-view-read-formal-result-20261007\\TEST-com.zoutrankil.data.config.MacroCoreMonthlyViewLiveReadAcceptanceTest.xml",
+      "sha256": "3a4661c092261cd8f3e11210c21843289b4bd5c0eb2c89c3e846f02fac9ed98a"
+    }
+  ],
+  "java_cases": [
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "naturalMonthKeyHasPositiveFourDigitYearAndRoundTripsLeapAndYearBoundaries()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "nineExplicitFieldsRoundTripThroughPreservedProjectionAndTypedValues()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "eachMetricPreservesExactBinary64SignedZeroAndFiniteExtremeWithoutScaling()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "gdpNullRatioAndLegacyTotalIncrementStayExactWithoutNewBusinessFormula()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "allNineAliasBindingsPointToBaseColumnsAndWriteReplacementCapabilitiesAreRejected()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "everyNullableMetricIncludingHistoricalMissingMonthlyComponentsRemainsNull()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "ordinaryAliasDefinitionIsReadOnlyUnpartitionedAndReferencesTheCanonicalBase()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "monthMustBeItsExactFirstDayAtUtcMidnightWithoutTimezoneOrSubsecondGuessing()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "canonicalYearMonthJsonPreservesNullsAndSignedZero()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "completeProjectionRejectsMissingExtraAndNonDateMonthTransport()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "changedBaseValuesKeepMonthIdentityWithoutInventingSourceGenerationColumn()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest",
+      "method": "everyMetricRejectsNanInfinityAndCoercingNumericCarriers()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+        "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest",
+      "method": "halfOpenMonthRangeAndActualViewBaseCursorPassThroughWithoutExpansion()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+        "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest",
+      "method": "explicitPrivateAliasPreservesLogicalDependencyAndRejectsUnapprovedObject()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+        "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest",
+      "method": "invalidWindowWrongCarrierPartialFieldsOrPageBudgetRejectBeforeAnyReaderCall()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+        "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest",
+      "method": "businessDecoderPreservesAllNullFieldsSignedZeroAndActualReaderSnapshotToken()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+        "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest",
+      "method": "changedViewOrBaseFailurePropagatesWithoutFallbackToAnEmptyOrBasePage()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+        "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest",
+      "method": "fullMonthKeyAndConvenienceUseFirstDayEqualityAndReaderOwnedPhysicalVersion()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+        "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest",
+      "method": "emptyActualViewPageKeepsItsPhysicalTokenAndDoesNotInvokeAnotherObject()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+        "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest",
+      "method": "exactlyTwelveMonthsAndRowsArePermittedAtTheFiniteBoundary()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+        "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "viewSchemaMustHaveExactOrderTypesAndNineUniqueColumns()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "ownerSqlRejectsFilteringJoiningQualificationProjectionCommentsAndFallback()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "sameBaseBusinessValuesWithNewPhysicalOrWalTxnRejectOldCursor()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "ownerSqlAllowsOnlyCaseWhitespaceBaseIdentifierQuotesAndOriginalOuterParentheses()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "privateViewPinsOnlyItsExplicitPrivateBase()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "baseSchemaTypeAndDedupKeyMustRemainD104Exact()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "formalViewVersionPinsDirectoryBodySchemaAndIndependentBasePhysicalWalDomains()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "emptyBaseCannotHideActualRowsMissingCountOrAmbiguousCount()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "invalidViewBlankIdentityStatusHistoryOrInvalidationReasonRejectFirstPage()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "nullableBaseCannotHideNonzeroWalPendingOrRawMetadata()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "validFinitePreparationAndTwelveMonthsDoNotConnect()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "actualBaseChangeAfterRowSelectReturnsNoPage()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "wrongDependenciesKindVersionAndUnknownPrivateObjectRejectBeforeJdbc()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "aliasDropRecreateOrStatusHistoryChangeRejectsOldCursor()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "everyMetadataQueryHasFiniteTimeoutRowsAndQuotedSchemaColumns()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "positivePhysicalTxnCannotPassNullableEmptyBaseEvenWithCountZero()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "unboundedReadAndPrepareRejectBeforeJdbc()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "monthCarriersRejectNullStringsInstantYearMonthAndNonFirstDay()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "viewNativeSchemaFlagChangeDuringSnapshotIsRejected()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "monthRangeRejectsWrongFieldTypesDaysReverseAndThirteenMonths()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "uninitializedBaseRequiresStableActualCountZeroAndPreservesNullPhysicalToken()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "appliesOnlyToRegisteredLogicalOrPhysicalAliasIdentity()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "oversizedPageAndNonMonthOrMixedFiltersRejectBeforeJdbc()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "basePhysicalRevisionBetweenCompleteViewSnapshotsIsRejected()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "absentNativeViewColumnFlagsCannotBecomeFalse()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "missingDuplicateOrWrongNativeViewIdentityFailsClosed()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "viewValidFlagDoesNotAllowWrongBasePhysicalContract()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "equivalentDefinitionWithChangedActualBodyHashStillRejectsOldCursor()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "completeOrderedNineColumnProjectionIsRequiredBeforeJdbc()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "baseIdOrDirectoryChangeRejectsOldCursorBeforeAnyRowQuery()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "exactObservedViewNativeTimestampAndNoUpsertFlagsAreRequiredOnFirstPage()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "interruptedCallerCancelsBeforeAnyMetadataQuery()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "nullableBaseMetadataChangeAcrossCountCannotBeNormalizedAway()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "incompleteOrWrongMonthCursorKeyRejectsBeforeJdbc()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "viewMetadataChangeAcrossItsSchemaCheckIsRejected()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "actualOrdinaryViewTypeDirectoryAndIdMustAgreeWithViewsMetadata()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest",
+      "method": "viewValidFlagDoesNotAllowSuspendedPendingBufferedOrLaggingBaseWal()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+        "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.service.MacroCoreMonthlyViewCatalogStartupTest",
+      "method": "ordinaryMonthlyViewUsesExistingCanonicalBaseOwnerWithoutStartupIo()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyViewCatalogStartupTest.xml",
+        "sha256": "ed223496f4a55c3f419991510283c651710e9b0f56606a1c39e671975455ca05"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.service.MacroCoreMonthlyViewWriteRejectionTest",
+      "method": "allTypedPublicationAndReplacementPreparationsRejectTheOrdinaryView()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyViewWriteRejectionTest.xml",
+        "sha256": "78f8a8ece5dcbca637ccc32c1b5f7618c507dd452998428b123b99194db9f146"
+      }
+    },
+    {
+      "phase": "pure",
+      "class": "com.zoutrankil.data.service.MacroCoreMonthlyViewWriteRejectionTest",
+      "method": "preparedWriteGroupRejectsTheViewBeforeAnyOwnerQueryOrLedgerCreation()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-import-correction-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyViewWriteRejectionTest.xml",
+        "sha256": "78f8a8ece5dcbca637ccc32c1b5f7618c507dd452998428b123b99194db9f146"
+      }
+    },
+    {
+      "phase": "private",
+      "class": "com.zoutrankil.data.config.MacroCoreMonthlyViewLiveReadAcceptanceTest",
+      "method": "actualBoundedAliasReadsMatchBaseAuditAndOriginalOracleWithoutPublication()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-view-read-private-result-20261007\\TEST-com.zoutrankil.data.config.MacroCoreMonthlyViewLiveReadAcceptanceTest.xml",
+        "sha256": "63061b10955ee6634f1e1df923c067cec2c7c26e090119b62b195b5ada995179"
+      }
+    },
+    {
+      "phase": "formal",
+      "class": "com.zoutrankil.data.config.MacroCoreMonthlyViewLiveReadAcceptanceTest",
+      "method": "actualBoundedAliasReadsMatchBaseAuditAndOriginalOracleWithoutPublication()",
+      "report": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-view-read-formal-result-20261007\\TEST-com.zoutrankil.data.config.MacroCoreMonthlyViewLiveReadAcceptanceTest.xml",
+        "sha256": "3a4661c092261cd8f3e11210c21843289b4bd5c0eb2c89c3e846f02fac9ed98a"
+      }
+    }
+  ],
+  "actual_live_receipts": {
+    "private": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-view-read-private-acceptance-20261007.json",
+      "sha256": "84fe5329f4440c053da258da9f53b9c5a8b126aa2f3dd0d559b9262b5adf78a3"
+    },
+    "formal": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-view-read-formal-acceptance-20261007.json",
+      "sha256": "bc60e0dc9fed69a599a33ed8dddf4ecc54ff821dba93a9b174acebc9c1d43e1c"
+    }
+  },
+  "python": [
+    {
+      "guard_source": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d105_view_script_guards.py",
+        "sha256": "f6062bcc4985b3c5cb1717c73c79d5400c690887c48806d89be1dde7691a5113"
+      },
+      "actual_log": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\python-view-guards-private-identity-correction-20261007.log",
+        "sha256": "1dce52a154fb93ac664f87df35286bc76fcbfcf58ecb61785e1e9d9d82eb295d"
+      },
+      "unique_PASS": 44,
+      "methods": [
+        "SelectAndValuesTests.test_multiline_select_with_binds_is_allowed",
+        "SelectAndValuesTests.test_empty_nonselect_and_semicolon_rejected",
+        "SelectAndValuesTests.test_only_four_fixed_read_objects_allowed",
+        "SelectAndValuesTests.test_finite_three_real_fields_and_exact_bound",
+        "SelectAndValuesTests.test_more_than_twelve_month_rows_rejected",
+        "SelectAndValuesTests.test_duplicate_month_keys_rejected",
+        "SelectAndValuesTests.test_wrong_column_order_or_missing_column_rejected",
+        "SelectAndValuesTests.test_month_must_be_first_day_utc_midnight",
+        "SelectAndValuesTests.test_returned_month_outside_window_rejected",
+        "SelectAndValuesTests.test_current_future_or_overlong_windows_rejected",
+        "SelectAndValuesTests.test_double_nan_infinity_bool_and_string_rejected",
+        "SelectAndValuesTests.test_nullable_double_preserved_and_not_counted_as_bits",
+        "SelectAndValuesTests.test_single_ulp_difference_rejected_without_tolerance",
+        "SelectAndValuesTests.test_null_to_zero_difference_rejected",
+        "ViewMetadataTests.test_original_and_private_exact_identity_selects_allowed",
+        "ViewMetadataTests.test_existing_wrong_source_or_view_rejected",
+        "ViewMetadataTests.test_invalid_view_or_reason_rejected",
+        "ViewMetadataTests.test_missing_view_has_no_base_fallback",
+        "ViewMetadataTests.test_blank_directory_and_history_rejected",
+        "ViewMetadataTests.test_exact_nine_native_schema_flags_allowed",
+        "ViewMetadataTests.test_schema_wrong_type_order_designated_or_upsert_rejected",
+        "ViewMetadataTests.test_native_view_physical_directory_and_matview_rejected",
+        "ViewMetadataTests.test_schema_drift_after_value_read_rejected",
+        "ViewMetadataTests.test_seven_table_drift_after_value_read_rejected",
+        "TargetLedgerAndAdmissionTests.test_formal_pid_wrong_private_pid_and_root_rejected_before_native",
+        "TargetLedgerAndAdmissionTests.test_wrong_current_server_birth_rejected",
+        "TargetLedgerAndAdmissionTests.test_equivalent_six_and_seven_digit_os_birth_preserves_raw_identity",
+        "TargetLedgerAndAdmissionTests.test_missing_or_unstopped_java_native_proof_rejected",
+        "TargetLedgerAndAdmissionTests.test_ledger_uses_readonly_query_only_and_closes",
+        "TargetLedgerAndAdmissionTests.test_any_original_ledger_table_changed_rejected",
+        "TargetLedgerAndAdmissionTests.test_protocol_task_decision_budget_bool_and_retry_rejected",
+        "TargetLedgerAndAdmissionTests.test_wrong_admitted_code_sha_rejected",
+        "TargetLedgerAndAdmissionTests.test_wrong_admitted_code_path_rejected",
+        "TargetLedgerAndAdmissionTests.test_static_review_failed_or_missing_helpers_rejected",
+        "TargetLedgerAndAdmissionTests.test_existing_view_or_protected_frontier_changed_rejected",
+        "CreateOnceTests.test_only_private_identity_create_allowed",
+        "CreateOnceTests.test_cancellation_before_claim_prevents_http",
+        "CreateOnceTests.test_existing_claim_refuses_http_resend",
+        "CreateOnceTests.test_unknown_http_preserves_durable_intent_without_retry",
+        "CreateOnceTests.test_raw_bytes_saved_before_ddl_ack_is_accepted",
+        "CreateOnceTests.test_dml_payload_does_not_upgrade_create_unknown",
+        "CreateOnceTests.test_duplicate_response_keys_remain_unknown",
+        "CreateOnceTests.test_cancellation_after_durable_claim_does_not_send",
+        "CreateOnceTests.test_native_server_or_producer_changed_refuses_claim"
+      ]
+    }
+  ],
+  "historical_failures_preserved": [
+    {
+      "kind": "INITIAL_JAVA_TEST_IMPORT_COMPILE_FAILURE",
+      "log": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-pure-tests-20261007.log",
+        "sha256": "3da8fa536d3e7d7237da40e4150d932b0bff7120815b75da94e9188505003b7b"
+      },
+      "resolution": "Corrected imports compiled and the separately archived actual current sixty pure methods passed; the failed compile log is excluded from passing test counts."
+    }
+  ],
+  "historical_subset_runs_excluded": [
+    {
+      "kind": "ORIGINAL_43_GUARDS_SUBSET",
+      "actual_log": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\python-view-guards-20261007.log",
+        "sha256": "3f8566f32f39436fe4374afe796684596e1fb43ef1148fb3730d569285b7c25d"
+      },
+      "included_in_current_44_not_added": true
+    }
+  ],
+  "test_execution_owner": "root; two real SELECT scopes reuse the same unique JUnit method",
+  "inventory_tool_executed_tests": 0,
+  "formal_writes": 0,
+  "source_writes": 0,
+  "output_writes": 0,
+  "actual_source_increment": false,
+  "actual_source_revision": false,
+  "next_task_admitted": false
+}

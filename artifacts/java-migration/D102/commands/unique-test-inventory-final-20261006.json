@@ -1,0 +1,980 @@
+{
+  "task_id": "D102",
+  "checked_at": "2026-10-06T13:49:17.602913+00:00",
+  "status": "PASSED_UNIQUE_TEST_INVENTORY",
+  "java_unique": 130,
+  "java_unique_pure": 129,
+  "java_live": 1,
+  "python_unique": 81,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "java_methods": [
+    {
+      "classname": "com.zoutrankil.data.config.EtfMarketOverviewDailyViewLiveAcceptanceTest",
+      "method": "actualViewMatchesBothBasesInPrivateAndFormalBoundedReads()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-view-read-acceptance-xml-20261006\\TEST-com.zoutrankil.data.config.EtfMarketOverviewDailyViewLiveAcceptanceTest.xml",
+      "stage": "live"
+    },
+    {
+      "classname": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest",
+      "method": "allFourColumnsAreRequiredInACompleteTypedProjectionWithoutTypeCoercion()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest",
+      "method": "countsRejectNegativeAndCoercingOrOverflowCarriersButRetainMaxLong()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest",
+      "method": "directWriteAndBothReplacementCapabilitiesAreRejected()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest",
+      "method": "eitherDoubleFieldRejectsNanAndBothInfinities()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest",
+      "method": "fourPhysicalFieldsMapExplicitlyAndRoundTripWithoutNumericChanges()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest",
+      "method": "nullableSumsStayNullAndExactRequiredZeroCountIsNotAReplacementForNull()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest",
+      "method": "onlyExactUtcMidnightCanCarryTheBusinessDate()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest",
+      "method": "revisedBaseValuesKeepTheDateKeyWithoutAddingACacheGenerationField()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest",
+      "method": "signedQuantitiesAndSignedZeroRemainExactWithoutRescalingOrClamping()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest",
+      "method": "viewDefinitionHasOnlyDateIdentityAndTwoExactBaseDependencies()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest",
+      "method": "completeDateKeyAndDateConvenienceUseExactEqualityWithoutAQueryRangeOrGeneration()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest",
+      "method": "completeExplicitQueryUsesTheBusinessMapperAndPreservesTheReadersActualSourceToken()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest",
+      "method": "exactlyThirtyOneCalendarDaysAndRowsArePermittedWithoutExpandingTheQuery()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest",
+      "method": "explicitHalfOpenRangeAndPhysicalVectorCursorPassThroughToTheSharedReader()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest",
+      "method": "invalidDateRangePageBudgetOrMissingQueryFailBeforeReaderInteraction()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest",
+      "method": "theRepositoryRequiresItsSharedReaderAndCreatesNoIndependentPublisher()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest",
+      "method": "unsettledOrChangedSourceFailurePropagatesInsteadOfBecomingAnEmptyPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest",
+      "method": "namesNullsAndNanosecondsSurviveWithoutDefaultTimezone()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest",
+      "method": "schemaMismatchAndBoundaryDuplicateCannotYieldACursor()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbBoundedReaderTest",
+      "method": "cursorUsesCompleteLexicographicKeyAndCannotCrossQueryOrVersion()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbBoundedReaderTest",
+      "method": "filterValuesAreBoundAndUnknownFieldsFailBeforeSql()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbBoundedReaderTest",
+      "method": "typedCalendarRangesNullsAndPrecisionAreStrict()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "absentOrIncompletePhysicalMetadataCannotBecomeAnEmptyOrReadableCache()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "cacheThatBecomesUnsettledDuringReadCannotReturnAStablePage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "changedBusinessVersionFilterCannotReuseCursorEvenWhenPhysicalVersionIsUnchanged()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "dedupRevisionDuringActualReadRejectsTheFetchedPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "existingUnregisteredStockBasicTableKeepsItsCallerVersionWithoutCacheMetadata()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "invalidBusinessVersionEqualityFailsBeforeAnyMetadataSchemaOrRowQuery()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "malformedCursorGenerationOrIncompleteKeyFailsDuringSqlPreparationWithoutDatabaseReads()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "physicalCommitOrWalFrontierChangeIndependentlyInvalidatesAnOldCursor()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "sameBusinessVersionDedupRevisionBetweenPagesRejectsTheCursorBeforeAnotherSelect()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "stableCacheBindsIndependentPhysicalAndWalIdentityRatherThanBusinessVersion()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "tableIdentityOrDirectoryRecreationCannotReuseMatchingTransactionCounters()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest",
+      "method": "unsettledSuspendedOrNonWalCacheFailsBeforeFetchingRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "absentOrIncompletePhysicalMetadataCannotBecomeAnEmptyOrReadableCache()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "cacheThatBecomesUnsettledDuringReadCannotReturnAStablePage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "changedBusinessVersionFilterCannotReuseCursorEvenWhenPhysicalVersionIsUnchanged()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "dedupRevisionDuringActualReadRejectsTheFetchedPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "existingUnregisteredStockBasicTableKeepsItsCallerVersionWithoutCacheMetadata()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "invalidBusinessVersionEqualityFailsBeforeAnyMetadataSchemaOrRowQuery()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "malformedCursorGenerationOrIncompleteKeyFailsDuringSqlPreparationWithoutDatabaseReads()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "physicalCommitOrWalFrontierChangeIndependentlyInvalidatesAnOldCursor()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "rangePaginationRetainsBothDateAndGenerationWhenTwoVersionsShareADate()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "sameBusinessVersionDedupRevisionBetweenPagesRejectsTheCursorBeforeAnotherSelect()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "stableCacheBindsIndependentPhysicalAndWalIdentityRatherThanBusinessVersion()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "tableIdentityOrDirectoryRecreationCannotReuseMatchingTransactionCounters()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest",
+      "method": "unsettledSuspendedOrNonWalCacheFailsBeforeFetchingRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "anySourcePhysicalCommitOrWalRevisionRejectsOldCursorBeforeAnotherRowQuery()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "bothSourceMetadataRowsAndAllCountersAndBooleanStatusesAreRequired()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "changedJoinKeysFormulasSourcesSamplingOrExtraFiltersFailOnTheFirstPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "changedViewIdentityDefinitionHashOrStatusHistoryRejectsOldCursor()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "datasetSchemaChangeRejectsCursorBeforeFetchingAnotherPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "eitherSourceUnsettledSuspendedOrWrongPhysicalContractFailsBeforeRowSelect()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "everyD102MetadataStatementSetsItsOwnDeadlineAndFiniteRowBudget()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "exactDateEqualityIsBoundAndUsesTheOriginalTimestampOutputUnit()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "exactFullSourceSchemaAndOriginalMicroNanoTimestampUnitsAreRequired()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "existingStockBasicLatestWithTableDependencyRemainsUnchanged()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "fullSourceSchemaIsRecheckedAfterBoundedSelect()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "ordinaryViewAcceptsOnlyCaseWhitespaceAndKnownIdentifierQuoteVariation()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "rangeOfExactly31DaysAnd31BucketsIsPermittedWithFiniteOutputLimit()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "recreatedSourceIdOrDirectoryCannotReuseEqualTransactions()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "registeredNameCannotBypassViewGuardsByClaimingATableOrMaterializedView()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "registeredViewRequiresExactlyItsOrderedTwoDependenciesBeforeAnyJdbcCall()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "sourceDesignatedTimestampAndBothPhysicalDedupKeysCannotBeOmittedOrInvented()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "sourceRevisionDuringBoundedSelectCannotReturnAMixedPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "stableDirectViewBindsItsIdentityAndIndependentPhysicalVersionsOfBothSources()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "unboundedOversizedWrongDateTypesAndPartialProjectionFailBeforeAnyJdbcCall()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "unregisteredViewsKeepCallerVersionWithoutEtfOrMvMetadata()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "viewDefinitionChangeDuringSourceMetadataFailsBeforeRowSelect()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "viewMustBePresentUniqueValidWithDirectoryStatusHistoryAndNoInvalidation()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest",
+      "method": "viewOrSourceThatBecomesInvalidAfterSelectCannotReturnAPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "stage": "deadline"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "method": "fixedNativeMvSqlAllowsOnlyWhitespaceAndCaseNormalization()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "method": "fullRefreshDuringReadRejectsThePageEvenWithTheSameBaseCheckpoint()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "method": "independentPhysicalAndWalCountersAreAcceptedWhenWalIsSettled()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "method": "invalidLaggingOrUnappliedWalStatesFailBeforeFetchingRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "method": "missingPhysicalVersionFailsBeforeFetchingRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "method": "rangeRefreshBetweenPagesRejectsCursorEvenWithTheSameBaseCheckpoint()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "method": "recreatedViewOrBaseCannotReuseMatchingTransactionCounters()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "method": "sameNameFreshMvWithWrongBaseOrAggregationFailsOnItsFirstPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "method": "stableSnapshotBindsCursorToBaseAndPhysicalMvIdentityAndVersion()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "absentOrIncompletePhysicalMetadataCannotBecomeAnEmptyOrReadableCache()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "cacheThatBecomesUnsettledDuringReadCannotReturnAStablePage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "changedBusinessVersionFilterCannotReuseCursorEvenWhenPhysicalVersionIsUnchanged()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "dedupRevisionDuringActualReadRejectsTheFetchedPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "existingUnregisteredStockBasicTableKeepsItsCallerVersionWithoutCacheMetadata()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "invalidBusinessVersionEqualityFailsBeforeAnyMetadataSchemaOrRowQuery()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "malformedCursorGenerationOrIncompleteKeyFailsDuringSqlPreparationWithoutDatabaseReads()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "physicalCommitOrWalFrontierChangeIndependentlyInvalidatesAnOldCursor()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "rangePaginationRetainsBothDateAndGenerationWhenTwoVersionsShareADate()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "sameBusinessVersionDedupRevisionBetweenPagesRejectsTheCursorBeforeAnotherSelect()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "stableCacheBindsIndependentPhysicalAndWalIdentityRatherThanBusinessVersion()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "tableIdentityOrDirectoryRecreationCannotReuseMatchingTransactionCounters()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest",
+      "method": "unsettledSuspendedOrNonWalCacheFailsBeforeFetchingRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "aliasCannotFallbackToAnOrdinaryTableOrAnAbsentMv()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "aliasChangesDuringDependencySnapshotOrRowReadRejectThePage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "aliasCursorRejectsChangedMvOrBasePhysicalVersionWithUnchangedCheckpoint()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "aliasCursorRejectsRecreatedBaseOrMvWithMatchingTransactionCounters()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "aliasStatusDirectoryAndExactDependencySqlAreRequiredBeforeReadingRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "datasetDefinitionChangeRejectsAliasCursorBeforeFetchingAnotherPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "existingStockBasicLatestWithTableDependencyKeepsCallerVersionAndSkipsMvAliasMetadata()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "mvRefreshDuringAliasReadRejectsTheFetchedPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "recreatedAliasSqlHashOrStatusHistoryCannotReuseAnOldCursor()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "registeredAliasRejectsMissingOrWrongDependencyBeforeReadingMetadataOrRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "registeredAliasRejectsMultipleDependenciesBeforeReadingMetadataOrRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "stableAliasBindsDirectorySqlAndCompleteNativeMvVersionToItsCursor()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "validAliasRejectsInvalidLaggingUnsettledOrSuspendedMvBeforeFetchingRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest",
+      "method": "validAliasRejectsSameNameFreshMvWithWrongBaseOrAggregationOnItsFirstPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "aliasCannotFallbackToAnOrdinaryTableOrAnAbsentMv()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "aliasChangesDuringDependencySnapshotOrRowReadRejectThePage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "aliasCursorRejectsChangedMvOrBasePhysicalVersionWithUnchangedCheckpoint()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "aliasCursorRejectsRecreatedBaseOrMvWithMatchingTransactionCounters()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "aliasStatusDirectoryAndExactDependencySqlAreRequiredBeforeReadingRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "datasetDefinitionChangeRejectsAliasCursorBeforeFetchingAnotherPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "existingStockBasicLatestWithTableDependencyKeepsCallerVersionAndSkipsMvAliasMetadata()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "mvRefreshDuringAliasReadRejectsTheFetchedPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "recreatedAliasSqlHashOrStatusHistoryCannotReuseAnOldCursor()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "registeredAliasRejectsMissingOrWrongDependencyBeforeReadingMetadataOrRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "registeredAliasRejectsMultipleDependenciesBeforeReadingMetadataOrRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "stableAliasBindsDirectorySqlAndCompleteNativeMvVersionToItsCursor()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "validAliasRejectsInvalidLaggingUnsettledOrSuspendedMvBeforeFetchingRows()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "method": "validAliasRejectsSameNameFreshMvWithWrongBaseOrAggregationOnItsFirstPage()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.service.EtfMarketOverviewViewCatalogStartupTest",
+      "method": "actualCatalogRegistersReadonlyViewAndKeepsExistingSourceAndCacheJobs()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewViewCatalogStartupTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.service.ReadGroupJsonTest",
+      "method": "datesAndCursorRoundTripWithoutTypeOrPrecisionLoss()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.service.ReadGroupJsonTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.service.ReadGroupJsonTest",
+      "method": "projectionJsonPreservesNullsAndDoesNotExposeMutableBinaryValues()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.service.ReadGroupJsonTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.service.ReadGroupJsonTest",
+      "method": "rejectsAmbiguousDatesDuplicateKeysUnknownPropertiesAndOverflow()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.service.ReadGroupJsonTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.service.ReadGroupReaderTest",
+      "method": "cancellationPreservesCompletedPageAndDoesNotReadLaterMembers()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.service.ReadGroupReaderTest",
+      "method": "duplicateMembersAndUnboundedAggregateRequestsAreRejected()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.service.ReadGroupReaderTest",
+      "method": "failuresRemainDistinctFromEmptyPagesAndDoNotHideOtherMembers()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+      "stage": "pure"
+    },
+    {
+      "classname": "com.zoutrankil.data.service.ReadGroupReaderTest",
+      "method": "heterogeneousRowsKeepTheirOwnQueriesVersionsAndCursors()",
+      "latest_report": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+      "stage": "pure"
+    }
+  ],
+  "java_reports": [
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest.xml",
+      "sha256": "cbd7b46697ee215e05922461b3e0b64083a0893e5131663c8c52766d8758f3d2",
+      "executed_methods": 10,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest.xml",
+      "sha256": "75fd0ca04288b14df33c40f1f7aedd7552e0a608b1fa64b2308299de0b9786b6",
+      "executed_methods": 7,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest.xml",
+      "sha256": "0208cfeb36434676dfa378689febbc4b684e1a47595fb9ca6bd083fd49b9c087",
+      "executed_methods": 2,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderTest.xml",
+      "sha256": "269f4d949c2eecfd44cb6e259e04d841b35dc66696094211147cdf285649b5e3",
+      "executed_methods": 3,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbCacheTableReadGuardTest.xml",
+      "sha256": "fb02067d973b4873bcd2eab863d62de2673ebb18097b487e9c5732ea1441f252",
+      "executed_methods": 12,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewCacheTableReadGuardTest.xml",
+      "sha256": "4f69fe4be7ae5840420fd6237863c6b0007d1fc0f2887d577099c92583d3de19",
+      "executed_methods": 13,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "sha256": "e1368596d93eaa0060aa726b83e4c0c4057028bdc73b83ae48254e6d2c41d886",
+      "executed_methods": 23,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest.xml",
+      "sha256": "1aa490b8ff5a0c00977c7d9f756b9566ba6aa52c7c2de37d62bae018b92a7cf7",
+      "executed_methods": 9,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest.xml",
+      "sha256": "94588806cdb715a46387801a68fa45e5765fe285b48e0b412fe5624a740d1ed2",
+      "executed_methods": 13,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest.xml",
+      "sha256": "4345617f46bce7dc7060c537894c44ca4ee1321b21b3c33ae105ee31a2de50e0",
+      "executed_methods": 14,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest.xml",
+      "sha256": "966f6994180418c303ae359c9dc6cf596d4cd1a7eb944b6ff49a02a15c674614",
+      "executed_methods": 14,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewViewCatalogStartupTest.xml",
+      "sha256": "f769a1061d90acf507d29cf3574aef83ced5a7ebe473ba19d1f18b97ea0deb1f",
+      "executed_methods": 1,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.service.ReadGroupJsonTest.xml",
+      "sha256": "391c49d4fc73ed6b32bd92b3fba98ab28d28e0266d09e7385485be6e425a884d",
+      "executed_methods": 3,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-pure-tests-xml-20261006\\TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+      "sha256": "845e5e4a31e7daf019d3ed472652fa70141cd4d8d5d9bb954515c46bd69109c8",
+      "executed_methods": 4,
+      "stage": "pure"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-xml-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEtfMarketOverviewViewReadGuardTest.xml",
+      "sha256": "3edb269736328a3774588b84c5d60f4e08d9df4e2e1b35299ef224b944792ccc",
+      "executed_methods": 24,
+      "stage": "deadline"
+    },
+    {
+      "path": "artifacts\\java-migration\\D102\\commands\\java-view-read-acceptance-xml-20261006\\TEST-com.zoutrankil.data.config.EtfMarketOverviewDailyViewLiveAcceptanceTest.xml",
+      "sha256": "ebf3ba325de9ab22f148a8f839c199f408f6bb6f35949b80571bb6c182bd08b3",
+      "executed_methods": 1,
+      "stage": "live"
+    }
+  ],
+  "python_methods": [
+    "QueryGuards.test_original_multiline_and_binds_are_single_select",
+    "QueryGuards.test_nonselect_empty_and_semicolon_refuse",
+    "QueryGuards.test_formal_ddl_refuses_before_driver",
+    "QueryGuards.test_other_private_statement_refuses_before_driver",
+    "QueryGuards.test_exact_private_pid_root_required",
+    "QueryGuards.test_private_constructor_rejects_missing_attestation",
+    "QueryGuards.test_sentinel_truncation_refuses",
+    "QueryGuards.test_duplicate_selected_columns_refuse",
+    "QueryGuards.test_invalid_budget_refuses",
+    "QueryGuards.test_cancellation_refuses_before_driver",
+    "QueryGuards.test_pg_read_and_write_socket_waits_have_finite_deadline",
+    "QueryGuards.test_pg_timeout_closes_own_connection_and_restores_callback",
+    "ValuesAndMetadata.test_full_four_fields_exact_binary64_pass",
+    "ValuesAndMetadata.test_one_ulp_business_difference_is_not_accepted",
+    "ValuesAndMetadata.test_qwp_one_ulp_serialization_is_only_diagnostic",
+    "ValuesAndMetadata.test_qwp_wrong_null_and_large_number_refuse",
+    "ValuesAndMetadata.test_null_double_is_preserved",
+    "ValuesAndMetadata.test_missing_date_and_duplicate_key_refuse",
+    "ValuesAndMetadata.test_null_blank_nonmidnight_and_timezone_key_refuse",
+    "ValuesAndMetadata.test_required_counts_and_nonfinite_double_refuse",
+    "ValuesAndMetadata.test_signed_zero_bits_are_not_coerced",
+    "ValuesAndMetadata.test_wal_invalid_or_unsettled_refuse",
+    "ValuesAndMetadata.test_empty_target_keeps_raw_null_and_count_zero",
+    "ValuesAndMetadata.test_boolean_actual_counts_and_missing_raw_metadata_refuse",
+    "ValuesAndMetadata.test_view_missing_invalid_or_other_sql_refuse",
+    "ValuesAndMetadata.test_view_identity_and_status_history_missing_or_blank_refuse",
+    "ValuesAndMetadata.test_four_field_schema_wrong_type_or_duplicate_refuses",
+    "DdlAndAdmission.test_coordinator_sha_or_serial_gate_refuses",
+    "DdlAndAdmission.test_existing_wrong_view_is_never_replaced",
+    "DdlAndAdmission.test_existing_correct_view_is_read_only",
+    "DdlAndAdmission.test_prior_unknown_ack_blocks_new_attempt_even_if_view_exists",
+    "DdlAndAdmission.test_prior_ack_missing_view_is_not_resubmitted",
+    "DdlAndAdmission.test_durable_unknown_before_single_driver_attempt_no_retry",
+    "DdlAndAdmission.test_missing_view_with_changed_protected_frontier_refuses",
+    "DdlAndAdmission.test_source_read_failure_stays_failure",
+    "DdlAndAdmission.test_actual_private_listener_pid_root_and_ports_refuse_mismatch",
+    "DdlAndAdmission.test_source_complete_field_change_refuses_exact_capture",
+    "DdlAndAdmission.test_active_or_unknown_ledger_blocks_before_native_query",
+    "DdlAndAdmission.test_present_or_reused_producer_pid_blocks",
+    "ExplicitProcessIdentityReview.test_optional_path_and_sha_are_a_required_pair_before_evidence_read",
+    "ExplicitProcessIdentityReview.test_explicit_review_sha_must_be_lowercase_sha256",
+    "ExplicitProcessIdentityReview.test_complete_known_child_stop_and_explicit_later_identity_pass",
+    "ExplicitProcessIdentityReview.test_unaccepted_review_protocol_or_scope_refuses",
+    "ExplicitProcessIdentityReview.test_review_changed_sha_refuses",
+    "ExplicitProcessIdentityReview.test_full_historical_manifest_hash_or_inventory_drift_refuses",
+    "ExplicitProcessIdentityReview.test_review_wrong_private_target_or_gate_refuses",
+    "ExplicitProcessIdentityReview.test_old_failure_with_submission_or_diagnostic_claim_refuses",
+    "ExplicitProcessIdentityReview.test_current_birth_not_strictly_after_original_stop_refuses",
+    "ExplicitProcessIdentityReview.test_complete_stop_flags_false_or_missing_refuse",
+    "ExplicitProcessIdentityReview.test_child_sidecar_birth_or_parent_drift_refuses",
+    "ExplicitProcessIdentityReview.test_unknown_start_or_unreviewed_original_birth_refuses",
+    "ExplicitProcessIdentityReview.test_original_request_or_actual_bridge_response_drift_refuses",
+    "ExplicitProcessIdentityReview.test_default_present_or_reused_pid_still_refuses",
+    "ExplicitProcessIdentityReview.test_explicit_review_allows_only_exact_native_birth_name_and_parent",
+    "ExplicitProcessIdentityReview.test_native_query_preserves_utc_os_birth_and_excludes_command_lines",
+    "ExplicitProcessIdentityReview.test_native_unknown_birth_boolean_pid_or_server_pid_refuse",
+    "ExplicitProcessIdentityReview.test_native_query_failure_or_unrequested_pid_refuses",
+    "ExplicitProcessIdentityReview.test_nanosecond_stop_order_does_not_truncate_to_microseconds",
+    "ExplicitProcessIdentityReview.test_every_quiescence_boundary_reloads_review_with_full_manifest",
+    "ExplicitProcessIdentityReview.test_protocol2_complete_history_returns_exhaustive_stop_policy",
+    "ExplicitProcessIdentityReview.test_protocol2_current_helper_name_parent_and_newer_birth_are_diagnostic_only",
+    "ExplicitProcessIdentityReview.test_protocol2_current_birth_equal_or_earlier_than_any_old_stop_refuses",
+    "ExplicitProcessIdentityReview.test_protocol2_present_hard_denied_or_unlisted_pid_refuses_but_absent_is_safe",
+    "ExplicitProcessIdentityReview.test_protocol2_unknown_native_birth_or_reserved_server_pid_refuses",
+    "ExplicitProcessIdentityReview.test_protocol2_partition_missing_overlapping_boolean_or_duplicate_pid_refuses",
+    "ExplicitProcessIdentityReview.test_protocol2_second_failed_and_diagnostic_paths_cannot_use_old_admission",
+    "ExplicitProcessIdentityReview.test_protocol2_every_started_invocation_needs_its_frozen_response",
+    "ExplicitProcessIdentityReview.test_protocol2_response_sha_or_actual_bridge_pid_drift_refuses",
+    "ExplicitProcessIdentityReview.test_protocol2_incomplete_invocation_denies_every_pid_even_with_known_birth",
+    "ExplicitProcessIdentityReview.test_protocol2_unreviewed_second_original_instance_refuses",
+    "ExplicitProcessIdentityReview.test_protocol2_typed_frontier_sha_or_lease_drift_refuses",
+    "ExplicitProcessIdentityReview.test_protocol2_quiescence_queries_all_history_including_response_only_unknown_pid",
+    "ExplicitProcessIdentityReview.test_protocol2_two_valid_boundaries_allow_current_native_helper_identity_changes",
+    "ExplicitProcessIdentityReview.test_protocol2_all_instances_are_verified_and_latest_stop_controls_reuse",
+    "ExplicitProcessIdentityReview.test_protocol2_distinct_known_births_of_same_leaf_pid_pass",
+    "ExplicitProcessIdentityReview.test_protocol2_exact_duplicate_leaf_identity_refuses",
+    "ExplicitProcessIdentityReview.test_protocol2_equivalent_iso_precision_is_the_same_os_identity",
+    "ExplicitProcessIdentityReview.test_protocol2_reused_parent_pid_is_ambiguous_and_refuses",
+    "ExplicitProcessIdentityReview.test_protocol2_reused_actual_bridge_pid_is_ambiguous_and_refuses",
+    "ExplicitProcessIdentityReview.test_protocol2_root_pid_cannot_be_a_reused_child_identity",
+    "ExplicitProcessIdentityReview.test_protocol1_retains_pid_unique_children_even_when_birth_differs"
+  ],
+  "python_report": {
+    "path": "artifacts\\java-migration\\D102\\commands\\python-historical-identity-leaf-guards-20261006.json",
+    "sha256": "da716be168adc3ad7ece00d45f5cd1143dc4d78fad340b23165156468da4ff53"
+  },
+  "counting": "Latest metadata guard 24 subsumes earlier 23; Python final source cases replace earlier 39/59; failed pre-CREATE audits are retained outside passed-method counts"
+}

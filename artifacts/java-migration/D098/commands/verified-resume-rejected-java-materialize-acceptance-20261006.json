@@ -1,0 +1,386 @@
+{
+  "taskId" : "D098",
+  "checkedAt" : "2026-10-06T06:31:14.370410600Z",
+  "status" : "FAILED",
+  "target" : "private-127.0.0.1:19010/18822",
+  "privateDataRoot" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d098-isolated-questdb",
+  "ledger" : "var\\d098-java-5ca73133-08d2-48da-9c25-bdb801b35558.sqlite3",
+  "formalMutated" : false,
+  "formalWrittenRows" : 0,
+  "sourceUniverseReadyCertified" : false,
+  "fixtureSourceSubmissions" : [ ],
+  "formalBefore" : {
+    "source" : {
+      "id" : 1665,
+      "directory" : "l2_daily_features_recovery_20260911~1665",
+      "physicalTxn" : 11266,
+      "rows" : 4924676,
+      "pendingRows" : 0,
+      "sequencerTxn" : 11266,
+      "writerTxn" : 11266,
+      "bufferedTxnSize" : 0,
+      "tableSuspended" : false,
+      "walSuspended" : false
+    },
+    "mvPhysical" : {
+      "id" : 1813,
+      "directory" : "mv_retail_sentiment_daily_v1~1813",
+      "physicalTxn" : 252,
+      "rows" : 886,
+      "pendingRows" : 0,
+      "sequencerTxn" : 252,
+      "writerTxn" : 252,
+      "bufferedTxnSize" : 0,
+      "tableSuspended" : false,
+      "walSuspended" : false
+    },
+    "mv" : {
+      "status" : "invalid",
+      "invalidationReason" : "materialized view is ahead of base table and cannot be synchronized",
+      "base" : "l2_daily_features",
+      "sql" : "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "refreshed" : 10206,
+      "reportedBase" : 11266
+    }
+  },
+  "initialSourceRows" : 15828,
+  "calendarRows" : 20,
+  "calendar" : [ {
+    "date" : "2026-09-10",
+    "open" : 1,
+    "previousDate" : "20260909"
+  }, {
+    "date" : "2026-09-11",
+    "open" : 1,
+    "previousDate" : "20260910"
+  }, {
+    "date" : "2026-09-12",
+    "open" : 0,
+    "previousDate" : "20260911"
+  }, {
+    "date" : "2026-09-13",
+    "open" : 0,
+    "previousDate" : "20260911"
+  }, {
+    "date" : "2026-09-14",
+    "open" : 1,
+    "previousDate" : "20260911"
+  }, {
+    "date" : "2026-09-15",
+    "open" : 1,
+    "previousDate" : "20260914"
+  }, {
+    "date" : "2026-09-16",
+    "open" : 1,
+    "previousDate" : "20260915"
+  }, {
+    "date" : "2026-09-17",
+    "open" : 1,
+    "previousDate" : "20260916"
+  }, {
+    "date" : "2026-09-18",
+    "open" : 1,
+    "previousDate" : "20260917"
+  }, {
+    "date" : "2026-09-19",
+    "open" : 0,
+    "previousDate" : "20260918"
+  }, {
+    "date" : "2026-09-20",
+    "open" : 0,
+    "previousDate" : "20260918"
+  }, {
+    "date" : "2026-09-21",
+    "open" : 1,
+    "previousDate" : "20260918"
+  }, {
+    "date" : "2026-09-22",
+    "open" : 1,
+    "previousDate" : "20260921"
+  }, {
+    "date" : "2026-09-23",
+    "open" : 1,
+    "previousDate" : "20260922"
+  }, {
+    "date" : "2026-09-24",
+    "open" : 1,
+    "previousDate" : "20260923"
+  }, {
+    "date" : "2026-09-25",
+    "open" : 0,
+    "previousDate" : "20260924"
+  }, {
+    "date" : "2026-09-26",
+    "open" : 0,
+    "previousDate" : "20260924"
+  }, {
+    "date" : "2026-09-27",
+    "open" : 0,
+    "previousDate" : "20260924"
+  }, {
+    "date" : "2026-09-28",
+    "open" : 1,
+    "previousDate" : "20260924"
+  }, {
+    "date" : "2026-09-29",
+    "open" : 1,
+    "previousDate" : "20260928"
+  } ],
+  "calendarSnapshot" : {
+    "id" : 10,
+    "directory" : "exchange_calendar~10",
+    "physicalTxn" : 1,
+    "rows" : 20,
+    "pendingRows" : 0,
+    "sequencerTxn" : 1,
+    "writerTxn" : 1,
+    "bufferedTxnSize" : 0,
+    "tableSuspended" : false,
+    "walSuspended" : false
+  },
+  "first" : {
+    "result" : {
+      "result" : {
+        "runId" : "d098-d23b00c9-74e5-42b9-91d2-8ffa0bf26ee0",
+        "state" : "VERIFIED",
+        "sourceRows" : 2,
+        "verifiedRows" : 2,
+        "errorCode" : null,
+        "reusedRows" : 0
+      },
+      "sourceRawRows" : 15828,
+      "source" : {
+        "sourceId" : 9,
+        "sourceDirectory" : "l2_daily_features~9",
+        "sourceTableTxn" : 2,
+        "sourceSeqTxn" : 2,
+        "sourceWriterTxn" : 2,
+        "sourceSettled" : true,
+        "mvId" : 11,
+        "mvDirectory" : "mv_retail_sentiment_daily_v1~11",
+        "mvTxn" : 1,
+        "mvSeqTxn" : 1,
+        "mvWriterTxn" : 1,
+        "mvSettled" : true,
+        "valid" : true,
+        "caughtUp" : true,
+        "definitionSha" : "871f00b9d08484e8e651e56a546aa8391b925d91eb64fdc75987c41228f51664",
+        "refreshStarted" : "2026-10-06 06:25:13.880086",
+        "refreshFinished" : "2026-10-06 06:25:13.958596",
+        "refreshBaseTxn" : 2,
+        "reportedBaseTxn" : 2,
+        "sourcePartition" : "DAY",
+        "viewStatus" : "valid"
+      },
+      "target" : {
+        "sourceId" : 9,
+        "sourceDirectory" : "l2_daily_features~9",
+        "sourceTableTxn" : 2,
+        "sourceSeqTxn" : 2,
+        "sourceWriterTxn" : 2,
+        "sourceSettled" : true,
+        "mvId" : 11,
+        "mvDirectory" : "mv_retail_sentiment_daily_v1~11",
+        "mvTxn" : 1,
+        "mvSeqTxn" : 1,
+        "mvWriterTxn" : 1,
+        "mvSettled" : true,
+        "valid" : true,
+        "caughtUp" : true,
+        "definitionSha" : "871f00b9d08484e8e651e56a546aa8391b925d91eb64fdc75987c41228f51664",
+        "refreshStarted" : "2026-10-06 06:25:13.880086",
+        "refreshFinished" : "2026-10-06 06:25:13.958596",
+        "refreshBaseTxn" : 2,
+        "reportedBaseTxn" : 2,
+        "sourcePartition" : "DAY",
+        "viewStatus" : "valid"
+      },
+      "targetSnapshotError" : null
+    },
+    "status" : {
+      "runId" : "d098-d23b00c9-74e5-42b9-91d2-8ffa0bf26ee0",
+      "state" : "VERIFIED",
+      "targetId" : "questdb-1c7dde8d059c7b3807076edb2bd49a6b44a381e1a278a842a77bcceff3d332d0",
+      "logicalDate" : "2026-10-06",
+      "verifiedRows" : 2,
+      "unresolvedSlices" : 0,
+      "cancellationRequested" : false,
+      "currentTarget" : {
+        "sourceId" : 9,
+        "sourceDirectory" : "l2_daily_features~9",
+        "sourceTableTxn" : 2,
+        "sourceSeqTxn" : 2,
+        "sourceWriterTxn" : 2,
+        "sourceSettled" : true,
+        "mvId" : 11,
+        "mvDirectory" : "mv_retail_sentiment_daily_v1~11",
+        "mvTxn" : 1,
+        "mvSeqTxn" : 1,
+        "mvWriterTxn" : 1,
+        "mvSettled" : true,
+        "valid" : true,
+        "caughtUp" : true,
+        "definitionSha" : "871f00b9d08484e8e651e56a546aa8391b925d91eb64fdc75987c41228f51664",
+        "refreshStarted" : "2026-10-06 06:25:13.880086",
+        "refreshFinished" : "2026-10-06 06:25:13.958596",
+        "refreshBaseTxn" : 2,
+        "reportedBaseTxn" : 2,
+        "sourcePartition" : "DAY",
+        "viewStatus" : "valid"
+      },
+      "currentTargetError" : null
+    },
+    "ledgerEntries" : [ {
+      "id" : "attempt-4db47ca7-c822-4476-b401-9a155f2beac2",
+      "kind" : "ATTEMPT",
+      "runId" : "d098-d23b00c9-74e5-42b9-91d2-8ffa0bf26ee0",
+      "parentId" : "d098-d23b00c9-74e5-42b9-91d2-8ffa0bf26ee0",
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"b3bbf11b8a3892b002e3d0d4db321573161dbf30de5e360008493746e39279b9\",\"readbackEvidence\":\"ledger:slice-62f369fb-1351-4b8a-bc38-057c5577a8c3:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false}}",
+      "updatedAt" : "2026-10-06T06:33:15.312527100Z"
+    }, {
+      "id" : "d098-d23b00c9-74e5-42b9-91d2-8ffa0bf26ee0",
+      "kind" : "RUN",
+      "runId" : "d098-d23b00c9-74e5-42b9-91d2-8ffa0bf26ee0",
+      "parentId" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"b3bbf11b8a3892b002e3d0d4db321573161dbf30de5e360008493746e39279b9\",\"readbackEvidence\":\"ledger:slice-62f369fb-1351-4b8a-bc38-057c5577a8c3:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false}}",
+      "updatedAt" : "2026-10-06T06:33:15.325199500Z"
+    }, {
+      "id" : "slice-62f369fb-1351-4b8a-bc38-057c5577a8c3",
+      "kind" : "SLICE",
+      "runId" : "d098-d23b00c9-74e5-42b9-91d2-8ffa0bf26ee0",
+      "parentId" : "attempt-4db47ca7-c822-4476-b401-9a155f2beac2",
+      "state" : "VERIFIED",
+      "revision" : 6,
+      "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"d967645997b22ae5db6b34211c4478127348b51d84994c4c4e6b46aa35712a1d\",\"readbackEvidence\":\"ledger:slice-62f369fb-1351-4b8a-bc38-057c5577a8c3:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false}}",
+      "updatedAt" : "2026-10-06T06:33:15.246956700Z"
+    } ],
+    "intervalLeaseReleased" : true
+  },
+  "replay" : {
+    "result" : {
+      "result" : {
+        "runId" : "d098-822bd4c8-0115-4052-9527-63ca1440aa5b",
+        "state" : "VERIFIED",
+        "sourceRows" : 2,
+        "verifiedRows" : 2,
+        "errorCode" : null,
+        "reusedRows" : 0
+      },
+      "sourceRawRows" : 15828,
+      "source" : {
+        "sourceId" : 9,
+        "sourceDirectory" : "l2_daily_features~9",
+        "sourceTableTxn" : 2,
+        "sourceSeqTxn" : 2,
+        "sourceWriterTxn" : 2,
+        "sourceSettled" : true,
+        "mvId" : 11,
+        "mvDirectory" : "mv_retail_sentiment_daily_v1~11",
+        "mvTxn" : 1,
+        "mvSeqTxn" : 1,
+        "mvWriterTxn" : 1,
+        "mvSettled" : true,
+        "valid" : true,
+        "caughtUp" : true,
+        "definitionSha" : "871f00b9d08484e8e651e56a546aa8391b925d91eb64fdc75987c41228f51664",
+        "refreshStarted" : "2026-10-06 06:25:13.880086",
+        "refreshFinished" : "2026-10-06 06:25:13.958596",
+        "refreshBaseTxn" : 2,
+        "reportedBaseTxn" : 2,
+        "sourcePartition" : "DAY",
+        "viewStatus" : "valid"
+      },
+      "target" : {
+        "sourceId" : 9,
+        "sourceDirectory" : "l2_daily_features~9",
+        "sourceTableTxn" : 2,
+        "sourceSeqTxn" : 2,
+        "sourceWriterTxn" : 2,
+        "sourceSettled" : true,
+        "mvId" : 11,
+        "mvDirectory" : "mv_retail_sentiment_daily_v1~11",
+        "mvTxn" : 1,
+        "mvSeqTxn" : 1,
+        "mvWriterTxn" : 1,
+        "mvSettled" : true,
+        "valid" : true,
+        "caughtUp" : true,
+        "definitionSha" : "871f00b9d08484e8e651e56a546aa8391b925d91eb64fdc75987c41228f51664",
+        "refreshStarted" : "2026-10-06 06:25:13.880086",
+        "refreshFinished" : "2026-10-06 06:25:13.958596",
+        "refreshBaseTxn" : 2,
+        "reportedBaseTxn" : 2,
+        "sourcePartition" : "DAY",
+        "viewStatus" : "valid"
+      },
+      "targetSnapshotError" : null
+    },
+    "status" : {
+      "runId" : "d098-822bd4c8-0115-4052-9527-63ca1440aa5b",
+      "state" : "VERIFIED",
+      "targetId" : "questdb-1c7dde8d059c7b3807076edb2bd49a6b44a381e1a278a842a77bcceff3d332d0",
+      "logicalDate" : "2026-10-06",
+      "verifiedRows" : 2,
+      "unresolvedSlices" : 0,
+      "cancellationRequested" : false,
+      "currentTarget" : {
+        "sourceId" : 9,
+        "sourceDirectory" : "l2_daily_features~9",
+        "sourceTableTxn" : 2,
+        "sourceSeqTxn" : 2,
+        "sourceWriterTxn" : 2,
+        "sourceSettled" : true,
+        "mvId" : 11,
+        "mvDirectory" : "mv_retail_sentiment_daily_v1~11",
+        "mvTxn" : 1,
+        "mvSeqTxn" : 1,
+        "mvWriterTxn" : 1,
+        "mvSettled" : true,
+        "valid" : true,
+        "caughtUp" : true,
+        "definitionSha" : "871f00b9d08484e8e651e56a546aa8391b925d91eb64fdc75987c41228f51664",
+        "refreshStarted" : "2026-10-06 06:25:13.880086",
+        "refreshFinished" : "2026-10-06 06:25:13.958596",
+        "refreshBaseTxn" : 2,
+        "reportedBaseTxn" : 2,
+        "sourcePartition" : "DAY",
+        "viewStatus" : "valid"
+      },
+      "currentTargetError" : null
+    },
+    "ledgerEntries" : [ {
+      "id" : "attempt-fe9e330b-240e-4605-9619-8c8af2bf01db",
+      "kind" : "ATTEMPT",
+      "runId" : "d098-822bd4c8-0115-4052-9527-63ca1440aa5b",
+      "parentId" : "d098-822bd4c8-0115-4052-9527-63ca1440aa5b",
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"b3bbf11b8a3892b002e3d0d4db321573161dbf30de5e360008493746e39279b9\",\"readbackEvidence\":\"ledger:slice-12350ef9-8576-4a76-9382-9a5a2a176656:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false}}",
+      "updatedAt" : "2026-10-06T06:35:04.778893600Z"
+    }, {
+      "id" : "d098-822bd4c8-0115-4052-9527-63ca1440aa5b",
+      "kind" : "RUN",
+      "runId" : "d098-822bd4c8-0115-4052-9527-63ca1440aa5b",
+      "parentId" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"b3bbf11b8a3892b002e3d0d4db321573161dbf30de5e360008493746e39279b9\",\"readbackEvidence\":\"ledger:slice-12350ef9-8576-4a76-9382-9a5a2a176656:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false}}",
+      "updatedAt" : "2026-10-06T06:35:04.790822400Z"
+    }, {
+      "id" : "slice-12350ef9-8576-4a76-9382-9a5a2a176656",
+      "kind" : "SLICE",
+      "runId" : "d098-822bd4c8-0115-4052-9527-63ca1440aa5b",
+      "parentId" : "attempt-fe9e330b-240e-4605-9619-8c8af2bf01db",
+      "state" : "VERIFIED",
+      "revision" : 6,
+      "payloadJson" : "{\"verification\":{\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":2,\"sourceFingerprint\":\"d967645997b22ae5db6b34211c4478127348b51d84994c4c4e6b46aa35712a1d\",\"readbackEvidence\":\"ledger:slice-12350ef9-8576-4a76-9382-9a5a2a176656:revision:5\",\"mismatchedRows\":0,\"matchedRows\":2,\"expectedRows\":2,\"passed\":true,\"writerStopped\":false}}",
+      "updatedAt" : "2026-10-06T06:35:04.721453Z"
+    } ],
+    "intervalLeaseReleased" : true
+  },
+  "errorClass" : "IllegalStateException"
+}

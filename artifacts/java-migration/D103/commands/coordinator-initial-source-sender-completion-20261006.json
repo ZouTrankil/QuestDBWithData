@@ -1,0 +1,43 @@
+{
+  "protocol_version": 1,
+  "task_id": "D103",
+  "decision": "accepted_for_initial_source_readonly_reconciliation",
+  "failed_fixture": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-initial-20261006.json",
+    "sha256": "13f05b7bd5586450b66f694d1e6b4582de26cb3aea6d9ede5898acd32be54ac8"
+  },
+  "create_claim": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\index-monthly-create-once-20261006.json",
+    "sha256": "e6093b23285aafabdb2b5352a686dc3c2c501f5bf420e1c15ea808975c335877"
+  },
+  "insert_claim": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\index-monthly-initial-insert-once-20261006.json",
+    "sha256": "3601c017b74ad57964eb08599ab5e609fdf9f32e5d9aaa8602993bc84680a0d1"
+  },
+  "producer_code": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d103_equity_style_isolated.py",
+    "sha256": "bb3fc799711ebf3637feca63f9fe29304341bfd9d4bbbab6b001b8f2722e6210"
+  },
+  "shell_completion": {
+    "session_id": 21749,
+    "exit_code": 1,
+    "status": "COMPLETED",
+    "observed_at": "2026-10-06T14:51:08.831676+00:00",
+    "evidence": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-initial-shell-completion-20261006.json",
+      "sha256": "590946eb48adbecdaa07fed141599779c1aaec56b21672a80ddeadf32c0376dc"
+    }
+  },
+  "ownership": {
+    "single_synchronous_http_attempt": true,
+    "http_context_closed_before_exit": true,
+    "native_subprocess_run_synchronous": true,
+    "no_business_writer_child": true,
+    "no_threaded_or_background_submission": true,
+    "producer_pid_birth_not_recorded": true
+  },
+  "retry_forbidden": true,
+  "raw_insert_response_not_retained": true,
+  "original_insert_ack": "UNKNOWN",
+  "scope": "Only permits bounded SELECT reconciliation of already submitted source fixture. Synchronous request context exited and the actual foreground shell completed. Exact producer PID/birth was not captured. Do not upgrade the original ACK, modify historical claims, resubmit source INSERT or infer generic process-stop proof for other jobs. Further materialization requires complete current exact source fields/bits, unchanged original native private server identity, settled WAL and unchanged formal/private output proof."
+}

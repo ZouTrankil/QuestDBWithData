@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2026-10-06T16:27:14.826Z" hostname="AMD395" time="0.738">
+  <properties/>
+  <testcase name="explicitAcknowledgedFlushOccursOnceAndCloseDoesNotSubmitAgain()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.591"/>
+  <testcase name="targetIdentityIsStableLegalBoundedAndChangesWithEndpointSchemaOrGeneration()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.009"/>
+  <testcase name="senderConstructionFailureHasNoSubmissionAndLeavesStoppedState()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.004"/>
+  <testcase name="allNullHistoricalRowCannotBecomeTimestampOnlyIlpButRemainsTypedReadable()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.003"/>
+  <testcase name="eachMissingRequiredMonthlyFieldRejectsBeforeAnyPreflightOrSender()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.003"/>
+  <testcase name="constructingRowsFailureDiscardsBufferWithoutCallingFlush()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.006"/>
+  <testcase name="unknownAckRetainsUnresolvedAndNeverAutomaticallyFlushesOrReplays()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.011"/>
+  <testcase name="emptyPhysicalTxnRemainsNullAndRequiresIndependentZeroRowsAndZeroWal()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.001"/>
+  <testcase name="twelveRowsRemainBelowOneMiBBudgetAndDistinctCanonicalKeys()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.005"/>
+  <testcase name="invalidReadbackKeysAndRangeFailBeforeJdbc()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.011"/>
+  <testcase name="closeFailureCannotClaimWriterStoppedEvenWhenFlushAcknowledged()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.009"/>
+  <testcase name="nonemptySnapshotsPreservePhysicalWalDifferencesAndRejectPendingOrSuspended()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.002"/>
+  <testcase name="optionalQuarterlyGdpAndTwelveObservationRatioCanBothBeNullOnCompleteWrite()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.005"/>
+  <testcase name="batchIsOneToTwelveUniqueMonthsAndRejectsEmptyNullDuplicateAndOverflowBeforeSend()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.009"/>
+  <testcase name="initializedMissingWalFrontierRequiresActualEmptyRowsAndEveryZeroWalFieldWithoutNormalizingNull()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.0"/>
+  <testcase name="freshPortHasNoHistoricalWriterStoppedProof()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.003"/>
+  <testcase name="onlyExplicitIsolatedNameIsAdmittedBeforeAnyConnectionOrSender()" classname="com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest" time="0.054"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

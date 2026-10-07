@@ -1,0 +1,71 @@
+{
+  "task_id": "D104",
+  "protocol_version": 1,
+  "decision": "accepted_for_remaining_five_source_initial_only",
+  "checked_at": "2026-10-06T16:33:56.811925+00:00",
+  "partial_audit": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-known-initial-cpi-readonly-review-20261007.json",
+    "sha256": "49b089dcf684c0da50aabcb2478ad2143f4eeadda506e4e8cb608f2ca0632604"
+  },
+  "failed_initial": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-20261007.json",
+    "sha256": "516195048104e45c61ed0d7ff5796f32eca6d72dabc493c16b2a3f1e3667c534"
+  },
+  "preflight": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007.json",
+    "sha256": "fc4b839c44254aee9f221e1246c5279738cf33704eb12749f2f70691347f530b"
+  },
+  "startup": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\private-server-start-20261007.json",
+    "sha256": "9dccda7261b680798924e7632c4f8dd646c15e8f0442e737b80ba701f36f51f7"
+  },
+  "native_stop": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\known-initial-source-producer-native-stop-20261007.json",
+    "sha256": "22eb9d54a388a6d61ecc3a5344d57d27cf8af3e57e3ba4c685906cdfd014c7ac"
+  },
+  "executor_completion": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\known-initial-source-executor-completion-20261007.json",
+    "sha256": "5d12f3651f75a44ff361f00ecd3f0ffff7229f70b79a099b38fac9e7b0f9df0f"
+  },
+  "target": {
+    "pid": 43084,
+    "birth_utc": "2026-10-06T16:04:24.4330550Z",
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19040,
+    "pg_port": 18852
+  },
+  "script": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d104_macro_core_initial_after_known_partial.py",
+    "sha256": "d813f0363ad5dc0558001b2b9f8c6a4225187ddf1c8fe4520d6898feb7ffac32"
+  },
+  "guards": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d104_known_partial_guards.py",
+    "sha256": "1f03292ebb7460e6e41e35522efa070f8e66777d56bfe4d2fe01f19bc241bb3e"
+  },
+  "guards_log": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\python-known-partial-guards-final-20261007.log",
+    "sha256": "129d734aeee11de38e18c7efbe70d43f7d090e8d743d811b7034f513c469dd5f"
+  },
+  "guards_PASS": 31,
+  "guards_executor": {
+    "chunk_id": "75e9b6",
+    "exit_code": 0,
+    "status": "COMPLETED"
+  },
+  "independent_static_review": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-known-partial-continuation-static-review-20261007.json",
+    "sha256": "61d70a68126a94389da7288c91c8d43f6bb6d8c54042105044459beab1dab8a1"
+  },
+  "new_DDL": 5,
+  "new_DML": 5,
+  "new_source_rows": 21,
+  "cpi_resubmissions": 0,
+  "formal_writes": 0,
+  "private_output_writes": 0,
+  "automatic_retry": false,
+  "original_failed_evidence_preserved": true,
+  "java_writes_admitted": false,
+  "D105_admitted": false,
+  "scope": "Only five never-submitted missing source tables in the exact attested D104 private instance. Two original CPI ACKs remain untouched. Original initial receipt stays FAILED."
+}

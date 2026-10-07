@@ -1,0 +1,38 @@
+{
+  "task_id": "D103",
+  "status": "VERIFIED_KNOWN_INCREMENT_JVM_STOP_AND_ALL_SCOPED_LEDGER_TERMINAL",
+  "increment_receipt": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-increment-acceptance-20261006.json",
+    "sha256": "a13875847e736ba3848190071800fb8968fb6dfde879344e0338fbda647549e5"
+  },
+  "initial_readonly_receipt": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-readonly-recovery-20261006.json",
+    "sha256": "59dcdd9257c198c72944828f67226e74be05d760fb0bb37475f032b162aec7b4"
+  },
+  "native": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\final-increment-java-native-stop-20261006.json",
+    "sha256": "2b3abbb12d66402457f13ff2ed563a2b2f6bd7c0e34922129dd4c480547a1fff"
+  },
+  "executor_completion": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\final-increment-java-executor-completion-20261006.json",
+    "sha256": "0bf5b2dc0c59e2fc20f3c886094fb0c51f7e8e3c6af07e3e9ca55c06edfcdfcb"
+  },
+  "junit": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-increment-result-20261006\\TEST-com.zoutrankil.data.config.EquityStyleMonthlyLiveAcceptanceTest.xml",
+    "sha256": "9e90c07fbd08f23ecf0600980ed28db3b664ba6ce2bb35afa2ac8d573b1d6ee5"
+  },
+  "ledger_terminal": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\final-java-terminal-ledger-20261006.json",
+    "sha256": "b662421250687d9d43cb980f152f1ccd967cde0052523fd3f6736cf2ffc3a7e1"
+  },
+  "run_count": 9,
+  "entry_count": 21,
+  "event_count": 85,
+  "retained_leases": 0,
+  "original_initial_jvm_pid_birth_not_recorded": true,
+  "original_initial_junit_status": "FAILED_FINAL_RECEIPT_SERIALIZATION",
+  "formal_writes": 0,
+  "new_source_submissions": 0,
+  "new_output_publications": 0,
+  "scope": "READ-only terminal census after actual incremental success. Original failed test and source UNKNOWN ACK remain preserved; no native identity is invented."
+}

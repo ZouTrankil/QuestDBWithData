@@ -1,0 +1,512 @@
+{
+  "task_id": "D101",
+  "stage": "independent_new_hit_run_review",
+  "checked_at": "2026-10-06T11:06:45.183899+00:00",
+  "status": "PASS",
+  "recommendation": "accepted_two_day_new_hit_zero_publish",
+  "blockers": [],
+  "scope": {
+    "actual_local_sqlite_mode": "ro",
+    "query_only": true,
+    "questdb_service_queries_by_reviewer": 0,
+    "cim_queries_by_reviewer": 0,
+    "owner_invocations_by_reviewer": 0,
+    "gradle_runs_by_reviewer": 0,
+    "ledger_mutations_by_reviewer": 0,
+    "new_only_artifact": true
+  },
+  "run_id": "d101-66903d41-b564-4c6e-8a7d-f7b8422bad88",
+  "ledger_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-45e5e7ce-b273-4510-8d15-e1abe5397550.sqlite3",
+  "frozen_source_version": "40ea432abd94e78faf7994fe74cf68fbcc981113340d312a57ff7184a2358e93",
+  "target_id": "questdb-012f0bebfa498858a5ebe3040de1b5b3c9dc18dabfc6f7cbcd31ad2899d41af9",
+  "actual_owner_hits": 2,
+  "actual_owner_misses": 0,
+  "cache_ilp_submitted_rows": 0,
+  "coverage_ilp_submitted_rows": 0,
+  "actual_java_submission_units": 2,
+  "checkpoint_after": "2026-09-18",
+  "entries": [
+    {
+      "id": "attempt-1b698d82-436f-46d1-922c-6a60a014b4ad",
+      "kind": "ATTEMPT",
+      "state": "VERIFIED",
+      "revision": 2,
+      "verified_units": 2,
+      "writer_stopped_field": false,
+      "readback_evidence": "ledger:slice-f7ddf9fc-62e7-4ba5-ac65-e41404831f3e:revision:5;ledger:slice-b4c6fb07-6003-4f35-a985-772a6f14eec1:revision:5"
+    },
+    {
+      "id": "d101-66903d41-b564-4c6e-8a7d-f7b8422bad88",
+      "kind": "RUN",
+      "state": "VERIFIED",
+      "revision": 2,
+      "verified_units": 2,
+      "writer_stopped_field": false,
+      "readback_evidence": "ledger:slice-f7ddf9fc-62e7-4ba5-ac65-e41404831f3e:revision:5;ledger:slice-b4c6fb07-6003-4f35-a985-772a6f14eec1:revision:5"
+    },
+    {
+      "id": "slice-b4c6fb07-6003-4f35-a985-772a6f14eec1",
+      "kind": "SLICE",
+      "state": "VERIFIED",
+      "revision": 6,
+      "verified_units": 1,
+      "writer_stopped_field": false,
+      "readback_evidence": "ledger:slice-b4c6fb07-6003-4f35-a985-772a6f14eec1:revision:5"
+    },
+    {
+      "id": "slice-f7ddf9fc-62e7-4ba5-ac65-e41404831f3e",
+      "kind": "SLICE",
+      "state": "VERIFIED",
+      "revision": 6,
+      "verified_units": 1,
+      "writer_stopped_field": false,
+      "readback_evidence": "ledger:slice-f7ddf9fc-62e7-4ba5-ac65-e41404831f3e:revision:5"
+    }
+  ],
+  "event_count": 20,
+  "submitted_units": 2,
+  "submitted_dates": [
+    "2026-09-17",
+    "2026-09-18"
+  ],
+  "retained_all_ledger_leases": 0,
+  "old_recovered_run_still_verified": true,
+  "verification_proof_writer_stopped_field_note": "Normal ACK ledger proofs retain generic writerStopped=false. Actual stop is independently proved by Gateway writerStopped before/after live validation and the fully SHA-bound exited process trees; raw proof flags are not rewritten.",
+  "publications": [
+    {
+      "trade_date": "2026-09-17",
+      "invocation_id": "3f77fbe5-5af4-40f8-a393-263ce67f5f59",
+      "slice_id": "slice-f7ddf9fc-62e7-4ba5-ac65-e41404831f3e",
+      "durable_submitted_revision": 4,
+      "actual_owner_hits": 1,
+      "actual_owner_misses": 0,
+      "cache_ilp_submitted_rows": 0,
+      "coverage_ilp_submitted_rows": 0,
+      "original_digest_verified": true,
+      "source_and_target_snapshots_unchanged": true,
+      "response": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.response.json",
+        "sha256": "1275c3dc1a3209d664dba92a3c68ccd608adce1deaec323bbb501f80cc17b431"
+      },
+      "intent": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.intent.json",
+        "sha256": "ccb72dc7df5f8b94ecc720791f5bb7c72bf689d9c3f39e40027a0bbe99a9c621"
+      },
+      "atomic_claim": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-owner-intent-claims\\a65e520d1cc7475a2241b26f81a1a9b63d1d12e4f09362893719bc7f5e2ef076.claim.json",
+        "sha256": "87ef878d942e40b01b12c98a218b4316062e3e30b68c08b8547cdba6104b2eda"
+      },
+      "invocation_claim_raw_ack": "UNKNOWN"
+    },
+    {
+      "trade_date": "2026-09-18",
+      "invocation_id": "d721b5ef-5278-4294-a6d4-1a482060e06c",
+      "slice_id": "slice-b4c6fb07-6003-4f35-a985-772a6f14eec1",
+      "durable_submitted_revision": 4,
+      "actual_owner_hits": 1,
+      "actual_owner_misses": 0,
+      "cache_ilp_submitted_rows": 0,
+      "coverage_ilp_submitted_rows": 0,
+      "original_digest_verified": true,
+      "source_and_target_snapshots_unchanged": true,
+      "response": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.response.json",
+        "sha256": "0c2dcd7670d815a60b1154a1aa93a7e2d65f985d028343a5ae5aba1333c2bf84"
+      },
+      "intent": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.intent.json",
+        "sha256": "71e3d6d863dd81dd97d76182c4c91c59c8d4bd9f1f467792b3c1efc7ac19ed96"
+      },
+      "atomic_claim": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-owner-intent-claims\\068a5cd3d4adecfb604d2ae74cea7fd1129f905854e3e490d46bf558b5f2f684.claim.json",
+        "sha256": "8fd729ae14b9529015717aa62a41a52680da13d11810fd66b2412f78986dfe90"
+      },
+      "invocation_claim_raw_ack": "UNKNOWN"
+    }
+  ],
+  "processes": [
+    {
+      "kind": "owner.read hit",
+      "invocation_id": "3f77fbe5-5af4-40f8-a393-263ce67f5f59",
+      "launcher_pid": 35904,
+      "actual_bridge_pid": 34416,
+      "known_process_identities": 7,
+      "unknown_process_identities": 0,
+      "tree_stopped": true,
+      "forced": false,
+      "stop_evidence": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.process-stopped.json",
+        "sha256": "33f7f86d37753094ba964ff88d2c525b7082b9cf7d05da7045b6ff69c6acd969"
+      },
+      "observed_at": "2026-10-06T11:00:14.291009400Z"
+    },
+    {
+      "kind": "bound readonly unit preview",
+      "invocation_id": "70bb1d34-fc4d-4954-8a48-046ac938cbb6",
+      "launcher_pid": 33552,
+      "actual_bridge_pid": 12032,
+      "known_process_identities": 6,
+      "unknown_process_identities": 0,
+      "tree_stopped": true,
+      "forced": false,
+      "stop_evidence": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-70bb1d34-fc4d-4954-8a48-046ac938cbb6.process-stopped.json",
+        "sha256": "bf1e0e01b83817925e33a96559776e402e600c2952a63aefa99ad61880679136"
+      },
+      "observed_at": "2026-10-06T10:59:58.866381600Z"
+    },
+    {
+      "kind": "owner.read hit",
+      "invocation_id": "d721b5ef-5278-4294-a6d4-1a482060e06c",
+      "launcher_pid": 46480,
+      "actual_bridge_pid": 30648,
+      "known_process_identities": 7,
+      "unknown_process_identities": 0,
+      "tree_stopped": true,
+      "forced": false,
+      "stop_evidence": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.process-stopped.json",
+        "sha256": "ba6b9f246471eba904b06574aafe9056b7debc4e0676799fd44f70d8a356f42d"
+      },
+      "observed_at": "2026-10-06T11:00:41.682053500Z"
+    },
+    {
+      "kind": "bound readonly unit preview",
+      "invocation_id": "e21acc0d-1b33-4e3d-873a-5770b73a9624",
+      "launcher_pid": 28388,
+      "actual_bridge_pid": 34444,
+      "known_process_identities": 6,
+      "unknown_process_identities": 0,
+      "tree_stopped": true,
+      "forced": false,
+      "stop_evidence": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-e21acc0d-1b33-4e3d-873a-5770b73a9624.process-stopped.json",
+        "sha256": "09ac4541f1641a33fb8b96d5b5d66fcbcbb47805a1bf4dcb7730088fcf0c44e4"
+      },
+      "observed_at": "2026-10-06T11:00:26.089522400Z"
+    }
+  ],
+  "process_evidence_scope": "Existing actual Java start/stop/child-birth evidence and live Gateway fresh native checks; no current native query by this reviewer.",
+  "values": {
+    "two_current_cache_rows": 2,
+    "two_current_coverage_rows": 2,
+    "all_stored_fields_equal_first": true,
+    "cache_unique_fields": 10,
+    "receipt_unique_fields": 10,
+    "key_and_range_cache_field_comparisons": 20,
+    "pg_reference_double_raw_bit_comparisons": 8,
+    "independent_jdbc_double_raw_bit_comparisons": 8,
+    "double_tolerance": 0,
+    "five_frontiers_before_publication_after_publication_after_reads_equal": true,
+    "tables_after": {
+      "etf_share": {
+        "table": "etf_share",
+        "id": 9,
+        "directory": "etf_share~9",
+        "physicalTxn": 4,
+        "metadataRows": 1532,
+        "actualRows": 1532,
+        "sequenceTxn": 4,
+        "writerTxn": 4,
+        "pendingRows": 0,
+        "bufferedTxns": 0,
+        "tableSuspended": false,
+        "walSuspended": false
+      },
+      "etf_daily": {
+        "table": "etf_daily",
+        "id": 10,
+        "directory": "etf_daily~10",
+        "physicalTxn": 9,
+        "metadataRows": 4274,
+        "actualRows": 4274,
+        "sequenceTxn": 9,
+        "writerTxn": 9,
+        "pendingRows": 0,
+        "bufferedTxns": 0,
+        "tableSuspended": false,
+        "walSuspended": false
+      },
+      "etf_basic": {
+        "table": "etf_basic",
+        "id": 11,
+        "directory": "etf_basic~11",
+        "physicalTxn": 6,
+        "metadataRows": 2958,
+        "actualRows": 2958,
+        "sequenceTxn": 6,
+        "writerTxn": 6,
+        "pendingRows": 0,
+        "bufferedTxns": 0,
+        "tableSuspended": false,
+        "walSuspended": false
+      },
+      "etf_market_overview_daily_cache": {
+        "table": "etf_market_overview_daily_cache",
+        "id": 12,
+        "directory": "etf_market_overview_daily_cache~12",
+        "physicalTxn": 2,
+        "metadataRows": 2,
+        "actualRows": 2,
+        "sequenceTxn": 2,
+        "writerTxn": 2,
+        "pendingRows": 0,
+        "bufferedTxns": 0,
+        "tableSuspended": false,
+        "walSuspended": false
+      },
+      "market_barometer_cache_coverage": {
+        "table": "market_barometer_cache_coverage",
+        "id": 13,
+        "directory": "market_barometer_cache_coverage~13",
+        "physicalTxn": 2,
+        "metadataRows": 2,
+        "actualRows": 2,
+        "sequenceTxn": 2,
+        "writerTxn": 2,
+        "pendingRows": 0,
+        "bufferedTxns": 0,
+        "tableSuspended": false,
+        "walSuspended": false
+      }
+    },
+    "source_provider_ingestion_or_formal_freshness_certified": false
+  },
+  "historical_evidence": {
+    "all_recovery_historical_and_publisher_SHA_bindings_unchanged": true,
+    "old_failed_hit_preserved": true,
+    "old_false_stop_markers_preserved": true,
+    "no_original_run_or_claim_reuse": true,
+    "total_owner_atomic_claims": 5,
+    "new_run_owner_atomic_claims": 2,
+    "source_mutations": 0,
+    "formal_written_rows": 0,
+    "independent_java_cache_or_receipt_writes": 0,
+    "ddl_operations": 0,
+    "automatic_replays": 0
+  },
+  "tests": {
+    "new_hit_live": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "java_pure_unique_passed": 184,
+    "python_pure_unique_passed": 63,
+    "java_live_unique_methods_with_pass_archive": 4,
+    "failed_live_history_retained": true
+  },
+  "next_boundaries": {
+    "source_increment_admitted": false,
+    "next_task_admitted": false,
+    "human_review": "pending_review",
+    "reason": "Only this new two-day HIT stage is accepted. Source increment remains subject to separate readonly preflight and exact reviewed mutator binding."
+  },
+  "evidence": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\coordinator-hit-failure-review-20261006.json",
+      "sha256": "dcd93d2aa88c2d2bb8050914e428f8cde15c735bb25b09fa63f8bd2cb2e80c6d"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\coordinator-hit-new-run-admission-20261006.json",
+      "sha256": "25b465bb8d9c9a0563cc0c0f20439cc13a1ba8b4c8913c641d1e83b65f61ff9e"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\coordinator-hit-readonly-recovery-review-20261006.json",
+      "sha256": "c67d89f793d37f15176bb8f7561db783a335258c57cb310875c45e6b407785a7"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-hit-readonly-recovery-20261006.json",
+      "sha256": "6bc5ba02c2f46db6b73c4622305390bb441ae768f101ec88401bd97af4abc29d"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-live-hit-new-run-20261006.log",
+      "sha256": "d7cf9c6e9f8af8b6b73e77f9342d352df47011ef04b5aee57558e94e0d80e3bb"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-live-hit-new-run-xml-20261006\\TEST-com.zoutrankil.data.config.EtfMarketOverviewDailyCacheLiveAcceptanceTest.xml",
+      "sha256": "cdb931e01f009c07818cae3e99ae2411c85ef8958d482ef123eb78ee1cff0f19"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-70bb1d34-fc4d-4954-8a48-046ac938cbb6.process-observed-0.json",
+      "sha256": "9b5b70f77fd9e400dd8a63965175f143de93c58383eaebe7034a68300ca6396b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-70bb1d34-fc4d-4954-8a48-046ac938cbb6.process-observed-1.json",
+      "sha256": "d9b5ab7f75bbd4aa3fc59ae0886393124b77e6c1ea10d1483a7b158610a1b28b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-70bb1d34-fc4d-4954-8a48-046ac938cbb6.process-observed-2.json",
+      "sha256": "b0ac7e3c4a7283e9f27f1f4ed5f56840137764a4a9f9440c6c644f8a438d87e7"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-70bb1d34-fc4d-4954-8a48-046ac938cbb6.process-observed-3.json",
+      "sha256": "4524d7566fb784dcd2fdee296a3410be74a3e5655f2d2711c64f9753953eb7b2"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-70bb1d34-fc4d-4954-8a48-046ac938cbb6.process-observed-4.json",
+      "sha256": "6960e44e02a334a5c036e5c383825e715c8648c670ac633155a32e910e222721"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-70bb1d34-fc4d-4954-8a48-046ac938cbb6.process-started.json",
+      "sha256": "67a259c2b883da7b5f72201367eb1796a5119c317ac773f45c5dd9adcdfdd540"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-70bb1d34-fc4d-4954-8a48-046ac938cbb6.process-stopped.json",
+      "sha256": "bf1e0e01b83817925e33a96559776e402e600c2952a63aefa99ad61880679136"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-70bb1d34-fc4d-4954-8a48-046ac938cbb6.response.json",
+      "sha256": "f06d86648f0dc0bf12b70beecf97ee5b44e0a7aed4ef30b60325a9433511cbae"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-e21acc0d-1b33-4e3d-873a-5770b73a9624.process-observed-0.json",
+      "sha256": "eb564e865092d45ed51f64abf76d0b2c01546fad8ef07985ee3ff3d3c252b13b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-e21acc0d-1b33-4e3d-873a-5770b73a9624.process-observed-1.json",
+      "sha256": "032d9fc0f7afc6b1eeced8234d32c01e67ee66e3430ad3b8d304fc7deae55ae2"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-e21acc0d-1b33-4e3d-873a-5770b73a9624.process-observed-2.json",
+      "sha256": "9717d57b6073a0e94c6c4f5edf3ee50f37c76c21cb0f548fe07886297a4c711b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-e21acc0d-1b33-4e3d-873a-5770b73a9624.process-observed-3.json",
+      "sha256": "5fe999d450f9110d08244ddcc3818821c3d9c78dc91489edfafd69c95ea2322f"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-e21acc0d-1b33-4e3d-873a-5770b73a9624.process-observed-4.json",
+      "sha256": "ea7f4fda641e85f57cafff68ec99420d8cf2cfed01e8bbd5c02d029192e4d7fe"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-e21acc0d-1b33-4e3d-873a-5770b73a9624.process-started.json",
+      "sha256": "1d7825614c1a624872b2e34404781ee6e13a83fe1b8d78169e5785078c10b126"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-e21acc0d-1b33-4e3d-873a-5770b73a9624.process-stopped.json",
+      "sha256": "09ac4541f1641a33fb8b96d5b5d66fcbcbb47805a1bf4dcb7730088fcf0c44e4"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-e21acc0d-1b33-4e3d-873a-5770b73a9624.response.json",
+      "sha256": "a07fc76841308053bad1151a202e353e67c9602aaa7db21625103ab6e8be4a9b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.intent.json",
+      "sha256": "ccb72dc7df5f8b94ecc720791f5bb7c72bf689d9c3f39e40027a0bbe99a9c621"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.process-observed-0.json",
+      "sha256": "feddb0530f7e91e41a2899ad66fd1a63bee8565fbaf7002d82ae7a20175ae9e1"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.process-observed-1.json",
+      "sha256": "3df62d75297fc13d9172a14ef402d6edb1e364236a78cc16e07b6ac270b3e541"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.process-observed-2.json",
+      "sha256": "cd1da2a7ab8b1c1da750328343fd60af8104e2bb2a3011d6d60ce961be32c827"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.process-observed-3.json",
+      "sha256": "45f0673c822580d88b881e533322fc7a2204c9379165388450103b1274fe8d0b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.process-observed-4.json",
+      "sha256": "44ed622fa609f7692a41849653bec1c0f000e7c5b39c67bbd4196ab489224218"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.process-observed-5.json",
+      "sha256": "f701bed0d42570b1dc76117efc52159d85580fa7bff682909092b5c4133c3ded"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.process-started.json",
+      "sha256": "d41c1bbc409893ac51d59b7dad41cfae10d4d9dc477d9f0cff2beb85922a14af"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.process-stopped.json",
+      "sha256": "33f7f86d37753094ba964ff88d2c525b7082b9cf7d05da7045b6ff69c6acd969"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.request.json",
+      "sha256": "7824f712894d0e621e81f3ce4562ad81afa2bd62c0675c65e173665eb951d444"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-3f77fbe5-5af4-40f8-a393-263ce67f5f59.response.json",
+      "sha256": "1275c3dc1a3209d664dba92a3c68ccd608adce1deaec323bbb501f80cc17b431"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.intent.json",
+      "sha256": "71e3d6d863dd81dd97d76182c4c91c59c8d4bd9f1f467792b3c1efc7ac19ed96"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.process-observed-0.json",
+      "sha256": "5079721d5b2d815210609637850146c421ea55322edbe0cac71e1e5a55abf92a"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.process-observed-1.json",
+      "sha256": "393bc59367f3bc8e115265135943d52957620af70fd06983cbe1f87fe44840bc"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.process-observed-2.json",
+      "sha256": "8c26e50516a2492daa32cb5ef6d57b97bd79150f96bf51061d75cb6f7ae555b3"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.process-observed-3.json",
+      "sha256": "2ec73597c1698c92629c8b758812faa0819e4362a48be43f6dae8197d8a60fde"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.process-observed-4.json",
+      "sha256": "d742123d5865ee50cdd2a66b111337e8057b6cdb4f9545af51e1b0d7051c3832"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.process-observed-5.json",
+      "sha256": "4b39a36f7dec67f0d77e01c8914905f92218dc2bafc93dbe505f5910975a09a7"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.process-started.json",
+      "sha256": "2ea6c54c9d6015a52d55956edcfa0624efece89291d7bf5e5222fbdc359acd03"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.process-stopped.json",
+      "sha256": "ba6b9f246471eba904b06574aafe9056b7debc4e0676799fd44f70d8a356f42d"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.request.json",
+      "sha256": "246416eea205d46006f548ddce706d7dd4db652ce8668f01837ab44551347c93"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-d721b5ef-5278-4294-a6d4-1a482060e06c.response.json",
+      "sha256": "0c2dcd7670d815a60b1154a1aa93a7e2d65f985d028343a5ae5aba1333c2bf84"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-first-20261006.json",
+      "sha256": "50be7fef72f5891cc97f61256240f3aa0eb1d9946acee1f0c210f3913ba5860b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-hit-20261006.json",
+      "sha256": "42fc13b797379f964e84ea5514d4199c7d7b6eb87fd3405ab692b22dd89ef1bb"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\owner-invocation-3f77fbe5-5af4-40f8-a393-263ce67f5f59.json",
+      "sha256": "1e8942851781dede3720c2fcd1bf28cdb21037eb9cc6fa2ae3b9bf332ae490c9"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\owner-invocation-d721b5ef-5278-4294-a6d4-1a482060e06c.json",
+      "sha256": "dd091706164ef01a3478b7028868e9f99aa3308464d990da490eebcd3b1cdfd4"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\source-fixture-initial-20261006.json",
+      "sha256": "c38a61f792ef6be689e1ed1cdb335dabf3da7f9b44c886a11fd4c84669f945f4"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-owner-intent-claims\\068a5cd3d4adecfb604d2ae74cea7fd1129f905854e3e490d46bf558b5f2f684.claim.json",
+      "sha256": "8fd729ae14b9529015717aa62a41a52680da13d11810fd66b2412f78986dfe90"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-owner-intent-claims\\a65e520d1cc7475a2241b26f81a1a9b63d1d12e4f09362893719bc7f5e2ef076.claim.json",
+      "sha256": "87ef878d942e40b01b12c98a218b4316062e3e30b68c08b8547cdba6104b2eda"
+    }
+  ]
+}

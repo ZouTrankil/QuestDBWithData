@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.batch.DfcfCsvParserTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-07T06:18:35.750Z" hostname="AMD395" time="0.534">
+  <properties/>
+  <testcase name="productionTextualDealIdentifiersAndMissingRawTimesMatchCancellationPriceLineage()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.1"/>
+  <testcase name="wrongDateAndFractionalIntegerFieldsAreRejected()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.004"/>
+  <testcase name="productionTimeSortingIsStableAndKeepsOriginalQuoteDelta()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.002"/>
+  <testcase name="productionNonfiniteSourceNumericsAreRejectedExplicitly()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.013"/>
+  <testcase name="cancellationPrecedenceAndShanghaiProductionProjectionMatchPython()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.002"/>
+  <testcase name="productionProjectionFiltersUnknownsAndReconstructsShenzhenCancelPriceWithoutLookingAhead()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.004"/>
+  <testcase name="shenzhenOrderTypesAndSubmissionCodesMatchTheExistingSourceContract()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.003"/>
+  <testcase name="quoteMappingPreservesTenLevelsAndClampsOutOfOrderTickDelta()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.006"/>
+  <testcase name="productionPreservesFractionalQuantitiesAcrossAllThreeTablesAndSynthesizedCancels()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.017"/>
+  <testcase name="dealMappingScalesPriceAndRetainsCancelsAndUnclassifiedRows()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.002"/>
+  <testcase name="rawQuantityJsonStaysIntegralAndProductionTimeProvenanceIsNotSerialized()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.34"/>
+  <testcase name="productionNumericCoercionMatchesPandasWhileAuditScannersStayStrict()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.027"/>
+  <testcase name="shanghaiEtfWithWrongVendorSuffixUsesShanghaiOrderCodes()" classname="com.zoutrankil.batch.DfcfCsvParserTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

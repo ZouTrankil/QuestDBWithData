@@ -1,0 +1,801 @@
+{
+  "read_only": true,
+  "tables": [
+    {
+      "query": "SELECT * FROM table_columns('moneyflow')",
+      "response": {
+        "query": "SELECT * FROM table_columns('moneyflow')",
+        "columns": [
+          {
+            "name": "column",
+            "type": "STRING"
+          },
+          {
+            "name": "type",
+            "type": "STRING"
+          },
+          {
+            "name": "indexed",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "indexBlockCapacity",
+            "type": "INT"
+          },
+          {
+            "name": "symbolCached",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "symbolCapacity",
+            "type": "INT"
+          },
+          {
+            "name": "symbolTableSize",
+            "type": "INT"
+          },
+          {
+            "name": "designated",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "upsertKey",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "indexType",
+            "type": "STRING"
+          },
+          {
+            "name": "indexInclude",
+            "type": "STRING"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "ts_code",
+            "SYMBOL",
+            false,
+            256,
+            true,
+            8192,
+            5713,
+            false,
+            true,
+            "",
+            ""
+          ],
+          [
+            "trade_date",
+            "TIMESTAMP",
+            false,
+            0,
+            false,
+            0,
+            0,
+            true,
+            true,
+            "",
+            ""
+          ],
+          [
+            "buy_sm_vol",
+            "LONG",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_sm_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "sell_sm_vol",
+            "LONG",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "sell_sm_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_md_vol",
+            "LONG",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_md_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "sell_md_vol",
+            "LONG",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "sell_md_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_lg_vol",
+            "LONG",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_lg_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "sell_lg_vol",
+            "LONG",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "sell_lg_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_elg_vol",
+            "LONG",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_elg_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "sell_elg_vol",
+            "LONG",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "sell_elg_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "net_mf_vol",
+            "LONG",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "net_mf_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ]
+        ],
+        "count": 20
+      },
+      "table": "moneyflow"
+    },
+    {
+      "query": "SELECT * FROM table_columns('moneyflow_ths')",
+      "response": {
+        "query": "SELECT * FROM table_columns('moneyflow_ths')",
+        "columns": [
+          {
+            "name": "column",
+            "type": "STRING"
+          },
+          {
+            "name": "type",
+            "type": "STRING"
+          },
+          {
+            "name": "indexed",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "indexBlockCapacity",
+            "type": "INT"
+          },
+          {
+            "name": "symbolCached",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "symbolCapacity",
+            "type": "INT"
+          },
+          {
+            "name": "symbolTableSize",
+            "type": "INT"
+          },
+          {
+            "name": "designated",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "upsertKey",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "indexType",
+            "type": "STRING"
+          },
+          {
+            "name": "indexInclude",
+            "type": "STRING"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "ts_code",
+            "SYMBOL",
+            false,
+            256,
+            true,
+            8192,
+            5352,
+            false,
+            true,
+            "",
+            ""
+          ],
+          [
+            "trade_date",
+            "TIMESTAMP",
+            false,
+            0,
+            false,
+            0,
+            0,
+            true,
+            true,
+            "",
+            ""
+          ],
+          [
+            "name",
+            "STRING",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "pct_change",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "latest",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "net_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "net_d5_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_lg_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_lg_amount_rate",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_md_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_md_amount_rate",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_sm_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_sm_amount_rate",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ]
+        ],
+        "count": 13
+      },
+      "table": "moneyflow_ths"
+    },
+    {
+      "query": "SELECT * FROM table_columns('moneyflow_dc')",
+      "response": {
+        "query": "SELECT * FROM table_columns('moneyflow_dc')",
+        "columns": [
+          {
+            "name": "column",
+            "type": "STRING"
+          },
+          {
+            "name": "type",
+            "type": "STRING"
+          },
+          {
+            "name": "indexed",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "indexBlockCapacity",
+            "type": "INT"
+          },
+          {
+            "name": "symbolCached",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "symbolCapacity",
+            "type": "INT"
+          },
+          {
+            "name": "symbolTableSize",
+            "type": "INT"
+          },
+          {
+            "name": "designated",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "upsertKey",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "indexType",
+            "type": "STRING"
+          },
+          {
+            "name": "indexInclude",
+            "type": "STRING"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "ts_code",
+            "SYMBOL",
+            false,
+            256,
+            true,
+            8192,
+            6179,
+            false,
+            true,
+            "",
+            ""
+          ],
+          [
+            "trade_date",
+            "TIMESTAMP",
+            false,
+            0,
+            false,
+            0,
+            0,
+            true,
+            true,
+            "",
+            ""
+          ],
+          [
+            "name",
+            "STRING",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "pct_change",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "close",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "net_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "net_amount_rate",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_elg_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_elg_amount_rate",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_lg_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_lg_amount_rate",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_md_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_md_amount_rate",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_sm_amount",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ],
+          [
+            "buy_sm_amount_rate",
+            "DOUBLE",
+            false,
+            0,
+            false,
+            0,
+            0,
+            false,
+            false,
+            "",
+            ""
+          ]
+        ],
+        "count": 15
+      },
+      "table": "moneyflow_dc"
+    }
+  ],
+  "observed_at": "2026-09-30T06:55:05.4608071+08:00"
+}

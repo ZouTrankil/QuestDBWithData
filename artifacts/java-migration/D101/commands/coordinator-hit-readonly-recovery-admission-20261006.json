@@ -1,0 +1,37 @@
+{
+  "new_hit_run_admitted": false,
+  "source_fixture_rows": 8764,
+  "ledger_path": "var/d101-java-45e5e7ce-b273-4510-8d15-e1abe5397550.sqlite3",
+  "private_pid": 23388,
+  "task_id": "D101",
+  "proofs": [
+    "coordinator-hit-failure-review-20261006.json",
+    "java-hit-failed-native-check-20261006.json",
+    "java-hit-failed-sqlite-readonly-20261006.json",
+    "java-tombstone-investigation-guards-20261006.json",
+    "java-job-full-prefix-reconcile-guards-20261006.json",
+    "coordinator-hit-recovery-contract-review-20261006.json"
+  ],
+  "source_increment_admitted": false,
+  "ports": [
+    19020,
+    18832
+  ],
+  "java_pure_unique": 184,
+  "checked_at": "2026-10-06T10:40:26.4452778Z",
+  "next_task_admitted": false,
+  "run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+  "human_review": "pending_review",
+  "boundaries": {
+    "formal_queries": 0,
+    "new_process_evidence": "CREATE_NEW fsynced new proof; SHA/native PID absence revalidated by writerStopped",
+    "old_slice_units": 1,
+    "old_failed_files_immutable": true,
+    "new_submitted_slices": 0,
+    "questdb_writes": 0,
+    "new_owner_invocations": 0,
+    "full_range_read_proof_units": 2
+  },
+  "decision": "admitted_explicit_readonly_original_hit_recovery_only",
+  "required_runtime": "Fresh exact private server/native writer absence and both current days source/cache/receipt/full-key/raw-bit/WAL revalidation; only then existing shared ledger reconciliation and lease release; no resend; any failure preserved"
+}

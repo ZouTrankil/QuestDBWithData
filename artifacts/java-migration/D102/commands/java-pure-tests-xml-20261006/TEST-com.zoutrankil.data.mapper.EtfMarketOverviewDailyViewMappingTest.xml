@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-06T12:26:45.806Z" hostname="AMD395" time="0.08">
+  <properties/>
+  <testcase name="onlyExactUtcMidnightCanCarryTheBusinessDate()" classname="com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest" time="0.039"/>
+  <testcase name="nullableSumsStayNullAndExactRequiredZeroCountIsNotAReplacementForNull()" classname="com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest" time="0.014"/>
+  <testcase name="signedQuantitiesAndSignedZeroRemainExactWithoutRescalingOrClamping()" classname="com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest" time="0.0"/>
+  <testcase name="revisedBaseValuesKeepTheDateKeyWithoutAddingACacheGenerationField()" classname="com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest" time="0.003"/>
+  <testcase name="eitherDoubleFieldRejectsNanAndBothInfinities()" classname="com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest" time="0.001"/>
+  <testcase name="countsRejectNegativeAndCoercingOrOverflowCarriersButRetainMaxLong()" classname="com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest" time="0.008"/>
+  <testcase name="allFourColumnsAreRequiredInACompleteTypedProjectionWithoutTypeCoercion()" classname="com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest" time="0.001"/>
+  <testcase name="fourPhysicalFieldsMapExplicitlyAndRoundTripWithoutNumericChanges()" classname="com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest" time="0.001"/>
+  <testcase name="viewDefinitionHasOnlyDateIdentityAndTwoExactBaseDependencies()" classname="com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest" time="0.006"/>
+  <testcase name="directWriteAndBothReplacementCapabilitiesAreRejected()" classname="com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMappingTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

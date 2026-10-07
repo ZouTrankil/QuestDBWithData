@@ -1,0 +1,391 @@
+{
+  "task_id": "D101",
+  "stage": "final_independent_readiness",
+  "checked_at": "2026-10-06T12:11:39.246092+00:00",
+  "status": "PASS",
+  "recommendation": "accepted_for_serial_progress",
+  "blockers": [],
+  "findings": [],
+  "review_method": "Read-only local JSON/XML/AST/SHA and offline exact-value/original-digest comparisons. No database, CIM, native process, owner, or Gradle operations. Existing live/SQlite/OS proofs are identified as saved evidence, not fresh checks.",
+  "human_review": "pending_review",
+  "coordinator_gate_at_review": "awaiting_final_review",
+  "next_task_admitted_by_this_review": false,
+  "D102_may_start": false,
+  "reviewed_mutable_documents_before_final_status_edits": [
+    {
+      "path": "docs/migration-tasks-20260929/results/D101.json",
+      "sha256": "4a2ecfa8d2acbccdcb9b76849952aa99c50ffdab8f7d52e44bfbb3adecbe02ab"
+    },
+    {
+      "path": "artifacts/java-migration/D101/mapping-contract-20261006.json",
+      "sha256": "ae8f3c8f30f6051f966063f4fd1b03bd893d96861265e978057a2f2cce706e75"
+    },
+    {
+      "path": "artifacts/java-migration/D101/README.md",
+      "sha256": "d7bf7861885bd2a22731d325e929ee00c6c02dbfaca3fc77e60d6e4b718b16e9"
+    },
+    {
+      "path": "docs/migration-tasks-20260929/11-derived/D101-etf_market_overview_daily_cache.md",
+      "sha256": "053ca61257c24864142462246d25bbe9623f76141e250b6861fdf29d0ceb3d1b"
+    },
+    {
+      "path": "docs/migration-tasks-20260929/completion-register.md",
+      "sha256": "33a3bd58f0e1658a7c3d17ce1e59a1c6c63a0c1035721d99c8ae97dc51ecb0f0"
+    },
+    {
+      "path": "docs/migration-tasks-20260929/execution-status.md",
+      "sha256": "ae92bb31b43bb1f5769a818b47c67d385e82693f128cf60d014435076b8202a4"
+    },
+    {
+      "path": "docs/migration-tasks-20260929/manifest.json",
+      "sha256": "4da092a3327ea0a3ba3628fb95a4eb3fd82d8f1aee1fbe2d9676f364ab69a947"
+    }
+  ],
+  "reviewed_frozen_stage_and_review_artifacts": [
+    {
+      "path": "artifacts/java-migration/D101/commands/cache-readonly-audit-20261006.json",
+      "sha256": "332b0c455ca8e48fdae522ad57cb0d29ceecc7bb5d7351f0749f95adff0790a5"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-final-static-review-20261006.json",
+      "sha256": "f93d25f443819442df18aba1b66b44f2c776b020d89ec6f2461aebda1d4d3e8b"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-first-admission-20261006.json",
+      "sha256": "96bf968b229b62e3aed1025508862b6b3ebd04646252d677417a0fe000724e66"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-first-data-review-20261006.json",
+      "sha256": "1bd6f304afed12bb87f08266c16a62b4b5ddd60414153510fe9a17d396e5f93a"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-first-readmission-20261006.json",
+      "sha256": "27f8527894ea731f415466e05e879ae2d58ebe1ef5ba8ad8483c7947e829ba64"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-first-readonly-failure-review-20261006.json",
+      "sha256": "506bcd8e9e2e868faa2663a5f05b106bac7b915d2de56bbda7971f519b8290e7"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-hit-failure-review-20261006.json",
+      "sha256": "dcd93d2aa88c2d2bb8050914e428f8cde15c735bb25b09fa63f8bd2cb2e80c6d"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-hit-new-run-admission-20261006.json",
+      "sha256": "25b465bb8d9c9a0563cc0c0f20439cc13a1ba8b4c8913c641d1e83b65f61ff9e"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-hit-new-run-review-20261006.json",
+      "sha256": "83811728c2840b21a768408ead0546a409053d708be544c962e441a7ef4c53fd"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-hit-readonly-recovery-admission-20261006.json",
+      "sha256": "74e86c9507842c69b836eea6d4d622b4ce6d8b8fdce1efca050b6e950863c91e"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-hit-readonly-recovery-review-20261006.json",
+      "sha256": "c67d89f793d37f15176bb8f7561db783a335258c57cb310875c45e6b407785a7"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-hit-recovery-contract-review-20261006.json",
+      "sha256": "2586f588b0b2f1812cacb7cfe9a1c56a6a1de1d87c0291e6d4eb4b2b9aee2fee"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-java-increment-admission-20261006.json",
+      "sha256": "b6f5b458d6b279266e5e1d7134f5e35b90705faf90ab03e0b0ba74062cb6630f"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-java-increment-data-review-20261006.json",
+      "sha256": "cc3fa764e5f81072e537c95304cedb6c2c63c86eea6bddfb81f05f5faa4f4d63"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-process-preview-review-20261006.json",
+      "sha256": "c4f5b8871bada7634c91ac6ecd5452994607b118df3195053fb7e39d66a1a9b6"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-source-fixture-initial-20261006.json",
+      "sha256": "b6c930497ca9d8ccb5d36ba66dc7493472d3cf5ef1954a6a4f0ccf62bb64ab94"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-source-increment-admission-20261006.json",
+      "sha256": "38a49b5ff1f215326300e86ed59df398e4866d2345348ac781f851bece3b96b7"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-source-increment-data-review-20261006.json",
+      "sha256": "4b09c8b6f3443f176f1f1562bff3b79a3ef084fc2c108cec470ea990147770bc"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-source-increment-preflight-review-20261006.json",
+      "sha256": "de5777ea29aebf3e3c3197abc25016496d0b314294c6dbd3bef1f170132bc7ef"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-typed-write-admission-20261006.json",
+      "sha256": "38062129871a8a06ffa84d0c100d0a032a7df914b46ce15807f4e5ba4c79175e"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-typed-write-data-review-20261006.json",
+      "sha256": "2e1665daa650aec966bc16e46ce59b73dc38a2139a0bde77aec88403c91d2b19"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-hit-readonly-recovery-20261006.json",
+      "sha256": "6bc5ba02c2f46db6b73c4622305390bb441ae768f101ec88401bd97af4abc29d"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-process-preview-20261006.json",
+      "sha256": "2eba5d81cea5256ea92f014ba7defb255d35b4eed94a94e83a85361e59805576"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-readthrough-first-20261006.json",
+      "sha256": "50be7fef72f5891cc97f61256240f3aa0eb1d9946acee1f0c210f3913ba5860b"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-readthrough-first-failed-385ed512-0fe2-41ff-bbf3-804fb2230dcd.json",
+      "sha256": "2b51e7355e25a77347c721f75486978f38bae4205a3da38825d2170298e9908c"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-readthrough-hit-20261006.json",
+      "sha256": "42fc13b797379f964e84ea5514d4199c7d7b6eb87fd3405ab692b22dd89ef1bb"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-readthrough-hit-failed-cc76bb4f-3b56-4597-bdd3-013826157690.json",
+      "sha256": "3d9762b8fce34ccd14c3b73d44bb31a8c1a1224c9c8fbd80864b234363b3cbbe"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-readthrough-increment-20261006.json",
+      "sha256": "66fd525f51d94e3b4db4ae33aa5257d67f62062a588504ba14cb9f7334edcb9b"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-readthrough-typed-write-20261006.json",
+      "sha256": "6914f8cddb9d1bf638d70d6db7a8100cc3ea3631f141267b4d145ec70dce0cf5"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/source-fixture-increment-20261006.json",
+      "sha256": "10ce3ee27359111b92b5e4a0b62f8af30e638d27b38ec6272cf6a9aa016383ce"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/source-fixture-initial-20261006.json",
+      "sha256": "c38a61f792ef6be689e1ed1cdb335dabf3da7f9b44c886a11fd4c84669f945f4"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/strictwrite-group-request-D101-typed-20261006.json",
+      "sha256": "83e8b6220a6b4a38d6ca0e4c13f5828fefdb80a5358ed289723b060272685665"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/unique-test-inventory-final-20261006.json",
+      "sha256": "6482df3552b58b66c622e85c72fa06694151e389246c4bb22fc551154a49547a"
+    }
+  ],
+  "independent_binding_rechecks": {
+    "static_code_bindings": 14,
+    "typed_review_bound_files": 245,
+    "all_exact_sha_matched": true,
+    "archived_xml_files": 52,
+    "latest_passed_java_methods_rechecked": 190,
+    "java_duplicate_methods": 0,
+    "python_ast_methods_and_passed_logs": 75,
+    "result_evidence_refs_exist": 51,
+    "original_four_field_digests_recomputed": 5,
+    "original_four_field_digest_matches": 5,
+    "typed_current_five_field_and_binary64_stability": true
+  },
+  "unique_tests": {
+    "java_pure": 184,
+    "java_live": 6,
+    "java_unique": 190,
+    "python_bridge": 43,
+    "python_fixture": 32,
+    "python_unique": 75,
+    "latest_unique_failures": 0,
+    "latest_unique_errors": 0,
+    "latest_unique_skipped": 0,
+    "historical_failed_method_executions_preserved": 22,
+    "historical_failed_or_repeated_executions_not_added_to_success_count": true
+  },
+  "D01_D09_matrix": [
+    {
+      "requirement": "D01",
+      "status": "PASS_WITH_RECORDED_SCOPE",
+      "conclusion": "Five explicit fields: LocalDate UTC midnight, nonnegative required LONG, two nullable finite binary64 quantities (万份/亿元), lowercase64SHA; exact source/Python/typed persistence semantics, no extra scaling.",
+      "evidence_refs": [
+        "mapping-contract-20261006.json",
+        "commands/java-readthrough-increment-20261006.json",
+        "commands/unique-test-inventory-final-20261006.json"
+      ]
+    },
+    {
+      "requirement": "D02",
+      "status": "PASS_WITH_RECORDED_SCOPE",
+      "conclusion": "Complete (trade_date,source_version) key, same-date different generations retained; original four-field digest excludes source_version; five stored full keys and five recomputed original digests match.",
+      "evidence_refs": [
+        "mapping-contract-20261006.json",
+        "commands/coordinator-java-increment-data-review-20261006.json"
+      ]
+    },
+    {
+      "requirement": "D03",
+      "status": "PASS_WITH_RECORDED_SCOPE",
+      "conclusion": "TIMESTAMP trade_date, MONTH/WAL/DEDUP(date,SHA); original cache/coverage install and full source schemas attested in isolated fixture. Empty-target raw null txn/count preserved with independent COUNT0 and WAL0; no formal DDL.",
+      "evidence_refs": [
+        "commands/source-fixture-initial-20261006.json",
+        "commands/java-process-preview-20261006.json",
+        "commands/cache-readonly-audit-20261006.json"
+      ]
+    },
+    {
+      "requirement": "D04",
+      "status": "PASS_WITH_RECORDED_SCOPE",
+      "conclusion": "Typed complete-key/range reads, actual five-page historical generations, configured ReadGroup/cancellation/strict JSON; physical id/dir/txn/WAL snapshot cursor rejects real old txn2 cursor before row query at txn5.",
+      "evidence_refs": [
+        "commands/java-readthrough-increment-20261006.json",
+        "commands/strictread-group-request-D101-increment.json",
+        "commands/unique-test-inventory-final-20261006.json"
+      ]
+    },
+    {
+      "requirement": "D05",
+      "status": "PASS_WITH_RECORDED_SCOPE",
+      "conclusion": "Prepared single-member INGEST asserts exact current original-owner five-column values, raw binary64 and immutable caller-order payload; actual three hits and zero cache/coverage submissions, four malformed/spoof/history/standalone-receipt cases reject with zero effects. Original Python remains sole publisher.",
+      "evidence_refs": [
+        "commands/coordinator-typed-write-data-review-20261006.json",
+        "commands/java-readthrough-typed-write-20261006.json",
+        "commands/strictwrite-group-request-D101-typed-20261006.json"
+      ]
+    },
+    {
+      "requirement": "D06",
+      "status": "PASS_WITH_RECORDED_SCOPE",
+      "conclusion": "Canonical INCREMENTAL(default)/MATERIALIZE/SELECT-only RECONCILE; full bounded bootstrap prefix <=31 days/units/pages, 64KiB batches, 5min job, <=50000 source rows per preview; real first2 miss -> hit2 -> new-day global YEAR generation miss3. No-source days emit zero units; known empty join lifecycle/receipt semantics covered by pure tests, no fabricated DTO.",
+      "evidence_refs": [
+        "commands/java-readthrough-first-20261006.json",
+        "commands/java-readthrough-hit-20261006.json",
+        "commands/java-readthrough-increment-20261006.json",
+        "commands/unique-test-inventory-final-20261006.json"
+      ]
+    },
+    {
+      "requirement": "D07",
+      "status": "PASS_WITH_RECORDED_SCOPE",
+      "conclusion": "One canonical manual/non-daily data.etf_market_overview_daily_cache job; three existing upstream jobs sharev3/dailyv1/basicv1 with transitive calendar registration; configured READ/WRITE bindings and dedicated management CLI reuse shared SQLite runner/submission hook/allDates lock.",
+      "evidence_refs": [
+        "commands/coordinator-final-static-review-20261006.json",
+        "commands/unique-test-inventory-final-20261006.json",
+        "README.md"
+      ]
+    },
+    {
+      "requirement": "D08",
+      "status": "PASS_WITH_RECORDED_SCOPE",
+      "conclusion": "Durable rev4 SUBMITTED intent before unique owner invocation, ACK separate from all-field/WAL verification; no auto retry/resend, full-table UNKNOWN lease retention, cancellation/timeouts/resume/source drift guards. Explicit old HIT investigation plus fresh complete-window proof2 settles actual slice1 only; absence of complete remaining-day data retains IN_DOUBT. Increment checkpoint9/18->9/21 does not skip prefix.",
+      "evidence_refs": [
+        "commands/java-hit-readonly-recovery-20261006.json",
+        "commands/coordinator-hit-readonly-recovery-review-20261006.json",
+        "commands/java-job-full-prefix-reconcile-guards-20261006.json",
+        "commands/unique-test-inventory-final-20261006.json"
+      ]
+    },
+    {
+      "requirement": "D09",
+      "status": "PASS_WITH_RECORDED_SCOPE",
+      "conclusion": "Bounded private configuration, inclusive management/exclusive READ window, plan/run/status/cancel/resume/reconcile and strict typed READ/WRITE request examples; frozen original-generation illustrative row explicitly not current WRITE input; actual response/run IDs, dedicated ledger and stage evidence linked. No completed-fixture automatic rerun.",
+      "evidence_refs": [
+        "README.md",
+        "commands/strictread-group-request-D101-hit.json",
+        "commands/strictwrite-group-request-D101-typed-20261006.json",
+        "commands/java-readthrough-increment-20261006.json"
+      ]
+    }
+  ],
+  "final_stage_aggregates": {
+    "private_pid": 23388,
+    "qwp_port": 19020,
+    "pg_port": 18832,
+    "real_source_rows": 11667,
+    "source_full_field_values": 164180,
+    "first_misses": 2,
+    "first_ACKs": 4,
+    "new_complete_hit_hits": 2,
+    "new_complete_hit_cache_and_coverage_submissions": 0,
+    "full_prefix_increment_misses": 3,
+    "increment_ACKs": 6,
+    "typed_current_hits": 3,
+    "typed_cache_and_coverage_submissions": 0,
+    "stored_cache_full_keys": 5,
+    "stored_receipt_full_keys": 5,
+    "cache_unique_fields": 25,
+    "receipt_unique_fields": 25,
+    "increment_key_and_range_cache_field_comparisons": 50,
+    "PG_reference_double_bits": 20,
+    "independent_JDBC_double_bits": 20,
+    "double_tolerance": 0,
+    "checkpoint_increment_before": "2026-09-18",
+    "checkpoint_increment_after": "2026-09-21",
+    "retained_all_ledger_leases": 0,
+    "saved_typed_review_all_entries_verified": 22,
+    "actual_same_private_ledger": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-45e5e7ce-b273-4510-8d15-e1abe5397550.sqlite3",
+    "request_logical_dates": {
+      "FIRST": "2026-09-19",
+      "new_HIT": "2026-09-19",
+      "INCREMENT": "2026-09-22",
+      "typed_child": "2026-09-22"
+    }
+  },
+  "historical_failure_and_process_proof_boundary": {
+    "prepublication_wrapper_identity_failure_preserved": true,
+    "historical_one_day_HIT_UNKNOWN_and_false_stop_markers_preserved": true,
+    "explicit_readonly_recovery_publisher_calls": 0,
+    "explicit_readonly_recovery_business_DB_writes": 0,
+    "fresh_full_window_RUN_ATTEMPT_proof_units_from_saved_acceptance": 2,
+    "original_actual_submitted_slice_units": 1,
+    "recovery_is_two_hit_acceptance": false,
+    "independent_new_two_hit_stage_passed": true,
+    "normal_ACK_ledger_raw_writerStopped": false,
+    "normal_ACK_flag_not_coerced_or_rewritten": true,
+    "actual_stop_evidence": "Separate SHA-bound Gateway OS birth/parent/exit trees and passing live writerStopped checks; no fresh native check by this readiness reviewer",
+    "incomplete_complete_window_or_stopped_writer_proof_remains_fail_closed": true
+  },
+  "scope_caveats": {
+    "dedicated_isolated_real_source_acceptance_only": true,
+    "production_cutover": false,
+    "formal_queries_by_this_review": 0,
+    "formal_writes": 0,
+    "formal_historical_receipt_generations": 5,
+    "formal_digest_matches": 3,
+    "formal_digest_mismatches": 2,
+    "formal_repaired": false,
+    "formal_current_hit_certified": false,
+    "production_latest_certified": false,
+    "full_history_certified": false,
+    "upstream_provider_universe_certified": false,
+    "same_key_source_value_correction_live_tested": false,
+    "actual_source_revision_scope": "Real third-day append changes global YEAR source generation; whole three-day prefix recomputed, timeless basic unchanged",
+    "D094_remains_public_READ_only_and_has_no_standalone_Java_writer": true
+  },
+  "permitted_final_coordinator_status_edits": {
+    "allowed": true,
+    "affected_paths": [
+      "docs/migration-tasks-20260929/results/D101.json",
+      "artifacts/java-migration/D101/mapping-contract-20261006.json",
+      "artifacts/java-migration/D101/README.md",
+      "docs/migration-tasks-20260929/11-derived/D101-etf_market_overview_daily_cache.md",
+      "docs/migration-tasks-20260929/completion-register.md",
+      "docs/migration-tasks-20260929/execution-status.md",
+      "docs/migration-tasks-20260929/manifest.json"
+    ],
+    "allowed_changes": "Finalize verified/accepted_for_serial_progress statuses, finished/task-record date and actual per-stage logical dates, explicit initial/increment checkpoint labels, historical-tense wording, final review links and current remaining-mainline/admission status. Keep human pending_review and all formal/isolated/failure/proof limitations. Coordinator gate may separately authorize serial D102 after accepting this review.",
+    "immutable_evidence_or_source_code_changes_allowed": false,
+    "fresh_DB_or_native_acceptance_implied": false,
+    "historical_failures_relabelled_as_two_hit_success_allowed": false
+  },
+  "operations_by_this_review": {
+    "database_queries": 0,
+    "database_writes": 0,
+    "SQLite_queries": 0,
+    "CIM_or_native_process_queries": 0,
+    "owner_invocations": 0,
+    "Gradle_runs": 0,
+    "tests_executed": 0,
+    "implementation_edits": 0,
+    "other_document_edits": 0,
+    "new_only_review_artifact": true
+  }
+}

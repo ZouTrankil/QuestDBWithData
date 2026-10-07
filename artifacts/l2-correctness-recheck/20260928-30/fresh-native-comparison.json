@@ -1,0 +1,199 @@
+{
+  "generatedAt": "2026-10-07T09:20:37.921606+00:00",
+  "status": "passed",
+  "relativeTolerance": 1e-10,
+  "absoluteTolerance": 1e-09,
+  "source": "Fresh formal Java batch vs freshly calculated Python KuakeSyncPipeline P0-P13",
+  "rowsCompared": 21,
+  "fieldsCompared": 2310,
+  "matched": 2310,
+  "differenceCount": 0,
+  "exactlyUnchangedNativeRows": 21,
+  "pythonInputHashChecks": 63,
+  "errors": [],
+  "dates": {
+    "20260928": {
+      "counts": {
+        "success": 7,
+        "empty": 0,
+        "failed": 0,
+        "resumed": 0
+      },
+      "aggregateSha256": "a7a0257572b31fbe787648e4cd2dfd5baf5f0cec8c76f4c1646fb07aada74491",
+      "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961",
+      "symbols": {
+        "000001.SZ": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "27523495f3b163eb92b2f93ac80b0ce89cfd7410a31c84819cb1042e21d82f64",
+          "inputFingerprint": "1e723d80c3666839a3cbde10db912b085f7fe0e01f4f6f597dc0196103ff6d86"
+        },
+        "159915.SZ": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "cfa5def84ca762d07e4b9d263f7dceab0ea4d4d158e0fc4646c8fa0462adf199",
+          "inputFingerprint": "a357cc061b9cceb768c34a8e86bf198ba7028ca75612b9cc03758bb35d7162d6"
+        },
+        "300750.SZ": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "614f6edd6ef9a50d1e487e4b23d12f30c6555ace313d67baf18b25bad71ab0ab",
+          "inputFingerprint": "37c8dad88c23fe85eae5f68da13ba6d2832fd2103d1adebfe0aa4d5d4050c1c3"
+        },
+        "510300.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "a27302be3a5b408db5fd6326dade6889f26d8747bf3452191755aa226412ef31",
+          "inputFingerprint": "ec1f89d4504dbefcd77db17e76a7e4476ed3c5d908a3e3622a038ce2effc10ee"
+        },
+        "588000.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "e136dc8b1eb40b2e6aeb38ccedcc4bb2975ab693a94af62ebf76040a2dabce63",
+          "inputFingerprint": "09ac810c4c64a1a4828314e5a6f8e8aca9aadc6eb3045fe94f1414c623d6f112"
+        },
+        "600000.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "0d5e7423e074c1c7d957e4b123d2cf1dc92050462d8c71a5290e80099236fae0",
+          "inputFingerprint": "ed3164c310101ce9e9cd352553b227d965d90167afc9afbfda0c22946aae653f"
+        },
+        "688981.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "6ec57fe47f0ab57154ef51ba18f3a6d2bdc4b2514c4b3a6c01f5cd472943fb8e",
+          "inputFingerprint": "0b812934de9a4bb454c7c1c8fb30986a4ed989fdf1737f74ef35b0892143251d"
+        }
+      }
+    },
+    "20260929": {
+      "counts": {
+        "success": 7,
+        "empty": 0,
+        "failed": 0,
+        "resumed": 0
+      },
+      "aggregateSha256": "0a335a710306f94cf40763b6b346ae9217704a681b9526f06ef1d14871934d18",
+      "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961",
+      "symbols": {
+        "000001.SZ": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "1983fd4fdb660972fcbebff24e29d797b417dffa1e7489bc95ce7ef6bbf0fb4b",
+          "inputFingerprint": "1ed98ffcac3bfd5e87e7b476feb694f32da9440c56e598f79ef575dc03207e00"
+        },
+        "159915.SZ": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "861000231c22a508ad63770bd0329761a494a9ad1df30fab3ec4619829cbfa71",
+          "inputFingerprint": "82af5e8a7cf84b7cce749d85c7b3d07362833427a02d6b3aaabd36be4537de05"
+        },
+        "300750.SZ": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "dae669629fdaebac29c0dc246cd81ded63c9d53cc53e7783c42038b5901efeb0",
+          "inputFingerprint": "e24fc25eb5f59f5417eec0c8656bea3c761a467dc2a40a2f26b8db8b271341f1"
+        },
+        "510300.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "28466a6684559e49d59dd56a5a353e4f7c4f59f0fcad675d760fc14229e63354",
+          "inputFingerprint": "0f865358017759e2a5f22c14d577b471643caac15c36c42a202ad4ba3623b743"
+        },
+        "588000.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "5a6b4563592e7e3986b6e5fccd8160c1c1845eb10208d15dd5db875203df220e",
+          "inputFingerprint": "22bc1a93f183e8bc05491f88efc4b22699c586ba906a19f506dd29e6f504a5c8"
+        },
+        "600000.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "7210feb7e9219ada2f884c2832abdc7f7a475cc8f9feee7628d6c30d8b06b1d6",
+          "inputFingerprint": "653b17d2ffeb208d54af85c2263d09e7ceecf217e925ad6fe05a253b26b86af8"
+        },
+        "688981.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "0cb943b626e78a52740b8728e7794d04867cfb6ace47c26d0e21abe3bd2583f0",
+          "inputFingerprint": "18c8924de72091f5fe5f51bbefbc337912ccfd0cb64dd7c42ac7378fa71ff1a1"
+        }
+      }
+    },
+    "20260930": {
+      "counts": {
+        "success": 7,
+        "empty": 0,
+        "failed": 0,
+        "resumed": 0
+      },
+      "aggregateSha256": "62da6b693d17afbfc7c2d206c6b91cd0844484f82c7d8c2d28fe4d935a5ca7bf",
+      "computeFingerprint": "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961",
+      "symbols": {
+        "000001.SZ": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "a06f5f6c5bf7b244094d791cc2751157c17b30ca9ab5f146cf65570e1f14a436",
+          "inputFingerprint": "33ad3dc55c3aecc431a1efcfbcf4b85de7e5b8de1166a232350b39182b88f327"
+        },
+        "159915.SZ": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "fecdce42222dda355dea7b5ca36a7b428e2b00e5b39de100d155e39541a9e77a",
+          "inputFingerprint": "b41575bd83a7d48fedcadae419a14ec3044ddb7a97383e92e0a3fe7c8713e711"
+        },
+        "300750.SZ": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "3f3870a33e28e84ffca6a995af9ff6d39ea92d7caf4860b70cb0c31c2e4cd9d4",
+          "inputFingerprint": "50640ea1476b27dd6f2de2eb1638ab6cfc108b70539fd78fb9ca030cde68fcd8"
+        },
+        "510300.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "a4f20a10bb32fc3277a7c19b9c9df727ee45f38efb684ecde8664257c8936175",
+          "inputFingerprint": "6efcd38a02edcd8a1a3ff813f7866a4adbf1b4214ca511b30af151cd4a99e338"
+        },
+        "588000.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "6c156ebad011790e0817bb9367057d51008558951d5785108d74ca1a020c459b",
+          "inputFingerprint": "c7c3d7fcd7c54258fd481adc91f2c2ed8c1e46e26451c1893b68cd8fb8cc3641"
+        },
+        "600000.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "1156bb761f463cde77b3b3ac58f584d5fbf7961148050a8588cd768b92c53b4a",
+          "inputFingerprint": "be96647fb9dfa398e2f02a0906b965a1c8a8e63840f3a7c402140040183ce715"
+        },
+        "688981.SH": {
+          "fieldsCompared": 110,
+          "differences": [],
+          "nativeExactlyUnchanged": true,
+          "pythonSha256": "0364ef0536f8cc0ccff6193078b3dee979e3e3f2d798dc8df87b613e623aa9b5",
+          "inputFingerprint": "da43fd8738d31f9094bc229894ce9b05d3b88dc3233747271e8c904b6576d786"
+        }
+      }
+    }
+  }
+}

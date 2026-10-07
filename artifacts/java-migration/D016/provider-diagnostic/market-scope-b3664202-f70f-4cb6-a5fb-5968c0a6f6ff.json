@@ -1,0 +1,28 @@
+{
+  "task" : "D016",
+  "purpose" : "Check unfiltered Python fund_share scope against documented SH/SZ partitions and legacy market O",
+  "formalTableMutated" : false,
+  "date" : "20260928",
+  "probes" : [ {
+    "parameters" : {
+      "trade_date" : "20260928"
+    },
+    "returnedRows" : 1776,
+    "marketCounts" : {
+      "SH" : 1001,
+      "SZ" : 775
+    },
+    "nonExchangeSamples" : [ ],
+    "belowCap" : true
+  }, {
+    "parameters" : {
+      "trade_date" : "20260928",
+      "market" : "O"
+    },
+    "returnedRows" : 0,
+    "marketCounts" : { },
+    "nonExchangeSamples" : [ ],
+    "belowCap" : true
+  } ],
+  "finishedAt" : "2026-09-29T19:55:36.930475500Z"
+}

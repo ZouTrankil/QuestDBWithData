@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.batch.L2ArchiveAdmissionTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-07T06:18:36.299Z" hostname="AMD395" time="1.697">
+  <properties/>
+  <testcase name="rejectsUnsettledIncompleteAndPathTraversalArchives()" classname="com.zoutrankil.batch.L2ArchiveAdmissionTest" time="0.489"/>
+  <testcase name="semanticMaterializationSupportsSevenZipWithoutExternalTools()" classname="com.zoutrankil.batch.L2ArchiveAdmissionTest" time="0.325"/>
+  <testcase name="rejectsCorruptedSevenZipAfterMemberCrcCheck()" classname="com.zoutrankil.batch.L2ArchiveAdmissionTest" time="0.091"/>
+  <testcase name="rejectsArchivesOutsideConfiguredRootAndWrongNames()" classname="com.zoutrankil.batch.L2ArchiveAdmissionTest" time="0.026"/>
+  <testcase name="rejectsZipBombByExpandedByteBoundWithoutBufferingArchiveInMemory()" classname="com.zoutrankil.batch.L2ArchiveAdmissionTest" time="0.257"/>
+  <testcase name="recordsChangedSameDateArchiveAsExplicitRevision()" classname="com.zoutrankil.batch.L2ArchiveAdmissionTest" time="0.128"/>
+  <testcase name="validatesSevenZipMembersAndBoundedExpansionWithoutExternalExecutable()" classname="com.zoutrankil.batch.L2ArchiveAdmissionTest" time="0.077"/>
+  <testcase name="semanticMaterializationWritesThreeBoundedArtifactsAndReusesVerifiedManifest()" classname="com.zoutrankil.batch.L2ArchiveAdmissionTest" time="0.154"/>
+  <testcase name="rejectsIncompleteSevenZipWithoutAdmittingIt()" classname="com.zoutrankil.batch.L2ArchiveAdmissionTest" time="0.064"/>
+  <testcase name="verifiesBoundedCompleteZipAndDeduplicatesByContentFingerprint()" classname="com.zoutrankil.batch.L2ArchiveAdmissionTest" time="0.078"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

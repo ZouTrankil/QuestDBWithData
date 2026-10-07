@@ -1,0 +1,60 @@
+{
+  "checkedAt": "2026-09-30T05:41:32.4920120+08:00",
+  "targetTable": "java_d088_l2_event_response_features_20260930053712_9ced7f2a",
+  "targetQuery": "select count() as row_count, min(minute) as min_minute, max(minute) as max_minute from \"java_d088_l2_event_response_features_20260930053712_9ced7f2a\"",
+  "target": {
+    "query": "select count() as row_count, min(minute) as min_minute, max(minute) as max_minute from \"java_d088_l2_event_response_features_20260930053712_9ced7f2a\"",
+    "columns": [
+      {
+        "name": "row_count",
+        "type": "LONG"
+      },
+      {
+        "name": "min_minute",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "max_minute",
+        "type": "TIMESTAMP"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        354,
+        "2026-09-21T01:16:00Z",
+        "2026-09-24T06:57:00Z"
+      ]
+    ],
+    "count": 1
+  },
+  "formalTable": "l2_event_response_features",
+  "formalQuery": "select count() as row_count, min(minute) as min_minute, max(minute) as max_minute from \"l2_event_response_features\"",
+  "formal": {
+    "query": "select count() as row_count, min(minute) as min_minute, max(minute) as max_minute from \"l2_event_response_features\"",
+    "columns": [
+      {
+        "name": "row_count",
+        "type": "LONG"
+      },
+      {
+        "name": "min_minute",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "max_minute",
+        "type": "TIMESTAMP"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        114123728,
+        "2026-02-02T01:15:00Z",
+        "2026-09-21T07:00:00Z"
+      ]
+    ],
+    "count": 1
+  },
+  "formalTableMutatedByAcceptance": false
+}

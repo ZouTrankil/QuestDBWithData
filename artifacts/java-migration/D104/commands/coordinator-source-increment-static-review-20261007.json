@@ -1,0 +1,232 @@
+{
+  "task_id": "D104",
+  "protocol_version": 1,
+  "record_date": "2026-10-07",
+  "status": "PASS",
+  "recommendation": "accepted_for_bounded_source_increment",
+  "blockers": [],
+  "reviewer": "/root/materialize_design",
+  "review_kind": "independent static file-only source-increment review",
+  "executed_by_reviewer": {
+    "database_queries": 0,
+    "mutations": 0,
+    "tests": 0,
+    "owner_invocations": 0,
+    "native_queries": 0,
+    "service_actions": 0
+  },
+  "bindings": [
+    {
+      "path": "tools/prepare_d104_macro_core_increment_isolated.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/prepare_d104_macro_core_increment_isolated.py",
+      "sha256": "adf45f32d4ade8b96b91ac200e26f6db12789ea4f6b12ff3da344cd9dceb8645"
+    },
+    {
+      "path": "tools/test_d104_increment_guards.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/test_d104_increment_guards.py",
+      "sha256": "d0166580101465181741d03e601c3cb1ea5658bf908575955d0cd70ae75a9e13"
+    },
+    {
+      "path": "tools/prepare_d104_macro_core_initial_after_known_partial.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/prepare_d104_macro_core_initial_after_known_partial.py",
+      "sha256": "d813f0363ad5dc0558001b2b9f8c6a4225187ddf1c8fe4520d6898feb7ffac32"
+    },
+    {
+      "path": "tools/prepare_d104_macro_core_isolated.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/prepare_d104_macro_core_isolated.py",
+      "sha256": "23389881d8c6b8401dfb8b482378f6cdbe911f79e0b72269e46dcc6573388922"
+    },
+    {
+      "path": "tools/preflight_d104_macro_core_readonly.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/preflight_d104_macro_core_readonly.py",
+      "sha256": "245607f62dd3366746c712839351ecfc8d302a95c4a8f5d1e16125acbe676f91"
+    },
+    {
+      "path": "tools/preflight_d103_equity_style_readonly.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/preflight_d103_equity_style_readonly.py",
+      "sha256": "d832e236fb927af8beedcfe7984413969262be50d9812b9bfd9173ce8961546c"
+    },
+    {
+      "path": "tools/prepare_d103_equity_style_isolated.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/prepare_d103_equity_style_isolated.py",
+      "sha256": "bb3fc799711ebf3637feca63f9fe29304341bfd9d4bbbab6b001b8f2722e6210"
+    }
+  ],
+  "evidence_bindings": [
+    {
+      "path": "artifacts/java-migration/D104/commands/source-fixture-initial-20261007.json",
+      "sha256": "516195048104e45c61ed0d7ff5796f32eca6d72dabc493c16b2a3f1e3667c534"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/source-fixture-initial-after-known-partial-20261007.json",
+      "sha256": "050cd029e0ec639bd1e11dcd2b8d4b8e5336ee45554abae22b430c075de8f006"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/coordinator-complete-initial-source-readonly-review-20261007.json",
+      "sha256": "7a69e5bc874ad824d200a61fe55d1fc75952c446920d81c1520034e99180ed7b"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/macro-core-readonly-preflight-20261007.json",
+      "sha256": "fc4b839c44254aee9f221e1246c5279738cf33704eb12749f2f70691347f530b"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/private-server-start-20261007.json",
+      "sha256": "9dccda7261b680798924e7632c4f8dd646c15e8f0442e737b80ba701f36f51f7"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/java-initial-acceptance-20261007.json",
+      "sha256": "2ef5ded567bf02de76170516e0acd4fedd3a4b3242133a79bafac4986bc559b1"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/initial-java-process-and-ledger-review-20261007.json",
+      "sha256": "738744cd9f782ae0f47faa1a76064cc80b8fa7772aebb3f173fcd0798831f1e2"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/initial-java-terminal-ledger-20261007.json",
+      "sha256": "20497f292f31bb50531691b7c5b487d540989c6182382efa235acfd29f0f0d6c"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/python-source-increment-guards-frozen-20261007.log",
+      "sha256": "d2d063bb1b80484cac569af1e753e959b67b35c0171e3ffd955b76959f5c5bd3"
+    }
+  ],
+  "scope": {
+    "source_rows": 5,
+    "tables": [
+      "cn_cpi",
+      "cn_ppi",
+      "cn_pmi",
+      "cn_m",
+      "sf_month"
+    ],
+    "original_initial_resubmissions": 0,
+    "human_review": "pending_review",
+    "source_month": "202608",
+    "source_insert_attempts": 5,
+    "formal_writes": 0,
+    "java_increment_execution_admitted": false,
+    "automatic_retry": false,
+    "next_task_admitted": false,
+    "private_output_writes": 0,
+    "new_DDL": 0
+  },
+  "checks": [
+    {
+      "name": "startup source-code and independent-review closure",
+      "path": "tools/prepare_d104_macro_core_increment_isolated.py",
+      "lines": [
+        195,
+        217,
+        220,
+        227,
+        346
+      ],
+      "result": "PASS",
+      "detail": "Explicit gate binds exact current script path/SHA. Its immutable independent review must be D104/PASS/blockers[]/bounded-source recommendation and include unique tool-local path/absolute_path/SHA entries for this script, guards and all five loaded helpers. Every batch revalidates admission. Gate.guards is tools source; optional guard_log is scoped commands evidence. Missing/duplicate/hash/path drift refuses."
+    },
+    {
+      "name": "known initial delivery and immutable failure preservation",
+      "path": "tools/prepare_d104_macro_core_increment_isolated.py",
+      "lines": [
+        228,
+        251
+      ],
+      "result": "PASS",
+      "detail": "Exact accepted continuation, actual successful Java initial and terminal-review paths/SHA are consumed. Original CPI known2ACK and five remaining known10ACK raw responses/claims are checked. The original FAILED remains preserved; no UNKNOWN source result is admitted, no initial/CPI re-send path exists. Initial23 full fields and Java six-source/raw hash are compared to the frozen real preflight capture."
+    },
+    {
+      "name": "actual original Java terminal/ledger proof",
+      "path": "tools/prepare_d104_macro_core_increment_isolated.py",
+      "lines": [
+        127,
+        185,
+        252,
+        253
+      ],
+      "result": "PASS",
+      "detail": "All five SQLite tables are read mode=ro/query_only in one bounded transaction and compared exactly with immutable initial8-run/18-entry/72-event snapshot, zero leases. Frozen job/window/source/target and prepared group/child identities match actual receipt. Exact known JVM PID/birth pre-IO identity, executor exit0/JUnit1PASS/native original-identity absence bind that producer; every write does a fresh current absence check. Unknown/earlier birth cannot substitute for stopped evidence."
+    },
+    {
+      "name": "five one-shot August source mutations",
+      "path": "tools/prepare_d104_macro_core_increment_isolated.py",
+      "lines": [
+        287,
+        317,
+        324,
+        360
+      ],
+      "result": "PASS",
+      "detail": "Only five fixed monthly sources each accept exactly one captured August row; GDP, formal/source output and DDL are excluded. Claims are a new fixed August namespace; existing claims reject before HTTP. Each boundary checks current service root/listeners/PID/birth, producer, complete source values/metadata, formal/output and unchanged full ledger. Exact id/directory and txn/sequence +1 and strict source field readback follow each ACK."
+    },
+    {
+      "name": "durable UNKNOWN and native ACK accounting",
+      "path": "tools/prepare_d104_macro_core_increment_isolated.py",
+      "lines": [
+        292,
+        320,
+        403,
+        421
+      ],
+      "result": "PASS",
+      "detail": "CREATE_NEW UNKNOWN intent and invocation progress precede one synchronous bounded HTTP request. Raw response bytes are saved/fsynced before response parsing and ACK promotion; status/body/schema/row count/duplicate JSON or durable-save failure stays UNKNOWN. Exception stops the workflow and later phases; no retry/resend loop exists."
+    },
+    {
+      "name": "readback bracketing and final full frontier",
+      "path": "tools/prepare_d104_macro_core_increment_isolated.py",
+      "lines": [
+        259,
+        284,
+        347,
+        355,
+        363,
+        384
+      ],
+      "result": "PASS",
+      "detail": "output_frontier fresh-checks both protected tables after schema/full9-field read. Each write boundary ends with fresh all8-table metadata/WAL/independent COUNT then exact five-table SQLite closure. Final source/full-row/oracle/schema/formal/native/file proofs finish before another fresh8+ledger; stored private_after is that fresh vector and source_after is derived from it. Nonempty/NULL counters, ID replacement and post-read drift are refused by frozen continuation helper."
+    },
+    {
+      "name": "actual data and semantics scope",
+      "path": "tools/prepare_d104_macro_core_increment_isolated.py",
+      "lines": [
+        334,
+        340,
+        363,
+        382
+      ],
+      "result": "PASS",
+      "detail": "Original AST oracle excludes Python DDL/write tail and is supplied with complete finite real captures. All source fields, nullable auxiliary slots and raw binary64 bits are strict, with quarter-end/month identity and required-six completeness. Final source28/412 fields/383 nullable slots and protected old2-month target are compared without tolerance. This is bounded source append, not actual source revision, provider ingestion or full-history certification."
+    }
+  ],
+  "external_validation": {
+    "executed_by": "root coordinator, not this reviewer",
+    "final_increment_guards": {
+      "unique_cases": 49,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "exec_exit_code": 0,
+      "exec_chunk": "6d3e2d",
+      "log": "artifacts/java-migration/D104/commands/python-source-increment-guards-frozen-20261007.log",
+      "log_sha256": "d2d063bb1b80484cac569af1e753e959b67b35c0171e3ffd955b76959f5c5bd3"
+    },
+    "previous_41_and_47_logs": "preserved historical, not additional unique cases",
+    "current_unique_python_total_reported_by_root": 159,
+    "total_formula": "44 preflight +35 initial +31 remaining-only +49 final increment",
+    "actual_source_increment": "NOT_EXECUTED_AT_REVIEW",
+    "actual_java_increment": "NOT_EXECUTED_AT_REVIEW"
+  },
+  "resolved_findings": [
+    "Post-target-row metadata lacked a closing read in the draft; final output helper brackets it.",
+    "Final private frontier was previously sampled before later source/output reads; final8+ledger closure now follows all readbacks and is reused as actual stored vector.",
+    "Early draft gate did not pin running script/helper code; final explicit script+review code closure now rejects omission/drift.",
+    "Optional guards was incorrectly treated as commands proof; final tools guard source and separate commands guard_log scopes are distinct."
+  ],
+  "limitations": [
+    "Static recommendation only for five real August source INSERTs on the explicitly admitted private target; separate root gate and actual execution are required.",
+    "No approval of Java incremental run, task completion, formal mutation, scheduled/provider source refresh, source revision or D105.",
+    "Known original foreground sender close/completion and fresh original JVM identity checks do not manufacture unknown producer identity or upgrade old UNKNOWN ACK.",
+    "Same-JVM UNKNOWN Java reconcile restrictions remain unchanged.",
+    "This review does not independently re-review its author-owned DTO/mapper/read repository/write port.",
+    "Only a new review file is written; original failures/claims/raw responses/logs/artifacts are preserved."
+  ]
+}

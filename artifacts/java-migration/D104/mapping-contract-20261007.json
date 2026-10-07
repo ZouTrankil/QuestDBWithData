@@ -1,0 +1,460 @@
+{
+  "task_id": "D104",
+  "status": "VERIFIED_ISOLATED_INITIAL_AND_INCREMENT_DELIVERY_PENDING",
+  "record_date": "2026-10-07",
+  "author_scope": "DTO/storage author mapping documentation, not independent self-review. Independent implementation/storage review is linked separately.",
+  "source_contract": "source-contract-20261007.json",
+  "dataset": {
+    "id": "macro_core_monthly",
+    "version": 1,
+    "kind": "TABLE",
+    "capabilities": [
+      "READ",
+      "WRITE"
+    ],
+    "partition": "YEAR",
+    "wal": true,
+    "business_key": [
+      "month"
+    ],
+    "upsert_key": [
+      "month"
+    ],
+    "designated_timestamp": "month",
+    "registered_dependencies": [],
+    "governed_physical_inputs": [
+      "cn_cpi",
+      "cn_ppi",
+      "cn_pmi",
+      "cn_m",
+      "cn_gdp",
+      "sf_month"
+    ],
+    "unregistered_upstream_java_tasks": [
+      "D065",
+      "D066",
+      "D067",
+      "D068",
+      "D069",
+      "D070"
+    ]
+  },
+  "columns": [
+    {
+      "ordinal": 1,
+      "storage": "month",
+      "storage_type": "TIMESTAMP",
+      "java": "month",
+      "java_type": "YearMonth",
+      "nullable_read": false,
+      "source": "source.month YYYYMM / cn_gdp.report_date own month",
+      "unit": "observation month",
+      "mapping": "YYYY-MM JSON, first-day LocalDate DatasetValues, exact UTC midnight first-day TIMESTAMP micros; reject non-first date/non-midnight/unsupported year"
+    },
+    {
+      "ordinal": 2,
+      "storage": "cpi_yoy",
+      "storage_type": "DOUBLE",
+      "java": "cpiYoy",
+      "java_type": "Double",
+      "nullable_read": true,
+      "required_publication": true,
+      "source": "cn_cpi.nt_yoy",
+      "unit": "unchanged stored source value; local source declares percent",
+      "owner_lines": [
+        73,
+        76
+      ]
+    },
+    {
+      "ordinal": 3,
+      "storage": "ppi_yoy",
+      "storage_type": "DOUBLE",
+      "java": "ppiYoy",
+      "java_type": "Double",
+      "nullable_read": true,
+      "required_publication": true,
+      "source": "cn_ppi.ppi_yoy",
+      "unit": "unchanged stored monthly YoY value",
+      "owner_lines": [
+        80,
+        82
+      ]
+    },
+    {
+      "ordinal": 4,
+      "storage": "pmi_mfg",
+      "storage_type": "DOUBLE",
+      "java": "pmiMfg",
+      "java_type": "Double",
+      "nullable_read": true,
+      "required_publication": true,
+      "source": "cn_pmi.pmi010000",
+      "unit": "unchanged manufacturing PMI level",
+      "owner_lines": [
+        86,
+        89
+      ]
+    },
+    {
+      "ordinal": 5,
+      "storage": "gdp_yoy",
+      "storage_type": "DOUBLE",
+      "java": "gdpYoy",
+      "java_type": "Double",
+      "nullable_read": true,
+      "required_publication": false,
+      "source": "cn_gdp.gdp_yoy at report_date own month",
+      "unit": "unchanged stored source value; local source declares percent",
+      "mapping": "No forward fill; quarter-end identity checked; no-report month remains null",
+      "owner_lines": [
+        99,
+        105
+      ]
+    },
+    {
+      "ordinal": 6,
+      "storage": "m2_yoy",
+      "storage_type": "DOUBLE",
+      "java": "m2Yoy",
+      "java_type": "Double",
+      "nullable_read": true,
+      "required_publication": true,
+      "source": "cn_m.m2_yoy",
+      "unit": "unchanged stored source value; local source declares percent",
+      "owner_lines": [
+        93,
+        95
+      ]
+    },
+    {
+      "ordinal": 7,
+      "storage": "social_financing_stock",
+      "storage_type": "DOUBLE",
+      "java": "socialFinancingStock",
+      "java_type": "Double",
+      "nullable_read": true,
+      "required_publication": true,
+      "source": "sf_month.stk_endval",
+      "unit": "unchanged stored value; local source declares 万亿元",
+      "owner_lines": [
+        109,
+        124
+      ]
+    },
+    {
+      "ordinal": 8,
+      "storage": "new_rmb_loan",
+      "storage_type": "DOUBLE",
+      "java": "newRmbLoan",
+      "java_type": "Double",
+      "nullable_read": true,
+      "required_publication": true,
+      "source": "sf_month.inc_month",
+      "unit": "unchanged stored value; local source declares 亿元",
+      "mapping": "Legacy field name denotes total social-financing monthly increment, not a distinct RMB-loan series",
+      "owner_lines": [
+        115,
+        119
+      ]
+    },
+    {
+      "ordinal": 9,
+      "storage": "social_financing_yoy",
+      "storage_type": "DOUBLE",
+      "java": "socialFinancingYoy",
+      "java_type": "Double",
+      "nullable_read": true,
+      "required_publication": false,
+      "source": "current stk_endval / preceding twelfth sorted physical observation stk_endval - 1",
+      "unit": "dimensionless fractional ratio",
+      "mapping": "Original pct_change(12,fill_method=None) before dedup; no x100/calendar fill; missing/null baseline=null; zero denominator/nonfinite result rejected",
+      "owner_lines": [
+        124,
+        127
+      ]
+    }
+  ],
+  "metric_constraints": {
+    "finite": true,
+    "nullable_read": true,
+    "preserve_signed_zero": true,
+    "raw_binary64_equality": true,
+    "rounding": false,
+    "scaling": false,
+    "fill_null_with_zero": false,
+    "unproven_positive_or_ratio_range_constraints": false,
+    "required_six_at_write": true
+  },
+  "mapper_apis": [
+    "columns()",
+    "values(row): DatasetValues with month LocalDate",
+    "fromValues(Map)",
+    "fromValues(DatasetValues)",
+    "toStorage(row)",
+    "fromStorage(MacroCoreMonthlyRow)"
+  ],
+  "generated_projection": "src/main/java/com/zoutrankil/data/domain/table/MacroCoreMonthlyRow.java preserved; independent business record and explicit mapper added",
+  "typed_read": {
+    "fields": "all ordered9",
+    "key": "month first-day LocalDate equality",
+    "range": "first-day LocalDate fromInclusive/toExclusive, 1..12 months",
+    "page_rows_max": 12,
+    "source_version": "reader-owned actual table physical/WAL/schema token, not caller business version",
+    "cursor": "query fingerprint + full month key + physical token; metadata/schema/WAL changes reject old cursor",
+    "empty_target": "Null frontier retained as uninitialized; only independent COUNT0/all WAL0/raw nullable counters null-or0/physicalTxn null-or0 and stable bracketing metadata may pass"
+  },
+  "typed_write": {
+    "table_regex": "java_d104_macro_core_monthly_[a-z0-9]{1,64}",
+    "rows": "1..12 unique months",
+    "bytes_max": 1048576,
+    "schema": "exact ordered9 YEAR/WAL/DEDUP(month), no materialized view",
+    "publication_required_fields": [
+      "cpi_yoy",
+      "ppi_yoy",
+      "pmi_mfg",
+      "m2_yoy",
+      "social_financing_stock",
+      "new_rmb_loan"
+    ],
+    "codec": "complete YearMonth + null bitmap + raw64 bits, preserving optional nulls/signed zero",
+    "transport": "one synchronous HTTP flush; autoFlush off; retry_timeout0; reset then close",
+    "unknown": "no automatic retry; shared SQLite intent and allDates lease retained; same-instance actual stopped sender + full-source/full-prefix proof required for reconcile",
+    "group_scope": "Prepared caller DTO ingest verifies its full nine values; source-oracle derivation belongs to canonical materialize job. STATIC/WAL_REPLACE/ordinary formal target rejected."
+  },
+  "job": {
+    "id": "data.macro_core_monthly",
+    "version": 1,
+    "default": "INCREMENTAL",
+    "modes": [
+      "MATERIALIZE",
+      "INCREMENTAL",
+      "RECONCILE"
+    ],
+    "frequency": "MANUAL",
+    "enabled": true,
+    "daily_eligible": false,
+    "dependencies": [],
+    "months_max": 12,
+    "raw_source_rows_max": 84,
+    "source_context_rows_max": 12,
+    "pages": 1,
+    "output_rows_max": 12,
+    "job_timeout_seconds": 300,
+    "source_read_deadline_seconds": 20,
+    "target_query_seconds": 20,
+    "ack_timeout_seconds": 20,
+    "visibility_timeout_seconds": 20,
+    "closed_months": true,
+    "checkpoint": "full-prefix exact persisted proof, one-month overlap only when old source/context values unchanged; source revision bounded bootstrap; target drift refuses"
+  },
+  "implementation_bindings": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthly.java",
+      "sha256": "e0f7b78fc2a37d322255787fbb64cd1b40731c8c22947e1fd8a7716b7e1b6065"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyKey.java",
+      "sha256": "bedfe13fb3a1c17f107cda04d9e39cba45fe27efead6f3894bf3f09ba2f0eb9d"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyDataset.java",
+      "sha256": "7d3a60223c8a5d2a23e25ffb7ef6d8cedc52a89b9f81a78ec615f3bea96fa97b"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/mapper/MacroCoreMonthlyMapper.java",
+      "sha256": "aa24cc7657d4426a3f4c8e1a858f037e0618a425a805923ccb5f12e6fd6f4bee"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyReadRepository.java",
+      "sha256": "2b5c46fe1e4815b7c26729a0b6609146de10c42b2ad1027f748dd180c76d93b0"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyWritePort.java",
+      "sha256": "b60a7dc724f1e08ede6ac85915a1ab2e1739b6ffc44f6607932cc73e8747ef35"
+    }
+  ],
+  "independent_reviews": [
+    {
+      "path": "commands/coordinator-domain-storage-static-review-supplement-20261007.json",
+      "sha256": "c8e7435ccfa88bcd8f51e3fd8db19b1a891b7505912bf90437f23e6be6522d23"
+    },
+    {
+      "path": "commands/coordinator-current-java-static-review-supplement-20261007.json",
+      "sha256": "3a1dc97312ff19b497f40103de1bbe7b05f3828de9dc5b6dfef57618786008d7",
+      "scope": "Other-author current wiring/source/guard/harness, own implementation excluded"
+    },
+    {
+      "path": "commands/coordinator-source-owner-static-review-supplement-valid-20261007.json",
+      "sha256": "531af900643cd4642ace34cd84684c7937a479d42b4bfb52c1f639b8c89e761a",
+      "scope": "Independent other-author Source/Adapter/Job +53pure methods; own DTO/storage implementation excluded."
+    }
+  ],
+  "actual_validation_so_far": {
+    "pure_java_unique": 122,
+    "pure_java_provenance": "Final9 XML121 + separate initial catalog XML1; no rerun double-count",
+    "java_initial": {
+      "path": "commands/java-initial-acceptance-20261007.json",
+      "sha256": "2ef5ded567bf02de76170516e0acd4fedd3a4b3242133a79bafac4986bc559b1",
+      "status": "VERIFIED_ISOLATED_INITIAL_REPLAY",
+      "rows": 2,
+      "fields": 18,
+      "nullable_double_slots": 16,
+      "nonnull_double_bits": 15,
+      "double_tolerance": 0
+    },
+    "initial_terminal_review": {
+      "path": "commands/initial-java-process-and-ledger-review-20261007.json",
+      "sha256": "738744cd9f782ae0f47faa1a76064cc80b8fa7772aebb3f173fcd0798831f1e2",
+      "runs": 8,
+      "entries": 18,
+      "events": 72,
+      "leases": 0
+    },
+    "august_increment": {
+      "status": "VERIFIED_ISOLATED_INCREMENTAL",
+      "source_fixture": {
+        "path": "commands/source-fixture-increment-20261007.json",
+        "sha256": "a42dfaf524efa873173ee2f896d223057fb54ce251fbb585870f3aa36bb10fcc"
+      },
+      "complete_source_readonly_review": {
+        "path": "commands/coordinator-complete-increment-source-readonly-review-20261007.json",
+        "sha256": "501e3cebf4b9118f50178234a23117faa219e0c3ce6ca4f6065f48dd7abf7d00"
+      },
+      "java_receipt": {
+        "path": "commands/java-increment-acceptance-20261007.json",
+        "sha256": "b1aec9b83be584059cbe2aad5d18240a14167915b5c37ad9f02568e586c318ca"
+      },
+      "source_INSERT_ACKs": 5,
+      "source_added_rows": 5,
+      "GDP_added_rows": 0,
+      "DDL": 0,
+      "fixture_output_writes": 0,
+      "source_rows": 28,
+      "source_full_fields": 412,
+      "source_nullable_double_slots": 383,
+      "source_nonnull_double_bits": 338,
+      "source_NULL_slots": 45,
+      "source_window": "2026-06..2026-08 with preceding12 SF observations",
+      "effective_from": "2026-07-01",
+      "effective_to_inclusive": "2026-08-01",
+      "logical_date": "2026-10-07",
+      "checkpoint_before": "2026-07-01",
+      "checkpoint_after": "2026-08-01",
+      "checkpoint_reason": "VERIFIED_PREFIX_APPEND",
+      "parent_run": "d104-da436947-022d-470c-b8da-23387419d834",
+      "parent_kind": "prior exact readonly RECONCILE full-prefix proof",
+      "run_id": "d104-04c432e7-4096-4f09-b56d-35cedfa4d8e4",
+      "run_state": "VERIFIED",
+      "verified_submitted_rows": 2,
+      "reused_rows": 0,
+      "source_version": "2b55c59496e1806bb6555a78dc26cb19020376a01ac71e4500832d3b879026a0",
+      "full_raw_fingerprint": "648c609a0ca308bf003be8f11ef55c6497c15c6d29ae4c2bf69f3ef20ada4d1e",
+      "output_rows": 3,
+      "output_fields": 27,
+      "output_nullable_double_slots": 24,
+      "output_nonnull_double_bits": 22,
+      "output_NULL_slots": 2,
+      "double_tolerance": 0,
+      "target_table_id": 15,
+      "target_physical_txn": 5,
+      "target_wal_sequence": 5,
+      "configured_typed_read_group": "READ 3rows with full9fields",
+      "actual_source_increment": true,
+      "actual_source_revision": false,
+      "formal_writes": 0,
+      "reference_project_writes": 0
+    },
+    "source_revision_live": false,
+    "formal_writes": 0,
+    "reference_project_writes": 0,
+    "final_coordinator": "PENDING",
+    "human_review": "pending_review",
+    "next_task_admitted": false,
+    "final_terminal_review": {
+      "evidence": {
+        "path": "commands/increment-java-process-and-ledger-review-20261007.json",
+        "sha256": "9242676d38e609336efd4b2c0276e4d43fa5ea1d981e1e993adc5689625251db"
+      },
+      "sqlite_snapshot": {
+        "path": "commands/increment-java-terminal-ledger-20261007.json",
+        "sha256": "c2bf40dba7d4c2561c8e3dafedaf7ce24670a86731b9875db38d1b42adcdd728"
+      },
+      "runs": 9,
+      "entries": 21,
+      "events": 85,
+      "groups": 1,
+      "retained_leases": 0,
+      "previous8runs_preserved": true,
+      "known_jvm_pid": 37064,
+      "known_jvm_birth_utc": "2026-10-06T17:19:59.210502Z",
+      "original_jvm_stopped": true,
+      "proof_scope": "Root previously captured exact JVM birth, native absence and executor exit0/JUnit1PASS; document author did not rerun native/ledger checks."
+    },
+    "final_validation_inventory": {
+      "evidence": {
+        "path": "commands/validation-inventory-20261007.json",
+        "sha256": "16b78883f5d9add95ba76b3f8ed8ad622e4c45af1280836d1046269ca5173b08"
+      },
+      "java_unique_passing_methods": 123,
+      "java_pure_unique_methods": 122,
+      "java_live_unique_methods": 1,
+      "java_live_actual_stage_invocations": 2,
+      "java_PASS_invocations": 124,
+      "python_unique_pure_guards": 159,
+      "python_components": [
+        44,
+        35,
+        31,
+        49
+      ],
+      "failures": 0,
+      "errors": 0,
+      "skips": 0,
+      "executed_by_document_author": false,
+      "provenance": "Root archived reports and summary only. Same live method executed initial and increment stages; do not count it as two unique methods. Historical rerun logs remain preserved and are not added."
+    },
+    "preserved_increment_audit_diagnostic": {
+      "kind": "READONLY_INCREMENT_AUDIT_EXECUTOR_LOG_PATH_FAILURE",
+      "evidence": {
+        "path": "commands/coordinator-complete-increment-source-readonly-review-actual-20261007.log",
+        "sha256": "d9d03c9eeef2bab83b8a4363c1e54bc6a05e42fd00e6286ea7ae4e86a19802d0"
+      },
+      "failure": "After all28rows/412fields compared, executor evidence save expected source-fixture-increment-20261007.log while actual Tee log used -actual. No source resend or data mismatch; five original source ACKs remain known successful.",
+      "recovery": "CREATE_NEW byte-identical log binding plus a new SELECT-only full audit, with a new native-stop supplement; original failed log and helper bytes remain unchanged.",
+      "new_success": {
+        "path": "commands/coordinator-complete-increment-source-readonly-review-20261007.json",
+        "sha256": "501e3cebf4b9118f50178234a23117faa219e0c3ce6ca4f6065f48dd7abf7d00"
+      },
+      "new_log": {
+        "path": "commands/coordinator-complete-increment-source-readonly-review-supplement-20261007.log",
+        "sha256": "abb8052b7f2d8d9e460870fc95862114fb9c52eabc532c528572e046114180cc"
+      },
+      "DDL_DML_in_recovery": 0,
+      "unknown_source_ACK": false
+    },
+    "configured_catalog": {
+      "path": "commands/java-catalog-startup-final-20261007.json",
+      "dataset_count": 53,
+      "job_count": 42,
+      "D104_fields": 9,
+      "capabilities": [
+        "READ",
+        "WRITE"
+      ],
+      "default_mode": "INCREMENTAL",
+      "dependencies": [],
+      "provider_ingestion_certified": false
+    },
+    "acceptance_scope": "Real June/July initial and August append, per-target exact9-field/binary64 comparison at zero tolerance. No live source revision/UNKNOWN recovery/formal publication/upstream Java readiness or next-task admission."
+  },
+  "limits": [
+    "Six upstream Java ingestion jobs/provider readiness remain unregistered and uncertified.",
+    "Bounded June-August captured source/oracle does not certify complete source history or current publication-time availability.",
+    "Live source revision and unknown-result recovery are not claimed by initial acceptance; state and proof rules have pure-test coverage.",
+    "Successful private writes do not authorize formal materialization/replacement, auto refresh, scheduled daily execution, or consumer cutover.",
+    "Historical original fixture failure and initial pure-test fixture failure remain unchanged evidence.",
+    "Increment SELECT-only audit log-path save failure remains separate historical evidence; no source resend and no source ACK ambiguity.",
+    "One live test method has two actual passing stage invocations; final inventory123unique Java methods/124PASSinvocations and159unique Python guards."
+  ]
+}

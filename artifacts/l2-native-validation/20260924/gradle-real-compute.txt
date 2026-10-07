@@ -1,0 +1,26 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+
+> Task :l2DailyFeatureCompute
+000001.SZ date=20260924 normalized=000001.SZ deals=115965 orders=154628 quotes=4833 fields=110 elapsedSeconds=3.465
+600000.SH date=20260924 normalized=600000.SH deals=47397 orders=61789 quotes=4968 fields=110 elapsedSeconds=1.178
+300750.SZ date=20260924 normalized=300750.SZ deals=198897 orders=298492 quotes=4833 fields=110 elapsedSeconds=4.187
+688981.SH date=20260924 normalized=688981.SH deals=58366 orders=187762 quotes=4998 fields=110 elapsedSeconds=2.049
+510300.SZ date=20260924 normalized=510300.SH deals=131641 orders=316155 quotes=5007 fields=110 elapsedSeconds=3.386
+159915.SZ date=20260924 normalized=159915.SZ deals=310269 orders=490531 quotes=4843 fields=110 elapsedSeconds=5.100
+588000.SZ date=20260924 normalized=588000.SH deals=233236 orders=458395 quotes=5009 fields=110 elapsedSeconds=5.152
+generated_rows=7 output=C:\Users\zouqiang\IdeaProjects\QuestDBWithData\var\l2-pipeline-validation\java-daily-features.jsonl
+
+[Incubating] Problems report is available at: file:///C:/Users/zouqiang/IdeaProjects/QuestDBWithData/var/l2-pipeline-validation/gradle-build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 34s
+3 actionable tasks: 1 executed, 2 up-to-date

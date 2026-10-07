@@ -1,0 +1,96 @@
+{
+  "task_id": "D105",
+  "protocol_version": 1,
+  "status": "PASS",
+  "record_date": "2026-10-07",
+  "review_type": "independent_other_author_import_delta_and_archived_report_read_only",
+  "blockers": [],
+  "original_review": {
+    "path": "artifacts/java-migration/D105/commands/coordinator-shared-guard-static-review-20261007.json",
+    "sha256": "2846de93a8866513e88478f6720bc902ce6baf0a971695fe8884cf2f932fdc03",
+    "preserved": true
+  },
+  "delta": {
+    "file": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewWriteRejectionTest.java",
+    "line": 5,
+    "change": "Root added repository.DatasetWritePreparation import. Class resides in repository, so its prior missing import caused compile failure; direct-write/replacement assertions unchanged.",
+    "current_sha256": "97793dd6836a76aa1714faadb529e2090126208128d69924f81a8844f5ab2aeb",
+    "original_static_review_limit": "Original static PASS did not constitute compilation and did not catch this test import defect; original artifact remains unchanged.",
+    "author_exclusion": "The mapping test's corrected JobDefinitionJson domain import is recorded as an observed root correction/current binding only, not independent review of this author's mapper or own12mapping tests."
+  },
+  "bindings": [
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewWriteRejectionTest.java",
+      "sha256": "97793dd6836a76aa1714faadb529e2090126208128d69924f81a8844f5ab2aeb"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMappingTest.java",
+      "sha256": "2e4e71b3256640e3a8811aca5507d1e18d273c8d9143890ac033ae3b70a2f975",
+      "independent_semantic_review": false
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-20261007.log",
+      "sha256": "3da8fa536d3e7d7237da40e4150d932b0bff7120815b75da94e9188505003b7b"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-import-correction-20261007.log",
+      "sha256": "6fb76742c89d018435ec532ed037959f0cf6a991b7eae14c57ec9926de87fb4e"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-import-correction-20261007/TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+      "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-import-correction-20261007/TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+      "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-import-correction-20261007/TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+      "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-import-correction-20261007/TEST-com.zoutrankil.data.service.MacroCoreMonthlyViewCatalogStartupTest.xml",
+      "sha256": "ed223496f4a55c3f419991510283c651710e9b0f56606a1c39e671975455ca05"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-import-correction-20261007/TEST-com.zoutrankil.data.service.MacroCoreMonthlyViewWriteRejectionTest.xml",
+      "sha256": "78f8a8ece5dcbca637ccc32c1b5f7618c507dd452998428b123b99194db9f146"
+    }
+  ],
+  "external_actual_reports": {
+    "executed_by": "Root coordinator",
+    "executed_by_reviewer": false,
+    "root_executor": {
+      "session_id": 24454,
+      "exit_code": 0,
+      "chunk_id": "e25f14"
+    },
+    "unique_passing_methods": 60,
+    "classes": 5,
+    "tests_by_class": [
+      12,
+      8,
+      37,
+      1,
+      2
+    ],
+    "failures": 0,
+    "errors": 0,
+    "skips": 0,
+    "initial_failure": "First root compileTestJava failed with five compiler diagnostics from two missing/wrong imports; zero test methods executed. Original log preserved, not counted as passing or added to inventory."
+  },
+  "runtime_actions": {
+    "DB": 0,
+    "native": 0,
+    "tests": 0,
+    "Gradle": 0,
+    "owner": 0,
+    "source_edits": 0
+  },
+  "limitations": [
+    "This supplement certifies the import delta/current archived-report binding only, not a new runtime VIEW acceptance.",
+    "Actual shared cancellation is prelaunch/boundary only; no in-flight cancellation or totalreaddeadline claim.",
+    "Own DTO/storage/tests are excluded from independent semantic conclusions; no D106 admission."
+  ],
+  "D106_admitted": false
+}

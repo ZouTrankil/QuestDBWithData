@@ -1,0 +1,440 @@
+{
+  "task_id": "D096",
+  "checked_at": "2026-10-06T05:20:54.467142+00:00",
+  "formal_mutated": false,
+  "execute_isolated": true,
+  "python_owner_definition_sha256": "f7e7d1f84e29f72a0df4613ada216076c0a0dc2ccb3f9cbc18a00d719939b139",
+  "d095_real_source_evidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D095\\commands\\java-materialize-acceptance-20261006.json",
+  "d095_real_source_evidence_sha256": "3c3db554353f2598d8612e387383ae3bd3c4d41f3bdf1adc67ce356115577e69",
+  "formal": {
+    "target": "formal-127.0.0.1:9000",
+    "operations": "SELECT only",
+    "range_start_inclusive": "2026-09-17",
+    "range_stop_exclusive": "2026-09-22",
+    "source_bounded_rows": 16658,
+    "schemas": {
+      "v_market_breadth_daily": {
+        "trade_date": "TIMESTAMP",
+        "stock_count": "LONG",
+        "up_count": "LONG",
+        "down_count": "LONG",
+        "flat_count": "LONG",
+        "avg_pct_change": "DOUBLE",
+        "total_amount_yi": "DOUBLE"
+      },
+      "mv_market_breadth_daily_v1": {
+        "trade_date": "TIMESTAMP",
+        "stock_count": "LONG",
+        "up_count": "LONG",
+        "down_count": "LONG",
+        "flat_count": "LONG",
+        "avg_pct_change": "DOUBLE",
+        "total_amount_yi": "DOUBLE"
+      }
+    },
+    "seven_field_schema_sha256": "b378fa372e407bb660a06d3941f03aafc354cdbe9ac9a6b3f852210805cd6840",
+    "snapshot": {
+      "tables": {
+        "stk_factor": {
+          "id": 1722,
+          "directoryName": "stk_factor~1722",
+          "table_txn": 14,
+          "table_row_count": 10265031,
+          "table_min_timestamp": "2010-01-29T00:00:00.000000Z",
+          "table_max_timestamp": "2026-09-24T00:00:00.000000Z",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "mv_market_breadth_daily_v1": {
+          "id": 1812,
+          "directoryName": "mv_market_breadth_daily_v1~1812",
+          "table_txn": 2,
+          "table_row_count": 2212,
+          "table_min_timestamp": "2010-01-29T00:00:00.000000Z",
+          "table_max_timestamp": "2026-09-18T00:00:00.000000Z",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        }
+      },
+      "wal": {
+        "stk_factor": {
+          "sequencerTxn": 14,
+          "writerTxn": 14,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "mv_market_breadth_daily_v1": {
+          "sequencerTxn": 2,
+          "writerTxn": 2,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        }
+      },
+      "mv": {
+        "view_name": "mv_market_breadth_daily_v1",
+        "view_status": "invalid",
+        "invalidation_reason": "materialized view is ahead of base table and cannot be synchronized",
+        "base_table_name": "stk_factor",
+        "view_directory_name": null,
+        "refresh_base_table_txn": 12,
+        "base_table_txn": 14,
+        "refresh_type": "timer",
+        "timer_interval": 1,
+        "timer_interval_unit": "MINUTE",
+        "view_sql_sha256": "f7e7d1f84e29f72a0df4613ada216076c0a0dc2ccb3f9cbc18a00d719939b139",
+        "definition_matches_python": true
+      },
+      "alias": {
+        "view_name": "v_market_breadth_daily",
+        "view_sql": "SELECT * FROM mv_market_breadth_daily_v1",
+        "view_table_dir_name": "v_market_breadth_daily~241",
+        "invalidation_reason": null,
+        "view_status": "valid",
+        "view_status_update_time": "2026-09-30T01:27:52.505775Z"
+      }
+    },
+    "version_stable": true,
+    "actual_alias_view_sql": "SELECT * FROM mv_market_breadth_daily_v1",
+    "actual_alias_view_sql_sha256": "ef2d5b111665ca56541a75ef344508595c8e2c50ee8609ed89c8f183ca6375e6",
+    "registered_alias_select_sha256": "ef2d5b111665ca56541a75ef344508595c8e2c50ee8609ed89c8f183ca6375e6",
+    "comparisons": {
+      "alias_vs_mv": {
+        "passed": true,
+        "rows": 2,
+        "fields": [
+          "trade_date",
+          "stock_count",
+          "up_count",
+          "down_count",
+          "flat_count",
+          "avg_pct_change",
+          "total_amount_yi"
+        ],
+        "field_comparisons": 14
+      },
+      "alias_vs_direct_base": {
+        "passed": false,
+        "error": "Isolated data has missing or additional complete keys",
+        "left_rows": 2,
+        "right_rows": 3
+      },
+      "mv_vs_direct_base": {
+        "passed": false,
+        "error": "Isolated data has missing or additional complete keys",
+        "left_rows": 2,
+        "right_rows": 3
+      }
+    },
+    "rows": {
+      "v_market_breadth_daily": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "stock_count": 5552,
+          "up_count": 2575,
+          "down_count": 2820,
+          "flat_count": 157,
+          "avg_pct_change": 0.12166565201729085,
+          "total_amount_yi": 18343.331240500058
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4234,
+          "down_count": 1152,
+          "flat_count": 167,
+          "avg_pct_change": 1.5667630109850548,
+          "total_amount_yi": 20929.055246700013
+        }
+      ],
+      "mv_market_breadth_daily_v1": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "stock_count": 5552,
+          "up_count": 2575,
+          "down_count": 2820,
+          "flat_count": 157,
+          "avg_pct_change": 0.12166565201729085,
+          "total_amount_yi": 18343.331240500058
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4234,
+          "down_count": 1152,
+          "flat_count": 167,
+          "avg_pct_change": 1.5667630109850548,
+          "total_amount_yi": 20929.055246700013
+        }
+      ],
+      "direct_base": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "stock_count": 5552,
+          "up_count": 2575,
+          "down_count": 2820,
+          "flat_count": 157,
+          "avg_pct_change": 0.12166565201729085,
+          "total_amount_yi": 18343.331240500058
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4234,
+          "down_count": 1152,
+          "flat_count": 167,
+          "avg_pct_change": 1.5667630109850548,
+          "total_amount_yi": 20929.055246700013
+        },
+        {
+          "trade_date": "2026-09-21T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4536,
+          "down_count": 936,
+          "flat_count": 81,
+          "avg_pct_change": 1.9182546011165114,
+          "total_amount_yi": 20481.336778100027
+        }
+      ]
+    },
+    "mv_ready": false,
+    "target_validated": false,
+    "ordinary_view_wal_dedup": "not applicable; projection is owned by D095 MV"
+  },
+  "status": "VERIFIED_ISOLATED",
+  "isolated": {
+    "target": "private-127.0.0.1:19000",
+    "operations": "CREATE VIEW when missing; all acceptance queries SELECT only",
+    "range_start_inclusive": "2026-09-17",
+    "range_stop_exclusive": "2026-09-22",
+    "source_bounded_rows": 16658,
+    "schemas": {
+      "v_market_breadth_daily": {
+        "trade_date": "TIMESTAMP",
+        "stock_count": "LONG",
+        "up_count": "LONG",
+        "down_count": "LONG",
+        "flat_count": "LONG",
+        "avg_pct_change": "DOUBLE",
+        "total_amount_yi": "DOUBLE"
+      },
+      "mv_market_breadth_daily_v1": {
+        "trade_date": "TIMESTAMP",
+        "stock_count": "LONG",
+        "up_count": "LONG",
+        "down_count": "LONG",
+        "flat_count": "LONG",
+        "avg_pct_change": "DOUBLE",
+        "total_amount_yi": "DOUBLE"
+      }
+    },
+    "seven_field_schema_sha256": "b378fa372e407bb660a06d3941f03aafc354cdbe9ac9a6b3f852210805cd6840",
+    "snapshot": {
+      "tables": {
+        "stk_factor": {
+          "id": 9,
+          "directoryName": "stk_factor~9",
+          "table_txn": 122,
+          "table_row_count": 16658,
+          "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+          "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "mv_market_breadth_daily_v1": {
+          "id": 10,
+          "directoryName": "mv_market_breadth_daily_v1~10",
+          "table_txn": 74,
+          "table_row_count": 3,
+          "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+          "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        }
+      },
+      "wal": {
+        "stk_factor": {
+          "sequencerTxn": 122,
+          "writerTxn": 122,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "mv_market_breadth_daily_v1": {
+          "sequencerTxn": 74,
+          "writerTxn": 74,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        }
+      },
+      "mv": {
+        "view_name": "mv_market_breadth_daily_v1",
+        "view_status": "valid",
+        "invalidation_reason": null,
+        "base_table_name": "stk_factor",
+        "view_directory_name": null,
+        "refresh_base_table_txn": 122,
+        "base_table_txn": 122,
+        "refresh_type": "timer",
+        "timer_interval": 1,
+        "timer_interval_unit": "MINUTE",
+        "view_sql_sha256": "f7e7d1f84e29f72a0df4613ada216076c0a0dc2ccb3f9cbc18a00d719939b139",
+        "definition_matches_python": true
+      },
+      "alias": {
+        "view_name": "v_market_breadth_daily",
+        "view_sql": "SELECT * FROM mv_market_breadth_daily_v1",
+        "view_table_dir_name": "v_market_breadth_daily~12",
+        "invalidation_reason": null,
+        "view_status": "valid",
+        "view_status_update_time": "2026-10-06T05:21:00.364325Z"
+      }
+    },
+    "version_stable": true,
+    "actual_alias_view_sql": "SELECT * FROM mv_market_breadth_daily_v1",
+    "actual_alias_view_sql_sha256": "ef2d5b111665ca56541a75ef344508595c8e2c50ee8609ed89c8f183ca6375e6",
+    "registered_alias_select_sha256": "ef2d5b111665ca56541a75ef344508595c8e2c50ee8609ed89c8f183ca6375e6",
+    "comparisons": {
+      "alias_vs_mv": {
+        "passed": true,
+        "rows": 3,
+        "fields": [
+          "trade_date",
+          "stock_count",
+          "up_count",
+          "down_count",
+          "flat_count",
+          "avg_pct_change",
+          "total_amount_yi"
+        ],
+        "field_comparisons": 21
+      },
+      "alias_vs_direct_base": {
+        "passed": true,
+        "rows": 3,
+        "fields": [
+          "trade_date",
+          "stock_count",
+          "up_count",
+          "down_count",
+          "flat_count",
+          "avg_pct_change",
+          "total_amount_yi"
+        ],
+        "field_comparisons": 21
+      },
+      "mv_vs_direct_base": {
+        "passed": true,
+        "rows": 3,
+        "fields": [
+          "trade_date",
+          "stock_count",
+          "up_count",
+          "down_count",
+          "flat_count",
+          "avg_pct_change",
+          "total_amount_yi"
+        ],
+        "field_comparisons": 21
+      }
+    },
+    "rows": {
+      "v_market_breadth_daily": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "stock_count": 5552,
+          "up_count": 2575,
+          "down_count": 2820,
+          "flat_count": 157,
+          "avg_pct_change": 0.12166565201729095,
+          "total_amount_yi": 18343.331240500032
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4234,
+          "down_count": 1152,
+          "flat_count": 167,
+          "avg_pct_change": 1.5667630109850548,
+          "total_amount_yi": 20929.055246700038
+        },
+        {
+          "trade_date": "2026-09-21T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4536,
+          "down_count": 936,
+          "flat_count": 81,
+          "avg_pct_change": 1.918254601116519,
+          "total_amount_yi": 20481.336778100012
+        }
+      ],
+      "mv_market_breadth_daily_v1": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "stock_count": 5552,
+          "up_count": 2575,
+          "down_count": 2820,
+          "flat_count": 157,
+          "avg_pct_change": 0.12166565201729095,
+          "total_amount_yi": 18343.331240500032
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4234,
+          "down_count": 1152,
+          "flat_count": 167,
+          "avg_pct_change": 1.5667630109850548,
+          "total_amount_yi": 20929.055246700038
+        },
+        {
+          "trade_date": "2026-09-21T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4536,
+          "down_count": 936,
+          "flat_count": 81,
+          "avg_pct_change": 1.918254601116519,
+          "total_amount_yi": 20481.336778100012
+        }
+      ],
+      "direct_base": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "stock_count": 5552,
+          "up_count": 2575,
+          "down_count": 2820,
+          "flat_count": 157,
+          "avg_pct_change": 0.12166565201729095,
+          "total_amount_yi": 18343.331240500032
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4234,
+          "down_count": 1152,
+          "flat_count": 167,
+          "avg_pct_change": 1.5667630109850548,
+          "total_amount_yi": 20929.055246700038
+        },
+        {
+          "trade_date": "2026-09-21T00:00:00.000000Z",
+          "stock_count": 5553,
+          "up_count": 4536,
+          "down_count": 936,
+          "flat_count": 81,
+          "avg_pct_change": 1.918254601116519,
+          "total_amount_yi": 20481.336778100012
+        }
+      ]
+    },
+    "mv_ready": true,
+    "target_validated": true,
+    "ordinary_view_wal_dedup": "not applicable; projection is owned by D095 MV",
+    "alias_created": true,
+    "private_target_attestation": {
+      "pid": 16980,
+      "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d095-isolated-questdb",
+      "http_port": 19000,
+      "pg_port": 18812,
+      "address": "127.0.0.1"
+    }
+  }
+}

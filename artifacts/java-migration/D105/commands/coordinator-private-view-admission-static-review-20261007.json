@@ -1,0 +1,107 @@
+{
+  "protocol_version": 1,
+  "task_id": "D105",
+  "status": "PASS",
+  "reviewer": "/root/d095_scripts",
+  "review_kind": "Independent file-only static review of root-authored private view admission tool and its frozen actual input evidence",
+  "decision": "accepted_for_private_view_create_once",
+  "blockers": [],
+  "bindings": [
+    {
+      "path": "tools/admit_d105_private_view.py",
+      "sha256": "4cf63058ac0e09f47b4169e5f2502c7d2e2981b3761e9bad29a21f239b6ce00d"
+    }
+  ],
+  "evidence_bindings": [
+    {
+      "path": "artifacts/java-migration/D105/commands/coordinator-private-view-create-admission-20261007.json",
+      "sha256": "16086cf9a9faf2d00a77627701b95806b620a5aff7822102e851f9b7360f6d82"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/coordinator-view-tools-static-review-20261007.json",
+      "sha256": "d1ff167a5ad40dcbbf8a08997780ba2f99b47693249478e27a59ea7eb3fd958b"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/view-isolated-preflight-20261007.json",
+      "sha256": "ed596b6e2e48573b1ec34da33c2ae3184ad675a79f20bd87dc11ad93df02a09c"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/view-formal-readonly-audit-20261007.json",
+      "sha256": "4b3aec1c690ae34a0b69e35df34d535d7a881454e2e549623e11724eb9be437d"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/formal-audit-private-identity-adaptation-note-20261007.json",
+      "sha256": "9e0c1950ebb2a6707148dea62c8022f21d7027bd967972b08743cd2c435b7d2d"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-catalog-startup-20261007.json",
+      "sha256": "b35f51b1ede68156b31fa8bd982170c4e2e6e16526bf42c87171752cdc6c4524"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/python-view-guards-private-identity-correction-20261007.log",
+      "sha256": "1dce52a154fb93ac664f87df35286bc76fcbfcf58ecb61785e1e9d9d82eb295d"
+    }
+  ],
+  "actual_java_pure_archives": [
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-import-correction-20261007/TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyViewMappingTest.xml",
+      "sha256": "3109a99405971f61a966f3130ca4a92b707bde1212388fffd1c983e1ac31359a",
+      "unique_methods": 12
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-import-correction-20261007/TEST-com.zoutrankil.data.repository.MacroCoreMonthlyViewReadRepositoryTest.xml",
+      "sha256": "d97b7215977024e3d6778e42d4dc8110e1fc243982a0111578b574d67d9858eb",
+      "unique_methods": 8
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-import-correction-20261007/TEST-com.zoutrankil.data.repository.QuestDbMacroCoreViewReadGuardTest.xml",
+      "sha256": "b438f1663157df5a8416e86b4e5f7287342b1520b35c0ce7985785c85707ec05",
+      "unique_methods": 37
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-import-correction-20261007/TEST-com.zoutrankil.data.service.MacroCoreMonthlyViewCatalogStartupTest.xml",
+      "sha256": "ed223496f4a55c3f419991510283c651710e9b0f56606a1c39e671975455ca05",
+      "unique_methods": 1
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/java-pure-tests-import-correction-20261007/TEST-com.zoutrankil.data.service.MacroCoreMonthlyViewWriteRejectionTest.xml",
+      "sha256": "78f8a8ece5dcbca637ccc32c1b5f7618c507dd452998428b123b99194db9f146",
+      "unique_methods": 2
+    }
+  ],
+  "findings": {
+    "pure_java_unique_passing_methods": 60,
+    "pure_java_failures_errors_skips": 0,
+    "python_unique_passing_guard_methods": 44,
+    "catalog_dataset_count": 54,
+    "catalog_job_count": 42,
+    "view_independent_jobs": 0,
+    "catalog_database_connections": 0,
+    "catalog_ledger_created": false,
+    "private_alias_proven_absent": true,
+    "private_base_real_months": 3,
+    "private_protected_seven_table_frontier_stable": true,
+    "original_five_sqlite_tables_stable_and_zero_leases": true,
+    "formal_old_executed_script_sha256": "9cb825bd97ef48efdb6aa0ceda21395ca67c254833ba9c2baf8ba2f4f506b87b",
+    "current_private_audit_script_sha256": "3540ddb34ccbec4d777a2ce00e236b3ef6b76ccf190cc82006c14ba43d0d949b",
+    "old_formal_receipt_legitimate": "Only private_target changed between the executed formal script and current version. The scope=formal call path never enters private_target/native/quiescence. Independent tool reviewer binds both actual receipt and author change note; the note itself is not execution proof.",
+    "actual_gate_consumer": "Root-reported file-only execution chunk485d18 returned success. The root tool calls creator.validate_code before saving and creator.admission_inputs after saving; both consumers are file-only and independently revalidate source facts, audit values, current script/helper SHA set, fixed target and one-CREATE budget.",
+    "admission_authority": "Only one missing-only ordinary private VIEW CREATE into java_d105_v_macro_core_monthly_acceptance over java_d104_macro_core_monthly_acceptance. Creator performs fresh exact native/root/birth/ports, five-ledger-table, source/base full-value and formal frontier checks before its sole HTTP operation; existing view or UNKNOWN claim prohibits resend.",
+    "business_mutation_budgets": {"DDL": 1, "DML": 0, "ILP": 0, "source_writes": 0, "base_writes": 0, "formal_writes": 0},
+    "automatic_retry": false,
+    "human_comparison_status": "pending_review",
+    "D106_admitted": false
+  },
+  "reviewer_actions": {
+    "file_reads_and_hashes": true,
+    "xml_method_deduplication": true,
+    "database_queries": 0,
+    "native_queries": 0,
+    "owner_invocations": 0,
+    "tests_run": 0,
+    "gradle_runs": 0,
+    "registration_edits": 0,
+    "existing_evidence_modified": false
+  },
+  "limits": "This review admits the narrowly scoped private CREATE attempt only. It does not claim that the view has already been created or that Java live SELECT, registration or final D105 data acceptance has completed. No service/native/database state was independently queried by this reviewer."
+}

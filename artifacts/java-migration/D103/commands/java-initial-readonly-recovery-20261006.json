@@ -1,0 +1,2324 @@
+{
+  "task_id" : "D103",
+  "stage" : "readonly_recovery",
+  "started_at" : "2026-10-06T15:31:05.122758800Z",
+  "status" : "VERIFIED_ISOLATED_INITIAL_BY_READONLY_RECOVERY",
+  "attempt_label" : "",
+  "jvm_pid" : 47280,
+  "jvm_birth_utc" : "2026-10-06T15:31:02.250865Z",
+  "jvm_identity_evidence" : {
+    "sha256" : "354dc19eb7b3c0738b4c5bd07e4c882bb35dd53856377bed5b7605019373155e",
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-readonly-recovery-jvm-identity-20261006.json"
+  },
+  "failed_initial_gate" : {
+    "sha256" : "d449e9713a69d478e511f485b0a1bc52d24a0d68e86ecb72cac2dfc47227c893",
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\coordinator-initial-java-receipt-failure-recovery-20261006.json"
+  },
+  "fixture_receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-initial-readonly-reconciliation-20261006.json",
+  "fixture_sha256" : "e2a2099b7c39526414594bb9816718481e40131a34c5d563161a600c6484f236",
+  "preflight_sha256" : "61a3e91753074598b6db0d5bdc7867ff45d90d144628629a36316a0bf091b0db",
+  "source" : {
+    "snapshot" : {
+      "table" : "index_monthly",
+      "tableId" : 9,
+      "directory" : "index_monthly~9",
+      "physicalTxn" : 1,
+      "sequenceTxn" : 1,
+      "schemaHash" : "23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285"
+    },
+    "rawFingerprint" : "1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f",
+    "rawRows" : 32,
+    "rows" : [ {
+      "month" : "2026-06",
+      "hs300Ret1m" : 0.0178,
+      "zz500Ret1m" : 0.0804,
+      "allARet1m" : 0.0287,
+      "cs1000Ret1m" : 0.0477,
+      "smallLargeRet1m" : 0.0299,
+      "midLargeRet1m" : 0.0626,
+      "growthRet1m" : -0.047,
+      "valueRet1m" : 0.0641,
+      "growthValueRet1m" : -0.1111,
+      "energyRet1m" : -0.1491,
+      "materialsRet1m" : 0.0024,
+      "industrialsRet1m" : -0.034,
+      "consumerDiscretionaryRet1m" : -0.0822,
+      "consumerStaplesRet1m" : -0.1165,
+      "healthcareRet1m" : -0.006,
+      "financialsRet1m" : -0.027,
+      "itRet1m" : 0.2427,
+      "telecomRet1m" : 0.087,
+      "utilitiesRet1m" : -0.1489,
+      "energyVsAllA1m" : -0.1778,
+      "materialsVsAllA1m" : -0.0263,
+      "industrialsVsAllA1m" : -0.0627,
+      "consumerDiscretionaryVsAllA1m" : -0.1109,
+      "consumerStaplesVsAllA1m" : -0.1452,
+      "healthcareVsAllA1m" : -0.0347,
+      "financialsVsAllA1m" : -0.0557,
+      "itVsAllA1m" : 0.214,
+      "telecomVsAllA1m" : 0.05829999999999999,
+      "utilitiesVsAllA1m" : -0.1776
+    }, {
+      "month" : "2026-07",
+      "hs300Ret1m" : -0.0786,
+      "zz500Ret1m" : -0.1702,
+      "allARet1m" : -0.1328,
+      "cs1000Ret1m" : -0.1969,
+      "smallLargeRet1m" : -0.11829999999999999,
+      "midLargeRet1m" : -0.09159999999999999,
+      "growthRet1m" : 0.0695,
+      "valueRet1m" : -0.2,
+      "growthValueRet1m" : 0.2695,
+      "energyRet1m" : 0.1345,
+      "materialsRet1m" : -0.0821,
+      "industrialsRet1m" : -0.1037,
+      "consumerDiscretionaryRet1m" : 0.0322,
+      "consumerStaplesRet1m" : 0.1212,
+      "healthcareRet1m" : 0.0717,
+      "financialsRet1m" : 0.069,
+      "itRet1m" : -0.2995,
+      "telecomRet1m" : -0.2591,
+      "utilitiesRet1m" : 0.0304,
+      "energyVsAllA1m" : 0.2673,
+      "materialsVsAllA1m" : 0.050699999999999995,
+      "industrialsVsAllA1m" : 0.0291,
+      "consumerDiscretionaryVsAllA1m" : 0.165,
+      "consumerStaplesVsAllA1m" : 0.254,
+      "healthcareVsAllA1m" : 0.20450000000000002,
+      "financialsVsAllA1m" : 0.2018,
+      "itVsAllA1m" : -0.1667,
+      "telecomVsAllA1m" : -0.1263,
+      "utilitiesVsAllA1m" : 0.1632
+    } ]
+  },
+  "actual_target" : {
+    "targetId" : "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+    "tableId" : 10,
+    "directory" : "java_d103_equity_style_monthly_acceptance~10",
+    "schemaHash" : "1398f2216b2a635e887dabc9075c9e4d8e6ac1f030105294edc2e3e0c995b6cd",
+    "physicalTxn" : 4,
+    "walTxn" : 4,
+    "sequenceTxn" : 4,
+    "writerTxn" : 4,
+    "pendingRows" : 0,
+    "bufferedTxns" : 0,
+    "suspended" : false,
+    "rowCount" : 2,
+    "metadataRowCount" : 2
+  },
+  "expected_rows" : [ {
+    "month" : "2026-06-01",
+    "hs300_ret_1m" : 0.0178,
+    "zz500_ret_1m" : 0.0804,
+    "all_a_ret_1m" : 0.0287,
+    "cs1000_ret_1m" : 0.0477,
+    "small_large_ret_1m" : 0.0299,
+    "mid_large_ret_1m" : 0.0626,
+    "growth_ret_1m" : -0.047,
+    "value_ret_1m" : 0.0641,
+    "growth_value_ret_1m" : -0.1111,
+    "energy_ret_1m" : -0.1491,
+    "materials_ret_1m" : 0.0024,
+    "industrials_ret_1m" : -0.034,
+    "consumer_discretionary_ret_1m" : -0.0822,
+    "consumer_staples_ret_1m" : -0.1165,
+    "healthcare_ret_1m" : -0.006,
+    "financials_ret_1m" : -0.027,
+    "it_ret_1m" : 0.2427,
+    "telecom_ret_1m" : 0.087,
+    "utilities_ret_1m" : -0.1489,
+    "energy_vs_all_a_1m" : -0.1778,
+    "materials_vs_all_a_1m" : -0.0263,
+    "industrials_vs_all_a_1m" : -0.0627,
+    "consumer_discretionary_vs_all_a_1m" : -0.1109,
+    "consumer_staples_vs_all_a_1m" : -0.1452,
+    "healthcare_vs_all_a_1m" : -0.0347,
+    "financials_vs_all_a_1m" : -0.0557,
+    "it_vs_all_a_1m" : 0.214,
+    "telecom_vs_all_a_1m" : 0.05829999999999999,
+    "utilities_vs_all_a_1m" : -0.1776
+  }, {
+    "month" : "2026-07-01",
+    "hs300_ret_1m" : -0.0786,
+    "zz500_ret_1m" : -0.1702,
+    "all_a_ret_1m" : -0.1328,
+    "cs1000_ret_1m" : -0.1969,
+    "small_large_ret_1m" : -0.11829999999999999,
+    "mid_large_ret_1m" : -0.09159999999999999,
+    "growth_ret_1m" : 0.0695,
+    "value_ret_1m" : -0.2,
+    "growth_value_ret_1m" : 0.2695,
+    "energy_ret_1m" : 0.1345,
+    "materials_ret_1m" : -0.0821,
+    "industrials_ret_1m" : -0.1037,
+    "consumer_discretionary_ret_1m" : 0.0322,
+    "consumer_staples_ret_1m" : 0.1212,
+    "healthcare_ret_1m" : 0.0717,
+    "financials_ret_1m" : 0.069,
+    "it_ret_1m" : -0.2995,
+    "telecom_ret_1m" : -0.2591,
+    "utilities_ret_1m" : 0.0304,
+    "energy_vs_all_a_1m" : 0.2673,
+    "materials_vs_all_a_1m" : 0.050699999999999995,
+    "industrials_vs_all_a_1m" : 0.0291,
+    "consumer_discretionary_vs_all_a_1m" : 0.165,
+    "consumer_staples_vs_all_a_1m" : 0.254,
+    "healthcare_vs_all_a_1m" : 0.20450000000000002,
+    "financials_vs_all_a_1m" : 0.2018,
+    "it_vs_all_a_1m" : -0.1667,
+    "telecom_vs_all_a_1m" : -0.1263,
+    "utilities_vs_all_a_1m" : 0.1632
+  } ],
+  "original_operations" : [ {
+    "role" : "first",
+    "run_id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+    "state" : "VERIFIED",
+    "verified_rows" : 2,
+    "mode" : "MATERIALIZE",
+    "parent_run_id" : null,
+    "ledger_entry" : {
+      "id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "kind" : "RUN",
+      "run_id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:54.973281300Z"
+    },
+    "acked_slice_receipts" : [ {
+      "entry_id" : "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision" : 5,
+      "state" : "ACKNOWLEDGED",
+      "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at" : "2026-10-06T15:11:54.895976900Z"
+    } ],
+    "proof_origin" : "Original immutable SQLite events revalidated by SELECT; no replay"
+  }, {
+    "role" : "same_range_replay",
+    "run_id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+    "state" : "VERIFIED",
+    "verified_rows" : 2,
+    "mode" : "MATERIALIZE",
+    "parent_run_id" : null,
+    "ledger_entry" : {
+      "id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "kind" : "RUN",
+      "run_id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:58.792534200Z"
+    },
+    "acked_slice_receipts" : [ {
+      "entry_id" : "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision" : 5,
+      "state" : "ACKNOWLEDGED",
+      "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at" : "2026-10-06T15:11:58.735516400Z"
+    } ],
+    "proof_origin" : "Original immutable SQLite events revalidated by SELECT; no replay"
+  }, {
+    "role" : "cancelled_for_resume",
+    "run_id" : "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+    "state" : "CANCELLED",
+    "verified_rows" : 0,
+    "mode" : "MATERIALIZE",
+    "parent_run_id" : null,
+    "ledger_entry" : {
+      "id" : "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "kind" : "RUN",
+      "run_id" : "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "parent_id" : null,
+      "state" : "CANCELLED",
+      "revision" : 1,
+      "payload_json" : "{\"errorCode\":\"CancellationException\"}",
+      "updated_at" : "2026-10-06T15:11:58.883566700Z"
+    },
+    "acked_slice_receipts" : [ ],
+    "proof_origin" : "Original immutable SQLite events revalidated by SELECT; no replay"
+  }, {
+    "role" : "exact_resume",
+    "run_id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+    "state" : "VERIFIED",
+    "verified_rows" : 2,
+    "mode" : "MATERIALIZE",
+    "parent_run_id" : "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+    "ledger_entry" : {
+      "id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "kind" : "RUN",
+      "run_id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.567556800Z"
+    },
+    "acked_slice_receipts" : [ {
+      "entry_id" : "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision" : 5,
+      "state" : "ACKNOWLEDGED",
+      "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at" : "2026-10-06T15:12:02.511557400Z"
+    } ],
+    "proof_origin" : "Original immutable SQLite events revalidated by SELECT; no replay"
+  }, {
+    "role" : "readonly_reconcile",
+    "run_id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+    "state" : "VERIFIED",
+    "verified_rows" : 2,
+    "mode" : "RECONCILE",
+    "parent_run_id" : null,
+    "ledger_entry" : {
+      "id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "kind" : "RUN",
+      "run_id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.870390100Z"
+    },
+    "acked_slice_receipts" : [ {
+      "entry_id" : "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision" : 5,
+      "state" : "ACKNOWLEDGED",
+      "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at" : "2026-10-06T15:12:02.815453600Z"
+    } ],
+    "proof_origin" : "Original immutable SQLite events revalidated by SELECT; no replay"
+  }, {
+    "role" : "configured_write_group",
+    "run_id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+    "state" : "VERIFIED",
+    "verified_rows" : 1,
+    "mode" : null,
+    "parent_run_id" : null,
+    "ledger_entry" : {
+      "id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "kind" : "RUN",
+      "run_id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"matchedRows\":1,\"duplicateKeys\":0,\"passed\":true,\"mismatchedRows\":0,\"expectedRows\":1,\"readbackEvidence\":\"ledger:run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1\",\"actualRows\":1,\"missingKeys\":0,\"sourceFingerprint\":\"21563b4215d15ffc3d17826e1cff67ea0fb4b51e9248bd2c203b01d8203e61de\"},\"reusedChildReadback\":{},\"metric\":\"verifiedChildRuns\"}",
+      "updated_at" : "2026-10-06T15:12:06.949470Z"
+    },
+    "acked_slice_receipts" : [ ],
+    "proof_origin" : "Original immutable SQLite events revalidated by SELECT; no replay"
+  }, {
+    "role" : "typed_write_child",
+    "run_id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+    "state" : "VERIFIED",
+    "verified_rows" : 1,
+    "mode" : "INGEST",
+    "parent_run_id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+    "ledger_entry" : {
+      "id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "kind" : "RUN",
+      "run_id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"65efc99d8addeea814af0bc42b6a5a0d62f0a3ba578730112e4fbb69728d517a\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:06.916978Z"
+    },
+    "acked_slice_receipts" : [ {
+      "entry_id" : "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision" : 5,
+      "state" : "ACKNOWLEDGED",
+      "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":1,\"verifiedRows\":1,\"receipts\":[{\"batch\":1,\"submittedRows\":1,\"verifiedRows\":1,\"bytes\":3012,\"digest\":\"2944645a3159c6c4149dce547a4f01adfe750e47269010c74ff4af278656e26c\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at" : "2026-10-06T15:12:06.879326800Z"
+    } ],
+    "proof_origin" : "Original immutable SQLite events revalidated by SELECT; no replay"
+  }, {
+    "role" : "cancelled_before_source",
+    "run_id" : "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+    "state" : "CANCELLED",
+    "verified_rows" : 0,
+    "mode" : "MATERIALIZE",
+    "parent_run_id" : null,
+    "ledger_entry" : {
+      "id" : "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "kind" : "RUN",
+      "run_id" : "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "parent_id" : null,
+      "state" : "CANCELLED",
+      "revision" : 1,
+      "payload_json" : "{\"errorCode\":\"CancellationException\"}",
+      "updated_at" : "2026-10-06T15:12:07.011770Z"
+    },
+    "acked_slice_receipts" : [ ],
+    "proof_origin" : "Original immutable SQLite events revalidated by SELECT; no replay"
+  } ],
+  "original_run_ids" : [ "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc", "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab", "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b", "d103-9817fd74-462e-4fcb-87cc-dceffaac2423", "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae", "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74", "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1", "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e" ],
+  "configured_read_group" : {
+    "startedAt" : "2026-10-06T15:31:09.854359800Z",
+    "finishedAt" : "2026-10-06T15:31:09.865273Z",
+    "members" : [ {
+      "memberId" : "styles",
+      "datasetId" : "equity_style_monthly",
+      "definitionVersion" : 1,
+      "rowType" : "com.zoutrankil.data.domain.EquityStyleMonthly",
+      "status" : "READ",
+      "page" : {
+        "datasetId" : "equity_style_monthly",
+        "definitionVersion" : 1,
+        "sourceVersion" : "table:java_d103_equity_style_monthly_acceptance:id:10:dir:java_d103_equity_style_monthly_acceptance~10:txn:4:wal:4:wal-physical:4:metadata-rows:2",
+        "observedAt" : "2026-10-06T15:31:09.863600800Z",
+        "rows" : [ {
+          "month" : "2026-06",
+          "hs300Ret1m" : 0.0178,
+          "zz500Ret1m" : 0.0804,
+          "allARet1m" : 0.0287,
+          "cs1000Ret1m" : 0.0477,
+          "smallLargeRet1m" : 0.0299,
+          "midLargeRet1m" : 0.0626,
+          "growthRet1m" : -0.047,
+          "valueRet1m" : 0.0641,
+          "growthValueRet1m" : -0.1111,
+          "energyRet1m" : -0.1491,
+          "materialsRet1m" : 0.0024,
+          "industrialsRet1m" : -0.034,
+          "consumerDiscretionaryRet1m" : -0.0822,
+          "consumerStaplesRet1m" : -0.1165,
+          "healthcareRet1m" : -0.006,
+          "financialsRet1m" : -0.027,
+          "itRet1m" : 0.2427,
+          "telecomRet1m" : 0.087,
+          "utilitiesRet1m" : -0.1489,
+          "energyVsAllA1m" : -0.1778,
+          "materialsVsAllA1m" : -0.0263,
+          "industrialsVsAllA1m" : -0.0627,
+          "consumerDiscretionaryVsAllA1m" : -0.1109,
+          "consumerStaplesVsAllA1m" : -0.1452,
+          "healthcareVsAllA1m" : -0.0347,
+          "financialsVsAllA1m" : -0.0557,
+          "itVsAllA1m" : 0.214,
+          "telecomVsAllA1m" : 0.05829999999999999,
+          "utilitiesVsAllA1m" : -0.1776
+        }, {
+          "month" : "2026-07",
+          "hs300Ret1m" : -0.0786,
+          "zz500Ret1m" : -0.1702,
+          "allARet1m" : -0.1328,
+          "cs1000Ret1m" : -0.1969,
+          "smallLargeRet1m" : -0.11829999999999999,
+          "midLargeRet1m" : -0.09159999999999999,
+          "growthRet1m" : 0.0695,
+          "valueRet1m" : -0.2,
+          "growthValueRet1m" : 0.2695,
+          "energyRet1m" : 0.1345,
+          "materialsRet1m" : -0.0821,
+          "industrialsRet1m" : -0.1037,
+          "consumerDiscretionaryRet1m" : 0.0322,
+          "consumerStaplesRet1m" : 0.1212,
+          "healthcareRet1m" : 0.0717,
+          "financialsRet1m" : 0.069,
+          "itRet1m" : -0.2995,
+          "telecomRet1m" : -0.2591,
+          "utilitiesRet1m" : 0.0304,
+          "energyVsAllA1m" : 0.2673,
+          "materialsVsAllA1m" : 0.050699999999999995,
+          "industrialsVsAllA1m" : 0.0291,
+          "consumerDiscretionaryVsAllA1m" : 0.165,
+          "consumerStaplesVsAllA1m" : 0.254,
+          "healthcareVsAllA1m" : 0.20450000000000002,
+          "financialsVsAllA1m" : 0.2018,
+          "itVsAllA1m" : -0.1667,
+          "telecomVsAllA1m" : -0.1263,
+          "utilitiesVsAllA1m" : 0.1632
+        } ],
+        "nextCursor" : null
+      },
+      "errorCode" : null
+    } ]
+  },
+  "read_request_evidence" : {
+    "sha256" : "8b8634c1b040cb641b82aa22b0540a3f34fc8de4f7b20917225ca8a031a28fbe",
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\read-group-initial-20261006.json"
+  },
+  "original_write_request_evidence" : {
+    "sha256" : "59f051a046a9fc73ec986079bbef2a21fdf2f03fea584ff032894fb060e4871c",
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\write-group-initial-20261006.json"
+  },
+  "formal_before" : {
+    "index_monthly" : {
+      "physical" : [ {
+        "id" : 334,
+        "directoryName" : "index_monthly~334",
+        "table_txn" : 11,
+        "table_row_count" : 6506,
+        "partitionBy" : "YEAR",
+        "designatedTimestamp" : "trade_date",
+        "walEnabled" : true,
+        "dedup" : false,
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0
+      } ],
+      "count" : 6506,
+      "schema" : [ {
+        "column" : "ts_code",
+        "type" : "SYMBOL",
+        "indexed" : false,
+        "indexBlockCapacity" : 256,
+        "symbolCached" : true,
+        "symbolCapacity" : 256,
+        "symbolTableSize" : 55,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "trade_date",
+        "type" : "TIMESTAMP",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : true,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "close",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "open",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "high",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "low",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "pre_close",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "change",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "pct_chg",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "vol",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "amount",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "layer",
+        "type" : "SYMBOL",
+        "indexed" : false,
+        "indexBlockCapacity" : 256,
+        "symbolCached" : true,
+        "symbolCapacity" : 256,
+        "symbolTableSize" : 3,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "bucket",
+        "type" : "SYMBOL",
+        "indexed" : false,
+        "indexBlockCapacity" : 256,
+        "symbolCached" : true,
+        "symbolCapacity" : 256,
+        "symbolTableSize" : 7,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "update_time",
+        "type" : "TIMESTAMP",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      } ],
+      "wal" : [ {
+        "sequencerTxn" : 11,
+        "writerTxn" : 11,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ]
+    },
+    "equity_style_monthly" : {
+      "physical" : [ {
+        "id" : 335,
+        "directoryName" : "equity_style_monthly~335",
+        "table_txn" : 8,
+        "table_row_count" : 198,
+        "partitionBy" : "YEAR",
+        "designatedTimestamp" : "month",
+        "walEnabled" : true,
+        "dedup" : true,
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0
+      } ],
+      "count" : 198,
+      "schema" : [ {
+        "column" : "month",
+        "type" : "TIMESTAMP",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : true,
+        "upsertKey" : true,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "hs300_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "zz500_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "all_a_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "cs1000_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "small_large_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "mid_large_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "growth_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "value_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "growth_value_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "energy_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "materials_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "industrials_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "consumer_discretionary_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "consumer_staples_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "healthcare_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "financials_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "it_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "telecom_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "utilities_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "energy_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "materials_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "industrials_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "consumer_discretionary_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "consumer_staples_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "healthcare_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "financials_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "it_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "telecom_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "utilities_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      } ],
+      "wal" : [ {
+        "sequencerTxn" : 8,
+        "writerTxn" : 8,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ]
+    }
+  },
+  "formal_after" : {
+    "index_monthly" : {
+      "physical" : [ {
+        "id" : 334,
+        "directoryName" : "index_monthly~334",
+        "table_txn" : 11,
+        "table_row_count" : 6506,
+        "partitionBy" : "YEAR",
+        "designatedTimestamp" : "trade_date",
+        "walEnabled" : true,
+        "dedup" : false,
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0
+      } ],
+      "count" : 6506,
+      "schema" : [ {
+        "column" : "ts_code",
+        "type" : "SYMBOL",
+        "indexed" : false,
+        "indexBlockCapacity" : 256,
+        "symbolCached" : true,
+        "symbolCapacity" : 256,
+        "symbolTableSize" : 55,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "trade_date",
+        "type" : "TIMESTAMP",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : true,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "close",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "open",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "high",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "low",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "pre_close",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "change",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "pct_chg",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "vol",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "amount",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "layer",
+        "type" : "SYMBOL",
+        "indexed" : false,
+        "indexBlockCapacity" : 256,
+        "symbolCached" : true,
+        "symbolCapacity" : 256,
+        "symbolTableSize" : 3,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "bucket",
+        "type" : "SYMBOL",
+        "indexed" : false,
+        "indexBlockCapacity" : 256,
+        "symbolCached" : true,
+        "symbolCapacity" : 256,
+        "symbolTableSize" : 7,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "update_time",
+        "type" : "TIMESTAMP",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      } ],
+      "wal" : [ {
+        "sequencerTxn" : 11,
+        "writerTxn" : 11,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ]
+    },
+    "equity_style_monthly" : {
+      "physical" : [ {
+        "id" : 335,
+        "directoryName" : "equity_style_monthly~335",
+        "table_txn" : 8,
+        "table_row_count" : 198,
+        "partitionBy" : "YEAR",
+        "designatedTimestamp" : "month",
+        "walEnabled" : true,
+        "dedup" : true,
+        "table_suspended" : false,
+        "wal_pending_row_count" : 0
+      } ],
+      "count" : 198,
+      "schema" : [ {
+        "column" : "month",
+        "type" : "TIMESTAMP",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : true,
+        "upsertKey" : true,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "hs300_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "zz500_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "all_a_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "cs1000_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "small_large_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "mid_large_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "growth_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "value_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "growth_value_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "energy_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "materials_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "industrials_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "consumer_discretionary_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "consumer_staples_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "healthcare_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "financials_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "it_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "telecom_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "utilities_ret_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "energy_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "materials_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "industrials_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "consumer_discretionary_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "consumer_staples_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "healthcare_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "financials_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "it_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "telecom_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      }, {
+        "column" : "utilities_vs_all_a_1m",
+        "type" : "DOUBLE",
+        "indexed" : false,
+        "indexBlockCapacity" : 0,
+        "symbolCached" : false,
+        "symbolCapacity" : 0,
+        "symbolTableSize" : 0,
+        "designated" : false,
+        "upsertKey" : false,
+        "indexType" : "",
+        "indexInclude" : ""
+      } ],
+      "wal" : [ {
+        "sequencerTxn" : 8,
+        "writerTxn" : 8,
+        "bufferedTxnSize" : 0,
+        "suspended" : false
+      } ]
+    }
+  },
+  "native_start" : {
+    "attestation_child_stopped" : true,
+    "records" : [ {
+      "port" : 19030,
+      "address" : "127.0.0.1",
+      "pid" : 41560,
+      "name" : "java.exe",
+      "command" : "\"D:\\tool\\questdb\\db\\bin\\java.exe\" -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:+UseParallelGC --sun-misc-unsafe-memory-access=allow --enable-native-access=io.questdb --add-opens=java.base/java.lang=io.questdb --add-opens=java.base/java.lang.reflect=io.questdb --add-opens=java.base/java.nio=io.questdb --add-opens=java.base/java.time.zone=io.questdb --add-exports=java.base/jdk.internal.vm=io.questdb -m io.questdb/io.questdb.ServerMain -d C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-isolated-questdb",
+      "birth" : "2026-10-06T14:15:29.5834980Z"
+    }, {
+      "port" : 18842,
+      "address" : "127.0.0.1",
+      "pid" : 41560,
+      "name" : "java.exe",
+      "command" : "\"D:\\tool\\questdb\\db\\bin\\java.exe\" -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:+UseParallelGC --sun-misc-unsafe-memory-access=allow --enable-native-access=io.questdb --add-opens=java.base/java.lang=io.questdb --add-opens=java.base/java.lang.reflect=io.questdb --add-opens=java.base/java.nio=io.questdb --add-opens=java.base/java.time.zone=io.questdb --add-exports=java.base/jdk.internal.vm=io.questdb -m io.questdb/io.questdb.ServerMain -d C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-isolated-questdb",
+      "birth" : "2026-10-06T14:15:29.5834980Z"
+    } ],
+    "attestation_child_pid" : 30044,
+    "observed_at" : "2026-10-06T15:31:08.804623900Z",
+    "jvm_birth_utc" : "2026-10-06T15:31:02.250865Z",
+    "phase" : "readonly_recovery_start"
+  },
+  "native_finish" : {
+    "attestation_child_stopped" : true,
+    "records" : [ {
+      "port" : 19030,
+      "address" : "127.0.0.1",
+      "pid" : 41560,
+      "name" : "java.exe",
+      "command" : "\"D:\\tool\\questdb\\db\\bin\\java.exe\" -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:+UseParallelGC --sun-misc-unsafe-memory-access=allow --enable-native-access=io.questdb --add-opens=java.base/java.lang=io.questdb --add-opens=java.base/java.lang.reflect=io.questdb --add-opens=java.base/java.nio=io.questdb --add-opens=java.base/java.time.zone=io.questdb --add-exports=java.base/jdk.internal.vm=io.questdb -m io.questdb/io.questdb.ServerMain -d C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-isolated-questdb",
+      "birth" : "2026-10-06T14:15:29.5834980Z"
+    }, {
+      "port" : 18842,
+      "address" : "127.0.0.1",
+      "pid" : 41560,
+      "name" : "java.exe",
+      "command" : "\"D:\\tool\\questdb\\db\\bin\\java.exe\" -XX:+UnlockExperimentalVMOptions -XX:+AlwaysPreTouch -XX:+UseParallelGC --sun-misc-unsafe-memory-access=allow --enable-native-access=io.questdb --add-opens=java.base/java.lang=io.questdb --add-opens=java.base/java.lang.reflect=io.questdb --add-opens=java.base/java.nio=io.questdb --add-opens=java.base/java.time.zone=io.questdb --add-exports=java.base/jdk.internal.vm=io.questdb -m io.questdb/io.questdb.ServerMain -d C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-isolated-questdb",
+      "birth" : "2026-10-06T14:15:29.5834980Z"
+    } ],
+    "attestation_child_pid" : 15568,
+    "observed_at" : "2026-10-06T15:31:13.548708500Z",
+    "jvm_birth_utc" : "2026-10-06T15:31:02.250865Z",
+    "phase" : "readonly_recovery_finish"
+  },
+  "ledger_snapshot" : {
+    "runs" : [ {
+      "id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "parent_run_id" : null,
+      "job_id" : "data.equity_style_monthly",
+      "job_version" : 1,
+      "logical_date" : "2026-10-06",
+      "target_id" : "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json" : "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    }, {
+      "id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "parent_run_id" : null,
+      "job_id" : "data.equity_style_monthly",
+      "job_version" : 1,
+      "logical_date" : "2026-10-06",
+      "target_id" : "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json" : "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    }, {
+      "id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "parent_run_id" : "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "job_id" : "data.equity_style_monthly",
+      "job_version" : 1,
+      "logical_date" : "2026-10-06",
+      "target_id" : "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json" : "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    }, {
+      "id" : "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "parent_run_id" : null,
+      "job_id" : "data.equity_style_monthly",
+      "job_version" : 1,
+      "logical_date" : "2026-10-06",
+      "target_id" : "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json" : "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    }, {
+      "id" : "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "parent_run_id" : null,
+      "job_id" : "data.equity_style_monthly",
+      "job_version" : 1,
+      "logical_date" : "2026-10-06",
+      "target_id" : "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json" : "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    }, {
+      "id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "parent_run_id" : null,
+      "job_id" : "data.equity_style_monthly",
+      "job_version" : 1,
+      "logical_date" : "2026-10-06",
+      "target_id" : "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json" : "{\"definition\":{\"jobId\":\"data.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"equity_style_monthly_owner\",\"supportedModes\":[\"RECONCILE\",\"MATERIALIZE\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"parent_source_version\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"source_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"checkpoint_reason\":{\"type\":\"STRING\",\"required\":false,\"maxLength\":64,\"maxItems\":1,\"choices\":[\"SOURCE_PREFIX_REVISED\",\"VERIFIED_PREFIX_APPEND\"]},\"bootstrap_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_version\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpoint_before\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"equity_style_monthly.month_window\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT5M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":12,\"maxBatchBytes\":1048576},\"revisionDays\":31,\"dependencies\":[{\"jobId\":\"data.index_monthly\",\"version\":1}],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"RECONCILE\",\"parameters\":{\"bootstrap_from\":\"2026-06-01\",\"source_hash\":\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\",\"source_version\":\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\",\"target_id\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"},\"from\":\"2026-06-01\",\"to\":\"2026-07-01\",\"logicalDate\":\"2026-10-06\"}"
+    }, {
+      "id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "parent_run_id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "job_id" : "write.equity_style_monthly",
+      "job_version" : 1,
+      "logical_date" : "2026-10-06",
+      "target_id" : "d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323",
+      "frozen_json" : "{\"definition\":{\"jobId\":\"write.equity_style_monthly\",\"version\":1,\"datasetId\":\"equity_style_monthly\",\"datasetVersion\":1,\"owner\":\"java.equity_style_monthly.bounded_materializer\",\"supportedModes\":[\"INGEST\"],\"defaultMode\":\"INGEST\",\"parameters\":{\"payloadFingerprint\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"memberBatch\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"groupBatch\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"planFingerprint\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"prepared.local\",\"slicePolicyRef\":\"prepared.single_page\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT30S\"},\"timeout\":\"PT20M\",\"budget\":{\"maxWindowDays\":1,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":1,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"MANUAL\",\"zone\":\"Z\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"INGEST\",\"parameters\":{\"groupBatch\":\"d103-actual-june\",\"memberBatch\":\"d103-actual-june-member\",\"payloadFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"planFingerprint\":\"4cddc997848a8995bdacdcabd0927a8a2e5bfd1662f7c957c2d1e07c3fa17776\"},\"from\":null,\"to\":null,\"logicalDate\":\"2026-10-06\"}"
+    }, {
+      "id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "parent_run_id" : null,
+      "job_id" : "group.prepared_writes",
+      "job_version" : 1,
+      "logical_date" : "2026-10-06",
+      "target_id" : "group-control",
+      "frozen_json" : "{\"group\":{\"groupId\":\"group.prepared_writes\",\"version\":1,\"members\":[{\"job\":{\"jobId\":\"write.equity_style_monthly\",\"version\":1},\"after\":[]}],\"enabled\":true,\"dailyEligible\":false},\"logicalDate\":\"2026-10-06\",\"members\":[{\"frozenRequest\":\"{\\\"definition\\\":{\\\"jobId\\\":\\\"write.equity_style_monthly\\\",\\\"version\\\":1,\\\"datasetId\\\":\\\"equity_style_monthly\\\",\\\"datasetVersion\\\":1,\\\"owner\\\":\\\"java.equity_style_monthly.bounded_materializer\\\",\\\"supportedModes\\\":[\\\"INGEST\\\"],\\\"defaultMode\\\":\\\"INGEST\\\",\\\"parameters\\\":{\\\"payloadFingerprint\\\":{\\\"type\\\":\\\"STRING\\\",\\\"required\\\":true,\\\"maxLength\\\":128,\\\"maxItems\\\":1,\\\"choices\\\":[]},\\\"memberBatch\\\":{\\\"type\\\":\\\"STRING\\\",\\\"required\\\":true,\\\"maxLength\\\":128,\\\"maxItems\\\":1,\\\"choices\\\":[]},\\\"groupBatch\\\":{\\\"type\\\":\\\"STRING\\\",\\\"required\\\":true,\\\"maxLength\\\":128,\\\"maxItems\\\":1,\\\"choices\\\":[]},\\\"planFingerprint\\\":{\\\"type\\\":\\\"STRING\\\",\\\"required\\\":true,\\\"maxLength\\\":128,\\\"maxItems\\\":1,\\\"choices\\\":[]}},\\\"ratePolicyRef\\\":\\\"prepared.local\\\",\\\"slicePolicyRef\\\":\\\"prepared.single_page\\\",\\\"verificationPolicyRef\\\":\\\"questdb.full_key_values\\\",\\\"retry\\\":{\\\"maxAttempts\\\":1,\\\"backoff\\\":\\\"PT1S\\\",\\\"maxElapsed\\\":\\\"PT30S\\\"},\\\"timeout\\\":\\\"PT20M\\\",\\\"budget\\\":{\\\"maxWindowDays\\\":1,\\\"maxSlices\\\":1,\\\"maxPages\\\":1,\\\"maxRows\\\":1,\\\"maxBatchBytes\\\":1048576},\\\"revisionDays\\\":0,\\\"dependencies\\\":[],\\\"frequency\\\":\\\"MANUAL\\\",\\\"zone\\\":\\\"Z\\\",\\\"enabled\\\":true,\\\"dailyEligible\\\":false},\\\"mode\\\":\\\"INGEST\\\",\\\"parameters\\\":{\\\"groupBatch\\\":\\\"d103-actual-june\\\",\\\"memberBatch\\\":\\\"d103-actual-june-member\\\",\\\"payloadFingerprint\\\":\\\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\\\",\\\"planFingerprint\\\":\\\"4cddc997848a8995bdacdcabd0927a8a2e5bfd1662f7c957c2d1e07c3fa17776\\\"},\\\"from\\\":null,\\\"to\\\":null,\\\"logicalDate\\\":\\\"2026-10-06\\\"}\",\"jobId\":\"write.equity_style_monthly\",\"ordinal\":0,\"targetId\":\"d103-f05f9296fbfab0e04e6e6de13d953aaa9ccdb1771a1f4c8668d47ac02301b323\"}]}"
+    } ],
+    "entries" : [ {
+      "id" : "attempt-4b49b3e5-3a30-49f4-a51a-05329095f296",
+      "kind" : "ATTEMPT",
+      "run_id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "parent_id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"65efc99d8addeea814af0bc42b6a5a0d62f0a3ba578730112e4fbb69728d517a\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:06.905545500Z"
+    }, {
+      "id" : "attempt-4dd3ec55-313d-46f9-8846-ecc6ebe7a68b",
+      "kind" : "ATTEMPT",
+      "run_id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "parent_id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.857940300Z"
+    }, {
+      "id" : "attempt-579d0a61-dd96-4c82-97ee-1b23ea0c6d2d",
+      "kind" : "ATTEMPT",
+      "run_id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "parent_id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:54.958553800Z"
+    }, {
+      "id" : "attempt-592a4371-25cd-44bc-811e-796949953b84",
+      "kind" : "ATTEMPT",
+      "run_id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "parent_id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.556109500Z"
+    }, {
+      "id" : "attempt-bac7ead1-69ef-4a06-9fe8-2b4634e8da7c",
+      "kind" : "ATTEMPT",
+      "run_id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "parent_id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:58.781231100Z"
+    }, {
+      "id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "kind" : "RUN",
+      "run_id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:58.792534200Z"
+    }, {
+      "id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "kind" : "RUN",
+      "run_id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:54.973281300Z"
+    }, {
+      "id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "kind" : "RUN",
+      "run_id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.567556800Z"
+    }, {
+      "id" : "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "kind" : "RUN",
+      "run_id" : "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "parent_id" : null,
+      "state" : "CANCELLED",
+      "revision" : 1,
+      "payload_json" : "{\"errorCode\":\"CancellationException\"}",
+      "updated_at" : "2026-10-06T15:12:07.011770Z"
+    }, {
+      "id" : "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "kind" : "RUN",
+      "run_id" : "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "parent_id" : null,
+      "state" : "CANCELLED",
+      "revision" : 1,
+      "payload_json" : "{\"errorCode\":\"CancellationException\"}",
+      "updated_at" : "2026-10-06T15:11:58.883566700Z"
+    }, {
+      "id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "kind" : "RUN",
+      "run_id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.870390100Z"
+    }, {
+      "id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "kind" : "RUN",
+      "run_id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"65efc99d8addeea814af0bc42b6a5a0d62f0a3ba578730112e4fbb69728d517a\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:06.916978Z"
+    }, {
+      "id" : "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "kind" : "SLICE",
+      "run_id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "parent_id" : "attempt-4dd3ec55-313d-46f9-8846-ecc6ebe7a68b",
+      "state" : "VERIFIED",
+      "revision" : 6,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.824768700Z"
+    }, {
+      "id" : "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "kind" : "SLICE",
+      "run_id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "parent_id" : "attempt-592a4371-25cd-44bc-811e-796949953b84",
+      "state" : "VERIFIED",
+      "revision" : 6,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.521370800Z"
+    }, {
+      "id" : "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "kind" : "SLICE",
+      "run_id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "parent_id" : "attempt-bac7ead1-69ef-4a06-9fe8-2b4634e8da7c",
+      "state" : "VERIFIED",
+      "revision" : 6,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:58.744878200Z"
+    }, {
+      "id" : "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "kind" : "SLICE",
+      "run_id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "parent_id" : "attempt-579d0a61-dd96-4c82-97ee-1b23ea0c6d2d",
+      "state" : "VERIFIED",
+      "revision" : 6,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:54.907323800Z"
+    }, {
+      "id" : "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "kind" : "SLICE",
+      "run_id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "parent_id" : "attempt-4b49b3e5-3a30-49f4-a51a-05329095f296",
+      "state" : "VERIFIED",
+      "revision" : 6,
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:06.887486200Z"
+    }, {
+      "id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "kind" : "RUN",
+      "run_id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "parent_id" : null,
+      "state" : "VERIFIED",
+      "revision" : 2,
+      "payload_json" : "{\"verification\":{\"matchedRows\":1,\"duplicateKeys\":0,\"passed\":true,\"mismatchedRows\":0,\"expectedRows\":1,\"readbackEvidence\":\"ledger:run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1\",\"actualRows\":1,\"missingKeys\":0,\"sourceFingerprint\":\"21563b4215d15ffc3d17826e1cff67ea0fb4b51e9248bd2c203b01d8203e61de\"},\"reusedChildReadback\":{},\"metric\":\"verifiedChildRuns\"}",
+      "updated_at" : "2026-10-06T15:12:06.949470Z"
+    } ],
+    "events" : [ {
+      "entry_id" : "attempt-4b49b3e5-3a30-49f4-a51a-05329095f296",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:06.579463700Z"
+    }, {
+      "entry_id" : "attempt-4b49b3e5-3a30-49f4-a51a-05329095f296",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:06.588670600Z"
+    }, {
+      "entry_id" : "attempt-4b49b3e5-3a30-49f4-a51a-05329095f296",
+      "revision" : 2,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"65efc99d8addeea814af0bc42b6a5a0d62f0a3ba578730112e4fbb69728d517a\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:06.905545500Z"
+    }, {
+      "entry_id" : "attempt-4dd3ec55-313d-46f9-8846-ecc6ebe7a68b",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.673101800Z"
+    }, {
+      "entry_id" : "attempt-4dd3ec55-313d-46f9-8846-ecc6ebe7a68b",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.680744400Z"
+    }, {
+      "entry_id" : "attempt-4dd3ec55-313d-46f9-8846-ecc6ebe7a68b",
+      "revision" : 2,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.857940300Z"
+    }, {
+      "entry_id" : "attempt-579d0a61-dd96-4c82-97ee-1b23ea0c6d2d",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:54.319271500Z"
+    }, {
+      "entry_id" : "attempt-579d0a61-dd96-4c82-97ee-1b23ea0c6d2d",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:54.327522400Z"
+    }, {
+      "entry_id" : "attempt-579d0a61-dd96-4c82-97ee-1b23ea0c6d2d",
+      "revision" : 2,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:54.958553800Z"
+    }, {
+      "entry_id" : "attempt-592a4371-25cd-44bc-811e-796949953b84",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.340162300Z"
+    }, {
+      "entry_id" : "attempt-592a4371-25cd-44bc-811e-796949953b84",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.348582300Z"
+    }, {
+      "entry_id" : "attempt-592a4371-25cd-44bc-811e-796949953b84",
+      "revision" : 2,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.556109500Z"
+    }, {
+      "entry_id" : "attempt-bac7ead1-69ef-4a06-9fe8-2b4634e8da7c",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:58.438224600Z"
+    }, {
+      "entry_id" : "attempt-bac7ead1-69ef-4a06-9fe8-2b4634e8da7c",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:58.445874600Z"
+    }, {
+      "entry_id" : "attempt-bac7ead1-69ef-4a06-9fe8-2b4634e8da7c",
+      "revision" : 2,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:58.781231100Z"
+    }, {
+      "entry_id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:58.382210400Z"
+    }, {
+      "entry_id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:58.430069100Z"
+    }, {
+      "entry_id" : "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "revision" : 2,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:58.792534200Z"
+    }, {
+      "entry_id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:54.230243Z"
+    }, {
+      "entry_id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:54.309077800Z"
+    }, {
+      "entry_id" : "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "revision" : 2,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:54.973281300Z"
+    }, {
+      "entry_id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.290907300Z"
+    }, {
+      "entry_id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.332734500Z"
+    }, {
+      "entry_id" : "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "revision" : 2,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.567556800Z"
+    }, {
+      "entry_id" : "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:07.002126200Z"
+    }, {
+      "entry_id" : "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e",
+      "revision" : 1,
+      "state" : "CANCELLED",
+      "payload_json" : "{\"errorCode\":\"CancellationException\"}",
+      "updated_at" : "2026-10-06T15:12:07.011770Z"
+    }, {
+      "entry_id" : "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:58.872569Z"
+    }, {
+      "entry_id" : "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "revision" : 1,
+      "state" : "CANCELLED",
+      "payload_json" : "{\"errorCode\":\"CancellationException\"}",
+      "updated_at" : "2026-10-06T15:11:58.883566700Z"
+    }, {
+      "entry_id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.623888700Z"
+    }, {
+      "entry_id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.665933Z"
+    }, {
+      "entry_id" : "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "revision" : 2,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"86e089071f1f0f1743ce8969187237959895ab557fa11e31ced98baacfdba707\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.870390100Z"
+    }, {
+      "entry_id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:06.521492600Z"
+    }, {
+      "entry_id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:06.571119100Z"
+    }, {
+      "entry_id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "revision" : 2,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"65efc99d8addeea814af0bc42b6a5a0d62f0a3ba578730112e4fbb69728d517a\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:06.916978Z"
+    }, {
+      "entry_id" : "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.702751600Z"
+    }, {
+      "entry_id" : "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.710916200Z"
+    }, {
+      "entry_id" : "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision" : 2,
+      "state" : "FETCHED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:12:02.718701600Z"
+    }, {
+      "entry_id" : "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision" : 3,
+      "state" : "VALIDATED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:12:02.726821300Z"
+    }, {
+      "entry_id" : "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision" : 4,
+      "state" : "SUBMITTED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:12:02.759607700Z"
+    }, {
+      "entry_id" : "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision" : 5,
+      "state" : "ACKNOWLEDGED",
+      "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at" : "2026-10-06T15:12:02.815453600Z"
+    }, {
+      "entry_id" : "slice-26849f90-0a45-4600-8771-4d74ae52a9c7",
+      "revision" : 6,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-26849f90-0a45-4600-8771-4d74ae52a9c7:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.824768700Z"
+    }, {
+      "entry_id" : "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.373230Z"
+    }, {
+      "entry_id" : "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:02.383530500Z"
+    }, {
+      "entry_id" : "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision" : 2,
+      "state" : "FETCHED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:12:02.391442200Z"
+    }, {
+      "entry_id" : "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision" : 3,
+      "state" : "VALIDATED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:12:02.398533700Z"
+    }, {
+      "entry_id" : "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision" : 4,
+      "state" : "SUBMITTED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:12:02.433608700Z"
+    }, {
+      "entry_id" : "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision" : 5,
+      "state" : "ACKNOWLEDGED",
+      "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at" : "2026-10-06T15:12:02.511557400Z"
+    }, {
+      "entry_id" : "slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046",
+      "revision" : 6,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-2f466a2f-0ae2-4a93-a5a0-b81b49ad1046:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:02.521370800Z"
+    }, {
+      "entry_id" : "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:58.472145Z"
+    }, {
+      "entry_id" : "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:58.480136100Z"
+    }, {
+      "entry_id" : "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision" : 2,
+      "state" : "FETCHED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:11:58.490249500Z"
+    }, {
+      "entry_id" : "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision" : 3,
+      "state" : "VALIDATED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:11:58.499400600Z"
+    }, {
+      "entry_id" : "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision" : 4,
+      "state" : "SUBMITTED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:11:58.536106600Z"
+    }, {
+      "entry_id" : "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision" : 5,
+      "state" : "ACKNOWLEDGED",
+      "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at" : "2026-10-06T15:11:58.735516400Z"
+    }, {
+      "entry_id" : "slice-36771135-ed35-4343-abd2-c6b44adab683",
+      "revision" : 6,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-36771135-ed35-4343-abd2-c6b44adab683:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:58.744878200Z"
+    }, {
+      "entry_id" : "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:54.369587200Z"
+    }, {
+      "entry_id" : "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:11:54.380422100Z"
+    }, {
+      "entry_id" : "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision" : 2,
+      "state" : "FETCHED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:11:54.391863900Z"
+    }, {
+      "entry_id" : "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision" : 3,
+      "state" : "VALIDATED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:11:54.402119200Z"
+    }, {
+      "entry_id" : "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision" : 4,
+      "state" : "SUBMITTED",
+      "payload_json" : "{\"returnedRows\":2,\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"responseEvidence\":\"{\\\"sourceSnapshot\\\":{\\\"table\\\":\\\"index_monthly\\\",\\\"tableId\\\":9,\\\"directory\\\":\\\"index_monthly~9\\\",\\\"physicalTxn\\\":1,\\\"sequenceTxn\\\":1,\\\"schemaHash\\\":\\\"23a4287035cb3b1c2f71eee2efd9ebd02373550cd83fdf300fb9b21df2f46285\\\"},\\\"sourceVersion\\\":\\\"816fd4b946d5e3e0833f38091f3e2db31e83def09bf4cf157bd5a2d578c87697\\\",\\\"rawSourceFingerprint\\\":\\\"1a9a4797152b75aae50436e949317ae7bf5c7a1a320603f7e8ce211762e4165f\\\",\\\"rawSourceRows\\\":32,\\\"fullPrefixExpected\\\":[{\\\"month\\\":\\\"2026-06-01\\\",\\\"hs300_ret_1m\\\":0.0178,\\\"zz500_ret_1m\\\":0.0804,\\\"all_a_ret_1m\\\":0.0287,\\\"cs1000_ret_1m\\\":0.0477,\\\"small_large_ret_1m\\\":0.0299,\\\"mid_large_ret_1m\\\":0.0626,\\\"growth_ret_1m\\\":-0.047,\\\"value_ret_1m\\\":0.0641,\\\"growth_value_ret_1m\\\":-0.1111,\\\"energy_ret_1m\\\":-0.1491,\\\"materials_ret_1m\\\":0.0024,\\\"industrials_ret_1m\\\":-0.034,\\\"consumer_discretionary_ret_1m\\\":-0.0822,\\\"consumer_staples_ret_1m\\\":-0.1165,\\\"healthcare_ret_1m\\\":-0.006,\\\"financials_ret_1m\\\":-0.027,\\\"it_ret_1m\\\":0.2427,\\\"telecom_ret_1m\\\":0.087,\\\"utilities_ret_1m\\\":-0.1489,\\\"energy_vs_all_a_1m\\\":-0.1778,\\\"materials_vs_all_a_1m\\\":-0.0263,\\\"industrials_vs_all_a_1m\\\":-0.0627,\\\"consumer_discretionary_vs_all_a_1m\\\":-0.1109,\\\"consumer_staples_vs_all_a_1m\\\":-0.1452,\\\"healthcare_vs_all_a_1m\\\":-0.0347,\\\"financials_vs_all_a_1m\\\":-0.0557,\\\"it_vs_all_a_1m\\\":0.214,\\\"telecom_vs_all_a_1m\\\":0.05829999999999999,\\\"utilities_vs_all_a_1m\\\":-0.1776},{\\\"month\\\":\\\"2026-07-01\\\",\\\"hs300_ret_1m\\\":-0.0786,\\\"zz500_ret_1m\\\":-0.1702,\\\"all_a_ret_1m\\\":-0.1328,\\\"cs1000_ret_1m\\\":-0.1969,\\\"small_large_ret_1m\\\":-0.11829999999999999,\\\"mid_large_ret_1m\\\":-0.09159999999999999,\\\"growth_ret_1m\\\":0.0695,\\\"value_ret_1m\\\":-0.2,\\\"growth_value_ret_1m\\\":0.2695,\\\"energy_ret_1m\\\":0.1345,\\\"materials_ret_1m\\\":-0.0821,\\\"industrials_ret_1m\\\":-0.1037,\\\"consumer_discretionary_ret_1m\\\":0.0322,\\\"consumer_staples_ret_1m\\\":0.1212,\\\"healthcare_ret_1m\\\":0.0717,\\\"financials_ret_1m\\\":0.069,\\\"it_ret_1m\\\":-0.2995,\\\"telecom_ret_1m\\\":-0.2591,\\\"utilities_ret_1m\\\":0.0304,\\\"energy_vs_all_a_1m\\\":0.2673,\\\"materials_vs_all_a_1m\\\":0.050699999999999995,\\\"industrials_vs_all_a_1m\\\":0.0291,\\\"consumer_discretionary_vs_all_a_1m\\\":0.165,\\\"consumer_staples_vs_all_a_1m\\\":0.254,\\\"healthcare_vs_all_a_1m\\\":0.20450000000000002,\\\"financials_vs_all_a_1m\\\":0.2018,\\\"it_vs_all_a_1m\\\":-0.1667,\\\"telecom_vs_all_a_1m\\\":-0.1263,\\\"utilities_vs_all_a_1m\\\":0.1632}],\\\"bootstrapFrom\\\":\\\"2026-06-01\\\",\\\"toInclusive\\\":\\\"2026-07-01\\\",\\\"complete\\\":true}\",\"cursor\":\"2026-06-01/2026-07-01\"}",
+      "updated_at" : "2026-10-06T15:11:54.451451Z"
+    }, {
+      "entry_id" : "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision" : 5,
+      "state" : "ACKNOWLEDGED",
+      "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":2,\"verifiedRows\":2,\"receipts\":[{\"batch\":1,\"submittedRows\":2,\"verifiedRows\":2,\"bytes\":6024,\"digest\":\"782927caecc7402e3e7522f22e556e6b769bb27311d813e39a842eb9bd9137bb\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at" : "2026-10-06T15:11:54.895976900Z"
+    }, {
+      "entry_id" : "slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1",
+      "revision" : 6,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":2,\"matchedRows\":2,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-4207c101-0f81-4d8e-8e4d-621e3b9448a1:revision:5\",\"sourceFingerprint\":\"52de55e476b17a87837b371164f5c23fdd7005011600f9019954274e4a92b284\",\"actualRows\":2,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:11:54.907323800Z"
+    }, {
+      "entry_id" : "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:06.650109Z"
+    }, {
+      "entry_id" : "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:06.659173500Z"
+    }, {
+      "entry_id" : "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision" : 2,
+      "state" : "FETCHED",
+      "payload_json" : "{\"returnedRows\":1,\"sourceFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\write-evidence\\\\write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74\\\\styles\\\\prepared-input-28462e3b-df2c-48e2-a4a4-790fcd4a72f3.json\",\"cursor\":null}",
+      "updated_at" : "2026-10-06T15:12:06.667043900Z"
+    }, {
+      "entry_id" : "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision" : 3,
+      "state" : "VALIDATED",
+      "payload_json" : "{\"returnedRows\":1,\"sourceFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\write-evidence\\\\write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74\\\\styles\\\\prepared-input-28462e3b-df2c-48e2-a4a4-790fcd4a72f3.json\",\"cursor\":null}",
+      "updated_at" : "2026-10-06T15:12:06.676904Z"
+    }, {
+      "entry_id" : "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision" : 4,
+      "state" : "SUBMITTED",
+      "payload_json" : "{\"returnedRows\":1,\"sourceFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\write-evidence\\\\write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74\\\\styles\\\\prepared-input-28462e3b-df2c-48e2-a4a4-790fcd4a72f3.json\",\"cursor\":null}",
+      "updated_at" : "2026-10-06T15:12:06.714130400Z"
+    }, {
+      "entry_id" : "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision" : 5,
+      "state" : "ACKNOWLEDGED",
+      "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":1,\"verifiedRows\":1,\"receipts\":[{\"batch\":1,\"submittedRows\":1,\"verifiedRows\":1,\"bytes\":3012,\"digest\":\"2944645a3159c6c4149dce547a4f01adfe750e47269010c74ff4af278656e26c\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "updated_at" : "2026-10-06T15:12:06.879326800Z"
+    }, {
+      "entry_id" : "slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a",
+      "revision" : 6,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"duplicateKeys\":0,\"writerStopped\":false,\"passed\":true,\"expectedRows\":1,\"matchedRows\":1,\"mismatchedRows\":0,\"readbackEvidence\":\"ledger:slice-97d97ab9-37cf-4a0d-87d0-0e4af38d8d7a:revision:5\",\"sourceFingerprint\":\"b6cc6010f1ee7c5e300ad1e8a394024cceb2124effae5fc11614c522dac1bf06\",\"actualRows\":1,\"missingKeys\":0}}",
+      "updated_at" : "2026-10-06T15:12:06.887486200Z"
+    }, {
+      "entry_id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "revision" : 0,
+      "state" : "PENDING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:06.484725100Z"
+    }, {
+      "entry_id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "revision" : 1,
+      "state" : "RUNNING",
+      "payload_json" : "{}",
+      "updated_at" : "2026-10-06T15:12:06.497025600Z"
+    }, {
+      "entry_id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "revision" : 2,
+      "state" : "VERIFIED",
+      "payload_json" : "{\"verification\":{\"matchedRows\":1,\"duplicateKeys\":0,\"passed\":true,\"mismatchedRows\":0,\"expectedRows\":1,\"readbackEvidence\":\"ledger:run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1\",\"actualRows\":1,\"missingKeys\":0,\"sourceFingerprint\":\"21563b4215d15ffc3d17826e1cff67ea0fb4b51e9248bd2c203b01d8203e61de\"},\"reusedChildReadback\":{},\"metric\":\"verifiedChildRuns\"}",
+      "updated_at" : "2026-10-06T15:12:06.949470Z"
+    } ],
+    "groups" : [ {
+      "parent_run_id" : "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "ordinal" : 0,
+      "job_id" : "write.equity_style_monthly",
+      "job_version" : 1,
+      "child_run_id" : "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1"
+    } ],
+    "leases" : [ ]
+  },
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-java-acceptance.sqlite3",
+  "key_and_full_field_comparisons" : 60,
+  "exact_double_bit_comparisons" : 58,
+  "double_tolerance" : 0,
+  "finished_at" : "2026-10-06T15:31:13.564264800Z",
+  "new_ddl" : 0,
+  "new_dml" : 0,
+  "new_ilp_batches" : 0,
+  "new_materialization_runs" : 0,
+  "ledger_mutated" : false,
+  "formal_mutated" : false,
+  "reference_project_mutated" : false,
+  "original_sender_pid_birth_not_recorded" : true,
+  "original_junit_status" : "FAILED_RECEIPT_SERIALIZATION"
+}

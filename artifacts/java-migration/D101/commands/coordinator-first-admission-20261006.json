@@ -1,0 +1,45 @@
+{
+  "task_id": "D101",
+  "decision": "admitted_for_bounded_first_only",
+  "checked_at": "2026-10-06T09:43:44.4470612Z",
+  "human_review": "pending_review",
+  "next_task_admitted": false,
+  "private_pid": 23388,
+  "private_root": "var/d101-isolated-questdb",
+  "ports": [
+    19020,
+    18832
+  ],
+  "source_fixture_rows": 8764,
+  "cache_rows_before": 0,
+  "coverage_rows_before": 0,
+  "raw_null_txn_preserved": true,
+  "java_protocol_tests": 97,
+  "python_bridge_tests": 43,
+  "python_fixture_tests": 20,
+  "bridge_sha256": "df9bb4349d0881ac8fb09b5b47ce4571140abe0b3f5898b6a28b3b4b245c1fdd",
+  "reviewers": [
+    "root",
+    "materialize_design",
+    "d095_scripts"
+  ],
+  "bounds": {
+    "dates": [
+      "2026-09-17",
+      "2026-09-18"
+    ],
+    "ddl": 0,
+    "cache_submitted_rows_max": 2,
+    "automatic_retries": 0,
+    "source_writes": 0,
+    "formal_writes": 0,
+    "coverage_submitted_rows_max": 2
+  },
+  "proofs": [
+    "java-owner-protocol-final-tests-20261006.json",
+    "python-owner-bridge-final-guards-20261006.json",
+    "owner-preview-final-response-20261006.json",
+    "source-fixture-initial-20261006.json"
+  ],
+  "required_runtime": "Fresh Java Gateway previews and exact PID/root/schema/source/target/WAL checks; actual SQLite SUBMITTED revision4 before owner.read; stop on any failure"
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-06T15:04:48.638Z" hostname="AMD395" time="1.548">
+  <properties/>
+  <testcase name="exactlyTwelveMonthsAndRowsArePermittedWithoutExpandingRange()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest" time="1.453"/>
+  <testcase name="invalidUnboundedWrongCarrierPartialFieldsOrBudgetRejectBeforeReader()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest" time="0.03"/>
+  <testcase name="physicalVersionDriftFailurePropagatesInsteadOfBecomingEmpty()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest" time="0.027"/>
+  <testcase name="completeDecoderRetainsNullableValuesAndReadersPhysicalToken()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest" time="0.01"/>
+  <testcase name="explicitIsolatedTargetUsesSameDefinitionAndArbitraryObjectIsRejected()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest" time="0.011"/>
+  <testcase name="halfOpenMonthRangeKeepsLocalDateBoundsAndActualPhysicalCursor()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest" time="0.004"/>
+  <testcase name="keyAndConvenienceReadUseFirstDayEqualityAndDelegatePhysicalCursorPin()" classname="com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\zouqiang\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.18.11\82212e5b3633e7a65fca8bec525762cfb6c9bae4\byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

@@ -1,0 +1,791 @@
+{
+  "model_fields": {
+    "ts": {
+      "annotation": "<class 'str'>",
+      "required": true,
+      "default": "REQUIRED",
+      "description": "交易日期时间戳"
+    },
+    "symbol": {
+      "annotation": "<class 'str'>",
+      "required": true,
+      "default": "REQUIRED",
+      "description": "股票代码"
+    },
+    "has_deal": {
+      "annotation": "typing.Optional[bool]",
+      "required": false,
+      "default": null,
+      "description": "当日是否存在成交数据"
+    },
+    "has_order": {
+      "annotation": "typing.Optional[bool]",
+      "required": false,
+      "default": null,
+      "description": "当日是否存在委托数据"
+    },
+    "has_snapshot": {
+      "annotation": "typing.Optional[bool]",
+      "required": false,
+      "default": null,
+      "description": "当日是否存在快照数据"
+    },
+    "deal_records": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "原始成交记录数"
+    },
+    "order_records": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "原始委托记录数"
+    },
+    "snapshot_records": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "原始快照记录数"
+    },
+    "continuous_auction_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "连续竞价记录占比"
+    },
+    "crossed_quote_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "盘口倒挂占比"
+    },
+    "locked_quote_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "盘口锁定占比"
+    },
+    "missing_top5_quote_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "前五档盘口缺失占比"
+    },
+    "feature_version": {
+      "annotation": "typing.Optional[str]",
+      "required": false,
+      "default": null,
+      "description": "特征管线版本号"
+    },
+    "parser_version": {
+      "annotation": "typing.Optional[str]",
+      "required": false,
+      "default": null,
+      "description": "解析器版本号"
+    },
+    "order_link_coverage": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "可建立订单链路的委托记录占比"
+    },
+    "deal_order_match_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "成交可回连到委托单号的占比"
+    },
+    "nonnegative_depth_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "盘口深度非负记录占比"
+    },
+    "valid_spread_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "买一卖一价差有效记录占比"
+    },
+    "orphan_execution_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "无法回连委托的成交占比"
+    },
+    "cancel_without_fill_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "未成交即撤销的订单占比"
+    },
+    "partial_fill_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "部分成交后终止的订单占比"
+    },
+    "median_cancel_time_ms": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "提交到取消的中位耗时(毫秒)"
+    },
+    "median_first_fill_time_ms": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "提交到首次成交的中位耗时(毫秒)"
+    },
+    "passive_fill_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "被动成交量占总成交量比例"
+    },
+    "large_order_fill_rate": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "大额订单成交量占提交量比例"
+    },
+    "partial_cancel_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "发生部分撤单的订单占比"
+    },
+    "replace_like_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "撤旧挂新类行为占比(近似代理)"
+    },
+    "open_30m_spread_mean": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "开盘前30分钟平均相对价差"
+    },
+    "close_30m_obi_mean": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "尾盘前30分钟盘口失衡均值"
+    },
+    "midday_liquidity_drop": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "午间相对开盘的流动性下滑幅度"
+    },
+    "afternoon_ofi_reversal": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "午后OFI相对上午是否反转"
+    },
+    "open_close_vol_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "开盘成交量与尾盘成交量比"
+    },
+    "close_30m_impact_mean": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "尾盘30秒价格冲击均值"
+    },
+    "aggressor_label_match_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "供应商主动方向与盘口推断方向一致占比"
+    },
+    "mid_cross_match_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "中间价附近成交经tick rule判向后的一致占比"
+    },
+    "tick_rule_fallback_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "需要tick rule回退判向的成交占比"
+    },
+    "unclassified_trade_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "无法稳定归类主动方向的成交占比"
+    },
+    "depth_recovery_5s": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "最优盘口深度受冲击后5秒恢复比例"
+    },
+    "best_quote_depletion_rate": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "买一卖一深度被显著耗尽的频率"
+    },
+    "add_cancel_execute_ratio_top1": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "近端新增挂单相对撤单与成交消耗的比例"
+    },
+    "depth_turnover_top5": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "前五档盘口深度换手速度"
+    },
+    "book_pressure_decay": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "盘口压力一阶衰减强度"
+    },
+    "queue_depletion_speed": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "最优档位队列消耗速度"
+    },
+    "mean_rel_aggro": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "平均主买/主卖侵略性 (0~1)"
+    },
+    "median_inter_arrival_ms": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "同方向订单到达毫秒级中位数耗时 (评判高频竞争度)"
+    },
+    "algo_windows": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "被判定为机器/算法主导的 5 分钟时间窗数量 (低熵)"
+    },
+    "total_windows": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "全天有效的 5 分钟时间窗总数"
+    },
+    "mean_algo_entropy": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "算法单区域的平均香农时间熵"
+    },
+    "mean_retail_entropy": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "散户单区域的平均香农时间熵"
+    },
+    "algo_total_amount": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "算法(低熵)时段内促成的总成交金额"
+    },
+    "retail_total_amount": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "散户(高熵)时段内促成的总成交金额"
+    },
+    "wash_trade_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "全天虚假对倒交易占总成交的比例"
+    },
+    "wash_amount": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "判定为虚假对倒成交的总金额"
+    },
+    "clean_amount": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "剥离水分后的真实有效成交金额"
+    },
+    "spoof_count": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "发生严重撤单欺诈的时间窗总数"
+    },
+    "fake_pressure_count": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "假压单(上方大额挂单后撤单，诱导卖出)的发生次数"
+    },
+    "fake_support_count": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "假托底(下方大额挂单后撤单，诱导买入)的发生次数"
+    },
+    "mean_sell_otr": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "卖方全天平均 OTR 撤单比"
+    },
+    "mean_buy_otr": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "买方全天平均 OTR 撤单比"
+    },
+    "mean_cancel_distance_ticks": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "均值撤单价格距离最优盘口的偏离跳数 (鉴别真假做市)"
+    },
+    "total_net_flow": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "取消噪音后的全天真实中枢流向"
+    },
+    "q2_accumulation": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "仅在 Q2静默吸筹(主力进+小阴跌) 时期的净买入量"
+    },
+    "mean_vwap_skew": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "VWAP 偏度 (正值表示当日量价重心在上方)"
+    },
+    "q1_count": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "出现 主动拉升(流入+涨) 的时间窗数量"
+    },
+    "q2_count": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "出现 静默吸筹(流入+跌) 的时间窗数量"
+    },
+    "q3_count": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "出现 主动出货(流出+跌) 的时间窗数量"
+    },
+    "q4_count": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "出现 拉高出货(流出+涨) 的时间窗数量"
+    },
+    "main_net_inflow": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "超大单(>100万)净流入金额"
+    },
+    "retail_funds_net_inflow": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "散户小单净流入金额 (反向参考)"
+    },
+    "main_funds_buy_amount": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "主动扫盘的超大单总买额"
+    },
+    "main_funds_sell_amount": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "主动砸盘的超大单总卖额"
+    },
+    "mid_tier_net_inflow": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "中单(20w~100w)净买入，防范 TWAP 拆单隐藏"
+    },
+    "trade_size_gini": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "成交分配基尼系数 (0极散，1极度寡头包揽)"
+    },
+    "open_auction_net_inflow": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "集合竞价开盘净流入"
+    },
+    "close_auction_net_inflow": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "集合竞价收盘净流入"
+    },
+    "mean_spread": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "全天平均相对买卖价差 Spread"
+    },
+    "mean_obi_top5": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "前五档买压 vs 卖压失衡比 (OBI, 短期极强预测)"
+    },
+    "amihud_illiquidity": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "Amihud流动性冲击因子 (全天均值，厚度反指标)"
+    },
+    "obi_top1_mean": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "买一卖一失衡均值"
+    },
+    "obi_top5_std": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "前五档失衡波动"
+    },
+    "obi_top1_std": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "买一卖一失衡波动"
+    },
+    "depth_top1_mean": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "一档总深度均值"
+    },
+    "depth_top5_mean": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "前五档总深度均值"
+    },
+    "depth_slope": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "深度曲线相对斜率"
+    },
+    "depth_convexity": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "深度曲线相对凸性"
+    },
+    "microprice_minus_mid_mean": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "微价格相对中间价偏移均值"
+    },
+    "microprice_minus_mid_std": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "微价格相对中间价偏移波动"
+    },
+    "effective_spread_mean": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "成交相对中间价的有效价差均值"
+    },
+    "realized_spread_1m": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "1分钟实现价差均值"
+    },
+    "impact_30s": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "30秒价格冲击均值"
+    },
+    "impact_5m": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "5分钟价格冲击均值"
+    },
+    "orderbook_replenish_speed": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "盘口被吃后恢复速度"
+    },
+    "ofi_mean": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "盘口 OFI 均值"
+    },
+    "ofi_std": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "盘口 OFI 波动"
+    },
+    "ofi_persistence": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "盘口 OFI 一阶持续性"
+    },
+    "ofi_positive_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "OFI 为正占比"
+    },
+    "ofi_negative_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "OFI 为负占比"
+    },
+    "near_touch_cancel_add_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "最优盘口附近撤单与新增挂单之比"
+    },
+    "gmm_main_force_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "主力资金成交量占比 (GMM 识别)"
+    },
+    "gmm_hft_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "高频/算法成交量占比 (GMM 识别)"
+    },
+    "gmm_retail_ratio": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "散户成交量占比 (GMM 识别)"
+    },
+    "gmm_main_force_net_inflow": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "GMM 识别后的主力净流入金额"
+    },
+    "mfi_pulse": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "能量脉冲 (由极其激进的扫盘成交聚合而来)"
+    },
+    "mfi_escort": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "护盘底气 (巨额买单一挡二挡承接力测试)"
+    },
+    "mfi_precip": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "资金沉淀 (累积定单流失衡正向溢价)"
+    },
+    "mfi_score": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "综合主力进场强度打分(0-1)"
+    },
+    "ofi_slope": {
+      "annotation": "typing.Optional[float]",
+      "required": false,
+      "default": null,
+      "description": "订单流不平衡 (OFI) 斜率 (5分钟窗口 OLS Beta)"
+    },
+    "total_records": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "原始逐笔成交总数"
+    },
+    "clean_records": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "清洗过滤后有效总数"
+    },
+    "large_order_records": {
+      "annotation": "typing.Optional[int]",
+      "required": false,
+      "default": null,
+      "description": "符合大单的发生次数"
+    }
+  },
+  "field_count": 110,
+  "questdb": {
+    "table_name": "l2_daily_features",
+    "timestamp_col": "ts",
+    "partition_by": "DAY",
+    "symbols": [
+      "symbol"
+    ],
+    "dedup_keys": [
+      "ts",
+      "symbol"
+    ],
+    "schema": {
+      "ts": "TIMESTAMP",
+      "symbol": "SYMBOL",
+      "has_deal": "BOOLEAN",
+      "has_order": "BOOLEAN",
+      "has_snapshot": "BOOLEAN",
+      "deal_records": "LONG",
+      "order_records": "LONG",
+      "snapshot_records": "LONG",
+      "continuous_auction_ratio": "DOUBLE",
+      "crossed_quote_ratio": "DOUBLE",
+      "locked_quote_ratio": "DOUBLE",
+      "missing_top5_quote_ratio": "DOUBLE",
+      "feature_version": "STRING",
+      "parser_version": "STRING",
+      "order_link_coverage": "DOUBLE",
+      "deal_order_match_ratio": "DOUBLE",
+      "nonnegative_depth_ratio": "DOUBLE",
+      "valid_spread_ratio": "DOUBLE",
+      "orphan_execution_ratio": "DOUBLE",
+      "cancel_without_fill_ratio": "DOUBLE",
+      "partial_fill_ratio": "DOUBLE",
+      "median_cancel_time_ms": "DOUBLE",
+      "median_first_fill_time_ms": "DOUBLE",
+      "passive_fill_ratio": "DOUBLE",
+      "large_order_fill_rate": "DOUBLE",
+      "partial_cancel_ratio": "DOUBLE",
+      "replace_like_ratio": "DOUBLE",
+      "open_30m_spread_mean": "DOUBLE",
+      "close_30m_obi_mean": "DOUBLE",
+      "midday_liquidity_drop": "DOUBLE",
+      "afternoon_ofi_reversal": "DOUBLE",
+      "open_close_vol_ratio": "DOUBLE",
+      "close_30m_impact_mean": "DOUBLE",
+      "aggressor_label_match_ratio": "DOUBLE",
+      "mid_cross_match_ratio": "DOUBLE",
+      "tick_rule_fallback_ratio": "DOUBLE",
+      "unclassified_trade_ratio": "DOUBLE",
+      "depth_recovery_5s": "DOUBLE",
+      "best_quote_depletion_rate": "DOUBLE",
+      "add_cancel_execute_ratio_top1": "DOUBLE",
+      "depth_turnover_top5": "DOUBLE",
+      "book_pressure_decay": "DOUBLE",
+      "queue_depletion_speed": "DOUBLE",
+      "mean_rel_aggro": "DOUBLE",
+      "median_inter_arrival_ms": "DOUBLE",
+      "algo_windows": "LONG",
+      "total_windows": "LONG",
+      "mean_algo_entropy": "DOUBLE",
+      "mean_retail_entropy": "DOUBLE",
+      "algo_total_amount": "DOUBLE",
+      "retail_total_amount": "DOUBLE",
+      "wash_trade_ratio": "DOUBLE",
+      "wash_amount": "DOUBLE",
+      "clean_amount": "DOUBLE",
+      "spoof_count": "LONG",
+      "fake_pressure_count": "LONG",
+      "fake_support_count": "LONG",
+      "mean_sell_otr": "DOUBLE",
+      "mean_buy_otr": "DOUBLE",
+      "mean_cancel_distance_ticks": "DOUBLE",
+      "total_net_flow": "DOUBLE",
+      "q2_accumulation": "DOUBLE",
+      "mean_vwap_skew": "DOUBLE",
+      "q1_count": "LONG",
+      "q2_count": "LONG",
+      "q3_count": "LONG",
+      "q4_count": "LONG",
+      "main_net_inflow": "DOUBLE",
+      "retail_funds_net_inflow": "DOUBLE",
+      "main_funds_buy_amount": "DOUBLE",
+      "main_funds_sell_amount": "DOUBLE",
+      "mid_tier_net_inflow": "DOUBLE",
+      "trade_size_gini": "DOUBLE",
+      "open_auction_net_inflow": "DOUBLE",
+      "close_auction_net_inflow": "DOUBLE",
+      "mean_spread": "DOUBLE",
+      "mean_obi_top5": "DOUBLE",
+      "amihud_illiquidity": "DOUBLE",
+      "obi_top1_mean": "DOUBLE",
+      "obi_top5_std": "DOUBLE",
+      "obi_top1_std": "DOUBLE",
+      "depth_top1_mean": "DOUBLE",
+      "depth_top5_mean": "DOUBLE",
+      "depth_slope": "DOUBLE",
+      "depth_convexity": "DOUBLE",
+      "microprice_minus_mid_mean": "DOUBLE",
+      "microprice_minus_mid_std": "DOUBLE",
+      "effective_spread_mean": "DOUBLE",
+      "realized_spread_1m": "DOUBLE",
+      "impact_30s": "DOUBLE",
+      "impact_5m": "DOUBLE",
+      "orderbook_replenish_speed": "DOUBLE",
+      "ofi_mean": "DOUBLE",
+      "ofi_std": "DOUBLE",
+      "ofi_persistence": "DOUBLE",
+      "ofi_positive_ratio": "DOUBLE",
+      "ofi_negative_ratio": "DOUBLE",
+      "near_touch_cancel_add_ratio": "DOUBLE",
+      "gmm_main_force_ratio": "DOUBLE",
+      "gmm_hft_ratio": "DOUBLE",
+      "gmm_retail_ratio": "DOUBLE",
+      "gmm_main_force_net_inflow": "DOUBLE",
+      "mfi_pulse": "DOUBLE",
+      "mfi_escort": "DOUBLE",
+      "mfi_precip": "DOUBLE",
+      "mfi_score": "DOUBLE",
+      "ofi_slope": "DOUBLE",
+      "total_records": "LONG",
+      "clean_records": "LONG",
+      "large_order_records": "LONG"
+    }
+  },
+  "parser_version": "dfcf_csv_v1.2",
+  "feature_version": "v1.3"
+}

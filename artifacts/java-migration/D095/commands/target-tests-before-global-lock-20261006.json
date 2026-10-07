@@ -1,0 +1,182 @@
+{
+  "suites": [
+    {
+      "name": "com.zoutrankil.data.mapper.MarketBreadthDailyV1MappingTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "allSevenFieldsRoundTripIncludingNullableAggregates()",
+        "definitionUsesNaturalDailyKeyAndRejectsDirectWrites()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.repository.MarketBreadthDailyV1LiveReadAcceptanceTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "isolatedValidMvTypedReadsMatchPythonSourceAggregatesAndGroup()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "recreatedViewOrBaseCannotReuseMatchingTransactionCounters()",
+        "missingPhysicalVersionFailsBeforeFetchingRows()",
+        "independentPhysicalAndWalCountersAreAcceptedWhenWalIsSettled()",
+        "rangeRefreshBetweenPagesRejectsCursorEvenWithTheSameBaseCheckpoint()",
+        "fullRefreshDuringReadRejectsThePageEvenWithTheSameBaseCheckpoint()",
+        "stableSnapshotBindsCursorToBaseAndPhysicalMvIdentityAndVersion()",
+        "invalidLaggingOrUnappliedWalStatesFailBeforeFetchingRows()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.service.MarketBreadthDailyV1JobServiceTest",
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "acknowledgedFullRefreshVisibilityTimeoutRetainsLeaseAndCannotBeRepeated()",
+        "aDisabledOrUnadmittedFormalPortRejectsBeforeQueryingOrSending()",
+        "lostFullRefreshAcknowledgementRetainsDurableSubmittedIntentAndCannotBeRepeated()",
+        "fullRepairRejectsEmptyAndUnboundedWholeSourceScopes()",
+        "resumeRejectsChangedSourceRatherThanReplanningAgainstTodaysVersion()",
+        "verifiedBridgeAdvancesContiguousCoverageButOtherTargetsAndModesDoNot()",
+        "failedRunResumesItsExactFrozenWindowLogicalDateAndTarget()",
+        "defaultDisabledFullRepairCannotRunAFormalStatement()",
+        "oldBootstrapAnchorAllowsANewFiniteIncrementalOverlap()",
+        "activeCancellationIsDurableAndDoesNotFalselyCompleteTheRun()",
+        "isolatedFullRepairRunsThroughCanonicalFrozenMaterializationAndLedger()",
+        "uncertainRunRetainsIntervalExclusionAndCannotBeResumedOrReplayed()",
+        "materializedOutputDriftAfterReadbackCannotAdvanceTheRunOrReleaseItsLease()",
+        "durableRunResultRemainsVisibleWhenItsDecorativeSnapshotCannotBeRead()",
+        "alreadyVerifiedRunWithRetainedLeaseCanFinishAfterCrashBeforeLockRelease()",
+        "sourceDriftAfterReadbackCannotAdvanceTheRunOrReleaseItsLease()",
+        "unanchoredHistoryCannotAuthorizeAnUnboundedFirstRun()",
+        "checkpointCannotCrossAnUnverifiedCalendarGap()",
+        "stoppedWriterReconciliationVerifiesActualValuesAndReleasesTheRetainedLeaseWithoutWriting()",
+        "terminalCancellationIsRejectedWithoutChangingVerificationOrAddingACancellation()",
+        "calendarDriftAfterReadbackCannotAdvanceTheIncrementalCheckpoint()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.service.MarketBreadthDailyV1LiveMaterializeAcceptanceTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "realSourceFirstRunReplayIncrementalEmptyAndInvalidRecovery()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.service.MarketBreadthDailyV1MaterializeAdapterTest",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "changedFrozenSourceVersionAndPhysicalTargetAreRejectedBeforeBinding()",
+        "genuinelyEmptyStableSourceCompletesWithoutRefresh()",
+        "validSettledLaggingMvCanCatchUpAfterFullValueReadbackAndComplete()",
+        "thirtyOneDayWindowIsAcceptedAndThirtyTwoDaysIsRejectedBeforePortAccess()",
+        "incrementalRequestMustFreezeItsIndependentCalendarVersion()",
+        "calendarChangedAfterPlanningIsRejectedAtPreflight()",
+        "mvChangedAfterReadbackCannotReturnSourceComplete()",
+        "sourceChangedAfterPlanningIsRejectedAtPreflight()",
+        "dailyStockCountSumMustEqualFullRawSourceCount()",
+        "cancellationAfterPageVerificationPreventsCompletion()",
+        "missingTradingDayBucketIsRejectedEvenWhenAllPresentRawRowsAreCovered()",
+        "reconciliationReadbackChecksActualValuesWithoutAnotherSend()",
+        "emptySourceWithStaleOutputIsRejectedBeforePageDelivery()",
+        "calendarChangedDuringCoveragePreventsPageDelivery()",
+        "[1] \"invalid\"",
+        "[2] \"source-unsettled\"",
+        "[3] \"mv-unsettled\"",
+        "defaultIncrementalDefinitionHasFiniteSinglePageBudget()",
+        "sourceChangedDuringCompleteAggregationCannotDeliverAPage()",
+        "cancellationBeforeFetchPreventsSourceReadsAndConsumerInvocation()",
+        "calendarChangedAfterActualReadbackCannotReturnSourceComplete()",
+        "nonemptyDailyPageCoversEveryRawRowAndCarriesFrozenCompletenessEvidence()",
+        "mvThatRemainsLaggingAfterConsumerCannotReturnComplete()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.service.SyncJobRegistryTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "rejectsUnknownDatasetDuplicateJobAndMissingAdapterMode()",
+        "disabledJobsCannotPrepareAndCatalogReplacementPreservesFrozenVersion()",
+        "validatesDependencyVersionsAndRejectsCycles()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.service.SyncJobRunnerTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "changedSourceCannotReuseOldFingerprintAndTargetDriftStopsRecovery()",
+        "sourceFailureIsFailedAndPreflightCancellationNeverFetches()",
+        "sequentialPagesConvergeIntoLedgerAndPreserveLogicalDate()",
+        "adapterFailureAfterFetchClosesCurrentSliceWithoutSending()",
+        "resumeRefetchesButDoesNotRewriteVerifiedPage()",
+        "unknownWritePastDeadlineRetainsExclusionAndRejectsReplay()",
+        "durableCancellationAfterFirstPageStopsSecondSendAndPreservesReceipt()",
+        "changedTargetOrUnfinishedPriorRunCannotResume()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.service.VerifiedBatchExecutorTest",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "emptyInputNeverSends()",
+        "invalidSourceRowFailsBeforeTransport()",
+        "equalCountsWithWrongValueRemainInDoubt()",
+        "matchingReadbackCannotReconcileSenderThatMayStillWrite()",
+        "unsettledWalAndDuplicateKeyCannotBeVerified()",
+        "boundedBatchesRequireExactValuesAndWal()",
+        "sourceFailureAfterVerifiedBatchPreservesReceipt()",
+        "optInToleranceAcceptsRoundingOnlyAndPreservesTheSourceDigest()",
+        "cancellationBeforeSendAndAfterSendHaveDifferentOutcomes()",
+        "partialSecondBatchStaysInDoubtWithFirstReceiptIntact()",
+        "cancellationDuringPreflightCannotStartTransport()",
+        "transportByteEstimateAndBatchBudgetAreEnforcedBeforeSend()",
+        "optInToleranceStillRejectsOutOfToleranceValuesAndDifferentKeys()",
+        "lostAcknowledgementCanOnlyBeReconciledByReadback()",
+        "defaultComparisonRejectsEvenSmallNumericReadbackDifferences()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.service.VerifiedSliceRecoveryTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "optInToleranceRejectsOutOfToleranceRecoveryBeforeAnyReplay()",
+        "optInToleranceVerifiesFirstWriteAndReusesTheSameRoundedValuesWithoutResending()",
+        "defaultExactComparisonRejectsRoundingDriftDuringRecovery()"
+      ]
+    }
+  ],
+  "tests": 84,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0
+}

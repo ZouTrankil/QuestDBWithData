@@ -1,0 +1,385 @@
+{
+  "task_id" : "D103",
+  "database_connections" : 0,
+  "job" : {
+    "jobId" : "data.equity_style_monthly",
+    "version" : 1,
+    "datasetId" : "equity_style_monthly",
+    "datasetVersion" : 1,
+    "owner" : "equity_style_monthly_owner",
+    "supportedModes" : [ "INCREMENTAL", "RECONCILE", "MATERIALIZE" ],
+    "defaultMode" : "INCREMENTAL",
+    "parameters" : {
+      "checkpoint_reason" : {
+        "type" : "STRING",
+        "required" : false,
+        "maxLength" : 64,
+        "maxItems" : 1,
+        "choices" : [ "VERIFIED_PREFIX_APPEND", "SOURCE_PREFIX_REVISED" ]
+      },
+      "source_hash" : {
+        "type" : "STRING",
+        "required" : true,
+        "maxLength" : 64,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "target_id" : {
+        "type" : "STRING",
+        "required" : true,
+        "maxLength" : 128,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "parent_source_version" : {
+        "type" : "STRING",
+        "required" : false,
+        "maxLength" : 128,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "checkpoint_before" : {
+        "type" : "DATE",
+        "required" : false,
+        "maxLength" : 10,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "source_version" : {
+        "type" : "STRING",
+        "required" : true,
+        "maxLength" : 128,
+        "maxItems" : 1,
+        "choices" : [ ]
+      },
+      "bootstrap_from" : {
+        "type" : "DATE",
+        "required" : true,
+        "maxLength" : 10,
+        "maxItems" : 1,
+        "choices" : [ ]
+      }
+    },
+    "ratePolicyRef" : "questdb.materialize",
+    "slicePolicyRef" : "equity_style_monthly.month_window",
+    "verificationPolicyRef" : "questdb.full_key_values",
+    "retry" : {
+      "maxAttempts" : 1,
+      "backoff" : "PT1S",
+      "maxElapsed" : "PT1S"
+    },
+    "timeout" : "PT5M",
+    "budget" : {
+      "maxWindowDays" : 366,
+      "maxSlices" : 1,
+      "maxPages" : 1,
+      "maxRows" : 12,
+      "maxBatchBytes" : 1048576
+    },
+    "revisionDays" : 31,
+    "dependencies" : [ {
+      "jobId" : "data.index_monthly",
+      "version" : 1
+    } ],
+    "frequency" : "MANUAL",
+    "zone" : "Asia/Shanghai",
+    "enabled" : true,
+    "dailyEligible" : false
+  },
+  "dataset_count" : 52,
+  "definition" : {
+    "datasetId" : "equity_style_monthly",
+    "schemaVersion" : 1,
+    "provider" : "derived.index_monthly.pct_chg",
+    "owner" : "java.equity_style_monthly.bounded_materializer",
+    "objectName" : "equity_style_monthly",
+    "objectKind" : "TABLE",
+    "columns" : [ {
+      "sourceName" : "index_monthly.trade_date:YYYYMM",
+      "logicalName" : "month",
+      "storageName" : "month",
+      "storageType" : "TIMESTAMP",
+      "nullable" : false,
+      "meaning" : "Monthly period identity; exact first calendar day UTC carrier",
+      "temporal" : {
+        "kind" : "BUSINESS_DATE",
+        "sourceFormat" : "BASIC",
+        "zone" : "calendar",
+        "precision" : "MONTH",
+        "meaning" : "Original source YYYYMM becomes first-day LocalDate; period label, not event/publication time"
+      },
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000300.SH]:last_non_null_in_month",
+      "logicalName" : "hs300_ret_1m",
+      "storageName" : "hs300_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000905.SH]:last_non_null_in_month",
+      "logicalName" : "zz500_ret_1m",
+      "storageName" : "zz500_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000985.SH]:last_non_null_in_month",
+      "logicalName" : "all_a_ret_1m",
+      "storageName" : "all_a_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000852.SH]:last_non_null_in_month",
+      "logicalName" : "cs1000_ret_1m",
+      "storageName" : "cs1000_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:cs1000_ret_1m-hs300_ret_1m",
+      "logicalName" : "small_large_ret_1m",
+      "storageName" : "small_large_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:zz500_ret_1m-hs300_ret_1m",
+      "logicalName" : "mid_large_ret_1m",
+      "storageName" : "mid_large_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000921.SH]:last_non_null_in_month",
+      "logicalName" : "growth_ret_1m",
+      "storageName" : "growth_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000920.SH]:last_non_null_in_month",
+      "logicalName" : "value_ret_1m",
+      "storageName" : "value_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:growth_ret_1m-value_ret_1m",
+      "logicalName" : "growth_value_ret_1m",
+      "storageName" : "growth_value_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000986.SH]:last_non_null_in_month",
+      "logicalName" : "energy_ret_1m",
+      "storageName" : "energy_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000987.SH]:last_non_null_in_month",
+      "logicalName" : "materials_ret_1m",
+      "storageName" : "materials_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000988.SH]:last_non_null_in_month",
+      "logicalName" : "industrials_ret_1m",
+      "storageName" : "industrials_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000989.SH]:last_non_null_in_month",
+      "logicalName" : "consumer_discretionary_ret_1m",
+      "storageName" : "consumer_discretionary_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000990.SH]:last_non_null_in_month",
+      "logicalName" : "consumer_staples_ret_1m",
+      "storageName" : "consumer_staples_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000991.SH]:last_non_null_in_month",
+      "logicalName" : "healthcare_ret_1m",
+      "storageName" : "healthcare_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000992.SH]:last_non_null_in_month",
+      "logicalName" : "financials_ret_1m",
+      "storageName" : "financials_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000993.SH]:last_non_null_in_month",
+      "logicalName" : "it_ret_1m",
+      "storageName" : "it_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000994.SH]:last_non_null_in_month",
+      "logicalName" : "telecom_ret_1m",
+      "storageName" : "telecom_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "index_monthly.pct_chg[ts_code=000995.SH]:last_non_null_in_month",
+      "logicalName" : "utilities_ret_1m",
+      "storageName" : "utilities_ret_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Unconverted stored index_monthly.pct_chg; last non-null dated source value",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:energy_ret_1m-all_a_ret_1m",
+      "logicalName" : "energy_vs_all_a_1m",
+      "storageName" : "energy_vs_all_a_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:materials_ret_1m-all_a_ret_1m",
+      "logicalName" : "materials_vs_all_a_1m",
+      "storageName" : "materials_vs_all_a_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:industrials_ret_1m-all_a_ret_1m",
+      "logicalName" : "industrials_vs_all_a_1m",
+      "storageName" : "industrials_vs_all_a_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:consumer_discretionary_ret_1m-all_a_ret_1m",
+      "logicalName" : "consumer_discretionary_vs_all_a_1m",
+      "storageName" : "consumer_discretionary_vs_all_a_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:consumer_staples_ret_1m-all_a_ret_1m",
+      "logicalName" : "consumer_staples_vs_all_a_1m",
+      "storageName" : "consumer_staples_vs_all_a_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:healthcare_ret_1m-all_a_ret_1m",
+      "logicalName" : "healthcare_vs_all_a_1m",
+      "storageName" : "healthcare_vs_all_a_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:financials_ret_1m-all_a_ret_1m",
+      "logicalName" : "financials_vs_all_a_1m",
+      "storageName" : "financials_vs_all_a_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:it_ret_1m-all_a_ret_1m",
+      "logicalName" : "it_vs_all_a_1m",
+      "storageName" : "it_vs_all_a_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:telecom_ret_1m-all_a_ret_1m",
+      "logicalName" : "telecom_vs_all_a_1m",
+      "storageName" : "telecom_vs_all_a_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:utilities_ret_1m-all_a_ret_1m",
+      "logicalName" : "utilities_vs_all_a_1m",
+      "storageName" : "utilities_vs_all_a_1m",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Difference in the same stored source-return units; preserve nullable arithmetic",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    } ],
+    "businessKey" : [ "month" ],
+    "dedupKey" : [ "month" ],
+    "designatedTimestamp" : "month",
+    "partition" : "YEAR",
+    "wal" : true,
+    "capabilities" : [ "READ", "WRITE" ],
+    "dependencies" : [ "index_monthly" ],
+    "storageRationale" : "YYYYMM period key carried at the first calendar day at exact UTC midnight; not a trading-month end or publication instant. 16 source pct_chg returns retain stored units; 13 differences use the same stored units. Legacy value=000920.SH/growth=000921.SH bindings and growth-value formula are preserved despite index-universe naming conflict. 29 nullable finite DOUBLEs preserve raw values, signed zero and nulls without scaling or rounding. Writes use only the isolated java_d103_equity_style_monthly_<suffix> target through the canonical bounded Java job; no formal writer or replacement capability is admitted. Read windows and batches are bounded to 12 months. Source readiness, point-in-time availability, full history and consumer cutover are not implied."
+  },
+  "job_count" : 41,
+  "ledger_created" : false
+}

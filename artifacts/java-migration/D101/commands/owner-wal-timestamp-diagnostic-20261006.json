@@ -1,0 +1,102 @@
+{
+  "task_id": "D101",
+  "status": "READONLY_WAL_TIMESTAMP_CARRIER_DIAGNOSTIC",
+  "target": {
+    "pid": 23388,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19020,
+    "pg_port": 18832
+  },
+  "database_operations": "SELECT only",
+  "qwp": {
+    "query": "SELECT table_name,wal_max_timestamp,table_last_write_timestamp FROM tables()",
+    "columns": [
+      {
+        "name": "table_name",
+        "type": "STRING"
+      },
+      {
+        "name": "wal_max_timestamp",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "table_last_write_timestamp",
+        "type": "TIMESTAMP"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "etf_basic",
+        "1970-01-01T00:00:00.000000Z",
+        "2026-10-06T08:52:39.084185Z"
+      ],
+      [
+        "etf_daily",
+        "58683-01-03T00:00:00.000000Z",
+        "2026-10-06T08:52:21.727194Z"
+      ],
+      [
+        "etf_market_overview_daily_cache",
+        null,
+        null
+      ],
+      [
+        "etf_share",
+        "2026-09-18T00:00:00.000000Z",
+        "2026-10-06T08:51:56.160468Z"
+      ],
+      [
+        "market_barometer_cache_coverage",
+        null,
+        null
+      ]
+    ],
+    "count": 5
+  },
+  "pg_sql": "SELECT table_name,cast(wal_max_timestamp AS LONG) AS wal_max_raw,cast(table_last_write_timestamp AS LONG) AS wall_write_raw FROM tables()",
+  "pg_description": [
+    [
+      "table_name",
+      1043
+    ],
+    [
+      "wal_max_raw",
+      20
+    ],
+    [
+      "wall_write_raw",
+      20
+    ]
+  ],
+  "pg_rows": [
+    [
+      "etf_basic",
+      0,
+      1791276759084185
+    ],
+    [
+      "etf_daily",
+      1789689600000000000,
+      1791276741727194
+    ],
+    [
+      "etf_market_overview_daily_cache",
+      null,
+      null
+    ],
+    [
+      "etf_share",
+      1789689600000000,
+      1791276716160468
+    ],
+    [
+      "market_barometer_cache_coverage",
+      null,
+      null
+    ]
+  ],
+  "source_mutated": false,
+  "formal_mutated": false
+}

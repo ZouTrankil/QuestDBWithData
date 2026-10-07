@@ -1,0 +1,86 @@
+{
+  "protocol_version": 2,
+  "task_id": "D103",
+  "decision": "accepted_for_bounded_source_increment_after_readonly_recovery",
+  "initial_recovery": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-initial-readonly-reconciliation-20261006.json",
+    "sha256": "e2a2099b7c39526414594bb9816718481e40131a34c5d563161a600c6484f236"
+  },
+  "java_readonly_recovery": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-readonly-recovery-20261006.json",
+    "sha256": "59dcdd9257c198c72944828f67226e74be05d760fb0bb37475f032b162aec7b4"
+  },
+  "original_initial_failure": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\coordinator-initial-java-receipt-failure-recovery-20261006.json",
+    "sha256": "d449e9713a69d478e511f485b0a1bc52d24a0d68e86ecb72cac2dfc47227c893"
+  },
+  "target": {
+    "pid": 41560,
+    "birth_utc": "2026-10-06T14:15:29.5834980Z",
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19030,
+    "pg_port": 18842
+  },
+  "bounded_source": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\source-fixture-initial-20261006-source-august-held.jsonl",
+    "sha256": "0b9de3e66ef9e0827bff47cda54a4a7e3b7a96243cab48fa738c80226f739246",
+    "rows": 16,
+    "field_values": 224,
+    "canonical_records_sha256": "3a667911284636c7d37d43f1a742ef2b3c1494c967d9f7b5f749b64c5180afb0",
+    "physical_types": {
+      "ts_code": "SYMBOL",
+      "trade_date": "TIMESTAMP",
+      "close": "DOUBLE",
+      "open": "DOUBLE",
+      "high": "DOUBLE",
+      "low": "DOUBLE",
+      "pre_close": "DOUBLE",
+      "change": "DOUBLE",
+      "pct_chg": "DOUBLE",
+      "vol": "DOUBLE",
+      "amount": "DOUBLE",
+      "layer": "SYMBOL",
+      "bucket": "SYMBOL",
+      "update_time": "TIMESTAMP"
+    },
+    "JSONL_shape": "values=all ordered physical columns; raw_double_bits=big-endian IEEE754 hex or explicit null"
+  },
+  "java_process": {
+    "pid": 47280,
+    "birth_utc": "2026-10-06T15:31:02.250865Z",
+    "stopped_observed_at": "2026-10-06T15:35:22.797134+00:00",
+    "native_evidence": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\readonly-recovery-java-native-stop-20261006.json",
+      "sha256": "3e8d0d87a838dabc753051a2149c6dd8cdba123bbad9478a56c603c1803e838c"
+    }
+  },
+  "executor_completion": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\readonly-recovery-java-executor-completion-20261006.json",
+    "sha256": "1ffbec6fd09df449a3193e5d771998fea5a2cf316d0027e89a0a34217cdfaae4"
+  },
+  "junit": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-readonly-recovery-result-20261006\\TEST-com.zoutrankil.data.config.EquityStyleMonthlyInitialReadOnlyRecoveryTest.xml",
+    "sha256": "8b3eb1b5ffb574572143208c7dc38735e608861c58c70cf278897a671ca12fca"
+  },
+  "ledger": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d103-java-acceptance.sqlite3",
+    "run_ids": [
+      "d103-84e190c2-db7f-4e97-9308-d813e6ed16dc",
+      "d103-083ca356-3c1d-4f93-9ab6-9eef63658eab",
+      "d103-cancelled-resume-852a9cb6-2c5d-4efb-b572-e2ebe2de887b",
+      "d103-9817fd74-462e-4fcb-87cc-dceffaac2423",
+      "d103-dee9e136-8495-4baf-b5f3-8f34a20fdbae",
+      "write-group-d1c905f9-7cc3-4b7c-b134-b42b2d870e74",
+      "run-274ea5cd-76f6-4a18-9b4c-9f20abf490a1",
+      "d103-cancelled-00415301-503c-4a68-87d0-5b920bc18d6e"
+    ],
+    "terminal_evidence": {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\readonly-recovery-java-terminal-ledger-20261006.json",
+      "sha256": "69d8424dfb0725d91d6de9f5b8a500e1b7e58fbeb0b8b4c4bdbc1f19a793e9fa"
+    }
+  },
+  "retry_forbidden": true,
+  "checked_at": "2026-10-06T15:35:22.797134+00:00",
+  "scope": "One separately admitted sixteen-row August source append; no output/formal DDL/DML. Original initial JUnit remains failed final serialization, original JVM identity unavailable, original source INSERT ACK UNKNOWN. Fresh READ-only recovery verifies all original actual operations and its known JVM has stopped."
+}

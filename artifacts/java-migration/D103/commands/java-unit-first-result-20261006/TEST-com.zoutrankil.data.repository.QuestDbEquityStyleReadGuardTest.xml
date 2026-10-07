@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-06T15:01:01.825Z" hostname="AMD395" time="0.854">
+  <properties/>
+  <testcase name="metadataSchemaOrderCannotDrift()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.509"/>
+  <testcase name="schemaExtraColumnCannotBeIgnored()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.009"/>
+  <testcase name="metadataBooleanNullFailsClosed()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.007"/>
+  <testcase name="pageLimitIsRequired()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.002"/>
+  <testcase name="exactMonthRejectsWrongDateType()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.002"/>
+  <testcase name="monthFirstIsRequired()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.002"/>
+  <testcase name="noWindowIsRejectedBeforeConnection()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.002"/>
+  <testcase name="finiteMonthlyPreparationDoesNotConnect()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.293"/>
+  <testcase name="laggingWalIsRejected()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.005"/>
+  <testcase name="thirteenMonthWindowIsRejected()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.002"/>
+  <testcase name="generationChangeAcrossSchemaReadIsRejected()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.007"/>
+  <testcase name="fullProjectionIsRequired()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.002"/>
+  <testcase name="physicalVersionAndAllMetadataStatementsAreBounded()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.006"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

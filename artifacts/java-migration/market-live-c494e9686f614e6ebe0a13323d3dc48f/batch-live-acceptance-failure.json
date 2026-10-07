@@ -1,0 +1,86 @@
+{
+  "acceptanceId" : "c494e9686f614e6ebe0a13323d3dc48f",
+  "startedAt" : "2026-09-29T17:13:56.766080700Z",
+  "formalTablesMutated" : false,
+  "humanReview" : "pending_review",
+  "isolatedTables" : [ "java_d007_daily_c494e9686f614e6ebe0a13323d3dc48f", "java_d008_basic_c494e9686f614e6ebe0a13323d3dc48f", "java_d009_factor_c494e9686f614e6ebe0a13323d3dc48f" ],
+  "isolatedTablesCreated" : [ "java_d007_daily_c494e9686f614e6ebe0a13323d3dc48f", "java_d008_basic_c494e9686f614e6ebe0a13323d3dc48f", "java_d009_factor_c494e9686f614e6ebe0a13323d3dc48f" ],
+  "sourceSyncMayHaveStarted" : true,
+  "ledger" : "sync-ledger.sqlite",
+  "preflight" : {
+    "effectiveRateLimitsPerMinute" : {
+      "stk_factor_pro" : 10,
+      "daily" : 10,
+      "daily_basic" : 10,
+      "endpointPerMinute" : 10,
+      "globalPerMinute" : 20
+    },
+    "liveEndpoints" : "daily, daily_basic, stk_factor_pro",
+    "questdbObjectsReadable" : 569,
+    "tushareCredentialConfigured" : true
+  },
+  "D007" : {
+    "task" : "D007",
+    "job" : "data.daily",
+    "table" : "java_d007_daily_c494e9686f614e6ebe0a13323d3dc48f",
+    "targetId" : "questdb-69bc7056c49138b42264b5c8bbdbb46cd63541058985a31a55d5082092f27714",
+    "requestWindows" : {
+      "initial" : [ "2026-09-28", "2026-09-28" ],
+      "incrementalTo" : "2026-09-29"
+    },
+    "runs" : [ {
+      "runId" : "daily-063ebf5e-da9f-4d9f-970c-9b34f1c2176c",
+      "state" : "VERIFIED",
+      "sourceRows" : 5557,
+      "verifiedRows" : 5557,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "daily-982f5fcc-b259-4dde-8ecd-f698456270ca",
+      "state" : "VERIFIED",
+      "sourceRows" : 5557,
+      "verifiedRows" : 5557,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "daily-8edcbc16-a6db-4f60-bff7-85efe9b726cd",
+      "state" : "VERIFIED",
+      "sourceRows" : 5557,
+      "verifiedRows" : 5557,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "daily-2ec58097-7077-4b89-b871-ca8890ab263d",
+      "state" : "VERIFIED",
+      "sourceRows" : 11116,
+      "verifiedRows" : 11116,
+      "errorCode" : null,
+      "reusedRows" : 0
+    } ],
+    "readbackAfterFirst" : {
+      "rows" : 5557,
+      "sha256" : "ca3daf45e8e02375ce10f256bade3d3261ab03facb3053435854328dd2f271c4",
+      "duplicateKeys" : 0
+    },
+    "readbackAfterIdempotentRepeat" : {
+      "rows" : 5557,
+      "sha256" : "ca3daf45e8e02375ce10f256bade3d3261ab03facb3053435854328dd2f271c4",
+      "duplicateKeys" : 0
+    },
+    "readbackAfterIncremental" : {
+      "rows" : 11116,
+      "sha256" : "0a6a1cc155c2bdf2fca846aa63e93fe43442c4ee8ed1df7ab1d7b9704b22da88",
+      "duplicateKeys" : 0
+    },
+    "allPhysicalColumnsSelected" : true,
+    "fullRowVerification" : "VERIFIED slice readback matched every returned key and physical column",
+    "isolatedEvidenceDirectory" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-c494e9686f614e6ebe0a13323d3dc48f\\sync-evidence",
+    "formalTableMutated" : false,
+    "humanReview" : "pending_review"
+  },
+  "failedAt" : "2026-09-29T17:14:47.743417900Z",
+  "result" : "failed_during_or_after_live_acceptance",
+  "failureType" : "java.lang.IllegalArgumentException",
+  "failure" : "Column not projected: previous_trade_date",
+  "failureCategory" : "IllegalArgumentException"
+}

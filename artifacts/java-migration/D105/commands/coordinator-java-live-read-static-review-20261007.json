@@ -1,0 +1,244 @@
+{
+  "protocol_version": 1,
+  "task_id": "D105",
+  "status": "PASS",
+  "record_date": "2026-10-07",
+  "reviewed_at_utc": "2026-10-06T18:10:40.901648+00:00",
+  "review_type": "independent_static_java_live_read_and_root_read_tools",
+  "reviewer": "/root/mv_reader_guard",
+  "static_only": true,
+  "blockers": [],
+  "findings": [],
+  "code_bindings": [
+    {
+      "path": "src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyViewLiveReadAcceptanceTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyViewLiveReadAcceptanceTest.java",
+      "sha256": "b6aa1fc3646ef968dabb0bb3cf246cf054a57e18538302c5cdefb16668a0e0d1",
+      "role": "Other-author final live harness: independent full static inspection"
+    },
+    {
+      "path": "tools/admit_d105_java_view_read.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/admit_d105_java_view_read.py",
+      "sha256": "7966a170f4f04cb6a762f37ecc4a8a780d4d5d12443f0b07e517c27c385375ca",
+      "role": "Root read-stage admission tool: independently inspected without execution"
+    },
+    {
+      "path": "tools/record_d105_readonly_terminal.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/record_d105_readonly_terminal.py",
+      "sha256": "1fe0a2b03dafbe0eb61962210230dc5f7ffd390fec3932b472b6e1863a3c2b88",
+      "role": "Root final stopped-reader/full dependency closure tool: independently inspected without execution"
+    }
+  ],
+  "reference_code_bindings": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyView.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyView.java",
+      "sha256": "53279fe1c2f9366af3e9e9a69e0b15c6c40dc1489d0941c8ba7911c8724c5f5d",
+      "role": "Typed nullable nine-field domain context, reviewed previously"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewKey.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewKey.java",
+      "sha256": "b5d6a8ba8266dd31b76e2d44976373140ef6e7bef4005a5a0041131faf889d2c",
+      "role": "Exact first-month UTC key context"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewDataset.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewDataset.java",
+      "sha256": "b1bd73e275e36487d43e19a06664eadcd04d14a091e73af3e7fa7c4484fe1d12",
+      "role": "Fixed formal/private READ-only definition context"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMapper.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMapper.java",
+      "sha256": "f45427f050104e28801972dd2016b30f020b7b4ab24baffe67c501660f03ca6f",
+      "role": "Nine-field exact mapper context"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyViewReadRepository.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyViewReadRepository.java",
+      "sha256": "08f3c5bc9a5c1b81ec9fca82e9a1b12edee9756a61a4628240203f4a56a31750",
+      "role": "Bounded typed alias repository context"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+      "sha256": "9bc606c5a640de5659f5b0235aead8680bf6b166b1dc7cc819718c4bd59bae9e",
+      "role": "Root-authored D105 dispatch integration context; reviewer-authored guard internals excluded"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+      "sha256": "1590de0606e4a9b326b3917fcd0fdbb866d2f8f6bf2d070fd282d58b6e5f5c46",
+      "role": "Actual typed group binding context"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuard.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuard.java",
+      "sha256": "7e2baa42f6e79efae168524eecf2acefc397c790ebb2df18280319aeb7277d4f",
+      "role": "Previously accepted D104 typed base read context"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/JobDefinitionJson.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/JobDefinitionJson.java",
+      "sha256": "f97fd8d9202b9ab29367922fa083d46cc2a1a0f98ff5c8b7891ecdf160ecfbaf",
+      "role": "LocalDate/Instant/YearMonth JSON serialization context"
+    },
+    {
+      "path": "tools/audit_d105_macro_core_view.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/audit_d105_macro_core_view.py",
+      "sha256": "3540ddb34ccbec4d777a2ce00e236b3ef6b76ccf190cc82006c14ba43d0d949b",
+      "role": "Current fixed-pair SELECT-only audit/actual native schema and birth proof context"
+    },
+    {
+      "path": "tools/prepare_d105_macro_core_view_isolated.py",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/tools/prepare_d105_macro_core_view_isolated.py",
+      "sha256": "4a741225f9c76bd3565749dee62b78a4a5d4a60771ad9a6119cfe05213a0a1f0",
+      "role": "Prior single CREATE receipt producer helper context; harness does not call creator"
+    }
+  ],
+  "excluded_author_inventory": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuard.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuard.java",
+      "sha256": "71c7ea91a09eb97de58e9e83128aa00e17318a75dc3bff6873fcc8404eda8b08",
+      "role": "Reviewer-authored guard excluded; no self-review"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuardTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuardTest.java",
+      "sha256": "c157f774f3c87ff215600282a4324139dfebe8d8547b5d8dee0f410d4663188a",
+      "role": "Reviewer-authored 37 pure tests excluded; no self-review"
+    }
+  ],
+  "bindings": [
+    {
+      "path": "artifacts/java-migration/D105/commands/view-isolated-acceptance-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/view-isolated-acceptance-20261007.json",
+      "sha256": "191475bf1496c53a78044139f865bd31f050c13dc6fe1701f4846eb5a832536a",
+      "role": "Root external actual private CREATE ACK1 plus complete view/base read audit"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/view-formal-readonly-audit-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/view-formal-readonly-audit-20261007.json",
+      "sha256": "4b3aec1c690ae34a0b69e35df34d535d7a881454e2e549623e11724eb9be437d",
+      "role": "Root external formal SELECT-only view/base read audit under prior audit version"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/root-formal-view-metadata-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/root-formal-view-metadata-20261007.json",
+      "sha256": "9ce66ed64413732c8577e19bb53b72b44d2e35a11c9a040320e9009a9866059f",
+      "role": "Root external formal native view schema/SQL observation"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/coordinator-domain-wiring-static-review-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/coordinator-domain-wiring-static-review-20261007.json",
+      "sha256": "222decb401ef87164260eba4170814c99294ddb8887231cd9f470fc2bf09d4ac",
+      "role": "Prior independent other-author domain/wiring review"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/coordinator-domain-wiring-import-correction-static-review-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/coordinator-domain-wiring-import-correction-static-review-20261007.json",
+      "sha256": "bc1ada6ab9f799e00b4dc4c0b0e9f705207d20d9d2751243dc24c6397d187b7b",
+      "role": "Two corrected test imports supplement preserves compile failure"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/coordinator-view-tools-static-review-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/coordinator-view-tools-static-review-20261007.json",
+      "sha256": "d1ff167a5ad40dcbbf8a08997780ba2f99b47693249478e27a59ea7eb3fd958b",
+      "role": "Independent fixed-pair CREATE/audit full helper review"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/macro-core-readonly-preflight-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D104/commands/macro-core-readonly-preflight-20261007.json",
+      "sha256": "fc4b839c44254aee9f221e1246c5279738cf33704eb12749f2f70691347f530b",
+      "role": "Actual immutable three-month original oracle preflight"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/macro-core-readonly-preflight-20261007-oracle.jsonl",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D104/commands/macro-core-readonly-preflight-20261007-oracle.jsonl",
+      "sha256": "6e3a262811b63ad0933ccd3ecbf437ff6497370c9fff67ba648679fff0306a30",
+      "role": "Actual immutable complete nine-field JSONL and independent raw binary64/NULL oracle"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/java-increment-acceptance-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D104/commands/java-increment-acceptance-20261007.json",
+      "sha256": "b1aec9b83be584059cbe2aad5d18240a14167915b5c37ad9f02568e586c318ca",
+      "role": "Prior real D104 base/ledger/native attestation evidence"
+    },
+    {
+      "path": "artifacts/java-migration/D104/coordinator-review-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D104/coordinator-review-20261007.json",
+      "sha256": "a5fd14527a068185f222abf54292c0f8532a50d8ae2eb49f14e4fc6b369d1bde",
+      "role": "Prior accepted base owner gate"
+    }
+  ],
+  "checks": [
+    {
+      "area": "connections_follow_exact_admission",
+      "result": "PASS",
+      "detail": "Before any Hikari/JDBC connection, harness verifies current scope-specific admission SHA, fixed actual audit path/SHA/status, current Java test and production code bindings, D104 gate/final/preflight/oracle bytes, existing ledger-file inventory, and fresh self JVM native identity saved with child exit proof. Constructors used in the acceptance read path do not create source/target/ledger."
+    },
+    {
+      "area": "actual_evidence_shape",
+      "result": "PASS",
+      "detail": "Actual private receipt191475 has attempted_DDL=acknowledged_DDL=1, ACKNOWLEDGED create_operation and no scope key; harness uses that correct private branch. Actual formal receipt4b3aec uses scope=formal and DDL0. Existing raw nine-field rows and nullable raw-bit maps match parser/mapper structure. Native view history is compared using a LONG microsecond cast against the actual saved ISO timestamp; raw PG text remains intact."
+    },
+    {
+      "area": "native_pid_reuse_consistency",
+      "result": "PASS",
+      "detail": "One strict-empty-matches mismatch was identified in unexecuted intermediate e079 and fixed by root. Final b6aa requires original_identity_present=false; each nonempty current match must have the creator PID and a strictly later native birth. This matches the existing original_absent contract without allowing the original process or unknown birth."
+    },
+    {
+      "area": "actual_typed_values_and_independent_oracle",
+      "result": "PASS",
+      "detail": "Direct JDBC base and view casts preserve exact first-month microseconds and getDouble/wasNull. Full nine-field typed results are compared at zero tolerance to saved original oracle JSONL, its independent raw-bit maps, actual audit base/view rows, typed base repository, and configured ReadGroup. Eight nullable DOUBLE slots per row remain explicit; the current three-row sample has 24 slots,22 nonNULL raw-bit comparisons,2 NULL comparisons."
+    },
+    {
+      "area": "bounded_key_range_cursor_and_group",
+      "result": "PASS",
+      "detail": "Actual June/July initial and replay, July/August later read window, three page-size1 June/August pages, exact month/key reads, September empty reads, actual physical token identity, range-changed cursor rejection, and complete configured typed group are asserted. Invalid date/projection/range/page requests are checked before reader invocation. Output loop is capped at three current expected months; production read limits remain12months/12page."
+    },
+    {
+      "area": "cancellation_and_writes",
+      "result": "PASS",
+      "detail": "After clearing reader spy invocations, pre-cancelled group requires CANCELLED/no page/zero reader invocation. Definition and typed preparation reject WRITE/STATIC_REPLACE/WAL_REPLACE. Executable SQL in harness is SELECT only, no writer/owner/sync job/SyncRunLedger is instantiated, and existing D104 ledger plus WAL/SHM file bytes are checked unchanged before/after."
+    },
+    {
+      "area": "read_metadata_and_time_bounds",
+      "result": "PASS",
+      "detail": "Harness compares all seven source/base physical/WAL/COUNT brackets with saved actual audit metadata, plus view identity/status/schema and base/view schema snapshots before/after all reads. Prepared statements set queryTimeout20 and finite MaxRows/fetch size; JDBC socketTimeout20/connectTimeout10 and Hikari limits are explicit. Source COUNTS are whole-table observations, not a claim that result LIMIT caps engine scanning."
+    },
+    {
+      "area": "root_admission_tool",
+      "result": "PASS",
+      "detail": "Root stage tool freezes reviewed current harness and production references before gate creation, binds actual scope audit, and private stage revalidates dedicated PID/root/birth/listeners, prior raw CREATE ACK, original five-table terminal ledger and actual creator instance absence. It publishes only new admission/attestation evidence, with no DB or ledger mutation."
+    },
+    {
+      "area": "root_terminal_tool",
+      "result": "PASS",
+      "detail": "Final terminal tool requires both scope receipts, successful external executor/JUnit evidence, unchanged ledger-file hashes, saved-before-connections actual JVM identity SHA, and fresh absence of each original PID/birth. It reruns complete SELECT-only formal/private view/base/source closure, including final physical view identity, then verifies nine runs/21entries/85events/onegroup/zero leases remain unchanged. No CREATE/recovery/source publication is called."
+    }
+  ],
+  "test_inventory": {
+    "unique_live_method": 1,
+    "method": "actualBoundedAliasReadsMatchBaseAuditAndOriginalOracleWithoutPublication",
+    "planned_executions": "Separate private and formal invocations of the same unique method",
+    "execution_status": "Pending actual Java read execution at review time; no passing outcome asserted by reviewer"
+  },
+  "native_proof_boundary": "Native operations are part of root-run admission/harness/terminal execution only. Reviewer read their implementation and saved predecessor facts; did not query OS processes or sockets. External executor completion is root transcription and is explicitly labeled by terminal tool.",
+  "execution": {
+    "reviewer_tests_run": 0,
+    "reviewer_gradle_runs": 0,
+    "reviewer_database_queries": 0,
+    "reviewer_database_mutations": 0,
+    "reviewer_native_queries": 0,
+    "reviewer_reference_imports": 0,
+    "action": "Read source and saved JSON/JSONL only, computed SHA256, and created this static review new-only."
+  },
+  "recommendation": "No static blocker remains for separately admitted root-run private/formal bounded Java view reads and final SELECT-only closure. This is not actual read validation or a D105 serial-progress gate.",
+  "human_review": "PENDING",
+  "coordinator_gate": "PENDING",
+  "next_task_admitted": false,
+  "D106_admitted": false
+}

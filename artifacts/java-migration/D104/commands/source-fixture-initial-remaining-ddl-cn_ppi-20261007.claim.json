@@ -1,0 +1,45 @@
+{
+  "task_id": "D104",
+  "invocation_id": "4adc1249-89be-4737-bde7-997608ab034d",
+  "stage": "remaining_initial_after_known_partial",
+  "kind": "DDL",
+  "table": "cn_ppi",
+  "rows": 0,
+  "ack": "ACKNOWLEDGED",
+  "created_at": "2026-10-06T16:34:32.923619+00:00",
+  "automatic_retry": false,
+  "target": {
+    "pid": 43084,
+    "birth_utc": "2026-10-06T16:04:24.4330550Z",
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19040,
+    "pg_port": 18852
+  },
+  "producer_identity": {
+    "pid": 10272,
+    "parent_pid": 50768,
+    "name": "python.exe",
+    "birth_utc": "2026-10-06T16:34:15.9246870Z"
+  },
+  "partial_admission": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-remaining-initial-source-admission-20261007.json",
+    "sha256": "77ba12f5e25e2bb326e156f17911cea4f06b395bf0ea060f906eddb38cc433ab"
+  },
+  "failed_initial": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-20261007.json",
+    "sha256": "516195048104e45c61ed0d7ff5796f32eca6d72dabc493c16b2a3f1e3667c534"
+  },
+  "sql_sha256": "52eda205abb940de4b5c89dfaa5e42fabf3f2c1397a47efc49aecbc0a09360ae",
+  "source_records_sha256": null,
+  "raw_response": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-remaining-ddl-cn_ppi-20261007.claim.response.bin",
+    "sha256": "b6f48174863fd847cf8fbaf0a8e4811ba50d6277e9a5082eeb9760fd5a219321",
+    "bytes": 12
+  },
+  "http_status": 200,
+  "ack_at": "2026-10-06T16:34:33.008119+00:00",
+  "response": {
+    "ddl": "OK"
+  }
+}

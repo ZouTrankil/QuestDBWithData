@@ -1,0 +1,286 @@
+{
+  "generatedAt": "2026-10-07T08:47:23.700658+00:00",
+  "scope": "Existing 45 sampled symbol-day performance artifacts for 20260928-20260930; no recomputation or Python algorithm comparison",
+  "guard": {
+    "status": "passed",
+    "errors": [],
+    "frozenSchemaFields": 110,
+    "firstRows": 45,
+    "currentRows": 45,
+    "currentResumedRows": 45,
+    "currentRecomputedRows": 0,
+    "aggregateChecksumPolicy": "Exact complete-file SHA-256; exact per-symbol JSON bytes excluding CR/LF",
+    "benchmark0928Rows": 15,
+    "benchmark0928IdenticalRows": 15,
+    "computeFingerprints": [
+      "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961"
+    ]
+  },
+  "dates": [
+    {
+      "date": "20260928",
+      "rowCount": 15,
+      "firstCounts": {
+        "success": 15,
+        "empty": 0,
+        "failed": 0,
+        "resumed": 0
+      },
+      "currentCounts": {
+        "success": 15,
+        "empty": 0,
+        "failed": 0,
+        "resumed": 15
+      },
+      "recomputedCurrent": 0,
+      "sourceBytes": 937364845,
+      "aggregateSha256": "f3878014503c8ccd9df0025df7905425826b0595857135b9d94ac2c6742bc7f9",
+      "aggregateUnchanged": true,
+      "firstNativeDateSeconds": 24.588087,
+      "currentNativeDateSeconds": 1.07931,
+      "firstSymbolSeconds": {
+        "count": 15,
+        "min": 0.0269401,
+        "median": 2.4733082,
+        "max": 21.9725209,
+        "sum": 73.67249989999999
+      },
+      "currentSymbolSeconds": {
+        "count": 15,
+        "min": 0.0055852,
+        "median": 0.0878635,
+        "max": 0.7923861,
+        "sum": 2.3672137
+      },
+      "computeFingerprintUnchanged": true,
+      "symbols": [
+        "000001.SZ",
+        "000725.SZ",
+        "111024.SH",
+        "158056.SZ",
+        "159915.SZ",
+        "204001.SZ",
+        "300750.SZ",
+        "510300.SH",
+        "511690.SH",
+        "515800.SH",
+        "588000.SH",
+        "600000.SH",
+        "600930.SH",
+        "605305.SH",
+        "688981.SH"
+      ],
+      "firstManifest": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real-first-snapshot\\20260928\\manifest.json",
+      "currentManifest": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\20260928\\manifest.json",
+      "currentAggregate": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\20260928\\l2_daily_features.jsonl"
+    },
+    {
+      "date": "20260929",
+      "rowCount": 15,
+      "firstCounts": {
+        "success": 15,
+        "empty": 0,
+        "failed": 0,
+        "resumed": 0
+      },
+      "currentCounts": {
+        "success": 15,
+        "empty": 0,
+        "failed": 0,
+        "resumed": 15
+      },
+      "recomputedCurrent": 0,
+      "sourceBytes": 1002665411,
+      "aggregateSha256": "7874f503c82a9d8a9312f29b359e86356606438bae023430cef12a66468c64c6",
+      "aggregateUnchanged": true,
+      "firstNativeDateSeconds": 26.343364,
+      "currentNativeDateSeconds": 1.045956,
+      "firstSymbolSeconds": {
+        "count": 15,
+        "min": 0.0179106,
+        "median": 1.3001095,
+        "max": 25.0539201,
+        "sum": 67.86750909999999
+      },
+      "currentSymbolSeconds": {
+        "count": 15,
+        "min": 0.0041224,
+        "median": 0.0436603,
+        "max": 0.9795371,
+        "sum": 2.2833715
+      },
+      "computeFingerprintUnchanged": true,
+      "symbols": [
+        "000001.SZ",
+        "111024.SH",
+        "113701.SH",
+        "158027.SZ",
+        "159915.SZ",
+        "204001.SZ",
+        "300314.SZ",
+        "300750.SZ",
+        "501043.SH",
+        "510300.SH",
+        "511100.SH",
+        "516150.SH",
+        "588000.SH",
+        "600000.SH",
+        "688981.SH"
+      ],
+      "firstManifest": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real-first-snapshot\\20260929\\manifest.json",
+      "currentManifest": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\20260929\\manifest.json",
+      "currentAggregate": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\20260929\\l2_daily_features.jsonl"
+    },
+    {
+      "date": "20260930",
+      "rowCount": 15,
+      "firstCounts": {
+        "success": 15,
+        "empty": 0,
+        "failed": 0,
+        "resumed": 0
+      },
+      "currentCounts": {
+        "success": 15,
+        "empty": 0,
+        "failed": 0,
+        "resumed": 15
+      },
+      "recomputedCurrent": 0,
+      "sourceBytes": 943133650,
+      "aggregateSha256": "bf94e8dce1989c80773e8a8e6b051cd60ce2cec2ab77c52a66cc904ee4d9b2d9",
+      "aggregateUnchanged": true,
+      "firstNativeDateSeconds": 22.178932,
+      "currentNativeDateSeconds": 0.818654,
+      "firstSymbolSeconds": {
+        "count": 15,
+        "min": 0.019195,
+        "median": 1.7030481,
+        "max": 20.7820391,
+        "sum": 68.36429009999999
+      },
+      "currentSymbolSeconds": {
+        "count": 15,
+        "min": 0.0034095,
+        "median": 0.0524237,
+        "max": 0.7586643,
+        "sum": 2.0748441
+      },
+      "computeFingerprintUnchanged": true,
+      "symbols": [
+        "000001.SZ",
+        "001246.SZ",
+        "111024.SH",
+        "159915.SZ",
+        "204001.SZ",
+        "300750.SZ",
+        "301026.SZ",
+        "508093.SH",
+        "510300.SH",
+        "516000.SH",
+        "588000.SH",
+        "600000.SH",
+        "600985.SH",
+        "603737.SH",
+        "688981.SH"
+      ],
+      "firstManifest": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real-first-snapshot\\20260930\\manifest.json",
+      "currentManifest": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\20260930\\manifest.json",
+      "currentAggregate": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\20260930\\l2_daily_features.jsonl"
+    }
+  ],
+  "nativeFirstTiming": {
+    "artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real-first-metrics.json",
+    "scope": [
+      "CSV parsing",
+      "P0-P13",
+      "input SHA256 before and after computation",
+      "per-symbol atomic fsync checkpoint",
+      "daily manifest and ordered JSONL aggregation"
+    ],
+    "recordedAt": "2026-10-07T08:38:39.499052700Z",
+    "status": "SUCCESS",
+    "wallSeconds": 73.3193973,
+    "processCpuSeconds": 331.984375,
+    "gcCount": 56,
+    "gcSeconds": 6.453,
+    "heapPeakGiB": 14.109375,
+    "rssPeakGiB": 16.27581024169922,
+    "heapMaxGiB": 24.0,
+    "jvmArgs": [
+      "--enable-native-access=ALL-UNNAMED",
+      "-Xms1g",
+      "-Xmx24g"
+    ],
+    "nativeArgs": [
+      "--source-root",
+      "var/l2-performance-validation/raw",
+      "--dates",
+      "20260928,20260929,20260930",
+      "--output-root",
+      "var/l2-performance-validation/batch-real",
+      "--workers",
+      "4",
+      "--resume",
+      "true"
+    ]
+  },
+  "nativeDirectResumeTiming": {
+    "artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real-resume-metrics.json",
+    "scope": [
+      "CSV parsing",
+      "P0-P13",
+      "input SHA256 before and after computation",
+      "per-symbol atomic fsync checkpoint",
+      "daily manifest and ordered JSONL aggregation"
+    ],
+    "recordedAt": "2026-10-07T08:43:18.524924200Z",
+    "status": "SUCCESS",
+    "wallSeconds": 3.1164781,
+    "processCpuSeconds": 8.8125,
+    "gcCount": 1,
+    "gcSeconds": 0.006,
+    "heapPeakGiB": 0.032334133982658386,
+    "rssPeakGiB": 0.12926101684570312,
+    "heapMaxGiB": 24.0,
+    "jvmArgs": [
+      "--enable-native-access=ALL-UNNAMED",
+      "-Xms1g",
+      "-Xmx24g"
+    ],
+    "nativeArgs": [
+      "--source-root",
+      "var/l2-performance-validation/raw",
+      "--dates",
+      "20260928,20260929,20260930",
+      "--output-root",
+      "var/l2-performance-validation/batch-real",
+      "--workers",
+      "4",
+      "--resume",
+      "true"
+    ]
+  },
+  "latestFormalScriptNativeCommand": {
+    "dates": [
+      "20260928",
+      "20260929",
+      "20260930"
+    ],
+    "workers": 4,
+    "resume": true,
+    "elapsedSeconds": 32.5018574,
+    "exitCode": 0,
+    "log": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\run-20261007-164340-230d33ba\\native-batch.log",
+    "argumentsFile": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\run-20261007-164340-230d33ba\\native-arguments.json",
+    "isolatedBuildDirectory": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\run-20261007-164340-230d33ba\\gradle-build",
+    "projectCacheDirectory": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\run-20261007-164340-230d33ba\\gradle-project-cache",
+    "artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\run-20261007-164340-230d33ba\\native-summary.json",
+    "runDirectory": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\run-20261007-164340-230d33ba",
+    "timingScope": "Gradle native command, including isolated compilation/startup; excludes extraction",
+    "manifestNativeDateSeconds": 2.9439200000000003,
+    "commandMinusNativeDateSeconds": 29.5579374,
+    "resumedOutputsFromCurrentManifests": 45,
+    "recomputedOutputsFromCurrentManifests": 0
+  }
+}

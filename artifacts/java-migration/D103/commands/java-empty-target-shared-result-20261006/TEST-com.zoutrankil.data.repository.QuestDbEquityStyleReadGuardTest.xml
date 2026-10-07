@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" tests="19" skipped="0" failures="0" errors="0" timestamp="2026-10-06T15:09:25.566Z" hostname="AMD395" time="0.44">
+  <properties/>
+  <testcase name="metadataSchemaOrderCannotDrift()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.231"/>
+  <testcase name="schemaExtraColumnCannotBeIgnored()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.009"/>
+  <testcase name="nullPhysicalTxnCannotHideAnyNonzeroWalOrPendingFrontier()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.014"/>
+  <testcase name="metadataBooleanNullFailsClosed()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.011"/>
+  <testcase name="uninitializedCursorIsRejectedWhenFirstPhysicalTxnBecomesZeroBeforeRowQuery()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.051"/>
+  <testcase name="pageLimitIsRequired()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.002"/>
+  <testcase name="nullableMetadataChangeAcrossActualCountCannotBeNormalizedAway()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.009"/>
+  <testcase name="exactMonthRejectsWrongDateType()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.003"/>
+  <testcase name="rawNullableRowMetadataMustBeZeroOrNullAndCannotBeNegative()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.011"/>
+  <testcase name="monthFirstIsRequired()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.003"/>
+  <testcase name="nullPhysicalTxnCannotHideActualRowsOrMissingCount()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.006"/>
+  <testcase name="uninitializedTableRequiresActualZeroAndKeepsNullableVersionWithBoundedStatements()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.041"/>
+  <testcase name="noWindowIsRejectedBeforeConnection()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.002"/>
+  <testcase name="finiteMonthlyPreparationDoesNotConnect()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.009"/>
+  <testcase name="laggingWalIsRejected()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.006"/>
+  <testcase name="thirteenMonthWindowIsRejected()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.002"/>
+  <testcase name="generationChangeAcrossSchemaReadIsRejected()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.007"/>
+  <testcase name="fullProjectionIsRequired()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.002"/>
+  <testcase name="physicalVersionAndAllMetadataStatementsAreBounded()" classname="com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest" time="0.006"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

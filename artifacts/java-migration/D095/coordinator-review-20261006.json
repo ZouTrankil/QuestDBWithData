@@ -1,0 +1,108 @@
+{
+  "task_id": "D095",
+  "reviewed_at": "2026-10-06T13:13:04.336519+08:00",
+  "reviewer": "primary-coordinator",
+  "decision": "accepted_for_serial_progress",
+  "human_review": "pending_review",
+  "validation_scope": "isolated_actual_QuestDB_with_complete_real_source_slices",
+  "tests": {
+    "tests": 90,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "python_guard_tests": 15,
+  "actual_job_catalog_size": 38,
+  "native_mode": "INCREMENTAL; tracked FULL_ISOLATED recovery only on attested private instance",
+  "whole_mv_exclusion": "allDates; disjoint windows blocked while unknown; legacy exact scope reconciles only after stable actual readback",
+  "source_raw_rows": 16658,
+  "source_first_slice_rows": 11105,
+  "source_new_day_rows": 5553,
+  "calendar_field_comparisons": 80,
+  "checkpoint_before": "2026-09-18",
+  "checkpoint_after": "2026-09-21",
+  "revision_from": "2026-09-19",
+  "live_runs": {
+    "missingDatesRejected": {
+      "runId": "d095-9bc9c031-c16b-4ffe-90f4-dca9c1ee625f",
+      "state": "FAILED",
+      "sourceRows": 0,
+      "verifiedRows": 0,
+      "errorCode": "IllegalStateException",
+      "reusedRows": 0
+    },
+    "first": {
+      "runId": "d095-d1b97554-dd38-43a9-a887-684f528f9c98",
+      "state": "VERIFIED",
+      "sourceRows": 2,
+      "verifiedRows": 2,
+      "errorCode": null,
+      "reusedRows": 0
+    },
+    "replay": {
+      "runId": "d095-dd874fea-0dc8-434c-8ef5-885f7a82ef72",
+      "state": "VERIFIED",
+      "sourceRows": 2,
+      "verifiedRows": 2,
+      "errorCode": null,
+      "reusedRows": 0
+    },
+    "incremental": {
+      "runId": "d095-ae8670a2-013b-4b26-977b-588f8370363f",
+      "state": "VERIFIED",
+      "sourceRows": 3,
+      "verifiedRows": 3,
+      "errorCode": null,
+      "reusedRows": 0
+    },
+    "fullRepair": {
+      "runId": "d095-9fa46685-6f3f-4106-9077-9386cd6cdebc",
+      "state": "VERIFIED",
+      "sourceRows": 3,
+      "verifiedRows": 3,
+      "errorCode": null,
+      "reusedRows": 0
+    },
+    "empty": {
+      "runId": "d095-56a56eea-beb3-43e9-9388-93e157feac43",
+      "state": "VERIFIED_EMPTY",
+      "sourceRows": 0,
+      "verifiedRows": 0,
+      "errorCode": null,
+      "reusedRows": 0
+    },
+    "invalidRejected": {
+      "runId": "d095-d0059935-70cf-42c5-b1a4-a118a8afafdd",
+      "state": "FAILED",
+      "sourceRows": 0,
+      "verifiedRows": 0,
+      "errorCode": "IllegalStateException",
+      "reusedRows": 0
+    },
+    "recovery": {
+      "runId": "d095-3598a9a7-b082-457b-b13f-c4396e1c7064",
+      "state": "VERIFIED",
+      "sourceRows": 3,
+      "verifiedRows": 3,
+      "errorCode": null,
+      "reusedRows": 0
+    }
+  },
+  "live_ledger": "var\\d095-java-1203ad29-7f39-4792-bfa8-27e141a1a603.sqlite3",
+  "remaining_live_leases": 0,
+  "formal_writes": 0,
+  "formal_production_ready": false,
+  "formal_limitations": "Existing MV invalid with four missing dates; global pending refresh budget exceeded. Formal FULL and production cutover not executed.",
+  "diagnostic_runs_preserved": [
+    "var/d095-java-568c69ff-8453-459b-a0dd-4fc2aabb13c6.sqlite3 / d095-452b0bba-078c-4c11-bd2e-30718d672c44 remains IN_DOUBT. Old private process stopped; sample source version changed; no false reconciliation."
+  ],
+  "evidence": [
+    "commands/target-tests-20261006.json",
+    "commands/java-tests-20261006.log",
+    "commands/java-job-registration-20261006.json",
+    "commands/java-materialize-acceptance-20261006.json",
+    "commands/isolated-acceptance-20261006.json",
+    "commands/formal-readonly-full-20261006.json"
+  ],
+  "next_task": "D096"
+}

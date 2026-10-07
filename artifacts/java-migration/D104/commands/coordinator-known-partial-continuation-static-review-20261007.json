@@ -1,0 +1,227 @@
+{
+  "task_id": "D104",
+  "record_date": "2026-10-07",
+  "status": "PASS",
+  "review_kind": "Independent static/file-only review of known-CPI remaining-source continuation",
+  "recommendation": "accepted_for_remaining_five_source_initial_only",
+  "blockers": [],
+  "findings": [],
+  "actual_continuation_executed_by_reviewer": false,
+  "bindings": [
+    {
+      "path": "tools/prepare_d104_macro_core_initial_after_known_partial.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d104_macro_core_initial_after_known_partial.py",
+      "sha256": "d813f0363ad5dc0558001b2b9f8c6a4225187ddf1c8fe4520d6898feb7ffac32"
+    },
+    {
+      "path": "tools/test_d104_known_partial_guards.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d104_known_partial_guards.py",
+      "sha256": "1f03292ebb7460e6e41e35522efa070f8e66777d56bfe4d2fe01f19bc241bb3e"
+    },
+    {
+      "path": "tools/review_d104_known_initial_cpi_readonly.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\review_d104_known_initial_cpi_readonly.py",
+      "sha256": "8de0b358e6e385d3950479831b3280512ca5630bb12e5b57f83c41b916260b63"
+    },
+    {
+      "path": "tools/prepare_d104_macro_core_isolated.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d104_macro_core_isolated.py",
+      "sha256": "23389881d8c6b8401dfb8b482378f6cdbe911f79e0b72269e46dcc6573388922"
+    },
+    {
+      "path": "tools/preflight_d104_macro_core_readonly.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\preflight_d104_macro_core_readonly.py",
+      "sha256": "245607f62dd3366746c712839351ecfc8d302a95c4a8f5d1e16125acbe676f91"
+    },
+    {
+      "path": "tools/preflight_d103_equity_style_readonly.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\preflight_d103_equity_style_readonly.py",
+      "sha256": "d832e236fb927af8beedcfe7984413969262be50d9812b9bfd9173ce8961546c"
+    },
+    {
+      "path": "tools/prepare_d103_equity_style_isolated.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d103_equity_style_isolated.py",
+      "sha256": "bb3fc799711ebf3637feca63f9fe29304341bfd9d4bbbab6b001b8f2722e6210"
+    }
+  ],
+  "partial_audit": {
+    "path": "artifacts/java-migration/D104/commands/coordinator-known-initial-cpi-readonly-review-20261007.json",
+    "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-known-initial-cpi-readonly-review-20261007.json",
+    "sha256": "49b089dcf684c0da50aabcb2478ad2143f4eeadda506e4e8cb608f2ca0632604"
+  },
+  "input_evidence_bindings_rehashed": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-20261007.json",
+      "sha256": "516195048104e45c61ed0d7ff5796f32eca6d72dabc493c16b2a3f1e3667c534"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\known-initial-source-producer-native-stop-20261007.json",
+      "sha256": "22eb9d54a388a6d61ecc3a5344d57d27cf8af3e57e3ba4c685906cdfd014c7ac"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\known-initial-source-executor-completion-20261007.json",
+      "sha256": "5d12f3651f75a44ff361f00ecd3f0ffff7229f70b79a099b38fac9e7b0f9df0f"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007.json",
+      "sha256": "fc4b839c44254aee9f221e1246c5279738cf33704eb12749f2f70691347f530b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\private-server-start-20261007.json",
+      "sha256": "9dccda7261b680798924e7632c4f8dd646c15e8f0442e737b80ba701f36f51f7"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-ddl-cn_cpi-20261007.claim.json",
+      "sha256": "c39cc65a0cd540de615ce4dde352eba93a7a72a71d707d37be4bda08f155ec5d"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-ddl-cn_cpi-20261007.claim.response.bin",
+      "sha256": "b6f48174863fd847cf8fbaf0a8e4811ba50d6277e9a5082eeb9760fd5a219321"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-dml-cn_cpi-20261007.claim.json",
+      "sha256": "8ae5de10e4a5db706d771fd2aa4d934363ca596abeb4481a3f639b5058b9f0bd"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-dml-cn_cpi-20261007.claim.response.bin",
+      "sha256": "bf28704bb78cb86d6fe251c332a0c9800f40dfd4ce7e5ec64083d0f11a5b348d"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007-cn_cpi-source.jsonl",
+      "sha256": "573eaa54577476971a9a8c718513175e7d2a67b70c70d81a1a1181ea3e7ea839"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007-cn_ppi-source.jsonl",
+      "sha256": "21dcc9c3f2c54c6d5c847ba1e824ec4de05458e1c67488baef26bc67c2c9caba"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007-cn_pmi-source.jsonl",
+      "sha256": "081d2152b92a62754c948569b8bc12870f24088889ca17ea5ca88d17e7fb52b9"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007-cn_m-source.jsonl",
+      "sha256": "5a959b6fdf9d74cca79c31f8c6b8ed5d32bae3c246ed026a5290cd42b79ad28d"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007-cn_gdp-source.jsonl",
+      "sha256": "23585f87e107e818ff392006d721602b230a0195028cfed987239f1b125e872c"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007-sf_month-source.jsonl",
+      "sha256": "32c8acc12d8de2dcd6fb65cd99bcb9efafce68088f4d7c53edad871718945e32"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-20261007.log",
+      "sha256": "e95c9c068b2bcf662fbe333ca2c513c32e30efab06ef178a9abe6f6cf15a5f74"
+    }
+  ],
+  "mutation_scope": {
+    "remaining_tables": [
+      "cn_ppi",
+      "cn_pmi",
+      "cn_m",
+      "cn_gdp",
+      "sf_month"
+    ],
+    "new_DDL": 5,
+    "new_DML": 5,
+    "new_source_rows": 21,
+    "cpi_resubmissions": 0,
+    "formal_writes": 0,
+    "private_output_writes": 0,
+    "source_revision": 0,
+    "automatic_retry": false,
+    "unknown_ack_admitted": false,
+    "original_known_ack_operations": 2,
+    "original_known_ack_rows": 2,
+    "expected_total_known_ack_operations": 12,
+    "expected_total_known_ack_rows": 23
+  },
+  "checks": [
+    {
+      "component": "Original known CPI admission closure",
+      "file": "tools/prepare_d104_macro_core_initial_after_known_partial.py",
+      "lines": "108-137,150-180",
+      "result": "PASS",
+      "detail": "Pins actual retained FAILED SHA516195... and original initial code SHA233898..., original exact visibility error, only CPI DDL ACK plus DML2 ACK. Both fixed original claims, SQL/source record digests, invocation/producer/target/preflight/startup identities and fsynced raw responses are rehashed/reparsed. Strict full26-field/24-nonnull-double CPI readback binds preserved partial audit."
+    },
+    {
+      "component": "No CPI/output publisher and no unknown replay",
+      "file": "tools/prepare_d104_macro_core_initial_after_known_partial.py",
+      "lines": "183-221,234-262,304-322",
+      "result": "PASS",
+      "detail": "Remaining allowlist excludes CPI and both output tables. Only new fixed remaining claims and new continuation output are CREATE_NEW. Both old-name and new-name claims for five sources must be absent. UNKNOWN precedes single synchronous HTTP request; raw response is durable before exact ACK parsing. Any error ends FAILED with original retained failures unchanged, no subsequent request or resend."
+    },
+    {
+      "component": "Native service/producer boundaries",
+      "file": "tools/prepare_d104_macro_core_initial_after_known_partial.py",
+      "lines": "139-147,166-172,193-194,235-253",
+      "result": "PASS",
+      "detail": "Actual original failed producer PID/birth is bound to root transcription executor41796 exit1 chunk0c35a3/log and readonly stop record. Fresh current original-PID identity must be absent or strictly later known birth. Every new mutation repeats exact dedicated startup/listener PID/birth/address/module/root and current foreground producer identity; Java ledger absence, formal full census, protected/private generations and old CPI values are checked before each operation."
+    },
+    {
+      "component": "Stable independent COUNT and visibility-only polling",
+      "file": "tools/prepare_d104_macro_core_initial_after_known_partial.py",
+      "lines": "39-99",
+      "result": "PASS",
+      "detail": "Two full metadata/WAL observations bracket independent COUNT; physical disappearance/replacement fails immediately. NULL transaction/count remains raw and cannot hide nonzero actual rows. Transient count/frontier visibility drift triggers only SELECT polling under original<=30s bound, cancellation and capped SQL transport; no mutation replay."
+    },
+    {
+      "component": "Full source/oracle and final actual private closure",
+      "file": "tools/prepare_d104_macro_core_initial_after_known_partial.py",
+      "lines": "102-105,263-284",
+      "result": "PASS_AFTER_FIX",
+      "detail": "Full ordered original physical fields, exact UTC keys/nulls/finite binary64 comparisons and original AST-only oracle match frozen two-month preflight. Fresh eight-table private metadata/WAL/COUNT vector is resampled AFTER complete source reads/oracle/formal/native observations and must equal both current admitted state and pre-readback vector. CPI identity/rows stay unchanged, outputs remain absent, formal and old evidence stay frozen. Success requires exactly10newACK/21newrows."
+    },
+    {
+      "component": "Original readonly partial helper",
+      "file": "tools/review_d104_known_initial_cpi_readonly.py",
+      "result": "PASS_FILE_ONLY",
+      "detail": "Observed actual helper only native/SELECT/file receipt operations; no DDL/DML/publisher/ledger creation. Original retained known claims/raw responses and exact CPI26fields plus metadata/formal stability are recorded; explicit continuation consumer adds strict HTTP200/SQL/rows/claim path and later-birth checks rather than accepting generic FAILED/UNKNOWN."
+    },
+    {
+      "component": "31 frozen pure guards",
+      "file": "tools/test_d104_known_partial_guards.py",
+      "result": "PASS_ROOT_EXECUTED_NOT_REVIEWER",
+      "detail": "Static test inspection covers generation race polling, raw NULL, disappearance/id replacement, cancellation/deadlines, old UNKNOWN rejection, CPI/output mutation rejection, producer reuse/presence, UNKNOWN one-shot+raw-before-ACK and final fresh frontier drift. Root actual final log reports31PASS. Reviewer did not execute Python/imports/tests/native/DB."
+    }
+  ],
+  "resolved_findings": [
+    {
+      "issue": "Old continuation draft reused private_after captured before full source readback/oracle",
+      "fix": "Final frozen d813f036... tool adds final_private_frontier after all full readback/oracle/formal/native checks; finalreceipt saves that actual fresh vector and requires fresh==current==pre-readback. Added3pure cases for fresh-all-eight, post-readback txn/id/count drift and prior-vector mismatch."
+    }
+  ],
+  "root_actual_pure_evidence": {
+    "log": {
+      "path": "artifacts/java-migration/D104/commands/python-known-partial-guards-final-20261007.log",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\python-known-partial-guards-final-20261007.log",
+      "sha256": "129d734aeee11de38e18c7efbe70d43f7d090e8d743d811b7034f513c469dd5f"
+    },
+    "unique_methods": 31,
+    "all_pass": true,
+    "exit_code": 0,
+    "chunk_id": "75e9b6",
+    "source": "Root actual exec report plus saved final31-success log",
+    "prior_28_log_preserved": true,
+    "reruns_not_additive": true
+  },
+  "scope_caveats": [
+    "Recommendation permits only root creation of a separate explicit remaining-five-source admission gate. It does not execute or declare the continuation successful.",
+    "Original source-fixture-initial receipt remains FAILED_PRESERVED. Durable known2ACK allow proof of those exact CPI operations; no UNKNOWN is retried or converted into ACK.",
+    "Current foreground synchronous HTTP contexts close before tool return; producer_sender_stopped is transport scope only, not an assertion that its own Python OS process is absent. Original producer stop is separately proved.",
+    "No Java DDL/materialization/live, August source increment, source revision, upstream D065-D070/provider universe certification, formal mutation/cutover or D105 admission follows from this static record.",
+    "Reviewer performed only file reads/hashes and new review-artifact write. Zero Python imports/execution, DB queries/writes, native checks, Gradle or test runs."
+  ],
+  "reviewer_actions": {
+    "tools_edited": false,
+    "original_evidence_edited": false,
+    "python_executions": 0,
+    "python_imports": 0,
+    "database_queries": 0,
+    "database_writes": 0,
+    "native_checks": 0,
+    "gradle_runs": 0,
+    "test_runs": 0
+  }
+}

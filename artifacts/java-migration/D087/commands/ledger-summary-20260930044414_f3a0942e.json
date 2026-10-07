@@ -1,0 +1,75 @@
+{
+  "ledger": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d087-live-20260930044414_f3a0942e.sqlite3",
+  "runs": [
+    {
+      "runId": "d087-20260929T204421265Z-27d72c4a-d9f0-41fa-bacd-a26d8eb9a7fa",
+      "jobId": "data.l2_intraday_bar_features",
+      "jobVersion": 1,
+      "logicalDate": "2026-09-30",
+      "targetId": "questdb-446564a580c6cb9afcdf0b3d8c8fd39ea2e0d1dca93656acfbbb4d4e340dc099",
+      "state": "VERIFIED",
+      "sourceRows": 759,
+      "submittedRows": 759,
+      "verifiedRows": 759,
+      "reusedRows": 0,
+      "acknowledgedBatches": 12,
+      "sliceCount": 6
+    },
+    {
+      "runId": "d087-20260929T204430013Z-1378d233-3e55-469f-a36a-e1d1295bb77f",
+      "jobId": "data.l2_intraday_bar_features",
+      "jobVersion": 1,
+      "logicalDate": "2026-09-30",
+      "targetId": "questdb-446564a580c6cb9afcdf0b3d8c8fd39ea2e0d1dca93656acfbbb4d4e340dc099",
+      "state": "VERIFIED",
+      "sourceRows": 759,
+      "submittedRows": 759,
+      "verifiedRows": 759,
+      "reusedRows": 0,
+      "acknowledgedBatches": 12,
+      "sliceCount": 6
+    },
+    {
+      "runId": "d087-20260929T204437632Z-fbb0b565-25aa-4ac7-8f55-7a3993c347d6",
+      "jobId": "data.l2_intraday_bar_features",
+      "jobVersion": 1,
+      "logicalDate": "2026-09-30",
+      "targetId": "questdb-446564a580c6cb9afcdf0b3d8c8fd39ea2e0d1dca93656acfbbb4d4e340dc099",
+      "state": "VERIFIED",
+      "sourceRows": 1014,
+      "submittedRows": 1014,
+      "verifiedRows": 1014,
+      "reusedRows": 0,
+      "acknowledgedBatches": 16,
+      "sliceCount": 8
+    },
+    {
+      "runId": "d087-20260929T204443885Z-37a0c879-bf05-4bd8-81c8-424e3993fa95",
+      "jobId": "data.l2_intraday_bar_features",
+      "jobVersion": 1,
+      "logicalDate": "2026-09-30",
+      "targetId": "questdb-446564a580c6cb9afcdf0b3d8c8fd39ea2e0d1dca93656acfbbb4d4e340dc099",
+      "state": "VERIFIED",
+      "sourceRows": 1014,
+      "submittedRows": 0,
+      "verifiedRows": 1014,
+      "reusedRows": 1014,
+      "acknowledgedBatches": 0,
+      "sliceCount": 8
+    },
+    {
+      "runId": "run-89b78c65-d2fa-4729-8860-119f8e5a569a",
+      "jobId": "write.l2_intraday_bar_features",
+      "jobVersion": 1,
+      "logicalDate": "2026-09-30",
+      "targetId": "questdb-446564a580c6cb9afcdf0b3d8c8fd39ea2e0d1dca93656acfbbb4d4e340dc099",
+      "state": "VERIFIED",
+      "sourceRows": 253,
+      "submittedRows": 253,
+      "verifiedRows": 253,
+      "reusedRows": 0,
+      "acknowledgedBatches": 4,
+      "sliceCount": 1
+    }
+  ]
+}

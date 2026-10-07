@@ -1,0 +1,45 @@
+{
+  "task_id": "D102",
+  "decision": "accepted_for_one_finite_java_private_and_formal_SELECT_test",
+  "checked_at": "2026-10-06T13:47:27.121995+00:00",
+  "evidence": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-history-rule-new-attempt-20261006.json",
+      "sha256": "8946651cb61f016209ef19d3b7209a6f5fe0f575374585d8936f681045b03cd3"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\v_etf_market_overview_daily-create-once.json",
+      "sha256": "3c05e4bd186e51500ef1c943368e45152fc8dd5bba5ab3c5b22f4695abb6f683"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\coordinator-review-20261006.json",
+      "sha256": "2201c05e5e05c4b056a5f3170be86ed86c230fb08e1d7dcf42f93c7228fccaef"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-typed-write-20261006.json",
+      "sha256": "6914f8cddb9d1bf638d70d6db7a8100cc3ea3631f141267b4d145ec70dce0cf5"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\QuestDbBoundedReader.java",
+      "sha256": "ebf5ab8099f17254783b0f6697444b4e244c4ad2febe11e177b5705bca1c30af"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\EtfMarketOverviewDailyViewLiveAcceptanceTest.java",
+      "sha256": "e1926d3de4fae648f21816ba25170b3fb1f8870f6cc6d859d9085b0f3812aa8e"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-private-view-history-rule-admission-20261006.json",
+      "sha256": "40d9dba569c4c296fcb69e022150c1fb36ff4319fa942b82054ca9ab48ad4900"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-reader-timeout-review-20261006.json",
+      "sha256": "42f01efb8aa9785cbb6d82d130ecabc431bbf2fc52309fac8b5d561d0b736669"
+    }
+  ],
+  "scope": "D102_LIVE_READ=true; one method over three actual source days, private 18832 and formal readonly; actual page/cursor/readgroup/exact binary64 comparisons",
+  "java_unique_pure_precondition": 129,
+  "actual_source_revision_during_test": false,
+  "ddl_source_cache_coverage_owner_refresh_and_formal_writes": 0,
+  "next_task_admitted": false,
+  "human_review": "pending_review"
+}

@@ -1,0 +1,110 @@
+{
+  "planOnly": true,
+  "skipExtract": false,
+  "archiveRoot": "D:\\BaiduNetdiskDownload\\202609",
+  "rawRoot": "D:\\l2-native-raw",
+  "outputRoot": "D:\\l2-native-features",
+  "dates": [
+    "20260928",
+    "20260929",
+    "20260930"
+  ],
+  "workers": 4,
+  "archives": [
+    {
+      "date": "20260928",
+      "path": "D:\\BaiduNetdiskDownload\\202609\\20260928.7z",
+      "exists": true,
+      "compressedBytes": 5054614541,
+      "modifiedUtc": "2026-10-06T18:41:17.6640327Z",
+      "extractionExecutable": "C:\\Program Files\\7-Zip\\7z.exe",
+      "extractionArguments": [
+        "x",
+        "-y",
+        "D:\\BaiduNetdiskDownload\\202609\\20260928.7z",
+        "-oD:\\l2-native-raw",
+        "-bsp0"
+      ],
+      "extractedDateDirectory": "D:\\l2-native-raw\\20260928"
+    },
+    {
+      "date": "20260929",
+      "path": "D:\\BaiduNetdiskDownload\\202609\\20260929.7z",
+      "exists": true,
+      "compressedBytes": 4565383460,
+      "modifiedUtc": "2026-09-29T15:47:59.7254899Z",
+      "extractionExecutable": "C:\\Program Files\\7-Zip\\7z.exe",
+      "extractionArguments": [
+        "x",
+        "-y",
+        "D:\\BaiduNetdiskDownload\\202609\\20260929.7z",
+        "-oD:\\l2-native-raw",
+        "-bsp0"
+      ],
+      "extractedDateDirectory": "D:\\l2-native-raw\\20260929"
+    },
+    {
+      "date": "20260930",
+      "path": "D:\\BaiduNetdiskDownload\\202609\\20260930.7z",
+      "exists": true,
+      "compressedBytes": 4501980409,
+      "modifiedUtc": "2026-10-06T18:35:39.1532733Z",
+      "extractionExecutable": "C:\\Program Files\\7-Zip\\7z.exe",
+      "extractionArguments": [
+        "x",
+        "-y",
+        "D:\\BaiduNetdiskDownload\\202609\\20260930.7z",
+        "-oD:\\l2-native-raw",
+        "-bsp0"
+      ],
+      "extractedDateDirectory": "D:\\l2-native-raw\\20260930"
+    }
+  ],
+  "rawDrive": {
+    "root": "D:\\",
+    "freeBytes": 847758524416,
+    "totalBytes": 2000381014016
+  },
+  "outputDrive": {
+    "root": "D:\\",
+    "freeBytes": 847758524416,
+    "totalBytes": 2000381014016
+  },
+  "minimumFreeBytesForExtraction": 160000000000,
+  "extractionCapacitySufficient": true,
+  "archiveExpandedBytes": null,
+  "capacityNote": "Expanded size is not inferred from prior archives. The extraction free-space gate reserves 160 GB; compressed file sizes above are read from the requested archives.",
+  "nativeTask": "l2DailyFeatureBatch",
+  "nativeArguments": [
+    "--source-root",
+    "D:\\l2-native-raw",
+    "--output-root",
+    "D:\\l2-native-features",
+    "--dates",
+    "20260928,20260929,20260930",
+    "--workers",
+    "4",
+    "--resume",
+    "true"
+  ],
+  "resume": true,
+  "nativeInvocation": {
+    "executable": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\gradlew.bat",
+    "workingDirectory": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData",
+    "task": "l2DailyFeatureBatch",
+    "arguments": [
+      "--no-daemon",
+      "--console=plain",
+      "--project-cache-dir",
+      "D:\\l2-native-features\\run-20261007-164509-5362ff89\\gradle-project-cache",
+      "--init-script",
+      "D:\\l2-native-features\\run-20261007-164509-5362ff89\\native-arguments.init.gradle",
+      "-Pl2CleaningArgumentsFile=D:\\l2-native-features\\run-20261007-164509-5362ff89\\native-arguments.json",
+      "-Pl2CleaningBuildDirectory=D:\\l2-native-features\\run-20261007-164509-5362ff89\\gradle-build",
+      "l2DailyFeatureBatch"
+    ],
+    "isolatedBuildDirectory": "D:\\l2-native-features\\run-20261007-164509-5362ff89\\gradle-build",
+    "projectCacheDirectory": "D:\\l2-native-features\\run-20261007-164509-5362ff89\\gradle-project-cache",
+    "argumentsTransport": "UTF-8 JSON file read by a temporary Gradle init script; no shell command interpolation."
+  }
+}

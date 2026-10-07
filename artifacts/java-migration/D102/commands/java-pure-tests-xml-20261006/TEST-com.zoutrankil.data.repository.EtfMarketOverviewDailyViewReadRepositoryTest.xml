@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-06T12:26:45.889Z" hostname="AMD395" time="1.299">
+  <properties/>
+  <testcase name="explicitHalfOpenRangeAndPhysicalVectorCursorPassThroughToTheSharedReader()" classname="com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest" time="1.224"/>
+  <testcase name="completeExplicitQueryUsesTheBusinessMapperAndPreservesTheReadersActualSourceToken()" classname="com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest" time="0.017"/>
+  <testcase name="invalidDateRangePageBudgetOrMissingQueryFailBeforeReaderInteraction()" classname="com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest" time="0.023"/>
+  <testcase name="completeDateKeyAndDateConvenienceUseExactEqualityWithoutAQueryRangeOrGeneration()" classname="com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest" time="0.006"/>
+  <testcase name="theRepositoryRequiresItsSharedReaderAndCreatesNoIndependentPublisher()" classname="com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest" time="0.003"/>
+  <testcase name="exactlyThirtyOneCalendarDaysAndRowsArePermittedWithoutExpandingTheQuery()" classname="com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest" time="0.001"/>
+  <testcase name="unsettledOrChangedSourceFailurePropagatesInsteadOfBecomingAnEmptyPage()" classname="com.zoutrankil.data.repository.EtfMarketOverviewDailyViewReadRepositoryTest" time="0.016"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\zouqiang\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.18.11\82212e5b3633e7a65fca8bec525762cfb6c9bae4\byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

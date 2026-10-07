@@ -1,0 +1,278 @@
+{
+  "task_id": "D104",
+  "protocol_version": 1,
+  "record_date": "2026-10-07",
+  "status": "PASS",
+  "review_kind": "Independent current Java admission/reader delta static supplement",
+  "recommendation": "PASS_STATIC_SUPPLEMENT_ONLY",
+  "blockers": [],
+  "actual_java_live_claimed": false,
+  "next_task_admitted": false,
+  "D105_admitted": false,
+  "bindings": [
+    {
+      "path": "src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyLiveAcceptanceTest.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\MacroCoreMonthlyLiveAcceptanceTest.java",
+      "sha256": "16d58149057ae21b990fac244b47a348d92afff232bcf3969914597062027c3a"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuard.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\QuestDbMacroCoreReadGuard.java",
+      "sha256": "7e2baa42f6e79efae168524eecf2acefc397c790ebb2df18280319aeb7277d4f"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuardTest.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\repository\\QuestDbMacroCoreReadGuardTest.java",
+      "sha256": "dfb13c914575afeb5cd3dde1094471292a2d901312489cabfe4c288699e1bcab"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlySourceTest.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\service\\MacroCoreMonthlySourceTest.java",
+      "sha256": "9c76589e1236b0783b454d458d46cf8c219c17352e1538fc11dd1534b8b0f14b"
+    },
+    {
+      "path": "tools/record_d104_java_terminal_readonly.py",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\record_d104_java_terminal_readonly.py",
+      "sha256": "25679aa699d8a50232fd2700fda23ff4687432f6035e2723ae8c1afb1786d973"
+    }
+  ],
+  "preserved_prior_review": {
+    "path": "artifacts/java-migration/D104/commands/coordinator-shared-wiring-static-review-20261007.json",
+    "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-shared-wiring-static-review-20261007.json",
+    "sha256": "053e47c51791fd370f7e7be403459fcfabdc13bf263d668891e1f8b750e580d4"
+  },
+  "independent_other_author_domain_storage_review": {
+    "path": "artifacts/java-migration/D104/commands/coordinator-domain-storage-static-review-supplement-20261007.json",
+    "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-domain-storage-static-review-supplement-20261007.json",
+    "sha256": "c8e7435ccfa88bcd8f51e3fd8db19b1a891b7505912bf90437f23e6be6522d23"
+  },
+  "author_owned_nullable_fix_inventory_not_independent_self_review": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyWritePort.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\MacroCoreMonthlyWritePort.java",
+      "sha256": "b60a7dc724f1e08ede6ac85915a1ab2e1739b6ffc44f6607932cc73e8747ef35"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/repository/MacroCoreMonthlyWritePortTest.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\repository\\MacroCoreMonthlyWritePortTest.java",
+      "sha256": "7ea018e596bafb99a899d40d746a73b9472a9e7b2ccdac66c9073524fe546a40"
+    }
+  ],
+  "unchanged_source_adapter_job_bindings": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlySource.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\MacroCoreMonthlySource.java",
+      "sha256": "346d30361bd8b93716a8ed8fb3bbc515a90415b95656ada582619ee4b9633f7d"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyMaterializeAdapter.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\MacroCoreMonthlyMaterializeAdapter.java",
+      "sha256": "e2159f02b82a635b2f9b62d599f0f1d4f5e1c084d83e44925839dcaa7227d354"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyJobService.java",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\MacroCoreMonthlyJobService.java",
+      "sha256": "f94129a0ce97cc8d2eefb0f5ea2125b82ba9c7c5551584f2a849fbd857938d2b"
+    }
+  ],
+  "checks": [
+    {
+      "file": "src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyLiveAcceptanceTest.java",
+      "lines": "25-53,58-104",
+      "result": "PASS_AFTER_EXACT_SET_FIX",
+      "detail": "Stage-specific coordinator admission path/SHA, decision, bounded rows2/perbatch, no source/formal write/no retry; source fixture/preflight/startup/source review files are rehashed. SourceReview must be task D104/protocol1/current stage VERIFIED_COMPLETE_SOURCE status and bind exact fixture SHA. CODE_PATHS is exactly28 unique required implementation/test paths including the harness; admission must have same count, no duplicates, exact normalized path set and correct SHA for every item. Empty/missing/unrelated code lists fail before connections."
+    },
+    {
+      "file": "src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyLiveAcceptanceTest.java",
+      "lines": "105-202",
+      "result": "STATIC_PASS_NOT_EXECUTED",
+      "detail": "All gates precede native/SQL/DDL. Accurate JVM birth CREATE_NEW before IO; prior full six-source/formal oracle and every actual write-boundary sameBatch/native identity remain in place. Original once UNKNOWN setup claim and immutable stage artifact are retained; source mutation is outside Java harness. Prefix append writes only bounded July-August overlap2 and verifies complete target June-August3; runtime actual gate/source evidence must exist first."
+    },
+    {
+      "file": "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuard.java",
+      "lines": "80-95",
+      "result": "PASS_AFTER_POSITIVE_TXN_FIX",
+      "detail": "Any nullable physical/WAL/row-count frontier requires known physical txn null/0 and WAL/writer/sequence/pending/buffer zero; independent COUNT0 is bracketed by exact raw metadata equality. Positive physicalTxn with nullable WAL/row metadata fails before COUNT, rather than being accepted as an uninitialized empty state."
+    },
+    {
+      "file": "src/test/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuardTest.java",
+      "result": "STATIC_PASS_ROOT_EXTERNAL24PASS",
+      "detail": "Focused positive physical transaction case extends prior nullable/stability/cursor coverage; final archived24tests all pass without altering whole schema/generation guard semantics."
+    },
+    {
+      "file": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlySourceTest.java",
+      "lines": "81-86,158-176",
+      "result": "PASS_TEST_FIX_ONLY_ROOT_EXTERNAL24PASS",
+      "detail": "Wrong raw timestamp carrier is passed directly to derive validator; a LocalDate-casting mock window filter no longer raises an unrelated ClassCastException before the production contract validation. Real JDBC period reader remains strict UTC/midnight/null validation. No production behavior or expected domain value weakened."
+    },
+    {
+      "file": "tools/record_d104_java_terminal_readonly.py",
+      "result": "STATIC_PASS_NOT_EXECUTED",
+      "detail": "Terminal consumer preserves nullable Double slot count16/24 separately from nonnull IEEE-bit count15/22. Success receipt, known JVM identity+birth, actual JUnit/exec completion and five readonly SQLite table closures remain required; no mutation, automatic repair or prior failure overwrite."
+    }
+  ],
+  "resolved_findings": [
+    {
+      "issue": "Live admission code_bindings loop admitted an empty or incomplete binding list",
+      "resolution": "Fixed required28-file set/count/unique normalized paths and each SHA now enforced before IO."
+    },
+    {
+      "issue": "Nullable empty frontier admitted positive physical transaction",
+      "resolution": "Root guard rejects positive physicalTxn in nullable path, focused24thguardcase passes. Author Port matches same parent-requested boundary; independently reviewed by sibling domain/storage reviewer, not self-certified here."
+    }
+  ],
+  "external_actual_pure_evidence": {
+    "origin": "Root-executed archived JUnit XML and saved Gradle log; reviewer only parsed/hashed files",
+    "final_nine_classes_tests": 121,
+    "catalog_unique_tests": 1,
+    "total_unique_pure": 122,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "final_xml_bindings": [
+      {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.cli.MacroCoreMonthlyCommandsTest.xml",
+        "sha256": "876bf63df47257ad0b7cccaa976b7ca38d7a357747bebdb01912ffb42d4299d5",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.mapper.MacroCoreMonthlyMappingTest.xml",
+        "sha256": "2d9fab7792de871e0200fe16f579f72eb82186cc781040ade8059698ebc94f85",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyReadRepositoryTest.xml",
+        "sha256": "57ae7aa9afb4f4970527ce828af04010de6bef1a66a4e65128d1804d7f2112ff",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.repository.MacroCoreMonthlyWritePortTest.xml",
+        "sha256": "e5ac0a5b0b39a2206b794fa4aea60b43abf9a1fee0013ee85ab54199cfe0a237",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.repository.QuestDbMacroCoreReadGuardTest.xml",
+        "sha256": "356f32a14d8ff644a3c5c95c6130da8bd2e6eee01db14efd553acf373ac0697f",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyJobServiceTest.xml",
+        "sha256": "3658342177ced780a6eed6ff4ac1a68d05488010d9063b18a34b24fbf1d21ad7",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyMaterializeAdapterTest.xml",
+        "sha256": "e76975740d54b5c6708fc19a6e4146a3899423742e7cc48214123669697f317e",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlySourceTest.xml",
+        "sha256": "604caaa8fe27199275aed2e7c7c89949be6a10cb33528d8e280b65cb0d39139b",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyWriteGroupPreflightTest.xml",
+        "sha256": "40185192da83db3a345fd8a7bedce083841542248b9f63f447d6e32c7ba2e18c",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "catalog_xml_binding": {
+      "path": "artifacts/java-migration/D104/commands/java-pure-tests-initial-failed-20261007/TEST-com.zoutrankil.data.service.MacroCoreMonthlyCatalogStartupTest.xml",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-initial-failed-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlyCatalogStartupTest.xml",
+      "sha256": "781ee14e177705c71069947b953d5d223f0506d28b2b684ec5ff81852923264c"
+    },
+    "final_log": {
+      "path": "artifacts/java-migration/D104/commands/java-pure-tests-final-20261007.log",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-final-20261007.log",
+      "sha256": "0adcacc0815f3669bec0bea369ec062f77b7bc9061c3a2212147a0f74b3aefae"
+    },
+    "initial_failed_log": {
+      "path": "artifacts/java-migration/D104/commands/java-pure-tests-initial-20261007.log",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-initial-20261007.log",
+      "sha256": "153273d13526a4188973126db33f1d02ed59c794ea452d0baac34361ced0f7b0"
+    },
+    "initial_failed_source_xml": {
+      "path": "artifacts/java-migration/D104/commands/java-pure-tests-initial-failed-20261007/TEST-com.zoutrankil.data.service.MacroCoreMonthlySourceTest.xml",
+      "absolute_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-pure-tests-initial-failed-20261007\\TEST-com.zoutrankil.data.service.MacroCoreMonthlySourceTest.xml",
+      "sha256": "03f348dc4f3c79a19bdb9c2cc8722dbb87dc2ae9e5e909127ee12c4c616fef51"
+    },
+    "initial_run_tests": 120,
+    "initial_failed_run_added_to_unique_pass_count": false,
+    "initial_failure_preserved": true,
+    "method_id_deduplication": "classname#testcase-name, selected final121 plus independently PASS catalog1 only"
+  },
+  "exact_admission_code_inventory": [
+    "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthly.java",
+    "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyKey.java",
+    "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyDataset.java",
+    "src/main/java/com/zoutrankil/data/domain/JobDefinitionJson.java",
+    "src/main/java/com/zoutrankil/data/mapper/MacroCoreMonthlyMapper.java",
+    "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyReadRepository.java",
+    "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyWritePort.java",
+    "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuard.java",
+    "src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+    "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlySource.java",
+    "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyMaterializeAdapter.java",
+    "src/main/java/com/zoutrankil/data/service/MacroCoreMonthlyJobService.java",
+    "src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
+    "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+    "src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
+    "src/main/java/com/zoutrankil/data/cli/MacroCoreMonthlyCommands.java",
+    "src/main/java/com/zoutrankil/data/cli/CommandLineRunner.java",
+    "src/test/java/com/zoutrankil/data/mapper/MacroCoreMonthlyMappingTest.java",
+    "src/test/java/com/zoutrankil/data/repository/MacroCoreMonthlyReadRepositoryTest.java",
+    "src/test/java/com/zoutrankil/data/repository/MacroCoreMonthlyWritePortTest.java",
+    "src/test/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuardTest.java",
+    "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlySourceTest.java",
+    "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyMaterializeAdapterTest.java",
+    "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyJobServiceTest.java",
+    "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyWriteGroupPreflightTest.java",
+    "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyCatalogStartupTest.java",
+    "src/test/java/com/zoutrankil/data/cli/MacroCoreMonthlyCommandsTest.java",
+    "src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyLiveAcceptanceTest.java"
+  ],
+  "limits": [
+    "This record is static supplement only; actual initial/increment Java live success is not claimed or executed by reviewer.",
+    "Original reviews and failed120test evidence remain immutable; later statuses/admission gates and data reviews are separate.",
+    "Source-fixture remaining preparation reported complete by root but its actual full-source readonly review is outside this Java delta review.",
+    "No August increment tool admission, source revision/provider universe/production cutover or D105 admission is granted.",
+    "Author-owned domain/mapper/repository/write Port independent correctness is excluded from self-review; current own Port/Test are inventory only and have a separate sibling review."
+  ],
+  "reviewer_actions": {
+    "source_changes": 0,
+    "test_runs": 0,
+    "gradle_runs": 0,
+    "python_executions": 0,
+    "database_queries": 0,
+    "database_writes": 0,
+    "native_checks": 0,
+    "old_evidence_changes": 0
+  }
+}

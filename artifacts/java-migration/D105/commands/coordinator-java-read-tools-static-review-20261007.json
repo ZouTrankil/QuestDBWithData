@@ -1,0 +1,24 @@
+{
+  "protocol_version": 1,
+  "task_id": "D105",
+  "status": "PASS",
+  "reviewer": "/root/d095_scripts",
+  "review_kind": "Independent static file-only review of root-authored bounded Java read admission and final readonly terminal tools",
+  "blockers": [],
+  "bindings": [
+    {"path": "tools/admit_d105_java_view_read.py", "sha256": "7966a170f4f04cb6a762f37ecc4a8a780d4d5d12443f0b07e517c27c385375ca"},
+    {"path": "tools/record_d105_readonly_terminal.py", "sha256": "1fe0a2b03dafbe0eb61962210230dc5f7ffd390fec3932b472b6e1863a3c2b88"}
+  ],
+  "findings": [
+    "The admission tool accepts only the fixed private/formal scopes, immutable successful D105 full-value audit and current reviewed harness. It freezes current Java code/evidence hashes before JDBC reads without permanently rechecking obsolete D104 shared-source snapshots.",
+    "Private admission preserves the real prior CREATE as exactly one attempted/acknowledged DDL with literal raw native ACK bytes. It performs fresh exact root/PID/birth/listener attestation, original creator identity absence and all-five-table readonly ledger quiescence. The admitted Java operation budget itself remains SELECT-only.",
+    "The terminal tool requires two actual matching-scope Java success receipts and separate one-test zero-failure/error/skip XMLs, actual executor completions/logs, and a pre-connection recorded JVM PID/OS birth whose stopped original identity is independently queried. It never manufactures a stopped writer identity or invokes a business owner.",
+    "Fresh private/formal audit_target calls fully recheck three-month nine-column values against base and the original frozen D104 oracle, source full-field readback, native view metadata/schema and protected seven-table snapshots. After cross-scope reads the final closure independently rechecks protected_state, views(), schema and native view_physical for both targets.",
+    "Original D104 five SQLite tables are mode=ro/query_only read and must remain exactly equal before/after and to the accepted creator receipt: 9 runs,21 entries,85 events,1 group,0 leases. Source/output/formal/ledger mutation budgets are zero. Root actual execution of this draft is required before any final data acceptance.",
+    "June/July repeat and July/August window expansion reuse the accepted D104 source append/base publication. Both actual_source_increment and actual_source_revision remain false for D105; no independent View job, refresh, checkpoint or direct business writer is claimed."
+  ],
+  "limits": "This is a static review, not a Java read or terminal execution result. It recommends the bounded read tools only; D106 remains unadmitted until actual receipts, final readonly closure, unique validation inventory and independent final cross-stage review pass.",
+  "executed_by_reviewer": {"database_queries": 0, "native_queries": 0, "tests": 0, "gradle": 0, "owner_invocations": 0, "registration_edits": 0},
+  "existing_evidence_modified": false,
+  "D106_admitted": false
+}

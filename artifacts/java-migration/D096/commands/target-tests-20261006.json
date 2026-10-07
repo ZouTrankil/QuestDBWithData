@@ -1,0 +1,111 @@
+{
+  "suites": [
+    {
+      "name": "com.zoutrankil.data.config.MarketBreadthDailyViewLiveAcceptanceTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "realAliasPagesAndConfiguredReadGroupMatchEverySourceAggregateField()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.mapper.MarketBreadthDailyV1MappingTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "allSevenFieldsRoundTripIncludingNullableAggregates()",
+        "definitionUsesNaturalDailyKeyAndRejectsDirectWrites()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.mapper.MarketBreadthDailyViewMappingTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "repositoryForwardsExactKeyAndExclusiveRangeWithBoundedPageAndCursor()",
+        "ordinaryAliasContractHasIndependentExplicitBindingAndRejectsDirectWrites()",
+        "repositoryRejectsInvalidRangesAndPageBudgetsBeforeDatabaseReads()",
+        "allSevenFieldsPassThroughWithExactDateAndAggregateUnits()",
+        "nonMidnightCarriersMissingRequiredFieldsAndWrongTypesAreRejected()",
+        "nullAggregatesStayNullAndNullChangeRowsAreNotCountedAsFlat()",
+        "invalidCountsIncludingOverflowAndNonfiniteAggregatesAreRejected()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.repository.QuestDbBoundedReaderTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "typedCalendarRangesNullsAndPrecisionAreStrict()",
+        "cursorUsesCompleteLexicographicKeyAndCannotCrossQueryOrVersion()",
+        "filterValuesAreBoundAndUnknownFieldsFailBeforeSql()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.repository.QuestDbMaterializedViewReadGuardTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "recreatedViewOrBaseCannotReuseMatchingTransactionCounters()",
+        "fixedNativeMvSqlAllowsOnlyWhitespaceAndCaseNormalization()",
+        "missingPhysicalVersionFailsBeforeFetchingRows()",
+        "independentPhysicalAndWalCountersAreAcceptedWhenWalIsSettled()",
+        "rangeRefreshBetweenPagesRejectsCursorEvenWithTheSameBaseCheckpoint()",
+        "sameNameFreshMvWithWrongBaseOrAggregationFailsOnItsFirstPage()",
+        "fullRefreshDuringReadRejectsThePageEvenWithTheSameBaseCheckpoint()",
+        "stableSnapshotBindsCursorToBaseAndPhysicalMvIdentityAndVersion()",
+        "invalidLaggingOrUnappliedWalStatesFailBeforeFetchingRows()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.repository.QuestDbViewDependencyReadGuardTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "aliasStatusDirectoryAndExactDependencySqlAreRequiredBeforeReadingRows()",
+        "validAliasRejectsSameNameFreshMvWithWrongBaseOrAggregationOnItsFirstPage()",
+        "registeredAliasRejectsMissingOrWrongDependencyBeforeReadingMetadataOrRows()",
+        "aliasCannotFallbackToAnOrdinaryTableOrAnAbsentMv()",
+        "recreatedAliasSqlHashOrStatusHistoryCannotReuseAnOldCursor()",
+        "existingStockBasicLatestWithTableDependencyKeepsCallerVersionAndSkipsMvAliasMetadata()",
+        "stableAliasBindsDirectorySqlAndCompleteNativeMvVersionToItsCursor()",
+        "aliasChangesDuringDependencySnapshotOrRowReadRejectThePage()",
+        "aliasCursorRejectsChangedMvOrBasePhysicalVersionWithUnchangedCheckpoint()",
+        "aliasCursorRejectsRecreatedBaseOrMvWithMatchingTransactionCounters()",
+        "registeredAliasRejectsMultipleDependenciesBeforeReadingMetadataOrRows()",
+        "datasetDefinitionChangeRejectsAliasCursorBeforeFetchingAnotherPage()",
+        "mvRefreshDuringAliasReadRejectsTheFetchedPage()",
+        "validAliasRejectsInvalidLaggingUnsettledOrSuspendedMvBeforeFetchingRows()"
+      ]
+    },
+    {
+      "name": "com.zoutrankil.data.service.ReadGroupReaderTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "cancellationPreservesCompletedPageAndDoesNotReadLaterMembers()",
+        "failuresRemainDistinctFromEmptyPagesAndDoNotHideOtherMembers()",
+        "heterogeneousRowsKeepTheirOwnQueriesVersionsAndCursors()",
+        "duplicateMembersAndUnboundedAggregateRequestsAreRejected()"
+      ]
+    }
+  ],
+  "tests": 40,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0
+}

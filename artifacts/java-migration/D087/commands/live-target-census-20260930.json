@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-09-30T04:45:10+08:00",
+  "query": "SELECT count() FROM each explicit java_d087_l2_intraday_bar_features_* target",
+  "formalTableMutated": false,
+  "targets": [
+    {
+      "table": "java_d087_l2_intraday_bar_features_20260930043747_40237641",
+      "rows": 0,
+      "attempt": "initial live plan",
+      "outcome": "empty-target aggregate behavior exposed and fixed"
+    },
+    {
+      "table": "java_d087_l2_intraday_bar_features_20260930044024_c3f582fd",
+      "rows": 1014,
+      "attempt": "acceptance registry setup iteration",
+      "outcome": "sync and readback runs verified; temporary test registry dependency was incomplete"
+    },
+    {
+      "table": "java_d087_l2_intraday_bar_features_20260930044235_5a5e3f74",
+      "rows": 1014,
+      "attempt": "acceptance registry setup iteration",
+      "outcome": "sync and readback runs verified; temporary test registry omitted the D001 calendar dependency"
+    },
+    {
+      "table": "java_d087_l2_intraday_bar_features_20260930044414_f3a0942e",
+      "rows": 1014,
+      "attempt": "accepted live run",
+      "outcome": "all D087 acceptance checks verified"
+    }
+  ],
+  "cleanup": "No failed isolated acceptance table was dropped; they remain distinguishable from the formal table and are retained as failure evidence."
+}

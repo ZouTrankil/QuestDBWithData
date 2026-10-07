@@ -1,0 +1,27 @@
+{
+  "source": "saved real CSIndex XLS",
+  "rawFile": "artifacts\\java-migration\\D021\\provider-diagnostic\\e64d384cefce46d6aa7a36293b25dc3e\\source\\csindex-000300-72bc4c9bd1be88f7d2c16e5a54f74777f4f43a768629699d22698a83f86c8e71.xls",
+  "rawSha256": "72bc4c9bd1be88f7d2c16e5a54f74777f4f43a768629699d22698a83f86c8e71",
+  "columns": [
+    "日期Date",
+    "指数代码 Index Code",
+    "指数名称 Index Name",
+    "指数英文名称Index Name(Eng)",
+    "成份券代码Constituent Code",
+    "成份券名称Constituent Name",
+    "成份券英文名称Constituent Name(Eng)",
+    "交易所Exchange",
+    "交易所英文名称Exchange(Eng)",
+    "权重(%)weight"
+  ],
+  "rows": 300,
+  "tradeDates": [
+    "20260831"
+  ],
+  "indexCodes": [
+    "000300"
+  ],
+  "uniqueRawConstituents": 300,
+  "dataRowsWritten": 0,
+  "note": "Independent pandas/xlrd inspection of source binary; not a QuestDB acceptance claim."
+}

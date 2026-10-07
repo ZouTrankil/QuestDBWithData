@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.PersistentWriteGroupRunnerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-06T09:27:34.420Z" hostname="AMD395" time="21.742">
+  <properties/>
+  <testcase name="missingCurrentValueRefusesReuseAndDoesNotRepairOrStartLaterMember()" classname="com.zoutrankil.data.service.PersistentWriteGroupRunnerTest" time="0.646"/>
+  <testcase name="secondTargetFailureReopensLedgerAndReusesFirstWithFreshReadback()" classname="com.zoutrankil.data.service.PersistentWriteGroupRunnerTest" time="0.796"/>
+  <testcase name="mismatchedMemberBindingsFailBeforeAnyRunOrWrite()" classname="com.zoutrankil.data.service.PersistentWriteGroupRunnerTest" time="0.008"/>
+  <testcase name="unknownFirstDeliveryRetainsInDoubtAndCannotBeAutoReplayed()" classname="com.zoutrankil.data.service.PersistentWriteGroupRunnerTest" time="20.29"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

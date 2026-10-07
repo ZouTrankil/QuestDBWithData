@@ -1,0 +1,540 @@
+{
+  "checkpointVersion" : "l2-native-batch-v1",
+  "date" : "20260930",
+  "sourceDirectory" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\raw\\20260930",
+  "computeFingerprint" : "a3b6545e0a6b9ec1628d6c64aff7ba6663ea2cd5ee4a00d0a1150235c1a93961",
+  "featureVersion" : "v1.3",
+  "parserVersion" : "dfcf_csv_v1.2",
+  "workers" : 4,
+  "startedAt" : "2026-10-07T08:38:17.315320900Z",
+  "updatedAt" : "2026-10-07T08:38:39.494252700Z",
+  "status" : "COMPLETE",
+  "published" : true,
+  "aggregateSha256" : "bf94e8dce1989c80773e8a8e6b051cd60ce2cec2ab77c52a66cc904ee4d9b2d9",
+  "discoveredCanonicalSymbols" : 15,
+  "selection" : {
+    "allDiscoveredCanonicalSymbols" : 15,
+    "requestedNotPresent" : [ ],
+    "excludedByUniverse" : 0,
+    "requestedUniverseSize" : null,
+    "selectedCanonicalSymbols" : 15
+  },
+  "counts" : {
+    "success" : 15,
+    "empty" : 0,
+    "failed" : 0,
+    "resumed" : 0
+  },
+  "ignoredEntries" : [ ],
+  "symbols" : [ {
+    "symbol" : "000001.SZ",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "000001.SZ" ],
+    "inputFingerprint" : "33ad3dc55c3aecc431a1efcfbcf4b85de7e5b8de1166a232350b39182b88f327",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "a92c3aa3834a95050afdda32c71ad71c2849435d2f5b5a3c41cb083cb3369c68",
+        "bytes" : 7856367,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "26bf83efe786adb098e9085732f24e2d2ed9af88797df2e81870b9ae11bf0d97",
+        "bytes" : 6885198,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "e06114c1ef5e10f8a331e73f72e4bdcfce570ac9dfb9e72ad2aed655259d9e2a",
+        "bytes" : 2068684,
+        "present" : true
+      }
+    },
+    "resultSha256" : "642c19217eaeb7f0a0a9e37dd132f79cb255853bc12985f4e009bc12b7767c8e",
+    "rows" : {
+      "rawQuotes" : 4817,
+      "orders" : 128779,
+      "rawOrders" : 107793,
+      "deals" : 99528,
+      "rawDeals" : 99528,
+      "quotes" : 4817
+    },
+    "elapsedSeconds" : 1.3765111,
+    "error" : null
+  }, {
+    "symbol" : "001246.SZ",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "001246.SZ" ],
+    "inputFingerprint" : "edebe2929f4e09221deaa68dc27db188130fb1d5f8dbf5418c80c34d50a03c7d",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "019bda13409d494a6b4ba4a0e82183425088e87dc63d42070d9fea90341dce75",
+        "bytes" : 96934804,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "ed1904eac21e5885886b0f322449160a1313b3ab839c8336f698444fe5c546bc",
+        "bytes" : 87973434,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "f377f577668b611befc1524b6d0c35fc6abe9a41c27eaf868abfc41c33d5d9d3",
+        "bytes" : 1816316,
+        "present" : true
+      }
+    },
+    "resultSha256" : "4b68f2a5d80fa003742d5adc0edd14f8e5f1ba29e10c39893ef7fed792dc95b4",
+    "rows" : {
+      "rawQuotes" : 4634,
+      "orders" : 2055437,
+      "rawOrders" : 1396616,
+      "deals" : 1308210,
+      "rawDeals" : 1308210,
+      "quotes" : 4634
+    },
+    "elapsedSeconds" : 16.6489998,
+    "error" : null
+  }, {
+    "symbol" : "111024.SH",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "111024.SZ" ],
+    "inputFingerprint" : "4babfc61fd0990c3756b467cd4c6f75ee88e88fa6a64177322643e1f061431e1",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "3c8a0345c695001d3ea81df8a16d91eddde11338367680ba91150c7e15c955c8",
+        "bytes" : 16476271,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "4fc865978d2ab786e1df8ea5dbfadff9b40cdfa5de6f1706e6f1d58f9d3fb2a7",
+        "bytes" : 126338149,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "7e3ba1853906bfce54565eb7ac494a4f79d4bb2a264bde609f75406d5aa26c04",
+        "bytes" : 1763950,
+        "present" : true
+      }
+    },
+    "resultSha256" : "bc8c4ff6d8659262daca243989a4b7a138b1a0961e9b6f2f2bc5f7534980c3ce",
+    "rows" : {
+      "rawQuotes" : 4994,
+      "orders" : 2017953,
+      "rawOrders" : 2017956,
+      "deals" : 208091,
+      "rawDeals" : 208091,
+      "quotes" : 4994
+    },
+    "elapsedSeconds" : 10.9967238,
+    "error" : null
+  }, {
+    "symbol" : "159915.SZ",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "159915.SZ" ],
+    "inputFingerprint" : "b41575bd83a7d48fedcadae419a14ec3044ddb7a97383e92e0a3fe7c8713e711",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "39cfc1a60aaced64d6e9a20c83c19ec2a6447f26fa7f1a07fdf9e0a3e4f85e6f",
+        "bytes" : 21791061,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "bce7dc28a821cee300ff0f6cc06e1a26b7d0be9098468050975dd37d1867512a",
+        "bytes" : 20095181,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "2c87d8162da43a3c40436fbd80426180c95e1ed75ca4d794c460989ebaf779c3",
+        "bytes" : 2016459,
+        "present" : true
+      }
+    },
+    "resultSha256" : "c6f90a3f92e10ac85fb09e5d2fe57b6d08b9b7c8793cf01ced76aa1e6569a5d4",
+    "rows" : {
+      "rawQuotes" : 4840,
+      "orders" : 514545,
+      "rawOrders" : 318478,
+      "deals" : 301461,
+      "rawDeals" : 301461,
+      "quotes" : 4840
+    },
+    "elapsedSeconds" : 3.6832547,
+    "error" : null
+  }, {
+    "symbol" : "204001.SZ",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "204001.SZ" ],
+    "inputFingerprint" : "b1d6a984605d5d8da2814dfe5fade5c1216ee0d37792daeb666609fbdca57456",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "e29c1e81929a751b69290a80a9aceac3cd30d5c11f561c5c2986177b896c22d3",
+        "bytes" : 181085383,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "1dfaf5e296a2cbded2e0f509aeca74bccf478edda3b18f4cf7651d48d3220727",
+        "bytes" : 177825021,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "ddd964fb30badf007cb979787f12d7e5caa064715ce40cb67c3035255ea16e71",
+        "bytes" : 2075343,
+        "present" : true
+      }
+    },
+    "resultSha256" : "7bb144e649b958cd41d47ddb1457b06268a0ecbbce1f3a1d89421f4ba84d77d0",
+    "rows" : {
+      "rawQuotes" : 5025,
+      "orders" : 0,
+      "rawOrders" : 2865146,
+      "deals" : 2280660,
+      "rawDeals" : 2280660,
+      "quotes" : 5025
+    },
+    "elapsedSeconds" : 20.7820391,
+    "error" : null
+  }, {
+    "symbol" : "300750.SZ",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "300750.SZ" ],
+    "inputFingerprint" : "50640ea1476b27dd6f2de2eb1638ab6cfc108b70539fd78fb9ca030cde68fcd8",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "aba5fac734f89733b89489f5c82425b65ef66f8328d9913431117f5b5e7ef872",
+        "bytes" : 16604426,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "9b861e2ed2c294f848bb6a91ec79d9c10386df1419aecfb6dbd88d998e6d16d9",
+        "bytes" : 16799873,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "547e98ddf7f2cb89759f5c5adf7abfddb8562fbc3f914767180b1a297a4c1b6d",
+        "bytes" : 1961059,
+        "present" : true
+      }
+    },
+    "resultSha256" : "db1b6e6ef4853a9b86622ab3e36d2f27f23a156f8e370fdd7280cf985fa7c80d",
+    "rows" : {
+      "rawQuotes" : 4834,
+      "orders" : 325969,
+      "rawOrders" : 260900,
+      "deals" : 213105,
+      "rawDeals" : 213105,
+      "quotes" : 4834
+    },
+    "elapsedSeconds" : 2.8645615,
+    "error" : null
+  }, {
+    "symbol" : "301026.SZ",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "301026.SZ" ],
+    "inputFingerprint" : "4d6037dbf14a786d54ca6597bf9abf3aa8bea6aaa6c6cda0f2814a3877df94b7",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "47e6cf7edd1a09920ca3802a661de2d764dbee64f05fba3c2a885480db14830f",
+        "bytes" : 555986,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "065d30d373ae1116cf6501b18165f0a000cd30016fa61b8471124a559576efe0",
+        "bytes" : 525205,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "b6f2b38f38bc08d135955a325c73ca2c7a70e20a163e78eb15b7db7729a845bb",
+        "bytes" : 990150,
+        "present" : true
+      }
+    },
+    "resultSha256" : "7d13d540d40fb1b44881d71a248c24c3b120e13907fba64784bf22979d8450f4",
+    "rows" : {
+      "rawQuotes" : 2621,
+      "orders" : 10759,
+      "rawOrders" : 8267,
+      "deals" : 7229,
+      "rawDeals" : 7229,
+      "quotes" : 2621
+    },
+    "elapsedSeconds" : 0.1385166,
+    "error" : null
+  }, {
+    "symbol" : "508093.SH",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "508093.SZ" ],
+    "inputFingerprint" : "386b5b0a21d8065540b12e89feb61c96f50838a58df62baa2d2ae21ffb20d8f7",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "f7462e3fb8830743f6eb8fe896d539963020b0525952669c16dc9d2e00f77491",
+        "bytes" : 1896,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "e3640091aa0de34a72037de03ad417682a5e020c1c82ab0493c4b26ee441b5c5",
+        "bytes" : 72238,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "45bd24e882478ff0e98c88aec6dbc957ac8ffd2be2e782b2993fe5d8bad84723",
+        "bytes" : 98139,
+        "present" : true
+      }
+    },
+    "resultSha256" : "449c41c9a860d48a251574d39ec62b7da70957f82e172437597cbbe564ad8ca1",
+    "rows" : {
+      "rawQuotes" : 297,
+      "orders" : 1134,
+      "rawOrders" : 1139,
+      "deals" : 23,
+      "rawDeals" : 23,
+      "quotes" : 297
+    },
+    "elapsedSeconds" : 0.019195,
+    "error" : null
+  }, {
+    "symbol" : "510300.SH",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "510300.SZ" ],
+    "inputFingerprint" : "6efcd38a02edcd8a1a3ff813f7866a4adbf1b4214ca511b30af151cd4a99e338",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "a800dd00288a9ba10f36d94e700b4892984cc487249873500df3a00ab0c5865c",
+        "bytes" : 4383155,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "897c0793524fa5b7fe2e7da4656794e81a9267f2c263b7af81d4965e8f1fc666",
+        "bytes" : 15482103,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "1555a738b6de3f1f389344add784fdb7bcc0bffb195ce12cf6f00101be3a07d3",
+        "bytes" : 2040247,
+        "present" : true
+      }
+    },
+    "resultSha256" : "cae5e421c9df473236d919f427f53ed613d0ea8f7e16631e8f68d933bf94bfeb",
+    "rows" : {
+      "rawQuotes" : 5008,
+      "orders" : 242599,
+      "rawOrders" : 242604,
+      "deals" : 54892,
+      "rawDeals" : 54892,
+      "quotes" : 5008
+    },
+    "elapsedSeconds" : 1.7030481,
+    "error" : null
+  }, {
+    "symbol" : "516000.SH",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "516000.SZ" ],
+    "inputFingerprint" : "7552848647c2a4cbd5bbe309974d622664158ed3470f105eaf176747a0619b8c",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "c7a16f23fe0ed4101a80a0a0cd0c5acb71aa5f8e5db90373e04eaad3856368b3",
+        "bytes" : 104017,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "59878f34734d10b6546942f05fcf415589e7e303c26c5e67f8c9b5b2709bec08",
+        "bytes" : 2109418,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "2b4eb9c3fc0c25192a4b48e04d5f213004e9ee5f2c275c233588496c11ff9452",
+        "bytes" : 1335248,
+        "present" : true
+      }
+    },
+    "resultSha256" : "518fd0eac412028c715082534b2c70bd9a05314402bcb1d75b7b6dba5015f7ad",
+    "rows" : {
+      "rawQuotes" : 3769,
+      "orders" : 33031,
+      "rawOrders" : 33036,
+      "deals" : 1327,
+      "rawDeals" : 1327,
+      "quotes" : 3769
+    },
+    "elapsedSeconds" : 0.2478903,
+    "error" : null
+  }, {
+    "symbol" : "588000.SH",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "588000.SZ" ],
+    "inputFingerprint" : "c7c3d7fcd7c54258fd481adc91f2c2ed8c1e46e26451c1893b68cd8fb8cc3641",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "6974e8259cd22b8a8c1541e29c08cc13630ed8a39201b29551a4a8803dd47572",
+        "bytes" : 23735907,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "d5f28cce90317a636fba7b13e5db95474d815b58f3884750f0a963b5c51b38b9",
+        "bytes" : 38527391,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "8511508aeb4365354990a93b40dfc5d7741fc86f631014a6ed18e0fc32b9ef8f",
+        "bytes" : 2133099,
+        "present" : true
+      }
+    },
+    "resultSha256" : "aa10659dfb9a5ec994d3fdad7080fbd518214615339961f07c7090f1d8f9b74e",
+    "rows" : {
+      "rawQuotes" : 5008,
+      "orders" : 604372,
+      "rawOrders" : 604377,
+      "deals" : 297783,
+      "rawDeals" : 297783,
+      "quotes" : 5008
+    },
+    "elapsedSeconds" : 5.1398723,
+    "error" : null
+  }, {
+    "symbol" : "600000.SH",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "600000.SH" ],
+    "inputFingerprint" : "be96647fb9dfa398e2f02a0906b965a1c8a8e63840f3a7c402140040183ce715",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "6626211da5fcbc54fc7ba1d79fb5e5812774e0e8788d7fa8fdb4947dcdf425ff",
+        "bytes" : 9370799,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "88ab8b240aacd9232c9fe0666faa488af9a2704d86a6e8df21e2e6c94d1f09c2",
+        "bytes" : 9098627,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "df5a6f574b9b40831dd958a69414252dff8eb24010750655fbd9917187ca8414",
+        "bytes" : 1993734,
+        "present" : true
+      }
+    },
+    "resultSha256" : "b3780b6f56a8f3b9e35912458ed6e9f1bd0677842d7294ff0383734f1eaa1017",
+    "rows" : {
+      "rawQuotes" : 4996,
+      "orders" : 145878,
+      "rawOrders" : 145883,
+      "deals" : 118293,
+      "rawDeals" : 118293,
+      "quotes" : 4996
+    },
+    "elapsedSeconds" : 1.6887696,
+    "error" : null
+  }, {
+    "symbol" : "600985.SH",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "600985.SH" ],
+    "inputFingerprint" : "0507be6d92c61f92adf73b8411e8a4abe76d0cc2373b689d412ea5684431f65a",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "110348884e9685e633b62a5492a25479585d5a12da04ad88885bb4d220a24f29",
+        "bytes" : 2176581,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "f1c6805f6d6d0eb54cd6c83fed705e884977a530338d54c04ba280a4a208eb20",
+        "bytes" : 2068873,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "a7701452d2001b61262f9be74be3e2e98017bdfa812cb4be9587c5c0f93a1f26",
+        "bytes" : 1801883,
+        "present" : true
+      }
+    },
+    "resultSha256" : "d5ff06f9c04c7ad9e213a69d1ac31c93d88be228eb6f0eabed402a9761e2d02e",
+    "rows" : {
+      "rawQuotes" : 4621,
+      "orders" : 32760,
+      "rawOrders" : 32765,
+      "deals" : 27235,
+      "rawDeals" : 27235,
+      "quotes" : 4621
+    },
+    "elapsedSeconds" : 0.6037458,
+    "error" : null
+  }, {
+    "symbol" : "603737.SH",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "603737.SH" ],
+    "inputFingerprint" : "1ebde5daf7dd81ec9315c26d6e821f48beea2091fc1da478184104b0756ef443",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "28f13c28dd57b680bdeaed879068f85d940e179d9bed6089fa9899cf70afde55",
+        "bytes" : 3994157,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "de657403ba1dfb5b5729db0bbe3a7e21486df3e73b12fb817b9f8136cb381aa5",
+        "bytes" : 4419801,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "d12934460fc104efb195180fe4c6faa46ae48e3b5a0e0a5bd829f3c6f650fa73",
+        "bytes" : 1859763,
+        "present" : true
+      }
+    },
+    "resultSha256" : "c56ff07deebd292f6ab56bcba91ae082621fb1c3e2dbf860e846a7b57741d77e",
+    "rows" : {
+      "rawQuotes" : 4895,
+      "orders" : 70029,
+      "rawOrders" : 70034,
+      "deals" : 50067,
+      "rawDeals" : 50067,
+      "quotes" : 4895
+    },
+    "elapsedSeconds" : 0.6788011,
+    "error" : null
+  }, {
+    "symbol" : "688981.SH",
+    "status" : "SUCCESS",
+    "resumed" : false,
+    "sourceDirectories" : [ "688981.SH" ],
+    "inputFingerprint" : "da43fd8738d31f9094bc229894ce9b05d3b88dc3233747271e8c904b6576d786",
+    "inputFiles" : {
+      "逐笔成交.csv" : {
+        "sha256" : "acf6c5a3bdec9b51b571a169b3aa6e50b53f151a8fecd27c8bd455f9d55ec934",
+        "bytes" : 9885809,
+        "present" : true
+      },
+      "逐笔委托.csv" : {
+        "sha256" : "5cc7bb6315cda0c032bee2754c8314587f97ef6b46f46202587bbd9101e7bf06",
+        "bytes" : 13972213,
+        "present" : true
+      },
+      "行情.csv" : {
+        "sha256" : "bc65ef0c5be23b6c345348fd0af000f58c2b4b0558d98eb955afb27d91a164b3",
+        "bytes" : 2030232,
+        "present" : true
+      }
+    },
+    "resultSha256" : "b561a5aaa3f5fb6ff739eaec8a4486c01a97895d7144cdb75d62d4880e62db50",
+    "rows" : {
+      "rawQuotes" : 5004,
+      "orders" : 217196,
+      "rawOrders" : 217201,
+      "deals" : 121758,
+      "rawDeals" : 121758,
+      "quotes" : 5004
+    },
+    "elapsedSeconds" : 1.7923613,
+    "error" : null
+  } ]
+}

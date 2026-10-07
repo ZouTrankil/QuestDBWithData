@@ -1,0 +1,248 @@
+{
+  "protocol_version": 1,
+  "task_id": "D105",
+  "status": "PASS",
+  "record_date": "2026-10-07",
+  "reviewed_at_utc": "2026-10-06T17:56:43.102784+00:00",
+  "review_type": "independent_static_domain_wiring_document_review",
+  "reviewer": "/root/mv_reader_guard",
+  "scope": "Other-author D105 domain/key/dataset/mapper/repository, design mapping/repository tests, root D105 bounded-reader dispatch/validation and ReadGroup binding, catalog/write rejection tests, and current draft delivery documents. Reviewer-authored guard and tests excluded.",
+  "static_only": true,
+  "blockers": [],
+  "findings": [],
+  "code_bindings": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyView.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyView.java",
+      "sha256": "53279fe1c2f9366af3e9e9a69e0b15c6c40dc1489d0941c8ba7911c8724c5f5d",
+      "role": "Other-author typed nine-field domain; nullable finite binary64"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewKey.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewKey.java",
+      "sha256": "b5d6a8ba8266dd31b76e2d44976373140ef6e7bef4005a5a0041131faf889d2c",
+      "role": "Other-author YearMonth and exact first-day UTC key"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewDataset.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewDataset.java",
+      "sha256": "b1bd73e275e36487d43e19a06664eadcd04d14a091e73af3e7fa7c4484fe1d12",
+      "role": "Other-author READ-only logical view and dependency contract"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMapper.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMapper.java",
+      "sha256": "f45427f050104e28801972dd2016b30f020b7b4ab24baffe67c501660f03ca6f",
+      "role": "Other-author explicit nine-field storage and DatasetValues mapping"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyViewReadRepository.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyViewReadRepository.java",
+      "sha256": "08f3c5bc9a5c1b81ec9fca82e9a1b12edee9756a61a4628240203f4a56a31750",
+      "role": "Other-author bounded typed repository without fallback"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMappingTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMappingTest.java",
+      "sha256": "2e4e71b3256640e3a8811aca5507d1e18d273c8d9143890ac033ae3b70a2f975",
+      "role": "Other-author mapping pure cases inspected without execution"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/repository/MacroCoreMonthlyViewReadRepositoryTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/repository/MacroCoreMonthlyViewReadRepositoryTest.java",
+      "sha256": "d2bdbf2c6ec82aed691758bbe0bae1affc1bcef5b8c1a2c381550bd56cbb2ae2",
+      "role": "Other-author repository pure cases inspected without execution"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+      "sha256": "9bc606c5a640de5659f5b0235aead8680bf6b166b1dc7cc819718c4bd59bae9e",
+      "role": "Root-authored D105 read/prepare validation and version-dispatch delta only; reviewer-authored guard internals excluded"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+      "sha256": "1590de0606e4a9b326b3917fcd0fdbb866d2f8f6bf2d070fd282d58b6e5f5c46",
+      "role": "Root-authored typed D105 binding using guarded reader and null caller business version"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
+      "sha256": "2fef4e79679dbd8c19ea96d8aceb19b1aa9633be3fac8b184fddf3bdd9ba8502",
+      "role": "Unchanged component-based dataset registration context; no D105 job added"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewCatalogStartupTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewCatalogStartupTest.java",
+      "sha256": "ee35391237e96bb9861e8205e55582ed0b1160cd6a3f270954b75013e76d649c",
+      "role": "Root-authored zero-connection catalog test; source inspection only"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewWriteRejectionTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/service/MacroCoreMonthlyViewWriteRejectionTest.java",
+      "sha256": "97793dd6836a76aa1714faadb529e2090126208128d69924f81a8844f5ab2aeb",
+      "role": "Root-authored direct and group write rejection tests; source inspection only"
+    }
+  ],
+  "excluded_author_inventory": [
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuard.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuard.java",
+      "sha256": "71c7ea91a09eb97de58e9e83128aa00e17318a75dc3bff6873fcc8404eda8b08",
+      "role": "Reviewer-authored D105 guard: excluded from independent review"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuardTest.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/test/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuardTest.java",
+      "sha256": "c157f774f3c87ff215600282a4324139dfebe8d8547b5d8dee0f410d4663188a",
+      "role": "Reviewer-authored 37 guard tests: excluded from independent review"
+    }
+  ],
+  "bindings": [
+    {
+      "path": "artifacts/java-migration/D105/README.md",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/README.md",
+      "sha256": "95b987e8a1bebf2055299f4e35f2f57db5270097758cfbdfab207b770e60beac",
+      "role": "Current draft: actual view acceptance and coordinator gate remain pending"
+    },
+    {
+      "path": "artifacts/java-migration/D105/source-contract-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/source-contract-20261007.json",
+      "sha256": "9d8cf02d7db06108b37d257bbe384d00d260e43dae22b96ac80431382c198218",
+      "role": "Current file-grounded source contract draft"
+    },
+    {
+      "path": "artifacts/java-migration/D105/mapping-contract-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/mapping-contract-20261007.json",
+      "sha256": "eeff0f7c3e9c6699f1d78ede8a9d8be658370e28dff52059cc18006530aca8e0",
+      "role": "Current mapping contract draft and implementation SHA inventory"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/root-formal-view-metadata-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/root-formal-view-metadata-20261007.json",
+      "sha256": "9ce66ed64413732c8577e19bb53b72b44d2e35a11c9a040320e9009a9866059f",
+      "role": "Root-saved external SELECT-only metadata evidence; not executed by reviewer"
+    },
+    {
+      "path": "artifacts/java-migration/D104/coordinator-review-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D104/coordinator-review-20261007.json",
+      "sha256": "a5fd14527a068185f222abf54292c0f8532a50d8ae2eb49f14e4fc6b369d1bde",
+      "role": "Prior accepted D104 base owner gate only; not D105 source publication"
+    },
+    {
+      "path": "artifacts/java-migration/D104/commands/java-increment-acceptance-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D104/commands/java-increment-acceptance-20261007.json",
+      "sha256": "b1aec9b83be584059cbe2aad5d18240a14167915b5c37ad9f02568e586c318ca",
+      "role": "Prior D104 three-month base evidence only"
+    },
+    {
+      "path": "artifacts/java-migration/D105/commands/coordinator-shared-guard-static-review-20261007.json",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/java-migration/D105/commands/coordinator-shared-guard-static-review-20261007.json",
+      "sha256": "2846de93a8866513e88478f6720bc902ce6baf0a971695fe8884cf2f932fdc03",
+      "role": "Separate other-author static review covers excluded guard; no execution claim"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/domain/view/MacroCoreMonthlyView.java",
+      "absolute_path": "C:/Users/zouqiang/IdeaProjects/QuestDBWithData/src/main/java/com/zoutrankil/data/domain/view/MacroCoreMonthlyView.java",
+      "sha256": "f832ff48a33c82a2ecfdd31eab6002636451708301cd52928a30858c20c1178d",
+      "role": "Preserved generated nine-field storage projection, not a database writer"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/sql/questdb/derived/create_monthly_derived_views.sql",
+      "absolute_path": "D:/work/fund_2/back-monitor/sql/questdb/derived/create_monthly_derived_views.sql",
+      "sha256": "cab9a70d8bda8e0ac8c96720e38a500407431aaf2e7f18f1ac1eb05c8f55fc3e",
+      "role": "Original ordinary VIEW SELECT * declaration, read from file only"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/models/macro/macro_core_monthly.py",
+      "absolute_path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/models/macro/macro_core_monthly.py",
+      "sha256": "2eebcf7e231b00c1b031dc3fa43672c56b19aa498241c9b72445d122ae86c0d3",
+      "role": "Original ordered nine-field base model, file-only"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/macro_core_monthly.py",
+      "absolute_path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/macro_core_monthly.py",
+      "sha256": "ba8afd819e3ac373783141bdbcb94a32cef454659d92cc7fb47c36373cc9ac50",
+      "role": "Original base GDP/SF semantics, file-only"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/queries/macro.py",
+      "absolute_path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/queries/macro.py",
+      "sha256": "7f9ce369a7d65838a4775c8899ccfd10ee92ed5687a7b7fe8b1a4d38fc350afd",
+      "role": "Original broad Python view-first fallback caller, file-only; Java propagates errors"
+    }
+  ],
+  "checks": [
+    {
+      "area": "nine_field_mapping",
+      "result": "PASS",
+      "detail": "Ordered month plus eight nullable finite Double values are explicitly mapped. YearMonth is represented as exact first-day LocalDate in DatasetValues and first-day UTC microsecond Instant in the generated projection. NULL and signed zero are preserved; no scale, rounding, fill, or numeric coercion is introduced."
+    },
+    {
+      "area": "source_semantics",
+      "result": "PASS",
+      "detail": "Ordinary SELECT * alias inherits actual base values. GDP remains its own report month; social financing ratio and legacy new_rmb_loan units/naming are not recomputed. View READ permits historical required-component NULLs."
+    },
+    {
+      "area": "object_and_owner",
+      "result": "PASS",
+      "detail": "Dataset declares VIEW/NONE, READ only, no UPSERT/WAL writer, sole logical dependency macro_core_monthly, and formal/private object whitelist. Existing canonical data.macro_core_monthly v1 is referenced; no view job, provider, checkpoint, or competing publisher is added."
+    },
+    {
+      "area": "repository_bounds",
+      "result": "PASS",
+      "detail": "Full ordered nine-column key/range requests use YearMonth-derived first-day dates, one to twelve calendar months, and page size at most twelve. Invalid repository requests fail before reader access. Reader errors propagate without base or empty fallback."
+    },
+    {
+      "area": "root_guard_integration",
+      "result": "PASS",
+      "detail": "Root inserts D105 validation before metadata in both read and prepare, routes applies/version to the dedicated guard, and retains existing before/after physical-version and cursor fingerprint checks. This reviews root call sites only; dedicated guard implementation is excluded."
+    },
+    {
+      "area": "typed_read_group",
+      "result": "PASS",
+      "detail": "Root binding uses the typed view mapper and shared guarded reader, with no caller business source_version supplied. Component-based DatasetConfiguration registration remains unchanged."
+    },
+    {
+      "area": "write_rejection_and_catalog_cases",
+      "result": "PASS",
+      "detail": "Root test sources check READ-only WRITE/STATIC_REPLACE/WAL_REPLACE rejection before JDBC/ledger and zero-connection catalog registration with one existing base owner and no view job. These cases were read, not executed by reviewer."
+    },
+    {
+      "area": "document_boundaries",
+      "result": "PASS",
+      "detail": "Three current drafts distinguish prior D104 three-month base evidence from pending D105 view acceptance. They retain human review pending and D106 not admitted, and do not claim provider/full-history/PIT/caller-cutover or internal scan certification."
+    },
+    {
+      "area": "document_embedded_sha",
+      "result": "PASS",
+      "detail": "25 embedded path/SHA occurrences across the two JSON documents, representing 21 unique files, matched actual bytes at review time."
+    }
+  ],
+  "test_source_inventory": {
+    "design_mapping_unique_methods": 12,
+    "design_repository_unique_methods": 8,
+    "root_catalog_unique_methods": 1,
+    "root_write_rejection_unique_methods": 2,
+    "independently_reviewed_unique_methods": 23,
+    "excluded_guard_unique_methods": 37,
+    "root_planned_five_class_unique_methods": 60,
+    "execution_status": "Not executed by reviewer; planned counts are source inventory, not passing results."
+  },
+  "execution": {
+    "tests_run": 0,
+    "gradle_runs": 0,
+    "database_queries": 0,
+    "database_mutations": 0,
+    "native_process_queries": 0,
+    "provider_requests": 0,
+    "reference_imports": 0,
+    "reference_writes": 0,
+    "action": "Read source/artifact files, computed file SHA256 and source method counts, and created this new review artifact only."
+  },
+  "recommendation": "No static blocker found for root-managed finite pure tests and separately admitted D105 actual view/read acceptance; this review is not a serial-progress gate.",
+  "coordinator_gate": "PENDING",
+  "human_review": "PENDING",
+  "next_task_admitted": false,
+  "D106_admitted": false
+}

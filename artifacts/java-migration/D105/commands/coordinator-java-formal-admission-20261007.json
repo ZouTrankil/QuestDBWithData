@@ -1,0 +1,118 @@
+{
+  "protocol_version": 1,
+  "task_id": "D105",
+  "status": "PASS",
+  "decision": "accepted_for_bounded_view_read",
+  "scope": "formal",
+  "checked_at": "2026-10-06T18:12:01.703467+00:00",
+  "actual_view_audit": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\view-formal-readonly-audit-20261007.json",
+    "sha256": "4b3aec1c690ae34a0b69e35df34d535d7a881454e2e549623e11724eb9be437d"
+  },
+  "java_test": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\MacroCoreMonthlyViewLiveReadAcceptanceTest.java",
+    "sha256": "b6aa1fc3646ef968dabb0bb3cf246cf054a57e18538302c5cdefb16668a0e0d1"
+  },
+  "code_bindings": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\MacroCoreMonthlyView.java",
+      "sha256": "53279fe1c2f9366af3e9e9a69e0b15c6c40dc1489d0941c8ba7911c8724c5f5d"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\MacroCoreMonthlyViewKey.java",
+      "sha256": "b5d6a8ba8266dd31b76e2d44976373140ef6e7bef4005a5a0041131faf889d2c"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\MacroCoreMonthlyViewDataset.java",
+      "sha256": "b1bd73e275e36487d43e19a06664eadcd04d14a091e73af3e7fa7c4484fe1d12"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\mapper\\MacroCoreMonthlyViewMapper.java",
+      "sha256": "f45427f050104e28801972dd2016b30f020b7b4ab24baffe67c501660f03ca6f"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\MacroCoreMonthlyViewReadRepository.java",
+      "sha256": "08f3c5bc9a5c1b81ec9fca82e9a1b12edee9756a61a4628240203f4a56a31750"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\QuestDbMacroCoreViewReadGuard.java",
+      "sha256": "71c7ea91a09eb97de58e9e83128aa00e17318a75dc3bff6873fcc8404eda8b08"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\QuestDbMacroCoreReadGuard.java",
+      "sha256": "7e2baa42f6e79efae168524eecf2acefc397c790ebb2df18280319aeb7277d4f"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\QuestDbBoundedReader.java",
+      "sha256": "9bc606c5a640de5659f5b0235aead8680bf6b166b1dc7cc819718c4bd59bae9e"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\config\\ReadGroupConfiguration.java",
+      "sha256": "1590de0606e4a9b326b3917fcd0fdbb866d2f8f6bf2d070fd282d58b6e5f5c46"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\config\\DatasetConfiguration.java",
+      "sha256": "2fef4e79679dbd8c19ea96d8aceb19b1aa9633be3fac8b184fddf3bdd9ba8502"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\MacroCoreMonthlyReadRepository.java",
+      "sha256": "2b5c46fe1e4815b7c26729a0b6609146de10c42b2ad1027f748dd180c76d93b0"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\mapper\\MacroCoreMonthlyMapper.java",
+      "sha256": "aa24cc7657d4426a3f4c8e1a858f037e0618a425a805923ccb5f12e6fd6f4bee"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\MacroCoreMonthlyDataset.java",
+      "sha256": "7d3a60223c8a5d2a23e25ffb7ef6d8cedc52a89b9f81a78ec615f3bea96fa97b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\DatasetReadQuery.java",
+      "sha256": "c2bbaef2b4ae33229fc6812986e1ef97c76394a9f8e840c78714764ea2c42681"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\DatasetReadCursor.java",
+      "sha256": "9ea3ce2c71160136f1c0c98b66b24808b0a9875ee04bd96d0e222bd23f9fc881"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\DatasetReadPage.java",
+      "sha256": "d0ed43aa108d7a713cead8ad3e9eb03bf3f96d87cc2c4773ceba8e5d8e55521b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\ReadGroupReader.java",
+      "sha256": "fcd44f8dde5f2c29e280862425449ecc9466da6d88b713d80879db9488fc7bfe"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\DatasetWritePreparation.java",
+      "sha256": "a98950cbf18569f039158a98370504860f5bdfa213fd487e4f162e604c7c4621"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\ReadGroupJson.java",
+      "sha256": "5ff9d7325052edeb9f6dfcb2f0cabc6e9940441b749ba0e182c001cc5fae3ea3"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\StockBasicWriteGroupService.java",
+      "sha256": "8c0c3f00a6d029822f89f26da785a67bf4d62244edc60d94be1339f2c547c92b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\MacroCoreMonthlyViewLiveReadAcceptanceTest.java",
+      "sha256": "b6aa1fc3646ef968dabb0bb3cf246cf054a57e18538302c5cdefb16668a0e0d1"
+    }
+  ],
+  "independent_acceptance_review": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\coordinator-java-live-read-static-review-20261007.json",
+    "sha256": "8e51ae5158a512e821ec8cfc81244a6c166a8c00021513d1a7c07076caa2e2da"
+  },
+  "DDL": 0,
+  "DML": 0,
+  "ILP": 0,
+  "base_writes": 0,
+  "formal_writes": 0,
+  "ledger_writes": 0,
+  "automatic_retry": false,
+  "source_increment": false,
+  "D106_admitted": false,
+  "FULL_admitted": false,
+  "coordinator_mode": "direct_local_serial",
+  "human_comparison_status": "pending_review"
+}

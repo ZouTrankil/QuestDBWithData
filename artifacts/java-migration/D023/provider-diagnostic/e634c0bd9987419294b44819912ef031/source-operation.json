@@ -1,0 +1,10 @@
+{
+  "startedAt" : "2026-09-29T22:22:11.669805200Z",
+  "task" : "D023",
+  "sourceDate" : "2026-09-17",
+  "formalTableMutated" : false,
+  "questdbWrites" : 0,
+  "status" : "FAILED",
+  "failure" : "org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'syncJobRegistry' defined in class path resource [com/zoutrankil/questdbwithdata/config/DatasetConfiguration.class]: Failed to instantiate [com.zoutrankil.questdbwithdata.service.SyncJobRegistry]: Factory method 'syncJobRegistry' threw exception with message: Unknown dependency or dependency version",
+  "finishedAt" : "2026-09-29T22:22:15.732989400Z"
+}

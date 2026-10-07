@@ -1,0 +1,15 @@
+gradle.beforeProject { project ->
+    def buildRoot = gradle.startParameter.projectProperties.get('l2CleaningBuildDirectory')
+    if (!buildRoot) throw new GradleException('Missing l2CleaningBuildDirectory')
+    def projectBuild = project.path == ':' ? new File(buildRoot) :
+        new File(buildRoot, 'subprojects/' + project.path.substring(1).replace(':', '/'))
+    project.layout.buildDirectory.set(projectBuild)
+}
+gradle.projectsEvaluated {
+    def argumentsFile = rootProject.findProperty('l2CleaningArgumentsFile')
+    if (!argumentsFile) throw new GradleException('Missing l2CleaningArgumentsFile')
+    def nativeArguments = new groovy.json.JsonSlurper().parse(new File(argumentsFile.toString()), 'UTF-8')
+    rootProject.tasks.named('l2DailyFeatureBatch', JavaExec).configure {
+        setArgs(nativeArguments.collect { it.toString() })
+    }
+}

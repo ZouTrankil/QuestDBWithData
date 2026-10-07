@@ -1,0 +1,31 @@
+{
+  "task_id": "D101",
+  "status": "PASSED_PURE_GUARDS",
+  "command": "python -B -m unittest discover -s tools -p test_d101_owner_bridge_guards.py -v",
+  "tests": 30,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "duration_seconds": 0.500,
+  "database_operations": 0,
+  "cim_operations": 0,
+  "http_operations": 0,
+  "ilp_operations": 0,
+  "bytecode_disabled": true,
+  "script_sha256": "9efd81bede4f2638c7a886c8c3cab53c7d4bd1618be9dd94d350b5ee7afa229e",
+  "test_sha256": "3c96ca14a7e1a58a43755e551bf22bd796069700e1073a54295b4e9c4d9b0bd8",
+  "log_sha256": "45394853922d3e1e2e36f207f8fa266e8c4ce2670a30359d2e68d513e00a0bc6",
+  "log": "artifacts/java-migration/D101/commands/python-owner-bridge-guards-20261006.log",
+  "coverage": [
+    "one SELECT and finite exact private request",
+    "same unit fingerprint survives owner publication; changed source/value/code rejects",
+    "actual canonical FrozenRequest source_version and prepared INGEST parameters",
+    "SQLite SLICE SUBMITTED revision4 event/run and immutable preview binding",
+    "prepared canonical Java payload SHA and all five physical fields including binary64",
+    "unknown driver flush durable before send; zero automatic retry; close without flush",
+    "source change before flush blocks transmission",
+    "duplicate invocation cannot call original owner again",
+    "preview never calls owner.read/install/Sender",
+    "SQLite connections close and cancellation blocks owner submission"
+  ]
+}

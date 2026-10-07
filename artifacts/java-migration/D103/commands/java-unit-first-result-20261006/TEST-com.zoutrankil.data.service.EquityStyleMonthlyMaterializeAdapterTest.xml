@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-10-06T15:01:25.585Z" hostname="AMD395" time="0.044">
+  <properties/>
+  <testcase name="missingWrongKeyDuplicateAndSignedZeroMismatchAreExactFailures()" classname="com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest" time="0.002"/>
+  <testcase name="emptySourceRequiresStableEmptyActualTargetAndReturnsExplicitZero()" classname="com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest" time="0.004"/>
+  <testcase name="incrementalConsumerCannotHideAnUnverifiedOldPrefix()" classname="com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest" time="0.005"/>
+  <testcase name="publishesOneCompleteBoundedPageAndVerifiesWholePrefixBeforeCompletion()" classname="com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest" time="0.005"/>
+  <testcase name="fullPrefixMismatchAfterConsumerCannotReturnComplete()" classname="com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest" time="0.004"/>
+  <testcase name="sourceRevisionAfterWriteFailsBeforeVerifiedSourceOrCompletion()" classname="com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest" time="0.004"/>
+  <testcase name="cancellationAndFiniteBudgetsDoNotReachPublisher()" classname="com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest" time="0.003"/>
+  <testcase name="readonlyReconcileUsesRealReadbackAndNeverPublisher()" classname="com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest" time="0.008"/>
+  <testcase name="sourcePlanDriftAndTargetRebuildRejectBeforeSend()" classname="com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest" time="0.006"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

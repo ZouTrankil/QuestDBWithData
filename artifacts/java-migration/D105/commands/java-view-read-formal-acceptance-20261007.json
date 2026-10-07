@@ -1,0 +1,921 @@
+{
+  "task_id" : "D105",
+  "scope" : "formal",
+  "started_at" : "2026-10-06T18:13:27.052023Z",
+  "DDL" : 0,
+  "DML" : 0,
+  "ILP" : 0,
+  "base_writes" : 0,
+  "formal_writes" : 0,
+  "ledger_initialized" : false,
+  "owner_invocations" : 0,
+  "automatic_retry" : false,
+  "java_admission" : {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\coordinator-java-formal-admission-20261007.json",
+    "sha256" : "0bc6deee6bd68cda267eb48c07dcfc2131d8fa0729c9d087987fc815ec3dc58f"
+  },
+  "admitted_code_bindings" : [ {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\MacroCoreMonthlyView.java",
+    "sha256" : "53279fe1c2f9366af3e9e9a69e0b15c6c40dc1489d0941c8ba7911c8724c5f5d"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\MacroCoreMonthlyViewKey.java",
+    "sha256" : "b5d6a8ba8266dd31b76e2d44976373140ef6e7bef4005a5a0041131faf889d2c"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\MacroCoreMonthlyViewDataset.java",
+    "sha256" : "b1bd73e275e36487d43e19a06664eadcd04d14a091e73af3e7fa7c4484fe1d12"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\mapper\\MacroCoreMonthlyViewMapper.java",
+    "sha256" : "f45427f050104e28801972dd2016b30f020b7b4ab24baffe67c501660f03ca6f"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\MacroCoreMonthlyViewReadRepository.java",
+    "sha256" : "08f3c5bc9a5c1b81ec9fca82e9a1b12edee9756a61a4628240203f4a56a31750"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\QuestDbMacroCoreViewReadGuard.java",
+    "sha256" : "71c7ea91a09eb97de58e9e83128aa00e17318a75dc3bff6873fcc8404eda8b08"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\QuestDbMacroCoreReadGuard.java",
+    "sha256" : "7e2baa42f6e79efae168524eecf2acefc397c790ebb2df18280319aeb7277d4f"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\QuestDbBoundedReader.java",
+    "sha256" : "9bc606c5a640de5659f5b0235aead8680bf6b166b1dc7cc819718c4bd59bae9e"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\config\\ReadGroupConfiguration.java",
+    "sha256" : "1590de0606e4a9b326b3917fcd0fdbb866d2f8f6bf2d070fd282d58b6e5f5c46"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\config\\DatasetConfiguration.java",
+    "sha256" : "2fef4e79679dbd8c19ea96d8aceb19b1aa9633be3fac8b184fddf3bdd9ba8502"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\MacroCoreMonthlyReadRepository.java",
+    "sha256" : "2b5c46fe1e4815b7c26729a0b6609146de10c42b2ad1027f748dd180c76d93b0"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\mapper\\MacroCoreMonthlyMapper.java",
+    "sha256" : "aa24cc7657d4426a3f4c8e1a858f037e0618a425a805923ccb5f12e6fd6f4bee"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\MacroCoreMonthlyDataset.java",
+    "sha256" : "7d3a60223c8a5d2a23e25ffb7ef6d8cedc52a89b9f81a78ec615f3bea96fa97b"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\DatasetReadQuery.java",
+    "sha256" : "c2bbaef2b4ae33229fc6812986e1ef97c76394a9f8e840c78714764ea2c42681"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\DatasetReadCursor.java",
+    "sha256" : "9ea3ce2c71160136f1c0c98b66b24808b0a9875ee04bd96d0e222bd23f9fc881"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\domain\\DatasetReadPage.java",
+    "sha256" : "d0ed43aa108d7a713cead8ad3e9eb03bf3f96d87cc2c4773ceba8e5d8e55521b"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\ReadGroupReader.java",
+    "sha256" : "fcd44f8dde5f2c29e280862425449ecc9466da6d88b713d80879db9488fc7bfe"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\DatasetWritePreparation.java",
+    "sha256" : "a98950cbf18569f039158a98370504860f5bdfa213fd487e4f162e604c7c4621"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\ReadGroupJson.java",
+    "sha256" : "5ff9d7325052edeb9f6dfcb2f0cabc6e9940441b749ba0e182c001cc5fae3ea3"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\StockBasicWriteGroupService.java",
+    "sha256" : "8c0c3f00a6d029822f89f26da785a67bf4d62244edc60d94be1339f2c547c92b"
+  }, {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\MacroCoreMonthlyViewLiveReadAcceptanceTest.java",
+    "sha256" : "b6aa1fc3646ef968dabb0bb3cf246cf054a57e18538302c5cdefb16668a0e0d1"
+  } ],
+  "D104_ledger_files_before" : {
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-java-acceptance.sqlite3" : {
+      "exists" : true,
+      "bytes" : 204800,
+      "sha256" : "22b8e6af27241f74646353dc9e952d8b82789b3fa457c13a07c328a728f3a821"
+    },
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-java-acceptance.sqlite3-wal" : {
+      "exists" : true,
+      "bytes" : 0,
+      "sha256" : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-java-acceptance.sqlite3-shm" : {
+      "exists" : true,
+      "bytes" : 32768,
+      "sha256" : "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb"
+    }
+  },
+  "audit" : {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\view-formal-readonly-audit-20261007.json",
+    "sha256" : "4b3aec1c690ae34a0b69e35df34d535d7a881454e2e549623e11724eb9be437d"
+  },
+  "D104_preflight_sha256" : "fc4b839c44254aee9f221e1246c5279738cf33704eb12749f2f70691347f530b",
+  "D104_final_receipt_sha256" : "b1aec9b83be584059cbe2aad5d18240a14167915b5c37ad9f02568e586c318ca",
+  "D104_gate_sha256" : "a5fd14527a068185f222abf54292c0f8532a50d8ae2eb49f14e4fc6b369d1bde",
+  "original_oracle_capture" : {
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007-oracle.jsonl",
+    "sha256" : "6e3a262811b63ad0933ccd3ecbf437ff6497370c9fff67ba648679fff0306a30",
+    "rows" : 3,
+    "field_values" : 27,
+    "canonical_records_sha256" : "d872c05c904d34117be675b9012b6a518d7424589d82390d0cdd28b4105da9f3",
+    "physical_types" : {
+      "month" : "TIMESTAMP",
+      "cpi_yoy" : "DOUBLE",
+      "ppi_yoy" : "DOUBLE",
+      "pmi_mfg" : "DOUBLE",
+      "gdp_yoy" : "DOUBLE",
+      "m2_yoy" : "DOUBLE",
+      "social_financing_stock" : "DOUBLE",
+      "new_rmb_loan" : "DOUBLE",
+      "social_financing_yoy" : "DOUBLE"
+    },
+    "JSONL_shape" : "values=all ordered physical columns; raw_double_bits=big-endian IEEE754 hex or explicit null"
+  },
+  "jvm_identity" : {
+    "task_id" : "D105",
+    "scope" : "formal",
+    "jvm_pid" : 50928,
+    "jvm_birth_utc" : "2026-10-06T18:13:25.6842470Z",
+    "jvm_birth_source" : "fresh Win32_Process.CreationDate UTC before connections",
+    "jvm_process_handle_start_informational" : "2026-10-06T18:13:25.684Z",
+    "native" : {
+      "pid" : 50928,
+      "parent_pid" : 18668,
+      "name" : "java.exe",
+      "birth_utc" : "2026-10-06T18:13:25.6842470Z"
+    },
+    "identity_child_pid" : 38760,
+    "identity_child_stopped" : true,
+    "saved_before_connections" : true,
+    "observed_at" : "2026-10-06T18:13:28.321362300Z",
+    "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\java-view-read-formal-jvm-identity-20261007.json",
+    "sha256" : "156911cc70d1e5b8a31e64e420ede22ae226f14586fefaf791bfbec294ba4d08"
+  },
+  "jvm_pid" : 50928,
+  "jvm_birth_utc" : "2026-10-06T18:13:25.6842470Z",
+  "native_checks_by_java_harness" : 1,
+  "readback" : {
+    "metadata_before" : {
+      "schemas" : {
+        "v_macro_core_monthly" : [ {
+          "type" : "TIMESTAMP",
+          "column" : "month",
+          "designated" : true,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "cpi_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "ppi_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "pmi_mfg",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "gdp_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "m2_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "social_financing_stock",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "new_rmb_loan",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "social_financing_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        } ],
+        "macro_core_monthly" : [ {
+          "type" : "TIMESTAMP",
+          "column" : "month",
+          "designated" : true,
+          "upsertKey" : true
+        }, {
+          "type" : "DOUBLE",
+          "column" : "cpi_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "ppi_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "pmi_mfg",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "gdp_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "m2_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "social_financing_stock",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "new_rmb_loan",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "social_financing_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        } ]
+      },
+      "view" : {
+        "view_name" : "v_macro_core_monthly",
+        "view_sql" : "\n    SELECT * FROM macro_core_monthly\n",
+        "view_table_dir_name" : "v_macro_core_monthly~1806",
+        "view_status" : "valid",
+        "view_status_update_time" : "2026-09-30 01:27:52.535072",
+        "directoryName" : "v_macro_core_monthly~1806",
+        "partitionBy" : "N/A",
+        "designatedTimestamp" : "month",
+        "invalidation_reason" : null,
+        "id" : 1806,
+        "view_status_update_micros" : 1790731672535072,
+        "walEnabled" : true,
+        "dedup" : false,
+        "matView" : false
+      },
+      "tables" : {
+        "cn_cpi" : {
+          "id" : 1828,
+          "table_txn" : 2,
+          "wal_txn" : 2,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 2,
+          "writerTxn" : 2,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "cn_cpi_stage_20260928_172457_114956~1828",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        },
+        "cn_ppi" : {
+          "id" : 1832,
+          "table_txn" : 2,
+          "wal_txn" : 2,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 2,
+          "writerTxn" : 2,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "cn_ppi_stage_20260928_172516_507534~1832",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        },
+        "cn_pmi" : {
+          "id" : 1829,
+          "table_txn" : 2,
+          "wal_txn" : 2,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 2,
+          "writerTxn" : 2,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "cn_pmi_stage_20260928_172504_051432~1829",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        },
+        "cn_m" : {
+          "id" : 1831,
+          "table_txn" : 2,
+          "wal_txn" : 2,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 2,
+          "writerTxn" : 2,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "cn_m_stage_20260928_172511_058531~1831",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        },
+        "cn_gdp" : {
+          "id" : 1571,
+          "table_txn" : 3,
+          "wal_txn" : 3,
+          "table_row_count" : 66,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 3,
+          "writerTxn" : 3,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "cn_gdp~1571",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "report_date",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 66
+        },
+        "sf_month" : {
+          "id" : 1830,
+          "table_txn" : 2,
+          "wal_txn" : 2,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 2,
+          "writerTxn" : 2,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "sf_month_stage_20260928_172508_654300~1830",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        },
+        "macro_core_monthly" : {
+          "id" : 1603,
+          "table_txn" : 8,
+          "wal_txn" : 8,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 8,
+          "writerTxn" : 8,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "macro_core_monthly_recovery_20260905~1603",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        }
+      }
+    },
+    "metadata_after" : {
+      "schemas" : {
+        "v_macro_core_monthly" : [ {
+          "type" : "TIMESTAMP",
+          "column" : "month",
+          "designated" : true,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "cpi_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "ppi_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "pmi_mfg",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "gdp_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "m2_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "social_financing_stock",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "new_rmb_loan",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "social_financing_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        } ],
+        "macro_core_monthly" : [ {
+          "type" : "TIMESTAMP",
+          "column" : "month",
+          "designated" : true,
+          "upsertKey" : true
+        }, {
+          "type" : "DOUBLE",
+          "column" : "cpi_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "ppi_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "pmi_mfg",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "gdp_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "m2_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "social_financing_stock",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "new_rmb_loan",
+          "designated" : false,
+          "upsertKey" : false
+        }, {
+          "type" : "DOUBLE",
+          "column" : "social_financing_yoy",
+          "designated" : false,
+          "upsertKey" : false
+        } ]
+      },
+      "view" : {
+        "view_name" : "v_macro_core_monthly",
+        "view_sql" : "\n    SELECT * FROM macro_core_monthly\n",
+        "view_table_dir_name" : "v_macro_core_monthly~1806",
+        "view_status" : "valid",
+        "view_status_update_time" : "2026-09-30 01:27:52.535072",
+        "directoryName" : "v_macro_core_monthly~1806",
+        "partitionBy" : "N/A",
+        "designatedTimestamp" : "month",
+        "invalidation_reason" : null,
+        "id" : 1806,
+        "view_status_update_micros" : 1790731672535072,
+        "walEnabled" : true,
+        "dedup" : false,
+        "matView" : false
+      },
+      "tables" : {
+        "cn_cpi" : {
+          "id" : 1828,
+          "table_txn" : 2,
+          "wal_txn" : 2,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 2,
+          "writerTxn" : 2,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "cn_cpi_stage_20260928_172457_114956~1828",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        },
+        "cn_ppi" : {
+          "id" : 1832,
+          "table_txn" : 2,
+          "wal_txn" : 2,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 2,
+          "writerTxn" : 2,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "cn_ppi_stage_20260928_172516_507534~1832",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        },
+        "cn_pmi" : {
+          "id" : 1829,
+          "table_txn" : 2,
+          "wal_txn" : 2,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 2,
+          "writerTxn" : 2,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "cn_pmi_stage_20260928_172504_051432~1829",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        },
+        "cn_m" : {
+          "id" : 1831,
+          "table_txn" : 2,
+          "wal_txn" : 2,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 2,
+          "writerTxn" : 2,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "cn_m_stage_20260928_172511_058531~1831",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        },
+        "cn_gdp" : {
+          "id" : 1571,
+          "table_txn" : 3,
+          "wal_txn" : 3,
+          "table_row_count" : 66,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 3,
+          "writerTxn" : 3,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "cn_gdp~1571",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "report_date",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 66
+        },
+        "sf_month" : {
+          "id" : 1830,
+          "table_txn" : 2,
+          "wal_txn" : 2,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 2,
+          "writerTxn" : 2,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "sf_month_stage_20260928_172508_654300~1830",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        },
+        "macro_core_monthly" : {
+          "id" : 1603,
+          "table_txn" : 8,
+          "wal_txn" : 8,
+          "table_row_count" : 200,
+          "wal_pending_row_count" : 0,
+          "sequencerTxn" : 8,
+          "writerTxn" : 8,
+          "bufferedTxnSize" : 0,
+          "directoryName" : "macro_core_monthly_recovery_20260905~1603",
+          "partitionBy" : "YEAR",
+          "designatedTimestamp" : "month",
+          "walEnabled" : true,
+          "dedup" : true,
+          "matView" : false,
+          "table_suspended" : false,
+          "suspended" : false,
+          "actual_select_count" : 200
+        }
+      }
+    },
+    "actual_view_rows" : [ {
+      "month" : "2026-06-01",
+      "cpi_yoy" : 1.0,
+      "ppi_yoy" : 4.1,
+      "pmi_mfg" : 50.3,
+      "gdp_yoy" : 4.7,
+      "m2_yoy" : 8.0,
+      "social_financing_stock" : 462.06,
+      "new_rmb_loan" : 33671.0,
+      "social_financing_yoy" : 0.07395872071401999
+    }, {
+      "month" : "2026-07-01",
+      "cpi_yoy" : 0.5,
+      "ppi_yoy" : 3.5,
+      "pmi_mfg" : 49.2,
+      "gdp_yoy" : null,
+      "m2_yoy" : 7.7,
+      "social_financing_stock" : 463.28,
+      "new_rmb_loan" : 14068.0,
+      "social_financing_yoy" : 0.0742724637681158
+    }, {
+      "month" : "2026-08-01",
+      "cpi_yoy" : 0.8,
+      "ppi_yoy" : 3.8,
+      "pmi_mfg" : 49.8,
+      "gdp_yoy" : null,
+      "m2_yoy" : 7.5,
+      "social_financing_stock" : 464.8,
+      "new_rmb_loan" : 16577.0,
+      "social_financing_yoy" : 0.07183212267958039
+    } ],
+    "independent_jdbc_base_rows" : [ {
+      "month" : "2026-06-01",
+      "cpi_yoy" : 1.0,
+      "ppi_yoy" : 4.1,
+      "pmi_mfg" : 50.3,
+      "gdp_yoy" : 4.7,
+      "m2_yoy" : 8.0,
+      "social_financing_stock" : 462.06,
+      "new_rmb_loan" : 33671.0,
+      "social_financing_yoy" : 0.07395872071401999
+    }, {
+      "month" : "2026-07-01",
+      "cpi_yoy" : 0.5,
+      "ppi_yoy" : 3.5,
+      "pmi_mfg" : 49.2,
+      "gdp_yoy" : null,
+      "m2_yoy" : 7.7,
+      "social_financing_stock" : 463.28,
+      "new_rmb_loan" : 14068.0,
+      "social_financing_yoy" : 0.0742724637681158
+    }, {
+      "month" : "2026-08-01",
+      "cpi_yoy" : 0.8,
+      "ppi_yoy" : 3.8,
+      "pmi_mfg" : 49.8,
+      "gdp_yoy" : null,
+      "m2_yoy" : 7.5,
+      "social_financing_stock" : 464.8,
+      "new_rmb_loan" : 16577.0,
+      "social_financing_yoy" : 0.07183212267958039
+    } ],
+    "independent_jdbc_view_rows" : [ {
+      "month" : "2026-06-01",
+      "cpi_yoy" : 1.0,
+      "ppi_yoy" : 4.1,
+      "pmi_mfg" : 50.3,
+      "gdp_yoy" : 4.7,
+      "m2_yoy" : 8.0,
+      "social_financing_stock" : 462.06,
+      "new_rmb_loan" : 33671.0,
+      "social_financing_yoy" : 0.07395872071401999
+    }, {
+      "month" : "2026-07-01",
+      "cpi_yoy" : 0.5,
+      "ppi_yoy" : 3.5,
+      "pmi_mfg" : 49.2,
+      "gdp_yoy" : null,
+      "m2_yoy" : 7.7,
+      "social_financing_stock" : 463.28,
+      "new_rmb_loan" : 14068.0,
+      "social_financing_yoy" : 0.0742724637681158
+    }, {
+      "month" : "2026-08-01",
+      "cpi_yoy" : 0.8,
+      "ppi_yoy" : 3.8,
+      "pmi_mfg" : 49.8,
+      "gdp_yoy" : null,
+      "m2_yoy" : 7.5,
+      "social_financing_stock" : 464.8,
+      "new_rmb_loan" : 16577.0,
+      "social_financing_yoy" : 0.07183212267958039
+    } ],
+    "oracle_rows" : [ {
+      "month" : "2026-06-01",
+      "cpi_yoy" : 1.0,
+      "ppi_yoy" : 4.1,
+      "pmi_mfg" : 50.3,
+      "gdp_yoy" : 4.7,
+      "m2_yoy" : 8.0,
+      "social_financing_stock" : 462.06,
+      "new_rmb_loan" : 33671.0,
+      "social_financing_yoy" : 0.07395872071401999
+    }, {
+      "month" : "2026-07-01",
+      "cpi_yoy" : 0.5,
+      "ppi_yoy" : 3.5,
+      "pmi_mfg" : 49.2,
+      "gdp_yoy" : null,
+      "m2_yoy" : 7.7,
+      "social_financing_stock" : 463.28,
+      "new_rmb_loan" : 14068.0,
+      "social_financing_yoy" : 0.0742724637681158
+    }, {
+      "month" : "2026-08-01",
+      "cpi_yoy" : 0.8,
+      "ppi_yoy" : 3.8,
+      "pmi_mfg" : 49.8,
+      "gdp_yoy" : null,
+      "m2_yoy" : 7.5,
+      "social_financing_stock" : 464.8,
+      "new_rmb_loan" : 16577.0,
+      "social_financing_yoy" : 0.07183212267958039
+    } ],
+    "actual_double_bits" : [ {
+      "cpi_yoy" : "3ff0000000000000",
+      "ppi_yoy" : "4010666666666666",
+      "pmi_mfg" : "4049266666666666",
+      "gdp_yoy" : "4012cccccccccccd",
+      "m2_yoy" : "4020000000000000",
+      "social_financing_stock" : "407ce0f5c28f5c29",
+      "new_rmb_loan" : "40e070e000000000",
+      "social_financing_yoy" : "3fb2eef56eb880b0"
+    }, {
+      "cpi_yoy" : "3fe0000000000000",
+      "ppi_yoy" : "400c000000000000",
+      "pmi_mfg" : "404899999999999a",
+      "gdp_yoy" : null,
+      "m2_yoy" : "401ecccccccccccd",
+      "social_financing_stock" : "407cf47ae147ae14",
+      "new_rmb_loan" : "40cb7a0000000000",
+      "social_financing_yoy" : "3fb303852ae09d70"
+    }, {
+      "cpi_yoy" : "3fe999999999999a",
+      "ppi_yoy" : "400e666666666666",
+      "pmi_mfg" : "4048e66666666666",
+      "gdp_yoy" : null,
+      "m2_yoy" : "401e000000000000",
+      "social_financing_stock" : "407d0ccccccccccd",
+      "new_rmb_loan" : "40d0304000000000",
+      "social_financing_yoy" : "3fb2639709b607e0"
+    } ],
+    "pages" : [ {
+      "has_more" : true,
+      "source_version" : "view:v_macro_core_monthly:directory:v_macro_core_monthly~1806:id:1806:definition:163499ee745dc6043100a10c2b41efd5990fbb9127041861a70e658c150a0ff0:body:94db39dc5dd2fcbcc16aba208a84e3a5024f500f2ffc27dbb6ee721a784af563:status-updated:2026-09-30 01:27:52.535072:schema:9b334dd97e1e33aa368b94a8ccaf60f0adbf3be733136331a20c9e755772b5b2:source:table:macro_core_monthly:id:1603:dir:macro_core_monthly_recovery_20260905~1603:txn:8:wal:8:wal-physical:8:metadata-rows:200",
+      "page" : 1,
+      "month" : "2026-06"
+    }, {
+      "has_more" : true,
+      "source_version" : "view:v_macro_core_monthly:directory:v_macro_core_monthly~1806:id:1806:definition:163499ee745dc6043100a10c2b41efd5990fbb9127041861a70e658c150a0ff0:body:94db39dc5dd2fcbcc16aba208a84e3a5024f500f2ffc27dbb6ee721a784af563:status-updated:2026-09-30 01:27:52.535072:schema:9b334dd97e1e33aa368b94a8ccaf60f0adbf3be733136331a20c9e755772b5b2:source:table:macro_core_monthly:id:1603:dir:macro_core_monthly_recovery_20260905~1603:txn:8:wal:8:wal-physical:8:metadata-rows:200",
+      "page" : 2,
+      "month" : "2026-07"
+    }, {
+      "has_more" : false,
+      "source_version" : "view:v_macro_core_monthly:directory:v_macro_core_monthly~1806:id:1806:definition:163499ee745dc6043100a10c2b41efd5990fbb9127041861a70e658c150a0ff0:body:94db39dc5dd2fcbcc16aba208a84e3a5024f500f2ffc27dbb6ee721a784af563:status-updated:2026-09-30 01:27:52.535072:schema:9b334dd97e1e33aa368b94a8ccaf60f0adbf3be733136331a20c9e755772b5b2:source:table:macro_core_monthly:id:1603:dir:macro_core_monthly_recovery_20260905~1603:txn:8:wal:8:wal-physical:8:metadata-rows:200",
+      "page" : 3,
+      "month" : "2026-08"
+    } ],
+    "first_actual_cursor" : {
+      "queryFingerprint" : "b377513e7e9aac4ca3f8d0e0f24f71acc7b9ba4d0bee79b3244525ad3a1a9e58",
+      "keyValues" : [ "2026-06-01" ],
+      "sourceVersion" : "view:v_macro_core_monthly:directory:v_macro_core_monthly~1806:id:1806:definition:163499ee745dc6043100a10c2b41efd5990fbb9127041861a70e658c150a0ff0:body:94db39dc5dd2fcbcc16aba208a84e3a5024f500f2ffc27dbb6ee721a784af563:status-updated:2026-09-30 01:27:52.535072:schema:9b334dd97e1e33aa368b94a8ccaf60f0adbf3be733136331a20c9e755772b5b2:source:table:macro_core_monthly:id:1603:dir:macro_core_monthly_recovery_20260905~1603:txn:8:wal:8:wal-physical:8:metadata-rows:200"
+    },
+    "physical_view_base_token" : "view:v_macro_core_monthly:directory:v_macro_core_monthly~1806:id:1806:definition:163499ee745dc6043100a10c2b41efd5990fbb9127041861a70e658c150a0ff0:body:94db39dc5dd2fcbcc16aba208a84e3a5024f500f2ffc27dbb6ee721a784af563:status-updated:2026-09-30 01:27:52.535072:schema:9b334dd97e1e33aa368b94a8ccaf60f0adbf3be733136331a20c9e755772b5b2:source:table:macro_core_monthly:id:1603:dir:macro_core_monthly_recovery_20260905~1603:txn:8:wal:8:wal-physical:8:metadata-rows:200",
+    "base_physical_token" : "table:macro_core_monthly:id:1603:dir:macro_core_monthly_recovery_20260905~1603:txn:8:wal:8:wal-physical:8:metadata-rows:200",
+    "unique_field_comparisons" : 27,
+    "nullable_double_slot_comparisons" : 24,
+    "nonnull_double_rawbit_comparisons" : 22,
+    "null_double_comparisons" : 2,
+    "first_june_july_repeat_exact" : true,
+    "july_august_later_read_window_exact" : true,
+    "september_empty_without_failure" : true,
+    "changed_range_cursor_rejected" : true,
+    "configured_read_group" : {
+      "startedAt" : "2026-10-06T18:13:30.395501400Z",
+      "finishedAt" : "2026-10-06T18:13:30.418123700Z",
+      "members" : [ {
+        "memberId" : "macro-view",
+        "datasetId" : "v_macro_core_monthly",
+        "definitionVersion" : 1,
+        "rowType" : "com.zoutrankil.data.domain.MacroCoreMonthlyView",
+        "status" : "READ",
+        "page" : {
+          "datasetId" : "v_macro_core_monthly",
+          "definitionVersion" : 1,
+          "sourceVersion" : "view:v_macro_core_monthly:directory:v_macro_core_monthly~1806:id:1806:definition:163499ee745dc6043100a10c2b41efd5990fbb9127041861a70e658c150a0ff0:body:94db39dc5dd2fcbcc16aba208a84e3a5024f500f2ffc27dbb6ee721a784af563:status-updated:2026-09-30 01:27:52.535072:schema:9b334dd97e1e33aa368b94a8ccaf60f0adbf3be733136331a20c9e755772b5b2:source:table:macro_core_monthly:id:1603:dir:macro_core_monthly_recovery_20260905~1603:txn:8:wal:8:wal-physical:8:metadata-rows:200",
+          "observedAt" : "2026-10-06T18:13:30.413685900Z",
+          "rows" : [ {
+            "month" : "2026-06",
+            "cpiYoy" : 1.0,
+            "ppiYoy" : 4.1,
+            "pmiMfg" : 50.3,
+            "gdpYoy" : 4.7,
+            "m2Yoy" : 8.0,
+            "socialFinancingStock" : 462.06,
+            "newRmbLoan" : 33671.0,
+            "socialFinancingYoy" : 0.07395872071401999
+          }, {
+            "month" : "2026-07",
+            "cpiYoy" : 0.5,
+            "ppiYoy" : 3.5,
+            "pmiMfg" : 49.2,
+            "gdpYoy" : null,
+            "m2Yoy" : 7.7,
+            "socialFinancingStock" : 463.28,
+            "newRmbLoan" : 14068.0,
+            "socialFinancingYoy" : 0.0742724637681158
+          }, {
+            "month" : "2026-08",
+            "cpiYoy" : 0.8,
+            "ppiYoy" : 3.8,
+            "pmiMfg" : 49.8,
+            "gdpYoy" : null,
+            "m2Yoy" : 7.5,
+            "socialFinancingStock" : 464.8,
+            "newRmbLoan" : 16577.0,
+            "socialFinancingYoy" : 0.07183212267958039
+          } ],
+          "nextCursor" : null
+        },
+        "errorCode" : null
+      } ]
+    },
+    "pre_cancelled_group" : {
+      "startedAt" : "2026-10-06T18:13:30.420860200Z",
+      "finishedAt" : "2026-10-06T18:13:30.420860200Z",
+      "members" : [ {
+        "memberId" : "macro-view",
+        "datasetId" : "v_macro_core_monthly",
+        "definitionVersion" : 1,
+        "rowType" : "com.zoutrankil.data.domain.MacroCoreMonthlyView",
+        "status" : "CANCELLED",
+        "page" : null,
+        "errorCode" : "READ_CANCELLED"
+      } ]
+    },
+    "pre_cancelled_reader_invocations" : 0,
+    "invalid_month_projection_or_budget_before_reader" : true,
+    "typed_write_and_replacement_rejected" : true,
+    "read_group_request" : {
+      "path" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\strictread-group-request-D105-formal-20261007.json",
+      "sha256" : "b92607861ae95cb74aadcb0adce534a5f0756851846fc89988a1ea9009ccc9a4"
+    }
+  },
+  "D104_ledger_files_after" : {
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-java-acceptance.sqlite3" : {
+      "exists" : true,
+      "bytes" : 204800,
+      "sha256" : "22b8e6af27241f74646353dc9e952d8b82789b3fa457c13a07c328a728f3a821"
+    },
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-java-acceptance.sqlite3-wal" : {
+      "exists" : true,
+      "bytes" : 0,
+      "sha256" : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-java-acceptance.sqlite3-shm" : {
+      "exists" : true,
+      "bytes" : 32768,
+      "sha256" : "fd4c9fda9cd3f9ae7c962b0ddf37232294d55580e1aa165aa06129b8549389eb"
+    }
+  },
+  "ledger_mutated" : false,
+  "status" : "VERIFIED_FORMAL_BOUNDED_VIEW_READ",
+  "double_tolerance" : 0,
+  "actual_source_increment_during_D105" : false,
+  "actual_source_revision_during_D105" : false,
+  "source_increment_provenance" : "Prior accepted D104 August source append/base publication, reused unchanged",
+  "cancellation_scope" : "Pre-cancelled ReadGroup token before any reader invocation only",
+  "finished_at" : "2026-10-06T18:13:30.467919100Z"
+}

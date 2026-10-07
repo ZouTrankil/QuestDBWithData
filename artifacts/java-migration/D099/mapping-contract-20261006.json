@@ -1,0 +1,73 @@
+{
+  "taskId": "D099",
+  "object": "v_retail_sentiment_daily",
+  "definitionVersion": 1,
+  "evidenceKind": "SOURCE_AND_IMPLEMENTATION_CONTRACT_NOT_LIVE_ACCEPTANCE",
+  "objectKind": "VIEW",
+  "canonicalAliasSql": "SELECT * FROM mv_retail_sentiment_daily_v1",
+  "dependency": "mv_retail_sentiment_daily_v1",
+  "baseRefreshJobId": "data.mv_retail_sentiment_daily_v1",
+  "separateAliasRefreshJob": false,
+  "businessKey": ["trade_date"],
+  "grain": "One SAMPLE BY 1d ALIGN TO CALENDAR bucket of l2_daily_features.ts",
+  "dateCarrier": "Exact UTC midnight TIMESTAMP maps to LocalDate; nonmidnight or fractional timestamp is rejected",
+  "physicalPartition": "N/A for ordinary VIEW; Java Partition.NONE",
+  "physicalWal": "N/A for ordinary VIEW; Java wal=false. Parent MV remains MONTH/WAL",
+  "dedupKey": [],
+  "capabilities": ["READ"],
+  "directWriteAndReplacement": "Rejected; the canonical D098 native job owns refresh",
+  "columns": [
+    {"name":"trade_date","source":"mv_retail_sentiment_daily_v1.trade_date","javaType":"LocalDate","accessor":"tradeDate","storageType":"TIMESTAMP","nullable":false,"unit":"calendar day","parentSql":"ts AS trade_date","pythonSqlLine":33},
+    {"name":"avg_retail_ratio","source":"mv_retail_sentiment_daily_v1.avg_retail_ratio","javaType":"Double","accessor":"avgRetailRatio","storageType":"DOUBLE","nullable":true,"unit":"dimensionless GMM retail volume ratio","parentSql":"avg(gmm_retail_ratio)","pythonSqlLine":34},
+    {"name":"avg_retail_entropy","source":"mv_retail_sentiment_daily_v1.avg_retail_entropy","javaType":"Double","accessor":"avgRetailEntropy","storageType":"DOUBLE","nullable":true,"unit":"bits, Shannon base-2 time entropy","parentSql":"avg(mean_retail_entropy)","pythonSqlLine":35},
+    {"name":"total_retail_amount_yi","source":"mv_retail_sentiment_daily_v1.total_retail_amount_yi","javaType":"Double","accessor":"totalRetailAmountYi","storageType":"DOUBLE","nullable":true,"unit":"yi yuan","parentSql":"sum(retail_total_amount) / 100000000.0","pythonSqlLine":36},
+    {"name":"total_retail_net_inflow_yi","source":"mv_retail_sentiment_daily_v1.total_retail_net_inflow_yi","javaType":"Double","accessor":"totalRetailNetInflowYi","storageType":"DOUBLE","nullable":true,"unit":"signed yi yuan","parentSql":"sum(retail_funds_net_inflow) / 100000000.0","pythonSqlLine":37},
+    {"name":"avg_rel_aggro","source":"mv_retail_sentiment_daily_v1.avg_rel_aggro","javaType":"Double","accessor":"avgRelAggro","storageType":"DOUBLE","nullable":true,"unit":"source relative aggression scale","parentSql":"avg(mean_rel_aggro)","pythonSqlLine":38},
+    {"name":"total_q1","source":"mv_retail_sentiment_daily_v1.total_q1","javaType":"Long","accessor":"totalQ1","storageType":"LONG","nullable":true,"unit":"Q1 windows with inflow and price rise","parentSql":"sum(q1_count)","pythonSqlLine":39},
+    {"name":"total_q3","source":"mv_retail_sentiment_daily_v1.total_q3","javaType":"Long","accessor":"totalQ3","storageType":"LONG","nullable":true,"unit":"Q3 windows with outflow and price decline","parentSql":"sum(q3_count)","pythonSqlLine":40},
+    {"name":"avg_wash_trade_ratio","source":"mv_retail_sentiment_daily_v1.avg_wash_trade_ratio","javaType":"Double","accessor":"avgWashTradeRatio","storageType":"DOUBLE","nullable":true,"unit":"dimensionless wash trade ratio","parentSql":"avg(wash_trade_ratio)","pythonSqlLine":41},
+    {"name":"total_spoof_count","source":"mv_retail_sentiment_daily_v1.total_spoof_count","javaType":"Long","accessor":"totalSpoofCount","storageType":"LONG","nullable":true,"unit":"severe spoofing windows","parentSql":"sum(spoof_count)","pythonSqlLine":42},
+    {"name":"total_manipulation_count","source":"mv_retail_sentiment_daily_v1.total_manipulation_count","javaType":"Long","accessor":"totalManipulationCount","storageType":"LONG","nullable":true,"unit":"rowwise fake support plus fake pressure counts","parentSql":"sum(fake_support_count + fake_pressure_count)","pythonSqlLine":43},
+    {"name":"avg_mfi_score","source":"mv_retail_sentiment_daily_v1.avg_mfi_score","javaType":"Double","accessor":"avgMfiScore","storageType":"DOUBLE","nullable":true,"unit":"source main-force-intensity score scale","parentSql":"avg(mfi_score)","pythonSqlLine":44},
+    {"name":"total_main_net_yi","source":"mv_retail_sentiment_daily_v1.total_main_net_yi","javaType":"Double","accessor":"totalMainNetYi","storageType":"DOUBLE","nullable":true,"unit":"signed yi yuan","parentSql":"sum(main_net_inflow) / 100000000.0","pythonSqlLine":45}
+  ],
+  "nullPrecisionAndUnits": {
+    "nulls": "All twelve SUM/AVG outputs retain null; null is distinct from zero. Either-null fake-support/fake-pressure operand makes that row expression null before SUM; no COALESCE or split SUM",
+    "integers": "Four nullable Long outputs are exact and nonnegative when present; negative/wrapped values and non-Long coercion are rejected. Source overflow protection belongs to the existing D098 port",
+    "doubles": "Eight nullable Double outputs must be finite; pass-through preserves exact stored Double values, including signed zero. No extra scale conversion, ratio clamp, entropy range or MFI upper bound",
+    "amounts": "D098 SQL converts source yuan to yi yuan once; the alias mapper performs no multiplication/division"
+  },
+  "pythonReferences": [
+    {"path":"D:/work/fund_2/back-monitor/src/quant_platform/data/application/market_barometer.py","lines":[19,24,26,43,44],"fact":"get_retail_sentiment delegates to the v_retail_sentiment_daily repository read; Java does not copy Python exception-to-empty behavior"},
+    {"path":"D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/market_barometer.py","lines":[25,33,37,39,52,59,60,63,66,69,93,95,96],"fact":"Native alias range/latest SELECT path reads the ordinary view and bypasses read-through publishing"},
+    {"path":"D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/registry.py","lines":[39,40,41,42,43,44,45,46],"fact":"retail_sentiment_daily native product binds l2_daily_features -> mv_retail_sentiment_daily_v1 -> v_retail_sentiment_daily"},
+    {"path":"D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/derived.py","lines":[115,116,117,118,119,123,408,409,411,412,413,414],"fact":"Active status requires the exact SELECT * alias; Python activate replaces alias only after parity. D099 adds no automatic activation or database writes"},
+    {"path":"D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/market_barometer_views.py","lines":[31,33,34,35,36,37,38,39,40,41,42,43,44,45,46,48,55],"fact":"All thirteen parent aggregate expressions and calendar-day grain"}
+  ],
+  "d098SemanticEvidence": "artifacts/java-migration/D098/mapping-contract-20261006.json",
+  "generatedProjection": "src/main/java/com/zoutrankil/data/domain/view/RetailSentimentDailyView.java remains unmodified; dedicated business DTO is domain/RetailSentimentDailyView.java",
+  "readContract": {
+    "repository":"RetailSentimentDailyViewReadRepository",
+    "operations":["findForDate complete trade_date equality key","findRange finite increasing [from,to) with stable cursor","findPage validated shared query"],
+    "physicalVersion":"Caller supplies no synthetic source version; shared alias/MV guard binds actual alias SQL and source/MV physical/WAL frontier before/after every read and cursor",
+    "failure":"Invalid, lagging, changed or incorrectly bound MV/alias must not return a success page",
+    "group":"Actual ReadGroupConfiguration binding must return domain.RetailSentimentDailyView; cancellation yields no page"
+  },
+  "acceptancePlan": {
+    "enabledEnvironment":"D099_LIVE_READ=true",
+    "privateTarget":"127.0.0.1:19010/18822, attested var/d098-isolated-questdb",
+    "acceptedSourceFrontier":"9:36",
+    "sourceRawRows":23773,
+    "fixtureScope":"D098's fifteen necessary source columns of formal 110 columns; only relative-base MV and alias parity, no D086/provider/universe readiness claim",
+    "dates":["2026-09-17","2026-09-18","2026-09-21"],
+    "pages":3,
+    "aliasParentComparisons":39,
+    "aliasParentTolerance":"Exact date/nullable Long/Double bits/nulls",
+    "aliasDirectBaseComparisons":39,
+    "directBaseTolerance":"Date/nullable Long exact; nullable Double finite, atol=1e-8 and rtol=1e-10",
+    "writes":0,
+    "formal":"Read-only alias remains bound to invalid formal MV; typed read and actual group fail without page; no repair"
+  },
+  "testsPreparedNotRunByAuthor": ["RetailSentimentDailyViewMappingTest: 11 semantic, mapping, alias contract and query-boundary cases", "RetailSentimentDailyViewLiveReadAcceptanceTest: enabled-only actual QuestDB read acceptance"],
+  "liveAcceptanceStatus":"PENDING_COORDINATOR_EXECUTION"
+}

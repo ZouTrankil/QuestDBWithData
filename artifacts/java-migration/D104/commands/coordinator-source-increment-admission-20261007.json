@@ -1,0 +1,71 @@
+{
+  "task_id": "D104",
+  "protocol_version": 1,
+  "decision": "accepted_for_bounded_source_increment",
+  "checked_at": "2026-10-06T17:09:00.365274+00:00",
+  "initial_fixture": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\source-fixture-initial-after-known-partial-20261007.json",
+    "sha256": "050cd029e0ec639bd1e11dcd2b8d4b8e5336ee45554abae22b430c075de8f006"
+  },
+  "java_initial": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\java-initial-acceptance-20261007.json",
+    "sha256": "2ef5ded567bf02de76170516e0acd4fedd3a4b3242133a79bafac4986bc559b1"
+  },
+  "terminal_review": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\initial-java-process-and-ledger-review-20261007.json",
+    "sha256": "738744cd9f782ae0f47faa1a76064cc80b8fa7772aebb3f173fcd0798831f1e2"
+  },
+  "preflight": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\macro-core-readonly-preflight-20261007.json",
+    "sha256": "fc4b839c44254aee9f221e1246c5279738cf33704eb12749f2f70691347f530b"
+  },
+  "startup": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\private-server-start-20261007.json",
+    "sha256": "9dccda7261b680798924e7632c4f8dd646c15e8f0442e737b80ba701f36f51f7"
+  },
+  "target": {
+    "pid": 43084,
+    "birth_utc": "2026-10-06T16:04:24.4330550Z",
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19040,
+    "pg_port": 18852
+  },
+  "source_month": "202608",
+  "source_rows": 5,
+  "source_INSERT_attempts": 5,
+  "new_DDL": 0,
+  "private_output_writes": 0,
+  "formal_writes": 0,
+  "automatic_retry": false,
+  "script": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\prepare_d104_macro_core_increment_isolated.py",
+    "sha256": "adf45f32d4ade8b96b91ac200e26f6db12789ea4f6b12ff3da344cd9dceb8645"
+  },
+  "guards": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d104_increment_guards.py",
+    "sha256": "d0166580101465181741d03e601c3cb1ea5658bf908575955d0cd70ae75a9e13"
+  },
+  "guard_log": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\python-source-increment-guards-frozen-20261007.log",
+    "sha256": "d2d063bb1b80484cac569af1e753e959b67b35c0171e3ffd955b76959f5c5bd3"
+  },
+  "independent_static_review": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D104\\commands\\coordinator-source-increment-static-review-20261007.json",
+    "sha256": "8745f32ede3e04ffcc46530267d20656366f7789649c58fe488932d7747b4c54"
+  },
+  "source_tables": [
+    "cn_cpi",
+    "cn_ppi",
+    "cn_pmi",
+    "cn_m",
+    "sf_month"
+  ],
+  "GDP_INSERT_rows": 0,
+  "private_output_expected_rows": 2,
+  "sqlite_tables_unchanged_required": 5,
+  "original_initial_status": "FAILED_PRESERVED",
+  "java_incremental_writes_admitted": false,
+  "D105_admitted": false,
+  "scope": "Only one actual captured August observation in each five monthly sources; retain initial whole source prefix, two target months, all ledger rows and the original failed CPI-preparation evidence."
+}

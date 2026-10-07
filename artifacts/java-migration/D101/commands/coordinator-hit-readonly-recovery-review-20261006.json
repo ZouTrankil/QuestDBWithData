@@ -1,0 +1,278 @@
+{
+  "task_id": "D101",
+  "stage": "independent_hit_readonly_recovery_review",
+  "checked_at": "2026-10-06T10:50:59.588569+00:00",
+  "status": "PASS",
+  "recommendation": "accepted_for_new_hit_run_only",
+  "blockers": [],
+  "review_scope": {
+    "actual_local_sqlite_mode": "ro",
+    "connection_query_only": true,
+    "questdb_service_queries_by_reviewer": 0,
+    "native_process_queries_by_reviewer": 0,
+    "owner_invocations_by_reviewer": 0,
+    "gradle_runs_by_reviewer": 0,
+    "ledger_writes_by_reviewer": 0,
+    "source_writes_by_reviewer": 0,
+    "artifact_policy": "new-only review; historical files unchanged"
+  },
+  "original_run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+  "ledger_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-45e5e7ce-b273-4510-8d15-e1abe5397550.sqlite3",
+  "frozen_run_identity_unchanged": true,
+  "entry_proofs": {
+    "ATTEMPT": {
+      "entry_id": "attempt-86516af8-49bf-453e-be69-9284978be066",
+      "revision": 3,
+      "state": "VERIFIED",
+      "expected_rows": 2,
+      "actual_rows": 2,
+      "matched_rows": 2,
+      "writer_stopped": true,
+      "source_complete": true,
+      "full_range_validated_units": 2,
+      "source_version": "40ea432abd94e78faf7994fe74cf68fbcc981113340d312a57ff7184a2358e93",
+      "unit_fingerprints": [
+        "8e072be155557154cac3cf9525b4364663f2d845a9b3fba5a23bf8519175ae0c",
+        "1fc5f995b8f92b04644aca107f2266b977a043d6e9e2ff1d2b2ed5684a711551"
+      ]
+    },
+    "RUN": {
+      "entry_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+      "revision": 3,
+      "state": "VERIFIED",
+      "expected_rows": 2,
+      "actual_rows": 2,
+      "matched_rows": 2,
+      "writer_stopped": true,
+      "source_complete": true,
+      "full_range_validated_units": 2,
+      "source_version": "40ea432abd94e78faf7994fe74cf68fbcc981113340d312a57ff7184a2358e93",
+      "unit_fingerprints": [
+        "8e072be155557154cac3cf9525b4364663f2d845a9b3fba5a23bf8519175ae0c",
+        "1fc5f995b8f92b04644aca107f2266b977a043d6e9e2ff1d2b2ed5684a711551"
+      ]
+    },
+    "SLICE": {
+      "entry_id": "slice-5c5d6c88-b2e2-46dd-ba8c-42a781c5a4ad",
+      "revision": 6,
+      "state": "VERIFIED",
+      "expected_rows": 1,
+      "actual_rows": 1,
+      "matched_rows": 1,
+      "writer_stopped": true,
+      "source_complete": true,
+      "full_range_validated_units": 2,
+      "source_version": "40ea432abd94e78faf7994fe74cf68fbcc981113340d312a57ff7184a2358e93",
+      "unit_fingerprints": [
+        "8e072be155557154cac3cf9525b4364663f2d845a9b3fba5a23bf8519175ae0c",
+        "1fc5f995b8f92b04644aca107f2266b977a043d6e9e2ff1d2b2ed5684a711551"
+      ]
+    }
+  },
+  "original_event_count": 12,
+  "current_event_count": 15,
+  "added_events": "3 VERIFIED only",
+  "actual_submitted_slice_count": 1,
+  "original_submitted_date": "2026-09-17",
+  "second_day_submitted": false,
+  "run_and_attempt_read_proof_units": 2,
+  "management_verified_publication_units": 1,
+  "unresolved_slices": 0,
+  "retained_run_leases": 0,
+  "retained_all_ledger_leases": 0,
+  "data_proof": {
+    "scope": "actual Recovery test fresh SELECT and raw-bit assertions; independently bound artifacts and SQLite evidence, no new QuestDB queries by this reviewer",
+    "dates": [
+      "2026-09-17",
+      "2026-09-18"
+    ],
+    "cache_rows": 2,
+    "coverage_rows": 2,
+    "all_field_comparisons": 80,
+    "pg_reference_double_rawbit_comparisons": 16,
+    "independent_jdbc_double_rawbit_comparisons": 8,
+    "double_tolerance": 0,
+    "five_tables_before_and_after_equal": true,
+    "tables": {
+      "etf_share": {
+        "table": "etf_share",
+        "id": 9,
+        "directory": "etf_share~9",
+        "physicalTxn": 4,
+        "metadataRows": 1532,
+        "actualRows": 1532,
+        "sequenceTxn": 4,
+        "writerTxn": 4,
+        "pendingRows": 0,
+        "bufferedTxns": 0,
+        "tableSuspended": false,
+        "walSuspended": false
+      },
+      "etf_daily": {
+        "table": "etf_daily",
+        "id": 10,
+        "directory": "etf_daily~10",
+        "physicalTxn": 9,
+        "metadataRows": 4274,
+        "actualRows": 4274,
+        "sequenceTxn": 9,
+        "writerTxn": 9,
+        "pendingRows": 0,
+        "bufferedTxns": 0,
+        "tableSuspended": false,
+        "walSuspended": false
+      },
+      "etf_basic": {
+        "table": "etf_basic",
+        "id": 11,
+        "directory": "etf_basic~11",
+        "physicalTxn": 6,
+        "metadataRows": 2958,
+        "actualRows": 2958,
+        "sequenceTxn": 6,
+        "writerTxn": 6,
+        "pendingRows": 0,
+        "bufferedTxns": 0,
+        "tableSuspended": false,
+        "walSuspended": false
+      },
+      "etf_market_overview_daily_cache": {
+        "table": "etf_market_overview_daily_cache",
+        "id": 12,
+        "directory": "etf_market_overview_daily_cache~12",
+        "physicalTxn": 2,
+        "metadataRows": 2,
+        "actualRows": 2,
+        "sequenceTxn": 2,
+        "writerTxn": 2,
+        "pendingRows": 0,
+        "bufferedTxns": 0,
+        "tableSuspended": false,
+        "walSuspended": false
+      },
+      "market_barometer_cache_coverage": {
+        "table": "market_barometer_cache_coverage",
+        "id": 13,
+        "directory": "market_barometer_cache_coverage~13",
+        "physicalTxn": 2,
+        "metadataRows": 2,
+        "actualRows": 2,
+        "sequenceTxn": 2,
+        "writerTxn": 2,
+        "pendingRows": 0,
+        "bufferedTxns": 0,
+        "tableSuspended": false,
+        "walSuspended": false
+      }
+    },
+    "source_fixture_sha256": "c38a61f792ef6be689e1ed1cdb335dabf3da7f9b44c886a11fd4c84669f945f4",
+    "fresh_source_complete": true,
+    "writer_stopped_on_all_three_verification_proofs": true
+  },
+  "process_proof": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-00f2f51a-06ff-4624-870a-903f717ae4d3.process-reconciled-253b18e7-eb2c-44b1-8ff1-0a8de1295254.json",
+    "sha256": "7ffa139f9b8d5a5c52445794f3de3b7fcf95aac759d49aed36fdce055aa6f0f8",
+    "original_bound_evidence_count": 14,
+    "known_process_identities": 7,
+    "late_duplicate_unknown_tombstones": 2,
+    "original_markers_remain_false_and_unchanged": true,
+    "actual_bridge_pid": 27172,
+    "native_absence": {
+      "method": "Java ProcessHandle.of",
+      "checked_at": "2026-10-06T10:40:35.208770100Z",
+      "all_absent": true,
+      "checked_pids": [
+        1960,
+        2504,
+        17572,
+        23980,
+        27172,
+        29156,
+        45192
+      ]
+    },
+    "scope": "Recovery stage and Gateway fresh ProcessHandle checks; no independent current native query by this reviewer"
+  },
+  "publication_inventory": {
+    "before_after_sha_maps_equal": true,
+    "immutable_historical_files_verified": 17,
+    "publisher_files_verified": 52,
+    "actual_intents": 3,
+    "actual_claims": 3,
+    "original_hit_intents": 1,
+    "new_submissions": 0,
+    "new_publisher_invocations": 0,
+    "questdb_mutations": 0,
+    "formal_written_rows": 0,
+    "source_changes": 0,
+    "ddl_operations": 0,
+    "automatic_replays": 0
+  },
+  "boundary": {
+    "recovery_certifies_two_owner_hits": false,
+    "fresh_new_hit_run_required": true,
+    "new_hit_must_use_new_run_and_claim_identity": true,
+    "source_increment_admitted": false,
+    "next_task_admitted": false,
+    "human_review": "pending_review",
+    "explanation": "Fresh two-day current cache/receipt/source/WAL proof permits explicit readonly settlement of the original one submitted slice. It does not create a second day submission or certify two owner hits. Recommend only a separate new HIT run; no source increment or D102."
+  },
+  "evidence": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-hit-readonly-recovery-20261006.json",
+      "sha256": "6bc5ba02c2f46db6b73c4622305390bb441ae768f101ec88401bd97af4abc29d"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-hit-readonly-recovery-xml-20261006\\TEST-com.zoutrankil.data.config.EtfMarketOverviewCacheHitReadOnlyRecoveryTest.xml",
+      "sha256": "443aeb6aff82f114988532e77d650a870d7b3949b3de1d359c079beaa7691010"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-hit-readonly-recovery-20261006.log",
+      "sha256": "869ccc16ba00ab631bfce76ef37203d5566e3251439e6780bd2705ca50f37896"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-job-full-prefix-reconcile-guards-20261006.json",
+      "sha256": "68db3f6a21e853ec208e47a0cb9cbf7055a2296288a60b90ccce324d2d3ba320"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-job-full-prefix-reconcile-guards-xml-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewDailyCacheJobServiceTest.xml",
+      "sha256": "1b884d3c6664e254d3bc31d164ef9316e2649d17f59616408c15ccd4ef6cfebb"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-job-full-prefix-reconcile-guards-20261006.log",
+      "sha256": "e35d62f34808dc34a9d18ab91275b5bc2da094ceeda06d493d01a31281b4d243"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\coordinator-hit-readonly-recovery-admission-20261006.json",
+      "sha256": "74e86c9507842c69b836eea6d4d622b4ce6d8b8fdce1efca050b6e950863c91e"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\coordinator-hit-failure-review-20261006.json",
+      "sha256": "dcd93d2aa88c2d2bb8050914e428f8cde15c735bb25b09fa63f8bd2cb2e80c6d"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-hit-failed-cc76bb4f-3b56-4597-bdd3-013826157690.json",
+      "sha256": "3d9762b8fce34ccd14c3b73d44bb31a8c1a1224c9c8fbd80864b234363b3cbbe"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-hit-failed-native-check-20261006.json",
+      "sha256": "c333d700c877d6384c23892f8afc77747245071603f77aafcd89b9a0c1a5b8a1"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-hit-failed-sqlite-readonly-20261006.json",
+      "sha256": "6ac89914f04956f2f2784581d46cf15c997329f3d591efd1814c62506ef8e262"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\source-fixture-initial-20261006.json",
+      "sha256": "c38a61f792ef6be689e1ed1cdb335dabf3da7f9b44c886a11fd4c84669f945f4"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-publish-00f2f51a-06ff-4624-870a-903f717ae4d3.process-reconciled-253b18e7-eb2c-44b1-8ff1-0a8de1295254.json",
+      "sha256": "7ffa139f9b8d5a5c52445794f3de3b7fcf95aac759d49aed36fdce055aa6f0f8"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\EtfMarketOverviewCacheHitReadOnlyRecoveryTest.java",
+      "sha256": "dc4c6c7bad324e2f404f3c8a5a62eba8d51680cbaab04285aeb24040ce23188f"
+    }
+  ]
+}

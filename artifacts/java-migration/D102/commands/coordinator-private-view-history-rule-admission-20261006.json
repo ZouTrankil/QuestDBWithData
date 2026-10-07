@@ -1,0 +1,75 @@
+{
+  "task_id": "D102",
+  "checked_at": "2026-10-06T13:35:21.445461+00:00",
+  "decision": "accepted_for_private_missing_view_with_reviewed_old_instances_only",
+  "private_target": {
+    "pid": 23388,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-isolated-questdb",
+    "http_port": 19020,
+    "pg_port": 18832
+  },
+  "evidence": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-completed-producer-identity-review-20261006.json",
+      "sha256": "810c456a7c024a497a375a2369000f0991779bdea8a1975a440efec006e28cad"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-historical-identity-rule-review-20261006.json",
+      "sha256": "a3f4e0a5992e64562467f761779503dda084ef84618951f55e2fe58947d7411b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\python-historical-identity-leaf-guards-20261006.json",
+      "sha256": "da716be168adc3ad7ece00d45f5cd1143dc4d78fad340b23165156468da4ff53"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\python-historical-identity-leaf-guards-20261006.log",
+      "sha256": "ac77e7a9db41cae7ab187e5ef4937ec5d75bea1a010edb0809e05aaebb872e73"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-20261006.json",
+      "sha256": "26b337b392b304e940c6430cc0adc2b8ecd9b381ed4fd6e0e26b8a83575609ae"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-new-identity-20261006.json",
+      "sha256": "35a5906e8579bcdf6ba014e493998f478e75b4310240c9aae074bd809986f2d8"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\failed-precreate-identity-delta-diagnostic-20261006.json",
+      "sha256": "55622426c08f402ee9731a399a6ea8b4fd0fa84a3694f07cac79fb2ec58064ee"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\coordinator-review-20261006.json",
+      "sha256": "2201c05e5e05c4b056a5f3170be86ed86c230fb08e1d7dcf42f93c7228fccaef"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-typed-write-20261006.json",
+      "sha256": "6914f8cddb9d1bf638d70d6db7a8100cc3ea3631f141267b4d145ec70dce0cf5"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\audit_d102_etf_view.py",
+      "sha256": "818e4216602ab2bbdee840d650093e0eb1cb11366bad633cb8488b4d8d8549cb"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d102_script_guards.py",
+      "sha256": "bb90338c52f97f2c599bbe3927ca2d52f38a0bac62d1a97ad4f9c4029e41cbc9"
+    }
+  ],
+  "fresh_native_policy": "At every boundary each present historical PID must be eligible and its known UTC OS birth must be strictly later than all its verified original complete STOPs; every hard-denied PID must be absent",
+  "eligible_pids": 466,
+  "hard_denied_pids": 9,
+  "complete_historical_pid_census": 475,
+  "no_name_parent_or_executable_exemption": true,
+  "default_and_protocol1_policy_preserved": true,
+  "stable_boundaries": "Ledger contents, full historical process manifest, review binding and PID census stable; fresh current identities independently validated at both boundaries",
+  "python_unique": 81,
+  "max_ddl_attempts": 1,
+  "source_cache_coverage_refresh_and_formal_writes": 0,
+  "owner_invocations": 0,
+  "old_failures_preserved": true,
+  "earlier_actual_ddl_attempts": 0,
+  "automatic_retry": false,
+  "unknown_ack_policy": "Retain UNKNOWN and stop; never resend or reset",
+  "new_output": "view-isolated-acceptance-history-rule-20261006.json",
+  "java_live_admitted": false,
+  "next_task_admitted": false
+}

@@ -1,0 +1,67 @@
+{
+  "ledger_created" : false,
+  "job_count" : 40,
+  "definition" : {
+    "datasetId" : "v_etf_market_overview_daily",
+    "schemaVersion" : 1,
+    "provider" : "python.derived.market_barometer_views",
+    "owner" : "python.market_barometer_views.install_views",
+    "objectName" : "v_etf_market_overview_daily",
+    "objectKind" : "VIEW",
+    "columns" : [ {
+      "sourceName" : "etf_share.timestamp",
+      "logicalName" : "trade_date",
+      "storageName" : "trade_date",
+      "storageType" : "TIMESTAMP",
+      "nullable" : false,
+      "meaning" : "Calendar-day identity of the direct join aggregate",
+      "temporal" : {
+        "kind" : "BUSINESS_DATE",
+        "sourceFormat" : "BASIC",
+        "zone" : "calendar",
+        "precision" : "DAY",
+        "meaning" : "SAMPLE BY 1d ALIGN TO CALENDAR aggregate date carried at exact UTC midnight; not an event timestamp"
+      },
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:count_distinct(etf_share.ts_code)",
+      "logicalName" : "etf_count",
+      "storageName" : "etf_count",
+      "storageType" : "LONG",
+      "nullable" : false,
+      "meaning" : "Exact nonnegative distinct full-code count after same-code/same-timestamp INNER JOIN",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:sum(etf_share.fd_share)",
+      "logicalName" : "total_share",
+      "storageName" : "total_share",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Joined ETF shares in ten-thousand-share units (万份); preserve SQL null and signed values",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    }, {
+      "sourceName" : "derived:sum(etf_share.fd_share*etf_daily.close)/10000.0",
+      "logicalName" : "total_size_yi",
+      "storageName" : "total_size_yi",
+      "storageType" : "DOUBLE",
+      "nullable" : true,
+      "meaning" : "Joined ETF market value in yi yuan (亿元); division belongs to source SQL, no mapper scaling",
+      "temporal" : null,
+      "legacyNullSentinels" : [ ]
+    } ],
+    "businessKey" : [ "trade_date" ],
+    "dedupKey" : [ ],
+    "designatedTimestamp" : "trade_date",
+    "partition" : "NONE",
+    "wal" : false,
+    "capabilities" : [ "READ" ],
+    "dependencies" : [ "etf_share", "etf_daily" ],
+    "storageRationale" : "Ordinary direct share/daily view, SAMPLE BY 1d ALIGN TO CALENDAR after an INNER JOIN on complete timestamp and ts_code. No basic JOIN, code/type filter, cache/receipt dependency, physical partition, WAL or UPSERT key. Direct writes and replacements are forbidden. Existing base owners refresh share/daily; D101 prewarms its separate cache and does not materialize this view. Reads bind the exact view SQL and both base tables' stable physical/WAL versions; date alone is the natural identity. Typed reads require the four columns and a date equality or a bounded date range of at most 31 days, with pages of at most 31 rows. Nullable finite DOUBLE aggregates retain exact binary64 values, signed zero, units and SQL nulls."
+  },
+  "dataset_count" : 51,
+  "view_independent_jobs" : 0,
+  "database_connections" : 0,
+  "task_id" : "D102"
+}

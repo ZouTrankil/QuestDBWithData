@@ -1,0 +1,156 @@
+{
+  "task_id": "D105",
+  "status": "OBSERVED_FORMAL_VIEW_METADATA_READONLY",
+  "observed_at": "2026-10-06T17:45:43.874039+00:00",
+  "view_before": [
+    {
+      "view_sql": "\n    SELECT * FROM macro_core_monthly\n",
+      "view_table_dir_name": "v_macro_core_monthly~1806",
+      "view_status": "valid",
+      "invalidation_reason": null,
+      "view_status_update_time": "2026-09-30T01:27:52.535072Z"
+    }
+  ],
+  "columns": [
+    {
+      "column": "month",
+      "type": "TIMESTAMP",
+      "indexed": false,
+      "indexBlockCapacity": 0,
+      "symbolCached": false,
+      "symbolCapacity": 0,
+      "symbolTableSize": 0,
+      "designated": true,
+      "upsertKey": false,
+      "indexType": "",
+      "indexInclude": ""
+    },
+    {
+      "column": "cpi_yoy",
+      "type": "DOUBLE",
+      "indexed": false,
+      "indexBlockCapacity": 0,
+      "symbolCached": false,
+      "symbolCapacity": 0,
+      "symbolTableSize": 0,
+      "designated": false,
+      "upsertKey": false,
+      "indexType": "",
+      "indexInclude": ""
+    },
+    {
+      "column": "ppi_yoy",
+      "type": "DOUBLE",
+      "indexed": false,
+      "indexBlockCapacity": 0,
+      "symbolCached": false,
+      "symbolCapacity": 0,
+      "symbolTableSize": 0,
+      "designated": false,
+      "upsertKey": false,
+      "indexType": "",
+      "indexInclude": ""
+    },
+    {
+      "column": "pmi_mfg",
+      "type": "DOUBLE",
+      "indexed": false,
+      "indexBlockCapacity": 0,
+      "symbolCached": false,
+      "symbolCapacity": 0,
+      "symbolTableSize": 0,
+      "designated": false,
+      "upsertKey": false,
+      "indexType": "",
+      "indexInclude": ""
+    },
+    {
+      "column": "gdp_yoy",
+      "type": "DOUBLE",
+      "indexed": false,
+      "indexBlockCapacity": 0,
+      "symbolCached": false,
+      "symbolCapacity": 0,
+      "symbolTableSize": 0,
+      "designated": false,
+      "upsertKey": false,
+      "indexType": "",
+      "indexInclude": ""
+    },
+    {
+      "column": "m2_yoy",
+      "type": "DOUBLE",
+      "indexed": false,
+      "indexBlockCapacity": 0,
+      "symbolCached": false,
+      "symbolCapacity": 0,
+      "symbolTableSize": 0,
+      "designated": false,
+      "upsertKey": false,
+      "indexType": "",
+      "indexInclude": ""
+    },
+    {
+      "column": "social_financing_stock",
+      "type": "DOUBLE",
+      "indexed": false,
+      "indexBlockCapacity": 0,
+      "symbolCached": false,
+      "symbolCapacity": 0,
+      "symbolTableSize": 0,
+      "designated": false,
+      "upsertKey": false,
+      "indexType": "",
+      "indexInclude": ""
+    },
+    {
+      "column": "new_rmb_loan",
+      "type": "DOUBLE",
+      "indexed": false,
+      "indexBlockCapacity": 0,
+      "symbolCached": false,
+      "symbolCapacity": 0,
+      "symbolTableSize": 0,
+      "designated": false,
+      "upsertKey": false,
+      "indexType": "",
+      "indexInclude": ""
+    },
+    {
+      "column": "social_financing_yoy",
+      "type": "DOUBLE",
+      "indexed": false,
+      "indexBlockCapacity": 0,
+      "symbolCached": false,
+      "symbolCapacity": 0,
+      "symbolTableSize": 0,
+      "designated": false,
+      "upsertKey": false,
+      "indexType": "",
+      "indexInclude": ""
+    }
+  ],
+  "physical_metadata": [
+    {
+      "id": 1806,
+      "directoryName": "v_macro_core_monthly~1806",
+      "partitionBy": "N/A",
+      "walEnabled": true,
+      "dedup": false,
+      "matView": false,
+      "designatedTimestamp": "month"
+    }
+  ],
+  "view_after": [
+    {
+      "view_sql": "\n    SELECT * FROM macro_core_monthly\n",
+      "view_table_dir_name": "v_macro_core_monthly~1806",
+      "view_status": "valid",
+      "invalidation_reason": null,
+      "view_status_update_time": "2026-09-30T01:27:52.535072Z"
+    }
+  ],
+  "view_metadata_stable": true,
+  "DDL_DML": 0,
+  "formal_writes": 0
+}

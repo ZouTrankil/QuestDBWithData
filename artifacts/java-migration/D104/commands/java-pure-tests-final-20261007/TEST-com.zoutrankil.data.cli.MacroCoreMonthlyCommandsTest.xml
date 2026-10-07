@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.cli.MacroCoreMonthlyCommandsTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-06T16:32:20.667Z" hostname="AMD395" time="0.125">
+  <properties/>
+  <testcase name="missingOwnerIsRejected()" classname="com.zoutrankil.data.cli.MacroCoreMonthlyCommandsTest" time="0.002"/>
+  <testcase name="installRejectsFlagsBeforeOwnerIo()" classname="com.zoutrankil.data.cli.MacroCoreMonthlyCommandsTest" time="0.089"/>
+  <testcase name="unknownCommandIsRejectedBeforeOwnerIo()" classname="com.zoutrankil.data.cli.MacroCoreMonthlyCommandsTest" time="0.006"/>
+  <testcase name="planRequiresExplicitDatesAndOnlyKnownFlags()" classname="com.zoutrankil.data.cli.MacroCoreMonthlyCommandsTest" time="0.007"/>
+  <testcase name="statusRequiresOnlyRunFlagBeforeOwnerIo()" classname="com.zoutrankil.data.cli.MacroCoreMonthlyCommandsTest" time="0.003"/>
+  <testcase name="malformedDateIsRejectedBeforeOwnerIo()" classname="com.zoutrankil.data.cli.MacroCoreMonthlyCommandsTest" time="0.009"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

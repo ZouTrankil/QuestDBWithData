@@ -1,0 +1,48 @@
+{
+  "task_id": "D101",
+  "status": "PASSED_PURE_GUARDS_AND_READONLY_PREVIEW",
+  "tests": 43,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "duration_seconds": 0.612,
+  "script_sha256": "df9bb4349d0881ac8fb09b5b47ce4571140abe0b3f5898b6a28b3b4b245c1fdd",
+  "test_sha256": "d4521e3122ac0e630865a98398195c082b625be230a0517a408b2f683d89ce59",
+  "log": "artifacts/java-migration/D101/commands/python-owner-bridge-final-guards-20261006.log",
+  "log_sha256": "24987f5571a4351cef4c7d656481bdbdc5d5a273192c1504c1b9ae89d06f6672",
+  "readonly_preview": "artifacts/java-migration/D101/commands/owner-preview-final-response-20261006.json",
+  "readonly_preview_sha256": "b95ea3731a7bc2775b7770a68bacbbf039c921406cb685b46c28fd32b72e3b11",
+  "readonly_preview_request_sha256": "82d2273fac81900bac16a8c3e04a720a8df2488486fbfe051329516119701392",
+  "target_actual_row_counts_before": {
+    "etf_market_overview_daily_cache": 0,
+    "market_barometer_cache_coverage": 0
+  },
+  "target_actual_row_counts_after": {
+    "etf_market_overview_daily_cache": 0,
+    "market_barometer_cache_coverage": 0
+  },
+  "target_raw_table_txn_null_preserved": true,
+  "target_raw_table_row_count_null_preserved": true,
+  "source_transactions_initialized": true,
+  "stable_unit_fingerprint": "8e072be155557154cac3cf9525b4364663f2d845a9b3fba5a23bf8519175ae0c",
+  "source_census_keys": 5856,
+  "source_census_field_values": 107914,
+  "source_census": {
+    "etf_basic": 2958,
+    "etf_daily": 2132,
+    "etf_share": 766
+  },
+  "original_inner_join_etf_count": 765,
+  "sqlite_parent_cancellation_chain": "Actual complete chain, at most64, rejects cancellation/cycle/missing parent before every owner flush",
+  "owner_invoked": false,
+  "owner_submissions": [],
+  "database_operations": "SELECT only for readonly preview; pure mocks for tests",
+  "formal_mutated": false,
+  "source_mutated": false,
+  "ddl_operations": 0,
+  "original_owner_source_state_and_versions_unchanged": true,
+  "original_business_sql_unchanged": true,
+  "metadata_transport_adaptation": "Only exact SELECT * FROM tables(): table_min_timestamp, table_max_timestamp and wal_max_timestamp CAST as LONG and decoded by each verified timestamp kind; last-write wallclock, partition and business SQL unchanged",
+  "historical_formal_digest_mismatches_retained": 2,
+  "java_gateway_port_independent_review": "No remaining field blocker after target-only null/count proof and exact parent cancellation/atomic claim revisions; actual Java publication remains coordinator controlled"
+}

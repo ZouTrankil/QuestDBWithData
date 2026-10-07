@@ -1,0 +1,222 @@
+{
+  "task_id": "D103",
+  "record_date": "2026-10-06",
+  "status": "PASS",
+  "method": "independent_static_file_only",
+  "recommendation": "ready_for_root_finite_initial_live_verification_after_required_test_gate",
+  "blockers": [],
+  "scope": "Updated initial Java live harness, task-scoped SELECT-only source recovery and the dedicated empty-table read guard delta. This is not actual Java materialization acceptance or the D103 final serial gate.",
+  "operations": {
+    "DB_queries": 0,
+    "DB_writes": 0,
+    "CIM_or_native_queries": 0,
+    "Gradle_or_tests": 0,
+    "owner_invocations": 0,
+    "implementation_edits": 0,
+    "new_review_files": 1
+  },
+  "checks": [
+    {
+      "id": "successful_receipt_only",
+      "result": "PASS",
+      "path": "src/test/java/com/zoutrankil/data/config/EquityStyleMonthlyLiveAcceptanceTest.java",
+      "lines": [
+        35,
+        58
+      ],
+      "detail": "The initial branch requires task D103 and exact VERIFIED_INITIAL_SOURCE_BY_READONLY_RECONCILIATION, nondiagnostic admission, exact delivered source and stable frontier flags, original UNKNOWN INSERT ACK, zero retry/submission, unchanged original private identity and successful preflight/completion/startup evidence SHAs. Retained FAILED and diagnostic-only receipts are no longer sufficient."
+    },
+    {
+      "id": "actual_recovery_receipt_binding",
+      "result": "PASS",
+      "path": "artifacts/java-migration/D103/commands/source-fixture-initial-readonly-reconciliation-20261006.json",
+      "detail": "File-only inspection confirms successful readonly receipt e2a2099b7c39526414594bb9816718481e40131a34c5d563161a600c6484f236: source id9/index_monthly~9/physical and WAL txn1, 32 complete rows, 448 full source field comparisons and 288 source DOUBLE raw-bit comparisons at zero tolerance; before/after states match. INSERT remains UNKNOWN, source submissions/retries/DDL/DML/old receipt or claim rewrites are zero. The accepted original shell completion and synchronous source-owner evidence remain explicitly task scoped, with no invented producer PID/birth."
+    },
+    {
+      "id": "pre_ddl_source_admission",
+      "result": "PASS",
+      "path": "src/test/java/com/zoutrankil/data/config/EquityStyleMonthlyLiveAcceptanceTest.java",
+      "lines": [
+        70,
+        88
+      ],
+      "detail": "Before creating the once claim or installing the Java target, a fresh complete bounded source Batch is checked against all expected monthly output fields using exact codec equality and raw row count. Its source table ID/directory/physical transaction/WAL sequence must match the accepted readonly receipt. Full source Batch equality is checked again before CREATE. This prevents a same-count source update from reaching Java publication before oracle rejection."
+    },
+    {
+      "id": "each_actual_write_identity_and_source",
+      "result": "PASS",
+      "path": "src/test/java/com/zoutrankil/data/config/EquityStyleMonthlyLiveAcceptanceTest.java",
+      "lines": [
+        64,
+        87,
+        94,
+        99,
+        110,
+        121,
+        151,
+        246
+      ],
+      "detail": "Fresh finite native checks bind both private listeners to the receipt PID, exact OS birth, Java executable, QuestDB module and private root before connections and each actual CREATE/first/replay/cancelled-resume/typed-write/increment operation. The complete admitted source Batch is reread for equality at each actual write boundary. The final native check is recorded after verification. Current executor birth is obtained through Win32_Process.CreationDate, while ProcessHandle startInstant is retained separately without a precision tolerance claim."
+    },
+    {
+      "id": "verified_resume_contract",
+      "result": "PASS",
+      "path": "src/test/java/com/zoutrankil/data/config/EquityStyleMonthlyLiveAcceptanceTest.java",
+      "lines": [
+        100,
+        113
+      ],
+      "detail": "A VERIFIED run is asserted non-resumable with unchanged target snapshot. A real pre-submission CANCELLED run is created by the shared runner with the same frozen bounded plan and then resumed through the actual JobService. This preserves FrozenRunRequest's terminal failed/cancelled/partial contract rather than weakening production lifecycle rules."
+    },
+    {
+      "id": "once_create_and_unknown_exclusion",
+      "result": "PASS",
+      "path": "src/test/java/com/zoutrankil/data/config/EquityStyleMonthlyLiveAcceptanceTest.java",
+      "lines": [
+        83,
+        90
+      ],
+      "detail": "Initial acceptance requires no existing ledger and creates the fixed installation claim via CREATE_NEW before install. An exception leaves a claim that blocks an automatic rerun; acknowledgement is recorded only after installation and actual settled empty snapshot return. Canonical runner ledger and shared pending-publication checks protect subsequent unknown submissions. No initial source INSERT retry is added."
+    },
+    {
+      "id": "readonly_recovery_preserves_history",
+      "result": "PASS",
+      "path": "tools/reconcile_d103_initial_source_readonly.py",
+      "lines": [
+        56,
+        118,
+        121,
+        154,
+        157,
+        229,
+        237,
+        267
+      ],
+      "detail": "The frozen tool rehashes the exact retained failed fixture, sole CREATE and INSERT claims, original complete14-field captures and synchronous producer source. Nondiagnostic admission requires the independently recorded completed executor session21749/exit1 and explicit task-scoped completion review. It checks exact settled32-row source delivery/txn1, private source physical identity, protected outputs/schema, full formal captures and native private identity before/after; immutable inputs are rechecked before saving a new-only result. It never calls DDL/DML/source publisher or upgrades the missing INSERT ACK."
+    },
+    {
+      "id": "fresh_empty_table_read",
+      "result": "PASS",
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbEquityStyleReadGuard.java",
+      "lines": [
+        71,
+        94,
+        95,
+        119
+      ],
+      "detail": "The empty-table fix keeps table_txn, wal_txn and metadata row count nullable. Only null physical txn with zero writer/sequence/pending/buffer, null-or-zero raw WAL/row metadata and independent COUNT=0 is accepted. Metadata must remain exactly equal across that count; schema and outer read before/after checks remain. The version token names uninitialized explicitly, so null and txn0 cannot be normalized into the same cursor generation."
+    },
+    {
+      "id": "empty_table_guard_regressions",
+      "result": "PASS_STATIC_ASSERTIONS_ONLY",
+      "path": "src/test/java/com/zoutrankil/data/repository/QuestDbEquityStyleReadGuardTest.java",
+      "lines": [
+        87,
+        142
+      ],
+      "detail": "Six added tests assert finite20s/count bounds, retained null token, rejection of nonempty/missing count, nonzero WAL/pending/buffer, negative or nonzero raw row metadata, null-to-zero metadata drift and stale uninitialized cursor rejection before row fetch. Tests were inspected but not executed by this reviewer."
+    },
+    {
+      "id": "bounded_harness_and_read_write_composition",
+      "result": "PASS",
+      "path": "src/test/java/com/zoutrankil/data/config/EquityStyleMonthlyLiveAcceptanceTest.java",
+      "lines": [
+        122,
+        177,
+        196,
+        206
+      ],
+      "detail": "Reads stay within two/three real months and twelve-row caps; page/key/group reads use typed dataset bindings. Configured typed INGEST uses the isolated port and canonical ledger; cancellation is prelaunch. Exact output codec compares month/null/raw DOUBLE bits without tolerance. Formal access is SELECT only with per-SQL timeout and bounded pools. Current source-revision evidence remains false; the separate real August stage is not falsely claimed by this static record."
+    }
+  ],
+  "resolved_prior_review_findings": [
+    "VERIFIED first-run resume replaced by rejection plus canonical CANCELLED resume",
+    "FAILED or diagnostic-only source receipt cannot admit Java initial writes",
+    "Current private two-listener process identity checked at every actual write boundary",
+    "Fresh source identity and full output oracle checked before DDL, same complete source Batch checked before every write",
+    "Fresh null-txn target typed read uses independent stable empty proof instead of coercion or rejection"
+  ],
+  "limitations": [
+    "PASS here is source-level admissibility only. Root must execute required regression/test gates and the finite live method; no actual Java target materialization is certified by this record.",
+    "The original source INSERT response and producer PID/birth were not retained. The accepted completion review is confined to that frozen synchronous initial CLI/shell and exact readonly source proof; it is not generic UNKNOWN writer-stop evidence.",
+    "Root must retain old FAILED fixture/claims and must not rerun source setup or initial Java acceptance after an existing once claim/ledger. Unknown DDL or publication remains blocked, not automatically resent.",
+    "Native subprocess checks are bounded and identity is reread at each write boundary. This record does not claim a new OS-level atomic connection identity mechanism.",
+    "Twenty-second SQL timeouts and native30-second checks are per operation, not a new absolute total-harness deadline.",
+    "Stored source-return units and spreads remain unchanged; this review makes no newly proven percent/decimal scaling claim.",
+    "Full provider history/universe readiness, formal mutation/repair, exact source-revision acceptance, new August admission and next task admission remain outside this initial static review.",
+    "A later live increment status/evidence enhancement requires its updated code SHA to be recorded; this artifact binds only the inspected frozen versions."
+  ],
+  "actual_java_verified": false,
+  "actual_live_admitted_by_this_review": false,
+  "next_task_admitted": false,
+  "bindings": [
+    {
+      "path": "src/test/java/com/zoutrankil/data/config/EquityStyleMonthlyLiveAcceptanceTest.java",
+      "sha256": "f103618ef3006e505c9aa26677f497370d62b1ff65ce597747c29a781a08858f"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/repository/QuestDbEquityStyleReadGuard.java",
+      "sha256": "8bca0233968bb8a660b027857e2ce04b878d8e76b3c42951b5b68f6dadaa0f5e"
+    },
+    {
+      "path": "src/test/java/com/zoutrankil/data/repository/QuestDbEquityStyleReadGuardTest.java",
+      "sha256": "9533bcf13ba7c551c6e6543505aee59d98fa9afcd50e4fe41b0edb85703efc18"
+    },
+    {
+      "path": "tools/reconcile_d103_initial_source_readonly.py",
+      "sha256": "ed912df9fc1116110b4e1b4a5986b2e86221010124a6f68ce3ba5c44bd80401d"
+    },
+    {
+      "path": "tools/prepare_d103_equity_style_isolated.py",
+      "sha256": "bb3fc799711ebf3637feca63f9fe29304341bfd9d4bbbab6b001b8f2722e6210"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/FrozenRunRequest.java",
+      "sha256": "2bf54c8ba19d3e6fa22c834d07fdfc5f44671a194fce16c70985ea246d78a77f"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlySource.java",
+      "sha256": "4ec7c9b429ac1d9d34e3c104842abb966091598f3e9785576dfd115e12da8b38"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlyMaterializeAdapter.java",
+      "sha256": "705e0f179b22043f816ab3718140a16de6951aefea858b948348408f795ee7de"
+    },
+    {
+      "path": "src/main/java/com/zoutrankil/data/service/EquityStyleMonthlyJobService.java",
+      "sha256": "8382266e67d04a102ea0d771244556766a23fa783ac0fe0cfce5ad631163d174"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/source-fixture-initial-readonly-reconciliation-20261006.json",
+      "sha256": "e2a2099b7c39526414594bb9816718481e40131a34c5d563161a600c6484f236"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/coordinator-initial-source-sender-completion-20261006.json",
+      "sha256": "659daf85f24a586e7fa659e9bb1c6cc5579e8256b2afbd52ae0606a16da5ccb8"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/source-fixture-initial-shell-completion-20261006.json",
+      "sha256": "590946eb48adbecdaa07fed141599779c1aaec56b21672a80ddeadf32c0376dc"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/source-fixture-initial-20261006.json",
+      "sha256": "13f05b7bd5586450b66f694d1e6b4582de26cb3aea6d9ede5898acd32be54ac8"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/index-monthly-create-once-20261006.json",
+      "sha256": "e6093b23285aafabdb2b5352a686dc3c2c501f5bf420e1c15ea808975c335877"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/index-monthly-initial-insert-once-20261006.json",
+      "sha256": "3601c017b74ad57964eb08599ab5e609fdf9f32e5d9aaa8602993bc84680a0d1"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/private-server-start-20261006.json",
+      "sha256": "9db4a1f4b13a18e0b093f84823c35facb3a849dce0753e1b7efc4ed4fd624b9d"
+    },
+    {
+      "path": "artifacts/java-migration/D103/commands/equity-style-readonly-preflight-20261006.json",
+      "sha256": "61a3e91753074598b6db0d5bdc7867ff45d90d144628629a36316a0bf091b0db"
+    }
+  ]
+}

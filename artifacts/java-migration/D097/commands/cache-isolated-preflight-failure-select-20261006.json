@@ -1,0 +1,91 @@
+{
+  "task_id": "D097",
+  "status": "FAILED",
+  "checked_at": "2026-10-06T05:52:39.600184+00:00",
+  "target": "private-127.0.0.1:19000/18812",
+  "formal_mutated": false,
+  "owner": "original MarketBarometerReadThroughCache._publish",
+  "owner_submissions": [],
+  "phases": [],
+  "current_cache_hit_certified": false,
+  "production_latest_certified": false,
+  "java_writer_exercised": false,
+  "java_checkpoint_exercised": false,
+  "private_target_attestation": {
+    "pid": 16980,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d095-isolated-questdb",
+    "http_port": 19000,
+    "pg_port": 18812,
+    "address": "127.0.0.1"
+  },
+  "input_target": {
+    "pid": 16980,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d095-isolated-questdb",
+    "http_port": 19000,
+    "pg_port": 18812,
+    "address": "127.0.0.1"
+  },
+  "source_mv_alias_before": {
+    "tables": {
+      "stk_factor": {
+        "id": 9,
+        "directoryName": "stk_factor~9",
+        "table_txn": 122,
+        "table_row_count": 16658,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "mv_market_breadth_daily_v1": {
+        "id": 10,
+        "directoryName": "mv_market_breadth_daily_v1~10",
+        "table_txn": 74,
+        "table_row_count": 3,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      }
+    },
+    "wal": {
+      "stk_factor": {
+        "sequencerTxn": 122,
+        "writerTxn": 122,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "mv_market_breadth_daily_v1": {
+        "sequencerTxn": 74,
+        "writerTxn": 74,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    "mv": {
+      "view_name": "mv_market_breadth_daily_v1",
+      "view_status": "valid",
+      "invalidation_reason": null,
+      "base_table_name": "stk_factor",
+      "view_directory_name": null,
+      "refresh_base_table_txn": 122,
+      "base_table_txn": 122,
+      "refresh_type": "timer",
+      "timer_interval": 1,
+      "timer_interval_unit": "MINUTE",
+      "view_sql_sha256": "f7e7d1f84e29f72a0df4613ada216076c0a0dc2ccb3f9cbc18a00d719939b139",
+      "definition_matches_python": true
+    },
+    "alias": {
+      "view_name": "v_market_breadth_daily",
+      "view_sql": "SELECT * FROM mv_market_breadth_daily_v1",
+      "view_table_dir_name": "v_market_breadth_daily~12",
+      "invalidation_reason": null,
+      "view_status": "valid",
+      "view_status_update_time": "2026-10-06T05:21:00.364325Z"
+    }
+  },
+  "python_owner_file": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_cache.py",
+  "python_owner_file_sha256": "5971761ed070f7b178892c90a9114b0609a3dcb2cbf8767867432279371b5bee",
+  "error": "Owner client executes a single private SELECT only"
+}

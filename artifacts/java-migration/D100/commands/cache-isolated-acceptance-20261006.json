@@ -1,0 +1,1815 @@
+{
+  "task_id": "D100",
+  "owner": "original MarketBarometerReadThroughCache._publish",
+  "owner_submissions": [
+    {
+      "phase": "first",
+      "table": "retail_sentiment_daily_cache",
+      "submitted_rows": 2,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false,
+      "planned_rows": 2,
+      "attempted_rows": 2,
+      "acknowledged_rows": 2,
+      "attempted_rows_semantics": "durable single driver flush intent; server application requires exact readback"
+    },
+    {
+      "phase": "first",
+      "table": "market_barometer_cache_coverage",
+      "submitted_rows": 2,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false,
+      "planned_rows": 2,
+      "attempted_rows": 2,
+      "acknowledged_rows": 2,
+      "attempted_rows_semantics": "durable single driver flush intent; server application requires exact readback"
+    },
+    {
+      "phase": "replay",
+      "table": "retail_sentiment_daily_cache",
+      "submitted_rows": 2,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false,
+      "planned_rows": 2,
+      "attempted_rows": 2,
+      "acknowledged_rows": 2,
+      "attempted_rows_semantics": "durable single driver flush intent; server application requires exact readback"
+    },
+    {
+      "phase": "replay",
+      "table": "market_barometer_cache_coverage",
+      "submitted_rows": 2,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false,
+      "planned_rows": 2,
+      "attempted_rows": 2,
+      "acknowledged_rows": 2,
+      "attempted_rows_semantics": "durable single driver flush intent; server application requires exact readback"
+    },
+    {
+      "phase": "increment",
+      "table": "retail_sentiment_daily_cache",
+      "submitted_rows": 1,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false,
+      "planned_rows": 1,
+      "attempted_rows": 1,
+      "acknowledged_rows": 1,
+      "attempted_rows_semantics": "durable single driver flush intent; server application requires exact readback"
+    },
+    {
+      "phase": "increment",
+      "table": "market_barometer_cache_coverage",
+      "submitted_rows": 1,
+      "transport": "private HTTP ILP",
+      "ack": "ACKNOWLEDGED",
+      "automatic_retry": false,
+      "planned_rows": 1,
+      "attempted_rows": 1,
+      "acknowledged_rows": 1,
+      "attempted_rows_semantics": "durable single driver flush intent; server application requires exact readback"
+    }
+  ],
+  "ddl_submissions": [],
+  "phases": [
+    {
+      "phase": "first",
+      "submitted_cache_rows": 2,
+      "submitted_coverage_rows": 2,
+      "visible_selected_keys": 2,
+      "cache_snapshot": {
+        "physical": {
+          "id": 13,
+          "directoryName": "retail_sentiment_daily_cache~13",
+          "table_txn": 1,
+          "table_row_count": 2,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 1,
+          "writerTxn": 1,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "coverage_snapshot": {
+        "physical": {
+          "id": 14,
+          "directoryName": "market_barometer_cache_coverage~14",
+          "table_txn": 1,
+          "table_row_count": 2,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 1,
+          "writerTxn": 1,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "cache_rows": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "avg_retail_ratio": 0.14872828742309666,
+          "avg_retail_entropy": 1.5887293306111183,
+          "total_retail_amount_yi": 17180.14693112448,
+          "total_retail_net_inflow_yi": -840.5730231482072,
+          "avg_rel_aggro": 0.4794140898962389,
+          "total_q1": 82969,
+          "total_q3": 102472,
+          "avg_wash_trade_ratio": 0.08909074639044749,
+          "total_spoof_count": 310560,
+          "total_manipulation_count": 310560,
+          "avg_mfi_score": 0.28992594083188344,
+          "total_main_net_yi": -162.51056215947986,
+          "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "avg_retail_ratio": 0.1482778955879337,
+          "avg_retail_entropy": 1.601971357172353,
+          "total_retail_amount_yi": 19172.440182006954,
+          "total_retail_net_inflow_yi": 531.826131947779,
+          "avg_rel_aggro": 0.5069840285517629,
+          "total_q1": 91116,
+          "total_q3": 90850,
+          "avg_wash_trade_ratio": 0.08654103091502331,
+          "total_spoof_count": 306949,
+          "total_manipulation_count": 306949,
+          "avg_mfi_score": 0.32047066705334354,
+          "total_main_net_yi": 36.62509322703998,
+          "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+        }
+      ],
+      "coverage_receipts": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "dataset_id": "retail_sentiment_daily",
+          "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906",
+          "row_count": 1,
+          "content_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "dataset_id": "retail_sentiment_daily",
+          "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22",
+          "row_count": 1,
+          "content_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54"
+        }
+      ],
+      "verified_generations": [
+        {
+          "receipt": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "dataset_id": "retail_sentiment_daily",
+            "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906",
+            "row_count": 1,
+            "content_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "avg_retail_ratio": 0.14872828742309666,
+            "avg_retail_entropy": 1.5887293306111183,
+            "total_retail_amount_yi": 17180.14693112448,
+            "total_retail_net_inflow_yi": -840.5730231482072,
+            "avg_rel_aggro": 0.4794140898962389,
+            "total_q1": 82969,
+            "total_q3": 102472,
+            "avg_wash_trade_ratio": 0.08909074639044749,
+            "total_spoof_count": 310560,
+            "total_manipulation_count": 310560,
+            "avg_mfi_score": 0.28992594083188344,
+            "total_main_net_yi": -162.51056215947986,
+            "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728",
+          "fourteen_field_comparisons": 14,
+          "double_binary64_hex": {
+            "avg_retail_ratio": "3fc309874d3c73f1",
+            "avg_retail_entropy": "3ff96b6f7252bb4a",
+            "total_retail_amount_yi": "40d0c7096751cd9a",
+            "total_retail_net_inflow_yi": "c08a44958d290b35",
+            "avg_rel_aggro": "3fdeaeb86f56240c",
+            "avg_wash_trade_ratio": "3fb6cea6b21f8a2b",
+            "avg_mfi_score": "3fd28e258888a35b",
+            "total_main_net_yi": "c064505686743151"
+          },
+          "authoritative_numeric_transport": "PGWire binary64",
+          "qwp_display_records": [
+            {
+              "trade_date": "2026-09-17T00:00:00.000000Z",
+              "avg_retail_ratio": 0.14872828742309666,
+              "avg_retail_entropy": 1.5887293306111183,
+              "total_retail_amount_yi": 17180.14693112448,
+              "total_retail_net_inflow_yi": -840.5730231482072,
+              "avg_rel_aggro": 0.4794140898962389,
+              "total_q1": 82969,
+              "total_q3": 102472,
+              "avg_wash_trade_ratio": 0.08909074639044749,
+              "total_spoof_count": 310560,
+              "total_manipulation_count": 310560,
+              "avg_mfi_score": 0.28992594083188344,
+              "total_main_net_yi": -162.51056215947986,
+              "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+            }
+          ],
+          "qwp_transport_comparison": {
+            "passed": true,
+            "field_comparisons": 14,
+            "double_bit_exact_comparisons": 8,
+            "qwp_display_rounding": [],
+            "primary_storage_and_owner_digest": "PGWire binary64 exact"
+          },
+          "current_cache_hit_certified": false
+        },
+        {
+          "receipt": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "dataset_id": "retail_sentiment_daily",
+            "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22",
+            "row_count": 1,
+            "content_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "avg_retail_ratio": 0.1482778955879337,
+            "avg_retail_entropy": 1.601971357172353,
+            "total_retail_amount_yi": 19172.440182006954,
+            "total_retail_net_inflow_yi": 531.826131947779,
+            "avg_rel_aggro": 0.5069840285517629,
+            "total_q1": 91116,
+            "total_q3": 90850,
+            "avg_wash_trade_ratio": 0.08654103091502331,
+            "total_spoof_count": 306949,
+            "total_manipulation_count": 306949,
+            "avg_mfi_score": 0.32047066705334354,
+            "total_main_net_yi": 36.62509322703998,
+            "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54",
+          "fourteen_field_comparisons": 14,
+          "double_binary64_hex": {
+            "avg_retail_ratio": "3fc2fac524228b5c",
+            "avg_retail_entropy": "3ff9a1acb7c2f1a1",
+            "total_retail_amount_yi": "40d2b91c2bf1270a",
+            "total_retail_net_inflow_yi": "40809e9beb110f22",
+            "avg_rel_aggro": "3fe0393691c72c41",
+            "avg_wash_trade_ratio": "3fb6278d918aca59",
+            "avg_mfi_score": "3fd4829766949211",
+            "total_main_net_yi": "404250030e0b8b3e"
+          },
+          "authoritative_numeric_transport": "PGWire binary64",
+          "qwp_display_records": [
+            {
+              "trade_date": "2026-09-18T00:00:00.000000Z",
+              "avg_retail_ratio": 0.1482778955879337,
+              "avg_retail_entropy": 1.601971357172353,
+              "total_retail_amount_yi": 19172.440182006954,
+              "total_retail_net_inflow_yi": 531.826131947779,
+              "avg_rel_aggro": 0.5069840285517629,
+              "total_q1": 91116,
+              "total_q3": 90850,
+              "avg_wash_trade_ratio": 0.08654103091502331,
+              "total_spoof_count": 306949,
+              "total_manipulation_count": 306949,
+              "avg_mfi_score": 0.32047066705334354,
+              "total_main_net_yi": 36.62509322703998,
+              "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+            }
+          ],
+          "qwp_transport_comparison": {
+            "passed": true,
+            "field_comparisons": 14,
+            "double_bit_exact_comparisons": 8,
+            "qwp_display_rounding": [],
+            "primary_storage_and_owner_digest": "PGWire binary64 exact"
+          },
+          "current_cache_hit_certified": false
+        }
+      ],
+      "cache_field_comparisons": 28,
+      "receipt_field_comparisons": 10
+    },
+    {
+      "phase": "replay",
+      "submitted_cache_rows": 2,
+      "submitted_coverage_rows": 2,
+      "visible_selected_keys": 2,
+      "cache_snapshot": {
+        "physical": {
+          "id": 13,
+          "directoryName": "retail_sentiment_daily_cache~13",
+          "table_txn": 2,
+          "table_row_count": 2,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 2,
+          "writerTxn": 2,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "coverage_snapshot": {
+        "physical": {
+          "id": 14,
+          "directoryName": "market_barometer_cache_coverage~14",
+          "table_txn": 2,
+          "table_row_count": 2,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 2,
+          "writerTxn": 2,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "cache_rows": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "avg_retail_ratio": 0.14872828742309666,
+          "avg_retail_entropy": 1.5887293306111183,
+          "total_retail_amount_yi": 17180.14693112448,
+          "total_retail_net_inflow_yi": -840.5730231482072,
+          "avg_rel_aggro": 0.4794140898962389,
+          "total_q1": 82969,
+          "total_q3": 102472,
+          "avg_wash_trade_ratio": 0.08909074639044749,
+          "total_spoof_count": 310560,
+          "total_manipulation_count": 310560,
+          "avg_mfi_score": 0.28992594083188344,
+          "total_main_net_yi": -162.51056215947986,
+          "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "avg_retail_ratio": 0.1482778955879337,
+          "avg_retail_entropy": 1.601971357172353,
+          "total_retail_amount_yi": 19172.440182006954,
+          "total_retail_net_inflow_yi": 531.826131947779,
+          "avg_rel_aggro": 0.5069840285517629,
+          "total_q1": 91116,
+          "total_q3": 90850,
+          "avg_wash_trade_ratio": 0.08654103091502331,
+          "total_spoof_count": 306949,
+          "total_manipulation_count": 306949,
+          "avg_mfi_score": 0.32047066705334354,
+          "total_main_net_yi": 36.62509322703998,
+          "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+        }
+      ],
+      "coverage_receipts": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "dataset_id": "retail_sentiment_daily",
+          "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906",
+          "row_count": 1,
+          "content_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "dataset_id": "retail_sentiment_daily",
+          "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22",
+          "row_count": 1,
+          "content_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54"
+        }
+      ],
+      "verified_generations": [
+        {
+          "receipt": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "dataset_id": "retail_sentiment_daily",
+            "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906",
+            "row_count": 1,
+            "content_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "avg_retail_ratio": 0.14872828742309666,
+            "avg_retail_entropy": 1.5887293306111183,
+            "total_retail_amount_yi": 17180.14693112448,
+            "total_retail_net_inflow_yi": -840.5730231482072,
+            "avg_rel_aggro": 0.4794140898962389,
+            "total_q1": 82969,
+            "total_q3": 102472,
+            "avg_wash_trade_ratio": 0.08909074639044749,
+            "total_spoof_count": 310560,
+            "total_manipulation_count": 310560,
+            "avg_mfi_score": 0.28992594083188344,
+            "total_main_net_yi": -162.51056215947986,
+            "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728",
+          "fourteen_field_comparisons": 14,
+          "double_binary64_hex": {
+            "avg_retail_ratio": "3fc309874d3c73f1",
+            "avg_retail_entropy": "3ff96b6f7252bb4a",
+            "total_retail_amount_yi": "40d0c7096751cd9a",
+            "total_retail_net_inflow_yi": "c08a44958d290b35",
+            "avg_rel_aggro": "3fdeaeb86f56240c",
+            "avg_wash_trade_ratio": "3fb6cea6b21f8a2b",
+            "avg_mfi_score": "3fd28e258888a35b",
+            "total_main_net_yi": "c064505686743151"
+          },
+          "authoritative_numeric_transport": "PGWire binary64",
+          "qwp_display_records": [
+            {
+              "trade_date": "2026-09-17T00:00:00.000000Z",
+              "avg_retail_ratio": 0.14872828742309666,
+              "avg_retail_entropy": 1.5887293306111183,
+              "total_retail_amount_yi": 17180.14693112448,
+              "total_retail_net_inflow_yi": -840.5730231482072,
+              "avg_rel_aggro": 0.4794140898962389,
+              "total_q1": 82969,
+              "total_q3": 102472,
+              "avg_wash_trade_ratio": 0.08909074639044749,
+              "total_spoof_count": 310560,
+              "total_manipulation_count": 310560,
+              "avg_mfi_score": 0.28992594083188344,
+              "total_main_net_yi": -162.51056215947986,
+              "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+            }
+          ],
+          "qwp_transport_comparison": {
+            "passed": true,
+            "field_comparisons": 14,
+            "double_bit_exact_comparisons": 8,
+            "qwp_display_rounding": [],
+            "primary_storage_and_owner_digest": "PGWire binary64 exact"
+          },
+          "current_cache_hit_certified": false
+        },
+        {
+          "receipt": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "dataset_id": "retail_sentiment_daily",
+            "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22",
+            "row_count": 1,
+            "content_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "avg_retail_ratio": 0.1482778955879337,
+            "avg_retail_entropy": 1.601971357172353,
+            "total_retail_amount_yi": 19172.440182006954,
+            "total_retail_net_inflow_yi": 531.826131947779,
+            "avg_rel_aggro": 0.5069840285517629,
+            "total_q1": 91116,
+            "total_q3": 90850,
+            "avg_wash_trade_ratio": 0.08654103091502331,
+            "total_spoof_count": 306949,
+            "total_manipulation_count": 306949,
+            "avg_mfi_score": 0.32047066705334354,
+            "total_main_net_yi": 36.62509322703998,
+            "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54",
+          "fourteen_field_comparisons": 14,
+          "double_binary64_hex": {
+            "avg_retail_ratio": "3fc2fac524228b5c",
+            "avg_retail_entropy": "3ff9a1acb7c2f1a1",
+            "total_retail_amount_yi": "40d2b91c2bf1270a",
+            "total_retail_net_inflow_yi": "40809e9beb110f22",
+            "avg_rel_aggro": "3fe0393691c72c41",
+            "avg_wash_trade_ratio": "3fb6278d918aca59",
+            "avg_mfi_score": "3fd4829766949211",
+            "total_main_net_yi": "404250030e0b8b3e"
+          },
+          "authoritative_numeric_transport": "PGWire binary64",
+          "qwp_display_records": [
+            {
+              "trade_date": "2026-09-18T00:00:00.000000Z",
+              "avg_retail_ratio": 0.1482778955879337,
+              "avg_retail_entropy": 1.601971357172353,
+              "total_retail_amount_yi": 19172.440182006954,
+              "total_retail_net_inflow_yi": 531.826131947779,
+              "avg_rel_aggro": 0.5069840285517629,
+              "total_q1": 91116,
+              "total_q3": 90850,
+              "avg_wash_trade_ratio": 0.08654103091502331,
+              "total_spoof_count": 306949,
+              "total_manipulation_count": 306949,
+              "avg_mfi_score": 0.32047066705334354,
+              "total_main_net_yi": 36.62509322703998,
+              "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+            }
+          ],
+          "qwp_transport_comparison": {
+            "passed": true,
+            "field_comparisons": 14,
+            "double_bit_exact_comparisons": 8,
+            "qwp_display_rounding": [],
+            "primary_storage_and_owner_digest": "PGWire binary64 exact"
+          },
+          "current_cache_hit_certified": false
+        }
+      ],
+      "cache_field_comparisons": 28,
+      "receipt_field_comparisons": 10
+    },
+    {
+      "phase": "increment",
+      "submitted_cache_rows": 1,
+      "submitted_coverage_rows": 1,
+      "visible_selected_keys": 3,
+      "cache_snapshot": {
+        "physical": {
+          "id": 13,
+          "directoryName": "retail_sentiment_daily_cache~13",
+          "table_txn": 3,
+          "table_row_count": 3,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 3,
+          "writerTxn": 3,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "coverage_snapshot": {
+        "physical": {
+          "id": 14,
+          "directoryName": "market_barometer_cache_coverage~14",
+          "table_txn": 3,
+          "table_row_count": 3,
+          "partitionBy": "MONTH",
+          "walEnabled": true,
+          "dedup": true,
+          "designatedTimestamp": "trade_date",
+          "table_suspended": false,
+          "wal_pending_row_count": 0
+        },
+        "wal": {
+          "sequencerTxn": 3,
+          "writerTxn": 3,
+          "bufferedTxnSize": 0,
+          "suspended": false
+        },
+        "settled": true
+      },
+      "cache_rows": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "avg_retail_ratio": 0.14872828742309666,
+          "avg_retail_entropy": 1.5887293306111183,
+          "total_retail_amount_yi": 17180.14693112448,
+          "total_retail_net_inflow_yi": -840.5730231482072,
+          "avg_rel_aggro": 0.4794140898962389,
+          "total_q1": 82969,
+          "total_q3": 102472,
+          "avg_wash_trade_ratio": 0.08909074639044749,
+          "total_spoof_count": 310560,
+          "total_manipulation_count": 310560,
+          "avg_mfi_score": 0.28992594083188344,
+          "total_main_net_yi": -162.51056215947986,
+          "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "avg_retail_ratio": 0.1482778955879337,
+          "avg_retail_entropy": 1.601971357172353,
+          "total_retail_amount_yi": 19172.440182006954,
+          "total_retail_net_inflow_yi": 531.826131947779,
+          "avg_rel_aggro": 0.5069840285517629,
+          "total_q1": 91116,
+          "total_q3": 90850,
+          "avg_wash_trade_ratio": 0.08654103091502331,
+          "total_spoof_count": 306949,
+          "total_manipulation_count": 306949,
+          "avg_mfi_score": 0.32047066705334354,
+          "total_main_net_yi": 36.62509322703998,
+          "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+        },
+        {
+          "trade_date": "2026-09-21T00:00:00.000000Z",
+          "avg_retail_ratio": 0.14394985138572083,
+          "avg_retail_entropy": 1.6135276823615923,
+          "total_retail_amount_yi": 19321.916918843424,
+          "total_retail_net_inflow_yi": -115.10705471653013,
+          "avg_rel_aggro": 0.5078168096077674,
+          "total_q1": 91729,
+          "total_q3": 88207,
+          "avg_wash_trade_ratio": 0.08664339640749684,
+          "total_spoof_count": 294851,
+          "total_manipulation_count": 294851,
+          "avg_mfi_score": 0.32359121054157386,
+          "total_main_net_yi": 81.97984425612,
+          "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba"
+        }
+      ],
+      "coverage_receipts": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "dataset_id": "retail_sentiment_daily",
+          "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906",
+          "row_count": 1,
+          "content_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728"
+        },
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "dataset_id": "retail_sentiment_daily",
+          "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22",
+          "row_count": 1,
+          "content_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54"
+        },
+        {
+          "trade_date": "2026-09-21T00:00:00.000000Z",
+          "dataset_id": "retail_sentiment_daily",
+          "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba",
+          "row_count": 1,
+          "content_digest": "78174b198c9ba7a0ced97a48c71b71e8355fbecc7983f5facef689b995d4748c"
+        }
+      ],
+      "verified_generations": [
+        {
+          "receipt": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "dataset_id": "retail_sentiment_daily",
+            "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906",
+            "row_count": 1,
+            "content_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-17T00:00:00.000000Z",
+            "avg_retail_ratio": 0.14872828742309666,
+            "avg_retail_entropy": 1.5887293306111183,
+            "total_retail_amount_yi": 17180.14693112448,
+            "total_retail_net_inflow_yi": -840.5730231482072,
+            "avg_rel_aggro": 0.4794140898962389,
+            "total_q1": 82969,
+            "total_q3": 102472,
+            "avg_wash_trade_ratio": 0.08909074639044749,
+            "total_spoof_count": 310560,
+            "total_manipulation_count": 310560,
+            "avg_mfi_score": 0.28992594083188344,
+            "total_main_net_yi": -162.51056215947986,
+            "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728",
+          "fourteen_field_comparisons": 14,
+          "double_binary64_hex": {
+            "avg_retail_ratio": "3fc309874d3c73f1",
+            "avg_retail_entropy": "3ff96b6f7252bb4a",
+            "total_retail_amount_yi": "40d0c7096751cd9a",
+            "total_retail_net_inflow_yi": "c08a44958d290b35",
+            "avg_rel_aggro": "3fdeaeb86f56240c",
+            "avg_wash_trade_ratio": "3fb6cea6b21f8a2b",
+            "avg_mfi_score": "3fd28e258888a35b",
+            "total_main_net_yi": "c064505686743151"
+          },
+          "authoritative_numeric_transport": "PGWire binary64",
+          "qwp_display_records": [
+            {
+              "trade_date": "2026-09-17T00:00:00.000000Z",
+              "avg_retail_ratio": 0.14872828742309666,
+              "avg_retail_entropy": 1.5887293306111183,
+              "total_retail_amount_yi": 17180.14693112448,
+              "total_retail_net_inflow_yi": -840.5730231482072,
+              "avg_rel_aggro": 0.4794140898962389,
+              "total_q1": 82969,
+              "total_q3": 102472,
+              "avg_wash_trade_ratio": 0.08909074639044749,
+              "total_spoof_count": 310560,
+              "total_manipulation_count": 310560,
+              "avg_mfi_score": 0.28992594083188344,
+              "total_main_net_yi": -162.51056215947986,
+              "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+            }
+          ],
+          "qwp_transport_comparison": {
+            "passed": true,
+            "field_comparisons": 14,
+            "double_bit_exact_comparisons": 8,
+            "qwp_display_rounding": [],
+            "primary_storage_and_owner_digest": "PGWire binary64 exact"
+          },
+          "current_cache_hit_certified": false
+        },
+        {
+          "receipt": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "dataset_id": "retail_sentiment_daily",
+            "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22",
+            "row_count": 1,
+            "content_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-18T00:00:00.000000Z",
+            "avg_retail_ratio": 0.1482778955879337,
+            "avg_retail_entropy": 1.601971357172353,
+            "total_retail_amount_yi": 19172.440182006954,
+            "total_retail_net_inflow_yi": 531.826131947779,
+            "avg_rel_aggro": 0.5069840285517629,
+            "total_q1": 91116,
+            "total_q3": 90850,
+            "avg_wash_trade_ratio": 0.08654103091502331,
+            "total_spoof_count": 306949,
+            "total_manipulation_count": 306949,
+            "avg_mfi_score": 0.32047066705334354,
+            "total_main_net_yi": 36.62509322703998,
+            "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54",
+          "fourteen_field_comparisons": 14,
+          "double_binary64_hex": {
+            "avg_retail_ratio": "3fc2fac524228b5c",
+            "avg_retail_entropy": "3ff9a1acb7c2f1a1",
+            "total_retail_amount_yi": "40d2b91c2bf1270a",
+            "total_retail_net_inflow_yi": "40809e9beb110f22",
+            "avg_rel_aggro": "3fe0393691c72c41",
+            "avg_wash_trade_ratio": "3fb6278d918aca59",
+            "avg_mfi_score": "3fd4829766949211",
+            "total_main_net_yi": "404250030e0b8b3e"
+          },
+          "authoritative_numeric_transport": "PGWire binary64",
+          "qwp_display_records": [
+            {
+              "trade_date": "2026-09-18T00:00:00.000000Z",
+              "avg_retail_ratio": 0.1482778955879337,
+              "avg_retail_entropy": 1.601971357172353,
+              "total_retail_amount_yi": 19172.440182006954,
+              "total_retail_net_inflow_yi": 531.826131947779,
+              "avg_rel_aggro": 0.5069840285517629,
+              "total_q1": 91116,
+              "total_q3": 90850,
+              "avg_wash_trade_ratio": 0.08654103091502331,
+              "total_spoof_count": 306949,
+              "total_manipulation_count": 306949,
+              "avg_mfi_score": 0.32047066705334354,
+              "total_main_net_yi": 36.62509322703998,
+              "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+            }
+          ],
+          "qwp_transport_comparison": {
+            "passed": true,
+            "field_comparisons": 14,
+            "double_bit_exact_comparisons": 8,
+            "qwp_display_rounding": [],
+            "primary_storage_and_owner_digest": "PGWire binary64 exact"
+          },
+          "current_cache_hit_certified": false
+        },
+        {
+          "receipt": {
+            "trade_date": "2026-09-21T00:00:00.000000Z",
+            "dataset_id": "retail_sentiment_daily",
+            "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba",
+            "row_count": 1,
+            "content_digest": "78174b198c9ba7a0ced97a48c71b71e8355fbecc7983f5facef689b995d4748c"
+          },
+          "cache_record": {
+            "trade_date": "2026-09-21T00:00:00.000000Z",
+            "avg_retail_ratio": 0.14394985138572083,
+            "avg_retail_entropy": 1.6135276823615923,
+            "total_retail_amount_yi": 19321.916918843424,
+            "total_retail_net_inflow_yi": -115.10705471653013,
+            "avg_rel_aggro": 0.5078168096077674,
+            "total_q1": 91729,
+            "total_q3": 88207,
+            "avg_wash_trade_ratio": 0.08664339640749684,
+            "total_spoof_count": 294851,
+            "total_manipulation_count": 294851,
+            "avg_mfi_score": 0.32359121054157386,
+            "total_main_net_yi": 81.97984425612,
+            "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba"
+          },
+          "receipt_digest_matches": true,
+          "exact_key_row_count": 1,
+          "actual_python_record_digest": "78174b198c9ba7a0ced97a48c71b71e8355fbecc7983f5facef689b995d4748c",
+          "fourteen_field_comparisons": 14,
+          "double_binary64_hex": {
+            "avg_retail_ratio": "3fc26cf2dffb9d15",
+            "avg_retail_entropy": "3ff9d102672ef07f",
+            "total_retail_amount_yi": "40d2de7aaecc5f66",
+            "total_retail_net_inflow_yi": "c05cc6d9fc069849",
+            "avg_rel_aggro": "3fe0400909b3fb3f",
+            "avg_wash_trade_ratio": "3fb62e42f9fc0c4f",
+            "avg_mfi_score": "3fd4b5b7e8a3249f",
+            "total_main_net_yi": "40547eb5c4aecd5e"
+          },
+          "authoritative_numeric_transport": "PGWire binary64",
+          "qwp_display_records": [
+            {
+              "trade_date": "2026-09-21T00:00:00.000000Z",
+              "avg_retail_ratio": 0.14394985138572083,
+              "avg_retail_entropy": 1.6135276823615923,
+              "total_retail_amount_yi": 19321.916918843424,
+              "total_retail_net_inflow_yi": -115.10705471653013,
+              "avg_rel_aggro": 0.5078168096077674,
+              "total_q1": 91729,
+              "total_q3": 88207,
+              "avg_wash_trade_ratio": 0.08664339640749684,
+              "total_spoof_count": 294851,
+              "total_manipulation_count": 294851,
+              "avg_mfi_score": 0.32359121054157386,
+              "total_main_net_yi": 81.97984425612,
+              "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba"
+            }
+          ],
+          "qwp_transport_comparison": {
+            "passed": true,
+            "field_comparisons": 14,
+            "double_bit_exact_comparisons": 8,
+            "qwp_display_rounding": [],
+            "primary_storage_and_owner_digest": "PGWire binary64 exact"
+          },
+          "current_cache_hit_certified": false
+        }
+      ],
+      "cache_field_comparisons": 42,
+      "receipt_field_comparisons": 15
+    }
+  ],
+  "current_cache_hit_certified": false,
+  "production_latest_certified": false,
+  "java_writer_exercised": false,
+  "java_checkpoint_exercised": false,
+  "formal_mutated": false,
+  "target": "private-127.0.0.1:19010/18822",
+  "source_projection_scope": "15 necessary real physical fields of formal110; provider/universe readiness not certified",
+  "status": "VERIFIED_STORED_GENERATIONS",
+  "stage": "continue",
+  "checked_at": "2026-10-06T08:12:01.614415+00:00",
+  "private_target_attestation": {
+    "pid": 31760,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d098-isolated-questdb",
+    "address": "127.0.0.1",
+    "http_port": 19010,
+    "pg_port": 18822
+  },
+  "input_target": {
+    "pid": 31760,
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d098-isolated-questdb",
+    "address": "127.0.0.1",
+    "http_port": 19010,
+    "pg_port": 18822
+  },
+  "startup_attestation": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D100\\commands\\private-server-restart-20261006.json",
+    "sha256": "8cb32eafd8b509d7809150104ac01d5095927575e9fcae508738349a79cf5c27",
+    "expected_pid": 31760
+  },
+  "empty_ddl_recovery_audit": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D100\\commands\\cache-isolated-first-recovery-readonly-20261006.json",
+  "empty_ddl_recovery_audit_sha256": "086469ef98e2919bb5cfefbd0da3c0ffdbe74e3f8f1de64f4f15721ac921f3fb",
+  "failed_first_artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D100\\commands\\cache-isolated-first-20261006.json",
+  "failed_first_artifact_sha256": "7dd5448858185059217fd4b9d3206ecef6032375b113611bade2db17630e0e65",
+  "formal_source_mv_alias_before": {
+    "tables": {
+      "l2_daily_features": {
+        "id": 1665,
+        "directoryName": "l2_daily_features_recovery_20260911~1665",
+        "table_txn": 11266,
+        "table_row_count": 4924676,
+        "table_min_timestamp": "2023-01-03T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-24T00:00:00.000000Z",
+        "partitionBy": "DAY",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "ts",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "id": 1813,
+        "directoryName": "mv_retail_sentiment_daily_v1~1813",
+        "table_txn": 252,
+        "table_row_count": 886,
+        "table_min_timestamp": "2023-01-03T00:00:00.000000Z",
+        "table_max_timestamp": "2026-08-31T00:00:00.000000Z",
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": false,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      }
+    },
+    "wal": {
+      "l2_daily_features": {
+        "sequencerTxn": 11266,
+        "writerTxn": 11266,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "sequencerTxn": 252,
+        "writerTxn": 252,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    "mv": {
+      "view_name": "mv_retail_sentiment_daily_v1",
+      "view_status": "invalid",
+      "invalidation_reason": "materialized view is ahead of base table and cannot be synchronized",
+      "base_table_name": "l2_daily_features",
+      "view_table_dir_name": "mv_retail_sentiment_daily_v1~1813",
+      "refresh_base_table_txn": 10206,
+      "base_table_txn": 11266,
+      "refresh_type": "timer",
+      "timer_interval": 1,
+      "timer_interval_unit": "MINUTE",
+      "view_sql": "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "view_sql_sha256": "8dc9eb43e0b093b2c2656239f5b49e7e454d699ed157a4eb7c08a50d06c753bc",
+      "definition_matches_python_exact": true
+    },
+    "alias": {
+      "view_name": "v_retail_sentiment_daily",
+      "view_sql": "SELECT * FROM mv_retail_sentiment_daily_v1",
+      "view_table_dir_name": "v_retail_sentiment_daily~240",
+      "invalidation_reason": null,
+      "view_status": "valid",
+      "view_status_update_time": "2026-09-30T01:27:52.538878Z"
+    }
+  },
+  "source_mv_alias_before": {
+    "tables": {
+      "l2_daily_features": {
+        "id": 9,
+        "directoryName": "l2_daily_features~9",
+        "table_txn": 36,
+        "table_row_count": 23773,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "partitionBy": "DAY",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "ts",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "id": 11,
+        "directoryName": "mv_retail_sentiment_daily_v1~11",
+        "table_txn": 11,
+        "table_row_count": 3,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": false,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      }
+    },
+    "wal": {
+      "l2_daily_features": {
+        "sequencerTxn": 36,
+        "writerTxn": 36,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "sequencerTxn": 11,
+        "writerTxn": 11,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    "mv": {
+      "view_name": "mv_retail_sentiment_daily_v1",
+      "view_status": "valid",
+      "invalidation_reason": null,
+      "base_table_name": "l2_daily_features",
+      "view_table_dir_name": "mv_retail_sentiment_daily_v1~11",
+      "refresh_base_table_txn": 36,
+      "base_table_txn": 36,
+      "refresh_type": "timer",
+      "timer_interval": 1,
+      "timer_interval_unit": "MINUTE",
+      "view_sql": "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "view_sql_sha256": "8dc9eb43e0b093b2c2656239f5b49e7e454d699ed157a4eb7c08a50d06c753bc",
+      "definition_matches_python_exact": true
+    },
+    "alias": {
+      "view_name": "v_retail_sentiment_daily",
+      "view_sql": "SELECT * FROM mv_retail_sentiment_daily_v1",
+      "view_table_dir_name": "v_retail_sentiment_daily~12",
+      "invalidation_reason": null,
+      "view_status": "valid",
+      "view_status_update_time": "2026-10-06T07:44:46.384351Z"
+    }
+  },
+  "frozen_python_owner_files_sha256": {
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_cache.py": "5971761ed070f7b178892c90a9114b0609a3dcb2cbf8767867432279371b5bee",
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\models\\market_barometer_cache.py": "d930b1cf639735699c378692978762d31f31b4f970a66cf968869d1e9cb36fe1",
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_views.py": "c2c280376f1642b37e892a87a5b98190f2acad7f954640a88d1624845c0d3dda",
+    "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\common\\persistence\\questdb_model.py": "f29d21ca141302ea1d508ee85f09a4f44375ff5d94b1a4a30cfc880a6605fc92"
+  },
+  "python_owner_file": "D:\\work\\fund_2\\back-monitor\\src\\quant_platform\\data\\adapters\\questdb\\market_barometer_cache.py",
+  "python_owner_file_sha256": "5971761ed070f7b178892c90a9114b0609a3dcb2cbf8767867432279371b5bee",
+  "original_source_frames": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14872828742309666,
+      "avg_retail_entropy": 1.5887293306111183,
+      "total_retail_amount_yi": 17180.14693112448,
+      "total_retail_net_inflow_yi": -840.5730231482072,
+      "avg_rel_aggro": 0.4794140898962389,
+      "total_q1": 82969,
+      "total_q3": 102472,
+      "avg_wash_trade_ratio": 0.08909074639044749,
+      "total_spoof_count": 310560,
+      "total_manipulation_count": 310560,
+      "avg_mfi_score": 0.28992594083188344,
+      "total_main_net_yi": -162.51056215947986
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "avg_retail_ratio": 0.1482778955879337,
+      "avg_retail_entropy": 1.601971357172353,
+      "total_retail_amount_yi": 19172.440182006954,
+      "total_retail_net_inflow_yi": 531.826131947779,
+      "avg_rel_aggro": 0.5069840285517629,
+      "total_q1": 91116,
+      "total_q3": 90850,
+      "avg_wash_trade_ratio": 0.08654103091502331,
+      "total_spoof_count": 306949,
+      "total_manipulation_count": 306949,
+      "avg_mfi_score": 0.32047066705334354,
+      "total_main_net_yi": 36.62509322703998
+    },
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14394985138572083,
+      "avg_retail_entropy": 1.6135276823615923,
+      "total_retail_amount_yi": 19321.916918843424,
+      "total_retail_net_inflow_yi": -115.10705471653013,
+      "avg_rel_aggro": 0.5078168096077674,
+      "total_q1": 91729,
+      "total_q3": 88207,
+      "avg_wash_trade_ratio": 0.08664339640749684,
+      "total_spoof_count": 294851,
+      "total_manipulation_count": 294851,
+      "avg_mfi_score": 0.32359121054157386,
+      "total_main_net_yi": 81.97984425612
+    }
+  ],
+  "original_source_partition_versions": {
+    "20260917": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906",
+    "20260918": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22",
+    "20260921": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba"
+  },
+  "original_source_partition_state": {
+    "l2_daily_features": [
+      9,
+      [
+        {
+          "name": "2026-09-17",
+          "numRows": 7926,
+          "minTimestamp": "2026-09-17T00:00:00.000000Z",
+          "maxTimestamp": "2026-09-17T00:00:00.000000Z",
+          "seqTxn": 36
+        },
+        {
+          "name": "2026-09-18",
+          "numRows": 7902,
+          "minTimestamp": "2026-09-18T00:00:00.000000Z",
+          "maxTimestamp": "2026-09-18T00:00:00.000000Z",
+          "seqTxn": 1
+        },
+        {
+          "name": "2026-09-21",
+          "numRows": 7945,
+          "minTimestamp": "2026-09-21T00:00:00.000000Z",
+          "maxTimestamp": "2026-09-21T00:00:00.000000Z",
+          "seqTxn": 34
+        }
+      ]
+    ]
+  },
+  "source_raw_rows": 23773,
+  "d099_real_source_evidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D099\\commands\\alias-audit-20261006.json",
+  "d099_real_source_evidence_sha256": "19acc3daa5af2d63990da8f8b44bb39b80266da9686dd38c765be6ac94613d52",
+  "installed_owner_tables": [
+    {
+      "table": "retail_sentiment_daily_cache",
+      "created": false,
+      "physical_types": {
+        "trade_date": "TIMESTAMP",
+        "avg_retail_ratio": "DOUBLE",
+        "avg_retail_entropy": "DOUBLE",
+        "total_retail_amount_yi": "DOUBLE",
+        "total_retail_net_inflow_yi": "DOUBLE",
+        "avg_rel_aggro": "DOUBLE",
+        "total_q1": "LONG",
+        "total_q3": "LONG",
+        "avg_wash_trade_ratio": "DOUBLE",
+        "total_spoof_count": "LONG",
+        "total_manipulation_count": "LONG",
+        "avg_mfi_score": "DOUBLE",
+        "total_main_net_yi": "DOUBLE",
+        "source_version": "SYMBOL"
+      },
+      "physical_upsert_keys": [
+        "source_version",
+        "trade_date"
+      ],
+      "schema_sha256": "611358a0b5a7fab456dc6f9c1e649f9f34825f223b16a4b0f8927b50014cbe03"
+    },
+    {
+      "table": "market_barometer_cache_coverage",
+      "created": false,
+      "physical_types": {
+        "trade_date": "TIMESTAMP",
+        "dataset_id": "SYMBOL",
+        "source_version": "SYMBOL",
+        "row_count": "LONG",
+        "content_digest": "STRING"
+      },
+      "physical_upsert_keys": [
+        "dataset_id",
+        "source_version",
+        "trade_date"
+      ],
+      "schema_sha256": "3bb3bfdbe6abf3c67c107803290e36af67c0b645f8742661886a9cb083a636a3"
+    }
+  ],
+  "resume_existing_records": {
+    "cache_rows": 2,
+    "coverage_dataset_rows": 2,
+    "raw_cache_table_row_count": 2,
+    "row_count_evidence": "complete fourteen/five-field PGWire reads with LIMIT201; metadata null is preserved"
+  },
+  "tables_before": {
+    "retail_sentiment_daily_cache": {
+      "physical": {
+        "id": 13,
+        "directoryName": "retail_sentiment_daily_cache~13",
+        "table_txn": 3,
+        "table_row_count": 3,
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "wal": {
+        "sequencerTxn": 3,
+        "writerTxn": 3,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "settled": true
+    },
+    "market_barometer_cache_coverage": {
+      "physical": {
+        "id": 14,
+        "directoryName": "market_barometer_cache_coverage~14",
+        "table_txn": 3,
+        "table_row_count": 3,
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "wal": {
+        "sequencerTxn": 3,
+        "writerTxn": 3,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "settled": true
+    }
+  },
+  "cache_rows": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14872828742309666,
+      "avg_retail_entropy": 1.5887293306111183,
+      "total_retail_amount_yi": 17180.14693112448,
+      "total_retail_net_inflow_yi": -840.5730231482072,
+      "avg_rel_aggro": 0.4794140898962389,
+      "total_q1": 82969,
+      "total_q3": 102472,
+      "avg_wash_trade_ratio": 0.08909074639044749,
+      "total_spoof_count": 310560,
+      "total_manipulation_count": 310560,
+      "avg_mfi_score": 0.28992594083188344,
+      "total_main_net_yi": -162.51056215947986,
+      "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "avg_retail_ratio": 0.1482778955879337,
+      "avg_retail_entropy": 1.601971357172353,
+      "total_retail_amount_yi": 19172.440182006954,
+      "total_retail_net_inflow_yi": 531.826131947779,
+      "avg_rel_aggro": 0.5069840285517629,
+      "total_q1": 91116,
+      "total_q3": 90850,
+      "avg_wash_trade_ratio": 0.08654103091502331,
+      "total_spoof_count": 306949,
+      "total_manipulation_count": 306949,
+      "avg_mfi_score": 0.32047066705334354,
+      "total_main_net_yi": 36.62509322703998,
+      "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+    },
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14394985138572083,
+      "avg_retail_entropy": 1.6135276823615923,
+      "total_retail_amount_yi": 19321.916918843424,
+      "total_retail_net_inflow_yi": -115.10705471653013,
+      "avg_rel_aggro": 0.5078168096077674,
+      "total_q1": 91729,
+      "total_q3": 88207,
+      "avg_wash_trade_ratio": 0.08664339640749684,
+      "total_spoof_count": 294851,
+      "total_manipulation_count": 294851,
+      "avg_mfi_score": 0.32359121054157386,
+      "total_main_net_yi": 81.97984425612,
+      "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba"
+    }
+  ],
+  "coverage_receipts": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "dataset_id": "retail_sentiment_daily",
+      "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906",
+      "row_count": 1,
+      "content_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728"
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "dataset_id": "retail_sentiment_daily",
+      "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22",
+      "row_count": 1,
+      "content_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54"
+    },
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "dataset_id": "retail_sentiment_daily",
+      "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba",
+      "row_count": 1,
+      "content_digest": "78174b198c9ba7a0ced97a48c71b71e8355fbecc7983f5facef689b995d4748c"
+    }
+  ],
+  "verified_generations": [
+    {
+      "receipt": {
+        "trade_date": "2026-09-17T00:00:00.000000Z",
+        "dataset_id": "retail_sentiment_daily",
+        "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906",
+        "row_count": 1,
+        "content_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728"
+      },
+      "cache_record": {
+        "trade_date": "2026-09-17T00:00:00.000000Z",
+        "avg_retail_ratio": 0.14872828742309666,
+        "avg_retail_entropy": 1.5887293306111183,
+        "total_retail_amount_yi": 17180.14693112448,
+        "total_retail_net_inflow_yi": -840.5730231482072,
+        "avg_rel_aggro": 0.4794140898962389,
+        "total_q1": 82969,
+        "total_q3": 102472,
+        "avg_wash_trade_ratio": 0.08909074639044749,
+        "total_spoof_count": 310560,
+        "total_manipulation_count": 310560,
+        "avg_mfi_score": 0.28992594083188344,
+        "total_main_net_yi": -162.51056215947986,
+        "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+      },
+      "receipt_digest_matches": true,
+      "exact_key_row_count": 1,
+      "actual_python_record_digest": "bfe1b46ac2aa2fb906cc7f2d8b9a1eb8a6e4e41e15999bd5b043829b0f1b4728",
+      "fourteen_field_comparisons": 14,
+      "double_binary64_hex": {
+        "avg_retail_ratio": "3fc309874d3c73f1",
+        "avg_retail_entropy": "3ff96b6f7252bb4a",
+        "total_retail_amount_yi": "40d0c7096751cd9a",
+        "total_retail_net_inflow_yi": "c08a44958d290b35",
+        "avg_rel_aggro": "3fdeaeb86f56240c",
+        "avg_wash_trade_ratio": "3fb6cea6b21f8a2b",
+        "avg_mfi_score": "3fd28e258888a35b",
+        "total_main_net_yi": "c064505686743151"
+      },
+      "authoritative_numeric_transport": "PGWire binary64",
+      "qwp_display_records": [
+        {
+          "trade_date": "2026-09-17T00:00:00.000000Z",
+          "avg_retail_ratio": 0.14872828742309666,
+          "avg_retail_entropy": 1.5887293306111183,
+          "total_retail_amount_yi": 17180.14693112448,
+          "total_retail_net_inflow_yi": -840.5730231482072,
+          "avg_rel_aggro": 0.4794140898962389,
+          "total_q1": 82969,
+          "total_q3": 102472,
+          "avg_wash_trade_ratio": 0.08909074639044749,
+          "total_spoof_count": 310560,
+          "total_manipulation_count": 310560,
+          "avg_mfi_score": 0.28992594083188344,
+          "total_main_net_yi": -162.51056215947986,
+          "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+        }
+      ],
+      "qwp_transport_comparison": {
+        "passed": true,
+        "field_comparisons": 14,
+        "double_bit_exact_comparisons": 8,
+        "qwp_display_rounding": [],
+        "primary_storage_and_owner_digest": "PGWire binary64 exact"
+      },
+      "current_cache_hit_certified": false
+    },
+    {
+      "receipt": {
+        "trade_date": "2026-09-18T00:00:00.000000Z",
+        "dataset_id": "retail_sentiment_daily",
+        "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22",
+        "row_count": 1,
+        "content_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54"
+      },
+      "cache_record": {
+        "trade_date": "2026-09-18T00:00:00.000000Z",
+        "avg_retail_ratio": 0.1482778955879337,
+        "avg_retail_entropy": 1.601971357172353,
+        "total_retail_amount_yi": 19172.440182006954,
+        "total_retail_net_inflow_yi": 531.826131947779,
+        "avg_rel_aggro": 0.5069840285517629,
+        "total_q1": 91116,
+        "total_q3": 90850,
+        "avg_wash_trade_ratio": 0.08654103091502331,
+        "total_spoof_count": 306949,
+        "total_manipulation_count": 306949,
+        "avg_mfi_score": 0.32047066705334354,
+        "total_main_net_yi": 36.62509322703998,
+        "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+      },
+      "receipt_digest_matches": true,
+      "exact_key_row_count": 1,
+      "actual_python_record_digest": "9aba2db8db945b14d4cab5bf0e23b5c382c7be29051d69326073c09abe869b54",
+      "fourteen_field_comparisons": 14,
+      "double_binary64_hex": {
+        "avg_retail_ratio": "3fc2fac524228b5c",
+        "avg_retail_entropy": "3ff9a1acb7c2f1a1",
+        "total_retail_amount_yi": "40d2b91c2bf1270a",
+        "total_retail_net_inflow_yi": "40809e9beb110f22",
+        "avg_rel_aggro": "3fe0393691c72c41",
+        "avg_wash_trade_ratio": "3fb6278d918aca59",
+        "avg_mfi_score": "3fd4829766949211",
+        "total_main_net_yi": "404250030e0b8b3e"
+      },
+      "authoritative_numeric_transport": "PGWire binary64",
+      "qwp_display_records": [
+        {
+          "trade_date": "2026-09-18T00:00:00.000000Z",
+          "avg_retail_ratio": 0.1482778955879337,
+          "avg_retail_entropy": 1.601971357172353,
+          "total_retail_amount_yi": 19172.440182006954,
+          "total_retail_net_inflow_yi": 531.826131947779,
+          "avg_rel_aggro": 0.5069840285517629,
+          "total_q1": 91116,
+          "total_q3": 90850,
+          "avg_wash_trade_ratio": 0.08654103091502331,
+          "total_spoof_count": 306949,
+          "total_manipulation_count": 306949,
+          "avg_mfi_score": 0.32047066705334354,
+          "total_main_net_yi": 36.62509322703998,
+          "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+        }
+      ],
+      "qwp_transport_comparison": {
+        "passed": true,
+        "field_comparisons": 14,
+        "double_bit_exact_comparisons": 8,
+        "qwp_display_rounding": [],
+        "primary_storage_and_owner_digest": "PGWire binary64 exact"
+      },
+      "current_cache_hit_certified": false
+    },
+    {
+      "receipt": {
+        "trade_date": "2026-09-21T00:00:00.000000Z",
+        "dataset_id": "retail_sentiment_daily",
+        "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba",
+        "row_count": 1,
+        "content_digest": "78174b198c9ba7a0ced97a48c71b71e8355fbecc7983f5facef689b995d4748c"
+      },
+      "cache_record": {
+        "trade_date": "2026-09-21T00:00:00.000000Z",
+        "avg_retail_ratio": 0.14394985138572083,
+        "avg_retail_entropy": 1.6135276823615923,
+        "total_retail_amount_yi": 19321.916918843424,
+        "total_retail_net_inflow_yi": -115.10705471653013,
+        "avg_rel_aggro": 0.5078168096077674,
+        "total_q1": 91729,
+        "total_q3": 88207,
+        "avg_wash_trade_ratio": 0.08664339640749684,
+        "total_spoof_count": 294851,
+        "total_manipulation_count": 294851,
+        "avg_mfi_score": 0.32359121054157386,
+        "total_main_net_yi": 81.97984425612,
+        "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba"
+      },
+      "receipt_digest_matches": true,
+      "exact_key_row_count": 1,
+      "actual_python_record_digest": "78174b198c9ba7a0ced97a48c71b71e8355fbecc7983f5facef689b995d4748c",
+      "fourteen_field_comparisons": 14,
+      "double_binary64_hex": {
+        "avg_retail_ratio": "3fc26cf2dffb9d15",
+        "avg_retail_entropy": "3ff9d102672ef07f",
+        "total_retail_amount_yi": "40d2de7aaecc5f66",
+        "total_retail_net_inflow_yi": "c05cc6d9fc069849",
+        "avg_rel_aggro": "3fe0400909b3fb3f",
+        "avg_wash_trade_ratio": "3fb62e42f9fc0c4f",
+        "avg_mfi_score": "3fd4b5b7e8a3249f",
+        "total_main_net_yi": "40547eb5c4aecd5e"
+      },
+      "authoritative_numeric_transport": "PGWire binary64",
+      "qwp_display_records": [
+        {
+          "trade_date": "2026-09-21T00:00:00.000000Z",
+          "avg_retail_ratio": 0.14394985138572083,
+          "avg_retail_entropy": 1.6135276823615923,
+          "total_retail_amount_yi": 19321.916918843424,
+          "total_retail_net_inflow_yi": -115.10705471653013,
+          "avg_rel_aggro": 0.5078168096077674,
+          "total_q1": 91729,
+          "total_q3": 88207,
+          "avg_wash_trade_ratio": 0.08664339640749684,
+          "total_spoof_count": 294851,
+          "total_manipulation_count": 294851,
+          "avg_mfi_score": 0.32359121054157386,
+          "total_main_net_yi": 81.97984425612,
+          "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba"
+        }
+      ],
+      "qwp_transport_comparison": {
+        "passed": true,
+        "field_comparisons": 14,
+        "double_bit_exact_comparisons": 8,
+        "qwp_display_rounding": [],
+        "primary_storage_and_owner_digest": "PGWire binary64 exact"
+      },
+      "current_cache_hit_certified": false
+    }
+  ],
+  "cache_field_comparisons": 42,
+  "receipt_field_comparisons": 15,
+  "range_from_inclusive": "2026-09-17",
+  "range_to_exclusive": "2026-09-22",
+  "qwp_range_display_records": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14872828742309666,
+      "avg_retail_entropy": 1.5887293306111183,
+      "total_retail_amount_yi": 17180.14693112448,
+      "total_retail_net_inflow_yi": -840.5730231482072,
+      "avg_rel_aggro": 0.4794140898962389,
+      "total_q1": 82969,
+      "total_q3": 102472,
+      "avg_wash_trade_ratio": 0.08909074639044749,
+      "total_spoof_count": 310560,
+      "total_manipulation_count": 310560,
+      "avg_mfi_score": 0.28992594083188344,
+      "total_main_net_yi": -162.51056215947986,
+      "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "avg_retail_ratio": 0.1482778955879337,
+      "avg_retail_entropy": 1.601971357172353,
+      "total_retail_amount_yi": 19172.440182006954,
+      "total_retail_net_inflow_yi": 531.826131947779,
+      "avg_rel_aggro": 0.5069840285517629,
+      "total_q1": 91116,
+      "total_q3": 90850,
+      "avg_wash_trade_ratio": 0.08654103091502331,
+      "total_spoof_count": 306949,
+      "total_manipulation_count": 306949,
+      "avg_mfi_score": 0.32047066705334354,
+      "total_main_net_yi": 36.62509322703998,
+      "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+    },
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14394985138572083,
+      "avg_retail_entropy": 1.6135276823615923,
+      "total_retail_amount_yi": 19321.916918843424,
+      "total_retail_net_inflow_yi": -115.10705471653013,
+      "avg_rel_aggro": 0.5078168096077674,
+      "total_q1": 91729,
+      "total_q3": 88207,
+      "avg_wash_trade_ratio": 0.08664339640749684,
+      "total_spoof_count": 294851,
+      "total_manipulation_count": 294851,
+      "avg_mfi_score": 0.32359121054157386,
+      "total_main_net_yi": 81.97984425612,
+      "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba"
+    }
+  ],
+  "qwp_range_transport_comparison": {
+    "passed": true,
+    "field_comparisons": 42,
+    "double_bit_exact_comparisons": 24,
+    "qwp_display_rounding": [],
+    "primary_storage_and_owner_digest": "PGWire binary64 exact"
+  },
+  "range_rows": [
+    {
+      "trade_date": "2026-09-17T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14872828742309666,
+      "avg_retail_entropy": 1.5887293306111183,
+      "total_retail_amount_yi": 17180.14693112448,
+      "total_retail_net_inflow_yi": -840.5730231482072,
+      "avg_rel_aggro": 0.4794140898962389,
+      "total_q1": 82969,
+      "total_q3": 102472,
+      "avg_wash_trade_ratio": 0.08909074639044749,
+      "total_spoof_count": 310560,
+      "total_manipulation_count": 310560,
+      "avg_mfi_score": 0.28992594083188344,
+      "total_main_net_yi": -162.51056215947986,
+      "source_version": "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+    },
+    {
+      "trade_date": "2026-09-18T00:00:00.000000Z",
+      "avg_retail_ratio": 0.1482778955879337,
+      "avg_retail_entropy": 1.601971357172353,
+      "total_retail_amount_yi": 19172.440182006954,
+      "total_retail_net_inflow_yi": 531.826131947779,
+      "avg_rel_aggro": 0.5069840285517629,
+      "total_q1": 91116,
+      "total_q3": 90850,
+      "avg_wash_trade_ratio": 0.08654103091502331,
+      "total_spoof_count": 306949,
+      "total_manipulation_count": 306949,
+      "avg_mfi_score": 0.32047066705334354,
+      "total_main_net_yi": 36.62509322703998,
+      "source_version": "740fa1c56861d128fcbaaca8b286028b7609fda208393391fcb6aad6f1602d22"
+    },
+    {
+      "trade_date": "2026-09-21T00:00:00.000000Z",
+      "avg_retail_ratio": 0.14394985138572083,
+      "avg_retail_entropy": 1.6135276823615923,
+      "total_retail_amount_yi": 19321.916918843424,
+      "total_retail_net_inflow_yi": -115.10705471653013,
+      "avg_rel_aggro": 0.5078168096077674,
+      "total_q1": 91729,
+      "total_q3": 88207,
+      "avg_wash_trade_ratio": 0.08664339640749684,
+      "total_spoof_count": 294851,
+      "total_manipulation_count": 294851,
+      "avg_mfi_score": 0.32359121054157386,
+      "total_main_net_yi": 81.97984425612,
+      "source_version": "77443d2e4fbb69d02f32d81d3ea790bb22dd1579c60f5274904f8d7e244de7ba"
+    }
+  ],
+  "range_complete_keys": 3,
+  "tables_after": {
+    "retail_sentiment_daily_cache": {
+      "physical": {
+        "id": 13,
+        "directoryName": "retail_sentiment_daily_cache~13",
+        "table_txn": 3,
+        "table_row_count": 3,
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "wal": {
+        "sequencerTxn": 3,
+        "writerTxn": 3,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "settled": true
+    },
+    "market_barometer_cache_coverage": {
+      "physical": {
+        "id": 14,
+        "directoryName": "market_barometer_cache_coverage~14",
+        "table_txn": 3,
+        "table_row_count": 3,
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "wal": {
+        "sequencerTxn": 3,
+        "writerTxn": 3,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "settled": true
+    }
+  },
+  "source_mv_alias_after": {
+    "tables": {
+      "l2_daily_features": {
+        "id": 9,
+        "directoryName": "l2_daily_features~9",
+        "table_txn": 36,
+        "table_row_count": 23773,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "partitionBy": "DAY",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "ts",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "id": 11,
+        "directoryName": "mv_retail_sentiment_daily_v1~11",
+        "table_txn": 11,
+        "table_row_count": 3,
+        "table_min_timestamp": "2026-09-17T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-21T00:00:00.000000Z",
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": false,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      }
+    },
+    "wal": {
+      "l2_daily_features": {
+        "sequencerTxn": 36,
+        "writerTxn": 36,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "sequencerTxn": 11,
+        "writerTxn": 11,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    "mv": {
+      "view_name": "mv_retail_sentiment_daily_v1",
+      "view_status": "valid",
+      "invalidation_reason": null,
+      "base_table_name": "l2_daily_features",
+      "view_table_dir_name": "mv_retail_sentiment_daily_v1~11",
+      "refresh_base_table_txn": 36,
+      "base_table_txn": 36,
+      "refresh_type": "timer",
+      "timer_interval": 1,
+      "timer_interval_unit": "MINUTE",
+      "view_sql": "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "view_sql_sha256": "8dc9eb43e0b093b2c2656239f5b49e7e454d699ed157a4eb7c08a50d06c753bc",
+      "definition_matches_python_exact": true
+    },
+    "alias": {
+      "view_name": "v_retail_sentiment_daily",
+      "view_sql": "SELECT * FROM mv_retail_sentiment_daily_v1",
+      "view_table_dir_name": "v_retail_sentiment_daily~12",
+      "invalidation_reason": null,
+      "view_status": "valid",
+      "view_status_update_time": "2026-10-06T07:44:46.384351Z"
+    }
+  },
+  "formal_source_mv_alias_after": {
+    "tables": {
+      "l2_daily_features": {
+        "id": 1665,
+        "directoryName": "l2_daily_features_recovery_20260911~1665",
+        "table_txn": 11266,
+        "table_row_count": 4924676,
+        "table_min_timestamp": "2023-01-03T00:00:00.000000Z",
+        "table_max_timestamp": "2026-09-24T00:00:00.000000Z",
+        "partitionBy": "DAY",
+        "walEnabled": true,
+        "dedup": true,
+        "designatedTimestamp": "ts",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "id": 1813,
+        "directoryName": "mv_retail_sentiment_daily_v1~1813",
+        "table_txn": 252,
+        "table_row_count": 886,
+        "table_min_timestamp": "2023-01-03T00:00:00.000000Z",
+        "table_max_timestamp": "2026-08-31T00:00:00.000000Z",
+        "partitionBy": "MONTH",
+        "walEnabled": true,
+        "dedup": false,
+        "designatedTimestamp": "trade_date",
+        "table_suspended": false,
+        "wal_pending_row_count": 0
+      }
+    },
+    "wal": {
+      "l2_daily_features": {
+        "sequencerTxn": 11266,
+        "writerTxn": 11266,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      },
+      "mv_retail_sentiment_daily_v1": {
+        "sequencerTxn": 252,
+        "writerTxn": 252,
+        "bufferedTxnSize": 0,
+        "suspended": false
+      }
+    },
+    "mv": {
+      "view_name": "mv_retail_sentiment_daily_v1",
+      "view_status": "invalid",
+      "invalidation_reason": "materialized view is ahead of base table and cannot be synchronized",
+      "base_table_name": "l2_daily_features",
+      "view_table_dir_name": "mv_retail_sentiment_daily_v1~1813",
+      "refresh_base_table_txn": 10206,
+      "base_table_txn": 11266,
+      "refresh_type": "timer",
+      "timer_interval": 1,
+      "timer_interval_unit": "MINUTE",
+      "view_sql": "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "view_sql_sha256": "8dc9eb43e0b093b2c2656239f5b49e7e454d699ed157a4eb7c08a50d06c753bc",
+      "definition_matches_python_exact": true
+    },
+    "alias": {
+      "view_name": "v_retail_sentiment_daily",
+      "view_sql": "SELECT * FROM mv_retail_sentiment_daily_v1",
+      "view_table_dir_name": "v_retail_sentiment_daily~240",
+      "invalidation_reason": null,
+      "view_status": "valid",
+      "view_status_update_time": "2026-09-30T01:27:52.538878Z"
+    }
+  },
+  "stable_physical_and_wal_versions": true,
+  "source_mv_alias_unchanged": true,
+  "formal_source_mv_alias_unchanged": true,
+  "cache_submitted_rows": 5,
+  "coverage_submitted_rows": 5,
+  "physical_inserted_rows": "unknown; actual unique keys and submitted rows are recorded independently",
+  "physical_updated_rows": "unknown; exact same original generation replay follows owner DEDUP",
+  "generation_count": 3,
+  "first_artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D100\\commands\\cache-isolated-first-resume-20261006.json",
+  "first_artifact_sha256": "707aeb85e01a02ab3237f63c790a210da7533c7f73cf3bdf0d6d773684f51f5c",
+  "java_cursor_capture": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D100\\commands\\java-cache-cursor-first-20261006.json",
+  "java_cursor_capture_sha256": "83618e659cb945c240a3991779c3fcd274d315630485adf3e950b19d11109ab0",
+  "captured_actual_first_cursor": {
+    "queryFingerprint": "c0fb4a97f8d89a42175bca678fe28ea71efb36553496a72eb826a4903548a3fb",
+    "keyValues": [
+      "2026-09-17",
+      "715fd547a4a47c1e3350c24241ebed099a3113bb835c0db5c7cbb5694f310906"
+    ],
+    "sourceVersion": "table:retail_sentiment_daily_cache:id:13:directory:retail_sentiment_daily_cache~13:txn:1:wal-seq:1"
+  }
+}

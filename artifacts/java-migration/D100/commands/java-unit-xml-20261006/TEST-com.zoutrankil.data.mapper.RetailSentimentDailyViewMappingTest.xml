@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-06T07:51:28.357Z" hostname="AMD395" time="0.04">
+  <properties/>
+  <testcase name="repositoryRejectsInvalidDatesRangesAndPageBudgetsBeforeReads()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" time="0.01"/>
+  <testcase name="parentAndAliasKeepAllThirteenFieldValuesAndNullableCountTypesIdentical()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" time="0.002"/>
+  <testcase name="nullableLongCountsRejectNegativeOrOverflowedValuesAndRetainExactMaxLong()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" time="0.004"/>
+  <testcase name="absentFieldsAndCoercedNumericOrDateTypesAreRejected()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" time="0.002"/>
+  <testcase name="repositoryForwardsCompleteDateKeyAndFiniteExclusiveRangeAndTheCursor()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" time="0.004"/>
+  <testcase name="everyPhysicalFieldHasAnExplicitLosslessMappingInCardOrder()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" time="0.004"/>
+  <testcase name="aliasDefinitionHasThirteenExplicitParentColumnsAndNoPhysicalWriteContract()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" time="0.002"/>
+  <testcase name="allNullableSumAndAverageFieldsStayNullRatherThanBecomingZero()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" time="0.001"/>
+  <testcase name="everyDoubleAggregateRejectsNanAndEitherInfinity()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" time="0.002"/>
+  <testcase name="onlyExactUtcMidnightIsAcceptedAsTheCalendarDateCarrier()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" time="0.005"/>
+  <testcase name="aliasAggregateUnitsAndSignedFlowsPassThroughWithoutExtraScalingOrClamping()" classname="com.zoutrankil.data.mapper.RetailSentimentDailyViewMappingTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

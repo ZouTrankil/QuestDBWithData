@@ -1,0 +1,20 @@
+{
+  "task_id": "D095",
+  "reviewed_at": "2026-09-30T18:58:00+08:00",
+  "gate": "hold",
+  "next_task": "D096",
+  "may_advance": false,
+  "reasons": [
+    "Formal QuestDB MV is invalid and missing four recent source trading days.",
+    "Isolated real-source write, invalidation and FULL repair prove the procedure but do not repair the formal target.",
+    "Formal FULL refresh and full business-key/value parity remain pending explicit user authorization."
+  ],
+  "implementation": "Java typed read, ReadGroup and invalid-state guard complete; focused tests pass",
+  "formal_instance_mutated": false,
+  "human_review": "pending_review",
+  "evidence": [
+    "docs/migration-tasks-20260929/results/D095.json",
+    "artifacts/java-migration/D095/commands/formal-readonly-audit-20260930.json",
+    "artifacts/java-migration/D095/commands/isolated-acceptance-20260930.json"
+  ]
+}

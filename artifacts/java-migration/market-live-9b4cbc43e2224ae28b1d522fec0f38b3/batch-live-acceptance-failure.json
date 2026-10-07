@@ -1,0 +1,87 @@
+{
+  "acceptanceId" : "9b4cbc43e2224ae28b1d522fec0f38b3",
+  "selectedTasks" : [ "D008", "D009" ],
+  "startedAt" : "2026-09-29T17:20:39.056473100Z",
+  "formalTablesMutated" : false,
+  "humanReview" : "pending_review",
+  "isolatedTables" : [ "java_d007_daily_9b4cbc43e2224ae28b1d522fec0f38b3", "java_d008_basic_9b4cbc43e2224ae28b1d522fec0f38b3", "java_d009_factor_9b4cbc43e2224ae28b1d522fec0f38b3" ],
+  "isolatedTablesCreated" : [ "java_d008_basic_9b4cbc43e2224ae28b1d522fec0f38b3", "java_d009_factor_9b4cbc43e2224ae28b1d522fec0f38b3" ],
+  "sourceSyncMayHaveStarted" : true,
+  "ledger" : "sync-ledger.sqlite",
+  "preflight" : {
+    "effectiveRateLimitsPerMinute" : {
+      "stk_factor_pro" : 10,
+      "globalPerMinute" : 20,
+      "endpointPerMinute" : 10,
+      "daily_basic" : 10,
+      "daily" : 10
+    },
+    "tushareCredentialConfigured" : true,
+    "questdbObjectsReadable" : 572,
+    "liveEndpoints" : "daily, daily_basic, stk_factor_pro"
+  },
+  "D008" : {
+    "task" : "D008",
+    "job" : "data.daily_basic",
+    "table" : "java_d008_basic_9b4cbc43e2224ae28b1d522fec0f38b3",
+    "targetId" : "questdb-e06e721856bebe2a2923fb35fdccf2fa3058dd6ba2d6e229f7cb7f9274ebd70b",
+    "requestWindows" : {
+      "incrementalTo" : "2026-09-29",
+      "initial" : [ "2026-09-28", "2026-09-28" ]
+    },
+    "runs" : [ {
+      "runId" : "daily-basic-a870222b-a769-4444-9c57-6831765adb77",
+      "state" : "VERIFIED",
+      "sourceRows" : 5557,
+      "verifiedRows" : 5557,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "daily-basic-3c187bad-9348-4289-91ee-733cc4f1daa4",
+      "state" : "VERIFIED",
+      "sourceRows" : 5557,
+      "verifiedRows" : 5557,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "daily-basic-1be315b0-2487-4314-8cbd-bd04738321a6",
+      "state" : "VERIFIED",
+      "sourceRows" : 5557,
+      "verifiedRows" : 5557,
+      "errorCode" : null,
+      "reusedRows" : 0
+    }, {
+      "runId" : "daily-basic-0aed6281-930e-49c7-952b-866eab2d4c04",
+      "state" : "VERIFIED",
+      "sourceRows" : 116572,
+      "verifiedRows" : 116572,
+      "errorCode" : null,
+      "reusedRows" : 0
+    } ],
+    "readbackAfterFirst" : {
+      "rows" : 5557,
+      "sha256" : "3dedb54701b7f74ecc1ec9101737a3957a3b2495973e58d48ef1f03fbaa8a033",
+      "duplicateKeys" : 0
+    },
+    "readbackAfterIdempotentRepeat" : {
+      "rows" : 5557,
+      "sha256" : "3dedb54701b7f74ecc1ec9101737a3957a3b2495973e58d48ef1f03fbaa8a033",
+      "duplicateKeys" : 0
+    },
+    "readbackAfterIncremental" : {
+      "rows" : 116572,
+      "sha256" : "d476e2f961faa652248a33a65f3dc47345241b1e2b2fc2def95483a617905ffc",
+      "duplicateKeys" : 0
+    },
+    "allPhysicalColumnsSelected" : true,
+    "fullRowVerification" : "VERIFIED slice readback matched every returned key and physical column",
+    "isolatedEvidenceDirectory" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-9b4cbc43e2224ae28b1d522fec0f38b3\\sync-evidence",
+    "formalTableMutated" : false,
+    "humanReview" : "pending_review"
+  },
+  "failedAt" : "2026-09-29T17:28:26.581680300Z",
+  "result" : "failed_during_or_after_live_acceptance",
+  "failureType" : "com.zoutrankil.questdbwithdata.cli.IncompleteCommandException",
+  "failure" : "stk_factor sync incomplete: FAILED; run=stk-factor-0e8fb03d-4f63-4c46-a1e8-7e1a42380d5f",
+  "failureCategory" : "IncompleteCommandException"
+}

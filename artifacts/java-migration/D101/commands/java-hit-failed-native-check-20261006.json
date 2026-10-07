@@ -1,0 +1,35 @@
+{
+  "status": "VERIFIED_FAILED_HIT_PROCESS_IDS_ABSENT_PRIVATE_LISTENERS_UNCHANGED",
+  "ledger_recovery_authorized": false,
+  "database_queries": 0,
+  "old_stop_sha256": "180746da6c334ee44ddf7c072f52f74bcc6273590a9e9bc5d86bb37a7f97f377",
+  "publisher_invocations": 0,
+  "old_stop_path": "artifacts/java-migration/D101/commands/java-owner-bridge/java-owner-publish-00f2f51a-06ff-4624-870a-903f717ae4d3.process-stopped.json",
+  "old_stop_process_tree_stopped": false,
+  "database_mutations": 0,
+  "current_matches": [],
+  "checked_at": "2026-10-06T10:24:21.7678397Z",
+  "run_id": "d101-1be2292a-c0b0-4810-a22b-9747bef68071",
+  "task_id": "D101",
+  "listeners": [
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 19020,
+      "OwningProcess": 23388
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 18832,
+      "OwningProcess": 23388
+    }
+  ],
+  "observed_process_ids": [
+    17572,
+    1960,
+    27172,
+    23980,
+    2504,
+    29156,
+    45192
+  ]
+}

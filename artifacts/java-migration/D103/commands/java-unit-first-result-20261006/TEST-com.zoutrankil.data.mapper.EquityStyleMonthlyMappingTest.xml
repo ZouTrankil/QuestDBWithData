@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest" tests="10" skipped="0" failures="1" errors="0" timestamp="2026-10-06T15:00:59.405Z" hostname="AMD395" time="0.133">
+  <properties/>
+  <testcase name="nullableFieldsKeepEveryNullIncludingAnAllNullHistoricalRow()" classname="com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest" time="0.063"/>
+  <testcase name="monthIsExactFirstCalendarDayAtUtcMidnightRatherThanMonthEnd()" classname="com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest" time="0.008"/>
+  <testcase name="datasetDeclaresOrderedNullableThirtyColumnsAndYearWalSingleMonthDedup()" classname="com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest" time="0.005"/>
+  <testcase name="everyNumericColumnRejectsNanInfinityAndNumericCoercion()" classname="com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest" time="0.009"/>
+  <testcase name="canonicalCodecPreservesFieldPositionNullBitmapSignedZeroAndMonthIdentity()" classname="com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest" time="0.009"/>
+  <testcase name="legacyValue920Growth921BindingAndDifferenceDirectionRemainExplicit()" classname="com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest" time="0.018">
+    <failure message="org.opentest4j.AssertionFailedError: expected: &lt;true&gt; but was: &lt;false&gt;" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: expected: &lt;true&gt; but was: &lt;false&gt;
+	at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:158)
+	at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:139)
+	at app//org.junit.jupiter.api.AssertTrue.failNotTrue(AssertTrue.java:69)
+	at app//org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:41)
+	at app//org.junit.jupiter.api.AssertTrue.assertTrue(AssertTrue.java:35)
+	at app//org.junit.jupiter.api.Assertions.assertTrue(Assertions.java:195)
+	at app//com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.legacyValue920Growth921BindingAndDifferenceDirectionRemainExplicit(EquityStyleMonthlyMappingTest.java:118)
+</failure>
+  </testcase>
+  <testcase name="completeProjectionRejectsMissingExtraAndWrongMonthTypes()" classname="com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest" time="0.005"/>
+  <testcase name="eachFieldKeepsSignedZeroExtremeFiniteValuesAndPercentageUnitsWithoutScaling()" classname="com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest" time="0.007"/>
+  <testcase name="allThirtyFieldsHaveExplicitIndependentStorageAndBusinessMapping()" classname="com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest" time="0.002"/>
+  <testcase name="monthCarrierWorksAcrossLeapYearAndYearBoundaryWithoutTimezoneOrDayGuessing()" classname="com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

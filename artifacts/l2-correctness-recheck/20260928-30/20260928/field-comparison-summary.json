@@ -1,0 +1,66 @@
+{
+  "generatedAt": "2026-10-07T09:14:39.839451+00:00",
+  "date": "20260928",
+  "canonicalApi": "KuakeSyncPipeline(source=DfcfCsvLevel2Source(rawRoot)).process_symbol_date(symbol, datetime(2026,9,28), load_snapshot=True)",
+  "nativeFile": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-performance-validation\\batch-real\\20260928\\l2_daily_features.jsonl",
+  "nativeFileSha256": "f3878014503c8ccd9df0025df7905425826b0595857135b9d94ac2c6742bc7f9",
+  "relativeTolerance": 1e-10,
+  "absoluteTolerance": 1e-09,
+  "typePolicy": "Exact type/value for int, bool, str and null; both float required for floating comparison; exact frozen field set",
+  "differences": [],
+  "rowsCompared": 7,
+  "fieldsCompared": 770,
+  "matched": 770,
+  "differenceCount": 0,
+  "symbols": {
+    "000001.SZ": {
+      "fieldsCompared": 110,
+      "matched": 110,
+      "referenceFile": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\20260928\\python-reference\\000001.SZ.json",
+      "referenceSha256": "27523495f3b163eb92b2f93ac80b0ce89cfd7410a31c84819cb1042e21d82f64",
+      "differences": []
+    },
+    "600000.SH": {
+      "fieldsCompared": 110,
+      "matched": 110,
+      "referenceFile": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\20260928\\python-reference\\600000.SH.json",
+      "referenceSha256": "0d5e7423e074c1c7d957e4b123d2cf1dc92050462d8c71a5290e80099236fae0",
+      "differences": []
+    },
+    "300750.SZ": {
+      "fieldsCompared": 110,
+      "matched": 110,
+      "referenceFile": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\20260928\\python-reference\\300750.SZ.json",
+      "referenceSha256": "614f6edd6ef9a50d1e487e4b23d12f30c6555ace313d67baf18b25bad71ab0ab",
+      "differences": []
+    },
+    "688981.SH": {
+      "fieldsCompared": 110,
+      "matched": 110,
+      "referenceFile": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\20260928\\python-reference\\688981.SH.json",
+      "referenceSha256": "6ec57fe47f0ab57154ef51ba18f3a6d2bdc4b2514c4b3a6c01f5cd472943fb8e",
+      "differences": []
+    },
+    "510300.SH": {
+      "fieldsCompared": 110,
+      "matched": 110,
+      "referenceFile": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\20260928\\python-reference\\510300.SH.json",
+      "referenceSha256": "a27302be3a5b408db5fd6326dade6889f26d8747bf3452191755aa226412ef31",
+      "differences": []
+    },
+    "159915.SZ": {
+      "fieldsCompared": 110,
+      "matched": 110,
+      "referenceFile": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\20260928\\python-reference\\159915.SZ.json",
+      "referenceSha256": "cfa5def84ca762d07e4b9d263f7dceab0ea4d4d158e0fc4646c8fa0462adf199",
+      "differences": []
+    },
+    "588000.SH": {
+      "fieldsCompared": 110,
+      "matched": 110,
+      "referenceFile": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\l2-correctness-recheck\\20260928\\python-reference\\588000.SH.json",
+      "referenceSha256": "e136dc8b1eb40b2e6aeb38ccedcc4bb2975ab693a94af62ebf76040a2dabce63",
+      "differences": []
+    }
+  }
+}

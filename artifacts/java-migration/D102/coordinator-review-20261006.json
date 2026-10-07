@@ -1,0 +1,239 @@
+{
+  "task_id": "D102",
+  "dataset_id": "v_etf_market_overview_daily",
+  "checked_at": "2026-10-06T14:07:22.036116+00:00",
+  "decision": "accepted_for_serial_progress",
+  "implementation_status": "implemented",
+  "data_validation_status": "verified",
+  "human_review": "pending_review",
+  "blockers": [],
+  "execution_mode": "direct_local_serial",
+  "next_task": "D103",
+  "next_task_may_start": true,
+  "delivery_matrix": {
+    "D01": "Four-column semantic DTO/domain/mapper, exact date/count/null/double behavior; actual PG/JDBC verification",
+    "D02": "Natural trade_date identity, no own physical DEDUP; underlying full ts_code/timestamp source keys guarded",
+    "D03": "Ordinary VIEW missing-only isolated CREATE ACK; no view WAL/partition; both source schemas and settled versions guarded",
+    "D04": "Typed key/date/range/page reads and actual configured ReadGroup; real cursor continuation/replay and changed-range rejection",
+    "D05": "Ordinary VIEW rejects batch/static/WAL replacement preparation before writers; actual rejection assertions",
+    "D06": "Original direct share/daily JOIN and native SAMPLE BY; real D101 source captures full-field reread, no independent refresh publisher",
+    "D07": "51 registered DatasetDefinition entries, 40 jobs; ordinary VIEW independent job/checkpoint/run/slice not applicable; base owners remain existing source jobs",
+    "D08": "31-day/page bounds, finite per-statement deadlines, truncation/null/schema/version failure propagation, prelaunch cancellation, stable-source cursor; UNKNOWN CREATE nonretryable",
+    "D09": "Actual private and formal SELECT comparisons; complete real sources, same-range read replay, D101 third-day window extension; source mutations not claimed"
+  },
+  "java_unique": 130,
+  "python_unique": 81,
+  "private_source_rows": 11667,
+  "private_source_full_field_values": 164180,
+  "ordinary_view_creates": 1,
+  "create_ack": "ACKNOWLEDGED",
+  "business_data_writes": 0,
+  "formal_writes": 0,
+  "owner_invocations": 0,
+  "actual_D102_source_revision": false,
+  "double_scope": {
+    "within_each_target": "Original source SQL/view/Java independent JDBC/typed DTO/ReadGroup exact binary64, tolerance0",
+    "between_targets": "Four actual aggregate DOUBLE bit differences retained: Sep17 size +7 ULP; Sep18 share +1 ULP and size -2 ULP; Sep21 size -4 ULP (private minus formal)",
+    "cross_target_bit_stability_certified": false,
+    "inference": "Identical captured inputs and different physical layouts can yield different native DOUBLE SUM reduction order; execution-plan cause was not independently certified"
+  },
+  "metadata_transport_scope": {
+    "raw_jdbc_snapshot_timestamp_json": "Epoch millisecond carrier differs by -8 hours from the native UTC timestamp and loses sub-millisecond digits",
+    "authoritative_guard": "Reader uses getString and binds the complete correct UTC microsecond status text in sourceVersion; independently matched both targets to Python native metadata",
+    "cross_transport_raw_epoch_is_utc_authority": false,
+    "business_date_mapper_affected": false,
+    "verification": "Metadata table IDs/directories/transactions/rows/WAL match exactly across stages; full view status time compared through sourceVersion token, not the raw epoch carrier"
+  },
+  "identity_admission": {
+    "protocol_version": 2,
+    "historical_process_files": 659,
+    "historical_responses": 90,
+    "historical_pids": 475,
+    "eligible_pids": 466,
+    "hard_denied_pids": 9,
+    "eligible_original_instances": 556,
+    "complete_original_invocations": 88,
+    "incomplete_original_invocations": 2,
+    "rule": "Fresh present PID known OS birth strictly after all its complete original STOPs; incomplete or unknown original identities require native absence",
+    "leaf_reuse_rule": "Distinct normalized PID/birth leaves permitted; exact duplicate, root reuse and ambiguous parent/bridge rejected",
+    "default_and_protocol1_preserved": true,
+    "unknown_create_never_retried": true
+  },
+  "historical_precreate_failed_attempts_retained": 3,
+  "evidence": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-typed-write-20261006.json",
+      "sha256": "6914f8cddb9d1bf638d70d6db7a8100cc3ea3631f141267b4d145ec70dce0cf5"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\source-fixture-increment-20261006.json",
+      "sha256": "10ce3ee27359111b92b5e4a0b62f8af30e638d27b38ec6272cf6a9aa016383ce"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\source-fixture-initial-20261006.json",
+      "sha256": "c38a61f792ef6be689e1ed1cdb335dabf3da7f9b44c886a11fd4c84669f945f4"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\coordinator-review-20261006.json",
+      "sha256": "2201c05e5e05c4b056a5f3170be86ed86c230fb08e1d7dcf42f93c7228fccaef"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\actual-historical-proof-consumption-20261006.json",
+      "sha256": "1562d9a876efa1714ef8899257910ab514c7984562408f47d8a05ba4264d27bf"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-completed-producer-identity-review-20261006.json",
+      "sha256": "810c456a7c024a497a375a2369000f0991779bdea8a1975a440efec006e28cad"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-final-readiness-review-20261006.json",
+      "sha256": "33f678bc88eb79e05a6da5c5526b4eabf52827c5cfcf12b10c8a73d5c25c8ede"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-historical-identity-rule-review-20261006.json",
+      "sha256": "a3f4e0a5992e64562467f761779503dda084ef84618951f55e2fe58947d7411b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-java-view-read-admission-20261006.json",
+      "sha256": "dfe0e45b93dc79eb9d14168df22216922eb94b9ffb44adb8e7b2ffb0140d058d"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-precreate-new-attempt-review-20261006.json",
+      "sha256": "314b3ba15781c105d94960a812d65d9117e2042d931674f8b70c9fa73379c56c"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-private-view-history-rule-admission-20261006.json",
+      "sha256": "40d9dba569c4c296fcb69e022150c1fb36ff4319fa942b82054ca9ab48ad4900"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-reader-static-review-20261006.json",
+      "sha256": "2e195498cf011fc8bb81c20f1c415aea499838fc028fdfa0465a0e2f13506b25"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-reader-timeout-review-20261006.json",
+      "sha256": "42f01efb8aa9785cbb6d82d130ecabc431bbf2fc52309fac8b5d561d0b736669"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\coordinator-view-data-review-20261006.json",
+      "sha256": "abf7341aaceb0aa504dedd3ccaf66347202499f95e705dd056fcd3810c301617"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\java-catalog-startup-20261006.json",
+      "sha256": "5d0c1b729693241844c5c0ba1360a31d47b9ba4a2005e2f87d7b3aa94c4b388f"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\java-metadata-deadline-guards-20261006.json",
+      "sha256": "c02d46cb7e533f64f820e7d745d44d916c3d2efcfb964cabd5cc37bfb8d6ac80"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\java-pure-tests-20261006.json",
+      "sha256": "f2e1f1a2e88dad02f4d861a89839f3b168504df37c7598b4c69b82d5c6a338cc"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\java-view-read-acceptance-20261006.json",
+      "sha256": "83f9c8afe4d343b7eb5b82f8fb130e59e1d113b6dd0ad8034249dde230d3928f"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\java-view-read-acceptance-20261006.log",
+      "sha256": "57220f3061b60887dd3ffd254e13f02fda8c5cd2b727ec70031ca1cb11d8ff29"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\java-view-read-acceptance-xml-20261006\\TEST-com.zoutrankil.data.config.EtfMarketOverviewDailyViewLiveAcceptanceTest.xml",
+      "sha256": "ebf3ba325de9ab22f148a8f839c199f408f6bb6f35949b80571bb6c182bd08b3"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\java-view-read-test-20261006.json",
+      "sha256": "98039494ed70e3cd3ddb01dc99ebac1ccec75db2c7c98389655715ffc8845938"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\python-historical-identity-leaf-guards-20261006.json",
+      "sha256": "da716be168adc3ad7ece00d45f5cd1143dc4d78fad340b23165156468da4ff53"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\unique-test-inventory-final-20261006.json",
+      "sha256": "0c5100cd7b64a27a04d97fec3e07f27eb4e03180356f7e3397de8d66b6e069fb"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\v_etf_market_overview_daily-create-once.json",
+      "sha256": "3c05e4bd186e51500ef1c943368e45152fc8dd5bba5ab3c5b22f4695abb6f683"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-formal-readonly-audit-20261006.json",
+      "sha256": "24cde1b8140db92224a4756b2d680c36cf339d9b93bbabe0fd960545def81170"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-20261006.json",
+      "sha256": "26b337b392b304e940c6430cc0adc2b8ecd9b381ed4fd6e0e26b8a83575609ae"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-history-rule-20261006.json",
+      "sha256": "c37014e6c236eba748ac7048b393c07a6cd8330e0ea063aa674288f94eec5e82"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-history-rule-new-attempt-20261006.json",
+      "sha256": "8946651cb61f016209ef19d3b7209a6f5fe0f575374585d8936f681045b03cd3"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\commands\\view-isolated-acceptance-new-identity-20261006.json",
+      "sha256": "35a5906e8579bcdf6ba014e493998f478e75b4310240c9aae074bd809986f2d8"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\docs\\migration-tasks-20260929\\00-common-contract.md",
+      "sha256": "faaae47e4f60b62da905bf372a123539cd49d577bf691db7768a96b5db11bca5"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\QuestDbBoundedReader.java",
+      "sha256": "ebf5ab8099f17254783b0f6697444b4e244c4ad2febe11e177b5705bca1c30af"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\test\\java\\com\\zoutrankil\\data\\config\\EtfMarketOverviewDailyViewLiveAcceptanceTest.java",
+      "sha256": "e1926d3de4fae648f21816ba25170b3fb1f8870f6cc6d859d9085b0f3812aa8e"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\audit_d102_etf_view.py",
+      "sha256": "818e4216602ab2bbdee840d650093e0eb1cb11366bad633cb8488b4d8d8549cb"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d102_script_guards.py",
+      "sha256": "bb90338c52f97f2c599bbe3927ca2d52f38a0bac62d1a97ad4f9c4029e41cbc9"
+    }
+  ],
+  "mutable_documents_before_gate": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\docs\\migration-tasks-20260929\\results\\D102.json",
+      "sha256": "69e9b197e09ece1c5bf9d20a6345c78bc96beeab16b7c022d55f5bab68c5e91e",
+      "mutable_coordinator_document": true
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\mapping-contract-20261006.json",
+      "sha256": "ae6ad21fd4c4281793937ab23898e20e82efc6beae5d5d0e52f3c001f4c8d139",
+      "mutable_coordinator_document": true
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D102\\README.md",
+      "sha256": "4d1f52bbfd5bcfa4eef5b800914790ba0f7feb3a60289042adf4e48e812f2d9a",
+      "mutable_coordinator_document": true
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\docs\\migration-tasks-20260929\\11-derived\\D102-v_etf_market_overview_daily.md",
+      "sha256": "a60f95663678064a9af4e84e806795dd5bc30c8a8b24c8c22b1265a488dbc856",
+      "mutable_coordinator_document": true
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\docs\\migration-tasks-20260929\\completion-register.md",
+      "sha256": "89791064f4726d89d4506c59f05b2958462fd804690050c98ca5947fa61b5ac1",
+      "mutable_coordinator_document": true
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\docs\\migration-tasks-20260929\\execution-status.md",
+      "sha256": "16e74cc41f304e68c41945c01465d8fc1a3f59aad1575699e1c023497a6f46cb",
+      "mutable_coordinator_document": true
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\docs\\migration-tasks-20260929\\manifest.json",
+      "sha256": "3b3bc0c42624bc6a51b4ff8eb4c50a6c7274ca352479ba98fcb76ed06dfc10fb",
+      "mutable_coordinator_document": true
+    }
+  ],
+  "scope": "Bounded ordinary VIEW over original physical share/daily inputs; target-local exact SQL/view/typed parity. No source sync routing change, global bit stability, provider universe, full-history freshness, production cutover or D101 formal receipt repair certification"
+}

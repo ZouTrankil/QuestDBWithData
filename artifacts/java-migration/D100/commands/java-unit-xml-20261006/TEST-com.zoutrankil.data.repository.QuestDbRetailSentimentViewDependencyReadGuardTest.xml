@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" tests="14" skipped="0" failures="0" errors="0" timestamp="2026-10-06T07:51:29.831Z" hostname="AMD395" time="0.162">
+  <properties/>
+  <testcase name="aliasStatusDirectoryAndExactDependencySqlAreRequiredBeforeReadingRows()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.027"/>
+  <testcase name="validAliasRejectsSameNameFreshMvWithWrongBaseOrAggregationOnItsFirstPage()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.005"/>
+  <testcase name="registeredAliasRejectsMissingOrWrongDependencyBeforeReadingMetadataOrRows()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.003"/>
+  <testcase name="aliasCannotFallbackToAnOrdinaryTableOrAnAbsentMv()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.005"/>
+  <testcase name="recreatedAliasSqlHashOrStatusHistoryCannotReuseAnOldCursor()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.031"/>
+  <testcase name="existingStockBasicLatestWithTableDependencyKeepsCallerVersionAndSkipsMvAliasMetadata()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.003"/>
+  <testcase name="stableAliasBindsDirectorySqlAndCompleteNativeMvVersionToItsCursor()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.005"/>
+  <testcase name="aliasChangesDuringDependencySnapshotOrRowReadRejectThePage()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.013"/>
+  <testcase name="aliasCursorRejectsChangedMvOrBasePhysicalVersionWithUnchangedCheckpoint()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.017"/>
+  <testcase name="aliasCursorRejectsRecreatedBaseOrMvWithMatchingTransactionCounters()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.012"/>
+  <testcase name="registeredAliasRejectsMultipleDependenciesBeforeReadingMetadataOrRows()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.002"/>
+  <testcase name="datasetDefinitionChangeRejectsAliasCursorBeforeFetchingAnotherPage()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.008"/>
+  <testcase name="mvRefreshDuringAliasReadRejectsTheFetchedPage()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.007"/>
+  <testcase name="validAliasRejectsInvalidLaggingUnsettledOrSuspendedMvBeforeFetchingRows()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentViewDependencyReadGuardTest" time="0.016"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

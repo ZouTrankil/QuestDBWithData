@@ -1,0 +1,18 @@
+{
+  "task_id": "D102",
+  "checked_at": "2026-10-06T12:41:43.648104+00:00",
+  "decision": "accepted_for_private_missing_view_only",
+  "scope": "One fixed original ordinary VIEW CREATE only if absent on attested D101 private PID23388/root/19020/18832; exact original source captures and five-table frontier unchanged",
+  "script_sha256": "b301ec11fce16aa499d20c591fcbc00180a1c3b66f6e130fbbafc83cc49c4a9d",
+  "pure_guard_tests": 39,
+  "formal_parity_sha256": "24cde1b8140db92224a4756b2d680c36cf339d9b93bbabe0fd960545def81170",
+  "guard_summary_sha256": "f570f1459c7ea438507ee8aeb46b2c3fe183c60e1e90461711e123dc31192340",
+  "source_rows": 11667,
+  "source_full_fields": 164180,
+  "formal_writes": 0,
+  "source_insert_refresh_or_cache_publish": 0,
+  "retry": 0,
+  "unknown_ack_policy": "Retain durable claim and stop; no resend or reset",
+  "java_live_admitted": false,
+  "next_task_admitted": false
+}

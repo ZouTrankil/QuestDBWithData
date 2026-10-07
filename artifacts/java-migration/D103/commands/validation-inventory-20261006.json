@@ -1,0 +1,1542 @@
+{
+  "task_id": "D103",
+  "status": "PASS_CURRENT_CODE_BOUNDED_VALIDATION_INVENTORY",
+  "unique_java_passing_methods": 125,
+  "unique_java_pure_methods": 123,
+  "d103_specific_java_pure_methods": 96,
+  "shared_java_pure_methods": 27,
+  "unique_java_live_methods": 2,
+  "python_unique_pure_guards": 122,
+  "java_reports": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+      "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest.xml",
+      "sha256": "47e227e5bbd1598d3b91a7278fd6a6ffc4861fa70e9d0234ee5cc5db3e76a7db"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+      "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+      "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyCatalogStartupTest.xml",
+      "sha256": "620ca570c20db8828c668397ec01a34fc5171008cbb06dd12a0487c27322fd58"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+      "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest.xml",
+      "sha256": "7f058e920da5f736f869b045b860cba9c82f524fd1f9140b72d406667882d020"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+      "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyWriteGroupPreflightTest.xml",
+      "sha256": "bd9cf5899ab47d3faa0bd9afb8e91c7c52b6999138266c6311247e15958583bf"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.domain.temporal.TemporalValuesTest.xml",
+      "sha256": "e04613c7e85368a0c70263d9c734071db91caeb204a593c40ed7952e1ef0bdeb"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest.xml",
+      "sha256": "bd351f0a671e9b7a5bc51d49719793115594c8e642e10635336ff0116b104445"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderTest.xml",
+      "sha256": "745091cc473bb7423cf9e2bfb0c0eaa778db44b95c8a8dd49cc30733ca059a6b"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+      "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.xml",
+      "sha256": "dd761bcb5660a572ce0b9b85c534d8cbd4e8109af8f1846215dafd8b622b4fc9"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.PreparedWriteAdapterTest.xml",
+      "sha256": "cae237a2a7b83e8beabb4fc75b2f31d747decf3d2af46a88d892ad81ec20d76f"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.ReadGroupJsonTest.xml",
+      "sha256": "b91ed05bb4cc5dbd64f6507132782620db2820b9fd9856accd75723690fe87c9"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+      "sha256": "47f35b98a410d3b2468e34e8fd7ceb41ea93e67a7a73902c56c85301e8b50105"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-year-month-json-result-20261006\\TEST-com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest.xml",
+      "sha256": "03eb5b6d0f19fe1c2dfaa800717b2f9ccc0c751df80e179604f9eac098213d00"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-year-month-json-result-20261006\\TEST-com.zoutrankil.data.domain.JobTemporalRoundTripTest.xml",
+      "sha256": "08b53e0578660d25a723be66695d40058f193bd34e9748a81875fd3894ab4c79"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-readonly-recovery-result-20261006\\TEST-com.zoutrankil.data.config.EquityStyleMonthlyInitialReadOnlyRecoveryTest.xml",
+      "sha256": "8b3eb1b5ffb574572143208c7dc38735e608861c58c70cf278897a671ca12fca"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-increment-result-20261006\\TEST-com.zoutrankil.data.config.EquityStyleMonthlyLiveAcceptanceTest.xml",
+      "sha256": "9e90c07fbd08f23ecf0600980ed28db3b664ba6ce2bb35afa2ac8d573b1d6ee5"
+    }
+  ],
+  "java_methods": [
+    {
+      "class": "com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest",
+      "method": "nullableFieldsKeepEveryNullIncludingAnAllNullHistoricalRow()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+          "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest",
+      "method": "monthIsExactFirstCalendarDayAtUtcMidnightRatherThanMonthEnd()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+          "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest",
+      "method": "datasetDeclaresOrderedNullableThirtyColumnsAndYearWalSingleMonthDedup()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+          "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest",
+      "method": "everyNumericColumnRejectsNanInfinityAndNumericCoercion()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+          "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest",
+      "method": "canonicalCodecPreservesFieldPositionNullBitmapSignedZeroAndMonthIdentity()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+          "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest",
+      "method": "legacyValue920Growth921BindingAndDifferenceDirectionRemainExplicit()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+          "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest",
+      "method": "completeProjectionRejectsMissingExtraAndWrongMonthTypes()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+          "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest",
+      "method": "eachFieldKeepsSignedZeroExtremeFiniteValuesAndPercentageUnitsWithoutScaling()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+          "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest",
+      "method": "allThirtyFieldsHaveExplicitIndependentStorageAndBusinessMapping()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+          "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest",
+      "method": "monthCarrierWorksAcrossLeapYearAndYearBoundaryWithoutTimezoneOrDayGuessing()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.mapper.EquityStyleMonthlyMappingTest.xml",
+          "sha256": "339460ac0234ee75e4ea00ad4ee8272398b7e2ec133daa30f8ff4579d46cfa6e"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest",
+      "method": "exactlyTwelveMonthsAndRowsArePermittedWithoutExpandingRange()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest.xml",
+          "sha256": "47e227e5bbd1598d3b91a7278fd6a6ffc4861fa70e9d0234ee5cc5db3e76a7db"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest",
+      "method": "invalidUnboundedWrongCarrierPartialFieldsOrBudgetRejectBeforeReader()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest.xml",
+          "sha256": "47e227e5bbd1598d3b91a7278fd6a6ffc4861fa70e9d0234ee5cc5db3e76a7db"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest",
+      "method": "physicalVersionDriftFailurePropagatesInsteadOfBecomingEmpty()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest.xml",
+          "sha256": "47e227e5bbd1598d3b91a7278fd6a6ffc4861fa70e9d0234ee5cc5db3e76a7db"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest",
+      "method": "completeDecoderRetainsNullableValuesAndReadersPhysicalToken()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest.xml",
+          "sha256": "47e227e5bbd1598d3b91a7278fd6a6ffc4861fa70e9d0234ee5cc5db3e76a7db"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest",
+      "method": "explicitIsolatedTargetUsesSameDefinitionAndArbitraryObjectIsRejected()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest.xml",
+          "sha256": "47e227e5bbd1598d3b91a7278fd6a6ffc4861fa70e9d0234ee5cc5db3e76a7db"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest",
+      "method": "halfOpenMonthRangeKeepsLocalDateBoundsAndActualPhysicalCursor()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest.xml",
+          "sha256": "47e227e5bbd1598d3b91a7278fd6a6ffc4861fa70e9d0234ee5cc5db3e76a7db"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest",
+      "method": "keyAndConvenienceReadUseFirstDayEqualityAndDelegatePhysicalCursorPin()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyReadRepositoryTest.xml",
+          "sha256": "47e227e5bbd1598d3b91a7278fd6a6ffc4861fa70e9d0234ee5cc5db3e76a7db"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "explicitAcknowledgedFlushOccursOnceAndCloseDoesNotSubmitAgain()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "targetIdentityIsStableLegalBoundedAndChangesWithEndpointSchemaOrGeneration()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "senderConstructionFailureHasNoSubmissionAndLeavesStoppedState()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "allNullHistoricalRowCannotBecomeTimestampOnlyIlpButRemainsTypedReadable()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "constructingRowsFailureDiscardsBufferWithoutCallingFlush()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "unknownAckRetainsUnresolvedAndNeverAutomaticallyFlushesOrReplays()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "emptyPhysicalTxnRemainsNullAndRequiresIndependentZeroRowsAndZeroWal()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "twelveRowsRemainBelowOneMiBBudgetAndDistinctCanonicalKeys()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "invalidReadbackKeysAndRangeFailBeforeJdbc()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "closeFailureCannotClaimWriterStoppedEvenWhenFlushAcknowledged()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "nonemptySnapshotsPreservePhysicalWalDifferencesAndRejectPendingOrSuspended()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "batchIsOneToTwelveUniqueMonthsAndRejectsEmptyNullDuplicateAndOverflowBeforeSend()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "freshPortHasNoHistoricalWriterStoppedProof()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest",
+      "method": "onlyExplicitIsolatedNameIsAdmittedBeforeAnyConnectionOrSender()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.EquityStyleMonthlyWritePortTest.xml",
+          "sha256": "52494e8fe409f54197aea002865e721f80a325f9eac3a66c01ae31b5cad89a5c"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "metadataSchemaOrderCannotDrift()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "schemaExtraColumnCannotBeIgnored()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "metadataBooleanNullFailsClosed()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "pageLimitIsRequired()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "exactMonthRejectsWrongDateType()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "monthFirstIsRequired()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "noWindowIsRejectedBeforeConnection()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "finiteMonthlyPreparationDoesNotConnect()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "laggingWalIsRejected()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "thirteenMonthWindowIsRejected()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "generationChangeAcrossSchemaReadIsRejected()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "fullProjectionIsRequired()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "physicalVersionAndAllMetadataStatementsAreBounded()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "911bdcb1937b6c5209291293cf433e83b4d5cc1180d6c09a6b09d287b96a1049"
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyCatalogStartupTest",
+      "method": "actualCatalogAdmitsTypedMonthlyDatasetAndCanonicalJobWithoutIo()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyCatalogStartupTest.xml",
+          "sha256": "620ca570c20db8828c668397ec01a34fc5171008cbb06dd12a0487c27322fd58"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "cancelledFrozenRequestResumesSameIdentityAndUnknownNeverAutomaticallyResumes()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "catalogConstructionWithBlankTargetDoesNotConnectOrCreateLedger()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "sameInstanceReconciliationCompletesRunningAttemptAfterItsDoubtCommitFailed()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "onlyAppendedSourceMonthsReuseCheckpointWithRealOneMonthOverlap()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "incompleteMonthsAreHistoricalMaterializeRowsButNeverIncrementalCheckpoint()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "retainedPreparedWriteLeaseBlocksNewJobRegardlessOfItsJobId()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "unknownReconciliationRejectsSourceRevisionAndPreservesOldEvidence()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "readonlyReconcileJobChecksActualValuesAndNeverSends()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "firstRunIsDurablyVerifiedOnlyAfterFullPrefixAndSharedExclusionReleased()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "currentFutureNonFirstAndThirteenthMonthsFailBeforeMetadata()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "externallyChangedTargetPrefixRejectsCheckpointAndDoesNotWrite()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "anyOldRawFieldRevisionRebuildsWholeFinitePrefixEvenIfOutputUnchanged()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "canonicalDefinitionUsesD022OwnerAndFiniteIsolatedMaterializationPolicies()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "frozenSourceChangeIsDurableFailureRatherThanAutomaticReplan()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "absentOrAllNullMonthCannotAdvanceAcrossARealMonthlyGap()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "readonlyReconciliationCompletesAPreviouslyVerifiedSliceWithoutResend()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "emptyHistoricalWindowIsVerifiedEmptyAndNeverSuppliesCheckpoint()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest",
+      "method": "unknownOutcomeRetainsDatasetLeaseAndRequiresActualSameInstanceStoppedProof()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyJobServiceTest.xml",
+          "sha256": "73dbb6faba19b71eeefcd4ccb21611fc0197e37835be188152ac214e23737f50"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest",
+      "method": "missingWrongKeyDuplicateAndSignedZeroMismatchAreExactFailures()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest.xml",
+          "sha256": "7f058e920da5f736f869b045b860cba9c82f524fd1f9140b72d406667882d020"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest",
+      "method": "emptySourceRequiresStableEmptyActualTargetAndReturnsExplicitZero()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest.xml",
+          "sha256": "7f058e920da5f736f869b045b860cba9c82f524fd1f9140b72d406667882d020"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest",
+      "method": "incrementalConsumerCannotHideAnUnverifiedOldPrefix()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest.xml",
+          "sha256": "7f058e920da5f736f869b045b860cba9c82f524fd1f9140b72d406667882d020"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest",
+      "method": "publishesOneCompleteBoundedPageAndVerifiesWholePrefixBeforeCompletion()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest.xml",
+          "sha256": "7f058e920da5f736f869b045b860cba9c82f524fd1f9140b72d406667882d020"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest",
+      "method": "fullPrefixMismatchAfterConsumerCannotReturnComplete()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest.xml",
+          "sha256": "7f058e920da5f736f869b045b860cba9c82f524fd1f9140b72d406667882d020"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest",
+      "method": "sourceRevisionAfterWriteFailsBeforeVerifiedSourceOrCompletion()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest.xml",
+          "sha256": "7f058e920da5f736f869b045b860cba9c82f524fd1f9140b72d406667882d020"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest",
+      "method": "cancellationAndFiniteBudgetsDoNotReachPublisher()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest.xml",
+          "sha256": "7f058e920da5f736f869b045b860cba9c82f524fd1f9140b72d406667882d020"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest",
+      "method": "readonlyReconcileUsesRealReadbackAndNeverPublisher()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest.xml",
+          "sha256": "7f058e920da5f736f869b045b860cba9c82f524fd1f9140b72d406667882d020"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest",
+      "method": "sourcePlanDriftAndTargetRebuildRejectBeforeSend()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyMaterializeAdapterTest.xml",
+          "sha256": "7f058e920da5f736f869b045b860cba9c82f524fd1f9140b72d406667882d020"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "missingOrGloballyAllNullRequiredCodeFailsInsteadOfFabricatingZero()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "explicitFirstDayTwelveMonthBudgetAndFixedCodeBoundedSql()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "fullFourteenFieldCarriersAndFiniteBinary64AreMandatory()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "physicalSourceMustHaveExactYearWalNonDedupSchemaAndSettledCounters()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "malformedWindowIsRejectedBeforeAnyJdbcAccess()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "nonfiniteDerivedDifferenceIsRejected()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "preservesLegacyPercentageValuesCodeBindingsAndPercentagePointSpreads()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "duplicateNonDeduplicatingSourceFullKeyAndWrongOrderingAreRejected()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "metadataQueriesCarryTimeoutAndFiniteRowSentinels()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "nullablePerMonthLegacyCellsRemainNullAndEntireNullMonthIsOmitted()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "pivotUsesLastNonnullPctRatherThanLatestCloseOrNull()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlySourceTest",
+      "method": "allRawFieldsAndSignedZeroContributeToFingerprint()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlySourceTest.xml",
+          "sha256": "07835b48299aca910dfa00cc7e1f38fbd6bc930f86fc8647d76fd5ac82083226"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyWriteGroupPreflightTest",
+      "method": "timestampOnlyNullPayloadFailsBeforeOwnerQueryLedgerOrSubmission()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyWriteGroupPreflightTest.xml",
+          "sha256": "bd9cf5899ab47d3faa0bd9afb8e91c7c52b6999138266c6311247e15958583bf"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EquityStyleMonthlyWriteGroupPreflightTest",
+      "method": "thirteenMonthsFailBeforeOwnerQueryLedgerOrSubmission()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-unit-stored-units-result-20261006\\TEST-com.zoutrankil.data.service.EquityStyleMonthlyWriteGroupPreflightTest.xml",
+          "sha256": "bd9cf5899ab47d3faa0bd9afb8e91c7c52b6999138266c6311247e15958583bf"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.domain.temporal.TemporalValuesTest",
+      "method": "calendarDatesRejectMalformedInputsAndKeepTheTradingDay()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.domain.temporal.TemporalValuesTest.xml",
+          "sha256": "e04613c7e85368a0c70263d9c734071db91caeb204a593c40ed7952e1ef0bdeb"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.domain.temporal.TemporalValuesTest",
+      "method": "localTimesRejectBothDstAmbiguityAndGaps()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.domain.temporal.TemporalValuesTest.xml",
+          "sha256": "e04613c7e85368a0c70263d9c734071db91caeb204a593c40ed7952e1ef0bdeb"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.domain.temporal.TemporalValuesTest",
+      "method": "instantsRequireAnOffsetAndPreserveNanoseconds()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.domain.temporal.TemporalValuesTest.xml",
+          "sha256": "e04613c7e85368a0c70263d9c734071db91caeb204a593c40ed7952e1ef0bdeb"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest",
+      "method": "namesNullsAndNanosecondsSurviveWithoutDefaultTimezone()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest.xml",
+          "sha256": "bd351f0a671e9b7a5bc51d49719793115594c8e642e10635336ff0116b104445"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest",
+      "method": "schemaMismatchAndBoundaryDuplicateCannotYieldACursor()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderMappingTest.xml",
+          "sha256": "bd351f0a671e9b7a5bc51d49719793115594c8e642e10635336ff0116b104445"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbBoundedReaderTest",
+      "method": "typedCalendarRangesNullsAndPrecisionAreStrict()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderTest.xml",
+          "sha256": "745091cc473bb7423cf9e2bfb0c0eaa778db44b95c8a8dd49cc30733ca059a6b"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbBoundedReaderTest",
+      "method": "cursorUsesCompleteLexicographicKeyAndCannotCrossQueryOrVersion()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderTest.xml",
+          "sha256": "745091cc473bb7423cf9e2bfb0c0eaa778db44b95c8a8dd49cc30733ca059a6b"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbBoundedReaderTest",
+      "method": "filterValuesAreBoundAndUnknownFieldsFailBeforeSql()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbBoundedReaderTest.xml",
+          "sha256": "745091cc473bb7423cf9e2bfb0c0eaa778db44b95c8a8dd49cc30733ca059a6b"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "nullPhysicalTxnCannotHideAnyNonzeroWalOrPendingFrontier()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "uninitializedCursorIsRejectedWhenFirstPhysicalTxnBecomesZeroBeforeRowQuery()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "nullableMetadataChangeAcrossActualCountCannotBeNormalizedAway()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "rawNullableRowMetadataMustBeZeroOrNullAndCannotBeNegative()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "nullPhysicalTxnCannotHideActualRowsOrMissingCount()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest",
+      "method": "uninitializedTableRequiresActualZeroAndKeepsNullableVersionWithBoundedStatements()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.repository.QuestDbEquityStyleReadGuardTest.xml",
+          "sha256": "7b9767ae7d749b2136c4feb04c7b03a38c322df408524c78b73f57a626d5dc4d"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest",
+      "method": "oldSourceGenerationFailsBeforeSend()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.xml",
+          "sha256": "dd761bcb5660a572ce0b9b85c534d8cbd4e8109af8f1846215dafd8b622b4fc9"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest",
+      "method": "duplicateDayDifferentGenerationAndWindowOverflowAreRejected()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.xml",
+          "sha256": "dd761bcb5660a572ce0b9b85c534d8cbd4e8109af8f1846215dafd8b622b4fc9"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest",
+      "method": "canonicalPreparedDefinitionAdmitsOnlyBoundedIngest()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.xml",
+          "sha256": "dd761bcb5660a572ce0b9b85c534d8cbd4e8109af8f1846215dafd8b622b4fc9"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest",
+      "method": "wrongFiveFieldCallerAssertionFailsBeforeAnyOwnerSend()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.xml",
+          "sha256": "dd761bcb5660a572ce0b9b85c534d8cbd4e8109af8f1846215dafd8b622b4fc9"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest",
+      "method": "realPersistentGroupBindsEveryPublicationToCanonicalInputAndSubmittedAuthority()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.xml",
+          "sha256": "dd761bcb5660a572ce0b9b85c534d8cbd4e8109af8f1846215dafd8b622b4fc9"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest",
+      "method": "sourceVectorChangeAcrossPreparedRowsStopsAllSubmissions()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.xml",
+          "sha256": "dd761bcb5660a572ce0b9b85c534d8cbd4e8109af8f1846215dafd8b622b4fc9"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest",
+      "method": "signedZeroCannotBeChangedByCaller()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.xml",
+          "sha256": "dd761bcb5660a572ce0b9b85c534d8cbd4e8109af8f1846215dafd8b622b4fc9"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest",
+      "method": "missingSourceDayDoesNotInventPreparedCacheOrReceipt()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.EtfMarketOverviewCachePreparedWriteAdapterTest.xml",
+          "sha256": "dd761bcb5660a572ce0b9b85c534d8cbd4e8109af8f1846215dafd8b622b4fc9"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.PreparedWriteAdapterTest",
+      "method": "emptyPreparedBatchCompletesWithoutAWrite()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.PreparedWriteAdapterTest.xml",
+          "sha256": "cae237a2a7b83e8beabb4fc75b2f31d747decf3d2af46a88d892ad81ec20d76f"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.PreparedWriteAdapterTest",
+      "method": "lossyOwnerMappingAndTargetDriftAreRejectedBeforeSending()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.PreparedWriteAdapterTest.xml",
+          "sha256": "cae237a2a7b83e8beabb4fc75b2f31d747decf3d2af46a88d892ad81ec20d76f"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.PreparedWriteAdapterTest",
+      "method": "preparedRowsUseVerifiedRunnerAndResumeWithoutAnotherSend()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.PreparedWriteAdapterTest.xml",
+          "sha256": "cae237a2a7b83e8beabb4fc75b2f31d747decf3d2af46a88d892ad81ec20d76f"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.ReadGroupJsonTest",
+      "method": "projectionJsonPreservesNullsAndDoesNotExposeMutableBinaryValues()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.ReadGroupJsonTest.xml",
+          "sha256": "b91ed05bb4cc5dbd64f6507132782620db2820b9fd9856accd75723690fe87c9"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.ReadGroupJsonTest",
+      "method": "datesAndCursorRoundTripWithoutTypeOrPrecisionLoss()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.ReadGroupJsonTest.xml",
+          "sha256": "b91ed05bb4cc5dbd64f6507132782620db2820b9fd9856accd75723690fe87c9"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.ReadGroupJsonTest",
+      "method": "rejectsAmbiguousDatesDuplicateKeysUnknownPropertiesAndOverflow()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.ReadGroupJsonTest.xml",
+          "sha256": "b91ed05bb4cc5dbd64f6507132782620db2820b9fd9856accd75723690fe87c9"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.ReadGroupReaderTest",
+      "method": "cancellationPreservesCompletedPageAndDoesNotReadLaterMembers()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+          "sha256": "47f35b98a410d3b2468e34e8fd7ceb41ea93e67a7a73902c56c85301e8b50105"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.ReadGroupReaderTest",
+      "method": "failuresRemainDistinctFromEmptyPagesAndDoNotHideOtherMembers()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+          "sha256": "47f35b98a410d3b2468e34e8fd7ceb41ea93e67a7a73902c56c85301e8b50105"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.ReadGroupReaderTest",
+      "method": "heterogeneousRowsKeepTheirOwnQueriesVersionsAndCursors()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+          "sha256": "47f35b98a410d3b2468e34e8fd7ceb41ea93e67a7a73902c56c85301e8b50105"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.service.ReadGroupReaderTest",
+      "method": "duplicateMembersAndUnboundedAggregateRequestsAreRejected()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-empty-target-shared-result-20261006\\TEST-com.zoutrankil.data.service.ReadGroupReaderTest.xml",
+          "sha256": "47f35b98a410d3b2468e34e8fd7ceb41ea93e67a7a73902c56c85301e8b50105"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest",
+      "method": "actualD103SourceBatchNestedMonthlyRowsSerializeAndDeserializeExactly()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-year-month-json-result-20261006\\TEST-com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest.xml",
+          "sha256": "03eb5b6d0f19fe1c2dfaa800717b2f9ccc0c751df80e179604f9eac098213d00"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest",
+      "method": "yearMonthRejectsInvalidDatesNoncanonicalStringsAndNonstringCarriers()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-year-month-json-result-20261006\\TEST-com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest.xml",
+          "sha256": "03eb5b6d0f19fe1c2dfaa800717b2f9ccc0c751df80e179604f9eac098213d00"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest",
+      "method": "yearMonthRoundTripsCanonicalPositiveFourDigitIsoWithoutAnOptionalTimeModule()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-year-month-json-result-20261006\\TEST-com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest.xml",
+          "sha256": "03eb5b6d0f19fe1c2dfaa800717b2f9ccc0c751df80e179604f9eac098213d00"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest",
+      "method": "actualD103MaterializationResultHasCanonicalNestedMonthAndStableRoundTrip()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-year-month-json-result-20261006\\TEST-com.zoutrankil.data.domain.JobDefinitionYearMonthJsonTest.xml",
+          "sha256": "03eb5b6d0f19fe1c2dfaa800717b2f9ccc0c751df80e179604f9eac098213d00"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.domain.JobTemporalRoundTripTest",
+      "method": "persistedTemporalValuesRecoverWithoutOptionalModules()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-year-month-json-result-20261006\\TEST-com.zoutrankil.data.domain.JobTemporalRoundTripTest.xml",
+          "sha256": "08b53e0578660d25a723be66695d40058f193bd34e9748a81875fd3894ab4c79"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.config.EquityStyleMonthlyInitialReadOnlyRecoveryTest",
+      "method": "actualInitialPrefixIsRecoveredWithoutPublication()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-readonly-recovery-result-20261006\\TEST-com.zoutrankil.data.config.EquityStyleMonthlyInitialReadOnlyRecoveryTest.xml",
+          "sha256": "8b3eb1b5ffb574572143208c7dc38735e608861c58c70cf278897a671ca12fca"
+        }
+      ]
+    },
+    {
+      "class": "com.zoutrankil.data.config.EquityStyleMonthlyLiveAcceptanceTest",
+      "method": "actualBoundedMaterializationUsesCanonicalRunnerTypedReadsAndComposition()",
+      "status": "PASS",
+      "passing_report_bindings": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-increment-result-20261006\\TEST-com.zoutrankil.data.config.EquityStyleMonthlyLiveAcceptanceTest.xml",
+          "sha256": "9e90c07fbd08f23ecf0600980ed28db3b664ba6ce2bb35afa2ac8d573b1d6ee5"
+        }
+      ]
+    }
+  ],
+  "python_pure_report": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\python-all-d103-guards-20261006.log",
+    "sha256": "0483c4f8d63e32b3a276b25a54eaa8940d2316038a481f75ebec5b3c3e299e9e"
+  },
+  "preserved_original_failed_live": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D103\\commands\\java-initial-failed-result-20261006\\TEST-com.zoutrankil.data.config.EquityStyleMonthlyLiveAcceptanceTest.xml",
+    "sha256": "8d773bf9d93248f88c18ddb565d32978dc8401f80570745111abdee024fefc0e"
+  },
+  "original_initial_stage_junit_status": "FAILED_FINAL_RECEIPT_SERIALIZATION; preserved, not reclassified",
+  "live_stage_results": {
+    "original_initial": "actual operations completed, final YearMonth receipt serialization failed",
+    "fresh_readonly_recovery": "PASS; no DDL/DML/ledger transitions",
+    "incremental": "PASS; actual July overlap plus August append"
+  },
+  "counts_do_not_sum_repeated_runs": true,
+  "unbounded_or_full_acceptance": false,
+  "formal_write_acceptance": false
+}

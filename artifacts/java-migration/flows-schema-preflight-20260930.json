@@ -1,0 +1,48 @@
+{
+  "observed_at": "2026-09-30T06:50:16.5859435+08:00",
+  "query": "SELECT table_name,partitionBy,walEnabled,dedup FROM tables() WHERE table_name IN ('moneyflow_hsgt','margin_all','margin_detail')",
+  "response": {
+    "query": "SELECT table_name,partitionBy,walEnabled,dedup FROM tables() WHERE table_name IN ('moneyflow_hsgt','margin_all','margin_detail')",
+    "columns": [
+      {
+        "name": "table_name",
+        "type": "STRING"
+      },
+      {
+        "name": "partitionBy",
+        "type": "STRING"
+      },
+      {
+        "name": "walEnabled",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "dedup",
+        "type": "BOOLEAN"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "margin_all",
+        "YEAR",
+        true,
+        false
+      ],
+      [
+        "margin_detail",
+        "YEAR",
+        true,
+        true
+      ],
+      [
+        "moneyflow_hsgt",
+        "DAY",
+        true,
+        false
+      ]
+    ],
+    "count": 3
+  },
+  "read_only": true
+}

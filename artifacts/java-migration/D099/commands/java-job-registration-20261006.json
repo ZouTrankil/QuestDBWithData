@@ -1,0 +1,96 @@
+{
+  "job_catalog_size": 39,
+  "canonical_base_job": {
+    "jobId": "data.mv_retail_sentiment_daily_v1",
+    "version": 1,
+    "datasetId": "mv_retail_sentiment_daily_v1",
+    "datasetVersion": 1,
+    "owner": "retail_sentiment_daily_owner",
+    "supportedModes": [
+      "INCREMENTAL",
+      "RECONCILE",
+      "MATERIALIZE"
+    ],
+    "defaultMode": "INCREMENTAL",
+    "parameters": {
+      "target_id": {
+        "type": "STRING",
+        "required": true,
+        "maxLength": 128,
+        "maxItems": 1,
+        "choices": []
+      },
+      "checkpoint_before": {
+        "type": "DATE",
+        "required": false,
+        "maxLength": 10,
+        "maxItems": 1,
+        "choices": []
+      },
+      "calendar_version": {
+        "type": "STRING",
+        "required": false,
+        "maxLength": 128,
+        "maxItems": 1,
+        "choices": []
+      },
+      "source_version": {
+        "type": "STRING",
+        "required": true,
+        "maxLength": 128,
+        "maxItems": 1,
+        "choices": []
+      },
+      "bootstrap_from": {
+        "type": "DATE",
+        "required": true,
+        "maxLength": 10,
+        "maxItems": 1,
+        "choices": []
+      },
+      "native_refresh": {
+        "type": "STRING",
+        "required": false,
+        "maxLength": 32,
+        "maxItems": 1,
+        "choices": [
+          "INCREMENTAL",
+          "FULL_ISOLATED"
+        ]
+      }
+    },
+    "ratePolicyRef": "questdb.materialize",
+    "slicePolicyRef": "retail_sentiment_daily.range31",
+    "verificationPolicyRef": "questdb.full_key_values",
+    "retry": {
+      "maxAttempts": 1,
+      "backoff": "PT1S",
+      "maxElapsed": "PT1S"
+    },
+    "timeout": "PT5M",
+    "budget": {
+      "maxWindowDays": 31,
+      "maxSlices": 1,
+      "maxPages": 1,
+      "maxRows": 31,
+      "maxBatchBytes": 65536
+    },
+    "revisionDays": 3,
+    "dependencies": [
+      {
+        "jobId": "data.l2_daily_features",
+        "version": 1
+      },
+      {
+        "jobId": "data.exchange_calendar",
+        "version": 1
+      }
+    ],
+    "frequency": "MANUAL",
+    "zone": "Asia/Shanghai",
+    "enabled": true,
+    "dailyEligible": false
+  },
+  "alias_duplicate_job_count": 0,
+  "build_successful": true
+}

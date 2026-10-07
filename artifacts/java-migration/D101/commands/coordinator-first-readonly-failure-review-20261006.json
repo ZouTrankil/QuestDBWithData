@@ -1,0 +1,239 @@
+{
+  "task_id": "D101",
+  "decision": "known_prepublication_failure",
+  "checked_at": "2026-10-06T09:49:38.978115+00:00",
+  "scope": "Filesystem artifact and existing authoritative CIM proof review only; no DB/CIM/socket calls in this review",
+  "reason": "Windows venv launcher PID15328 differs from actual Python interpreter bridge PID15144; Java correctly rejected incomplete process identity proof before owner invocation",
+  "owner_invoked": false,
+  "owner_submissions": [],
+  "acknowledged_owner_submissions": 0,
+  "ddl_operations": 0,
+  "source_mutations": 0,
+  "formal_written_rows": 0,
+  "publish_intent_count": 0,
+  "atomic_submission_claim_count": 0,
+  "canonical_ledger": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-0a328481-ecf5-4920-8226-23860d7e0a96.sqlite3",
+    "exists": false,
+    "sqlite_sidecars_exist": false
+  },
+  "tables_before": {
+    "etf_share": {
+      "table": "etf_share",
+      "id": 9,
+      "directory": "etf_share~9",
+      "physicalTxn": 4,
+      "metadataRows": 1532,
+      "actualRows": 1532,
+      "sequenceTxn": 4,
+      "writerTxn": 4,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "etf_daily": {
+      "table": "etf_daily",
+      "id": 10,
+      "directory": "etf_daily~10",
+      "physicalTxn": 9,
+      "metadataRows": 4274,
+      "actualRows": 4274,
+      "sequenceTxn": 9,
+      "writerTxn": 9,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "etf_basic": {
+      "table": "etf_basic",
+      "id": 11,
+      "directory": "etf_basic~11",
+      "physicalTxn": 6,
+      "metadataRows": 2958,
+      "actualRows": 2958,
+      "sequenceTxn": 6,
+      "writerTxn": 6,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "etf_market_overview_daily_cache": {
+      "table": "etf_market_overview_daily_cache",
+      "id": 12,
+      "directory": "etf_market_overview_daily_cache~12",
+      "physicalTxn": null,
+      "metadataRows": null,
+      "actualRows": 0,
+      "sequenceTxn": 0,
+      "writerTxn": 0,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "market_barometer_cache_coverage": {
+      "table": "market_barometer_cache_coverage",
+      "id": 13,
+      "directory": "market_barometer_cache_coverage~13",
+      "physicalTxn": null,
+      "metadataRows": null,
+      "actualRows": 0,
+      "sequenceTxn": 0,
+      "writerTxn": 0,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    }
+  },
+  "tables_after_verified_preview_stability_derived": {
+    "etf_share": {
+      "table": "etf_share",
+      "id": 9,
+      "directory": "etf_share~9",
+      "physicalTxn": 4,
+      "metadataRows": 1532,
+      "actualRows": 1532,
+      "sequenceTxn": 4,
+      "writerTxn": 4,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "etf_daily": {
+      "table": "etf_daily",
+      "id": 10,
+      "directory": "etf_daily~10",
+      "physicalTxn": 9,
+      "metadataRows": 4274,
+      "actualRows": 4274,
+      "sequenceTxn": 9,
+      "writerTxn": 9,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "etf_basic": {
+      "table": "etf_basic",
+      "id": 11,
+      "directory": "etf_basic~11",
+      "physicalTxn": 6,
+      "metadataRows": 2958,
+      "actualRows": 2958,
+      "sequenceTxn": 6,
+      "writerTxn": 6,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "etf_market_overview_daily_cache": {
+      "table": "etf_market_overview_daily_cache",
+      "id": 12,
+      "directory": "etf_market_overview_daily_cache~12",
+      "physicalTxn": null,
+      "metadataRows": null,
+      "actualRows": 0,
+      "sequenceTxn": 0,
+      "writerTxn": 0,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    },
+    "market_barometer_cache_coverage": {
+      "table": "market_barometer_cache_coverage",
+      "id": 13,
+      "directory": "market_barometer_cache_coverage~13",
+      "physicalTxn": null,
+      "metadataRows": null,
+      "actualRows": 0,
+      "sequenceTxn": 0,
+      "writerTxn": 0,
+      "pendingRows": 0,
+      "bufferedTxns": 0,
+      "tableSuspended": false,
+      "walSuspended": false
+    }
+  },
+  "after_proof_scope": "Derived from PREVIEW_VERIFIED snapshot-stability guard and two explicit target COUNT after values; source actualRows inherited from Java before-count under identical source identity/txn/WAL. No independent postfailure SQL is claimed.",
+  "five_table_metadata_equal": true,
+  "target_actual_row_counts_before": {
+    "etf_market_overview_daily_cache": 0,
+    "market_barometer_cache_coverage": 0
+  },
+  "target_actual_row_counts_after": {
+    "etf_market_overview_daily_cache": 0,
+    "market_barometer_cache_coverage": 0
+  },
+  "raw_null_target_txn_and_rows_preserved": true,
+  "target_wal_writer_and_sequence_zero": true,
+  "source_fixture_sha256_unchanged": "c38a61f792ef6be689e1ed1cdb335dabf3da7f9b44c886a11fd4c84669f945f4",
+  "failed_wrapper_pid": 15328,
+  "actual_bridge_pid": 15144,
+  "authoritative_cim_failed_processes_absent": true,
+  "private_pid_and_ports_unchanged": true,
+  "source_fingerprint": "8e072be155557154cac3cf9525b4364663f2d845a9b3fba5a23bf8519175ae0c",
+  "sources_fingerprint": "40ea432abd94e78faf7994fe74cf68fbcc981113340d312a57ff7184a2358e93",
+  "evidence": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-readthrough-first-failed-385ed512-0fe2-41ff-bbf3-804fb2230dcd.json",
+      "sha256": "2b51e7355e25a77347c721f75486978f38bae4205a3da38825d2170298e9908c"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-live-first-20261006.log",
+      "sha256": "5128c9b62236fd8a6cbcdbfc8c7d61c154f34ab102792b9b1ff81449ea89fa84"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-live-first-failed-xml-20261006\\TEST-com.zoutrankil.data.config.EtfMarketOverviewDailyCacheLiveAcceptanceTest.xml",
+      "sha256": "690b38e5075ec6e0fee916ec27d30c6403773a38568d35de7abaa97740462918"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-first-failed-process-check-20261006.json",
+      "sha256": "8fb92e8bf26966bb898cd1ba9ddeb0d8be8577254742cecce95aac7a0d1a633e"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\source-fixture-initial-20261006.json",
+      "sha256": "c38a61f792ef6be689e1ed1cdb335dabf3da7f9b44c886a11fd4c84669f945f4"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\coordinator-first-admission-20261006.json",
+      "sha256": "96bf968b229b62e3aed1025508862b6b3ebd04646252d677417a0fe000724e66"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\d101_etf_cache_owner_bridge.py",
+      "sha256": "df9bb4349d0881ac8fb09b5b47ce4571140abe0b3f5898b6a28b3b4b245c1fdd"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-6c34fe3a-c315-4dec-994d-67bb13b547f4.request.json",
+      "sha256": "8e777860dec12e6768d9e7c8bf89c1082a780398a0436681eb23d549e7d3379e"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-6c34fe3a-c315-4dec-994d-67bb13b547f4.response.json",
+      "sha256": "f291280e65e54160af9678351ceaab0a6d8d2b1eaa5b21cb3f8935c34f712bbe"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-6c34fe3a-c315-4dec-994d-67bb13b547f4.process-started.json",
+      "sha256": "ab887bd8049aa80f84e5a462ffde12ba9a19b4028c4d036f8bcaa3f76fe14395"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-6c34fe3a-c315-4dec-994d-67bb13b547f4.process-stopped.json",
+      "sha256": "110af7a7aee70a0997957f9c91efced64b865187f28952806e0d3859c17434bc"
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D101\\commands\\java-owner-bridge\\java-owner-preview-6c34fe3a-c315-4dec-994d-67bb13b547f4.log",
+      "sha256": "239fbd9eeaf0caabfca0dd8ca527a9be5090566fe74b0a43a7fb0b52892301a9"
+    }
+  ],
+  "implementation_repair_allowed": true,
+  "new_first_identity_allowed_only_after": "Strict actual child PID/start/parent and complete termination proof repair, pure tests pass and coordinator explicit new-first review",
+  "publisher_authorized_by_this_review": false,
+  "database_changes_authorized_by_this_review": false,
+  "delete_reset_or_retry_authorized": false,
+  "human_review": "pending_review"
+}

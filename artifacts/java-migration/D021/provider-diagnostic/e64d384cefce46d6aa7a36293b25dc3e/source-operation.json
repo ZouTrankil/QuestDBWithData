@@ -1,0 +1,100 @@
+{
+  "task" : "D021",
+  "startedAt" : "2026-09-29T21:19:22.246798300Z",
+  "table" : "java_d021_index_weight_e64d384cefce46d6aa7a36293b25dc3e",
+  "dataRowsWritten" : 0,
+  "formalTableMutated" : false,
+  "plan" : {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.index_weight",
+        "version" : 1,
+        "datasetId" : "index_weight",
+        "datasetVersion" : 1,
+        "owner" : "index_weight_owner",
+        "supportedModes" : [ "BACKFILL", "SNAPSHOT" ],
+        "defaultMode" : "SNAPSHOT",
+        "parameters" : {
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "force" : {
+            "type" : "BOOLEAN",
+            "required" : false,
+            "maxLength" : 5,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "observedAt" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 40,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "index_weight.index_month",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 2,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT4M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 92,
+          "maxSlices" : 32,
+          "maxPages" : 32,
+          "maxRows" : 128000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 0,
+        "dependencies" : [ {
+          "jobId" : "data.index",
+          "version" : 1
+        }, {
+          "jobId" : "data.stock_detail_info",
+          "version" : 1
+        } ],
+        "frequency" : "WEEKLY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : false
+      },
+      "mode" : "SNAPSHOT",
+      "parameters" : {
+        "force" : false,
+        "observedAt" : "2026-09-29T21:19:26.850395Z",
+        "targetId" : "static-v2-50026b938db7046f9df6db4112cd91343ae5b067ed2e4c1a6ad5aff015138c5b"
+      },
+      "from" : null,
+      "to" : null,
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-50026b938db7046f9df6db4112cd91343ae5b067ed2e4c1a6ad5aff015138c5b",
+    "targetMinBefore" : null,
+    "targetMaxBefore" : null
+  },
+  "status" : "FAILED",
+  "failure" : "java.lang.IllegalArgumentException: D021 CSIndex XLS header/order changed at column 0",
+  "finishedAt" : "2026-09-29T21:19:27.783388500Z"
+}

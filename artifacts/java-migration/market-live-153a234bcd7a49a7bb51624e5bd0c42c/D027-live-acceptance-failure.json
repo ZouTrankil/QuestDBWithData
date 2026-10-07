@@ -1,0 +1,133 @@
+{
+  "task" : "D027",
+  "table" : "java_d027_moneyflow_hsgt_153a234bcd7a49a7bb51624e5bd0c42c",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-153a234bcd7a49a7bb51624e5bd0c42c\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T23:27:16.115092700Z",
+  "formalTableMutated" : false,
+  "humanReview" : "pending_review",
+  "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+  "runs" : [ ],
+  "independentReadbacks" : [ ],
+  "plans" : [ {
+    "request" : {
+      "definition" : {
+        "jobId" : "data.moneyflow_hsgt",
+        "version" : 1,
+        "datasetId" : "moneyflow_hsgt",
+        "datasetVersion" : 1,
+        "owner" : "moneyflow_hsgt_owner",
+        "supportedModes" : [ "INCREMENTAL", "RECONCILE", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetRowsBefore" : {
+            "type" : "INTEGER",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetFingerprint" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "moneyflow_hsgt.range31",
+        "verificationPolicyRef" : "questdb.full_row_stage_replace",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT2S",
+          "maxElapsed" : "PT10M"
+        },
+        "timeout" : "PT30M",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 12,
+          "maxPages" : 12,
+          "maxRows" : 366,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 5,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "INCREMENTAL",
+      "parameters" : {
+        "checkpointAnchor" : "2026-09-17",
+        "physicalTargetId" : "static-v2-bbf9d09b275abcb5a955e7536d68d493ef6de9a9a7495489d9cfa3967a87fa31",
+        "targetFingerprint" : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+        "targetRowsBefore" : 0
+      },
+      "from" : "2026-09-17",
+      "to" : "2026-09-17",
+      "logicalDate" : "2026-09-30"
+    },
+    "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+    "physicalTargetId" : "static-v2-bbf9d09b275abcb5a955e7536d68d493ef6de9a9a7495489d9cfa3967a87fa31",
+    "checkpointBefore" : null,
+    "checkpointAnchor" : "2026-09-17",
+    "targetBefore" : {
+      "identity" : {
+        "id" : 3004,
+        "directory" : "java_d027_moneyflow_hsgt_153a234bcd7a49a7bb51624e5bd0c42c~3004",
+        "writerTxn" : 0
+      },
+      "rows" : [ ],
+      "fingerprint" : "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes" : 0
+    },
+    "bootstrap" : true
+  } ],
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalStateException: D027 nonempty verified source required: Result[runId=moneyflow-hsgt-2cff451f-ff18-489e-b56a-bdcbc19c4352, state=IN_DOUBT, sourceRows=1, verifiedRows=1, errorCode=Uncertain, reusedRows=0]",
+  "finishedAt" : "2026-09-29T23:27:23.446926Z"
+}

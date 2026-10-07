@@ -1,0 +1,44 @@
+{
+  "checkedAt": "2026-09-29T17:06:50.139610+00:00",
+  "host": "127.0.0.1",
+  "pgPort": 8812,
+  "httpPort": 9000,
+  "database": "qdb",
+  "serviceConfig": "D:\\tool\\questdb\\db\\data\\conf\\server.conf",
+  "credentialSource": "local server config, documented defaults when not overridden",
+  "credentialsRecorded": false,
+  "postgresSelect1": 1,
+  "formalTableMetadata": [
+    [
+      "daily",
+      1680,
+      "daily~1680"
+    ],
+    [
+      "daily_basic",
+      1876,
+      "daily_basic_stage_20260928_185816_917214~1876"
+    ],
+    [
+      "stk_factor",
+      1722,
+      "stk_factor~1722"
+    ],
+    [
+      "ths_member",
+      1779,
+      "ths_member_stage_20260916_000918_ed422f99~1779"
+    ]
+  ],
+  "formalTableCountsBeforeAcceptance": {
+    "daily": 9798989,
+    "daily_basic": 9941223,
+    "stk_factor": 10265031
+  },
+  "completedSessionSamples": [
+    "2026-09-29T00:00:00",
+    "2026-09-28T00:00:00"
+  ],
+  "formalTablesMutated": false,
+  "processEnvironmentLoader": "var/local-questdb-env.ps1"
+}

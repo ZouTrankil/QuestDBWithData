@@ -1,0 +1,30 @@
+{
+  "task_id": "D100",
+  "event": "restart_existing_private_service",
+  "previous_pid": 37904,
+  "previous_pid_and_listeners_absent": true,
+  "failed_start_pid": 40752,
+  "failed_start_stopped": true,
+  "pid": 31760,
+  "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d098-isolated-questdb",
+  "http_port": 19010,
+  "pg_port": 18822,
+  "questdb_version": "10.0.1",
+  "jvm_options": [
+    "-XX:+UnlockExperimentalVMOptions",
+    "-XX:+AlwaysPreTouch",
+    "-XX:+UseParallelGC",
+    "--sun-misc-unsafe-memory-access=allow",
+    "--enable-native-access=io.questdb",
+    "--add-opens=java.base/java.lang=io.questdb",
+    "--add-opens=java.base/java.lang.reflect=io.questdb",
+    "--add-opens=java.base/java.nio=io.questdb",
+    "--add-opens=java.base/java.time.zone=io.questdb",
+    "--add-exports=java.base/jdk.internal.vm=io.questdb"
+  ],
+  "jvm_options_source": "installed D:/tool/questdb/db/bin/questdb.exe null-terminated launcher options",
+  "root_reset": false,
+  "source_sql_mutations": 0,
+  "formal_mutations": 0,
+  "started_at": "2026-10-06T07:44:43.8999584Z"
+}

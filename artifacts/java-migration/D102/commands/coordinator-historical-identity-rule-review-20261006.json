@@ -1,0 +1,148 @@
+{
+  "task_id": "D102",
+  "status": "PASS",
+  "review_type": "independent_static_protocol2_historical_identity_rule_review",
+  "recommendation": "accepted_for_explicit_guarded_new_precreate_attempt_only",
+  "findings": [],
+  "blockers": [],
+  "bindings": [
+    {
+      "path": "tools/audit_d102_etf_view.py",
+      "sha256": "818e4216602ab2bbdee840d650093e0eb1cb11366bad633cb8488b4d8d8549cb",
+      "reviewed_lines": "369-581,586-676,731-766,814-826"
+    },
+    {
+      "path": "tools/test_d102_script_guards.py",
+      "sha256": "bb90338c52f97f2c599bbe3927ca2d52f38a0bac62d1a97ad4f9c4029e41cbc9",
+      "reviewed_lines": "575-754,757-824"
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/coordinator-completed-producer-identity-review-20261006.json",
+      "sha256": "810c456a7c024a497a375a2369000f0991779bdea8a1975a440efec006e28cad",
+      "role": "Immutable protocol2 complete historical review"
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/python-historical-identity-leaf-guards-20261006.json",
+      "sha256": "da716be168adc3ad7ece00d45f5cd1143dc4d78fad340b23165156468da4ff53",
+      "role": "Root final pure summary: 81 unique cases, zero failures/errors/skips; includes previous definitions without rerun addition"
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/python-historical-identity-leaf-guards-20261006.log",
+      "sha256": "ac77e7a9db41cae7ab187e5ef4937ec5d75bea1a010edb0809e05aaebb872e73",
+      "role": "Root final pure execution log"
+    },
+    {
+      "path": "artifacts/java-migration/D102/commands/actual-historical-proof-consumption-20261006.json",
+      "sha256": "1562d9a876efa1714ef8899257910ab514c7984562408f47d8a05ba4264d27bf",
+      "role": "Root actual file-only consumer passed against the frozen real review: 466 eligible, 9 hard-deny, 475 census; no native/database calls"
+    }
+  ],
+  "checks": [
+    {
+      "check": "Protocol and immutable historical scope",
+      "result": "PASS",
+      "lines": "audit:381-481",
+      "detail": "Protocol2 requires its explicit accepted status/scope and fixed second unsubmitted failure/diagnostic, D101 gate, target and typed frontier. Consumer reconstructs the full process inventory and all 90 response identities, verifies every frozen SHA and exactly partitions the 475 historical PIDs into eligible and hard-deny sets."
+    },
+    {
+      "check": "Hard-deny overrides every other instance",
+      "result": "PASS",
+      "lines": "audit:468-481,558-582",
+      "detail": "Every PID associated with an incomplete invocation must be hard-denied even if it has another complete instance. FIRST wrapper15328/unknown bridge15144 and old false-HIT associated PIDs remain among the 9 hard-denied PIDs; no old investigation/recovery shortcut is imported."
+    },
+    {
+      "check": "Every eligible old OS instance and maximum STOP",
+      "result": "PASS",
+      "lines": "audit:482-582",
+      "detail": "Original START/complete STOP, invocation/request/response hashes, sidecars, parent chain, actual bridge and known UTC births are revalidated. Every eligible historical occurrence must have its matching complete proof in that invocation. For each eligible PID, the policy accumulates the maximum original STOP time across all old births using nanosecond-safe comparison."
+    },
+    {
+      "check": "Fresh current birth instead of a changing whitelist",
+      "result": "PASS",
+      "lines": "audit:586-600,642-676",
+      "detail": "Without review, any present historical PID still rejects. Protocol1 remains exact-current-identity. Protocol2 samples the complete reconstructed census including response-only unknown bridge15144; each present PID must be eligible, not hard-denied, and have a known authoritative OS birth strictly later than its maximum old STOP. Name/parent/executable remain diagnostics rather than a reuse allowlist."
+    },
+    {
+      "check": "Narrow distinct-leaf instance handling",
+      "result": "PASS",
+      "lines": "audit:509-547",
+      "detail": "Only protocol2 permits distinct child instances of the same PID, keyed by PID and normalized UTC OS birth. Exact duplicates and equivalent timestamps with different fractional precision reject. A child cannot use the root PID. Every referenced parent PID and actual bridge PID must have exactly one known birth; ambiguous parents/bridge reject without time-based guessing."
+    },
+    {
+      "check": "Quiescence comparison preserves fixed evidence",
+      "result": "PASS",
+      "lines": "audit:602-606,642-676,826",
+      "detail": "Both boundaries freshly validate full historical evidence, all ledgers and current birth rules. Only protocol2 allows native_current_matches to differ between boundaries. Ledger inventory/state, complete historical hashes, PID census, immutable review binding and policy remain equal. Default/protocol1 retain full strict equality."
+    },
+    {
+      "check": "Missing-only CREATE and unknown outcome remain guarded",
+      "result": "PASS",
+      "lines": "audit:195-203,731-766",
+      "detail": "The change does not admit sources, caches, publishers, replacement views or formal mutations. UNKNOWN CREATE claims still reject every retry even if the view exists. A new missing-only CREATE retains target/source/frontier/quiescence checks, durable UNKNOWN before one exact private driver call, no automatic retry and bounded PG execution/read timeout."
+    },
+    {
+      "check": "Actual proof consumption distinguished from mocks",
+      "result": "PASS",
+      "detail": "Root's final 81-case evidence and successful real file-only consumer are both bound above. The earlier 74 mock cases did not establish real-history compatibility; their observed leaf-PID rejection was resolved before this PASS. Reviewer read these artifacts and did not execute either validation or tests."
+    }
+  ],
+  "resolved_finding": {
+    "priority": "P2",
+    "original_location": "tools/audit_d102_etf_view.py:513 in SHA60d0b3e26e3b685c6b08cf1e769ddd51999254e499361be9ff0f050c904a6e4c",
+    "problem": "The original protocol2 draft keyed children by PID alone and rejected a real complete tree containing two different known OS instances of the same leaf PID; 74 mocked tests passed while real proof consumption failed.",
+    "independent_readonly_diagnosis": {
+      "invocation_id": "5b2d714d-6fcc-4ee7-9990-c4511d85bd99",
+      "root_pid": 40804,
+      "root_birth": "2026-10-06T11:22:04.324Z",
+      "actual_bridge_and_parent_pid": 33592,
+      "unique_parent_birth": "2026-10-06T11:22:04.373Z",
+      "repeated_leaf_pid": 12620,
+      "births": [
+        "2026-10-06T11:22:08.785Z",
+        "2026-10-06T11:22:23.140Z"
+      ],
+      "sidecars": [
+        "process-observed-3.json",
+        "process-observed-7.json"
+      ],
+      "both_exit_observed": true,
+      "repeated_pid_referenced_as_parent": false,
+      "only_repeated_child_pid_in_88_complete_stop_trees": true
+    },
+    "resolution": "Final consumer distinguishes normalized PID+birth instances only for protocol2 while requiring unique parent/bridge identities. Original evidence is unchanged, seven leaf-specific cases were added, and root's actual full historical consumer now passes.",
+    "outstanding": false
+  },
+  "historical_review_scope": {
+    "historical_process_files": 659,
+    "historical_response_files": 90,
+    "historical_invocations": 90,
+    "complete_stop_invocations": 88,
+    "incomplete_stop_invocations": 2,
+    "historical_pids": 475,
+    "eligible_pids": 466,
+    "hard_deny_pids": 9,
+    "complete_known_instances_before_whole_pid_denial": 558,
+    "eligible_known_instances": 556,
+    "source": "Counts are from the frozen independent historical review; actual root consumer counts are separately bound above."
+  },
+  "limitations": [
+    "This reviewer performed filesystem-only static analysis. No DB, CIM, service, owner, test, Gradle or production validator execution was performed by the reviewer.",
+    "This recommendation permits only a coordinator's explicit guarded new private pre-CREATE decision. Execution must still freshly sample CIM, reject present hard-deny/unknown identities, verify ledgers/immutable historical evidence and re-attest the private target and unchanged protected table frontiers.",
+    "Birth-after-STOP proves separation from the reviewed old instances; it is not a global absence proof for every possible untracked program. No process-name exemption, generic current allowlist, kill or automatic restart is introduced.",
+    "Native diagnostic rows may change because temporary tools reuse PIDs. They may differ only after each boundary independently passes the same historical rule; fixed evidence or ledger changes are not ignored.",
+    "Previous protocol1 reviews, failed attempts, old incomplete STOPs, historical ledger writerStopped values and both earlier pure versions remain preserved. Protocol2 does not repair or replay an UNKNOWN CREATE.",
+    "No D102 live acceptance, provider completeness, current cache hit, formal freshness, cutover or D103 admission is claimed."
+  ],
+  "actions": {
+    "implementation_edits": 0,
+    "test_runs": 0,
+    "gradle_runs": 0,
+    "database_queries": 0,
+    "database_mutations": 0,
+    "native_queries": 0,
+    "owner_invocations": 0,
+    "old_evidence_overwrites": 0
+  },
+  "automatic_retry": false,
+  "next_task_may_start": false
+}

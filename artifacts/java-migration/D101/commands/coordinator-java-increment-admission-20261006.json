@@ -1,0 +1,54 @@
+{
+  "private_pid": 23388,
+  "ledger_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d101-java-45e5e7ce-b273-4510-8d15-e1abe5397550.sqlite3",
+  "checked_at": "2026-10-06T11:20:13.9750232Z",
+  "typed_write_stage_admitted": false,
+  "evidence": [
+    {
+      "sha256": "10ce3ee27359111b92b5e4a0b62f8af30e638d27b38ec6272cf6a9aa016383ce",
+      "path": "artifacts\\java-migration\\D101\\commands\\source-fixture-increment-20261006.json"
+    },
+    {
+      "sha256": "4b09c8b6f3443f176f1f1562bff3b79a3ef084fc2c108cec470ea990147770bc",
+      "path": "artifacts\\java-migration\\D101\\commands\\coordinator-source-increment-data-review-20261006.json"
+    },
+    {
+      "sha256": "38a49b5ff1f215326300e86ed59df398e4866d2345348ac781f851bece3b96b7",
+      "path": "artifacts\\java-migration\\D101\\commands\\coordinator-source-increment-admission-20261006.json"
+    },
+    {
+      "sha256": "42fc13b797379f964e84ea5514d4199c7d7b6eb87fd3405ab692b22dd89ef1bb",
+      "path": "artifacts\\java-migration\\D101\\commands\\java-readthrough-hit-20261006.json"
+    },
+    {
+      "sha256": "83811728c2840b21a768408ead0546a409053d708be544c962e441a7ef4c53fd",
+      "path": "artifacts\\java-migration\\D101\\commands\\coordinator-hit-new-run-review-20261006.json"
+    },
+    {
+      "sha256": "95ab76d0c803c9d96b8852866ee1b973997bc464fc7b4389196b454f96426a90",
+      "path": "artifacts\\java-migration\\D101\\commands\\python-fixture-admission-guards-20261006.json"
+    }
+  ],
+  "decision": "admitted_canonical_java_full_prefix_increment_only",
+  "next_task_admitted": false,
+  "required_runtime": "Fresh private PID/source schema/WAL and full prefix preview; new distinct run/atomic claims; durable rev4 SUBMITTED before each original Python owner.read; exact three generations and full five-field cache+receipt keys/rawbits; targets2->5; actual first txn2 cursor must reject new txn5; zero retained lease; unknown retained without resend",
+  "task_id": "D101",
+  "human_review": "pending_review",
+  "ports": [
+    19020,
+    18832
+  ],
+  "bounds": {
+    "ddl": 0,
+    "source_or_formal_mutations": 0,
+    "bootstrap_from": "2026-09-17",
+    "automatic_replays": 0,
+    "through_inclusive": "2026-09-21",
+    "expected_ack": 6,
+    "source_rows": 11667,
+    "coverage_submitted_max": 3,
+    "cache_submitted_max": 3,
+    "known_source_dates": 3
+  },
+  "private_root": "var/d101-isolated-questdb"
+}

@@ -1,0 +1,43 @@
+{
+  "task_id": "D097",
+  "reviewed_at": "2026-10-06T13:58:55.815149+08:00",
+  "reviewer": "primary-coordinator",
+  "decision": "accepted_for_serial_progress",
+  "human_review": "pending_review",
+  "implementation_disposition": "retained_compatibility",
+  "validation_scope": "isolated_actual_QuestDB_original_Python_owner_real_source_compatibility",
+  "java_tests": {
+    "tests": 63,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "python_script_tests": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "scope": "Pure mocked failure boundaries; no actual DB/CIM/HTTP"
+  },
+  "source_raw_rows": 16658,
+  "private_verified_keys": 3,
+  "python_phase_field_comparisons": 56,
+  "java_field_comparisons": 48,
+  "formal_writes": 0,
+  "formal_historical_receipt_failures": 2,
+  "formal_production_ready": false,
+  "reason": "Original publisher private first/replay/increment and Java historical READ validation passed. Formal legacy inconsistencies are explicitly retained; Java raw reads provide no receipt or freshness certification.",
+  "evidence": [
+    "artifacts/java-migration/D097/commands/cache-isolated-acceptance-20261006.json",
+    "artifacts/java-migration/D097/commands/java-cache-read-acceptance-20261006.json",
+    "artifacts/java-migration/D097/commands/read-group-request.json",
+    "artifacts/java-migration/D097/commands/cache-readonly-audit-20261006.json",
+    "artifacts/java-migration/D097/commands/cache-digest-diagnostic-20261006.json",
+    "artifacts/java-migration/D097/commands/cache-isolated-preflight-failure-select-20261006.json",
+    "artifacts/java-migration/D097/commands/target-tests-20261006.json",
+    "artifacts/java-migration/D097/commands/java-tests-20261006.log",
+    "artifacts/java-migration/D097/commands/python-script-guards-20261006.log",
+    "artifacts/java-migration/D097/commands/java-dataset-registration-20261006.json"
+  ],
+  "next_task": "D098"
+}

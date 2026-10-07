@@ -1,0 +1,23 @@
+{
+  "checkedAt": "2026-09-29T17:09:36.971830+00:00",
+  "reason": "Terminated test failed during planning serialization, before source execution; all owned isolated tables confirmed empty",
+  "tablesBeforeCleanup": [
+    {
+      "table": "java_d007_daily_234e9fea4dd14d0aa0eddbab56a49731",
+      "id": 2836,
+      "rows": 0
+    },
+    {
+      "table": "java_d008_basic_234e9fea4dd14d0aa0eddbab56a49731",
+      "id": 2837,
+      "rows": 0
+    },
+    {
+      "table": "java_d009_factor_234e9fea4dd14d0aa0eddbab56a49731",
+      "id": 2838,
+      "rows": 0
+    }
+  ],
+  "allOwnedEmptyTargetsRemoved": true,
+  "formalTablesMutated": false
+}

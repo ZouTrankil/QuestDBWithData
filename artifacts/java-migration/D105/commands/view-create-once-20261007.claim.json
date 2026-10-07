@@ -1,0 +1,41 @@
+{
+  "task_id": "D105",
+  "invocation_id": "05353829-1677-4c5a-bd7f-91b1807f5191",
+  "created_at": "2026-10-06T18:03:13.772042+00:00",
+  "kind": "DDL",
+  "table": "java_d105_v_macro_core_monthly_acceptance",
+  "rows": 0,
+  "ack": "ACKNOWLEDGED",
+  "request_started": true,
+  "automatic_retry": false,
+  "target": {
+    "pid": 43084,
+    "birth_utc": "2026-10-06T16:04:24.4330550Z",
+    "data_root": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d104-isolated-questdb",
+    "host": "127.0.0.1",
+    "http_port": 19040,
+    "pg_port": 18852
+  },
+  "producer_identity": {
+    "pid": 48328,
+    "parent_pid": 3860,
+    "name": "python.exe",
+    "birth_utc": "2026-10-06T18:02:50.1060230Z"
+  },
+  "create_admission": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\coordinator-private-view-create-admission-20261007.json",
+    "sha256": "16086cf9a9faf2d00a77627701b95806b620a5aff7822102e851f9b7360f6d82"
+  },
+  "sql": "CREATE VIEW java_d105_v_macro_core_monthly_acceptance AS (SELECT * FROM java_d104_macro_core_monthly_acceptance)",
+  "sql_sha256": "7c9d8b56b6a1aaa0dcbe437fa2ef5e1ccdea63ce44504e564f8443ea39dcf707",
+  "raw_response": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\D105\\commands\\view-create-once-20261007.claim.response.bin",
+    "sha256": "b6f48174863fd847cf8fbaf0a8e4811ba50d6277e9a5082eeb9760fd5a219321",
+    "bytes": 12
+  },
+  "http_status": 200,
+  "response": {
+    "ddl": "OK"
+  },
+  "acknowledged_at": "2026-10-06T18:03:13.893650+00:00"
+}

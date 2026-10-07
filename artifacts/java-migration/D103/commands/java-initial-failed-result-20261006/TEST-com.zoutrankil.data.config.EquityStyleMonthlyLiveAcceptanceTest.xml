@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.config.EquityStyleMonthlyLiveAcceptanceTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2026-10-06T15:11:42.788Z" hostname="AMD395" time="27.674">
+  <properties/>
+  <testcase name="actualBoundedMaterializationUsesCanonicalRunnerTypedReadsAndComposition()" classname="com.zoutrankil.data.config.EquityStyleMonthlyLiveAcceptanceTest" time="27.674">
+    <failure message="com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Java 8 date/time type `java.time.YearMonth` not supported by default: add Module &quot;com.fasterxml.jackson.datatype:jackson-datatype-jsr310&quot; to enable handling (or disable `MapperFeature.REQUIRE_HANDLERS_FOR_JAVA8_TIMES`) (through reference chain: java.util.LinkedHashMap[&quot;admitted_source&quot;]-&gt;com.zoutrankil.data.service.EquityStyleMonthlySource$Batch[&quot;rows&quot;]-&gt;java.util.ImmutableCollections$List12[0]-&gt;com.zoutrankil.data.domain.EquityStyleMonthly[&quot;month&quot;])" type="com.fasterxml.jackson.databind.exc.InvalidDefinitionException">com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Java 8 date/time type `java.time.YearMonth` not supported by default: add Module &quot;com.fasterxml.jackson.datatype:jackson-datatype-jsr310&quot; to enable handling (or disable `MapperFeature.REQUIRE_HANDLERS_FOR_JAVA8_TIMES`) (through reference chain: java.util.LinkedHashMap[&quot;admitted_source&quot;]-&gt;com.zoutrankil.data.service.EquityStyleMonthlySource$Batch[&quot;rows&quot;]-&gt;java.util.ImmutableCollections$List12[0]-&gt;com.zoutrankil.data.domain.EquityStyleMonthly[&quot;month&quot;])
+	at com.fasterxml.jackson.databind.exc.InvalidDefinitionException.from(InvalidDefinitionException.java:77)
+	at com.fasterxml.jackson.databind.SerializerProvider.reportBadDefinition(SerializerProvider.java:1359)
+	at com.fasterxml.jackson.databind.ser.impl.UnsupportedTypeSerializer.serialize(UnsupportedTypeSerializer.java:34)
+	at com.fasterxml.jackson.databind.ser.BeanPropertyWriter.serializeAsField(BeanPropertyWriter.java:732)
+	at com.fasterxml.jackson.databind.ser.std.BeanSerializerBase.serializeFields(BeanSerializerBase.java:760)
+	at com.fasterxml.jackson.databind.ser.BeanSerializer.serialize(BeanSerializer.java:183)
+	at com.fasterxml.jackson.databind.ser.impl.IndexedListSerializer.serializeContentsUsing(IndexedListSerializer.java:142)
+	at com.fasterxml.jackson.databind.ser.impl.IndexedListSerializer.serializeContents(IndexedListSerializer.java:88)
+	at com.fasterxml.jackson.databind.ser.impl.IndexedListSerializer.serialize(IndexedListSerializer.java:79)
+	at com.fasterxml.jackson.databind.ser.impl.IndexedListSerializer.serialize(IndexedListSerializer.java:18)
+	at com.fasterxml.jackson.databind.ser.BeanPropertyWriter.serializeAsField(BeanPropertyWriter.java:732)
+	at com.fasterxml.jackson.databind.ser.std.BeanSerializerBase.serializeFields(BeanSerializerBase.java:760)
+	at com.fasterxml.jackson.databind.ser.BeanSerializer.serialize(BeanSerializer.java:183)
+	at com.fasterxml.jackson.databind.ser.std.MapSerializer.serializeFields(MapSerializer.java:807)
+	at com.fasterxml.jackson.databind.ser.std.MapSerializer.serializeWithoutTypeInfo(MapSerializer.java:763)
+	at com.fasterxml.jackson.databind.ser.std.MapSerializer.serialize(MapSerializer.java:719)
+	at com.fasterxml.jackson.databind.ser.std.MapSerializer.serialize(MapSerializer.java:34)
+	at com.fasterxml.jackson.databind.ser.DefaultSerializerProvider._serialize(DefaultSerializerProvider.java:503)
+	at com.fasterxml.jackson.databind.ser.DefaultSerializerProvider.serializeValue(DefaultSerializerProvider.java:342)
+	at com.fasterxml.jackson.databind.ObjectWriter$Prefetch.serialize(ObjectWriter.java:1587)
+	at com.fasterxml.jackson.databind.ObjectWriter._writeValueAndClose(ObjectWriter.java:1289)
+	at com.fasterxml.jackson.databind.ObjectWriter.writeValueAsString(ObjectWriter.java:1140)
+	at com.zoutrankil.data.config.EquityStyleMonthlyLiveAcceptanceTest.actualBoundedMaterializationUsesCanonicalRunnerTypedReadsAndComposition(EquityStyleMonthlyLiveAcceptanceTest.java:177)
+</failure>
+  </testcase>
+  <system-out><![CDATA[23:11:46.568 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-private - Starting...
+23:11:46.604 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-private - Start completed.
+23:11:46.605 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-formal - Starting...
+23:11:46.606 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-formal - Start completed.
+23:12:10.428 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-formal - Shutdown initiated...
+23:12:10.431 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-formal - Shutdown completed.
+23:12:10.432 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-private - Shutdown initiated...
+23:12:10.432 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-private - Shutdown completed.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

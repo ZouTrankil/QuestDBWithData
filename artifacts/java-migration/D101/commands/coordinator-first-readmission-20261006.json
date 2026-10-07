@@ -1,0 +1,66 @@
+{
+  "coverage_rows_before": 0,
+  "bounds": {
+    "source_writes": 0,
+    "automatic_retries": 0,
+    "ddl": 0,
+    "cache_submitted_rows_max": 2,
+    "formal_writes": 0,
+    "coverage_submitted_rows_max": 2,
+    "dates": [
+      "2026-09-17",
+      "2026-09-18"
+    ]
+  },
+  "proofs": [
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-first-readonly-failure-review-20261006.json",
+      "sha256": "506bcd8e9e2e868faa2663a5f05b106bac7b915d2de56bbda7971f519b8290e7"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-process-tree-guards-20261006.json",
+      "sha256": "8ce8cf7f8b7df770c764b74c86eb177150545cb7095ad1bacc24076e44e27409"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-job-unknown-prefix-guards-20261006.json",
+      "sha256": "c1a64aa2b5b74c79b61f77c7c5bb17c9d5469d21f81ca3cf6e963e8ade9891ed"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-process-preview-20261006.json",
+      "sha256": "2eba5d81cea5256ea92f014ba7defb255d35b4eed94a94e83a85361e59805576"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/java-process-preview-native-check-20261006.json",
+      "sha256": "d60f929f62bfdac6e448aec32b606868ccffe5cdc96550eb060e93560ed8ebd7"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/coordinator-process-preview-review-20261006.json",
+      "sha256": "c4f5b8871bada7634c91ac6ecd5452994607b118df3195053fb7e39d66a1a9b6"
+    },
+    {
+      "path": "artifacts/java-migration/D101/commands/source-fixture-initial-20261006.json",
+      "sha256": "c38a61f792ef6be689e1ed1cdb335dabf3da7f9b44c886a11fd4c84669f945f4"
+    }
+  ],
+  "python_fixture_unique": 20,
+  "prior_failed_attempt": "Kept immutable: no owner invocation, intent, atomic claim or ledger; no earlier submitted writer to retry",
+  "python_bridge_unique": 43,
+  "source_fixture_rows": 8764,
+  "required_runtime": "New UUID ledger/run; fresh Java previews and exact PID/root/schema/source/target/WAL checks; actual SQLite SUBMITTED revision4 before unique original owner.read; any unknown stops without resend",
+  "raw_null_txn_preserved": true,
+  "cache_rows_before": 0,
+  "java_pure_unique": 173,
+  "actual_readonly_process_preview_tests": 1,
+  "checked_at": "2026-10-06T10:06:22.2187469Z",
+  "ports": [
+    19020,
+    18832
+  ],
+  "decision": "admitted_new_identity_bounded_first_after_verified_prepublication_failure",
+  "bridge_sha256": "df9bb4349d0881ac8fb09b5b47ce4571140abe0b3f5898b6a28b3b4b245c1fdd",
+  "private_root": "var/d101-isolated-questdb",
+  "next_task_admitted": false,
+  "private_pid": 23388,
+  "task_id": "D101",
+  "human_review": "pending_review"
+}

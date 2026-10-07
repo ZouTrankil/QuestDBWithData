@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" tests="24" skipped="0" failures="0" errors="0" timestamp="2026-10-06T09:40:24.041Z" hostname="AMD395" time="0.8">
+  <properties/>
+  <testcase name="atomicClaimAllowsOnlyOneOfTwoGatewayInstancesForSameDurableSlice()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.206"/>
+  <testcase name="timeoutKillsThenWaitsForExitAndRetainsUnknownIntentWithoutRetry()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.068"/>
+  <testcase name="sourceNullTxnRemainsRejectedEvenWithZeroMetadataRowsWalAndCount()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.004"/>
+  <testcase name="invalidRevisionOrUnknownDayFailsBeforeLedgerAccess()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.006"/>
+  <testcase name="parsesCompleteFiveFieldCacheAndFiveFieldReceipt()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.004"/>
+  <testcase name="rejectsFractionalBooleanOverflowAndNegativeCounters()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.008"/>
+  <testcase name="processUsesArgvAndNewArtifactsWithRealWaitProof()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.049"/>
+  <testcase name="rejectsInventedUnknownReceiptOrPresentCacheForEmptyJoin()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.005"/>
+  <testcase name="knownEmptyJoinIsOneReceiptPublicationWhileUnknownAnchorHasNoReceipt()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.003"/>
+  <testcase name="publicationCreatesImmutableIntentAndRefusesSameSliceReplay()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.079"/>
+  <testcase name="unconfiguredBeanConstructsButOperationFailsBeforeProcessLaunch()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.055"/>
+  <testcase name="acceptsExplicitNullTargetTxnOnlyWithRawNullRowsWal0AndActualCount0()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.006"/>
+  <testcase name="nullTargetRejectsMissingCountBooleanCountRawRowsOrWalNonzero()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.006"/>
+  <testcase name="nullableBinary64AndSignedZeroPreserved()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.004"/>
+  <testcase name="missingResponseIsUnknownAndNeverRelaunched()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.023"/>
+  <testcase name="rejectsUnsettledOrSuspendedWal()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.005"/>
+  <testcase name="defensiveSnapshotsCannotChangeFrozenEnvelope()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.005"/>
+  <testcase name="rejectsWrongProtocolTargetPidAndFormalPort()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.005"/>
+  <testcase name="configurationRejectsUnboundedTimeoutAndBudget()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.004"/>
+  <testcase name="rejectsMissingSourceIncompleteCensusAndOverBudget()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.005"/>
+  <testcase name="rejectsNonMidnightDateWrongGenerationAndExtraBusinessColumn()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.004"/>
+  <testcase name="finiteFileCapRefusesOversizedAndMissingArtifacts()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.007"/>
+  <testcase name="actualSQLiteParentCancellationAndReadonlyReconcileModeFailBeforeProcessLaunch()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.218"/>
+  <testcase name="rejectsAttestationDifferentPidOrDataRoot()" classname="com.zoutrankil.data.service.EtfMarketOverviewCacheOwnerGatewayTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

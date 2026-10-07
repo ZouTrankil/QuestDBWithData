@@ -1,0 +1,25 @@
+{
+  "protocol_version": 1,
+  "task_id": "D105",
+  "status": "FILE_ONLY_IMPLEMENTATION_CHANGE_NOTE",
+  "author": "/root/d095_scripts",
+  "scope": "No new data acceptance or independent review; describes a private-only function correction after the successful formal SELECT audit.",
+  "existing_formal_receipt": {
+    "path": "artifacts/java-migration/D105/commands/view-formal-readonly-audit-20261007.json",
+    "sha256": "4b3aec1c690ae34a0b69e35df34d535d7a881454e2e549623e11724eb9be437d",
+    "executed_script_sha256": "9cb825bd97ef48efdb6aa0ceda21395ca67c254833ba9c2baf8ba2f4f506b87b"
+  },
+  "current_audit_script": {
+    "path": "tools/audit_d105_macro_core_view.py",
+    "sha256": "3540ddb34ccbec4d777a2ce00e236b3ef6b76ccf190cc82006c14ba43d0d949b"
+  },
+  "changed_function": "private_target",
+  "change": "Preserve the actual raw current server identity. Normalize six/seven digit OS birth for instant comparison. Consume all three actual final Java native_attestations records using the original strict listener/root/PID/birth validator, rather than referring to a nonexistent Java private_target field.",
+  "formal_path": "main(scope=formal) calls prerequisites(), FormalReader(), audit_target(isolated=False). It never calls private_target(), quiescence(), native checks or private database connections. The formal SQL/value/schema/native VIEW metadata and final protected table readback functions were not changed by this correction.",
+  "formal_receipt_preserved": true,
+  "database_queries_performed_by_note_author": 0,
+  "native_queries_performed_by_note_author": 0,
+  "tests_performed_by_note_author": 0,
+  "mutations_performed_by_note_author": 0,
+  "reference_project_mutated": false
+}

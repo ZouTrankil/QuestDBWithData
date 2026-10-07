@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.VerifiedBatchExecutorTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2026-10-06T08:41:47.457Z" hostname="AMD395" time="0.128">
+  <properties/>
+  <testcase name="emptyInputNeverSends()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.0"/>
+  <testcase name="invalidSourceRowFailsBeforeTransport()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.001"/>
+  <testcase name="equalCountsWithWrongValueRemainInDoubt()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.017"/>
+  <testcase name="matchingReadbackCannotReconcileSenderThatMayStillWrite()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.016"/>
+  <testcase name="unsettledWalAndDuplicateKeyCannotBeVerified()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.016"/>
+  <testcase name="boundedBatchesRequireExactValuesAndWal()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.001"/>
+  <testcase name="sourceFailureAfterVerifiedBatchPreservesReceipt()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.001"/>
+  <testcase name="optInToleranceAcceptsRoundingOnlyAndPreservesTheSourceDigest()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.002"/>
+  <testcase name="cancellationBeforeSendAndAfterSendHaveDifferentOutcomes()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.0"/>
+  <testcase name="partialSecondBatchStaysInDoubtWithFirstReceiptIntact()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.016"/>
+  <testcase name="cancellationDuringPreflightCannotStartTransport()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.0"/>
+  <testcase name="transportByteEstimateAndBatchBudgetAreEnforcedBeforeSend()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.001"/>
+  <testcase name="optInToleranceStillRejectsOutOfToleranceValuesAndDifferentKeys()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.033"/>
+  <testcase name="lostAcknowledgementCanOnlyBeReconciledByReadback()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.001"/>
+  <testcase name="defaultComparisonRejectsEvenSmallNumericReadbackDifferences()" classname="com.zoutrankil.data.service.VerifiedBatchExecutorTest" time="0.018"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,51 @@
+{
+  "task" : "D027",
+  "table" : "java_d027_moneyflow_hsgt_153a234bcd7a49a7bb51624e5bd0c42c",
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-153a234bcd7a49a7bb51624e5bd0c42c\\sync-ledger.sqlite",
+  "startedAt" : "2026-09-29T23:27:16.115092700Z",
+  "formalTableMutated" : false,
+  "priorFailure" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-153a234bcd7a49a7bb51624e5bd0c42c\\D027-live-acceptance-failure.json",
+  "firstRecoveryState" : "VERIFIED",
+  "targetId" : "static-v2-bcc656e2b218a1f2108accf2cab0500cba7a66a1eb6d24eeeffcd584726bf615",
+  "runs" : [ {
+    "verifiedRows" : 1,
+    "state" : "VERIFIED",
+    "runId" : "moneyflow-hsgt-2cff451f-ff18-489e-b56a-bdcbc19c4352",
+    "sourceRows" : 1,
+    "recoveredOriginalPublication" : true
+  } ],
+  "independentReadbacks" : [ {
+    "sourceRows" : 1,
+    "matches" : 1,
+    "status" : "MATCHED",
+    "expectedRows" : 1,
+    "fieldNames" : [ "trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money" ],
+    "table" : "java_d027_moneyflow_hsgt_153a234bcd7a49a7bb51624e5bd0c42c",
+    "actualRows" : 1,
+    "runId" : "moneyflow-hsgt-2cff451f-ff18-489e-b56a-bdcbc19c4352",
+    "task" : "D027",
+    "slices" : [ {
+      "matches" : 1,
+      "fromInclusive" : "2026-09-17",
+      "sourceFingerprint" : "e648fb2a7046640ff888d1a11066e3afc1479a55c64fbfc94da9747a78e35556",
+      "receipt" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\java-migration\\market-live-153a234bcd7a49a7bb51624e5bd0c42c\\sync-evidence\\moneyflow-hsgt-2cff451f-ff18-489e-b56a-bdcbc19c4352\\source\\moneyflow-hsgt-20260917-20260917-e648fb2a7046640ff888d1a11066e3afc1479a55c64fbfc94da9747a78e35556.json",
+      "toInclusive" : "2026-09-17",
+      "sourceRows" : 1
+    } ],
+    "duplicateKeys" : 0,
+    "dedup" : false,
+    "mismatches" : 0,
+    "journalState" : "VERIFIED",
+    "missingKeys" : 0,
+    "fieldsCompared" : 7
+  } ],
+  "plans" : [ ],
+  "afterFirst" : {
+    "rows" : 1,
+    "sha256" : "239f9ea4e58a67bf17ad06dd10857f0885de659e06717048057621f48e76fffd",
+    "duplicateKeys" : 0
+  },
+  "result" : "FAILED",
+  "failure" : "java.lang.IllegalArgumentException: Ledger page limit must be 1..1000",
+  "finishedAt" : "2026-09-29T23:29:34.463324100Z"
+}

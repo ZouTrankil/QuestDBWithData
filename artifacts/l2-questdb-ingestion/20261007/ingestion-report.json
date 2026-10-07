@@ -1,0 +1,43 @@
+{
+  "startedAt": "2026-10-07T11:04:50.043772+00:00",
+  "endpoint": "http://127.0.0.1:9000",
+  "table": "l2_daily_features",
+  "status": "SUCCEEDED",
+  "dates": [
+    {
+      "date": "20260928",
+      "expectedRows": 7926,
+      "preexistingMatchingRows": 0,
+      "sourceSha256": "eddb7db904003b95ba1403bf92a9218ddb18ccea1eeedd137da340ad66d478c1",
+      "acknowledgedRows": 7926,
+      "status": "VERIFIED",
+      "readbackRows": 7926,
+      "verifiedFields": 871860,
+      "mismatches": []
+    },
+    {
+      "date": "20260929",
+      "expectedRows": 7918,
+      "preexistingMatchingRows": 0,
+      "sourceSha256": "5d68c6428af0fb5eb0522337648161e03618e8de735fedc1a42a20767205000d",
+      "acknowledgedRows": 7918,
+      "status": "VERIFIED",
+      "readbackRows": 7918,
+      "verifiedFields": 870980,
+      "mismatches": []
+    },
+    {
+      "date": "20260930",
+      "expectedRows": 7888,
+      "preexistingMatchingRows": 0,
+      "sourceSha256": "2e3b7ef0a76078f206b9261bb1168203067ebec956fcac812f2f6557d259b757",
+      "acknowledgedRows": 7888,
+      "status": "VERIFIED",
+      "readbackRows": 7888,
+      "verifiedFields": 867680,
+      "mismatches": []
+    }
+  ],
+  "finishedAt": "2026-10-07T11:05:05.388125+00:00",
+  "totalVerifiedRows": 23732
+}

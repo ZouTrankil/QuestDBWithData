@@ -1,0 +1,580 @@
+{
+  "task": "D103",
+  "dataset": "equity_style_monthly",
+  "record_date": "2026-10-06",
+  "status": "CORRECTED_SOURCE_CONTRACT_STORED_UNITS",
+  "scope": "Read-only local Python/source inspection; not DB acceptance, provider readiness or consumer cutover",
+  "operations": {
+    "python_imports": 0,
+    "python_execution": 0,
+    "database_queries": 0,
+    "database_writes": 0,
+    "test_runs": 0
+  },
+  "bindings": [
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/models/index/equity_style_monthly.py",
+      "sha256": "a30e220b46ca18cfbcee78672b9b99865c16adad16407723d3b4f91813400a53"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py",
+      "sha256": "ef690f93c28cd71d310d80997d2138432051a4ab82be08158bf74bf1bdf92b3f"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/derived/market/equity_style_monthly.py",
+      "sha256": "24ab897a291f01ce029a6fe81ac461058a6d0e9444496bb1c32be430f9fbc6a2"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/registry.py",
+      "sha256": "474dda15e8bb77a848bbd015f1b650feb5e1998d95ce197e3cc9df072d65614d"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/catalog.py",
+      "sha256": "19a75be0fdf9f6512786a86c313152952aabb0eecb62eeeefe2d46856e508152"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/derived/workflows.py",
+      "sha256": "feaacb0fb3cec88dd632ffefeee3a4b991515fd9817d048ffb8dcfbaf05c3036"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/derived/regime/features_monthly.py",
+      "sha256": "75bd8a70570dab3b78fbc2afb4c67512124b6126e0016da4188daad68c5b623c"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/models/index/monthly.py",
+      "sha256": "8203bf1cc40532a51d3e352adedfdaa75f7a1ef0bd91146b825e8ec5810b65d7"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/connectors/index/index_monthly_sync.py",
+      "sha256": "0f6de9705a22892884cb6f0cf8da3c901ccf2db029a405c90590cc0d30533879"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/contracts/index_universe.py",
+      "sha256": "da6bd79194863f6ba3ff59caa58a27fba2e77313ba3f2c8433a2010c8be0610d"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/common/persistence/questdb_model.py",
+      "sha256": "f29d21ca141302ea1d508ee85f09a4f44375ff5d94b1a4a30cfc880a6605fc92"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/common/persistence/questdb_temporal.py",
+      "sha256": "9fe97d188b1375e03e8849f22c96365b755ad3efbb399eba89cad5c4f196902d"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/trading_terminal_web/src/features/market/MarketCharts.tsx",
+      "sha256": "ec1c596051468063b48e8b7b795fe9881eee58a8303c6f1f06a02413dc45e059"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/.venv/Lib/site-packages/pandas/core/reshape/pivot.py",
+      "sha256": "ca591255841ca0c9aec6abc4a3210fe981f3795b462fdcbab9e0047cdebf4736"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/.venv/Lib/site-packages/pandas/core/groupby/groupby.py",
+      "sha256": "14306cc4674b8b2f1252921445152a2a6133271fbf3310205364af7059d08de8"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/config/table_definitions/indices.py",
+      "sha256": "ebd5a3b61eb2f946d6740dc502084729ac3fd17e916f196919f29664ccf15551"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/materialization.py",
+      "sha256": "624a71f0579c27c289aa1023e6d1534dc84ce8a45bb909bc78911fd9f0a58e66"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/interfaces/cli.py",
+      "sha256": "f6e3c958047e513055586a108245287d2f8b764af0e7818723f56117950f362d"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/application/index_data.py",
+      "sha256": "9eacc4e27a29d134eedb9ec343462c8f02e005eee72c2bd8562f66fc0ae94694"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/questdb/index_data.py",
+      "sha256": "7ea91ecad9d8667bf4bcd5dcb080c5d3376b317408dca627c9e0c2d0d8945fbe"
+    },
+    {
+      "path": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/quality/month_end_coverage.py",
+      "sha256": "5355e5cc8fb424410120198e80dd9c1d4821a9010928bef587f8522ae6ecce3b"
+    }
+  ],
+  "period": {
+    "source": "YYYYMM from actual index_monthly.trade_date",
+    "domain": "YearMonth",
+    "key": [
+      "month"
+    ],
+    "physical_type": "TIMESTAMP",
+    "storage": "Exact UTC midnight on first calendar day; reject non-first-day or non-midnight",
+    "availability": "Not a last open/trading day, not known_at/published_at, no point-in-time certification",
+    "references": [
+      "models/index/equity_style_monthly.py:19,51-90",
+      "common/persistence/questdb_temporal.py:63-85,123-159,199-206"
+    ]
+  },
+  "physical": {
+    "columns": 30,
+    "nullable_doubles": 29,
+    "partition": "YEAR",
+    "wal": true,
+    "dedup": true,
+    "upsert_key": [
+      "month"
+    ]
+  },
+  "columns": [
+    {
+      "name": "month",
+      "java": "YearMonth",
+      "storage": "TIMESTAMP",
+      "nullable": false,
+      "meaning": "Monthly period identity"
+    },
+    {
+      "name": "hs300_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000300.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "zz500_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000905.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "all_a_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000985.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "cs1000_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000852.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "small_large_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "cs1000_ret_1m - hs300_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:84"
+    },
+    {
+      "name": "mid_large_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "zz500_ret_1m - hs300_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:85"
+    },
+    {
+      "name": "growth_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000921.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "value_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000920.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "growth_value_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "growth_ret_1m - value_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:86"
+    },
+    {
+      "name": "energy_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000986.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "materials_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000987.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "industrials_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000988.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "consumer_discretionary_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000989.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "consumer_staples_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000990.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "healthcare_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000991.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "financials_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000992.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "it_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000993.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "telecom_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000994.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "utilities_ret_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "unchanged stored index_monthly.pct_chg units",
+      "source_code": "000995.SH",
+      "formula": "last non-null index_monthly.pct_chg within month",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:21-38"
+    },
+    {
+      "name": "energy_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "energy_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100"
+    },
+    {
+      "name": "materials_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "materials_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100"
+    },
+    {
+      "name": "industrials_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "industrials_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100"
+    },
+    {
+      "name": "consumer_discretionary_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "consumer_discretionary_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100"
+    },
+    {
+      "name": "consumer_staples_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "consumer_staples_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100"
+    },
+    {
+      "name": "healthcare_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "healthcare_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100"
+    },
+    {
+      "name": "financials_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "financials_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100"
+    },
+    {
+      "name": "it_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "it_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100"
+    },
+    {
+      "name": "telecom_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "telecom_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100"
+    },
+    {
+      "name": "utilities_vs_all_a_1m",
+      "java": "Double",
+      "storage": "DOUBLE",
+      "nullable": true,
+      "unit": "difference in stored index_monthly.pct_chg units",
+      "source_code": null,
+      "formula": "utilities_ret_1m - all_a_ret_1m",
+      "reference": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py:88-100"
+    }
+  ],
+  "owner": {
+    "actual_module": "D:/work/fund_2/back-monitor/src/quant_platform/data/adapters/materializers/equity_style_monthly.py",
+    "entry": "build_equity_style_monthly(start_month=None,end_month=None)",
+    "backend": "task",
+    "schedule_owner": "month_end",
+    "active_chain": [
+      "catalog.py:22,38-47 -> materialization.py:40-65 -> build_equity_style_monthly",
+      "derived/workflows.py:45-76 run_regime_features_monthly -> equity style -> regime_features_monthly",
+      "scripts/pipeline/run_month_end_pipeline.ps1 bounded month-end command"
+    ],
+    "empty_behavior": "No feature rows -> returns empty before DDL/write (111-128). Errors must not become VERIFIED_EMPTY.",
+    "write_behavior": "Nonempty -> missing-only ensure_table_exists(force=False) then original questdb_client.write_model; returned frame/row count alone does not verify ACK.",
+    "mode_warning": "Original entry accepts only start_month/end_month. Generic catalog signature-filter can silently drop --no-write/full/force; do not invoke build as a read-only oracle."
+  },
+  "source": {
+    "table": "index_monthly",
+    "full_fields": [
+      "ts_code",
+      "trade_date",
+      "close",
+      "open",
+      "high",
+      "low",
+      "pre_close",
+      "change",
+      "pct_chg",
+      "vol",
+      "amount",
+      "layer",
+      "bucket",
+      "update_time"
+    ],
+    "required_codes": {
+      "hs300_ret_1m": "000300.SH",
+      "zz500_ret_1m": "000905.SH",
+      "all_a_ret_1m": "000985.SH",
+      "cs1000_ret_1m": "000852.SH",
+      "growth_ret_1m": "000921.SH",
+      "value_ret_1m": "000920.SH",
+      "energy_ret_1m": "000986.SH",
+      "materials_ret_1m": "000987.SH",
+      "industrials_ret_1m": "000988.SH",
+      "consumer_discretionary_ret_1m": "000989.SH",
+      "consumer_staples_ret_1m": "000990.SH",
+      "healthcare_ret_1m": "000991.SH",
+      "financials_ret_1m": "000992.SH",
+      "it_ret_1m": "000993.SH",
+      "telecom_ret_1m": "000994.SH",
+      "utilities_ret_1m": "000995.SH"
+    },
+    "original_query": "SELECT ts_code,trade_date,pct_chg FROM index_monthly WHERE ts_code IN (16 frozen complete .SH codes) ORDER BY trade_date,ts_code",
+    "bounds": "Original SQL unbounded history; DataFrame YYYYMM inclusive filtering before pivot (42-74). Java pushes an explicit at-most-12-month range to SQL with sentinel cap.",
+    "return_formula": "Consumes unchanged stored pct_chg. No pct_change, close/pre_close recomputation, division by 100 or prior-month warmup.",
+    "upstream": "index_monthly_sync per-code MAX trade_date+1 unless force/default anchor; original has no prior-month revision overlap (107-139). D022 Java overlaps prior2months but targets are isolated/configured; automatic formal refresh not certified.",
+    "upstream_keys": "Actual Python schema has no dedup_keys; D022 retained YEAR/WAL/DEDUP=false with staging/journal. Do not infer D103 source key dedup from D103 output key."
+  },
+  "pivot": {
+    "library": "Local installed pandas 2.3.3, source read without import",
+    "reference": [
+      "pandas/core/reshape/pivot.py:63-74,172-186,203,249-251",
+      "pandas/core/groupby/groupby.py:3425-3431,3470-3490"
+    ],
+    "aggregation": "last with skipna=True; dropna=True, sort=True, no fill_value",
+    "cases": [
+      {
+        "case": "multiple trade dates for one code/month",
+        "behavior": "Original ORDER BY dates -> last non-null pct_chg, ignoring a later NULL; capture chosen date and null/multiple counts"
+      },
+      {
+        "case": "one month missing/null but same code non-null in another bounded month",
+        "behavior": "Column retained; month cell and dependent spread NaN become storage NULL"
+      },
+      {
+        "case": "whole-window code absent or all NULL",
+        "behavior": "Pivot column removed; _build arithmetic accesses required columns before adding missing schema fields, hence KeyError when other rows exist"
+      },
+      {
+        "case": "whole month all sixteen NULL/no retained groups",
+        "behavior": "Month omitted; if entire frame empty then no DDL/write"
+      },
+      {
+        "case": "empty source/filter",
+        "behavior": "Empty output, no DDL/write"
+      },
+      {
+        "case": "duplicate (ts_code,trade_date)",
+        "behavior": "ORDER BY has no complete tie breaker. Last conflicting non-null row depends on arrival/physical order; Java rejects all duplicates, including equal values"
+      },
+      {
+        "case": "Infinity/NaN",
+        "behavior": "Java accepts only finite nullable DOUBLE. NaN is source/Pandas NULL; stored Infinity is an explicit diagnostic, never silently filled with zero"
+      }
+    ]
+  },
+  "admission": {
+    "historical_read": "29 nullable finite DOUBLEs retained, including an all-null historical record; no readiness inference",
+    "complete_publish": "Every required code/month must have at least one finite non-null pct_chg; no missing month/code. Reject duplicate full source keys, nonfinite metrics, future/incomplete periods, source errors and sentinel cap. This is stronger than original nullable output.",
+    "zero": "No valid rows -> no write and no checkpoint advance; zero does not certify initial write acceptance",
+    "revision": "Source whole-vector id/directory/physicalTxn/WAL proof freezes real generation; retain full14 raw capture/hash and exact30 expected rows. Revalidate completed prefix against source revisions before choosing bounded refresh window."
+  },
+  "known_legacy_conflicts": [
+    {
+      "item": "920/921 names inverted relative to index_universe",
+      "evidence": "materializer26-27 value=000920.SH/growth=000921.SH vs index_universe72-73 920=300R成长/921=300R价值",
+      "decision": "Preserve legacy full codes and growth(921)-value(920) arithmetic; correction requires separately versioned caller/data change"
+    },
+    {
+      "item": "UI percentage interpretation",
+      "evidence": "MarketCharts.tsx63-65 multiplies stored all_a and spreads by100 for display; source-unit lineage supplement supersedes the original percent interpretation",
+      "decision": "Do not imitate UI scaling in mapper; consumer display conversion is outside materializer mapping"
+    }
+  ],
+  "consumers": {
+    "regime_features": "SOURCE_TABLES includes equity_style_monthly; bounded month SELECT and latest row per month, outer merge, missing fields NULL (regime/features_monthly.py:15-21,29-87)",
+    "factor_regime": "Features consumed as numeric values, no rescaling; finite/dropna/latest-incomplete filtering does not establish D103 upstream coverage",
+    "coverage": "Month-end readiness checks existence of one regime_features row, not all16source codes/null/version completeness",
+    "read_facade": "get_equity_style_monthly bounded inclusive start/end/limit240; legacy read adapter may skip model-invalid rows. Java typed reads reject malformed rows."
+  },
+  "related_tests": {
+    "dedicated_algorithm_test_found": false,
+    "upstream_tests": "tests/unit/data/test_index_market_sync.py:20-33,83-133 cover universe/monthly aliases/per-code watermark",
+    "method": "Read-only rg search of Python tests/callers; no test execution"
+  },
+  "recommended_actual_sample": {
+    "months": [
+      "202606",
+      "202607",
+      "202608"
+    ],
+    "state": "Candidate completed months; actual DB census and oracle are separate root-run evidence",
+    "phases": [
+      "June+July initial actual2row publication",
+      "same-window replay full30fields/rawbits",
+      "real August source append and bounded next increment",
+      "bounded source revision and explicit failure/empty/unknown/cancel handling"
+    ],
+    "max_months": 12,
+    "prerequisite": "16 finite non-null code/month cells; all14source columns and full keys captured; source/target identity stable before/after"
+  },
+  "caveats": [
+    "No full source/provider universe readiness",
+    "No formal output repair or formal writer from this artifact",
+    "No complete history/PIT availability certification",
+    "No downstream caller switch certification",
+    "Typed nullability is distinct from complete-source publication admission"
+  ],
+  "semantic_supersession": {
+    "original": {
+      "sha256": "9a7bd7cf8bae8b96296bf305a909a4eee3153ebf14de0b155eb365a4f7995405",
+      "path": "artifacts/java-migration/D103/source-contract-20261006.json"
+    },
+    "lineage": {
+      "sha256": "4f0d5c7180ad2a673c94502396df0287b297fb649982eabf468e5306afd06613",
+      "path": "artifacts/java-migration/D103/commands/source-stored-unit-lineage-review-20261006.json"
+    },
+    "scope": "Supersedes percent/percentage-point assertions in original source contract and preflight known_limits. Numeric captures and exact oracle remain unchanged; no multiply/divide100."
+  }
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-10-06T08:41:43.037Z" hostname="AMD395" time="0.125">
+  <properties/>
+  <testcase name="dedupRevisionDuringActualReadRejectsTheFetchedPage()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.015"/>
+  <testcase name="absentOrIncompletePhysicalMetadataCannotBecomeAnEmptyOrReadableCache()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.011"/>
+  <testcase name="stableCacheBindsIndependentPhysicalAndWalIdentityRatherThanBusinessVersion()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.007"/>
+  <testcase name="malformedCursorGenerationOrIncompleteKeyFailsDuringSqlPreparationWithoutDatabaseReads()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.004"/>
+  <testcase name="tableIdentityOrDirectoryRecreationCannotReuseMatchingTransactionCounters()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.02"/>
+  <testcase name="existingUnregisteredStockBasicTableKeepsItsCallerVersionWithoutCacheMetadata()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.005"/>
+  <testcase name="rangePaginationRetainsBothDateAndGenerationWhenTwoVersionsShareADate()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.011"/>
+  <testcase name="unsettledSuspendedOrNonWalCacheFailsBeforeFetchingRows()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.007"/>
+  <testcase name="changedBusinessVersionFilterCannotReuseCursorEvenWhenPhysicalVersionIsUnchanged()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.006"/>
+  <testcase name="physicalCommitOrWalFrontierChangeIndependentlyInvalidatesAnOldCursor()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.01"/>
+  <testcase name="sameBusinessVersionDedupRevisionBetweenPagesRejectsTheCursorBeforeAnotherSelect()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.009"/>
+  <testcase name="cacheThatBecomesUnsettledDuringReadCannotReturnAStablePage()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.007"/>
+  <testcase name="invalidBusinessVersionEqualityFailsBeforeAnyMetadataSchemaOrRowQuery()" classname="com.zoutrankil.data.repository.QuestDbRetailSentimentCacheTableReadGuardTest" time="0.006"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

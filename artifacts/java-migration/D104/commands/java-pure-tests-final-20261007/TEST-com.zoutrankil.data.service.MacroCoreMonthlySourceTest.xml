@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" tests="24" skipped="0" failures="0" errors="0" timestamp="2026-10-06T16:32:17.512Z" hostname="AMD395" time="3.151">
+  <properties/>
+  <testcase name="completeReadHasFiniteMetadataAndRawSentinelsWithTwentySecondTimeout()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="1.881"/>
+  <testcase name="zeroDenominatorAndNonfiniteSfRatioAreRejected()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.007"/>
+  <testcase name="completeSixSourceJoinPreservesStoredUnitsAndOwnGdpQuarterMonth()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.009"/>
+  <testcase name="nullableFrontierWithNonemptyActualCountIsRejected()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.017"/>
+  <testcase name="missingOrNullableSfContextLeavesYoyNullWithoutWithholdingCompleteMonth()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.008"/>
+  <testcase name="nonemptySourceRawWalTxnMustBeKnownAndEqualToAppliedWriter()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.041"/>
+  <testcase name="exactFrozenSixSchemasYearWalDedupAndSettledWalAreRequired()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.098"/>
+  <testcase name="anySingleNullableFrontierRequiresZeroWalAndCountEvidence()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.037"/>
+  <testcase name="normalizedMonthlyDuplicateAndUnorderedObservationsAreRejected()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.007"/>
+  <testcase name="emptyOptionalGdpProducesNullableGdpRowsAfterStableIndependentSourceCounts()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.03"/>
+  <testcase name="explicitFirstDayTwelveMonthClosedBudgetAndFiniteAllFieldSql()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.011"/>
+  <testcase name="completeSourcePhysicalVectorDriftFailsAfterFullRawRead()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.028"/>
+  <testcase name="allRawFieldsContextNullsAndSignedZeroContributeToDataOnlyFingerprint()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.054"/>
+  <testcase name="nullableFrontierWithKnownNonzeroPhysicalWalOrRowsIsRejectedWithoutCount()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.038"/>
+  <testcase name="socialFinancingUsesPrecedingTwelvePhysicalObservationsAcrossCalendarGaps()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.001"/>
+  <testcase name="nullablePhysicalSourceFrontierSerializesExplicitNullWithoutZeroCoercion()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.744"/>
+  <testcase name="malformedWindowFailsBeforeJdbcAndEmptyMaterializeIsDistinctFromIncremental()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.005"/>
+  <testcase name="rawWindowTruncationAndUnknownCounterCarriersAreRejected()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.041"/>
+  <testcase name="sourceFullRawFieldsStrictDatesQuarterAndFiniteDoubleAreRequired()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.004"/>
+  <testcase name="nullableIndependentCountMustBeStrictKnownUniqueAndBounded()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.041"/>
+  <testcase name="incompleteRequiredSourceMonthsAreExplicitlyWithheldAndNeverIncremental()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.004"/>
+  <testcase name="nullableNewEmptyGdpPhysicalFrontierRequiresIndependentCountAndRemainsNull()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.019"/>
+  <testcase name="fixedSourceSchemasMatchNativeColumnCountsAndMonthlyDedupKeys()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.002"/>
+  <testcase name="nullableMetadataMustRemainExactlyStableAroundIndependentCount()" classname="com.zoutrankil.data.service.MacroCoreMonthlySourceTest" time="0.009"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\zouqiang\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.18.11\82212e5b3633e7a65fca8bec525762cfb6c9bae4\byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

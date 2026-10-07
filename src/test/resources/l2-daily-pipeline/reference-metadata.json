@@ -1,0 +1,51 @@
+{
+  "date": "20260924",
+  "feature_version": "v1.3",
+  "parser_version": "dfcf_csv_v1.2",
+  "fixture_encoding": "gb18030",
+  "description": "Deterministic synthetic exchange events with three minute-behavior populations, grouped sweeps, unknown vendor rows, all day segments, cancel/replace lifecycles, repeated timestamps and float-boundary prices.",
+  "fixtures": [
+    {
+      "raw_symbol": "510300.SZ",
+      "normalized_symbol": "510300.SH",
+      "minute_bins": 33,
+      "raw_rows": {
+        "deal": 858,
+        "order": 3363,
+        "snapshot": 990
+      },
+      "expected_field_count": 110,
+      "parser_records": {
+        "deal_records": 825,
+        "order_records": 3330,
+        "snapshot_records": 990
+      },
+      "input_sha256": {
+        "行情.csv": "73a3ee98d381534fccb453571cc67f8e2aafa08f6d11a66781511cb43aaff192",
+        "逐笔委托.csv": "914238605d5716f58732c814fbc02e8744611d27388563b646409db841faf8a8",
+        "逐笔成交.csv": "641dad600a2a046a259c2a7105e0dc6eeb977be9b23244e1325d405a3764215a"
+      }
+    },
+    {
+      "raw_symbol": "159915.SZ",
+      "normalized_symbol": "159915.SZ",
+      "minute_bins": 33,
+      "raw_rows": {
+        "deal": 1823,
+        "order": 2398,
+        "snapshot": 990
+      },
+      "expected_field_count": 110,
+      "parser_records": {
+        "deal_records": 1790,
+        "order_records": 3330,
+        "snapshot_records": 990
+      },
+      "input_sha256": {
+        "行情.csv": "73a3ee98d381534fccb453571cc67f8e2aafa08f6d11a66781511cb43aaff192",
+        "逐笔委托.csv": "b77015c2f98d8c6670504ba15c45ad1fc1a94711a1bccfbf511e961906eb4844",
+        "逐笔成交.csv": "1cb11643966646ce2463cbb4105006ee3b520675ef44d809a06545d1196e6fea"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.zoutrankil.data.config.EquityStyleMonthlyInitialReadOnlyRecoveryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-06T15:31:04.908Z" hostname="AMD395" time="8.718">
+  <properties/>
+  <testcase name="actualInitialPrefixIsRecoveredWithoutPublication()" classname="com.zoutrankil.data.config.EquityStyleMonthlyInitialReadOnlyRecoveryTest" time="8.718"/>
+  <system-out><![CDATA[23:31:09.179 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-private-recovery - Starting...
+23:31:09.202 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-private-recovery - Start completed.
+23:31:09.202 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-formal-recovery - Starting...
+23:31:09.204 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-formal-recovery - Start completed.
+23:31:13.548 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-formal-recovery - Shutdown initiated...
+23:31:13.551 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-formal-recovery - Shutdown completed.
+23:31:13.551 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-private-recovery - Shutdown initiated...
+23:31:13.558 [Test worker] INFO com.zaxxer.hikari.HikariDataSource -- d103-private-recovery - Shutdown completed.
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

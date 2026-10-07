@@ -1,0 +1,139 @@
+{
+  "task" : "D016",
+  "purpose" : "Check unfiltered Python fund_share scope against documented SH/SZ partitions and legacy market O",
+  "formalTableMutated" : false,
+  "date" : "20260917",
+  "probes" : [ {
+    "parameters" : {
+      "trade_date" : "20260917"
+    },
+    "returnedRows" : 1774,
+    "marketCounts" : {
+      "O" : 9,
+      "SH" : 999,
+      "SZ" : 766
+    },
+    "nonExchangeSamples" : [ {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : "(带固定封闭期)",
+      "ts_code" : "007767.OF",
+      "fd_share" : 3983.5843
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "028607.OF",
+      "fd_share" : 16945.8696
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "027223.OF",
+      "fd_share" : 3118.9619
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "027224.OF",
+      "fd_share" : 951.1366
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "027545.OF",
+      "fd_share" : 40148.3345
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "028973.OF",
+      "fd_share" : 1152.8322
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "028974.OF",
+      "fd_share" : 21.6076
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "027546.OF",
+      "fd_share" : 96933.6538
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "028608.OF",
+      "fd_share" : 15133.9175
+    } ],
+    "belowCap" : true
+  }, {
+    "parameters" : {
+      "trade_date" : "20260917",
+      "market" : "O"
+    },
+    "returnedRows" : 9,
+    "marketCounts" : {
+      "O" : 9
+    },
+    "nonExchangeSamples" : [ {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : "(带固定封闭期)",
+      "ts_code" : "007767.OF",
+      "fd_share" : 3983.5843
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "028607.OF",
+      "fd_share" : 16945.8696
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "027223.OF",
+      "fd_share" : 3118.9619
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "027224.OF",
+      "fd_share" : 951.1366
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "027545.OF",
+      "fd_share" : 40148.3345
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "028973.OF",
+      "fd_share" : 1152.8322
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "028974.OF",
+      "fd_share" : 21.6076
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "027546.OF",
+      "fd_share" : 96933.6538
+    }, {
+      "market" : "O",
+      "trade_date" : "20260917",
+      "fund_type" : null,
+      "ts_code" : "028608.OF",
+      "fd_share" : 15133.9175
+    } ],
+    "belowCap" : true
+  } ],
+  "finishedAt" : "2026-09-29T19:58:29.765905200Z"
+}

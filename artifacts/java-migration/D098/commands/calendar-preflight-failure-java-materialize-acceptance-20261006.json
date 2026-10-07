@@ -1,0 +1,48 @@
+{
+  "taskId" : "D098",
+  "checkedAt" : "2026-10-06T06:30:40.220490100Z",
+  "status" : "FAILED",
+  "target" : "private-127.0.0.1:19010/18822",
+  "privateDataRoot" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\d098-isolated-questdb",
+  "ledger" : "var\\d098-java-9252488d-8fdc-4a3b-973e-1cf131da8ec7.sqlite3",
+  "formalMutated" : false,
+  "formalWrittenRows" : 0,
+  "sourceUniverseReadyCertified" : false,
+  "fixtureSourceSubmissions" : [ ],
+  "formalBefore" : {
+    "source" : {
+      "id" : 1665,
+      "directory" : "l2_daily_features_recovery_20260911~1665",
+      "physicalTxn" : 11266,
+      "rows" : 4924676,
+      "pendingRows" : 0,
+      "sequencerTxn" : 11266,
+      "writerTxn" : 11266,
+      "bufferedTxnSize" : 0,
+      "tableSuspended" : false,
+      "walSuspended" : false
+    },
+    "mvPhysical" : {
+      "id" : 1813,
+      "directory" : "mv_retail_sentiment_daily_v1~1813",
+      "physicalTxn" : 252,
+      "rows" : 886,
+      "pendingRows" : 0,
+      "sequencerTxn" : 252,
+      "writerTxn" : 252,
+      "bufferedTxnSize" : 0,
+      "tableSuspended" : false,
+      "walSuspended" : false
+    },
+    "mv" : {
+      "status" : "invalid",
+      "invalidationReason" : "materialized view is ahead of base table and cannot be synchronized",
+      "base" : "l2_daily_features",
+      "sql" : "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "refreshed" : 10206,
+      "reportedBase" : 11266
+    }
+  },
+  "initialSourceRows" : 15828,
+  "errorClass" : "AssertionFailedError"
+}

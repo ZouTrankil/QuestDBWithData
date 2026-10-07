@@ -1,0 +1,36 @@
+{
+  "task_id": "D102",
+  "status": "PASSED_STATIC_REVIEW",
+  "checked_at": "2026-10-06T12:43:35.401984+00:00",
+  "review_scope": "Independent frozen source and pure guard definitions only; no DB/native/owner calls or tests executed by this reviewer",
+  "findings": [],
+  "script": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\audit_d102_etf_view.py",
+    "sha256": "b301ec11fce16aa499d20c591fcbc00180a1c3b66f6e130fbbafc83cc49c4a9d"
+  },
+  "tests": {
+    "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\tools\\test_d102_script_guards.py",
+    "sha256": "f0447f892f782d774ff2a69d679878135f45e76a38ec0df5f0915090945c233a",
+    "test_definitions": 39,
+    "execution_by_reviewer": false
+  },
+  "checked_boundaries": [
+    "Formal PG8812/QWP calls remain fixed SELECT-only; create_view requires isolated target/root/PID and the exact original DDL.",
+    "Accepted D101 gate exact path/SHA/nextD102, successful actual typed target frontier and complete original source capture SHA chain are required before private installation.",
+    "Only absent ordinary VIEW can create; an existing wrong definition is refused, any prior UNKNOWN claim refuses automatically, ACK-but-missing refuses resubmission.",
+    "CREATE_NEW+fsync UNKNOWN claim and invocation journal persist before exactly one driver CREATE; timeout/error leaves UNKNOWN, no retry.",
+    "Before CREATE, exact five-table schema/count/physical/WAL frontiers, original 11667-row captures, all D101 Java ledgers terminal/no leases and fresh authoritative producer absence are checked.",
+    "View name/status/SQL and nonblank actual directory/status history are required, matching the Java guard metadata contract.",
+    "Three daily results use complete four-field keys and strict PG binary64 parity; QWP remains at-most2ULP serialization diagnostics.",
+    "PG records and sole CREATE have a20-second monotonic absolute poll/select deadline; the previous wait callback is restored and only the owned connection closes on failure.",
+    "Finite source/result sentinels, duplicate/null keys/columns, schema/physical/WAL drift, cancellation and original Python code hashes remain fail-closed."
+  ],
+  "formal_writes_admitted": false,
+  "source_cache_coverage_refresh_or_owner_writes_admitted": false,
+  "private_ddl_scope": "At most the original missing v_etf_market_overview_daily ordinary CREATE on PID23388/root d101-isolated-questdb/19020+18832, under existing root admission and runtime checks.",
+  "recommendation": "ready_for_root_pure_tests_and_bounded_formal_readonly_then_private_missing_only_audit",
+  "human_review": "pending_review",
+  "review_database_operations": 0,
+  "review_native_process_queries": 0,
+  "review_test_runs": 0
+}
