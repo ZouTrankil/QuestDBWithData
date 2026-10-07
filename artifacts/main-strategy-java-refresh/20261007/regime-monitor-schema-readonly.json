@@ -1,0 +1,455 @@
+{
+  "observedAtUtc": "2026-10-07T13:05:16.9477182Z",
+  "readOnly": true,
+  "providerRequests": 0,
+  "databaseWrites": 0,
+  "schema": {
+    "query": "SELECT * FROM table_columns('regime_features_monitor_daily')",
+    "columns": [
+      {
+        "name": "column",
+        "type": "STRING"
+      },
+      {
+        "name": "type",
+        "type": "STRING"
+      },
+      {
+        "name": "indexed",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexBlockCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolCached",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "symbolCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolTableSize",
+        "type": "INT"
+      },
+      {
+        "name": "designated",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "upsertKey",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexType",
+        "type": "STRING"
+      },
+      {
+        "name": "indexInclude",
+        "type": "STRING"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "trade_date",
+        "TIMESTAMP",
+        false,
+        0,
+        false,
+        0,
+        0,
+        true,
+        false,
+        "",
+        ""
+      ],
+      [
+        "month",
+        "SYMBOL",
+        false,
+        0,
+        true,
+        256,
+        33,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "hs300_ret_mtd",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "zz500_ret_mtd",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "all_a_ret_mtd",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "cs1000_ret_mtd",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "small_large_ret_mtd",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "growth_value_ret_mtd",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "avg_up_down_ratio_5d",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "avg_limit_up_count_5d",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "avg_limit_down_count_5d",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "avg_turnover_rate_5d",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "avg_pct_positive_ratio_5d",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "avg_pct_negative_ratio_5d",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "northbound_net_buy_mtd",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "margin_balance_change_mtd",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "all_a_pe_ttm_percentile_latest",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "all_a_pb_percentile_latest",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "erp_latest",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "data_quality_flag",
+        "SYMBOL",
+        false,
+        0,
+        true,
+        256,
+        1,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "updated_at",
+        "TIMESTAMP",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ]
+    ],
+    "count": 21
+  },
+  "metadata": {
+    "query": "SELECT table_name,id,directoryName,walEnabled,dedup,partitionBy,designatedTimestamp FROM tables() WHERE table_name='regime_features_monitor_daily'",
+    "columns": [
+      {
+        "name": "table_name",
+        "type": "STRING"
+      },
+      {
+        "name": "id",
+        "type": "INT"
+      },
+      {
+        "name": "directoryName",
+        "type": "STRING"
+      },
+      {
+        "name": "walEnabled",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "dedup",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "partitionBy",
+        "type": "STRING"
+      },
+      {
+        "name": "designatedTimestamp",
+        "type": "STRING"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "regime_features_monitor_daily",
+        3017,
+        "java_regime_features_monitor_daily_stage_e547b911cd9a4275b8fb175768cfd670~3017",
+        true,
+        false,
+        "MONTH",
+        "trade_date"
+      ]
+    ],
+    "count": 1
+  },
+  "range": {
+    "query": "SELECT min(trade_date) AS first_date,max(trade_date) AS latest_date,count() AS row_count FROM regime_features_monitor_daily",
+    "columns": [
+      {
+        "name": "first_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "latest_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "row_count",
+        "type": "LONG"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "2024-01-02T00:00:00Z",
+        "2026-09-30T00:00:00Z",
+        666
+      ]
+    ],
+    "count": 1
+  },
+  "wal": {
+    "query": "SELECT * FROM wal_tables() WHERE name='regime_features_monitor_daily'",
+    "columns": [
+      {
+        "name": "name",
+        "type": "STRING"
+      },
+      {
+        "name": "suspended",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "writerTxn",
+        "type": "LONG"
+      },
+      {
+        "name": "bufferedTxnSize",
+        "type": "LONG"
+      },
+      {
+        "name": "sequencerTxn",
+        "type": "LONG"
+      },
+      {
+        "name": "errorTag",
+        "type": "STRING"
+      },
+      {
+        "name": "errorMessage",
+        "type": "STRING"
+      },
+      {
+        "name": "memoryPressure",
+        "type": "INT"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "regime_features_monitor_daily",
+        false,
+        9,
+        0,
+        9,
+        "",
+        "",
+        0
+      ]
+    ],
+    "count": 1
+  }
+}

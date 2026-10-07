@@ -1,0 +1,75 @@
+{
+  "observed_at": "2026-10-07T21:30:38.5866945+08:00",
+  "objective": "完成这个目标，成分那个可以看情况，没有最新的0930的，就算了，用实际最新的就行",
+  "previous_goal_turn_classification": "progress",
+  "previous_turn_evidence": "Actual Java sync/native publications/local readback and finalized evidence reports; this turn independently re-read current QuestDB, full native field/hash audits, component full-target source receipts and final source route/build.",
+  "all_required_items_proved": true,
+  "required_work_remaining": [],
+  "requirements": [
+    {
+      "requirement": "复用既有Java sync/WebFlux client，修复现有实现",
+      "proved": true,
+      "evidence": "goal-java-route-closure-audit.json, final source hashes and frozen ledger/source receipts"
+    },
+    {
+      "requirement": "主策略日数据补齐至20260930并入本地QuestDB",
+      "proved": true,
+      "evidence": "main-strategy-readonly-acceptance.json latest; goal-current-questdb-observation.json source0930"
+    },
+    {
+      "requirement": "回测日视图随实际依赖补齐且通过日表质量",
+      "proved": true,
+      "evidence": "main-strategy-readonly-acceptance.json 32-date actual SQL"
+    },
+    {
+      "requirement": "市场情绪需要计算的部分实际跑Java job并发布到0930",
+      "proved": true,
+      "evidence": "market-sentiment-native-readback.json 17 checks, 371/5141 field comparisons, current full canonical SHA; publication+ledger"
+    },
+    {
+      "requirement": "真实ETF输入包所需市场状态上下文补齐至0930",
+      "proved": true,
+      "evidence": "regime-native-java-audit.json 147/13839/13839 comparisons, required9 fields and source pins; publication+ledger"
+    },
+    {
+      "requirement": "ETF行情/因子0930、目标ETF行情齐全",
+      "proved": true,
+      "evidence": "main-strategy-readonly-acceptance.json and goal-current-questdb-observation.json"
+    },
+    {
+      "requirement": "成分无0930新披露时使用实际最新源披露",
+      "proved": true,
+      "evidence": "goal-constituent-actual-latest.json retained whole-target terminal receipts, latest8-field actual readback, zero differences; Java latest-window VERIFIED_EMPTY"
+    },
+    {
+      "requirement": "0928-0930完整归档Level2清洗并写入本地QuestDB",
+      "proved": true,
+      "evidence": "prior l2 full census/archive/source110-field audit and 2610520-field ingestion report; current exact counts/unique110 schema"
+    },
+    {
+      "requirement": "本地写入已可见，WAL追平",
+      "proved": true,
+      "evidence": "goal-current-questdb-observation.json 10 actual formal WAL rows"
+    },
+    {
+      "requirement": "最终修复源码可构建且本地Java端口与发布一致",
+      "proved": true,
+      "evidence": "goal-final-build-receipt.json, goal-local-regime-plan-launch.json and summary"
+    },
+    {
+      "requirement": "Level2最终验收后暂停五分钟监控",
+      "proved": true,
+      "evidence": "C:\\Users\\zouqiang\\.codex\\automations\\level2\\automation.toml"
+    }
+  ],
+  "accepted_constituent_policy": "Actual latest source disclosure, not a mandatory 20260930 disclosure",
+  "upstream_constraints": [
+    "0930 financing full-market source still incomplete: optional financing enhancements remain NULL/partial_enhanced under existing row/consumer contracts; no full-market source completion claim",
+    "589330 disclosure127-day governance advisory retained under user actual-latest policy",
+    "512770 two announcement batches remain preserved; existing latest-announcement consumption retained",
+    "0930 IPO001246 factor provider-empty not fabricated"
+  ],
+  "temporal_limit": "Current cutoff data verified; recomputed records retain actual updated_at, historical0930 visibility/strategy plan replay not certified",
+  "task_boundary": "Requested data synchronization, calculations, correctness and local ingestion are complete. Strategy execution, score_panel, target-plan publication or trades were not requested.",
+  "conclusion": "The original main-strategy data goal is fulfilled under the user actual-latest constituent policy; optional upstream source quality limits remain explicitly documented, with no remaining mandatory Java data job."
+}

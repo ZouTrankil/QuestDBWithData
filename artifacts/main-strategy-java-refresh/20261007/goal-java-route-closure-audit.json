@@ -1,0 +1,1016 @@
+{
+  "observed_at": "2026-10-07T21:26:12.7751099+08:00",
+  "audit_kind": "independent final Java route closure, retained evidence and source code audit",
+  "read_only": true,
+  "provider_requests": 0,
+  "database_writes": 0,
+  "production_jobs_started": 0,
+  "tests_added_or_run": 0,
+  "production_java_modified": false,
+  "scope": {
+    "cutoff": "2026-09-30",
+    "source_trade_dates": [
+      "2026-09-22",
+      "2026-09-23",
+      "2026-09-24",
+      "2026-09-28",
+      "2026-09-29",
+      "2026-09-30"
+    ],
+    "native_trade_dates": [
+      "2026-09-21",
+      "2026-09-22",
+      "2026-09-23",
+      "2026-09-24",
+      "2026-09-28",
+      "2026-09-29",
+      "2026-09-30"
+    ],
+    "etf_portfolio_policy": "User explicitly permits actual latest disclosure when no 0930 disclosure exists."
+  },
+  "conclusion": {
+    "status": "closed_with_upstream_and_consumer_limits",
+    "java_route_confirmed": true,
+    "required_additional_java_data_jobs": [],
+    "approved_data_goal_has_no_remaining_required_java_job": true,
+    "retrospective_point_in_time_certification": false,
+    "trading_or_strategy_plan_published": false
+  },
+  "webflux_chain": {
+    "path": [
+      "existing dataset JobService/Source",
+      "injected TusharePageService",
+      "injected TushareClient.requestAsync/requestMono",
+      "existing SharedRequestBudget",
+      "injected singleton WebClient.post/exchangeToMono",
+      "shared Reactor Netty connection provider"
+    ],
+    "native": "Pinned QuestDB reads and shared typed native window publisher; only necessary IPO proof used existing client. No Python provider bridge.",
+    "source_refs": [
+      "TusharePageService.java:17-31",
+      "TushareClient.java:24-61",
+      "ClientConfiguration.java:20-62",
+      "QuestDbProperties.java:51"
+    ],
+    "unrelated_or_second_http_client_found": false,
+    "existing_credential_lease_preserved": true
+  },
+  "final_build": {
+    "started_at": "2026-10-07T21:17:49.7079923+08:00",
+    "finished_at": "2026-10-07T21:17:51.0448252+08:00",
+    "command": [
+      "gradlew.bat",
+      "classes",
+      "--no-problems-report",
+      "-q"
+    ],
+    "java_home": "C:\\Users\\zouqiang\\.jdks\\jdk-24.0.2",
+    "exit_code": 0,
+    "tests_executed": false,
+    "log": "var/main-strategy-java-refresh/20261007/goal-final-classes.log"
+  },
+  "current_local_plan": {
+    "launch_receipt": {
+      "started_at": "2026-10-07T21:17:51.0647678+08:00",
+      "finished_at": "2026-10-07T21:18:00.6333278+08:00",
+      "executable": "C:/Users/zouqiang/.jdks/jdk-24.0.2/bin/java.exe",
+      "arguments": [
+        "-Dapp.questdb.host=127.0.0.1",
+        "-Dapp.sync.ledger-path=var/main-strategy-java-refresh/20261007/sync-ledger.sqlite3",
+        "-Dlogging.level.root=ERROR",
+        "@var/main-strategy-java-refresh/20261007/classpath.args",
+        "com.zoutrankil.data.QuestDataApplication",
+        "plan-regime-features-monitor-daily-job",
+        "--from",
+        "2026-09-21",
+        "--to",
+        "2026-09-30",
+        "--logical-date",
+        "2026-10-07"
+      ],
+      "exit_code": 0,
+      "expected_plan_only": true,
+      "log": "var/main-strategy-java-refresh/20261007/goal-local-regime-plan.log"
+    },
+    "status": "PLANNED",
+    "executed": false,
+    "dataVerified": false,
+    "job_version": 2,
+    "target_table_id": 3017,
+    "target_rows": 666,
+    "target_full_sha256": "c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3",
+    "matches_regime_publication": true,
+    "evidence_role": "Fresh current localhost plan proves final code can read the same published physical target; it is not substituted for historical sync launch evidence."
+  },
+  "local_target": {
+    "host": "127.0.0.1",
+    "http_port": 9000,
+    "pg_port": 8812,
+    "explicit_override": "-Dapp.questdb.host=127.0.0.1",
+    "property_routes": "QuestDbProperties drives PG connection and qwpConfig sender; StaticTargetIdentity binds JDBC target and live physical table identity.",
+    "current_observation_time": "2026-10-07T21:15:20.6657294+08:00",
+    "current_wal_rows": [
+      [
+        "daily_basic",
+        false,
+        205,
+        205,
+        0
+      ],
+      [
+        "etf_daily",
+        false,
+        40,
+        40,
+        0
+      ],
+      [
+        "etf_factor",
+        false,
+        58,
+        58,
+        0
+      ],
+      [
+        "etf_portfolio",
+        false,
+        1529,
+        1529,
+        0
+      ],
+      [
+        "l2_daily_features",
+        false,
+        11386,
+        11386,
+        0
+      ],
+      [
+        "market_sentiment_daily",
+        false,
+        9,
+        9,
+        0
+      ],
+      [
+        "moneyflow",
+        false,
+        175,
+        175,
+        0
+      ],
+      [
+        "regime_features_monitor_daily",
+        false,
+        9,
+        9,
+        0
+      ],
+      [
+        "stk_factor",
+        false,
+        156,
+        156,
+        0
+      ],
+      [
+        "stk_limit",
+        false,
+        216,
+        216,
+        0
+      ]
+    ],
+    "current_source_0930": [
+      [
+        "stk_factor",
+        5560,
+        5560
+      ],
+      [
+        "daily_basic",
+        5561,
+        5561
+      ],
+      [
+        "stk_limit",
+        5651,
+        5651
+      ],
+      [
+        "moneyflow",
+        5572,
+        5572
+      ],
+      [
+        "etf_daily",
+        2140,
+        2140
+      ],
+      [
+        "etf_factor",
+        2140,
+        2140
+      ]
+    ]
+  },
+  "ledger": {
+    "readonly_observed_at": "2026-10-07T13:16:13.629825Z",
+    "selected_runs": 14,
+    "verified": 10,
+    "verified_empty": 1,
+    "failed": 2,
+    "cancelled": 1,
+    "nonterminal_selected_runs": 0,
+    "historical_failures": [
+      {
+        "id": "daily-basic-71780938-93af-4629-8203-66f52163a37d",
+        "job": "data.daily_basic",
+        "state": "FAILED",
+        "payload": {
+          "errorCode": "Incomplete"
+        }
+      },
+      {
+        "id": "market-sentiment-97ae2bd4-575d-45d5-9363-b2a9553b8698",
+        "job": "data.market_sentiment_daily",
+        "state": "CANCELLED",
+        "payload": {
+          "errorCode": "CancellationException"
+        }
+      },
+      {
+        "id": "stk-limit-5e26ff2f-3f99-4bf3-b063-dad034b7755d",
+        "job": "data.stk_limit",
+        "state": "FAILED",
+        "payload": {
+          "errorCode": "Incomplete"
+        }
+      }
+    ],
+    "failure_resolution": "daily_basic and stk_limit FAILED originals are preserved, then accepted parent-linked serial resume. Original Incomplete category suppresses precise cause; lease contention is corroborated by concurrency/code/diagnostic receipt and successful serialized recovery, not proved by category alone. Cancelled market run superseded by a separately verified same-window run."
+  },
+  "dataset_routes": [
+    {
+      "dataset": "stk_factor",
+      "endpoint": "stk_factor",
+      "source_owner": "StockFactorSource",
+      "source_columns": 35,
+      "note": "Legacy 35-column contract, jobVersion 2; no stk_factor_pro 261-column substitution.",
+      "latest_required_date": "2026-09-30",
+      "rows_0930": [
+        5560
+      ],
+      "runs": [
+        {
+          "run_id": "stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518",
+          "job_version": 2,
+          "state": "VERIFIED",
+          "parent_run_id": null,
+          "from": "2026-09-22",
+          "to": "2026-09-24",
+          "updated_at": "2026-10-07T12:08:48.595661500Z",
+          "verification": {
+            "sourceFingerprint": "d0a52c4ed8e5282fb65ece920a8125ce69ac74aeb8826810e4daead76efcac5a",
+            "actualRows": 16667,
+            "missingKeys": 0,
+            "duplicateKeys": 0,
+            "writerStopped": false,
+            "passed": true,
+            "expectedRows": 16667,
+            "matchedRows": 16667,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-ed99c75c-b007-44ce-af36-9956b4c81f2e:revision:5;ledger:slice-53dd700b-1890-47cb-a0de-27799104fee9:revision:5;ledger:slice-7c9e0924-fc24-4e4a-95c8-c3fdf5eeeae3:revision:5"
+          },
+          "empty_source_receipt": null
+        },
+        {
+          "run_id": "stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468",
+          "job_version": 2,
+          "state": "VERIFIED",
+          "parent_run_id": null,
+          "from": "2026-09-28",
+          "to": "2026-09-30",
+          "updated_at": "2026-10-07T11:53:51.953794800Z",
+          "verification": {
+            "passed": true,
+            "expectedRows": 16676,
+            "matchedRows": 16676,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-40c7678e-6213-454e-8262-cd49f925af7f:revision:5;ledger:slice-b8cf0fce-60b6-470c-bf6a-72dcf43f4869:revision:5;ledger:slice-c9903006-6fa7-4444-8d80-4f297515d04c:revision:5",
+            "sourceFingerprint": "75251f90ac43530cd024fb7d8375a45fde08add550139f9c1eab036d4b6eeac1",
+            "actualRows": 16676,
+            "missingKeys": 0,
+            "duplicateKeys": 0,
+            "writerStopped": false
+          },
+          "empty_source_receipt": null
+        }
+      ]
+    },
+    {
+      "dataset": "daily_basic",
+      "endpoint": "daily_basic",
+      "source_owner": "DailyBasicSource",
+      "source_columns": 18,
+      "note": "Exact trade-date bounded response; full key/value verification.",
+      "latest_required_date": "2026-09-30",
+      "rows_0930": [
+        5561
+      ],
+      "runs": [
+        {
+          "run_id": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+          "job_version": 1,
+          "state": "VERIFIED",
+          "parent_run_id": "daily-basic-71780938-93af-4629-8203-66f52163a37d",
+          "from": "2026-09-22",
+          "to": "2026-09-30",
+          "updated_at": "2026-10-07T12:06:29.882936600Z",
+          "verification": {
+            "actualRows": 33344,
+            "missingKeys": 0,
+            "duplicateKeys": 0,
+            "writerStopped": false,
+            "passed": true,
+            "expectedRows": 33344,
+            "matchedRows": 33344,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-a2499517-9e72-4821-951c-04487987dadf:revision:5;ledger:slice-26433b77-6002-4f4f-b792-49d002fea1c7:revision:5;ledger:slice-f4ea0a43-2bf6-41f1-9e06-408244298bc0:revision:5;ledger:slice-ec4fc9bd-12d1-4a4c-acea-2f7a96c25484:revision:5;ledger:slice-8d755bc4-7694-4bc2-9738-88cc4e92a1df:revision:5;ledger:slice-c7985fe8-8822-4c18-ae87-e0f150160106:revision:5",
+            "sourceFingerprint": "fd03478f05701f25646affd1d0ffdf764f782669aea3b80f925a4d35834e4d56"
+          },
+          "empty_source_receipt": null
+        }
+      ]
+    },
+    {
+      "dataset": "stk_limit",
+      "endpoint": "stk_limit",
+      "source_owner": "StockLimitSource",
+      "source_columns": 4,
+      "note": "Formal existing target allowed only explicit bounded BACKFILL/RECONCILE; resume retains guard.",
+      "latest_required_date": "2026-09-30",
+      "rows_0930": [
+        5651
+      ],
+      "runs": [
+        {
+          "run_id": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+          "job_version": 1,
+          "state": "VERIFIED",
+          "parent_run_id": "stk-limit-5e26ff2f-3f99-4bf3-b063-dad034b7755d",
+          "from": "2026-09-22",
+          "to": "2026-09-30",
+          "updated_at": "2026-10-07T12:07:14.807022300Z",
+          "verification": {
+            "duplicateKeys": 0,
+            "writerStopped": false,
+            "passed": true,
+            "expectedRows": 33890,
+            "matchedRows": 33890,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-c15cfa6f-00a6-4f9c-adda-fff5c939b4a2:revision:5;ledger:slice-a5019205-7699-487e-82d0-804c45a30ca6:revision:5;ledger:slice-36439678-2866-4117-b20d-aedabaa83c2f:revision:5;ledger:slice-4d547be1-4b86-42d0-827e-55db608a1e0f:revision:5;ledger:slice-0dc1ea09-0d2c-4617-83cf-1ca32656d9e9:revision:5;ledger:slice-cb8945e5-3b33-490e-8719-1d004f4dedd1:revision:5",
+            "sourceFingerprint": "e37b9b840062f4e2e46bcf2cc376c4c89265ab5bd4bec3da52e2aee0f3a7dfa8",
+            "actualRows": 33890,
+            "missingKeys": 0
+          },
+          "empty_source_receipt": null
+        }
+      ]
+    },
+    {
+      "dataset": "moneyflow",
+      "endpoint": "moneyflow",
+      "source_owner": "MoneyflowSource",
+      "source_columns": 20,
+      "note": "Formal existing target allowed only explicit bounded BACKFILL/RECONCILE; source window and resume guards retained.",
+      "latest_required_date": "2026-09-30",
+      "rows_0930": [
+        5572
+      ],
+      "runs": [
+        {
+          "run_id": "moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a",
+          "job_version": 1,
+          "state": "VERIFIED",
+          "parent_run_id": null,
+          "from": "2026-09-22",
+          "to": "2026-09-24",
+          "updated_at": "2026-10-07T12:08:11.934417200Z",
+          "verification": {
+            "writerStopped": false,
+            "passed": true,
+            "expectedRows": 16679,
+            "matchedRows": 16679,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-e038a180-48fa-4456-8b22-8ebae41d1dbf:revision:5;ledger:slice-89cb8b94-5b0f-4efb-80a8-79208e69eef4:revision:5;ledger:slice-c01ad0d5-9e5c-4a56-9967-455039b09be0:revision:5",
+            "sourceFingerprint": "5e6e2fd26434a06d1fc30f4dbf432b965ce7cb0a8509634319cce8276365dee4",
+            "actualRows": 16679,
+            "missingKeys": 0,
+            "duplicateKeys": 0
+          },
+          "empty_source_receipt": null
+        },
+        {
+          "run_id": "moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b",
+          "job_version": 1,
+          "state": "VERIFIED",
+          "parent_run_id": null,
+          "from": "2026-09-28",
+          "to": "2026-09-30",
+          "updated_at": "2026-10-07T12:07:44.686957500Z",
+          "verification": {
+            "missingKeys": 0,
+            "actualRows": 16712,
+            "sourceFingerprint": "bfe6bcb2562bf63ec0a3317d7928fbdce8c9458368903ec091416cf7097246a5",
+            "readbackEvidence": "ledger:slice-5a8822f1-f308-468b-9ec4-62c4e87af68f:revision:5;ledger:slice-a9428053-7a54-47e8-bf96-7fea70c2a6a4:revision:5;ledger:slice-96d48661-e3f2-4664-a7a1-2f7ce8a4da0b:revision:5",
+            "mismatchedRows": 0,
+            "matchedRows": 16712,
+            "expectedRows": 16712,
+            "passed": true,
+            "writerStopped": false,
+            "duplicateKeys": 0
+          },
+          "empty_source_receipt": null
+        }
+      ]
+    },
+    {
+      "dataset": "etf_daily",
+      "endpoint": "fund_daily",
+      "source_owner": "EtfDailySource",
+      "source_columns": null,
+      "note": "Three complete retained source receipts and full key/value readback.",
+      "latest_required_date": "2026-09-30",
+      "rows_0930": [
+        2140
+      ],
+      "runs": [
+        {
+          "run_id": "etf-daily-3c9cfe0f-0f86-47e1-95ef-6213e05debd7",
+          "job_version": 1,
+          "state": "VERIFIED",
+          "parent_run_id": null,
+          "from": "2026-09-28",
+          "to": "2026-09-30",
+          "updated_at": "2026-10-07T12:10:04.389571800Z",
+          "verification": {
+            "duplicateKeys": 0,
+            "writerStopped": false,
+            "passed": true,
+            "expectedRows": 6439,
+            "matchedRows": 6439,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-3cc40bfc-df0a-4aef-b6fb-f74f77b8762a:revision:5;ledger:slice-28e03413-cac0-4a96-a272-a1f4b11a00d8:revision:5;ledger:slice-add7d4ce-0d90-4d5b-a982-1a875c27fc08:revision:5",
+            "sourceFingerprint": "25914fd1b2412c9f0b3b072b29660c56bbc37e5fbad359b8d09c1b7b105638cc",
+            "actualRows": 6439,
+            "missingKeys": 0
+          },
+          "empty_source_receipt": null
+        }
+      ]
+    },
+    {
+      "dataset": "etf_factor",
+      "endpoint": "fund_factor_pro",
+      "source_owner": "EtfFactorSource",
+      "source_columns": 89,
+      "note": "Existing official 89-column fund_factor_pro mapper; accepts declared ETF code suffixes.",
+      "latest_required_date": "2026-09-30",
+      "rows_0930": [
+        2140
+      ],
+      "runs": [
+        {
+          "run_id": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+          "job_version": 1,
+          "state": "VERIFIED",
+          "parent_run_id": null,
+          "from": "2026-09-22",
+          "to": "2026-09-30",
+          "updated_at": "2026-10-07T12:12:26.187399400Z",
+          "verification": {
+            "duplicateKeys": 0,
+            "writerStopped": false,
+            "passed": true,
+            "expectedRows": 12855,
+            "matchedRows": 12855,
+            "mismatchedRows": 0,
+            "readbackEvidence": "ledger:slice-624863f2-3b76-44aa-9018-4ee1dac75992:revision:5;ledger:slice-cd82a8e2-bea5-417c-a7ef-0e79211dce3c:revision:5;ledger:slice-9ea04622-4892-4473-94ac-640f0460a5f0:revision:5;ledger:slice-dc57c65f-43f9-427c-9651-eadaf75f3733:revision:5;ledger:slice-47d4683e-928c-4bef-8881-1fa64a5174f3:revision:5;ledger:slice-9227bb84-e757-4ff2-92d6-701774ac0f13:revision:5",
+            "sourceFingerprint": "b4d72078859ae5c597afaba7583c08380882f703487405572db41e37865758cd",
+            "actualRows": 12855,
+            "missingKeys": 0
+          },
+          "empty_source_receipt": null
+        }
+      ]
+    },
+    {
+      "dataset": "etf_portfolio",
+      "endpoint": "fund_portfolio",
+      "source_owner": "EtfPortfolioSource",
+      "source_columns": null,
+      "note": "Announcement-date source scan 0928-0930 complete and verified empty; actual latest disclosures retained by explicit user preference.",
+      "latest_required_date": "actual latest disclosure accepted",
+      "rows_0930": [],
+      "runs": [
+        {
+          "run_id": "etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79",
+          "job_version": 1,
+          "state": "VERIFIED_EMPTY",
+          "parent_run_id": null,
+          "from": "2026-09-28",
+          "to": "2026-09-30",
+          "updated_at": "2026-10-07T12:12:48.379968300Z",
+          "verification": null,
+          "empty_source_receipt": {
+            "responseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79\\complete-4553dcdc-a428-48cc-93e9-52bcceb9120a.json",
+            "returnedRows": 0,
+            "submittedRows": 0,
+            "sourceComplete": true
+          }
+        }
+      ]
+    },
+    {
+      "dataset": "market_sentiment_daily",
+      "endpoint": null,
+      "source_owner": "MarketSentimentDailyCalculation",
+      "source_columns": 53,
+      "note": "Native Java calculation from pinned QuestDB sources; saved IPO listing/factor receipts use the existing WebFlux client. Completed run version 1; final owner version 2 current plan only.",
+      "latest_required_date": "2026-09-30",
+      "rows_0930": [],
+      "runs": [
+        {
+          "run_id": "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+          "job_version": 1,
+          "state": "VERIFIED",
+          "parent_run_id": null,
+          "from": "2026-09-21",
+          "to": "2026-09-30",
+          "updated_at": "2026-10-07T12:29:02.055205900Z",
+          "verification": {
+            "missingKeys": 0,
+            "actualRows": 7,
+            "sourceFingerprint": "c0be408daaa854a8b2c0e54c2f6d324a021cbdaee0c452447975e601e61ff0bc",
+            "readbackEvidence": "ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5",
+            "mismatchedRows": 0,
+            "matchedRows": 7,
+            "expectedRows": 7,
+            "passed": true,
+            "writerStopped": false,
+            "duplicateKeys": 0
+          },
+          "empty_source_receipt": null
+        }
+      ]
+    },
+    {
+      "dataset": "regime_features_monitor_daily",
+      "endpoint": null,
+      "source_owner": "RegimeFeaturesMonitorDailyCalculation",
+      "source_columns": 21,
+      "note": "Native Java calculation from pinned QuestDB sources and retained IPO evidence; completed run version 1. Final owner version 2 current local plan only.",
+      "latest_required_date": "2026-09-30",
+      "rows_0930": [],
+      "runs": [
+        {
+          "run_id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+          "job_version": 1,
+          "state": "VERIFIED",
+          "parent_run_id": null,
+          "from": "2026-09-21",
+          "to": "2026-09-30",
+          "updated_at": "2026-10-07T12:57:29.765790600Z",
+          "verification": {
+            "missingKeys": 0,
+            "actualRows": 7,
+            "sourceFingerprint": "ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca",
+            "readbackEvidence": "ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5",
+            "mismatchedRows": 0,
+            "matchedRows": 7,
+            "expectedRows": 7,
+            "passed": true,
+            "writerStopped": false,
+            "duplicateKeys": 0
+          },
+          "empty_source_receipt": null
+        }
+      ]
+    }
+  ],
+  "native_publications": {
+    "market": {
+      "run_id": "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+      "passed": true,
+      "columns": 53,
+      "new_rows": 7,
+      "formal_rows": 104,
+      "source_cells_compared": 371,
+      "outside_cells_compared": 5141,
+      "publication": {
+        "backup": "java_d121_market_sentiment_daily_backup_330d0c1869114a32b5a6908d2206c50e",
+        "sourceFingerprint": "083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365",
+        "fullTargetFingerprint": "c5e64e8f17e97f8188921c615490ad50634c04ede45ffe91df3db885bf77649b",
+        "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\source.json",
+        "published": true,
+        "windowRows": 7,
+        "formalRows": 104
+      },
+      "source_evidence": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\source.json",
+        "sha256": "f79dd1e85d68793f9438e917cbc65bf4f79d0898309fc69aa0e6fa77b503b0c8",
+        "bytes": 17805
+      }
+    },
+    "regime": {
+      "run_id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "passed": true,
+      "columns": 21,
+      "new_rows": 7,
+      "formal_rows": 666,
+      "source_cells_compared": 147,
+      "outside_cells_compared": 13839,
+      "backup_cells_compared": 13839,
+      "publication": {
+        "state": "VERIFIED",
+        "revision": 3,
+        "intent": {
+          "id": "regime_features_monitor_daily-publication-762edc72-5523-4391-81bd-c6805bdf7507",
+          "dataset": "regime_features_monitor_daily",
+          "runId": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+          "target": "regime_features_monitor_daily",
+          "backup": "java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0",
+          "stage": "java_regime_features_monitor_daily_stage_e547b911cd9a4275b8fb175768cfd670",
+          "initialTarget": "static-v2-378943d25ab02151687b0f421d79f5d75c5d790139f4d2e91543f0f824871cde",
+          "originalId": 1810,
+          "originalDirectory": "regime_features_monitor_daily_rebuild_20260918_213053~1810",
+          "replacementId": 3017,
+          "beforeFingerprint": "48e5c14c0f45daddc82c8a8787cbdae0fd352f883aa2e5866025bed363fad560",
+          "afterFingerprint": "c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3",
+          "scope": "{\"sourceEvidenceSha256\":\"222829222f212d6ffc78a12b55232eae3b5435c38dc93fddb0564206c1227ba6\",\"sourceEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\\\source.json\",\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"from\":\"2026-09-21\",\"to\":\"2026-09-30\"}"
+        }
+      },
+      "source_evidence": {
+        "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\source.json",
+        "sha256": "222829222f212d6ffc78a12b55232eae3b5435c38dc93fddb0564206c1227ba6",
+        "bytes": 18471
+      }
+    },
+    "final_code_version_boundary": "Both actual native calculations ran jobVersion 1 and have passed full-field publication audits; final version 2 mode/context guard source compiles and read-only plans pass. No version 2 production run is asserted.",
+    "digest_boundary": "Run aggregate fingerprint, per-slice source fingerprint, source file SHA, and complete target hash are distinct scopes and are checked at their matching scope."
+  },
+  "provenance": {
+    "selected_java_source_verified_rows": 153276,
+    "meaning": "Source records matched, not newly inserted row count.",
+    "portfolio_0831": "Historical 901265-row repair was Python; retained Java 0928-0930 source scan is verified empty. Historical rows are independently full-key/value checked, without relabeling them as Java writes.",
+    "portfolio_historical_verification": {
+      "checked_at": "2026-10-07T19:30:17.808297+08:00",
+      "as_of": "2026-09-30",
+      "ann_date": "2026-08-31",
+      "read_only_verification": true,
+      "source_json_sha256": "3d82929226699e7689a1199e99671395ce43d80136621e481f39f2b51068264d",
+      "source_rows": 901265,
+      "source_duplicate_keys": 0,
+      "local_rows": 901265,
+      "local_duplicate_keys": 0,
+      "missing_source_keys": 0,
+      "extra_local_keys": 0,
+      "compared_numeric_values": 3605060,
+      "value_differences": 0,
+      "numeric_tolerance": {
+        "relative": 1E-09,
+        "absolute": 1E-06
+      },
+      "examples": [],
+      "missing_key_examples": [],
+      "wal_health": [
+        {
+          "table_name": "etf_portfolio",
+          "dedup": true,
+          "table_txn": 1529,
+          "wal_txn": 1529,
+          "wal_pending_row_count": 0,
+          "table_suspended": false
+        }
+      ],
+      "sync_ledger_outcome": [
+        {
+          "table_name": "etf_portfolio",
+          "status": "success",
+          "fetched_rows": 901265,
+          "accepted_rows": 901265,
+          "visible_rows": 901265,
+          "failed_rows": 0,
+          "unknown_rows": 0,
+          "completion_verified": 1,
+          "message": "",
+          "attempt_id": "3feaa691d92d495e8c35e1c399e2e0a4",
+          "duration": 140.82835817337036,
+          "sync_function": "sync_etf_portfolio"
+        }
+      ],
+      "target_disclosures": [
+        {
+          "ts_code": "512770.SH",
+          "ann_date": "2026-08-31T00:00:00Z",
+          "end_date": "2026-06-30T00:00:00Z",
+          "rows": 124,
+          "weight_sum": 53.35999999999999
+        },
+        {
+          "ts_code": "512770.SH",
+          "ann_date": "2026-07-21T00:00:00Z",
+          "end_date": "2026-06-30T00:00:00Z",
+          "rows": 10,
+          "weight_sum": 46.57
+        },
+        {
+          "ts_code": "589330.SH",
+          "ann_date": "2026-05-26T00:00:00Z",
+          "end_date": "2026-05-22T00:00:00Z",
+          "rows": 10,
+          "weight_sum": 20.07
+        }
+      ],
+      "passed": true
+    }
+  },
+  "accepted_consumer_snapshot": {
+    "observed_at": "2026-10-07T21:14:24.1010449+08:00",
+    "status": "ok",
+    "failures": [],
+    "latest": {
+      "stk_factor": "2026-09-30",
+      "v_backtest_daily": "2026-09-30",
+      "market_sentiment_daily": "2026-09-30",
+      "regime_features_monitor_daily": "2026-09-30",
+      "etf_daily": "2026-09-30",
+      "etf_adj": "2026-09-30",
+      "etf_factor": "2026-09-30",
+      "l2_daily_features": "2026-09-30"
+    },
+    "backtest_days_checked": 32,
+    "target_disclosures": [
+      {
+        "ts_code": "512770.SH",
+        "latest_ann_date": "2026-08-31"
+      },
+      {
+        "ts_code": "589330.SH",
+        "latest_ann_date": "2026-05-26"
+      }
+    ]
+  },
+  "counterexamples_and_limits": [
+    {
+      "issue": "589330.SH actual latest disclosure is 20260526, age127 at0930 and exceeds former120day rule",
+      "handling": "User latest-disclosure permission allows data goal closure; retain freshness fact, do not invent0930 holdings.",
+      "additional_java_job_required": false
+    },
+    {
+      "issue": "512770.SH same report has disjoint0721 and0831 disclosures (46.57+53.36=99.93); existing latest-ann consumer takes53.36",
+      "handling": "All actual retained rows match upstream. Consumer selection semantics remains a separate issue; repeat source sync does not repair it.",
+      "additional_java_job_required": false
+    },
+    {
+      "issue": "0930 margin_detail provider lacksSZ/BJ coverage",
+      "handling": "Sentiment partial_enhanced omits financing enhancement, regime optional margin changeNULL. Repeating unavailable provider scope cannot manufacture completeness.",
+      "additional_java_job_required": false
+    },
+    {
+      "issue": "001246.SZ IPO on0930 has daily/basic but exact native stk_factor source-empty",
+      "handling": "Exact Java listing and factor response evidence retained; no fabricatedfactor or falseallstockfactorcoverage claim.",
+      "additional_java_job_required": false
+    },
+    {
+      "issue": "0930 data cut-off versus Oct7 calculation/availability timestamps",
+      "handling": "Current-data acceptance only; this audit does not certify historical as-of replay availability.",
+      "additional_java_job_required": false
+    }
+  ],
+  "final_source_file_sha256": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\client\\TushareClient.java",
+      "sha256": "a7b2ae78304016002c668ca8fca33758a109f396b11bbd32559ff05e7e55dd23",
+      "bytes": 8155
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\config\\ClientConfiguration.java",
+      "sha256": "d8a27084345a6a3c24776b1b4b4030f9396dcd4ac1aefc76829497c727d2b10b",
+      "bytes": 3451
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\config\\QuestDbProperties.java",
+      "sha256": "e4badfa1003e8b391febd436a447aef334996e6e11d1e4cf06f703716cff5596",
+      "bytes": 2778
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\mapper\\StockFactorMapper.java",
+      "sha256": "edd6ddeb7247460a92b7abd3309f32a677f659b814f7c910687c76b734251698",
+      "bytes": 7104
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\DailyBasicWritePort.java",
+      "sha256": "50e1cfd7ced6c84ff5aa212c8f89e69c27c0e38f4a0b124c2f4658d0eed9f5b4",
+      "bytes": 8073
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\MarketSentimentDailyWritePort.java",
+      "sha256": "e832b9a2ade6a9e4d0bee28a1d126f9d57085961e3169004769e28d009d84dae",
+      "bytes": 5090
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\MoneyflowWritePort.java",
+      "sha256": "b73b2cfb39b6283491bd4922f0fff7752a136695f50f39b2d0f236a92c8fa94f",
+      "bytes": 11009
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\NativeDailyWindowPublication.java",
+      "sha256": "acef37ff21682d287f3793f6fbeaf2952a89450fab3077baaed1558d26da62e0",
+      "bytes": 20046
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\NativeDailyWindowWritePort.java",
+      "sha256": "b37182d7b4e9ce1568aad386f8a5daf07a2ad7ab5adf3dc7ecec9bc707a0b00e",
+      "bytes": 15588
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\RegimeFeaturesMonitorDailyWritePort.java",
+      "sha256": "a18fab99ba970f3165f8dd9ff5f0ae2ed3b35ad3eedfcac7ba85804565281eb5",
+      "bytes": 4539
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\StockFactorWritePort.java",
+      "sha256": "e60bff160ecd919b2411ef8ddf69b2700001f30f7e0623306d5d9458937f531a",
+      "bytes": 9378
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\repository\\StockLimitWritePort.java",
+      "sha256": "d270df6d0d76b34302673ce78230a432d4f0345749cb5404c6b3b6e8e8854742",
+      "bytes": 9406
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\DailyBasicSource.java",
+      "sha256": "ad4293fcc8aaf6fdbaafd71f41f229e401ebebd2815da9ebcb4a44312c1351aa",
+      "bytes": 7135
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EtfDailySource.java",
+      "sha256": "28affdfcc87453a45fbb06b8b90505ee97469c56504a0fe7dc5023f77e9fbeeb",
+      "bytes": 8860
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EtfFactorSource.java",
+      "sha256": "7b70193c6baec8e1b47c87b450b6af9f02ef509be77b689627e40e05a59873a9",
+      "bytes": 11242
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\EtfPortfolioSource.java",
+      "sha256": "2fc7f379cedbc4b24a16160709e107d1c228b3425e4519c3d8839a1a355a20c9",
+      "bytes": 21422
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\MarketSentimentDailyCalculation.java",
+      "sha256": "636ad885504aa6f7c41246998614d79ce80d3cfd0221917694a412bbd3d9105f",
+      "bytes": 16879
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\MarketSentimentDailyJobService.java",
+      "sha256": "548696a268fc19ccac4cfa11edf9852c3d378bd06ec7920a26118734c5a26633",
+      "bytes": 39942
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\MoneyflowJobService.java",
+      "sha256": "817046701927cbdfb23c32e2eae80696fdab949b0ca75511453613cede969152",
+      "bytes": 14501
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\MoneyflowSource.java",
+      "sha256": "9f3cf3e9c25475f95863841f7188b8c0dce706c5f791a2f1045301149a5c80de",
+      "bytes": 8959
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\RegimeFeaturesMonitorDailyCalculation.java",
+      "sha256": "1d0c95dbfbc62db6761609f3efba3ea197a8a9ce72e8bf98421e6341fec11b39",
+      "bytes": 11262
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\RegimeFeaturesMonitorDailyJobService.java",
+      "sha256": "8508594ee302c9e619fb498a7b009362a3475550361f0854b9194c61df5d5a87",
+      "bytes": 32481
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\StaticTargetIdentity.java",
+      "sha256": "c8b235014fdaac977305ddc5865d3c2e31ed3063031ccea6c6d40e920fd46d4f",
+      "bytes": 2558
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\StockFactorSource.java",
+      "sha256": "0fc526ef05442fc72607fd49a60f5177d3966b451ca0a5937147557928ec9c54",
+      "bytes": 7542
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\StockLimitJobService.java",
+      "sha256": "8a0a0a3c20d1b60aa9410e1da3e58f5d7a57e33cd2ad73ceb639c3ec47e3408b",
+      "bytes": 14876
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\StockLimitSource.java",
+      "sha256": "cf3ef104605f938a5ca7cba5432334213956024903c11b7574ac8defdb6013bd",
+      "bytes": 8877
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\SyncJobRunner.java",
+      "sha256": "c7b3a907e8f635b84d5a4d4b4010fe5f0d5a7985822b307e73ddd0de1d7d4a52",
+      "bytes": 21193
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\src\\main\\java\\com\\zoutrankil\\data\\service\\TusharePageService.java",
+      "sha256": "f697f504ceaa7d96021b71da2385af9b294a44455f64bed16b252316587b8b7b",
+      "bytes": 4820
+    }
+  ],
+  "evidence_file_sha256": [
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\goal-java-routes-ledger-readonly.json",
+      "sha256": "c437317626656c0db830698259a4d7ff05924794ef4a1cab0f6733d63df69cdd",
+      "bytes": 402291
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\java-sync-data-audit.json",
+      "sha256": "880aac6b7c190f0b1b720ab686ec9bcacb060ac9f6baffa9547702d33afa2074",
+      "bytes": 149675
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\java-sync-source-receipts-readonly.json",
+      "sha256": "962e24a3f3490420014c2cf6cb4a2d277148e7bc3bcacb31ea94c3d840064777",
+      "bytes": 62654
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\goal-etf-retained-receipt-audit.json",
+      "sha256": "d2d9662bfaf7f60e29277693d322940ed18b31bf32055951654f0c1dd8affffb",
+      "bytes": 9037
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\etf-margin-audit.json",
+      "sha256": "549d6f156255a974694673ce7f607fde43aa11858a5c740f5364722052bd6efd",
+      "bytes": 26131
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\market-sentiment-native-readback.json",
+      "sha256": "970c13255f554ba208f8f94e682bb72a3b899c15aa7008f28979687ec663eebf",
+      "bytes": 374362
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\market-sentiment-ledger.json",
+      "sha256": "46ed4e240f515f815090cbff3ba3a57b6d529b05cbc550867a1a712048537b98",
+      "bytes": 19621
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\regime-native-java-audit.json",
+      "sha256": "dffd22242145095d6965894fb0bb5ff774f9e538377b83aae1ba07798f576fb4",
+      "bytes": 31240
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\regime-monitor-ledger.json",
+      "sha256": "21319b8f086d31cd1ed17bccb95b4ce0ae956f1de9ca1796f0f9c9442287b09e",
+      "bytes": 31984
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\main-strategy-readonly-acceptance.json",
+      "sha256": "bf3c40d2a97ca10610c12f603d55176f08f0c98ec4c69c0ca6eb0cca17936bea",
+      "bytes": 15804
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\goal-current-questdb-observation.json",
+      "sha256": "fe82abf93fc9c260f1dadd60a49a78c5a34dc8a42dc6ab91f28c4701c4e39591",
+      "bytes": 8318
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\native-current-plan-v2-readonly.json",
+      "sha256": "3df393e0e10653de34629337f9e3efc21714756142bbf2ea8f8f91c33d70c348",
+      "bytes": 706
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\goal-final-build-receipt.json",
+      "sha256": "8f245ef10b88da0078c70aa4b95e1282b8c3aabaa70d69a007b36f35caa5d9d6",
+      "bytes": 392
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\goal-local-regime-plan-launch.json",
+      "sha256": "0a52e8cfddf8abaacc5ea41ed0cb63bcf99d4976dc54eeb618243d106ae29e65",
+      "bytes": 766
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\goal-final-classes.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\goal-local-regime-plan.log",
+      "sha256": "c444c10909aca5616e72ee97fa8f71b3bf14c9376db3f9b824b47232b5478d0a",
+      "bytes": 680222
+    }
+  ]
+}

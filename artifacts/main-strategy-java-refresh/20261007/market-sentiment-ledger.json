@@ -1,0 +1,342 @@
+{
+  "observedAtUtc" : "2026-10-07T12:37:10.882214100Z",
+  "readOnly" : true,
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-ledger.sqlite3",
+  "run" : [ {
+    "id" : "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+    "parent_run_id" : null,
+    "job_id" : "data.market_sentiment_daily",
+    "job_version" : 1,
+    "logical_date" : "2026-10-07",
+    "target_id" : "static-v2-a69a67fed101e886c64b8f9552fde4f1ce29841baf8a9de80c60f2606060b88e",
+    "frozen_json" : "{\"definition\":{\"jobId\":\"data.market_sentiment_daily\",\"version\":1,\"datasetId\":\"market_sentiment_daily\",\"datasetVersion\":1,\"owner\":\"market_sentiment_daily_owner\",\"supportedModes\":[\"MATERIALIZE\",\"RECONCILE\"],\"defaultMode\":\"MATERIALIZE\",\"parameters\":{\"target_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"warmup_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_pin\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"market_sentiment_daily.range366\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT2H\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":366,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"source_pin\":\"2df621d0e44afd4f9cbbc3a8add965265f8b4edc91fe328b822814cdc74cf9a8\",\"target_hash\":\"c8f60c8ac993f6dbd678843444ef24a71fb109c671d238bc087725cee440d6ef\",\"target_id\":\"static-v2-a69a67fed101e886c64b8f9552fde4f1ce29841baf8a9de80c60f2606060b88e\",\"warmup_from\":\"2022-11-21\"},\"from\":\"2026-09-21\",\"to\":\"2026-09-30\",\"logicalDate\":\"2026-10-07\"}",
+    "frozen_json_parsed" : {
+      "definition" : {
+        "jobId" : "data.market_sentiment_daily",
+        "version" : 1,
+        "datasetId" : "market_sentiment_daily",
+        "datasetVersion" : 1,
+        "owner" : "market_sentiment_daily_owner",
+        "supportedModes" : [ "MATERIALIZE", "RECONCILE" ],
+        "defaultMode" : "MATERIALIZE",
+        "parameters" : {
+          "target_hash" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "warmup_from" : {
+            "type" : "DATE",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "source_pin" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "target_id" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "questdb.materialize",
+        "slicePolicyRef" : "market_sentiment_daily.range366",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 1,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT1S"
+        },
+        "timeout" : "PT2H",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 1,
+          "maxPages" : 1,
+          "maxRows" : 366,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 0,
+        "dependencies" : [ ],
+        "frequency" : "MANUAL",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : false
+      },
+      "mode" : "MATERIALIZE",
+      "parameters" : {
+        "source_pin" : "2df621d0e44afd4f9cbbc3a8add965265f8b4edc91fe328b822814cdc74cf9a8",
+        "target_hash" : "c8f60c8ac993f6dbd678843444ef24a71fb109c671d238bc087725cee440d6ef",
+        "target_id" : "static-v2-a69a67fed101e886c64b8f9552fde4f1ce29841baf8a9de80c60f2606060b88e",
+        "warmup_from" : "2022-11-21"
+      },
+      "from" : "2026-09-21",
+      "to" : "2026-09-30",
+      "logicalDate" : "2026-10-07"
+    }
+  } ],
+  "entries" : [ {
+    "id" : "slice-4fb9865d-f5ae-4398-9184-60aca064b7b3",
+    "kind" : "SLICE",
+    "run_id" : "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+    "parent_id" : "attempt-6bc2f2a4-2e64-46a1-a5b5-0426b54e7afc",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payload_json" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365\",\"readbackEvidence\":\"ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "missingKeys" : 0,
+        "actualRows" : 7,
+        "sourceFingerprint" : "083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365",
+        "readbackEvidence" : "ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 7,
+        "expectedRows" : 7,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0
+      }
+    },
+    "updated_at" : "2026-10-07T12:29:01.749029800Z"
+  }, {
+    "id" : "attempt-6bc2f2a4-2e64-46a1-a5b5-0426b54e7afc",
+    "kind" : "ATTEMPT",
+    "run_id" : "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+    "parent_id" : "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payload_json" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"c0be408daaa854a8b2c0e54c2f6d324a021cbdaee0c452447975e601e61ff0bc\",\"readbackEvidence\":\"ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "missingKeys" : 0,
+        "actualRows" : 7,
+        "sourceFingerprint" : "c0be408daaa854a8b2c0e54c2f6d324a021cbdaee0c452447975e601e61ff0bc",
+        "readbackEvidence" : "ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 7,
+        "expectedRows" : 7,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0
+      }
+    },
+    "updated_at" : "2026-10-07T12:29:02.043223700Z"
+  }, {
+    "id" : "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+    "kind" : "RUN",
+    "run_id" : "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+    "parent_id" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payload_json" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"c0be408daaa854a8b2c0e54c2f6d324a021cbdaee0c452447975e601e61ff0bc\",\"readbackEvidence\":\"ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "missingKeys" : 0,
+        "actualRows" : 7,
+        "sourceFingerprint" : "c0be408daaa854a8b2c0e54c2f6d324a021cbdaee0c452447975e601e61ff0bc",
+        "readbackEvidence" : "ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 7,
+        "expectedRows" : 7,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0
+      }
+    },
+    "updated_at" : "2026-10-07T12:29:02.055205900Z"
+  } ],
+  "events" : [ {
+    "entry_id" : "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T12:28:10.039198Z"
+  }, {
+    "entry_id" : "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T12:28:10.205118700Z"
+  }, {
+    "entry_id" : "attempt-6bc2f2a4-2e64-46a1-a5b5-0426b54e7afc",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T12:28:10.216000200Z"
+  }, {
+    "entry_id" : "attempt-6bc2f2a4-2e64-46a1-a5b5-0426b54e7afc",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T12:28:10.225799800Z"
+  }, {
+    "entry_id" : "slice-4fb9865d-f5ae-4398-9184-60aca064b7b3",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T12:29:01.569136700Z"
+  }, {
+    "entry_id" : "slice-4fb9865d-f5ae-4398-9184-60aca064b7b3",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T12:29:01.578901100Z"
+  }, {
+    "entry_id" : "slice-4fb9865d-f5ae-4398-9184-60aca064b7b3",
+    "revision" : 2,
+    "state" : "FETCHED",
+    "payload_json" : "{\"returnedRows\":7,\"sourceFingerprint\":\"083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\\\source.json\",\"cursor\":null}",
+    "payload_json_parsed" : {
+      "returnedRows" : 7,
+      "sourceFingerprint" : "083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\source.json",
+      "cursor" : null
+    },
+    "updated_at" : "2026-10-07T12:29:01.586877100Z"
+  }, {
+    "entry_id" : "slice-4fb9865d-f5ae-4398-9184-60aca064b7b3",
+    "revision" : 3,
+    "state" : "VALIDATED",
+    "payload_json" : "{\"returnedRows\":7,\"sourceFingerprint\":\"083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\\\source.json\",\"cursor\":null}",
+    "payload_json_parsed" : {
+      "returnedRows" : 7,
+      "sourceFingerprint" : "083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\source.json",
+      "cursor" : null
+    },
+    "updated_at" : "2026-10-07T12:29:01.594900500Z"
+  }, {
+    "entry_id" : "slice-4fb9865d-f5ae-4398-9184-60aca064b7b3",
+    "revision" : 4,
+    "state" : "SUBMITTED",
+    "payload_json" : "{\"returnedRows\":7,\"sourceFingerprint\":\"083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\\\source.json\",\"cursor\":null}",
+    "payload_json_parsed" : {
+      "returnedRows" : 7,
+      "sourceFingerprint" : "083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\source.json",
+      "cursor" : null
+    },
+    "updated_at" : "2026-10-07T12:29:01.653010100Z"
+  }, {
+    "entry_id" : "slice-4fb9865d-f5ae-4398-9184-60aca064b7b3",
+    "revision" : 5,
+    "state" : "ACKNOWLEDGED",
+    "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":7,\"verifiedRows\":7,\"receipts\":[{\"batch\":1,\"submittedRows\":7,\"verifiedRows\":7,\"bytes\":48163,\"digest\":\"87242e990d3d1b6031d2939595f101cb34da563b7dd6cec229964bb2eb7681a1\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+    "payload_json_parsed" : {
+      "writeResult" : {
+        "status" : "VERIFIED",
+        "submittedRows" : 7,
+        "verifiedRows" : 7,
+        "receipts" : [ {
+          "batch" : 1,
+          "submittedRows" : 7,
+          "verifiedRows" : 7,
+          "bytes" : 48163,
+          "digest" : "87242e990d3d1b6031d2939595f101cb34da563b7dd6cec229964bb2eb7681a1",
+          "delivery" : "ACKNOWLEDGED"
+        } ],
+        "reason" : null
+      }
+    },
+    "updated_at" : "2026-10-07T12:29:01.737875500Z"
+  }, {
+    "entry_id" : "slice-4fb9865d-f5ae-4398-9184-60aca064b7b3",
+    "revision" : 6,
+    "state" : "VERIFIED",
+    "payload_json" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365\",\"readbackEvidence\":\"ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "missingKeys" : 0,
+        "actualRows" : 7,
+        "sourceFingerprint" : "083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365",
+        "readbackEvidence" : "ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 7,
+        "expectedRows" : 7,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0
+      }
+    },
+    "updated_at" : "2026-10-07T12:29:01.749029800Z"
+  }, {
+    "entry_id" : "attempt-6bc2f2a4-2e64-46a1-a5b5-0426b54e7afc",
+    "revision" : 2,
+    "state" : "VERIFIED",
+    "payload_json" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"c0be408daaa854a8b2c0e54c2f6d324a021cbdaee0c452447975e601e61ff0bc\",\"readbackEvidence\":\"ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "missingKeys" : 0,
+        "actualRows" : 7,
+        "sourceFingerprint" : "c0be408daaa854a8b2c0e54c2f6d324a021cbdaee0c452447975e601e61ff0bc",
+        "readbackEvidence" : "ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 7,
+        "expectedRows" : 7,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0
+      }
+    },
+    "updated_at" : "2026-10-07T12:29:02.043223700Z"
+  }, {
+    "entry_id" : "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+    "revision" : 2,
+    "state" : "VERIFIED",
+    "payload_json" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"c0be408daaa854a8b2c0e54c2f6d324a021cbdaee0c452447975e601e61ff0bc\",\"readbackEvidence\":\"ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "missingKeys" : 0,
+        "actualRows" : 7,
+        "sourceFingerprint" : "c0be408daaa854a8b2c0e54c2f6d324a021cbdaee0c452447975e601e61ff0bc",
+        "readbackEvidence" : "ledger:slice-4fb9865d-f5ae-4398-9184-60aca064b7b3:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 7,
+        "expectedRows" : 7,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0
+      }
+    },
+    "updated_at" : "2026-10-07T12:29:02.055205900Z"
+  } ],
+  "publications" : [ {
+    "id" : "market-sentiment-publication-ec0e0557-c241-46cd-a4c3-a4ad4f3c3178",
+    "dataset" : "market_sentiment_daily",
+    "run_id" : "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+    "intent_json" : "{\"id\":\"market-sentiment-publication-ec0e0557-c241-46cd-a4c3-a4ad4f3c3178\",\"dataset\":\"market_sentiment_daily\",\"runId\":\"market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\",\"target\":\"market_sentiment_daily\",\"backup\":\"java_d121_market_sentiment_daily_backup_330d0c1869114a32b5a6908d2206c50e\",\"stage\":\"java_d121_market_sentiment_daily_stage_980de8672a964145ae618e5e0494bfe3\",\"initialTarget\":\"static-v2-a69a67fed101e886c64b8f9552fde4f1ce29841baf8a9de80c60f2606060b88e\",\"originalId\":1811,\"originalDirectory\":\"market_sentiment_daily_rebuild_20260918_213205~1811\",\"replacementId\":3016,\"beforeFingerprint\":\"c8f60c8ac993f6dbd678843444ef24a71fb109c671d238bc087725cee440d6ef\",\"afterFingerprint\":\"c5e64e8f17e97f8188921c615490ad50634c04ede45ffe91df3db885bf77649b\",\"scope\":\"{\\\"to\\\":\\\"2026-09-30\\\",\\\"from\\\":\\\"2026-09-21\\\",\\\"sourceEvidence\\\":\\\"C:\\\\\\\\Users\\\\\\\\zouqiang\\\\\\\\IdeaProjects\\\\\\\\QuestDBWithData\\\\\\\\var\\\\\\\\main-strategy-java-refresh\\\\\\\\20261007\\\\\\\\sync-evidence\\\\\\\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\\\\\\\source.json\\\",\\\"sourceFingerprint\\\":\\\"083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365\\\",\\\"sourceEvidenceSha256\\\":\\\"f79dd1e85d68793f9438e917cbc65bf4f79d0898309fc69aa0e6fa77b503b0c8\\\"}\"}",
+    "intent_json_parsed" : {
+      "id" : "market-sentiment-publication-ec0e0557-c241-46cd-a4c3-a4ad4f3c3178",
+      "dataset" : "market_sentiment_daily",
+      "runId" : "market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c",
+      "target" : "market_sentiment_daily",
+      "backup" : "java_d121_market_sentiment_daily_backup_330d0c1869114a32b5a6908d2206c50e",
+      "stage" : "java_d121_market_sentiment_daily_stage_980de8672a964145ae618e5e0494bfe3",
+      "initialTarget" : "static-v2-a69a67fed101e886c64b8f9552fde4f1ce29841baf8a9de80c60f2606060b88e",
+      "originalId" : 1811,
+      "originalDirectory" : "market_sentiment_daily_rebuild_20260918_213205~1811",
+      "replacementId" : 3016,
+      "beforeFingerprint" : "c8f60c8ac993f6dbd678843444ef24a71fb109c671d238bc087725cee440d6ef",
+      "afterFingerprint" : "c5e64e8f17e97f8188921c615490ad50634c04ede45ffe91df3db885bf77649b",
+      "scope" : "{\"to\":\"2026-09-30\",\"from\":\"2026-09-21\",\"sourceEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\\\source.json\",\"sourceFingerprint\":\"083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365\",\"sourceEvidenceSha256\":\"f79dd1e85d68793f9438e917cbc65bf4f79d0898309fc69aa0e6fa77b503b0c8\"}"
+    },
+    "state" : "VERIFIED",
+    "revision" : 3,
+    "updated_at" : "2026-10-07T12:29:02.025602900Z"
+  } ]
+}

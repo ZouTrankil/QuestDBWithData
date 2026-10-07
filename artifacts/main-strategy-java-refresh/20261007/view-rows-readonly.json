@@ -1,0 +1,81 @@
+{
+  "query": "SELECT trade_date,count() AS row_count,count_distinct(ts_code) AS unique_codes,sum(CASE WHEN close IS NULL THEN 1 ELSE 0 END) AS null_close,sum(CASE WHEN up_limit IS NULL THEN 1 ELSE 0 END) AS null_up_limit,sum(CASE WHEN down_limit IS NULL THEN 1 ELSE 0 END) AS null_down_limit FROM v_backtest_daily WHERE trade_date >= '2026-09-22T00:00:00Z' AND trade_date < '2026-10-01T00:00:00Z' GROUP BY trade_date ORDER BY trade_date",
+  "columns": [
+    {
+      "name": "trade_date",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "row_count",
+      "type": "LONG"
+    },
+    {
+      "name": "unique_codes",
+      "type": "LONG"
+    },
+    {
+      "name": "null_close",
+      "type": "LONG"
+    },
+    {
+      "name": "null_up_limit",
+      "type": "LONG"
+    },
+    {
+      "name": "null_down_limit",
+      "type": "LONG"
+    }
+  ],
+  "timestamp": 0,
+  "dataset": [
+    [
+      "2026-09-22T00:00:00Z",
+      5567,
+      5567,
+      0,
+      0,
+      0
+    ],
+    [
+      "2026-09-23T00:00:00Z",
+      5568,
+      5568,
+      0,
+      0,
+      0
+    ],
+    [
+      "2026-09-24T00:00:00Z",
+      5569,
+      5569,
+      0,
+      0,
+      0
+    ],
+    [
+      "2026-09-28T00:00:00Z",
+      5569,
+      5569,
+      0,
+      0,
+      0
+    ],
+    [
+      "2026-09-29T00:00:00Z",
+      5571,
+      5571,
+      0,
+      0,
+      0
+    ],
+    [
+      "2026-09-30T00:00:00Z",
+      5571,
+      5571,
+      0,
+      0,
+      0
+    ]
+  ],
+  "count": 6
+}

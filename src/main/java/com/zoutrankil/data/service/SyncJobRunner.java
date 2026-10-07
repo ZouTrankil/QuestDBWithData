@@ -301,7 +301,17 @@ public final class SyncJobRunner<T, K> {
     private static boolean canTransitionToInDoubt(SyncRunState state) {
         return Set.of(SyncRunState.RUNNING, SyncRunState.SUBMITTED, SyncRunState.ACKNOWLEDGED).contains(state);
     }
-    private String error(Exception failure) throws Exception { return json.writeValueAsString(Map.of("errorCode", failure.getClass().getSimpleName())); }
+    private String error(Exception failure) throws Exception {
+        var detail = new LinkedHashMap<String,Object>();
+        detail.put("errorCode", failure.getClass().getSimpleName());
+        // PageExecutor reasons are generated locally and contain only classifications, never request credentials.
+        if (failure instanceof PageExecutor.Incomplete incomplete) {
+            detail.put("sourceReason", incomplete.getMessage());
+            detail.put("consumedPages", incomplete.consumedPages());
+            detail.put("consumedRows", incomplete.consumedRows());
+        }
+        return json.writeValueAsString(detail);
+    }
     private static void check(BooleanSupplier stopped) {
         if (stopped.getAsBoolean()) throw new CancellationException("Sync cancelled or deadline elapsed");
     }

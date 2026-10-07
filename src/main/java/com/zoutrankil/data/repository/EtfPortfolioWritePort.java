@@ -45,7 +45,7 @@ public final class EtfPortfolioWritePort implements VerifiedBatchExecutor.Port<E
     private volatile boolean uncertainSenderStopped;
 
     public EtfPortfolioWritePort(String table, String expectedTargetId, JdbcTemplate jdbc, QuestDB questdb) {
-        EtfPortfolioDataset.requireIsolatedTable(table);
+        com.zoutrankil.data.service.EtfPortfolioJobService.requireExecutionTableName(table);
         if (expectedTargetId == null || !expectedTargetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen isolated etf_portfolio target identity required");
         this.table = table; this.expectedTargetId = expectedTargetId;
@@ -100,6 +100,15 @@ public final class EtfPortfolioWritePort implements VerifiedBatchExecutor.Port<E
             throw new IllegalArgumentException("At most 250 unique complete etf_portfolio keys required");
         requireExpectedTarget();
         var clauses = new ArrayList<String>(); var parameters = new ArrayList<Object>();
+        LocalDate minAnn = keys.stream().map(EtfPortfolioKey::annDate).min(LocalDate::compareTo).orElseThrow();
+        LocalDate maxAnn = keys.stream().map(EtfPortfolioKey::annDate).max(LocalDate::compareTo).orElseThrow();
+        LocalDate minEnd = keys.stream().map(EtfPortfolioKey::endDate).min(LocalDate::compareTo).orElseThrow();
+        LocalDate maxEnd = keys.stream().map(EtfPortfolioKey::endDate).max(LocalDate::compareTo).orElseThrow();
+        var codes = new LinkedHashSet<String>(); keys.forEach(key -> codes.add(key.tsCode()));
+        parameters.add(calendarMicros(minAnn)); parameters.add(calendarMicros(maxAnn.plusDays(1)));
+        // end_date is the designated timestamp, so this also bounds the physical partition scan.
+        parameters.add(calendarMicros(minEnd)); parameters.add(calendarMicros(maxEnd.plusDays(1)));
+        parameters.addAll(codes);
         for (var key : keys) {
             clauses.add("(ts_code=? AND ann_date=cast(? AS TIMESTAMP) AND end_date=cast(? AS TIMESTAMP) AND symbol=?)");
             parameters.add(key.tsCode()); parameters.add(calendarMicros(key.annDate()));
@@ -107,7 +116,9 @@ public final class EtfPortfolioWritePort implements VerifiedBatchExecutor.Port<E
         }
         String sql = "SELECT ts_code,cast(ann_date as long) AS ann_date_micros,cast(end_date as long) AS end_date_micros,"
                 + "symbol,mkv,amount,stk_mkv_ratio,stk_float_ratio,cast(update_time as long) AS update_time_micros FROM \""
-                + table + "\" WHERE " + String.join(" OR ", clauses)
+                + table + "\" WHERE ann_date>=cast(? AS TIMESTAMP) AND ann_date<cast(? AS TIMESTAMP)"
+                + " AND end_date>=cast(? AS TIMESTAMP) AND end_date<cast(? AS TIMESTAMP) AND ts_code IN ("
+                + String.join(",", Collections.nCopies(codes.size(), "?")) + ") AND (" + String.join(" OR ", clauses) + ")"
                 + " ORDER BY ts_code,ann_date,end_date,symbol LIMIT " + (keys.size() + 1);
         return jdbc.query(sql, (rs, index) -> physical(rs), parameters.toArray());
     }

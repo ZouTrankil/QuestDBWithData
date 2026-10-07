@@ -1,0 +1,28 @@
+[
+  {
+    "log": "market-sentiment-current-plan-v2.log",
+    "status": "PLANNED",
+    "executed": false,
+    "job": "data.market_sentiment_daily",
+    "job_version": 2,
+    "modes": [
+      "MATERIALIZE"
+    ],
+    "table_id": 3016,
+    "rows": 104,
+    "fingerprint": "c5e64e8f17e97f8188921c615490ad50634c04ede45ffe91df3db885bf77649b"
+  },
+  {
+    "log": "regime-current-plan-v2.log",
+    "status": "PLANNED",
+    "executed": false,
+    "job": "data.regime_features_monitor_daily",
+    "job_version": 2,
+    "modes": [
+      "MATERIALIZE"
+    ],
+    "table_id": 3017,
+    "rows": 666,
+    "fingerprint": "c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3"
+  }
+]

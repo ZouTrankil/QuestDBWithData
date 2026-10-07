@@ -1,0 +1,1060 @@
+{
+  "ObservedAt": "2026-10-07T12:29:40.3772107Z",
+  "Endpoint": "http://127.0.0.1:9000",
+  "ScopeStart": "2026-09-22",
+  "ScopeEnd": "2026-09-30",
+  "Queries": [
+    {
+      "Name": "stk_factor_daily",
+      "SQL": "SELECT trade_date,count() AS rows,count_distinct(ts_code) AS codes,sum(case when ts_code IS NULL then 1 else 0 end) AS null_codes,sum(case when close IS NULL then 1 else 0 end) AS null_close,sum(case when close<=0 then 1 else 0 end) AS nonpositive_close,sum(case when adj_factor IS NULL then 1 else 0 end) AS null_adj_factor,sum(case when adj_factor<=0 then 1 else 0 end) AS nonpositive_adj_factor FROM stk_factor WHERE trade_date>='2026-09-22' AND trade_date<'2026-10-01' GROUP BY trade_date ORDER BY trade_date",
+      "Columns": [
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "rows",
+          "type": "LONG"
+        },
+        {
+          "name": "codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_close",
+          "type": "LONG"
+        },
+        {
+          "name": "nonpositive_close",
+          "type": "LONG"
+        },
+        {
+          "name": "null_adj_factor",
+          "type": "LONG"
+        },
+        {
+          "name": "nonpositive_adj_factor",
+          "type": "LONG"
+        }
+      ],
+      "Rows": [
+        [
+          "2026-09-22T00:00:00Z",
+          5554,
+          5554,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-23T00:00:00Z",
+          5556,
+          5556,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-24T00:00:00Z",
+          5557,
+          5557,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          5557,
+          5557,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          5559,
+          5559,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-30T00:00:00Z",
+          5560,
+          5560,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "QueryCount": 6
+    },
+    {
+      "Name": "daily_basic_daily",
+      "SQL": "SELECT trade_date,count() AS rows,count_distinct(ts_code) AS codes,sum(case when ts_code IS NULL then 1 else 0 end) AS null_codes,sum(case when close IS NULL then 1 else 0 end) AS null_close,sum(case when total_mv IS NULL then 1 else 0 end) AS null_total_mv,sum(case when circ_mv IS NULL then 1 else 0 end) AS null_circ_mv FROM daily_basic WHERE trade_date>='2026-09-22' AND trade_date<'2026-10-01' GROUP BY trade_date ORDER BY trade_date",
+      "Columns": [
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "rows",
+          "type": "LONG"
+        },
+        {
+          "name": "codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_close",
+          "type": "LONG"
+        },
+        {
+          "name": "null_total_mv",
+          "type": "LONG"
+        },
+        {
+          "name": "null_circ_mv",
+          "type": "LONG"
+        }
+      ],
+      "Rows": [
+        [
+          "2026-09-22T00:00:00Z",
+          5554,
+          5554,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-23T00:00:00Z",
+          5556,
+          5556,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-24T00:00:00Z",
+          5557,
+          5557,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          5557,
+          5557,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          5559,
+          5559,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-30T00:00:00Z",
+          5561,
+          5561,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "QueryCount": 6
+    },
+    {
+      "Name": "stk_limit_daily",
+      "SQL": "SELECT trade_date,count() AS rows,count_distinct(ts_code) AS codes,sum(case when ts_code IS NULL then 1 else 0 end) AS null_codes,sum(case when up_limit IS NULL then 1 else 0 end) AS null_up_limit,sum(case when down_limit IS NULL then 1 else 0 end) AS null_down_limit,sum(case when up_limit<down_limit then 1 else 0 end) AS invalid_limits FROM stk_limit WHERE trade_date>='2026-09-22' AND trade_date<'2026-10-01' GROUP BY trade_date ORDER BY trade_date",
+      "Columns": [
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "rows",
+          "type": "LONG"
+        },
+        {
+          "name": "codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_up_limit",
+          "type": "LONG"
+        },
+        {
+          "name": "null_down_limit",
+          "type": "LONG"
+        },
+        {
+          "name": "invalid_limits",
+          "type": "LONG"
+        }
+      ],
+      "Rows": [
+        [
+          "2026-09-22T00:00:00Z",
+          5646,
+          5646,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-23T00:00:00Z",
+          5647,
+          5647,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-24T00:00:00Z",
+          5648,
+          5648,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          5648,
+          5648,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          5650,
+          5650,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-30T00:00:00Z",
+          5651,
+          5651,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "QueryCount": 6
+    },
+    {
+      "Name": "moneyflow_daily",
+      "SQL": "SELECT trade_date,count() AS rows,count_distinct(ts_code) AS codes,sum(case when ts_code IS NULL then 1 else 0 end) AS null_codes,sum(case when buy_sm_amount IS NULL then 1 else 0 end) AS null_buy_sm_amount,sum(case when net_mf_amount IS NULL then 1 else 0 end) AS null_net_mf_amount FROM moneyflow WHERE trade_date>='2026-09-22' AND trade_date<'2026-10-01' GROUP BY trade_date ORDER BY trade_date",
+      "Columns": [
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "rows",
+          "type": "LONG"
+        },
+        {
+          "name": "codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_buy_sm_amount",
+          "type": "LONG"
+        },
+        {
+          "name": "null_net_mf_amount",
+          "type": "LONG"
+        }
+      ],
+      "Rows": [
+        [
+          "2026-09-22T00:00:00Z",
+          5554,
+          5554,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-23T00:00:00Z",
+          5556,
+          5556,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-24T00:00:00Z",
+          5569,
+          5569,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          5569,
+          5569,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          5571,
+          5571,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-30T00:00:00Z",
+          5572,
+          5572,
+          0,
+          0,
+          0
+        ]
+      ],
+      "QueryCount": 6
+    },
+    {
+      "Name": "etf_daily_daily",
+      "SQL": "SELECT timestamp,count() AS rows,count_distinct(ts_code) AS codes,sum(case when ts_code IS NULL then 1 else 0 end) AS null_codes,sum(case when close IS NULL then 1 else 0 end) AS null_close,sum(case when close<=0 then 1 else 0 end) AS nonpositive_close,sum(case when vol IS NULL then 1 else 0 end) AS null_vol,sum(case when amount IS NULL then 1 else 0 end) AS null_amount FROM etf_daily WHERE timestamp>='2026-09-22' AND timestamp<'2026-10-01' GROUP BY timestamp ORDER BY timestamp",
+      "Columns": [
+        {
+          "name": "timestamp",
+          "type": "TIMESTAMP_NS"
+        },
+        {
+          "name": "rows",
+          "type": "LONG"
+        },
+        {
+          "name": "codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_close",
+          "type": "LONG"
+        },
+        {
+          "name": "nonpositive_close",
+          "type": "LONG"
+        },
+        {
+          "name": "null_vol",
+          "type": "LONG"
+        },
+        {
+          "name": "null_amount",
+          "type": "LONG"
+        }
+      ],
+      "Rows": [
+        [
+          "2026-09-22T00:00:00.000000000Z",
+          2148,
+          2148,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-23T00:00:00.000000000Z",
+          2134,
+          2134,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-24T00:00:00.000000000Z",
+          2134,
+          2134,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-28T00:00:00.000000000Z",
+          2163,
+          2163,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-29T00:00:00.000000000Z",
+          2136,
+          2136,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-30T00:00:00.000000000Z",
+          2140,
+          2140,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "QueryCount": 6
+    },
+    {
+      "Name": "etf_factor_daily",
+      "SQL": "SELECT trade_date,count() AS rows,count_distinct(ts_code) AS codes,sum(case when ts_code IS NULL then 1 else 0 end) AS null_codes,sum(case when close IS NULL then 1 else 0 end) AS null_close,sum(case when close<=0 then 1 else 0 end) AS nonpositive_close,sum(case when vol IS NULL then 1 else 0 end) AS null_vol,sum(case when amount IS NULL then 1 else 0 end) AS null_amount FROM etf_factor WHERE trade_date>='2026-09-22' AND trade_date<'2026-10-01' GROUP BY trade_date ORDER BY trade_date",
+      "Columns": [
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "rows",
+          "type": "LONG"
+        },
+        {
+          "name": "codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_close",
+          "type": "LONG"
+        },
+        {
+          "name": "nonpositive_close",
+          "type": "LONG"
+        },
+        {
+          "name": "null_vol",
+          "type": "LONG"
+        },
+        {
+          "name": "null_amount",
+          "type": "LONG"
+        }
+      ],
+      "Rows": [
+        [
+          "2026-09-22T00:00:00Z",
+          2148,
+          2148,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-23T00:00:00Z",
+          2134,
+          2134,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-24T00:00:00Z",
+          2134,
+          2134,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          2163,
+          2163,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          2136,
+          2136,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-30T00:00:00Z",
+          2140,
+          2140,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "QueryCount": 6
+    },
+    {
+      "Name": "margin_daily",
+      "SQL": "SELECT trade_date,count() AS rows,count_distinct(ts_code) AS codes,sum(case when ts_code IS NULL then 1 else 0 end) AS null_codes,sum(case when rzye IS NULL then 1 else 0 end) AS null_rzye,sum(case when rzmre IS NULL then 1 else 0 end) AS null_rzmre,sum(case when rzye<0 OR rzmre<0 then 1 else 0 end) AS invalid_required_balances,sum(case when rqye IS NULL then 1 else 0 end) AS null_rqye,sum(case when rzrqye IS NULL then 1 else 0 end) AS null_rzrqye FROM margin_detail WHERE trade_date>='2026-09-22' AND trade_date<'2026-10-01' GROUP BY trade_date ORDER BY trade_date",
+      "Columns": [
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "rows",
+          "type": "LONG"
+        },
+        {
+          "name": "codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_rzye",
+          "type": "LONG"
+        },
+        {
+          "name": "null_rzmre",
+          "type": "LONG"
+        },
+        {
+          "name": "invalid_required_balances",
+          "type": "LONG"
+        },
+        {
+          "name": "null_rqye",
+          "type": "LONG"
+        },
+        {
+          "name": "null_rzrqye",
+          "type": "LONG"
+        }
+      ],
+      "Rows": [
+        [
+          "2026-09-22T00:00:00Z",
+          4450,
+          4450,
+          0,
+          0,
+          0,
+          0,
+          3,
+          3
+        ],
+        [
+          "2026-09-23T00:00:00Z",
+          4451,
+          4451,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2
+        ],
+        [
+          "2026-09-24T00:00:00Z",
+          4452,
+          4452,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          4452,
+          4452,
+          0,
+          0,
+          0,
+          0,
+          2,
+          2
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          4454,
+          4454,
+          0,
+          0,
+          0,
+          0,
+          3,
+          3
+        ],
+        [
+          "2026-09-30T00:00:00Z",
+          2001,
+          2001,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ]
+      ],
+      "QueryCount": 6
+    },
+    {
+      "Name": "margin_exchange",
+      "SQL": "SELECT trade_date,right(ts_code,2) AS exchange,count() AS rows FROM margin_detail WHERE trade_date>='2026-09-28' AND trade_date<'2026-10-01' GROUP BY trade_date,exchange ORDER BY trade_date,exchange",
+      "Columns": [
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "exchange",
+          "type": "STRING"
+        },
+        {
+          "name": "rows",
+          "type": "LONG"
+        }
+      ],
+      "Rows": [
+        [
+          "2026-09-28T00:00:00Z",
+          "BJ",
+          344
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          "SH",
+          2002
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          "SZ",
+          2106
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          "BJ",
+          345
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          "SH",
+          2002
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          "SZ",
+          2107
+        ],
+        [
+          "2026-09-30T00:00:00Z",
+          "SH",
+          2001
+        ]
+      ],
+      "QueryCount": 7
+    },
+    {
+      "Name": "etf_targets_daily",
+      "SQL": "SELECT ts_code,timestamp,close,vol,amount FROM etf_daily WHERE timestamp>='2026-09-28' AND timestamp<'2026-10-01' AND ts_code IN ('512770.SH','589330.SH') ORDER BY timestamp,ts_code",
+      "Columns": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "timestamp",
+          "type": "TIMESTAMP_NS"
+        },
+        {
+          "name": "close",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "vol",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "amount",
+          "type": "DOUBLE"
+        }
+      ],
+      "Rows": [
+        [
+          "512770.SH",
+          "2026-09-28T00:00:00.000000000Z",
+          2.382,
+          26024.0,
+          6303.548
+        ],
+        [
+          "589330.SH",
+          "2026-09-28T00:00:00.000000000Z",
+          0.863,
+          54626.0,
+          4738.535
+        ],
+        [
+          "512770.SH",
+          "2026-09-29T00:00:00.000000000Z",
+          2.398,
+          12559.0,
+          3002.723
+        ],
+        [
+          "589330.SH",
+          "2026-09-29T00:00:00.000000000Z",
+          0.867,
+          43879.0,
+          3795.666
+        ],
+        [
+          "512770.SH",
+          "2026-09-30T00:00:00.000000000Z",
+          2.374,
+          7909.0,
+          1899.264
+        ],
+        [
+          "589330.SH",
+          "2026-09-30T00:00:00.000000000Z",
+          0.858,
+          19281.0,
+          1667.813
+        ]
+      ],
+      "QueryCount": 6
+    },
+    {
+      "Name": "etf_targets_factor",
+      "SQL": "SELECT ts_code,trade_date,close,vol,amount FROM etf_factor WHERE trade_date>='2026-09-28' AND trade_date<'2026-10-01' AND ts_code IN ('512770.SH','589330.SH') ORDER BY trade_date,ts_code",
+      "Columns": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "close",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "vol",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "amount",
+          "type": "DOUBLE"
+        }
+      ],
+      "Rows": [
+        [
+          "512770.SH",
+          "2026-09-28T00:00:00Z",
+          2.382,
+          26024.0,
+          6303.55
+        ],
+        [
+          "589330.SH",
+          "2026-09-28T00:00:00Z",
+          0.863,
+          54626.0,
+          4738.54
+        ],
+        [
+          "512770.SH",
+          "2026-09-29T00:00:00Z",
+          2.398,
+          12559.0,
+          3002.72
+        ],
+        [
+          "589330.SH",
+          "2026-09-29T00:00:00Z",
+          0.867,
+          43879.0,
+          3795.67
+        ],
+        [
+          "512770.SH",
+          "2026-09-30T00:00:00Z",
+          2.374,
+          7909.0,
+          1899.26
+        ],
+        [
+          "589330.SH",
+          "2026-09-30T00:00:00Z",
+          0.858,
+          19281.0,
+          1667.81
+        ]
+      ],
+      "QueryCount": 6
+    },
+    {
+      "Name": "etf_targets_disclosures",
+      "SQL": "SELECT ts_code,ann_date,end_date,count() AS rows,count_distinct(symbol) AS symbols,sum(stk_mkv_ratio) AS weight_sum,sum(case when symbol IS NULL then 1 else 0 end) AS null_symbols,sum(case when stk_mkv_ratio IS NULL then 1 else 0 end) AS null_weights,min(update_time) AS oldest_update,max(update_time) AS newest_update FROM etf_portfolio WHERE ts_code IN ('512770.SH','589330.SH') AND ann_date>='2026-01-01' AND ann_date<'2026-10-01' GROUP BY ts_code,ann_date,end_date ORDER BY ts_code,ann_date,end_date",
+      "Columns": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "ann_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "end_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "rows",
+          "type": "LONG"
+        },
+        {
+          "name": "symbols",
+          "type": "LONG"
+        },
+        {
+          "name": "weight_sum",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "null_symbols",
+          "type": "LONG"
+        },
+        {
+          "name": "null_weights",
+          "type": "LONG"
+        },
+        {
+          "name": "oldest_update",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "newest_update",
+          "type": "TIMESTAMP"
+        }
+      ],
+      "Rows": [
+        [
+          "512770.SH",
+          "2026-01-22T00:00:00Z",
+          "2025-12-31T00:00:00Z",
+          10,
+          10,
+          48.07,
+          0,
+          0,
+          "2026-08-05T19:03:34.05211Z",
+          "2026-08-05T19:03:34.05211Z"
+        ],
+        [
+          "512770.SH",
+          "2026-03-31T00:00:00Z",
+          "2025-12-31T00:00:00Z",
+          126,
+          126,
+          51.90999999999998,
+          0,
+          0,
+          "2026-08-05T19:06:03.411485Z",
+          "2026-08-05T19:06:03.411485Z"
+        ],
+        [
+          "512770.SH",
+          "2026-04-22T00:00:00Z",
+          "2026-03-31T00:00:00Z",
+          10,
+          10,
+          45.51,
+          0,
+          0,
+          "2026-08-05T19:06:03.411485Z",
+          "2026-08-05T19:06:03.411485Z"
+        ],
+        [
+          "512770.SH",
+          "2026-07-21T00:00:00Z",
+          "2026-06-30T00:00:00Z",
+          10,
+          10,
+          46.57,
+          0,
+          0,
+          "2026-08-05T19:07:23.324583Z",
+          "2026-08-05T19:07:23.324583Z"
+        ],
+        [
+          "512770.SH",
+          "2026-08-31T00:00:00Z",
+          "2026-06-30T00:00:00Z",
+          124,
+          124,
+          53.35999999999999,
+          0,
+          0,
+          "2026-10-07T11:29:08.786108Z",
+          "2026-10-07T11:29:08.786108Z"
+        ],
+        [
+          "589330.SH",
+          "2026-05-26T00:00:00Z",
+          "2026-05-22T00:00:00Z",
+          10,
+          10,
+          20.07,
+          0,
+          0,
+          "2026-08-05T19:07:12.63766Z",
+          "2026-08-05T19:07:12.63766Z"
+        ]
+      ],
+      "QueryCount": 6
+    },
+    {
+      "Name": "etf_portfolio_0831",
+      "SQL": "SELECT count() AS rows,sum(case when ts_code IS NULL OR symbol IS NULL OR ann_date IS NULL OR end_date IS NULL then 1 else 0 end) AS null_keys,sum(case when stk_mkv_ratio IS NULL then 1 else 0 end) AS null_weights FROM etf_portfolio WHERE ann_date>='2026-08-31' AND ann_date<'2026-09-01'",
+      "Columns": [
+        {
+          "name": "rows",
+          "type": "LONG"
+        },
+        {
+          "name": "null_keys",
+          "type": "LONG"
+        },
+        {
+          "name": "null_weights",
+          "type": "LONG"
+        }
+      ],
+      "Rows": [
+        [
+          901265,
+          0,
+          96
+        ]
+      ],
+      "QueryCount": 1
+    },
+    {
+      "Name": "etf_portfolio_target_latest",
+      "SQL": "SELECT ts_code,max(ann_date) AS latest_announcement FROM etf_portfolio WHERE ts_code IN ('512770.SH','589330.SH') AND ann_date<'2026-10-01' GROUP BY ts_code",
+      "Columns": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "latest_announcement",
+          "type": "TIMESTAMP"
+        }
+      ],
+      "Rows": [
+        [
+          "512770.SH",
+          "2026-08-31T00:00:00Z"
+        ],
+        [
+          "589330.SH",
+          "2026-05-26T00:00:00Z"
+        ]
+      ],
+      "QueryCount": 2
+    },
+    {
+      "Name": "wal_source_tables",
+      "SQL": "SELECT name,suspended,writerTxn,sequencerTxn,pendingTxnCount FROM wal_tables() WHERE name IN ('stk_factor','daily_basic','stk_limit','moneyflow','etf_daily','etf_factor','etf_portfolio','margin_detail')",
+      "Error": "\r\n{\r\n  \"query\": \"SELECT name,suspended,writerTxn,sequencerTxn,pendingTxnCount FROM wal_tables() WHERE name IN (\\u0027stk_factor\\u0027,\\u0027daily_basic\\u0027,\\u0027stk_limit\\u0027,\\u0027moneyflow\\u0027,\\u0027etf_daily\\u0027,\\u0027etf_factor\\u0027,\\u0027etf_portfolio\\u0027,\\u0027margin_detail\\u0027)\",\r\n  \"error\": \"Invalid column: pendingTxnCount\",\r\n  \"position\": 45\r\n}"
+    }
+  ]
+}

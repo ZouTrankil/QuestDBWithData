@@ -53,7 +53,7 @@ public final class StockLimitJobService {
         this.jobs = Objects.requireNonNull(jobs); this.pages = Objects.requireNonNull(pages);
         this.tradingDates = new StockLimitTradingDates(calendars); this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb);
-        this.ledgerPath = ledgerPath.toAbsolutePath().normalize(); requireIsolatedTableName(table); this.table = table;
+        this.ledgerPath = ledgerPath.toAbsolutePath().normalize(); requireExecutionTableName(table); this.table = table;
     }
 
     public String tableName() { return table; }
@@ -64,12 +64,22 @@ public final class StockLimitJobService {
             throw new IllegalStateException("D010 execution requires a dedicated java_d010_stk_limit_<suffix> isolated target");
     }
 
+    /** Existing formal table is allowed only through its bounded recovery owner; no formal DDL is issued. */
+    public static void requireExecutionTableName(String table) {
+        if (!"stk_limit".equals(table)) requireIsolatedTableName(table);
+    }
+
+    private void requireExecutionMode(Mode mode) {
+        if ("stk_limit".equals(table) && mode != Mode.BACKFILL && mode != Mode.RECONCILE)
+            throw new IllegalArgumentException("Formal stk_limit requires explicit bounded BACKFILL or RECONCILE; old rows do not establish incremental coverage");
+    }
+
     public String targetId() throws Exception {
-        requireIsolatedTableName(table);
+        requireExecutionTableName(table);
         var rows = jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name = ?", table);
         if (rows.size() != 1 || !(rows.getFirst().get("id") instanceof Number id)
                 || !(rows.getFirst().get("directoryName") instanceof String directory))
-            throw new IllegalStateException("Exact isolated stk_limit QuestDB target identity required");
+            throw new IllegalStateException("Exact stk_limit QuestDB target identity required");
         return StaticTargetIdentity.identify(jdbc, table, id.longValue(), directory);
     }
 
@@ -86,6 +96,7 @@ public final class StockLimitJobService {
         SyncJobDefinition definition = StockLimitSyncJobOwner.DEFINITION;
         Mode mode = requestedMode == null ? definition.defaultMode() : requestedMode;
         if (!definition.supportedModes().contains(mode)) throw new IllegalArgumentException("Unsupported stk_limit mode");
+        requireExecutionMode(mode);
         if ((mode == Mode.BACKFILL || mode == Mode.RECONCILE) && requestedThrough == null)
             throw new IllegalArgumentException("Bounded stk_limit backfill/reconcile requires explicit --to");
         if (mode == Mode.INCREMENTAL && bootstrapFrom != null
@@ -187,6 +198,7 @@ public final class StockLimitJobService {
         return execute("stk-limit-" + UUID.randomUUID(), Objects.requireNonNull(priorRunId), plan);
     }
     private SyncJobRunner.Result execute(String runId, String priorRunId, Plan plan) throws Exception {
+        requireExecutionMode(plan.request().mode());
         if (!plan.request().definition().equals(StockLimitSyncJobOwner.DEFINITION)
                 || !plan.targetId().equals(plan.request().parameters().get("targetId"))
                 || !plan.targetId().equals(targetId()))

@@ -39,9 +39,9 @@ public final class StockLimitWritePort implements VerifiedBatchExecutor.Port<Sto
     private volatile boolean uncertainSenderStopped;
 
     public StockLimitWritePort(String table, String expectedTargetId, JdbcTemplate jdbc, QuestDB questdb) {
-        StockLimitJobService.requireIsolatedTableName(table);
+        StockLimitJobService.requireExecutionTableName(table);
         if (expectedTargetId == null || !expectedTargetId.startsWith("static-v2-"))
-            throw new IllegalArgumentException("Frozen isolated stk_limit target identity required");
+            throw new IllegalArgumentException("Frozen stk_limit target identity required");
         this.table = table; this.expectedTargetId = expectedTargetId;
         this.jdbc = new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());
         this.jdbc.setQueryTimeout(20); this.jdbc.setMaxRows(10_001);
@@ -82,13 +82,21 @@ public final class StockLimitWritePort implements VerifiedBatchExecutor.Port<Sto
             throw new IllegalArgumentException("At most 250 unique complete stk_limit keys required");
         requireExpectedTarget();
         var clauses = new ArrayList<String>(); var parameters = new ArrayList<Object>();
+        var firstDate = keys.stream().map(StockLimitKey::tradeDate).min(Comparator.naturalOrder()).orElseThrow();
+        var lastDate = keys.stream().map(StockLimitKey::tradeDate).max(Comparator.naturalOrder()).orElseThrow();
+        parameters.add(new TemporalValues.CalendarTimestamp(firstDate).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        parameters.add(new TemporalValues.CalendarTimestamp(lastDate.plusDays(1)).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        var codes = keys.stream().map(StockLimitKey::tsCode).distinct().sorted().toList();
+        parameters.addAll(codes);
         for (var key : keys) {
             clauses.add("(ts_code = ? AND trade_date = cast(? as TIMESTAMP))");
             parameters.add(key.tsCode());
             parameters.add(new TemporalValues.CalendarTimestamp(key.tradeDate()).storageEpoch(TemporalValues.EpochUnit.MICROS));
         }
         String sql = "SELECT ts_code, cast(trade_date as long) AS trade_date_micros, up_limit, down_limit FROM \""
-                + table + "\" WHERE " + String.join(" OR ", clauses) + " ORDER BY trade_date, ts_code LIMIT " + (keys.size() + 1);
+                + table + "\" WHERE trade_date >= cast(? AS TIMESTAMP) AND trade_date < cast(? AS TIMESTAMP)"
+                + " AND ts_code IN (" + String.join(",", Collections.nCopies(codes.size(), "?")) + ")"
+                + " AND (" + String.join(" OR ", clauses) + ") ORDER BY trade_date, ts_code LIMIT " + (keys.size() + 1);
         return jdbc.query(sql, (rs, index) -> physical(rs), parameters.toArray());
     }
     /** Bounded distinct physical date inventory used to reject unexplained existing target rows. */

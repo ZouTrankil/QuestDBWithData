@@ -1,0 +1,16 @@
+{
+  "query": "SELECT max(trade_date) latest FROM v_regime_features_monitor_daily WHERE trade_date>='2026-09-21'",
+  "columns": [
+    {
+      "name": "latest",
+      "type": "TIMESTAMP"
+    }
+  ],
+  "timestamp": -1,
+  "dataset": [
+    [
+      "2026-09-30T00:00:00Z"
+    ]
+  ],
+  "count": 1
+}

@@ -43,6 +43,7 @@ public final class MarginDetailSource {
                 if(!row.tradeDate().equals(date)||!seen.add(row.key()))throw new IllegalArgumentException("D029 duplicate natural key or source row outside frozen trade_date");rows.add(row);}
             // Python records an empty/fully-filtered partition as skipped and unverified; it is not a checkpoint.
             if(rows.isEmpty())throw new IllegalStateException("D029 empty margin_detail session is unverified under the inspected Python sync contract");
+            requireFullMarketCoverage(exchangeCounts(raw,basic));
             byte[] bytes=body(date,params,raw,completed.sourceVersion(),rows.size(),footers,true,null);if(bytes.length>MAX_EVIDENCE_BYTES)throw new IllegalStateException("D029 raw receipt exceeds 32 MiB bound");
             String fingerprint=sha(bytes);Files.createDirectories(evidenceRoot);Path receipt=evidenceRoot.resolve("margin-detail-"+basic+"-"+fingerprint+".json");persist(receipt,bytes);
             return new SyncJobRunner.Page<>(List.copyOf(rows),fingerprint,receipt.toString(),basic);
@@ -63,6 +64,9 @@ public final class MarginDetailSource {
         List<Map<String,JsonNode>> raw=json.convertValue(proof.path("rawRows"),new TypeReference<>(){});var rows=new ArrayList<MarginDetail>();var keys=new HashSet<MarginDetailKey>();int footer=0;
         for(var item:raw){validateRow(item,basic);if(isFooter(item,basic)){footer++;continue;}var row=new MarginDetailMapper().fromSource(new MarginDetailMapper().dto(item));if(!keys.add(row.key()))throw new IllegalStateException("D029 source receipt contains duplicate natural key");rows.add(row);}
         if(footer!=proof.path("excludedDateFooters").asInt(-1)||rows.size()!=proof.path("normalizedRows").asInt(-1)||rows.isEmpty())throw new IllegalStateException("D029 normalized receipt totals differ from raw source rows");
+        var counts=exchangeCounts(raw,basic);requireFullMarketCoverage(counts);
+        if(proof.has("exchangeCounts")&&!json.valueToTree(counts).equals(proof.path("exchangeCounts")))throw new IllegalStateException("D029 source receipt exchange counts differ from its raw response");
+        if(proof.has("fullMarketCoverageVerified")&&!proof.path("fullMarketCoverageVerified").asBoolean(false))throw new IllegalStateException("D029 source receipt has unverified market coverage");
         var canonical=new ArrayList<>(raw);canonical.sort(Comparator.comparing((Map<String,JsonNode> row)->value(row,"ts_code")).thenComparing(row->value(row,"trade_date")));
         if(!json.valueToTree(canonical).equals(json.valueToTree(raw)))throw new IllegalStateException("D029 raw receipt rows are not deterministically ordered");
         return new SyncJobRunner.Page<>(List.copyOf(rows),fingerprint,path.toString(),basic);
@@ -80,11 +84,24 @@ public final class MarginDetailSource {
         if(footer&&NUMERIC.stream().anyMatch(f->row.get(f)!=null&&!row.get(f).isNull()))throw new IllegalArgumentException("D029 date footer is not fully empty");
     }
     private static boolean isFooter(Map<String,JsonNode> row,String date){return footerLabel(date).equals(value(row,"ts_code"));}
+    /** Presence is a minimum publication check, not a claim that a prior-date roster is today's complete universe. */
+    private static Map<String,Integer> exchangeCounts(List<Map<String,JsonNode>> rows,String basic){
+        var counts=new LinkedHashMap<String,Integer>();counts.put("SH",0);counts.put("SZ",0);counts.put("BJ",0);
+        for(var row:rows){if(isFooter(row,basic))continue;String code=value(row,"ts_code"),exchange=code.substring(code.lastIndexOf('.')+1);
+            if(counts.containsKey(exchange))counts.compute(exchange,(key,count)->Math.addExact(count,1));}
+        return Collections.unmodifiableMap(counts);
+    }
+    private static void requireFullMarketCoverage(Map<String,Integer> counts){
+        if(counts.getOrDefault("SH",0)<1||counts.getOrDefault("SZ",0)<1)
+            throw new IllegalStateException("D029 full-market margin_detail publication is unverified: required SH/SZ coverage missing; exchangeCounts="+counts);
+    }
     private static String footerLabel(String basic){LocalDate date=LocalDate.parse(basic,BASIC);return "日期："+date+".BJ";}
     private static String value(Map<String,JsonNode> row,String field){JsonNode value=row==null?null:row.get(field);return value==null||value.isNull()?"":value.asText();}
     private static byte[] body(LocalDate date,Map<String,Object> params,List<Map<String,JsonNode>> rows,String sourceVersion,int normalized,int footers,boolean complete,Exception failure)throws Exception{
         var json=JobDefinitionJson.mapper().copy().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true);var body=new LinkedHashMap<String,Object>();body.put("sourceKind","tushare");body.put("endpoint","margin_detail");body.put("sourceContractVersion",1);
         body.put("parameters",params);body.put("fields",FIELDS);body.put("tradeDate",date.toString());body.put("apiMaximumRows",API_ROW_CAP);body.put("returnedRows",rows.size());body.put("normalizedRows",normalized);body.put("excludedDateFooters",footers);body.put("rawRows",rows);body.put("sourceComplete",complete);
+        var counts=exchangeCounts(rows,date.format(BASIC));body.put("exchangeCounts",counts);body.put("marketCoveragePolicy","required_sh_sz_presence_bj_observed");
+        body.put("fullMarketCoverageVerified",complete&&counts.get("SH")>0&&counts.get("SZ")>0);
         if(sourceVersion!=null)body.put("sourceVersion",sourceVersion);if(failure!=null)body.put("failureType",failure.getClass().getSimpleName());return json.writeValueAsBytes(body);
     }
     private void persistUnverified(LocalDate date,Map<String,Object> params,List<Map<String,JsonNode>> rows,String sourceVersion,Exception failure)throws Exception{

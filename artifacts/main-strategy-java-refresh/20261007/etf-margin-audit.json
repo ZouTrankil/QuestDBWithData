@@ -1,0 +1,885 @@
+{
+  "observed_at": "2026-10-07T12:33:27.9628174Z",
+  "scope_start": "2026-09-22",
+  "scope_end": "2026-09-30",
+  "questdb_endpoint": "http://127.0.0.1:9000",
+  "audit_read_only": true,
+  "provider_calls": 0,
+  "source_tables": [
+    {
+      "table": "stk_factor",
+      "latest_as_of_0930": "2026-09-30T00:00:00Z",
+      "latest_rows": 5560,
+      "daily_rows": [
+        {
+          "date": "2026-09-22T00:00:00Z",
+          "rows": 5554,
+          "unique_codes": 5554,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-23T00:00:00Z",
+          "rows": 5556,
+          "unique_codes": 5556,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-24T00:00:00Z",
+          "rows": 5557,
+          "unique_codes": 5557,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-28T00:00:00Z",
+          "rows": 5557,
+          "unique_codes": 5557,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-29T00:00:00Z",
+          "rows": 5559,
+          "unique_codes": 5559,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-30T00:00:00Z",
+          "rows": 5560,
+          "unique_codes": 5560,
+          "duplicate_key_excess": 0
+        }
+      ],
+      "duplicate_key_excess": 0.0,
+      "key_nulls": 0.0,
+      "latest_status": "through_20260930",
+      "query_evidence": "stk_factor_daily"
+    },
+    {
+      "table": "daily_basic",
+      "latest_as_of_0930": "2026-09-30T00:00:00Z",
+      "latest_rows": 5561,
+      "daily_rows": [
+        {
+          "date": "2026-09-22T00:00:00Z",
+          "rows": 5554,
+          "unique_codes": 5554,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-23T00:00:00Z",
+          "rows": 5556,
+          "unique_codes": 5556,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-24T00:00:00Z",
+          "rows": 5557,
+          "unique_codes": 5557,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-28T00:00:00Z",
+          "rows": 5557,
+          "unique_codes": 5557,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-29T00:00:00Z",
+          "rows": 5559,
+          "unique_codes": 5559,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-30T00:00:00Z",
+          "rows": 5561,
+          "unique_codes": 5561,
+          "duplicate_key_excess": 0
+        }
+      ],
+      "duplicate_key_excess": 0.0,
+      "key_nulls": 0.0,
+      "latest_status": "through_20260930",
+      "query_evidence": "daily_basic_daily"
+    },
+    {
+      "table": "stk_limit",
+      "latest_as_of_0930": "2026-09-30T00:00:00Z",
+      "latest_rows": 5651,
+      "daily_rows": [
+        {
+          "date": "2026-09-22T00:00:00Z",
+          "rows": 5646,
+          "unique_codes": 5646,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-23T00:00:00Z",
+          "rows": 5647,
+          "unique_codes": 5647,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-24T00:00:00Z",
+          "rows": 5648,
+          "unique_codes": 5648,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-28T00:00:00Z",
+          "rows": 5648,
+          "unique_codes": 5648,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-29T00:00:00Z",
+          "rows": 5650,
+          "unique_codes": 5650,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-30T00:00:00Z",
+          "rows": 5651,
+          "unique_codes": 5651,
+          "duplicate_key_excess": 0
+        }
+      ],
+      "duplicate_key_excess": 0.0,
+      "key_nulls": 0.0,
+      "latest_status": "through_20260930",
+      "query_evidence": "stk_limit_daily"
+    },
+    {
+      "table": "moneyflow",
+      "latest_as_of_0930": "2026-09-30T00:00:00Z",
+      "latest_rows": 5572,
+      "daily_rows": [
+        {
+          "date": "2026-09-22T00:00:00Z",
+          "rows": 5554,
+          "unique_codes": 5554,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-23T00:00:00Z",
+          "rows": 5556,
+          "unique_codes": 5556,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-24T00:00:00Z",
+          "rows": 5569,
+          "unique_codes": 5569,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-28T00:00:00Z",
+          "rows": 5569,
+          "unique_codes": 5569,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-29T00:00:00Z",
+          "rows": 5571,
+          "unique_codes": 5571,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-30T00:00:00Z",
+          "rows": 5572,
+          "unique_codes": 5572,
+          "duplicate_key_excess": 0
+        }
+      ],
+      "duplicate_key_excess": 0.0,
+      "key_nulls": 0.0,
+      "latest_status": "through_20260930",
+      "query_evidence": "moneyflow_daily"
+    },
+    {
+      "table": "etf_daily",
+      "latest_as_of_0930": "2026-09-30T00:00:00.000000000Z",
+      "latest_rows": 2140,
+      "daily_rows": [
+        {
+          "date": "2026-09-22T00:00:00.000000000Z",
+          "rows": 2148,
+          "unique_codes": 2148,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-23T00:00:00.000000000Z",
+          "rows": 2134,
+          "unique_codes": 2134,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-24T00:00:00.000000000Z",
+          "rows": 2134,
+          "unique_codes": 2134,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-28T00:00:00.000000000Z",
+          "rows": 2163,
+          "unique_codes": 2163,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-29T00:00:00.000000000Z",
+          "rows": 2136,
+          "unique_codes": 2136,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-30T00:00:00.000000000Z",
+          "rows": 2140,
+          "unique_codes": 2140,
+          "duplicate_key_excess": 0
+        }
+      ],
+      "duplicate_key_excess": 0.0,
+      "key_nulls": 0.0,
+      "latest_status": "through_20260930",
+      "query_evidence": "etf_daily_daily"
+    },
+    {
+      "table": "etf_factor",
+      "latest_as_of_0930": "2026-09-30T00:00:00Z",
+      "latest_rows": 2140,
+      "daily_rows": [
+        {
+          "date": "2026-09-22T00:00:00Z",
+          "rows": 2148,
+          "unique_codes": 2148,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-23T00:00:00Z",
+          "rows": 2134,
+          "unique_codes": 2134,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-24T00:00:00Z",
+          "rows": 2134,
+          "unique_codes": 2134,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-28T00:00:00Z",
+          "rows": 2163,
+          "unique_codes": 2163,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-29T00:00:00Z",
+          "rows": 2136,
+          "unique_codes": 2136,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-30T00:00:00Z",
+          "rows": 2140,
+          "unique_codes": 2140,
+          "duplicate_key_excess": 0
+        }
+      ],
+      "duplicate_key_excess": 0.0,
+      "key_nulls": 0.0,
+      "latest_status": "through_20260930",
+      "query_evidence": "etf_factor_daily"
+    },
+    {
+      "table": "margin_detail",
+      "latest_as_of_0930": "2026-09-30T00:00:00Z",
+      "latest_rows": 2001,
+      "daily_rows": [
+        {
+          "date": "2026-09-22T00:00:00Z",
+          "rows": 4450,
+          "unique_codes": 4450,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-23T00:00:00Z",
+          "rows": 4451,
+          "unique_codes": 4451,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-24T00:00:00Z",
+          "rows": 4452,
+          "unique_codes": 4452,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-28T00:00:00Z",
+          "rows": 4452,
+          "unique_codes": 4452,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-29T00:00:00Z",
+          "rows": 4454,
+          "unique_codes": 4454,
+          "duplicate_key_excess": 0
+        },
+        {
+          "date": "2026-09-30T00:00:00Z",
+          "rows": 2001,
+          "unique_codes": 2001,
+          "duplicate_key_excess": 0
+        }
+      ],
+      "duplicate_key_excess": 0.0,
+      "key_nulls": 0.0,
+      "latest_status": "partial_2001_SH_only",
+      "query_evidence": "margin_daily"
+    }
+  ],
+  "completed_source_jobs": [
+    {
+      "log": "stk-factor-0922-0924.log",
+      "result": {
+        "runId": "stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518",
+        "state": "VERIFIED",
+        "sourceRows": 16667,
+        "verifiedRows": 16667,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "acceptance": "verified_returned_source_scope"
+    },
+    {
+      "log": "stk-factor-0928-0930.log",
+      "result": {
+        "runId": "stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468",
+        "state": "VERIFIED",
+        "sourceRows": 16676,
+        "verifiedRows": 16676,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "acceptance": "verified_returned_source_scope"
+    },
+    {
+      "log": "daily-basic-resume.log",
+      "result": {
+        "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+        "state": "VERIFIED",
+        "sourceRows": 33344,
+        "verifiedRows": 33344,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "acceptance": "verified_returned_source_scope"
+    },
+    {
+      "log": "stk-limit-resume.log",
+      "result": {
+        "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+        "state": "VERIFIED",
+        "sourceRows": 33890,
+        "verifiedRows": 33890,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "acceptance": "verified_returned_source_scope"
+    },
+    {
+      "log": "moneyflow-0922-0924.log",
+      "result": {
+        "runId": "moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a",
+        "state": "VERIFIED",
+        "sourceRows": 16679,
+        "verifiedRows": 16679,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "acceptance": "verified_returned_source_scope"
+    },
+    {
+      "log": "moneyflow-0928-0930.log",
+      "result": {
+        "runId": "moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b",
+        "state": "VERIFIED",
+        "sourceRows": 16712,
+        "verifiedRows": 16712,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "acceptance": "verified_returned_source_scope"
+    },
+    {
+      "log": "etf-daily-0928-0930.log",
+      "result": {
+        "runId": "etf-daily-3c9cfe0f-0f86-47e1-95ef-6213e05debd7",
+        "state": "VERIFIED",
+        "sourceRows": 6439,
+        "verifiedRows": 6439,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "acceptance": "verified_returned_source_scope"
+    },
+    {
+      "log": "etf-factor-0922-0930.log",
+      "result": {
+        "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+        "state": "VERIFIED",
+        "sourceRows": 12855,
+        "verifiedRows": 12855,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "acceptance": "verified_returned_source_scope"
+    },
+    {
+      "log": "etf-portfolio-0928-0930.log",
+      "result": {
+        "runId": "etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79",
+        "state": "VERIFIED_EMPTY",
+        "sourceRows": 0,
+        "verifiedRows": 0,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "acceptance": "verified_returned_source_scope"
+    },
+    {
+      "log": "margin-detail-0922-0930.log",
+      "result": {
+        "runId": "margin-detail-987f94ff-12f7-4dbe-b1ae-5e10d12b50c3",
+        "state": "VERIFIED",
+        "sourceRows": 24260,
+        "verifiedRows": 24260,
+        "errorCode": null,
+        "reusedRows": 0
+      },
+      "acceptance": "partial_latest_date_despite_historic_VERIFIED"
+    }
+  ],
+  "wal_evidence": {
+    "Name": "wal_source_tables",
+    "SQL": "SELECT * FROM wal_tables() WHERE name IN ('stk_factor','daily_basic','stk_limit','moneyflow','etf_daily','etf_factor','etf_portfolio','margin_detail')",
+    "Columns": [
+      {
+        "name": "name",
+        "type": "STRING"
+      },
+      {
+        "name": "suspended",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "writerTxn",
+        "type": "LONG"
+      },
+      {
+        "name": "bufferedTxnSize",
+        "type": "LONG"
+      },
+      {
+        "name": "sequencerTxn",
+        "type": "LONG"
+      },
+      {
+        "name": "errorTag",
+        "type": "STRING"
+      },
+      {
+        "name": "errorMessage",
+        "type": "STRING"
+      },
+      {
+        "name": "memoryPressure",
+        "type": "INT"
+      }
+    ],
+    "Rows": [
+      [
+        "etf_daily",
+        false,
+        40,
+        0,
+        40,
+        "",
+        "",
+        0
+      ],
+      [
+        "etf_factor",
+        false,
+        58,
+        0,
+        58,
+        "",
+        "",
+        0
+      ],
+      [
+        "stk_limit",
+        false,
+        216,
+        0,
+        216,
+        "",
+        "",
+        0
+      ],
+      [
+        "etf_portfolio",
+        false,
+        1529,
+        0,
+        1529,
+        "",
+        "",
+        0
+      ],
+      [
+        "margin_detail",
+        false,
+        121,
+        0,
+        121,
+        "",
+        "",
+        0
+      ],
+      [
+        "daily_basic",
+        false,
+        205,
+        0,
+        205,
+        "",
+        "",
+        0
+      ],
+      [
+        "stk_factor",
+        false,
+        156,
+        0,
+        156,
+        "",
+        "",
+        0
+      ],
+      [
+        "moneyflow",
+        false,
+        175,
+        0,
+        175,
+        "",
+        "",
+        0
+      ]
+    ],
+    "QueryCount": 8
+  },
+  "margin_provider": {
+    "dataset": "margin_detail",
+    "as_of_trade_date": "2026-09-30",
+    "diagnostic_source": "existing Java TushareClient / WebFlux",
+    "maximum_requests": 7,
+    "observed_requests": 7,
+    "provider_calls_in_this_audit": 0,
+    "writes_database": false,
+    "complete_source_date": "2026-09-29",
+    "physical_latest_date": "2026-09-30",
+    "latest_date_status": "partial_sh_only",
+    "bulk_latest_rows": 2001,
+    "bulk_latest_exchange_counts": {
+      "SH": 2001,
+      "SZ": 0,
+      "BJ": 0
+    },
+    "exact_missing_examples": [
+      "000001.SZ",
+      "920229.BJ",
+      "600363.SH"
+    ],
+    "official_exchange_publication_verified": false,
+    "conclusion": "Current configured Tushare bulk and sampled exact/range responses do not supply 20260930 SZ/BJ; exchange official publication is not established by these probes.",
+    "source_guard": "SH and SZ presence required before complete; BJ counts recorded; missing markets retain unverified raw SHA evidence.",
+    "probes": [
+      {
+        "request_index": 0,
+        "parameters": {
+          "trade_date": "20260930"
+        },
+        "status": "observed",
+        "returned_rows": 2001,
+        "exchange_counts": {
+          "SH": 2001
+        },
+        "observed_dates": [
+          "20260930"
+        ],
+        "scope_matches": true,
+        "observed_at": "2026-10-07T12:16:23.799825700Z",
+        "receipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\margin-provider-probe\\probe-0-d931b2ad962039e7cdb8664eec16806a466a8426e60d3ae1ab12be1d3dd2c316.json",
+        "sha256": "d931b2ad962039e7cdb8664eec16806a466a8426e60d3ae1ab12be1d3dd2c316",
+        "filename_sha_matches": true
+      },
+      {
+        "request_index": 1,
+        "parameters": {
+          "trade_date": "20260930",
+          "ts_code": "000001.SZ"
+        },
+        "status": "observed",
+        "returned_rows": 0,
+        "exchange_counts": {},
+        "observed_dates": [],
+        "scope_matches": true,
+        "observed_at": "2026-10-07T12:16:25.400248400Z",
+        "receipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\margin-provider-probe\\probe-1-34a7a76d5be6ec4181c57987420d9dcbe0cae421ed7bfbc94a905f075adef8f6.json",
+        "sha256": "34a7a76d5be6ec4181c57987420d9dcbe0cae421ed7bfbc94a905f075adef8f6",
+        "filename_sha_matches": true
+      },
+      {
+        "request_index": 2,
+        "parameters": {
+          "trade_date": "20260930",
+          "ts_code": "920229.BJ"
+        },
+        "status": "observed",
+        "returned_rows": 0,
+        "exchange_counts": {},
+        "observed_dates": [],
+        "scope_matches": true,
+        "observed_at": "2026-10-07T12:16:29.924976800Z",
+        "receipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\margin-provider-probe\\probe-2-e20c6ddb19092476cb9459a3d5101bc04c7694c467eee5a064f378240fa60a39.json",
+        "sha256": "e20c6ddb19092476cb9459a3d5101bc04c7694c467eee5a064f378240fa60a39",
+        "filename_sha_matches": true
+      },
+      {
+        "request_index": 3,
+        "parameters": {
+          "trade_date": "20260930",
+          "ts_code": "600000.SH"
+        },
+        "status": "observed",
+        "returned_rows": 1,
+        "exchange_counts": {
+          "SH": 1
+        },
+        "observed_dates": [
+          "20260930"
+        ],
+        "scope_matches": true,
+        "observed_at": "2026-10-07T12:16:35.922742400Z",
+        "receipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\margin-provider-probe\\probe-3-bc765a0d953e94b140d0593084d68788d8c205db9a7afc0dd9adb03e24894d36.json",
+        "sha256": "bc765a0d953e94b140d0593084d68788d8c205db9a7afc0dd9adb03e24894d36",
+        "filename_sha_matches": true
+      },
+      {
+        "request_index": 4,
+        "parameters": {
+          "trade_date": "20260930",
+          "ts_code": "600363.SH"
+        },
+        "status": "observed",
+        "returned_rows": 0,
+        "exchange_counts": {},
+        "observed_dates": [],
+        "scope_matches": true,
+        "observed_at": "2026-10-07T12:16:41.955686400Z",
+        "receipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\margin-provider-probe\\probe-4-7f5c474b217afac606544c826d5f74fedd6f21a5fb78b6443a4309970d6e4a09.json",
+        "sha256": "7f5c474b217afac606544c826d5f74fedd6f21a5fb78b6443a4309970d6e4a09",
+        "filename_sha_matches": true
+      },
+      {
+        "request_index": 5,
+        "parameters": {
+          "end_date": "20260930",
+          "start_date": "20260929",
+          "ts_code": "000001.SZ"
+        },
+        "status": "observed",
+        "returned_rows": 1,
+        "exchange_counts": {
+          "SZ": 1
+        },
+        "observed_dates": [
+          "20260929"
+        ],
+        "scope_matches": true,
+        "observed_at": "2026-10-07T12:16:47.965775300Z",
+        "receipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\margin-provider-probe\\probe-5-cec7c505325066646778ab7bdf3e54f377c4817de51d23b367467a7ca409dc01.json",
+        "sha256": "cec7c505325066646778ab7bdf3e54f377c4817de51d23b367467a7ca409dc01",
+        "filename_sha_matches": true
+      },
+      {
+        "request_index": 6,
+        "parameters": {
+          "end_date": "20260930",
+          "start_date": "20260929",
+          "ts_code": "920229.BJ"
+        },
+        "status": "observed",
+        "returned_rows": 1,
+        "exchange_counts": {
+          "BJ": 1
+        },
+        "observed_dates": [
+          "20260929"
+        ],
+        "scope_matches": true,
+        "observed_at": "2026-10-07T12:16:53.952437100Z",
+        "receipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\margin-provider-probe\\probe-6-1504dea469cfa9e7a1656c32a19cdd46d4b46d7c62a9b31e40cf867ad25f7f47.json",
+        "sha256": "1504dea469cfa9e7a1656c32a19cdd46d4b46d7c62a9b31e40cf867ad25f7f47",
+        "filename_sha_matches": true
+      }
+    ]
+  },
+  "etf_targets": [
+    {
+      "ts_code": "512770.SH",
+      "latest_announcement": "2026-08-31",
+      "report_date": "2026-06-30",
+      "latest_announcement_rows": 124,
+      "latest_announcement_weight_sum": 53.36,
+      "same_report_combined_announcement_rows": 134,
+      "same_report_combined_weight_sum": 99.93,
+      "freshness_days_as_of_0930": 30,
+      "daily_close_0930": 2.374,
+      "warning": "Latest-announcement-only consumer excludes the prior 10 rows / 46.57 from the same report. No strategy selection policy was changed."
+    },
+    {
+      "ts_code": "589330.SH",
+      "latest_announcement": "2026-05-26",
+      "report_date": "2026-05-22",
+      "latest_announcement_rows": 10,
+      "latest_announcement_weight_sum": 20.07,
+      "freshness_days_as_of_0930": 127,
+      "freshness_limit_days": 120,
+      "daily_close_0930": 0.858,
+      "warning": "Over the 120-day governance window; current existing source evidence has no later disclosure. Do not manufacture a 0930 announcement."
+    }
+  ],
+  "etf_portfolio_0831_reused_full_key_value_verification": {
+    "checked_at": "2026-10-07T19:30:17.808297+08:00",
+    "as_of": "2026-09-30",
+    "ann_date": "2026-08-31",
+    "read_only_verification": true,
+    "source_json_sha256": "3d82929226699e7689a1199e99671395ce43d80136621e481f39f2b51068264d",
+    "source_rows": 901265,
+    "source_duplicate_keys": 0,
+    "local_rows": 901265,
+    "local_duplicate_keys": 0,
+    "missing_source_keys": 0,
+    "extra_local_keys": 0,
+    "compared_numeric_values": 3605060,
+    "value_differences": 0,
+    "numeric_tolerance": {
+      "relative": 1E-09,
+      "absolute": 1E-06
+    },
+    "examples": [],
+    "missing_key_examples": [],
+    "wal_health": [
+      {
+        "table_name": "etf_portfolio",
+        "dedup": true,
+        "table_txn": 1529,
+        "wal_txn": 1529,
+        "wal_pending_row_count": 0,
+        "table_suspended": false
+      }
+    ],
+    "sync_ledger_outcome": [
+      {
+        "table_name": "etf_portfolio",
+        "status": "success",
+        "fetched_rows": 901265,
+        "accepted_rows": 901265,
+        "visible_rows": 901265,
+        "failed_rows": 0,
+        "unknown_rows": 0,
+        "completion_verified": 1,
+        "message": "",
+        "attempt_id": "3feaa691d92d495e8c35e1c399e2e0a4",
+        "duration": 140.82835817337036,
+        "sync_function": "sync_etf_portfolio"
+      }
+    ],
+    "target_disclosures": [
+      {
+        "ts_code": "512770.SH",
+        "ann_date": "2026-08-31T00:00:00Z",
+        "end_date": "2026-06-30T00:00:00Z",
+        "rows": 124,
+        "weight_sum": 53.35999999999999
+      },
+      {
+        "ts_code": "512770.SH",
+        "ann_date": "2026-07-21T00:00:00Z",
+        "end_date": "2026-06-30T00:00:00Z",
+        "rows": 10,
+        "weight_sum": 46.57
+      },
+      {
+        "ts_code": "589330.SH",
+        "ann_date": "2026-05-26T00:00:00Z",
+        "end_date": "2026-05-22T00:00:00Z",
+        "rows": 10,
+        "weight_sum": 20.07
+      }
+    ],
+    "passed": true
+  },
+  "etf_portfolio_current_0831_rows": 901265,
+  "etf_portfolio_current_0831_null_weights": 96,
+  "etf_target_duplicate_keys": 0,
+  "etf_target_daily_factor_close_compared_rows": 6,
+  "etf_target_daily_factor_close_differences": 0,
+  "strategy_acceptance": "not_complete: margin0930 partial and ETF589330 disclosure freshness warning; market calculation acceptance belongs to coordinator",
+  "evidence_files": [
+    "etf-margin-audit-queries.json",
+    "etf-margin-audit-extra-queries.json",
+    "etf-target-duplicate-keys.json"
+  ],
+  "margin_coverage_guard_verification": {
+    "run_id": "margin-detail-1d2ebba8-0785-48ac-8292-ae4c928e829a",
+    "state": "FAILED",
+    "expected_rejection": true,
+    "source_rows": 0,
+    "verified_rows": 0,
+    "reused_rows": 0,
+    "error_code": "IllegalStateException",
+    "cli_exit_code": 3,
+    "raw_returned_rows": 2001,
+    "raw_normalized_rows": 2001,
+    "exchange_counts": {
+      "BJ": 0,
+      "SH": 2001,
+      "SZ": 0
+    },
+    "source_complete": false,
+    "full_market_coverage_verified": false,
+    "market_coverage_policy": "required_sh_sz_presence_bj_observed",
+    "raw_receipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\margin-detail-1d2ebba8-0785-48ac-8292-ae4c928e829a\\source\\unverified-20260930-db825b08c86a586f005809a449c0c54178a9d7e6412716ba07fb5321822ed33b.json",
+    "raw_sha256": "db825b08c86a586f005809a449c0c54178a9d7e6412716ba07fb5321822ed33b",
+    "raw_filename_sha_matches": true,
+    "before": [
+      [
+        2001,
+        2001,
+        1286761675955.0
+      ]
+    ],
+    "after": [
+      [
+        2001,
+        2001,
+        1286761675955.0
+      ]
+    ],
+    "aggregate_unchanged": true,
+    "data_acceptance": "0930 remains partial; guard rejection is verified, not completed market data"
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "0": {
+    "query": "SHOW CREATE VIEW v_backtest_daily",
+    "columns": [
+      {
+        "name": "ddl",
+        "type": "VARCHAR"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "CREATE VIEW 'v_backtest_daily' AS ( \nSELECT b.trade_date, b.ts_code, b.open, b.high, b.low, b.close,\n       b.vol, b.amount, b.adj_factor, l.up_limit, l.down_limit,\n       coalesce(s.is_suspended, 0) is_suspended, coalesce(st.is_st, 0) is_st\nFROM stk_factor b\nLEFT JOIN stk_limit l ON (b.trade_date = l.trade_date AND b.ts_code = l.ts_code)\nLEFT JOIN (SELECT timestamp, ts_code, max(is_suspended) is_suspended\n           FROM stk_suspend GROUP BY timestamp, ts_code) s ON (b.trade_date = s.timestamp AND b.ts_code = s.ts_code)\nLEFT JOIN stk_st_daily st ON (b.trade_date = st.timestamp AND b.ts_code = st.ts_code)\nUNION ALL\nSELECT s.trade_date, s.ts_code, f.close AS open, f.close AS high,\n       f.close AS low, f.close AS close, 0.0 AS vol, 0.0 AS amount,\n       f.adj_factor, l.up_limit, l.down_limit, s.is_suspended,\n       coalesce(st.is_st, 0) is_st\nFROM ((SELECT timestamp AS trade_date, ts_code, max(is_suspended) is_suspended\n      FROM stk_suspend GROUP BY timestamp, ts_code ORDER BY trade_date) TIMESTAMP(trade_date)) s\nASOF JOIN stk_factor f ON (ts_code)\nLEFT JOIN stk_limit l ON (s.trade_date = l.trade_date AND s.ts_code = l.ts_code)\nLEFT JOIN stk_st_daily st ON (s.trade_date = st.timestamp AND s.ts_code = st.ts_code)\nJOIN (SELECT DISTINCT trade_date FROM stk_factor) fd ON s.trade_date = fd.trade_date\nWHERE f.trade_date < s.trade_date\n);"
+      ]
+    ],
+    "count": 1
+  },
+  "1": {
+    "query": "SELECT max(timestamp) AS latest_date,count() AS physical_rows FROM stk_suspend",
+    "columns": [
+      {
+        "name": "latest_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "physical_rows",
+        "type": "LONG"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "2026-09-30T00:00:00Z",
+        128440
+      ]
+    ],
+    "count": 1
+  },
+  "2": {
+    "query": "SELECT max(timestamp) AS latest_date,count() AS physical_rows FROM stk_st_daily",
+    "columns": [
+      {
+        "name": "latest_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "physical_rows",
+        "type": "LONG"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "2026-09-30T00:00:00Z",
+        830433
+      ]
+    ],
+    "count": 1
+  },
+  "3": {
+    "query": "SELECT ts_code,trade_date,close FROM daily_basic WHERE trade_date = '2026-09-30' AND ts_code NOT IN (SELECT ts_code FROM stk_factor WHERE trade_date = '2026-09-30')",
+    "columns": [
+      {
+        "name": "ts_code",
+        "type": "SYMBOL"
+      },
+      {
+        "name": "trade_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "close",
+        "type": "DOUBLE"
+      }
+    ],
+    "timestamp": 1,
+    "dataset": [
+      [
+        "001246.SZ",
+        "2026-09-30T00:00:00Z",
+        65.09
+      ]
+    ],
+    "count": 1
+  },
+  "4": {
+    "query": "SELECT * FROM exchange_calendar WHERE cal_date >= '2026-09-22' AND cal_date <= '2026-09-30' AND exchange = 'SSE'",
+    "columns": [
+      {
+        "name": "exchange",
+        "type": "SYMBOL"
+      },
+      {
+        "name": "cal_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "is_open",
+        "type": "INT"
+      },
+      {
+        "name": "pretrade_date",
+        "type": "STRING"
+      }
+    ],
+    "timestamp": 1,
+    "dataset": [
+      [
+        "SSE",
+        "2026-09-22T00:00:00Z",
+        1,
+        "20260921"
+      ],
+      [
+        "SSE",
+        "2026-09-23T00:00:00Z",
+        1,
+        "20260922"
+      ],
+      [
+        "SSE",
+        "2026-09-24T00:00:00Z",
+        1,
+        "20260923"
+      ],
+      [
+        "SSE",
+        "2026-09-25T00:00:00Z",
+        0,
+        "20260924"
+      ],
+      [
+        "SSE",
+        "2026-09-26T00:00:00Z",
+        0,
+        "20260924"
+      ],
+      [
+        "SSE",
+        "2026-09-27T00:00:00Z",
+        0,
+        "20260924"
+      ],
+      [
+        "SSE",
+        "2026-09-28T00:00:00Z",
+        1,
+        "20260924"
+      ],
+      [
+        "SSE",
+        "2026-09-29T00:00:00Z",
+        1,
+        "20260928"
+      ],
+      [
+        "SSE",
+        "2026-09-30T00:00:00Z",
+        1,
+        "20260929"
+      ]
+    ],
+    "count": 9
+  }
+}

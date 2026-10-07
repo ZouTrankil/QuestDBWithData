@@ -84,6 +84,13 @@ public final class DailyBasicWritePort implements VerifiedBatchExecutor.Port<Dai
             throw new IllegalArgumentException("Finite unique complete daily_basic keys required");
         var clauses = new ArrayList<String>();
         var parameters = new ArrayList<Object>();
+        // Keep exact key pairs while making the timestamp interval visible to the storage planner.
+        var firstDate = keys.stream().map(DailyBasicKey::tradeDate).min(Comparator.naturalOrder()).orElseThrow();
+        var lastDate = keys.stream().map(DailyBasicKey::tradeDate).max(Comparator.naturalOrder()).orElseThrow();
+        parameters.add(new TemporalValues.CalendarTimestamp(firstDate).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        parameters.add(new TemporalValues.CalendarTimestamp(lastDate.plusDays(1)).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        var codes = keys.stream().map(DailyBasicKey::tsCode).distinct().sorted().toList();
+        parameters.addAll(codes);
         for (var key : keys) {
             clauses.add("(ts_code = ? AND trade_date = cast(? as TIMESTAMP))");
             parameters.add(key.tsCode());
@@ -91,7 +98,9 @@ public final class DailyBasicWritePort implements VerifiedBatchExecutor.Port<Dai
         }
         String sql = "SELECT ts_code, cast(trade_date as long) AS trade_date_micros, close, turnover_rate, turnover_rate_f, "
                 + "volume_ratio, pe, pe_ttm, pb, ps, ps_ttm, dv_ratio, dv_ttm, total_share, float_share, free_share, total_mv, circ_mv FROM "
-                + table + " WHERE " + String.join(" OR ", clauses) + " ORDER BY trade_date, ts_code LIMIT " + (keys.size() + 1);
+                + table + " WHERE trade_date >= cast(? AS TIMESTAMP) AND trade_date < cast(? AS TIMESTAMP)"
+                + " AND ts_code IN (" + String.join(",", Collections.nCopies(codes.size(), "?")) + ")"
+                + " AND (" + String.join(" OR ", clauses) + ") ORDER BY trade_date, ts_code LIMIT " + (keys.size() + 1);
         return jdbc.query(sql, (rs, index) -> new DailyBasic(rs.getString("ts_code"),
                 TemporalValues.CalendarTimestamp.fromStorageEpoch(rs.getLong("trade_date_micros"),
                         TemporalValues.EpochUnit.MICROS).date(),

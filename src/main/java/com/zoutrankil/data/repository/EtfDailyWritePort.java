@@ -39,7 +39,7 @@ public final class EtfDailyWritePort implements VerifiedBatchExecutor.Port<EtfDa
     private volatile boolean uncertainSenderStopped;
 
     public EtfDailyWritePort(String table, String expectedTargetId, JdbcTemplate jdbc, QuestDB questdb) {
-        EtfDailyJobService.requireIsolatedTableName(table);
+        EtfDailyJobService.requireExecutionTableName(table);
         if (expectedTargetId == null || !expectedTargetId.startsWith("static-v2-"))
             throw new IllegalArgumentException("Frozen isolated etf_daily target identity required");
         this.table = table; this.expectedTargetId = expectedTargetId;

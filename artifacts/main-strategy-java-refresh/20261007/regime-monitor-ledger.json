@@ -1,0 +1,886 @@
+{
+  "observedAtUtc": "2026-10-07T13:05:18.285067800Z",
+  "readOnly": true,
+  "ledger": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-ledger.sqlite3",
+  "run": [
+    {
+      "id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "parent_run_id": null,
+      "job_id": "data.regime_features_monitor_daily",
+      "job_version": 1,
+      "logical_date": "2026-10-07",
+      "target_id": "static-v2-378943d25ab02151687b0f421d79f5d75c5d790139f4d2e91543f0f824871cde",
+      "frozen_json": "{\"definition\":{\"jobId\":\"data.regime_features_monitor_daily\",\"version\":1,\"datasetId\":\"regime_features_monitor_daily\",\"datasetVersion\":1,\"owner\":\"regime_features_monitor_daily_owner\",\"supportedModes\":[\"MATERIALIZE\",\"RECONCILE\"],\"defaultMode\":\"MATERIALIZE\",\"parameters\":{\"target_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"warmup_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_pin\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"regime_features_monitor_daily.range366\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT20M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":366,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"source_pin\":\"ae0c315f418b8f9f54296d2a1071aa0aad3204e583ade7940db38f41dfff9028\",\"target_hash\":\"48e5c14c0f45daddc82c8a8787cbdae0fd352f883aa2e5866025bed363fad560\",\"target_id\":\"static-v2-378943d25ab02151687b0f421d79f5d75c5d790139f4d2e91543f0f824871cde\",\"warmup_from\":\"2026-09-01\"},\"from\":\"2026-09-21\",\"to\":\"2026-09-30\",\"logicalDate\":\"2026-10-07\"}",
+      "frozen_json_parsed": {
+        "definition": {
+          "jobId": "data.regime_features_monitor_daily",
+          "version": 1,
+          "datasetId": "regime_features_monitor_daily",
+          "datasetVersion": 1,
+          "owner": "regime_features_monitor_daily_owner",
+          "supportedModes": [
+            "MATERIALIZE",
+            "RECONCILE"
+          ],
+          "defaultMode": "MATERIALIZE",
+          "parameters": {
+            "target_hash": {
+              "type": "STRING",
+              "required": true,
+              "maxLength": 64,
+              "maxItems": 1,
+              "choices": []
+            },
+            "warmup_from": {
+              "type": "DATE",
+              "required": true,
+              "maxLength": 10,
+              "maxItems": 1,
+              "choices": []
+            },
+            "source_pin": {
+              "type": "STRING",
+              "required": true,
+              "maxLength": 64,
+              "maxItems": 1,
+              "choices": []
+            },
+            "target_id": {
+              "type": "STRING",
+              "required": true,
+              "maxLength": 128,
+              "maxItems": 1,
+              "choices": []
+            }
+          },
+          "ratePolicyRef": "questdb.materialize",
+          "slicePolicyRef": "regime_features_monitor_daily.range366",
+          "verificationPolicyRef": "questdb.full_key_values",
+          "retry": {
+            "maxAttempts": 1,
+            "backoff": "PT1S",
+            "maxElapsed": "PT1S"
+          },
+          "timeout": "PT20M",
+          "budget": {
+            "maxWindowDays": 366,
+            "maxSlices": 1,
+            "maxPages": 1,
+            "maxRows": 366,
+            "maxBatchBytes": 1048576
+          },
+          "revisionDays": 0,
+          "dependencies": [],
+          "frequency": "MANUAL",
+          "zone": "Asia/Shanghai",
+          "enabled": true,
+          "dailyEligible": false
+        },
+        "mode": "MATERIALIZE",
+        "parameters": {
+          "source_pin": "ae0c315f418b8f9f54296d2a1071aa0aad3204e583ade7940db38f41dfff9028",
+          "target_hash": "48e5c14c0f45daddc82c8a8787cbdae0fd352f883aa2e5866025bed363fad560",
+          "target_id": "static-v2-378943d25ab02151687b0f421d79f5d75c5d790139f4d2e91543f0f824871cde",
+          "warmup_from": "2026-09-01"
+        },
+        "from": "2026-09-21",
+        "to": "2026-09-30",
+        "logicalDate": "2026-10-07"
+      }
+    }
+  ],
+  "entries": [
+    {
+      "id": "slice-0cabcced-ddb0-407f-9456-a35bd3890dc5",
+      "kind": "SLICE",
+      "run_id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "parent_id": "attempt-78fb4ab8-0402-483d-8f88-33bc13c34f0c",
+      "state": "VERIFIED",
+      "revision": 6,
+      "payload_json": "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"readbackEvidence\":\"ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+      "payload_json_parsed": {
+        "verification": {
+          "missingKeys": 0,
+          "actualRows": 7,
+          "sourceFingerprint": "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+          "readbackEvidence": "ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5",
+          "mismatchedRows": 0,
+          "matchedRows": 7,
+          "expectedRows": 7,
+          "passed": true,
+          "writerStopped": false,
+          "duplicateKeys": 0
+        }
+      },
+      "updated_at": "2026-10-07T12:57:28.977950600Z"
+    },
+    {
+      "id": "attempt-78fb4ab8-0402-483d-8f88-33bc13c34f0c",
+      "kind": "ATTEMPT",
+      "run_id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "parent_id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca\",\"readbackEvidence\":\"ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+      "payload_json_parsed": {
+        "verification": {
+          "missingKeys": 0,
+          "actualRows": 7,
+          "sourceFingerprint": "ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca",
+          "readbackEvidence": "ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5",
+          "mismatchedRows": 0,
+          "matchedRows": 7,
+          "expectedRows": 7,
+          "passed": true,
+          "writerStopped": false,
+          "duplicateKeys": 0
+        }
+      },
+      "updated_at": "2026-10-07T12:57:29.752015500Z"
+    },
+    {
+      "id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "kind": "RUN",
+      "run_id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "parent_id": null,
+      "state": "VERIFIED",
+      "revision": 2,
+      "payload_json": "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca\",\"readbackEvidence\":\"ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+      "payload_json_parsed": {
+        "verification": {
+          "missingKeys": 0,
+          "actualRows": 7,
+          "sourceFingerprint": "ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca",
+          "readbackEvidence": "ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5",
+          "mismatchedRows": 0,
+          "matchedRows": 7,
+          "expectedRows": 7,
+          "passed": true,
+          "writerStopped": false,
+          "duplicateKeys": 0
+        }
+      },
+      "updated_at": "2026-10-07T12:57:29.765790600Z"
+    }
+  ],
+  "events": [
+    {
+      "entry_id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "payload_json_parsed": {},
+      "updated_at": "2026-10-07T12:57:23.725292Z"
+    },
+    {
+      "entry_id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "payload_json_parsed": {},
+      "updated_at": "2026-10-07T12:57:23.976397Z"
+    },
+    {
+      "entry_id": "attempt-78fb4ab8-0402-483d-8f88-33bc13c34f0c",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "payload_json_parsed": {},
+      "updated_at": "2026-10-07T12:57:23.989643200Z"
+    },
+    {
+      "entry_id": "attempt-78fb4ab8-0402-483d-8f88-33bc13c34f0c",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "payload_json_parsed": {},
+      "updated_at": "2026-10-07T12:57:23.999029800Z"
+    },
+    {
+      "entry_id": "slice-0cabcced-ddb0-407f-9456-a35bd3890dc5",
+      "revision": 0,
+      "state": "PENDING",
+      "payload_json": "{}",
+      "payload_json_parsed": {},
+      "updated_at": "2026-10-07T12:57:28.697960900Z"
+    },
+    {
+      "entry_id": "slice-0cabcced-ddb0-407f-9456-a35bd3890dc5",
+      "revision": 1,
+      "state": "RUNNING",
+      "payload_json": "{}",
+      "payload_json_parsed": {},
+      "updated_at": "2026-10-07T12:57:28.708849100Z"
+    },
+    {
+      "entry_id": "slice-0cabcced-ddb0-407f-9456-a35bd3890dc5",
+      "revision": 2,
+      "state": "FETCHED",
+      "payload_json": "{\"returnedRows\":7,\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\\\source.json\",\"cursor\":null}",
+      "payload_json_parsed": {
+        "returnedRows": 7,
+        "sourceFingerprint": "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+        "responseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\source.json",
+        "cursor": null
+      },
+      "updated_at": "2026-10-07T12:57:28.719861100Z"
+    },
+    {
+      "entry_id": "slice-0cabcced-ddb0-407f-9456-a35bd3890dc5",
+      "revision": 3,
+      "state": "VALIDATED",
+      "payload_json": "{\"returnedRows\":7,\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\\\source.json\",\"cursor\":null}",
+      "payload_json_parsed": {
+        "returnedRows": 7,
+        "sourceFingerprint": "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+        "responseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\source.json",
+        "cursor": null
+      },
+      "updated_at": "2026-10-07T12:57:28.733565900Z"
+    },
+    {
+      "entry_id": "slice-0cabcced-ddb0-407f-9456-a35bd3890dc5",
+      "revision": 4,
+      "state": "SUBMITTED",
+      "payload_json": "{\"returnedRows\":7,\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\\\source.json\",\"cursor\":null}",
+      "payload_json_parsed": {
+        "returnedRows": 7,
+        "sourceFingerprint": "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+        "responseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\source.json",
+        "cursor": null
+      },
+      "updated_at": "2026-10-07T12:57:28.828218800Z"
+    },
+    {
+      "entry_id": "slice-0cabcced-ddb0-407f-9456-a35bd3890dc5",
+      "revision": 5,
+      "state": "ACKNOWLEDGED",
+      "payload_json": "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":7,\"verifiedRows\":7,\"receipts\":[{\"batch\":1,\"submittedRows\":7,\"verifiedRows\":7,\"bytes\":24379,\"digest\":\"7e9abc82b3a09d8b76be4736fbf13b258f709e62d0e62f0ee91eaae1b745ee00\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+      "payload_json_parsed": {
+        "writeResult": {
+          "status": "VERIFIED",
+          "submittedRows": 7,
+          "verifiedRows": 7,
+          "receipts": [
+            {
+              "batch": 1,
+              "submittedRows": 7,
+              "verifiedRows": 7,
+              "bytes": 24379,
+              "digest": "7e9abc82b3a09d8b76be4736fbf13b258f709e62d0e62f0ee91eaae1b745ee00",
+              "delivery": "ACKNOWLEDGED"
+            }
+          ],
+          "reason": null
+        }
+      },
+      "updated_at": "2026-10-07T12:57:28.965296800Z"
+    },
+    {
+      "entry_id": "slice-0cabcced-ddb0-407f-9456-a35bd3890dc5",
+      "revision": 6,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"readbackEvidence\":\"ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+      "payload_json_parsed": {
+        "verification": {
+          "missingKeys": 0,
+          "actualRows": 7,
+          "sourceFingerprint": "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+          "readbackEvidence": "ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5",
+          "mismatchedRows": 0,
+          "matchedRows": 7,
+          "expectedRows": 7,
+          "passed": true,
+          "writerStopped": false,
+          "duplicateKeys": 0
+        }
+      },
+      "updated_at": "2026-10-07T12:57:28.977950600Z"
+    },
+    {
+      "entry_id": "attempt-78fb4ab8-0402-483d-8f88-33bc13c34f0c",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca\",\"readbackEvidence\":\"ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+      "payload_json_parsed": {
+        "verification": {
+          "missingKeys": 0,
+          "actualRows": 7,
+          "sourceFingerprint": "ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca",
+          "readbackEvidence": "ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5",
+          "mismatchedRows": 0,
+          "matchedRows": 7,
+          "expectedRows": 7,
+          "passed": true,
+          "writerStopped": false,
+          "duplicateKeys": 0
+        }
+      },
+      "updated_at": "2026-10-07T12:57:29.752015500Z"
+    },
+    {
+      "entry_id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "revision": 2,
+      "state": "VERIFIED",
+      "payload_json": "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca\",\"readbackEvidence\":\"ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+      "payload_json_parsed": {
+        "verification": {
+          "missingKeys": 0,
+          "actualRows": 7,
+          "sourceFingerprint": "ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca",
+          "readbackEvidence": "ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5",
+          "mismatchedRows": 0,
+          "matchedRows": 7,
+          "expectedRows": 7,
+          "passed": true,
+          "writerStopped": false,
+          "duplicateKeys": 0
+        }
+      },
+      "updated_at": "2026-10-07T12:57:29.765790600Z"
+    }
+  ],
+  "publications": [
+    {
+      "id": "regime_features_monitor_daily-publication-762edc72-5523-4391-81bd-c6805bdf7507",
+      "dataset": "regime_features_monitor_daily",
+      "run_id": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "intent_json": "{\"id\":\"regime_features_monitor_daily-publication-762edc72-5523-4391-81bd-c6805bdf7507\",\"dataset\":\"regime_features_monitor_daily\",\"runId\":\"regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\",\"target\":\"regime_features_monitor_daily\",\"backup\":\"java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0\",\"stage\":\"java_regime_features_monitor_daily_stage_e547b911cd9a4275b8fb175768cfd670\",\"initialTarget\":\"static-v2-378943d25ab02151687b0f421d79f5d75c5d790139f4d2e91543f0f824871cde\",\"originalId\":1810,\"originalDirectory\":\"regime_features_monitor_daily_rebuild_20260918_213053~1810\",\"replacementId\":3017,\"beforeFingerprint\":\"48e5c14c0f45daddc82c8a8787cbdae0fd352f883aa2e5866025bed363fad560\",\"afterFingerprint\":\"c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3\",\"scope\":\"{\\\"sourceEvidenceSha256\\\":\\\"222829222f212d6ffc78a12b55232eae3b5435c38dc93fddb0564206c1227ba6\\\",\\\"sourceEvidence\\\":\\\"C:\\\\\\\\Users\\\\\\\\zouqiang\\\\\\\\IdeaProjects\\\\\\\\QuestDBWithData\\\\\\\\var\\\\\\\\main-strategy-java-refresh\\\\\\\\20261007\\\\\\\\sync-evidence\\\\\\\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\\\\\\\source.json\\\",\\\"sourceFingerprint\\\":\\\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\\\",\\\"from\\\":\\\"2026-09-21\\\",\\\"to\\\":\\\"2026-09-30\\\"}\"}",
+      "intent_json_parsed": {
+        "id": "regime_features_monitor_daily-publication-762edc72-5523-4391-81bd-c6805bdf7507",
+        "dataset": "regime_features_monitor_daily",
+        "runId": "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+        "target": "regime_features_monitor_daily",
+        "backup": "java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0",
+        "stage": "java_regime_features_monitor_daily_stage_e547b911cd9a4275b8fb175768cfd670",
+        "initialTarget": "static-v2-378943d25ab02151687b0f421d79f5d75c5d790139f4d2e91543f0f824871cde",
+        "originalId": 1810,
+        "originalDirectory": "regime_features_monitor_daily_rebuild_20260918_213053~1810",
+        "replacementId": 3017,
+        "beforeFingerprint": "48e5c14c0f45daddc82c8a8787cbdae0fd352f883aa2e5866025bed363fad560",
+        "afterFingerprint": "c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3",
+        "scope": "{\"sourceEvidenceSha256\":\"222829222f212d6ffc78a12b55232eae3b5435c38dc93fddb0564206c1227ba6\",\"sourceEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\\\source.json\",\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"from\":\"2026-09-21\",\"to\":\"2026-09-30\"}"
+      },
+      "state": "VERIFIED",
+      "revision": 3,
+      "updated_at": "2026-10-07T12:57:29.725498100Z"
+    }
+  ],
+  "questdbReadOnly": {
+    "observedAtUtc": "2026-10-07T13:05:16.9477182Z",
+    "readOnly": true,
+    "providerRequests": 0,
+    "databaseWrites": 0,
+    "schema": {
+      "query": "SELECT * FROM table_columns('regime_features_monitor_daily')",
+      "columns": [
+        {
+          "name": "column",
+          "type": "STRING"
+        },
+        {
+          "name": "type",
+          "type": "STRING"
+        },
+        {
+          "name": "indexed",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "indexBlockCapacity",
+          "type": "INT"
+        },
+        {
+          "name": "symbolCached",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "symbolCapacity",
+          "type": "INT"
+        },
+        {
+          "name": "symbolTableSize",
+          "type": "INT"
+        },
+        {
+          "name": "designated",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "upsertKey",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "indexType",
+          "type": "STRING"
+        },
+        {
+          "name": "indexInclude",
+          "type": "STRING"
+        }
+      ],
+      "timestamp": -1,
+      "dataset": [
+        [
+          "trade_date",
+          "TIMESTAMP",
+          false,
+          0,
+          false,
+          0,
+          0,
+          true,
+          false,
+          "",
+          ""
+        ],
+        [
+          "month",
+          "SYMBOL",
+          false,
+          0,
+          true,
+          256,
+          33,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "hs300_ret_mtd",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "zz500_ret_mtd",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "all_a_ret_mtd",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "cs1000_ret_mtd",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "small_large_ret_mtd",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "growth_value_ret_mtd",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "avg_up_down_ratio_5d",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "avg_limit_up_count_5d",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "avg_limit_down_count_5d",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "avg_turnover_rate_5d",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "avg_pct_positive_ratio_5d",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "avg_pct_negative_ratio_5d",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "northbound_net_buy_mtd",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "margin_balance_change_mtd",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "all_a_pe_ttm_percentile_latest",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "all_a_pb_percentile_latest",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "erp_latest",
+          "DOUBLE",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "data_quality_flag",
+          "SYMBOL",
+          false,
+          0,
+          true,
+          256,
+          1,
+          false,
+          false,
+          "",
+          ""
+        ],
+        [
+          "updated_at",
+          "TIMESTAMP",
+          false,
+          0,
+          false,
+          0,
+          0,
+          false,
+          false,
+          "",
+          ""
+        ]
+      ],
+      "count": 21
+    },
+    "metadata": {
+      "query": "SELECT table_name,id,directoryName,walEnabled,dedup,partitionBy,designatedTimestamp FROM tables() WHERE table_name='regime_features_monitor_daily'",
+      "columns": [
+        {
+          "name": "table_name",
+          "type": "STRING"
+        },
+        {
+          "name": "id",
+          "type": "INT"
+        },
+        {
+          "name": "directoryName",
+          "type": "STRING"
+        },
+        {
+          "name": "walEnabled",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "dedup",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "partitionBy",
+          "type": "STRING"
+        },
+        {
+          "name": "designatedTimestamp",
+          "type": "STRING"
+        }
+      ],
+      "timestamp": -1,
+      "dataset": [
+        [
+          "regime_features_monitor_daily",
+          3017,
+          "java_regime_features_monitor_daily_stage_e547b911cd9a4275b8fb175768cfd670~3017",
+          true,
+          false,
+          "MONTH",
+          "trade_date"
+        ]
+      ],
+      "count": 1
+    },
+    "range": {
+      "query": "SELECT min(trade_date) AS first_date,max(trade_date) AS latest_date,count() AS row_count FROM regime_features_monitor_daily",
+      "columns": [
+        {
+          "name": "first_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "latest_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "row_count",
+          "type": "LONG"
+        }
+      ],
+      "timestamp": -1,
+      "dataset": [
+        [
+          "2024-01-02T00:00:00Z",
+          "2026-09-30T00:00:00Z",
+          666
+        ]
+      ],
+      "count": 1
+    },
+    "wal": {
+      "query": "SELECT * FROM wal_tables() WHERE name='regime_features_monitor_daily'",
+      "columns": [
+        {
+          "name": "name",
+          "type": "STRING"
+        },
+        {
+          "name": "suspended",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "writerTxn",
+          "type": "LONG"
+        },
+        {
+          "name": "bufferedTxnSize",
+          "type": "LONG"
+        },
+        {
+          "name": "sequencerTxn",
+          "type": "LONG"
+        },
+        {
+          "name": "errorTag",
+          "type": "STRING"
+        },
+        {
+          "name": "errorMessage",
+          "type": "STRING"
+        },
+        {
+          "name": "memoryPressure",
+          "type": "INT"
+        }
+      ],
+      "timestamp": -1,
+      "dataset": [
+        [
+          "regime_features_monitor_daily",
+          false,
+          9,
+          0,
+          9,
+          "",
+          "",
+          0
+        ]
+      ],
+      "count": 1
+    }
+  },
+  "timings": {
+    "createdAtUtc": "2026-10-07T12:57:23.725292Z",
+    "runningAtUtc": "2026-10-07T12:57:23.976397Z",
+    "sourceFetchedAtUtc": "2026-10-07T12:57:28.719861100Z",
+    "sourceSliceSubmittedAtUtc": "2026-10-07T12:57:28.828218800Z",
+    "sourceSliceVerifiedAtUtc": "2026-10-07T12:57:28.977950600Z",
+    "publicationVerifiedAtUtc": "2026-10-07T12:57:29.725498100Z",
+    "finishedAtUtc": "2026-10-07T12:57:29.765790600Z",
+    "createdToVerifiedSeconds": 6.0404986,
+    "runningToVerifiedSeconds": 5.7893936,
+    "runningToFetchedSeconds": 4.7434641,
+    "submittedToSliceVerifiedSeconds": 0.1497318,
+    "postSliceVerificationToRunFinishedSeconds": 0.78784,
+    "timingNote": "Derived from ledger timestamps; tail includes publication and runner finalization, not a separately instrumented pure publication timer."
+  },
+  "sourceEvidenceAudit": {
+    "sourcePath": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\source.json",
+    "actualSourceSha256": "222829222f212d6ffc78a12b55232eae3b5435c38dc93fddb0564206c1227ba6",
+    "publicationSourceSha256": "222829222f212d6ffc78a12b55232eae3b5435c38dc93fddb0564206c1227ba6",
+    "shaMatches": true,
+    "producer": "java.regime_features_monitor_daily",
+    "sourceFingerprint": "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+    "sourceWindowRows": 7,
+    "typedFieldCount": 21,
+    "sourceWindowValues": 147,
+    "retainedOldRows": 659,
+    "retainedOldValues": 13839,
+    "publishedRows": 666,
+    "publishedValues": 13986,
+    "fullPublishedFingerprint": "c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3",
+    "rawSourceProperties": [
+      "marginAvailability",
+      "historyDates",
+      "rows",
+      "sourceFingerprint",
+      "valuationRawRows",
+      "from",
+      "warmupFrom",
+      "externalReadOnlySources",
+      "algorithmVersion",
+      "to",
+      "producer",
+      "ignoredGovNonValuationDates",
+      "qualityPolicy",
+      "northboundObservedDates",
+      "sources",
+      "sourceRawRows",
+      "expectedSseTradingDates",
+      "gov10YObservedDates",
+      "panelCoverage",
+      "requiredContextFields",
+      "valuationObservedDates"
+    ],
+    "scope": {
+      "sourceEvidenceSha256": "222829222f212d6ffc78a12b55232eae3b5435c38dc93fddb0564206c1227ba6",
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\source.json",
+      "sourceFingerprint": "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+      "from": "2026-09-21",
+      "to": "2026-09-30"
+    },
+    "sourceFingerprintNote": "Publication uses the per-source/slice fingerprint; run verification sourceFingerprint is the runner aggregate and can differ."
+  }
+}

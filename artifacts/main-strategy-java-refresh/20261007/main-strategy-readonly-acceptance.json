@@ -1,0 +1,603 @@
+{
+  "observed_at": "2026-10-07T21:14:24.1010449+08:00",
+  "questdb_host": "127.0.0.1",
+  "producer": "PowerShell read-only SQL acceptance of Java sync; no source acquisition or ingestion",
+  "scope": "Equivalent daily data conditions from main_strategy_daily.py plus ETF input-package regime calendar-grid and six finite numeric context fields; known official symbols verified; no strategy execution or companion-plan validation",
+  "status": "ok",
+  "latest": {
+    "stk_factor": "2026-09-30",
+    "v_backtest_daily": "2026-09-30",
+    "market_sentiment_daily": "2026-09-30",
+    "regime_features_monitor_daily": "2026-09-30",
+    "etf_daily": "2026-09-30",
+    "etf_adj": "2026-09-30",
+    "etf_factor": "2026-09-30",
+    "l2_daily_features": "2026-09-30"
+  },
+  "min_rows": 5000,
+  "checked_days": 32,
+  "lookback_from": "2026-08-17",
+  "lookback_to": "2026-09-30",
+  "backtest_quality": [
+    {
+      "trade_date": "2026-08-17",
+      "factor_rows": 5538,
+      "backtest": {
+        "trade_date": "2026-08-17",
+        "backtest_rows": 5543,
+        "unique_rows": 5543,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-08-18",
+      "factor_rows": 5540,
+      "backtest": {
+        "trade_date": "2026-08-18",
+        "backtest_rows": 5545,
+        "unique_rows": 5545,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-08-19",
+      "factor_rows": 5541,
+      "backtest": {
+        "trade_date": "2026-08-19",
+        "backtest_rows": 5547,
+        "unique_rows": 5547,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-08-20",
+      "factor_rows": 5540,
+      "backtest": {
+        "trade_date": "2026-08-20",
+        "backtest_rows": 5547,
+        "unique_rows": 5547,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-08-21",
+      "factor_rows": 5542,
+      "backtest": {
+        "trade_date": "2026-08-21",
+        "backtest_rows": 5548,
+        "unique_rows": 5548,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-08-24",
+      "factor_rows": 5545,
+      "backtest": {
+        "trade_date": "2026-08-24",
+        "backtest_rows": 5549,
+        "unique_rows": 5549,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-08-25",
+      "factor_rows": 5545,
+      "backtest": {
+        "trade_date": "2026-08-25",
+        "backtest_rows": 5549,
+        "unique_rows": 5549,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-08-26",
+      "factor_rows": 5547,
+      "backtest": {
+        "trade_date": "2026-08-26",
+        "backtest_rows": 5550,
+        "unique_rows": 5550,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-08-27",
+      "factor_rows": 5547,
+      "backtest": {
+        "trade_date": "2026-08-27",
+        "backtest_rows": 5550,
+        "unique_rows": 5550,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-08-28",
+      "factor_rows": 5546,
+      "backtest": {
+        "trade_date": "2026-08-28",
+        "backtest_rows": 5550,
+        "unique_rows": 5550,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-08-31",
+      "factor_rows": 5545,
+      "backtest": {
+        "trade_date": "2026-08-31",
+        "backtest_rows": 5551,
+        "unique_rows": 5551,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-01",
+      "factor_rows": 5546,
+      "backtest": {
+        "trade_date": "2026-09-01",
+        "backtest_rows": 5553,
+        "unique_rows": 5553,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-02",
+      "factor_rows": 5546,
+      "backtest": {
+        "trade_date": "2026-09-02",
+        "backtest_rows": 5553,
+        "unique_rows": 5553,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-03",
+      "factor_rows": 5548,
+      "backtest": {
+        "trade_date": "2026-09-03",
+        "backtest_rows": 5554,
+        "unique_rows": 5554,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-04",
+      "factor_rows": 5547,
+      "backtest": {
+        "trade_date": "2026-09-04",
+        "backtest_rows": 5555,
+        "unique_rows": 5555,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-07",
+      "factor_rows": 5549,
+      "backtest": {
+        "trade_date": "2026-09-07",
+        "backtest_rows": 5558,
+        "unique_rows": 5558,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-08",
+      "factor_rows": 5549,
+      "backtest": {
+        "trade_date": "2026-09-08",
+        "backtest_rows": 5558,
+        "unique_rows": 5558,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-09",
+      "factor_rows": 5548,
+      "backtest": {
+        "trade_date": "2026-09-09",
+        "backtest_rows": 5558,
+        "unique_rows": 5558,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-10",
+      "factor_rows": 5548,
+      "backtest": {
+        "trade_date": "2026-09-10",
+        "backtest_rows": 5560,
+        "unique_rows": 5560,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-11",
+      "factor_rows": 5549,
+      "backtest": {
+        "trade_date": "2026-09-11",
+        "backtest_rows": 5561,
+        "unique_rows": 5561,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-14",
+      "factor_rows": 5550,
+      "backtest": {
+        "trade_date": "2026-09-14",
+        "backtest_rows": 5562,
+        "unique_rows": 5562,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-15",
+      "factor_rows": 5548,
+      "backtest": {
+        "trade_date": "2026-09-15",
+        "backtest_rows": 5562,
+        "unique_rows": 5562,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-16",
+      "factor_rows": 5548,
+      "backtest": {
+        "trade_date": "2026-09-16",
+        "backtest_rows": 5562,
+        "unique_rows": 5562,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-17",
+      "factor_rows": 5552,
+      "backtest": {
+        "trade_date": "2026-09-17",
+        "backtest_rows": 5564,
+        "unique_rows": 5564,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-18",
+      "factor_rows": 5553,
+      "backtest": {
+        "trade_date": "2026-09-18",
+        "backtest_rows": 5565,
+        "unique_rows": 5565,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-21",
+      "factor_rows": 5553,
+      "backtest": {
+        "trade_date": "2026-09-21",
+        "backtest_rows": 5565,
+        "unique_rows": 5565,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-22",
+      "factor_rows": 5554,
+      "backtest": {
+        "trade_date": "2026-09-22",
+        "backtest_rows": 5567,
+        "unique_rows": 5567,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-23",
+      "factor_rows": 5556,
+      "backtest": {
+        "trade_date": "2026-09-23",
+        "backtest_rows": 5568,
+        "unique_rows": 5568,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-24",
+      "factor_rows": 5557,
+      "backtest": {
+        "trade_date": "2026-09-24",
+        "backtest_rows": 5569,
+        "unique_rows": 5569,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-28",
+      "factor_rows": 5557,
+      "backtest": {
+        "trade_date": "2026-09-28",
+        "backtest_rows": 5569,
+        "unique_rows": 5569,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-29",
+      "factor_rows": 5559,
+      "backtest": {
+        "trade_date": "2026-09-29",
+        "backtest_rows": 5571,
+        "unique_rows": 5571,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    },
+    {
+      "trade_date": "2026-09-30",
+      "factor_rows": 5560,
+      "backtest": {
+        "trade_date": "2026-09-30",
+        "backtest_rows": 5571,
+        "unique_rows": 5571,
+        "close_null": 0,
+        "suspended_null": 0,
+        "st_null": 0
+      },
+      "status": "ok"
+    }
+  ],
+  "etf_daily_latest_rows": 2140,
+  "etf_daily_baseline_rows": 2119.5,
+  "etf_daily_coverage": 1.0096720924746403,
+  "target_symbols": [
+    "512770.SH",
+    "589330.SH"
+  ],
+  "target_prices": [
+    {
+      "ts_code": "512770.SH",
+      "close": 2.374
+    },
+    {
+      "ts_code": "589330.SH",
+      "close": 0.858
+    }
+  ],
+  "target_disclosures": [
+    {
+      "ts_code": "512770.SH",
+      "latest_ann_date": "2026-08-31"
+    },
+    {
+      "ts_code": "589330.SH",
+      "latest_ann_date": "2026-05-26"
+    }
+  ],
+  "regime_context_required_fields": [
+    {
+      "trade_date": "2026-09-21",
+      "month": "202609",
+      "hs300_ret_mtd": 0.006128269138770959,
+      "zz500_ret_mtd": 0.022781308999223704,
+      "all_a_ret_mtd": 0.009823940848495916,
+      "small_large_ret_mtd": -0.005928413792938514,
+      "growth_value_ret_mtd": 0.03565156864140617,
+      "avg_up_down_ratio_5d": 2.685331655932475,
+      "data_quality_flag": "proxy_style"
+    },
+    {
+      "trade_date": "2026-09-22",
+      "month": "202609",
+      "hs300_ret_mtd": 0.006025080420503759,
+      "zz500_ret_mtd": 0.023812591230938596,
+      "all_a_ret_mtd": 0.0115179718913887,
+      "small_large_ret_mtd": -0.0016974990170528503,
+      "growth_value_ret_mtd": 0.039428557238532225,
+      "avg_up_down_ratio_5d": 2.792163310242214,
+      "data_quality_flag": "proxy_style"
+    },
+    {
+      "trade_date": "2026-09-23",
+      "month": "202609",
+      "hs300_ret_mtd": 0.004361847614994474,
+      "zz500_ret_mtd": 0.024313520320647264,
+      "all_a_ret_mtd": 0.009123815023405646,
+      "small_large_ret_mtd": -0.0059946418232753595,
+      "growth_value_ret_mtd": 0.04824615470713611,
+      "avg_up_down_ratio_5d": 2.17934476358334,
+      "data_quality_flag": "proxy_style"
+    },
+    {
+      "trade_date": "2026-09-24",
+      "month": "202609",
+      "hs300_ret_mtd": -0.014543761345005457,
+      "zz500_ret_mtd": 0.013332772977536989,
+      "all_a_ret_mtd": -0.003251775206797314,
+      "small_large_ret_mtd": 0.005675312837544411,
+      "growth_value_ret_mtd": 0.04002958408062118,
+      "avg_up_down_ratio_5d": 2.0487055458607175,
+      "data_quality_flag": "proxy_style"
+    },
+    {
+      "trade_date": "2026-09-28",
+      "month": "202609",
+      "hs300_ret_mtd": -0.041884882372028254,
+      "zz500_ret_mtd": -0.010713990042869215,
+      "all_a_ret_mtd": -0.025697959766185496,
+      "small_large_ret_mtd": 0.017072263296700863,
+      "growth_value_ret_mtd": 0.01376874652678095,
+      "avg_up_down_ratio_5d": 1.33799497132611,
+      "data_quality_flag": "proxy_style"
+    },
+    {
+      "trade_date": "2026-09-29",
+      "month": "202609",
+      "hs300_ret_mtd": -0.03406781796784453,
+      "zz500_ret_mtd": -0.003428019431248819,
+      "all_a_ret_mtd": -0.01777925015713,
+      "small_large_ret_mtd": 0.017894425305203687,
+      "growth_value_ret_mtd": 0.01816623990429944,
+      "avg_up_down_ratio_5d": 0.7152895914316261,
+      "data_quality_flag": "proxy_style"
+    },
+    {
+      "trade_date": "2026-09-30",
+      "month": "202609",
+      "hs300_ret_mtd": -0.033321575213180354,
+      "zz500_ret_mtd": -0.004847824462113959,
+      "all_a_ret_mtd": -0.018938697024002304,
+      "small_large_ret_mtd": 0.014306674865428692,
+      "growth_value_ret_mtd": 0.004068974729826369,
+      "avg_up_down_ratio_5d": 0.7364893621696943,
+      "data_quality_flag": "proxy_style"
+    }
+  ],
+  "regime_calendar": [
+    {
+      "trade_date": "2026-09-21",
+      "is_open": 1
+    },
+    {
+      "trade_date": "2026-09-22",
+      "is_open": 1
+    },
+    {
+      "trade_date": "2026-09-23",
+      "is_open": 1
+    },
+    {
+      "trade_date": "2026-09-24",
+      "is_open": 1
+    },
+    {
+      "trade_date": "2026-09-25",
+      "is_open": 0
+    },
+    {
+      "trade_date": "2026-09-26",
+      "is_open": 0
+    },
+    {
+      "trade_date": "2026-09-27",
+      "is_open": 0
+    },
+    {
+      "trade_date": "2026-09-28",
+      "is_open": 1
+    },
+    {
+      "trade_date": "2026-09-29",
+      "is_open": 1
+    },
+    {
+      "trade_date": "2026-09-30",
+      "is_open": 1
+    }
+  ],
+  "regime_expected_dates": [
+    "2026-09-21",
+    "2026-09-22",
+    "2026-09-23",
+    "2026-09-24",
+    "2026-09-28",
+    "2026-09-29",
+    "2026-09-30"
+  ],
+  "failures": [],
+  "additional_quality_constraints": [
+    "20260930 margin_detail lacks SZ/BJ in current upstream; Java sentiment rejects its financing enhancement and marks partial_enhanced; regime optional margin_balance_change_mtd remains NULL",
+    "589330.SH latest announcement 20260526 is 127 calendar days before 20260930, exceeding the 120-day governance freshness limit",
+    "001246.SZ listed 20260930 has native stk_factor provider-empty receipt; no factor fabricated",
+    "512770.SH same report period has two non-overlapping announcement batches; existing latest-announcement consumer only takes 53.36 instead of combined 99.93"
+  ]
+}

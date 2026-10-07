@@ -1,0 +1,17 @@
+{
+  "Name": "etf_target_duplicate_keys_corrected",
+  "ObservedAt": "2026-10-07T12:31:30.0621607Z",
+  "SQL": "SELECT count() AS duplicate_keys FROM (SELECT ts_code,ann_date,end_date,symbol,count() AS key_rows FROM etf_portfolio WHERE ts_code IN ('512770.SH','589330.SH') AND ann_date>='2026-01-01' AND ann_date<'2026-10-01' GROUP BY ts_code,ann_date,end_date,symbol) WHERE key_rows>1",
+  "Columns": [
+    {
+      "name": "duplicate_keys",
+      "type": "LONG"
+    }
+  ],
+  "Rows": [
+    [
+      0
+    ]
+  ],
+  "QueryCount": 1
+}

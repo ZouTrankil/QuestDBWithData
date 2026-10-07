@@ -1,0 +1,4756 @@
+{
+  "observedAtUtc": "2026-10-07T12:45:08.0522071Z",
+  "conclusion": "PASS for the five audited source tables and the bounded v_backtest_daily window",
+  "targetDate": "2026-09-30",
+  "tradingDates": [
+    "20260922",
+    "20260923",
+    "20260924",
+    "20260928",
+    "20260929",
+    "20260930"
+  ],
+  "tables": {
+    "stk_factor": {
+      "passed": true,
+      "latestDate": "2026-09-30T00:00:00Z",
+      "physicalRowsAllHistory": 10282455,
+      "firstDate": "2010-01-29T00:00:00Z",
+      "windowRows": 33343.0,
+      "sourceFieldCount": 35,
+      "physicalFieldCount": 35,
+      "fieldNamesMatch": true,
+      "physicalColumnTypes": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL",
+          "designated": false,
+          "upsertKey": true
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP",
+          "designated": true,
+          "upsertKey": true
+        },
+        {
+          "name": "close",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "open",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "high",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "low",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "pre_close",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "change",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "pct_change",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "vol",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "amount",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "adj_factor",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "open_hfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "open_qfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "close_hfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "close_qfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "high_hfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "high_qfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "low_hfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "low_qfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "pre_close_hfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "pre_close_qfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "macd_dif",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "macd_dea",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "macd",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "kdj_k",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "kdj_d",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "kdj_j",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "rsi_6",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "rsi_12",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "rsi_24",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "boll_upper",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "boll_mid",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "boll_lower",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "cci",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        }
+      ],
+      "criticalFields": [
+        "close",
+        "pre_close",
+        "amount",
+        "vol"
+      ],
+      "duplicateKeyGroups": 0,
+      "nullBusinessDates": 0,
+      "metadata": [
+        "stk_factor",
+        1722,
+        "stk_factor~1722",
+        true,
+        true,
+        "YEAR",
+        "trade_date"
+      ],
+      "walFrontier": [
+        "stk_factor",
+        false,
+        156,
+        156,
+        0
+      ],
+      "dates": [
+        {
+          "tradeDate": "20260922",
+          "physicalRows": 5554,
+          "uniqueCodes": 5554,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 5554,
+          "runId": "stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518",
+          "sliceId": "slice-ed99c75c-b007-44ce-af36-9956b4c81f2e",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260923",
+          "physicalRows": 5556,
+          "uniqueCodes": 5556,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 5556,
+          "runId": "stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518",
+          "sliceId": "slice-53dd700b-1890-47cb-a0de-27799104fee9",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260924",
+          "physicalRows": 5557,
+          "uniqueCodes": 5557,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 5557,
+          "runId": "stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518",
+          "sliceId": "slice-7c9e0924-fc24-4e4a-95c8-c3fdf5eeeae3",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260928",
+          "physicalRows": 5557,
+          "uniqueCodes": 5557,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 5557,
+          "runId": "stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468",
+          "sliceId": "slice-40c7678e-6213-454e-8262-cd49f925af7f",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260929",
+          "physicalRows": 5559,
+          "uniqueCodes": 5559,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 5559,
+          "runId": "stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468",
+          "sliceId": "slice-b8cf0fce-60b6-470c-bf6a-72dcf43f4869",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260930",
+          "physicalRows": 5560,
+          "uniqueCodes": 5560,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 5560,
+          "runId": "stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468",
+          "sliceId": "slice-c9903006-6fa7-4444-8d80-4f297515d04c",
+          "passed": true
+        }
+      ]
+    },
+    "daily_basic": {
+      "passed": true,
+      "latestDate": "2026-09-30T00:00:00Z",
+      "physicalRowsAllHistory": 9974567,
+      "firstDate": "2010-01-29T00:00:00Z",
+      "windowRows": 33344.0,
+      "sourceFieldCount": 18,
+      "physicalFieldCount": 18,
+      "fieldNamesMatch": true,
+      "physicalColumnTypes": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL",
+          "designated": false,
+          "upsertKey": true
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP",
+          "designated": true,
+          "upsertKey": true
+        },
+        {
+          "name": "close",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "turnover_rate",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "turnover_rate_f",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "volume_ratio",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "pe",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "pe_ttm",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "pb",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ps",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ps_ttm",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "dv_ratio",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "dv_ttm",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_share",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "float_share",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "free_share",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "total_mv",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "circ_mv",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        }
+      ],
+      "criticalFields": [
+        "close",
+        "turnover_rate",
+        "circ_mv",
+        "total_mv"
+      ],
+      "duplicateKeyGroups": 0,
+      "nullBusinessDates": 0,
+      "metadata": [
+        "daily_basic",
+        1876,
+        "daily_basic_stage_20260928_185816_917214~1876",
+        true,
+        true,
+        "YEAR",
+        "trade_date"
+      ],
+      "walFrontier": [
+        "daily_basic",
+        false,
+        205,
+        205,
+        0
+      ],
+      "dates": [
+        {
+          "tradeDate": "20260922",
+          "physicalRows": 5554,
+          "uniqueCodes": 5554,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_turnover_rate": 0,
+            "null_circ_mv": 0,
+            "null_total_mv": 0
+          },
+          "sourceRows": 5554,
+          "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+          "sliceId": "slice-a2499517-9e72-4821-951c-04487987dadf",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260923",
+          "physicalRows": 5556,
+          "uniqueCodes": 5556,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_turnover_rate": 0,
+            "null_circ_mv": 0,
+            "null_total_mv": 0
+          },
+          "sourceRows": 5556,
+          "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+          "sliceId": "slice-26433b77-6002-4f4f-b792-49d002fea1c7",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260924",
+          "physicalRows": 5557,
+          "uniqueCodes": 5557,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_turnover_rate": 0,
+            "null_circ_mv": 0,
+            "null_total_mv": 0
+          },
+          "sourceRows": 5557,
+          "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+          "sliceId": "slice-f4ea0a43-2bf6-41f1-9e06-408244298bc0",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260928",
+          "physicalRows": 5557,
+          "uniqueCodes": 5557,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_turnover_rate": 0,
+            "null_circ_mv": 0,
+            "null_total_mv": 0
+          },
+          "sourceRows": 5557,
+          "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+          "sliceId": "slice-ec4fc9bd-12d1-4a4c-acea-2f7a96c25484",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260929",
+          "physicalRows": 5559,
+          "uniqueCodes": 5559,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_turnover_rate": 0,
+            "null_circ_mv": 0,
+            "null_total_mv": 0
+          },
+          "sourceRows": 5559,
+          "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+          "sliceId": "slice-8d755bc4-7694-4bc2-9738-88cc4e92a1df",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260930",
+          "physicalRows": 5561,
+          "uniqueCodes": 5561,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_turnover_rate": 0,
+            "null_circ_mv": 0,
+            "null_total_mv": 0
+          },
+          "sourceRows": 5561,
+          "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+          "sliceId": "slice-c7985fe8-8822-4c18-ae87-e0f150160106",
+          "passed": true
+        }
+      ]
+    },
+    "stk_limit": {
+      "passed": true,
+      "latestDate": "2026-09-30T00:00:00Z",
+      "physicalRowsAllHistory": 12344449,
+      "firstDate": "2010-01-29T00:00:00Z",
+      "windowRows": 33890.0,
+      "sourceFieldCount": 4,
+      "physicalFieldCount": 4,
+      "fieldNamesMatch": true,
+      "physicalColumnTypes": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL",
+          "designated": false,
+          "upsertKey": true
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP",
+          "designated": true,
+          "upsertKey": true
+        },
+        {
+          "name": "up_limit",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "down_limit",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        }
+      ],
+      "criticalFields": [
+        "up_limit",
+        "down_limit"
+      ],
+      "duplicateKeyGroups": 0,
+      "nullBusinessDates": 0,
+      "metadata": [
+        "stk_limit",
+        1725,
+        "stk_limit~1725",
+        true,
+        true,
+        "YEAR",
+        "trade_date"
+      ],
+      "walFrontier": [
+        "stk_limit",
+        false,
+        216,
+        216,
+        0
+      ],
+      "dates": [
+        {
+          "tradeDate": "20260922",
+          "physicalRows": 5646,
+          "uniqueCodes": 5646,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_up_limit": 0,
+            "null_down_limit": 0
+          },
+          "sourceRows": 5646,
+          "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+          "sliceId": "slice-c15cfa6f-00a6-4f9c-adda-fff5c939b4a2",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260923",
+          "physicalRows": 5647,
+          "uniqueCodes": 5647,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_up_limit": 0,
+            "null_down_limit": 0
+          },
+          "sourceRows": 5647,
+          "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+          "sliceId": "slice-a5019205-7699-487e-82d0-804c45a30ca6",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260924",
+          "physicalRows": 5648,
+          "uniqueCodes": 5648,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_up_limit": 0,
+            "null_down_limit": 0
+          },
+          "sourceRows": 5648,
+          "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+          "sliceId": "slice-36439678-2866-4117-b20d-aedabaa83c2f",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260928",
+          "physicalRows": 5648,
+          "uniqueCodes": 5648,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_up_limit": 0,
+            "null_down_limit": 0
+          },
+          "sourceRows": 5648,
+          "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+          "sliceId": "slice-4d547be1-4b86-42d0-827e-55db608a1e0f",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260929",
+          "physicalRows": 5650,
+          "uniqueCodes": 5650,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_up_limit": 0,
+            "null_down_limit": 0
+          },
+          "sourceRows": 5650,
+          "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+          "sliceId": "slice-0dc1ea09-0d2c-4617-83cf-1ca32656d9e9",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260930",
+          "physicalRows": 5651,
+          "uniqueCodes": 5651,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_up_limit": 0,
+            "null_down_limit": 0
+          },
+          "sourceRows": 5651,
+          "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+          "sliceId": "slice-cb8945e5-3b33-490e-8719-1d004f4dedd1",
+          "passed": true
+        }
+      ]
+    },
+    "moneyflow": {
+      "passed": true,
+      "latestDate": "2026-09-30T00:00:00Z",
+      "physicalRowsAllHistory": 4631266,
+      "firstDate": "2023-01-03T00:00:00Z",
+      "windowRows": 33391.0,
+      "sourceFieldCount": 20,
+      "physicalFieldCount": 20,
+      "fieldNamesMatch": true,
+      "physicalColumnTypes": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL",
+          "designated": false,
+          "upsertKey": true
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP",
+          "designated": true,
+          "upsertKey": true
+        },
+        {
+          "name": "buy_sm_vol",
+          "type": "LONG",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "buy_sm_amount",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "sell_sm_vol",
+          "type": "LONG",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "sell_sm_amount",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "buy_md_vol",
+          "type": "LONG",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "buy_md_amount",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "sell_md_vol",
+          "type": "LONG",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "sell_md_amount",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "buy_lg_vol",
+          "type": "LONG",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "buy_lg_amount",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "sell_lg_vol",
+          "type": "LONG",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "sell_lg_amount",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "buy_elg_vol",
+          "type": "LONG",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "buy_elg_amount",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "sell_elg_vol",
+          "type": "LONG",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "sell_elg_amount",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "net_mf_vol",
+          "type": "LONG",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "net_mf_amount",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        }
+      ],
+      "criticalFields": [
+        "buy_sm_vol",
+        "sell_sm_vol",
+        "buy_md_vol",
+        "sell_md_vol",
+        "buy_lg_vol",
+        "sell_lg_vol",
+        "buy_elg_vol",
+        "sell_elg_vol",
+        "net_mf_vol",
+        "net_mf_amount"
+      ],
+      "duplicateKeyGroups": 0,
+      "nullBusinessDates": 0,
+      "metadata": [
+        "moneyflow",
+        1873,
+        "moneyflow_stage_20260928_184806_272189~1873",
+        true,
+        true,
+        "YEAR",
+        "trade_date"
+      ],
+      "walFrontier": [
+        "moneyflow",
+        false,
+        175,
+        175,
+        0
+      ],
+      "dates": [
+        {
+          "tradeDate": "20260922",
+          "physicalRows": 5554,
+          "uniqueCodes": 5554,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_buy_sm_vol": 0,
+            "null_sell_sm_vol": 0,
+            "null_buy_md_vol": 0,
+            "null_sell_md_vol": 0,
+            "null_buy_lg_vol": 0,
+            "null_sell_lg_vol": 0,
+            "null_buy_elg_vol": 0,
+            "null_sell_elg_vol": 0,
+            "null_net_mf_vol": 0,
+            "null_net_mf_amount": 0
+          },
+          "sourceRows": 5554,
+          "runId": "moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a",
+          "sliceId": "slice-e038a180-48fa-4456-8b22-8ebae41d1dbf",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260923",
+          "physicalRows": 5556,
+          "uniqueCodes": 5556,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_buy_sm_vol": 0,
+            "null_sell_sm_vol": 0,
+            "null_buy_md_vol": 0,
+            "null_sell_md_vol": 0,
+            "null_buy_lg_vol": 0,
+            "null_sell_lg_vol": 0,
+            "null_buy_elg_vol": 0,
+            "null_sell_elg_vol": 0,
+            "null_net_mf_vol": 0,
+            "null_net_mf_amount": 0
+          },
+          "sourceRows": 5556,
+          "runId": "moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a",
+          "sliceId": "slice-89cb8b94-5b0f-4efb-80a8-79208e69eef4",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260924",
+          "physicalRows": 5569,
+          "uniqueCodes": 5569,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_buy_sm_vol": 0,
+            "null_sell_sm_vol": 0,
+            "null_buy_md_vol": 0,
+            "null_sell_md_vol": 0,
+            "null_buy_lg_vol": 0,
+            "null_sell_lg_vol": 0,
+            "null_buy_elg_vol": 0,
+            "null_sell_elg_vol": 0,
+            "null_net_mf_vol": 0,
+            "null_net_mf_amount": 0
+          },
+          "sourceRows": 5569,
+          "runId": "moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a",
+          "sliceId": "slice-c01ad0d5-9e5c-4a56-9967-455039b09be0",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260928",
+          "physicalRows": 5569,
+          "uniqueCodes": 5569,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_buy_sm_vol": 0,
+            "null_sell_sm_vol": 0,
+            "null_buy_md_vol": 0,
+            "null_sell_md_vol": 0,
+            "null_buy_lg_vol": 0,
+            "null_sell_lg_vol": 0,
+            "null_buy_elg_vol": 0,
+            "null_sell_elg_vol": 0,
+            "null_net_mf_vol": 0,
+            "null_net_mf_amount": 0
+          },
+          "sourceRows": 5569,
+          "runId": "moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b",
+          "sliceId": "slice-5a8822f1-f308-468b-9ec4-62c4e87af68f",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260929",
+          "physicalRows": 5571,
+          "uniqueCodes": 5571,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_buy_sm_vol": 0,
+            "null_sell_sm_vol": 0,
+            "null_buy_md_vol": 0,
+            "null_sell_md_vol": 0,
+            "null_buy_lg_vol": 0,
+            "null_sell_lg_vol": 0,
+            "null_buy_elg_vol": 0,
+            "null_sell_elg_vol": 0,
+            "null_net_mf_vol": 0,
+            "null_net_mf_amount": 0
+          },
+          "sourceRows": 5571,
+          "runId": "moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b",
+          "sliceId": "slice-a9428053-7a54-47e8-bf96-7fea70c2a6a4",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260930",
+          "physicalRows": 5572,
+          "uniqueCodes": 5572,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_buy_sm_vol": 0,
+            "null_sell_sm_vol": 0,
+            "null_buy_md_vol": 0,
+            "null_sell_md_vol": 0,
+            "null_buy_lg_vol": 0,
+            "null_sell_lg_vol": 0,
+            "null_buy_elg_vol": 0,
+            "null_sell_elg_vol": 0,
+            "null_net_mf_vol": 0,
+            "null_net_mf_amount": 0
+          },
+          "sourceRows": 5572,
+          "runId": "moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b",
+          "sliceId": "slice-96d48661-e3f2-4664-a7a1-2f7ce8a4da0b",
+          "passed": true
+        }
+      ]
+    },
+    "etf_factor": {
+      "passed": true,
+      "latestDate": "2026-09-30T00:00:00Z",
+      "physicalRowsAllHistory": 1083841,
+      "firstDate": "2018-01-02T00:00:00Z",
+      "windowRows": 12855.0,
+      "sourceFieldCount": 89,
+      "physicalFieldCount": 89,
+      "fieldNamesMatch": true,
+      "physicalColumnTypes": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL",
+          "designated": false,
+          "upsertKey": true
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP",
+          "designated": true,
+          "upsertKey": true
+        },
+        {
+          "name": "open",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "high",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "low",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "close",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "pre_close",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "change",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "pct_change",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "vol",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "amount",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "asi_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "asit_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "bbi_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "bias1_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "bias2_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "bias3_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "brar_ar_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "brar_br_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "cr_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "dfma_dif_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "dfma_difma_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "dpo_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "madpo_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ema_bfq_5",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ema_bfq_10",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ema_bfq_20",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ema_bfq_30",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ema_bfq_60",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ema_bfq_90",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ema_bfq_250",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "emv_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "maemv_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "expma_12_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "expma_50_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ktn_down_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ktn_mid_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ktn_upper_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ma_bfq_5",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ma_bfq_10",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ma_bfq_20",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ma_bfq_30",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ma_bfq_60",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ma_bfq_90",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ma_bfq_250",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "macd_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "macd_dif_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "macd_dea_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "kdj_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "kdj_k_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "kdj_d_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "rsi_bfq_6",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "rsi_bfq_12",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "rsi_bfq_24",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "boll_upper_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "boll_mid_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "boll_lower_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "atr_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "cci_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "dmi_pdi_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "dmi_mdi_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "dmi_adx_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "dmi_adxr_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "mass_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "ma_mass_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "mfi_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "mtm_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "mtmma_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "obv_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "psy_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "psyma_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "roc_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "maroc_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "taq_down_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "taq_mid_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "taq_up_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "trix_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "trma_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "vr_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "wr_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "wr1_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "xsii_td1_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "xsii_td2_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "xsii_td3_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "xsii_td4_bfq",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "updays",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "downdays",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "lowdays",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        },
+        {
+          "name": "topdays",
+          "type": "DOUBLE",
+          "designated": false,
+          "upsertKey": false
+        }
+      ],
+      "criticalFields": [
+        "close",
+        "pre_close",
+        "amount",
+        "vol"
+      ],
+      "duplicateKeyGroups": 0,
+      "nullBusinessDates": 0,
+      "metadata": [
+        "etf_factor",
+        1819,
+        "etf_factor~1819",
+        true,
+        true,
+        "YEAR",
+        "trade_date"
+      ],
+      "walFrontier": [
+        "etf_factor",
+        false,
+        58,
+        58,
+        0
+      ],
+      "dates": [
+        {
+          "tradeDate": "20260922",
+          "physicalRows": 2148,
+          "uniqueCodes": 2148,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 2148,
+          "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+          "sliceId": "slice-624863f2-3b76-44aa-9018-4ee1dac75992",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260923",
+          "physicalRows": 2134,
+          "uniqueCodes": 2134,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 2134,
+          "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+          "sliceId": "slice-cd82a8e2-bea5-417c-a7ef-0e79211dce3c",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260924",
+          "physicalRows": 2134,
+          "uniqueCodes": 2134,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 2134,
+          "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+          "sliceId": "slice-9ea04622-4892-4473-94ac-640f0460a5f0",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260928",
+          "physicalRows": 2163,
+          "uniqueCodes": 2163,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 2163,
+          "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+          "sliceId": "slice-dc57c65f-43f9-427c-9651-eadaf75f3733",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260929",
+          "physicalRows": 2136,
+          "uniqueCodes": 2136,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 2136,
+          "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+          "sliceId": "slice-47d4683e-928c-4bef-8881-1fa64a5174f3",
+          "passed": true
+        },
+        {
+          "tradeDate": "20260930",
+          "physicalRows": 2140,
+          "uniqueCodes": 2140,
+          "nullCounts": {
+            "null_business_code": 0,
+            "null_close": 0,
+            "null_pre_close": 0,
+            "null_amount": 0,
+            "null_vol": 0
+          },
+          "sourceRows": 2140,
+          "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+          "sliceId": "slice-9227bb84-e757-4ff2-92d6-701774ac0f13",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "runs": [
+    {
+      "summary": {
+        "id": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+        "parentRunId": "daily-basic-71780938-93af-4629-8203-66f52163a37d",
+        "jobId": "data.daily_basic",
+        "jobVersion": 1,
+        "logicalDate": "2026-09-30",
+        "targetId": "questdb-9c28d809a848440c51173cfa7cd1b89c606e11fdb152ee3777527fa7509f860d",
+        "state": "VERIFIED",
+        "revision": 2,
+        "updatedAt": "2026-10-07T12:06:29.882936600Z"
+      },
+      "mode": "BACKFILL",
+      "from": "2026-09-22",
+      "to": "2026-09-30",
+      "parameters": {
+        "trade_dates": "20260922,20260923,20260924,20260928,20260929,20260930"
+      },
+      "verification": {
+        "actualRows": 33344,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 33344,
+        "matchedRows": 33344,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-a2499517-9e72-4821-951c-04487987dadf:revision:5;ledger:slice-26433b77-6002-4f4f-b792-49d002fea1c7:revision:5;ledger:slice-f4ea0a43-2bf6-41f1-9e06-408244298bc0:revision:5;ledger:slice-ec4fc9bd-12d1-4a4c-acea-2f7a96c25484:revision:5;ledger:slice-8d755bc4-7694-4bc2-9738-88cc4e92a1df:revision:5;ledger:slice-c7985fe8-8822-4c18-ae87-e0f150160106:revision:5",
+        "sourceFingerprint": "fd03478f05701f25646affd1d0ffdf764f782669aea3b80f925a4d35834e4d56"
+      },
+      "sliceStates": [
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED"
+      ],
+      "sourceRows": 33344,
+      "verifiedRows": 33344,
+      "errorCode": null,
+      "logPath": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\daily-basic-resume.log",
+      "logSha256": "b097717216a8a836c9757534c10f3e86977608f9e89dc218d46281a7152aae24",
+      "resume": {
+        "parentRunId": "daily-basic-71780938-93af-4629-8203-66f52163a37d",
+        "parentState": "FAILED",
+        "sameTarget": true,
+        "sameFrom": true,
+        "sameTo": true,
+        "sameDates": true,
+        "parentHasNoFetchedSlices": true
+      }
+    },
+    {
+      "summary": {
+        "id": "daily-basic-71780938-93af-4629-8203-66f52163a37d",
+        "parentRunId": null,
+        "jobId": "data.daily_basic",
+        "jobVersion": 1,
+        "logicalDate": "2026-09-30",
+        "targetId": "questdb-9c28d809a848440c51173cfa7cd1b89c606e11fdb152ee3777527fa7509f860d",
+        "state": "FAILED",
+        "revision": 2,
+        "updatedAt": "2026-10-07T11:50:47.630377700Z"
+      },
+      "mode": "BACKFILL",
+      "from": "2026-09-22",
+      "to": "2026-09-30",
+      "parameters": {
+        "trade_dates": "20260922,20260923,20260924,20260928,20260929,20260930"
+      },
+      "verification": null,
+      "sliceStates": [],
+      "sourceRows": 0,
+      "verifiedRows": 0,
+      "errorCode": "Incomplete",
+      "logPath": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\daily-basic-0922-0930.log",
+      "logSha256": "7800ce9b679be23a0769bcfc392334bf4796140b482471ab89a17a1d3f8c5b9a",
+      "resume": null
+    },
+    {
+      "summary": {
+        "id": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+        "parentRunId": null,
+        "jobId": "data.etf_factor",
+        "jobVersion": 1,
+        "logicalDate": "2026-09-30",
+        "targetId": "static-v2-fb5588a9899ebd38e7a31dbec93863d9b57ba71295dce339e8a3354d81ea4c1f",
+        "state": "VERIFIED",
+        "revision": 2,
+        "updatedAt": "2026-10-07T12:12:26.187399400Z"
+      },
+      "mode": "BACKFILL",
+      "from": "2026-09-22",
+      "to": "2026-09-30",
+      "parameters": {
+        "targetId": "static-v2-fb5588a9899ebd38e7a31dbec93863d9b57ba71295dce339e8a3354d81ea4c1f",
+        "targetMaxBefore": "2026-09-30",
+        "targetMinBefore": "2018-01-02",
+        "trade_dates": "20260922,20260923,20260924,20260928,20260929,20260930"
+      },
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 12855,
+        "matchedRows": 12855,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-624863f2-3b76-44aa-9018-4ee1dac75992:revision:5;ledger:slice-cd82a8e2-bea5-417c-a7ef-0e79211dce3c:revision:5;ledger:slice-9ea04622-4892-4473-94ac-640f0460a5f0:revision:5;ledger:slice-dc57c65f-43f9-427c-9651-eadaf75f3733:revision:5;ledger:slice-47d4683e-928c-4bef-8881-1fa64a5174f3:revision:5;ledger:slice-9227bb84-e757-4ff2-92d6-701774ac0f13:revision:5",
+        "sourceFingerprint": "b4d72078859ae5c597afaba7583c08380882f703487405572db41e37865758cd",
+        "actualRows": 12855,
+        "missingKeys": 0
+      },
+      "sliceStates": [
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED"
+      ],
+      "sourceRows": 12855,
+      "verifiedRows": 12855,
+      "errorCode": null,
+      "logPath": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\etf-factor-0922-0930.log",
+      "logSha256": "62a52aaa3f0418b34437ad046f96e4c5272706afc5129599fcdd3ad42cbc1316",
+      "resume": null
+    },
+    {
+      "summary": {
+        "id": "moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a",
+        "parentRunId": null,
+        "jobId": "data.moneyflow",
+        "jobVersion": 1,
+        "logicalDate": "2026-09-30",
+        "targetId": "static-v2-b3c1c13467617a2a9ca67590424e9f8e7ff641ee2f1134a0a9f3a4b32251a848",
+        "state": "VERIFIED",
+        "revision": 2,
+        "updatedAt": "2026-10-07T12:08:11.934417200Z"
+      },
+      "mode": "BACKFILL",
+      "from": "2026-09-22",
+      "to": "2026-09-24",
+      "parameters": {
+        "targetId": "static-v2-b3c1c13467617a2a9ca67590424e9f8e7ff641ee2f1134a0a9f3a4b32251a848",
+        "targetMaxBefore": "2026-09-30",
+        "targetMinBefore": "2023-01-03",
+        "targetRowsBefore": 4631266,
+        "trade_dates": "20260922,20260923,20260924"
+      },
+      "verification": {
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 16679,
+        "matchedRows": 16679,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-e038a180-48fa-4456-8b22-8ebae41d1dbf:revision:5;ledger:slice-89cb8b94-5b0f-4efb-80a8-79208e69eef4:revision:5;ledger:slice-c01ad0d5-9e5c-4a56-9967-455039b09be0:revision:5",
+        "sourceFingerprint": "5e6e2fd26434a06d1fc30f4dbf432b965ce7cb0a8509634319cce8276365dee4",
+        "actualRows": 16679,
+        "missingKeys": 0,
+        "duplicateKeys": 0
+      },
+      "sliceStates": [
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED"
+      ],
+      "sourceRows": 16679,
+      "verifiedRows": 16679,
+      "errorCode": null,
+      "logPath": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\moneyflow-0922-0924.log",
+      "logSha256": "8b5be014406389a011eba0b16af8a6bbe3db98af8da40a7aae4dbe701da0e90d",
+      "resume": null
+    },
+    {
+      "summary": {
+        "id": "moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b",
+        "parentRunId": null,
+        "jobId": "data.moneyflow",
+        "jobVersion": 1,
+        "logicalDate": "2026-09-30",
+        "targetId": "static-v2-b3c1c13467617a2a9ca67590424e9f8e7ff641ee2f1134a0a9f3a4b32251a848",
+        "state": "VERIFIED",
+        "revision": 2,
+        "updatedAt": "2026-10-07T12:07:44.686957500Z"
+      },
+      "mode": "BACKFILL",
+      "from": "2026-09-28",
+      "to": "2026-09-30",
+      "parameters": {
+        "targetId": "static-v2-b3c1c13467617a2a9ca67590424e9f8e7ff641ee2f1134a0a9f3a4b32251a848",
+        "targetMaxBefore": "2026-09-30",
+        "targetMinBefore": "2023-01-03",
+        "targetRowsBefore": 4631266,
+        "trade_dates": "20260928,20260929,20260930"
+      },
+      "verification": {
+        "missingKeys": 0,
+        "actualRows": 16712,
+        "sourceFingerprint": "bfe6bcb2562bf63ec0a3317d7928fbdce8c9458368903ec091416cf7097246a5",
+        "readbackEvidence": "ledger:slice-5a8822f1-f308-468b-9ec4-62c4e87af68f:revision:5;ledger:slice-a9428053-7a54-47e8-bf96-7fea70c2a6a4:revision:5;ledger:slice-96d48661-e3f2-4664-a7a1-2f7ce8a4da0b:revision:5",
+        "mismatchedRows": 0,
+        "matchedRows": 16712,
+        "expectedRows": 16712,
+        "passed": true,
+        "writerStopped": false,
+        "duplicateKeys": 0
+      },
+      "sliceStates": [
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED"
+      ],
+      "sourceRows": 16712,
+      "verifiedRows": 16712,
+      "errorCode": null,
+      "logPath": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\moneyflow-0928-0930.log",
+      "logSha256": "44f1f11b092a9f39b92c2c0a7a5774329b7e0b8208d66931f0234e3109ce369c",
+      "resume": null
+    },
+    {
+      "summary": {
+        "id": "stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518",
+        "parentRunId": null,
+        "jobId": "data.stk_factor",
+        "jobVersion": 2,
+        "logicalDate": "2026-09-30",
+        "targetId": "static-v2-d20e81d906f062807ebc93338a28688de6f59d80dbb2735284e8d93b466e4a8c",
+        "state": "VERIFIED",
+        "revision": 2,
+        "updatedAt": "2026-10-07T12:08:48.595661500Z"
+      },
+      "mode": "BACKFILL",
+      "from": "2026-09-22",
+      "to": "2026-09-24",
+      "parameters": {
+        "targetId": "static-v2-d20e81d906f062807ebc93338a28688de6f59d80dbb2735284e8d93b466e4a8c",
+        "targetMaxBefore": "2026-09-30",
+        "targetMinBefore": "2010-01-29"
+      },
+      "verification": {
+        "sourceFingerprint": "d0a52c4ed8e5282fb65ece920a8125ce69ac74aeb8826810e4daead76efcac5a",
+        "actualRows": 16667,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 16667,
+        "matchedRows": 16667,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-ed99c75c-b007-44ce-af36-9956b4c81f2e:revision:5;ledger:slice-53dd700b-1890-47cb-a0de-27799104fee9:revision:5;ledger:slice-7c9e0924-fc24-4e4a-95c8-c3fdf5eeeae3:revision:5"
+      },
+      "sliceStates": [
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED"
+      ],
+      "sourceRows": 16667,
+      "verifiedRows": 16667,
+      "errorCode": null,
+      "logPath": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\stk-factor-0922-0924.log",
+      "logSha256": "aa77bb817b160c829e8819de44e223336e96782ddaf77c789b5eac33a3430bfd",
+      "resume": null
+    },
+    {
+      "summary": {
+        "id": "stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468",
+        "parentRunId": null,
+        "jobId": "data.stk_factor",
+        "jobVersion": 2,
+        "logicalDate": "2026-09-30",
+        "targetId": "static-v2-d20e81d906f062807ebc93338a28688de6f59d80dbb2735284e8d93b466e4a8c",
+        "state": "VERIFIED",
+        "revision": 2,
+        "updatedAt": "2026-10-07T11:53:51.953794800Z"
+      },
+      "mode": "BACKFILL",
+      "from": "2026-09-28",
+      "to": "2026-09-30",
+      "parameters": {
+        "targetId": "static-v2-d20e81d906f062807ebc93338a28688de6f59d80dbb2735284e8d93b466e4a8c",
+        "targetMaxBefore": "2026-09-30",
+        "targetMinBefore": "2010-01-29"
+      },
+      "verification": {
+        "passed": true,
+        "expectedRows": 16676,
+        "matchedRows": 16676,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-40c7678e-6213-454e-8262-cd49f925af7f:revision:5;ledger:slice-b8cf0fce-60b6-470c-bf6a-72dcf43f4869:revision:5;ledger:slice-c9903006-6fa7-4444-8d80-4f297515d04c:revision:5",
+        "sourceFingerprint": "75251f90ac43530cd024fb7d8375a45fde08add550139f9c1eab036d4b6eeac1",
+        "actualRows": 16676,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false
+      },
+      "sliceStates": [
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED"
+      ],
+      "sourceRows": 16676,
+      "verifiedRows": 16676,
+      "errorCode": null,
+      "logPath": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\stk-factor-0928-0930.log",
+      "logSha256": "56cf5af879262a0567a45738d4329d8de49b082d4320775965d148d4af515c32",
+      "resume": null
+    },
+    {
+      "summary": {
+        "id": "stk-limit-5e26ff2f-3f99-4bf3-b063-dad034b7755d",
+        "parentRunId": null,
+        "jobId": "data.stk_limit",
+        "jobVersion": 1,
+        "logicalDate": "2026-09-30",
+        "targetId": "static-v2-8778e6f4906d6eceb916dd2e07ff2fe234c6cfed58977777a3c501abe1e1fa90",
+        "state": "FAILED",
+        "revision": 2,
+        "updatedAt": "2026-10-07T11:57:19.037485600Z"
+      },
+      "mode": "BACKFILL",
+      "from": "2026-09-22",
+      "to": "2026-09-30",
+      "parameters": {
+        "targetId": "static-v2-8778e6f4906d6eceb916dd2e07ff2fe234c6cfed58977777a3c501abe1e1fa90",
+        "targetMaxBefore": "2026-09-30",
+        "targetMinBefore": "2010-01-29",
+        "trade_dates": "20260922,20260923,20260924,20260928,20260929,20260930"
+      },
+      "verification": null,
+      "sliceStates": [],
+      "sourceRows": 0,
+      "verifiedRows": 0,
+      "errorCode": "Incomplete",
+      "logPath": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\stk-limit-0922-0930.log",
+      "logSha256": "c3329b30f42aa4bb73f7ddb3635086ac22b07a08274385ef74dc97b7414b02bb",
+      "resume": null
+    },
+    {
+      "summary": {
+        "id": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+        "parentRunId": "stk-limit-5e26ff2f-3f99-4bf3-b063-dad034b7755d",
+        "jobId": "data.stk_limit",
+        "jobVersion": 1,
+        "logicalDate": "2026-09-30",
+        "targetId": "static-v2-8778e6f4906d6eceb916dd2e07ff2fe234c6cfed58977777a3c501abe1e1fa90",
+        "state": "VERIFIED",
+        "revision": 2,
+        "updatedAt": "2026-10-07T12:07:14.807022300Z"
+      },
+      "mode": "BACKFILL",
+      "from": "2026-09-22",
+      "to": "2026-09-30",
+      "parameters": {
+        "targetId": "static-v2-8778e6f4906d6eceb916dd2e07ff2fe234c6cfed58977777a3c501abe1e1fa90",
+        "targetMaxBefore": "2026-09-30",
+        "targetMinBefore": "2010-01-29",
+        "trade_dates": "20260922,20260923,20260924,20260928,20260929,20260930"
+      },
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 33890,
+        "matchedRows": 33890,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-c15cfa6f-00a6-4f9c-adda-fff5c939b4a2:revision:5;ledger:slice-a5019205-7699-487e-82d0-804c45a30ca6:revision:5;ledger:slice-36439678-2866-4117-b20d-aedabaa83c2f:revision:5;ledger:slice-4d547be1-4b86-42d0-827e-55db608a1e0f:revision:5;ledger:slice-0dc1ea09-0d2c-4617-83cf-1ca32656d9e9:revision:5;ledger:slice-cb8945e5-3b33-490e-8719-1d004f4dedd1:revision:5",
+        "sourceFingerprint": "e37b9b840062f4e2e46bcf2cc376c4c89265ab5bd4bec3da52e2aee0f3a7dfa8",
+        "actualRows": 33890,
+        "missingKeys": 0
+      },
+      "sliceStates": [
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED",
+        "VERIFIED"
+      ],
+      "sourceRows": 33890,
+      "verifiedRows": 33890,
+      "errorCode": null,
+      "logPath": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\stk-limit-resume.log",
+      "logSha256": "9d323dc3bcdf0fb79c4ac30f76e7ae2fbfb453b267436a5c2277c96a401b1ca9",
+      "resume": {
+        "parentRunId": "stk-limit-5e26ff2f-3f99-4bf3-b063-dad034b7755d",
+        "parentState": "FAILED",
+        "sameTarget": true,
+        "sameFrom": true,
+        "sameTo": true,
+        "sameDates": true,
+        "parentHasNoFetchedSlices": true
+      }
+    }
+  ],
+  "verifiedRunCount": 7,
+  "retainedFailedRunCount": 2,
+  "verifiedSourceRows": 146823.0,
+  "sourceReceipts": [
+    {
+      "calculatedSourceFingerprint": "644460087d55d2af9c3c5103ad441af83e79555baa7cd009dfe29337971604e2",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "daily_basic",
+      "fieldCount": 18,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "turnover_rate",
+        "turnover_rate_f",
+        "volume_ratio",
+        "pe",
+        "pe_ttm",
+        "pb",
+        "ps",
+        "ps_ttm",
+        "dv_ratio",
+        "dv_ttm",
+        "total_share",
+        "float_share",
+        "free_share",
+        "total_mv",
+        "circ_mv"
+      ],
+      "fileSha256": "2b48c52324c2814d6da495d4a04664843a8973c7ae08d020e1d0e68972126a24",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.daily_basic",
+      "ledgerFetchedRows": 5556,
+      "ledgerSourceFingerprint": "644460087d55d2af9c3c5103ad441af83e79555baa7cd009dfe29337971604e2",
+      "passed": true,
+      "rawResponseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\response-921c63f7-bccd-470a-9d47-380a0f3f0492.json",
+      "rawResponseSha256": "4d7ad2ffa2af2a737ca14d61134672b09c18fbc1bb57dcb86a132735ef8046d1",
+      "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+      "sliceId": "slice-26433b77-6002-4f4f-b792-49d002fea1c7",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\source-5d12ddcd-146c-4eeb-b370-49b8b7b7c8af.json",
+      "sourceRows": 5556,
+      "state": "VERIFIED",
+      "tradeDate": "20260923",
+      "verification": {
+        "actualRows": 5556,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5556,
+        "matchedRows": 5556,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-26433b77-6002-4f4f-b792-49d002fea1c7:revision:5",
+        "sourceFingerprint": "644460087d55d2af9c3c5103ad441af83e79555baa7cd009dfe29337971604e2"
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "ddcc23377681d417578e701d5170e93aea89b79ffe32b9a90c9397b46bf7e241",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "daily_basic",
+      "fieldCount": 18,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "turnover_rate",
+        "turnover_rate_f",
+        "volume_ratio",
+        "pe",
+        "pe_ttm",
+        "pb",
+        "ps",
+        "ps_ttm",
+        "dv_ratio",
+        "dv_ttm",
+        "total_share",
+        "float_share",
+        "free_share",
+        "total_mv",
+        "circ_mv"
+      ],
+      "fileSha256": "08d29727aa9a2c40309710ec3a12cdc1a737e7a42f5af144dba378d7b0c4b998",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.daily_basic",
+      "ledgerFetchedRows": 5559,
+      "ledgerSourceFingerprint": "ddcc23377681d417578e701d5170e93aea89b79ffe32b9a90c9397b46bf7e241",
+      "passed": true,
+      "rawResponseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\response-59226ccf-10c9-4be5-81d0-1a10f1dc56d7.json",
+      "rawResponseSha256": "5e23612b2c84bb32662b608b806e90618bfcc0486b1903a4989880df74040138",
+      "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+      "sliceId": "slice-8d755bc4-7694-4bc2-9738-88cc4e92a1df",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\source-b3eda533-1c20-44ff-91b9-2e6eaa0f4e4f.json",
+      "sourceRows": 5559,
+      "state": "VERIFIED",
+      "tradeDate": "20260929",
+      "verification": {
+        "actualRows": 5559,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5559,
+        "matchedRows": 5559,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-8d755bc4-7694-4bc2-9738-88cc4e92a1df:revision:5",
+        "sourceFingerprint": "ddcc23377681d417578e701d5170e93aea89b79ffe32b9a90c9397b46bf7e241"
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "5614a8f4372405909b54e6526fe2ce5ce1f28e1c221817fd56753a81f5fb4b13",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "daily_basic",
+      "fieldCount": 18,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "turnover_rate",
+        "turnover_rate_f",
+        "volume_ratio",
+        "pe",
+        "pe_ttm",
+        "pb",
+        "ps",
+        "ps_ttm",
+        "dv_ratio",
+        "dv_ttm",
+        "total_share",
+        "float_share",
+        "free_share",
+        "total_mv",
+        "circ_mv"
+      ],
+      "fileSha256": "4330dbb367b8fa36997946aacbec589f9ba75f134440821d637e8db5634929e5",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.daily_basic",
+      "ledgerFetchedRows": 5554,
+      "ledgerSourceFingerprint": "5614a8f4372405909b54e6526fe2ce5ce1f28e1c221817fd56753a81f5fb4b13",
+      "passed": true,
+      "rawResponseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\response-e5c95844-2299-450c-8365-5ff31cd6aab7.json",
+      "rawResponseSha256": "67aee25c7313486390dbadad084198b1782c057afa922df68ccd592e5111e116",
+      "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+      "sliceId": "slice-a2499517-9e72-4821-951c-04487987dadf",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\source-be115c72-76dc-4829-b3f5-0ab7f0f1c753.json",
+      "sourceRows": 5554,
+      "state": "VERIFIED",
+      "tradeDate": "20260922",
+      "verification": {
+        "actualRows": 5554,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5554,
+        "matchedRows": 5554,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-a2499517-9e72-4821-951c-04487987dadf:revision:5",
+        "sourceFingerprint": "5614a8f4372405909b54e6526fe2ce5ce1f28e1c221817fd56753a81f5fb4b13"
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "6edb038bc6c9c4cce3e4c67c43bf79ab1dfbbe9448e0f0df8aa209b4d147675f",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "daily_basic",
+      "fieldCount": 18,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "turnover_rate",
+        "turnover_rate_f",
+        "volume_ratio",
+        "pe",
+        "pe_ttm",
+        "pb",
+        "ps",
+        "ps_ttm",
+        "dv_ratio",
+        "dv_ttm",
+        "total_share",
+        "float_share",
+        "free_share",
+        "total_mv",
+        "circ_mv"
+      ],
+      "fileSha256": "c7c5440497ef32dd01e43f45460a84697b0d837e849ffd677838ad66514c94f6",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.daily_basic",
+      "ledgerFetchedRows": 5561,
+      "ledgerSourceFingerprint": "6edb038bc6c9c4cce3e4c67c43bf79ab1dfbbe9448e0f0df8aa209b4d147675f",
+      "passed": true,
+      "rawResponseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\response-c9ac9a87-47f7-4a25-89f5-08a40c513ca2.json",
+      "rawResponseSha256": "6e32620f50211ae0a9a94d24f00400aa73921ca28f76ca8f05332f69a181a8e0",
+      "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+      "sliceId": "slice-c7985fe8-8822-4c18-ae87-e0f150160106",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\source-771f8e2b-5e14-4d6c-aa58-359caf868e7a.json",
+      "sourceRows": 5561,
+      "state": "VERIFIED",
+      "tradeDate": "20260930",
+      "verification": {
+        "actualRows": 5561,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5561,
+        "matchedRows": 5561,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-c7985fe8-8822-4c18-ae87-e0f150160106:revision:5",
+        "sourceFingerprint": "6edb038bc6c9c4cce3e4c67c43bf79ab1dfbbe9448e0f0df8aa209b4d147675f"
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "c5f02a329ac7eb55b30fd73a027d1184dab0dea0687b62283044a145bc3fbdf6",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "daily_basic",
+      "fieldCount": 18,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "turnover_rate",
+        "turnover_rate_f",
+        "volume_ratio",
+        "pe",
+        "pe_ttm",
+        "pb",
+        "ps",
+        "ps_ttm",
+        "dv_ratio",
+        "dv_ttm",
+        "total_share",
+        "float_share",
+        "free_share",
+        "total_mv",
+        "circ_mv"
+      ],
+      "fileSha256": "e640d108a7b1921cc6988c5f28cff9d9e1f1e23d84315301d7821ce8ee9e0773",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.daily_basic",
+      "ledgerFetchedRows": 5557,
+      "ledgerSourceFingerprint": "c5f02a329ac7eb55b30fd73a027d1184dab0dea0687b62283044a145bc3fbdf6",
+      "passed": true,
+      "rawResponseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\response-6f04dcb1-b32d-4863-9c6f-853bb93d2efc.json",
+      "rawResponseSha256": "3dc0e4cea861626b3d4cb86dfb52503bcd3e1585942270cbf79422a455a2bd55",
+      "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+      "sliceId": "slice-ec4fc9bd-12d1-4a4c-acea-2f7a96c25484",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\source-29cc8dd3-de1d-4ccb-aa1e-4b0cf907af30.json",
+      "sourceRows": 5557,
+      "state": "VERIFIED",
+      "tradeDate": "20260928",
+      "verification": {
+        "actualRows": 5557,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5557,
+        "matchedRows": 5557,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-ec4fc9bd-12d1-4a4c-acea-2f7a96c25484:revision:5",
+        "sourceFingerprint": "c5f02a329ac7eb55b30fd73a027d1184dab0dea0687b62283044a145bc3fbdf6"
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "89c323242707f828354834d5fcc7f68c47540913eedb058770c79f99898fd513",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "daily_basic",
+      "fieldCount": 18,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "turnover_rate",
+        "turnover_rate_f",
+        "volume_ratio",
+        "pe",
+        "pe_ttm",
+        "pb",
+        "ps",
+        "ps_ttm",
+        "dv_ratio",
+        "dv_ttm",
+        "total_share",
+        "float_share",
+        "free_share",
+        "total_mv",
+        "circ_mv"
+      ],
+      "fileSha256": "ab5a3a6cdca5fd5c579a7fedea718fa80c25fdb28aa9ca0f7cc5e6d993c11bef",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.daily_basic",
+      "ledgerFetchedRows": 5557,
+      "ledgerSourceFingerprint": "89c323242707f828354834d5fcc7f68c47540913eedb058770c79f99898fd513",
+      "passed": true,
+      "rawResponseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\response-84610dc8-a271-4bce-93d0-54e4be0fed03.json",
+      "rawResponseSha256": "a22ea61ea47e20fb84c13235db2c3d5cf53d83b81d6c7dfc05468b09c5229833",
+      "runId": "daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691",
+      "sliceId": "slice-f4ea0a43-2bf6-41f1-9e06-408244298bc0",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\daily-basic-5bdc9a21-9fbc-4dc2-a143-4528d5d2b691\\source-ff5f6b31-3395-4083-a6aa-cc683509e6da.json",
+      "sourceRows": 5557,
+      "state": "VERIFIED",
+      "tradeDate": "20260924",
+      "verification": {
+        "actualRows": 5557,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5557,
+        "matchedRows": 5557,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-f4ea0a43-2bf6-41f1-9e06-408244298bc0:revision:5",
+        "sourceFingerprint": "89c323242707f828354834d5fcc7f68c47540913eedb058770c79f99898fd513"
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "1e14701bfc0bcdf3ab9eaabefa20f4ef072c4ce4c205e655b99f7d76064864dc",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "fund_factor_pro",
+      "fieldCount": 89,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "asi_bfq",
+        "asit_bfq",
+        "bbi_bfq",
+        "bias1_bfq",
+        "bias2_bfq",
+        "bias3_bfq",
+        "brar_ar_bfq",
+        "brar_br_bfq",
+        "cr_bfq",
+        "dfma_dif_bfq",
+        "dfma_difma_bfq",
+        "dpo_bfq",
+        "madpo_bfq",
+        "ema_bfq_5",
+        "ema_bfq_10",
+        "ema_bfq_20",
+        "ema_bfq_30",
+        "ema_bfq_60",
+        "ema_bfq_90",
+        "ema_bfq_250",
+        "emv_bfq",
+        "maemv_bfq",
+        "expma_12_bfq",
+        "expma_50_bfq",
+        "ktn_down_bfq",
+        "ktn_mid_bfq",
+        "ktn_upper_bfq",
+        "ma_bfq_5",
+        "ma_bfq_10",
+        "ma_bfq_20",
+        "ma_bfq_30",
+        "ma_bfq_60",
+        "ma_bfq_90",
+        "ma_bfq_250",
+        "macd_bfq",
+        "macd_dif_bfq",
+        "macd_dea_bfq",
+        "kdj_bfq",
+        "kdj_k_bfq",
+        "kdj_d_bfq",
+        "rsi_bfq_6",
+        "rsi_bfq_12",
+        "rsi_bfq_24",
+        "boll_upper_bfq",
+        "boll_mid_bfq",
+        "boll_lower_bfq",
+        "atr_bfq",
+        "cci_bfq",
+        "dmi_pdi_bfq",
+        "dmi_mdi_bfq",
+        "dmi_adx_bfq",
+        "dmi_adxr_bfq",
+        "mass_bfq",
+        "ma_mass_bfq",
+        "mfi_bfq",
+        "mtm_bfq",
+        "mtmma_bfq",
+        "obv_bfq",
+        "psy_bfq",
+        "psyma_bfq",
+        "roc_bfq",
+        "maroc_bfq",
+        "taq_down_bfq",
+        "taq_mid_bfq",
+        "taq_up_bfq",
+        "trix_bfq",
+        "trma_bfq",
+        "vr_bfq",
+        "wr_bfq",
+        "wr1_bfq",
+        "xsii_td1_bfq",
+        "xsii_td2_bfq",
+        "xsii_td3_bfq",
+        "xsii_td4_bfq",
+        "updays",
+        "downdays",
+        "lowdays",
+        "topdays"
+      ],
+      "fileSha256": "1e14701bfc0bcdf3ab9eaabefa20f4ef072c4ce4c205e655b99f7d76064864dc",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.etf_factor",
+      "ledgerFetchedRows": 2136,
+      "ledgerSourceFingerprint": "1e14701bfc0bcdf3ab9eaabefa20f4ef072c4ce4c205e655b99f7d76064864dc",
+      "passed": true,
+      "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+      "sliceId": "slice-47d4683e-928c-4bef-8881-1fa64a5174f3",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7\\source\\fund-factor-pro-20260929-1e14701bfc0bcdf3ab9eaabefa20f4ef072c4ce4c205e655b99f7d76064864dc.json",
+      "sourceRows": 2136,
+      "state": "VERIFIED",
+      "tradeDate": "20260929",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 2136,
+        "matchedRows": 2136,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-47d4683e-928c-4bef-8881-1fa64a5174f3:revision:5",
+        "sourceFingerprint": "1e14701bfc0bcdf3ab9eaabefa20f4ef072c4ce4c205e655b99f7d76064864dc",
+        "actualRows": 2136,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "01c0166449644cd96ff79d4f7903035b386dcdfda2e3166a897a596cc6f38b49",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "fund_factor_pro",
+      "fieldCount": 89,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "asi_bfq",
+        "asit_bfq",
+        "bbi_bfq",
+        "bias1_bfq",
+        "bias2_bfq",
+        "bias3_bfq",
+        "brar_ar_bfq",
+        "brar_br_bfq",
+        "cr_bfq",
+        "dfma_dif_bfq",
+        "dfma_difma_bfq",
+        "dpo_bfq",
+        "madpo_bfq",
+        "ema_bfq_5",
+        "ema_bfq_10",
+        "ema_bfq_20",
+        "ema_bfq_30",
+        "ema_bfq_60",
+        "ema_bfq_90",
+        "ema_bfq_250",
+        "emv_bfq",
+        "maemv_bfq",
+        "expma_12_bfq",
+        "expma_50_bfq",
+        "ktn_down_bfq",
+        "ktn_mid_bfq",
+        "ktn_upper_bfq",
+        "ma_bfq_5",
+        "ma_bfq_10",
+        "ma_bfq_20",
+        "ma_bfq_30",
+        "ma_bfq_60",
+        "ma_bfq_90",
+        "ma_bfq_250",
+        "macd_bfq",
+        "macd_dif_bfq",
+        "macd_dea_bfq",
+        "kdj_bfq",
+        "kdj_k_bfq",
+        "kdj_d_bfq",
+        "rsi_bfq_6",
+        "rsi_bfq_12",
+        "rsi_bfq_24",
+        "boll_upper_bfq",
+        "boll_mid_bfq",
+        "boll_lower_bfq",
+        "atr_bfq",
+        "cci_bfq",
+        "dmi_pdi_bfq",
+        "dmi_mdi_bfq",
+        "dmi_adx_bfq",
+        "dmi_adxr_bfq",
+        "mass_bfq",
+        "ma_mass_bfq",
+        "mfi_bfq",
+        "mtm_bfq",
+        "mtmma_bfq",
+        "obv_bfq",
+        "psy_bfq",
+        "psyma_bfq",
+        "roc_bfq",
+        "maroc_bfq",
+        "taq_down_bfq",
+        "taq_mid_bfq",
+        "taq_up_bfq",
+        "trix_bfq",
+        "trma_bfq",
+        "vr_bfq",
+        "wr_bfq",
+        "wr1_bfq",
+        "xsii_td1_bfq",
+        "xsii_td2_bfq",
+        "xsii_td3_bfq",
+        "xsii_td4_bfq",
+        "updays",
+        "downdays",
+        "lowdays",
+        "topdays"
+      ],
+      "fileSha256": "01c0166449644cd96ff79d4f7903035b386dcdfda2e3166a897a596cc6f38b49",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.etf_factor",
+      "ledgerFetchedRows": 2148,
+      "ledgerSourceFingerprint": "01c0166449644cd96ff79d4f7903035b386dcdfda2e3166a897a596cc6f38b49",
+      "passed": true,
+      "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+      "sliceId": "slice-624863f2-3b76-44aa-9018-4ee1dac75992",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7\\source\\fund-factor-pro-20260922-01c0166449644cd96ff79d4f7903035b386dcdfda2e3166a897a596cc6f38b49.json",
+      "sourceRows": 2148,
+      "state": "VERIFIED",
+      "tradeDate": "20260922",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 2148,
+        "matchedRows": 2148,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-624863f2-3b76-44aa-9018-4ee1dac75992:revision:5",
+        "sourceFingerprint": "01c0166449644cd96ff79d4f7903035b386dcdfda2e3166a897a596cc6f38b49",
+        "actualRows": 2148,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "8195760efb998d1ce4178da21deb4aa76b4c9100cf09e387d54d7508b5ffb908",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "fund_factor_pro",
+      "fieldCount": 89,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "asi_bfq",
+        "asit_bfq",
+        "bbi_bfq",
+        "bias1_bfq",
+        "bias2_bfq",
+        "bias3_bfq",
+        "brar_ar_bfq",
+        "brar_br_bfq",
+        "cr_bfq",
+        "dfma_dif_bfq",
+        "dfma_difma_bfq",
+        "dpo_bfq",
+        "madpo_bfq",
+        "ema_bfq_5",
+        "ema_bfq_10",
+        "ema_bfq_20",
+        "ema_bfq_30",
+        "ema_bfq_60",
+        "ema_bfq_90",
+        "ema_bfq_250",
+        "emv_bfq",
+        "maemv_bfq",
+        "expma_12_bfq",
+        "expma_50_bfq",
+        "ktn_down_bfq",
+        "ktn_mid_bfq",
+        "ktn_upper_bfq",
+        "ma_bfq_5",
+        "ma_bfq_10",
+        "ma_bfq_20",
+        "ma_bfq_30",
+        "ma_bfq_60",
+        "ma_bfq_90",
+        "ma_bfq_250",
+        "macd_bfq",
+        "macd_dif_bfq",
+        "macd_dea_bfq",
+        "kdj_bfq",
+        "kdj_k_bfq",
+        "kdj_d_bfq",
+        "rsi_bfq_6",
+        "rsi_bfq_12",
+        "rsi_bfq_24",
+        "boll_upper_bfq",
+        "boll_mid_bfq",
+        "boll_lower_bfq",
+        "atr_bfq",
+        "cci_bfq",
+        "dmi_pdi_bfq",
+        "dmi_mdi_bfq",
+        "dmi_adx_bfq",
+        "dmi_adxr_bfq",
+        "mass_bfq",
+        "ma_mass_bfq",
+        "mfi_bfq",
+        "mtm_bfq",
+        "mtmma_bfq",
+        "obv_bfq",
+        "psy_bfq",
+        "psyma_bfq",
+        "roc_bfq",
+        "maroc_bfq",
+        "taq_down_bfq",
+        "taq_mid_bfq",
+        "taq_up_bfq",
+        "trix_bfq",
+        "trma_bfq",
+        "vr_bfq",
+        "wr_bfq",
+        "wr1_bfq",
+        "xsii_td1_bfq",
+        "xsii_td2_bfq",
+        "xsii_td3_bfq",
+        "xsii_td4_bfq",
+        "updays",
+        "downdays",
+        "lowdays",
+        "topdays"
+      ],
+      "fileSha256": "8195760efb998d1ce4178da21deb4aa76b4c9100cf09e387d54d7508b5ffb908",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.etf_factor",
+      "ledgerFetchedRows": 2140,
+      "ledgerSourceFingerprint": "8195760efb998d1ce4178da21deb4aa76b4c9100cf09e387d54d7508b5ffb908",
+      "passed": true,
+      "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+      "sliceId": "slice-9227bb84-e757-4ff2-92d6-701774ac0f13",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7\\source\\fund-factor-pro-20260930-8195760efb998d1ce4178da21deb4aa76b4c9100cf09e387d54d7508b5ffb908.json",
+      "sourceRows": 2140,
+      "state": "VERIFIED",
+      "tradeDate": "20260930",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 2140,
+        "matchedRows": 2140,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-9227bb84-e757-4ff2-92d6-701774ac0f13:revision:5",
+        "sourceFingerprint": "8195760efb998d1ce4178da21deb4aa76b4c9100cf09e387d54d7508b5ffb908",
+        "actualRows": 2140,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "b2a597e36e0c3d43bbf466f259c443d0d66d12b52f4c916913c6c332dc0066f8",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "fund_factor_pro",
+      "fieldCount": 89,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "asi_bfq",
+        "asit_bfq",
+        "bbi_bfq",
+        "bias1_bfq",
+        "bias2_bfq",
+        "bias3_bfq",
+        "brar_ar_bfq",
+        "brar_br_bfq",
+        "cr_bfq",
+        "dfma_dif_bfq",
+        "dfma_difma_bfq",
+        "dpo_bfq",
+        "madpo_bfq",
+        "ema_bfq_5",
+        "ema_bfq_10",
+        "ema_bfq_20",
+        "ema_bfq_30",
+        "ema_bfq_60",
+        "ema_bfq_90",
+        "ema_bfq_250",
+        "emv_bfq",
+        "maemv_bfq",
+        "expma_12_bfq",
+        "expma_50_bfq",
+        "ktn_down_bfq",
+        "ktn_mid_bfq",
+        "ktn_upper_bfq",
+        "ma_bfq_5",
+        "ma_bfq_10",
+        "ma_bfq_20",
+        "ma_bfq_30",
+        "ma_bfq_60",
+        "ma_bfq_90",
+        "ma_bfq_250",
+        "macd_bfq",
+        "macd_dif_bfq",
+        "macd_dea_bfq",
+        "kdj_bfq",
+        "kdj_k_bfq",
+        "kdj_d_bfq",
+        "rsi_bfq_6",
+        "rsi_bfq_12",
+        "rsi_bfq_24",
+        "boll_upper_bfq",
+        "boll_mid_bfq",
+        "boll_lower_bfq",
+        "atr_bfq",
+        "cci_bfq",
+        "dmi_pdi_bfq",
+        "dmi_mdi_bfq",
+        "dmi_adx_bfq",
+        "dmi_adxr_bfq",
+        "mass_bfq",
+        "ma_mass_bfq",
+        "mfi_bfq",
+        "mtm_bfq",
+        "mtmma_bfq",
+        "obv_bfq",
+        "psy_bfq",
+        "psyma_bfq",
+        "roc_bfq",
+        "maroc_bfq",
+        "taq_down_bfq",
+        "taq_mid_bfq",
+        "taq_up_bfq",
+        "trix_bfq",
+        "trma_bfq",
+        "vr_bfq",
+        "wr_bfq",
+        "wr1_bfq",
+        "xsii_td1_bfq",
+        "xsii_td2_bfq",
+        "xsii_td3_bfq",
+        "xsii_td4_bfq",
+        "updays",
+        "downdays",
+        "lowdays",
+        "topdays"
+      ],
+      "fileSha256": "b2a597e36e0c3d43bbf466f259c443d0d66d12b52f4c916913c6c332dc0066f8",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.etf_factor",
+      "ledgerFetchedRows": 2134,
+      "ledgerSourceFingerprint": "b2a597e36e0c3d43bbf466f259c443d0d66d12b52f4c916913c6c332dc0066f8",
+      "passed": true,
+      "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+      "sliceId": "slice-9ea04622-4892-4473-94ac-640f0460a5f0",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7\\source\\fund-factor-pro-20260924-b2a597e36e0c3d43bbf466f259c443d0d66d12b52f4c916913c6c332dc0066f8.json",
+      "sourceRows": 2134,
+      "state": "VERIFIED",
+      "tradeDate": "20260924",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 2134,
+        "matchedRows": 2134,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-9ea04622-4892-4473-94ac-640f0460a5f0:revision:5",
+        "sourceFingerprint": "b2a597e36e0c3d43bbf466f259c443d0d66d12b52f4c916913c6c332dc0066f8",
+        "actualRows": 2134,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "ad6da60c530440c2772553b07920432d2ae9a6ee263423ffcbde8e704bf19eee",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "fund_factor_pro",
+      "fieldCount": 89,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "asi_bfq",
+        "asit_bfq",
+        "bbi_bfq",
+        "bias1_bfq",
+        "bias2_bfq",
+        "bias3_bfq",
+        "brar_ar_bfq",
+        "brar_br_bfq",
+        "cr_bfq",
+        "dfma_dif_bfq",
+        "dfma_difma_bfq",
+        "dpo_bfq",
+        "madpo_bfq",
+        "ema_bfq_5",
+        "ema_bfq_10",
+        "ema_bfq_20",
+        "ema_bfq_30",
+        "ema_bfq_60",
+        "ema_bfq_90",
+        "ema_bfq_250",
+        "emv_bfq",
+        "maemv_bfq",
+        "expma_12_bfq",
+        "expma_50_bfq",
+        "ktn_down_bfq",
+        "ktn_mid_bfq",
+        "ktn_upper_bfq",
+        "ma_bfq_5",
+        "ma_bfq_10",
+        "ma_bfq_20",
+        "ma_bfq_30",
+        "ma_bfq_60",
+        "ma_bfq_90",
+        "ma_bfq_250",
+        "macd_bfq",
+        "macd_dif_bfq",
+        "macd_dea_bfq",
+        "kdj_bfq",
+        "kdj_k_bfq",
+        "kdj_d_bfq",
+        "rsi_bfq_6",
+        "rsi_bfq_12",
+        "rsi_bfq_24",
+        "boll_upper_bfq",
+        "boll_mid_bfq",
+        "boll_lower_bfq",
+        "atr_bfq",
+        "cci_bfq",
+        "dmi_pdi_bfq",
+        "dmi_mdi_bfq",
+        "dmi_adx_bfq",
+        "dmi_adxr_bfq",
+        "mass_bfq",
+        "ma_mass_bfq",
+        "mfi_bfq",
+        "mtm_bfq",
+        "mtmma_bfq",
+        "obv_bfq",
+        "psy_bfq",
+        "psyma_bfq",
+        "roc_bfq",
+        "maroc_bfq",
+        "taq_down_bfq",
+        "taq_mid_bfq",
+        "taq_up_bfq",
+        "trix_bfq",
+        "trma_bfq",
+        "vr_bfq",
+        "wr_bfq",
+        "wr1_bfq",
+        "xsii_td1_bfq",
+        "xsii_td2_bfq",
+        "xsii_td3_bfq",
+        "xsii_td4_bfq",
+        "updays",
+        "downdays",
+        "lowdays",
+        "topdays"
+      ],
+      "fileSha256": "ad6da60c530440c2772553b07920432d2ae9a6ee263423ffcbde8e704bf19eee",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.etf_factor",
+      "ledgerFetchedRows": 2134,
+      "ledgerSourceFingerprint": "ad6da60c530440c2772553b07920432d2ae9a6ee263423ffcbde8e704bf19eee",
+      "passed": true,
+      "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+      "sliceId": "slice-cd82a8e2-bea5-417c-a7ef-0e79211dce3c",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7\\source\\fund-factor-pro-20260923-ad6da60c530440c2772553b07920432d2ae9a6ee263423ffcbde8e704bf19eee.json",
+      "sourceRows": 2134,
+      "state": "VERIFIED",
+      "tradeDate": "20260923",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 2134,
+        "matchedRows": 2134,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-cd82a8e2-bea5-417c-a7ef-0e79211dce3c:revision:5",
+        "sourceFingerprint": "ad6da60c530440c2772553b07920432d2ae9a6ee263423ffcbde8e704bf19eee",
+        "actualRows": 2134,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "970f530919e95a28ed33acc79d8f9a4d8167ae35397c408a99845f8d7b76a28f",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "fund_factor_pro",
+      "fieldCount": 89,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "asi_bfq",
+        "asit_bfq",
+        "bbi_bfq",
+        "bias1_bfq",
+        "bias2_bfq",
+        "bias3_bfq",
+        "brar_ar_bfq",
+        "brar_br_bfq",
+        "cr_bfq",
+        "dfma_dif_bfq",
+        "dfma_difma_bfq",
+        "dpo_bfq",
+        "madpo_bfq",
+        "ema_bfq_5",
+        "ema_bfq_10",
+        "ema_bfq_20",
+        "ema_bfq_30",
+        "ema_bfq_60",
+        "ema_bfq_90",
+        "ema_bfq_250",
+        "emv_bfq",
+        "maemv_bfq",
+        "expma_12_bfq",
+        "expma_50_bfq",
+        "ktn_down_bfq",
+        "ktn_mid_bfq",
+        "ktn_upper_bfq",
+        "ma_bfq_5",
+        "ma_bfq_10",
+        "ma_bfq_20",
+        "ma_bfq_30",
+        "ma_bfq_60",
+        "ma_bfq_90",
+        "ma_bfq_250",
+        "macd_bfq",
+        "macd_dif_bfq",
+        "macd_dea_bfq",
+        "kdj_bfq",
+        "kdj_k_bfq",
+        "kdj_d_bfq",
+        "rsi_bfq_6",
+        "rsi_bfq_12",
+        "rsi_bfq_24",
+        "boll_upper_bfq",
+        "boll_mid_bfq",
+        "boll_lower_bfq",
+        "atr_bfq",
+        "cci_bfq",
+        "dmi_pdi_bfq",
+        "dmi_mdi_bfq",
+        "dmi_adx_bfq",
+        "dmi_adxr_bfq",
+        "mass_bfq",
+        "ma_mass_bfq",
+        "mfi_bfq",
+        "mtm_bfq",
+        "mtmma_bfq",
+        "obv_bfq",
+        "psy_bfq",
+        "psyma_bfq",
+        "roc_bfq",
+        "maroc_bfq",
+        "taq_down_bfq",
+        "taq_mid_bfq",
+        "taq_up_bfq",
+        "trix_bfq",
+        "trma_bfq",
+        "vr_bfq",
+        "wr_bfq",
+        "wr1_bfq",
+        "xsii_td1_bfq",
+        "xsii_td2_bfq",
+        "xsii_td3_bfq",
+        "xsii_td4_bfq",
+        "updays",
+        "downdays",
+        "lowdays",
+        "topdays"
+      ],
+      "fileSha256": "970f530919e95a28ed33acc79d8f9a4d8167ae35397c408a99845f8d7b76a28f",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.etf_factor",
+      "ledgerFetchedRows": 2163,
+      "ledgerSourceFingerprint": "970f530919e95a28ed33acc79d8f9a4d8167ae35397c408a99845f8d7b76a28f",
+      "passed": true,
+      "runId": "etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7",
+      "sliceId": "slice-dc57c65f-43f9-427c-9651-eadaf75f3733",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-factor-d6e3e5ff-198c-4cc9-9304-e6dbf50ce5f7\\source\\fund-factor-pro-20260928-970f530919e95a28ed33acc79d8f9a4d8167ae35397c408a99845f8d7b76a28f.json",
+      "sourceRows": 2163,
+      "state": "VERIFIED",
+      "tradeDate": "20260928",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 2163,
+        "matchedRows": 2163,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-dc57c65f-43f9-427c-9651-eadaf75f3733:revision:5",
+        "sourceFingerprint": "970f530919e95a28ed33acc79d8f9a4d8167ae35397c408a99845f8d7b76a28f",
+        "actualRows": 2163,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "99f8adf5686f66c154622a548ca8193f98c961eba393ccf27c1bad1dbe2e0ad2",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "moneyflow",
+      "fieldCount": 20,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "buy_sm_vol",
+        "buy_sm_amount",
+        "sell_sm_vol",
+        "sell_sm_amount",
+        "buy_md_vol",
+        "buy_md_amount",
+        "sell_md_vol",
+        "sell_md_amount",
+        "buy_lg_vol",
+        "buy_lg_amount",
+        "sell_lg_vol",
+        "sell_lg_amount",
+        "buy_elg_vol",
+        "buy_elg_amount",
+        "sell_elg_vol",
+        "sell_elg_amount",
+        "net_mf_vol",
+        "net_mf_amount"
+      ],
+      "fileSha256": "99f8adf5686f66c154622a548ca8193f98c961eba393ccf27c1bad1dbe2e0ad2",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.moneyflow",
+      "ledgerFetchedRows": 5556,
+      "ledgerSourceFingerprint": "99f8adf5686f66c154622a548ca8193f98c961eba393ccf27c1bad1dbe2e0ad2",
+      "passed": true,
+      "runId": "moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a",
+      "sliceId": "slice-89cb8b94-5b0f-4efb-80a8-79208e69eef4",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a\\source\\moneyflow-20260923-99f8adf5686f66c154622a548ca8193f98c961eba393ccf27c1bad1dbe2e0ad2.json",
+      "sourceRows": 5556,
+      "state": "VERIFIED",
+      "tradeDate": "20260923",
+      "verification": {
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5556,
+        "matchedRows": 5556,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-89cb8b94-5b0f-4efb-80a8-79208e69eef4:revision:5",
+        "sourceFingerprint": "99f8adf5686f66c154622a548ca8193f98c961eba393ccf27c1bad1dbe2e0ad2",
+        "actualRows": 5556,
+        "missingKeys": 0,
+        "duplicateKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "bda33a5b5db999b4af45e6f32f87a642dfbc15b7e322e9a1fb15fd454589cb28",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "moneyflow",
+      "fieldCount": 20,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "buy_sm_vol",
+        "buy_sm_amount",
+        "sell_sm_vol",
+        "sell_sm_amount",
+        "buy_md_vol",
+        "buy_md_amount",
+        "sell_md_vol",
+        "sell_md_amount",
+        "buy_lg_vol",
+        "buy_lg_amount",
+        "sell_lg_vol",
+        "sell_lg_amount",
+        "buy_elg_vol",
+        "buy_elg_amount",
+        "sell_elg_vol",
+        "sell_elg_amount",
+        "net_mf_vol",
+        "net_mf_amount"
+      ],
+      "fileSha256": "bda33a5b5db999b4af45e6f32f87a642dfbc15b7e322e9a1fb15fd454589cb28",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.moneyflow",
+      "ledgerFetchedRows": 5569,
+      "ledgerSourceFingerprint": "bda33a5b5db999b4af45e6f32f87a642dfbc15b7e322e9a1fb15fd454589cb28",
+      "passed": true,
+      "runId": "moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a",
+      "sliceId": "slice-c01ad0d5-9e5c-4a56-9967-455039b09be0",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a\\source\\moneyflow-20260924-bda33a5b5db999b4af45e6f32f87a642dfbc15b7e322e9a1fb15fd454589cb28.json",
+      "sourceRows": 5569,
+      "state": "VERIFIED",
+      "tradeDate": "20260924",
+      "verification": {
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5569,
+        "matchedRows": 5569,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-c01ad0d5-9e5c-4a56-9967-455039b09be0:revision:5",
+        "sourceFingerprint": "bda33a5b5db999b4af45e6f32f87a642dfbc15b7e322e9a1fb15fd454589cb28",
+        "actualRows": 5569,
+        "missingKeys": 0,
+        "duplicateKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "5bfba3cb1e53ee53e2ace4576db9331bb5d3f16917d7088951171b546017d2b5",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "moneyflow",
+      "fieldCount": 20,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "buy_sm_vol",
+        "buy_sm_amount",
+        "sell_sm_vol",
+        "sell_sm_amount",
+        "buy_md_vol",
+        "buy_md_amount",
+        "sell_md_vol",
+        "sell_md_amount",
+        "buy_lg_vol",
+        "buy_lg_amount",
+        "sell_lg_vol",
+        "sell_lg_amount",
+        "buy_elg_vol",
+        "buy_elg_amount",
+        "sell_elg_vol",
+        "sell_elg_amount",
+        "net_mf_vol",
+        "net_mf_amount"
+      ],
+      "fileSha256": "5bfba3cb1e53ee53e2ace4576db9331bb5d3f16917d7088951171b546017d2b5",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.moneyflow",
+      "ledgerFetchedRows": 5554,
+      "ledgerSourceFingerprint": "5bfba3cb1e53ee53e2ace4576db9331bb5d3f16917d7088951171b546017d2b5",
+      "passed": true,
+      "runId": "moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a",
+      "sliceId": "slice-e038a180-48fa-4456-8b22-8ebae41d1dbf",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\moneyflow-464eefa5-18b7-49f5-bbbd-d1ce9eb98a3a\\source\\moneyflow-20260922-5bfba3cb1e53ee53e2ace4576db9331bb5d3f16917d7088951171b546017d2b5.json",
+      "sourceRows": 5554,
+      "state": "VERIFIED",
+      "tradeDate": "20260922",
+      "verification": {
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5554,
+        "matchedRows": 5554,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-e038a180-48fa-4456-8b22-8ebae41d1dbf:revision:5",
+        "sourceFingerprint": "5bfba3cb1e53ee53e2ace4576db9331bb5d3f16917d7088951171b546017d2b5",
+        "actualRows": 5554,
+        "missingKeys": 0,
+        "duplicateKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "262023bc9189c9e19d330cdfea5810f6b7b56b3b2e6a0a166071c0dbea73045f",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "moneyflow",
+      "fieldCount": 20,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "buy_sm_vol",
+        "buy_sm_amount",
+        "sell_sm_vol",
+        "sell_sm_amount",
+        "buy_md_vol",
+        "buy_md_amount",
+        "sell_md_vol",
+        "sell_md_amount",
+        "buy_lg_vol",
+        "buy_lg_amount",
+        "sell_lg_vol",
+        "sell_lg_amount",
+        "buy_elg_vol",
+        "buy_elg_amount",
+        "sell_elg_vol",
+        "sell_elg_amount",
+        "net_mf_vol",
+        "net_mf_amount"
+      ],
+      "fileSha256": "262023bc9189c9e19d330cdfea5810f6b7b56b3b2e6a0a166071c0dbea73045f",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.moneyflow",
+      "ledgerFetchedRows": 5569,
+      "ledgerSourceFingerprint": "262023bc9189c9e19d330cdfea5810f6b7b56b3b2e6a0a166071c0dbea73045f",
+      "passed": true,
+      "runId": "moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b",
+      "sliceId": "slice-5a8822f1-f308-468b-9ec4-62c4e87af68f",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b\\source\\moneyflow-20260928-262023bc9189c9e19d330cdfea5810f6b7b56b3b2e6a0a166071c0dbea73045f.json",
+      "sourceRows": 5569,
+      "state": "VERIFIED",
+      "tradeDate": "20260928",
+      "verification": {
+        "missingKeys": 0,
+        "actualRows": 5569,
+        "sourceFingerprint": "262023bc9189c9e19d330cdfea5810f6b7b56b3b2e6a0a166071c0dbea73045f",
+        "readbackEvidence": "ledger:slice-5a8822f1-f308-468b-9ec4-62c4e87af68f:revision:5",
+        "mismatchedRows": 0,
+        "matchedRows": 5569,
+        "expectedRows": 5569,
+        "passed": true,
+        "writerStopped": false,
+        "duplicateKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "a0f6b343dc8317cf88bd363ea464d751553be4a681a2aa1975857015c404eeb4",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "moneyflow",
+      "fieldCount": 20,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "buy_sm_vol",
+        "buy_sm_amount",
+        "sell_sm_vol",
+        "sell_sm_amount",
+        "buy_md_vol",
+        "buy_md_amount",
+        "sell_md_vol",
+        "sell_md_amount",
+        "buy_lg_vol",
+        "buy_lg_amount",
+        "sell_lg_vol",
+        "sell_lg_amount",
+        "buy_elg_vol",
+        "buy_elg_amount",
+        "sell_elg_vol",
+        "sell_elg_amount",
+        "net_mf_vol",
+        "net_mf_amount"
+      ],
+      "fileSha256": "a0f6b343dc8317cf88bd363ea464d751553be4a681a2aa1975857015c404eeb4",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.moneyflow",
+      "ledgerFetchedRows": 5572,
+      "ledgerSourceFingerprint": "a0f6b343dc8317cf88bd363ea464d751553be4a681a2aa1975857015c404eeb4",
+      "passed": true,
+      "runId": "moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b",
+      "sliceId": "slice-96d48661-e3f2-4664-a7a1-2f7ce8a4da0b",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b\\source\\moneyflow-20260930-a0f6b343dc8317cf88bd363ea464d751553be4a681a2aa1975857015c404eeb4.json",
+      "sourceRows": 5572,
+      "state": "VERIFIED",
+      "tradeDate": "20260930",
+      "verification": {
+        "missingKeys": 0,
+        "actualRows": 5572,
+        "sourceFingerprint": "a0f6b343dc8317cf88bd363ea464d751553be4a681a2aa1975857015c404eeb4",
+        "readbackEvidence": "ledger:slice-96d48661-e3f2-4664-a7a1-2f7ce8a4da0b:revision:5",
+        "mismatchedRows": 0,
+        "matchedRows": 5572,
+        "expectedRows": 5572,
+        "passed": true,
+        "writerStopped": false,
+        "duplicateKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "018d4447f5b97f1321d97bd955a7d1ed115e0e099d4cc2cf3ee1a3e4cc616fa3",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "moneyflow",
+      "fieldCount": 20,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "buy_sm_vol",
+        "buy_sm_amount",
+        "sell_sm_vol",
+        "sell_sm_amount",
+        "buy_md_vol",
+        "buy_md_amount",
+        "sell_md_vol",
+        "sell_md_amount",
+        "buy_lg_vol",
+        "buy_lg_amount",
+        "sell_lg_vol",
+        "sell_lg_amount",
+        "buy_elg_vol",
+        "buy_elg_amount",
+        "sell_elg_vol",
+        "sell_elg_amount",
+        "net_mf_vol",
+        "net_mf_amount"
+      ],
+      "fileSha256": "018d4447f5b97f1321d97bd955a7d1ed115e0e099d4cc2cf3ee1a3e4cc616fa3",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.moneyflow",
+      "ledgerFetchedRows": 5571,
+      "ledgerSourceFingerprint": "018d4447f5b97f1321d97bd955a7d1ed115e0e099d4cc2cf3ee1a3e4cc616fa3",
+      "passed": true,
+      "runId": "moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b",
+      "sliceId": "slice-a9428053-7a54-47e8-bf96-7fea70c2a6a4",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\moneyflow-ae452f65-7f01-401c-8b6c-d666b3a9906b\\source\\moneyflow-20260929-018d4447f5b97f1321d97bd955a7d1ed115e0e099d4cc2cf3ee1a3e4cc616fa3.json",
+      "sourceRows": 5571,
+      "state": "VERIFIED",
+      "tradeDate": "20260929",
+      "verification": {
+        "missingKeys": 0,
+        "actualRows": 5571,
+        "sourceFingerprint": "018d4447f5b97f1321d97bd955a7d1ed115e0e099d4cc2cf3ee1a3e4cc616fa3",
+        "readbackEvidence": "ledger:slice-a9428053-7a54-47e8-bf96-7fea70c2a6a4:revision:5",
+        "mismatchedRows": 0,
+        "matchedRows": 5571,
+        "expectedRows": 5571,
+        "passed": true,
+        "writerStopped": false,
+        "duplicateKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "2d89e016b7a0141363252336afacad71083b39992ddcd9fc12e41ffce627580c",
+      "completion": {
+        "pages": 1,
+        "rows": 5556,
+        "sourceVersion": null
+      },
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_factor",
+      "fieldCount": 35,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "open",
+        "high",
+        "low",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "adj_factor",
+        "open_hfq",
+        "open_qfq",
+        "close_hfq",
+        "close_qfq",
+        "high_hfq",
+        "high_qfq",
+        "low_hfq",
+        "low_qfq",
+        "pre_close_hfq",
+        "pre_close_qfq",
+        "macd_dif",
+        "macd_dea",
+        "macd",
+        "kdj_k",
+        "kdj_d",
+        "kdj_j",
+        "rsi_6",
+        "rsi_12",
+        "rsi_24",
+        "boll_upper",
+        "boll_mid",
+        "boll_lower",
+        "cci"
+      ],
+      "fileSha256": "2d89e016b7a0141363252336afacad71083b39992ddcd9fc12e41ffce627580c",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_factor",
+      "ledgerFetchedRows": 5556,
+      "ledgerSourceFingerprint": "2d89e016b7a0141363252336afacad71083b39992ddcd9fc12e41ffce627580c",
+      "passed": true,
+      "runId": "stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518",
+      "sliceId": "slice-53dd700b-1890-47cb-a0de-27799104fee9",
+      "sourceContractVersion": 2,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518\\source\\source-9f843845-6d86-4718-88ae-536bdbd01d4e.json",
+      "sourceRows": 5556,
+      "state": "VERIFIED",
+      "tradeDate": "20260923",
+      "verification": {
+        "sourceFingerprint": "2d89e016b7a0141363252336afacad71083b39992ddcd9fc12e41ffce627580c",
+        "actualRows": 5556,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5556,
+        "matchedRows": 5556,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-53dd700b-1890-47cb-a0de-27799104fee9:revision:5"
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "30dabe46df6419de251ca87ce331576b2a235b5c92b2196fef94aaa993feefa2",
+      "completion": {
+        "pages": 1,
+        "rows": 5557,
+        "sourceVersion": null
+      },
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_factor",
+      "fieldCount": 35,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "open",
+        "high",
+        "low",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "adj_factor",
+        "open_hfq",
+        "open_qfq",
+        "close_hfq",
+        "close_qfq",
+        "high_hfq",
+        "high_qfq",
+        "low_hfq",
+        "low_qfq",
+        "pre_close_hfq",
+        "pre_close_qfq",
+        "macd_dif",
+        "macd_dea",
+        "macd",
+        "kdj_k",
+        "kdj_d",
+        "kdj_j",
+        "rsi_6",
+        "rsi_12",
+        "rsi_24",
+        "boll_upper",
+        "boll_mid",
+        "boll_lower",
+        "cci"
+      ],
+      "fileSha256": "30dabe46df6419de251ca87ce331576b2a235b5c92b2196fef94aaa993feefa2",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_factor",
+      "ledgerFetchedRows": 5557,
+      "ledgerSourceFingerprint": "30dabe46df6419de251ca87ce331576b2a235b5c92b2196fef94aaa993feefa2",
+      "passed": true,
+      "runId": "stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518",
+      "sliceId": "slice-7c9e0924-fc24-4e4a-95c8-c3fdf5eeeae3",
+      "sourceContractVersion": 2,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518\\source\\source-451a54ea-29c8-4038-8163-36177fffef44.json",
+      "sourceRows": 5557,
+      "state": "VERIFIED",
+      "tradeDate": "20260924",
+      "verification": {
+        "sourceFingerprint": "30dabe46df6419de251ca87ce331576b2a235b5c92b2196fef94aaa993feefa2",
+        "actualRows": 5557,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5557,
+        "matchedRows": 5557,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-7c9e0924-fc24-4e4a-95c8-c3fdf5eeeae3:revision:5"
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "18f2df20b4946c21dc29d26ae6427b519d18bf57281bd6c34105ae4f51443a9f",
+      "completion": {
+        "pages": 1,
+        "rows": 5554,
+        "sourceVersion": null
+      },
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_factor",
+      "fieldCount": 35,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "open",
+        "high",
+        "low",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "adj_factor",
+        "open_hfq",
+        "open_qfq",
+        "close_hfq",
+        "close_qfq",
+        "high_hfq",
+        "high_qfq",
+        "low_hfq",
+        "low_qfq",
+        "pre_close_hfq",
+        "pre_close_qfq",
+        "macd_dif",
+        "macd_dea",
+        "macd",
+        "kdj_k",
+        "kdj_d",
+        "kdj_j",
+        "rsi_6",
+        "rsi_12",
+        "rsi_24",
+        "boll_upper",
+        "boll_mid",
+        "boll_lower",
+        "cci"
+      ],
+      "fileSha256": "18f2df20b4946c21dc29d26ae6427b519d18bf57281bd6c34105ae4f51443a9f",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_factor",
+      "ledgerFetchedRows": 5554,
+      "ledgerSourceFingerprint": "18f2df20b4946c21dc29d26ae6427b519d18bf57281bd6c34105ae4f51443a9f",
+      "passed": true,
+      "runId": "stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518",
+      "sliceId": "slice-ed99c75c-b007-44ce-af36-9956b4c81f2e",
+      "sourceContractVersion": 2,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-factor-068f2f38-d20d-4b47-b7f1-5fd134d22518\\source\\source-0030c277-2d54-4a6d-8bb8-aa1460e428ab.json",
+      "sourceRows": 5554,
+      "state": "VERIFIED",
+      "tradeDate": "20260922",
+      "verification": {
+        "sourceFingerprint": "18f2df20b4946c21dc29d26ae6427b519d18bf57281bd6c34105ae4f51443a9f",
+        "actualRows": 5554,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5554,
+        "matchedRows": 5554,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-ed99c75c-b007-44ce-af36-9956b4c81f2e:revision:5"
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "7ef959ef2ac07462f15de5ac727372b94b4ecf4940a5dc5b307e83a6d6d07500",
+      "completion": {
+        "pages": 1,
+        "rows": 5557,
+        "sourceVersion": null
+      },
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_factor",
+      "fieldCount": 35,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "open",
+        "high",
+        "low",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "adj_factor",
+        "open_hfq",
+        "open_qfq",
+        "close_hfq",
+        "close_qfq",
+        "high_hfq",
+        "high_qfq",
+        "low_hfq",
+        "low_qfq",
+        "pre_close_hfq",
+        "pre_close_qfq",
+        "macd_dif",
+        "macd_dea",
+        "macd",
+        "kdj_k",
+        "kdj_d",
+        "kdj_j",
+        "rsi_6",
+        "rsi_12",
+        "rsi_24",
+        "boll_upper",
+        "boll_mid",
+        "boll_lower",
+        "cci"
+      ],
+      "fileSha256": "7ef959ef2ac07462f15de5ac727372b94b4ecf4940a5dc5b307e83a6d6d07500",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_factor",
+      "ledgerFetchedRows": 5557,
+      "ledgerSourceFingerprint": "7ef959ef2ac07462f15de5ac727372b94b4ecf4940a5dc5b307e83a6d6d07500",
+      "passed": true,
+      "runId": "stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468",
+      "sliceId": "slice-40c7678e-6213-454e-8262-cd49f925af7f",
+      "sourceContractVersion": 2,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468\\source\\source-fda1e978-7649-4b3e-b8e2-3c4245f16927.json",
+      "sourceRows": 5557,
+      "state": "VERIFIED",
+      "tradeDate": "20260928",
+      "verification": {
+        "passed": true,
+        "expectedRows": 5557,
+        "matchedRows": 5557,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-40c7678e-6213-454e-8262-cd49f925af7f:revision:5",
+        "sourceFingerprint": "7ef959ef2ac07462f15de5ac727372b94b4ecf4940a5dc5b307e83a6d6d07500",
+        "actualRows": 5557,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "c330e3b9b425ccdc9d7294228783e5e0195217aa824b78484e839c28dd2e3423",
+      "completion": {
+        "pages": 1,
+        "rows": 5559,
+        "sourceVersion": null
+      },
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_factor",
+      "fieldCount": 35,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "open",
+        "high",
+        "low",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "adj_factor",
+        "open_hfq",
+        "open_qfq",
+        "close_hfq",
+        "close_qfq",
+        "high_hfq",
+        "high_qfq",
+        "low_hfq",
+        "low_qfq",
+        "pre_close_hfq",
+        "pre_close_qfq",
+        "macd_dif",
+        "macd_dea",
+        "macd",
+        "kdj_k",
+        "kdj_d",
+        "kdj_j",
+        "rsi_6",
+        "rsi_12",
+        "rsi_24",
+        "boll_upper",
+        "boll_mid",
+        "boll_lower",
+        "cci"
+      ],
+      "fileSha256": "c330e3b9b425ccdc9d7294228783e5e0195217aa824b78484e839c28dd2e3423",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_factor",
+      "ledgerFetchedRows": 5559,
+      "ledgerSourceFingerprint": "c330e3b9b425ccdc9d7294228783e5e0195217aa824b78484e839c28dd2e3423",
+      "passed": true,
+      "runId": "stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468",
+      "sliceId": "slice-b8cf0fce-60b6-470c-bf6a-72dcf43f4869",
+      "sourceContractVersion": 2,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468\\source\\source-78d6f964-ed49-4f05-b81a-237e35434905.json",
+      "sourceRows": 5559,
+      "state": "VERIFIED",
+      "tradeDate": "20260929",
+      "verification": {
+        "passed": true,
+        "expectedRows": 5559,
+        "matchedRows": 5559,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-b8cf0fce-60b6-470c-bf6a-72dcf43f4869:revision:5",
+        "sourceFingerprint": "c330e3b9b425ccdc9d7294228783e5e0195217aa824b78484e839c28dd2e3423",
+        "actualRows": 5559,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "32c396097f00ea086a94c21c0d5bab733b777eed1a56953436debd084d19efdc",
+      "completion": {
+        "pages": 1,
+        "rows": 5560,
+        "sourceVersion": null
+      },
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_factor",
+      "fieldCount": 35,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "close",
+        "open",
+        "high",
+        "low",
+        "pre_close",
+        "change",
+        "pct_change",
+        "vol",
+        "amount",
+        "adj_factor",
+        "open_hfq",
+        "open_qfq",
+        "close_hfq",
+        "close_qfq",
+        "high_hfq",
+        "high_qfq",
+        "low_hfq",
+        "low_qfq",
+        "pre_close_hfq",
+        "pre_close_qfq",
+        "macd_dif",
+        "macd_dea",
+        "macd",
+        "kdj_k",
+        "kdj_d",
+        "kdj_j",
+        "rsi_6",
+        "rsi_12",
+        "rsi_24",
+        "boll_upper",
+        "boll_mid",
+        "boll_lower",
+        "cci"
+      ],
+      "fileSha256": "32c396097f00ea086a94c21c0d5bab733b777eed1a56953436debd084d19efdc",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_factor",
+      "ledgerFetchedRows": 5560,
+      "ledgerSourceFingerprint": "32c396097f00ea086a94c21c0d5bab733b777eed1a56953436debd084d19efdc",
+      "passed": true,
+      "runId": "stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468",
+      "sliceId": "slice-c9903006-6fa7-4444-8d80-4f297515d04c",
+      "sourceContractVersion": 2,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-factor-eba6ccdf-3b72-418e-b584-64b074e3e468\\source\\source-881ed02a-cb3c-41db-9eed-62ad0a55779c.json",
+      "sourceRows": 5560,
+      "state": "VERIFIED",
+      "tradeDate": "20260930",
+      "verification": {
+        "passed": true,
+        "expectedRows": 5560,
+        "matchedRows": 5560,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-c9903006-6fa7-4444-8d80-4f297515d04c:revision:5",
+        "sourceFingerprint": "32c396097f00ea086a94c21c0d5bab733b777eed1a56953436debd084d19efdc",
+        "actualRows": 5560,
+        "missingKeys": 0,
+        "duplicateKeys": 0,
+        "writerStopped": false
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "93c3eb035f65f5c05a6f887658b60bd21553fbcc1de362eb1fdadaaa7ee7e27d",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_limit",
+      "fieldCount": 4,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "up_limit",
+        "down_limit"
+      ],
+      "fileSha256": "93c3eb035f65f5c05a6f887658b60bd21553fbcc1de362eb1fdadaaa7ee7e27d",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_limit",
+      "ledgerFetchedRows": 5650,
+      "ledgerSourceFingerprint": "93c3eb035f65f5c05a6f887658b60bd21553fbcc1de362eb1fdadaaa7ee7e27d",
+      "passed": true,
+      "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+      "sliceId": "slice-0dc1ea09-0d2c-4617-83cf-1ca32656d9e9",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-limit-ecde9425-a828-4c4e-a419-51995e2535df\\source\\stk-limit-20260929-ce1efd20-d069-4ef3-bbb5-40c4c1d4a99f.json",
+      "sourceRows": 5650,
+      "state": "VERIFIED",
+      "tradeDate": "20260929",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5650,
+        "matchedRows": 5650,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-0dc1ea09-0d2c-4617-83cf-1ca32656d9e9:revision:5",
+        "sourceFingerprint": "93c3eb035f65f5c05a6f887658b60bd21553fbcc1de362eb1fdadaaa7ee7e27d",
+        "actualRows": 5650,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "028f8d7a0b77aaa8e4e37ab740fcb2d04e0f3b005cd4e82a148ff8b0cf5488e6",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_limit",
+      "fieldCount": 4,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "up_limit",
+        "down_limit"
+      ],
+      "fileSha256": "028f8d7a0b77aaa8e4e37ab740fcb2d04e0f3b005cd4e82a148ff8b0cf5488e6",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_limit",
+      "ledgerFetchedRows": 5648,
+      "ledgerSourceFingerprint": "028f8d7a0b77aaa8e4e37ab740fcb2d04e0f3b005cd4e82a148ff8b0cf5488e6",
+      "passed": true,
+      "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+      "sliceId": "slice-36439678-2866-4117-b20d-aedabaa83c2f",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-limit-ecde9425-a828-4c4e-a419-51995e2535df\\source\\stk-limit-20260924-efd1382f-fc81-4f14-a142-b4e8b2d8b5d7.json",
+      "sourceRows": 5648,
+      "state": "VERIFIED",
+      "tradeDate": "20260924",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5648,
+        "matchedRows": 5648,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-36439678-2866-4117-b20d-aedabaa83c2f:revision:5",
+        "sourceFingerprint": "028f8d7a0b77aaa8e4e37ab740fcb2d04e0f3b005cd4e82a148ff8b0cf5488e6",
+        "actualRows": 5648,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "adc39ef2a4ce889bf6d7dfe89995f4949820f203f0dfd6bff49422d2765df36e",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_limit",
+      "fieldCount": 4,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "up_limit",
+        "down_limit"
+      ],
+      "fileSha256": "adc39ef2a4ce889bf6d7dfe89995f4949820f203f0dfd6bff49422d2765df36e",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_limit",
+      "ledgerFetchedRows": 5648,
+      "ledgerSourceFingerprint": "adc39ef2a4ce889bf6d7dfe89995f4949820f203f0dfd6bff49422d2765df36e",
+      "passed": true,
+      "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+      "sliceId": "slice-4d547be1-4b86-42d0-827e-55db608a1e0f",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-limit-ecde9425-a828-4c4e-a419-51995e2535df\\source\\stk-limit-20260928-7623349c-abbd-4419-96c0-4c9b7ea79fea.json",
+      "sourceRows": 5648,
+      "state": "VERIFIED",
+      "tradeDate": "20260928",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5648,
+        "matchedRows": 5648,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-4d547be1-4b86-42d0-827e-55db608a1e0f:revision:5",
+        "sourceFingerprint": "adc39ef2a4ce889bf6d7dfe89995f4949820f203f0dfd6bff49422d2765df36e",
+        "actualRows": 5648,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "81980299aa6972e4a3da9e1effdfe98bd9a4ec64a123269d05a4cd1dae0a6c0b",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_limit",
+      "fieldCount": 4,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "up_limit",
+        "down_limit"
+      ],
+      "fileSha256": "81980299aa6972e4a3da9e1effdfe98bd9a4ec64a123269d05a4cd1dae0a6c0b",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_limit",
+      "ledgerFetchedRows": 5647,
+      "ledgerSourceFingerprint": "81980299aa6972e4a3da9e1effdfe98bd9a4ec64a123269d05a4cd1dae0a6c0b",
+      "passed": true,
+      "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+      "sliceId": "slice-a5019205-7699-487e-82d0-804c45a30ca6",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-limit-ecde9425-a828-4c4e-a419-51995e2535df\\source\\stk-limit-20260923-dbdc9bb2-6a86-4bca-93a4-a4efd585da90.json",
+      "sourceRows": 5647,
+      "state": "VERIFIED",
+      "tradeDate": "20260923",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5647,
+        "matchedRows": 5647,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-a5019205-7699-487e-82d0-804c45a30ca6:revision:5",
+        "sourceFingerprint": "81980299aa6972e4a3da9e1effdfe98bd9a4ec64a123269d05a4cd1dae0a6c0b",
+        "actualRows": 5647,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "dadf3a15737fcf50fced4fda917bfb573caf7466d079ee57de9ca228240b4c77",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_limit",
+      "fieldCount": 4,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "up_limit",
+        "down_limit"
+      ],
+      "fileSha256": "dadf3a15737fcf50fced4fda917bfb573caf7466d079ee57de9ca228240b4c77",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_limit",
+      "ledgerFetchedRows": 5646,
+      "ledgerSourceFingerprint": "dadf3a15737fcf50fced4fda917bfb573caf7466d079ee57de9ca228240b4c77",
+      "passed": true,
+      "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+      "sliceId": "slice-c15cfa6f-00a6-4f9c-adda-fff5c939b4a2",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-limit-ecde9425-a828-4c4e-a419-51995e2535df\\source\\stk-limit-20260922-fa119bea-6dde-4685-b646-b39d9aa1775a.json",
+      "sourceRows": 5646,
+      "state": "VERIFIED",
+      "tradeDate": "20260922",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5646,
+        "matchedRows": 5646,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-c15cfa6f-00a6-4f9c-adda-fff5c939b4a2:revision:5",
+        "sourceFingerprint": "dadf3a15737fcf50fced4fda917bfb573caf7466d079ee57de9ca228240b4c77",
+        "actualRows": 5646,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    },
+    {
+      "calculatedSourceFingerprint": "c4b298bf83983517456825d9f8bd1c4da41bb8bc587b24f54db3fc06818a4ed3",
+      "completion": true,
+      "duplicateSourceKeys": 0,
+      "endpoint": "stk_limit",
+      "fieldCount": 4,
+      "fields": [
+        "ts_code",
+        "trade_date",
+        "up_limit",
+        "down_limit"
+      ],
+      "fileSha256": "c4b298bf83983517456825d9f8bd1c4da41bb8bc587b24f54db3fc06818a4ed3",
+      "fingerprintMatches": true,
+      "invalidSourceCodes": 0,
+      "jobId": "data.stk_limit",
+      "ledgerFetchedRows": 5651,
+      "ledgerSourceFingerprint": "c4b298bf83983517456825d9f8bd1c4da41bb8bc587b24f54db3fc06818a4ed3",
+      "passed": true,
+      "runId": "stk-limit-ecde9425-a828-4c4e-a419-51995e2535df",
+      "sliceId": "slice-cb8945e5-3b33-490e-8719-1d004f4dedd1",
+      "sourceContractVersion": null,
+      "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-limit-ecde9425-a828-4c4e-a419-51995e2535df\\source\\stk-limit-20260930-a92fa836-7b8a-4687-8376-51c1f359dd6b.json",
+      "sourceRows": 5651,
+      "state": "VERIFIED",
+      "tradeDate": "20260930",
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 5651,
+        "matchedRows": 5651,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-cb8945e5-3b33-490e-8719-1d004f4dedd1:revision:5",
+        "sourceFingerprint": "c4b298bf83983517456825d9f8bd1c4da41bb8bc587b24f54db3fc06818a4ed3",
+        "actualRows": 5651,
+        "missingKeys": 0
+      },
+      "wrongSourceDates": 0
+    }
+  ],
+  "view": {
+    "ddl": "CREATE VIEW 'v_backtest_daily' AS ( \nSELECT b.trade_date, b.ts_code, b.open, b.high, b.low, b.close,\n       b.vol, b.amount, b.adj_factor, l.up_limit, l.down_limit,\n       coalesce(s.is_suspended, 0) is_suspended, coalesce(st.is_st, 0) is_st\nFROM stk_factor b\nLEFT JOIN stk_limit l ON (b.trade_date = l.trade_date AND b.ts_code = l.ts_code)\nLEFT JOIN (SELECT timestamp, ts_code, max(is_suspended) is_suspended\n           FROM stk_suspend GROUP BY timestamp, ts_code) s ON (b.trade_date = s.timestamp AND b.ts_code = s.ts_code)\nLEFT JOIN stk_st_daily st ON (b.trade_date = st.timestamp AND b.ts_code = st.ts_code)\nUNION ALL\nSELECT s.trade_date, s.ts_code, f.close AS open, f.close AS high,\n       f.close AS low, f.close AS close, 0.0 AS vol, 0.0 AS amount,\n       f.adj_factor, l.up_limit, l.down_limit, s.is_suspended,\n       coalesce(st.is_st, 0) is_st\nFROM ((SELECT timestamp AS trade_date, ts_code, max(is_suspended) is_suspended\n      FROM stk_suspend GROUP BY timestamp, ts_code ORDER BY trade_date) TIMESTAMP(trade_date)) s\nASOF JOIN stk_factor f ON (ts_code)\nLEFT JOIN stk_limit l ON (s.trade_date = l.trade_date AND s.ts_code = l.ts_code)\nLEFT JOIN stk_st_daily st ON (s.trade_date = st.timestamp AND s.ts_code = st.ts_code)\nJOIN (SELECT DISTINCT trade_date FROM stk_factor) fd ON s.trade_date = fd.trade_date\nWHERE f.trade_date < s.trade_date\n);",
+    "rowsByDate": {
+      "query": "SELECT trade_date,count() AS row_count,count_distinct(ts_code) AS unique_codes,sum(CASE WHEN close IS NULL THEN 1 ELSE 0 END) AS null_close,sum(CASE WHEN up_limit IS NULL THEN 1 ELSE 0 END) AS null_up_limit,sum(CASE WHEN down_limit IS NULL THEN 1 ELSE 0 END) AS null_down_limit FROM v_backtest_daily WHERE trade_date >= '2026-09-22T00:00:00Z' AND trade_date < '2026-10-01T00:00:00Z' GROUP BY trade_date ORDER BY trade_date",
+      "columns": [
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "row_count",
+          "type": "LONG"
+        },
+        {
+          "name": "unique_codes",
+          "type": "LONG"
+        },
+        {
+          "name": "null_close",
+          "type": "LONG"
+        },
+        {
+          "name": "null_up_limit",
+          "type": "LONG"
+        },
+        {
+          "name": "null_down_limit",
+          "type": "LONG"
+        }
+      ],
+      "timestamp": 0,
+      "dataset": [
+        [
+          "2026-09-22T00:00:00Z",
+          5567,
+          5567,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-23T00:00:00Z",
+          5568,
+          5568,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-24T00:00:00Z",
+          5569,
+          5569,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          5569,
+          5569,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          5571,
+          5571,
+          0,
+          0,
+          0
+        ],
+        [
+          "2026-09-30T00:00:00Z",
+          5571,
+          5571,
+          0,
+          0,
+          0
+        ]
+      ],
+      "count": 6
+    },
+    "dependencies": [
+      "stk_factor",
+      "stk_limit",
+      "stk_suspend",
+      "stk_st_daily"
+    ],
+    "stkSuspendLatest": {
+      "query": "SELECT max(timestamp) AS latest_date,count() AS physical_rows FROM stk_suspend",
+      "columns": [
+        {
+          "name": "latest_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "physical_rows",
+          "type": "LONG"
+        }
+      ],
+      "timestamp": -1,
+      "dataset": [
+        [
+          "2026-09-30T00:00:00Z",
+          128440
+        ]
+      ],
+      "count": 1
+    },
+    "stkStLatest": {
+      "query": "SELECT max(timestamp) AS latest_date,count() AS physical_rows FROM stk_st_daily",
+      "columns": [
+        {
+          "name": "latest_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "physical_rows",
+          "type": "LONG"
+        }
+      ],
+      "timestamp": -1,
+      "dataset": [
+        [
+          "2026-09-30T00:00:00Z",
+          830433
+        ]
+      ],
+      "count": 1
+    },
+    "referenceRows": {
+      "query": "SELECT 'stk_suspend' AS source_table,timestamp,count() AS row_count,count_distinct(ts_code) AS unique_codes FROM stk_suspend WHERE timestamp >= '2026-09-22' AND timestamp < '2026-10-01' GROUP BY timestamp UNION ALL SELECT 'stk_st_daily' AS source_table,timestamp,count() AS row_count,count_distinct(ts_code) AS unique_codes FROM stk_st_daily WHERE timestamp >= '2026-09-22' AND timestamp < '2026-10-01' GROUP BY timestamp ORDER BY timestamp,source_table",
+      "columns": [
+        {
+          "name": "source_table",
+          "type": "STRING"
+        },
+        {
+          "name": "timestamp",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "row_count",
+          "type": "LONG"
+        },
+        {
+          "name": "unique_codes",
+          "type": "LONG"
+        }
+      ],
+      "timestamp": 1,
+      "dataset": [
+        [
+          "stk_st_daily",
+          "2026-09-22T00:00:00Z",
+          281,
+          281
+        ],
+        [
+          "stk_suspend",
+          "2026-09-22T00:00:00Z",
+          15,
+          15
+        ],
+        [
+          "stk_st_daily",
+          "2026-09-23T00:00:00Z",
+          281,
+          281
+        ],
+        [
+          "stk_suspend",
+          "2026-09-23T00:00:00Z",
+          12,
+          12
+        ],
+        [
+          "stk_st_daily",
+          "2026-09-24T00:00:00Z",
+          281,
+          281
+        ],
+        [
+          "stk_suspend",
+          "2026-09-24T00:00:00Z",
+          12,
+          12
+        ],
+        [
+          "stk_st_daily",
+          "2026-09-28T00:00:00Z",
+          280,
+          280
+        ],
+        [
+          "stk_suspend",
+          "2026-09-28T00:00:00Z",
+          12,
+          12
+        ],
+        [
+          "stk_st_daily",
+          "2026-09-29T00:00:00Z",
+          279,
+          279
+        ],
+        [
+          "stk_suspend",
+          "2026-09-29T00:00:00Z",
+          13,
+          13
+        ],
+        [
+          "stk_st_daily",
+          "2026-09-30T00:00:00Z",
+          278,
+          278
+        ],
+        [
+          "stk_suspend",
+          "2026-09-30T00:00:00Z",
+          13,
+          13
+        ]
+      ],
+      "count": 12
+    },
+    "coverage": "Six dates have rows==unique(ts_code), close/up_limit/down_limit null=0; max recent view date is 2026-09-30"
+  },
+  "etfTargets": {
+    "query": "SELECT ts_code,trade_date,close,pre_close,vol,amount FROM etf_factor WHERE trade_date >= '2026-09-22' AND trade_date < '2026-10-01' AND ts_code IN ('512770.SH','589330.SH') ORDER BY trade_date,ts_code",
+    "columns": [
+      {
+        "name": "ts_code",
+        "type": "SYMBOL"
+      },
+      {
+        "name": "trade_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "close",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "pre_close",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "vol",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "amount",
+        "type": "DOUBLE"
+      }
+    ],
+    "timestamp": 1,
+    "dataset": [
+      [
+        "512770.SH",
+        "2026-09-22T00:00:00Z",
+        2.596,
+        2.593,
+        13839.0,
+        3639.4
+      ],
+      [
+        "589330.SH",
+        "2026-09-22T00:00:00Z",
+        0.915,
+        0.91,
+        49190.0,
+        4522.94
+      ],
+      [
+        "512770.SH",
+        "2026-09-23T00:00:00Z",
+        2.582,
+        2.596,
+        5691.0,
+        1476.01
+      ],
+      [
+        "589330.SH",
+        "2026-09-23T00:00:00Z",
+        0.931,
+        0.915,
+        39696.0,
+        3670.66
+      ],
+      [
+        "512770.SH",
+        "2026-09-24T00:00:00Z",
+        2.512,
+        2.582,
+        12108.0,
+        3068.89
+      ],
+      [
+        "589330.SH",
+        "2026-09-24T00:00:00Z",
+        0.904,
+        0.931,
+        40561.0,
+        3729.19
+      ],
+      [
+        "512770.SH",
+        "2026-09-28T00:00:00Z",
+        2.382,
+        2.512,
+        26024.0,
+        6303.55
+      ],
+      [
+        "589330.SH",
+        "2026-09-28T00:00:00Z",
+        0.863,
+        0.904,
+        54626.0,
+        4738.54
+      ],
+      [
+        "512770.SH",
+        "2026-09-29T00:00:00Z",
+        2.398,
+        2.382,
+        12559.0,
+        3002.72
+      ],
+      [
+        "589330.SH",
+        "2026-09-29T00:00:00Z",
+        0.867,
+        0.863,
+        43879.0,
+        3795.67
+      ],
+      [
+        "512770.SH",
+        "2026-09-30T00:00:00Z",
+        2.374,
+        2.398,
+        7909.0,
+        1899.26
+      ],
+      [
+        "589330.SH",
+        "2026-09-30T00:00:00Z",
+        0.858,
+        0.867,
+        19281.0,
+        1667.81
+      ]
+    ],
+    "count": 12
+  },
+  "factorUniverseDifference": {
+    "physicalDailyOnly": {
+      "query": "SELECT ts_code,trade_date,close FROM daily WHERE trade_date='2026-09-30' AND ts_code NOT IN (SELECT ts_code FROM stk_factor WHERE trade_date='2026-09-30')",
+      "columns": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "close",
+          "type": "DOUBLE"
+        }
+      ],
+      "timestamp": 1,
+      "dataset": [
+        [
+          "001246.SZ",
+          "2026-09-30T00:00:00Z",
+          65.09
+        ]
+      ],
+      "count": 1
+    },
+    "physicalDailyBasicOnly": {
+      "query": "SELECT ts_code,trade_date,close FROM daily_basic WHERE trade_date = '2026-09-30' AND ts_code NOT IN (SELECT ts_code FROM stk_factor WHERE trade_date = '2026-09-30')",
+      "columns": [
+        {
+          "name": "ts_code",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "close",
+          "type": "DOUBLE"
+        }
+      ],
+      "timestamp": 1,
+      "dataset": [
+        [
+          "001246.SZ",
+          "2026-09-30T00:00:00Z",
+          65.09
+        ]
+      ],
+      "count": 1
+    },
+    "javaListingDayEvidence": [
+      {
+        "tradeDate": "2026-09-30",
+        "tsCode": "001246.SZ",
+        "decision": "provider_empty_on_verified_listing_day",
+        "listingResponse": [
+          {
+            "ts_code": "001246.SZ",
+            "list_date": "20260930"
+          }
+        ],
+        "listingDate": "20260930",
+        "listingEndpoint": "stock_basic",
+        "factorProbeRows": 0,
+        "factorResponse": [],
+        "factorEndpoint": "stk_factor"
+      }
+    ],
+    "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\source.json",
+    "sourceEvidenceSha256": "f79dd1e85d68793f9438e917cbc65bf4f79d0898309fc69aa0e6fa77b503b0c8",
+    "publicationState": "VERIFIED",
+    "decision": "001246.SZ is in daily/daily_basic on listing day 20260930; captured Java exact factor probe returned zero, so no fabricated factor row"
+  },
+  "calendar": {
+    "query": "SELECT * FROM exchange_calendar WHERE cal_date >= '2026-09-22' AND cal_date <= '2026-09-30' AND exchange = 'SSE'",
+    "columns": [
+      {
+        "name": "exchange",
+        "type": "SYMBOL"
+      },
+      {
+        "name": "cal_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "is_open",
+        "type": "INT"
+      },
+      {
+        "name": "pretrade_date",
+        "type": "STRING"
+      }
+    ],
+    "timestamp": 1,
+    "dataset": [
+      [
+        "SSE",
+        "2026-09-22T00:00:00Z",
+        1,
+        "20260921"
+      ],
+      [
+        "SSE",
+        "2026-09-23T00:00:00Z",
+        1,
+        "20260922"
+      ],
+      [
+        "SSE",
+        "2026-09-24T00:00:00Z",
+        1,
+        "20260923"
+      ],
+      [
+        "SSE",
+        "2026-09-25T00:00:00Z",
+        0,
+        "20260924"
+      ],
+      [
+        "SSE",
+        "2026-09-26T00:00:00Z",
+        0,
+        "20260924"
+      ],
+      [
+        "SSE",
+        "2026-09-27T00:00:00Z",
+        0,
+        "20260924"
+      ],
+      [
+        "SSE",
+        "2026-09-28T00:00:00Z",
+        1,
+        "20260924"
+      ],
+      [
+        "SSE",
+        "2026-09-29T00:00:00Z",
+        1,
+        "20260928"
+      ],
+      [
+        "SSE",
+        "2026-09-30T00:00:00Z",
+        1,
+        "20260929"
+      ]
+    ],
+    "count": 9
+  },
+  "credentialLeaseRecovery": {
+    "dailyBasicDiagnosisArtifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\daily-basic-source-lease-audit.json",
+    "cause": "Original errors retained Incomplete; zero source rows and overlap with an existing credential lease owner corroborate process lifetime lease contention, rather than a verified empty provider response",
+    "recovery": "Serial Java resume runs preserved parent IDs, frozen windows and targets, and completed VERIFIED",
+    "proofLimit": "Original suppressed Incomplete alone does not retain the exact credential lease exception text"
+  },
+  "provenance": {
+    "producer": "Java owner jobs using existing TusharePageService/TushareClient/Spring WebClient",
+    "priorPythonWritesExist": true,
+    "priorPythonArtifacts": "D:/work/fund_2/back-monitor/artifacts/main-strategy-refresh/20261007",
+    "newSourceVerification": "30 new Java source receipts and seven VERIFIED Java run IDs, full key/value readback in durable ledger",
+    "rowCountMeaning": "sourceRows/verifiedRows count submitted and verified source rows, not new inserts; existing DEDUP keys can be refreshed",
+    "auditProviderRequests": 0,
+    "auditDatabaseWrites": 0,
+    "auditTestsRun": 0
+  },
+  "limitations": [
+    "This independent audit reran read-only row/key/null/schema/source-receipt checks; complete values are evidenced by native owner readback receipts, not by re-fetching provider data.",
+    "Main-strategy market sentiment, ETF portfolio announcement freshness, margin and Level2 acceptance are separate coordinator audits; five source tables alone do not prove every strategy input."
+  ]
+}

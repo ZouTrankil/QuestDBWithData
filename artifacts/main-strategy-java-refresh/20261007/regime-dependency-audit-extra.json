@@ -1,0 +1,744 @@
+[
+  {
+    "sql": "select sf.trade_date,count() n,sum(case when db.ts_code is null then 1 else 0 end) missing_basic,sum(case when sl.ts_code is null then 1 else 0 end) missing_limit,sum(case when ss.ts_code is null then 1 else 0 end) no_suspend_event,sum(case when st.ts_code is null then 1 else 0 end) no_st_flag,sum(case when ss.is_suspended=1 then 1 else 0 end) suspended,sum(case when st.is_st=1 then 1 else 0 end) st_count,sum(case when sf.close is null then 1 else 0 end) close_null,sum(case when sf.pre_close is null or sf.pre_close=0 then 1 else 0 end) invalid_preclose,sum(case when db.total_mv is null then 1 else 0 end) total_mv_null,sum(case when db.pb is null then 1 else 0 end) pb_null,sum(case when db.turnover_rate is null then 1 else 0 end) turnover_null from (select trade_date,ts_code,close,pre_close from stk_factor where trade_date>='2026-09-01' and trade_date<'2026-10-01') sf left join (select trade_date,ts_code,total_mv,pb,turnover_rate from daily_basic where trade_date>='2026-09-01' and trade_date<'2026-10-01') db on sf.ts_code=db.ts_code and sf.trade_date=db.trade_date left join (select trade_date,ts_code from stk_limit where trade_date>='2026-09-01' and trade_date<'2026-10-01') sl on sf.ts_code=sl.ts_code and sf.trade_date=sl.trade_date left join (select timestamp,ts_code,is_suspended from stk_suspend where timestamp>='2026-09-01' and timestamp<'2026-10-01') ss on sf.ts_code=ss.ts_code and sf.trade_date=ss.timestamp left join (select timestamp,ts_code,is_st from stk_st_daily where timestamp>='2026-09-01' and timestamp<'2026-10-01') st on sf.ts_code=st.ts_code and sf.trade_date=st.timestamp group by sf.trade_date order by sf.trade_date",
+    "result": {
+      "query": "select sf.trade_date,count() n,sum(case when db.ts_code is null then 1 else 0 end) missing_basic,sum(case when sl.ts_code is null then 1 else 0 end) missing_limit,sum(case when ss.ts_code is null then 1 else 0 end) no_suspend_event,sum(case when st.ts_code is null then 1 else 0 end) no_st_flag,sum(case when ss.is_suspended=1 then 1 else 0 end) suspended,sum(case when st.is_st=1 then 1 else 0 end) st_count,sum(case when sf.close is null then 1 else 0 end) close_null,sum(case when sf.pre_close is null or sf.pre_close=0 then 1 else 0 end) invalid_preclose,sum(case when db.total_mv is null then 1 else 0 end) total_mv_null,sum(case when db.pb is null then 1 else 0 end) pb_null,sum(case when db.turnover_rate is null then 1 else 0 end) turnover_null from (select trade_date,ts_code,close,pre_close from stk_factor where trade_date>='2026-09-01' and trade_date<'2026-10-01') sf left join (select trade_date,ts_code,total_mv,pb,turnover_rate from daily_basic where trade_date>='2026-09-01' and trade_date<'2026-10-01') db on sf.ts_code=db.ts_code and sf.trade_date=db.trade_date left join (select trade_date,ts_code from stk_limit where trade_date>='2026-09-01' and trade_date<'2026-10-01') sl on sf.ts_code=sl.ts_code and sf.trade_date=sl.trade_date left join (select timestamp,ts_code,is_suspended from stk_suspend where timestamp>='2026-09-01' and timestamp<'2026-10-01') ss on sf.ts_code=ss.ts_code and sf.trade_date=ss.timestamp left join (select timestamp,ts_code,is_st from stk_st_daily where timestamp>='2026-09-01' and timestamp<'2026-10-01') st on sf.ts_code=st.ts_code and sf.trade_date=st.timestamp group by sf.trade_date order by sf.trade_date",
+      "columns": [
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "n",
+          "type": "LONG"
+        },
+        {
+          "name": "missing_basic",
+          "type": "LONG"
+        },
+        {
+          "name": "missing_limit",
+          "type": "LONG"
+        },
+        {
+          "name": "no_suspend_event",
+          "type": "LONG"
+        },
+        {
+          "name": "no_st_flag",
+          "type": "LONG"
+        },
+        {
+          "name": "suspended",
+          "type": "LONG"
+        },
+        {
+          "name": "st_count",
+          "type": "LONG"
+        },
+        {
+          "name": "close_null",
+          "type": "LONG"
+        },
+        {
+          "name": "invalid_preclose",
+          "type": "LONG"
+        },
+        {
+          "name": "total_mv_null",
+          "type": "LONG"
+        },
+        {
+          "name": "pb_null",
+          "type": "LONG"
+        },
+        {
+          "name": "turnover_null",
+          "type": "LONG"
+        }
+      ],
+      "timestamp": 0,
+      "dataset": [
+        [
+          "2026-09-01T00:00:00Z",
+          5546,
+          0,
+          0,
+          5544,
+          5345,
+          2,
+          201,
+          0,
+          0,
+          0,
+          54,
+          0
+        ],
+        [
+          "2026-09-02T00:00:00Z",
+          5546,
+          0,
+          0,
+          5545,
+          5346,
+          1,
+          200,
+          0,
+          0,
+          0,
+          54,
+          0
+        ],
+        [
+          "2026-09-03T00:00:00Z",
+          5548,
+          0,
+          0,
+          5547,
+          5347,
+          1,
+          201,
+          0,
+          0,
+          0,
+          54,
+          0
+        ],
+        [
+          "2026-09-04T00:00:00Z",
+          5547,
+          0,
+          0,
+          5547,
+          5347,
+          0,
+          200,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-07T00:00:00Z",
+          5549,
+          0,
+          0,
+          5548,
+          5349,
+          1,
+          200,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-08T00:00:00Z",
+          5549,
+          0,
+          0,
+          5548,
+          5348,
+          1,
+          201,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-09T00:00:00Z",
+          5548,
+          0,
+          0,
+          5548,
+          5347,
+          0,
+          201,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-10T00:00:00Z",
+          5548,
+          0,
+          0,
+          5548,
+          5347,
+          0,
+          201,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-11T00:00:00Z",
+          5549,
+          0,
+          0,
+          5549,
+          5349,
+          0,
+          200,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-14T00:00:00Z",
+          5550,
+          0,
+          0,
+          5550,
+          5350,
+          0,
+          200,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-15T00:00:00Z",
+          5548,
+          0,
+          0,
+          5548,
+          5348,
+          0,
+          200,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-16T00:00:00Z",
+          5548,
+          0,
+          0,
+          5548,
+          5348,
+          0,
+          200,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-17T00:00:00Z",
+          5552,
+          0,
+          0,
+          5552,
+          5352,
+          0,
+          200,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-18T00:00:00Z",
+          5553,
+          0,
+          0,
+          5551,
+          5353,
+          2,
+          200,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-21T00:00:00Z",
+          5553,
+          0,
+          0,
+          5551,
+          5353,
+          2,
+          200,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-22T00:00:00Z",
+          5554,
+          0,
+          0,
+          5552,
+          5354,
+          2,
+          200,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-23T00:00:00Z",
+          5556,
+          0,
+          0,
+          5556,
+          5356,
+          0,
+          200,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-24T00:00:00Z",
+          5557,
+          0,
+          0,
+          5557,
+          5358,
+          0,
+          199,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          5557,
+          0,
+          0,
+          5557,
+          5359,
+          0,
+          198,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          5559,
+          0,
+          0,
+          5558,
+          5362,
+          1,
+          197,
+          0,
+          0,
+          0,
+          53,
+          0
+        ],
+        [
+          "2026-09-30T00:00:00Z",
+          5560,
+          0,
+          0,
+          5559,
+          5363,
+          1,
+          197,
+          0,
+          0,
+          0,
+          52,
+          0
+        ]
+      ],
+      "count": 21
+    }
+  },
+  {
+    "sql": "select trade_date,north_money from moneyflow_hsgt where trade_date>='2026-09-01' and trade_date<'2026-10-01' order by trade_date",
+    "result": {
+      "query": "select trade_date,north_money from moneyflow_hsgt where trade_date>='2026-09-01' and trade_date<'2026-10-01' order by trade_date",
+      "columns": [
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "north_money",
+          "type": "DOUBLE"
+        }
+      ],
+      "timestamp": 0,
+      "dataset": [
+        [
+          "2026-09-01T00:00:00Z",
+          273259.26
+        ],
+        [
+          "2026-09-02T00:00:00Z",
+          244809.28
+        ],
+        [
+          "2026-09-03T00:00:00Z",
+          242742.51
+        ],
+        [
+          "2026-09-04T00:00:00Z",
+          274164.42
+        ],
+        [
+          "2026-09-07T00:00:00Z",
+          271389.76
+        ],
+        [
+          "2026-09-08T00:00:00Z",
+          266047.9
+        ],
+        [
+          "2026-09-09T00:00:00Z",
+          246085.9
+        ],
+        [
+          "2026-09-10T00:00:00Z",
+          223690.51
+        ],
+        [
+          "2026-09-11T00:00:00Z",
+          291319.64
+        ],
+        [
+          "2026-09-14T00:00:00Z",
+          238485.02
+        ],
+        [
+          "2026-09-15T00:00:00Z",
+          229704.69
+        ],
+        [
+          "2026-09-16T00:00:00Z",
+          264238.52
+        ],
+        [
+          "2026-09-17T00:00:00Z",
+          259865.83
+        ],
+        [
+          "2026-09-18T00:00:00Z",
+          333924.35
+        ],
+        [
+          "2026-09-21T00:00:00Z",
+          283911.86
+        ],
+        [
+          "2026-09-22T00:00:00Z",
+          291149.88
+        ],
+        [
+          "2026-09-23T00:00:00Z",
+          236505.27
+        ],
+        [
+          "2026-09-24T00:00:00Z",
+          232511.99
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          260502.09
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          212916.05
+        ],
+        [
+          "2026-09-30T00:00:00Z",
+          207941.62
+        ]
+      ],
+      "count": 21
+    }
+  },
+  {
+    "sql": "select * from regime_features_monitor_daily where trade_date='2026-09-18'",
+    "result": {
+      "query": "select * from regime_features_monitor_daily where trade_date='2026-09-18'",
+      "columns": [
+        {
+          "name": "trade_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "month",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "hs300_ret_mtd",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "zz500_ret_mtd",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "all_a_ret_mtd",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "cs1000_ret_mtd",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "small_large_ret_mtd",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "growth_value_ret_mtd",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "avg_up_down_ratio_5d",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "avg_limit_up_count_5d",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "avg_limit_down_count_5d",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "avg_turnover_rate_5d",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "avg_pct_positive_ratio_5d",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "avg_pct_negative_ratio_5d",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "northbound_net_buy_mtd",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "margin_balance_change_mtd",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "all_a_pe_ttm_percentile_latest",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "all_a_pb_percentile_latest",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "erp_latest",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "data_quality_flag",
+          "type": "SYMBOL"
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP"
+        }
+      ],
+      "timestamp": 0,
+      "dataset": [
+        [
+          "2026-09-18T00:00:00Z",
+          "202609",
+          -0.005075982077479724,
+          0.0015929790836946012,
+          -0.009491544027897869,
+          -0.025246008366261563,
+          -0.02017002628878184,
+          0.03726195597058357,
+          1.9915952490206315,
+          60.4,
+          9.8,
+          2.950968622655809,
+          0.5523515286884138,
+          0.4216653155743425,
+          36597.2759,
+          null,
+          0.26582278481012656,
+          0.569620253164557,
+          0.814411408600137,
+          "proxy_style",
+          "2026-09-18T21:30:53Z"
+        ]
+      ],
+      "count": 1
+    }
+  },
+  {
+    "sql": "select cal_date,is_open from exchange_calendar where exchange='SSE' and cal_date>='2026-09-01' and cal_date<'2026-10-01' order by cal_date",
+    "result": {
+      "query": "select cal_date,is_open from exchange_calendar where exchange='SSE' and cal_date>='2026-09-01' and cal_date<'2026-10-01' order by cal_date",
+      "columns": [
+        {
+          "name": "cal_date",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "is_open",
+          "type": "INT"
+        }
+      ],
+      "timestamp": 0,
+      "dataset": [
+        [
+          "2026-09-01T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-02T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-03T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-04T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-05T00:00:00Z",
+          0
+        ],
+        [
+          "2026-09-06T00:00:00Z",
+          0
+        ],
+        [
+          "2026-09-07T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-08T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-09T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-10T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-11T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-12T00:00:00Z",
+          0
+        ],
+        [
+          "2026-09-13T00:00:00Z",
+          0
+        ],
+        [
+          "2026-09-14T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-15T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-16T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-17T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-18T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-19T00:00:00Z",
+          0
+        ],
+        [
+          "2026-09-20T00:00:00Z",
+          0
+        ],
+        [
+          "2026-09-21T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-22T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-23T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-24T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-25T00:00:00Z",
+          0
+        ],
+        [
+          "2026-09-26T00:00:00Z",
+          0
+        ],
+        [
+          "2026-09-27T00:00:00Z",
+          0
+        ],
+        [
+          "2026-09-28T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-29T00:00:00Z",
+          1
+        ],
+        [
+          "2026-09-30T00:00:00Z",
+          1
+        ]
+      ],
+      "count": 30
+    }
+  }
+]

@@ -25,8 +25,9 @@ public final class MarginDetailSyncAdapter implements SyncJobRunner.Adapter<Marg
     }
     @Override public SyncJobRunner.SourceCompletion fetch(SyncJobDefinition.FrozenRequest request,SyncJobRunner.PageConsumer<MarginDetail> consumer,BooleanSupplier cancelled)throws Exception{
         var dates=decodeDates(request);var refs=new ArrayList<Map<String,Object>>();int total=0;
-        for(LocalDate date:dates){check(cancelled);var page=source.fetch(date,cancelled);verifyNoSourceKeyRemoval(date,page.rows());consumer.accept(page);total=Math.addExact(total,page.rows().size());
-            refs.add(Map.of("tradeDate",date.toString(),"rows",page.rows().size(),"sourceFingerprint",page.sourceFingerprint(),"responseEvidence",page.responseEvidence()));}
+        for(LocalDate date:dates){check(cancelled);var page=source.fetch(date,cancelled);var existing=verifyNoSourceKeyRemoval(date,page.rows());var before=preservePhysicalBefore(date,existing,page);consumer.accept(page);total=Math.addExact(total,page.rows().size());
+            refs.add(Map.of("tradeDate",date.toString(),"rows",page.rows().size(),"sourceFingerprint",page.sourceFingerprint(),"responseEvidence",page.responseEvidence(),
+                    "physicalBeforeEvidence",before.path().toString(),"physicalBeforeFingerprint",before.fingerprint()));}
         if(dates.isEmpty()||dates.size()>MarginDetailSyncJobOwner.MAX_SOURCE_SLICES||total<1||total>MarginDetailSyncJobOwner.DEFINITION.budget().maxRows())throw new IllegalStateException("D029 source completion is empty or exceeds the frozen bounded window");
         Files.createDirectories(evidenceRoot);var body=new LinkedHashMap<String,Object>();body.put("dataset","margin_detail");body.put("endpoint","margin_detail");body.put("targetId",targetId);body.put("mode",request.mode().name());
         body.put("fromInclusive",request.from().toString());body.put("toInclusive",request.to().toString());body.put("logicalDate",request.logicalDate().toString());body.put("tradeDates",dates);
@@ -35,8 +36,19 @@ public final class MarginDetailSyncAdapter implements SyncJobRunner.Adapter<Marg
         Path complete=evidenceRoot.resolve("complete-window.json");try{Files.write(complete,bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);}catch(FileAlreadyExistsException exists){if(!Arrays.equals(Files.readAllBytes(complete),bytes))throw new IllegalStateException("Conflicting D029 completion manifest",exists);}
         return new SyncJobRunner.SourceCompletion(dates.size(),total,true,complete.toString());
     }
-    private void verifyNoSourceKeyRemoval(LocalDate date,List<MarginDetail> rows){var keys=new HashSet<MarginDetailKey>();for(var row:rows)if(!keys.add(row.key()))throw new IllegalStateException("D029 duplicate source natural key");
-        var existing=port.readDate(date);if(existing.stream().anyMatch(row->!keys.contains(row.key())))throw new IllegalStateException("D029 provider omitted an existing date key; no source deletion/tombstone contract exists");}
+    private List<MarginDetail> verifyNoSourceKeyRemoval(LocalDate date,List<MarginDetail> rows){var keys=new HashSet<MarginDetailKey>();for(var row:rows)if(!keys.add(row.key()))throw new IllegalStateException("D029 duplicate source natural key");
+        var existing=port.readDate(date);var existingKeys=new HashSet<MarginDetailKey>();for(var row:existing)if(!existingKeys.add(row.key()))throw new IllegalStateException("D029 existing date contains duplicate natural keys");
+        if(existing.stream().anyMatch(row->!keys.contains(row.key())))throw new IllegalStateException("D029 provider omitted an existing date key; no source deletion/tombstone contract exists");return existing;}
+    private record PhysicalBefore(Path path,String fingerprint){}
+    private PhysicalBefore preservePhysicalBefore(LocalDate date,List<MarginDetail> rows,SyncJobRunner.Page<MarginDetail> page)throws Exception{
+        var mapper=new com.zoutrankil.data.mapper.MarginDetailMapper();var body=new LinkedHashMap<String,Object>();body.put("dataset","margin_detail");body.put("targetId",targetId);body.put("tradeDate",date);
+        body.put("rowCount",rows.size());body.put("physicalRows",rows.stream().map(row->mapper.values(row).asMap()).toList());body.put("sourceFingerprint",page.sourceFingerprint());body.put("responseEvidence",page.responseEvidence());
+        byte[] bytes=JobDefinitionJson.mapper().copy().configure(com.fasterxml.jackson.databind.SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true).writeValueAsBytes(body);
+        if(bytes.length>32*1024*1024)throw new IllegalStateException("D029 pre-write physical evidence exceeds 32 MiB");String hash=HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+        Files.createDirectories(evidenceRoot);Path path=evidenceRoot.resolve("physical-before-"+date.format(DateTimeFormatter.BASIC_ISO_DATE)+"-"+hash+".json");
+        try{Files.write(path,bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);}catch(FileAlreadyExistsException exists){if(!Arrays.equals(Files.readAllBytes(path),bytes))throw new IllegalStateException("Conflicting D029 physical-before evidence",exists);}
+        return new PhysicalBefore(path,hash);
+    }
     public static List<LocalDate> decodeDates(SyncJobDefinition.FrozenRequest request){Object raw=request.parameters().get("trade_dates");if(!(raw instanceof String encoded)||encoded.isBlank())throw new IllegalArgumentException("D029 frozen request requires SSE trade dates");
         var dates=Arrays.stream(encoded.split(",",-1)).map(s->{if(!s.matches("[0-9]{8}"))throw new IllegalArgumentException("D029 source dates must be YYYYMMDD");return LocalDate.parse(s,DateTimeFormatter.BASIC_ISO_DATE);}).toList();
         if(dates.size()>MarginDetailSyncJobOwner.MAX_SOURCE_SLICES||dates.stream().distinct().count()!=dates.size()||!dates.equals(dates.stream().sorted().toList())||dates.stream().anyMatch(d->d.isBefore(request.from())||d.isAfter(request.to())))throw new IllegalArgumentException("D029 source dates are duplicate, unordered or outside the frozen window");return dates;}
@@ -52,7 +64,7 @@ public final class MarginDetailSyncAdapter implements SyncJobRunner.Adapter<Marg
         if(!(p.get("checkpointAnchor") instanceof LocalDate anchor)||request.from().isBefore(anchor))throw new IllegalArgumentException("D029 frozen checkpoint anchor is required and must precede the request");
         LocalDate before=(LocalDate)p.get("checkpointBefore");if(request.mode()==Mode.INCREMENTAL){if(before==null&&!request.from().equals(anchor))throw new IllegalArgumentException("D029 bootstrap must start at its frozen anchor");
             if(before!=null&&(!before.isAfter(anchor.minusDays(1))||before.isAfter(request.to())||!request.from().equals(max(anchor,before.minusDays(MarginDetailSyncJobOwner.REVISION_DAYS)))))throw new IllegalArgumentException("D029 incremental overlap differs from frozen checkpoint");}
-        else if(before==null||request.from().isBefore(anchor)||request.to().isAfter(before))throw new IllegalArgumentException("D029 BACKFILL must stay inside its frozen checkpoint coverage");decodeDates(request);
+        else if(before==null?!request.from().equals(anchor):request.from().isBefore(anchor)||request.to().isAfter(before))throw new IllegalArgumentException("D029 BACKFILL requires its explicit repair anchor or bounded prior checkpoint coverage");decodeDates(request);
     }
     private static LocalDate max(LocalDate a,LocalDate b){return a.isAfter(b)?a:b;}
     private static void check(BooleanSupplier cancelled){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new CancellationException("D029 cancelled between bounded trade-date source calls");}

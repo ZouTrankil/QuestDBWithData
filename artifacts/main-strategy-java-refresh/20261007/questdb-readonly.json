@@ -1,0 +1,1051 @@
+{
+  "observedAtUtc": "2026-10-07T12:37:08.4917345Z",
+  "endpoint": "http://127.0.0.1:9000/exec",
+  "readOnly": true,
+  "providerRequests": 0,
+  "databaseWrites": 0,
+  "expectedTradingDates": [
+    "2026-09-22",
+    "2026-09-23",
+    "2026-09-24",
+    "2026-09-28",
+    "2026-09-29",
+    "2026-09-30"
+  ],
+  "tables": {
+    "stk_factor": {
+      "criticalFields": [
+        "close",
+        "pre_close",
+        "amount",
+        "vol"
+      ],
+      "rowsByDate": {
+        "query": "SELECT trade_date,count() AS rows,count_distinct(ts_code) AS unique_codes,sum(CASE WHEN ts_code IS NULL OR ts_code = '' THEN 1 ELSE 0 END) AS null_business_code,sum(CASE WHEN close IS NULL THEN 1 ELSE 0 END) AS null_close,sum(CASE WHEN pre_close IS NULL THEN 1 ELSE 0 END) AS null_pre_close,sum(CASE WHEN amount IS NULL THEN 1 ELSE 0 END) AS null_amount,sum(CASE WHEN vol IS NULL THEN 1 ELSE 0 END) AS null_vol FROM stk_factor WHERE trade_date >= '2026-09-22T00:00:00.000000Z' AND trade_date < '2026-10-01T00:00:00.000000Z' GROUP BY trade_date ORDER BY trade_date",
+        "columns": [
+          {
+            "name": "trade_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "rows",
+            "type": "LONG"
+          },
+          {
+            "name": "unique_codes",
+            "type": "LONG"
+          },
+          {
+            "name": "null_business_code",
+            "type": "LONG"
+          },
+          {
+            "name": "null_close",
+            "type": "LONG"
+          },
+          {
+            "name": "null_pre_close",
+            "type": "LONG"
+          },
+          {
+            "name": "null_amount",
+            "type": "LONG"
+          },
+          {
+            "name": "null_vol",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": 0,
+        "dataset": [
+          [
+            "2026-09-22T00:00:00Z",
+            5554,
+            5554,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-23T00:00:00Z",
+            5556,
+            5556,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-24T00:00:00Z",
+            5557,
+            5557,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-28T00:00:00Z",
+            5557,
+            5557,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-29T00:00:00Z",
+            5559,
+            5559,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-30T00:00:00Z",
+            5560,
+            5560,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "count": 6
+      },
+      "duplicateBusinessKeys": {
+        "query": "SELECT count() AS duplicate_key_groups FROM (SELECT ts_code,trade_date,count() AS key_rows FROM stk_factor WHERE trade_date >= '2026-09-22T00:00:00.000000Z' AND trade_date < '2026-10-01T00:00:00.000000Z' GROUP BY ts_code,trade_date) WHERE key_rows > 1",
+        "columns": [
+          {
+            "name": "duplicate_key_groups",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            0
+          ]
+        ],
+        "count": 1
+      },
+      "physicalRange": {
+        "query": "SELECT min(trade_date) AS first_date,max(trade_date) AS latest_date,count() AS physical_rows FROM stk_factor",
+        "columns": [
+          {
+            "name": "first_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "latest_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "physical_rows",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "2010-01-29T00:00:00Z",
+            "2026-09-30T00:00:00Z",
+            10282455
+          ]
+        ],
+        "count": 1
+      },
+      "nullBusinessDates": {
+        "query": "SELECT count() AS null_business_dates FROM stk_factor WHERE trade_date IS NULL",
+        "columns": [
+          {
+            "name": "null_business_dates",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            0
+          ]
+        ],
+        "count": 1
+      }
+    },
+    "daily_basic": {
+      "criticalFields": [
+        "close",
+        "turnover_rate",
+        "circ_mv",
+        "total_mv"
+      ],
+      "rowsByDate": {
+        "query": "SELECT trade_date,count() AS rows,count_distinct(ts_code) AS unique_codes,sum(CASE WHEN ts_code IS NULL OR ts_code = '' THEN 1 ELSE 0 END) AS null_business_code,sum(CASE WHEN close IS NULL THEN 1 ELSE 0 END) AS null_close,sum(CASE WHEN turnover_rate IS NULL THEN 1 ELSE 0 END) AS null_turnover_rate,sum(CASE WHEN circ_mv IS NULL THEN 1 ELSE 0 END) AS null_circ_mv,sum(CASE WHEN total_mv IS NULL THEN 1 ELSE 0 END) AS null_total_mv FROM daily_basic WHERE trade_date >= '2026-09-22T00:00:00.000000Z' AND trade_date < '2026-10-01T00:00:00.000000Z' GROUP BY trade_date ORDER BY trade_date",
+        "columns": [
+          {
+            "name": "trade_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "rows",
+            "type": "LONG"
+          },
+          {
+            "name": "unique_codes",
+            "type": "LONG"
+          },
+          {
+            "name": "null_business_code",
+            "type": "LONG"
+          },
+          {
+            "name": "null_close",
+            "type": "LONG"
+          },
+          {
+            "name": "null_turnover_rate",
+            "type": "LONG"
+          },
+          {
+            "name": "null_circ_mv",
+            "type": "LONG"
+          },
+          {
+            "name": "null_total_mv",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": 0,
+        "dataset": [
+          [
+            "2026-09-22T00:00:00Z",
+            5554,
+            5554,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-23T00:00:00Z",
+            5556,
+            5556,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-24T00:00:00Z",
+            5557,
+            5557,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-28T00:00:00Z",
+            5557,
+            5557,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-29T00:00:00Z",
+            5559,
+            5559,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-30T00:00:00Z",
+            5561,
+            5561,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "count": 6
+      },
+      "duplicateBusinessKeys": {
+        "query": "SELECT count() AS duplicate_key_groups FROM (SELECT ts_code,trade_date,count() AS key_rows FROM daily_basic WHERE trade_date >= '2026-09-22T00:00:00.000000Z' AND trade_date < '2026-10-01T00:00:00.000000Z' GROUP BY ts_code,trade_date) WHERE key_rows > 1",
+        "columns": [
+          {
+            "name": "duplicate_key_groups",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            0
+          ]
+        ],
+        "count": 1
+      },
+      "physicalRange": {
+        "query": "SELECT min(trade_date) AS first_date,max(trade_date) AS latest_date,count() AS physical_rows FROM daily_basic",
+        "columns": [
+          {
+            "name": "first_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "latest_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "physical_rows",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "2010-01-29T00:00:00Z",
+            "2026-09-30T00:00:00Z",
+            9974567
+          ]
+        ],
+        "count": 1
+      },
+      "nullBusinessDates": {
+        "query": "SELECT count() AS null_business_dates FROM daily_basic WHERE trade_date IS NULL",
+        "columns": [
+          {
+            "name": "null_business_dates",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            0
+          ]
+        ],
+        "count": 1
+      }
+    },
+    "stk_limit": {
+      "criticalFields": [
+        "up_limit",
+        "down_limit"
+      ],
+      "rowsByDate": {
+        "query": "SELECT trade_date,count() AS rows,count_distinct(ts_code) AS unique_codes,sum(CASE WHEN ts_code IS NULL OR ts_code = '' THEN 1 ELSE 0 END) AS null_business_code,sum(CASE WHEN up_limit IS NULL THEN 1 ELSE 0 END) AS null_up_limit,sum(CASE WHEN down_limit IS NULL THEN 1 ELSE 0 END) AS null_down_limit FROM stk_limit WHERE trade_date >= '2026-09-22T00:00:00.000000Z' AND trade_date < '2026-10-01T00:00:00.000000Z' GROUP BY trade_date ORDER BY trade_date",
+        "columns": [
+          {
+            "name": "trade_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "rows",
+            "type": "LONG"
+          },
+          {
+            "name": "unique_codes",
+            "type": "LONG"
+          },
+          {
+            "name": "null_business_code",
+            "type": "LONG"
+          },
+          {
+            "name": "null_up_limit",
+            "type": "LONG"
+          },
+          {
+            "name": "null_down_limit",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": 0,
+        "dataset": [
+          [
+            "2026-09-22T00:00:00Z",
+            5646,
+            5646,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-23T00:00:00Z",
+            5647,
+            5647,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-24T00:00:00Z",
+            5648,
+            5648,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-28T00:00:00Z",
+            5648,
+            5648,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-29T00:00:00Z",
+            5650,
+            5650,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-30T00:00:00Z",
+            5651,
+            5651,
+            0,
+            0,
+            0
+          ]
+        ],
+        "count": 6
+      },
+      "duplicateBusinessKeys": {
+        "query": "SELECT count() AS duplicate_key_groups FROM (SELECT ts_code,trade_date,count() AS key_rows FROM stk_limit WHERE trade_date >= '2026-09-22T00:00:00.000000Z' AND trade_date < '2026-10-01T00:00:00.000000Z' GROUP BY ts_code,trade_date) WHERE key_rows > 1",
+        "columns": [
+          {
+            "name": "duplicate_key_groups",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            0
+          ]
+        ],
+        "count": 1
+      },
+      "physicalRange": {
+        "query": "SELECT min(trade_date) AS first_date,max(trade_date) AS latest_date,count() AS physical_rows FROM stk_limit",
+        "columns": [
+          {
+            "name": "first_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "latest_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "physical_rows",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "2010-01-29T00:00:00Z",
+            "2026-09-30T00:00:00Z",
+            12344449
+          ]
+        ],
+        "count": 1
+      },
+      "nullBusinessDates": {
+        "query": "SELECT count() AS null_business_dates FROM stk_limit WHERE trade_date IS NULL",
+        "columns": [
+          {
+            "name": "null_business_dates",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            0
+          ]
+        ],
+        "count": 1
+      }
+    },
+    "moneyflow": {
+      "criticalFields": [
+        "buy_sm_vol",
+        "sell_sm_vol",
+        "buy_md_vol",
+        "sell_md_vol",
+        "buy_lg_vol",
+        "sell_lg_vol",
+        "buy_elg_vol",
+        "sell_elg_vol",
+        "net_mf_vol",
+        "net_mf_amount"
+      ],
+      "rowsByDate": {
+        "query": "SELECT trade_date,count() AS rows,count_distinct(ts_code) AS unique_codes,sum(CASE WHEN ts_code IS NULL OR ts_code = '' THEN 1 ELSE 0 END) AS null_business_code,sum(CASE WHEN buy_sm_vol IS NULL THEN 1 ELSE 0 END) AS null_buy_sm_vol,sum(CASE WHEN sell_sm_vol IS NULL THEN 1 ELSE 0 END) AS null_sell_sm_vol,sum(CASE WHEN buy_md_vol IS NULL THEN 1 ELSE 0 END) AS null_buy_md_vol,sum(CASE WHEN sell_md_vol IS NULL THEN 1 ELSE 0 END) AS null_sell_md_vol,sum(CASE WHEN buy_lg_vol IS NULL THEN 1 ELSE 0 END) AS null_buy_lg_vol,sum(CASE WHEN sell_lg_vol IS NULL THEN 1 ELSE 0 END) AS null_sell_lg_vol,sum(CASE WHEN buy_elg_vol IS NULL THEN 1 ELSE 0 END) AS null_buy_elg_vol,sum(CASE WHEN sell_elg_vol IS NULL THEN 1 ELSE 0 END) AS null_sell_elg_vol,sum(CASE WHEN net_mf_vol IS NULL THEN 1 ELSE 0 END) AS null_net_mf_vol,sum(CASE WHEN net_mf_amount IS NULL THEN 1 ELSE 0 END) AS null_net_mf_amount FROM moneyflow WHERE trade_date >= '2026-09-22T00:00:00.000000Z' AND trade_date < '2026-10-01T00:00:00.000000Z' GROUP BY trade_date ORDER BY trade_date",
+        "columns": [
+          {
+            "name": "trade_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "rows",
+            "type": "LONG"
+          },
+          {
+            "name": "unique_codes",
+            "type": "LONG"
+          },
+          {
+            "name": "null_business_code",
+            "type": "LONG"
+          },
+          {
+            "name": "null_buy_sm_vol",
+            "type": "LONG"
+          },
+          {
+            "name": "null_sell_sm_vol",
+            "type": "LONG"
+          },
+          {
+            "name": "null_buy_md_vol",
+            "type": "LONG"
+          },
+          {
+            "name": "null_sell_md_vol",
+            "type": "LONG"
+          },
+          {
+            "name": "null_buy_lg_vol",
+            "type": "LONG"
+          },
+          {
+            "name": "null_sell_lg_vol",
+            "type": "LONG"
+          },
+          {
+            "name": "null_buy_elg_vol",
+            "type": "LONG"
+          },
+          {
+            "name": "null_sell_elg_vol",
+            "type": "LONG"
+          },
+          {
+            "name": "null_net_mf_vol",
+            "type": "LONG"
+          },
+          {
+            "name": "null_net_mf_amount",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": 0,
+        "dataset": [
+          [
+            "2026-09-22T00:00:00Z",
+            5554,
+            5554,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-23T00:00:00Z",
+            5556,
+            5556,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-24T00:00:00Z",
+            5569,
+            5569,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-28T00:00:00Z",
+            5569,
+            5569,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-29T00:00:00Z",
+            5571,
+            5571,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-30T00:00:00Z",
+            5572,
+            5572,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "count": 6
+      },
+      "duplicateBusinessKeys": {
+        "query": "SELECT count() AS duplicate_key_groups FROM (SELECT ts_code,trade_date,count() AS key_rows FROM moneyflow WHERE trade_date >= '2026-09-22T00:00:00.000000Z' AND trade_date < '2026-10-01T00:00:00.000000Z' GROUP BY ts_code,trade_date) WHERE key_rows > 1",
+        "columns": [
+          {
+            "name": "duplicate_key_groups",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            0
+          ]
+        ],
+        "count": 1
+      },
+      "physicalRange": {
+        "query": "SELECT min(trade_date) AS first_date,max(trade_date) AS latest_date,count() AS physical_rows FROM moneyflow",
+        "columns": [
+          {
+            "name": "first_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "latest_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "physical_rows",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "2023-01-03T00:00:00Z",
+            "2026-09-30T00:00:00Z",
+            4631266
+          ]
+        ],
+        "count": 1
+      },
+      "nullBusinessDates": {
+        "query": "SELECT count() AS null_business_dates FROM moneyflow WHERE trade_date IS NULL",
+        "columns": [
+          {
+            "name": "null_business_dates",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            0
+          ]
+        ],
+        "count": 1
+      }
+    },
+    "etf_factor": {
+      "criticalFields": [
+        "close",
+        "pre_close",
+        "amount",
+        "vol"
+      ],
+      "rowsByDate": {
+        "query": "SELECT trade_date,count() AS rows,count_distinct(ts_code) AS unique_codes,sum(CASE WHEN ts_code IS NULL OR ts_code = '' THEN 1 ELSE 0 END) AS null_business_code,sum(CASE WHEN close IS NULL THEN 1 ELSE 0 END) AS null_close,sum(CASE WHEN pre_close IS NULL THEN 1 ELSE 0 END) AS null_pre_close,sum(CASE WHEN amount IS NULL THEN 1 ELSE 0 END) AS null_amount,sum(CASE WHEN vol IS NULL THEN 1 ELSE 0 END) AS null_vol FROM etf_factor WHERE trade_date >= '2026-09-22T00:00:00.000000Z' AND trade_date < '2026-10-01T00:00:00.000000Z' GROUP BY trade_date ORDER BY trade_date",
+        "columns": [
+          {
+            "name": "trade_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "rows",
+            "type": "LONG"
+          },
+          {
+            "name": "unique_codes",
+            "type": "LONG"
+          },
+          {
+            "name": "null_business_code",
+            "type": "LONG"
+          },
+          {
+            "name": "null_close",
+            "type": "LONG"
+          },
+          {
+            "name": "null_pre_close",
+            "type": "LONG"
+          },
+          {
+            "name": "null_amount",
+            "type": "LONG"
+          },
+          {
+            "name": "null_vol",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": 0,
+        "dataset": [
+          [
+            "2026-09-22T00:00:00Z",
+            2148,
+            2148,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-23T00:00:00Z",
+            2134,
+            2134,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-24T00:00:00Z",
+            2134,
+            2134,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-28T00:00:00Z",
+            2163,
+            2163,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-29T00:00:00Z",
+            2136,
+            2136,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            "2026-09-30T00:00:00Z",
+            2140,
+            2140,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "count": 6
+      },
+      "duplicateBusinessKeys": {
+        "query": "SELECT count() AS duplicate_key_groups FROM (SELECT ts_code,trade_date,count() AS key_rows FROM etf_factor WHERE trade_date >= '2026-09-22T00:00:00.000000Z' AND trade_date < '2026-10-01T00:00:00.000000Z' GROUP BY ts_code,trade_date) WHERE key_rows > 1",
+        "columns": [
+          {
+            "name": "duplicate_key_groups",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            0
+          ]
+        ],
+        "count": 1
+      },
+      "physicalRange": {
+        "query": "SELECT min(trade_date) AS first_date,max(trade_date) AS latest_date,count() AS physical_rows FROM etf_factor",
+        "columns": [
+          {
+            "name": "first_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "latest_date",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "physical_rows",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "2018-01-02T00:00:00Z",
+            "2026-09-30T00:00:00Z",
+            1083841
+          ]
+        ],
+        "count": 1
+      },
+      "nullBusinessDates": {
+        "query": "SELECT count() AS null_business_dates FROM etf_factor WHERE trade_date IS NULL",
+        "columns": [
+          {
+            "name": "null_business_dates",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            0
+          ]
+        ],
+        "count": 1
+      }
+    }
+  },
+  "tablesMetadata": {
+    "query": "SELECT table_name,id,directoryName,walEnabled,dedup,partitionBy,designatedTimestamp FROM tables() WHERE table_name IN ('stk_factor','daily_basic','stk_limit','moneyflow','etf_factor','v_backtest_daily')",
+    "columns": [
+      {
+        "name": "table_name",
+        "type": "STRING"
+      },
+      {
+        "name": "id",
+        "type": "INT"
+      },
+      {
+        "name": "directoryName",
+        "type": "STRING"
+      },
+      {
+        "name": "walEnabled",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "dedup",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "partitionBy",
+        "type": "STRING"
+      },
+      {
+        "name": "designatedTimestamp",
+        "type": "STRING"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "daily_basic",
+        1876,
+        "daily_basic_stage_20260928_185816_917214~1876",
+        true,
+        true,
+        "YEAR",
+        "trade_date"
+      ],
+      [
+        "etf_factor",
+        1819,
+        "etf_factor~1819",
+        true,
+        true,
+        "YEAR",
+        "trade_date"
+      ],
+      [
+        "moneyflow",
+        1873,
+        "moneyflow_stage_20260928_184806_272189~1873",
+        true,
+        true,
+        "YEAR",
+        "trade_date"
+      ],
+      [
+        "stk_factor",
+        1722,
+        "stk_factor~1722",
+        true,
+        true,
+        "YEAR",
+        "trade_date"
+      ],
+      [
+        "stk_limit",
+        1725,
+        "stk_limit~1725",
+        true,
+        true,
+        "YEAR",
+        "trade_date"
+      ],
+      [
+        "v_backtest_daily",
+        1780,
+        "v_backtest_daily~1780",
+        true,
+        false,
+        "N/A",
+        null
+      ]
+    ],
+    "count": 6
+  },
+  "walFrontiers": {
+    "query": "SELECT name,suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name IN ('stk_factor','daily_basic','stk_limit','moneyflow','etf_factor')",
+    "columns": [
+      {
+        "name": "name",
+        "type": "STRING"
+      },
+      {
+        "name": "suspended",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "writerTxn",
+        "type": "LONG"
+      },
+      {
+        "name": "sequencerTxn",
+        "type": "LONG"
+      },
+      {
+        "name": "bufferedTxnSize",
+        "type": "LONG"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "etf_factor",
+        false,
+        58,
+        58,
+        0
+      ],
+      [
+        "stk_limit",
+        false,
+        216,
+        216,
+        0
+      ],
+      [
+        "daily_basic",
+        false,
+        205,
+        205,
+        0
+      ],
+      [
+        "stk_factor",
+        false,
+        156,
+        156,
+        0
+      ],
+      [
+        "moneyflow",
+        false,
+        175,
+        175,
+        0
+      ]
+    ],
+    "count": 5
+  }
+}

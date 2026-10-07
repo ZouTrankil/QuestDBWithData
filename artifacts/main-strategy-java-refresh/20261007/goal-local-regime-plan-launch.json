@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-10-07T21:17:51.0647678+08:00",
+  "finished_at": "2026-10-07T21:18:00.6333278+08:00",
+  "executable": "C:/Users/zouqiang/.jdks/jdk-24.0.2/bin/java.exe",
+  "arguments": [
+    "-Dapp.questdb.host=127.0.0.1",
+    "-Dapp.sync.ledger-path=var/main-strategy-java-refresh/20261007/sync-ledger.sqlite3",
+    "-Dlogging.level.root=ERROR",
+    "@var/main-strategy-java-refresh/20261007/classpath.args",
+    "com.zoutrankil.data.QuestDataApplication",
+    "plan-regime-features-monitor-daily-job",
+    "--from",
+    "2026-09-21",
+    "--to",
+    "2026-09-30",
+    "--logical-date",
+    "2026-10-07"
+  ],
+  "exit_code": 0,
+  "expected_plan_only": true,
+  "log": "var/main-strategy-java-refresh/20261007/goal-local-regime-plan.log"
+}

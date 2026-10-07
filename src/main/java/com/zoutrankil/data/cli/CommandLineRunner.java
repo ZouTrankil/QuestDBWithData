@@ -93,6 +93,14 @@ public class CommandLineRunner implements ApplicationRunner {
     private com.zoutrankil.data.service.MoneyflowThsJobService moneyflowThsService;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
     private com.zoutrankil.data.service.MoneyflowJobService moneyflowService;
+    @Autowired(required = false)
+    private com.zoutrankil.data.service.MarginDetailJobService marginDetailService;
+    @Autowired(required = false)
+    private com.zoutrankil.data.service.MarketSentimentDailyJobService marketSentimentService;
+    @Autowired(required = false)
+    private com.zoutrankil.data.service.RegimeFeaturesMonitorDailyJobService regimeMonitorService;
+    @org.springframework.beans.factory.annotation.Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}")
+    private String syncLedgerPath;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
     private com.zoutrankil.data.service.EtfPortfolioJobService etfPortfolioService;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
@@ -174,6 +182,114 @@ public class CommandLineRunner implements ApplicationRunner {
         String command = args[0];
         Map<String, String> options = parseOptions(args);
         switch (command) {
+            case "sync-run-status" -> {
+                if (!options.keySet().equals(java.util.Set.of("--run")))
+                    throw new IllegalArgumentException("Exact --run required");
+                System.out.println(com.zoutrankil.data.domain.JobDefinitionJson.mapper()
+                        .writerWithDefaultPrettyPrinter().writeValueAsString(java.util.Map.of(
+                                "status", com.zoutrankil.data.repository.SyncRunLedger.openReadOnly(Path.of(syncLedgerPath)).get(options.get("--run")),
+                                "entries", com.zoutrankil.data.repository.SyncRunLedger.openReadOnly(Path.of(syncLedgerPath)).entries(options.get("--run"), null, 100))));
+            }
+            case "plan-regime-features-monitor-daily-job", "run-regime-features-monitor-daily-job" -> {
+                if (regimeMonitorService == null || !options.keySet().containsAll(java.util.Set.of("--from", "--to", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --from, --to and --logical-date required; optional --mode MATERIALIZE");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.data.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : com.zoutrankil.data.domain.SyncJobDefinition.Mode.MATERIALIZE;
+                var plan = regimeMonitorService.plan(java.time.LocalDate.parse(options.get("--from")),
+                        java.time.LocalDate.parse(options.get("--to")), java.time.LocalDate.parse(options.get("--logical-date")), mode);
+                var json = com.zoutrankil.data.domain.JobDefinitionJson.mapper();
+                if (command.equals("plan-regime-features-monitor-daily-job"))
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(java.util.Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false, "plan", plan)));
+                else {
+                    var materialization = regimeMonitorService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(materialization));
+                    var result = materialization.result();
+                    if (result.errorCode() != null || !java.util.Set.of(
+                            com.zoutrankil.data.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.data.domain.SyncRunState.VERIFIED_EMPTY).contains(result.state()))
+                        throw new IncompleteCommandException("regime_features_monitor_daily incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "finish-regime-monitor-publication" -> {
+                if (regimeMonitorService == null || !options.keySet().equals(java.util.Set.of("--run", "--writer-stopped"))
+                        || !"true".equals(options.get("--writer-stopped")))
+                    throw new IllegalArgumentException("Exact --run and explicit --writer-stopped true required");
+                var snapshot = regimeMonitorService.finishInterrupted(options.get("--run"), true);
+                System.out.println(com.zoutrankil.data.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter()
+                        .writeValueAsString(java.util.Map.of("status", "VERIFIED", "dataVerified", true,
+                                "targetId", snapshot.targetId(), "rows", snapshot.rows().size(), "fingerprint", snapshot.fingerprint())));
+            }
+            case "plan-market-sentiment-daily-job", "run-market-sentiment-daily-job" -> {
+                if (marketSentimentService == null || !options.keySet().containsAll(java.util.Set.of("--from", "--to", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --from, --to and --logical-date required; optional --mode MATERIALIZE");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.data.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : com.zoutrankil.data.domain.SyncJobDefinition.Mode.MATERIALIZE;
+                var plan = marketSentimentService.plan(java.time.LocalDate.parse(options.get("--from")),
+                        java.time.LocalDate.parse(options.get("--to")), java.time.LocalDate.parse(options.get("--logical-date")), mode);
+                var json = com.zoutrankil.data.domain.JobDefinitionJson.mapper();
+                if (command.equals("plan-market-sentiment-daily-job"))
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(java.util.Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false, "plan", plan)));
+                else {
+                    var materialization = marketSentimentService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(materialization));
+                    var result = materialization.result();
+                    if (result.errorCode() != null || !java.util.Set.of(
+                            com.zoutrankil.data.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.data.domain.SyncRunState.VERIFIED_EMPTY).contains(result.state()))
+                        throw new IncompleteCommandException("market_sentiment_daily incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
+            case "finish-market-sentiment-publication" -> {
+                if (marketSentimentService == null || !options.keySet().equals(java.util.Set.of("--run", "--writer-stopped"))
+                        || !"true".equals(options.get("--writer-stopped")))
+                    throw new IllegalArgumentException("Exact --run and explicit --writer-stopped true required");
+                var snapshot = marketSentimentService.finishInterrupted(options.get("--run"), true);
+                System.out.println(com.zoutrankil.data.domain.JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter()
+                        .writeValueAsString(java.util.Map.of("status", "VERIFIED", "dataVerified", true,
+                                "targetId", snapshot.targetId(), "rows", snapshot.rows().size(), "fingerprint", snapshot.fingerprint())));
+            }
+            case "plan-margin-detail-job", "run-margin-detail-job" -> {
+                if (marginDetailService == null) throw new IllegalStateException("Margin detail owner unavailable");
+                if (options.containsKey("--resume-from")) {
+                    if (!command.equals("run-margin-detail-job")
+                            || !options.keySet().equals(java.util.Set.of("--resume-from")))
+                        throw new IllegalArgumentException("Resume requires only --resume-from and restores the frozen request");
+                    var result = marginDetailService.resume(options.get("--resume-from"));
+                    System.out.println(com.zoutrankil.data.domain.JobDefinitionJson.mapper()
+                            .writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || !java.util.Set.of(
+                            com.zoutrankil.data.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.data.domain.SyncRunState.VERIFIED_EMPTY).contains(result.state()))
+                        throw new IncompleteCommandException("margin_detail resume incomplete: " + result.state() + "; run=" + result.runId());
+                    return;
+                }
+                if (!options.keySet().containsAll(java.util.Set.of("--from", "--to", "--logical-date"))
+                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode").containsAll(options.keySet()))
+                    throw new IllegalArgumentException("Explicit --from, --to and --logical-date required; optional --mode");
+                var mode = options.containsKey("--mode")
+                        ? com.zoutrankil.data.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
+                        : com.zoutrankil.data.domain.SyncJobDefinition.Mode.BACKFILL;
+                var plan = marginDetailService.planDetailed(mode, java.time.LocalDate.parse(options.get("--from")),
+                        java.time.LocalDate.parse(options.get("--to")), java.time.LocalDate.parse(options.get("--logical-date")));
+                var json = com.zoutrankil.data.domain.JobDefinitionJson.mapper();
+                if (command.equals("plan-margin-detail-job"))
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(java.util.Map.of(
+                            "status", "PLANNED", "executed", false, "dataVerified", false, "plan", plan)));
+                else {
+                    var result = marginDetailService.run(plan);
+                    System.out.println(json.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+                    if (result.errorCode() != null || !java.util.Set.of(
+                            com.zoutrankil.data.domain.SyncRunState.VERIFIED,
+                            com.zoutrankil.data.domain.SyncRunState.VERIFIED_EMPTY).contains(result.state()))
+                        throw new IncompleteCommandException("margin_detail sync incomplete: " + result.state() + "; run=" + result.runId());
+                }
+            }
             case "install-macro-core-monthly-isolated", "plan-macro-core-monthly-job", "run-macro-core-monthly-job",
                  "macro-core-monthly-job-status", "cancel-macro-core-monthly-run", "resume-macro-core-monthly-run",
                  "reconcile-macro-core-monthly-run" -> MacroCoreMonthlyCommands.execute(command,options,macroCoreMonthlyService);
@@ -1751,6 +1867,8 @@ public class CommandLineRunner implements ApplicationRunner {
 
     private static String usage() {
         return "Usage: run-exchange-calendar|plan-exchange-calendar --exchanges SSE,SZSE --from YYYY-MM-DD --to YYYY-MM-DD "
+                + "OR plan-regime-features-monitor-daily-job|run-regime-features-monitor-daily-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD [--mode MATERIALIZE] OR finish-regime-monitor-publication --run RUN_ID --writer-stopped true OR sync-run-status --run RUN_ID OR plan-market-sentiment-daily-job|run-market-sentiment-daily-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD [--mode MATERIALIZE] OR finish-market-sentiment-publication --run RUN_ID --writer-stopped true "
+                + "OR plan-margin-detail-job|run-margin-detail-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD [--mode BACKFILL|INCREMENTAL] OR run-margin-detail-job --resume-from RUN_ID "
                 + "--logical-date YYYY-MM-DD [--mode incremental|backfill|reconcile] [--resume-from RUN_ID] OR sync-stock-basic [--output PATH] OR "
                 + "sync-stock-basic-questdb OR migrate-questdb-schema OR "
                 + "show-stock-basic-latest OR verify-questdb-jdbc OR show-dataset-definitions OR show-sync-job-definitions OR "

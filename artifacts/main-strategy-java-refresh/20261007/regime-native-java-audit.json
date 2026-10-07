@@ -1,0 +1,758 @@
+{
+  "observedAt" : "2026-10-07T13:14:57.196406100Z",
+  "passed" : true,
+  "runId" : "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+  "comparison" : "All 21 fields; exact Instant including UTC microseconds, exact strings/null and Double IEEE-754 raw bits",
+  "windowRows" : 7,
+  "fullRows" : 666,
+  "outsideRows" : 659,
+  "backupRows" : 659,
+  "sourceFieldComparisons" : 147,
+  "outsideFieldComparisons" : 13839,
+  "backupFieldComparisons" : 13839,
+  "sourceDifferences" : [ ],
+  "outsideDifferences" : [ ],
+  "backupDifferences" : [ ],
+  "sourceFileSha256" : "222829222f212d6ffc78a12b55232eae3b5435c38dc93fddb0564206c1227ba6",
+  "scopeValid" : true,
+  "fullTargetCanonicalSha256" : "c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3",
+  "expectedMergedCanonicalSha256" : "c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3",
+  "backupCanonicalSha256" : "48e5c14c0f45daddc82c8a8787cbdae0fd352f883aa2e5866025bed363fad560",
+  "schemaExact" : true,
+  "expectedTradingDates" : [ "2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24", "2026-09-28", "2026-09-29", "2026-09-30" ],
+  "actualTradingDates" : [ "2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24", "2026-09-28", "2026-09-29", "2026-09-30" ],
+  "calendarGridComplete" : true,
+  "requiredContextInvalid" : [ ],
+  "formalDuplicateDates" : 0,
+  "nonfiniteValues" : [ ],
+  "margin0930NullAndPartialEvidenced" : true,
+  "margin0930Evidence" : {
+    "tradeDate" : "2026-09-30",
+    "reason" : "entire_recent_exchange_missing",
+    "counts" : {
+      "BJ" : 0,
+      "SZ" : 0,
+      "SH" : 2001
+    },
+    "policy" : "prior_20_observed_dates_min_3_positive_dates",
+    "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+    "priorObservedDates" : [ "2026-09-29", "2026-09-28", "2026-09-24", "2026-09-23", "2026-09-22", "2026-09-21", "2026-09-18", "2026-09-17", "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+    "admitted" : false,
+    "priorObservedDays" : 20,
+    "missingExchanges" : [ "BJ", "SZ" ],
+    "positiveObservationCounts" : {
+      "BJ" : 20,
+      "SH" : 20,
+      "SZ" : 20
+    }
+  },
+  "latestRow" : {
+    "tradeDate" : "2026-09-30T00:00:00Z",
+    "month" : "202609",
+    "hs300RetMtd" : -0.033321575213180354,
+    "zz500RetMtd" : -0.004847824462113959,
+    "allARetMtd" : -0.018938697024002304,
+    "cs1000RetMtd" : -0.019014900347751662,
+    "smallLargeRetMtd" : 0.014306674865428692,
+    "growthValueRetMtd" : 0.004068974729826369,
+    "avgUpDownRatio5d" : 0.7364893621696943,
+    "avgLimitUpCount5d" : 49.2,
+    "avgLimitDownCount5d" : 21.6,
+    "avgTurnoverRate5d" : 2.9025317037069103,
+    "avgPctPositiveRatio5d" : 0.3580369231032648,
+    "avgPctNegativeRatio5d" : 0.6197597290351148,
+    "northboundNetBuyMtd" : 53851.6635,
+    "marginBalanceChangeMtd" : null,
+    "allAPeTtmPercentileLatest" : 0.38095238095238093,
+    "allAPbPercentileLatest" : 0.38095238095238093,
+    "erpLatest" : 0.8300156485912749,
+    "dataQualityFlag" : "proxy_style",
+    "updatedAt" : "2026-10-07T12:57:26.404569Z"
+  },
+  "metadata" : {
+    "query" : "SELECT table_name,id,directoryName,walEnabled,partitionBy,dedup,designatedTimestamp FROM tables() WHERE table_name IN ('regime_features_monitor_daily','java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0') ORDER BY table_name",
+    "columns" : [ {
+      "name" : "table_name",
+      "type" : "STRING"
+    }, {
+      "name" : "id",
+      "type" : "INT"
+    }, {
+      "name" : "directoryName",
+      "type" : "STRING"
+    }, {
+      "name" : "walEnabled",
+      "type" : "BOOLEAN"
+    }, {
+      "name" : "partitionBy",
+      "type" : "STRING"
+    }, {
+      "name" : "dedup",
+      "type" : "BOOLEAN"
+    }, {
+      "name" : "designatedTimestamp",
+      "type" : "STRING"
+    } ],
+    "timestamp" : -1,
+    "dataset" : [ [ "java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0", 1810, "regime_features_monitor_daily_rebuild_20260918_213053~1810", true, "MONTH", false, "trade_date" ], [ "regime_features_monitor_daily", 3017, "java_regime_features_monitor_daily_stage_e547b911cd9a4275b8fb175768cfd670~3017", true, "MONTH", false, "trade_date" ] ],
+    "count" : 2
+  },
+  "physicalIdentitiesAndLayoutVerified" : true,
+  "walBefore" : {
+    "query" : "SELECT name,suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name IN ('regime_features_monitor_daily','java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0') ORDER BY name",
+    "columns" : [ {
+      "name" : "name",
+      "type" : "STRING"
+    }, {
+      "name" : "suspended",
+      "type" : "BOOLEAN"
+    }, {
+      "name" : "writerTxn",
+      "type" : "LONG"
+    }, {
+      "name" : "sequencerTxn",
+      "type" : "LONG"
+    }, {
+      "name" : "bufferedTxnSize",
+      "type" : "LONG"
+    } ],
+    "timestamp" : -1,
+    "dataset" : [ [ "java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0", false, 4, 4, 0 ], [ "regime_features_monitor_daily", false, 9, 9, 0 ] ],
+    "count" : 2
+  },
+  "walAfter" : {
+    "query" : "SELECT name,suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name IN ('regime_features_monitor_daily','java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0') ORDER BY name",
+    "columns" : [ {
+      "name" : "name",
+      "type" : "STRING"
+    }, {
+      "name" : "suspended",
+      "type" : "BOOLEAN"
+    }, {
+      "name" : "writerTxn",
+      "type" : "LONG"
+    }, {
+      "name" : "sequencerTxn",
+      "type" : "LONG"
+    }, {
+      "name" : "bufferedTxnSize",
+      "type" : "LONG"
+    } ],
+    "timestamp" : -1,
+    "dataset" : [ [ "java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0", false, 4, 4, 0 ], [ "regime_features_monitor_daily", false, 9, 9, 0 ] ],
+    "count" : 2
+  },
+  "ledgerRun" : {
+    "id" : "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+    "parentRunId" : null,
+    "jobId" : "data.regime_features_monitor_daily",
+    "jobVersion" : 1,
+    "logicalDate" : "2026-10-07",
+    "targetId" : "static-v2-378943d25ab02151687b0f421d79f5d75c5d790139f4d2e91543f0f824871cde",
+    "frozenJson" : "{\"definition\":{\"jobId\":\"data.regime_features_monitor_daily\",\"version\":1,\"datasetId\":\"regime_features_monitor_daily\",\"datasetVersion\":1,\"owner\":\"regime_features_monitor_daily_owner\",\"supportedModes\":[\"MATERIALIZE\",\"RECONCILE\"],\"defaultMode\":\"MATERIALIZE\",\"parameters\":{\"target_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"warmup_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_pin\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"regime_features_monitor_daily.range366\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT20M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":366,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"MANUAL\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":false},\"mode\":\"MATERIALIZE\",\"parameters\":{\"source_pin\":\"ae0c315f418b8f9f54296d2a1071aa0aad3204e583ade7940db38f41dfff9028\",\"target_hash\":\"48e5c14c0f45daddc82c8a8787cbdae0fd352f883aa2e5866025bed363fad560\",\"target_id\":\"static-v2-378943d25ab02151687b0f421d79f5d75c5d790139f4d2e91543f0f824871cde\",\"warmup_from\":\"2026-09-01\"},\"from\":\"2026-09-21\",\"to\":\"2026-09-30\",\"logicalDate\":\"2026-10-07\"}"
+  },
+  "ledgerState" : {
+    "id" : "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+    "kind" : "RUN",
+    "runId" : "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca\",\"readbackEvidence\":\"ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-10-07T12:57:29.765790600Z"
+  },
+  "ledgerEntries" : [ {
+    "id" : "attempt-78fb4ab8-0402-483d-8f88-33bc13c34f0c",
+    "kind" : "ATTEMPT",
+    "runId" : "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+    "parentId" : "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca\",\"readbackEvidence\":\"ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-10-07T12:57:29.752015500Z"
+  }, {
+    "id" : "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+    "kind" : "RUN",
+    "runId" : "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+    "parentId" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca\",\"readbackEvidence\":\"ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-10-07T12:57:29.765790600Z"
+  }, {
+    "id" : "slice-0cabcced-ddb0-407f-9456-a35bd3890dc5",
+    "kind" : "SLICE",
+    "runId" : "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+    "parentId" : "attempt-78fb4ab8-0402-483d-8f88-33bc13c34f0c",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payloadJson" : "{\"verification\":{\"missingKeys\":0,\"actualRows\":7,\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"readbackEvidence\":\"ledger:slice-0cabcced-ddb0-407f-9456-a35bd3890dc5:revision:5\",\"mismatchedRows\":0,\"matchedRows\":7,\"expectedRows\":7,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0}}",
+    "updatedAt" : "2026-10-07T12:57:28.977950600Z"
+  } ],
+  "publicationJournal" : {
+    "state" : "VERIFIED",
+    "revision" : 3,
+    "intent" : {
+      "id" : "regime_features_monitor_daily-publication-762edc72-5523-4391-81bd-c6805bdf7507",
+      "dataset" : "regime_features_monitor_daily",
+      "runId" : "regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756",
+      "target" : "regime_features_monitor_daily",
+      "backup" : "java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0",
+      "stage" : "java_regime_features_monitor_daily_stage_e547b911cd9a4275b8fb175768cfd670",
+      "initialTarget" : "static-v2-378943d25ab02151687b0f421d79f5d75c5d790139f4d2e91543f0f824871cde",
+      "originalId" : 1810,
+      "originalDirectory" : "regime_features_monitor_daily_rebuild_20260918_213053~1810",
+      "replacementId" : 3017,
+      "beforeFingerprint" : "48e5c14c0f45daddc82c8a8787cbdae0fd352f883aa2e5866025bed363fad560",
+      "afterFingerprint" : "c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3",
+      "scope" : "{\"sourceEvidenceSha256\":\"222829222f212d6ffc78a12b55232eae3b5435c38dc93fddb0564206c1227ba6\",\"sourceEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\\\source.json\",\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"from\":\"2026-09-21\",\"to\":\"2026-09-30\"}"
+    }
+  },
+  "sourceHeader" : {
+    "marginAvailability" : [ {
+      "tradeDate" : "2026-09-01",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 336,
+        "SZ" : 2102,
+        "SH" : 2000
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ ],
+      "priorObservedDates" : [ ],
+      "admitted" : true,
+      "priorObservedDays" : 0,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 0,
+        "SH" : 0,
+        "SZ" : 0
+      }
+    }, {
+      "tradeDate" : "2026-09-02",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 336,
+        "SZ" : 2103,
+        "SH" : 2000
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ ],
+      "priorObservedDates" : [ "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 1,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 1,
+        "SH" : 1,
+        "SZ" : 1
+      }
+    }, {
+      "tradeDate" : "2026-09-03",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 337,
+        "SZ" : 2103,
+        "SH" : 2000
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ ],
+      "priorObservedDates" : [ "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 2,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 2,
+        "SH" : 2,
+        "SZ" : 2
+      }
+    }, {
+      "tradeDate" : "2026-09-04",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 338,
+        "SZ" : 2103,
+        "SH" : 2000
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 3,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 3,
+        "SH" : 3,
+        "SZ" : 3
+      }
+    }, {
+      "tradeDate" : "2026-09-07",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 339,
+        "SZ" : 2103,
+        "SH" : 2001
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 4,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 4,
+        "SH" : 4,
+        "SZ" : 4
+      }
+    }, {
+      "tradeDate" : "2026-09-08",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 339,
+        "SZ" : 2103,
+        "SH" : 2001
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 5,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 5,
+        "SH" : 5,
+        "SZ" : 5
+      }
+    }, {
+      "tradeDate" : "2026-09-09",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 340,
+        "SZ" : 2104,
+        "SH" : 1999
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 6,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 6,
+        "SH" : 6,
+        "SZ" : 6
+      }
+    }, {
+      "tradeDate" : "2026-09-10",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 340,
+        "SZ" : 2105,
+        "SH" : 1999
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 7,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 7,
+        "SH" : 7,
+        "SZ" : 7
+      }
+    }, {
+      "tradeDate" : "2026-09-11",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 340,
+        "SZ" : 2105,
+        "SH" : 2000
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 8,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 8,
+        "SH" : 8,
+        "SZ" : 8
+      }
+    }, {
+      "tradeDate" : "2026-09-14",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 340,
+        "SZ" : 2105,
+        "SH" : 2000
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 9,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 9,
+        "SH" : 9,
+        "SZ" : 9
+      }
+    }, {
+      "tradeDate" : "2026-09-15",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 340,
+        "SZ" : 2105,
+        "SH" : 2000
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 10,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 10,
+        "SH" : 10,
+        "SZ" : 10
+      }
+    }, {
+      "tradeDate" : "2026-09-16",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 341,
+        "SZ" : 2105,
+        "SH" : 2001
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-15", "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 11,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 11,
+        "SH" : 11,
+        "SZ" : 11
+      }
+    }, {
+      "tradeDate" : "2026-09-17",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 341,
+        "SZ" : 2105,
+        "SH" : 2002
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 12,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 12,
+        "SH" : 12,
+        "SZ" : 12
+      }
+    }, {
+      "tradeDate" : "2026-09-18",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 341,
+        "SZ" : 2105,
+        "SH" : 2002
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-17", "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 13,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 13,
+        "SH" : 13,
+        "SZ" : 13
+      }
+    }, {
+      "tradeDate" : "2026-09-21",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 341,
+        "SZ" : 2105,
+        "SH" : 2002
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-18", "2026-09-17", "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 14,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 14,
+        "SH" : 14,
+        "SZ" : 14
+      }
+    }, {
+      "tradeDate" : "2026-09-22",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 342,
+        "SZ" : 2106,
+        "SH" : 2002
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-21", "2026-09-18", "2026-09-17", "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 15,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 15,
+        "SH" : 15,
+        "SZ" : 15
+      }
+    }, {
+      "tradeDate" : "2026-09-23",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 343,
+        "SZ" : 2106,
+        "SH" : 2002
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-22", "2026-09-21", "2026-09-18", "2026-09-17", "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 16,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 16,
+        "SH" : 16,
+        "SZ" : 16
+      }
+    }, {
+      "tradeDate" : "2026-09-24",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 344,
+        "SZ" : 2106,
+        "SH" : 2002
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-23", "2026-09-22", "2026-09-21", "2026-09-18", "2026-09-17", "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 17,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 17,
+        "SH" : 17,
+        "SZ" : 17
+      }
+    }, {
+      "tradeDate" : "2026-09-28",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 344,
+        "SZ" : 2106,
+        "SH" : 2002
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-24", "2026-09-23", "2026-09-22", "2026-09-21", "2026-09-18", "2026-09-17", "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 18,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 18,
+        "SH" : 18,
+        "SZ" : 18
+      }
+    }, {
+      "tradeDate" : "2026-09-29",
+      "reason" : "recent_exchange_scope_available",
+      "counts" : {
+        "BJ" : 345,
+        "SZ" : 2107,
+        "SH" : 2002
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-28", "2026-09-24", "2026-09-23", "2026-09-22", "2026-09-21", "2026-09-18", "2026-09-17", "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : true,
+      "priorObservedDays" : 19,
+      "missingExchanges" : [ ],
+      "positiveObservationCounts" : {
+        "BJ" : 19,
+        "SH" : 19,
+        "SZ" : 19
+      }
+    }, {
+      "tradeDate" : "2026-09-30",
+      "reason" : "entire_recent_exchange_missing",
+      "counts" : {
+        "BJ" : 0,
+        "SZ" : 0,
+        "SH" : 2001
+      },
+      "policy" : "prior_20_observed_dates_min_3_positive_dates",
+      "expectedExchanges" : [ "BJ", "SH", "SZ" ],
+      "priorObservedDates" : [ "2026-09-29", "2026-09-28", "2026-09-24", "2026-09-23", "2026-09-22", "2026-09-21", "2026-09-18", "2026-09-17", "2026-09-16", "2026-09-15", "2026-09-14", "2026-09-11", "2026-09-10", "2026-09-09", "2026-09-08", "2026-09-07", "2026-09-04", "2026-09-03", "2026-09-02", "2026-09-01" ],
+      "admitted" : false,
+      "priorObservedDays" : 20,
+      "missingExchanges" : [ "BJ", "SZ" ],
+      "positiveObservationCounts" : {
+        "BJ" : 20,
+        "SH" : 20,
+        "SZ" : 20
+      }
+    } ],
+    "historyDates" : 21,
+    "sourceFingerprint" : "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+    "valuationRawRows" : 116588,
+    "from" : "2026-09-21",
+    "warmupFrom" : "2026-09-01",
+    "externalReadOnlySources" : [ "cn_bond_yield_curve" ],
+    "algorithmVersion" : "java.regime_features_monitor_daily.v1_legacy_proxy_style",
+    "to" : "2026-09-30",
+    "producer" : "java.regime_features_monitor_daily",
+    "ignoredGovNonValuationDates" : [ "2026-09-20" ],
+    "qualityPolicy" : "proxy_style describes stock-bucket proxies; optional partial-market margin is null and separately evidenced",
+    "northboundObservedDates" : 21,
+    "sources" : [ "stk_factor", "daily_basic", "stk_limit", "stk_suspend", "stk_st_daily", "margin_detail", "moneyflow_hsgt", "cn_bond_yield_curve", "exchange_calendar" ],
+    "sourceRawRows" : 116577,
+    "expectedSseTradingDates" : [ "2026-09-21", "2026-09-22", "2026-09-23", "2026-09-24", "2026-09-28", "2026-09-29", "2026-09-30" ],
+    "gov10YObservedDates" : 22,
+    "panelCoverage" : [ {
+      "tradableRows" : 5343,
+      "tradeDate" : "2026-09-01",
+      "basicMatches" : 5546,
+      "limitMatches" : 5546,
+      "factorRows" : 5546
+    }, {
+      "tradableRows" : 5345,
+      "tradeDate" : "2026-09-02",
+      "basicMatches" : 5546,
+      "limitMatches" : 5546,
+      "factorRows" : 5546
+    }, {
+      "tradableRows" : 5347,
+      "tradeDate" : "2026-09-03",
+      "basicMatches" : 5548,
+      "limitMatches" : 5548,
+      "factorRows" : 5548
+    }, {
+      "tradableRows" : 5347,
+      "tradeDate" : "2026-09-04",
+      "basicMatches" : 5547,
+      "limitMatches" : 5547,
+      "factorRows" : 5547
+    }, {
+      "tradableRows" : 5348,
+      "tradeDate" : "2026-09-07",
+      "basicMatches" : 5549,
+      "limitMatches" : 5549,
+      "factorRows" : 5549
+    }, {
+      "tradableRows" : 5348,
+      "tradeDate" : "2026-09-08",
+      "basicMatches" : 5549,
+      "limitMatches" : 5549,
+      "factorRows" : 5549
+    }, {
+      "tradableRows" : 5347,
+      "tradeDate" : "2026-09-09",
+      "basicMatches" : 5548,
+      "limitMatches" : 5548,
+      "factorRows" : 5548
+    }, {
+      "tradableRows" : 5347,
+      "tradeDate" : "2026-09-10",
+      "basicMatches" : 5548,
+      "limitMatches" : 5548,
+      "factorRows" : 5548
+    }, {
+      "tradableRows" : 5349,
+      "tradeDate" : "2026-09-11",
+      "basicMatches" : 5549,
+      "limitMatches" : 5549,
+      "factorRows" : 5549
+    }, {
+      "tradableRows" : 5350,
+      "tradeDate" : "2026-09-14",
+      "basicMatches" : 5550,
+      "limitMatches" : 5550,
+      "factorRows" : 5550
+    }, {
+      "tradableRows" : 5348,
+      "tradeDate" : "2026-09-15",
+      "basicMatches" : 5548,
+      "limitMatches" : 5548,
+      "factorRows" : 5548
+    }, {
+      "tradableRows" : 5348,
+      "tradeDate" : "2026-09-16",
+      "basicMatches" : 5548,
+      "limitMatches" : 5548,
+      "factorRows" : 5548
+    }, {
+      "tradableRows" : 5352,
+      "tradeDate" : "2026-09-17",
+      "basicMatches" : 5552,
+      "limitMatches" : 5552,
+      "factorRows" : 5552
+    }, {
+      "tradableRows" : 5351,
+      "tradeDate" : "2026-09-18",
+      "basicMatches" : 5553,
+      "limitMatches" : 5553,
+      "factorRows" : 5553
+    }, {
+      "tradableRows" : 5351,
+      "tradeDate" : "2026-09-21",
+      "basicMatches" : 5553,
+      "limitMatches" : 5553,
+      "factorRows" : 5553
+    }, {
+      "tradableRows" : 5352,
+      "tradeDate" : "2026-09-22",
+      "basicMatches" : 5554,
+      "limitMatches" : 5554,
+      "factorRows" : 5554
+    }, {
+      "tradableRows" : 5356,
+      "tradeDate" : "2026-09-23",
+      "basicMatches" : 5556,
+      "limitMatches" : 5556,
+      "factorRows" : 5556
+    }, {
+      "tradableRows" : 5358,
+      "tradeDate" : "2026-09-24",
+      "basicMatches" : 5557,
+      "limitMatches" : 5557,
+      "factorRows" : 5557
+    }, {
+      "tradableRows" : 5359,
+      "tradeDate" : "2026-09-28",
+      "basicMatches" : 5557,
+      "limitMatches" : 5557,
+      "factorRows" : 5557
+    }, {
+      "tradableRows" : 5361,
+      "tradeDate" : "2026-09-29",
+      "basicMatches" : 5559,
+      "limitMatches" : 5559,
+      "factorRows" : 5559
+    }, {
+      "tradableRows" : 5362,
+      "tradeDate" : "2026-09-30",
+      "basicMatches" : 5560,
+      "limitMatches" : 5560,
+      "factorRows" : 5560
+    } ],
+    "requiredContextFields" : [ "hs300_ret_mtd", "zz500_ret_mtd", "all_a_ret_mtd", "small_large_ret_mtd", "growth_value_ret_mtd", "avg_up_down_ratio_5d" ],
+    "valuationObservedDates" : 21
+  }
+}

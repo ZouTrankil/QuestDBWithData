@@ -93,13 +93,23 @@ public final class StockFactorWritePort implements VerifiedBatchExecutor.Port<St
         requireExpectedTarget();
         if(keys.size()>250 || new HashSet<>(keys).size()!=keys.size()) throw new IllegalArgumentException("At most 250 unique full factor keys per readback");
         var clauses=new ArrayList<String>();var params=new ArrayList<Object>();
+        // Expose the designated-timestamp interval to QuestDB's partition/interval planner.
+        // The exact pair predicates below still decide membership, including mixed-date batches.
+        var firstDate=keys.stream().map(StockFactorKey::tradeDate).min(Comparator.naturalOrder()).orElseThrow();
+        var lastDate=keys.stream().map(StockFactorKey::tradeDate).max(Comparator.naturalOrder()).orElseThrow();
+        params.add(new TemporalValues.CalendarTimestamp(firstDate).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        params.add(new TemporalValues.CalendarTimestamp(lastDate.plusDays(1)).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        var codes=keys.stream().map(StockFactorKey::tsCode).distinct().sorted().toList();
+        params.addAll(codes);
         for(var key:keys) {
             clauses.add("(ts_code=? AND trade_date=cast(? AS TIMESTAMP))");params.add(key.tsCode());
             params.add(new TemporalValues.CalendarTimestamp(key.tradeDate()).storageEpoch(TemporalValues.EpochUnit.MICROS));
         }
         var projection=String.join(",",StockFactorDataset.STORAGE_COLUMNS.stream().map(c->c.equals("trade_date")
                 ?"cast(\"trade_date\" as long) AS trade_micros":"\""+c+"\"").toList());
-        String sql="SELECT "+projection+" FROM \""+table+"\" WHERE "+String.join(" OR ",clauses)
+        String sql="SELECT "+projection+" FROM \""+table+"\" WHERE trade_date>=cast(? AS TIMESTAMP)"
+                +" AND trade_date<cast(? AS TIMESTAMP) AND ts_code IN ("+String.join(",",Collections.nCopies(codes.size(),"?"))
+                +") AND ("+String.join(" OR ",clauses)+")"
                 +" ORDER BY ts_code,trade_date LIMIT "+(keys.size()+1);
         return jdbc.query(sql,(rs,index)->physical(rs),params.toArray());
     }

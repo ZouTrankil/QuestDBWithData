@@ -20,7 +20,7 @@ public class EtfDailyReadRepository implements DatasetImplementation {
     public EtfDailyReadRepository(QuestDbBoundedReader reader,
             @Value("${app.sync.etf-daily-table:java_d014_etf_daily_acceptance}") String table) {
         this.reader = Objects.requireNonNull(reader);
-        com.zoutrankil.data.service.EtfDailyJobService.requireIsolatedTableName(table);
+        com.zoutrankil.data.service.EtfDailyJobService.requireExecutionTableName(table);
         this.table = table;
     }
     @Override public DatasetDefinition definition() { return EtfDailyDataset.definition(table); }

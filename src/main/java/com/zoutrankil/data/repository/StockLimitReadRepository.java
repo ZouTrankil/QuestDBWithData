@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.*;
 
-/** Bounded typed reads against a D010 isolated target. */
+/** Bounded typed reads against the explicit D010 target. */
 @Repository
 public class StockLimitReadRepository implements DatasetImplementation {
     private static final List<String> COLUMNS = StockLimitDataset.DEFINITION.columns().stream()
@@ -20,7 +20,7 @@ public class StockLimitReadRepository implements DatasetImplementation {
     public StockLimitReadRepository(QuestDbBoundedReader reader,
             @Value("${app.sync.stk-limit-table:java_d010_stk_limit_acceptance}") String table) {
         this.reader = Objects.requireNonNull(reader);
-        com.zoutrankil.data.service.StockLimitJobService.requireIsolatedTableName(table);
+        StockLimitJobService.requireExecutionTableName(table);
         this.table = table;
     }
     @Override public DatasetDefinition definition() { return StockLimitDataset.definition(table); }

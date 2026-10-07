@@ -1,0 +1,172 @@
+{
+  "etfDaily": [
+    {
+      "endpoint": "fund_daily",
+      "tradeDate": "2026-09-29",
+      "rowCount": 2136,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-daily-3c9cfe0f-0f86-47e1-95ef-6213e05debd7\\source\\etf-daily-20260929-3fdc2fcc-96d0-4f2f-8bf4-be27610998af.json",
+      "sha256": "d85fbc2881fb96cff9c4f4a70d434e727e0e4dbb1196f37ed0f078a81bac2cac",
+      "ledgerSourceFingerprint": "d85fbc2881fb96cff9c4f4a70d434e727e0e4dbb1196f37ed0f078a81bac2cac",
+      "fingerprintMatches": true,
+      "complete": true,
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 2136,
+        "matchedRows": 2136,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-28e03413-cac0-4a96-a272-a1f4b11a00d8:revision:5",
+        "sourceFingerprint": "d85fbc2881fb96cff9c4f4a70d434e727e0e4dbb1196f37ed0f078a81bac2cac",
+        "actualRows": 2136,
+        "missingKeys": 0
+      }
+    },
+    {
+      "endpoint": "fund_daily",
+      "tradeDate": "2026-09-28",
+      "rowCount": 2163,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-daily-3c9cfe0f-0f86-47e1-95ef-6213e05debd7\\source\\etf-daily-20260928-93bc2af7-6f15-4c36-a293-d7d3d35ecd0d.json",
+      "sha256": "333fabbf87f7c21df203c22e94ab781c78ba9ffd40b17d50ea098f2ac8b8a75f",
+      "ledgerSourceFingerprint": "333fabbf87f7c21df203c22e94ab781c78ba9ffd40b17d50ea098f2ac8b8a75f",
+      "fingerprintMatches": true,
+      "complete": true,
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 2163,
+        "matchedRows": 2163,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-3cc40bfc-df0a-4aef-b6fb-f74f77b8762a:revision:5",
+        "sourceFingerprint": "333fabbf87f7c21df203c22e94ab781c78ba9ffd40b17d50ea098f2ac8b8a75f",
+        "actualRows": 2163,
+        "missingKeys": 0
+      }
+    },
+    {
+      "endpoint": "fund_daily",
+      "tradeDate": "2026-09-30",
+      "rowCount": 2140,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-daily-3c9cfe0f-0f86-47e1-95ef-6213e05debd7\\source\\etf-daily-20260930-37810e7d-be35-4f8d-91a7-f3a6373456f4.json",
+      "sha256": "52dbf38738232c695de44482a6bc4ce35115c27f1bb93848be896bb606916686",
+      "ledgerSourceFingerprint": "52dbf38738232c695de44482a6bc4ce35115c27f1bb93848be896bb606916686",
+      "fingerprintMatches": true,
+      "complete": true,
+      "verification": {
+        "duplicateKeys": 0,
+        "writerStopped": false,
+        "passed": true,
+        "expectedRows": 2140,
+        "matchedRows": 2140,
+        "mismatchedRows": 0,
+        "readbackEvidence": "ledger:slice-add7d4ce-0d90-4d5b-a982-1a875c27fc08:revision:5",
+        "sourceFingerprint": "52dbf38738232c695de44482a6bc4ce35115c27f1bb93848be896bb606916686",
+        "actualRows": 2140,
+        "missingKeys": 0
+      }
+    }
+  ],
+  "etfPortfolio": {
+    "completionFile": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79\\complete-4553dcdc-a428-48cc-93e9-52bcceb9120a.json",
+    "completionSha256": "01d08bfae34b47a910cb350a155dc1595aa3847f74b676197ac99533c50636a0",
+    "completion": {
+      "announcementDates": [
+        "2026-09-28",
+        "2026-09-29",
+        "2026-09-30"
+      ],
+      "complete": true,
+      "endpoint": "fund_portfolio",
+      "from": "2026-09-28",
+      "mode": "BACKFILL",
+      "observedAt": "2026-10-07T12:12:35.675356Z",
+      "receipts": [
+        {
+          "date": "2026-09-28",
+          "fingerprint": "1c3bd0808d30a0a55f9971704b5d2b1b769b370ad9b3f5fcbeb9ca56d1d0bac7",
+          "responseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79\\source\\source-20260928-1c3bd0808d30a0a55f9971704b5d2b1b769b370ad9b3f5fcbeb9ca56d1d0bac7.json",
+          "rows": 0,
+          "runnerChunks": [
+            {
+              "count": 1,
+              "cursor": "20260928#0",
+              "fingerprint": "541bd4680e3063a5a98ffd795378bfd31b14534cd4c71ca78a13c2087e1f10a0",
+              "index": 0,
+              "offset": 0,
+              "responseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79\\source\\chunk-20260928-1c3bd0808d30a0a55f9971704b5d2b1b769b370ad9b3f5fcbeb9ca56d1d0bac7-0.json",
+              "rows": 0
+            }
+          ],
+          "sourcePages": 1
+        },
+        {
+          "date": "2026-09-29",
+          "fingerprint": "67a5f68164f37fa98da6bca471da6c37f1733aaf5545ea3e3044ca575b480799",
+          "responseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79\\source\\source-20260929-67a5f68164f37fa98da6bca471da6c37f1733aaf5545ea3e3044ca575b480799.json",
+          "rows": 0,
+          "runnerChunks": [
+            {
+              "count": 1,
+              "cursor": "20260929#0",
+              "fingerprint": "178c5078234c1247a3bb8b2014b34063ab5e6d925651b3290123c78e5e971f80",
+              "index": 0,
+              "offset": 0,
+              "responseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79\\source\\chunk-20260929-67a5f68164f37fa98da6bca471da6c37f1733aaf5545ea3e3044ca575b480799-0.json",
+              "rows": 0
+            }
+          ],
+          "sourcePages": 1
+        },
+        {
+          "date": "2026-09-30",
+          "fingerprint": "21dd2eaee909240c236925ed25d565cf271bfbf44f9a6f3a4b58ce1a520a6aaa",
+          "responseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79\\source\\source-20260930-21dd2eaee909240c236925ed25d565cf271bfbf44f9a6f3a4b58ce1a520a6aaa.json",
+          "rows": 0,
+          "runnerChunks": [
+            {
+              "count": 1,
+              "cursor": "20260930#0",
+              "fingerprint": "fe9899c02842cc72b444ba2476627876d6e91148b05eebf673c195b3bbadb50d",
+              "index": 0,
+              "offset": 0,
+              "responseEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79\\source\\chunk-20260930-21dd2eaee909240c236925ed25d565cf271bfbf44f9a6f3a4b58ce1a520a6aaa-0.json",
+              "rows": 0
+            }
+          ],
+          "sourcePages": 1
+        }
+      ],
+      "slices": 3,
+      "sourceContractVersion": 1,
+      "sourceRows": 0,
+      "to": "2026-09-30"
+    },
+    "sourceFiles": [
+      {
+        "date": "2026-09-28",
+        "rows": 0,
+        "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79\\source\\source-20260928-1c3bd0808d30a0a55f9971704b5d2b1b769b370ad9b3f5fcbeb9ca56d1d0bac7.json",
+        "sha256": "1c3bd0808d30a0a55f9971704b5d2b1b769b370ad9b3f5fcbeb9ca56d1d0bac7",
+        "receiptFingerprint": "1c3bd0808d30a0a55f9971704b5d2b1b769b370ad9b3f5fcbeb9ca56d1d0bac7",
+        "fingerprintMatches": true
+      },
+      {
+        "date": "2026-09-29",
+        "rows": 0,
+        "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79\\source\\source-20260929-67a5f68164f37fa98da6bca471da6c37f1733aaf5545ea3e3044ca575b480799.json",
+        "sha256": "67a5f68164f37fa98da6bca471da6c37f1733aaf5545ea3e3044ca575b480799",
+        "receiptFingerprint": "67a5f68164f37fa98da6bca471da6c37f1733aaf5545ea3e3044ca575b480799",
+        "fingerprintMatches": true
+      },
+      {
+        "date": "2026-09-30",
+        "rows": 0,
+        "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\etf-portfolio-35156059-7d4e-4127-b72c-823a6a562c79\\source\\source-20260930-21dd2eaee909240c236925ed25d565cf271bfbf44f9a6f3a4b58ce1a520a6aaa.json",
+        "sha256": "21dd2eaee909240c236925ed25d565cf271bfbf44f9a6f3a4b58ce1a520a6aaa",
+        "receiptFingerprint": "21dd2eaee909240c236925ed25d565cf271bfbf44f9a6f3a4b58ce1a520a6aaa",
+        "fingerprintMatches": true
+      }
+    ]
+  }
+}

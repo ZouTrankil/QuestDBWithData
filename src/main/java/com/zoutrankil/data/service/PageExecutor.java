@@ -23,6 +23,9 @@ public final class PageExecutor {
         Incomplete(String reason, int pages, int rows) {
             super(reason); consumedPages = pages; consumedRows = rows;
         }
+        Incomplete(String reason, int pages, int rows, Throwable cause) {
+            super(reason, cause); consumedPages = pages; consumedRows = rows;
+        }
         public int consumedPages() { return consumedPages; }
         public int consumedRows() { return consumedRows; }
     }
@@ -55,7 +58,7 @@ public final class PageExecutor {
             try { page = fetcher.fetch(Collections.unmodifiableMap(params)); }
             catch (Exception failure) {
                 if (failure instanceof InterruptedException) Thread.currentThread().interrupt();
-                throw new Incomplete("Source page failed (" + failureTypes(failure) + ")", pages, rows);
+                throw new Incomplete("Source page failed (" + failureTypes(failure) + ")", pages, rows, failure);
             }
             if (page == null) throw new Incomplete("Null source page", pages, rows);
             if (cancelled.getAsBoolean()) throw new Incomplete("Slice cancelled after fetch", pages, rows);
@@ -78,7 +81,7 @@ public final class PageExecutor {
                 }
                 if (!keys.add(digest(key))) throw new Incomplete("Duplicate business key within/across pages", pages, rows);
                 try { validator.validate(row); }
-                catch (Exception failure) { throw new Incomplete("Row outside declared slice or invalid (" + failure.getClass().getSimpleName() + ")", pages, rows); }
+                catch (Exception failure) { throw new Incomplete("Row outside declared slice or invalid (" + failure.getClass().getSimpleName() + ")", pages, rows, failure); }
             }
             if (contract.paging() == PageContract.Paging.NONE && count >= contract.sourceRowCap() && !page.explicitEnd()) {
                 throw new Truncated(pages, rows); // No rows delivered from a potentially truncated window.

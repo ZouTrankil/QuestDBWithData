@@ -65,7 +65,7 @@ public final class EtfFactorWritePort implements VerifiedBatchExecutor.Port<EtfF
     private volatile boolean uncertainSenderStopped;
 
     public EtfFactorWritePort(String table, String expectedTargetId, JdbcTemplate jdbc, QuestDB questdb) {
-        EtfFactorJobService.requireIsolatedTableName(table);
+        EtfFactorJobService.requireExecutionTableName(table);
         if (expectedTargetId == null || !expectedTargetId.startsWith("static-v2-"))
             throw new IllegalArgumentException("Frozen isolated etf_factor identity required");
         this.table = table; this.expectedTargetId = expectedTargetId;

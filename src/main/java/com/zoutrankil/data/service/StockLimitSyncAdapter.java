@@ -88,7 +88,9 @@ public final class StockLimitSyncAdapter implements SyncJobRunner.Adapter<StockL
         for (var date : dates) {
             if (cancelled.getAsBoolean() || Thread.currentThread().isInterrupted())
                 throw new CancellationException("stk_limit date slice cancelled");
-            var page = source.fetch(date, cancelled); consumer.accept(page);
+            var page = source.fetch(date, cancelled);
+            verifyNoSourceKeyRemoval(date, page.rows());
+            consumer.accept(page);
             rows = Math.addExact(rows, page.rows().size()); evidence.add(page.responseEvidence());
         }
         Files.createDirectories(evidenceRoot);
@@ -100,6 +102,13 @@ public final class StockLimitSyncAdapter implements SyncJobRunner.Adapter<StockL
         if (Files.size(completion) > StockLimitSource.MAX_EVIDENCE_BYTES)
             throw new IllegalArgumentException("stk_limit completion evidence exceeds 32 MiB budget");
         return new SyncJobRunner.SourceCompletion(dates.size(), rows, true, completion.toString());
+    }
+    private void verifyNoSourceKeyRemoval(LocalDate date, List<StockLimit> sourceRows) {
+        var sourceKeys = new HashSet<StockLimitKey>();
+        for (var row : sourceRows)
+            if (!sourceKeys.add(row.key())) throw new IllegalStateException("Duplicate stk_limit source key");
+        if (port.readDate(date).stream().anyMatch(row -> !sourceKeys.contains(row.key())))
+            throw new IllegalStateException("stk_limit source omitted an existing target key; deletion requires an explicit staged replacement policy");
     }
     @Override public VerifiedBatchExecutor.Codec<StockLimit, StockLimitKey> codec() { return StockLimitWritePort.CODEC; }
     @Override public VerifiedBatchExecutor.Port<StockLimit, StockLimitKey> port() { return port; }

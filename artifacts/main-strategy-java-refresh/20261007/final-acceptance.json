@@ -1,0 +1,118 @@
+{
+  "observed_at": "2026-10-07T21:25:17.5812847+08:00",
+  "target_host": "127.0.0.1",
+  "data_cutoff": "2026-09-30",
+  "status": "completed_with_upstream_quality_limits",
+  "source_sync_route": "Existing Java TusharePageService -> TushareClient -> WebFlux WebClient -> typed owners -> SyncJobRunner",
+  "new_http_clients": 0,
+  "daily_quality_status": "ok",
+  "checked_backtest_days": 32,
+  "latest_dates": {
+    "stk_factor": "2026-09-30",
+    "v_backtest_daily": "2026-09-30",
+    "market_sentiment_daily": "2026-09-30",
+    "regime_features_monitor_daily": "2026-09-30",
+    "etf_daily": "2026-09-30",
+    "etf_adj": "2026-09-30",
+    "etf_factor": "2026-09-30",
+    "l2_daily_features": "2026-09-30"
+  },
+  "regime_expected_trading_dates": [
+    "2026-09-21",
+    "2026-09-22",
+    "2026-09-23",
+    "2026-09-24",
+    "2026-09-28",
+    "2026-09-29",
+    "2026-09-30"
+  ],
+  "market_sentiment": {
+    "backup": "java_d121_market_sentiment_daily_backup_330d0c1869114a32b5a6908d2206c50e",
+    "sourceFingerprint": "083bda003cd84bf7776f5b7092a015922a7541fbe27d5c2a014021a7cf94d365",
+    "fullTargetFingerprint": "c5e64e8f17e97f8188921c615490ad50634c04ede45ffe91df3db885bf77649b",
+    "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-466c4316-9c83-489f-8c6b-11a84ebe936c\\source.json",
+    "published": true,
+    "windowRows": 7,
+    "formalRows": 104
+  },
+  "regime_context": {
+    "sourceFingerprint": "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+    "fullTargetFingerprint": "c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3",
+    "sourceEvidence": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-5c1ba217-3a43-40cd-82cb-69a83d69b756\\source.json",
+    "published": true,
+    "windowRows": 7,
+    "formalRows": 666,
+    "backup": "java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0",
+    "independent_readback": {
+      "passed": true,
+      "new_field_comparisons": 147,
+      "preserved_field_comparisons": 13839,
+      "backup_field_comparisons": 13839,
+      "source_differences": [],
+      "outside_differences": [],
+      "backup_differences": [],
+      "full_target_sha256": "c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3",
+      "source_file_sha256": "222829222f212d6ffc78a12b55232eae3b5435c38dc93fddb0564206c1227ba6",
+      "report": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\regime-native-java-audit.json"
+    }
+  },
+  "preserved_history_rows": {
+    "regime_context": 659,
+    "market_sentiment": 97
+  },
+  "quality_constraints": [
+    "20260930 margin_detail lacks SZ/BJ in current upstream; Java sentiment rejects its financing enhancement and marks partial_enhanced; regime optional margin_balance_change_mtd remains NULL",
+    "589330.SH latest announcement 20260526 is 127 calendar days before 20260930, exceeding the 120-day governance freshness limit",
+    "001246.SZ listed 20260930 has native stk_factor provider-empty receipt; no factor fabricated",
+    "512770.SH same report period has two non-overlapping announcement batches; existing latest-announcement consumer only takes 53.36 instead of combined 99.93"
+  ],
+  "prior_python_history": "Previously completed historical ETF 20260831 repair and source checks preserved; this report does not relabel them as Java",
+  "strategy_plan_execution": "Not run; no plan or trade published",
+  "build": "gradlew classes --no-problems-report succeeded",
+  "report": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\final-report.md",
+  "temporal_availability": {
+    "regime_new_rows_updated_at": "2026-10-07T12:57:26.404569Z",
+    "historical_point_in_time_replay_certified": false,
+    "current_etf_context_available_as_of_filter": false,
+    "note": "Current data cutoff is 20260930; recomputed rows retain actual observation time and are not asserted available on 20260930."
+  },
+  "final_constituent_policy": {
+    "user_authorized": "Use actual latest upstream constituent disclosure when no 20260930 announcement exists",
+    "latest": {
+      "589330.SH": "2026-05-26",
+      "512770.SH": "2026-08-31"
+    },
+    "disclosure_dates_preserved": true,
+    "freshness_advisory_preserved": true
+  },
+  "fresh_closure_verification": {
+    "questdb_observed_at": "2026-10-07T21:15:20.6657294+08:00",
+    "daily_readonly_observed_at": "2026-10-07T21:14:24.1010449+08:00",
+    "daily_status": "ok",
+    "checked_days": 32,
+    "sentiment_passed": true,
+    "sentiment_observed_at": "2026-10-07T21:14:53.3470555+08:00",
+    "regime_passed": true,
+    "regime_observed_at": "2026-10-07T13:14:57.196406100Z",
+    "build_exit": 0,
+    "explicit_local_plan": {
+      "observed_at": "2026-10-07T21:18:00.6333278+08:00",
+      "status": "PLANNED",
+      "executed": false,
+      "target_id": "static-v2-1f66ec9bb03f2e4bd51de62a2db8df81e4ab0617986a4298b82c1d769a6df2ee",
+      "table_id": 3017,
+      "rows": 666,
+      "fingerprint": "c21beb9d2deca48ea85ce24a4a62d6d8ccd0f4912bebfb7b4304f521f4bf50e3",
+      "local_host_argument_present": true,
+      "launch_receipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\goal-local-regime-plan-launch.json"
+    },
+    "route_review_path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\goal-java-route-closure-audit.json"
+  },
+  "completion_audit": {
+    "all_required_items_proved": true,
+    "requirements_count": 11,
+    "required_work_remaining": [],
+    "artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\goal-completion-audit.json",
+    "constituent_latest_readback": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\goal-constituent-actual-latest.json"
+  }
+}

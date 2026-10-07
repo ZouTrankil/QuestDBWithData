@@ -28,7 +28,7 @@ public class EtfFactorReadRepository implements DatasetImplementation {
     private final EtfFactorMapper mapper = new EtfFactorMapper();
     public EtfFactorReadRepository(QuestDbBoundedReader reader,
             @Value("${app.sync.etf-factor-table:java_d017_etf_factor_acceptance}") String table) {
-        this.reader = Objects.requireNonNull(reader); EtfFactorJobService.requireIsolatedTableName(table); this.table = table;
+        this.reader = Objects.requireNonNull(reader); EtfFactorJobService.requireExecutionTableName(table); this.table = table;
     }
     @Override public DatasetDefinition definition() { return EtfFactorDataset.definition(table); }
     public DatasetReadPage<EtfFactor> findByKey(EtfFactorKey key) {

@@ -1,0 +1,39 @@
+{
+  "observed_at": "2026-10-07T21:29:19.8693814+08:00",
+  "cutoff": "20260930",
+  "user_policy": "Actual latest available source disclosure accepted",
+  "endpoint": "http://127.0.0.1:9000",
+  "read_only": true,
+  "provider_requests_this_audit": 0,
+  "passed": true,
+  "funds": [
+    {
+      "symbol": "512770.SH",
+      "latest_source_announcement": "20260831",
+      "source_rows": 124,
+      "readback_rows": 124,
+      "numeric_field_comparisons": 496,
+      "differences": [],
+      "full_target_source_rows": 2354,
+      "terminal_short_page": true,
+      "full_source_provenance": "Existing 20261007 target-code provider receipt obtained before Java route correction; retained honestly, not a new Java fetch",
+      "source_file": "D:\\work\\fund_2\\back-monitor\\artifacts\\main-strategy-refresh\\20261007\\etf-readonly-audit\\512770.SH.source.json",
+      "source_file_sha256": "dec760b9cc7670d03ba222d82cb84a413ec544be3b9b2f35bf0bbe770b1be444",
+      "query": "SELECT ts_code,ann_date,end_date,symbol,mkv,amount,stk_mkv_ratio,stk_float_ratio FROM etf_portfolio WHERE ts_code='512770.SH' AND ann_date='2026-08-31' ORDER BY symbol"
+    },
+    {
+      "symbol": "589330.SH",
+      "latest_source_announcement": "20260526",
+      "source_rows": 10,
+      "readback_rows": 10,
+      "numeric_field_comparisons": 40,
+      "differences": [],
+      "full_target_source_rows": 10,
+      "terminal_short_page": true,
+      "full_source_provenance": "Existing 20261007 target-code provider receipt obtained before Java route correction; retained honestly, not a new Java fetch",
+      "source_file": "D:\\work\\fund_2\\back-monitor\\artifacts\\main-strategy-refresh\\20261007\\etf-readonly-audit\\589330.SH.source.json",
+      "source_file_sha256": "5ec6c16530d7a3be055f43a23ce4e7a7fa9e42491ac79444bb62b086ccc7d5ff",
+      "query": "SELECT ts_code,ann_date,end_date,symbol,mkv,amount,stk_mkv_ratio,stk_float_ratio FROM etf_portfolio WHERE ts_code='589330.SH' AND ann_date='2026-05-26' ORDER BY symbol"
+    }
+  ]
+}

@@ -73,15 +73,19 @@ public final class EtfPortfolioJobService {
         this.jobs = Objects.requireNonNull(jobs); this.pages = Objects.requireNonNull(pages);
         this.jdbc = Objects.requireNonNull(jdbc); this.questdb = Objects.requireNonNull(questdb);
         this.ledgerPath = Objects.requireNonNull(ledgerPath).toAbsolutePath().normalize();
-        EtfPortfolioDataset.requireIsolatedTable(table); this.table = table;
+        requireExecutionTableName(table); this.table = table;
     }
 
     public String tableName() { return table; }
 
     public static void requireIsolatedTableName(String value) { EtfPortfolioDataset.requireIsolatedTable(value); }
 
+    public static void requireExecutionTableName(String value) {
+        if (!"etf_portfolio".equals(value)) EtfPortfolioDataset.requireIsolatedTable(value);
+    }
+
     public String targetId() {
-        EtfPortfolioDataset.requireIsolatedTable(table);
+        requireExecutionTableName(table);
         QuestDbWriteChecks.preflight(jdbc, table, EtfPortfolioDataset.definition(table));
         var rows = jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name=?", table);
         if (rows.size() != 1 || !(rows.getFirst().get("id") instanceof Number id)
@@ -98,6 +102,8 @@ public final class EtfPortfolioJobService {
         LocalDate ceiling = sourceCompletedThrough(logicalDate, requestedThrough);
         if (ceiling == null) throw new IllegalArgumentException("No completed etf_portfolio announcement date is available yet");
         Mode mode = requestedMode == null ? EtfPortfolioSyncJobOwner.DEFINITION.defaultMode() : requestedMode;
+        if ("etf_portfolio".equals(table) && mode != Mode.BACKFILL)
+            throw new IllegalArgumentException("Formal etf_portfolio refresh requires explicit bounded BACKFILL");
         if (!EtfPortfolioSyncJobOwner.DEFINITION.supportedModes().contains(mode))
             throw new IllegalArgumentException("Unsupported etf_portfolio sync mode");
         if (mode == Mode.BACKFILL && (bootstrapFrom == null || requestedThrough == null))
@@ -187,6 +193,8 @@ public final class EtfPortfolioJobService {
 
     private SyncJobRunner.Result execute(String runId, String priorRunId, Plan plan) throws Exception {
         Objects.requireNonNull(plan);
+        if ("etf_portfolio".equals(table) && plan.request().mode() != Mode.BACKFILL)
+            throw new IllegalArgumentException("Formal etf_portfolio refresh requires bounded BACKFILL");
         if (!plan.request().definition().equals(EtfPortfolioSyncJobOwner.DEFINITION)
                 || !plan.targetId().equals(plan.request().parameters().get("targetId"))
                 || !plan.targetId().equals(targetId()))

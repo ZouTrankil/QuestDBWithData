@@ -29,7 +29,7 @@ public class EtfPortfolioReadRepository implements DatasetImplementation {
     public EtfPortfolioReadRepository(QuestDbBoundedReader reader,
             @Value("${app.sync.etf-portfolio-table:java_d018_etf_portfolio_acceptance}") String table) {
         this.reader = Objects.requireNonNull(reader);
-        EtfPortfolioDataset.requireIsolatedTable(table);
+        com.zoutrankil.data.service.EtfPortfolioJobService.requireExecutionTableName(table);
         this.table = table;
     }
     @Override public DatasetDefinition definition() { return EtfPortfolioDataset.definition(table); }

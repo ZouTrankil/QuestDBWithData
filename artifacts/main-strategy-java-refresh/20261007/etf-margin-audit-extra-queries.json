@@ -1,0 +1,185 @@
+[
+  {
+    "Name": "wal_source_tables",
+    "SQL": "SELECT * FROM wal_tables() WHERE name IN ('stk_factor','daily_basic','stk_limit','moneyflow','etf_daily','etf_factor','etf_portfolio','margin_detail')",
+    "Columns": [
+      {
+        "name": "name",
+        "type": "STRING"
+      },
+      {
+        "name": "suspended",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "writerTxn",
+        "type": "LONG"
+      },
+      {
+        "name": "bufferedTxnSize",
+        "type": "LONG"
+      },
+      {
+        "name": "sequencerTxn",
+        "type": "LONG"
+      },
+      {
+        "name": "errorTag",
+        "type": "STRING"
+      },
+      {
+        "name": "errorMessage",
+        "type": "STRING"
+      },
+      {
+        "name": "memoryPressure",
+        "type": "INT"
+      }
+    ],
+    "Rows": [
+      [
+        "etf_daily",
+        false,
+        40,
+        0,
+        40,
+        "",
+        "",
+        0
+      ],
+      [
+        "etf_factor",
+        false,
+        58,
+        0,
+        58,
+        "",
+        "",
+        0
+      ],
+      [
+        "stk_limit",
+        false,
+        216,
+        0,
+        216,
+        "",
+        "",
+        0
+      ],
+      [
+        "etf_portfolio",
+        false,
+        1529,
+        0,
+        1529,
+        "",
+        "",
+        0
+      ],
+      [
+        "margin_detail",
+        false,
+        121,
+        0,
+        121,
+        "",
+        "",
+        0
+      ],
+      [
+        "daily_basic",
+        false,
+        205,
+        0,
+        205,
+        "",
+        "",
+        0
+      ],
+      [
+        "stk_factor",
+        false,
+        156,
+        0,
+        156,
+        "",
+        "",
+        0
+      ],
+      [
+        "moneyflow",
+        false,
+        175,
+        0,
+        175,
+        "",
+        "",
+        0
+      ]
+    ],
+    "QueryCount": 8
+  },
+  {
+    "Name": "etf_target_duplicate_keys",
+    "SQL": "SELECT ts_code,ann_date,end_date,symbol,count() AS duplicate_rows FROM etf_portfolio WHERE ts_code IN ('512770.SH','589330.SH') AND ann_date>='2026-01-01' AND ann_date<'2026-10-01' GROUP BY ts_code,ann_date,end_date,symbol HAVING count()>1",
+    "Error": "\r\n{\r\n  \"query\": \"SELECT ts_code,ann_date,end_date,symbol,count() AS duplicate_rows FROM etf_portfolio WHERE ts_code IN (\\u0027512770.SH\\u0027,\\u0027589330.SH\\u0027) AND ann_date\\u003E=\\u00272026-01-01\\u0027 AND ann_date\\u003C\\u00272026-10-01\\u0027 GROUP BY ts_code,ann_date,end_date,symbol HAVING count()\\u003E1\",\r\n  \"error\": \"unexpected token [HAVING]\",\r\n  \"position\": 223\r\n}"
+  },
+  {
+    "Name": "etf_latest_report_union",
+    "SQL": "SELECT ts_code,end_date,count() AS rows,count_distinct(symbol) AS symbols,sum(stk_mkv_ratio) AS weight_sum FROM etf_portfolio WHERE ts_code='512770.SH' AND end_date='2026-06-30' AND ann_date IN ('2026-07-21','2026-08-31') GROUP BY ts_code,end_date",
+    "Columns": [
+      {
+        "name": "ts_code",
+        "type": "SYMBOL"
+      },
+      {
+        "name": "end_date",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "rows",
+        "type": "LONG"
+      },
+      {
+        "name": "symbols",
+        "type": "LONG"
+      },
+      {
+        "name": "weight_sum",
+        "type": "DOUBLE"
+      }
+    ],
+    "Rows": [
+      [
+        "512770.SH",
+        "2026-06-30T00:00:00Z",
+        134,
+        134,
+        99.92999999999999
+      ]
+    ],
+    "QueryCount": 1
+  },
+  {
+    "Name": "etf_close_alignment",
+    "SQL": "SELECT count() AS matched_target_rows,sum(case when d.close<>f.close then 1 else 0 end) AS close_difference_count FROM (SELECT ts_code,timestamp,close FROM etf_daily WHERE timestamp>='2026-09-28' AND timestamp<'2026-10-01' AND ts_code IN ('512770.SH','589330.SH')) d JOIN (SELECT ts_code,trade_date,close FROM etf_factor WHERE trade_date>='2026-09-28' AND trade_date<'2026-10-01' AND ts_code IN ('512770.SH','589330.SH')) f ON d.ts_code=f.ts_code AND d.timestamp=f.trade_date",
+    "Columns": [
+      {
+        "name": "matched_target_rows",
+        "type": "LONG"
+      },
+      {
+        "name": "close_difference_count",
+        "type": "LONG"
+      }
+    ],
+    "Rows": [
+      [
+        6,
+        0
+      ]
+    ],
+    "QueryCount": 1
+  }
+]

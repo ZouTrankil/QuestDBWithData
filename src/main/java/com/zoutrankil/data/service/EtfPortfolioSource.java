@@ -34,17 +34,19 @@ public final class EtfPortfolioSource {
     public static final int CONTRACT_VERSION = 1;
     public static final int PAGE_SIZE = 8_000;
     /** Finite local cap: larger announcement dates preserve incomplete evidence and fail closed. */
-    public static final int MAX_ROWS_PER_ANN_DATE = 256_000;
-    public static final int MAX_PAGES_PER_ANN_DATE = 33;
+    public static final int MAX_ROWS_PER_ANN_DATE = 1_000_000;
+    public static final int MAX_PAGES_PER_ANN_DATE = MAX_ROWS_PER_ANN_DATE / PAGE_SIZE + 1;
     public static final int RUNNER_PAGE_ROWS = 10_000;
     public static final int MAX_CHUNKS_PER_ANN_DATE = (MAX_ROWS_PER_ANN_DATE + RUNNER_PAGE_ROWS - 1) / RUNNER_PAGE_ROWS;
-    public static final int MAX_EVIDENCE_BYTES = 96 * 1024 * 1024;
+    public static final int MAX_EVIDENCE_BYTES = 256 * 1024 * 1024;
+    private static final int LEGACY_ROW_CAP = 256_000;
+    private static final String CHUNK_REFERENCE_ENCODING = "source_receipt_reference_v1";
     public static final List<String> FIELDS = EtfPortfolioMapper.SOURCE_FIELDS;
     public static final PageContract CONTRACT = new PageContract(ENDPOINT, FIELDS,
             List.of("ts_code", "ann_date", "end_date", "symbol"), Set.of("ann_date", "limit", "offset"),
             PageContract.Paging.OFFSET, PageContract.Completion.SHORT_PAGE, "limit", "offset", PAGE_SIZE,
             PAGE_SIZE, MAX_PAGES_PER_ANN_DATE, MAX_ROWS_PER_ANN_DATE,
-            "Python etf_portfolio_sync._get_etf_portfolio_by_ann_date sends limit=8000 and increasing offset; official Tushare fund_portfolio doc_id=121 confirms ann_date but does not document paging. Java follows the observed connector parameters, caps each ann_date at 256000 rows/33 calls, emits verified 10000-row runner chunks, and fails closed without a short terminal response.");
+            "Python etf_portfolio_sync._get_etf_portfolio_by_ann_date sends limit=8000 and increasing offset; official Tushare fund_portfolio doc_id=121 confirms ann_date but does not document paging. Java follows the observed connector parameters, caps each ann_date at 1000000 rows/126 calls including a terminal empty page, emits verified 10000-row runner chunks, and fails closed without a short terminal response.");
 
     private record CapturedPage(long offset, int rows, List<Map<String, JsonNode>> rawRows) {}
     private record Persisted(byte[] bytes, Path path) {}
@@ -106,9 +108,10 @@ public final class EtfPortfolioSource {
         for (var row : typed) if (!keys.add(row.key()))
             throw new IllegalStateException("fund_portfolio source contains a duplicate complete key");
 
-        var pageEvidence = captured.stream().map(page -> Map.of(
-                "offset", page.offset(), "limit", PAGE_SIZE, "rows", page.rows())).toList();
         var json = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        var pageEvidence = new ArrayList<Map<String,Object>>(captured.size());
+        for(var page:captured)pageEvidence.add(Map.of("offset",page.offset(),"limit",PAGE_SIZE,"rows",page.rows(),
+                "rawSha256",sha256(json.writeValueAsBytes(page.rawRows().stream().map(EtfPortfolioSource::canonicalRow).toList()))));
         var body = new LinkedHashMap<String, Object>();
         body.put("sourceKind", "tushare"); body.put("endpoint", ENDPOINT);
         body.put("sourceContractVersion", CONTRACT_VERSION); body.put("parameters", parameters);
@@ -140,7 +143,9 @@ public final class EtfPortfolioSource {
             chunkBody.put("sourceFingerprint", fingerprint); chunkBody.put("sourceReceipt", receipt.getFileName().toString());
             chunkBody.put("totalReturnedRows", typed.size()); chunkBody.put("chunkIndex", index);
             chunkBody.put("chunkCount", chunkCount); chunkBody.put("chunkOffset", offset);
-            chunkBody.put("rawRows", chunkRaw); chunkBody.put("returnedRows", rows.size());
+            // The full immutable response owns the raw rows. Runner receipts carry only a bounded subset reference.
+            chunkBody.put("chunkEncoding", CHUNK_REFERENCE_ENCODING);
+            chunkBody.put("chunkRowsSha256", sha256(json.writeValueAsBytes(chunkRaw)));chunkBody.put("returnedRows", rows.size());
             byte[] chunkBytes = json.writeValueAsBytes(chunkBody); requireEvidenceSize(chunkBytes);
             String chunkFingerprint = sha256(chunkBytes);
             Path chunkReceipt = evidenceRoot.resolve("chunk-" + basic + "-" + fingerprint + "-" + index + ".json");
@@ -162,16 +167,18 @@ public final class EtfPortfolioSource {
         if (!sha256(bytes).equals(expectedFingerprint)) throw new IllegalStateException("fund_portfolio receipt fingerprint changed");
         var json = JobDefinitionJson.mapper(); var proof = json.readTree(bytes);
         String basic = expectedDate.format(DateTimeFormatter.BASIC_ISO_DATE);
+        int rowCap=proof.path("annDateRowCap").asInt(-1),returned=proof.path("returnedRows").asInt(-1);
+        boolean referenced=CHUNK_REFERENCE_ENCODING.equals(proof.path("chunkEncoding").asText(""));
         if (!proof.path("sourceKind").asText().equals("tushare") || !proof.path("endpoint").asText().equals(ENDPOINT)
                 || !proof.path("sourceComplete").asBoolean(false)
                 || proof.path("sourceContractVersion").asInt(-1) != CONTRACT_VERSION
                 || !proof.path("announcementDate").asText().equals(expectedDate.toString())
                 || !proof.path("observedAt").asText().equals(expectedObservedAt.toString())
-                || !json.valueToTree(FIELDS).equals(proof.path("fields")) || !proof.path("rawRows").isArray()
+                || !json.valueToTree(FIELDS).equals(proof.path("fields"))
                 || proof.path("pageSize").asInt(-1) != PAGE_SIZE
-                || proof.path("annDateRowCap").asInt(-1) != MAX_ROWS_PER_ANN_DATE
-                || proof.path("returnedRows").asInt(-1) != proof.path("rawRows").size()
-                || proof.path("rawRows").size() > RUNNER_PAGE_ROWS
+                || !supportedRowCap(rowCap) || returned<0 || returned>RUNNER_PAGE_ROWS
+                || (referenced ? !proof.path("chunkRowsSha256").asText("").matches("[0-9a-f]{64}")||proof.has("rawRows")
+                    : proof.has("chunkEncoding")||!proof.path("rawRows").isArray()||returned!=proof.path("rawRows").size())
                 || !proof.path("parameters").path("ann_date").asText().equals(basic)
                 || proof.path("pageEvidence").isMissingNode())
             throw new IllegalStateException("fund_portfolio receipt scope, paging or completion evidence differs");
@@ -181,10 +188,10 @@ public final class EtfPortfolioSource {
         int offset = proof.path("chunkOffset").asInt(-1), total = proof.path("totalReturnedRows").asInt(-1);
         if (!globalFingerprint.matches("[0-9a-f]{64}") || !fullName.matches("source-" + basic + "-[0-9a-f]{64}\\.json")
                 || !fullName.endsWith(globalFingerprint + ".json") || index < 0 || count < 1
-                || count > MAX_CHUNKS_PER_ANN_DATE || index >= count || total < 0 || total > MAX_ROWS_PER_ANN_DATE
+                || count > (rowCap+RUNNER_PAGE_ROWS-1)/RUNNER_PAGE_ROWS || index >= count || total < 0 || total > rowCap
                 || count != Math.max(1, (total + RUNNER_PAGE_ROWS - 1) / RUNNER_PAGE_ROWS)
-                || offset != index * RUNNER_PAGE_ROWS || offset + proof.path("rawRows").size() > total
-                || !validPageEvidence(proof.path("pageEvidence"), total))
+                || offset != index * RUNNER_PAGE_ROWS || returned!=Math.min(RUNNER_PAGE_ROWS,total-offset)
+                || !validPageEvidence(proof.path("pageEvidence"), total,rowCap))
             throw new IllegalStateException("Invalid fund_portfolio chunk manifest");
         Path parent = receipt.toAbsolutePath().normalize().getParent();
         Path realParent = parent.toRealPath();
@@ -204,19 +211,20 @@ public final class EtfPortfolioSource {
                 || full.path("sourceContractVersion").asInt(-1) != CONTRACT_VERSION
                 || !full.path("announcementDate").asText().equals(expectedDate.toString())
                 || !full.path("observedAt").asText().equals(expectedObservedAt.toString())
-                || !json.valueToTree(FIELDS).equals(full.path("fields")) || full.path("rawRows").size() != total
+                || !json.valueToTree(FIELDS).equals(full.path("fields")) || !full.path("rawRows").isArray() || full.path("rawRows").size() != total
                 || full.path("returnedRows").asInt(-1) != total || !full.path("parameters").path("ann_date").asText().equals(basic)
                 || full.path("pageSize").asInt(-1) != PAGE_SIZE
-                || full.path("annDateRowCap").asInt(-1) != MAX_ROWS_PER_ANN_DATE
-                || sourcePages < 1 || sourcePages > MAX_PAGES_PER_ANN_DATE
+                || full.path("annDateRowCap").asInt(-1) != rowCap
+                || sourcePages < 1 || sourcePages > rowCap/PAGE_SIZE+1 || sourcePages!=full.path("pageEvidence").size()
                 || !json.valueToTree(proof.path("pageEvidence")).equals(full.path("pageEvidence"))
-                || !validPageEvidence(full.path("pageEvidence"), total))
+                || !validPageEvidence(full.path("pageEvidence"), total,rowCap))
             throw new IllegalStateException("Complete fund_portfolio response receipt differs from chunk manifest");
         var mapper = new EtfPortfolioMapper(); var rows = new ArrayList<EtfPortfolio>();
         var keys = new HashSet<EtfPortfolioKey>();
-        var raw = json.convertValue(proof.path("rawRows"), new TypeReference<List<Map<String, JsonNode>>>() {});
-        var fullRaw = json.convertValue(full.path("rawRows"), new TypeReference<List<Map<String, JsonNode>>>() {});
-        if (!json.valueToTree(raw).equals(json.valueToTree(fullRaw.subList(offset, offset + raw.size()))))
+        var subset=json.createArrayNode();for(int position=offset;position<offset+returned;position++)subset.add(full.path("rawRows").get(position));
+        var raw = json.convertValue(referenced?subset:proof.path("rawRows"), new TypeReference<List<Map<String, JsonNode>>>() {});
+        if (referenced ? !sha256(json.copy().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true).writeValueAsBytes(raw)).equals(proof.path("chunkRowsSha256").asText())
+                : !proof.path("rawRows").equals(subset))
             throw new IllegalStateException("fund_portfolio chunk rows differ from complete raw response receipt");
         for (var value : raw) {
             validate(value, expectedDate, expectedObservedAt);
@@ -228,18 +236,20 @@ public final class EtfPortfolioSource {
                 basic + "#" + index, globalFingerprint, fullReceipt);
     }
 
-    private static boolean validPageEvidence(JsonNode pages, int totalRows) {
-        if (!pages.isArray() || pages.size() < 1 || pages.size() > MAX_PAGES_PER_ANN_DATE) return false;
+    private static boolean validPageEvidence(JsonNode pages, int totalRows,int rowCap) {
+        if (!supportedRowCap(rowCap)||!pages.isArray() || pages.size() < 1 || pages.size() > rowCap/PAGE_SIZE+1) return false;
         long expectedOffset = 0; int counted = 0;
         for (int index = 0; index < pages.size(); index++) {
             JsonNode page = pages.get(index); int count = page.path("rows").asInt(-1);
             if (page.path("offset").asLong(-1) != expectedOffset || page.path("limit").asInt(-1) != PAGE_SIZE
-                    || count < 0 || count > PAGE_SIZE || count < PAGE_SIZE && index != pages.size() - 1) return false;
+                    || count < 0 || count > PAGE_SIZE || count < PAGE_SIZE && index != pages.size() - 1
+                    || (rowCap!=LEGACY_ROW_CAP||page.has("rawSha256"))&&!page.path("rawSha256").asText("").matches("[0-9a-f]{64}")) return false;
             expectedOffset = Math.addExact(expectedOffset, count); counted = Math.addExact(counted, count);
         }
-        return counted == totalRows && counted <= MAX_ROWS_PER_ANN_DATE
+        return counted == totalRows && counted <= rowCap
                 && pages.get(pages.size() - 1).path("rows").asInt() < PAGE_SIZE;
     }
+    private static boolean supportedRowCap(int rowCap){return rowCap==LEGACY_ROW_CAP||rowCap==MAX_ROWS_PER_ANN_DATE;}
 
     private static void validate(Map<String, JsonNode> row, LocalDate date, Instant observedAt) {
         new EtfPortfolioMapper().fromSource(row, date, observedAt);
@@ -266,7 +276,7 @@ public final class EtfPortfolioSource {
         return new TreeMap<>(row);
     }
     private static void requireEvidenceSize(byte[] bytes) {
-        if (bytes.length > MAX_EVIDENCE_BYTES) throw new IllegalArgumentException("fund_portfolio evidence exceeds 96 MiB");
+        if (bytes.length > MAX_EVIDENCE_BYTES) throw new IllegalArgumentException("fund_portfolio evidence exceeds 256 MiB");
     }
     private static void writeImmutable(Path path, byte[] bytes) throws Exception {
         try { Files.write(path, bytes, StandardOpenOption.CREATE_NEW); }

@@ -53,7 +53,7 @@ public final class EtfDailyJobService {
         this.jobs = Objects.requireNonNull(jobs); this.pages = Objects.requireNonNull(pages);
         this.tradingDates = new EtfDailyTradingDates(calendars); this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb);
-        this.ledgerPath = ledgerPath.toAbsolutePath().normalize(); requireIsolatedTableName(table); this.table = table;
+        this.ledgerPath = ledgerPath.toAbsolutePath().normalize(); requireExecutionTableName(table); this.table = table;
     }
 
     public String tableName() { return table; }
@@ -64,8 +64,13 @@ public final class EtfDailyJobService {
             throw new IllegalStateException("D014 execution requires a dedicated java_d014_etf_daily_<suffix> isolated target");
     }
 
+    /** Existing formal table is admitted explicitly; isolated creation remains a separate contract. */
+    public static void requireExecutionTableName(String table) {
+        if (!"etf_daily".equals(table)) requireIsolatedTableName(table);
+    }
+
     public String targetId() throws Exception {
-        requireIsolatedTableName(table);
+        requireExecutionTableName(table);
         var rows = jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name = ?", table);
         if (rows.size() != 1 || !(rows.getFirst().get("id") instanceof Number id)
                 || !(rows.getFirst().get("directoryName") instanceof String directory))
@@ -75,6 +80,8 @@ public final class EtfDailyJobService {
 
     /** Builds a frozen daily plan. Incremental uses receipt-backed coverage and a five-day revision overlap. */
     public Plan plan(Mode requestedMode, LocalDate bootstrapFrom, LocalDate requestedThrough, LocalDate logicalDate) throws Exception {
+        if ("etf_daily".equals(table) && requestedMode != Mode.BACKFILL && requestedMode != Mode.RECONCILE)
+            throw new IllegalArgumentException("Formal etf_daily refresh requires explicit bounded BACKFILL or RECONCILE");
         Objects.requireNonNull(logicalDate, "Frozen etf_daily logical date required");
         if (requestedThrough != null && requestedThrough.isAfter(logicalDate))
             throw new IllegalArgumentException("etf_daily --to exceeds logical date");
@@ -187,6 +194,8 @@ public final class EtfDailyJobService {
         return execute("etf-daily-" + UUID.randomUUID(), Objects.requireNonNull(priorRunId), plan);
     }
     private SyncJobRunner.Result execute(String runId, String priorRunId, Plan plan) throws Exception {
+        if ("etf_daily".equals(table) && plan.request().mode() != Mode.BACKFILL && plan.request().mode() != Mode.RECONCILE)
+            throw new IllegalArgumentException("Formal etf_daily refresh requires bounded BACKFILL or RECONCILE");
         if (!plan.request().definition().equals(EtfDailySyncJobOwner.DEFINITION)
                 || !plan.targetId().equals(plan.request().parameters().get("targetId"))
                 || !plan.targetId().equals(targetId()))

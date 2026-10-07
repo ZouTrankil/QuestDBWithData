@@ -7,6 +7,7 @@ import static com.zoutrankil.data.domain.DatasetDefinition.*;
 /** Audited margin_detail schema plus a write contract restricted to isolated D029 tables. */
 public final class MarginDetailDataset {
     public static final String ISOLATED_PREFIX = "java_d029_margin_detail_";
+    public static final String FORMAL_TABLE = "margin_detail";
     private static final TemporalContract TRADE_DATE = new TemporalContract(TemporalKind.BUSINESS_DATE,
             "BASIC", "calendar", "DAY", "Tushare trade_date stored as UTC-midnight timestamp carrier");
     private MarginDetailDataset() {}
@@ -46,6 +47,11 @@ public final class MarginDetailDataset {
         DatasetDefinition.identifier(table);
         if (!table.startsWith(ISOLATED_PREFIX) || table.length() <= ISOLATED_PREFIX.length())
             throw new IllegalArgumentException("D029 requires java_d029_margin_detail_<explicit suffix> isolated target");
+    }
+    /** Formal writes are admitted by the existing owner only as bounded source-certified repair. */
+    public static void requireWriteTable(String table) {
+        if (FORMAL_TABLE.equals(table)) return;
+        requireIsolatedTable(table);
     }
     public static String createIsolatedTableSql(String table) {
         requireIsolatedTable(table);

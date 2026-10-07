@@ -59,10 +59,12 @@ public final class MarginDetailCoverage {
                 LocalDate from=LocalDate.parse(frozen.path("from").asText()),to=LocalDate.parse(frozen.path("to").asText());long days=ChronoUnit.DAYS.between(from,to)+1;if(days<1||days>MarginDetailSyncJobOwner.MAX_WINDOW_DAYS||to.isAfter(LocalDate.parse(frozen.path("logicalDate").asText())))throw new IllegalStateException("Verified D029 run exceeds its finite frozen date interval");
                 LocalDate anchor=requiredDate(params,"checkpointAnchor"),before=optionalDate(params,"checkpointBefore");if(from.isBefore(anchor))throw new IllegalStateException("Verified D029 interval precedes frozen checkpoint anchor");
                 if(mode==SyncJobDefinition.Mode.INCREMENTAL&&before!=null&&!from.equals(max(anchor,before.minusDays(MarginDetailSyncJobOwner.REVISION_DAYS))))throw new IllegalStateException("Verified D029 incremental overlap differs from its frozen checkpoint");
-                if(mode==SyncJobDefinition.Mode.BACKFILL&&(before==null||to.isAfter(before)))throw new IllegalStateException("Verified D029 BACKFILL lacks its bounded prior checkpoint");
+                boolean repair=mode==SyncJobDefinition.Mode.BACKFILL&&before==null;
+                if(mode==SyncJobDefinition.Mode.BACKFILL&&(repair?!from.equals(anchor):to.isAfter(before)))throw new IllegalStateException("Verified D029 BACKFILL lacks its repair anchor or bounded prior checkpoint");
                 List<LocalDate> dates=calendar.read(from,to);if(!encodeDates(dates).equals(params.path("trade_dates").asText()))throw new IllegalStateException("D029 frozen trade-date list differs from complete SSE calendar");
                 var receipts=readReceipts(ledger,ledgerPath,summary.id(),dates);verifyManifest(ledgerPath,summary.id(),targetId,mode,from,to,dates,receipts);
-                found.add(new Interval(summary.id(),mode,from,to,anchor,before,Instant.parse(summary.updatedAt()),receipts));}
+                // Legacy-table repairs prove only their bounded source interval; they do not bootstrap global incremental coverage.
+                if(!repair)found.add(new Interval(summary.id(),mode,from,to,anchor,before,Instant.parse(summary.updatedAt()),receipts));}
             if(summaries.size()<HISTORY_PAGE)break;after=summaries.getLast().id();}
         return List.copyOf(found);
     }

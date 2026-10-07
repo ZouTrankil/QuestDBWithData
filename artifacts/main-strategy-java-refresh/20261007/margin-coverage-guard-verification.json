@@ -1,0 +1,39 @@
+{
+  "run_id": "margin-detail-1d2ebba8-0785-48ac-8292-ae4c928e829a",
+  "state": "FAILED",
+  "expected_rejection": true,
+  "source_rows": 0,
+  "verified_rows": 0,
+  "reused_rows": 0,
+  "error_code": "IllegalStateException",
+  "cli_exit_code": 3,
+  "raw_returned_rows": 2001,
+  "raw_normalized_rows": 2001,
+  "exchange_counts": {
+    "BJ": 0,
+    "SH": 2001,
+    "SZ": 0
+  },
+  "source_complete": false,
+  "full_market_coverage_verified": false,
+  "market_coverage_policy": "required_sh_sz_presence_bj_observed",
+  "raw_receipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\margin-detail-1d2ebba8-0785-48ac-8292-ae4c928e829a\\source\\unverified-20260930-db825b08c86a586f005809a449c0c54178a9d7e6412716ba07fb5321822ed33b.json",
+  "raw_sha256": "db825b08c86a586f005809a449c0c54178a9d7e6412716ba07fb5321822ed33b",
+  "raw_filename_sha_matches": true,
+  "before": [
+    [
+      2001,
+      2001,
+      1286761675955.0
+    ]
+  ],
+  "after": [
+    [
+      2001,
+      2001,
+      1286761675955.0
+    ]
+  ],
+  "aggregate_unchanged": true,
+  "data_acceptance": "0930 remains partial; guard rejection is verified, not completed market data"
+}

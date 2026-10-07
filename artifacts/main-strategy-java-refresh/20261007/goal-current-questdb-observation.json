@@ -1,0 +1,274 @@
+{
+  "observed_at": "2026-10-07T21:15:20.6657294+08:00",
+  "endpoint": "http://127.0.0.1:9000",
+  "read_only": true,
+  "queries": {
+    "source0930": {
+      "sql": "SELECT 'stk_factor' dataset,count(*) n,count_distinct(ts_code) unique_n FROM stk_factor WHERE trade_date='2026-09-30' UNION ALL SELECT 'daily_basic' dataset,count(*) n,count_distinct(ts_code) unique_n FROM daily_basic WHERE trade_date='2026-09-30' UNION ALL SELECT 'stk_limit' dataset,count(*) n,count_distinct(ts_code) unique_n FROM stk_limit WHERE trade_date='2026-09-30' UNION ALL SELECT 'moneyflow' dataset,count(*) n,count_distinct(ts_code) unique_n FROM moneyflow WHERE trade_date='2026-09-30' UNION ALL SELECT 'etf_daily' dataset,count(*) n,count_distinct(ts_code) unique_n FROM etf_daily WHERE timestamp='2026-09-30' UNION ALL SELECT 'etf_factor' dataset,count(*) n,count_distinct(ts_code) unique_n FROM etf_factor WHERE trade_date='2026-09-30'",
+      "result": {
+        "query": "SELECT 'stk_factor' dataset,count(*) n,count_distinct(ts_code) unique_n FROM stk_factor WHERE trade_date='2026-09-30' UNION ALL SELECT 'daily_basic' dataset,count(*) n,count_distinct(ts_code) unique_n FROM daily_basic WHERE trade_date='2026-09-30' UNION ALL SELECT 'stk_limit' dataset,count(*) n,count_distinct(ts_code) unique_n FROM stk_limit WHERE trade_date='2026-09-30' UNION ALL SELECT 'moneyflow' dataset,count(*) n,count_distinct(ts_code) unique_n FROM moneyflow WHERE trade_date='2026-09-30' UNION ALL SELECT 'etf_daily' dataset,count(*) n,count_distinct(ts_code) unique_n FROM etf_daily WHERE timestamp='2026-09-30' UNION ALL SELECT 'etf_factor' dataset,count(*) n,count_distinct(ts_code) unique_n FROM etf_factor WHERE trade_date='2026-09-30'",
+        "columns": [
+          {
+            "name": "dataset",
+            "type": "STRING"
+          },
+          {
+            "name": "n",
+            "type": "LONG"
+          },
+          {
+            "name": "unique_n",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "stk_factor",
+            5560,
+            5560
+          ],
+          [
+            "daily_basic",
+            5561,
+            5561
+          ],
+          [
+            "stk_limit",
+            5651,
+            5651
+          ],
+          [
+            "moneyflow",
+            5572,
+            5572
+          ],
+          [
+            "etf_daily",
+            2140,
+            2140
+          ],
+          [
+            "etf_factor",
+            2140,
+            2140
+          ]
+        ],
+        "count": 6
+      }
+    },
+    "l2": {
+      "sql": "SELECT to_str(ts,'yyyy-MM-dd') trade_date,count(*) n,count_distinct(symbol) unique_n FROM l2_daily_features WHERE ts>='2026-09-28' AND ts<'2026-10-01' GROUP BY ts ORDER BY ts",
+      "result": {
+        "query": "SELECT to_str(ts,'yyyy-MM-dd') trade_date,count(*) n,count_distinct(symbol) unique_n FROM l2_daily_features WHERE ts>='2026-09-28' AND ts<'2026-10-01' GROUP BY ts ORDER BY ts",
+        "columns": [
+          {
+            "name": "trade_date",
+            "type": "STRING"
+          },
+          {
+            "name": "n",
+            "type": "LONG"
+          },
+          {
+            "name": "unique_n",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "2026-09-28",
+            7926,
+            7926
+          ],
+          [
+            "2026-09-29",
+            7918,
+            7918
+          ],
+          [
+            "2026-09-30",
+            7888,
+            7888
+          ]
+        ],
+        "count": 3
+      }
+    },
+    "l2Schema": {
+      "sql": "SELECT count(*) n FROM table_columns('l2_daily_features')",
+      "result": {
+        "query": "SELECT count(*) n FROM table_columns('l2_daily_features')",
+        "columns": [
+          {
+            "name": "n",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            110
+          ]
+        ],
+        "count": 1
+      }
+    },
+    "portfolio": {
+      "sql": "SELECT ts_code,to_str(ann_date,'yyyy-MM-dd') ann_date,count(*) n,count_distinct(symbol) unique_n,sum(stk_mkv_ratio) weight FROM etf_portfolio WHERE ts_code IN ('512770.SH','589330.SH') AND ann_date>='2026-05-01' AND ann_date<='2026-09-30' GROUP BY ts_code,ann_date ORDER BY ts_code,ann_date",
+      "result": {
+        "query": "SELECT ts_code,to_str(ann_date,'yyyy-MM-dd') ann_date,count(*) n,count_distinct(symbol) unique_n,sum(stk_mkv_ratio) weight FROM etf_portfolio WHERE ts_code IN ('512770.SH','589330.SH') AND ann_date>='2026-05-01' AND ann_date<='2026-09-30' GROUP BY ts_code,ann_date ORDER BY ts_code,ann_date",
+        "columns": [
+          {
+            "name": "ts_code",
+            "type": "SYMBOL"
+          },
+          {
+            "name": "ann_date",
+            "type": "STRING"
+          },
+          {
+            "name": "n",
+            "type": "LONG"
+          },
+          {
+            "name": "unique_n",
+            "type": "LONG"
+          },
+          {
+            "name": "weight",
+            "type": "DOUBLE"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "512770.SH",
+            "2026-07-21",
+            10,
+            10,
+            46.57
+          ],
+          [
+            "512770.SH",
+            "2026-08-31",
+            124,
+            124,
+            53.35999999999999
+          ],
+          [
+            "589330.SH",
+            "2026-05-26",
+            10,
+            10,
+            20.07
+          ]
+        ],
+        "count": 3
+      }
+    },
+    "wal": {
+      "sql": "SELECT name,suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name IN ('stk_factor','daily_basic','stk_limit','moneyflow','etf_daily','etf_factor','etf_portfolio','l2_daily_features','market_sentiment_daily','regime_features_monitor_daily') ORDER BY name",
+      "result": {
+        "query": "SELECT name,suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name IN ('stk_factor','daily_basic','stk_limit','moneyflow','etf_daily','etf_factor','etf_portfolio','l2_daily_features','market_sentiment_daily','regime_features_monitor_daily') ORDER BY name",
+        "columns": [
+          {
+            "name": "name",
+            "type": "STRING"
+          },
+          {
+            "name": "suspended",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "writerTxn",
+            "type": "LONG"
+          },
+          {
+            "name": "sequencerTxn",
+            "type": "LONG"
+          },
+          {
+            "name": "bufferedTxnSize",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "daily_basic",
+            false,
+            205,
+            205,
+            0
+          ],
+          [
+            "etf_daily",
+            false,
+            40,
+            40,
+            0
+          ],
+          [
+            "etf_factor",
+            false,
+            58,
+            58,
+            0
+          ],
+          [
+            "etf_portfolio",
+            false,
+            1529,
+            1529,
+            0
+          ],
+          [
+            "l2_daily_features",
+            false,
+            11386,
+            11386,
+            0
+          ],
+          [
+            "market_sentiment_daily",
+            false,
+            9,
+            9,
+            0
+          ],
+          [
+            "moneyflow",
+            false,
+            175,
+            175,
+            0
+          ],
+          [
+            "regime_features_monitor_daily",
+            false,
+            9,
+            9,
+            0
+          ],
+          [
+            "stk_factor",
+            false,
+            156,
+            156,
+            0
+          ],
+          [
+            "stk_limit",
+            false,
+            216,
+            216,
+            0
+          ]
+        ],
+        "count": 10
+      }
+    }
+  }
+}

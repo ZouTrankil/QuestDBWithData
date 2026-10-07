@@ -80,7 +80,7 @@ public final class EtfFactorJobService {
         this.jobs = Objects.requireNonNull(jobs); this.pages = Objects.requireNonNull(pages);
         this.tradingDates = new EtfFactorTradingDates(calendars); this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb); this.ledgerPath = ledgerPath.toAbsolutePath().normalize();
-        requireIsolatedTableName(table); this.table = table;
+        requireExecutionTableName(table); this.table = table;
     }
 
     public String tableName() { return table; }
@@ -89,9 +89,13 @@ public final class EtfFactorJobService {
         EtfFactorDataset.requireIsolatedTable(table);
     }
 
+    public static void requireExecutionTableName(String table) {
+        if (!"etf_factor".equals(table)) requireIsolatedTableName(table);
+    }
+
     /** Returns the configured endpoint, table and physical table generation as a non-secret identity. */
     public String targetId() {
-        requireIsolatedTableName(table);
+        requireExecutionTableName(table);
         var rows = jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name = ?", table);
         if (rows.size() != 1 || !(rows.getFirst().get("id") instanceof Number id)
                 || !(rows.getFirst().get("directoryName") instanceof String directory))
@@ -116,6 +120,8 @@ public final class EtfFactorJobService {
         if (resolvedThrough.isAfter(logicalDate)) resolvedThrough = logicalDate;
         SyncJobDefinition definition = EtfFactorSyncJobOwner.DEFINITION;
         Mode mode = requestedMode == null ? definition.defaultMode() : requestedMode;
+        if ("etf_factor".equals(table) && mode != Mode.BACKFILL && mode != Mode.RECONCILE)
+            throw new IllegalArgumentException("Formal etf_factor refresh requires explicit bounded BACKFILL or RECONCILE");
         if (!definition.supportedModes().contains(mode)) throw new IllegalArgumentException("Unsupported etf_factor mode");
         if (mode != Mode.INCREMENTAL && (bootstrapFrom == null || requestedThrough == null))
             throw new IllegalArgumentException("Bounded etf_factor backfill/reconcile requires explicit --from and --to");
@@ -238,6 +244,8 @@ public final class EtfFactorJobService {
 
     private SyncJobRunner.Result execute(String runId, String priorRunId, Plan plan) throws Exception {
         var request = plan.request();
+        if ("etf_factor".equals(table) && request.mode() != Mode.BACKFILL && request.mode() != Mode.RECONCILE)
+            throw new IllegalArgumentException("Formal etf_factor refresh requires bounded BACKFILL or RECONCILE");
         if (!request.definition().equals(EtfFactorSyncJobOwner.DEFINITION)
                 || !plan.targetId().equals(request.parameters().get("targetId")))
             throw new IllegalArgumentException("Frozen etf_factor job definition or target identity differs");
