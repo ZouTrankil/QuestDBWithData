@@ -6,7 +6,6 @@ import com.zoutrankil.data.domain.MarginAllDataset;
 import com.zoutrankil.data.domain.MarginAllKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.MarginAllMapper;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import com.zoutrankil.data.service.MarginAllSource;
 import com.zoutrankil.data.service.MarginAllSyncJobOwner;

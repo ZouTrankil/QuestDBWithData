@@ -62,9 +62,9 @@ public final class ThsMemberBoardStaging {
         Files.createDirectories(folder);
         var json = JobDefinitionJson.mapper();
         Path intent = folder.resolve(stage + "-intent.json");
-        Files.write(intent, json.writeValueAsBytes(Map.of("target", prepared.target(), "stage", stage,
+        FileEvidenceStore.writeNew(intent, json.writeValueAsBytes(Map.of("target", prepared.target(), "stage", stage,
                 "board", prepared.board(), "before", prepared.before(), "source", prepared.source(),
-                "batchLimit", 250)), StandardOpenOption.CREATE_NEW);
+                "batchLimit", 250)));
         String statement = "CREATE TABLE " + stage + " AS (SELECT * FROM \"" + prepared.target()
                 + "\" WHERE ts_code <> '" + prepared.board() + "') TIMESTAMP(update_time) PARTITION BY MONTH WAL "
                 + "DEDUP UPSERT KEYS(ts_code,con_code,update_time)";
@@ -103,10 +103,10 @@ public final class ThsMemberBoardStaging {
                 || !actual.otherFingerprint().equals(prepared.before().otherFingerprint()))
             throw new IllegalStateException("THS stage full-field or unaffected-board mismatch; retain stage");
         Path receipt = folder.resolve(stage + "-verified.json");
-        Files.write(receipt, json.writeValueAsBytes(Map.of("stage", stage, "board", prepared.board(),
+        FileEvidenceStore.writeNew(receipt, json.writeValueAsBytes(Map.of("stage", stage, "board", prepared.board(),
                 "beforeFingerprint", prepared.before().contentFingerprint(),
                 "afterFingerprint", actual.contentFingerprint(), "sourceRows", rows.size(),
-                "copiedRows", actual.otherRows(), "batches", batches)), StandardOpenOption.CREATE_NEW);
+                "copiedRows", actual.otherRows(), "batches", batches)));
         return new Verified(stage, actual, batches, receipt.toString());
     }
 

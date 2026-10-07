@@ -68,6 +68,20 @@ tasks.named('test') {
     systemProperty 'cli.runtimeClasspath', sourceSets.main.runtimeClasspath.asPath
 }
 
+tasks.withType(Test).configureEach {
+    systemProperty 'architecture.mainClasses', sourceSets.main.output.classesDirs.asPath
+    systemProperty 'architecture.sources', sourceSets.main.java.srcDirs.collect { it.absolutePath }.join(File.pathSeparator)
+}
+
+tasks.register('architectureTest', Test) {
+    group = 'verification'
+    description = 'Reject new dependency violations and stale architecture exceptions.'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    useJUnitPlatform()
+    filter { includeTestsMatching 'com.zoutrankil.architecture.*' }
+}
+
 tasks.register('batchRun', JavaExec) {
     group = 'application'
     description = 'Start the isolated SQLite-backed batch runtime (no legacy components).'
@@ -149,6 +163,7 @@ tasks.register('verifyBatchDistributionDatabaseDrivers') {
 
 tasks.named('check') {
     dependsOn tasks.named('verifyBatchDistributionDatabaseDrivers')
+    dependsOn tasks.named('architectureTest')
 }
 
 tasks.register('resolveDependencyLocks') {

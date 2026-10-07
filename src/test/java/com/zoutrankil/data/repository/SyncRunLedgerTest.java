@@ -1,5 +1,7 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.stock.application.StockBasicJobDefinition;
+
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.SyncRunState;
 import org.junit.jupiter.api.Test;
@@ -86,7 +88,7 @@ class SyncRunLedgerTest {
     }
     @Test void structuredFrozenDefinitionSurvivesDatabaseReopen() throws Exception {
         Path path = root.resolve("ledger.sqlite3");
-        var request = com.zoutrankil.data.service.StockBasicJobDefinition.DEFINITION.freeze(
+        var request = com.zoutrankil.data.stock.application.StockBasicJobDefinition.DEFINITION.freeze(
                 null, java.util.Map.of(), null, null, java.time.LocalDate.of(2026, 9, 29));
         var writer = new SyncRunLedger(path);
         writer.createRun("run-1", null, "isolated-questdb", request);

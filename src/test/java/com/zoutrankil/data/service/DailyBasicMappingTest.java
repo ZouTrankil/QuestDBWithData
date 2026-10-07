@@ -1,8 +1,10 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.DailyBasicSource;
+
 import com.zoutrankil.data.client.dto.TushareDailyBasicDto;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.DailyBasicMapper;
+import com.zoutrankil.data.stock.mapper.DailyBasicMapper;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.time.LocalDate;

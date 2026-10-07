@@ -1,5 +1,9 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
+import com.zoutrankil.data.stock.application.StockBasicSyncService;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.service.*;

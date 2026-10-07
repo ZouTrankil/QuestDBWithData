@@ -1,4 +1,9 @@
 package com.zoutrankil.data.service;
+import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
+
+import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
+import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
 
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
@@ -36,14 +41,14 @@ class StockDetailOwnerResumeLiveTest {
                 var failedPages=mock(TusharePageService.class);
                 doThrow(new IOException("injected source failure")).when(failedPages).execute(any(),anyMap(),
                         any(),any(),any());
-                var failing=new StockDetailInfoJobService(failedPages,jdbc,ledgerPath,target);
+                var failing=new StockDetailInfoJobService(failedPages,new QuestDbStockDetailTarget(jdbc,target),ledgerPath);
                 var plan=failing.plan(List.of("000001.SZ"),false,LocalDate.of(2026,9,29));
                 var first=failing.run(plan);
                 assertEquals(SyncRunState.FAILED,first.state());
                 assertEquals(0,new StockDetailInfoStorage(jdbc,target).snapshot().rows().size());
                 assertNull(new DatasetIntervalLock(ledgerPath).findOwned(first.runId(),
                         DatasetIntervalLock.Scope.allDates("stock_detail_info")));
-                var owner=new StockDetailInfoJobService(ctx.getBean(TusharePageService.class),jdbc,ledgerPath,target);
+                var owner=new StockDetailInfoJobService(ctx.getBean(TusharePageService.class),new QuestDbStockDetailTarget(jdbc,target),ledgerPath);
                 var replay=owner.resume(plan,first.runId());
                 assertEquals(SyncRunState.VERIFIED,replay.state(),replay.errorCode());
                 assertEquals(1,replay.insertedRows());

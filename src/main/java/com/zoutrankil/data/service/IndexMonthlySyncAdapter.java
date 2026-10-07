@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.policy.IndexMonthlyUniverse;
+
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.IndexMonthlyStaging;
@@ -104,7 +106,7 @@ public final class IndexMonthlySyncAdapter implements SyncJobRunner.Adapter<Inde
         var proof=new LinkedHashMap<String,Object>();proof.put("endpoint","index_monthly");proof.put("tsCode",code);proof.put("from",request.from());proof.put("to",request.to());proof.put("observedAt",observed);
         proof.put("sourceRows",page.rows().size());proof.put("sourceEvidence",page.responseEvidence());proof.put("sourceComplete",true);
         proof.put("publicationId",publicationId);proof.put("stageReceipt",stageReceiptHolder[0]);proof.put("dedup",false);
-        JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true).writeValue(completion.toFile(),proof);
+        JobDefinitionJson.canonicalMapper().writeValue(completion.toFile(),proof);
         if(Files.size(completion)>IndexMonthlySource.MAX_EVIDENCE_BYTES)throw new IllegalArgumentException("D022 completion evidence exceeds 16 MiB");
         return new SyncJobRunner.SourceCompletion(1,page.rows().size(),true,completion.toString());
     }

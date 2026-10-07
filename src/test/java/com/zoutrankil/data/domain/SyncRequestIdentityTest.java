@@ -1,6 +1,6 @@
 package com.zoutrankil.data.domain;
 
-import com.zoutrankil.data.service.StockBasicSyncAdapter;
+import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.*;

@@ -1,5 +1,8 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockBasicSyncService;
+
 import com.zoutrankil.data.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.DefaultApplicationArguments;
@@ -25,9 +28,9 @@ class ScheduleCommandTest {
                 new DefaultApplicationArguments("schedule-tick","--now","2026-09-29")));
     }
     @Test void incompleteScheduledResultMakesCliFail() throws Exception {
-        when(schedule.tick()).thenReturn(List.of(new com.zoutrankil.data.repository.SyncScheduleStore.History(
+        when(schedule.tick()).thenReturn(List.of(new com.zoutrankil.data.service.StockBasicScheduleService.History(
                 "sample",java.time.Instant.parse("2026-09-29T01:30:00Z"),
-                com.zoutrankil.data.repository.SyncScheduleStore.State.IN_DOUBT,null,"unknown")));
+                com.zoutrankil.data.service.StockBasicScheduleService.State.IN_DOUBT,null,"unknown")));
         assertThrows(IllegalStateException.class,() -> cli().run(new DefaultApplicationArguments("schedule-tick")));
     }
 }

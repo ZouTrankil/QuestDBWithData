@@ -1,7 +1,7 @@
 package com.zoutrankil.data.service;
 
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.repository.StockDetailInfoStorage;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /** Stable endpoint/table identity for D022 checkpoints across journaled physical replacements. */

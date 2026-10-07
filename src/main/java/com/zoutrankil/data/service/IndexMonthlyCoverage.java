@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.IndexMonthlyWritePort;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.repository.SqliteLedgerSchema;
 import java.nio.file.*;
-import java.sql.DriverManager;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -91,6 +91,11 @@ public final class IndexMonthlyCoverage {
         return left.keySet().equals(right.keySet())&&left.keySet().stream().allMatch(k->Arrays.equals(left.get(k),right.get(k)));}
     private static boolean sameDefinition(JsonNode expected,JsonNode actual){try{var json=JobDefinitionJson.mapper();return json.treeToValue(expected,SyncJobDefinition.class).equals(json.treeToValue(actual,SyncJobDefinition.class));}catch(com.fasterxml.jackson.core.JsonProcessingException bad){return false;}}
     private static LocalDate date(String value){try{if(value==null||!value.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}"))throw new IllegalArgumentException();return LocalDate.parse(value);}catch(RuntimeException bad){throw new IllegalStateException("Invalid D022 frozen date",bad);}}
-    private static boolean hasHistorySchema(Path path)throws Exception{var names=new HashSet<String>();try(var c=DriverManager.getConnection("jdbc:sqlite:"+path.toUri().toASCIIString()+"?mode=ro");var s=c.createStatement();var rows=s.executeQuery("SELECT name FROM sqlite_master WHERE type='table'")){while(rows.next())names.add(rows.getString(1));}
-        Set<String> required=Set.of("ledger_meta","sync_runs","sync_entries","sync_events");if(Collections.disjoint(names,required))return false;if(!names.containsAll(required))throw new IllegalStateException("Partial D022 sync ledger schema");return true;}
+    private static boolean hasHistorySchema(Path path)throws Exception{
+        var names = SqliteLedgerSchema.tableNames(path);
+        var required = Set.of("ledger_meta","sync_runs","sync_entries","sync_events");
+        if (java.util.Collections.disjoint(names, required)) return false;
+        if (!names.containsAll(required)) throw new IllegalStateException("Partial D022 sync ledger schema");
+        return true;
+    }
 }

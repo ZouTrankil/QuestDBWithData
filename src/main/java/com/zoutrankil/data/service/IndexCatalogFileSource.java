@@ -3,10 +3,10 @@ package com.zoutrankil.data.service;
 import com.zoutrankil.data.client.dto.IndexCatalogSourceRow;
 import com.zoutrankil.data.domain.IndexCatalogEntry;
 import com.zoutrankil.data.mapper.IndexCatalogMapper;
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import java.nio.*;
 import java.nio.charset.*;
 import java.nio.file.*;
-import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.BooleanSupplier;
@@ -21,15 +21,11 @@ public final class IndexCatalogFileSource {
     }
     static byte[] readBounded(Path path,int limit) throws java.io.IOException {
         if(limit<1 || limit>64*1024*1024) throw new IllegalArgumentException("Bounded catalog input limit required");
-        byte[] bytes;
-        try(var input=Files.newInputStream(path)) { bytes=input.readNBytes(limit+1); }
-        if(bytes.length>limit) throw new IllegalArgumentException("Catalog input exceeds byte bound");
-        return bytes;
+        return FileEvidenceStore.readBounded(path,limit,()->new IllegalArgumentException("Catalog input exceeds byte bound"));
     }
     public Input read(Path path,Instant importedAt,BooleanSupplier cancelled) throws Exception {
-        Objects.requireNonNull(importedAt);check(cancelled);byte[] bytes;
-        try(var input=Files.newInputStream(path)) { bytes=input.readNBytes(MAX_BYTES+1); }
-        if(bytes.length>MAX_BYTES) throw new IllegalArgumentException("Catalog file exceeds byte bound");
+        Objects.requireNonNull(importedAt);check(cancelled);
+        byte[] bytes=FileEvidenceStore.readBounded(path,MAX_BYTES,()->new IllegalArgumentException("Catalog file exceeds byte bound"));
         String text=StandardCharsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT)
                 .onUnmappableCharacter(CodingErrorAction.REPORT).decode(ByteBuffer.wrap(bytes)).toString();
         if(text.startsWith("\uFEFF")) text=text.substring(1);
@@ -46,8 +42,7 @@ public final class IndexCatalogFileSource {
             rows.add(row);
         }
         check(cancelled);
-        return new Input(path.toAbsolutePath().normalize().toString(),HexFormat.of().formatHex(
-                MessageDigest.getInstance("SHA-256").digest(bytes)),bytes.length,rows);
+        return new Input(path.toAbsolutePath().normalize().toString(),FileEvidenceStore.sha256(bytes),bytes.length,rows);
     }
     private static List<List<String>> parse(String text,BooleanSupplier cancelled) {
         var result=new ArrayList<List<String>>();var row=new ArrayList<String>();var field=new StringBuilder();

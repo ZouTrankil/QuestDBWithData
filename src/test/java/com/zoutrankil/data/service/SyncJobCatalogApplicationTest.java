@@ -1,5 +1,8 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockBasicSyncService;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
+
 import com.zoutrankil.data.QuestDataApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;

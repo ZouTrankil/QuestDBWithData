@@ -1,5 +1,8 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+import com.zoutrankil.data.domain.policy.IndexWeightUniverse;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -27,7 +30,6 @@ import java.net.http.HttpResponse;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.time.Duration;
 import java.time.Instant;
@@ -42,7 +44,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -294,7 +295,7 @@ public final class IndexWeightSource {
 
     private Call persistCall(String indexCode, String route, Map<String,Object> parameters,
             Map<String,Object> body, int rawBytes, int responseRows, List<IndexWeight> rows) throws Exception {
-        var json = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        var json = JobDefinitionJson.canonicalMapper();
         byte[] bytes = json.writeValueAsBytes(body);
         requireReceiptSize(bytes);
         String fingerprint = sha256(bytes);
@@ -563,7 +564,7 @@ public final class IndexWeightSource {
             writeImmutable(evidenceRoot.resolve(name), raw); body.put("rawFile", name);
             body.put("rawSha256", sha256(raw)); body.put("rawBytes", raw.length);
         }
-        byte[] bytes = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        byte[] bytes = JobDefinitionJson.canonicalMapper()
                 .writeValueAsBytes(body);
         requireReceiptSize(bytes); writeImmutable(evidenceRoot.resolve("incomplete-" + UUID.randomUUID() + ".json"), bytes);
     }
@@ -572,13 +573,14 @@ public final class IndexWeightSource {
     }
     private static void writeImmutable(Path path, byte[] bytes) throws Exception {
         Files.createDirectories(path.toAbsolutePath().normalize().getParent());
-        try { Files.write(path, bytes, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE); }
+        try { FileEvidenceStore.writeNew(path, bytes); }
         catch (java.nio.file.FileAlreadyExistsException exists) {
-            if (!MessageDigest.isEqual(Files.readAllBytes(path), bytes))
+            if (!MessageDigest.isEqual(FileEvidenceStore.readBounded(path, Math.max(1, bytes.length),
+                    () -> new IllegalStateException("D021 immutable evidence path conflicts with existing bytes", exists)), bytes))
                 throw new IllegalStateException("D021 immutable evidence path conflicts with existing bytes", exists);
         }
     }
     private static String sha256(byte[] bytes) throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        return FileEvidenceStore.sha256(bytes);
     }
 }

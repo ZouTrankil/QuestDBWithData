@@ -1,11 +1,11 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.client.dto.TushareThsIndexDto;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.ThsIndexMapper;
 import java.nio.file.*;
-import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.BooleanSupplier;
@@ -50,8 +50,8 @@ public final class ThsIndexSource {
                 "observedAt",observedAt,"rows",raw,"completion",completion));
         if(bytes.length>8*1024*1024) throw new IllegalArgumentException("THS source evidence exceeds byte bound");
         Files.createDirectories(evidence);Path receipt=evidence.resolve("source-"+UUID.randomUUID()+".json");
-        Files.write(receipt,bytes,StandardOpenOption.CREATE_NEW);
-        return new SyncJobRunner.Page<>(typed,HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)),receipt.toString(),null);
+        FileEvidenceStore.writeNew(receipt,bytes);
+        return new SyncJobRunner.Page<>(typed,FileEvidenceStore.sha256(bytes),receipt.toString(),null);
     }
     private static TushareThsIndexDto decode(Map<String,JsonNode> row) {
         var count=row.get("count");Integer number=null;

@@ -17,6 +17,10 @@ import static com.zoutrankil.data.domain.DatasetDefinition.*;
 /** One bounded SELECT per page plus schema preflight; never relies on JDBC full-table buffering. */
 @Repository
 public class QuestDbBoundedReader {
+    private static final ObjectMapper JSON = new ObjectMapper();
+    private static final Set<StorageType> UNORDERED_STORAGE_TYPES = Set.of(
+            StorageType.BINARY, StorageType.LONG256, StorageType.UUID, StorageType.BOOLEAN, StorageType.IPV4);
+
     public record Bound(Column column, Object storageValue) {}
     public record PreparedRead(String sql, List<Bound> parameters, String fingerprint) {
         public PreparedRead { parameters = List.copyOf(parameters); }
@@ -528,7 +532,7 @@ public class QuestDbBoundedReader {
         return c.storageType() == StorageType.TIMESTAMP || c.storageType() == StorageType.TIMESTAMP_NS || c.storageType() == StorageType.DATE;
     }
     private static void requireOrdered(Column c) {
-        if (Set.of(StorageType.BINARY, StorageType.LONG256, StorageType.UUID, StorageType.BOOLEAN, StorageType.IPV4).contains(c.storageType())) {
+        if (UNORDERED_STORAGE_TYPES.contains(c.storageType())) {
             throw new IllegalArgumentException("No verified keyset ordering for type " + c.storageType());
         }
     }
@@ -642,7 +646,7 @@ public class QuestDbBoundedReader {
             parts.add(definition.columns().toString()); parts.add(definition.businessKey()); parts.add(query.columns());
             for (var entry : new TreeMap<>(query.equalities()).entrySet()) parts.add(List.of(entry.getKey(), canonical(entry.getValue())));
             parts.add(Arrays.asList(query.rangeColumn(), canonical(query.fromInclusive()), canonical(query.toExclusive())));
-            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(new ObjectMapper()
+            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(JSON
                     .writeValueAsString(parts).getBytes(StandardCharsets.UTF_8)));
         } catch (Exception error) { throw new IllegalArgumentException("Cannot fingerprint read scope", error); }
     }

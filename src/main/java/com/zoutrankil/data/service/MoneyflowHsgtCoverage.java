@@ -9,9 +9,9 @@ import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.MoneyflowHsgtStorage;
 import com.zoutrankil.data.repository.ReferencePublicationJournal;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.repository.SqliteLedgerSchema;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.DriverManager;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -136,7 +136,10 @@ public final class MoneyflowHsgtCoverage {
     private static boolean sameDefinition(JsonNode expected,JsonNode actual){try{return JobDefinitionJson.mapper().treeToValue(expected,SyncJobDefinition.class).equals(JobDefinitionJson.mapper().treeToValue(actual,SyncJobDefinition.class));}catch(Exception invalid){return false;}}
     private static String requiredDate(JsonNode node){if(node==null||!node.isTextual())throw new IllegalStateException("D027 frozen date required");return node.asText();}
     private static boolean hasSchema(Path path)throws Exception{
-        var names=new java.util.HashSet<String>();try(var connection=DriverManager.getConnection("jdbc:sqlite:"+path.toUri().toASCIIString()+"?mode=ro");var statement=connection.createStatement();var rows=statement.executeQuery("SELECT name FROM sqlite_master WHERE type='table'")){while(rows.next())names.add(rows.getString(1));}
-        Set<String> required=Set.of("ledger_meta","sync_runs","sync_entries","sync_events");if(java.util.Collections.disjoint(names,required))return false;if(!names.containsAll(required))throw new IllegalStateException("Partial D027 ledger schema");return true;
+        var names = SqliteLedgerSchema.tableNames(path);
+        var required = Set.of("ledger_meta","sync_runs","sync_entries","sync_events");
+        if (java.util.Collections.disjoint(names, required)) return false;
+        if (!names.containsAll(required)) throw new IllegalStateException("Partial D027 ledger schema");
+        return true;
     }
 }

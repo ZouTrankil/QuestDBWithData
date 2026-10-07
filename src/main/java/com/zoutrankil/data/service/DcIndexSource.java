@@ -1,5 +1,6 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -7,7 +8,6 @@ import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.DcIndexMapper;
 import java.nio.file.*;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -67,7 +67,8 @@ public final class DcIndexSource {
         var path=receipt.toAbsolutePath().normalize();
         if(!expectedFingerprint.matches("[0-9a-f]{64}")||!Files.isRegularFile(path)||Files.size(path)>MAX_EVIDENCE_BYTES)
             throw new IllegalArgumentException("Bounded dc_index receipt and SHA-256 required");
-        byte[] bytes=Files.readAllBytes(path);if(!sha(bytes).equals(expectedFingerprint))throw new IllegalStateException("dc_index receipt SHA mismatch");
+        byte[] bytes=FileEvidenceStore.readBounded(path, MAX_EVIDENCE_BYTES,
+                () -> new IllegalArgumentException("Bounded dc_index receipt and SHA-256 required"));if(!sha(bytes).equals(expectedFingerprint))throw new IllegalStateException("dc_index receipt SHA mismatch");
         var json=JobDefinitionJson.mapper();JsonNode proof=json.readTree(bytes);
         if(!"dc_index".equals(proof.path("endpoint").asText())||!proof.path("sourceComplete").asBoolean(false)
                 ||!proof.path("tradeDate").asText().equals(expectedDate.toString())
@@ -92,7 +93,7 @@ public final class DcIndexSource {
     }
     private static byte[] canonical(LocalDate date,Map<String,Object> parameters,List<Map<String,JsonNode>> rows,
                                     boolean complete,Exception failure)throws Exception {
-        var json=JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true);
+        var json=JobDefinitionJson.canonicalMapper();
         var body=new LinkedHashMap<String,Object>();body.put("sourceKind","tushare");body.put("endpoint","dc_index");
         body.put("tradeDate",date.toString());body.put("parameters",parameters);body.put("fields",FIELDS);
         body.put("sourceRowCap",SOURCE_ROW_CAP);body.put("returnedRows",rows.size());body.put("rawRows",rows);
@@ -104,9 +105,10 @@ public final class DcIndexSource {
         Files.createDirectories(evidenceRoot);Path target=evidenceRoot.resolve("unverified-"+date.format(BASIC)+"-"+sha(bytes)+".json");persist(target,bytes);
     }
     private static void persist(Path target,byte[] body)throws Exception {
-        try{Files.write(target,body,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);}
-        catch(FileAlreadyExistsException exists){if(!Arrays.equals(Files.readAllBytes(target),body))throw new IllegalStateException("Conflicting deterministic dc_index evidence receipt",exists);}
+        try{FileEvidenceStore.writeNew(target,body);}
+        catch(FileAlreadyExistsException exists){if(!Arrays.equals(FileEvidenceStore.readBounded(target, Math.max(1, body.length),
+                    () -> new IllegalStateException("Conflicting deterministic dc_index evidence receipt", exists)),body))throw new IllegalStateException("Conflicting deterministic dc_index evidence receipt",exists);}
     }
-    public static String sha(byte[] bytes)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));}
+    public static String sha(byte[] bytes)throws Exception{return FileEvidenceStore.sha256(bytes);}
     private static String value(Map<String,JsonNode> row,String field){JsonNode v=row.get(field);return v==null||v.isNull()?"":v.asText();}
 }

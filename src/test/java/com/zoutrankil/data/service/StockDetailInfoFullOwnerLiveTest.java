@@ -1,12 +1,15 @@
 package com.zoutrankil.data.service;
+import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
+
+import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
 
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.StockDetailInfoDataset;
 import com.zoutrankil.data.domain.SyncRunState;
-import com.zoutrankil.data.repository.StockDetailInfoStaging;
-import com.zoutrankil.data.repository.StockDetailInfoStorage;
-import com.zoutrankil.data.repository.StockDetailPublicationJournal;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStaging;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
+import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -58,7 +61,7 @@ class StockDetailInfoFullOwnerLiveTest {
                 var seeded = new StockDetailInfoStorage(jdbc,target).snapshot();
                 assertEquals(productionBefore.rows().size(),seeded.rows().size());
 
-                var owner = new StockDetailInfoJobService(pages,jdbc,ledger,target);
+                var owner = new StockDetailInfoJobService(pages,new QuestDbStockDetailTarget(jdbc,target),ledger);
                 var result = owner.run(owner.plan(List.of(),true,LocalDate.of(2026,9,29)));
                 assertEquals(SyncRunState.VERIFIED,result.state(),result.errorCode());
                 assertEquals(result.sourceRows(),result.verifiedRows());

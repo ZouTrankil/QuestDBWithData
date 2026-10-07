@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
@@ -16,7 +18,6 @@ import java.nio.channels.OverlappingFileLockException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.util.HexFormat;
 import java.util.Objects;
@@ -62,7 +63,7 @@ public final class MarginZrzPublication {
             throw new IllegalStateException("D031 target or verified stage changed before publication");
         verifyStageReceipt(verified);
         String backup=com.zoutrankil.data.domain.MarginZrzDataset.ISOLATED_PREFIX+"backup_"+UUID.randomUUID().toString().replace("-","");
-        String stageReceiptHash=sha(Files.readAllBytes(Path.of(verified.receipt())));
+        String stageReceiptHash=sha(FileEvidenceStore.readBounded(Path.of(verified.receipt()), 4 * 1024 * 1024, () -> new IllegalStateException("D031 verified stage receipt escaped its run evidence root")));
         String scope=JobDefinitionJson.mapper().writeValueAsString(java.util.Map.of("stageReceipt",verified.receipt(),
                 "stageReceiptFingerprint",stageReceiptHash,"requestFingerprint",prepared.requestFingerprint(),
                 "windowFrom",prepared.from(),"windowTo",prepared.to(),"sourceRows",verified.authoritativeRows().size()));
@@ -122,9 +123,9 @@ public final class MarginZrzPublication {
     public java.util.Optional<ReferencePublicationJournal.Entry> findForRun(String runId)throws Exception{return journal.findForRun(runId);}
     public void requireNoPendingPublication()throws Exception{requireNoPending(null);}
     private void requireNoPending(String exceptRun)throws Exception {
-        try(var db=java.sql.DriverManager.getConnection("jdbc:sqlite:"+ledgerPath);var query=db.prepareStatement("SELECT run_id FROM reference_publications WHERE dataset='margin_zrz' AND state<>'VERIFIED' LIMIT 32");var rows=query.executeQuery()){
-            while(rows.next())if(!Objects.equals(exceptRun,rows.getString(1)))throw new IllegalStateException("Unresolved D031 publication requires finish: "+rows.getString(1));
-        }
+        journal.visitSummaries(32,true,ReferencePublicationJournal.ConnectionPolicy.DRIVER_DEFAULTS,(summary,rowNumber)->{
+            if(!Objects.equals(exceptRun,summary.runId()))throw new IllegalStateException("Unresolved D031 publication requires finish: "+summary.runId());
+        });
         Path root=ledgerPath.getParent().resolve("sync-evidence");if(!Files.exists(root))return;
         if(Files.isSymbolicLink(root)||!Files.isDirectory(root))throw new IllegalStateException("D031 evidence root is invalid");
         int count=0;try(var runs=Files.newDirectoryStream(root)){for(Path dir:runs){if(++count>50_000)throw new IllegalStateException("D031 unresolved-stage scan exceeds 50000 runs");
@@ -152,7 +153,7 @@ public final class MarginZrzPublication {
     private void verifyStageReceipt(MarginZrzStaging.Verified verified)throws Exception {
         Path receipt=Path.of(verified.receipt()).toRealPath();Path runRoot=verified.prepared().runEvidence().toRealPath();
         if(!receipt.startsWith(runRoot)||Files.size(receipt)<1||Files.size(receipt)>4*1024*1024)throw new IllegalStateException("D031 verified stage receipt escaped its run evidence root");
-        JsonNode proof=JobDefinitionJson.mapper().readTree(Files.readAllBytes(receipt));var p=verified.prepared();
+        JsonNode proof=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(receipt, 4 * 1024 * 1024, () -> new IllegalStateException("D031 verified stage receipt escaped its run evidence root")));var p=verified.prepared();
         var run=SyncRunLedger.openReadOnly(ledgerPath).getRun(p.runId());
         if(!"margin_zrz".equals(proof.path("dataset").asText())||!proof.path("sourceComplete").asBoolean(false)
                 ||proof.path("dedup").asBoolean(true)||!p.runId().equals(proof.path("runId").asText())
@@ -167,9 +168,9 @@ public final class MarginZrzPublication {
         JsonNode scope=JobDefinitionJson.mapper().readTree(entry.intent().scope());String raw=scope.path("stageReceipt").asText("");
         Path receipt=Path.of(raw).toAbsolutePath().normalize();Path root=ledgerPath.getParent().resolve("sync-evidence").resolve(entry.intent().runId()).toAbsolutePath().normalize();
         if(!receipt.startsWith(root)||Files.isSymbolicLink(receipt)||!Files.isRegularFile(receipt)||Files.size(receipt)>4*1024*1024
-                ||!sha(Files.readAllBytes(receipt)).equals(scope.path("stageReceiptFingerprint").asText()))
+                ||!sha(FileEvidenceStore.readBounded(receipt, 4 * 1024 * 1024, () -> new IllegalStateException("D031 verified stage receipt escaped its run evidence root"))).equals(scope.path("stageReceiptFingerprint").asText()))
             throw new IllegalStateException("D031 journal stage receipt hash/path is invalid");
-        JsonNode proof=JobDefinitionJson.mapper().readTree(Files.readAllBytes(receipt));
+        JsonNode proof=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(receipt, 4 * 1024 * 1024, () -> new IllegalStateException("D031 verified stage receipt escaped its run evidence root")));
         var run=SyncRunLedger.openReadOnly(ledgerPath).getRun(entry.intent().runId());
         String frozenFingerprint=SyncRequestIdentity.fingerprint(run.frozenJson(),run.targetId());
         if(!proof.path("sourceComplete").asBoolean(false)||proof.path("dedup").asBoolean(true)
@@ -207,7 +208,7 @@ public final class MarginZrzPublication {
         try{lock=channel.tryLock();}catch(OverlappingFileLockException busy){channel.close();throw new IllegalStateException("D031 publication is already active",busy);}
         if(lock==null){channel.close();throw new IllegalStateException("D031 publication is already active");}return new LockHolder(channel,lock);
     }
-    private static String sha(byte[] bytes)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));}
+    private static String sha(byte[] bytes)throws Exception{return FileEvidenceStore.sha256(bytes);}
     private static boolean same(MarginZrzStorage.Snapshot a,MarginZrzStorage.Snapshot b){return MarginZrzStorage.sameContent(a,b)
             &&a.identity().id()==b.identity().id()&&a.identity().directory().equals(b.identity().directory())&&a.identity().writerTxn()==b.identity().writerTxn();}
     private static void check(BooleanSupplier cancelled){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new java.util.concurrent.CancellationException("D031 table publication cancelled");}

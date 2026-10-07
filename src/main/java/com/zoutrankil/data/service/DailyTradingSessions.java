@@ -4,7 +4,7 @@ import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.ExchangeCalendar;
 import com.zoutrankil.data.domain.ExchangeCalendarDataset;
-import com.zoutrankil.data.repository.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;

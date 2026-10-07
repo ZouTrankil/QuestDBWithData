@@ -1,5 +1,9 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
+import com.zoutrankil.data.domain.policy.IndexWeightUniverse;
+
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.IndexWeight;
 import com.zoutrankil.data.domain.IndexWeightDataset;
@@ -92,7 +96,7 @@ public final class IndexWeightSyncAdapter implements SyncJobRunner.Adapter<Index
         body.put("pages", pages); body.put("calls", result.calls()); body.put("pageEvidence", pageEvidence);
         body.put("targetComparison", "all source keys and physical rows matched after runner readback");
         body.put("complete", result.complete());
-        byte[] bytes = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        byte[] bytes = JobDefinitionJson.canonicalMapper()
                 .writeValueAsBytes(body);
         if (bytes.length > MAX_COMPLETION_BYTES)
             throw new IllegalArgumentException("D021 completion receipt exceeds 32 MiB");
@@ -223,9 +227,9 @@ public final class IndexWeightSyncAdapter implements SyncJobRunner.Adapter<Index
 
     private static void writeImmutable(Path path, byte[] bytes) throws Exception {
         Files.createDirectories(path.toAbsolutePath().normalize().getParent());
-        try { Files.write(path, bytes, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE); }
+        try { FileEvidenceStore.writeNew(path,bytes); }
         catch (java.nio.file.FileAlreadyExistsException exists) {
-            if (!java.security.MessageDigest.isEqual(Files.readAllBytes(path), bytes))
+            if (!java.security.MessageDigest.isEqual(FileEvidenceStore.readBounded(path, Math.max(1, bytes.length), () -> new IllegalStateException("D021 immutable completion evidence path conflict", exists)), bytes))
                 throw new IllegalStateException("D021 immutable completion evidence path conflict", exists);
         }
     }

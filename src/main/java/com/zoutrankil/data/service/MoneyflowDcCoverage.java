@@ -4,8 +4,8 @@ import com.zoutrankil.data.repository.MoneyflowDcWritePort;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.repository.SqliteLedgerSchema;
 import java.nio.file.*;
-import java.sql.DriverManager;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -50,5 +50,11 @@ public final class MoneyflowDcCoverage {
                 long count=0;LocalDate first=null,last=null;var selected=new HashMap<LocalDate,Receipt>();for(var e:selectedTimed.entrySet()){Receipt r=e.getValue().receipt();selected.put(e.getKey(),r);count=Math.addExact(count,r.rows());if(r.rows()>0){if(first==null||r.date().isBefore(first))first=r.date();if(last==null||r.date().isAfter(last))last=r.date();}}candidates.add(new Coverage(anchor,through,selected,count,first,last,latest));}}
         return candidates.stream().max(Comparator.comparing(Coverage::through).thenComparing(Coverage::verifiedAt).thenComparing(Coverage::anchor,Comparator.reverseOrder()));}
     public static String encodeDates(List<LocalDate> dates){if(dates.size()>5||dates.stream().distinct().count()!=dates.size()||!dates.equals(dates.stream().sorted().toList()))throw new IllegalArgumentException("D026 requires unique ascending bounded dates");return dates.isEmpty()?"NONE":String.join(",",dates.stream().map(d->d.format(DateTimeFormatter.BASIC_ISO_DATE)).toList());}
-    private static boolean hasLedger(Path path)throws Exception{var names=new HashSet<String>();try(var c=DriverManager.getConnection("jdbc:sqlite:"+path.toAbsolutePath().normalize().toUri().toASCIIString()+"?mode=ro");var s=c.createStatement();var r=s.executeQuery("SELECT name FROM sqlite_master WHERE type='table'")){while(r.next())names.add(r.getString(1));}Set<String> required=Set.of("ledger_meta","sync_runs","sync_entries","sync_events");if(Collections.disjoint(names,required))return false;if(!names.containsAll(required))throw new IllegalStateException("Partial D026 ledger schema");return true;}
+    private static boolean hasLedger(Path path)throws Exception{
+        var names = SqliteLedgerSchema.tableNames(path.toAbsolutePath().normalize());
+        var required = Set.of("ledger_meta","sync_runs","sync_entries","sync_events");
+        if (java.util.Collections.disjoint(names, required)) return false;
+        if (!names.containsAll(required)) throw new IllegalStateException("Partial D026 ledger schema");
+        return true;
+    }
 }

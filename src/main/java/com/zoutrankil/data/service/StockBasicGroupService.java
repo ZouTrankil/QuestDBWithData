@@ -1,5 +1,9 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
+
 import com.zoutrankil.data.domain.SyncGroupDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.repository.SyncRunLedger;

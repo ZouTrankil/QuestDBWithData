@@ -6,6 +6,7 @@ import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
 /** D018 contract for the externally owned etf_portfolio table; formal DDL remains audit-only. */
 public final class EtfPortfolioDataset {
+    public static final int MAX_ROWS_PER_ANN_DATE = 1_000_000;
     public static final String ISOLATED_PREFIX = "java_d018_etf_portfolio_";
     private static final TemporalContract ANN_DATE = new TemporalContract(TemporalKind.BUSINESS_DATE,
             "BASIC", "calendar", "DAY", "Tushare announcement date; UTC-midnight storage carrier, not an instant");
@@ -57,5 +58,10 @@ public final class EtfPortfolioDataset {
         DatasetDefinition.identifier(table);
         if (!table.startsWith(ISOLATED_PREFIX) || table.length() <= ISOLATED_PREFIX.length())
             throw new IllegalStateException("D018 execution requires java_d018_etf_portfolio_<suffix>");
+    }
+
+    /** Admits the existing formal table or the original isolated execution namespace. */
+    public static void requireExecutionTable(String table) {
+        if (!"etf_portfolio".equals(table)) requireIsolatedTable(table);
     }
 }

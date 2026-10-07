@@ -7,6 +7,7 @@ import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
 /** D016 mapping for the externally owned etf_share table; isolated D016 objects only. */
 public final class EtfShareDataset {
+    public static final int MAX_ROWS_PER_DATE = 5997;
     public static final String ISOLATED_PREFIX = "java_d016_etf_share_";
     private static final TemporalContract TRADE_DATE = new TemporalContract(
             TemporalKind.BUSINESS_DATE, "BASIC", "calendar", "DAY",

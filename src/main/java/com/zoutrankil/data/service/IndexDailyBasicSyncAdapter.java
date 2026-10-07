@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.policy.IndexDailyBasicUniverse;
+
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.IndexDailyBasicWritePort;
@@ -64,7 +66,7 @@ public final class IndexDailyBasicSyncAdapter implements SyncJobRunner.Adapter<I
         body.put("tsCode", code); body.put("from", request.from()); body.put("to", request.to());
         body.put("slices", 1); body.put("sourceRows", page.rows().size());
         body.put("sourceEvidence", page.responseEvidence()); body.put("complete", true);
-        JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true).writeValue(completion.toFile(), body);
+        JobDefinitionJson.canonicalMapper().writeValue(completion.toFile(), body);
         if (Files.size(completion) > IndexDailyBasicSource.MAX_EVIDENCE_BYTES)
             throw new IllegalArgumentException("D020 completion evidence exceeds 16 MiB");
         return new SyncJobRunner.SourceCompletion(1, page.rows().size(), true, completion.toString());

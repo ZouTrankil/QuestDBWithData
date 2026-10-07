@@ -1,4 +1,8 @@
 package com.zoutrankil.data.service;
+import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
+
+import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
 
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
@@ -47,12 +51,12 @@ class StockDetailOwnerBoundaryLiveTest {
                 var storage=new StockDetailInfoStorage(jdbc,target);var before=storage.snapshot();
                 var calls=new AtomicInteger();
                 var empty=source(params->{calls.incrementAndGet();return new PageExecutor.Page(List.of(),null,false,null);});
-                var owner=new StockDetailInfoJobService(empty,jdbc,path,target);
+                var owner=new StockDetailInfoJobService(empty,new QuestDbStockDetailTarget(jdbc,target),path);
                 var request=owner.plan(List.of("000001.SZ"),false,LocalDate.of(2026,9,29));
                 var emptyResult=owner.run(request);
                 assertEquals(SyncRunState.VERIFIED_EMPTY,emptyResult.state(),emptyResult.errorCode());
                 assertEquals(3,calls.get());assertNull(emptyResult.publicationId());
-                var failureOwner=new StockDetailInfoJobService(source(params->{throw new java.io.IOException("provider fixture failure");}),jdbc,path,target);
+                var failureOwner=new StockDetailInfoJobService(source(params->{throw new java.io.IOException("provider fixture failure");}),new QuestDbStockDetailTarget(jdbc,target),path);
                 var failed=failureOwner.run(request);
                 assertEquals(SyncRunState.FAILED,failed.state());assertNull(failed.publicationId());
                 var ledger=new SyncRunLedger(path);
@@ -60,7 +64,7 @@ class StockDetailOwnerBoundaryLiveTest {
                     ledger.requestCancellation("cancel-"+id);
                     return new PageExecutor.Page(List.of(),null,false,null);
                 });
-                var cancelled=new StockDetailInfoJobService(cancelledSource,jdbc,path,target)
+                var cancelled=new StockDetailInfoJobService(cancelledSource,new QuestDbStockDetailTarget(jdbc,target),path)
                         .execute("cancel-"+id,null,request);
                 assertEquals(SyncRunState.CANCELLED,cancelled.state());assertNull(cancelled.publicationId());
                 var locks=new DatasetIntervalLock(path);var scope=DatasetIntervalLock.Scope.allDates("stock_detail_info");

@@ -1,10 +1,10 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.EquityStyleMonthlyMapper;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.sql.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -178,7 +178,7 @@ public class EquityStyleMonthlySource {
             else {String text=value.toString();lines.append(value.getClass().getSimpleName()).append(':').append(text.length()).append(':').append(text);}lines.append('\n');}
         return hash(lines.toString());
     }
-    static String hash(String text){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8)));}catch(Exception impossible){throw new IllegalStateException(impossible);}}
+    static String hash(String text){try{return FileEvidenceStore.sha256(text.getBytes(StandardCharsets.UTF_8));}catch(Exception impossible){throw new IllegalStateException(impossible);}}
     private <T>T query(String sql,int cap,ResultSetExtractor<T> extractor){return jdbc.query(connection->{var statement=connection.prepareStatement(sql);statement.setQueryTimeout(20);statement.setMaxRows(cap);return statement;},extractor);}
     private static long counter(ResultSet rs,String field)throws SQLException{Object value=rs.getObject(field);if(!(value instanceof Byte||value instanceof Short||value instanceof Integer||value instanceof Long)||((Number)value).longValue()<0)throw new IllegalStateException("Exact nonnegative physical/WAL LONG required");return ((Number)value).longValue();}
     private static boolean bool(ResultSet rs,String field)throws SQLException{Object value=rs.getObject(field);if(!(value instanceof Boolean flag))throw new IllegalStateException("Known physical/schema boolean required");return flag;}

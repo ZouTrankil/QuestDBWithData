@@ -1,5 +1,6 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -10,8 +11,6 @@ import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.mapper.MarginAllMapper;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -67,7 +66,8 @@ public final class MarginAllSource {
         if (fingerprint == null || !fingerprint.matches("[0-9a-f]{64}") || !Files.isRegularFile(file)
                 || Files.isSymbolicLink(file) || Files.size(file) < 1 || Files.size(file) > MAX_EVIDENCE_BYTES)
             throw new IllegalArgumentException("D028 bounded raw receipt and SHA-256 required");
-        byte[] bytes = Files.readAllBytes(file); if (!sha(bytes).equals(fingerprint)) throw new IllegalStateException("D028 receipt SHA-256 mismatch");
+        byte[] bytes = FileEvidenceStore.readBounded(file, MAX_EVIDENCE_BYTES,
+                () -> new IllegalArgumentException("D028 bounded raw receipt and SHA-256 required")); if (!sha(bytes).equals(fingerprint)) throw new IllegalStateException("D028 receipt SHA-256 mismatch");
         var json = JobDefinitionJson.mapper(); JsonNode proof = json.readTree(bytes); String basic = expectedDate.format(BASIC);
         if (!"tushare".equals(proof.path("sourceKind").asText()) || !"margin".equals(proof.path("endpoint").asText())
                 || !proof.path("sourceComplete").asBoolean(false) || !expectedDate.toString().equals(proof.path("tradeDate").asText())
@@ -97,7 +97,7 @@ public final class MarginAllSource {
         }
     }
     private static byte[] body(LocalDate date, Map<String,Object> params, List<Map<String,JsonNode>> rows, String version, boolean complete, Exception failure) throws Exception {
-        var json = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        var json = JobDefinitionJson.canonicalMapper();
         var body = new LinkedHashMap<String,Object>(); body.put("sourceKind","tushare"); body.put("endpoint","margin"); body.put("sourceContractVersion",1);
         body.put("parameters",params); body.put("fields",FIELDS); body.put("tradeDate",date.toString()); body.put("apiMaximumRows",API_ROW_CAP);
         body.put("returnedRows",rows.size()); body.put("rawRows",rows); body.put("sourceComplete",complete);
@@ -109,9 +109,10 @@ public final class MarginAllSource {
         Files.createDirectories(evidenceRoot); persist(evidenceRoot.resolve("incomplete-"+date.format(BASIC)+"-"+sha(bytes)+".json"),bytes);
     }
     private static void persist(Path path, byte[] bytes) throws Exception {
-        try { Files.write(path,bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE); }
-        catch (java.nio.file.FileAlreadyExistsException exists) { if (!Arrays.equals(Files.readAllBytes(path),bytes)) throw new IllegalStateException("Conflicting immutable D028 receipt",exists); }
+        try { FileEvidenceStore.writeNew(path,bytes); }
+        catch (java.nio.file.FileAlreadyExistsException exists) { if (!Arrays.equals(FileEvidenceStore.readBounded(path, Math.max(1, bytes.length),
+                    () -> new IllegalStateException("Conflicting immutable D028 receipt", exists)),bytes)) throw new IllegalStateException("Conflicting immutable D028 receipt",exists); }
     }
     private static String value(Map<String,JsonNode> row, String field) { JsonNode v = row.get(field); return v == null || v.isNull() ? "" : v.asText(); }
-    private static String sha(byte[] bytes) throws Exception { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)); }
+    private static String sha(byte[] bytes) throws Exception { return FileEvidenceStore.sha256(bytes); }
 }

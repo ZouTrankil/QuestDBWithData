@@ -9,6 +9,8 @@ import java.util.function.Function;
 
 /** Validates an already bounded source page before any writer can borrow a sender. */
 public final class DatasetWritePreparation {
+    private static final ObjectMapper JSON = new ObjectMapper();
+
     private DatasetWritePreparation() {}
     public record Limits(int maxRows, int maxNormalizedBytes) {
         public Limits {
@@ -58,7 +60,6 @@ public final class DatasetWritePreparation {
         var required = new HashSet<>(definition.columns().stream().map(DatasetDefinition.Column::logicalName).toList());
         var rows = new ArrayList<DatasetValues>(input.size());
         var keys = new HashSet<String>();
-        var json = new ObjectMapper();
         try {
             var digest = MessageDigest.getInstance("SHA-256");
             digest.update((definition.datasetId() + ":" + definition.schemaVersion() + ":" + definition.objectName())
@@ -77,8 +78,8 @@ public final class DatasetWritePreparation {
                     canonical.put(column.storageName(), normalized);
                     if (definition.businessKey().contains(column.logicalName())) businessKey.put(column.logicalName(), normalized);
                 }
-                if (!keys.add(json.writeValueAsString(businessKey))) throw new IllegalArgumentException("Duplicate business key in write page");
-                byte[] encoded = json.writeValueAsBytes(canonical);
+                if (!keys.add(JSON.writeValueAsString(businessKey))) throw new IllegalArgumentException("Duplicate business key in write page");
+                byte[] encoded = JSON.writeValueAsBytes(canonical);
                 bytes = Math.addExact(bytes, encoded.length);
                 if (bytes > limits.maxNormalizedBytes()) throw new IllegalArgumentException("Write page exceeds normalized byte bound");
                 digest.update(encoded);

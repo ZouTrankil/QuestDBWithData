@@ -1,9 +1,52 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.DailyJobService;
+import com.zoutrankil.data.stock.application.DailyBasicJobService;
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
+import com.zoutrankil.data.stock.application.StockFactorJobService;
+import com.zoutrankil.data.stock.application.StockLimitJobService;
+import com.zoutrankil.data.stock.application.StockStDailyJobService;
+import com.zoutrankil.data.stock.application.StockSuspendJobService;
+import com.zoutrankil.data.stock.storage.DailyWritePort;
+import com.zoutrankil.data.stock.storage.DailyBasicWritePort;
+import com.zoutrankil.data.stock.storage.StockFactorWritePort;
+import com.zoutrankil.data.stock.storage.StockLimitWritePort;
+import com.zoutrankil.data.stock.storage.StockStDailyWritePort;
+import com.zoutrankil.data.stock.storage.StockSuspendWritePort;
+import com.zoutrankil.data.stock.mapper.DailyMapper;
+import com.zoutrankil.data.stock.mapper.DailyBasicMapper;
+import com.zoutrankil.data.stock.mapper.StockFactorMapper;
+import com.zoutrankil.data.stock.mapper.StockLimitMapper;
+import com.zoutrankil.data.stock.mapper.StockStDailyMapper;
+import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
+import com.zoutrankil.data.stock.application.StaticStockDetailWriteAdapter;
+
+import com.zoutrankil.data.etf.application.EtfBasicJobService;
+import com.zoutrankil.data.etf.storage.EtfBasicWritePort;
+import com.zoutrankil.data.etf.mapper.EtfBasicMapper;
+import com.zoutrankil.data.etf.application.EtfPortfolioJobService;
+import com.zoutrankil.data.etf.storage.EtfPortfolioWritePort;
+import com.zoutrankil.data.etf.mapper.EtfPortfolioMapper;
+import com.zoutrankil.data.etf.application.EtfShareJobService;
+import com.zoutrankil.data.etf.storage.EtfShareWritePort;
+import com.zoutrankil.data.etf.mapper.EtfShareMapper;
+
+import com.zoutrankil.data.etf.application.EtfDailyJobService;
+import com.zoutrankil.data.etf.storage.EtfDailyWritePort;
+import com.zoutrankil.data.etf.mapper.EtfDailyMapper;
+import com.zoutrankil.data.etf.application.EtfAdjJobService;
+import com.zoutrankil.data.etf.storage.EtfAdjWritePort;
+import com.zoutrankil.data.etf.mapper.EtfAdjMapper;
+import com.zoutrankil.data.etf.application.EtfFactorJobService;
+import com.zoutrankil.data.etf.storage.EtfFactorWritePort;
+import com.zoutrankil.data.etf.mapper.EtfFactorMapper;
+
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.repository.StockBasicWritePort;
-import com.zoutrankil.data.repository.ExchangeCalendarWritePort;
-import com.zoutrankil.data.mapper.ExchangeCalendarMapper;
+import com.zoutrankil.data.stock.storage.StockBasicWritePort;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarWritePort;
+import com.zoutrankil.data.calendar.mapper.ExchangeCalendarMapper;
 import io.questdb.client.QuestDB;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -338,82 +381,82 @@ public class StockBasicWriteGroupService {
                 adapters.put(member.memberId(), new L2T0TrainingLabelsPreparedWriteAdapter(
                         l2T0TrainingLabelsTarget, prepared));
             } else if(member.definition().datasetId().equals(DailyDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.DailyMapper();
-                var port=new com.zoutrankil.data.repository.DailyWritePort(
+                var mapper=new com.zoutrankil.data.stock.mapper.DailyMapper();
+                var port=new com.zoutrankil.data.stock.storage.DailyWritePort(
                         dailyTarget.tableName(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.DailyWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.stock.storage.DailyWritePort.CODEC,port,()->{
                             try { return dailyTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve daily target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(DailyBasicDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.DailyBasicMapper();
-                var port=new com.zoutrankil.data.repository.DailyBasicWritePort(
+                var mapper=new com.zoutrankil.data.stock.mapper.DailyBasicMapper();
+                var port=new com.zoutrankil.data.stock.storage.DailyBasicWritePort(
                         dailyBasicTarget.tableName(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.DailyBasicWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.stock.storage.DailyBasicWritePort.CODEC,port,()->{
                             try { return dailyBasicTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve daily_basic target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(StockFactorDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.StockFactorMapper();
-                var port=new com.zoutrankil.data.repository.StockFactorWritePort(
+                var mapper=new com.zoutrankil.data.stock.mapper.StockFactorMapper();
+                var port=new com.zoutrankil.data.stock.storage.StockFactorWritePort(
                         stockFactorTarget.tableName(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.StockFactorWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.stock.storage.StockFactorWritePort.CODEC,port,()->{
                             try { return stockFactorTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve stk_factor target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(StockLimitDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.StockLimitMapper();
-                var port=new com.zoutrankil.data.repository.StockLimitWritePort(
+                var mapper=new com.zoutrankil.data.stock.mapper.StockLimitMapper();
+                var port=new com.zoutrankil.data.stock.storage.StockLimitWritePort(
                         stockLimitTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.StockLimitWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.stock.storage.StockLimitWritePort.CODEC,port,()->{
                             try { return stockLimitTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve stk_limit target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(EtfDailyDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.EtfDailyMapper();
-                var port=new com.zoutrankil.data.repository.EtfDailyWritePort(
+                var mapper=new com.zoutrankil.data.etf.mapper.EtfDailyMapper();
+                var port=new com.zoutrankil.data.etf.storage.EtfDailyWritePort(
                         etfDailyTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.EtfDailyWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.etf.storage.EtfDailyWritePort.CODEC,port,()->{
                             try { return etfDailyTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_daily target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(EtfAdjDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.EtfAdjMapper();
-                var port=new com.zoutrankil.data.repository.EtfAdjWritePort(
+                var mapper=new com.zoutrankil.data.etf.mapper.EtfAdjMapper();
+                var port=new com.zoutrankil.data.etf.storage.EtfAdjWritePort(
                         etfAdjTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.EtfAdjWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.etf.storage.EtfAdjWritePort.CODEC,port,()->{
                             try { return etfAdjTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_adj target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(EtfShareDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.EtfShareMapper();
-                var port=new com.zoutrankil.data.repository.EtfShareWritePort(
+                var mapper=new com.zoutrankil.data.etf.mapper.EtfShareMapper();
+                var port=new com.zoutrankil.data.etf.storage.EtfShareWritePort(
                         etfShareTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.EtfShareWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.etf.storage.EtfShareWritePort.CODEC,port,()->{
                             try { return etfShareTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_share target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(EtfFactorDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.EtfFactorMapper();
-                var port=new com.zoutrankil.data.repository.EtfFactorWritePort(
+                var mapper=new com.zoutrankil.data.etf.mapper.EtfFactorMapper();
+                var port=new com.zoutrankil.data.etf.storage.EtfFactorWritePort(
                         etfFactorTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.EtfFactorWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.etf.storage.EtfFactorWritePort.CODEC,port,()->{
                             try { return etfFactorTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_factor target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
@@ -478,22 +521,22 @@ public class StockBasicWriteGroupService {
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve index_weight target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(EtfPortfolioDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.EtfPortfolioMapper();
-                var port=new com.zoutrankil.data.repository.EtfPortfolioWritePort(
+                var mapper=new com.zoutrankil.data.etf.mapper.EtfPortfolioMapper();
+                var port=new com.zoutrankil.data.etf.storage.EtfPortfolioWritePort(
                         etfPortfolioTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.EtfPortfolioWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.etf.storage.EtfPortfolioWritePort.CODEC,port,()->{
                             try { return etfPortfolioTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_portfolio target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(EtfBasicDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.EtfBasicMapper();
-                var port=new com.zoutrankil.data.repository.EtfBasicWritePort(
+                var mapper=new com.zoutrankil.data.etf.mapper.EtfBasicMapper();
+                var port=new com.zoutrankil.data.etf.storage.EtfBasicWritePort(
                         etfBasicTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.EtfBasicWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.etf.storage.EtfBasicWritePort.CODEC,port,()->{
                             try { return etfBasicTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_basic target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
@@ -528,22 +571,22 @@ public class StockBasicWriteGroupService {
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve moneyflow_hsgt target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(StockStDailyDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.StockStDailyMapper();
-                var port=new com.zoutrankil.data.repository.StockStDailyWritePort(
+                var mapper=new com.zoutrankil.data.stock.mapper.StockStDailyMapper();
+                var port=new com.zoutrankil.data.stock.storage.StockStDailyWritePort(
                         stockStDailyTarget.tableName(),member.targetId(),jdbc,questdb);
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.StockStDailyWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.stock.storage.StockStDailyWritePort.CODEC,port,()->{
                             try { stockStDailyTarget.requireNoPendingPublication(); return stockStDailyTarget.physicalTargetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve stk_st_daily target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(StockSuspendDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.mapper.StockSuspendMapper();
-                var port=new com.zoutrankil.data.repository.StockSuspendWritePort(
+                var mapper=new com.zoutrankil.data.stock.mapper.StockSuspendMapper();
+                var port=new com.zoutrankil.data.stock.storage.StockSuspendWritePort(
                         stockSuspendTarget.tableName(),jdbc,questdb,member.targetId());
                 adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
                         mapper::fromValues,mapper::values,
-                        com.zoutrankil.data.repository.StockSuspendWritePort.CODEC,port,()->{
+                        com.zoutrankil.data.stock.storage.StockSuspendWritePort.CODEC,port,()->{
                             try { stockSuspendTarget.requireNoPendingPublication(); return stockSuspendTarget.physicalTargetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve stk_suspend target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));

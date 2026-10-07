@@ -13,8 +13,9 @@ class CliProcessTest {
         var command = new ArrayList<String>();
         String javaExecutable=System.getProperty("os.name","").toLowerCase(Locale.ROOT).contains("win")?"java.exe":"java";
         command.add(Path.of(System.getProperty("java.home"),"bin",javaExecutable).toString());
+        command.addAll(List.of("-Dfile.encoding=UTF-8", "-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8"));
         command.add("-cp"); command.add(System.getProperty("cli.runtimeClasspath"));
-        command.add("com.zoutrankil.data.QuestDbWithDataApplication");
+        command.add("com.zoutrankil.data.QuestDataApplication");
         command.addAll(List.of(args));
         var builder = new ProcessBuilder(command).redirectError(temp.resolve(name+".err").toFile())
                 .redirectOutput(temp.resolve(name+".log").toFile());

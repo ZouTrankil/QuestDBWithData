@@ -28,7 +28,7 @@ public final class ThsMemberRunRecovery {
         if (Files.size(preparedPath) > 32L * 1024 * 1024)
             throw new IllegalStateException("THS member preparation exceeds bound");
         var json = JobDefinitionJson.mapper();
-        var frozen = json.readTree(preparedPath.toFile());
+        var frozen = json.readTree(FileEvidenceStore.readBounded(preparedPath, 32 * 1024 * 1024, () -> new IllegalStateException("THS member preparation exceeds bound")));
         if (!runId.equals(frozen.path("runId").asText())
                 || !run.targetId().equals(frozen.path("targetId").asText())
                 || !run.frozenJson().equals(frozen.path("request").asText()))
@@ -55,8 +55,8 @@ public final class ThsMemberRunRecovery {
             throw new IllegalStateException("THS source receipt path or size differs");
         SyncJobRunner.Page<ThsMember> source;
         if (preparedWrite) {
-            byte[] bytes = Files.readAllBytes(sourcePath);
-            String hash = HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+            byte[] bytes = FileEvidenceStore.readBounded(sourcePath, 16 * 1024 * 1024, () -> new IllegalStateException("THS source receipt path or size differs"));
+            String hash = FileEvidenceStore.sha256(bytes);
             var proof = json.readTree(bytes);
             var mapper = new com.zoutrankil.data.mapper.ThsMemberMapper();
             if (!hash.equals(savedSource.sourceFingerprint())
@@ -135,7 +135,7 @@ public final class ThsMemberRunRecovery {
                 Files.write(folder.resolve("completion-recomputed.json"), json.writeValueAsBytes(proof));
                 throw new IllegalStateException("Existing THS member completion receipt differs");
             }
-        } else Files.write(receipt, json.writeValueAsBytes(proof), StandardOpenOption.CREATE_NEW);
+        } else FileEvidenceStore.writeNew(receipt,json.writeValueAsBytes(proof));
         int sourceRows = source.rows().size();
         var verification = Map.of("passed", true, "expectedRows", sourceRows, "actualRows", sourceRows,
                 "matchedRows", sourceRows, "mismatchedRows", 0, "duplicateKeys", 0, "missingKeys", 0,

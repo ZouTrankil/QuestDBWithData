@@ -14,7 +14,7 @@ public final class MacroCoreMonthlyMaterializeAdapter implements SyncJobRunner.A
     private final MacroCoreMonthlyWritePort writer;
     private final MacroCoreMonthlySource.Batch frozen;
     private SyncJobDefinition.FrozenRequest active;
-    private MacroCoreMonthlyWritePort.Snapshot verifiedTarget;
+    private MacroCoreMonthlyTargetSnapshot verifiedTarget;
     private MacroCoreMonthlySource.Batch verifiedSource;
     public MacroCoreMonthlyMaterializeAdapter(MacroCoreMonthlySource source,MacroCoreMonthlyWritePort writer,MacroCoreMonthlySource.Batch frozen){
         this.source=Objects.requireNonNull(source);this.writer=Objects.requireNonNull(writer);this.frozen=Objects.requireNonNull(frozen);
@@ -85,7 +85,7 @@ public final class MacroCoreMonthlyMaterializeAdapter implements SyncJobRunner.A
     private void requireTarget(){if(!writer.targetId().equals(active.parameters().get("target_id")))throw new IllegalStateException("D104 physical target identity changed");}
     @Override public boolean recoveryRequired(String runId){return writer.unresolved();}
     @Override public Duration visibilityTimeout(){return Duration.ofSeconds(20);}
-    public MacroCoreMonthlyWritePort.Snapshot verifiedTarget(){return verifiedTarget;}
+    public MacroCoreMonthlyTargetSnapshot verifiedTarget(){return verifiedTarget;}
     public MacroCoreMonthlySource.Batch verifiedSource(){return verifiedSource;}
     public void requireUnchangedVerification()throws Exception{
         if(verifiedTarget==null||verifiedSource==null||!verifiedTarget.equals(writer.targetSnapshot()))throw new IllegalStateException("D104 lacks stable final actual verification");

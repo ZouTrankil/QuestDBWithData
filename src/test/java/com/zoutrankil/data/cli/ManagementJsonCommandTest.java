@@ -1,5 +1,11 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
+import com.zoutrankil.data.stock.application.StockBasicSyncService;
+import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
+
 import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.SyncRunLedger;
@@ -20,12 +26,17 @@ class ManagementJsonCommandTest {
     private final StockBasicSyncService legacy = mock(StockBasicSyncService.class);
     private final StockBasicGroupService group = mock(StockBasicGroupService.class);
     private CommandLineRunner cli() {
+        return cli(new LedgerManagementService(LedgerManagementService.DEFAULT_LEDGER_PATH));
+    }
+    private CommandLineRunner cli(LedgerManagementService ledgerManagement) {
         var d = StockBasicSyncAdapter.definition(true);
         var datasets = new DatasetRegistry(List.of(() -> StockBasicDataset.DEFINITION));
         var jobs = new SyncJobRegistry(List.of(d), datasets, Map.of(d.datasetId(),d.supportedModes()),
                 new SyncJobRegistry.Policies(Set.of(d.ratePolicyRef()),Set.of(d.slicePolicyRef()),Set.of(d.verificationPolicyRef())));
         return new CommandLineRunner(legacy,datasets,jobs,runner,group,mock(ReadGroupReader.class),
-                mock(StockBasicWriteGroupService.class),mock(StockBasicScheduleService.class));
+                mock(StockBasicWriteGroupService.class),mock(StockBasicScheduleService.class),
+                mock(ExchangeCalendarJobService.class),mock(StockDetailInfoJobService.class),
+                mock(IndexCatalogJobService.class),ledgerManagement);
     }
     private JsonNode output(CommandLineRunner cli, String... args) throws Exception {
         var buffer = new ByteArrayOutputStream();
@@ -80,6 +91,26 @@ class ManagementJsonCommandTest {
         assertEquals(ledger.get("run-one").state().name(),result.at("/runs/0/state").textValue());
         assertEquals("run-one",result.get("nextAfter").textValue());
         assertFalse(result.at("/runs/0").has("frozenJson"));
+        verifyNoInteractions(runner,legacy,group);
+    }
+    @Test void allManagementCommandsUseConfiguredLedgerAndAcceptAnExplicitOverride() throws Exception {
+        Path configured = temp.resolve("configured.sqlite"), explicit = temp.resolve("explicit.sqlite");
+        var first = new SyncRunLedger(configured);
+        first.createRun(new SyncRunLedger.Run("run-shared",null,"data.stock_basic",2,"2026-09-29","configured-target","{}"));
+        var second = new SyncRunLedger(explicit);
+        second.createRun(new SyncRunLedger.Run("run-shared",null,"data.stock_basic",2,"2026-09-29","explicit-target","{}"));
+        var command = cli(new LedgerManagementService(configured.toString()));
+        assertEquals("configured-target",output(command,"show-sync-history").at("/runs/0/targetId").textValue());
+        assertEquals("configured-target",output(command,"show-sync-run","--run","run-shared").at("/run/targetId").textValue());
+        assertTrue(output(command,"cancel-sync-run","--run","run-shared").path("cancellationRequested").booleanValue());
+        assertTrue(first.cancellationRequested("run-shared"));
+        assertFalse(second.cancellationRequested("run-shared"));
+        assertEquals("explicit-target",output(command,"show-sync-history","--ledger",explicit.toString()).at("/runs/0/targetId").textValue());
+        assertEquals("explicit-target",output(command,"show-sync-run","--ledger",explicit.toString(),"--run","run-shared").at("/run/targetId").textValue());
+        var cancelled = output(command,"cancel-sync-run","--ledger",explicit.toString(),"--run","run-shared");
+        assertTrue(cancelled.path("cancellationRequested").booleanValue());
+        assertEquals(second.get("run-shared").state().name(),cancelled.path("state").textValue());
+        assertTrue(second.cancellationRequested("run-shared"));
         verifyNoInteractions(runner,legacy,group);
     }
 }

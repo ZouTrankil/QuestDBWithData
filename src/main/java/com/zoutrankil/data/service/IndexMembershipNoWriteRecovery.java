@@ -36,7 +36,7 @@ final class IndexMembershipNoWriteRecovery {
         if(Files.exists(receipt)) {
             if(!json.readTree(IndexMembershipSourceEvidence.bounded(receipt,96*1024*1024)).equals(json.readTree(json.writeValueAsBytes(proof))))
                 throw new IllegalStateException("No-write membership completion receipt differs");
-        } else Files.writeString(receipt,json.writeValueAsString(proof),StandardOpenOption.CREATE_NEW);
+        } else FileEvidenceStore.writeNewUtf8(receipt,json.writeValueAsString(proof));
         Map<String,?> payload;
         if(count==0) payload=Map.of("sourceComplete",true,"returnedRows",0,"submittedRows",0,
                 "responseEvidence",source.responseEvidence(),"readbackEvidence",receipt.toString(),"checkpoint",actual.fingerprint());

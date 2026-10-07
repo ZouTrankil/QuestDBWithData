@@ -1,5 +1,7 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.IndexDailyBasicMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +20,7 @@ public class IndexDailyBasicReadRepository implements DatasetImplementation {
     public IndexDailyBasicReadRepository(QuestDbBoundedReader reader,
             @Value("${app.sync.index-daily-basic-table:java_d020_index_daily_basic_acceptance}") String table) {
         this.reader = Objects.requireNonNull(reader);
-        com.zoutrankil.data.service.IndexDailyBasicJobService.requireIsolatedTableName(table);
+        IsolatedTablePolicy.INDEX_DAILY_BASIC.require(table);
         this.table = table;
     }
     @Override public DatasetDefinition definition() { return IndexDailyBasicDataset.definition(table); }
@@ -29,7 +31,7 @@ public class IndexDailyBasicReadRepository implements DatasetImplementation {
     }
     public DatasetReadPage<IndexDailyBasic> findRange(String code, LocalDate fromInclusive, LocalDate toExclusive,
             int pageSize, DatasetReadCursor cursor) {
-        if (!com.zoutrankil.data.service.IndexDailyBasicUniverse.valid(code)
+        if (!com.zoutrankil.data.domain.policy.IndexDailyBasicUniverse.valid(code)
                 || fromInclusive == null || toExclusive == null || !fromInclusive.isBefore(toExclusive))
             throw new IllegalArgumentException("Known D020 index and increasing half-open date range required");
         return find(new DatasetReadQuery(COLUMNS, Map.of("ts_code", code), "trade_date",

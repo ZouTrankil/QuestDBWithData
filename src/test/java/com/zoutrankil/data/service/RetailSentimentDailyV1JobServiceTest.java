@@ -10,7 +10,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.RetailSentimentDailyV1MaterializationPort;
-import com.zoutrankil.data.repository.RetailSentimentDailyV1MaterializationPort.Snapshot;
+import com.zoutrankil.data.domain.RetailSentimentDailyV1Snapshot;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -30,7 +30,7 @@ class RetailSentimentDailyV1JobServiceTest {
     private static final String TARGET = "questdb-" + "a".repeat(64);
     private static final String CALENDAR = "calendar-31:8:8:" + "b".repeat(64);
     private static final String OTHER_TARGET = "questdb-" + "c".repeat(64);
-    private static final Snapshot CURRENT = snapshot(7, 10);
+    private static final RetailSentimentDailyV1Snapshot CURRENT = snapshot(7, 10);
     private static final List<RetailSentimentDailyV1> ROWS = List.of(
             new RetailSentimentDailyV1(START, 0.5, 1.2, 10.0, -2.0, 0.6, 2L, 1L, 0.2, 1L, 3L, 51.0, -1.0));
 
@@ -336,7 +336,7 @@ class RetailSentimentDailyV1JobServiceTest {
 
     @Test void isolatedFullRepairRunsThroughCanonicalFrozenMaterializationAndLedger() throws Exception {
         var setup = setup();
-        Snapshot invalid = new Snapshot(CURRENT.sourceId(), CURRENT.sourceDirectory(), CURRENT.sourceTableTxn(),
+        RetailSentimentDailyV1Snapshot invalid = new RetailSentimentDailyV1Snapshot(CURRENT.sourceId(), CURRENT.sourceDirectory(), CURRENT.sourceTableTxn(),
                 CURRENT.sourceSeqTxn(), CURRENT.sourceWriterTxn(), true, CURRENT.mvId(), CURRENT.mvDirectory(),
                 CURRENT.mvTxn(), CURRENT.mvSeqTxn(), CURRENT.mvWriterTxn(), true, false, false,
                 CURRENT.definitionSha(), CURRENT.refreshStarted(), CURRENT.refreshFinished(),
@@ -440,7 +440,7 @@ class RetailSentimentDailyV1JobServiceTest {
         verify(setup.port, times(1)).send(ROWS);
     }
 
-    private void assertPostReadbackDrift(Snapshot changed) throws Exception {
+    private void assertPostReadbackDrift(RetailSentimentDailyV1Snapshot changed) throws Exception {
         var setup = setup();
         var uncertain = uncertain(setup, "uncertain", request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE));
         when(setup.port.snapshot()).thenReturn(CURRENT, CURRENT, CURRENT, CURRENT, changed);
@@ -536,8 +536,8 @@ class RetailSentimentDailyV1JobServiceTest {
                 "sourceFingerprint", "unit-source", "readbackEvidence", "unit-native-readback", "writerStopped", stopped)));
     }
 
-    private static Snapshot snapshot(long sourceTxn, long outputTxn) {
-        return new Snapshot(11, "l2_daily_features~11", sourceTxn, sourceTxn, sourceTxn, true,
+    private static RetailSentimentDailyV1Snapshot snapshot(long sourceTxn, long outputTxn) {
+        return new RetailSentimentDailyV1Snapshot(11, "l2_daily_features~11", sourceTxn, sourceTxn, sourceTxn, true,
                 12, "mv_retail_sentiment_daily_v1~12", outputTxn, outputTxn, outputTxn, true, true, true,
                 RetailSentimentDailyV1MaterializationPort.DEFINITION_SHA, "2026-10-06T00:00:00Z", "2026-10-06T00:00:01Z",
                 sourceTxn, sourceTxn, "DAY", "valid");

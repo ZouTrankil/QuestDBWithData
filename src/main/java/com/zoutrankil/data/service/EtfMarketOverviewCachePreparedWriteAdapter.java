@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.EtfMarketOverviewDailyCacheMapper;
 import com.zoutrankil.data.repository.EtfMarketOverviewCacheDelegatedPort;
@@ -102,15 +104,14 @@ public final class EtfMarketOverviewCachePreparedWriteAdapter
         }
         if (!member.batch().fingerprint().equals(HexFormat.of().formatHex(payloadHash.digest())))
             throw new IllegalStateException("Prepared input exact canonical bytes differ from frozen payload fingerprint");
-        Files.writeString(artifact, JobDefinitionJson.mapper().writeValueAsString(Map.of(
+        FileEvidenceStore.writeNewUtf8(artifact,JobDefinitionJson.mapper().writeValueAsString(Map.of(
                 "datasetId", member.definition().datasetId(), "memberId", member.memberId(),
                 "groupBatch", actual.parameters().get("groupBatch"),
                 "memberBatch", actual.parameters().get("memberBatch"),
                 "planFingerprint", actual.parameters().get("planFingerprint"),
                 "payloadFingerprint", member.batch().fingerprint(), "rows", member.batch().rows(),
                 "canonicalPayloadLines", canonicalLines,
-                "semantics", "Caller assertions; original Python owner determines and publishes every value")),
-                StandardOpenOption.CREATE_NEW);
+                "semantics", "Caller assertions; original Python owner determines and publishes every value")));
         String artifactSha = HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256")
                 .digest(Files.readAllBytes(artifact)));
         var units = new ArrayList<EtfMarketOverviewCachePublicationEnvelope>();

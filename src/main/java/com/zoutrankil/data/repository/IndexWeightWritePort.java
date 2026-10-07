@@ -1,5 +1,7 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.IndexWeight;
 import com.zoutrankil.data.domain.IndexWeightDataset;
@@ -7,8 +9,6 @@ import com.zoutrankil.data.domain.IndexWeightKey;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.IndexWeightMapper;
-import com.zoutrankil.data.service.IndexWeightJobService;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
@@ -55,7 +55,7 @@ public final class IndexWeightWritePort implements VerifiedBatchExecutor.Port<In
     private volatile boolean uncertainSenderStopped;
 
     public IndexWeightWritePort(String table, String targetId, JdbcTemplate jdbc, QuestDB questdb) {
-        IndexWeightJobService.requireIsolatedTableName(table);
+        IsolatedTablePolicy.INDEX_WEIGHT.require(table);
         if (targetId == null || !targetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen D021 isolated target identity required");
         this.table = table; this.expectedTargetId = targetId;

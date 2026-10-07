@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.calendar.application.ExchangeCalendarCoverage;
+
 import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.repository.SyncScheduleStore;
 import org.junit.jupiter.api.Test;

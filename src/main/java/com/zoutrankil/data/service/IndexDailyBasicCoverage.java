@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.IndexDailyBasicWritePort;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.repository.SqliteLedgerSchema;
 import java.nio.file.*;
-import java.sql.DriverManager;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -164,13 +164,9 @@ public final class IndexDailyBasicCoverage {
         catch (RuntimeException invalid) { throw new IllegalStateException("Invalid frozen D020 date", invalid); }
     }
     private static boolean hasHistorySchema(Path path) throws Exception {
-        var names = new HashSet<String>();
-        try (var connection = DriverManager.getConnection("jdbc:sqlite:" + path.toUri().toASCIIString() + "?mode=ro");
-             var statement = connection.createStatement(); var rows = statement.executeQuery("SELECT name FROM sqlite_master WHERE type='table'")) {
-            while (rows.next()) names.add(rows.getString(1));
-        }
-        Set<String> required = Set.of("ledger_meta", "sync_runs", "sync_entries", "sync_events");
-        if (Collections.disjoint(names, required)) return false;
+        var names = SqliteLedgerSchema.tableNames(path);
+        var required = Set.of("ledger_meta", "sync_runs", "sync_entries", "sync_events");
+        if (java.util.Collections.disjoint(names, required)) return false;
         if (!names.containsAll(required)) throw new IllegalStateException("Partial D020 sync ledger schema");
         return true;
     }

@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.MarginZrz;
@@ -81,9 +83,9 @@ public final class MarginZrzSyncAdapter implements SyncJobRunner.Adapter<MarginZ
             body.put("fromInclusive",request.from());body.put("toInclusive",request.to());body.put("logicalDate",request.logicalDate());
             body.put("sourceSlices",verified.sourceReceipts());body.put("sourceRows",page.rows().size());body.put("stageReceipt",verified.receipt());
             body.put("publicationState",published.entry().state());body.put("publicationJournalId",published.entry().intent().id());body.put("complete",true);
-            byte[] bytes=JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true).writeValueAsBytes(body);
+            byte[] bytes=JobDefinitionJson.canonicalMapper().writeValueAsBytes(body);
             if(bytes.length>2*1024*1024)throw new IllegalStateException("D031 source completion receipt exceeds 2 MiB");
-            Files.write(completion,bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);
+            FileEvidenceStore.writeNew(completion,bytes);
             return new SyncJobRunner.SourceCompletion(1,page.rows().size(),true,completion.toString());
         }
     }

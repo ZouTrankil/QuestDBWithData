@@ -14,7 +14,7 @@ public final class EquityStyleMonthlyMaterializeAdapter implements SyncJobRunner
     private final EquityStyleMonthlyWritePort writer;
     private final EquityStyleMonthlySource.Batch frozen;
     private SyncJobDefinition.FrozenRequest active;
-    private EquityStyleMonthlyWritePort.Snapshot verifiedTarget;
+    private EquityStyleMonthlyTargetSnapshot verifiedTarget;
     private EquityStyleMonthlySource.Batch verifiedSource;
     public EquityStyleMonthlyMaterializeAdapter(EquityStyleMonthlySource source,EquityStyleMonthlyWritePort writer,EquityStyleMonthlySource.Batch frozen){
         this.source=Objects.requireNonNull(source);this.writer=Objects.requireNonNull(writer);this.frozen=Objects.requireNonNull(frozen);
@@ -84,7 +84,7 @@ public final class EquityStyleMonthlyMaterializeAdapter implements SyncJobRunner
     private void requireTarget(){if(!writer.targetId().equals(active.parameters().get("target_id")))throw new IllegalStateException("D103 physical target identity changed");}
     @Override public boolean recoveryRequired(String runId){return writer.unresolved();}
     @Override public Duration visibilityTimeout(){return Duration.ofSeconds(20);}
-    public EquityStyleMonthlyWritePort.Snapshot verifiedTarget(){return verifiedTarget;}
+    public EquityStyleMonthlyTargetSnapshot verifiedTarget(){return verifiedTarget;}
     public EquityStyleMonthlySource.Batch verifiedSource(){return verifiedSource;}
     public void requireUnchangedVerification()throws Exception{
         if(verifiedTarget==null||verifiedSource==null||!verifiedTarget.equals(writer.targetSnapshot()))throw new IllegalStateException("D103 lacks stable final actual verification");

@@ -1,5 +1,7 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.domain.RetailSentimentDailyV1Snapshot;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -19,8 +21,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 class RetailSentimentDailyV1CommandsTest {
     private static final LocalDate DATE = LocalDate.of(2026, 9, 17);
     private static final String TARGET = "questdb-" + "a".repeat(64);
-    private static final RetailSentimentDailyV1MaterializationPort.Snapshot SNAPSHOT =
-            new RetailSentimentDailyV1MaterializationPort.Snapshot(11, "l2_daily_features~11", 7,
+    private static final RetailSentimentDailyV1Snapshot SNAPSHOT =
+            new RetailSentimentDailyV1Snapshot(11, "l2_daily_features~11", 7,
                     7, 7, true, 12, "mv_retail_sentiment_daily_v1~12", 10, 4, 4, true,
                     true, true, RetailSentimentDailyV1MaterializationPort.DEFINITION_SHA,
                     "2026-10-06T00:00:00Z", "2026-10-06T00:00:01Z", 7, 7, "DAY", "valid");

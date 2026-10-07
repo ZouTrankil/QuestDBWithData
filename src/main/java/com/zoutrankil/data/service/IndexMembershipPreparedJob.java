@@ -65,10 +65,10 @@ public final class IndexMembershipPreparedJob {
             var prepared=IndexMembershipStaging.preparePrepared(before,rows,rows.getFirst().indexCode());
             byte[] sourceBytes=IndexMembershipSourceEvidence.bounded(receipt,IndexMembershipStorage.MAX_BYTES);
             String sourceHash=IndexMembershipSourceEvidence.hash(sourceBytes);
-            Files.writeString(folder.resolve("prepared.json"),JobDefinitionJson.mapper().writeValueAsString(Map.of(
+            FileEvidenceStore.writeNewUtf8(folder.resolve("prepared.json"),JobDefinitionJson.mapper().writeValueAsString(Map.of(
                     "runId",run,"targetId",target,"request",SyncRequestIdentity.snapshotJson(request),
                     "sourceKind","prepared-write-request","sourceReceipt",receipt.toString(),"sourceHash",sourceHash,
-                    "prepared",prepared)),StandardOpenOption.CREATE_NEW);
+                    "prepared",prepared)));
             check(cancelled);String publication=null;
             if(prepared.merge().requiresWrite()) {
                 submitted=true;submittedRows=prepared.rows().size();
@@ -89,7 +89,7 @@ public final class IndexMembershipPreparedJob {
             proof.put("sourceHash",sourceHash);proof.put("before",before);proof.put("actual",actual);
             proof.put("prepared",prepared);proof.put("publicationId",publication);proof.put("submittedStageRows",submittedRows);
             Path completed=folder.resolve("completion.json");
-            Files.writeString(completed,JobDefinitionJson.mapper().writeValueAsString(proof),StandardOpenOption.CREATE_NEW);
+            FileEvidenceStore.writeNewUtf8(completed,JobDefinitionJson.mapper().writeValueAsString(proof));
             var verification=Map.of("passed",true,"expectedRows",rows.size(),"actualRows",rows.size(),
                     "matchedRows",rows.size(),"mismatchedRows",0,"duplicateKeys",0,"missingKeys",0,
                     "readbackEvidence",completed.toString(),"sourceFingerprint",sourceHash,"writerStopped",true);

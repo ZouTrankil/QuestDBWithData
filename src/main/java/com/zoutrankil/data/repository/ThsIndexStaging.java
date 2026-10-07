@@ -53,8 +53,8 @@ public final class ThsIndexStaging {
         }
         if(!batch.isEmpty()) batches.add(List.copyOf(batch));
         String stage="java_ths_index_stage_"+UUID.randomUUID().toString().replace("-","");Files.createDirectories(evidence);
-        Files.writeString(evidence.resolve(stage+"-intent.json"),JobDefinitionJson.mapper().writeValueAsString(Map.of(
-                "stage",stage,"prepared",prepared,"batches",batches.size(),"maxBatchRows",250,"estimatedBatchBytes",256*1024)),StandardOpenOption.CREATE_NEW);
+        FileEvidenceStore.writeNewUtf8(evidence.resolve(stage+"-intent.json"),JobDefinitionJson.mapper().writeValueAsString(Map.of(
+                "stage",stage,"prepared",prepared,"batches",batches.size(),"maxBatchRows",250,"estimatedBatchBytes",256*1024)));
         jdbc.execute("CREATE TABLE "+stage+" ("+String.join(",",ThsIndexDataset.DEFINITION.columns().stream()
                 .map(c->"\""+c.storageName()+"\" "+c.storageType().name()).toList())
                 +") TIMESTAMP(update_time) PARTITION BY MONTH WAL DEDUP UPSERT KEYS(ts_code,update_time)");
@@ -80,9 +80,9 @@ public final class ThsIndexStaging {
         check(cancelled);var actual=new ThsIndexStorage(jdbc,stage).snapshot();
         if(!prepared.rows().equals(actual.rows())) throw new IllegalStateException("THS stage full-field mismatch; retain stage");
         Path receipt=evidence.resolve(stage+"-verified.json");
-        Files.writeString(receipt,JobDefinitionJson.mapper().writeValueAsString(Map.of("stage",stage,"snapshot",actual,
+        FileEvidenceStore.writeNewUtf8(receipt,JobDefinitionJson.mapper().writeValueAsString(Map.of("stage",stage,"snapshot",actual,
                 "batches",batches.size(),"inserted",prepared.merge().inserted(),"revised",prepared.merge().revised(),
-                "retainedAbsent",prepared.merge().retainedAbsent())),StandardOpenOption.CREATE_NEW);
+                "retainedAbsent",prepared.merge().retainedAbsent())));
         return new Verified(stage,actual,receipt.toString(),batches.size());
     }
     private static void check(BooleanSupplier cancelled) {

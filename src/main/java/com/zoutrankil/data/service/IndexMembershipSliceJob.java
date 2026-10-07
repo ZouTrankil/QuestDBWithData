@@ -49,8 +49,8 @@ public final class IndexMembershipSliceJob {
             throw new IllegalStateException("Reconcile uncertain membership runs before retry; request and target must remain frozen");
         String next="membership-"+UUID.randomUUID();Path folder=path.getParent().resolve("sync-evidence").resolve(next);
         Files.createDirectories(folder);
-        Files.writeString(folder.resolve("resume-intent.json"),JobDefinitionJson.mapper().writeValueAsString(
-                Map.of("priorRunId",priorRun,"request",prior.frozenJson(),"targetId",target)),StandardOpenOption.CREATE_NEW);
+        FileEvidenceStore.writeNewUtf8(folder.resolve("resume-intent.json"),JobDefinitionJson.mapper().writeValueAsString(
+                Map.of("priorRunId",priorRun,"request",prior.frozenJson(),"targetId",target)));
         return execute(next,null,request);
     }
     public Result execute(String run,String parent,SyncJobDefinition.FrozenRequest request) throws Exception {
@@ -93,9 +93,9 @@ public final class IndexMembershipSliceJob {
             if(!target.equals(StaticTargetIdentity.identify(jdbc,table,before.identity().id(),before.identity().directory())))
                 throw new IllegalStateException("Membership target changed after run creation");
             var prepared=IndexMembershipStaging.prepare(before,source.rows(),scope.l2Code());var merge=prepared.merge();
-            Files.writeString(folder.resolve("prepared.json"),JobDefinitionJson.mapper().writeValueAsString(Map.of(
+            FileEvidenceStore.writeNewUtf8(folder.resolve("prepared.json"),JobDefinitionJson.mapper().writeValueAsString(Map.of(
                     "runId",run,"targetId",target,"request",SyncRequestIdentity.snapshotJson(request),"scope",scope,
-                    "source",source,"prepared",prepared)),StandardOpenOption.CREATE_NEW);
+                    "source",source,"prepared",prepared)));
             hook.afterPrepared(run);
             check(cancelled);String publication=null;
             if(merge.requiresWrite()) {
@@ -112,7 +112,7 @@ public final class IndexMembershipSliceJob {
             proof.put("merge",merge);proof.put("publicationId",publication);proof.put("submittedStageRows",submittedRows);
             proof.put("sourceComplete",true);proof.put("checkpointBefore",before.fingerprint());proof.put("checkpointAfter",actual.fingerprint());
             Path receipt=folder.resolve("completion.json");
-            Files.writeString(receipt,JobDefinitionJson.mapper().writeValueAsString(proof),StandardOpenOption.CREATE_NEW);
+            FileEvidenceStore.writeNewUtf8(receipt,JobDefinitionJson.mapper().writeValueAsString(proof));
             SyncRunState state=sourceRows==0?SyncRunState.VERIFIED_EMPTY:SyncRunState.VERIFIED;
             Map<String,?> payload;
             if(sourceRows==0) payload=Map.of("sourceComplete",true,"returnedRows",0,"submittedRows",0,

@@ -1,7 +1,5 @@
 package com.zoutrankil.data.service;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.DatasetWritePreparation;
 import java.nio.file.*;
@@ -17,8 +15,7 @@ public final class WriteGroupJson {
     }
     public WriteGroupRequest parse(byte[] bytes) throws Exception {
         if (bytes == null || bytes.length > 64 * 1024 * 1024) throw new IllegalArgumentException("Write JSON exceeds 64 MiB");
-        var root = new ObjectMapper().enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
-                .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS).readTree(bytes);
+        var root = RequestJson.readTree(bytes);
         ReadGroupJson.fields(root, "batchId", "logicalDate", "members");
         var members = root.required("members");
         if (!members.isArray() || members.isEmpty() || members.size() > 64)
@@ -33,7 +30,7 @@ public final class WriteGroupJson {
             if (version != definition.schemaVersion()) throw new IllegalArgumentException("Write definition version differs");
             var input = member.required("rows");
             if (!input.isArray() || input.size() > 10000) throw new IllegalArgumentException("Bounded full rows required");
-            var columns = definition.columns().stream().map(DatasetDefinition.Column::logicalName).toArray(String[]::new);
+            var columns = Set.of(definition.columns().stream().map(DatasetDefinition.Column::logicalName).toArray(String[]::new));
             var rows = new ArrayList<DatasetValues>();
             for (var row : input) {
                 ReadGroupJson.fields(row, columns);

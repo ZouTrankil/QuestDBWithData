@@ -101,7 +101,8 @@ public final class ThsMemberJobService implements SyncJobOwner {
         String fingerprint = (String) request.parameters().get("payloadFingerprint");
         if (!batch.fingerprint().equals(fingerprint) || Files.size(receipt) > 16L * 1024 * 1024)
             throw new IllegalArgumentException("Prepared THS member batch differs from frozen fingerprint");
-        var proof = JobDefinitionJson.mapper().readTree(receipt.toFile());
+        var proof = JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(receipt,
+                16 * 1024 * 1024, () -> new IllegalArgumentException("Prepared THS member batch differs from frozen fingerprint")));
         if (!proof.path("sourceKind").asText().equals("prepared-write-request")
                 || !proof.path("targetId").asText().equals(targetId())
                 || !proof.path("fingerprint").asText().equals(fingerprint)
@@ -180,7 +181,7 @@ public final class ThsMemberJobService implements SyncJobOwner {
                     Instant.now().truncatedTo(ChronoUnit.MICROS), cancelled);
             else {
                 Path receipt = input.receipt().toAbsolutePath().normalize();
-                byte[] bytes = Files.readAllBytes(receipt);
+                byte[] bytes = FileEvidenceStore.readBounded(receipt, 16 * 1024 * 1024, () -> new IllegalStateException("Prepared THS member receipt changed after admission"));
                 var proof = JobDefinitionJson.mapper().readTree(bytes);
                 var mapper = new com.zoutrankil.data.mapper.ThsMemberMapper();
                 if (bytes.length > 16 * 1024 * 1024
@@ -191,7 +192,7 @@ public final class ThsMemberJobService implements SyncJobOwner {
                         || !JobDefinitionJson.mapper().valueToTree(input.rows().stream().map(mapper::values).toList())
                                 .equals(proof.path("rows")))
                     throw new IllegalStateException("Prepared THS member receipt changed after admission");
-                String hash = HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+                String hash = FileEvidenceStore.sha256(bytes);
                 source = new SyncJobRunner.Page<>(input.rows(), hash, receipt.toString(), null);
             }
             sourceCount = source.rows().size();
@@ -204,9 +205,9 @@ public final class ThsMemberJobService implements SyncJobOwner {
             if (!target.equals(StaticTargetIdentity.identify(jdbc, table,
                     prepared.before().identity().id(), prepared.before().identity().directory())))
                 throw new IllegalStateException("THS member target changed after run creation");
-            Files.write(folder.resolve("prepared.json"), JobDefinitionJson.mapper().writeValueAsBytes(Map.of(
+            FileEvidenceStore.writeNew(folder.resolve("prepared.json"),JobDefinitionJson.mapper().writeValueAsBytes(Map.of(
                     "runId", run, "targetId", target, "request", SyncRequestIdentity.snapshotJson(request),
-                    "source", source, "prepared", prepared)), StandardOpenOption.CREATE_NEW);
+                    "source", source, "prepared", prepared)));
             check(cancelled);
             if (staging.requiresWrite(prepared)) {
                 submitted = true;
@@ -231,7 +232,7 @@ public final class ThsMemberJobService implements SyncJobOwner {
             proof.put("before", prepared.before()); proof.put("actual", actual);
             proof.put("publicationId", publication); proof.put("sourceRows", sourceCount);
             proof.put("verifiedRows", sourceCount); proof.put("copiedOtherRows", copied);
-            Files.write(receipt, JobDefinitionJson.mapper().writeValueAsBytes(proof), StandardOpenOption.CREATE_NEW);
+            FileEvidenceStore.writeNew(receipt,JobDefinitionJson.mapper().writeValueAsBytes(proof));
             var verification = Map.of("passed", true, "expectedRows", sourceCount, "actualRows", sourceCount,
                     "matchedRows", sourceCount, "mismatchedRows", 0, "duplicateKeys", 0, "missingKeys", 0,
                     "readbackEvidence", receipt.toString(), "sourceFingerprint", source.sourceFingerprint(),

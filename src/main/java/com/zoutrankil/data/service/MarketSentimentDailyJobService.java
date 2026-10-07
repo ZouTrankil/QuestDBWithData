@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockFactorSource;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.table.MarketSentimentDailyRow;
 import com.zoutrankil.data.client.TushareClient;
@@ -8,17 +10,16 @@ import com.zoutrankil.data.repository.MarketSentimentDailyWritePort;
 import com.zoutrankil.data.repository.ReferencePublicationJournal;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.zoutrankil.data.repository.MarketSentimentDailyStorage;
 import org.springframework.stereotype.Service;
 import java.nio.file.*;
 import java.security.MessageDigest;
-import java.sql.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.BooleanSupplier;
 import static com.zoutrankil.data.domain.SyncJobDefinition.*;
-import static com.zoutrankil.data.service.MarketSentimentDailyCalculation.*;
+import static com.zoutrankil.data.domain.policy.MarketSentimentDailyCalculation.*;
 
 /** Explicit native Java rebuild. Reads existing dependency tables; never shells a Python owner. */
 @Service
@@ -26,15 +27,14 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
     public static final String JOB_ID="data.market_sentiment_daily";
     public static final List<String> SOURCES=List.of("stk_factor","daily_basic","stk_limit","stk_suspend","stk_st_daily","margin_detail","moneyflow","daily");
     public record Plan(FrozenRequest request,String targetId,LocalDate warmupFrom,List<String> dependencies,
-                       String sourcePin,MarketSentimentDailyWritePort.Snapshot targetBefore) {}
+                       String sourcePin,MarketSentimentDailyTargetSnapshot targetBefore) {}
     public record MaterializationResult(SyncJobRunner.Result result,int historyDates,long sourceRawRows,
                                         String sourceFingerprint,String fullTargetFingerprint,String evidence) {}
-    private final JdbcTemplate jdbc;private final Path ledgerPath;private final String table;private final TushareClient sourceClient;
-    public MarketSentimentDailyJobService(JdbcTemplate jdbc,TushareClient sourceClient,
-            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledger,
-            @Value("${app.sync.market-sentiment-table:market_sentiment_daily}") String table){
-        this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc.getDataSource()));this.jdbc.setQueryTimeout(120);this.jdbc.setFetchSize(2048);
-        ledgerPath=Path.of(ledger).toAbsolutePath().normalize();MarketSentimentDailyWritePort.requireTarget(table);this.table=table;this.sourceClient=Objects.requireNonNull(sourceClient);
+    private final MarketSentimentDailyStorage storage;private final Path ledgerPath;private final String table;private final TushareClient sourceClient;
+    public MarketSentimentDailyJobService(MarketSentimentDailyStorage storage,TushareClient sourceClient,
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledger){
+        this.storage=Objects.requireNonNull(storage);
+        ledgerPath=Path.of(ledger).toAbsolutePath().normalize();storage.requireTarget();this.table=storage.table();this.sourceClient=Objects.requireNonNull(sourceClient);
     }
     @Override public String datasetId(){return "market_sentiment_daily";}
     @Override public Set<Mode> supportedSyncModes(){return jobDefinition().supportedModes();}
@@ -67,7 +67,7 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
         if(mode!=Mode.MATERIALIZE)throw new IllegalArgumentException("Native sentiment owner currently supports MATERIALIZE only; interrupted publication uses its explicit recovery command");
         if(from==null||to==null||logicalDate==null||from.isAfter(to)||to.isAfter(logicalDate)||ChronoUnit.DAYS.between(from,to)>=366)
             throw new IllegalArgumentException("Explicit bounded from/to <= logicalDate, at most 366 calendar days required");
-        requireNoPendingPublication();var port=new MarketSentimentDailyWritePort(jdbc,table);var before=port.formalSnapshot();
+        requireNoPendingPublication();var port=storage.newWriter();var before=port.formalSnapshot();
         if(!before.wal())throw new IllegalStateException("Current sentiment contract requires its MONTH WAL formal table");
         String pin=sourcePin();LocalDate warmup=from.minusDays(1400);
         var request=jobDefinition().freeze(mode,Map.of("target_id",before.targetId(),"source_pin",pin,"target_hash",before.fingerprint(),"warmup_from",warmup),from,to,logicalDate);
@@ -77,7 +77,7 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
         if(plan==null||!plan.request.definition().equals(jobDefinition())||!plan.sourcePin.equals(plan.request.parameters().get("source_pin"))
                 ||!plan.targetId.equals(plan.request.parameters().get("target_id"))||!plan.warmupFrom.equals(plan.request.from().minusDays(1400)))
             throw new IllegalArgumentException("Frozen native sentiment plan required");
-        String run="market-sentiment-"+UUID.randomUUID();var ledger=new SyncRunLedger(ledgerPath);var port=new MarketSentimentDailyWritePort(jdbc,table);
+        String run="market-sentiment-"+UUID.randomUUID();var ledger=new SyncRunLedger(ledgerPath);var port=storage.newWriter();
         var adapter=new Adapter(plan,run,port);var runner=new SyncJobRunner<MarketSentimentDailyRow,Instant>(ledger,new DatasetIntervalLock(ledgerPath));
         var result=runner.run(run,null,plan.targetId,plan.request,adapter,()->Thread.currentThread().isInterrupted());
         return new MaterializationResult(result,adapter.historyDates,adapter.rawRows,adapter.sourceFingerprint,adapter.finalFingerprint,adapter.evidence==null?null:adapter.evidence.toString());
@@ -117,8 +117,8 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
                     JobDefinitionJson.mapper().writeValueAsString(Map.of("from",request.from(),"to",request.to(),"sourceFingerprint",sourceFingerprint,"sourceEvidence",evidence.toString(),"sourceEvidenceSha256",fileHash(evidence))));
             var entry=journal.create(intent);journaled=true;
             try{
-                check(cancelled);jdbc.execute("RENAME TABLE \""+table+"\" TO \""+backup+"\"");entry=journal.advance(entry,ReferencePublicationJournal.State.OLD_MOVED);
-                check(cancelled);jdbc.execute("RENAME TABLE \""+port.stage()+"\" TO \""+table+"\"");entry=journal.advance(entry,ReferencePublicationJournal.State.PUBLISHED);
+                check(cancelled);storage.rename(table,backup);entry=journal.advance(entry,ReferencePublicationJournal.State.OLD_MOVED);
+                check(cancelled);storage.rename(port.stage(),table);entry=journal.advance(entry,ReferencePublicationJournal.State.PUBLISHED);
                 var published=port.formalSnapshot();var retained=port.snapshot(backup);
                 if(published.tableId()!=stage.tableId()||!published.fingerprint().equals(stage.fingerprint())||retained.tableId()!=plan.targetBefore.tableId()
                         ||!retained.fingerprint().equals(plan.targetBefore.fingerprint()))throw new IllegalStateException("Published sentiment or retained backup differs");
@@ -137,28 +137,19 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
         MessageDigest sourceHash=MessageDigest.getInstance("SHA-256");
         for(LocalDate lower=plan.warmupFrom;!lower.isAfter(plan.request.to());){
             check(cancelled);LocalDate upper=lower.withDayOfMonth(1).plusMonths(1);if(upper.isAfter(plan.request.to().plusDays(1)))upper=plan.request.to().plusDays(1);
-            LocalDate[] date={null};var rows=new ArrayList<Stock>();var rawCodes=new HashSet<String>();int[] basicCount={0},limitCount={0},batchRows={0};
-            String sql="SELECT cast(sf.trade_date AS long) AS trade_micros,sf.ts_code,sf.close,sf.pre_close,sf.amount,db.turnover_rate,db.circ_mv,db.total_mv,db.pb,sl.up_limit,sl.down_limit,ss.is_suspended,st.is_st,db.ts_code AS basic_code,sl.ts_code AS limit_code"
-                    +" FROM "+bounded("stk_factor","trade_date,ts_code,close,pre_close,amount","trade_date")+" sf"
-                    +" LEFT JOIN "+bounded("daily_basic","trade_date,ts_code,turnover_rate,circ_mv,total_mv,pb","trade_date")+" db ON sf.ts_code=db.ts_code AND sf.trade_date=db.trade_date"
-                    +" LEFT JOIN "+bounded("stk_limit","trade_date,ts_code,up_limit,down_limit","trade_date")+" sl ON sf.ts_code=sl.ts_code AND sf.trade_date=sl.trade_date"
-                    +" LEFT JOIN "+bounded("stk_suspend","timestamp,ts_code,is_suspended","timestamp")+" ss ON sf.ts_code=ss.ts_code AND sf.trade_date=ss.timestamp"
-                    +" LEFT JOIN "+bounded("stk_st_daily","timestamp,ts_code,is_st","timestamp")+" st ON sf.ts_code=st.ts_code AND sf.trade_date=st.timestamp"
-                    +" ORDER BY sf.trade_date,sf.ts_code LIMIT 200001";
-            jdbc.query(sql,(org.springframework.jdbc.core.RowCallbackHandler)rs->{
-                if(++batchRows[0]>200000)throw new IllegalStateException("Historical month exceeds 200000-row budget");
-                // The shared cancellation supplier consults SQLite; keep it outside the per-row hot path.
-                if(batchRows[0]==1 || (batchRows[0]&1023)==0)check(cancelled);rawRows[0]++;
-                LocalDate current=date(rs);
-                if(date[0]!=null&&!date[0].equals(current)){finishDay(date[0],rows,rawCodes,basicCount[0],limitCount[0],expected,seen,days,gaps);rows.clear();rawCodes.clear();basicCount[0]=limitCount[0]=0;}
-                date[0]=current;String code=rs.getString("ts_code");if(code==null||!rawCodes.add(code))throw new IllegalStateException("Duplicate stock panel business key on "+current);
-                if(rs.getString("basic_code")!=null)basicCount[0]++;if(rs.getString("limit_code")!=null)limitCount[0]++;
-                double close=number(rs,"close"),previous=number(rs,"pre_close"),amount=number(rs,"amount"),turnover=number(rs,"turnover_rate"),circ=number(rs,"circ_mv"),mv=number(rs,"total_mv"),pb=number(rs,"pb"),up=number(rs,"up_limit"),down=number(rs,"down_limit");
-                boolean suspended=flag(rs.getObject("is_suspended")),st=flag(rs.getObject("is_st"));
-                String raw=current+"|"+code+"|"+close+"|"+previous+"|"+amount+"|"+turnover+"|"+circ+"|"+mv+"|"+pb+"|"+up+"|"+down+"|"+suspended+"|"+st+"\n";sourceHash.update(raw.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-                if(!suspended&&!st)rows.add(history.computeIfAbsent(code,k->new StockHistory()).prepare(code,close,previous,amount,turnover,circ,mv,pb,up,down));
-            },micros(lower),micros(upper),micros(lower),micros(upper),micros(lower),micros(upper),micros(lower),micros(upper),micros(lower),micros(upper));
-            if(date[0]!=null)finishDay(date[0],rows,rawCodes,basicCount[0],limitCount[0],expected,seen,days,gaps);lower=upper;
+            var rows=new ArrayList<Stock>();
+            rawRows[0]+=storage.readPanelMonth(lower,upper,()->check(cancelled),new MarketSentimentDailyStorage.PanelConsumer(){
+                @Override public void completeDay(LocalDate date,Set<String> codes,int basic,int limits){
+                    finishDay(date,rows,codes,basic,limits,expected,seen,days,gaps);rows.clear();
+                }
+                @Override public void accept(MarketSentimentDailyStorage.PanelRow row){
+                    LocalDate current=row.date();String code=row.code();
+                    double close=row.close(),previous=row.previous(),amount=row.amount(),turnover=row.turnover(),circ=row.circ(),mv=row.mv(),pb=row.pb(),up=row.up(),down=row.down();
+                    boolean suspended=row.suspended(),st=row.st();
+                    String raw=current+"|"+code+"|"+close+"|"+previous+"|"+amount+"|"+turnover+"|"+circ+"|"+mv+"|"+pb+"|"+up+"|"+down+"|"+suspended+"|"+st+"\n";sourceHash.update(raw.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                    if(!suspended&&!st)rows.add(history.computeIfAbsent(code,k->new StockHistory()).prepare(code,close,previous,amount,turnover,circ,mv,pb,up,down));
+                }
+            });lower=upper;
         }
         if(!seen.equals(expected.keySet()))throw new IllegalStateException("Sentiment source is missing requested trading dates: "+difference(expected.keySet(),seen));
         if(days.size()<120)throw new IllegalStateException("At least 120 historical trading dates required for sentiment rebuild");
@@ -195,25 +186,9 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
                     "factorEndpoint",StockFactorSource.SOURCE_ENDPOINT,"factorResponse",factors.rows(),"factorProbeRows",0,"decision","provider_empty_on_verified_listing_day");
         }catch(java.io.IOException failure){throw new IllegalStateException("Cannot establish provider evidence for factor gap: "+date+"/"+code,failure);}
     }
-    private Map<LocalDate,Set<String>> expectedDates(LocalDate from,LocalDate to){
-        var result=new TreeMap<LocalDate,Set<String>>();int[] count={0};jdbc.query("SELECT cast(trade_date AS long) AS trade_micros,ts_code FROM daily WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP) ORDER BY trade_date,ts_code LIMIT 2200001",
-                (org.springframework.jdbc.core.RowCallbackHandler)rs->{if(++count[0]>2200000)throw new IllegalStateException("Expected daily universe exceeds bounded row budget");var date=date(rs);
-                    if(!result.computeIfAbsent(date,d->new HashSet<>()).add(rs.getString("ts_code")))throw new IllegalStateException("Duplicate daily source key");},micros(from),micros(to.plusDays(1)));
-        if(result.isEmpty())throw new IllegalStateException("No authoritative daily trading dates in requested window");return result;
-    }
+    private Map<LocalDate,Set<String>> expectedDates(LocalDate from,LocalDate to){return storage.expectedDates(from,to);}
     private List<Map<String,Object>> enrich(List<Day> days,LocalDate from,LocalDate requestedFrom,LocalDate to,MessageDigest hash)throws Exception{
-        var margins=new TreeMap<LocalDate,double[]>();var exchanges=new TreeMap<LocalDate,Map<String,Long>>();
-        jdbc.query("SELECT trade_date,cast(trade_date AS long) AS trade_micros,sum(rzye) balance,sum(rzmre) buy,sum(rzche) repay,count() source_rows,"
-                +"sum(CASE WHEN ts_code LIKE '%.SH' THEN 1 ELSE 0 END) exchange_sh,"
-                +"sum(CASE WHEN ts_code LIKE '%.SZ' THEN 1 ELSE 0 END) exchange_sz,"
-                +"sum(CASE WHEN ts_code LIKE '%.BJ' THEN 1 ELSE 0 END) exchange_bj"
-                +" FROM margin_detail WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP) GROUP BY trade_date,trade_micros ORDER BY trade_date LIMIT 1801",
-                (org.springframework.jdbc.core.RowCallbackHandler)rs->{
-                    LocalDate date=date(rs);long sh=rs.getLong("exchange_sh"),sz=rs.getLong("exchange_sz"),bj=rs.getLong("exchange_bj");
-                    if(sh+sz+bj!=rs.getLong("source_rows"))throw new IllegalStateException("Margin source contains unrecognized exchange codes on "+date);
-                    if(margins.put(date,new double[]{number(rs,"balance"),number(rs,"buy"),number(rs,"repay")})!=null)throw new IllegalStateException("Duplicate margin aggregate date");
-                    exchanges.put(date,Map.of("SH",sh,"SZ",sz,"BJ",bj));if(margins.size()>1800)throw new IllegalStateException("Margin aggregate exceeds bounded date budget");
-                },micros(from),micros(to.plusDays(1)));
+        var marginData=storage.margins(from,to);var margins=marginData.margins();var exchanges=marginData.exchanges();
         var availability=new ArrayList<Map<String,Object>>();var excluded=new HashSet<LocalDate>();
         for(var day:days)if(!day.date.isBefore(requestedFrom)&&!day.date.isAfter(to)){
             // Only preceding observed dates establish scope. Today's incomplete
@@ -235,33 +210,18 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
         double[] filledBalance=new double[marginDates.size()];double last=Double.NaN;
         for(int i=0;i<marginDates.size();i++){LocalDate date=marginDates.get(i);double value=excluded.contains(date)?Double.NaN:margins.get(date)[0];if(finite(value))last=value;filledBalance[i]=last;}
         for(int i=0;i<marginDates.size();i++)changes.put(marginDates.get(i),i<5?Double.NaN:divide(filledBalance[i],filledBalance[i-5])-1);
-        var flows=new TreeMap<LocalDate,double[]>();jdbc.query("SELECT trade_date,cast(trade_date AS long) AS trade_micros,sum(net_mf_amount) net,sum(buy_lg_amount+buy_elg_amount-sell_lg_amount-sell_elg_amount) large_net FROM moneyflow WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP) GROUP BY trade_date,trade_micros ORDER BY trade_date LIMIT 1801",
-                (org.springframework.jdbc.core.RowCallbackHandler)rs->{flows.put(date(rs),new double[]{number(rs,"net"),number(rs,"large_net")});},micros(from),micros(to.plusDays(1)));
+        var flows=storage.flows(from,to);
         for(var d:days){var margin=margins.get(d.date);if(margin!=null&&!excluded.contains(d.date)){d.put("margin_buy_sell_ratio",divide(margin[1],margin[2]));d.put("margin_buy_amount_ratio",divide(margin[1],d.get("total_amount")*1000));d.put("margin_balance_change_5d",changes.get(d.date));}
             else{d.put("margin_buy_sell_ratio",Double.NaN);d.put("margin_buy_amount_ratio",Double.NaN);d.put("margin_balance_change_5d",Double.NaN);}
             var flow=flows.get(d.date);if(flow!=null){d.put("moneyflow_net_amount_ratio",divide(flow[0],d.get("total_amount")/10));d.put("moneyflow_large_net_ratio",divide(flow[1],d.get("total_amount")/10));}
             hash.update((d.date+"|"+Arrays.toString(margin)+"|"+Arrays.toString(flow)+"\n").getBytes(java.nio.charset.StandardCharsets.UTF_8));}
         hash.update(canonicalBytes(availability));return List.copyOf(availability);
     }
-    private String sourcePin()throws Exception{
-        var pins=new ArrayList<Object>();for(String source:SOURCES){var metadata=jdbc.queryForList("SELECT id,directoryName,walEnabled,table_txn,table_row_count FROM tables() WHERE table_name=?",source);
-            if(metadata.size()!=1)throw new IllegalStateException("Required source table missing: "+source);var item=new LinkedHashMap<String,Object>(metadata.getFirst());item.put("table",source);
-            if(Boolean.TRUE.equals(item.get("walEnabled"))){var frontier=jdbc.queryForList("SELECT suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name=?",source);
-                if(frontier.size()!=1)throw new IllegalStateException("Source WAL metadata missing: "+source);var wal=frontier.getFirst();
-                if(!com.zoutrankil.data.repository.QuestDbWriteChecks.walSettled(jdbc,source))
-                    throw new IllegalStateException("Source WAL is unsettled: "+source);item.put("wal",wal);}
-            pins.add(item);}
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(canonicalBytes(pins)));
-    }
-    private void requireNoPendingPublication()throws Exception{
-        if(!Files.isRegularFile(ledgerPath))return;
-        try(var db=DriverManager.getConnection("jdbc:sqlite:"+ledgerPath);var exists=db.prepareStatement("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='reference_publications'")){try(var r=exists.executeQuery()){if(!r.next()||r.getInt(1)==0)return;}
-            try(var query=db.prepareStatement("SELECT run_id FROM reference_publications WHERE dataset='market_sentiment_daily' AND state<>'VERIFIED' LIMIT 1");var r=query.executeQuery()){
-                if(r.next())throw new IllegalStateException("Sentiment publication requires explicit reconciliation before another run: "+r.getString(1));}}
-    }
-    public SyncRunLedger.Entry status(String run)throws Exception{return SyncRunLedger.openReadOnly(ledgerPath).get(run);}
+    private String sourcePin()throws Exception{return storage.sourcePin(SOURCES);}
+    private void requireNoPendingPublication()throws Exception{storage.requireNoPendingPublication(ledgerPath);}
+    public LedgerReadModels.Entry status(String run)throws Exception{return LedgerReadModels.entry(SyncRunLedger.openReadOnly(ledgerPath).get(run));}
     /** Complete a previously verified stage only with explicit proof that its former writer stopped. */
-    public MarketSentimentDailyWritePort.Snapshot finishInterrupted(String runId,boolean writerStopped)throws Exception{
+    public MarketSentimentDailyTargetSnapshot finishInterrupted(String runId,boolean writerStopped)throws Exception{
         if(!writerStopped)throw new IllegalArgumentException("Explicit stopped-writer proof required");
         var ledger=new SyncRunLedger(ledgerPath);var run=ledger.getRun(runId);if(!JOB_ID.equals(run.jobId()))throw new IllegalArgumentException("Run belongs to another owner");
         var journal=new ReferencePublicationJournal(ledgerPath,datasetId());var entry=journal.forRun(runId);var intent=entry.intent();
@@ -275,7 +235,7 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
         var children=ledger.entries(runId,null,100);var slices=children.stream().filter(e->e.kind()==SyncRunLedger.Kind.SLICE).toList();
         var attempts=children.stream().filter(e->e.kind()==SyncRunLedger.Kind.ATTEMPT).toList();
         if(slices.size()!=1||slices.getFirst().state()!=SyncRunState.VERIFIED||attempts.size()!=1)throw new IllegalStateException("Recovery requires one fully verified native source slice");
-        var port=new MarketSentimentDailyWritePort(jdbc,table);var locks=new DatasetIntervalLock(ledgerPath);var lease=locks.findOwned(runId,DatasetIntervalLock.Scope.allDates(datasetId()));
+        var port=storage.newWriter();var locks=new DatasetIntervalLock(ledgerPath);var lease=locks.findOwned(runId,DatasetIntervalLock.Scope.allDates(datasetId()));
         if(entry.state()!=ReferencePublicationJournal.State.VERIFIED){if(lease==null)throw new IllegalStateException("Uncertain publication lease missing");journal.requireLease(lease,true);
             boolean targetOld=identityMatches(intent.target(),intent.originalId()),targetNew=identityMatches(intent.target(),intent.replacementId()),
                     backupOld=identityMatches(intent.backup(),intent.originalId()),stageNew=identityMatches(intent.stage(),intent.replacementId());
@@ -285,8 +245,8 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
             if(!old.fingerprint().equals(intent.beforeFingerprint())||!replacement.fingerprint().equals(intent.afterFingerprint()))throw new IllegalStateException("Recovery content fingerprint differs");
             if(entry.state()!=ReferencePublicationJournal.State.IN_DOUBT)entry=journal.advance(entry,ReferencePublicationJournal.State.IN_DOUBT);
             entry=journal.advance(entry,ReferencePublicationJournal.State.RESUMING);
-            try{if(targetOld)jdbc.execute("RENAME TABLE \""+intent.target()+"\" TO \""+intent.backup()+"\"");
-                if(!targetNew)jdbc.execute("RENAME TABLE \""+intent.stage()+"\" TO \""+intent.target()+"\"");
+            try{if(targetOld)storage.rename(intent.target(),intent.backup());
+                if(!targetNew)storage.rename(intent.stage(),intent.target());
                 entry=journal.advance(entry,ReferencePublicationJournal.State.PUBLISHED);
                 var actual=port.formalSnapshot();var backup=port.snapshot(intent.backup());
                 if(actual.tableId()!=intent.replacementId()||backup.tableId()!=intent.originalId()||!actual.fingerprint().equals(intent.afterFingerprint())||!backup.fingerprint().equals(intent.beforeFingerprint()))
@@ -302,18 +262,12 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
         if(lease!=null){if(!lease.inDoubt()){locks.retainInDoubt(lease);lease=locks.findOwned(runId,lease.scope());}locks.releaseAfterReconciliation(lease,true,true);}
         return actual;
     }
-    private boolean tableExists(String name){return !jdbc.queryForList("SELECT id FROM tables() WHERE table_name=?",name).isEmpty();}
-    private boolean identityMatches(String name,long id){var found=jdbc.queryForList("SELECT id FROM tables() WHERE table_name=?",name);return found.size()==1&&found.getFirst().get("id") instanceof Number n&&n.longValue()==id;}
+    private boolean tableExists(String name){return storage.tableExists(name);}
+    private boolean identityMatches(String name,long id){return storage.identityMatches(name,id);}
     private static String fileHash(Path path)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path)));}
-    private static byte[] canonicalBytes(Object value)throws Exception{return JobDefinitionJson.mapper().configure(com.fasterxml.jackson.databind.SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true).writeValueAsBytes(value);}
+    private static byte[] canonicalBytes(Object value)throws Exception{return JobDefinitionJson.canonicalMapper().writeValueAsBytes(value);}
     private static void writeEvidence(Path path,Object evidence)throws Exception{byte[] bytes=JobDefinitionJson.mapper().writeValueAsBytes(evidence);
         try(var channel=java.nio.channels.FileChannel.open(path,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE)){var buffer=java.nio.ByteBuffer.wrap(bytes);while(buffer.hasRemaining())channel.write(buffer);channel.force(true);}}
-    private static long micros(LocalDate date){return MarketSentimentDailyWritePort.micros(date.atStartOfDay().toInstant(ZoneOffset.UTC));}
-    private static String bounded(String table,String columns,String timestamp){return "(SELECT "+columns+" FROM "+table+" WHERE "+timestamp+">=cast(? AS TIMESTAMP) AND "+timestamp+"<cast(? AS TIMESTAMP))";}
-    private static LocalDate date(ResultSet rs)throws SQLException{Object raw=rs.getObject("trade_micros");if(!(raw instanceof Number n))throw new SQLException("Explicit trading date epoch required");
-        var carrier=MarketSentimentDailyWritePort.fromMicros(n.longValue());var utc=carrier.atOffset(ZoneOffset.UTC);if(!utc.toLocalTime().equals(LocalTime.MIDNIGHT))throw new SQLException("Trading date is not an exact calendar carrier");return utc.toLocalDate();}
-    private static double number(ResultSet rs,String field)throws SQLException{double value=rs.getDouble(field);if(rs.wasNull()||Double.isNaN(value))return Double.NaN;if(!finite(value))throw new SQLException("Nonfinite source value: "+field);return value;}
-    private static boolean flag(Object value){return Boolean.TRUE.equals(value)||value instanceof Number n&&n.doubleValue()==1;}
     private static void check(BooleanSupplier cancelled){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new java.util.concurrent.CancellationException("Sentiment calculation cancelled");}
     private static <T> Set<T> difference(Set<T> expected,Set<T> seen){var values=new HashSet<>(expected);values.removeAll(seen);return values;}
 }

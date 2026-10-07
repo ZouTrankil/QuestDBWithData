@@ -33,7 +33,7 @@ final class ThsIndexNoWriteRecovery {
         if(Files.exists(receipt)) {
             if(!json.readTree(receipt.toFile()).equals(json.readTree(json.writeValueAsBytes(proof))))
                 throw new IllegalStateException("No-write completion receipt differs");
-        } else Files.writeString(receipt,json.writeValueAsString(proof),StandardOpenOption.CREATE_NEW);
+        } else FileEvidenceStore.writeNewUtf8(receipt,json.writeValueAsString(proof));
         var payload=new LinkedHashMap<String,Object>();payload.put("evidence",receipt.toString());payload.put("checkpoint",actual.fingerprint());
         payload.put("verification",Map.of("passed",true,"expectedRows",count,"actualRows",count,"matchedRows",count,
                 "mismatchedRows",0,"duplicateKeys",0,"missingKeys",0,"readbackEvidence",receipt.toString(),

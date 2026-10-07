@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
+
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.*;
@@ -27,13 +29,13 @@ class ExchangeCalendarOwnerLiveTest {
                     +"TIMESTAMP(cal_date) PARTITION BY YEAR WAL DEDUP UPSERT KEYS(exchange,cal_date)");
             boolean verified=false;
             try {
-                var owner=new ExchangeCalendarJobService(ctx.getBean(TusharePageService.class),jdbc,ctx.getBean(QuestDB.class),
-                        ctx.getBean(QuestDbProperties.class),ledger.toString(),table);
+                var owner=new ExchangeCalendarJobService(ctx.getBean(TusharePageService.class),
+                        new com.zoutrankil.data.calendar.storage.ExchangeCalendarQuestDbTarget(table,jdbc,ctx.getBean(QuestDB.class),ctx.getBean(QuestDbProperties.class)),ledger.toString());
                 LocalDate from=LocalDate.of(2026,9,25),end=from.plusDays(3);var exchanges=List.of("SSE","SZSE");
                 var first=owner.run(exchanges,from,from.plusDays(1),end,null);
                 assertEquals(SyncRunState.VERIFIED,first.state(),first.errorCode());
-                var reopened=new ExchangeCalendarJobService(ctx.getBean(TusharePageService.class),jdbc,ctx.getBean(QuestDB.class),
-                        ctx.getBean(QuestDbProperties.class),ledger.toString(),table);
+                var reopened=new ExchangeCalendarJobService(ctx.getBean(TusharePageService.class),
+                        new com.zoutrankil.data.calendar.storage.ExchangeCalendarQuestDbTarget(table,jdbc,ctx.getBean(QuestDB.class),ctx.getBean(QuestDbProperties.class)),ledger.toString());
                 var plan=reopened.plan(exchanges,from,end,end,null);
                 assertEquals(4,plan.checkedTargetRows());assertEquals(from,plan.request().from());
                 assertEquals(Map.of("SSE",from.plusDays(1),"SZSE",from.plusDays(1)),plan.checkpointCandidates());

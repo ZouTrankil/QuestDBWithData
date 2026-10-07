@@ -1,5 +1,6 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import java.nio.file.*;
@@ -54,8 +55,8 @@ public final class IndexMembershipClassificationSource {
                 "observedAt",Instant.now(),"completion",completed,"rows",raw));
         if(bytes.length>1024*1024) throw new IllegalArgumentException("Classification evidence exceeds 1 MiB");
         Files.createDirectories(evidence);Path receipt=evidence.resolve("classification-"+UUID.randomUUID()+".json");
-        Files.write(receipt,bytes,StandardOpenOption.CREATE_NEW);
-        return new Catalog(typed,HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes)),receipt.toString());
+        FileEvidenceStore.writeNew(receipt,bytes);
+        return new Catalog(typed,FileEvidenceStore.sha256(bytes),receipt.toString());
     }
     private static Industry decode(Map<String,JsonNode> row) {
         return new Industry(text(row,"index_code"),text(row,"industry_name"),text(row,"industry_code"),text(row,"parent_code"),
@@ -64,9 +65,9 @@ public final class IndexMembershipClassificationSource {
     /** Rebuild scope identities from the frozen bytes, never from caller-supplied typed rows. */
     public static Catalog reopen(Path receipt,String fingerprint) throws Exception {
         if(fingerprint==null || !fingerprint.matches("[0-9a-f]{64}")) throw new IllegalArgumentException("Classification SHA-256 required");
-        byte[] bytes;
-        try(var input=Files.newInputStream(receipt)) { bytes=input.readNBytes(1024*1024+1); }
-        if(bytes.length>1024*1024 || !HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes)).equals(fingerprint))
+        byte[] bytes = FileEvidenceStore.readBounded(receipt, 1024*1024,
+                () -> new IllegalArgumentException("Frozen classification receipt changed or exceeds bound"));
+        if(!FileEvidenceStore.sha256(bytes).equals(fingerprint))
             throw new IllegalArgumentException("Frozen classification receipt changed or exceeds bound");
         var json=JobDefinitionJson.mapper();var proof=json.readTree(bytes);var rows=proof.path("rows");
         if(!proof.path("endpoint").asText().equals("index_classify")

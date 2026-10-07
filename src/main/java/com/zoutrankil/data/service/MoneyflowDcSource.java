@@ -1,12 +1,12 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.MoneyflowDcMapper;
 import java.nio.file.*;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -41,7 +41,8 @@ public final class MoneyflowDcSource {
 
     public static SyncJobRunner.Page<MoneyflowDc> reopen(Path receipt,String fingerprint,LocalDate expectedDate)throws Exception {
         Path path=receipt.toAbsolutePath().normalize(); if(fingerprint==null||!fingerprint.matches("[0-9a-f]{64}")||!Files.isRegularFile(path)||Files.size(path)>MAX_EVIDENCE_BYTES)throw new IllegalArgumentException("Bounded moneyflow_dc receipt and SHA-256 required");
-        byte[] bytes=Files.readAllBytes(path); if(!sha(bytes).equals(fingerprint))throw new IllegalStateException("moneyflow_dc receipt SHA mismatch"); var json=JobDefinitionJson.mapper(); JsonNode proof=json.readTree(bytes);
+        byte[] bytes=FileEvidenceStore.readBounded(path, MAX_EVIDENCE_BYTES,
+                () -> new IllegalArgumentException("Bounded moneyflow_dc receipt and SHA-256 required")); if(!sha(bytes).equals(fingerprint))throw new IllegalStateException("moneyflow_dc receipt SHA mismatch"); var json=JobDefinitionJson.mapper(); JsonNode proof=json.readTree(bytes);
         if(!"moneyflow_dc".equals(proof.path("endpoint").asText())||!proof.path("sourceComplete").asBoolean(false)||!expectedDate.toString().equals(proof.path("tradeDate").asText())
                 ||proof.path("apiMaximumRows").asInt(-1)!=API_ROW_CAP||!proof.path("rawRows").isArray()||proof.path("returnedRows").asInt(-1)!=proof.path("rawRows").size()
                 ||proof.path("rawRows").size()>MAX_DAILY_ROWS||!json.valueToTree(FIELDS).equals(proof.path("fields"))||!expectedDate.format(BASIC).equals(proof.path("parameters").path("trade_date").asText()))
@@ -75,10 +76,11 @@ public final class MoneyflowDcSource {
         for(String field:FIELDS)if(!Set.of("ts_code","trade_date","name").contains(field)){JsonNode v=row.get(field);if(v!=null&&!v.isNull()&&!v.isNumber()&&!v.isTextual())throw new IllegalArgumentException("moneyflow_dc numeric scalar required: "+field);}
     }
     private static byte[] body(LocalDate date,Map<String,Object> params,List<Map<String,JsonNode>> rows,String version,boolean complete,Exception failure,List<Map<String,Object>> pageProofs)throws Exception {
-        var json=JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true);var body=new LinkedHashMap<String,Object>();body.put("receiptVersion",2);body.put("dailyRowBound",MAX_DAILY_ROWS);body.put("pageSize",PAGE_SIZE);body.put("pageProofs",pageProofs);body.put("sourceKind","tushare");body.put("endpoint","moneyflow_dc");body.put("parameters",params);body.put("fields",FIELDS);body.put("tradeDate",date.toString());body.put("apiMaximumRows",API_ROW_CAP);body.put("returnedRows",rows.size());body.put("rawRows",rows);body.put("sourceComplete",complete);if(version!=null)body.put("sourceVersion",version);if(failure!=null)body.put("failureType",failure.getClass().getSimpleName());return json.writeValueAsBytes(body);
+        var json=JobDefinitionJson.canonicalMapper();var body=new LinkedHashMap<String,Object>();body.put("receiptVersion",2);body.put("dailyRowBound",MAX_DAILY_ROWS);body.put("pageSize",PAGE_SIZE);body.put("pageProofs",pageProofs);body.put("sourceKind","tushare");body.put("endpoint","moneyflow_dc");body.put("parameters",params);body.put("fields",FIELDS);body.put("tradeDate",date.toString());body.put("apiMaximumRows",API_ROW_CAP);body.put("returnedRows",rows.size());body.put("rawRows",rows);body.put("sourceComplete",complete);if(version!=null)body.put("sourceVersion",version);if(failure!=null)body.put("failureType",failure.getClass().getSimpleName());return json.writeValueAsBytes(body);
     }
     private void persistUnverified(LocalDate date,Map<String,Object> params,List<Map<String,JsonNode>> rows,String version,Exception failure)throws Exception { byte[] bytes=body(date,params,rows,version,false,failure,List.of());if(bytes.length>MAX_EVIDENCE_BYTES)throw new IllegalStateException("Unverified moneyflow_dc response exceeds evidence bound",failure);Files.createDirectories(evidenceRoot);persist(evidenceRoot.resolve("unverified-"+date.format(BASIC)+"-"+sha(bytes)+".json"),bytes); }
-    private static void persist(Path path,byte[] bytes)throws Exception { try{Files.write(path,bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);}catch(FileAlreadyExistsException exists){if(!Arrays.equals(Files.readAllBytes(path),bytes))throw new IllegalStateException("Conflicting deterministic moneyflow_dc receipt",exists);} }
+    private static void persist(Path path,byte[] bytes)throws Exception { try{FileEvidenceStore.writeNew(path,bytes);}catch(FileAlreadyExistsException exists){if(!Arrays.equals(FileEvidenceStore.readBounded(path, Math.max(1, bytes.length),
+                    () -> new IllegalStateException("Conflicting deterministic moneyflow_dc receipt", exists)),bytes))throw new IllegalStateException("Conflicting deterministic moneyflow_dc receipt",exists);} }
     private static String value(Map<String,JsonNode> row,String name){JsonNode v=row.get(name);return v==null||v.isNull()?"":v.asText();}
-    private static String sha(byte[] bytes)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));}
+    private static String sha(byte[] bytes)throws Exception{return FileEvidenceStore.sha256(bytes);}
 }

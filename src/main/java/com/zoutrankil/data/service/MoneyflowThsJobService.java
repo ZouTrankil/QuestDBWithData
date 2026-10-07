@@ -5,7 +5,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.MoneyflowThsDataset;
 import com.zoutrankil.data.domain.MoneyflowThs;
 import com.zoutrankil.data.domain.MoneyflowThsKey;
-import com.zoutrankil.data.repository.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.repository.MoneyflowThsWritePort;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import io.questdb.client.QuestDB;

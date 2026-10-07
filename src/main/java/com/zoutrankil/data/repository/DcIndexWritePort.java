@@ -3,7 +3,6 @@ package com.zoutrankil.data.repository;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.DcIndexMapper;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;

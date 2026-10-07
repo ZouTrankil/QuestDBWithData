@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.DcIndexWritePort;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.repository.SqliteLedgerSchema;
 import java.nio.file.*;
-import java.sql.DriverManager;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -24,8 +24,11 @@ public final class DcIndexCoverage {
     private DcIndexCoverage(){}
 
     static boolean hasLedger(Path path)throws Exception{
-        var names=new HashSet<String>();try(var c=DriverManager.getConnection("jdbc:sqlite:"+path.toAbsolutePath().normalize().toUri().toASCIIString()+"?mode=ro");var s=c.createStatement();var r=s.executeQuery("SELECT name FROM sqlite_master WHERE type='table'")){while(r.next())names.add(r.getString(1));}
-        Set<String> need=Set.of("ledger_meta","sync_runs","sync_entries","sync_events");if(Collections.disjoint(names,need))return false;if(!names.containsAll(need))throw new IllegalStateException("Partial D023 sync ledger schema");return true;
+        var names = SqliteLedgerSchema.tableNames(path.toAbsolutePath().normalize());
+        var required = Set.of("ledger_meta","sync_runs","sync_entries","sync_events");
+        if (java.util.Collections.disjoint(names, required)) return false;
+        if (!names.containsAll(required)) throw new IllegalStateException("Partial D023 sync ledger schema");
+        return true;
     }
     public static Optional<Coverage> checkpoint(Path path,String targetId,DcIndexTradingDates calendar)throws Exception{
         Objects.requireNonNull(path);Objects.requireNonNull(targetId);Objects.requireNonNull(calendar);if(!Files.isRegularFile(path)||!hasLedger(path))return Optional.empty();

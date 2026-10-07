@@ -1,12 +1,12 @@
 package com.zoutrankil.data.repository;
+
+import com.zoutrankil.data.domain.MoneyflowDataset;
 import com.zoutrankil.data.service.MoneyflowSource;
-import com.zoutrankil.data.service.MoneyflowJobService;
 import com.zoutrankil.data.service.MoneyflowSyncJobOwner;
 
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.MoneyflowMapper;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
@@ -26,7 +26,7 @@ public final class MoneyflowWritePort implements VerifiedBatchExecutor.Port<Mone
         @Override public byte[] canonicalBytes(Moneyflow row){try{return JobDefinitionJson.mapper().writeValueAsBytes(new MoneyflowMapper().values(row).asMap());}catch(Exception e){throw new IllegalArgumentException("Cannot encode moneyflow row",e);}}
         @Override public int estimatedTransportBytes(Moneyflow row,byte[] canonical){return Math.addExact(Math.multiplyExact(canonical.length,4),256);}};
     private final String table,targetId;private final JdbcTemplate jdbc;private final QuestDB questdb;private final MoneyflowMapper mapper=new MoneyflowMapper();private volatile boolean senderStopped;
-    public MoneyflowWritePort(String table,String targetId,JdbcTemplate jdbc,QuestDB questdb){MoneyflowJobService.requireExecutionTableName(table);if(targetId==null||!targetId.matches("static-v2-[0-9a-f]{64}"))throw new IllegalArgumentException("Frozen D024 physical target identity required");this.table=table;this.targetId=targetId;this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());this.jdbc.setQueryTimeout(20);this.jdbc.setMaxRows(30001);this.questdb=Objects.requireNonNull(questdb);}
+    public MoneyflowWritePort(String table,String targetId,JdbcTemplate jdbc,QuestDB questdb){MoneyflowDataset.requireExecutionTable(table);if(targetId==null||!targetId.matches("static-v2-[0-9a-f]{64}"))throw new IllegalArgumentException("Frozen D024 physical target identity required");this.table=table;this.targetId=targetId;this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());this.jdbc.setQueryTimeout(20);this.jdbc.setMaxRows(30001);this.questdb=Objects.requireNonNull(questdb);}
     @Override public void preflight(){requireTarget();QuestDbWriteChecks.preflight(jdbc,table,MoneyflowDataset.definition(table));requireTarget();}
     @Override public void send(List<Moneyflow> rows)throws Exception{if(rows==null||rows.isEmpty()||rows.size()>MAX_BATCH_ROWS)throw new IllegalArgumentException("Nonempty moneyflow batch of at most 250 rows required");preflight();senderStopped=false;
         DatasetWritePreparation.prepare(MoneyflowDataset.definition(table),rows,mapper::values,new DatasetWritePreparation.Limits(MAX_BATCH_ROWS,MAX_BATCH_BYTES));long bytes=0;for(var row:rows){bytes=Math.addExact(bytes,CODEC.estimatedTransportBytes(row,CODEC.canonicalBytes(row)));if(bytes>MAX_BATCH_BYTES)throw new IllegalArgumentException("moneyflow batch exceeds 1 MiB before send");}

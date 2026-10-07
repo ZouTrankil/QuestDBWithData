@@ -1,11 +1,13 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
+
 import com.zoutrankil.data.service.DatasetIntervalLock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.*;
-import static com.zoutrankil.data.repository.StockDetailPublicationJournal.State;
+import static com.zoutrankil.data.stock.storage.StockDetailPublicationJournal.State;
 
 class StockDetailPublicationJournalTest {
     @TempDir Path root;

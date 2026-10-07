@@ -1,5 +1,7 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.stock.storage.StockBasicWritePort;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.QuestDataApplication;
@@ -7,7 +9,7 @@ import com.zoutrankil.data.client.TushareClient;
 import com.zoutrankil.data.client.dto.TushareStockBasicDto;
 import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.domain.StockBasicSnapshot;
-import com.zoutrankil.data.mapper.StockBasicMapper;
+import com.zoutrankil.data.stock.mapper.StockBasicMapper;
 import com.zoutrankil.data.service.TusharePageService;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import io.questdb.client.QuestDB;

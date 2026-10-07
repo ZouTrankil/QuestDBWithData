@@ -1,5 +1,8 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.stock.application.StockBasicJobDefinition;
+import com.zoutrankil.data.stock.storage.StockBasicWritePort;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.client.TushareClient;

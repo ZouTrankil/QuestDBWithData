@@ -118,8 +118,8 @@ public final class IndexCatalogJobService implements SyncJobOwner {
             throw new IllegalStateException("Reconcile uncertain writes before replaying bounded catalog source");
         String next="index-catalog-"+UUID.randomUUID();
         Path folder=path.getParent().resolve("sync-evidence").resolve(next);Files.createDirectories(folder);
-        Files.writeString(folder.resolve("resume-intent.json"),JobDefinitionJson.mapper().writeValueAsString(
-                Map.of("priorRunId",priorRun,"request",prior.frozenJson(),"targetId",prior.targetId())),StandardOpenOption.CREATE_NEW);
+        FileEvidenceStore.writeNewUtf8(folder.resolve("resume-intent.json"),JobDefinitionJson.mapper().writeValueAsString(
+                Map.of("priorRunId",priorRun,"request",prior.frozenJson(),"targetId",prior.targetId())));
         return execute(next,null,request);
     }
     public Result execute(String run,String parent,FrozenRequest request) throws Exception {
@@ -164,7 +164,7 @@ public final class IndexCatalogJobService implements SyncJobOwner {
                         || !JobDefinitionJson.mapper().valueToTree(input.rows().stream().map(mapper::values).toList())
                                 .equals(proof.path("rows")))
                     throw new IllegalStateException("Prepared catalog receipt changed after admission");
-                String hash=HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+                String hash=FileEvidenceStore.sha256(bytes);
                 source=new IndexCatalogFileSource.Input(receipt.toString(),hash,bytes.length,input.rows());
             }
             sourceCount=source.rows().size();var before=storage.snapshot();
@@ -172,8 +172,8 @@ public final class IndexCatalogJobService implements SyncJobOwner {
                 throw new IllegalStateException("Target changed after run creation");
             var prepared=IndexCatalogStaging.prepare(before,source.rows());var merge=prepared.merge();
             Files.createDirectories(folder);
-            Files.writeString(folder.resolve("prepared.json"),JobDefinitionJson.mapper().writeValueAsString(Map.of(
-                    "runId",run,"targetId",target,"request",SyncRequestIdentity.snapshotJson(request),"source",source,"prepared",prepared)),StandardOpenOption.CREATE_NEW);
+            FileEvidenceStore.writeNewUtf8(folder.resolve("prepared.json"),JobDefinitionJson.mapper().writeValueAsString(Map.of(
+                    "runId",run,"targetId",target,"request",SyncRequestIdentity.snapshotJson(request),"source",source,"prepared",prepared)));
             check(cancelled);
             if(merge.requiresWrite()) {
                 submitted=true;
@@ -188,7 +188,7 @@ public final class IndexCatalogJobService implements SyncJobOwner {
             Path receipt=folder.resolve("completion.json");var proof=new LinkedHashMap<String,Object>();
             proof.put("runId",run);proof.put("source",source);proof.put("before",before);proof.put("actual",actual);
             proof.put("merge",merge);proof.put("publicationId",publication);proof.put("submittedStageRows",merge.requiresWrite()?prepared.rows().size():0);
-            Files.writeString(receipt,JobDefinitionJson.mapper().writeValueAsString(proof),StandardOpenOption.CREATE_NEW);
+            FileEvidenceStore.writeNewUtf8(receipt,JobDefinitionJson.mapper().writeValueAsString(proof));
             var state=sourceCount==0?SyncRunState.VERIFIED_EMPTY:SyncRunState.VERIFIED;
             var payload=new LinkedHashMap<String,Object>();payload.put("evidence",receipt.toString());payload.put("checkpoint",actual.fingerprint());
             if(sourceCount==0) {

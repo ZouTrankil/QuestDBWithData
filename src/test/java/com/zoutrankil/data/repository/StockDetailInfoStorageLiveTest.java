@@ -1,5 +1,7 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
+
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import org.junit.jupiter.api.Test;

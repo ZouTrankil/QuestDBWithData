@@ -6,6 +6,7 @@ import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
 /** D022 formal-schema and isolated compatibility contract; both retain DEDUP=false. */
 public final class IndexMonthlyDataset {
+    public static final String ISOLATED_PREFIX = "java_d022_index_monthly_";
     private IndexMonthlyDataset() {}
     private static final TemporalContract TRADE_DATE = new TemporalContract(
             TemporalKind.BUSINESS_DATE, "BASIC", "calendar", "DAY", "Provider month-end trading observation carried at UTC midnight");
@@ -57,8 +58,7 @@ public final class IndexMonthlyDataset {
     }
     public static void requireIsolatedTableName(String table) {
         DatasetDefinition.identifier(table);
-        String prefix = "java_d022_index_monthly_";
-        if (!table.startsWith(prefix) || table.length() <= prefix.length())
+        if (!table.startsWith(ISOLATED_PREFIX) || table.length() <= ISOLATED_PREFIX.length())
             throw new IllegalArgumentException("D022 isolated target required; the formal index_monthly table is external and has no dedup key");
     }
     public static String createIsolatedTableSql(String table) {

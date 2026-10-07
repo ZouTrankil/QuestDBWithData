@@ -1,5 +1,10 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.DailyBasicCoverage;
+import com.zoutrankil.data.stock.application.DailyBasicJobService;
+import com.zoutrankil.data.stock.application.DailyBasicSource;
+import com.zoutrankil.data.stock.application.DailyBasicSyncAdapter;
+
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.JobDefinitionJson;
@@ -140,7 +145,7 @@ class DailyBasicCheckpointTest {
             evidence.set("rows", JobDefinitionJson.mapper().valueToTree(rows));
             evidence.put("sourceComplete", true);
             evidence.put("apiMaximumRows", DailyBasicSource.API_ROW_CAP);
-            Files.write(sourcePath, JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+            Files.write(sourcePath, JobDefinitionJson.canonicalMapper()
                     .writeValueAsBytes(evidence));
             String fingerprint = fingerprint(tradeDate, rows);
             String slice = "slice-receipt-" + index;
@@ -195,7 +200,7 @@ class DailyBasicCheckpointTest {
             rowMaps.add(values);
         }
         body.put("rows", rowMaps);
-        byte[] bytes = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        byte[] bytes = JobDefinitionJson.canonicalMapper()
                 .writeValueAsBytes(body);
         return java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
     }

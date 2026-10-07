@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.policy.IndexMonthlyUniverse;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
@@ -19,7 +21,7 @@ import java.util.*;
 /** Explicit bounded planner/runner for one frozen monthly-provider code and an isolated target. */
 @Service
 public final class IndexMonthlyJobService {
-    public static final String ISOLATED_TABLE_PREFIX="java_d022_index_monthly_";
+    public static final String ISOLATED_TABLE_PREFIX=IndexMonthlyDataset.ISOLATED_PREFIX;
     public record Plan(SyncJobDefinition.FrozenRequest request,String targetId,String physicalTargetId,String tsCode,
             LocalDate checkpointBefore,LocalDate checkpointAnchor,IndexMonthlyWritePort.TargetRange physicalRange,boolean bootstrap) {
         public Plan {

@@ -1,5 +1,8 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockBasicSyncService;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.service.*;
 import org.junit.jupiter.api.Test;

@@ -8,6 +8,8 @@ import static com.zoutrankil.data.domain.DatasetDefinition.*;
 /** D017 source-to-physical contract for externally owned etf_factor; only isolated D017 tables are created. */
 public final class EtfFactorDataset {
     public static final String ISOLATED_PREFIX = "java_d017_etf_factor_";
+    /** Official fund_factor_pro row ceiling; responses reaching this bound are incomplete. */
+    public static final int SOURCE_ROW_CAP = 8_000;
     public static final List<String> PRICE_FIELDS = List.of(
             "open", "high", "low", "close", "pre_close", "change", "pct_change", "vol", "amount");
     public static final List<String> FACTOR_FIELDS = List.of(
@@ -87,5 +89,10 @@ public final class EtfFactorDataset {
         if (field.contains("_bfq"))
             return "Tushare fund_factor_pro indicator with _bfq (不复权) semantics, including any period suffix; source-defined parameters and raw DOUBLE are preserved without recomputation";
         return "Tushare fund_factor_pro source-defined raw DOUBLE value, no scaling";
+    }
+
+    /** Admits the existing formal table or the original isolated execution namespace. */
+    public static void requireExecutionTable(String table) {
+        if (!"etf_factor".equals(table)) requireIsolatedTable(table);
     }
 }

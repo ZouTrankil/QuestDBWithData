@@ -451,7 +451,7 @@ class RetailSentimentDailyV1LiveMaterializeAcceptanceTest {
         assertEquals(port.calendarVersion(), frozen.request().parameters().get("calendar_version"));
         assertEquals(failed.targetId(), frozen.targetId()); assertEquals(failed.targetId(), port.targetId());
         var originalSource = json.treeToValue(previous.path("incremental").path("result").path("source"),
-                RetailSentimentDailyV1MaterializationPort.Snapshot.class);
+                RetailSentimentDailyV1Snapshot.class);
         var sourceBefore = port.snapshot();
         assertTrue(originalSource.sourceUnchanged(sourceBefore), "No new source transaction or physical identity may be admitted by continuation");
         assertEquals("9:34", sourceBefore.sourceVersion());
@@ -519,8 +519,8 @@ class RetailSentimentDailyV1LiveMaterializeAcceptanceTest {
         return resumed;
     }
 
-    private static void sameMvIdentity(RetailSentimentDailyV1MaterializationPort.Snapshot expected,
-                                       RetailSentimentDailyV1MaterializationPort.Snapshot actual) {
+    private static void sameMvIdentity(RetailSentimentDailyV1Snapshot expected,
+                                       RetailSentimentDailyV1Snapshot actual) {
         assertEquals(expected.mvId(), actual.mvId()); assertEquals(expected.mvDirectory(), actual.mvDirectory());
         assertEquals(expected.definitionSha(), actual.definitionSha());
     }

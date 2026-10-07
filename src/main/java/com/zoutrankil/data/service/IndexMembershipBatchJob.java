@@ -149,9 +149,9 @@ public final class IndexMembershipBatchJob {
             catch(java.sql.SQLException failure) { throw new IllegalStateException("Cannot read parent group cancellation",failure); }
         };
         try {
-            Files.createDirectories(folder(run));Files.writeString(folder(run).resolve("batch-plan.json"),json.writeValueAsString(Map.of(
+            Files.createDirectories(folder(run));FileEvidenceStore.writeNewUtf8(folder(run).resolve("batch-plan.json"),json.writeValueAsString(Map.of(
                     "runId",run,"table",table,"initialIdentity",identity,"initialFingerprint",initial.fingerprint(),
-                    "request",SyncRequestIdentity.snapshotJson(request))),StandardOpenOption.CREATE_NEW);
+                    "request",SyncRequestIdentity.snapshotJson(request))));
             move(ledger,run,SyncRunState.RUNNING,Map.of());hook.afterPlan(run);
             ledger.createChild(attempt,SyncRunLedger.Kind.ATTEMPT,run,run);attempted=true;
             move(ledger,attempt,SyncRunState.RUNNING,Map.of());
@@ -190,8 +190,8 @@ public final class IndexMembershipBatchJob {
                     if(cancelled.getAsBoolean() || ledger.cancellationRequested(run)) throw new java.util.concurrent.CancellationException();
                     receipts.add(IndexMembershipCompletedRun.verify(jdbc,path,table,members.get(i).childRunId(),requests.get(i)));
                 }
-                Path receipt=folder(run).resolve("batch-completion.json");Files.writeString(receipt,json.writeValueAsString(Map.of(
-                        "runId",run,"members",members,"readback",receipts)),StandardOpenOption.CREATE_NEW);
+                Path receipt=folder(run).resolve("batch-completion.json");FileEvidenceStore.writeNewUtf8(receipt,json.writeValueAsString(Map.of(
+                        "runId",run,"members",members,"readback",receipts)));
                 boolean empty=members.stream().allMatch(m->m.state()==SyncRunState.VERIFIED_EMPTY);
                 var state=empty?SyncRunState.VERIFIED_EMPTY:SyncRunState.VERIFIED;
                 Map<String,?> proof=empty?Map.of("sourceComplete",true,"returnedRows",0,"submittedRows",0,"responseEvidence",receipt.toString())

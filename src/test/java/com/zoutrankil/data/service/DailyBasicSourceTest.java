@@ -1,5 +1,8 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.DailyBasicSource;
+import com.zoutrankil.data.stock.mapper.DailyBasicMapper;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -18,7 +21,7 @@ class DailyBasicSourceTest {
 
     @Test void capturesARealShapedBoundedResponseAndMapsIt() throws Exception {
         var pages = new StubPages((params, cap) -> page(List.of(row("000001.SZ", "20260928", 12.3))));
-        var result = new DailyBasicSource(pages, new com.zoutrankil.data.mapper.DailyBasicMapper(), evidence)
+        var result = new DailyBasicSource(pages, new com.zoutrankil.data.stock.mapper.DailyBasicMapper(), evidence)
                 .fetch(LocalDate.of(2026, 9, 28), () -> false);
         assertEquals(1, result.rows().size());
         assertEquals(12.3d, result.rows().getFirst().close());
@@ -28,10 +31,29 @@ class DailyBasicSourceTest {
 
     @Test void emptyDateRemainsAnExplicitCompleteResponse() throws Exception {
         var pages = new StubPages((params, cap) -> page(List.of()));
-        var result = new DailyBasicSource(pages, new com.zoutrankil.data.mapper.DailyBasicMapper(), evidence)
+        var result = new DailyBasicSource(pages, new com.zoutrankil.data.stock.mapper.DailyBasicMapper(), evidence)
                 .fetch(LocalDate.of(2026, 9, 28), () -> false);
         assertTrue(result.rows().isEmpty());
         assertTrue(Files.exists(Path.of(result.responseEvidence())));
+    }
+
+    @Test void sourceFingerprintRemainsTheCanonicalProjectionRatherThanTheReceiptFileHash() throws Exception {
+        var source = new DailyBasicSource(new StubPages((params, cap) -> page(List.of())),
+                new com.zoutrankil.data.stock.mapper.DailyBasicMapper(), evidence);
+        var first = source.fetch(LocalDate.of(2026, 9, 28), () -> false);
+        var second = source.fetch(LocalDate.of(2026, 9, 28), () -> false);
+        byte[] receipt = Files.readAllBytes(Path.of(first.responseEvidence()));
+        var body = com.zoutrankil.data.domain.JobDefinitionJson.mapper().readTree(receipt);
+        var projection = new LinkedHashMap<String, JsonNode>();
+        for (String field : List.of("endpoint", "parameters", "fields", "tradeDate", "rows"))
+            projection.put(field, body.get(field));
+        byte[] canonical = com.zoutrankil.data.domain.JobDefinitionJson.canonicalMapper().writeValueAsBytes(projection);
+        assertEquals(HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(canonical)),
+                first.sourceFingerprint());
+        assertEquals(first.sourceFingerprint(), second.sourceFingerprint());
+        assertNotEquals(first.responseEvidence(), second.responseEvidence());
+        assertNotEquals(HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(receipt)),
+                first.sourceFingerprint());
     }
 
     @Test void officialMaximumRowCountFailsClosedAndRetainsTheResponse() {
@@ -39,7 +61,7 @@ class DailyBasicSourceTest {
         for (int i = 0; i < DailyBasicSource.API_ROW_CAP; i++)
             capped.add(row(String.format(Locale.ROOT, "%06d.SZ", i), "20260928", 1.0));
         var pages = new StubPages((params, cap) -> page(capped));
-        var source = new DailyBasicSource(pages, new com.zoutrankil.data.mapper.DailyBasicMapper(), evidence);
+        var source = new DailyBasicSource(pages, new com.zoutrankil.data.stock.mapper.DailyBasicMapper(), evidence);
         assertThrows(PageExecutor.Truncated.class,
                 () -> source.fetch(LocalDate.of(2026, 9, 28), () -> false));
         assertTrue(listEvidence().stream().anyMatch(path -> path.getFileName().toString().startsWith("response-")));

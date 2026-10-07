@@ -1,7 +1,7 @@
 package com.zoutrankil.data.service;
 
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.StockDetailInfoMapper;
+import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
 import com.zoutrankil.data.repository.DatasetWritePreparation;
 import org.junit.jupiter.api.Test;
 

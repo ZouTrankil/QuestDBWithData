@@ -1,6 +1,5 @@
 package com.zoutrankil.data.cli;
 
-import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
@@ -13,11 +12,10 @@ final class MacroCoreMonthlyCommands {
     private MacroCoreMonthlyCommands() {}
     static void execute(String command, Map<String,String> options, MacroCoreMonthlyJobService owner) throws Exception {
         Objects.requireNonNull(owner,"Registered D104 owner required");
-        var json = JobDefinitionJson.mapper();
         switch (command) {
             case "install-macro-core-monthly-isolated" -> {
                 requireKeys(options,Set.of()); owner.installIsolated();
-                System.out.println(json.writeValueAsString(Map.of("status","ISOLATED_TARGET_READY","datasetId","macro_core_monthly")));
+                CliOutput.printJson(Map.of("status","ISOLATED_TARGET_READY","datasetId","macro_core_monthly"), CliOutput.Profile.JOB_DEFINITION, false);
             }
             case "macro-core-monthly-job-status", "cancel-macro-core-monthly-run",
                  "resume-macro-core-monthly-run", "reconcile-macro-core-monthly-run" -> {
@@ -28,7 +26,7 @@ final class MacroCoreMonthlyCommands {
                     case "reconcile-macro-core-monthly-run" -> owner.reconcile(options.get("--run"));
                     default -> owner.resume(options.get("--run"));
                 };
-                System.out.println(json.writeValueAsString(value));
+                CliOutput.printJson(value, CliOutput.Profile.JOB_DEFINITION, false);
                 if(value instanceof MacroCoreMonthlyJobService.MaterializationResult result)requireComplete(result);
             }
             case "plan-macro-core-monthly-job", "run-macro-core-monthly-job" -> {
@@ -37,9 +35,9 @@ final class MacroCoreMonthlyCommands {
                     throw new IllegalArgumentException("Explicit first-month from/to/logical-date and optional mode required");
                 var plan=owner.plan(LocalDate.parse(options.get("--from")),LocalDate.parse(options.get("--to")),
                         LocalDate.parse(options.get("--logical-date")),options.containsKey("--mode")?Mode.valueOf(options.get("--mode")):null);
-                if(command.startsWith("plan-"))System.out.println(json.writeValueAsString(Map.of("status","PLANNED","executed",false,
-                        "request",json.readTree(SyncRequestIdentity.snapshotJson(plan.request())),"targetId",plan.targetId(),"plan",plan)));
-                else { var result=owner.run(plan);System.out.println(json.writeValueAsString(result));requireComplete(result); }
+                if(command.startsWith("plan-"))CliOutput.printJson(Map.of("status","PLANNED","executed",false,
+                        "request",CliOutput.readTree(SyncRequestIdentity.snapshotJson(plan.request()), CliOutput.Profile.JOB_DEFINITION),"targetId",plan.targetId(),"plan",plan), CliOutput.Profile.JOB_DEFINITION, false);
+                else { var result=owner.run(plan);CliOutput.printJson(result, CliOutput.Profile.JOB_DEFINITION, false);requireComplete(result); }
             }
             default -> throw new IllegalArgumentException("Unknown D104 command");
         }

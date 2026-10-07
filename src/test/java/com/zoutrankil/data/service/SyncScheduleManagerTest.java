@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.SyncScheduleStore;
 import org.junit.jupiter.api.Test;

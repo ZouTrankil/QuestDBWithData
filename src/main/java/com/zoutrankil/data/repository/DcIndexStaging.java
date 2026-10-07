@@ -36,7 +36,7 @@ public final class DcIndexStaging {
         if(!physicalTargetId.equals(actualBefore)||!logicalTargetId.matches("static-v2-[0-9a-f]{64}"))throw new IllegalStateException("D023 stage baseline differs from frozen physical/logical target");
         String requestFingerprint=SyncRequestIdentity.fingerprint(request,logicalTargetId);
         var json=JobDefinitionJson.mapper();Path intent=evidenceFolder.resolve(stage+"-intent.json");
-        Files.write(intent,json.writeValueAsBytes(Map.ofEntries(
+        FileEvidenceStore.writeNew(intent,json.writeValueAsBytes(Map.ofEntries(
                 Map.entry("dataset","dc_index"),Map.entry("target",target),Map.entry("stage",stage),Map.entry("runId",runId),
                 Map.entry("logicalTargetId",logicalTargetId),Map.entry("physicalTargetBefore",actualBefore),
                 Map.entry("beforeId",beforeIdentity.id()),Map.entry("beforeDirectory",beforeIdentity.directory()),
@@ -44,7 +44,7 @@ public final class DcIndexStaging {
                 Map.entry("fromInclusive",prepared.fromInclusive().toString()),Map.entry("toInclusive",prepared.toInclusive().toString()),
                 Map.entry("windowRule","authoritative closed calendar-date replacement; stage initially contains only rows outside window"),
                 Map.entry("dedup",false),Map.entry("beforeFingerprint",prepared.before().fingerprint()),
-                Map.entry("sourceRows",prepared.source().size()))),StandardOpenOption.CREATE_NEW);
+                Map.entry("sourceRows",prepared.source().size()))));
         String columns=String.join(",",DcIndexDataset.DEFINITION.columns().stream().map(c->"\""+c.storageName()+"\" "+c.storageType().name()).toList());
         String create="CREATE TABLE \""+stage+"\" ("+columns+") TIMESTAMP(\"trade_date\") PARTITION BY YEAR WAL";
         jdbc.execute(create);awaitWal(stage,cancelled);new DcIndexStorage(jdbc,stage).preflight();
@@ -59,12 +59,12 @@ public final class DcIndexStaging {
         Path receipt=evidenceFolder.resolve(stage+"-outside-verified.json");
         String stagePhysical=DcIndexStorage.physicalTargetId(jdbc,stage,actual.identity());
         String formalPhysical=DcIndexStorage.physicalTargetId(jdbc,target,actual.identity());
-        Files.write(receipt,json.writeValueAsBytes(Map.ofEntries(Map.entry("proofVersion",2),Map.entry("dataset","dc_index"),
+        FileEvidenceStore.writeNew(receipt,json.writeValueAsBytes(Map.ofEntries(Map.entry("proofVersion",2),Map.entry("dataset","dc_index"),
                 Map.entry("target",target),Map.entry("stage",stage),Map.entry("dedup",false),
                 Map.entry("stagePhysicalTarget",stagePhysical),Map.entry("physicalTargetAfter",formalPhysical),
                 Map.entry("stageId",actual.identity().id()),Map.entry("stageDirectory",actual.identity().directory()),
                 Map.entry("snapshotProof",snapshotProof(actual)),Map.entry("outsideRows",actual.rows().size()),
-                Map.entry("windowFrom",prepared.fromInclusive().toString()),Map.entry("windowTo",prepared.toInclusive().toString()))),StandardOpenOption.CREATE_NEW);
+                Map.entry("windowFrom",prepared.fromInclusive().toString()),Map.entry("windowTo",prepared.toInclusive().toString()))));
         return new Verified(stage,actual,receipt.toString());
     }
     public Complete verifyComplete(Prepared prepared,Verified stage,String sourceFingerprint,Path evidenceFolder,BooleanSupplier cancelled)throws Exception{
@@ -83,7 +83,7 @@ public final class DcIndexStaging {
         persist(receipt,JobDefinitionJson.mapper().writeValueAsBytes(body));
         return new Complete(stage.table(),actual,prepared.source().size(),sourceFingerprint,receipt.toString());
     }
-    private static void persist(Path path,byte[] bytes)throws Exception{try{Files.write(path,bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);}
+    private static void persist(Path path,byte[] bytes)throws Exception{try{FileEvidenceStore.writeNew(path,bytes);}
         catch(FileAlreadyExistsException exists){var json=JobDefinitionJson.mapper();if(!json.readTree(Files.readAllBytes(path)).equals(json.readTree(bytes)))throw new IllegalStateException("Conflicting deterministic D023 stage receipt",exists);}}
     /** Detect run-local stage side effects so the runner retains its interval lease until reconciliation. */
     public static boolean hasStageIntent(Path stageFolder)throws java.io.IOException{

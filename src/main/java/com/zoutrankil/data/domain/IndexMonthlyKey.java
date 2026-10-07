@@ -1,6 +1,6 @@
 package com.zoutrankil.data.domain;
 
-import com.zoutrankil.data.service.IndexMonthlyUniverse;
+import com.zoutrankil.data.domain.policy.IndexMonthlyUniverse;
 import java.time.LocalDate;
 import java.util.Objects;
 

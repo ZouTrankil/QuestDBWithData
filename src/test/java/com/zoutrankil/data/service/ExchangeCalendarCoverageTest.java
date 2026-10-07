@@ -1,5 +1,8 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.calendar.application.ExchangeCalendarCoverage;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
+
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.repository.SyncRunLedger;

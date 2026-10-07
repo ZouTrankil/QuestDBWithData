@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zoutrankil.data.domain.*;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.EtfMarketOverviewDailyViewMapper;
 import com.zoutrankil.data.repository.*;

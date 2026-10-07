@@ -31,7 +31,7 @@ class MacroCoreMonthlyCatalogStartupTest {
             assertTrue(MacroCoreMonthlyJobService.definition().dependencies().isEmpty());
             var source=context.getBean("d101NoConnectionDataSource",DataSource.class);
             verify(source,never()).getConnection();verify(source,never()).getConnection(anyString(),anyString());
-            Path result=Path.of("artifacts/java-migration/D104/commands/java-catalog-startup-final-20261007.json");
+            Path result=temporary.resolve("java-catalog-startup-final-20261007.json");
             Files.createDirectories(result.getParent());Files.writeString(result,JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
                     "task_id","D104","dataset_count",datasets.definitions().size(),"job_count",jobs.definitions().size(),
                     "definition",MacroCoreMonthlyDataset.DEFINITION,"job",MacroCoreMonthlyJobService.definition(),

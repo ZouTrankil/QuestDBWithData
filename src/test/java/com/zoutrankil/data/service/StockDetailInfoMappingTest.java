@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.client.dto.TushareStockDetailDto;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.table.StockDetailInfoRow;
-import com.zoutrankil.data.mapper.StockDetailInfoMapper;
+import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
 import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
 import java.time.*;

@@ -2,7 +2,6 @@ package com.zoutrankil.data.repository;
 
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.IndexMonthlyMapper;
-import com.zoutrankil.data.service.IndexMonthlyJobService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
@@ -22,7 +21,7 @@ public class IndexMonthlyReadRepository implements DatasetImplementation {
         Objects.requireNonNull(key);return find(new DatasetReadQuery(COLUMNS,Map.of("ts_code",key.tsCode(),"trade_date",key.tradeDate()),null,null,null,1,null));
     }
     public DatasetReadPage<IndexMonthly> findRange(String code,LocalDate fromInclusive,LocalDate toExclusive,int pageSize,DatasetReadCursor cursor) {
-        if(!com.zoutrankil.data.service.IndexMonthlyUniverse.validProviderCode(code)||fromInclusive==null||toExclusive==null
+        if(!com.zoutrankil.data.domain.policy.IndexMonthlyUniverse.validProviderCode(code)||fromInclusive==null||toExclusive==null
                 ||!fromInclusive.isBefore(toExclusive))throw new IllegalArgumentException("Known monthly code and increasing half-open range required");
         return find(new DatasetReadQuery(COLUMNS,Map.of("ts_code",code),"trade_date",fromInclusive,toExclusive,pageSize,cursor));
     }

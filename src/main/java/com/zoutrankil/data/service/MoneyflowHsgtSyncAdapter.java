@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.MoneyflowHsgt;
@@ -79,9 +81,9 @@ public final class MoneyflowHsgtSyncAdapter implements SyncJobRunner.Adapter<Mon
             body.put("fromInclusive",request.from());body.put("toInclusive",request.to());body.put("logicalDate",request.logicalDate());
             body.put("sourceSlices",verified.sourceReceipts());body.put("sourceRows",rowCount);body.put("stageReceipt",verified.receipt());
             body.put("publicationState",published.entry().state());body.put("publicationJournalId",published.entry().intent().id());body.put("complete",true);
-            byte[] bytes=JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true).writeValueAsBytes(body);
+            byte[] bytes=JobDefinitionJson.canonicalMapper().writeValueAsBytes(body);
             if(bytes.length>2*1024*1024)throw new IllegalStateException("D027 source completion receipt exceeds 2 MiB");
-            Files.write(completion,bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);
+            FileEvidenceStore.writeNew(completion,bytes);
             return new SyncJobRunner.SourceCompletion(collected.size(),rowCount,true,completion.toString());
         }
     }
@@ -124,20 +126,10 @@ public final class MoneyflowHsgtSyncAdapter implements SyncJobRunner.Adapter<Mon
     /** A short provider response alone cannot certify missing aggregate dates in the formal product. */
     private void requireFormalCalendarCoverage(LocalDate from,LocalDate to,List<MoneyflowHsgt> rows){
         var natural=new HashSet<LocalDate>();var expected=new HashSet<LocalDate>();
-        long lower=new com.zoutrankil.data.domain.temporal.TemporalValues.CalendarTimestamp(from)
-                .storageEpoch(com.zoutrankil.data.domain.temporal.TemporalValues.EpochUnit.MICROS);
-        long upper=new com.zoutrankil.data.domain.temporal.TemporalValues.CalendarTimestamp(to.plusDays(1))
-                .storageEpoch(com.zoutrankil.data.domain.temporal.TemporalValues.EpochUnit.MICROS);
-        jdbc.query("SELECT cast(cal_date AS long) AS cal_micros,is_open FROM exchange_calendar WHERE exchange='SSE' AND cal_date>=cast(? AS TIMESTAMP) AND cal_date<cast(? AS TIMESTAMP) ORDER BY cal_date LIMIT 33",
-                (org.springframework.jdbc.core.RowCallbackHandler)rs->{
-                    Object raw=rs.getObject("cal_micros"),flag=rs.getObject("is_open");
-                    if(!(raw instanceof Number n)||!(flag instanceof Number open)||open.intValue()!=0&&open.intValue()!=1)
-                        throw new IllegalStateException("Formal northbound coverage requires typed SSE calendar rows");
-                    LocalDate date=com.zoutrankil.data.domain.temporal.TemporalValues.CalendarTimestamp.fromStorageEpoch(n.longValue(),
-                            com.zoutrankil.data.domain.temporal.TemporalValues.EpochUnit.MICROS).date();
-                    if(!natural.add(date))throw new IllegalStateException("Duplicate SSE calendar business date");
-                    if(open.intValue()==1)expected.add(date);
-                },lower,upper);
+        new com.zoutrankil.data.repository.MoneyflowHsgtCalendarStorage(jdbc).readSseDates(from,to,(date,open)->{
+            if(!natural.add(date))throw new IllegalStateException("Duplicate SSE calendar business date");
+            if(open==1)expected.add(date);
+        });
         for(LocalDate date=from;!date.isAfter(to);date=date.plusDays(1))
             if(!natural.contains(date))throw new IllegalStateException("Missing SSE calendar coverage on "+date);
         var returned=new HashSet<LocalDate>();for(var row:rows)returned.add(row.tradeDate());

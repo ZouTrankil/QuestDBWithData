@@ -1,9 +1,12 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
+import com.zoutrankil.data.stock.storage.StockBasicWritePort;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.StockBasicMapper;
+import com.zoutrankil.data.stock.mapper.StockBasicMapper;
 import com.zoutrankil.data.repository.*;
 import io.questdb.client.QuestDB;
 import org.junit.jupiter.api.Test;

@@ -6,7 +6,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.repository.MarketBreadthDailyV1MaterializationPort;
-import com.zoutrankil.data.repository.MarketBreadthDailyV1MaterializationPort.Snapshot;
+import com.zoutrankil.data.domain.MarketBreadthDailyV1Snapshot;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ class MarketBreadthDailyV1MaterializeAdapterTest {
             new MarketBreadthDailyV1(FROM, 2, 1, 1, 0, 1.2, 3.5),
             new MarketBreadthDailyV1(TO, 3, 2, 0, 1, null, 0.4));
     private final MarketBreadthDailyV1MaterializationPort port = mock(MarketBreadthDailyV1MaterializationPort.class);
-    private final Snapshot frozen = readySnapshot();
+    private final MarketBreadthDailyV1Snapshot frozen = readySnapshot();
     private MarketBreadthDailyV1MaterializeAdapter adapter;
     private FrozenRequest request;
 
@@ -48,8 +48,8 @@ class MarketBreadthDailyV1MaterializeAdapterTest {
         request = freeze(SOURCE_VERSION, TARGET_ID, FROM, TO);
     }
 
-    private static Snapshot readySnapshot() {
-        Snapshot snapshot = mock(Snapshot.class);
+    private static MarketBreadthDailyV1Snapshot readySnapshot() {
+        MarketBreadthDailyV1Snapshot snapshot = mock(MarketBreadthDailyV1Snapshot.class);
         when(snapshot.valid()).thenReturn(true);
         when(snapshot.caughtUp()).thenReturn(true);
         when(snapshot.sourceSettled()).thenReturn(true);
@@ -117,7 +117,7 @@ class MarketBreadthDailyV1MaterializeAdapterTest {
     }
 
     @Test void sourceChangedAfterPlanningIsRejectedAtPreflight() {
-        Snapshot changed = readySnapshot();
+        MarketBreadthDailyV1Snapshot changed = readySnapshot();
         when(port.snapshot()).thenReturn(changed);
         var error = assertThrows(IllegalStateException.class, () -> adapter.preflight(request));
         assertTrue(error.getMessage().contains("source changed after planning"));
@@ -127,7 +127,7 @@ class MarketBreadthDailyV1MaterializeAdapterTest {
     }
 
     @Test void sourceChangedDuringCompleteAggregationCannotDeliverAPage() {
-        Snapshot changed = readySnapshot();
+        MarketBreadthDailyV1Snapshot changed = readySnapshot();
         when(port.snapshot()).thenReturn(frozen, changed);
         var pages = new ArrayList<SyncJobRunner.Page<MarketBreadthDailyV1>>();
         var error = assertThrows(IllegalStateException.class,
@@ -151,7 +151,7 @@ class MarketBreadthDailyV1MaterializeAdapterTest {
 
     @Test void validSettledLaggingMvCanCatchUpAfterFullValueReadbackAndComplete() throws Exception {
         when(frozen.caughtUp()).thenReturn(false);
-        Snapshot caughtUp = readySnapshot();
+        MarketBreadthDailyV1Snapshot caughtUp = readySnapshot();
         when(frozen.sourceUnchanged(caughtUp)).thenReturn(true);
         when(port.snapshot()).thenReturn(frozen, frozen, caughtUp);
         when(port.verifiedSnapshot()).thenReturn(caughtUp);
@@ -300,7 +300,7 @@ class MarketBreadthDailyV1MaterializeAdapterTest {
     }
 
     @Test void mvChangedAfterReadbackCannotReturnSourceComplete() {
-        Snapshot changedOutput = readySnapshot();
+        MarketBreadthDailyV1Snapshot changedOutput = readySnapshot();
         when(frozen.sourceUnchanged(changedOutput)).thenReturn(true);
         when(port.snapshot()).thenReturn(frozen, frozen, changedOutput);
         var error = assertThrows(IllegalStateException.class,

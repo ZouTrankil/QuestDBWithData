@@ -10,7 +10,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.MarketBreadthDailyV1MaterializationPort;
-import com.zoutrankil.data.repository.MarketBreadthDailyV1MaterializationPort.Snapshot;
+import com.zoutrankil.data.domain.MarketBreadthDailyV1Snapshot;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -30,7 +30,7 @@ class MarketBreadthDailyV1JobServiceTest {
     private static final String TARGET = "questdb-" + "a".repeat(64);
     private static final String CALENDAR = "calendar-31:8:8:" + "b".repeat(64);
     private static final String OTHER_TARGET = "questdb-" + "c".repeat(64);
-    private static final Snapshot CURRENT = snapshot(7, 10);
+    private static final MarketBreadthDailyV1Snapshot CURRENT = snapshot(7, 10);
     private static final List<MarketBreadthDailyV1> ROWS = List.of(
             new MarketBreadthDailyV1(START, 2, 1, 1, 0, 0.0, 10.0));
 
@@ -263,7 +263,7 @@ class MarketBreadthDailyV1JobServiceTest {
 
     @Test void isolatedFullRepairRunsThroughCanonicalFrozenMaterializationAndLedger() throws Exception {
         var setup = setup();
-        Snapshot invalid = new Snapshot(CURRENT.sourceId(), CURRENT.sourceDirectory(), CURRENT.sourceTableTxn(),
+        MarketBreadthDailyV1Snapshot invalid = new MarketBreadthDailyV1Snapshot(CURRENT.sourceId(), CURRENT.sourceDirectory(), CURRENT.sourceTableTxn(),
                 CURRENT.sourceSeqTxn(), CURRENT.sourceWriterTxn(), true, CURRENT.mvId(), CURRENT.mvDirectory(),
                 CURRENT.mvTxn(), CURRENT.mvSeqTxn(), CURRENT.mvWriterTxn(), true, false, false,
                 CURRENT.definitionSha(), CURRENT.refreshStarted(), CURRENT.refreshFinished(),
@@ -367,7 +367,7 @@ class MarketBreadthDailyV1JobServiceTest {
         verify(setup.port, times(1)).send(ROWS);
     }
 
-    private void assertPostReadbackDrift(Snapshot changed) throws Exception {
+    private void assertPostReadbackDrift(MarketBreadthDailyV1Snapshot changed) throws Exception {
         var setup = setup();
         var uncertain = uncertain(setup, "uncertain", request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE));
         when(setup.port.snapshot()).thenReturn(CURRENT, CURRENT, CURRENT, CURRENT, changed);
@@ -463,8 +463,8 @@ class MarketBreadthDailyV1JobServiceTest {
                 "sourceFingerprint", "unit-source", "readbackEvidence", "unit-native-readback", "writerStopped", stopped)));
     }
 
-    private static Snapshot snapshot(long sourceTxn, long outputTxn) {
-        return new Snapshot(11, "stk_factor~11", sourceTxn, sourceTxn, sourceTxn, true,
+    private static MarketBreadthDailyV1Snapshot snapshot(long sourceTxn, long outputTxn) {
+        return new MarketBreadthDailyV1Snapshot(11, "stk_factor~11", sourceTxn, sourceTxn, sourceTxn, true,
                 12, "mv_market_breadth_daily_v1~12", outputTxn, outputTxn, outputTxn, true, true, true,
                 MarketBreadthDailyV1MaterializationPort.DEFINITION_SHA, "2026-10-06T00:00:00Z", "2026-10-06T00:00:01Z",
                 sourceTxn, sourceTxn, "YEAR", "valid");

@@ -155,7 +155,7 @@ public class MoneyflowHsgtJobService {
         if(new MoneyflowHsgtPublication(jdbc,ledgerPath).findForRun(runId).isEmpty())MoneyflowHsgtRunRecovery.finishStageOnly(jdbc,ledgerPath,table,runId,writerStopped);
         var result=new MoneyflowHsgtPublication(jdbc,ledgerPath).finish(runId,writerStopped);completeRecoveredLedger(runId,result);return result;
     }
-    public SyncRunLedger.Entry status(String runId)throws Exception{return SyncRunLedger.openReadOnly(ledgerPath).get(runId);}
+    public LedgerReadModels.Entry status(String runId)throws Exception{return LedgerReadModels.entry(SyncRunLedger.openReadOnly(ledgerPath).get(runId));}
     public List<SyncRunLedger.Entry> entries(String runId,String afterId,int limit)throws Exception{return SyncRunLedger.openReadOnly(ledgerPath).entries(runId,afterId,limit);}
     public boolean cancel(String runId)throws Exception{return new SyncRunLedger(ledgerPath).requestCancellation(runId);}
     public SyncJobRunner.Result runAsGroupChild(String childRunId,String parentRunId,String expectedTarget,SyncJobDefinition.FrozenRequest request)throws Exception {

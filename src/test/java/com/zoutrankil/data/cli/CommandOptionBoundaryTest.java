@@ -1,5 +1,8 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockBasicSyncService;
+
 import com.zoutrankil.data.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.DefaultApplicationArguments;
@@ -7,6 +10,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CommandOptionBoundaryTest {
+    @Test void springConfigurationOptionsAreRemovedBeforeCommandDispatch() throws Exception {
+        var legacy = mock(StockBasicSyncService.class);
+        var cli = new CommandLineRunner(legacy, mock(DatasetRegistry.class), mock(SyncJobRegistry.class),
+                mock(StockBasicJobService.class), mock(StockBasicGroupService.class), mock(ReadGroupReader.class),
+                mock(StockBasicWriteGroupService.class), mock(StockBasicScheduleService.class));
+        cli.run(new DefaultApplicationArguments("--spring.profiles.active=offline", "verify-questdb-jdbc",
+                "--app.web.enabled=true", "--logging.level.root=ERROR"));
+        verify(legacy).verifyQuestDbConnection();
+        verifyNoMoreInteractions(legacy);
+    }
+
     @Test void ambiguousInputsAreRejectedBeforeAnyRunnerOrLegacyWrite() {
         var legacy = mock(StockBasicSyncService.class);
         var jobs = mock(StockBasicJobService.class);
@@ -24,7 +38,6 @@ class CommandOptionBoundaryTest {
                 {"sync-stock-basic-questdb", "--=invalid"},
                 {"sync-stock-basic-questdb", "--unexpected", "value"},
                 {"migrate-questdb-schema", "--unexpected", "value"},
-                {"sync-stock-basic", "--unexpected", "value"},
                 {"show-stock-basic-latest", "--unexpected", "value"},
                 {"verify-questdb-jdbc", "--unexpected", "value"}
         }) assertThrows(IllegalArgumentException.class, () -> cli.run(new DefaultApplicationArguments(args)));

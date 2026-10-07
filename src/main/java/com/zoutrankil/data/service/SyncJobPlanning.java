@@ -1,6 +1,5 @@
 package com.zoutrankil.data.service;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import java.time.LocalDate;
@@ -20,9 +19,7 @@ public final class SyncJobPlanning {
         String input = parameterInput(options);
         if (input.getBytes(StandardCharsets.UTF_8).length > 65536)
             throw new IllegalArgumentException("Parameters exceed 64 KiB");
-        var mapper = new ObjectMapper().enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
-                .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
-        var node = mapper.readTree(input);
+        var node = RequestJson.readTree(input);
         if (node == null || !node.isObject()) throw new IllegalArgumentException("Parameter object required");
         var values = new LinkedHashMap<String,Object>();
         var fields = node.fields();

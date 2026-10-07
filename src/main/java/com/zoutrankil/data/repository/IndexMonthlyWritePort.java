@@ -1,13 +1,13 @@
 package com.zoutrankil.data.repository;
 
-import com.zoutrankil.data.service.IndexMonthlyUniverse;
+import com.zoutrankil.data.domain.IndexMonthlyDataset;
+
+import com.zoutrankil.data.domain.policy.IndexMonthlyUniverse;
 
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.IndexMonthlyMapper;
-import com.zoutrankil.data.service.IndexMonthlyJobService;
 import com.zoutrankil.data.service.IndexMonthlySource;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
@@ -40,7 +40,7 @@ public final class IndexMonthlyWritePort implements VerifiedBatchExecutor.Port<I
     private volatile boolean publicationComplete;
     private volatile Exception publicationFailure;
     public IndexMonthlyWritePort(String table,String targetId,JdbcTemplate jdbc,QuestDB questdb) {
-        IndexMonthlyJobService.requireIsolatedTableName(table);
+        IndexMonthlyDataset.requireIsolatedTableName(table);
         if(targetId==null||!targetId.matches("static-v2-[0-9a-f]{64}"))throw new IllegalArgumentException("Frozen isolated D022 target id required");
         this.table=table;this.targetId=targetId;this.writeTable=table;this.writeTargetId=targetId;
         this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());
@@ -48,7 +48,7 @@ public final class IndexMonthlyWritePort implements VerifiedBatchExecutor.Port<I
     }
     /** Bind generic verified-batch writes to the exact stage created for the current frozen window. */
     public synchronized void useStagingTarget(String stage,String physicalId) {
-        IndexMonthlyJobService.requireIsolatedTableName(stage);
+        IndexMonthlyDataset.requireIsolatedTableName(stage);
         if(!stage.contains("_stage_")||physicalId==null||!physicalId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException("D022 journal-owned stage identity required");
         this.writeTable=stage;this.writeTargetId=physicalId;

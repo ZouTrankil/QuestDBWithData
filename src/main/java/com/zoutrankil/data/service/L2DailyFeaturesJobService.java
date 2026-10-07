@@ -8,7 +8,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncJobOwner;
 import com.zoutrankil.data.domain.SyncRunState;
-import com.zoutrankil.data.repository.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.repository.L2DailyFeaturesWritePort;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import io.questdb.client.QuestDB;

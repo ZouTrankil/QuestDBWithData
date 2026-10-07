@@ -8,6 +8,8 @@ import java.util.*;
 
 /** Full-key, full-value comparison. Equal row counts alone can never pass this check. */
 public final class DatasetWriteComparison {
+    private static final ObjectMapper JSON = new ObjectMapper();
+
     private DatasetWriteComparison() {}
     public record Difference(String keyDigest, String kind, List<String> columns) {
         public Difference { columns = List.copyOf(columns); }
@@ -66,7 +68,7 @@ public final class DatasetWriteComparison {
     private static String digest(Object value) {
         try {
             return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
-                    .digest(new ObjectMapper().writeValueAsString(value).getBytes(StandardCharsets.UTF_8)));
+                    .digest(JSON.writeValueAsString(value).getBytes(StandardCharsets.UTF_8)));
         } catch (Exception failure) { throw new IllegalArgumentException("Cannot fingerprint full readback values", failure); }
     }
 }

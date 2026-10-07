@@ -1,0 +1,22 @@
+Captured on 2026-10-07 from pre-T12 compiled classes retained after the passing T11 gate.
+The helper was compiled and run with the portable JDK 24.0.2, using only the copied
+.gradle/refactor-baseline/T12/before-classes and before-resources plus the resolved
+runtime dependency jars. No new T12 production class was compiled or loaded.
+BeforeT12GoldenCapture.java.txt is the exact standalone capture source.
+
+Old class SHA-256:
+DailyDataset.class   7813E9824876ABDEB6ABA1F279675D213CAB9B4CEE54A4AF3E1A504B31B23A86
+SourceContract.class 16693AD532482F3A498933D8A9D5C81C2C2150DBE0B761D5ECE70DFB4C3DFF2C
+DailySource.class    6B37F627E3466ED76A4B6D0314B67F4341241D902BA4C3A93525816BF2ABD57B
+DailyWritePort.class A31EDEFDF881457FEC1EE0006A6581671A028D8F6AFA6CEDDC7079E9A816EF20
+
+Exact bytes are retained for all output except three known unordered Set arrays:
+dataset-definition.json: capabilities sorted lexically.
+source-page-contract.json: allowedParameters sorted lexically.
+sync-request.json: definition.supportedModes sorted lexically.
+No field, business-key, dependency, row, numeric or null ordering/value was normalized.
+The request fingerprint uses the original SyncRequestIdentity implementation.
+The source receipt was produced by the real DailySource with an offline page service.
+The frozen bytes were serialized by the original batch Json mapper, and their hash is
+the same raw SHA-256 used by SourceCollector. The test also exercises collect end to end.
+These fixtures must not be refreshed by serializing the new implementation.

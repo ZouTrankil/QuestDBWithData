@@ -4,6 +4,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+import javax.sql.DataSource;
 import org.quartz.*;
 import java.nio.file.*;
 import java.net.*;
@@ -33,6 +35,9 @@ class SqliteRuntimeTest {
                 "--jdb.api-port=0","--jdb.api-token=test-token-with-at-least-24-characters","--jdb.archive-root="+archive,
                 "--jdb.scheduling-enabled=false","--jdb.core-source-fanout-enabled="+(fixture==null));
     }
+    private static JdbcTemplate jdbc(ConfigurableApplicationContext context) {
+        return new JdbcTemplate(context.getBean(DataSource.class));
+    }
     @Test void sqliteLaunchRestartQuartzPauseAndApiAuth() throws Exception {
         String id=ContractsTest.request("sqlite-launch").instanceId();
         try (var context=start()) {
@@ -40,10 +45,10 @@ class SqliteRuntimeTest {
             var result=launches.launch(ContractsTest.request("sqlite-launch"));
             assertEquals("BLOCKED",result.get("business_state"));
             assertTrue(result.get("steps").toString().contains("core-source-plan-invalid"));
-            assertEquals(0,ledger.jdbc().queryForObject("SELECT count(*) FROM source_probe",Integer.class));
-            assertEquals(0,ledger.jdbc().queryForObject("SELECT count(*) FROM batch_job_instance",Integer.class));
+            assertEquals(0,jdbc(context).queryForObject("SELECT count(*) FROM source_probe",Integer.class));
+            assertEquals(0,jdbc(context).queryForObject("SELECT count(*) FROM batch_job_instance",Integer.class));
             assertEquals("BLOCKED",launches.launch(ContractsTest.request("sqlite-retry")).get("business_state"));
-            assertEquals(0,ledger.jdbc().queryForObject("SELECT count(*) FROM batch_job_instance",Integer.class));
+            assertEquals(0,jdbc(context).queryForObject("SELECT count(*) FROM batch_job_instance",Integer.class));
             Scheduler scheduler=context.getBean(Scheduler.class);
             assertTrue(scheduler.checkExists(new JobKey("post_close","jdb")));
             assertTrue(scheduler.checkExists(new JobKey("source_cyq_perf","jdb")));
@@ -81,21 +86,21 @@ class SqliteRuntimeTest {
             assertTrue(prometheus.body().contains("jdb_verified_quarterly_observations 0"));
             scheduler.getContext().put("calendar",new TradingCalendar("calendar-fixture-v1",java.time.LocalDate.of(2026,9,28),
                     java.time.LocalDate.of(2026,9,30),new TreeSet<>(List.of(java.time.LocalDate.of(2026,9,28),java.time.LocalDate.of(2026,9,29),java.time.LocalDate.of(2026,9,30)))));
-            int instancesBeforePlan=ledger.jdbc().queryForObject("SELECT count(*) FROM business_instance",Integer.class);
+            int instancesBeforePlan=jdbc(context).queryForObject("SELECT count(*) FROM business_instance",Integer.class);
             var planRequest=HttpRequest.newBuilder(URI.create("http://localhost:"+port+"/v1/backfills/plan")).header("Authorization",auth)
                     .header("Content-Type","application/json").POST(HttpRequest.BodyPublishers.ofString(Json.write(
                             new ManagementServer.BackfillPlanRequest("source_daily","2026-09-28","2026-09-30",3,"calendar-fixture-v1")))).build();
             var planned=http.send(planRequest,HttpResponse.BodyHandlers.ofString());
             assertEquals(200,planned.statusCode());assertTrue(planned.body().contains("\"dryRun\":true"));
             assertTrue(planned.body().contains("\"enqueued\":false"));assertTrue(planned.body().contains("2026-09-30"));
-            assertEquals(instancesBeforePlan,ledger.jdbc().queryForObject("SELECT count(*) FROM business_instance",Integer.class));
+            assertEquals(instancesBeforePlan,jdbc(context).queryForObject("SELECT count(*) FROM business_instance",Integer.class));
             var monthlyPlanRequest=HttpRequest.newBuilder(URI.create("http://localhost:"+port+"/v1/backfills/plan")).header("Authorization",auth)
                     .header("Content-Type","application/json").POST(HttpRequest.BodyPublishers.ofString(Json.write(
                             new ManagementServer.BackfillPlanRequest("source_cn_m","2026-05-01","2026-07-01",3,RecoveryPolicy.MONTHLY_PERIOD_VERSION)))).build();
             var monthlyPlanned=http.send(monthlyPlanRequest,HttpResponse.BodyHandlers.ofString());
             assertEquals(200,monthlyPlanned.statusCode());assertTrue(monthlyPlanned.body().contains("\"frequency\":\"MONTH\""));
             assertTrue(monthlyPlanned.body().contains("2026-05-01")&&monthlyPlanned.body().contains("2026-06-01")&&monthlyPlanned.body().contains("2026-07-01"));
-            assertEquals(instancesBeforePlan,ledger.jdbc().queryForObject("SELECT count(*) FROM business_instance",Integer.class));
+            assertEquals(instancesBeforePlan,jdbc(context).queryForObject("SELECT count(*) FROM business_instance",Integer.class));
             var quarterlyPlan=HttpRequest.newBuilder(URI.create("http://localhost:"+port+"/v1/backfills/plan")).header("Authorization",auth)
                     .header("Content-Type","application/json").POST(HttpRequest.BodyPublishers.ofString(Json.write(
                             new ManagementServer.BackfillPlanRequest("source_cn_gdp","2025-12-31","2026-06-30",2000,RecoveryPolicy.QUARTERLY_PERIOD_VERSION)))).build();
@@ -103,7 +108,7 @@ class SqliteRuntimeTest {
             assertEquals(200,quarterlyPlanned.statusCode());assertTrue(quarterlyPlanned.body().contains("\"frequency\":\"QUARTER\""));
             assertTrue(quarterlyPlanned.body().contains("\"maxPartitions\":1000"));
             assertTrue(quarterlyPlanned.body().contains("2025-12-31")&&quarterlyPlanned.body().contains("2026-03-31")&&quarterlyPlanned.body().contains("2026-06-30"));
-            assertEquals(instancesBeforePlan,ledger.jdbc().queryForObject("SELECT count(*) FROM business_instance",Integer.class));
+            assertEquals(instancesBeforePlan,jdbc(context).queryForObject("SELECT count(*) FROM business_instance",Integer.class));
             var stalePlan=HttpRequest.newBuilder(URI.create("http://localhost:"+port+"/v1/backfills/plan")).header("Authorization",auth)
                     .header("Content-Type","application/json").POST(HttpRequest.BodyPublishers.ofString(Json.write(
                             new ManagementServer.BackfillPlanRequest("source_daily","2026-09-28","2026-09-30",3,null)))).build();
@@ -120,7 +125,7 @@ class SqliteRuntimeTest {
             String inspectBody=Json.write(new ManagementServer.ArchiveInspectionRequest(l2Archive.toString()));
             var inspectRequest=HttpRequest.newBuilder(inspectUri).header("Authorization",auth).header("Content-Type","application/json").POST(HttpRequest.BodyPublishers.ofString(inspectBody)).build();
             assertEquals(409,http.send(inspectRequest,HttpResponse.BodyHandlers.ofString()).statusCode());
-            context.getBean(SqliteLedger.class).jdbc().update("UPDATE l2_archive_observation SET observed_at_millis=? WHERE source_path=?",System.currentTimeMillis()-360_000,l2Archive.toString());
+            jdbc(context).update("UPDATE l2_archive_observation SET observed_at_millis=? WHERE source_path=?",System.currentTimeMillis()-360_000,l2Archive.toString());
             var inspected=http.send(inspectRequest,HttpResponse.BodyHandlers.ofString());
             assertEquals(200,inspected.statusCode()); assertTrue(inspected.body().contains("ZIP_CRC_AND_CSV_VERIFIED")); assertTrue(inspected.body().contains("\"sourceRows\":3"));
             assertTrue(inspected.body().contains("SEMANTICALLY_PARSED"));assertTrue(inspected.body().contains("dfcf-csv-mapper-v1"));
@@ -132,9 +137,9 @@ class SqliteRuntimeTest {
             try(var deals=new java.util.zip.GZIPInputStream(Files.newInputStream(semanticManifest.getParent().resolve("deals.ndjson.gz")))) {
                 assertTrue(new String(deals.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8).contains("\"side\":\"BUY\""));
             }
-            assertEquals(1,context.getBean(SqliteLedger.class).jdbc().queryForObject("SELECT count(*) FROM l2_archive_ledger",Integer.class));
-            assertEquals(3,context.getBean(SqliteLedger.class).jdbc().queryForObject("SELECT count(*) FROM l2_archive_member",Integer.class));
-            assertEquals(2,context.getBean(SqliteLedger.class).jdbc().queryForObject("SELECT count(*) FROM BATCH_JOB_INSTANCE WHERE JOB_NAME='l2_archive_integrity'",Integer.class));
+            assertEquals(1,jdbc(context).queryForObject("SELECT count(*) FROM l2_archive_ledger",Integer.class));
+            assertEquals(3,jdbc(context).queryForObject("SELECT count(*) FROM l2_archive_member",Integer.class));
+            assertEquals(2,jdbc(context).queryForObject("SELECT count(*) FROM BATCH_JOB_INSTANCE WHERE JOB_NAME='l2_archive_integrity'",Integer.class));
             assertTrue(response.body().contains("auditEvents"));
             var pause=HttpRequest.newBuilder(URI.create("http://localhost:"+port+"/v1/schedules/source_cyq_perf/pause"))
                     .header("Authorization","Bearer test-token-with-at-least-24-characters").POST(HttpRequest.BodyPublishers.noBody()).build();
@@ -225,14 +230,14 @@ class SqliteRuntimeTest {
                 public DurableWriter.Proof inspect(DurableWriter.Intent i) { return new DurableWriter.Proof(false,false,false,false,null); }
             };
             assertEquals(DurableWriter.Delivery.UNKNOWN,writer.execute(intent,port));
-            var jdbc=ledger.jdbc();jdbc.update("INSERT INTO BATCH_JOB_INSTANCE(JOB_NAME,JOB_KEY) VALUES('source_daily','orphan-fixture')");
+            var jdbc=jdbc(context);jdbc.update("INSERT INTO BATCH_JOB_INSTANCE(JOB_NAME,JOB_KEY) VALUES('source_daily','orphan-fixture')");
             long batchInstance=jdbc.queryForObject("SELECT JOB_INSTANCE_ID FROM BATCH_JOB_INSTANCE WHERE JOB_KEY='orphan-fixture'",Long.class);
             jdbc.update("INSERT INTO BATCH_JOB_EXECUTION(JOB_INSTANCE_ID,CREATE_TIME,STATUS,EXIT_CODE) VALUES(?,CURRENT_TIMESTAMP,'UNKNOWN','UNKNOWN')",batchInstance);
             long orphanExecution=jdbc.queryForObject("SELECT JOB_EXECUTION_ID FROM BATCH_JOB_EXECUTION WHERE JOB_INSTANCE_ID=?",Long.class,batchInstance);
             jdbc.update("INSERT INTO BATCH_JOB_EXECUTION_PARAMS(JOB_EXECUTION_ID,PARAMETER_NAME,PARAMETER_TYPE,PARAMETER_VALUE,IDENTIFYING) VALUES(?,'instance','java.lang.String',?,'Y')",orphanExecution,"f".repeat(64));
             var pending=ledger.reconciliationQueue();assertTrue(Json.write(pending).contains("batch-1"));assertTrue(Json.write(pending).contains("jdb_test_protocol"));
             assertEquals(1,pending.get("orphanBatchExecutions").size());
-            assertEquals("UNKNOWN",ledger.jdbc().queryForObject("SELECT delivery FROM write_intent WHERE batch_id='batch-1'",String.class));
+            assertEquals("UNKNOWN",jdbc(context).queryForObject("SELECT delivery FROM write_intent WHERE batch_id='batch-1'",String.class));
             var server=context.getBean(ManagementServer.class);
             var response=HttpClient.newHttpClient().send(HttpRequest.newBuilder(URI.create("http://localhost:"+server.port()+"/v1/reconciliation"))
                     .header("Authorization","Bearer test-token-with-at-least-24-characters").GET().build(),HttpResponse.BodyHandlers.ofString());
@@ -247,7 +252,7 @@ class SqliteRuntimeTest {
             };
             assertEquals(DurableWriter.Delivery.VERIFIED,writer.execute(intent,reconciled));
             assertTrue(ledger.reconciliationQueue().get("writes").stream().noneMatch(row->"batch-1".equals(row.get("batch_id"))));
-            assertEquals(0,ledger.jdbc().queryForObject("SELECT count(*) FROM target_reservation WHERE target='jdb_test_protocol'",Integer.class));
+            assertEquals(0,jdbc(context).queryForObject("SELECT count(*) FROM target_reservation WHERE target='jdb_test_protocol'",Integer.class));
         }
     }
 
@@ -265,7 +270,7 @@ class SqliteRuntimeTest {
             children.heartbeat(childId,java.time.Instant.now());
             assertTrue(children.observe(request,"FactorReady").alive());
             assertEquals(1,ledger.reconciliationQueue().get("externalExecutions").size());
-            assertEquals(1,ledger.jdbc().queryForObject("SELECT count(*) FROM external_execution WHERE instance_id=?",Integer.class,request.instanceId()));
+            assertEquals(1,jdbc(context).queryForObject("SELECT count(*) FROM external_execution WHERE instance_id=?",Integer.class,request.instanceId()));
         }
         try(var context=start()) {
             var children=context.getBean(ExternalExecutionStore.class);
@@ -277,7 +282,7 @@ class SqliteRuntimeTest {
             var completed=children.observe(request,"FactorReady");
             assertEquals(BusinessState.VERIFIED,ExternalComputation.validate(request,"FactorReady",completed));
             assertEquals(childId,children.reserve(request,"FactorReady",archive.resolve("external/child.log")).childId());
-            assertEquals(3,context.getBean(SqliteLedger.class).jdbc().queryForObject("SELECT count(*) FROM external_execution_event WHERE child_id=?",Integer.class,childId));
+            assertEquals(3,jdbc(context).queryForObject("SELECT count(*) FROM external_execution_event WHERE child_id=?",Integer.class,childId));
         }
     }
 
@@ -330,9 +335,9 @@ class SqliteRuntimeTest {
             var first=executor.observe(request,"FactorReady");Thread.sleep(150);
             var second=executor.observe(request,"FactorReady");
             assertEquals(first.childId(),second.childId());assertTrue(second.alive());
-            assertEquals(1,context.getBean(SqliteLedger.class).jdbc().queryForObject(
+            assertEquals(1,jdbc(context).queryForObject(
                     "SELECT count(*) FROM external_execution WHERE instance_id=? AND stage='FactorReady'",Integer.class,request.instanceId()));
-            assertTrue(context.getBean(SqliteLedger.class).jdbc().queryForObject(
+            assertTrue(jdbc(context).queryForObject(
                     "SELECT count(*) FROM external_execution_event WHERE child_id=? AND event='DIAGNOSTIC'",Integer.class,first.childId())>0);
             assertEquals(ExternalExecutionStore.State.EXITED,awaitExternalTerminal(store,request).state());
         }
@@ -372,7 +377,7 @@ class SqliteRuntimeTest {
             var futures=new ArrayList<Future<RunRequest>>();
             for(int i=0;i<8;i++) { final int n=i; futures.add(pool.submit(() -> ledger.register(ContractsTest.request("race-"+n)))); }
             for(var future:futures) assertEquals(ContractsTest.request("race").instanceId(),future.get().instanceId());
-            assertEquals(1,ledger.jdbc().queryForObject("SELECT count(*) FROM business_instance",Integer.class));
+            assertEquals(1,jdbc(context).queryForObject("SELECT count(*) FROM business_instance",Integer.class));
             var r=ContractsTest.request("conflict");
             var changed=new RunRequest(r.requestId(),r.job(),r.logicalDate(),r.rangeStart(),r.rangeEnd(),r.definitionVersion(),r.revision(),
                     null,null,"changed-source",r.calendarVersion(),r.zone(),r.scheduledAt(),r.triggeredAt());
@@ -398,7 +403,7 @@ class SqliteRuntimeTest {
             assertEquals(1,calls.get("StrategyPublished").get());
             assertEquals("VERIFIED",launches.launch(ContractsTest.request("fixture-repeat")).get("business_state"));
             assertEquals(1,calls.get("StrategyPublished").get());
-            assertEquals(1,ledger.jdbc().queryForObject("SELECT count(*) FROM batch_job_instance",Integer.class));
+            assertEquals(1,jdbc(context).queryForObject("SELECT count(*) FROM batch_job_instance",Integer.class));
         }
     }
 
@@ -421,7 +426,7 @@ class SqliteRuntimeTest {
             } finally { release.countDown(); }
             assertEquals("VERIFIED",first.get(10,TimeUnit.SECONDS).get("business_state"));
             assertEquals(1,executions.get());
-            assertEquals(1,context.getBean(SqliteLedger.class).jdbc().queryForObject("SELECT count(*) FROM batch_job_execution",Integer.class));
+            assertEquals(1,jdbc(context).queryForObject("SELECT count(*) FROM batch_job_execution",Integer.class));
         }
     }
     @Test void ackDoesNotCertifyVisibilityAndSuspensionRetainsOwnership() throws Exception {
@@ -443,7 +448,7 @@ class SqliteRuntimeTest {
             assertEquals(1,sends.get());
             suspended.set(true);
             assertEquals(DurableWriter.Delivery.BLOCKED,writer.execute(intent,port));
-            assertEquals(1,ledger.jdbc().queryForObject("SELECT count(*) FROM target_reservation",Integer.class));
+            assertEquals(1,jdbc(context).queryForObject("SELECT count(*) FROM target_reservation",Integer.class));
         }
     }
 
@@ -477,9 +482,9 @@ class SqliteRuntimeTest {
             var retry=new RunRequest("late-second","source_daily",date,date,date,"daily-v1","0",null,null,second.fingerprint(),"cal","Asia/Shanghai",instant,instant,second.scopeIdentity());
             assertEquals("BLOCKED",launch.launch(retry).get("business_state")); // Complete input, but no QDB writer configured in this test.
             assertEquals(request.instanceId(),retry.instanceId());
-            assertEquals(1,ledger.jdbc().queryForObject("SELECT count(*) FROM batch_job_instance",Integer.class));
+            assertEquals(1,jdbc(context).queryForObject("SELECT count(*) FROM batch_job_instance",Integer.class));
             assertEquals(second.fingerprint(),ledger.request(request.instanceId()).inputFingerprint());
-            ledger.jdbc().update("INSERT INTO write_intent(batch_id,instance_id,target,owner,source_fingerprint,artifact,expected_rows,delivery) VALUES('pending',?,'jdb_test_pending','test',?,'retained',1,'INTENT')",request.instanceId(),second.fingerprint());
+            jdbc(context).update("INSERT INTO write_intent(batch_id,instance_id,target,owner,source_fingerprint,artifact,expected_rows,delivery) VALUES('pending',?,'jdb_test_pending','test',?,'retained',1,'INTENT')",request.instanceId(),second.fingerprint());
             var third=new RunRequest("late-third","source_daily",date,date,date,"daily-v1","0",null,null,first.fingerprint(),"cal","Asia/Shanghai",instant,instant,first.scopeIdentity());
             assertThrows(IllegalArgumentException.class,() -> launch.launch(third));
         }

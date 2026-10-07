@@ -1,10 +1,15 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarSlices;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarSource;
+
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.ExchangeCalendarMapper;
-import com.zoutrankil.data.repository.ExchangeCalendarWritePort;
+import com.zoutrankil.data.calendar.mapper.ExchangeCalendarMapper;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarWritePort;
 import io.questdb.client.QuestDB;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -50,8 +55,8 @@ class ExchangeCalendarWriteGroupLiveTest {
                         "members", List.of(Map.of("memberId", "calendar", "datasetId", "exchange_calendar",
                                 "definitionVersion", 1, "batchId", "calendar_member_" + suffix,
                                 "rows", expected.stream().map(row -> mapper.values(row).asMap()).toList()))));
-                var calendar = new ExchangeCalendarJobService(context.getBean(TusharePageService.class), jdbc,
-                        context.getBean(QuestDB.class), context.getBean(QuestDbProperties.class), ledger.toString(), table);
+                var calendar = new ExchangeCalendarJobService(context.getBean(TusharePageService.class),
+                        new com.zoutrankil.data.calendar.storage.ExchangeCalendarQuestDbTarget(table,jdbc,context.getBean(QuestDB.class),context.getBean(QuestDbProperties.class)),ledger.toString());
                 var group = new StockBasicWriteGroupService(context.getBean(DatasetRegistry.class),
                         mock(StockBasicJobService.class), calendar, jdbc, context.getBean(QuestDB.class), ledger.toString());
                 var first = group.run(request, null);

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.MarketBreadthDailyV1;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.repository.MarketBreadthDailyV1MaterializationPort;
-import com.zoutrankil.data.repository.MarketBreadthDailyV1MaterializationPort.Snapshot;
+import com.zoutrankil.data.domain.MarketBreadthDailyV1Snapshot;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -42,11 +42,11 @@ public final class MarketBreadthDailyV1MaterializeAdapter
             };
 
     private final MarketBreadthDailyV1MaterializationPort port;
-    private final Snapshot frozen;
+    private final MarketBreadthDailyV1Snapshot frozen;
     private long sourceRawRows;
-    private Snapshot lastVerificationSnapshot;
+    private MarketBreadthDailyV1Snapshot lastVerificationSnapshot;
 
-    public MarketBreadthDailyV1MaterializeAdapter(MarketBreadthDailyV1MaterializationPort port, Snapshot frozen) {
+    public MarketBreadthDailyV1MaterializeAdapter(MarketBreadthDailyV1MaterializationPort port, MarketBreadthDailyV1Snapshot frozen) {
         this.port = Objects.requireNonNull(port);
         this.frozen = Objects.requireNonNull(frozen);
     }
@@ -72,7 +72,7 @@ public final class MarketBreadthDailyV1MaterializeAdapter
         check(cancelled);
         port.cancellationProbe(cancelled);
         port.bind(request.from(), request.to(), frozen);
-        Snapshot before = port.snapshot();
+        MarketBreadthDailyV1Snapshot before = port.snapshot();
         requireSourceReady(before, full(request));
         sourceRawRows = port.sourceRawRows(request.from(), request.to());
         var expected = port.expected(request.from(), request.to());
@@ -82,7 +82,7 @@ public final class MarketBreadthDailyV1MaterializeAdapter
                     expected.stream().map(MarketBreadthDailyV1::tradeDate).toList());
             requireCalendarVersion(request);
         }
-        Snapshot sourceAfter = port.snapshot();
+        MarketBreadthDailyV1Snapshot sourceAfter = port.snapshot();
         if (!before.sourceUnchanged(sourceAfter))
             throw new IllegalStateException("D095 source changed while reading its complete bounded aggregation");
         if ((sourceRawRows == 0) != expected.isEmpty()
@@ -92,7 +92,7 @@ public final class MarketBreadthDailyV1MaterializeAdapter
             throw new IllegalStateException("D095 FULL repair requires real nonempty source rows");
         if (expected.isEmpty()) {
             var actual = port.actual(request.from(), request.to());
-            Snapshot afterEmptyRead = port.snapshot();
+            MarketBreadthDailyV1Snapshot afterEmptyRead = port.snapshot();
             if (!actual.isEmpty() || !before.equals(afterEmptyRead))
                 throw new IllegalStateException("D095 empty source has stale output or its MV version changed");
             requireReady(afterEmptyRead);
@@ -104,7 +104,7 @@ public final class MarketBreadthDailyV1MaterializeAdapter
         consumer.accept(new SyncJobRunner.Page<>(expected, fingerprint, evidence,
                 request.from() + "/" + request.to()));
         check(cancelled);
-        Snapshot completed = port.snapshot();
+        MarketBreadthDailyV1Snapshot completed = port.snapshot();
         requireReady(completed);
         if (!frozen.sourceUnchanged(completed))
             throw new IllegalStateException("D095 source changed before verification was complete");
@@ -142,7 +142,7 @@ public final class MarketBreadthDailyV1MaterializeAdapter
         return timeout == null ? Duration.ofMinutes(3) : timeout;
     }
     public long sourceRawRows() { return sourceRawRows; }
-    public Snapshot lastVerificationSnapshot() { return lastVerificationSnapshot; }
+    public MarketBreadthDailyV1Snapshot lastVerificationSnapshot() { return lastVerificationSnapshot; }
 
     private void requireRequest(SyncJobDefinition.FrozenRequest request) {
         if (request == null || !"mv_market_breadth_daily_v1".equals(request.definition().datasetId())
@@ -158,7 +158,7 @@ public final class MarketBreadthDailyV1MaterializeAdapter
             throw new IllegalArgumentException("Exact D095 frozen definition, source version and physical target required");
     }
 
-    private void requireSourceReady(Snapshot state, boolean repair) {
+    private void requireSourceReady(MarketBreadthDailyV1Snapshot state, boolean repair) {
         if ((!repair && !state.valid()) || "refreshing".equalsIgnoreCase(state.viewStatus())
                 || !state.sourceSettled() || !state.mvSettled()
                 || !frozen.sourceUnchanged(state) || frozen.mvId() != state.mvId()
@@ -167,7 +167,7 @@ public final class MarketBreadthDailyV1MaterializeAdapter
             throw new IllegalStateException("D095 source/MV is invalid, refreshing, unsettled or changed");
     }
 
-    private void requireReady(Snapshot state) {
+    private void requireReady(MarketBreadthDailyV1Snapshot state) {
         if (!state.valid() || !state.caughtUp() || !state.sourceSettled() || !state.mvSettled()
                 || !frozen.sourceUnchanged(state) || frozen.mvId() != state.mvId()
                 || !frozen.mvDirectory().equals(state.mvDirectory())
@@ -176,7 +176,7 @@ public final class MarketBreadthDailyV1MaterializeAdapter
     }
 
     private String evidence(SyncJobDefinition.FrozenRequest request, int rows, String fingerprint,
-                            Snapshot state) throws Exception {
+                            MarketBreadthDailyV1Snapshot state) throws Exception {
         var details = new LinkedHashMap<String, Object>();
         details.put("nativeRefresh", full(request) ? "FULL_ISOLATED" : "INCREMENTAL");
         details.put("source", MarketBreadthDailyV1MaterializationPort.SOURCE);

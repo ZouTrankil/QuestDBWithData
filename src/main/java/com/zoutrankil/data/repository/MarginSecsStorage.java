@@ -12,7 +12,6 @@ import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /** Bounded physical snapshot and natural-key comparison for the D030 YEAR/WAL/DEDUP table. */

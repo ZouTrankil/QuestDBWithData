@@ -1,0 +1,108 @@
+package com.zoutrankil.batch;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.zoutrankil.data.domain.PageContract;
+import com.zoutrankil.data.service.PageExecutor;
+import java.nio.file.*;
+import java.time.*;
+import java.util.*;
+
+/** Read-only characterization against the preserved pre-T13 compiled implementation. */
+public final class CaptureSourceBaseline {
+    public static void main(String[] args) throws Exception {
+        Path output=Path.of(args[0]); Files.createDirectories(output);
+        var cases=new ArrayList<Map<String,Object>>();
+        for(String dataset:new TreeSet<>(SourceContract.SUPPORTED)) {
+            var c=SourceContract.load(dataset);
+            String code=switch(dataset) {
+                case "exchange_calendar" -> "SSE";
+                case "etf_basic" -> "E";
+                case "fut_basic" -> "CFFEX";
+                case "fut_holding" -> "IF";
+                case "fut_mapping" -> "IF.CFX";
+                case "fut_daily","fut_settle","ft_limit" -> "IF2610.CFX";
+                default -> "000001.SZ";
+            };
+            LocalDate day=LocalDate.parse(SourceContract.MONTHLY_AGGREGATES.contains(dataset)?"2026-09-01":
+                    dataset.equals("cn_gdp")||dataset.equals("fina_mainbz")?"2026-06-30":
+                    dataset.equals("disclosure_date")?"2026-09-30":"2026-09-28");
+            Set<String> codes=c.isMarketAggregate()?Set.of():Set.of(code);
+            var rows=providerRows(dataset,code);
+            var fixture=new LinkedHashMap<String,Object>();
+            fixture.put("dataset",dataset);fixture.put("date",day);fixture.put("codes",codes);
+            fixture.put("providerRows",rows);
+            var expected=new LinkedHashMap<String,Object>();fixture.put("expected",expected);
+            expected.put("contract",Json.MAPPER.valueToTree(c));
+            expected.put("pageContract",page(c.pageContract()));expected.put("providerContract",page(c.providerContract(code)));
+            expected.put("businessColumns",c.businessColumns());expected.put("logicalDateColumn",c.logicalDateColumn());
+            expected.put("writeBatchSize",c.writeBatchSize());expected.put("ddl",c.createTableSql("jdb_test_baseline"));
+            var codesCheck=new LinkedHashMap<String,Boolean>();
+            for(String candidate:List.of("000001.SZ","000001.SH","000001.BJ","000001.CSI","000001.SI","510300.OF","IF2610.CFX","IF.CFX","IF","CFFEX","SSE","SZSE","E","invalid","")) codesCheck.put(candidate,c.validCode(candidate));
+            expected.put("validCodes",codesCheck);
+            var normalizationCases=new ArrayList<Map<String,Object>>();
+            var prepared=c.prepareRows(rows,day,codes,code).getFirst();
+            fixture.put("preparedRow",prepared);
+            normalizationCases.add(normalizationCase("valid",c,prepared,day,codes));
+            normalizationCases.add(normalizationCase("wrong-date",c,prepared,day.plusDays(1),codes));
+            normalizationCases.add(normalizationCase("empty-universe",c,prepared,day,Set.of()));
+            for(var column:c.businessColumns()) {
+                var missing=new LinkedHashMap<>(prepared);missing.remove(column.source());
+                normalizationCases.add(normalizationCase("missing-"+column.source(),c,missing,day,codes));
+                var nullValue=new LinkedHashMap<>(prepared);nullValue.put(column.source(),Json.MAPPER.nullNode());
+                normalizationCases.add(normalizationCase("null-"+column.source(),c,nullValue,day,codes));
+                var wrongType=new LinkedHashMap<>(prepared);wrongType.put(column.source(),Json.MAPPER.valueToTree(false));
+                normalizationCases.add(normalizationCase("type-"+column.source(),c,wrongType,day,codes));
+            }
+            fixture.put("normalizationCases",normalizationCases);
+            var requests=new ArrayList<Map<String,Object>>();
+            var collector=new SourceCollector(output.resolve("archive").resolve(dataset));
+            try {
+                var collected=collector.collect(new SourceCollector.Request(dataset,day,codes,"baseline-universe-v1",null),(provider,params)->{
+                    var request=new LinkedHashMap<String,Object>();request.put("contract",page(provider));request.put("params",new LinkedHashMap<>(params));requests.add(request);
+                    var response=rows;
+                    if(dataset.equals("fina_mainbz")) {
+                        var changed=new LinkedHashMap<>(rows.getFirst());
+                        changed.put("bz_code",Json.MAPPER.valueToTree(params.get("type")));
+                        changed.put("bz_item",Json.MAPPER.valueToTree("baseline-"+params.get("type")));
+                        response=List.of(changed);
+                    }
+                    return new PageExecutor.Page(response,null,true,"baseline-provider-v1");
+                });
+                expected.put("frozen",Files.readString(Path.of(collected.artifact())));
+                expected.put("fingerprint",collected.fingerprint());expected.put("state",collected.state());
+                var frozen=collector.read(collected.fingerprint());
+                expected.put("rows",frozen.rows());expected.put("coverage",collected.completeCoverage());
+                var physical=new ArrayList<Object>();var keys=new ArrayList<String>();
+                for(var row:frozen.rows()) {physical.add(c.physicalRow(row,Instant.parse("2026-10-01T01:02:03.123456789Z")));keys.add(c.key(row));}
+                expected.put("physical",physical);expected.put("keys",keys);
+                expected.put("observedCodes",c.observedCodes(frozen.rows()));
+            } catch(Exception e) {expected.put("collectError",Map.of("type",e.getClass().getName(),"message",Objects.toString(e.getMessage(),"")));}
+            expected.put("requests",requests);cases.add(fixture);
+        }
+        Files.writeString(output.resolve("sources-before-t13.json"),Json.MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(cases));
+        System.out.println("Captured "+cases.size()+" sources");
+        for(var c:cases) {var expected=(Map<?,?>)c.get("expected"); if(expected.containsKey("collectError"))System.out.println(c.get("dataset")+": "+expected.get("collectError"));}
+    }
+    static JsonNode page(PageContract c) {
+        ObjectNode result=Json.MAPPER.valueToTree(c);
+        result.set("allowedParameters",Json.MAPPER.valueToTree(new TreeSet<>(c.allowedParameters())));
+        return result;
+    }
+    static Map<String,Object> normalizationCase(String name,SourceContract c,Map<String,JsonNode> row,LocalDate day,Set<String> codes) {
+        var result=new LinkedHashMap<String,Object>();result.put("name",name);result.put("date",day);result.put("codes",codes);
+        try {result.put("normalized",Json.write(c.normalize(row,day,codes)));}
+        catch(Exception e) {result.put("error",Map.of("type",e.getClass().getName(),"message",Objects.toString(e.getMessage(),"")));}
+        return result;
+    }
+    static List<Map<String,JsonNode>> providerRows(String dataset,String code) {
+        if(dataset.equals("cn_bond_yield_curve")) {
+            var result=new ArrayList<Map<String,JsonNode>>();
+            for(String curve:List.of("中债国债收益率曲线","中债中短期票据收益率曲线(AAA)","中债商业银行普通债收益率曲线(AAA)")) {
+                var row=new LinkedHashMap<String,JsonNode>();row.put("raw_trade_date",Json.MAPPER.valueToTree("2026-09-28"));row.put("raw_curve_name",Json.MAPPER.valueToTree(curve));
+                for(String tenor:List.of("3m","6m","1y","3y","5y","7y","10y","30y"))row.put("raw_"+tenor,Json.MAPPER.valueToTree("2.25"));result.add(row);
+            }return result;
+        }
+        return List.of(NativeSourceTest.row(dataset,code));
+    }
+}

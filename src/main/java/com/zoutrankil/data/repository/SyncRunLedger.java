@@ -244,6 +244,34 @@ public final class SyncRunLedger {
             try (var r = s.executeQuery()) { return r.next(); }
         }
     }
+    /** Verify the durable revision4 event and every owner in its bounded cancellation chain. */
+    public void requireUncancelledRevision4SubmissionEvent(String runId, String sliceId, String expectedPayloadJson)
+            throws SQLException {
+        try (var c = connect(); var statement = c.prepareStatement(
+                "SELECT state,payload_json FROM sync_events WHERE entry_id=? AND revision=4")) {
+            statement.setString(1, sliceId);
+            try (var rows = statement.executeQuery()) {
+                if (!rows.next() || !"SUBMITTED".equals(rows.getString(1))
+                        || !expectedPayloadJson.equals(rows.getString(2)) || rows.next())
+                    throw new IllegalStateException("Revision4 submission event differs");
+            }
+            try (var cancelled = c.prepareStatement("SELECT count(*) FROM sync_cancellations WHERE run_id=?")) {
+                var visited = new HashSet<String>();
+                while (runId != null) {
+                    if (visited.size() >= 64 || !visited.add(runId))
+                        throw new IllegalStateException("Parent cancellation chain is cyclic or exceeds budget");
+                    var owner = getRun(runId);
+                    if (owner == null) throw new IllegalStateException("Parent run authority is absent");
+                    cancelled.setString(1, runId);
+                    try (var rows = cancelled.executeQuery()) {
+                        if (!rows.next() || rows.getLong(1) != 0)
+                            throw new IllegalStateException("Run or parent cancelled");
+                    }
+                    runId = owner.parentRunId();
+                }
+            }
+        }
+    }
     public List<Entry> entries(String runId, String afterId, int limit) throws SQLException {
         id(runId); if (afterId != null) id(afterId); pageSize(limit);
         try (var c = connect(); var s = c.prepareStatement(

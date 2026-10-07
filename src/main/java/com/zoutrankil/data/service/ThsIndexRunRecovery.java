@@ -25,7 +25,7 @@ public final class ThsIndexRunRecovery {
         Path folder=ledgerPath.getParent().resolve("sync-evidence").resolve(runId);
         if(Files.size(folder.resolve("prepared.json"))>64L*1024*1024)
             throw new IllegalStateException("THS recovery evidence exceeds bound");
-        var json=JobDefinitionJson.mapper();var frozen=json.readTree(folder.resolve("prepared.json").toFile());
+        var json=JobDefinitionJson.mapper();var frozen=json.readTree(FileEvidenceStore.readBounded(folder.resolve("prepared.json"), 64 * 1024 * 1024, () -> new IllegalStateException("THS recovery evidence exceeds bound")));
         if(!runId.equals(frozen.path("runId").asText())
                 || !run.targetId().equals(frozen.path("targetId").asText())
                 || !run.frozenJson().equals(frozen.path("request").asText()))
@@ -40,8 +40,8 @@ public final class ThsIndexRunRecovery {
         if(!(preparedWrite?input.startsWith(allowed):input.getParent().equals(allowed))
                 || Files.size(input)>ThsIndexStorage.MAX_BYTES)
             throw new IllegalStateException("THS source receipt path or size differs");
-        byte[] bytes=Files.readAllBytes(input);
-        String hash=HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+        byte[] bytes=FileEvidenceStore.readBounded(input, ThsIndexStorage.MAX_BYTES, () -> new IllegalStateException("THS source receipt path or size differs"));
+        String hash=FileEvidenceStore.sha256(bytes);
         var sourceProof=json.readTree(bytes);
         if(!hash.equals(source.sourceFingerprint()))
             throw new IllegalStateException("THS source receipt hash changed");
@@ -111,7 +111,7 @@ public final class ThsIndexRunRecovery {
         if(Files.exists(receipt)) {
             if(!json.readTree(receipt.toFile()).equals(json.readTree(json.writeValueAsBytes(proof))))
                 throw new IllegalStateException("Existing THS completion receipt differs from physical proof");
-        } else Files.writeString(receipt,json.writeValueAsString(proof),StandardOpenOption.CREATE_NEW);
+        } else FileEvidenceStore.writeNewUtf8(receipt,json.writeValueAsString(proof));
         int sourceRows=source.rows().size();
         var verification=Map.of("passed",true,"expectedRows",sourceRows,"actualRows",sourceRows,
                 "matchedRows",sourceRows,"mismatchedRows",0,"duplicateKeys",0,"missingKeys",0,
@@ -147,6 +147,6 @@ public final class ThsIndexRunRecovery {
 
     private static String fingerprint(List<com.zoutrankil.data.domain.table.ThsIndexRow> rows) throws Exception {
         byte[] bytes=JobDefinitionJson.mapper().writeValueAsBytes(rows);
-        return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+        return FileEvidenceStore.sha256(bytes);
     }
 }

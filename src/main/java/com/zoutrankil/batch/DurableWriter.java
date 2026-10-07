@@ -2,8 +2,6 @@ package com.zoutrankil.batch;
 
 import java.nio.file.*;
 import java.util.*;
-import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.jdbc.support.JdbcTransactionManager;
 
 /** Cross-database write protocol. Unknown delivery is reconciled, never automatically resent. */
 public final class DurableWriter {
@@ -32,10 +30,8 @@ public final class DurableWriter {
         Proof inspect(Intent intent) throws Exception;
     }
     private final SqliteLedger ledger;
-    private final TransactionTemplate transactions;
     public DurableWriter(SqliteLedger ledger) {
-        this.ledger=ledger;
-        this.transactions=new TransactionTemplate(new JdbcTransactionManager(Objects.requireNonNull(ledger.jdbc().getDataSource())));
+        this.ledger=Objects.requireNonNull(ledger);
     }
     public Delivery execute(Intent intent, Port port) throws Exception {
         try (var guard = ledger.tryLock("target:"+intent.target()).orElseThrow(() -> new IllegalStateException("Target busy"))) {
@@ -47,7 +43,7 @@ public final class DurableWriter {
                 port.preflight(intent);
                 guard.requireAlive();
                 // Committed UNKNOWN *before* network I/O closes the send/ledger crash gap.
-                int claimed = ledger.jdbc().update("UPDATE write_intent SET delivery='UNKNOWN',attempt=attempt+1,updated_at=current_timestamp WHERE batch_id=? AND delivery='INTENT'", intent.batchId());
+                int claimed = ledger.claimWriteUnknown(intent.batchId());
                 if (claimed != 1) throw new IllegalStateException("Write intent no longer sendable");
                 guard.requireAlive();
                 try { port.send(intent); }
@@ -59,41 +55,25 @@ public final class DurableWriter {
                     ledger.audit(intent.instanceId(), "delivery-unknown", detail);
                     return Delivery.UNKNOWN;
                 }
-                ledger.jdbc().update("UPDATE write_intent SET delivery='ACKNOWLEDGED',updated_at=current_timestamp WHERE batch_id=? AND delivery='UNKNOWN'", intent.batchId());
+                ledger.acknowledgeWrite(intent.batchId());
                 state=Delivery.ACKNOWLEDGED;
             }
             Proof proof=port.inspect(intent);
             if (proof.suspended()) {
-                ledger.jdbc().update("UPDATE write_intent SET delivery='BLOCKED',proof=? WHERE batch_id=?", Json.write(proof), intent.batchId());
+                ledger.blockWrite(intent.batchId(), Json.write(proof));
                 return Delivery.BLOCKED;
             }
             if (!proof.verified(state == Delivery.ACKNOWLEDGED)) return state;
-            transactions.executeWithoutResult(tx -> {
-                ledger.jdbc().update("UPDATE write_intent SET delivery='VERIFIED',proof=?,updated_at=current_timestamp WHERE batch_id=?", Json.write(proof), intent.batchId());
-                ledger.jdbc().update("DELETE FROM target_reservation WHERE target=? AND batch_id=?", intent.target(), intent.batchId());
-            });
+            ledger.verifyWriteAndRelease(intent.batchId(), intent.target(), Json.write(proof));
             return Delivery.VERIFIED;
         }
     }
     private void persist(Intent intent) {
-        transactions.executeWithoutResult(tx -> {
-            ledger.jdbc().update("""
-                INSERT INTO write_intent(batch_id,instance_id,target,owner,source_fingerprint,artifact,expected_rows,delivery)
-                VALUES(?,?,?,?,?,?,?,'INTENT') ON CONFLICT(batch_id) DO NOTHING
-                """, intent.batchId(), intent.instanceId(), intent.target(), intent.owner(), intent.sourceFingerprint(), intent.artifact(), intent.expectedRows());
-            var existing=ledger.jdbc().queryForMap("SELECT * FROM write_intent WHERE batch_id=?", intent.batchId());
-            if (!intent.instanceId().equals(existing.get("instance_id")) || !intent.target().equals(existing.get("target"))
-                    || !intent.owner().equals(existing.get("owner")) || !intent.sourceFingerprint().equals(existing.get("source_fingerprint"))
-                    || !intent.artifact().equals(existing.get("artifact")) || intent.expectedRows()!=((Number)existing.get("expected_rows")).longValue())
-                throw new IllegalArgumentException("Batch identity reused for different content");
-            if (Delivery.VERIFIED.name().equals(existing.get("delivery"))) return;
-            ledger.jdbc().update("INSERT INTO target_reservation(target,batch_id) VALUES(?,?) ON CONFLICT(target) DO NOTHING", intent.target(), intent.batchId());
-            String owner=ledger.jdbc().queryForObject("SELECT batch_id FROM target_reservation WHERE target=?", String.class, intent.target());
-            if (!intent.batchId().equals(owner)) throw new IllegalStateException("Target has unresolved sender: "+owner);
-        });
+        ledger.reserveWriteIntent(new SqliteLedger.WriteIntentRecord(intent.batchId(), intent.instanceId(),
+                intent.target(), intent.owner(), intent.sourceFingerprint(), intent.artifact(), intent.expectedRows()));
     }
     public Delivery delivery(String batchId) {
-        return Delivery.valueOf(ledger.jdbc().queryForObject("SELECT delivery FROM write_intent WHERE batch_id=?", String.class, batchId));
+        return Delivery.valueOf(ledger.writeDelivery(batchId));
     }
     private void verifyRetainedArtifact(Intent intent) throws Exception {
         var hash=java.security.MessageDigest.getInstance("SHA-256");

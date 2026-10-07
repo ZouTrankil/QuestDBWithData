@@ -43,7 +43,7 @@ class EtfMarketOverviewViewCatalogStartupTest {
             assertNotNull(jobs.require(EtfMarketOverviewDailyCacheJobService.JOB_ID, 1));
             var source = context.getBean("d101NoConnectionDataSource", DataSource.class);
             verify(source, never()).getConnection(); verify(source, never()).getConnection(anyString(), anyString());
-            Path output = Path.of("artifacts/java-migration/D102/commands/java-catalog-startup-20261006.json");
+            Path output = temporary.resolve("java-catalog-startup-20261006.json");
             Files.createDirectories(output.getParent());
             Files.writeString(output, JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(
                     Map.of("task_id", "D102", "dataset_count", datasets.definitions().size(),

@@ -1,5 +1,7 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.domain.IndexMonthlyDataset;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.IndexMonthly;
 import com.zoutrankil.data.domain.IndexMonthlyKey;
@@ -7,15 +9,12 @@ import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-import com.zoutrankil.data.service.IndexMonthlyJobService;
 import com.zoutrankil.data.service.IndexMonthlySource;
 import com.zoutrankil.data.service.IndexMonthlySyncJobOwner;
 import com.zoutrankil.data.service.SyncJobRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.file.*;
 import java.security.MessageDigest;
 import java.time.Duration;
@@ -53,7 +52,7 @@ public final class IndexMonthlyStaging {
                             SyncJobDefinition.FrozenRequest request, String code, LocalDate from, LocalDate to,
                             String sourceReceipt, String sourceFingerprint, int sourceRows,
                             Path evidence, BooleanSupplier cancelled) throws Exception {
-        IndexMonthlyJobService.requireIsolatedTableName(target);
+        IndexMonthlyDataset.requireIsolatedTableName(target);
         requireWindow(code, from, to);
         Objects.requireNonNull(request);
         check(cancelled);
@@ -64,7 +63,8 @@ public final class IndexMonthlyStaging {
         Path runRoot = requireRunRoot(stageRoot, runId);
         Path rawReceipt = requireEvidenceFile(runRoot, sourceReceipt, IndexMonthlySource.MAX_EVIDENCE_BYTES);
         if (sourceFingerprint == null || !sourceFingerprint.matches("[0-9a-f]{64}") || sourceRows < 1
-                || sourceRows > IndexMonthlySource.CLIENT_ROW_CAP || !sha256(Files.readAllBytes(rawReceipt)).equals(sourceFingerprint))
+                || sourceRows > IndexMonthlySource.CLIENT_ROW_CAP || !sha256(FileEvidenceStore.readBounded(rawReceipt, IndexMonthlySource.MAX_EVIDENCE_BYTES,
+                        () -> new IOException("D022 source receipt exceeds its evidence bound or escaped the run directory"))).equals(sourceFingerprint))
             throw new IllegalArgumentException("D022 complete bounded raw-source receipt required before stage creation");
         var sourcePage = IndexMonthlySource.reopen(rawReceipt, sourceFingerprint, code, from, to, observedAt);
         if (sourcePage.rows().size() != sourceRows)
@@ -75,7 +75,7 @@ public final class IndexMonthlyStaging {
         if (!IndexMonthlyStorage.physicalTargetId(jdbc, target, before.identity()).equals(physicalTarget))
             throw new IllegalStateException("D022 target physical generation changed before stage preparation");
         var outside = storage.outside(code, from, to);
-        String stage = IndexMonthlyJobService.ISOLATED_TABLE_PREFIX + "stage_" + UUID.randomUUID().toString().replace("-", "");
+        String stage = IndexMonthlyDataset.ISOLATED_PREFIX + "stage_" + UUID.randomUUID().toString().replace("-", "");
         String end = to.plusDays(1) + "T00:00:00.000000Z";
         String lower = from + "T00:00:00.000000Z";
         Path intent = stageRoot.resolve(stage + "-intent.json");
@@ -132,7 +132,7 @@ public final class IndexMonthlyStaging {
     public Recovered recover(String target, String logicalTargetId, String physicalTarget, String runId,
                              SyncJobDefinition.FrozenRequest request, SyncJobRunner.Page<IndexMonthly> fetched,
                              Path evidence) throws Exception {
-        IndexMonthlyJobService.requireIsolatedTableName(target);
+        IndexMonthlyDataset.requireIsolatedTableName(target);
         Objects.requireNonNull(request);
         Objects.requireNonNull(fetched);
         Path stageRoot = evidence.toAbsolutePath().normalize();
@@ -142,7 +142,8 @@ public final class IndexMonthlyStaging {
         Path intentPath = intents.getFirst().toRealPath();
         if (!intentPath.startsWith(runRoot) || Files.size(intentPath) > MAX_INTENT_BYTES)
             throw new IllegalStateException("D022 stage intent is outside the run evidence bound");
-        JsonNode intent = JobDefinitionJson.mapper().readTree(Files.readAllBytes(intentPath));
+        JsonNode intent = JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(intentPath, MAX_INTENT_BYTES,
+                () -> new IllegalStateException("D022 stage intent is outside the run evidence bound")));
         String code = required(intent, "code");
         LocalDate from = LocalDate.parse(required(intent, "windowFrom"));
         LocalDate to = LocalDate.parse(required(intent, "windowTo"));
@@ -177,7 +178,8 @@ public final class IndexMonthlyStaging {
         String fetchedReceipt = Path.of(fetched.responseEvidence()).toAbsolutePath().normalize().toString();
         if (!source.toString().equals(fetchedReceipt) || !fetched.cursor().equals(code)
                 || !fetched.sourceFingerprint().equals(sourceFingerprint) || fetched.rows().size() != sourceRows
-                || !sha256(Files.readAllBytes(source)).equals(sourceFingerprint))
+                || !sha256(FileEvidenceStore.readBounded(source, IndexMonthlySource.MAX_EVIDENCE_BYTES,
+                        () -> new IOException("D022 source receipt exceeds its evidence bound or escaped the run directory"))).equals(sourceFingerprint))
             throw new IllegalStateException("D022 fetched ledger event and stage source evidence differ");
         var reopened = IndexMonthlySource.reopen(source, sourceFingerprint, code, from, to, observedAt);
         if (!sameRows(reopened.rows(), fetched.rows()))
@@ -421,24 +423,16 @@ public final class IndexMonthlyStaging {
     private static void writeNewDurable(Path path, Object body) throws Exception {
         byte[] bytes = JobDefinitionJson.mapper().writeValueAsBytes(body);
         if (bytes.length < 1 || bytes.length > MAX_INTENT_BYTES) throw new IllegalArgumentException("D022 stage evidence size bound exceeded");
-        try (FileChannel channel = FileChannel.open(path, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
-            ByteBuffer buffer = ByteBuffer.wrap(bytes);
-            while (buffer.hasRemaining()) channel.write(buffer);
-            channel.force(true);
-        }
+        FileEvidenceStore.writeNewDurable(path, bytes);
     }
 
     private static void replaceDurable(Path path, Object body) throws Exception {
         byte[] bytes = JobDefinitionJson.mapper().writeValueAsBytes(body);
         if (bytes.length < 1 || bytes.length > MAX_INTENT_BYTES) throw new IllegalArgumentException("D022 stage evidence size bound exceeded");
-        Path temporary = path.resolveSibling(path.getFileName() + ".tmp-" + UUID.randomUUID());
         try {
-            writeNewDurable(temporary, body);
-            Files.move(temporary, path, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+            FileEvidenceStore.replaceDurable(path, bytes);
         } catch (AtomicMoveNotSupportedException unsupported) {
             throw new IOException("D022 stage READY intent requires an atomic durable replace", unsupported);
-        } finally {
-            Files.deleteIfExists(temporary);
         }
     }
 
@@ -449,13 +443,13 @@ public final class IndexMonthlyStaging {
     }
 
     private static String sha256(byte[] bytes) throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        return FileEvidenceStore.sha256(bytes);
     }
 
     private static String quoteLiteral(String value) { return value.replace("'", "''"); }
 
     private static void requireWindow(String code, LocalDate from, LocalDate to) {
-        if (!com.zoutrankil.data.service.IndexMonthlyUniverse.validProviderCode(code)
+        if (!com.zoutrankil.data.domain.policy.IndexMonthlyUniverse.validProviderCode(code)
                 || from == null || to == null || from.isAfter(to)) throw new IllegalArgumentException("Bounded D022 window required");
     }
 

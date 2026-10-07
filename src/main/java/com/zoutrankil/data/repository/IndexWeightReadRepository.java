@@ -1,5 +1,7 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadPage;
@@ -28,7 +30,7 @@ public class IndexWeightReadRepository implements DatasetImplementation {
     public IndexWeightReadRepository(QuestDbBoundedReader reader,
             @Value("${app.sync.index-weight-table:java_d021_index_weight_acceptance}") String table) {
         this.reader = Objects.requireNonNull(reader);
-        com.zoutrankil.data.service.IndexWeightJobService.requireIsolatedTableName(table);
+        IsolatedTablePolicy.INDEX_WEIGHT.require(table);
         this.table = table;
     }
     @Override public DatasetDefinition definition() { return IndexWeightDataset.definition(table); }

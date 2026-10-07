@@ -5,9 +5,9 @@ import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.repository.QuestDbBoundedReader;
+import com.zoutrankil.data.service.DatasetReadService;
 import com.zoutrankil.data.service.DatasetRegistry;
-import com.zoutrankil.data.service.StockBasicSyncService;
+import com.zoutrankil.data.stock.application.StockBasicSyncService;
 import com.zoutrankil.data.service.SyncJobRegistry;
 import java.time.Instant;
 import java.util.LinkedHashMap;
@@ -32,10 +32,10 @@ public class ExternalApiController {
     private final DatasetRegistry datasets;
     private final SyncJobRegistry jobs;
     private final StockBasicSyncService stockBasic;
-    private final QuestDbBoundedReader reader;
+    private final DatasetReadService reader;
 
     public ExternalApiController(DatasetRegistry datasets, SyncJobRegistry jobs,
-                                 StockBasicSyncService stockBasic, QuestDbBoundedReader reader) {
+                                 StockBasicSyncService stockBasic, DatasetReadService reader) {
         this.datasets = datasets;
         this.jobs = jobs;
         this.stockBasic = stockBasic;
@@ -85,7 +85,7 @@ public class ExternalApiController {
         }
         var query = new DatasetReadQuery(definition.columns().stream()
                 .map(DatasetDefinition.Column::logicalName).toList(), Map.of(), null, null, null, limit, null);
-        return Mono.fromCallable(() -> reader.read(definition, query, null, values -> values))
+        return Mono.fromCallable(() -> reader.read(definition, query))
                 .subscribeOn(Schedulers.boundedElastic())
                 .onErrorMap(org.springframework.dao.DataAccessException.class,
                         error -> new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "QuestDB unavailable"));

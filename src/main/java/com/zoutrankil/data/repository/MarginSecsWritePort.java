@@ -7,7 +7,6 @@ import com.zoutrankil.data.domain.MarginSecsKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.MarginSecsMapper;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
 import java.sql.ResultSet;

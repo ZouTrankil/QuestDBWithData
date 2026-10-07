@@ -98,4 +98,3 @@ class EquityStyleMonthlyReadRepositoryTest {
         verifyNoInteractions(reader);
     }
 }
-

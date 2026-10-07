@@ -532,4 +532,3 @@ class MacroCoreMonthlyViewLiveReadAcceptanceTest {
                 StandardOpenOption.CREATE_NEW);
     }
 }
-

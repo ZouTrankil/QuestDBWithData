@@ -1,5 +1,7 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.IndexDailyMarketMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +20,7 @@ public class IndexDailyMarketReadRepository implements DatasetImplementation {
     public IndexDailyMarketReadRepository(QuestDbBoundedReader reader,
             @Value("${app.sync.index-daily-market-table:java_d019_index_daily_market_acceptance}") String table) {
         this.reader = Objects.requireNonNull(reader);
-        com.zoutrankil.data.service.IndexDailyMarketJobService.requireIsolatedTableName(table);
+        IsolatedTablePolicy.INDEX_DAILY_MARKET.require(table);
         this.table = table;
     }
     @Override public DatasetDefinition definition() { return IndexDailyMarketDataset.definition(table); }
@@ -28,7 +30,7 @@ public class IndexDailyMarketReadRepository implements DatasetImplementation {
     }
     public DatasetReadPage<IndexDailyMarket> findRange(String tsCode, LocalDate fromInclusive,
             LocalDate toExclusive, int pageSize, DatasetReadCursor cursor) {
-        if (!com.zoutrankil.data.service.IndexDailyMarketUniverse.valid(tsCode) || fromInclusive == null || toExclusive == null
+        if (!com.zoutrankil.data.domain.policy.IndexDailyMarketUniverse.valid(tsCode) || fromInclusive == null || toExclusive == null
                 || !fromInclusive.isBefore(toExclusive)) throw new IllegalArgumentException("Known index and increasing half-open range required");
         return find(new DatasetReadQuery(COLUMNS, Map.of("ts_code", tsCode), "trade_date",
                 fromInclusive, toExclusive, pageSize, cursor));

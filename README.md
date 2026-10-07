@@ -1,6 +1,6 @@
 # QuestDBWithData
 
-Java data-ingestion project. The first vertical slice fetches Tushare Pro's current listed-stock directory with Spring WebClient, maps it to a Java model, writes a local CSV snapshot, or sends it to QuestDB through the native Java QWP client.
+Java data-ingestion project. The first vertical slice fetches Tushare Pro's current listed-stock directory with Spring WebClient, maps it to a Java model, and sends it to QuestDB through the native Java QWP client.
 
 ## Requirements
 
@@ -10,21 +10,7 @@ Java data-ingestion project. The first vertical slice fetches Tushare Pro's curr
 
 ## Run
 
-Set `app.tushare.token` in `src/main/resources/application.yml`, then run:
-
-```bash
-./gradlew run --args='sync-stock-basic'
-```
-
-To choose explicit files:
-
-```bash
-./gradlew run --args='sync-stock-basic --output var/stock_basic.csv'
-```
-
-The command calls Tushare over HTTPS, checks the API response code, and atomically writes the returned rows to `var/stock_basic.csv`.
-
-To write and verify the result in QuestDB, configure QuestDB in `src/main/resources/application.yml` and run:
+Set `app.tushare.token` and QuestDB credentials in `src/main/resources/application.yml`, then run:
 
 ```bash
 ./gradlew run --args='sync-stock-basic-questdb'

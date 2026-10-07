@@ -27,7 +27,7 @@ final class IndexMembershipStageRecovery {
         String selected=null;IndexMembershipStorage.Snapshot replacement=null;var retained=new ArrayList<String>();
         for(Path intent:intents) {
             if(Files.size(intent)>96L*1024*1024) throw new IllegalStateException("Stage intent exceeds bound");
-            var proof=json.readTree(intent.toFile());String stage=proof.path("stage").asText();
+            var proof=json.readTree(FileEvidenceStore.readBounded(intent, 96 * 1024 * 1024, () -> new IllegalStateException("Stage intent exceeds bound")));String stage=proof.path("stage").asText();
             if(!intent.getFileName().toString().equals(stage+"-intent.json")
                     || !prepared.equals(json.treeToValue(proof.path("prepared"),IndexMembershipStaging.Prepared.class)))
                 throw new IllegalStateException("Stage intent differs from frozen preparation");
@@ -47,10 +47,10 @@ final class IndexMembershipStageRecovery {
         }
         if(!new IndexMembershipStorage(jdbc,table).snapshot().equals(before))
             throw new IllegalStateException("Original membership catalog changed during stage recovery");
-        Files.writeString(folder.resolve("stage-recovery-"+UUID.randomUUID()+".json"),json.writeValueAsString(
+        FileEvidenceStore.writeNewUtf8(folder.resolve("stage-recovery-"+UUID.randomUUID()+".json"),json.writeValueAsString(
                 Map.of("runId",run,"selectedStage",selected,"rebuiltFreshStage",rebuilt,
                         "stageRowsSubmitted",rebuilt?prepared.rows().size():0,"retainedStages",retained,
-                        "writerStopped",true,"sourceRequests",0)),StandardOpenOption.CREATE_NEW);
+                        "writerStopped",true,"sourceRequests",0)));
         journal.requireLease(lease,true);
         return journal.create(new ReferencePublicationJournal.Intent("membership-publication-"+UUID.randomUUID(),"index_member",run,
                 table,"java_index_member_backup_"+UUID.randomUUID().toString().replace("-",""),selected,target,

@@ -24,7 +24,7 @@ public final class IndexCatalogRunRecovery {
         Path folder=ledgerPath.getParent().resolve("sync-evidence").resolve(runId);
         if(Files.size(folder.resolve("prepared.json"))>64L*1024*1024)
             throw new IllegalStateException("Catalog recovery evidence exceeds bound");
-        var json=JobDefinitionJson.mapper();var frozen=json.readTree(folder.resolve("prepared.json").toFile());
+        var json=JobDefinitionJson.mapper();var frozen=json.readTree(FileEvidenceStore.readBounded(folder.resolve("prepared.json"), 64 * 1024 * 1024, () -> new IllegalStateException("Catalog recovery evidence exceeds bound")));
         if(!runId.equals(frozen.path("runId").asText())
                 || !run.targetId().equals(frozen.path("targetId").asText())
                 || !run.frozenJson().equals(frozen.path("request").asText()))
@@ -39,7 +39,7 @@ public final class IndexCatalogRunRecovery {
         } else {
             Path input=Path.of(source.path()).toAbsolutePath().normalize();
             byte[] bytes=IndexCatalogFileSource.readBounded(input,16*1024*1024);
-            String hash=HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+            String hash=FileEvidenceStore.sha256(bytes);
             if(bytes.length>16*1024*1024 || bytes.length!=source.bytes() || !hash.equals(source.sha256()))
                 throw new IllegalStateException("Prepared catalog receipt changed");
             var proof=json.readTree(bytes);
@@ -90,7 +90,7 @@ public final class IndexCatalogRunRecovery {
         if(Files.exists(receipt)) {
             if(!json.readTree(receipt.toFile()).equals(json.readTree(json.writeValueAsBytes(proof))))
                 throw new IllegalStateException("Existing catalog completion receipt differs from physical proof");
-        } else Files.writeString(receipt,json.writeValueAsString(proof),StandardOpenOption.CREATE_NEW);
+        } else FileEvidenceStore.writeNewUtf8(receipt,json.writeValueAsString(proof));
         int sourceRows=source.rows().size();
         var verification=Map.of("passed",true,"expectedRows",sourceRows,"actualRows",sourceRows,
                 "matchedRows",sourceRows,"mismatchedRows",0,"duplicateKeys",0,"missingKeys",0,
@@ -119,6 +119,6 @@ public final class IndexCatalogRunRecovery {
 
     private static String fingerprint(List<com.zoutrankil.data.domain.table.IndexRow> rows) throws Exception {
         byte[] bytes=JobDefinitionJson.mapper().writeValueAsBytes(rows);
-        return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+        return FileEvidenceStore.sha256(bytes);
     }
 }

@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.MoneyflowThs;
@@ -7,7 +9,7 @@ import com.zoutrankil.data.domain.MoneyflowThsDataset;
 import com.zoutrankil.data.domain.MoneyflowThsKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
-import com.zoutrankil.data.repository.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.repository.MoneyflowThsWritePort;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -105,10 +107,10 @@ public final class MoneyflowThsSyncAdapter implements SyncJobRunner.Adapter<Mone
         body.put("logicalDate", request.logicalDate());
         body.put("tradeDates", dates); body.put("completedDateSlices", pageCount); body.put("sourceRows", rowCount);
         body.put("sourceReceipts", pageEvidence); body.put("complete", true);
-        byte[] bytes = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        byte[] bytes = JobDefinitionJson.canonicalMapper()
                 .writeValueAsBytes(body);
         if (bytes.length > MAX_COMPLETION_BYTES) throw new IllegalStateException("D025 completion evidence exceeds 16 MiB");
-        try { Files.write(complete, bytes, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE); }
+        try { FileEvidenceStore.writeNew(complete,bytes); }
         catch (java.nio.file.FileAlreadyExistsException exists) { throw new IllegalStateException("D025 completion evidence collision", exists); }
         return new SyncJobRunner.SourceCompletion(pageCount, rowCount, true, complete.toString());
     }

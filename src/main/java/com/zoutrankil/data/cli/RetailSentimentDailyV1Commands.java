@@ -1,6 +1,5 @@
 package com.zoutrankil.data.cli;
 
-import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRunState;
@@ -13,14 +12,13 @@ final class RetailSentimentDailyV1Commands {
     private RetailSentimentDailyV1Commands() {}
     static void execute(String command, Map<String,String> options, RetailSentimentDailyV1JobService owner) throws Exception {
         Objects.requireNonNull(owner, "Registered D098 owner required");
-        var json = JobDefinitionJson.mapper();
         switch (command) {
             case "install-retail-sentiment-daily-isolated" -> {
-                requireKeys(options, Set.of()); System.out.println(json.writeValueAsString(owner.installIsolated()));
+                requireKeys(options, Set.of()); CliOutput.printJson(owner.installIsolated(), CliOutput.Profile.JOB_DEFINITION, false);
             }
             case "repair-retail-sentiment-daily-isolated" -> {
                 requireKeys(options, Set.of()); var result = owner.repairIsolated();
-                System.out.println(json.writeValueAsString(result)); requireComplete(result);
+                CliOutput.printJson(result, CliOutput.Profile.JOB_DEFINITION, false); requireComplete(result);
             }
             case "retail-sentiment-daily-job-status", "cancel-retail-sentiment-daily-run", "resume-retail-sentiment-daily-run" -> {
                 requireKeys(options, Set.of("--run"));
@@ -29,13 +27,13 @@ final class RetailSentimentDailyV1Commands {
                     case "cancel-retail-sentiment-daily-run" -> owner.cancel(options.get("--run"));
                     default -> owner.resume(options.get("--run"));
                 };
-                System.out.println(json.writeValueAsString(value));
+                CliOutput.printJson(value, CliOutput.Profile.JOB_DEFINITION, false);
                 if (value instanceof RetailSentimentDailyV1JobService.MaterializationResult result) requireComplete(result);
             }
             case "reconcile-retail-sentiment-daily-run" -> {
                 requireKeys(options, Set.of("--run","--writer-stopped"));
                 if (!"true".equals(options.get("--writer-stopped"))) throw new IllegalArgumentException("writer-stopped must be true");
-                System.out.println(json.writeValueAsString(owner.reconcile(options.get("--run"), true)));
+                CliOutput.printJson(owner.reconcile(options.get("--run"), true), CliOutput.Profile.JOB_DEFINITION, false);
             }
             case "plan-retail-sentiment-daily-job", "run-retail-sentiment-daily-job" -> {
                 var required = Set.of("--from","--to","--logical-date");
@@ -45,11 +43,11 @@ final class RetailSentimentDailyV1Commands {
                 var plan = owner.plan(LocalDate.parse(options.get("--from")),LocalDate.parse(options.get("--to")),
                         LocalDate.parse(options.get("--logical-date")),options.containsKey("--mode") ? Mode.valueOf(options.get("--mode")) : null);
                 if (command.startsWith("plan-")) {
-                    System.out.println(json.writeValueAsString(Map.of("status","PLANNED","executed",false,
-                            "request",json.readTree(SyncRequestIdentity.snapshotJson(plan.request())),
-                            "targetId",plan.targetId(),"source",plan.source())));
+                    CliOutput.printJson(Map.of("status","PLANNED","executed",false,
+                            "request",CliOutput.readTree(SyncRequestIdentity.snapshotJson(plan.request()), CliOutput.Profile.JOB_DEFINITION),
+                            "targetId",plan.targetId(),"source",plan.source()), CliOutput.Profile.JOB_DEFINITION, false);
                 } else {
-                    var result = owner.run(plan); System.out.println(json.writeValueAsString(result)); requireComplete(result);
+                    var result = owner.run(plan); CliOutput.printJson(result, CliOutput.Profile.JOB_DEFINITION, false); requireComplete(result);
                 }
             }
             default -> throw new IllegalArgumentException("Unknown D098 command");

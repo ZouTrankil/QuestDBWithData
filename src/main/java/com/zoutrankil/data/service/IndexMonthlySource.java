@@ -1,12 +1,14 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+import com.zoutrankil.data.domain.policy.IndexMonthlyUniverse;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.IndexMonthlyMapper;
 import java.nio.file.*;
-import java.security.MessageDigest;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -48,14 +50,15 @@ public final class IndexMonthlySource {
         body.put("from",from);body.put("to",to);body.put("observedAt",observedAt);body.put("parameters",params);body.put("fields",FIELDS);
         body.put("rawRows",raw);body.put("returnedRows",rows.size());body.put("sourceComplete",true);body.put("clientRowCap",CLIENT_ROW_CAP);
         body.put("sourceVersion",complete.sourceVersion());
-        byte[] bytes=JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true).writeValueAsBytes(body);requireEvidence(bytes);
+        byte[] bytes=JobDefinitionJson.canonicalMapper().writeValueAsBytes(body);requireEvidence(bytes);
         Files.createDirectories(evidenceRoot);Path receipt=evidenceRoot.resolve("index-monthly-"+index.providerCode().replace('.','-')+"-"+start+"-"+end+"-"+UUID.randomUUID()+".json");
-        Files.write(receipt,bytes,StandardOpenOption.CREATE_NEW);return new SyncJobRunner.Page<>(rows,sha256(bytes),receipt.toString(),index.providerCode());
+        FileEvidenceStore.writeNew(receipt,bytes);return new SyncJobRunner.Page<>(rows,sha256(bytes),receipt.toString(),index.providerCode());
     }
     public static SyncJobRunner.Page<IndexMonthly> reopen(Path receipt,String fingerprint,String expectedCode,LocalDate from,LocalDate to,Instant observedAt)throws Exception {
         var index=requireIndex(expectedCode);requireWindow(from,to);Objects.requireNonNull(observedAt);
         if(fingerprint==null||!fingerprint.matches("[0-9a-f]{64}")||!Files.isRegularFile(receipt)||Files.size(receipt)>MAX_EVIDENCE_BYTES)throw new IllegalArgumentException("Bounded D022 receipt/SHA-256 required");
-        byte[] bytes=Files.readAllBytes(receipt);if(!sha256(bytes).equals(fingerprint))throw new IllegalStateException("D022 immutable source receipt fingerprint changed");
+        byte[] bytes=FileEvidenceStore.readBounded(receipt, MAX_EVIDENCE_BYTES,
+                () -> new IllegalArgumentException("Bounded D022 receipt/SHA-256 required"));if(!sha256(bytes).equals(fingerprint))throw new IllegalStateException("D022 immutable source receipt fingerprint changed");
         var json=JobDefinitionJson.mapper();JsonNode proof=json.readTree(bytes);
         if(!"tushare".equals(proof.path("sourceKind").asText())||!"index_monthly".equals(proof.path("endpoint").asText())||proof.path("schemaVersion").asInt(-1)!=1
                 ||!index.providerCode().equals(proof.path("providerCode").asText())||!index.canonicalCode().equals(proof.path("canonicalCode").asText())
@@ -80,11 +83,11 @@ public final class IndexMonthlySource {
         body.put("layer",index.layer());body.put("bucket",index.bucket());body.put("from",from);body.put("to",to);body.put("observedAt",observedAt);body.put("parameters",params);body.put("fields",FIELDS);
         body.put("responseRows",page.rows().size());body.put("rawRows",page.rows());body.put("sourceComplete",false);body.put("clientRowCap",CLIENT_ROW_CAP);
         body.put("evidenceStatus","unverified_raw_response");body.put("explicitEnd",page.explicitEnd());body.put("failureCategory",failure.getClass().getSimpleName());body.put("failure",failure.getMessage());
-        if(page.sourceVersion()!=null)body.put("sourceVersion",page.sourceVersion());byte[] bytes=JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true).writeValueAsBytes(body);requireEvidence(bytes);
-        Files.createDirectories(evidenceRoot);Files.write(evidenceRoot.resolve("incomplete-"+UUID.randomUUID()+".json"),bytes,StandardOpenOption.CREATE_NEW);
+        if(page.sourceVersion()!=null)body.put("sourceVersion",page.sourceVersion());byte[] bytes=JobDefinitionJson.canonicalMapper().writeValueAsBytes(body);requireEvidence(bytes);
+        Files.createDirectories(evidenceRoot);FileEvidenceStore.writeNew(evidenceRoot.resolve("incomplete-"+UUID.randomUUID()+".json"),bytes);
     }
     public static IndexMonthlyUniverse.Index requireIndex(String providerCode){var index=IndexMonthlyUniverse.resolveProvider(providerCode);if(index==null)throw new IllegalArgumentException("D022 code must be one of the frozen 55 monthly-enabled Python indices");return index;}
     public static void requireWindow(LocalDate from,LocalDate to){Objects.requireNonNull(from);Objects.requireNonNull(to);long days=ChronoUnit.DAYS.between(from,to)+1;if(days<1||days>MAX_WINDOW_DAYS)throw new IllegalArgumentException("D022 range must be 1..3660 calendar days");}
     private static void requireEvidence(byte[] bytes){if(bytes.length>MAX_EVIDENCE_BYTES)throw new IllegalArgumentException("D022 source evidence exceeds 16 MiB");}
-    private static String sha256(byte[] bytes)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));}
+    private static String sha256(byte[] bytes)throws Exception{return FileEvidenceStore.sha256(bytes);}
 }

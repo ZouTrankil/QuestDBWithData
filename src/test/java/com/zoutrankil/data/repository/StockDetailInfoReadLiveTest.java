@@ -1,5 +1,9 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.stock.storage.StockDetailInfoReadRepository;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
+import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
+
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadQuery;
@@ -46,7 +50,7 @@ class StockDetailInfoReadLiveTest {
             var selected = new ArrayList<>(first.rows()); selected.addAll(second.rows());
             var physical = new StockDetailInfoStorage(jdbc,"stock_detail_info").readKeys(
                     selected.stream().map(r -> r.tsCode()).toList());
-            assertEquals(selected,physical.stream().map(new com.zoutrankil.data.mapper.StockDetailInfoMapper()::fromStorage).toList());
+            assertEquals(selected,physical.stream().map(new com.zoutrankil.data.stock.mapper.StockDetailInfoMapper()::fromStorage).toList());
             assertEquals(LocalDate.of(2002,6,14),selected.stream()
                     .filter(r -> r.tsCode().equals("000003.SZ")).findFirst().orElseThrow().delistingDate());
 

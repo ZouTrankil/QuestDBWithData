@@ -6,8 +6,8 @@ import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.EquityStyleMonthlyMapper;
 import com.zoutrankil.data.repository.EquityStyleMonthlyWritePort;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.repository.DatasetPublicationReadModel;
 import java.nio.file.*;
-import java.sql.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,9 +26,9 @@ public final class EquityStyleMonthlyJobService implements SyncJobOwner {
         public Plan(FrozenRequest request,String targetId,EquityStyleMonthlySource.Batch source){this(request,targetId,source,null);}
     }
     public record MaterializationResult(SyncJobRunner.Result result,long sourceRawRows,
-            EquityStyleMonthlySource.Batch source,EquityStyleMonthlyWritePort.Snapshot target,String targetSnapshotError) {}
+            EquityStyleMonthlySource.Batch source,EquityStyleMonthlyTargetSnapshot target,String targetSnapshotError) {}
     public record Status(String runId,SyncRunState state,String targetId,String logicalDate,int verifiedRows,
-            int unresolvedSlices,boolean cancellationRequested,EquityStyleMonthlyWritePort.Snapshot currentTarget,String currentTargetError) {}
+            int unresolvedSlices,boolean cancellationRequested,EquityStyleMonthlyTargetSnapshot currentTarget,String currentTargetError) {}
     private final Path ledgerPath;
     private final EquityStyleMonthlySource source;
     private final Supplier<EquityStyleMonthlyWritePort> factory;
@@ -111,7 +111,7 @@ public final class EquityStyleMonthlyJobService implements SyncJobOwner {
         if(verified!=null&&observed.snapshot()!=null&&!verified.equals(observed.snapshot()))error="TargetChangedAfterVerification";
         return new MaterializationResult(result,plan.source().rawRows(),plan.source(),verified==null?observed.snapshot():verified,error);
     }
-    public EquityStyleMonthlyWritePort.Snapshot installIsolated()throws Exception{
+    public EquityStyleMonthlyTargetSnapshot installIsolated()throws Exception{
         requireNoPendingPublication();var writer=port();source.snapshot();writer.createIsolatedTarget();return writer.targetSnapshot();
     }
     public String tableName(){if(targetTable!=null){EquityStyleMonthlyWritePort.requireIsolatedTable(targetTable);return targetTable;}return port().table();}
@@ -121,17 +121,10 @@ public final class EquityStyleMonthlyJobService implements SyncJobOwner {
     public Path ledgerPath(){return ledgerPath;}
     /** Unknown prepared writes and materializations share the same dataset-wide retained exclusion. */
     public void requireNoPendingPublication()throws Exception{
-        if(!Files.isRegularFile(ledgerPath))return;
-        try(var c=DriverManager.getConnection("jdbc:sqlite:"+ledgerPath.toUri().toASCIIString()+"?mode=ro");var s=c.createStatement()){
-            s.execute("PRAGMA query_only=ON");s.setQueryTimeout(5);
-            try(var tables=s.executeQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='sync_interval_locks'")){
-                if(tables.next())try(var q=c.prepareStatement("SELECT id FROM sync_interval_locks WHERE dataset_id=? LIMIT 1")){
-                    q.setString(1,datasetId());try(var rows=q.executeQuery()){if(rows.next())throw new IllegalStateException("D103 dataset has an active or uncertain publication lease");}
-                }
-            }
-            try(var q=c.prepareStatement("SELECT e.id FROM sync_entries e JOIN sync_runs r ON r.id=e.run_id WHERE json_extract(r.frozen_json,'$.definition.datasetId')=? AND (e.state IN ('SUBMITTED','ACKNOWLEDGED','IN_DOUBT') OR (e.kind='RUN' AND e.state IN ('PENDING','RUNNING'))) LIMIT 1")){
-                q.setString(1,datasetId());try(var rows=q.executeQuery()){if(rows.next())throw new IllegalStateException("D103 pending publication requires explicit reconciliation");}
-            }
+        switch(DatasetPublicationReadModel.read(ledgerPath,datasetId())){
+            case LEASE_HELD -> throw new IllegalStateException("D103 dataset has an active or uncertain publication lease");
+            case PENDING_PUBLICATION -> throw new IllegalStateException("D103 pending publication requires explicit reconciliation");
+            case CLEAR -> { }
         }
     }
     public Status status(String runId)throws Exception{
@@ -231,7 +224,7 @@ public final class EquityStyleMonthlyJobService implements SyncJobOwner {
     private SyncRunLedger.Run requireRun(SyncRunLedger ledger,String id)throws Exception{var run=ledger.getRun(id);if(!JOB_ID.equals(run.jobId())||run.jobVersion()!=definition().version())throw new IllegalArgumentException("Run does not belong to D103");return run;}
     private static List<SyncRunLedger.Entry> children(SyncRunLedger ledger,String id)throws Exception{var result=new ArrayList<SyncRunLedger.Entry>();String cursor=null;while(true){var page=ledger.entries(id,cursor,100);if(page.isEmpty())break;result.addAll(page);if(result.size()>100)throw new IllegalStateException("D103 child budget exceeded");cursor=page.getLast().id();}return result;}
     private static String proof(int n,String fp,String evidence)throws Exception{return JobDefinitionJson.mapper().writeValueAsString(Map.of("verification",Map.of("passed",true,"expectedRows",n,"actualRows",n,"matchedRows",n,"mismatchedRows",0,"duplicateKeys",0,"missingKeys",0,"sourceFingerprint",fp,"readbackEvidence",evidence,"writerStopped",true)));}
-    private record Observed(EquityStyleMonthlyWritePort.Snapshot snapshot,String error){}
+    private record Observed(EquityStyleMonthlyTargetSnapshot snapshot,String error){}
     private Observed safeSnapshot(){try{return safeSnapshot(port());}catch(RuntimeException e){return new Observed(null,e.getClass().getSimpleName());}}
     private static Observed safeSnapshot(EquityStyleMonthlyWritePort writer){try{return new Observed(writer.targetSnapshot(),null);}catch(RuntimeException e){return new Observed(null,e.getClass().getSimpleName());}}
     private EquityStyleMonthlyWritePort port(){return Objects.requireNonNull(factory.get(),"D103 isolated writer required");}

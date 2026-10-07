@@ -6,6 +6,7 @@ import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
 /** D012's explicit derived source-to-physical contract for the audited external stk_st_daily table. */
 public final class StockStDailyDataset {
+    public static final java.time.LocalDate HISTORY_ANCHOR = java.time.LocalDate.of(2010, 1, 1);
     private StockStDailyDataset() {}
     private static final TemporalContract CALENDAR_DAY = new TemporalContract(TemporalKind.BUSINESS_DATE,
             "BASIC", "calendar", "DAY", "SSE open trade date stored as UTC-midnight carrier");

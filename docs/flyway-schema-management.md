@@ -38,7 +38,6 @@ app:
 | `sync-stock-basic-questdb` | 先迁移，再获取数据和写入 |
 | `show-stock-basic-latest` | 先迁移，再查询 view |
 | `verify-questdb-jdbc` | 仅 SELECT 1，不创建数据库对象 |
-| `sync-stock-basic` | 仅 HTTP/CSV，不执行迁移 |
 
 ```bash
 ./gradlew run --args='migrate-questdb-schema'

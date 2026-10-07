@@ -6,7 +6,7 @@ import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.IndexDailyMarket;
 import com.zoutrankil.data.domain.IndexDailyMarketKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-import com.zoutrankil.data.service.IndexDailyMarketUniverse;
+import com.zoutrankil.data.domain.policy.IndexDailyMarketUniverse;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;

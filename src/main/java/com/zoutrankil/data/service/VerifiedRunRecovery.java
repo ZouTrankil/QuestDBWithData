@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.SyncRunLedger;
@@ -59,11 +61,10 @@ public final class VerifiedRunRecovery {
             throw new IllegalStateException("Completed source coverage no longer matches verified child");
         Files.createDirectories(receiptDirectory);
         Path receipt = receiptDirectory.resolve("revalidated-" + UUID.randomUUID() + ".json");
-        Files.writeString(receipt, json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
+        FileEvidenceStore.writeNewUtf8(receipt,json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
                 "priorRunId", priorRun, "targetId", targetId, "verifiedAt", Instant.now().toString(),
                 "expectedRows", expected, "actualRows", totals[1], "pages", totals[0],
-                "sourceEvidence", completion.evidence(), "sliceReadbacks", proofs, "passed", true)),
-                StandardOpenOption.CREATE_NEW);
+                "sourceEvidence", completion.evidence(), "sliceReadbacks", proofs, "passed", true)));
         return receipt.toString();
     }
 }

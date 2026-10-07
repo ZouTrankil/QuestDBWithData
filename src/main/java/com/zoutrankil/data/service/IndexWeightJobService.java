@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+
 import com.zoutrankil.data.domain.IndexWeight;
 import com.zoutrankil.data.domain.IndexWeightDataset;
 import com.zoutrankil.data.domain.IndexWeightKey;
@@ -10,6 +12,7 @@ import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.mapper.IndexWeightMapper;
 import com.zoutrankil.data.repository.IndexWeightWritePort;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
+import com.zoutrankil.data.repository.SqliteLedgerSchema;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import io.questdb.client.QuestDB;
 import java.nio.file.Path;
@@ -74,10 +77,7 @@ public final class IndexWeightJobService {
     public String tableName() { return table; }
 
     public static void requireIsolatedTableName(String value) {
-        DatasetDefinition.identifier(value);
-        String prefix = "java_d021_index_weight_";
-        if (!value.startsWith(prefix) || value.length() <= prefix.length())
-            throw new IllegalArgumentException("D021 isolated table name required");
+        IsolatedTablePolicy.INDEX_WEIGHT.require(value);
     }
     public static void requireIsolatedTargetParameter(Map<String, ?> parameters) {
         Object value = parameters == null ? null : parameters.get("targetId");
@@ -211,10 +211,7 @@ public final class IndexWeightJobService {
     /** Only successful complete snapshots of this physical target count as refreshes; backfill never advances this gate. */
     private LocalDate latestVerifiedSnapshotDate(String target) throws Exception {
         if (!java.nio.file.Files.isRegularFile(ledgerPath)) return null;
-        try (var connection = java.sql.DriverManager.getConnection("jdbc:sqlite:" + ledgerPath);
-                var query = connection.prepareStatement("SELECT count(*) FROM sqlite_master WHERE type='table' AND name='sync_runs'")) {
-            try (var rows = query.executeQuery()) { if (!rows.next() || rows.getInt(1) == 0) return null; }
-        }
+        if (!SqliteLedgerSchema.hasRunHistoryTable(ledgerPath)) return null;
         return IndexWeightCoverage.latestVerifiedSnapshot(ledgerPath, target, nameResolver.targetId())
                 .map(IndexWeightCoverage.Snapshot::verifiedLocalDate).orElse(null);
     }

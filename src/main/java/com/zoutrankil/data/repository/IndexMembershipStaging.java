@@ -60,8 +60,8 @@ public final class IndexMembershipStaging {
         }
         if(!batch.isEmpty()) batches.add(List.copyOf(batch));
         String stage="java_index_member_stage_"+UUID.randomUUID().toString().replace("-","");Files.createDirectories(folder);
-        Files.writeString(folder.resolve(stage+"-intent.json"),json.writeValueAsString(Map.of("stage",stage,"prepared",prepared,
-                "batches",batches.size(),"maxBatchRows",250,"estimatedBatchBytes",256*1024)),StandardOpenOption.CREATE_NEW);
+        FileEvidenceStore.writeNewUtf8(folder.resolve(stage+"-intent.json"),json.writeValueAsString(Map.of("stage",stage,"prepared",prepared,
+                "batches",batches.size(),"maxBatchRows",250,"estimatedBatchBytes",256*1024)));
         var columns=IndexMembershipDataset.DEFINITION.columns();
         jdbc.execute("CREATE TABLE "+stage+" ("+String.join(",",columns.stream().map(c->"\""+c.storageName()+"\" "+c.storageType().name()).toList())
                 +") TIMESTAMP(update_time) PARTITION BY YEAR WAL");
@@ -90,8 +90,8 @@ public final class IndexMembershipStaging {
         check(cancelled);var actual=new IndexMembershipStorage(jdbc,stage).snapshot();
         if(!prepared.rows().equals(actual.rows())) throw new IllegalStateException("Membership stage full-field mismatch; retain stage");
         Path receipt=folder.resolve(stage+"-verified.json");
-        Files.writeString(receipt,json.writeValueAsString(Map.of("stage",stage,"actual",actual,"batches",batches.size(),
-                "inserted",prepared.merge().inserted(),"revised",prepared.merge().revised())),StandardOpenOption.CREATE_NEW);
+        FileEvidenceStore.writeNewUtf8(receipt,json.writeValueAsString(Map.of("stage",stage,"actual",actual,"batches",batches.size(),
+                "inserted",prepared.merge().inserted(),"revised",prepared.merge().revised())));
         return new Verified(stage,actual,batches.size(),receipt.toString());
     }
     private static void check(BooleanSupplier cancelled) {

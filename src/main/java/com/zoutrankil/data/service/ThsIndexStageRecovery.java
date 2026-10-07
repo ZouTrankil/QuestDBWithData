@@ -27,7 +27,7 @@ final class ThsIndexStageRecovery {
         String selected=null;ThsIndexStorage.Snapshot replacement=null;var retained=new ArrayList<String>();
         for(Path intent:intents) {
             if(Files.size(intent)>32L*1024*1024) throw new IllegalStateException("Stage intent exceeds bound");
-            var proof=json.readTree(intent.toFile());String stage=proof.path("stage").asText();
+            var proof=json.readTree(FileEvidenceStore.readBounded(intent, 32 * 1024 * 1024, () -> new IllegalStateException("Stage intent exceeds bound")));String stage=proof.path("stage").asText();
             if(!intent.getFileName().toString().equals(stage+"-intent.json")
                     || !prepared.equals(json.treeToValue(proof.path("prepared"),ThsIndexStaging.Prepared.class)))
                 throw new IllegalStateException("Stage intent differs from frozen preparation");
@@ -47,10 +47,10 @@ final class ThsIndexStageRecovery {
         }
         if(!new ThsIndexStorage(jdbc,table).snapshot().equals(before))
             throw new IllegalStateException("Original THS catalog changed during stage recovery");
-        Files.writeString(folder.resolve("stage-recovery-"+UUID.randomUUID()+".json"),json.writeValueAsString(
+        FileEvidenceStore.writeNewUtf8(folder.resolve("stage-recovery-"+UUID.randomUUID()+".json"),json.writeValueAsString(
                 Map.of("runId",run,"selectedStage",selected,"rebuiltFreshStage",rebuilt,
                         "stageRowsSubmitted",rebuilt?prepared.rows().size():0,"retainedStages",retained,
-                        "writerStopped",true,"sourceRequests",0)),StandardOpenOption.CREATE_NEW);
+                        "writerStopped",true,"sourceRequests",0)));
         journal.requireLease(lease,true);
         return journal.create(new ReferencePublicationJournal.Intent("ths-publication-"+UUID.randomUUID(),"ths_index",run,
                 table,"java_ths_index_backup_"+UUID.randomUUID().toString().replace("-",""),selected,target,

@@ -2,7 +2,6 @@ package com.zoutrankil.data.repository;
 
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.security.MessageDigest;
 import java.sql.ResultSet;

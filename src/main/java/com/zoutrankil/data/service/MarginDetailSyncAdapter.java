@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.MarginDetailWritePort;
 import java.nio.file.*;
@@ -32,8 +34,8 @@ public final class MarginDetailSyncAdapter implements SyncJobRunner.Adapter<Marg
         Files.createDirectories(evidenceRoot);var body=new LinkedHashMap<String,Object>();body.put("dataset","margin_detail");body.put("endpoint","margin_detail");body.put("targetId",targetId);body.put("mode",request.mode().name());
         body.put("fromInclusive",request.from().toString());body.put("toInclusive",request.to().toString());body.put("logicalDate",request.logicalDate().toString());body.put("tradeDates",dates);
         body.put("completedDateSlices",dates.size());body.put("sourceRows",total);body.put("returnedRows",total);body.put("sourceReceipts",refs);body.put("sourceComplete",true);body.put("complete",true);
-        byte[] bytes=JobDefinitionJson.mapper().copy().configure(com.fasterxml.jackson.databind.SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true).writeValueAsBytes(body);if(bytes.length>1024*1024)throw new IllegalStateException("D029 complete-window manifest exceeds 1 MiB");
-        Path complete=evidenceRoot.resolve("complete-window.json");try{Files.write(complete,bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);}catch(FileAlreadyExistsException exists){if(!Arrays.equals(Files.readAllBytes(complete),bytes))throw new IllegalStateException("Conflicting D029 completion manifest",exists);}
+        byte[] bytes=JobDefinitionJson.canonicalMapper().writeValueAsBytes(body);if(bytes.length>1024*1024)throw new IllegalStateException("D029 complete-window manifest exceeds 1 MiB");
+        Path complete=evidenceRoot.resolve("complete-window.json");try{FileEvidenceStore.writeNew(complete,bytes);}catch(FileAlreadyExistsException exists){if(!Arrays.equals(FileEvidenceStore.readBounded(complete, Math.max(1, bytes.length), () -> new IllegalStateException("Conflicting D029 completion manifest", exists)),bytes))throw new IllegalStateException("Conflicting D029 completion manifest",exists);}
         return new SyncJobRunner.SourceCompletion(dates.size(),total,true,complete.toString());
     }
     private List<MarginDetail> verifyNoSourceKeyRemoval(LocalDate date,List<MarginDetail> rows){var keys=new HashSet<MarginDetailKey>();for(var row:rows)if(!keys.add(row.key()))throw new IllegalStateException("D029 duplicate source natural key");

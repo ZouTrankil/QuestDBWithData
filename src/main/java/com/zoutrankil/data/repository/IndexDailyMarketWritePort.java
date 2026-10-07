@@ -1,10 +1,10 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.IndexDailyMarketMapper;
-import com.zoutrankil.data.service.IndexDailyMarketJobService;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
@@ -39,7 +39,7 @@ public final class IndexDailyMarketWritePort implements VerifiedBatchExecutor.Po
     private final IndexDailyMarketMapper mapper = new IndexDailyMarketMapper();
     private volatile boolean uncertainSenderStopped;
     public IndexDailyMarketWritePort(String table, String targetId, JdbcTemplate jdbc, QuestDB questdb) {
-        IndexDailyMarketJobService.requireIsolatedTableName(table);
+        IsolatedTablePolicy.INDEX_DAILY_MARKET.require(table);
         if (targetId == null || !targetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen D019 isolated target identity required");
         this.table = table; this.expectedTargetId = targetId;
@@ -156,7 +156,7 @@ public final class IndexDailyMarketWritePort implements VerifiedBatchExecutor.Po
                 + "cast(update_time AS long) AS update_time_micros FROM \"" + table + "\"";
     }
     private static void requireKnownCode(String code) {
-        if (!com.zoutrankil.data.service.IndexDailyMarketUniverse.valid(code))
+        if (!com.zoutrankil.data.domain.policy.IndexDailyMarketUniverse.valid(code))
             throw new IllegalArgumentException("Known frozen D019 source ts_code required");
     }
     private void requireExpectedTarget() {

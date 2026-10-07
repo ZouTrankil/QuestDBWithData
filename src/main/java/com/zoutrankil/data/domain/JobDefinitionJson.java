@@ -7,11 +7,30 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdScalarSerializer;
 import java.io.IOException;
 import java.time.*;
+import java.util.regex.Pattern;
 
 /** Explicit ISO temporal representation, independent of optional Jackson time modules. */
 public final class JobDefinitionJson {
+    private static final Pattern YEAR_MONTH_PATTERN = Pattern.compile("[0-9]{4}-(0[1-9]|1[0-2])");
+    private static final SimpleModule TEMPORAL_MODULE = temporalModule();
+    private static final ObjectMapper MAPPER = createMapper(false);
+    private static final ObjectMapper CANONICAL_MAPPER = createMapper(true);
+
     private JobDefinitionJson() {}
-    public static ObjectMapper mapper() {
+
+    /** Shared mapper preserving map iteration order. Do not mutate its configuration. */
+    public static ObjectMapper mapper() { return MAPPER; }
+
+    /** Shared mapper that sorts map keys for fingerprints. Do not mutate its configuration. */
+    public static ObjectMapper canonicalMapper() { return CANONICAL_MAPPER; }
+
+    private static ObjectMapper createMapper(boolean sortMapKeys) {
+        var mapper = new ObjectMapper().registerModule(TEMPORAL_MODULE);
+        if (sortMapKeys) mapper.enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
+        return mapper;
+    }
+
+    private static SimpleModule temporalModule() {
         var temporal = new SimpleModule("job-definition-time");
         temporal.addSerializer(Duration.class, stringSerializer(Duration.class));
         temporal.addSerializer(ZoneId.class, stringSerializer(ZoneId.class));
@@ -43,13 +62,13 @@ public final class JobDefinitionJson {
         temporal.addDeserializer(LocalDate.class,stringDeserializer(LocalDate.class,LocalDate::parse));
         temporal.addDeserializer(Instant.class,stringDeserializer(Instant.class,Instant::parse));
         temporal.addDeserializer(YearMonth.class,stringDeserializer(YearMonth.class,value -> {
-            if(!value.matches("[0-9]{4}-(0[1-9]|1[0-2])"))
+            if(!YEAR_MONTH_PATTERN.matcher(value).matches())
                 throw new DateTimeException("Exact YYYY-MM month required");
             YearMonth month=YearMonth.parse(value);
             if(month.getYear()<1)throw new DateTimeException("Positive four-digit year required");
             return month;
         }));
-        return new ObjectMapper().registerModule(temporal);
+        return temporal;
     }
     private static <T> JsonDeserializer<T> stringDeserializer(Class<T> type,java.util.function.Function<String,T> parse) {
         return new com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer<>(type) {

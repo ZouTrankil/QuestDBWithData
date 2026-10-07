@@ -1,4 +1,9 @@
 package com.zoutrankil.data.service;
+import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
+
+import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
+import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
 
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
@@ -25,13 +30,13 @@ class StockDetailInfoOwnerLiveTest {
             jdbc.execute("CREATE TABLE "+target+" ("+String.join(",",columns.stream().map(c->c.storageName()+" "+c.storageType().name()).toList())+")");
             var backups=new ArrayList<String>();boolean verified=false;
             try {
-                var pages=ctx.getBean(TusharePageService.class);var owner=new StockDetailInfoJobService(pages,jdbc,path,target);
+                var pages=ctx.getBean(TusharePageService.class);var owner=new StockDetailInfoJobService(pages,new QuestDbStockDetailTarget(jdbc,target),path);
                 var day=LocalDate.of(2026,9,29);var firstPlan=owner.plan(List.of("000001.SZ"),false,day);
                 var first=owner.run(firstPlan);assertEquals(SyncRunState.VERIFIED,first.state(),first.errorCode());
                 assertEquals(1,first.insertedRows());assertNull(first.errorCode());
                 var journal=new StockDetailPublicationJournal(path);backups.add(journal.get(first.publicationId()).intent().backup());
                 var original=new StockDetailInfoStorage(jdbc,target).snapshot();
-                var reopened=new StockDetailInfoJobService(pages,jdbc,path,target);
+                var reopened=new StockDetailInfoJobService(pages,new QuestDbStockDetailTarget(jdbc,target),path);
                 var repeated=reopened.run(firstPlan);assertEquals(SyncRunState.VERIFIED,repeated.state(),repeated.errorCode());
                 assertEquals(1,repeated.unchangedRows());assertNull(repeated.publicationId());
                 assertEquals(original.identity(),new StockDetailInfoStorage(jdbc,target).snapshot().identity());

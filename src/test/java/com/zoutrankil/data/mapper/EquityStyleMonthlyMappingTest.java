@@ -130,4 +130,3 @@ class EquityStyleMonthlyMappingTest {
         assertFalse(Arrays.equals(codec.canonicalBytes(row), codec.canonicalBytes(mapper.fromValues(changed))));
     }
 }
-

@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import io.questdb.client.QuestDB;
@@ -30,7 +32,7 @@ public final class MoneyflowJobService {
         this.jobs=Objects.requireNonNull(jobs);this.pages=Objects.requireNonNull(pages);this.calendar=new MoneyflowTradingDates(exchangeCalendar);this.jdbc=Objects.requireNonNull(jdbc);this.questdb=Objects.requireNonNull(questdb);this.ledgerPath=ledgerPath.toAbsolutePath().normalize();requireExecutionTableName(table);this.table=table;}
     public String tableName(){return table;}public static void requireIsolatedTableName(String table){MoneyflowDataset.requireIsolatedTable(table);}
     /** Permits the exact preexisting formal table without relaxing isolated-table DDL. */
-    public static void requireExecutionTableName(String table){if(!"moneyflow".equals(table))requireIsolatedTableName(table);}
+    public static void requireExecutionTableName(String table){MoneyflowDataset.requireExecutionTable(table);}
     private boolean formalTarget(){return "moneyflow".equals(table);}
     private void requireExecutionMode(Mode mode){if(formalTarget()&&mode!=Mode.BACKFILL)throw new IllegalArgumentException("Formal moneyflow requires explicit bounded BACKFILL; old rows do not establish incremental coverage");}
     public String targetId(){requireExecutionTableName(table);var rows=jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name=?",table);if(rows.size()!=1||!(rows.getFirst().get("id") instanceof Number id)||!(rows.getFirst().get("directoryName") instanceof String directory))throw new IllegalStateException("Exact D024 target identity required");return StaticTargetIdentity.identify(jdbc,table,id.longValue(),directory);}

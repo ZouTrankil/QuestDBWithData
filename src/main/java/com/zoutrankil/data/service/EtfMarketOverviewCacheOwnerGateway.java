@@ -5,10 +5,9 @@ import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.*;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import java.io.*;
 import java.nio.file.*;
-import java.security.MessageDigest;
-import java.sql.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -356,22 +355,7 @@ public class EtfMarketOverviewCacheOwnerGateway {
             if(!prepared.startsWith(workspace.toRealPath())||!sha(readBounded(prepared)).equals(string(caller,"prepared_input_sha256")))
                 throw new IllegalStateException("Immutable prepared input differs");
         }
-        try (var c=DriverManager.getConnection("jdbc:sqlite:"+ledgerPath.toUri().toASCIIString()+"?mode=ro");var statement=c.prepareStatement(
-                "SELECT state,payload_json FROM sync_events WHERE entry_id=? AND revision=4")) {
-            statement.setString(1,submission.sliceId());try (var rows=statement.executeQuery()) {
-                if (!rows.next() || !"SUBMITTED".equals(rows.getString(1)) || !entry.payloadJson().equals(rows.getString(2)) || rows.next())
-                    throw new IllegalStateException("Revision4 submission event differs");
-            }
-            try (var cancelled=c.prepareStatement("SELECT count(*) FROM sync_cancellations WHERE run_id=?")) {
-                var visited=new HashSet<String>();String runId=submission.runId();
-                while(runId!=null){
-                    if(visited.size()>=64||!visited.add(runId))throw new IllegalStateException("Parent cancellation chain is cyclic or exceeds budget");
-                    var owner=ledger.getRun(runId);if(owner==null)throw new IllegalStateException("Parent run authority is absent");
-                    cancelled.setString(1,runId);try(var rows=cancelled.executeQuery()){if(!rows.next()||rows.getLong(1)!=0)throw new IllegalStateException("Run or parent cancelled");}
-                    runId=owner.parentRunId();
-                }
-            }
-        }
+        ledger.requireUncancelledRevision4SubmissionEvent(submission.runId(),submission.sliceId(),entry.payloadJson());
     }
 
     protected void requireConfigured() throws IOException {
@@ -621,9 +605,7 @@ public class EtfMarketOverviewCacheOwnerGateway {
     private static Double nullableDouble(JsonNode row,String key) throws IOException {var node=row.get(key);if(node==null)throw new IOException("Missing nullable field");if(node.isNull())return null;if(!node.isNumber()||!Double.isFinite(node.doubleValue()))throw new IOException("Finite binary64 required");return node.doubleValue();}
     private static String hash(JsonNode row,String key) throws IOException {String hash=string(row,key);if(!hash.matches("[0-9a-f]{64}"))throw new IOException("Lowercase SHA required: "+key);return hash;}
     public static void exactKeys(JsonNode node,Collection<String> expected) throws IOException {if(node==null||!node.isObject())throw new IOException("Exact object required");var keys=new HashSet<String>();node.fieldNames().forEachRemaining(keys::add);if(!keys.equals(new HashSet<>(expected)))throw new IOException("Object fields differ");}
-    public static byte[] readBounded(Path path) throws IOException {if(!Files.isRegularFile(path)||Files.size(path)>MAX_JSON_BYTES)throw new IOException("Bounded regular JSON artifact required");try(var input=Files.newInputStream(path)){byte[] bytes=input.readNBytes(MAX_JSON_BYTES+1);if(bytes.length>MAX_JSON_BYTES)throw new IOException("JSON budget exceeded");return bytes;}}
-    private static void newJson(Path path,JsonNode value) throws IOException {byte[] bytes=JSON.writeValueAsBytes(value);if(bytes.length>MAX_JSON_BYTES)throw new IOException("JSON budget exceeded");try(var channel=java.nio.channels.FileChannel.open(path,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE)){
-            var buffer=java.nio.ByteBuffer.wrap(bytes);while(buffer.hasRemaining())channel.write(buffer);channel.force(true);
-        }}
-    public static String sha(byte[] bytes){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));}catch(java.security.NoSuchAlgorithmException impossible){throw new IllegalStateException(impossible);}}
+    public static byte[] readBounded(Path path) throws IOException {if(!Files.isRegularFile(path)||Files.size(path)>MAX_JSON_BYTES)throw new IOException("Bounded regular JSON artifact required");return FileEvidenceStore.readBounded(path,MAX_JSON_BYTES,()->new IOException("JSON budget exceeded"));}
+    private static void newJson(Path path,JsonNode value) throws IOException {byte[] bytes=JSON.writeValueAsBytes(value);if(bytes.length>MAX_JSON_BYTES)throw new IOException("JSON budget exceeded");FileEvidenceStore.writeNewDurable(path,bytes);}
+    public static String sha(byte[] bytes){return FileEvidenceStore.sha256(bytes);}
 }

@@ -1,5 +1,8 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.DailyBasicJobService;
+import com.zoutrankil.data.stock.application.DailyBasicSyncAdapter;
+
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;

@@ -1,10 +1,10 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.MacroCoreMonthlyMapper;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.sql.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -154,7 +154,7 @@ public class MacroCoreMonthlySource {
         requireWindow(from,to);long count=ChronoUnit.MONTHS.between(YearMonth.from(from),YearMonth.from(to))+1;if(rows.size()!=count)throw new IllegalStateException("D104 incremental prefix has withheld/missing monthly observations");var month=YearMonth.from(from);var mapper=new MacroCoreMonthlyMapper();
         for(var row:rows){if(!row.month().equals(month))throw new IllegalStateException("D104 incremental source months are not contiguous");var values=mapper.values(row).asMap();if(REQUIRED_MONTHLY_FIELDS.stream().anyMatch(f->values.get(f)==null))throw new IllegalStateException("D104 incremental prefix requires all six monthly components");month=month.plusMonths(1);}
     }
-    static String hash(String text){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8)));}catch(Exception e){throw new IllegalStateException(e);}}
+    static String hash(String text){try{return FileEvidenceStore.sha256(text.getBytes(StandardCharsets.UTF_8));}catch(Exception e){throw new IllegalStateException(e);}}
     private static long deadline(){return System.nanoTime()+Duration.ofSeconds(20).toNanos();}
     private <T>T query(String sql,int cap,long until,ResultSetExtractor<T> extractor){long remaining=until-System.nanoTime();if(remaining<=0)throw new IllegalStateException("D104 complete source read exceeded twenty seconds");T result=jdbc.query(connection->{var statement=connection.prepareStatement(sql);statement.setQueryTimeout((int)Math.max(1,(remaining+999_999_999L)/1_000_000_000L));statement.setMaxRows(cap);return statement;},extractor);if(System.nanoTime()>until)throw new IllegalStateException("D104 source deadline expired");return result;}
     private static Long nullableCounter(ResultSet rs,String field)throws SQLException{if(rs.getObject(field)==null)return null;return counter(rs,field);}

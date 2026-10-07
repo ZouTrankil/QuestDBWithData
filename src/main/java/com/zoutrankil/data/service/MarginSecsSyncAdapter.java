@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.MarginSecs;
@@ -7,7 +9,7 @@ import com.zoutrankil.data.domain.MarginSecsDataset;
 import com.zoutrankil.data.domain.MarginSecsKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
-import com.zoutrankil.data.repository.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.repository.MarginSecsStorage;
 import com.zoutrankil.data.repository.MarginSecsWritePort;
 import java.nio.file.Files;
@@ -65,9 +67,9 @@ public final class MarginSecsSyncAdapter implements SyncJobRunner.Adapter<Margin
         body.put("logicalDate",request.logicalDate());body.put("calendarFingerprint",request.parameters().get("calendarFingerprint"));
         body.put("calendarDays",encoded);body.put("tradeDates",dates);body.put("completedDateSlices",pages);body.put("sourceRows",rows);
         body.put("sourceReceipts",receipts);body.put("complete",true);
-        byte[] bytes=JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true).writeValueAsBytes(body);
+        byte[] bytes=JobDefinitionJson.canonicalMapper().writeValueAsBytes(body);
         if(bytes.length>2*1024*1024)throw new IllegalStateException("D030 window completion receipt exceeds two MiB");
-        try{Files.write(complete,bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);}
+        try{FileEvidenceStore.writeNew(complete,bytes);}
         catch(java.nio.file.FileAlreadyExistsException collision){throw new IllegalStateException("D030 completion receipt path collision",collision);}
         return new SyncJobRunner.SourceCompletion(pages,rows,true,complete.toString());
     }

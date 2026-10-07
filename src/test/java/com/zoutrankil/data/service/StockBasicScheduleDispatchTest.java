@@ -1,5 +1,8 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
+
 import com.zoutrankil.data.domain.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -46,7 +49,7 @@ class StockBasicScheduleDispatchTest {
         assertEquals(2,histories.size());
         assertEquals("job-run",service.status("job.schedule").history().getFirst().runId());
         assertEquals("group-run",service.status("group.schedule").history().getFirst().runId());
-        assertEquals(com.zoutrankil.data.repository.SyncScheduleStore.State.PARTIAL,
+        assertEquals(com.zoutrankil.data.service.StockBasicScheduleService.State.PARTIAL,
                 service.status("group.schedule").history().getFirst().state());
         service.tick();
         verify(job,times(1)).run(List.of("000001.SZ"),date);

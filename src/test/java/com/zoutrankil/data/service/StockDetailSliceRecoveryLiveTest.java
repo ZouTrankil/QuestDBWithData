@@ -1,4 +1,9 @@
 package com.zoutrankil.data.service;
+import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
+
+import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
+import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
 
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
@@ -33,7 +38,7 @@ class StockDetailSliceRecoveryLiveTest {
                             +"WHEN OLD.kind='SLICE' AND NEW.state='VERIFIED' "
                             +"BEGIN SELECT RAISE(ABORT,'injected completion failure'); END");
                 }
-                var owner=new StockDetailInfoJobService(ctx.getBean(TusharePageService.class),jdbc,path,table);
+                var owner=new StockDetailInfoJobService(ctx.getBean(TusharePageService.class),new QuestDbStockDetailTarget(jdbc,table),path);
                 var failed=owner.run(owner.plan(List.of("000001.SZ"),false,LocalDate.of(2026,9,29)));
                 assertEquals(SyncRunState.IN_DOUBT,failed.state());assertNotNull(failed.publicationId());
                 for(String entry:List.of(failed.runId(),failed.runId()+"-attempt",failed.runId()+"-snapshot"))

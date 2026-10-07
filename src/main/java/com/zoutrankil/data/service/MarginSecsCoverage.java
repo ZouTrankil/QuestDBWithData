@@ -7,9 +7,9 @@ import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.MarginSecsStorage;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.repository.SqliteLedgerSchema;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.DriverManager;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -124,7 +124,10 @@ public final class MarginSecsCoverage {
     private static boolean terminal(SyncRunState state){return state==SyncRunState.VERIFIED||state==SyncRunState.VERIFIED_EMPTY;}
     private static List<String> split(String value){return value==null||value.isBlank()?List.of():List.of(value.split(",",-1));}
     private static boolean hasSchema(Path path)throws Exception{
-        var names=new HashSet<String>();try(var c=DriverManager.getConnection("jdbc:sqlite:"+path.toUri().toASCIIString()+"?mode=ro");var s=c.createStatement();var rs=s.executeQuery("SELECT name FROM sqlite_master WHERE type='table'")){while(rs.next())names.add(rs.getString(1));}
-        Set<String> required=Set.of("ledger_meta","sync_runs","sync_entries","sync_events");if(java.util.Collections.disjoint(names,required))return false;if(!names.containsAll(required))throw new IllegalStateException("Partial D030 ledger schema");return true;
+        var names = SqliteLedgerSchema.tableNames(path);
+        var required = Set.of("ledger_meta","sync_runs","sync_entries","sync_events");
+        if (java.util.Collections.disjoint(names, required)) return false;
+        if (!names.containsAll(required)) throw new IllegalStateException("Partial D030 ledger schema");
+        return true;
     }
 }

@@ -10,7 +10,6 @@ import com.zoutrankil.data.repository.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.nio.channels.*;
 import java.nio.file.*;
-import java.sql.*;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.CancellationException;
@@ -76,7 +75,7 @@ public final class IndexMonthlyPublication {
                 throw new IllegalStateException("D022 target or stage changed after source-window verification");
             verifySourceEvidence(runId, stage, prepared);
             String backup = IndexMonthlyJobService.ISOLATED_TABLE_PREFIX + "backup_" + UUID.randomUUID().toString().replace("-", "");
-            String receiptFingerprint=sha256(Files.readAllBytes(Path.of(stage.receipt())));
+            String receiptFingerprint=sha256(FileEvidenceStore.readBounded(Path.of(stage.receipt()), 16 * 1024 * 1024, () -> new IllegalStateException("D022 source/stage evidence is absent, oversized, altered, or outside the run root")));
             String scope = JobDefinitionJson.mapper().writeValueAsString(Map.of("code", prepared.code(),
                     "fromInclusive", prepared.from(), "toInclusive", prepared.to(), "stageDirectory", stage.snapshot().identity().directory(),
                     "sourceFingerprint", stage.sourceFingerprint(), "sourceReceipt", stage.sourceReceipt(),
@@ -134,11 +133,9 @@ public final class IndexMonthlyPublication {
     public Optional<ReferencePublicationJournal.Entry> findForRun(String runId) throws Exception { return journal.findForRun(runId); }
     public void requireNoPendingPublication() throws Exception { requireNoPendingPublication(null); }
     private void requireNoPendingPublication(String exceptRun) throws Exception {
-        try (var db = open(); var query = db.prepareStatement("SELECT run_id FROM reference_publications WHERE dataset='index_monthly' AND state<>'VERIFIED' LIMIT 32")) {
-            try (var rows = query.executeQuery()) { while (rows.next()) {
-                String run = rows.getString(1); if (!Objects.equals(run, exceptRun)) throw new IllegalStateException("Unresolved D022 publication requires finish: " + run);
-            } }
-        }
+        journal.visitSummaries(32,true,ReferencePublicationJournal.ConnectionPolicy.FOREIGN_KEYS_WITH_BUSY_TIMEOUT,(summary,rowNumber)->{
+            String run=summary.runId();if(!Objects.equals(run,exceptRun))throw new IllegalStateException("Unresolved D022 publication requires finish: "+run);
+        });
         requireNoPendingStageOnly(exceptRun);
     }
     private void requireNoPendingStageOnly(String exceptRun) throws Exception {
@@ -177,8 +174,8 @@ public final class IndexMonthlyPublication {
                 ||!runId.equals(prepared.runId())||!prepared.logicalTargetId().equals(runTarget(frozen))
                 ||!prepared.logicalTargetId().equals(IndexMonthlyTargetIdentity.logical(jdbc,prepared.target())))
             throw new IllegalStateException("D022 stage source receipt differs from the complete frozen run/target request");
-        requireEvidenceFiles(runId,stage.receipt(),stage.sourceReceipt(),stage.sourceFingerprint(),sha256(Files.readAllBytes(Path.of(stage.receipt()))));
-        JsonNode stageProof=JobDefinitionJson.mapper().readTree(Path.of(stage.receipt()).toFile());
+        requireEvidenceFiles(runId,stage.receipt(),stage.sourceReceipt(),stage.sourceFingerprint(),sha256(FileEvidenceStore.readBounded(Path.of(stage.receipt()), 16 * 1024 * 1024, () -> new IllegalStateException("D022 source/stage evidence is absent, oversized, altered, or outside the run root"))));
+        JsonNode stageProof=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(Path.of(stage.receipt()), 16 * 1024 * 1024, () -> new IllegalStateException("D022 source/stage evidence is absent, oversized, altered, or outside the run root")));
         requireStageProof(stageProof,prepared,stage);
         var page=IndexMonthlySource.reopen(Path.of(stage.sourceReceipt()),stage.sourceFingerprint(),prepared.code(),prepared.from(),prepared.to(),
                 prepared.observedAt());
@@ -188,7 +185,7 @@ public final class IndexMonthlyPublication {
         JsonNode scope=JobDefinitionJson.mapper().readTree(entry.intent().scope());
         String receipt=required(scope,"stageReceipt"),sourceReceipt=required(scope,"sourceReceipt"),fingerprint=required(scope,"sourceFingerprint");
         requireEvidenceFiles(entry.intent().runId(),receipt,sourceReceipt,fingerprint,required(scope,"stageReceiptFingerprint"));
-        JsonNode proof=JobDefinitionJson.mapper().readTree(Path.of(receipt).toFile());
+        JsonNode proof=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(Path.of(receipt), 16 * 1024 * 1024, () -> new IllegalStateException("D022 source/stage evidence is absent, oversized, altered, or outside the run root")));
         var run=SyncRunLedger.openReadOnly(ledgerPath).getRun(entry.intent().runId());
         JsonNode frozen=frozenRequest(entry.intent().runId(),run);
         if(!proof.path("sourceComplete").asBoolean(false)||proof.path("dedup").asBoolean(true)
@@ -260,8 +257,8 @@ public final class IndexMonthlyPublication {
         Path stage=stageCandidate.toRealPath();
         Path source=sourceCandidate.toRealPath();
         if(!stage.startsWith(runRoot)||!source.startsWith(runRoot)||Files.size(stage)>16L*1024*1024
-                ||Files.size(source)>IndexMonthlySource.MAX_EVIDENCE_BYTES||!sha256(Files.readAllBytes(source)).equals(sourceFingerprint)
-                ||!sha256(Files.readAllBytes(stage)).equals(expectedStageHash))
+                ||Files.size(source)>IndexMonthlySource.MAX_EVIDENCE_BYTES||!sha256(FileEvidenceStore.readBounded(source, IndexMonthlySource.MAX_EVIDENCE_BYTES, () -> new IllegalStateException("D022 source/stage evidence is absent, oversized, altered, or outside the run root"))).equals(sourceFingerprint)
+                ||!sha256(FileEvidenceStore.readBounded(stage, 16 * 1024 * 1024, () -> new IllegalStateException("D022 source/stage evidence is absent, oversized, altered, or outside the run root"))).equals(expectedStageHash))
             throw new IllegalStateException("D022 source/stage evidence is absent, oversized, altered, or outside the run root");
     }
     private static boolean sameRows(List<IndexMonthly> expected,List<IndexMonthly> actual) {
@@ -323,12 +320,7 @@ public final class IndexMonthlyPublication {
         return value.asText();
     }
     private static String required(JsonNode node,String field) { JsonNode value=node.path(field);if(!value.isTextual()||value.asText().isBlank())throw new IllegalStateException("D022 publication scope lacks "+field);return value.asText(); }
-    private static String sha256(byte[] bytes)throws Exception{return java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));}
+    private static String sha256(byte[] bytes)throws Exception{return FileEvidenceStore.sha256(bytes);}
     private static void check(BooleanSupplier cancelled) { if (cancelled.getAsBoolean() || Thread.currentThread().isInterrupted()) throw new CancellationException("D022 publication cancelled"); }
     private void rename(String from, String to) { DatasetDefinition.identifier(from); DatasetDefinition.identifier(to); jdbc.execute("RENAME TABLE \""+from+"\" TO \""+to+"\""); }
-    private Connection open() throws SQLException {
-        var db = DriverManager.getConnection("jdbc:sqlite:" + ledgerPath);
-        try (var statement = db.createStatement()) { statement.execute("PRAGMA foreign_keys=ON"); statement.execute("PRAGMA busy_timeout=5000"); }
-        return db;
-    }
 }

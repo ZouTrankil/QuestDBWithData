@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.mapper.IndexDailyBasicMapper;
@@ -18,7 +20,7 @@ import java.util.*;
 /** Explicit bounded D020 planner/runner for one frozen source code and isolated table. */
 @Service
 public final class IndexDailyBasicJobService {
-    public static final String ISOLATED_TABLE_PREFIX = "java_d020_index_daily_basic_";
+    public static final String ISOLATED_TABLE_PREFIX = IsolatedTablePolicy.INDEX_DAILY_BASIC.prefix();
     public record Plan(SyncJobDefinition.FrozenRequest request, String targetId, String tsCode,
             LocalDate checkpointBefore, LocalDate checkpointAnchor,
             IndexDailyBasicWritePort.TargetRange physicalRange, boolean bootstrap) {
@@ -50,9 +52,7 @@ public final class IndexDailyBasicJobService {
     }
     public String tableName() { return table; }
     public static void requireIsolatedTableName(String table) {
-        DatasetDefinition.identifier(table);
-        if (!table.startsWith(ISOLATED_TABLE_PREFIX) || table.length() <= ISOLATED_TABLE_PREFIX.length())
-            throw new IllegalStateException("D020 execution requires java_d020_index_daily_basic_<suffix> isolated target");
+        IsolatedTablePolicy.INDEX_DAILY_BASIC.require(table);
     }
     public String targetId() {
         requireIsolatedTableName(table);

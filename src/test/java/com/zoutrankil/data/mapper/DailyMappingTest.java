@@ -1,5 +1,7 @@
 package com.zoutrankil.data.mapper;
 
+import com.zoutrankil.data.stock.mapper.DailyMapper;
+
 import com.zoutrankil.data.client.dto.TushareDailyDto;
 import com.zoutrankil.data.domain.DailyDataset;
 import com.zoutrankil.data.domain.DailyMarketBar;

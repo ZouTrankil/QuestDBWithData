@@ -72,11 +72,10 @@ public final class IndexMembershipPreparedWriteAdapter implements WriteGroupMemb
             throw new java.util.concurrent.CancellationException("Membership write cancelled or changed target");
         var typed=materialize();Path folder=evidenceRoot.resolve(child);Files.createDirectories(folder);
         Path receipt=folder.resolve(member.memberId()+"-prepared-input.json");
-        Files.writeString(receipt,JobDefinitionJson.mapper().writeValueAsString(Map.of(
+        FileEvidenceStore.writeNewUtf8(receipt,JobDefinitionJson.mapper().writeValueAsString(Map.of(
                 "sourceKind","prepared-write-request","memberId",member.memberId(),
                 "batchId",member.batchId(),"targetId",member.targetId(),
-                "fingerprint",member.batch().fingerprint(),"rows",member.batch().rows())),
-                StandardOpenOption.CREATE_NEW);
+                "fingerprint",member.batch().fingerprint(),"rows",member.batch().rows())));
         var result=owner.executePrepared(child,parent,actual,typed,receipt);
         return new SyncJobRunner.Result(result.runId(),result.state(),result.supplied(),result.verified(),result.errorCode());
     }

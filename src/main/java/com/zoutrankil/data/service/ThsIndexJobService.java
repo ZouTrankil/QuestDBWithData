@@ -66,7 +66,8 @@ public final class ThsIndexJobService implements SyncJobOwner {
             throw new IllegalArgumentException("Prepared THS rows differ from frozen fingerprint");
         Path input=Path.of(receipt);if(Files.size(input)>ThsIndexStorage.MAX_BYTES)
             throw new IllegalArgumentException("Prepared THS receipt exceeds byte bound");
-        var proof=JobDefinitionJson.mapper().readTree(input.toFile());
+        var proof=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(input,
+                ThsIndexStorage.MAX_BYTES, () -> new IllegalArgumentException("Prepared THS receipt exceeds byte bound")));
         if(!proof.path("sourceKind").asText().equals("prepared-write-request")
                 || !proof.path("fingerprint").asText().equals(fingerprint)
                 || !proof.path("targetId").asText().equals(targetId())
@@ -96,8 +97,8 @@ public final class ThsIndexJobService implements SyncJobOwner {
             throw new IllegalStateException("Reconcile uncertain THS writes before replaying the source");
         String next="ths-index-"+UUID.randomUUID();
         Path folder=path.getParent().resolve("sync-evidence").resolve(next);Files.createDirectories(folder);
-        Files.writeString(folder.resolve("resume-intent.json"),JobDefinitionJson.mapper().writeValueAsString(
-                Map.of("priorRunId",priorRun,"request",prior.frozenJson(),"targetId",prior.targetId())),StandardOpenOption.CREATE_NEW);
+        FileEvidenceStore.writeNewUtf8(folder.resolve("resume-intent.json"),JobDefinitionJson.mapper().writeValueAsString(
+                Map.of("priorRunId",priorRun,"request",prior.frozenJson(),"targetId",prior.targetId())));
         return execute(next,null,request);
     }
     public SyncJobRunner.Result runAsGroupChild(String child,String parent,String expectedTarget,FrozenRequest request) throws Exception {
@@ -158,7 +159,7 @@ public final class ThsIndexJobService implements SyncJobOwner {
             else {
                 Path receipt=Path.of(input.receipt()).toAbsolutePath().normalize();
                 if(Files.size(receipt)>ThsIndexStorage.MAX_BYTES) throw new IllegalStateException("Prepared THS receipt exceeds bound");
-                byte[] bytes=Files.readAllBytes(receipt);var proof=JobDefinitionJson.mapper().readTree(bytes);
+                byte[] bytes=FileEvidenceStore.readBounded(receipt, ThsIndexStorage.MAX_BYTES, () -> new IllegalStateException("Prepared THS receipt exceeds bound"));var proof=JobDefinitionJson.mapper().readTree(bytes);
                 var mapper=new com.zoutrankil.data.mapper.ThsIndexMapper();
                 if(!proof.path("sourceKind").asText().equals("prepared-write-request")
                         || !proof.path("targetId").asText().equals(target)
@@ -166,7 +167,7 @@ public final class ThsIndexJobService implements SyncJobOwner {
                         || !JobDefinitionJson.mapper().valueToTree(input.rows().stream().map(mapper::values).toList())
                                 .equals(proof.path("rows")))
                     throw new IllegalStateException("Prepared THS receipt changed after admission");
-                String hash=HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+                String hash=FileEvidenceStore.sha256(bytes);
                 source=new SyncJobRunner.Page<>(input.rows(),hash,receipt.toString(),null);
             }
             sourceCount=source.rows().size();if(sourceCount==0) throw new IllegalStateException("Empty THS source cannot certify completeness");
@@ -175,9 +176,9 @@ public final class ThsIndexJobService implements SyncJobOwner {
                 throw new IllegalStateException("THS target changed after run creation");
             var prepared=input==null?ThsIndexStaging.prepare(before,source.rows(),ThsIndexSource.Scope.all())
                     :ThsIndexStaging.preparePrepared(before,source.rows());var merge=prepared.merge();
-            Files.writeString(folder.resolve("prepared.json"),JobDefinitionJson.mapper().writeValueAsString(Map.of(
+            FileEvidenceStore.writeNewUtf8(folder.resolve("prepared.json"),JobDefinitionJson.mapper().writeValueAsString(Map.of(
                     "runId",run,"targetId",target,"request",SyncRequestIdentity.snapshotJson(request),
-                    "source",source,"prepared",prepared)),StandardOpenOption.CREATE_NEW);
+                    "source",source,"prepared",prepared)));
             check(cancelled);
             if(merge.requiresWrite()) {
                 submitted=true;
@@ -193,7 +194,7 @@ public final class ThsIndexJobService implements SyncJobOwner {
             proof.put("runId",run);proof.put("source",source);proof.put("before",before);proof.put("actual",actual);
             proof.put("merge",merge);proof.put("publicationId",publication);
             proof.put("submittedStageRows",merge.requiresWrite()?prepared.rows().size():0);
-            Files.writeString(receipt,JobDefinitionJson.mapper().writeValueAsString(proof),StandardOpenOption.CREATE_NEW);
+            FileEvidenceStore.writeNewUtf8(receipt,JobDefinitionJson.mapper().writeValueAsString(proof));
             var verification=Map.of("passed",true,"expectedRows",sourceCount,"actualRows",sourceCount,
                     "matchedRows",sourceCount,"mismatchedRows",0,"duplicateKeys",0,"missingKeys",0,
                     "readbackEvidence",receipt.toString(),"sourceFingerprint",source.sourceFingerprint(),"writerStopped",true);

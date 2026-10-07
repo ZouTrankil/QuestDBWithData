@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockDetailInfoDiscovery;
+
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import org.junit.jupiter.api.Test;

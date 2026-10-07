@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -15,7 +17,7 @@ import com.zoutrankil.data.domain.ReadGroupRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.mapper.L2T0TrainingLabelsMapper;
-import com.zoutrankil.data.repository.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.repository.L2DatasetManifestReadRepository;
 import com.zoutrankil.data.repository.L2IntradayBarFeaturesReadRepository;
 import com.zoutrankil.data.repository.L2T0TrainingLabelsReadRepository;

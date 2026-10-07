@@ -1,4 +1,9 @@
 package com.zoutrankil.data.service;
+import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
+
+import com.zoutrankil.data.stock.application.StockDetailInfoRunRecovery;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
+import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
 
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
@@ -28,8 +33,8 @@ class StockDetailObservedRunRecoveryTest {
         app.addInitializers(c->c.addBeanFactoryPostProcessor(f->((BeanDefinitionRegistry)f).removeBeanDefinition("commandLineRunner")));
         try(var ctx=app.run()) {
             var jdbc=ctx.getBean(JdbcTemplate.class);
-            assertThrows(IllegalStateException.class,()->StockDetailInfoRunRecovery.reconcilePublished(jdbc,path,table,run,false));
-            var result=StockDetailInfoRunRecovery.reconcilePublished(jdbc,path,table,run,true);
+            assertThrows(IllegalStateException.class,()->StockDetailInfoRunRecovery.reconcilePublished(new QuestDbStockDetailTarget(jdbc,table),path,table,run,false));
+            var result=StockDetailInfoRunRecovery.reconcilePublished(new QuestDbStockDetailTarget(jdbc,table),path,table,run,true);
             assertEquals(SyncRunState.VERIFIED,result.state());assertEquals(SyncRunState.VERIFIED,ledger.get(run).state());
             assertEquals(SyncRunState.VERIFIED,ledger.get(run+"-attempt").state());
             if(proof.has("snapshotSlice")) assertEquals(SyncRunState.VERIFIED,ledger.get(proof.path("snapshotSlice").asText()).state());

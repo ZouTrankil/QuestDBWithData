@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.DatasetWritePreparation;
 import com.zoutrankil.data.repository.SyncRunLedger;
@@ -69,10 +71,10 @@ public final class PreparedWriteAdapter<T,K> implements SyncJobRunner.Adapter<T,
         var typed = materialize();
         Files.createDirectories(evidence);
         Path receipt = evidence.resolve("prepared-input-" + UUID.randomUUID() + ".json");
-        Files.writeString(receipt, JobDefinitionJson.mapper().writeValueAsString(Map.of(
+        FileEvidenceStore.writeNewUtf8(receipt,JobDefinitionJson.mapper().writeValueAsString(Map.of(
                 "sourceKind", "prepared-write-request", "memberId", member.memberId(), "batchId", member.batchId(),
                 "targetId", member.targetId(), "definition", member.definition(), "logicalDate", actual.logicalDate(),
-                "fingerprint", member.batch().fingerprint(), "rows", member.batch().rows())), StandardOpenOption.CREATE_NEW);
+                "fingerprint", member.batch().fingerprint(), "rows", member.batch().rows())));
         if (cancelled.getAsBoolean()) throw new java.util.concurrent.CancellationException("Prepared write cancelled");
         consumer.accept(new SyncJobRunner.Page<>(typed, member.batch().fingerprint(), receipt.toString(), null));
         return new SyncJobRunner.SourceCompletion(1, typed.size(), true, receipt.toString());

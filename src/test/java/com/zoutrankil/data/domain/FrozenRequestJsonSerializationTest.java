@@ -2,7 +2,7 @@ package com.zoutrankil.data.domain;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.zoutrankil.data.service.DailyBasicJobService;
+import com.zoutrankil.data.stock.application.DailyBasicJobService;
 import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.LocalDate;

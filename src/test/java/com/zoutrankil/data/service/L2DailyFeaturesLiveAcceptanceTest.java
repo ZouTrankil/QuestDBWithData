@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.config.QuestDbProperties;
@@ -9,12 +11,15 @@ import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.mapper.L2DailyFeaturesMapper;
-import com.zoutrankil.data.repository.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.repository.L2DatasetManifestReadRepository;
 import com.zoutrankil.data.repository.L2DailyFeaturesReadRepository;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import io.questdb.client.QuestDB;
 import com.zoutrankil.data.cli.CommandLineRunner;
+import com.zoutrankil.data.cli.CatalogCommands;
+import com.zoutrankil.data.cli.CliCommandRegistry;
+import com.zoutrankil.data.cli.L2Commands;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.DefaultApplicationArguments;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -143,11 +148,9 @@ class L2DailyFeaturesLiveAcceptanceTest {
                             java.util.Set.of("exchange_calendar.year", "l2_manifest.parquet_date",
                                     "l2_daily_features.parquet_date"),
                             java.util.Set.of("questdb.full_key_values")));
-            var dispatcher = new CommandLineRunner(null, registeredDatasets, registeredJobs, null, null, null, null, null,
-                    null, null, null);
-            var serviceField = CommandLineRunner.class.getDeclaredField("l2DailyFeaturesService");
-            serviceField.setAccessible(true);
-            serviceField.set(dispatcher, service);
+            var dispatcher = new CommandLineRunner(new CliCommandRegistry(List.of(
+                    new CatalogCommands(registeredDatasets, registeredJobs),
+                    new L2Commands(null, service, null, null, null))));
             String jobList = invoke(dispatcher, "list-sync-jobs");
             String datasetList = invoke(dispatcher, "show-dataset-definitions");
             String jobDetails = invoke(dispatcher, "show-sync-job", "--job=data.l2_daily_features", "--version=1");

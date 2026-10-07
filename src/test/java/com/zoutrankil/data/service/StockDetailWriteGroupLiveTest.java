@@ -1,8 +1,15 @@
 package com.zoutrankil.data.service;
+import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
+
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
+import com.zoutrankil.data.stock.domain.policy.StockDetailInfoMerge;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
+import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
 
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.mapper.StockDetailInfoMapper;
+import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
 import com.zoutrankil.data.repository.*;
 import io.questdb.client.QuestDB;
 import org.junit.jupiter.api.Test;
@@ -41,7 +48,7 @@ class StockDetailWriteGroupLiveTest {
                         "members",List.of(Map.of("memberId","stock_detail","datasetId","stock_detail_info",
                                 "definitionVersion",1,"batchId","stock_detail_member_"+id,
                                 "rows",List.of(new StockDetailInfoMapper().values(sourceRow).asMap())))));
-                var owner=new StockDetailInfoJobService(ctx.getBean(TusharePageService.class),jdbc,ledgerPath,target);
+                var owner=new StockDetailInfoJobService(ctx.getBean(TusharePageService.class),new QuestDbStockDetailTarget(jdbc,target),ledgerPath);
                 var group=new StockBasicWriteGroupService(ctx.getBean(DatasetRegistry.class),
                         mock(StockBasicJobService.class),null,owner,jdbc,ctx.getBean(QuestDB.class),
                         ledgerPath.toString());

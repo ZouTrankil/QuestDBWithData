@@ -1,5 +1,6 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -10,15 +11,12 @@ import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.mapper.MarginSecsMapper;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,7 +95,8 @@ public final class MarginSecsSource {
         if (fingerprint == null || !fingerprint.matches("[0-9a-f]{64}") || !Files.isRegularFile(file)
                 || Files.isSymbolicLink(file) || Files.size(file) < 1 || Files.size(file) > MAX_EVIDENCE_BYTES)
             throw new IllegalArgumentException("D030 bounded raw receipt and SHA-256 required");
-        byte[] bytes = Files.readAllBytes(file);
+        byte[] bytes = FileEvidenceStore.readBounded(file, MAX_EVIDENCE_BYTES,
+                () -> new IllegalArgumentException("D030 bounded raw receipt and SHA-256 required"));
         if (!sha(bytes).equals(fingerprint)) throw new IllegalStateException("D030 receipt SHA-256 mismatch");
         var json = JobDefinitionJson.mapper(); JsonNode body = json.readTree(bytes); String basic = expectedDate.format(BASIC);
         if (!"tushare".equals(body.path("sourceKind").asText()) || !"margin_secs".equals(body.path("endpoint").asText())
@@ -136,7 +135,7 @@ public final class MarginSecsSource {
 
     private static byte[] body(LocalDate date, Map<String,Object> parameters, List<Map<String,JsonNode>> rows,
             String version, boolean complete, Exception failure) throws Exception {
-        var json = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        var json = JobDefinitionJson.canonicalMapper();
         var body = new LinkedHashMap<String,Object>(); body.put("sourceKind", "tushare"); body.put("endpoint", "margin_secs");
         body.put("sourceContractVersion", 1); body.put("parameters", parameters); body.put("fields", FIELDS);
         body.put("tradeDate", date); body.put("apiMaximumRows", API_ROW_CAP); body.put("returnedRows", rows.size());
@@ -155,11 +154,12 @@ public final class MarginSecsSource {
     }
 
     private static void persist(Path path, byte[] bytes) throws Exception {
-        try { Files.write(path, bytes, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE); }
+        try { FileEvidenceStore.writeNew(path, bytes); }
         catch (java.nio.file.FileAlreadyExistsException exists) {
-            if (!Arrays.equals(Files.readAllBytes(path), bytes)) throw new IllegalStateException("Conflicting immutable D030 receipt", exists);
+            if (!Arrays.equals(FileEvidenceStore.readBounded(path, Math.max(1, bytes.length),
+                    () -> new IllegalStateException("Conflicting immutable D030 receipt", exists)), bytes)) throw new IllegalStateException("Conflicting immutable D030 receipt", exists);
         }
     }
     private static String value(Map<String,JsonNode> row, String field) { JsonNode value = row.get(field); return value == null || value.isNull() ? "" : value.asText(); }
-    private static String sha(byte[] bytes) throws Exception { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)); }
+    private static String sha(byte[] bytes) throws Exception { return FileEvidenceStore.sha256(bytes); }
 }

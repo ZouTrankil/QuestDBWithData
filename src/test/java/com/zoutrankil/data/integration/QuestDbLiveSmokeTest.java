@@ -1,9 +1,11 @@
 package com.zoutrankil.data.integration;
 
+import com.zoutrankil.data.stock.mapper.StockBasicMapper;
+
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.StockBasic;
-import com.zoutrankil.data.repository.QuestDbStockBasicRepository;
-import com.zoutrankil.data.service.StockBasicSyncService;
+import com.zoutrankil.data.stock.storage.QuestDbStockBasicRepository;
+import com.zoutrankil.data.stock.application.StockBasicSyncService;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
 import org.junit.jupiter.api.*;
@@ -13,8 +15,6 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
@@ -51,15 +51,6 @@ class QuestDbLiveSmokeTest {
     }
 
     @Test
-    void sourceSyncToCsv() throws Exception {
-        Path output = Path.of("var/live-smoke/stock_basic.csv");
-        int count = context.getBean(StockBasicSyncService.class).syncToCsv(output);
-        assertTrue(count > 0, "Tushare must return a nonempty current universe");
-        assertTrue(Files.size(output) > 0);
-        System.out.println("SMOKE sourceSyncToCsv rows=" + count);
-    }
-
-    @Test
     void applicationMigrationAndSync() throws Exception {
         String table = QuestDbStockBasicRepository.TABLE;
         String view = QuestDbStockBasicRepository.LATEST_VIEW;
@@ -80,11 +71,11 @@ class QuestDbLiveSmokeTest {
             var repo = context.getBean(QuestDbStockBasicRepository.class);
             StockBasic original = new StockBasic("SMOKE.TEST", "SMOKE", "before",
                     "test", "test", LocalDate.of(2020, 1, 2));
-            repo.storeAndVerify(List.of(original));
+            context.getBean(com.zoutrankil.data.stock.application.StockBasicWriteService.class).storeAndVerify(List.of(original));
             await(() -> repo.findLatest().stream().anyMatch(r -> r.name().equals("before")));
             StockBasic corrected = new StockBasic("SMOKE.TEST", "SMOKE", "after",
                     "test", "test", null);
-            repo.storeAndVerify(List.of(corrected));
+            context.getBean(com.zoutrankil.data.stock.application.StockBasicWriteService.class).storeAndVerify(List.of(corrected));
             await(() -> repo.findLatest().stream().anyMatch(r -> r.name().equals("after")
                     && r.listDate() == null));
             assertEquals(1, repo.findLatest().size());
@@ -93,8 +84,8 @@ class QuestDbLiveSmokeTest {
             await(() -> count(table) == 0);
             var service = new StockBasicSyncService(
                     context.getBean(com.zoutrankil.data.client.TushareClient.class),
-                    context.getBean(com.zoutrankil.data.mapper.StockBasicMapper.class),
-                    repo, repo,
+                    context.getBean(com.zoutrankil.data.stock.mapper.StockBasicMapper.class),
+                    context.getBean(com.zoutrankil.data.stock.application.StockBasicWriteService.class), repo,
                     new com.zoutrankil.data.service.SchemaMigrationService(flyway));
             var report = service.syncToQuestDb();
             assertTrue(report.submittedRows() > 0);

@@ -81,7 +81,7 @@ final class IndexMembershipPreparedRecovery {
         if(Files.exists(completed)) {
             if(!json.readTree(IndexMembershipSourceEvidence.bounded(completed,96*1024*1024)).equals(json.valueToTree(proof)))
                 throw new IllegalStateException("Existing prepared membership completion differs");
-        } else Files.writeString(completed,json.writeValueAsString(proof),StandardOpenOption.CREATE_NEW);
+        } else FileEvidenceStore.writeNewUtf8(completed,json.writeValueAsString(proof));
         int count=prepared.source().size();
         var verification=Map.of("passed",true,"expectedRows",count,"actualRows",count,"matchedRows",count,
                 "mismatchedRows",0,"duplicateKeys",0,"missingKeys",0,"readbackEvidence",completed.toString(),

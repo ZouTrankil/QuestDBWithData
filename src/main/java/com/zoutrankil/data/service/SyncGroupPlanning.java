@@ -1,6 +1,5 @@
 package com.zoutrankil.data.service;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.domain.*;
 import java.nio.charset.StandardCharsets;
@@ -56,9 +55,7 @@ public final class SyncGroupPlanning {
     private static Map<String,JsonNode> parseObject(String input) throws Exception {
         if (input.getBytes(StandardCharsets.UTF_8).length>65536)
             throw new IllegalArgumentException("Group parameter JSON exceeds 64 KiB");
-        var mapper=new ObjectMapper().enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
-                .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
-        return object(mapper.readTree(input));
+        return object(RequestJson.readTree(input));
     }
     private static Map<String,JsonNode> object(JsonNode node) {
         if (node==null || !node.isObject()) throw new IllegalArgumentException("JSON object required");

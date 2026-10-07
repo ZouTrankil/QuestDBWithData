@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.domain.policy.StockDetailInfoMerge;
+
 import com.zoutrankil.data.domain.StockDetailInfo;
 import org.junit.jupiter.api.Test;
 import java.time.*;

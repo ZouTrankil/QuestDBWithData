@@ -1,9 +1,10 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.DatasetWritePreparation;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -43,8 +44,7 @@ public final class WriteGroupPlan {
             members.add(new Member(member.memberId(), member.batchId(), target, definition, prepared));
         }
         try {
-            var json = JobDefinitionJson.mapper().configure(
-                    com.fasterxml.jackson.databind.SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+            var json = JobDefinitionJson.canonicalMapper();
             var identities = members.stream().map(m -> {
                 com.fasterxml.jackson.databind.node.ObjectNode definition = json.valueToTree(m.definition());
                 var capabilities = definition.putArray("capabilities");
@@ -54,7 +54,7 @@ public final class WriteGroupPlan {
             }).toList();
             byte[] frozen = json.writeValueAsString(Map.of("batchId", request.batchId(),
                     "logicalDate", request.logicalDate(), "members", identities)).getBytes(StandardCharsets.UTF_8);
-            String fingerprint = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(frozen));
+            String fingerprint = FileEvidenceStore.sha256(frozen);
             return new WriteGroupPlan(request.batchId(), request.logicalDate(), members, fingerprint);
         } catch (Exception failure) { throw new IllegalArgumentException("Cannot freeze write group identity", failure); }
     }

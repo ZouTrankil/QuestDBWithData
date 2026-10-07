@@ -1,10 +1,15 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.cli.CommandLineRunner;
+import com.zoutrankil.data.cli.CatalogCommands;
+import com.zoutrankil.data.cli.CliCommandRegistry;
+import com.zoutrankil.data.cli.L2Commands;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadQuery;
@@ -17,7 +22,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.domain.WriteGroupRequest;
 import com.zoutrankil.data.mapper.L2EventResponseFeaturesMapper;
-import com.zoutrankil.data.repository.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.repository.L2DatasetManifestReadRepository;
 import com.zoutrankil.data.repository.L2IntradayBarFeaturesReadRepository;
 import com.zoutrankil.data.repository.L2EventResponseFeaturesReadRepository;
@@ -195,11 +200,9 @@ class L2EventResponseFeaturesLiveAcceptanceTest {
                             Set.of("exchange_calendar.year", "l2_manifest.parquet_date",
                                     "l2_intraday_bar_features.parquet_date", "l2_event_response_features.parquet_date"),
                             Set.of("questdb.full_key_values")));
-            var dispatcher = new CommandLineRunner(null, registeredDatasets, registeredJobs, null, null, null,
-                    null, null, null, null, null);
-            var serviceField = CommandLineRunner.class.getDeclaredField("l2EventResponseFeaturesService");
-            serviceField.setAccessible(true);
-            serviceField.set(dispatcher, service);
+            var dispatcher = new CommandLineRunner(new CliCommandRegistry(List.of(
+                    new CatalogCommands(registeredDatasets, registeredJobs),
+                    new L2Commands(null, null, null, service, null))));
             String jobList = invoke(dispatcher, "list-sync-jobs");
             String datasetList = invoke(dispatcher, "show-dataset-definitions");
             String jobDetails = invoke(dispatcher, "show-sync-job", "--job=data.l2_event_response_features", "--version=1");

@@ -31,7 +31,7 @@ final class IndexCatalogNoWriteRecovery {
         if(Files.exists(receipt)) {
             if(!json.readTree(receipt.toFile()).equals(json.readTree(json.writeValueAsBytes(proof))))
                 throw new IllegalStateException("No-write completion receipt differs");
-        } else Files.writeString(receipt,json.writeValueAsString(proof),StandardOpenOption.CREATE_NEW);
+        } else FileEvidenceStore.writeNewUtf8(receipt,json.writeValueAsString(proof));
         var payload=new LinkedHashMap<String,Object>();payload.put("evidence",receipt.toString());payload.put("checkpoint",actual.fingerprint());
         if(count==0) {
             payload.put("sourceComplete",true);payload.put("returnedRows",0);payload.put("submittedRows",0);

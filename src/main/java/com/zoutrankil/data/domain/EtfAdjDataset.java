@@ -43,4 +43,9 @@ public final class EtfAdjDataset {
         return "CREATE TABLE " + table + " (" + String.join(", ", definitions)
                 + ") TIMESTAMP(timestamp) PARTITION BY YEAR WAL DEDUP UPSERT KEYS(ts_code, timestamp)";
     }
+
+    /** Admits the existing formal table or the original isolated execution namespace. */
+    public static void requireExecutionTable(String table) {
+        if (!"etf_adj".equals(table)) com.zoutrankil.data.domain.policy.IsolatedTablePolicy.ETF_ADJ.require(table);
+    }
 }

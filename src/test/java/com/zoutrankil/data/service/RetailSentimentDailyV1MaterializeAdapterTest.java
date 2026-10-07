@@ -6,7 +6,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.repository.RetailSentimentDailyV1MaterializationPort;
-import com.zoutrankil.data.repository.RetailSentimentDailyV1MaterializationPort.Snapshot;
+import com.zoutrankil.data.domain.RetailSentimentDailyV1Snapshot;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ class RetailSentimentDailyV1MaterializeAdapterTest {
             new RetailSentimentDailyV1(FROM, 0.5, 1.2, 3.5, -1.0, 0.6, 2L, 1L, 0.2, 1L, 3L, 51.0, -2.0),
             new RetailSentimentDailyV1(TO, null, 1.8, 0.4, -0.1, 0.7, 3L, 2L, null, 0L, null, 48.0, -0.3));
     private final RetailSentimentDailyV1MaterializationPort port = mock(RetailSentimentDailyV1MaterializationPort.class);
-    private final Snapshot frozen = readySnapshot();
+    private final RetailSentimentDailyV1Snapshot frozen = readySnapshot();
     private RetailSentimentDailyV1MaterializeAdapter adapter;
     private FrozenRequest request;
 
@@ -48,8 +48,8 @@ class RetailSentimentDailyV1MaterializeAdapterTest {
         request = freeze(SOURCE_VERSION, TARGET_ID, FROM, TO);
     }
 
-    private static Snapshot readySnapshot() {
-        Snapshot snapshot = mock(Snapshot.class);
+    private static RetailSentimentDailyV1Snapshot readySnapshot() {
+        RetailSentimentDailyV1Snapshot snapshot = mock(RetailSentimentDailyV1Snapshot.class);
         when(snapshot.valid()).thenReturn(true);
         when(snapshot.caughtUp()).thenReturn(true);
         when(snapshot.sourceSettled()).thenReturn(true);
@@ -117,7 +117,7 @@ class RetailSentimentDailyV1MaterializeAdapterTest {
     }
 
     @Test void sourceChangedAfterPlanningIsRejectedAtPreflight() {
-        Snapshot changed = readySnapshot();
+        RetailSentimentDailyV1Snapshot changed = readySnapshot();
         when(port.snapshot()).thenReturn(changed);
         var error = assertThrows(IllegalStateException.class, () -> adapter.preflight(request));
         assertTrue(error.getMessage().contains("source changed after planning"));
@@ -127,7 +127,7 @@ class RetailSentimentDailyV1MaterializeAdapterTest {
     }
 
     @Test void sourceChangedDuringCompleteAggregationCannotDeliverAPage() {
-        Snapshot changed = readySnapshot();
+        RetailSentimentDailyV1Snapshot changed = readySnapshot();
         when(port.snapshot()).thenReturn(frozen, changed);
         var pages = new ArrayList<SyncJobRunner.Page<RetailSentimentDailyV1>>();
         var error = assertThrows(IllegalStateException.class,
@@ -151,7 +151,7 @@ class RetailSentimentDailyV1MaterializeAdapterTest {
 
     @Test void validSettledLaggingMvCanCatchUpAfterFullValueReadbackAndComplete() throws Exception {
         when(frozen.caughtUp()).thenReturn(false);
-        Snapshot caughtUp = readySnapshot();
+        RetailSentimentDailyV1Snapshot caughtUp = readySnapshot();
         when(frozen.sourceUnchanged(caughtUp)).thenReturn(true);
         when(port.snapshot()).thenReturn(frozen, frozen, caughtUp);
         when(port.verifiedSnapshot()).thenReturn(caughtUp);
@@ -301,7 +301,7 @@ class RetailSentimentDailyV1MaterializeAdapterTest {
     }
 
     @Test void mvChangedAfterReadbackCannotReturnSourceComplete() {
-        Snapshot changedOutput = readySnapshot();
+        RetailSentimentDailyV1Snapshot changedOutput = readySnapshot();
         when(frozen.sourceUnchanged(changedOutput)).thenReturn(true);
         when(port.snapshot()).thenReturn(frozen, frozen, changedOutput);
         var error = assertThrows(IllegalStateException.class,

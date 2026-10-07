@@ -1,5 +1,7 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.stock.storage.StockFactorReadRepository;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import com.zoutrankil.data.domain.*;

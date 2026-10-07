@@ -4,7 +4,6 @@ import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.EquityStyleMonthlyMapper;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import io.questdb.client.Sender;
 import org.springframework.jdbc.core.ConnectionCallback;
@@ -51,26 +50,6 @@ public class EquityStyleMonthlyWritePort implements VerifiedBatchExecutor.Port<E
         }
     };
 
-    /** Raw nullable metadata is preserved; only an independently counted empty table permits uninitialized txn. */
-    public record Snapshot(String targetId, long tableId, String directory, String schemaHash,
-                           Long physicalTxn, Long walTxn, long sequenceTxn, long writerTxn,
-                           long pendingRows, long bufferedTxns, boolean suspended, long rowCount,
-                           Long metadataRowCount) {
-        public Snapshot {
-            Objects.requireNonNull(targetId); Objects.requireNonNull(directory); Objects.requireNonNull(schemaHash);
-            if (tableId < 0 || directory.isBlank() || sequenceTxn < 0 || writerTxn < 0 || pendingRows < 0
-                    || bufferedTxns < 0 || rowCount < 0 || physicalTxn != null && physicalTxn < 0
-                    || walTxn != null && walTxn < 0 || metadataRowCount != null && metadataRowCount < 0)
-                throw new IllegalArgumentException("Complete nonnegative target metadata required");
-        }
-        public String identity() { return targetId; }
-        public boolean settled() {
-            if (suspended || pendingRows != 0 || bufferedTxns != 0 || sequenceTxn != writerTxn) return false;
-            if (physicalTxn == null) return rowCount == 0 && sequenceTxn == 0 && writerTxn == 0
-                    && (metadataRowCount == null || metadataRowCount == 0) && (walTxn == null || walTxn == 0);
-            return walTxn == null || walTxn == writerTxn;
-        }
-    }
 
     private final String table;
     private final JdbcTemplate jdbc;
@@ -214,7 +193,7 @@ public class EquityStyleMonthlyWritePort implements VerifiedBatchExecutor.Port<E
     }
     @Override public boolean uncertainSenderStopped() { return senderStopped && !senderActive; }
 
-    public Snapshot targetSnapshot() {
+    public EquityStyleMonthlyTargetSnapshot targetSnapshot() {
         var before = metadata();
         var schema = jdbc.queryForList("SELECT \"column\",\"type\",designated,\"upsertKey\" FROM table_columns('" + table + "') LIMIT 31");
         if (schema.size() != 30) throw new IllegalStateException("D103 target must contain exactly 30 columns");
@@ -242,7 +221,7 @@ public class EquityStyleMonthlyWritePort implements VerifiedBatchExecutor.Port<E
                 || !"YEAR".equals(before.get("partitionBy"))
                 || !"month".equals(before.get("designatedTimestamp")))
             throw new IllegalStateException("D103 YEAR/WAL/month contract changed");
-        return new Snapshot(identity, id, directory, schemaHash, nullableCounter(before.get("table_txn")),
+        return new EquityStyleMonthlyTargetSnapshot(identity, id, directory, schemaHash, nullableCounter(before.get("table_txn")),
                 nullableCounter(before.get("wal_txn")), counter(before.get("sequencerTxn"), "sequence txn"),
                 counter(before.get("writerTxn"), "writer txn"), counter(before.get("wal_pending_row_count"), "pending rows"),
                 counter(before.get("bufferedTxnSize"), "buffered txns"), suspended, rows,
@@ -257,11 +236,11 @@ public class EquityStyleMonthlyWritePort implements VerifiedBatchExecutor.Port<E
         if (rows.size() != 1) throw new IllegalStateException("One actual WAL target required");
         return rows.getFirst();
     }
-    private synchronized void requireIdentity(Snapshot snapshot) {
+    private synchronized void requireIdentity(EquityStyleMonthlyTargetSnapshot snapshot) {
         if (frozenTargetId == null) frozenTargetId = snapshot.targetId();
         if (!frozenTargetId.equals(snapshot.targetId())) throw new IllegalStateException("D103 physical target identity changed");
     }
-    private static void requireStable(Snapshot before, Snapshot after) {
+    private static void requireStable(EquityStyleMonthlyTargetSnapshot before, EquityStyleMonthlyTargetSnapshot after) {
         if (!before.equals(after) || !after.settled()) throw new IllegalStateException("D103 target changed or WAL is unsettled during readback");
     }
     private static void requireRows(List<EquityStyleMonthly> rows, int max) {

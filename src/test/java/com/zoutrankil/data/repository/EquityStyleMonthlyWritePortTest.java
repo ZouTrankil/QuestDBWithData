@@ -117,9 +117,9 @@ class EquityStyleMonthlyWritePortTest {
         assertTrue(size<EquityStyleMonthlyWritePort.MAX_BYTES);assertDoesNotThrow(()->EquityStyleMonthlyWritePort.requireBatch(rows));
         assertEquals(12,rows.stream().map(EquityStyleMonthlyWritePort.CODEC::key).distinct().count());
     }
-    private EquityStyleMonthlyWritePort.Snapshot snapshot(Long txn,Long wal,long seq,long writer,long pending,long buffered,
+    private com.zoutrankil.data.domain.EquityStyleMonthlyTargetSnapshot snapshot(Long txn,Long wal,long seq,long writer,long pending,long buffered,
                                                            boolean suspended,long count,Long metadataRows) {
-        return new EquityStyleMonthlyWritePort.Snapshot("bound-id",3,"target~3","schema-sha",txn,wal,seq,writer,pending,buffered,suspended,count,metadataRows);
+        return new com.zoutrankil.data.domain.EquityStyleMonthlyTargetSnapshot("bound-id",3,"target~3","schema-sha",txn,wal,seq,writer,pending,buffered,suspended,count,metadataRows);
     }
     @Test void emptyPhysicalTxnRemainsNullAndRequiresIndependentZeroRowsAndZeroWal() {
         var empty=snapshot(null,null,0,0,0,0,false,0,null);
@@ -149,4 +149,3 @@ class EquityStyleMonthlyWritePortTest {
         verifyNoInteractions(ds);
     }
 }
-

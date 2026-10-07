@@ -1,5 +1,7 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 

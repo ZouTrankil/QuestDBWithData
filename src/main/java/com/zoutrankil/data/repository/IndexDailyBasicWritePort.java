@@ -1,11 +1,11 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.IndexDailyBasicMapper;
-import com.zoutrankil.data.service.IndexDailyBasicJobService;
 import com.zoutrankil.data.service.IndexDailyBasicSource;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
@@ -39,7 +39,7 @@ public final class IndexDailyBasicWritePort implements VerifiedBatchExecutor.Por
     private final IndexDailyBasicMapper mapper = new IndexDailyBasicMapper();
     private volatile boolean uncertainSenderStopped;
     public IndexDailyBasicWritePort(String table, String targetId, JdbcTemplate jdbc, QuestDB questdb) {
-        IndexDailyBasicJobService.requireIsolatedTableName(table);
+        IsolatedTablePolicy.INDEX_DAILY_BASIC.require(table);
         if (targetId == null || !targetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen D020 isolated target identity required");
         this.table = table; this.expectedTargetId = targetId; this.jdbc = new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());

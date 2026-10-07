@@ -1,4 +1,9 @@
 package com.zoutrankil.data.cli;
+
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockBasicSyncService;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
 import com.zoutrankil.data.service.*;
 import com.zoutrankil.data.domain.SyncRunState;
 import org.junit.jupiter.api.Test;

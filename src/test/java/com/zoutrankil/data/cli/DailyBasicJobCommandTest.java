@@ -1,5 +1,7 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.stock.application.DailyBasicJobService;
+
 import com.zoutrankil.data.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.DefaultApplicationArguments;
@@ -33,13 +35,8 @@ class DailyBasicJobCommandTest {
         verify(service).plan(null, futureDate, logicalDate, null);
     }
 
-    private static CommandLineRunner cli(DailyBasicJobService service) throws Exception {
-        var runner = new CommandLineRunner(mock(StockBasicSyncService.class), mock(DatasetRegistry.class),
-                mock(SyncJobRegistry.class), mock(StockBasicJobService.class), mock(StockBasicGroupService.class),
-                mock(ReadGroupReader.class), mock(StockBasicWriteGroupService.class));
-        var field = CommandLineRunner.class.getDeclaredField("dailyBasicService");
-        field.setAccessible(true);
-        field.set(runner, service);
-        return runner;
+    private static CommandLineRunner cli(DailyBasicJobService service) {
+        return new CommandLineRunner(new CliCommandRegistry(java.util.List.of(
+                new StockCommands(null, null, null, service, null, null, null, null))));
     }
 }

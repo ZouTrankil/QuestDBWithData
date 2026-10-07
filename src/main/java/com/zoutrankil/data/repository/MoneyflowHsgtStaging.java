@@ -1,7 +1,6 @@
 package com.zoutrankil.data.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.MoneyflowHsgt;
 import com.zoutrankil.data.domain.MoneyflowHsgtKey;
@@ -10,13 +9,9 @@ import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.service.MoneyflowHsgtSource;
 import com.zoutrankil.data.service.MoneyflowHsgtSyncJobOwner;
 import com.zoutrankil.data.service.SyncJobRunner;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.file.*;
-import java.security.MessageDigest;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
@@ -129,7 +124,7 @@ public final class MoneyflowHsgtStaging {
         if(Files.isSymbolicLink(stage)||!Files.isDirectory(stage,LinkOption.NOFOLLOW_LINKS))throw new IOException("D027 stage evidence directory invalid");
         try(DirectoryStream<Path> files=Files.newDirectoryStream(stage,"*-intent.json")){for(Path file:files){
             if(Files.isSymbolicLink(file)||!Files.isRegularFile(file,LinkOption.NOFOLLOW_LINKS)||Files.size(file)>MAX_INTENT_BYTES)throw new IOException("D027 stage intent invalid");
-            JsonNode intent=JobDefinitionJson.mapper().readTree(Files.readAllBytes(file));if(!"DISCARDED".equals(intent.path("phase").asText()))return true;
+            JsonNode intent=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(file,MAX_INTENT_BYTES,()->new IOException("D027 stage intent invalid")));if(!"DISCARDED".equals(intent.path("phase").asText()))return true;
         }return false;}
     }
 
@@ -142,7 +137,7 @@ public final class MoneyflowHsgtStaging {
         var intents=new ArrayList<Path>();try(DirectoryStream<Path> files=Files.newDirectoryStream(stageRoot,"*-intent.json")){for(Path path:files){if(intents.size()>0)throw new IOException("Multiple D027 stage intents require manual reconciliation");intents.add(path);}}
         if(intents.size()!=1)throw new IllegalStateException("D027 stage-only recovery requires exactly one intent");
         Path intentPath=intents.getFirst();if(Files.isSymbolicLink(intentPath)||!Files.isRegularFile(intentPath,LinkOption.NOFOLLOW_LINKS)||Files.size(intentPath)>MAX_INTENT_BYTES)throw new IOException("D027 stage intent is invalid");
-        var json=JobDefinitionJson.mapper();JsonNode intent=json.readTree(Files.readAllBytes(intentPath));
+        var json=JobDefinitionJson.mapper();JsonNode intent=json.readTree(FileEvidenceStore.readBounded(intentPath,MAX_INTENT_BYTES,()->new IOException("D027 stage intent is invalid")));
         if(!"moneyflow_hsgt".equals(intent.path("dataset").asText())||!runId.equals(intent.path("runId").asText())
                 ||!target.equals(intent.path("target").asText()))throw new IllegalStateException("D027 stage intent belongs to another run/target");
         if("DISCARDED".equals(intent.path("phase").asText()))return;
@@ -187,21 +182,21 @@ public final class MoneyflowHsgtStaging {
             check(cancelled);if(System.nanoTime()>deadline)throw new IllegalStateException("D027 stage WAL unresolved; retain it for recovery");Thread.sleep(50);}
     }
     private static void writeNew(Path path,Object body)throws Exception {
-        Files.createDirectories(path.getParent());byte[] bytes=JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true).writeValueAsBytes(body);
+        Files.createDirectories(path.getParent());byte[] bytes=JobDefinitionJson.canonicalMapper().writeValueAsBytes(body);
         if(bytes.length<1||bytes.length>MAX_INTENT_BYTES)throw new IllegalArgumentException("D027 stage proof exceeds 4 MiB");
-        try(FileChannel channel=FileChannel.open(path,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE)){
-            ByteBuffer buffer=ByteBuffer.wrap(bytes);while(buffer.hasRemaining())channel.write(buffer);channel.force(true);}
+        try{FileEvidenceStore.writeNewDurable(path,bytes);}
         catch(FileAlreadyExistsException existing){
             if(Files.isSymbolicLink(path)||!Files.isRegularFile(path,LinkOption.NOFOLLOW_LINKS)||Files.size(path)>MAX_INTENT_BYTES
-                    ||!JobDefinitionJson.mapper().readTree(Files.readAllBytes(path)).equals(JobDefinitionJson.mapper().readTree(bytes)))
+                    ||!JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(path,MAX_INTENT_BYTES,
+                            ()->new IOException("D027 deterministic stage proof conflicts with existing receipt",existing))).equals(JobDefinitionJson.mapper().readTree(bytes)))
                 throw new IOException("D027 deterministic stage proof conflicts with existing receipt",existing);
         }
     }
     private static void replaceDurable(Path path,Object body)throws Exception {
-        Path tmp=path.resolveSibling(path.getFileName()+".tmp-"+UUID.randomUUID());writeNew(tmp,body);
-        try{Files.move(tmp,path,StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING);}
+        Files.createDirectories(path.getParent());byte[] bytes=JobDefinitionJson.canonicalMapper().writeValueAsBytes(body);
+        if(bytes.length<1||bytes.length>MAX_INTENT_BYTES)throw new IllegalArgumentException("D027 stage proof exceeds 4 MiB");
+        try{FileEvidenceStore.replaceDurable(path,bytes);}
         catch(AtomicMoveNotSupportedException unsupported){throw new IOException("D027 READY intent requires atomic durable replace",unsupported);}
-        finally{Files.deleteIfExists(tmp);}
     }
     private static void check(BooleanSupplier cancelled){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new java.util.concurrent.CancellationException("D027 stage operation cancelled; retain artifacts");}
 }

@@ -1,5 +1,8 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
+
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.*;
@@ -28,8 +31,8 @@ class ExchangeCalendarGroupLiveTest {
                     +"TIMESTAMP(cal_date) PARTITION BY YEAR WAL DEDUP UPSERT KEYS(exchange,cal_date)");
             boolean verified=false;
             try {
-                var calendar=new ExchangeCalendarJobService(ctx.getBean(TusharePageService.class),jdbc,ctx.getBean(QuestDB.class),
-                        ctx.getBean(QuestDbProperties.class),ledgerPath.toString(),table);
+                var calendar=new ExchangeCalendarJobService(ctx.getBean(TusharePageService.class),
+                        new com.zoutrankil.data.calendar.storage.ExchangeCalendarQuestDbTarget(table,jdbc,ctx.getBean(QuestDB.class),ctx.getBean(QuestDbProperties.class)),ledgerPath.toString());
                 var jobs=ctx.getBean(SyncJobRegistry.class);
                 var groups=new StockBasicGroupService(jobs,ctx.getBean(StockBasicJobService.class),calendar,ledgerPath.toString());
                 var registry=new SyncGroupRegistry(groups.definitions(),jobs);

@@ -6,7 +6,6 @@ import com.zoutrankil.data.domain.MarginAll;
 import com.zoutrankil.data.domain.MarginAllDataset;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.MarginAllMapper;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.security.MessageDigest;
 import java.sql.SQLException;

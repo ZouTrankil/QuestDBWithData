@@ -1,5 +1,10 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.calendar.application.ExchangeCalendarCoverage;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarSource;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarWritePort;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import org.junit.jupiter.api.Test;
@@ -29,6 +34,7 @@ class ExchangeCalendarFailureTest {
         var path=root.resolve("unknown.sqlite");var ledger=new SyncRunLedger(path);
         var source=mock(ExchangeCalendarSource.class);var port=mock(ExchangeCalendarWritePort.class);
         var day=LocalDate.of(2026,9,28);
+        when(port.codec()).thenReturn(ExchangeCalendarWritePort.CODEC);
         var row=new ExchangeCalendar("SSE",day,true,day.minusDays(4));
         when(source.fetch(any(),any())).thenReturn(new SyncJobRunner.Page<>(List.of(row),"source-hash","source-evidence",null));
         doThrow(new IllegalStateException("transport outcome unknown")).when(port).send(anyList());

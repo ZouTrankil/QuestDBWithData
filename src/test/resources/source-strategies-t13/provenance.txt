@@ -1,0 +1,26 @@
+Captured on 2026-10-07 before T13 source strategy changes.
+CaptureSourceBaseline.java.txt is the exact independent capture helper. It ran
+against the preserved pre-T12 compiled classes/resources and the existing
+NativeSourceTest.row fixture generator. T12 changed only daily metadata binding;
+the T12 gate separately proved daily serialized bytes and normalization unchanged.
+No T13 replacement strategy class was compiled or loaded to generate expectations.
+
+41 registered sources were collected through the old SourceCollector, using local
+synthetic provider pages. The fixture retains provider inputs, request parameters,
+PageContracts, ordered business columns, DDL, normalized/physical rows, keys,
+coverage, final state, exact Frozen JSON bytes and content SHA-256.
+1836 normalization cases record valid, missing, null, wrong-type, date and universe
+outcomes including exact exception type/message. Provider inputs are synthetic
+compatibility examples, not observations of current external provider coverage.
+
+Only PageContract.allowedParameters (an unordered Set) is sorted for comparison.
+No field/key/row order, numeric value, null or date is normalized in expected
+Frozen bytes or normalization output. The JSON fixture container was compacted
+without changing the embedded exact-output strings.
+Fixture SHA-256: 3582957c7493f78968ed51f065cdf37d87f57fbf17e9ac7ca8d40220035c250a
+
+Pre-T12 SourceContract.class SHA-256:
+16693AD532482F3A498933D8A9D5C81C2C2150DBE0B761D5ECE70DFB4C3DFF2C
+Preserved classes: .gradle/refactor-baseline/T12/before-classes
+Capture output and archive: .gradle/refactor-baseline/T13/captured
+These expectations must not be refreshed from the replacement implementation.

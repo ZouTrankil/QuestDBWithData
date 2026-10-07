@@ -1,5 +1,10 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.etf.application.EtfBasicSyncJobOwner;
+import com.zoutrankil.data.etf.application.EtfShareSyncJobOwner;
+
+import com.zoutrankil.data.etf.application.EtfDailySyncJobOwner;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;

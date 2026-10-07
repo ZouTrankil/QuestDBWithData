@@ -1,7 +1,7 @@
 package com.zoutrankil.data.repository;
 
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.service.DatasetIntervalLock;
+import com.zoutrankil.data.domain.IntervalLockStore;
 import java.nio.file.*;
 import java.sql.*;
 import java.time.Instant;
@@ -28,6 +28,11 @@ public final class ReferencePublicationJournal {
         }
     }
     public record Entry(Intent intent,State state,long revision) {}
+    public enum ConnectionPolicy { FOREIGN_KEYS_WITH_BUSY_TIMEOUT, DRIVER_DEFAULTS }
+    public record Summary(String runId,String state) {}
+    @FunctionalInterface public interface SummaryVisitor {
+        void accept(Summary summary,int rowNumber) throws Exception;
+    }
     private final Path path;
     private final String dataset;
     public ReferencePublicationJournal(Path path,String dataset) throws SQLException {
@@ -40,13 +45,31 @@ public final class ReferencePublicationJournal {
         }
     }
     private Connection open() throws SQLException {
+        return open(ConnectionPolicy.FOREIGN_KEYS_WITH_BUSY_TIMEOUT);
+    }
+    private Connection open(ConnectionPolicy policy) throws SQLException {
         var db=DriverManager.getConnection("jdbc:sqlite:"+path);
-        try(var s=db.createStatement()) { s.execute("PRAGMA foreign_keys=ON");s.execute("PRAGMA busy_timeout=5000"); }
+        if(policy==ConnectionPolicy.FOREIGN_KEYS_WITH_BUSY_TIMEOUT)
+            try(var s=db.createStatement()) { s.execute("PRAGMA foreign_keys=ON");s.execute("PRAGMA busy_timeout=5000"); }
         return db;
     }
-    public DatasetIntervalLock.Lease requireLease(DatasetIntervalLock.Lease lease,boolean allowUncertain) {
-        if(!lease.scope().equals(DatasetIntervalLock.Scope.allDates(dataset))) throw new IllegalArgumentException("Whole owning dataset lease required");
-        var actual=new DatasetIntervalLock(path).findOwned(lease.runId(),lease.scope());
+    /** Visits a bounded dataset scan in SQLite's existing order, stopping immediately if the visitor fails. */
+    public void visitSummaries(int limit,boolean unverifiedOnly,ConnectionPolicy policy,SummaryVisitor visitor) throws Exception {
+        if(limit<1||limit>1001)throw new IllegalArgumentException("Publication summary limit must be between 1 and 1001");
+        Objects.requireNonNull(policy);Objects.requireNonNull(visitor);
+        String sql="SELECT run_id,state FROM reference_publications WHERE dataset=?"
+                +(unverifiedOnly?" AND state<>'VERIFIED'":"")+" LIMIT ?";
+        try(var db=open(policy);var query=db.prepareStatement(sql)) {
+            query.setString(1,dataset);query.setInt(2,limit);
+            try(var rows=query.executeQuery()) {
+                int rowNumber=0;
+                while(rows.next())visitor.accept(new Summary(rows.getString(1),rows.getString(2)),++rowNumber);
+            }
+        }
+    }
+    public IntervalLockStore.Lease requireLease(IntervalLockStore.Lease lease,boolean allowUncertain) {
+        if(!lease.scope().equals(IntervalLockStore.Scope.allDates(dataset))) throw new IllegalArgumentException("Whole owning dataset lease required");
+        var actual=new SqliteIntervalLockStore(path).findOwned(lease.runId(),lease.scope());
         if(actual==null || !actual.id().equals(lease.id()) || actual.inDoubt() && !allowUncertain)
             throw new IllegalStateException("Publication lease absent, changed or uncertain");
         return actual;

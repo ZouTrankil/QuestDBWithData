@@ -1,6 +1,5 @@
 package com.zoutrankil.data.service;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
@@ -25,8 +24,7 @@ public final class ReadGroupJson {
     }
     public ReadGroupRequest parse(byte[] bytes) throws Exception {
         if (bytes == null || bytes.length > 1024 * 1024) throw new IllegalArgumentException("Bounded JSON required");
-        var root = new ObjectMapper().enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION)
-                .enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS).readTree(bytes);
+        var root = RequestJson.readTree(bytes);
         fields(root, "timeoutMillis", "members");
         int millis = integer(root.required("timeoutMillis"));
         var membersNode = root.required("members");
@@ -109,9 +107,12 @@ public final class ReadGroupJson {
         };
     }
     static void fields(JsonNode node, String... allowed) {
+        fields(node, Set.of(allowed));
+    }
+    static void fields(JsonNode node, Set<String> allowed) {
         if (node == null || !node.isObject()) throw new IllegalArgumentException("JSON object required");
-        var names = Set.of(allowed); var fields = node.fieldNames();
-        while (fields.hasNext()) if (!names.contains(fields.next())) throw new IllegalArgumentException("Unknown request property");
+        var fields = node.fieldNames();
+        while (fields.hasNext()) if (!allowed.contains(fields.next())) throw new IllegalArgumentException("Unknown request property");
     }
     static int integer(JsonNode node) {
         if (!node.isIntegralNumber() || !node.canConvertToInt()) throw new IllegalArgumentException("Integer required");

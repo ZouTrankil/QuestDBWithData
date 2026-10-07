@@ -31,7 +31,7 @@ class EquityStyleMonthlyCatalogStartupTest {
             assertNotNull(jobs.require(IndexMonthlySyncJobOwner.DEFINITION.jobId(),IndexMonthlySyncJobOwner.DEFINITION.version()));
             var source=context.getBean("d101NoConnectionDataSource",DataSource.class);
             verify(source,never()).getConnection();verify(source,never()).getConnection(anyString(),anyString());
-            Path result=Path.of("artifacts/java-migration/D103/commands/java-catalog-startup-final-20261006.json");
+            Path result=temporary.resolve("java-catalog-startup-final-20261006.json");
             Files.createDirectories(result.getParent());Files.writeString(result,JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
                     "task_id","D103","dataset_count",datasets.definitions().size(),"job_count",jobs.definitions().size(),
                     "definition",EquityStyleMonthlyDataset.DEFINITION,"job",EquityStyleMonthlyJobService.definition(),

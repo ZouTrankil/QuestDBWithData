@@ -75,13 +75,10 @@ public final class LaunchService {
                     return ledger.detail(request.instanceId());
                 }
                 var states=ledger.stages(request.instanceId());
-                if (MainStrategyDailyWork.JOB.equals(request.job())) {
-                    boolean ready=MainStrategyDailyWork.STAGES.stream()
-                            .allMatch(stage -> states.getOrDefault(stage,BusinessState.WAITING_UPSTREAM).ready());
-                    if (ready) ledger.state(request.instanceId(),BusinessState.VERIFIED,execution.getId(),null);
-                    else if (ledger.state(request.instanceId())==BusinessState.RUNNING)
-                        ledger.state(request.instanceId(),BusinessState.IN_DOUBT,execution.getId(),
-                                "Main-strategy batch ended without five authoritative stage certificates");
+                if ("main_strategy_daily".equals(request.job())) {
+                    // No authoritative completion protocol for this job is present in this delivery.
+                    ledger.state(request.instanceId(),BusinessState.IN_DOUBT,execution.getId(),
+                            "Main-strategy completion protocol is unavailable; five authoritative stage certificates cannot be verified");
                     return ledger.detail(request.instanceId());
                 }
                 boolean allReady=PostCloseGraph.STAGES.stream().allMatch(s -> states.getOrDefault(s.id(),BusinessState.WAITING_UPSTREAM).ready());

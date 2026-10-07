@@ -1,10 +1,12 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockFactorSyncJobOwner;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.MarketBreadthDailyV1MaterializationPort;
-import com.zoutrankil.data.repository.MarketBreadthDailyV1MaterializationPort.Snapshot;
+import com.zoutrankil.data.domain.MarketBreadthDailyV1Snapshot;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Path;
 import java.time.*;
@@ -20,12 +22,12 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 @Service
 public final class MarketBreadthDailyV1JobService implements SyncJobOwner {
     public static final String JOB_ID = "data.mv_market_breadth_daily_v1";
-    public record Plan(FrozenRequest request, String targetId, Snapshot source) {}
+    public record Plan(FrozenRequest request, String targetId, MarketBreadthDailyV1Snapshot source) {}
     public record MaterializationResult(SyncJobRunner.Result result, long sourceRawRows,
-                                        Snapshot source, Snapshot target, String targetSnapshotError) {}
+                                        MarketBreadthDailyV1Snapshot source, MarketBreadthDailyV1Snapshot target, String targetSnapshotError) {}
     public record Status(String runId, SyncRunState state, String targetId, String logicalDate,
                          int verifiedRows, int unresolvedSlices, boolean cancellationRequested,
-                         Snapshot currentTarget, String currentTargetError) {}
+                         MarketBreadthDailyV1Snapshot currentTarget, String currentTargetError) {}
     private final JdbcTemplate jdbc;
     private final QuestDbProperties properties;
     private final Path ledgerPath;
@@ -116,14 +118,14 @@ public final class MarketBreadthDailyV1JobService implements SyncJobOwner {
                 ? runner.run(runId, null, plan.targetId(), plan.request(), adapter, () -> false)
                 : runner.resume(runId, previousRunId, plan.targetId(), plan.request(), adapter, () -> false);
         var observed = safeSnapshot(port);
-        Snapshot verified = adapter.lastVerificationSnapshot();
+        MarketBreadthDailyV1Snapshot verified = adapter.lastVerificationSnapshot();
         String snapshotError = observed.error;
         if (verified != null && observed.snapshot != null && !verified.equals(observed.snapshot))
             snapshotError = "TargetChangedAfterVerification";
         return new MaterializationResult(result, adapter.sourceRawRows(), plan.source(),
                 verified == null ? observed.snapshot : verified, snapshotError);
     }
-    public Snapshot installIsolated() throws Exception { var port = port(); port.createIsolatedTarget(); return port.snapshot(); }
+    public MarketBreadthDailyV1Snapshot installIsolated() throws Exception { var port = port(); port.createIsolatedTarget(); return port.snapshot(); }
     /** The isolated FULL operation has the same durable intent, exclusion and verification as every materialization. */
     public MaterializationResult repairIsolated() throws Exception {
         var port = port();
@@ -252,7 +254,7 @@ public final class MarketBreadthDailyV1JobService implements SyncJobOwner {
         if (from == null || to == null || to.isBefore(from) || ChronoUnit.DAYS.between(from,to) >= 31)
             throw new IllegalArgumentException("Explicit nonempty D095 window of at most 31 days required");
     }
-    private record ObservedTarget(Snapshot snapshot, String error) {}
+    private record ObservedTarget(MarketBreadthDailyV1Snapshot snapshot, String error) {}
     private ObservedTarget safeSnapshot() {
         try { return safeSnapshot(port()); }
         catch (RuntimeException failure) { return new ObservedTarget(null, failure.getClass().getSimpleName()); }

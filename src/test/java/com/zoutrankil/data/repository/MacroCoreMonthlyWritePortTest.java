@@ -134,9 +134,9 @@ class MacroCoreMonthlyWritePortTest {
         assertTrue(size<MacroCoreMonthlyWritePort.MAX_BYTES);assertDoesNotThrow(()->MacroCoreMonthlyWritePort.requireBatch(rows));
         assertEquals(12,rows.stream().map(MacroCoreMonthlyWritePort.CODEC::key).distinct().count());
     }
-    private MacroCoreMonthlyWritePort.Snapshot snapshot(Long txn,Long wal,long seq,long writer,long pending,long buffered,
+    private com.zoutrankil.data.domain.MacroCoreMonthlyTargetSnapshot snapshot(Long txn,Long wal,long seq,long writer,long pending,long buffered,
                                                            boolean suspended,long count,Long metadataRows) {
-        return new MacroCoreMonthlyWritePort.Snapshot("bound-id",3,"target~3","schema-sha",txn,wal,seq,writer,pending,buffered,suspended,count,metadataRows);
+        return new com.zoutrankil.data.domain.MacroCoreMonthlyTargetSnapshot("bound-id",3,"target~3","schema-sha",txn,wal,seq,writer,pending,buffered,suspended,count,metadataRows);
     }
     @Test void emptyPhysicalTxnRemainsNullAndRequiresIndependentZeroRowsAndZeroWal() {
         var empty=snapshot(null,null,0,0,0,0,false,0,null);
@@ -190,4 +190,3 @@ class MacroCoreMonthlyWritePortTest {
         verifyNoInteractions(ds);
     }
 }
-

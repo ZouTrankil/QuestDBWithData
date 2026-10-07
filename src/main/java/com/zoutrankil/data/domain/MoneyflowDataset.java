@@ -10,6 +10,9 @@ public final class MoneyflowDataset {
     private static final TemporalContract TRADE_DATE = new TemporalContract(TemporalKind.BUSINESS_DATE,
             "BASIC", "calendar", "DAY", "Tushare trade date carried at UTC midnight, not an instant");
     private MoneyflowDataset() {}
+    public static void requireExecutionTable(String table) {
+        if (!"moneyflow".equals(table)) requireIsolatedTable(table);
+    }
     public static final DatasetDefinition DEFINITION = definition("moneyflow");
     public static DatasetDefinition definition(String table) {
         DatasetDefinition.identifier(table);

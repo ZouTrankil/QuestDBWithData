@@ -5,6 +5,7 @@ import com.zoutrankil.data.client.dto.IndexWeightSourceDto;
 import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.IndexWeight;
 import com.zoutrankil.data.domain.IndexWeightKey;
+import com.zoutrankil.data.domain.policy.IndexWeightUniverse;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -46,12 +47,7 @@ public final class IndexWeightMapper {
                 values.get("weight", Double.class), values.get("update_time", Instant.class));
     }
     public static String normalizeIndexCode(String value) {
-        if (value == null) throw new IllegalArgumentException("index_code required");
-        String code = value.strip().toUpperCase(java.util.Locale.ROOT);
-        int dot = code.indexOf('.');
-        if (dot >= 0) code = code.substring(0, dot);
-        if (!code.matches("[0-9]{1,6}")) throw new IllegalArgumentException("Invalid six digit index_code: " + value);
-        return "0".repeat(6 - code.length()) + code;
+        return IndexWeightUniverse.normalizeIndexCode(value);
     }
     public static String normalizeDateText(String value) {
         if (value == null || value.isBlank()) throw new IllegalArgumentException("D021 trade_date required");

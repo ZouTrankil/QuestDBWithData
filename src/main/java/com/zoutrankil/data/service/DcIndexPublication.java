@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.nio.channels.*;
 import java.nio.file.*;
 import java.security.MessageDigest;
-import java.sql.*;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
@@ -23,11 +22,13 @@ public final class DcIndexPublication {
             String fullTargetFingerprint,String evidence,boolean writerStopped,boolean passed){}
     private final JdbcTemplate jdbc;private final Path ledgerPath,evidenceRoot;private final String table,logicalTargetId,runId;
     private final ReferencePublicationJournal journal;private final DatasetIntervalLock locks;
+    private final DcIndexTargetTransitionStore transitions;
     public DcIndexPublication(JdbcTemplate jdbc,Path ledgerPath,Path evidenceRoot,String table,String logicalTargetId,String runId)throws Exception{
         DatasetDefinition.identifier(table);this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());this.jdbc.setQueryTimeout(30);
         this.ledgerPath=ledgerPath.toAbsolutePath().normalize();this.evidenceRoot=evidenceRoot.toAbsolutePath().normalize();
         this.table=table;this.logicalTargetId=Objects.requireNonNull(logicalTargetId);this.runId=Objects.requireNonNull(runId);
-        this.journal=new ReferencePublicationJournal(this.ledgerPath,"dc_index");this.locks=new DatasetIntervalLock(this.ledgerPath);initializeTransitions();
+        this.journal=new ReferencePublicationJournal(this.ledgerPath,"dc_index");this.locks=new DatasetIntervalLock(this.ledgerPath);
+        this.transitions=new DcIndexTargetTransitionStore(this.ledgerPath);transitions.initialize();
     }
     public Lock acquire()throws Exception{
         return acquire(null);
@@ -55,7 +56,7 @@ public final class DcIndexPublication {
         if(!before.equals(current)||!expectedPhysical.equals(actualPhysical))throw new IllegalStateException("D023 physical target changed after planning/source capture");
         if(!stage.table().startsWith("java_dc_index_stage_"))throw new IllegalArgumentException("D023 isolated stage required");
         Path complete=Path.of(completionPath).toAbsolutePath().normalize();requireEvidence(complete,"complete-window.json");
-        JsonNode completeJson=JobDefinitionJson.mapper().readTree(complete.toFile());
+        JsonNode completeJson=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(complete, DcIndexSource.MAX_EVIDENCE_BYTES, () -> new IllegalStateException("D023 recovery evidence outside run bound")));
         if(!completeJson.path("complete").asBoolean(false)||!sourceFingerprint.equals(completeJson.path("sourceFingerprint").asText())
                 ||!stage.table().equals(completeJson.path("stage").asText())||!completeJson.path("dedup").isBoolean()||completeJson.path("dedup").asBoolean())
             throw new IllegalStateException("D023 completion proof differs from the DEDUP=false staged window");
@@ -68,7 +69,7 @@ public final class DcIndexPublication {
         String backup="java_dc_index_backup_"+UUID.randomUUID().toString().replace("-","");
         var scopeValues=new LinkedHashMap<String,Object>(Map.of("logicalTargetId",logicalTargetId,
                 "physicalTargetBefore",expectedPhysical,"fromInclusive",from.toString(),"toInclusive",to.toString(),
-                "sourceFingerprint",sourceFingerprint,"completeEvidence",complete.toString(),"completeEvidenceSha256",sha(Files.readAllBytes(complete)),
+                "sourceFingerprint",sourceFingerprint,"completeEvidence",complete.toString(),"completeEvidenceSha256",sha(FileEvidenceStore.readBounded(complete, DcIndexSource.MAX_EVIDENCE_BYTES, () -> new IllegalStateException("D023 recovery evidence outside run bound"))),
                 "stageDirectory",stageNow.identity().directory(),"stagePhysicalTarget",DcIndexStorage.physicalTargetId(jdbc,stage.table(),stageNow.identity()),"dedup",false));
         scopeValues.put("proofVersion",2);var intentScope=JobDefinitionJson.mapper().writeValueAsString(scopeValues);
         var intent=new ReferencePublicationJournal.Intent("dc-index-publication-"+UUID.randomUUID(),"dc_index",runId,
@@ -129,24 +130,25 @@ public final class DcIndexPublication {
     }
     public static void requireNoPendingPublication(Path ledgerPath)throws Exception{requireNoPendingPublication(ledgerPath,null);}
     private static void requireNoPendingPublication(Path ledgerPath,String exceptStageRun)throws Exception{
-        if(!Files.isRegularFile(ledgerPath))return;new ReferencePublicationJournal(ledgerPath,"dc_index");ensureTransitionTable(ledgerPath);try(var db=sqlite(ledgerPath)){
-            if(tableExists(db,"reference_publications"))try(var query=db.prepareStatement("SELECT run_id FROM reference_publications WHERE dataset='dc_index' AND state<>'VERIFIED' LIMIT 1");var rows=query.executeQuery()){
-                if(rows.next())throw new IllegalStateException("Unresolved D023 publication for run "+rows.getString(1));}
-            if(tableExists(db,"dc_index_target_transitions"))try(var query=db.prepareStatement("SELECT run_id FROM dc_index_target_transitions WHERE state<>'VERIFIED' LIMIT 1");var rows=query.executeQuery()){
-                if(rows.next())throw new IllegalStateException("Unverified D023 physical transition for run "+rows.getString(1));}}
+        if(!Files.isRegularFile(ledgerPath))return;new ReferencePublicationJournal(ledgerPath,"dc_index");
+        var store=new DcIndexTargetTransitionStore(ledgerPath);store.initialize();var pending=store.pendingIfPresent();
+        if(pending.publicationRunId()!=null)throw new IllegalStateException("Unresolved D023 publication for run "+pending.publicationRunId());
+        if(pending.transitionRunId()!=null)throw new IllegalStateException("Unverified D023 physical transition for run "+pending.transitionRunId());
         requireNoPendingStageOnly(ledgerPath,exceptStageRun);
     }
     public static boolean authorizesResume(Path path,String runId,String logical,String before,String current)throws Exception{
-        if(!Files.isRegularFile(path))return false;try(var db=sqlite(path);var q=db.prepareStatement("SELECT previous_physical_id,next_physical_id,state FROM dc_index_target_transitions WHERE run_id=? AND logical_target_id=?")){
-            q.setString(1,runId);q.setString(2,logical);try(var rs=q.executeQuery()){if(!rs.next())return false;boolean ok=before.equals(rs.getString(1))&&current.equals(rs.getString(2))&&"VERIFIED".equals(rs.getString(3));if(rs.next())throw new IllegalStateException("Duplicate D023 transition");return ok&&new ReferencePublicationJournal(path,"dc_index").forRun(runId).state()==State.VERIFIED;}}
+        if(!Files.isRegularFile(path))return false;var found=new DcIndexTargetTransitionStore(path).forRun(runId,logical);
+        if(found.isEmpty())return false;var entry=found.get();var intent=entry.intent();
+        boolean ok=before.equals(intent.previousPhysicalId())&&current.equals(intent.nextPhysicalId())&&"VERIFIED".equals(entry.state());
+        return ok&&new ReferencePublicationJournal(path,"dc_index").forRun(runId).state()==State.VERIFIED;
     }
     public static void verifyCurrentTarget(Path path,JdbcTemplate jdbc,String table,String logical,String physical)throws Exception{
         if(!Files.isRegularFile(path))return;requireNoPendingPublication(path);if(!logical.equals(DcIndexTargetIdentity.logical(jdbc,table)))throw new IllegalStateException("D023 logical database/table identity changed");
-        try(var db=sqlite(path);var q=db.prepareStatement("SELECT previous_physical_id,next_physical_id,run_id,state FROM dc_index_target_transitions WHERE logical_target_id=? ORDER BY created_at,rowid")){
-            q.setString(1,logical);try(var rs=q.executeQuery()){String prior=null;while(rs.next()){if(!"VERIFIED".equals(rs.getString(4))||prior!=null&&!prior.equals(rs.getString(1)))throw new IllegalStateException("D023 physical lineage is incomplete/discontinuous");
-                if(new ReferencePublicationJournal(path,"dc_index").forRun(rs.getString(3)).state()!=State.VERIFIED)throw new IllegalStateException("D023 transition lacks verified publication journal");prior=rs.getString(2);}
-                if(prior!=null&&!prior.equals(physical))throw new IllegalStateException("D023 physical target changed outside journaled replacement");
-                if(prior==null){String historical=lastVerifiedPhysical(path,logical);if(historical!=null&&!historical.equals(physical))throw new IllegalStateException("D023 physical generation changed outside a journaled publication");}}}
+        String prior=null;for(var entry:new DcIndexTargetTransitionStore(path).lineage(logical)){var intent=entry.intent();
+            if(!"VERIFIED".equals(entry.state())||prior!=null&&!prior.equals(intent.previousPhysicalId()))throw new IllegalStateException("D023 physical lineage is incomplete/discontinuous");
+            if(new ReferencePublicationJournal(path,"dc_index").forRun(intent.runId()).state()!=State.VERIFIED)throw new IllegalStateException("D023 transition lacks verified publication journal");prior=intent.nextPhysicalId();}
+        if(prior!=null&&!prior.equals(physical))throw new IllegalStateException("D023 physical target changed outside journaled replacement");
+        if(prior==null){String historical=lastVerifiedPhysical(path,logical);if(historical!=null&&!historical.equals(physical))throw new IllegalStateException("D023 physical generation changed outside a journaled publication");}
     }
 
     private DcIndexStorage.Snapshot verifyPublished(ReferencePublicationJournal.Entry entry)throws Exception{
@@ -159,7 +161,7 @@ public final class DcIndexPublication {
     }
     private void validateCompletionEvidence(JsonNode scope,ReferencePublicationJournal.Intent intent)throws Exception{
         Path file=Path.of(requiredText(scope,"completeEvidence")).toAbsolutePath().normalize();requireEvidence(file,"complete-window.json");
-        byte[] bytes=Files.readAllBytes(file);if(!sha(bytes).equals(requiredText(scope,"completeEvidenceSha256")))throw new IllegalStateException("D023 completion receipt changed since publication intent");
+        byte[] bytes=FileEvidenceStore.readBounded(file, DcIndexSource.MAX_EVIDENCE_BYTES, () -> new IllegalStateException("D023 recovery evidence outside run bound"));if(!sha(bytes).equals(requiredText(scope,"completeEvidenceSha256")))throw new IllegalStateException("D023 completion receipt changed since publication intent");
         JsonNode proof=JobDefinitionJson.mapper().readTree(bytes);if(!proof.path("complete").asBoolean(false)||!proof.path("sourceComplete").asBoolean(false)
                 ||!proof.path("dedup").isBoolean()||proof.path("dedup").asBoolean()
                 ||!intent.stage().equals(proof.path("stage").asText())||!intent.afterFingerprint().equals(proof.path("snapshotProof").path("fingerprint").asText())
@@ -175,7 +177,7 @@ public final class DcIndexPublication {
                 ||!requiredText(scope,"physicalTargetBefore").equals(params.path("physicalTargetId").asText())
                 ||!from.toString().equals(requiredText(scope,"fromInclusive"))||!to.toString().equals(requiredText(scope,"toInclusive")))
             throw new IllegalStateException("D023 publication scope differs from its frozen run request");
-        Path complete=Path.of(requiredText(scope,"completeEvidence")).toAbsolutePath().normalize();JsonNode proof=json.readTree(complete.toFile());
+        Path complete=Path.of(requiredText(scope,"completeEvidence")).toAbsolutePath().normalize();JsonNode proof=json.readTree(FileEvidenceStore.readBounded(complete, DcIndexSource.MAX_EVIDENCE_BYTES, () -> new IllegalStateException("D023 recovery evidence outside run bound")));
         String encoded=params.path("trade_dates").asText();if(encoded.isBlank())throw new IllegalStateException("D023 frozen source-date list is empty");
         List<LocalDate> dates=Arrays.stream(encoded.split(",",-1)).map(v->{if(!v.matches("[0-9]{8}"))throw new IllegalStateException("D023 frozen source date is invalid");return LocalDate.parse(v,java.time.format.DateTimeFormatter.BASIC_ISO_DATE);}).toList();
         if(dates.size()>DcIndexSyncJobOwner.MAX_WINDOW_DAYS||dates.stream().distinct().count()!=dates.size()
@@ -223,13 +225,18 @@ public final class DcIndexPublication {
         Path root=evidenceRoot.toRealPath(),real=path.toRealPath();if(!real.startsWith(root))throw new IllegalStateException("D023 evidence resolves outside its run directory");
     }
     private void verifyTargetLineage(String logical,String current,String exceptStageRun)throws Exception{
-        requireNoPendingPublication(ledgerPath,exceptStageRun);try(var db=sqlite(ledgerPath);var q=db.prepareStatement("SELECT previous_physical_id,next_physical_id,state FROM dc_index_target_transitions WHERE logical_target_id=? ORDER BY created_at,rowid")){
-            q.setString(1,logical);try(var rs=q.executeQuery()){String prior=null;while(rs.next()){if(!"VERIFIED".equals(rs.getString(3))||prior!=null&&!prior.equals(rs.getString(1)))throw new IllegalStateException("D023 physical identity lineage incomplete");prior=rs.getString(2);}if(prior!=null&&!prior.equals(current))throw new IllegalStateException("D023 physical target changed outside publication lineage");}}
+        requireNoPendingPublication(ledgerPath,exceptStageRun);String prior=null;
+        for(var entry:transitions.lineage(logical)){var intent=entry.intent();
+            if(!"VERIFIED".equals(entry.state())||prior!=null&&!prior.equals(intent.previousPhysicalId()))throw new IllegalStateException("D023 physical identity lineage incomplete");prior=intent.nextPhysicalId();}
+        if(prior!=null&&!prior.equals(current))throw new IllegalStateException("D023 physical target changed outside publication lineage");
     }
     private String currentPhysical(){var identity=new DcIndexStorage(jdbc,table).preflight();return DcIndexStorage.physicalTargetId(jdbc,table,identity);}
     private void requireLease(LocalDate from,LocalDate to,boolean recovery){var lease=locks.findOwned(runId,new DatasetIntervalLock.Scope("dc_index",from,to));if(lease==null||lease.inDoubt()!=recovery)throw new IllegalStateException("D023 date-window lease missing or not in required publication state");}
-    private void requireNoOtherPending(String currentRun)throws Exception{try(var db=sqlite(ledgerPath);var q=db.prepareStatement("SELECT run_id FROM reference_publications WHERE dataset='dc_index' AND state<>'VERIFIED' AND run_id<>? LIMIT 1")){q.setString(1,currentRun);try(var rs=q.executeQuery()){if(rs.next())throw new IllegalStateException("Another D023 publication is unresolved: "+rs.getString(1));}}
-        try(var db=sqlite(ledgerPath);var q=db.prepareStatement("SELECT run_id FROM dc_index_target_transitions WHERE state<>'VERIFIED' AND run_id<>? LIMIT 1")){q.setString(1,currentRun);try(var rs=q.executeQuery()){if(rs.next())throw new IllegalStateException("Another D023 physical transition is unresolved: "+rs.getString(1));}}
+    private void requireNoOtherPending(String currentRun)throws Exception{
+        String publication=transitions.firstUnverifiedPublication(currentRun);
+        if(publication!=null)throw new IllegalStateException("Another D023 publication is unresolved: "+publication);
+        String transition=transitions.firstUnverifiedTransition(currentRun);
+        if(transition!=null)throw new IllegalStateException("Another D023 physical transition is unresolved: "+transition);
         requireNoPendingStageOnly(ledgerPath,currentRun);}
     private static void requireNoPendingStageOnly(Path ledgerPath,String exceptRun)throws Exception{
         Path root=ledgerPath.toAbsolutePath().normalize().getParent().resolve("sync-evidence");if(!Files.exists(root,LinkOption.NOFOLLOW_LINKS))return;
@@ -242,7 +249,7 @@ public final class DcIndexPublication {
                 Path found=null;try(DirectoryStream<Path> files=Files.newDirectoryStream(stageDir,"java_dc_index_stage_*-intent.json")){for(Path file:files){
                         if(found!=null||Files.isSymbolicLink(file)||!Files.isRegularFile(file,LinkOption.NOFOLLOW_LINKS)||Files.size(file)>DcIndexSource.MAX_EVIDENCE_BYTES)
                             throw new IllegalStateException("Ambiguous or unbounded D023 stage-only intent for run "+runId);found=file;}}
-                if(found==null)continue;var json=JobDefinitionJson.mapper().readTree(Files.readAllBytes(found));
+                if(found==null)continue;var json=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(found, DcIndexSource.MAX_EVIDENCE_BYTES, () -> new IllegalStateException("D023 recovery evidence outside run bound")));
                 if(!"dc_index".equals(json.path("dataset").asText())||!json.path("stage").asText().matches("java_dc_index_stage_[0-9a-f]{32}"))
                     throw new IllegalStateException("Malformed D023 stage-only intent for run "+runId);
                 var state=ledger.get(runId).state();var saved=ledger.getRun(runId);
@@ -266,16 +273,13 @@ public final class DcIndexPublication {
         ensureTransition(entry,before,after,from,to);var latest=journal.forRun(runId);if(latest.state()!=State.VERIFIED)journal.advance(latest,State.VERIFIED);setTransitionVerified(runId);
     }
     private void ensureTransition(ReferencePublicationJournal.Entry entry,String before,String after,LocalDate from,LocalDate to)throws Exception{
-        try(var db=sqlite(ledgerPath);var q=db.prepareStatement("SELECT run_id,logical_target_id,previous_physical_id,next_physical_id,from_day,to_day FROM dc_index_target_transitions WHERE publication_id=?")){
-            q.setString(1,entry.intent().id());try(var rs=q.executeQuery()){if(rs.next()){if(!runId.equals(rs.getString(1))||!logicalTargetId.equals(rs.getString(2))||!before.equals(rs.getString(3))||!after.equals(rs.getString(4))||!from.toString().equals(rs.getString(5))||!to.toString().equals(rs.getString(6)))throw new IllegalStateException("D023 physical transition changed during recovery");return;}}}
-        try(var db=sqlite(ledgerPath);var s=db.prepareStatement("INSERT INTO dc_index_target_transitions(publication_id,run_id,logical_target_id,previous_physical_id,next_physical_id,from_day,to_day,state,created_at) VALUES(?,?,?,?,?,?,?,'PENDING',?)")){
-            s.setString(1,entry.intent().id());s.setString(2,runId);s.setString(3,logicalTargetId);s.setString(4,before);s.setString(5,after);s.setString(6,from.toString());s.setString(7,to.toString());s.setString(8,java.time.Instant.now().toString());s.executeUpdate();}
+        var intent=new DcIndexTargetTransitionStore.Intent(entry.intent().id(),runId,logicalTargetId,before,after,from.toString(),to.toString());
+        var saved=transitions.forPublication(entry.intent().id());
+        if(saved.isPresent()){if(!intent.equals(saved.get().intent()))throw new IllegalStateException("D023 physical transition changed during recovery");return;}
+        transitions.insertPending(intent);
     }
-    private void setTransitionVerified(String run)throws Exception{try(var db=sqlite(ledgerPath);var s=db.prepareStatement("UPDATE dc_index_target_transitions SET state='VERIFIED' WHERE run_id=? AND state IN ('PENDING','VERIFIED')")){s.setString(1,run);if(s.executeUpdate()!=1)throw new IllegalStateException("D023 transition journal missing/ambiguous");}}
+    private void setTransitionVerified(String run)throws Exception{transitions.markVerified(run);}
     private static String requiredText(JsonNode json,String field){JsonNode v=json.path(field);if(!v.isTextual()||v.asText().isBlank())throw new IllegalStateException("D023 publication scope lacks "+field);return v.asText();}
-    private void initializeTransitions()throws SQLException{ensureTransitionTable(ledgerPath);}
-    private static void ensureTransitionTable(Path path)throws SQLException{try(var db=sqlite(path);var s=db.createStatement()){s.execute("CREATE TABLE IF NOT EXISTS dc_index_target_transitions (publication_id TEXT PRIMARY KEY,run_id TEXT NOT NULL UNIQUE,logical_target_id TEXT NOT NULL,previous_physical_id TEXT NOT NULL,next_physical_id TEXT NOT NULL,from_day TEXT NOT NULL,to_day TEXT NOT NULL,state TEXT NOT NULL CHECK(state IN ('PENDING','VERIFIED')),created_at TEXT NOT NULL)");}}
-    private static boolean tableExists(Connection db,String table)throws SQLException{try(var s=db.prepareStatement("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?")){s.setString(1,table);try(var r=s.executeQuery()){return r.next();}}}
     private static String lastVerifiedPhysical(Path path,String logical)throws Exception{
         var ledger=SyncRunLedger.openReadOnly(path);String after=null,latest=null,latestAt=null;int scanned=0;
         while(true){var page=ledger.history("data.dc_index",after,100);for(var summary:page){if(++scanned>10_000)throw new IllegalStateException("D023 physical identity history exceeds bound");
@@ -293,7 +297,6 @@ public final class DcIndexPublication {
     private void markInDoubt(String run,Exception failure){try{var e=journal.forRun(run);if(e.state()!=State.VERIFIED&&e.state()!=State.IN_DOUBT)journal.advance(e,State.IN_DOUBT);}catch(Exception e){failure.addSuppressed(e);}}
     private FileLockHolder acquireRecoveryLock()throws Exception{Path path=ledgerPath.resolveSibling(ledgerPath.getFileName()+".dc-index-publication.lock");Files.createDirectories(path.getParent());FileChannel c=FileChannel.open(path,StandardOpenOption.CREATE,StandardOpenOption.WRITE);try{FileLock l;try{l=c.tryLock();}catch(OverlappingFileLockException busy){l=null;}if(l==null)throw new IllegalStateException("D023 publication active");return new FileLockHolder(c,l);}catch(Exception e){c.close();throw e;}}
     private record FileLockHolder(FileChannel channel,FileLock lock)implements AutoCloseable{@Override public void close()throws Exception{try{lock.release();}finally{channel.close();}}}
-    private static Connection sqlite(Path path)throws SQLException{var c=DriverManager.getConnection("jdbc:sqlite:"+path.toAbsolutePath().normalize().toUri().toASCIIString());try(var s=c.createStatement()){s.execute("PRAGMA foreign_keys=ON");s.execute("PRAGMA busy_timeout=5000");}return c;}
-    private static String sha(byte[] b)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(b));}
+    private static String sha(byte[] b)throws Exception{return FileEvidenceStore.sha256(b);}
     private static void check(BooleanSupplier cancelled){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new CancellationException("D023 publication cancelled");}
 }

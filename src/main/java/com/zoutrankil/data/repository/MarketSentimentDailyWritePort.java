@@ -1,5 +1,8 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.domain.MarketSentimentDailyTargetSnapshot;
+import com.zoutrankil.data.domain.NativeDailyWindowSnapshot;
+
 import com.zoutrankil.data.domain.table.MarketSentimentDailyRow;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,9 +21,6 @@ public final class MarketSentimentDailyWritePort implements VerifiedBatchExecuto
             "data_quality_flag","model_version","updated_at");
     private static final NativeDailyWindowWritePort.Projection<MarketSentimentDailyRow> PROJECTION=new NativeDailyWindowWritePort.Projection<>(MarketSentimentDailyRow.class,COLUMNS);
     public static final VerifiedBatchExecutor.Codec<MarketSentimentDailyRow,Instant> CODEC=PROJECTION;
-    public record Snapshot(String targetId,long tableId,String directory,boolean wal,List<MarketSentimentDailyRow> rows,String fingerprint) {
-        public Snapshot { rows=List.copyOf(rows); }
-    }
     private final NativeDailyWindowWritePort<MarketSentimentDailyRow> delegate;
     public MarketSentimentDailyWritePort(JdbcTemplate source,String table) {
         delegate=new NativeDailyWindowWritePort<>(source,table,"market_sentiment_daily","java_d121_market_sentiment_daily",MarketSentimentDailyRow.class,COLUMNS);
@@ -29,10 +29,10 @@ public final class MarketSentimentDailyWritePort implements VerifiedBatchExecuto
     public NativeDailyWindowWritePort<MarketSentimentDailyRow> nativePort(){return delegate;}
     public String table(){return delegate.table();}
     public String stage(){return delegate.stage();}
-    public Snapshot snapshot(String table){return typed(delegate.snapshot(table));}
-    public Snapshot formalSnapshot(){return typed(delegate.formalSnapshot());}
-    public void requireSame(Snapshot expected){delegate.requireSame(nativeSnapshot(expected));}
-    public Snapshot prepare(Snapshot before,LocalDate from,LocalDate to)throws Exception{return typed(delegate.prepare(nativeSnapshot(before),from,to));}
+    public MarketSentimentDailyTargetSnapshot snapshot(String table){return typed(delegate.snapshot(table));}
+    public MarketSentimentDailyTargetSnapshot formalSnapshot(){return typed(delegate.formalSnapshot());}
+    public void requireSame(MarketSentimentDailyTargetSnapshot expected){delegate.requireSame(nativeSnapshot(expected));}
+    public MarketSentimentDailyTargetSnapshot prepare(MarketSentimentDailyTargetSnapshot before,LocalDate from,LocalDate to)throws Exception{return typed(delegate.prepare(nativeSnapshot(before),from,to));}
     public static boolean outside(MarketSentimentDailyRow row,LocalDate from,LocalDate to){return PROJECTION.outside(row,from,to);}
     @Override public void preflight(){delegate.preflight();}
     @Override public void send(List<MarketSentimentDailyRow> rows)throws Exception{delegate.send(rows);}
@@ -47,10 +47,10 @@ public final class MarketSentimentDailyWritePort implements VerifiedBatchExecuto
     public static Instant fromMicros(long time){return NativeDailyWindowWritePort.fromMicros(time);}
     public static String quotedColumns(){return PROJECTION.quotedColumns();}
     public static String digest(List<MarketSentimentDailyRow> rows){return PROJECTION.digest(rows);}
-    private static Snapshot typed(NativeDailyWindowWritePort.Snapshot<MarketSentimentDailyRow> snapshot) {
-        return new Snapshot(snapshot.targetId(),snapshot.tableId(),snapshot.directory(),snapshot.wal(),snapshot.rows(),snapshot.fingerprint());
+    private static MarketSentimentDailyTargetSnapshot typed(NativeDailyWindowSnapshot<MarketSentimentDailyRow> snapshot) {
+        return new MarketSentimentDailyTargetSnapshot(snapshot.targetId(),snapshot.tableId(),snapshot.directory(),snapshot.wal(),snapshot.rows(),snapshot.fingerprint());
     }
-    private static NativeDailyWindowWritePort.Snapshot<MarketSentimentDailyRow> nativeSnapshot(Snapshot snapshot) {
-        return new NativeDailyWindowWritePort.Snapshot<>(snapshot.targetId(),snapshot.tableId(),snapshot.directory(),snapshot.wal(),snapshot.rows(),snapshot.fingerprint());
+    private static NativeDailyWindowSnapshot<MarketSentimentDailyRow> nativeSnapshot(MarketSentimentDailyTargetSnapshot snapshot) {
+        return new NativeDailyWindowSnapshot<>(snapshot.targetId(),snapshot.tableId(),snapshot.directory(),snapshot.wal(),snapshot.rows(),snapshot.fingerprint());
     }
 }

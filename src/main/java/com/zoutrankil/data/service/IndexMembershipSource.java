@@ -1,5 +1,6 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.TushareIndexMembershipDto;
 import com.zoutrankil.data.domain.*;
@@ -50,17 +51,17 @@ public final class IndexMembershipSource {
             byte[] bytes=JobDefinitionJson.mapper().writeValueAsBytes(proof);
             if(bytes.length>4*1024*1024) throw new IllegalArgumentException("Membership response exceeds evidence budget");
             Files.createDirectories(evidence);Path part=evidence.resolve("membership-"+UUID.randomUUID()+"-"+mode+".json");
-            Files.write(part,bytes,StandardOpenOption.CREATE_NEW);
+            FileEvidenceStore.writeNew(part,bytes);
             requests.add(Map.of("receipt",part.toString(),"sha256",hash(bytes),"response",proof));
         }
         check(cancelled);byte[] bytes=JobDefinitionJson.mapper().writeValueAsBytes(Map.of(
                 "scope",scope,"observedAt",observedAt,"requests",requests,"rows",rows,"complete",true));
         if(bytes.length>8*1024*1024) throw new IllegalArgumentException("Membership slice exceeds evidence budget");
         Path receipt=evidence.resolve("membership-complete-"+UUID.randomUUID()+".json");
-        Files.write(receipt,bytes,StandardOpenOption.CREATE_NEW);
+        FileEvidenceStore.writeNew(receipt,bytes);
         return new SyncJobRunner.Page<>(rows,hash(bytes),receipt.toString(),null);
     }
-    private static String hash(byte[] bytes) throws Exception { return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes)); }
+    private static String hash(byte[] bytes) throws Exception { return FileEvidenceStore.sha256(bytes); }
     private static void check(BooleanSupplier cancelled) {
         if(cancelled.getAsBoolean() || Thread.currentThread().isInterrupted()) throw new java.util.concurrent.CancellationException("Membership source cancelled");
     }

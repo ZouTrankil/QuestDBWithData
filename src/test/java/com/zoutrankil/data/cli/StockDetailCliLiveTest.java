@@ -1,7 +1,7 @@
 package com.zoutrankil.data.cli;
 
 import com.zoutrankil.data.QuestDataApplication;
-import com.zoutrankil.data.service.StockDetailInfoJobService;
+import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.io.TempDir;

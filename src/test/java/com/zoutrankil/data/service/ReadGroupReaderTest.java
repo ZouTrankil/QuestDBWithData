@@ -89,4 +89,42 @@ class ReadGroupReaderTest {
         for (int i = 0; i < 11; i++) members.add(member("m" + i, "stock_basic_latest", query(10000, Map.of())));
         assertThrows(IllegalArgumentException.class, () -> new ReadGroupRequest(members, Duration.ofSeconds(30)));
     }
+
+    @Test void wrongRuntimeMapperTypeFailsItsMemberWithoutStoppingLaterReads() {
+        assertBrokenMapperFails((Function<DatasetValues,Integer>) values -> 42, "ClassCastException");
+    }
+
+    @Test void nullRuntimeMapperResultFailsItsMemberWithoutBecomingAnEmptyPage() {
+        assertBrokenMapperFails((Function<DatasetValues,NameRow>) values -> null, "NullPointerException");
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void assertBrokenMapperFails(Function mapper, String errorCode) {
+        var calls = new java.util.concurrent.atomic.AtomicInteger();
+        Function<DatasetValues,Object> observed = values -> {
+            calls.incrementAndGet();
+            return mapper.apply(values);
+        };
+        ReadBindingCatalog.Registration<?> invalid = new ReadBindingCatalog.Registration(
+                StockBasicDataset.DEFINITION.datasetId(), 1, NameRow.class, observed, () -> null);
+        var backend = new Reader();
+        var datasets = new DatasetRegistry(List.of(() -> StockBasicDataset.DEFINITION, () -> StockBasicDataset.LATEST));
+        var catalog = new ReadBindingCatalog(List.of(invalid,
+                ReadBindingCatalog.typed(StockBasicDataset.LATEST.datasetId(), 1, NameRow.class,
+                        row -> new NameRow(row.get("ts_code", String.class), row.get("name", String.class)))));
+        var grouped = new ReadGroupReader(datasets, backend, catalog.bind(datasets));
+        assertEquals(0, calls.get(), "Constructing bindings must not invent data to invoke a mapper");
+
+        var result = grouped.read(new ReadGroupRequest(List.of(
+                member("bad", "stock_basic_snapshot", query(1, Map.of())),
+                member("good", "stock_basic_latest", query(1, Map.of()))), Duration.ofSeconds(30)), () -> false);
+        assertFalse(result.complete());
+        assertEquals(1, calls.get());
+        assertEquals(ReadGroupReader.Status.FAILED, result.require("bad").status());
+        assertEquals(errorCode, result.require("bad").errorCode());
+        assertEquals(NameRow.class, result.require("bad").rowType());
+        assertNull(result.require("bad").page());
+        assertEquals(ReadGroupReader.Status.READ, result.require("good").status());
+        assertEquals(List.of(new NameRow("000001.SZ", "sample")), result.require("good").typedPage(NameRow.class).rows());
+    }
 }

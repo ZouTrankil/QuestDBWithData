@@ -1,11 +1,13 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.MarginDetailWritePort;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.repository.SqliteLedgerSchema;
 import java.nio.file.*;
-import java.sql.DriverManager;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -84,7 +86,7 @@ public final class MarginDetailCoverage {
     private static void verifyManifest(Path ledgerPath,String runId,String targetId,SyncJobDefinition.Mode mode,LocalDate from,LocalDate to,List<LocalDate> dates,Map<LocalDate,Receipt> receipts)throws Exception{
         Path runRoot=ledgerPath.toAbsolutePath().normalize().getParent().resolve("sync-evidence").resolve(runId).toRealPath(),manifest=runRoot.resolve("complete-window.json");
         if(Files.isSymbolicLink(manifest)||!Files.isRegularFile(manifest,LinkOption.NOFOLLOW_LINKS)||Files.size(manifest)>1024*1024)throw new IllegalStateException("D029 completion manifest is absent/oversized");
-        JsonNode proof=JobDefinitionJson.mapper().readTree(Files.readAllBytes(manifest));if(!"margin_detail".equals(proof.path("dataset").asText())||!"margin_detail".equals(proof.path("endpoint").asText())
+        JsonNode proof=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(manifest, 1024 * 1024, () -> new IllegalStateException("D029 completion manifest is absent/oversized")));if(!"margin_detail".equals(proof.path("dataset").asText())||!"margin_detail".equals(proof.path("endpoint").asText())
                 ||!targetId.equals(proof.path("targetId").asText())||!mode.name().equals(proof.path("mode").asText())||!from.toString().equals(proof.path("fromInclusive").asText())
                 ||!to.toString().equals(proof.path("toInclusive").asText())||!proof.path("sourceComplete").asBoolean(false)||!proof.path("complete").asBoolean(false)
                 ||!JobDefinitionJson.mapper().valueToTree(dates).equals(proof.path("tradeDates"))||proof.path("sourceReceipts").size()!=dates.size())throw new IllegalStateException("D029 completion manifest differs from frozen run/date sequence");
@@ -100,5 +102,11 @@ public final class MarginDetailCoverage {
     private static LocalDate requiredDate(JsonNode params,String field){JsonNode value=params.path(field);if(!value.isTextual())throw new IllegalStateException("D029 frozen "+field+" date required");return LocalDate.parse(value.asText());}
     private static LocalDate optionalDate(JsonNode params,String field){JsonNode value=params.get(field);return value==null||value.isNull()?null:LocalDate.parse(value.asText());}
     private static boolean sameDefinition(JsonNode expected,JsonNode actual){try{return JobDefinitionJson.mapper().treeToValue(expected,SyncJobDefinition.class).equals(JobDefinitionJson.mapper().treeToValue(actual,SyncJobDefinition.class));}catch(Exception invalid){return false;}}
-    private static boolean hasLedger(Path path)throws Exception{try(var c=DriverManager.getConnection("jdbc:sqlite:"+path.toAbsolutePath().normalize().toUri().toASCIIString()+"?mode=ro");var s=c.createStatement();var r=s.executeQuery("SELECT name FROM sqlite_master WHERE type='table'")){var names=new HashSet<String>();while(r.next())names.add(r.getString(1));Set<String> needed=Set.of("ledger_meta","sync_runs","sync_entries","sync_events");if(Collections.disjoint(names,needed))return false;if(!names.containsAll(needed))throw new IllegalStateException("Partial D029 ledger schema");return true;}}
+    private static boolean hasLedger(Path path)throws Exception{
+        var names = SqliteLedgerSchema.tableNames(path.toAbsolutePath().normalize());
+        var required = Set.of("ledger_meta","sync_runs","sync_entries","sync_events");
+        if (java.util.Collections.disjoint(names, required)) return false;
+        if (!names.containsAll(required)) throw new IllegalStateException("Partial D029 ledger schema");
+        return true;
+    }
 }

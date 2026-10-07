@@ -49,8 +49,7 @@ public final class SourceProductRunner {
         var qualityFailures=SourceQuality.failures(dataset,frozen.rows());
         if(!qualityFailures.isEmpty()) return new StageExecutor.Result(BusinessState.BLOCKED,null,"quality:"+String.join(",",qualityFailures));
         if(endpoint==null) return new StageExecutor.Result(BusinessState.BLOCKED,null,"source-writer-not-configured");
-        Instant createdAt=ledger.jdbc().queryForObject("SELECT created_at FROM business_instance WHERE instance_id=?",
-                (rs,index) -> rs.getTimestamp(1).toInstant(),request.instanceId());
+        Instant createdAt=ledger.businessCreatedAt(request.instanceId());
         var physicalRows=frozen.rows().stream().map(row -> contract.physicalRow(row,createdAt)).toList();
         String target="jdb_test_"+ledger.environmentNamespace()+"_"+dataset+"_"+request.instanceId();
         Path directory=archive.resolve("writes").resolve(request.instanceId()); Files.createDirectories(directory);

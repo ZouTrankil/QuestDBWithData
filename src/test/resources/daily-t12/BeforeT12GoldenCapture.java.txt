@@ -1,0 +1,79 @@
+package com.zoutrankil.batch;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.zoutrankil.data.domain.*;
+import com.zoutrankil.data.repository.DailyWritePort;
+import com.zoutrankil.data.service.*;
+import java.nio.file.*;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.function.BooleanSupplier;
+
+/** Executed only against the copied pre-T12 class files, never the new implementation. */
+public final class BeforeT12GoldenCapture {
+    public static void main(String[] args) throws Exception {
+        Path out = Path.of(args[0]); Files.createDirectories(out);
+        var json = JobDefinitionJson.mapper();
+        var day = LocalDate.of(2026, 9, 28);
+        var contract = SourceContract.load("daily");
+        Files.write(out.resolve("source-contract.json"), Json.MAPPER.writeValueAsBytes(contract));
+        var definition = (ObjectNode)json.valueToTree(DailyDataset.DEFINITION);
+        sortSet(definition, "capabilities");
+        Files.write(out.resolve("dataset-definition.json"), json.writeValueAsBytes(definition));
+        var byDate = (ObjectNode)json.valueToTree(DailySource.BY_DATE);
+        sortSet(byDate, "allowedParameters");
+        Files.write(out.resolve("source-page-contract.json"), json.writeValueAsBytes(byDate));
+        var request = DailySyncAdapter.definition(true).freeze(SyncJobDefinition.Mode.BACKFILL,
+                Map.of(), day.minusDays(4), day, day);
+        var requestTree = (ObjectNode)json.valueToTree(request);
+        sortSet((ObjectNode)requestTree.get("definition"), "supportedModes");
+        Files.write(out.resolve("sync-request.json"), json.writeValueAsBytes(requestTree));
+        Files.writeString(out.resolve("sync-request.sha256"), SyncRequestIdentity.fingerprint(request, "daily"));
+        var sourceRequest = new SourceCollector.Request("daily", day, Set.of("000001.SZ"), "test-universe-v1", null);
+        Files.write(out.resolve("source-request.json"), Json.MAPPER.writeValueAsBytes(sourceRequest));
+        var raw = raw();
+        var normalized = contract.normalize(raw, day, Set.of("000001.SZ"));
+        Files.write(out.resolve("normalized-row.json"), Json.MAPPER.writeValueAsBytes(normalized));
+        var frozen = new SourceCollector.Frozen(2, "daily", "daily-v1", day, day, day,
+                Set.of("000001.SZ"), "test-universe-v1", contract.sourceDocumentation(), List.of(normalized), 1, true);
+        byte[] frozenBytes = Json.MAPPER.writeValueAsBytes(frozen);
+        Files.write(out.resolve("frozen.json"), frozenBytes);
+        Files.writeString(out.resolve("frozen.sha256"), sha256(frozenBytes));
+        var fake = new TusharePageService(null) {
+            @Override public PageExecutor.Completed execute(PageContract pageContract, Map<String,Object> params,
+                    PageExecutor.Consumer consumer, PageExecutor.Validator validator, BooleanSupplier cancelled) throws Exception {
+                validator.validate(raw);
+                consumer.accept(new PageExecutor.Page(List.of(raw), null, false, null),
+                        new PageExecutor.Receipt(1, 0, null, 1, "test-page", null));
+                return new PageExecutor.Completed(1, 1, null);
+            }
+        };
+        var page = new DailySource(fake, out.resolve("capture-evidence")).fetch(day, () -> List.of("000001.SZ"), () -> false);
+        Files.copy(Path.of(page.responseEvidence()), out.resolve("source-receipt.json"), StandardCopyOption.REPLACE_EXISTING);
+        Files.writeString(out.resolve("source-receipt.sha256"), page.sourceFingerprint());
+        Files.write(out.resolve("daily-codec.bin"), DailyWritePort.CODEC.canonicalBytes(page.rows().getFirst()));
+        Files.write(out.resolve("daily-market-bar.json"), json.writeValueAsBytes(page.rows().getFirst()));
+        Files.write(out.resolve("raw-row.json"), Json.MAPPER.writeValueAsBytes(raw));
+    }
+    static Map<String,JsonNode> raw() {
+        var n = com.fasterxml.jackson.databind.node.JsonNodeFactory.instance;
+        var raw = new LinkedHashMap<String,JsonNode>();
+        raw.put("ts_code", n.textNode("000001.SZ")); raw.put("trade_date", n.textNode("20260928"));
+        raw.put("open", n.numberNode(-0.0)); raw.put("high", n.numberNode(12.75));
+        raw.put("low", n.nullNode()); raw.put("close", n.numberNode(12.5));
+        raw.put("pre_close", n.numberNode(12.25)); raw.put("change", n.numberNode(0.25));
+        raw.put("pct_chg", n.numberNode(2.04)); raw.put("vol", n.numberNode(1200.5));
+        raw.put("amount", n.numberNode(15000.125)); raw.put("ah_vol", n.nullNode());
+        raw.put("ah_amount", n.numberNode(0.0));
+        return raw;
+    }
+    static void sortSet(ObjectNode node, String field) {
+        var values = new ArrayList<JsonNode>(); node.get(field).forEach(values::add);
+        values.sort(Comparator.comparing(JsonNode::asText));
+        node.putArray(field).addAll(values);
+    }
+    static String sha256(byte[] bytes) throws Exception {
+        return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+    }
+}

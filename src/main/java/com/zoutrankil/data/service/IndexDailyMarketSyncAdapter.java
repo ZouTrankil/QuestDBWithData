@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.policy.IndexDailyMarketUniverse;
+
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.IndexDailyMarketWritePort;
@@ -76,7 +78,7 @@ public final class IndexDailyMarketSyncAdapter implements SyncJobRunner.Adapter<
         body.put("tsCode", code); body.put("from", request.from()); body.put("to", request.to());
         body.put("observedAt", observedAt); body.put("slices", 1); body.put("sourceRows", page.rows().size());
         body.put("sourceEvidence", page.responseEvidence()); body.put("complete", true);
-        JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true).writeValue(completion.toFile(), body);
+        JobDefinitionJson.canonicalMapper().writeValue(completion.toFile(), body);
         if (Files.size(completion) > IndexDailyMarketSource.MAX_EVIDENCE_BYTES)
             throw new IllegalArgumentException("D019 completion evidence exceeds 32 MiB");
         return new SyncJobRunner.SourceCompletion(1, page.rows().size(), true, completion.toString());

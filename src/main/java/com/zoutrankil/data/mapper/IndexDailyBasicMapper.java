@@ -6,7 +6,7 @@ import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.IndexDailyBasic;
 import com.zoutrankil.data.domain.IndexDailyBasicKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-import com.zoutrankil.data.service.IndexDailyBasicUniverse;
+import com.zoutrankil.data.domain.policy.IndexDailyBasicUniverse;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;

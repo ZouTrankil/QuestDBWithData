@@ -1,5 +1,8 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
+
 import com.zoutrankil.data.domain.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -67,10 +70,25 @@ class StockBasicScheduleServiceTest {
                 .thenReturn(new SyncGroupRunner.Result("group-run", SyncRunState.PARTIAL, List.of()));
         var result = service.tick().getFirst();
         assertEquals("group-run", result.runId());
-        assertEquals(com.zoutrankil.data.repository.SyncScheduleStore.State.PARTIAL, result.state());
+        assertEquals(com.zoutrankil.data.service.StockBasicScheduleService.State.PARTIAL, result.state());
         service.tick();
         verify(job, times(1)).run(List.of("000001.SZ"), day);
         verify(group, times(1)).run(List.of("000001.SZ"), day, null);
+    }
+    @Test void publicScheduleResponsesSerializeExactlyLikeStoredHistory() throws Exception {
+        var service = service();
+        service.put(request(""));
+        service.setEnabled("test.schedule", true);
+        when(job.run(List.of("000001.SZ"), java.time.LocalDate.of(2026, 9, 29)))
+                .thenReturn(new SyncJobRunner.Result("job-run", SyncRunState.IN_DOUBT, 0, 0, null));
+        var tick = service.tick();
+        var store = new com.zoutrankil.data.repository.SyncScheduleStore(temp.resolve("schedule.sqlite"));
+        var stored = store.history("test.schedule", 100);
+        var json = new com.fasterxml.jackson.databind.ObjectMapper().findAndRegisterModules();
+        assertEquals(json.writeValueAsString(stored), json.writeValueAsString(tick));
+        var status = service.status("test.schedule");
+        var oldStatus = new SyncScheduleManager.Status(status.definition(), status.next(), stored);
+        assertEquals(json.writeValueAsString(oldStatus), json.writeValueAsString(status));
     }
     @Test void malformedOrUnsupportedConfigurationNeverCreatesSchedule() throws Exception {
         var service = service();

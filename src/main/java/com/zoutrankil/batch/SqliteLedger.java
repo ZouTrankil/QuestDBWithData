@@ -10,6 +10,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 /** SQLite-backed metadata ledger. Metadata commits happen before any external side effect. */
 public final class SqliteLedger {
+    public record WriteIntentRecord(String batchId,String instanceId,String target,String owner,
+                                    String sourceFingerprint,String artifact,long expectedRows) {}
+    public record SourceProbeClaim(boolean acquired,Map<String,Object> row) {}
     public record SourceCertificateState(String job,BusinessState state,String requestJson,String evidenceJson) {}
     public record CoverageSegment(LocalDate start,LocalDate end,long months) {}
     public record MonthlyCoverage(String dataset,String definitionVersion,String scopeIdentity,
@@ -29,6 +32,64 @@ public final class SqliteLedger {
         jdbc.update("INSERT INTO runtime_identity(singleton,namespace) VALUES(1,?) ON CONFLICT(singleton) DO NOTHING",
                 UUID.randomUUID().toString().replace("-","").substring(0,16));
         return jdbc.queryForObject("SELECT namespace FROM runtime_identity WHERE singleton=1",String.class);
+    }
+    /** The immutable intent and its durable target reservation are committed together. */
+    public void reserveWriteIntent(WriteIntentRecord intent) {
+        transactions.executeWithoutResult(tx -> {
+            jdbc.update("""
+                INSERT INTO write_intent(batch_id,instance_id,target,owner,source_fingerprint,artifact,expected_rows,delivery)
+                VALUES(?,?,?,?,?,?,?,'INTENT') ON CONFLICT(batch_id) DO NOTHING
+                """, intent.batchId(), intent.instanceId(), intent.target(), intent.owner(), intent.sourceFingerprint(), intent.artifact(), intent.expectedRows());
+            var existing=jdbc.queryForMap("SELECT * FROM write_intent WHERE batch_id=?", intent.batchId());
+            if (!intent.instanceId().equals(existing.get("instance_id")) || !intent.target().equals(existing.get("target"))
+                    || !intent.owner().equals(existing.get("owner")) || !intent.sourceFingerprint().equals(existing.get("source_fingerprint"))
+                    || !intent.artifact().equals(existing.get("artifact")) || intent.expectedRows()!=((Number)existing.get("expected_rows")).longValue())
+                throw new IllegalArgumentException("Batch identity reused for different content");
+            if ("VERIFIED".equals(existing.get("delivery"))) return;
+            jdbc.update("INSERT INTO target_reservation(target,batch_id) VALUES(?,?) ON CONFLICT(target) DO NOTHING", intent.target(), intent.batchId());
+            String owner=jdbc.queryForObject("SELECT batch_id FROM target_reservation WHERE target=?", String.class, intent.target());
+            if (!intent.batchId().equals(owner)) throw new IllegalStateException("Target has unresolved sender: "+owner);
+        });
+    }
+    public String writeDelivery(String batchId) {
+        return jdbc.queryForObject("SELECT delivery FROM write_intent WHERE batch_id=?", String.class, batchId);
+    }
+    /** Call outside a surrounding transaction so UNKNOWN is committed before any send or flush. */
+    public int claimWriteUnknown(String batchId) {
+        return jdbc.update("UPDATE write_intent SET delivery='UNKNOWN',attempt=attempt+1,updated_at=current_timestamp WHERE batch_id=? AND delivery='INTENT'", batchId);
+    }
+    public void acknowledgeWrite(String batchId) {
+        jdbc.update("UPDATE write_intent SET delivery='ACKNOWLEDGED',updated_at=current_timestamp WHERE batch_id=? AND delivery='UNKNOWN'", batchId);
+    }
+    public void blockWrite(String batchId,String proofJson) {
+        jdbc.update("UPDATE write_intent SET delivery='BLOCKED',proof=? WHERE batch_id=?", proofJson, batchId);
+    }
+    /** Verification and release cannot become visible independently. */
+    public void verifyWriteAndRelease(String batchId,String target,String proofJson) {
+        transactions.executeWithoutResult(tx -> {
+            jdbc.update("UPDATE write_intent SET delivery='VERIFIED',proof=?,updated_at=current_timestamp WHERE batch_id=?", proofJson, batchId);
+            jdbc.update("DELETE FROM target_reservation WHERE target=? AND batch_id=?", target, batchId);
+        });
+    }
+    public SourceProbeClaim claimSourceProbe(String requestId,String fingerprint,String requestJson) {
+        int acquired=jdbc.update("INSERT INTO source_probe(request_id,request_fingerprint,request_json,state) VALUES(?,?,?,'RUNNING') ON CONFLICT(request_id) DO NOTHING",requestId,fingerprint,requestJson);
+        var row=sourceProbe(requestId);
+        if(!fingerprint.equals(row.get("request_fingerprint")))
+            throw new IllegalArgumentException("Source probe idempotency key reused for different input");
+        return new SourceProbeClaim(acquired!=0,row);
+    }
+    public void completeSourceProbe(String requestId,String state,String resultJson) {
+        jdbc.update("UPDATE source_probe SET state=?,result_json=?,completed_at=current_timestamp WHERE request_id=?",state,resultJson,requestId);
+    }
+    public void failSourceProbe(String requestId,String errorType) {
+        jdbc.update("UPDATE source_probe SET state='FAILED',error_type=?,completed_at=current_timestamp WHERE request_id=?",errorType,requestId);
+    }
+    public Map<String,Object> sourceProbe(String requestId) {
+        return jdbc.queryForMap("SELECT * FROM source_probe WHERE request_id=?",requestId);
+    }
+    public Instant businessCreatedAt(String instanceId) {
+        return jdbc.queryForObject("SELECT created_at FROM business_instance WHERE instance_id=?",
+                (rs,index) -> rs.getTimestamp(1).toInstant(),instanceId);
     }
     public RunRequest register(RunRequest request) { return register(request,(previous,next) -> false); }
     public RunRequest register(RunRequest request,java.util.function.BiPredicate<RunRequest,RunRequest> sameSourceScope) {
@@ -316,5 +377,4 @@ public final class SqliteLedger {
         }
         @Override public void close() throws SQLException { handle.close(); }
     }
-    JdbcTemplate jdbc() { return jdbc; }
 }

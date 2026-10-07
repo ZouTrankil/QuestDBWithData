@@ -3,6 +3,7 @@ package com.zoutrankil.data.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.IndexMembershipMapper;
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import java.nio.file.*;
 import java.time.Instant;
 import java.util.*;
@@ -11,14 +12,10 @@ import java.util.*;
 final class IndexMembershipSourceEvidence {
     private IndexMembershipSourceEvidence() {}
     static byte[] bounded(Path path,int maximum) throws Exception {
-        try(var in=Files.newInputStream(path)) {
-            byte[] bytes=in.readNBytes(maximum+1);
-            if(bytes.length>maximum) throw new IllegalArgumentException("Membership evidence exceeds bound");
-            return bytes;
-        }
+        return FileEvidenceStore.readBounded(path,maximum,()->new IllegalArgumentException("Membership evidence exceeds bound"));
     }
     static String hash(byte[] bytes) throws Exception {
-        return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));
+        return FileEvidenceStore.sha256(bytes);
     }
     static void verify(SyncJobRunner.Page<IndexMembership> source,IndexMembershipSource.Scope scope,Path folder) throws Exception {
         var json=JobDefinitionJson.mapper();Path receipt=owned(source.responseEvidence(),folder);
@@ -56,9 +53,8 @@ final class IndexMembershipSourceEvidence {
             throw new IllegalStateException("Frozen typed membership values differ from raw provider responses");
     }
     private static Path owned(String value,Path folder) throws Exception {
-        Path path=Path.of(value).toAbsolutePath().normalize();
-        if(!path.getParent().equals(folder.toAbsolutePath().normalize()) || !path.toRealPath().getParent().equals(folder.toRealPath()))
-            throw new IllegalArgumentException("Membership evidence is outside owning run folder");
-        return path;
+        return FileEvidenceStore.owned(Path.of(value),folder,FileEvidenceStore.Ownership.DIRECT_CHILD,
+                FileEvidenceStore.Symlinks.ALLOW_WITHIN_ROOT,
+                ()->new IllegalArgumentException("Membership evidence is outside owning run folder"));
     }
 }

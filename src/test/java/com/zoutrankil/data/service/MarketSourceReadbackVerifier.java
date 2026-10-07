@@ -412,7 +412,7 @@ public final class MarketSourceReadbackVerifier {
         body.put("rows", rows);
         if (receiptMeta.path("sourceVersion").isTextual())
             body.put("sourceVersion", receiptMeta.path("sourceVersion").textValue());
-        byte[] canonical = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        byte[] canonical = JobDefinitionJson.canonicalMapper()
                 .writeValueAsBytes(body);
         return sha256(canonical);
     }

@@ -1,11 +1,12 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.ExchangeCalendar;
-import com.zoutrankil.data.repository.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public final class MarginSecsTradingDates {
     private static String fingerprint(List<String> days) {
         try {
             byte[] bytes = String.join("\n", days).getBytes(StandardCharsets.UTF_8);
-            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+            return FileEvidenceStore.sha256(bytes);
         } catch (Exception impossible) { throw new IllegalStateException(impossible); }
     }
 }

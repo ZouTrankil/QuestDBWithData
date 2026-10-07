@@ -1,8 +1,8 @@
 package com.zoutrankil.data.repository;
 
 import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.NativeDailyWindowSnapshot;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.lang.reflect.*;
@@ -15,9 +15,6 @@ import java.util.*;
  * The formal table is never appended, deleted, dropped or altered by this port.
  */
 public final class NativeDailyWindowWritePort<R extends Record> implements VerifiedBatchExecutor.Port<R,Instant> {
-    public record Snapshot<R extends Record>(String targetId,long tableId,String directory,boolean wal,List<R> rows,String fingerprint) {
-        public Snapshot { rows=List.copyOf(rows); }
-    }
     private final JdbcTemplate jdbc;
     private final String formal,exactFormal,stagePrefix;
     private final Class<R> rowType;
@@ -47,7 +44,7 @@ public final class NativeDailyWindowWritePort<R extends Record> implements Verif
     public Class<R> rowType(){return rowType;}
     public List<String> columns(){return columns;}
     public VerifiedBatchExecutor.Codec<R,Instant> codec(){return codec;}
-    public Snapshot<R> snapshot(String table) {
+    public NativeDailyWindowSnapshot<R> snapshot(String table) {
         requireTarget(table,exactFormal,stagePrefix);
         var metadata=jdbc.queryForList("SELECT id,directoryName,walEnabled,partitionBy,dedup,designatedTimestamp FROM tables() WHERE table_name=?",table);
         if(metadata.size()!=1)throw new IllegalStateException("Exact typed daily table identity required: "+table);
@@ -58,14 +55,14 @@ public final class NativeDailyWindowWritePort<R extends Record> implements Verif
             throw new IllegalStateException("Expected MONTH WAL non-DEDUP daily layout");
         requireSchema(table);if(!walSettled(table,wal))throw new IllegalStateException("Typed daily WAL unsettled: "+table);
         var rows=readAll(table);if(!walSettled(table,wal))throw new IllegalStateException("Typed daily WAL changed during snapshot");
-        return new Snapshot<>(StaticTargetIdentity.identify(jdbc,table,id.longValue(),directory),id.longValue(),directory,wal,rows,digest(rows));
+        return new NativeDailyWindowSnapshot<>(StaticTargetIdentity.identify(jdbc,table,id.longValue(),directory),id.longValue(),directory,wal,rows,digest(rows));
     }
-    public Snapshot<R> formalSnapshot(){return snapshot(formal);}
-    public void requireSame(Snapshot<R> expected) {
+    public NativeDailyWindowSnapshot<R> formalSnapshot(){return snapshot(formal);}
+    public void requireSame(NativeDailyWindowSnapshot<R> expected) {
         var current=formalSnapshot();if(!expected.targetId().equals(current.targetId())||!expected.fingerprint().equals(current.fingerprint()))
             throw new IllegalStateException("Typed daily target changed since planning");
     }
-    public Snapshot<R> prepare(Snapshot<R> before,LocalDate from,LocalDate to)throws Exception {
+    public NativeDailyWindowSnapshot<R> prepare(NativeDailyWindowSnapshot<R> before,LocalDate from,LocalDate to)throws Exception {
         requireWindow(from,to);requireSame(before);writeTable=stagePrefix+"_stage_"+UUID.randomUUID().toString().replace("-","");
         jdbc.execute("CREATE TABLE \""+writeTable+"\" AS (SELECT "+quotedColumns()+" FROM \""+formal+"\" WHERE trade_date<cast('"+from+"T00:00:00.000000Z' AS TIMESTAMP) OR trade_date>=cast('"+to.plusDays(1)+"T00:00:00.000000Z' AS TIMESTAMP)) TIMESTAMP(trade_date) PARTITION BY MONTH "+(before.wal()?"WAL":"BYPASS WAL"));
         awaitWal(writeTable,before.wal());var stage=snapshot(writeTable);writeId=stage.targetId();

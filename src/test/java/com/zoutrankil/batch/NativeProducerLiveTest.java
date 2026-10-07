@@ -3,6 +3,8 @@ package com.zoutrankil.batch;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.boot.SpringApplication;
+import org.springframework.jdbc.core.JdbcTemplate;
+import javax.sql.DataSource;
 import com.zoutrankil.data.service.TusharePageService;
 import java.nio.file.*;
 import java.time.*;
@@ -25,6 +27,7 @@ class NativeProducerLiveTest {
                     "--jdb.questdb-http-url="+qdb,"--jdb.scheduling-enabled=false")) {
                 var collector=context.getBean(SourceCollector.class);var pages=context.getBean(TusharePageService.class);
                 var launches=context.getBean(LaunchService.class);var ledger=context.getBean(SqliteLedger.class);
+                var jdbc=new JdbcTemplate(context.getBean(DataSource.class));
                 var selected=SourceContract.SUPPORTED.stream().sorted().toList();
                 String selection=System.getenv("JDB_SOURCE_DATASETS");
                 if(selection!=null&&!selection.isBlank()) selected=Arrays.stream(selection.split(",")).map(String::trim).filter(s -> !s.isEmpty()).peek(SourceContract::load).toList();
@@ -131,10 +134,10 @@ class NativeProducerLiveTest {
                         assertTrue(persisted.verifiedSegments().stream().anyMatch(segment -> !segment.start().isAfter(sourceRequest.rangeStart())
                                 && !segment.end().isBefore(sourceRequest.rangeEnd())),"verified source interval must publish a continuous persisted quarterly watermark");
                     }
-                    int attempts=ledger.jdbc().queryForObject("SELECT sum(attempt) FROM write_intent WHERE instance_id=?",Integer.class,request.instanceId());
+                    int attempts=jdbc.queryForObject("SELECT sum(attempt) FROM write_intent WHERE instance_id=?",Integer.class,request.instanceId());
                     assertEquals(Math.max(1,(collected.rows()+contract.writeBatchSize()-1)/contract.writeBatchSize()),attempts);
                     assertEquals(expectedState,launches.launch(request).get("business_state"));
-                    assertEquals(attempts,ledger.jdbc().queryForObject("SELECT sum(attempt) FROM write_intent WHERE instance_id=?",Integer.class,request.instanceId()));
+                    assertEquals(attempts,jdbc.queryForObject("SELECT sum(attempt) FROM write_intent WHERE instance_id=?",Integer.class,request.instanceId()));
                     var report=new LinkedHashMap<String,Object>();report.put("dataset",dataset);report.put("code",contract.isMarketAggregate()?"aggregate-no-security-dimension":codeLabel);report.put("source",collected);
                     report.put("result",result);report.put("sendAttempts",attempts);report.put("dataPostCount",collected.rows()==0?0:attempts);report.put("physicalColumns",contract.columns());
                     if(SourceContract.MONTHLY_AGGREGATES.contains(dataset)) report.put("persistedCoverage",ledger.monthlyCoverage().stream()

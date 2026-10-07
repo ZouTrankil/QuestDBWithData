@@ -1,11 +1,11 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.TushareThsMemberDto;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.ThsMemberMapper;
 import java.nio.file.*;
-import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.BooleanSupplier;
@@ -53,9 +53,9 @@ public final class ThsMemberSource {
         if (bytes.length > 16 * 1024 * 1024) throw new IllegalArgumentException("THS board evidence exceeds byte bound");
         Files.createDirectories(evidence);
         Path receipt = evidence.resolve("source-" + UUID.randomUUID() + ".json");
-        Files.write(receipt, bytes, StandardOpenOption.CREATE_NEW);
+        FileEvidenceStore.writeNew(receipt, bytes);
         return new SyncJobRunner.Page<>(typed,
-                HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)),
+                FileEvidenceStore.sha256(bytes),
                 receipt.toString(), null);
     }
 
@@ -65,8 +65,9 @@ public final class ThsMemberSource {
         if (!ThsIndex.validCode(boardCode) || !expectedHash.matches("[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen board and source hash required");
         if (Files.size(receipt) > 16L * 1024 * 1024) throw new IllegalStateException("THS source receipt exceeds bound");
-        byte[] bytes = Files.readAllBytes(receipt);
-        String hash = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        byte[] bytes = FileEvidenceStore.readBounded(receipt, 16 * 1024 * 1024,
+                () -> new IllegalStateException("THS source receipt exceeds bound"));
+        String hash = FileEvidenceStore.sha256(bytes);
         if (!hash.equals(expectedHash)) throw new IllegalStateException("THS source receipt hash changed");
         var json = JobDefinitionJson.mapper();
         var proof = json.readTree(bytes);

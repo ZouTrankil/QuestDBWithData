@@ -1,5 +1,9 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.policy.IndexDailyMarketUniverse;
+
+import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.mapper.IndexDailyMarketMapper;
@@ -18,7 +22,7 @@ import java.util.*;
 /** Explicit bounded planner/runner for one frozen D019 source code and isolated target. */
 @Service
 public final class IndexDailyMarketJobService {
-    public static final String ISOLATED_TABLE_PREFIX = "java_d019_index_daily_market_";
+    public static final String ISOLATED_TABLE_PREFIX = IsolatedTablePolicy.INDEX_DAILY_MARKET.prefix();
     public record Plan(SyncJobDefinition.FrozenRequest request, String targetId, String tsCode,
             IndexDailyMarketUniverse.Route route, LocalDate checkpointBefore, LocalDate checkpointAnchor,
             IndexDailyMarketWritePort.TargetRange physicalRange, boolean bootstrap) {
@@ -50,9 +54,7 @@ public final class IndexDailyMarketJobService {
     }
     public String tableName() { return table; }
     public static void requireIsolatedTableName(String table) {
-        DatasetDefinition.identifier(table);
-        if (!table.startsWith(ISOLATED_TABLE_PREFIX) || table.length() <= ISOLATED_TABLE_PREFIX.length())
-            throw new IllegalStateException("D019 execution requires a dedicated java_d019_index_daily_market_<suffix> target");
+        IsolatedTablePolicy.INDEX_DAILY_MARKET.require(table);
     }
     public String targetId() {
         requireIsolatedTableName(table);

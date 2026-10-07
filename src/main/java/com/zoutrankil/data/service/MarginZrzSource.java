@@ -1,5 +1,6 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -10,8 +11,6 @@ import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.mapper.MarginZrzMapper;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -56,7 +55,8 @@ public final class MarginZrzSource {
         requireWindow(expectedFrom,expectedTo);Path file=receipt.toAbsolutePath().normalize();
         if(fingerprint==null||!fingerprint.matches("[0-9a-f]{64}")||!Files.isRegularFile(file)||Files.isSymbolicLink(file)||Files.size(file)<1||Files.size(file)>MAX_EVIDENCE_BYTES)
             throw new IllegalArgumentException("D031 bounded raw receipt and SHA-256 required");
-        byte[] bytes=Files.readAllBytes(file);if(!sha(bytes).equals(fingerprint))throw new IllegalStateException("D031 receipt SHA-256 mismatch");
+        byte[] bytes=FileEvidenceStore.readBounded(file, MAX_EVIDENCE_BYTES,
+                () -> new IllegalArgumentException("D031 bounded raw receipt and SHA-256 required"));if(!sha(bytes).equals(fingerprint))throw new IllegalStateException("D031 receipt SHA-256 mismatch");
         var json=JobDefinitionJson.mapper();JsonNode proof=json.readTree(bytes);String first=expectedFrom.format(BASIC),last=expectedTo.format(BASIC);
         if(!"tushare".equals(proof.path("sourceKind").asText())||!"slb_len".equals(proof.path("endpoint").asText())
                 ||!proof.path("sourceComplete").asBoolean(false)||!expectedFrom.toString().equals(proof.path("fromInclusive").asText())
@@ -76,16 +76,17 @@ public final class MarginZrzSource {
         if(typed.tradeDate().isBefore(from)||typed.tradeDate().isAfter(to))throw new IllegalArgumentException("D031 provider date outside frozen range");}
     private static void validateExactFields(Map<String,JsonNode> row){if(row==null||!row.keySet().equals(new HashSet<>(FIELDS)))throw new IllegalArgumentException("D031 provider columns differ from six-field slb_len contract");}
     private static byte[] body(LocalDate from,LocalDate to,Map<String,Object> params,List<Map<String,JsonNode>> rows,String version,boolean complete,Exception failure)throws Exception{
-        var json=JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS,true);var body=new LinkedHashMap<String,Object>();
+        var json=JobDefinitionJson.canonicalMapper();var body=new LinkedHashMap<String,Object>();
         body.put("sourceKind","tushare");body.put("endpoint","slb_len");body.put("sourceContractVersion",1);body.put("parameters",params);body.put("fields",FIELDS);
         body.put("fromInclusive",from);body.put("toInclusive",to);body.put("apiMaximumRows",API_ROW_CAP);body.put("returnedRows",rows.size());body.put("rawRows",rows);body.put("sourceComplete",complete);
         if(version!=null)body.put("sourceVersion",version);if(failure!=null)body.put("failureType",failure.getClass().getSimpleName());return json.writeValueAsBytes(body);}
     private void persistIncomplete(LocalDate from,LocalDate to,Map<String,Object> params,List<Map<String,JsonNode>> rows,String version,Exception failure)throws Exception{
         byte[] bytes=body(from,to,params,rows,version,false,failure);if(bytes.length>MAX_EVIDENCE_BYTES)throw new IllegalStateException("D031 incomplete source receipt exceeds 4 MiB",failure);
         Files.createDirectories(evidenceRoot);persist(evidenceRoot.resolve("incomplete-"+from.format(BASIC)+"-"+to.format(BASIC)+"-"+sha(bytes)+".json"),bytes);}
-    private static void persist(Path path,byte[] bytes)throws Exception{try{Files.write(path,bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);}
-        catch(java.nio.file.FileAlreadyExistsException exists){if(!Arrays.equals(Files.readAllBytes(path),bytes))throw new IllegalStateException("Conflicting immutable D031 receipt",exists);}}
+    private static void persist(Path path,byte[] bytes)throws Exception{try{FileEvidenceStore.writeNew(path,bytes);}
+        catch(java.nio.file.FileAlreadyExistsException exists){if(!Arrays.equals(FileEvidenceStore.readBounded(path, Math.max(1, bytes.length),
+                    () -> new IllegalStateException("Conflicting immutable D031 receipt", exists)),bytes))throw new IllegalStateException("Conflicting immutable D031 receipt",exists);}}
     private static String value(Map<String,JsonNode> row,String field){JsonNode node=row.get(field);return node==null||node.isNull()?"":node.asText();}
-    private static String sha(byte[] bytes)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));}
+    private static String sha(byte[] bytes)throws Exception{return FileEvidenceStore.sha256(bytes);}
     private static void requireWindow(LocalDate from,LocalDate to){if(from==null||to==null||from.isAfter(to)||ChronoUnit.DAYS.between(from,to)+1>MAX_RANGE_DAYS)throw new IllegalArgumentException("D031 inclusive source range must be ordered and <=366 days");}
 }

@@ -1,5 +1,6 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -10,14 +11,11 @@ import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.mapper.MoneyflowThsMapper;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HexFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +101,8 @@ public final class MoneyflowThsSource {
         if (fingerprint == null || !fingerprint.matches("[0-9a-f]{64}") || !Files.isRegularFile(path)
                 || Files.size(path) > MAX_EVIDENCE_BYTES)
             throw new IllegalArgumentException("D025 bounded source receipt and SHA-256 required");
-        byte[] bytes = Files.readAllBytes(path);
+        byte[] bytes = FileEvidenceStore.readBounded(path, MAX_EVIDENCE_BYTES,
+                () -> new IllegalArgumentException("D025 bounded source receipt and SHA-256 required"));
         if (!sha(bytes).equals(fingerprint)) throw new IllegalStateException("D025 source receipt SHA-256 mismatch");
         var json = JobDefinitionJson.mapper();
         JsonNode proof = json.readTree(bytes);
@@ -147,7 +146,7 @@ public final class MoneyflowThsSource {
 
     private static byte[] body(LocalDate date, Map<String, Object> parameters,
             List<Map<String, JsonNode>> rows, String sourceVersion, boolean complete, Exception failure) throws Exception {
-        var json = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        var json = JobDefinitionJson.canonicalMapper();
         var body = new java.util.LinkedHashMap<String, Object>();
         body.put("sourceKind", "tushare"); body.put("endpoint", "moneyflow_ths");
         body.put("sourceContractVersion", 1); body.put("parameters", parameters); body.put("fields", FIELDS);
@@ -169,9 +168,10 @@ public final class MoneyflowThsSource {
     }
 
     private static void persist(Path path, byte[] bytes) throws Exception {
-        try { Files.write(path, bytes, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE); }
+        try { FileEvidenceStore.writeNew(path, bytes); }
         catch (java.nio.file.FileAlreadyExistsException exists) {
-            if (!Arrays.equals(Files.readAllBytes(path), bytes))
+            if (!Arrays.equals(FileEvidenceStore.readBounded(path, Math.max(1, bytes.length),
+                    () -> new IllegalStateException("Conflicting immutable D025 receipt", exists)), bytes))
                 throw new IllegalStateException("Conflicting immutable D025 receipt", exists);
         }
     }
@@ -180,6 +180,6 @@ public final class MoneyflowThsSource {
         return value == null || value.isNull() ? "" : value.asText();
     }
     private static String sha(byte[] bytes) throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        return FileEvidenceStore.sha256(bytes);
     }
 }

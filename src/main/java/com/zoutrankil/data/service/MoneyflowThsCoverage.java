@@ -6,12 +6,12 @@ import com.zoutrankil.data.domain.MoneyflowThs;
 import com.zoutrankil.data.domain.MoneyflowThsKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
-import com.zoutrankil.data.repository.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.repository.MoneyflowThsWritePort;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.repository.SqliteLedgerSchema;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.DriverManager;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -211,13 +211,8 @@ public final class MoneyflowThsCoverage {
         return value.asText();
     }
     private static boolean hasHistorySchema(Path path) throws Exception {
-        var names = new HashSet<String>();
-        try (var connection = DriverManager.getConnection("jdbc:sqlite:" + path.toUri().toASCIIString() + "?mode=ro");
-             var statement = connection.createStatement();
-             var rows = statement.executeQuery("SELECT name FROM sqlite_master WHERE type='table'")) {
-            while (rows.next()) names.add(rows.getString(1));
-        }
-        Set<String> required = Set.of("ledger_meta", "sync_runs", "sync_entries", "sync_events");
+        var names = SqliteLedgerSchema.tableNames(path);
+        var required = Set.of("ledger_meta", "sync_runs", "sync_entries", "sync_events");
         if (java.util.Collections.disjoint(names, required)) return false;
         if (!names.containsAll(required)) throw new IllegalStateException("Partial D025 ledger schema");
         return true;

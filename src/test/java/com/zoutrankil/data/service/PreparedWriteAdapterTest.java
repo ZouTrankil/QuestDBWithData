@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.storage.StockBasicWritePort;
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import org.junit.jupiter.api.Test;

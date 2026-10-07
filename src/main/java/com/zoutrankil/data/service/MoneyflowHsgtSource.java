@@ -1,5 +1,6 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -10,15 +11,12 @@ import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.mapper.MoneyflowHsgtMapper;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HexFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -100,7 +98,8 @@ public final class MoneyflowHsgtSource {
         if (fingerprint == null || !fingerprint.matches("[0-9a-f]{64}") || !Files.isRegularFile(file)
                 || Files.isSymbolicLink(file) || Files.size(file) < 1 || Files.size(file) > MAX_EVIDENCE_BYTES)
             throw new IllegalArgumentException("D027 bounded raw receipt and SHA-256 required");
-        byte[] bytes = Files.readAllBytes(file);
+        byte[] bytes = FileEvidenceStore.readBounded(file, MAX_EVIDENCE_BYTES,
+                () -> new IllegalArgumentException("D027 bounded raw receipt and SHA-256 required"));
         if (!sha(bytes).equals(fingerprint)) throw new IllegalStateException("D027 receipt SHA-256 mismatch");
         var json = JobDefinitionJson.mapper(); JsonNode body = json.readTree(bytes);
         if (!"tushare".equals(body.path("sourceKind").asText()) || !"moneyflow_hsgt".equals(body.path("endpoint").asText())
@@ -141,7 +140,7 @@ public final class MoneyflowHsgtSource {
     }
     private static byte[] body(LocalDate from, LocalDate to, Map<String,Object> params,
             List<Map<String,JsonNode>> rows, String version, boolean complete, Exception failure) throws Exception {
-        var json = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+        var json = JobDefinitionJson.canonicalMapper();
         var body = new java.util.LinkedHashMap<String,Object>();
         body.put("sourceKind","tushare"); body.put("endpoint","moneyflow_hsgt"); body.put("sourceContractVersion",1);
         body.put("parameters",params); body.put("fields",FIELDS); body.put("fromInclusive",from); body.put("toInclusive",to);
@@ -157,13 +156,14 @@ public final class MoneyflowHsgtSource {
         Files.createDirectories(evidenceRoot);persist(evidenceRoot.resolve("incomplete-"+from.format(BASIC)+"-"+to.format(BASIC)+"-"+sha(bytes)+".json"),bytes);
     }
     private static void persist(Path path,byte[] bytes)throws Exception {
-        try{Files.write(path,bytes,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);}
-        catch(java.nio.file.FileAlreadyExistsException exists){if(!Arrays.equals(Files.readAllBytes(path),bytes))throw new IllegalStateException("Conflicting immutable D027 receipt",exists);}
+        try{FileEvidenceStore.writeNew(path,bytes);}
+        catch(java.nio.file.FileAlreadyExistsException exists){if(!Arrays.equals(FileEvidenceStore.readBounded(path, Math.max(1, bytes.length),
+                    () -> new IllegalStateException("Conflicting immutable D027 receipt", exists)),bytes))throw new IllegalStateException("Conflicting immutable D027 receipt",exists);}
     }
     private static String field(Map<String,JsonNode> row,String name) {
         JsonNode value=row.get(name);return value==null||value.isNull()?"":value.asText();
     }
-    private static String sha(byte[] bytes)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));}
+    private static String sha(byte[] bytes)throws Exception{return FileEvidenceStore.sha256(bytes);}
     private static void requireWindow(LocalDate from,LocalDate to) {
         if(from==null||to==null||from.isAfter(to)||ChronoUnit.DAYS.between(from,to)+1>MAX_RANGE_DAYS)
             throw new IllegalArgumentException("D027 source range must be ordered and at most 31 calendar days");

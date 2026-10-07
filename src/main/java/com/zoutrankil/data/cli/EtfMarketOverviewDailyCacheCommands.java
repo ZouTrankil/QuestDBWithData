@@ -1,6 +1,5 @@
 package com.zoutrankil.data.cli;
 
-import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
@@ -15,7 +14,6 @@ final class EtfMarketOverviewDailyCacheCommands {
     static void execute(String command, Map<String,String> options,
                         EtfMarketOverviewDailyCacheJobService owner) throws Exception {
         Objects.requireNonNull(owner, "Registered D101 owner required");
-        var json = JobDefinitionJson.mapper();
         switch (command) {
             case "etf-market-overview-cache-job-status", "cancel-etf-market-overview-cache-run",
                  "resume-etf-market-overview-cache-run" -> {
@@ -25,7 +23,7 @@ final class EtfMarketOverviewDailyCacheCommands {
                     case "cancel-etf-market-overview-cache-run" -> owner.cancel(options.get("--run"));
                     default -> owner.resume(options.get("--run"));
                 };
-                System.out.println(json.writeValueAsString(value));
+                CliOutput.printJson(value, CliOutput.Profile.JOB_DEFINITION, false);
                 if (value instanceof EtfMarketOverviewDailyCacheJobService.MaterializationResult result)
                     requireComplete(result);
             }
@@ -33,7 +31,7 @@ final class EtfMarketOverviewDailyCacheCommands {
                 requireKeys(options, Set.of("--run", "--writer-stopped"));
                 if (!"true".equals(options.get("--writer-stopped")))
                     throw new IllegalArgumentException("writer-stopped must be true");
-                System.out.println(json.writeValueAsString(owner.reconcile(options.get("--run"), true)));
+                CliOutput.printJson(owner.reconcile(options.get("--run"), true), CliOutput.Profile.JOB_DEFINITION, false);
             }
             case "plan-etf-market-overview-cache-job", "run-etf-market-overview-cache-job" -> {
                 var required = Set.of("--from", "--to", "--logical-date");
@@ -44,12 +42,12 @@ final class EtfMarketOverviewDailyCacheCommands {
                         LocalDate.parse(options.get("--logical-date")),
                         options.containsKey("--mode") ? Mode.valueOf(options.get("--mode")) : null);
                 if (command.startsWith("plan-")) {
-                    System.out.println(json.writeValueAsString(Map.of("status", "PLANNED", "executed", false,
-                            "request", json.readTree(SyncRequestIdentity.snapshotJson(plan.request())),
-                            "targetId", plan.targetId(), "source", plan.source())));
+                    CliOutput.printJson(Map.of("status", "PLANNED", "executed", false,
+                            "request", CliOutput.readTree(SyncRequestIdentity.snapshotJson(plan.request()), CliOutput.Profile.JOB_DEFINITION),
+                            "targetId", plan.targetId(), "source", plan.source()), CliOutput.Profile.JOB_DEFINITION, false);
                 } else {
                     var result = owner.run(plan);
-                    System.out.println(json.writeValueAsString(result));
+                    CliOutput.printJson(result, CliOutput.Profile.JOB_DEFINITION, false);
                     requireComplete(result);
                 }
             }

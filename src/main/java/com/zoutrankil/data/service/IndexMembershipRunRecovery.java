@@ -82,7 +82,7 @@ public final class IndexMembershipRunRecovery {
         if(Files.exists(receipt)) {
             if(!json.readTree(IndexMembershipSourceEvidence.bounded(receipt,96*1024*1024)).equals(json.readTree(json.writeValueAsBytes(proof))))
                 throw new IllegalStateException("Membership completion differs from full physical proof");
-        } else Files.writeString(receipt,json.writeValueAsString(proof),StandardOpenOption.CREATE_NEW);
+        } else FileEvidenceStore.writeNewUtf8(receipt,json.writeValueAsString(proof));
         int sourceRows=source.rows().size();
         var verification=Map.of("passed",true,"expectedRows",sourceRows,"actualRows",sourceRows,"matchedRows",sourceRows,
                 "mismatchedRows",0,"duplicateKeys",0,"missingKeys",0,"readbackEvidence",receipt.toString(),

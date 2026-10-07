@@ -1,6 +1,5 @@
 package com.zoutrankil.data.cli;
 
-import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
@@ -13,11 +12,10 @@ final class EquityStyleMonthlyCommands {
     private EquityStyleMonthlyCommands() {}
     static void execute(String command, Map<String,String> options, EquityStyleMonthlyJobService owner) throws Exception {
         Objects.requireNonNull(owner,"Registered D103 owner required");
-        var json = JobDefinitionJson.mapper();
         switch (command) {
             case "install-equity-style-monthly-isolated" -> {
                 requireKeys(options,Set.of()); owner.installIsolated();
-                System.out.println(json.writeValueAsString(Map.of("status","ISOLATED_TARGET_READY","datasetId","equity_style_monthly")));
+                CliOutput.printJson(Map.of("status","ISOLATED_TARGET_READY","datasetId","equity_style_monthly"), CliOutput.Profile.JOB_DEFINITION, false);
             }
             case "equity-style-monthly-job-status", "cancel-equity-style-monthly-run",
                  "resume-equity-style-monthly-run", "reconcile-equity-style-monthly-run" -> {
@@ -28,7 +26,7 @@ final class EquityStyleMonthlyCommands {
                     case "reconcile-equity-style-monthly-run" -> owner.reconcile(options.get("--run"));
                     default -> owner.resume(options.get("--run"));
                 };
-                System.out.println(json.writeValueAsString(value));
+                CliOutput.printJson(value, CliOutput.Profile.JOB_DEFINITION, false);
                 if(value instanceof EquityStyleMonthlyJobService.MaterializationResult result)requireComplete(result);
             }
             case "plan-equity-style-monthly-job", "run-equity-style-monthly-job" -> {
@@ -37,9 +35,9 @@ final class EquityStyleMonthlyCommands {
                     throw new IllegalArgumentException("Explicit first-month from/to/logical-date and optional mode required");
                 var plan=owner.plan(LocalDate.parse(options.get("--from")),LocalDate.parse(options.get("--to")),
                         LocalDate.parse(options.get("--logical-date")),options.containsKey("--mode")?Mode.valueOf(options.get("--mode")):null);
-                if(command.startsWith("plan-"))System.out.println(json.writeValueAsString(Map.of("status","PLANNED","executed",false,
-                        "request",json.readTree(SyncRequestIdentity.snapshotJson(plan.request())),"targetId",plan.targetId(),"plan",plan)));
-                else { var result=owner.run(plan);System.out.println(json.writeValueAsString(result));requireComplete(result); }
+                if(command.startsWith("plan-"))CliOutput.printJson(Map.of("status","PLANNED","executed",false,
+                        "request",CliOutput.readTree(SyncRequestIdentity.snapshotJson(plan.request()), CliOutput.Profile.JOB_DEFINITION),"targetId",plan.targetId(),"plan",plan), CliOutput.Profile.JOB_DEFINITION, false);
+                else { var result=owner.run(plan);CliOutput.printJson(result, CliOutput.Profile.JOB_DEFINITION, false);requireComplete(result); }
             }
             default -> throw new IllegalArgumentException("Unknown D103 command");
         }

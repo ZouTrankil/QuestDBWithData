@@ -1,5 +1,8 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockDetailInfoDiscovery;
+import com.zoutrankil.data.stock.application.StockDetailInfoSource;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.zoutrankil.data.domain.PageContract;

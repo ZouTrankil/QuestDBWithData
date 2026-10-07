@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.RetailSentimentDailyV1;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.repository.RetailSentimentDailyV1MaterializationPort;
-import com.zoutrankil.data.repository.RetailSentimentDailyV1MaterializationPort.Snapshot;
+import com.zoutrankil.data.domain.RetailSentimentDailyV1Snapshot;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -54,11 +54,11 @@ public final class RetailSentimentDailyV1MaterializeAdapter
             };
 
     private final RetailSentimentDailyV1MaterializationPort port;
-    private final Snapshot frozen;
+    private final RetailSentimentDailyV1Snapshot frozen;
     private long sourceRawRows;
-    private Snapshot lastVerificationSnapshot;
+    private RetailSentimentDailyV1Snapshot lastVerificationSnapshot;
 
-    public RetailSentimentDailyV1MaterializeAdapter(RetailSentimentDailyV1MaterializationPort port, Snapshot frozen) {
+    public RetailSentimentDailyV1MaterializeAdapter(RetailSentimentDailyV1MaterializationPort port, RetailSentimentDailyV1Snapshot frozen) {
         this.port = Objects.requireNonNull(port);
         this.frozen = Objects.requireNonNull(frozen);
     }
@@ -84,7 +84,7 @@ public final class RetailSentimentDailyV1MaterializeAdapter
         check(cancelled);
         port.cancellationProbe(cancelled);
         port.bind(request.from(), request.to(), frozen);
-        Snapshot before = port.snapshot();
+        RetailSentimentDailyV1Snapshot before = port.snapshot();
         requireSourceReady(before, full(request));
         sourceRawRows = port.sourceRawRows(request.from(), request.to());
         var expected = port.expected(request.from(), request.to());
@@ -95,7 +95,7 @@ public final class RetailSentimentDailyV1MaterializeAdapter
             requireCalendarVersion(request);
         }
         port.requireSourceCoverage(request.from(), request.to(), sourceRawRows, expected);
-        Snapshot sourceAfter = port.snapshot();
+        RetailSentimentDailyV1Snapshot sourceAfter = port.snapshot();
         if (!before.sourceUnchanged(sourceAfter))
             throw new IllegalStateException("D098 source changed while reading its complete bounded aggregation");
         if ((sourceRawRows == 0) != expected.isEmpty())
@@ -104,7 +104,7 @@ public final class RetailSentimentDailyV1MaterializeAdapter
             throw new IllegalStateException("D098 FULL repair requires real nonempty source rows");
         if (expected.isEmpty()) {
             var actual = port.actual(request.from(), request.to());
-            Snapshot afterEmptyRead = port.snapshot();
+            RetailSentimentDailyV1Snapshot afterEmptyRead = port.snapshot();
             if (!actual.isEmpty() || !before.equals(afterEmptyRead))
                 throw new IllegalStateException("D098 empty source has stale output or its MV version changed");
             requireReady(afterEmptyRead);
@@ -116,7 +116,7 @@ public final class RetailSentimentDailyV1MaterializeAdapter
         consumer.accept(new SyncJobRunner.Page<>(expected, fingerprint, evidence,
                 request.from() + "/" + request.to()));
         check(cancelled);
-        Snapshot completed = port.snapshot();
+        RetailSentimentDailyV1Snapshot completed = port.snapshot();
         requireReady(completed);
         if (!frozen.sourceUnchanged(completed))
             throw new IllegalStateException("D098 source changed before verification was complete");
@@ -154,7 +154,7 @@ public final class RetailSentimentDailyV1MaterializeAdapter
         return timeout == null ? Duration.ofMinutes(3) : timeout;
     }
     public long sourceRawRows() { return sourceRawRows; }
-    public Snapshot lastVerificationSnapshot() { return lastVerificationSnapshot; }
+    public RetailSentimentDailyV1Snapshot lastVerificationSnapshot() { return lastVerificationSnapshot; }
 
     private void requireRequest(SyncJobDefinition.FrozenRequest request) {
         if (request == null || !"mv_retail_sentiment_daily_v1".equals(request.definition().datasetId())
@@ -170,7 +170,7 @@ public final class RetailSentimentDailyV1MaterializeAdapter
             throw new IllegalArgumentException("Exact D098 frozen definition, source version and physical target required");
     }
 
-    private void requireSourceReady(Snapshot state, boolean repair) {
+    private void requireSourceReady(RetailSentimentDailyV1Snapshot state, boolean repair) {
         if ((!repair && !state.valid()) || "refreshing".equalsIgnoreCase(state.viewStatus())
                 || !state.sourceSettled() || !state.mvSettled()
                 || !frozen.sourceUnchanged(state) || frozen.mvId() != state.mvId()
@@ -179,7 +179,7 @@ public final class RetailSentimentDailyV1MaterializeAdapter
             throw new IllegalStateException("D098 source/MV is invalid, refreshing, unsettled or changed");
     }
 
-    private void requireReady(Snapshot state) {
+    private void requireReady(RetailSentimentDailyV1Snapshot state) {
         if (!state.valid() || !state.caughtUp() || !state.sourceSettled() || !state.mvSettled()
                 || !frozen.sourceUnchanged(state) || frozen.mvId() != state.mvId()
                 || !frozen.mvDirectory().equals(state.mvDirectory())
@@ -188,7 +188,7 @@ public final class RetailSentimentDailyV1MaterializeAdapter
     }
 
     private String evidence(SyncJobDefinition.FrozenRequest request, int rows, String fingerprint,
-                            Snapshot state) throws Exception {
+                            RetailSentimentDailyV1Snapshot state) throws Exception {
         var details = new LinkedHashMap<String, Object>();
         details.put("nativeRefresh", full(request) ? "FULL_ISOLATED" : "INCREMENTAL");
         details.put("source", RetailSentimentDailyV1MaterializationPort.SOURCE);

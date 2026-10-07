@@ -9,7 +9,6 @@ import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.MoneyflowThsMapper;
 import com.zoutrankil.data.service.MoneyflowThsSource;
 import com.zoutrankil.data.service.MoneyflowThsSyncJobOwner;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;

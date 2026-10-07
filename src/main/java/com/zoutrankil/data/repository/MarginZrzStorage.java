@@ -7,7 +7,6 @@ import com.zoutrankil.data.domain.MarginZrzDataset;
 import com.zoutrankil.data.domain.MarginZrzKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.mapper.MarginZrzMapper;
-import com.zoutrankil.data.service.StaticTargetIdentity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.security.MessageDigest;
 import java.sql.SQLException;

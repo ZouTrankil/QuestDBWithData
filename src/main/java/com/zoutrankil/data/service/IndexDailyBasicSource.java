@@ -1,12 +1,14 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+import com.zoutrankil.data.domain.policy.IndexDailyBasicUniverse;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.mapper.IndexDailyBasicMapper;
 import java.nio.file.*;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -67,12 +69,12 @@ public final class IndexDailyBasicSource {
         body.put("from", from); body.put("to", to); body.put("parameters", params); body.put("fields", FIELDS);
         body.put("rawRows", raw); body.put("returnedRows", typed.size()); body.put("sourceComplete", true);
         body.put("sourceRowCap", API_ROW_CAP); body.put("sourceVersion", completed.sourceVersion());
-        byte[] bytes = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        byte[] bytes = JobDefinitionJson.canonicalMapper()
                 .writeValueAsBytes(body);
         requireEvidenceSize(bytes); Files.createDirectories(evidenceRoot);
         Path receipt = evidenceRoot.resolve("index-daily-basic-" + canonical.replace('.', '-') + "-" + start + "-" + end
                 + "-" + UUID.randomUUID() + ".json");
-        Files.write(receipt, bytes, StandardOpenOption.CREATE_NEW);
+        FileEvidenceStore.writeNew(receipt, bytes);
         return new SyncJobRunner.Page<>(typed, sha256(bytes), receipt.toString(), canonical);
     }
 
@@ -83,7 +85,8 @@ public final class IndexDailyBasicSource {
         if (fingerprint == null || !fingerprint.matches("[0-9a-f]{64}") || !Files.isRegularFile(receipt)
                 || Files.size(receipt) > MAX_EVIDENCE_BYTES)
             throw new IllegalArgumentException("Bounded D020 receipt and SHA-256 required");
-        byte[] bytes = Files.readAllBytes(receipt);
+        byte[] bytes = FileEvidenceStore.readBounded(receipt, MAX_EVIDENCE_BYTES,
+                () -> new IllegalArgumentException("Bounded D020 receipt and SHA-256 required"));
         if (!sha256(bytes).equals(fingerprint)) throw new IllegalStateException("D020 source receipt fingerprint changed");
         var json = JobDefinitionJson.mapper(); var proof = json.readTree(bytes);
         if (!"tushare".equals(proof.path("sourceKind").asText()) || !"index_dailybasic".equals(proof.path("endpoint").asText())
@@ -125,10 +128,10 @@ public final class IndexDailyBasicSource {
         body.put("evidenceStatus", "unverified_raw_response"); body.put("explicitEnd", response.explicitEnd());
         body.put("failureCategory", failure.getClass().getSimpleName()); body.put("failure", failure.getMessage());
         if (response.sourceVersion() != null) body.put("sourceVersion", response.sourceVersion());
-        byte[] bytes = JobDefinitionJson.mapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        byte[] bytes = JobDefinitionJson.canonicalMapper()
                 .writeValueAsBytes(body);
         requireEvidenceSize(bytes); Files.createDirectories(evidenceRoot);
-        Files.write(evidenceRoot.resolve("incomplete-" + UUID.randomUUID() + ".json"), bytes, StandardOpenOption.CREATE_NEW);
+        FileEvidenceStore.writeNew(evidenceRoot.resolve("incomplete-" + UUID.randomUUID() + ".json"), bytes);
     }
     public static String requireCode(String code) {
         String canonical = IndexDailyBasicUniverse.resolve(code);
@@ -144,6 +147,6 @@ public final class IndexDailyBasicSource {
         if (bytes.length > MAX_EVIDENCE_BYTES) throw new IllegalArgumentException("D020 source evidence exceeds 16 MiB");
     }
     private static String sha256(byte[] bytes) throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        return FileEvidenceStore.sha256(bytes);
     }
 }

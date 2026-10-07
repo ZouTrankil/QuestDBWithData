@@ -1,8 +1,9 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.zoutrankil.data.domain.StockDetailInfoDataset;
-import com.zoutrankil.data.repository.StockDetailInfoStorage;
-import java.security.MessageDigest;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HexFormat;
@@ -66,10 +67,9 @@ public final class IndexWeightNameResolver implements IndexWeightSource.NameLook
             reference.put("list_status", row.listStatus());
             references.add(java.util.Collections.unmodifiableMap(reference));
         }
-        byte[] canonical = com.zoutrankil.data.domain.JobDefinitionJson.mapper()
-                .configure(com.fasterxml.jackson.databind.SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        byte[] canonical = com.zoutrankil.data.domain.JobDefinitionJson.canonicalMapper()
                 .writeValueAsBytes(references);
-        String fingerprint = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(canonical));
+        String fingerprint = FileEvidenceStore.sha256(canonical);
         return new IndexWeightSource.NameEnrichment(actualTarget, fingerprint, names, references);
     }
 }

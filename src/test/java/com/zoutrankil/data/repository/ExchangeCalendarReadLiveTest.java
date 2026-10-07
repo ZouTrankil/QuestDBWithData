@@ -3,7 +3,7 @@ package com.zoutrankil.data.repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-import com.zoutrankil.data.mapper.ExchangeCalendarMapper;
+import com.zoutrankil.data.calendar.mapper.ExchangeCalendarMapper;
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.service.ReadGroupReader;
 import org.junit.jupiter.api.Test;

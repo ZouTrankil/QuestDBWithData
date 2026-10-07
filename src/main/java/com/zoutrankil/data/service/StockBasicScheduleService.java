@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.domain.SyncScheduleDefinition;
@@ -16,6 +18,13 @@ import java.util.function.Predicate;
 @Service
 @org.springframework.context.annotation.Lazy
 public class StockBasicScheduleService {
+    public enum State { CLAIMED, VERIFIED, VERIFIED_EMPTY, PARTIAL, FAILED, IN_DOUBT,
+        CANCELLED, MISSED, SKIPPED_REENTRY }
+    public record History(String scheduleId, Instant dueAt, State state, String runId, String detail) {}
+    public record Status(SyncScheduleDefinition definition, SyncScheduleDefinition.Slot next,
+                         List<History> history) {
+        public Status { history = List.copyOf(history); }
+    }
     private final SyncScheduleManager manager;
     private final StockBasicJobService job;
     private final StockBasicGroupService group;
@@ -44,9 +53,13 @@ public class StockBasicScheduleService {
         codes(definition); // reject missing or unsupported runner parameters before saving
         manager.put(definition);
     }
-    public SyncScheduleManager.Status status(String id) throws Exception { return manager.status(id); }
+    public Status status(String id) throws Exception {
+        var status = manager.status(id);
+        return new Status(status.definition(), status.next(), status.history().stream()
+                .map(StockBasicScheduleService::history).toList());
+    }
     public void setEnabled(String id,boolean enabled) throws Exception { manager.setEnabled(id,enabled); }
-    public List<SyncScheduleStore.History> tick() throws Exception {
+    public List<History> tick() throws Exception {
         return manager.tick((definition,slot) -> {
             var codes=codes(definition);
             if (definition.target()==SyncScheduleDefinition.Target.JOB
@@ -60,7 +73,10 @@ public class StockBasicScheduleService {
                 return new SyncScheduleManager.RunResult(result.runId(),result.state());
             }
             throw new IllegalArgumentException("No admitted schedule runner for target");
-        });
+        }).stream().map(StockBasicScheduleService::history).toList();
+    }
+    private static History history(SyncScheduleStore.History row) {
+        return new History(row.scheduleId(), row.dueAt(), State.valueOf(row.state().name()), row.runId(), row.detail());
     }
     private static List<String> codes(SyncScheduleDefinition definition) {
         if (!definition.parameters().keySet().equals(Set.of("codes")))

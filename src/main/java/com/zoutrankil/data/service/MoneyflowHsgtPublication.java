@@ -1,5 +1,7 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
@@ -16,7 +18,6 @@ import java.nio.channels.OverlappingFileLockException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.util.HexFormat;
 import java.util.Objects;
@@ -62,7 +63,7 @@ public final class MoneyflowHsgtPublication {
             throw new IllegalStateException("D027 target or verified stage changed before publication");
         verifyStageReceipt(verified);
         String backup=com.zoutrankil.data.domain.MoneyflowHsgtDataset.ISOLATED_PREFIX+"backup_"+UUID.randomUUID().toString().replace("-","");
-        String stageReceiptHash=sha(Files.readAllBytes(Path.of(verified.receipt())));
+        String stageReceiptHash=sha(FileEvidenceStore.readBounded(Path.of(verified.receipt()), 4 * 1024 * 1024, () -> new IllegalStateException("D027 verified stage receipt escaped its run evidence root")));
         String scope=JobDefinitionJson.mapper().writeValueAsString(java.util.Map.of("stageReceipt",verified.receipt(),
                 "stageReceiptFingerprint",stageReceiptHash,"requestFingerprint",prepared.requestFingerprint(),
                 "windowFrom",prepared.from(),"windowTo",prepared.to(),"sourceRows",verified.authoritativeRows().size(),
@@ -127,12 +128,12 @@ public final class MoneyflowHsgtPublication {
     }
     public void requireNoPendingPublication()throws Exception{requireNoPending(null);}
     private void requireNoPending(String exceptRun)throws Exception {
-        try(var db=java.sql.DriverManager.getConnection("jdbc:sqlite:"+ledgerPath);var query=db.prepareStatement("SELECT run_id,state FROM reference_publications WHERE dataset='moneyflow_hsgt' LIMIT 1001");var rows=query.executeQuery()){
-            int scanned=0;while(rows.next()){if(++scanned>1000)throw new IllegalStateException("D027 publication journal scan exceeds 1000 rows");String runId=rows.getString(1);
-                if(Objects.equals(exceptRun,runId))continue;
-                if(!State.VERIFIED.name().equals(rows.getString(2))||!runClosedSuccessfully(runId))
-                    throw new IllegalStateException("D027 publication or owning ledger run requires recovery/finalization: "+runId);}
-        }
+        journal.visitSummaries(1001,false,ReferencePublicationJournal.ConnectionPolicy.DRIVER_DEFAULTS,(summary,rowNumber)->{
+            if(rowNumber>1000)throw new IllegalStateException("D027 publication journal scan exceeds 1000 rows");String runId=summary.runId();
+            if(Objects.equals(exceptRun,runId))return;
+            if(!State.VERIFIED.name().equals(summary.state())||!runClosedSuccessfully(runId))
+                throw new IllegalStateException("D027 publication or owning ledger run requires recovery/finalization: "+runId);
+        });
         Path root=ledgerPath.getParent().resolve("sync-evidence");if(!Files.exists(root))return;
         if(Files.isSymbolicLink(root)||!Files.isDirectory(root))throw new IllegalStateException("D027 evidence root is invalid");
         int count=0;try(var runs=Files.newDirectoryStream(root)){for(Path dir:runs){if(++count>50_000)throw new IllegalStateException("D027 unresolved-stage scan exceeds 50000 runs");
@@ -163,7 +164,7 @@ public final class MoneyflowHsgtPublication {
     private void verifyStageReceipt(MoneyflowHsgtStaging.Verified verified)throws Exception {
         Path receipt=Path.of(verified.receipt()).toRealPath();Path runRoot=verified.prepared().runEvidence().toRealPath();
         if(!receipt.startsWith(runRoot)||Files.size(receipt)<1||Files.size(receipt)>4*1024*1024)throw new IllegalStateException("D027 verified stage receipt escaped its run evidence root");
-        JsonNode proof=JobDefinitionJson.mapper().readTree(Files.readAllBytes(receipt));var p=verified.prepared();
+        JsonNode proof=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(receipt, 4 * 1024 * 1024, () -> new IllegalStateException("D027 verified stage receipt escaped its run evidence root")));var p=verified.prepared();
         var run=SyncRunLedger.openReadOnly(ledgerPath).getRun(p.runId());
         if(!"moneyflow_hsgt".equals(proof.path("dataset").asText())||!proof.path("sourceComplete").asBoolean(false)
                 ||proof.path("dedup").asBoolean(true)||!p.runId().equals(proof.path("runId").asText())
@@ -178,9 +179,9 @@ public final class MoneyflowHsgtPublication {
         JsonNode scope=JobDefinitionJson.mapper().readTree(entry.intent().scope());String raw=scope.path("stageReceipt").asText("");
         Path receipt=Path.of(raw).toAbsolutePath().normalize();Path root=ledgerPath.getParent().resolve("sync-evidence").resolve(entry.intent().runId()).toRealPath();
         if(Files.isSymbolicLink(receipt)||!Files.isRegularFile(receipt,java.nio.file.LinkOption.NOFOLLOW_LINKS)||Files.size(receipt)<1||Files.size(receipt)>4*1024*1024
-                ||!receipt.toRealPath().startsWith(root)||!sha(Files.readAllBytes(receipt)).equals(scope.path("stageReceiptFingerprint").asText()))
+                ||!receipt.toRealPath().startsWith(root)||!sha(FileEvidenceStore.readBounded(receipt, 4 * 1024 * 1024, () -> new IllegalStateException("D027 verified stage receipt escaped its run evidence root"))).equals(scope.path("stageReceiptFingerprint").asText()))
             throw new IllegalStateException("D027 journal stage receipt hash/path is invalid");
-        JsonNode proof=JobDefinitionJson.mapper().readTree(Files.readAllBytes(receipt));
+        JsonNode proof=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(receipt, 4 * 1024 * 1024, () -> new IllegalStateException("D027 verified stage receipt escaped its run evidence root")));
         JsonNode stageIdentity=proof.path("stageAfter").path("identity"),beforeIdentity=proof.path("before").path("identity");
         if(!proof.path("sourceComplete").asBoolean(false)||proof.path("dedup").asBoolean(true)
                 ||!entry.intent().runId().equals(proof.path("runId").asText())||!entry.intent().stage().equals(proof.path("stage").asText())
@@ -219,7 +220,7 @@ public final class MoneyflowHsgtPublication {
         try{lock=channel.tryLock();}catch(OverlappingFileLockException busy){channel.close();throw new IllegalStateException("D027 publication is already active",busy);}
         if(lock==null){channel.close();throw new IllegalStateException("D027 publication is already active");}return new LockHolder(channel,lock);
     }
-    private static String sha(byte[] bytes)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));}
+    private static String sha(byte[] bytes)throws Exception{return FileEvidenceStore.sha256(bytes);}
     private static boolean same(MoneyflowHsgtStorage.Snapshot a,MoneyflowHsgtStorage.Snapshot b){return MoneyflowHsgtStorage.sameContent(a,b)
             &&a.identity().id()==b.identity().id()&&a.identity().directory().equals(b.identity().directory())&&a.identity().writerTxn()==b.identity().writerTxn();}
     private static void check(BooleanSupplier cancelled){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new java.util.concurrent.CancellationException("D027 table publication cancelled");}

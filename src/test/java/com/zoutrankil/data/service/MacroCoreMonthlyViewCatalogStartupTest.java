@@ -42,12 +42,12 @@ class MacroCoreMonthlyViewCatalogStartupTest {
                     MacroCoreMonthlyViewDataset.BASE_REFRESH_JOB_VERSION));
             assertEquals(1, jobs.definitions().stream().filter(job -> job.datasetId().equals("macro_core_monthly")).count());
             assertTrue(jobs.definitions().stream().noneMatch(job -> job.datasetId().equals("v_macro_core_monthly")));
-            assertEquals(54, datasets.definitions().size());
-            assertEquals(42, jobs.definitions().size());
+            assertEquals(56, datasets.definitions().size());
+            assertEquals(44, jobs.definitions().size());
             var source = context.getBean("d101NoConnectionDataSource", DataSource.class);
             verify(source, never()).getConnection();
             verify(source, never()).getConnection(anyString(), anyString());
-            Path output = Path.of("artifacts/java-migration/D105/commands/java-catalog-startup-20261007.json");
+            Path output = temporary.resolve("java-catalog-startup-20261007.json");
             Files.createDirectories(output.getParent());
             Files.writeString(output, JobDefinitionJson.mapper().writerWithDefaultPrettyPrinter().writeValueAsString(
                     Map.of("task_id", "D105", "dataset_count", datasets.definitions().size(),

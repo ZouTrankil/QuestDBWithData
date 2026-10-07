@@ -1,4 +1,11 @@
 package com.zoutrankil.data.service;
+import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
+
+import com.zoutrankil.data.stock.application.StockBasicJobService;
+import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
+import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
 
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
@@ -30,7 +37,7 @@ class StockDetailGroupLiveTest {
                     .map(c->c.storageName()+" "+c.storageType().name()).toList())+")");
             String backup=null;boolean verified=false;
             try {
-                var owner=new StockDetailInfoJobService(ctx.getBean(TusharePageService.class),jdbc,ledgerPath,target);
+                var owner=new StockDetailInfoJobService(ctx.getBean(TusharePageService.class),new QuestDbStockDetailTarget(jdbc,target),ledgerPath);
                 var jobs=ctx.getBean(SyncJobRegistry.class);
                 var groups=new StockBasicGroupService(jobs,ctx.getBean(StockBasicJobService.class),
                         ctx.getBean(ExchangeCalendarJobService.class),owner,ledgerPath.toString());

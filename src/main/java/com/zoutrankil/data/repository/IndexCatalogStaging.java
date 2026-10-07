@@ -45,9 +45,9 @@ public final class IndexCatalogStaging {
         if(!batch.isEmpty()) batches.add(List.copyOf(batch));
         String stage="java_index_catalog_stage_"+UUID.randomUUID().toString().replace("-","");
         Files.createDirectories(evidence);
-        Files.writeString(evidence.resolve(stage+"-intent.json"),JobDefinitionJson.mapper().writeValueAsString(
+        FileEvidenceStore.writeNewUtf8(evidence.resolve(stage+"-intent.json"),JobDefinitionJson.mapper().writeValueAsString(
                 Map.of("stage",stage,"before",prepared.before(),"rows",prepared.rows(),"batches",batches.size(),
-                        "maxBatchRows",250,"estimatedBatchBytes",256*1024)),StandardOpenOption.CREATE_NEW);
+                        "maxBatchRows",250,"estimatedBatchBytes",256*1024)));
         var columns=IndexCatalogDataset.DEFINITION.columns();
         jdbc.execute("CREATE TABLE "+stage+" ("+String.join(",",columns.stream()
                 .map(c->c.storageName()+" "+c.storageType().name()).toList())+") timestamp(import_time) PARTITION BY MONTH WAL");
@@ -82,9 +82,9 @@ public final class IndexCatalogStaging {
         check(cancelled);var actual=new IndexCatalogStorage(jdbc,stage).snapshot();
         if(!prepared.rows().equals(actual.rows())) throw new IllegalStateException("Catalog stage full-row mismatch; retain stage");
         Path receipt=evidence.resolve(stage+"-verified.json");
-        Files.writeString(receipt,JobDefinitionJson.mapper().writeValueAsString(Map.of("stage",stage,"snapshot",actual,
+        FileEvidenceStore.writeNewUtf8(receipt,JobDefinitionJson.mapper().writeValueAsString(Map.of("stage",stage,"snapshot",actual,
                 "inserted",prepared.merge().inserted(),"revised",prepared.merge().revised(),
-                "retainedAbsent",prepared.merge().retainedAbsent(),"batches",batches.size())),StandardOpenOption.CREATE_NEW);
+                "retainedAbsent",prepared.merge().retainedAbsent(),"batches",batches.size())));
         return new Verified(stage,actual,receipt.toString(),batches.size());
     }
     private static void check(BooleanSupplier cancelled) {

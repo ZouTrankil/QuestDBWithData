@@ -6,7 +6,7 @@ import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.IndexMonthly;
 import com.zoutrankil.data.domain.IndexMonthlyKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-import com.zoutrankil.data.service.IndexMonthlyUniverse;
+import com.zoutrankil.data.domain.policy.IndexMonthlyUniverse;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;

@@ -5,7 +5,7 @@ import com.zoutrankil.data.domain.MarginSecs;
 import com.zoutrankil.data.domain.MarginSecsDataset;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
-import com.zoutrankil.data.repository.ExchangeCalendarReadRepository;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.repository.MarginSecsStorage;
 import com.zoutrankil.data.repository.MarginSecsWritePort;
 import com.zoutrankil.data.repository.SyncRunLedger;

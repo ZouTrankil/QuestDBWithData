@@ -1,5 +1,6 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.L2IntradayBarFeatures;
@@ -73,8 +74,7 @@ public final class L2IntradayBarFeaturesParquetSource {
     public Path datasetRoot() { return datasetRoot; }
 
     public String sourceRootIdentity() throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
-                .digest(datasetRoot.toRealPath().toString().getBytes(StandardCharsets.UTF_8)));
+        return FileEvidenceStore.sha256(datasetRoot.toRealPath().toString().getBytes(StandardCharsets.UTF_8));
     }
 
     public Inspection inspect(LocalDate from, LocalDate to, List<String> symbols,

@@ -86,11 +86,10 @@ public final class ThsMemberPreparedWriteAdapter implements WriteGroupMemberAdap
         var typed = materialize();
         Path folder = evidenceRoot.resolve(child); Files.createDirectories(folder);
         Path receipt = folder.resolve(member.memberId() + "-prepared-input.json");
-        Files.writeString(receipt, JobDefinitionJson.mapper().writeValueAsString(Map.of(
+        FileEvidenceStore.writeNewUtf8(receipt,JobDefinitionJson.mapper().writeValueAsString(Map.of(
                 "sourceKind", "prepared-write-request", "memberId", member.memberId(),
                 "batchId", member.batchId(), "targetId", member.targetId(), "board", board,
-                "fingerprint", member.batch().fingerprint(), "rows", member.batch().rows())),
-                StandardOpenOption.CREATE_NEW);
+                "fingerprint", member.batch().fingerprint(), "rows", member.batch().rows())));
         var result = owner.executePrepared(child, parent, actual, typed, receipt);
         return new SyncJobRunner.Result(result.runId(), result.state(), result.sourceRows(),
                 result.verifiedBoardRows(), result.errorCode());

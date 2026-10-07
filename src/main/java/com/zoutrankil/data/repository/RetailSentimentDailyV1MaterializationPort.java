@@ -1,13 +1,17 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
+
+import com.zoutrankil.data.domain.RetailSentimentDailyV1Snapshot;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.RetailSentimentDailyV1;
 import com.zoutrankil.data.service.DailyTradingSessions;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.sql.PreparedStatement;
@@ -30,14 +34,13 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
-import java.util.regex.Pattern;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /** One explicitly enabled native refresh, followed by bounded real QuestDB readback. */
 public final class RetailSentimentDailyV1MaterializationPort
         implements VerifiedBatchExecutor.Port<RetailSentimentDailyV1, LocalDate> {
+    private static final ObjectMapper FIXTURE_JSON = new ObjectMapper();
     public static final String SOURCE = "l2_daily_features";
     public static final String OUTPUT = "mv_retail_sentiment_daily_v1";
     public static final int MAX_WINDOW_DAYS = 31;
@@ -58,26 +61,6 @@ public final class RetailSentimentDailyV1MaterializationPort
             + " SAMPLE BY 1d ALIGN TO CALENDAR";
     public static final String DEFINITION_SHA = sha(normalized(DEFINITION_SQL));
 
-    /** Captures both source and output versions: RANGE may change the output without changing its base checkpoint. */
-    public record Snapshot(long sourceId, String sourceDirectory, long sourceTableTxn,
-                           long sourceSeqTxn, long sourceWriterTxn, boolean sourceSettled,
-                           long mvId, String mvDirectory, long mvTxn, long mvSeqTxn,
-                           long mvWriterTxn, boolean mvSettled, boolean valid, boolean caughtUp,
-                           String definitionSha, String refreshStarted, String refreshFinished,
-                           long refreshBaseTxn, long reportedBaseTxn, String sourcePartition, String viewStatus) {
-        public String sourceVersion() { return sourceId + ":" + sourceSeqTxn; }
-        public boolean sourceUnchanged(Snapshot other) {
-            return other != null && sourceId == other.sourceId
-                    && Objects.equals(sourceDirectory, other.sourceDirectory)
-                    && Objects.equals(sourcePartition, other.sourcePartition)
-                    && sourceTableTxn == other.sourceTableTxn && sourceSeqTxn == other.sourceSeqTxn
-                    && sourceWriterTxn == other.sourceWriterTxn && sourceSettled && other.sourceSettled;
-        }
-        public String stableVersion() {
-            return sourceVersion() + ":" + sourceTableTxn + ":" + mvId + ":" + mvTxn
-                    + ":" + mvSeqTxn + ":" + refreshBaseTxn + ":" + refreshStarted + ":" + refreshFinished;
-        }
-    }
 
     private record Physical(long id, String directory, long txn, boolean suspended, long pendingRows,
                             String partition, boolean wal, boolean dedup) {}
@@ -91,9 +74,9 @@ public final class RetailSentimentDailyV1MaterializationPort
     private final QuestDbProperties properties;
     private final boolean mutationsEnabled;
     private final String expectedTargetId;
-    private Long privateProcessId;
+    private final PrivateQuestDbInstanceAttestor privateInstanceAttestor;
     private LocalDate from, to;
-    private Snapshot frozen, submittedAt, readbackSnapshot, verifiedSnapshot;
+    private RetailSentimentDailyV1Snapshot frozen, submittedAt, readbackSnapshot, verifiedSnapshot;
     private boolean submitted, acknowledged;
     private boolean fullIsolated;
     private List<RetailSentimentDailyV1> submittedRows = List.of();
@@ -113,9 +96,12 @@ public final class RetailSentimentDailyV1MaterializationPort
         if (expectedTargetId != null && !expectedTargetId.matches("questdb-[0-9a-f]{64}"))
             throw new IllegalArgumentException("D098 exact expected physical target identity required");
         this.expectedTargetId = expectedTargetId;
+        this.privateInstanceAttestor = new PrivateQuestDbInstanceAttestor(
+                new PrivateQuestDbInstanceAttestor.Spec("D098", Path.of("var"),
+                        Path.of("var", "d098-isolated-questdb"), 18822, 19010), this::verifyPrivateFixture);
     }
 
-    public Snapshot snapshot() {
+    public RetailSentimentDailyV1Snapshot snapshot() {
         requireSourceSchema();
         requireOutputSchema();
         Metadata first = metadata();
@@ -124,7 +110,7 @@ public final class RetailSentimentDailyV1MaterializationPort
         return snapshot(first);
     }
 
-    private Snapshot snapshot(Metadata state) {
+    private RetailSentimentDailyV1Snapshot snapshot(Metadata state) {
         var source = state.source;
         var output = state.output;
         var sourceWal = state.sourceWal;
@@ -144,18 +130,18 @@ public final class RetailSentimentDailyV1MaterializationPort
         boolean valid = "valid".equalsIgnoreCase(refresh.status) && blank(refresh.reason);
         boolean caughtUp = valid && sourceSettled && outputSettled
                 && refresh.refreshed == sourceWal.sequencer && refresh.base == sourceWal.sequencer;
-        return new Snapshot(source.id, source.directory, source.txn, sourceWal.sequencer, sourceWal.writer,
+        return new RetailSentimentDailyV1Snapshot(source.id, source.directory, source.txn, sourceWal.sequencer, sourceWal.writer,
                 sourceSettled, output.id, output.directory, output.txn, outputWal.sequencer,
                 outputWal.writer, outputSettled, valid, caughtUp, sha(normalized(refresh.sql)),
                 refresh.started, refresh.finished, refresh.refreshed, refresh.base, source.partition, refresh.status);
     }
 
     public String targetId() {
-        Snapshot state = snapshot();
+        RetailSentimentDailyV1Snapshot state = snapshot();
         return "questdb-" + sha(properties.getHost() + ":" + properties.getPgPort() + ":"
                 + properties.getQwpPort() + ":" + properties.getDatabase() + ":" + SOURCE + ":"
-                + state.sourceId + ":" + state.sourceDirectory + ":" + OUTPUT + ":"
-                + state.mvId + ":" + state.mvDirectory + ":" + state.definitionSha);
+                + state.sourceId() + ":" + state.sourceDirectory() + ":" + OUTPUT + ":"
+                + state.mvId() + ":" + state.mvDirectory() + ":" + state.definitionSha());
     }
 
     /** The real calendar has an independent WAL frontier; source settlement does not certify calendar coverage. */
@@ -337,7 +323,7 @@ public final class RetailSentimentDailyV1MaterializationPort
         return count;
     }
 
-    public void bind(LocalDate start, LocalDate end, Snapshot expected) {
+    public void bind(LocalDate start, LocalDate end, RetailSentimentDailyV1Snapshot expected) {
         window(start, end);
         Objects.requireNonNull(expected);
         if (submitted || frozen != null && (!from.equals(start) || !to.equals(end) || !frozen.equals(expected)))
@@ -392,7 +378,7 @@ public final class RetailSentimentDailyV1MaterializationPort
     /** FULL is bounded by the complete physical source, never by a convenient subset. Empty sources are rejected. */
     public FullSourceScope fullSourceScope() {
         requireIsolatedMutation();
-        Snapshot before = snapshot();
+        RetailSentimentDailyV1Snapshot before = snapshot();
         FullSourceScope scope = jdbc.query("SELECT count() AS n,min(ts) AS lo,max(ts) AS hi FROM " + SOURCE, rs -> {
             if (!rs.next()) throw new IllegalStateException("D098 full-source bounds are absent");
             long count = requiredLong(rs, "n");
@@ -415,10 +401,10 @@ public final class RetailSentimentDailyV1MaterializationPort
         if (frozen == null) throw new IllegalStateException("D098 refresh interval is not frozen");
         if (fullIsolated) requireIsolatedMutation();
         else requireAdmittedMutation();
-        Snapshot current = snapshot();
+        RetailSentimentDailyV1Snapshot current = snapshot();
         requireFrozenSource(current);
-        if ((!fullIsolated && !current.valid) || "refreshing".equalsIgnoreCase(current.viewStatus)
-                || !current.sourceSettled || !current.mvSettled)
+        if ((!fullIsolated && !current.valid()) || "refreshing".equalsIgnoreCase(current.viewStatus())
+                || !current.sourceSettled() || !current.mvSettled())
             throw new IllegalStateException("D098 MV is invalid, refreshing or WAL is unsettled");
         if (fullIsolated) {
             FullSourceScope scope = fullSourceScope();
@@ -429,8 +415,8 @@ public final class RetailSentimentDailyV1MaterializationPort
     }
 
     /** The native WAL refresh may visit the whole source; lagging sources therefore have a global work bound. */
-    private void requireFinitePendingRefresh(Snapshot current) {
-        if (current.caughtUp) return;
+    private void requireFinitePendingRefresh(RetailSentimentDailyV1Snapshot current) {
+        if (current.caughtUp()) return;
         var scope = jdbc.queryForMap("SELECT count() AS n,min(ts) AS lo,max(ts) AS hi FROM " + SOURCE);
         long count = ((Number) scope.get("n")).longValue();
         if (count < 0 || count > MAX_SOURCE_ROWS) throw new IllegalStateException("D098 pending native refresh exceeds global source budget");
@@ -475,11 +461,11 @@ public final class RetailSentimentDailyV1MaterializationPort
             throw new IllegalArgumentException("D098 bounded complete date keys required");
         if (submitted && !submittedRows.stream().map(RetailSentimentDailyV1::tradeDate).toList().equals(keys))
             throw new IllegalArgumentException("D098 refresh readback must cover the complete submitted window");
-        Snapshot before = snapshot();
+        RetailSentimentDailyV1Snapshot before = snapshot();
         requireFrozenSource(before);
         requireReadable(before);
         var actual = actual(from, to);
-        Snapshot after = snapshot();
+        RetailSentimentDailyV1Snapshot after = snapshot();
         if (!before.equals(after)) throw new IllegalStateException("D098 output changed during real readback");
         requireFrozenSource(after);
         readbackSnapshot = after;
@@ -492,19 +478,19 @@ public final class RetailSentimentDailyV1MaterializationPort
             return false;
         }
         if (readbackSnapshot == null) return false;
-        Snapshot current = snapshot();
+        RetailSentimentDailyV1Snapshot current = snapshot();
         requireFrozenSource(current);
-        if (!current.equals(readbackSnapshot) || !current.valid || !current.caughtUp) return false;
+        if (!current.equals(readbackSnapshot) || !current.valid() || !current.caughtUp()) return false;
         if (submitted && (!acknowledged || !refreshCompleted(current))) return false;
         verifiedSnapshot = current;
         return true;
     }
 
-    private boolean refreshCompleted(Snapshot current) {
-        boolean ready = submittedAt != null && acknowledged && current.valid && current.caughtUp
-                && frozen.sourceUnchanged(current) && current.mvSettled;
-        return ready && (!fullIsolated || current.mvTxn != submittedAt.mvTxn
-                || !Objects.equals(current.refreshFinished, submittedAt.refreshFinished));
+    private boolean refreshCompleted(RetailSentimentDailyV1Snapshot current) {
+        boolean ready = submittedAt != null && acknowledged && current.valid() && current.caughtUp()
+                && frozen.sourceUnchanged(current) && current.mvSettled();
+        return ready && (!fullIsolated || current.mvTxn() != submittedAt.mvTxn()
+                || !Objects.equals(current.refreshFinished(), submittedAt.refreshFinished()));
         // A caught-up INCREMENTAL can be a no-op. Its unchanged txn is accepted only with complete real value readback.
     }
 
@@ -514,18 +500,18 @@ public final class RetailSentimentDailyV1MaterializationPort
         return false;
     }
     public boolean unresolved() { return submitted && verifiedSnapshot == null; }
-    public Snapshot verifiedSnapshot() { return verifiedSnapshot; }
+    public RetailSentimentDailyV1Snapshot verifiedSnapshot() { return verifiedSnapshot; }
     public Duration visibilityTimeout() { return Duration.ofMinutes(3); }
 
-    private void requireFrozenSource(Snapshot state) {
-        if (!frozen.sourceUnchanged(state) || frozen.mvId != state.mvId
-                || !Objects.equals(frozen.mvDirectory, state.mvDirectory)
-                || !Objects.equals(frozen.definitionSha, state.definitionSha))
+    private void requireFrozenSource(RetailSentimentDailyV1Snapshot state) {
+        if (!frozen.sourceUnchanged(state) || frozen.mvId() != state.mvId()
+                || !Objects.equals(frozen.mvDirectory(), state.mvDirectory())
+                || !Objects.equals(frozen.definitionSha(), state.definitionSha()))
             throw new IllegalStateException("D098 frozen source version, physical identity or definition changed");
     }
 
-    private static void requireReadable(Snapshot state) {
-        if (!state.valid || !state.caughtUp || !state.sourceSettled || !state.mvSettled)
+    private static void requireReadable(RetailSentimentDailyV1Snapshot state) {
+        if (!state.valid() || !state.caughtUp() || !state.sourceSettled() || !state.mvSettled())
             throw new IllegalStateException("D098 MV is invalid, lagging or has unsettled/suspended WAL");
     }
 
@@ -535,7 +521,7 @@ public final class RetailSentimentDailyV1MaterializationPort
         if (!mutationsEnabled || !Set.of("127.0.0.1", "localhost", "::1").contains(properties.getHost())
                 || properties.getPgPort() != 18822 || properties.getQwpPort() != 19010)
             throw new IllegalStateException("D098 mutations require the explicitly enabled local private instance on 18822/19010");
-        attestPrivateProcess();
+        privateInstanceAttestor.attest();
     }
 
     private void requireAdmittedMutation() {
@@ -545,82 +531,14 @@ public final class RetailSentimentDailyV1MaterializationPort
             throw new IllegalStateException("D098 admitted physical target identity differs from the actual instance");
     }
 
-    private void attestPrivateProcess() {
-        if (!System.getProperty("os.name", "").toLowerCase(Locale.ROOT).contains("win"))
-            throw new IllegalStateException("D098 implicit private-instance admission requires Windows process attestation");
-        try {
-            Path root = Path.of("var", "d098-isolated-questdb").toAbsolutePath().normalize().toRealPath();
-            Path workspaceVar = Path.of("var").toAbsolutePath().normalize().toRealPath();
-            if (!root.startsWith(workspaceVar)) throw new IllegalStateException("D098 private data root is outside workspace var");
-            var marker = new ObjectMapper().readTree(root.resolve("d098-fixture.json").toFile());
-            if (!"D098".equals(marker.path("task_id").asText())
-                    || !root.equals(Path.of(marker.path("data_root").asText("")).toAbsolutePath().normalize().toRealPath())
-                    || !marker.path("fixture_tables").isArray() || marker.path("fixture_tables").size() != 2
-                    || !Set.of(SOURCE, OUTPUT).equals(Set.of(marker.path("fixture_tables").get(0).asText(),
-                            marker.path("fixture_tables").get(1).asText())))
-                throw new IllegalStateException("D098 private fixture marker differs from the admitted source and MV");
-            var config = new LinkedHashMap<String, String>();
-            for (String line : Files.readAllLines(root.resolve("conf/server.conf"), StandardCharsets.UTF_8)) {
-                String text = line.replace("\uFEFF", "").trim();
-                int equal = text.indexOf('=');
-                if (equal > 0 && !text.startsWith("#")) config.put(text.substring(0, equal).trim(), text.substring(equal + 1).trim());
-            }
-            if (!"127.0.0.1:19010".equals(config.get("http.net.bind.to"))
-                    || !"127.0.0.1:18822".equals(config.get("pg.net.bind.to")))
-                throw new IllegalStateException("D098 private data root does not bind the expected loopback listeners");
-            String script = """
-                    $ErrorActionPreference='Stop'
-                    $listeners=@(Get-NetTCPConnection -LocalPort 19010,18822 -State Listen -ErrorAction Stop)
-                    $records=@(foreach($port in @(19010,18822)) {
-                      $matches=@($listeners | Where-Object LocalPort -eq $port)
-                      if($matches.Count -ne 1) { throw 'Ambiguous private listener' }
-                      $listener=$matches[0]
-                      $proc=Get-CimInstance Win32_Process -Filter "ProcessId=$($listener.OwningProcess)"
-                      [pscustomobject]@{port=$port;address=$listener.LocalAddress;pid=$proc.ProcessId;name=$proc.Name;command=$proc.CommandLine}
-                    })
-                    ConvertTo-Json -InputObject $records -Compress
-                    """;
-            Path powershell = Path.of(Objects.requireNonNull(System.getenv("SystemRoot")),
-                    "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
-            Process process = new ProcessBuilder(powershell.toString(), "-NoProfile", "-NonInteractive", "-Command", script)
-                    .redirectErrorStream(true).start();
-            if (!process.waitFor(10, TimeUnit.SECONDS)) {
-                process.destroyForcibly();
-                throw new IllegalStateException("D098 private listener attestation timed out");
-            }
-            byte[] output = process.getInputStream().readNBytes(32_769);
-            if (process.exitValue() != 0 || output.length > 32_768)
-                throw new IllegalStateException("D098 private listener attestation failed");
-            var records = new ObjectMapper().readTree(output);
-            if (!records.isArray() || records.size() != 2) throw new IllegalStateException("D098 private listeners differ");
-            Long observedPid = null;
-            var observedPorts = new HashSet<Integer>();
-            var dataRootArgument = Pattern.compile("(?:^|\\s)-d\\s+(?:\"([^\"]+)\"|(\\S+))(?=\\s|$)");
-            for (var record : records) {
-                long processId = record.path("pid").asLong(-1);
-                String name = record.path("name").asText("").toLowerCase(Locale.ROOT);
-                if (!"127.0.0.1".equals(record.path("address").asText()) || processId < 1
-                        || !Set.of("questdb.exe", "java.exe").contains(name)
-                        || observedPid != null && observedPid != processId
-                        || !observedPorts.add(record.path("port").asInt(-1)))
-                    throw new IllegalStateException("D098 private listeners do not belong to one loopback QuestDB process");
-                var argument = dataRootArgument.matcher(record.path("command").asText(""));
-                if (!argument.find()) throw new IllegalStateException("D098 private process has no explicit data root");
-                String directory = argument.group(1) == null ? argument.group(2) : argument.group(1);
-                if (!root.equals(Path.of(directory).toAbsolutePath().normalize().toRealPath()) || argument.find())
-                    throw new IllegalStateException("D098 private process belongs to a different data root");
-                observedPid = processId;
-            }
-            if (!observedPorts.equals(Set.of(19010, 18822))
-                    || privateProcessId != null && !privateProcessId.equals(observedPid))
-                throw new IllegalStateException("D098 private QuestDB process changed during this operation");
-            privateProcessId = observedPid;
-        } catch (InterruptedException cancelled) {
-            Thread.currentThread().interrupt();
-            throw new CancellationException("D098 private listener attestation cancelled");
-        } catch (java.io.IOException failure) {
-            throw new IllegalStateException("Cannot attest D098 private QuestDB data root and process", failure);
-        }
+    private void verifyPrivateFixture(Path root) throws IOException {
+        var marker = FIXTURE_JSON.readTree(root.resolve("d098-fixture.json").toFile());
+        if (!"D098".equals(marker.path("task_id").asText())
+                || !root.equals(Path.of(marker.path("data_root").asText("")).toAbsolutePath().normalize().toRealPath())
+                || !marker.path("fixture_tables").isArray() || marker.path("fixture_tables").size() != 2
+                || !Set.of(SOURCE, OUTPUT).equals(Set.of(marker.path("fixture_tables").get(0).asText(),
+                        marker.path("fixture_tables").get(1).asText())))
+            throw new IllegalStateException("D098 private fixture marker differs from the admitted source and MV");
     }
 
     private Metadata metadata() {

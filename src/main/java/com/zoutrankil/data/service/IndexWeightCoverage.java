@@ -1,5 +1,9 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.repository.FileEvidenceStore;
+
+import com.zoutrankil.data.domain.policy.IndexWeightUniverse;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition;
@@ -7,7 +11,6 @@ import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -88,7 +91,7 @@ public final class IndexWeightCoverage {
                 Path receiptPath = requireWithin(evidence, root);
                 if (!fingerprint.matches("[0-9a-f]{64}") || Files.size(receiptPath) > MAX_RECEIPT_BYTES)
                     throw new IllegalStateException("D021 snapshot receipt exceeds cap or has invalid SHA-256");
-                byte[] receiptBytes = Files.readAllBytes(receiptPath);
+                byte[] receiptBytes = FileEvidenceStore.readBounded(receiptPath, MAX_RECEIPT_BYTES, () -> new IllegalStateException("D021 snapshot receipt exceeds cap or has invalid SHA-256"));
                 if (!fingerprint.equals(sha256(receiptBytes))) throw new IllegalStateException("D021 source receipt SHA-256 differs from ledger");
                 JsonNode receipt = JobDefinitionJson.mapper().readTree(receiptBytes);
                 String code = receipt.path("indexCode").asText("");
@@ -106,7 +109,7 @@ public final class IndexWeightCoverage {
                             .toString(), root);
                     if (Files.size(raw) > IndexWeightSource.MAX_XLS_BYTES)
                         throw new IllegalStateException("D021 raw workbook exceeds bounded evidence size");
-                    byte[] rawBytes = Files.readAllBytes(raw);
+                    byte[] rawBytes = FileEvidenceStore.readBounded(raw, IndexWeightSource.MAX_XLS_BYTES, () -> new IllegalStateException("D021 raw workbook exceeds bounded evidence size"));
                     if (rawBytes.length > IndexWeightSource.MAX_XLS_BYTES
                             || rawBytes.length != receipt.path("rawBytes").asInt(-1)
                             || !receipt.path("rawSha256").asText().equals(sha256(rawBytes)))
@@ -143,6 +146,6 @@ public final class IndexWeightCoverage {
         return candidate;
     }
     private static String sha256(byte[] bytes) throws Exception {
-        return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        return FileEvidenceStore.sha256(bytes);
     }
 }

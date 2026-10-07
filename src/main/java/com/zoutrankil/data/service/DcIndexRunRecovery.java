@@ -31,7 +31,7 @@ public final class DcIndexRunRecovery {
         var params=request.parameters();String logical=Objects.toString(params.get("targetId"),""),physical=Objects.toString(params.get("physicalTargetId"),"");
         if(!run.targetId().equals(logical)||!logical.equals(DcIndexTargetIdentity.logical(jdbc,table)))throw new IllegalStateException("D023 stage-only run is outside the frozen logical target");
         var dates=DcIndexSyncAdapter.decodeDates(request);Path evidenceRoot=ledgerPath.toAbsolutePath().normalize().getParent().resolve("sync-evidence").resolve(runId).toRealPath();
-        Path stageRoot=evidenceRoot.resolve("staging");Path intentPath=findStageIntent(stageRoot,evidenceRoot);JsonNode intent=JobDefinitionJson.mapper().readTree(Files.readAllBytes(intentPath));
+        Path stageRoot=evidenceRoot.resolve("staging");Path intentPath=findStageIntent(stageRoot,evidenceRoot);JsonNode intent=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(intentPath, DcIndexSource.MAX_EVIDENCE_BYTES, () -> new IllegalStateException("D023 recovery evidence outside run bound")));
         String stage=requiredText(intent,"stage");if(!stage.matches("java_dc_index_stage_[0-9a-f]{32}")||!"dc_index".equals(intent.path("dataset").asText())
                 ||!table.equals(intent.path("target").asText())||!runId.equals(intent.path("runId").asText())||!logical.equals(intent.path("logicalTargetId").asText())
                 ||!physical.equals(intent.path("physicalTargetBefore").asText())
@@ -72,7 +72,7 @@ public final class DcIndexRunRecovery {
             Path outside=stageRoot.resolve(stage+"-outside-verified.json");if(Files.isSymbolicLink(outside)||!Files.isRegularFile(outside,LinkOption.NOFOLLOW_LINKS)
                     ||Files.size(outside)>DcIndexSource.MAX_EVIDENCE_BYTES||!outside.toRealPath().startsWith(evidenceRoot))
                 throw new IllegalStateException("D023 stage-only outside-snapshot receipt is absent or oversized");
-            JsonNode outsideProof=JobDefinitionJson.mapper().readTree(Files.readAllBytes(outside));String currentStagePhysical=DcIndexStorage.physicalTargetId(jdbc,stage,stageSnapshot.identity());
+            JsonNode outsideProof=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(outside, DcIndexSource.MAX_EVIDENCE_BYTES, () -> new IllegalStateException("D023 recovery evidence outside run bound")));String currentStagePhysical=DcIndexStorage.physicalTargetId(jdbc,stage,stageSnapshot.identity());
             var expectedOutside=DcIndexStorage.outside(before.rows(),request.from(),request.to().plusDays(1));
             byte[] outsideBytes=DcIndexStorage.canonical(expectedOutside);
             if(!"dc_index".equals(outsideProof.path("dataset").asText())||!stage.equals(outsideProof.path("stage").asText())||outsideProof.path("dedup").asBoolean(true)
@@ -95,9 +95,9 @@ public final class DcIndexRunRecovery {
             body.put("stageReceipt",completeStage.receipt());body.put("snapshotProof",DcIndexStaging.snapshotProof(completeStage.snapshot()));body.put("dedup",false);body.put("sourceComplete",true);body.put("complete",true);
             byte[] manifest=JobDefinitionJson.mapper().writeValueAsBytes(body);
             if(Files.exists(complete,LinkOption.NOFOLLOW_LINKS)){if(Files.isSymbolicLink(complete)||!Files.isRegularFile(complete,LinkOption.NOFOLLOW_LINKS)
-                        ||Files.size(complete)>DcIndexSource.MAX_EVIDENCE_BYTES||!JobDefinitionJson.mapper().readTree(Files.readAllBytes(complete)).equals(JobDefinitionJson.mapper().valueToTree(body)))
+                        ||Files.size(complete)>DcIndexSource.MAX_EVIDENCE_BYTES||!JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(complete, DcIndexSource.MAX_EVIDENCE_BYTES, () -> new IllegalStateException("D023 recovery evidence outside run bound"))).equals(JobDefinitionJson.mapper().valueToTree(body)))
                     throw new IllegalStateException("D023 existing completion manifest conflicts with recovered stage proof");}
-            else Files.write(complete,manifest,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);
+            else FileEvidenceStore.writeNew(complete,manifest);
             var locks=new DatasetIntervalLock(ledgerPath);var scope=new DatasetIntervalLock.Scope("dc_index",request.from(),request.to());var lease=locks.findOwned(runId,scope);
             if(lease==null)throw new IllegalStateException("D023 stage-only recovery lost its frozen interval lease");if(!lease.inDoubt()){locks.retainInDoubt(lease);lease=locks.findOwned(runId,scope);}
             if(lease==null||!lease.inDoubt())throw new IllegalStateException("D023 stopped stage-only run could not retain its interval lease");
@@ -118,7 +118,7 @@ public final class DcIndexRunRecovery {
         if(!from.toString().equals(scope.path("fromInclusive").asText())||!to.toString().equals(scope.path("toInclusive").asText())
                 ||!run.targetId().equals(scope.path("logicalTargetId").asText())||!table.equals(intent.target()))throw new IllegalStateException("D023 recovered publication scope differs from saved request");
         Path evidenceRoot=ledgerPath.toAbsolutePath().normalize().getParent().resolve("sync-evidence").resolve(runId).toRealPath();
-        Path complete=safeEvidence(evidenceRoot,scope.path("completeEvidence").asText());byte[] completeBytes=Files.readAllBytes(complete);
+        Path complete=safeEvidence(evidenceRoot,scope.path("completeEvidence").asText());byte[] completeBytes=FileEvidenceStore.readBounded(complete, DcIndexSource.MAX_EVIDENCE_BYTES, () -> new IllegalStateException("D023 recovery evidence outside run bound"));
         if(!sha(completeBytes).equals(scope.path("completeEvidenceSha256").asText()))throw new IllegalStateException("D023 complete receipt SHA differs from publication intent");
         JsonNode proof=json.readTree(completeBytes);if(!proof.path("complete").asBoolean(false)||!proof.path("sourceComplete").asBoolean(false)
                 ||proof.path("dedup").asBoolean(true)||!intent.stage().equals(proof.path("stage").asText())
@@ -145,8 +145,8 @@ public final class DcIndexRunRecovery {
         String physicalAfter=DcIndexStorage.physicalTargetId(jdbc,table,actual.identity());
         var publicationProof=new DcIndexPublication.Proof(run.targetId(),params.path("physicalTargetId").asText(),physicalAfter,from,to,rows,actualWindow.size(),combined,actual.fingerprint(),complete.toString(),true,true);
         Path publicationPath=evidenceRoot.resolve("publication-window.json");var publicationBytes=json.writeValueAsBytes(publicationProof);
-        if(Files.exists(publicationPath)){if(!Arrays.equals(Files.readAllBytes(publicationPath),publicationBytes))throw new IllegalStateException("Existing D023 publication proof differs from recovered journal");}
-        else Files.write(publicationPath,publicationBytes,StandardOpenOption.CREATE_NEW);
+        if(Files.exists(publicationPath)){if(!Arrays.equals(FileEvidenceStore.readBounded(publicationPath, Math.max(1, publicationBytes.length), () -> new IllegalStateException("Existing D023 publication proof differs from recovered journal")),publicationBytes))throw new IllegalStateException("Existing D023 publication proof differs from recovered journal");}
+        else FileEvidenceStore.writeNew(publicationPath,publicationBytes);
         String readback="questdb-full-snapshot:"+actual.fingerprint();Map<String,Object> verification=Map.of("passed",true,"writerStopped",true,"expectedRows",rows,"actualRows",rows,
                 "matchedRows",rows,"mismatchedRows",0,"duplicateKeys",0,"missingKeys",0,"readbackEvidence",readback,"sourceFingerprint",combined);
         Map<String,Object> completionEvidence=Map.of("sourceComplete",true,"returnedRows",rows,"submittedRows",rows,
@@ -204,5 +204,5 @@ public final class DcIndexRunRecovery {
     }
     private static List<LocalDate> decodeDates(String value,LocalDate from,LocalDate to){var dates=Arrays.stream(value.split(",",-1)).map(s->LocalDate.parse(s,java.time.format.DateTimeFormatter.BASIC_ISO_DATE)).toList();if(dates.isEmpty()||dates.size()>5||dates.stream().distinct().count()!=dates.size()||!dates.equals(dates.stream().sorted().toList())||dates.stream().anyMatch(d->d.isBefore(from)||d.isAfter(to)))throw new IllegalStateException("D023 frozen trade-date list invalid");return dates;}
     private static String combine(List<String> values)throws Exception{var d=MessageDigest.getInstance("SHA-256");for(String v:values){d.update(v.getBytes(java.nio.charset.StandardCharsets.UTF_8));d.update((byte)0);}return HexFormat.of().formatHex(d.digest());}
-    private static String sha(byte[] bytes)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));}
+    private static String sha(byte[] bytes)throws Exception{return FileEvidenceStore.sha256(bytes);}
 }

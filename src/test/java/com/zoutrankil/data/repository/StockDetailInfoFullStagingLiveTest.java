@@ -1,8 +1,11 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.stock.storage.StockDetailInfoStaging;
+import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
+
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.service.StockDetailInfoDiscovery;
+import com.zoutrankil.data.stock.application.StockDetailInfoDiscovery;
 import com.zoutrankil.data.service.TusharePageService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;

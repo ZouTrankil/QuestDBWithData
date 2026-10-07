@@ -28,7 +28,7 @@ public final class MoneyflowHsgtRunRecovery {
   if(Files.isSymbolicLink(stageRoot)||!Files.isDirectory(stageRoot))throw new IllegalStateException("D027 stage folder invalid");
   Path intentFile=null;try(var files=Files.newDirectoryStream(stageRoot,"*-intent.json")){for(Path p:files){if(intentFile!=null)throw new IllegalStateException("D027 stage intent ambiguous");intentFile=p;}}
   if(intentFile==null||Files.isSymbolicLink(intentFile)||!Files.isRegularFile(intentFile)||Files.size(intentFile)>4*1024*1024||!intentFile.toRealPath().startsWith(root))throw new IllegalStateException("D027 bounded owned intent required");
-  JsonNode intent=json.readTree(Files.readAllBytes(intentFile));String stage=intent.path("stage").asText();
+  JsonNode intent=json.readTree(FileEvidenceStore.readBounded(intentFile, 4 * 1024 * 1024, () -> new IllegalStateException("D027 bounded owned intent required")));String stage=intent.path("stage").asText();
   if(!stage.matches("java_d027_moneyflow_hsgt_stage_[0-9a-f]{32}")||!"READY".equals(intent.path("phase").asText())||!"moneyflow_hsgt".equals(intent.path("dataset").asText())||intent.path("dedup").asBoolean(true)
     ||!runId.equals(intent.path("runId").asText())||!table.equals(intent.path("target").asText())||!saved.targetId().equals(intent.path("logicalTargetId").asText())
     ||!fingerprint.equals(intent.path("requestFingerprint").asText())||!request.from().toString().equals(intent.path("windowFrom").asText())||!request.to().toString().equals(intent.path("windowTo").asText())
