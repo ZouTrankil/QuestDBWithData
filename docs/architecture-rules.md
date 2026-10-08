@@ -4,21 +4,23 @@
 
 主应用入口为 `com.zoutrankil.data.QuestDataApplication`，包含 CLI 和 Web 两种模式。
 批处理入口为 `com.zoutrankil.batch.BatchApplication`，使用独立启动配置。
-Gradle 工程由 `data-core`、`data-app`、`batch-app` 三个模块组成。根工程保留聚合测试、根级契约、架构检查和发行包装配，不承载生产 Java 源码。
+Gradle 工程由 `data-core`、`data-app`、`batch-app` 三个基础模块及 `main-strategy-runtime` 组合模块组成。根工程保留聚合测试、根级契约、架构检查和发行包装配，不承载生产 Java 源码。
 
 ```mermaid
 flowchart TD
     Core[data-core: 共享模型与基础契约]
     Data[data-app: 主数据应用 / CLI / Web]
     Batch[batch-app: 批处理应用]
+    Strategy[main-strategy-runtime: 主策略日批组合与 Web 适配]
     Root[根工程: 聚合检查与发行包]
     Data --> Core
     Batch --> Core
-    Root --> Data
-    Root --> Batch
+    Strategy --> Data
+    Strategy --> Batch
+    Root --> Strategy
 ```
 
-主应用和批处理应用相互独立，只通过 `data-core` 中稳定的共享类型协作。模块测试资源随所属模块进入测试运行时；明确共享的资源由资源归属检查维护。批处理 JDBC 驱动由发行包检查限定在批处理分发物中。完整离线验收运行 `check`；live 数据源、生产数据库和保留状态恢复验收须作为单独的运行环境门禁。
+`data-app` 与 `batch-app` 各自只依赖 `data-core`。需要在 Web 主应用中组合两侧功能时，依赖方向由 `main-strategy-runtime` 单向指向两个基础应用；该模块只进入 Web 发行包，批处理独立发行包不包含主应用类。模块测试资源随所属模块进入测试运行时；明确共享的资源由资源归属检查维护。批处理 JDBC 驱动由发行包检查限定在批处理分发物中。完整离线验收运行 `check`；live 数据源、生产数据库和保留状态恢复验收须作为单独的运行环境门禁。
 
 | 包/层 | 职责 | 允许的主要依赖 |
 | --- | --- | --- |

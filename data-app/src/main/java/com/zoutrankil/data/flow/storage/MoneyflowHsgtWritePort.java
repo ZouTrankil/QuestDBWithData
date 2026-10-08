@@ -60,10 +60,10 @@ public final class MoneyflowHsgtWritePort implements MoneyflowHsgtWriteSession {
         this.jdbc.setQueryTimeout(20); this.jdbc.setMaxRows(MAX_BATCH_ROWS + 1);
         this.questdb = Objects.requireNonNull(questdb);
     }
-    /** Bind only to the journal-owned, same-schema non-DEDUP stage for the current run. */
+    /** Bind only to the journal-owned stage with the original target's exact schema and layout. */
     public synchronized void useStage(String stage, String stageId) {
         MoneyflowHsgtDataset.requireIsolatedTable(stage);
-        if (!stage.contains("_stage_") || stageId == null || !stageId.matches("static-v2-[0-9a-f]{64}")
+        if (!stage.matches("java_d027_moneyflow_hsgt_stage_[0-9a-f]{32}") || stageId == null || !stageId.matches("static-v2-[0-9a-f]{64}")
                 || stageId.equals(frozenTargetId)) throw new IllegalArgumentException("D027 verified stage identity required");
         writeTable = stage; writeTargetId = stageId;
     }
@@ -71,7 +71,7 @@ public final class MoneyflowHsgtWritePort implements MoneyflowHsgtWriteSession {
     public String stageTable() { return writeTable; }
     @Override public void preflight() {
         requireWriteTarget();
-        QuestDbWriteChecks.preflight(jdbc, writeTable, MoneyflowHsgtDataset.admittedWriteDefinition(writeTable));
+        QuestDbWriteChecks.preflight(jdbc, writeTable, MoneyflowHsgtDataset.publicationWriteDefinition(writeTable,formalTable));
         requireWriteTarget();
     }
     @Override public void send(List<MoneyflowHsgt> rows) throws Exception {
@@ -79,7 +79,7 @@ public final class MoneyflowHsgtWritePort implements MoneyflowHsgtWriteSession {
             throw new IllegalArgumentException("D027 requires 1..250 row batches");
         if (writeTable.equals(formalTable)) throw new IllegalStateException("D027 direct writes are forbidden; bind a full-snapshot stage first");
         preflight(); senderStopped = false;
-        DatasetWritePreparation.prepareWalReplace(MoneyflowHsgtDataset.isolatedWriteDefinition(writeTable), rows,
+        DatasetWritePreparation.prepareWalReplace(MoneyflowHsgtDataset.publicationWriteDefinition(writeTable,formalTable), rows,
                 mapper::values, new DatasetWritePreparation.Limits(MAX_BATCH_ROWS, MAX_BATCH_BYTES));
         long bytes = 0;
         for (var row : rows) {

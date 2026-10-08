@@ -1,0 +1,173 @@
+{
+  "observed_at": "2026-10-07T23:13:09.5954840+08:00",
+  "read_only": true,
+  "ddl_executed": 0,
+  "database_writes": 0,
+  "production_jobs_started": 0,
+  "tests_added_or_run": 0,
+  "java_modified": false,
+  "questdb_build": "Build Information: QuestDB 10.0.1, JDK 25.0.2, Commit Hash 7a391566ac827e0d8c269b91f2415c16b0a32a84",
+  "object_name": "v_backtest_daily",
+  "actual_kind": "VIEW",
+  "view_id": 1780,
+  "view_valid": true,
+  "native_mv": false,
+  "view_0930": {
+    "rows": 5571,
+    "unique_keys": 5571,
+    "suspended_rows": 12
+  },
+  "fields": 13,
+  "business_key": [
+    "trade_date",
+    "ts_code"
+  ],
+  "source_tables": [
+    "stk_factor",
+    "stk_limit",
+    "stk_suspend",
+    "stk_st_daily"
+  ],
+  "top_level_shape": "two row projections UNION ALL; LEFT JOIN plus grouped suspension; ASOF fallback path; no outer time aggregation",
+  "direct_native_mv_supported": false,
+  "reason": "Official QuestDB 10.0.1 creation validator requires a SAMPLE BY or timestamp_floor-based grouped interval, WAL base and designated timestamp for every refresh mode; nested suspension grouping does not satisfy the whole row-enrichment definition.",
+  "union_blanket_unsupported_asserted": false,
+  "full_only_arbitrary_query_exception": false,
+  "recommended_path": "Reuse existing backtest_daily composite-key materialized table and canonical Java SQL window job; retain v_backtest_daily 13-column alias and formal read guards. Explicitly describe this as table materialization, not native MV.",
+  "strict_native_mv_alternative": "First publish complete unique(date,code) rows into existing backtest_daily; then an explicitly verified per-stock daily singleton aggregate native MV, read by v_backtest_daily alias. Extra storage/refresh stage; not installed or validated in this audit.",
+  "existing_native_mvs": [
+    [
+      "mv_market_breadth_daily_v1",
+      "timer",
+      "stk_factor",
+      null,
+      "2026-09-21T23:56:50.310426Z",
+      "SELECT\n    trade_date,\n    count() AS stock_count,\n    sum(CASE WHEN pct_change > 0 THEN 1 ELSE 0 END) AS up_count,\n    sum(CASE WHEN pct_change < 0 THEN 1 ELSE 0 END) AS down_count,\n    sum(CASE WHEN pct_change = 0 THEN 1 ELSE 0 END) AS flat_count,\n    avg(pct_change) AS avg_pct_change,\n    sum(amount) / 100000.0 AS total_amount_yi\nFROM stk_factor\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "mv_market_breadth_daily_v1~1812",
+      "materialized view is ahead of base table and cannot be synchronized",
+      "invalid",
+      null,
+      12,
+      156,
+      0,
+      null,
+      null,
+      "2026-09-18T15:32:22.866888Z",
+      1,
+      "MINUTE",
+      0,
+      null,
+      0,
+      null,
+      0,
+      0,
+      0,
+      2000000
+    ],
+    [
+      "mv_retail_sentiment_daily_v1",
+      "timer",
+      "l2_daily_features",
+      null,
+      "2026-09-21T23:56:50.310362Z",
+      "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "mv_retail_sentiment_daily_v1~1813",
+      "materialized view is ahead of base table and cannot be synchronized",
+      "invalid",
+      null,
+      10206,
+      11386,
+      0,
+      null,
+      null,
+      "2026-09-18T15:32:22.955712Z",
+      1,
+      "MINUTE",
+      0,
+      null,
+      0,
+      null,
+      0,
+      0,
+      0,
+      2000000
+    ]
+  ],
+  "existing_aliases": [
+    [
+      "v_retail_sentiment_daily",
+      "SELECT * FROM mv_retail_sentiment_daily_v1",
+      "valid",
+      null
+    ],
+    [
+      "v_market_breadth_daily",
+      "SELECT * FROM mv_market_breadth_daily_v1",
+      "valid",
+      null
+    ]
+  ],
+  "existing_materialized_tables": [
+    [
+      1757,
+      "backtest_daily",
+      10355884,
+      17,
+      "2026-09-17T00:00:00Z",
+      "DAY",
+      true,
+      true,
+      false,
+      "T"
+    ],
+    [
+      1914,
+      "backtest_daily_cache",
+      11916956,
+      836,
+      "2026-09-30T00:00:00Z",
+      "MONTH",
+      true,
+      true,
+      false,
+      "T"
+    ],
+    [
+      1915,
+      "backtest_daily_cache_coverage",
+      2155,
+      792,
+      "2026-09-30T00:00:00Z",
+      "MONTH",
+      true,
+      true,
+      false,
+      "T"
+    ]
+  ],
+  "critical_constraints": [
+    "Preserve 13 fields, complete composite key, is_suspended LONG and is_st INT.",
+    "Preserve no-factor suspension rows, prior-close ASOF, source units and NULL semantics.",
+    "ASOF source pin includes prior price history, not only current date partitions.",
+    "Existing NativeDailyWindowWritePort is day-only, 10000-row snapshot, MONTH/nonDEDUP: cannot directly handle this data.",
+    "Current breadth/retail MVs invalid; exact aliases can be valid while their MVs invalid; guard must still reject.",
+    "Coordinate Python existing CREATE OR REPLACE installer so it cannot silently revert the new materialized alias.",
+    "Versioned cache/coverage already exists; preserve provenance and source-generation digest contract.",
+    "Use existing runner/batch/locks/publication journal; all-key/field readback and WAL settled checks before publishing.",
+    "Window replacement must remove obsolete keys; ordinary UPSERT alone cannot remove vanished source rows.",
+    "Do not use last/max aggregation to hide upstream duplicates or treat REFRESH acknowledgement/maxDate as completeness."
+  ],
+  "official_sources": [
+    "https://questdb.com/docs/query/sql/create-mat-view/",
+    "https://questdb.com/docs/query/sql/refresh-mat-view/",
+    "https://questdb.com/docs/concepts/materialized-views/",
+    "https://github.com/questdb/questdb/blob/10.0.1/core/src/main/java/io/questdb/griffin/engine/ops/CreateMatViewOperationImpl.java#L373-L435",
+    "https://questdb.com/blog/questdb-9-release/"
+  ],
+  "evidence": {
+    "object_metadata": "artifacts/backtest-mv-audit/20261007/object-readonly.json",
+    "object_metadata_sha256": "9227756aa5b15902ece5e2b287102fb4e5a6e78c3d00b9bbe713063921756ac3",
+    "recommendation": "artifacts/backtest-mv-audit/20261007/recommendation.md",
+    "recommendation_sha256": "05ac5061cba8d6087f5e6dc516c7534b161e5dbbca291a5e5642e023bf1bb428"
+  }
+}

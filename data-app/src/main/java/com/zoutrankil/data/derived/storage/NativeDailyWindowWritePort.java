@@ -15,6 +15,8 @@ import java.security.MessageDigest;
 import java.sql.*;
 import java.time.*;
 import java.util.*;
+import java.util.function.BooleanSupplier;
+import java.util.function.BooleanSupplier;
 
 /** Shared typed daily-window staging for MONTH/WAL/non-DEDUP derived record tables.
  * The formal table is never appended, deleted, dropped or altered by this port.
@@ -54,11 +56,44 @@ public final class NativeDailyWindowWritePort<R extends Record> implements Nativ
             throw new IllegalStateException("Incomplete typed daily metadata");
         if(!wal||!"MONTH".equals(item.get("partitionBy"))||!Boolean.FALSE.equals(item.get("dedup"))||!"trade_date".equals(item.get("designatedTimestamp")))
             throw new IllegalStateException("Expected MONTH WAL non-DEDUP daily layout");
-        requireSchema(table);if(!walSettled(table,wal))throw new IllegalStateException("Typed daily WAL unsettled: "+table);
-        var rows=readAll(table);if(!walSettled(table,wal))throw new IllegalStateException("Typed daily WAL changed during snapshot");
+        requireSchema(table);
+        try {awaitPublished(table,id.longValue(),directory,()->false);}
+        catch(InterruptedException interrupted){Thread.currentThread().interrupt();throw new java.util.concurrent.CancellationException("Typed daily snapshot interrupted");}
+        catch(RuntimeException failure){throw failure;}
+        catch(Exception failure){throw new IllegalStateException("Typed daily settlement check failed",failure);}
+        var frontier=walFrontier(table);var rows=readAll(table);
+        var after=jdbc.queryForList("SELECT id,directoryName,walEnabled,partitionBy,dedup,designatedTimestamp FROM tables() WHERE table_name=?",table);
+        if(after.size()!=1||!item.equals(after.getFirst())||!frontier.equals(walFrontier(table))||!walSettled(table,wal))
+            throw new IllegalStateException("Typed daily identity or WAL changed during snapshot");
+        requireSchema(table);
         return new NativeDailyWindowSnapshot<>(StaticTargetIdentity.identify(jdbc,table,id.longValue(),directory),id.longValue(),directory,wal,rows,digest(rows));
     }
     public NativeDailyWindowSnapshot<R> formalSnapshot(){return snapshot(formal);}
+    /** Await only the exact renamed physical object; timeout/cancellation leaves its journal recoverable. */
+    public void awaitPublished(String table,long expectedId,String expectedDirectory,BooleanSupplier cancelled)throws Exception {
+        requireTarget(table,exactFormal,stagePrefix);Objects.requireNonNull(cancelled);
+        if(expectedId<0||expectedDirectory==null||expectedDirectory.isBlank())throw new IllegalArgumentException("Exact publication identity required");
+        long deadline=System.nanoTime()+Duration.ofSeconds(60).toNanos();
+        while(true) {
+            if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new java.util.concurrent.CancellationException("Typed daily publication cancelled");
+            var metadata=jdbc.queryForList("SELECT id,directoryName,walEnabled,partitionBy,dedup,designatedTimestamp FROM tables() WHERE table_name=?",table);
+            if(metadata.size()>1)throw new IllegalStateException("Ambiguous renamed typed daily object");
+            if(metadata.size()==1) {
+                var item=metadata.getFirst();
+                if(!(item.get("id") instanceof Number id)||id.longValue()!=expectedId||!expectedDirectory.equals(item.get("directoryName"))
+                        ||!Boolean.TRUE.equals(item.get("walEnabled"))||!"MONTH".equals(item.get("partitionBy"))
+                        ||!Boolean.FALSE.equals(item.get("dedup"))||!"trade_date".equals(item.get("designatedTimestamp")))
+                    throw new IllegalStateException("Renamed typed daily object differs from exact identity/layout");
+                if(walSettled(table,true)){requireSchema(table);return;}
+            }
+            if(System.nanoTime()>=deadline)throw new IllegalStateException("Renamed typed daily WAL did not settle within 60 seconds: "+table);
+            Thread.sleep(100);
+        }
+    }
+    private Map<String,Object> walFrontier(String table) {
+        var rows=jdbc.queryForList("SELECT writerTxn,sequencerTxn,suspended,bufferedTxnSize FROM wal_tables() WHERE name=?",table);
+        if(rows.size()!=1)throw new IllegalStateException("Exact typed daily WAL frontier required");return rows.getFirst();
+    }
     public void requireSame(NativeDailyWindowSnapshot<R> expected) {
         var current=formalSnapshot();if(!expected.targetId().equals(current.targetId())||!expected.fingerprint().equals(current.fingerprint()))
             throw new IllegalStateException("Typed daily target changed since planning");

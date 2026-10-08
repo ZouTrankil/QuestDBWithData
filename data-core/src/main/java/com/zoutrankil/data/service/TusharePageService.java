@@ -22,7 +22,10 @@ public class TusharePageService {
         return new PageExecutor().execute(contract, baseParams, fetcher(contract, cancelled), consumer, validator, cancelled);
     }
     public PageExecutor.Fetcher fetcher(PageContract contract, BooleanSupplier cancelled) {
-        if (contract.endpoint().equals("namechange")) return params -> fetchNamechange(contract, params, cancelled);
+        // The legacy cursor owner starts at its history anchor. A declared nonpaged annual
+        // request must retain its own start/end parameters and use the existing generic client.
+        if (contract.endpoint().equals("namechange") && contract.paging() == PageContract.Paging.CURSOR)
+            return params -> fetchNamechange(contract, params, cancelled);
         if (contract.paging() == PageContract.Paging.CURSOR || contract.completion() == PageContract.Completion.EXPLICIT_END) {
             throw new IllegalArgumentException("Tushare fields/items wire response has no cursor/end marker; a source-specific adapter is required");
         }

@@ -57,6 +57,15 @@ public final class MoneyflowHsgtSyncAdapter implements SyncJobRunner.Adapter<Mon
         try(MoneyflowHsgtPublication.Operation operation=publication.beginOperation(runId)) {
             check(cancelled);
             String logical=(String)request.parameters().get("targetId"),physical=(String)request.parameters().get("physicalTargetId");
+            // Formal admission proves calendar coverage before any temporary table is created.
+            // Its explicit 31-day bound fits one existing source request.
+            SyncJobRunner.Page<MoneyflowHsgt> formalPage=null;
+            if("moneyflow_hsgt".equals(port.formalTable())){
+                if(java.time.temporal.ChronoUnit.DAYS.between(request.from(),request.to())>=MoneyflowHsgtSource.MAX_RANGE_DAYS)
+                    throw new IllegalArgumentException("Formal northbound request exceeds 31-day source bound");
+                formalPage=source.fetch(request.from(),request.to(),cancelled);
+                requireFormalCalendarCoverage(request.from(),request.to(),formalPage.rows());
+            }
             var prepared=staging.prepare(port.formalTable(),logical,physical,runId,request,runEvidence,cancelled);
             port.useStage(prepared.stage(),prepared.stagePhysicalTarget());
             var collected=new ArrayList<SyncJobRunner.Page<MoneyflowHsgt>>();var seen=new HashSet<MoneyflowHsgtKey>();
@@ -64,8 +73,7 @@ public final class MoneyflowHsgtSyncAdapter implements SyncJobRunner.Adapter<Mon
             while(!from.isAfter(request.to())) {
                 check(cancelled);LocalDate to=from.plusDays(MoneyflowHsgtSource.MAX_RANGE_DAYS-1L);
                 if(to.isAfter(request.to()))to=request.to();
-                var page=source.fetch(from,to,cancelled);
-                if("moneyflow_hsgt".equals(port.formalTable()))requireFormalCalendarCoverage(from,to,page.rows());
+                var page=formalPage==null?source.fetch(from,to,cancelled):formalPage;
                 for(var row:page.rows())if(!seen.add(row.key()))throw new IllegalStateException("D027 duplicate natural trade date across source slices");
                 consumer.accept(page);
                 var actual=port.readWindow(prepared.stage(),from,to);

@@ -1,0 +1,20 @@
+plugins { id 'java-library' }
+
+dependencies {
+    implementation project(':data-app')
+    implementation project(':batch-app')
+    implementation platform('org.springframework.boot:spring-boot-dependencies:4.1.1')
+    implementation 'org.springframework.boot:spring-boot'
+    implementation 'org.springframework.batch:spring-batch-core'
+    implementation 'org.springframework:spring-context-support'
+    implementation 'org.quartz-scheduler:quartz'
+    implementation('org.flywaydb:flyway-core') { version { strictly '11.9.0' } }
+}
+
+// The composition adapter compiles against public types from both independently
+// buildable applications, while each application keeps its runtime dependencies private.
+def data = project(':data-app')
+def batch = project(':batch-app')
+sourceSets.main.compileClasspath += data.sourceSets.main.output + batch.sourceSets.main.output
+sourceSets.main.compileClasspath += data.configurations.compileClasspath + batch.configurations.compileClasspath
+tasks.named('compileJava') { dependsOn data.tasks.named('compileJava'), batch.tasks.named('compileJava') }

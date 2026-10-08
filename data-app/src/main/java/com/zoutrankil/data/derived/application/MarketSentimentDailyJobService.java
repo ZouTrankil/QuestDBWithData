@@ -27,7 +27,7 @@ import java.util.function.BooleanSupplier;
 import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 import static com.zoutrankil.data.domain.policy.MarketSentimentDailyCalculation.*;
 
-/** Explicit native Java rebuild. Reads existing dependency tables; never shells a Python owner. */
+/** Native Java calculation, used by the persistent main-strategy batch and explicit recovery. */
 @Service
 public final class MarketSentimentDailyJobService implements DatasetImplementation,SyncJobOwner {
     public static final String JOB_ID="data.market_sentiment_daily";
@@ -64,9 +64,9 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
         parameters.put("source_pin",new Parameter(ParameterType.STRING,true,64,1,Set.of()));
         parameters.put("target_hash",new Parameter(ParameterType.STRING,true,64,1,Set.of()));
         parameters.put("warmup_from",new Parameter(ParameterType.DATE,true,10,1,Set.of()));
-        return new SyncJobDefinition(JOB_ID,2,"market_sentiment_daily",1,"market_sentiment_daily_owner",Set.of(Mode.MATERIALIZE),Mode.MATERIALIZE,
+        return new SyncJobDefinition(JOB_ID,3,"market_sentiment_daily",1,"market_sentiment_daily_owner",Set.of(Mode.MATERIALIZE),Mode.MATERIALIZE,
                 parameters,"questdb.materialize","market_sentiment_daily.range366","questdb.full_key_values",
-                new RetryPolicy(1,Duration.ofSeconds(1),Duration.ofSeconds(1)),Duration.ofHours(2),new Budget(366,1,1,366,1024*1024),0,List.of(),Frequency.MANUAL,ZoneId.of("Asia/Shanghai"),true,false);
+                new RetryPolicy(1,Duration.ofSeconds(1),Duration.ofSeconds(1)),Duration.ofHours(2),new Budget(366,1,1,366,1024*1024),0,List.of(),Frequency.DAILY,ZoneId.of("Asia/Shanghai"),true,true);
     }
     public Plan plan(LocalDate from,LocalDate to,LocalDate logicalDate)throws Exception{return plan(from,to,logicalDate,Mode.MATERIALIZE);}
     public Plan plan(LocalDate from,LocalDate to,LocalDate logicalDate,Mode mode)throws Exception{
@@ -123,8 +123,8 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
                     JobDefinitionJson.mapper().writeValueAsString(Map.of("from",request.from(),"to",request.to(),"sourceFingerprint",sourceFingerprint,"sourceEvidence",evidence.toString(),"sourceEvidenceSha256",fileHash(evidence))));
             var entry=journal.create(intent);journaled=true;
             try{
-                check(cancelled);target.rename(table,backup);entry=journal.advance(entry,ReferencePublicationJournal.State.OLD_MOVED);
-                check(cancelled);target.rename(port.stage(),table);entry=journal.advance(entry,ReferencePublicationJournal.State.PUBLISHED);
+                check(cancelled);target.rename(table,backup);port.nativePort().awaitPublished(backup,plan.targetBefore.tableId(),plan.targetBefore.directory(),cancelled);entry=journal.advance(entry,ReferencePublicationJournal.State.OLD_MOVED);
+                check(cancelled);target.rename(port.stage(),table);port.nativePort().awaitPublished(table,stage.tableId(),stage.directory(),cancelled);entry=journal.advance(entry,ReferencePublicationJournal.State.PUBLISHED);
                 var published=port.formalSnapshot();var retained=port.snapshot(backup);
                 if(published.tableId()!=stage.tableId()||!published.fingerprint().equals(stage.fingerprint())||retained.tableId()!=plan.targetBefore.tableId()
                         ||!retained.fingerprint().equals(plan.targetBefore.fingerprint()))throw new IllegalStateException("Published sentiment or retained backup differs");
@@ -258,8 +258,8 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
             if(!old.fingerprint().equals(intent.beforeFingerprint())||!replacement.fingerprint().equals(intent.afterFingerprint()))throw new IllegalStateException("Recovery content fingerprint differs");
             if(entry.state()!=ReferencePublicationJournal.State.IN_DOUBT)entry=journal.advance(entry,ReferencePublicationJournal.State.IN_DOUBT);
             entry=journal.advance(entry,ReferencePublicationJournal.State.RESUMING);
-            try{if(targetOld)target.rename(intent.target(),intent.backup());
-                if(!targetNew)target.rename(intent.stage(),intent.target());
+            try{if(targetOld){target.rename(intent.target(),intent.backup());port.nativePort().awaitPublished(intent.backup(),intent.originalId(),intent.originalDirectory(),()->false);}
+                if(!targetNew){target.rename(intent.stage(),intent.target());port.nativePort().awaitPublished(intent.target(),intent.replacementId(),replacement.directory(),()->false);}
                 entry=journal.advance(entry,ReferencePublicationJournal.State.PUBLISHED);
                 var actual=port.formalSnapshot();var backup=port.snapshot(intent.backup());
                 if(actual.tableId()!=intent.replacementId()||backup.tableId()!=intent.originalId()||!actual.fingerprint().equals(intent.afterFingerprint())||!backup.fingerprint().equals(intent.beforeFingerprint()))

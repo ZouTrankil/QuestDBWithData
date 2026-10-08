@@ -1,0 +1,86 @@
+{
+  "observedAtUtc" : "2026-10-07T17:58:52.667694Z",
+  "readOnly" : true,
+  "providerCalls" : 0,
+  "dbWrites" : 0,
+  "status" : "VERIFIED",
+  "runId" : "moneyflow-hsgt-5e761b3b-4f19-4f61-85f7-97fcafd20a1e",
+  "publicationId" : "moneyflow-hsgt-publication-06be7d5d-c55a-419a-843c-97d3a06504a1",
+  "runState" : "VERIFIED",
+  "publicationState" : "VERIFIED",
+  "range" : {
+    "from" : "2026-09-28",
+    "to" : "2026-09-30"
+  },
+  "formal" : {
+    "dedupKeys" : [ "trade_date" ],
+    "clock" : [ [ 3026, "java_d027_moneyflow_hsgt_stage_8f336ba163c0468c8a75ed4af388c411~3026", true, "trade_date", "DAY", 3, 3, false, 0 ] ],
+    "columns" : [ [ "trade_date", "TIMESTAMP", true ], [ "ggt_ss", "DOUBLE", false ], [ "ggt_sz", "DOUBLE", false ], [ "hgt", "DOUBLE", false ], [ "sgt", "DOUBLE", false ], [ "north_money", "DOUBLE", false ], [ "south_money", "DOUBLE", false ] ],
+    "dedup" : true,
+    "table" : "moneyflow_hsgt"
+  },
+  "backup" : {
+    "dedupKeys" : [ "trade_date" ],
+    "clock" : [ [ 1868, "moneyflow_hsgt_stage_20260928_182500_103692~1868", true, "trade_date", "DAY", 5, 5, false, 0 ] ],
+    "columns" : [ [ "trade_date", "TIMESTAMP", true ], [ "ggt_ss", "DOUBLE", false ], [ "ggt_sz", "DOUBLE", false ], [ "hgt", "DOUBLE", false ], [ "sgt", "DOUBLE", false ], [ "north_money", "DOUBLE", false ], [ "south_money", "DOUBLE", false ] ],
+    "dedup" : true,
+    "table" : "java_d027_moneyflow_hsgt_backup_1e56f04bbca6404090e1ed2622a25624"
+  },
+  "stageRenamedToFormal" : true,
+  "stageIdentity" : {
+    "id" : 3026,
+    "directory" : "java_d027_moneyflow_hsgt_stage_8f336ba163c0468c8a75ed4af388c411~3026",
+    "writerTxn" : 2
+  },
+  "stageProofSha256" : "c2190bba62d19b63e71523a7acbf14188e973b8ec4763461dc8cf2dcdd69d54c",
+  "fullRows" : 440,
+  "backupRows" : 440,
+  "fullCanonicalSha256" : "e3e174ca5da5e45df2c23bafcaf7d688b4fbdd9570a433948291c16c775568ba",
+  "backupCanonicalSha256" : "e3e174ca5da5e45df2c23bafcaf7d688b4fbdd9570a433948291c16c775568ba",
+  "outsideRows" : 437,
+  "outsideCanonicalSha256" : "fbdc2f890484fbf7780efe1e6a0136a75e30da30eba54bb7c5b401faf41deb6e",
+  "outsideComparedFieldValues" : 3059,
+  "outsideIeeeExact" : true,
+  "sourceRows" : 3,
+  "sourceComparedFieldValues" : 21,
+  "sourceIeeeExact" : true,
+  "sourceCanonicalSha256" : "f3a1dcf21e7b2d133a4bfdfecff1b285c6c3337d085fa94fc58bc15699f645ff",
+  "sourceReceipts" : [ {
+    "file" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\moneyflow-hsgt-5e761b3b-4f19-4f61-85f7-97fcafd20a1e\\source\\moneyflow-hsgt-20260928-20260930-2631f5475fc3660b8e0ddfbe10ef236166f3083e80955a994d523b05bd687df1.json",
+    "parameters" : {
+      "end_date" : "20260930",
+      "start_date" : "20260928"
+    },
+    "rows" : 3,
+    "sha256" : "2631f5475fc3660b8e0ddfbe10ef236166f3083e80955a994d523b05bd687df1"
+  } ],
+  "duplicateBusinessDates" : 0,
+  "invalidRequiredDatesOrInfiniteValues" : 0,
+  "sourceWindow" : [ {
+    "trade_date" : "2026-09-28",
+    "ggt_ss" : 32341.9,
+    "ggt_sz" : 22966.33,
+    "hgt" : 124113.01,
+    "sgt" : 136389.08,
+    "north_money" : 260502.09,
+    "south_money" : 55308.23
+  }, {
+    "trade_date" : "2026-09-29",
+    "ggt_ss" : 32365.04,
+    "ggt_sz" : 22943.34,
+    "hgt" : 103258.29,
+    "sgt" : 109657.76,
+    "north_money" : 212916.05,
+    "south_money" : 55308.37
+  }, {
+    "trade_date" : "2026-09-30",
+    "ggt_ss" : 32415.98,
+    "ggt_sz" : 22961.03,
+    "hgt" : 101257.88,
+    "sgt" : 106683.74,
+    "north_money" : 207941.62,
+    "south_money" : 55377.01
+  } ],
+  "ledgerEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\hsgt-runtime-ledger.json",
+  "ledgerEvidenceSha256" : "16638b03727eb347086dfb6dd2225e44243645cb10d4bebb7630ddd8aedf7f5c"
+}

@@ -535,6 +535,12 @@ public class NativeDailyWindowPublicationProtocolContractTest {
             if (!expected.targetId().equals(actual.targetId()) || !expected.fingerprint().equals(actual.fingerprint()))
                 throw new IllegalStateException("Physical generation or content changed");
         }
+        public void awaitPublished(String table,long expectedId,String expectedDirectory,java.util.function.BooleanSupplier cancelled) {
+            if(cancelled.getAsBoolean()) throw new java.util.concurrent.CancellationException("Publication observation cancelled");
+            var actual=snapshot(table);
+            if(actual.tableId()!=expectedId||!actual.directory().equals(expectedDirectory))
+                throw new IllegalStateException("Published physical identity differs");
+        }
         public NativeDailyWindowSnapshot<Row> prepare(NativeDailyWindowSnapshot<Row> before, LocalDate from, LocalDate to) {
             requireSame(before);
             writeStage = PREFIX + "_stage_test";

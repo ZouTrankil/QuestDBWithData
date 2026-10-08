@@ -159,20 +159,34 @@ public final class SqliteLedger {
     }
     /** Atomically persists a bounded attempt before its launch side effect. Duplicate Quartz fire IDs cannot claim twice. */
     public OptionalInt claimRecoveryAttempt(String instanceId,String triggerId,Instant now,Duration minimumInterval,int maximumAttempts) {
+        return claimRecoveryAttempt(instanceId,triggerId,now,minimumInterval,maximumAttempts,false);
+    }
+    /** An explicit operator retry skips the existing cooldown, but starts the next automatic cooldown. */
+    public OptionalInt claimMainStrategyOperatorRecoveryAttempt(String instanceId,String triggerId,Instant now,
+                                                               Duration minimumInterval,int maximumAttempts) {
+        if(triggerId==null||!triggerId.startsWith("manual:")||!"main_strategy_daily".equals(request(instanceId).job()))
+            throw new IllegalArgumentException("Explicit main-strategy operator trigger required");
+        if(!Set.of(BusinessState.WAITING_SOURCE,BusinessState.WAITING_UPSTREAM,BusinessState.BLOCKED,BusinessState.PARTIAL).contains(state(instanceId)))
+            return OptionalInt.empty();
+        return claimRecoveryAttempt(instanceId,triggerId,now,minimumInterval,maximumAttempts,true);
+    }
+    private OptionalInt claimRecoveryAttempt(String instanceId,String triggerId,Instant now,Duration minimumInterval,
+                                            int maximumAttempts,boolean operatorRetry) {
         if(triggerId==null||triggerId.isBlank()||triggerId.length()>256||minimumInterval.isNegative()||maximumAttempts<1)
             throw new IllegalArgumentException("Invalid recovery claim");
         return transactions.execute(tx->{
             jdbc.update("INSERT INTO post_close_recovery_attempt(instance_id) VALUES(?) ON CONFLICT(instance_id) DO NOTHING",instanceId);
             int changed=jdbc.update("""
                     UPDATE post_close_recovery_attempt SET attempts=attempts+1,last_attempt_epoch_ms=?,next_attempt_epoch_ms=?
-                    WHERE instance_id=? AND attempts<? AND (next_attempt_epoch_ms IS NULL OR next_attempt_epoch_ms<=?)
+                    WHERE instance_id=? AND attempts<? AND (?=1 OR next_attempt_epoch_ms IS NULL OR next_attempt_epoch_ms<=?)
                       AND NOT EXISTS (SELECT 1 FROM post_close_recovery_trigger t WHERE t.instance_id=? AND t.trigger_id=?)
-                    """,now.toEpochMilli(),now.plus(minimumInterval).toEpochMilli(),instanceId,maximumAttempts,now.toEpochMilli(),instanceId,triggerId);
+                    """,now.toEpochMilli(),now.plus(minimumInterval).toEpochMilli(),instanceId,maximumAttempts,operatorRetry?1:0,now.toEpochMilli(),instanceId,triggerId);
             if(changed!=1)return OptionalInt.empty();
             int attempt=jdbc.queryForObject("SELECT attempts FROM post_close_recovery_attempt WHERE instance_id=?",Integer.class,instanceId);
             jdbc.update("INSERT INTO post_close_recovery_trigger(instance_id,trigger_id,attempt_no,claimed_epoch_ms) VALUES(?,?,?,?)",
                     instanceId,triggerId,attempt,now.toEpochMilli());
             audit(instanceId,"post-close-recovery-claimed",triggerId+":attempt="+attempt);
+            if(operatorRetry)audit(instanceId,"main-strategy-operator-recovery-claimed",triggerId+":attempt="+attempt+":nextAutomaticAttempt="+now.plus(minimumInterval));
             return OptionalInt.of(attempt);
         });
     }
@@ -256,6 +270,50 @@ public final class SqliteLedger {
             result.put(rs.getString(1), BusinessState.valueOf(rs.getString(2)));
         }, id);
         return result;
+    }
+    /** Read one immutable ready certificate without exposing the ledger's JDBC handle. */
+    public Optional<CompletionEvidence> readyStageEvidence(String instanceId,String stage) {
+        return jdbc.query("SELECT evidence_json FROM stage_result WHERE instance_id=? AND stage=? AND business_state IN ('VERIFIED','VERIFIED_EMPTY')",
+                (rs,index) -> Json.read(rs.getString(1),CompletionEvidence.class),instanceId,stage).stream().findFirst();
+    }
+    /** Read all ready certificates for an owner as one immutable snapshot. */
+    public Map<String,CompletionEvidence> readyStageEvidence(String instanceId) {
+        var result=new LinkedHashMap<String,CompletionEvidence>();
+        jdbc.query("SELECT stage,evidence_json FROM stage_result WHERE instance_id=? AND business_state IN ('VERIFIED','VERIFIED_EMPTY')",
+                (org.springframework.jdbc.core.RowCallbackHandler)rs -> result.put(rs.getString(1),Json.read(rs.getString(2),CompletionEvidence.class)),instanceId);
+        return Collections.unmodifiableMap(result);
+    }
+    /** Latest unsuperseded owner revision for a job/date; competing revision branches fail closed. */
+    public Optional<RecoveryCandidate> latestCandidate(String job,LocalDate target) {
+        var rows=jdbc.query("""
+                SELECT b.request_json,b.business_state FROM business_instance b
+                WHERE b.job=? AND b.logical_date=? AND NOT EXISTS
+                  (SELECT 1 FROM business_instance newer WHERE newer.supersedes=b.instance_id)
+                ORDER BY b.created_at DESC,b.instance_id DESC LIMIT 2
+                """,(rs,index) -> new RecoveryCandidate(Json.read(rs.getString(1),RunRequest.class),
+                        BusinessState.valueOf(rs.getString(2))),job,target);
+        if(rows.size()>1) throw new IllegalStateException("Ambiguous unsuperseded revisions for "+job+"/"+target);
+        return rows.stream().findFirst();
+    }
+    /** Install an immutable scheduler definition and return its persisted enabled state. */
+    public boolean installScheduleDefinition(String id,String cron,String zone,String calendarVersion,boolean enabled) {
+        jdbc.update("""
+                INSERT INTO schedule_definition(id,cron,zone,calendar_version,enabled,version)
+                VALUES(?,?,?,?,?,1) ON CONFLICT(id) DO NOTHING
+                """,id,cron,zone,calendarVersion,enabled);
+        var stored=jdbc.queryForMap("SELECT cron,zone,calendar_version,enabled FROM schedule_definition WHERE id=?",id);
+        if(!cron.equals(stored.get("cron"))||!zone.equals(stored.get("zone"))||!calendarVersion.equals(stored.get("calendar_version")))
+            throw new IllegalStateException("Persisted schedule differs from configured definition; explicit schedule migration required");
+        Object value=stored.get("enabled");
+        return value instanceof Boolean flag?flag:value instanceof Number number&&number.intValue()!=0;
+    }
+    public boolean scheduleEnabled(String id) {
+        Object value=jdbc.queryForObject("SELECT enabled FROM schedule_definition WHERE id=?",Object.class,id);
+        return value instanceof Boolean flag?flag:value instanceof Number number&&number.intValue()!=0;
+    }
+    public void setScheduleEnabled(String id,boolean enabled) {
+        if(jdbc.update("UPDATE schedule_definition SET enabled=? WHERE id=?",enabled,id)!=1)
+            throw new IllegalStateException("Schedule definition is absent: "+id);
     }
     public void stage(RunRequest request, String stage, BusinessState state, CompletionEvidence evidence, String reason) {
         if (evidence != null && (!evidence.matches(request, stage) || evidence.state() != state))

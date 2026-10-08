@@ -17,6 +17,7 @@ import java.util.function.BooleanSupplier;
 
 /** Builds and fully reads back an authoritative D011 date-window replacement stage. */
 public final class StockSuspendStaging implements com.zoutrankil.data.stock.port.StockSuspendStagingPort {
+    public static final int MAX_STAGE_EVIDENCE_BYTES = 64 * 1024 * 1024;
     private static final DateTimeFormatter TIMESTAMP_LITERAL=DateTimeFormatter
             .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",Locale.ROOT).withZone(ZoneOffset.UTC);
 
@@ -25,7 +26,7 @@ public final class StockSuspendStaging implements com.zoutrankil.data.stock.port
 
     public StockSuspendStaging(JdbcTemplate source,String target) {
         DatasetDefinition.identifier(target);this.target=target;
-        jdbc=new JdbcTemplate(Objects.requireNonNull(source).getDataSource());jdbc.setQueryTimeout(20);
+        jdbc=new JdbcTemplate(Objects.requireNonNull(source).getDataSource());jdbc.setQueryTimeout(120);
     }
 
     public static Prepared prepare(StockSuspendState.Snapshot before,StockSuspendState.Snapshot current,
@@ -56,7 +57,7 @@ public final class StockSuspendStaging implements com.zoutrankil.data.stock.port
         if(!prepared.equals(replay))throw new IllegalArgumentException("stk_suspend preparation changed before staging");
         String stage="java_stk_suspend_stage_"+UUID.randomUUID().toString().replace("-","");
         Files.createDirectories(evidenceFolder);var json=JobDefinitionJson.mapper();
-        FileEvidenceStore.writeNew(evidenceFolder.resolve(stage+"-intent.json"),json.writeValueAsBytes(Map.of(
+        writeStageEvidence(evidenceFolder.resolve(stage+"-intent.json"),json.writeValueAsBytes(Map.of(
                 "target",target,"stage",stage,"prepared",prepared,"windowSemantics","[fromInclusive,toInclusive]",
                 "sourceRows",prepared.source().size(),"maxRows",StockSuspendStorage.MAX_ROWS,
                 "maxBytes",StockSuspendStorage.MAX_BYTES)));
@@ -88,7 +89,7 @@ public final class StockSuspendStaging implements com.zoutrankil.data.stock.port
         var actual=storage.snapshot();
         if(!actual.rows().equals(prepared.expected()))throw new IllegalStateException("stk_suspend replacement stage full-row readback differs");
         Path receipt=evidenceFolder.resolve(stage+"-verified.json");
-        FileEvidenceStore.writeNew(receipt,json.writeValueAsBytes(Map.of("target",target,"stage",stage,"actual",actual,"batches",batches,
+        writeStageEvidence(receipt,json.writeValueAsBytes(Map.of("target",target,"stage",stage,"actual",actual,"batches",batches,
                 "sourceRows",prepared.source().size(),"windowFrom",prepared.fromInclusive().toString(),"windowTo",prepared.toInclusive().toString(),
                 "preservedOutsideRows",expectedOutside.size())));
         return new Verified(stage,actual,batches,receipt.toString());
@@ -96,6 +97,11 @@ public final class StockSuspendStaging implements com.zoutrankil.data.stock.port
 
     private static String timestampLiteral(LocalDate date) {
         return TIMESTAMP_LITERAL.format(date.atStartOfDay(ZoneOffset.UTC).toInstant());
+    }
+    private static void writeStageEvidence(Path path,byte[] content)throws Exception {
+        if(content.length>MAX_STAGE_EVIDENCE_BYTES)
+            throw new IllegalStateException("stk_suspend stage evidence exceeds 64 MiB");
+        FileEvidenceStore.writeNew(path,content);
     }
     private void awaitWal(String table,BooleanSupplier cancelled)throws Exception {
         long deadline=System.nanoTime()+Duration.ofSeconds(60).toNanos();

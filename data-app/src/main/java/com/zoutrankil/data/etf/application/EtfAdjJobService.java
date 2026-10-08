@@ -100,6 +100,8 @@ public final class EtfAdjJobService {
         Mode mode = requestedMode == null ? definition.defaultMode() : requestedMode;
         if (!definition.supportedModes().contains(mode)) throw new IllegalArgumentException("Unsupported etf_adj mode");
         requireAdmittedMode(mode);
+        if ("etf_adj".equals(table) && requestedThrough != null && requestedThrough.isAfter(completedSourceCeiling))
+            throw new IllegalArgumentException("Formal etf_adj cannot include an incomplete source date");
         if ((mode == Mode.BACKFILL || mode == Mode.RECONCILE) && requestedThrough == null)
             throw new IllegalArgumentException("Bounded etf_adj backfill/reconcile requires explicit --to");
         if (mode == Mode.INCREMENTAL && bootstrapFrom != null

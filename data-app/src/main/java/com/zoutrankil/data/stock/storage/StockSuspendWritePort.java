@@ -101,13 +101,19 @@ public final class StockSuspendWritePort implements com.zoutrankil.data.stock.po
         if (keys.size() > 250 || new HashSet<>(keys).size() != keys.size())
             throw new IllegalArgumentException("At most 250 unique full stock suspension keys per readback");
         var clauses = new ArrayList<String>(); var params = new ArrayList<Object>();
+        LocalDate from=keys.stream().map(StockSuspendKey::tradeDate).min(LocalDate::compareTo).orElseThrow();
+        LocalDate to=keys.stream().map(StockSuspendKey::tradeDate).max(LocalDate::compareTo).orElseThrow();
+        params.add(new TemporalValues.CalendarTimestamp(from).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        params.add(new TemporalValues.CalendarTimestamp(to.plusDays(1)).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        var codes=keys.stream().map(StockSuspendKey::tsCode).distinct().sorted().toList();params.addAll(codes);
         for (var key : keys) {
             clauses.add("(ts_code=? AND timestamp=cast(? AS TIMESTAMP))");
             params.add(key.tsCode());
             params.add(new TemporalValues.CalendarTimestamp(key.tradeDate()).storageEpoch(TemporalValues.EpochUnit.MICROS));
         }
         String sql = "SELECT \"ts_code\",\"is_suspended\",cast(\"timestamp\" as long) AS timestamp_micros FROM \""
-                + table + "\" WHERE " + String.join(" OR ", clauses) + " ORDER BY ts_code,timestamp LIMIT " + (keys.size() + 1);
+                + table + "\" WHERE timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP) AND ts_code IN ("
+                + String.join(",",codes.stream().map(code->"?").toList()) + ") AND (" + String.join(" OR ", clauses) + ") ORDER BY ts_code,timestamp LIMIT " + (keys.size() + 1);
         return jdbc.query(sql, this::physical, params.toArray());
     }
 

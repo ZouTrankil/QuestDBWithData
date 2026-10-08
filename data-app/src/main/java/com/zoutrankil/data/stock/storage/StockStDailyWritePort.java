@@ -83,13 +83,19 @@ public final class StockStDailyWritePort implements StockDateWriteSession<StockS
             throw new IllegalArgumentException("At most 250 unique complete stk_st_daily keys required");
         requireExpectedTarget();
         var clauses = new ArrayList<String>(); var params = new ArrayList<Object>();
+        LocalDate from=keys.stream().map(StockStDailyKey::timestamp).min(LocalDate::compareTo).orElseThrow();
+        LocalDate to=keys.stream().map(StockStDailyKey::timestamp).max(LocalDate::compareTo).orElseThrow();
+        params.add(new TemporalValues.CalendarTimestamp(from).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        params.add(new TemporalValues.CalendarTimestamp(to.plusDays(1)).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        var codes=keys.stream().map(StockStDailyKey::tsCode).distinct().sorted().toList();params.addAll(codes);
         for (var key : keys) {
             clauses.add("(ts_code=? AND timestamp=cast(? AS TIMESTAMP))");
             params.add(key.tsCode());
             params.add(new TemporalValues.CalendarTimestamp(key.timestamp()).storageEpoch(TemporalValues.EpochUnit.MICROS));
         }
         String sql = "SELECT ts_code, is_st, cast(timestamp AS long) AS timestamp_micros FROM \"" + table
-                + "\" WHERE " + String.join(" OR ", clauses) + " ORDER BY timestamp,ts_code LIMIT " + (keys.size() + 1);
+                + "\" WHERE timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP) AND ts_code IN ("
+                + String.join(",",codes.stream().map(code->"?").toList()) + ") AND (" + String.join(" OR ", clauses) + ") ORDER BY timestamp,ts_code LIMIT " + (keys.size() + 1);
         return jdbc.query(sql, (rs, index) -> physical(rs), params.toArray());
     }
     public List<LocalDate> readExistingDates() {

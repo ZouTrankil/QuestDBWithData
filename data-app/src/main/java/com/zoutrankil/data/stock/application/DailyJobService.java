@@ -54,7 +54,7 @@ public final class DailyJobService implements SyncJobOwner {
         this.stockDetails = Objects.requireNonNull(stockDetails);
         this.target = Objects.requireNonNull(target);
         this.ledgerPath = Objects.requireNonNull(ledgerPath).toAbsolutePath().normalize();
-        String table=target.tableName(); DatasetDefinition.identifier(table); this.table=table;
+        String table=target.tableName(); requireExecutionTableName(table); this.table=table;
     }
 
     @Override public String datasetId() { return DailyDataset.DEFINITION.datasetId(); }
@@ -70,8 +70,11 @@ public final class DailyJobService implements SyncJobOwner {
         Objects.requireNonNull(bootstrapFrom, "Explicit bounded bootstrap date required");
         Objects.requireNonNull(logicalDate, "Logical date required");
         Mode mode = requestedMode == null ? definition().defaultMode() : requestedMode;
+        if ("daily".equals(table) && requestedTo == null)
+            throw new IllegalArgumentException("Formal daily requires an explicit bounded end date");
         LocalDate to = DailySyncEndDate.resolve(requestedTo, ZonedDateTime.now(DailySyncEndDate.ZONE));
         if (bootstrapFrom.isAfter(to)) throw new IllegalArgumentException("Daily sync window is empty after provider completion ceiling");
+        requireFormalWindow(mode, bootstrapFrom, to, logicalDate);
         // Validate the exact finite request before touching target metadata.
         var request = definition().freeze(mode, Map.of(), bootstrapFrom, to, logicalDate);
         String target = targetId();
@@ -95,6 +98,7 @@ public final class DailyJobService implements SyncJobOwner {
                 checked = DailyCheckpoint.validateOverlap(ledger, coverage, from, calendars, writer);
             }
         }
+        requireFormalWindow(mode, from, to, logicalDate);
         request = definition().freeze(mode, Map.of(), from, to, logicalDate);
         // D001 exact date coverage is verified during preflight; it is never replaced by weekday arithmetic.
         DailyTradingSessions.read(calendars, from, to);
@@ -119,6 +123,7 @@ public final class DailyJobService implements SyncJobOwner {
 
     public SyncJobRunner.Result runAsGroupChild(String childRun, String parentRun, String expectedTarget,
                                                 FrozenRequest request) throws Exception {
+        requireFormalWindow(request.mode(), request.from(), request.to(), request.logicalDate());
         if (!targetId().equals(expectedTarget)) throw new IllegalStateException("Daily group target changed before execution");
         return execute(childRun, new Plan(request, expectedTarget, null, 0), null, parentRun);
     }
@@ -129,9 +134,26 @@ public final class DailyJobService implements SyncJobOwner {
         IsolatedTablePolicy.DAILY.require(table);
     }
 
+    /** Formal daily and the existing D007 isolated namespace are the only admitted targets. */
+    public static void requireExecutionTableName(String table) {
+        DatasetDefinition.identifier(table);
+        if (!"daily".equals(table)) IsolatedTablePolicy.DAILY.require(table);
+    }
+
+    private void requireFormalWindow(Mode mode, LocalDate from, LocalDate to, LocalDate logicalDate) {
+        if (!"daily".equals(table)) return;
+        if ((mode != Mode.BACKFILL && mode != Mode.RECONCILE) || from == null || to == null
+                || logicalDate == null || from.isAfter(to)
+                || java.time.temporal.ChronoUnit.DAYS.between(from, to) >= 31
+                || to.isAfter(logicalDate)
+                || to.isAfter(DailySyncEndDate.resolve(null, ZonedDateTime.now(DailySyncEndDate.ZONE))))
+            throw new IllegalArgumentException("Formal daily requires explicit BACKFILL/RECONCILE of at most 31 completed calendar days through its logical date");
+    }
+
     private SyncJobRunner.Result execute(String runId, Plan plan, String priorRunId, String parentRunId) throws Exception {
         if (!plan.request().definition().equals(definition()) || !plan.request().definition().datasetId().equals("daily"))
             throw new IllegalArgumentException("Frozen daily job definition required");
+        requireFormalWindow(plan.request().mode(), plan.request().from(), plan.request().to(), plan.request().logicalDate());
         if (!targetId().equals(plan.targetId())) throw new IllegalStateException("Daily target changed since planning");
         var evidence = ledgerPath.getParent().resolve("sync-evidence").resolve(runId);
         var port = this.target.newWriter();

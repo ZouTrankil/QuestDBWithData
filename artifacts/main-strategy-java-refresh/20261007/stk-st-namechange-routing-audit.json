@@ -1,0 +1,189 @@
+{
+  "observedAtUtc": "2026-10-07T17:28:18.8103536Z",
+  "readOnly": true,
+  "providerRequests": 0,
+  "databaseWrites": 0,
+  "runId": "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+  "failure": "StockStDailyPublication.verifyRunBinding residual isolated prefix rejects formal",
+  "sourceDefect": "TusharePageService routes Paging.NONE namechange into cursor helper, whose absent cursor defaults year=2010 and ignores requested start_date",
+  "annualResponses": [
+    {
+      "year": 2010,
+      "requestedFrom": "20100101",
+      "requestedTo": "20101231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "452198aaedbde01f9040cce049939a15dce6375609acb1afc0cbd871c3d95c00",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2011,
+      "requestedFrom": "20110101",
+      "requestedTo": "20111231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "6a388ef5b5c0f68fe1d2ddc092e510a271e5839d4e28adbc75bc0681a6952a37",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2012,
+      "requestedFrom": "20120101",
+      "requestedTo": "20121231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "4841d6db41e7d2d8e7ff5f138624abcb520f2d801d6f034aefe94c901b88e624",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2013,
+      "requestedFrom": "20130101",
+      "requestedTo": "20131231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "83af84ff74f0e9340cd6c9383a5a74fc8b843dadf57b6f1b4cfc3e3d737c4065",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2014,
+      "requestedFrom": "20140101",
+      "requestedTo": "20141231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "bf96c8da80eb579fe4d50d0372a51051e36c97197a3d0e5d3cd9b85fffe8775f",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2015,
+      "requestedFrom": "20150101",
+      "requestedTo": "20151231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "8e1a90a615b82459347eee19b9683ae0130569493a5f833e7acee3895eb6309f",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2016,
+      "requestedFrom": "20160101",
+      "requestedTo": "20161231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "911a49a140a123935f5ff23427e23cf6e7e18dc859304ed4079e58bef7d6b4aa",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2017,
+      "requestedFrom": "20170101",
+      "requestedTo": "20171231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "12a2ba532fefe550c327f66e93dbe42134ea269cf930ae26fa3bc0983acf8768",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2018,
+      "requestedFrom": "20180101",
+      "requestedTo": "20181231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "3051b0c5c34d18c7ec3db95102413761939f239025d2aedeb802f9eb40ed101d",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2019,
+      "requestedFrom": "20190101",
+      "requestedTo": "20191231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "30ebbee14632bbb90dd772fe3b098a4de8273bd0b65d301821d8858bd57666d8",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2020,
+      "requestedFrom": "20200101",
+      "requestedTo": "20201231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "4451a7efd2caa395f0cef4db0992ad15c3835d9489a199edcc76d3c904e988fa",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2021,
+      "requestedFrom": "20210101",
+      "requestedTo": "20211231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "b84a0d4de8afe5d137d99a728da88e28de3e2942afd75a9298b018f75655979d",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2022,
+      "requestedFrom": "20220101",
+      "requestedTo": "20221231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "a8440e8b796e1460de561e5456a75067492f313cb4e556311b6490e3d71df90c",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2023,
+      "requestedFrom": "20230101",
+      "requestedTo": "20231231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "c24019edb2813ceaca5bf27a15f95eb086739ec42e2633f962f44f9bcb2bbd9e",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2024,
+      "requestedFrom": "20240101",
+      "requestedTo": "20241231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "5dd759e68d9e46433ac92bdb41713973edbc49b305e8b8da42e648c27a84bda7",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2025,
+      "requestedFrom": "20250101",
+      "requestedTo": "20251231",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "f73d26731a47e765ad3572da283d26cd33221e4934461e069b3591d49628810a",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    },
+    {
+      "year": 2026,
+      "requestedFrom": "20260101",
+      "requestedTo": "20260930",
+      "rows": 497,
+      "rawRowsSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "receiptSha256": "71b0eb5bb2ad7275e313025f43631009c5700ec2f316cfeb73dcafb012c84942",
+      "periodStartMin": "20100106",
+      "periodStartMax": "20120322"
+    }
+  ],
+  "nonemptyRawFingerprints": 1,
+  "sourceMaterializedRows": 0,
+  "formalBeforeRows": 830433,
+  "preservedOutsideRows": 829596,
+  "positiveRowsAtRisk": 837,
+  "published": false,
+  "officialSourceContract": "https://tushare.pro/document/2?doc_id=100",
+  "contractNote": "start_date/end_date query parameters filter announcement dates; period effective start_date is a different output value and may legitimately cross the request year"
+}

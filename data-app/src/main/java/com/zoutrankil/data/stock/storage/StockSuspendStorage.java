@@ -15,7 +15,7 @@ import java.util.*;
 
 /** Bounded full-table snapshot used only by D011's scoped, journaled replacement. */
 public final class StockSuspendStorage implements com.zoutrankil.data.stock.port.StockSuspendTables.Table {
-    public static final int MAX_ROWS = 100_000;
+    public static final int MAX_ROWS = 200_000;
     public static final int MAX_BYTES = 32 * 1024 * 1024;
     private final JdbcTemplate jdbc;
     private final String table;
@@ -23,7 +23,8 @@ public final class StockSuspendStorage implements com.zoutrankil.data.stock.port
     public StockSuspendStorage(JdbcTemplate source, String table) {
         DatasetDefinition.identifier(table); this.table = table;
         this.jdbc = new JdbcTemplate(Objects.requireNonNull(source).getDataSource());
-        this.jdbc.setQueryTimeout(20); this.jdbc.setMaxRows(MAX_ROWS + 1);
+        // A newly materialized historical stage needs a finite cold-reader allowance.
+        this.jdbc.setQueryTimeout(120); this.jdbc.setMaxRows(MAX_ROWS + 1);
     }
 
     public Identity preflight() {
@@ -47,7 +48,7 @@ public final class StockSuspendStorage implements com.zoutrankil.data.stock.port
         var rows = jdbc.query("SELECT \"ts_code\",\"is_suspended\",cast(\"timestamp\" AS long) AS timestamp_micros FROM \""
                 + table + "\" ORDER BY \"timestamp\",\"ts_code\" LIMIT " + (MAX_ROWS + 1),
                 (rs, rowNum) -> physical(rs, rowNum));
-        if (rows.size() > MAX_ROWS) throw new IllegalStateException("stk_suspend full snapshot exceeds 100,000 rows");
+        if (rows.size() > MAX_ROWS) throw new IllegalStateException("stk_suspend full snapshot exceeds 200,000 rows");
         byte[] canonical = canonical(rows);
         if (canonical.length > MAX_BYTES) throw new IllegalStateException("stk_suspend snapshot exceeds 32 MiB");
         Identity after = preflight();

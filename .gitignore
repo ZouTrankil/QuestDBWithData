@@ -25,3 +25,14 @@ build/
 /artifacts/java-migration/D004/**/*.sqlite*
 /artifacts/java-migration/D005/**/*.sqlite*
 /artifacts/java-migration/D006/**/*.sqlite*
+
+# Runtime databases and locks are local run state across migration tasks.
+/artifacts/java-migration/**/*.sqlite*
+/artifacts/java-migration/**/*.lock
+
+# Compiler output captured during local migration work.
+/artifacts/main-strategy-java-refresh/20261007/shared-native-port-compile/
+
+# Python bytecode caches.
+__pycache__/
+*.py[cod]

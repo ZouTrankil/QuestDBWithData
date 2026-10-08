@@ -1,0 +1,233 @@
+{
+  "observedAtUtc": "2026-10-07T18:23:24.7590089Z",
+  "status": "PASS",
+  "readOnlyAudit": true,
+  "triggeredBy": "root single POST /catch-up, Idempotency-Key acceptance-reuse-20261008-0222",
+  "instance": "19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5",
+  "checks": {
+    "idle": true,
+    "businessVerified": true,
+    "syncRunCountUnchanged": true,
+    "perOwnerRunCountsUnchanged": true,
+    "recentSyncRunsAndStatesUnchanged": true,
+    "nativePublicationJournalsUnchanged": true,
+    "batchExecutionsUnchanged": true,
+    "stageRowsAndCertificatesUnchanged": true,
+    "recoveryBudgetUnchanged": true,
+    "tableIdentitiesAndClocksUnchanged": true,
+    "walFrontiersUnchanged": true,
+    "nativeMetadataUnchanged": true,
+    "certificateArtifactShaMatches": true,
+    "allReferencedOwnerArtifactShaMatches": true,
+    "originalInDoubtReceiptPreserved": true
+  },
+  "syncRunCount": 37,
+  "batchExecution": 7,
+  "stages": [
+    {
+      "stage": "BacktestDaily",
+      "batchId": "backtest-materialize-eb1fb3e8-0cc5-4e4c-8d1e-48b83815c17d",
+      "state": "VERIFIED",
+      "artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\BacktestDaily-dbf1e03a-4ba0-4269-80be-eb98216d212d.json",
+      "sha256": "c41471b6bc7eddb5d26c766f06f311a36e90f718ad2b0b01a7a8a55932bf9667",
+      "certificateShaMatches": true,
+      "ownerArtifactRefs": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\backtest-materialize-eb1fb3e8-0cc5-4e4c-8d1e-48b83815c17d\\publication.json",
+          "expectedSha": "e0d28eaa94ffb27a0c060c5bfb87c8c000a53b916800f6f30150009f14e1bcab",
+          "observedSha": "e0d28eaa94ffb27a0c060c5bfb87c8c000a53b916800f6f30150009f14e1bcab",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\backtest-materialize-eb1fb3e8-0cc5-4e4c-8d1e-48b83815c17d\\source.json",
+          "expectedSha": "7d08c55a4901c83970652b4af033012f1d48e4f3a8c8d129af2f8892a50782be",
+          "observedSha": "7d08c55a4901c83970652b4af033012f1d48e4f3a8c8d129af2f8892a50782be",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "stage": "MainStrategyAcceptance",
+      "batchId": "19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5",
+      "state": "VERIFIED",
+      "artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\MainStrategyAcceptance-486461d7-79b2-4d98-8c5b-3164be8dbea4.json",
+      "sha256": "afc49e64396ce79bcfeb175b29e4291e52a058bd3ad04ba8a147c65c90463b97",
+      "certificateShaMatches": true,
+      "ownerArtifactRefs": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\l2-full-cleaning-acceptance\\20261007\\null-reference\\schema.json",
+          "expectedSha": "47b0a9510a6252e9fa913db264ae1b9669919d11ea039e8853ab5e1aa952a7bf",
+          "observedSha": "47b0a9510a6252e9fa913db264ae1b9669919d11ea039e8853ab5e1aa952a7bf",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\l2-full-cleaning-acceptance\\20261007\\output-validation-all.json",
+          "expectedSha": "c8a1c26d76ea02a5853ffb1e23484fa9eef694717d99666496a89e8875956ef8",
+          "observedSha": "c8a1c26d76ea02a5853ffb1e23484fa9eef694717d99666496a89e8875956ef8",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\l2-questdb-ingestion\\20261007\\ingestion-report.json",
+          "expectedSha": "3cc3c988f0a6376aa42ff0008cd782607200b58ab61cd30a49bd45c536380717",
+          "observedSha": "3cc3c988f0a6376aa42ff0008cd782607200b58ab61cd30a49bd45c536380717",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\artifacts\\main-strategy-java-refresh\\20261007\\goal-current-questdb-observation.json",
+          "expectedSha": "fe82abf93fc9c260f1dadd60a49a78c5a34dc8a42dc6ab91f28c4701c4e39591",
+          "observedSha": "fe82abf93fc9c260f1dadd60a49a78c5a34dc8a42dc6ab91f28c4701c4e39591",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\retained-l2\\20260930.json",
+          "expectedSha": "794929035bd54b75b7374212fcacaabf9a8af7b0694976117d2a3e656cb5b2c6",
+          "observedSha": "794929035bd54b75b7374212fcacaabf9a8af7b0694976117d2a3e656cb5b2c6",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "stage": "MarketSentimentDaily",
+      "batchId": "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+      "state": "VERIFIED",
+      "artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\MarketSentimentDaily-5f2d10c4-e86d-4e12-ae2d-36989c9f63ad.json",
+      "sha256": "c48f5d759736aadcb8301117435bf1e22e10e1d4a2e52bec00532ca92a3c9873",
+      "certificateShaMatches": true,
+      "ownerArtifactRefs": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8\\publication.json",
+          "expectedSha": "0125dbf586552bb34f59b6eef331739c38f547bc2ef440eb492b8b9061d14297",
+          "observedSha": "0125dbf586552bb34f59b6eef331739c38f547bc2ef440eb492b8b9061d14297",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8\\source.json",
+          "expectedSha": "51d171f34c7ff1f617114d33f3723631e8c8603cf3027fb9e01b19d7a19ee97a",
+          "observedSha": "51d171f34c7ff1f617114d33f3723631e8c8603cf3027fb9e01b19d7a19ee97a",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "stage": "RegimeFeaturesMonitorDaily",
+      "batchId": "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+      "state": "VERIFIED",
+      "artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\RegimeFeaturesMonitorDaily-2b7b4ac3-8cb4-4bba-beeb-a43f2f7d8c97.json",
+      "sha256": "f4a235c8041d3b8c5334fc8beb6c1318f89c55c267eddce5dd374aca9e3990ec",
+      "certificateShaMatches": true,
+      "ownerArtifactRefs": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f\\publication.json",
+          "expectedSha": "e0fe28b03c85f48d0005e2cf52745d296cca0680daf5a49170f0036bfa376c95",
+          "observedSha": "e0fe28b03c85f48d0005e2cf52745d296cca0680daf5a49170f0036bfa376c95",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f\\source.json",
+          "expectedSha": "1358df27ae772e558811337342e42a069aaae8f3bf9bb07232e042a11ab379ea",
+          "observedSha": "1358df27ae772e558811337342e42a069aaae8f3bf9bb07232e042a11ab379ea",
+          "matches": true
+        }
+      ]
+    },
+    {
+      "stage": "Sources",
+      "batchId": "19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5",
+      "state": "VERIFIED",
+      "artifact": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\Sources-2584fc4e-8adb-471b-a939-5621934f953e.json",
+      "sha256": "392239deb045c868a2cb93df85468600df3dbf1c28c48166c37c902108b37ac0",
+      "certificateShaMatches": true,
+      "ownerArtifactRefs": [
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\cn_bond_yield_curve\\2026-09-28_2026-09-30\\receipt.json",
+          "expectedSha": "f90afded6b4feaaf29f28172d2c71dda2d92154dd654fb5fb8223f6833810dce",
+          "observedSha": "f90afded6b4feaaf29f28172d2c71dda2d92154dd654fb5fb8223f6833810dce",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\daily\\2026-09-28_2026-09-30\\receipt.json",
+          "expectedSha": "9e5c247919024e89ff7886a54e06e8d25423737e57fd8396cbb7f407ce714387",
+          "observedSha": "9e5c247919024e89ff7886a54e06e8d25423737e57fd8396cbb7f407ce714387",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\daily_basic\\2026-09-28_2026-09-30\\receipt.json",
+          "expectedSha": "526822ba75f7ade9a4d93b3d76ab8f8d2a405c0cd55d34f91bf2a0fb5b09233a",
+          "observedSha": "526822ba75f7ade9a4d93b3d76ab8f8d2a405c0cd55d34f91bf2a0fb5b09233a",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\etf_adj\\2026-09-28_2026-09-30\\receipt.json",
+          "expectedSha": "8ce951864af221bb22b585fde0164082cb98c00d87a73aec114509b7d3c3f6a9",
+          "observedSha": "8ce951864af221bb22b585fde0164082cb98c00d87a73aec114509b7d3c3f6a9",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\etf_daily\\2026-09-28_2026-09-30\\receipt.json",
+          "expectedSha": "fdd4f3d7c02ee81bee5316da780abf645a9655ec429d3f7baa689e0a991e77e3",
+          "observedSha": "fdd4f3d7c02ee81bee5316da780abf645a9655ec429d3f7baa689e0a991e77e3",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\etf_factor\\2026-09-28_2026-09-30\\receipt.json",
+          "expectedSha": "6f8dc0f1f288d43ff75af5a04b104f1988671978d4e8250ca23f6d70610f8414",
+          "observedSha": "6f8dc0f1f288d43ff75af5a04b104f1988671978d4e8250ca23f6d70610f8414",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\etf_portfolio\\2026-09-28_2026-09-30\\receipt.json",
+          "expectedSha": "94b1fc3ebaa39f15354e78c629c5661512f411b0fe51796e82c8dc58e9ee2182",
+          "observedSha": "94b1fc3ebaa39f15354e78c629c5661512f411b0fe51796e82c8dc58e9ee2182",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\moneyflow\\2026-09-28_2026-09-30\\receipt.json",
+          "expectedSha": "9b553f35922658c7c30633f8ee9718c235c72d4e6d8de677782b870a082907e2",
+          "observedSha": "9b553f35922658c7c30633f8ee9718c235c72d4e6d8de677782b870a082907e2",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\moneyflow_hsgt\\2026-09-28_2026-09-30\\receipt.json",
+          "expectedSha": "7845a6e350fb1d1d68678fafa72a1d2467c9a81d6ea8d1a7a0e4618b31f0df7c",
+          "observedSha": "7845a6e350fb1d1d68678fafa72a1d2467c9a81d6ea8d1a7a0e4618b31f0df7c",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\stk_factor\\2026-09-28_2026-09-30\\receipt.json",
+          "expectedSha": "90f7488342623af7360ae2033219dd91e751ade900b479c1053d060fda231761",
+          "observedSha": "90f7488342623af7360ae2033219dd91e751ade900b479c1053d060fda231761",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\stk_limit\\2026-09-28_2026-09-30\\receipt.json",
+          "expectedSha": "2b21703c2bd5497e31bde30c133568ca726921f8a44ac80f9abe399d980c6f7f",
+          "observedSha": "2b21703c2bd5497e31bde30c133568ca726921f8a44ac80f9abe399d980c6f7f",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\stk_st_daily\\2026-09-28_2026-09-30\\receipt-b0cde648-2689-4d61-8ac8-2ccc8e413130.json",
+          "expectedSha": "f667ed2b85943a73727950ecfdb33bb7c0e4a9b28190a3162077b792bbc1c842",
+          "observedSha": "f667ed2b85943a73727950ecfdb33bb7c0e4a9b28190a3162077b792bbc1c842",
+          "matches": true
+        },
+        {
+          "path": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\stk_suspend\\2026-09-28_2026-09-30\\receipt-e050230a-ff9f-40cb-9cd3-8befd533f274.json",
+          "expectedSha": "deb00f5488a0b72f921d8e9d1b9968265f52c6f7fd0f57093a7e10cada062a14",
+          "observedSha": "deb00f5488a0b72f921d8e9d1b9968265f52c6f7fd0f57093a7e10cada062a14",
+          "matches": true
+        }
+      ]
+    }
+  ],
+  "originalInDoubtReceiptSha": "648f9ad461b6967a40c6a764d2ac6ce406a77ca9103af6241c5e65f6e4c1c3f3",
+  "before": {
+    "ledger": "before-repeat-ledger.json",
+    "clocks": "before-repeat-table-clocks.json"
+  },
+  "after": {
+    "ledger": "after-repeat-ledger.json",
+    "clocks": "after-repeat-table-clocks.json",
+    "api": "after-repeat-api.json"
+  },
+  "conclusion": "Same-date catch-up performed live read-only revalidation and retained the existing five VERIFIED certificates. It created no owner run, no Spring Batch execution and no target/source/native WAL or identity change."
+}

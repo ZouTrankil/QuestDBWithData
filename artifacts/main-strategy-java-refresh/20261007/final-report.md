@@ -1,6 +1,6 @@
 # 主策略数据补齐与 Java sync 验收
 
-验收日期：2026-10-07（Asia/Shanghai）。目标截止日：**2026-09-30**。目标实例：**本地 QuestDB，127.0.0.1:9000 / 8812**。
+首次验收：2026-10-07；物化视图与常驻批处理复验：2026-10-08（Asia/Shanghai）。目标截止日：**2026-09-30**。目标实例：**本地 QuestDB，127.0.0.1:9000 / 8812**。最新改造与运行证据见第 9 节。
 
 ## 1. 本次结果
 
@@ -9,9 +9,9 @@
 | 用户关注的数据 | 当前结果 | 本轮完成方式 |
 | --- | --- | --- |
 | `stk_factor` | 最新 09-30，六个补齐日期共 33343 条；逐键、全部字段回读通过 | 原 Java owner 的有界 BACKFILL |
-| `v_backtest_daily` | 最新 09-30；最近 32 个交易日行数覆盖、唯一键、收盘价/ST/停牌关键空值检查通过 | 源表补齐后视图自动反映，无需单独同步 |
-| `market_sentiment_daily` | 最新 09-30；本轮 7 个日期、53 字段通过，全表 104 行 | Java 原生计算、stage 验证、带持久化发布账本的替换 |
-| `regime_features_monitor_daily` | 最新 09-30；本轮 7 个日期、21 字段，全表 666 行 | Java 原生计算实际 ETF 输入包的市场上下文 |
+| `v_backtest_daily` | 真正的原生 MV，最新 09-30，保全 10400431 行；首次迁移 13 字段逐月完整验证，10-08 自动批处理再次验证三日 16711 行 | Java 发布 `backtest_daily` 基表后刷新目标 MV；没有中间普通 VIEW |
+| `market_sentiment_daily` | 最新 09-30，全表 104 行；10-08 自动 job 三日 159 个字段值验证通过 | Java DAILY / MATERIALIZE job，契约 v3；Spring 启动补齐并持续调度 |
+| `regime_features_monitor_daily` | 最新 09-30，全表 666 行；10-08 自动 job 三日 21 字段验证通过 | Java DAILY / MATERIALIZE job，契约 v3；与情绪、回测物化及验收顺序串接 |
 | `etf_daily` | 最新 09-30，09-28–30 共 6439 条；当日 2140 条、目标两只 ETF 行情齐全 | 原 Java ETF owner BACKFILL |
 | `etf_portfolio` | 09-28–30 的原源无新公告，Java `VERIFIED_EMPTY`；历史漏入库已修复，详见第 4 节 | 原 Java owner 检查最新窗口，复用之前完整历史对账 |
 
@@ -166,3 +166,57 @@ WHERE ts >= '2026-09-28' AND ts < '2026-10-01' LIMIT 5;
 两只成分还重新对照了已保存的按 ETF 代码完整源回执（均有完整短终页证据）：当前最新公告的 124/10 个业务键、共 536 个业务数值字段与本地实际读回完全一致。源回执保留之前 Python 获取的真实来源，本轮没有冒称重新通过 Java 获取这些历史披露。详见 [实际最新成分核对](C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/main-strategy-java-refresh/20261007/goal-constituent-actual-latest.json)。
 
 最终 [Java 链路审计](C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/main-strategy-java-refresh/20261007/goal-java-route-closure-audit.json) 确认无必须追加的 Java 数据任务；[逐项完成审计](C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/main-strategy-java-refresh/20261007/goal-completion-audit.json) 的 11 项要求均有实际证据。按用户确认的实际最新成分口径，本次主策略数据入库目标完成，保留第 4 节上游可选增强数据与治理提示。
+
+## 9. 10-08 原生 MV 与 Spring 常驻批处理复验
+
+**本次改造已完成实际运行验收。** Spring 主应用无程序参数启动，自动恢复到 09-30；同一业务实例的五个阶段均为 `VERIFIED`，最后 Spring Batch execution **7 / COMPLETED**，当前应用保持运行，调度启用。该 execution 的 108.974 秒是续跑剩余阶段的时间，前面的源同步与问题修复另计，不能当作整条每日流水线基准。
+
+| 阶段 | 本次实际结果 | 原 Java owner run |
+| --- | --- | --- |
+| Sources | 13 个必需来源验证通过，其中 ETF 持仓三日无公告为 `VERIFIED_EMPTY`；两融 `PARTIAL` 作为可选增强限制保留 | 各来源的不可变回执见业务实例 `sources/` |
+| MarketSentimentDaily | 3 行 × 53 字段通过，原 101 行窗口外历史不变；发布与原 run 均 VERIFIED | `market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8` |
+| RegimeFeaturesMonitorDaily | 3 行 × 21 字段通过，全表 666 行，原窗口外数据保留 | `regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f` |
+| BacktestDaily | 三日 16711 行，全部 13 字段 source/base/MV 一致；窗口外 DAY 分区未改变，目标 MV 已刷新 | `backtest-materialize-eb1fb3e8-0cc5-4e4c-8d1e-48b83815c17d` |
+| MainStrategyAcceptance | 必需日数据、ETF 行情、原生 MV 与 Level2 当前完整类型质量通过；可选源和披露限制明确记录 | Java 只读验收证书 |
+
+### 运行方式
+
+- Spring `ApplicationReadyEvent` 自动启动补齐，不再需要每天执行 CLI one shot。既有 Java WebFlux 客户端、共享限流与来源 owner 继续使用。
+- 上海时区每天 **20:35** 执行，选取经过 **20:30** 数据截止时间的最近 SSE 开市日；21:00–23:45 每 15 分钟恢复符合条件的未完成任务，预算有限。当前 10-08 凌晨的目标仍是 09-30。
+- Spring Batch、Quartz、实例及证书持久化在 `var/main-strategy-batch.sqlite`。原来源与发布权威账本继续使用 `var/main-strategy-java-refresh/20261007/sync-ledger.sqlite3`，重启须保留。
+- 当前唯一主应用 PID **29904**，创建时间 **2026-10-08T02:17:50.724846+08:00**；本地 host 和来源账本通过 VM 参数显式绑定，程序参数为空。启动凭据见 `var/main-strategy-batch/launch.json`。IntelliJ 的 VM 配置见 [README](C:/Users/zouqiang/IdeaProjects/QuestDBWithData/README.md:61)。
+
+### 目标物化视图
+
+`v_backtest_daily` 本身是 QuestDB 原生 Materialized View，固定 ID **3021**、固定名称，基表为实际 enriched TABLE `backtest_daily`，ID **3020**。没有中间普通 VIEW 或别名 VIEW。首次迁移保全现有源可提供的 **2010-01-29–2026-09-30 / 10400431 行**，完成 201 个逐月、13 字段完整验证；这不代表源库具有期间所有历史交易日。
+
+本轮三日替换后执行 FULL refresh，实际刷新 **49.510 秒**，最终 baseTxn=refreshTxn=**206**，MV writer/sequence=**21**。三日共同 typed digest 为 `a973c2c50c4269efdf92e37193d6fa8544a8ad8d63d443b90bf9340004a07f77`。通用窗口证书的 SHA 包含表名，因此不同对象的窗口 SHA 不用于直接比较字段值。
+
+最新发布为 `backtest-publication-6204e621-aafd-4dc0-ae94-b95a5b9d899f`，最终 publication.json SHA 为 `e0d28eaa94ffb27a0c060c5bfb87c8c000a53b916800f6f30150009f14e1bcab`。数据 API 在来源更新后明确返回未就绪 HTTP **409**，重新发布后已实际恢复 HTTP **200**、返回 13 字段及当前不可变发布版本。
+
+### 本次发现并修复的问题
+
+1. 修复既有正式 `daily` 准入、停牌完整历史证据上限和有界查询超时，保留全字段、窗口外数据和发布恢复校验。
+2. `namechange` 原特殊分页分支错误忽略年度范围，使多个年度请求都返回 2010 年；改为仅 CURSOR 契约走特殊分支，其他请求仍用原 WebFlux 通用分支。新增重复非空年度来源检查。错误运行在发布前被挡住，新来源三日 **280/279/278** 条逐值通过，历史数据未被错误清空。
+3. HSGT 正式表实际为 DAY/WAL/`trade_date` 去重，旧隔离契约非去重；修复正式表、stage、备份和恢复的完整布局传递。实际 3 行来源、437 行窗口外数据均精确验证，旧隔离模式保留。
+4. 修复改名后的 WAL 短暂未稳定检查。市场情绪原运行已完成两个 rename 后进入 IN_DOUBT，通过显式 `reconcile-publication` 接口恢复**原 run**，逐字段、source SHA、完整目标和备份证明均通过。原 IN_DOUBT 回执完整保留，新增恢复回执与 SHA 链；没有另起计算任务。
+
+### 删除 Level2 临时输出后的验收
+
+普通策略与 Java job 读取 QuestDB，不依赖 `D:\l2-native-features`，本次未重新解压或清洗。第五阶段实际使用保留的完整归档验收、入库回执、110 字段契约和未改变的 WAL，再完整检查当前 09-30 **7888 行 / 867680 字段**，业务键唯一、规范代码、日期、字段类型、有限值及版本通过；`ofi_slope` 的 37 个合法空值代码集合也完全一致。
+
+当前完整 typed window SHA 为 `c82c02dfd3a20a0aba1e66b79427969d9437d4e20504b48c204669f4ba3bb1bc`，基线绑定 ID 1665、目录与 WAL 11386，保存于 `var/main-strategy-batch/retained-l2/20260930.json`。原入库由 Python importer 完成，数值比较采用 1e-12 容差；已删除 JSONL 后，这次不冒称重新完成原始文件逐值比较。未来新 Level2 日期仍须自己的清洗和入库证据，缺失时批处理等待来源。重新导入时可从保留的原始归档重建输出。
+
+### 同日重复触发与证据
+
+完成后实际再次触发同日 `catch-up`：前后来源账本 `sync_runs` 均为 **37**，没有新 owner run 或 Spring execution，五个阶段证书及来源/发布文件 SHA 不变，20 张来源/目标表的身份和 WAL、目标 MV 元数据全部不变。结果保持 `VERIFIED`，证明同日完成任务只回读复用。
+
+- [运行终态](C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/main-strategy-persistent-batch/20261007/final-runtime-status-after-repeat.json)
+- [五阶段证书](C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/main-strategy-persistent-batch/20261007/final-instance-before-repeat.json)
+- [同日复用验收](C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/main-strategy-persistent-batch/20261007/same-date-reuse-audit.json)
+- [最终独立只读审计](C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/main-strategy-persistent-batch/20261007/final-independent-runtime-audit.json)：五阶段 SHA/当前源身份一致，Regime 三日 63 字段及 663 行窗外数据无差异，回测三日 source/base/MV 共同 digest 一致。
+- [最终验收摘要与证据散列](C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/main-strategy-persistent-batch/20261007/final-validation.json)
+- [HSGT 全字段及历史保留证明](C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/main-strategy-persistent-batch/20261007/hsgt-runtime-audit.json)
+- [市场情绪原运行恢复](C:/Users/zouqiang/IdeaProjects/QuestDBWithData/artifacts/main-strategy-persistent-batch/20261007/market-original-run-reconciled-ledger.json)
+
+仍保留第 4 节的 09-30 两融缺 SZ/BJ、ETF 实际公告批次权重完整性与披露时效限制。本轮没有运行策略或发布交易计划。

@@ -190,13 +190,17 @@ public final class StockStDailyPublication {
     }
 
     private void verifyRunBinding(String runId, String logicalTarget, String physicalTarget, String target) throws Exception {
+        StockStDailyJobService.requireAdmittedTableName(target);
         var run = com.zoutrankil.data.repository.SyncRunLedger.openReadOnly(ledgerPath).getRun(runId);
         var frozen = JobDefinitionJson.mapper().readTree(run.frozenJson());
+        var request = StockStDailySyncAdapter.restoreFrozenRequest(run.frozenJson(), run.targetId());
+        StockStDailySyncAdapter.validateFrozenRequest(request);
         if (!"data.stk_st_daily".equals(run.jobId()) || run.jobVersion() != 1 || !logicalTarget.equals(run.targetId())
                 || !logicalTarget.equals(frozen.path("parameters").path("targetId").asText())
                 || !physicalTarget.equals(frozen.path("parameters").path("physicalTargetId").asText())
                 || !StockStDailySyncJobOwner.DEFINITION.jobId().equals(frozen.path("definition").path("jobId").asText())
-                || !StockExecutionTables.admitsStockStDaily(target))
+                || !StockExecutionTables.admitsStockStDaily(target)
+                || "stk_st_daily".equals(target) && request.mode() != com.zoutrankil.data.domain.SyncJobDefinition.Mode.BACKFILL)
             throw new IllegalStateException("D012 publication differs from frozen logical/physical target binding");
     }
 

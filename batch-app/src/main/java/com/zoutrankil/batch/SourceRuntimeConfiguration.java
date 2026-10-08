@@ -35,6 +35,10 @@ public class SourceRuntimeConfiguration {
                 Path.of(System.getProperty("user.home"),".questdbwithdata","credential-budgets"));
     }
     @Bean(destroyMethod="close") SharedRequestBudget chinabondRequestBudget(TushareProperties properties) {
+        return createChinabondRequestBudget(properties);
+    }
+    /** Public-source quota authority is shared by isolated and formal ChinaBond owners. */
+    public static SharedRequestBudget createChinabondRequestBudget(TushareProperties properties) {
         return new SharedRequestBudget(new SharedRequestBudget.Policy(properties.getGlobalPerMinute(),properties.getEndpointPerMinute(),
                 properties.getEndpointLimits(),properties.getConcurrency(),properties.getQueueCapacity(),properties.getMaxAttempts(),
                 properties.getTotalTimeout(),properties.getRetryBase(),properties.getRetryMax(),properties.getRetryableBusinessCodes()),
@@ -50,6 +54,10 @@ public class SourceRuntimeConfiguration {
         return new TusharePageService(new TushareClient(client,properties,budget));
     }
     @Bean ChinabondYieldSource chinabondYieldSource(@Qualifier("chinabondRequestBudget") SharedRequestBudget budget,TushareProperties properties) {
+        return createChinabondYieldSource(budget,properties);
+    }
+    /** Same verified native source construction, reusable without enabling the isolated batch runtime. */
+    public static ChinabondYieldSource createChinabondYieldSource(SharedRequestBudget budget,TushareProperties properties) {
         var ssl=chinaBondSslContext();
         var http=HttpClient.create().disableRetry(true).followRedirect(false)
                 .option(io.netty.channel.ChannelOption.CONNECT_TIMEOUT_MILLIS,Math.toIntExact(properties.getConnectTimeout().toMillis()))

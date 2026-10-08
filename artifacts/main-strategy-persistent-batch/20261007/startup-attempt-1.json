@@ -1,0 +1,5 @@
+{
+  "status": "UNAVAILABLE",
+  "reason": "UnsatisfiedDependencyException: Error creating bean with name 'dataSource' defined in com.zoutrankil.batch.MainStrategyDailyChildConfiguration: Unsatisfied dependency expressed through method 'dataSource' parameter 0: No qualifying bean of type 'com.zoutrankil.data.config.MainStrategyBatchProperties' available: expected single matching bean but found 2: mainStrategyBatchProperties,app.sync.batch-com.zoutrankil.data.config.MainStrategyBatchProperties",
+  "job": "main_strategy_daily"
+}

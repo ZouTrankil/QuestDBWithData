@@ -75,10 +75,20 @@ public final class LaunchService {
                     return ledger.detail(request.instanceId());
                 }
                 var states=ledger.stages(request.instanceId());
-                if ("main_strategy_daily".equals(request.job())) {
-                    // No authoritative completion protocol for this job is present in this delivery.
-                    ledger.state(request.instanceId(),BusinessState.IN_DOUBT,execution.getId(),
-                            "Main-strategy completion protocol is unavailable; five authoritative stage certificates cannot be verified");
+                if (MainStrategyDailyWork.JOB.equals(request.job())) {
+                    boolean ready=MainStrategyDailyWork.STAGES.stream()
+                            .allMatch(stage -> states.getOrDefault(stage,BusinessState.WAITING_UPSTREAM).ready());
+                    var outcome=ledger.state(request.instanceId());
+                    boolean active=outcome==BusinessState.RUNNING || outcome==BusinessState.VERIFYING;
+                    boolean completed=execution.getStatus()==org.springframework.batch.core.BatchStatus.COMPLETED;
+                    // A failed final callback/commit can leave five old ready certificates behind.
+                    // Those certificates must never overwrite a recorded unknown or failed owner outcome.
+                    if (ready && completed && active)
+                        ledger.state(request.instanceId(),BusinessState.VERIFIED,execution.getId(),null);
+                    else if (active)
+                        ledger.state(request.instanceId(),BusinessState.IN_DOUBT,execution.getId(),
+                                "Main-strategy batch outcome requires reconciliation: technical="+execution.getStatus()
+                                        +", fiveAuthoritativeStagesReady="+ready);
                     return ledger.detail(request.instanceId());
                 }
                 boolean allReady=PostCloseGraph.STAGES.stream().allMatch(s -> states.getOrDefault(s.id(),BusinessState.WAITING_UPSTREAM).ready());

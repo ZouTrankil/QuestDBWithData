@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
+import com.zoutrankil.data.stock.storage.StockSuspendStaging;
 import com.zoutrankil.data.repository.*;
 
 import java.nio.file.*;
@@ -96,7 +97,8 @@ public final class StockSuspendRunRecovery {
         Path realEvidence = runEvidence.toRealPath();
         Path completionPath = resolveForCreateUnder(runEvidence, realEvidence, requiredText(scope, "completionEvidence"),
                 "complete-" + runId + ".json");
-        Path stageReceipt = resolveUnder(runEvidence, realEvidence, requiredText(scope, "stageReceipt"), null);
+        Path stageReceipt = resolveUnder(runEvidence, realEvidence, requiredText(scope, "stageReceipt"),
+                intent.stage()+"-verified.json", StockSuspendStaging.MAX_STAGE_EVIDENCE_BYTES);
 
         var stageProof = readStageProof(stageReceipt, intent, table, from, to);
         var publication = new StockSuspendPublication(target.newPublicationTables(), ledgerPath, runEvidence, table, logicalTarget, runId);
@@ -315,7 +317,11 @@ public final class StockSuspendRunRecovery {
 
     private static JsonNode readStageProof(Path stageReceipt, ReferencePublicationJournal.Intent intent,
                                            String table, LocalDate from, LocalDate to) throws Exception {
-        JsonNode proof = JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(stageReceipt, StockSuspendSource.MAX_EVIDENCE_BYTES, () -> new IllegalStateException("D011 recovery evidence escapes its run directory or exceeds its byte bound")));
+        if (!intent.stage().matches("java_stk_suspend_stage_[0-9a-f]{32}"))
+            throw new IllegalStateException("D011 publication stage name is malformed");
+        JsonNode proof = JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(stageReceipt,
+                StockSuspendStaging.MAX_STAGE_EVIDENCE_BYTES,
+                () -> new IllegalStateException("D011 recovery evidence escapes its run directory or exceeds its byte bound")));
         if (!table.equals(proof.path("target").asText()) || !intent.stage().equals(proof.path("stage").asText())
                 || !from.toString().equals(proof.path("windowFrom").asText())
                 || !to.toString().equals(proof.path("windowTo").asText())
@@ -325,11 +331,16 @@ public final class StockSuspendRunRecovery {
     }
 
     private static Path resolveUnder(Path expectedRoot, Path realRoot, String rawPath, String expectedName) throws Exception {
+        return resolveUnder(expectedRoot, realRoot, rawPath, expectedName, StockSuspendSource.MAX_EVIDENCE_BYTES);
+    }
+
+    private static Path resolveUnder(Path expectedRoot, Path realRoot, String rawPath, String expectedName,
+                                     int maxBytes) throws Exception {
         Path candidate = Path.of(rawPath).toAbsolutePath().normalize();
         if (!candidate.startsWith(expectedRoot.toAbsolutePath().normalize()) || !Files.isRegularFile(candidate))
             throw new IllegalStateException("D011 recovery evidence is absent or outside its run directory");
         Path real = candidate.toRealPath();
-        if (!real.startsWith(realRoot) || Files.size(real) > StockSuspendSource.MAX_EVIDENCE_BYTES)
+        if (!real.startsWith(realRoot) || Files.size(real) > maxBytes)
             throw new IllegalStateException("D011 recovery evidence escapes its run directory or exceeds its byte bound");
         if (expectedName != null && !expectedName.equals(real.getFileName().toString()))
             throw new IllegalStateException("D011 recovery evidence path has an unexpected stable name");

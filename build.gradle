@@ -22,14 +22,16 @@ allprojects {
 }
 
 // Resolve project models, not dependencies, before wiring aggregate task outputs.
-['data-core', 'data-app', 'batch-app'].each { evaluationDependsOn(":${it}") }
+['data-core', 'data-app', 'batch-app', 'main-strategy-runtime'].each { evaluationDependsOn(":${it}") }
 def core = project(':data-core')
 def data = project(':data-app')
 def batch = project(':batch-app')
-def modules = [core, data, batch]
+def strategy = project(':main-strategy-runtime')
+def modules = [core, data, batch, strategy]
+def layeredModules = [core, data, batch]
 def mainOutputs = files(modules.collect { it.sourceSets.main.output })
-def mainClassDirs = files(modules.collect { it.sourceSets.main.output.classesDirs })
-def sourceRoots = modules.collectMany { it.sourceSets.main.java.srcDirs.toList() }
+def layeredMainClassDirs = files(layeredModules.collect { it.sourceSets.main.output.classesDirs })
+def layeredSourceRoots = layeredModules.collectMany { it.sourceSets.main.java.srcDirs.toList() }
 def moduleJarFiles = files(modules.collect { it.tasks.named('jar').flatMap { task -> task.archiveFile } })
 
 // An unqualified selector (`test`, `check`, `build`, `run`) may select matching child tasks too.
@@ -117,8 +119,8 @@ tasks.named('test', Test) {
     classpath = aggregateTestClasspath
     // Keep root `test --tests ...` as a real filtered Test, not a lifecycle alias.
     systemProperty 'cli.runtimeClasspath', data.sourceSets.main.runtimeClasspath.asPath
-    systemProperty 'architecture.mainClasses', mainClassDirs.asPath
-    systemProperty 'architecture.sources', sourceRoots.collect { it.absolutePath }.join(File.pathSeparator)
+    systemProperty 'architecture.mainClasses', layeredMainClassDirs.asPath
+    systemProperty 'architecture.sources', layeredSourceRoots.collect { it.absolutePath }.join(File.pathSeparator)
 }
 tasks.withType(Test).configureEach {
     systemProperty 'l2.preview.source-root', batch.file('src/main/java').absolutePath
@@ -131,24 +133,24 @@ data.tasks.withType(Test).configureEach {
 }
 tasks.register('architectureTest', Test) {
     group = 'verification'
-    description = 'Reject package dependency violations across all three physical modules.'
+    description = 'Reject package dependency violations in layered apps; verify composition dependencies separately.'
     dependsOn tasks.named('testClasses'), tasks.named('verifyEmptyRootMain'), tasks.named('verifyRootTestOwnership')
     testClassesDirs = sourceSets.test.output.classesDirs
     classpath = aggregateTestClasspath
-    systemProperty 'architecture.mainClasses', mainClassDirs.asPath
-    systemProperty 'architecture.sources', sourceRoots.collect { it.absolutePath }.join(File.pathSeparator)
+    systemProperty 'architecture.mainClasses', layeredMainClassDirs.asPath
+    systemProperty 'architecture.sources', layeredSourceRoots.collect { it.absolutePath }.join(File.pathSeparator)
     filter { includeTestsMatching 'com.zoutrankil.architecture.*' }
 }
 
 tasks.named('run', JavaExec) {
-    dependsOn data.tasks.named('classes')
-    classpath = data.sourceSets.main.runtimeClasspath
+    dependsOn data.tasks.named('classes'), strategy.tasks.named('classes'), batch.tasks.named('classes')
+    classpath = data.sourceSets.main.runtimeClasspath + strategy.sourceSets.main.runtimeClasspath
 }
 tasks.register('webRun', JavaExec) {
     group = 'application'
     description = 'Start the external Spring WebFlux API on the configured HTTP port.'
-    dependsOn data.tasks.named('classes')
-    classpath = data.sourceSets.main.runtimeClasspath
+    dependsOn data.tasks.named('classes'), strategy.tasks.named('classes'), batch.tasks.named('classes')
+    classpath = data.sourceSets.main.runtimeClasspath + strategy.sourceSets.main.runtimeClasspath
     mainClass = 'com.zoutrankil.data.QuestDataApplication'
 }
 tasks.register('batchRun', JavaExec) {
@@ -183,7 +185,7 @@ tasks.register('l2DailyFeatureBatch', JavaExec) {
 }
 
 tasks.named('startScripts', CreateStartScripts) {
-    classpath = files(tasks.named('jar').flatMap { it.archiveFile }) + data.configurations.runtimeClasspath
+    classpath = files(tasks.named('jar').flatMap { it.archiveFile }, strategy.tasks.named('jar').flatMap { it.archiveFile }) + data.configurations.runtimeClasspath + strategy.configurations.runtimeClasspath
 }
 tasks.register('batchRuntimeJar', Jar) {
     dependsOn batch.tasks.named('classes')
@@ -205,7 +207,11 @@ tasks.register('batchControlScripts', CreateStartScripts) {
 distributions {
     main {
         distributionBaseName = 'QuestDBWithData'
-        contents { from(data.configurations.runtimeClasspath) { into 'lib' } }
+        contents {
+            from(data.configurations.runtimeClasspath) { into 'lib' }
+            from(strategy.tasks.named('jar')) { into 'lib' }
+            from(strategy.configurations.runtimeClasspath) { into 'lib' }
+        }
     }
     create('batch') {
         distributionBaseName = 'QuestDBWithData-batch'
@@ -230,6 +236,7 @@ tasks.register('verifyModuleBoundaries') {
         }
         requireCondition(ownProjectDependencies(core).empty, 'data-core must not depend on either application')
         [data, batch].each { p -> requireCondition(ownProjectDependencies(p) == ([':data-core'] as Set), "${p.path} main project dependencies must be only data-core") }
+        requireCondition(ownProjectDependencies(strategy) == ([':data-app', ':batch-app'] as Set), 'main-strategy-runtime is the only composition module and must depend on both applications')
         def readEntries = { archive ->
             new java.util.zip.ZipFile(archive).withCloseable { zip ->
                 def entries = zip.entries().collect { it.name }
@@ -240,6 +247,7 @@ tasks.register('verifyModuleBoundaries') {
         def coreEntries = readEntries(core.tasks.named('jar').get().archiveFile.get().asFile)
         def dataEntries = readEntries(data.tasks.named('jar').get().archiveFile.get().asFile)
         def batchEntries = readEntries(batch.tasks.named('jar').get().archiveFile.get().asFile)
+        def strategyEntries = readEntries(strategy.tasks.named('jar').get().archiveFile.get().asFile)
         def rootJarEntries = readEntries(tasks.named('jar').get().archiveFile.get().asFile)
         def rootBatchEntries = readEntries(tasks.named('batchRuntimeJar').get().archiveFile.get().asFile)
         def coreSourceTypes = core.sourceSets.main.java.files.collect { source ->

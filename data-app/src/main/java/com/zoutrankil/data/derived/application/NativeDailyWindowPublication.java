@@ -58,8 +58,10 @@ public final class NativeDailyWindowPublication<R extends Record> {
                 before.tableId(),before.directory(),stage.tableId(),before.fingerprint(),stage.fingerprint(),JobDefinitionJson.mapper().writeValueAsString(scope));
         var entry=journal.create(intent);
         try {
-            check(cancelled);storage.rename(intent.target(),intent.backup());entry=journal.advance(entry,State.OLD_MOVED);
-            check(cancelled);storage.rename(intent.stage(),intent.target());entry=journal.advance(entry,State.PUBLISHED);
+            check(cancelled);storage.rename(intent.target(),intent.backup());
+            port.awaitPublished(intent.backup(),before.tableId(),before.directory(),cancelled);entry=journal.advance(entry,State.OLD_MOVED);
+            check(cancelled);storage.rename(intent.stage(),intent.target());
+            port.awaitPublished(intent.target(),stage.tableId(),stage.directory(),cancelled);entry=journal.advance(entry,State.PUBLISHED);
             var published=port.formalSnapshot();var retained=port.snapshot(backup);requirePublished(intent,published,retained);
             entry=journal.advance(entry,State.VERIFIED);
             Path evidence=writePublicationEvidence(source,intent,published,source.rows().size());
@@ -92,8 +94,8 @@ public final class NativeDailyWindowPublication<R extends Record> {
             if(lease==null)throw new IllegalStateException("Uncertain publication dataset lease missing");journal.requireLease(lease,true);
             if(entry.state()!=State.IN_DOUBT)entry=journal.advance(entry,State.IN_DOUBT);entry=journal.advance(entry,State.RESUMING);
             try {
-                if(oldTarget)storage.rename(intent.target(),intent.backup());
-                if(!newTarget)storage.rename(intent.stage(),intent.target());
+                if(oldTarget){storage.rename(intent.target(),intent.backup());port.awaitPublished(intent.backup(),original.tableId(),original.directory(),()->false);}
+                if(!newTarget){storage.rename(intent.stage(),intent.target());port.awaitPublished(intent.target(),replacement.tableId(),replacement.directory(),()->false);}
                 entry=journal.advance(entry,State.PUBLISHED);var actual=port.formalSnapshot();var backup=port.snapshot(intent.backup());requirePublished(intent,actual,backup);
                 entry=journal.advance(entry,State.VERIFIED);
             } catch(Exception failure) {retainUncertain(journal,runId,failure);throw failure;}
@@ -164,15 +166,28 @@ public final class NativeDailyWindowPublication<R extends Record> {
     }
     private Path writePublicationEvidence(Source<R> source,ReferencePublicationJournal.Intent intent,NativeDailyWindowSnapshot<R> published,int windowRows)throws Exception {
         Path file=source.file().resolveSibling("publication.json");
-        var body=Map.of("published",true,"backup",intent.backup(),"formalRows",published.rows().size(),"windowRows",windowRows,"fullTargetFingerprint",published.fingerprint(),"sourceFingerprint",source.fingerprint(),"sourceEvidence",source.file().toString());
-        if(Files.isRegularFile(file)) {
+        var body=new LinkedHashMap<String,Object>();body.put("published",true);body.put("producer","java."+dataset);
+        body.put("runId",intent.runId());body.put("publicationId",intent.id());body.put("publicationState","VERIFIED");
+        body.put("target",intent.target());body.put("formalTableId",published.tableId());body.put("formalDirectory",published.directory());
+        body.put("backup",intent.backup());body.put("backupTableId",intent.originalId());body.put("backupDirectory",intent.originalDirectory());
+        body.put("formalRows",published.rows().size());body.put("windowRows",windowRows);body.put("fullTargetFingerprint",published.fingerprint());
+        body.put("beforeTargetFingerprint",intent.beforeFingerprint());body.put("sourceFingerprint",source.fingerprint());
+        body.put("sourceEvidence",source.file().toString());body.put("sourceEvidenceSha256",source.fileSha());
+        byte[] bytes=JobDefinitionJson.mapper().writeValueAsBytes(body);
+        if(bytes.length>4*1024*1024)throw new IllegalStateException("Publication evidence exceeds four MiB");
+        if(Files.exists(file,LinkOption.NOFOLLOW_LINKS)) {
+            if(Files.isSymbolicLink(file)||!Files.isRegularFile(file,LinkOption.NOFOLLOW_LINKS)||Files.size(file)<1||Files.size(file)>4*1024*1024)
+                throw new IllegalStateException("Bounded regular publication evidence required");
             var existing=JobDefinitionJson.mapper().readTree(file.toFile());
             if(!existing.path("published").asBoolean()||!intent.backup().equals(existing.path("backup").asText())||!published.fingerprint().equals(existing.path("fullTargetFingerprint").asText())
-                    ||!source.fingerprint().equals(existing.path("sourceFingerprint").asText())||existing.path("windowRows").asInt(-1)!=windowRows)
+                    ||!source.fingerprint().equals(existing.path("sourceFingerprint").asText())||existing.path("windowRows").asInt(-1)!=windowRows
+                    ||existing.path("formalRows").asInt(-1)!=published.rows().size()||!source.file().toString().equals(existing.path("sourceEvidence").asText()))
                 throw new IllegalStateException("Existing publication evidence differs");
+            // Preserve previously certified immutable evidence; any enriched binding already present must agree.
+            var expected=JobDefinitionJson.mapper().readTree(bytes);for(var field:body.entrySet())if(existing.has(field.getKey())&&!existing.get(field.getKey()).equals(expected.get(field.getKey())))
+                throw new IllegalStateException("Existing publication identity/source SHA binding differs");
             return file;
         }
-        byte[] bytes=JobDefinitionJson.mapper().writeValueAsBytes(body);
         try(var channel=java.nio.channels.FileChannel.open(file,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE)) {
             var buffer=java.nio.ByteBuffer.wrap(bytes);while(buffer.hasRemaining())channel.write(buffer);channel.force(true);
         }

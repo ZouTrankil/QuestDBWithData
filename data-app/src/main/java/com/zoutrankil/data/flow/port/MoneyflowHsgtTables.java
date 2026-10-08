@@ -13,6 +13,11 @@ public interface MoneyflowHsgtTables {
         Snapshot window(LocalDate from, LocalDate to) throws Exception;
     }
     Table open(String table);
+    default Table open(String table, String owningTarget) {
+        if (!table.equals(owningTarget))
+            throw new UnsupportedOperationException("This table adapter cannot validate an owner's publication layout");
+        return open(table);
+    }
     String logicalTargetId(String table);
     String physicalTargetId(String table, Identity identity);
     int tableCount(String table);

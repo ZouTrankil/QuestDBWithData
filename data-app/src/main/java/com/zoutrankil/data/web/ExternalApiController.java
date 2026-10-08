@@ -87,6 +87,8 @@ public class ExternalApiController {
                 .map(DatasetDefinition.Column::logicalName).toList(), Map.of(), null, null, null, limit, null);
         return Mono.fromCallable(() -> reader.read(definition, query))
                 .subscribeOn(Schedulers.boundedElastic())
+                .onErrorMap(DatasetReadService.NotReadyException.class,
+                        error -> new ResponseStatusException(HttpStatus.CONFLICT, error.getMessage(), error))
                 .onErrorMap(org.springframework.dao.DataAccessException.class,
                         error -> new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "QuestDB unavailable"));
     }
