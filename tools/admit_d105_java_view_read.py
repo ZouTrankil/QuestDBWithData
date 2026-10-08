@@ -14,29 +14,29 @@ sys.dont_write_bytecode = True
 import audit_d105_macro_core_view as audit
 
 D = audit.DIRECTORY
-JAVA = audit.REPO / "src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyViewLiveReadAcceptanceTest.java"
+JAVA = audit.REPO / "data-app/src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyViewLiveReadAcceptanceTest.java"
 CODE = (
-    "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyView.java",
-    "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewKey.java",
-    "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewDataset.java",
-    "src/main/java/com/zoutrankil/data/mapper/MacroCoreMonthlyViewMapper.java",
-    "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyViewReadRepository.java",
-    "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreViewReadGuard.java",
-    "src/main/java/com/zoutrankil/data/repository/QuestDbMacroCoreReadGuard.java",
-    "src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
-    "src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
-    "src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
-    "src/main/java/com/zoutrankil/data/repository/MacroCoreMonthlyReadRepository.java",
-    "src/main/java/com/zoutrankil/data/mapper/MacroCoreMonthlyMapper.java",
-    "src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyDataset.java",
-    "src/main/java/com/zoutrankil/data/domain/DatasetReadQuery.java",
-    "src/main/java/com/zoutrankil/data/domain/DatasetReadCursor.java",
-    "src/main/java/com/zoutrankil/data/domain/DatasetReadPage.java",
-    "src/main/java/com/zoutrankil/data/service/ReadGroupReader.java",
-    "src/main/java/com/zoutrankil/data/repository/DatasetWritePreparation.java",
-    "src/main/java/com/zoutrankil/data/service/ReadGroupJson.java",
-    "src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
-    "src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyViewLiveReadAcceptanceTest.java",
+    "data-app/src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyView.java",
+    "data-app/src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewKey.java",
+    "data-app/src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyViewDataset.java",
+    "data-app/src/main/java/com/zoutrankil/data/derived/mapper/MacroCoreMonthlyViewMapper.java",
+    "data-app/src/main/java/com/zoutrankil/data/derived/storage/MacroCoreMonthlyViewReadRepository.java",
+    "data-app/src/main/java/com/zoutrankil/data/derived/storage/QuestDbMacroCoreViewReadGuard.java",
+    "data-app/src/main/java/com/zoutrankil/data/derived/storage/QuestDbMacroCoreReadGuard.java",
+    "data-app/src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java",
+    "data-app/src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java",
+    "data-app/src/main/java/com/zoutrankil/data/config/DatasetConfiguration.java",
+    "data-app/src/main/java/com/zoutrankil/data/derived/storage/MacroCoreMonthlyReadRepository.java",
+    "data-app/src/main/java/com/zoutrankil/data/derived/mapper/MacroCoreMonthlyMapper.java",
+    "data-app/src/main/java/com/zoutrankil/data/domain/MacroCoreMonthlyDataset.java",
+    "data-app/src/main/java/com/zoutrankil/data/domain/DatasetReadQuery.java",
+    "data-app/src/main/java/com/zoutrankil/data/domain/DatasetReadCursor.java",
+    "data-app/src/main/java/com/zoutrankil/data/domain/DatasetReadPage.java",
+    "data-app/src/main/java/com/zoutrankil/data/service/ReadGroupReader.java",
+    "data-app/src/main/java/com/zoutrankil/data/repository/DatasetWritePreparation.java",
+    "data-app/src/main/java/com/zoutrankil/data/service/ReadGroupJson.java",
+    "data-app/src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java",
+    "data-app/src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyViewLiveReadAcceptanceTest.java",
 )
 
 

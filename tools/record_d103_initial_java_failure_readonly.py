@@ -73,11 +73,11 @@ def main():
         'session_id':10320,'exit_code':1,'chunk_id':'f0be13','observed_at':observed,
         'status':'COMPLETED','test_result':'1 test completed, 1 failed; final receipt serialization at line177',
         'original_jvm_pid_birth_not_recorded':True})
-    main_java=ROOT/'src/main/java/com/zoutrankil/data'
+    main_java=ROOT/'data-app/src/main/java/com/zoutrankil/data'
     gate={'protocol_version':1,'task_id':'D103','decision':'accepted_for_readonly_receipt_recovery','checked_at':observed,
         'failed_junit':binding(failed_xml),'log':binding(DIRECTORY/'java-initial-live-20261006.log'),
-        'executed_test_source':source,'port_source':binding(main_java/'repository/EquityStyleMonthlyWritePort.java'),
-        'adapter_source':binding(main_java/'service/EquityStyleMonthlyMaterializeAdapter.java'),
+        'executed_test_source':source,'port_source':binding(main_java/'derived/storage/EquityStyleMonthlyWritePort.java'),
+        'adapter_source':binding(main_java/'derived/application/EquityStyleMonthlyMaterializeAdapter.java'),
         'runner_source':binding(main_java/'service/SyncJobRunner.java'),
         'typed_adapter_source':binding(main_java/'service/PreparedWriteAdapter.java'),
         'original_executor_completion':completion,'ledger_snapshot':snapshot_proof,

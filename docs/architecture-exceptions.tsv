@@ -1,14 +1,1 @@
 # rule	origin	target	remediation-task	reason
-application-storage	com.zoutrankil.data.service.L2DailyFeaturesJobService	io.questdb.client.QuestDB	T15	Move family storage assembly or concrete application dependency behind a port
-application-storage	com.zoutrankil.data.service.L2DailyFeaturesJobService	org.springframework.jdbc.core.JdbcTemplate	T15	Move family storage assembly or concrete application dependency behind a port
-application-storage	com.zoutrankil.data.service.L2DatasetManifestJobService	io.questdb.client.QuestDB	T15	Move family storage assembly or concrete application dependency behind a port
-application-storage	com.zoutrankil.data.service.L2DatasetManifestJobService	org.springframework.jdbc.core.JdbcTemplate	T15	Move family storage assembly or concrete application dependency behind a port
-application-storage	com.zoutrankil.data.service.L2EventResponseFeaturesJobService	io.questdb.client.QuestDB	T15	Move family storage assembly or concrete application dependency behind a port
-application-storage	com.zoutrankil.data.service.L2EventResponseFeaturesJobService	org.springframework.jdbc.core.JdbcTemplate	T15	Move family storage assembly or concrete application dependency behind a port
-application-storage	com.zoutrankil.data.service.L2IntradayBarFeaturesJobService	io.questdb.client.QuestDB	T15	Move family storage assembly or concrete application dependency behind a port
-application-storage	com.zoutrankil.data.service.L2IntradayBarFeaturesJobService	org.springframework.jdbc.core.JdbcTemplate	T15	Move family storage assembly or concrete application dependency behind a port
-application-storage	com.zoutrankil.data.service.L2T0TrainingLabelsJobService	io.questdb.client.QuestDB	T15	Move family storage assembly or concrete application dependency behind a port
-application-storage	com.zoutrankil.data.service.L2T0TrainingLabelsJobService	org.springframework.jdbc.core.JdbcTemplate	T15	Move family storage assembly or concrete application dependency behind a port
-application-storage	com.zoutrankil.data.service.StaticTargetIdentity	org.springframework.jdbc.core.JdbcTemplate	T05	Separate pure target identity from JDBC metadata lookup
-application-storage	com.zoutrankil.data.service.StockBasicWriteGroupService	io.questdb.client.QuestDB	T15	Move family storage assembly or concrete application dependency behind a port
-application-storage	com.zoutrankil.data.service.StockBasicWriteGroupService	org.springframework.jdbc.core.JdbcTemplate	T15	Move family storage assembly or concrete application dependency behind a port

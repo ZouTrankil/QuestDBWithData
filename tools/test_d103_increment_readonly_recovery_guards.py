@@ -206,7 +206,7 @@ class ImmutableHistoryClosureTests(unittest.TestCase):
                 sut.validate_original_frontier(receipt, historical, actual)
 
     def test_project_java_readonly_sha_binding_supported(self):
-        path = sut.audit.REPO / "src/main/java/com/zoutrankil/data/repository/EquityStyleMonthlyWritePort.java"
+        path = sut.audit.REPO / "data-app/src/main/java/com/zoutrankil/data/derived/storage/EquityStyleMonthlyWritePort.java"
         proof = {"path": str(path), "sha256": sut.audit.digest(path)}
         self.assertEqual(sut.proof_file(proof), proof)
         proof["sha256"] = "e" * 64

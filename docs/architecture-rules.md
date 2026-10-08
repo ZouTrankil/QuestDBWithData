@@ -4,7 +4,21 @@
 
 主应用入口为 `com.zoutrankil.data.QuestDataApplication`，包含 CLI 和 Web 两种模式。
 批处理入口为 `com.zoutrankil.batch.BatchApplication`，使用独立启动配置。
-当前仍为单 Gradle 工程；T17 将按真实共享依赖拆为 `data-core`、`data-app`、`batch-app`。
+Gradle 工程由 `data-core`、`data-app`、`batch-app` 三个模块组成。根工程保留聚合测试、根级契约、架构检查和发行包装配，不承载生产 Java 源码。
+
+```mermaid
+flowchart TD
+    Core[data-core: 共享模型与基础契约]
+    Data[data-app: 主数据应用 / CLI / Web]
+    Batch[batch-app: 批处理应用]
+    Root[根工程: 聚合检查与发行包]
+    Data --> Core
+    Batch --> Core
+    Root --> Data
+    Root --> Batch
+```
+
+主应用和批处理应用相互独立，只通过 `data-core` 中稳定的共享类型协作。模块测试资源随所属模块进入测试运行时；明确共享的资源由资源归属检查维护。批处理 JDBC 驱动由发行包检查限定在批处理分发物中。完整离线验收运行 `check`；live 数据源、生产数据库和保留状态恢复验收须作为单独的运行环境门禁。
 
 | 包/层 | 职责 | 允许的主要依赖 |
 | --- | --- | --- |
@@ -29,8 +43,8 @@ flowchart LR
     Config --> Store
 ```
 
-当前存量尚未全部达到这张依赖图。具体债务登记在
-[`architecture-exceptions.tsv`](architecture-exceptions.tsv)，每项记录规则、调用方、被依赖类型、整改任务和原因。
+当前包依赖扫描的违规数为 0。
+[`architecture-exceptions.tsv`](architecture-exceptions.tsv) 保留登记格式；今后出现待整改边时，逐项记录规则、调用方、被依赖类型、整改任务和原因。
 登记依赖边不代表批准新增业务调用；同一依赖边内新增了多少次调用不由本检查计数。
 
 ## CLI 命令装配
@@ -112,7 +126,7 @@ ST 的硬中断恢复仅允许已完整核验的整数零行 `FETCHED` 凭证进
 恢复先核验全部阶段、每日与年度来源凭证，再核对发布后的整表、窗口及窗口外内容，完成台账后释放租约。
 非空 `FETCHED`、损坏凭证或无法确定的物理布局不能触发后续重命名。
 
-跨业务族的 group 装配仍待 T15 后续统一整理；业务包内的数据库依赖清除不能证明共享装配已经完成。
+跨业务族的 group 通过 `WriteGroupWriters` 装配独立 session，物理工厂位于 `group.storage`。
 
 ## 指数业务包
 
@@ -132,7 +146,7 @@ DcIndex 保留完整窗口替换、物理代际和不同版本的发布证据，
 各族的逻辑身份、WAL 等待、取消位置和正式表准入分别校验，不合并成通用发布协议。
 
 DailyMarket/DailyBasic 的 group-child prior/parent 传递仍按既有行为固定；修正这一行为需要单独审阅。
-跨族 group 直接构造存储组件的装配仍属于 T15 后续工作。
+跨族 group 的物理组件由 `WriteGroupWriters` 工厂按原调用位置创建。
 
 ## 资金流和融资融券业务包
 
@@ -155,7 +169,7 @@ HSGT 完成中断发布前，先核验冻结 owner/request、run/attempt/slice �
 非空或可被强制转换为零的凭证不能授权剩余重命名。
 完整发布读回后才完成切片、attempt 和 run，并释放所属租约。
 
-各任务原有取消和 parent/prior 传递方式仍分别保留；跨族 group 装配和父任务取消传播留在 T15 后续整理。
+各任务原有取消和 parent/prior 传递方式仍分别保留；扩展跨族父任务取消传播需要单独定义并审阅协议。
 
 ## 自动检查
 
@@ -188,3 +202,17 @@ HSGT 完成中断发布前，先核验冻结 owner/request、run/attempt/slice �
 原生 MV 的会话保留物理源快照、目标绑定、PID 见证、refresh 与读回的实例状态；私有 attestor 通过窄接口创建，每个会话单独保存 PID 历史。日历覆盖顺序为 version-before、窗口读取与比较、version-after，不能移入通用物理 MV 写入器执行应用流程。
 
 ETF delegated cache 的持久 claim、冻结身份和禁止重发语义由应用层拥有。进程端口负责实际进程控制，物理 target 负责有界 SELECT 读回。Session 的 attempted/unresolved/cancellation 状态不作为共享单例，三个 stopped-process 证明和释放 lease 前的最终复核保持原顺序。构造与 DI 装配不查询或启动进程；plan/preview 仍可能运行原有只读预览。
+
+## L2 入库与共享 group 装配
+
+`data.l2` 的 application、port、storage、mapper 与 domain 分别拥有来源检查、执行及恢复、目标/session 契约、物理读写、字段转换和纯值记录。`L2Configuration` 绑定五个目标及五个 Python 来源配置，保留原有配置键、默认路径、窗口预算和懒加载客户端。构造和装配不执行来源进程或数据库查询。
+
+DatasetManifest、DailyFeatures 的分页方式与三个分钟型目标的 prepared write 保持各自的协议。来源 receipt、CSV/Parquet 指纹、T0 六个 horizon 的顺序和计数、空源校验及恢复边界由原业务族决定。每次运行创建独立 writer、source 和证据上下文；纯 row、字段映射、codec、预算和不可变定义可以共享。
+
+`WriteGroupWriters` 声明 23 个类型化 writer 工厂和两个 publication table 工厂。`QuestDbWriteGroupWriters` 每次调用创建新的物理实例；`StockBasicWriteGroupService` 从 session 获取同一 codec。创建时机、隔离目标、证据路径以及发布回调的位置按各分支的原流程保留。
+
+## 原生 L2 计算
+
+`batch.l2` 的两个 CLI 只解析不可变 request 并调用 single/batch service。来源接口拥有目录发现、原始文件指纹和有界 CSV 读取；checkpoint store 拥有输出锁、原子文件、日志、受限检查点读取和聚合文件。数值 pipeline 使用原有的纯计算函数，计算版本指纹包含实际加载的 class 字节及 Java/Jackson 版本。
+
+每次 batch date 执行新建 worker pool 和 publication gate。result 写入或删除、结果哈希与 checkpoint 写入在同一次受控发布中完成；清理先关闭发布权限，再停止 worker。中断异常、清理过程的再次中断与记账 I/O 异常保留异常链，退出时恢复线程中断标志。旧版本指纹失配后重算并生成新检查点；恢复前重新核验来源、结果、日期、symbol 和字段数。

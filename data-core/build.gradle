@@ -1,0 +1,15 @@
+plugins { id 'java-library' }
+
+dependencies {
+    api platform('org.springframework.boot:spring-boot-dependencies:4.1.1')
+    api 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
+    api 'org.springframework:spring-context'
+    api 'org.springframework:spring-webflux'
+    api 'org.springframework.boot:spring-boot'
+    api 'io.projectreactor:reactor-core'
+}
+
+tasks.named('jar') {
+    archiveBaseName = 'QuestDBWithData'
+    archiveClassifier = 'core'
+}

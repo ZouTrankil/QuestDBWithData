@@ -2,8 +2,8 @@
 from pathlib import Path
 
 ROOT = Path(__file__).absolute().parent.parent
-source = ROOT / 'src/test/java/com/zoutrankil/data/config/EquityStyleMonthlyLiveAcceptanceTest.java'
-target = ROOT / 'src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyLiveAcceptanceTest.java'
+source = ROOT / 'data-app/src/test/java/com/zoutrankil/data/config/EquityStyleMonthlyLiveAcceptanceTest.java'
+target = ROOT / 'data-app/src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyLiveAcceptanceTest.java'
 assert not target.exists()
 text = source.read_text(encoding='utf-8-sig')
 for left, right in [('EquityStyle','MacroCore'), ('equityStyle','macroCore'), ('equity_style','macro_core'),

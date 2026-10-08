@@ -21,7 +21,7 @@ source_codes = [row["index_code"] for row in source["rows"]]
 if len(source_codes) != len(set(source_codes)):
     raise SystemExit("Duplicate source classification code")
 
-config = yaml.safe_load((root / "src/main/resources/application.yml").read_text(encoding="utf-8"))["app"]["questdb"]
+config = yaml.safe_load((root / "data-app/src/main/resources/application.yml").read_text(encoding="utf-8"))["app"]["questdb"]
 auth = base64.b64encode(f"{config['username']}:{config['password']}".encode()).decode()
 endpoint = f"http://{config['host']}:{config['qwp-port']}/exec"
 sql = "SELECT DISTINCT index_code FROM index_member ORDER BY index_code LIMIT 2000"

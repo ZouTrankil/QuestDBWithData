@@ -58,9 +58,9 @@ def main():
     catalog=load(catalog_path)
     assert catalog['dataset_count']==53 and catalog['job_count']==42
     assert catalog['database_connections']==0 and catalog['ledger_created'] is False
-    harness=ROOT/'src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyLiveAcceptanceTest.java'
+    harness=ROOT/'data-app/src/test/java/com/zoutrankil/data/config/MacroCoreMonthlyLiveAcceptanceTest.java'
     literal=harness.read_text(encoding='utf-8').split('CODE_PATHS=List.of(',1)[1].split(');',1)[0]
-    paths=re.findall(r'"(src/(?:main|test)/java/[^"\r\n]+\.java)"',literal)
+    paths=re.findall(r'"((?:data-core/|data-app/|batch-app/)?src/(?:main|test)/java/[^"\r\n]+\.java)"',literal)
     assert len(paths)==len(set(paths))==28
     gate={'task_id':'D104','protocol_version':1,'stage':args.stage,
         'decision':'accepted_for_bounded_java_initial_materialization' if initial else 'accepted_for_bounded_java_incremental_materialization',

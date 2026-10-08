@@ -8,7 +8,7 @@ import json
 import yaml
 
 root = Path(__file__).resolve().parents[1]
-config = yaml.safe_load((root / 'src/main/resources/application.yml').read_text(encoding='utf-8'))['app']['questdb']
+config = yaml.safe_load((root / 'data-app/src/main/resources/application.yml').read_text(encoding='utf-8'))['app']['questdb']
 auth = base64.b64encode(f"{config['username']}:{config['password']}".encode()).decode()
 endpoint = f"http://{config['host']}:{config['qwp-port']}/exec"
 queries = {

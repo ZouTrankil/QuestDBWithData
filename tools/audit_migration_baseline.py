@@ -30,7 +30,7 @@ def main():
     parser.add_argument('--python-project', type=Path, required=True)
     args = parser.parse_args()
     workspace = args.workspace.resolve()
-    config = yaml.safe_load((workspace / 'src/main/resources/application.yml').read_text(encoding='utf-8'))
+    config = yaml.safe_load((workspace / 'data-app/src/main/resources/application.yml').read_text(encoding='utf-8'))
     qdb = config['app']['questdb']
     if any('${' in str(qdb.get(k, '')) for k in ('host', 'username', 'password')):
         raise RuntimeError('Resolve QuestDB configuration placeholders before running this audit')
@@ -89,7 +89,7 @@ def main():
                 'python_model': row['model_source'], 'sync': row['sync_function'],
                 'caller_evidence': refs, 'owner_confirmed': False, 'columns': [],
                 'projection': None, 'schema_changes': [], 'sample': None}
-        for path in (workspace / 'src/main/java/com/zoutrankil/questdbwithdata/domain').rglob('*.java'):
+        for path in (workspace / 'data-app/src/main/java/com/zoutrankil/data/domain').rglob('*.java'):
             if f'object `{name}`' in path.read_text(encoding='utf-8'):
                 item['projection'] = path.relative_to(workspace).as_posix()
                 break

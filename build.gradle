@@ -1,172 +1,318 @@
-plugins {
-    id 'application'
-}
+plugins { id 'application' }
 
-group = 'com.zoutrankil'
-version = '0.1.0'
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation platform('org.springframework.boot:spring-boot-dependencies:4.1.1')
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3'
-    implementation 'org.xerial:sqlite-jdbc:3.53.4.0'
-    implementation 'org.apache.commons:commons-compress:1.28.0'
-    implementation 'org.tukaani:xz:1.12'
-    // PostgreSQL JDBC remains for the legacy QuestDB PGWire adapter in the main app.
-    runtimeOnly 'org.postgresql:postgresql:42.7.7'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-webclient'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.batch:spring-batch-core'
-    implementation 'org.springframework:spring-context-support'
-    implementation 'org.quartz-scheduler:quartz'
-    implementation 'org.questdb:questdb-client:1.3.8'
-    // D021 reads the provider's bounded legacy .xls constituent-weight files.
-    implementation 'org.apache.poi:poi:5.5.1'
-    // QuestDB community module 10.26.0 is built against core 11.9.0.
-    implementation('org.flywaydb:flyway-core') {
-        version { strictly '11.9.0' }
-    }
-    runtimeOnly 'org.flywaydb:flyway-database-questdb:10.26.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'org.mockito:mockito-core'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
-
-configurations {
-    batchRuntimeClasspath {
-        extendsFrom runtimeClasspath
-        // The legacy application uses PostgreSQL JDBC only to speak QuestDB PGWire.
-        // The isolated Batch service uses SQLite and must not package this driver.
-        exclude group: 'org.postgresql'
+allprojects {
+    group = 'com.zoutrankil'
+    version = '0.1.0'
+    repositories { mavenCentral() }
+    dependencyLocking { lockAllConfigurations() }
+    plugins.withId('java') {
+        java { toolchain { languageVersion = JavaLanguageVersion.of(24) } }
+        dependencies {
+            testImplementation platform('org.springframework.boot:spring-boot-dependencies:4.1.1')
+            testImplementation 'org.junit.jupiter:junit-jupiter'
+            testImplementation 'org.mockito:mockito-core'
+            testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        }
+        tasks.withType(Test).configureEach {
+            useJUnitPlatform { excludeTags 'retained-parity' }
+            workingDir rootProject.projectDir
+        }
+        tasks.withType(JavaExec).configureEach { workingDir rootProject.projectDir }
     }
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
+// Resolve project models, not dependencies, before wiring aggregate task outputs.
+['data-core', 'data-app', 'batch-app'].each { evaluationDependsOn(":${it}") }
+def core = project(':data-core')
+def data = project(':data-app')
+def batch = project(':batch-app')
+def modules = [core, data, batch]
+def mainOutputs = files(modules.collect { it.sourceSets.main.output })
+def mainClassDirs = files(modules.collect { it.sourceSets.main.output.classesDirs })
+def sourceRoots = modules.collectMany { it.sourceSets.main.java.srcDirs.toList() }
+def moduleJarFiles = files(modules.collect { it.tasks.named('jar').flatMap { task -> task.archiveFile } })
+
+// An unqualified selector (`test`, `check`, `build`, `run`) may select matching child tasks too.
+// Keep legacy root entrypoints single-execution; explicit :module:test / :module:run remain isolated.
+modules.each { module ->
+    module.tasks.withType(Test).configureEach {
+        onlyIf('Root aggregate already executes the module test classes') { !gradle.taskGraph.hasTask(':test') }
+    }
+}
+[data, batch].each { module ->
+    module.tasks.named('run', JavaExec).configure {
+        onlyIf('Root run is the legacy single data application entrypoint') { !gradle.taskGraph.hasTask(':run') }
     }
 }
 
-application {
-    mainClass = 'com.zoutrankil.data.QuestDataApplication'
+// Root main contains no source. Root archives retain the existing public distribution paths.
+sourceSets.main.java.setSrcDirs([])
+sourceSets.main.resources.setSrcDirs([])
+sourceSets.main.output.classesDirs.setFrom(files())
+def emptyRootResources = layout.buildDirectory.dir('root-empty-main-resources')
+sourceSets.main.output.resourcesDir = emptyRootResources.get().asFile
+tasks.named('processResources') { destinationDir = emptyRootResources.get().asFile }
+tasks.register('verifyEmptyRootMain') {
+    group = 'verification'
+    doLast {
+        def allowed = emptyRootResources.get().asFile
+        if (sourceSets.main.output.files != ([allowed] as Set) || !fileTree(allowed).files.empty)
+            throw new GradleException('Root main output must contain only the dedicated empty resource directory; old monolithic classes/resources are excluded')
+    }
+}
+// The original monolithic test classes/resources are excluded for the same reason.
+def rootContractClasses = layout.buildDirectory.dir('classes/java/root-contract-test')
+def rootContractResources = layout.buildDirectory.dir('root-contract-test-resources')
+tasks.named('compileTestJava', JavaCompile) { destinationDirectory = rootContractClasses }
+tasks.named('processTestResources') { destinationDir = rootContractResources.get().asFile }
+sourceSets.test.output.classesDirs.setFrom(files(rootContractClasses))
+sourceSets.test.output.classesDirs.builtBy(tasks.named('compileTestJava'))
+sourceSets.test.output.resourcesDir = rootContractResources.get().asFile
+sourceSets.test.output.dir([builtBy: tasks.named('processTestResources')], rootContractResources)
+tasks.register('verifyRootTestOwnership') {
+    group = 'verification'
+    dependsOn tasks.named('compileTestJava'), tasks.named('processTestResources')
+    doLast {
+        def expectedOutputs = [rootContractClasses.get().asFile, rootContractResources.get().asFile] as Set
+        if (sourceSets.test.output.files != expectedOutputs) throw new GradleException('Unexpected root test output directory')
+        def sourceTypes = sourceSets.test.java.files.collect { source ->
+            def sourceRoot = sourceSets.test.java.srcDirs.find { source.toPath().startsWith(it.toPath()) }
+            sourceRoot.toPath().relativize(source.toPath()).toString().replace('\\', '/').replaceAll(/\.java$/, '')
+        }.toSet()
+        fileTree(rootContractClasses).matching { include '**/*.class' }.files.each { output ->
+            def type = rootContractClasses.get().asFile.toPath().relativize(output.toPath()).toString().replace('\\', '/').replaceAll(/\.class$/, '').split(/\$/)[0]
+            if (!sourceTypes.contains(type)) throw new GradleException("Stale or unowned root test class: ${type}")
+        }
+        def expectedResources = sourceSets.test.resources.files.collect { source ->
+            def sourceRoot = sourceSets.test.resources.srcDirs.find { source.toPath().startsWith(it.toPath()) }
+            sourceRoot.toPath().relativize(source.toPath()).toString().replace('\\', '/')
+        }.toSet()
+        def actualResources = fileTree(rootContractResources).files.collect { output -> rootContractResources.get().asFile.toPath().relativize(output.toPath()).toString().replace('\\', '/') }.toSet()
+        if (expectedResources != actualResources) throw new GradleException('Root test resources differ from the remaining cross-app contract resources')
+    }
+}
+application { mainClass = 'com.zoutrankil.data.QuestDataApplication' }
+// Root contracts intentionally see all three outputs; no app-to-app production dependency.
+// Filter project jars because their class directories are already present exactly once.
+sourceSets.test.compileClasspath += mainOutputs + files(modules.collect { it.sourceSets.main.compileClasspath }).filter {
+    !moduleJarFiles.files.contains(it)
+}
+def aggregateTestClasses = files(sourceSets.test.output.classesDirs, modules.collect { it.sourceSets.test.output.classesDirs })
+def aggregateTestClasspath = (sourceSets.test.runtimeClasspath + files(modules.collect { it.sourceSets.test.runtimeClasspath })).filter {
+    !moduleJarFiles.files.contains(it)
 }
 
-tasks.register('webRun', JavaExec) {
-    group = 'application'
-    description = 'Start the external Spring WebFlux API on the configured HTTP port.'
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'com.zoutrankil.data.QuestDataApplication'
+tasks.named('compileJava') { dependsOn modules.collect { it.tasks.named('compileJava') } }
+tasks.named('classes') { dependsOn modules.collect { it.tasks.named('classes') } }
+tasks.named('compileTestJava') { dependsOn modules.collect { it.tasks.named('compileTestJava') } }
+tasks.named('testClasses') { dependsOn modules.collect { it.tasks.named('testClasses') } }
+tasks.named('jar') {
+    dependsOn data.tasks.named('classes'), tasks.named('verifyEmptyRootMain')
+    from(data.sourceSets.main.output)
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
-    systemProperty 'cli.runtimeClasspath', sourceSets.main.runtimeClasspath.asPath
+tasks.named('test', Test) {
+    dependsOn(modules.collect { it.tasks.named('testClasses') }, tasks.named('verifyEmptyRootMain'), tasks.named('verifyRootTestOwnership'))
+    testClassesDirs = aggregateTestClasses
+    classpath = aggregateTestClasspath
+    // Keep root `test --tests ...` as a real filtered Test, not a lifecycle alias.
+    systemProperty 'cli.runtimeClasspath', data.sourceSets.main.runtimeClasspath.asPath
+    systemProperty 'architecture.mainClasses', mainClassDirs.asPath
+    systemProperty 'architecture.sources', sourceRoots.collect { it.absolutePath }.join(File.pathSeparator)
 }
-
 tasks.withType(Test).configureEach {
-    systemProperty 'architecture.mainClasses', sourceSets.main.output.classesDirs.asPath
-    systemProperty 'architecture.sources', sourceSets.main.java.srcDirs.collect { it.absolutePath }.join(File.pathSeparator)
+    systemProperty 'l2.preview.source-root', batch.file('src/main/java').absolutePath
 }
-
+batch.tasks.withType(Test).configureEach {
+    systemProperty 'l2.preview.source-root', batch.file('src/main/java').absolutePath
+}
+data.tasks.withType(Test).configureEach {
+    systemProperty 'cli.runtimeClasspath', data.sourceSets.main.runtimeClasspath.asPath
+}
 tasks.register('architectureTest', Test) {
     group = 'verification'
-    description = 'Reject new dependency violations and stale architecture exceptions.'
+    description = 'Reject package dependency violations across all three physical modules.'
+    dependsOn tasks.named('testClasses'), tasks.named('verifyEmptyRootMain'), tasks.named('verifyRootTestOwnership')
     testClassesDirs = sourceSets.test.output.classesDirs
-    classpath = sourceSets.test.runtimeClasspath
-    useJUnitPlatform()
+    classpath = aggregateTestClasspath
+    systemProperty 'architecture.mainClasses', mainClassDirs.asPath
+    systemProperty 'architecture.sources', sourceRoots.collect { it.absolutePath }.join(File.pathSeparator)
     filter { includeTestsMatching 'com.zoutrankil.architecture.*' }
 }
 
+tasks.named('run', JavaExec) {
+    dependsOn data.tasks.named('classes')
+    classpath = data.sourceSets.main.runtimeClasspath
+}
+tasks.register('webRun', JavaExec) {
+    group = 'application'
+    description = 'Start the external Spring WebFlux API on the configured HTTP port.'
+    dependsOn data.tasks.named('classes')
+    classpath = data.sourceSets.main.runtimeClasspath
+    mainClass = 'com.zoutrankil.data.QuestDataApplication'
+}
 tasks.register('batchRun', JavaExec) {
     group = 'application'
     description = 'Start the isolated SQLite-backed batch runtime (no legacy components).'
-    classpath = sourceSets.main.output + configurations.batchRuntimeClasspath
+    dependsOn batch.tasks.named('classes')
+    classpath = batch.sourceSets.main.runtimeClasspath
     mainClass = 'com.zoutrankil.batch.BatchApplication'
 }
-
-dependencyLocking { lockAllConfigurations() }
-
 tasks.register('batchControl', JavaExec) {
     group = 'application'
-    classpath = sourceSets.main.output + configurations.batchRuntimeClasspath
+    dependsOn batch.tasks.named('classes')
+    classpath = batch.sourceSets.main.runtimeClasspath
     mainClass = 'com.zoutrankil.batch.BatchControl'
 }
-
 tasks.register('l2DailyFeatureCompute', JavaExec) {
     group = 'application'
     description = 'Compute native Python-compatible daily L2 features from bounded extracted DFCF CSV samples.'
-    classpath = sourceSets.main.runtimeClasspath
+    dependsOn batch.tasks.named('classes')
+    classpath = batch.sourceSets.main.output + batch.configurations.l2RuntimeClasspath
     mainClass = 'com.zoutrankil.batch.l2.L2DailyFeatureCli'
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(24) }
 }
-
 tasks.register('l2DailyFeatureBatch', JavaExec) {
     group = 'application'
     description = 'Compute daily L2 features from extracted date directories with bounded workers and verified resume.'
-    classpath = sourceSets.main.runtimeClasspath
+    dependsOn batch.tasks.named('classes')
+    classpath = batch.sourceSets.main.output + batch.configurations.l2RuntimeClasspath
     mainClass = 'com.zoutrankil.batch.l2.L2DailyFeatureBatchCli'
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(24) }
     jvmArgs '-Xms1g', "-Xmx${providers.gradleProperty('l2BatchHeap').getOrElse('24g')}"
 }
 
-// Isolated distribution from this same project; do not package legacy application.yml credentials.
-tasks.register('batchRuntimeJar', Jar) {
-    archiveClassifier = 'batch'
-    from(sourceSets.main.output) { exclude 'application.yml' }
+tasks.named('startScripts', CreateStartScripts) {
+    classpath = files(tasks.named('jar').flatMap { it.archiveFile }) + data.configurations.runtimeClasspath
 }
-
+tasks.register('batchRuntimeJar', Jar) {
+    dependsOn batch.tasks.named('classes')
+    archiveClassifier = 'batch'
+    from(batch.sourceSets.main.output)
+}
 tasks.register('batchStartScripts', CreateStartScripts) {
     applicationName = 'questdb-batch'
     mainClass = 'com.zoutrankil.batch.BatchApplication'
-    classpath = files(tasks.named('batchRuntimeJar').flatMap { it.archiveFile }) + configurations.batchRuntimeClasspath
+    classpath = files(tasks.named('batchRuntimeJar').flatMap { it.archiveFile }) + batch.configurations.runtimeClasspath
     outputDir = layout.buildDirectory.dir('batch-scripts').get().asFile
 }
 tasks.register('batchControlScripts', CreateStartScripts) {
     applicationName = 'questdb-batch-control'
     mainClass = 'com.zoutrankil.batch.BatchControl'
-    classpath = files(tasks.named('batchRuntimeJar').flatMap { it.archiveFile }) + configurations.batchRuntimeClasspath
+    classpath = files(tasks.named('batchRuntimeJar').flatMap { it.archiveFile }) + batch.configurations.runtimeClasspath
     outputDir = layout.buildDirectory.dir('batch-control-scripts').get().asFile
 }
 distributions {
-    batch {
+    main {
+        distributionBaseName = 'QuestDBWithData'
+        contents { from(data.configurations.runtimeClasspath) { into 'lib' } }
+    }
+    create('batch') {
         distributionBaseName = 'QuestDBWithData-batch'
         contents {
             from(tasks.named('batchStartScripts')) { into 'bin'; fileMode = 0755 }
             from(tasks.named('batchControlScripts')) { into 'bin'; fileMode = 0755 }
             from(tasks.named('batchRuntimeJar')) { into 'lib' }
-            from(configurations.batchRuntimeClasspath) { into 'lib' }
+            from(batch.configurations.runtimeClasspath) { into 'lib' }
             from('deploy/batch') { into 'config-examples' }
         }
     }
 }
 
+tasks.register('verifyModuleBoundaries') {
+    group = 'verification'
+    dependsOn(modules.collect { it.tasks.named('jar') }, tasks.named('jar'), tasks.named('batchRuntimeJar'))
+    doLast {
+        def requireCondition = { condition, message -> if (!condition) throw new GradleException(message) }
+        def ownProjectDependencies = { p ->
+            p.configurations.findAll { it.name in ['api', 'implementation', 'runtimeOnly', 'compileOnly'] }
+                .collectMany { it.dependencies.withType(ProjectDependency).collect { d -> d.dependencyProject.path } }.toSet()
+        }
+        requireCondition(ownProjectDependencies(core).empty, 'data-core must not depend on either application')
+        [data, batch].each { p -> requireCondition(ownProjectDependencies(p) == ([':data-core'] as Set), "${p.path} main project dependencies must be only data-core") }
+        def readEntries = { archive ->
+            new java.util.zip.ZipFile(archive).withCloseable { zip ->
+                def entries = zip.entries().collect { it.name }
+                requireCondition(entries.size() == entries.toSet().size(), "Duplicate jar entries in ${archive}")
+                entries.toSet()
+            }
+        }
+        def coreEntries = readEntries(core.tasks.named('jar').get().archiveFile.get().asFile)
+        def dataEntries = readEntries(data.tasks.named('jar').get().archiveFile.get().asFile)
+        def batchEntries = readEntries(batch.tasks.named('jar').get().archiveFile.get().asFile)
+        def rootJarEntries = readEntries(tasks.named('jar').get().archiveFile.get().asFile)
+        def rootBatchEntries = readEntries(tasks.named('batchRuntimeJar').get().archiveFile.get().asFile)
+        def coreSourceTypes = core.sourceSets.main.java.files.collect { source ->
+            def sourceRoot = core.sourceSets.main.java.srcDirs.find { source.toPath().startsWith(it.toPath()) }
+            sourceRoot.toPath().relativize(source.toPath()).toString().replace('\\', '/').replaceAll(/\.java$/, '')
+        }.toSet()
+        requireCondition(coreSourceTypes.size() == 17, 'Core source closure changed; review the explicit shared boundary')
+        requireCondition(coreEntries.findAll { it.endsWith('.class') }.every { entry -> coreSourceTypes.contains(entry.replaceAll(/\.class$/, '').split(/\$/)[0]) }, 'Core jar contains stale or unowned application classes')
+        requireCondition(!coreEntries.any { it in ['application.yml', 'batch-runtime.yml', 'logback-spring.xml'] || it.startsWith('db/') || it.startsWith('trust/') || it.startsWith('contracts/') }, 'Core has application/DB resources')
+        requireCondition(!dataEntries.any { it.startsWith('com/zoutrankil/batch/') }, 'data-app contains batch classes')
+        requireCondition(!batchEntries.any { it.startsWith('com/zoutrankil/data/') }, 'batch-app contains data/core classes')
+        requireCondition(rootJarEntries == dataEntries && !rootJarEntries.any { it.startsWith('com/zoutrankil/batch/') }, 'Root compatibility jar differs from data-app output or contains stale batch classes')
+        requireCondition(rootBatchEntries == batchEntries, 'Root batch compatibility jar differs from batch-app output')
+        requireCondition(!batchEntries.contains('application.yml') && !batchEntries.any { it.startsWith('db/migration/questdb/') }, 'batch-app contains data configuration/migrations')
+        requireCondition((coreEntries.findAll { it.endsWith('.class') }.intersect(dataEntries)).empty, 'Core classes are duplicated in data-app')
+        requireCondition(batchEntries.contains('trust/cfca-ev-root.pem') && batchEntries.contains('META-INF/LICENSE-numpy-l2.txt'), 'Batch trust or license resource is missing')
+        def forbidden = ['postgresql-', 'questdb-client-', 'flyway-database-questdb-', 'poi-']
+        requireCondition(!batch.configurations.runtimeClasspath.files.any { f -> forbidden.any { f.name.startsWith(it) } }, 'Batch has data-only dependencies')
+        requireCondition(!core.configurations.runtimeClasspath.files.any { f -> (forbidden + ['sqlite-jdbc-', 'flyway-core-']).any { f.name.startsWith(it) } }, 'Core has database runtime dependencies')
+    }
+}
 tasks.register('verifyBatchDistributionDatabaseDrivers') {
     group = 'verification'
-    description = 'Assert the standalone Batch distribution uses SQLite and does not package PostgreSQL JDBC.'
-    dependsOn tasks.named('batchDistZip')
+    description = 'Assert the standalone Batch distribution contains SQLite and no data-app/PG/QuestDB/POI artifacts.'
+    dependsOn tasks.named('batchDistZip'), tasks.named('verifyModuleBoundaries')
     doLast {
         def archive = tasks.named('batchDistZip').get().archiveFile.get().asFile
         def entries = zipTree(archive).matching { include '**/*.jar' }.files.collect { it.name }
-        if (!entries.any { it.startsWith('sqlite-jdbc-') }) {
-            throw new GradleException("Batch distribution is missing SQLite JDBC: ${archive}")
-        }
-        if (entries.any { it.startsWith('postgresql-') }) {
-            throw new GradleException("Batch distribution must not contain PostgreSQL JDBC: ${archive}")
-        }
+        if (!entries.any { it.startsWith('sqlite-jdbc-') }) throw new GradleException("Batch distribution is missing SQLite JDBC: ${archive}")
+        if (entries.any { name -> ['postgresql-', 'questdb-client-', 'flyway-database-questdb-', 'poi-'].any { name.startsWith(it) } })
+            throw new GradleException("Batch distribution contains data-only dependencies: ${archive}")
+        if (entries.contains("QuestDBWithData-${project.version}.jar")) throw new GradleException('Batch distribution contains data-app jar')
     }
 }
-
-tasks.named('check') {
-    dependsOn tasks.named('verifyBatchDistributionDatabaseDrivers')
-    dependsOn tasks.named('architectureTest')
+tasks.register('verifyDependencyVersionCompatibility') {
+    group = 'verification'
+    description = 'Compare actually resolved module GAVs with the captured pre-module lock versions.'
+    doLast {
+        def baseline = new groovy.json.JsonSlurper().parse(file('gradle/dependency-baseline-before-modules.json'))
+        def configurationsToCheck = ['compileClasspath', 'runtimeClasspath', 'testCompileClasspath', 'testRuntimeClasspath', 'l2RuntimeClasspath']
+        def rows = []
+        def differences = []
+        allprojects.each { p ->
+            p.configurations.findAll { it.canBeResolved && it.name in configurationsToCheck }.each { configuration ->
+                def oldName = p == batch && configuration.name == 'runtimeClasspath' ? 'batchRuntimeClasspath'
+                    : configuration.name == 'l2RuntimeClasspath' ? 'runtimeClasspath' : configuration.name
+                def expected = baseline.configurations[oldName]
+                if (expected == null) throw new GradleException("Missing captured configuration: ${oldName}")
+                def actual = new TreeMap<String, String>()
+                configuration.incoming.resolutionResult.allComponents.each { component ->
+                    def id = component.id
+                    if (id instanceof org.gradle.api.artifacts.component.ModuleComponentIdentifier)
+                        actual["${id.group}:${id.module}".toString()] = id.version
+                }
+                actual.each { coordinate, selected ->
+                    if (expected[coordinate] != selected)
+                        differences.add([project: p.path, configuration: configuration.name, coordinate: coordinate, expected: expected[coordinate], actual: selected])
+                }
+                rows.add([project: p.path, configuration: configuration.name, baselineConfiguration: oldName, selected: actual,
+                    removedCoordinates: expected.keySet().findAll { !actual.containsKey(it) }.sort()])
+            }
+        }
+        def report = layout.buildDirectory.file('reports/modules/dependency-version-compatibility.json').get().asFile
+        report.parentFile.mkdirs()
+        report.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([baselineLockSha256: baseline.sourceSha256, resolved: rows, differences: differences])) + '\n'
+        if (!differences.empty) throw new GradleException("Module dependency versions differ from the accepted baseline; see ${report}")
+    }
 }
-
+tasks.named('check') {
+    dependsOn tasks.named('verifyBatchDistributionDatabaseDrivers'), tasks.named('architectureTest'), tasks.named('verifyDependencyVersionCompatibility')
+}
+tasks.named('assemble') { dependsOn modules.collect { it.tasks.named('jar') } }
 tasks.register('resolveDependencyLocks') {
-    description = 'Resolve and freeze all resolvable dependency configurations; use --write-locks.'
-    doLast { configurations.findAll { it.canBeResolved }.each { it.resolve() } }
+    description = 'Resolve all root and module configurations with --write-locks; never synthesize lockfiles.'
+    doLast { allprojects.each { p -> p.configurations.findAll { it.canBeResolved }.each { it.resolve() } } }
 }

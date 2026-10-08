@@ -65,7 +65,7 @@ for path in source_definitions:
                 physical_schema_verified=name in VERIFIED_LEGACY_JAVA or name in IMPLEMENTED_NATIVE and name not in PHYSICAL_SCHEMA_UNVERIFIED, deployed_enabled='unknown'))
 # Public non-Tushare sources are registered in Java even when absent from the legacy provider catalogue.
 for name in ({'cn_bond_yield_curve'} - {source['asset'] for source in sources}) if source_definitions else set():
-    contract_path = ROOT / 'src/main/resources/contracts/source' / f'{name}.json'
+    contract_path = ROOT / 'batch-app/src/main/resources/contracts/source' / f'{name}.json'
     sources.append(dict(asset=name, kind='source', owner='JDB-05', disposition=disposition(name),
         implementation=implementation(name), evidence=evidence(name), reference=str(contract_path.relative_to(ROOT)),
         line=None, reference_sha256=sha(contract_path), contract=json.loads(contract_path.read_text()),
