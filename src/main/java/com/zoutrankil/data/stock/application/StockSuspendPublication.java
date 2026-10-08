@@ -88,8 +88,11 @@ public final class StockSuspendPublication {
         var currentAgain=storage.snapshot();
         if(!before.equals(currentAgain))throw new IllegalStateException("stk_suspend target changed while source pages were staged");
         Path stageReceipt=Path.of(stage.receipt()).toAbsolutePath().normalize();
-        if(!stageReceipt.startsWith(evidenceRoot)||!Files.isRegularFile(stageReceipt)
-                ||Files.size(stageReceipt)>StockSuspendSource.MAX_EVIDENCE_BYTES)
+        if(!stage.table().matches("java_stk_suspend_stage_[0-9a-f]{32}")
+                ||!stageReceipt.getFileName().toString().equals(stage.table()+"-verified.json")
+                ||!stageReceipt.startsWith(evidenceRoot)||!Files.isRegularFile(stageReceipt)
+                ||!stageReceipt.toRealPath().startsWith(evidenceRoot.toRealPath())
+                ||Files.size(stageReceipt)>StockSuspendStaging.MAX_STAGE_EVIDENCE_BYTES)
             throw new IllegalStateException("stk_suspend verified stage receipt is absent, oversized or outside the run evidence directory");
         var stageAgain=tables.openTable(stage.table()).snapshot();
         if(!stage.snapshot().equals(stageAgain)||!stageAgain.rows().equals(prepared.expected()))

@@ -1,0 +1,174 @@
+{
+  "observedAtUtc" : "2026-10-07T17:03:27.081196100Z",
+  "readOnly" : true,
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-ledger.sqlite3",
+  "run" : [ {
+    "id" : "stk-suspend-42a5626c-81a0-4a32-8bf8-a5946c038996",
+    "parent_run_id" : null,
+    "job_id" : "data.stk_suspend",
+    "job_version" : 1,
+    "logical_date" : "2026-10-08",
+    "target_id" : "static-v2-f9b44732ef4fc827982110aaa07bdc4e150148f7c98c66769c845810b106e234",
+    "frozen_json" : "{\"definition\":{\"jobId\":\"data.stk_suspend\",\"version\":1,\"datasetId\":\"stk_suspend\",\"datasetVersion\":1,\"owner\":\"stk_suspend_owner\",\"supportedModes\":[\"INCREMENTAL\",\"BACKFILL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"targetMaxBefore\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"checkpointAnchor\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"targetId\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpointBefore\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"targetMinBefore\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"physicalTargetId\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"tushare.shared\",\"slicePolicyRef\":\"daily.trade_date\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":3,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT2M\"},\"timeout\":\"PT10M\",\"budget\":{\"maxWindowDays\":5,\"maxSlices\":5,\"maxPages\":5,\"maxRows\":25000,\"maxBatchBytes\":1048576},\"revisionDays\":2,\"dependencies\":[],\"frequency\":\"DAILY\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":true},\"mode\":\"BACKFILL\",\"parameters\":{\"physicalTargetId\":\"static-v2-a62c43140d5de06faa28b4076c5a8c43e8a75e04048174ca95ed6023d4c3cc27\",\"targetId\":\"static-v2-f9b44732ef4fc827982110aaa07bdc4e150148f7c98c66769c845810b106e234\",\"targetMaxBefore\":\"2026-09-30\",\"targetMinBefore\":\"2010-01-29\"},\"from\":\"2026-09-28\",\"to\":\"2026-09-30\",\"logicalDate\":\"2026-10-08\"}",
+    "frozen_json_parsed" : {
+      "definition" : {
+        "jobId" : "data.stk_suspend",
+        "version" : 1,
+        "datasetId" : "stk_suspend",
+        "datasetVersion" : 1,
+        "owner" : "stk_suspend_owner",
+        "supportedModes" : [ "INCREMENTAL", "BACKFILL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "daily.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT10M",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 5,
+          "maxRows" : 25000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "physicalTargetId" : "static-v2-a62c43140d5de06faa28b4076c5a8c43e8a75e04048174ca95ed6023d4c3cc27",
+        "targetId" : "static-v2-f9b44732ef4fc827982110aaa07bdc4e150148f7c98c66769c845810b106e234",
+        "targetMaxBefore" : "2026-09-30",
+        "targetMinBefore" : "2010-01-29"
+      },
+      "from" : "2026-09-28",
+      "to" : "2026-09-30",
+      "logicalDate" : "2026-10-08"
+    }
+  } ],
+  "entries" : [ {
+    "id" : "attempt-dacc1fa3-4b22-4cdb-9910-1b0b227ff19f",
+    "kind" : "ATTEMPT",
+    "run_id" : "stk-suspend-42a5626c-81a0-4a32-8bf8-a5946c038996",
+    "parent_id" : "stk-suspend-42a5626c-81a0-4a32-8bf8-a5946c038996",
+    "state" : "FAILED",
+    "revision" : 2,
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\"}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException"
+    },
+    "updated_at" : "2026-10-07T17:02:20.128105300Z"
+  }, {
+    "id" : "stk-suspend-42a5626c-81a0-4a32-8bf8-a5946c038996",
+    "kind" : "RUN",
+    "run_id" : "stk-suspend-42a5626c-81a0-4a32-8bf8-a5946c038996",
+    "parent_id" : null,
+    "state" : "FAILED",
+    "revision" : 2,
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\"}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException"
+    },
+    "updated_at" : "2026-10-07T17:02:20.137951600Z"
+  } ],
+  "events" : [ {
+    "entry_id" : "stk-suspend-42a5626c-81a0-4a32-8bf8-a5946c038996",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:02:19.843592600Z"
+  }, {
+    "entry_id" : "stk-suspend-42a5626c-81a0-4a32-8bf8-a5946c038996",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:02:19.864663700Z"
+  }, {
+    "entry_id" : "attempt-dacc1fa3-4b22-4cdb-9910-1b0b227ff19f",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:02:19.871658800Z"
+  }, {
+    "entry_id" : "attempt-dacc1fa3-4b22-4cdb-9910-1b0b227ff19f",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:02:19.878374100Z"
+  }, {
+    "entry_id" : "attempt-dacc1fa3-4b22-4cdb-9910-1b0b227ff19f",
+    "revision" : 2,
+    "state" : "FAILED",
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\"}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException"
+    },
+    "updated_at" : "2026-10-07T17:02:20.128105300Z"
+  }, {
+    "entry_id" : "stk-suspend-42a5626c-81a0-4a32-8bf8-a5946c038996",
+    "revision" : 2,
+    "state" : "FAILED",
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\"}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException"
+    },
+    "updated_at" : "2026-10-07T17:02:20.137951600Z"
+  } ],
+  "publications" : [ ]
+}

@@ -40,6 +40,71 @@ It listens on `APP_PORT` (default `8080`). `GET /api/v1/health` is public for pr
 
 CLI commands still run through the same main class when a command is supplied, for example `./gradlew run --args='show-sync-job-definitions'`.
 
+### Persistent main-strategy daily Batch
+
+The main Spring Web application starts `main_strategy_daily` automatically after
+`ApplicationReadyEvent`. This also applies to an IntelliJ launch with no arguments.
+The default `app.sync.batch.enabled` and `startup-catchup` are `true`.
+Its ordered stages are existing Java source owners, market sentiment calculation,
+regime calculation, backtest materialization, and physical data acceptance.
+Source requests reuse the existing WebFlux client and shared request budget.
+
+The calendar selects the latest completed SSE session after the 20:30 Asia/Shanghai
+source cutoff. Quartz runs at 20:35 and retries eligible unfinished work every
+15 minutes from 21:00 through 23:45, with a finite retry budget. SQLite stores
+business instances, stage certificates, Spring Batch executions and Quartz state.
+Completed stages are read back before reuse; uncertain writes require the existing
+owner's reconciliation operation. A process exit code alone cannot complete a batch.
+
+`v_backtest_daily` is the native Materialized View target, backed by the existing
+`backtest_daily` enriched table. The first conversion preserves the complete source
+history and all 13 business fields. No ordinary intermediate or alias VIEW is
+installed. The Java materialization owner refreshes the MV after verified base
+publication; deleting old DAY partitions requires a FULL refresh.
+Market sentiment and regime remain calculation tables managed by their existing
+Java MATERIALIZE jobs, both registered as daily eligible.
+
+Set the QuestDB address and the persistent source ledger before starting the
+application. The current local acceptance uses these IntelliJ VM options:
+
+```text
+-Dapp.questdb.host=127.0.0.1
+-Dapp.sync.ledger-path=var/main-strategy-java-refresh/20261007/sync-ledger.sqlite3
+```
+
+Keep this source ledger when restarting: it contains the publication authority and
+retained recovery evidence. The scheduler's separate metadata defaults to
+`var/main-strategy-batch.sqlite`. Web mode binds the main-strategy owners to their
+formal table names; finite CLI commands retain their isolated defaults.
+
+Control and inspect the same running pipeline through:
+
+- `GET /api/v1/batch/main-strategy`
+- `GET /api/v1/batch/main-strategy/instances/{instanceId}`
+- `POST /api/v1/batch/main-strategy/catch-up`
+- `POST /api/v1/batch/main-strategy/instances/{instanceId}/reconcile-publication`
+- `POST /api/v1/batch/main-strategy/pause`
+- `POST /api/v1/batch/main-strategy/resume`
+
+These routes use the existing API authentication. Persisted pause survives a
+restart. Set `APP_SYNC_BATCH_ENABLED=false` to disable this runtime, or
+`APP_SYNC_BATCH_STARTUP_CATCHUP=false` to keep scheduling without a startup catchup.
+An uncertain native publication requires explicit reconciliation with the body
+`{"stage":"MarketSentimentDaily","runId":"original-run-id","writerStopped":true}`.
+The runtime requires an idle writer, the original frozen run, unchanged source
+proofs and physical publication verification. It preserves the uncertain receipt
+and appends a verified recovery link; use `catch-up` afterward for the remaining
+stages. Ordinary retries never replay an uncertain publication.
+The accepted Level2 temporary JSONL directory need not be kept for ordinary daily
+jobs. Retained ingestion and archive receipts, an unchanged WAL frontier and a
+complete current typed quality fingerprint can certify already imported dates.
+Fresh source comparisons or re-imports require regenerating the deleted output.
+Future Level2 dates require their own accepted cleaning/import evidence; this
+batch waits when that dependency is missing. ETF disclosures use the actual latest
+announcement before the target date, with freshness and completeness limitations
+reported separately. Incomplete whole-market financing data stays optional and
+does not become a fabricated complete source.
+
 Useful smoke-test routes are `GET /api/v1/info`, `GET /api/v1/datasets`, `GET /api/v1/jobs`, `GET /api/v1/stock-basic/latest`, and `POST /api/v1/stock-basic/sync`. The last two access QuestDB or Tushare and run on a bounded-elastic scheduler so blocking database/client calls do not occupy the WebFlux event loop.
 
 Open [api.http](api.http) in IntelliJ and run the requests to check service health, QuestDB connectivity, dataset definitions, and a bounded sample of actual QuestDB rows. The sample endpoint accepts `limit=1..100` and reads only registered datasets with the READ capability. The stock synchronization request is commented out in the file because it writes data.

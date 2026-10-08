@@ -29,7 +29,7 @@ import java.util.UUID;
 import java.util.function.BooleanSupplier;
 import static com.zoutrankil.data.repository.ReferencePublicationJournal.State;
 
-/** D027 stage/backup rename journal; every generation retains DAY/WAL/DEDUP=false. */
+/** D027 stage/backup rename journal preserves the original target's exact DAY/WAL/DEDUP layout. */
 public final class MoneyflowHsgtPublication {
     public enum Layout { ORIGINAL, OLD_MOVED, PUBLISHED, CONFLICT }
     public record Result(ReferencePublicationJournal.Entry entry,Layout layout,
@@ -59,7 +59,7 @@ public final class MoneyflowHsgtPublication {
         if(operation==null||operation.owner!=this||operation.closed)throw new IllegalArgumentException("Active D027 publication lock required");
         var prepared=verified.prepared();requireNoPending(prepared.runId());
         var original=tables.open(prepared.target()).snapshot();
-        var stage=tables.open(prepared.stage()).snapshot();
+        var stage=tables.open(prepared.stage(),prepared.target()).snapshot();
         if(!same(original,prepared.before())
                 ||!tables.physicalTargetId(prepared.target(),original.identity()).equals(prepared.physicalTargetBefore())
                 ||!same(stage,verified.snapshot())
@@ -71,7 +71,8 @@ public final class MoneyflowHsgtPublication {
         String scope=JobDefinitionJson.mapper().writeValueAsString(java.util.Map.of("stageReceipt",verified.receipt(),
                 "stageReceiptFingerprint",stageReceiptHash,"requestFingerprint",prepared.requestFingerprint(),
                 "windowFrom",prepared.from(),"windowTo",prepared.to(),"sourceRows",verified.authoritativeRows().size(),
-                "replacementDirectory",stage.identity().directory()));
+                "replacementDirectory",stage.identity().directory(),
+                "dedup",com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(prepared.target())));
         var intent=new ReferencePublicationJournal.Intent("moneyflow-hsgt-publication-"+UUID.randomUUID(),"moneyflow_hsgt",
                 prepared.runId(),prepared.target(),backup,prepared.stage(),prepared.physicalTargetBefore(),
                 original.identity().id(),original.identity().directory(),stage.identity().id(),original.fingerprint(),stage.fingerprint(),scope);
@@ -151,18 +152,18 @@ public final class MoneyflowHsgtPublication {
         var i=entry.intent();boolean target=exists(i.target()),backup=exists(i.backup()),stage=exists(i.stage());
         String replacementDirectory=JobDefinitionJson.mapper().readTree(i.scope()).path("replacementDirectory").asText("");
         if(replacementDirectory.isBlank())return Layout.CONFLICT;
-        if(target&&backup&&!stage&&matches(i.target(),i.replacementId(),replacementDirectory,i.afterFingerprint())&&matches(i.backup(),i.originalId(),i.originalDirectory(),i.beforeFingerprint()))return Layout.PUBLISHED;
-        if(!target&&backup&&stage&&matches(i.backup(),i.originalId(),i.originalDirectory(),i.beforeFingerprint())&&matches(i.stage(),i.replacementId(),replacementDirectory,i.afterFingerprint()))return Layout.OLD_MOVED;
-        if(target&&!backup&&stage&&matches(i.target(),i.originalId(),i.originalDirectory(),i.beforeFingerprint())&&matches(i.stage(),i.replacementId(),replacementDirectory,i.afterFingerprint()))return Layout.ORIGINAL;
+        if(target&&backup&&!stage&&matches(i.target(),i.target(),i.replacementId(),replacementDirectory,i.afterFingerprint())&&matches(i.backup(),i.target(),i.originalId(),i.originalDirectory(),i.beforeFingerprint()))return Layout.PUBLISHED;
+        if(!target&&backup&&stage&&matches(i.backup(),i.target(),i.originalId(),i.originalDirectory(),i.beforeFingerprint())&&matches(i.stage(),i.target(),i.replacementId(),replacementDirectory,i.afterFingerprint()))return Layout.OLD_MOVED;
+        if(target&&!backup&&stage&&matches(i.target(),i.target(),i.originalId(),i.originalDirectory(),i.beforeFingerprint())&&matches(i.stage(),i.target(),i.replacementId(),replacementDirectory,i.afterFingerprint()))return Layout.ORIGINAL;
         return Layout.CONFLICT;
     }
     private Result verifyPublished(ReferencePublicationJournal.Entry entry)throws Exception {
         if(inspect(entry)!=Layout.PUBLISHED)throw new IllegalStateException("D027 published target differs from journal stage snapshot");
-        return new Result(entry,Layout.PUBLISHED,tables.open(entry.intent().target()).snapshot(),
-                tables.open(entry.intent().backup()).snapshot());
+        return new Result(entry,Layout.PUBLISHED,tables.open(entry.intent().target(),entry.intent().target()).snapshot(),
+                tables.open(entry.intent().backup(),entry.intent().target()).snapshot());
     }
-    private boolean matches(String table,long id,String directory,String fingerprint)throws Exception {
-        var snapshot=tables.open(table).snapshot();return snapshot.identity().id()==id
+    private boolean matches(String table,String owningTarget,long id,String directory,String fingerprint)throws Exception {
+        var snapshot=tables.open(table,owningTarget).snapshot();return snapshot.identity().id()==id
                 &&snapshot.identity().directory().equals(directory)&&snapshot.fingerprint().equals(fingerprint);
     }
     private boolean exists(String table){return tables.tableCount(table)==1;}
@@ -172,12 +173,12 @@ public final class MoneyflowHsgtPublication {
         JsonNode proof=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(receipt, 4 * 1024 * 1024, () -> new IllegalStateException("D027 verified stage receipt escaped its run evidence root")));var p=verified.prepared();
         var run=SyncRunLedger.openReadOnly(ledgerPath).getRun(p.runId());
         if(!"moneyflow_hsgt".equals(proof.path("dataset").asText())||!proof.path("sourceComplete").asBoolean(false)
-                ||proof.path("dedup").asBoolean(true)||!p.runId().equals(proof.path("runId").asText())
+                ||!matchesLayout(proof,p.target())||!p.runId().equals(proof.path("runId").asText())
                 ||!p.target().equals(proof.path("target").asText())||!p.stage().equals(proof.path("stage").asText())
                 ||!p.requestFingerprint().equals(proof.path("requestFingerprint").asText())
                 ||!SyncRequestIdentity.fingerprint(run.frozenJson(),run.targetId()).equals(p.requestFingerprint())
                 ||proof.path("sourceRows").asInt(-1)!=verified.authoritativeRows().size()
-                ||!MoneyflowHsgtRows.sameRows(verified.authoritativeRows(),tables.open(p.stage()).window(p.from(),p.to()).rows()))
+                ||!MoneyflowHsgtRows.sameRows(verified.authoritativeRows(),tables.open(p.stage(),p.target()).window(p.from(),p.to()).rows()))
             throw new IllegalStateException("D027 publication source proof differs from frozen request/staged window");
     }
     private void verifyJournalReceipt(ReferencePublicationJournal.Entry entry)throws Exception {
@@ -188,7 +189,9 @@ public final class MoneyflowHsgtPublication {
             throw new IllegalStateException("D027 journal stage receipt hash/path is invalid");
         JsonNode proof=JobDefinitionJson.mapper().readTree(FileEvidenceStore.readBounded(receipt, 4 * 1024 * 1024, () -> new IllegalStateException("D027 verified stage receipt escaped its run evidence root")));
         JsonNode stageIdentity=proof.path("stageAfter").path("identity"),beforeIdentity=proof.path("before").path("identity");
-        if(!proof.path("sourceComplete").asBoolean(false)||proof.path("dedup").asBoolean(true)
+        if(!proof.path("sourceComplete").asBoolean(false)||!matchesLayout(proof,entry.intent().target())
+                ||scope.has("dedup")&&!matchesLayout(scope,entry.intent().target())
+                ||!scope.has("dedup")&&com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(entry.intent().target())
                 ||!entry.intent().runId().equals(proof.path("runId").asText())||!entry.intent().stage().equals(proof.path("stage").asText())
                 ||!entry.intent().target().equals(proof.path("target").asText())
                 ||!entry.intent().afterFingerprint().equals(proof.path("stageAfter").path("fingerprint").asText())
@@ -207,12 +210,16 @@ public final class MoneyflowHsgtPublication {
                 throw new IllegalStateException("D027 journal source receipt escaped its run evidence root");
             var page=MoneyflowHsgtSource.reopen(source,hash,from,to);
             if(page.rows().size()!=ref.path("rows").asInt(-1)
-                    ||!MoneyflowHsgtRows.sameRows(page.rows(),tables.open(sourceTable).window(from,to).rows()))
+                    ||!MoneyflowHsgtRows.sameRows(page.rows(),tables.open(sourceTable,entry.intent().target()).window(from,to).rows()))
                 throw new IllegalStateException("D027 journal source receipt differs from the staged/published date window");
             returned=Math.addExact(returned,page.rows().size());
         }
         if(returned!=proof.path("sourceRows").asInt(-1)||returned!=scope.path("sourceRows").asInt(-2))
             throw new IllegalStateException("D027 journal source row total differs from receipt-backed stage proof");
+    }
+    private static boolean matchesLayout(JsonNode proof,String owningTarget) {
+        return proof.path("dedup").isBoolean()
+                &&proof.path("dedup").asBoolean()==com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(owningTarget);
     }
     private void rename(String source,String target){tables.rename(source,target);}
     private LockHolder acquireLock()throws Exception {

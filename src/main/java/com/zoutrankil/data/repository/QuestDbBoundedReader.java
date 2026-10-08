@@ -8,6 +8,9 @@ import com.zoutrankil.data.domain.temporal.TemporalValues;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import java.nio.file.Path;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.*;
@@ -55,7 +58,10 @@ public class QuestDbBoundedReader {
     // Admitted Python cache products identify a generation by sha256(...).hexdigest().
     private static final java.util.regex.Pattern CACHE_GENERATION = java.util.regex.Pattern.compile("[0-9a-f]{64}");
     private final JdbcTemplate jdbc;
-    public QuestDbBoundedReader(JdbcTemplate jdbc) { this.jdbc = jdbc; }
+    private final Path ledgerPath;
+    public QuestDbBoundedReader(JdbcTemplate jdbc) { this(jdbc,System.getProperty("app.sync.ledger-path","var/sync-ledger.sqlite3")); }
+    @Autowired
+    public QuestDbBoundedReader(JdbcTemplate jdbc,@Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledger) { this.jdbc=jdbc;this.ledgerPath=Path.of(ledger).toAbsolutePath().normalize(); }
 
     public <T> DatasetReadPage<T> read(DatasetDefinition definition, DatasetReadQuery query, String sourceVersion,
                                       Function<DatasetValues, T> mapper) {
@@ -141,6 +147,8 @@ public class QuestDbBoundedReader {
     }
 
     private String guardedSourceVersion(DatasetDefinition definition) {
+        if(BacktestDailyMaterializationReadGuard.applies(definition))
+            return BacktestDailyMaterializationReadGuard.version(jdbc,definition,ledgerPath);
         if (QuestDbEquityStyleReadGuard.applies(definition))
             return QuestDbEquityStyleReadGuard.version(jdbc, definition);
         if (QuestDbMacroCoreReadGuard.applies(definition))

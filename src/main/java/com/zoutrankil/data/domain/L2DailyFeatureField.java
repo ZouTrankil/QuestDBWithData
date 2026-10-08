@@ -122,7 +122,7 @@ public enum L2DailyFeatureField {
     LARGE_ORDER_RECORDS("large_order_records", StorageType.LONG, true, "符合大单的发生次数", false);
 
     private static final Map<String, L2DailyFeatureField> BY_NAME = Arrays.stream(values())
-            .collect(Collectors.toUnmodifiableMap(L2DailyFeatureField::name, Function.identity()));
+            .collect(Collectors.toUnmodifiableMap(L2DailyFeatureField::fieldName, Function.identity()));
     private final String name;
     private final StorageType storageType;
     private final boolean nullable;

@@ -1,0 +1,622 @@
+{
+  "observedAtUtc": "2026-10-07T18:22:37.6929136Z",
+  "readOnly": true,
+  "queries": {
+    "tables": {
+      "sql": "SELECT id,table_name,directoryName,walEnabled,partitionBy,table_txn,wal_txn,table_row_count FROM tables() WHERE table_name IN ('daily','daily_basic','stk_factor','stk_limit','stk_suspend','stk_st_daily','moneyflow','moneyflow_hsgt','margin_detail','etf_daily','etf_adj','etf_factor','etf_portfolio','cn_bond_yield_curve','exchange_calendar','market_sentiment_daily','regime_features_monitor_daily','backtest_daily','v_backtest_daily','l2_daily_features') ORDER BY table_name",
+      "result": {
+        "query": "SELECT id,table_name,directoryName,walEnabled,partitionBy,table_txn,wal_txn,table_row_count FROM tables() WHERE table_name IN ('daily','daily_basic','stk_factor','stk_limit','stk_suspend','stk_st_daily','moneyflow','moneyflow_hsgt','margin_detail','etf_daily','etf_adj','etf_factor','etf_portfolio','cn_bond_yield_curve','exchange_calendar','market_sentiment_daily','regime_features_monitor_daily','backtest_daily','v_backtest_daily','l2_daily_features') ORDER BY table_name",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INT"
+          },
+          {
+            "name": "table_name",
+            "type": "STRING"
+          },
+          {
+            "name": "directoryName",
+            "type": "STRING"
+          },
+          {
+            "name": "walEnabled",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "partitionBy",
+            "type": "STRING"
+          },
+          {
+            "name": "table_txn",
+            "type": "LONG"
+          },
+          {
+            "name": "wal_txn",
+            "type": "LONG"
+          },
+          {
+            "name": "table_row_count",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            3020,
+            "backtest_daily",
+            "java_backtest_daily_stage_e9aeb75785cf4e07bdd7e4d16c0f56c8~3020",
+            true,
+            "DAY",
+            206,
+            206,
+            10400431
+          ],
+          [
+            1846,
+            "cn_bond_yield_curve",
+            "cn_bond_yield_curve_stage_20260928_174124_549276~1846",
+            true,
+            "YEAR",
+            8,
+            8,
+            96028
+          ],
+          [
+            1680,
+            "daily",
+            "daily~1680",
+            true,
+            "YEAR",
+            189,
+            189,
+            9810109
+          ],
+          [
+            1876,
+            "daily_basic",
+            "daily_basic_stage_20260928_185816_917214~1876",
+            true,
+            "YEAR",
+            274,
+            274,
+            9974567
+          ],
+          [
+            1818,
+            "etf_adj",
+            "etf_adj~1818",
+            true,
+            "YEAR",
+            33,
+            33,
+            1584815
+          ],
+          [
+            1686,
+            "etf_daily",
+            "etf_daily~1686",
+            true,
+            "YEAR",
+            68,
+            68,
+            2134931
+          ],
+          [
+            1819,
+            "etf_factor",
+            "etf_factor~1819",
+            true,
+            "YEAR",
+            85,
+            85,
+            1083841
+          ],
+          [
+            307,
+            "etf_portfolio",
+            "etf_portfolio~307",
+            true,
+            "YEAR",
+            1529,
+            1529,
+            6512523
+          ],
+          [
+            296,
+            "exchange_calendar",
+            "exchange_calendar~296",
+            true,
+            "YEAR",
+            9,
+            9,
+            26668
+          ],
+          [
+            1665,
+            "l2_daily_features",
+            "l2_daily_features_recovery_20260911~1665",
+            true,
+            "DAY",
+            11386,
+            11386,
+            4948408
+          ],
+          [
+            1708,
+            "margin_detail",
+            "margin_detail~1708",
+            true,
+            "YEAR",
+            157,
+            157,
+            3599694
+          ],
+          [
+            3027,
+            "market_sentiment_daily",
+            "java_d121_market_sentiment_daily_stage_dd4bd401f5b84ab094a578d4d03e804c~3027",
+            true,
+            "MONTH",
+            null,
+            null,
+            null
+          ],
+          [
+            1873,
+            "moneyflow",
+            "moneyflow_stage_20260928_184806_272189~1873",
+            true,
+            "YEAR",
+            244,
+            244,
+            4631266
+          ],
+          [
+            3026,
+            "moneyflow_hsgt",
+            "java_d027_moneyflow_hsgt_stage_8f336ba163c0468c8a75ed4af388c411~3026",
+            true,
+            "DAY",
+            null,
+            null,
+            null
+          ],
+          [
+            3028,
+            "regime_features_monitor_daily",
+            "java_regime_features_monitor_daily_stage_3d1836683429456082c826121cb44351~3028",
+            true,
+            "MONTH",
+            null,
+            null,
+            null
+          ],
+          [
+            1722,
+            "stk_factor",
+            "stk_factor~1722",
+            true,
+            "YEAR",
+            225,
+            225,
+            10282455
+          ],
+          [
+            1725,
+            "stk_limit",
+            "stk_limit~1725",
+            true,
+            "YEAR",
+            285,
+            285,
+            12344449
+          ],
+          [
+            3025,
+            "stk_st_daily",
+            "java_d012_stk_st_daily_stage_bab6164bf8ca43468c1cf0d59504c3f8~3025",
+            true,
+            "YEAR",
+            null,
+            null,
+            null
+          ],
+          [
+            3023,
+            "stk_suspend",
+            "java_stk_suspend_stage_8f4e5aac8d144fc3b0572a8503231e7f~3023",
+            true,
+            "DAY",
+            null,
+            null,
+            null
+          ],
+          [
+            3021,
+            "v_backtest_daily",
+            "v_backtest_daily~3021",
+            true,
+            "MONTH",
+            21,
+            21,
+            10400431
+          ]
+        ],
+        "count": 20
+      }
+    },
+    "wal": {
+      "sql": "SELECT name,suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name IN ('daily','daily_basic','stk_factor','stk_limit','stk_suspend','stk_st_daily','moneyflow','moneyflow_hsgt','margin_detail','etf_daily','etf_adj','etf_factor','etf_portfolio','cn_bond_yield_curve','exchange_calendar','market_sentiment_daily','regime_features_monitor_daily','backtest_daily','v_backtest_daily','l2_daily_features') ORDER BY name",
+      "result": {
+        "query": "SELECT name,suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name IN ('daily','daily_basic','stk_factor','stk_limit','stk_suspend','stk_st_daily','moneyflow','moneyflow_hsgt','margin_detail','etf_daily','etf_adj','etf_factor','etf_portfolio','cn_bond_yield_curve','exchange_calendar','market_sentiment_daily','regime_features_monitor_daily','backtest_daily','v_backtest_daily','l2_daily_features') ORDER BY name",
+        "columns": [
+          {
+            "name": "name",
+            "type": "STRING"
+          },
+          {
+            "name": "suspended",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "writerTxn",
+            "type": "LONG"
+          },
+          {
+            "name": "sequencerTxn",
+            "type": "LONG"
+          },
+          {
+            "name": "bufferedTxnSize",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "backtest_daily",
+            false,
+            206,
+            206,
+            0
+          ],
+          [
+            "cn_bond_yield_curve",
+            false,
+            8,
+            8,
+            0
+          ],
+          [
+            "daily",
+            false,
+            189,
+            189,
+            0
+          ],
+          [
+            "daily_basic",
+            false,
+            274,
+            274,
+            0
+          ],
+          [
+            "etf_adj",
+            false,
+            33,
+            33,
+            0
+          ],
+          [
+            "etf_daily",
+            false,
+            68,
+            68,
+            0
+          ],
+          [
+            "etf_factor",
+            false,
+            85,
+            85,
+            0
+          ],
+          [
+            "etf_portfolio",
+            false,
+            1529,
+            1529,
+            0
+          ],
+          [
+            "exchange_calendar",
+            false,
+            9,
+            9,
+            0
+          ],
+          [
+            "l2_daily_features",
+            false,
+            11386,
+            11386,
+            0
+          ],
+          [
+            "margin_detail",
+            false,
+            157,
+            157,
+            0
+          ],
+          [
+            "market_sentiment_daily",
+            false,
+            5,
+            5,
+            0
+          ],
+          [
+            "moneyflow",
+            false,
+            244,
+            244,
+            0
+          ],
+          [
+            "moneyflow_hsgt",
+            false,
+            3,
+            3,
+            0
+          ],
+          [
+            "regime_features_monitor_daily",
+            false,
+            5,
+            5,
+            0
+          ],
+          [
+            "stk_factor",
+            false,
+            225,
+            225,
+            0
+          ],
+          [
+            "stk_limit",
+            false,
+            285,
+            285,
+            0
+          ],
+          [
+            "stk_st_daily",
+            false,
+            12,
+            12,
+            0
+          ],
+          [
+            "stk_suspend",
+            false,
+            6,
+            6,
+            0
+          ],
+          [
+            "v_backtest_daily",
+            false,
+            21,
+            21,
+            0
+          ]
+        ],
+        "count": 20
+      }
+    },
+    "native": {
+      "sql": "SELECT * FROM materialized_views()",
+      "result": {
+        "query": "SELECT * FROM materialized_views()",
+        "columns": [
+          {
+            "name": "view_name",
+            "type": "STRING"
+          },
+          {
+            "name": "refresh_type",
+            "type": "STRING"
+          },
+          {
+            "name": "base_table_name",
+            "type": "STRING"
+          },
+          {
+            "name": "last_refresh_start_timestamp",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "last_refresh_finish_timestamp",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "view_sql",
+            "type": "STRING"
+          },
+          {
+            "name": "view_table_dir_name",
+            "type": "STRING"
+          },
+          {
+            "name": "invalidation_reason",
+            "type": "STRING"
+          },
+          {
+            "name": "view_status",
+            "type": "STRING"
+          },
+          {
+            "name": "refresh_period_hi",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "refresh_base_table_txn",
+            "type": "LONG"
+          },
+          {
+            "name": "base_table_txn",
+            "type": "LONG"
+          },
+          {
+            "name": "refresh_limit",
+            "type": "INT"
+          },
+          {
+            "name": "refresh_limit_unit",
+            "type": "STRING"
+          },
+          {
+            "name": "timer_time_zone",
+            "type": "STRING"
+          },
+          {
+            "name": "timer_start",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "timer_interval",
+            "type": "INT"
+          },
+          {
+            "name": "timer_interval_unit",
+            "type": "STRING"
+          },
+          {
+            "name": "period_length",
+            "type": "INT"
+          },
+          {
+            "name": "period_length_unit",
+            "type": "STRING"
+          },
+          {
+            "name": "period_delay",
+            "type": "INT"
+          },
+          {
+            "name": "period_delay_unit",
+            "type": "STRING"
+          },
+          {
+            "name": "refresh_avg_commit_nanos",
+            "type": "LONG"
+          },
+          {
+            "name": "refresh_avg_scan_sample_nanos",
+            "type": "LONG"
+          },
+          {
+            "name": "refresh_avg_scan_range_ts_units",
+            "type": "LONG"
+          },
+          {
+            "name": "refresh_gap_threshold_ts_units",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "mv_market_breadth_daily_v1",
+            "timer",
+            "stk_factor",
+            null,
+            "2026-09-21T23:56:50.310426Z",
+            "SELECT\n    trade_date,\n    count() AS stock_count,\n    sum(CASE WHEN pct_change > 0 THEN 1 ELSE 0 END) AS up_count,\n    sum(CASE WHEN pct_change < 0 THEN 1 ELSE 0 END) AS down_count,\n    sum(CASE WHEN pct_change = 0 THEN 1 ELSE 0 END) AS flat_count,\n    avg(pct_change) AS avg_pct_change,\n    sum(amount) / 100000.0 AS total_amount_yi\nFROM stk_factor\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+            "mv_market_breadth_daily_v1~1812",
+            "materialized view is ahead of base table and cannot be synchronized",
+            "invalid",
+            null,
+            12,
+            225,
+            0,
+            null,
+            null,
+            "2026-09-18T15:32:22.866888Z",
+            1,
+            "MINUTE",
+            0,
+            null,
+            0,
+            null,
+            0,
+            0,
+            0,
+            2000000
+          ],
+          [
+            "mv_retail_sentiment_daily_v1",
+            "timer",
+            "l2_daily_features",
+            null,
+            "2026-09-21T23:56:50.310362Z",
+            "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+            "mv_retail_sentiment_daily_v1~1813",
+            "materialized view is ahead of base table and cannot be synchronized",
+            "invalid",
+            null,
+            10206,
+            11386,
+            0,
+            null,
+            null,
+            "2026-09-18T15:32:22.955712Z",
+            1,
+            "MINUTE",
+            0,
+            null,
+            0,
+            null,
+            0,
+            0,
+            0,
+            2000000
+          ],
+          [
+            "v_backtest_daily",
+            "manual",
+            "backtest_daily",
+            "2026-10-07T18:18:43.006627Z",
+            "2026-10-07T18:19:32.516985Z",
+            "SELECT trade_date,ts_code,last(open) AS open,last(high) AS high,last(low) AS low,last(close) AS close,last(vol) AS vol,last(amount) AS amount,last(adj_factor) AS adj_factor,last(up_limit) AS up_limit,last(down_limit) AS down_limit,cast(last(is_suspended) AS LONG) AS is_suspended,last(is_st) AS is_st FROM backtest_daily SAMPLE BY 1d ALIGN TO CALENDAR",
+            "v_backtest_daily~3021",
+            null,
+            "valid",
+            null,
+            206,
+            206,
+            0,
+            null,
+            null,
+            null,
+            0,
+            null,
+            0,
+            null,
+            0,
+            null,
+            562384,
+            4682549994,
+            79850598789126,
+            9589771968
+          ]
+        ],
+        "count": 3
+      }
+    }
+  }
+}

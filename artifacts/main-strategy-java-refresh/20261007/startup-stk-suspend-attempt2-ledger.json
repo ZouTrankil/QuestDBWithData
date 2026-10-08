@@ -1,0 +1,194 @@
+{
+  "observedAtUtc" : "2026-10-07T17:10:16.862841800Z",
+  "readOnly" : true,
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-ledger.sqlite3",
+  "run" : [ {
+    "id" : "stk-suspend-c7483686-3ba8-45ab-9c59-ff164d237ed6",
+    "parent_run_id" : null,
+    "job_id" : "data.stk_suspend",
+    "job_version" : 1,
+    "logical_date" : "2026-10-08",
+    "target_id" : "static-v2-f9b44732ef4fc827982110aaa07bdc4e150148f7c98c66769c845810b106e234",
+    "frozen_json" : "{\"definition\":{\"jobId\":\"data.stk_suspend\",\"version\":1,\"datasetId\":\"stk_suspend\",\"datasetVersion\":1,\"owner\":\"stk_suspend_owner\",\"supportedModes\":[\"BACKFILL\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"checkpointBefore\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"targetId\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpointAnchor\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"targetMaxBefore\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"physicalTargetId\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"targetMinBefore\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"tushare.shared\",\"slicePolicyRef\":\"daily.trade_date\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":3,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT2M\"},\"timeout\":\"PT10M\",\"budget\":{\"maxWindowDays\":5,\"maxSlices\":5,\"maxPages\":5,\"maxRows\":25000,\"maxBatchBytes\":1048576},\"revisionDays\":2,\"dependencies\":[],\"frequency\":\"DAILY\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":true},\"mode\":\"BACKFILL\",\"parameters\":{\"physicalTargetId\":\"static-v2-a62c43140d5de06faa28b4076c5a8c43e8a75e04048174ca95ed6023d4c3cc27\",\"targetId\":\"static-v2-f9b44732ef4fc827982110aaa07bdc4e150148f7c98c66769c845810b106e234\",\"targetMaxBefore\":\"2026-09-30\",\"targetMinBefore\":\"2010-01-29\"},\"from\":\"2026-09-28\",\"to\":\"2026-09-30\",\"logicalDate\":\"2026-10-08\"}",
+    "frozen_json_parsed" : {
+      "definition" : {
+        "jobId" : "data.stk_suspend",
+        "version" : 1,
+        "datasetId" : "stk_suspend",
+        "datasetVersion" : 1,
+        "owner" : "stk_suspend_owner",
+        "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "daily.trade_date",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2M"
+        },
+        "timeout" : "PT10M",
+        "budget" : {
+          "maxWindowDays" : 5,
+          "maxSlices" : 5,
+          "maxPages" : 5,
+          "maxRows" : 25000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 2,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "physicalTargetId" : "static-v2-a62c43140d5de06faa28b4076c5a8c43e8a75e04048174ca95ed6023d4c3cc27",
+        "targetId" : "static-v2-f9b44732ef4fc827982110aaa07bdc4e150148f7c98c66769c845810b106e234",
+        "targetMaxBefore" : "2026-09-30",
+        "targetMinBefore" : "2010-01-29"
+      },
+      "from" : "2026-09-28",
+      "to" : "2026-09-30",
+      "logicalDate" : "2026-10-08"
+    }
+  } ],
+  "entries" : [ {
+    "id" : "attempt-cd1d6b7d-9523-4fd4-9958-8c2babc57795",
+    "kind" : "ATTEMPT",
+    "run_id" : "stk-suspend-c7483686-3ba8-45ab-9c59-ff164d237ed6",
+    "parent_id" : "stk-suspend-c7483686-3ba8-45ab-9c59-ff164d237ed6",
+    "state" : "FAILED",
+    "revision" : 2,
+    "payload_json" : "{\"errorCode\":\"UncategorizedSQLException\",\"errorOrigin\":[\"org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1550)\",\"org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:427)\",\"org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:491)\",\"org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:501)\",\"com.zoutrankil.data.repository.StockSuspendStorage.snapshot(StockSuspendStorage.java:53)\",\"com.zoutrankil.data.repository.StockSuspendStaging.write(StockSuspendStaging.java:71)\",\"com.zoutrankil.data.service.StockSuspendSyncAdapter.fetch(StockSuspendSyncAdapter.java:125)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockSuspendJobService.execute(StockSuspendJobService.java:261)\",\"com.zoutrankil.data.service.StockSuspendJobService.run(StockSuspendJobService.java:201)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$11(MainStrategyDailyPipeline.java:83)\"],\"causeOrigins\":[{\"origin\":[\"org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)\",\"org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)\",\"org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)\",\"org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)\",\"org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)\",\"org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)\",\"org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)\",\"org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)\"],\"errorCode\":\"PSQLException\"}]}",
+    "payload_json_parsed" : {
+      "errorCode" : "UncategorizedSQLException",
+      "errorOrigin" : [ "org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1550)", "org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:427)", "org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:491)", "org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:501)", "com.zoutrankil.data.repository.StockSuspendStorage.snapshot(StockSuspendStorage.java:53)", "com.zoutrankil.data.repository.StockSuspendStaging.write(StockSuspendStaging.java:71)", "com.zoutrankil.data.service.StockSuspendSyncAdapter.fetch(StockSuspendSyncAdapter.java:125)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockSuspendJobService.execute(StockSuspendJobService.java:261)", "com.zoutrankil.data.service.StockSuspendJobService.run(StockSuspendJobService.java:201)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$11(MainStrategyDailyPipeline.java:83)" ],
+      "causeOrigins" : [ {
+        "origin" : [ "org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)", "org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)", "org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)", "org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)", "org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)", "org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)", "org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)", "org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)" ],
+        "errorCode" : "PSQLException"
+      } ]
+    },
+    "updated_at" : "2026-10-07T17:09:43.667367700Z"
+  }, {
+    "id" : "stk-suspend-c7483686-3ba8-45ab-9c59-ff164d237ed6",
+    "kind" : "RUN",
+    "run_id" : "stk-suspend-c7483686-3ba8-45ab-9c59-ff164d237ed6",
+    "parent_id" : null,
+    "state" : "FAILED",
+    "revision" : 2,
+    "payload_json" : "{\"errorCode\":\"UncategorizedSQLException\",\"errorOrigin\":[\"org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1550)\",\"org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:427)\",\"org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:491)\",\"org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:501)\",\"com.zoutrankil.data.repository.StockSuspendStorage.snapshot(StockSuspendStorage.java:53)\",\"com.zoutrankil.data.repository.StockSuspendStaging.write(StockSuspendStaging.java:71)\",\"com.zoutrankil.data.service.StockSuspendSyncAdapter.fetch(StockSuspendSyncAdapter.java:125)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockSuspendJobService.execute(StockSuspendJobService.java:261)\",\"com.zoutrankil.data.service.StockSuspendJobService.run(StockSuspendJobService.java:201)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$11(MainStrategyDailyPipeline.java:83)\"],\"causeOrigins\":[{\"origin\":[\"org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)\",\"org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)\",\"org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)\",\"org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)\",\"org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)\",\"org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)\",\"org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)\",\"org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)\"],\"errorCode\":\"PSQLException\"}]}",
+    "payload_json_parsed" : {
+      "errorCode" : "UncategorizedSQLException",
+      "errorOrigin" : [ "org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1550)", "org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:427)", "org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:491)", "org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:501)", "com.zoutrankil.data.repository.StockSuspendStorage.snapshot(StockSuspendStorage.java:53)", "com.zoutrankil.data.repository.StockSuspendStaging.write(StockSuspendStaging.java:71)", "com.zoutrankil.data.service.StockSuspendSyncAdapter.fetch(StockSuspendSyncAdapter.java:125)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockSuspendJobService.execute(StockSuspendJobService.java:261)", "com.zoutrankil.data.service.StockSuspendJobService.run(StockSuspendJobService.java:201)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$11(MainStrategyDailyPipeline.java:83)" ],
+      "causeOrigins" : [ {
+        "origin" : [ "org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)", "org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)", "org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)", "org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)", "org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)", "org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)", "org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)", "org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)" ],
+        "errorCode" : "PSQLException"
+      } ]
+    },
+    "updated_at" : "2026-10-07T17:09:43.682016400Z"
+  } ],
+  "events" : [ {
+    "entry_id" : "stk-suspend-c7483686-3ba8-45ab-9c59-ff164d237ed6",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:09:01.270827700Z"
+  }, {
+    "entry_id" : "stk-suspend-c7483686-3ba8-45ab-9c59-ff164d237ed6",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:09:01.300679200Z"
+  }, {
+    "entry_id" : "attempt-cd1d6b7d-9523-4fd4-9958-8c2babc57795",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:09:01.308771300Z"
+  }, {
+    "entry_id" : "attempt-cd1d6b7d-9523-4fd4-9958-8c2babc57795",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:09:01.317023200Z"
+  }, {
+    "entry_id" : "attempt-cd1d6b7d-9523-4fd4-9958-8c2babc57795",
+    "revision" : 2,
+    "state" : "FAILED",
+    "payload_json" : "{\"errorCode\":\"UncategorizedSQLException\",\"errorOrigin\":[\"org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1550)\",\"org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:427)\",\"org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:491)\",\"org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:501)\",\"com.zoutrankil.data.repository.StockSuspendStorage.snapshot(StockSuspendStorage.java:53)\",\"com.zoutrankil.data.repository.StockSuspendStaging.write(StockSuspendStaging.java:71)\",\"com.zoutrankil.data.service.StockSuspendSyncAdapter.fetch(StockSuspendSyncAdapter.java:125)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockSuspendJobService.execute(StockSuspendJobService.java:261)\",\"com.zoutrankil.data.service.StockSuspendJobService.run(StockSuspendJobService.java:201)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$11(MainStrategyDailyPipeline.java:83)\"],\"causeOrigins\":[{\"origin\":[\"org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)\",\"org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)\",\"org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)\",\"org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)\",\"org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)\",\"org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)\",\"org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)\",\"org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)\"],\"errorCode\":\"PSQLException\"}]}",
+    "payload_json_parsed" : {
+      "errorCode" : "UncategorizedSQLException",
+      "errorOrigin" : [ "org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1550)", "org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:427)", "org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:491)", "org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:501)", "com.zoutrankil.data.repository.StockSuspendStorage.snapshot(StockSuspendStorage.java:53)", "com.zoutrankil.data.repository.StockSuspendStaging.write(StockSuspendStaging.java:71)", "com.zoutrankil.data.service.StockSuspendSyncAdapter.fetch(StockSuspendSyncAdapter.java:125)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockSuspendJobService.execute(StockSuspendJobService.java:261)", "com.zoutrankil.data.service.StockSuspendJobService.run(StockSuspendJobService.java:201)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$11(MainStrategyDailyPipeline.java:83)" ],
+      "causeOrigins" : [ {
+        "origin" : [ "org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)", "org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)", "org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)", "org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)", "org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)", "org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)", "org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)", "org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)" ],
+        "errorCode" : "PSQLException"
+      } ]
+    },
+    "updated_at" : "2026-10-07T17:09:43.667367700Z"
+  }, {
+    "entry_id" : "stk-suspend-c7483686-3ba8-45ab-9c59-ff164d237ed6",
+    "revision" : 2,
+    "state" : "FAILED",
+    "payload_json" : "{\"errorCode\":\"UncategorizedSQLException\",\"errorOrigin\":[\"org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1550)\",\"org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:427)\",\"org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:491)\",\"org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:501)\",\"com.zoutrankil.data.repository.StockSuspendStorage.snapshot(StockSuspendStorage.java:53)\",\"com.zoutrankil.data.repository.StockSuspendStaging.write(StockSuspendStaging.java:71)\",\"com.zoutrankil.data.service.StockSuspendSyncAdapter.fetch(StockSuspendSyncAdapter.java:125)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockSuspendJobService.execute(StockSuspendJobService.java:261)\",\"com.zoutrankil.data.service.StockSuspendJobService.run(StockSuspendJobService.java:201)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$11(MainStrategyDailyPipeline.java:83)\"],\"causeOrigins\":[{\"origin\":[\"org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)\",\"org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)\",\"org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)\",\"org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)\",\"org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)\",\"org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)\",\"org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)\",\"org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)\"],\"errorCode\":\"PSQLException\"}]}",
+    "payload_json_parsed" : {
+      "errorCode" : "UncategorizedSQLException",
+      "errorOrigin" : [ "org.springframework.jdbc.core.JdbcTemplate.translateException(JdbcTemplate.java:1550)", "org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:427)", "org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:491)", "org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:501)", "com.zoutrankil.data.repository.StockSuspendStorage.snapshot(StockSuspendStorage.java:53)", "com.zoutrankil.data.repository.StockSuspendStaging.write(StockSuspendStaging.java:71)", "com.zoutrankil.data.service.StockSuspendSyncAdapter.fetch(StockSuspendSyncAdapter.java:125)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockSuspendJobService.execute(StockSuspendJobService.java:261)", "com.zoutrankil.data.service.StockSuspendJobService.run(StockSuspendJobService.java:201)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$11(MainStrategyDailyPipeline.java:83)" ],
+      "causeOrigins" : [ {
+        "origin" : [ "org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2993)", "org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2656)", "org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:446)", "org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:533)", "org.postgresql.jdbc.PgStatement.execute(PgStatement.java:449)", "org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:371)", "org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:356)", "org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:332)" ],
+        "errorCode" : "PSQLException"
+      } ]
+    },
+    "updated_at" : "2026-10-07T17:09:43.682016400Z"
+  } ],
+  "publications" : [ ]
+}

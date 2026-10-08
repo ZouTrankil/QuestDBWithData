@@ -14,19 +14,17 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 import static com.zoutrankil.data.domain.policy.RegimeFeaturesMonitorDailyCalculation.*;
 import static com.zoutrankil.data.domain.policy.MarketSentimentDailyCalculation.finite;
 
-/** Explicit native Java owner for the existing 21-field proxy-style context table.
- * Reads existing QuestDB dependencies; no Python owner, additional source client,
- * provider request, or formal append. cn_bond_yield_curve is a pinned read-only
- * external table, not an invented registered/synchronized source owner.
+/** Native Java owner for the existing 21-field proxy-style context table.
+ * The persistent batch synchronizes dependencies before invoking this calculation.
+ * The calculation reads pinned inputs and publishes a verified date window.
  */
 public final class RegimeFeaturesMonitorDailyJobService implements DatasetImplementation,SyncJobOwner {
     public static final String JOB_ID="data.regime_features_monitor_daily";
     public static final String PRODUCER="java.regime_features_monitor_daily";
     private static final String FORMAL="regime_features_monitor_daily",PREFIX="java_regime_features_monitor_daily";
     public static final List<String> SOURCES=List.of("stk_factor","daily_basic","stk_limit","stk_suspend","stk_st_daily","margin_detail","moneyflow_hsgt","cn_bond_yield_curve","exchange_calendar");
-    // Only registered owners belong in registry dependencies. The gov curve is
-    // still REQUIRED, schema-read, date-bounded, source-pinned, and fingerprinted.
-    public static final List<String> REGISTERED_DEPENDENCIES=SOURCES.stream().filter(s->!s.equals("cn_bond_yield_curve")).toList();
+    // Every required input now has a registered Java owner, including ChinaBond.
+    public static final List<String> REGISTERED_DEPENDENCIES=SOURCES;
     public record Plan(FrozenRequest request,String targetId,LocalDate warmupFrom,List<String> dependencies,String sourcePin,
                        NativeDailyWindowSnapshot<RegimeFeaturesMonitorDailyRow> targetBefore) {}
     public record MaterializationResult(SyncJobRunner.Result result,int historyDates,long sourceRawRows,String sourceFingerprint,String fullTargetFingerprint,String evidence) {}
@@ -57,15 +55,15 @@ public final class RegimeFeaturesMonitorDailyJobService implements DatasetImplem
             columns.add(new DatasetDefinition.Column("derived:"+name,name,name,storage,i!=0,"Legacy proxy-style field "+name,temporal));}
         return new DatasetDefinition(datasetId(),1,"derived.questdb",PRODUCER,table,DatasetDefinition.ObjectKind.TABLE,columns,List.of("trade_date"),List.of(),"trade_date",
                 DatasetDefinition.Partition.MONTH,true,Set.of(DatasetDefinition.Capability.READ,DatasetDefinition.Capability.WAL_REPLACE),REGISTERED_DEPENDENCIES,
-                "21 existing fields; bounded full-row window replacement retaining outside rows and backup. Warmup=min(month start,from-20 days); qcut size/PB proxy style, monthly compounds, rolling five observations, full warmup-window valuation ranks. Required input-package context fields are finite; optional incomplete-market margin is NULL with separate availability evidence, while the inherited data_quality_flag remains proxy_style. Existing gov/10Y cn_bond_yield_curve is a required pinned read-only external table, not a registered provider owner.");
+                "21 existing fields; bounded full-row window replacement retaining outside rows and backup. Warmup=min(month start,from-20 days); qcut size/PB proxy style, monthly compounds, rolling five observations, full warmup-window valuation ranks. Required input-package context fields are finite; optional incomplete-market margin is NULL with separate availability evidence, while the inherited data_quality_flag remains proxy_style. Gov/10Y cn_bond_yield_curve is a required pinned input synchronized by its registered ChinaBond owner before calculation.");
     }
     public static SyncJobDefinition jobDefinition(){
         var parameters=new LinkedHashMap<String,Parameter>();
         parameters.put("target_id",new Parameter(ParameterType.STRING,true,128,1,Set.of()));parameters.put("source_pin",new Parameter(ParameterType.STRING,true,64,1,Set.of()));
         parameters.put("target_hash",new Parameter(ParameterType.STRING,true,64,1,Set.of()));parameters.put("warmup_from",new Parameter(ParameterType.DATE,true,10,1,Set.of()));
-        return new SyncJobDefinition(JOB_ID,2,FORMAL,1,"regime_features_monitor_daily_owner",Set.of(Mode.MATERIALIZE),Mode.MATERIALIZE,
+        return new SyncJobDefinition(JOB_ID,3,FORMAL,1,"regime_features_monitor_daily_owner",Set.of(Mode.MATERIALIZE),Mode.MATERIALIZE,
                 parameters,"questdb.materialize","regime_features_monitor_daily.range366","questdb.full_key_values",
-                new RetryPolicy(1,Duration.ofSeconds(1),Duration.ofSeconds(1)),Duration.ofMinutes(20),new Budget(366,1,1,366,1024*1024),0,List.of(),Frequency.MANUAL,ZoneId.of("Asia/Shanghai"),true,false);
+                new RetryPolicy(1,Duration.ofSeconds(1),Duration.ofSeconds(1)),Duration.ofMinutes(20),new Budget(366,1,1,366,1024*1024),0,List.of(),Frequency.DAILY,ZoneId.of("Asia/Shanghai"),true,true);
     }
     public Plan plan(LocalDate from,LocalDate to,LocalDate logicalDate)throws Exception{return plan(from,to,logicalDate,Mode.MATERIALIZE);}
     public Plan plan(LocalDate from,LocalDate to,LocalDate logicalDate,Mode mode)throws Exception{

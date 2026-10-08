@@ -34,7 +34,8 @@ public final class MoneyflowHsgtRunRecovery {
   Path intentFile=null;try(var files=Files.newDirectoryStream(stageRoot,"*-intent.json")){for(Path p:files){if(intentFile!=null)throw new IllegalStateException("D027 stage intent ambiguous");intentFile=p;}}
   if(intentFile==null||Files.isSymbolicLink(intentFile)||!Files.isRegularFile(intentFile)||Files.size(intentFile)>4*1024*1024||!intentFile.toRealPath().startsWith(root))throw new IllegalStateException("D027 bounded owned intent required");
   JsonNode intent=json.readTree(FileEvidenceStore.readBounded(intentFile, 4 * 1024 * 1024, () -> new IllegalStateException("D027 bounded owned intent required")));String stage=intent.path("stage").asText();
-  if(!stage.matches("java_d027_moneyflow_hsgt_stage_[0-9a-f]{32}")||!"READY".equals(intent.path("phase").asText())||!"moneyflow_hsgt".equals(intent.path("dataset").asText())||intent.path("dedup").asBoolean(true)
+  if(!stage.matches("java_d027_moneyflow_hsgt_stage_[0-9a-f]{32}")||!"READY".equals(intent.path("phase").asText())||!"moneyflow_hsgt".equals(intent.path("dataset").asText())
+    ||!intent.path("dedup").isBoolean()||intent.path("dedup").asBoolean()!=com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(table)
     ||!runId.equals(intent.path("runId").asText())||!table.equals(intent.path("target").asText())||!saved.targetId().equals(intent.path("logicalTargetId").asText())
     ||!fingerprint.equals(intent.path("requestFingerprint").asText())||!request.from().toString().equals(intent.path("windowFrom").asText())||!request.to().toString().equals(intent.path("windowTo").asText())
     ||!request.logicalDate().toString().equals(intent.path("logicalDate").asText())||!request.mode().name().equals(intent.path("mode").asText()))throw new IllegalStateException("D027 intent differs from frozen request");
@@ -45,7 +46,7 @@ public final class MoneyflowHsgtRunRecovery {
    String physical=tables.physicalTargetId(table,before.identity());
    if(!physical.equals(params.get("physicalTargetId"))||!physical.equals(intent.path("physicalTargetBefore").asText()))throw new IllegalStateException("D027 baseline physical target changed");
    requireSnapshot(intent.path("before"),before);requireSnapshot(intent.path("preservedOutside"),outside);
-   var actualStage=tables.open(stage).snapshot();String stagePhysical=tables.physicalTargetId(stage,actualStage.identity());
+   var actualStage=tables.open(stage,table).snapshot();String stagePhysical=tables.physicalTargetId(stage,actualStage.identity());
    var initialStage=intent.path("stageOutside");
    if(!stagePhysical.equals(intent.path("stagePhysicalTarget").asText())||actualStage.identity().id()!=initialStage.path("identity").path("id").asLong(-1)
       ||!actualStage.identity().directory().equals(initialStage.path("identity").path("directory").asText())||!outside.fingerprint().equals(initialStage.path("fingerprint").asText())||outside.rows().size()!=initialStage.path("rows").asInt(-1))throw new IllegalStateException("D027 stage identity/outside proof changed");

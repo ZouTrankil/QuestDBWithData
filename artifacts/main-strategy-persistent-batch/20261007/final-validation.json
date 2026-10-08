@@ -1,0 +1,50 @@
+{
+  "acceptedAt": "2026-10-08T02:29:02.1287054+08:00",
+  "status": "VERIFIED",
+  "questdbHost": "127.0.0.1",
+  "targetDate": "2026-09-30",
+  "sourceRange": [
+    "2026-09-28",
+    "2026-09-30"
+  ],
+  "instanceId": "19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5",
+  "springBatchExecution": 7,
+  "springBatchState": "COMPLETED",
+  "readyStages": 5,
+  "nativeMaterializedView": "v_backtest_daily",
+  "nativeId": 3021,
+  "baseTable": "backtest_daily",
+  "baseId": 3020,
+  "historyRows": 10400431,
+  "windowRows": 16711,
+  "backtestFields": 13,
+  "baseTxn": 206,
+  "refreshTxn": 206,
+  "mvTxn": 21,
+  "currentL2Rows": 7888,
+  "currentL2FieldsChecked": 867680,
+  "deletedL2OutputRequiredForOrdinaryJobs": false,
+  "javaProducerPid": 29904,
+  "programArguments": [],
+  "dailyTime": "20:35",
+  "zone": "Asia/Shanghai",
+  "sameDateReuse": "PASS",
+  "classesBuildExitCode": 0,
+  "diffCheckExitCode": 0,
+  "unitTestsRun": false,
+  "limitations": [
+    "2026-09-30 margin_detail lacks SZ/BJ and is not used as a complete enhancement source",
+    "ETF latest-disclosure weight completeness and freshness limitations remain",
+    "Deleted Level2 JSONL prevents a new raw-source value comparison; retained import used 1e-12 numeric tolerance"
+  ],
+  "evidenceSha256": {
+    "final-runtime-status-after-repeat.json": "36958a1ee4941287c721191d7504baffc2e52592c2c3a624b23469be5a69fe87",
+    "final-instance-after-repeat.json": "e10cea45db7e197d7860e2f60e077d7290e8c466a0f73e83a8db96c7333340f4",
+    "same-date-reuse-audit.json": "64959f182eeb9806f188ece9867c2ec5c7e5d1d52a4857d459975e5823ecfec0",
+    "native-api-final-sample.json": "ca27d440347aeef1c25817640496aa3f169d58b28d424e9dc0d32e91b7d52d0d",
+    "hsgt-runtime-audit.json": "bedfa978dfe4bedf1f766959269a51c4e620c0b33a17eac61758c4420d3c96d5",
+    "market-original-run-reconciled-ledger.json": "d7ba55ee857da2002f1c011d5dc4e21c6f2a274f80fec61fcc56bd19e6b51b98",
+    "final-independent-runtime-audit.json": "5efe7d9cfad4e08858b6ba1db64267baa1d2b5297787bea4ea291954fa11ebd5"
+  },
+  "independentAuditErrors": []
+}

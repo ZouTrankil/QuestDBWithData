@@ -1,0 +1,62 @@
+{
+  "observedAtUtc": "2026-10-07T18:13:38.2113641Z",
+  "readOnly": true,
+  "instance": "19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5",
+  "sourceWindow": "2026-09-28..2026-09-30",
+  "stageOrder": [
+    "Sources",
+    "MarketSentimentDaily",
+    "RegimeFeaturesMonitorDaily",
+    "BacktestDaily",
+    "MainStrategyAcceptance"
+  ],
+  "stageProofBinding": [
+    "frozen immutable source/owner definitions and range",
+    "original official source SyncRunLedger VERIFIED or VERIFIED_EMPTY + window SHA and physical clocks",
+    "native original frozen ledger run + source.json/publication.json hashes + current all-field target fingerprint",
+    "native backtest current base ID/native ID/source pin/publication identities and exact typed values",
+    "fifth Level2 historical archive/import receipt + stable historical WAL + current 110 fields/null-symbol/version/unique/date checks"
+  ],
+  "actualBlocking": "Market publication was IN_DOUBT at content-only observation; owner formal reconciliation required",
+  "market": {
+    "formalSha256": "0f54a0e164250dcc50a82f3927a119ec13fbe1f50bd20c409c1e230496748e75",
+    "runId": "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+    "publicationStateAtObservation": "IN_DOUBT",
+    "formalRows": 104,
+    "outsideDifferences": [],
+    "fieldsChecked": 159,
+    "sourceDifferences": [],
+    "outsideRows": 101,
+    "intentAfterMatches": true,
+    "intentBeforeMatches": true,
+    "backupRows": 104
+  },
+  "l2": {
+    "schemaErrors": [],
+    "historicalAndCurrentWriterTxn": 11386,
+    "limitations": [
+      "Original temporary source JSONL deleted",
+      "Historical importer numeric comparison used tolerance",
+      "Historical receipt has no physical table ID/directory; new current baseline explicitly binds physical identity"
+    ],
+    "nullContractMatches": true,
+    "rows": 7888,
+    "fieldsChecked": 867680,
+    "nullCounts": {
+      "ofi_slope": 37
+    },
+    "temporaryFeatureDirectoryExists": false,
+    "retainedFallbackApplicable": true,
+    "retainedFilesPresent": true,
+    "valueErrors": []
+  },
+  "sourceRefreshReadApi": {
+    "fix": "ReadGuard expected NotReadyException reasons map precisely to HTTP 409 in datasetSample; integrity/schema failures not generalized",
+    "observedStatus": 500,
+    "status": "source edit ready; parent compiles/restarts/requests actual endpoint",
+    "exactLoggedError": "Backtest sources/base/native changed after verified publication",
+    "sourceFile": "var/main-strategy-batch/main-web-20261008-015200.err.log:99"
+  },
+  "fullEvidence": "artifacts/main-strategy-persistent-batch/20261007/market-content-l2-retained-audit-v2.json",
+  "goalComplete": false
+}

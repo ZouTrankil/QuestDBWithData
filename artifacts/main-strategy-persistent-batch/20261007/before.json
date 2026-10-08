@@ -1,0 +1,326 @@
+[
+  {
+    "query": "SELECT table_name,table_type,matView,partitionBy,id,table_row_count,table_min_timestamp,table_max_timestamp FROM tables() WHERE table_name IN ('backtest_daily','v_backtest_daily','market_sentiment_daily','regime_features_monitor_daily') ORDER BY table_name",
+    "columns": [
+      {
+        "name": "table_name",
+        "type": "STRING"
+      },
+      {
+        "name": "table_type",
+        "type": "CHAR"
+      },
+      {
+        "name": "matView",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "partitionBy",
+        "type": "STRING"
+      },
+      {
+        "name": "id",
+        "type": "INT"
+      },
+      {
+        "name": "table_row_count",
+        "type": "LONG"
+      },
+      {
+        "name": "table_min_timestamp",
+        "type": "TIMESTAMP"
+      },
+      {
+        "name": "table_max_timestamp",
+        "type": "TIMESTAMP"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "backtest_daily",
+        "T",
+        false,
+        "DAY",
+        1757,
+        10355884,
+        "2010-01-29T00:00:00Z",
+        "2026-09-17T00:00:00Z"
+      ],
+      [
+        "market_sentiment_daily",
+        "T",
+        false,
+        "MONTH",
+        3016,
+        null,
+        null,
+        null
+      ],
+      [
+        "regime_features_monitor_daily",
+        "T",
+        false,
+        "MONTH",
+        3018,
+        null,
+        null,
+        null
+      ],
+      [
+        "v_backtest_daily",
+        "V",
+        false,
+        "N/A",
+        1780,
+        0,
+        null,
+        null
+      ]
+    ],
+    "count": 4
+  },
+  {
+    "query": "SELECT view_name,view_sql FROM views() WHERE view_name='v_backtest_daily'",
+    "columns": [
+      {
+        "name": "view_name",
+        "type": "STRING"
+      },
+      {
+        "name": "view_sql",
+        "type": "STRING"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "v_backtest_daily",
+        "SELECT b.trade_date, b.ts_code, b.open, b.high, b.low, b.close,\n       b.vol, b.amount, b.adj_factor, l.up_limit, l.down_limit,\n       coalesce(s.is_suspended, 0) is_suspended, coalesce(st.is_st, 0) is_st\nFROM stk_factor b\nLEFT JOIN stk_limit l ON (b.trade_date = l.trade_date AND b.ts_code = l.ts_code)\nLEFT JOIN (SELECT timestamp, ts_code, max(is_suspended) is_suspended\n           FROM stk_suspend GROUP BY timestamp, ts_code) s ON (b.trade_date = s.timestamp AND b.ts_code = s.ts_code)\nLEFT JOIN stk_st_daily st ON (b.trade_date = st.timestamp AND b.ts_code = st.ts_code)\nUNION ALL\nSELECT s.trade_date, s.ts_code, f.close AS open, f.close AS high,\n       f.close AS low, f.close AS close, 0.0 AS vol, 0.0 AS amount,\n       f.adj_factor, l.up_limit, l.down_limit, s.is_suspended,\n       coalesce(st.is_st, 0) is_st\nFROM ((SELECT timestamp AS trade_date, ts_code, max(is_suspended) is_suspended\n      FROM stk_suspend GROUP BY timestamp, ts_code ORDER BY trade_date) TIMESTAMP(trade_date)) s\nASOF JOIN stk_factor f ON (ts_code)\nLEFT JOIN stk_limit l ON (s.trade_date = l.trade_date AND s.ts_code = l.ts_code)\nLEFT JOIN stk_st_daily st ON (s.trade_date = st.timestamp AND s.ts_code = st.ts_code)\nJOIN (SELECT DISTINCT trade_date FROM stk_factor) fd ON s.trade_date = fd.trade_date\nWHERE f.trade_date < s.trade_date"
+      ]
+    ],
+    "count": 1
+  },
+  {
+    "query": "SELECT * FROM table_columns('v_backtest_daily')",
+    "columns": [
+      {
+        "name": "column",
+        "type": "STRING"
+      },
+      {
+        "name": "type",
+        "type": "STRING"
+      },
+      {
+        "name": "indexed",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexBlockCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolCached",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "symbolCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolTableSize",
+        "type": "INT"
+      },
+      {
+        "name": "designated",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "upsertKey",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexType",
+        "type": "STRING"
+      },
+      {
+        "name": "indexInclude",
+        "type": "STRING"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "trade_date",
+        "TIMESTAMP",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "ts_code",
+        "SYMBOL",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "open",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "high",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "low",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "close",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "vol",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "amount",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "adj_factor",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "up_limit",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "down_limit",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "is_suspended",
+        "LONG",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "is_st",
+        "INT",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ]
+    ],
+    "count": 13
+  }
+]

@@ -4,8 +4,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * Typed read model for the retained Python backtest_daily snapshot.
- * The current Python read-through product remains the computation/cache owner.
+ * Typed row of Java's enriched date/stock base for the native backtest materialized view.
  */
 public record BacktestDaily(
         LocalDate tradeDate,

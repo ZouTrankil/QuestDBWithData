@@ -5,7 +5,8 @@ public final class CliUsage {
     private CliUsage() {}
 
     public static String text() {
-        return "Usage: run-exchange-calendar|plan-exchange-calendar --exchanges SSE,SZSE --from YYYY-MM-DD --to YYYY-MM-DD "
+        return "Usage: plan-backtest-daily-job|run-backtest-daily-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD OR --bootstrap true --logical-date YYYY-MM-DD OR finish-backtest-daily-publication --run RUN_ID --writer-stopped true OR "
+                + "run-exchange-calendar|plan-exchange-calendar --exchanges SSE,SZSE --from YYYY-MM-DD --to YYYY-MM-DD "
                 + "--logical-date YYYY-MM-DD [--mode incremental|backfill|reconcile] [--resume-from RUN_ID] OR "
                 + "sync-stock-basic-questdb OR migrate-questdb-schema OR "
                 + "show-stock-basic-latest OR verify-questdb-jdbc OR show-dataset-definitions OR show-sync-job-definitions OR "

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
-/** D093 read-only contract for the authoritative Python-installed ordinary view. */
+/** Public true native MV; its original name and all thirteen typed business fields are preserved. */
 public final class BacktestDailyViewDataset {
     private BacktestDailyViewDataset() {}
 
@@ -23,12 +23,11 @@ public final class BacktestDailyViewDataset {
     }
 
     public static final DatasetDefinition DEFINITION = new DatasetDefinition(
-            "v_backtest_daily", 1, "python.derived.backtest_view",
-            "python.backtest_view.install_view", "v_backtest_daily", ObjectKind.VIEW,
-            columns(), List.of("trade_date", "ts_code"), List.of(), null,
-            Partition.NONE, false, Set.of(Capability.READ), List.of(),
-            "Ordinary view of stk_factor, stk_limit, grouped stk_suspend and stk_st_daily. "
-                    + "Python owns VIEW_SELECT and installation; Java reads the existing definition only. "
-                    + "No physical partition, WAL, DEDUP or direct writes belong to the view. "
-                    + "The source models require unique date/stock keys, and suspension rows are grouped before joining.");
+            "v_backtest_daily", 1, "derived.questdb.backtest_daily",
+            "backtest_daily_owner", "v_backtest_daily", ObjectKind.MATERIALIZED_VIEW,
+            columns(), List.of("trade_date", "ts_code"), List.of(), "trade_date",
+            Partition.MONTH, true, Set.of(Capability.READ), List.of("backtest_daily"),
+            "True native SAMPLE BY1d singleton-per-stock aggregation of the fully enriched unique DAY base. "
+                    + "No ordinary intermediate/alias view is installed. is_suspended remains LONG and is_st INT. "
+                    + "Reads require verified durable publication, all-four-source pin, exact native SQL/schema, live physical base binding, WAL and refresh catch-up.");
 }

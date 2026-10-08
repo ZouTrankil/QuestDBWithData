@@ -1,0 +1,470 @@
+{
+  "observedAtUtc": "2026-10-07T17:43:21.9671864Z",
+  "readOnly": true,
+  "providerCalls": 0,
+  "dbWrites": 0,
+  "runId": "stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41",
+  "status": "VERIFIED_SOURCE_AND_FORMAL_WINDOW",
+  "announcementWindowNote": "Tushare input start/end filter announcement dates; raw start/end are effective intervals and may extend beyond request year. ann_date is not in the owner four-field contract; this audit validates the captured request and independent effective interval expansion, not unreturned issuer disclosures.",
+  "annuals": [
+    {
+      "year": 2010,
+      "parameters": {
+        "end_date": "20101231",
+        "start_date": "20100101"
+      },
+      "returnedRows": 497,
+      "stRows": 95,
+      "overlappingRows": 0,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2010-048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87.json",
+      "fileSha256": "70ab0c2ea65e2a2c7f4e5aa623f21ef0a9e7529dc85a55deb388d8b7a3062509",
+      "declaredRawSha256": "048773d7ccda07b3ad0ad26ae7bbaafaf5f29e4a412d3184df583cdd9616ce87",
+      "effectiveStartMin": "20100106",
+      "effectiveStartMax": "20120322"
+    },
+    {
+      "year": 2011,
+      "parameters": {
+        "end_date": "20111231",
+        "start_date": "20110101"
+      },
+      "returnedRows": 445,
+      "stRows": 90,
+      "overlappingRows": 0,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2011-3054760741872a35a2e134f256dc9d1a12bb3f580815bb99e5295ecc3ba37fcf.json",
+      "fileSha256": "7bf99998f9bb02bd851c00b23f32af022efe1064a41e882bc55a8bcb3972039c",
+      "declaredRawSha256": "3054760741872a35a2e134f256dc9d1a12bb3f580815bb99e5295ecc3ba37fcf",
+      "effectiveStartMin": "20110107",
+      "effectiveStartMax": "20120329"
+    },
+    {
+      "year": 2012,
+      "parameters": {
+        "end_date": "20121231",
+        "start_date": "20120101"
+      },
+      "returnedRows": 320,
+      "stRows": 58,
+      "overlappingRows": 0,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2012-6d16e68301ade4c1830b4b577f06ea4b8b57f21b095a209213ce19dc98a9360a.json",
+      "fileSha256": "042827ab88a54b958f195a3416f0ea9914789b3ef6cc2bad2f93c80e6602aeee",
+      "declaredRawSha256": "6d16e68301ade4c1830b4b577f06ea4b8b57f21b095a209213ce19dc98a9360a",
+      "effectiveStartMin": "20120105",
+      "effectiveStartMax": "20140808"
+    },
+    {
+      "year": 2013,
+      "parameters": {
+        "end_date": "20131231",
+        "start_date": "20130101"
+      },
+      "returnedRows": 178,
+      "stRows": 48,
+      "overlappingRows": 1,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2013-44a35a295f2f178b676a905080741b9984c8ea332aa16d524928e376064b1120.json",
+      "fileSha256": "4520a21725c7c9bbb6e99851af6b930509a4fe2272bd28e2683407c7c65f2d17",
+      "declaredRawSha256": "44a35a295f2f178b676a905080741b9984c8ea332aa16d524928e376064b1120",
+      "effectiveStartMin": "20130114",
+      "effectiveStartMax": "20140411"
+    },
+    {
+      "year": 2014,
+      "parameters": {
+        "end_date": "20141231",
+        "start_date": "20140101"
+      },
+      "returnedRows": 312,
+      "stRows": 46,
+      "overlappingRows": 0,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2014-72173abf048029edafaf5cc980cea1d38fec8fb5fd65c6ed4cd3438d77e33aa4.json",
+      "fileSha256": "5f9670732aaa83be71f88c749f765d90f278a50088c38e46f67a757969d1fff9",
+      "declaredRawSha256": "72173abf048029edafaf5cc980cea1d38fec8fb5fd65c6ed4cd3438d77e33aa4",
+      "effectiveStartMin": "20140107",
+      "effectiveStartMax": "20150804"
+    },
+    {
+      "year": 2015,
+      "parameters": {
+        "end_date": "20151231",
+        "start_date": "20150101"
+      },
+      "returnedRows": 441,
+      "stRows": 49,
+      "overlappingRows": 0,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2015-7fe3a513b12e79da3f2ca280d26a696d93f2d1ac7f0ff24fb18ed2b6ffbb203b.json",
+      "fileSha256": "82575682b54ae93a11c92a76c9076c5842edc4f38d723d6d55d46d8619045f30",
+      "declaredRawSha256": "7fe3a513b12e79da3f2ca280d26a696d93f2d1ac7f0ff24fb18ed2b6ffbb203b",
+      "effectiveStartMin": "20150105",
+      "effectiveStartMax": "20160422"
+    },
+    {
+      "year": 2016,
+      "parameters": {
+        "end_date": "20161231",
+        "start_date": "20160101"
+      },
+      "returnedRows": 478,
+      "stRows": 66,
+      "overlappingRows": 0,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2016-60ace09dff1fdedbaf29bd8d832061c24ca25eca9f7a39addec5b54dd91a4b18.json",
+      "fileSha256": "560dab0edada61af87966aa5e26c5dead178eecf495c5ec6f4244b2b07c45a76",
+      "declaredRawSha256": "60ace09dff1fdedbaf29bd8d832061c24ca25eca9f7a39addec5b54dd91a4b18",
+      "effectiveStartMin": "20160106",
+      "effectiveStartMax": "20170526"
+    },
+    {
+      "year": 2017,
+      "parameters": {
+        "end_date": "20171231",
+        "start_date": "20170101"
+      },
+      "returnedRows": 649,
+      "stRows": 66,
+      "overlappingRows": 1,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2017-eb23d155f80717cbd31b2dd1d72ddbfc1e23c2e15b088c9b7cb447860b619445.json",
+      "fileSha256": "dbb2ad08a3dc4654b45187b597cfd3bf8cfaa3208832a325a6dc127778f816fb",
+      "declaredRawSha256": "eb23d155f80717cbd31b2dd1d72ddbfc1e23c2e15b088c9b7cb447860b619445",
+      "effectiveStartMin": "20170103",
+      "effectiveStartMax": "20180209"
+    },
+    {
+      "year": 2018,
+      "parameters": {
+        "end_date": "20181231",
+        "start_date": "20180101"
+      },
+      "returnedRows": 321,
+      "stRows": 76,
+      "overlappingRows": 0,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2018-b1449db31b27395b3a1351649c76f0c5e97b78efbf212db465a9b7b1ab5da8c7.json",
+      "fileSha256": "d829b53ea6042814e61bd9ec0b147491d1e5b60984fd1b7c78ef9865d42f6063",
+      "declaredRawSha256": "b1449db31b27395b3a1351649c76f0c5e97b78efbf212db465a9b7b1ab5da8c7",
+      "effectiveStartMin": "20180103",
+      "effectiveStartMax": "20190228"
+    },
+    {
+      "year": 2019,
+      "parameters": {
+        "end_date": "20191231",
+        "start_date": "20190101"
+      },
+      "returnedRows": 437,
+      "stRows": 124,
+      "overlappingRows": 1,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2019-d736acbcaaa7f70ae6116c650599030c24124aab66c0a4bed77cbf8076646c40.json",
+      "fileSha256": "bcc24b23e7439db6e7db07cd41ea80f01a3646fe6a9707a23e826d70548b7654",
+      "declaredRawSha256": "d736acbcaaa7f70ae6116c650599030c24124aab66c0a4bed77cbf8076646c40",
+      "effectiveStartMin": "20190103",
+      "effectiveStartMax": "20200512"
+    },
+    {
+      "year": 2020,
+      "parameters": {
+        "end_date": "20201231",
+        "start_date": "20200101"
+      },
+      "returnedRows": 694,
+      "stRows": 165,
+      "overlappingRows": 7,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2020-348b3fbbe2044a8e1d6f55eae9fcd7e3722c0fa95ca19c554b312fc998e06ae1.json",
+      "fileSha256": "528da7f8ccdf6ef2492dc9a73a5f55e36b190dc9896748ca25240cc0203147a8",
+      "declaredRawSha256": "348b3fbbe2044a8e1d6f55eae9fcd7e3722c0fa95ca19c554b312fc998e06ae1",
+      "effectiveStartMin": "20200106",
+      "effectiveStartMax": "20210126"
+    },
+    {
+      "year": 2021,
+      "parameters": {
+        "end_date": "20211231",
+        "start_date": "20210101"
+      },
+      "returnedRows": 890,
+      "stRows": 136,
+      "overlappingRows": 6,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2021-7f60291b53e8480bd783ee27bac9ac6d95863b35d1bf85859ffb212c5f26cdbe.json",
+      "fileSha256": "ee2afac4051d80823ef03f43c54fd8f722535b6da6155cbc3dc19aaf1f6b6e31",
+      "declaredRawSha256": "7f60291b53e8480bd783ee27bac9ac6d95863b35d1bf85859ffb212c5f26cdbe",
+      "effectiveStartMin": "20210104",
+      "effectiveStartMax": "20220406"
+    },
+    {
+      "year": 2022,
+      "parameters": {
+        "end_date": "20221231",
+        "start_date": "20220101"
+      },
+      "returnedRows": 704,
+      "stRows": 100,
+      "overlappingRows": 6,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2022-d09daa5884038e679a5acfe09d6e95007dd52256cc77095aadb982487195d2a2.json",
+      "fileSha256": "412e90006af98c85f06a90572f0e5310905e52e8f4a5ab552ba48e81f2e5f72d",
+      "declaredRawSha256": "d09daa5884038e679a5acfe09d6e95007dd52256cc77095aadb982487195d2a2",
+      "effectiveStartMin": "20220105",
+      "effectiveStartMax": "20230704"
+    },
+    {
+      "year": 2023,
+      "parameters": {
+        "end_date": "20231231",
+        "start_date": "20230101"
+      },
+      "returnedRows": 542,
+      "stRows": 95,
+      "overlappingRows": 25,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2023-8459ab3ae0c4dce88ce5ad169131a6c8ebf7141a9e83dee42adc3b7a8b5fcc50.json",
+      "fileSha256": "1bee5db3017acd56e6ee50ea74f5534bd93ea1ccad23fa185fc626d955d6191a",
+      "declaredRawSha256": "8459ab3ae0c4dce88ce5ad169131a6c8ebf7141a9e83dee42adc3b7a8b5fcc50",
+      "effectiveStartMin": "20230106",
+      "effectiveStartMax": "20240207"
+    },
+    {
+      "year": 2024,
+      "parameters": {
+        "end_date": "20241231",
+        "start_date": "20240101"
+      },
+      "returnedRows": 330,
+      "stRows": 131,
+      "overlappingRows": 35,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2024-71dbd1b37ca71f94decf2d5dce785355edaef1a53be098a214c75e0f74106219.json",
+      "fileSha256": "9594f188bb55f837ba3c33e79f94385c4b691a74698b5c9e068157ed21e13a1d",
+      "declaredRawSha256": "71dbd1b37ca71f94decf2d5dce785355edaef1a53be098a214c75e0f74106219",
+      "effectiveStartMin": "20240103",
+      "effectiveStartMax": "20251028"
+    },
+    {
+      "year": 2025,
+      "parameters": {
+        "end_date": "20251231",
+        "start_date": "20250101"
+      },
+      "returnedRows": 449,
+      "stRows": 177,
+      "overlappingRows": 52,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2025-8b5399e05cbffc6b73b8321a56f7211cc3361c650d0cfd789c5c315890f6353e.json",
+      "fileSha256": "028b9d8fb8490ae58f12be6e4f4cdb18744334b641be65b77fdc0917a6e6691f",
+      "declaredRawSha256": "8b5399e05cbffc6b73b8321a56f7211cc3361c650d0cfd789c5c315890f6353e",
+      "effectiveStartMin": "20250102",
+      "effectiveStartMax": "20260204"
+    },
+    {
+      "year": 2026,
+      "parameters": {
+        "end_date": "20260930",
+        "start_date": "20260101"
+      },
+      "returnedRows": 437,
+      "stRows": 157,
+      "overlappingRows": 147,
+      "sourceComplete": true,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\namechange-2026-65f035ec47d2e770619db8e0ea6ed894b7198fc78304c4b2e6ca9873c25c6726.json",
+      "fileSha256": "df8b44548ab328732d92492920465d0e1d0bc13a166fc170702ec96a3a7cb70e",
+      "declaredRawSha256": "65f035ec47d2e770619db8e0ea6ed894b7198fc78304c4b2e6ca9873c25c6726",
+      "effectiveStartMin": "20260106",
+      "effectiveStartMax": "20260930"
+    }
+  ],
+  "annualWindows": 17,
+  "distinctNonemptyDeclaredRawSha256": 17,
+  "uniqueOverlappingPeriods": 281,
+  "daily": [
+    {
+      "date": "2026-09-28",
+      "independentRows": 280,
+      "receiptRows": 280,
+      "oldRows": 280,
+      "oldKeysExact": true,
+      "independentExpansionExact": true,
+      "duplicateKeys": 0,
+      "invalidFieldValues": 0,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\stk-st-daily-20260928-9d0973a14b3a42272e5b7fa60e152365ad04ea8ae4cab43d531d51a2f827909c.json",
+      "fileSha256": "9d0973a14b3a42272e5b7fa60e152365ad04ea8ae4cab43d531d51a2f827909c"
+    },
+    {
+      "date": "2026-09-29",
+      "independentRows": 279,
+      "receiptRows": 279,
+      "oldRows": 279,
+      "oldKeysExact": true,
+      "independentExpansionExact": true,
+      "duplicateKeys": 0,
+      "invalidFieldValues": 0,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\stk-st-daily-20260929-2478e80333fc88514dcac48cee16e6cde58a039fe308e87d23be12f3c5bd1588.json",
+      "fileSha256": "2478e80333fc88514dcac48cee16e6cde58a039fe308e87d23be12f3c5bd1588"
+    },
+    {
+      "date": "2026-09-30",
+      "independentRows": 278,
+      "receiptRows": 278,
+      "oldRows": 278,
+      "oldKeysExact": true,
+      "independentExpansionExact": true,
+      "duplicateKeys": 0,
+      "invalidFieldValues": 0,
+      "file": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-07b07a05-eadc-441f-b731-ff1a923daa41\\source\\stk-st-daily-20260930-710aabba0a02ebadd09aff12de8b6039a37acfcc52ae4020162a12dfb237affd.json",
+      "fileSha256": "710aabba0a02ebadd09aff12de8b6039a37acfcc52ae4020162a12dfb237affd"
+    }
+  ],
+  "sourceRows": 837.0,
+  "existing837KeysPreserved": true,
+  "rawShaCheck": "Declared canonical raw SHA, filename and cross-year uniqueness; all complete annual file SHA independently recomputed and matched every daily reference.",
+  "sourceFileShaCheck": "Every daily receipt SHA independently recomputed; independent key expansion and all three fields checked.",
+  "formal": {
+    "clockBefore": {
+      "query": "SELECT t.id,t.directoryName,t.walEnabled,w.writerTxn,w.sequencerTxn,w.suspended,w.bufferedTxnSize FROM tables() t JOIN wal_tables() w ON w.name=t.table_name WHERE t.table_name='stk_st_daily'",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT"
+        },
+        {
+          "name": "directoryName",
+          "type": "STRING"
+        },
+        {
+          "name": "walEnabled",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "writerTxn",
+          "type": "LONG"
+        },
+        {
+          "name": "sequencerTxn",
+          "type": "LONG"
+        },
+        {
+          "name": "suspended",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "bufferedTxnSize",
+          "type": "LONG"
+        }
+      ],
+      "timestamp": -1,
+      "dataset": [
+        [
+          3025,
+          "java_d012_stk_st_daily_stage_bab6164bf8ca43468c1cf0d59504c3f8~3025",
+          true,
+          12,
+          12,
+          false,
+          0
+        ]
+      ],
+      "count": 1
+    },
+    "clockAfter": {
+      "query": "SELECT t.id,t.directoryName,t.walEnabled,w.writerTxn,w.sequencerTxn,w.suspended,w.bufferedTxnSize FROM tables() t JOIN wal_tables() w ON w.name=t.table_name WHERE t.table_name='stk_st_daily'",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT"
+        },
+        {
+          "name": "directoryName",
+          "type": "STRING"
+        },
+        {
+          "name": "walEnabled",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "writerTxn",
+          "type": "LONG"
+        },
+        {
+          "name": "sequencerTxn",
+          "type": "LONG"
+        },
+        {
+          "name": "suspended",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "bufferedTxnSize",
+          "type": "LONG"
+        }
+      ],
+      "timestamp": -1,
+      "dataset": [
+        [
+          3025,
+          "java_d012_stk_st_daily_stage_bab6164bf8ca43468c1cf0d59504c3f8~3025",
+          true,
+          12,
+          12,
+          false,
+          0
+        ]
+      ],
+      "count": 1
+    },
+    "schema": {
+      "query": "SELECT \"column\",type FROM table_columns('stk_st_daily')",
+      "columns": [
+        {
+          "name": "column",
+          "type": "STRING"
+        },
+        {
+          "name": "type",
+          "type": "STRING"
+        }
+      ],
+      "timestamp": -1,
+      "dataset": [
+        [
+          "ts_code",
+          "SYMBOL"
+        ],
+        [
+          "is_st",
+          "INT"
+        ],
+        [
+          "timestamp",
+          "TIMESTAMP"
+        ]
+      ],
+      "count": 3
+    },
+    "rows": 837,
+    "sourceToFormalKeyValuesExact": true,
+    "comparedValues": 2511,
+    "typedWindowSha256": "0acf2ae506eaa2382ea60e947b2c75121f243487131ca5a07f2dbdebf9e7323b",
+    "flowReceipt": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch\\19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5\\sources\\stk_st_daily\\2026-09-28_2026-09-30\\receipt-b0cde648-2689-4d61-8ac8-2ccc8e413130.json",
+    "flowReceiptSha256": "f667ed2b85943a73727950ecfdb33bb7c0e4a9b28190a3162077b792bbc1c842",
+    "flowReceiptState": "VERIFIED",
+    "publicationId": "stk-st-publication-34706de4-d190-451b-a78b-a23ea7c369ac",
+    "publicationState": "VERIFIED",
+    "fullRows": 830433,
+    "fullCanonicalSha256": "fa12c8bf111364f98c209af7941a53201a14b71e35b3abb0b2b7a18099cd79ac",
+    "beforeFullCanonicalSha256": "fa12c8bf111364f98c209af7941a53201a14b71e35b3abb0b2b7a18099cd79ac",
+    "outsideRows": 829596,
+    "outsideCanonicalSha256": "aae30857e1df86950b890908f9f88403a0d78295c287ec44214df0bd4402a2b0",
+    "backup": "java_d012_stk_st_daily_backup_1e4ae59286ca4bb2851c251fa98445ce",
+    "physicalId": 3025,
+    "stageWriterTxn": 11,
+    "publishedWriterTxn": 12,
+    "fullProofNote": "Full-history and outside SHA are certified by actual VERIFIED publication/stage proof; independent audit re-read every bounded-window field and stable identity/WAL. Rename advances the stage WAL frontier from 11 to 12."
+  }
+}

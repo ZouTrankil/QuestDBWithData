@@ -18,6 +18,7 @@ public final class QuestDbMoneyflowHsgtTables implements MoneyflowHsgtStagingPor
   jdbc=new JdbcTemplate(Objects.requireNonNull(source.getDataSource()));jdbc.setQueryTimeout(120);
  }
  @Override public Table open(String table) {return new MoneyflowHsgtStorage(jdbc,table);}
+ @Override public Table open(String table,String owningTarget) {return new MoneyflowHsgtStorage(jdbc,table,owningTarget);}
  @Override public String logicalTargetId(String table) {
   DatasetDefinition.identifier(table);
   return StaticTargetIdentity.identify(jdbc,table,0L,"d027-logical-target-v1");
@@ -27,7 +28,8 @@ public final class QuestDbMoneyflowHsgtTables implements MoneyflowHsgtStagingPor
  @Override public void createOutsideStage(String target,String stage,LocalDate from,LocalDate to) {
   String lower=from+"T00:00:00.000000Z",upper=to.plusDays(1)+"T00:00:00.000000Z";
   String sql="CREATE TABLE \""+stage+"\" AS (SELECT trade_date,ggt_ss,ggt_sz,hgt,sgt,north_money,south_money FROM \""+target
-   +"\" WHERE trade_date<cast('"+lower+"' AS TIMESTAMP) OR trade_date>=cast('"+upper+"' AS TIMESTAMP)) TIMESTAMP(trade_date) PARTITION BY DAY WAL";
+   +"\" WHERE trade_date<cast('"+lower+"' AS TIMESTAMP) OR trade_date>=cast('"+upper+"' AS TIMESTAMP)) TIMESTAMP(trade_date) PARTITION BY DAY WAL"
+   +(com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(target)?" DEDUP UPSERT KEYS(trade_date)":"");
   jdbc.execute(sql);
  }
  @Override public int discardTableCount(String table) {return new JdbcTemplate(jdbc.getDataSource()).queryForList("SELECT id,directoryName FROM tables() WHERE table_name=?",table).size();}

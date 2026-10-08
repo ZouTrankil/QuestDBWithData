@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 
-/** Bounded full-table and window snapshots used by D027's no-DEDUP journaled publication. */
+/** Bounded snapshots retain the owning D027 target's exact DAY/WAL/DEDUP layout. */
 public final class MoneyflowHsgtStorage implements com.zoutrankil.data.flow.port.MoneyflowHsgtTables.Table {
     public static final int MAX_ROWS = MoneyflowHsgtLimits.MAX_ROWS;
     public static final int MAX_BYTES = MoneyflowHsgtLimits.MAX_BYTES;
@@ -28,13 +28,18 @@ public final class MoneyflowHsgtStorage implements com.zoutrankil.data.flow.port
 
     private final JdbcTemplate jdbc;
     private final String table;
+    private final DatasetDefinition writeDefinition;
     public MoneyflowHsgtStorage(JdbcTemplate jdbc,String table) {
+        this(jdbc,table,table);
+    }
+    public MoneyflowHsgtStorage(JdbcTemplate jdbc,String table,String owningTarget) {
         DatasetDefinition.identifier(table); this.table=table;
+        this.writeDefinition=MoneyflowHsgtDataset.publicationWriteDefinition(table,owningTarget);
         this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc.getDataSource()));
         this.jdbc.setQueryTimeout(120); this.jdbc.setMaxRows(MAX_ROWS+1);
     }
     public Identity preflight() {
-        QuestDbWriteChecks.preflight(jdbc,table,MoneyflowHsgtDataset.admittedWriteDefinition(table));
+        QuestDbWriteChecks.preflight(jdbc,table,writeDefinition);
         var objects=jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name=?",table);
         var wal=jdbc.queryForList("SELECT writerTxn FROM wal_tables() WHERE name=?",table);
         if(objects.size()!=1||wal.size()!=1||!(objects.getFirst().get("id") instanceof Number id)

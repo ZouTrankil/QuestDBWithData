@@ -11,6 +11,7 @@ import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.domain.table.DailyRow;
 import com.zoutrankil.data.stock.mapper.DailyMapper;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
+import com.zoutrankil.data.service.DailyJobService;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
 import java.io.ByteArrayOutputStream;
@@ -61,7 +62,7 @@ public final class DailyWritePort implements DailyWriteSession {
     private final DailyMapper mapper = new DailyMapper();
 
     public DailyWritePort(String table, JdbcTemplate jdbc, QuestDB questdb) {
-        DatasetDefinition.identifier(table);
+        DailyJobService.requireExecutionTableName(table);
         this.table = table;
         this.jdbc = new JdbcTemplate(Objects.requireNonNull(jdbc.getDataSource()));
         this.jdbc.setQueryTimeout(20);
@@ -110,7 +111,14 @@ public final class DailyWritePort implements DailyWriteSession {
             throw new IllegalArgumentException("At most 250 unique daily keys may be verified at once");
         }
         var clauses = new ArrayList<String>(keys.size());
-        var parameters = new ArrayList<Object>(keys.size() * 2);
+        var parameters = new ArrayList<Object>(keys.size() * 3 + 2);
+        // Keep exact pairs; the outer interval/code predicates let QuestDB prune partitions and symbols.
+        var firstDate = keys.stream().map(DailyMarketBar.Key::tradeDate).min(Comparator.naturalOrder()).orElseThrow();
+        var lastDate = keys.stream().map(DailyMarketBar.Key::tradeDate).max(Comparator.naturalOrder()).orElseThrow();
+        parameters.add(new TemporalValues.CalendarTimestamp(firstDate).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        parameters.add(new TemporalValues.CalendarTimestamp(lastDate.plusDays(1)).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        var codes = keys.stream().map(DailyMarketBar.Key::tsCode).distinct().sorted().toList();
+        parameters.addAll(codes);
         for (var key : keys) {
             clauses.add("(ts_code=? AND trade_date=cast(? as TIMESTAMP))");
             parameters.add(key.tsCode());
@@ -119,7 +127,10 @@ public final class DailyWritePort implements DailyWriteSession {
         }
         String projection = String.join(", ", SELECT_COLUMNS.stream().map(column -> column.equals("trade_date")
                 ? "cast(trade_date as long) AS trade_date_micros" : column).toList());
-        String sql = "SELECT " + projection + " FROM " + table + " WHERE " + String.join(" OR ", clauses)
+        String sql = "SELECT " + projection + " FROM " + table
+                + " WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP)"
+                + " AND ts_code IN (" + String.join(",", Collections.nCopies(codes.size(), "?")) + ")"
+                + " AND (" + String.join(" OR ", clauses) + ")"
                 + " ORDER BY ts_code,trade_date LIMIT " + (keys.size() + 1);
         return jdbc.query(sql, (rs, index) -> mapper.fromStorage(readRow(rs)), parameters.toArray());
     }

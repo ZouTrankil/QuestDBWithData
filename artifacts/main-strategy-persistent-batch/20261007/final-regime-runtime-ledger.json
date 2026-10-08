@@ -1,0 +1,342 @@
+{
+  "observedAtUtc" : "2026-10-07T18:21:38.683964600Z",
+  "readOnly" : true,
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-ledger.sqlite3",
+  "run" : [ {
+    "id" : "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+    "parent_run_id" : null,
+    "job_id" : "data.regime_features_monitor_daily",
+    "job_version" : 3,
+    "logical_date" : "2026-09-30",
+    "target_id" : "static-v2-030ca0a4badcbaaa58785906bc2058d645dfcf7f75c5b5787a694020fe26370c",
+    "frozen_json" : "{\"definition\":{\"jobId\":\"data.regime_features_monitor_daily\",\"version\":3,\"datasetId\":\"regime_features_monitor_daily\",\"datasetVersion\":1,\"owner\":\"regime_features_monitor_daily_owner\",\"supportedModes\":[\"MATERIALIZE\"],\"defaultMode\":\"MATERIALIZE\",\"parameters\":{\"warmup_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"source_pin\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"regime_features_monitor_daily.range366\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT20M\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":366,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"DAILY\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":true},\"mode\":\"MATERIALIZE\",\"parameters\":{\"source_pin\":\"b7aaf114e01a735587baa031ddb8dd950d6fab5230de9b34a407ebb60a212861\",\"target_hash\":\"8bb4232710f019986888c17bfafe998c335812a0722731819eb015ed8c30b483\",\"target_id\":\"static-v2-030ca0a4badcbaaa58785906bc2058d645dfcf7f75c5b5787a694020fe26370c\",\"warmup_from\":\"2026-09-01\"},\"from\":\"2026-09-28\",\"to\":\"2026-09-30\",\"logicalDate\":\"2026-09-30\"}",
+    "frozen_json_parsed" : {
+      "definition" : {
+        "jobId" : "data.regime_features_monitor_daily",
+        "version" : 3,
+        "datasetId" : "regime_features_monitor_daily",
+        "datasetVersion" : 1,
+        "owner" : "regime_features_monitor_daily_owner",
+        "supportedModes" : [ "MATERIALIZE" ],
+        "defaultMode" : "MATERIALIZE",
+        "parameters" : {
+          "warmup_from" : {
+            "type" : "DATE",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "source_pin" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "target_id" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "target_hash" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "questdb.materialize",
+        "slicePolicyRef" : "regime_features_monitor_daily.range366",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 1,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT1S"
+        },
+        "timeout" : "PT20M",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 1,
+          "maxPages" : 1,
+          "maxRows" : 366,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 0,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "MATERIALIZE",
+      "parameters" : {
+        "source_pin" : "b7aaf114e01a735587baa031ddb8dd950d6fab5230de9b34a407ebb60a212861",
+        "target_hash" : "8bb4232710f019986888c17bfafe998c335812a0722731819eb015ed8c30b483",
+        "target_id" : "static-v2-030ca0a4badcbaaa58785906bc2058d645dfcf7f75c5b5787a694020fe26370c",
+        "warmup_from" : "2026-09-01"
+      },
+      "from" : "2026-09-28",
+      "to" : "2026-09-30",
+      "logicalDate" : "2026-09-30"
+    }
+  } ],
+  "entries" : [ {
+    "id" : "slice-17084a3b-045b-49b2-b74c-bfc6796fba83",
+    "kind" : "SLICE",
+    "run_id" : "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+    "parent_id" : "attempt-201cfd48-8b79-41b8-a16a-a565a5dc8333",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payload_json" : "{\"verification\":{\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"readbackEvidence\":\"ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5\",\"mismatchedRows\":0,\"matchedRows\":3,\"expectedRows\":3,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":3}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "sourceFingerprint" : "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+        "readbackEvidence" : "ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 3,
+        "expectedRows" : 3,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0,
+        "missingKeys" : 0,
+        "actualRows" : 3
+      }
+    },
+    "updated_at" : "2026-10-07T18:18:21.948250800Z"
+  }, {
+    "id" : "attempt-201cfd48-8b79-41b8-a16a-a565a5dc8333",
+    "kind" : "ATTEMPT",
+    "run_id" : "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+    "parent_id" : "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payload_json" : "{\"verification\":{\"sourceFingerprint\":\"ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca\",\"readbackEvidence\":\"ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5\",\"mismatchedRows\":0,\"matchedRows\":3,\"expectedRows\":3,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":3}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "sourceFingerprint" : "ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca",
+        "readbackEvidence" : "ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 3,
+        "expectedRows" : 3,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0,
+        "missingKeys" : 0,
+        "actualRows" : 3
+      }
+    },
+    "updated_at" : "2026-10-07T18:18:22.476511400Z"
+  }, {
+    "id" : "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+    "kind" : "RUN",
+    "run_id" : "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+    "parent_id" : null,
+    "state" : "VERIFIED",
+    "revision" : 2,
+    "payload_json" : "{\"verification\":{\"sourceFingerprint\":\"ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca\",\"readbackEvidence\":\"ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5\",\"mismatchedRows\":0,\"matchedRows\":3,\"expectedRows\":3,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":3}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "sourceFingerprint" : "ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca",
+        "readbackEvidence" : "ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 3,
+        "expectedRows" : 3,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0,
+        "missingKeys" : 0,
+        "actualRows" : 3
+      }
+    },
+    "updated_at" : "2026-10-07T18:18:22.488543200Z"
+  } ],
+  "events" : [ {
+    "entry_id" : "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T18:18:16.557010800Z"
+  }, {
+    "entry_id" : "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T18:18:16.734937600Z"
+  }, {
+    "entry_id" : "attempt-201cfd48-8b79-41b8-a16a-a565a5dc8333",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T18:18:16.746390100Z"
+  }, {
+    "entry_id" : "attempt-201cfd48-8b79-41b8-a16a-a565a5dc8333",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T18:18:16.757387800Z"
+  }, {
+    "entry_id" : "slice-17084a3b-045b-49b2-b74c-bfc6796fba83",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T18:18:21.743868400Z"
+  }, {
+    "entry_id" : "slice-17084a3b-045b-49b2-b74c-bfc6796fba83",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T18:18:21.755493200Z"
+  }, {
+    "entry_id" : "slice-17084a3b-045b-49b2-b74c-bfc6796fba83",
+    "revision" : 2,
+    "state" : "FETCHED",
+    "payload_json" : "{\"returnedRows\":3,\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f\\\\source.json\",\"cursor\":null}",
+    "payload_json_parsed" : {
+      "returnedRows" : 3,
+      "sourceFingerprint" : "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f\\source.json",
+      "cursor" : null
+    },
+    "updated_at" : "2026-10-07T18:18:21.764560300Z"
+  }, {
+    "entry_id" : "slice-17084a3b-045b-49b2-b74c-bfc6796fba83",
+    "revision" : 3,
+    "state" : "VALIDATED",
+    "payload_json" : "{\"returnedRows\":3,\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f\\\\source.json\",\"cursor\":null}",
+    "payload_json_parsed" : {
+      "returnedRows" : 3,
+      "sourceFingerprint" : "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f\\source.json",
+      "cursor" : null
+    },
+    "updated_at" : "2026-10-07T18:18:21.773619600Z"
+  }, {
+    "entry_id" : "slice-17084a3b-045b-49b2-b74c-bfc6796fba83",
+    "revision" : 4,
+    "state" : "SUBMITTED",
+    "payload_json" : "{\"returnedRows\":3,\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f\\\\source.json\",\"cursor\":null}",
+    "payload_json_parsed" : {
+      "returnedRows" : 3,
+      "sourceFingerprint" : "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f\\source.json",
+      "cursor" : null
+    },
+    "updated_at" : "2026-10-07T18:18:21.853615400Z"
+  }, {
+    "entry_id" : "slice-17084a3b-045b-49b2-b74c-bfc6796fba83",
+    "revision" : 5,
+    "state" : "ACKNOWLEDGED",
+    "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":3,\"verifiedRows\":3,\"receipts\":[{\"batch\":1,\"submittedRows\":3,\"verifiedRows\":3,\"bytes\":10467,\"digest\":\"12d8c8f5b1198ec41bad847a8e876a8093f87ff12ffa64005f269b460e70313a\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+    "payload_json_parsed" : {
+      "writeResult" : {
+        "status" : "VERIFIED",
+        "submittedRows" : 3,
+        "verifiedRows" : 3,
+        "receipts" : [ {
+          "batch" : 1,
+          "submittedRows" : 3,
+          "verifiedRows" : 3,
+          "bytes" : 10467,
+          "digest" : "12d8c8f5b1198ec41bad847a8e876a8093f87ff12ffa64005f269b460e70313a",
+          "delivery" : "ACKNOWLEDGED"
+        } ],
+        "reason" : null
+      }
+    },
+    "updated_at" : "2026-10-07T18:18:21.938590200Z"
+  }, {
+    "entry_id" : "slice-17084a3b-045b-49b2-b74c-bfc6796fba83",
+    "revision" : 6,
+    "state" : "VERIFIED",
+    "payload_json" : "{\"verification\":{\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"readbackEvidence\":\"ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5\",\"mismatchedRows\":0,\"matchedRows\":3,\"expectedRows\":3,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":3}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "sourceFingerprint" : "cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5",
+        "readbackEvidence" : "ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 3,
+        "expectedRows" : 3,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0,
+        "missingKeys" : 0,
+        "actualRows" : 3
+      }
+    },
+    "updated_at" : "2026-10-07T18:18:21.948250800Z"
+  }, {
+    "entry_id" : "attempt-201cfd48-8b79-41b8-a16a-a565a5dc8333",
+    "revision" : 2,
+    "state" : "VERIFIED",
+    "payload_json" : "{\"verification\":{\"sourceFingerprint\":\"ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca\",\"readbackEvidence\":\"ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5\",\"mismatchedRows\":0,\"matchedRows\":3,\"expectedRows\":3,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":3}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "sourceFingerprint" : "ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca",
+        "readbackEvidence" : "ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 3,
+        "expectedRows" : 3,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0,
+        "missingKeys" : 0,
+        "actualRows" : 3
+      }
+    },
+    "updated_at" : "2026-10-07T18:18:22.476511400Z"
+  }, {
+    "entry_id" : "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+    "revision" : 2,
+    "state" : "VERIFIED",
+    "payload_json" : "{\"verification\":{\"sourceFingerprint\":\"ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca\",\"readbackEvidence\":\"ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5\",\"mismatchedRows\":0,\"matchedRows\":3,\"expectedRows\":3,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":3}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "sourceFingerprint" : "ba3857bb50293440bbda1728eb25cc9f5797a82c1c8daef7d77c427fafddc6ca",
+        "readbackEvidence" : "ledger:slice-17084a3b-045b-49b2-b74c-bfc6796fba83:revision:5",
+        "mismatchedRows" : 0,
+        "matchedRows" : 3,
+        "expectedRows" : 3,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0,
+        "missingKeys" : 0,
+        "actualRows" : 3
+      }
+    },
+    "updated_at" : "2026-10-07T18:18:22.488543200Z"
+  } ],
+  "publications" : [ {
+    "id" : "regime_features_monitor_daily-publication-61288d54-f0b4-4577-9c67-63a19f9929bb",
+    "dataset" : "regime_features_monitor_daily",
+    "run_id" : "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+    "intent_json" : "{\"id\":\"regime_features_monitor_daily-publication-61288d54-f0b4-4577-9c67-63a19f9929bb\",\"dataset\":\"regime_features_monitor_daily\",\"runId\":\"regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f\",\"target\":\"regime_features_monitor_daily\",\"backup\":\"java_regime_features_monitor_daily_backup_77bf160fea8b4817b0aaa25067388360\",\"stage\":\"java_regime_features_monitor_daily_stage_3d1836683429456082c826121cb44351\",\"initialTarget\":\"static-v2-030ca0a4badcbaaa58785906bc2058d645dfcf7f75c5b5787a694020fe26370c\",\"originalId\":3018,\"originalDirectory\":\"regime_features_monitor_daily_rebuild_20261007_234258~3018\",\"replacementId\":3028,\"beforeFingerprint\":\"8bb4232710f019986888c17bfafe998c335812a0722731819eb015ed8c30b483\",\"afterFingerprint\":\"9999fe8244396795dfdb8793af6110cb4330d5aa0bb20c8381166b6338d1b4bb\",\"scope\":\"{\\\"sourceEvidence\\\":\\\"C:\\\\\\\\Users\\\\\\\\zouqiang\\\\\\\\IdeaProjects\\\\\\\\QuestDBWithData\\\\\\\\var\\\\\\\\main-strategy-java-refresh\\\\\\\\20261007\\\\\\\\sync-evidence\\\\\\\\regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f\\\\\\\\source.json\\\",\\\"sourceFingerprint\\\":\\\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\\\",\\\"sourceEvidenceSha256\\\":\\\"1358df27ae772e558811337342e42a069aaae8f3bf9bb07232e042a11ab379ea\\\",\\\"to\\\":\\\"2026-09-30\\\",\\\"from\\\":\\\"2026-09-28\\\"}\"}",
+    "intent_json_parsed" : {
+      "id" : "regime_features_monitor_daily-publication-61288d54-f0b4-4577-9c67-63a19f9929bb",
+      "dataset" : "regime_features_monitor_daily",
+      "runId" : "regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f",
+      "target" : "regime_features_monitor_daily",
+      "backup" : "java_regime_features_monitor_daily_backup_77bf160fea8b4817b0aaa25067388360",
+      "stage" : "java_regime_features_monitor_daily_stage_3d1836683429456082c826121cb44351",
+      "initialTarget" : "static-v2-030ca0a4badcbaaa58785906bc2058d645dfcf7f75c5b5787a694020fe26370c",
+      "originalId" : 3018,
+      "originalDirectory" : "regime_features_monitor_daily_rebuild_20261007_234258~3018",
+      "replacementId" : 3028,
+      "beforeFingerprint" : "8bb4232710f019986888c17bfafe998c335812a0722731819eb015ed8c30b483",
+      "afterFingerprint" : "9999fe8244396795dfdb8793af6110cb4330d5aa0bb20c8381166b6338d1b4bb",
+      "scope" : "{\"sourceEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\regime-monitor-f28d7fcd-3a47-4115-847e-42d4af6b611f\\\\source.json\",\"sourceFingerprint\":\"cb8cde9cd23b8036d455fbeb494be3392cbce4c6e0d0d5c190793c58f0c77cf5\",\"sourceEvidenceSha256\":\"1358df27ae772e558811337342e42a069aaae8f3bf9bb07232e042a11ab379ea\",\"to\":\"2026-09-30\",\"from\":\"2026-09-28\"}"
+    },
+    "state" : "VERIFIED",
+    "revision" : 3,
+    "updated_at" : "2026-10-07T18:18:22.454777800Z"
+  } ]
+}

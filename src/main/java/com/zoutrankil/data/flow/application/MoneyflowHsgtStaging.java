@@ -25,7 +25,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.BooleanSupplier;
 
-/** Builds a same-layout non-DEDUP full-table snapshot with one authoritative date window replaced. */
+/** Builds a full-table snapshot preserving the owning target's physical layout and outside rows. */
 public final class MoneyflowHsgtStaging {
 
 
@@ -57,11 +57,11 @@ public final class MoneyflowHsgtStaging {
         body.put("runId",runId);body.put("target",target);body.put("logicalTargetId",logicalTargetId);
         body.put("physicalTargetBefore",physicalTargetId);body.put("stage",stage);body.put("requestFingerprint",requestFingerprint);
         body.put("mode",request.mode());body.put("logicalDate",request.logicalDate());body.put("windowFrom",request.from());
-        body.put("windowTo",request.to());body.put("before",proof(before));body.put("preservedOutside",proof(outside));body.put("dedup",false);
+        body.put("windowTo",request.to());body.put("before",proof(before));body.put("preservedOutside",proof(outside));body.put("dedup",com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(target));
         writeNew(stageIntent,body);
         if(tables.tableCount(stage)!=0)throw new IllegalStateException("D027 generated stage table already exists");
         tables.createOutsideStage(target,stage,request.from(),request.to());tables.awaitWal(stage,cancelled);
-        var copied=tables.open(stage).snapshot();
+        var copied=tables.open(stage,target).snapshot();
         if(!MoneyflowHsgtRows.sameRows(outside.rows(),copied.rows()))throw new IllegalStateException("D027 stage did not preserve exact rows outside the authoritative window");
         String stageId=tables.physicalTargetId(stage,copied.identity());
         body.put("phase","READY");body.put("stagePhysicalTarget",stageId);body.put("stageOutside",proof(copied));replaceDurable(stageIntent,body);
@@ -97,11 +97,11 @@ public final class MoneyflowHsgtStaging {
         if(!sameIdentityAndContent(targetNow,prepared.before())
                 ||!tables.physicalTargetId(prepared.target(),targetNow.identity()).equals(prepared.physicalTargetBefore()))
             throw new IllegalStateException("D027 original target changed during staged source collection");
-        var actual=tables.open(prepared.stage()).snapshot();
+        var actual=tables.open(prepared.stage(),prepared.target()).snapshot();
         if(!tables.physicalTargetId(prepared.stage(),actual.identity()).equals(prepared.stagePhysicalTarget()))
             throw new IllegalStateException("D027 staged physical generation changed");
-        var outsideNow=tables.open(prepared.stage()).outside(prepared.from(),prepared.to());
-        var windowNow=tables.open(prepared.stage()).window(prepared.from(),prepared.to());
+        var outsideNow=tables.open(prepared.stage(),prepared.target()).outside(prepared.from(),prepared.to());
+        var windowNow=tables.open(prepared.stage(),prepared.target()).window(prepared.from(),prepared.to());
         if(!MoneyflowHsgtRows.sameRows(prepared.outside().rows(),outsideNow.rows())
                 ||!MoneyflowHsgtRows.sameRows(MoneyflowHsgtRows.ordered(expected),windowNow.rows()))
             throw new IllegalStateException("D027 full staged snapshot differs from preserved target plus authoritative source window");
@@ -109,7 +109,7 @@ public final class MoneyflowHsgtStaging {
         body.put("target",prepared.target());body.put("logicalTargetId",prepared.logicalTargetId());
         body.put("physicalTargetBefore",prepared.physicalTargetBefore());body.put("stage",prepared.stage());
         body.put("stagePhysicalTarget",prepared.stagePhysicalTarget());body.put("requestFingerprint",prepared.requestFingerprint());
-        body.put("windowFrom",prepared.from());body.put("windowTo",prepared.to());body.put("dedup",false);
+        body.put("windowFrom",prepared.from());body.put("windowTo",prepared.to());body.put("dedup",com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(prepared.target()));
         body.put("before",proof(prepared.before()));body.put("preservedOutside",proof(outsideNow));body.put("authoritativeWindow",proof(windowNow));
         body.put("sourceRows",expected.size());body.put("sourceReceipts",receiptRefs);body.put("sourceComplete",true);
         body.put("stageAfter",proof(actual));
@@ -139,6 +139,7 @@ public final class MoneyflowHsgtStaging {
         Path intentPath=intents.getFirst();if(Files.isSymbolicLink(intentPath)||!Files.isRegularFile(intentPath,LinkOption.NOFOLLOW_LINKS)||Files.size(intentPath)>MAX_INTENT_BYTES)throw new IOException("D027 stage intent is invalid");
         var json=JobDefinitionJson.mapper();JsonNode intent=json.readTree(FileEvidenceStore.readBounded(intentPath,MAX_INTENT_BYTES,()->new IOException("D027 stage intent is invalid")));
         if(!"moneyflow_hsgt".equals(intent.path("dataset").asText())||!runId.equals(intent.path("runId").asText())
+                ||!intent.path("dedup").isBoolean()||intent.path("dedup").asBoolean()!=com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(target)
                 ||!target.equals(intent.path("target").asText()))throw new IllegalStateException("D027 stage intent belongs to another run/target");
         if("DISCARDED".equals(intent.path("phase").asText()))return;
         if(!Set.of("PREPARING","READY").contains(intent.path("phase").asText()))throw new IllegalStateException("D027 stage intent phase is not discardable");
@@ -156,7 +157,7 @@ public final class MoneyflowHsgtStaging {
         int named=tables.discardTableCount(stage);
         if(named>1)throw new IllegalStateException("D027 stage name is ambiguous");
         if(named==1){
-            var staged=tables.open(stage).snapshot();String stageId=tables.physicalTargetId(stage,staged.identity());
+            var staged=tables.open(stage,target).snapshot();String stageId=tables.physicalTargetId(stage,staged.identity());
             String recorded=intent.path("stagePhysicalTarget").asText("");
             if(!recorded.isBlank()&&!recorded.equals(stageId))throw new IllegalStateException("D027 stage physical generation changed before discard");
             tables.drop(stage);

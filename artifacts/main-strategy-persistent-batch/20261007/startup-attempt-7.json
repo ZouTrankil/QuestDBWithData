@@ -1,0 +1,44 @@
+{
+  "job": "main_strategy_daily",
+  "enabled": true,
+  "startupCatchup": true,
+  "queued": false,
+  "closing": false,
+  "completionCutoff": "20:30",
+  "zone": "Asia/Shanghai",
+  "maximumRecoveryAttempts": 12,
+  "triggers": [
+    {
+      "name": "daily",
+      "state": "NORMAL",
+      "nextFireAt": "2026-10-08T12:35:00Z"
+    },
+    {
+      "name": "recovery",
+      "state": "NORMAL",
+      "nextFireAt": "2026-10-08T13:00:00Z"
+    }
+  ],
+  "lastError": null,
+  "instances": [
+    {
+      "instance_id": "19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5",
+      "job": "main_strategy_daily",
+      "logical_date": "2026-09-30",
+      "business_state": "IN_DOUBT",
+      "reason": "Native owner not verified: market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8 IN_DOUBT IllegalStateException",
+      "batch_execution_id": 6
+    }
+  ],
+  "pipeline": {
+    "producer": "java.main_strategy_daily",
+    "stage": "MarketSentimentDaily",
+    "target": "2026-09-30",
+    "lastOutcome": "IN_DOUBT:Native owner not verified: market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8 IN_DOUBT IllegalStateException",
+    "artifactRoot": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch",
+    "targetEtfs": [
+      "512770.SH",
+      "589330.SH"
+    ]
+  }
+}

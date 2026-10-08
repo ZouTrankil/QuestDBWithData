@@ -1,0 +1,44 @@
+{
+  "job": "main_strategy_daily",
+  "enabled": true,
+  "startupCatchup": true,
+  "queued": false,
+  "closing": false,
+  "completionCutoff": "20:30",
+  "zone": "Asia/Shanghai",
+  "maximumRecoveryAttempts": 12,
+  "triggers": [
+    {
+      "name": "daily",
+      "state": "NORMAL",
+      "nextFireAt": "2026-10-08T12:35:00Z"
+    },
+    {
+      "name": "recovery",
+      "state": "NORMAL",
+      "nextFireAt": "2026-10-08T13:00:00Z"
+    }
+  ],
+  "lastError": null,
+  "instances": [
+    {
+      "instance_id": "19598fab846fd1c3ecd35ceb77f317e9cc400d268881d5995fdeb4ea96690dd5",
+      "job": "main_strategy_daily",
+      "logical_date": "2026-09-30",
+      "business_state": "WAITING_SOURCE",
+      "reason": "moneyflow_hsgt preflight: Cannot prove D027 physical target identity",
+      "batch_execution_id": 5
+    }
+  ],
+  "pipeline": {
+    "producer": "java.main_strategy_daily",
+    "stage": "Sources",
+    "target": "2026-09-30",
+    "lastOutcome": "WAITING_SOURCE:moneyflow_hsgt preflight: Cannot prove D027 physical target identity",
+    "artifactRoot": "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-batch",
+    "targetEtfs": [
+      "512770.SH",
+      "589330.SH"
+    ]
+  }
+}

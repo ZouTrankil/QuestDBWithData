@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
-/** D090 retained-compatibility contract for the audited physical snapshot. */
+/** Enriched composite-key base for the public native backtest materialized view. */
 public final class BacktestDailyDataset {
     private BacktestDailyDataset() {}
 
@@ -13,7 +13,7 @@ public final class BacktestDailyDataset {
             "Exchange business date; UTC midnight is only the QuestDB storage carrier");
 
     public static final DatasetDefinition DEFINITION = new DatasetDefinition(
-            "backtest_daily", 1, "python.derived.backtest_daily", "python.backtest_readthrough_compatibility",
+            "backtest_daily", 1, "derived.questdb.backtest_daily", "backtest_daily_owner",
             "backtest_daily", ObjectKind.TABLE,
             List.of(
                     new Column("trade_date", "trade_date", "trade_date", StorageType.TIMESTAMP, false,
@@ -34,10 +34,10 @@ public final class BacktestDailyDataset {
                     new Column("derived:stk_st_daily", "is_st", "is_st", StorageType.INT, true,
                             "Special-treatment indicator; coalesced to zero by the current view when absent", null)),
             List.of("trade_date", "ts_code"), List.of("trade_date", "ts_code"), "trade_date",
-            Partition.DAY, true, Set.of(Capability.READ), List.of(),
-            "Preserve the audited legacy DAY/WAL/DEDUP table and its (trade_date, ts_code) key as a read-only compatibility surface. "
-                    + "Python owns the source-version read-through cache from v_backtest_daily; the callable legacy materializer is not promoted. "
-                    + "No Java write or compute owner is registered, preventing a competing materialization path.");
+            Partition.DAY, true, Set.of(Capability.READ,Capability.WAL_REPLACE), List.of("stk_factor","stk_limit","stk_suspend","stk_st_daily"),
+            "Java owns the canonical 13-field enrichment including historical ASOF suspension rows. "
+                    + "First publication bootstraps the complete source history; later explicit DAY windows preserve physical base identity and retain old-window backups. "
+                    + "The native v_backtest_daily refresh and its source-pinned publication receipt must complete before guarded reads.");
 
     private static Column metric(String name, String meaning) {
         return new Column("derived:backtest_daily." + name, name, name, StorageType.DOUBLE, true, meaning, null);

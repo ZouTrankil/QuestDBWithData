@@ -70,6 +70,7 @@ public final class StockStDailySource {
         if (sessions.isEmpty()) return 0;
 
         var yearEvidence = new ArrayList<Evidence>();
+        var nonemptyAnnualFingerprints = new HashSet<String>();
         var stPeriods = new LinkedHashSet<StockStPeriod>();
         int firstYear = HISTORY_ANCHOR.getYear(), lastYear = to.getYear();
         if (lastYear - firstYear + 1 > MAX_YEAR_WINDOWS)
@@ -78,6 +79,7 @@ public final class StockStDailySource {
         for (int year = firstYear; year <= lastYear; year++) {
             checkCancelled(cancelled);
             var saved = fetchYear(year, to, cancelled);
+            requireDistinctAnnualRows(saved.rows(), nonemptyAnnualFingerprints);
             totalEvidenceBytes = Math.addExact(totalEvidenceBytes, Files.size(Path.of(saved.evidence().path())));
             if (totalEvidenceBytes > MAX_TOTAL_EVIDENCE_BYTES)
                 throw new IllegalStateException("D012 raw annual evidence exceeds 512 MiB per-run bound");
@@ -155,6 +157,7 @@ public final class StockStDailySource {
         if (refs.size() != years || years > MAX_YEAR_WINDOWS)
             throw new IllegalStateException("D012 daily receipt does not retain every annual namechange response");
         var periods = new LinkedHashSet<StockStPeriod>();
+        var nonemptyAnnualFingerprints = new HashSet<String>();
         for (int index = 0; index < refs.size(); index++) {
             JsonNode ref = refs.get(index);
             int year = HISTORY_ANCHOR.getYear() + index;
@@ -169,6 +172,7 @@ public final class StockStDailySource {
             Path rawPath = candidate.toRealPath();
             if (!rawPath.startsWith(root)) throw new IllegalStateException("D012 raw annual receipt escaped its evidence directory");
             var annual = reopenYear(rawPath, requiredText(ref, "fingerprint"), year, to);
+            requireDistinctAnnualRows(annual, nonemptyAnnualFingerprints);
             if (annual.size() != ref.path("returnedRows").asInt(-1))
                 throw new IllegalStateException("D012 raw annual receipt row count changed");
             for (var raw : annual) {
@@ -310,6 +314,15 @@ public final class StockStDailySource {
 
     private static void validate(Map<String,JsonNode> row) {
         new StockStDailyMapper().period(row);
+    }
+    /** Disjoint announcement-year requests cannot certify the same nonempty captured response repeatedly. */
+    private static void requireDistinctAnnualRows(List<Map<String,JsonNode>> rows, Set<String> seen) throws Exception {
+        if (rows.isEmpty()) return;
+        String fingerprint = sha256(JobDefinitionJson.mapper()
+                .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+                .writeValueAsBytes(canonicalRawRows(rows)));
+        if (!seen.add(fingerprint))
+            throw new IllegalStateException("D012 source incomplete: distinct announcement years returned identical nonempty raw rows");
     }
     private static List<Map<String,JsonNode>> canonicalRawRows(List<Map<String,JsonNode>> rows) {
         var ordered = new ArrayList<Map<String,JsonNode>>(rows.size());

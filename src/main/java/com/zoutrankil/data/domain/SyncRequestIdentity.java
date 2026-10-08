@@ -9,6 +9,11 @@ import java.util.*;
 /** Recovery identity includes full frozen configuration, parameters, logical date and target. */
 public final class SyncRequestIdentity {
     private SyncRequestIdentity() {}
+    /** Stable registered configuration identity, independent of Set/Map iteration order across JVMs. */
+    public static String definitionJson(SyncJobDefinition definition) {
+        Objects.requireNonNull(definition,"Definition required");
+        return canonical(JobDefinitionJson.mapper().valueToTree(definition),"/definition").toString();
+    }
     public static String snapshotJson(SyncJobDefinition.FrozenRequest request) {
         Objects.requireNonNull(request,"Frozen request required");
         try { return JobDefinitionJson.mapper().writeValueAsString(request); }

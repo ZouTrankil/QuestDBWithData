@@ -1,0 +1,302 @@
+{
+  "observedAtUtc" : "2026-10-07T17:58:11.981221500Z",
+  "readOnly" : true,
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-ledger.sqlite3",
+  "run" : [ {
+    "id" : "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+    "parent_run_id" : null,
+    "job_id" : "data.market_sentiment_daily",
+    "job_version" : 3,
+    "logical_date" : "2026-09-30",
+    "target_id" : "static-v2-d39f58912102a7573eb04bbd7e8dee5076a6ad3c1e635dcbfb9d6a3a7ff76ca9",
+    "frozen_json" : "{\"definition\":{\"jobId\":\"data.market_sentiment_daily\",\"version\":3,\"datasetId\":\"market_sentiment_daily\",\"datasetVersion\":1,\"owner\":\"market_sentiment_daily_owner\",\"supportedModes\":[\"MATERIALIZE\"],\"defaultMode\":\"MATERIALIZE\",\"parameters\":{\"source_pin\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"target_id\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"target_hash\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":64,\"maxItems\":1,\"choices\":[]},\"warmup_from\":{\"type\":\"DATE\",\"required\":true,\"maxLength\":10,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"questdb.materialize\",\"slicePolicyRef\":\"market_sentiment_daily.range366\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":1,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT1S\"},\"timeout\":\"PT2H\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":1,\"maxPages\":1,\"maxRows\":366,\"maxBatchBytes\":1048576},\"revisionDays\":0,\"dependencies\":[],\"frequency\":\"DAILY\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":true},\"mode\":\"MATERIALIZE\",\"parameters\":{\"source_pin\":\"07e50ff8417bd9e592460b566141e24bb53efc74c1e5ba8a57e3ba092ca1557b\",\"target_hash\":\"c8bfa6bdf8647b3c4d32ce31a42fd3e423e383ce3426738e875eabfa962c4ea0\",\"target_id\":\"static-v2-d39f58912102a7573eb04bbd7e8dee5076a6ad3c1e635dcbfb9d6a3a7ff76ca9\",\"warmup_from\":\"2022-11-28\"},\"from\":\"2026-09-28\",\"to\":\"2026-09-30\",\"logicalDate\":\"2026-09-30\"}",
+    "frozen_json_parsed" : {
+      "definition" : {
+        "jobId" : "data.market_sentiment_daily",
+        "version" : 3,
+        "datasetId" : "market_sentiment_daily",
+        "datasetVersion" : 1,
+        "owner" : "market_sentiment_daily_owner",
+        "supportedModes" : [ "MATERIALIZE" ],
+        "defaultMode" : "MATERIALIZE",
+        "parameters" : {
+          "source_pin" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "target_id" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "target_hash" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 64,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "warmup_from" : {
+            "type" : "DATE",
+            "required" : true,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "questdb.materialize",
+        "slicePolicyRef" : "market_sentiment_daily.range366",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 1,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT1S"
+        },
+        "timeout" : "PT2H",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 1,
+          "maxPages" : 1,
+          "maxRows" : 366,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 0,
+        "dependencies" : [ ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "MATERIALIZE",
+      "parameters" : {
+        "source_pin" : "07e50ff8417bd9e592460b566141e24bb53efc74c1e5ba8a57e3ba092ca1557b",
+        "target_hash" : "c8bfa6bdf8647b3c4d32ce31a42fd3e423e383ce3426738e875eabfa962c4ea0",
+        "target_id" : "static-v2-d39f58912102a7573eb04bbd7e8dee5076a6ad3c1e635dcbfb9d6a3a7ff76ca9",
+        "warmup_from" : "2022-11-28"
+      },
+      "from" : "2026-09-28",
+      "to" : "2026-09-30",
+      "logicalDate" : "2026-09-30"
+    }
+  } ],
+  "entries" : [ {
+    "id" : "slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628",
+    "kind" : "SLICE",
+    "run_id" : "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+    "parent_id" : "attempt-2f5d1fb7-b79c-4244-ac7a-badfeda73375",
+    "state" : "VERIFIED",
+    "revision" : 6,
+    "payload_json" : "{\"verification\":{\"mismatchedRows\":0,\"matchedRows\":3,\"expectedRows\":3,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":3,\"sourceFingerprint\":\"9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862\",\"readbackEvidence\":\"ledger:slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628:revision:5\"}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "mismatchedRows" : 0,
+        "matchedRows" : 3,
+        "expectedRows" : 3,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0,
+        "missingKeys" : 0,
+        "actualRows" : 3,
+        "sourceFingerprint" : "9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862",
+        "readbackEvidence" : "ledger:slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628:revision:5"
+      }
+    },
+    "updated_at" : "2026-10-07T17:57:31.763485900Z"
+  }, {
+    "id" : "attempt-2f5d1fb7-b79c-4244-ac7a-badfeda73375",
+    "kind" : "ATTEMPT",
+    "run_id" : "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+    "parent_id" : "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+    "state" : "IN_DOUBT",
+    "revision" : 2,
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.repository.NativeDailyWindowWritePort.snapshot(NativeDailyWindowWritePort.java:59)\",\"com.zoutrankil.data.repository.NativeDailyWindowWritePort.formalSnapshot(NativeDailyWindowWritePort.java:63)\",\"com.zoutrankil.data.repository.MarketSentimentDailyWritePort.formalSnapshot(MarketSentimentDailyWritePort.java:33)\",\"com.zoutrankil.data.service.MarketSentimentDailyJobService$Adapter.fetch(MarketSentimentDailyJobService.java:122)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.MarketSentimentDailyJobService.run(MarketSentimentDailyJobService.java:82)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$market$1(MainStrategyDailyPipeline.java:186)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.nativeRun(MainStrategyDailyPipeline.java:211)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.market(MainStrategyDailyPipeline.java:186)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:125)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.repository.NativeDailyWindowWritePort.snapshot(NativeDailyWindowWritePort.java:59)", "com.zoutrankil.data.repository.NativeDailyWindowWritePort.formalSnapshot(NativeDailyWindowWritePort.java:63)", "com.zoutrankil.data.repository.MarketSentimentDailyWritePort.formalSnapshot(MarketSentimentDailyWritePort.java:33)", "com.zoutrankil.data.service.MarketSentimentDailyJobService$Adapter.fetch(MarketSentimentDailyJobService.java:122)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.MarketSentimentDailyJobService.run(MarketSentimentDailyJobService.java:82)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$market$1(MainStrategyDailyPipeline.java:186)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.nativeRun(MainStrategyDailyPipeline.java:211)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.market(MainStrategyDailyPipeline.java:186)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:125)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)" ]
+    },
+    "updated_at" : "2026-10-07T17:57:31.925525300Z"
+  }, {
+    "id" : "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+    "kind" : "RUN",
+    "run_id" : "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+    "parent_id" : null,
+    "state" : "IN_DOUBT",
+    "revision" : 2,
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.repository.NativeDailyWindowWritePort.snapshot(NativeDailyWindowWritePort.java:59)\",\"com.zoutrankil.data.repository.NativeDailyWindowWritePort.formalSnapshot(NativeDailyWindowWritePort.java:63)\",\"com.zoutrankil.data.repository.MarketSentimentDailyWritePort.formalSnapshot(MarketSentimentDailyWritePort.java:33)\",\"com.zoutrankil.data.service.MarketSentimentDailyJobService$Adapter.fetch(MarketSentimentDailyJobService.java:122)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.MarketSentimentDailyJobService.run(MarketSentimentDailyJobService.java:82)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$market$1(MainStrategyDailyPipeline.java:186)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.nativeRun(MainStrategyDailyPipeline.java:211)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.market(MainStrategyDailyPipeline.java:186)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:125)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.repository.NativeDailyWindowWritePort.snapshot(NativeDailyWindowWritePort.java:59)", "com.zoutrankil.data.repository.NativeDailyWindowWritePort.formalSnapshot(NativeDailyWindowWritePort.java:63)", "com.zoutrankil.data.repository.MarketSentimentDailyWritePort.formalSnapshot(MarketSentimentDailyWritePort.java:33)", "com.zoutrankil.data.service.MarketSentimentDailyJobService$Adapter.fetch(MarketSentimentDailyJobService.java:122)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.MarketSentimentDailyJobService.run(MarketSentimentDailyJobService.java:82)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$market$1(MainStrategyDailyPipeline.java:186)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.nativeRun(MainStrategyDailyPipeline.java:211)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.market(MainStrategyDailyPipeline.java:186)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:125)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)" ]
+    },
+    "updated_at" : "2026-10-07T17:57:31.936396400Z"
+  } ],
+  "events" : [ {
+    "entry_id" : "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:56:43.565197700Z"
+  }, {
+    "entry_id" : "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:56:43.634806600Z"
+  }, {
+    "entry_id" : "attempt-2f5d1fb7-b79c-4244-ac7a-badfeda73375",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:56:43.642070400Z"
+  }, {
+    "entry_id" : "attempt-2f5d1fb7-b79c-4244-ac7a-badfeda73375",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:56:43.649970600Z"
+  }, {
+    "entry_id" : "slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:57:31.557956800Z"
+  }, {
+    "entry_id" : "slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:57:31.565842400Z"
+  }, {
+    "entry_id" : "slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628",
+    "revision" : 2,
+    "state" : "FETCHED",
+    "payload_json" : "{\"returnedRows\":3,\"sourceFingerprint\":\"9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8\\\\source.json\",\"cursor\":null}",
+    "payload_json_parsed" : {
+      "returnedRows" : 3,
+      "sourceFingerprint" : "9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8\\source.json",
+      "cursor" : null
+    },
+    "updated_at" : "2026-10-07T17:57:31.573298700Z"
+  }, {
+    "entry_id" : "slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628",
+    "revision" : 3,
+    "state" : "VALIDATED",
+    "payload_json" : "{\"returnedRows\":3,\"sourceFingerprint\":\"9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8\\\\source.json\",\"cursor\":null}",
+    "payload_json_parsed" : {
+      "returnedRows" : 3,
+      "sourceFingerprint" : "9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8\\source.json",
+      "cursor" : null
+    },
+    "updated_at" : "2026-10-07T17:57:31.581778600Z"
+  }, {
+    "entry_id" : "slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628",
+    "revision" : 4,
+    "state" : "SUBMITTED",
+    "payload_json" : "{\"returnedRows\":3,\"sourceFingerprint\":\"9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8\\\\source.json\",\"cursor\":null}",
+    "payload_json_parsed" : {
+      "returnedRows" : 3,
+      "sourceFingerprint" : "9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8\\source.json",
+      "cursor" : null
+    },
+    "updated_at" : "2026-10-07T17:57:31.615419100Z"
+  }, {
+    "entry_id" : "slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628",
+    "revision" : 5,
+    "state" : "ACKNOWLEDGED",
+    "payload_json" : "{\"writeResult\":{\"status\":\"VERIFIED\",\"submittedRows\":3,\"verifiedRows\":3,\"receipts\":[{\"batch\":1,\"submittedRows\":3,\"verifiedRows\":3,\"bytes\":20547,\"digest\":\"f03373460238c0e9af807658a7341f0112363a65472f2132db241cfc7e460898\",\"delivery\":\"ACKNOWLEDGED\"}],\"reason\":null}}",
+    "payload_json_parsed" : {
+      "writeResult" : {
+        "status" : "VERIFIED",
+        "submittedRows" : 3,
+        "verifiedRows" : 3,
+        "receipts" : [ {
+          "batch" : 1,
+          "submittedRows" : 3,
+          "verifiedRows" : 3,
+          "bytes" : 20547,
+          "digest" : "f03373460238c0e9af807658a7341f0112363a65472f2132db241cfc7e460898",
+          "delivery" : "ACKNOWLEDGED"
+        } ],
+        "reason" : null
+      }
+    },
+    "updated_at" : "2026-10-07T17:57:31.756229800Z"
+  }, {
+    "entry_id" : "slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628",
+    "revision" : 6,
+    "state" : "VERIFIED",
+    "payload_json" : "{\"verification\":{\"mismatchedRows\":0,\"matchedRows\":3,\"expectedRows\":3,\"passed\":true,\"writerStopped\":false,\"duplicateKeys\":0,\"missingKeys\":0,\"actualRows\":3,\"sourceFingerprint\":\"9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862\",\"readbackEvidence\":\"ledger:slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628:revision:5\"}}",
+    "payload_json_parsed" : {
+      "verification" : {
+        "mismatchedRows" : 0,
+        "matchedRows" : 3,
+        "expectedRows" : 3,
+        "passed" : true,
+        "writerStopped" : false,
+        "duplicateKeys" : 0,
+        "missingKeys" : 0,
+        "actualRows" : 3,
+        "sourceFingerprint" : "9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862",
+        "readbackEvidence" : "ledger:slice-2e6d1d28-4faa-439f-ab0d-5bf5b09e6628:revision:5"
+      }
+    },
+    "updated_at" : "2026-10-07T17:57:31.763485900Z"
+  }, {
+    "entry_id" : "attempt-2f5d1fb7-b79c-4244-ac7a-badfeda73375",
+    "revision" : 2,
+    "state" : "IN_DOUBT",
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.repository.NativeDailyWindowWritePort.snapshot(NativeDailyWindowWritePort.java:59)\",\"com.zoutrankil.data.repository.NativeDailyWindowWritePort.formalSnapshot(NativeDailyWindowWritePort.java:63)\",\"com.zoutrankil.data.repository.MarketSentimentDailyWritePort.formalSnapshot(MarketSentimentDailyWritePort.java:33)\",\"com.zoutrankil.data.service.MarketSentimentDailyJobService$Adapter.fetch(MarketSentimentDailyJobService.java:122)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.MarketSentimentDailyJobService.run(MarketSentimentDailyJobService.java:82)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$market$1(MainStrategyDailyPipeline.java:186)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.nativeRun(MainStrategyDailyPipeline.java:211)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.market(MainStrategyDailyPipeline.java:186)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:125)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.repository.NativeDailyWindowWritePort.snapshot(NativeDailyWindowWritePort.java:59)", "com.zoutrankil.data.repository.NativeDailyWindowWritePort.formalSnapshot(NativeDailyWindowWritePort.java:63)", "com.zoutrankil.data.repository.MarketSentimentDailyWritePort.formalSnapshot(MarketSentimentDailyWritePort.java:33)", "com.zoutrankil.data.service.MarketSentimentDailyJobService$Adapter.fetch(MarketSentimentDailyJobService.java:122)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.MarketSentimentDailyJobService.run(MarketSentimentDailyJobService.java:82)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$market$1(MainStrategyDailyPipeline.java:186)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.nativeRun(MainStrategyDailyPipeline.java:211)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.market(MainStrategyDailyPipeline.java:186)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:125)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)" ]
+    },
+    "updated_at" : "2026-10-07T17:57:31.925525300Z"
+  }, {
+    "entry_id" : "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+    "revision" : 2,
+    "state" : "IN_DOUBT",
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.repository.NativeDailyWindowWritePort.snapshot(NativeDailyWindowWritePort.java:59)\",\"com.zoutrankil.data.repository.NativeDailyWindowWritePort.formalSnapshot(NativeDailyWindowWritePort.java:63)\",\"com.zoutrankil.data.repository.MarketSentimentDailyWritePort.formalSnapshot(MarketSentimentDailyWritePort.java:33)\",\"com.zoutrankil.data.service.MarketSentimentDailyJobService$Adapter.fetch(MarketSentimentDailyJobService.java:122)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.MarketSentimentDailyJobService.run(MarketSentimentDailyJobService.java:82)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$market$1(MainStrategyDailyPipeline.java:186)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.nativeRun(MainStrategyDailyPipeline.java:211)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.market(MainStrategyDailyPipeline.java:186)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:125)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.repository.NativeDailyWindowWritePort.snapshot(NativeDailyWindowWritePort.java:59)", "com.zoutrankil.data.repository.NativeDailyWindowWritePort.formalSnapshot(NativeDailyWindowWritePort.java:63)", "com.zoutrankil.data.repository.MarketSentimentDailyWritePort.formalSnapshot(MarketSentimentDailyWritePort.java:33)", "com.zoutrankil.data.service.MarketSentimentDailyJobService$Adapter.fetch(MarketSentimentDailyJobService.java:122)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.MarketSentimentDailyJobService.run(MarketSentimentDailyJobService.java:82)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$market$1(MainStrategyDailyPipeline.java:186)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.nativeRun(MainStrategyDailyPipeline.java:211)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.market(MainStrategyDailyPipeline.java:186)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:125)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)" ]
+    },
+    "updated_at" : "2026-10-07T17:57:31.936396400Z"
+  } ],
+  "publications" : [ {
+    "id" : "market-sentiment-publication-31cf2236-80c7-4629-82f5-7e208f293093",
+    "dataset" : "market_sentiment_daily",
+    "run_id" : "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+    "intent_json" : "{\"id\":\"market-sentiment-publication-31cf2236-80c7-4629-82f5-7e208f293093\",\"dataset\":\"market_sentiment_daily\",\"runId\":\"market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8\",\"target\":\"market_sentiment_daily\",\"backup\":\"java_d121_market_sentiment_daily_backup_498c008c1bd2418aab5a9d75dfd05d69\",\"stage\":\"java_d121_market_sentiment_daily_stage_dd4bd401f5b84ab094a578d4d03e804c\",\"initialTarget\":\"static-v2-d39f58912102a7573eb04bbd7e8dee5076a6ad3c1e635dcbfb9d6a3a7ff76ca9\",\"originalId\":3019,\"originalDirectory\":\"market_sentiment_daily_rebuild_20261007_234437~3019\",\"replacementId\":3027,\"beforeFingerprint\":\"c8bfa6bdf8647b3c4d32ce31a42fd3e423e383ce3426738e875eabfa962c4ea0\",\"afterFingerprint\":\"0f54a0e164250dcc50a82f3927a119ec13fbe1f50bd20c409c1e230496748e75\",\"scope\":\"{\\\"sourceEvidence\\\":\\\"C:\\\\\\\\Users\\\\\\\\zouqiang\\\\\\\\IdeaProjects\\\\\\\\QuestDBWithData\\\\\\\\var\\\\\\\\main-strategy-java-refresh\\\\\\\\20261007\\\\\\\\sync-evidence\\\\\\\\market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8\\\\\\\\source.json\\\",\\\"sourceFingerprint\\\":\\\"9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862\\\",\\\"sourceEvidenceSha256\\\":\\\"51d171f34c7ff1f617114d33f3723631e8c8603cf3027fb9e01b19d7a19ee97a\\\",\\\"to\\\":\\\"2026-09-30\\\",\\\"from\\\":\\\"2026-09-28\\\"}\"}",
+    "intent_json_parsed" : {
+      "id" : "market-sentiment-publication-31cf2236-80c7-4629-82f5-7e208f293093",
+      "dataset" : "market_sentiment_daily",
+      "runId" : "market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8",
+      "target" : "market_sentiment_daily",
+      "backup" : "java_d121_market_sentiment_daily_backup_498c008c1bd2418aab5a9d75dfd05d69",
+      "stage" : "java_d121_market_sentiment_daily_stage_dd4bd401f5b84ab094a578d4d03e804c",
+      "initialTarget" : "static-v2-d39f58912102a7573eb04bbd7e8dee5076a6ad3c1e635dcbfb9d6a3a7ff76ca9",
+      "originalId" : 3019,
+      "originalDirectory" : "market_sentiment_daily_rebuild_20261007_234437~3019",
+      "replacementId" : 3027,
+      "beforeFingerprint" : "c8bfa6bdf8647b3c4d32ce31a42fd3e423e383ce3426738e875eabfa962c4ea0",
+      "afterFingerprint" : "0f54a0e164250dcc50a82f3927a119ec13fbe1f50bd20c409c1e230496748e75",
+      "scope" : "{\"sourceEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\market-sentiment-49f30758-bfb8-4625-8241-8b6850ea94f8\\\\source.json\",\"sourceFingerprint\":\"9a60ba488b496f8b73f7e137a6949df49eee529d96de2a5555ee421efb281862\",\"sourceEvidenceSha256\":\"51d171f34c7ff1f617114d33f3723631e8c8603cf3027fb9e01b19d7a19ee97a\",\"to\":\"2026-09-30\",\"from\":\"2026-09-28\"}"
+    },
+    "state" : "IN_DOUBT",
+    "revision" : 3,
+    "updated_at" : "2026-10-07T17:57:31.907774200Z"
+  } ]
+}

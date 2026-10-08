@@ -1,0 +1,339 @@
+{
+  "observedAtUtc" : "2026-10-07T17:24:17.980065100Z",
+  "readOnly" : true,
+  "ledger" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-ledger.sqlite3",
+  "run" : [ {
+    "id" : "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+    "parent_run_id" : null,
+    "job_id" : "data.stk_st_daily",
+    "job_version" : 1,
+    "logical_date" : "2026-10-08",
+    "target_id" : "d012-logical-v1-2ec7185d57cd184af205266065c8ee877ddd9632b9fd488ffdefb1c2915699cf",
+    "frozen_json" : "{\"definition\":{\"jobId\":\"data.stk_st_daily\",\"version\":1,\"datasetId\":\"stk_st_daily\",\"datasetVersion\":1,\"owner\":\"stk_st_daily_owner\",\"supportedModes\":[\"BACKFILL\",\"INCREMENTAL\"],\"defaultMode\":\"INCREMENTAL\",\"parameters\":{\"trade_dates\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":4000,\"maxItems\":1,\"choices\":[]},\"targetMinBefore\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"physicalTargetId\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]},\"checkpointAnchor\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"targetMaxBefore\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"checkpointBefore\":{\"type\":\"DATE\",\"required\":false,\"maxLength\":10,\"maxItems\":1,\"choices\":[]},\"targetId\":{\"type\":\"STRING\",\"required\":true,\"maxLength\":128,\"maxItems\":1,\"choices\":[]}},\"ratePolicyRef\":\"tushare.shared\",\"slicePolicyRef\":\"stk_st_daily.namechange_year_trade_dates\",\"verificationPolicyRef\":\"questdb.full_key_values\",\"retry\":{\"maxAttempts\":3,\"backoff\":\"PT1S\",\"maxElapsed\":\"PT2H\"},\"timeout\":\"PT12H\",\"budget\":{\"maxWindowDays\":366,\"maxSlices\":366,\"maxPages\":366,\"maxRows\":1000000,\"maxBatchBytes\":1048576},\"revisionDays\":30,\"dependencies\":[{\"jobId\":\"data.exchange_calendar\",\"version\":1},{\"jobId\":\"data.stock_detail_info\",\"version\":1}],\"frequency\":\"DAILY\",\"zone\":\"Asia/Shanghai\",\"enabled\":true,\"dailyEligible\":true},\"mode\":\"BACKFILL\",\"parameters\":{\"physicalTargetId\":\"static-v2-77041d1c85295c72090981996b611339575eabde520543de1d04bbc698e23b43\",\"targetId\":\"d012-logical-v1-2ec7185d57cd184af205266065c8ee877ddd9632b9fd488ffdefb1c2915699cf\",\"targetMaxBefore\":\"2026-09-30\",\"targetMinBefore\":\"2010-01-27\",\"trade_dates\":\"20260928,20260929,20260930\"},\"from\":\"2026-09-28\",\"to\":\"2026-09-30\",\"logicalDate\":\"2026-10-08\"}",
+    "frozen_json_parsed" : {
+      "definition" : {
+        "jobId" : "data.stk_st_daily",
+        "version" : 1,
+        "datasetId" : "stk_st_daily",
+        "datasetVersion" : 1,
+        "owner" : "stk_st_daily_owner",
+        "supportedModes" : [ "BACKFILL", "INCREMENTAL" ],
+        "defaultMode" : "INCREMENTAL",
+        "parameters" : {
+          "trade_dates" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 4000,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMinBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "physicalTargetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointAnchor" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetMaxBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "checkpointBefore" : {
+            "type" : "DATE",
+            "required" : false,
+            "maxLength" : 10,
+            "maxItems" : 1,
+            "choices" : [ ]
+          },
+          "targetId" : {
+            "type" : "STRING",
+            "required" : true,
+            "maxLength" : 128,
+            "maxItems" : 1,
+            "choices" : [ ]
+          }
+        },
+        "ratePolicyRef" : "tushare.shared",
+        "slicePolicyRef" : "stk_st_daily.namechange_year_trade_dates",
+        "verificationPolicyRef" : "questdb.full_key_values",
+        "retry" : {
+          "maxAttempts" : 3,
+          "backoff" : "PT1S",
+          "maxElapsed" : "PT2H"
+        },
+        "timeout" : "PT12H",
+        "budget" : {
+          "maxWindowDays" : 366,
+          "maxSlices" : 366,
+          "maxPages" : 366,
+          "maxRows" : 1000000,
+          "maxBatchBytes" : 1048576
+        },
+        "revisionDays" : 30,
+        "dependencies" : [ {
+          "jobId" : "data.exchange_calendar",
+          "version" : 1
+        }, {
+          "jobId" : "data.stock_detail_info",
+          "version" : 1
+        } ],
+        "frequency" : "DAILY",
+        "zone" : "Asia/Shanghai",
+        "enabled" : true,
+        "dailyEligible" : true
+      },
+      "mode" : "BACKFILL",
+      "parameters" : {
+        "physicalTargetId" : "static-v2-77041d1c85295c72090981996b611339575eabde520543de1d04bbc698e23b43",
+        "targetId" : "d012-logical-v1-2ec7185d57cd184af205266065c8ee877ddd9632b9fd488ffdefb1c2915699cf",
+        "targetMaxBefore" : "2026-09-30",
+        "targetMinBefore" : "2010-01-27",
+        "trade_dates" : "20260928,20260929,20260930"
+      },
+      "from" : "2026-09-28",
+      "to" : "2026-09-30",
+      "logicalDate" : "2026-10-08"
+    }
+  } ],
+  "entries" : [ {
+    "id" : "slice-9aec9720-f342-4151-a11e-dac3d99456ed",
+    "kind" : "SLICE",
+    "run_id" : "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+    "parent_id" : "attempt-c31c027a-99a3-4fce-bacc-c98417396dbc",
+    "state" : "FAILED",
+    "revision" : 3,
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)\",\"com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)\",\"com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)\",\"com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\",\"org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)", "com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)", "com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)", "com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)", "org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)" ]
+    },
+    "updated_at" : "2026-10-07T17:22:40.572432100Z"
+  }, {
+    "id" : "slice-a2d249ed-3294-4781-90d7-66072f664e6c",
+    "kind" : "SLICE",
+    "run_id" : "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+    "parent_id" : "attempt-c31c027a-99a3-4fce-bacc-c98417396dbc",
+    "state" : "FAILED",
+    "revision" : 3,
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)\",\"com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)\",\"com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)\",\"com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\",\"org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)", "com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)", "com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)", "com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)", "org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)" ]
+    },
+    "updated_at" : "2026-10-07T17:22:40.581734800Z"
+  }, {
+    "id" : "slice-cf61d743-ef1d-4f85-8865-0e11104ad7f5",
+    "kind" : "SLICE",
+    "run_id" : "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+    "parent_id" : "attempt-c31c027a-99a3-4fce-bacc-c98417396dbc",
+    "state" : "FAILED",
+    "revision" : 3,
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)\",\"com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)\",\"com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)\",\"com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\",\"org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)", "com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)", "com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)", "com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)", "org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)" ]
+    },
+    "updated_at" : "2026-10-07T17:22:40.590576500Z"
+  }, {
+    "id" : "attempt-c31c027a-99a3-4fce-bacc-c98417396dbc",
+    "kind" : "ATTEMPT",
+    "run_id" : "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+    "parent_id" : "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+    "state" : "FAILED",
+    "revision" : 2,
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)\",\"com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)\",\"com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)\",\"com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\",\"org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)", "com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)", "com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)", "com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)", "org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)" ]
+    },
+    "updated_at" : "2026-10-07T17:22:40.599813Z"
+  }, {
+    "id" : "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+    "kind" : "RUN",
+    "run_id" : "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+    "parent_id" : null,
+    "state" : "FAILED",
+    "revision" : 2,
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)\",\"com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)\",\"com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)\",\"com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\",\"org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)", "com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)", "com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)", "com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)", "org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)" ]
+    },
+    "updated_at" : "2026-10-07T17:22:40.608541500Z"
+  } ],
+  "events" : [ {
+    "entry_id" : "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:20:00.818356900Z"
+  }, {
+    "entry_id" : "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:20:00.847222100Z"
+  }, {
+    "entry_id" : "attempt-c31c027a-99a3-4fce-bacc-c98417396dbc",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:20:00.852941600Z"
+  }, {
+    "entry_id" : "attempt-c31c027a-99a3-4fce-bacc-c98417396dbc",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:20:00.859635500Z"
+  }, {
+    "entry_id" : "slice-9aec9720-f342-4151-a11e-dac3d99456ed",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:22:40.484022700Z"
+  }, {
+    "entry_id" : "slice-9aec9720-f342-4151-a11e-dac3d99456ed",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:22:40.491525200Z"
+  }, {
+    "entry_id" : "slice-9aec9720-f342-4151-a11e-dac3d99456ed",
+    "revision" : 2,
+    "state" : "FETCHED",
+    "payload_json" : "{\"returnedRows\":0,\"sourceFingerprint\":\"d3512c286888b1dd4349a34a41df315fec6bf1409ddca8e89088df13b0979a06\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad\\\\source\\\\stk-st-daily-20260928-d3512c286888b1dd4349a34a41df315fec6bf1409ddca8e89088df13b0979a06.json\",\"cursor\":\"20260928\"}",
+    "payload_json_parsed" : {
+      "returnedRows" : 0,
+      "sourceFingerprint" : "d3512c286888b1dd4349a34a41df315fec6bf1409ddca8e89088df13b0979a06",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad\\source\\stk-st-daily-20260928-d3512c286888b1dd4349a34a41df315fec6bf1409ddca8e89088df13b0979a06.json",
+      "cursor" : "20260928"
+    },
+    "updated_at" : "2026-10-07T17:22:40.497936300Z"
+  }, {
+    "entry_id" : "slice-a2d249ed-3294-4781-90d7-66072f664e6c",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:22:40.513599800Z"
+  }, {
+    "entry_id" : "slice-a2d249ed-3294-4781-90d7-66072f664e6c",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:22:40.520486100Z"
+  }, {
+    "entry_id" : "slice-a2d249ed-3294-4781-90d7-66072f664e6c",
+    "revision" : 2,
+    "state" : "FETCHED",
+    "payload_json" : "{\"returnedRows\":0,\"sourceFingerprint\":\"6585f15c7e799e9a2494df0528c46c957b8f3bffcc2579b648e71620160d6be2\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad\\\\source\\\\stk-st-daily-20260929-6585f15c7e799e9a2494df0528c46c957b8f3bffcc2579b648e71620160d6be2.json\",\"cursor\":\"20260929\"}",
+    "payload_json_parsed" : {
+      "returnedRows" : 0,
+      "sourceFingerprint" : "6585f15c7e799e9a2494df0528c46c957b8f3bffcc2579b648e71620160d6be2",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad\\source\\stk-st-daily-20260929-6585f15c7e799e9a2494df0528c46c957b8f3bffcc2579b648e71620160d6be2.json",
+      "cursor" : "20260929"
+    },
+    "updated_at" : "2026-10-07T17:22:40.526752100Z"
+  }, {
+    "entry_id" : "slice-cf61d743-ef1d-4f85-8865-0e11104ad7f5",
+    "revision" : 0,
+    "state" : "PENDING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:22:40.543359400Z"
+  }, {
+    "entry_id" : "slice-cf61d743-ef1d-4f85-8865-0e11104ad7f5",
+    "revision" : 1,
+    "state" : "RUNNING",
+    "payload_json" : "{}",
+    "payload_json_parsed" : { },
+    "updated_at" : "2026-10-07T17:22:40.550857300Z"
+  }, {
+    "entry_id" : "slice-cf61d743-ef1d-4f85-8865-0e11104ad7f5",
+    "revision" : 2,
+    "state" : "FETCHED",
+    "payload_json" : "{\"returnedRows\":0,\"sourceFingerprint\":\"6c45467f9e12ae2c77c7aa0ae26da5ab5e185ae2778891d04188388d3a144bd8\",\"responseEvidence\":\"C:\\\\Users\\\\zouqiang\\\\IdeaProjects\\\\QuestDBWithData\\\\var\\\\main-strategy-java-refresh\\\\20261007\\\\sync-evidence\\\\stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad\\\\source\\\\stk-st-daily-20260930-6c45467f9e12ae2c77c7aa0ae26da5ab5e185ae2778891d04188388d3a144bd8.json\",\"cursor\":\"20260930\"}",
+    "payload_json_parsed" : {
+      "returnedRows" : 0,
+      "sourceFingerprint" : "6c45467f9e12ae2c77c7aa0ae26da5ab5e185ae2778891d04188388d3a144bd8",
+      "responseEvidence" : "C:\\Users\\zouqiang\\IdeaProjects\\QuestDBWithData\\var\\main-strategy-java-refresh\\20261007\\sync-evidence\\stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad\\source\\stk-st-daily-20260930-6c45467f9e12ae2c77c7aa0ae26da5ab5e185ae2778891d04188388d3a144bd8.json",
+      "cursor" : "20260930"
+    },
+    "updated_at" : "2026-10-07T17:22:40.557015100Z"
+  }, {
+    "entry_id" : "slice-9aec9720-f342-4151-a11e-dac3d99456ed",
+    "revision" : 3,
+    "state" : "FAILED",
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)\",\"com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)\",\"com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)\",\"com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\",\"org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)", "com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)", "com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)", "com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)", "org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)" ]
+    },
+    "updated_at" : "2026-10-07T17:22:40.572432100Z"
+  }, {
+    "entry_id" : "slice-a2d249ed-3294-4781-90d7-66072f664e6c",
+    "revision" : 3,
+    "state" : "FAILED",
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)\",\"com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)\",\"com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)\",\"com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\",\"org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)", "com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)", "com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)", "com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)", "org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)" ]
+    },
+    "updated_at" : "2026-10-07T17:22:40.581734800Z"
+  }, {
+    "entry_id" : "slice-cf61d743-ef1d-4f85-8865-0e11104ad7f5",
+    "revision" : 3,
+    "state" : "FAILED",
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)\",\"com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)\",\"com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)\",\"com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\",\"org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)", "com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)", "com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)", "com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)", "org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)" ]
+    },
+    "updated_at" : "2026-10-07T17:22:40.590576500Z"
+  }, {
+    "entry_id" : "attempt-c31c027a-99a3-4fce-bacc-c98417396dbc",
+    "revision" : 2,
+    "state" : "FAILED",
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)\",\"com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)\",\"com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)\",\"com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\",\"org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)", "com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)", "com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)", "com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)", "org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)" ]
+    },
+    "updated_at" : "2026-10-07T17:22:40.599813Z"
+  }, {
+    "entry_id" : "stk-st-daily-00d42c2f-6f75-4b2e-936a-900e0bd05bad",
+    "revision" : 2,
+    "state" : "FAILED",
+    "payload_json" : "{\"errorCode\":\"IllegalStateException\",\"errorOrigin\":[\"com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)\",\"com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)\",\"com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)\",\"com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)\",\"com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)\",\"com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)\",\"com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)\",\"com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)\",\"com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)\",\"org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)\"]}",
+    "payload_json_parsed" : {
+      "errorCode" : "IllegalStateException",
+      "errorOrigin" : [ "com.zoutrankil.data.service.StockStDailyPublication.verifyRunBinding(StockStDailyPublication.java:238)", "com.zoutrankil.data.service.StockStDailyPublication.publish(StockStDailyPublication.java:70)", "com.zoutrankil.data.service.StockStDailySyncAdapter.fetch(StockStDailySyncAdapter.java:203)", "com.zoutrankil.data.service.SyncJobRunner.execute(SyncJobRunner.java:111)", "com.zoutrankil.data.service.SyncJobRunner.run(SyncJobRunner.java:55)", "com.zoutrankil.data.service.StockStDailyJobService.execute(StockStDailyJobService.java:282)", "com.zoutrankil.data.service.StockStDailyJobService.run(StockStDailyJobService.java:209)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.lambda$new$13(MainStrategyDailyPipeline.java:84)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.sources(MainStrategyDailyPipeline.java:171)", "com.zoutrankil.data.service.MainStrategyDailyPipeline.execute(MainStrategyDailyPipeline.java:124)", "com.zoutrankil.batch.MainStrategyDailyBatchJob.lambda$build$0(MainStrategyDailyBatchJob.java:26)", "org.springframework.batch.core.step.tasklet.TaskletStep$ChunkTransactionCallback.doInTransaction(TaskletStep.java:412)" ]
+    },
+    "updated_at" : "2026-10-07T17:22:40.608541500Z"
+  } ],
+  "publications" : [ ]
+}

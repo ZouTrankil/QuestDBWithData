@@ -91,13 +91,19 @@ public final class EtfAdjWritePort implements com.zoutrankil.data.etf.port.EtfAd
             throw new IllegalArgumentException("At most 250 unique complete etf_adj keys required");
         requireExpectedTarget();
         var clauses = new ArrayList<String>(); var parameters = new ArrayList<Object>();
+        LocalDate from=keys.stream().map(EtfAdjKey::tradeDate).min(LocalDate::compareTo).orElseThrow();
+        LocalDate to=keys.stream().map(EtfAdjKey::tradeDate).max(LocalDate::compareTo).orElseThrow();
+        parameters.add(new TemporalValues.CalendarTimestamp(from).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        parameters.add(new TemporalValues.CalendarTimestamp(to.plusDays(1)).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        var codes=keys.stream().map(EtfAdjKey::tsCode).distinct().sorted().toList();parameters.addAll(codes);
         for (var key : keys) {
             clauses.add("(ts_code = ? AND timestamp = cast(? as TIMESTAMP))");
             parameters.add(key.tsCode());
             parameters.add(new TemporalValues.CalendarTimestamp(key.tradeDate()).storageEpoch(TemporalValues.EpochUnit.MICROS));
         }
         String sql = "SELECT ts_code, adj_factor, cast(timestamp as long) AS trade_date_micros FROM \""
-                + table + "\" WHERE " + String.join(" OR ", clauses)
+                + table + "\" WHERE timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP) AND ts_code IN ("
+                + String.join(",",codes.stream().map(code->"?").toList()) + ") AND (" + String.join(" OR ", clauses) + ")"
                 + " ORDER BY timestamp, ts_code LIMIT " + (keys.size() + 1);
         return jdbc.query(sql, (rs, index) -> physical(rs), parameters.toArray());
     }

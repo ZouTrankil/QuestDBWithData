@@ -159,20 +159,34 @@ public final class SqliteLedger {
     }
     /** Atomically persists a bounded attempt before its launch side effect. Duplicate Quartz fire IDs cannot claim twice. */
     public OptionalInt claimRecoveryAttempt(String instanceId,String triggerId,Instant now,Duration minimumInterval,int maximumAttempts) {
+        return claimRecoveryAttempt(instanceId,triggerId,now,minimumInterval,maximumAttempts,false);
+    }
+    /** An explicit operator retry skips the existing cooldown, but starts the next automatic cooldown. */
+    public OptionalInt claimMainStrategyOperatorRecoveryAttempt(String instanceId,String triggerId,Instant now,
+                                                               Duration minimumInterval,int maximumAttempts) {
+        if(triggerId==null||!triggerId.startsWith("manual:")||!"main_strategy_daily".equals(request(instanceId).job()))
+            throw new IllegalArgumentException("Explicit main-strategy operator trigger required");
+        if(!Set.of(BusinessState.WAITING_SOURCE,BusinessState.WAITING_UPSTREAM,BusinessState.BLOCKED,BusinessState.PARTIAL).contains(state(instanceId)))
+            return OptionalInt.empty();
+        return claimRecoveryAttempt(instanceId,triggerId,now,minimumInterval,maximumAttempts,true);
+    }
+    private OptionalInt claimRecoveryAttempt(String instanceId,String triggerId,Instant now,Duration minimumInterval,
+                                            int maximumAttempts,boolean operatorRetry) {
         if(triggerId==null||triggerId.isBlank()||triggerId.length()>256||minimumInterval.isNegative()||maximumAttempts<1)
             throw new IllegalArgumentException("Invalid recovery claim");
         return transactions.execute(tx->{
             jdbc.update("INSERT INTO post_close_recovery_attempt(instance_id) VALUES(?) ON CONFLICT(instance_id) DO NOTHING",instanceId);
             int changed=jdbc.update("""
                     UPDATE post_close_recovery_attempt SET attempts=attempts+1,last_attempt_epoch_ms=?,next_attempt_epoch_ms=?
-                    WHERE instance_id=? AND attempts<? AND (next_attempt_epoch_ms IS NULL OR next_attempt_epoch_ms<=?)
+                    WHERE instance_id=? AND attempts<? AND (?=1 OR next_attempt_epoch_ms IS NULL OR next_attempt_epoch_ms<=?)
                       AND NOT EXISTS (SELECT 1 FROM post_close_recovery_trigger t WHERE t.instance_id=? AND t.trigger_id=?)
-                    """,now.toEpochMilli(),now.plus(minimumInterval).toEpochMilli(),instanceId,maximumAttempts,now.toEpochMilli(),instanceId,triggerId);
+                    """,now.toEpochMilli(),now.plus(minimumInterval).toEpochMilli(),instanceId,maximumAttempts,operatorRetry?1:0,now.toEpochMilli(),instanceId,triggerId);
             if(changed!=1)return OptionalInt.empty();
             int attempt=jdbc.queryForObject("SELECT attempts FROM post_close_recovery_attempt WHERE instance_id=?",Integer.class,instanceId);
             jdbc.update("INSERT INTO post_close_recovery_trigger(instance_id,trigger_id,attempt_no,claimed_epoch_ms) VALUES(?,?,?,?)",
                     instanceId,triggerId,attempt,now.toEpochMilli());
             audit(instanceId,"post-close-recovery-claimed",triggerId+":attempt="+attempt);
+            if(operatorRetry)audit(instanceId,"main-strategy-operator-recovery-claimed",triggerId+":attempt="+attempt+":nextAutomaticAttempt="+now.plus(minimumInterval));
             return OptionalInt.of(attempt);
         });
     }

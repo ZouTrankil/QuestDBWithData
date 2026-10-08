@@ -304,6 +304,15 @@ public final class SyncJobRunner<T, K> {
     private String error(Exception failure) throws Exception {
         var detail = new LinkedHashMap<String,Object>();
         detail.put("errorCode", failure.getClass().getSimpleName());
+        // Code locations make local preflight failures diagnosable without persisting
+        // provider messages, request bodies or credentials.
+        detail.put("errorOrigin", Arrays.stream(failure.getStackTrace()).limit(12)
+                .map(StackTraceElement::toString).toList());
+        var causes = new ArrayList<Map<String,Object>>();
+        for (Throwable cause = failure.getCause(); cause != null && causes.size() < 4; cause = cause.getCause())
+            causes.add(Map.of("errorCode", cause.getClass().getSimpleName(), "origin",
+                    Arrays.stream(cause.getStackTrace()).limit(8).map(StackTraceElement::toString).toList()));
+        if (!causes.isEmpty()) detail.put("causeOrigins", causes);
         // PageExecutor reasons are generated locally and contain only classifications, never request credentials.
         if (failure instanceof PageExecutor.Incomplete incomplete) {
             detail.put("sourceReason", incomplete.getMessage());

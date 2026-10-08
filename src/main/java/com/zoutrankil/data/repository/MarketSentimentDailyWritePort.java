@@ -31,6 +31,7 @@ public final class MarketSentimentDailyWritePort implements VerifiedBatchExecuto
     public String stage(){return delegate.stage();}
     public MarketSentimentDailyTargetSnapshot snapshot(String table){return typed(delegate.snapshot(table));}
     public MarketSentimentDailyTargetSnapshot formalSnapshot(){return typed(delegate.formalSnapshot());}
+    public void awaitPublished(String table,long expectedId,String expectedDirectory,java.util.function.BooleanSupplier cancelled)throws Exception{delegate.awaitPublished(table,expectedId,expectedDirectory,cancelled);}
     public void requireSame(MarketSentimentDailyTargetSnapshot expected){delegate.requireSame(nativeSnapshot(expected));}
     public MarketSentimentDailyTargetSnapshot prepare(MarketSentimentDailyTargetSnapshot before,LocalDate from,LocalDate to)throws Exception{return typed(delegate.prepare(nativeSnapshot(before),from,to));}
     public static boolean outside(MarketSentimentDailyRow row,LocalDate from,LocalDate to){return PROJECTION.outside(row,from,to);}

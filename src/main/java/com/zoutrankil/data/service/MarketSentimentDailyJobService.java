@@ -21,7 +21,7 @@ import java.util.function.BooleanSupplier;
 import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 import static com.zoutrankil.data.domain.policy.MarketSentimentDailyCalculation.*;
 
-/** Explicit native Java rebuild. Reads existing dependency tables; never shells a Python owner. */
+/** Native Java calculation, used by the persistent main-strategy batch and explicit recovery. */
 @Service
 public final class MarketSentimentDailyJobService implements DatasetImplementation,SyncJobOwner {
     public static final String JOB_ID="data.market_sentiment_daily";
@@ -58,9 +58,9 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
         parameters.put("source_pin",new Parameter(ParameterType.STRING,true,64,1,Set.of()));
         parameters.put("target_hash",new Parameter(ParameterType.STRING,true,64,1,Set.of()));
         parameters.put("warmup_from",new Parameter(ParameterType.DATE,true,10,1,Set.of()));
-        return new SyncJobDefinition(JOB_ID,2,"market_sentiment_daily",1,"market_sentiment_daily_owner",Set.of(Mode.MATERIALIZE),Mode.MATERIALIZE,
+        return new SyncJobDefinition(JOB_ID,3,"market_sentiment_daily",1,"market_sentiment_daily_owner",Set.of(Mode.MATERIALIZE),Mode.MATERIALIZE,
                 parameters,"questdb.materialize","market_sentiment_daily.range366","questdb.full_key_values",
-                new RetryPolicy(1,Duration.ofSeconds(1),Duration.ofSeconds(1)),Duration.ofHours(2),new Budget(366,1,1,366,1024*1024),0,List.of(),Frequency.MANUAL,ZoneId.of("Asia/Shanghai"),true,false);
+                new RetryPolicy(1,Duration.ofSeconds(1),Duration.ofSeconds(1)),Duration.ofHours(2),new Budget(366,1,1,366,1024*1024),0,List.of(),Frequency.DAILY,ZoneId.of("Asia/Shanghai"),true,true);
     }
     public Plan plan(LocalDate from,LocalDate to,LocalDate logicalDate)throws Exception{return plan(from,to,logicalDate,Mode.MATERIALIZE);}
     public Plan plan(LocalDate from,LocalDate to,LocalDate logicalDate,Mode mode)throws Exception{
@@ -117,8 +117,8 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
                     JobDefinitionJson.mapper().writeValueAsString(Map.of("from",request.from(),"to",request.to(),"sourceFingerprint",sourceFingerprint,"sourceEvidence",evidence.toString(),"sourceEvidenceSha256",fileHash(evidence))));
             var entry=journal.create(intent);journaled=true;
             try{
-                check(cancelled);storage.rename(table,backup);entry=journal.advance(entry,ReferencePublicationJournal.State.OLD_MOVED);
-                check(cancelled);storage.rename(port.stage(),table);entry=journal.advance(entry,ReferencePublicationJournal.State.PUBLISHED);
+                check(cancelled);storage.rename(table,backup);port.awaitPublished(backup,plan.targetBefore.tableId(),plan.targetBefore.directory(),cancelled);entry=journal.advance(entry,ReferencePublicationJournal.State.OLD_MOVED);
+                check(cancelled);storage.rename(port.stage(),table);port.awaitPublished(table,stage.tableId(),stage.directory(),cancelled);entry=journal.advance(entry,ReferencePublicationJournal.State.PUBLISHED);
                 var published=port.formalSnapshot();var retained=port.snapshot(backup);
                 if(published.tableId()!=stage.tableId()||!published.fingerprint().equals(stage.fingerprint())||retained.tableId()!=plan.targetBefore.tableId()
                         ||!retained.fingerprint().equals(plan.targetBefore.fingerprint()))throw new IllegalStateException("Published sentiment or retained backup differs");
@@ -221,46 +221,11 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
     private void requireNoPendingPublication()throws Exception{storage.requireNoPendingPublication(ledgerPath);}
     public LedgerReadModels.Entry status(String run)throws Exception{return LedgerReadModels.entry(SyncRunLedger.openReadOnly(ledgerPath).get(run));}
     /** Complete a previously verified stage only with explicit proof that its former writer stopped. */
-    public MarketSentimentDailyTargetSnapshot finishInterrupted(String runId,boolean writerStopped)throws Exception{
-        if(!writerStopped)throw new IllegalArgumentException("Explicit stopped-writer proof required");
-        var ledger=new SyncRunLedger(ledgerPath);var run=ledger.getRun(runId);if(!JOB_ID.equals(run.jobId()))throw new IllegalArgumentException("Run belongs to another owner");
-        var journal=new ReferencePublicationJournal(ledgerPath,datasetId());var entry=journal.forRun(runId);var intent=entry.intent();
-        if(!table.equals(intent.target())||!run.targetId().equals(intent.initialTarget()))throw new IllegalStateException("Recovery target binding differs");
-        var scope=JobDefinitionJson.mapper().readTree(intent.scope());Path sourceEvidence=Path.of(scope.path("sourceEvidence").asText()).toAbsolutePath().normalize();
-        Path ownedRoot=ledgerPath.getParent().resolve("sync-evidence").resolve(runId).toAbsolutePath().normalize();
-        if(!sourceEvidence.startsWith(ownedRoot)||!Files.isRegularFile(sourceEvidence)||Files.size(sourceEvidence)>4*1024*1024
-                ||!fileHash(sourceEvidence).equals(scope.path("sourceEvidenceSha256").asText()))throw new IllegalStateException("Recovery source evidence is missing or changed");
-        var source=JobDefinitionJson.mapper().readTree(sourceEvidence.toFile());if(!MODEL_VERSION.equals(source.path("modelVersion").asText())
-                ||!scope.path("sourceFingerprint").asText().equals(source.path("sourceFingerprint").asText())||!source.path("rows").isArray())throw new IllegalStateException("Recovery source proof differs");
-        var children=ledger.entries(runId,null,100);var slices=children.stream().filter(e->e.kind()==SyncRunLedger.Kind.SLICE).toList();
-        var attempts=children.stream().filter(e->e.kind()==SyncRunLedger.Kind.ATTEMPT).toList();
-        if(slices.size()!=1||slices.getFirst().state()!=SyncRunState.VERIFIED||attempts.size()!=1)throw new IllegalStateException("Recovery requires one fully verified native source slice");
-        var port=storage.newWriter();var locks=new DatasetIntervalLock(ledgerPath);var lease=locks.findOwned(runId,DatasetIntervalLock.Scope.allDates(datasetId()));
-        if(entry.state()!=ReferencePublicationJournal.State.VERIFIED){if(lease==null)throw new IllegalStateException("Uncertain publication lease missing");journal.requireLease(lease,true);
-            boolean targetOld=identityMatches(intent.target(),intent.originalId()),targetNew=identityMatches(intent.target(),intent.replacementId()),
-                    backupOld=identityMatches(intent.backup(),intent.originalId()),stageNew=identityMatches(intent.stage(),intent.replacementId());
-            if(!(targetOld&&stageNew&&!tableExists(intent.backup())||!tableExists(intent.target())&&backupOld&&stageNew||targetNew&&backupOld&&!tableExists(intent.stage())))
-                throw new IllegalStateException("Recovery layout conflicts with durable publication identities");
-            var old=port.snapshot(targetOld?intent.target():intent.backup());var replacement=port.snapshot(targetNew?intent.target():intent.stage());
-            if(!old.fingerprint().equals(intent.beforeFingerprint())||!replacement.fingerprint().equals(intent.afterFingerprint()))throw new IllegalStateException("Recovery content fingerprint differs");
-            if(entry.state()!=ReferencePublicationJournal.State.IN_DOUBT)entry=journal.advance(entry,ReferencePublicationJournal.State.IN_DOUBT);
-            entry=journal.advance(entry,ReferencePublicationJournal.State.RESUMING);
-            try{if(targetOld)storage.rename(intent.target(),intent.backup());
-                if(!targetNew)storage.rename(intent.stage(),intent.target());
-                entry=journal.advance(entry,ReferencePublicationJournal.State.PUBLISHED);
-                var actual=port.formalSnapshot();var backup=port.snapshot(intent.backup());
-                if(actual.tableId()!=intent.replacementId()||backup.tableId()!=intent.originalId()||!actual.fingerprint().equals(intent.afterFingerprint())||!backup.fingerprint().equals(intent.beforeFingerprint()))
-                    throw new IllegalStateException("Recovered formal or backup differs");entry=journal.advance(entry,ReferencePublicationJournal.State.VERIFIED);
-            }catch(Exception failure){var current=journal.forRun(runId);if(current.state()!=ReferencePublicationJournal.State.VERIFIED&&current.state()!=ReferencePublicationJournal.State.IN_DOUBT)journal.advance(current,ReferencePublicationJournal.State.IN_DOUBT);throw failure;}
-        }
-        var actual=port.formalSnapshot();if(actual.tableId()!=intent.replacementId()||!actual.fingerprint().equals(intent.afterFingerprint()))throw new IllegalStateException("Verified publication drifted");
-        int rows=source.path("rows").size();String proof=JobDefinitionJson.mapper().writeValueAsString(Map.of("sourceComplete",true,"returnedRows",rows,"publication",intent.id(),
-                "verification",Map.of("passed",true,"writerStopped",true,"expectedRows",rows,"actualRows",rows,"matchedRows",rows,"duplicateKeys",0,"missingKeys",0,"mismatchedRows",0,"sourceFingerprint",scope.path("sourceFingerprint").asText(),"readbackEvidence",intent.id())));
-        for(var item:List.of(attempts.getFirst(),ledger.get(runId))){var current=ledger.get(item.id());if(current.state()==SyncRunState.VERIFIED)continue;
-            if(current.state()==SyncRunState.RUNNING||current.state()==SyncRunState.ACKNOWLEDGED){ledger.transition(current.id(),current.revision(),SyncRunState.IN_DOUBT,"{\"publicationRecovery\":true}");current=ledger.get(current.id());}
-            if(current.state()!=SyncRunState.IN_DOUBT)throw new IllegalStateException("Recovery ledger state cannot complete: "+current.state());ledger.transition(current.id(),current.revision(),SyncRunState.VERIFIED,proof);}
-        if(lease!=null){if(!lease.inDoubt()){locks.retainInDoubt(lease);lease=locks.findOwned(runId,lease.scope());}locks.releaseAfterReconciliation(lease,true,true);}
-        return actual;
+    public MarketSentimentDailyWritePort.Snapshot finishInterrupted(String runId,boolean writerStopped)throws Exception{
+        var port=new MarketSentimentDailyWritePort(jdbc,table);
+        var recovered=new com.zoutrankil.data.repository.NativeDailyWindowPublication<MarketSentimentDailyRow>(jdbc,ledgerPath,datasetId(),port.nativePort())
+                .finishInterrupted(runId,writerStopped,"java.market_sentiment_daily",MODEL_VERSION);
+        return new MarketSentimentDailyWritePort.Snapshot(recovered.targetId(),recovered.tableId(),recovered.directory(),recovered.wal(),recovered.rows(),recovered.fingerprint());
     }
     private boolean tableExists(String name){return storage.tableExists(name);}
     private boolean identityMatches(String name,long id){return storage.identityMatches(name,id);}

@@ -6,6 +6,7 @@ import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.service.DatasetReadService;
+import com.zoutrankil.data.repository.BacktestDailyMaterializationReadGuard;
 import com.zoutrankil.data.service.DatasetRegistry;
 import com.zoutrankil.data.stock.application.StockBasicSyncService;
 import com.zoutrankil.data.service.SyncJobRegistry;
@@ -87,6 +88,8 @@ public class ExternalApiController {
                 .map(DatasetDefinition.Column::logicalName).toList(), Map.of(), null, null, null, limit, null);
         return Mono.fromCallable(() -> reader.read(definition, query))
                 .subscribeOn(Schedulers.boundedElastic())
+                .onErrorMap(BacktestDailyMaterializationReadGuard.NotReadyException.class,
+                        error -> new ResponseStatusException(HttpStatus.CONFLICT, error.getMessage(), error))
                 .onErrorMap(org.springframework.dao.DataAccessException.class,
                         error -> new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "QuestDB unavailable"));
     }

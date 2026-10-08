@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
-/** D027 preserves the audited DAY/WAL/non-DEDUP schema; updates publish a verified full-table stage. */
+/** D027 preserves formal DAY/WAL/trade_date DEDUP and the original isolated non-DEDUP layout. */
 public final class MoneyflowHsgtDataset {
     public static final String ISOLATED_PREFIX = "java_d027_moneyflow_hsgt_";
     private static final TemporalContract TRADE_DATE = new TemporalContract(TemporalKind.BUSINESS_DATE,
@@ -15,9 +15,10 @@ public final class MoneyflowHsgtDataset {
     public static DatasetDefinition definition(String table) {
         DatasetDefinition.identifier(table);
         return new DatasetDefinition("moneyflow_hsgt", 1, "tushare.moneyflow_hsgt", "moneyflow_hsgt_owner",
-                table, ObjectKind.TABLE, columns(), List.of("trade_date"), List.of(), "trade_date", Partition.DAY,
+                table, ObjectKind.TABLE, columns(), List.of("trade_date"),
+                "moneyflow_hsgt".equals(table) ? List.of("trade_date") : List.of(), "trade_date", Partition.DAY,
                 true, Set.of(Capability.READ), List.of(),
-                "Audited formal layout is DAY/WAL/DEDUP=false. Natural identity is one aggregate per trade_date, but it is not a physical UPSERT key; writes require verified full-table stage replacement.");
+                "Observed formal layout is DAY/WAL/DEDUP with trade_date UPSERT identity; original isolated tables remain non-DEDUP. Owner writes require verified full-table stage replacement.");
     }
 
     public static DatasetDefinition isolatedWriteDefinition(String table) {
@@ -25,13 +26,32 @@ public final class MoneyflowHsgtDataset {
         return admittedWriteDefinition(table);
     }
 
-    /** Formal writes are stage replacement only; layout and natural identity are unchanged. */
+    /** Exact formal writes preserve the observed trade_date DEDUP key; isolated targets retain their original layout. */
     public static DatasetDefinition admittedWriteDefinition(String table) {
         requireAdmittedTable(table);
+        return writeDefinition(table, "moneyflow_hsgt".equals(table));
+    }
+
+    /** A journal-owned stage/backup must inherit its original admitted target's layout. */
+    public static DatasetDefinition publicationWriteDefinition(String table, String owningTarget) {
+        requireAdmittedTable(owningTarget);
+        DatasetDefinition.identifier(table);
+        if (!table.equals(owningTarget)
+                && !table.matches("java_d027_moneyflow_hsgt_(?:stage|backup)_[0-9a-f]{32}"))
+            throw new IllegalArgumentException("D027 publication object must be the owning target or an exact generated stage/backup");
+        return writeDefinition(table, "moneyflow_hsgt".equals(owningTarget));
+    }
+
+    public static boolean formalDedupLayout(String owningTarget) {
+        requireAdmittedTable(owningTarget);
+        return "moneyflow_hsgt".equals(owningTarget);
+    }
+
+    private static DatasetDefinition writeDefinition(String table, boolean dedup) {
         return new DatasetDefinition("moneyflow_hsgt", 1, "tushare.moneyflow_hsgt", "moneyflow_hsgt_owner",
-                table, ObjectKind.TABLE, columns(), List.of("trade_date"), List.of(), "trade_date", Partition.DAY,
+                table, ObjectKind.TABLE, columns(), List.of("trade_date"), dedup ? List.of("trade_date") : List.of(), "trade_date", Partition.DAY,
                 true, Set.of(Capability.READ, Capability.WAL_REPLACE), List.of(),
-                "D027 acceptance target retains DAY/WAL/DEDUP=false. Corrections publish a bounded full-table snapshot from a verified stage; no DEDUP key is invented.");
+                "D027 stage replacement preserves the owning target's exact DAY/WAL layout: formal trade_date DEDUP, original isolated non-DEDUP.");
     }
 
     public static List<Column> columns() {
