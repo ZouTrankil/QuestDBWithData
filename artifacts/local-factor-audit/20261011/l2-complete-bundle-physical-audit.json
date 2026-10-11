@@ -1,0 +1,150 @@
+{
+  "schema": "java.l2_bundle_physical_acceptance.v1",
+  "manifestSha256": "51c0e51379e7519038dac98e5fbdf5c37bb656d8de2b53531aa830f9050e466b",
+  "parts": [
+    {
+      "part": 0,
+      "expectedRows": 99858,
+      "physicalRows": 99858,
+      "missingRows": 0,
+      "unexpectedRows": 0,
+      "duplicateRows": 0,
+      "mismatches": 0,
+      "sourceStable": true,
+      "walSettled": true,
+      "readSeconds": 0.6227370999986306,
+      "state": [
+        [
+          1692,
+          "factor_observation~1692",
+          2998,
+          2998,
+          0,
+          false
+        ]
+      ],
+      "observedAtUtc": "2026-10-11T03:22:23.856092+00:00"
+    },
+    {
+      "part": 1,
+      "expectedRows": 99858,
+      "physicalRows": 99858,
+      "missingRows": 0,
+      "unexpectedRows": 0,
+      "duplicateRows": 0,
+      "mismatches": 0,
+      "sourceStable": true,
+      "walSettled": true,
+      "readSeconds": 0.5504292999976315,
+      "state": [
+        [
+          1692,
+          "factor_observation~1692",
+          2998,
+          2998,
+          0,
+          false
+        ]
+      ],
+      "observedAtUtc": "2026-10-11T03:22:34.858981+00:00"
+    },
+    {
+      "part": 2,
+      "expectedRows": 99858,
+      "physicalRows": 99858,
+      "missingRows": 0,
+      "unexpectedRows": 0,
+      "duplicateRows": 0,
+      "mismatches": 0,
+      "sourceStable": true,
+      "walSettled": true,
+      "readSeconds": 0.8927292000153102,
+      "state": [
+        [
+          1692,
+          "factor_observation~1692",
+          2998,
+          2998,
+          0,
+          false
+        ]
+      ],
+      "observedAtUtc": "2026-10-11T03:22:41.014275+00:00"
+    },
+    {
+      "part": 3,
+      "expectedRows": 99858,
+      "physicalRows": 99858,
+      "missingRows": 0,
+      "unexpectedRows": 0,
+      "duplicateRows": 0,
+      "mismatches": 0,
+      "sourceStable": true,
+      "walSettled": true,
+      "readSeconds": 0.590128999989247,
+      "state": [
+        [
+          1692,
+          "factor_observation~1692",
+          2998,
+          2998,
+          0,
+          false
+        ]
+      ],
+      "observedAtUtc": "2026-10-11T03:22:46.549388+00:00"
+    },
+    {
+      "part": 4,
+      "expectedRows": 99858,
+      "physicalRows": 99858,
+      "missingRows": 0,
+      "unexpectedRows": 0,
+      "duplicateRows": 0,
+      "mismatches": 0,
+      "sourceStable": true,
+      "walSettled": true,
+      "readSeconds": 0.6817532000131905,
+      "state": [
+        [
+          1692,
+          "factor_observation~1692",
+          2998,
+          2998,
+          0,
+          false
+        ]
+      ],
+      "observedAtUtc": "2026-10-11T03:22:50.995899+00:00"
+    },
+    {
+      "part": 5,
+      "expectedRows": 68085,
+      "physicalRows": 68085,
+      "missingRows": 0,
+      "unexpectedRows": 0,
+      "duplicateRows": 0,
+      "mismatches": 0,
+      "sourceStable": true,
+      "walSettled": true,
+      "readSeconds": 0.4414626999932807,
+      "state": [
+        [
+          1692,
+          "factor_observation~1692",
+          2998,
+          2998,
+          0,
+          false
+        ]
+      ],
+      "observedAtUtc": "2026-10-11T03:22:53.887574+00:00"
+    }
+  ],
+  "expectedRows": 567375,
+  "physicalRows": 567375,
+  "physicalAcceptance": true,
+  "sourceComplete": false,
+  "factorReady": false,
+  "bundleHashesVerified": true
+}
