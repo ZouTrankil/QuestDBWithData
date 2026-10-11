@@ -5,7 +5,17 @@ public final class CliUsage {
     private CliUsage() {}
 
     public static String text() {
-        return "Usage: plan-backtest-daily-job|run-backtest-daily-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD OR --bootstrap true --logical-date YYYY-MM-DD OR finish-backtest-daily-publication --run RUN_ID --writer-stopped true OR "
+        return "Usage: compute-etf-factor-panel --history-from DATE --from DATE --to DATE --output PATH OR compute-factor-panel --from DATE --to DATE --output PATH [--values-output PATH] [--factors ID,ID (--evidence-output PATH | --bundle-output DIRECTORY)] [--pools ID,ID --pool-output PATH] OR plan-factor-observations|run-factor-observations --evidence PATH --logical-date DATE [--mode MODE] [--resume-from RUN] OR inspect-factor-observations --date YYYY-MM-DD --entity-type TYPE --factor ID --version VERSION OR show-factor-definitions OR compute-daily-factor-features --input PATH --output PATH OR "
+                + "export-etf-observations --panel PATH --output NEW_PATH --computed-at DATETIME OR run-etf-factor-pipeline --date DATE --history-from DATE --root DIRECTORY OR resume-etf-factor-pipeline --run DIRECTORY OR "
+                + "compute-l2-factor-panel --history-from DATE --from DATE --to DATE --factors ID,ID --output PATH [--pools ID,ID --receipt-directory DIRECTORY] [--evidence-output PATH | --evidence-directory DIRECTORY] OR "
+                + "record-factor-pool-coverage|inspect-factor-pool-coverage --artifact PATH --store DIRECTORY OR "
+                + "run-l2-observation-bundle --bundle DIRECTORY --logical-date DATE --root DIRECTORY OR "
+                + "inspect-l2-observation-bundle --bundle DIRECTORY OR "
+                + "run-factor-pipeline --date DATE --factors ID,ID --pools ID,ID --root DIRECTORY OR "
+                + "reconcile-factor-observations --run RUN --evidence PATH --writer-log PATH --proof NEW_PATH OR "
+                + "inspect-factor-observation-page --evidence PATH --page INDEX [--job-version 2|3] OR "
+                + "compute-questdb-factor-features --symbol CODE --from YYYY-MM-DD --to YYYY-MM-DD --output PATH OR "
+                + "plan-backtest-daily-job|run-backtest-daily-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD OR --bootstrap true --logical-date YYYY-MM-DD OR finish-backtest-daily-publication --run RUN_ID --writer-stopped true OR "
                 + "run-exchange-calendar|plan-exchange-calendar --exchanges SSE,SZSE --from YYYY-MM-DD --to YYYY-MM-DD "
                 + "--logical-date YYYY-MM-DD [--mode incremental|backfill|reconcile] [--resume-from RUN_ID] OR "
                 + "sync-stock-basic-questdb OR migrate-questdb-schema OR "

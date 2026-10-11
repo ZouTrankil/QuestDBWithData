@@ -8,8 +8,6 @@ import java.util.*;
 
 /** Verified ledger slices are checkpoints; old offset cursors never skip fresh source reads. */
 public final class VerifiedSliceRecovery {
-    /** Conservative across typed ports; current concrete ports accept at least 250 complete keys. */
-    private static final int MAX_RECOVERY_READBACK_KEYS = 100;
     public record Checkpoint(String runId,String sliceId,String sourceFingerprint,int rows) {}
     public record Readback(Checkpoint checkpoint,String valueDigest) {}
     public record CompleteRevalidation(int pages,int sourceRows,int matchedRows,
@@ -65,11 +63,15 @@ public final class VerifiedSliceRecovery {
         }
         port.preflight();
         var keys=List.copyOf(expected.keySet());
+        int readbackCapacity=port.recoveryReadbackBatchRows();
+        if(readbackCapacity<1 || readbackCapacity>10_000)
+            throw new IllegalArgumentException("Recovery readback capacity must be 1..10000");
         var seen=new HashSet<K>();
         int batchNumber=0, actualRows=0;
-        for(int start=0;start<keys.size();start+=MAX_RECOVERY_READBACK_KEYS) {
+        for(int start=0;start<keys.size();start+=readbackCapacity) {
             batchNumber++;
-            var batch=keys.subList(start,Math.min(keys.size(),start+MAX_RECOVERY_READBACK_KEYS));
+            var batch=keys.subList(start,Math.min(keys.size(),start+readbackCapacity));
+            var requestedKeys=new HashSet<>(batch);
             var actual=port.readback(List.copyOf(batch));
             if(actual==null) throw new IllegalStateException("Checkpoint target readback returned null for batch="
                     +batchNumber+" requestedKeys="+batch.size());
@@ -77,7 +79,7 @@ public final class VerifiedSliceRecovery {
             var batchSeen=new HashSet<K>();
             for(T row:actual) {
                 K key=codec.key(row);
-                if(key==null || !batch.contains(key))
+                if(key==null || !requestedKeys.contains(key))
                     throw new IllegalStateException("Checkpoint target returned an unexpected key; batch="+batchNumber);
                 if(!batchSeen.add(key) || !seen.add(key))
                     throw new IllegalStateException("Checkpoint target contains a duplicate key; batch="+batchNumber);

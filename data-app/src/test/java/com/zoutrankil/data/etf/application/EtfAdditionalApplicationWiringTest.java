@@ -82,8 +82,8 @@ class EtfAdditionalApplicationWiringTest {
             var jobs=context.getBean(SyncJobRegistry.class);
             var datasets=context.getBean(DatasetRegistry.class);
             var bindings=context.getBean(ReadBindingCatalog.class).bind(datasets);
-            assertEquals(56,bindings.size());
-            assertEquals(56,datasets.definitions().stream().filter(d -> d.capabilities().contains(DatasetDefinition.Capability.READ)).count());
+            assertEquals(53,bindings.size());
+            assertEquals(53,datasets.definitions().stream().filter(d -> d.capabilities().contains(DatasetDefinition.Capability.READ)).count());
             assertEquals(jobs.definitions().size(),jobs.definitions().stream().map(SyncJobDefinition::jobId).distinct().count());
             for(var family:Family.values()) {
                 String dataset=family.definition.datasetId();

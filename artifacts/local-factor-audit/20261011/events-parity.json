@@ -1,0 +1,58 @@
+{
+  "rows": 27855,
+  "mismatches": 0,
+  "finiteValues": {
+    "event_cash_dividend": 1832,
+    "event_earnings_forecast": 3658,
+    "event_repurchase_amount": 1733,
+    "event_unlock_ratio": 1170,
+    "ownership_holder_change": 3032
+  },
+  "sourceRows": {
+    "holder_trade": 13814,
+    "repurchase": 8583,
+    "share_float": 478110,
+    "dividend": 23343,
+    "forecast": 7098
+  },
+  "pythonReadSeconds": 2.534219799999846,
+  "pythonComputeSeconds": 1.249000799987698,
+  "sourceVersions": [
+    {
+      "id": 1618,
+      "table_name": "dividend",
+      "directoryName": "dividend~1618",
+      "table_txn": 3,
+      "wal_txn": 3
+    },
+    {
+      "id": 1862,
+      "table_name": "forecast",
+      "directoryName": "forecast_stage_20260928_181158_217386~1862",
+      "table_txn": 4,
+      "wal_txn": 4
+    },
+    {
+      "id": 1816,
+      "table_name": "repurchase",
+      "directoryName": "repurchase~1816",
+      "table_txn": 2,
+      "wal_txn": 2
+    },
+    {
+      "id": 1872,
+      "table_name": "share_float",
+      "directoryName": "share_float_stage_20260928_184417_615630~1872",
+      "table_txn": 35,
+      "wal_txn": 35
+    },
+    {
+      "id": 1849,
+      "table_name": "stk_holdertrade",
+      "directoryName": "stk_holdertrade_stage_20260928_174136_599741~1849",
+      "table_txn": 4,
+      "wal_txn": 4
+    }
+  ],
+  "published": false
+}

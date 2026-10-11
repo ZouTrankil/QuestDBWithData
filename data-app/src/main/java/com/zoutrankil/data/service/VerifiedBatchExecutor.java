@@ -70,6 +70,8 @@ public final class VerifiedBatchExecutor<T, K> {
         void send(List<T> rows) throws Exception;
         /** Actual rows by the exact requested keys; duplicates must remain observable. */
         List<T> readback(List<K> keys) throws Exception;
+        /** Explicit bounded capacity for checkpoint revalidation; conservative for existing ports. */
+        default int recoveryReadbackBatchRows() { return 100; }
         /** True only after the relevant WAL frontier is settled. */
         boolean walSettled() throws Exception;
         /** Explicit proof that an uncertain sender cannot deliver additional writes. */

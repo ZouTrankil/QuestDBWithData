@@ -1,0 +1,141 @@
+{
+  "checked_at": "2026-10-11T01:44:13.270213+00:00",
+  "scope": "Current local QuestDB at 127.0.0.1:9000 and current data/back-monitor source; no remote-history completeness claim",
+  "operations": "Database SELECT only; source files unchanged; no DROP executed",
+  "backtest_lineage": [
+    "stk_factor/stk_limit/stk_suspend/stk_st_daily",
+    "backtest_daily (Java enriched base table)",
+    "v_backtest_daily (native manual MV)",
+    "backtest_daily_cache + backtest_daily_cache_coverage (Python Dataset readthrough)"
+  ],
+  "disposition": {
+    "backtest_daily": "KEEP: native MV base and direct Java factor reader dependency",
+    "backtest_daily_cache": "REQUIRES MIGRATION: duplicate storage after MV, but Dataset path still requires it",
+    "backtest_daily_cache_coverage": "REQUIRES MIGRATION: paired publish receipts and digest checks",
+    "market_breadth_daily_cache": "RETIREMENT CANDIDATE: current native alias bypasses it; remove legacy installer, fallback, and typed read registration before DROP",
+    "retail_sentiment_daily_cache": "RETIREMENT CANDIDATE: current native alias bypasses it; remove legacy installer, fallback, and typed read registration before DROP",
+    "etf_market_overview_daily_cache": "KEEP PENDING MIGRATION: active ETF readthrough and Java Python-owner bridge",
+    "market_barometer_cache_coverage": "KEEP: active ETF cache shares this receipt table; other product receipts can be retired separately"
+  },
+  "physical_cache_tables": [
+    {
+      "table_name": "backtest_daily_cache",
+      "table_type": "T",
+      "matView": false,
+      "table_row_count": 14199080,
+      "table_min_timestamp": "2022-07-28T00:00:00.000000Z",
+      "table_max_timestamp": "2026-09-30T00:00:00.000000Z"
+    },
+    {
+      "table_name": "backtest_daily_cache_coverage",
+      "table_type": "T",
+      "matView": false,
+      "table_row_count": 2565,
+      "table_min_timestamp": "2022-07-28T00:00:00.000000Z",
+      "table_max_timestamp": "2026-09-30T00:00:00.000000Z"
+    },
+    {
+      "table_name": "etf_market_overview_daily_cache",
+      "table_type": "T",
+      "matView": false,
+      "table_row_count": 1181,
+      "table_min_timestamp": "2025-05-06T00:00:00.000000Z",
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z"
+    },
+    {
+      "table_name": "market_barometer_cache_coverage",
+      "table_type": "T",
+      "matView": false,
+      "table_row_count": 2466,
+      "table_min_timestamp": "2025-05-06T00:00:00.000000Z",
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z"
+    },
+    {
+      "table_name": "market_breadth_daily_cache",
+      "table_type": "T",
+      "matView": false,
+      "table_row_count": 922,
+      "table_min_timestamp": "2025-05-06T00:00:00.000000Z",
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z"
+    },
+    {
+      "table_name": "retail_sentiment_daily_cache",
+      "table_type": "T",
+      "matView": false,
+      "table_row_count": 338,
+      "table_min_timestamp": "2025-05-06T00:00:00.000000Z",
+      "table_max_timestamp": "2026-09-17T00:00:00.000000Z"
+    }
+  ],
+  "view_health": [
+    {
+      "view_name": "mv_market_breadth_daily_v1",
+      "base_table_name": "stk_factor",
+      "refresh_type": "timer",
+      "view_status": "valid",
+      "refresh_base_table_txn": 225,
+      "base_table_txn": 225
+    },
+    {
+      "view_name": "mv_retail_sentiment_daily_v1",
+      "base_table_name": "l2_daily_features",
+      "refresh_type": "timer",
+      "view_status": "valid",
+      "refresh_base_table_txn": 11386,
+      "base_table_txn": 11386
+    },
+    {
+      "view_name": "v_backtest_daily",
+      "base_table_name": "backtest_daily",
+      "refresh_type": "manual",
+      "view_status": "valid",
+      "refresh_base_table_txn": 11,
+      "base_table_txn": 11
+    }
+  ],
+  "bounded_parity": {
+    "breadth": {
+      "cache_rows": 1,
+      "view_rows": 1,
+      "equal_ignoring_source_version": true,
+      "date": "2026-09-18T00:00:00.000000Z"
+    },
+    "retail": {
+      "cache_rows": 1,
+      "view_rows": 1,
+      "equal_ignoring_source_version": true,
+      "date": "2026-09-17T00:00:00.000000Z"
+    },
+    "etf": {
+      "cache_rows": 1,
+      "view_rows": 1,
+      "equal_ignoring_source_version": true,
+      "date": "2026-09-18T00:00:00.000000Z"
+    }
+  },
+  "backtest_latest_receipts": [
+    {
+      "trade_date": "2026-09-30T00:00:00.000000Z",
+      "source_version": "7887aeb8cf24e13a8b53c2e533853fbbf307949e8ba42cab5a71ecadf5781735",
+      "row_count": 5571,
+      "content_digest": "ee5b6ca4e0edbc825eb8d251584f709385cf96254aff3b50cccecff2d106c976"
+    },
+    {
+      "trade_date": "2026-09-30T00:00:00.000000Z",
+      "source_version": "24921ac654283aba0e17314e2af0738ba7e8dfb9b9dae132abef63f8ec3f227d",
+      "row_count": 5571,
+      "content_digest": "ee5b6ca4e0edbc825eb8d251584f709385cf96254aff3b50cccecff2d106c976"
+    }
+  ],
+  "limitations": [
+    "Counts/min/max SELECT on backtest_daily, v_backtest_daily and mv_market_breadth_daily_v1 timed out; metadata table_row_count/min/max retained independently.",
+    "One-day aggregate comparisons certify only those sampled dates, not whole-history parity."
+  ],
+  "key_source_evidence": [
+    "F:/repo/engine/data/data-app/src/main/java/com/zoutrankil/data/repository/BacktestDailyMaterializationPort.java:45",
+    "F:/repo/engine/back-monitor/src/quant_platform/data/adapters/questdb/dataset_snapshots.py:306",
+    "F:/repo/engine/back-monitor/src/quant_platform/data/adapters/questdb/market_barometer.py:59",
+    "F:/repo/engine/back-monitor/src/quant_platform/data/adapters/questdb/market_barometer_cache.py:147",
+    "F:/repo/engine/data/data-app/src/main/java/com/zoutrankil/data/config/DefaultReadBindings.java:44"
+  ]
+}

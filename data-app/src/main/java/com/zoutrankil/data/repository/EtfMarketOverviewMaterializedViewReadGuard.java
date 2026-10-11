@@ -1,0 +1,99 @@
+package com.zoutrankil.data.repository;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.HexFormat;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+/** Both JOIN input revisions must match the verified native refresh receipt. */
+public final class EtfMarketOverviewMaterializedViewReadGuard {
+    public static final String OUTPUT = "mv_etf_market_overview_daily_v1";
+    public static final String RECEIPT = "etf_market_overview_mv_refresh";
+    public static final String SQL = """
+            SELECT
+                s.timestamp AS trade_date,
+                count_distinct(s.ts_code) AS etf_count,
+                sum(s.fd_share) AS total_share,
+                sum(s.fd_share * d.close) / 10000.0 AS total_size_yi
+            FROM etf_share s
+            JOIN etf_daily d ON s.ts_code = d.ts_code AND s.timestamp = d.timestamp
+            SAMPLE BY 1d ALIGN TO CALENDAR
+            """;
+
+    private EtfMarketOverviewMaterializedViewReadGuard() {}
+
+    /** Null retains the original direct-view guard during staged deployment. */
+    public static String versionIfActivated(JdbcTemplate jdbc) {
+        var aliases = jdbc.queryForList("SELECT view_sql,view_status,invalidation_reason,view_table_dir_name "
+                + "FROM views() WHERE view_name='v_etf_market_overview_daily'");
+        if (aliases.isEmpty()) return null;
+        if (aliases.size() != 1) throw new IllegalStateException("Ambiguous ETF public alias");
+        var alias = aliases.getFirst();
+        if (!normalized("SELECT * FROM " + OUTPUT).equals(normalized(alias.get("view_sql")))) return null;
+        if (!"valid".equals(alias.get("view_status")) || nonempty(alias.get("invalidation_reason")))
+            throw new IllegalStateException("ETF native alias is invalid");
+        String aliasDirectory = text(alias, "view_table_dir_name");
+        String share = snapshot(jdbc, "etf_share"), daily = snapshot(jdbc, "etf_daily");
+        String pin = sha(normalized(SQL) + "|" + share + "|" + daily);
+        var view = one(jdbc.queryForList("SELECT * FROM materialized_views() WHERE view_name='" + OUTPUT + "'"));
+        if (!"etf_share".equals(view.get("base_table_name")) || !"manual".equals(view.get("refresh_type"))
+                || !"valid".equals(view.get("view_status")) || nonempty(view.get("invalidation_reason"))
+                || !normalized(SQL).equals(normalized(view.get("view_sql")))
+                || counter(view, "refresh_base_table_txn") != counter(view, "base_table_txn"))
+            throw new IllegalStateException("ETF native MV definition or checkpoint is not current");
+        String output = snapshot(jdbc, OUTPUT);
+        var receipt = one(jdbc.queryForList("SELECT source_version,output_version FROM " + RECEIPT
+                + " ORDER BY refreshed_at DESC LIMIT 1"));
+        if (!pin.equals(receipt.get("source_version")) || !output.equals(receipt.get("output_version")))
+            throw new IllegalStateException("ETF JOIN inputs/output changed after verified refresh");
+        if (!share.equals(snapshot(jdbc, "etf_share")) || !daily.equals(snapshot(jdbc, "etf_daily"))
+                || !output.equals(snapshot(jdbc, OUTPUT)))
+            throw new IllegalStateException("ETF source/output revisions changed during verification");
+        return "etf-native:" + pin + "|" + output + "|" + aliasDirectory;
+    }
+
+    static String normalized(Object value) {
+        return value == null ? "" : value.toString().strip().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
+    }
+
+    static String sha(String text) {
+        try {
+            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8)));
+        } catch (java.security.NoSuchAlgorithmException e) { throw new IllegalStateException(e); }
+    }
+
+    private static String snapshot(JdbcTemplate jdbc, String table) {
+        var row = one(jdbc.queryForList("SELECT t.id,t.directoryName,t.table_txn,t.walEnabled,t.table_suspended,"
+                + "t.wal_pending_row_count,w.sequencerTxn,w.writerTxn,w.bufferedTxnSize,w.suspended "
+                + "FROM tables() t JOIN wal_tables() w ON w.name=t.table_name WHERE t.table_name=?", table));
+        if (!Boolean.TRUE.equals(row.get("walEnabled")) || !Boolean.FALSE.equals(row.get("suspended"))
+                || !Boolean.FALSE.equals(row.get("table_suspended")) || counter(row, "wal_pending_row_count") != 0
+                || counter(row, "bufferedTxnSize") != 0 || counter(row, "writerTxn") != counter(row, "sequencerTxn"))
+            throw new IllegalStateException("ETF source/output WAL is not settled: " + table);
+        return table + ":" + counter(row, "id") + ":" + text(row, "directoryName") + ":"
+                + counter(row, "table_txn") + ":" + counter(row, "sequencerTxn");
+    }
+
+    private static Map<String,Object> one(List<Map<String,Object>> rows) {
+        if (rows.size() != 1) throw new IllegalStateException("Unique ETF native metadata/receipt required");
+        return rows.getFirst();
+    }
+
+    private static long counter(Map<String,Object> row, String name) {
+        if (!(row.get(name) instanceof Number value) || value.longValue() < 0)
+            throw new IllegalStateException("Required ETF revision counter unavailable: " + name);
+        return value.longValue();
+    }
+
+    private static String text(Map<String,Object> row, String name) {
+        String value = Objects.toString(row.get(name), "");
+        if (value.isBlank()) throw new IllegalStateException("Required ETF identity missing: " + name);
+        return value;
+    }
+
+    private static boolean nonempty(Object value) { return value != null && !value.toString().isBlank(); }
+}

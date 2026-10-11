@@ -1,0 +1,11 @@
+ M scripts/pipeline/run_post_close_data_foundation.ps1
+ M src/quant_platform/common/runtime/job_catalog.py
+ M src/quant_platform/data/adapters/governance/l2_ingest_receipt.py
+ M src/quant_platform/data/adapters/questdb/backtest_cache.py
+ M src/quant_platform/data/adapters/questdb/backtest_view.py
+ M src/quant_platform/data/adapters/questdb/derived.py
+ M src/quant_platform/data/adapters/questdb/derived_completeness.py
+ M src/quant_platform/data/adapters/questdb/market_barometer_cache.py
+ M tests/unit/runtime/test_job_catalog_metadata.py
+ M tests/unit/runtime/test_post_close_resume.py
+?? src/quant_platform/data/adapters/governance/l2_retained_ingest.py

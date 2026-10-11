@@ -1,0 +1,61 @@
+{
+  "code_scope": "ETF overview native MV migration in back-monitor, with matching Java typed read guard in data",
+  "production_database_changed": false,
+  "legacy_cache_dropped": false,
+  "private_server_stopped": true,
+  "python": {
+    "tests": 54,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "java": {
+    "tests": 38,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "private_questdb": {
+    "status": "PASS",
+    "instance": "private 127.0.0.1:19812",
+    "build": "Build Information: QuestDB 10.0.1, JDK 25.0.2, Commit Hash 7a391566ac827e0d8c269b91f2415c16b0a32a84",
+    "database_writes": "Private instance only",
+    "join_and_count_distinct_supported": true,
+    "base_checkpoint_unchanged_after_right_correction": true,
+    "right_correction_read_rejected": true,
+    "full_refresh_repaired_right_correction": true,
+    "checked_rows": 2,
+    "source_version": "de4561f676407ca8f89f15ac176c6c71305d38c99b2aa6596360e50ac29785d1",
+    "output_version": "mv_etf_market_overview_daily_v1:11:mv_etf_market_overview_daily_v1~11:6:6",
+    "rows": [
+      {
+        "trade_date": "2026-09-29",
+        "etf_count": "2",
+        "total_share": "300.0",
+        "total_size_yi": "0.1"
+      },
+      {
+        "trade_date": "2026-09-30",
+        "etf_count": "1",
+        "total_share": "50.0",
+        "total_size_yi": "0.025"
+      }
+    ],
+    "cache_operations": []
+  },
+  "new_output": "mv_etf_market_overview_daily_v1",
+  "public_alias": "v_etf_market_overview_daily",
+  "refresh_receipt": "etf_market_overview_mv_refresh (one metadata row per verified refresh; no cached business rows)",
+  "policy": "Explicit manual FULL refresh after both source owners finish; full month-window parity and stable source/output checks before publishing receipt",
+  "deployment": [
+    "data derived install etf_market_overview_daily",
+    "data derived repair etf_market_overview_daily --full",
+    "data derived activate etf_market_overview_daily"
+  ],
+  "python_ast_valid": true,
+  "preserved_other_workspace_changes": true,
+  "limitations": [
+    "Synthetic isolated QuestDB 10.0.1 validation; no formal source completeness certification or production activation.",
+    "Legacy Java cache management and historical cache data remain available during staged migration."
+  ]
+}

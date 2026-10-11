@@ -41,6 +41,8 @@ public final class SyncJobRunner<T, K> {
         }
         /** Native asynchronous materialization can request a longer bounded visibility wait. */
         default Duration visibilityTimeout() { return Duration.ofSeconds(20); }
+        /** Opt-in transport capacity; adapters must derive changed layouts from the frozen request. */
+        default int maxWriteBatchRows(FrozenRequest request) { return 250; }
         /** True when the dataset has a durable side effect that needs explicit reconciliation before retry. */
         default boolean recoveryRequired(String runId) throws Exception { return false; }
     }
@@ -255,7 +257,10 @@ public final class SyncJobRunner<T, K> {
             public boolean walSettled() throws Exception { return port.walSettled(); }
             public boolean uncertainSenderStopped() throws Exception { return port.uncertainSenderStopped(); }
         };
-        int batchRows = Math.min(250, page.rows().size());
+        int capacity = adapter.maxWriteBatchRows(request);
+        if(capacity < 1 || capacity > 10_000)
+            throw new IllegalArgumentException("Write batch capacity must be 1..10000");
+        int batchRows = Math.min(capacity, page.rows().size());
         long remainingNanos = durationNanos - (System.nanoTime() - startedNanos);
         if (remainingNanos < 1_000_000) throw new CancellationException("Write deadline reached");
         var requestedVisibility = adapter.visibilityTimeout();

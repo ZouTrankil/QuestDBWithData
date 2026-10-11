@@ -46,7 +46,7 @@ class ReadBindingApplicationTest {
             context.register(ReadGroupConfiguration.class);
             context.refresh();
             var catalog = context.getBean(ReadBindingCatalog.class);
-            assertEquals(57, catalog.registrations().size());
+            assertEquals(54, catalog.registrations().size());
             var binding = catalog.bind(context.getBean(DatasetRegistry.class)).getFirst();
             assertSame(definition, binding.definition());
             assertEquals(String.class, binding.rowType());
@@ -76,7 +76,8 @@ class ReadBindingApplicationTest {
 
     @Test void completeApplicationRegistersEveryActiveReaderWithoutDatabaseAccess() throws Exception {
         var expectedTyped = originalTypedRows();
-        assertEquals(20, expectedTyped.size());
+        expectedTyped.keySet().removeAll(CacheDatasetRetirementTest.RETIRED);
+        assertEquals(16, expectedTyped.size());
         var dataSource = mock(DataSource.class);
         var ledger = temp.resolve("not-created.sqlite");
         var application = new SpringApplication(QuestDataApplication.class);
@@ -101,13 +102,13 @@ class ReadBindingApplicationTest {
                     .filter(definition -> definition.capabilities().contains(DatasetDefinition.Capability.READ)).toList();
             var historicalIds = new LinkedHashSet<>(expectedTyped.keySet());
             historicalIds.addAll(originalGenericIds());
-            assertEquals(54, historicalIds.size(), "The historical contract remains 20 typed and 34 generic readers");
-            var addedIds = Set.of("market_sentiment_daily", "regime_features_monitor_daily");
+            assertEquals(50, historicalIds.size(), "The remaining historical contract has 16 typed and 34 generic readers");
+            var addedIds = Set.of("market_sentiment_daily", "regime_features_monitor_daily", "cn_bond_yield_curve");
             var readableIds = readable.stream().map(DatasetDefinition::datasetId).collect(Collectors.toSet());
             assertEquals(historicalIds, readableIds.stream().filter(id -> !addedIds.contains(id)).collect(Collectors.toSet()));
             assertTrue(readableIds.containsAll(addedIds));
-            assertEquals(56, readable.size());
-            assertEquals(56, catalog.registrations().size());
+            assertEquals(53, readable.size());
+            assertEquals(53, catalog.registrations().size());
             assertEquals(readable.size(), bound.size());
             for (var id : addedIds) {
                 var registration = catalog.registrations().stream().filter(value -> value.datasetId().equals(id))

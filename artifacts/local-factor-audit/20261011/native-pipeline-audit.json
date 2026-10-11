@@ -1,0 +1,41 @@
+{
+  "executionId": "2026-09-30-fabece10-a8d6-4995-b52e-c1b5648cd659",
+  "phase": "PARTIAL",
+  "verifiedRows": 5571,
+  "verifiedPages": 23,
+  "poolSections": 2,
+  "poolObjectSha256": "2d219d0a05c92c1a17e8ff0ded181139ac4c4658c865f666be6f86dda931bcb1",
+  "physical": {
+    "expectedRows": 5571,
+    "visibleExpectedRows": 5571,
+    "missingRows": 0,
+    "mismatches": 0,
+    "unexpectedRows": 0,
+    "sourceStable": true,
+    "walSettled": true,
+    "state": [
+      [
+        1692,
+        "factor_observation~1692",
+        1584,
+        1584,
+        0,
+        false
+      ]
+    ],
+    "observedAtUtc": "2026-10-10T20:44:13.050954+00:00"
+  },
+  "tests": [
+    {
+      "name": "com.zoutrankil.data.cli.FactorPipelineCommandsTest",
+      "tests": 2
+    },
+    {
+      "name": "com.zoutrankil.data.factor.FactorPoolCoverageStoreTest",
+      "tests": 2
+    }
+  ],
+  "automaticPostCloseEnabled": false,
+  "sourceComplete": false,
+  "factorReady": false
+}

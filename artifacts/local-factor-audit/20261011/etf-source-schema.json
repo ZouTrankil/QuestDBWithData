@@ -1,0 +1,733 @@
+{
+  "etf_daily": {
+    "query": "select * from table_columns('etf_daily')",
+    "columns": [
+      {
+        "name": "column",
+        "type": "STRING"
+      },
+      {
+        "name": "type",
+        "type": "STRING"
+      },
+      {
+        "name": "indexed",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexBlockCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolCached",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "symbolCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolTableSize",
+        "type": "INT"
+      },
+      {
+        "name": "designated",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "upsertKey",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexType",
+        "type": "STRING"
+      },
+      {
+        "name": "indexInclude",
+        "type": "STRING"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "ts_code",
+        "SYMBOL",
+        false,
+        256,
+        true,
+        4096,
+        2271,
+        false,
+        true,
+        "",
+        ""
+      ],
+      [
+        "timestamp",
+        "TIMESTAMP_NS",
+        false,
+        0,
+        false,
+        0,
+        0,
+        true,
+        true,
+        "",
+        ""
+      ],
+      [
+        "pre_close",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "open",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "high",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "low",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "close",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "change",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "pct_chg",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "vol",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "amount",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ]
+    ],
+    "count": 11
+  },
+  "etf_basic": {
+    "query": "select * from table_columns('etf_basic')",
+    "columns": [
+      {
+        "name": "column",
+        "type": "STRING"
+      },
+      {
+        "name": "type",
+        "type": "STRING"
+      },
+      {
+        "name": "indexed",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexBlockCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolCached",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "symbolCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolTableSize",
+        "type": "INT"
+      },
+      {
+        "name": "designated",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "upsertKey",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexType",
+        "type": "STRING"
+      },
+      {
+        "name": "indexInclude",
+        "type": "STRING"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "ts_code",
+        "SYMBOL",
+        false,
+        256,
+        true,
+        4096,
+        2958,
+        false,
+        true,
+        "",
+        ""
+      ],
+      [
+        "name",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "management",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "custodian",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "fund_type",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "found_date",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "due_date",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "list_date",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "issue_date",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "delist_date",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "issue_amount",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "m_fee",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "c_fee",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "duration_year",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "p_value",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "min_amount",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "exp_return",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "benchmark",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "status",
+        "SYMBOL",
+        false,
+        256,
+        true,
+        256,
+        3,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "invest_type",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "type",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "trustee",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "purc_startdate",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "redm_startdate",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "market",
+        "SYMBOL",
+        false,
+        256,
+        true,
+        256,
+        1,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "timestamp",
+        "TIMESTAMP",
+        false,
+        0,
+        false,
+        0,
+        0,
+        true,
+        true,
+        "",
+        ""
+      ],
+      [
+        "update_time",
+        "TIMESTAMP",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ]
+    ],
+    "count": 27
+  },
+  "etf_share": {
+    "query": "select * from table_columns('etf_share')",
+    "columns": [
+      {
+        "name": "column",
+        "type": "STRING"
+      },
+      {
+        "name": "type",
+        "type": "STRING"
+      },
+      {
+        "name": "indexed",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexBlockCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolCached",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "symbolCapacity",
+        "type": "INT"
+      },
+      {
+        "name": "symbolTableSize",
+        "type": "INT"
+      },
+      {
+        "name": "designated",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "upsertKey",
+        "type": "BOOLEAN"
+      },
+      {
+        "name": "indexType",
+        "type": "STRING"
+      },
+      {
+        "name": "indexInclude",
+        "type": "STRING"
+      }
+    ],
+    "timestamp": -1,
+    "dataset": [
+      [
+        "ts_code",
+        "SYMBOL",
+        false,
+        256,
+        true,
+        4096,
+        2434,
+        false,
+        true,
+        "",
+        ""
+      ],
+      [
+        "timestamp",
+        "TIMESTAMP",
+        false,
+        0,
+        false,
+        0,
+        0,
+        true,
+        true,
+        "",
+        ""
+      ],
+      [
+        "fd_share",
+        "DOUBLE",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "fund_type",
+        "STRING",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "market",
+        "SYMBOL",
+        false,
+        256,
+        true,
+        256,
+        4,
+        false,
+        false,
+        "",
+        ""
+      ],
+      [
+        "update_time",
+        "TIMESTAMP",
+        false,
+        0,
+        false,
+        0,
+        0,
+        false,
+        false,
+        "",
+        ""
+      ]
+    ],
+    "count": 6
+  }
+}

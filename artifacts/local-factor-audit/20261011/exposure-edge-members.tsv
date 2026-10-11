@@ -1,0 +1,9 @@
+A	<NULL>	2025-01-02	L1	old	<NULL>
+A	2025-01-02	<NULL>	L1	new	<NULL>
+B	<NULL>	<NULL>	L1	<NULL>	fallback
+C	<NULL>	<NULL>	L1	 	must_not_fallback
+D	<NULL>	<NULL>	L2	excluded	<NULL>
+E	<NULL>	<NULL>	L1	base	<NULL>
+E	2025-01-01	2025-01-02	L1	temporary	<NULL>
+F	2025-01-01	<NULL>	L1	tie_first	<NULL>
+F	2025-01-01	<NULL>	L1	tie_last	<NULL>

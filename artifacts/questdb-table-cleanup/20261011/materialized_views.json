@@ -1,0 +1,197 @@
+{
+  "query": "select * from materialized_views()",
+  "columns": [
+    {
+      "name": "view_name",
+      "type": "STRING"
+    },
+    {
+      "name": "refresh_type",
+      "type": "STRING"
+    },
+    {
+      "name": "base_table_name",
+      "type": "STRING"
+    },
+    {
+      "name": "last_refresh_start_timestamp",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "last_refresh_finish_timestamp",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "view_sql",
+      "type": "STRING"
+    },
+    {
+      "name": "view_table_dir_name",
+      "type": "STRING"
+    },
+    {
+      "name": "invalidation_reason",
+      "type": "STRING"
+    },
+    {
+      "name": "view_status",
+      "type": "STRING"
+    },
+    {
+      "name": "refresh_period_hi",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "refresh_base_table_txn",
+      "type": "LONG"
+    },
+    {
+      "name": "base_table_txn",
+      "type": "LONG"
+    },
+    {
+      "name": "refresh_limit",
+      "type": "INT"
+    },
+    {
+      "name": "refresh_limit_unit",
+      "type": "STRING"
+    },
+    {
+      "name": "timer_time_zone",
+      "type": "STRING"
+    },
+    {
+      "name": "timer_start",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "timer_interval",
+      "type": "INT"
+    },
+    {
+      "name": "timer_interval_unit",
+      "type": "STRING"
+    },
+    {
+      "name": "period_length",
+      "type": "INT"
+    },
+    {
+      "name": "period_length_unit",
+      "type": "STRING"
+    },
+    {
+      "name": "period_delay",
+      "type": "INT"
+    },
+    {
+      "name": "period_delay_unit",
+      "type": "STRING"
+    },
+    {
+      "name": "refresh_avg_commit_nanos",
+      "type": "LONG"
+    },
+    {
+      "name": "refresh_avg_scan_sample_nanos",
+      "type": "LONG"
+    },
+    {
+      "name": "refresh_avg_scan_range_ts_units",
+      "type": "LONG"
+    },
+    {
+      "name": "refresh_gap_threshold_ts_units",
+      "type": "LONG"
+    }
+  ],
+  "timestamp": -1,
+  "dataset": [
+    [
+      "mv_market_breadth_daily_v1",
+      "timer",
+      "stk_factor",
+      "2026-10-10T00:33:42.939069Z",
+      "2026-10-10T00:33:55.983885Z",
+      "SELECT\n    trade_date,\n    count() AS stock_count,\n    sum(CASE WHEN pct_change > 0 THEN 1 ELSE 0 END) AS up_count,\n    sum(CASE WHEN pct_change < 0 THEN 1 ELSE 0 END) AS down_count,\n    sum(CASE WHEN pct_change = 0 THEN 1 ELSE 0 END) AS flat_count,\n    avg(pct_change) AS avg_pct_change,\n    sum(amount) / 100000.0 AS total_amount_yi\nFROM stk_factor\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "mv_market_breadth_daily_v1~1812",
+      null,
+      "valid",
+      null,
+      225,
+      225,
+      0,
+      null,
+      null,
+      "2026-09-18T15:32:22.866888Z",
+      1,
+      "MINUTE",
+      0,
+      null,
+      0,
+      null,
+      4111400,
+      13025281200,
+      526089600000000,
+      166055334600
+    ],
+    [
+      "mv_retail_sentiment_daily_v1",
+      "timer",
+      "l2_daily_features",
+      "2026-10-10T00:33:43.767850Z",
+      "2026-10-10T00:40:01.546083Z",
+      "SELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR",
+      "mv_retail_sentiment_daily_v1~1813",
+      null,
+      "valid",
+      null,
+      11386,
+      11386,
+      0,
+      null,
+      null,
+      "2026-09-18T15:32:22.955712Z",
+      1,
+      "MINUTE",
+      0,
+      null,
+      0,
+      null,
+      688500,
+      377766706700,
+      118108800000000,
+      214812000
+    ],
+    [
+      "v_backtest_daily",
+      "manual",
+      "backtest_daily",
+      "2026-10-10T00:41:34.390729Z",
+      "2026-10-10T00:42:13.711717Z",
+      "SELECT trade_date,ts_code,last(open) AS open,last(high) AS high,last(low) AS low,last(close) AS close,last(vol) AS vol,last(amount) AS amount,last(adj_factor) AS adj_factor,last(up_limit) AS up_limit,last(down_limit) AS down_limit,cast(last(is_suspended) AS LONG) AS is_suspended,last(is_st) AS is_st FROM backtest_daily SAMPLE BY 1d ALIGN TO CALENDAR",
+      "v_backtest_daily~3021",
+      null,
+      "valid",
+      null,
+      11,
+      11,
+      0,
+      null,
+      null,
+      null,
+      0,
+      null,
+      0,
+      null,
+      0,
+      null,
+      1707229,
+      5211896078,
+      134731657589723,
+      44131869650
+    ]
+  ],
+  "count": 3
+}

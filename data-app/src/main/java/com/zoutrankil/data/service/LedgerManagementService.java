@@ -43,7 +43,7 @@ public final class LedgerManagementService {
     public Cancellation cancel(String override, String runId) throws IOException, SQLException {
         Path path = resolvePath(override);
         if (!Files.isRegularFile(path)) throw new IllegalArgumentException("Ledger does not exist");
-        var ledger = new SyncRunLedger(path);
+        var ledger = SyncRunLedger.openExisting(path);
         boolean accepted = ledger.requestCancellation(runId);
         return new Cancellation(runId, accepted, ledger.get(runId).state());
     }

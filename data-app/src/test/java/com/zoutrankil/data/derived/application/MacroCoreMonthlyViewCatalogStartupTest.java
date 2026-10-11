@@ -44,8 +44,8 @@ class MacroCoreMonthlyViewCatalogStartupTest {
                     MacroCoreMonthlyViewDataset.BASE_REFRESH_JOB_VERSION));
             assertEquals(1, jobs.definitions().stream().filter(job -> job.datasetId().equals("macro_core_monthly")).count());
             assertTrue(jobs.definitions().stream().noneMatch(job -> job.datasetId().equals("v_macro_core_monthly")));
-            assertEquals(56, datasets.definitions().size());
-            assertEquals(44, jobs.definitions().size());
+            assertEquals(53, datasets.definitions().size());
+            assertEquals(46, jobs.definitions().size());
             var source = context.getBean("d101NoConnectionDataSource", DataSource.class);
             verify(source, never()).getConnection();
             verify(source, never()).getConnection(anyString(), anyString());

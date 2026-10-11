@@ -1,0 +1,1644 @@
+{
+  "date": "2026-09-30",
+  "scope": "GLOBAL",
+  "sourceStateBefore": [
+    [
+      1692,
+      2932,
+      2933,
+      2000,
+      false
+    ]
+  ],
+  "sourceStateAfter": [
+    [
+      1692,
+      2932,
+      2933,
+      2000,
+      false
+    ]
+  ],
+  "stableDuringRead": true,
+  "definitions": [
+    {
+      "factorId": "l2_deal_records_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_deal_records_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4536
+    },
+    {
+      "factorId": "l2_order_records_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_order_records_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4536
+    },
+    {
+      "factorId": "l2_snapshot_records_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_snapshot_records_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_continuous_auction_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_locked_quote_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_missing_top5_quote_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_valid_spread_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_cancel_without_fill_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_partial_fill_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_median_cancel_time_ms_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_large_order_fill_rate_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_partial_cancel_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_replace_like_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_open_30m_spread_mean_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_close_30m_obi_mean_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_midday_liquidity_drop_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_open_close_vol_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_close_30m_impact_mean_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_aggressor_label_match_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mid_cross_match_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_tick_rule_fallback_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_unclassified_trade_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_depth_recovery_5s_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_best_quote_depletion_rate_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_add_cancel_execute_ratio_top1_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_depth_turnover_top5_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_book_pressure_decay_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mean_rel_aggro_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_median_inter_arrival_ms_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_algo_windows_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_algo_windows_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4536
+    },
+    {
+      "factorId": "l2_total_windows_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_total_windows_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_mean_algo_entropy_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mean_retail_entropy_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_algo_total_amount_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_algo_total_amount_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_retail_total_amount_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_retail_total_amount_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_wash_trade_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_wash_amount_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_wash_amount_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_spoof_count_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_spoof_count_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_fake_pressure_count_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_fake_pressure_count_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4536
+    },
+    {
+      "factorId": "l2_fake_support_count_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_fake_support_count_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4536
+    },
+    {
+      "factorId": "l2_mean_sell_otr_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mean_buy_otr_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mean_cancel_distance_ticks_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_total_net_flow_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_total_net_flow_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_q2_accumulation_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_q2_accumulation_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mean_vwap_skew_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_q1_count_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_q1_count_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4536
+    },
+    {
+      "factorId": "l2_q2_count_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_q2_count_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4536
+    },
+    {
+      "factorId": "l2_q3_count_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_q3_count_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4227,
+      "validRows": 4224
+    },
+    {
+      "factorId": "l2_q4_count_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_q4_count_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_main_net_inflow_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_main_net_inflow_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_retail_funds_net_inflow_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_retail_funds_net_inflow_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_main_funds_buy_amount_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_main_funds_buy_amount_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_main_funds_sell_amount_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_main_funds_sell_amount_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mid_tier_net_inflow_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mid_tier_net_inflow_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_trade_size_gini_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_open_auction_net_inflow_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_close_auction_net_inflow_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_amihud_illiquidity_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_obi_top5_std_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_obi_top1_std_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_realized_spread_1m_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_impact_30s_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_orderbook_replenish_speed_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_ofi_persistence_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_ofi_positive_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_ofi_negative_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_near_touch_cancel_add_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_gmm_main_force_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_gmm_hft_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_gmm_retail_ratio_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_gmm_main_force_net_inflow_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_gmm_main_force_net_inflow_to_clean_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mfi_pulse_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mfi_escort_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mfi_precip_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_mfi_score_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_ofi_slope_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_total_records_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_total_records_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_clean_records_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_clean_records_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4536
+    },
+    {
+      "factorId": "l2_large_order_records_raw",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_large_order_records_delta3",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4536
+    },
+    {
+      "factorId": "market_up_ratio",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "market_state",
+      "rows": 1,
+      "validRows": 1
+    },
+    {
+      "factorId": "market_down_ratio",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "market_state",
+      "rows": 1,
+      "validRows": 1
+    },
+    {
+      "factorId": "market_new_high_20_ratio",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "market_state",
+      "rows": 1,
+      "validRows": 1
+    },
+    {
+      "factorId": "market_new_low_20_ratio",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "market_state",
+      "rows": 1,
+      "validRows": 1
+    },
+    {
+      "factorId": "market_limit_up_count",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "market_state",
+      "rows": 1,
+      "validRows": 1
+    },
+    {
+      "factorId": "market_limit_down_count",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "market_state",
+      "rows": 1,
+      "validRows": 1
+    },
+    {
+      "factorId": "market_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "market_state",
+      "rows": 1,
+      "validRows": 1
+    },
+    {
+      "factorId": "market_turnover_rate",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "market_state",
+      "rows": 1,
+      "validRows": 1
+    },
+    {
+      "factorId": "market_volatility_20d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "market_state",
+      "rows": 1,
+      "validRows": 1
+    },
+    {
+      "factorId": "market_dispersion",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "market_state",
+      "rows": 1,
+      "validRows": 1
+    },
+    {
+      "factorId": "market_beta",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "market_residual_volatility",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "risk_nonlinear_size",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "risk_listing_days",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "risk_volatility_60d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "risk_volatility_120d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "risk_downside_vol_60d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "risk_adv20",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 5571,
+      "validRows": 5562
+    },
+    {
+      "factorId": "risk_adv60",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "liquidity_turnover",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "liquidity_amihud",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "value_dividend_yield",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "quality_gross_margin",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "fundamental_pit",
+      "rows": 5571,
+      "validRows": 5468
+    },
+    {
+      "factorId": "quality_roic",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "fundamental_pit",
+      "rows": 5571,
+      "validRows": 5469
+    },
+    {
+      "factorId": "growth_revenue_yoy",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "fundamental_pit",
+      "rows": 5571,
+      "validRows": 5569
+    },
+    {
+      "factorId": "momentum_20d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "daily_price_tech",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "momentum_60d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "rsi_strength",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "ma_trend_strength",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "price_acceleration",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "macd_strength",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "reversal_1d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 5571,
+      "validRows": 5571
+    },
+    {
+      "factorId": "reversal_5d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "reversal_20d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "volume_momentum",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "volume_amount_ratio",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "volume_price_divergence",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "volatility_20d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "daily_price_tech",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "bollinger_position",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "rotation_composite",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "limit_distance_up",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "limit_distance_down",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "limit_touch_up",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "limit_touch_down",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "value_bp",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "value_ep",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "value_cfp",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_pit",
+      "rows": 5560,
+      "validRows": 4336
+    },
+    {
+      "factorId": "value_sales_yield",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "momentum_12m",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "momentum_6_1",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "momentum_12_2",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "quality_gross_profit_assets",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_pit",
+      "rows": 5560,
+      "validRows": 5398
+    },
+    {
+      "factorId": "quality_operating_profitability",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_pit",
+      "rows": 5560,
+      "validRows": 5502
+    },
+    {
+      "factorId": "quality_roe",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "fundamental_pit",
+      "rows": 5571,
+      "validRows": 5529
+    },
+    {
+      "factorId": "quality_roa",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "fundamental_pit",
+      "rows": 5571,
+      "validRows": 5472
+    },
+    {
+      "factorId": "quality_accruals",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_pit",
+      "rows": 5560,
+      "validRows": 4345
+    },
+    {
+      "factorId": "quality_cashflow_quality",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_pit",
+      "rows": 5560,
+      "validRows": 4345
+    },
+    {
+      "factorId": "quality_debt_ratio",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "fundamental_pit",
+      "rows": 5571,
+      "validRows": 5571
+    },
+    {
+      "factorId": "low_risk_beta_252d",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "low_risk_volatility_252d",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "low_risk_idio_volatility_252d",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "low_risk_downside_volatility_252d",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "investment_asset_growth",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_pit",
+      "rows": 5560,
+      "validRows": 5508
+    },
+    {
+      "factorId": "investment_capex_assets",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_pit",
+      "rows": 5560,
+      "validRows": 4310
+    },
+    {
+      "factorId": "investment_noa_growth",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_pit",
+      "rows": 5560,
+      "validRows": 5458
+    },
+    {
+      "factorId": "size_log_mv",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "size_float_mv",
+      "version": "global_structural_v1_0_0",
+      "sourceGroup": "global_structural_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_quote_relative_spread",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_quote_microprice_deviation",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_depth_top1",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_depth_top5",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_depth_slope",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_depth_convexity",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_obi1",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_obi5",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_ofi",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_ofi_volatility",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_quote_volatility",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "l2_open_auction_net_inflow",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "l2_close_auction_net_inflow",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "execution_fill_probability_proxy",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "execution_time_to_fill_proxy",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "execution_expected_slippage_proxy",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "execution_expected_impact_proxy",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "execution_capacity_proxy",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "execution_queue_depletion",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "l2_microstructure",
+      "rows": 4539,
+      "validRows": 4539
+    },
+    {
+      "factorId": "ownership_margin_balance",
+      "version": "margin_next_session_v1",
+      "sourceGroup": "event_pit",
+      "rows": 5571,
+      "validRows": 3956
+    },
+    {
+      "factorId": "ownership_short_balance",
+      "version": "margin_next_session_v1",
+      "sourceGroup": "event_pit",
+      "rows": 5571,
+      "validRows": 3919
+    },
+    {
+      "factorId": "ownership_holder_change",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "event_pit",
+      "rows": 5571,
+      "validRows": 3032
+    },
+    {
+      "factorId": "event_repurchase_amount",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "event_pit",
+      "rows": 5571,
+      "validRows": 1733
+    },
+    {
+      "factorId": "event_unlock_ratio",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "event_pit",
+      "rows": 5571,
+      "validRows": 1170
+    },
+    {
+      "factorId": "event_cash_dividend",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "event_pit",
+      "rows": 5571,
+      "validRows": 1832
+    },
+    {
+      "factorId": "event_earnings_forecast",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "event_pit",
+      "rows": 5571,
+      "validRows": 3658
+    },
+    {
+      "factorId": "event_is_st",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "event_is_suspended",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "canonical_daily",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_trend_return_20d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_momentum_return_5d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_technical_rsi_6d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_liquidity_amount_20d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_share_change_5d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_flow_intensity_5d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_flow_persistence_5d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_component_up_breadth_1d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_component_median_return_5d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_component_l2_inflow_breadth",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_component_l2_mfi_median",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_residual_momentum_20d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_recovery_quality_5d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_component_earnings_outlook",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_component_return_dispersion_5d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_component_top10_weight",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_market_correlation_shock_20d",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_csi_value_reference",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_csi_growth_reference",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_csi_dividend_reference",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_csi_quality_reference",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_csi_low_vol_reference",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_csi_momentum_reference",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_csi_cashflow_reference",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_csi_liquidity_reference",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_basket_obi1",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_basket_obi5",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_basket_ofi",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_basket_spread",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    },
+    {
+      "factorId": "etf_basket_depth",
+      "version": "factor_platform_v2_0_2",
+      "sourceGroup": "etf_maturity",
+      "rows": 0,
+      "validRows": 0
+    }
+  ],
+  "factorReady": false,
+  "note": "Presence only; active L2 publication may change counts. Does not certify entity coverage or PIT readiness."
+}

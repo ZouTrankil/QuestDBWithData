@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-11T01:51:27.094125+00:00",
+  "authorized_tables": [
+    "backtest_daily_cache",
+    "backtest_daily_cache_coverage",
+    "market_breadth_daily_cache",
+    "retail_sentiment_daily_cache"
+  ],
+  "preserved_tables": [
+    "backtest_daily",
+    "v_backtest_daily",
+    "etf_market_overview_daily_cache",
+    "market_barometer_cache_coverage"
+  ],
+  "source_changes": "Retire four cache consumers/installers with MV readiness validation, then DROP explicitly selected derived caches after checks pass",
+  "preexisting_work": "Saved binary working-tree patches and status snapshots before edits"
+}

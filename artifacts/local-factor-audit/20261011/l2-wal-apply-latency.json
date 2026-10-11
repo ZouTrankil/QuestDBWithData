@@ -1,0 +1,19 @@
+{
+  "sourceLog": "F:\\db\\questdb-10.0.1-data\\log\\questdb-rolling.log.20261011.1",
+  "lastJobs": [
+    "2026-10-11T01:52:53.448089Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2867, transactions=1, rows=2000, time=19741ms, rate=101rows/s, ampl=372.76]",
+    "2026-10-11T01:53:15.960459Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2868, transactions=1, rows=2000, time=19868ms, rate=100rows/s, ampl=373.76]",
+    "2026-10-11T01:53:33.186322Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2869, transactions=1, rows=2000, time=15078ms, rate=132rows/s, ampl=374.76]",
+    "2026-10-11T01:53:50.183027Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2870, transactions=1, rows=2000, time=15055ms, rate=132rows/s, ampl=375.76]",
+    "2026-10-11T01:54:06.948006Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2871, transactions=1, rows=2000, time=14468ms, rate=138rows/s, ampl=376.76]",
+    "2026-10-11T01:54:31.389512Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2872, transactions=1, rows=2000, time=22958ms, rate=87rows/s, ampl=377.76]",
+    "2026-10-11T01:55:04.248693Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2873, transactions=1, rows=2000, time=27810ms, rate=71rows/s, ampl=378.76]",
+    "2026-10-11T01:55:27.141446Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2874, transactions=1, rows=2000, time=19214ms, rate=104rows/s, ampl=379.76]",
+    "2026-10-11T01:56:08.208980Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2875, transactions=1, rows=2000, time=39334ms, rate=50rows/s, ampl=380.76]",
+    "2026-10-11T01:56:34.747898Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2876, transactions=1, rows=2000, time=25071ms, rate=79rows/s, ampl=381.76]",
+    "2026-10-11T01:56:51.982150Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2877, transactions=1, rows=2000, time=15720ms, rate=127rows/s, ampl=382.76]",
+    "2026-10-11T01:58:18.003052Z I i.q.c.w.ApplyWal2TableJob job finished [table=factor_observation~1692, seqTxn=2878, transactions=1, rows=2000, time=84030ms, rate=23rows/s, ampl=383.76]"
+  ],
+  "observedSlowApplyMillis": 84030,
+  "subsequentVisibilityTimeoutSeconds": 180
+}

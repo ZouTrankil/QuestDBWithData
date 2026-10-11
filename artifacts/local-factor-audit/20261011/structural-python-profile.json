@@ -1,0 +1,38 @@
+{
+  "sourceState": [
+    {
+      "id": 1620,
+      "table_name": "balance",
+      "directoryName": "balance~1620",
+      "table_txn": 5,
+      "wal_txn": 5,
+      "walEnabled": true,
+      "table_suspended": false
+    },
+    {
+      "id": 1619,
+      "table_name": "cashflow",
+      "directoryName": "cashflow~1619",
+      "table_txn": 14,
+      "wal_txn": 14,
+      "walEnabled": true,
+      "table_suspended": false
+    },
+    {
+      "id": 1621,
+      "table_name": "income",
+      "directoryName": "income~1621",
+      "table_txn": 14,
+      "wal_txn": 14,
+      "walEnabled": true,
+      "table_suspended": false
+    }
+  ],
+  "sourceRows": {
+    "income": 177762,
+    "balance": 173145,
+    "cashflow": 164525
+  },
+  "resultRows": 5560,
+  "computeSeconds": 8.172154700005194
+}

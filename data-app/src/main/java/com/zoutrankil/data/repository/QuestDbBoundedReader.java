@@ -55,7 +55,7 @@ public class QuestDbBoundedReader {
             "\"([A-Za-z_][A-Za-z0-9_]*)\"|([A-Za-z_][A-Za-z0-9_]*)|([0-9]+(?:\\.[0-9]+)?[A-Za-z]*)|([.,()*/=])");
     // Python's DEDUP publisher can revise existing cache keys without changing their business source_version.
     private static final Set<String> GUARDED_CACHE_TABLES = Set.of(
-            "market_breadth_daily_cache", "retail_sentiment_daily_cache", "etf_market_overview_daily_cache");
+            "etf_market_overview_daily_cache");
     // Admitted Python cache products identify a generation by sha256(...).hexdigest().
     private static final java.util.regex.Pattern CACHE_GENERATION = java.util.regex.Pattern.compile("[0-9a-f]{64}");
     private final JdbcTemplate jdbc;
@@ -171,6 +171,8 @@ public class QuestDbBoundedReader {
     private String requireCurrentEtfAggregateView(DatasetDefinition definition) {
         if (!definition.dependencies().equals(GUARDED_ETF_AGGREGATE_SOURCES))
             throw new IllegalStateException("ETF aggregate differs from its registered two-source dependency contract");
+        String nativeVersion = EtfMarketOverviewMaterializedViewReadGuard.versionIfActivated(jdbc);
+        if (nativeVersion != null) return nativeVersion;
         AliasState before = etfAggregateViewState();
         String share = requireEtfAggregateSource("etf_share", EtfShareDataset.DEFINITION);
         String daily = requireEtfAggregateSource("etf_daily", EtfDailyDataset.DEFINITION);

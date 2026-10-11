@@ -33,6 +33,16 @@ public final class MarginDetailSource {
     public MarginDetailSource(TusharePageService pages,Path evidenceRoot){this.pages=Objects.requireNonNull(pages);this.evidenceRoot=Objects.requireNonNull(evidenceRoot).toAbsolutePath().normalize();}
 
     public SyncJobRunner.Page<MarginDetail> fetch(LocalDate date,BooleanSupplier cancelled)throws Exception{
+        var available = fetchAvailable(date, cancelled);
+        if (!available.fullMarketCoverage())
+            throw new IllegalStateException("D029 market coverage is partial; receipt=" + available.page().responseEvidence());
+        return available.page();
+    }
+
+    /** Available rows may be persisted without certifying the whole trading day. */
+    public record AvailablePage(SyncJobRunner.Page<MarginDetail> page, boolean fullMarketCoverage) {}
+
+    public AvailablePage fetchAvailable(LocalDate date,BooleanSupplier cancelled)throws Exception{
         Objects.requireNonNull(date);Objects.requireNonNull(cancelled);String basic=date.format(BASIC);var params=Map.<String,Object>of("trade_date",basic);
         var raw=new ArrayList<Map<String,JsonNode>>();PageExecutor.Completed completed;
         var fetcher=pages.fetcher(CONTRACT,cancelled);
@@ -47,10 +57,11 @@ public final class MarginDetailSource {
                 if(!row.tradeDate().equals(date)||!seen.add(row.key()))throw new IllegalArgumentException("D029 duplicate natural key or source row outside frozen trade_date");rows.add(row);}
             // Python records an empty/fully-filtered partition as skipped and unverified; it is not a checkpoint.
             if(rows.isEmpty())throw new IllegalStateException("D029 empty margin_detail session is unverified under the inspected Python sync contract");
-            requireFullMarketCoverage(exchangeCounts(raw,basic));
-            byte[] bytes=body(date,params,raw,completed.sourceVersion(),rows.size(),footers,true,null);if(bytes.length>MAX_EVIDENCE_BYTES)throw new IllegalStateException("D029 raw receipt exceeds 32 MiB bound");
+            var counts = exchangeCounts(raw,basic);
+            boolean complete = counts.get("SH") > 0 && counts.get("SZ") > 0;
+            byte[] bytes=body(date,params,raw,completed.sourceVersion(),rows.size(),footers,complete,null);if(bytes.length>MAX_EVIDENCE_BYTES)throw new IllegalStateException("D029 raw receipt exceeds 32 MiB bound");
             String fingerprint=sha(bytes);Files.createDirectories(evidenceRoot);Path receipt=evidenceRoot.resolve("margin-detail-"+basic+"-"+fingerprint+".json");persist(receipt,bytes);
-            return new SyncJobRunner.Page<>(List.copyOf(rows),fingerprint,receipt.toString(),basic);
+            return new AvailablePage(new SyncJobRunner.Page<>(List.copyOf(rows),fingerprint,receipt.toString(),basic), complete);
         }catch(Exception failure){persistUnverified(date,params,raw,completed.sourceVersion(),failure);throw failure;}
     }
 

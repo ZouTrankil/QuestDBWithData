@@ -66,7 +66,7 @@ compact/pretty 与时间格式分别选择，避免改变已有输出。`CliExit
 ## 数据集读取注册
 
 `ReadBindingCatalog` 明确登记 dataset ID、schemaVersion、Java 行类型、映射函数和来源版本 supplier。
-`DefaultReadBindings` 当前登记 20 个类型化和 36 个通用 `DatasetValues` 表示；新数据集必须显式选择表示。
+`DefaultReadBindings` 当前登记 16 个类型化和 37 个通用 `DatasetValues` 表示；新数据集必须显式选择表示。
 Spring 扩展可提供 `ReadBindingCatalog.Registration<?>` Bean，重复 ID 会导致装配失败。
 绑定时使用当前 `DatasetRegistry` 的完整定义，以保留隔离物理表名和部署配置。
 未启用的数据集可以留在目录中，已启用的 READ 数据集缺少注册或版本不符则拒绝启动。

@@ -55,10 +55,10 @@ class EtfApplicationWiringTest {
                     .filter(target -> expectedTargets.containsValue(target.getClass())).toList();
             assertEquals(3, targets.size());
             assertEquals(jobs.definitions().size(), jobs.definitions().stream().map(SyncJobDefinition::jobId).distinct().count());
-            assertEquals(56, datasets.definitions().stream()
+            assertEquals(53, datasets.definitions().stream()
                     .filter(d -> d.capabilities().contains(DatasetDefinition.Capability.READ)).count());
             var bindings = catalog.bind(datasets);
-            assertEquals(56, bindings.size());
+            assertEquals(53, bindings.size());
             for (String dataset : tables.keySet()) {
                 var familyOwners = owners.stream().filter(owner -> owner.datasetId().equals(dataset)).toList();
                 assertEquals(1, familyOwners.size());

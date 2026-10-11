@@ -1,0 +1,109 @@
+[
+  {
+    "backup": "java_backtest_daily_backup_2cf197c215184001b14792d3597dfe64",
+    "target": "backtest_daily",
+    "backup_id": 1757,
+    "target_id": 3036,
+    "backup_rows": 10355884,
+    "formal_rows": 10400431,
+    "schema_equal": true,
+    "status": "KEEP_DISTINCT_VALUES",
+    "comparison_scope": "2010 only; stopped at first nonzero difference",
+    "backup_rows_not_in_formal_in_2010": 686
+  },
+  {
+    "backup": "java_d012_stk_st_daily_backup_1e4ae59286ca4bb2851c251fa98445ce",
+    "target": "stk_st_daily",
+    "backup_id": 1821,
+    "target_id": 3032,
+    "status": "EXACT_DUPLICATE",
+    "backup_rows": 830433,
+    "formal_rows": 830433,
+    "backup_rows_not_in_formal": 0,
+    "formal_rows_not_in_backup": 0
+  },
+  {
+    "backup": "java_d027_moneyflow_hsgt_backup_1e56f04bbca6404090e1ed2622a25624",
+    "target": "moneyflow_hsgt",
+    "backup_id": 1868,
+    "target_id": 3033,
+    "backup_rows": 440,
+    "formal_rows": 440,
+    "schema_equal": true,
+    "status": "COVERED",
+    "backup_rows_not_in_formal": 0,
+    "formal_rows_not_in_backup": 0
+  },
+  {
+    "backup": "java_d121_market_sentiment_daily_backup_330d0c1869114a32b5a6908d2206c50e",
+    "target": "market_sentiment_daily",
+    "backup_id": 1811,
+    "target_id": 3034,
+    "backup_rows": 97,
+    "formal_rows": 104,
+    "schema_equal": true,
+    "backup_rows_not_in_formal": 52,
+    "formal_rows_not_in_backup": 59,
+    "status": "KEEP_DISTINCT_VALUES"
+  },
+  {
+    "backup": "java_d121_market_sentiment_daily_backup_498c008c1bd2418aab5a9d75dfd05d69",
+    "target": "market_sentiment_daily",
+    "backup_id": 3019,
+    "target_id": 3034,
+    "backup_rows": 104,
+    "formal_rows": 104,
+    "schema_equal": true,
+    "backup_rows_not_in_formal": 0,
+    "formal_rows_not_in_backup": 0,
+    "status": "COVERED"
+  },
+  {
+    "backup": "java_regime_features_monitor_daily_backup_5dfdf1335867492bbcaced654832a7e0",
+    "target": "regime_features_monitor_daily",
+    "backup_id": 1810,
+    "target_id": 3035,
+    "backup_rows": 659,
+    "formal_rows": 666,
+    "schema_equal": true,
+    "backup_rows_not_in_formal": 52,
+    "formal_rows_not_in_backup": 59,
+    "status": "KEEP_DISTINCT_VALUES"
+  },
+  {
+    "backup": "java_regime_features_monitor_daily_backup_77bf160fea8b4817b0aaa25067388360",
+    "target": "regime_features_monitor_daily",
+    "backup_id": 3018,
+    "target_id": 3035,
+    "backup_rows": 666,
+    "formal_rows": 666,
+    "schema_equal": true,
+    "backup_rows_not_in_formal": 0,
+    "formal_rows_not_in_backup": 0,
+    "status": "COVERED"
+  },
+  {
+    "backup": "java_stk_suspend_backup_a3bb5f0e38494dbe8b0ed669776e87fd",
+    "target": "stk_suspend",
+    "backup_id": 1823,
+    "target_id": 3031,
+    "backup_rows": 128440,
+    "formal_rows": 128440,
+    "schema_equal": true,
+    "status": "COVERED",
+    "backup_rows_not_in_formal": 0,
+    "formal_rows_not_in_backup": 0
+  },
+  {
+    "backup": "stock_detail_info_backup_pre_rebuild_20261010_084646_656713",
+    "target": "stock_detail_info",
+    "backup_id": 1817,
+    "target_id": 3037,
+    "backup_rows": 5908,
+    "formal_rows": 5912,
+    "schema_equal": true,
+    "backup_rows_not_in_formal": 5908,
+    "formal_rows_not_in_backup": 5912,
+    "status": "KEEP_DISTINCT_VALUES"
+  }
+]

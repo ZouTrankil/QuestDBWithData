@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "instance": "private 127.0.0.1:19812",
+  "build": "Build Information: QuestDB 10.0.1, JDK 25.0.2, Commit Hash 7a391566ac827e0d8c269b91f2415c16b0a32a84",
+  "database_writes": "Private instance only",
+  "join_and_count_distinct_supported": true,
+  "base_checkpoint_unchanged_after_right_correction": true,
+  "right_correction_read_rejected": true,
+  "full_refresh_repaired_right_correction": true,
+  "checked_rows": 2,
+  "source_version": "de4561f676407ca8f89f15ac176c6c71305d38c99b2aa6596360e50ac29785d1",
+  "output_version": "mv_etf_market_overview_daily_v1:11:mv_etf_market_overview_daily_v1~11:6:6",
+  "rows": [
+    {
+      "trade_date": "2026-09-29",
+      "etf_count": "2",
+      "total_share": "300.0",
+      "total_size_yi": "0.1"
+    },
+    {
+      "trade_date": "2026-09-30",
+      "etf_count": "1",
+      "total_share": "50.0",
+      "total_size_yi": "0.025"
+    }
+  ],
+  "cache_operations": []
+}

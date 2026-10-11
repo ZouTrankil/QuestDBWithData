@@ -1,0 +1,17 @@
+{
+  "sample_rows": 800,
+  "industries": 12,
+  "max_absolute_error": 1.8318679906315083e-15,
+  "parity": "PASS",
+  "python_cached_projection_median_ms": 0.27286250006000046,
+  "python_cached_projection_rounds_ms": [
+    0.1654660000349395,
+    0.23589850003190804,
+    0.6073525000101654,
+    0.496202499998617,
+    0.2768004999961704,
+    0.22123750000901055,
+    0.27286250006000046
+  ],
+  "scope": "Synthetic neutralization kernel only. Python timing excludes DataFrame sample filtering/sorting/cache lookup; Java timing includes them. Not full pipeline speedup evidence."
+}

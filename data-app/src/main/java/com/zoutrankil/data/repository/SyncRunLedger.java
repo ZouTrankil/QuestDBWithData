@@ -20,19 +20,34 @@ public final class SyncRunLedger {
     private static final ObjectMapper JSON = new ObjectMapper();
 
     public SyncRunLedger(Path path) throws IOException, SQLException {
-        this(path, false);
+        this(path, false, true);
     }
     /** Resolved local authority path for delegates that verify durable submission directly. */
     public Path path() { return path.toAbsolutePath().normalize(); }
 
-    public static SyncRunLedger openReadOnly(Path path) throws IOException, SQLException {
-        return new SyncRunLedger(path, true);
+    /** Keep SQLite open across a finite job, avoiding a last-connection checkpoint per transaction.
+     * The anchor holds no transaction; normal independent FULL-synchronous commits remain unchanged.
+     */
+    public AutoCloseable keepOpen() throws SQLException {
+        var anchor=connect();
+        return anchor::close;
     }
-    private SyncRunLedger(Path path, boolean readOnly) throws IOException, SQLException {
+
+    public static SyncRunLedger openReadOnly(Path path) throws IOException, SQLException {
+        return new SyncRunLedger(path, true, false);
+    }
+    /** Operational commands must not run schema initialization against an active writer. */
+    public static SyncRunLedger openExisting(Path path) throws IOException, SQLException {
+        return new SyncRunLedger(path, false, false);
+    }
+    private SyncRunLedger(Path path, boolean readOnly, boolean initialize) throws IOException, SQLException {
         this.path = path.toAbsolutePath().normalize();
         this.readOnly = readOnly;
-        if (readOnly) {
+        if (readOnly || !initialize) {
             if (!Files.isRegularFile(this.path)) throw new IOException("Ledger does not exist");
+            if(!readOnly)try(var c=connect();var s=c.createStatement();var r=s.executeQuery("SELECT version FROM ledger_meta")) {
+                if(!r.next() || r.getInt(1)!=1 || r.next())throw new SQLException("Unsupported ledger schema");
+            }
             return;
         }
         Files.createDirectories(this.path.getParent());
@@ -178,6 +193,18 @@ public final class SyncRunLedger {
             if (previous.revision() != expectedRevision) throw new IllegalStateException("Stale ledger revision");
             previous.state().requireTransition(next);
             requireCompletionEvidence(previous.state(), next, payloadJson);
+            if(previous.state()==SyncRunState.IN_DOUBT && next==SyncRunState.PARTIAL) {
+                if(previous.kind()==Kind.SLICE)
+                    throw new IllegalArgumentException("An uncertain slice must be verified, not partially reconciled");
+                try(var s=c.prepareStatement("SELECT count(*),sum(CASE WHEN state='VERIFIED' THEN 0 ELSE 1 END) "
+                        +"FROM sync_entries WHERE run_id=? AND kind='SLICE'")) {
+                    s.setString(1,previous.runId());
+                    try(var rows=s.executeQuery()) {
+                        if(!rows.next() || rows.getLong(1)==0 || rows.getLong(2)!=0)
+                            throw new IllegalStateException("Every submitted-prefix slice must be verified before partial reconciliation");
+                    }
+                }
+            }
             if (next == SyncRunState.VERIFIED || next == SyncRunState.VERIFIED_EMPTY) {
                 try (var s = c.prepareStatement("SELECT count(*) FROM sync_entries WHERE parent_id=? "
                         + "AND (state NOT IN ('VERIFIED','VERIFIED_EMPTY') OR (?='VERIFIED_EMPTY' AND state='VERIFIED'))")) {
@@ -225,17 +252,19 @@ public final class SyncRunLedger {
     /** Durable cancellation request; it never changes delivery evidence or releases interval locks. */
     public boolean requestCancellation(String runId) throws SQLException {
         id(runId);
-        boolean[] accepted = {false};
-        transaction(c -> {
-            var run = require(c, runId);
-            if (run.kind() != Kind.RUN) throw new IllegalArgumentException("Cancellation requires a run ID");
-            if (run.state().terminal()) return;
-            try (var s = c.prepareStatement("INSERT INTO sync_cancellations VALUES(?,?) ON CONFLICT(run_id) DO NOTHING")) {
-                s.setString(1, runId); s.setString(2, Instant.now().toString()); s.executeUpdate();
-            }
-            accepted[0] = true;
-        });
-        return accepted[0];
+        if(readOnly)throw new IllegalStateException("Read-only ledger");
+        var run=get(runId);
+        if(run.kind()!=Kind.RUN)throw new IllegalArgumentException("Cancellation requires a run ID");
+        if(run.state().terminal())return false;
+        // A single write statement avoids upgrading a deferred read snapshot while the runner commits pages.
+        // Recheck terminal state atomically, and preserve the first cancellation timestamp on repeated requests.
+        try(var c=connect();var s=c.prepareStatement("INSERT INTO sync_cancellations(run_id,requested_at) "
+                +"SELECT id,? FROM sync_entries WHERE id=? AND kind='RUN' "
+                +"AND state NOT IN ('VERIFIED','VERIFIED_EMPTY','PARTIAL','FAILED','CANCELLED') "
+                +"ON CONFLICT(run_id) DO UPDATE SET run_id=excluded.run_id")) {
+            s.setString(1,Instant.now().toString());s.setString(2,runId);
+            return s.executeUpdate()==1;
+        }
     }
     public boolean cancellationRequested(String runId) throws SQLException {
         id(runId);
@@ -376,6 +405,21 @@ public final class SyncRunLedger {
     private static void requireCompletionEvidence(SyncRunState previous, SyncRunState next, String payload) {
         try {
             var root = JSON.readTree(payload);
+            if(previous==SyncRunState.IN_DOUBT && next==SyncRunState.PARTIAL) {
+                var proof=root.path("verification");
+                long submitted=count(root.path("submittedRows"));
+                if(submitted<1 || count(proof.path("expectedRows"))!=submitted
+                        || count(proof.path("matchedRows"))!=submitted || count(proof.path("actualRows"))!=submitted
+                        || count(proof.path("mismatchedRows"))!=0 || count(proof.path("duplicateKeys"))!=0
+                        || count(proof.path("missingKeys"))!=0 || !proof.path("passed").asBoolean(false)
+                        || !proof.path("writerStopped").asBoolean(false)
+                        || proof.path("sourceFingerprint").asText("").isBlank()
+                        || proof.path("readbackEvidence").asText("").isBlank()
+                        || !root.path("sourceComplete").isBoolean() || root.path("sourceComplete").booleanValue()
+                        || !root.path("allSubmittedSlicesVerified").isBoolean()
+                        || !root.path("allSubmittedSlicesVerified").booleanValue())
+                    throw new IllegalArgumentException("Stopped writer and complete submitted-prefix readback required for partial reconciliation");
+            }
             if (next == SyncRunState.VERIFIED) {
                 var proof = root.path("verification");
                 long expected = count(proof.path("expectedRows"));

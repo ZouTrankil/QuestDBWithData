@@ -38,7 +38,7 @@ app:
     response-timeout: 45s
     request-timeout: 50s
   questdb:
-    host: 100.97.201.8
+    host: ${QUESTDB_HOST:127.0.0.1}
     pg-port: 8812
     qwp-port: 9000
 

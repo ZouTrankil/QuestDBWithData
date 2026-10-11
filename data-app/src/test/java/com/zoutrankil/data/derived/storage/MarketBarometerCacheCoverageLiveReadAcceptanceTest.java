@@ -24,12 +24,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-/** Three-product live receipt comparison against the exact Python owner digest audit. */
+/** Active ETF receipt comparison against the exact retained Python owner digest audit. */
 class MarketBarometerCacheCoverageLiveReadAcceptanceTest {
     private static final Path INPUT = Path.of(
             "artifacts/java-migration/D094/commands/python-owner-audit-20260930.json");
     private static final List<String> TABLES = List.of("market_barometer_cache_coverage",
-            "market_breadth_daily_cache", "etf_market_overview_daily_cache", "retail_sentiment_daily_cache");
+            "etf_market_overview_daily_cache");
 
     @Test void typedReceiptsMatchPythonVerifiedCacheRowsWithoutWrites() throws Exception {
         assumeTrue("true".equalsIgnoreCase(System.getenv("D094_LIVE_READ")),
@@ -38,8 +38,10 @@ class MarketBarometerCacheCoverageLiveReadAcceptanceTest {
         Map<String, Object> audit = new ObjectMapper().readValue(Files.newInputStream(INPUT), new TypeReference<>() {});
         assertEquals("VERIFIED", audit.get("status"));
         @SuppressWarnings("unchecked")
-        var selected = (List<Map<String, Object>>) audit.get("selected_receipts");
-        assertEquals(3, selected.size());
+        var historical = (List<Map<String, Object>>) audit.get("selected_receipts");
+        var selected = historical.stream()
+                .filter(receipt -> "etf_market_overview_daily".equals(receipt.get("dataset_id"))).toList();
+        assertEquals(1, selected.size());
 
         var dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
@@ -111,7 +113,7 @@ class MarketBarometerCacheCoverageLiveReadAcceptanceTest {
         }
 
         var after = tableIdentities(jdbc);
-        assertEquals(before, after, "Coverage and three caches must remain unchanged");
+        assertEquals(before, after, "Coverage and the active ETF cache must remain unchanged");
         var evidence = new LinkedHashMap<String, Object>();
         evidence.put("task_id", "D094");
         evidence.put("checked_at", Instant.now().toString());

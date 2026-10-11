@@ -1,0 +1,176 @@
+{
+  "at": "2026-10-11T02:37:12.687370+00:00",
+  "status": "completed",
+  "scope": "Four selected cache retirements in local QuestDB and the data/back-monitor working trees",
+  "endpoint": "http://127.0.0.1:9000",
+  "dropped": [
+    "backtest_daily_cache",
+    "backtest_daily_cache_coverage",
+    "market_breadth_daily_cache",
+    "retail_sentiment_daily_cache"
+  ],
+  "changes": [
+    "Backtest daily and month-end Dataset read v_backtest_daily directly with native metadata/generation guards",
+    "Market breadth and retail readers require their native MV aliases",
+    "Retired Python cache installers/models/fallback and four Java read catalog families",
+    "Public Python backtest derived run is native read-only; Java owns base and MV publication"
+  ],
+  "coverage": {
+    "backtest_business_keys": 5584919,
+    "breadth_date_keys": 339,
+    "retail_date_keys": 338,
+    "missing_keys": 0,
+    "formal_values_match_current_sources": true,
+    "old_differences": {
+      "backtest_versioned_rows": 4,
+      "breadth_versioned_rows": 7,
+      "retail_versioned_rows": 0
+    },
+    "report": "artifacts\\cache-table-audit\\20261011\\retirement\\coverage-pre-drop.json"
+  },
+  "tests": {
+    "python": {
+      "tests": 147,
+      "passed": 147,
+      "failed": 0
+    },
+    "java_selected": {
+      "tests": 119,
+      "passed": 119,
+      "failed": 0,
+      "gradle_exit_code": 0
+    },
+    "architecture": {
+      "status": "FAILED",
+      "report": "F:\\repo\\engine\\data\\artifacts\\cache-table-audit\\20261011\\retirement\\java-architecture-current-violations.tsv",
+      "tests": 11,
+      "attribution": "F:\\repo\\engine\\data\\artifacts\\cache-table-audit\\20261011\\retirement\\java-architecture-attribution.json",
+      "passed": 10,
+      "failed": 1,
+      "repository_to_application": 8,
+      "violations": 44,
+      "entrypoint_infrastructure": 36
+    }
+  },
+  "post_drop_live_reads": {
+    "passed": true,
+    "backtest_full_day": {
+      "date": "2026-09-30",
+      "rows": 5571,
+      "base_mv_digest_equal": true,
+      "version": "9aed1b6fbc7af4a2ec3b1999e46011c34153a0c00bad46d8fe77eda2c36a5d97"
+    },
+    "datasets": [
+      {
+        "id": "market.stock.backtest_daily",
+        "rows": 1,
+        "read_path": "materialized_view",
+        "source_version": "9aed1b6fbc7af4a2ec3b1999e46011c34153a0c00bad46d8fe77eda2c36a5d97"
+      },
+      {
+        "id": "market.stock.month_end.backtest_daily",
+        "rows": 1,
+        "read_path": "materialized_view",
+        "source_version": "9aed1b6fbc7af4a2ec3b1999e46011c34153a0c00bad46d8fe77eda2c36a5d97"
+      }
+    ],
+    "market": [
+      {
+        "view": "v_market_breadth_daily",
+        "rows": 1,
+        "latest": "2026-09-30 00:00:00"
+      },
+      {
+        "view": "v_retail_sentiment_daily",
+        "rows": 1,
+        "latest": "2026-09-30 00:00:00"
+      }
+    ],
+    "queries": 86,
+    "report": "artifacts\\cache-table-audit\\20261011\\retirement\\live-smoke-post-drop.json"
+  },
+  "preserved": {
+    "backtest_daily": {
+      "id": 3036,
+      "rows": 10400431,
+      "identity_unchanged": true,
+      "rows_unchanged": true,
+      "table_txn_unchanged": true
+    },
+    "v_backtest_daily": {
+      "id": 3021,
+      "rows": 10400431,
+      "identity_unchanged": true,
+      "rows_unchanged": true,
+      "table_txn_unchanged": true
+    },
+    "mv_market_breadth_daily_v1": {
+      "id": 1812,
+      "rows": 2219,
+      "identity_unchanged": true,
+      "rows_unchanged": true,
+      "table_txn_unchanged": true
+    },
+    "mv_retail_sentiment_daily_v1": {
+      "id": 1813,
+      "rows": 907,
+      "identity_unchanged": true,
+      "rows_unchanged": true,
+      "table_txn_unchanged": true
+    },
+    "etf_market_overview_daily_cache": {
+      "id": 1800,
+      "rows": 1181,
+      "identity_unchanged": true,
+      "rows_unchanged": true,
+      "table_txn_unchanged": true
+    },
+    "market_barometer_cache_coverage": {
+      "id": 1802,
+      "rows": 2466,
+      "identity_unchanged": true,
+      "rows_unchanged": true,
+      "table_txn_unchanged": true
+    }
+  },
+  "remaining_cache_tables": [
+    {
+      "table_name": "etf_market_overview_daily_cache",
+      "id": 1800,
+      "table_type": "T",
+      "table_row_count": 1181,
+      "table_txn": 6
+    },
+    {
+      "table_name": "market_barometer_cache_coverage",
+      "id": 1802,
+      "table_type": "T",
+      "table_row_count": 2466,
+      "table_txn": 13
+    }
+  ],
+  "native_view_health": {
+    "mv_market_breadth_daily_v1": {
+      "status": "valid",
+      "caught_up": true
+    },
+    "mv_retail_sentiment_daily_v1": {
+      "status": "valid",
+      "caught_up": true
+    },
+    "v_backtest_daily": {
+      "status": "valid",
+      "caught_up": true
+    }
+  },
+  "preexisting_work_snapshots": [
+    "data-preexisting.patch",
+    "data-preexisting-status.txt",
+    "back-monitor-preexisting.patch",
+    "back-monitor-preexisting-status.txt"
+  ],
+  "limitations": [
+    "Complete repository offline acceptance is not green: the current architecture scanner has 44 factor dependency violations. Their files or parent directories were already present; exact baseline content hashes were not captured. No factor code or architecture rules were changed.",
+    "Live Dataset extraction acceptance uses 2026-09-30; historical cache business-key coverage is checked separately in full. No remote full-sample research or PIT acceptance is asserted."
+  ]
+}

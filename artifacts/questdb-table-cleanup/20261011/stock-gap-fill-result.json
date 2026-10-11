@@ -1,0 +1,58 @@
+{
+  "table": "stock_detail_info",
+  "key": "301139.SZ",
+  "before": {
+    "ts_code": "301139.SZ",
+    "update_time": "2026-10-10T08:46:46.465269Z",
+    "symbol": "301139",
+    "name": "元道退",
+    "market": "创业板",
+    "exchange": "SZSE",
+    "list_status": "L",
+    "list_date": "20220708",
+    "fullname": "元道通信股份有限公司",
+    "enname": "Wintao Communications Co.,Ltd",
+    "cnspell": "YDT",
+    "area": null,
+    "industry": null,
+    "curr_type": "CNY",
+    "delist_date": "None",
+    "is_hs": "N",
+    "act_name": "李晋",
+    "act_ent_type": "自然人"
+  },
+  "expected_after": {
+    "ts_code": "301139.SZ",
+    "update_time": "2026-10-10T08:46:46.465269Z",
+    "symbol": "301139",
+    "name": "元道退",
+    "market": "创业板",
+    "exchange": "SZSE",
+    "list_status": "L",
+    "list_date": "20220708",
+    "fullname": "元道通信股份有限公司",
+    "enname": "Wintao Communications Co.,Ltd",
+    "cnspell": "YDT",
+    "area": "新疆",
+    "industry": "通信设备",
+    "curr_type": "CNY",
+    "delist_date": "None",
+    "is_hs": "N",
+    "act_name": "李晋",
+    "act_ent_type": "自然人"
+  },
+  "fields": [
+    "area",
+    "industry"
+  ],
+  "before_digest": "c21c2a1ff7cf64adc0b31147148b8b38f79f36b9f867297020b90d3822dccad9",
+  "expected_after_digest": "d15ca0a5071ffedc83cd228fe810ec3aca0179babc6805ae988f617cc34ec8f0",
+  "status": "VERIFIED",
+  "response": {
+    "dml": "OK",
+    "updated": 1
+  },
+  "after_digest": "d15ca0a5071ffedc83cd228fe810ec3aca0179babc6805ae988f617cc34ec8f0",
+  "formal_rows": 5912,
+  "only_two_cells_changed": true
+}

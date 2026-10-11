@@ -1,0 +1,48 @@
+{
+  "query": "select signal_date,entity_type,entity_id,factor_id,definition_version,factor_value,available_at,quality_status,scope,l2_source_lineage_digest from factor_observation where signal_date >= '2026-09-30' and signal_date < '2026-10-01' and entity_id='000001.SZ' and factor_id in ('reversal_1d','risk_adv20')",
+  "columns": [
+    {
+      "name": "signal_date",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "entity_type",
+      "type": "SYMBOL"
+    },
+    {
+      "name": "entity_id",
+      "type": "SYMBOL"
+    },
+    {
+      "name": "factor_id",
+      "type": "SYMBOL"
+    },
+    {
+      "name": "definition_version",
+      "type": "SYMBOL"
+    },
+    {
+      "name": "factor_value",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "available_at",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "quality_status",
+      "type": "SYMBOL"
+    },
+    {
+      "name": "scope",
+      "type": "SYMBOL"
+    },
+    {
+      "name": "l2_source_lineage_digest",
+      "type": "SYMBOL"
+    }
+  ],
+  "timestamp": 0,
+  "dataset": [],
+  "count": 0
+}

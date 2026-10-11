@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
-/** D102 direct ordinary view contract, independent of the versioned D101 cache. */
+/** Stable ETF public view; supports staged direct SQL and verified native MV activation. */
 public final class EtfMarketOverviewDailyViewDataset {
     private EtfMarketOverviewDailyViewDataset() {}
 
@@ -26,11 +26,12 @@ public final class EtfMarketOverviewDailyViewDataset {
                             StorageType.DOUBLE, true, "Joined ETF market value in yi yuan (亿元); division belongs to source SQL, no mapper scaling", null)),
             List.of("trade_date"), List.of(), "trade_date", Partition.NONE, false,
             Set.of(Capability.READ), List.of("etf_share", "etf_daily"),
-            "Ordinary direct share/daily view, SAMPLE BY 1d ALIGN TO CALENDAR after an INNER JOIN on complete timestamp and ts_code. "
-                    + "No basic JOIN, code/type filter, cache/receipt dependency, physical partition, WAL or UPSERT key. "
+            "Public share/daily view, SAMPLE BY 1d ALIGN TO CALENDAR after an INNER JOIN on complete timestamp and ts_code. "
+                    + "No basic JOIN, code/type filter, physical partition, WAL or UPSERT key on the public alias. "
                     + "Direct writes and replacements are forbidden. Existing base owners refresh share/daily; "
-                    + "D101 prewarms its separate cache and does not materialize this view. "
-                    + "Reads bind the exact view SQL and both base tables' stable physical/WAL versions; date alone is the natural identity. "
+                    + "Explicit native lifecycle installs mv_etf_market_overview_daily_v1, refreshes both-source history and activates this alias. "
+                    + "Activated native reads bind both source revisions and the verified output via etf_market_overview_mv_refresh; "
+                    + "staged direct reads retain the fixed original SQL and both stable source versions. Date alone is the natural identity. "
                     + "Typed reads require the four columns and a date equality or a bounded date range of at most 31 days, with pages of at most 31 rows. "
                     + "Nullable finite DOUBLE aggregates retain exact binary64 values, signed zero, units and SQL nulls.");
 }

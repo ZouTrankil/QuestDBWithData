@@ -33,6 +33,85 @@ build/
 # Compiler output captured during local migration work.
 /artifacts/main-strategy-java-refresh/20261007/shared-native-port-compile/
 
+# Isolated QuestDB and Gradle runtime snapshots for local ETF MV validation.
+/artifacts/etf-overview-mv-validation/*/conf/
+/artifacts/etf-overview-mv-validation/*/db/
+/artifacts/etf-overview-mv-validation/*/gradle/
+/artifacts/etf-overview-mv-validation/*/public/
+/artifacts/etf-overview-mv-validation/*/import/*.parquet
+
+# Compiled probes and local coverage ledgers from factor audits.
+/artifacts/local-factor-audit/**/*.class
+/artifacts/local-factor-audit/**/*.sqlite*
+/artifacts/local-factor-audit/**/benchmark-deps/
+
+# Full query trace is local run output; compact audit results live beside it.
+/artifacts/questdb-table-cleanup/**/queries.jsonl
+
 # Python bytecode caches.
 __pycache__/
 *.py[cod]
+
+# Large point-in-time factor and QuestDB readbacks stay local; compact audit reports are committed.
+/artifacts/local-factor-audit/20261011/csi-frozen-inputs.json
+/artifacts/local-factor-audit/20261011/csi-long-frozen-inputs.json
+/artifacts/local-factor-audit/20261011/daily-missing-bundle/observations-000.json
+/artifacts/local-factor-audit/20261011/daily-missing-bundle/observations-001.json
+/artifacts/local-factor-audit/20261011/daily-missing-bundle/observations-002.json
+/artifacts/local-factor-audit/20261011/etf-command-components-panel.json
+/artifacts/local-factor-audit/20261011/etf-command-csi-window-panel.json
+/artifacts/local-factor-audit/20261011/etf-command-earnings-panel.json
+/artifacts/local-factor-audit/20261011/etf-command-l2-panel.json
+/artifacts/local-factor-audit/20261011/etf-command-panel.json
+/artifacts/local-factor-audit/20261011/etf-component-l2-source.json
+/artifacts/local-factor-audit/20261011/etf-constituents-live.json
+/artifacts/local-factor-audit/20261011/etf-current-long-panel.json
+/artifacts/local-factor-audit/20261011/etf-current-observations.json
+/artifacts/local-factor-audit/20261011/etf-live-frozen/inputs.tsv
+/artifacts/local-factor-audit/20261011/etf-live-frozen/java.tsv
+/artifacts/local-factor-audit/20261011/etf-live-frozen/shares.tsv
+/artifacts/local-factor-audit/20261011/etf-long-history-guarded.json
+/artifacts/local-factor-audit/20261011/etf-long-history-observations.json
+/artifacts/local-factor-audit/20261011/etf-long-history-panel.json
+/artifacts/local-factor-audit/20261011/etf-long-history-with-missing.json
+/artifacts/local-factor-audit/20261011/etf-observations.json
+/artifacts/local-factor-audit/20261011/etf-shared-reference.tsv
+/artifacts/local-factor-audit/20261011/events-observations.json
+/artifacts/local-factor-audit/20261011/financial-panel-observations.json
+/artifacts/local-factor-audit/20261011/financial-panel-values.json
+/artifacts/local-factor-audit/20261011/financial-python-values.json
+/artifacts/local-factor-audit/20261011/full-panel-java-values-r3.json
+/artifacts/local-factor-audit/20261011/full-panel-java-values.json
+/artifacts/local-factor-audit/20261011/full-panel-pandas-values.json
+/artifacts/local-factor-audit/20261011/full-panel-python-values.json
+/artifacts/local-factor-audit/20261011/l2-all-bundle/observations-000.json
+/artifacts/local-factor-audit/20261011/l2-all-bundle/observations-001.json
+/artifacts/local-factor-audit/20261011/l2-all-bundle/observations-002.json
+/artifacts/local-factor-audit/20261011/l2-all-bundle/observations-003.json
+/artifacts/local-factor-audit/20261011/l2-all-bundle/observations-004.json
+/artifacts/local-factor-audit/20261011/l2-all-bundle/observations-005.json
+/artifacts/local-factor-audit/20261011/l2-all-publication-panel.json
+/artifacts/local-factor-audit/20261011/l2-live-pools-v2.json
+/artifacts/local-factor-audit/20261011/l2-live-pools.json
+/artifacts/local-factor-audit/20261011/l2-observations.json
+/artifacts/local-factor-audit/20261011/l2-publication-panel.json
+/artifacts/local-factor-audit/20261011/l2-shared-panel.json
+/artifacts/local-factor-audit/20261011/live-pools-observations.json
+/artifacts/local-factor-audit/20261011/live-pools-v2-observations.json
+/artifacts/local-factor-audit/20261011/live-pools-v2-values.json
+/artifacts/local-factor-audit/20261011/live-pools-values.json
+/artifacts/local-factor-audit/20261011/margin-factors-observations.json
+/artifacts/local-factor-audit/20261011/native-pipeline/2026-09-30-9a4702a3-dbf6-4a4c-9153-0ea2f9628b9f/pools.json
+/artifacts/local-factor-audit/20261011/normalized-java-values.json
+/artifacts/local-factor-audit/20261011/normalized-python-repeat-values.json
+/artifacts/local-factor-audit/20261011/panel-observations.json
+/artifacts/local-factor-audit/20261011/pit-selected-observations.json
+/artifacts/local-factor-audit/20261011/shared-final-observations.json
+/artifacts/local-factor-audit/20261011/shared-final-values.json
+/artifacts/local-factor-audit/20261011/structural-java-values.json
+/artifacts/local-factor-audit/20261011/structural-observations.json
+/artifacts/local-factor-audit/20261011/structural-python-values.json
+/artifacts/questdb-table-cleanup/20261011/remaining-small-details.json
+/artifacts/local-factor-audit/20261011/normalized-python-values.json
+/artifacts/local-factor-audit/20261011/pool-coverage/objects/a07fdaf28f8cd2e105c39567b469dab79dea769ed6acb415dffbb13a35e83a0b.json
+/artifacts/local-factor-audit/20261011/native-pipeline/2026-09-30-fabece10-a8d6-4995-b52e-c1b5648cd659/pools.json

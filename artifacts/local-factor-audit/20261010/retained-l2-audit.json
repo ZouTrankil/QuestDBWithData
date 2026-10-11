@@ -1,0 +1,55 @@
+{
+  "status" : "retained_conditions_verified",
+  "observedAt" : "2026-10-10T00:58:16.539546800Z",
+  "wal" : {
+    "query" : "SELECT name,suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name='l2_daily_features'",
+    "columns" : [ {
+      "name" : "name",
+      "type" : "STRING"
+    }, {
+      "name" : "suspended",
+      "type" : "BOOLEAN"
+    }, {
+      "name" : "writerTxn",
+      "type" : "LONG"
+    }, {
+      "name" : "sequencerTxn",
+      "type" : "LONG"
+    }, {
+      "name" : "bufferedTxnSize",
+      "type" : "LONG"
+    } ],
+    "timestamp" : -1,
+    "dataset" : [ [ "l2_daily_features", false, 11386, 11386, 0 ] ],
+    "count" : 1
+  },
+  "evidenceSha256" : {
+    "artifacts\\l2-questdb-ingestion\\20261007\\ingestion-report.json" : "3cc3c988f0a6376aa42ff0008cd782607200b58ab61cd30a49bd45c536380717",
+    "artifacts\\l2-full-cleaning-acceptance\\20261007\\output-validation-all.json" : "c8a1c26d76ea02a5853ffb1e23484fa9eef694717d99666496a89e8875956ef8",
+    "artifacts\\l2-full-cleaning-acceptance\\20261007\\null-reference\\schema.json" : "47b0a9510a6252e9fa913db264ae1b9669919d11ea039e8853ab5e1aa952a7bf",
+    "artifacts\\main-strategy-java-refresh\\20261007\\goal-current-questdb-observation.json" : "fe82abf93fc9c260f1dadd60a49a78c5a34dc8a42dc6ab91f28c4701c4e39591"
+  },
+  "dates" : [ {
+    "date" : "20260928",
+    "status" : "verified_retained_conditions",
+    "historicalSourceSha256" : "eddb7db904003b95ba1403bf92a9218ddb18ccea1eeedd137da340ad66d478c1",
+    "rows" : 7926,
+    "currentJsonRowsSha256" : "067f9ef693954799042b0513631e41112f0abf1a4439a01b7b92f58168738c3c",
+    "fieldsChecked" : 871860
+  }, {
+    "date" : "20260929",
+    "status" : "verified_retained_conditions",
+    "historicalSourceSha256" : "5d68c6428af0fb5eb0522337648161e03618e8de735fedc1a42a20767205000d",
+    "rows" : 7918,
+    "currentJsonRowsSha256" : "c5751169243a9a5b73f84c1d4c392f8053d76a2c965e3b1c5647af1dcb8e9bdd",
+    "fieldsChecked" : 870980
+  }, {
+    "date" : "20260930",
+    "status" : "verified_retained_conditions",
+    "historicalSourceSha256" : "2e3b7ef0a76078f206b9261bb1168203067ebec956fcac812f2f6557d259b757",
+    "rows" : 7888,
+    "currentJsonRowsSha256" : "0d06bfb9ef41e145e27f476cdd4b1782a94891cfff752a69c41c272492f46cef",
+    "fieldsChecked" : 867680
+  } ],
+  "limitation" : "Historical importer receipt plus unchanged WAL and full current typed QA. Original raw-source comparison was not repeated. Does not replace Java publication ledger or fabricate Python ingest reports."
+}

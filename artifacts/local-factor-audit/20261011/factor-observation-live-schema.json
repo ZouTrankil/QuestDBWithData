@@ -1,0 +1,183 @@
+{
+  "query": "select * from table_columns('factor_observation')",
+  "columns": [
+    {
+      "name": "column",
+      "type": "STRING"
+    },
+    {
+      "name": "type",
+      "type": "STRING"
+    },
+    {
+      "name": "indexed",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "indexBlockCapacity",
+      "type": "INT"
+    },
+    {
+      "name": "symbolCached",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "symbolCapacity",
+      "type": "INT"
+    },
+    {
+      "name": "symbolTableSize",
+      "type": "INT"
+    },
+    {
+      "name": "designated",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "upsertKey",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "indexType",
+      "type": "STRING"
+    },
+    {
+      "name": "indexInclude",
+      "type": "STRING"
+    }
+  ],
+  "timestamp": -1,
+  "dataset": [
+    [
+      "signal_date",
+      "TIMESTAMP",
+      false,
+      0,
+      false,
+      0,
+      0,
+      true,
+      true,
+      "",
+      ""
+    ],
+    [
+      "entity_type",
+      "SYMBOL",
+      false,
+      256,
+      true,
+      256,
+      3,
+      false,
+      true,
+      "",
+      ""
+    ],
+    [
+      "entity_id",
+      "SYMBOL",
+      false,
+      256,
+      true,
+      16384,
+      10940,
+      false,
+      true,
+      "",
+      ""
+    ],
+    [
+      "factor_id",
+      "SYMBOL",
+      false,
+      256,
+      true,
+      512,
+      253,
+      false,
+      true,
+      "",
+      ""
+    ],
+    [
+      "definition_version",
+      "SYMBOL",
+      false,
+      256,
+      true,
+      256,
+      3,
+      false,
+      true,
+      "",
+      ""
+    ],
+    [
+      "factor_value",
+      "DOUBLE",
+      false,
+      0,
+      false,
+      0,
+      0,
+      false,
+      false,
+      "",
+      ""
+    ],
+    [
+      "available_at",
+      "TIMESTAMP",
+      false,
+      0,
+      false,
+      0,
+      0,
+      false,
+      false,
+      "",
+      ""
+    ],
+    [
+      "quality_status",
+      "SYMBOL",
+      false,
+      256,
+      true,
+      256,
+      3,
+      false,
+      false,
+      "",
+      ""
+    ],
+    [
+      "scope",
+      "SYMBOL",
+      false,
+      256,
+      true,
+      256,
+      1,
+      false,
+      false,
+      "",
+      ""
+    ],
+    [
+      "l2_source_lineage_digest",
+      "SYMBOL",
+      false,
+      256,
+      true,
+      256,
+      13,
+      false,
+      false,
+      "",
+      ""
+    ]
+  ],
+  "count": 10
+}

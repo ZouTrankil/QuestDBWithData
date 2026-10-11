@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
-/** D094 read-only contract for Python's shared barometer cache coverage table. */
+/** Read-only receipts for the active ETF cache and retained historical barometer generations. */
 public final class MarketBarometerCacheCoverageDataset {
     private MarketBarometerCacheCoverageDataset() {}
 
@@ -19,7 +19,7 @@ public final class MarketBarometerCacheCoverageDataset {
                     new Column("trade_date", "trade_date", "trade_date", StorageType.TIMESTAMP, false,
                             "Exchange business date carried by UTC-midnight storage timestamp", TRADE_DATE),
                     new Column("dataset_id", "dataset_id", "dataset_id", StorageType.SYMBOL, false,
-                            "Market breadth, ETF overview or retail sentiment product identifier", null),
+                            "Active ETF overview product or retained historical barometer product identifier", null),
                     new Column("source_version", "source_version", "source_version", StorageType.SYMBOL, false,
                             "SHA-256 fingerprint of product SQL and relevant source table state", null),
                     new Column("row_count", "row_count", "row_count", StorageType.LONG, false,
@@ -30,6 +30,7 @@ public final class MarketBarometerCacheCoverageDataset {
             List.of("trade_date", "dataset_id", "source_version"), "trade_date",
             Partition.MONTH, true, Set.of(Capability.READ), List.of(),
             "Python's read-through owner publishes this shared receipt after verifying cache visibility and content. "
-                    + "The three products have separate physical cache tables and may publish zero-row days. "
+                    + "Only ETF overview retains an active cache; breadth and retail sentiment use native materialized views. "
+                    + "Historical receipts remain readable, and ETF may publish zero-row days. "
                     + "Java reads receipts only, preserving MONTH/WAL/DEDUP and the complete versioned key.");
 }

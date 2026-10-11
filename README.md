@@ -61,6 +61,16 @@ owner's reconciliation operation. A process exit code alone cannot complete a ba
 history and all 13 business fields. No ordinary intermediate or alias VIEW is
 installed. The Java materialization owner refreshes the MV after verified base
 publication; deleting old DAY partitions requires a FULL refresh.
+
+The obsolete `backtest_daily_cache`, `backtest_daily_cache_coverage`,
+`market_breadth_daily_cache` and `retail_sentiment_daily_cache` datasets are retired
+from the Java catalog and read-group API. Read backtests from `v_backtest_daily`,
+market breadth from `v_market_breadth_daily`, and retail sentiment from
+`v_retail_sentiment_daily`; the latter two aliases read native materialized views.
+The ETF overview cache and its shared `market_barometer_cache_coverage` receipts
+remain active. Historical schema exports and migration audits describe the old
+objects and are retained as evidence.
+
 Market sentiment and regime remain calculation tables managed by their existing
 Java MATERIALIZE jobs, both registered as daily eligible.
 

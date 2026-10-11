@@ -1,0 +1,39 @@
+{
+  "rows": 1710773,
+  "securities": 5849,
+  "requestedRows": 5571,
+  "readSeconds": 35.60570200000075,
+  "computeSeconds": 82.87633420000202,
+  "betaChecksum": 5535.763208013202,
+  "sourceState": [
+    {
+      "id": 3036,
+      "table_name": "backtest_daily",
+      "directoryName": "backtest_daily~3036",
+      "table_txn": 11,
+      "wal_txn": 11
+    },
+    {
+      "id": 1876,
+      "table_name": "daily_basic",
+      "directoryName": "daily_basic_stage_20260928_185816_917214~1876",
+      "table_txn": 274,
+      "wal_txn": 274
+    }
+  ],
+  "scope": "One cold process, same fields and period; Python HTTP JSON/pandas conversion differs from Java JDBC. Compute uses the installed pandas fallback. No full column parity or multipool timing yet.",
+  "processMemory": {
+    "rss": 1866014720,
+    "vms": 2474078208,
+    "num_page_faults": 6835995,
+    "peak_wset": 5698224128,
+    "wset": 1866014720,
+    "peak_paged_pool": 448280,
+    "paged_pool": 447640,
+    "peak_nonpaged_pool": 152960,
+    "nonpaged_pool": 132152,
+    "pagefile": 2474078208,
+    "peak_pagefile": 6312120320,
+    "private": 2474078208
+  }
+}

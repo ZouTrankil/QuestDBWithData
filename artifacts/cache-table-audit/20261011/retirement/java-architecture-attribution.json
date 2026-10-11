@@ -1,0 +1,448 @@
+{
+  "fresh_run": "F:/repo/engine/data/.gradle/cache-retirement/20261011/isolated-final-20261011T0215/evidence-v2/run-20261011T020928073-0586b849",
+  "failed_test": "ArchitectureDependencyTest.productionDependenciesMatchOnlyTheExplicitRemainingDebt",
+  "violations": 44,
+  "attribution": [
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.EtfFactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbCsiFinancials",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EtfFactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/EtfFactorPanelCommands.java"
+      ],
+      "source_sha256": "e29dc370666307560db7b6db6cce0eb53ade738786eb3e45a33ca44ab68216b6"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.EtfFactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbDailyFactorPanel",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EtfFactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/EtfFactorPanelCommands.java"
+      ],
+      "source_sha256": "e29dc370666307560db7b6db6cce0eb53ade738786eb3e45a33ca44ab68216b6"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.EtfFactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbEtfConstituents",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EtfFactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/EtfFactorPanelCommands.java"
+      ],
+      "source_sha256": "e29dc370666307560db7b6db6cce0eb53ade738786eb3e45a33ca44ab68216b6"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.EtfFactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbEtfEarnings",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EtfFactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/EtfFactorPanelCommands.java"
+      ],
+      "source_sha256": "e29dc370666307560db7b6db6cce0eb53ade738786eb3e45a33ca44ab68216b6"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.EtfFactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbEtfInputs",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EtfFactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/EtfFactorPanelCommands.java"
+      ],
+      "source_sha256": "e29dc370666307560db7b6db6cce0eb53ade738786eb3e45a33ca44ab68216b6"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.EtfFactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbEtfL2",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EtfFactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/EtfFactorPanelCommands.java"
+      ],
+      "source_sha256": "e29dc370666307560db7b6db6cce0eb53ade738786eb3e45a33ca44ab68216b6"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.EtfFactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbEtfTechnical",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EtfFactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/EtfFactorPanelCommands.java"
+      ],
+      "source_sha256": "e29dc370666307560db7b6db6cce0eb53ade738786eb3e45a33ca44ab68216b6"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.EtfFactorPanelCommands",
+      "target": "com.zoutrankil.data.repository.FileEvidenceStore",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EtfFactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/EtfFactorPanelCommands.java"
+      ],
+      "source_sha256": "e29dc370666307560db7b6db6cce0eb53ade738786eb3e45a33ca44ab68216b6"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.EtfFactorPanelCommands",
+      "target": "org.springframework.jdbc.core.JdbcTemplate",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EtfFactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/EtfFactorPanelCommands.java"
+      ],
+      "source_sha256": "e29dc370666307560db7b6db6cce0eb53ade738786eb3e45a33ca44ab68216b6"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.EtfFactorPipelineCommands",
+      "target": "com.zoutrankil.data.repository.FileEvidenceStore",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\EtfFactorPipelineCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/EtfFactorPipelineCommands.java"
+      ],
+      "source_sha256": "e48a9248a37dac9dfbb44c79bc978c681499f0c9dd50f03e521816ae22a795c2"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbFactorInputs",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorCommands.java"
+      ],
+      "source_sha256": "4e7df8ce6120aee235356e7d22bd4e27f7c15418d78c74a4a4776f224092bb38"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbGlobalObservations",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorCommands.java"
+      ],
+      "source_sha256": "4e7df8ce6120aee235356e7d22bd4e27f7c15418d78c74a4a4776f224092bb38"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorCommands",
+      "target": "com.zoutrankil.data.repository.FileEvidenceStore",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorCommands.java"
+      ],
+      "source_sha256": "4e7df8ce6120aee235356e7d22bd4e27f7c15418d78c74a4a4776f224092bb38"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorObservationCommands",
+      "target": "com.zoutrankil.data.factor.storage.GlobalObservationWriteSession",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorObservationCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorObservationCommands.java"
+      ],
+      "source_sha256": "86a3293d1c3cedfec7661037e791b19324a752d5cf5ee161eb33f3d283933d28"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorObservationCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbGlobalObservations",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorObservationCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorObservationCommands.java"
+      ],
+      "source_sha256": "86a3293d1c3cedfec7661037e791b19324a752d5cf5ee161eb33f3d283933d28"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorObservationCommands",
+      "target": "com.zoutrankil.data.repository.SyncRunLedger",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorObservationCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorObservationCommands.java"
+      ],
+      "source_sha256": "86a3293d1c3cedfec7661037e791b19324a752d5cf5ee161eb33f3d283933d28"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorObservationCommands",
+      "target": "io.questdb.client.QuestDB",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorObservationCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorObservationCommands.java"
+      ],
+      "source_sha256": "86a3293d1c3cedfec7661037e791b19324a752d5cf5ee161eb33f3d283933d28"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorObservationCommands",
+      "target": "org.springframework.jdbc.core.JdbcTemplate",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorObservationCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorObservationCommands.java"
+      ],
+      "source_sha256": "86a3293d1c3cedfec7661037e791b19324a752d5cf5ee161eb33f3d283933d28"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbDailyFactorPanel",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorPanelCommands.java"
+      ],
+      "source_sha256": "fbd370261e39403552e15f50b3e49e2ed9582abc9543008a258ba10e78e2c1bf"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbEventFactors",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorPanelCommands.java"
+      ],
+      "source_sha256": "fbd370261e39403552e15f50b3e49e2ed9582abc9543008a258ba10e78e2c1bf"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbFinancialIndicators",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorPanelCommands.java"
+      ],
+      "source_sha256": "fbd370261e39403552e15f50b3e49e2ed9582abc9543008a258ba10e78e2c1bf"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbFinancialStatements",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorPanelCommands.java"
+      ],
+      "source_sha256": "fbd370261e39403552e15f50b3e49e2ed9582abc9543008a258ba10e78e2c1bf"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbGlobalObservations",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorPanelCommands.java"
+      ],
+      "source_sha256": "fbd370261e39403552e15f50b3e49e2ed9582abc9543008a258ba10e78e2c1bf"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbStockMembership",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorPanelCommands.java"
+      ],
+      "source_sha256": "fbd370261e39403552e15f50b3e49e2ed9582abc9543008a258ba10e78e2c1bf"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorPanelCommands",
+      "target": "com.zoutrankil.data.repository.FileEvidenceStore",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorPanelCommands.java"
+      ],
+      "source_sha256": "fbd370261e39403552e15f50b3e49e2ed9582abc9543008a258ba10e78e2c1bf"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorPanelCommands",
+      "target": "org.springframework.jdbc.core.JdbcTemplate",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorPanelCommands.java"
+      ],
+      "source_sha256": "fbd370261e39403552e15f50b3e49e2ed9582abc9543008a258ba10e78e2c1bf"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorPipelineCommands",
+      "target": "com.zoutrankil.data.factor.storage.FactorPoolCoverageStore",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorPipelineCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorPipelineCommands.java"
+      ],
+      "source_sha256": "1897973b05fe6c915bab36eced21154ab5ca69a9f464685cf4b77873f7c3b833"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorPipelineCommands",
+      "target": "com.zoutrankil.data.repository.FileEvidenceStore",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorPipelineCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorPipelineCommands.java"
+      ],
+      "source_sha256": "1897973b05fe6c915bab36eced21154ab5ca69a9f464685cf4b77873f7c3b833"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.FactorPoolCoverageCommands",
+      "target": "com.zoutrankil.data.factor.storage.FactorPoolCoverageStore",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\FactorPoolCoverageCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/FactorPoolCoverageCommands.java"
+      ],
+      "source_sha256": "4852d454a61fcadcce4bbd688ca128bee84acbbd79f34d5da26e1a3413545913"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.L2FactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbDailyFactorPanel",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\L2FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/L2FactorPanelCommands.java"
+      ],
+      "source_sha256": "712815c59ba0f7398b5f325a914eb3ee459a1d33f6f8239c4028d1120274a2c5"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.L2FactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbL2FactorPanel",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\L2FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/L2FactorPanelCommands.java"
+      ],
+      "source_sha256": "712815c59ba0f7398b5f325a914eb3ee459a1d33f6f8239c4028d1120274a2c5"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.L2FactorPanelCommands",
+      "target": "com.zoutrankil.data.factor.storage.QuestDbStockMembership",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\L2FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/L2FactorPanelCommands.java"
+      ],
+      "source_sha256": "712815c59ba0f7398b5f325a914eb3ee459a1d33f6f8239c4028d1120274a2c5"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.L2FactorPanelCommands",
+      "target": "com.zoutrankil.data.repository.FileEvidenceStore",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\L2FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/L2FactorPanelCommands.java"
+      ],
+      "source_sha256": "712815c59ba0f7398b5f325a914eb3ee459a1d33f6f8239c4028d1120274a2c5"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.L2FactorPanelCommands",
+      "target": "org.springframework.jdbc.core.JdbcTemplate",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\L2FactorPanelCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/L2FactorPanelCommands.java"
+      ],
+      "source_sha256": "712815c59ba0f7398b5f325a914eb3ee459a1d33f6f8239c4028d1120274a2c5"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.L2ObservationBundleCommands",
+      "target": "com.zoutrankil.data.repository.FileEvidenceStore",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\L2ObservationBundleCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/L2ObservationBundleCommands.java"
+      ],
+      "source_sha256": "029fd43bddfd11ea9e682904239d17bf018db3e2683e6ee9ff826845db74b874"
+    },
+    {
+      "rule": "entrypoint-infrastructure",
+      "origin": "com.zoutrankil.data.cli.L2ObservationBundleCommands",
+      "target": "com.zoutrankil.data.repository.SyncRunLedger",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\cli\\L2ObservationBundleCommands.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/cli/L2ObservationBundleCommands.java"
+      ],
+      "source_sha256": "029fd43bddfd11ea9e682904239d17bf018db3e2683e6ee9ff826845db74b874"
+    },
+    {
+      "rule": "repository-to-application",
+      "origin": "com.zoutrankil.data.factor.storage.FactorPoolCoverageStore",
+      "target": "com.zoutrankil.data.factor.application.FactorIncrementalPlanner",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\factor\\storage\\FactorPoolCoverageStore.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/factor/"
+      ],
+      "source_sha256": "ada34fb870aa12340704d2a5de3d408dea25b247cfc559018f87cb6dd8b9e146"
+    },
+    {
+      "rule": "repository-to-application",
+      "origin": "com.zoutrankil.data.factor.storage.FactorPoolCoverageStore",
+      "target": "com.zoutrankil.data.factor.application.FactorPoolEvidence",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\factor\\storage\\FactorPoolCoverageStore.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/factor/"
+      ],
+      "source_sha256": "ada34fb870aa12340704d2a5de3d408dea25b247cfc559018f87cb6dd8b9e146"
+    },
+    {
+      "rule": "repository-to-application",
+      "origin": "com.zoutrankil.data.factor.storage.GlobalObservationWriteSession",
+      "target": "com.zoutrankil.data.factor.application.FactorObservationWritePort",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\factor\\storage\\GlobalObservationWriteSession.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/factor/"
+      ],
+      "source_sha256": "e79783df6011563ac34d766395511e7fd7e54ea039ca1fcedd2e9866dfa390a6"
+    },
+    {
+      "rule": "repository-to-application",
+      "origin": "com.zoutrankil.data.factor.storage.GlobalObservationWriteSession",
+      "target": "com.zoutrankil.data.factor.application.GlobalObservationCoverage",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\factor\\storage\\GlobalObservationWriteSession.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/factor/"
+      ],
+      "source_sha256": "e79783df6011563ac34d766395511e7fd7e54ea039ca1fcedd2e9866dfa390a6"
+    },
+    {
+      "rule": "repository-to-application",
+      "origin": "com.zoutrankil.data.factor.storage.QuestDbGlobalObservationStore",
+      "target": "com.zoutrankil.data.factor.application.GlobalObservationCoverage",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\factor\\storage\\QuestDbGlobalObservationStore.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/factor/"
+      ],
+      "source_sha256": "827dc37624ae33d3edbca4fbf98f39375e6a4f483741250bbf40f91ff54058c0"
+    },
+    {
+      "rule": "repository-to-application",
+      "origin": "com.zoutrankil.data.factor.storage.QuestDbGlobalObservationStore",
+      "target": "com.zoutrankil.data.factor.application.GlobalObservationPublisher",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\factor\\storage\\QuestDbGlobalObservationStore.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/factor/"
+      ],
+      "source_sha256": "827dc37624ae33d3edbca4fbf98f39375e6a4f483741250bbf40f91ff54058c0"
+    },
+    {
+      "rule": "repository-to-application",
+      "origin": "com.zoutrankil.data.factor.storage.QuestDbGlobalObservations",
+      "target": "com.zoutrankil.data.factor.application.GlobalObservationCoverage",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\factor\\storage\\QuestDbGlobalObservations.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/factor/"
+      ],
+      "source_sha256": "88f357d7278b508fadebbac2bbcdb14469e92d86ecffc9f4107b77313dde6476"
+    },
+    {
+      "rule": "repository-to-application",
+      "origin": "com.zoutrankil.data.factor.storage.QuestDbGlobalObservations",
+      "target": "com.zoutrankil.data.factor.application.GlobalObservationIncrementalRead",
+      "source": "F:\\repo\\engine\\data\\data-app\\src\\main\\java\\com\\zoutrankil\\data\\factor\\storage\\QuestDbGlobalObservations.java",
+      "initial_status_matches": [
+        "?? data-app/src/main/java/com/zoutrankil/data/factor/"
+      ],
+      "source_sha256": "88f357d7278b508fadebbac2bbcdb14469e92d86ecffc9f4107b77313dde6476"
+    }
+  ],
+  "limit": "Initial status proves the CLI source names and factor source directory were already untracked before retirement. No per-file pre-retirement content hashes were captured for those untracked sources, so this does not prove each current edge was identical before the task. This task made no changes to those files or architecture rules/exceptions."
+}

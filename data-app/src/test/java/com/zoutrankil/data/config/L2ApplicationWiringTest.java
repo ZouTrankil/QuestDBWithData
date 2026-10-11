@@ -80,8 +80,8 @@ class L2ApplicationWiringTest {
             }
             var datasets = context.getBean(DatasetRegistry.class);
             var readers = context.getBean(ReadBindingCatalog.class);
-            assertEquals(56, datasets.definitions().stream().filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
-            assertEquals(56, readers.bind(datasets).size());
+            assertEquals(53, datasets.definitions().stream().filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
+            assertEquals(53, readers.bind(datasets).size());
             var representations = new HashMap<String, Class<?>>();
             readers.registrations().forEach(value -> representations.put(value.datasetId(), value.rowType()));
             assertEquals(L2DatasetManifest.class, representations.get("l2_dataset_manifest"));

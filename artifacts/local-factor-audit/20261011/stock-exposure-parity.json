@@ -1,0 +1,93 @@
+{
+  "rows": 16683,
+  "membershipRows": 5902,
+  "dates": [
+    "2020-01-02",
+    "2025-09-30",
+    "2026-09-30"
+  ],
+  "mismatches": 0,
+  "boundaryRows": 18,
+  "boundaryMismatches": 0,
+  "industryCoverage": {
+    "2020-01-02 00:00:00": 2683,
+    "2025-09-30 00:00:00": 5329,
+    "2026-09-30 00:00:00": 5553
+  },
+  "indexCoverage": [
+    {
+      "index_code": "000510",
+      "latest": "2026-08-31T00:00:00.000000Z",
+      "rows": 11500
+    },
+    {
+      "index_code": "000688",
+      "latest": "2026-08-31T00:00:00.000000Z",
+      "rows": 450
+    },
+    {
+      "index_code": "000852",
+      "latest": "2026-08-31T00:00:00.000000Z",
+      "rows": 104000
+    },
+    {
+      "index_code": "000016",
+      "latest": "2026-08-31T00:00:00.000000Z",
+      "rows": 450
+    },
+    {
+      "index_code": "932000",
+      "latest": "2026-08-31T00:00:00.000000Z",
+      "rows": 74000
+    },
+    {
+      "index_code": "000905",
+      "latest": "2026-08-31T00:00:00.000000Z",
+      "rows": 4500
+    },
+    {
+      "index_code": "399673",
+      "latest": "2026-08-31T00:00:00.000000Z",
+      "rows": 5200
+    },
+    {
+      "index_code": "000300",
+      "latest": "2026-08-31T00:00:00.000000Z",
+      "rows": 55200
+    }
+  ],
+  "missingRequiredIndices": [
+    "000906",
+    "000985"
+  ],
+  "sourceVersions": [
+    {
+      "table_name": "daily_basic",
+      "id": 1876,
+      "directoryName": "daily_basic_stage_20260928_185816_917214~1876",
+      "table_txn": 274,
+      "wal_txn": 274,
+      "wal_pending_row_count": 0,
+      "table_suspended": false
+    },
+    {
+      "table_name": "index_member",
+      "id": 1760,
+      "directoryName": "index_member_sw2021_stage_20260912_035448~1760",
+      "table_txn": 2,
+      "wal_txn": 2,
+      "wal_pending_row_count": 0,
+      "table_suspended": false
+    },
+    {
+      "table_name": "index_weight",
+      "id": 1857,
+      "directoryName": "index_weight_stage_20260928_174248_245924~1857",
+      "table_txn": 5,
+      "wal_txn": 5,
+      "wal_pending_row_count": 0,
+      "table_suspended": false
+    }
+  ],
+  "note": "Historical dates validate industry intervals; market capitalization uses fixed 2026-09-30 fixture, not historical market-cap evidence."
+}

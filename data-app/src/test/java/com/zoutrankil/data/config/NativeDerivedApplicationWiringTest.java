@@ -53,13 +53,13 @@ class NativeDerivedApplicationWiringTest {
             assertEquals(Set.of(SyncJobDefinition.Mode.MATERIALIZE), marketOwner.supportedSyncModes());
             assertEquals(Set.of(SyncJobDefinition.Mode.MATERIALIZE), regimeOwner.supportedSyncModes());
             var jobs = context.getBean(SyncJobRegistry.class);
-            assertEquals(MarketSentimentDailyJobService.jobDefinition(), jobs.require(MarketSentimentDailyJobService.JOB_ID, 2));
-            assertEquals(RegimeFeaturesMonitorDailyJobService.jobDefinition(), jobs.require(RegimeFeaturesMonitorDailyJobService.JOB_ID, 2));
-            assertFalse(regimeOwner.definition().dependencies().contains("cn_bond_yield_curve"));
+            assertEquals(MarketSentimentDailyJobService.jobDefinition(), jobs.require(MarketSentimentDailyJobService.JOB_ID, 3));
+            assertEquals(RegimeFeaturesMonitorDailyJobService.jobDefinition(), jobs.require(RegimeFeaturesMonitorDailyJobService.JOB_ID, 3));
+            assertTrue(regimeOwner.definition().dependencies().contains("cn_bond_yield_curve"));
             assertTrue(RegimeFeaturesMonitorDailyJobService.SOURCES.contains("cn_bond_yield_curve"));
             var datasets = context.getBean(DatasetRegistry.class);
-            assertEquals(56, datasets.definitions().stream().filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
-            assertEquals(56, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
+            assertEquals(53, datasets.definitions().stream().filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
+            assertEquals(53, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
             verifyNoInteractions(source);
             assertFalse(Files.exists(ledger));
         }

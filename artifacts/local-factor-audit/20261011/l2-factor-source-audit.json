@@ -1,0 +1,32 @@
+{
+  "enabledFactors": 135,
+  "enabledPublicationFactors": 125,
+  "physicalColumns": 110,
+  "missingBindings": [],
+  "lineageFields": [
+    "feature_version",
+    "parser_version"
+  ],
+  "versions": [
+    {
+      "feature_version": "v1.3",
+      "parser_version": "dfcf_csv_v1.2",
+      "rows": 7888,
+      "symbols": 7888
+    }
+  ],
+  "coverageDate": "2026-09-30",
+  "sourceState": [
+    {
+      "id": 1665,
+      "table_name": "l2_daily_features",
+      "directoryName": "l2_daily_features_recovery_20260911~1665",
+      "table_txn": 11386,
+      "wal_txn": 11386,
+      "table_suspended": false
+    }
+  ],
+  "stable": true,
+  "productionReady": false,
+  "limitation": "Full-history version scan exceeded 60 seconds; this report only checks the requested date and schema."
+}

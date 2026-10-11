@@ -18,7 +18,7 @@ public enum SyncRunState {
             case SUBMITTED -> Set.of(ACKNOWLEDGED, IN_DOUBT, PARTIAL).contains(next);
             case ACKNOWLEDGED -> Set.of(VERIFIED, IN_DOUBT, PARTIAL).contains(next);
             // A reconciled authoritative empty-window publication still needs the empty-source proof.
-            case IN_DOUBT -> next == VERIFIED || next == VERIFIED_EMPTY;
+            case IN_DOUBT -> next == VERIFIED || next == VERIFIED_EMPTY || next == PARTIAL;
             default -> false;
         };
         if (!valid) throw new IllegalArgumentException("Invalid ledger transition: " + this + " -> " + next);

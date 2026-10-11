@@ -30,21 +30,25 @@ public final class MarginDetailSyncAdapter implements SyncJobRunner.Adapter<Marg
                     ||!Objects.equals(physical.min(),params.get("targetMinBefore"))||!Objects.equals(physical.max(),params.get("targetMaxBefore")))throw new IllegalStateException("D029 physical target baseline changed after plan; replan before a new run");}
     }
     @Override public SyncJobRunner.SourceCompletion fetch(SyncJobDefinition.FrozenRequest request,SyncJobRunner.PageConsumer<MarginDetail> consumer,BooleanSupplier cancelled)throws Exception{
-        var dates=decodeDates(request);var refs=new ArrayList<Map<String,Object>>();int total=0;
-        for(LocalDate date:dates){check(cancelled);var page=source.fetch(date,cancelled);var existing=verifyNoSourceKeyRemoval(date,page.rows());var before=preservePhysicalBefore(date,existing,page);consumer.accept(page);total=Math.addExact(total,page.rows().size());
+        var dates=decodeDates(request);var refs=new ArrayList<Map<String,Object>>();int total=0;var incompleteDates=new ArrayList<LocalDate>();
+        for(LocalDate date:dates){check(cancelled);var available=source.fetchAvailable(date,cancelled);var page=available.page();
+            var existing=port.readDate(date);
+            var sourceKeys=new HashSet<MarginDetailKey>();for(var row:page.rows())if(!sourceKeys.add(row.key()))throw new IllegalStateException("D029 duplicate source natural key");
+            var existingKeys=new HashSet<MarginDetailKey>();for(var row:existing)if(!existingKeys.add(row.key()))throw new IllegalStateException("D029 existing date contains duplicate natural keys");
+            // UPSERT preserves keys omitted by a partial provider response. Their
+            // absence prevents day completion, but does not discard available rows.
+            if(!available.fullMarketCoverage()||!sourceKeys.containsAll(existingKeys))incompleteDates.add(date);
+            var before=preservePhysicalBefore(date,existing,page);consumer.accept(page);total=Math.addExact(total,page.rows().size());
             refs.add(Map.of("tradeDate",date.toString(),"rows",page.rows().size(),"sourceFingerprint",page.sourceFingerprint(),"responseEvidence",page.responseEvidence(),
                     "physicalBeforeEvidence",before.path().toString(),"physicalBeforeFingerprint",before.fingerprint()));}
         if(dates.isEmpty()||dates.size()>MarginDetailSyncJobOwner.MAX_SOURCE_SLICES||total<1||total>MarginDetailSyncJobOwner.DEFINITION.budget().maxRows())throw new IllegalStateException("D029 source completion is empty or exceeds the frozen bounded window");
         Files.createDirectories(evidenceRoot);var body=new LinkedHashMap<String,Object>();body.put("dataset","margin_detail");body.put("endpoint","margin_detail");body.put("targetId",targetId);body.put("mode",request.mode().name());
         body.put("fromInclusive",request.from().toString());body.put("toInclusive",request.to().toString());body.put("logicalDate",request.logicalDate().toString());body.put("tradeDates",dates);
-        body.put("completedDateSlices",dates.size());body.put("sourceRows",total);body.put("returnedRows",total);body.put("sourceReceipts",refs);body.put("sourceComplete",true);body.put("complete",true);
+        body.put("completedDateSlices",dates.size());body.put("sourceRows",total);body.put("returnedRows",total);body.put("sourceReceipts",refs);body.put("sourceComplete",incompleteDates.isEmpty());body.put("complete",incompleteDates.isEmpty());body.put("incompleteDates",incompleteDates);
         byte[] bytes=JobDefinitionJson.canonicalMapper().writeValueAsBytes(body);if(bytes.length>1024*1024)throw new IllegalStateException("D029 complete-window manifest exceeds 1 MiB");
-        Path complete=evidenceRoot.resolve("complete-window.json");try{FileEvidenceStore.writeNew(complete,bytes);}catch(FileAlreadyExistsException exists){if(!Arrays.equals(FileEvidenceStore.readBounded(complete, Math.max(1, bytes.length), () -> new IllegalStateException("Conflicting D029 completion manifest", exists)),bytes))throw new IllegalStateException("Conflicting D029 completion manifest",exists);}
-        return new SyncJobRunner.SourceCompletion(dates.size(),total,true,complete.toString());
+        Path complete=evidenceRoot.resolve(incompleteDates.isEmpty()?"complete-window.json":"partial-window.json");try{FileEvidenceStore.writeNew(complete,bytes);}catch(FileAlreadyExistsException exists){if(!Arrays.equals(FileEvidenceStore.readBounded(complete, Math.max(1, bytes.length), () -> new IllegalStateException("Conflicting D029 completion manifest", exists)),bytes))throw new IllegalStateException("Conflicting D029 completion manifest",exists);}
+        return new SyncJobRunner.SourceCompletion(dates.size(),total,incompleteDates.isEmpty(),complete.toString());
     }
-    private List<MarginDetail> verifyNoSourceKeyRemoval(LocalDate date,List<MarginDetail> rows){var keys=new HashSet<MarginDetailKey>();for(var row:rows)if(!keys.add(row.key()))throw new IllegalStateException("D029 duplicate source natural key");
-        var existing=port.readDate(date);var existingKeys=new HashSet<MarginDetailKey>();for(var row:existing)if(!existingKeys.add(row.key()))throw new IllegalStateException("D029 existing date contains duplicate natural keys");
-        if(existing.stream().anyMatch(row->!keys.contains(row.key())))throw new IllegalStateException("D029 provider omitted an existing date key; no source deletion/tombstone contract exists");return existing;}
     private record PhysicalBefore(Path path,String fingerprint){}
     private PhysicalBefore preservePhysicalBefore(LocalDate date,List<MarginDetail> rows,SyncJobRunner.Page<MarginDetail> page)throws Exception{
         var mapper=new com.zoutrankil.data.margin.mapper.MarginDetailMapper();var body=new LinkedHashMap<String,Object>();body.put("dataset","margin_detail");body.put("targetId",targetId);body.put("tradeDate",date);
