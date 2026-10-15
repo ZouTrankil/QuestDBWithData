@@ -17,6 +17,19 @@ com.zoutrankil.data
 └── web/                             # WebFlux 请求、响应和应用服务调用
 ```
 
+## Gradle 模块结构
+
+```text
+QuestDBWithData/
+├── data-core/              # 数据与批处理共享的契约和基础类型
+├── data-app/               # 数据 CLI、WebFlux API、数据 owner 与 QuestDB 访问
+├── batch-app/              # 独立批处理应用与 L2 计算
+├── main-strategy-runtime/  # 主策略组合运行时，连接数据和批处理应用
+└── src/test/               # 跨模块架构检查与兼容性测试
+```
+
+根项目负责聚合构建、测试和兼容的启动入口，不再包含生产源码。`data-app` 和 `batch-app` 分别依赖 `data-core`，主策略组合由 `main-strategy-runtime` 负责。数据应用配置位于 `data-app/src/main/resources/application.yml`，独立批处理配置位于 `batch-app/src/main/resources/batch-runtime.yml`。各模块的 `build/` 和根项目的 `build/` 均为可重新生成的构建产物。
+
 ## 依赖方向
 
 - `cli` 调用 `service`，不直接访问 HTTP、JDBC 或 QWP。
@@ -29,7 +42,7 @@ com.zoutrankil.data
 
 ## 配置约定
 
-- Spring 配置放在 `src/main/resources/application.yml`，通过 `@ConfigurationProperties` 分别绑定 `app.tushare` 和 `app.questdb`。
+- Spring 配置放在 `data-app/src/main/resources/application.yml`，通过 `@ConfigurationProperties` 分别绑定 `app.tushare` 和 `app.questdb`。
 - QuestDB PGWire 连接池由 Spring Boot 的 `spring.datasource` 自动配置；本地 SQLite 连接由存储组件按事务管理并及时关闭。
 - 基础设施客户端通过 Spring Bean 管理生命周期；借用的 QWP `Sender` 必须使用 try-with-resources 归还。
 - 本地 CLI 命令以非 Web 模式启动，执行完成后关闭上下文。无命令时由 Spring 解析后的 `app.web.enabled` 选择模式，`--web` 可显式启动 Web。同步应用服务经 WebFlux 调用时使用有界阻塞调度器，避免占用事件循环线程。
@@ -45,4 +58,4 @@ com.zoutrankil.data
 
 `CommandLineRunner` 当前承载数据集、同步任务、分组、调度和恢复命令。各数据集的 owner/JobService 负责计划和运行，registry 验证定义与依赖；`LedgerManagementService` 统一取消、历史和状态查询的台账选择。早期 stock-basic 同步链仍由 `StockBasicSyncService`、`TushareClient` 和 `QuestDbStockBasicRepository` 协作。
 
-表与 view DDL 位于 `src/main/resources/db/migration/questdb/`。`SchemaMigrationService` 通过 Spring 管理的 Flyway Bean 运行迁移；同步和查询 service 先迁移再访问 repository。SELECT 1 探活不触发迁移。新增模型步骤见 [模型开发流程](model-development-workflow.md)。
+表与 view DDL 位于 `data-app/src/main/resources/db/migration/questdb/`。`SchemaMigrationService` 通过 Spring 管理的 Flyway Bean 运行迁移；同步和查询 service 先迁移再访问 repository。SELECT 1 探活不触发迁移。新增模型步骤见 [模型开发流程](model-development-workflow.md)。

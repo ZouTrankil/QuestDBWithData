@@ -1,6 +1,6 @@
 # Flyway 管理 QuestDB schema
 
-本项目已接入 Flyway：Spring 管理 Flyway Bean，复用 YAML 配置的 PGWire DataSource，由 service 在数据库业务操作前执行迁移。表和 view 定义位于 `src/main/resources/db/migration/questdb/`，repository 只负责数据读写。
+本项目已接入 Flyway：Spring 管理 Flyway Bean，复用 YAML 配置的 PGWire DataSource，由 service 在数据库业务操作前执行迁移。表和 view 定义位于 `data-app/src/main/resources/db/migration/questdb/`，repository 只负责数据读写。
 
 ## 依赖与版本
 
@@ -50,7 +50,7 @@ app:
 ## 版本化 SQL
 
 ```text
-src/main/resources/db/migration/questdb/
+data-app/src/main/resources/db/migration/questdb/
 ├── V1__create_stock_basic_table.sql
 └── V2__create_stock_basic_latest_view.sql
 ```

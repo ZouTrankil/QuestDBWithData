@@ -16,7 +16,7 @@
 
 ## 已落地代码
 
-代码集中在 `src/main/java/com/zoutrankil/batch/`，原 CLI 和原 SQLite 治理链未接管、未改接。
+代码集中在 `batch-app/src/main/java/com/zoutrankil/batch/`，原 CLI 和原 SQLite 治理链未接管、未改接。
 
 - `BatchApplication` / `RuntimeConfiguration`：同仓独立启动入口，不扫描旧应用的 producer/config。独立持久化 SQLite 文件；Flyway 在单一文件内管理业务台账、Spring Batch 与 Quartz 表。SQLite 单机单运行实例，Quartz 使用 JDBC 持久化并禁用集群。PostgreSQL PGWire/8812 不可配置为元数据。生产入口无 fixture 开关。
 - `RunRequest` / `CompletionEvidence`：日期、范围、修订、输入身份、实体范围、日历版本、时区、触发时刻和证书校验。来源业务实例哈希包含冻结 universe 版本与期望实体集合，不包含执行时间或 request ID；服务从冻结来源推导并校验 scopeIdentity。已写入或已完成的实例变更输入需显式 revision；未发送源实例的同范围晚到输入有受控重绑，旧成功证据不可覆盖。业务状态独立于 Batch 状态。

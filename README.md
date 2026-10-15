@@ -5,12 +5,12 @@ Java data-ingestion project. The first vertical slice fetches Tushare Pro's curr
 ## Requirements
 
 - JDK 24
-- Tushare Pro token with access to `stock_basic`; configure it in `src/main/resources/application.yml`
-- QuestDB credentials in `src/main/resources/application.yml` for QuestDB commands
+- Tushare Pro token with access to `stock_basic`; configure it in `data-app/src/main/resources/application.yml`
+- QuestDB credentials in `data-app/src/main/resources/application.yml` for QuestDB commands
 
 ## Run
 
-Set `app.tushare.token` and QuestDB credentials in `src/main/resources/application.yml`, then run:
+Set `app.tushare.token` and QuestDB credentials in `data-app/src/main/resources/application.yml`, then run:
 
 ```bash
 ./gradlew run --args='sync-stock-basic-questdb'
@@ -18,7 +18,7 @@ Set `app.tushare.token` and QuestDB credentials in `src/main/resources/applicati
 
 This creates/uses the isolated `java_tushare_stock_basic_qwp_test` table, writes one UTC daily snapshot, and reads back the row count for that snapshot. The table uses `(snapshot_ts, ts_code)` as its deduplication key, so rows with the same daily key are upserted. Row-count polling is a limited visibility check: unchanged counts cannot confirm that a repeated sync's new field values have been applied. The command does not touch production tables. The previous `sync-stock-basic-jdbc` command remains as an alias.
 
-The QuestDB table and latest view are managed by Flyway SQL migrations in `src/main/resources/db/migration/questdb/`. Run `./gradlew run --args='migrate-questdb-schema'` explicitly, or let database sync/latest-query commands migrate before use. Existing databases require schema reconciliation and an explicit baseline; see the Flyway guide.
+The QuestDB table and latest view are managed by Flyway SQL migrations in `data-app/src/main/resources/db/migration/questdb/`. Run `./gradlew run --args='migrate-questdb-schema'` explicitly, or let database sync/latest-query commands migrate before use. Existing databases require schema reconciliation and an explicit baseline; see the Flyway guide.
 
 QuestDB ingestion uses the native QWP WebSocket client on the YAML-configured QWP port (normally 9000). PostgreSQL JDBC/PGWire (normally 8812) creates the table schema and polls for the submitted snapshot to become queryable. QWP writes are asynchronous, so the command waits for visibility with a 10-second deadline and fails if the row count does not catch up.
 
