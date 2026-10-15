@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 
 /** Read-only, bounded bridge to the materialized D089 Parquet and per-symbol D085 manifest receipts. */
@@ -36,8 +35,6 @@ public final class L2T0TrainingLabelsParquetSource {
     public static final int PAGE_ROWS = 200;
     public static final long MAX_SOURCE_BYTES = 64L * 1024 * 1024;
     public static final long MAX_OUTPUT_BYTES = 64L * 1024 * 1024;
-    private static final int MAX_INSPECTION_BYTES = 1024 * 1024;
-    private static final int MAX_ERROR_BYTES = 8192;
     private static final int MAX_LINE_BYTES = 8 * 1024 * 1024;
     private static final String PARSER_VERSION = "l2-t0-training-labels-parquet-v1";
     private static final DateTimeFormatter BASIC_DATE = DateTimeFormatter.BASIC_ISO_DATE;
@@ -72,18 +69,17 @@ public final class L2T0TrainingLabelsParquetSource {
     }
 
     private final Path datasetRoot;
-    private final Path helper;
-    private final String pythonExecutable;
     private final L2T0TrainingLabelsMapper mapper = new L2T0TrainingLabelsMapper();
 
-    public L2T0TrainingLabelsParquetSource(Path datasetRoot, Path helper, String pythonExecutable) {
+    public L2T0TrainingLabelsParquetSource(Path datasetRoot) {
         this.datasetRoot = Objects.requireNonNull(datasetRoot).toAbsolutePath().normalize();
-        this.helper = Objects.requireNonNull(helper).toAbsolutePath().normalize();
-        this.pythonExecutable = Objects.requireNonNull(pythonExecutable);
-        if (pythonExecutable.isBlank() || pythonExecutable.length() > 4096)
-            throw new IllegalArgumentException("Configured D089 Python executable path required");
     }
 
+    /** Compatibility constructor; native reads do not launch the supplied legacy helper. */
+    @Deprecated
+    public L2T0TrainingLabelsParquetSource(Path datasetRoot, Path ignoredHelper, String ignoredInterpreter) {
+        this(datasetRoot);
+    }
     public Path datasetRoot() { return datasetRoot; }
 
     public String sourceRootIdentity() throws Exception {
@@ -93,44 +89,29 @@ public final class L2T0TrainingLabelsParquetSource {
     public Inspection inspect(LocalDate from, LocalDate to, List<String> symbols,
                               int maxRows, int maxFiles) throws Exception {
         validateWindow(from, to, symbols);
-        Path output = Files.createTempFile("d089-inspection-", ".json");
-        Path error = Files.createTempFile("d089-inspection-", ".stderr");
-        try {
-            runProcess(command(from, to, symbols, maxRows, maxFiles, "--inspect", null),
-                    output, error, MAX_INSPECTION_BYTES, Duration.ofMinutes(5), () -> false);
-            if (Files.size(output) > MAX_INSPECTION_BYTES)
-                throw new IOException("D089 source inspection exceeded its output bound");
-            JsonNode node = JSON.readTree(Files.readString(output, StandardCharsets.UTF_8));
-            Inspection inspection = decodeInspection(node, "inspection");
-            if (!inspection.from().equals(from) || !inspection.to().equals(to)
-                    || inspection.selectedRows() > maxRows || inspection.files() > maxFiles
-                    || !inspection.rootIdentity().equals(sourceRootIdentity()))
-                throw new IOException("D089 source inspection differs from its frozen request budgets");
-            return inspection;
-        } finally {
-            deleteTemporaryFiles(output, error);
-        }
+        var control = NativeL2DailyParquetReader.Control.of(() -> false, Duration.ofMinutes(5));
+        return decodeInspection(NativeL2CertifiedFeaturesReader.scan(NativeL2CertifiedFeaturesReader.Product.TRAINING, datasetRoot, from, to, symbols, maxRows, maxFiles, control).inspection(), "inspection");
     }
-
     public SyncJobRunner.SourceCompletion stream(Inspection expected, List<String> symbols,
             int maxRows, int maxFiles, SyncJobRunner.PageConsumer<L2T0TrainingLabels> consumer,
             BooleanSupplier cancelled, Duration timeout) throws Exception {
-        Objects.requireNonNull(expected);
-        Objects.requireNonNull(consumer);
-        Objects.requireNonNull(cancelled);
+        Objects.requireNonNull(expected); Objects.requireNonNull(consumer); Objects.requireNonNull(cancelled);
         validateWindow(expected.from(), expected.to(), symbols);
-        Path output = Files.createTempFile("d089-source-", ".jsonl");
-        Path error = Files.createTempFile("d089-source-", ".stderr");
+        var control = NativeL2DailyParquetReader.Control.of(cancelled, timeout);
+        Path output = Files.createTempFile("d089-native-source-", ".jsonl");
         try {
-            runProcess(command(expected.from(), expected.to(), symbols, maxRows, maxFiles,
-                            "--stream", expected.sourceFingerprint()),
-                    output, error, MAX_OUTPUT_BYTES, timeout, cancelled);
-            return consumeOutput(output, expected, symbols, consumer, cancelled);
+            var scan = NativeL2CertifiedFeaturesReader.scan(NativeL2CertifiedFeaturesReader.Product.TRAINING, datasetRoot, expected.from(), expected.to(), symbols, maxRows, maxFiles, control);
+            requireSameInspection(expected, decodeInspection(scan.inspection(), "inspection"));
+            NativeL2CertifiedFeaturesReader.writeStream(scan, output, control);
+            // Complete source stability proof before the first downstream consumer can write.
+            requireSameInspection(expected, decodeInspection(NativeL2CertifiedFeaturesReader.scan(NativeL2CertifiedFeaturesReader.Product.TRAINING, datasetRoot, expected.from(), expected.to(), symbols, maxRows, maxFiles, control).inspection(), "inspection"));
+            return consumeOutput(output, expected, symbols, consumer, () -> NativeL2SourceSupport.check(control));
+        } catch (NativeL2SourceSupport.Deadline failure) {
+            throw (Exception) failure.getCause();
         } finally {
-            deleteTemporaryFiles(output, error);
+            deleteTemporaryFiles(output);
         }
     }
-
     private SyncJobRunner.SourceCompletion consumeOutput(Path output, Inspection expected,
             List<String> symbols, SyncJobRunner.PageConsumer<L2T0TrainingLabels> consumer,
             BooleanSupplier cancelled) throws Exception {
@@ -236,78 +217,6 @@ public final class L2T0TrainingLabelsParquetSource {
             digest.update(canonical);
         }
         return HexFormat.of().formatHex(digest.digest());
-    }
-
-    private List<String> command(LocalDate from, LocalDate to, List<String> symbols,
-            int maxRows, int maxFiles, String mode, String fingerprint) throws Exception {
-        if (!Files.isRegularFile(helper) || Files.isSymbolicLink(helper))
-            throw new IOException("D089 Parquet reader helper is unavailable");
-        Path python = Path.of(pythonExecutable).toAbsolutePath().normalize();
-        if (!Files.isRegularFile(python)) throw new IOException("Configured D089 Python executable is unavailable");
-        var command = new ArrayList<String>();
-        command.add(python.toString());
-        command.add(helper.toString());
-        command.add("--dataset-root"); command.add(datasetRoot.toString());
-        command.add("--from-date"); command.add(BASIC_DATE.format(from));
-        command.add("--to-date"); command.add(BASIC_DATE.format(to));
-        command.add("--page-rows"); command.add(Integer.toString(PAGE_ROWS));
-        command.add("--max-files"); command.add(Integer.toString(maxFiles));
-        command.add("--max-rows"); command.add(Integer.toString(maxRows));
-        command.add("--max-bytes"); command.add(Long.toString(MAX_SOURCE_BYTES));
-        command.add("--max-output-bytes"); command.add(Long.toString(MAX_OUTPUT_BYTES));
-        symbols.forEach(symbol -> { command.add("--symbol"); command.add(symbol); });
-        command.add(mode);
-        if (fingerprint != null) { command.add("--expected-fingerprint"); command.add(fingerprint); }
-        return List.copyOf(command);
-    }
-
-    private static void runProcess(List<String> command, Path output, Path error, long maxOutputBytes,
-            Duration timeout, BooleanSupplier cancelled) throws Exception {
-        if (timeout == null || timeout.isZero() || timeout.isNegative())
-            throw new IllegalArgumentException("Positive D089 source timeout required");
-        var builder = new ProcessBuilder(command).redirectOutput(output.toFile()).redirectError(error.toFile());
-        builder.environment().keySet().removeIf(key -> key.startsWith("QUESTDB_")
-                || key.startsWith("APP_QUESTDB_") || key.contains("TUSHARE"));
-        Process process = builder.start();
-        long deadline = System.nanoTime() + timeout.toNanos();
-        try {
-            try (var stdin = process.getOutputStream()) { stdin.close(); }
-            while (!process.waitFor(200, TimeUnit.MILLISECONDS)) {
-                if (cancelled.getAsBoolean() || Thread.currentThread().isInterrupted())
-                    throw new CancellationException("D089 Parquet reader cancelled");
-                if (System.nanoTime() >= deadline)
-                    throw new java.util.concurrent.TimeoutException("D089 Parquet reader exceeded its bounded deadline");
-                if (Files.size(output) > maxOutputBytes)
-                    throw new IOException("D089 Parquet reader exceeded its output-byte budget");
-            }
-            if (process.exitValue() != 0) {
-                String detail = Files.size(error) > MAX_ERROR_BYTES ? "source error output exceeded bound"
-                        : Files.readString(error, StandardCharsets.UTF_8).lines().findFirst().orElse("source process failed");
-                String errorType = detail.contains(":") ? detail.substring(0, detail.indexOf(':')) : detail;
-                throw new IOException("D089 Parquet reader failed: " + errorType);
-            }
-            if (Files.size(output) > maxOutputBytes) throw new IOException("D089 output exceeded its byte budget");
-        } finally {
-            if (process.isAlive()) terminate(process);
-        }
-    }
-
-    private static void terminate(Process process) {
-        boolean interrupted = Thread.interrupted();
-        try {
-            process.destroy();
-            if (!process.waitFor(2, TimeUnit.SECONDS)) {
-                process.destroyForcibly();
-                process.waitFor(2, TimeUnit.SECONDS);
-            }
-        } catch (InterruptedException stopWait) {
-            interrupted = true;
-            process.destroyForcibly();
-            try { process.waitFor(2, TimeUnit.SECONDS); }
-            catch (InterruptedException interruptedAgain) { interrupted = true; }
-        } finally {
-            if (interrupted) Thread.currentThread().interrupt();
-        }
     }
 
     private static void deleteTemporaryFiles(Path... files) {

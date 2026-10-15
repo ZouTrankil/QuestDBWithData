@@ -22,10 +22,10 @@ import org.springframework.core.env.MapPropertySource;
 class EtfMarketOverviewViewCatalogStartupTest {
     @TempDir Path temporary;
 
-    @Test void actualCatalogRegistersReadonlyViewAndKeepsExistingSourceAndCacheJobs() throws Exception {
+    @Test void actualCatalogRegistersReadonlyViewAndRetiresCacheJobs() throws Exception {
         Path ledger = temporary.resolve("uncreated.sqlite3");
         var application = new SpringApplication(QuestDataApplication.class,
-                EtfMarketOverviewCacheCatalogStartupTest.NoConnectionConfiguration.class);
+                CatalogNoConnectionTestSupport.NoConnectionConfiguration.class);
         application.setWebApplicationType(WebApplicationType.NONE);
         application.setAdditionalProfiles("d101-catalog-test");
         application.addInitializers(context -> context.getEnvironment().getPropertySources().addFirst(
@@ -42,7 +42,8 @@ class EtfMarketOverviewViewCatalogStartupTest {
             assertEquals(Set.of(DatasetDefinition.Capability.READ), datasets.require("v_etf_market_overview_daily").definition().capabilities());
             assertTrue(jobs.definitions().stream().noneMatch(job -> job.datasetId().equals("v_etf_market_overview_daily")));
             assertNotNull(jobs.require("data.etf_share", 3)); assertNotNull(jobs.require("data.etf_daily", 1));
-            assertNotNull(jobs.require(EtfMarketOverviewDailyCacheJobService.JOB_ID, 1));
+            assertTrue(jobs.definitions().stream().noneMatch(job -> job.datasetId().equals("etf_market_overview_daily_cache")));
+            assertTrue(datasets.definitions().stream().noneMatch(dataset -> Set.of("etf_market_overview_daily_cache", "market_barometer_cache_coverage").contains(dataset.objectName())));
             var source = context.getBean("d101NoConnectionDataSource", DataSource.class);
             verify(source, never()).getConnection(); verify(source, never()).getConnection(anyString(), anyString());
             Path output = temporary.resolve("java-catalog-startup-20261006.json");

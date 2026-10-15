@@ -141,7 +141,7 @@ class CliCommandRegistryTest {
                 new IndexCommands(null, null, null, null, null, null, null, null, null),
                 new FlowCommands(null, null, null, null),
                 new L2Commands(null, null, null, null, null),
-                new MaterializationCommands(null, null, null, null, null));
+                new MaterializationCommands(null, null, null, null));
     }
 
     private record Call(String command, Map<String, String> options) {}

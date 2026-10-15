@@ -42,12 +42,12 @@ public final class BacktestDailyMaterializationJobService implements SyncJobOwne
     public Plan bootstrapPlan(LocalDate logicalDate)throws Exception{return prepare(null,null,logicalDate,true);}
     public Plan plan(LocalDate from,LocalDate to,LocalDate logicalDate)throws Exception{
         if(from==null||to==null||from.isAfter(to)||ChronoUnit.DAYS.between(from,to)>=366)throw new IllegalArgumentException("Explicit from/to up to366 days required");
-        // The first run must bootstrap all source history, even if a caller asks only for the last date.
-        return prepare(from,to,logicalDate,!hasVerifiedPublication());
+        // A migrated native view can be maintained by window without inventing historical authority.
+        return prepare(from,to,logicalDate,false);
     }
     private Plan prepare(LocalDate from,LocalDate to,LocalDate logicalDate,boolean bootstrap)throws Exception{
         Objects.requireNonNull(logicalDate);requireNoPending();var port=new BacktestDailyMaterializationPort(jdbc);var before=port.identity(BASE);String pin=port.sourcePin();
-        String kind=port.targetKind(),sql=port.targetSql();if(kind.equals("V")){if(!normalized(SOURCE_SQL).equals(normalized(sql)))throw new IllegalStateException("Existing ordinary backtest SQL differs from canonical source");bootstrap=true;}
+        String kind=port.targetKind(),sql=port.targetSql();if(kind.equals("V")){if(!normalized(SOURCE_SQL).equals(normalized(sql)))throw new IllegalStateException("Existing ordinary backtest SQL differs from canonical source");if(!bootstrap)throw new IllegalStateException("Ordinary view conversion requires explicit --bootstrap true; requested window was not expanded");}
         else if(!kind.equals("M")||!normalized(MV_SQL).equals(normalized(sql)))throw new IllegalStateException("Existing public backtest object is not the approved view or native definition");
         if(bootstrap){Bounds all=port.sourceBounds();from=all.from();to=all.to();}if(to.isAfter(logicalDate))throw new IllegalArgumentException("Backtest cutoff exceeds logical date");
         if(!pin.equals(port.sourcePin())||!before.equals(port.identity(BASE)))throw new IllegalStateException("Sources/target changed while planning");
@@ -83,12 +83,22 @@ public final class BacktestDailyMaterializationJobService implements SyncJobOwne
                 oldMonths.addAll(port.fullDigest(BASE,plan.targetBefore()));
             }
             requirePin(plan.sourcePin());port.requireSame(plan.targetBefore());
+            boolean reuseExisting=false;
+            if(!plan.bootstrap()&&expected.equals(oldMonths)) {
+                try {port.reuseExisting(expected);reuseExisting=true;}
+                catch(IllegalStateException staleNative) {
+                    // Equal base values alone are insufficient: rebuild a stale/mismatching native view.
+                }
+            }
             Path root=ledgerPath.getParent().resolve("sync-evidence").resolve(run);evidence=root.resolve("source.json");windowHash=fullHash(expected);
             writeEvidence(evidence,Map.ofEntries(Map.entry("producer","java.backtest_daily.materialization"),Map.entry("from",request.from()),Map.entry("to",request.to()),Map.entry("bootstrap",plan.bootstrap()),
                     Map.entry("sourcePin",plan.sourcePin()),Map.entry("canonicalSql",SOURCE_SQL),Map.entry("nativeSql",MV_SQL),Map.entry("sourceBusinessRows",sourceRows),Map.entry("monthReceipts",expected),
-                    Map.entry("oldMonthReceipts",oldMonths),Map.entry("oldObjectKind",plan.oldObjectKind()),Map.entry("oldObjectSql",plan.oldObjectSql()),Map.entry("sourceComplete",true)));
+                    Map.entry("oldMonthReceipts",oldMonths),Map.entry("oldObjectKind",plan.oldObjectKind()),Map.entry("oldObjectSql",plan.oldObjectSql()),Map.entry("sourceComplete",true),
+                    Map.entry("historyCertified",plan.bootstrap()||hasCertifiedHistory(plan.targetBefore())),Map.entry("physicalPublicationReused",reuseExisting)));
             for(var month:expected){Path file=root.resolve("source-"+month.from()+".json");writeEvidence(file,Map.of("receipt",month,"sourcePin",plan.sourcePin(),"sourceComplete",true,"fields",COLUMNS));
                 consumer.accept(new SyncJobRunner.Page<>(List.of(month),sha(new String(CODEC.canonicalBytes(month),java.nio.charset.StandardCharsets.UTF_8)),file.toString(),month.from().toString()));}
+            if(reuseExisting){requirePin(plan.sourcePin());port.requireReuseUnchanged();baseRows=plan.targetBefore().rows();nativeRows=baseRows;
+                return new SyncJobRunner.SourceCompletion(expected.size(),expected.size(),true,evidence.toString());}
             port.verifyReplacement(oldMonths,expected);requirePin(plan.sourcePin());port.requireSame(plan.targetBefore());
             List<Map<String,Object>> outside=port.outsidePartitions(request.from(),request.to());
             if(!plan.bootstrap()){
@@ -162,14 +172,27 @@ public final class BacktestDailyMaterializationJobService implements SyncJobOwne
         requirePin(pin);Path output=owned.resolve("publication.json");
         // Once the immutable final proof exists, recovery verifies it instead of submitting another asynchronous FULL.
         if(Files.exists(output)){var proof=json.readTree(output.toFile());if(!json.writeValueAsString(port.identity(BASE)).equals(proof.path("base").toString())||!json.writeValueAsString(port.nativeState(MV)).equals(proof.path("native").toString())||!pin.equals(proof.path("sourcePin").asText()))throw new IllegalStateException("Retained final publication proof differs from current objects");}
-        else {port.installAndVerifyNative(MV,expected,bootstrap||old.stream().mapToLong(MonthReceipt::rows).sum()>0);requirePin(pin);writeEvidence(output,Map.of("producer","java.backtest_daily.materialization","base",port.identity(BASE),"native",port.nativeState(MV),"sourceEvidenceSha256",fileHash(source),"sourcePin",pin,"bootstrap",bootstrap,"sourceBusinessRows",expected.stream().mapToLong(MonthReceipt::rows).sum(),"monthReceipts",expected));}
+        else {port.installAndVerifyNative(MV,expected,bootstrap||old.stream().mapToLong(MonthReceipt::rows).sum()>0);requirePin(pin);writeEvidence(output,Map.of("producer","java.backtest_daily.materialization","base",port.identity(BASE),"native",port.nativeState(MV),"sourceEvidenceSha256",fileHash(source),"sourcePin",pin,"bootstrap",bootstrap,"sourceBusinessRows",expected.stream().mapToLong(MonthReceipt::rows).sum(),"monthReceipts",expected,"historyCertified",json.readTree(source.toFile()).path("historyCertified").asBoolean(true)));}
         var base=port.identity(BASE);var nativeState=port.nativeState(MV);recordFinalProof(intent.id(),intent.runId(),output);requirePin(pin);if(!base.equals(port.identity(BASE))||!nativeState.equals(port.nativeState(MV)))throw new IllegalStateException("Published objects changed before final journal verification");
         if(entry.state()!=ReferencePublicationJournal.State.VERIFIED)journal.advance(entry,ReferencePublicationJournal.State.VERIFIED);return new Published(base,nativeState,output.toString());
     }
     private void requirePin(String expected){if(!expected.matches("[0-9a-f]{64}")||!expected.equals(new BacktestDailyMaterializationPort(jdbc).sourcePin()))throw new IllegalStateException("Complete four-source historical pin changed");}
     public SyncRunLedger.Entry status(String runId)throws Exception{return SyncRunLedger.openReadOnly(ledgerPath).get(runId);}
     private void recordFinalProof(String publication,String run,Path output)throws Exception{try(var db=DriverManager.getConnection("jdbc:sqlite:"+ledgerPath);var s=db.createStatement()){s.execute("PRAGMA synchronous=FULL");s.execute("CREATE TABLE IF NOT EXISTS backtest_publication_proofs (publication_id TEXT PRIMARY KEY REFERENCES reference_publications(id),run_id TEXT NOT NULL,evidence_path TEXT NOT NULL,evidence_sha256 TEXT NOT NULL)");try(var insert=db.prepareStatement("INSERT INTO backtest_publication_proofs VALUES(?,?,?,?) ON CONFLICT(publication_id) DO NOTHING")){insert.setString(1,publication);insert.setString(2,run);insert.setString(3,output.toString());insert.setString(4,fileHash(output));insert.executeUpdate();}try(var q=db.prepareStatement("SELECT run_id,evidence_path,evidence_sha256 FROM backtest_publication_proofs WHERE publication_id=?")){q.setString(1,publication);try(var r=q.executeQuery()){if(!r.next()||!run.equals(r.getString(1))||!output.toString().equals(r.getString(2))||!fileHash(output).equals(r.getString(3))||r.next())throw new IllegalStateException("Immutable final publication attestation differs");}}}}
-    private boolean hasVerifiedPublication()throws Exception{return !publicationRows("state='VERIFIED'").isEmpty();}
+    private boolean hasCertifiedHistory(Identity before)throws Exception{
+        if(publicationRows("state='VERIFIED'").isEmpty())return false;
+        try(var db=DriverManager.getConnection("jdbc:sqlite:"+ledgerPath.toUri().toASCIIString()+"?mode=ro");var s=db.createStatement()){
+            s.execute("PRAGMA query_only=ON");
+            try(var r=s.executeQuery("SELECT q.run_id,q.evidence_path,q.evidence_sha256 FROM reference_publications p JOIN backtest_publication_proofs q ON q.publication_id=p.id AND q.run_id=p.run_id WHERE p.dataset='backtest_daily' AND p.state='VERIFIED' ORDER BY p.updated_at DESC,p.id DESC LIMIT 1")){
+                if(!r.next())return false;
+                Path expected=ledgerPath.getParent().resolve("sync-evidence").resolve(r.getString(1)).resolve("publication.json").toAbsolutePath().normalize();
+                Path file=Path.of(r.getString(2)).toAbsolutePath().normalize();
+                if(!expected.equals(file)||!Files.isRegularFile(file)||Files.size(file)>2*1024*1024||!fileHash(file).equals(r.getString(3)))throw new IllegalStateException("Previous backtest publication proof is absent or changed");
+                var json=JobDefinitionJson.mapper();var proof=json.readTree(file.toFile());
+                return proof.path("historyCertified").asBoolean(true)&&json.writeValueAsString(before).equals(proof.path("base").toString());
+            }
+        }
+    }
     private void requireNoPending()throws Exception{if(!publicationRows("state<>'VERIFIED'").isEmpty())throw new IllegalStateException("Backtest has an interrupted publication; use explicit stopped-writer recovery");}
     private List<String> publicationRows(String predicate)throws Exception{
         if(!Files.isRegularFile(ledgerPath))return List.of();try(var db=DriverManager.getConnection("jdbc:sqlite:"+ledgerPath.toUri().toASCIIString()+"?mode=ro");var s=db.createStatement()){

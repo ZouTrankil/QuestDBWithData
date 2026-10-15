@@ -170,15 +170,21 @@ public final class DailyBasicJobService implements SyncJobOwner {
     public String revalidateGroupChild(String priorChild, String expectedTarget,
             SyncJobDefinition.FrozenRequest request, String parentGroupRunId) throws Exception {
         if (!targetId().equals(expectedTarget)) throw new IllegalStateException("daily_basic group target identity changed");
-        var ledger = new SyncRunLedger(ledgerPath);
+        var ledger = SyncRunLedger.openReadOnly(ledgerPath);
         var evidence = ledgerPath.getParent().resolve("sync-evidence").resolve("daily-basic-recheck-" + UUID.randomUUID());
         var adapter = adapter(evidence);
         return VerifiedRunRecovery.revalidate(ledger, priorChild, expectedTarget, request, adapter,
                 () -> {
                     if (Thread.currentThread().isInterrupted()) return true;
+                    if (parentGroupRunId == null) return false;
                     try { return ledger.cancellationRequested(parentGroupRunId); }
                     catch (java.sql.SQLException failure) { throw new IllegalStateException("Cannot read group cancellation", failure); }
                 }, evidence);
+    }
+
+    public String revalidate(String priorRunId)throws Exception {
+        var saved=FrozenRunRequest.restoreCompleted(ledgerPath,priorRunId,definition());
+        return revalidateGroupChild(priorRunId,saved.targetId(),saved.request(),null);
     }
 
     private SyncJobRunner.Result execute(String runId, String priorRunId, String expectedTarget,

@@ -74,7 +74,7 @@ public final class QuestDbDailyFactorPanel {
     private PriceSnapshot readProjected(LocalDate historyFrom,LocalDate through,int maxRows,
             String table,List<String> fields,int[] priceColumns) {
         if(historyFrom==null || through==null || historyFrom.isAfter(through)
-                || ChronoUnit.DAYS.between(historyFrom,through)>460 || maxRows<1 || maxRows>5_000_000)
+                || ChronoUnit.DAYS.between(historyFrom,through)>com.zoutrankil.data.factor.engine.EtfHistoryWindow.MAX_DAYS || maxRows<1 || maxRows>5_000_000)
             throw new IllegalArgumentException("Bounded stock price history required");
         var before=table.equals("v_backtest_daily")?priceState():state();var listing=listingDates();var aliases=StockCodeAliases.load();
         var builders=new LinkedHashMap<String,Columns>();long[] sourceRows={0};long kept=0,excluded=0;

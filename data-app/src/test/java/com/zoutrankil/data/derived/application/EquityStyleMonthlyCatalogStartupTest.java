@@ -21,7 +21,7 @@ class EquityStyleMonthlyCatalogStartupTest {
     @TempDir Path temporary;
     @Test void actualCatalogAdmitsTypedMonthlyDatasetAndCanonicalJobWithoutIo() throws Exception {
         Path ledger=temporary.resolve("uncreated.sqlite3");
-        var application=new SpringApplication(QuestDataApplication.class,EtfMarketOverviewCacheCatalogStartupTest.NoConnectionConfiguration.class);
+        var application=new SpringApplication(QuestDataApplication.class,CatalogNoConnectionTestSupport.NoConnectionConfiguration.class);
         application.setWebApplicationType(WebApplicationType.NONE);application.setAdditionalProfiles("d101-catalog-test");
         application.addInitializers(context->context.getEnvironment().getPropertySources().addFirst(new MapPropertySource("d103-catalog-test",Map.of(
                 "app.sync.ledger-path",ledger.toString(),"app.sync.etf-market-overview-cache.expected-pid","0",

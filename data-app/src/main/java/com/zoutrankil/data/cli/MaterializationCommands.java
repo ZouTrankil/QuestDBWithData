@@ -4,7 +4,6 @@ import com.zoutrankil.data.derived.application.MarketSentimentDailyJobService;
 import com.zoutrankil.data.derived.application.RegimeFeaturesMonitorDailyJobService;
 
 import com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService;
-import com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService;
 import com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService;
 import com.zoutrankil.data.derived.application.MarketBreadthDailyV1JobService;
 import com.zoutrankil.data.derived.application.RetailSentimentDailyV1JobService;
@@ -23,9 +22,7 @@ public final class MaterializationCommands implements CliCommandFamily {
             "macro-core-monthly-job-status", "cancel-macro-core-monthly-run", "resume-macro-core-monthly-run",
             "reconcile-macro-core-monthly-run", "install-equity-style-monthly-isolated", "plan-equity-style-monthly-job",
             "run-equity-style-monthly-job", "equity-style-monthly-job-status", "cancel-equity-style-monthly-run",
-            "resume-equity-style-monthly-run", "reconcile-equity-style-monthly-run", "plan-etf-market-overview-cache-job",
-            "run-etf-market-overview-cache-job", "etf-market-overview-cache-job-status", "cancel-etf-market-overview-cache-run",
-            "resume-etf-market-overview-cache-run", "reconcile-etf-market-overview-cache-run", "install-retail-sentiment-daily-isolated",
+            "resume-equity-style-monthly-run", "reconcile-equity-style-monthly-run", "install-retail-sentiment-daily-isolated",
             "repair-retail-sentiment-daily-isolated", "plan-retail-sentiment-daily-job", "run-retail-sentiment-daily-job",
             "retail-sentiment-daily-job-status", "cancel-retail-sentiment-daily-run", "resume-retail-sentiment-daily-run",
             "reconcile-retail-sentiment-daily-run", "install-market-breadth-daily-isolated", "repair-market-breadth-daily-isolated",
@@ -33,7 +30,6 @@ public final class MaterializationCommands implements CliCommandFamily {
             "cancel-market-breadth-daily-run", "resume-market-breadth-daily-run", "reconcile-market-breadth-daily-run");
     private final com.zoutrankil.data.derived.application.MarketBreadthDailyV1JobService marketBreadthDailyService;
     private final com.zoutrankil.data.derived.application.RetailSentimentDailyV1JobService retailSentimentDailyService;
-    private final com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService;
     private final com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService equityStyleMonthlyService;
     private final com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService macroCoreMonthlyService;
 
@@ -43,14 +39,12 @@ public final class MaterializationCommands implements CliCommandFamily {
     @org.springframework.beans.factory.annotation.Autowired
     public MaterializationCommands(@org.springframework.lang.Nullable com.zoutrankil.data.derived.application.MarketBreadthDailyV1JobService marketBreadthDailyService,
             @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.RetailSentimentDailyV1JobService retailSentimentDailyService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService,
             @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService equityStyleMonthlyService,
             @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService macroCoreMonthlyService,
             @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.MarketSentimentDailyJobService marketSentimentService,
             @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.RegimeFeaturesMonitorDailyJobService regimeMonitorService) {
         this.marketBreadthDailyService = marketBreadthDailyService;
         this.retailSentimentDailyService = retailSentimentDailyService;
-        this.etfMarketOverviewDailyCacheService = etfMarketOverviewDailyCacheService;
         this.equityStyleMonthlyService = equityStyleMonthlyService;
         this.macroCoreMonthlyService = macroCoreMonthlyService;
         this.marketSentimentService = marketSentimentService;
@@ -59,10 +53,9 @@ public final class MaterializationCommands implements CliCommandFamily {
 
     public MaterializationCommands(@org.springframework.lang.Nullable com.zoutrankil.data.derived.application.MarketBreadthDailyV1JobService marketBreadthDailyService,
             @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.RetailSentimentDailyV1JobService retailSentimentDailyService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService etfMarketOverviewDailyCacheService,
             @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService equityStyleMonthlyService,
             @org.springframework.lang.Nullable com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService macroCoreMonthlyService) {
-        this(marketBreadthDailyService, retailSentimentDailyService, etfMarketOverviewDailyCacheService, equityStyleMonthlyService, macroCoreMonthlyService, null, null);
+        this(marketBreadthDailyService, retailSentimentDailyService, equityStyleMonthlyService, macroCoreMonthlyService, null, null);
     }
 
     @Override public java.util.Set<String> commands() { return COMMANDS; }
@@ -135,10 +128,6 @@ public final class MaterializationCommands implements CliCommandFamily {
             case "install-equity-style-monthly-isolated", "plan-equity-style-monthly-job", "run-equity-style-monthly-job",
                  "equity-style-monthly-job-status", "cancel-equity-style-monthly-run", "resume-equity-style-monthly-run",
                  "reconcile-equity-style-monthly-run" -> EquityStyleMonthlyCommands.execute(command,options,equityStyleMonthlyService);
-            case "plan-etf-market-overview-cache-job", "run-etf-market-overview-cache-job",
-                 "etf-market-overview-cache-job-status", "cancel-etf-market-overview-cache-run",
-                 "resume-etf-market-overview-cache-run", "reconcile-etf-market-overview-cache-run" ->
-                    EtfMarketOverviewDailyCacheCommands.execute(command, options, etfMarketOverviewDailyCacheService);
             case "install-retail-sentiment-daily-isolated", "repair-retail-sentiment-daily-isolated",
                  "plan-retail-sentiment-daily-job", "run-retail-sentiment-daily-job",
                  "retail-sentiment-daily-job-status", "cancel-retail-sentiment-daily-run",

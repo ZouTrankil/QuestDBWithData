@@ -286,4 +286,11 @@ public final class EtfFactorJobService {
         if (expected == null || !expected.equals(actual))
             throw new IllegalStateException("etf_factor physical target identity changed after planning");
     }
+    /** Re-fetch the original completed window and compare every current physical value. */
+    public String revalidate(String priorRunId)throws Exception {
+        return com.zoutrankil.data.service.CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,
+                EtfFactorSyncJobOwner.DEFINITION,this::targetId,(evidence,identity)->
+                    new EtfFactorSyncAdapter(new EtfFactorSource(pages,new EtfFactorMapper(),evidence.resolve("source")),
+                            tradingDates,target.newWriter(identity),evidence));
+    }
 }

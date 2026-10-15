@@ -27,7 +27,7 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.*;
  * It certifies SSE open dates within the frozen window. It never derives a checkpoint from MAX(date).
  */
 @Service
-public final class CnBondYieldCurveJobService implements DatasetImplementation,SyncJobOwner {
+public final class CnBondYieldCurveJobService implements SyncJobOwner {
     public static final String DATASET="cn_bond_yield_curve",JOB_ID="data.cn_bond_yield_curve";
     private static final SourceContract SOURCE=SourceContract.load(DATASET);
     private static final DateTimeFormatter BASIC=DateTimeFormatter.BASIC_ISO_DATE;
@@ -42,6 +42,26 @@ public final class CnBondYieldCurveJobService implements DatasetImplementation,S
         this.questdb=Objects.requireNonNull(questdb);this.source=Objects.requireNonNull(source);this.ledgerPath=Path.of(ledger).toAbsolutePath().normalize();
     }
     public String tableName(){return DATASET;}
+    public String targetId(){return CnBondYieldCurveWritePort.targetId(jdbc);}
+    /** Fresh source and exact readback only; the recovery consumer never sends rows. */
+    public String revalidate(String priorRunId)throws Exception{
+        var saved=FrozenRunRequest.restoreCompleted(ledgerPath,priorRunId,jobDefinition());
+        var request=saved.request();
+        return CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,jobDefinition(),this::targetId,
+                (evidence,identity)->{
+                    var current=calendar(request.from(),request.to());
+                    if(!current.hash.equals(request.parameters().get("calendarHash"))
+                            ||!encodeDates(current.openDates).equals(request.parameters().get("trade_dates")))
+                        throw new IllegalStateException("ChinaBond frozen calendar changed before revalidation");
+                    var port=new CnBondYieldCurveWritePort(jdbc,questdb,DATASET,identity);
+                    // The original pre-write hash cannot describe the completed target. Capture
+                    // the current window for preflight; fetch still checks every source value.
+                    var snapshot=new Plan(request,identity,
+                            CnBondYieldCurveWritePort.fingerprint(port.readWindow(request.from(),request.to())),
+                            current.openDates,current.hash);
+                    return new Adapter(snapshot,evidence,port);
+                });
+    }
     public String datasetId(){return DATASET;}
     public DatasetDefinition definition(){return CnBondYieldCurveWritePort.definition();}
     public Set<Mode> supportedSyncModes(){return Set.of(Mode.BACKFILL);}
@@ -81,7 +101,8 @@ public final class CnBondYieldCurveJobService implements DatasetImplementation,S
     public boolean cancel(String run)throws Exception{return new SyncRunLedger(ledgerPath).requestCancellation(run);}
     private final class Adapter implements SyncJobRunner.Adapter<CnBondYieldCurveRow,CnBondYieldCurveKey>{
         private final Plan plan;private final Path evidence;private final CnBondYieldCurveWritePort port;
-        Adapter(Plan plan,String run,CnBondYieldCurveWritePort port){this.plan=plan;this.evidence=ledgerPath.getParent().resolve("sync-evidence").resolve(run);this.port=port;}
+        Adapter(Plan plan,String run,CnBondYieldCurveWritePort port){this(plan,ledgerPath.getParent().resolve("sync-evidence").resolve(run),port);}
+        Adapter(Plan plan,Path evidence,CnBondYieldCurveWritePort port){this.plan=plan;this.evidence=evidence;this.port=port;}
         public void preflight(FrozenRequest request)throws Exception{
             port.preflight();var current=calendar(request.from(),request.to());
             if(!current.hash.equals(plan.calendarHash)||!current.openDates.equals(plan.tradeDates))throw new IllegalStateException("ChinaBond authoritative calendar changed after planning");

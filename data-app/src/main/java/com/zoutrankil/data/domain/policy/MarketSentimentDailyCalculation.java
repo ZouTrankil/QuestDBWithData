@@ -32,11 +32,30 @@ public final class MarketSentimentDailyCalculation {
     /** pandas rolling(20,min_periods=10) after ST/suspended filtering, per stock. */
     public static final class StockHistory {
         private final double[] close=new double[20]; private int size,cursor,streak; private boolean previousLimit;
+        private double rollingSum,addCompensation,removeCompensation,lastValue=Double.NaN;
+        private int observations,negativeCount,consecutiveSame;
         public Stock prepare(String code,double value,double previous,double amount,double turnover,
                              double circMv,double totalMv,double pb,double upLimit,double downLimit){
+            // Match pandas 2.3 roll_mean: independent Kahan compensation for
+            // removal and addition, with removal before addition. Re-summing
+            // the circular array moves exact threshold observations across bins.
+            if(size==20&&finite(close[cursor])) {
+                double old=close[cursor],y=-old-removeCompensation,t=rollingSum+y;
+                removeCompensation=t-rollingSum-y;rollingSum=t;observations--;
+                if(Double.doubleToRawLongBits(old)<0)negativeCount--;
+            }
             close[cursor]=value;cursor=(cursor+1)%20;size=Math.min(20,size+1);
-            double sum=0;int valid=0;for(int i=0;i<size;i++)if(finite(close[i])){sum+=close[i];valid++;}
-            double ma=valid>=10?sum/valid:Double.NaN;
+            if(finite(value)) {
+                double y=value-addCompensation,t=rollingSum+y;
+                addCompensation=t-rollingSum-y;rollingSum=t;observations++;
+                if(Double.doubleToRawLongBits(value)<0)negativeCount++;
+                consecutiveSame=value==lastValue?consecutiveSame+1:1;lastValue=value;
+            }
+            double ma=observations>=10?rollingSum/observations:Double.NaN;
+            if(observations>=10) {
+                if(consecutiveSame>=observations)ma=lastValue;
+                else if(negativeCount==0&&ma<0||negativeCount==observations&&ma>0)ma=0;
+            }
             boolean limit=finite(upLimit)&&Math.abs(value-upLimit)<=1e-6;
             streak=limit?streak+1:0;
             var result=new Stock(code,value,previous,amount,turnover,circMv,totalMv,pb,upLimit,downLimit,
@@ -80,9 +99,13 @@ public final class MarketSentimentDailyCalculation {
                 .sorted(Comparator.comparingDouble((Stock s)->pb?s.pb:s.totalMv).thenComparing(Stock::code)).toList();
         if(ordered.stream().map(s->pb?s.pb:s.totalMv).distinct().count()<3)return Double.NaN;
         double lower=0,upper=0;int nl=0,nu=0,n=ordered.size();
-        // qcut on rank(method=first), using linearly interpolated rank boundaries.
-        for(int i=0;i<n;i++){if(i<=(n-1)/3.0){lower+=ordered.get(i).ret();nl++;}
-            else if(i>2*(n-1)/3.0){upper+=ordered.get(i).ret();nu++;}}
+        // pandas Series.quantile passes percentages to numpy.percentile, which
+        // divides them by 100 again. Preserve that rounding before comparing
+        // one-based ranks: integer boundaries can fall just below the rank.
+        double lowBoundary=1+(n-1)*(((1.0/3.0)*100.0)/100.0);
+        double highBoundary=1+(n-1)*(((2.0/3.0)*100.0)/100.0);
+        for(int i=0;i<n;i++){if(i+1<=lowBoundary){lower+=ordered.get(i).ret();nl++;}
+            else if(i+1>highBoundary){upper+=ordered.get(i).ret();nu++;}}
         return divide(lower,nl)-divide(upper,nu);
     }
     public static void score(List<Day> days){

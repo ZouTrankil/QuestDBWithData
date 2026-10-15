@@ -81,14 +81,14 @@ public final class LaunchService {
                     var outcome=ledger.state(request.instanceId());
                     boolean active=outcome==BusinessState.RUNNING || outcome==BusinessState.VERIFYING;
                     boolean completed=execution.getStatus()==org.springframework.batch.core.BatchStatus.COMPLETED;
-                    // A failed final callback/commit can leave five old ready certificates behind.
+                    // A failed final callback/commit can leave old ready certificates behind.
                     // Those certificates must never overwrite a recorded unknown or failed owner outcome.
                     if (ready && completed && active)
                         ledger.state(request.instanceId(),BusinessState.VERIFIED,execution.getId(),null);
                     else if (active)
                         ledger.state(request.instanceId(),BusinessState.IN_DOUBT,execution.getId(),
                                 "Main-strategy batch outcome requires reconciliation: technical="+execution.getStatus()
-                                        +", fiveAuthoritativeStagesReady="+ready);
+                                        +", authoritativeStagesReady="+ready);
                     return ledger.detail(request.instanceId());
                 }
                 boolean allReady=PostCloseGraph.STAGES.stream().allMatch(s -> states.getOrDefault(s.id(),BusinessState.WAITING_UPSTREAM).ready());

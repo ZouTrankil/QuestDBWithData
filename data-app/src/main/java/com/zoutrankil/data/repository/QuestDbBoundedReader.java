@@ -53,11 +53,6 @@ public class QuestDbBoundedReader {
             "close", "trade_date", "etf_count", "total_share", "total_size_yi", "etf_share", "etf_daily");
     private static final java.util.regex.Pattern ETF_SQL_TOKEN = java.util.regex.Pattern.compile(
             "\"([A-Za-z_][A-Za-z0-9_]*)\"|([A-Za-z_][A-Za-z0-9_]*)|([0-9]+(?:\\.[0-9]+)?[A-Za-z]*)|([.,()*/=])");
-    // Python's DEDUP publisher can revise existing cache keys without changing their business source_version.
-    private static final Set<String> GUARDED_CACHE_TABLES = Set.of(
-            "etf_market_overview_daily_cache");
-    // Admitted Python cache products identify a generation by sha256(...).hexdigest().
-    private static final java.util.regex.Pattern CACHE_GENERATION = java.util.regex.Pattern.compile("[0-9a-f]{64}");
     private final JdbcTemplate jdbc;
     private final Path ledgerPath;
     public QuestDbBoundedReader(JdbcTemplate jdbc) { this(jdbc,System.getProperty("app.sync.ledger-path","var/sync-ledger.sqlite3")); }
@@ -70,7 +65,6 @@ public class QuestDbBoundedReader {
         DerivedMonthlyReadGuards.validateEquityStyle(definition, query);
         DerivedMonthlyReadGuards.validateMacroCore(definition, query);
         DerivedMonthlyReadGuards.validateMacroCoreView(definition, query);
-        validateCacheGenerationFilters(definition, query);
         String guardedBefore = guardedSourceVersion(definition);
         String effectiveSourceVersion = guardedBefore == null ? sourceVersion : guardedBefore;
         var prepared = prepare(definition, query, effectiveSourceVersion);
@@ -131,21 +125,9 @@ public class QuestDbBoundedReader {
         }
     }
 
-    private static void validateCacheGenerationFilters(DatasetDefinition definition, DatasetReadQuery query) {
-        if (definition.objectKind() != ObjectKind.TABLE || !GUARDED_CACHE_TABLES.contains(definition.objectName())) return;
-        if (query.equalities().containsKey("source_version"))
-            requireCacheGeneration(query.equalities().get("source_version"));
-        if (query.cursor() != null) {
-            if (query.cursor().keyValues().size() != 2)
-                throw new IllegalArgumentException("Complete date/source-generation cursor key required");
-            requireCacheGeneration(query.cursor().keyValues().get(1));
-        }
-    }
 
-    private static void requireCacheGeneration(Object value) {
-        if (!(value instanceof String version) || !CACHE_GENERATION.matcher(version).matches())
-            throw new IllegalArgumentException("Lowercase SHA-256 source_version required");
-    }
+
+
 
     private String guardedSourceVersion(DatasetDefinition definition) {
         if (BacktestDailyMaterializationReadGuard.applies(definition))
@@ -162,8 +144,6 @@ public class QuestDbBoundedReader {
             return requireCurrentAlias(definition);
         if (definition.objectKind() == ObjectKind.VIEW && GUARDED_ETF_AGGREGATE_VIEW.equals(definition.objectName()))
             return requireCurrentEtfAggregateView(definition);
-        if (definition.objectKind() == ObjectKind.TABLE && GUARDED_CACHE_TABLES.contains(definition.objectName()))
-            return requireCurrentCacheTable(definition.objectName());
         return null;
     }
 
@@ -281,32 +261,7 @@ public class QuestDbBoundedReader {
         }, extractor);
     }
 
-    /** This is a physical cache snapshot, independent of the row's source_version and current upstream freshness. */
-    private String requireCurrentCacheTable(String objectName) {
-        return jdbc.query("SELECT t.id AS table_id,t.directoryName AS table_directory,t.table_txn AS table_physical_txn,"
-                + "t.table_suspended AS table_suspended,t.wal_pending_row_count AS table_pending_rows,"
-                + "t.walEnabled AS table_wal_enabled,w.sequencerTxn AS table_seq_txn,"
-                + "w.writerTxn AS table_writer_txn,w.bufferedTxnSize AS table_buffered_txns,"
-                + "w.suspended AS table_wal_suspended FROM tables() t JOIN wal_tables() w ON w.name=t.table_name "
-                + "WHERE t.table_name='" + objectName + "'", rs -> {
-            if (!rs.next()) throw new IllegalStateException("Guarded cache table or WAL metadata is absent");
-            long id = requiredCounter(rs, "table_id");
-            String directory = rs.getString("table_directory");
-            long physicalTxn = requiredCounter(rs, "table_physical_txn");
-            long sequenceTxn = requiredCounter(rs, "table_seq_txn");
-            long writerTxn = requiredCounter(rs, "table_writer_txn");
-            long pendingRows = requiredCounter(rs, "table_pending_rows");
-            long bufferedTxns = requiredCounter(rs, "table_buffered_txns");
-            if (directory == null || directory.isBlank() || !requiredBoolean(rs, "table_wal_enabled")
-                    || requiredBoolean(rs, "table_suspended") || requiredBoolean(rs, "table_wal_suspended")
-                    || pendingRows != 0 || bufferedTxns != 0 || writerTxn != sequenceTxn)
-                throw new IllegalStateException("Guarded cache table WAL is unsettled, suspended or unavailable");
-            if (rs.next()) throw new IllegalStateException("Duplicate guarded cache table metadata");
-            // Table and WAL counters are independent; both are bound, never compared to one another.
-            return "table:" + objectName + ":id:" + id + ":directory:" + directory
-                    + ":txn:" + physicalTxn + ":wal-seq:" + sequenceTxn;
-        });
-    }
+
 
     private static boolean requiredBoolean(ResultSet rs, String column) throws SQLException {
         boolean value = rs.getBoolean(column);
@@ -449,7 +404,6 @@ public class QuestDbBoundedReader {
         DerivedMonthlyReadGuards.validateEquityStyle(definition, query);
         DerivedMonthlyReadGuards.validateMacroCore(definition, query);
         DerivedMonthlyReadGuards.validateMacroCoreView(definition, query);
-        validateCacheGenerationFilters(definition, query);
         var columns = columns(definition);
         if (!columns.keySet().containsAll(query.columns()) || !columns.keySet().containsAll(query.equalities().keySet())
                 || !query.columns().containsAll(definition.businessKey())) {

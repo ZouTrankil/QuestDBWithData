@@ -31,14 +31,10 @@ class L2ApplicationWiringTest {
                 "l2-event-response-features", "l2-t0-training-labels"};
         String[] tables = {"java_d085_manifest_wiring", "java_d086_daily_wiring", "java_d087_intraday_wiring",
                 "java_d088_event_wiring", "java_d089_labels_wiring"};
-        String[] scripts = {"read_l2_dataset_manifest.py", "read_l2_daily_features.py",
-                "read_l2_intraday_bar_features.py", "read_l2_event_response_features.py", "read_l2_t0_training_labels.py"};
         if (override) for (int i = 0; i < settings.length; i++) {
             String prefix = "app.sync." + settings[i] + ".";
             properties.put(prefix + "target-table", tables[i]);
             properties.put(prefix + "dataset-root", temporary.resolve("source-" + i).toString());
-            properties.put(prefix + "reader-script", temporary.resolve(scripts[i]).toString());
-            properties.put(prefix + "python-executable", temporary.resolve("python.exe").toString());
         }
         var app = new SpringApplication(QuestDataApplication.class);
         app.setWebApplicationType(WebApplicationType.NONE);
@@ -60,11 +56,10 @@ class L2ApplicationWiringTest {
                 assertEquals(override ? tables[i] : "", targets[i].getMethod("tableName").invoke(target));
                 Object source = context.getBean(sources[i]);
                 Path root = override ? temporary.resolve("source-" + i)
-                        : Path.of("D:/work/fund_2/back-monitor/artifacts/level2_t0_dataset");
+                        : Path.of("F:/repo/engine/back-monitor/artifacts/level2_t0_dataset");
                 assertEquals(root.toAbsolutePath().normalize(), sources[i].getMethod("datasetRoot").invoke(source));
-                assertEquals((override ? temporary.resolve(scripts[i]) : Path.of("tools", scripts[i])).toAbsolutePath().normalize(), field(source, "helper"));
-                assertEquals(override ? temporary.resolve("python.exe").toString()
-                        : "D:/work/fund_2/back-monitor/.venv/Scripts/python.exe", field(source, "pythonExecutable"));
+                assertThrows(NoSuchFieldException.class, () -> source.getClass().getDeclaredField("helper"));
+                assertThrows(NoSuchFieldException.class, () -> source.getClass().getDeclaredField("pythonExecutable"));
                 var owner = (SyncJobOwner) context.getBean(owners[i]);
                 var definition = owner.syncJobDefinitions().getFirst();
                 assertEquals(definition, context.getBean(SyncJobRegistry.class).require(definition.jobId(), 1));
@@ -80,8 +75,8 @@ class L2ApplicationWiringTest {
             }
             var datasets = context.getBean(DatasetRegistry.class);
             var readers = context.getBean(ReadBindingCatalog.class);
-            assertEquals(53, datasets.definitions().stream().filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
-            assertEquals(53, readers.bind(datasets).size());
+            assertEquals(51, datasets.definitions().stream().filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
+            assertEquals(51, readers.bind(datasets).size());
             var representations = new HashMap<String, Class<?>>();
             readers.registrations().forEach(value -> representations.put(value.datasetId(), value.rowType()));
             assertEquals(L2DatasetManifest.class, representations.get("l2_dataset_manifest"));
@@ -89,14 +84,10 @@ class L2ApplicationWiringTest {
             assertEquals(L2IntradayBarFeatures.class, representations.get("l2_intraday_bar_features"));
             assertEquals(L2T0TrainingLabels.class, representations.get("l2_t0_training_labels"));
             assertEquals(DatasetValues.class, representations.get("l2_event_response_features"));
+            assertEquals(1, context.getBeansOfType(FormalL2DailyFeaturesIngestion.class).size());
             verifyNoInteractions(dataSource);
             assertFalse(Files.exists(ledger));
         }
     }
 
-    private static Object field(Object value, String name) throws Exception {
-        var field = value.getClass().getDeclaredField(name);
-        field.setAccessible(true);
-        return field.get(value);
-    }
 }

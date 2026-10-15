@@ -184,6 +184,88 @@ tasks.register('l2DailyFeatureBatch', JavaExec) {
     jvmArgs '-Xms1g', "-Xmx${providers.gradleProperty('l2BatchHeap').getOrElse('24g')}"
 }
 
+tasks.register('mainStrategyData', JavaExec) {
+    group = 'application'
+    description = 'Native Java main strategy score publication and canonical official plan data storage.'
+    dependsOn strategy.tasks.named('classes')
+    classpath = strategy.sourceSets.main.runtimeClasspath
+    mainClass = 'com.zoutrankil.data.strategy.cli.MainStrategyDataCli'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(24) }
+    jvmArgs "-Xmx${providers.gradleProperty('mainStrategyDataHeap').getOrElse('16g')}"
+}
+
+tasks.register('aliyunL2Live', JavaExec) {
+    group = 'application'
+    description = 'Direct vendor MQTT Level2 subscription, durable raw capture and Java live normalization.'
+    dependsOn data.tasks.named('classes')
+    classpath = data.sourceSets.main.runtimeClasspath
+    mainClass = 'com.zoutrankil.data.l2live.bootstrap.AliyunL2LiveMain'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(24) }
+    jvmArgs '-Xms128m', "-Xmx${providers.gradleProperty('l2LiveHeap').getOrElse('1g')}"
+}
+
+tasks.register('writeL2LiveRuntime') {
+    group = 'application'
+    description = 'Build the live collector and write its local Java launch paths without starting a subscription.'
+    dependsOn data.tasks.named('jar'), data.configurations.runtimeClasspath
+    doLast {
+        def root = file('var/l2-live').toPath()
+        def runtimes = root.resolve('runtime')
+        java.nio.file.Files.createDirectories(runtimes)
+        def runtimeId = java.util.UUID.randomUUID().toString()
+        def snapshot = java.nio.file.Files.createDirectory(runtimes.resolve(runtimeId))
+        def libraries = java.nio.file.Files.createDirectory(snapshot.resolve('lib'))
+        def artifacts = [data.tasks.named('jar').get().archiveFile.get().asFile] + data.configurations.runtimeClasspath.files.toList()
+        // Keep the application's classpath order; Windows filenames are case-insensitive.
+        def byName = new LinkedHashMap<String, File>()
+        artifacts.each { File source ->
+            if (!source.isFile() || !source.name.toLowerCase(java.util.Locale.ROOT).endsWith('.jar'))
+                throw new GradleException('Live runtime requires regular jar artifacts')
+            def key = source.name.toLowerCase(java.util.Locale.ROOT)
+            def previous = byName.putIfAbsent(key, source.canonicalFile)
+            if (previous != null && !java.nio.file.Files.isSameFile(previous.toPath(), source.toPath()))
+                throw new GradleException('Live runtime jar filename collision: ' + source.name)
+        }
+        def sha256 = { java.nio.file.Path path ->
+            def digest = java.security.MessageDigest.getInstance('SHA-256')
+            java.nio.file.Files.newInputStream(path).withCloseable { input ->
+                byte[] buffer = new byte[65536]
+                int count
+                while ((count = input.read(buffer)) != -1) digest.update(buffer, 0, count)
+            }
+            java.util.HexFormat.of().formatHex(digest.digest())
+        }
+        def manifest = []
+        def classpath = []
+        byName.values().each { File source ->
+            def before = sha256(source.toPath())
+            def target = libraries.resolve(source.name)
+            java.nio.file.Files.copy(source.toPath(), target, java.nio.file.StandardCopyOption.COPY_ATTRIBUTES)
+            def copied = sha256(target)
+            if (before != copied) throw new GradleException('Live runtime jar changed during snapshot copy')
+            manifest.add([name: source.name, bytes: java.nio.file.Files.size(target), sha256: copied])
+            classpath.add(target.toAbsolutePath().toString().replace('\\', '/'))
+        }
+        def receipt = [runtimeId: runtimeId, createdAt: java.time.Instant.now().toString(), libraries: manifest]
+        java.nio.file.Files.writeString(snapshot.resolve('manifest.json'),
+                groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(receipt)), java.nio.charset.StandardCharsets.UTF_8,
+                java.nio.file.StandardOpenOption.CREATE_NEW)
+        def publishPath = { String name, String value ->
+            def pending = root.resolve(name + '.' + runtimeId + '.tmp')
+            java.nio.file.Files.writeString(pending, value, java.nio.charset.StandardCharsets.UTF_8, java.nio.file.StandardOpenOption.CREATE_NEW)
+            try {
+                java.nio.file.Files.move(pending, root.resolve(name), java.nio.file.StandardCopyOption.ATOMIC_MOVE,
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+            } catch (java.nio.file.AtomicMoveNotSupportedException unsupported) {
+                java.nio.file.Files.move(pending, root.resolve(name), java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+            }
+        }
+        publishPath('runtime-classpath.txt', classpath.join(File.pathSeparator))
+        def launcher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(24) }.get()
+        publishPath('java-path.txt', launcher.executablePath.asFile.absolutePath.replace('\\', '/'))
+    }
+}
+
 tasks.named('startScripts', CreateStartScripts) {
     classpath = files(tasks.named('jar').flatMap { it.archiveFile }, strategy.tasks.named('jar').flatMap { it.archiveFile }) + data.configurations.runtimeClasspath + strategy.configurations.runtimeClasspath
 }
@@ -287,6 +369,7 @@ tasks.register('verifyDependencyVersionCompatibility') {
     description = 'Compare actually resolved module GAVs with the captured pre-module lock versions.'
     doLast {
         def baseline = new groovy.json.JsonSlurper().parse(file('gradle/dependency-baseline-before-modules.json'))
+        def additions = new groovy.json.JsonSlurper().parse(file('gradle/dependency-additions-java-strategy.json'))
         def configurationsToCheck = ['compileClasspath', 'runtimeClasspath', 'testCompileClasspath', 'testRuntimeClasspath', 'l2RuntimeClasspath']
         def rows = []
         def differences = []
@@ -303,8 +386,12 @@ tasks.register('verifyDependencyVersionCompatibility') {
                         actual["${id.group}:${id.module}".toString()] = id.version
                 }
                 actual.each { coordinate, selected ->
-                    if (expected[coordinate] != selected)
-                        differences.add([project: p.path, configuration: configuration.name, coordinate: coordinate, expected: expected[coordinate], actual: selected])
+                    // Existing baseline versions remain exact. Only explicitly pinned new modules
+                    // in the two native data owners may extend the pre-module dependency set.
+                    def allowedAddition = expected[coordinate] == null && p.path in additions.projects && configuration.name in additions.configurations
+                        ? additions.versions[coordinate] : null
+                    if ((expected[coordinate] ?: allowedAddition) != selected)
+                        differences.add([project: p.path, configuration: configuration.name, coordinate: coordinate, expected: expected[coordinate] ?: allowedAddition, actual: selected])
                 }
                 rows.add([project: p.path, configuration: configuration.name, baselineConfiguration: oldName, selected: actual,
                     removedCoordinates: expected.keySet().findAll { !actual.containsKey(it) }.sort()])
@@ -312,7 +399,7 @@ tasks.register('verifyDependencyVersionCompatibility') {
         }
         def report = layout.buildDirectory.file('reports/modules/dependency-version-compatibility.json').get().asFile
         report.parentFile.mkdirs()
-        report.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([baselineLockSha256: baseline.sourceSha256, resolved: rows, differences: differences])) + '\n'
+        report.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([baselineLockSha256: baseline.sourceSha256, explicitAdditions: additions, resolved: rows, differences: differences])) + '\n'
         if (!differences.empty) throw new GradleException("Module dependency versions differ from the accepted baseline; see ${report}")
     }
 }

@@ -22,7 +22,7 @@ class MacroCoreMonthlyViewCatalogStartupTest {
     @Test void ordinaryMonthlyViewUsesExistingCanonicalBaseOwnerWithoutStartupIo() throws Exception {
         Path ledger = temporary.resolve("uncreated.sqlite3");
         var application = new SpringApplication(QuestDataApplication.class,
-                EtfMarketOverviewCacheCatalogStartupTest.NoConnectionConfiguration.class);
+                CatalogNoConnectionTestSupport.NoConnectionConfiguration.class);
         application.setWebApplicationType(WebApplicationType.NONE);
         application.setAdditionalProfiles("d101-catalog-test");
         application.addInitializers(context -> context.getEnvironment().getPropertySources().addFirst(

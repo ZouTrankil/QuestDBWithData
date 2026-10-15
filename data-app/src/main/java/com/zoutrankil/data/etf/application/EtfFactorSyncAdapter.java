@@ -23,6 +23,7 @@ import java.util.function.BooleanSupplier;
 
 /** Executes the exact frozen calendar date sequence; formal data is never written by this owner. */
 public final class EtfFactorSyncAdapter implements SyncJobRunner.Adapter<EtfFactor, EtfFactorKey> {
+    @Override public java.time.Duration visibilityTimeout() { return java.time.Duration.ofMinutes(3); }
     private final EtfFactorSource source;
     private final EtfFactorTradingDates calendars;
     private final EtfWriteSession<EtfFactor, EtfFactorKey> port;

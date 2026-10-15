@@ -66,6 +66,10 @@ public final class StockSuspendJobService {
     }
 
     public String tableName() { return table; }
+    public String revalidate(String priorRunId)throws Exception {
+        return CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,StockSuspendSyncJobOwner.DEFINITION,
+                this::targetId,(evidence,identity)->new StockSuspendRevalidationAdapter(pages,target,evidence));
+    }
     public void requireNoPendingPublication() throws Exception {
         StockSuspendPublication.requireNoPendingPublication(ledgerPath);
     }

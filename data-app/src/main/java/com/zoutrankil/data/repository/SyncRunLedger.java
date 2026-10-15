@@ -368,6 +368,34 @@ public final class SyncRunLedger {
             }
         }
     }
+    /**
+     * Candidate source runs whose frozen data interval covers the requested day, including later backfills.
+     * This does not certify readiness: callers must check state, slices, source evidence and physical rows.
+     * Exact target identity is mandatory so isolated and formal targets cannot be mixed.
+     */
+    public List<RunSummary> coveringHistory(String jobId,String targetId,LocalDate dataDate,
+            String afterId,int limit)throws SQLException {
+        id(jobId);Objects.requireNonNull(dataDate);
+        if(targetId==null || targetId.isBlank())throw new IllegalArgumentException("Exact target identity required");
+        pageSize(limit);if(afterId!=null)id(afterId);
+        String sql="SELECT r.id,r.parent_run_id,r.job_id,r.job_version,r.logical_date,r.target_id,"
+                +"e.state,e.revision,e.updated_at FROM sync_runs r JOIN sync_entries e ON e.id=r.id AND e.kind='RUN'"
+                +" WHERE r.job_id=? AND r.target_id=?"
+                +" AND json_extract(r.frozen_json,'$.from')<=? AND json_extract(r.frozen_json,'$.to')>=?"
+                +(afterId==null?"":" AND r.id>?")+" ORDER BY r.id LIMIT ?";
+        var rows=new ArrayList<RunSummary>();
+        try(var connection=connect();var statement=connection.prepareStatement(sql)) {
+            int index=1;statement.setString(index++,jobId);statement.setString(index++,targetId);
+            statement.setString(index++,dataDate.toString());statement.setString(index++,dataDate.toString());
+            if(afterId!=null)statement.setString(index++,afterId);statement.setInt(index,limit);
+            try(var result=statement.executeQuery()) {
+                while(result.next())rows.add(new RunSummary(result.getString(1),result.getString(2),result.getString(3),
+                        result.getInt(4),result.getString(5),result.getString(6),SyncRunState.valueOf(result.getString(7)),
+                        result.getLong(8),result.getString(9)));
+            }
+        }
+        return List.copyOf(rows);
+    }
     private Entry require(Connection c, String id) throws SQLException {
         try (var s = c.prepareStatement("SELECT * FROM sync_entries WHERE id=?")) {
             s.setString(1, id);

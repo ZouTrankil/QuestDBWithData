@@ -63,6 +63,11 @@ public final class EtfDailyJobService {
 
     public String tableName() { return table; }
 
+    /** Explicit recovery retains the original interval until exact submitted values are reconciled. */
+    public Map<String,Object> reconcile(String runId,Path writerLog) throws Exception {
+        return EtfDailyRunRecovery.reconcile(ledgerPath,runId,writerLog,target);
+    }
+
     public static void requireIsolatedTableName(String table) {
         IsolatedTablePolicy.ETF_DAILY.require(table);
     }
@@ -192,5 +197,12 @@ public final class EtfDailyJobService {
                     return new EtfDailySyncAdapter(new EtfDailySource(pages,
                             new EtfDailyMapper(), evidence.resolve("source")), tradingDates, port, evidence);
                 });
+    }
+    /** Re-fetch the original completed window and compare every current physical value. */
+    public String revalidate(String priorRunId)throws Exception {
+        return com.zoutrankil.data.service.CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,
+                EtfDailySyncJobOwner.DEFINITION,this::targetId,(evidence,identity)->
+                    new EtfDailySyncAdapter(new EtfDailySource(pages,new EtfDailyMapper(),evidence.resolve("source")),
+                            tradingDates,target.newWriter(identity),evidence));
     }
 }

@@ -25,7 +25,7 @@ class RemoteCommandMergeTest {
     @Test void bothMaterializationFamiliesRequireExplicitWriterStoppedConfirmation() {
         var market = mock(MarketSentimentDailyJobService.class);
         var regime = mock(RegimeFeaturesMonitorDailyJobService.class);
-        var family = new MaterializationCommands(null, null, null, null, null, market, regime);
+        var family = new MaterializationCommands(null, null, null, null, market, regime);
         for (String command : java.util.List.of("finish-market-sentiment-publication", "finish-regime-monitor-publication")) {
             assertThrows(IllegalArgumentException.class, () -> family.execute(command, Map.of("--run", "run")));
             assertThrows(IllegalArgumentException.class, () -> family.execute(command,

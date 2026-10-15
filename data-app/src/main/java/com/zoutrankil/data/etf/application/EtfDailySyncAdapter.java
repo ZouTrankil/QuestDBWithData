@@ -16,6 +16,7 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 
 /** Executes exactly the frozen sequence of one-date all-market requests. */
 public final class EtfDailySyncAdapter implements SyncJobRunner.Adapter<EtfDaily, EtfDailyKey> {
+    @Override public Duration visibilityTimeout() { return Duration.ofMinutes(3); }
     private final EtfDailySource source;
     private final EtfDailyTradingDates tradingDates;
     private final EtfWriteSession<EtfDaily, EtfDailyKey> port;

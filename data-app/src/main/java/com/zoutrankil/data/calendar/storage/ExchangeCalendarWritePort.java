@@ -17,6 +17,7 @@ import java.util.*;
 
 /** D001 finite QWP writes and exact four-column readback. Caller owns run/lock/verification. */
 public final class ExchangeCalendarWritePort implements VerifiedWriteSession<ExchangeCalendar, ExchangeCalendar.Key> {
+    private static final com.fasterxml.jackson.databind.ObjectMapper CODEC_MAPPER=JobDefinitionJson.mapper();
     private final String table;
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
@@ -24,7 +25,7 @@ public final class ExchangeCalendarWritePort implements VerifiedWriteSession<Exc
     public static final VerifiedBatchExecutor.Codec<ExchangeCalendar,ExchangeCalendar.Key> CODEC=new VerifiedBatchExecutor.Codec<>() {
         public ExchangeCalendar.Key key(ExchangeCalendar row) { return row.key(); }
         public byte[] canonicalBytes(ExchangeCalendar row) {
-            try { return JobDefinitionJson.mapper().writeValueAsBytes(row); }
+            try { return CODEC_MAPPER.writeValueAsBytes(row); }
             catch(java.io.IOException e) { throw new IllegalArgumentException("Cannot encode calendar row",e); }
         }
         public int estimatedTransportBytes(ExchangeCalendar row,byte[] bytes) { return Math.addExact(Math.multiplyExact(bytes.length,4),96); }
@@ -41,8 +42,13 @@ public final class ExchangeCalendarWritePort implements VerifiedWriteSession<Exc
                 new DatasetWritePreparation.Limits(366,1024*1024));
         long bytes=rows.stream().mapToLong(r->CODEC.estimatedTransportBytes(r,CODEC.canonicalBytes(r))).sum();
         if(bytes>1024*1024) throw new IllegalArgumentException("Calendar transport budget exceeded");
+        var current=new HashMap<ExchangeCalendar.Key,ExchangeCalendar>();
+        for(var row:readback(rows.stream().map(ExchangeCalendar::key).toList()))
+            if(current.putIfAbsent(row.key(),row)!=null)throw new IllegalStateException("Duplicate calendar target key before incremental write");
+        var delta=rows.stream().filter(row->!row.equals(current.get(row.key()))).toList();
+        if(delta.isEmpty())return;
         try(Sender sender=questdb.borrowSender()) {
-            for(var value:rows) {
+            for(var value:delta) {
                 var stored=mapper.toStorage(value);
                 var row=sender.table(table).symbol("exchange",stored.exchange()).longColumn("is_open",stored.isOpen());
                 if(stored.pretradeDate()!=null) row.stringColumn("pretrade_date",stored.pretradeDate());

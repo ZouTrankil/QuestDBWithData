@@ -122,7 +122,40 @@ public final class StockSuspendSyncAdapter implements SyncJobRunner.Adapter<Stoc
         String sourceFingerprint=combineFingerprints(sourceFingerprints);
         var current=target.openTable(table).snapshot();
         if(!before.equals(current))throw new IllegalStateException("stk_suspend logical target changed while source pages were being buffered");
+        // A strictly new date window cannot remove or revise any historical key. Publish it
+        // through the normal ledger-owned writer instead of copying every historical partition.
         var prepared=target.prepare(before,current,allRows,request.from(),request.to());
+        boolean appendOnly=before.rows().stream().allMatch(row->row.tradeDate().isBefore(request.from()));
+        if(appendOnly) {
+            var canonical=prepared.expected();
+            Path intent=evidenceRoot.resolve("append-intent.json");
+            com.zoutrankil.data.repository.FileEvidenceStore.writeNewDurable(intent,json.writeValueAsBytes(Map.of(
+                    "schema","java.stk_suspend_append.v1","runId",runId,"physicalTargetId",physicalTargetId,
+                    "before",before,"from",request.from(),"to",request.to(),"sourceFingerprint",sourceFingerprint)));
+            for(var page:bufferedPages) {
+                if(cancelled.getAsBoolean())throw new java.util.concurrent.CancellationException("stk_suspend append cancelled");
+                consumer.accept(page);
+            }
+            var after=target.openTable(table).snapshot();
+            if(!after.identity().equals(before.identity()) || !after.rows().equals(canonical))
+                throw new IllegalStateException("stk_suspend append full-key readback differs; retain ledger and evidence");
+            Path complete=evidenceRoot.resolve("complete-"+runId+".json");
+            var proof=new LinkedHashMap<String,Object>();
+            proof.put("endpoint","suspend_d");proof.put("mode",request.mode().name());
+            proof.put("publicationMode","APPEND_NEW_DATES");proof.put("fromInclusive",request.from());proof.put("toInclusive",request.to());
+            proof.put("completedDateSlices",totals[0]);proof.put("sourceRows",totals[1]);proof.put("returnedRows",totals[1]);
+            proof.put("submittedRows",totals[1]);proof.put("sliceReceipts",receipts);proof.put("responseEvidence",String.join(";",receipts));
+            proof.put("sourceComplete",true);proof.put("complete",true);proof.put("physicalTargetId",physicalTargetId);
+            proof.put("fullTargetFingerprint",after.fingerprint());proof.put("outsideRowsPreserved",before.rows().size());
+            proof.put("sourceFingerprint",sourceFingerprint);proof.put("appendIntent",intent.toString());
+            com.zoutrankil.data.repository.FileEvidenceStore.writeNewDurable(complete,json.writeValueAsBytes(proof));
+            for(Path receipt:pageEvidence) {
+                var page=(com.fasterxml.jackson.databind.node.ObjectNode)json.readTree(receipt.toFile());
+                page.put("completionEvidence",complete.toString());page.put("publicationMode","APPEND_NEW_DATES");
+                com.zoutrankil.data.repository.FileEvidenceStore.replaceDurable(receipt,json.writeValueAsBytes(page));
+            }
+            return new SyncJobRunner.SourceCompletion(totals[0],totals[1],true,complete.toString());
+        }
         var stage=target.newStaging().write(prepared,evidenceRoot.resolve("publication"),cancelled);
         String stagePhysical=target.physicalTargetId(stage.table(),stage.snapshot().identity());
         this.port=originalPort.forTarget(stage.table(),stagePhysical);

@@ -10,9 +10,9 @@ import java.util.Optional;
 /** Parent-context Java owners supply physical certificates to the isolated Batch repository. */
 public interface MainStrategyDailyWork {
     String JOB = "main_strategy_daily";
-    String DEFINITION_VERSION = "1";
+    String DEFINITION_VERSION = "2";
     List<String> STAGES = List.of("Sources", "MarketSentimentDaily", "RegimeFeaturesMonitorDaily",
-            "BacktestDaily", "MainStrategyAcceptance");
+            "BacktestDaily", "L2DailyFeatures", "ScoreInputs", "OfficialPlanData", "MainStrategyAcceptance");
 
     LocalDate resolveTarget(Clock clock, LocalTime completionCutoff) throws Exception;
     String inputFingerprint(LocalDate target) throws Exception;

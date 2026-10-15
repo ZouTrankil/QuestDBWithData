@@ -58,8 +58,8 @@ class NativeDerivedApplicationWiringTest {
             assertTrue(regimeOwner.definition().dependencies().contains("cn_bond_yield_curve"));
             assertTrue(RegimeFeaturesMonitorDailyJobService.SOURCES.contains("cn_bond_yield_curve"));
             var datasets = context.getBean(DatasetRegistry.class);
-            assertEquals(53, datasets.definitions().stream().filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
-            assertEquals(53, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
+            assertEquals(51, datasets.definitions().stream().filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
+            assertEquals(51, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
             verifyNoInteractions(source);
             assertFalse(Files.exists(ledger));
         }

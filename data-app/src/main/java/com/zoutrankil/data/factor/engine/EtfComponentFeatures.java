@@ -38,6 +38,12 @@ public final class EtfComponentFeatures {
             String[] names={"component_l2_inflow_breadth","basket_obi1","basket_obi5","basket_ofi","basket_spread","basket_depth"};
             for(int i=0;i<names.length;i++)output.put(names[i],positiveRatio(sums[i],denominators[i]));
             output.put("component_l2_mfi_median",median(mfi));
+        } else {
+            // Preserve a stable output schema on dates without L2 input. Explicit
+            // missing observations let other ETF factors publish incrementally.
+            for(String name:List.of("component_l2_inflow_breadth","component_l2_mfi_median",
+                    "basket_obi1","basket_obi5","basket_ofi","basket_spread","basket_depth"))
+                output.put(name,Double.NaN);
         }
         return Collections.unmodifiableMap(output);
     }

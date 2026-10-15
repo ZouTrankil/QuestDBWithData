@@ -59,6 +59,7 @@ public final class BacktestDailyMaterializationPort implements VerifiedBatchExec
     };
     private final JdbcTemplate jdbc;
     private Identity before; private LocalDate from,to;private boolean bootstrap,staged;private String stage;
+    private NativeState reusedNative;
     private VerifiedBatchExecutor.Submission submission;
     private BooleanSupplier cancelled=()->Thread.currentThread().isInterrupted();
     public BacktestDailyMaterializationPort(JdbcTemplate source){jdbc=new JdbcTemplate(Objects.requireNonNull(source.getDataSource()));jdbc.setQueryTimeout(1800);jdbc.setFetchSize(1024);}
@@ -66,6 +67,21 @@ public final class BacktestDailyMaterializationPort implements VerifiedBatchExec
         requireName(stage,"java_backtest_daily_stage_");this.before=Objects.requireNonNull(before);this.from=Objects.requireNonNull(from);this.to=Objects.requireNonNull(to);this.bootstrap=bootstrap;this.stage=stage;cancelled=Objects.requireNonNull(stopped);
     }
     public String stage(){return stage;}
+    /** Admit zero-write replay only after both physical layers match the complete requested source. */
+    public void reuseExisting(List<MonthReceipt> expected) {
+        if(bootstrap||staged||before==null)throw new IllegalStateException("Frozen non-bootstrap replay required");
+        requireSame(before);var nativeBefore=nativeState(MV);
+        for(var receipt:expected)if(!receipt.equals(digest(BASE,receipt.from(),receipt.to(),true))
+                ||!receipt.equals(digest(MV,receipt.from(),receipt.to(),false)))
+            throw new IllegalStateException("Existing backtest values differ from source");
+        requireSame(before);
+        if(!nativeBefore.equals(nativeState(MV)))throw new IllegalStateException("Native generation changed during reuse admission");
+        reusedNative=nativeBefore;
+    }
+    public void requireReuseUnchanged() {
+        requireSame(before);
+        if(reusedNative==null||!reusedNative.equals(nativeState(MV)))throw new IllegalStateException("Reused native generation changed");
+    }
     public void check(){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new java.util.concurrent.CancellationException("Backtest materialization cancelled");}
     public static String sha(String text){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8)));}catch(Exception e){throw new IllegalStateException(e);}}
     public static String normalized(String text){return text==null?"":text.trim().replaceAll("\\s+"," ").toLowerCase(Locale.ROOT);}
@@ -174,14 +190,15 @@ public final class BacktestDailyMaterializationPort implements VerifiedBatchExec
     }
     @Override public void send(List<MonthReceipt> rows){
         if(rows==null||rows.size()!=1||submission==null)throw new IllegalArgumentException("One durable owning monthly receipt per runner submission required");preflight();var receipt=rows.getFirst();if(receipt.from().isBefore(from)||receipt.to().isAfter(to)||!sha(new String(CODEC.canonicalBytes(receipt),StandardCharsets.UTF_8)).equals(submission.sourceFingerprint()))throw new IllegalStateException("Submitted exact monthly source receipt differs");
+        if(reusedNative!=null){requireReuseUnchanged();submission=null;return;}
         if(!staged){
             jdbc.execute("CREATE TABLE "+quote(stage)+" (trade_date TIMESTAMP,ts_code SYMBOL,open DOUBLE,high DOUBLE,low DOUBLE,close DOUBLE,vol DOUBLE,amount DOUBLE,adj_factor DOUBLE,up_limit DOUBLE,down_limit DOUBLE,is_suspended INT,is_st INT) TIMESTAMP(trade_date) PARTITION BY DAY WAL DEDUP UPSERT KEYS(trade_date,ts_code)");staged=true;
         }
         // One bounded server INSERT per already proven month avoids a single full-history JOIN timeout.
         jdbc.execute("INSERT INTO "+quote(stage)+" ("+String.join(",",COLUMNS)+") SELECT "+physicalColumns()+" FROM ("+sourceWindowSql(receipt.from(),receipt.to())+")");awaitBase(stage);submission=null;
     }
-    @Override public List<MonthReceipt> readback(List<LocalDate> keys){if(!staged||keys.size()!=1)throw new IllegalArgumentException("Complete receipt key required");LocalDate lo=keys.getFirst();LocalDate hi=lo.plusMonths(1).withDayOfMonth(1).minusDays(1);if(hi.isAfter(to))hi=to;return List.of(digest(stage,lo,hi,true));}
-    @Override public boolean walSettled(){if(!staged)return false;identity(stage);return true;}
+    @Override public List<MonthReceipt> readback(List<LocalDate> keys){if((!staged&&reusedNative==null)||keys.size()!=1)throw new IllegalArgumentException("Complete receipt key required");LocalDate lo=keys.getFirst();LocalDate hi=lo.plusMonths(1).withDayOfMonth(1).minusDays(1);if(hi.isAfter(to))hi=to;if(reusedNative!=null)requireReuseUnchanged();return List.of(digest(reusedNative==null?stage:BASE,lo,hi,true));}
+    @Override public boolean walSettled(){if(reusedNative!=null){requireReuseUnchanged();return true;}if(!staged)return false;identity(stage);return true;}
     private void awaitBase(String table){long stop=System.nanoTime()+Duration.ofMinutes(20).toNanos();while(true){check();try{identity(table);return;}catch(IllegalStateException waiting){if(System.nanoTime()>=stop)throw waiting;}sleep();}}
     private static void sleep(){try{Thread.sleep(500);}catch(InterruptedException e){Thread.currentThread().interrupt();throw new java.util.concurrent.CancellationException("Backtest wait interrupted");}}
     /** Every requested source value and key is read back before the formal table is touched. */

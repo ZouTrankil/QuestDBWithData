@@ -3,6 +3,7 @@ package com.zoutrankil.data.config;
 import com.zoutrankil.data.domain.DatasetImplementation;
 import com.zoutrankil.data.domain.StockBasicDataset;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
+import com.zoutrankil.data.repository.CnBondYieldCurveWritePort;
 import com.zoutrankil.data.service.DatasetRegistry;
 import com.zoutrankil.data.service.ReadBindingCatalog;
 import com.zoutrankil.data.service.ReadGroupReader;
@@ -17,6 +18,14 @@ public class ReadGroupConfiguration {
     @Bean
     DatasetImplementation stockBasicLatestDataset() {
         return () -> StockBasicDataset.LATEST;
+    }
+
+    /** Keep the formal data definition available to this independently buildable app.
+     * The main-strategy composition module supplies the bounded synchronization owner.
+     */
+    @Bean
+    DatasetImplementation cnBondYieldCurveDataset() {
+        return CnBondYieldCurveWritePort::definition;
     }
 
     @Bean

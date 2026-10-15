@@ -64,7 +64,7 @@ public final class MoneyflowHsgtSyncAdapter implements SyncJobRunner.Adapter<Mon
                 if(java.time.temporal.ChronoUnit.DAYS.between(request.from(),request.to())>=MoneyflowHsgtSource.MAX_RANGE_DAYS)
                     throw new IllegalArgumentException("Formal northbound request exceeds 31-day source bound");
                 formalPage=source.fetch(request.from(),request.to(),cancelled);
-                requireFormalCalendarCoverage(request.from(),request.to(),formalPage.rows());
+                requireFormalCalendarCoverage(calendars,request.from(),request.to(),formalPage.rows());
             }
             var prepared=staging.prepare(port.formalTable(),logical,physical,runId,request,runEvidence,cancelled);
             port.useStage(prepared.stage(),prepared.stagePhysicalTarget());
@@ -106,7 +106,7 @@ public final class MoneyflowHsgtSyncAdapter implements SyncJobRunner.Adapter<Mon
         }
         return false;
     }
-    private static void validateRequest(FrozenRequest request) {
+    static void validateRequest(FrozenRequest request) {
         if(request==null||!request.definition().equals(MoneyflowHsgtSyncJobOwner.DEFINITION)
                 ||request.definition().datasetVersion()!=MoneyflowHsgtDataset.DEFINITION.schemaVersion()
                 ||!Set.of(Mode.INCREMENTAL,Mode.BACKFILL,Mode.RECONCILE).contains(request.mode())
@@ -132,7 +132,7 @@ public final class MoneyflowHsgtSyncAdapter implements SyncJobRunner.Adapter<Mon
     private static void check(BooleanSupplier cancelled){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new CancellationException("D027 cancelled between bounded source slices");}
 
     /** A short provider response alone cannot certify missing aggregate dates in the formal product. */
-    private void requireFormalCalendarCoverage(LocalDate from,LocalDate to,List<MoneyflowHsgt> rows){
+    static void requireFormalCalendarCoverage(SseCalendarWindowReadPort calendars,LocalDate from,LocalDate to,List<MoneyflowHsgt> rows){
         var natural=new HashSet<LocalDate>();var expected=new HashSet<LocalDate>();
         calendars.readSseDates(from,to,(date,open)->{
             if(!natural.add(date))throw new IllegalStateException("Duplicate SSE calendar business date");

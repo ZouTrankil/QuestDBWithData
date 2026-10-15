@@ -110,4 +110,10 @@ public final class MarginDetailJobService {
         if(formal&&(!repair||!request.from().equals(request.parameters().get("checkpointAnchor"))))throw new IllegalArgumentException("Formal margin_detail requires an explicit source-certified BACKFILL repair window");
         if(repair&&!formal)throw new IllegalArgumentException("D029 isolated BACKFILL requires a receipt-backed prior checkpoint");return repair;}
     private static void requireTarget(String expected,String actual){if(!Objects.equals(expected,actual))throw new IllegalStateException("D029 QuestDB physical target identity changed");}
+    public String revalidate(String priorRunId)throws Exception {
+        return com.zoutrankil.data.service.CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,
+                MarginDetailSyncJobOwner.DEFINITION,this::targetId,(evidence,identity)->
+                    new MarginDetailSyncAdapter(new MarginDetailSource(pages,evidence.resolve("source")),
+                            calendar,target.newWriter(identity),evidence,identity,true));
+    }
 }

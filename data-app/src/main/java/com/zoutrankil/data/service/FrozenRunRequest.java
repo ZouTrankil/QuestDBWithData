@@ -12,11 +12,17 @@ public final class FrozenRunRequest {
     private FrozenRunRequest() {}
     public record Restored(SyncJobDefinition.FrozenRequest request,String targetId) {}
     public static Restored restore(Path ledgerPath,String priorId,SyncJobDefinition expected)throws Exception {
+        return restore(ledgerPath,priorId,expected,Set.of(SyncRunState.FAILED,SyncRunState.CANCELLED,SyncRunState.PARTIAL));
+    }
+    public static Restored restoreCompleted(Path ledgerPath,String priorId,SyncJobDefinition expected)throws Exception {
+        return restore(ledgerPath,priorId,expected,Set.of(SyncRunState.VERIFIED,SyncRunState.VERIFIED_EMPTY));
+    }
+    private static Restored restore(Path ledgerPath,String priorId,SyncJobDefinition expected,Set<SyncRunState> allowed)throws Exception {
         Objects.requireNonNull(expected);var ledger=SyncRunLedger.openReadOnly(ledgerPath);
         var prior=ledger.getRun(priorId);var state=ledger.get(priorId).state();
-        if(!Set.of(SyncRunState.FAILED,SyncRunState.CANCELLED,SyncRunState.PARTIAL).contains(state)
+        if(!allowed.contains(state)
                 ||!prior.jobId().equals(expected.jobId())||prior.jobVersion()!=expected.version())
-            throw new IllegalStateException("Only a terminal failed/cancelled/partial run of the current job definition can resume");
+            throw new IllegalStateException("Frozen run state or job definition is not admitted for this operation");
         var json=JobDefinitionJson.mapper();var saved=json.readTree(prior.frozenJson());
         var definition=json.treeToValue(saved.path("definition"),SyncJobDefinition.class);
         if(!definition.equals(expected))throw new IllegalStateException("Frozen job definition changed before recovery");

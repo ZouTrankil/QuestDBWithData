@@ -98,4 +98,9 @@ public final class MoneyflowJobService {
     private SyncJobRunner.Result execute(String runId,String parentId,String priorRunId,String target,SyncJobDefinition.FrozenRequest request)throws Exception{requireFormalRecoveryRequest(request);requireTarget(target,targetId());var ledger=new SyncRunLedger(ledgerPath);var adapter=new MoneyflowSyncAdapter(pages,calendar,this.target.newWriter(target),ledgerPath.getParent().resolve("sync-evidence").resolve(runId),target);var runner=new SyncJobRunner<Moneyflow,MoneyflowKey>(ledger,new DatasetIntervalLock(ledgerPath));return priorRunId==null?runner.run(runId,parentId,target,request,adapter,()->Thread.currentThread().isInterrupted()):runner.resume(runId,parentId,priorRunId,target,request,adapter,()->Thread.currentThread().isInterrupted());}
     private static String frozenTarget(SyncJobDefinition.FrozenRequest request){Object raw=request.parameters().get("targetId");if(!(raw instanceof String s))throw new IllegalArgumentException("Frozen D024 target identity required");return s;}
     private static void requireTarget(String expected,String actual){if(!Objects.equals(expected,actual))throw new IllegalStateException("D024 QuestDB target identity changed");}
+    public String revalidate(String priorRunId)throws Exception {
+        return com.zoutrankil.data.service.CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,
+                MoneyflowSyncJobOwner.DEFINITION,this::targetId,(evidence,identity)->
+                    new MoneyflowSyncAdapter(pages,calendar,target.newWriter(identity),evidence,identity));
+    }
 }

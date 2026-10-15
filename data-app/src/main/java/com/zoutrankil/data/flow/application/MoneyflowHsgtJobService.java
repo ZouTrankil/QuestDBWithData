@@ -65,6 +65,11 @@ public class MoneyflowHsgtJobService {
             throw new IllegalArgumentException("Formal moneyflow_hsgt requires explicit source-certified BACKFILL/RECONCILE of at most 31 days");
     }
     public String targetId(){return target.targetId();}
+    public String revalidate(String priorRunId)throws Exception {
+        return CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,MoneyflowHsgtSyncJobOwner.DEFINITION,
+                this::targetId,(evidence,identity)->new MoneyflowHsgtRevalidationAdapter(
+                        new MoneyflowHsgtSource(pages,evidence.resolve("source")),target,calendars,evidence));
+    }
     public String physicalTargetId(){try{return target.physicalTargetId();}
         catch(Exception failure){throw new IllegalStateException("Cannot prove D027 physical target identity",failure);}}
 

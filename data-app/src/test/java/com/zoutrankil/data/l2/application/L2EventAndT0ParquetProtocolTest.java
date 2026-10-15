@@ -9,7 +9,6 @@ import java.nio.file.*;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
@@ -17,8 +16,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import static com.zoutrankil.data.l2.application.L2EventAndT0Fixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 class L2EventAndT0ParquetProtocolTest {
     @TempDir Path directory;
@@ -75,39 +72,39 @@ class L2EventAndT0ParquetProtocolTest {
     }
 
     @ParameterizedTest @EnumSource(Family.class)
-    void commandKeepsArgumentOrderAndOriginalSourceBudgetWithoutLaunching(Family family) throws Exception {
-        Path root=Files.createDirectory(directory.resolve(family.code));Path helper=Files.writeString(directory.resolve(family.code+".py"),"not executed");Path python=Files.writeString(directory.resolve(family.code+".exe"),"not executed");
-        Object source=family.source(root,helper,python.toString());
-        var command=call(family.sourceType(),source,"command",new Class<?>[]{java.time.LocalDate.class,java.time.LocalDate.class,List.class,int.class,int.class,String.class,String.class},DAY,DAY,List.of(SYMBOL),300000,10000,"--stream",SOURCE);
-        assertEquals(List.of(python.toString(),helper.toString(),"--dataset-root",root.toString(),"--from-date","20260921","--to-date","20260921","--page-rows","200","--max-files","10000","--max-rows","300000","--max-bytes","67108864","--max-output-bytes","67108864","--symbol",SYMBOL,"--stream","--expected-fingerprint",SOURCE),command);
+    void compatibilitySourceUsesNativeRootIdentityWithoutLegacyHelper(Family family) throws Exception {
+        Path root=Files.createDirectory(directory.resolve(family.code));
+        Object source=family.source(root,root.resolve("absent.py"),"absent-interpreter");
         String identity=(String)call(family.sourceType(),source,"sourceRootIdentity",new Class<?>[0]);
         assertEquals(com.zoutrankil.data.repository.FileEvidenceStore.sha256(root.toRealPath().toString().getBytes(StandardCharsets.UTF_8)),identity);
+        var failure=assertThrows(IOException.class,()->call(family.sourceType(),source,"inspect",
+                new Class<?>[]{java.time.LocalDate.class,java.time.LocalDate.class,List.class,int.class,int.class},DAY,DAY,List.of(SYMBOL),10,10));
+        assertTrue(failure.getMessage().contains("certified feature rows"));
+        assertThrows(NoSuchFieldException.class,()->family.sourceType().getDeclaredField("helper"));
+        assertThrows(NoSuchFieldException.class,()->family.sourceType().getDeclaredField("pythonExecutable"));
     }
 
     @ParameterizedTest @EnumSource(Family.class)
-    void processTransportFiltersEnvironmentClosesStdinAndSanitizesFailure(Family family) throws Exception {
-        Path out=Files.writeString(directory.resolve(family.code+".out"),"");Path err=Files.writeString(directory.resolve(family.code+".err"),"ValueError: private path and payload\nsecret next line");
-        var process=mock(Process.class);when(process.waitFor(200,TimeUnit.MILLISECONDS)).thenReturn(true);when(process.exitValue()).thenReturn(1);when(process.isAlive()).thenReturn(false);
-        var closes=new AtomicInteger();when(process.getOutputStream()).thenReturn(new ByteArrayOutputStream(){@Override public void close(){closes.incrementAndGet();}});
-        var env=new HashMap<>(Map.of("QUESTDB_HOST","secret","APP_QUESTDB_PASSWORD","secret","PREFIX_TUSHARE_TOKEN","secret","PATH","safe"));
-        try(var builders=mockConstruction(ProcessBuilder.class,withSettings().defaultAnswer(RETURNS_SELF),(builder,context)->{assertEquals(List.of("fake-command"),context.arguments().getFirst());when(builder.environment()).thenReturn(env);when(builder.start()).thenReturn(process);})) {
-            var failure=assertThrows(IOException.class,()->runProcess(family,out,err,process,()->false));assertEquals(family.code+" Parquet reader failed: ValueError",failure.getMessage());
-            assertEquals(Map.of("PATH","safe"),env);assertEquals(2,closes.get());assertEquals(1,builders.constructed().size());
-            verify(builders.constructed().getFirst()).redirectOutput(out.toFile());verify(builders.constructed().getFirst()).redirectError(err.toFile());verify(process,never()).destroy();
-        }
+    void nativeStreamCancellationStopsBeforeFilesystemDecodeOrCallback(Family family) throws Exception {
+        Object source=family.source(directory.resolve("missing-source"),directory.resolve("absent.py"),"absent-interpreter");
+        Object expected=family.inspection(1,1);
+        var pages=new ArrayList<SyncJobRunner.Page<Object>>();
+        assertThrows(CancellationException.class,()->call(family.sourceType(),source,"stream",
+                new Class<?>[]{expected.getClass(),List.class,int.class,int.class,SyncJobRunner.PageConsumer.class,BooleanSupplier.class,Duration.class},
+                expected,List.of(SYMBOL),10,10,(SyncJobRunner.PageConsumer<Object>)pages::add,(BooleanSupplier)()->true,Duration.ofSeconds(10)));
+        assertTrue(pages.isEmpty());
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
-    void processCancellationDestroysAndForcesOnlyTheStillAliveProcess(Family family) throws Exception {
-        Path out=Files.writeString(directory.resolve(family.code+"-cancel.out"),"");Path err=Files.writeString(directory.resolve(family.code+"-cancel.err"),"");var process=mock(Process.class);
-        when(process.getOutputStream()).thenReturn(new ByteArrayOutputStream());when(process.waitFor(200,TimeUnit.MILLISECONDS)).thenReturn(false);when(process.isAlive()).thenReturn(true);when(process.waitFor(2,TimeUnit.SECONDS)).thenReturn(false,true);
-        try(var builders=mockConstruction(ProcessBuilder.class,withSettings().defaultAnswer(RETURNS_SELF),(builder,context)->{when(builder.environment()).thenReturn(new HashMap<>());when(builder.start()).thenReturn(process);})) {
-            assertThrows(CancellationException.class,()->runProcess(family,out,err,process,()->true));
-            var order=inOrder(process);order.verify(process).destroy();order.verify(process).waitFor(2,TimeUnit.SECONDS);order.verify(process).destroyForcibly();order.verify(process).waitFor(2,TimeUnit.SECONDS);
-        }
-        when(process.waitFor(2,TimeUnit.SECONDS)).thenThrow(new InterruptedException());
-        try { call(family.sourceType(),null,"terminate",new Class<?>[]{Process.class},process);assertTrue(Thread.currentThread().isInterrupted()); }
-        finally {Thread.interrupted();}
+    @Test void nativeDeadlineAndInvalidTimeoutAreIndependentOfAChildProcess() {
+        assertThrows(IllegalArgumentException.class,()->NativeL2DailyParquetReader.Control.of(()->false,Duration.ZERO));
+        var expired=new NativeL2DailyParquetReader.Control(()->false,System.nanoTime()-1);
+        assertThrows(TimeoutException.class,expired::run);
+        Thread.currentThread().interrupt();
+        try {
+            var control=NativeL2DailyParquetReader.Control.of(()->false,Duration.ofSeconds(10));
+            assertThrows(CancellationException.class,control::run);
+            assertTrue(Thread.currentThread().isInterrupted());
+        } finally {Thread.interrupted();}
     }
 
     @Test void t0InspectionCopiesBothMapLevelsAndPreservesAllSixHorizonOrders() throws Exception {
@@ -137,5 +134,4 @@ class L2EventAndT0ParquetProtocolTest {
     @SuppressWarnings("unchecked") private static SyncJobRunner.SourceCompletion consume(Family family,Object source,Path file,Object expected,List<SyncJobRunner.Page<Object>> pages,BooleanSupplier cancelled) throws Exception {
         return (SyncJobRunner.SourceCompletion)call(family.sourceType(),source,"consumeOutput",new Class<?>[]{Path.class,expected.getClass(),List.class,SyncJobRunner.PageConsumer.class,BooleanSupplier.class},file,expected,List.of(SYMBOL),(SyncJobRunner.PageConsumer<Object>)pages::add,cancelled);
     }
-    private static void runProcess(Family family,Path out,Path err,Process process,BooleanSupplier cancelled) throws Exception {call(family.sourceType(),null,"runProcess",new Class<?>[]{List.class,Path.class,Path.class,long.class,Duration.class,BooleanSupplier.class},List.of("fake-command"),out,err,1024L,Duration.ofMinutes(1),cancelled);}
 }

@@ -75,9 +75,9 @@ class FlowMarginApplicationWiringTest {
             assertFalse(MarginZrzSyncJobOwner.DEFINITION.enabled());
             assertFalse(MarginZrzSyncJobOwner.DEFINITION.dailyEligible());
             var datasets = context.getBean(DatasetRegistry.class);
-            assertEquals(53, datasets.definitions().stream()
+            assertEquals(51, datasets.definitions().stream()
                     .filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
-            assertEquals(53, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
+            assertEquals(51, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
             assertFalse(context.getBeanFactory().containsSingleton("questDbClient"));
             verify(dataSource, never()).getConnection();
             verify(dataSource, never()).getConnection(anyString(), anyString());

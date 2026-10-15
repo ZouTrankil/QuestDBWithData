@@ -1,0 +1,24 @@
+{
+  "reason": "Native Parquet L2 and frozen main-strategy data artifacts; optional plan provenance serialization; direct vendor MQTT live L2 ingestion",
+  "projects": [":data-app", ":main-strategy-runtime"],
+  "configurations": ["compileClasspath", "runtimeClasspath", "testCompileClasspath", "testRuntimeClasspath"],
+  "versions": {
+    "com.fasterxml.jackson.datatype:jackson-datatype-jdk8": "2.21.5",
+    "com.github.luben:zstd-jni": "1.5.7-3",
+    "com.google.code.findbugs:jsr305": "3.0.2",
+    "commons-pool:commons-pool": "1.6",
+    "io.airlift:aircompressor": "2.0.2",
+    "javax.annotation:javax.annotation-api": "1.3.2",
+    "org.apache.hadoop:hadoop-client-api": "3.4.2",
+    "org.apache.hadoop:hadoop-client-runtime": "3.4.2",
+    "org.apache.parquet:parquet-column": "1.17.1",
+    "org.apache.parquet:parquet-common": "1.17.1",
+    "org.apache.parquet:parquet-encoding": "1.17.1",
+    "org.apache.parquet:parquet-format-structures": "1.17.1",
+    "org.apache.parquet:parquet-hadoop": "1.17.1",
+    "org.apache.parquet:parquet-jackson": "1.17.1",
+    "org.eclipse.paho:org.eclipse.paho.client.mqttv3": "1.2.5",
+    "org.locationtech.jts:jts-core": "1.20.0",
+    "org.xerial.snappy:snappy-java": "1.1.10.7"
+  }
+}

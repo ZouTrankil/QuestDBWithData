@@ -18,10 +18,13 @@ public final class GlobalObservationWriteSession
     private final QuestDbGlobalObservationStore store;
     private final JdbcTemplate jdbc;
     private long preflightNanos,sendNanos,readbackNanos,walNanos;
-    private long pages,deltaRows,readbacks;
+    private long pages,attemptedDeltaRows,sendReturnedDeltaRows,sendExceptionDeltaRows,readbacks;
+    /** Send-attempt counters are not unique physical writes; readback/ledger owns verification. */
     public java.util.Map<String,Long> timings() {
         return java.util.Map.of("preflightNanos",preflightNanos,"sendInclusiveNanos",sendNanos,
-                "readbackNanos",readbackNanos,"walNanos",walNanos,"pages",pages,"deltaRows",deltaRows,"readbacks",readbacks);
+                "readbackNanos",readbackNanos,"walNanos",walNanos,"pages",pages,
+                "attemptedDeltaRows",attemptedDeltaRows,"sendReturnedDeltaRows",sendReturnedDeltaRows,
+                "sendExceptionDeltaRows",sendExceptionDeltaRows,"readbacks",readbacks);
     }
     public GlobalObservationWriteSession(JdbcTemplate jdbc, QuestDB questdb) {
         this.jdbc = new JdbcTemplate(java.util.Objects.requireNonNull(jdbc.getDataSource()));
@@ -60,7 +63,16 @@ public final class GlobalObservationWriteSession
         // The runner owns the interval lock here. Reconcile even when no reusable ledger checkpoint exists.
         var keys=rows.stream().map(GlobalObservationCoverage::key).toList();
         var delta=GlobalObservationCoverage.compare(rows,readback(keys));
-        if(!delta.writes().isEmpty()){store.send(delta.writes());deltaRows+=delta.writes().size();}
+        if(!delta.writes().isEmpty()) {
+            int count=delta.writes().size();attemptedDeltaRows+=count;
+            try {
+                store.send(delta.writes());sendReturnedDeltaRows+=count;
+            } catch(Exception failure) {
+                // A visibility timeout can follow a successful transport. Preserve that uncertainty
+                // even when the outer executor subsequently verifies the page without resending it.
+                sendExceptionDeltaRows+=count;throw failure;
+            }
+        }
         pages++;
         // The executor still rereads and verifies every requested row, including the unchanged ones.
         } finally {sendNanos+=System.nanoTime()-start;}

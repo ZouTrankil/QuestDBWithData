@@ -68,7 +68,7 @@ public final class RegimeFeaturesMonitorDailyJobService implements DatasetImplem
         var parameters=new LinkedHashMap<String,Parameter>();
         parameters.put("target_id",new Parameter(ParameterType.STRING,true,128,1,Set.of()));parameters.put("source_pin",new Parameter(ParameterType.STRING,true,64,1,Set.of()));
         parameters.put("target_hash",new Parameter(ParameterType.STRING,true,64,1,Set.of()));parameters.put("warmup_from",new Parameter(ParameterType.DATE,true,10,1,Set.of()));
-        return new SyncJobDefinition(JOB_ID,3,FORMAL,1,"regime_features_monitor_daily_owner",Set.of(Mode.MATERIALIZE),Mode.MATERIALIZE,
+        return new SyncJobDefinition(JOB_ID,4,FORMAL,1,"regime_features_monitor_daily_owner",Set.of(Mode.MATERIALIZE),Mode.MATERIALIZE,
                 parameters,"questdb.materialize","regime_features_monitor_daily.range366","questdb.full_key_values",
                 new RetryPolicy(1,Duration.ofSeconds(1),Duration.ofSeconds(1)),Duration.ofMinutes(20),new Budget(366,1,1,366,1024*1024),0,List.of(),Frequency.DAILY,ZoneId.of("Asia/Shanghai"),true,true);
     }

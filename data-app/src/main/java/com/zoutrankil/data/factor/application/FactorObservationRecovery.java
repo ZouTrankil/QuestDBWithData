@@ -19,7 +19,7 @@ public final class FactorObservationRecovery {
     public static Map<String,Object> reconcile(Path ledgerPath,String runId,Path evidence,Path writerLog,
             Path proofPath,GlobalObservationWriteSession session,QuestDbGlobalObservations observations) throws Exception {
         var json=JobDefinitionJson.mapper();
-        var writer=FactorWriterExitEvidence.inspect(writerLog,runId);
+        var writer=FactorWriterExitEvidence.inspect(writerLog,runId,ledgerPath);
         var snapshot=FactorObservationEvidence.read(evidence);
         var ledger=new SyncRunLedger(ledgerPath);
         var run=Objects.requireNonNull(ledger.getRun(runId),"Unknown run");
@@ -37,23 +37,23 @@ public final class FactorObservationRecovery {
         session.preflight();
         var locks=new DatasetIntervalLock(ledgerPath);
         var lease=locks.findOwned(runId,new DatasetIntervalLock.Scope("factor_observation",from,to));
-        if(lease==null || !lease.inDoubt())throw new IllegalStateException("Retained uncertain interval lock required");
+        if(lease==null)throw new IllegalStateException("Owned interval lock required");
         var entries=ledger.entries(runId,null,403);
         if(entries.size()>402)throw new IllegalArgumentException("Recovery entry budget exceeded");
         var owners=new ArrayList<SyncRunLedger.Entry>();
         var pages=new ArrayList<Page>();
         for(var entry:entries) {
             if(entry.kind()!=SyncRunLedger.Kind.SLICE) {
-                if(entry.state()!=SyncRunState.IN_DOUBT && entry.state()!=SyncRunState.PARTIAL)
+                if(entry.state()!=SyncRunState.IN_DOUBT && entry.state()!=SyncRunState.PARTIAL && entry.state()!=SyncRunState.RUNNING)
                     throw new IllegalStateException("Unexpected parent state: "+entry.state());
                 owners.add(entry);continue;
             }
-            if(entry.state()!=SyncRunState.VERIFIED && entry.state()!=SyncRunState.IN_DOUBT)
+            if(!Set.of(SyncRunState.VERIFIED,SyncRunState.IN_DOUBT,SyncRunState.SUBMITTED,SyncRunState.ACKNOWLEDGED).contains(entry.state()))
                 throw new IllegalStateException("Unresolved non-submitted slice");
             var events=ledger.events(entry.id(),-1,100);
             if(events.size()==100)throw new IllegalArgumentException("Slice event budget exceeded");
             var fetched=events.stream().filter(e->e.state()==SyncRunState.FETCHED).toList();
-            if(fetched.size()!=1 || entry.state()==SyncRunState.IN_DOUBT
+            if(fetched.size()!=1 || entry.state()!=SyncRunState.VERIFIED
                     && events.stream().noneMatch(e->e.state()==SyncRunState.SUBMITTED))
                 throw new IllegalStateException("Exactly one fetched and durable submitted page required");
             var source=json.readTree(fetched.getFirst().payloadJson());
@@ -100,6 +100,25 @@ public final class FactorObservationRecovery {
         report.put("pages",pages.stream().map(p->Map.of("sliceId",p.entry().id(),"start",p.start(),"end",p.end(),"fingerprint",p.fingerprint())).toList());
         report.put("verification",verification(submitted,snapshot.fileSha256(),proof.toString()));
         FileEvidenceStore.writeNew(proof,json.writeValueAsBytes(report));
+        // Only classify an orphan after proving its complete submitted prefix. Keep
+        // the interval retained throughout all ledger transitions and final readback.
+        writer.requireStopped();
+        if(!lease.inDoubt()) {
+            locks.retainInDoubt(lease);
+            lease=locks.findOwned(runId,new DatasetIntervalLock.Scope("factor_observation",from,to));
+        }
+        for(int i=0;i<pages.size();i++) {
+            var page=pages.get(i);
+            if(page.entry().state()==SyncRunState.SUBMITTED || page.entry().state()==SyncRunState.ACKNOWLEDGED) {
+                ledger.transition(page.entry().id(),page.entry().revision(),SyncRunState.IN_DOUBT,json.writeValueAsString(Map.of("writerStopped",true,"recoveryProof",proof.toString())));
+                pages.set(i,new Page(ledger.get(page.entry().id()),page.start(),page.end(),page.fingerprint()));
+            }
+        }
+        for(int i=0;i<owners.size();i++)if(owners.get(i).state()==SyncRunState.RUNNING) {
+            var owner=owners.get(i);
+            ledger.transition(owner.id(),owner.revision(),SyncRunState.IN_DOUBT,json.writeValueAsString(Map.of("writerStopped",true,"recoveryProof",proof.toString())));
+            owners.set(i,ledger.get(owner.id()));
+        }
         for(var page:pages)if(page.entry().state()==SyncRunState.IN_DOUBT) {
             writer.requireStopped();
             ledger.transition(page.entry().id(),page.entry().revision(),SyncRunState.VERIFIED,

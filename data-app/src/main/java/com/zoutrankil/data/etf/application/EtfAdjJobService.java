@@ -232,4 +232,10 @@ public final class EtfAdjJobService {
         var port = target.newWriter(plan.targetId());
         EtfAdjCoverage.validateExistingTarget(ledgerPath, saved.orElse(null), plan.targetId(), tradingDates, port);
     }
+    public String revalidate(String priorRunId)throws Exception {
+        return com.zoutrankil.data.service.CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,EtfAdjSyncJobOwner.DEFINITION,
+                this::targetId,(evidence,identity)->new EtfAdjSyncAdapter(
+                    new EtfAdjSource(pages,new EtfAdjMapper(),evidence.resolve("source")),
+                    tradingDates,target.newWriter(identity),evidence));
+    }
 }

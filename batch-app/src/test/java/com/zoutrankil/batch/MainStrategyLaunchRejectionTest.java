@@ -52,7 +52,7 @@ class MainStrategyLaunchRejectionTest {
         assertEquals(BusinessState.IN_DOUBT.name(), result.get("business_state"));
         assertEquals(BusinessState.IN_DOUBT, database.reopen().ledger.state(request.instanceId()));
         assertEquals(71L, ((Number) result.get("batch_execution_id")).longValue());
-        assertTrue(result.get("reason").toString().contains("completion protocol is unavailable"));
+        assertTrue(result.get("reason").toString().contains("authoritativeStagesReady=false"));
         assertTrue(database.ledger.stages(request.instanceId()).isEmpty());
         verify(operator).start(eq(job), any());
     }
@@ -61,6 +61,6 @@ class MainStrategyLaunchRejectionTest {
         var day = LocalDate.of(2026, 9, 29);
         var at = Instant.parse("2026-09-29T10:30:00Z");
         return new RunRequest("main-strategy-test", "main_strategy_daily", day, day, day,
-                "v1", "0", null, null, "source-v1", "calendar-v1", "Asia/Shanghai", at, at);
+                MainStrategyDailyWork.DEFINITION_VERSION, "0", null, null, "source-v1", "calendar-v1", "Asia/Shanghai", at, at);
     }
 }

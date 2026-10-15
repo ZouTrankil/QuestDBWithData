@@ -11,6 +11,7 @@ import java.util.*;
 public final class FactorPoolEvidence {
     private FactorPoolEvidence() {}
     public static final int MAX_BYTES=128*1024*1024;
+    public static final int MAX_ROWS=2_000_000;
     public record Snapshot(byte[] bytes,String sha256,String inputFingerprint,
             List<FactorIncrementalPlanner.Requested> sections) {}
     public static Snapshot read(Path path) throws Exception {
@@ -57,7 +58,7 @@ public final class FactorPoolEvidence {
             String key=date+"/"+pool;var symbols=textSet(array(section,"symbols"));
             if(!factors.contains(factor) || !sections.add(key+"/"+factor) || !symbols.equals(expected.get(key)))
                 throw new IllegalArgumentException("Pool section has missing, duplicate or unexpected members");
-            count+=symbols.size();if(count>100_000)throw new IllegalArgumentException("Pool result exceeds row budget");
+            count+=symbols.size();if(count>MAX_ROWS)throw new IllegalArgumentException("Pool result exceeds row budget");
             var values=section.path("values");
             for(String column:List.of("raw","rank","zscore","neutralized","effective","status"))
                 if(array(values,column).size()!=symbols.size())throw new IllegalArgumentException("Misaligned pool values");

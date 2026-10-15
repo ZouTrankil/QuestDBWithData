@@ -197,4 +197,11 @@ public final class StockLimitJobService {
         return priorRunId == null ? runner.run(runId, null, plan.targetId(), plan.request(), adapter, cancelled)
                 : runner.resume(runId, priorRunId, priorRunId, plan.targetId(), plan.request(), adapter, cancelled);
     }
+    /** Re-fetch the original completed window and compare every current physical value. */
+    public String revalidate(String priorRunId)throws Exception {
+        return com.zoutrankil.data.service.CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,
+                StockLimitSyncJobOwner.DEFINITION,this::targetId,(evidence,identity)->
+                    new StockLimitSyncAdapter(new StockLimitSource(pages,new com.zoutrankil.data.stock.mapper.StockLimitMapper(),evidence.resolve("source")),
+                            tradingDates,target.newWriter(identity),evidence));
+    }
 }

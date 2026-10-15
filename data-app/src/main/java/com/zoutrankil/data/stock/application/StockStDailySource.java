@@ -318,8 +318,7 @@ public final class StockStDailySource {
     /** Disjoint announcement-year requests cannot certify the same nonempty captured response repeatedly. */
     private static void requireDistinctAnnualRows(List<Map<String,JsonNode>> rows, Set<String> seen) throws Exception {
         if (rows.isEmpty()) return;
-        String fingerprint = sha256(JobDefinitionJson.mapper()
-                .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        String fingerprint = sha256(JobDefinitionJson.canonicalMapper()
                 .writeValueAsBytes(canonicalRawRows(rows)));
         if (!seen.add(fingerprint))
             throw new IllegalStateException("D012 source incomplete: distinct announcement years returned identical nonempty raw rows");

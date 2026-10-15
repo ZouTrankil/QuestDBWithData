@@ -12,6 +12,7 @@ import java.util.function.BooleanSupplier;
 
 /** Reuse a completed child only after fresh bounded source and exact current target readback. */
 public final class VerifiedRunRecovery {
+    private static final ObjectMapper JSON=JobDefinitionJson.mapper();
     private VerifiedRunRecovery() {}
     public static <T,K> String revalidate(SyncRunLedger ledger, String priorRun, String targetId,
             SyncJobDefinition.FrozenRequest request, SyncJobRunner.Adapter<T,K> adapter,
@@ -19,7 +20,12 @@ public final class VerifiedRunRecovery {
         var previous = ledger.get(priorRun);
         if (previous.state() != SyncRunState.VERIFIED && previous.state() != SyncRunState.VERIFIED_EMPTY)
             throw new IllegalStateException("Only completed children can be reused");
-        var json = new ObjectMapper();
+        var json = JSON;
+        var original=ledger.getRun(priorRun);
+        String requestFingerprint=SyncRequestIdentity.fingerprint(request,targetId);
+        if(!targetId.equals(original.targetId()) || !requestFingerprint.equals(
+                SyncRequestIdentity.fingerprint(original.frozenJson(),original.targetId())))
+            throw new IllegalStateException("Revalidation request differs from completed run");
         long expected = previous.state() == SyncRunState.VERIFIED_EMPTY ? 0
                 : json.readTree(previous.payloadJson()).path("verification").path("expectedRows").asLong(-1);
         if (expected < 0 || expected > request.definition().budget().maxRows())
@@ -61,10 +67,16 @@ public final class VerifiedRunRecovery {
             throw new IllegalStateException("Completed source coverage no longer matches verified child");
         Files.createDirectories(receiptDirectory);
         Path receipt = receiptDirectory.resolve("revalidated-" + UUID.randomUUID() + ".json");
-        FileEvidenceStore.writeNewUtf8(receipt,json.writerWithDefaultPrettyPrinter().writeValueAsString(Map.of(
-                "priorRunId", priorRun, "targetId", targetId, "verifiedAt", Instant.now().toString(),
-                "expectedRows", expected, "actualRows", totals[1], "pages", totals[0],
-                "sourceEvidence", completion.evidence(), "sliceReadbacks", proofs, "passed", true)));
+        var report=new LinkedHashMap<String,Object>();
+        report.put("schema","java.source_revalidation.v2");
+        report.put("priorRunId",priorRun);report.put("targetId",targetId);
+        report.put("requestFingerprint",requestFingerprint);
+        report.put("jobId",original.jobId());report.put("jobVersion",original.jobVersion());
+        report.put("from",request.from());report.put("to",request.to());
+        report.put("logicalDate",request.logicalDate());report.put("verifiedAt",Instant.now().toString());
+        report.put("expectedRows",expected);report.put("actualRows",totals[1]);report.put("pages",totals[0]);
+        report.put("sourceEvidence",completion.evidence());report.put("sliceReadbacks",proofs);report.put("passed",true);
+        FileEvidenceStore.writeNewUtf8(receipt,json.writerWithDefaultPrettyPrinter().writeValueAsString(report));
         return receipt.toString();
     }
 }

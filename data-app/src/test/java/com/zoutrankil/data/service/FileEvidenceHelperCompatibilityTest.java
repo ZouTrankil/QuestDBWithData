@@ -1,6 +1,5 @@
 package com.zoutrankil.data.service;
 
-import com.zoutrankil.data.derived.application.EtfMarketOverviewCacheOwnerGateway;
 
 import com.zoutrankil.data.index.application.IndexCompatibilityTestAccess;
 
@@ -30,17 +29,5 @@ class FileEvidenceHelperCompatibilityTest {
                 IndexCompatibilityTestAccess.membershipHash("abc".getBytes(StandardCharsets.UTF_8)));
     }
 
-    @Test void ownerGatewayKeepsTheRegularFilePrecheckAndRawDigest() throws Exception {
-        var absent=temporary.resolve("absent.json");
-        assertEquals("Bounded regular JSON artifact required",assertThrowsExactly(IOException.class,
-                ()->EtfMarketOverviewCacheOwnerGateway.readBounded(absent)).getMessage());
-        var oversized=Files.write(temporary.resolve("oversized.json"),
-                new byte[EtfMarketOverviewCacheOwnerGateway.MAX_JSON_BYTES+1]);
-        assertEquals("Bounded regular JSON artifact required",assertThrowsExactly(IOException.class,
-                ()->EtfMarketOverviewCacheOwnerGateway.readBounded(oversized)).getMessage());
-        var bytes="abc".getBytes(StandardCharsets.UTF_8);var path=Files.write(temporary.resolve("raw.json"),bytes);
-        assertArrayEquals(bytes,EtfMarketOverviewCacheOwnerGateway.readBounded(path));
-        assertEquals("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
-                EtfMarketOverviewCacheOwnerGateway.sha(bytes));
-    }
+
 }

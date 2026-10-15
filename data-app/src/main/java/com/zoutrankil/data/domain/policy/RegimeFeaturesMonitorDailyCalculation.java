@@ -58,7 +58,11 @@ public final class RegimeFeaturesMonitorDailyCalculation {
         double[] result={Double.NaN,Double.NaN,Double.NaN};
         if(eligible.stream().map(s->pb?s.pb:s.totalMv).distinct().count()<3)return result;
         double[] totals=new double[3];int[] counts=new int[3];int n=eligible.size();
-        for(int i=0;i<n;i++){int bucket=i<=(n-1)/3.0?0:i<=2*(n-1)/3.0?1:2;totals[bucket]+=eligible.get(i).ret();counts[bucket]++;}
+        // pandas quantile converts q to percent and numpy converts it back;
+        // preserve the resulting boundary rounding before comparing ranks.
+        double lower=1+(n-1)*(((1.0/3.0)*100.0)/100.0);
+        double upper=1+(n-1)*(((2.0/3.0)*100.0)/100.0);
+        for(int i=0;i<n;i++){int bucket=i+1<=lower?0:i+1<=upper?1:2;totals[bucket]+=eligible.get(i).ret();counts[bucket]++;}
         for(int i=0;i<3;i++)result[i]=divide(totals[i],counts[i]);return result;
     }
     public static void styleAndBreadth(List<Day> days){

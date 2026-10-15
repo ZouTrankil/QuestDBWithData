@@ -29,10 +29,11 @@ import static org.mockito.Mockito.*;
 /** The public catalog and request boundary reject retired caches before accessing QuestDB. */
 class CacheDatasetRetirementTest {
     static final Set<String> RETIRED = Set.of("backtest_daily_cache", "backtest_daily_cache_coverage",
-            "market_breadth_daily_cache", "retail_sentiment_daily_cache");
+            "market_breadth_daily_cache", "retail_sentiment_daily_cache",
+            "etf_market_overview_daily_cache", "market_barometer_cache_coverage");
     @TempDir Path temp;
 
-    @Test void nativeReadersAndEtfCacheRemainWhileRetiredRequestsCannotReachStorage() throws Exception {
+    @Test void nativeReadersRemainWhileAllRetiredCacheRequestsCannotReachStorage() throws Exception {
         var dataSource = mock(DataSource.class);
         Path ledger = temp.resolve("uncreated.sqlite3");
         var application = new SpringApplication(QuestDataApplication.class);
@@ -77,8 +78,6 @@ class CacheDatasetRetirementTest {
                     "mv_retail_sentiment_daily_v1", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
                     "v_retail_sentiment_daily", DatasetDefinition.ObjectKind.VIEW,
                     "v_etf_market_overview_daily", DatasetDefinition.ObjectKind.VIEW,
-                    "etf_market_overview_daily_cache", DatasetDefinition.ObjectKind.TABLE,
-                    "market_barometer_cache_coverage", DatasetDefinition.ObjectKind.TABLE,
                     "cn_bond_yield_curve", DatasetDefinition.ObjectKind.TABLE);
             var bindings = catalog.bind(datasets);
             for (var entry : retained.entrySet()) {

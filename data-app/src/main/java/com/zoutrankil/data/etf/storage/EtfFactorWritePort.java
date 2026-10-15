@@ -1,5 +1,8 @@
 package com.zoutrankil.data.etf.storage;
 
+import java.util.Comparator;
+import java.util.Collections;
+
 import com.zoutrankil.data.repository.*;
 
 import com.zoutrankil.data.domain.EtfFactor;
@@ -113,11 +116,19 @@ public final class EtfFactorWritePort implements com.zoutrankil.data.etf.port.Et
         if (keys == null || keys.isEmpty() || keys.size() > MAX_BATCH_ROWS || new HashSet<>(keys).size() != keys.size())
             throw new IllegalArgumentException("At most 250 unique full etf_factor keys required");
         requireExpectedTarget(); var clauses = new ArrayList<String>(); var params = new ArrayList<Object>();
+        var firstDate = keys.stream().map(EtfFactorKey::tradeDate).min(Comparator.naturalOrder()).orElseThrow();
+        var lastDate = keys.stream().map(EtfFactorKey::tradeDate).max(Comparator.naturalOrder()).orElseThrow();
+        params.add(new TemporalValues.CalendarTimestamp(firstDate).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        params.add(new TemporalValues.CalendarTimestamp(lastDate.plusDays(1)).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        var codes = keys.stream().map(EtfFactorKey::tsCode).distinct().sorted().toList();
+        params.addAll(codes);
         for (var key : keys) {
             clauses.add("(ts_code = ? AND trade_date = cast(? as TIMESTAMP))"); params.add(key.tsCode());
             params.add(new TemporalValues.CalendarTimestamp(key.tradeDate()).storageEpoch(TemporalValues.EpochUnit.MICROS));
         }
-        String sql = selectSql() + " WHERE " + String.join(" OR ", clauses)
+        String sql = selectSql() + " WHERE trade_date >= cast(? AS TIMESTAMP) AND trade_date < cast(? AS TIMESTAMP)"
+                + " AND ts_code IN (" + String.join(",", Collections.nCopies(codes.size(), "?")) + ")"
+                + " AND (" + String.join(" OR ", clauses) + ")"
                 + " ORDER BY trade_date, ts_code LIMIT " + (keys.size() + 1);
         return jdbc.query(sql, (rs, index) -> physical(rs), params.toArray());
     }

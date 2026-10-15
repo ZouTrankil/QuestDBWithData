@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-/** Bounded D086 QWP writer. Writes are restricted to named java_d086_* acceptance tables. */
+/** Bounded D086 QWP writer with isolated targets and an explicit fixed formal-table factory. */
 public final class L2DailyFeaturesWritePort
         implements L2DailyFeaturesWriteSession {
     public static final String ISOLATED_TABLE_PREFIX = L2DailyFeaturesRows.ISOLATED_TABLE_PREFIX;
@@ -45,13 +45,26 @@ public final class L2DailyFeaturesWritePort
     private final QuestDB questdb;
     private final L2DailyFeaturesMapper mapper = new L2DailyFeaturesMapper();
     private final AtomicBoolean senderActive = new AtomicBoolean();
+    private final boolean formal;
 
     public L2DailyFeaturesWritePort(String table, JdbcTemplate jdbc, QuestDB questdb) {
-        requireIsolatedTableName(table);
+        this(table, jdbc, questdb, false);
+    }
+
+    private L2DailyFeaturesWritePort(String table, JdbcTemplate jdbc, QuestDB questdb, boolean formal) {
+        if (formal) {
+            if (!"l2_daily_features".equals(table)) throw new IllegalArgumentException("Exact formal L2 table required");
+        } else requireIsolatedTableName(table);
+        this.formal = formal;
         this.table = table;
         this.jdbc = new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());
         this.jdbc.setQueryTimeout(20);
         this.questdb = Objects.requireNonNull(questdb);
+    }
+
+    /** Admit only the existing canonical table; this method performs no DDL or history repair. */
+    public static L2DailyFeaturesWritePort formal(JdbcTemplate jdbc, QuestDB questdb) {
+        return new L2DailyFeaturesWritePort("l2_daily_features", jdbc, questdb, true);
     }
 
     @Override public VerifiedBatchExecutor.Codec<L2DailyFeatures, L2DailyFeaturesKey> codec() { return CODEC; }
@@ -69,7 +82,7 @@ public final class L2DailyFeaturesWritePort
     }
 
     @Override public void preflight() {
-        requireIsolatedTableName(table);
+        if (!formal) requireIsolatedTableName(table);
         QuestDbWriteChecks.preflight(jdbc, table, L2DailyFeaturesDataset.DEFINITION);
     }
 
@@ -140,6 +153,7 @@ public final class L2DailyFeaturesWritePort
     }
 
     public List<LocalDate> readExistingDates() {
+        if (formal) throw new IllegalStateException("Formal L2 history must be inspected by an explicit bounded date");
         String sql = "SELECT ts FROM \"" + table + "\" GROUP BY ts ORDER BY ts LIMIT 32";
         return jdbc.query(sql, (rs, index) -> {
             if (index > 31) throw new IllegalStateException("D086 checkpoint date scan exceeded its bound");

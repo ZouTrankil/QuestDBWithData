@@ -40,6 +40,12 @@ public class ExchangeCalendarJobService implements SyncJobOwner {
     public Set<SyncJobDefinition.Mode> supportedSyncModes() { return ExchangeCalendarSyncAdapter.definition(true).supportedModes(); }
     public List<SyncJobDefinition> syncJobDefinitions() { return List.of(ExchangeCalendarSyncAdapter.definition(true)); }
     public String targetId() throws Exception { return target.targetId(); }
+    public String revalidate(String priorRunId) throws Exception {
+        return CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,
+                ExchangeCalendarSyncAdapter.definition(true),this::targetId,
+                (evidence,identity)->new ExchangeCalendarSyncAdapter(
+                        new ExchangeCalendarSource(pages,evidence),target.newWriter(),evidence));
+    }
     public Plan plan(List<String> exchanges,LocalDate bootstrapFrom,LocalDate end,LocalDate logicalDate,
                      SyncJobDefinition.Mode mode) throws Exception {
         var definition=ExchangeCalendarSyncAdapter.definition(true);

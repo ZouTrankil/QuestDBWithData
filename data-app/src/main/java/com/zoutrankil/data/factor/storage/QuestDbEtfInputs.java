@@ -5,7 +5,6 @@ import com.zoutrankil.data.factor.engine.EtfSharedPanel;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
@@ -20,8 +19,9 @@ public final class QuestDbEtfInputs {
         jdbc=new JdbcTemplate(Objects.requireNonNull(template.getDataSource()));jdbc.setQueryTimeout(90);
     }
     public Snapshot read(LocalDate historyFrom,LocalDate through,int maxRows) {
+        com.zoutrankil.data.factor.engine.EtfHistoryWindow.requireBounded(historyFrom,through);
         if(historyFrom==null || through==null || historyFrom.isAfter(through)
-                || ChronoUnit.DAYS.between(historyFrom,through)>460 || maxRows<1 || maxRows>1_000_000)
+                || maxRows<1 || maxRows>1_000_000)
             throw new IllegalArgumentException("ETF window and row budget required");
         var before=state();
         var references=new ArrayList<EtfMarketInputs.Reference>();int[] referenceRows={0};

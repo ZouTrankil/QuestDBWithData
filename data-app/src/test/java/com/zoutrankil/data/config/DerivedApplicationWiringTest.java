@@ -47,14 +47,10 @@ class DerivedApplicationWiringTest {
             for (var type : List.of(EquityStyleMonthlySourceReadPort.class, EquityStyleMonthlyTarget.class,
                     MacroCoreMonthlySourceReadPort.class, MacroCoreMonthlyTarget.class,
                     MarketBreadthDailyV1Target.class, RetailSentimentDailyV1Target.class,
-                    EtfMarketOverviewSource.class, EtfMarketOverviewPublisher.class,
-                    EtfMarketOverviewPublicationTarget.class, EtfMarketOverviewSessions.class,
                     EquityStyleMonthlyJobService.class, MacroCoreMonthlyJobService.class,
-                    MarketBreadthDailyV1JobService.class, RetailSentimentDailyV1JobService.class,
-                    EtfMarketOverviewDailyCacheJobService.class)) {
+                    MarketBreadthDailyV1JobService.class, RetailSentimentDailyV1JobService.class)) {
                 assertEquals(1, context.getBeansOfType(type).size(), type.getName());
             }
-            assertSame(context.getBean(EtfMarketOverviewSource.class), context.getBean(EtfMarketOverviewPublisher.class));
             assertEquals(override ? "java_d103_index_monthly_wiring" : "index_monthly",
                     context.getBean(EquityStyleMonthlySourceReadPort.class).table());
             assertEquals(override ? "java_d103_equity_style_monthly_wiring" : "",
@@ -63,13 +59,13 @@ class DerivedApplicationWiringTest {
                     context.getBean(MacroCoreMonthlyTarget.class).table());
             var owners = context.getBeansOfType(SyncJobOwner.class).values();
             for (var dataset : List.of("equity_style_monthly", "macro_core_monthly", "mv_market_breadth_daily_v1",
-                    "mv_retail_sentiment_daily_v1", "etf_market_overview_daily_cache")) {
+                    "mv_retail_sentiment_daily_v1")) {
                 assertEquals(1, owners.stream().filter(owner -> owner.datasetId().equals(dataset)).count(), dataset);
             }
             var datasets = context.getBean(DatasetRegistry.class);
-            assertEquals(53, datasets.definitions().stream()
+            assertEquals(51, datasets.definitions().stream()
                     .filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
-            assertEquals(53, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
+            assertEquals(51, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
             assertFalse(Files.exists(ledger));
             verifyNoInteractions(dataSource);
         }

@@ -104,7 +104,8 @@ public final class StockSuspendStaging implements com.zoutrankil.data.stock.port
         FileEvidenceStore.writeNew(path,content);
     }
     private void awaitWal(String table,BooleanSupplier cancelled)throws Exception {
-        long deadline=System.nanoTime()+Duration.ofSeconds(60).toNanos();
+        // Formal publication copies the bounded historical snapshot; cold WAL apply can exceed one minute.
+        long deadline=System.nanoTime()+Duration.ofMinutes(3).toNanos();
         while(!QuestDbWriteChecks.walSettled(jdbc,table)) {
             check(cancelled);if(System.nanoTime()>deadline)throw new IllegalStateException("stk_suspend stage WAL unresolved; retain stage");
             Thread.sleep(50);

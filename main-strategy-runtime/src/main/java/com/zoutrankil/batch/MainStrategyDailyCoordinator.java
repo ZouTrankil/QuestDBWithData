@@ -51,7 +51,7 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
             enabled=false;
         }
         if(!enabled) scheduler.pauseJob(jobKey);
-        ledger.audit(null,"main-strategy-schedule-installed",MainStrategyDailyWork.JOB+":v1:"+(enabled?"enabled":"paused"));
+        ledger.audit(null,"main-strategy-schedule-installed",MainStrategyDailyWork.JOB+":v"+MainStrategyDailyWork.DEFINITION_VERSION+":"+(enabled?"enabled":"paused"));
         scheduler.start();
     }
     private void addTrigger(JobKey job,String name,String cron) throws SchedulerException {

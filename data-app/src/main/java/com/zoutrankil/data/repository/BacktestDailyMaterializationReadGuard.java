@@ -13,7 +13,7 @@ public final class BacktestDailyMaterializationReadGuard {
     private BacktestDailyMaterializationReadGuard() {}
     /** Expected publication gates; integrity and schema failures remain ordinary failures. */
     public static final class NotReadyException extends IllegalStateException {
-        public enum Reason { LEDGER_ABSENT, PUBLICATION_PENDING, WRITER_ACTIVE, NOT_PUBLISHED, SOURCES_CHANGED }
+        public enum Reason { LEDGER_ABSENT, PUBLICATION_PENDING, WRITER_ACTIVE, NOT_PUBLISHED, SOURCES_CHANGED, HISTORY_UNCERTIFIED }
         private final Reason reason;
         public NotReadyException(Reason reason,String message){super(message);this.reason=reason;}
         public Reason reason(){return reason;}
@@ -45,6 +45,7 @@ public final class BacktestDailyMaterializationReadGuard {
             Path source=Path.of(scope.path("sourceEvidence").asText()).toAbsolutePath().normalize(),proofPath=Path.of(evidence).toAbsolutePath().normalize();
             if(!source.startsWith(owned)||!proofPath.equals(owned.resolve("publication.json"))||!Files.isRegularFile(source)||!Files.isRegularFile(proofPath)||Files.size(source)>4*1024*1024||Files.size(proofPath)>2*1024*1024||!hash(source).equals(scope.path("sourceEvidenceSha256").asText())||!hash(proofPath).equals(evidenceSha))throw new IllegalStateException("Immutable backtest source/final attestation is absent or changed");
             var proof=json.readTree(proofPath.toFile());
+            if(!proof.path("historyCertified").asBoolean(true))throw new NotReadyException(NotReadyException.Reason.HISTORY_UNCERTIFIED,"Backtest window is verified but migrated history remains uncertified");
             if(!scope.path("sourcePin").asText().equals(proof.path("sourcePin").asText())||!scope.path("sourceEvidenceSha256").asText().equals(proof.path("sourceEvidenceSha256").asText())||!json.writeValueAsString(base).equals(proof.path("base").toString())||!json.writeValueAsString(nativeState).equals(proof.path("native").toString()))throw new IllegalStateException("Backtest base/native or immutable evidence changed after verified publication");
             if(!pin.equals(scope.path("sourcePin").asText()))throw new NotReadyException(NotReadyException.Reason.SOURCES_CHANGED,"Backtest sources changed; a verified backtest materialization is required before reading");
             if(!base.equals(port.identity(BASE))||!nativeState.equals(port.nativeState(MV))||!pin.equals(port.sourcePin()))throw new IllegalStateException("Backtest publication changed during guard verification");

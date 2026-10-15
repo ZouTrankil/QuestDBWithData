@@ -11,8 +11,6 @@ import com.zoutrankil.data.l2.mapper.L2IntradayBarFeaturesMapper;
 import com.zoutrankil.data.l2.mapper.L2T0TrainingLabelsMapper;
 
 import com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService;
-import com.zoutrankil.data.derived.application.EtfMarketOverviewCachePreparedWriteAdapter;
-import com.zoutrankil.data.derived.application.EtfMarketOverviewDailyCacheJobService;
 import com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService;
 import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
 import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
@@ -146,8 +144,6 @@ public class StockBasicWriteGroupService {
     private StockStDailyJobService stockStDailyTarget;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
     private StockSuspendJobService stockSuspendTarget;
-    @org.springframework.beans.factory.annotation.Autowired(required=false)
-    private EtfMarketOverviewDailyCacheJobService etfMarketOverviewCacheTarget;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
     private EquityStyleMonthlyJobService equityStyleMonthlyTarget;
     @org.springframework.beans.factory.annotation.Autowired(required=false)
@@ -315,12 +311,7 @@ public class StockBasicWriteGroupService {
                 stockSuspendTarget.requireNoPendingPublication();
                 if(priorRun==null) targets.put(member.datasetId(),stockSuspendTarget.physicalTargetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.stk_suspend"));
-            } else if (member.datasetId().equals(EtfMarketOverviewDailyCacheDataset.DEFINITION.datasetId())
-                    && etfMarketOverviewCacheTarget != null) {
-                if (priorRun == null) targets.put(member.datasetId(), etfMarketOverviewCacheTarget.targetId());
-                else targets.put(member.datasetId(), SyncGroupTargetIdentity.frozen(ledger, priorRun,
-                        "write.etf_market_overview_daily_cache"));
-            } else if(member.datasetId().equals(MacroCoreMonthlyDataset.DEFINITION.datasetId()) && macroCoreMonthlyTarget!=null) {
+             } else if(member.datasetId().equals(MacroCoreMonthlyDataset.DEFINITION.datasetId()) && macroCoreMonthlyTarget!=null) {
                 var mapper=new com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper();
                 com.zoutrankil.data.derived.domain.MacroCoreMonthlyRows.requireBatch(
                         member.rows().stream().map(mapper::fromValues).toList());
@@ -598,13 +589,7 @@ public class StockBasicWriteGroupService {
                             try { stockSuspendTarget.requireNoPendingPublication(); return stockSuspendTarget.physicalTargetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve stk_suspend target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
-            } else if (member.definition().datasetId().equals(EtfMarketOverviewDailyCacheDataset.DEFINITION.datasetId())) {
-                if (etfMarketOverviewCacheTarget == null)
-                    throw new IllegalArgumentException("Registered D101 delegated owner required");
-                adapters.put(member.memberId(), new EtfMarketOverviewCachePreparedWriteAdapter(plan,
-                        member.memberId(), etfMarketOverviewCacheTarget.delegatedPort(),
-                        evidence.resolve(run).resolve(member.memberId())));
-            } else if(member.definition().datasetId().equals(MacroCoreMonthlyDataset.DEFINITION.datasetId())) {
+             } else if(member.definition().datasetId().equals(MacroCoreMonthlyDataset.DEFINITION.datasetId())) {
                 if(macroCoreMonthlyTarget==null)throw new IllegalArgumentException("Registered D104 write owner required");
                 var mapper=new com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper();
                 var port=macroCoreMonthlyTarget.writePort();

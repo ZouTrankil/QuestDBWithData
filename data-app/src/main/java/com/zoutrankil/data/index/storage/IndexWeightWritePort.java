@@ -38,11 +38,12 @@ public final class IndexWeightWritePort implements IndexWeightWriteSession {
     public static final int MAX_READBACK_ROWS = 20_000;
     public static final int MAX_EXISTING_ROWS_PER_SNAPSHOT = 2_500;
     private static final Duration ACK_TIMEOUT = Duration.ofSeconds(10);
+    private static final IndexWeightMapper CODEC_MAPPER = new IndexWeightMapper();
 
     public static final VerifiedBatchExecutor.Codec<IndexWeight,IndexWeightKey> CODEC = new VerifiedBatchExecutor.Codec<>() {
         @Override public IndexWeightKey key(IndexWeight row) { return row == null ? null : row.key(); }
         @Override public byte[] canonicalBytes(IndexWeight row) {
-            try { return JobDefinitionJson.mapper().writeValueAsBytes(new IndexWeightMapper().values(row).asMap()); }
+            try { return JobDefinitionJson.mapper().writeValueAsBytes(CODEC_MAPPER.values(row).asMap()); }
             catch (Exception failure) { throw new IllegalArgumentException("Cannot encode D021 row", failure); }
         }
         @Override public int estimatedTransportBytes(IndexWeight row, byte[] canonical) {
@@ -54,10 +55,20 @@ public final class IndexWeightWritePort implements IndexWeightWriteSession {
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
     private final IndexWeightMapper mapper = new IndexWeightMapper();
+    private final int snapshotLimit;
     private volatile boolean uncertainSenderStopped;
 
     public IndexWeightWritePort(String table, String targetId, JdbcTemplate jdbc, QuestDB questdb) {
-        IsolatedTablePolicy.INDEX_WEIGHT.require(table);
+        this(table,targetId,jdbc,questdb,false);
+    }
+    /** Explicit formal writer; legacy D021 construction remains restricted to isolated tables. */
+    public static IndexWeightWritePort formal(String targetId,JdbcTemplate jdbc,QuestDB questdb) {
+        return new IndexWeightWritePort("index_weight",targetId,jdbc,questdb,true);
+    }
+    private IndexWeightWritePort(String table,String targetId,JdbcTemplate jdbc,QuestDB questdb,boolean formal) {
+        if(formal && !"index_weight".equals(table))throw new IllegalArgumentException("Formal index_weight required");
+        if(!formal)IsolatedTablePolicy.INDEX_WEIGHT.require(table);
+        this.snapshotLimit=formal?10_000:MAX_EXISTING_ROWS_PER_SNAPSHOT;
         if (targetId == null || !targetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException("Frozen D021 isolated target identity required");
         this.table = table; this.expectedTargetId = targetId;
@@ -105,12 +116,15 @@ public final class IndexWeightWritePort implements IndexWeightWriteSession {
         if (keys == null || keys.isEmpty() || keys.size() > MAX_BATCH_ROWS || new HashSet<>(keys).size() != keys.size())
             throw new IllegalArgumentException("At most 250 unique D021 keys required for readback");
         requireExpectedTarget(); var clauses = new ArrayList<String>(); var args = new ArrayList<Object>();
+        var from=keys.stream().map(IndexWeightKey::tradeDate).min(LocalDate::compareTo).orElseThrow();
+        var through=keys.stream().map(IndexWeightKey::tradeDate).max(LocalDate::compareTo).orElseThrow().plusDays(1);
+        args.add(dateMicros(from));args.add(dateMicros(through));
         for (var key : keys) {
             clauses.add("(index_code = ? AND con_code = ? AND trade_date = cast(? AS TIMESTAMP))");
             args.add(key.indexCode()); args.add(key.conCode()); args.add(dateMicros(key.tradeDate()));
         }
-        return jdbc.query(selectColumns() + " WHERE " + String.join(" OR ", clauses)
-                + " ORDER BY trade_date,index_code,con_code LIMIT " + (keys.size() + 1),
+        return jdbc.query(selectColumns() + " WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP) AND (" + String.join(" OR ", clauses)
+                + ") ORDER BY trade_date,index_code,con_code LIMIT " + (keys.size() + 1),
                 (rs, row) -> physical(rs), args.toArray());
     }
     /** Read an authoritative index/date snapshot to detect stale physical keys before an upsert. */
@@ -118,9 +132,9 @@ public final class IndexWeightWritePort implements IndexWeightWriteSession {
         if (indexCode == null || !indexCode.matches("[0-9]{6}")) throw new IllegalArgumentException("Six digit D021 index required");
         Objects.requireNonNull(tradeDate); requireExpectedTarget();
         var rows = jdbc.query(selectColumns() + " WHERE index_code = ? AND trade_date = cast(? AS TIMESTAMP) "
-                + "ORDER BY con_code LIMIT " + (MAX_EXISTING_ROWS_PER_SNAPSHOT + 1), (rs, row) -> physical(rs),
+                + "ORDER BY con_code LIMIT " + (snapshotLimit + 1), (rs, row) -> physical(rs),
                 indexCode, dateMicros(tradeDate));
-        if (rows.size() > MAX_EXISTING_ROWS_PER_SNAPSHOT)
+        if (rows.size() > snapshotLimit)
             throw new IllegalStateException("D021 physical index/date group exceeds bounded snapshot-read cap");
         return List.copyOf(rows);
     }

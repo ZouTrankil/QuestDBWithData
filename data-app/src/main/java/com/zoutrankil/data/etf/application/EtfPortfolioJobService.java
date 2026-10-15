@@ -229,4 +229,10 @@ public final class EtfPortfolioJobService {
         for (LocalDate date = from; !date.isAfter(to); date = date.plusDays(1)) dates.add(date);
         return List.copyOf(dates);
     }
+    public String revalidate(String priorRunId)throws Exception {
+        return CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,EtfPortfolioSyncJobOwner.DEFINITION,
+                this::targetId,(evidence,identity)->new EtfPortfolioSyncAdapter(
+                    new EtfPortfolioSource(pages,new EtfPortfolioMapper(),evidence.resolve("source")),
+                    target.newWriter(identity),evidence));
+    }
 }

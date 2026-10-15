@@ -19,7 +19,8 @@ public final class DailyQuestDbTarget implements DailyTarget {
     }
     @Override public String tableName() { return table; }
     @Override public String targetId() throws Exception {
-        com.zoutrankil.data.domain.policy.IsolatedTablePolicy.DAILY.require(table);
+        DatasetDefinition.identifier(table);
+        if(!"daily".equals(table)) com.zoutrankil.data.domain.policy.IsolatedTablePolicy.DAILY.require(table);
         var rows = jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name=?", table);
         if (rows.size() != 1 || !(rows.getFirst().get("id") instanceof Number)
                 || rows.getFirst().get("directoryName") == null) {

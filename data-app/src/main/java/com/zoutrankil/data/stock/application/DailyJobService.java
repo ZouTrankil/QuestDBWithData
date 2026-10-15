@@ -129,6 +129,29 @@ public final class DailyJobService implements SyncJobOwner {
     }
 
     public String targetId() throws Exception { return target.targetId(); }
+    public String revalidate(String priorRunId)throws Exception {
+        var saved=FrozenRunRequest.restoreCompleted(ledgerPath,priorRunId,definition());
+        return revalidateGroupChild(priorRunId,saved.targetId(),saved.request(),null);
+    }
+
+    /** Recheck a completed source run without sending rows or changing its ledger state. */
+    public String revalidateGroupChild(String priorChild,String expectedTarget,
+            FrozenRequest request,String parentGroupRunId)throws Exception {
+        if(!request.definition().equals(definition()))
+            throw new IllegalArgumentException("Frozen daily job definition required");
+        requireFormalWindow(request.mode(),request.from(),request.to(),request.logicalDate());
+        if(!targetId().equals(expectedTarget))throw new IllegalStateException("Daily revalidation target changed");
+        var ledger=SyncRunLedger.openReadOnly(ledgerPath);
+        var evidence=ledgerPath.getParent().resolve("sync-evidence").resolve("daily-recheck-"+UUID.randomUUID());
+        var adapter=new DailySyncAdapter(pages,calendars,stockDetails,target.newWriter(),evidence);
+        return com.zoutrankil.data.service.VerifiedRunRecovery.revalidate(ledger,priorChild,expectedTarget,
+                request,adapter,()-> {
+                    if(Thread.currentThread().isInterrupted())return true;
+                    if(parentGroupRunId==null)return false;
+                    try{return ledger.cancellationRequested(parentGroupRunId);}
+                    catch(java.sql.SQLException failure){throw new IllegalStateException("Cannot read group cancellation",failure);}
+                },evidence);
+    }
 
     static void requireIsolatedTableName(String table) {
         IsolatedTablePolicy.DAILY.require(table);

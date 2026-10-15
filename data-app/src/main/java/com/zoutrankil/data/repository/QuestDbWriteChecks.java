@@ -36,6 +36,10 @@ public final class QuestDbWriteChecks {
         Object tableTxn=t.get("table_txn"),walTxn=t.get("wal_txn"),writerTxn=w.get("writerTxn");
         boolean counters=tableTxn==null && walTxn==null
                 || tableTxn!=null && walTxn!=null && same(tableTxn,walTxn)
+                // SQL UPDATE on QuestDB 10.0.1 can leave the in-memory WAL
+                // sequencer counter behind. Admit only when its applied counter
+                // agrees with the disk writer and the disk sequencer is settled.
+                || same(tableTxn,writerTxn) && notAhead(walTxn,writerTxn)
                 || tableTxn!=null && walTxn==null && same(tableTxn,writerTxn)
                 || tableTxn==null && walTxn!=null && same(walTxn,writerTxn);
         return Boolean.TRUE.equals(t.get("walEnabled")) && Boolean.FALSE.equals(t.get("table_suspended"))
@@ -44,4 +48,7 @@ public final class QuestDbWriteChecks {
     }
     private static boolean zero(Object n) { return n instanceof Number v && v.longValue()==0; }
     private static boolean same(Object a,Object b) { return a instanceof Number x && b instanceof Number y && x.longValue()==y.longValue(); }
+    private static boolean notAhead(Object a,Object b) {
+        return a instanceof Number x && b instanceof Number y && x.longValue()>=0 && x.longValue()<=y.longValue();
+    }
 }

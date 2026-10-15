@@ -88,5 +88,9 @@ public final class StockFactorSyncAdapter implements SyncJobRunner.Adapter<Stock
         receipts.add(result.receipt());totals[0]++;totals[1]=Math.addExact(totals[1],result.rows().size());
     }
     @Override public VerifiedBatchExecutor.Codec<StockFactor,StockFactorKey> codec() { return port.codec(); }
+    // Wide daily rows can remain in QuestDB's WAL beyond the shared 20-second
+    // default. Keep polling exact values; the runner still caps this by its
+    // frozen ten-minute job deadline and never equates acknowledgement with verification.
+    @Override public java.time.Duration visibilityTimeout() { return java.time.Duration.ofMinutes(3); }
     @Override public VerifiedBatchExecutor.Port<StockFactor,StockFactorKey> port() { return port; }
 }

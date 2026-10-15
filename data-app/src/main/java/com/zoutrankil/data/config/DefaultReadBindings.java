@@ -8,11 +8,9 @@ import com.zoutrankil.data.l2.mapper.L2T0TrainingLabelsMapper;
 import com.zoutrankil.data.derived.mapper.BacktestDailyMapper;
 import com.zoutrankil.data.derived.mapper.BacktestDailyViewMapper;
 import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
-import com.zoutrankil.data.derived.mapper.EtfMarketOverviewDailyCacheMapper;
 import com.zoutrankil.data.derived.mapper.EtfMarketOverviewDailyViewMapper;
 import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
 import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyViewMapper;
-import com.zoutrankil.data.derived.mapper.MarketBarometerCacheCoverageMapper;
 import com.zoutrankil.data.derived.mapper.MarketBreadthDailyV1Mapper;
 import com.zoutrankil.data.derived.mapper.MarketBreadthDailyViewMapper;
 import com.zoutrankil.data.derived.mapper.RetailSentimentDailyV1Mapper;
@@ -38,12 +36,10 @@ final class DefaultReadBindings {
             typed("l2_t0_training_labels", 1, L2T0TrainingLabels.class, new L2T0TrainingLabelsMapper()::fromValues),
             typed("backtest_daily", 1, BacktestDaily.class, new BacktestDailyMapper()::fromValues),
             typed("v_backtest_daily", 1, BacktestDailyViewValue.class, new BacktestDailyViewMapper()::fromValues),
-            typed("market_barometer_cache_coverage", 1, MarketBarometerCacheCoverage.class, new MarketBarometerCacheCoverageMapper()::fromValues),
             typed("v_macro_core_monthly", 1, MacroCoreMonthlyView.class, new MacroCoreMonthlyViewMapper()::fromValues),
             typed("macro_core_monthly", 1, MacroCoreMonthly.class, new MacroCoreMonthlyMapper()::fromValues),
             typed("equity_style_monthly", 1, EquityStyleMonthly.class, new EquityStyleMonthlyMapper()::fromValues),
             typed("v_etf_market_overview_daily", 1, EtfMarketOverviewDailyView.class, new EtfMarketOverviewDailyViewMapper()::fromValues),
-            typed("etf_market_overview_daily_cache", 1, EtfMarketOverviewDailyCache.class, new EtfMarketOverviewDailyCacheMapper()::fromValues),
             typed("v_retail_sentiment_daily", 1, RetailSentimentDailyView.class, new RetailSentimentDailyViewMapper()::fromValues),
             typed("mv_retail_sentiment_daily_v1", 1, RetailSentimentDailyV1.class, new RetailSentimentDailyV1Mapper()::fromValues),
             typed("mv_market_breadth_daily_v1", 1, MarketBreadthDailyV1.class, new MarketBreadthDailyV1Mapper()::fromValues),

@@ -28,16 +28,26 @@ public final class MarginDetailWritePort implements MarginDetailWriteSession {
     public static final int MAX_BATCH_ROWS=MarginDetailLimits.MAX_BATCH_ROWS,MAX_BATCH_BYTES=MarginDetailLimits.MAX_BATCH_BYTES,MAX_DATE_ROWS=MarginDetailLimits.API_ROW_CAP;
     private static final Duration ACK_TIMEOUT=Duration.ofSeconds(10);
     private static final List<String> NUMERIC=List.of("rzye","rzmre","rzche","rqye","rqyl","rqchl","rqmcl","rzrqye");
+    private static final MarginDetailMapper CODEC_MAPPER=new MarginDetailMapper();
     public static final VerifiedBatchExecutor.Codec<MarginDetail,MarginDetailKey> CODEC=new VerifiedBatchExecutor.Codec<>(){
         @Override public MarginDetailKey key(MarginDetail row){return row==null?null:row.key();}
-        @Override public byte[] canonicalBytes(MarginDetail row){try{return JobDefinitionJson.canonicalMapper().writeValueAsBytes(new MarginDetailMapper().values(row).asMap());}catch(Exception invalid){throw new IllegalArgumentException("Cannot canonically encode D029 row",invalid);}}
+        @Override public byte[] canonicalBytes(MarginDetail row){try{return JobDefinitionJson.canonicalMapper().writeValueAsBytes(CODEC_MAPPER.values(row).asMap());}catch(Exception invalid){throw new IllegalArgumentException("Cannot canonically encode D029 row",invalid);}}
         @Override public int estimatedTransportBytes(MarginDetail row,byte[] canonical){return Math.addExact(Math.multiplyExact(canonical.length,4),256);}};
     private final String table,targetId;private final JdbcTemplate jdbc;private final QuestDB questdb;private final MarginDetailMapper mapper=new MarginDetailMapper();private volatile boolean senderStopped;
     public MarginDetailWritePort(String table,String targetId,JdbcTemplate jdbc,QuestDB questdb){MarginDetailDataset.requireWriteTable(table);if(targetId==null||!targetId.matches("static-v2-[0-9a-f]{64}"))throw new IllegalArgumentException("Frozen D029 physical target identity required");this.table=table;this.targetId=targetId;this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());this.jdbc.setQueryTimeout(20);this.jdbc.setMaxRows(MarginDetailLimits.MAX_WINDOW_DAYS*MAX_DATE_ROWS+1);this.questdb=Objects.requireNonNull(questdb);}
     @Override public void preflight(){requireTarget();QuestDbWriteChecks.preflight(jdbc,table,MarginDetailDataset.definition(table));requireTarget();}
     @Override public void send(List<MarginDetail> rows)throws Exception{if(rows==null||rows.isEmpty()||rows.size()>MAX_BATCH_ROWS)throw new IllegalArgumentException("D029 requires a nonempty batch of at most 250 rows");preflight();senderStopped=false;
         DatasetWritePreparation.prepare(MarginDetailDataset.definition(table),rows,mapper::values,new DatasetWritePreparation.Limits(MAX_BATCH_ROWS,MAX_BATCH_BYTES));long bytes=0;for(var row:rows){bytes=Math.addExact(bytes,CODEC.estimatedTransportBytes(row,CODEC.canonicalBytes(row)));if(bytes>MAX_BATCH_BYTES)throw new IllegalArgumentException("D029 batch exceeds 1 MiB before send");}
-        boolean attempted=false;try(Sender sender=questdb.borrowSender()){for(var row:rows){var line=sender.table(table).symbol("ts_code",row.tsCode());if(row.name()!=null)line.stringColumn("name",row.name());for(String field:NUMERIC){Double value=numeric(row,field);if(value!=null)line.doubleColumn(field,value);}line.at(new TemporalValues.CalendarTimestamp(row.tradeDate()).storageCarrier());}
+        // The shared runner holds the date interval lease. It will also verify every requested row after send.
+        var keys=rows.stream().map(MarginDetail::key).toList();var wanted=new HashSet<>(keys);
+        var existing=new HashMap<MarginDetailKey,MarginDetail>();
+        for(var row:readback(keys))if(!wanted.contains(row.key())||existing.putIfAbsent(row.key(),row)!=null)
+            throw new IllegalStateException("D029 unexpected or duplicate physical key before incremental send");
+        var changed=rows.stream().filter(row->!row.equals(existing.get(row.key()))).toList();
+        org.slf4j.LoggerFactory.getLogger(MarginDetailWritePort.class).info(
+                "Margin detail incremental page requestedRows={} unchangedRows={} deltaRows={}",rows.size(),rows.size()-changed.size(),changed.size());
+        if(changed.isEmpty()){senderStopped=true;return;}
+        boolean attempted=false;try(Sender sender=questdb.borrowSender()){for(var row:changed){var line=sender.table(table).symbol("ts_code",row.tsCode());if(row.name()!=null)line.stringColumn("name",row.name());for(String field:NUMERIC){Double value=numeric(row,field);if(value!=null)line.doubleColumn(field,value);}line.at(new TemporalValues.CalendarTimestamp(row.tradeDate()).storageCarrier());}
             long sequence=sender.flushAndGetSequence();attempted=true;if(sequence<0||!sender.awaitAckedFsn(sequence,ACK_TIMEOUT.toMillis()))throw new IllegalStateException("D029 write acknowledgement is unknown; reconcile complete keys before replay");
         }catch(Exception failure){attempted=true;throw failure;}finally{senderStopped=attempted;}}
     @Override public List<MarginDetail> readback(List<MarginDetailKey> keys){

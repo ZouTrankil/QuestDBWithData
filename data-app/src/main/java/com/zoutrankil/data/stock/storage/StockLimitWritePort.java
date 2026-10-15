@@ -93,10 +93,13 @@ public final class StockLimitWritePort implements StockDateWriteSession<StockLim
         parameters.add(new TemporalValues.CalendarTimestamp(lastDate.plusDays(1)).storageEpoch(TemporalValues.EpochUnit.MICROS));
         var codes = keys.stream().map(StockLimitKey::tsCode).distinct().sorted().toList();
         parameters.addAll(codes);
-        for (var key : keys) {
-            clauses.add("(ts_code = ? AND trade_date = cast(? as TIMESTAMP))");
-            parameters.add(key.tsCode());
-            parameters.add(new TemporalValues.CalendarTimestamp(key.tradeDate()).storageEpoch(TemporalValues.EpochUnit.MICROS));
+        var byDate=new TreeMap<LocalDate,List<String>>();
+        for(var key:keys)byDate.computeIfAbsent(key.tradeDate(),ignored->new ArrayList<>()).add(key.tsCode());
+        for (var entry : byDate.entrySet()) {
+            clauses.add("(trade_date = cast(? as TIMESTAMP) AND ts_code IN ("
+                    +String.join(",",Collections.nCopies(entry.getValue().size(),"?"))+"))");
+            parameters.add(new TemporalValues.CalendarTimestamp(entry.getKey()).storageEpoch(TemporalValues.EpochUnit.MICROS));
+            parameters.addAll(entry.getValue());
         }
         String sql = "SELECT ts_code, cast(trade_date as long) AS trade_date_micros, up_limit, down_limit FROM \""
                 + table + "\" WHERE trade_date >= cast(? AS TIMESTAMP) AND trade_date < cast(? AS TIMESTAMP)"

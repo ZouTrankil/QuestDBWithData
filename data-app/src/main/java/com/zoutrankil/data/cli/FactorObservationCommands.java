@@ -6,8 +6,6 @@ import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.factor.application.FactorObservationEvidence;
 import com.zoutrankil.data.factor.application.FactorObservationJobService;
 import com.zoutrankil.data.factor.storage.GlobalObservationWriteSession;
-import com.zoutrankil.data.repository.SyncRunLedger;
-import com.zoutrankil.data.service.DatasetIntervalLock;
 import com.zoutrankil.data.service.SyncJobRunner;
 import io.questdb.client.QuestDB;
 import java.nio.file.Path;
@@ -28,9 +26,11 @@ public final class FactorObservationCommands implements CliCommandFamily {
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
     private final Path ledgerPath;
+    private final com.zoutrankil.data.factor.application.FactorObservationPublicationService publication;
     public FactorObservationCommands(JdbcTemplate jdbc,@Lazy QuestDB questdb,
             @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath) {
         this.jdbc=jdbc;this.questdb=questdb;this.ledgerPath=Path.of(ledgerPath);
+        this.publication=new com.zoutrankil.data.factor.application.FactorObservationPublicationService(jdbc,questdb,this.ledgerPath);
     }
     @Override public Set<String> commands() { return Set.of("plan-factor-observations","run-factor-observations","reconcile-factor-observations","inspect-factor-observation-page"); }
     @Override public void execute(String command,Map<String,String> options) throws Exception {
@@ -91,46 +91,12 @@ public final class FactorObservationCommands implements CliCommandFamily {
         }
     }
 
-    /** Read-only admission before a pipeline creates a new resume receipt. Execution rechecks it. */
+    /** Compatibility entry for finite pipelines; publication lives in the application service. */
     public void requireResumableEvidence(Path evidence,LocalDate logicalDate,String priorRunId) throws Exception {
-        var frozen=FactorObservationEvidence.read(evidence);
-        var ledger=new SyncRunLedger(ledgerPath);
-        var prior=java.util.Objects.requireNonNull(ledger.getRun(priorRunId),"Unknown prior factor run");
-        int version=com.zoutrankil.data.domain.JobDefinitionJson.mapper().readTree(prior.frozenJson())
-                .path("definition").path("version").asInt(-1);
-        var session=new GlobalObservationWriteSession(jdbc,questdb);String target=session.targetIdentity();
-        var from=frozen.rows().stream().map(row->row.signalDate()).min(LocalDate::compareTo).orElseThrow();
-        var through=frozen.rows().stream().map(row->row.signalDate()).max(LocalDate::compareTo).orElseThrow();
-        var request=FactorObservationJobService.definition(version).freeze(SyncJobDefinition.Mode.INCREMENTAL,
-                Map.of("targetId",target,"factorEvidenceSha256",frozen.fileSha256()),from,through,logicalDate);
-        com.zoutrankil.data.service.VerifiedSliceRecovery.load(ledger,priorRunId,request,target);
+        publication.requireResumableEvidence(evidence,logicalDate,priorRunId);
     }
-
-    /** Shared finite publication entry; caller retains runId before starting the writer. */
     public SyncJobRunner.Result publishEvidence(Path evidence,LocalDate logicalDate,SyncJobDefinition.Mode mode,
             String priorRunId,String runId) throws Exception {
-        evidence=evidence.toAbsolutePath().normalize();
-        var snapshot=FactorObservationEvidence.read(evidence);
-        LocalDate from=snapshot.rows().stream().map(row->row.signalDate()).min(LocalDate::compareTo).orElseThrow();
-        LocalDate through=snapshot.rows().stream().map(row->row.signalDate()).max(LocalDate::compareTo).orElseThrow();
-        var session=new GlobalObservationWriteSession(jdbc,questdb);
-        var ledger=new SyncRunLedger(ledgerPath);
-        var service=new FactorObservationJobService(new SyncJobRunner<>(ledger,new DatasetIntervalLock(ledgerPath)));
-        var request=service.plan(mode,from,through,logicalDate,session.targetIdentity(),snapshot.fileSha256());
-        if(priorRunId!=null) {
-            var prior=java.util.Objects.requireNonNull(ledger.getRun(priorRunId),"Unknown prior factor run");
-            int version=com.zoutrankil.data.domain.JobDefinitionJson.mapper().readTree(prior.frozenJson())
-                    .path("definition").path("version").asInt(-1);
-            request=FactorObservationJobService.definition(version).freeze(mode,
-                    Map.of("targetId",session.targetIdentity(),"factorEvidenceSha256",snapshot.fileSha256()),from,through,logicalDate);
-        }
-        long started=System.nanoTime();
-        try(var ledgerSession=ledger.keepOpen()) {
-            return service.execute(runId,priorRunId,request,snapshot.rows(),snapshot.sourceComplete(),evidence,
-                    session,()->Thread.currentThread().isInterrupted());
-        } finally {
-            org.slf4j.LoggerFactory.getLogger(FactorObservationCommands.class).info(
-                    "Factor publication timing run={} elapsedNanos={} stages={}",runId,System.nanoTime()-started,session.timings());
-        }
+        return publication.publishEvidence(evidence,logicalDate,mode,priorRunId,runId);
     }
 }

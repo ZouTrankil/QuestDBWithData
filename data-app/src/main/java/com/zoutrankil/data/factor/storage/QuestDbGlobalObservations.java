@@ -40,6 +40,19 @@ public class QuestDbGlobalObservations {
                     key.date(),key.entityType(),key.factorId(),key.version());
             groups.computeIfAbsent(section,ignored->new java.util.ArrayList<>()).add(key.entityId());
         }
+        LocalDate from=keys.stream().map(com.zoutrankil.data.factor.application.GlobalObservationCoverage.Key::date).min(LocalDate::compareTo).orElseThrow();
+        LocalDate through=keys.stream().map(com.zoutrankil.data.factor.application.GlobalObservationCoverage.Key::date).max(LocalDate::compareTo).orElseThrow();
+        if(through.isAfter(from.plusDays(30)))throw new IllegalArgumentException("Observation readback window exceeds 31 days");
+        var dimensions=new java.util.LinkedHashMap<String,java.util.Set<String>>();
+        for(String field:List.of("entity_type","entity_id","factor_id","definition_version"))dimensions.put(field,new java.util.TreeSet<>());
+        for(var key:keys) {
+            dimensions.get("entity_type").add(key.entityType());dimensions.get("entity_id").add(key.entityId());
+            dimensions.get("factor_id").add(key.factorId());dimensions.get("definition_version").add(key.version());
+        }
+        long candidates=through.toEpochDay()-from.toEpochDay()+1;
+        for(var values:dimensions.values()) {candidates*=values.size();if(candidates>10_000)break;}
+        if(candidates<=10_000 && candidates<=Math.max(250,keys.size()*5L))
+            return readCandidateKeys(keys,from,through,dimensions,(int)candidates);
         var predicates=new java.util.ArrayList<String>();var parameters=new java.util.ArrayList<Object>();
         for(var entry:groups.entrySet()) {
             var section=entry.getKey();var ids=entry.getValue();
@@ -48,9 +61,6 @@ public class QuestDbGlobalObservations {
                     +String.join(",",java.util.Collections.nCopies(ids.size(),"?"))+"))");
             parameters.add(section.entityType());parameters.add(section.factorId());parameters.add(section.version());parameters.addAll(ids);
         }
-        LocalDate from=keys.stream().map(com.zoutrankil.data.factor.application.GlobalObservationCoverage.Key::date).min(LocalDate::compareTo).orElseThrow();
-        LocalDate through=keys.stream().map(com.zoutrankil.data.factor.application.GlobalObservationCoverage.Key::date).max(LocalDate::compareTo).orElseThrow();
-        if(through.isAfter(from.plusDays(30)))throw new IllegalArgumentException("Observation readback window exceeds 31 days");
         var before=state();
         var rows=jdbc.query("SELECT signal_date,entity_type,entity_id,factor_id,definition_version,"
                 +"factor_value,available_at,quality_status,scope,l2_source_lineage_digest FROM factor_observation WHERE "
@@ -59,6 +69,27 @@ public class QuestDbGlobalObservations {
         if(rows.size()>keys.size())throw new IllegalStateException("Duplicate physical observation keys");
         if(!before.equals(state()))throw new IllegalStateException("Observations changed during read; retry");
         return List.copyOf(rows);
+    }
+    /** Read a small bounded superset with simple IN predicates, then retain exact requested keys. */
+    private List<GlobalFactorObservation> readCandidateKeys(
+            List<com.zoutrankil.data.factor.application.GlobalObservationCoverage.Key> keys,
+            LocalDate from,LocalDate through,Map<String,java.util.Set<String>> dimensions,int limit) {
+        var predicates=new java.util.ArrayList<String>();var parameters=new java.util.ArrayList<Object>();
+        for(var entry:dimensions.entrySet()) {
+            predicates.add(entry.getKey()+" IN ("+String.join(",",java.util.Collections.nCopies(entry.getValue().size(),"?"))+")");
+            parameters.addAll(entry.getValue());
+        }
+        var before=state();
+        var candidates=jdbc.query("SELECT signal_date,entity_type,entity_id,factor_id,definition_version,"
+                +"factor_value,available_at,quality_status,scope,l2_source_lineage_digest FROM factor_observation WHERE "
+                +"signal_date>='"+from+"' AND signal_date<'"+through.plusDays(1)+"' AND "
+                +String.join(" AND ",predicates)+" LIMIT "+(limit+1),QuestDbGlobalObservations::mapRow,parameters.toArray());
+        if(candidates.size()>limit)throw new IllegalStateException("Observation candidate read exceeds unique-key bound");
+        var wanted=new java.util.HashSet<>(keys);
+        var rows=candidates.stream().filter(row->wanted.contains(com.zoutrankil.data.factor.application.GlobalObservationCoverage.key(row))).toList();
+        if(rows.size()>keys.size())throw new IllegalStateException("Duplicate physical observation keys");
+        if(!before.equals(state()))throw new IllegalStateException("Observations changed during candidate read; retry");
+        return rows;
     }
     public List<GlobalFactorObservation> readSelected(LocalDate date,String entityType,
             String factorId,String version,int maxRows,List<String> entityIds) {
@@ -96,7 +127,8 @@ public class QuestDbGlobalObservations {
                             rs.getString("scope"), rs.getString("l2_source_lineage_digest"));
     }
 
-    private List<Map<String, Object>> state() {
+    /** Stable, settled physical generation for a read spanning multiple observation pages. */
+    public List<Map<String, Object>> state() {
         var rows = jdbc.queryForList("SELECT id,directoryName,table_txn,wal_txn,table_suspended,wal_pending_row_count"
                 + " FROM tables() WHERE table_name='factor_observation'");
         if (rows.size() != 1) throw new IllegalStateException("Missing factor_observation table");
@@ -107,6 +139,6 @@ public class QuestDbGlobalObservations {
                 || !Boolean.FALSE.equals(row.get("table_suspended"))
                 || table.longValue() != wal.longValue() || pending.longValue() != 0)
             throw new IllegalStateException("Observation WAL not settled");
-        return rows;
+        return rows.stream().map(Map::copyOf).toList();
     }
 }

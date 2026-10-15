@@ -195,6 +195,31 @@ public final class StockStDailySyncAdapter implements SyncJobRunner.Adapter<Stoc
         String physicalTarget = request.parameters().get("physicalTargetId").toString();
         var staging = target.newStaging();
         var prepared = staging.prepare(table, physicalTarget, request.from(), request.to());
+        var range=target.range();
+        boolean appendOnly=(range.max()==null || range.max().isBefore(request.from()))
+                && StockStDailyState.sameContent(prepared.before().content(),prepared.outside());
+        String publicationEvidence;
+        if(appendOnly) {
+            var expected=target.fingerprintWindow(allRows,request.from(),request.to());
+            if(!physicalTarget.equals(target.physicalTargetId()) || !prepared.before().equals(target.openTable().snapshot()))
+                throw new IllegalStateException("ST target changed before append");
+            Files.createDirectories(evidenceRoot);
+            Path intent=evidenceRoot.resolve("append-intent.json");
+            com.zoutrankil.data.repository.FileEvidenceStore.writeNewDurable(intent,JobDefinitionJson.canonicalMapper().writeValueAsBytes(Map.of(
+                    "schema","java.stk_st_daily_append.v1","runId",runId,"prepared",prepared,
+                    "sourceFingerprint",sourceFingerprint,"expectedWindow",expected,"sessionReceipts",receipts)));
+            for(var page:pages) { checkCancelled(cancelled);consumer.accept(page); }
+            var observed=target.openTable();
+            if(!physicalTarget.equals(target.physicalTargetId())
+                    || !StockStDailyState.sameContent(expected,observed.window(request.from(),request.to()))
+                    || !StockStDailyState.sameContent(prepared.outside(),observed.outside(request.from(),request.to())))
+                throw new IllegalStateException("ST append window or historical content differs; retain ledger and evidence");
+            Path proof=evidenceRoot.resolve("append-verified.json");
+            com.zoutrankil.data.repository.FileEvidenceStore.writeNewDurable(proof,JobDefinitionJson.canonicalMapper().writeValueAsBytes(Map.of(
+                    "passed",true,"physicalTargetId",physicalTarget,"window",expected,"outside",prepared.outside(),
+                    "sourceFingerprint",sourceFingerprint,"intent",intent.toString())));
+            publicationEvidence=proof.toString();
+        } else {
         var stage = staging.write(prepared, allRows, sourceFingerprint, receipts, evidenceRoot, cancelled);
         this.port = target.stageWriter(stage.table(), stage.physicalTarget());
         for (var page : pages) {
@@ -207,6 +232,8 @@ public final class StockStDailySyncAdapter implements SyncJobRunner.Adapter<Stoc
             markPublicationUncertain(request, pages, stage, uncertain);
             throw uncertain;
         }
+        publicationEvidence=publisher.forRun(runId).intent().id();
+        }
         Files.createDirectories(evidenceRoot);
         Path completion = evidenceRoot.resolve("complete-" + UUID.randomUUID() + ".json");
         var proof = new LinkedHashMap<String,Object>();
@@ -215,7 +242,8 @@ public final class StockStDailySyncAdapter implements SyncJobRunner.Adapter<Stoc
         proof.put("annualHistoryWindows", historyWindows); proof.put("tradeDates", dates);
         proof.put("sessionPages", emitted[0]); proof.put("sourceRows", rows[0]); proof.put("sessionReceipts", receipts);
         proof.put("complete", true);
-        proof.put("publication", publisher.forRun(runId).intent().id());
+        proof.put("publication", publicationEvidence);
+        proof.put("publicationMode",appendOnly?"APPEND_NEW_DATES":"REPLACE_WINDOW");
         JobDefinitionJson.canonicalMapper()
                 .writeValue(completion.toFile(), proof);
         if (Files.size(completion) > StockStDailySource.MAX_RESPONSE_BYTES)

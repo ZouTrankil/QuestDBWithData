@@ -19,7 +19,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebAppli
 public final class StockCommands implements CliCommandFamily {
     private static final java.util.Set<String> COMMANDS = java.util.Set.of(
             "plan-daily-job", "run-daily-job", "plan-daily-basic-job",
-            "run-daily-basic-job", "plan-stk-factor-job", "run-stk-factor-job",
+            "run-daily-basic-job", "plan-stk-factor-job", "run-stk-factor-job", "recover-stk-factor-job",
             "plan-stk-limit-job", "run-stk-limit-job", "plan-stk-st-daily-job",
             "run-stk-st-daily-job", "plan-stk-suspend-job", "run-stk-suspend-job",
             "finish-stk-suspend-publication", "finish-stk-st-daily-publication", "run-stock-basic-job",
@@ -56,6 +56,12 @@ public final class StockCommands implements CliCommandFamily {
 
     @Override public void execute(String command, Map<String, String> options) throws Exception {
         switch (command) {
+            case "recover-stk-factor-job" -> {
+                if(stockFactorService==null || !options.keySet().equals(java.util.Set.of("--run-id","--writer-log")))
+                    throw new IllegalArgumentException("Stock factor recovery requires --run-id and --writer-log");
+                CliOutput.printJson(stockFactorService.recover(options.get("--run-id"),java.nio.file.Path.of(options.get("--writer-log"))),
+                        CliOutput.Profile.JOB_DEFINITION,true);
+            }
             case "plan-daily-job", "run-daily-job" -> {
                 if(options.containsKey("--resume-from")) {
                     if(dailyService==null || !command.equals("run-daily-job")

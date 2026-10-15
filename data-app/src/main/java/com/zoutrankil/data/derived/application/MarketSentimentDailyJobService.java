@@ -64,7 +64,9 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
         parameters.put("source_pin",new Parameter(ParameterType.STRING,true,64,1,Set.of()));
         parameters.put("target_hash",new Parameter(ParameterType.STRING,true,64,1,Set.of()));
         parameters.put("warmup_from",new Parameter(ParameterType.DATE,true,10,1,Set.of()));
-        return new SyncJobDefinition(JOB_ID,3,"market_sentiment_daily",1,"market_sentiment_daily_owner",Set.of(Mode.MATERIALIZE),Mode.MATERIALIZE,
+        // v4 invalidates v3 numerical receipts after qcut/rolling-mean parity
+        // corrections and canonicalization of nested provider evidence.
+        return new SyncJobDefinition(JOB_ID,4,"market_sentiment_daily",1,"market_sentiment_daily_owner",Set.of(Mode.MATERIALIZE),Mode.MATERIALIZE,
                 parameters,"questdb.materialize","market_sentiment_daily.range366","questdb.full_key_values",
                 new RetryPolicy(1,Duration.ofSeconds(1),Duration.ofSeconds(1)),Duration.ofHours(2),new Budget(366,1,1,366,1024*1024),0,List.of(),Frequency.DAILY,ZoneId.of("Asia/Shanghai"),true,true);
     }
@@ -281,7 +283,12 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
     private boolean tableExists(String name){return target.tableExists(name);}
     private boolean identityMatches(String name,long id){return target.identityMatches(name,id);}
     private static String fileHash(Path path)throws Exception{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path)));}
-    private static byte[] canonicalBytes(Object value)throws Exception{return JobDefinitionJson.canonicalMapper().writeValueAsBytes(value);}
+    private static byte[] canonicalBytes(Object value)throws Exception{
+        var mapper=JobDefinitionJson.canonicalMapper();
+        // Provider responses contain nested ObjectNodes. Map-key ordering does
+        // not reorder those nodes, so normalize them before hashing evidence.
+        return mapper.writeValueAsBytes(mapper.convertValue(value,Object.class));
+    }
     private static void requirePublicationEvidence(Path path,Object evidence)throws Exception{
         if(Files.exists(path)){
             if(!Files.isRegularFile(path)||!JobDefinitionJson.mapper().valueToTree(evidence).equals(JobDefinitionJson.mapper().readTree(path.toFile())))

@@ -14,6 +14,7 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 
 /** D008's bounded trade-date source and single-dataset verified runner adapter. */
 public final class DailyBasicSyncAdapter implements SyncJobRunner.Adapter<DailyBasic, DailyBasicKey> {
+    @Override public Duration visibilityTimeout() { return Duration.ofMinutes(3); }
     private static final int MAX_WINDOW_DAYS = 366;
     private static final int REVISION_DAYS = 30;
     private final DailyBasicSource source;

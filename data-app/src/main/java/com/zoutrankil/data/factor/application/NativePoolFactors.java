@@ -15,6 +15,13 @@ public final class NativePoolFactors {
             FactorDefinitionCatalog catalog) {
         return computePrepared(history,features,membership,poolIds,factorIds,catalog,null,100_000);
     }
+    public static Result compute(List<DailyFactorPanel.Security> history,List<DailyFactorPanel.Features> features,
+            QuestDbStockMembership.Snapshot membership,List<String> poolIds,List<String> factorIds,
+            FactorDefinitionCatalog catalog,int maxOutputRows) {
+        if(maxOutputRows<1 || maxOutputRows>FactorPoolEvidence.MAX_ROWS)
+            throw new IllegalArgumentException("Bounded pool output required");
+        return computePrepared(history,features,membership,poolIds,factorIds,catalog,null,maxOutputRows);
+    }
     /** Time-series transforms have already run once per symbol; pools only gather the resulting values. */
     public static Result computeL2(List<DailyFactorPanel.Security> history,List<DailyFactorPanel.Features> features,
             QuestDbStockMembership.Snapshot membership,List<String> poolIds,List<String> factorIds,

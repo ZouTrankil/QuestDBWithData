@@ -8,7 +8,7 @@ from pathlib import Path
 import requests
 
 root = Path(__file__).parent
-directory = root / 'daily-scoped-bundle'
+directory = root / 'daily-view-bundle'
 manifest_bytes = (directory / 'manifest.json').read_bytes()
 manifest = json.loads(manifest_bytes)
 expected = defaultdict(dict)
@@ -57,6 +57,6 @@ report = dict(manifestSha256=hashlib.sha256(manifest_bytes).hexdigest(), factors
     observedAtUtc=datetime.now(timezone.utc).isoformat(), sourceComplete=False)
 report['passed'] = report['sourceStable'] and report['walSettled'] and all(
     p[k]==0 for p in parts for k in ['missingRows','unexpectedRows','duplicateRows','mismatches'])
-(root / 'daily-scoped-bundle-physical-audit.json').write_text(json.dumps(report, indent=2))
+(root / 'daily-view-bundle-physical-audit.json').write_text(json.dumps(report, indent=2))
 print(json.dumps({k:v for k,v in report.items() if k!='factors'}))
 assert report['passed'], 'Physical bundle differs; inspect per-factor report'

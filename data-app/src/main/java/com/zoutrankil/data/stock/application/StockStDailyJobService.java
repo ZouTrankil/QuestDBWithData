@@ -264,4 +264,10 @@ public final class StockStDailyJobService implements SyncJobOwner {
                     result.verifiedRows(), "D012_PUBLICATION_IN_DOUBT", result.reusedRows());
         return result;
     }
+    public String revalidate(String priorRunId)throws Exception {
+        return CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,StockStDailySyncJobOwner.DEFINITION,
+                this::targetId,(evidence,identity)->new StockStDailyRevalidationAdapter(
+                    new StockStDailySource(pages,new com.zoutrankil.data.stock.mapper.StockStDailyMapper(),evidence.resolve("source")),
+                    tradingDates,target,evidence));
+    }
 }

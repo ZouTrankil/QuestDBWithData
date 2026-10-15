@@ -92,13 +92,23 @@ public final class EtfDailyWritePort implements com.zoutrankil.data.etf.port.Etf
             throw new IllegalArgumentException("At most 250 unique complete etf_daily keys required");
         requireExpectedTarget();
         var clauses = new ArrayList<String>(); var parameters = new ArrayList<Object>();
+        // Expose the storage interval independently of the exact-pair OR predicate.
+        // Without it, a small readback can scan years of ETF history and time out.
+        var firstDate = keys.stream().map(EtfDailyKey::tradeDate).min(Comparator.naturalOrder()).orElseThrow();
+        var lastDate = keys.stream().map(EtfDailyKey::tradeDate).max(Comparator.naturalOrder()).orElseThrow();
+        parameters.add(new TemporalValues.CalendarTimestamp(firstDate).storageEpoch(TemporalValues.EpochUnit.NANOS));
+        parameters.add(new TemporalValues.CalendarTimestamp(lastDate.plusDays(1)).storageEpoch(TemporalValues.EpochUnit.NANOS));
+        var codes = keys.stream().map(EtfDailyKey::tsCode).distinct().sorted().toList();
+        parameters.addAll(codes);
         for (var key : keys) {
             clauses.add("(ts_code = ? AND timestamp = cast(? as TIMESTAMP_NS))");
             parameters.add(key.tsCode());
             parameters.add(new TemporalValues.CalendarTimestamp(key.tradeDate()).storageEpoch(TemporalValues.EpochUnit.NANOS));
         }
         String sql = "SELECT ts_code, cast(timestamp as long) AS trade_date_nanos, \"pre_close\", \"open\", \"high\", \"low\", \"close\", \"change\", \"pct_chg\", \"vol\", \"amount\" FROM \""
-                + table + "\" WHERE " + String.join(" OR ", clauses) + " ORDER BY timestamp, ts_code LIMIT " + (keys.size() + 1);
+                + table + "\" WHERE timestamp >= cast(? AS TIMESTAMP_NS) AND timestamp < cast(? AS TIMESTAMP_NS)"
+                + " AND ts_code IN (" + String.join(",", Collections.nCopies(codes.size(), "?")) + ")"
+                + " AND (" + String.join(" OR ", clauses) + ") ORDER BY timestamp, ts_code LIMIT " + (keys.size() + 1);
         return jdbc.query(sql, (rs, index) -> physical(rs), parameters.toArray());
     }
     /** Bounded distinct physical date inventory used to reject unexplained existing target rows. */

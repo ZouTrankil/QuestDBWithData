@@ -49,6 +49,14 @@ public final class StockFactorJobService {
         String table=target.tableName();DatasetDefinition.identifier(table);this.table=table;
     }
     public String tableName() { return table; }
+    public String revalidate(String priorRunId) throws Exception {
+        return CompletedSourceRevalidation.revalidate(ledgerPath,priorRunId,
+                StockFactorSyncJobOwner.DEFINITION,this::targetId,
+                (evidence,identity)->new StockFactorSyncAdapter(pages,target.newWriter(identity),evidence));
+    }
+    public Map<String,Object> recover(String runId,Path writerLog) throws Exception {
+        return StockFactorRunRecovery.finish(ledgerPath,runId,writerLog,target);
+    }
     /**
      * Resolves a default incremental plan from verified contiguous history. With no such history,
      * the caller must supply an explicit bounded bootstrap start. The upper bound also catches up

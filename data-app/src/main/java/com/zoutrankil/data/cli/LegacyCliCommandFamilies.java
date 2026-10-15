@@ -41,6 +41,6 @@ final class LegacyCliCommandFamilies {
                 new IndexCommands(null, null, null, indexCatalogService, null, null, null, null, null),
                 new FlowCommands(null, null, null, null),
                 new L2Commands(null, null, null, null, null),
-                new MaterializationCommands(null, null, null, null, null)));
+                new MaterializationCommands(null, null, null, null, null, null)));
     }
 }

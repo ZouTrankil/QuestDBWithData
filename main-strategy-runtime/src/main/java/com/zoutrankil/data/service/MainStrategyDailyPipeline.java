@@ -11,6 +11,8 @@ import com.zoutrankil.data.flow.application.*;
 import com.zoutrankil.data.margin.application.*;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.stock.application.*;
+import com.zoutrankil.data.l2.application.FormalL2DailyFeaturesIngestion;
+import com.zoutrankil.data.strategy.application.MainStrategyDataService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,7 +43,8 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
     private final ObjectMapper json=JobDefinitionJson.mapper(); private final List<Owner> owners;
     private final MarketSentimentDailyJobService market;private final RegimeFeaturesMonitorDailyJobService regime;
     private final BacktestDailyMaterializationJobService backtest;private final List<String> targetEtfs;
-    private final Path l2Report,l2Acceptance,l2Features,l2RetainedObservation,l2Contract;
+    private final FormalL2DailyFeaturesIngestion l2;
+    private final MainStrategyDataService strategyData;
     private volatile String activeStage="idle";private volatile LocalDate activeDate;private volatile String lastOutcome="never-run";
 
     @FunctionalInterface private interface Call<T>{T get()throws Exception;}
@@ -68,22 +71,16 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
             MarginDetailJobService margin,EtfDailyJobService etf,EtfAdjJobService adj,EtfFactorJobService etfFactor,
             EtfPortfolioJobService portfolio,CnBondYieldCurveJobService bonds,
             MarketSentimentDailyJobService market,RegimeFeaturesMonitorDailyJobService regime,BacktestDailyMaterializationJobService backtest,
+            FormalL2DailyFeaturesIngestion l2,MainStrategyDataService strategyData,
             @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}")String ledger,
             @Value("${app.sync.batch.artifact-root:var/main-strategy-batch}")String root,
-            @Value("${app.sync.batch.target-etfs:512770.SH,589330.SH}")String targetEtfs,
-            @Value("${app.sync.batch.l2-ingestion-report:artifacts/l2-questdb-ingestion/20261007/ingestion-report.json}")String l2Report,
-            @Value("${app.sync.batch.l2-acceptance-report:artifacts/l2-full-cleaning-acceptance/20261007/output-validation-all.json}")String l2Acceptance,
-            @Value("${app.sync.batch.l2-feature-root:D:/l2-native-features}")String l2Features,
-            @Value("${app.sync.batch.l2-retained-observation:artifacts/main-strategy-java-refresh/20261007/goal-current-questdb-observation.json}")String l2RetainedObservation,
-            @Value("${app.sync.batch.l2-retained-contract:artifacts/l2-full-cleaning-acceptance/20261007/null-reference/schema.json}")String l2Contract) {
+            @Value("${app.sync.batch.target-etfs:}")String targetEtfs) {
         this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc.getDataSource()));this.jdbc.setQueryTimeout(120);this.jdbc.setFetchSize(1024);
         this.registry=registry;this.ledger=Path.of(ledger).toAbsolutePath().normalize();this.root=Path.of(root).toAbsolutePath().normalize();
         this.market=market;this.regime=regime;this.backtest=backtest;
-        this.l2Report=Path.of(l2Report).toAbsolutePath().normalize();this.l2Acceptance=Path.of(l2Acceptance).toAbsolutePath().normalize();this.l2Features=Path.of(l2Features).toAbsolutePath().normalize();
-        this.l2RetainedObservation=Path.of(l2RetainedObservation).toAbsolutePath().normalize();
-        this.l2Contract=Path.of(l2Contract).toAbsolutePath().normalize();
+        this.l2=l2;this.strategyData=strategyData;
         this.targetEtfs=Arrays.stream(targetEtfs.split(",")).map(String::trim).filter(s->!s.isEmpty()).distinct().sorted().toList();
-        if(this.targetEtfs.isEmpty()||this.targetEtfs.size()>100||this.targetEtfs.stream().anyMatch(s->!s.matches("[0-9]{6}\\.(SH|SZ|BJ)")))throw new IllegalArgumentException("Bounded canonical target ETF codes required");
+        if(this.targetEtfs.size()>100||this.targetEtfs.stream().anyMatch(s->!s.matches("[0-9]{6}\\.(SH|SZ|BJ)")))throw new IllegalArgumentException("Bounded canonical target ETF codes required");
         owners=List.of(
             new Owner("daily","trade_date",List.of("trade_date","ts_code"),false,false,daily::tableName,(a,b,l)->{var p=daily.plan(a,b,l,Mode.BACKFILL);return new Planned(p.request(),()->daily.run(p));}),
             new Owner("daily_basic","trade_date",List.of("trade_date","ts_code"),false,false,basic::tableName,(a,b,l)->{var p=basic.plan(a,b,l,Mode.BACKFILL);return new Planned(p.request(),()->basic.run(p));}),
@@ -113,16 +110,16 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         var bindings=new TreeMap<String,Object>();
         for(var o:owners){var binding=new TreeMap<String,Object>();binding.put("table",o.binding().get());binding.put("definition",json.readTree(SyncRequestIdentity.definitionJson(definition(o.table()))));bindings.put(o.table(),binding);}
         bindings.put("market",json.readTree(SyncRequestIdentity.definitionJson(definition("market_sentiment_daily"))));bindings.put("regime",json.readTree(SyncRequestIdentity.definitionJson(definition("regime_features_monitor_daily"))));bindings.put("backtest",json.readTree(SyncRequestIdentity.definitionJson(definition("backtest_daily"))));
-        return RunRequest.hash("java.main_strategy_daily.v1",target.toString(),json.writeValueAsString(bindings),
-                "range=3;catchup<=31;sourceSlices<=3;SSE-calendar;cutoff>=20:30;optionalMarginWholeMarket;requiredL2;nativeDirectMV",ledger.toString(),targetEtfs.toString(),l2Report.toString(),l2Acceptance.toString(),l2Features.toString(),l2RetainedObservation.toString(),l2Contract.toString());
+        return RunRequest.hash("java.main_strategy_daily.v2",target.toString(),json.writeValueAsString(bindings),
+                "range=3;catchup<=31;sourceSlices<=3;SSE-calendar;cutoff>=20:30;optionalMarginWholeMarket;nativeL2;nativeDirectMV;pairedJavaScores;canonicalOfficialPlan",ledger.toString(),targetEtfs.toString(),strategyData.definitionFingerprint());
     }
     private SyncJobDefinition definition(String dataset){return registry.definitions().stream().filter(j->j.datasetId().equals(dataset)).findFirst().orElseThrow(()->new IllegalStateException("Registered Java owner absent: "+dataset));}
     private String definitionHash(String dataset){return RunRequest.hash(SyncRequestIdentity.definitionJson(definition(dataset)));}
     @Override public Map<String,Object> status(){var m=new LinkedHashMap<String,Object>();m.put("producer","java.main_strategy_daily");m.put("stage",activeStage);m.put("target",activeDate);m.put("lastOutcome",lastOutcome);m.put("artifactRoot",root.toString());m.put("targetEtfs",targetEtfs);return m;}
 
     @Override public void execute(RunRequest request,StageSink sink)throws Exception {
-        if(!JOB.equals(request.job())||!request.rangeStart().equals(request.logicalDate())||!request.rangeEnd().equals(request.logicalDate()))throw new IllegalArgumentException("Main strategy accepts one completed trading date");
-        activeDate=request.logicalDate();
+        if(!JOB.equals(request.job())||!DEFINITION_VERSION.equals(request.definitionVersion())||!request.rangeStart().equals(request.logicalDate())||!request.rangeEnd().equals(request.logicalDate()))throw new IllegalArgumentException("Main strategy accepts the current definition and one completed trading date");
+        activeDate=request.logicalDate();var completed=new LinkedHashMap<String,CompletionEvidence>();
         for(String stage:STAGES){
             activeStage=stage;CompletionEvidence evidence;
             try {
@@ -134,17 +131,24 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
                     case "MarketSentimentDaily"->market(request,plan);
                     case "RegimeFeaturesMonitorDaily"->regime(request,plan);
                     case "BacktestDaily"->backtest(request,plan);
-                    case "MainStrategyAcceptance"->acceptance(request,plan);
+                    case "L2DailyFeatures"->l2(request,plan);
+                    case "ScoreInputs"->scores(request,plan);
+                    case "OfficialPlanData"->officialPlan(request,plan);
+                    case "MainStrategyAcceptance"->acceptance(request,plan,completed.get("OfficialPlanData"));
                     default->throw new IllegalStateException("Unknown stage");};}
+                if(stage.equals("MainStrategyAcceptance"))requireAcceptancePlanStage(request,evidence,completed.get("OfficialPlanData"));
             }catch(Gate gate){lastOutcome=gate.state.name()+":"+gate.getMessage();sink.complete(stage,new StageExecutor.Result(gate.state,null,gate.getMessage()));return;}
             catch(Exception error){lastOutcome="IN_DOUBT:"+error.getClass().getSimpleName();sink.complete(stage,new StageExecutor.Result(BusinessState.IN_DOUBT,null,"Owner outcome requires reconciliation: "+Objects.toString(error.getMessage(),error.getClass().getSimpleName())));return;}
             sink.complete(stage,new StageExecutor.Result(evidence.state(),evidence,null));
+            completed.put(stage,evidence);
         }
         activeStage="idle";lastOutcome="VERIFIED";
     }
     @Override public void validateCompleted(RunRequest request,Map<String,CompletionEvidence> stages)throws Exception {
+        if(!DEFINITION_VERSION.equals(request.definitionVersion()))throw new Gate(BusinessState.BLOCKED,"Old main-strategy definitions require an explicit revision");
         if(!inputFingerprint(request.logicalDate()).equals(request.inputFingerprint()))throw new Gate(BusinessState.BLOCKED,"Pipeline definition/configuration changed");
         for(String stage:STAGES){var e=stages.get(stage);if(e==null)throw new Gate(BusinessState.BLOCKED,"Completed stage certificate missing: "+stage);validateStage(request,stage,e);}
+        requireAcceptancePlanStage(request,stages.get("MainStrategyAcceptance"),stages.get("OfficialPlanData"));
         verifyConsumer(request.logicalDate());
     }
     @Override public CompletionEvidence reconcilePublication(RunRequest request,String stage,String expectedRun,boolean writerStopped,Map<String,CompletionEvidence> upstream)throws Exception {
@@ -308,13 +312,40 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
             }
         }
     }
-    private CompletionEvidence acceptance(RunRequest r,PipelinePlan p)throws Exception {
-        var details=verifyConsumer(p.to());var windows=new ArrayList<Window>();
+    private CompletionEvidence acceptance(RunRequest r,PipelinePlan p,CompletionEvidence officialStage)throws Exception {
+        var officialDetails=readStageEvidence(r,"OfficialPlanData",officialStage).path("details");
+        var plan=strategyData.requirePlan(p.to());var authority=officialPlanAuthority(plan);
+        requireSamePlanAuthority(officialDetails,json.valueToTree(authority));
+        var details=new LinkedHashMap<String,Object>(verifyConsumer(p.to(),plan));var windows=new ArrayList<Window>();
         for(var o:owners)windows.add(snapshot(o.table(),o.date(),o.keys(),p.from(),p.to()));
         windows.add(snapshot("exchange_calendar","cal_date",List.of("cal_date","exchange"),p.from(),p.to()));
         windows.add(snapshot("market_sentiment_daily","trade_date",List.of("trade_date"),p.from(),p.to()));windows.add(snapshot("regime_features_monitor_daily","trade_date",List.of("trade_date"),p.from(),p.to()));
         windows.add(snapshot("v_backtest_daily","trade_date",List.of("trade_date","ts_code"),p.from(),p.to()));windows.add(snapshot("l2_daily_features","ts",List.of("ts","symbol"),p.to(),p.to()));
-        return certificate(r,"MainStrategyAcceptance",p,windows,l2EvidenceFiles(p.to()),null,details);
+        var scores=strategyData.scores(p.to());requireScoreSources(scores);
+        requireSamePlanAuthority(officialDetails,json.valueToTree(officialPlanAuthority(strategyData.requirePlan(p.to()))));
+        details.putAll(authority);details.put("officialPlanStage",officialStage);
+        return certificate(r,"MainStrategyAcceptance",p,windows,strategyData.scoreEvidence(scores),null,details);
+    }
+
+    private CompletionEvidence l2(RunRequest r,PipelinePlan p)throws Exception {
+        var proofs=new ArrayList<FormalL2DailyFeaturesIngestion.Evidence>();
+        for(var day:p.tradeDates()) {
+            try {proofs.add(l2.ingestAndValidate(day,()->Thread.currentThread().isInterrupted()));}
+            catch(Exception unavailable) {throw planningGate("L2DailyFeatures",unavailable);}
+        }
+        return certificate(r,"L2DailyFeatures",p,List.of(snapshot("l2_daily_features","ts",List.of("ts","symbol"),p.from(),p.to())),List.of(),null,Map.of("producer","java.native_l2_parquet","dates",proofs));
+    }
+    private CompletionEvidence scores(RunRequest r,PipelinePlan p)throws Exception {
+        com.zoutrankil.data.strategy.publication.ScoreArtifactPublisher.Publication publication;
+        try {publication=strategyData.prepareScores(p.to(),"java_scores_"+r.instanceId());}
+        catch(Exception unavailable) {throw planningGate("ScoreInputs",unavailable);}
+        return certificate(r,"ScoreInputs",p,List.of(snapshot("v_backtest_daily","trade_date",List.of("trade_date","ts_code"),p.from(),p.to())),strategyData.scoreEvidence(publication),null,Map.of("publication",publication));
+    }
+    private CompletionEvidence officialPlan(RunRequest r,PipelinePlan p)throws Exception {
+        com.zoutrankil.data.strategy.store.StoredOfficialPlan plan;
+        try {plan=strategyData.requirePlan(p.to());}
+        catch(Exception unavailable) {throw planningGate("OfficialPlanData",unavailable);}
+        return certificate(r,"OfficialPlanData",p,List.of(snapshot("etf_daily","timestamp",List.of("timestamp","ts_code"),p.to(),p.to())),strategyData.planEvidence(plan),null,officialPlanAuthority(plan));
     }
 
     private void requireLedgerResult(SyncJobRunner.Result result,SyncJobDefinition.FrozenRequest request)throws Exception {
@@ -340,11 +371,15 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         long rows=windows.stream().mapToLong(Window::rows).sum();if(rows==0)throw new Gate(BusinessState.WAITING_SOURCE,"Main-strategy stage lacks physical rows: "+stage);
         return new CompletionEvidence(1,"java.main_strategy_daily",r.instanceId(),stage,runId==null?r.instanceId():runId,r.logicalDate(),r.rangeStart(),r.rangeEnd(),r.rangeStart(),r.rangeEnd(),r.definitionVersion(),"stage-sha256:"+fileHash(artifact),r.inputFingerprint(),rows,rows,true,true,true,true,true,false,Instant.now(),BusinessState.VERIFIED,artifact.toString(),null);
     }
-    private void validateStage(RunRequest r,String stage,CompletionEvidence certificate)throws Exception {
-        if(!certificate.state().ready()||!certificate.matches(r,stage))throw new Gate(BusinessState.BLOCKED,"Stage certificate does not match frozen instance");
+    private JsonNode readStageEvidence(RunRequest r,String stage,CompletionEvidence certificate)throws Exception {
+        if(certificate==null||!certificate.state().ready()||!certificate.matches(r,stage))throw new Gate(BusinessState.BLOCKED,"Stage certificate does not match frozen instance");
         Path file=Path.of(certificate.artifact()).toAbsolutePath().normalize();if(!file.startsWith(instance(r))||!Files.isRegularFile(file))throw new Gate(BusinessState.BLOCKED,"Owned stage evidence missing");
         if(!certificate.sourceVersion().equals("stage-sha256:"+fileHash(file)))throw new Gate(BusinessState.BLOCKED,"Immutable stage artifact SHA changed");
         var e=json.readTree(Files.readAllBytes(file));if(!e.path("instance").asText().equals(r.instanceId())||!e.path("stage").asText().equals(stage)||!e.path("input").asText().equals(r.inputFingerprint()))throw new Gate(BusinessState.BLOCKED,"Stage evidence identity changed");
+        return e;
+    }
+    private void validateStage(RunRequest r,String stage,CompletionEvidence certificate)throws Exception {
+        var e=readStageEvidence(r,stage,certificate);
         for(var w:e.path("windows")){var old=json.treeToValue(w,Window.class);if(!old.equals(snapshot(old.table(),old.date(),old.keys(),old.from(),old.to())))throw new Gate(BusinessState.BLOCKED,"Live data changed after completion: "+old.table());}
         var fields=e.path("artifacts").fields();while(fields.hasNext()){var ref=fields.next();Path artifact=Path.of(ref.getKey()).toAbsolutePath().normalize();if(!Files.isRegularFile(artifact)||!ref.getValue().asText().equals(fileHash(artifact)))throw new Gate(BusinessState.BLOCKED,"Owner artifact changed: "+artifact);}
         if(stage.equals("Sources")){var p=json.treeToValue(e.path("plan"),PipelinePlan.class);for(var ref:e.path("artifacts").properties()){Path path=Path.of(ref.getKey());var receipt=json.readValue(Files.readAllBytes(path),SourceReceipt.class);var o=owners.stream().filter(v->v.table().equals(receipt.dataset())).findFirst().orElseThrow();validateReceipt(r,o,receipt);}verifySourceCoverage(p);}
@@ -354,6 +389,49 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         if(stage.equals("RegimeFeaturesMonitorDaily")&&!new RegimeFeaturesMonitorDailyWritePort(jdbc,"regime_features_monitor_daily").formalSnapshot().fingerprint().equals(e.path("details").path("fullTargetFingerprint").asText()))throw new Gate(BusinessState.BLOCKED,"Published full regime SHA changed");
         if(stage.equals("BacktestDaily")||stage.equals("MainStrategyAcceptance"))new BacktestDailyMaterializationPort(jdbc).nativeState("v_backtest_daily");
         if(stage.equals("BacktestDaily")&&!json.writeValueAsString(new BacktestDailyMaterializationPort(jdbc).nativeState("v_backtest_daily")).equals(e.path("details").path("native").toString()))throw new Gate(BusinessState.BLOCKED,"Published native/base identity or frontier changed");
+        if(stage.equals("L2DailyFeatures")) {
+            for(var proof:e.path("details").path("dates")) {var actual=l2.validate(LocalDate.parse(proof.path("day").asText()));if(!actual.sourceFingerprint().equals(proof.path("sourceFingerprint").asText())||!actual.readbackDigest().equals(proof.path("readbackDigest").asText())||!actual.targetIdentity().equals(proof.path("targetIdentity").asText()))throw new Gate(BusinessState.BLOCKED,"Native L2 source/physical values changed after completion");}
+        }
+        if(stage.equals("ScoreInputs")) {
+            var current=strategyData.scores(r.logicalDate());if(!current.producerRunId().equals(e.path("details").path("publication").path("producerRunId").asText()))throw new Gate(BusinessState.BLOCKED,"Java score alias advanced to a different frozen run");
+            requireScoreSources(current);
+        }
+        if(stage.equals("OfficialPlanData")||stage.equals("MainStrategyAcceptance")) {
+            requireSamePlanAuthority(e.path("details"),json.valueToTree(officialPlanAuthority(strategyData.requirePlan(r.logicalDate()))));
+            if(stage.equals("MainStrategyAcceptance")) {
+                requireScoreSources(strategyData.scores(r.logicalDate()));
+                var official=recordedOfficialPlanStage(e.path("details"));
+                requireSamePlanAuthority(e.path("details"),readStageEvidence(r,"OfficialPlanData",official).path("details"));
+            }
+        }
+    }
+
+    private static Map<String,String> officialPlanAuthority(com.zoutrankil.data.strategy.store.StoredOfficialPlan plan) {
+        return Map.of("planId",plan.planId(),"contentSha256",plan.contentSha256(),"scoreRun",plan.provenance().orElseThrow().scoreRunId());
+    }
+    private void requireScoreSources(com.zoutrankil.data.strategy.publication.ScoreArtifactPublisher.Publication scores)throws Exception {
+        try {strategyData.validateScoreSources(scores);}
+        catch(IllegalStateException changed) {throw new Gate(BusinessState.BLOCKED,changed.getMessage());}
+    }
+    static void requireSamePlanAuthority(JsonNode expected,JsonNode actual)throws Exception {
+        for(String field:List.of("planId","contentSha256","scoreRun")) {
+            var saved=expected.path(field);var current=actual.path(field);
+            if(!saved.isTextual()||saved.asText().isBlank()||!current.isTextual()||!saved.asText().equals(current.asText()))throw new Gate(BusinessState.BLOCKED,"Canonical official plan authority changed or missing: "+field);
+        }
+    }
+    static void requireSamePlanStage(CompletionEvidence recorded,CompletionEvidence current)throws Exception {
+        if(recorded==null||current==null||!recorded.equals(current))throw new Gate(BusinessState.BLOCKED,"Acceptance is not bound to this run's OfficialPlanData certificate");
+    }
+    private void requireAcceptancePlanStage(RunRequest r,CompletionEvidence acceptance,CompletionEvidence official)throws Exception {
+        var details=readStageEvidence(r,"MainStrategyAcceptance",acceptance).path("details");
+        var recorded=recordedOfficialPlanStage(details);
+        requireSamePlanStage(recorded,official);
+        requireSamePlanAuthority(details,readStageEvidence(r,"OfficialPlanData",official).path("details"));
+    }
+    private CompletionEvidence recordedOfficialPlanStage(JsonNode details)throws Exception {
+        var recorded=details.path("officialPlanStage");
+        if(!recorded.isObject())throw new Gate(BusinessState.BLOCKED,"Acceptance lacks the frozen OfficialPlanData certificate");
+        return json.treeToValue(recorded,CompletionEvidence.class);
     }
 
     private List<LocalDate> calendar(LocalDate from,LocalDate to)throws Exception {
@@ -370,6 +448,9 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         }
     }
     private Map<String,Object> verifyConsumer(LocalDate target)throws Exception {
+        return verifyConsumer(target,strategyData.requirePlan(target));
+    }
+    private Map<String,Object> verifyConsumer(LocalDate target,com.zoutrankil.data.strategy.store.StoredOfficialPlan plan)throws Exception {
         if(!calendar(target,target).equals(List.of(target)))throw new Gate(BusinessState.BLOCKED,"Consumer target is not an open SSE day");
         finiteRow("market_sentiment_daily",target,List.of("sentiment_score","sentiment_score_core","heat_score","breadth_score","limit_score","profit_effect_score","moneyflow_score"));finiteRow("regime_features_monitor_daily",target,REGIME_REQUIRED);
         var port=new BacktestDailyMaterializationPort(jdbc);var state=port.nativeState("v_backtest_daily");if(!port.digest("backtest_daily",target,target,true).equals(port.digest("v_backtest_daily",target,target,false)))throw new Gate(BusinessState.BLOCKED,"Native MV differs from typed base");
@@ -378,59 +459,11 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         var etfCounts=jdbc.queryForList("SELECT count() AS n FROM etf_daily WHERE timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP)",micros(target),micros(target.plusDays(1)));long current=((Number)etfCounts.getFirst().get("n")).longValue();
         var history=jdbc.queryForList("SELECT timestamp,count() AS n FROM etf_daily WHERE timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP) GROUP BY timestamp ORDER BY timestamp LIMIT 41",micros(target.minusDays(40)),micros(target));var ns=history.stream().map(v->((Number)v.get("n")).longValue()).sorted().toList();double baseline=ns.isEmpty()?current:ns.size()%2==1?ns.get(ns.size()/2):(ns.get(ns.size()/2-1)+ns.get(ns.size()/2))/2.0;
         if(current<=0||current<baseline*0.95)throw new Gate(BusinessState.WAITING_SOURCE,"ETF daily pool below 95% recent median");
-        var disclosure=new ArrayList<Map<String,Object>>();for(String code:targetEtfs){long n=jdbc.queryForObject("SELECT count() FROM etf_daily WHERE ts_code=? AND timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP)",Long.class,code,micros(target),micros(target.plusDays(1)));if(n!=1)throw new Gate(BusinessState.WAITING_SOURCE,"Held ETF daily missing or duplicate: "+code);var latest=jdbc.queryForObject("SELECT cast(max(ann_date) AS LONG) FROM etf_portfolio WHERE ts_code=? AND ann_date<cast(? AS TIMESTAMP)",Long.class,code,micros(target.plusDays(1)));if(latest==null)throw new Gate(BusinessState.WAITING_SOURCE,"Held ETF has no point-in-time disclosure: "+code);disclosure.add(Map.of("code",code,"latestDisclosure",date(latest),"ageDays",ChronoUnit.DAYS.between(date(latest),target),"quality","Presence verified; weights completeness and stale disclosure remain separate limitations."));}
+        var authoritativeTargets=plan.plan().targetSymbols();if(!targetEtfs.isEmpty()&&!new TreeSet<>(targetEtfs).equals(new TreeSet<>(authoritativeTargets)))throw new Gate(BusinessState.BLOCKED,"Configured targets differ from the canonical official plan");var disclosure=new ArrayList<Map<String,Object>>();for(String code:authoritativeTargets){long n=jdbc.queryForObject("SELECT count() FROM etf_daily WHERE ts_code=? AND timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP)",Long.class,code,micros(target),micros(target.plusDays(1)));if(n!=1)throw new Gate(BusinessState.WAITING_SOURCE,"Held ETF daily missing or duplicate: "+code);var latest=jdbc.queryForObject("SELECT cast(max(ann_date) AS LONG) FROM etf_portfolio WHERE ts_code=? AND ann_date<cast(? AS TIMESTAMP)",Long.class,code,micros(target.plusDays(1)));if(latest==null)throw new Gate(BusinessState.WAITING_SOURCE,"Held ETF has no point-in-time disclosure: "+code);disclosure.add(Map.of("code",code,"latestDisclosure",date(latest),"ageDays",ChronoUnit.DAYS.between(date(latest),target),"quality","Presence verified; weights completeness and stale disclosure remain separate limitations."));}
         var l2=snapshot("l2_daily_features","ts",List.of("ts","symbol"),target,target);if(l2.rows()==0)throw new Gate(BusinessState.WAITING_SOURCE,"Level2 not loaded for target; archive cleaning/import is a separate owner");
-        var l2Proof=verifyL2(target);
+        var l2Proof=this.l2.validate(target);
         return Map.of("target",target,"native",state,"etfRows",current,"etfBaseline",baseline,"l2Rows",l2.rows(),"l2",l2Proof,"disclosures",disclosure,"marginLimitation",Objects.toString(marginLimitation(target,target),"none"),"consumer","Main daily fields and native MV physically verified; optional disclosure/margin limitations are explicit.");
     }
-    private Map<String,Object> verifyL2(LocalDate target)throws Exception {
-        var retainedContract=l2Contract();
-        String day=basic(target);Path directory=l2Features.resolve(day),source=directory.resolve("l2_daily_features.jsonl"),manifest=directory.resolve("manifest.json");
-        for(Path file:List.of(l2Report,l2Acceptance))if(!Files.isRegularFile(file))throw new Gate(BusinessState.WAITING_SOURCE,"Accepted Level2 evidence unavailable for "+day+": "+file);
-        var report=json.readTree(Files.readAllBytes(l2Report));var accepted=json.readTree(Files.readAllBytes(l2Acceptance));
-        if(!"SUCCEEDED".equals(report.path("status").asText())||!"l2_daily_features".equals(report.path("table").asText())||!Set.of("http://127.0.0.1:9000","http://localhost:9000").contains(report.path("endpoint").asText()))throw new Gate(BusinessState.BLOCKED,"L2 retained import report identity is not accepted local QuestDB");
-        try(var connection=jdbc.getDataSource().getConnection()){String url=connection.getMetaData().getURL();if(!url.matches("jdbc:postgresql://(localhost|127\\.0\\.0\\.1|\\[::1\\]):.*"))throw new Gate(BusinessState.BLOCKED,"Retained local L2 evidence cannot authorize another QuestDB host");}
-        var importDay=dateEvidence(report,day);var acceptedDay=dateEvidence(accepted,day);
-        if(!"VERIFIED".equals(importDay.path("status").asText())||!"PASSED".equals(acceptedDay.path("status").asText())||importDay.path("mismatches").size()!=0||acceptedDay.path("errors").size()!=0||acceptedDay.path("failedSymbols").size()!=0||acceptedDay.path("missingSourceDirectories").size()!=0)throw new Gate(BusinessState.WAITING_SOURCE,"Level2 target lacks a complete accepted archive/import receipt");
-        if(!Files.isRegularFile(source)||!Files.isRegularFile(manifest))return retainedL2(target,importDay,acceptedDay);
-        var meta=json.readTree(Files.readAllBytes(manifest));String sha=fileHash(source);long count=importDay.path("expectedRows").asLong(-1);
-        if(count<=0||count>10000||count!=importDay.path("readbackRows").asLong(-2)||count*110!=importDay.path("verifiedFields").asLong(-3)||count!=acceptedDay.path("outputRows").asLong(-4)||!sha.equals(importDay.path("sourceSha256").asText())||!sha.equals(acceptedDay.path("aggregateSha256").asText())||!"COMPLETE".equals(meta.path("status").asText())||!meta.path("published").asBoolean()||!sha.equals(meta.path("aggregateSha256").asText()))throw new Gate(BusinessState.BLOCKED,"Level2 source SHA/count/COMPLETE publication does not match accepted receipt");
-        var schema=columns("l2_daily_features");if(schema.size()!=110)throw new Gate(BusinessState.BLOCKED,"Level2 exact 110-field schema absent");
-        for(var column:schema){var field=L2DailyFeatureField.named(Objects.toString(column.get("column")));if(field==null||!field.storageType().name().equals(column.get("type")))throw new Gate(BusinessState.BLOCKED,"Level2 physical typed schema drift");}
-        var expected=new TreeMap<String,JsonNode>();var names=new TreeSet<String>();for(var field:L2DailyFeatureField.values())names.add(field.fieldName());
-        try(var reader=Files.newBufferedReader(source,StandardCharsets.UTF_8)){for(String line;(line=reader.readLine())!=null;){if(line.isBlank()||line.length()>256000)throw new Gate(BusinessState.BLOCKED,"Invalid bounded Level2 JSONL row");var row=json.readTree(line);var actualNames=new TreeSet<String>();row.fieldNames().forEachRemaining(actualNames::add);String code=row.path("symbol").asText();if(!names.equals(actualNames)||!row.path("ts").asText().equals(day)||!code.matches("[0-9]{6}\\.(SH|SZ|BJ)")||expected.put(code,row)!=null||expected.size()>10000)throw new Gate(BusinessState.BLOCKED,"Level2 source fields/date/canonical key differ");for(var field:L2DailyFeatureField.values())if(!field.temporal())field.decode(row.get(field.fieldName()));if(row.path("feature_version").asText("").isBlank()||row.path("parser_version").asText("").isBlank())throw new Gate(BusinessState.BLOCKED,"Level2 source versions absent");}}
-        if(expected.size()!=count)throw new Gate(BusinessState.BLOCKED,"Level2 source count differs from accepted archive census");
-        for(var row:expected.values())if(!row.path("feature_version").asText().equals(retainedContract.path("feature_version").asText())||!row.path("parser_version").asText().equals(retainedContract.path("parser_version").asText()))throw new Gate(BusinessState.BLOCKED,"Level2 source versions differ from retained accepted contract");
-        var projection=new ArrayList<String>();for(var field:L2DailyFeatureField.values())projection.add(field.temporal()?"cast(ts AS LONG) AS ts":"\""+field.fieldName()+"\"");
-        var before=clock("l2_daily_features");var seen=new HashSet<String>();long[] fieldsChecked={0};
-        jdbc.query("SELECT "+String.join(",",projection)+" FROM l2_daily_features WHERE ts>=cast(? AS TIMESTAMP) AND ts<cast(? AS TIMESTAMP) ORDER BY symbol LIMIT 10001",(RowCallbackHandler)rs->{String code=rs.getString("symbol");var row=expected.get(code);if(row==null||!seen.add(code)||seen.size()>10000)throw new IllegalStateException("L2 live key/count differs from full accepted source");for(var field:L2DailyFeatureField.values()){Object actual=rs.getObject(field.fieldName());try{if(field.temporal()){if(!(actual instanceof Number n)||n.longValue()!=micros(target))throw new IllegalStateException("L2 live business day differs");}else {Object sourceValue=field.decode(row.get(field.fieldName()));Object normalized=field.normalize(actual);boolean equal=sourceValue instanceof Double a&&normalized instanceof Double b?Double.doubleToRawLongBits(a)==Double.doubleToRawLongBits(b):Objects.equals(sourceValue,normalized);if(!equal)throw new IllegalStateException("L2 live value differs: "+code+"."+field.fieldName());}fieldsChecked[0]++;}catch(IOException error){throw new IllegalStateException("L2 source field decode failed",error);}}},micros(target),micros(target.plusDays(1)));
-        if(seen.size()!=count||!seen.equals(expected.keySet())||fieldsChecked[0]!=count*110||!before.equals(clock("l2_daily_features"))||!sha.equals(fileHash(source)))throw new Gate(BusinessState.BLOCKED,"Level2 exact full-source readback changed or incomplete");
-        return Map.of("producer","retained Python importer ingest-local-questdb.py; current Java read-only certification","rows",count,"fieldsChecked",fieldsChecked[0],"sourceSha256",sha,"source",source.toString(),"importReport",l2Report.toString(),"archiveAcceptance",l2Acceptance.toString(),"publishedManifest",manifest.toString());
-    }
-    private Map<String,Object> retainedL2(LocalDate target,JsonNode imported,JsonNode accepted)throws Exception {
-        var contract=l2Contract();String expectedFeature=contract.path("feature_version").asText(),expectedParser=contract.path("parser_version").asText();
-        long count=imported.path("expectedRows").asLong(-1);String sha=imported.path("sourceSha256").asText();
-        if(count<1||count>10000||count!=imported.path("readbackRows").asLong(-2)||count*110!=imported.path("verifiedFields").asLong(-3)||count!=accepted.path("outputRows").asLong(-4)||count!=accepted.path("expectedCanonicalSymbols").asLong(-5)||count!=accepted.path("archiveRawSymbols").asLong(-6)||!sha.matches("[a-f0-9]{64}")||!sha.equals(accepted.path("aggregateSha256").asText()))throw new Gate(BusinessState.BLOCKED,"Retained L2 full archive/import coverage or source SHA disagrees");
-        if(!Files.isRegularFile(l2RetainedObservation))throw new Gate(BusinessState.WAITING_SOURCE,"Retained L2 WAL proof missing");
-        var historical=json.readTree(Files.readAllBytes(l2RetainedObservation)).path("queries").path("wal").path("result");var indexes=new HashMap<String,Integer>();int index=0;for(var column:historical.path("columns"))indexes.put(column.path("name").asText(),index++);
-        for(String name:List.of("name","suspended","writerTxn","sequencerTxn","bufferedTxnSize"))if(!indexes.containsKey(name))throw new Gate(BusinessState.BLOCKED,"Retained L2 WAL proof lacks required field: "+name);
-        var matches=new ArrayList<JsonNode>();for(var row:historical.path("dataset"))if("l2_daily_features".equals(row.path(indexes.get("name")).asText()))matches.add(row);if(matches.size()!=1)throw new Gate(BusinessState.BLOCKED,"Retained L2 physical frontier is ambiguous");var old=matches.getFirst();
-        var before=clock("l2_daily_features");long writer=((Number)before.get("writerTxn")).longValue();if(old.path(indexes.get("suspended")).asBoolean(true)||old.path(indexes.get("bufferedTxnSize")).asLong(-1)!=0||old.path(indexes.get("writerTxn")).asLong(-2)!=writer||old.path(indexes.get("sequencerTxn")).asLong(-3)!=writer)throw new Gate(BusinessState.BLOCKED,"L2 WAL changed since retained verified ingestion; fresh acceptance required");
-        var schema=columns("l2_daily_features");if(schema.size()!=110)throw new Gate(BusinessState.BLOCKED,"L2 exact 110-field schema missing");for(var column:schema){var field=L2DailyFeatureField.named(Objects.toString(column.get("column")));if(field==null||!field.storageType().name().equals(column.get("type")))throw new Gate(BusinessState.BLOCKED,"L2 typed schema changed");}
-        var projection=new ArrayList<String>();for(var field:L2DailyFeatureField.values())projection.add(field.temporal()?"cast(ts AS LONG) AS ts":"\""+field.fieldName()+"\"");var seen=new HashSet<String>();var nulls=new TreeMap<String,Long>();var nullSymbols=new TreeMap<String,Set<String>>();var featureVersions=new TreeSet<String>();var parserVersions=new TreeSet<String>();long[] checked={0};
-        jdbc.query("SELECT "+String.join(",",projection)+" FROM l2_daily_features WHERE ts>=cast(? AS TIMESTAMP) AND ts<cast(? AS TIMESTAMP) ORDER BY symbol LIMIT 10001",(RowCallbackHandler)rs->{String code=rs.getString("symbol");if(code==null||!code.matches("[0-9]{6}\\.(SH|SZ|BJ)")||!seen.add(code)||seen.size()>10000)throw new IllegalStateException("L2 canonical/date/unique key check failed");for(var field:L2DailyFeatureField.values()){Object value=rs.getObject(field.fieldName());if(field.temporal()){if(!(value instanceof Number n)||n.longValue()!=micros(target))throw new IllegalStateException("L2 business-date check failed");}else {Object normalized=field.normalize(value);if(normalized==null){nulls.merge(field.fieldName(),1L,Long::sum);nullSymbols.computeIfAbsent(field.fieldName(),k->new TreeSet<>()).add(code);}}checked[0]++;}String feature=rs.getString("feature_version"),parser=rs.getString("parser_version");if(!expectedFeature.equals(feature)||!expectedParser.equals(parser))throw new IllegalStateException("L2 model/parser version differs from retained accepted contract");featureVersions.add(feature);parserVersions.add(parser);},micros(target),micros(target.plusDays(1)));
-        var expectedNulls=new TreeMap<String,Long>();accepted.path("nullCountsByField").fields().forEachRemaining(e->expectedNulls.put(e.getKey(),e.getValue().asLong()));
-        var expectedSymbols=new TreeMap<String,Set<String>>();accepted.path("nullSymbolsByField").fields().forEachRemaining(e->{var codes=new TreeSet<String>();e.getValue().forEach(v->codes.add(v.asText()));expectedSymbols.put(e.getKey(),codes);});
-        if(seen.size()!=count||checked[0]!=count*110||!nulls.equals(expectedNulls)||!nullSymbols.equals(expectedSymbols)||featureVersions.size()!=1||parserVersions.size()!=1||!before.equals(clock("l2_daily_features")))throw new Gate(BusinessState.BLOCKED,"L2 retained coverage/current typed quality/null symbol set check failed");
-        var window=snapshot("l2_daily_features","ts",List.of("ts","symbol"),target,target);if(!before.equals(clock("l2_daily_features")))throw new Gate(BusinessState.BLOCKED,"L2 frontier changed between complete typed QA and SHA read");Path baseline=l2Baseline(target);
-        var values=new LinkedHashMap<String,Object>();values.put("producer","java.main_strategy_daily.retained_l2_quality");values.put("target",target);values.put("clock",before);values.put("window",window);values.put("ingestionReportSha256",fileHash(l2Report));values.put("archiveAcceptanceSha256",fileHash(l2Acceptance));values.put("retainedObservationSha256",fileHash(l2RetainedObservation));values.put("retainedContractSha256",fileHash(l2Contract));values.put("historicalSourceSha256",sha);values.put("fieldsChecked",checked[0]);values.put("nullCounts",nulls);values.put("nullSymbols",nullSymbols);values.put("featureVersions",featureVersions);values.put("parserVersions",parserVersions);
-        if(Files.isRegularFile(baseline)){var prior=json.readTree(Files.readAllBytes(baseline));if(!prior.path("clock").toString().equals(json.writeValueAsString(before))||!prior.path("window").toString().equals(json.writeValueAsString(window))||!prior.path("ingestionReportSha256").asText().equals(fileHash(l2Report))||!prior.path("archiveAcceptanceSha256").asText().equals(fileHash(l2Acceptance))||!prior.path("retainedObservationSha256").asText().equals(fileHash(l2RetainedObservation))||!prior.path("retainedContractSha256").asText().equals(fileHash(l2Contract))||!prior.path("nullSymbols").toString().equals(json.writeValueAsString(nullSymbols)))throw new Gate(BusinessState.BLOCKED,"Persisted L2 quality baseline changed; fresh acceptance required");}else write(baseline,values);
-        return Map.of("proofMode","retained verified ingestion + unchanged WAL frontier + current complete typed quality","producer","Original Python importer ingest-local-questdb.py; current Java readonly quality certification","rows",count,"fieldsChecked",checked[0],"historicalSourceSha256",sha,"currentTypedWindowSha256",window.sha256(),"baseline",baseline.toString(),"sourceOutputRetained",false,"limit","Temporary JSONL was deleted. Historical import used 1e-12 numeric tolerance; this pass does not repeat raw-source comparisons. Historical proof lacks table id/directory; the current full typed baseline binds their observed values for future drift checks.");
-    }
-    private Path l2Baseline(LocalDate day){return root.resolve("retained-l2").resolve(basic(day)+".json");}
-    private JsonNode l2Contract()throws Exception {if(!Files.isRegularFile(l2Contract))throw new Gate(BusinessState.WAITING_SOURCE,"Retained L2 version/nullability contract absent");var contract=json.readTree(Files.readAllBytes(l2Contract));if(contract.path("feature_version").asText().isBlank()||contract.path("parser_version").asText().isBlank())throw new Gate(BusinessState.BLOCKED,"Retained L2 versions missing");for(var field:L2DailyFeatureField.values()){var model=contract.path("model_fields").path(field.fieldName());if(!model.isObject()||model.path("required").asBoolean()!=!field.nullable())throw new Gate(BusinessState.BLOCKED,"L2 retained nullable contract differs: "+field.fieldName());}return contract;}
-    private List<Path> l2EvidenceFiles(LocalDate target){var paths=new ArrayList<Path>(List.of(l2Report,l2Acceptance,l2Contract));Path day=l2Features.resolve(basic(target));if(Files.isRegularFile(day.resolve("manifest.json"))&&Files.isRegularFile(day.resolve("l2_daily_features.jsonl"))){paths.add(day.resolve("manifest.json"));paths.add(day.resolve("l2_daily_features.jsonl"));}else {paths.add(l2RetainedObservation);paths.add(l2Baseline(target));}return paths;}
-    private JsonNode dateEvidence(JsonNode document,String day)throws Gate {var matches=new ArrayList<JsonNode>();for(var date:document.path("dates"))if(day.equals(date.path("date").asText()))matches.add(date);if(matches.size()!=1)throw new Gate(BusinessState.WAITING_SOURCE,"No unique accepted Level2 date receipt for "+day);return matches.getFirst();}
     private static String basic(LocalDate d){return d.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE);}
     private void requireContains(String actual,String actualDate,String expected,String expectedDate,LocalDate d)throws Exception {
         var missing=jdbc.queryForList("SELECT e.ts_code FROM \""+expected+"\" e LEFT JOIN \""+actual+"\" a ON e.ts_code=a.ts_code AND e.\""+expectedDate+"\"=a.\""+actualDate+"\" WHERE e.\""+expectedDate+"\">=cast(? AS TIMESTAMP) AND e.\""+expectedDate+"\"<cast(? AS TIMESTAMP) AND a.ts_code IS NULL LIMIT 101",micros(d),micros(d.plusDays(1)));if(!missing.isEmpty())throw new Gate(BusinessState.WAITING_SOURCE,actual+" lacks factor business keys on "+d+": "+missing);
