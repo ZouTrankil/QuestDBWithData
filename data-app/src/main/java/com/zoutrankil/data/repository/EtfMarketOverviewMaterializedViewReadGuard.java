@@ -27,21 +27,12 @@ public final class EtfMarketOverviewMaterializedViewReadGuard {
 
     private EtfMarketOverviewMaterializedViewReadGuard() {}
 
-    /** Null retains the original direct-view guard during staged deployment. */
+    /** Requires a current certificate for the native output; no ordinary alias is used. */
     public static String versionIfActivated(JdbcTemplate jdbc) {
         return versionIfActivated(jdbc,Path.of(System.getProperty("app.sync.ledger-path","var/sync-ledger.sqlite3")));
     }
 
     public static String versionIfActivated(JdbcTemplate jdbc,Path ledger) {
-        var aliases = jdbc.queryForList("SELECT view_sql,view_status,invalidation_reason,view_table_dir_name "
-                + "FROM views() WHERE view_name='v_etf_market_overview_daily'");
-        if (aliases.isEmpty()) return null;
-        if (aliases.size() != 1) throw new IllegalStateException("Ambiguous ETF public alias");
-        var alias = aliases.getFirst();
-        if (!normalized("SELECT * FROM " + OUTPUT).equals(normalized(alias.get("view_sql")))) return null;
-        if (!"valid".equals(alias.get("view_status")) || nonempty(alias.get("invalidation_reason")))
-            throw new IllegalStateException("ETF native alias is invalid");
-        String aliasDirectory = text(alias, "view_table_dir_name");
         String share = snapshot(jdbc, "etf_share"), daily = snapshot(jdbc, "etf_daily");
         String pin = sha(normalized(SQL) + "|" + share + "|" + daily);
         var view = view(jdbc);
@@ -60,7 +51,7 @@ public final class EtfMarketOverviewMaterializedViewReadGuard {
         if (!share.equals(snapshot(jdbc, "etf_share")) || !daily.equals(snapshot(jdbc, "etf_daily"))
                 || !output.equals(snapshot(jdbc, OUTPUT)))
             throw new IllegalStateException("ETF source/output revisions changed during verification");
-        return "etf-native:" + checkpoint + "|" + pin + "|" + output + "|" + aliasDirectory;
+        return "etf-native:" + checkpoint + "|" + pin + "|" + output;
     }
 
     public static Map<String,Object> view(JdbcTemplate jdbc) {

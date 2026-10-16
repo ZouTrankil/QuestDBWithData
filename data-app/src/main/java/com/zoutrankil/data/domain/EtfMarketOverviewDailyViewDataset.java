@@ -13,8 +13,8 @@ public final class EtfMarketOverviewDailyViewDataset {
             "SAMPLE BY 1d ALIGN TO CALENDAR aggregate date carried at exact UTC midnight; not an event timestamp");
 
     public static final DatasetDefinition DEFINITION = new DatasetDefinition(
-            "v_etf_market_overview_daily", 1, "python.derived.market_barometer_views",
-            "python.market_barometer_views.install_views", "v_etf_market_overview_daily", ObjectKind.VIEW,
+            "mv_etf_market_overview_daily_v1", 1, "python.derived.market_barometer_views",
+            "java.etf_overview_maintenance", "mv_etf_market_overview_daily_v1", ObjectKind.MATERIALIZED_VIEW,
             List.of(
                     new Column("etf_share.timestamp", "trade_date", "trade_date",
                             StorageType.TIMESTAMP, false, "Calendar-day identity of the direct join aggregate", TRADE_DATE),
@@ -24,14 +24,9 @@ public final class EtfMarketOverviewDailyViewDataset {
                             StorageType.DOUBLE, true, "Joined ETF shares in ten-thousand-share units (万份); preserve SQL null and signed values", null),
                     new Column("derived:sum(etf_share.fd_share*etf_daily.close)/10000.0", "total_size_yi", "total_size_yi",
                             StorageType.DOUBLE, true, "Joined ETF market value in yi yuan (亿元); division belongs to source SQL, no mapper scaling", null)),
-            List.of("trade_date"), List.of(), "trade_date", Partition.NONE, false,
+            List.of("trade_date"), List.of(), "trade_date", Partition.MONTH, true,
             Set.of(Capability.READ), List.of("etf_share", "etf_daily"),
-            "Public share/daily view, SAMPLE BY 1d ALIGN TO CALENDAR after an INNER JOIN on complete timestamp and ts_code. "
-                    + "No basic JOIN, code/type filter, physical partition, WAL or UPSERT key on the public alias. "
-                    + "Direct writes and replacements are forbidden. Existing base owners refresh share/daily; "
-                    + "Explicit native lifecycle installs mv_etf_market_overview_daily_v1, refreshes both-source history and activates this alias. "
-                    + "Activated native reads bind the database identity, both source revisions and verified output through the local SQLite run ledger; "
-                    + "staged direct reads retain the fixed original SQL and both stable source versions. Date alone is the natural identity. "
-                    + "Typed reads require the four columns and a date equality or a bounded date range of at most 31 days, with pages of at most 31 rows. "
-                    + "Nullable finite DOUBLE aggregates retain exact binary64 values, signed zero, units and SQL nulls.");
+            "Native share/daily MV with one calendar-day bucket after a timestamp/code INNER JOIN. "
+                    + "QuestDB maintains share increments; Java verifies both source revisions in its local SQLite ledger. "
+                    + "Daily-price revisions require a verified full refresh. Reads require all four fields and at most 31 days.");
 }

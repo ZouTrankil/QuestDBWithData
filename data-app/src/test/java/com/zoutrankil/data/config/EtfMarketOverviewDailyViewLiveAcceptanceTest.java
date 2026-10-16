@@ -167,7 +167,7 @@ class EtfMarketOverviewDailyViewLiveAcceptanceTest {
     }
 
     private static List<EtfMarketOverviewDailyView> directView(JdbcTemplate jdbc) {
-        return jdbc.query("SELECT trade_date,etf_count,total_share,total_size_yi FROM v_etf_market_overview_daily "
+        return jdbc.query("SELECT trade_date,etf_count,total_share,total_size_yi FROM mv_etf_market_overview_daily_v1 "
                 + "WHERE trade_date>='2026-09-17' AND trade_date<'2026-09-22' ORDER BY trade_date LIMIT 4", (rs, index) -> row(rs));
     }
 
@@ -206,8 +206,8 @@ class EtfMarketOverviewDailyViewLiveAcceptanceTest {
                     + "t.designatedTimestamp,t.table_suspended,t.wal_pending_row_count,w.sequencerTxn,w.writerTxn,w.bufferedTxnSize,w.suspended "
                     + "FROM tables() t JOIN wal_tables() w ON w.name=t.table_name WHERE t.table_name='" + table + "'"));
         }
-        result.put("view", jdbc.queryForList("SELECT * FROM views() WHERE view_name='v_etf_market_overview_daily' LIMIT 2"));
-        result.put("columns", jdbc.queryForList("SELECT \"column\",type FROM table_columns('v_etf_market_overview_daily') LIMIT 5"));
+        result.put("view", jdbc.queryForList("SELECT * FROM views() WHERE view_name='mv_etf_market_overview_daily_v1' LIMIT 2"));
+        result.put("columns", jdbc.queryForList("SELECT \"column\",type FROM table_columns('mv_etf_market_overview_daily_v1') LIMIT 5"));
         return result;
     }
 

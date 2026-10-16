@@ -29,6 +29,7 @@ import static org.mockito.Mockito.*;
 /** The public catalog and request boundary reject retired caches before accessing QuestDB. */
 class CacheDatasetRetirementTest {
     static final Set<String> RETIRED = Set.of("backtest_daily","v_backtest_daily","backtest_daily_cache", "backtest_daily_cache_coverage",
+            "v_market_breadth_daily", "v_retail_sentiment_daily", "v_macro_core_monthly", "v_etf_market_overview_daily",
             "market_breadth_daily_cache", "retail_sentiment_daily_cache",
             "etf_market_overview_daily_cache", "market_barometer_cache_coverage");
     @TempDir Path temp;
@@ -73,10 +74,8 @@ class CacheDatasetRetirementTest {
             var retained = Map.of(
                     "mv_backtest_daily", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
                     "mv_market_breadth_daily_v1", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
-                    "v_market_breadth_daily", DatasetDefinition.ObjectKind.VIEW,
                     "mv_retail_sentiment_daily_v1", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
-                    "v_retail_sentiment_daily", DatasetDefinition.ObjectKind.VIEW,
-                    "v_etf_market_overview_daily", DatasetDefinition.ObjectKind.VIEW,
+                    "mv_etf_market_overview_daily_v1", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
                     "cn_bond_yield_curve", DatasetDefinition.ObjectKind.TABLE);
             var bindings = catalog.bind(datasets);
             for (var entry : retained.entrySet()) {

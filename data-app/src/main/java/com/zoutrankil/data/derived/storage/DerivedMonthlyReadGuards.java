@@ -28,13 +28,4 @@ public final class DerivedMonthlyReadGuards {
         return QuestDbMacroCoreReadGuard.version(jdbc, definition);
     }
 
-    public static void validateMacroCoreView(DatasetDefinition definition, DatasetReadQuery query) {
-        QuestDbMacroCoreViewReadGuard.validate(definition, query);
-    }
-    public static boolean appliesMacroCoreView(DatasetDefinition definition) {
-        return QuestDbMacroCoreViewReadGuard.applies(definition);
-    }
-    public static String versionMacroCoreView(JdbcTemplate jdbc, DatasetDefinition definition) {
-        return QuestDbMacroCoreViewReadGuard.version(jdbc, definition);
-    }
 }

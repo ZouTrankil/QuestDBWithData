@@ -7,7 +7,6 @@ import com.zoutrankil.data.derived.storage.MarketBreadthDailyV1MaterializationPo
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyV1MaterializationPort;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,28 +30,9 @@ public class QuestDbBoundedReader {
     public record PreparedRead(String sql, List<Bound> parameters, String fingerprint) {
         public PreparedRead { parameters = List.copyOf(parameters); }
     }
-    // Add aliases here only after their individual migration has established the exact native MV contract.
-    private static final Map<String, String> GUARDED_MATERIALIZED_ALIASES = Map.of(
-            "v_market_breadth_daily", "mv_market_breadth_daily_v1",
-            "v_retail_sentiment_daily", "mv_retail_sentiment_daily_v1");
-    // D102 is an ordinary aggregate of two physical source tables, not an MV alias or cache generation.
-    private static final String GUARDED_ETF_AGGREGATE_VIEW = "v_etf_market_overview_daily";
+    private static final String GUARDED_ETF_AGGREGATE_VIEW = EtfMarketOverviewMaterializedViewReadGuard.OUTPUT;
     private static final List<String> GUARDED_ETF_AGGREGATE_SOURCES = List.of("etf_share", "etf_daily");
     private static final Set<String> ETF_AGGREGATE_COLUMNS = Set.of("trade_date", "etf_count", "total_share", "total_size_yi");
-    private static final String ETF_AGGREGATE_SQL = """
-            SELECT
-                s.timestamp AS trade_date,
-                count_distinct(s.ts_code) AS etf_count,
-                sum(s.fd_share) AS total_share,
-                sum(s.fd_share * d.close) / 10000.0 AS total_size_yi
-            FROM etf_share s
-            JOIN etf_daily d ON s.ts_code = d.ts_code AND s.timestamp = d.timestamp
-            SAMPLE BY 1d ALIGN TO CALENDAR
-            """;
-    private static final Set<String> ETF_SQL_IDENTIFIERS = Set.of("s", "d", "timestamp", "ts_code", "fd_share",
-            "close", "trade_date", "etf_count", "total_share", "total_size_yi", "etf_share", "etf_daily");
-    private static final java.util.regex.Pattern ETF_SQL_TOKEN = java.util.regex.Pattern.compile(
-            "\"([A-Za-z_][A-Za-z0-9_]*)\"|([A-Za-z_][A-Za-z0-9_]*)|([0-9]+(?:\\.[0-9]+)?[A-Za-z]*)|([.,()*/=])");
     private final JdbcTemplate jdbc;
     private final Path ledgerPath;
     public QuestDbBoundedReader(JdbcTemplate jdbc) { this(jdbc,System.getProperty("app.sync.ledger-path","var/sync-ledger.sqlite3")); }
@@ -64,7 +44,6 @@ public class QuestDbBoundedReader {
         validateEtfAggregateQuery(definition, query);
         DerivedMonthlyReadGuards.validateEquityStyle(definition, query);
         DerivedMonthlyReadGuards.validateMacroCore(definition, query);
-        DerivedMonthlyReadGuards.validateMacroCoreView(definition, query);
         String guardedBefore = guardedSourceVersion(definition);
         String effectiveSourceVersion = guardedBefore == null ? sourceVersion : guardedBefore;
         var prepared = prepare(definition, query, effectiveSourceVersion);
@@ -107,8 +86,8 @@ public class QuestDbBoundedReader {
     /** Date bounds limit output buckets; LIMIT is not evidence that the native JOIN scans only that many source rows. */
     private static void validateEtfAggregateQuery(DatasetDefinition definition, DatasetReadQuery query) {
         if (!GUARDED_ETF_AGGREGATE_VIEW.equals(definition.objectName())) return;
-        if (definition.objectKind() != ObjectKind.VIEW || !definition.dependencies().equals(GUARDED_ETF_AGGREGATE_SOURCES))
-            throw new IllegalStateException("ETF aggregate requires its registered ordinary VIEW and exact two-source contract");
+        if (definition.objectKind() != ObjectKind.MATERIALIZED_VIEW || !definition.dependencies().equals(GUARDED_ETF_AGGREGATE_SOURCES))
+            throw new IllegalStateException("ETF aggregate requires its registered native MV and exact two-source contract");
         if (query.columns().size() != ETF_AGGREGATE_COLUMNS.size()
                 || !new HashSet<>(query.columns()).equals(ETF_AGGREGATE_COLUMNS) || query.pageSize() > 31)
             throw new IllegalArgumentException("ETF aggregate requires all four fields and a page of at most 31 daily buckets");
@@ -136,192 +115,15 @@ public class QuestDbBoundedReader {
             return DerivedMonthlyReadGuards.versionEquityStyle(jdbc, definition);
         if (DerivedMonthlyReadGuards.appliesMacroCore(definition))
             return DerivedMonthlyReadGuards.versionMacroCore(jdbc, definition);
-        if (DerivedMonthlyReadGuards.appliesMacroCoreView(definition))
-            return DerivedMonthlyReadGuards.versionMacroCoreView(jdbc, definition);
+        if (GUARDED_ETF_AGGREGATE_VIEW.equals(definition.objectName()))
+            return EtfMarketOverviewMaterializedViewReadGuard.versionIfActivated(jdbc, ledgerPath);
         if (definition.objectKind() == ObjectKind.MATERIALIZED_VIEW)
             return requireCurrentMaterializedView(definition.objectName()).sourceVersion();
-        if (definition.objectKind() == ObjectKind.VIEW && GUARDED_MATERIALIZED_ALIASES.containsKey(definition.objectName()))
-            return requireCurrentAlias(definition);
-        if (definition.objectKind() == ObjectKind.VIEW && GUARDED_ETF_AGGREGATE_VIEW.equals(definition.objectName()))
-            return requireCurrentEtfAggregateView(definition);
         return null;
-    }
-
-    /** The registered direct aggregate binds its exact view definition and both original source versions. */
-    private String requireCurrentEtfAggregateView(DatasetDefinition definition) {
-        if (!definition.dependencies().equals(GUARDED_ETF_AGGREGATE_SOURCES))
-            throw new IllegalStateException("ETF aggregate differs from its registered two-source dependency contract");
-        String nativeVersion = EtfMarketOverviewMaterializedViewReadGuard.versionIfActivated(jdbc,ledgerPath);
-        if (nativeVersion != null) return nativeVersion;
-        AliasState before = etfAggregateViewState();
-        String share = requireEtfAggregateSource("etf_share", EtfShareDataset.DEFINITION);
-        String daily = requireEtfAggregateSource("etf_daily", EtfDailyDataset.DEFINITION);
-        if (!before.equals(etfAggregateViewState()))
-            throw new IllegalStateException("ETF aggregate definition changed while reading its source versions");
-        return "view-dir:" + before.directory + ":view-sql:" + before.sqlHash
-                + ":view-status-updated:" + before.statusUpdated + ":source:" + share + ":source:" + daily;
-    }
-
-    private AliasState etfAggregateViewState() {
-        return queryEtfMetadata("SELECT view_sql,view_table_dir_name,view_status,invalidation_reason,"
-                + "view_status_update_time FROM views() WHERE view_name='" + GUARDED_ETF_AGGREGATE_VIEW + "'", 2, rs -> {
-            if (!rs.next()) throw new IllegalStateException("Guarded ETF aggregate view is absent");
-            String sql = rs.getString("view_sql");
-            String directory = rs.getString("view_table_dir_name");
-            String reason = rs.getString("invalidation_reason");
-            String updated = rs.getString("view_status_update_time");
-            if (!"valid".equals(rs.getString("view_status")) || directory == null || directory.isBlank()
-                    || updated == null || updated.isBlank() || reason != null && !reason.isBlank()
-                    || !Objects.equals(etfSqlTokens(ETF_AGGREGATE_SQL), etfSqlTokens(sql)))
-                throw new IllegalStateException("ETF aggregate view is invalid or differs from the fixed original SQL");
-            var result = new AliasState(directory, sqlHash(sql), updated);
-            if (rs.next()) throw new IllegalStateException("Duplicate guarded ETF aggregate view metadata");
-            return result;
-        });
-    }
-
-    /** Discard only lexical whitespace/case and quoting of the known source/alias identifiers. */
-    private static List<String> etfSqlTokens(String sql) {
-        if (sql == null) return null;
-        var tokens = new ArrayList<String>();
-        for (int position = 0; position < sql.length();) {
-            if (Character.isWhitespace(sql.charAt(position))) { position++; continue; }
-            var match = ETF_SQL_TOKEN.matcher(sql).region(position, sql.length());
-            if (!match.lookingAt()) return null;
-            String token = match.group(1) != null ? match.group(1) : match.group();
-            token = token.toLowerCase(Locale.ROOT);
-            if (match.group(1) != null && !ETF_SQL_IDENTIFIERS.contains(token)) return null;
-            tokens.add(token);
-            position = match.end();
-        }
-        return List.copyOf(tokens);
-    }
-
-    private String requireEtfAggregateSource(String table, DatasetDefinition expected) {
-        String version = queryEtfMetadata("SELECT t.id AS table_id,t.directoryName AS table_directory,"
-                + "t.table_txn AS table_physical_txn,t.table_suspended AS table_suspended,"
-                + "t.wal_pending_row_count AS table_pending_rows,t.walEnabled AS table_wal_enabled,"
-                + "t.partitionBy AS table_partition,t.designatedTimestamp AS table_timestamp,"
-                + "t.dedup AS table_dedup,t.matView AS table_is_materialized,"
-                + "w.sequencerTxn AS table_seq_txn,w.writerTxn AS table_writer_txn,"
-                + "w.bufferedTxnSize AS table_buffered_txns,w.suspended AS table_wal_suspended "
-                + "FROM tables() t JOIN wal_tables() w ON w.name=t.table_name WHERE t.table_name='" + table + "'", 2, rs -> {
-            if (!rs.next()) throw new IllegalStateException("ETF aggregate source table or WAL metadata is absent");
-            long id = requiredCounter(rs, "table_id");
-            String directory = rs.getString("table_directory");
-            long physicalTxn = requiredCounter(rs, "table_physical_txn");
-            long seqTxn = requiredCounter(rs, "table_seq_txn");
-            long writerTxn = requiredCounter(rs, "table_writer_txn");
-            long pending = requiredCounter(rs, "table_pending_rows");
-            long buffered = requiredCounter(rs, "table_buffered_txns");
-            if (directory == null || directory.isBlank() || !requiredBoolean(rs, "table_wal_enabled")
-                    || requiredBoolean(rs, "table_suspended") || requiredBoolean(rs, "table_wal_suspended")
-                    || !requiredBoolean(rs, "table_dedup") || requiredBoolean(rs, "table_is_materialized")
-                    || !"YEAR".equals(rs.getString("table_partition"))
-                    || !"timestamp".equals(rs.getString("table_timestamp"))
-                    || pending != 0 || buffered != 0 || writerTxn != seqTxn)
-                throw new IllegalStateException("ETF aggregate source physical or settled WAL contract differs");
-            if (rs.next()) throw new IllegalStateException("Duplicate ETF aggregate source metadata");
-            // Physical commits and WAL sequence counters are independent version domains.
-            return table + ":id:" + id + ":directory:" + directory + ":txn:" + physicalTxn + ":wal-seq:" + seqTxn;
-        });
-        requireEtfSourceSchema(table, expected);
-        return version;
-    }
-
-    private void requireEtfSourceSchema(String table, DatasetDefinition expected) {
-        queryEtfMetadata("SELECT \"column\",\"type\",designated,upsertKey FROM table_columns('" + table + "') LIMIT 18", 18, rs -> {
-            var types = new LinkedHashMap<String, String>();
-            var designated = new ArrayList<String>();
-            var upsertKeys = new HashSet<String>();
-            while (rs.next()) {
-                String column = rs.getString("column");
-                String type = rs.getString("type");
-                if (column == null || types.putIfAbsent(column, type) != null || type == null)
-                    throw new IllegalStateException("Incomplete or duplicate ETF aggregate source schema");
-                if (requiredBoolean(rs, "designated")) designated.add(column);
-                if (requiredBoolean(rs, "upsertKey")) upsertKeys.add(column);
-            }
-            var expectedTypes = new LinkedHashMap<String, String>();
-            expected.columns().forEach(c -> expectedTypes.put(c.storageName(), c.storageType().name()));
-            if (!types.equals(expectedTypes) || !List.copyOf(types.keySet()).equals(List.copyOf(expectedTypes.keySet()))
-                    || !designated.equals(List.of("timestamp")) || !upsertKeys.equals(Set.of("ts_code", "timestamp")))
-                throw new IllegalStateException("ETF aggregate source full schema, timestamp precision or complete key differs");
-            return Boolean.TRUE;
-        });
-    }
-
-    private <T> T queryEtfMetadata(String sql, int rowLimit, ResultSetExtractor<T> extractor) {
-        return jdbc.query(connection -> {
-            var statement = connection.prepareStatement(sql);
-            statement.setQueryTimeout(20);
-            statement.setMaxRows(rowLimit);
-            statement.setFetchSize(rowLimit);
-            return statement;
-        }, extractor);
-    }
-
-
-
-    private static boolean requiredBoolean(ResultSet rs, String column) throws SQLException {
-        boolean value = rs.getBoolean(column);
-        if (rs.wasNull()) throw new IllegalStateException("Source status metadata is unavailable: " + column);
-        return value;
-    }
-
-    private record AliasState(String directory, String sqlHash, String statusUpdated) {}
-
-    /** A registered alias requires its fixed native MV dependency; unrelated views keep their existing contract. */
-    private String requireCurrentAlias(DatasetDefinition definition) {
-        String dependency = GUARDED_MATERIALIZED_ALIASES.get(definition.objectName());
-        if (!definition.dependencies().equals(List.of(dependency)))
-            throw new IllegalStateException("Guarded alias differs from its registered materialized dependency");
-        AliasState before = aliasState(definition.objectName(), dependency);
-        var materialized = requireCurrentMaterializedView(dependency);
-        if (!before.equals(aliasState(definition.objectName(), dependency)))
-            throw new IllegalStateException("Alias definition changed while reading its materialized dependency");
-        return "view-dir:" + before.directory + ":view-sql:" + before.sqlHash
-                + ":view-status-updated:" + before.statusUpdated + ":dependency:" + dependency
-                + ":" + materialized.sourceVersion();
-    }
-
-    private AliasState aliasState(String objectName, String dependency) {
-        // Both names have already passed DatasetDefinition's identifier validation.
-        return jdbc.query("SELECT view_sql,view_table_dir_name,view_status,invalidation_reason,"
-                + "view_status_update_time FROM views() WHERE view_name='" + objectName + "'", rs -> {
-            if (!rs.next()) throw new IllegalStateException("Guarded alias is absent");
-            String sql = rs.getString("view_sql");
-            String directory = rs.getString("view_table_dir_name");
-            String reason = rs.getString("invalidation_reason");
-            if (!"valid".equals(rs.getString("view_status")) || directory == null || directory.isBlank()
-                    || reason != null && !reason.isBlank() || !isExactAliasSql(sql, dependency))
-                throw new IllegalStateException("Alias is invalid or differs from its declared materialized dependency");
-            var result = new AliasState(directory, sqlHash(sql), rs.getString("view_status_update_time"));
-            if (rs.next()) throw new IllegalStateException("Duplicate guarded alias metadata");
-            return result;
-        });
-    }
-
-    private static boolean isExactAliasSql(String sql, String dependency) {
-        if (sql == null) return false;
-        // Each admitted alias is the exact SELECT * of its fixed native materialized view.
-        // Only identifier quoting and whitespace/case variation of that exact statement are accepted.
-        String identifier = java.util.regex.Pattern.quote(dependency);
-        return java.util.regex.Pattern.compile("(?i)^\\s*SELECT\\s+\\*\\s+FROM\\s+(?:"
-                + identifier + "|\"" + identifier + "\")\\s*$").matcher(sql).matches();
     }
 
     private static String normalizedSql(String sql) {
         return sql == null ? "" : sql.trim().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
-    }
-
-    private static String sqlHash(String sql) {
-        try {
-            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
-                    .digest(sql.trim().getBytes(StandardCharsets.UTF_8)));
-        } catch (java.security.NoSuchAlgorithmException impossible) {
-            throw new IllegalStateException("SHA-256 is unavailable", impossible);
-        }
     }
 
     private record MaterializedViewState(long baseTableId, long basePhysicalTxn, long baseSeqTxn,
@@ -403,7 +205,6 @@ public class QuestDbBoundedReader {
         validateEtfAggregateQuery(definition, query);
         DerivedMonthlyReadGuards.validateEquityStyle(definition, query);
         DerivedMonthlyReadGuards.validateMacroCore(definition, query);
-        DerivedMonthlyReadGuards.validateMacroCoreView(definition, query);
         var columns = columns(definition);
         if (!columns.keySet().containsAll(query.columns()) || !columns.keySet().containsAll(query.equalities().keySet())
                 || !query.columns().containsAll(definition.businessKey())) {

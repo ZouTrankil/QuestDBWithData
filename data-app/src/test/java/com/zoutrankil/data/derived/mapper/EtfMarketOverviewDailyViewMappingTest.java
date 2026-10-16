@@ -110,13 +110,13 @@ class EtfMarketOverviewDailyViewMappingTest {
 
     @Test void viewDefinitionHasOnlyDateIdentityAndTwoExactBaseDependencies() {
         var definition = EtfMarketOverviewDailyViewDataset.DEFINITION;
-        assertEquals("v_etf_market_overview_daily", definition.datasetId());
+        assertEquals("mv_etf_market_overview_daily_v1", definition.datasetId());
         assertEquals(definition.datasetId(), definition.objectName());
-        assertEquals(DatasetDefinition.ObjectKind.VIEW, definition.objectKind());
+        assertEquals(DatasetDefinition.ObjectKind.MATERIALIZED_VIEW, definition.objectKind());
         assertEquals(FIELDS, definition.storageColumns());
         assertEquals(List.of("trade_date"), definition.businessKey()); assertTrue(definition.dedupKey().isEmpty());
         assertEquals("trade_date", definition.designatedTimestamp());
-        assertEquals(DatasetDefinition.Partition.NONE, definition.partition()); assertFalse(definition.wal());
+        assertEquals(DatasetDefinition.Partition.MONTH, definition.partition()); assertTrue(definition.wal());
         assertEquals(List.of("etf_share", "etf_daily"), definition.dependencies());
         assertEquals(Set.of(DatasetDefinition.Capability.READ), definition.capabilities());
         assertEquals(List.of("etf_share.timestamp", "derived:count_distinct(etf_share.ts_code)",

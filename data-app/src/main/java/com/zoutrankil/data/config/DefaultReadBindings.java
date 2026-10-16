@@ -9,11 +9,8 @@ import com.zoutrankil.data.derived.mapper.BacktestDailyViewMapper;
 import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
 import com.zoutrankil.data.derived.mapper.EtfMarketOverviewDailyViewMapper;
 import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
-import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyViewMapper;
 import com.zoutrankil.data.derived.mapper.MarketBreadthDailyV1Mapper;
-import com.zoutrankil.data.derived.mapper.MarketBreadthDailyViewMapper;
 import com.zoutrankil.data.derived.mapper.RetailSentimentDailyV1Mapper;
-import com.zoutrankil.data.derived.mapper.RetailSentimentDailyViewMapper;
 
 import com.zoutrankil.data.domain.*;
 
@@ -34,14 +31,11 @@ final class DefaultReadBindings {
             typed("l2_intraday_bar_features", 1, L2IntradayBarFeatures.class, new L2IntradayBarFeaturesMapper()::fromValues),
             typed("l2_t0_training_labels", 1, L2T0TrainingLabels.class, new L2T0TrainingLabelsMapper()::fromValues),
             typed("mv_backtest_daily", 1, BacktestDailyViewValue.class, new BacktestDailyViewMapper()::fromValues),
-            typed("v_macro_core_monthly", 1, MacroCoreMonthlyView.class, new MacroCoreMonthlyViewMapper()::fromValues),
             typed("macro_core_monthly", 1, MacroCoreMonthly.class, new MacroCoreMonthlyMapper()::fromValues),
             typed("equity_style_monthly", 1, EquityStyleMonthly.class, new EquityStyleMonthlyMapper()::fromValues),
-            typed("v_etf_market_overview_daily", 1, EtfMarketOverviewDailyView.class, new EtfMarketOverviewDailyViewMapper()::fromValues),
-            typed("v_retail_sentiment_daily", 1, RetailSentimentDailyView.class, new RetailSentimentDailyViewMapper()::fromValues),
+            typed("mv_etf_market_overview_daily_v1", 1, EtfMarketOverviewDailyView.class, new EtfMarketOverviewDailyViewMapper()::fromValues),
             typed("mv_retail_sentiment_daily_v1", 1, RetailSentimentDailyV1.class, new RetailSentimentDailyV1Mapper()::fromValues),
             typed("mv_market_breadth_daily_v1", 1, MarketBreadthDailyV1.class, new MarketBreadthDailyV1Mapper()::fromValues),
-            typed("v_market_breadth_daily", 1, MarketBreadthDailyView.class, new MarketBreadthDailyViewMapper()::fromValues),
 
             // Explicit generic contracts from the registered repository definitions, not a catch-all fallback.
             generic("cn_bond_yield_curve", 1),

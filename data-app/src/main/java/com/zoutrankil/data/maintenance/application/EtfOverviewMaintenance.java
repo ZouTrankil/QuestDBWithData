@@ -96,13 +96,6 @@ public final class EtfOverviewMaintenance {
                 throw new IllegalStateException("ETF output is an ordinary table; preserve and migrate its data explicitly");
             jdbc.execute("CREATE MATERIALIZED VIEW "+OUTPUT+" WITH BASE etf_share REFRESH MANUAL DEFERRED AS ("+SQL+") PARTITION BY MONTH");
         } else requireDefinition(existing.getFirst());
-        var aliases=jdbc.queryForList("SELECT view_sql FROM views() WHERE view_name='v_etf_market_overview_daily'");
-        if(!aliases.isEmpty() && (aliases.size()!=1 || !Set.of(normalized(SQL),normalized("SELECT * FROM "+OUTPUT))
-                .contains(normalized(aliases.getFirst().get("view_sql")))))
-            throw new IllegalStateException("Unexpected ETF public view definition");
-        if(aliases.isEmpty())jdbc.execute("CREATE VIEW v_etf_market_overview_daily AS (SELECT * FROM "+OUTPUT+")");
-        else if(!normalized("SELECT * FROM "+OUTPUT).equals(normalized(aliases.getFirst().get("view_sql"))))
-            jdbc.execute("CREATE OR REPLACE VIEW v_etf_market_overview_daily AS (SELECT * FROM "+OUTPUT+")");
         // QuestDB maintains base-table increments. The Java checker covers secondary-table revisions.
         if(!"immediate".equals(view(jdbc).get("refresh_type")))
             jdbc.execute("ALTER MATERIALIZED VIEW "+OUTPUT+" SET REFRESH IMMEDIATE");
