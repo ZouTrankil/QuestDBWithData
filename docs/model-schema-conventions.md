@@ -141,10 +141,8 @@ Pydantic 可由 `model_json_schema()` 生成 JSON Schema。该 schema 可表达�
 
 新模型的逐步落地示例见 [新增模型与读写流程](model-development-workflow.md)。
 
-## 当前实例 schema 快照
+## Schema catalog
 
-已从配置的 `qdb` 实例只读导出 QuestDB 10.0.1 schema，快照见 [`schema-export/questdb-qdb-2026-09-28/`](../schema-export/questdb-qdb-2026-09-28/)。导出分为 table、view 和 materialized view，并额外保留按依赖顺序排列的完整 `schema.sql`。该实例有 321 张表、10 个普通 view、2 个 materialized view。
+历史 QuestDB schema 导出不再保存在仓库中。运行 [`generate_domain_models.py`](../tools/generate_domain_models.py) 时，通过 `--catalog` 提供单独准备的 catalog JSON。
 
-`domain/table`、`domain/view`、`domain/materializedview` 下的 record 是从快照字段生成的 Java schema projections：分别生成 172 个非 backup/staging/WAL drill 表记录、10 个 view 读取模型、2 个 materialized-view 读取模型。149 个命名为备份、staging 或 WAL 演练的表仍在原始 schema 导出中，但不生成应用模型。生成器和分类规则见 [`generate_domain_models.py`](../tools/generate_domain_models.py) 与快照目录 README。
-
-这些 projection 方便读取映射、schema 对照和后续迁移，不自动等于经过业务确认的 domain。DDL 无法还原可靠的 nullability、单位、字段业务含义和 Python Pydantic 校验规则；canonical domain 仍应由业务/API 契约审核，必要时通过 mapper 在 schema projection 与 domain 之间转换。
+生成的 record 只表示数据库字段，不等于经过业务确认的 domain。DDL 本身不能可靠说明字段单位、业务含义或 API 校验规则；以真实 API 契约为准，并在需要时通过 Mapper 转换。

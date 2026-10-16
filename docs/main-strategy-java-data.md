@@ -30,7 +30,7 @@ Weekly freshness uses the frozen SSE calendar: the signal and execution must mat
 ./gradlew mainStrategyData --args="inspect-plans"
 ```
 
-`produce-scores` reads sources and publishes the two scoring roles plus the three-role market product. It does not fabricate a plan or train replacement weights. The Java HTTP composition is launched by `webRun`; endpoints under `/api/v1/main-strategy/data` are `GET /`, `GET /scores`, `POST /scores`, `GET /input-package`, `GET /plans`, and `POST /plans/import`. Existing API token authentication applies. The import request carries `sourcePath`, `sourceSha256`, and optional `scoreRunId`; the source must remain inside the configured artifact root.
+`produce-scores` reads sources and publishes the two scoring roles plus the three-role market product. It does not fabricate a plan or train replacement weights. The Java HTTP composition runs in the independent main-strategy process, launched by `mainStrategyRun`; endpoints under `/api/v1/main-strategy/data` are `GET /`, `GET /scores`, `POST /scores`, `GET /input-package`, `GET /plans`, and `POST /plans/import`. Existing API token authentication applies. The import request carries `sourcePath`, `sourceSha256`, and optional `scoreRunId`; the source must remain inside the configured artifact root.
 
 The main persistent batch definition is version 2, with stages `Sources`, `MarketSentimentDaily`, `RegimeFeaturesMonitorDaily`, `BacktestDaily`, `L2DailyFeatures`, `ScoreInputs`, `OfficialPlanData`, `MainStrategyAcceptance`. Older version 1 run receipts are not accepted as version 2 completion evidence.
 
