@@ -20,7 +20,7 @@ public final class BacktestDailyMaterializedViewPort {
     public BacktestDailyMaterializedViewPort(JdbcTemplate jdbc){
         this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc.getDataSource()));this.jdbc.setQueryTimeout(120);
     }
-    public static String normalized(String sql){return sql.strip().replaceAll("\\s+"," ").toLowerCase(Locale.ROOT);}
+    public static String normalized(String sql){return sql.strip().replaceAll("\\s+"," ").toLowerCase(Locale.ROOT).replaceAll("\\s*([(),=<>])\\s*","$1");}
     private static String loadSql(){
         try(var in=BacktestDailyMaterializedViewPort.class.getResourceAsStream("/sql/mv_backtest_daily.sql")){
             if(in==null)throw new IllegalStateException("Canonical backtest MV SQL resource absent");
@@ -49,7 +49,7 @@ public final class BacktestDailyMaterializedViewPort {
         return immutable(v);
     }
     private Map<String,Map<String,Object>> clocks(){
-        var rows=jdbc.queryForList("SELECT t.table_name,t.id,t.directoryName,t.table_type,t.walEnabled,t.table_suspended,"
+        var rows=jdbc.queryForList("SELECT t.table_name,t.id,t.directoryName,t.table_type,t.walEnabled,t.table_suspended,t.dedup,"
                 +"w.writerTxn,w.sequencerTxn,w.bufferedTxnSize,w.suspended FROM tables() t JOIN wal_tables() w ON w.name=t.table_name "
                 +"WHERE t.table_name IN ('mv_backtest_daily','stk_factor','stk_limit','stk_suspend','stk_st_daily') ORDER BY t.table_name");
         if(rows.size()!=5)throw new IllegalStateException("Backtest MV and its four raw tables are required");
@@ -61,6 +61,7 @@ public final class BacktestDailyMaterializedViewPort {
                     ||!Boolean.FALSE.equals(row.get("suspended"))||number(row,"bufferedTxnSize")!=0||number(row,"writerTxn")!=number(row,"sequencerTxn"))
                 throw pending("Backtest source/MV WAL is not settled: "+name);
             if(!(NAME.equals(name)?"M":"T").equals(row.get("table_type")))throw new IllegalStateException("Backtest requires a physical native MV and original raw tables");
+            if(!NAME.equals(name)&&!Boolean.TRUE.equals(row.get("dedup")))throw new IllegalStateException("Backtest raw sources require unique date/stock keys: "+name);
             number(row,"id");result.put(name,immutable(row));
         }
         return Collections.unmodifiableMap(result);
@@ -79,6 +80,12 @@ public final class BacktestDailyMaterializedViewPort {
     public State sourceState(){
         var before=clocks();var view=view();requireSchema();
         if(number(before.get(BASE),"sequencerTxn")!=number(view,"refresh_base_table_txn"))throw pending("Backtest base transaction changed during refresh admission");
+        for(String name:SOURCES){
+            var keys=jdbc.queryForList("SELECT \"column\" FROM table_columns('"+name+"') WHERE upsertKey=true LIMIT 4");
+            var actual=new HashSet<String>();for(var key:keys)actual.add(Objects.toString(key.get("column")));
+            if(!actual.equals(Set.of(name.equals("stk_suspend")||name.equals("stk_st_daily")?"timestamp":"trade_date","ts_code")))
+                throw new IllegalStateException("Backtest raw source date/stock uniqueness changed: "+name);
+        }
         // QuestDB listens to one base table. Reject a late side-table commit instead of serving stale enrichment.
         for(String name:SOURCES){
             var tx=jdbc.queryForList("SELECT sequencerTxn,cast(timestamp AS LONG) AS committed FROM wal_transactions('"+name+"') LIMIT -1");

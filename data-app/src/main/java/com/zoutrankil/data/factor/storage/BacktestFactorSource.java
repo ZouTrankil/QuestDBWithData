@@ -5,7 +5,7 @@ import com.zoutrankil.data.repository.BacktestDailyMaterializedViewPort;
 import java.util.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-/** Result-table and read-view identity only; does not certify the deferred owner publication ledger. */
+/** Pin the native MV and all four raw-source identities during a factor read. */
 public final class BacktestFactorSource {
     public static final String VERSION_KEY = "backtestSourceVersion";
     private BacktestFactorSource() {}
@@ -24,6 +24,6 @@ public final class BacktestFactorSource {
     }
     public static void requireUnchanged(JdbcTemplate jdbc, Map<String,Object> row) {
         if (row.containsKey(VERSION_KEY) && !Objects.equals(row.get(VERSION_KEY), version(jdbc)))
-            throw new IllegalStateException("Backtest result table or view changed during factor computation");
+            throw new IllegalStateException("Backtest native MV or raw sources changed during factor computation");
     }
 }

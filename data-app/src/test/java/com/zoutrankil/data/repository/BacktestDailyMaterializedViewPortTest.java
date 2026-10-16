@@ -20,7 +20,7 @@ class BacktestDailyMaterializedViewPortTest {
     private void fixture(BiConsumer<BacktestDailyMaterializedViewPort,JdbcTemplate> check){
         for(String name:List.of("mv_backtest_daily","stk_factor","stk_limit","stk_suspend","stk_st_daily")){
             var row=new HashMap<String,Object>();row.put("table_name",name);row.put("id",clocks.size()+1L);row.put("directoryName",name+"~1");
-            row.put("table_type",name.equals("mv_backtest_daily")?"M":"T");row.put("walEnabled",true);row.put("table_suspended",false);
+            row.put("table_type",name.equals("mv_backtest_daily")?"M":"T");row.put("walEnabled",true);row.put("table_suspended",false);row.put("dedup",!name.equals("mv_backtest_daily"));
             row.put("writerTxn",10L);row.put("sequencerTxn",10L);row.put("bufferedTxnSize",0L);row.put("suspended",false);clocks.add(row);
             commits.put(name,List.of(new HashMap<>(Map.of("sequencerTxn",10L,"committed",900L))));
         }
@@ -32,8 +32,11 @@ class BacktestDailyMaterializedViewPortTest {
             when(jdbc.queryForList(contains("FROM materialized_views()"),eq("mv_backtest_daily"))).thenReturn(List.of(view));
             when(jdbc.queryForList(contains("FROM tables()"))).thenAnswer(ignored->clocks);
             when(jdbc.queryForList(contains("FROM table_columns("))).thenReturn(columns);
-            for(String name:BacktestDailyMaterializedViewPort.SOURCES)
+            for(String name:BacktestDailyMaterializedViewPort.SOURCES){
                 when(jdbc.queryForList(contains("wal_transactions('"+name+"')"))).thenAnswer(ignored->commits.get(name));
+                String date=name.equals("stk_suspend")||name.equals("stk_st_daily")?"timestamp":"trade_date";
+                when(jdbc.queryForList(contains("FROM table_columns('"+name+"')"))).thenReturn(List.of(Map.of("column",date),Map.of("column","ts_code")));
+            }
         })){
             var port=new BacktestDailyMaterializedViewPort(source);check.accept(port,construction.constructed().getFirst());
         }
@@ -78,6 +81,12 @@ class BacktestDailyMaterializedViewPortTest {
     @Test void anInvalidMvCannotBeRecoveredByAnApplicationRefresh(){
         fixture((port,jdbc)->{
             view.put("view_status","invalid");view.put("invalidation_reason","base renamed");
+            assertThrows(IllegalStateException.class,port::sourceState);verify(jdbc,never()).execute(anyString());
+        });
+    }
+    @Test void duplicateSourceKeysCannotBeHiddenByLastAggregates(){
+        fixture((port,jdbc)->{
+            when(jdbc.queryForList(contains("FROM table_columns('stk_suspend')"))).thenReturn(List.of(Map.of("column","timestamp")));
             assertThrows(IllegalStateException.class,port::sourceState);verify(jdbc,never()).execute(anyString());
         });
     }
