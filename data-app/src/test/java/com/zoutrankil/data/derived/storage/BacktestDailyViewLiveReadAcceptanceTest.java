@@ -1,6 +1,6 @@
 package com.zoutrankil.data.derived.storage;
 
-import com.zoutrankil.data.bootstrap.ProjectConfiguration;
+import com.zoutrankil.runtime.ProjectConfiguration;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.repository.BacktestDailyMaterializedViewPort;
 import org.junit.jupiter.api.Test;

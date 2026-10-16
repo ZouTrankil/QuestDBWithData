@@ -1,7 +1,7 @@
 package com.zoutrankil.data.maintenance.cli;
 
-import com.zoutrankil.data.bootstrap.ProjectConfiguration;
-import com.zoutrankil.data.bootstrap.ProjectLogging;
+import com.zoutrankil.runtime.ProjectConfiguration;
+import com.zoutrankil.runtime.ProjectLogging;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.maintenance.application.EtfOverviewMaintenance;

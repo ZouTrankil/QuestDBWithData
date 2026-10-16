@@ -13,12 +13,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import com.zoutrankil.data.bootstrap.ProjectConfiguration;
+import com.zoutrankil.runtime.ProjectConfiguration;
 import org.springframework.core.env.Environment;
 
 /** Shared YAML/profile configuration with literal legacy credential-file and CLI overrides. */
 public final class L2LiveConfiguration {
-    private static final Set<String> COMMANDS = Set.of("plan", "run", "replay", "status", "export");
+    private static final Set<String> COMMANDS = Set.of("plan", "run", "session", "replay", "status", "export");
     private static final Set<String> OPTIONS = Set.of("root", "credentials", "broker", "symbols", "overrides",
             "questdb", "seconds", "batch-size", "poll-ms", "visibility-ms", "lateness-ms", "retained-minutes", "wait-credentials");
     final String command;
@@ -36,10 +36,20 @@ public final class L2LiveConfiguration {
     final Duration lateness;
     final int retainedMinutes;
     final boolean waitForCredentials;
+    final ZoneId sessionZone;
+    final String sessionExchange;
+    final java.time.LocalTime sessionStart;
+    final java.time.LocalTime sessionStop;
 
     private L2LiveConfiguration(String command, Map<String, String> options, Map<String, String> env, Environment config)
             throws IOException {
         this.command = command;
+        sessionZone = ZoneId.of(config.getProperty("l2.session.zone", "Asia/Shanghai"));
+        sessionExchange = config.getProperty("l2.session.exchange", "SSE");
+        if (!Set.of("SSE", "SZSE").contains(sessionExchange)) throw new IllegalArgumentException("INVALID_SESSION_EXCHANGE");
+        sessionStart = java.time.LocalTime.parse(config.getProperty("l2.session.start", "09:00"));
+        sessionStop = java.time.LocalTime.parse(config.getProperty("l2.session.stop", "15:05"));
+        if (!sessionStart.isBefore(sessionStop)) throw new IllegalArgumentException("INVALID_SESSION_WINDOW");
         var effective = new LinkedHashMap<String, String>();
         for (String key : OPTIONS) {
             if (key.equals("broker")) continue; // Credential-file/environment broker overrides remain effective.
@@ -109,6 +119,8 @@ public final class L2LiveConfiguration {
         return new L2LiveConfiguration(command, options, env, config);
     }
 
+    boolean live() { return command.equals("run") || command.equals("session"); }
+
     public void requireLiveCredentials() {
         if (username.isBlank() || password.isBlank()) throw new IllegalArgumentException("SUBSCRIPTION_CREDENTIALS_MISSING");
         if (username.toLowerCase(java.util.Locale.ROOT).startsWith("level2_test"))
@@ -125,9 +137,11 @@ public final class L2LiveConfiguration {
         result.put("topics", symbols.stream().flatMap(symbol -> List.of("trans/", "order/", "market/").stream()
                 .map(prefix -> prefix + symbol.substring(0, 6))).toList());
         result.put("rawRoot", root.toString());
-        result.put("questDb", questDb);
-        result.put("eventTable", "l2_live_events_v2");
-        result.put("minuteTable", "l2_live_micro_state_1m_v2");
+        result.put("calendarQuestDb", questDb);
+        result.put("storage", "local_sqlite");
+        result.put("database", root.resolve("raw-journal.sqlite3").toString());
+        result.put("session", Map.of("zone", sessionZone.toString(), "exchange", sessionExchange,
+                "start", sessionStart.toString(), "stop", sessionStop.toString(), "calendar", "exchange_calendar"));
         result.put("qos", 0);
         result.put("singleAccountTerminal", true);
         result.put("businessSequenceScope", "unverified");

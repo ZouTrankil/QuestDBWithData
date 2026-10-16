@@ -9,9 +9,9 @@ import com.zoutrankil.data.l2live.application.L2Subscriptions;
 import com.zoutrankil.data.l2live.domain.AliyunL2WireParser;
 import com.zoutrankil.data.l2live.domain.L2MinuteAccumulator;
 import com.zoutrankil.data.l2live.storage.RawJournal;
-import com.zoutrankil.data.l2live.storage.QuestDbLiveSink;
-import com.zoutrankil.data.bootstrap.ProjectConfiguration;
-import com.zoutrankil.data.bootstrap.ProjectLogging;
+import com.zoutrankil.data.l2live.storage.LocalLiveSink;
+import com.zoutrankil.runtime.ProjectConfiguration;
+import com.zoutrankil.runtime.ProjectLogging;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
@@ -41,6 +41,10 @@ public final class AliyunL2LiveMain {
     }
 
     static int execute(String[] args, Map<String, String> env) {
+        return execute(args, env, Clock.systemUTC());
+    }
+
+    static int execute(String[] args, Map<String, String> env, Clock clock) {
         L2LiveConfiguration configuration = null;
         boolean ownsStatus = false;
         try {
@@ -60,8 +64,26 @@ public final class AliyunL2LiveMain {
                 if (lock == null) throw new IllegalStateException("COLLECTOR_ALREADY_RUNNING");
                 ownsStatus = true;
                 try (lock) {
-                    if (configuration.command.equals("run")) {
-                        configuration = awaitCredentials(configuration, args, env);
+                    L2TradingSession session = null;
+                    if (configuration.live()) Files.deleteIfExists(configuration.root.resolve("stop.request"));
+                    if (configuration.command.equals("session")) {
+                        phase(configuration.root, "checking_calendar");
+                        session = L2TradingSession.resolve(configuration, clock);
+                        if (!session.open() || session.expired(clock)) {
+                            phase(configuration.root, session.open() ? "session_closed" : "non_trading_day");
+                            return 0;
+                        }
+                        while (session.waiting(clock)) {
+                            if (Files.exists(configuration.root.resolve("stop.request"))) {
+                                phase(configuration.root, "stopped"); return 0;
+                            }
+                            phase(configuration.root, "waiting_session");
+                            Thread.sleep(1000);
+                        }
+                        if (session.expired(clock)) { phase(configuration.root, "session_closed"); return 0; }
+                    }
+                    if (configuration.live()) {
+                        configuration = awaitCredentials(configuration, args, env, session, clock);
                         if (configuration == null) return 0;
                     }
                     try (RawJournal journal = new RawJournal(configuration.root)) {
@@ -72,9 +94,8 @@ public final class AliyunL2LiveMain {
                         return 0;
                     }
                     var accumulator = new L2MinuteAccumulator(configuration.lateness, configuration.retainedMinutes, Clock.systemUTC());
-                    var sink = new QuestDbLiveSink(java.net.URI.create(configuration.questDb), configuration.questDbAuthorization,
-                            journal, configuration.visibilityTimeout, configuration.pollInterval);
-                    var topics = configuration.command.equals("run")
+                    var sink = new LocalLiveSink(journal);
+                    var topics = configuration.live()
                             ? Set.copyOf(L2Subscriptions.topics(configuration.symbols)) : Set.<String>of();
                     var processor = new L2LiveProcessor(journal, sink, new AliyunL2WireParser(), accumulator,
                             configuration.batchSize, topics);
@@ -84,7 +105,7 @@ public final class AliyunL2LiveMain {
                         print(Map.of("phase", "replayed", "rowsVerified", written, "journal", journal.status()));
                         return 0;
                     }
-                    run(configuration, journal, processor);
+                    run(configuration, journal, processor, session, clock);
                     }
                 }
             }
@@ -101,11 +122,11 @@ public final class AliyunL2LiveMain {
     }
 
     private static L2LiveConfiguration awaitCredentials(L2LiveConfiguration initial, String[] args,
-            Map<String, String> env) throws Exception {
+            Map<String, String> env, L2TradingSession session, Clock clock) throws Exception {
         L2LiveConfiguration config = initial;
-        Files.deleteIfExists(config.root.resolve("stop.request"));
         if (!config.waitForCredentials) { config.requireLiveCredentials(); return config; }
         while (true) {
+            if (session != null && session.expired(clock)) { phase(initial.root, "session_closed"); return null; }
             if (Files.exists(initial.root.resolve("stop.request"))) {
                 status(initial.root, Map.of("producer", "java.aliyun_l2_live", "phase", "stopped",
                         "processId", ProcessHandle.current().pid(), "at", Instant.now().toString()));
@@ -124,7 +145,9 @@ public final class AliyunL2LiveMain {
         }
     }
 
-    private static void run(L2LiveConfiguration config, RawJournal journal, L2LiveProcessor processor) throws Exception {
+    private static void run(L2LiveConfiguration config, RawJournal journal, L2LiveProcessor processor,
+            L2TradingSession session, Clock clock) throws Exception {
+        if (session != null && session.expired(clock)) { phase(config.root, "session_closed"); return; }
         if (hasLocalPythonCollector()) throw new IllegalStateException("PYTHON_COLLECTOR_STILL_RUNNING");
         if (Files.exists(config.root.resolve("stop.request"))) return;
         AtomicBoolean stopping = new AtomicBoolean();
@@ -138,7 +161,12 @@ public final class AliyunL2LiveMain {
                 received.incrementAndGet();
             } catch (Exception error) { throw new IllegalStateException("RAW_CAPTURE_FAILED"); }
         })) {
-            Thread hook = new Thread(() -> stopping.set(true), "l2-live-shutdown");
+            var finished = new java.util.concurrent.CountDownLatch(1);
+            Thread hook = new Thread(() -> {
+                stopping.set(true);
+                try { finished.await(30, java.util.concurrent.TimeUnit.SECONDS); }
+                catch (InterruptedException interrupted) { Thread.currentThread().interrupt(); }
+            }, "l2-live-shutdown");
             Runtime.getRuntime().addShutdownHook(hook);
             Instant started = Instant.now();
             long nextStatus = 0;
@@ -146,6 +174,7 @@ public final class AliyunL2LiveMain {
                 status(config.root, snapshot(config, "connecting", received.get(), written.get(), collector.status(), journal.status()));
                 collector.begin();
                 while (!stopping.get() && !Files.exists(config.root.resolve("stop.request"))
+                        && (session == null || !session.expired(clock))
                         && (config.seconds == 0 || Duration.between(started, Instant.now()).getSeconds() < config.seconds)) {
                     int n = 0;
                     String writeFailure = null;
@@ -182,6 +211,7 @@ public final class AliyunL2LiveMain {
                 }
                 status(config.root, snapshot(config, "stopped", received.get(), written.get(), collector.status(), journal.status()));
             } finally {
+                finished.countDown();
                 try { Runtime.getRuntime().removeShutdownHook(hook); } catch (IllegalStateException ignored) { }
             }
         }
@@ -208,6 +238,11 @@ public final class AliyunL2LiveMain {
         state.put("collector", collector);
         state.put("journal", journal);
         return state;
+    }
+
+    private static void phase(Path root, String phase) throws Exception {
+        status(root, Map.of("producer", "java.aliyun_l2_live", "phase", phase,
+                "processId", ProcessHandle.current().pid(), "at", Instant.now().toString(), "connected", false));
     }
 
     private static String safeCode(Exception error) {

@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.beans.factory.DisposableBean;
 
-/** Starts after the main Web context is ready; a finite CLI never constructs this lifecycle bean. */
+/** Starts after the independent strategy context is ready; a finite CLI never constructs this lifecycle bean. */
 public final class MainStrategyDailyBatchRuntime implements ApplicationListener<ApplicationReadyEvent>,DisposableBean {
     private final ApplicationContext parent;
     private final MainStrategyBatchProperties properties;
@@ -35,7 +35,7 @@ public final class MainStrategyDailyBatchRuntime implements ApplicationListener<
             startupError=error.getClass().getSimpleName()+": "+java.util.Objects.toString(error.getMessage(),"");
             child=null;
             context.close();
-            org.slf4j.LoggerFactory.getLogger(getClass()).error("Main-strategy Batch runtime failed to initialize",error);
+            throw new IllegalStateException("Main-strategy Batch runtime failed to initialize", error);
         }
     }
     private MainStrategyDailyCoordinator coordinator() {
@@ -45,7 +45,7 @@ public final class MainStrategyDailyBatchRuntime implements ApplicationListener<
     }
     public Map<String,Object> status() throws Exception {
         if(child==null) return Map.of("job",MainStrategyDailyWork.JOB,"status","UNAVAILABLE",
-                "reason",startupError==null?"Web context is not ready":startupError);
+                "reason",startupError==null?"Strategy context is not ready":startupError);
         return coordinator().status();
     }
     public Map<String,Object> detail(String instance) { return coordinator().detail(instance); }

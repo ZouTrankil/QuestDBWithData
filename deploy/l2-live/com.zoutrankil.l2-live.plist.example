@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+    <key>Label</key><string>com.zoutrankil.l2-live</string>
+    <key>ProgramArguments</key><array>
+        <string>/ABSOLUTE/QuestDBWithData/deploy/l2-live/run.sh</string>
+        <string>start</string><string>--wait-credentials</string><string>true</string>
+    </array>
+    <key>WorkingDirectory</key><string>/ABSOLUTE/QuestDBWithData</string>
+    <key>StartCalendarInterval</key><dict><key>Hour</key><integer>8</integer><key>Minute</key><integer>55</integer></dict>
+    <key>StandardOutPath</key><string>/ABSOLUTE/QuestDBWithData/var/l2-live/launchd.stdout.log</string>
+    <key>StandardErrorPath</key><string>/ABSOLUTE/QuestDBWithData/var/l2-live/launchd.stderr.log</string>
+</dict></plist>

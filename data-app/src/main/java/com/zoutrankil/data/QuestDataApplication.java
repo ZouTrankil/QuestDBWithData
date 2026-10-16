@@ -14,14 +14,23 @@ import java.util.TimeZone;
 public class QuestDataApplication {
     public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        SpringApplication application = new SpringApplication(QuestDataApplication.class);
-        application.setAdditionalProfiles("data");
-        application.setBannerMode(org.springframework.boot.Banner.Mode.OFF);
         int exitCode = 0;
         try {
-            if (!com.zoutrankil.data.bootstrap.StartupArguments.parse(args).hasCommand()) {
-            // The persistent application owns formal daily data. Finite CLI commands retain
-            // their acceptance-table defaults unless the caller supplies an explicit target.
+            var application = application(!com.zoutrankil.data.bootstrap.StartupArguments.parse(args).hasCommand(), "data");
+            QuestDataStartup.run(application, args);
+        } catch (RuntimeException failure) {
+            exitCode = com.zoutrankil.data.cli.CliExitStatus.failureCode(failure);
+            System.err.println("{\"status\":\"FAILED\",\"exitCode\":" + exitCode + "}");
+        }
+        if (exitCode != 0) System.exit(exitCode);
+    }
+
+    /** Shared data owners; each persistent entry point supplies its own process profile. */
+    public static SpringApplication application(boolean persistent, String... profiles) {
+        var application = new SpringApplication(QuestDataApplication.class);
+        application.setAdditionalProfiles(profiles);
+        application.setBannerMode(org.springframework.boot.Banner.Mode.OFF);
+        if (persistent) {
             application.setDefaultProperties(Map.ofEntries(
                     Map.entry("app.sync.stk-limit-table", "stk_limit"),
                     Map.entry("app.sync.stk-suspend-table", "stk_suspend"),
@@ -33,13 +42,7 @@ public class QuestDataApplication {
                     Map.entry("app.sync.etf-adj-table", "etf_adj"),
                     Map.entry("app.sync.etf-factor-table", "etf_factor"),
                     Map.entry("app.sync.etf-portfolio-table", "etf_portfolio")));
-            }
-            QuestDataStartup.run(application, args);
-        } catch (RuntimeException failure) {
-            exitCode = com.zoutrankil.data.cli.CliExitStatus.failureCode(failure);
-            System.err.println("{\"status\":\"FAILED\",\"exitCode\":" + exitCode + "}");
         }
-        if (exitCode != 0) System.exit(exitCode);
+        return application;
     }
-
 }

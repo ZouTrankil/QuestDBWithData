@@ -5,7 +5,7 @@ import com.zoutrankil.data.l2live.domain.L2CleanEvent;
 import com.zoutrankil.data.l2live.domain.L2MinuteAccumulator;
 import com.zoutrankil.data.l2live.domain.L2MinuteState;
 import com.zoutrankil.data.l2live.storage.RawJournal;
-import com.zoutrankil.data.l2live.storage.QuestDbLiveSink;
+import com.zoutrankil.data.l2live.storage.LocalLiveSink;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
@@ -14,20 +14,19 @@ import java.util.stream.Collectors;
 /** Composition of durable captures, pure normalization and verified publication. */
 public final class L2LiveProcessor {
     private final RawJournal journal;
-    private final QuestDbLiveSink sink;
+    private final LocalLiveSink sink;
     private final AliyunL2WireParser parser;
     private final L2MinuteAccumulator accumulator;
     private final int batchSize;
     private final Set<String> expectedTopics;
     private final Set<String> expectedSymbols;
-    private boolean targetsInitialized;
 
-    public L2LiveProcessor(RawJournal journal, QuestDbLiveSink sink, AliyunL2WireParser parser,
+    public L2LiveProcessor(RawJournal journal, LocalLiveSink sink, AliyunL2WireParser parser,
             L2MinuteAccumulator accumulator, int batchSize) throws Exception {
         this(journal, sink, parser, accumulator, batchSize, Set.of());
     }
 
-    public L2LiveProcessor(RawJournal journal, QuestDbLiveSink sink, AliyunL2WireParser parser,
+    public L2LiveProcessor(RawJournal journal, LocalLiveSink sink, AliyunL2WireParser parser,
             L2MinuteAccumulator accumulator, int batchSize, Set<String> expectedTopics) throws Exception {
         this.journal = journal;
         this.sink = sink;
@@ -90,10 +89,6 @@ public final class L2LiveProcessor {
                 || batch.states().stream().anyMatch(state -> !expectedSymbols.contains(state.symbol()))))
             throw new IllegalStateException("FROZEN_BATCH_SCOPE_MISMATCH");
         // A failed/unknown write is retried using these exact persisted values, never new accumulation.
-        if (!targetsInitialized) {
-            sink.initializeTargets();
-            targetsInitialized = true;
-        }
         sink.write(batch.events(), batch.states());
         journal.completeBatch(batch.id());
         accumulator.restore(batch.accumulatorState());

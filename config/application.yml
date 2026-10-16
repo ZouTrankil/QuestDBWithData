@@ -1,6 +1,6 @@
 # 唯一配置源。公共配置只定义一次；下方 profile 只配置各入口的差异。
 # IDE / Gradle 请使用项目根目录作为 working directory。
-# 启动入口自动选择 data / batch / l2，可叠加自定义环境 profile。
+# 启动入口自动选择 data / main-strategy / batch / l2，可叠加自定义环境 profile。
 spring:
   profiles:
     default: data
@@ -98,7 +98,7 @@ app:
     history-table: java_tushare_schema_history
   sync:
     batch:
-      enabled: ${APP_SYNC_BATCH_ENABLED:true}
+      enabled: ${APP_SYNC_BATCH_ENABLED:false}
       startup-catchup: ${APP_SYNC_BATCH_STARTUP_CATCHUP:true}
       ledger-path: ${APP_SYNC_BATCH_LEDGER_PATH:var/main-strategy-batch.sqlite}
       artifact-root: var/main-strategy-batch
@@ -208,3 +208,26 @@ l2:
   lateness-ms: 2000
   retained-minutes: 10
   wait-credentials: false
+  session:
+    zone: Asia/Shanghai
+    exchange: SSE
+    start: "09:00"
+    stop: "15:05"
+
+---
+# 主策略独立进程：数据 API 不再默认承载该调度器。
+spring:
+  application:
+    name: main-strategy
+  config:
+    activate:
+      on-profile: main-strategy
+server:
+  port: ${MAIN_STRATEGY_PORT:8081}
+app:
+  materialized-views:
+    etf-overview:
+      enabled: false
+  sync:
+    batch:
+      enabled: ${APP_SYNC_BATCH_ENABLED:true}

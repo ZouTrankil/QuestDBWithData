@@ -1,4 +1,4 @@
-package com.zoutrankil.data.bootstrap;
+package com.zoutrankil.runtime;
 
 import java.util.Map;
 import org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor;

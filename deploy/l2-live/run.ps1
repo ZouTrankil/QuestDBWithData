@@ -3,7 +3,8 @@ param(
     [string]$Symbols = '',
     [string]$CredentialsFile = '',
     [int]$Seconds = 0,
-    [switch]$Foreground
+    [switch]$Foreground,
+    [switch]$NoBuild
 )
 $ErrorActionPreference = 'Stop'
 $workspace = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
@@ -45,6 +46,7 @@ if ($Action -eq 'start') {
         }
     }
 }
+if (!$NoBuild) {
 $priorJavaHome = $env:JAVA_HOME
 try {
     $portableJdk = Join-Path $workspace '.gradle/toolchains/temurin-24.0.2/jdk-24.0.2+12'
@@ -53,9 +55,10 @@ try {
     try { & (Join-Path $workspace 'gradlew.bat') writeL2LiveRuntime --offline --console=plain; if ($LASTEXITCODE) { throw 'Live collector build failed.' } }
     finally { Pop-Location }
 } finally { $env:JAVA_HOME = $priorJavaHome }
+}
 $javaPath = [IO.File]::ReadAllText((Join-Path $runtimeRoot 'java-path.txt')).Trim()
 $classpath = [IO.File]::ReadAllText((Join-Path $runtimeRoot 'runtime-classpath.txt')).Trim()
-$command = if ($Action -eq 'start') { 'run' } else { $Action }
+$command = if ($Action -eq 'start') { 'session' } else { $Action }
 $launchArgs = @('-Xms128m','-Xmx1g','-cp',$classpath,'com.zoutrankil.data.l2live.bootstrap.AliyunL2LiveMain',$command,'--root',$runtimeRoot)
 if ($Symbols) { $launchArgs += @('--symbols',$Symbols) }
 if ($CredentialsFile) { $launchArgs += @('--credentials',[IO.Path]::GetFullPath($CredentialsFile)) }
@@ -73,10 +76,18 @@ $process = Start-Process -FilePath $javaPath -ArgumentList ('"@' + $argFile + '"
     -RedirectStandardOutput (Join-Path $runtimeRoot 'collector.stdout.log') -RedirectStandardError (Join-Path $runtimeRoot 'collector.stderr.log')
 $deadline = [DateTime]::UtcNow.AddSeconds(30)
 while ([DateTime]::UtcNow -lt $deadline) {
-    if ($process.HasExited) { throw 'Collector exited during startup. Read var/l2-live/status.json for its safe failure code.' }
+    if ($process.HasExited) {
+        if ($process.ExitCode -eq 0 -and (Test-Path -LiteralPath $statusFile)) {
+            $final = Get-Content -LiteralPath $statusFile -Raw | ConvertFrom-Json
+            if ($final.processId -eq $process.Id -and $final.phase -in @('non_trading_day','session_closed','stopped')) {
+                $final | ConvertTo-Json -Depth 8; exit 0
+            }
+        }
+        throw 'Collector exited during startup. Read var/l2-live/status.json for its safe failure code.'
+    }
     if (Test-Path -LiteralPath $statusFile) {
         try { $state = Get-Content -LiteralPath $statusFile -Raw | ConvertFrom-Json } catch { $state = $null }
-        if ($state -and $state.processId -eq $process.Id -and $state.phase -in @('awaiting_credentials','connecting','reconnecting','running','waiting_messages','write_retry')) {
+        if ($state -and $state.processId -eq $process.Id -and $state.phase -in @('checking_calendar','waiting_session','awaiting_credentials','connecting','reconnecting','running','waiting_messages','write_retry')) {
             $state | ConvertTo-Json -Depth 8; exit 0
         }
     }

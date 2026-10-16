@@ -1,7 +1,8 @@
-plugins { id 'java-library' }
+plugins { id 'application' }
 
 dependencies {
     implementation project(':data-app')
+    implementation project(':runtime-support')
     implementation project(':batch-app')
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3'
@@ -26,3 +27,9 @@ def batch = project(':batch-app')
 sourceSets.main.compileClasspath += data.sourceSets.main.output + batch.sourceSets.main.output
 sourceSets.main.compileClasspath += data.configurations.compileClasspath + batch.configurations.compileClasspath
 tasks.named('compileJava') { dependsOn data.tasks.named('compileJava'), batch.tasks.named('compileJava') }
+
+application {
+    applicationName = 'main-strategy'
+    mainClass = 'com.zoutrankil.strategy.MainStrategyApplication'
+    applicationDefaultJvmArgs = ['-Xms256m', '-Xmx4g']
+}

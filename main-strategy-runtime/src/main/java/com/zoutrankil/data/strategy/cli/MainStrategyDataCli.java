@@ -2,8 +2,8 @@ package com.zoutrankil.data.strategy.cli;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.strategy.application.MainStrategyDataService;
-import com.zoutrankil.data.bootstrap.ProjectConfiguration;
-import com.zoutrankil.data.bootstrap.ProjectLogging;
+import com.zoutrankil.runtime.ProjectConfiguration;
+import com.zoutrankil.runtime.ProjectLogging;
 import com.zoutrankil.data.config.QuestDbProperties;
 import org.springframework.boot.context.properties.bind.Binder;
 import java.nio.file.Path;

@@ -1,7 +1,16 @@
 {
-  "reason": "Native Parquet L2 and frozen main-strategy data artifacts; optional plan provenance serialization; direct vendor MQTT live L2 ingestion",
-  "projects": [":data-app", ":main-strategy-runtime"],
-  "configurations": ["compileClasspath", "runtimeClasspath", "testCompileClasspath", "testRuntimeClasspath"],
+  "reason": "Native Parquet L2 and frozen main-strategy data artifacts; optional plan provenance serialization; direct vendor MQTT live L2 ingestion (live dependency moved to its independent application)",
+  "projects": [
+    ":data-app",
+    ":main-strategy-runtime",
+    ":l2-live-app"
+  ],
+  "configurations": [
+    "compileClasspath",
+    "runtimeClasspath",
+    "testCompileClasspath",
+    "testRuntimeClasspath"
+  ],
   "versions": {
     "com.fasterxml.jackson.datatype:jackson-datatype-jdk8": "2.21.5",
     "com.github.luben:zstd-jni": "1.5.7-3",

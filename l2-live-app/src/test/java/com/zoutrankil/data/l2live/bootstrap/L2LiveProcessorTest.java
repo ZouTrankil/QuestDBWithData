@@ -2,7 +2,7 @@ package com.zoutrankil.data.l2live.bootstrap;
 
 import com.zoutrankil.data.l2live.domain.*;
 import com.zoutrankil.data.l2live.storage.RawJournal;
-import com.zoutrankil.data.l2live.storage.QuestDbLiveSink;
+import com.zoutrankil.data.l2live.storage.LocalLiveSink;
 import org.junit.jupiter.api.Test;
 import java.nio.charset.StandardCharsets;
 import java.time.Clock;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 class L2LiveProcessorTest {
     @Test void failedPublicationResumesExactFrozenBatchWithoutCountingTradeAgain() throws Exception {
         var journal = mock(RawJournal.class);
-        var sink = mock(QuestDbLiveSink.class);
+        var sink = mock(LocalLiveSink.class);
         var parser = spy(new AliyunL2WireParser());
         var accumulator = new L2MinuteAccumulator(Duration.ofSeconds(2), 10,
                 Clock.fixed(Instant.parse("2026-10-14T01:30:00.001Z"), ZoneOffset.UTC));
@@ -47,7 +47,6 @@ class L2LiveProcessorTest {
         verify(journal, times(1)).completeBatch("fixed-batch");
         verify(sink, times(2)).write(frozen.get().events(), frozen.get().states());
         var publicationOrder = inOrder(sink);
-        publicationOrder.verify(sink).initializeTargets();
         publicationOrder.verify(sink, times(2)).write(frozen.get().events(), frozen.get().states());
     }
 
@@ -59,7 +58,7 @@ class L2LiveProcessorTest {
         L2MinuteState state = first.accept(event).orElseThrow();
         var batch = new RawJournal.StoredBatch("existing", List.of(event), List.of(state), first.snapshot());
         var journal = mock(RawJournal.class);
-        var sink = mock(QuestDbLiveSink.class);
+        var sink = mock(LocalLiveSink.class);
         var parser = mock(AliyunL2WireParser.class);
         when(journal.committedAccumulatorState()).thenReturn(Map.of());
         when(journal.preparedBatch()).thenReturn(Optional.of(batch));
@@ -81,7 +80,7 @@ class L2LiveProcessorTest {
                 oldSession.topic(), oldSession.payloadBase64(), oldSession.recvTs(), oldSession.captureDate(),
                 oldSession.qos(), oldSession.retained(), oldSession.duplicate(), false);
         var journal = mock(RawJournal.class);
-        var sink = mock(QuestDbLiveSink.class);
+        var sink = mock(LocalLiveSink.class);
         var result = new AtomicReference<RawJournal.StoredBatch>();
         stubNewBatch(journal, List.of(outside, qos, valid, unconfirmed), result);
         var accumulator = accumulator();
@@ -96,7 +95,7 @@ class L2LiveProcessorTest {
     @Test void incompatibleFrozenScopeDoesNotModifyOrPublishTheRetainedBatch() throws Exception {
         var event = new AliyunL2WireParser().parse(trade("old-scope", 1, "600000", "100", 0));
         var journal = mock(RawJournal.class);
-        var sink = mock(QuestDbLiveSink.class);
+        var sink = mock(LocalLiveSink.class);
         when(journal.committedAccumulatorState()).thenReturn(Map.of());
         when(journal.preparedBatch()).thenReturn(Optional.of(new RawJournal.StoredBatch("frozen", List.of(event), List.of(), Map.of())));
         var error = assertThrows(IllegalStateException.class, () -> new L2LiveProcessor(journal, sink,
@@ -112,7 +111,7 @@ class L2LiveProcessorTest {
         var overflow = trade("overflow", 2, "563360", "10", 0);
         var after = trade("after", 3, "563360", "1", 0);
         var journal = mock(RawJournal.class);
-        var sink = mock(QuestDbLiveSink.class);
+        var sink = mock(LocalLiveSink.class);
         var result = new AtomicReference<RawJournal.StoredBatch>();
         stubNewBatch(journal, List.of(first, overflow, after), result);
         assertEquals(3, new L2LiveProcessor(journal, sink, new AliyunL2WireParser(), accumulator(), 100).processOnce());

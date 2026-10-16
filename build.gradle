@@ -29,15 +29,17 @@ allprojects {
 }
 
 // Resolve project models, not dependencies, before wiring aggregate task outputs.
-['data-core', 'data-app', 'batch-app', 'main-strategy-runtime'].each { evaluationDependsOn(":${it}") }
+['data-core', 'data-app', 'batch-app', 'main-strategy-runtime', 'runtime-support', 'l2-live-app'].each { evaluationDependsOn(":${it}") }
 def core = project(':data-core')
 def data = project(':data-app')
 def batch = project(':batch-app')
 def strategy = project(':main-strategy-runtime')
-def modules = [core, data, batch, strategy]
+def support = project(':runtime-support')
+def live = project(':l2-live-app')
+def modules = [core, data, batch, strategy, support, live]
 // Runtime configuration has one editable source, shared by the independent distributions.
 def runtimeConfigFiles = ['application.yml', 'logback-spring.xml']
-[data, batch].each { module ->
+[data, batch, strategy, live].each { module ->
     module.tasks.named('processResources') {
         from(rootProject.file('config')) { include runtimeConfigFiles }
     }
@@ -58,7 +60,7 @@ modules.each { module ->
         onlyIf('Root aggregate already executes the module test classes') { !gradle.taskGraph.hasTask(':test') }
     }
 }
-[data, batch].each { module ->
+[data, batch, strategy, live].each { module ->
     module.tasks.named('run', JavaExec).configure {
         onlyIf('Root run is the legacy single data application entrypoint') { !gradle.taskGraph.hasTask(':run') }
     }
@@ -160,14 +162,14 @@ tasks.register('architectureTest', Test) {
 }
 
 tasks.named('run', JavaExec) {
-    dependsOn data.tasks.named('classes'), strategy.tasks.named('classes'), batch.tasks.named('classes')
-    classpath = data.sourceSets.main.runtimeClasspath + strategy.sourceSets.main.runtimeClasspath
+    dependsOn data.tasks.named('classes')
+    classpath = data.sourceSets.main.runtimeClasspath
 }
 tasks.register('webRun', JavaExec) {
     group = 'application'
     description = 'Start the external Spring WebFlux API on the configured HTTP port.'
-    dependsOn data.tasks.named('classes'), strategy.tasks.named('classes'), batch.tasks.named('classes')
-    classpath = data.sourceSets.main.runtimeClasspath + strategy.sourceSets.main.runtimeClasspath
+    dependsOn data.tasks.named('classes')
+    classpath = data.sourceSets.main.runtimeClasspath
     mainClass = 'com.zoutrankil.data.QuestDataApplication'
 }
 tasks.register('batchRun', JavaExec) {
@@ -201,6 +203,15 @@ tasks.register('l2DailyFeatureBatch', JavaExec) {
     jvmArgs '-Xms1g', "-Xmx${providers.gradleProperty('l2BatchHeap').getOrElse('24g')}"
 }
 
+tasks.register('mainStrategyRun', JavaExec) {
+    group = 'application'
+    description = 'Start the independent main strategy scheduler and its control API.'
+    dependsOn strategy.tasks.named('classes')
+    classpath = strategy.sourceSets.main.runtimeClasspath
+    mainClass = 'com.zoutrankil.strategy.MainStrategyApplication'
+    jvmArgs '-Xms256m', '-Xmx4g'
+}
+
 tasks.register('mainStrategyData', JavaExec) {
     group = 'application'
     description = 'Native Java main strategy score publication and canonical official plan data storage.'
@@ -223,8 +234,8 @@ tasks.register('questdbMaintenance', JavaExec) {
 tasks.register('aliyunL2Live', JavaExec) {
     group = 'application'
     description = 'Direct vendor MQTT Level2 subscription, durable raw capture and Java live normalization.'
-    dependsOn data.tasks.named('classes')
-    classpath = data.sourceSets.main.runtimeClasspath
+    dependsOn live.tasks.named('classes')
+    classpath = live.sourceSets.main.runtimeClasspath
     mainClass = 'com.zoutrankil.data.l2live.bootstrap.AliyunL2LiveMain'
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(24) }
     jvmArgs '-Xms128m', "-Xmx${providers.gradleProperty('l2LiveHeap').getOrElse('1g')}"
@@ -233,7 +244,7 @@ tasks.register('aliyunL2Live', JavaExec) {
 tasks.register('writeL2LiveRuntime') {
     group = 'application'
     description = 'Build the live collector and write its local Java launch paths without starting a subscription.'
-    dependsOn data.tasks.named('jar'), data.configurations.runtimeClasspath
+    dependsOn live.tasks.named('jar'), live.configurations.runtimeClasspath
     doLast {
         def root = file('var/l2-live').toPath()
         def runtimes = root.resolve('runtime')
@@ -241,7 +252,7 @@ tasks.register('writeL2LiveRuntime') {
         def runtimeId = java.util.UUID.randomUUID().toString()
         def snapshot = java.nio.file.Files.createDirectory(runtimes.resolve(runtimeId))
         def libraries = java.nio.file.Files.createDirectory(snapshot.resolve('lib'))
-        def artifacts = [data.tasks.named('jar').get().archiveFile.get().asFile] + data.configurations.runtimeClasspath.files.toList()
+        def artifacts = [live.tasks.named('jar').get().archiveFile.get().asFile] + live.configurations.runtimeClasspath.files.toList()
         // Keep the application's classpath order; Windows filenames are case-insensitive.
         def byName = new LinkedHashMap<String, File>()
         artifacts.each { File source ->
@@ -293,11 +304,11 @@ tasks.register('writeL2LiveRuntime') {
 }
 
 // The root compatibility jar already contains data-app; do not ship its same-named jar twice.
-def mainDistributionRuntime = (data.configurations.runtimeClasspath + strategy.configurations.runtimeClasspath).filter {
+def mainDistributionRuntime = data.configurations.runtimeClasspath.filter {
     it != data.tasks.named('jar').get().archiveFile.get().asFile
 }
 tasks.named('startScripts', CreateStartScripts) {
-    classpath = files(tasks.named('jar').flatMap { it.archiveFile }, strategy.tasks.named('jar').flatMap { it.archiveFile }) + mainDistributionRuntime
+    classpath = files(tasks.named('jar').flatMap { it.archiveFile }) + mainDistributionRuntime
 }
 tasks.register('batchRuntimeJar', Jar) {
     dependsOn batch.tasks.named('classes')
@@ -323,7 +334,6 @@ distributions {
             // The root application jar already contains data-app. A single FileCollection
             // also deduplicates dependencies shared by the app and composition runtime.
             from('config') { include runtimeConfigFiles; into 'config' }
-            from(strategy.tasks.named('jar')) { into 'lib' }
             from(mainDistributionRuntime) { into 'lib' }
         }
     }
@@ -350,8 +360,11 @@ tasks.register('verifyModuleBoundaries') {
                 .collectMany { it.dependencies.withType(ProjectDependency).collect { d -> d.dependencyProject.path } }.toSet()
         }
         requireCondition(ownProjectDependencies(core).empty, 'data-core must not depend on either application')
-        [data, batch].each { p -> requireCondition(ownProjectDependencies(p) == ([':data-core'] as Set), "${p.path} main project dependencies must be only data-core") }
-        requireCondition(ownProjectDependencies(strategy) == ([':data-app', ':batch-app'] as Set), 'main-strategy-runtime is the only composition module and must depend on both applications')
+        requireCondition(ownProjectDependencies(batch) == ([':data-core'] as Set), 'batch-app depends only on data-core')
+        requireCondition(ownProjectDependencies(data) == ([':data-core', ':runtime-support'] as Set), 'data-app depends only on shared libraries')
+        requireCondition(ownProjectDependencies(support).empty, 'runtime-support must not depend on applications')
+        requireCondition(ownProjectDependencies(live) == ([':runtime-support'] as Set), 'l2-live-app must not depend on data-app or strategy')
+        requireCondition(ownProjectDependencies(strategy) == ([':data-app', ':batch-app', ':runtime-support'] as Set), 'main-strategy-runtime is the only composition module and must depend on both applications')
         def readEntries = { archive ->
             new java.util.zip.ZipFile(archive).withCloseable { zip ->
                 def entries = zip.entries().collect { it.name }
@@ -362,6 +375,13 @@ tasks.register('verifyModuleBoundaries') {
         def coreEntries = readEntries(core.tasks.named('jar').get().archiveFile.get().asFile)
         def dataEntries = readEntries(data.tasks.named('jar').get().archiveFile.get().asFile)
         def batchEntries = readEntries(batch.tasks.named('jar').get().archiveFile.get().asFile)
+        def liveEntries = readEntries(live.tasks.named('jar').get().archiveFile.get().asFile)
+        requireCondition(!dataEntries.any { it.startsWith('com/zoutrankil/data/l2live/') }, 'Live classes leaked into data-app; clean stale outputs')
+        requireCondition(liveEntries.contains('com/zoutrankil/data/l2live/bootstrap/AliyunL2LiveMain.class'), 'Independent live entrypoint missing')
+        requireCondition(!live.configurations.runtimeClasspath.files.any { it.name.startsWith('QuestDBWithData-') || it.name.startsWith('main-strategy-runtime-') || it.name.startsWith('batch-app-') }, 'Live runtime contains other applications')
+        requireCondition(!live.configurations.runtimeClasspath.files.any { f -> ['postgresql-', 'questdb-client-', 'flyway-', 'poi-', 'hadoop-', 'parquet-', 'spring-web', 'spring-batch', 'quartz-'].any { f.name.startsWith(it) } }, 'Live runtime contains API, strategy or offline data dependencies')
+        requireCondition(!strategy.configurations.runtimeClasspath.files.any { it.name.contains('mqtt') }, 'Strategy runtime contains MQTT')
+        requireCondition(!data.configurations.runtimeClasspath.files.any { it.name.contains('mqtt') }, 'MQTT dependency leaked into data-app')
         def strategyEntries = readEntries(strategy.tasks.named('jar').get().archiveFile.get().asFile)
         def rootJarEntries = readEntries(tasks.named('jar').get().archiveFile.get().asFile)
         def rootBatchEntries = readEntries(tasks.named('batchRuntimeJar').get().archiveFile.get().asFile)
@@ -377,7 +397,7 @@ tasks.register('verifyModuleBoundaries') {
         requireCondition(rootJarEntries == dataEntries && !rootJarEntries.any { it.startsWith('com/zoutrankil/batch/') }, 'Root compatibility jar differs from data-app output or contains stale batch classes')
         requireCondition(rootBatchEntries == batchEntries, 'Root batch compatibility jar differs from batch-app output')
         requireCondition(!batchEntries.any { it.startsWith('db/migration/questdb/') }, 'batch-app contains QuestDB migrations')
-        [data, batch].each { module ->
+        [data, batch, strategy, live].each { module ->
             new java.util.zip.ZipFile(module.tasks.named('jar').get().archiveFile.get().asFile).withCloseable { zip ->
                 runtimeConfigFiles.each { name ->
                     def entry = zip.getEntry(name)
@@ -430,7 +450,7 @@ tasks.register('verifyDependencyVersionCompatibility') {
                 }
                 actual.each { coordinate, selected ->
                     // Existing baseline versions remain exact. Only explicitly pinned new modules
-                    // in the two native data owners may extend the pre-module dependency set.
+                    // in the declared application modules may extend the pre-module dependency set.
                     def allowedAddition = expected[coordinate] == null && p.path in additions.projects && configuration.name in additions.configurations
                         ? additions.versions[coordinate] : null
                     if ((expected[coordinate] ?: allowedAddition) != selected)
