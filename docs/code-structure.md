@@ -29,11 +29,27 @@ QuestDBWithData/
 ├── deploy/                # Batch / L2 部署脚本与配置示例
 ├── docs/                  # 架构约定、数据规范与操作说明
 ├── tools/                 # 可重复使用的生成、读取、清洗和验证工具
-├── schema-export/         # Java 模型生成器使用的 schema catalog
-└── artifacts/java-migration/ # 测试依赖的历史输入与验收证据
+└── schema-export/         # Java 模型生成器使用的 schema catalog
 ```
 
-根项目负责聚合构建、测试和兼容的启动入口，不再包含生产源码。`data-app` 和 `batch-app` 分别依赖 `data-core`，主策略组合由 `main-strategy-runtime` 负责。所有入口共用根目录 `config/application.yml`；公共段只定义一次，`data`、`batch`、`l2` profile 保存各入口的差异。Gradle 将同一文件打入两个应用的分发包。各模块的 `build/` 和根项目的 `build/` 均为可重新生成的构建产物。
+根项目负责聚合构建、测试和兼容的启动入口，不再包含生产源码。`data-app` 和 `batch-app` 分别依赖 `data-core`，主策略组合由 `main-strategy-runtime` 负责。所有入口共用根目录 `config/application.yml`；公共段只定义一次，`data`、`batch`、`l2` profile 保存各入口的差异。Gradle 将同一文件打入两个应用的分发包。
+
+所有默认构建产物集中在顶层 `build/`，子模块使用独立子目录，避免类文件、资源和报告相互覆盖：
+
+```text
+build/
+├── libs/                   # 根项目兼容 JAR
+├── distributions/          # 应用分发包
+├── reports/                # 根项目聚合报告
+├── test-results/           # 根项目聚合测试结果
+└── modules/
+    ├── data-core/          # 各模块自己的 classes、resources、libs、reports 等
+    ├── data-app/
+    ├── batch-app/
+    └── main-strategy-runtime/
+```
+
+根 `./gradlew :clean` 清理整棵 `build/`；`./gradlew :data-app:clean` 只清理该模块的输出。启动和打包任务通过 Gradle 的模块输出引用解析路径，不需要修改启动命令。L2 清洗脚本等显式隔离运行仍可覆盖构建目录。Gradle 缓存位于 `.gradle/`，运行台账位于 `var/`，与构建产物分开管理。
 
 依赖方向：`data-app → data-core`、`batch-app → data-core`、`main-strategy-runtime → data-app + batch-app`。各模块的回归测试位于自己的 `src/test/`。根 `src/test/` 原用于跨模块契约检查；本次清理开始前，其测试源码和 daily-t12 资源已在工作区删除，本次未恢复或扩展这些删除。
 
@@ -89,7 +105,7 @@ QuestDBWithData/
 - `run_l2_native_cleaning.ps1`：归档解压、清洗、断点恢复入口。
 - `run_offline_tests.ps1`：Windows 离线验证入口；其根契约测试选择依赖根 `src/test/`，该目录在本次清理前已被删除。
 
-`artifacts/java-migration/` 保留 D001–D006、D085–D105 下的 1,598 个数据与证据文件。日历、证券资料、指数目录和同花顺指数等回归测试直接读取其中的输入；live 验收还会读取请求、来源样本和准入证据。目录内的旧探针源码、临时启动脚本与二进制/XML 测试报告已清理。保留这些输入不表示旧 live 环境仍可复现；重新验收需要重新生成准入记录和对应环境。D005 的部分原始 captures 原本就未纳入 Git，本次没有伪造或替换。
+首轮清理后曾保留 D001–D006、D085–D105 下的历史输入和验收证据。后续提交 `dda9048` 已移除剩余整个 `artifacts/` 目录（1,598 个文件）。当前源码中仍有测试引用旧 `artifacts/java-migration/` 路径；运行这些测试需要从 Git 历史恢复相应输入，或另行迁移到正式测试资源目录。下文早期测试结果记录的是当时输入仍在时的结果，不表示删除整个目录后的全量回归已通过。
 
 `schema-export/` 虽带日期，但模型生成器及其测试仍使用其中的 `domain-catalog.json`，因此保留。`gradle/dependency-*.json` 由依赖兼容性检查使用，也继续保留。本地 `var/`、SQLite/WAL 台账、开发者工作文件与已有未提交修改保持原样。
 
@@ -97,9 +113,13 @@ QuestDBWithData/
 
 本轮清理验证：日历映射、证券资料映射、指数目录文件和同花顺指数映射的 12 项测试均通过。完整 `:data-app:test` 共运行 2,384 项，其中 156 项失败、142 项跳过；失败报告未引用本轮删除的目录，完整测试未通过。
 
-新的 `artifacts/` 输出统一忽略，已经跟踪的测试输入仍由 Git 管理。构建目录与 Gradle 缓存可重新生成，本次不将清空开发环境缓存作为代码清理的一部分。
+提交前识别并清理了 D003 下 12 组旧 `prepared-*`、`prepared-recovery-*` 和 `publication-*` 运行快照，共 83 个文件、979,628 字节，包含 8 份旧实验 SQLite 账本；这些删除现已包含在并行生成的 `dda9048` 提交中。日常运行的 `var/` 台账继续保留。旧构建输出（约 493 MB）与本地日志（约 3.3 MB）作为可再生成文件清理，不纳入提交。
+
+新的 `artifacts/` 输出统一忽略，历史目录已从当前版本移除；各模块 `src/test/resources/` 中的测试资源继续由 Git 管理。构建目录与 Gradle 缓存可重新生成，本次不将清空开发环境缓存作为代码清理的一部分。
 
 ### 本次验证
+
+最终提交前，在整个 `artifacts/` 已移除的状态下，跨四模块选取的 70 项专项测试全部通过，模块边界、Batch 打包驱动及依赖版本检查通过；这次未运行仍依赖旧 artifacts 输入的测试。
 
 - 模型生成器 10 项 Python 测试通过。
 - 直接使用保留输入的四组 Java 测试通过，共 12 项、无失败或跳过：`ExchangeCalendarMappingTest`、`StockDetailInfoMappingTest`、`ThsIndexMappingTest`、`IndexCatalogFileSourceTest`。

@@ -14,10 +14,11 @@ deploy/                 Deployment scripts and configuration examples
 docs/                   Architecture, data conventions and operating guides
 tools/                  Reusable generation, L2 and test tools
 schema-export/          Schema catalog used by the Java model generator
-artifacts/java-migration/  Retained inputs and evidence used by acceptance tests
 ```
 
 The root Gradle project aggregates these four modules and provides the existing launch commands. See [docs/code-structure.md](docs/code-structure.md) for dependency directions, package responsibilities, and the historical-file cleanup record.
+
+All default build output is centralized under the top-level `build/`. Each module uses `build/modules/<module>/`; root JARs, distributions and aggregate reports retain their existing locations. `./gradlew :clean` removes all build output, while `./gradlew :data-app:clean` removes only that module's output.
 
 ## Requirements
 

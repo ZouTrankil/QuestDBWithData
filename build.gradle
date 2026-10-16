@@ -1,5 +1,12 @@
 plugins { id 'application' }
 
+// Keep module outputs isolated under the single top-level build directory.
+// Explicit build-directory overrides (for isolated runs) still take precedence.
+subprojects {
+    def moduleOutputPath = project.path.substring(1).replace(':', '/')
+    layout.buildDirectory.convention(rootProject.layout.buildDirectory.dir("modules/${moduleOutputPath}"))
+}
+
 allprojects {
     group = 'com.zoutrankil'
     version = '0.1.0'
@@ -272,8 +279,12 @@ tasks.register('writeL2LiveRuntime') {
     }
 }
 
+// The root compatibility jar already contains data-app; do not ship its same-named jar twice.
+def mainDistributionRuntime = (data.configurations.runtimeClasspath + strategy.configurations.runtimeClasspath).filter {
+    it != data.tasks.named('jar').get().archiveFile.get().asFile
+}
 tasks.named('startScripts', CreateStartScripts) {
-    classpath = files(tasks.named('jar').flatMap { it.archiveFile }, strategy.tasks.named('jar').flatMap { it.archiveFile }) + data.configurations.runtimeClasspath + strategy.configurations.runtimeClasspath
+    classpath = files(tasks.named('jar').flatMap { it.archiveFile }, strategy.tasks.named('jar').flatMap { it.archiveFile }) + mainDistributionRuntime
 }
 tasks.register('batchRuntimeJar', Jar) {
     dependsOn batch.tasks.named('classes')
@@ -296,9 +307,8 @@ distributions {
     main {
         distributionBaseName = 'QuestDBWithData'
         contents {
-            from(data.configurations.runtimeClasspath) { into 'lib' }
             from(strategy.tasks.named('jar')) { into 'lib' }
-            from(strategy.configurations.runtimeClasspath) { into 'lib' }
+            from(mainDistributionRuntime) { into 'lib' }
         }
     }
     create('batch') {
