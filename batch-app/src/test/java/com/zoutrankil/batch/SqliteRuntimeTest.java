@@ -24,16 +24,17 @@ class SqliteRuntimeTest {
     @BeforeEach void isolatedDatabase() { url="jdbc:sqlite:"+databaseDir.resolve("metadata.sqlite").toAbsolutePath(); }
     ConfigurableApplicationContext start() { return start(null); }
     ConfigurableApplicationContext start(StageExecutor fixture) {
-        var application=new SpringApplication(BatchApplication.class);
+        var application=BatchApplication.application();
         if (fixture!=null) application.addInitializers(context -> ((org.springframework.context.support.GenericApplicationContext)context)
                 .registerBean("testOnlyFixtureExecutor",StageExecutor.class,() -> fixture,definition -> definition.setPrimary(true)));
-        application.setDefaultProperties(Map.of("spring.config.name","batch-runtime","jdb.metadata-url",url,
+        application.setDefaultProperties(Map.of("jdb.metadata-url",url,
                 "jdb.api-token","test-token-with-at-least-24-characters",
                 "jdb.api-port","0","jdb.archive-root",archive.toString(),"jdb.scheduling-enabled","false",
                 "jdb.core-source-fanout-enabled",Boolean.toString(fixture==null)));
         return application.run("--jdb.metadata-url="+url,
                 "--jdb.api-port=0","--jdb.api-token=test-token-with-at-least-24-characters","--jdb.archive-root="+archive,
-                "--jdb.scheduling-enabled=false","--jdb.core-source-fanout-enabled="+(fixture==null));
+                "--jdb.scheduling-enabled=false","--jdb.core-source-fanout-enabled="+(fixture==null),
+                "--jdb.questdb-http-url=","--jdb.tushare-token=");
     }
     private static JdbcTemplate jdbc(ConfigurableApplicationContext context) {
         return new JdbcTemplate(context.getBean(DataSource.class));

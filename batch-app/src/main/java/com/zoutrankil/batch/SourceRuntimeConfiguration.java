@@ -26,7 +26,10 @@ import java.io.InputStream;
 public class SourceRuntimeConfiguration {
     @Bean SourceCollector sourceCollector(Environment env) { return new SourceCollector(Path.of(env.getRequiredProperty("jdb.archive-root"))); }
     @Bean TushareProperties sourceTushareProperties(Environment env) {
-        var properties=new TushareProperties(); properties.setToken(env.getProperty("jdb.tushare-token","")); return properties;
+        var properties=org.springframework.boot.context.properties.bind.Binder.get(env)
+                .bind("app.tushare",TushareProperties.class).orElseGet(TushareProperties::new);
+        properties.setToken(env.getProperty("jdb.tushare-token",properties.getToken()));
+        return properties;
     }
     @Bean(destroyMethod="close") SharedRequestBudget sourceRequestBudget(TushareProperties properties) {
         return new SharedRequestBudget(new SharedRequestBudget.Policy(properties.getGlobalPerMinute(),properties.getEndpointPerMinute(),

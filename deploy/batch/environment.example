@@ -1,3 +1,5 @@
+# Optional environment overrides for config/application.yml (batch profile).
+# Shared QuestDB/Tushare settings normally come from the common YAML document.
 # SQLite must be a persistent local file; the process creates its parent directory.
 JDB_METADATA_URL=jdbc:sqlite:/var/lib/questdb-batch/metadata.sqlite
 JDB_API_TOKEN=

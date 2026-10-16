@@ -2,7 +2,7 @@
 
 This process directly consumes the existing vendor MQTT feed and runs no trading actions. It uses three topics per symbol: `trans/<code>`, `order/<code>`, and `market/<code>`. The current limit is 16 SH/SZ symbols and 48 topics. The provider requires client ID to equal username and allows one terminal per account. Stop the previous collector through its runtime control before taking over that account.
 
-Copy `credentials.env.example` to `var/l2-live/credentials.env`, then fill the private subscription username and password. The runtime directory is ignored by Git. The collector does not use public test accounts and does not print credentials. Process environment variables override the credential file; values are literal and are not shell-expanded.
+Configure `l2.username` and `l2.password` in the `l2` profile of the shared `config/application.yml`; the collector automatically selects this profile and inherits the shared QuestDB endpoint. See [configuration usage](../../docs/configuration.md). Existing `var/l2-live/credentials.env` files are still accepted as literal overrides, followed by process environment variables. The collector does not print credentials.
 
 ```powershell
 ./deploy/l2-live/run.ps1 -Action plan

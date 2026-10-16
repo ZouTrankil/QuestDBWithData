@@ -19,8 +19,7 @@ class NativeProducerLiveTest {
         Path archive=Path.of("var/jdb-source-acceptance",UUID.randomUUID().toString()).toAbsolutePath();Files.createDirectories(archive);
         var reports=new ArrayList<Map<String,Object>>();
         {
-            var application=new SpringApplication(BatchApplication.class);
-            application.setDefaultProperties(Map.of("spring.config.name","batch-runtime"));
+            var application=BatchApplication.application();
             try(var context=application.run("--jdb.metadata-url=jdbc:sqlite:"+archive.resolve("metadata.sqlite").toAbsolutePath(),
                     "--jdb.api-port=0",
                     "--jdb.api-token=live-test-management-token-not-for-deployment","--jdb.archive-root="+archive,

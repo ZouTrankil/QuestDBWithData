@@ -10,9 +10,12 @@ public final class BatchControl {
     private BatchControl() {}
     public static void main(String[] args) throws Exception {
         if (args.length<1) throw new IllegalArgumentException("tasks | runs | reconciliation | run <request.json> | detail <instance> | sources | collect <request.json> <request-id> | l2-inspect <archive-path> | schedules | pause | resume");
-        String token=System.getenv("JDB_API_TOKEN");
-        if (token==null || token.length()<24) throw new IllegalArgumentException("JDB_API_TOKEN required");
-        String base=System.getenv().getOrDefault("JDB_API_URL","http://localhost:9085");
+        var environment=new org.springframework.core.env.StandardEnvironment();
+        org.springframework.boot.context.properties.source.ConfigurationPropertySources.attach(environment);
+        org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor.applyTo(environment,null,null,"batch");
+        String token=environment.getRequiredProperty("jdb.api-token");
+        if (token.length()<24) throw new IllegalArgumentException("jdb.api-token / JDB_API_TOKEN required");
+        String base=environment.getRequiredProperty("jdb.api-url");
         var uri=URI.create(base);
         if (!java.net.InetAddress.getByName(uri.getHost()).isLoopbackAddress())
             throw new IllegalArgumentException("Management client is restricted to loopback");

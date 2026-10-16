@@ -10,9 +10,13 @@ import org.springframework.context.annotation.Import;
 @Import(RuntimeConfiguration.class)
 public class BatchApplication {
     public static void main(String[] args) {
-        System.setProperty("spring.config.name", "batch-runtime");
+        application().run(args);
+    }
+
+    public static SpringApplication application() {
         var application=new SpringApplication(BatchApplication.class);
+        application.setAdditionalProfiles("batch");
         application.setWebApplicationType(WebApplicationType.NONE);
-        application.run(args);
+        return application;
     }
 }

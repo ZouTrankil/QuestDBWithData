@@ -16,7 +16,7 @@
 
 ## 配置
 
-在 `data-app/src/main/resources/application.yml` 中配置 Tushare 和 QuestDB 参数：
+在 `config/application.yml` 中配置 Tushare 和 QuestDB 参数：
 
 ```yaml
 app:
