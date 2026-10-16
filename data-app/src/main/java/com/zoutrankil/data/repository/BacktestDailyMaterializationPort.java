@@ -12,10 +12,10 @@ import java.util.*;
 import java.util.function.BooleanSupplier;
 
 /** Server-side full/enrichment window staging, verified by streaming every typed composite-key row.
- * The runner submits month integrity receipts, not ten million buffered data rows. Original data is retained.
+ * The runner submits month integrity receipts, not ten million buffered data rows. Original data is retained; the public view adds no physical copy.
  */
 public final class BacktestDailyMaterializationPort implements VerifiedBatchExecutor.Port<BacktestDailyMaterializationPort.MonthReceipt,LocalDate> {
-    public static final String BASE="backtest_daily", ALIAS="v_backtest_daily", MV="v_backtest_daily";
+    public static final String BASE="backtest_daily", ALIAS="v_backtest_daily";
     public static final List<String> SOURCES=List.of("stk_factor","stk_limit","stk_suspend","stk_st_daily");
     public static final List<String> COLUMNS=List.of("trade_date","ts_code","open","high","low","close","vol","amount","adj_factor","up_limit","down_limit","is_suspended","is_st");
     public static final long MAX_TOTAL_ROWS=40_000_000,MAX_MONTH_ROWS=1_000_000;
@@ -42,9 +42,8 @@ public final class BacktestDailyMaterializationPort implements VerifiedBatchExec
             JOIN (SELECT DISTINCT trade_date FROM stk_factor) fd ON s.trade_date = fd.trade_date
             WHERE f.trade_date < s.trade_date
             """.strip();
-    public static final String MV_SQL="SELECT trade_date,ts_code,last(open) AS open,last(high) AS high,last(low) AS low,last(close) AS close,"
-            +"last(vol) AS vol,last(amount) AS amount,last(adj_factor) AS adj_factor,last(up_limit) AS up_limit,last(down_limit) AS down_limit,"
-            +"cast(last(is_suspended) AS LONG) AS is_suspended,last(is_st) AS is_st FROM backtest_daily SAMPLE BY 1d ALIGN TO CALENDAR";
+    public static final String VIEW_SQL="SELECT trade_date,ts_code,open,high,low,close,vol,amount,adj_factor,up_limit,down_limit,"
+            +"cast(is_suspended AS LONG) AS is_suspended,is_st FROM backtest_daily";
     public record Identity(long id,String directory,long rows,LocalDate from,LocalDate to,long tableTxn,long sequenceTxn,long writerTxn) {
         public String fingerprint(){return sha(id+"|"+directory+"|"+rows+"|"+from+"|"+to+"|"+tableTxn+"|"+sequenceTxn+"|"+writerTxn);}
     }
@@ -52,14 +51,15 @@ public final class BacktestDailyMaterializationPort implements VerifiedBatchExec
     public record MonthReceipt(LocalDate from,LocalDate to,long rows,int dates,String sha256) {
         public MonthReceipt { if(from==null||to==null||from.isAfter(to)||rows<0||rows>MAX_MONTH_ROWS||dates<0||!sha256.matches("[0-9a-f]{64}"))throw new IllegalArgumentException("Complete finite month receipt required"); }
     }
-    public record NativeState(String name,long id,String directory,String base,long baseId,long baseTxn,long refreshTxn,long mvTxn,long sequenceTxn,String sql,String refreshStarted,String refreshFinished) {}
+    public record ViewState(String name,long id,String directory,String sql) {}
+    public record SourceState(Identity base,ViewState view) {}
     public static final VerifiedBatchExecutor.Codec<MonthReceipt,LocalDate> CODEC=new VerifiedBatchExecutor.Codec<>() {
         public LocalDate key(MonthReceipt r){return r.from();}
         public byte[] canonicalBytes(MonthReceipt r){return (r.from()+"|"+r.to()+"|"+r.rows()+"|"+r.dates()+"|"+r.sha256()+"\n").getBytes(StandardCharsets.UTF_8);}
     };
     private final JdbcTemplate jdbc;
     private Identity before; private LocalDate from,to;private boolean bootstrap,staged;private String stage;
-    private NativeState reusedNative;
+    private ViewState reusedView;
     private VerifiedBatchExecutor.Submission submission;
     private BooleanSupplier cancelled=()->Thread.currentThread().isInterrupted();
     public BacktestDailyMaterializationPort(JdbcTemplate source){jdbc=new JdbcTemplate(Objects.requireNonNull(source.getDataSource()));jdbc.setQueryTimeout(1800);jdbc.setFetchSize(1024);}
@@ -67,25 +67,23 @@ public final class BacktestDailyMaterializationPort implements VerifiedBatchExec
         requireName(stage,"java_backtest_daily_stage_");this.before=Objects.requireNonNull(before);this.from=Objects.requireNonNull(from);this.to=Objects.requireNonNull(to);this.bootstrap=bootstrap;this.stage=stage;cancelled=Objects.requireNonNull(stopped);
     }
     public String stage(){return stage;}
-    /** Admit zero-write replay only after both physical layers match the complete requested source. */
+    /** Reuse a verified result table; the public view carries no separate data or refresh state. */
     public void reuseExisting(List<MonthReceipt> expected) {
         if(bootstrap||staged||before==null)throw new IllegalStateException("Frozen non-bootstrap replay required");
-        requireSame(before);var nativeBefore=nativeState(MV);
-        for(var receipt:expected)if(!receipt.equals(digest(BASE,receipt.from(),receipt.to(),true))
-                ||!receipt.equals(digest(MV,receipt.from(),receipt.to(),false)))
+        requireSame(before);var viewBefore=viewState();
+        for(var receipt:expected)if(!receipt.equals(digest(BASE,receipt.from(),receipt.to(),true)))
             throw new IllegalStateException("Existing backtest values differ from source");
         requireSame(before);
-        if(!nativeBefore.equals(nativeState(MV)))throw new IllegalStateException("Native generation changed during reuse admission");
-        reusedNative=nativeBefore;
+        if(!viewBefore.equals(viewState()))throw new IllegalStateException("Backtest view changed during reuse admission");
+        reusedView=viewBefore;
     }
     public void requireReuseUnchanged() {
         requireSame(before);
-        if(reusedNative==null||!reusedNative.equals(nativeState(MV)))throw new IllegalStateException("Reused native generation changed");
+        if(reusedView==null||!reusedView.equals(viewState()))throw new IllegalStateException("Reused backtest view changed");
     }
     public void check(){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new java.util.concurrent.CancellationException("Backtest materialization cancelled");}
     public static String sha(String text){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8)));}catch(Exception e){throw new IllegalStateException(e);}}
     public static String normalized(String text){return text==null?"":text.trim().replaceAll("\\s+"," ").toLowerCase(Locale.ROOT);}
-    public static boolean nativeName(String value){return MV.equals(value);}
     public static void requireName(String name,String prefix){DatasetDefinition.identifier(name);if(!name.startsWith(prefix)||!name.substring(prefix.length()).matches("[0-9a-f]{32}"))throw new IllegalArgumentException("Exact owned artifact name required");}
     public static String timestamp(LocalDate d){return "cast('"+d+"T00:00:00.000000Z' AS TIMESTAMP)";}
     private static String datePredicate(LocalDate lo,LocalDate hi){return "trade_date>="+timestamp(lo)+" AND trade_date<"+timestamp(hi.plusDays(1));}
@@ -114,13 +112,13 @@ public final class BacktestDailyMaterializationPort implements VerifiedBatchExec
     private static long number(Map<String,Object> row,String key){Object value=row.get(key);if(!(value instanceof Number n))throw new IllegalStateException("Required metadata counter missing: "+key);return n.longValue();}
     private static LocalDate date(Object value){if(value==null)return null;if(!(value instanceof Number n))throw new IllegalStateException("UTC micros required");long us=n.longValue();if(Math.floorMod(us,86_400_000_000L)!=0)throw new IllegalStateException("Business date is not UTC midnight");return LocalDate.ofEpochDay(Math.floorDiv(us,86_400_000_000L));}
     public void requireSame(Identity expected){if(!identity(BASE).equals(expected))throw new IllegalStateException("Backtest physical target changed since planning");}
-    public void requireSchema(String table,boolean nativeMv){
+    public void requireSchema(String table,boolean view){
         var cols=jdbc.queryForList("SELECT \"column\",\"type\",designated,upsertKey FROM table_columns('"+table+"') LIMIT 14");
         if(cols.size()!=13)throw new IllegalStateException("Exact 13-column backtest schema required");var keys=new HashSet<String>();
-        for(int i=0;i<cols.size();i++){var c=cols.get(i);String name=COLUMNS.get(i),type=i==0?"TIMESTAMP":i==1?"SYMBOL":i<11?"DOUBLE":i==11&&nativeMv?"LONG":"INT";
+        for(int i=0;i<cols.size();i++){var c=cols.get(i);String name=COLUMNS.get(i),type=i==0?"TIMESTAMP":i==1?"SYMBOL":i<11?"DOUBLE":i==11&&view?"LONG":"INT";
             if(!name.equals(c.get("column"))||!type.equals(c.get("type"))||Boolean.TRUE.equals(c.get("designated"))!=(i==0))throw new IllegalStateException("Backtest schema/type/designated column differs: "+name);
             if(Boolean.TRUE.equals(c.get("upsertKey")))keys.add(name);}
-        if(!keys.equals(nativeMv?Set.of():Set.of("trade_date","ts_code")))throw new IllegalStateException("Backtest exact UPSERT key differs");
+        if(!keys.equals(view?Set.of():Set.of("trade_date","ts_code")))throw new IllegalStateException("Backtest exact UPSERT key differs");
     }
     /** Includes the entire historical price source and every side-table version, not merely requested partitions. */
     public String sourcePin(){
@@ -186,19 +184,19 @@ public final class BacktestDailyMaterializationPort implements VerifiedBatchExec
     @Override public void preflight(){if(before==null)throw new IllegalStateException("Frozen backtest stage request required");requireSame(before);check();}
     @Override public void submissionRecorded(VerifiedBatchExecutor.Submission context)throws Exception{
         var ledger=SyncRunLedger.openReadOnly(context.ledgerPath());var slice=ledger.get(context.sliceId());var run=ledger.getRun(context.runId());var frozen=JobDefinitionJson.mapper().readTree(run.frozenJson());
-        if(slice.kind()!=SyncRunLedger.Kind.SLICE||slice.state()!=SyncRunState.SUBMITTED||slice.revision()!=context.revision()||!context.runId().equals(slice.runId())||!"data.backtest_daily".equals(run.jobId())||run.jobVersion()!=1||!"MATERIALIZE".equals(frozen.path("mode").asText())||!before.fingerprint().equals(frozen.path("parameters").path("target_signature").asText())||!from.toString().equals(frozen.path("from").asText())||!to.toString().equals(frozen.path("to").asText())||!targetId(before).equals(run.targetId()))throw new IllegalStateException("Original owning durable monthly submission required");submission=context;
+        if(slice.kind()!=SyncRunLedger.Kind.SLICE||slice.state()!=SyncRunState.SUBMITTED||slice.revision()!=context.revision()||!context.runId().equals(slice.runId())||!"data.backtest_daily".equals(run.jobId())||!Set.of(1,2).contains(run.jobVersion())||!"MATERIALIZE".equals(frozen.path("mode").asText())||!before.fingerprint().equals(frozen.path("parameters").path("target_signature").asText())||!from.toString().equals(frozen.path("from").asText())||!to.toString().equals(frozen.path("to").asText())||!targetId(before).equals(run.targetId()))throw new IllegalStateException("Original owning durable monthly submission required");submission=context;
     }
     @Override public void send(List<MonthReceipt> rows){
         if(rows==null||rows.size()!=1||submission==null)throw new IllegalArgumentException("One durable owning monthly receipt per runner submission required");preflight();var receipt=rows.getFirst();if(receipt.from().isBefore(from)||receipt.to().isAfter(to)||!sha(new String(CODEC.canonicalBytes(receipt),StandardCharsets.UTF_8)).equals(submission.sourceFingerprint()))throw new IllegalStateException("Submitted exact monthly source receipt differs");
-        if(reusedNative!=null){requireReuseUnchanged();submission=null;return;}
+        if(reusedView!=null){requireReuseUnchanged();submission=null;return;}
         if(!staged){
             jdbc.execute("CREATE TABLE "+quote(stage)+" (trade_date TIMESTAMP,ts_code SYMBOL,open DOUBLE,high DOUBLE,low DOUBLE,close DOUBLE,vol DOUBLE,amount DOUBLE,adj_factor DOUBLE,up_limit DOUBLE,down_limit DOUBLE,is_suspended INT,is_st INT) TIMESTAMP(trade_date) PARTITION BY DAY WAL DEDUP UPSERT KEYS(trade_date,ts_code)");staged=true;
         }
         // One bounded server INSERT per already proven month avoids a single full-history JOIN timeout.
         jdbc.execute("INSERT INTO "+quote(stage)+" ("+String.join(",",COLUMNS)+") SELECT "+physicalColumns()+" FROM ("+sourceWindowSql(receipt.from(),receipt.to())+")");awaitBase(stage);submission=null;
     }
-    @Override public List<MonthReceipt> readback(List<LocalDate> keys){if((!staged&&reusedNative==null)||keys.size()!=1)throw new IllegalArgumentException("Complete receipt key required");LocalDate lo=keys.getFirst();LocalDate hi=lo.plusMonths(1).withDayOfMonth(1).minusDays(1);if(hi.isAfter(to))hi=to;if(reusedNative!=null)requireReuseUnchanged();return List.of(digest(reusedNative==null?stage:BASE,lo,hi,true));}
-    @Override public boolean walSettled(){if(reusedNative!=null){requireReuseUnchanged();return true;}if(!staged)return false;identity(stage);return true;}
+    @Override public List<MonthReceipt> readback(List<LocalDate> keys){if((!staged&&reusedView==null)||keys.size()!=1)throw new IllegalArgumentException("Complete receipt key required");LocalDate lo=keys.getFirst();LocalDate hi=lo.plusMonths(1).withDayOfMonth(1).minusDays(1);if(hi.isAfter(to))hi=to;if(reusedView!=null)requireReuseUnchanged();return List.of(digest(reusedView==null?stage:BASE,lo,hi,true));}
+    @Override public boolean walSettled(){if(reusedView!=null){requireReuseUnchanged();return true;}if(!staged)return false;identity(stage);return true;}
     private void awaitBase(String table){long stop=System.nanoTime()+Duration.ofMinutes(20).toNanos();while(true){check();try{identity(table);return;}catch(IllegalStateException waiting){if(System.nanoTime()>=stop)throw waiting;}sleep();}}
     private static void sleep(){try{Thread.sleep(500);}catch(InterruptedException e){Thread.currentThread().interrupt();throw new java.util.concurrent.CancellationException("Backtest wait interrupted");}}
     /** Every requested source value and key is read back before the formal table is touched. */
@@ -207,55 +205,37 @@ public final class BacktestDailyMaterializationPort implements VerifiedBatchExec
         for(var expected:sourceMonths)if(!expected.equals(digest(stage,expected.from(),expected.to(),true)))throw new IllegalStateException("Backtest source/stage month differs");
         long expected=sourceMonths.stream().mapToLong(MonthReceipt::rows).sum();if(stageBefore.rows()!=expected||!stageBefore.equals(identity(stage)))throw new IllegalStateException("Backtest complete source stage count or version differs");
     }
-    public NativeState nativeState(String name){
-        if(!nativeName(name))throw new IllegalArgumentException("Owned native generation required");
-        var rows=jdbc.queryForList("SELECT m.view_status,m.base_table_name,m.view_sql,m.refresh_base_table_txn,m.base_table_txn,m.last_refresh_start_timestamp,m.last_refresh_finish_timestamp,v.id,v.directoryName,coalesce(v.table_txn,vw.writerTxn) AS table_txn,v.partitionBy,v.matView,v.dedup,"
-                +"b.id AS base_id,bw.writerTxn AS base_writer,bw.sequencerTxn AS base_seq,bw.suspended AS base_suspended,bw.bufferedTxnSize AS base_buffered,"
-                +"vw.writerTxn AS mv_writer,vw.sequencerTxn AS mv_seq,vw.suspended AS mv_suspended,vw.bufferedTxnSize AS mv_buffered "
-                +"FROM materialized_views() m JOIN tables() v ON v.table_name=m.view_name JOIN tables() b ON b.table_name=m.base_table_name "
-                +"JOIN wal_tables() bw ON bw.name=b.table_name JOIN wal_tables() vw ON vw.name=v.table_name WHERE m.view_name=?",name);
-        if(rows.size()!=1)throw new IllegalStateException("Native backtest generation is absent");var r=rows.getFirst();
-        if(!"valid".equals(r.get("view_status"))||!BASE.equals(r.get("base_table_name"))||!normalized(MV_SQL).equals(normalized(Objects.toString(r.get("view_sql"))))||!"MONTH".equals(r.get("partitionBy"))||!Boolean.TRUE.equals(r.get("matView"))||!Boolean.FALSE.equals(r.get("dedup"))
-                ||number(r,"refresh_base_table_txn")!=number(r,"base_table_txn")||number(r,"base_table_txn")!=number(r,"base_seq")||number(r,"base_writer")!=number(r,"base_seq")||number(r,"mv_writer")!=number(r,"mv_seq")||number(r,"base_buffered")!=0||number(r,"mv_buffered")!=0||!Boolean.FALSE.equals(r.get("base_suspended"))||!Boolean.FALSE.equals(r.get("mv_suspended")))throw new IllegalStateException("Native backtest generation invalid, stale, changed or WAL unsettled");
-        requireSchema(name,true);return new NativeState(name,number(r,"id"),Objects.toString(r.get("directoryName")),BASE,number(r,"base_id"),number(r,"base_table_txn"),number(r,"refresh_base_table_txn"),number(r,"table_txn"),number(r,"mv_seq"),Objects.toString(r.get("view_sql")),Objects.toString(r.get("last_refresh_start_timestamp"),null),Objects.toString(r.get("last_refresh_finish_timestamp"),null));
+    /** The public name is a read-only alias of the sole enriched result table. */
+    public ViewState viewState(){
+        var rows=jdbc.queryForList("SELECT v.view_sql,v.view_status,t.id,t.directoryName,t.table_type,t.matView,w.name AS own_wal "
+                +"FROM views() v JOIN tables() t ON t.table_name=v.view_name LEFT JOIN wal_tables() w ON w.name=v.view_name WHERE v.view_name=?",ALIAS);
+        if(rows.size()!=1)throw new IllegalStateException("Backtest read view is absent; migrate the obsolete materialized view first");
+        var r=rows.getFirst();
+        if(!"valid".equals(r.get("view_status"))||!"V".equals(r.get("table_type"))
+                ||!normalized(VIEW_SQL).equals(normalized(Objects.toString(r.get("view_sql"))))
+                ||!Boolean.FALSE.equals(r.get("matView"))||r.get("own_wal")!=null)
+            throw new IllegalStateException("Backtest read view definition or metadata differs");
+        requireSchema(ALIAS,true);
+        return new ViewState(ALIAS,number(r,"id"),Objects.toString(r.get("directoryName")),Objects.toString(r.get("view_sql")));
     }
-    public void installAndVerifyNative(String name,List<MonthReceipt> fullBase){
-        installAndVerifyNative(name,fullBase,true);
+    public SourceState sourceState(){
+        var base=identity(BASE);var view=viewState();requireSame(base);
+        if(!view.equals(viewState()))throw new IllegalStateException("Backtest view changed while observing the result table");
+        return new SourceState(base,view);
     }
-    public void installAndVerifyNative(String name,List<MonthReceipt> fullBase,boolean fullRefresh){
-        if(!nativeName(name))throw new IllegalArgumentException("Fixed native backtest name required");var existing=jdbc.queryForList("SELECT table_name FROM tables() WHERE table_name=?",name);String priorFinished=null;long priorTxn=-1;boolean requireNewFull=fullRefresh||existing.isEmpty();
-        if(existing.isEmpty()){
-            jdbc.execute("CREATE MATERIALIZED VIEW "+quote(name)+" WITH BASE backtest_daily REFRESH MANUAL DEFERRED AS ("+MV_SQL+") PARTITION BY MONTH");
-            jdbc.execute("REFRESH MATERIALIZED VIEW "+quote(name)+" FULL");
-        } else {
-            var metadata=jdbc.queryForList("SELECT view_sql,base_table_name,last_refresh_finish_timestamp FROM materialized_views() WHERE view_name=?",name);
-            if(metadata.size()!=1||!BASE.equals(metadata.getFirst().get("base_table_name"))||!normalized(MV_SQL).equals(normalized(Objects.toString(metadata.getFirst().get("view_sql")))))throw new IllegalStateException("Existing native backtest definition differs");
-            priorFinished=Objects.toString(metadata.getFirst().get("last_refresh_finish_timestamp"),null);priorTxn=Objects.requireNonNull(jdbc.queryForObject("SELECT coalesce(t.table_txn,w.writerTxn) FROM tables() t JOIN wal_tables() w ON w.name=t.table_name WHERE t.table_name=?",Long.class,name));
-            // Partition deletion requires FULL; pure append can preserve the valid native checkpoint.
-            jdbc.execute("REFRESH MATERIALIZED VIEW "+quote(name)+(fullRefresh?" FULL":" INCREMENTAL"));
-        }
-        long stop=System.nanoTime()+Duration.ofHours(6).toNanos();NativeState beforeNative;
-        while(true){check();try{beforeNative=nativeState(name);if(requireNewFull&&(beforeNative.refreshFinished()==null||Objects.equals(priorFinished,beforeNative.refreshFinished())&&priorTxn==beforeNative.mvTxn()))throw new IllegalStateException("Submitted asynchronous FULL has no new completion receipt");break;}catch(IllegalStateException pending){if(System.nanoTime()>=stop)throw pending;}sleep();}
-        var baseBefore=identity(BASE);if(beforeNative.baseId()!=baseBefore.id())throw new IllegalStateException("Native generation binds a different base physical identity");
-        long total=0;for(var month:fullBase){if(!month.equals(digest(name,month.from(),month.to(),false)))throw new IllegalStateException("Native singleton aggregate differs from every original field or key: "+month.from());total+=month.rows();}
-        if(total>baseBefore.rows())throw new IllegalStateException("Native window count exceeds complete base");
-        var count=jdbc.queryForObject("SELECT count() FROM "+quote(name),Long.class);if(count==null||count!=baseBefore.rows()||!dateGrid(BASE).equals(dateGrid(name))||!beforeNative.equals(nativeState(name))||!baseBefore.equals(identity(BASE)))throw new IllegalStateException("Native complete history/date keys changed during exact readback");
+    public void installAndVerifyView(){
+        String kind=targetKind();
+        if(kind.equals("ABSENT"))jdbc.execute("CREATE VIEW "+quote(ALIAS)+" AS ("+VIEW_SQL+")");
+        else if(!kind.equals("V"))throw new IllegalStateException("Migrate the obsolete backtest materialized view before publishing");
+        viewState();
     }
-    public String targetKind(){var list=jdbc.queryForList("SELECT table_type FROM tables() WHERE table_name=?",MV);if(list.isEmpty())return "ABSENT";if(list.size()!=1)throw new IllegalStateException("Duplicate public backtest object");return Objects.toString(list.getFirst().get("table_type"));}
-    public long targetObjectId(){var list=jdbc.queryForList("SELECT id FROM tables() WHERE table_name=?",MV);if(list.size()!=1)throw new IllegalStateException("Exact public backtest identity absent");return number(list.getFirst(),"id");}
-    public String targetSql(){String kind=targetKind();if(kind.equals("ABSENT"))return "";var list=jdbc.queryForList("SELECT view_sql FROM "+(kind.equals("V")?"views()":"materialized_views()")+" WHERE view_name=?",MV);if(list.size()!=1)throw new IllegalStateException("Public backtest object is not view/MV");return Objects.toString(list.getFirst().get("view_sql"));}
-    public void removeOldDefinitionForBootstrap(String expectedKind,String expectedSql,String nativeBackup){
-        String kind=targetKind();if(kind.equals("ABSENT"))return;
-        if(!kind.equals(expectedKind)||!normalized(targetSql()).equals(normalized(expectedSql)))throw new IllegalStateException("Old public object changed before native cutover");
-        if(kind.equals("V"))jdbc.execute("DROP VIEW v_backtest_daily");
-        else if(kind.equals("M")){
-            requireName(nativeBackup,"java_backtest_daily_native_backup_");
-            long oldId=targetObjectId();var scope=jdbc.queryForMap("SELECT count() AS n,cast(min(trade_date) AS LONG) AS lo,cast(max(trade_date) AS LONG) AS hi FROM v_backtest_daily");long count=number(scope,"n");if(count<0||count>MAX_TOTAL_ROWS)throw new IllegalStateException("Retained old native exceeds business row budget");var months=new ArrayList<MonthReceipt>();if(count>0){LocalDate end=date(scope.get("hi"));for(LocalDate lo=date(scope.get("lo")).withDayOfMonth(1);!lo.isAfter(end);lo=lo.plusMonths(1))months.add(digest(MV,lo,lo.plusMonths(1).minusDays(1),false));}if(months.stream().mapToLong(MonthReceipt::rows).sum()!=count)throw new IllegalStateException("Old native history count differs");
-            if(jdbc.queryForList("SELECT table_name FROM tables() WHERE table_name=?",nativeBackup).isEmpty())jdbc.execute("CREATE TABLE "+quote(nativeBackup)+" AS (SELECT "+physicalColumns()+" FROM v_backtest_daily) TIMESTAMP(trade_date) PARTITION BY DAY WAL");
-            jdbc.execute("ALTER TABLE "+quote(nativeBackup)+" DEDUP ENABLE UPSERT KEYS(trade_date,ts_code)");awaitBase(nativeBackup);
-            if(identity(nativeBackup).rows()!=count)throw new IllegalStateException("Old native durable backup has different count");for(var month:months)if(!month.equals(digest(nativeBackup,month.from(),month.to(),true)))throw new IllegalStateException("Old native durable backup differs from every original field/key");if(targetObjectId()!=oldId)throw new IllegalStateException("Old native identity changed before DROP");
-            jdbc.execute("DROP MATERIALIZED VIEW v_backtest_daily");
-        }else throw new IllegalStateException("Unexpected public backtest object kind");
+    public String targetKind(){var list=jdbc.queryForList("SELECT table_type FROM tables() WHERE table_name=?",ALIAS);if(list.isEmpty())return "ABSENT";if(list.size()!=1)throw new IllegalStateException("Duplicate public backtest object");return Objects.toString(list.getFirst().get("table_type"));}
+    public long targetObjectId(){var list=jdbc.queryForList("SELECT id FROM tables() WHERE table_name=?",ALIAS);if(list.size()!=1)throw new IllegalStateException("Exact public backtest identity absent");return number(list.getFirst(),"id");}
+    public String targetSql(){String kind=targetKind();if(kind.equals("ABSENT"))return "";if(!kind.equals("V"))throw new IllegalStateException("Backtest public object must be a regular read view");var list=jdbc.queryForList("SELECT view_sql FROM views() WHERE view_name=?",ALIAS);if(list.size()!=1)throw new IllegalStateException("Public backtest read view is absent");return Objects.toString(list.getFirst().get("view_sql"));}
+    public void removeViewForBootstrap(String expectedSql){
+        if(!"V".equals(targetKind())||!normalized(VIEW_SQL).equals(normalized(expectedSql))||!normalized(targetSql()).equals(normalized(expectedSql)))
+            throw new IllegalStateException("Backtest view changed before base replacement");
+        jdbc.execute("DROP VIEW "+quote(ALIAS));
     }
     public void createWindowBackup(String backup){
         requireName(backup,"java_backtest_daily_backup_");requireSame(before);

@@ -25,10 +25,10 @@ class BacktestDailyMappingTest {
         assertEquals(source, mapper.fromValues(mapper.values(source)));
     }
 
-    @Test void definitionPreservesAuditedPhysicalKeyAndForbidsWrites() {
+    @Test void resultTablePreservesPhysicalKeyAndOnlyAllowsItsOwningWalReplacement() {
         var definition = BacktestDailyDataset.DEFINITION;
         assertEquals("backtest_daily", definition.objectName());
-        assertEquals(Set.of(DatasetDefinition.Capability.READ), definition.capabilities());
+        assertEquals(Set.of(DatasetDefinition.Capability.READ, DatasetDefinition.Capability.WAL_REPLACE), definition.capabilities());
         assertEquals(DatasetDefinition.Partition.DAY, definition.partition());
         assertTrue(definition.wal());
         assertEquals(java.util.List.of("trade_date", "ts_code"), definition.businessKey());

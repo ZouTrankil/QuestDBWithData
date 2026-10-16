@@ -64,7 +64,7 @@ public final class MainStrategyDataService {
         var inputs=new EtfOnlyTop2ScoreProducer.Inputs(rows(raw,"stock_daily","trade_date","ts_code"),rows(raw,"l2_raw","ts","symbol"),metadata,factors,references,holdings,List.of(),sentiment,raw.signalDates(),versions,target,true);
         var output=new EtfOnlyTop2ScoreProducer().produce(inputs,frozen);
         ScoreArtifactPublisher.PublicationGate gate=()->{
-            if(!raw.proof().get("sourceClocks").equals(reader.clocks())||!raw.proof().get("nativeBacktest").equals(reader.nativeState()))throw new IllegalStateException("Sources or native MV changed during Java data preparation");
+            if(!raw.proof().get("sourceClocks").equals(reader.clocks())||!raw.proof().get("backtestState").equals(reader.backtestState()))throw new IllegalStateException("Sources or backtest result changed during Java data preparation");
             if(!frozen.artifactSha256().equals(recipe().artifactSha256()))throw new IllegalStateException("Frozen recipe changed during Java data preparation");
         };
         gate.check();
@@ -93,8 +93,8 @@ public final class MainStrategyDataService {
     public void requireStart(LocalDate requested){if(requested!=null&&!requested.equals(start))throw new IllegalArgumentException("Requested score start differs from the configured frozen strategy start: "+start);}
     public void validateScoreSources(Publication p)throws Exception {
         var mapper=new ObjectMapper();var proof=mapper.readTree(Files.readAllBytes(publisher.provenancePath(p)));
-        if(!proof.path("sourceClocks").toString().equals(mapper.writeValueAsString(reader.clocks()))||!proof.path("nativeBacktest").toString().equals(mapper.writeValueAsString(reader.nativeState())))
-            throw new IllegalStateException("Current daily score source identity, schema, values frontier or native MV changed after publication");
+        if(!proof.path("sourceClocks").toString().equals(mapper.writeValueAsString(reader.clocks()))||!proof.path("backtestState").toString().equals(mapper.writeValueAsString(reader.backtestState())))
+            throw new IllegalStateException("Current daily score source identity, schema, values frontier or backtest result changed after publication");
     }
     public List<Path> scoreEvidence(Publication p)throws Exception {var files=new ArrayList<Path>(List.of(p.panelRef().path(),p.coverageRef().path(),publisher.provenancePath(p)));files.addAll(marketPackages.evidence(marketPackages.requireLatest(p)));return List.copyOf(files);}
     public StoredOfficialPlan importPlan(Path source,String expectedSha256)throws Exception {

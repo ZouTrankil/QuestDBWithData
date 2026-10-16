@@ -30,15 +30,15 @@ class BacktestDailyViewMappingTest {
                         null, null, null, null, null, null, null, null, null, null, null));
     }
 
-    @Test void nativeMaterializedViewHasMonthWalAndNoDedupOrDirectWrites() {
+    @Test void readViewHasNoPhysicalPartitionsWalDedupOrDirectWrites() {
         var definition = BacktestDailyViewDataset.DEFINITION;
         assertEquals("v_backtest_daily", definition.objectName());
-        assertEquals(DatasetDefinition.ObjectKind.MATERIALIZED_VIEW, definition.objectKind());
+        assertEquals(DatasetDefinition.ObjectKind.VIEW, definition.objectKind());
         assertEquals(List.of("trade_date", "ts_code"), definition.businessKey());
         assertTrue(definition.dedupKey().isEmpty());
         assertEquals("trade_date", definition.designatedTimestamp());
-        assertEquals(DatasetDefinition.Partition.MONTH, definition.partition());
-        assertTrue(definition.wal());
+        assertEquals(DatasetDefinition.Partition.NONE, definition.partition());
+        assertFalse(definition.wal());
         assertEquals(List.of("backtest_daily"), definition.dependencies());
         assertEquals(Set.of(DatasetDefinition.Capability.READ), definition.capabilities());
         assertEquals(DatasetDefinition.StorageType.LONG,

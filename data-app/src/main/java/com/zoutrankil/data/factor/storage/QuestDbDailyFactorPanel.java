@@ -99,9 +99,9 @@ public final class QuestDbDailyFactorPanel {
         if(!snapshot.sourceState().equals(priceState()))throw new IllegalStateException("Stock price source changed after read");
     }
     private List<Map<String,Object>> priceState() {
-        if(!QuestDbWriteChecks.walSettled(jdbc,"v_backtest_daily"))throw new IllegalStateException("Stock price WAL unsettled");
+        if(!QuestDbWriteChecks.walSettled(jdbc,"backtest_daily"))throw new IllegalStateException("Stock price WAL unsettled");
         var rows=jdbc.queryForList("SELECT id,table_name,directoryName,table_txn,wal_txn FROM tables()"
-                +" WHERE table_name IN ('v_backtest_daily','stock_detail_info') ORDER BY table_name");
+                +" WHERE table_name IN ('backtest_daily','stock_detail_info') ORDER BY table_name");
         if(rows.size()!=2)throw new IllegalStateException("Stock price/reference source missing");
         return BacktestFactorSource.stamp(jdbc,rows);
     }
@@ -165,10 +165,10 @@ public final class QuestDbDailyFactorPanel {
         return rows;
     }
     private List<Map<String,Object>> state() {
-        for(String table:List.of("v_backtest_daily","daily_basic"))
+        for(String table:List.of("backtest_daily","daily_basic"))
             if(!QuestDbWriteChecks.walSettled(jdbc,table))throw new IllegalStateException("Panel source WAL not settled: "+table);
         return BacktestFactorSource.stamp(jdbc,jdbc.queryForList("SELECT id,table_name,directoryName,table_txn,wal_txn FROM tables()"
-                +" WHERE table_name IN ('v_backtest_daily','daily_basic','stock_detail_info') ORDER BY table_name"));
+                +" WHERE table_name IN ('backtest_daily','daily_basic','stock_detail_info') ORDER BY table_name"));
     }
     private Map<String,ListingInterval> listingDates() {
         var dates=new LinkedHashMap<String,ListingInterval>();

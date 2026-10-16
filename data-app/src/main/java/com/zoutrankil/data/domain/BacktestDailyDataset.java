@@ -37,7 +37,7 @@ public final class BacktestDailyDataset {
             Partition.DAY, true, Set.of(Capability.READ,Capability.WAL_REPLACE), List.of("stk_factor","stk_limit","stk_suspend","stk_st_daily"),
             "Java owns the canonical 13-field enrichment including historical ASOF suspension rows. "
                     + "First publication bootstraps the complete source history; later explicit DAY windows preserve physical base identity and retain old-window backups. "
-                    + "The native v_backtest_daily refresh and its source-pinned publication receipt must complete before guarded reads.");
+                    + "The source-pinned result publication must complete before guarded reads; v_backtest_daily is a read-only alias with no refresh.");
 
     private static Column metric(String name, String meaning) {
         return new Column("derived:backtest_daily." + name, name, name, StorageType.DOUBLE, true, meaning, null);

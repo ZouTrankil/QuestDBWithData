@@ -28,7 +28,7 @@ app:
     retry-max: 10s
     retryable-business-codes: []
   questdb:
-    host: ${QUESTDB_HOST:127.0.0.1}
+    host: ${QUESTDB_HOST:100.64.153.106}
     pg-port: ${APP_QUESTDB_PG_PORT:8812}
     qwp-port: ${APP_QUESTDB_QWP_PORT:9000}
     username: admin

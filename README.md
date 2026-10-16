@@ -85,8 +85,14 @@ owner's reconciliation operation. A process exit code alone cannot complete a ba
 `v_backtest_daily` is the native Materialized View target, backed by the existing
 `backtest_daily` enriched table. The first conversion preserves the complete source
 history and all 13 business fields. No ordinary intermediate or alias VIEW is
-installed. The Java materialization owner refreshes the MV after verified base
-publication; deleting old DAY partitions requires a FULL refresh.
+installed. The MV uses `REFRESH IMMEDIATE`: QuestDB automatically refreshes it
+after base-table transactions. The Java owner still builds the enriched base from
+the four raw sources and verifies publication. Initial bootstrap and replacement
+of existing DAY partitions retain an explicit FULL refresh, because partition
+deletion invalidates the MV. Normal append refreshes are handled by the server.
+Changing the policy directly also advances the MV WAL transaction. Existing Java
+publication snapshots then require a newly verified publication on their owning
+ledger before guarded reads; immutable publication evidence must not be rewritten.
 
 The obsolete `backtest_daily_cache`, `backtest_daily_cache_coverage`,
 `market_breadth_daily_cache` and `retail_sentiment_daily_cache` datasets are retired

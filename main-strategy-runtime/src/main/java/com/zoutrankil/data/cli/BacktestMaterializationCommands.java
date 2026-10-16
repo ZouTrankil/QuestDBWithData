@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
 
-/** Commands for the canonical base and public native backtest materialization. */
+/** Commands for the single enriched backtest result table and its public read view. */
 @Component
 @ConditionalOnNotWebApplication
 public final class BacktestMaterializationCommands implements CliCommandFamily {
