@@ -1,16 +1,34 @@
 # QuestDBWithData
 
-Java data-ingestion project. The first vertical slice fetches Tushare Pro's current listed-stock directory with Spring WebClient, maps it to a Java model, and sends it to QuestDB through the native Java QWP client.
+Java data ingestion and calculation project with a WebFlux API, data CLI, standalone Batch application, native Level2 processing, and a persistent main-strategy runtime. Data is stored in QuestDB; local SQLite files hold execution and recovery state.
+
+## Project structure
+
+```text
+data-core/              Shared contracts and basic types
+data-app/               Data owners, CLI, WebFlux API and QuestDB access
+batch-app/              Standalone Batch application and native L2 calculation
+main-strategy-runtime/  Composition of data-app and batch-app
+config/                 Shared application configuration
+deploy/                 Deployment scripts and configuration examples
+docs/                   Architecture, data conventions and operating guides
+tools/                  Reusable generation, L2 and test tools
+schema-export/          Schema catalog used by the Java model generator
+```
+
+The root Gradle project aggregates these four modules and provides the existing launch commands. See [docs/code-structure.md](docs/code-structure.md) for dependency directions, package responsibilities, and the historical-file cleanup record.
+
+All default build output is centralized under the top-level `build/`. Each module uses `build/modules/<module>/`; root JARs, distributions and aggregate reports retain their existing locations. `./gradlew :clean` removes all build output, while `./gradlew :data-app:clean` removes only that module's output.
 
 ## Requirements
 
 - JDK 24
-- Tushare Pro token with access to `stock_basic`; configure it in `data-app/src/main/resources/application.yml`
-- QuestDB credentials in `data-app/src/main/resources/application.yml` for QuestDB commands
+- Tushare Pro token with access to `stock_basic`; configure it in `config/application.yml`
+- QuestDB credentials in `config/application.yml` for QuestDB commands
 
 ## Run
 
-Set `app.tushare.token` and QuestDB credentials in `data-app/src/main/resources/application.yml`, then run:
+Set `app.tushare.token` and QuestDB credentials in `config/application.yml`, then run:
 
 ```bash
 ./gradlew run --args='sync-stock-basic-questdb'
@@ -22,11 +40,16 @@ The QuestDB table and latest view are managed by Flyway SQL migrations in `data-
 
 QuestDB ingestion uses the native QWP WebSocket client on the YAML-configured QWP port (normally 9000). PostgreSQL JDBC/PGWire (normally 8812) creates the table schema and polls for the submitted snapshot to become queryable. QWP writes are asynchronous, so the command waits for visibility with a 10-second deadline and fails if the row count does not catch up.
 
-Configuration is Spring-managed through `@ConfigurationProperties` and `application.yml`; no `.env` file is read. The YAML contains placeholder credentials that you should replace with the values for your local services.
+All entry points use the single [config/application.yml](config/application.yml). Its first
+YAML document contains shared QuestDB, Tushare and path settings; the `data`, `batch`
+and `l2` profile documents contain only their own settings. Each entry point selects
+its profile automatically, and Spring environment variables, JVM properties and
+explicit CLI options can override the YAML. A root `.env` is not automatically read.
+See [configuration usage](docs/configuration.md) for profiles, precedence and deployment.
 
 See [docs/questdb-usage.md](docs/questdb-usage.md) for QuestDB conventions, [docs/model-schema-conventions.md](docs/model-schema-conventions.md) for time/key semantics and Pydantic-to-Java conversion, [docs/code-structure.md](docs/code-structure.md) for package responsibilities, and [docs/view.md](docs/view.md) for views, WAL recovery, and data-engineering notes.
 
-For the current migration status, including implemented framework capabilities and data/business functions not yet migrated, see [docs/java-migration-status.md](docs/java-migration-status.md). The generic sync/read/write and scheduling infrastructure is ahead of the original stock_basic vertical slice, but the 184 audited business data objects have not yet passed their individual migration acceptance.
+Historical migration task cards, superseded status snapshots, and one-off verification scripts were removed during repository cleanup. Current behavior is defined by the module code, registered dataset/job definitions, and maintained operating guides; a schema projection alone does not establish production readiness.
 
 ## Spring WebFlux API
 
@@ -72,7 +95,7 @@ market breadth from `v_market_breadth_daily`, and retail sentiment from
 `v_retail_sentiment_daily`; the latter two aliases read native materialized views.
 The ETF overview cache and its shared `market_barometer_cache_coverage` receipts
 remain active. Historical schema exports and migration audits describe the old
-objects and are retained as evidence.
+objects; the schema catalog is retained for model generation.
 
 Market sentiment and regime remain calculation tables managed by their existing
 Java MATERIALIZE jobs, both registered as daily eligible.
@@ -129,3 +152,13 @@ Spring Batch job metadata uses a local SQLite database; no PostgreSQL server is 
 The current configured database schema was exported read-only from QuestDB 10.0.1. Browse the [schema snapshot and table/view/materialized-view domain catalog](schema-export/questdb-qdb-2026-09-28/README.md); Java schema projections are generated by `tools/generate_domain_models.py`.
 
 The current `stock_basic` request uses `exchange=''` and `list_status='L'`; this is the current listed-stock universe, not a point-in-time historical universe.
+
+## Local verification
+
+```bash
+python3 -m unittest discover -s tools -p 'test_*.py'
+./gradlew :test --console=plain
+./gradlew check --console=plain
+```
+
+Live acceptance tests require their explicit environment configuration and external services. `:data-app:retainedParityTest` additionally requires original captures that are not all stored in Git. Keep `var/` and SQLite recovery ledgers across application restarts. New local run output under `artifacts/`, `build/`, and `logs/` is ignored by Git.

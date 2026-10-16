@@ -13,8 +13,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import com.zoutrankil.data.bootstrap.ProjectConfiguration;
+import org.springframework.core.env.Environment;
 
-/** Standalone collector configuration; no dotenv interpolation and no credentials in diagnostics. */
+/** Shared YAML/profile configuration with literal legacy credential-file and CLI overrides. */
 public final class L2LiveConfiguration {
     private static final Set<String> COMMANDS = Set.of("plan", "run", "replay", "status", "export");
     private static final Set<String> OPTIONS = Set.of("root", "credentials", "broker", "symbols", "overrides",
@@ -35,24 +37,40 @@ public final class L2LiveConfiguration {
     final int retainedMinutes;
     final boolean waitForCredentials;
 
-    private L2LiveConfiguration(String command, Map<String, String> options, Map<String, String> env)
+    private L2LiveConfiguration(String command, Map<String, String> options, Map<String, String> env, Environment config)
             throws IOException {
         this.command = command;
-        root = Path.of(options.getOrDefault("root", "var/l2-live")).toAbsolutePath().normalize();
-        Map<String, String> values = credentialFile(Path.of(options.getOrDefault("credentials",
-                root.resolve("credentials.env").toString())));
+        var effective = new LinkedHashMap<String, String>();
+        for (String key : OPTIONS) {
+            if (key.equals("broker")) continue; // Credential-file/environment broker overrides remain effective.
+            String value = config.getProperty("l2." + key);
+            if (value != null && !value.isBlank()) effective.put(key, value);
+        }
+        effective.put("poll-ms", Long.toString(config.getRequiredProperty("l2.poll-interval", Duration.class).toMillis()));
+        effective.put("visibility-ms", Long.toString(config.getRequiredProperty("l2.visibility-timeout", Duration.class).toMillis()));
+        effective.putAll(options);
+        options = effective;
+        root = Path.of(options.get("root")).toAbsolutePath().normalize();
+        Map<String, String> values = new LinkedHashMap<>();
+        values.put("ALIYUN_L2_USERNAME", config.getRequiredProperty("l2.username"));
+        values.put("ALIYUN_L2_PASSWORD", config.getRequiredProperty("l2.password"));
+        values.put("ALIYUN_L2_BROKER", config.getRequiredProperty("l2.broker"));
+        values.put("ALIYUN_L2_PORT", config.getRequiredProperty("l2.port"));
+        values.put("L2_LIVE_QUESTDB_URL", config.getRequiredProperty("l2.questdb-url"));
+        values.put("L2_LIVE_QUESTDB_AUTHORIZATION", config.getRequiredProperty("l2.questdb-authorization"));
+        values.putAll(credentialFile(Path.of(options.getOrDefault("credentials", root.resolve("credentials.env").toString()))));
         for (var entry : env.entrySet()) if (!entry.getValue().isBlank()) values.put(entry.getKey(), entry.getValue());
         username = values.getOrDefault("ALIYUN_L2_USERNAME", "");
         password = values.getOrDefault("ALIYUN_L2_PASSWORD", "");
-        String broker = options.getOrDefault("broker", values.getOrDefault("ALIYUN_L2_BROKER", "lv2.base32.cn"));
-        String port = values.getOrDefault("ALIYUN_L2_PORT", "1883");
+        String broker = options.getOrDefault("broker", values.get("ALIYUN_L2_BROKER"));
+        String port = values.get("ALIYUN_L2_PORT");
         brokerUri = broker.contains("://") ? broker : "tcp://" + broker + ":" + port;
         var parsedBroker = java.net.URI.create(brokerUri);
         if (!Set.of("tcp", "ssl").contains(parsedBroker.getScheme()) || parsedBroker.getHost() == null
                 || parsedBroker.getUserInfo() != null || parsedBroker.getQuery() != null
                 || parsedBroker.getFragment() != null || !Set.of("", "/").contains(parsedBroker.getPath()))
             throw new IllegalArgumentException("INVALID_BROKER_URI");
-        questDb = options.getOrDefault("questdb", values.getOrDefault("L2_LIVE_QUESTDB_URL", "http://127.0.0.1:9000"));
+        questDb = options.getOrDefault("questdb", values.get("L2_LIVE_QUESTDB_URL"));
         var db = java.net.URI.create(questDb);
         if (!Set.of("http", "https").contains(db.getScheme()) || db.getHost() == null
                 || db.getUserInfo() != null || db.getQuery() != null || db.getFragment() != null)
@@ -69,11 +87,15 @@ public final class L2LiveConfiguration {
         waitForCredentials = Boolean.parseBoolean(wait);
         symbols = List.copyOf(options.containsKey("symbols") ? symbols(options.get("symbols"))
                 : L2Subscriptions.load(Path.of(options.getOrDefault("overrides",
-                    "F:/repo/engine/back-monitor/config/trading/aliyun_l2_subscription_overrides.json")),
+                    config.getRequiredProperty("l2.overrides"))),
                     java.time.Instant.now()));
     }
 
     public static L2LiveConfiguration parse(String[] args, Map<String, String> env) throws IOException {
+        return parse(args, env, ProjectConfiguration.load("l2", env));
+    }
+
+    static L2LiveConfiguration parse(String[] args, Map<String, String> env, Environment config) throws IOException {
         String command = args.length == 0 ? "plan" : args[0];
         if (!COMMANDS.contains(command)) throw new IllegalArgumentException("UNKNOWN_COMMAND");
         Map<String, String> options = new LinkedHashMap<>();
@@ -84,7 +106,7 @@ public final class L2LiveConfiguration {
             if (!OPTIONS.contains(key) || options.putIfAbsent(key, args[++i]) != null)
                 throw new IllegalArgumentException("UNKNOWN_OR_DUPLICATE_OPTION");
         }
-        return new L2LiveConfiguration(command, options, env);
+        return new L2LiveConfiguration(command, options, env, config);
     }
 
     public void requireLiveCredentials() {

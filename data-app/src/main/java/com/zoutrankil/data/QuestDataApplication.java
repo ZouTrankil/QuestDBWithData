@@ -15,6 +15,7 @@ public class QuestDataApplication {
     public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         SpringApplication application = new SpringApplication(QuestDataApplication.class);
+        application.setAdditionalProfiles("data");
         application.setBannerMode(org.springframework.boot.Banner.Mode.OFF);
         int exitCode = 0;
         try {

@@ -1,5 +1,7 @@
 # `post_close` 核心来源冻结计划
 
+2026-10-16 清理说明：保留本页的来源契约与运行规则。文中历史验收快照已移出当前工作树，可从 Git 历史查阅；这些旧结果不代表当前环境已通过验收。
+
 `post_close` 在独立运行时默认先执行核心来源 fan-out，再启动 Spring Batch 盘后 DAG。fan-out 的唯一输入是冻结计划，不会临时猜测证券 universe。
 
 计划以内容寻址方式放在 `$JDB_ARCHIVE_ROOT/post-close-plans/<sha256>.json`。对应的 `post_close` `RunRequest.inputFingerprint` 与 `scopeIdentity` 都必须等于该文件原始字节的 64 位小写 SHA-256；请求据此读取不可变计划文件，不依赖可替换的日期别名。这样计划变化会改变盘后业务实例身份。请求、计划和来源请求使用相同的逻辑日期、交易日历版本及 `Asia/Shanghai` 时区；盘后计划仅接受单一逻辑日期。
@@ -32,4 +34,4 @@ JSON 结构如下。冻结时将下例实际展开为 15 个来源项，计算�
 
 同一 requestId 重试会复用 probe；新 requestId 保持相同盘后业务身份但建立新的只读 probe。若计划变化，盘后任务必须使用显式新 revision；已写入来源若输入变化，受影响来源也需提供自己的 revision、前驱 instance ID 和原因。来源身份或物理写入状态不明时仍须先走 reconciliation，不能以新计划掩盖旧的 IN_DOUBT。
 
-此机制已通过 synthetic source/ledger fixture 与真实 SQLite 运行时缺失计划阻断测试，完整记录见 [fan-out 验证](evidence/core-source-fanout-20260930.json)；尚未对完整 15 源计划执行真实 Tushare→隔离 QuestDB 的整链验收。
+此机制已通过 synthetic source/ledger fixture 与真实 SQLite 运行时缺失计划阻断测试，完整记录见 fan-out 验证；尚未对完整 15 源计划执行真实 Tushare→隔离 QuestDB 的整链验收。

@@ -1,5 +1,12 @@
 plugins { id 'application' }
 
+// Keep module outputs isolated under the single top-level build directory.
+// Explicit build-directory overrides (for isolated runs) still take precedence.
+subprojects {
+    def moduleOutputPath = project.path.substring(1).replace(':', '/')
+    layout.buildDirectory.convention(rootProject.layout.buildDirectory.dir("modules/${moduleOutputPath}"))
+}
+
 allprojects {
     group = 'com.zoutrankil'
     version = '0.1.0'
@@ -28,6 +35,12 @@ def data = project(':data-app')
 def batch = project(':batch-app')
 def strategy = project(':main-strategy-runtime')
 def modules = [core, data, batch, strategy]
+// One source file is also bundled in each independent application's distribution.
+[data, batch].each { module ->
+    module.tasks.named('processResources') {
+        from(rootProject.file('config')) { include 'application.yml' }
+    }
+}
 def layeredModules = [core, data, batch]
 def mainOutputs = files(modules.collect { it.sourceSets.main.output })
 def layeredMainClassDirs = files(layeredModules.collect { it.sourceSets.main.output.classesDirs })
@@ -266,8 +279,12 @@ tasks.register('writeL2LiveRuntime') {
     }
 }
 
+// The root compatibility jar already contains data-app; do not ship its same-named jar twice.
+def mainDistributionRuntime = (data.configurations.runtimeClasspath + strategy.configurations.runtimeClasspath).filter {
+    it != data.tasks.named('jar').get().archiveFile.get().asFile
+}
 tasks.named('startScripts', CreateStartScripts) {
-    classpath = files(tasks.named('jar').flatMap { it.archiveFile }, strategy.tasks.named('jar').flatMap { it.archiveFile }) + data.configurations.runtimeClasspath + strategy.configurations.runtimeClasspath
+    classpath = files(tasks.named('jar').flatMap { it.archiveFile }, strategy.tasks.named('jar').flatMap { it.archiveFile }) + mainDistributionRuntime
 }
 tasks.register('batchRuntimeJar', Jar) {
     dependsOn batch.tasks.named('classes')
@@ -296,6 +313,7 @@ distributions {
                 it != data.tasks.named('jar').get().archiveFile.get().asFile
             }) { into 'lib' }
             from(strategy.tasks.named('jar')) { into 'lib' }
+            from(mainDistributionRuntime) { into 'lib' }
         }
     }
     create('batch') {
@@ -346,7 +364,15 @@ tasks.register('verifyModuleBoundaries') {
         requireCondition(!batchEntries.any { it.startsWith('com/zoutrankil/data/') }, 'batch-app contains data/core classes')
         requireCondition(rootJarEntries == dataEntries && !rootJarEntries.any { it.startsWith('com/zoutrankil/batch/') }, 'Root compatibility jar differs from data-app output or contains stale batch classes')
         requireCondition(rootBatchEntries == batchEntries, 'Root batch compatibility jar differs from batch-app output')
-        requireCondition(!batchEntries.contains('application.yml') && !batchEntries.any { it.startsWith('db/migration/questdb/') }, 'batch-app contains data configuration/migrations')
+        requireCondition(!batchEntries.any { it.startsWith('db/migration/questdb/') }, 'batch-app contains QuestDB migrations')
+        [data, batch].each { module ->
+            new java.util.zip.ZipFile(module.tasks.named('jar').get().archiveFile.get().asFile).withCloseable { zip ->
+                def entry = zip.getEntry('application.yml')
+                requireCondition(entry != null && zip.getInputStream(entry).bytes == rootProject.file('config/application.yml').bytes,
+                        "${module.path} must package the single shared configuration source")
+                requireCondition(zip.getEntry('batch-runtime.yml') == null, 'Obsolete Batch configuration is still packaged')
+            }
+        }
         requireCondition((coreEntries.findAll { it.endsWith('.class') }.intersect(dataEntries)).empty, 'Core classes are duplicated in data-app')
         requireCondition(batchEntries.contains('trust/cfca-ev-root.pem') && batchEntries.contains('META-INF/LICENSE-numpy-l2.txt'), 'Batch trust or license resource is missing')
         def forbidden = ['postgresql-', 'questdb-client-', 'flyway-database-questdb-', 'poi-']
