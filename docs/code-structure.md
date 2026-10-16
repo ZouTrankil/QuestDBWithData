@@ -25,14 +25,49 @@ QuestDBWithData/
 ├── data-app/               # 数据 CLI、WebFlux API、数据 owner 与 QuestDB 访问
 ├── batch-app/              # 独立批处理应用与 L2 计算
 ├── main-strategy-runtime/  # 主策略组合运行时，连接数据和批处理应用
-├── config/                # 共享 application.yml 配置
+├── config/                # 运行参数 application.yml 和共享日志模板 logback-spring.xml
 ├── deploy/                # Batch / L2 部署脚本与配置示例
 ├── docs/                  # 架构约定、数据规范与操作说明
-├── tools/                 # 可重复使用的生成、读取、清洗和验证工具
-└── schema-export/         # Java 模型生成器使用的 schema catalog
+└── tools/                 # 可重复使用的生成、读取、清洗和验证工具
 ```
 
 根项目负责聚合构建、测试和兼容的启动入口，不再包含生产源码。`data-app` 和 `batch-app` 分别依赖 `data-core`，主策略组合由 `main-strategy-runtime` 负责。所有入口共用根目录 `config/application.yml`；公共段只定义一次，`data`、`batch`、`l2` profile 保存各入口的差异。Gradle 将同一文件打入两个应用的分发包。
+
+## Batch 功能包
+
+`batch-app/src/main/java/com/zoutrankil/batch/` 按职责组织。先按业务功能找包，再查看其中的入口和实现；测试使用对应的包路径。
+
+```text
+com.zoutrankil.batch
+├── BatchApplication.java  # 独立应用入口
+├── ScheduledLaunch.java   # 已持久化 Quartz 任务的旧类名兼容入口
+├── config/                # Spring 装配、数据源客户端配置
+├── api/                   # 管理 HTTP API、认证、健康状态和指标
+├── cli/                   # BatchControl 管理命令
+├── domain/                # 运行请求、业务状态、完成证据、交易日历和周期规则
+├── job/                   # Spring Batch Job、阶段执行、启动和恢复入口
+├── schedule/              # Quartz 调度目录、定时触发和补偿策略
+├── postclose/             # 收盘任务图、来源计划、来源并发与就绪检查
+├── source/                # 来源契约、请求/行/覆盖策略、采集会话与产品执行
+│   └── chinabond/         # 中债收益率采集适配器
+├── storage/               # SQLite 台账、运行锁、元数据初始化、Quartz 方言
+├── writer/                # 持久化写入协议和 QuestDB 写入适配器
+├── external/              # 外部计算协议、受限进程执行与执行记录
+├── l2/                    # L2 特征计算、流水线和计算检查点
+│   └── archive/           # L2 归档验收、物化、CSV 解析和入库
+│       └── baidu/         # 百度分享、订阅、下载与转存状态
+└── support/               # 跨功能 JSON 序列化
+```
+
+`config` 只负责装配；共享 SQLite 初始化放在 `storage.BatchMetadataStore`，供独立 Batch 和主策略组合运行时调用。`domain` 保存不依赖框架的业务规则。`source` 内部的策略实现继续使用包可见性，由公共契约对其他功能暴露能力；不按单个类拆包，也不为了分包把全部内部方法改为 public。
+
+`main-strategy-runtime` 中组合两个应用的五个批处理类统一放在 `com.zoutrankil.batch.strategy`，包括运行时、子上下文、Job、协调器和定时入口。该模块原根包下的 `MainStrategyDailyScheduledLaunch` 同样保留为兼容入口。Quartz 会将完整任务类名存入数据库，因此这两个旧类名需要继续可加载；它们不承载业务实现。
+
+跨包共享的测试数据放在 `batch-app/src/test/java/com/zoutrankil/batch/testsupport/`。功能测试保持在被测类型所属包中，避免为了测试扩大生产实现的可见性。`BatchApplication` 主类保持原名；管理 CLI 的新完整类名是 `com.zoutrankil.batch.cli.BatchControl`，Gradle 任务和分发脚本已同步。
+
+分包及配置整理验证（2026-10-16）：四模块生产和测试源码编译、根分发包构建、模块边界、Batch 数据库驱动及依赖兼容检查通过。Batch 回归运行 2,198 项，2,194 项通过、4 项跳过；包含 SQLite 启动/重启、Quartz 暂停状态与旧任务类兼容验证。配置、L2 CLI 和主策略专项另有 13 项通过；实际 L2 `plan` 入口确认可以按 `LOG_DIR` 写入日志且没有 Logback 配置错误。
+
+本轮 Batch 回归排除了两项已有问题：`SqliteRuntimeTest.lateSourceRebindsSameBatchInstanceOnlyBeforeAnyWriteIntent` 曾长时间不结束；`L2DailyFeatureBatchExecutionTest.realOldClassCheckpointIsInvalidatedThenNewCheckpointIsReused` 的冻结 aggregate SHA 与当前实现不一致。已在临时目录独立编译分包前源码，确认其输出 SHA 与分包后相同；未修改冻结预期值。以上结果不代表整仓全量回归通过。
 
 所有默认构建产物集中在顶层 `build/`，子模块使用独立子目录，避免类文件、资源和报告相互覆盖：
 

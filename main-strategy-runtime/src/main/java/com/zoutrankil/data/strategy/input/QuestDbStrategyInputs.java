@@ -1,7 +1,7 @@
 package com.zoutrankil.data.strategy.input;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.repository.BacktestDailyMaterializationPort;
+import com.zoutrankil.data.repository.BacktestDailyMaterializedViewPort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import java.security.MessageDigest;
@@ -15,7 +15,7 @@ public final class QuestDbStrategyInputs {
             Map<String,List<Map<String,Object>>> tables,Map<String,String> sourceVersions,
             Map<String,Object> proof) {}
     private static final ObjectMapper JSON=new ObjectMapper();
-    private static final List<String> TABLES=List.of("backtest_daily","daily_basic","stock_detail_info","l2_daily_features","etf_basic","etf_factor","etf_daily","etf_portfolio","market_sentiment_daily","regime_features_monitor_daily","exchange_calendar");
+    private static final List<String> TABLES=List.of("mv_backtest_daily","daily_basic","stock_detail_info","l2_daily_features","etf_basic","etf_factor","etf_daily","etf_portfolio","market_sentiment_daily","regime_features_monitor_daily","exchange_calendar");
     private static final List<String> L2_SCORE_COLUMNS=List.of("ts","symbol","clean_amount","q2_count","q2_accumulation","q2_accumulation_ratio","active_buy_ratio","gmm_main_force_net_inflow","obi_top5_std","orderbook_replenish_speed","depth_slope","continuous_auction_ratio","close_auction_net_inflow","open_close_vol_ratio","q3_count","q4_count","q4_distribution","q4_distribution_ratio","active_sell_ratio","large_active_sell_amount","depth_top5_mean","ofi_persistence","ofi_std","mfi_escort","mean_obi_top5","main_funds_buy_amount","daily_amount","amount","turnover_rate");
     private final JdbcTemplate jdbc;
     private final long rowBudget;
@@ -37,7 +37,7 @@ public final class QuestDbStrategyInputs {
     private Snapshot readSnapshot(LocalDate start,LocalDate end,int warmupDays)throws Exception {
         if(start==null||end==null||end.isBefore(start)||end.toEpochDay()-start.toEpochDay()>730||warmupDays<460||warmupDays>730)throw new IllegalArgumentException("Bounded signal span and >=460 calendar-day warmup required");
         LocalDate warmup=start.minusDays(warmupDays);
-        var before=clocks();var backtestPort=new BacktestDailyMaterializationPort(jdbc);Object backtest=backtestPort.sourceState();
+        var before=clocks();var backtestPort=new BacktestDailyMaterializedViewPort(jdbc);Object backtest=backtestPort.sourceState();
         List<LocalDate> dates=calendar(start,end),warmupGrid=calendar(warmup,end);
         if(dates.isEmpty()||!dates.getLast().equals(end))throw new IllegalStateException("Score target must be an open calendar date");
         var data=new LinkedHashMap<String,List<Map<String,Object>>>();
@@ -48,7 +48,7 @@ public final class QuestDbStrategyInputs {
             SELECT b.trade_date,b.ts_code,b.close AS price,b.open AS open_price,b.close AS raw_close,
                    b.amount,b.up_limit,b.down_limit,b.is_suspended,b.is_st,
                    d.pb,d.turnover_rate,d.total_mv,d.ts_code AS basic_present
-            FROM v_backtest_daily b LEFT JOIN daily_basic d ON b.trade_date=d.trade_date AND b.ts_code=d.ts_code
+            FROM mv_backtest_daily b LEFT JOIN daily_basic d ON b.trade_date=d.trade_date AND b.ts_code=d.ts_code
             WHERE b.trade_date>=cast(? AS TIMESTAMP) AND b.trade_date<cast(? AS TIMESTAMP)
             ORDER BY b.trade_date,b.ts_code
             """,warmup,end,"stock_daily"));
@@ -126,7 +126,7 @@ public final class QuestDbStrategyInputs {
             rows.add(Collections.unmodifiableMap(row));
         },params);return List.copyOf(rows);
     }
-    public Object backtestState(){return new BacktestDailyMaterializationPort(jdbc).sourceState();}
+    public Object backtestState(){return new BacktestDailyMaterializedViewPort(jdbc).sourceState();}
     static String l2Projection(Map<String,Object> clocks) {
         if(!(clocks.get("l2_daily_features") instanceof Map<?,?> card)||!(card.get("schema") instanceof List<?> schema))throw new IllegalStateException("Pinned L2 schema required");
         var names=new HashSet<String>();for(Object column:schema)if(column instanceof Map<?,?> row)names.add(Objects.toString(row.get("column"),""));

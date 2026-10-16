@@ -1,7 +1,7 @@
 package com.zoutrankil.data.config;
 
-import com.zoutrankil.batch.MainStrategyDailyBatchRuntime;
-import com.zoutrankil.batch.MainStrategyDailyWork;
+import com.zoutrankil.batch.strategy.MainStrategyDailyBatchRuntime;
+import com.zoutrankil.batch.job.MainStrategyDailyWork;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

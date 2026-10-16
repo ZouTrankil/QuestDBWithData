@@ -30,7 +30,7 @@ public final class EtfMarketOverviewDailyViewDataset {
                     + "No basic JOIN, code/type filter, physical partition, WAL or UPSERT key on the public alias. "
                     + "Direct writes and replacements are forbidden. Existing base owners refresh share/daily; "
                     + "Explicit native lifecycle installs mv_etf_market_overview_daily_v1, refreshes both-source history and activates this alias. "
-                    + "Activated native reads bind both source revisions and the verified output via etf_market_overview_mv_refresh; "
+                    + "Activated native reads bind the database identity, both source revisions and verified output through the local SQLite run ledger; "
                     + "staged direct reads retain the fixed original SQL and both stable source versions. Date alone is the natural identity. "
                     + "Typed reads require the four columns and a date equality or a bounded date range of at most 31 days, with pages of at most 31 rows. "
                     + "Nullable finite DOUBLE aggregates retain exact binary64 values, signed zero, units and SQL nulls.");

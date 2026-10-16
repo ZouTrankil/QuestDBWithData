@@ -25,7 +25,7 @@ public class QuestDbFactorInputs {
             throw new IllegalArgumentException("One security and at most 367 requested calendar days required");
         LocalDate warmup=from.minusDays(460);
         var before=state();
-        var market=readRows("v_backtest_daily",MARKET,symbol,warmup,through);
+        var market=readRows("mv_backtest_daily",MARKET,symbol,warmup,through);
         var basic=readRows("daily_basic",BASIC,symbol,warmup,through);
         if(market.isEmpty()) throw new IllegalStateException("No backtest input rows");
         var basicByDate=new LinkedHashMap<LocalDate,Map<String,Object>>();
@@ -76,7 +76,7 @@ public class QuestDbFactorInputs {
 
     private List<Map<String,Object>> state() {
         var state=jdbc.queryForList("SELECT id,table_name,directoryName,table_txn,wal_txn,table_suspended,wal_pending_row_count "
-                +"FROM tables() WHERE table_name IN ('backtest_daily','daily_basic') ORDER BY table_name");
+                +"FROM tables() WHERE table_name IN ('mv_backtest_daily','daily_basic') ORDER BY table_name");
         if(state.size()!=2) throw new IllegalStateException("Factor input table missing");
         for(var row:state) {
             if(!(row.get("table_txn") instanceof Number tableTxn) || !(row.get("wal_txn") instanceof Number walTxn)

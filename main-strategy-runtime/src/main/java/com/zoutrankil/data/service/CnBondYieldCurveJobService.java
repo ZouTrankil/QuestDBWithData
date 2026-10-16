@@ -1,8 +1,8 @@
 package com.zoutrankil.data.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zoutrankil.batch.ChinabondYieldSource;
-import com.zoutrankil.batch.SourceContract;
+import com.zoutrankil.batch.source.chinabond.ChinabondYieldSource;
+import com.zoutrankil.batch.source.SourceContract;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.table.CnBondYieldCurveRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;

@@ -30,10 +30,10 @@ public final class EtfFactorPanelComputation {
     /** Require every declared source group and the backtest result/view identity before reusing a panel. */
     public void requireSourceStateUnchanged(com.fasterxml.jackson.databind.JsonNode panel) throws Exception {
         var groups=Map.of("sourceState",Set.of("etf_basic","etf_daily","etf_share"),
-                "l2SourceState",Set.of("l2_daily_features"),"stockSourceState",Set.of("stock_detail_info","backtest_daily"),
+                "l2SourceState",Set.of("l2_daily_features"),"stockSourceState",Set.of("stock_detail_info","mv_backtest_daily"),
                 "holdingSourceState",Set.of("etf_portfolio"),"technicalSourceState",Set.of("etf_factor"),
                 "csiFinancialSourceState",Set.of("cashflow","fina_indicator"),"csiHoldingSourceState",Set.of("etf_portfolio"),
-                "csiMarketSourceState",Set.of("daily_basic","stock_detail_info","backtest_daily"),
+                "csiMarketSourceState",Set.of("daily_basic","stock_detail_info","mv_backtest_daily"),
                 "earningsSourceState",Set.of("express","forecast"));
         var guard=new FactorPanelComputation(jdbc);var checked=new HashSet<String>();
         for(var group:groups.entrySet()) {

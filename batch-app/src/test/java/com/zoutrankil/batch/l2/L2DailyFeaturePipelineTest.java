@@ -2,7 +2,7 @@ package com.zoutrankil.batch.l2;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.batch.DfcfCsvParser;
+import com.zoutrankil.batch.l2.archive.DfcfCsvParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

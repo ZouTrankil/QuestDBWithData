@@ -1,6 +1,6 @@
 package com.zoutrankil.batch.l2;
 
-import com.zoutrankil.batch.DfcfCsvParser;
+import com.zoutrankil.batch.l2.archive.DfcfCsvParser;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Arrays;

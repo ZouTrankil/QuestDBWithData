@@ -1,6 +1,6 @@
 package com.zoutrankil.data.web;
 
-import com.zoutrankil.batch.MainStrategyDailyBatchRuntime;
+import com.zoutrankil.batch.strategy.MainStrategyDailyBatchRuntime;
 import java.util.Map;
 import java.util.UUID;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

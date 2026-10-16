@@ -1,7 +1,7 @@
 package com.zoutrankil.batch.l2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.batch.DfcfCsvParser;
+import com.zoutrankil.batch.l2.archive.DfcfCsvParser;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.L2DailyFeatureField;
 import com.zoutrankil.data.domain.L2DailyFeatures;
@@ -35,7 +35,7 @@ final class L2ComputationFingerprint {
             L2TradeSignFeatures.class, L2LobTransitionFeatures.class, L2MicrostructureFeatures.class,
             L2GmmFeatures.class, L2IntensityFeatures.class)) collectClasses(type, classes);
         try {
-            collectClasses(Class.forName("com.zoutrankil.batch.DfcfCsvInspector"), classes);
+            collectClasses(Class.forName("com.zoutrankil.batch.l2.archive.DfcfCsvInspector"), classes);
         }
         catch (ClassNotFoundException absent) {
             throw new IOException("Missing production CSV reader", absent);

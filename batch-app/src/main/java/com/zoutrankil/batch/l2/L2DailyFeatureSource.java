@@ -1,6 +1,6 @@
 package com.zoutrankil.batch.l2;
 
-import com.zoutrankil.batch.DfcfCsvParser;
+import com.zoutrankil.batch.l2.archive.DfcfCsvParser;
 import com.zoutrankil.batch.l2.L2BatchState.Job;
 import com.zoutrankil.batch.l2.L2BatchState.SourceFingerprint;
 import java.io.IOException;

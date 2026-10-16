@@ -1,165 +1,132 @@
 # QuestDBWithData
 
-Java data ingestion and calculation project with a WebFlux API, data CLI, standalone Batch application, native Level2 processing, and a persistent main-strategy runtime. Data is stored in QuestDB; local SQLite files hold execution and recovery state.
+基于 Java 的数据采集与计算项目，提供 WebFlux API、数据命令行工具、独立 Batch 应用、原生 Level2 处理和持久化主策略运行时。业务数据存储在 QuestDB 中，本地 SQLite 文件保存执行状态和恢复记录。
 
-## Project structure
+## 项目结构
 
 ```text
-data-core/              Shared contracts and basic types
-data-app/               Data owners, CLI, WebFlux API and QuestDB access
-batch-app/              Standalone Batch application and native L2 calculation
-main-strategy-runtime/  Composition of data-app and batch-app
-config/                 Shared application configuration
-deploy/                 Deployment scripts and configuration examples
-docs/                   Architecture, data conventions and operating guides
-tools/                  Reusable generation, L2 and test tools
-schema-export/          Schema catalog used by the Java model generator
+data-core/              共享契约与基础类型
+data-app/               数据 owner、CLI、WebFlux API 与 QuestDB 访问
+batch-app/              独立 Batch 应用与原生 L2 计算
+main-strategy-runtime/  组合 data-app 与 batch-app 的主策略运行时
+config/                 共享应用配置
+deploy/                 部署脚本与配置示例
+docs/                   架构、数据约定与操作指南
+tools/                  可复用的生成、L2 处理与测试工具
 ```
 
-The root Gradle project aggregates these four modules and provides the existing launch commands. See [docs/code-structure.md](docs/code-structure.md) for dependency directions, package responsibilities, and the historical-file cleanup record.
+根 Gradle 项目聚合这四个模块，并提供统一的启动命令。模块依赖方向、包职责与历史文件清理记录见[代码结构说明](docs/code-structure.md)。
 
-All default build output is centralized under the top-level `build/`. Each module uses `build/modules/<module>/`; root JARs, distributions and aggregate reports retain their existing locations. `./gradlew :clean` removes all build output, while `./gradlew :data-app:clean` removes only that module's output.
+默认构建产物统一放在顶层 `build/` 下，各模块使用 `build/modules/<module>/` 子目录。根项目的 JAR、分发包和聚合报告保留原有位置。`./gradlew :clean` 清理全部构建产物，`./gradlew :data-app:clean` 只清理该模块的产物。
 
-## Requirements
+## 环境要求
 
-- JDK 24
-- Tushare Pro token with access to `stock_basic`; configure it in `config/application.yml`
-- QuestDB credentials in `config/application.yml` for QuestDB commands
+- JDK 24。
+- 拥有 `stock_basic` 访问权限的 Tushare Pro Token，在 `config/application.yml` 中配置。
+- 执行 QuestDB 相关命令前，在 `config/application.yml` 中配置 QuestDB 连接信息。
 
-## Run
+## 运行
 
-Set `app.tushare.token` and QuestDB credentials in `config/application.yml`, then run:
+在 `config/application.yml` 中设置 `app.tushare.token` 和 QuestDB 连接信息，然后执行：
 
 ```bash
 ./gradlew run --args='sync-stock-basic-questdb'
 ```
 
-This creates/uses the isolated `java_tushare_stock_basic_qwp_test` table, writes one UTC daily snapshot, and reads back the row count for that snapshot. The table uses `(snapshot_ts, ts_code)` as its deduplication key, so rows with the same daily key are upserted. Row-count polling is a limited visibility check: unchanged counts cannot confirm that a repeated sync's new field values have been applied. The command does not touch production tables. The previous `sync-stock-basic-jdbc` command remains as an alias.
+该命令创建或使用隔离测试表 `java_tushare_stock_basic_qwp_test`，写入一份按 UTC 日期划分的快照，并回读该快照的行数。表以 `(snapshot_ts, ts_code)` 为去重键，相同日期和证券代码的数据会更新或插入。行数轮询仅用于有限的可见性检查：如果行数未变，无法据此确认重复同步时的新字段值已经生效。该命令不操作生产表。旧命令 `sync-stock-basic-jdbc` 仍作为别名保留。
 
-The QuestDB table and latest view are managed by Flyway SQL migrations in `data-app/src/main/resources/db/migration/questdb/`. Run `./gradlew run --args='migrate-questdb-schema'` explicitly, or let database sync/latest-query commands migrate before use. Existing databases require schema reconciliation and an explicit baseline; see the Flyway guide.
+QuestDB 表和最新快照视图由 `data-app/src/main/resources/db/migration/questdb/` 下的 Flyway SQL 迁移管理。可以显式执行 `./gradlew run --args='migrate-questdb-schema'`，数据库同步和最新快照查询命令也会在使用前执行迁移。接入已有数据库时，需要先核对 schema 并显式设置 baseline，详见 [Flyway 管理指南](docs/flyway-schema-management.md)。
 
-QuestDB ingestion uses the native QWP WebSocket client on the YAML-configured QWP port (normally 9000). PostgreSQL JDBC/PGWire (normally 8812) creates the table schema and polls for the submitted snapshot to become queryable. QWP writes are asynchronous, so the command waits for visibility with a 10-second deadline and fails if the row count does not catch up.
+QuestDB 写入使用原生 QWP WebSocket 客户端，连接 YAML 中配置的 QWP 端口，通常为 `9000`。PostgreSQL JDBC/PGWire 通常使用 `8812` 端口，负责创建表结构，并轮询已提交的快照是否可以查询。QWP 写入是异步的，命令最多等待 10 秒；如果行数仍未达到预期，则报告失败。
 
-All entry points use the single [config/application.yml](config/application.yml). Its first
-YAML document contains shared QuestDB, Tushare and path settings; the `data`, `batch`
-and `l2` profile documents contain only their own settings. Each entry point selects
-its profile automatically, and Spring environment variables, JVM properties and
-explicit CLI options can override the YAML. A root `.env` is not automatically read.
-See [configuration usage](docs/configuration.md) for profiles, precedence and deployment.
+所有入口共用 [config/application.yml](config/application.yml)。第一段 YAML 定义共享的 QuestDB、Tushare 和路径配置，`data`、`batch`、`l2` profile 段只保留各自的专有设置。每个入口自动选择对应的 profile，环境变量、JVM 属性和显式 CLI 参数可以覆盖 YAML 配置。根目录的 `.env` 不会自动加载。profile、覆盖优先级和部署方式见[统一配置说明](docs/configuration.md)。
 
-See [docs/questdb-usage.md](docs/questdb-usage.md) for QuestDB conventions, [docs/model-schema-conventions.md](docs/model-schema-conventions.md) for time/key semantics and Pydantic-to-Java conversion, [docs/code-structure.md](docs/code-structure.md) for package responsibilities, and [docs/view.md](docs/view.md) for views, WAL recovery, and data-engineering notes.
+其他参考文档：
 
-Historical migration task cards, superseded status snapshots, and one-off verification scripts were removed during repository cleanup. Current behavior is defined by the module code, registered dataset/job definitions, and maintained operating guides; a schema projection alone does not establish production readiness.
+- [QuestDB 使用约定](docs/questdb-usage.md)。
+- [模型与 schema 约定](docs/model-schema-conventions.md)：时间、主键语义与 Pydantic 到 Java 的转换。
+- [代码结构说明](docs/code-structure.md)：模块与包职责。
+- [视图与恢复说明](docs/view.md)：视图、WAL 恢复和数据工程记录。
+
+历史迁移任务卡、过期状态快照和一次性验证脚本已在仓库清理中移除。当前行为以模块代码、已注册的数据集和任务定义，以及持续维护的操作指南为准。仅有 schema 映射不代表已经满足生产运行条件。
 
 ## Spring WebFlux API
 
-`app.web.enabled: true` in `application.yml` makes `com.zoutrankil.data.QuestDataApplication` start the WebFlux API without arguments, including from IntelliJ. Start it from Gradle with:
+在 `application.yml` 中设置 `app.web.enabled: true` 后，无参数启动 `com.zoutrankil.data.QuestDataApplication` 即可运行 WebFlux API，也适用于 IntelliJ 启动。从 Gradle 启动：
 
 ```bash
 APP_API_TOKEN='replace-with-at-least-24-characters' ./gradlew webRun
 ```
 
-It listens on `APP_PORT` (default `8080`). `GET /api/v1/health` is public for probes. When `APP_API_TOKEN` is set, all other `/api/v1/**` routes require `Authorization: Bearer <token>`; leaving it empty is convenient for local development only.
+服务监听 `APP_PORT`，默认端口为 `8080`。`GET /api/v1/health` 对外开放，供健康探针使用。设置 `APP_API_TOKEN` 后，其余 `/api/v1/**` 路由均要求 `Authorization: Bearer <token>`；Token 留空仅适合本地开发。
 
-CLI commands still run through the same main class when a command is supplied, for example `./gradlew run --args='show-sync-job-definitions'`.
+指定命令时，CLI 仍通过同一个主类运行，例如：
 
-### Persistent main-strategy daily Batch
-
-For independent local daily/backtest catch-up and a Windows post-close task, see
-[the backtest post-close runner](deploy/backtest-post-close/README.md).
-
-The main Spring Web application starts `main_strategy_daily` automatically after
-`ApplicationReadyEvent`. This also applies to an IntelliJ launch with no arguments.
-The default `app.sync.batch.enabled` and `startup-catchup` are `true`.
-Its ordered stages are existing Java source owners, market sentiment calculation,
-regime calculation, backtest materialization, and physical data acceptance.
-Source requests reuse the existing WebFlux client and shared request budget.
-
-The calendar selects the latest completed SSE session after the 20:30 Asia/Shanghai
-source cutoff. Quartz runs at 20:35 and retries eligible unfinished work every
-15 minutes from 21:00 through 23:45, with a finite retry budget. SQLite stores
-business instances, stage certificates, Spring Batch executions and Quartz state.
-Completed stages are read back before reuse; uncertain writes require the existing
-owner's reconciliation operation. A process exit code alone cannot complete a batch.
-
-`v_backtest_daily` is the native Materialized View target, backed by the existing
-`backtest_daily` enriched table. The first conversion preserves the complete source
-history and all 13 business fields. No ordinary intermediate or alias VIEW is
-installed. The MV uses `REFRESH IMMEDIATE`: QuestDB automatically refreshes it
-after base-table transactions. The Java owner still builds the enriched base from
-the four raw sources and verifies publication. Initial bootstrap and replacement
-of existing DAY partitions retain an explicit FULL refresh, because partition
-deletion invalidates the MV. Normal append refreshes are handled by the server.
-Changing the policy directly also advances the MV WAL transaction. Existing Java
-publication snapshots then require a newly verified publication on their owning
-ledger before guarded reads; immutable publication evidence must not be rewritten.
-
-The obsolete `backtest_daily_cache`, `backtest_daily_cache_coverage`,
-`market_breadth_daily_cache` and `retail_sentiment_daily_cache` datasets are retired
-from the Java catalog and read-group API. Read backtests from `v_backtest_daily`,
-market breadth from `v_market_breadth_daily`, and retail sentiment from
-`v_retail_sentiment_daily`; the latter two aliases read native materialized views.
-The ETF overview cache and its shared `market_barometer_cache_coverage` receipts
-remain active. Historical schema exports and migration audits describe the old
-objects; the schema catalog is retained for model generation.
-
-Market sentiment and regime remain calculation tables managed by their existing
-Java MATERIALIZE jobs, both registered as daily eligible.
-
-Set the QuestDB address and the persistent source ledger before starting the
-application. The current local acceptance uses these IntelliJ VM options:
-
-```text
--Dapp.questdb.host=127.0.0.1
--Dapp.sync.ledger-path=var/main-strategy-java-refresh/20261007/sync-ledger.sqlite3
+```bash
+./gradlew run --args='show-sync-job-definitions'
 ```
 
-Keep this source ledger when restarting: it contains the publication authority and
-retained recovery evidence. The scheduler's separate metadata defaults to
-`var/main-strategy-batch.sqlite`. Web mode binds the main-strategy owners to their
-formal table names; finite CLI commands retain their isolated defaults.
+### 持久化主策略每日批处理
 
-Control and inspect the same running pipeline through:
+主 Spring Web 应用在收到 `ApplicationReadyEvent` 后自动启动 `main_strategy_daily`，也适用于 IntelliJ 无参数启动。`app.sync.batch.enabled` 和 `startup-catchup` 默认均为 `true`。各阶段依次执行已有 Java 来源 owner、市场情绪计算、市场状态计算、QuestDB 回测物化视图验收和物理数据验收。来源请求复用已有 WebFlux 客户端和共享请求配额。
 
-- `GET /api/v1/batch/main-strategy`
-- `GET /api/v1/batch/main-strategy/instances/{instanceId}`
-- `POST /api/v1/batch/main-strategy/catch-up`
-- `POST /api/v1/batch/main-strategy/instances/{instanceId}/reconcile-publication`
-- `POST /api/v1/batch/main-strategy/pause`
-- `POST /api/v1/batch/main-strategy/resume`
+交易日历以 `Asia/Shanghai` 时区 20:30 的来源截止时间为界，选择最近已完成的上交所交易日。Quartz 在 20:35 触发任务，并在 21:00 至 23:45 之间每 15 分钟重试符合条件的未完成工作，重试次数有明确上限。SQLite 保存业务实例、阶段凭证、Spring Batch 执行记录和 Quartz 状态。复用已完成阶段前会回读验证；写入结果不确定时，必须由原 owner 执行对账恢复。仅凭进程退出码不能判定批处理完成。
 
-These routes use the existing API authentication. Persisted pause survives a
-restart. Set `APP_SYNC_BATCH_ENABLED=false` to disable this runtime, or
-`APP_SYNC_BATCH_STARTUP_CATCHUP=false` to keep scheduling without a startup catchup.
-An uncertain native publication requires explicit reconciliation with the body
-`{"stage":"MarketSentimentDaily","runId":"original-run-id","writerStopped":true}`.
-The runtime requires an idle writer, the original frozen run, unchanged source
-proofs and physical publication verification. It preserves the uncertain receipt
-and appends a verified recovery link; use `catch-up` afterward for the remaining
-stages. Ordinary retries never replay an uncertain publication.
-The accepted Level2 temporary JSONL directory need not be kept for ordinary daily
-jobs. Retained ingestion and archive receipts, an unchanged WAL frontier and a
-complete current typed quality fingerprint can certify already imported dates.
-Fresh source comparisons or re-imports require regenerating the deleted output.
-Future Level2 dates require their own accepted cleaning/import evidence; this
-batch waits when that dependency is missing. ETF disclosures use the actual latest
-announcement before the target date, with freshness and completeness limitations
-reported separately. Incomplete whole-market financing data stays optional and
-does not become a fabricated complete source.
+回测数据只查询 `mv_backtest_daily`。它是 QuestDB 原生物化视图，直接关联 `stk_factor`、`stk_limit`、`stk_suspend` 和 `stk_st_daily`，以 `REFRESH IMMEDIATE` 自动更新。保留 13 个字段与停牌补行：停牌日使用此前最后价格，成交量和成交额为零。建视图 SQL 位于 [`mv_backtest_daily.sql`](data-app/src/main/resources/sql/mv_backtest_daily.sql)。
 
-Useful smoke-test routes are `GET /api/v1/info`, `GET /api/v1/datasets`, `GET /api/v1/jobs`, `GET /api/v1/stock-basic/latest`, and `POST /api/v1/stock-basic/sync`. The last two access QuestDB or Tushare and run on a bounded-elastic scheduler so blocking database/client calls do not occupy the WebFlux event loop.
+`backtest_daily` 结果表和 `v_backtest_daily` 普通视图已退役；应用不再生成回测 stage/backup 表，不运行 Java 回测物化、发布、恢复或刷新命令。每日流水线的 `BacktestDaily` 阶段只等待并验证数据库 MV。
 
-Open [api.http](api.http) in IntelliJ and run the requests to check service health, QuestDB connectivity, dataset definitions, and a bounded sample of actual QuestDB rows. The sample endpoint accepts `limit=1..100` and reads only registered datasets with the READ capability. The stock synchronization request is commented out in the file because it writes data.
+QuestDB 只由指定基表触发刷新。这里使用 `stk_limit`，避免把历史 ASOF 取价范围裁掉；每日采集顺序为先写行情、停牌和 ST，再写涨跌停。主策略与盘后采集均执行该顺序。其他三张表单独变更不会触发 MV；补采或更正时也必须按完整来源批次写入对应日期，不能把基表进度等同于四表变化都会自动联动。读取会检查 MV 定义、13 列类型、WAL 和来源更新时间，拒绝未完成刷新或已知晚到来源。
 
-Flyway configuration, version pins and existing-database adoption are documented in [docs/flyway-schema-management.md](docs/flyway-schema-management.md). Follow [docs/model-development-workflow.md](docs/model-development-workflow.md) to define a new model and its read/write mappings. Runtime plugin tests pass; migrations have not yet been exercised against a live QuestDB instance.
+以下旧数据集已从 Java 目录和读取分组 API 中移除：
 
-Spring Batch job metadata uses a local SQLite database; no PostgreSQL server is required for Batch. The PostgreSQL JDBC driver remains in the main application only for QuestDB PGWire schema/query operations, and is excluded from the standalone Batch distribution.
+- `backtest_daily_cache`
+- `backtest_daily_cache_coverage`
+- `market_breadth_daily_cache`
+- `retail_sentiment_daily_cache`
 
-The current configured database schema was exported read-only from QuestDB 10.0.1. Browse the [schema snapshot and table/view/materialized-view domain catalog](schema-export/questdb-qdb-2026-09-28/README.md); Java schema projections are generated by `tools/generate_domain_models.py`.
+回测数据通过 `mv_backtest_daily` 读取，市场宽度通过 `v_market_breadth_daily` 读取，散户情绪通过 `v_retail_sentiment_daily` 读取；后两者是原生物化视图的读取别名。ETF 概览缓存及其共享的 `market_barometer_cache_coverage` 凭证仍在使用。
 
-The current `stock_basic` request uses `exchange=''` and `list_status='L'`; this is the current listed-stock universe, not a point-in-time historical universe.
+市场情绪和市场状态仍使用计算结果表，由现有 Java `MATERIALIZE` 任务管理，两者都已注册为可每日执行的任务。
 
-## Local verification
+启动应用前，在 [`config/application.yml`](config/application.yml) 设置 QuestDB 地址和 `app.sync.ledger-path`。
+
+重启时保留该来源账本，其中保存发布依据和恢复证据。调度器使用独立的元数据库，默认路径为 `var/main-strategy-batch.sqlite`。Web 模式将主策略 owner 绑定到正式表名；有限生命周期的 CLI 命令仍保留隔离表默认值。
+
+通过以下接口控制和查看同一个运行中的流水线：
+
+- `GET /api/v1/batch/main-strategy`：查看流水线状态。
+- `GET /api/v1/batch/main-strategy/instances/{instanceId}`：查看业务实例。
+- `POST /api/v1/batch/main-strategy/catch-up`：补齐未完成任务。
+- `POST /api/v1/batch/main-strategy/instances/{instanceId}/reconcile-publication`：对账恢复发布结果。
+- `POST /api/v1/batch/main-strategy/pause`：暂停。
+- `POST /api/v1/batch/main-strategy/resume`：恢复。
+
+这些接口沿用现有 API 鉴权。暂停状态持久化保存，重启后仍然有效。设置 `APP_SYNC_BATCH_ENABLED=false` 可禁用该运行时；设置 `APP_SYNC_BATCH_STARTUP_CATCHUP=false` 则保留定时调度，但不在启动时补齐任务。
+
+原生发布结果不确定时，需要显式调用对账恢复接口，请求体示例：
+
+```json
+{"stage":"MarketSentimentDaily","runId":"original-run-id","writerStopped":true}
+```
+
+恢复要求写入方已停止，并核对原始冻结运行、未变化的来源证据和物理发布结果。运行时保留原有不确定状态凭证，追加已验证的恢复关联记录；之后调用 `catch-up` 继续剩余阶段。普通重试不会重新执行结果不确定的发布。
+
+常规每日任务不要求保留已经验收的 Level2 临时 JSONL 目录。保留的导入和归档凭证、未变化的 WAL 进度，以及当前完整的类型化质量指纹，可用于验证已导入日期。重新对比来源或重新导入时，需要重新生成已删除的输出。后续 Level2 日期必须有各自已验收的清洗和导入证据，缺少该依赖时批处理会等待。ETF 披露数据使用目标日期之前实际最新的公告，时效性和完整性限制单独报告。全市场融资数据不完整时仍作为可选来源，不会被当作完整来源使用。
+
+常用冒烟测试接口包括 `GET /api/v1/info`、`GET /api/v1/datasets`、`GET /api/v1/jobs`、`GET /api/v1/stock-basic/latest` 和 `POST /api/v1/stock-basic/sync`。后两个接口访问 QuestDB 或 Tushare，使用 `bounded-elastic` 调度器执行，避免阻塞数据库或客户端调用占用 WebFlux 事件循环。
+
+在 IntelliJ 中打开 [api.http](api.http)，执行其中的请求，可检查服务健康状态、QuestDB 连通性、数据集定义和有数量上限的实际数据样本。样本接口接受 `limit=1..100`，仅读取已注册且具备 `READ` 能力的数据集。股票同步请求会写入数据，因此在文件中默认注释。
+
+Flyway 配置、固定版本与已有数据库的接入方式见 [Flyway schema 管理](docs/flyway-schema-management.md)。定义新模型及其读写映射，参见[模型开发流程](docs/model-development-workflow.md)。运行时插件测试已通过；迁移尚未在真实 QuestDB 实例上验证。
+
+Spring Batch 任务元数据使用本地 SQLite 数据库，不需要 PostgreSQL 服务。PostgreSQL JDBC 驱动仅在主应用中用于 QuestDB PGWire 的 schema 和查询操作，独立 Batch 分发包不包含该驱动。
+
+此前从 QuestDB 10.0.1 导出的 `schema-export/` 历史快照已清理。使用 `tools/generate_domain_models.py` 生成 Java schema 映射时，需要通过 `--catalog` 指定另行准备的数据对象目录 JSON 文件。
+
+当前 `stock_basic` 请求使用 `exchange=''` 和 `list_status='L'`，表示当前上市证券范围，不代表某个历史时点的证券范围。
+
+## 本地验证
 
 ```bash
 python3 -m unittest discover -s tools -p 'test_*.py'
@@ -167,4 +134,4 @@ python3 -m unittest discover -s tools -p 'test_*.py'
 ./gradlew check --console=plain
 ```
 
-Live acceptance tests require their explicit environment configuration and external services. `:data-app:retainedParityTest` additionally requires original captures that are not all stored in Git. Keep `var/` and SQLite recovery ledgers across application restarts. New local run output under `artifacts/`, `build/`, and `logs/` is ignored by Git.
+真实环境验收测试需要显式配置环境变量和外部服务。`:data-app:retainedParityTest` 还依赖原始采集样本，当前仓库不提供完整样本，需要另行准备。应用重启时应保留 `var/` 和 SQLite 恢复账本。`artifacts/`、`build/` 和 `logs/` 下的新本地运行产物由 Git 忽略。

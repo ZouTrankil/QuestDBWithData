@@ -1,6 +1,6 @@
 package com.zoutrankil.data.service;
 
-import com.zoutrankil.batch.DataReadiness;
+import com.zoutrankil.batch.postclose.DataReadiness;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.domain.SyncRunState;
 import java.nio.file.Path;

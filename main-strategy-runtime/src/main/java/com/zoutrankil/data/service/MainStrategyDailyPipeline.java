@@ -1,8 +1,13 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.batch.domain.BusinessState;
+import com.zoutrankil.batch.domain.CompletionEvidence;
+import com.zoutrankil.batch.domain.RunRequest;
+import com.zoutrankil.batch.job.MainStrategyDailyWork;
+import com.zoutrankil.batch.job.StageExecutor;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.batch.*;
 import com.zoutrankil.data.derived.application.*;
 import com.zoutrankil.data.derived.storage.*;
 import com.zoutrankil.data.domain.*;
@@ -42,7 +47,7 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
     private final JdbcTemplate jdbc; private final SyncJobRegistry registry; private final Path ledger,root;
     private final ObjectMapper json=JobDefinitionJson.mapper(); private final List<Owner> owners;
     private final MarketSentimentDailyJobService market;private final RegimeFeaturesMonitorDailyJobService regime;
-    private final BacktestDailyMaterializationJobService backtest;private final List<String> targetEtfs;
+    private final List<String> targetEtfs;
     private final FormalL2DailyFeaturesIngestion l2;
     private final MainStrategyDataService strategyData;
     private volatile String activeStage="idle";private volatile LocalDate activeDate;private volatile String lastOutcome="never-run";
@@ -70,14 +75,14 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
             StockSuspendJobService suspend,StockStDailyJobService st,MoneyflowJobService flow,MoneyflowHsgtJobService hsgt,
             MarginDetailJobService margin,EtfDailyJobService etf,EtfAdjJobService adj,EtfFactorJobService etfFactor,
             EtfPortfolioJobService portfolio,CnBondYieldCurveJobService bonds,
-            MarketSentimentDailyJobService market,RegimeFeaturesMonitorDailyJobService regime,BacktestDailyMaterializationJobService backtest,
+            MarketSentimentDailyJobService market,RegimeFeaturesMonitorDailyJobService regime,
             FormalL2DailyFeaturesIngestion l2,MainStrategyDataService strategyData,
             @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}")String ledger,
             @Value("${app.sync.batch.artifact-root:var/main-strategy-batch}")String root,
             @Value("${app.sync.batch.target-etfs:}")String targetEtfs) {
         this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc.getDataSource()));this.jdbc.setQueryTimeout(120);this.jdbc.setFetchSize(1024);
         this.registry=registry;this.ledger=Path.of(ledger).toAbsolutePath().normalize();this.root=Path.of(root).toAbsolutePath().normalize();
-        this.market=market;this.regime=regime;this.backtest=backtest;
+        this.market=market;this.regime=regime;
         this.l2=l2;this.strategyData=strategyData;
         this.targetEtfs=Arrays.stream(targetEtfs.split(",")).map(String::trim).filter(s->!s.isEmpty()).distinct().sorted().toList();
         if(this.targetEtfs.size()>100||this.targetEtfs.stream().anyMatch(s->!s.matches("[0-9]{6}\\.(SH|SZ|BJ)")))throw new IllegalArgumentException("Bounded canonical target ETF codes required");
@@ -85,9 +90,9 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
             new Owner("daily","trade_date",List.of("trade_date","ts_code"),false,false,daily::tableName,(a,b,l)->{var p=daily.plan(a,b,l,Mode.BACKFILL);return new Planned(p.request(),()->daily.run(p));}),
             new Owner("daily_basic","trade_date",List.of("trade_date","ts_code"),false,false,basic::tableName,(a,b,l)->{var p=basic.plan(a,b,l,Mode.BACKFILL);return new Planned(p.request(),()->basic.run(p));}),
             new Owner("stk_factor","trade_date",List.of("trade_date","ts_code"),false,false,factor::tableName,(a,b,l)->{var p=factor.plan(Mode.BACKFILL,a,b,l,null);return new Planned(p,()->factor.run(p));}),
-            new Owner("stk_limit","trade_date",List.of("trade_date","ts_code"),false,false,limit::tableName,(a,b,l)->{var p=limit.plan(Mode.BACKFILL,a,b,l);return new Planned(p.request(),()->limit.run(p));}),
             new Owner("stk_suspend","timestamp",List.of("timestamp","ts_code"),false,true,suspend::tableName,(a,b,l)->{var p=suspend.plan(Mode.BACKFILL,a,b,l);return new Planned(p,()->suspend.run(p));}),
             new Owner("stk_st_daily","timestamp",List.of("timestamp","ts_code"),false,true,st::tableName,(a,b,l)->{var p=st.plan(Mode.BACKFILL,a,b,l);return new Planned(p.request(),()->st.run(p));}),
+            new Owner("stk_limit","trade_date",List.of("trade_date","ts_code"),false,false,limit::tableName,(a,b,l)->{var p=limit.plan(Mode.BACKFILL,a,b,l);return new Planned(p.request(),()->limit.run(p));}),
             new Owner("moneyflow","trade_date",List.of("trade_date","ts_code"),false,false,flow::tableName,(a,b,l)->{var p=flow.planDetailed(Mode.BACKFILL,a,b,l);return new Planned(p.request(),()->flow.run(p));}),
             new Owner("moneyflow_hsgt","trade_date",List.of("trade_date"),false,false,hsgt::tableName,(a,b,l)->{var p=hsgt.plan(Mode.BACKFILL,a,b,l);return new Planned(p.request(),()->hsgt.run(p));}),
             new Owner("margin_detail","trade_date",List.of("trade_date","ts_code"),true,false,margin::tableName,(a,b,l)->{var p=margin.planDetailed(Mode.BACKFILL,a,b,l);return new Planned(p.request(),()->margin.run(p));}),
@@ -109,9 +114,9 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
     @Override public String inputFingerprint(LocalDate target)throws Exception {
         var bindings=new TreeMap<String,Object>();
         for(var o:owners){var binding=new TreeMap<String,Object>();binding.put("table",o.binding().get());binding.put("definition",json.readTree(SyncRequestIdentity.definitionJson(definition(o.table()))));bindings.put(o.table(),binding);}
-        bindings.put("market",json.readTree(SyncRequestIdentity.definitionJson(definition("market_sentiment_daily"))));bindings.put("regime",json.readTree(SyncRequestIdentity.definitionJson(definition("regime_features_monitor_daily"))));bindings.put("backtest",json.readTree(SyncRequestIdentity.definitionJson(definition("backtest_daily"))));
-        return RunRequest.hash("java.main_strategy_daily.v2",target.toString(),json.writeValueAsString(bindings),
-                "range=3;catchup<=31;sourceSlices<=3;SSE-calendar;cutoff>=20:30;optionalMarginWholeMarket;nativeL2;nativeDirectMV;pairedJavaScores;canonicalOfficialPlan",ledger.toString(),targetEtfs.toString(),strategyData.definitionFingerprint());
+        bindings.put("market",json.readTree(SyncRequestIdentity.definitionJson(definition("market_sentiment_daily"))));bindings.put("regime",json.readTree(SyncRequestIdentity.definitionJson(definition("regime_features_monitor_daily"))));bindings.put("backtestMvSql",BacktestDailyMaterializedViewPort.CREATE_SQL);
+        return RunRequest.hash("java.main_strategy_daily.v3",target.toString(),json.writeValueAsString(bindings),
+                "range=3;catchup<=31;sourceSlices<=3;SSE-calendar;cutoff>=20:30;optionalMarginWholeMarket;nativeL2;questdbBacktestMv;stkLimitLast;pairedJavaScores;canonicalOfficialPlan",ledger.toString(),targetEtfs.toString(),strategyData.definitionFingerprint());
     }
     private SyncJobDefinition definition(String dataset){return registry.definitions().stream().filter(j->j.datasetId().equals(dataset)).findFirst().orElseThrow(()->new IllegalStateException("Registered Java owner absent: "+dataset));}
     private String definitionHash(String dataset){return RunRequest.hash(SyncRequestIdentity.definitionJson(definition(dataset)));}
@@ -165,7 +170,7 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         if(!run.frozenJson().equals(old.frozenJson())||!run.jobId().equals(definition(dataset).jobId())||run.jobVersion()!=definition(dataset).version()||state!=SyncRunState.IN_DOUBT&&state!=SyncRunState.VERIFIED)throw new Gate(BusinessState.BLOCKED,"Original owner/frozen run is not eligible for reconciliation");
         requireNativeSource(old);requireNativeClocks(old);
         // A prior CLI finish is accepted only after the same immutable run is VERIFIED.
-        if(state==SyncRunState.IN_DOUBT)switch(stage){case "MarketSentimentDaily"->market.finishInterrupted(expectedRun,true);case "RegimeFeaturesMonitorDaily"->regime.finishInterrupted(expectedRun,true);case "BacktestDaily"->backtest.finishInterrupted(expectedRun,true);default->throw new IllegalArgumentException("Native stage required");}
+        if(state==SyncRunState.IN_DOUBT)switch(stage){case "MarketSentimentDaily"->market.finishInterrupted(expectedRun,true);case "RegimeFeaturesMonitorDaily"->regime.finishInterrupted(expectedRun,true);default->throw new IllegalArgumentException("Native stage required");}
         if(SyncRunLedger.openReadOnly(ledger).get(expectedRun).state()!=SyncRunState.VERIFIED)throw new Gate(BusinessState.IN_DOUBT,"Original owner did not finish VERIFIED");
         Path source=Path.of(old.sourceEvidence()).toAbsolutePath().normalize(),publication=source.resolveSibling("publication.json");
         if(!Files.isRegularFile(publication))throw new Gate(BusinessState.IN_DOUBT,"Recovered owner publication evidence absent");
@@ -180,9 +185,9 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         Path link=recoveryPath(originalFile);var recovery=new NativeRecovery(request.instanceId(),request.inputFingerprint(),stage,expectedRun,originalFile.toString(),fileHash(originalFile),recoveredFile.toString(),fileHash(recoveredFile),RunRequest.hash(old.frozenJson()),recovered.sourceEvidenceSha256(),recovered.evidenceSha256(),Instant.now());
         if(!Files.isRegularFile(link))write(link,recovery);validateRecovery(request,range,stage,dataset,originalFile,old);
         activeDate=request.logicalDate();activeStage=stage;lastOutcome="Explicit original-run publication reconciliation VERIFIED";
-        return switch(stage){case "MarketSentimentDaily"->market(request,range);case "RegimeFeaturesMonitorDaily"->regime(request,range);case "BacktestDaily"->backtest(request,range);default->throw new IllegalArgumentException("Native stage required");};
+        return switch(stage){case "MarketSentimentDaily"->market(request,range);case "RegimeFeaturesMonitorDaily"->regime(request,range);default->throw new IllegalArgumentException("Native stage required");};
     }
-    private static String nativeDataset(String stage){return switch(stage){case "MarketSentimentDaily"->"market_sentiment_daily";case "RegimeFeaturesMonitorDaily"->"regime_features_monitor_daily";case "BacktestDaily"->"backtest_daily";default->throw new IllegalArgumentException("Reconciliation accepts a native publication stage only");};}
+    private static String nativeDataset(String stage){return switch(stage){case "MarketSentimentDaily"->"market_sentiment_daily";case "RegimeFeaturesMonitorDaily"->"regime_features_monitor_daily";default->throw new IllegalArgumentException("Reconciliation accepts a native publication stage only");};}
     private List<Path> nativeFiles(Path directory)throws Exception{if(!Files.isDirectory(directory))return List.of();try(var list=Files.list(directory)){var files=list.filter(p->Files.isRegularFile(p)&&p.getFileName().toString().endsWith(".json")).sorted().toList();if(files.size()>66)throw new Gate(BusinessState.BLOCKED,"Native attempt audit budget exceeded");return files;}}
     private Path recoveryPath(Path original)throws Exception{return original.resolveSibling("recovery-"+fileHash(original)+".json");}
     private void requireNativeBinding(RunRequest request,PipelinePlan range,String stage,String dataset,NativeReceipt saved)throws Exception {
@@ -260,9 +265,11 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         return certificate(r,"RegimeFeaturesMonitorDaily",p,List.of(snapshot("regime_features_monitor_daily","trade_date",List.of("trade_date"),p.from(),p.to())),List.of(Path.of(saved.evidence()),Path.of(saved.sourceEvidence())),saved.result().runId(),Map.of("sourceFingerprint",saved.sourceFingerprint(),"fullTargetFingerprint",saved.fullTargetFingerprint()));
     }
     private CompletionEvidence backtest(RunRequest r,PipelinePlan p)throws Exception {
-        var saved=nativeRun(r,p,"BacktestDaily","backtest_daily",()->{var plan=backtest.plan(p.from(),p.to(),p.to());return new NativePlan(plan.request(),()->{var result=backtest.run(plan);return new NativeOutcome(result.result(),result.sourceFingerprint(),null,result.windowFingerprint(),result.evidence(),result.bootstrap());});});
-        var port=new BacktestDailyMaterializationPort(jdbc);var state=port.sourceState();
-        return certificate(r,"BacktestDaily",p,List.of(snapshot("backtest_daily","trade_date",List.of("trade_date","ts_code"),p.from(),p.to())),List.of(Path.of(saved.evidence()),Path.of(saved.sourceEvidence())),saved.result().runId(),Map.of("backtest",state,"bootstrap",saved.bootstrap(),"sourceFingerprint",saved.sourceFingerprint(),"windowFingerprint",saved.windowFingerprint()));
+        final BacktestDailyMaterializedViewPort.State state;
+        try {state=new BacktestDailyMaterializedViewPort(jdbc).awaitCurrent(Duration.ofSeconds(30));}
+        catch(BacktestDailyMaterializationReadGuard.NotReadyException waiting){throw new Gate(BusinessState.WAITING_SOURCE,waiting.getMessage());}
+        return certificate(r,"BacktestDaily",p,List.of(snapshot("mv_backtest_daily","trade_date",List.of("trade_date","ts_code"),p.from(),p.to())),List.of(),null,
+                Map.of("backtest",state,"producer","questdb.native_materialized_view","refresh","immediate","base","stk_limit"));
     }
     private NativeReceipt nativeRun(RunRequest request,PipelinePlan range,String stage,String dataset,Call<NativePlan> planner)throws Exception {
         Path directory=instance(request).resolve("native").resolve(stage);List<Path> files=nativeFiles(directory);
@@ -286,17 +293,13 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         requireNativeSource(saved);requireNativeClocks(saved);
         var source=json.readTree(Files.readAllBytes(Path.of(saved.sourceEvidence())));var publication=json.readTree(Files.readAllBytes(Path.of(saved.evidence())));
         var entry=publicationEntry(dataset,saved.result().runId());var scope=json.readTree(entry.intent().scope());var frozen=json.readTree(saved.frozenJson());
-        if(entry.state()!=ReferencePublicationJournal.State.VERIFIED||!entry.intent().target().equals(dataset)||!scope.path("sourceEvidence").asText().equals(saved.sourceEvidence())||!scope.path("sourceEvidenceSha256").asText().equals(saved.sourceEvidenceSha256())||!scope.path("from").asText().equals(frozen.path("from").asText())||!scope.path("to").asText().equals(frozen.path("to").asText())||!entry.intent().afterFingerprint().equals(dataset.equals("backtest_daily")?saved.windowFingerprint():saved.fullTargetFingerprint()))throw new Gate(BusinessState.BLOCKED,"Original native publication journal/source/frozen scope differs");
-        if(!dataset.equals("backtest_daily")&&(!publication.path("published").asBoolean()||!publication.path("sourceEvidence").asText().equals(saved.sourceEvidence())))throw new Gate(BusinessState.BLOCKED,"Native publication does not bind the owned source file");
+        if(entry.state()!=ReferencePublicationJournal.State.VERIFIED||!entry.intent().target().equals(dataset)||!scope.path("sourceEvidence").asText().equals(saved.sourceEvidence())||!scope.path("sourceEvidenceSha256").asText().equals(saved.sourceEvidenceSha256())||!scope.path("from").asText().equals(frozen.path("from").asText())||!scope.path("to").asText().equals(frozen.path("to").asText())||!entry.intent().afterFingerprint().equals(saved.fullTargetFingerprint()))throw new Gate(BusinessState.BLOCKED,"Original native publication journal/source/frozen scope differs");
+        if((!publication.path("published").asBoolean()||!publication.path("sourceEvidence").asText().equals(saved.sourceEvidence())))throw new Gate(BusinessState.BLOCKED,"Native publication does not bind the owned source file");
         if(publication.has("sourceEvidenceSha256")&&!publication.path("sourceEvidenceSha256").asText().equals(saved.sourceEvidenceSha256())||publication.has("runId")&&!publication.path("runId").asText().equals(saved.result().runId()))throw new Gate(BusinessState.BLOCKED,"Native publication source SHA/original run differs");
-        if(!dataset.equals("backtest_daily")&&(!source.path("sourceFingerprint").asText().equals(saved.sourceFingerprint())||!publication.path("sourceFingerprint").asText().equals(saved.sourceFingerprint())||!publication.path("fullTargetFingerprint").asText().equals(saved.fullTargetFingerprint())))throw new Gate(BusinessState.BLOCKED,"Native source/publication value fingerprints differ");
+        if((!source.path("sourceFingerprint").asText().equals(saved.sourceFingerprint())||!publication.path("sourceFingerprint").asText().equals(saved.sourceFingerprint())||!publication.path("fullTargetFingerprint").asText().equals(saved.fullTargetFingerprint())))throw new Gate(BusinessState.BLOCKED,"Native source/publication value fingerprints differ");
         if(dataset.equals("market_sentiment_daily")&&!saved.fullTargetFingerprint().equals(new MarketSentimentDailyWritePort(jdbc,dataset).formalSnapshot().fingerprint()))throw new Gate(BusinessState.BLOCKED,"Native sentiment published SHA changed");
         if(dataset.equals("regime_features_monitor_daily")&&!saved.fullTargetFingerprint().equals(new RegimeFeaturesMonitorDailyWritePort(jdbc,dataset).formalSnapshot().fingerprint()))throw new Gate(BusinessState.BLOCKED,"Native regime published SHA changed");
-        if(dataset.equals("backtest_daily")){
-            var port=new BacktestDailyMaterializationPort(jdbc);var proof=json.readTree(Files.readAllBytes(Path.of(saved.evidence())));
-            if(!proof.path("sourceEvidenceSha256").asText().equals(saved.sourceEvidenceSha256())||!json.writeValueAsString(port.identity("backtest_daily")).equals(proof.path("base").toString()))throw new Gate(BusinessState.BLOCKED,"Verified backtest publication source SHA or result table changed");
-            port.viewState();
-        }
+
     }
     private ReferencePublicationJournal.Entry publicationEntry(String dataset,String run)throws Exception {
         // The regular journal constructor may migrate metadata; completed-data checks stay read-only.
@@ -319,7 +322,7 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         for(var o:owners)windows.add(snapshot(o.table(),o.date(),o.keys(),p.from(),p.to()));
         windows.add(snapshot("exchange_calendar","cal_date",List.of("cal_date","exchange"),p.from(),p.to()));
         windows.add(snapshot("market_sentiment_daily","trade_date",List.of("trade_date"),p.from(),p.to()));windows.add(snapshot("regime_features_monitor_daily","trade_date",List.of("trade_date"),p.from(),p.to()));
-        windows.add(snapshot("backtest_daily","trade_date",List.of("trade_date","ts_code"),p.from(),p.to()));windows.add(snapshot("l2_daily_features","ts",List.of("ts","symbol"),p.to(),p.to()));
+        windows.add(snapshot("mv_backtest_daily","trade_date",List.of("trade_date","ts_code"),p.from(),p.to()));windows.add(snapshot("l2_daily_features","ts",List.of("ts","symbol"),p.to(),p.to()));
         var scores=strategyData.scores(p.to());requireScoreSources(scores);
         requireSamePlanAuthority(officialDetails,json.valueToTree(officialPlanAuthority(strategyData.requirePlan(p.to()))));
         details.putAll(authority);details.put("officialPlanStage",officialStage);
@@ -338,7 +341,7 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         com.zoutrankil.data.strategy.publication.ScoreArtifactPublisher.Publication publication;
         try {publication=strategyData.prepareScores(p.to(),"java_scores_"+r.instanceId());}
         catch(Exception unavailable) {throw planningGate("ScoreInputs",unavailable);}
-        return certificate(r,"ScoreInputs",p,List.of(snapshot("backtest_daily","trade_date",List.of("trade_date","ts_code"),p.from(),p.to())),strategyData.scoreEvidence(publication),null,Map.of("publication",publication));
+        return certificate(r,"ScoreInputs",p,List.of(snapshot("mv_backtest_daily","trade_date",List.of("trade_date","ts_code"),p.from(),p.to())),strategyData.scoreEvidence(publication),null,Map.of("publication",publication));
     }
     private CompletionEvidence officialPlan(RunRequest r,PipelinePlan p)throws Exception {
         com.zoutrankil.data.strategy.store.StoredOfficialPlan plan;
@@ -386,8 +389,8 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         JsonNode runNode=e.path("runId");String run=runNode.isTextual()?runNode.asText():"";if(!run.isBlank()){var authority=SyncRunLedger.openReadOnly(ledger);if(authority.get(run).state()!=SyncRunState.VERIFIED)throw new Gate(BusinessState.BLOCKED,"Native owner no longer VERIFIED: "+run);}
         if(stage.equals("MarketSentimentDaily")&&!new MarketSentimentDailyWritePort(jdbc,"market_sentiment_daily").formalSnapshot().fingerprint().equals(e.path("details").path("fullTargetFingerprint").asText()))throw new Gate(BusinessState.BLOCKED,"Published full sentiment SHA changed");
         if(stage.equals("RegimeFeaturesMonitorDaily")&&!new RegimeFeaturesMonitorDailyWritePort(jdbc,"regime_features_monitor_daily").formalSnapshot().fingerprint().equals(e.path("details").path("fullTargetFingerprint").asText()))throw new Gate(BusinessState.BLOCKED,"Published full regime SHA changed");
-        if(stage.equals("BacktestDaily")||stage.equals("MainStrategyAcceptance"))new BacktestDailyMaterializationPort(jdbc).sourceState();
-        if(stage.equals("BacktestDaily")&&!json.writeValueAsString(new BacktestDailyMaterializationPort(jdbc).sourceState()).equals(e.path("details").path("backtest").toString()))throw new Gate(BusinessState.BLOCKED,"Published backtest result table or view changed");
+        if(stage.equals("BacktestDaily")||stage.equals("MainStrategyAcceptance"))new BacktestDailyMaterializedViewPort(jdbc).sourceState();
+        if(stage.equals("BacktestDaily")&&!json.writeValueAsString(new BacktestDailyMaterializedViewPort(jdbc).sourceState()).equals(e.path("details").path("backtest").toString()))throw new Gate(BusinessState.BLOCKED,"Native backtest MV or raw sources changed");
         if(stage.equals("L2DailyFeatures")) {
             for(var proof:e.path("details").path("dates")) {var actual=l2.validate(LocalDate.parse(proof.path("day").asText()));if(!actual.sourceFingerprint().equals(proof.path("sourceFingerprint").asText())||!actual.readbackDigest().equals(proof.path("readbackDigest").asText())||!actual.targetIdentity().equals(proof.path("targetIdentity").asText()))throw new Gate(BusinessState.BLOCKED,"Native L2 source/physical values changed after completion");}
         }
@@ -452,9 +455,9 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
     private Map<String,Object> verifyConsumer(LocalDate target,com.zoutrankil.data.strategy.store.StoredOfficialPlan plan)throws Exception {
         if(!calendar(target,target).equals(List.of(target)))throw new Gate(BusinessState.BLOCKED,"Consumer target is not an open SSE day");
         finiteRow("market_sentiment_daily",target,List.of("sentiment_score","sentiment_score_core","heat_score","breadth_score","limit_score","profit_effect_score","moneyflow_score"));finiteRow("regime_features_monitor_daily",target,REGIME_REQUIRED);
-        var port=new BacktestDailyMaterializationPort(jdbc);var state=port.sourceState();
-        requireContains("v_backtest_daily","trade_date","stk_factor","trade_date",target);
-        for(String field:List.of("open","high","low","close","vol","amount","adj_factor","up_limit","down_limit"))finiteColumn("v_backtest_daily","trade_date",target,field);
+        var port=new BacktestDailyMaterializedViewPort(jdbc);var state=port.sourceState();
+        requireContains("mv_backtest_daily","trade_date","stk_factor","trade_date",target);
+        for(String field:List.of("open","high","low","close","vol","amount","adj_factor","up_limit","down_limit"))finiteColumn("mv_backtest_daily","trade_date",target,field);
         var etfCounts=jdbc.queryForList("SELECT count() AS n FROM etf_daily WHERE timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP)",micros(target),micros(target.plusDays(1)));long current=((Number)etfCounts.getFirst().get("n")).longValue();
         var history=jdbc.queryForList("SELECT timestamp,count() AS n FROM etf_daily WHERE timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP) GROUP BY timestamp ORDER BY timestamp LIMIT 41",micros(target.minusDays(40)),micros(target));var ns=history.stream().map(v->((Number)v.get("n")).longValue()).sorted().toList();double baseline=ns.isEmpty()?current:ns.size()%2==1?ns.get(ns.size()/2):(ns.get(ns.size()/2-1)+ns.get(ns.size()/2))/2.0;
         if(current<=0||current<baseline*0.95)throw new Gate(BusinessState.WAITING_SOURCE,"ETF daily pool below 95% recent median");

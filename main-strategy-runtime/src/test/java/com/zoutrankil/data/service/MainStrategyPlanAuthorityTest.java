@@ -1,8 +1,8 @@
 package com.zoutrankil.data.service;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.zoutrankil.batch.BusinessState;
-import com.zoutrankil.batch.CompletionEvidence;
+import com.zoutrankil.batch.domain.BusinessState;
+import com.zoutrankil.batch.domain.CompletionEvidence;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import java.time.Instant;
 import java.time.LocalDate;

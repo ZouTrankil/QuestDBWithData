@@ -30,16 +30,16 @@ class BacktestDailyViewMappingTest {
                         null, null, null, null, null, null, null, null, null, null, null));
     }
 
-    @Test void readViewHasNoPhysicalPartitionsWalDedupOrDirectWrites() {
+    @Test void nativeMvHasItsOwnStorageAndOnlyReadCapability() {
         var definition = BacktestDailyViewDataset.DEFINITION;
-        assertEquals("v_backtest_daily", definition.objectName());
-        assertEquals(DatasetDefinition.ObjectKind.VIEW, definition.objectKind());
+        assertEquals("mv_backtest_daily", definition.objectName());
+        assertEquals(DatasetDefinition.ObjectKind.MATERIALIZED_VIEW, definition.objectKind());
         assertEquals(List.of("trade_date", "ts_code"), definition.businessKey());
         assertTrue(definition.dedupKey().isEmpty());
         assertEquals("trade_date", definition.designatedTimestamp());
-        assertEquals(DatasetDefinition.Partition.NONE, definition.partition());
-        assertFalse(definition.wal());
-        assertEquals(List.of("backtest_daily"), definition.dependencies());
+        assertEquals(DatasetDefinition.Partition.MONTH, definition.partition());
+        assertTrue(definition.wal());
+        assertEquals(List.of("stk_factor","stk_limit","stk_suspend","stk_st_daily"), definition.dependencies());
         assertEquals(Set.of(DatasetDefinition.Capability.READ), definition.capabilities());
         assertEquals(DatasetDefinition.StorageType.LONG,
                 definition.columns().stream().filter(c -> c.storageName().equals("is_suspended")).findFirst().orElseThrow().storageType());

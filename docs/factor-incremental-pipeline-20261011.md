@@ -1,5 +1,6 @@
 # 因子增量计算与多池复用（2026-10-11）
 
+> 当前回测结构为直接关联四张原始表的 QuestDB 原生物化视图 `mv_backtest_daily`，`REFRESH IMMEDIATE` 以 `stk_limit` 为基表；采集必须先完成行情、停牌、ST，再写涨跌停。`backtest_daily`、`v_backtest_daily` 和旧 Java 发布流程已退役。下文旧 FULL/MANUAL 刷新与发布记录仅为 2026-10-11 历史记录，不再作为执行步骤。
 ## 数据流
 
 同一交易日读取一次带版本的源快照，生成 GLOBAL 原始因子，再按池成员选择样本。

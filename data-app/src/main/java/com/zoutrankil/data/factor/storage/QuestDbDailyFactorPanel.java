@@ -31,7 +31,7 @@ public final class QuestDbDailyFactorPanel {
             LocalDate historyFrom,LocalDate through,long sourceRows,long retainedRows,long excludedRows) {}
     /** Same alias/listing rules as the full panel, without basic-data joins or unused columns. */
     public PriceSnapshot readPrices(LocalDate historyFrom,LocalDate through,int maxRows) {
-        return readProjected(historyFrom,through,maxRows,"v_backtest_daily",List.of("close"),new int[]{0});
+        return readProjected(historyFrom,through,maxRows,"mv_backtest_daily",List.of("close"),new int[]{0});
     }
     public record CsiSnapshot(PriceSnapshot market,PriceSnapshot basic,List<Map<String,Object>> sourceState) {
         public List<com.zoutrankil.data.factor.engine.EtfCsiPipeline.Security> prepare(QuestDbCsiFinancials.Snapshot financials) {
@@ -62,7 +62,7 @@ public final class QuestDbDailyFactorPanel {
     /** Preserve the basic table's own observed dates for turnover rolling windows. */
     public CsiSnapshot readCsi(LocalDate historyFrom,LocalDate through,int maxRowsPerSource) {
         var before=state();
-        var market=readProjected(historyFrom,through,maxRowsPerSource,"v_backtest_daily",List.of("close","amount"),new int[]{0,1});
+        var market=readProjected(historyFrom,through,maxRowsPerSource,"mv_backtest_daily",List.of("close","amount"),new int[]{0,1});
         var basic=readProjected(historyFrom,through,maxRowsPerSource,"daily_basic",
                 List.of("turnover_rate","total_mv","pb","pe_ttm","dv_ttm"),new int[0]);
         if(!before.equals(state()))throw new IllegalStateException("CSI market/basic sources changed during read");
@@ -76,7 +76,7 @@ public final class QuestDbDailyFactorPanel {
         if(historyFrom==null || through==null || historyFrom.isAfter(through)
                 || ChronoUnit.DAYS.between(historyFrom,through)>com.zoutrankil.data.factor.engine.EtfHistoryWindow.MAX_DAYS || maxRows<1 || maxRows>5_000_000)
             throw new IllegalArgumentException("Bounded stock price history required");
-        var before=table.equals("v_backtest_daily")?priceState():state();var listing=listingDates();var aliases=StockCodeAliases.load();
+        var before=table.equals("mv_backtest_daily")?priceState():state();var listing=listingDates();var aliases=StockCodeAliases.load();
         var builders=new LinkedHashMap<String,Columns>();long[] sourceRows={0};long kept=0,excluded=0;
         for(LocalDate start=historyFrom;!start.isAfter(through);) {
             LocalDate end=start.withDayOfMonth(1).plusMonths(1);if(end.isAfter(through.plusDays(1)))end=through.plusDays(1);
@@ -90,7 +90,7 @@ public final class QuestDbDailyFactorPanel {
             }
             start=end;
         }
-        if(!before.equals(table.equals("v_backtest_daily")?priceState():state()))throw new IllegalStateException("Stock source changed during read");
+        if(!before.equals(table.equals("mv_backtest_daily")?priceState():state()))throw new IllegalStateException("Stock source changed during read");
         var securities=new ArrayList<DailyFactorPanel.Security>();
         builders.forEach((symbol,columns)->securities.add(columns.finish(symbol,listing.containsKey(symbol)?listing.get(symbol).listed():null)));
         return new PriceSnapshot(List.copyOf(securities),before,historyFrom,through,sourceRows[0],kept,excluded);
@@ -99,9 +99,9 @@ public final class QuestDbDailyFactorPanel {
         if(!snapshot.sourceState().equals(priceState()))throw new IllegalStateException("Stock price source changed after read");
     }
     private List<Map<String,Object>> priceState() {
-        if(!QuestDbWriteChecks.walSettled(jdbc,"backtest_daily"))throw new IllegalStateException("Stock price WAL unsettled");
+        if(!QuestDbWriteChecks.walSettled(jdbc,"mv_backtest_daily"))throw new IllegalStateException("Stock price WAL unsettled");
         var rows=jdbc.queryForList("SELECT id,table_name,directoryName,table_txn,wal_txn FROM tables()"
-                +" WHERE table_name IN ('backtest_daily','stock_detail_info') ORDER BY table_name");
+                +" WHERE table_name IN ('mv_backtest_daily','stock_detail_info') ORDER BY table_name");
         if(rows.size()!=2)throw new IllegalStateException("Stock price/reference source missing");
         return BacktestFactorSource.stamp(jdbc,rows);
     }
@@ -118,7 +118,7 @@ public final class QuestDbDailyFactorPanel {
             LocalDate end=start.withDayOfMonth(1).plusMonths(1);
             if(end.isAfter(through.plusDays(1)))end=through.plusDays(1);
             String filter="trade_date>='"+start+"' AND trade_date<'"+end+"'";
-            var market=aliases.normalize(readSource("v_backtest_daily",MARKET,filter,maxRows,sourceRows,0),new int[]{0,1,2,3,4,5});
+            var market=aliases.normalize(readSource("mv_backtest_daily",MARKET,filter,maxRows,sourceRows,0),new int[]{0,1,2,3,4,5});
             var basic=aliases.normalize(readSource("daily_basic",BASIC,filter,maxRows,sourceRows,1),new int[0]);
             var basicByKey=new java.util.HashMap<SecurityDate,double[]>();
             for(var row:basic) {
@@ -165,10 +165,10 @@ public final class QuestDbDailyFactorPanel {
         return rows;
     }
     private List<Map<String,Object>> state() {
-        for(String table:List.of("backtest_daily","daily_basic"))
+        for(String table:List.of("mv_backtest_daily","daily_basic"))
             if(!QuestDbWriteChecks.walSettled(jdbc,table))throw new IllegalStateException("Panel source WAL not settled: "+table);
         return BacktestFactorSource.stamp(jdbc,jdbc.queryForList("SELECT id,table_name,directoryName,table_txn,wal_txn FROM tables()"
-                +" WHERE table_name IN ('backtest_daily','daily_basic','stock_detail_info') ORDER BY table_name"));
+                +" WHERE table_name IN ('mv_backtest_daily','daily_basic','stock_detail_info') ORDER BY table_name"));
     }
     private Map<String,ListingInterval> listingDates() {
         var dates=new LinkedHashMap<String,ListingInterval>();

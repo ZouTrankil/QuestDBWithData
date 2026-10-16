@@ -1,7 +1,7 @@
 package com.zoutrankil.data.config;
 
-import com.zoutrankil.batch.ChinabondYieldSource;
-import com.zoutrankil.batch.SourceRuntimeConfiguration;
+import com.zoutrankil.batch.source.chinabond.ChinabondYieldSource;
+import com.zoutrankil.batch.config.SourceRuntimeConfiguration;
 import com.zoutrankil.data.client.SharedRequestBudget;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

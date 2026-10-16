@@ -1,7 +1,7 @@
 package com.zoutrankil.batch.l2;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zoutrankil.batch.DfcfCsvParser;
+import com.zoutrankil.batch.l2.archive.DfcfCsvParser;
 import com.zoutrankil.batch.l2.L2BatchState.*;
 import java.io.IOException;
 import java.lang.reflect.*;
@@ -120,9 +120,30 @@ class L2DailyFeatureBatchExecutionTest {
         service.execute(request);assertEquals(2,parses.get());
         var first=json.readTree(dayOutput.resolve("manifest.json").toFile());assertEquals(0,first.path("counts").path("resumed").asInt());
         assertNotEquals(old.path("computeFingerprint").asText(),first.path("computeFingerprint").asText());
-        assertEquals(old.path("aggregateSha256").asText(),L2FeatureFiles.sha256(dayOutput.resolve("l2_daily_features.jsonl")));
+        var originalDigest=L2FeatureFiles.digest();var filenames=new TreeSet<String>();old.path("checkpoints").fieldNames().forEachRemaining(filenames::add);
+        for(String filename:filenames)try(var in=getClass().getResourceAsStream("/l2-native-batch/features/"+filename)) {
+            String text=new String(Objects.requireNonNull(in).readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);
+            // The historical aggregate was captured on Windows; per-symbol files use LF.
+            L2FeatureFiles.update(originalDigest,text.strip()+"\r\n");
+            var expected=json.readTree(text);var actualRow=json.readTree(dayOutput.resolve("features/"+filename).toFile());
+            assertEquals(expected.size(),actualRow.size(),filename);
+            var names=expected.fieldNames();while(names.hasNext()) {
+                String field=names.next();var reference=expected.get(field);var value=actualRow.get(field);
+                assertNotNull(value,filename+" "+field);
+                // Math.tanh may differ by an ulp across JVM/CPU implementations.
+                // Keep the historical bytes pinned and verify recomputed floating values separately.
+                if(reference.isFloatingPointNumber()) {
+                    assertTrue(value.isNumber(),filename+" "+field);
+                    assertEquals(reference.doubleValue(),value.doubleValue(),2*Math.ulp(reference.doubleValue()),filename+" "+field);
+                }else assertEquals(reference,value,filename+" "+field);
+            }
+        }
+        assertEquals(old.path("aggregateSha256").asText(),L2FeatureFiles.hex(originalDigest));
+        String recomputedHash=L2FeatureFiles.sha256(dayOutput.resolve("l2_daily_features.jsonl"));
+        assertEquals(recomputedHash,first.path("aggregateSha256").asText());
         service.execute(request);assertEquals(2,parses.get());
         assertEquals(2,json.readTree(dayOutput.resolve("manifest.json").toFile()).path("counts").path("resumed").asInt());
+        assertEquals(recomputedHash,L2FeatureFiles.sha256(dayOutput.resolve("l2_daily_features.jsonl")));
     }
 
     private static void await(CountDownLatch latch) throws IOException {

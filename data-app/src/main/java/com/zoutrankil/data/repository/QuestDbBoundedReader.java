@@ -131,7 +131,7 @@ public class QuestDbBoundedReader {
 
     private String guardedSourceVersion(DatasetDefinition definition) {
         if (BacktestDailyMaterializationReadGuard.applies(definition))
-            return BacktestDailyMaterializationReadGuard.version(jdbc, definition, ledgerPath);
+            return BacktestDailyMaterializationReadGuard.version(jdbc, definition);
         if (DerivedMonthlyReadGuards.appliesEquityStyle(definition))
             return DerivedMonthlyReadGuards.versionEquityStyle(jdbc, definition);
         if (DerivedMonthlyReadGuards.appliesMacroCore(definition))
@@ -151,7 +151,7 @@ public class QuestDbBoundedReader {
     private String requireCurrentEtfAggregateView(DatasetDefinition definition) {
         if (!definition.dependencies().equals(GUARDED_ETF_AGGREGATE_SOURCES))
             throw new IllegalStateException("ETF aggregate differs from its registered two-source dependency contract");
-        String nativeVersion = EtfMarketOverviewMaterializedViewReadGuard.versionIfActivated(jdbc);
+        String nativeVersion = EtfMarketOverviewMaterializedViewReadGuard.versionIfActivated(jdbc,ledgerPath);
         if (nativeVersion != null) return nativeVersion;
         AliasState before = etfAggregateViewState();
         String share = requireEtfAggregateSource("etf_share", EtfShareDataset.DEFINITION);

@@ -1,7 +1,7 @@
 package com.zoutrankil.data.factor.storage;
 
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.repository.BacktestDailyMaterializationPort;
+import com.zoutrankil.data.repository.BacktestDailyMaterializedViewPort;
 import java.util.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -10,7 +10,7 @@ public final class BacktestFactorSource {
     public static final String VERSION_KEY = "backtestSourceVersion";
     private BacktestFactorSource() {}
     public static String version(JdbcTemplate jdbc) {
-        var state = new BacktestDailyMaterializationPort(jdbc).sourceState();
+        var state = new BacktestDailyMaterializedViewPort(jdbc).sourceState();
         try { return JobDefinitionJson.canonicalMapper().writeValueAsString(state); }
         catch (java.io.IOException failure) { throw new IllegalStateException("Cannot encode backtest source version", failure); }
     }

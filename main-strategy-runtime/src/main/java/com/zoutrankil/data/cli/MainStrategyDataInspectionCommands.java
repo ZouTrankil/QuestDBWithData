@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 @ConditionalOnNotWebApplication
 public final class MainStrategyDataInspectionCommands implements CliCommandFamily {
     private final ObjectProvider<MainStrategyDataService> data;
-    private final ObjectProvider<com.zoutrankil.batch.MainStrategyDailyWork> pipeline;
+    private final ObjectProvider<com.zoutrankil.batch.job.MainStrategyDailyWork> pipeline;
 
     public MainStrategyDataInspectionCommands(ObjectProvider<MainStrategyDataService> data,
-            ObjectProvider<com.zoutrankil.batch.MainStrategyDailyWork> pipeline) {
+            ObjectProvider<com.zoutrankil.batch.job.MainStrategyDailyWork> pipeline) {
         this.data=data;this.pipeline=pipeline;
     }
 

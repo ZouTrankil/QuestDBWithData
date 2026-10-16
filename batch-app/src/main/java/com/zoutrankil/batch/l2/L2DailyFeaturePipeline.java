@@ -1,6 +1,6 @@
 package com.zoutrankil.batch.l2;
 
-import com.zoutrankil.batch.DfcfCsvParser;
+import com.zoutrankil.batch.l2.archive.DfcfCsvParser;
 import com.zoutrankil.data.domain.L2DailyFeatureField;
 import com.zoutrankil.data.domain.L2DailyFeatures;
 import java.io.IOException;

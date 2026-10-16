@@ -39,7 +39,7 @@ public final class MainStrategyDataService {
         plans=new OfficialPlanStore(this.planDatabase);this.start=LocalDate.parse(start);
     }
     public String definitionFingerprint()throws Exception {
-        return com.zoutrankil.batch.RunRequest.hash("java.main_strategy.data.v1",start.toString(),recipe.toString(),stamp(recipe),pins.toString(),stamp(pins),allowedRoot.toString(),planDatabase.toString());
+        return com.zoutrankil.batch.domain.RunRequest.hash("java.main_strategy.data.v1",start.toString(),recipe.toString(),stamp(recipe),pins.toString(),stamp(pins),allowedRoot.toString(),planDatabase.toString());
     }
     public Map<String,Object> status()throws Exception {
         var result=new LinkedHashMap<String,Object>();result.put("producer","java.main_strategy.data");result.put("scoreStart",start);result.put("promotedRecipe",recipe.toString());result.put("recipePins",pins.toString());result.put("planDatabase",planDatabase.toString());

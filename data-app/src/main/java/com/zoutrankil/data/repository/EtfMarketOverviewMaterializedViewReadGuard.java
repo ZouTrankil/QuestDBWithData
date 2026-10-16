@@ -1,6 +1,7 @@
 package com.zoutrankil.data.repository;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.HexFormat;
 import java.util.List;
@@ -8,11 +9,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import org.springframework.jdbc.core.JdbcTemplate;
+import com.zoutrankil.data.maintenance.storage.MaterializedViewCheckpoints;
 
-/** Both JOIN input revisions must match the verified native refresh receipt. */
+/** Both JOIN input revisions must match the verified certificate in the local run ledger. */
 public final class EtfMarketOverviewMaterializedViewReadGuard {
     public static final String OUTPUT = "mv_etf_market_overview_daily_v1";
-    public static final String RECEIPT = "etf_market_overview_mv_refresh";
     public static final String SQL = """
             SELECT
                 s.timestamp AS trade_date,
@@ -28,6 +29,10 @@ public final class EtfMarketOverviewMaterializedViewReadGuard {
 
     /** Null retains the original direct-view guard during staged deployment. */
     public static String versionIfActivated(JdbcTemplate jdbc) {
+        return versionIfActivated(jdbc,Path.of(System.getProperty("app.sync.ledger-path","var/sync-ledger.sqlite3")));
+    }
+
+    public static String versionIfActivated(JdbcTemplate jdbc,Path ledger) {
         var aliases = jdbc.queryForList("SELECT view_sql,view_status,invalidation_reason,view_table_dir_name "
                 + "FROM views() WHERE view_name='v_etf_market_overview_daily'");
         if (aliases.isEmpty()) return null;
@@ -39,24 +44,45 @@ public final class EtfMarketOverviewMaterializedViewReadGuard {
         String aliasDirectory = text(alias, "view_table_dir_name");
         String share = snapshot(jdbc, "etf_share"), daily = snapshot(jdbc, "etf_daily");
         String pin = sha(normalized(SQL) + "|" + share + "|" + daily);
-        var view = one(jdbc.queryForList("SELECT * FROM materialized_views() WHERE view_name='" + OUTPUT + "'"));
-        if (!"etf_share".equals(view.get("base_table_name")) || !"manual".equals(view.get("refresh_type"))
-                || !"valid".equals(view.get("view_status")) || nonempty(view.get("invalidation_reason"))
-                || !normalized(SQL).equals(normalized(view.get("view_sql")))
+        var view = view(jdbc);
+        requireDefinition(view);
+        if (!"valid".equals(view.get("view_status")) || nonempty(view.get("invalidation_reason"))
                 || counter(view, "refresh_base_table_txn") != counter(view, "base_table_txn"))
             throw new IllegalStateException("ETF native MV definition or checkpoint is not current");
         String output = snapshot(jdbc, OUTPUT);
-        var receipt = one(jdbc.queryForList("SELECT source_version,output_version FROM " + RECEIPT
-                + " ORDER BY refreshed_at DESC LIMIT 1"));
-        if (!pin.equals(receipt.get("source_version")) || !output.equals(receipt.get("output_version")))
+        String checkpoint=checkpointName(jdbc);
+        var receipt = new MaterializedViewCheckpoints(ledger).find(checkpoint)
+                .orElseThrow(() -> new IllegalStateException("ETF local refresh checkpoint missing; run refresh-etf-overview"));
+        if (!definitionHash().equals(receipt.definitionHash()) || !share.equals(receipt.leftVersion())
+                || !daily.equals(receipt.rightVersion()) || !output.equals(receipt.outputVersion())
+                || !Objects.toString(view.get("last_refresh_finish_timestamp"),"").equals(receipt.refreshFinished()))
             throw new IllegalStateException("ETF JOIN inputs/output changed after verified refresh");
         if (!share.equals(snapshot(jdbc, "etf_share")) || !daily.equals(snapshot(jdbc, "etf_daily"))
                 || !output.equals(snapshot(jdbc, OUTPUT)))
             throw new IllegalStateException("ETF source/output revisions changed during verification");
-        return "etf-native:" + pin + "|" + output + "|" + aliasDirectory;
+        return "etf-native:" + checkpoint + "|" + pin + "|" + output + "|" + aliasDirectory;
     }
 
-    static String normalized(Object value) {
+    public static Map<String,Object> view(JdbcTemplate jdbc) {
+        return one(jdbc.queryForList("SELECT * FROM materialized_views() WHERE view_name='"+OUTPUT+"'"));
+    }
+
+    public static void requireDefinition(Map<String,Object> view) {
+        if(!"etf_share".equals(view.get("base_table_name"))
+                || !java.util.Set.of("manual","immediate").contains(Objects.toString(view.get("refresh_type"),""))
+                || !normalized(SQL).equals(normalized(view.get("view_sql"))))
+            throw new IllegalStateException("Unexpected ETF native MV definition or refresh policy");
+    }
+
+    public static String definitionHash() { return sha(normalized(SQL)); }
+
+    public static String checkpointName(JdbcTemplate jdbc) {
+        String identity=jdbc.queryForObject("SELECT current_data_id()",String.class);
+        if(identity==null||identity.isBlank())throw new IllegalStateException("QuestDB database identity unavailable");
+        return OUTPUT+"@"+identity;
+    }
+
+    public static String normalized(Object value) {
         return value == null ? "" : value.toString().strip().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
     }
 
@@ -66,7 +92,8 @@ public final class EtfMarketOverviewMaterializedViewReadGuard {
         } catch (java.security.NoSuchAlgorithmException e) { throw new IllegalStateException(e); }
     }
 
-    private static String snapshot(JdbcTemplate jdbc, String table) {
+    public static String snapshot(JdbcTemplate jdbc, String table) {
+        if(!java.util.Set.of("etf_share","etf_daily",OUTPUT).contains(table))throw new IllegalArgumentException("Unknown ETF source/output");
         var row = one(jdbc.queryForList("SELECT t.id,t.directoryName,t.table_txn,t.walEnabled,t.table_suspended,"
                 + "t.wal_pending_row_count,w.sequencerTxn,w.writerTxn,w.bufferedTxnSize,w.suspended "
                 + "FROM tables() t JOIN wal_tables() w ON w.name=t.table_name WHERE t.table_name=?", table));

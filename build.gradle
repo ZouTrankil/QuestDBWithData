@@ -35,10 +35,14 @@ def data = project(':data-app')
 def batch = project(':batch-app')
 def strategy = project(':main-strategy-runtime')
 def modules = [core, data, batch, strategy]
-// One source file is also bundled in each independent application's distribution.
+// Runtime configuration has one editable source, shared by the independent distributions.
+def runtimeConfigFiles = ['application.yml', 'logback-spring.xml']
 [data, batch].each { module ->
     module.tasks.named('processResources') {
-        from(rootProject.file('config')) { include 'application.yml' }
+        from(rootProject.file('config')) { include runtimeConfigFiles }
+    }
+    module.distributions.named('main') {
+        contents { from(rootProject.file('config')) { include runtimeConfigFiles; into 'config' } }
     }
 }
 def layeredModules = [core, data, batch]
@@ -177,7 +181,7 @@ tasks.register('batchControl', JavaExec) {
     group = 'application'
     dependsOn batch.tasks.named('classes')
     classpath = batch.sourceSets.main.runtimeClasspath
-    mainClass = 'com.zoutrankil.batch.BatchControl'
+    mainClass = 'com.zoutrankil.batch.cli.BatchControl'
 }
 tasks.register('l2DailyFeatureCompute', JavaExec) {
     group = 'application'
@@ -205,6 +209,15 @@ tasks.register('mainStrategyData', JavaExec) {
     mainClass = 'com.zoutrankil.data.strategy.cli.MainStrategyDataCli'
     javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(24) }
     jvmArgs "-Xmx${providers.gradleProperty('mainStrategyDataHeap').getOrElse('16g')}"
+}
+
+tasks.register('questdbMaintenance', JavaExec) {
+    group = 'application'
+    description = 'Inspect native MVs, verify ETF refreshes, or archive and retire registered legacy sync metadata.'
+    dependsOn data.tasks.named('classes')
+    classpath = data.sourceSets.main.runtimeClasspath
+    mainClass = 'com.zoutrankil.data.maintenance.cli.QuestDbMaintenanceCli'
+    javaLauncher = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(24) }
 }
 
 tasks.register('aliyunL2Live', JavaExec) {
@@ -299,7 +312,7 @@ tasks.register('batchStartScripts', CreateStartScripts) {
 }
 tasks.register('batchControlScripts', CreateStartScripts) {
     applicationName = 'questdb-batch-control'
-    mainClass = 'com.zoutrankil.batch.BatchControl'
+    mainClass = 'com.zoutrankil.batch.cli.BatchControl'
     classpath = files(tasks.named('batchRuntimeJar').flatMap { it.archiveFile }) + batch.configurations.runtimeClasspath
     outputDir = layout.buildDirectory.dir('batch-control-scripts').get().asFile
 }
@@ -309,9 +322,7 @@ distributions {
         contents {
             // The root application jar already contains data-app. A single FileCollection
             // also deduplicates dependencies shared by the app and composition runtime.
-            from((data.configurations.runtimeClasspath + strategy.configurations.runtimeClasspath).filter {
-                it != data.tasks.named('jar').get().archiveFile.get().asFile
-            }) { into 'lib' }
+            from('config') { include runtimeConfigFiles; into 'config' }
             from(strategy.tasks.named('jar')) { into 'lib' }
             from(mainDistributionRuntime) { into 'lib' }
         }
@@ -323,6 +334,7 @@ distributions {
             from(tasks.named('batchControlScripts')) { into 'bin'; fileMode = 0755 }
             from(tasks.named('batchRuntimeJar')) { into 'lib' }
             from(batch.configurations.runtimeClasspath) { into 'lib' }
+            from('config') { include runtimeConfigFiles; into 'config' }
             from('deploy/batch') { into 'config-examples' }
         }
     }
@@ -367,9 +379,11 @@ tasks.register('verifyModuleBoundaries') {
         requireCondition(!batchEntries.any { it.startsWith('db/migration/questdb/') }, 'batch-app contains QuestDB migrations')
         [data, batch].each { module ->
             new java.util.zip.ZipFile(module.tasks.named('jar').get().archiveFile.get().asFile).withCloseable { zip ->
-                def entry = zip.getEntry('application.yml')
-                requireCondition(entry != null && zip.getInputStream(entry).bytes == rootProject.file('config/application.yml').bytes,
-                        "${module.path} must package the single shared configuration source")
+                runtimeConfigFiles.each { name ->
+                    def entry = zip.getEntry(name)
+                    requireCondition(entry != null && zip.getInputStream(entry).bytes == rootProject.file("config/${name}").bytes,
+                            "${module.path} must package the canonical configuration: ${name}")
+                }
                 requireCondition(zip.getEntry('batch-runtime.yml') == null, 'Obsolete Batch configuration is still packaged')
             }
         }

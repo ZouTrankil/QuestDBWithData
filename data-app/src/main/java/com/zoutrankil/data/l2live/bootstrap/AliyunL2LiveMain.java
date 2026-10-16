@@ -10,6 +10,8 @@ import com.zoutrankil.data.l2live.domain.AliyunL2WireParser;
 import com.zoutrankil.data.l2live.domain.L2MinuteAccumulator;
 import com.zoutrankil.data.l2live.storage.RawJournal;
 import com.zoutrankil.data.l2live.storage.QuestDbLiveSink;
+import com.zoutrankil.data.bootstrap.ProjectConfiguration;
+import com.zoutrankil.data.bootstrap.ProjectLogging;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
@@ -33,6 +35,7 @@ public final class AliyunL2LiveMain {
     private AliyunL2LiveMain() {}
 
     public static void main(String[] args) {
+        ProjectLogging.initialize(ProjectConfiguration.load("l2"));
         int result = execute(args, System.getenv());
         if (result != 0) System.exit(result);
     }

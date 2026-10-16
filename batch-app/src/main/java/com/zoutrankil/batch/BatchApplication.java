@@ -1,5 +1,7 @@
 package com.zoutrankil.batch;
 
+import com.zoutrankil.batch.config.RuntimeConfiguration;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.SpringBootConfiguration;

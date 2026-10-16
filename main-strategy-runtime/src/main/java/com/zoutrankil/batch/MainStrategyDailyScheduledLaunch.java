@@ -5,15 +5,11 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-/** Both first launch and recovery use this one durable Quartz job identity. */
+/** Compatibility name for the existing persistent main-strategy Quartz job. */
+@Deprecated
 @DisallowConcurrentExecution
 public final class MainStrategyDailyScheduledLaunch implements Job {
-    @Override public void execute(JobExecutionContext execution) throws JobExecutionException {
-        try {
-            var coordinator=(MainStrategyDailyCoordinator)execution.getScheduler().getContext().get("mainStrategyCoordinator");
-            coordinator.probe("quartz:"+execution.getFireInstanceId(),
-                    execution.getScheduledFireTime().toInstant(),execution.getFireTime().toInstant(),
-                    execution.getTrigger().getKey().getName().equals("recovery"));
-        } catch(Exception error) { throw new JobExecutionException(error,false); }
+    @Override public void execute(JobExecutionContext context) throws JobExecutionException {
+        new com.zoutrankil.batch.strategy.MainStrategyDailyScheduledLaunch().execute(context);
     }
 }

@@ -5,6 +5,24 @@ spring:
   profiles:
     default: data
 
+logging:
+  config: ${LOGGING_CONFIG:classpath:logback-spring.xml}
+  level:
+    root: ${LOG_LEVEL:INFO}
+  file:
+    path: ${LOG_DIR:logs/${spring.application.name:questdb-data}}
+    name: ${LOG_FILE:${logging.file.path}/application.log}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"
+    file: "${logging.pattern.console}"
+  logback:
+    rollingpolicy:
+      file-name-pattern: ${LOG_ARCHIVE_PATTERN:${logging.file.path}/application.%d{yyyy-MM-dd}.%i.log.gz}
+      max-file-size: ${LOG_MAX_FILE_SIZE:100MB}
+      max-history: ${LOG_MAX_HISTORY:30}
+      total-size-cap: ${LOG_TOTAL_SIZE_CAP:1GB}
+      clean-history-on-start: true
+
 app:
   time:
     business-zone: Asia/Shanghai
@@ -47,6 +65,8 @@ app:
 ---
 # 主服务 / 数据 CLI（不影响原有 CLI 的隔离目标表规则）
 spring:
+  application:
+    name: questdb-data
   config:
     activate:
       on-profile: data
@@ -66,6 +86,13 @@ app:
     enabled: true
     api-token: ${APP_API_TOKEN:}
     allowed-origins: ${APP_ALLOWED_ORIGINS:*}
+  materialized-views:
+    etf-overview:
+      enabled: ${ETF_OVERVIEW_REFRESH_ENABLED:true}
+      check-interval: ${ETF_OVERVIEW_REFRESH_CHECK_INTERVAL:1m}
+      refresh-timeout: ${ETF_OVERVIEW_REFRESH_TIMEOUT:2m}
+  maintenance:
+    legacy-metadata-archive: ${LEGACY_METADATA_ARCHIVE:var/retired-sync-metadata}
   migration:
     location: classpath:db/migration/questdb
     history-table: java_tushare_schema_history
@@ -101,6 +128,8 @@ app:
 ---
 # 独立 Batch（SQLite 元数据，不启用主服务的 PGWire DataSource）
 spring:
+  application:
+    name: questdb-batch
   config:
     activate:
       on-profile: batch
@@ -119,6 +148,13 @@ jdb:
   l2-max-materialized-bytes: ${JDB_L2_MAX_MATERIALIZED_BYTES:34359738368}
   calendar-file: ${JDB_CALENDAR_FILE:}
   scheduling-enabled: ${JDB_SCHEDULING_ENABLED:false}
+  # Initial definitions only. Existing Quartz triggers and pause state survive restarts.
+  schedules:
+    "[post_close]": "${JDB_POST_CLOSE_CRON:0 30 18 ? * MON-FRI}"
+    "[source_cyq_perf]": "${JDB_SOURCE_CYQ_PERF_CRON:0 10 21 ? * MON-FRI}"
+    "[source_us_tbr]": "${JDB_SOURCE_US_TBR_CRON:0 35 21 ? * MON-FRI}"
+    "[post_close_recovery]": "${JDB_POST_CLOSE_RECOVERY_CRON:0 0/15 19-23 ? * MON-FRI}"
+    "[post_close_recovery_final]": "${JDB_POST_CLOSE_RECOVERY_FINAL_CRON:0 55 23 ? * MON-FRI}"
   core-source-fanout-enabled: ${JDB_CORE_SOURCE_FANOUT_ENABLED:true}
   production-enabled: false
   external:
@@ -149,6 +185,8 @@ jdb:
 ---
 # L2 独立采集器（只加载配置，不启动 Spring 容器 / 调度器）
 spring:
+  application:
+    name: questdb-l2
   config:
     activate:
       on-profile: l2

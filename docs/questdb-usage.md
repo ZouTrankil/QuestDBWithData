@@ -113,6 +113,26 @@ LIMIT ?;
 
 定义新模型时按 [新增模型与读写流程](model-development-workflow.md) 填写字段契约，并把对应 SQL 纳入 Flyway。
 
+## 业务账本迁出与旧表退役（2026-10-16）
+
+本轮从 `100.64.153.106` 迁出 26 张交易、券商和策略记录表，共 72,847 条记录，发布到本机 `/Users/Apple/zq/fun/back-monitor/artifacts/quant_platform/` 下的五个现有 SQLite 仓储。Python 项目的 `.env` 中 `QUESTDB_HOST` 同步修正为该地址，凭据未改动。
+
+| 数据 | 表数 | 记录数 | 持久化账本相对路径 |
+| --- | ---: | ---: | --- |
+| 信号、委托、成交和配对计划 | 4 | 1,818 | `best_trader/trade_evidence/records.sqlite3` |
+| 券商对账单和 QMT 账户记录 | 6 | 6,121 | `best_trader/broker_records/records.sqlite3` |
+| 历史回测与每日策略结果 | 7 | 57,768 | `research/strategy_runs/records.sqlite3` |
+| 策略生产结果和产物清单 | 7 | 6,989 | `research/strategy_production/records.sqlite3` |
+| 策略模板与实例修订 | 2 | 151 | `research/strategy_identity/records.sqlite3` |
+
+这些 SQLite 文件是业务数据，不能随临时 `artifacts/` 输出一起清理。Git 忽略规则不等于文件可删除；应与应用配置和研究产物一起持久化备份。
+
+迁移通过 JDBC 保存原始 schema、DDL 和完整字段，导出前后核对物理 ID、事务号和 WAL 状态。发布后逐字段核对行多重集和内容摘要，检查 SQLite 完整性，并通过实际消费者在新进程中读回全部记录。26 张旧表和两张空表 `orders`、`order_fills` 已退役；正式行情、因子、L2 数据与读取视图保留。
+
+原清单中的 13 张 staging/backup 表保留：本机没有可确认其可退役的原发布/恢复凭证。执行期间又观察到一张新生成的停牌 staging 表，同样未操作。后续只能由原任务 owner 核实完成状态和恢复引用后清理，不能按表名前缀批量删除。
+
+本轮原始快照、独立 SQLite 备份、逐表摘要、消费者读回和删除回执保存在 `var/questdb-record-cleanup/20261016T150229Z/`，该目录不纳入 Git，应保留用于审计和恢复。精确快照及受凭证约束的退役入口为 `tools/QuestDbRecordSnapshot.java`；本地发布和消费者验证分别使用 `tools/migrate_questdb_record_archives.py`、`tools/verify_record_archive_consumers.py`。发布工具拒绝覆盖已有业务账本。
+
 ## 官方参考
 
 - [QuestDB Java 客户端与 QWP](https://questdb.com/docs/connect/clients/java/)

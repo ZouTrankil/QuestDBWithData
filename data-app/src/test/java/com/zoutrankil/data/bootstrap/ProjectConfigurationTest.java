@@ -11,6 +11,30 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProjectConfigurationTest {
     @TempDir Path directory;
+    private java.util.Map<String,String> loggingProperties;
+    @org.junit.jupiter.api.BeforeEach void isolateBootLoggingSystemProperties() {
+        loggingProperties=new java.util.HashMap<>();
+        for(String key:java.util.List.of("LOG_FILE","LOG_PATH")) {
+            String value=System.getProperty(key);if(value!=null)loggingProperties.put(key,value);System.clearProperty(key);
+        }
+    }
+    @org.junit.jupiter.api.AfterEach void restoreBootLoggingSystemProperties() {
+        for(String key:java.util.List.of("LOG_FILE","LOG_PATH"))System.clearProperty(key);
+        loggingProperties.forEach(System::setProperty);
+    }
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "l2"})
+    void sharedLoggingUsesEachProcessNameAndAllowsDeploymentOverrides(String profile) throws Exception {
+        var file=configuration("");
+        var defaults=ProjectConfiguration.load(profile,Map.of("SPRING_CONFIG_LOCATION",file.toUri().toString()));
+        assertEquals("logs/questdb-"+profile+"/application.log",defaults.getRequiredProperty("logging.file.name"));
+        var custom=ProjectConfiguration.load(profile,Map.of("SPRING_CONFIG_LOCATION",file.toUri().toString(),
+                "LOG_FILE","/fixture/collector.log","LOG_MAX_HISTORY","7"));
+        assertEquals("/fixture/collector.log",custom.getRequiredProperty("logging.file.name"));
+        assertEquals("7",custom.getRequiredProperty("logging.logback.rollingpolicy.max-history"));
+    }
 
     @Test void commonSettingsAndAnEnvironmentProfileFeedDataConnectionsAndPaths() throws Exception {
         Path file = configuration("""
