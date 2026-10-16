@@ -290,9 +290,12 @@ distributions {
     main {
         distributionBaseName = 'QuestDBWithData'
         contents {
-            from(data.configurations.runtimeClasspath) { into 'lib' }
+            // The root application jar already contains data-app. A single FileCollection
+            // also deduplicates dependencies shared by the app and composition runtime.
+            from((data.configurations.runtimeClasspath + strategy.configurations.runtimeClasspath).filter {
+                it != data.tasks.named('jar').get().archiveFile.get().asFile
+            }) { into 'lib' }
             from(strategy.tasks.named('jar')) { into 'lib' }
-            from(strategy.configurations.runtimeClasspath) { into 'lib' }
         }
     }
     create('batch') {

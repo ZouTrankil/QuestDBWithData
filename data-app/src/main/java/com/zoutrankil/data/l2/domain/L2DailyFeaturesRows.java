@@ -12,6 +12,7 @@ public final class L2DailyFeaturesRows {
     public static final String ISOLATED_TABLE_PREFIX = "java_d086_l2_daily_features_";
     public static final int MAX_BATCH_ROWS = 200;
     public static final int MAX_BATCH_BYTES = 1024 * 1024;
+    public static final int MAX_FORMAL_BATCH_BYTES = 8 * 1024 * 1024;
     public static final int MAX_READBACK_KEYS = 200;
     private static final ObjectMapper JSON = new ObjectMapper();
 

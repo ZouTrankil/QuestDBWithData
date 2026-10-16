@@ -27,6 +27,10 @@ validate-formal-l2-day --date YYYY-MM-DD
 ingest-formal-l2-day --date YYYY-MM-DD
 ```
 
+The native archive batch also emits a day-level JSONL with a `COMPLETE` manifest and aggregate SHA-256. Once that pair is verified, `ingest-formal-l2-jsonl-day --date YYYY-MM-DD --source-root PATH` can publish that day through the same formal writer, date lock, conflict checks, WAL settlement, and exact readback. It checks every row against the manifest's successful symbol receipt and per-symbol result SHA-256 before submission; it still fills only confirmed missing `(ts,symbol)` keys.
+
+For a completed archive batch, `tools/ingest_l2_native_jsonl_formal.ps1` first verifies every requested day's manifest/hash, then invokes the single-day command serially and saves per-day writer evidence plus a post-ingestion `SELECT * FROM l2_daily_features ORDER by ts desc;` result.
+
 Validation is read-only. Ingestion fills certified missing keys under the existing persistent date lock. Both reject future dates and require the configured Parquet/manifest source for the requested date. Successful output includes the native evidence and keeps `factorReady=false`: this command does not certify the broader factor or strategy universe. If delivery becomes uncertain, reconcile the original retained lock before retrying ingestion.
 
 `NativeL2ParquetReaderTest` includes a checked-in Parquet 2.6/Snappy reference generated independently with PyArrow 21.0.0. Generation used Python once; production ingestion and the interoperability test read the bytes using Java only. Hadoop's shaded client API/runtime supplies the Parquet library's compatibility classes; local reads use `LocalInputFile` and a plain Parquet configuration.

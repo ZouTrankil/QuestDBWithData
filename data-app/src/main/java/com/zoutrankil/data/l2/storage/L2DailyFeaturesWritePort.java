@@ -26,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -89,11 +90,12 @@ public final class L2DailyFeaturesWritePort
     @Override public void send(List<L2DailyFeatures> rows) {
         if (rows == null || rows.isEmpty() || rows.size() > MAX_BATCH_ROWS)
             throw new IllegalArgumentException("One nonempty bounded D086 batch is required");
+        long byteBudget = formal ? L2DailyFeaturesRows.MAX_FORMAL_BATCH_BYTES : MAX_BATCH_BYTES;
         var normalized = DatasetWritePreparation.prepare(L2DailyFeaturesDataset.DEFINITION, rows,
-                mapper::values, new DatasetWritePreparation.Limits(MAX_BATCH_ROWS, MAX_BATCH_BYTES));
+                mapper::values, new DatasetWritePreparation.Limits(MAX_BATCH_ROWS, Math.toIntExact(byteBudget)));
         long estimated = rows.stream().mapToLong(row -> CODEC.estimatedTransportBytes(row,
                 CODEC.canonicalBytes(row))).sum();
-        if (normalized.empty() || estimated > MAX_BATCH_BYTES)
+        if (normalized.empty() || estimated > byteBudget)
             throw new IllegalArgumentException("D086 batch exceeds its normalized or transport byte budget");
         if (!senderActive.compareAndSet(false, true)) throw new IllegalStateException("D086 writer already active");
         try (Sender sender = questdb.borrowSender()) {
@@ -125,31 +127,35 @@ public final class L2DailyFeaturesWritePort
         if (keys == null || keys.isEmpty() || keys.size() > MAX_READBACK_KEYS
                 || new HashSet<>(keys).size() != keys.size())
             throw new IllegalArgumentException("At most 200 unique D086 keys may be verified at once");
-        var clauses = new ArrayList<String>(keys.size());
-        var parameters = new ArrayList<Object>(keys.size() * 2);
-        for (var key : keys) {
-            clauses.add("(ts=cast(? as TIMESTAMP) AND symbol=?)");
-            parameters.add(new TemporalValues.CalendarTimestamp(key.tradeDate())
-                    .storageEpoch(TemporalValues.EpochUnit.MICROS));
-            parameters.add(key.symbol());
-        }
         String projection = String.join(", ", SELECT_COLUMNS.stream().map(column -> column.equals("ts")
                 ? "cast(ts as long) AS ts_micros" : column).toList());
-        String sql = "SELECT " + projection + " FROM \"" + table + "\" WHERE "
-                + String.join(" OR ", clauses) + " ORDER BY ts,symbol LIMIT " + (keys.size() + 1);
-        return jdbc.query(connection -> {
-            var statement = connection.prepareStatement(sql);
-            statement.setQueryTimeout(20);
-            statement.setMaxRows(keys.size() + 1);
-            statement.setFetchSize(keys.size() + 1);
-            for (int i = 0; i < parameters.size(); i++) {
-                Object parameter = parameters.get(i);
-                if (parameter instanceof String text) statement.setString(i + 1, text);
-                else if (parameter instanceof Long number) statement.setLong(i + 1, number);
-                else throw new SQLException("Unsupported D086 key binding");
-            }
-            return statement;
-        }, (rs, index) -> mapper.fromValues(readValues(rs)));
+        var keysByDate = new TreeMap<LocalDate, List<L2DailyFeaturesKey>>();
+        for (var key : keys) keysByDate.computeIfAbsent(key.tradeDate(), ignored -> new ArrayList<>()).add(key);
+        var rows = new ArrayList<L2DailyFeatures>();
+        for (var entry : keysByDate.entrySet()) {
+            var dateKeys = entry.getValue();
+            var parameters = new ArrayList<Object>(dateKeys.size() + 1);
+            parameters.add(new TemporalValues.CalendarTimestamp(entry.getKey())
+                    .storageEpoch(TemporalValues.EpochUnit.MICROS));
+            for (var key : dateKeys) parameters.add(key.symbol());
+            String symbols = String.join(", ", java.util.Collections.nCopies(dateKeys.size(), "?"));
+            String sql = "SELECT " + projection + " FROM \"" + table + "\" WHERE ts=cast(? as TIMESTAMP)"
+                    + " AND symbol IN (" + symbols + ") ORDER BY ts,symbol LIMIT " + (dateKeys.size() + 1);
+            rows.addAll(jdbc.query(connection -> {
+                var statement = connection.prepareStatement(sql);
+                statement.setQueryTimeout(20);
+                statement.setMaxRows(dateKeys.size() + 1);
+                statement.setFetchSize(dateKeys.size() + 1);
+                for (int i = 0; i < parameters.size(); i++) {
+                    Object parameter = parameters.get(i);
+                    if (parameter instanceof String text) statement.setString(i + 1, text);
+                    else if (parameter instanceof Long number) statement.setLong(i + 1, number);
+                    else throw new SQLException("Unsupported D086 key binding");
+                }
+                return statement;
+            }, (rs, index) -> mapper.fromValues(readValues(rs))));
+        }
+        return List.copyOf(rows);
     }
 
     public List<LocalDate> readExistingDates() {

@@ -214,12 +214,17 @@ gradle.projectsEvaluated {
 $nativeLog = Join-Path $runRoot 'native-batch.log'
 Write-Host "Computing native L2 features for $($Dates -join ',') with $Workers workers; log: $nativeLog"
 $nativeStarted = [System.Diagnostics.Stopwatch]::StartNew()
+$previousErrorActionPreference = $ErrorActionPreference
 Push-Location -LiteralPath $projectRoot
 try {
+    # Gradle/Javac can emit informational notes on stderr. Keep native stderr from
+    # becoming a terminating PowerShell error; the process exit code is the gate.
+    $ErrorActionPreference = 'Continue'
     & $gradleWrapper @gradleArguments *> $nativeLog
     $nativeExitCode = $LASTEXITCODE
 }
 finally {
+    $ErrorActionPreference = $previousErrorActionPreference
     Pop-Location
     $nativeStarted.Stop()
 }

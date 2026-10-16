@@ -24,10 +24,13 @@ public final class PersistentFormalL2IntervalAuthority implements FormalL2Interv
         } catch (Exception failure) { throw new IllegalStateException("Cannot initialize formal L2 interval authority", failure); }
     }
     @Override public Lease acquire(String runId, Scope scope) {
+        return acquire(runId, scope, "java-parquet-1.17.1");
+    }
+    @Override public Lease acquire(String runId, Scope scope, String readerVersion) {
         initialize();
         try {
             String request = JSON.writeValueAsString(Map.of("day", scope.from().toString(),
-                    "targetTable", "l2_daily_features", "reader", "java-parquet-1.17.1", "certifiesExistingHistory", false));
+                    "targetTable", "l2_daily_features", "reader", readerVersion, "certifiesExistingHistory", false));
             ledger.createRun(new SyncRunLedger.Run(runId, null, "data.l2_daily_features.formal", 1,
                     scope.from().toString(), "l2_daily_features", request));
             ledger.transition(runId, 0, SyncRunState.RUNNING, request);

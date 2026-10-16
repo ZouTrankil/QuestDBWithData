@@ -107,6 +107,7 @@ public final class CliUsage {
                 + " OR plan-market-sentiment-daily-job|run-market-sentiment-daily-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD [--mode MATERIALIZE]"
                 + " OR finish-market-sentiment-publication --run RUN_ID --writer-stopped true"
                 + " OR plan-margin-detail-job|run-margin-detail-job --from YYYY-MM-DD --to YYYY-MM-DD --logical-date YYYY-MM-DD [--mode BACKFILL|INCREMENTAL]"
-                + " OR run-margin-detail-job --resume-from RUN_ID";
+                + " OR run-margin-detail-job --resume-from RUN_ID"
+                + " OR ingest-formal-l2-jsonl-day --date YYYY-MM-DD --source-root PATH";
     }
 }

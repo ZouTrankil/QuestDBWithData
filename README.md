@@ -42,6 +42,9 @@ CLI commands still run through the same main class when a command is supplied, f
 
 ### Persistent main-strategy daily Batch
 
+For independent local daily/backtest catch-up and a Windows post-close task, see
+[the backtest post-close runner](deploy/backtest-post-close/README.md).
+
 The main Spring Web application starts `main_strategy_daily` automatically after
 `ApplicationReadyEvent`. This also applies to an IntelliJ launch with no arguments.
 The default `app.sync.batch.enabled` and `startup-catchup` are `true`.
