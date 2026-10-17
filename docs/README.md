@@ -7,10 +7,12 @@
 | 各模块做什么，代码从哪里看 | [代码结构](code-structure.md) |
 | 数据库地址、账号、日志、启动命令在哪里配 | [配置和启动](configuration.md) |
 | 数据同步在哪做，怎么判断增量完成 | [同步和因子计算](data-pipeline.md) |
+| 三个市场怎样处理日期和时间 | [市场时间](market-time.md)、[数据集归属](dataset-markets.md) |
 | 给自己或 AI 扩展项目时要守哪些规则 | [项目规范](project-structure-and-standards.md)、[AI 入口](../AGENTS.md) |
 | 怎么分包，怎么检查依赖 | [分包和依赖检查](architecture-rules.md) |
 | 新增字段、模型或数据集 | [模型和新增数据集](model-schema-conventions.md) |
 | QuestDB 怎么读写，表和视图怎么选 | [QuestDB 使用说明](questdb-usage.md) |
+| 程序怎么列出实库数据、说明和标签，如何导出目录 | [数据目录接口](data-catalog.md) |
 | 怎么改表结构 | [数据库迁移](flyway-schema-management.md) |
 | 怎么维护 MV，旧 meta 表怎么处理 | [QuestDB 维护](questdb-maintenance.md) |
 | Batch 怎么采集、盘后运行和恢复 | [批处理说明](batch.md)、[接口定义](batch/openapi.yaml) |

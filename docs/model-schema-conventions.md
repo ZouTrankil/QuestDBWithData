@@ -30,7 +30,7 @@ businessTime.startOfDay(date);       // 业务日零点对应的真实时刻
 businessTime.todaySnapshotMarker();  // 快照表使用的日期标记
 ```
 
-`BusinessTime` 支持注入固定 `Clock`，方便检查跨日边界。当前单一业务时区不代表三市场时钟已经拆好。
+`BusinessTime` 支持注入固定 `Clock`，方便检查跨日边界。现在从 `MarketTimes` 按市场取得 `MarketTime`；旧 `BusinessTime` 只适配 A 股时钟。
 
 ## 业务键和数据库去重
 
@@ -53,7 +53,7 @@ businessTime.todaySnapshotMarker();  // 快照表使用的日期标记
 
 ## 生成模型时怎么做
 
-现有生成工具是 [generate_domain_models.py](../tools/generate_domain_models.py)，需要用 `--catalog` 提供自己准备的 catalog JSON。生成的 record 只说明数据库字段，不自动包含单位、业务含义和源校验。
+现有生成工具是 [generate_domain_models.py](../tools/generate_domain_models.py)，需要用 `--catalog` 提供自己准备的 catalog JSON，并用 `--market cn/us/btc` 选择归属。catalog 或每个对象要明确写 `market`；没有归属就拒绝生成，不靠表名前缀猜。也可以对已经分好市场的 catalog 显式传 `--output-root`。生成的 record 只说明数据库字段，不自动包含单位、业务含义和源校验。
 
 如果以后接入 Python/Pydantic，先提供真实模型和带版本的 JSON Schema，再确定 DTO 生成方式。当前没有完整的 Pydantic → Java 自动流水线，不要把建议写成已实现能力。
 

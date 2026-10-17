@@ -53,6 +53,30 @@ class GeneratorTest(unittest.TestCase):
         return {path.relative_to(self.output).as_posix(): path.read_bytes()
                 for path in self.output.rglob("*") if path.is_file()}
 
+    def test_cli_requires_a_market_or_explicit_directory_before_writing(self):
+        source = self.folder / "catalog.json"
+        source.write_text(json.dumps(catalog(object_definition())), encoding="utf-8")
+        result = subprocess.run([sys.executable, str(SCRIPT), "--catalog", str(source)],
+                                cwd=self.folder, capture_output=True, text=True)
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn("--market", result.stderr)
+        self.assertFalse((self.folder / "market-cn").exists())
+
+    def test_cli_routes_only_explicit_market_rows_and_rejects_unknown_ownership(self):
+        source = self.folder / "catalog.json"
+        source.write_text(json.dumps(catalog(object_definition(market="cn"),
+                                              object_definition("UsExampleRow", market="us"))), encoding="utf-8")
+        args = [sys.executable, str(SCRIPT), "--catalog", str(source), "--market", "us"]
+        result = subprocess.run(args, cwd=self.folder, capture_output=True, text=True)
+        self.assertEqual(0, result.returncode, result.stderr)
+        output = self.folder / "market-us/src/main/java/com/zoutrankil/data/domain/table"
+        saved = (output / "UsExampleRow.java").read_bytes()
+        self.assertFalse((self.folder / "market-cn").exists())
+        source.write_text(json.dumps(catalog(object_definition())), encoding="utf-8")
+        result = subprocess.run(args, cwd=self.folder, capture_output=True, text=True)
+        self.assertNotEqual(0, result.returncode)
+        self.assertEqual(saved, (output / "UsExampleRow.java").read_bytes())
+
     def test_default_root_matches_declared_package(self):
         package_path = Path("com/zoutrankil/data/domain")
         self.assertEqual(package_path.parts, generator.PACKAGE_ROOT.parts[-len(package_path.parts):])

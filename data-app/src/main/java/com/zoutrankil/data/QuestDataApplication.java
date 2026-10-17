@@ -9,7 +9,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import java.util.Map;
 import java.util.TimeZone;
 
-@SpringBootApplication
+@org.springframework.context.annotation.Configuration
+@org.springframework.context.annotation.Import(com.zoutrankil.market.cn.bootstrap.CnDataConfiguration.class)
 @EnableConfigurationProperties({TushareProperties.class, QuestDbProperties.class})
 public class QuestDataApplication {
     public static void main(String[] args) {
@@ -25,24 +26,8 @@ public class QuestDataApplication {
         if (exitCode != 0) System.exit(exitCode);
     }
 
-    /** 共享数据执行组件；各常驻进程入口自行选择对应的配置环境。 */
+    /** 兼容原数据入口，日志主类和已有恢复日志识别规则保持不变。 */
     public static SpringApplication application(boolean persistent, String... profiles) {
-        var application = new SpringApplication(QuestDataApplication.class);
-        application.setAdditionalProfiles(profiles);
-        application.setBannerMode(org.springframework.boot.Banner.Mode.OFF);
-        if (persistent) {
-            application.setDefaultProperties(Map.ofEntries(
-                    Map.entry("app.sync.stk-limit-table", "stk_limit"),
-                    Map.entry("app.sync.stk-suspend-table", "stk_suspend"),
-                    Map.entry("app.sync.stk-st-daily-table", "stk_st_daily"),
-                    Map.entry("app.sync.moneyflow-table", "moneyflow"),
-                    Map.entry("app.sync.moneyflow-hsgt-table", "moneyflow_hsgt"),
-                    Map.entry("app.sync.margin-detail-table", "margin_detail"),
-                    Map.entry("app.sync.etf-daily-table", "etf_daily"),
-                    Map.entry("app.sync.etf-adj-table", "etf_adj"),
-                    Map.entry("app.sync.etf-factor-table", "etf_factor"),
-                    Map.entry("app.sync.etf-portfolio-table", "etf_portfolio")));
-        }
-        return application;
+        return com.zoutrankil.market.cn.bootstrap.CnDataConfiguration.application(QuestDataApplication.class,persistent,profiles);
     }
 }

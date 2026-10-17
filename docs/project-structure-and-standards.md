@@ -1,69 +1,56 @@
 # 项目结构与开发规范
 
-这篇给开发者和后续接手的 AI 看。先记住：**现在是六个模块，按 A 股、美股、BTC 拆分是下一步计划，还没完成。**
+这篇给开发者和后续接手的 AI 看。业务已经按 A 股、美股、BTC 分目录；主策略和实时 L2 放在 A 股下面，仍是独立进程。美股目前只有部分利率数据，BTC 还没有采集链路。
 
 ## 怎么用这份规范
 
 开始改代码前，先读 [AGENTS.md](../AGENTS.md)，再看这篇和[相关功能说明](README.md)。用户当前明确提出的要求优先。
 
-这里说明统一设计。具体字段、命令和运行能力要对照代码、维护中的数据契约和实际验证结果。旧运行记录不能证明当前环境已经可用。
+具体字段、命令和运行能力要对照代码、维护中的数据契约和实际验证结果。建好模块不代表来源已接通，旧运行记录也不代表当前已经就绪。
 
 ## 现在的模块
 
-以 [settings.gradle](../settings.gradle) 为准。
-
-| 模块 | 现在做什么 | 依赖哪些项目模块 |
-| --- | --- | --- |
-| `data-core` | 共享模型和数据契约，也暂时放着一些来源客户端、分页和 A 股类型 | 无 |
-| `runtime-support` | 加载配置、日志、启动和数据库直连设置 | 无 |
-| `data-app` | 数据 API、CLI、来源同步和 QuestDB 访问 | core、runtime-support |
-| `batch-app` | 批任务、定时调度、SQLite 运行记录和离线 L2 | core、runtime-support |
-| `main-strategy-runtime` | 独立运行主策略，准备评分、输入数据和正式方案 | data-app、batch-app、runtime-support |
-| `l2-live-app` | 实时 MQTT 采集、解析和本地 Parquet 保存 | runtime-support |
-
-表里的 core 指 `data-core`。它目前仍有 Spring、WebFlux、Reactor 依赖，不能说已经是纯模型库。主策略依赖两个应用模块，也是迁移前的现状。
-
-根工程只负责聚合检查和打包，不放生产 Java 代码。各进程分别启动、停止；数据 API 不顺带启动主策略或实时 L2。
-
-## 准备调整成什么样
-
-下面是目标目录，不能当成已经存在的模块：
+实际项目清单看 [settings.gradle](../settings.gradle)。顶层按职责分，里面少量子项目用来隔离数据库驱动和批处理依赖：
 
 ```text
 QuestDBWithData/
-├── config/                     统一运行配置和日志配置
-├── docs/                       规范和使用说明
-├── data-core/                  跨市场通用模型和接口
-├── runtime-support/            配置、日志和启动支持
-├── data-engine/                通用采集、存储、校验和恢复
-├── data-app/                   数据 API 和 CLI 入口
-├── batch-app/                  批任务和调度入口
-├── market-cn/                  A 股模型、来源、清洗、特征和业务
-│   ├── src/main/java/
-│   ├── main-strategy-runtime/  主策略独立进程
-│   └── l2-live-app/            实时 L2 独立进程
-├── market-us/                  美股和美国宏观数据业务
-├── market-btc/                 BTC 业务
-└── build/                      所有模块的构建产物
+├── config/                         统一运行和日志配置
+├── data-core/                      纯 Java 通用模型、契约、时间接口
+├── runtime-support/                配置、日志、启动和市场时钟装配
+├── data-engine/                    通用请求、配额、分页
+│   ├── source/                     来源契约、采集、校验接口和市场注册
+│   ├── questdb/                    共享写入核验、SQLite 运行记录和恢复
+│   └── batch/                      Batch 元数据、持久写入、Quartz 存储支持
+├── market-cn/                      A 股表模型、DTO 和共享字段语义
+│   ├── source/                     A 股和中国宏观来源规则
+│   ├── data/                       清洗、同步、特征、数据服务和组件装配
+│   ├── batch/                      盘后任务图、离线 L2 和归档业务
+│   ├── main-strategy-runtime/      独立主策略入口和正式评分链路
+│   └── l2-live-app/                独立实时 L2 入口与采集业务
+├── market-us/                      美国表投影、现有利率来源和时间入口
+├── market-btc/                     BTC 时间入口；尚无真实来源任务
+├── data-app/                       数据 API / CLI 启动入口
+├── batch-app/                      批处理启动、管理 API 和调度装配
+└── build/                          所有模块的构建产物
 ```
 
-A 股主策略、实时和离线 L2 都归 A 股。美股和 BTC 有实际需求后，再增加各自的运行入口。
+`market-cn/data` 与 `market-cn/batch` 分开，是为了让 Batch 不加载 PGWire、QuestDB Sender、POI 和数据 API。实时 L2 只使用 core 和启动支持，不加载整个 A 股业务库。
 
-移动目录时，要一起接好 Gradle 子项目、源码和资源、测试、启动命令及发行包检查。比如嵌套项目要明确登记为 `:market-cn:main-strategy-runtime`。只建目录不算迁移完成。
+根工程不放生产代码，只做聚合检查和兼容打包。Gradle 使用完整路径，例如 `:market-cn:main-strategy-runtime`；根级 `mainStrategyRun`、`aliyunL2Live` 等启动命令继续保留。
 
 ## 代码应该放哪里
 
-- **data-core**：只留跨市场的纯模型和接口。目标是不依赖 Spring、数据库、网络和配置加载。市场专属表模型放回对应市场。
-- **data-engine**：分页、配额、执行预算、写后核验、运行记录、取消和恢复等通用机制，以及公共存储适配器。
-- **市场模块**：表模型、字段单位、来源规则、交易日历、清洗、特征和业务计算。有市场含义的 SQL 也归这里。
-- **应用入口**：处理参数、鉴权、请求、调度和组件装配，把业务交给应用服务。
-- **runtime-support**：只处理启动支持，不引入市场业务。运行一次性 CLI 时，不启动定时任务或其他常驻服务。
+- **data-core**：跨市场通用模型、数据契约、业务键、时间范围和市场时间接口。主代码只用 JDK，不引入 Spring、Jackson 或数据库。
+- **data-engine**：通用执行、分页、配额、来源归档、读写核验和恢复。市场通过接口注册规则，引擎不能反向调用市场实现。
+- **市场模块**：表模型、来源字段、单位、日期规则、清洗、特征、质量检查和应用。美国利率不能因为被 A 股使用就搬进 A 股清洗代码。
+- **应用入口**：参数、鉴权、管理接口、CLI 分发和组件装配；具体市场命令处理器可以跟市场库维护。
+- **runtime-support**：配置、日志、网络和启动支持。有限 CLI 不顺带启动调度、采集或其他常驻服务。
 
-目标依赖是“运行入口 → 市场业务 → data-engine → data-core”；入口还可以使用 runtime-support。市场业务之间通过已发布的数据共享输入，不直接调用彼此的清洗或策略实现。
+依赖方向是“运行入口 → 市场业务 → 通用引擎 → core”。市场之间读取明确的数据产品，不互调清洗或策略实现。主策略直接使用 A 股业务库，不依赖 data-app 或 batch-app 的入口 jar。
 
-供应商通用 HTTP、配额和协议解析可以共享；供应商某个 A 股接口的字段和覆盖规则仍归 A 股。通用执行器不要到处增加按市场名、数据集名判断的业务分支。
+来源规则通过 `SourcePolicyProvider` 注册；A 股和美国各自提供实现和资源。通用 `SourceContract`、采集器与账本继续复用。未知来源或重复注册直接报错，不提供猜测性的兜底。
 
-实时 L2 只带自己需要的依赖，不因为同属 A 股就加载整个数据 API、PGWire 或主策略。
+迁移保留了已有 Java 类名、表名、数据集版本、任务 ID 和实例身份算法，特别是 Quartz 中已经保存的作业类名。老包名不是业务归属依据；新代码先按市场和功能找目录。
 
 ## 按功能分包
 
@@ -82,7 +69,7 @@ domain 不依赖应用或存储；port 不引用具体实现；mapper 不访问�
 
 一次运行的 writer、session、取消标志、未决状态和临时表绑定要单独创建，不能作为共享单例。不可变定义和纯函数可以共享。
 
-现有包名先保留。未来市场根包用 `com.zoutrankil.market.cn`、`.us`、`.btc`。迁包时不要顺手改任务身份、表名或恢复流程。
+兼容代码保留现有包名。新增市场代码用 `com.zoutrankil.market.cn`、`.us`、`.btc`。迁包时不要顺手改任务身份、表名或恢复流程。
 
 ## 时间怎么处理
 
@@ -96,7 +83,9 @@ A 股业务日和会话用 `Asia/Shanghai`。美股交易日和会话用 `Americ
 
 所以，美股和 BTC 的事件也统一存 UTC，但“哪天开盘”由各自的业务规则决定。美国宏观发布日期不套用美股交易日历。
 
-现有 `BusinessTime` 和 `app.time.business-zone` 还不是完整的多市场时钟。以后按市场注入时钟，不要靠切换一个全局时区同时处理三个市场。JVM/JDBC 的 UTC 设置可以保留。
+现在用 `MarketId`、`MarketTime`、`MarketClock` 和 `MarketTimes` 明确区分三个市场，由 `runtime-support` 从 `app.time.markets` 装配。A 股的旧 `BusinessTime` 继续适配同一个 A 股时钟，`app.time.business-zone` 只作为兼容配置，冲突时拒绝启动。JVM/JDBC 继续使用 UTC。
+
+夏令时缺失或重复的本地时刻不自动猜测；重复时刻需要来源明确给偏移量。开市日仍查询版本化交易日历，不能用“周一到周五”替代。具体用法见[市场时间](market-time.md)，来源归属见[数据集归属](dataset-markets.md)。
 
 **历史日期标记不要整体加 8 小时。** 例如 `2026-10-19T00:00:00Z` 可能只是“10 月 19 日”的编码；上海当天实际零点则是 `2026-10-18T16:00:00Z`。两者用途不同。重试继续使用原 `logicalDate`，不要重新取今天。字段精度也要固定，不能悄悄丢掉微秒或纳秒。
 
@@ -176,7 +165,7 @@ Java 调用失败时，Python 不能偷偷启用另一套正式计算或写入�
 ./gradlew verifyDependencyVersionCompatibility verifyBatchDistributionDatabaseDrivers
 ```
 
-当前包检查只扫描 data-core、data-app、batch-app，详见[检查范围](architecture-rules.md#自动检查)。文档修改不用默认启动全量测试或外部作业。
+模块检查和字节码检查覆盖全部子项目，详见[检查范围](architecture-rules.md#自动检查)。文档修改不用默认启动全量测试或外部作业。
 
 交付写清改了什么、验证到哪、还有什么缺口。编译通过、固定样本通过、真实来源通过要分别说明。已获授权的工作继续完成，不额外增加重复确认。
 
@@ -191,12 +180,20 @@ Java 调用失败时，Python 不能偷偷启用另一套正式计算或写入�
 完成条件和验证方式：……
 ```
 
-## 后续迁移顺序
+## 后续扩展
 
-1. 先固定现有行为和模块检查，整理公共模型。
-2. 抽出 data-engine 的通用执行和存储机制。
-3. 把 A 股模型、清洗和应用归入 market-cn，保留各进程独立运行。
-4. 再接美股、BTC 和各自的业务时钟。
-5. 最后精简 data-app、batch-app 的入口和装配。
+接入新来源时，同时更新所属市场的注册、资源、模型、时区和覆盖测试。美股全市场日历与 BTC 数据源要有真实输入和验收结果后再启用，不复制一套空任务。
+
+已有策略与实时进程仍分别启动、停止和部署。持久化任务的类名或身份需要改变时，必须单独迁移，不能顺手改包。
 
 涉及市场划分、依赖、时间、写入方、业务键、产物格式、恢复或对外接口的重要变化，要更新本规范。需要记录取舍时放到 `docs/decisions/YYYY-MM-DD-主题.md`，有实际内容再建文件。
+
+构建输出为 `build/modules/<完整模块路径>/_output/`，父模块输出不会包含子模块输出，单独 clean 不会连带删除子模块。每个模块的 `verifyTestOwnership` 检查测试 class 和资源归属，聚合测试不能借用旧构建产物。
+
+### 离线检查入口
+
+运行 `python3 tools/run_offline_tests.py`，Windows 可用 `python` 或 PowerShell 包装脚本。覆盖当前全部模块，报告在 `.gradle/offline-checks/`，`latest.txt` 指向本次结果。真实来源和数据库验收另跑。
+
+保留历史原件的对照验收运行 `./gradlew :market-cn:data:retainedParityTest`；缺原件会报错，不能用普通离线通过代替。
+
+新评分发布前必须核验独立批准的来源范围清单，不能仅凭日期和当前行数标记完整。见[设计决定](decisions/2026-10-17-评分来源清单.md)。

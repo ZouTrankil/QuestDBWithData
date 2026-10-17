@@ -29,7 +29,12 @@ logging:
 
 app:
   time:
+    # 旧入口继续表示 A 股业务日期；三个市场各用自己的时钟。
     business-zone: Asia/Shanghai
+    markets:
+      cn: Asia/Shanghai
+      us: America/New_York
+      btc: UTC
   paths:
     # 本机相邻 Python 项目；从 Java 项目根目录启动时可直接找到。
     research-root: ../back-monitor
@@ -129,6 +134,9 @@ app:
       official-plan-db: ${app.paths.research-root}/artifacts/factor_research/l2/etf_only_fusion_main_daily/etf_only_paper/main_strategy_plans.sqlite3
       score-start-date: "2025-07-01"
       score-source-row-budget: 5000000
+      # 从独立来源核验记录生成并批准；缺少证明时评分停止发布。
+      source-coverage: ""
+      source-coverage-sha256: ""
     l2-manifest:
       dataset-root: ${app.paths.l2-dataset-root}
     l2-daily-features:

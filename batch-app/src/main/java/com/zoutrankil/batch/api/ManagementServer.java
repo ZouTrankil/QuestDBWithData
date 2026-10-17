@@ -103,6 +103,7 @@ public final class ManagementServer implements AutoCloseable {
                     if(request.start()==null || request.end()==null || request.maxPartitions()==null) throw new IllegalArgumentException("start, end and maxPartitions are required");
                     boolean monthly=SourceContract.MONTHLY_AGGREGATES.contains(dataset);
                     boolean quarterly=SourceContract.QUARTERLY_AGGREGATES.contains(dataset);
+                    boolean sourceDates=com.zoutrankil.batch.source.SourceStrategyRegistry.provider(dataset).usesSourceDates(dataset);
                     TradingCalendar calendar=(TradingCalendar)scheduler.getContext().get("calendar");
                     if(monthly) {
                         if(!RecoveryPolicy.MONTHLY_PERIOD_VERSION.equals(request.calendarVersion()))
@@ -110,14 +111,17 @@ public final class ManagementServer implements AutoCloseable {
                     } else if(quarterly) {
                         if(!RecoveryPolicy.QUARTERLY_PERIOD_VERSION.equals(request.calendarVersion()))
                             throw new IllegalArgumentException("Quarterly ranges require calendarVersion="+RecoveryPolicy.QUARTERLY_PERIOD_VERSION);
+                    } else if(sourceDates) {
+                        if(!com.zoutrankil.batch.source.SourceDatePartitions.VERSION.equals(request.calendarVersion()))
+                            throw new IllegalArgumentException("Source-date ranges require calendarVersion="+com.zoutrankil.batch.source.SourceDatePartitions.VERSION);
                     } else if(calendar==null || request.calendarVersion()==null || !request.calendarVersion().equals(calendar.version()))
                         throw new IllegalArgumentException("Matching versioned trading calendar required for backfill planning");
                     var start=java.time.LocalDate.parse(request.start());var end=java.time.LocalDate.parse(request.end());
                     int partitionLimit=monthly||quarterly?Math.min(request.maxPartitions(),Math.min(2000,SourceContract.load(dataset).maxRows())):request.maxPartitions();
-                    var dates=monthly?RecoveryPolicy.monthlyBackfill(start,end,partitionLimit):quarterly?RecoveryPolicy.quarterlyBackfill(start,end,partitionLimit):RecoveryPolicy.backfill(start,end,partitionLimit,calendar);
+                    var dates=monthly?RecoveryPolicy.monthlyBackfill(start,end,partitionLimit):quarterly?RecoveryPolicy.quarterlyBackfill(start,end,partitionLimit):sourceDates?com.zoutrankil.batch.source.SourceDatePartitions.plan(start,end,partitionLimit):RecoveryPolicy.backfill(start,end,partitionLimit,calendar);
                     respond(exchange,200,Map.ofEntries(Map.entry("job",request.job()),
-                            Map.entry("calendarVersion",monthly?RecoveryPolicy.MONTHLY_PERIOD_VERSION:quarterly?RecoveryPolicy.QUARTERLY_PERIOD_VERSION:calendar.version()),
-                            Map.entry("frequency",monthly?"MONTH":quarterly?"QUARTER":"TRADING_DAY"),Map.entry("start",request.start()),
+                            Map.entry("calendarVersion",monthly?RecoveryPolicy.MONTHLY_PERIOD_VERSION:quarterly?RecoveryPolicy.QUARTERLY_PERIOD_VERSION:sourceDates?com.zoutrankil.batch.source.SourceDatePartitions.VERSION:calendar.version()),
+                            Map.entry("frequency",monthly?"MONTH":quarterly?"QUARTER":sourceDates?"SOURCE_DATE":"TRADING_DAY"),Map.entry("start",request.start()),
                             Map.entry("end",request.end()),Map.entry("maxPartitions",partitionLimit),Map.entry("requestedMaxPartitions",request.maxPartitions()),
                             Map.entry("plannedPartitions",dates.size()),Map.entry("plannedDates",dates),Map.entry("dryRun",true),Map.entry("enqueued",false)));
                 } else if ("GET".equals(method) && path.equals("/v1/tasks")) {

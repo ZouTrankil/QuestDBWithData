@@ -1,26 +1,13 @@
 plugins { id 'application' }
-
 dependencies {
-    implementation project(':data-core')
+    implementation project(':market-cn:batch')
+    implementation project(':market-us')
     implementation project(':runtime-support')
-    implementation platform('org.springframework.boot:spring-boot-dependencies:4.1.1')
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3'
-    implementation 'org.xerial:sqlite-jdbc:3.53.4.0'
-    implementation 'org.apache.commons:commons-compress:1.28.0'
-    implementation 'org.tukaani:xz:1.12'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-webclient'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.batch:spring-batch-core'
-    implementation 'org.springframework:spring-context-support'
-    implementation 'org.quartz-scheduler:quartz'
-    implementation('org.flywaydb:flyway-core') { version { strictly '11.9.0' } }
 }
 application { mainClass = 'com.zoutrankil.batch.BatchApplication' }
+tasks.named('jar') { archiveBaseName = 'QuestDBWithData'; archiveClassifier = 'batch' }
 
-// Preserve the old resolved split: batch service/distribution used 2.20.0,
-// whereas both native L2 JavaExec tasks and compile/test used 2.21.0.
+// 保留服务分发包与离线 L2 的历史依赖版本，避免迁模块时顺带改变计算环境。
 def batchRuntime = configurations.runtimeClasspath
 configurations.create('l2RuntimeClasspath') {
     canBeConsumed = false
@@ -34,9 +21,4 @@ configurations.create('l2RuntimeClasspath') {
 configurations.named('runtimeClasspath') { resolutionStrategy.force 'commons-io:commons-io:2.20.0' }
 configurations.matching { it.name in ['compileClasspath', 'testCompileClasspath', 'testRuntimeClasspath'] }.configureEach {
     resolutionStrategy.force 'commons-io:commons-io:2.21.0'
-}
-
-tasks.named('jar') {
-    archiveBaseName = 'QuestDBWithData'
-    archiveClassifier = 'batch'
 }

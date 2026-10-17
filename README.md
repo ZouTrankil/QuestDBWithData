@@ -1,16 +1,17 @@
 # QuestDBWithData
 
-文档统一从[文档目录](docs/README.md)看。开发或交给 AI 扩展前，先读 [AI 开发入口](AGENTS.md) 和 [项目结构与开发规范](docs/project-structure-and-standards.md)。规范区分当前六模块工程与三市场迁移目标，统一时间语义、模块职责和数据发布规则。
+文档统一从[文档目录](docs/README.md)看。开发或交给 AI 扩展前，先读 [AI 开发入口](AGENTS.md) 和 [项目结构与开发规范](docs/project-structure-and-standards.md)。业务已按三个市场分目录，规范说明模块职责、市场时间和数据发布规则。
 
 简单说，这是一个用 Java 写的数据采集和计算项目。QuestDB 放业务数据，SQLite 记运行状态和恢复进度。
 
 ## 这几个目录是干什么的
 
-- `data-app`：数据 API、命令行、采集和 QuestDB 读写。
-- `batch-app`：定时批处理和离线 Level2 计算。
-- `main-strategy-runtime`：主策略自己的进程和管理 API。
-- `l2-live-app`：实时 MQTT 行情采集，原始报文、事件、分钟状态和恢复检查点以类型化 Parquet 落盘。
-- `data-core`、`runtime-support`：几个应用共用的模型、接口和启动支持。
+- `market-cn`：A 股模型、采集、清洗、特征和批处理；主策略与实时 L2 在下面分别启动。
+- `market-us`：美国表投影和现有利率来源。`market-btc`：BTC 时间和扩展入口，目前没有采集链路。
+- `data-core`：纯 Java 模型、契约和市场时间接口。
+- `data-engine`：通用客户端、来源执行、存储核验和恢复。
+- `runtime-support`：配置、日志和启动支持。
+- `data-app`、`batch-app`：数据和批处理的薄运行入口。
 
 ## 怎么启动
 
@@ -37,7 +38,7 @@
 
 ## 从哪里开始看代码
 
-先从 `QuestDataApplication` 看程序怎么启动。然后挑 `data-app` 里的一个业务，比如 `stock/`：跟着“命令 → 应用服务 → 数据来源和转换 → QuestDB 写入”往下看就行。
+先从 `QuestDataApplication` 看程序怎么启动。然后挑 `market-cn/data` 里的一个业务，比如 `stock/`：跟着“命令 → 应用服务 → 数据来源和转换 → QuestDB 写入”往下看就行。
 
 批处理和主策略稍复杂，等熟悉一条普通采集流程后再看。目录说明在[代码结构](docs/code-structure.md)，配置说明在[这里](docs/configuration.md)。
 

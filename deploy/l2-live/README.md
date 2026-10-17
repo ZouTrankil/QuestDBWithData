@@ -85,3 +85,7 @@ Windows：
 任务托管前台进程，禁止并发实例，错过触发后补启动，失败最多重试 3 次，每日不重新编译；当前用户需登录。更新代码后重建快照。
 
 macOS：将 `com.zoutrankil.l2-live.plist.example` 中 `/ABSOLUTE/QuestDBWithData` 全部替换为真实路径，保存至 `~/Library/LaunchAgents/com.zoutrankil.l2-live.plist`，再用 `launchctl bootstrap gui/$(id -u) <plist绝对路径>` 注册。Linux 可用 `55 8 * * * /实际路径/deploy/l2-live/run.sh start --wait-credentials true`。这些文件不会自动注册系统任务。
+
+## 接收落盘
+
+接收线程复用 SQLite 连接和预编译语句，原始报文仍逐条以 FULL 事务提交；提交成功才算已保存。Parquet 编码不持有接收锁。已验证并发追加、重启和原有恢复流程，全天负载与分日归档还未验收。

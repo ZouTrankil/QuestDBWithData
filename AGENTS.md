@@ -15,17 +15,19 @@
 - 新增或修改核心逻辑时必须补齐注释：算法、业务规则、时间边界、写入与恢复流程等，说明用途、原因和关键限制。
 - 逻辑改了，注释同步改；技术名称保留原文。只改注释时，不顺带改业务行为。
 
-## 现状与目标
+## 当前结构
 
-- 当前实际工程是 `data-core`、`runtime-support`、`data-app`、`batch-app`、`main-strategy-runtime`、`l2-live-app` 六模块，以 `settings.gradle` 和构建检查为准。
-- 按 A 股、美股、BTC 拆分的 `market-cn`、`market-us`、`market-btc` 及 `data-engine` 是目标，尚未完成迁移。不要导入并不存在的目标类或宣称多市场应用已经可用。
-- 新增市场模块须同步接入 Gradle、测试、资源、运行入口和发行包检查；不要直接绕过当前依赖边界。
+- 业务已经按 `market-cn`、`market-us`、`market-btc` 划分。A 股下面的主策略、实时 L2 仍独立启动，实际 Gradle 路径见 `settings.gradle`。
+- `data-core` 主代码只用 JDK；Tushare、分页和执行能力在 `data-engine`，A 股模型和 L2 类型在市场库。引擎的 source、questdb、batch 子项目分别隔离来源、数据读写和批处理依赖。
+- 主策略不依赖 data-app、batch-app 的入口包。市场通过 `SourcePolicyProvider` 注册来源，不互调业务实现。
+- 美股目前有美国利率来源和表投影；BTC 目前只有时间与扩展入口，不能说完整业务已接通。
+- 新模块须接入 Gradle、测试、资源、运行入口及边界检查；所有构建产物仍在根 build。
 
 ## 必须保持的设计
 
 1. **市场归属**：A 股清洗、特征、主策略和实时/离线 L2 归 A 股。市场业务通过明确的数据契约共享输入，不互调另一市场的具体业务实现。
 2. **时间**：真实时间点用 `Instant` 和 UTC；业务日期用 `LocalDate`。A 股业务时钟为 `Asia/Shanghai`，美股交易日和会话按 `America/New_York`，BTC 默认 UTC 并遵守交易所切分。禁止整库加 8 小时，禁止把现有 UTC 零点日期标记当作事件时间转换。
-3. **core**：目标是通用纯模型和接口，市场特有表模型归对应市场。当前 core 尚有客户端、框架依赖和 A 股类型；这是待迁移现状，不是新增依赖的模板。
+3. **core**：目标是通用纯模型和接口，市场特有表模型归对应市场。core 不放客户端、框架、数据库或 A 股专有类型。
 4. **分层**：domain 保存值和规则，application 编排，port 定义依赖，mapper 显式转换，storage/client 实现外部访问。CLI/Web 保持薄入口。
 5. **写入责任**：Java 负责来源同步、QuestDB 维护和已迁入 Java 的正式生产链路；Python 对 QuestDB 只读，承担研究和训练。策略、订单、成交等记录使用本地 SQLite，不重建 QuestDB 记录表。同一正式产物只保留一个写入方。
 6. **L2 存储**：实时归一化数据和累计状态使用类型化 Parquet，SQLite 保留原始接收 WAL 和提交索引；恢复及备份同时保留两者。不能恢复为主要依赖 JSON/BLOB 的结果存储。

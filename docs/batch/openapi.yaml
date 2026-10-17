@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: "Java 独立批处理管理接口"
-  version: 0.1.0
+  version: 0.2.0
   description: "业务完成状态与 Spring Batch 执行状态分别判断。所有接口需要 Bearer token，只监听本机。"
 servers:
   - url: http://localhost:9085
@@ -41,7 +41,7 @@ paths:
         '401': {description: "缺少 token 或 token 无效"}
   /v1/backfills/plan:
     post:
-      summary: "仅预览有限范围的回补分区；日频按指定日历，月频按月初，季度按季末，不提交执行"
+      summary: "只预览回补分区；交易日来源按指定日历，美国利率按来源日期，月季按对应周期，不提交执行"
       requestBody:
         required: true
         content:
@@ -55,7 +55,7 @@ paths:
                 start: {type: string, format: date}
                 end: {type: string, format: date}
                 maxPartitions: {type: integer, minimum: 1, maximum: 2000}
-                calendarVersion: {type: string, minLength: 1}
+                calendarVersion: {type: string, minLength: 1, description: "美国利率用 source-date-v1，月季用对应周期版本；其余来源要求匹配交易日历"}
       responses:
         '200': {description: "返回分区列表，dryRun=true、enqueued=false"}
         '400': {description: "任务、日期、预算或日历不正确"}
@@ -88,22 +88,22 @@ paths:
               additionalProperties: false
               required: [dataset, logicalDate, rangeStart, rangeEnd, expectedCodes, universeVersion]
               properties:
-                dataset: {type: string, enum: [daily, daily_basic, etf_daily, stk_limit, etf_adj, moneyflow, etf_factor, margin_detail, moneyflow_hsgt, stk_suspend, etf_portfolio, stk_factor, stk_st_daily, cn_bond_yield_curve, cyq_perf, index_daily_market, index_daily_basic, exchange_calendar, fina_mainbz, dividend, shibor, shibor_lpr, hibor, cn_cpi, cn_ppi, cn_pmi, cn_m, cn_gdp]}
+                dataset: {type: string, enum: [cn_bond_yield_curve, cn_cpi, cn_gdp, cn_m, cn_pmi, cn_ppi, cyq_perf, daily, daily_basic, disclosure_date, dividend, etf_adj, etf_basic, etf_daily, etf_factor, etf_portfolio, etf_share, exchange_calendar, fina_audit, fina_mainbz, ft_limit, fut_basic, fut_daily, fut_holding, fut_mapping, fut_settle, hibor, index_daily_basic, index_daily_market, margin_detail, moneyflow, moneyflow_hsgt, share_float, shibor, shibor_lpr, stk_factor, stk_limit, stk_st_daily, stk_suspend, ths_index, us_tbr]}
                 logicalDate: {type: string, format: date}
-                rangeStart: {type: string, format: date, description: "可选，包含起点；月频从月初开始，GDP 季频从季末开始"}
-                rangeEnd: {type: string, format: date, description: "可选，包含终点；必须等于 logicalDate"}
+                rangeStart: {type: string, format: date, description: "包含起点；月频从月初开始，GDP 季频从季末开始"}
+                rangeEnd: {type: string, format: date, description: "包含终点；必须等于 logicalDate"}
                 expectedCodes:
                   type: array
                   minItems: 0
                   maxItems: 20000
                   uniqueItems: true
-                  items: {type: string, pattern: '^([0-9]{6}\.(SH|SZ|BJ|OF)|SSE|SZSE)$'}
+                  items: {type: string, pattern: '^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$'}
                 universeVersion: {type: string, minLength: 1}
                 tsCode: {type: [string, 'null']}
               allOf:
                 - if:
                     properties:
-                      dataset: {enum: [moneyflow_hsgt, cn_bond_yield_curve]}
+                      dataset: {enum: [cn_bond_yield_curve, cn_cpi, cn_gdp, cn_m, cn_pmi, cn_ppi, disclosure_date, etf_share, hibor, moneyflow_hsgt, shibor, shibor_lpr, ths_index, us_tbr]}
                   then:
                     properties:
                       expectedCodes: {maxItems: 0}
@@ -111,17 +111,6 @@ paths:
                   else:
                     properties:
                       expectedCodes: {minItems: 1}
-                - if:
-                    properties:
-                      dataset: {const: etf_portfolio}
-                  then:
-                    properties:
-                      expectedCodes:
-                        items: {type: string, pattern: '^[0-9]{6}\.(SH|SZ|BJ|OF)$'}
-                  else:
-                    properties:
-                      expectedCodes:
-                        items: {type: string, pattern: '^[0-9]{6}\.(SH|SZ|BJ)$'}
       responses:
         '200': {description: "返回已保存的探测、内容指纹和文件路径；VERIFYING 不算就绪，同一请求键复用原探测"}
         '400': {description: "请求范围或契约错误，或同一幂等键的内容冲突"}

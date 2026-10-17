@@ -1,13 +1,13 @@
 # 同步和因子计算
 
-目前同步主要在 Java 做：`data-app` 有按业务分组的同步任务，`batch-app` 也有自己的来源采集和产品任务。两边的任务、目标和运行记录不同，不能因为数据集同名就互换。
+目前同步主要在 Java 做：A 股的 `data` 子项目有按业务分组的同步任务，`batch` 子项目也有自己的来源编排和产品任务。两边的任务、目标和运行记录不同，不能因为数据集同名就互换。
 
 ## 从哪里看代码
 
 | 要看什么 | 入口 |
 | --- | --- |
 | 当前有哪些数据同步任务 | `./gradlew run --args='show-sync-job-definitions'` |
-| 股票、ETF、指数等同步流程 | `data-app` 下对应业务的 `application` |
+| 股票、ETF、指数等同步流程 | `market-cn/data` 下对应业务的 `application` |
 | 通用运行记录、锁和恢复 | `SyncRunExecution`、`SyncJobRunner` 及相关端口 |
 | Batch 来源采集 | `SourceCollector`、`SourceStrategies` |
 | Batch 来源写入 | `SourceProductRunner`、`DurableWriter` |

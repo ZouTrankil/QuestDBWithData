@@ -34,3 +34,5 @@ questdb-batch-control detail <instance-id>
 `RUNNING`、`IN_DOUBT`、`FAILED` 不自动重放，先核对原运行和物理写入。已有写入意图后不能偷偷换来源；输入变化要显式增加 revision，并记录前驱实例和原因。
 
 这套恢复只覆盖盘后任务的有限重试，不代表历史回补队列或主策略缺口恢复已经完成。
+
+美国利率回补预览使用 `calendarVersion=source-date-v1`，逐个查询来源日期；不会用 SSE 开市日筛掉美国日期。它只是有限日期计划，不自动提交执行，也不代表已接通完整美股交易日历。

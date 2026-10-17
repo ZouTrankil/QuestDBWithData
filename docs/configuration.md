@@ -47,6 +47,12 @@
 
 实时 L2 的私有订阅账号还需要填写；`plan`、`replay` 无需账号。主策略方案、批准摘要和计划文件也必须真实存在，有默认路径不等于输入已经准备好。
 
+## 市场时间在哪里配
+
+`app.time.markets` 中，`cn` 是 `Asia/Shanghai`，`us` 是 `America/New_York`，`btc` 默认 `UTC`。A 股和美股不接受随意改成固定偏移量，BTC 可以按交易所契约设置切分时区。
+
+旧 `app.time.business-zone` 继续表示 A 股；与新 A 股值冲突会拒绝启动。实时 L2 的 `l2.session.zone` 也要与它一致。事件时间仍存 UTC，不迁移现有数据库时间值。详见[市场时间](market-time.md)。
+
 ## 换环境或临时覆盖
 
 可以直接改 YAML，也可以用标准环境变量覆盖，例如 `APP_QUESTDB_HOST`、`APP_TUSHARE_TOKEN`、`APP_WEB_API_TOKEN`、`JDB_API_TOKEN`。项目不会自动读取根目录 `.env`。

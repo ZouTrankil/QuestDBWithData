@@ -1,9 +1,10 @@
 {
-  "reason": "Native Parquet L2 and frozen main-strategy data artifacts; optional plan provenance serialization; direct vendor MQTT live L2 ingestion (live dependency moved to its independent application)",
+  "reason": "原有 Parquet、训练文件与 MQTT 依赖随市场模块迁移，固定版本不变。",
   "projects": [
-    ":data-app",
-    ":main-strategy-runtime",
-    ":l2-live-app"
+    ":market-cn:data",
+    ":market-cn:main-strategy-runtime",
+    ":market-cn:l2-live-app",
+    ":data-app"
   ],
   "configurations": [
     "compileClasspath",
