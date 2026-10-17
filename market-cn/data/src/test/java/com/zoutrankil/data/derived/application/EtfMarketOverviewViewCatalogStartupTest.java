@@ -24,10 +24,11 @@ class EtfMarketOverviewViewCatalogStartupTest {
 
     @Test void actualCatalogRegistersReadonlyViewAndRetiresCacheJobs() throws Exception {
         Path ledger = temporary.resolve("uncreated.sqlite3");
+        // 直接装配 A 股组件时，测试也明确启用对应市场配置。
         var application = new SpringApplication(QuestDataApplication.class,
                 CatalogNoConnectionTestSupport.NoConnectionConfiguration.class);
         application.setWebApplicationType(WebApplicationType.NONE);
-        application.setAdditionalProfiles("d101-catalog-test");
+        application.setAdditionalProfiles("market-cn", "d101-catalog-test");
         application.addInitializers(context -> context.getEnvironment().getPropertySources().addFirst(
                 new MapPropertySource("d102-catalog-test", Map.of(
                         "app.sync.ledger-path", ledger.toString(),

@@ -1,0 +1,37 @@
+# L2 独立采集器（只加载配置，不启动 Spring 容器 / 调度器）
+spring:
+  application:
+    name: questdb-l2
+  config:
+    activate:
+      on-profile: l2
+
+l2:
+  root: var/l2-live
+  # 未找到私有订阅账号；plan / replay 无需账号，run / session 连接供应商前须填写。
+  username: ""
+  password: ""
+  broker: lv2.base32.cn
+  port: 1883
+  questdb-url: ${app.questdb.http-url}
+  questdb-authorization: ${app.questdb.http-authorization}
+  symbols: ""
+  overrides: ${app.paths.research-root}/config/trading/aliyun_l2_subscription_overrides.json
+  seconds: 0
+  batch-size: 100
+  poll-interval: ${app.questdb.poll-interval}
+  visibility-timeout: ${app.questdb.visibility-timeout}
+  lateness-ms: 2000
+  retained-minutes: 10
+  wait-credentials: false
+  session:
+    zone: Asia/Shanghai
+    exchange: SSE
+    start: "09:00"
+    stop: "15:05"
+
+
+---
+
+spring.config.activate.on-profile: l2
+l2.storage.max-bytes: 8589934592

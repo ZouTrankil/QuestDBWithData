@@ -1,13 +1,13 @@
-# 这是一份本项目直接使用的运行配置，不是部署模板。默认连接现有 QuestDB。
-# 常改的位置：app.questdb（数据库）、app.tushare（数据源）、app.paths（研究目录）。
-# URL 引用同一组主机/端口参数，改 app.questdb 后数据 API、Batch、L2 会一起生效。
-# 连接、令牌及运行参数直接给出默认值；无需先设置环境变量。
-# 仍支持 Spring 标准覆盖，例如 APP_QUESTDB_HOST、APP_TUSHARE_TOKEN。
-# IDE / Gradle 请使用项目根目录作为 working directory。
-# 启动入口自动选择 data / main-strategy / batch / l2，可叠加自定义环境 profile。
+# 公共默认值；市场设置在 markets/，各进程设置在 apps/。
+# 入口自动选择 profile，环境变量和命令行仍可覆盖。
 spring:
   profiles:
     default: data
+    group:
+      data: [market-cn]
+      main-strategy: [data, market-cn]
+      batch: [market-cn]
+      l2: [market-cn]
 
 logging:
   config: classpath:logback-spring.xml
@@ -28,20 +28,9 @@ logging:
       clean-history-on-start: true
 
 app:
-  time:
-    # 旧入口继续表示 A 股业务日期；三个市场各用自己的时钟。
-    business-zone: Asia/Shanghai
-    markets:
-      cn: Asia/Shanghai
-      us: America/New_York
-      btc: UTC
-  paths:
-    # 本机相邻 Python 项目；从 Java 项目根目录启动时可直接找到。
-    research-root: ../back-monitor
-    l2-dataset-root: ${app.paths.research-root}/artifacts/level2_t0_dataset
   tushare:
-    # 已有数据源 token；可直接修改，也可通过 APP_TUSHARE_TOKEN 覆盖。
-    token: "43748a5da1339b43a4956da729ae791f4e25ce9a15a356060658ffe6"
+    # 数据源 token 使用本机覆盖或 APP_TUSHARE_TOKEN。
+    token: ""
     api-url: https://api.tushare.pro
     connect-timeout: 15s
     response-timeout: 45s
@@ -67,7 +56,7 @@ app:
     # HTTP 查询及写入端口。
     qwp-port: 9000
     username: admin
-    password: quest
+    password: ""
     database: qdb
     # 默认让本数据库绕过 HTTP / SOCKS 全局代理；其他网站仍使用原代理。
     direct-connection: true
@@ -83,179 +72,15 @@ app:
   sync:
     ledger-path: var/sync-ledger.sqlite3
 
----
-# 主服务 / 数据 CLI（不影响原有 CLI 的隔离目标表规则）
-spring:
-  application:
-    name: questdb-data
-  config:
-    activate:
-      on-profile: data
-  datasource:
-    # 默认 jdbc:postgresql://100.64.153.106:8812/qdb?sslmode=disable。
-    url: "jdbc:postgresql://${app.questdb.host}:${app.questdb.pg-port}/${app.questdb.database}?sslmode=disable"
-    username: ${app.questdb.username}
-    password: ${app.questdb.password}
-    hikari:
-      connection-timeout: 5000
-      maximum-pool-size: 4
-
-server:
-  port: 8080
-
-app:
-  web:
-    enabled: true
-    # 本项目已生成可用的默认访问令牌，请求使用 Authorization: Bearer <本项值>。
-    api-token: 3520a44242297066bb2199ec7ebcbab9eb48f72bfe19143b
-    allowed-origins: "*"
-  materialized-views:
-    etf-overview:
-      enabled: true
-      check-interval: 1m
-      refresh-timeout: 2m
-  maintenance:
-    legacy-metadata-archive: var/retired-sync-metadata
-  migration:
-    location: classpath:db/migration/questdb
-    history-table: java_tushare_schema_history
-  sync:
-    batch:
-      enabled: false
-      startup-catchup: true
-      ledger-path: var/main-strategy-batch.sqlite
-      artifact-root: var/main-strategy-batch
-      cron: "0 35 20 * * ?"
-      retry-cron: "0 0/15 21-23 * * ?"
-      completion-cutoff: "20:30"
-      maximum-recovery-attempts: 12
-      target-etfs: ""
-      research-root: ${app.paths.research-root}/artifacts/quant_platform
-      promoted-artifact-root: ${app.paths.research-root}
-      promoted-recipe: ${app.paths.research-root}/artifacts/factor_research/l2/etf_only_top2_promoted_recipe/promoted_recipe.json
-      promoted-recipe-pins: ${app.paths.research-root}/artifacts/factor_research/l2/etf_only_top2_promoted_recipe/accepted-sha256.json
-      official-plan-db: ${app.paths.research-root}/artifacts/factor_research/l2/etf_only_fusion_main_daily/etf_only_paper/main_strategy_plans.sqlite3
-      score-start-date: "2025-07-01"
-      score-source-row-budget: 5000000
-      # 从独立来源核验记录生成并批准；缺少证明时评分停止发布。
-      source-coverage: ""
-      source-coverage-sha256: ""
-    l2-manifest:
-      dataset-root: ${app.paths.l2-dataset-root}
-    l2-daily-features:
-      dataset-root: ${app.paths.l2-dataset-root}
-    l2-intraday-bar-features:
-      dataset-root: ${app.paths.l2-dataset-root}
-    l2-event-response-features:
-      dataset-root: ${app.paths.l2-dataset-root}
-    l2-t0-training-labels:
-      dataset-root: ${app.paths.l2-dataset-root}
 
 ---
-# 独立 Batch（SQLite 元数据，不启用主服务的 PGWire DataSource）
-spring:
-  application:
-    name: questdb-batch
-  config:
-    activate:
-      on-profile: batch
-  main:
-    web-application-type: none
-    banner-mode: off
-jdb:
-  metadata-url: jdbc:sqlite:./var/jdb-metadata.sqlite
-  # Batch 管理端必须有至少 24 位令牌；默认值已生成，batchControl 自动读取同一项。
-  api-token: 4ca319405f0b998acd4b0328d07c3d7da15117af443c4a00
-  api-port: 9085
-  api-url: http://localhost:${jdb.api-port}
-  archive-root: ./var/jdb-isolated
-  l2-settle-age: 5m
-  l2-max-archive-bytes: 8589934592
-  l2-max-expanded-bytes: 34359738368
-  l2-max-materialized-bytes: 34359738368
-  calendar-file: ""
-  scheduling-enabled: false
-  # 仅用于首次登记；已持久化的 Quartz 触发器及暂停状态在重启后保留。
-  schedules:
-    "[post_close]": "0 30 18 ? * MON-FRI"
-    "[source_cyq_perf]": "0 10 21 ? * MON-FRI"
-    "[source_us_tbr]": "0 35 21 ? * MON-FRI"
-    "[post_close_recovery]": "0 0/15 19-23 ? * MON-FRI"
-    "[post_close_recovery_final]": "0 55 23 ? * MON-FRI"
-  core-source-fanout-enabled: true
-  production-enabled: false
-  external:
-    # 尚未配置外部研究命令；依赖这些命令的阶段会保持 BLOCKED，不会误报完成。
-    commands-json: "{}"
-    environment-json: "{}"
-    timeout: 12h
-  tushare-token: ${app.tushare.token}
-  questdb-http-url: ${app.questdb.http-url}
-  questdb-http-authorization: ${app.questdb.http-authorization}
-  questdb-visibility-timeout: ${app.questdb.visibility-timeout}
-  questdb-poll-interval: ${app.questdb.poll-interval}
-  baidu:
-    enabled: false
-    download-enabled: false
-    cookie-file: ""
-    share-url: ""
-    share-password: ""
-    source-path: ""
-    unwrap-single-folder: false
-    remote-root: /
-    minimum-size-bytes: 1000000000
-    pcs-executable: ""
-    pcs-config-directory: ""
-    expected-account-uid: ""
-    download-timeout: 12h
-
----
-# L2 独立采集器（只加载配置，不启动 Spring 容器 / 调度器）
-spring:
-  application:
-    name: questdb-l2
-  config:
-    activate:
-      on-profile: l2
-
-l2:
-  root: var/l2-live
-  # 未找到私有订阅账号；plan / replay 无需账号，run / session 连接供应商前须填写。
-  username: ""
-  password: ""
-  broker: lv2.base32.cn
-  port: 1883
-  questdb-url: ${app.questdb.http-url}
-  questdb-authorization: ${app.questdb.http-authorization}
-  symbols: ""
-  overrides: ${app.paths.research-root}/config/trading/aliyun_l2_subscription_overrides.json
-  seconds: 0
-  batch-size: 100
-  poll-interval: ${app.questdb.poll-interval}
-  visibility-timeout: ${app.questdb.visibility-timeout}
-  lateness-ms: 2000
-  retained-minutes: 10
-  wait-credentials: false
-  session:
-    zone: Asia/Shanghai
-    exchange: SSE
-    start: "09:00"
-    stop: "15:05"
-
----
-# 主策略独立进程：数据 API 不再默认承载该调度器。
-spring:
-  application:
-    name: main-strategy
-  config:
-    activate:
-      on-profile: main-strategy
-server:
-  port: 8081
-app:
-  materialized-views:
-    etf-overview:
-      enabled: false
-  sync:
-    batch:
-      enabled: true
+# 相对路径同时适用于项目目录和发行包；后面的本机覆盖优先于公开默认值。
+spring.config.import:
+  - markets/cn.yml
+  - markets/us.yml
+  - markets/btc.yml
+  - apps/cn-data.yml
+  - apps/cn-batch.yml
+  - apps/cn-l2-live.yml
+  - apps/cn-main-strategy.yml
+  - "${APP_LOCAL_CONFIG:optional:file:./config/application-local.yml}"

@@ -1,0 +1,12 @@
+# A 股共用设置；只有 market-cn profile 会加载。
+spring.config.activate.on-profile: market-cn
+app:
+  time:
+    # 旧入口继续表示 A 股业务日期；三个市场各用自己的时钟。
+    business-zone: Asia/Shanghai
+    markets:
+      cn: Asia/Shanghai
+  paths:
+    # 本机相邻 Python 项目；从 Java 项目根目录启动时可直接找到。
+    research-root: ../back-monitor
+    l2-dataset-root: ${app.paths.research-root}/artifacts/level2_t0_dataset

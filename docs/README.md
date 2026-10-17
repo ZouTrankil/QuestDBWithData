@@ -28,8 +28,16 @@
 - 删除 `工作.md`：旧待办和清表清单，不能再当作执行指令。
 - 删除 `view.md`：早期对话和连接排障；表、视图的区别已放进 QuestDB 使用说明。
 - 删除 `factor-incremental-pipeline-20261011.md`：一千多行临时进度、运行编号和性能记录；仍有用的流程放进同步说明。
-- 删除 `questdb-maintenance-record-20261017.md`：操作流水和过时排障；维护方法、财务增量未接管的限制放进维护说明。
+- 删除 `questdb-maintenance-record-20261017.md`：操作流水和过时排障；维护方法、财务增量接管及验收范围放进维护说明。
 - 将 `java-batch-20260929/` 的三篇说明合并为 `batch.md`；接口定义移到 `batch/openapi.yaml`。
 - 将 `model-development-workflow.md` 合并到模型说明，避免同一规则写两份。
 
 已经提交的旧内容可以从 Git 历史查看。运行日志、验收报告留在各自的产物目录，不再不断追加到使用说明里。
+
+## 本轮补齐的入口
+
+- [财务增量同步](financial-sync.md)
+- [评分来源组装](strategy-source-coverage.md)和[历史时点输入](strategy-point-in-time.md)
+- [盘后因子来源认证](factor-source-certification.md)
+- [L2 日归档、空间检查和负载工具](../deploy/l2-live/README.md#分日归档与存储检查)
+- [来源认证和 L2 归档的设计决定](decisions/2026-10-17-来源认证与L2归档.md)

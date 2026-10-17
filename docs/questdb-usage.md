@@ -6,11 +6,11 @@ QuestDB 主要放市场原始数据和共享时序产品。自己的策略、订
 
 | 操作 | 当前做法 | 默认端口 |
 | --- | --- | --- |
-| data-app 的批量写入 | Java Sender，通过 QWP / WebSocket | 9000 |
+| A 股数据应用的批量写入 | Java Sender，通过 QWP / WebSocket | 9000 |
 | Batch 来源产品写入 | typed HTTP / ILP 适配器 | 9000 |
 | SQL、建表、查询和写后核验 | JDBC / PGWire；部分维护走 HTTP SQL | 8812 / 9000 |
 
-不要把两套写入协议混成一个。data-app 当前 QWP 写入不需要 `QUESTDB_ILP_PORT`，也没有靠这个变量启用 TCP 9009。
+不要把两套写入协议混成一个。A 股数据应用当前 QWP 写入不需要 `QUESTDB_ILP_PORT`，也没有靠这个变量启用 TCP 9009。
 
 数据库主机、端口、用户和密码在 `app.questdb`；URL 引用这组参数。已有实际默认值，不需要再复制一份占位配置。凭据只在配置里查看和修改，不写入文档或日志。
 

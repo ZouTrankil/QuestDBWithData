@@ -1,6 +1,23 @@
 # 配置和启动
 
-运行配置统一在 [config/application.yml](../config/application.yml)，日志格式在 [config/logback-spring.xml](../config/logback-spring.xml)。各程序会自己选对应配置段，启动时不用到处再找一份配置。
+运行配置都在根 `config/`。入口文件是 [application.yml](../config/application.yml)，日志格式是 [logback-spring.xml](../config/logback-spring.xml)。公共、市场和进程设置分开维护，程序自动按 profile 加载。
+
+| 文件 | 放什么 | 自动加载条件 |
+| --- | --- | --- |
+| `application.yml` | QuestDB、Tushare、公共日志、profile 分组和配置导入 | 所有入口 |
+| `markets/cn.yml` | A 股时区、研究目录、离线 L2 数据目录 | `market-cn`；现有四个进程自动带上 |
+| `markets/us.yml` | 美股时区及后续市场设置 | `market-us` |
+| `markets/btc.yml` | BTC 时区及后续来源切分设置 | `market-btc` |
+| `apps/cn-data.yml` | A 股数据 API、schema 位置、离线 L2 读取和财务日批 | `data` |
+| `apps/cn-main-strategy.yml` | 主策略参数、端口和日批开关 | 参数供 `data` / `main-strategy` 使用；仅策略 profile 默认启用策略日批 |
+| `apps/cn-batch.yml` | Batch 端口、SQLite、归档和任务计划 | `batch` |
+| `apps/cn-l2-live.yml` | 实时 L2 订阅、会话和本地存储 | `l2` |
+
+美股和 BTC 目前没有独立应用，所以先放市场设置，不复制 A 股应用或 L2 配置。core、engine、公共 API 库也不单独放一份运行配置。
+
+私密值统一放本机 `config/application-local.yml`，已从公开 YAML 迁出。该文件被 Git 忽略，不进入 JAR 或通用发行包；本机原值保留，没有更换凭据。新环境复制[空白示例](../config/application-local.example.yml) 填写。API 缺 token 时拒绝受保护请求，健康检查仍公开。
+
+内置加载顺序是公共 → 已启用的市场/应用 → 本机覆盖；环境变量和 CLI 仍优先。`main-strategy` 会自动带上 `data` 和 `market-cn`，其他现有进程会带上 `market-cn`，不用自己拼 profile。部署在别处可用 `APP_LOCAL_CONFIG` 指定实际文件 URI，可选文件加 `optional:`。检查公开配置及跟踪文件：`python3 tools/check_public_config.py`；检查发行文件再加 `--package 路径`，脚本需要 PyYAML。
 
 ## 怎么启动
 
@@ -25,18 +42,20 @@
 
 这几个是独立进程。只启动数据 API，不会顺带启动主策略或 Batch。
 
+数据入口实际在 `market-cn/data-app`，也可以直接用 `./gradlew :market-cn:data-app:run` 启动。顶层 `data-app` 是公共支持库，没有 run 任务；未来美股、BTC 的应用在各自市场里装配。
+
 ## 常改的值在哪里
 
 | 要改什么 | 配置位置 |
 | --- | --- |
 | QuestDB 主机、端口、账号、密码 | `app.questdb` |
 | Tushare 地址和 token | `app.tushare` |
-| 研究项目目录 | `app.paths.research-root`，默认 `../back-monitor` |
+| 研究项目目录 | `markets/cn.yml` 的 `app.paths.research-root`，默认 `../back-monitor` |
 | 数据 API 和主策略 API 的 token | `app.web.api-token` |
-| Batch 管理 API 的 token | `jdb.api-token`，在 `batch` 配置段 |
-| 主策略方案、文件路径和日批 | `app.sync.batch` |
-| Batch 定时任务 | `jdb.schedules`，在 `batch` 配置段 |
-| 实时 L2 账号和本地目录 | `l2.username/password`、`l2.root` |
+| Batch 管理 API 的 token | 本机覆盖中的 `jdb.api-token` |
+| 主策略方案、文件路径和日批 | `apps/cn-main-strategy.yml` 的 `app.sync.batch` |
+| Batch 定时任务 | `apps/cn-batch.yml` 的 `jdb.schedules` |
+| 实时 L2 本地目录和会话 | `apps/cn-l2-live.yml` 的 `l2.root`、`l2.session`；账号放本机覆盖 |
 | 日志目录和级别 | `logging.file.path`、`logging.level.root` |
 
 配置已有本项目使用的实际默认值，可以直接改。QuestDB 当前主机是 `100.64.153.106`，HTTP `9000`、PGWire `8812`、数据库 `qdb`；URL 引用这组值，改主机或端口会一起变化。
@@ -49,7 +68,7 @@
 
 ## 市场时间在哪里配
 
-`app.time.markets` 中，`cn` 是 `Asia/Shanghai`，`us` 是 `America/New_York`，`btc` 默认 `UTC`。A 股和美股不接受随意改成固定偏移量，BTC 可以按交易所契约设置切分时区。
+`markets/cn.yml`、`markets/us.yml`、`markets/btc.yml` 分别设置 `app.time.markets` 中自己的市场，`cn` 是 `Asia/Shanghai`，`us` 是 `America/New_York`，`btc` 默认 `UTC`。A 股和美股不接受随意改成固定偏移量，BTC 可以按交易所契约设置切分时区。
 
 旧 `app.time.business-zone` 继续表示 A 股；与新 A 股值冲突会拒绝启动。实时 L2 的 `l2.session.zone` 也要与它一致。事件时间仍存 UTC，不迁移现有数据库时间值。详见[市场时间](market-time.md)。
 
@@ -57,7 +76,7 @@
 
 可以直接改 YAML，也可以用标准环境变量覆盖，例如 `APP_QUESTDB_HOST`、`APP_TUSHARE_TOKEN`、`APP_WEB_API_TOKEN`、`JDB_API_TOKEN`。项目不会自动读取根目录 `.env`。
 
-如果经常在两个环境切换，可以在 YAML 最后加自己的配置段：
+如果经常在两个环境切换，可以在入口 YAML 最后加自己的配置段：
 
 ```yaml
 ---
@@ -71,6 +90,12 @@ app:
 ```
 
 启动前设置 `SPRING_PROFILES_ACTIVE=office`，只覆盖这一环境不同的值。JVM 参数和命令行参数也按 Spring 规则覆盖。
+
+## 部署时带哪些文件
+
+发行包会带完整公开 `config/` 目录，并在应用 jar 中保留同一份默认值。部署时复制整个目录，保留 `markets/`、`apps/` 的相对路径；不要只复制 `application.yml`。本机覆盖文件另外配置。
+
+各应用只激活自己的设置。公共连接可复用；某个进程需要不同数据库、端口、日志或 token 时，在它的应用文件或带 profile 的本机覆盖文档里设置同名属性。不要把应用 profile 写到公共默认激活列表。
 
 ## 日志和运行文件
 

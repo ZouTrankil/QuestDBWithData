@@ -1,0 +1,3 @@
+# BTC 默认按 UTC 切日；数据源另有约定时在这里调整。
+spring.config.activate.on-profile: market-btc
+app.time.markets.btc: UTC

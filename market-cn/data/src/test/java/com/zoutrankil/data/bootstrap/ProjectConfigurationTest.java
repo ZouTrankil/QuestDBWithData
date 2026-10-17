@@ -89,9 +89,85 @@ class ProjectConfigurationTest {
     }
 
     private Path configuration(String suffix) throws Exception {
+        // 外部配置是一整棵目录；导入路径要在 jar 和部署目录里都能解析。
+        for (String folder : java.util.List.of("markets", "apps")) {
+            try (var files = Files.walk(Path.of("config", folder))) {
+                for (Path source : files.filter(Files::isRegularFile).toList()) {
+                    String relative = Path.of("config").relativize(source).toString().replace('\\', '/');
+                    try (var input = getClass().getResourceAsStream("/" + relative)) {
+                        assertNotNull(input, relative);
+                        Path target = directory.resolve(relative);
+                        Files.createDirectories(target.getParent());
+                        Files.copy(input, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    }
+                }
+            }
+        }
         try (var stream = getClass().getResourceAsStream("/application.yml")) {
             assertNotNull(stream);
             return Files.writeString(directory.resolve("application.yml"), new String(stream.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8) + suffix);
         }
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "batch", "l2", "main-strategy"})
+    void privateFileOverridesEveryProfileAndEnvironmentStillWins(String profile) throws Exception {
+        Path file=configuration("");
+        Path local=Files.writeString(directory.resolve("private.yml"), """
+                app.tushare.token: fixture-source
+                app.questdb.password: fixture-password
+                app.web.api-token: fixture-data
+                jdb.api-token: fixture-batch
+                l2.username: fixture-l2
+                """);
+        var properties=Map.of("SPRING_CONFIG_LOCATION",file.toUri().toString(),
+                "APP_LOCAL_CONFIG",local.toUri().toString());
+        var loaded=ProjectConfiguration.load(profile,properties);
+        assertEquals("fixture-source",loaded.getRequiredProperty("app.tushare.token"));
+        assertEquals("fixture-password",loaded.getRequiredProperty("app.questdb.password"));
+        assertEquals("fixture-data",loaded.getRequiredProperty("app.web.api-token"));
+        assertEquals("fixture-batch",loaded.getRequiredProperty("jdb.api-token"));
+        assertEquals("fixture-l2",loaded.getRequiredProperty("l2.username"));
+        var override=new java.util.HashMap<>(properties);override.put("APP_TUSHARE_TOKEN","environment-source");
+        assertEquals("environment-source",ProjectConfiguration.load(profile,override).getRequiredProperty("app.tushare.token"));
+    }
+    @ParameterizedTest
+    @ValueSource(strings = {"market-us", "market-btc"})
+    void otherMarketsDoNotInheritCnApplications(String profile) throws Exception {
+        var file = configuration("");
+        var env = ProjectConfiguration.load(profile, Map.of("SPRING_CONFIG_LOCATION", file.toUri().toString(),
+                "APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml")));
+        String market = profile.substring("market-".length());
+        assertEquals(market.equals("us") ? "America/New_York" : "UTC",
+                env.getRequiredProperty("app.time.markets." + market));
+        for (String key : java.util.List.of("app.paths.l2-dataset-root", "l2.root", "jdb.metadata-url",
+                "spring.datasource.url", "app.sync.batch.enabled", "app.sync.financial.enabled"))
+            assertFalse(env.containsProperty(key), key);
+    }
+
+    @Test void mainStrategyProfileAloneLoadsItsDataBaseAndOverridesOnlyItsOwnSettings() throws Exception {
+        var file = configuration("");
+        var env = ProjectConfiguration.load("main-strategy", Map.of("SPRING_CONFIG_LOCATION", file.toUri().toString(),
+                "APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml")));
+        assertEquals("8081", env.getRequiredProperty("server.port"));
+        assertEquals("true", env.getRequiredProperty("app.sync.batch.enabled"));
+        assertEquals("false", env.getRequiredProperty("app.materialized-views.etf-overview.enabled"));
+        assertEquals("false", env.getRequiredProperty("app.sync.financial.enabled"));
+        assertEquals("Asia/Shanghai", env.getRequiredProperty("app.time.markets.cn"));
+        assertNotNull(env.getProperty("spring.datasource.url"));
+        assertFalse(env.containsProperty("l2.root"));
+        assertFalse(env.containsProperty("jdb.metadata-url"));
+    }
+
+    @Test void changingOneAppFileDoesNotChangeAnotherProcess() throws Exception {
+        var file = configuration("");
+        Files.writeString(directory.resolve("apps/cn-data.yml"), "\n---\nspring.config.activate.on-profile: data\nserver.port: 18080\n",
+                java.nio.file.StandardOpenOption.APPEND);
+        var variables = Map.of("SPRING_CONFIG_LOCATION", file.toUri().toString(),
+                "APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        assertEquals("18080", ProjectConfiguration.load("data", variables).getProperty("server.port"));
+        assertEquals("8081", ProjectConfiguration.load("main-strategy", variables).getProperty("server.port"));
+        assertFalse(ProjectConfiguration.load("batch", variables).containsProperty("server.port"));
+    }
+
 }
