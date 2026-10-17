@@ -2,7 +2,8 @@ plugins { id 'java-library' }
 
 dependencies {
     // 仅集成测试对照入口行为，不进入生产依赖或分发包。
-    testImplementation project(':data-app')
+    testImplementation project(':market-cn:data-app')
+    api project(':data-app')
     api project(':market-cn')
     api project(':data-engine:questdb')
     api project(':runtime-support')

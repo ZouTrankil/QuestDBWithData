@@ -1,6 +1,6 @@
 # 数据目录接口
 
-启动数据 App 后，可以调用接口查看当前 QuestDB 有哪些表和视图、各自有什么用、带哪些标签，并下载目录 CSV。
+启动 A 股数据 App（`market-cn/data-app`，兼容下方根级命令）后，可以调用接口查看当前 QuestDB 有哪些表和视图、各自有什么用、带哪些标签，并下载目录 CSV。
 
 ```sh
 ./gradlew webRun
@@ -58,7 +58,9 @@ CSV 为带 BOM 的 UTF-8，保留原分类清单的 12 列并追加“标签”�
 - 共用数据：App 的 `SharedDataDescriptions`。
 - 标签 ID 和中文名：`data-core` 的 `CatalogTag`。
 
-一个对象可以有多个标签。添加说明时登记对象名、用途、来源分类、市场、上游和标签；App 统一组装，重复登记会报错。后续新增 BTC 对象时可按同样方式增加对应市场登记。
+一个对象可以有多个标签。添加说明时登记对象名、用途、来源分类、市场、上游和标签。市场实现 `DataCatalogProvider`，通过 `META-INF/services` 注册，公共库通过 SPI 组装，重复登记会报错。后续 BTC 有实际数据时按同样方式注册。
+
+`data-app` 本身是公共库，不依赖市场，也不单独启动。新市场应用可以导入 `DataApiConfiguration`，提供 `DataSource`，按需提供 `DatasetRegistry`。没有市场模块时仍能查询实库目录，未知说明显示未分类；没有读取实现的对象不会标成可读。schema 配置不会自动执行迁移，实际 SQL 和执行命令仍由所属市场提供。
 
 实际对象和统计每次从 QuestDB 系统元数据发现。新表未登记说明时仍显示为 `UNCLASSIFIED`；被删除的表默认不再出现。MV 通过原生 MV 元数据识别，并展示实际基表、刷新方式和刷新事务，不能按名称猜测。
 

@@ -33,18 +33,21 @@ allprojects {
 }
 
 // Resolve project models, not dependencies, before wiring aggregate task outputs.
-['data-core', 'runtime-support', 'data-engine', 'data-engine:source', 'data-engine:questdb', 'data-engine:batch', 'market-cn', 'market-cn:source', 'market-cn:data', 'market-cn:batch', 'market-cn:main-strategy-runtime', 'market-cn:l2-live-app', 'market-us', 'market-btc', 'data-app', 'batch-app'].each { evaluationDependsOn(":${it}") }
+['data-core', 'runtime-support', 'data-engine', 'data-engine:source', 'data-engine:questdb', 'data-engine:batch', 'market-cn', 'market-cn:source', 'market-cn:data', 'market-cn:data-app', 'market-cn:batch', 'market-cn:main-strategy-runtime', 'market-cn:l2-live-app', 'market-us', 'market-btc', 'data-app', 'batch-app'].each { evaluationDependsOn(":${it}") }
 def core = project(':data-core')
-def data = project(':data-app')
+def data = project(':market-cn:data-app')
 def batch = project(':batch-app')
 def strategy = project(':market-cn:main-strategy-runtime')
 def support = project(':runtime-support')
 def live = project(':market-cn:l2-live-app')
-def modules = ['data-core', 'runtime-support', 'data-engine', 'data-engine:source', 'data-engine:questdb', 'data-engine:batch', 'market-cn', 'market-cn:source', 'market-cn:data', 'market-cn:batch', 'market-cn:main-strategy-runtime', 'market-cn:l2-live-app', 'market-us', 'market-btc', 'data-app', 'batch-app'].collect { project(":${it}") }
+def modules = ['data-core', 'runtime-support', 'data-engine', 'data-engine:source', 'data-engine:questdb', 'data-engine:batch', 'market-cn', 'market-cn:source', 'market-cn:data', 'market-cn:data-app', 'market-cn:batch', 'market-cn:main-strategy-runtime', 'market-cn:l2-live-app', 'market-us', 'market-btc', 'data-app', 'batch-app'].collect { project(":${it}") }
 def cnData = project(':market-cn:data')
 def cnBatch = project(':market-cn:batch')
 // Runtime configuration has one editable source, shared by the independent distributions.
-def runtimeConfigFiles = ['application.yml', 'logback-spring.xml']
+// 只分发公开运行配置；本机覆盖和示例文件不进入 jar 或发行包。
+def runtimeConfigFiles = fileTree('config') {
+    include 'application.yml', 'logback-spring.xml', 'markets/*.yml', 'apps/*.yml'
+}.files.collect { file('config').toPath().relativize(it.toPath()).toString().replace('\\', '/') }.sort()
 [data, batch, strategy, live].each { module ->
     module.tasks.named('processResources') {
         from(rootProject.file('config')) { include runtimeConfigFiles }
@@ -357,7 +360,7 @@ tasks.register('writeL2LiveRuntime') {
     }
 }
 
-// The root compatibility jar already contains data-app; do not ship its same-named jar twice.
+// 根兼容 jar 包含 A 股入口；公共 data-app 库仍正常进入 lib。
 def mainDistributionRuntime = data.configurations.runtimeClasspath.filter {
     it != data.tasks.named('jar').get().archiveFile.get().asFile
 }
@@ -385,8 +388,7 @@ distributions {
     main {
         distributionBaseName = 'QuestDBWithData'
         contents {
-            // The root application jar already contains data-app. A single FileCollection
-            // also deduplicates dependencies shared by the app and composition runtime.
+            // 根 jar 包含市场入口；依赖集合同时保留公共 API 支持库。
             from('config') { include runtimeConfigFiles; into 'config' }
             from(mainDistributionRuntime) { into 'lib' }
         }
@@ -418,11 +420,12 @@ tasks.register('verifyModuleBoundaries') {
             ':data-engine:batch': [':data-engine:source'],
             ':market-cn': [':data-core'],
             ':market-cn:source': [':market-cn', ':data-engine:source'],
-            ':market-cn:data': [':market-cn', ':data-engine:questdb', ':runtime-support'],
+            ':market-cn:data': [':data-app', ':market-cn', ':data-engine:questdb', ':runtime-support'],
+            ':market-cn:data-app': [':market-cn:data', ':market-cn:source', ':market-us', ':runtime-support'],
             ':market-cn:batch': [':market-cn:source', ':data-engine:batch'],
             ':market-us': [':data-engine:source'],
             ':market-btc': [':data-core'],
-            ':data-app': [':market-cn:data', ':market-cn:source', ':market-us', ':market-btc', ':runtime-support'],
+            ':data-app': [':data-engine:questdb', ':runtime-support'],
             ':batch-app': [':market-cn:batch', ':market-us', ':runtime-support'],
             ':market-cn:main-strategy-runtime': [':market-cn:data', ':market-cn:batch', ':market-us', ':runtime-support'],
             ':market-cn:l2-live-app': [':data-core', ':runtime-support']
@@ -489,6 +492,8 @@ tasks.register('verifyModuleBoundaries') {
         requireCondition(!strategy.configurations.runtimeClasspath.files.contains(batch.tasks.named('jar').get().archiveFile.get().asFile), '主策略不能依赖 Batch 入口包')
         requireCondition(readEntries(tasks.named('jar').get().archiveFile.get().asFile) == entriesByModule[data.path], '根兼容 jar 与数据入口不一致')
         requireCondition(readEntries(tasks.named('batchRuntimeJar').get().archiveFile.get().asFile) == entriesByModule[batch.path], '根 Batch 兼容 jar 与 Batch 入口不一致')
+        requireCondition(!entriesByModule[':data-app'].contains('com/zoutrankil/data/QuestDataApplication.class'), '公共 API 库夹带市场启动入口')
+        requireCondition(!entriesByModule[':data-app'].any { it in runtimeConfigFiles || it.startsWith('db/') }, '公共 API 库夹带市场配置或迁移脚本')
         [data, batch, strategy, live].each { module ->
             new java.util.zip.ZipFile(module.tasks.named('jar').get().archiveFile.get().asFile).withCloseable { zip ->
                 runtimeConfigFiles.each { name ->

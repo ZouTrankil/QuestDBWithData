@@ -4,9 +4,7 @@ import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.config.TushareProperties;
 import com.zoutrankil.data.bootstrap.QuestDataStartup;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import java.util.Map;
 import java.util.TimeZone;
 
 @org.springframework.context.annotation.Configuration
@@ -26,7 +24,7 @@ public class QuestDataApplication {
         if (exitCode != 0) System.exit(exitCode);
     }
 
-    /** 兼容原数据入口，日志主类和已有恢复日志识别规则保持不变。 */
+    /** A 股数据入口保留旧类名，避免破坏日志识别和已有恢复记录。 */
     public static SpringApplication application(boolean persistent, String... profiles) {
         return com.zoutrankil.market.cn.bootstrap.CnDataConfiguration.application(QuestDataApplication.class,persistent,profiles);
     }

@@ -63,9 +63,9 @@ class DerivedApplicationWiringTest {
                 assertEquals(1, owners.stream().filter(owner -> owner.datasetId().equals(dataset)).count(), dataset);
             }
             var datasets = context.getBean(DatasetRegistry.class);
-            assertEquals(47, datasets.definitions().stream()
+            assertEquals(52, datasets.definitions().stream()
                     .filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
-            assertEquals(47, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
+            assertEquals(52, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
             assertFalse(Files.exists(ledger));
             verifyNoInteractions(dataSource);
         }

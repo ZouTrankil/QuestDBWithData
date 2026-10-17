@@ -60,6 +60,22 @@ class MarketModuleArchitectureTest {
         }
         assertTrue(checked>0);
     }
+    @Test void commonApiLibraryDoesNotReferenceMarketsOrOwnTheirEntrypoints() throws Exception {
+        var owners = compiledOwners(); int checked = 0;
+        for (var entry : owners.entrySet()) if (normalized(entry.getValue()).contains("/modules/data-app/")) {
+            checked++;
+            assertNotEquals("com/zoutrankil/data/QuestDataApplication", entry.getKey());
+            for (String ref : references(entry.getValue(), entry.getKey())) {
+                var owner = owners.get(ref);
+                if (owner != null) assertFalse(normalized(owner).matches(".*?/modules/(market-[^/]+|batch-app)/.*"),
+                        "公共 API 反向引用市场或应用：" + entry.getKey() + " -> " + ref);
+            }
+        }
+        assertTrue(checked > 0);
+        var entrypoint = owners.get("com/zoutrankil/data/QuestDataApplication");
+        assertNotNull(entrypoint);
+        assertTrue(normalized(entrypoint).contains("/modules/market-cn/data-app/"));
+    }
     @Test void marketImplementationsDoNotCallEachOther() throws Exception {
         var owners=compiledOwners();
         for (var entry:owners.entrySet()) {

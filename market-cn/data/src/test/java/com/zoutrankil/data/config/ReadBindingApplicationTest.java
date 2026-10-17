@@ -105,12 +105,12 @@ class ReadBindingApplicationTest {
             var historicalIds = new LinkedHashSet<>(expectedTyped.keySet());
             historicalIds.addAll(originalGenericIds());
             assertEquals(44, historicalIds.size(), "The canonical contract has 10 typed and 34 generic readers");
-            var addedIds = Set.of("market_sentiment_daily", "regime_features_monitor_daily", "cn_bond_yield_curve");
+            var addedIds = Set.of("market_sentiment_daily", "regime_features_monitor_daily", "cn_bond_yield_curve", "cashflow", "income", "express", "forecast", "fina_indicator");
             var readableIds = readable.stream().map(DatasetDefinition::datasetId).collect(Collectors.toSet());
             assertEquals(historicalIds, readableIds.stream().filter(id -> !addedIds.contains(id)).collect(Collectors.toSet()));
             assertTrue(readableIds.containsAll(addedIds));
-            assertEquals(47, readable.size());
-            assertEquals(47, catalog.registrations().size());
+            assertEquals(52, readable.size());
+            assertEquals(52, catalog.registrations().size());
             assertEquals(readable.size(), bound.size());
             for (var id : addedIds) {
                 var registration = catalog.registrations().stream().filter(value -> value.datasetId().equals(id))

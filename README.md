@@ -11,11 +11,12 @@
 - `data-core`：纯 Java 模型、契约和市场时间接口。
 - `data-engine`：通用客户端、来源执行、存储核验和恢复。
 - `runtime-support`：配置、日志和启动支持。
-- `data-app`、`batch-app`：数据和批处理的薄运行入口。
+- `data-app`：公共鉴权、数据目录和 schema 配置支持库，没有市场启动入口。
+- `market-cn/data-app`：A 股数据 API / CLI 入口；`batch-app`：现有批处理入口。
 
 ## 怎么启动
 
-需要 JDK 24。[`config/application.yml`](config/application.yml) 已提供本项目的运行默认值，数据库、来源 token 和管理 API token 都在这里查看或修改。项目根目录的 `.env` 不会自动读取。
+需要 JDK 24。[`config/application.yml`](config/application.yml) 是配置入口，公共值在这里，市场和进程设置分别在 `config/markets/`、`config/apps/`。这些文件已提供本项目的运行默认值，数据库、来源 token 和管理 API token 都在这里查看或修改。项目根目录的 `.env` 不会自动读取。
 
 ```sh
 # 数据 API，默认 8080
@@ -38,7 +39,7 @@
 
 ## 从哪里开始看代码
 
-先从 `QuestDataApplication` 看程序怎么启动。然后挑 `market-cn/data` 里的一个业务，比如 `stock/`：跟着“命令 → 应用服务 → 数据来源和转换 → QuestDB 写入”往下看就行。
+先从 `market-cn/data-app` 的 `QuestDataApplication` 看程序怎么启动。然后挑 `market-cn/data` 里的一个业务，比如 `stock/`：跟着“命令 → 应用服务 → 数据来源和转换 → QuestDB 写入”往下看就行。
 
 批处理和主策略稍复杂，等熟悉一条普通采集流程后再看。目录说明在[代码结构](docs/code-structure.md)，配置说明在[这里](docs/configuration.md)。
 

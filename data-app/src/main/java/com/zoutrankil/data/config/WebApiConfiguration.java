@@ -33,12 +33,13 @@ public class WebApiConfiguration {
     WebFilter webApiTokenFilter(WebApiProperties properties) {
         return (exchange, chain) -> {
             String path = exchange.getRequest().getPath().value();
-            if (!path.startsWith("/api/v1/") || path.equals("/api/v1/health") || properties.apiToken().isEmpty()) {
+            if (!path.startsWith("/api/v1/") || path.equals("/api/v1/health")) {
                 return chain.filter(exchange);
             }
             String expected = "Bearer " + properties.apiToken();
             String supplied = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-            if (supplied == null || !MessageDigest.isEqual(expected.getBytes(StandardCharsets.UTF_8),
+            // 没有本机凭据时也拒绝请求，不能把空 token 当成关闭鉴权。
+            if (properties.apiToken().isEmpty() || supplied == null || !MessageDigest.isEqual(expected.getBytes(StandardCharsets.UTF_8),
                     supplied.getBytes(StandardCharsets.UTF_8))) {
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 exchange.getResponse().getHeaders().set(HttpHeaders.CONTENT_TYPE, "application/json");

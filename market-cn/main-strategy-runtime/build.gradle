@@ -2,7 +2,7 @@ plugins { id 'application' }
 
 dependencies {
     // 仅集成测试对照入口行为，不进入生产依赖或分发包。
-    testImplementation project(':data-app')
+    testImplementation project(':market-cn:data-app')
     runtimeOnly project(':market-us')
     implementation project(':market-cn:data')
     implementation project(':runtime-support')

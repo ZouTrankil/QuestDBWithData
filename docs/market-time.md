@@ -12,17 +12,15 @@ NYSE 的会话使用美东时间，不能全年固定成一个 UTC 小时；地�
 
 ## 配置在哪
 
-统一在根 `config/application.yml`：
+统一在根 `config/markets/`，由 `application.yml` 按 profile 导入：
 
-```yaml
-app:
-  time:
-    business-zone: Asia/Shanghai
-    markets:
-      cn: Asia/Shanghai
-      us: America/New_York
-      btc: UTC
-```
+| 文件 | 配置 |
+| --- | --- |
+| `cn.yml` | `app.time.markets.cn: Asia/Shanghai`，兼容 `app.time.business-zone` |
+| `us.yml` | `app.time.markets.us: America/New_York` |
+| `btc.yml` | `app.time.markets.btc: UTC` |
+
+A 股现有应用自动启用 `market-cn`；后续美股和 BTC 应用分别启用自己的市场 profile。未装入的市场时钟使用 core 定义的标准默认值，不加载该市场的业务配置。
 
 `business-zone` 是旧 A 股入口的兼容值，与 `markets.cn` 冲突会拒绝启动。A 股和美股不接受改成 UTC 或固定美东偏移量。BTC 可以按具体来源约定使用不同切分时区。
 
