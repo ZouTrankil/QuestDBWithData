@@ -56,6 +56,9 @@ app:
     retry-base: 1s
     retry-max: 10s
     retryable-business-codes: []
+  data-catalog:
+    query-timeout-seconds: 10
+
   questdb:
     # 当前数据库：HTTP http://100.64.153.106:9000；PGWire 100.64.153.106:8812。
     host: 100.64.153.106
