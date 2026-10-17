@@ -71,6 +71,19 @@ public final class StrategySourceCoverage {
             Path receipt=path.getParent().resolve(file).normalize();
             if(!fileSha(receipt,128L*1024*1024).equals(digest))throw new IllegalStateException("评分来源核验凭证已变化："+name);
         }
+        if(document.has("pointInTime"))history().revalidate();
+        if(document.has("coverageInputs")) {
+            var input=document.get("coverageInputs");Path file=path.getParent().resolve(input.required("path").asText()).normalize();
+            if(!fileSha(file,128L*1024*1024).equals(input.required("sha256").asText()))throw new IllegalStateException("批准的覆盖输入已改变");
+        }
+        if(document.has("upstreamRuns"))for(var source:document.get("upstreamRuns")) {
+            var ledger=com.zoutrankil.data.repository.SyncRunLedger.openReadOnly(Path.of(source.required("ledger").asText()));String id=source.required("runId").asText();
+            if(!objectSha(List.of(ledger.getRun(id),ledger.get(id))).equals(source.required("sha256").asText()))throw new IllegalStateException("上游核验记录已改变");
+        }
+    }
+    public PointInTimeHistory history()throws Exception {
+        if(!document.path("pointInTime").isObject())throw new IllegalStateException("历史评分缺 pointInTime 名称、行业及市场状态证据；不能使用今天的资料代替");
+        var source=document.get("pointInTime");return new PointInTimeHistory(path.getParent().resolve(source.required("path").asText()),source.required("sha256").asText());
     }
     static String keySha(List<Map<String,Object>> rows,List<String> keys)throws Exception {
         var encoded=new TreeSet<String>();

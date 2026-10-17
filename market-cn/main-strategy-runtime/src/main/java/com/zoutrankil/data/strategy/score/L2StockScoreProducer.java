@@ -33,7 +33,9 @@ public final class L2StockScoreProducer {
             // build_daily_diagnostics 不会向基础评分器暴露日频 turnover_rate。
             if (raw.values.containsKey("turnover_rate")) row.put("turnover_rate", raw.values.get("turnover_rate"));
             else row.values.remove("turnover_rate");
-            var meta = metadata.get(raw.symbol);
+            // 正式历史输入按日期取名称和行业；旧的纯计算调用仍可提供固定元数据。
+            var meta = metadata.get(raw.date+"|"+raw.symbol);
+            if(meta==null)meta=metadata.get(raw.symbol);
             if (meta == null) throw new IllegalArgumentException("L2 stock metadata missing: " + raw.symbol);
             row.put("name", Objects.toString(meta.name(), "")); row.put("industry_l2", Objects.toString(meta.industry(), ""));
             if (raw.values.containsKey("main_funds_buy_amount")) row.put("buy_aggressiveness", raw.n("main_funds_buy_amount") / (diag.n("amount") == 0 ? Double.NaN : diag.n("amount")));

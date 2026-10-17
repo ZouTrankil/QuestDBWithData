@@ -36,4 +36,16 @@ CLI 对应 `--source-coverage`、`--source-coverage-sha256`。清单属于运行
 
 这是发布前的阻断检查。清单要由独立采集核验、上市停牌规则和来源范围共同确定，不能把目标表当前行数或本次查询结果当成应有范围。文件摘要只能固定批准结果，本身不能证明供应商数据完整。
 
-上游自动产出并批准清单的链路还没接通，本次没有生成生产清单。默认配置为空，所以新评分会明确停止；不能据此说正式盘后链路已经跑通。已有评分和历史时点资料也不因此自动获得完整性证明。
+程序已支持从独立批准的预期键和真实上游运行自动组装清单。默认输入仍为空；没有真实批准材料时，新评分继续停止。已有评分不因此自动获得完整性或历史时点证明。
+
+## 自动组装
+
+输入格式 `java.strategy.coverage_inputs.v1`，包含 `start,end,warmupStart,sourceClocksSha256,sources,pointInTime`。每个来源填写 `expectedKeys`（按上表顺序的字符串数组列表）、`certificate,certificateSha256,upstreamRuns`。运行项含 `ledger,runId`。
+
+预期键必须来自独立证券及来源范围，不能复制目标表当前结果。上游必须是对应数据集的已核验根运行；股票输入要求 `stk_factor,stk_limit,stk_suspend,stk_st_daily,daily_basic` 的凭证。用别的数据集运行充数会失败。
+
+```sh
+./gradlew mainStrategyData --args='build-coverage --coverage-inputs /实际路径/inputs.json --coverage-inputs-sha256 批准摘要 --output /实际路径/coverage.json'
+```
+
+配置 `app.sync.batch.coverage-inputs`、`coverage-inputs-sha256` 后，主策略在评分前自动组装；独立 CLI 使用同名参数。未配置时仍读取原 `source-coverage`。两种方式都会检查[历史时点输入](strategy-point-in-time.md)，并在发布前重查原批准文件和账本。

@@ -19,7 +19,7 @@ public final class MainStrategyDataCli {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         if(args.length==0)throw new IllegalArgumentException("Command required: status|produce-scores|scores|import-plan|inspect-plans");
         var options=new LinkedHashMap<String,String>();
-        Set<String> allowed=Set.of("target","source","source-sha256","score-run","research-root","recipe","recipe-pins","artifact-root","plan-db","start","row-budget","source-coverage","source-coverage-sha256");
+        Set<String> allowed=Set.of("target","source","source-sha256","score-run","research-root","recipe","recipe-pins","artifact-root","plan-db","start","row-budget","source-coverage","source-coverage-sha256","coverage-inputs","coverage-inputs-sha256","output");
         for(int i=1;i<args.length;i+=2){if(!args[i].startsWith("--")||i+1>=args.length||!allowed.contains(args[i].substring(2))||options.put(args[i].substring(2),args[i+1])!=null)throw new IllegalArgumentException("Unknown, duplicate or incomplete data command option");}
         var config=ProjectConfiguration.load("data");
         ProjectLogging.initialize(config);
@@ -36,7 +36,9 @@ public final class MainStrategyDataCli {
                 Long.parseLong(options.getOrDefault("row-budget",config.getRequiredProperty("app.sync.batch.score-source-row-budget"))),
                 options.getOrDefault("source-coverage",config.getProperty("app.sync.batch.source-coverage","")),
                 options.getOrDefault("source-coverage-sha256",config.getProperty("app.sync.batch.source-coverage-sha256","")));
+        service.configureCoverageAssembly(options.getOrDefault("coverage-inputs",config.getProperty("app.sync.batch.coverage-inputs","")),options.getOrDefault("coverage-inputs-sha256",config.getProperty("app.sync.batch.coverage-inputs-sha256","")));
         Object result=switch(args[0]) {
+            case "build-coverage" -> com.zoutrankil.data.strategy.input.StrategyCoverageAssembler.assemble(Path.of(required(options,"coverage-inputs")),required(options,"coverage-inputs-sha256"),Path.of(required(options,"output")),new com.zoutrankil.data.strategy.input.QuestDbStrategyInputs(new JdbcTemplate(source),10000).clocks());
             case "status"->service.status();
             case "produce-scores"->{LocalDate target=LocalDate.parse(required(options,"target"));yield service.prepareScores(target,"java_scores_"+target+"_"+UUID.randomUUID());}
             case "scores"->service.scores(LocalDate.parse(required(options,"target")));

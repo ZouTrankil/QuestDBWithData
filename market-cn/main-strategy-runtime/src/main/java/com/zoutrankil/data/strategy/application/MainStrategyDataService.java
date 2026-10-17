@@ -2,6 +2,8 @@ package com.zoutrankil.data.strategy.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.strategy.input.QuestDbStrategyInputs;
+import com.zoutrankil.data.strategy.input.StrategySourceCoverage;
+import com.zoutrankil.data.strategy.input.StrategyCoverageAssembler;
 import com.zoutrankil.data.strategy.publication.ScoreArtifactPublisher;
 import com.zoutrankil.data.strategy.publication.NativeMarketInputPackagePublisher;
 import com.zoutrankil.data.strategy.publication.ScoreArtifactPublisher.Publication;
@@ -25,6 +27,11 @@ public final class MainStrategyDataService {
     private final Path recipe, pins, allowedRoot, planDatabase;
     private final LocalDate start;
     private final String coverageFile,coverageSha256;
+    private String coverageInputs="",coverageInputsSha256="";
+    @org.springframework.beans.factory.annotation.Autowired
+    public void configureCoverageAssembly(@Value("${app.sync.batch.coverage-inputs:}")String file,@Value("${app.sync.batch.coverage-inputs-sha256:}")String sha) {
+        if(file.isBlank()!=sha.isBlank()||!sha.isBlank()&&!sha.matches("[a-f0-9]{64}"))throw new IllegalArgumentException("覆盖组装输入和摘要需成对配置");coverageInputs=file;coverageInputsSha256=sha;
+    }
     public MainStrategyDataService(JdbcTemplate jdbc,String researchRoot,String recipe,String pins,String allowedRoot,
             String planDatabase,String start,long rowBudget) {
         this(jdbc,researchRoot,recipe,pins,allowedRoot,planDatabase,start,rowBudget,"","");
@@ -48,7 +55,8 @@ public final class MainStrategyDataService {
         plans=new OfficialPlanStore(this.planDatabase);this.start=LocalDate.parse(start);
     }
     public String definitionFingerprint()throws Exception {
-        return com.zoutrankil.batch.domain.RunRequest.hash("java.main_strategy.data.v1",start.toString(),recipe.toString(),stamp(recipe),pins.toString(),stamp(pins),allowedRoot.toString(),planDatabase.toString(),coverageFile,coverageSha256);
+        String base=com.zoutrankil.batch.domain.RunRequest.hash("java.main_strategy.data.v1",start.toString(),recipe.toString(),stamp(recipe),pins.toString(),stamp(pins),allowedRoot.toString(),planDatabase.toString(),coverageFile,coverageSha256);
+        return coverageInputs.isBlank()?base:com.zoutrankil.batch.domain.RunRequest.hash(base,coverageInputs,coverageInputsSha256);
     }
     public Map<String,Object> status()throws Exception {
         var result=new LinkedHashMap<String,Object>();result.put("producer","java.main_strategy.data");result.put("scoreStart",start);result.put("promotedRecipe",recipe.toString());result.put("recipePins",pins.toString());result.put("planDatabase",planDatabase.toString());
@@ -64,10 +72,17 @@ public final class MainStrategyDataService {
      */
     public Publication prepareScores(LocalDate target,String runId)throws Exception {
         FrozenPromotedRecipe frozen=recipe();
-        var raw=reader.read(start,target,460);
+        StrategySourceCoverage coverage;
+        if(coverageInputs.isBlank())coverage=new StrategySourceCoverage(coverageFile,coverageSha256);
+        else {
+            var assembled=StrategyCoverageAssembler.assemble(Path.of(coverageInputs),coverageInputsSha256,
+                    Path.of("var/strategy-source-coverage").resolve(UUID.randomUUID()+".json"),reader.clocks());
+            coverage=new StrategySourceCoverage(assembled.path().toString(),assembled.sha256());
+        }
+        var raw=reader.read(start,target,460,coverage);
         var metadata=new LinkedHashMap<String,L2StockScoreProducer.StockMetadata>();
         for(var row:raw.tables().get("stock_metadata")) {
-            String code=text(row,"ts_code");if(metadata.put(code,new L2StockScoreProducer.StockMetadata(text(row,"name"),text(row,"industry")))!=null)throw new IllegalStateException("Duplicate stock metadata business key");
+            String code=QuestDbStrategyInputs.date(row.get("trade_date"))+"|"+text(row,"ts_code");if(metadata.put(code,new L2StockScoreProducer.StockMetadata(text(row,"name"),text(row,"industry")))!=null)throw new IllegalStateException("Duplicate dated stock metadata business key");
         }
         var holdings=new ArrayList<EtfOnlyTop2ScoreProducer.Holding>();
         for(var row:raw.tables().get("etf_portfolio"))holdings.add(new EtfOnlyTop2ScoreProducer.Holding(text(row,"ts_code"),text(row,"symbol"),QuestDbStrategyInputs.date(row.get("ann_date")),QuestDbStrategyInputs.date(row.get("end_date")),number(row.get("stk_mkv_ratio")),number(row.get("mkv"))));
@@ -79,7 +94,7 @@ public final class MainStrategyDataService {
         var inputs=new EtfOnlyTop2ScoreProducer.Inputs(rows(raw,"stock_daily","trade_date","ts_code"),rows(raw,"l2_raw","ts","symbol"),metadata,factors,references,holdings,List.of(),sentiment,raw.signalDates(),versions,target,true);
         var output=new EtfOnlyTop2ScoreProducer().produce(inputs,frozen);
         ScoreArtifactPublisher.PublicationGate gate=()->{
-            reader.revalidateCoverage();
+            coverage.revalidate();
             if(!raw.proof().get("sourceClocks").equals(reader.clocks())||!raw.proof().get("backtestState").equals(reader.backtestState()))throw new IllegalStateException("Sources or backtest result changed during Java data preparation");
             if(!frozen.artifactSha256().equals(recipe().artifactSha256()))throw new IllegalStateException("Frozen recipe changed during Java data preparation");
         };

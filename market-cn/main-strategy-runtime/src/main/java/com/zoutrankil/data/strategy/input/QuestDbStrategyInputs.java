@@ -33,8 +33,11 @@ public final class QuestDbStrategyInputs {
         if(rowBudget<10_000||rowBudget>5_000_000)throw new IllegalArgumentException("Strategy source budget must be 10000..5000000");this.rowBudget=rowBudget;
     }
     public Snapshot read(LocalDate start,LocalDate end,int warmupDays)throws Exception {
+        return read(start,end,warmupDays,new StrategySourceCoverage(coverageFile,coverageSha256));
+    }
+    public Snapshot read(LocalDate start,LocalDate end,int warmupDays,StrategySourceCoverage coverage)throws Exception {
         if(activeRead.get()!=null)throw new IllegalStateException("Nested source snapshot read is forbidden");
-        var coverage=new StrategySourceCoverage(coverageFile,coverageSha256);
+        Objects.requireNonNull(coverage);
         activeRead.set(new ReadBudget(Math.multiplyExact(rowBudget,3)));
         try{return readSnapshot(start,end,warmupDays,coverage);}finally{activeRead.remove();}
     }
@@ -92,9 +95,13 @@ public final class QuestDbStrategyInputs {
         if(!before.equals(clocks())||!backtest.equals(backtestPort.sourceState()))throw new IllegalStateException("Strategy sources changed during the complete read");
         var versions=new LinkedHashMap<String,String>();
         var proofs=new LinkedHashMap<String,Object>();proofs.put("producer","java.main_strategy.inputs");proofs.put("start",start.toString());proofs.put("end",end.toString());proofs.put("warmupStart",warmup.toString());proofs.put("signalDates",dates.stream().map(LocalDate::toString).toList());proofs.put("sourceClocks",before);proofs.put("backtestState",backtest);
+        proofs.put("coverage",coverage.verify(start,end,warmup,data,before));
+        var history=coverage.history();
+        data.put("stock_metadata",history.metadata(data.get("l2_raw"),data.get("calendar")));
+        data.put("market_context",history.context(data.get("market_context"),data.get("calendar")));
+        history.revalidate();proofs.put("pointInTimeSha256",history.sha256());
         var rows=new LinkedHashMap<String,Object>();
         for(var e:data.entrySet()){String hash=hashRows(e.getValue());versions.put(e.getKey(),hash);rows.put(e.getKey(),Map.of("rows",e.getValue().size(),"sha256",hash));}
-        proofs.put("coverage",coverage.verify(start,end,warmup,data,before));
         proofs.put("sources",rows);proofs.put("sourceComplete",true);
         return new Snapshot(start,end,List.copyOf(dates),Collections.unmodifiableMap(data),Map.copyOf(versions),Collections.unmodifiableMap(proofs));
     }
