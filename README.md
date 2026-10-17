@@ -7,7 +7,7 @@
 - `data-app`：数据 API、命令行、采集和 QuestDB 读写。
 - `batch-app`：定时批处理和离线 Level2 计算。
 - `main-strategy-runtime`：主策略自己的进程和管理 API。
-- `l2-live-app`：实时 MQTT 行情采集。
+- `l2-live-app`：实时 MQTT 行情采集，原始报文、事件、分钟状态和恢复检查点以类型化 Parquet 落盘。
 - `data-core`、`runtime-support`：几个应用共用的模型、接口和启动支持。
 
 ## 怎么启动

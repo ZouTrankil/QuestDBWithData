@@ -37,6 +37,6 @@ app:
 
 日志默认分别写到 `logs/questdb-data/`、`logs/main-strategy/`、`logs/questdb-batch/` 和 `logs/questdb-l2/`。改日志目录用 `LOG_DIR`，改级别用 `LOG_LEVEL`。
 
-`var/` 下会保存 SQLite 运行状态和检查点。重启时要保留这些文件。Batch 已写进 SQLite 的定时任务设置不会自动跟着 YAML 改；要改已有任务，需要通过管理操作或迁移来做。
+`var/` 下会保存 SQLite 运行状态和提交索引。实时 L2 数据及累计检查点存放在 `l2.root/parquet/batches/`，使用标准 Parquet；SQLite 仅保留原始接收 WAL 与提交引用。重启和备份要同时保留 SQLite 与它引用的 Parquet 目录。Batch 已写进 SQLite 的定时任务设置不会自动跟着 YAML 改；要改已有任务，需要通过管理操作或迁移来做。
 
 主策略调度看 `app.sync.batch`；Batch 的时间表看 `batch` 配置段里的 `jdb.schedules`。QuestDB 的维护操作和历史清理记录在[单独页面](questdb-maintenance-record-20261017.md)。

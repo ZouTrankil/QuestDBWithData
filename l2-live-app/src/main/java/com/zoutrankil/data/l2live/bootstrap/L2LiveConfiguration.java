@@ -16,9 +16,9 @@ import java.util.Set;
 import com.zoutrankil.runtime.ProjectConfiguration;
 import org.springframework.core.env.Environment;
 
-/** Shared YAML/profile configuration with literal legacy credential-file and CLI overrides. */
+/** 共用 YAML 和配置环境；兼容旧凭据文件，并允许命令行覆盖。 */
 public final class L2LiveConfiguration {
-    private static final Set<String> COMMANDS = Set.of("plan", "run", "session", "replay", "status", "export");
+    private static final Set<String> COMMANDS = Set.of("plan", "run", "session", "replay", "status", "export", "migrate-parquet");
     private static final Set<String> OPTIONS = Set.of("root", "credentials", "broker", "symbols", "overrides",
             "questdb", "seconds", "batch-size", "poll-ms", "visibility-ms", "lateness-ms", "retained-minutes", "wait-credentials");
     final String command;
@@ -52,7 +52,7 @@ public final class L2LiveConfiguration {
         if (!sessionStart.isBefore(sessionStop)) throw new IllegalArgumentException("INVALID_SESSION_WINDOW");
         var effective = new LinkedHashMap<String, String>();
         for (String key : OPTIONS) {
-            if (key.equals("broker")) continue; // Credential-file/environment broker overrides remain effective.
+            if (key.equals("broker")) continue; // 仍允许凭据文件或环境变量覆盖 MQTT 服务地址。
             String value = config.getProperty("l2." + key);
             if (value != null && !value.isBlank()) effective.put(key, value);
         }
@@ -138,7 +138,8 @@ public final class L2LiveConfiguration {
                 .map(prefix -> prefix + symbol.substring(0, 6))).toList());
         result.put("rawRoot", root.toString());
         result.put("calendarQuestDb", questDb);
-        result.put("storage", "local_sqlite");
+        result.put("storage", "parquet");
+        result.put("parquetRoot", root.resolve("parquet/batches").toString());
         result.put("database", root.resolve("raw-journal.sqlite3").toString());
         result.put("session", Map.of("zone", sessionZone.toString(), "exchange", sessionExchange,
                 "start", sessionStart.toString(), "stop", sessionStop.toString(), "calendar", "exchange_calendar"));

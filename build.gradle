@@ -379,7 +379,7 @@ tasks.register('verifyModuleBoundaries') {
         requireCondition(!dataEntries.any { it.startsWith('com/zoutrankil/data/l2live/') }, 'Live classes leaked into data-app; clean stale outputs')
         requireCondition(liveEntries.contains('com/zoutrankil/data/l2live/bootstrap/AliyunL2LiveMain.class'), 'Independent live entrypoint missing')
         requireCondition(!live.configurations.runtimeClasspath.files.any { it.name.startsWith('QuestDBWithData-') || it.name.startsWith('main-strategy-runtime-') || it.name.startsWith('batch-app-') }, 'Live runtime contains other applications')
-        requireCondition(!live.configurations.runtimeClasspath.files.any { f -> ['postgresql-', 'questdb-client-', 'flyway-', 'poi-', 'hadoop-', 'parquet-', 'spring-web', 'spring-batch', 'quartz-'].any { f.name.startsWith(it) } }, 'Live runtime contains API, strategy or offline data dependencies')
+        requireCondition(!live.configurations.runtimeClasspath.files.any { f -> ['postgresql-', 'questdb-client-', 'flyway-', 'poi-', 'spring-web', 'spring-batch', 'quartz-'].any { f.name.startsWith(it) } }, 'Live runtime contains API, strategy or offline data dependencies')
         requireCondition(!strategy.configurations.runtimeClasspath.files.any { it.name.contains('mqtt') }, 'Strategy runtime contains MQTT')
         requireCondition(!data.configurations.runtimeClasspath.files.any { it.name.contains('mqtt') }, 'MQTT dependency leaked into data-app')
         def strategyEntries = readEntries(strategy.tasks.named('jar').get().archiveFile.get().asFile)

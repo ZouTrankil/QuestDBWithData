@@ -75,10 +75,10 @@ class RawJournalTest {
             assertTrue(batch.events().getFirst().isValid());assertEquals(1,journal.pending(2).size());
         }
     }
-    @Test void verifiedCommitAtomicallyAdvancesAllRawsAndAccumulatorAndIsIdempotent() {
+    @Test void verifiedCommitAtomicallyAdvancesAllRawsAndAccumulatorAndIsIdempotent() throws Exception {
         try(var journal=new RawJournal(root)) {
             var a=event(journal);var b=event(journal);var batch=journal.prepareBatch(List.of(a,b),List.of(),Map.of("count",2L));
-            journal.reserveOutbox(batch.id(),"a".repeat(64),"b".repeat(64),"c".repeat(64));journal.claimUnknown(batch.id());journal.markWriteVerified(batch.id());
+            new LocalLiveSink(journal).write(batch.events(),batch.states());
             journal.completeBatch(batch.id());journal.completeBatch(batch.id());
             assertTrue(journal.pending(2).isEmpty());assertTrue(journal.preparedBatch().isEmpty());assertEquals(2L,journal.committedAccumulatorState().get("count"));
             assertEquals(2,journal.status().completed());assertEquals(2,journal.status().captures());
@@ -115,21 +115,22 @@ class RawJournalTest {
             assertEquals(1,journal.status().captures());assertEquals(600_000,journal.status().rawBytes());assertEquals(1,journal.status().pending());
         }
     }
-    @Test void frozenOutboxAlsoObeysDatabasePageQuotaAndKeepsEarlierRaw() {
+    @Test void parquetQuotaFailureKeepsTheEarlierRawPending() {
         try(var journal=new RawJournal(root,1_048_576)) {
-            var capture=journal.append("wire",new byte[700_000],TIME,"s",0,false,false);
+            byte[] wire=new byte[700_000],checkpoint=new byte[600_000];new java.util.Random(1).nextBytes(wire);new java.util.Random(2).nextBytes(checkpoint);
+            var capture=journal.append("wire",wire,TIME,"s",0,false,false);
             var fields=new LinkedHashMap<String,Object>();AliyunL2WireParser.FIELD_TYPES.keySet().forEach(key->fields.put(key,null));fields.put("parser_version","v2");
             var event=new L2CleanEvent(capture,"600000.SH","SH","trans",capture.captureDate(),TIME,"ok","",fields);
-            assertThrows(IllegalStateException.class,()->journal.prepareBatch(List.of(event),List.of(),Map.of()));
+            assertThrows(IllegalStateException.class,()->journal.prepareBatch(List.of(event),List.of(),Map.of("uncompressed_checkpoint",java.util.Base64.getEncoder().encodeToString(checkpoint))));
             assertEquals(capture,journal.pending(1).getFirst());assertTrue(journal.preparedBatch().isEmpty());
         }
     }
     @Test void exportRetainsReplayableRawBytesAndDoesNotOverwriteEvidence() throws Exception {
         try(var journal=new RawJournal(root)) {
-            var capture=event(journal).capture();var destination=root.resolve("export/raw.jsonl");var evidence=journal.exportJsonl(destination);
-            var restored=LiveStorageJson.read(Files.readAllBytes(destination),com.zoutrankil.data.l2live.domain.RawCapture.class);
+            var capture=event(journal).capture();var destination=root.resolve("export/raw.parquet");var evidence=journal.exportParquet(destination);
+            var restored=LiveParquetCodec.readRaw(destination).getFirst();
             assertEquals(capture,restored);assertEquals(1,evidence.captures());assertEquals(capture.sequence(),evidence.lastSequence());
-            assertEquals(64,evidence.sha256().length());assertThrows(IllegalArgumentException.class,()->journal.exportJsonl(destination));
+            assertEquals(64,evidence.sha256().length());assertThrows(IllegalArgumentException.class,()->journal.exportParquet(destination));
             assertEquals(1,journal.status().pending());
         }
     }

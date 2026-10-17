@@ -28,7 +28,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-/** Separate live-data process. It has no strategy, QMT or order execution dependencies. */
+/** 独立的实时数据进程；不依赖策略、QMT 或订单执行。 */
 public final class AliyunL2LiveMain {
     private static final ObjectMapper JSON = new ObjectMapper().registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -87,9 +87,13 @@ public final class AliyunL2LiveMain {
                         if (configuration == null) return 0;
                     }
                     try (RawJournal journal = new RawJournal(configuration.root)) {
+                    if (configuration.command.equals("migrate-parquet")) {
+                        print(Map.of("phase", "migrated", "batches", journal.migrateParquet()));
+                        return 0;
+                    }
                     if (configuration.command.equals("export")) {
-                        Path output = configuration.root.resolve("raw-export.jsonl");
-                        var evidence = journal.exportJsonl(output);
+                        Path output = configuration.root.resolve("raw-export.parquet");
+                        var evidence = journal.exportParquet(output);
                         print(Map.of("phase", "exported", "evidence", evidence));
                         return 0;
                     }

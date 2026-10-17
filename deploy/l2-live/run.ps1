@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('plan','start','status','stop','replay','export')][string]$Action = 'status',
+    [ValidateSet('plan','start','status','stop','replay','export','migrate-parquet')][string]$Action = 'status',
     [string]$Symbols = '',
     [string]$CredentialsFile = '',
     [int]$Seconds = 0,

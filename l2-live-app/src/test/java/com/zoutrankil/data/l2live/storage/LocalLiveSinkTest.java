@@ -32,7 +32,8 @@ class LocalLiveSinkTest {
              var r = s.executeQuery("SELECT payload FROM prepared_batch WHERE active=0")) {
             assertEquals(1L, journal.committedAccumulatorState().get("count"));
             assertTrue(r.next());
-            var retained = LiveStorageJson.read(r.getBytes(1), RawJournal.FrozenData.class);
+            assertEquals(0, r.getBytes(1).length);
+            var retained = journal.storedBatch(batchId);
             assertEquals(1, retained.events().size());
             assertEquals("600000.SH", retained.events().getFirst().symbol());
             assertFalse(r.next());
