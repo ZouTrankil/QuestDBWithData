@@ -1,5 +1,6 @@
 param(
-    [ValidateSet('plan','start','status','stop','replay','export','migrate-parquet')][string]$Action = 'status',
+    [ValidateSet('plan','start','status','stop','replay','export','migrate-parquet','archive','verify-storage','files')][string]$Action = 'status',
+    [string]$Date = '',
     [string]$Symbols = '',
     [string]$CredentialsFile = '',
     [int]$Seconds = 0,
@@ -63,6 +64,7 @@ $launchArgs = @('-Xms128m','-Xmx1g','-cp',$classpath,'com.zoutrankil.data.l2live
 if ($Symbols) { $launchArgs += @('--symbols',$Symbols) }
 if ($CredentialsFile) { $launchArgs += @('--credentials',[IO.Path]::GetFullPath($CredentialsFile)) }
 if ($Seconds) { $launchArgs += @('--seconds',[string]$Seconds) }
+if ($Date) { $launchArgs += @('--date',$Date) }
 if ($Action -eq 'start') { $launchArgs += @('--wait-credentials','true') }
 # Use a Java argfile so long Windows classpaths and paths containing spaces remain exact.
 $argFile = Join-Path $runtimeRoot ('launch-' + [Guid]::NewGuid().ToString('N') + '.args')

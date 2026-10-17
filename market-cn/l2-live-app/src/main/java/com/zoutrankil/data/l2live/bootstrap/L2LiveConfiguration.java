@@ -18,10 +18,13 @@ import org.springframework.core.env.Environment;
 
 /** 共用 YAML 和配置环境；兼容旧凭据文件，并允许命令行覆盖。 */
 public final class L2LiveConfiguration {
-    private static final Set<String> COMMANDS = Set.of("plan", "run", "session", "replay", "status", "export", "migrate-parquet");
+    private static final Set<String> COMMANDS = Set.of("plan", "run", "session", "replay", "status", "export", "migrate-parquet", "archive", "verify-storage", "benchmark", "files");
     private static final Set<String> OPTIONS = Set.of("root", "credentials", "broker", "symbols", "overrides",
-            "questdb", "seconds", "batch-size", "poll-ms", "visibility-ms", "lateness-ms", "retained-minutes", "wait-credentials");
+            "questdb", "seconds", "batch-size", "poll-ms", "visibility-ms", "lateness-ms", "retained-minutes", "wait-credentials", "date", "messages", "rate", "storage-bytes");
     final String command;
+    final java.time.LocalDate archiveDate;
+    final int benchmarkMessages,benchmarkRate;
+    final long storageBytes;
     final Path root;
     final String brokerUri;
     final String username;
@@ -44,6 +47,12 @@ public final class L2LiveConfiguration {
     private L2LiveConfiguration(String command, Map<String, String> options, Map<String, String> env, Environment config)
             throws IOException {
         this.command = command;
+        storageBytes=bounded(options,"storage-bytes",config.getProperty("l2.storage.max-bytes",Long.class,8589934592L),1048576L,1099511627776L);
+        benchmarkMessages=(int)bounded(options,"messages",4800,48,100000000);
+        benchmarkRate=(int)bounded(options,"rate",100,1,100000);
+        if(!command.equals("benchmark")&&(options.containsKey("messages")||options.containsKey("rate")))throw new IllegalArgumentException("负载参数只用于 benchmark");
+        archiveDate=options.containsKey("date")?java.time.LocalDate.parse(options.get("date")):null;
+        if(command.equals("archive")!=(archiveDate!=null))throw new IllegalArgumentException("archive 必须显式提供 --date，其他命令不接受日期");
         sessionZone = com.zoutrankil.runtime.MarketClocks.forMarket(config,
                 com.zoutrankil.data.domain.temporal.MarketId.CN, java.time.Clock.systemUTC()).zone();
         if (!ZoneId.of(config.getProperty("l2.session.zone",sessionZone.getId())).equals(sessionZone))

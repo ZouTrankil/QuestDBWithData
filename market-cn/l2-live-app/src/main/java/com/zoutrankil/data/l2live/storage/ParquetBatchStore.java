@@ -17,6 +17,10 @@ final class ParquetBatchStore {
     private final Path root,pending,ready;
     private final long quota;
     private long bytes;
+    synchronized void recount() throws Exception {
+        try(var files=Files.walk(root)){long total=0;for(Path p:files.filter(p->Files.isRegularFile(p,LinkOption.NOFOLLOW_LINKS)).toList())total=Math.addExact(total,Files.size(p));bytes=total;}
+        if(bytes>quota)throw new IllegalStateException("Parquet archive byte quota exceeded");
+    }
     ParquetBatchStore(Path root,long quota) throws Exception {
         this.root=root;this.pending=root.resolve(".pending");this.ready=root.resolve("batches");this.quota=quota;
         for(Path dir:List.of(root,pending,ready)) {if(Files.isSymbolicLink(dir))throw new IllegalStateException("Linked Parquet root rejected");Files.createDirectories(dir);}

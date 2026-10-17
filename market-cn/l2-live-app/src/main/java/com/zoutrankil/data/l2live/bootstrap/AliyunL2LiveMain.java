@@ -86,7 +86,13 @@ public final class AliyunL2LiveMain {
                         configuration = awaitCredentials(configuration, args, env, session, clock);
                         if (configuration == null) return 0;
                     }
-                    try (RawJournal journal = new RawJournal(configuration.root)) {
+                    try (RawJournal journal = new RawJournal(configuration.root,configuration.storageBytes)) {
+                    if(configuration.command.equals("benchmark")){print(L2LoadBenchmark.run(journal,configuration.benchmarkMessages,configuration.benchmarkRate,configuration.batchSize,configuration.seconds));return 0;}
+                    if(configuration.command.equals("archive")) {
+                        print(journal.archiveDay(configuration.archiveDate,java.time.LocalDate.now(clock.withZone(java.time.ZoneId.of("Asia/Shanghai")))));return 0;
+                    }
+                    if(configuration.command.equals("verify-storage")) {print(journal.verifyStorage());return 0;}
+                    if(configuration.command.equals("files")){print(journal.parquetFiles());return 0;}
                     if (configuration.command.equals("migrate-parquet")) {
                         print(Map.of("phase", "migrated", "batches", journal.migrateParquet()));
                         return 0;

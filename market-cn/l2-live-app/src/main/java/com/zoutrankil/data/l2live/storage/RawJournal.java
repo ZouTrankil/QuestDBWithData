@@ -64,11 +64,12 @@ public final class RawJournal implements AutoCloseable {
                         if(!r.next() || r.getInt(1)!=APPLICATION_ID) throw new IllegalArgumentException("Existing file is not a live raw journal");
                     }
                     try(var s=c.createStatement();var r=s.executeQuery("PRAGMA user_version")) {
-                        if(!r.next() || !java.util.Set.of(2,3).contains(r.getInt(1))) throw new IllegalArgumentException("Unsupported live raw journal schema; subscription proof requires schema 2 or 3");
+                        if(!r.next() || !java.util.Set.of(2,3,4).contains(r.getInt(1))) throw new IllegalArgumentException("Unsupported live raw journal schema; subscription proof requires schema 2, 3 or 4");
                     }
                 }
             }
             initialize();
+            try(var c=open()){DailyParquetArchive.recoverCleanup(c,absolute.resolve("parquet"));}
             parquet=new ParquetBatchStore(absolute.resolve("parquet"),maxRawBytes);
         } catch(RuntimeException e) { throw e; }
         catch(Exception e) { throw new IllegalStateException("Cannot initialize live raw journal",e); }
@@ -96,12 +97,18 @@ public final class RawJournal implements AutoCloseable {
             s.execute("CREATE INDEX IF NOT EXISTS raw_pending_sequence ON raw_capture(completed,sequence)");
             s.execute("CREATE TABLE IF NOT EXISTS journal_totals(singleton INTEGER PRIMARY KEY CHECK(singleton=1),raw_bytes INTEGER NOT NULL,next_sequence INTEGER NOT NULL)");
             s.execute("INSERT INTO journal_totals(singleton,raw_bytes,next_sequence) SELECT 1,coalesce(sum(length(payload)),0),coalesce(max(sequence),0) FROM raw_capture WHERE NOT EXISTS(SELECT 1 FROM journal_totals) ON CONFLICT(singleton) DO NOTHING");
+            var totalColumns=new HashSet<String>();try(var r=s.executeQuery("PRAGMA table_info(journal_totals)")){while(r.next())totalColumns.add(r.getString("name"));}
+            if(!totalColumns.contains("captures"))s.execute("ALTER TABLE journal_totals ADD COLUMN captures INTEGER NOT NULL DEFAULT 0");
+            if(!totalColumns.contains("completed"))s.execute("ALTER TABLE journal_totals ADD COLUMN completed INTEGER NOT NULL DEFAULT 0");
+            // 只在打开日志时核对一次；运行中的状态查询不再扫描整日 payload。
+            s.execute("UPDATE journal_totals SET captures=(SELECT count(*) FROM raw_capture),completed=(SELECT count(*) FROM raw_capture WHERE completed=1) WHERE singleton=1");
             s.execute("CREATE TABLE IF NOT EXISTS prepared_batch(batch_id TEXT PRIMARY KEY,payload BLOB NOT NULL,payload_sha256 TEXT NOT NULL,active INTEGER NOT NULL CHECK(active IN (0,1)),write_verified INTEGER NOT NULL DEFAULT 0 CHECK(write_verified IN (0,1)),created_at TEXT NOT NULL,completed_at TEXT)");
             s.execute("CREATE UNIQUE INDEX IF NOT EXISTS one_active_live_batch ON prepared_batch(active) WHERE active=1");
             s.execute("CREATE TABLE IF NOT EXISTS committed_accumulator(singleton INTEGER PRIMARY KEY CHECK(singleton=1),payload BLOB NOT NULL,payload_sha256 TEXT NOT NULL,batch_id TEXT NOT NULL REFERENCES prepared_batch(batch_id))");
             s.execute("CREATE TABLE IF NOT EXISTS live_outbox(batch_id TEXT PRIMARY KEY REFERENCES prepared_batch(batch_id),encoding_sha256 TEXT NOT NULL,events_identity TEXT NOT NULL,states_identity TEXT NOT NULL,delivery TEXT NOT NULL CHECK(delivery IN ('INTENT','UNKNOWN','ACKNOWLEDGED','VERIFIED')))");
             s.execute("CREATE TABLE IF NOT EXISTS parquet_batches(batch_id TEXT PRIMARY KEY REFERENCES prepared_batch(batch_id),raw_sha256 TEXT NOT NULL,events_sha256 TEXT NOT NULL,minutes_sha256 TEXT NOT NULL,checkpoint_sha256 TEXT NOT NULL)");
-            s.execute("PRAGMA application_id="+APPLICATION_ID); s.execute("PRAGMA user_version=3");
+            DailyParquetArchive.initialize(c);
+            s.execute("PRAGMA application_id="+APPLICATION_ID); s.execute("PRAGMA user_version=4");
         }
     }
 
@@ -118,11 +125,12 @@ public final class RawJournal implements AutoCloseable {
         synchronized(captureLock) {
             try {
                 if(closed)throw new IllegalStateException("Raw journal is closed");
+                if(Files.getFileStore(database).getUsableSpace()<64L*1024*1024+frozen.length*4L)throw new IllegalStateException("L2_STORAGE_HEADROOM：磁盘余量不足，停止接收");
                 // 只复用原始接收连接；Parquet 编码仍可与后续报文落盘并行。
                 if(captureConnection==null) {
                     var connection=open();
                     try {
-                        var totals=connection.prepareStatement("UPDATE journal_totals SET raw_bytes=raw_bytes+?,next_sequence=next_sequence+1 WHERE singleton=1 AND raw_bytes<=?");
+                        var totals=connection.prepareStatement("UPDATE journal_totals SET raw_bytes=raw_bytes+?,next_sequence=next_sequence+1,captures=captures+1 WHERE singleton=1 AND raw_bytes<=?");
                         var insert=connection.prepareStatement("INSERT INTO raw_capture(sequence,capture_id,session_id,topic,payload,payload_sha256,envelope_sha256,recv_ts,capture_date,qos,retained,duplicate,subscription_authorized) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
                         captureTotals=totals;captureInsert=insert;captureConnection=connection;
                     } catch(Exception failure) {
@@ -253,6 +261,7 @@ public final class RawJournal implements AutoCloseable {
                         if(s.executeUpdate()!=1) throw new IllegalStateException("Prepared capture checkpoint changed before commit");
                     }
                 }
+                try(var s=c.prepareStatement("UPDATE journal_totals SET completed=completed+? WHERE singleton=1")){s.setInt(1,batch.events().size());if(s.executeUpdate()!=1)throw new IllegalStateException("原始日志统计缺失");}
                 var retained=receipt(c,id);
                 if(!parquet.published(id))throw new IllegalStateException("Parquet batch has not been published");
                 try(var s=c.prepareStatement("INSERT INTO committed_accumulator(singleton,payload,payload_sha256,batch_id) VALUES(1,?,?,?) ON CONFLICT(singleton) DO UPDATE SET payload=excluded.payload,payload_sha256=excluded.payload_sha256,batch_id=excluded.batch_id")) {
@@ -355,7 +364,8 @@ public final class RawJournal implements AutoCloseable {
             verifyHash(bytes,hash);if(!id.equals("live_"+hash))throw new IllegalStateException("Legacy prepared batch content identity mismatch");
             data=LiveStorageJson.read(bytes,FrozenData.class);
         } else {
-            data=parquet.read(id,receipt(c,id));if(!hash.equals(LiveValueIdentity.batch(data))||id.startsWith("live_pq_")&&!id.equals("live_pq_"+hash))throw new IllegalStateException("Parquet logical content identity mismatch");
+            var archived=DailyParquetArchive.read(c,database.getParent().resolve("parquet"),id,receipt(c,id));
+            data=archived.isPresent()?archived.get():parquet.read(id,receipt(c,id));if(!hash.equals(LiveValueIdentity.batch(data))||id.startsWith("live_pq_")&&!id.equals("live_pq_"+hash))throw new IllegalStateException("Parquet logical content identity mismatch");
         }
         return new StoredBatch(id,data.events(),data.states(),data.accumulatorState());
     }
@@ -384,7 +394,7 @@ public final class RawJournal implements AutoCloseable {
                 migrateBatch(id);count++;
             }
             // 恢复文件已冻结、SQLite 迁移已提交但目录尚未发布的历史已完成批次。
-            try(var c=open();var s=c.createStatement();var r=s.executeQuery("SELECT batch_id FROM prepared_batch WHERE active=0 AND length(payload)=0")){while(r.next()){String id=r.getString(1);parquet.publish(id,receipt(c,id));}}
+            try(var c=open();var s=c.createStatement();var r=s.executeQuery("SELECT batch_id FROM prepared_batch WHERE active=0 AND length(payload)=0 AND batch_id NOT IN (SELECT batch_id FROM parquet_archive_members)")){while(r.next()){String id=r.getString(1);parquet.publish(id,receipt(c,id));}}
             return count;
         } catch(RuntimeException e){throw e;}catch(Exception e){throw failure("Cannot migrate retained Parquet history",e);}
     }
@@ -434,9 +444,41 @@ public final class RawJournal implements AutoCloseable {
         if(bytes==null || !LiveStorageJson.sha256(bytes).equals(hash)) throw new IllegalStateException("Retained raw/checkpoint hash mismatch");
     }
     public synchronized Status status() {
-        try(var c=open();var s=c.createStatement();var r=s.executeQuery("SELECT count(*),coalesce(sum(1-completed),0),coalesce(sum(completed),0),coalesce(sum(length(payload)),0) FROM raw_capture")) {
-            r.next();return new Status(database,r.getLong(1),r.getLong(2),r.getLong(3),r.getLong(4),active(c).map(StoredBatch::id).orElse(""));
+        try(var c=open();var s=c.createStatement();var r=s.executeQuery("SELECT captures,captures-completed,completed,raw_bytes FROM journal_totals WHERE singleton=1")) {
+            if(!r.next())throw new IllegalStateException("原始日志统计缺失");String active="";
+            try(var q=c.createStatement();var batch=q.executeQuery("SELECT batch_id FROM prepared_batch WHERE active=1")){if(batch.next())active=batch.getString(1);}
+            return new Status(database,r.getLong(1),r.getLong(2),r.getLong(3),r.getLong(4),active);
         } catch(Exception e) { throw failure("Cannot read raw journal status",e); }
+    }
+
+    /** 调用方持有 collector.lock，接收连接也暂停；原始 SQLite 日志保留，不因合并而删报文。 */
+    public synchronized Map<String,Object> archiveDay(java.time.LocalDate date,java.time.LocalDate today) {
+        synchronized(captureLock) {
+            try(var c=open()) {
+                var result=DailyParquetArchive.seal(this,c,database.getParent().resolve("parquet"),date,today);
+                parquet.recount();return Map.of("date",result.date(),"batches",result.batches(),"filesRemoved",result.filesRemoved(),"manifestSha256",result.manifestSha256());
+            }catch(RuntimeException e){throw e;}catch(Exception e){throw failure("日归档未完成；保留原账本和文件",e);}
+        }
+    }
+    public synchronized Map<String,Object> verifyStorage() {
+        try(var c=open();var s=c.createStatement()) {
+            try(var r=s.executeQuery("PRAGMA quick_check")){if(!r.next()||!"ok".equals(r.getString(1)))throw new IllegalStateException("SQLite 完整性检查未通过");}
+            DailyParquetArchive.verifyAll(c,database.getParent().resolve("parquet"));long batches=0,valid=0,minutes=0;
+            try(var r=s.executeQuery("SELECT batch_id FROM prepared_batch")){while(r.next()){var batch=storedBatch(r.getString(1));valid+=batch.events().stream().filter(L2CleanEvent::isValid).count();minutes+=batch.states().size();batches++;}}
+            long raw=0;try(var r=s.executeQuery("SELECT * FROM raw_capture ORDER BY sequence")){while(r.next()){capture(r);raw++;}}
+            long bytes;try(var paths=Files.walk(database.getParent())){bytes=paths.filter(p->Files.isRegularFile(p,LinkOption.NOFOLLOW_LINKS)).mapToLong(p->{try{return Files.size(p);}catch(Exception e){throw new IllegalStateException(e);}}).sum();}
+            return Map.of("verified",true,"batches",batches,"rawCaptures",raw,"validNormalizedEvents",valid,"minuteObservations",minutes,"diskBytes",bytes,"usableDiskBytes",Files.getFileStore(database).getUsableSpace(),"pending",status().pending(),"rawQuotaBytes",maxRawBytes);
+        }catch(RuntimeException e){throw e;}catch(Exception e){throw failure("L2 存储核验失败",e);}
+    }
+    /** 只列 SQLite 已提交的文件；归档引用接管后，即使旧文件还没清完，也不能重复读取。 */
+    public synchronized Map<String,List<String>> parquetFiles() {
+        try(var c=open()) {
+            Path root=database.getParent().resolve("parquet");var directories=new ArrayList<>(DailyParquetArchive.directories(c,root));
+            try(var s=c.createStatement();var r=s.executeQuery("SELECT batch_id FROM prepared_batch WHERE active=0 AND write_verified=1 AND length(payload)=0 AND batch_id NOT IN (SELECT batch_id FROM parquet_archive_members) ORDER BY created_at,batch_id")){
+                while(r.next()){String id=r.getString(1);parquet.verifyPublished(id,receipt(c,id));directories.add(root.resolve("batches").resolve(id));}
+            }
+            var result=new java.util.TreeMap<String,List<String>>();for(String kind:List.of("raw","events","minutes"))result.put(kind,directories.stream().map(p->p.resolve(kind+".parquet").toAbsolutePath().toString()).toList());return java.util.Collections.unmodifiableMap(result);
+        }catch(RuntimeException e){throw e;}catch(Exception e){throw failure("不能列出已提交的 L2 文件",e);}
     }
     public synchronized ExportEvidence exportParquet(Path destination) {
         Path target=destination.toAbsolutePath().normalize(), temporary=null;

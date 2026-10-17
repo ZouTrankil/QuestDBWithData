@@ -12,6 +12,19 @@ class L2LiveConfigurationTest {
 
     @Test void unifiedYamlSuppliesSharedEndpointAndL2SettingsWhileOverridesStillWin() throws Exception {
         Path config = root.resolve("application.yml");
+        for (String folder : java.util.List.of("markets", "apps")) {
+            try (var files = Files.walk(Path.of("config", folder))) {
+                for (Path source : files.filter(Files::isRegularFile).toList()) {
+                    String relative = Path.of("config").relativize(source).toString().replace('\\', '/');
+                    try (var input = getClass().getResourceAsStream("/" + relative)) {
+                        assertNotNull(input, relative);
+                        Path target = root.resolve(relative);
+                        Files.createDirectories(target.getParent());
+                        Files.copy(input, target);
+                    }
+                }
+            }
+        }
         try (var stream = getClass().getResourceAsStream("/application.yml")) {
             assertNotNull(stream);
             Files.writeString(config, new String(stream.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8) + """

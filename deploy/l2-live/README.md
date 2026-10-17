@@ -22,24 +22,25 @@ var/l2-live/
 
 事件通过 `capture_id` 关联同批次的原始报文。不同证券共用固定 schema，缺失字段保持 NULL。文件元数据保存格式版本、数据集名称和批次 ID。检查点文件使用 `path: LIST<STRING>`、节点种类及类型化标量列表示状态树，保留空容器、NULL 和精确十进制状态。
 
-只扫描已发布批次中同一种文件。例如使用 PyArrow：
+分析前停止采集并用 `./deploy/l2-live/run.sh files > /实际路径/files.json` 导出已提交文件清单，再用 PyArrow 读取。归档后不再用批次目录的 glob 充当完整历史清单：
 
 ```python
-from glob import glob
+import json
 import pyarrow.dataset as ds
 
-files = glob('var/l2-live/parquet/batches/*/events.parquet')
-events = ds.dataset(files, format='parquet')
+with open('/实际路径/files.json', encoding='utf-8') as stream:
+    files = json.load(stream)
+events = ds.dataset(files['events'], format='parquet')
 print(events.to_table(columns=['symbol', 'exchange_ts', 'price', 'volume']))
 ```
 
 SQLite 保留原始接收日志和提交账本，保证刚收到但尚未形成 Parquet 批次的报文可恢复。新批次的 `prepared_batch.payload` 和 `committed_accumulator.payload` 为空，仅通过 `parquet_batches` 中的 SHA256 引用 Parquet。日志、文件摘要和控制状态不替代行情文件。`status.json` 与命令行 JSON 仅用于进程管理。
 
-四个文件写完、同步并逐列回读核验后，才冻结提交引用。发布通过同一文件系统中的目录原子移动完成；文件缺失、schema 或摘要变化会阻止推进原始接收检查点。发布后、账本提交前崩溃，重启复用同一批次，不重复计入成交或改写分钟可用时间。单批最多 200 条事件，SQLite 与 Parquet 归档分别受 8 GiB 上限约束；不自动清除历史。
+四个文件写完、同步并逐列回读核验后，才冻结提交引用。发布通过同一文件系统中的目录原子移动完成；文件缺失、schema 或摘要变化会阻止推进原始接收检查点。发布后、账本提交前崩溃，重启复用同一批次，不重复计入成交或改写分钟可用时间。单批最多 200 条事件；SQLite 与 Parquet 的容量上限各由 `l2.storage.max-bytes` 设置，默认 8 GiB，也可用 `--storage-bytes` 覆盖。实际磁盘余量不足 64 MiB 时停止接收。
 
 ## 配置和启动
 
-通过统一的 `config/application.yml` 的 `l2` profile 配置供应商账号、标的和路径。既有 `var/l2-live/credentials.env` 仍作为字面量覆盖，随后由进程环境变量和显式 CLI 参数覆盖。账号和密码不会写入计划输出。
+通过根 `config/apps/cn-l2-live.yml` 设置标的、路径和会话；入口自动启用 `l2` 与 `market-cn`，公共连接从 `config/application.yml` 继承，供应商账号放 `config/application-local.yml`。既有 `var/l2-live/credentials.env` 仍作为字面量覆盖，随后由进程环境变量和显式 CLI 参数覆盖。账号和密码不会写入计划输出。
 
 ```sh
 ./gradlew aliyunL2Live --args='plan --symbols 563360'
@@ -88,4 +89,29 @@ macOS：将 `com.zoutrankil.l2-live.plist.example` 中 `/ABSOLUTE/QuestDBWithDat
 
 ## 接收落盘
 
-接收线程复用 SQLite 连接和预编译语句，原始报文仍逐条以 FULL 事务提交；提交成功才算已保存。Parquet 编码不持有接收锁。已验证并发追加、重启和原有恢复流程，全天负载与分日归档还未验收。
+接收线程复用 SQLite 连接和预编译语句，原始报文仍逐条以 FULL 事务提交；提交成功才算已保存。Parquet 编码不持有接收锁。状态计数与接收、提交处于同一事务，状态查询不再全表扫描 payload；完整内容另由存储核验检查。
+
+## 分日归档与存储检查
+
+停止采集器后运行：
+
+```sh
+./gradlew aliyunL2Live --args='archive --root var/l2-live --date 2026-10-14'
+./gradlew aliyunL2Live --args='verify-storage --root var/l2-live'
+```
+
+只接受已经结束的接收日期；有待处理报文或活动批次时拒绝封存。混合日期批次及当前恢复检查点批次保留原文件。归档在 `parquet/archives/YYYY-MM-DD/`，含四个同类型文件及清单。
+
+先复制原行组，再逐批回读全部值，最后原子发布并提交 SQLite 引用。提交引用后才删除对应旧小文件；中断后先核验归档，再继续清理。重放和 `storedBatch` 都能读取已归档批次，重复命令不会重算或重复累计。单次最多扫描 200,000 个候选批次、清单 128 MiB，超过上限明确失败，须先封存较早日期。`files` 从提交索引列出有效批次及归档，忽略未提交和已被归档接管的旧文件，避免漏历史或重复读取。
+
+本地日志升级到 schema 4，旧 schema 2、3 自动兼容；使用了归档的目录不交给旧程序恢复。原始 SQLite 接收日志没有删除，仍须与全部 Parquet 一起备份。`verify-storage` 核对 SQLite、全部原始报文摘要、批次和归档，并报告积压、空间及可用磁盘；该命令可能较慢。
+
+## 可复现负载
+
+```sh
+./gradlew aliyunL2Live --args='benchmark --root var/l2-load-new --messages 960 --rate 100 --batch-size 200'
+```
+
+只允许新目录。工具生成 16 标的、48 topic 的合成负载，经过真实 FULL 日志、解析、累计及 Parquet 核验，报告落盘延迟、峰值积压、空间和重启耗时；原始持久化要求未降低。可增加 `--messages`、`--seconds`、`--rate` 运行长负载。上限及磁盘压力会明确失败，已提交报文保留供重放。
+
+本轮 960 条合成负载全部核验、最终无积压，并验证了强杀发布中子进程后只恢复一次。短测不能证明供应商真实高峰或全天容量够用；实际订阅、全天流量与成对备份恢复仍需现场验收。
