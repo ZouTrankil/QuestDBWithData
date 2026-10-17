@@ -8,7 +8,7 @@
 - `l2-live-app`：实时 MQTT 采集。
 - `data-core`、`runtime-support`：给其他模块共用的基础代码。
 
-大概的依赖关系是：数据和 Batch 共用 `data-core`；主策略组合这两边；实时 L2 单独运行，只用共享启动支持。
+大概的依赖关系是：数据和 Batch 共用 `data-core`、`runtime-support`；主策略组合这两边；实时 L2 单独运行，只用共享启动支持。
 
 ## 数据采集怎么走
 

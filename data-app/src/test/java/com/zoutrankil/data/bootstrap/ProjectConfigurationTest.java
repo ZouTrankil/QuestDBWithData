@@ -16,12 +16,12 @@ class ProjectConfigurationTest {
     private java.util.Map<String,String> loggingProperties;
     @org.junit.jupiter.api.BeforeEach void isolateBootLoggingSystemProperties() {
         loggingProperties=new java.util.HashMap<>();
-        for(String key:java.util.List.of("LOG_FILE","LOG_PATH")) {
+        for(String key:java.util.List.of("LOG_FILE","LOG_PATH","http.nonProxyHosts","socksNonProxyHosts","socksProxyHost","socksProxyPort")) {
             String value=System.getProperty(key);if(value!=null)loggingProperties.put(key,value);System.clearProperty(key);
         }
     }
     @org.junit.jupiter.api.AfterEach void restoreBootLoggingSystemProperties() {
-        for(String key:java.util.List.of("LOG_FILE","LOG_PATH"))System.clearProperty(key);
+        for(String key:java.util.List.of("LOG_FILE","LOG_PATH","http.nonProxyHosts","socksNonProxyHosts","socksProxyHost","socksProxyPort"))System.clearProperty(key);
         loggingProperties.forEach(System::setProperty);
     }
 
@@ -33,7 +33,7 @@ class ProjectConfigurationTest {
         var defaults=ProjectConfiguration.load(profile,Map.of("SPRING_CONFIG_LOCATION",file.toUri().toString()));
         assertEquals("logs/questdb-"+profile+"/application.log",defaults.getRequiredProperty("logging.file.name"));
         var custom=ProjectConfiguration.load(profile,Map.of("SPRING_CONFIG_LOCATION",file.toUri().toString(),
-                "LOG_FILE","/fixture/collector.log","LOG_MAX_HISTORY","7"));
+                "LOGGING_FILE_NAME","/fixture/collector.log","LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY","7"));
         assertEquals("/fixture/collector.log",custom.getRequiredProperty("logging.file.name"));
         assertEquals("7",custom.getRequiredProperty("logging.logback.rollingpolicy.max-history"));
     }
@@ -71,6 +71,21 @@ class ProjectConfigurationTest {
         assertEquals("http://env-db:29000", env.getRequiredProperty("app.questdb.http-url"));
         assertEquals(28812, org.springframework.boot.context.properties.bind.Binder.get(env)
                 .bind("app.questdb", com.zoutrankil.data.config.QuestDbProperties.class).get().getPgPort());
+    }
+
+    @Test void configuredDatabaseBypassesProxyWhileOtherSocketDestinationsKeepUsingIt() throws Exception {
+        System.setProperty("socksProxyHost", "127.0.0.1");
+        System.setProperty("socksProxyPort", "9");
+        System.setProperty("http.nonProxyHosts", "localhost|*.existing.invalid");
+        System.setProperty("socksNonProxyHosts", "localhost|127.*");
+        var file=configuration("");
+        ProjectConfiguration.load("data",Map.of("SPRING_CONFIG_LOCATION",file.toUri().toString(),
+                "APP_QUESTDB_HOST","100.64.153.106"));
+        assertEquals("localhost|*.existing.invalid|100.64.153.106",System.getProperty("http.nonProxyHosts"));
+        assertEquals("localhost|127.*|100.64.153.106",System.getProperty("socksNonProxyHosts"));
+        var selector=java.net.ProxySelector.getDefault();
+        assertEquals(java.net.Proxy.Type.DIRECT,selector.select(java.net.URI.create("socket://100.64.153.106:8812")).getFirst().type());
+        assertEquals(java.net.Proxy.Type.SOCKS,selector.select(java.net.URI.create("socket://unrelated.invalid:8812")).getFirst().type());
     }
 
     private Path configuration(String suffix) throws Exception {

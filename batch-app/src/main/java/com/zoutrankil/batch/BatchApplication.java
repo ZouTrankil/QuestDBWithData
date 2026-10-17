@@ -18,6 +18,8 @@ public class BatchApplication {
     public static SpringApplication application() {
         var application=new SpringApplication(BatchApplication.class);
         application.setAdditionalProfiles("batch");
+        application.addInitializers(context -> com.zoutrankil.runtime.ProjectConfiguration
+                .configureDatabaseNetwork(context.getEnvironment()));
         application.setWebApplicationType(WebApplicationType.NONE);
         return application;
     }

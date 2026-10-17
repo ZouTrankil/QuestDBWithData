@@ -11,6 +11,8 @@ public final class QuestDataStartup {
     public static ConfigurableApplicationContext run(SpringApplication application, String... arguments) {
         var parsed = StartupArguments.parse(arguments);
         application.addListeners(new RuntimeModeListener(parsed));
+        application.addInitializers(context -> com.zoutrankil.runtime.ProjectConfiguration
+                .configureDatabaseNetwork(context.getEnvironment()));
         var context = application.run(arguments);
         if (application.getWebApplicationType() == WebApplicationType.NONE) context.close();
         return context;

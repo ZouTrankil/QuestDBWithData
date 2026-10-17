@@ -360,7 +360,7 @@ tasks.register('verifyModuleBoundaries') {
                 .collectMany { it.dependencies.withType(ProjectDependency).collect { d -> d.dependencyProject.path } }.toSet()
         }
         requireCondition(ownProjectDependencies(core).empty, 'data-core must not depend on either application')
-        requireCondition(ownProjectDependencies(batch) == ([':data-core'] as Set), 'batch-app depends only on data-core')
+        requireCondition(ownProjectDependencies(batch) == ([':data-core', ':runtime-support'] as Set), 'batch-app depends only on shared data and runtime support')
         requireCondition(ownProjectDependencies(data) == ([':data-core', ':runtime-support'] as Set), 'data-app depends only on shared libraries')
         requireCondition(ownProjectDependencies(support).empty, 'runtime-support must not depend on applications')
         requireCondition(ownProjectDependencies(live) == ([':runtime-support'] as Set), 'l2-live-app must not depend on data-app or strategy')

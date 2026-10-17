@@ -25,6 +25,21 @@ public final class ProjectConfiguration {
                         new java.util.LinkedHashMap<>(variables)));
         ConfigurationPropertySources.attach(environment);
         ConfigDataEnvironmentPostProcessor.applyTo(environment, null, null, profile);
+        configureDatabaseNetwork(environment);
         return environment;
     }
+
+    /** 仅将配置的数据库地址加入直连名单，避免本机全局代理截获 PGWire 和 QuestDB HTTP。 */
+    public static synchronized void configureDatabaseNetwork(org.springframework.core.env.Environment environment) {
+        if (!environment.getProperty("app.questdb.direct-connection", Boolean.class, true)) return;
+        String host = environment.getProperty("app.questdb.host", "").trim();
+        if (host.isEmpty() || !host.matches("[A-Za-z0-9_.:-]+")) return;
+        for (String property : java.util.List.of("http.nonProxyHosts", "socksNonProxyHosts")) {
+            var hosts = new java.util.LinkedHashSet<>(java.util.List.of(
+                    System.getProperty(property, "localhost|127.*|[::1]").split("\\|")));
+            hosts.add(host);
+            System.setProperty(property, String.join("|", hosts));
+        }
+    }
+
 }
