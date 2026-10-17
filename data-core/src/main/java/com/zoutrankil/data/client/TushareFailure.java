@@ -2,7 +2,7 @@ package com.zoutrankil.data.client;
 
 import java.io.IOException;
 
-/** Safe to log: no source body, request parameters, credentials or nested transport message. */
+/** 可安全记录的错误：不含来源响应体、请求参数、凭据或底层传输异常消息。 */
 public final class TushareFailure extends IOException {
     public enum Kind { HTTP, BUSINESS, BUSINESS_RATE_LIMIT, CONTRACT, TRANSPORT }
     private final Kind kind;

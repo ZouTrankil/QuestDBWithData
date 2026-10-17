@@ -21,9 +21,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Canonical SQLite official-plan authority, compatible with the Python v3 tables.
- * Imports explicit official JSON only; scoring and target selection are separate owners.
- * Read operations never create a database, migrate it, or bind old plans to new scores.
+ * 正式方案以本地 SQLite 为唯一依据，兼容 Python 第 3 版表结构。
+ * 仅导入显式提供的正式 JSON；评分与目标选择由其他组件负责。
+ * 只读操作不创建或迁移数据库，也不把旧方案绑定到新评分。
  */
 public final class OfficialPlanStore {
     public static final String DATABASE_NAME = "main_strategy_plans.sqlite3";
@@ -36,7 +36,7 @@ public final class OfficialPlanStore {
     public Path path() { return path; }
     public static OfficialPlanStore forPlanRoot(Path root) { return new OfficialPlanStore(root.resolve(DATABASE_NAME)); }
 
-    /** Explicit frozen-input binding is mandatory; missing training/score identities fail before opening SQLite. */
+    /** 必须显式绑定已冻结输入；缺少训练或评分身份时，在打开 SQLite 前即拒绝处理。 */
     public StoredOfficialPlan importSnapshot(Path source, String expectedSourceSha256, PlanInputProvenance provenance) {
         if (provenance == null) throw new PlanStoreException("official plan import requires frozen score and training recipe evidence");
         PlanInputProvenance.requireSha256(expectedSourceSha256, "source snapshot");
@@ -58,7 +58,7 @@ public final class OfficialPlanStore {
                 if (existed) requireSchema(connection);
                 executeScript(connection, OfficialPlanSchema.V3);
                 executeScript(connection, OfficialPlanSchema.IMPORT_RECEIPTS);
-                // An immediate transaction serializes same-date conflict checks and alias updates.
+                // 即时事务将同日期冲突检查和别名更新串行化。
                 execute(connection, "BEGIN IMMEDIATE");
                 try {
                     verifyCurrentUniqueness(connection);
@@ -109,7 +109,7 @@ public final class OfficialPlanStore {
         catch (Exception e) { throw new PlanStoreException("cannot read official plan authority " + path, e); }
     }
 
-    /** Legacy v3 rows can be inspected, but cannot pass this executable evidence gate without an explicit JSON import. */
+    /** 旧第 3 版记录可以查看，但没有显式 JSON 导入时，不能通过本执行证据校验。 */
     public StoredOfficialPlan requireLatest(String strategy, LocalDate expectedSignalDate, String expectedScoreRunId) {
         StoredOfficialPlan stored = latest(strategy).orElseThrow(() -> new PlanStoreException("authoritative official weekly plan is missing: " + path));
         if (!stored.semanticHashVerified() || stored.provenance().isEmpty())
@@ -121,7 +121,7 @@ public final class OfficialPlanStore {
         return stored;
     }
 
-    /** Stronger acceptance when the caller has resolved both immutable score refs and its recipe. */
+    /** 调用方已经解析出两个不可变评分引用及其方案时，执行更严格的验收。 */
     public StoredOfficialPlan requireLatest(String strategy, LocalDate expectedSignalDate, PlanInputProvenance expected) {
         if (expected == null) throw new PlanStoreException("paired score and recipe evidence is required");
         StoredOfficialPlan stored = requireLatest(strategy, expectedSignalDate, expected.scoreRunId());
@@ -174,7 +174,7 @@ public final class OfficialPlanStore {
                 }
             }
         }
-        // A missing alias on a populated authority is corruption, not an invitation to infer latest from positions.
+        // 已有正式记录却缺少别名意味着数据损坏，不能从持仓推测“最新方案”。
         if (id == null && exists(connection, "SELECT 1 FROM strategy_plans WHERE strategy=? AND plan_kind=? AND is_current=1", strategy, KIND))
             throw new PlanStoreException("official authority has current plans but no latest alias");
         if (id != null) {
@@ -274,7 +274,7 @@ public final class OfficialPlanStore {
     }
 
     private static StoredOfficialPlan legacy(String id, String digest, String publishedAt, OfficialWeeklyPlan plan, boolean created) {
-        // Python v3 does not persist target-level valuation dates; its original semantic hash cannot always be reconstructed.
+        // Python 第 3 版未持久化每个目标的估值日期，原始语义摘要不一定能完整重建。
         return new StoredOfficialPlan(id, digest, publishedAt, plan, created, Optional.empty(), "", "", false);
     }
 
@@ -283,7 +283,7 @@ public final class OfficialPlanStore {
         projected.remove("diagnostic_payload_path");
         for (JsonNode target : projected.path("targets")) {
             ((ObjectNode) target).set("valuation_date", projected.get("valuation_date"));
-            // SQLite REAL loses the sign of zero; the immutable canonical payload retains it for semantic hashing.
+            // SQLite REAL 会丢失零的符号；语义摘要使用保留该符号的不可变标准载荷。
             for (String name : CanonicalPlanJson.TARGET_COLUMNS)
                 if (target.path(name).isNumber() && target.path(name).doubleValue() == 0) ((ObjectNode) target).put(name, 0.0);
         }

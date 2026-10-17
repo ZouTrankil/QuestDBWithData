@@ -10,9 +10,9 @@ import java.util.function.Consumer;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-/** Direct MQTT ingestion. Listener completion means the raw envelope has been durably captured. */
+/** 直接接收 MQTT 消息；监听回调成功返回表示原始报文已持久化。 */
 public final class AliyunL2MqttCollector implements AutoCloseable {
-    // JUL registers loggers weakly; retain the safe parent for the lifetime of every client.
+    // JUL 仅弱引用日志器；需在客户端整个生命周期内持有经过安全配置的父日志器。
     private static final java.util.logging.Logger PAHO_LOG_NAMESPACE =
             java.util.logging.Logger.getLogger("org.eclipse.paho.client.mqttv3");
     private final L2MqttSettings settings;
@@ -40,7 +40,7 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
         }));
     }
 
-    /** Offline test seam: injected client/scheduler never create a real network connection. */
+    /** 离线测试替换点：注入的客户端和调度器不会建立真实网络连接。 */
     AliyunL2MqttCollector(L2MqttSettings settings, Consumer<ReceivedMessage> listener,
                          IMqttAsyncClient client, Clock clock, ScheduledExecutorService reconnectExecutor) {
         this.settings = Objects.requireNonNull(settings);
@@ -51,7 +51,7 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
         expectedTopics = Set.copyOf(settings.topics());
     }
 
-    /** Nonblocking and idempotent; a closed collector cannot be reactivated. Network outages keep retrying. */
+    /** 非阻塞、可重复调用；已关闭的采集器不能重新激活，网络中断时持续重试。 */
     public void begin() {
         synchronized (lifecycle) {
             if (closed) throw safe("collector_closed");
@@ -68,7 +68,7 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
         attemptConnection(Duration.ofSeconds(30));
     }
 
-    /** A successful login alone does not complete this method: every topic must receive QoS0 SUBACK. */
+    /** 登录成功还不够；全部主题都收到 QoS 0 的 SUBACK 后，才算完成订阅。 */
     public void start(Duration timeout) {
         if (timeout == null || timeout.isNegative() || timeout.isZero() || timeout.compareTo(Duration.ofDays(1)) > 0)
             throw new IllegalArgumentException("A bounded positive MQTT start timeout is required");
@@ -106,12 +106,12 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
             options.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
             options.setUserName(settings.username()); options.setPassword(settings.password().toCharArray());
             options.setCleanSession(true); options.setKeepAliveInterval(settings.keepAliveSeconds());
-            // The collector owns retries, including cancellation and exact 5..60-second backoff.
+            // 采集器统一管理重试、取消和严格限定在 5～60 秒的退避。
             options.setAutomaticReconnect(false);
             options.setConnectionTimeout((int)Math.max(1, Math.min(30, (timeout.toMillis() + 999) / 1000)));
             try {
                 client.connect(options, null, new IMqttActionListener() {
-                    @Override public void onSuccess(IMqttToken token) { /* connectComplete starts authorization. */ }
+                    @Override public void onSuccess(IMqttToken token) { /* 由 connectComplete 开始订阅授权流程。 */ }
                     @Override public void onFailure(IMqttToken token, Throwable error) { connectionFailed(attempt, error); }
                 });
             } catch (MqttException | RuntimeException invalid) { connectionFailed(attempt, invalid); }
@@ -204,7 +204,7 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
                 receivedCount++; lastReceivedAt = received.receivedAt();
             }
             try {
-                listener.accept(received); // The runtime must persist raw bytes before attempting cleaning.
+                listener.accept(received); // 运行时先持久化原始字节，再尝试清洗。
                 synchronized (lifecycle) {
                     persistedCount++;
                     if (!expectedTopics.contains(topic)) failLocked("mqtt_unexpected_topic", 0);
@@ -215,7 +215,7 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
                 throw new MqttException(MqttException.REASON_CODE_CLIENT_EXCEPTION);
             }
         }
-        @Override public void deliveryComplete(IMqttDeliveryToken token) { /* Subscriber never publishes. */ }
+        @Override public void deliveryComplete(IMqttDeliveryToken token) { /* 订阅客户端从不发布消息。 */ }
     }
 
     private void failLocked(String code, int mqttReason) {
@@ -225,9 +225,9 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
         if (pendingReconnect != null) pendingReconnect.cancel(false);
         if (pendingAuthorizationTimeout != null) pendingAuthorizationTimeout.cancel(false);
         authorizationChanged.completeExceptionally(safe(code));
-        // Disconnect outside a Paho callback; its callback thread must never wait on itself.
+        // 在 Paho 回调之外断开连接，防止回调线程等待自身而死锁。
         try { reconnectExecutor.execute(this::stopTransport); }
-        catch (RejectedExecutionException alreadyStopping) { /* close also owns stopTransport. */ }
+        catch (RejectedExecutionException alreadyStopping) { /* close 同时负责调用 stopTransport。 */ }
     }
 
     public Map<String, Object> status() {
@@ -282,7 +282,7 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
     private static int reason(Throwable error) { return error instanceof MqttException mqtt ? mqtt.getReasonCode() : 0; }
     private static IllegalStateException safe(String code) { return new IllegalStateException("aliyun_l2:" + code); }
 
-    /** Paho embeds client ID in JUL resource names. Only our safe status codes are diagnostic output. */
+    /** Paho 会把客户端标识放入 JUL 资源名；诊断输出只能使用本模块的安全状态码。 */
     private static void disablePahoCredentialLogs() {
         String namespace = "org.eclipse.paho.client.mqttv3";
         var logger = PAHO_LOG_NAMESPACE;

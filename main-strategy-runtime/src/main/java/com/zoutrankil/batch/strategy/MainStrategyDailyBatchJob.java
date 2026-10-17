@@ -17,7 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
 
-/** Long-running owner calls never hold a SQLite transaction across QuestDB side effects. */
+/** 耗时的数据执行调用不跨 QuestDB 副作用持有 SQLite 事务。 */
 final class MainStrategyDailyBatchJob {
     private MainStrategyDailyBatchJob() {}
     static Job build(JobRepository repository, PlatformTransactionManager manager,

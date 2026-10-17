@@ -3,7 +3,7 @@ package com.zoutrankil.data.domain;
 import java.util.HashSet;
 import java.util.List;
 
-/** Ordered field and business identity semantics, independent of runtime storage and collection policy. */
+/** 声明字段顺序和业务身份语义，与运行时存储、采集规则解耦。 */
 public record DatasetSemantics(String datasetId, int semanticVersion,
                                List<DatasetDefinition.Column> fields, List<String> businessKey,
                                String businessDateColumn) {

@@ -6,7 +6,7 @@ import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.util.*;
 
-/** Ordered, fail-fast composition. Each child remains an ordinary single-dataset run. */
+/** 按顺序组合任务，遇到失败立即停止；每个子任务仍是普通的单数据集运行。 */
 public final class SyncGroupRunner {
     public record Window(LocalDate from, LocalDate to) {
         public Window {
@@ -42,7 +42,7 @@ public final class SyncGroupRunner {
     @FunctionalInterface public interface ChildExecutor {
         SyncJobRunner.Result execute(String childRunId, String parentRunId, String priorChildRunId,
                                      String targetId, SyncJobDefinition.FrozenRequest request) throws Exception;
-        /** Read-only source/target verification, returning a durable receipt path. Never replay writes here. */
+        /** 只读核查来源与目标，并返回持久化回执路径；这里绝不重放写入。 */
         default String revalidateCompleted(String priorChildRunId, String targetId,
                                            SyncJobDefinition.FrozenRequest request) throws Exception {
             throw new IllegalStateException("Completed child requires current readback verification");

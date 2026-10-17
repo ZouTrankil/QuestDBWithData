@@ -11,7 +11,7 @@ import java.util.Objects;
 import org.springframework.jdbc.core.JdbcTemplate;
 import com.zoutrankil.data.maintenance.storage.MaterializedViewCheckpoints;
 
-/** Both JOIN input revisions must match the verified certificate in the local run ledger. */
+/** JOIN 两侧输入版本必须同时匹配本地运行账本中已经验证的证书。 */
 public final class EtfMarketOverviewMaterializedViewReadGuard {
     public static final String OUTPUT = "mv_etf_market_overview_daily_v1";
     public static final String SQL = """
@@ -27,7 +27,7 @@ public final class EtfMarketOverviewMaterializedViewReadGuard {
 
     private EtfMarketOverviewMaterializedViewReadGuard() {}
 
-    /** Requires a current certificate for the native output; no ordinary alias is used. */
+    /** 原生输出必须有有效的当前证书；不再依赖普通视图别名。 */
     public static String versionIfActivated(JdbcTemplate jdbc) {
         return versionIfActivated(jdbc,Path.of(System.getProperty("app.sync.ledger-path","var/sync-ledger.sqlite3")));
     }

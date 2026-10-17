@@ -5,7 +5,7 @@ import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Path;
 import java.util.function.BooleanSupplier;
 
-/** Builds each run's adapter after its ledger, preserving writer and recovery construction order. */
+/** 先创建运行账本，再构造本次适配器，保证写入和恢复组件的初始化顺序。 */
 public final class SyncRunExecution {
     private SyncRunExecution() {}
 

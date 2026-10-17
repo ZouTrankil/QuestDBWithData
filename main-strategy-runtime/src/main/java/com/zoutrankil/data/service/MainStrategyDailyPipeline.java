@@ -36,7 +36,7 @@ import java.util.*;
 import java.util.function.Supplier;
 import static com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 
-/** Persistent main-strategy orchestration over the existing Java owners. No independent client or writer. */
+/** 复用已有 Java 数据执行组件的持久化主策略编排；不另建来源客户端或写入器。 */
 @Service
 @Lazy
 public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
@@ -65,7 +65,7 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
     public record NativeReceipt(String instance,String stage,String definitionHash,LocalDate from,LocalDate to,String frozenJson,
             SyncJobRunner.Result result,String sourceFingerprint,String fullTargetFingerprint,String windowFingerprint,String evidence,String evidenceSha256,String sourceEvidence,String sourceEvidenceSha256,
             boolean bootstrap,Map<String,Map<String,Object>> sourceClocks,Instant completed){}
-    /** Append-only link: the original uncertain receipt remains byte-for-byte intact. */
+    /** 仅追加恢复关联；原始未决回执的字节保持不变。 */
     public record NativeRecovery(String instance,String input,String stage,String runId,String originalReceipt,String originalSha256,
             String recoveredReceipt,String recoveredSha256,String frozenSha256,String sourceSha256,String publicationSha256,Instant reconciled){}
     private static final class Gate extends Exception {final BusinessState state;Gate(BusinessState state,String reason){super(reason);this.state=state;}}
@@ -92,6 +92,7 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
             new Owner("stk_factor","trade_date",List.of("trade_date","ts_code"),false,false,factor::tableName,(a,b,l)->{var p=factor.plan(Mode.BACKFILL,a,b,l,null);return new Planned(p,()->factor.run(p));}),
             new Owner("stk_suspend","timestamp",List.of("timestamp","ts_code"),false,true,suspend::tableName,(a,b,l)->{var p=suspend.plan(Mode.BACKFILL,a,b,l);return new Planned(p,()->suspend.run(p));}),
             new Owner("stk_st_daily","timestamp",List.of("timestamp","ts_code"),false,true,st::tableName,(a,b,l)->{var p=st.plan(Mode.BACKFILL,a,b,l);return new Planned(p.request(),()->st.run(p));}),
+            // 回测 MV 监听 stk_limit；价格、停牌和 ST 来源先准备，再提交涨跌停价以触发关联刷新。
             new Owner("stk_limit","trade_date",List.of("trade_date","ts_code"),false,false,limit::tableName,(a,b,l)->{var p=limit.plan(Mode.BACKFILL,a,b,l);return new Planned(p.request(),()->limit.run(p));}),
             new Owner("moneyflow","trade_date",List.of("trade_date","ts_code"),false,false,flow::tableName,(a,b,l)->{var p=flow.planDetailed(Mode.BACKFILL,a,b,l);return new Planned(p.request(),()->flow.run(p));}),
             new Owner("moneyflow_hsgt","trade_date",List.of("trade_date"),false,false,hsgt::tableName,(a,b,l)->{var p=hsgt.plan(Mode.BACKFILL,a,b,l);return new Planned(p.request(),()->hsgt.run(p));}),
@@ -103,6 +104,7 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
             new Owner("cn_bond_yield_curve","trade_date",List.of("trade_date","curve_code","tenor"),false,false,bonds::tableName,(a,b,l)->{var p=bonds.plan(a,b,l);return new Planned(p.request(),()->bonds.run(p));}));
     }
 
+    /** 按上海时间、收盘截止条件和真实 SSE 日历，选择最近可处理的已完成交易日。 */
     @Override public LocalDate resolveTarget(Clock clock,LocalTime cutoff)throws Exception {
         var now=ZonedDateTime.now(clock).withZoneSameInstant(ZONE);
         var ceiling=DailySyncEndDate.resolve(null,now);
@@ -122,6 +124,10 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
     private String definitionHash(String dataset){return RunRequest.hash(SyncRequestIdentity.definitionJson(definition(dataset)));}
     @Override public Map<String,Object> status(){var m=new LinkedHashMap<String,Object>();m.put("producer","java.main_strategy_daily");m.put("stage",activeStage);m.put("target",activeDate);m.put("lastOutcome",lastOutcome);m.put("artifactRoot",root.toString());m.put("targetEtfs",targetEtfs);return m;}
 
+    /**
+     * 按固定依赖顺序执行来源、衍生指标、回测输入、L2、评分和正式方案验收。
+     * 复用旧阶段前重新验证其证据；配置指纹变化或来源未就绪时，不继续推进下游。
+     */
     @Override public void execute(RunRequest request,StageSink sink)throws Exception {
         if(!JOB.equals(request.job())||!DEFINITION_VERSION.equals(request.definitionVersion())||!request.rangeStart().equals(request.logicalDate())||!request.rangeEnd().equals(request.logicalDate()))throw new IllegalArgumentException("Main strategy accepts the current definition and one completed trading date");
         activeDate=request.logicalDate();var completed=new LinkedHashMap<String,CompletionEvidence>();
@@ -169,7 +175,7 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         var authority=SyncRunLedger.openReadOnly(ledger);var run=authority.getRun(expectedRun);var state=authority.get(expectedRun).state();
         if(!run.frozenJson().equals(old.frozenJson())||!run.jobId().equals(definition(dataset).jobId())||run.jobVersion()!=definition(dataset).version()||state!=SyncRunState.IN_DOUBT&&state!=SyncRunState.VERIFIED)throw new Gate(BusinessState.BLOCKED,"Original owner/frozen run is not eligible for reconciliation");
         requireNativeSource(old);requireNativeClocks(old);
-        // A prior CLI finish is accepted only after the same immutable run is VERIFIED.
+        // 先前的 CLI 完成结果，仅在同一个不可变运行已经 VERIFIED 后才能被接受。
         if(state==SyncRunState.IN_DOUBT)switch(stage){case "MarketSentimentDaily"->market.finishInterrupted(expectedRun,true);case "RegimeFeaturesMonitorDaily"->regime.finishInterrupted(expectedRun,true);default->throw new IllegalArgumentException("Native stage required");}
         if(SyncRunLedger.openReadOnly(ledger).get(expectedRun).state()!=SyncRunState.VERIFIED)throw new Gate(BusinessState.IN_DOUBT,"Original owner did not finish VERIFIED");
         Path source=Path.of(old.sourceEvidence()).toAbsolutePath().normalize(),publication=source.resolveSibling("publication.json");
@@ -236,7 +242,7 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
                 if(!planned.request().from().equals(from)||!planned.request().to().equals(to)){
                     if(owner.optional()){limitations.add("margin_detail source ceiling excludes requested window "+from+".."+to);continue;}
                     throw new Gate(BusinessState.WAITING_SOURCE,"Owner ceiling did not cover frozen source window: "+owner.table());}
-                // Retrying a conclusively failed attempt uses a new immutable intent/result pair.
+                // 只对已明确失败的尝试发起重试，并创建新的不可变意图和结果对。
                 if(Files.isRegularFile(receipt)){String suffix=UUID.randomUUID().toString();receipt=receipt.resolveSibling("receipt-"+suffix+".json");started=receipt.resolveSibling("started-"+suffix+".json");}
                 write(started,Map.of("instance",r.instanceId(),"dataset",owner.table(),"frozen",SyncRequestIdentity.snapshotJson(planned.request()),"started",Instant.now()));
                 var result=planned.run().get();requireLedgerResult(result,planned.request());
@@ -302,7 +308,7 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
 
     }
     private ReferencePublicationJournal.Entry publicationEntry(String dataset,String run)throws Exception {
-        // The regular journal constructor may migrate metadata; completed-data checks stay read-only.
+        // 普通日志构造器可能迁移元数据；已完成结果的核查必须保持只读。
         try(var db=DriverManager.getConnection("jdbc:sqlite:"+ledger.toUri().toASCIIString()+"?mode=ro");var settings=db.createStatement()){
             settings.execute("PRAGMA query_only=ON");settings.execute("PRAGMA busy_timeout=5000");
             try(var query=db.prepareStatement("SELECT intent_json,state,revision FROM reference_publications WHERE dataset=? AND run_id=? LIMIT 2")){

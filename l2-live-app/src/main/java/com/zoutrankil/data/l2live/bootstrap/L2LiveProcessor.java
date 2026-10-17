@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/** Composition of durable captures, pure normalization and verified publication. */
+/** 串联持久化采集、纯函数归一化和经核验的 Parquet 存储。 */
 public final class L2LiveProcessor {
     private final RawJournal journal;
     private final LocalLiveSink sink;
@@ -40,6 +40,10 @@ public final class L2LiveProcessor {
         if (!checkpoint.isEmpty()) accumulator.restore(checkpoint);
     }
 
+    /**
+     * 优先恢复已冻结批次；只有不存在待完成批次时才解析新的原始报文。
+     * 这样在崩溃后重试 Parquet 提交时，不会把同一条成交再次累加到分钟状态。
+     */
     public int processOnce() throws Exception {
         RawJournal.StoredBatch batch = journal.preparedBatch().orElse(null);
         if (batch == null) {
@@ -65,8 +69,8 @@ public final class L2LiveProcessor {
                     if (event.isValid()) {
                         try { accumulator.accept(event).ifPresent(states::add); }
                         catch (ArithmeticException overflow) {
-                            // The batch has not been frozen. Restore and recompute earlier admitted captures,
-                            // retaining this offending envelope as an audit event without minute effects.
+                            // 批次尚未冻结；恢复到计算前状态，再重算此前已接纳的报文，
+                            // 将本条溢出报文仅保留为审计事件，不影响分钟累计。
                             accumulator.restore(beforeCalculation);
                             states.clear();
                             events.set(events.size() - 1, rejected(event, "aggregation_overflow", "Minute totals exceed exact numeric bounds"));
@@ -88,7 +92,7 @@ public final class L2LiveProcessor {
                     || !expectedSymbols.contains(event.symbol())))
                 || batch.states().stream().anyMatch(state -> !expectedSymbols.contains(state.symbol()))))
             throw new IllegalStateException("FROZEN_BATCH_SCOPE_MISMATCH");
-        // A failed/unknown write is retried using these exact persisted values, never new accumulation.
+        // 写入失败或结果未决时复用已持久化的准确值，不重新累加。
         sink.write(batch.events(), batch.states());
         journal.completeBatch(batch.id());
         accumulator.restore(batch.accumulatorState());

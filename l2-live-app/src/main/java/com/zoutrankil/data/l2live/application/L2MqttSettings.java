@@ -5,7 +5,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-/** Provider credentials stay in memory and are never part of status/toString output. */
+/** 供应商凭据只驻留内存，不出现在状态或 toString 输出中。 */
 public record L2MqttSettings(String brokerUri, @JsonIgnore String username, @JsonIgnore String password, List<String> symbols,
                              int maxTopics, int keepAliveSeconds) {
     public static final String DEFAULT_BROKER_URI = "tcp://lv2.base32.cn:1883";
@@ -36,7 +36,7 @@ public record L2MqttSettings(String brokerUri, @JsonIgnore String username, @Jso
             throw new IllegalArgumentException("Explicit L2 symbols must fit the configured topic allowance");
     }
 
-    /** The provider requires MQTT client ID to be identical to the account username. */
+    /** 供应商要求 MQTT 客户端标识与账户用户名相同。 */
     public String clientId() { return username; }
     public List<String> topics() { return L2Subscriptions.topics(symbols); }
 

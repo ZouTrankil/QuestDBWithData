@@ -14,7 +14,7 @@ import java.security.MessageDigest;
 import java.time.*;
 import java.util.*;
 
-/** Native Java collection, normalization and immutable source retention; never calls Python. */
+/** Java 负责采集、归一化和不可变来源归档，不调用 Python。 */
 public final class SourceCollector {
     @FunctionalInterface public interface ContractFetcher {
         PageExecutor.Page fetch(com.zoutrankil.data.domain.PageContract providerContract,
@@ -36,7 +36,7 @@ public final class SourceCollector {
                          List<Map<String,Object>> rows,int sourcePages,boolean completeCoverage) {
         public Frozen {
             if((schemaVersion!=1&&schemaVersion!=2) || sourcePages<1) throw new IllegalArgumentException("Unknown frozen-source schema or missing probe evidence");
-            // Schema v1 archives represented exactly one logical date and remain valid recovery inputs.
+            // 第 1 版归档只表示一个逻辑日期，仍可作为有效的恢复输入。
             if(rangeStart==null) rangeStart=logicalDate;
             if(rangeEnd==null) rangeEnd=logicalDate;
             new Request(dataset,logicalDate,expectedCodes,universeVersion,null,rangeStart,rangeEnd);
@@ -94,7 +94,7 @@ public final class SourceCollector {
         boolean coverage=strategy.coverage().coversRange(contract,normalized,request.expectedCodes(),request.rangeStart(),request.rangeEnd());
         var frozen=new Frozen(2,contract.dataset(),contract.version(),request.logicalDate(),request.rangeStart(),request.rangeEnd(),request.expectedCodes(),request.universeVersion(),
                 contract.sourceDocumentation(),normalized,completedPages[0],coverage);
-        // Observation time is in the probe receipt, not the content identity. Repeating equal input is stable.
+        // 观测时间记录在探测回执中，不参与内容身份；相同输入重复处理时身份保持稳定。
         byte[] content=Json.MAPPER.writeValueAsBytes(frozen);
         if(content.length>contract.maxBytes()) throw new IllegalArgumentException("Frozen manifest byte budget exceeded");
         String fingerprint=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(content));

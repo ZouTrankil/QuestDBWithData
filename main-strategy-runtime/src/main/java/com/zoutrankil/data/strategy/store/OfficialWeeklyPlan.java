@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-/** Validated official v1 payload; never synthesizes targets from score candidates. */
+/** 已经校验的正式第 1 版载荷；不根据评分候选自行合成目标持仓。 */
 public final class OfficialWeeklyPlan {
     private static final ObjectMapper JSON = new ObjectMapper();
     private final ObjectNode payload;
@@ -27,7 +27,7 @@ public final class OfficialWeeklyPlan {
                 .map(target -> target.path("symbol").asText()).sorted().toList();
     }
     public ObjectNode payload() { return payload.deepCopy(); }
-    /** Neutral Java values let both CLI Jackson 2 and HTTP Jackson 3 render the official contract. */
+    /** 使用中性的 Java 值，让 CLI 的 Jackson 2 和 HTTP 的 Jackson 3 都能序列化同一正式契约。 */
     @JsonValue
     public Map<String,Object> jsonValue() { return JSON.convertValue(payload, new TypeReference<Map<String,Object>>() {}); }
     public String canonicalJson() { return CanonicalPlanJson.write(payload); }

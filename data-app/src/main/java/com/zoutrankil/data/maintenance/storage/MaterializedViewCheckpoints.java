@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.time.Instant;
 import java.util.Optional;
 
-/** Refresh certificates belong to the local run ledger, never to a QuestDB business table. */
+/** 刷新证书保存在本地运行账本中，不写入 QuestDB 业务表。 */
 public final class MaterializedViewCheckpoints {
     public record Checkpoint(String definitionHash,String leftVersion,String rightVersion,
                              String outputVersion,String refreshFinished) {}
@@ -14,7 +14,7 @@ public final class MaterializedViewCheckpoints {
 
     public MaterializedViewCheckpoints(Path ledger) { this.ledger=ledger.toAbsolutePath().normalize(); }
 
-    /** A missing certificate fails closed and does not create a database during a read. */
+    /** 缺少证书时拒绝读取，且读取过程不会自动创建数据库。 */
     public Optional<Checkpoint> find(String output) {
         if(!Files.isRegularFile(ledger)) return Optional.empty();
         try(var db=DriverManager.getConnection("jdbc:sqlite:"+ledger.toUri().toASCIIString()+"?mode=ro");

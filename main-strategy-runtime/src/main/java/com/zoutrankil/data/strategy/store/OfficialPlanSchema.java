@@ -1,6 +1,6 @@
 package com.zoutrankil.data.strategy.store;
 
-/** Compatible v3 typed authority tables, plus Java import verification receipts. */
+/** 兼容第 3 版类型化正式账本表，并增加 Java 导入校验回执。 */
 final class OfficialPlanSchema {
     private OfficialPlanSchema() { }
     static final String V3 = """

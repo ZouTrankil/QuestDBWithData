@@ -17,11 +17,11 @@ import java.util.Optional;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-/** Bounded causal observations. Capture replay identity belongs to the durable journal, not this calculator. */
+/** 有界、遵循因果顺序的分钟观察计算；报文重放身份由持久化日志管理，而非计算器。 */
 public final class L2MinuteAccumulator {
     public static final String CHECKPOINT_VERSION="1";
     public static final Map<String,String> METRIC_TYPES=metricTypes();
-    /** Admission tolerance for observed clock skew; it does not certify source PIT availability. */
+    /** 容许已观测到的时钟偏差；这不构成来源数据满足时点可用性的证明。 */
     public static final Duration EVENT_CLOCK_TOLERANCE=Duration.ofSeconds(1);
     private static final int MAX_SYMBOLS=256,MAX_BOOK_HISTORY=128;
     private static final BigDecimal LARGE_AMOUNT=new BigDecimal("500000");
@@ -101,7 +101,7 @@ public final class L2MinuteAccumulator {
         var lastBook=state.books.floorEntry(minute.plus(1,ChronoUnit.MINUTES).minusNanos(1));
         if(lastBook!=null&&(bucket.book==null||lastBook.getValue().order.compareTo(bucket.book.order)>0))bucket.book=lastBook.getValue();
         evict(state,cutoff);
-        // Late accepted input may refine retained history, but never emits an older latest-minute observation.
+        // 被接纳的迟到数据可以修正保留历史，但不能让输出的最新分钟倒退。
         if(state.lastOutputMinute!=null&&minute.isBefore(state.lastOutputMinute)){count("older_minute_not_emitted");return Optional.empty();}
         state.lastOutputMinute=minute;bucket.revision=Math.incrementExact(bucket.revision);
         return Optional.of(new L2MinuteState(event.symbol(),state.day,minute,available,bucket.revision,metrics(state,bucket,available)));
@@ -199,7 +199,7 @@ public final class L2MinuteAccumulator {
     private static double clip(double value){return Math.max(0,Math.min(1,value));}
     private static double millis(Duration duration){return duration.getSeconds()*1000.0+duration.getNano()/1_000_000.0;}
 
-    /** JSON-ready deep copy; decimal accumulators are strings so generic JSON decoding cannot round them. */
+    /** 返回存储无关的深拷贝；十进制累计状态保留字符串精度，Parquet 负责类型化编码。 */
     public synchronized Map<String,Object> snapshot() {
         var result=new LinkedHashMap<String,Object>();result.put("checkpoint_version",CHECKPOINT_VERSION);result.put("parser_version",AliyunL2WireParser.VERSION);
         result.put("allowed_lateness_nanos",allowedLateness.toNanos());result.put("retained_minutes",retainedMinutes);result.put("diagnostics",new TreeMap<>(counters));
@@ -207,7 +207,7 @@ public final class L2MinuteAccumulator {
         for(var entry:symbols.entrySet()){var state=entry.getValue();var data=new LinkedHashMap<String,Object>();data.put("symbol",entry.getKey());data.put("current_day",state.day.toString());data.put("max_event_ts",iso(state.maxEventTs));data.put("last_output_minute",iso(state.lastOutputMinute));data.put("book_history",state.books.values().stream().map(L2MinuteAccumulator::saveBook).toList());data.put("buckets",state.buckets.values().stream().map(L2MinuteAccumulator::saveBucket).toList());states.add(data);}
         result.put("symbols",states);return freezeMap(result);
     }
-    /** Restore atomically after validating configuration, counts, identities and all typed scalar state. */
+    /** 先校验配置、计数、身份和全部类型化标量状态，再原子恢复。 */
     public synchronized void restore(Map<String,Object> checkpoint) {
         if(!CHECKPOINT_VERSION.equals(checkpoint.get("checkpoint_version"))||!AliyunL2WireParser.VERSION.equals(checkpoint.get("parser_version"))
                 ||exactLong(checkpoint.get("allowed_lateness_nanos"))!=allowedLateness.toNanos()||exactLong(checkpoint.get("retained_minutes"))!=retainedMinutes)

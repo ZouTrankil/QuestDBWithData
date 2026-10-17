@@ -28,7 +28,7 @@ public class TushareProperties {
     public int getEndpointPerMinute() { return endpointPerMinute; }
     public void setEndpointPerMinute(int value) { endpointPerMinute = value; }
     public java.util.Map<String, Integer> getEndpointLimits() { return endpointLimits; }
-    /** Dataset-specific ceilings must not be raised by a broader account/default setting. */
+    /** 单数据集的请求上限不能被更宽松的账户或默认配置抬高。 */
     public java.util.Map<String,Integer> effectiveEndpointLimits() {
         var limits = new java.util.HashMap<>(endpointLimits);
         limits.put("trade_cal",Math.min(20,Math.min(endpointPerMinute,limits.getOrDefault("trade_cal",endpointPerMinute))));

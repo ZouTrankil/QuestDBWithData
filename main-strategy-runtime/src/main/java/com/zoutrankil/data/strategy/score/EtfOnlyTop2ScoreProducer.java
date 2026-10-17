@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.*;
 import static com.zoutrankil.data.strategy.score.ScoreMath.*;
 
-/** Pure Java promoted daily score production; no training, provider calls or artifact publication. */
+/** 用纯 Java 生成已验收方案的日频评分；不训练模型、不请求供应商，也不发布产物。 */
 public final class EtfOnlyTop2ScoreProducer {
     public static final Map<String, String> FACTOR_COLUMNS;
     private static final Set<String> NEGATIVE_FACTORS = Set.of("top10_limit_touch", "top3_concentration", "ret_std60", "chip_breakdown");
@@ -32,7 +32,7 @@ public final class EtfOnlyTop2ScoreProducer {
                     || !Double.isFinite(minBuyBreadth) || !Double.isFinite(minTop100Weight)) throw new IllegalArgumentException("Invalid daily scoring settings"); }
         public static Settings canonical() { return new Settings(10, 1000, 3, 1, .25, .40); }
     }
-    /** Scalar canonical source columns only. stockDaily price is the original Python adapter close, not a new adjusted price. */
+    /** 仅接收标准来源的标量字段；stockDaily 价格是原 Python 适配器的 close，不额外生成复权价格。 */
     public record Inputs(List<ScoreRow> stockDaily, List<ScoreRow> l2Raw, Map<String, L2StockScoreProducer.StockMetadata> stockMetadata,
             List<ScoreRow> etfFactors, List<EtfReference> references, List<Holding> holdings, List<ScoreRow> chipRows,
             List<ScoreRow> marketSentiment, List<LocalDate> signalDates, Map<String, String> sourceVersions,
@@ -74,6 +74,10 @@ public final class EtfOnlyTop2ScoreProducer {
     public static List<ScoreRow> prepareMarketSentiment(List<ScoreRow> raw, LocalDate start, LocalDate end) {
         return EtfSourcePreparation.sentiment(raw, start, end);
     }
+    /**
+     * 先计算股票 L2 分数，再按各信号日可见的持仓公告聚合到 ETF，结合技术面、市场状态与流动性评分。
+     * 最后应用固定方案的权重、状态及诊断规则；输出评分面板和覆盖证据，不执行交易。
+     */
     public Output produce(Inputs inputs, FrozenPromotedRecipe promoted, Settings settings) {
         if (inputs.signalDates().getLast().isBefore(promoted.recipe().effectiveFrom())) throw new IllegalArgumentException("Promoted recipe is not effective on requested target");
         boolean usableL2Weights = inputs.signalDates().stream().map(date -> FrozenPromotedRecipe.asOf(promoted.l2Weights(), date))
@@ -146,9 +150,10 @@ public final class EtfOnlyTop2ScoreProducer {
         return rows;
     }
     private record Member(String stock, double weight) {}
+    /** 按信号日已公告的最近持仓构造成分篮子；整列选择权重口径，不能逐行混用比例与市值。 */
     private static Map<String, List<Member>> baskets(List<Holding> source, LocalDate date, boolean ratioPresent) {
         var latest = new HashMap<String, LocalDate>();
-        // Python prepares the whole weight column and drops missing weights before latest-ann selection.
+        // Python 先处理整列权重并删除缺失权重，再按最近公告选择记录。
         for (var row : source) if (!row.announced().isAfter(date) && !Double.isNaN(ratioPresent ? row.marketValueRatio() : row.marketValue()))
             latest.merge(row.etf(), row.announced(), (a, b) -> a.isAfter(b) ? a : b);
         var selected = new TreeMap<String, List<Holding>>();

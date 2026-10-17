@@ -3,7 +3,7 @@ package com.zoutrankil.data.client;
 import java.time.Duration;
 import java.util.*;
 
-/** Atomic global and endpoint pacing; rejected/waiting reservations never consume quota. */
+/** 全局与接口级限流原子判断；等待或被拒绝的预留不消耗配额。 */
 public final class PacedQuota {
     private final long globalSpacing;
     private final long defaultSpacing;
@@ -22,7 +22,7 @@ public final class PacedQuota {
         if (requests < 1 || requests > 60_000) throw new IllegalArgumentException("Rate must be 1..60000/minute");
         return Math.ceilDiv(Duration.ofMinutes(1).toNanos(), requests);
     }
-    /** Zero means admitted now; positive means retry after that many monotonic nanoseconds. */
+    /** 返回 0 表示立即放行；正数表示需等待的单调时钟纳秒数。 */
     public synchronized long tryAcquire(String endpoint, long now) {
         long delay = Math.max(globalNext == null ? 0 : Math.max(0, globalNext - now),
                 Math.max(0, endpointNext.getOrDefault(endpoint, now) - now));
@@ -34,7 +34,7 @@ public final class PacedQuota {
     public long maximumSpacingNanos() {
         return Math.max(Math.max(globalSpacing, defaultSpacing), spacing.values().stream().mapToLong(Long::longValue).max().orElse(0));
     }
-    /** Slow durable admission work must not shorten the interval between transport subscriptions. */
+    /** 持久化准入较慢时，也不能缩短两次实际发起网络请求之间的间隔。 */
     public synchronized void admissionReady(String endpoint, long now) {
         globalNext = now + globalSpacing;
         endpointNext.put(endpoint, now + spacing.getOrDefault(endpoint, defaultSpacing));

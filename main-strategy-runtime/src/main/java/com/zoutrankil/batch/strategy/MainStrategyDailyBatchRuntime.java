@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.beans.factory.DisposableBean;
 
-/** Starts after the independent strategy context is ready; a finite CLI never constructs this lifecycle bean. */
+/** 独立策略上下文就绪后才启动；有限命令行调用不构造此生命周期组件。 */
 public final class MainStrategyDailyBatchRuntime implements ApplicationListener<ApplicationReadyEvent>,DisposableBean {
     private final ApplicationContext parent;
     private final MainStrategyBatchProperties properties;
@@ -25,8 +25,8 @@ public final class MainStrategyDailyBatchRuntime implements ApplicationListener<
         var context=new AnnotationConfigApplicationContext();
         try {
             context.setParent(parent);context.setId(parent.getId()+":main-strategy-batch");
-            // Resolve the unique properties and Java pipeline directly from the parent.
-            // Additional aliases in the child would become duplicate autowire candidates.
+            // 直接从父上下文取得唯一的配置对象和 Java 流水线。
+            // 若在子上下文额外注册别名，会产生重复的自动注入候选。
             context.register(MainStrategyDailyChildConfiguration.class);context.refresh();
             var coordinator=context.getBean(MainStrategyDailyCoordinator.class);
             coordinator.install();child=context;

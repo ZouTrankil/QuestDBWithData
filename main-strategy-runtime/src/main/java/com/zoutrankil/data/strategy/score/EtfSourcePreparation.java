@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.*;
 import static com.zoutrankil.data.strategy.score.ScoreMath.*;
 
-/** Scalar adapter preparation matching etf_market.py, including the whole-column holdings fallback elsewhere. */
+/** 与 etf_market.py 一致的标量适配预处理；持仓权重整列回退逻辑在其他位置处理。 */
 public final class EtfSourcePreparation {
     private EtfSourcePreparation() {}
     private static final List<String> FOREIGN = List.of("货币", "现金", "黄金", "白银", "豆粕", "原油", "商品", "纳指", "标普", "恒生", "港股", "沪港深", "港美", "海外", "印度", "全球", "香港", "H股", "HK", "日经", "德国", "法国", "美国", "QDII", "REIT");
@@ -35,7 +35,7 @@ public final class EtfSourcePreparation {
                 || contains(invest, List.of("混合", "灵活", "成长型", "价值型", "稳定型", "主题型"), false));
     }
     private static String text(Map<String, Object> row, String name) { return Objects.toString(row.get(name), ""); }
-    /** prepare_market_sentiment ranks ties in date order, then cuts right-closed percentile bins. */
+    /** prepare_market_sentiment 按日期顺序打破并列，再划分右闭合的百分位区间。 */
     public static List<ScoreRow> sentiment(List<ScoreRow> raw, LocalDate start, LocalDate end) {
         var rows = raw.stream().filter(row -> !row.tradeDate().isBefore(start) && !row.tradeDate().isAfter(end)
                 && !Double.isNaN(row.number("sentiment_score"))).sorted(Comparator.comparing(ScoreRow::tradeDate)).toList();

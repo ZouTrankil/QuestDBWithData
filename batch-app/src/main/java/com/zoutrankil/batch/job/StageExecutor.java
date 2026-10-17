@@ -6,7 +6,7 @@ import com.zoutrankil.batch.domain.RunRequest;
 import com.zoutrankil.batch.external.ExternalComputation;
 import com.zoutrankil.batch.postclose.PostCloseGraph;
 
-/** Implementations must supply physical evidence, never infer completion from exit 0. */
+/** 实现方必须提供实际执行结果的证据，不能仅凭进程退出码为 0 判断完成。 */
 public interface StageExecutor {
     record Result(BusinessState state, CompletionEvidence evidence, String reason) {
         public Result {

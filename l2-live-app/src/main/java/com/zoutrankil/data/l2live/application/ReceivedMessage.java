@@ -3,7 +3,7 @@ package com.zoutrankil.data.l2live.application;
 import java.time.Instant;
 import java.util.Objects;
 
-/** Exact MQTT receive envelope; persistence owns the first processing step. */
+/** 完整保留 MQTT 接收报文；持久化必须是后续处理的第一步。 */
 public record ReceivedMessage(String topic, byte[] payload, Instant receivedAt, String sessionId,
                               int qos, boolean retained, boolean duplicate, boolean subscriptionAuthorized) {
     public ReceivedMessage {
@@ -15,7 +15,7 @@ public record ReceivedMessage(String topic, byte[] payload, Instant receivedAt, 
         payload = payload.clone();
     }
 
-    /** Legacy callers have no receive-time authorization proof. */
+    /** 旧调用方没有接收时刻的订阅授权证据。 */
     public ReceivedMessage(String topic, byte[] payload, Instant receivedAt, String sessionId,
                            int qos, boolean retained, boolean duplicate) {
         this(topic, payload, receivedAt, sessionId, qos, retained, duplicate, false);

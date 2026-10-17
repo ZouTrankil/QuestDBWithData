@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.*;
 import java.util.function.Supplier;
 import static com.zoutrankil.data.client.TushareFailure.Kind.*;
 
-/** One credential/provider budget with a local process lease. Every retry reacquires both quotas. */
+/** 同一凭据、同一供应商共用预算和本机进程租约；每次重试都须重新获取两级配额。 */
 public final class SharedRequestBudget implements AutoCloseable {
     public record Policy(int globalPerMinute, int endpointPerMinute, Map<String, Integer> endpointLimits,
                          int concurrency, int queueCapacity, int maxAttempts, Duration totalTimeout,
@@ -103,7 +103,7 @@ public final class SharedRequestBudget implements AutoCloseable {
                 if (delay == 0) delay = quota.tryAcquire(endpoint, System.nanoTime());
                 if (delay == 0) {
                     try {
-                        // Crash/restart cannot reset quota. Conservatively cool down all endpoints.
+                        // 崩溃重启不能重置配额，因此对所有接口保守执行冷却。
                         byte[] next = Long.toString(System.currentTimeMillis()
                                 + Math.ceilDiv(quota.maximumSpacingNanos(), 1_000_000L)).getBytes(StandardCharsets.UTF_8);
                         channel.position(0);

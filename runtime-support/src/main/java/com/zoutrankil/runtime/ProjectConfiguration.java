@@ -8,7 +8,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.core.env.SystemEnvironmentPropertySource;
 
-/** Loads the same ConfigData as Boot for finite tools, without creating application beans. */
+/** 有限工具加载与 Boot 相同的 ConfigData，不创建应用组件。 */
 public final class ProjectConfiguration {
     private ProjectConfiguration() {}
 
@@ -16,6 +16,7 @@ public final class ProjectConfiguration {
         return load(profile, System.getenv());
     }
 
+    /** 复用 Boot 配置解析和类型转换，只加载配置；命令行工具因此不会顺带启动调度或数据库组件。 */
     public static ConfigurableEnvironment load(String profile, Map<String, String> variables) {
         var environment = new StandardEnvironment();
         environment.setConversionService(new ApplicationConversionService());

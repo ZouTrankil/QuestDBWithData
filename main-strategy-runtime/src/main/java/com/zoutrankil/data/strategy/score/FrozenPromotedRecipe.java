@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-/** Accepted, hash-pinned Python promotion package. This loader never trains or substitutes a recipe. */
+/** 加载已验收且摘要固定的 Python 晋升方案包；不进行训练，也不替换方案。 */
 public record FrozenPromotedRecipe(Recipe recipe, List<DatedValues> factorWeights,
         List<DatedValues> factorStates, List<DatedValues> l2Weights, Map<String, String> artifactSha256) {
     public record Recipe(String strategyId, String scoreRecipeId, LocalDate effectiveFrom,
@@ -57,7 +57,7 @@ public record FrozenPromotedRecipe(Recipe recipe, List<DatedValues> factorWeight
     private static void requireColumn(Set<String> columns, String name) {
         if (!columns.contains(name)) throw new IllegalArgumentException("Promoted table lacks " + name);
     }
-    /** Roles: recipe, factor_weights, factor_states, l2_factor_weights. Caller must supply trusted acceptance hashes. */
+    /** 输入角色包括 recipe、factor_weights、factor_states、l2_factor_weights；调用方须提供可信的验收摘要。 */
     public static FrozenPromotedRecipe load(Path recipePath, Path allowedRoot, Map<String, String> expectedSha256) throws IOException {
         Path root = allowedRoot.toRealPath(), path = recipePath.toRealPath();
         if (!path.startsWith(root)) throw new IllegalArgumentException("Promoted recipe escapes allowed artifact root");
@@ -114,7 +114,7 @@ public record FrozenPromotedRecipe(Recipe recipe, List<DatedValues> factorWeight
         try { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)); }
         catch (NoSuchAlgorithmException impossible) { throw new IllegalStateException(impossible); }
     }
-    /** Last observation on or before signal date. A pre-history date intentionally gets an empty weight row. */
+    /** 取信号日当日或之前的最后一次观测；早于历史起点时按约定返回空权重行。 */
     public static Map<String, Object> asOf(List<DatedValues> source, LocalDate date) {
         DatedValues selected = null;
         for (var row : source) if (!row.date().isAfter(date) && (selected == null || !row.date().isBefore(selected.date()))) selected = row;

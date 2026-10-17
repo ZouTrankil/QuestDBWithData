@@ -81,7 +81,7 @@ final class ScoreMath {
     static double mean(List<MutableRow> rows, ToDoubleFunction<MutableRow> getter) {
         return rows.stream().mapToDouble(getter).filter(v -> !Double.isNaN(v)).average().orElse(Double.NaN);
     }
-    /** pandas groupby sum/mean uses compensated accumulation before division, which also fixes rank ties. */
+    /** 对齐 pandas 分组求和及均值：除法前采用补偿累加，这也影响并列排名的判定。 */
     static final class GroupSum {
         private double value, correction;
         private int count;

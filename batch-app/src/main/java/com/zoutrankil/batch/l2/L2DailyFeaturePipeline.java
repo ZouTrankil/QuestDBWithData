@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
 
-/** Native DFCF CSV -> Python-compatible P0-P13 -> typed l2_daily_features computation. */
+/** 从东方财富原始 CSV 计算与 Python 一致的 P0～P13 特征，输出类型化的 l2_daily_features。 */
 public final class L2DailyFeaturePipeline {
     public static final String FEATURE_VERSION="v1.3", PARSER_VERSION="dfcf_csv_v1.2";
     private L2DailyFeaturePipeline(){}
@@ -50,7 +50,7 @@ public final class L2DailyFeaturePipeline {
         for(var field:L2DailyFeatureField.values())if(!field.identity())output.put(field.fieldName(),row.features().get(field));
         return Collections.unmodifiableMap(output);
     }
-    /** Convert canonical parser records and apply the Data-owned order-normalizer flags. */
+    /** 转换标准解析记录，并应用数据模块定义的委托单归一化标记。 */
     public static L2FeatureData featureData(DfcfCsvParser.ProductionDay day) throws IOException {
         var quotes=new ArrayList<L2FeatureData.Quote>(day.quotes().size());
         for(var q:day.quotes()){
@@ -84,8 +84,8 @@ public final class L2DailyFeaturePipeline {
         return new L2FeatureData(day.symbol(),day.tradeDate(),deals,orders,quotes);
     }
     private static double number(BigDecimal value){return value==null?Double.NaN:value.doubleValue();}
-    // The Python adapter divides vendor prices by 100 and Kuake divides them by 100 again.
-    // Preserve both floating operations: a one-step /10000 changes near-touch comparisons.
+    // Python 适配层先将供应商价格除以 100，Kuake 计算层再除以 100。
+    // 保留两次浮点运算；直接除以 10000 会改变接近盘口价格时的比较结果。
     private static double price(BigDecimal value){return value==null?Double.NaN:value.movePointRight(4).doubleValue()/100.0/100.0;}
     private static long time(LocalDate date,int value) throws IOException {
         var ts=DfcfCsvParser.timestamp(date,value);

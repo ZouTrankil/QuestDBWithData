@@ -1,6 +1,6 @@
 package com.zoutrankil.data.client.dto;
 
-/** Wire-level Tushare fields; date values keep their source representation here. */
+/** 对应 Tushare 原始报文字段；日期在此层保留来源格式。 */
 public record TushareStockBasicDto(
         String tsCode,
         String symbol,

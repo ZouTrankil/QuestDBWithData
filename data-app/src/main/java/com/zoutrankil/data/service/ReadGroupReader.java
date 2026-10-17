@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.function.*;
 
-/** Sequential independent reads. A failed member is never represented as an empty successful page. */
+/** 按顺序独立读取各成员；成员失败时不能伪装成成功的空页。 */
 public final class ReadGroupReader {
     public record Binding<T>(DatasetDefinition definition, Class<T> rowType,
                              Function<DatasetValues,T> mapper, Supplier<String> sourceVersion) {
@@ -33,6 +33,7 @@ public final class ReadGroupReader {
     public record Result(Instant startedAt, Instant finishedAt, List<MemberResult> members) {
         public Result { members = List.copyOf(members); }
         public boolean complete() { return members.stream().allMatch(m -> m.status() == Status.READ); }
+        /** 各成员顺序独立读取，不承诺多个数据集来自同一个数据库快照。 */
         public boolean atomicSnapshot() { return false; }
         public MemberResult require(String memberId) {
             return members.stream().filter(m -> m.memberId().equals(memberId)).findFirst()
@@ -81,7 +82,7 @@ public final class ReadGroupReader {
                 }
             } catch (RuntimeException failure) {
                 status = Status.FAILED;
-                error = failure.getClass().getSimpleName(); // Never expose SQL, credentials, or raw provider messages.
+                error = failure.getClass().getSimpleName(); // 对外错误不暴露 SQL、凭据或供应商原始消息。
             }
             results.add(new MemberResult(member.memberId(), member.datasetId(), member.definitionVersion(),
                     binding == null ? null : binding.rowType(), status, null, error));

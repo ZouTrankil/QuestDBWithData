@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/** One immutable parse result for one raw capture, including rejected wire messages. */
+/** 一条原始采集对应一个不可变解析结果，也包含被拒绝的协议报文。 */
 public record L2CleanEvent(RawCapture capture,String symbol,String exchange,String channel,LocalDate tradeDate,
         Instant exchangeTs,String parseStatus,String parseError,Map<String,Object> fields) {
     public L2CleanEvent {

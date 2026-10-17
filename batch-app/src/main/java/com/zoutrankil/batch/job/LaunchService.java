@@ -12,7 +12,7 @@ import org.springframework.batch.core.job.parameters.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobOperator;
 import java.util.*;
 
-/** The sole entry for manual, Quartz and recovery requests. */
+/** 手工触发、Quartz 调度和恢复请求的统一入口。 */
 public final class LaunchService {
     private final SqliteLedger ledger; private final JobOperator operator; private final Map<String,Job> jobs;
     private final SourceCollector sourceCollector;
@@ -27,7 +27,7 @@ public final class LaunchService {
         this.coreSourceFanout=coreSourceFanout;
         var registered=new HashMap<String,Job>();
         for(var job:jobs) {
-            if("l2_archive_integrity".equals(job.getName())) continue; // Specialized archive path/identity parameters only.
+            if("l2_archive_integrity".equals(job.getName())) continue; // 这里只传递归档专用的路径和身份参数。
             if(registered.put(job.getName(),job)!=null) throw new IllegalArgumentException("Duplicate job owner");
         }
         this.jobs=Map.copyOf(registered);
@@ -47,7 +47,7 @@ public final class LaunchService {
         }
         try (var guard=ledger.tryLock("instance:"+request.instanceId()).orElse(null)) {
             if (guard==null) {
-                ledger.register(request); // Record equal-input triggers, but never rebind another live owner's input.
+                ledger.register(request); // 相同输入的重复触发仍需留痕，但不能改绑其他运行实例正在使用的输入。
                 return Map.of("instanceId",request.instanceId(),"disposition","already-running");
             }
             RunRequest trigger=request;
@@ -60,7 +60,7 @@ public final class LaunchService {
                 return ledger.detail(request.instanceId());
             }
             if ("pre_open_acceptance".equals(request.job())) {
-                // Strictly read-only product acceptance; this job never invokes a producer.
+                // 这里只读验收已有产物，不调用生产流程。
                 ledger.state(request.instanceId(),BusinessState.BLOCKED,null,"product-certificates-not-connected");
                 return ledger.detail(request.instanceId());
             }
@@ -88,8 +88,8 @@ public final class LaunchService {
                     var outcome=ledger.state(request.instanceId());
                     boolean active=outcome==BusinessState.RUNNING || outcome==BusinessState.VERIFYING;
                     boolean completed=execution.getStatus()==org.springframework.batch.core.BatchStatus.COMPLETED;
-                    // A failed final callback/commit can leave old ready certificates behind.
-                    // Those certificates must never overwrite a recorded unknown or failed owner outcome.
+                    // 最终回调或提交失败时，旧的就绪证书可能仍然存在。
+                    // 这些旧证书不能覆盖已经记录的“结果未决”或失败状态。
                     if (ready && completed && active)
                         ledger.state(request.instanceId(),BusinessState.VERIFIED,execution.getId(),null);
                     else if (active)

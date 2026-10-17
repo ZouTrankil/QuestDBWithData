@@ -7,7 +7,7 @@ import java.util.*;
 import org.springframework.stereotype.Component;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
 
-/** Explicit bounded formal owner invocation, using the same service as post-close. */
+/** 显式调用有界的正式执行入口，与收盘后流程使用同一服务。 */
 @Component
 @ConditionalOnNotWebApplication
 public final class CnBondYieldCurveCommands implements CliCommandFamily {

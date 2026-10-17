@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
-/** Reads the existing explicit subscription policy without expanding the allow-list. */
+/** 读取已有的显式订阅规则，不自行扩大允许名单。 */
 public final class L2Subscriptions {
     public static final int MAX_SYMBOLS = 16;
     public static final int MAX_TOPICS = 48;
@@ -23,7 +23,7 @@ public final class L2Subscriptions {
 
     private L2Subscriptions() {}
 
-    /** Date-frozen inspection uses local midnight; live callers should pass the captured Instant. */
+    /** 按日期检查时使用本地午夜；实时调用方应传入当次记录的 Instant。 */
     public static List<String> load(Path path, LocalDate asOf) throws IOException {
         return load(path, Objects.requireNonNull(asOf).atStartOfDay(EXCHANGE_ZONE).toInstant());
     }
@@ -85,7 +85,7 @@ public final class L2Subscriptions {
         return Set.copyOf(result);
     }
 
-    /** Vendor suffixes are unreliable; infer the exchange from the six-digit security code. */
+    /** 供应商后缀不可靠，根据六位证券代码推断交易所。 */
     public static String normalizeSymbol(String symbol) {
         if (symbol == null) throw new IllegalArgumentException("Unsupported L2 symbol");
         String code = symbol.strip().toUpperCase(Locale.ROOT).split("\\.", -1)[0];

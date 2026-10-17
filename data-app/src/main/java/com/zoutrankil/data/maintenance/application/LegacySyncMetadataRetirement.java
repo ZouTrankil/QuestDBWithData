@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-/** Retires only the six registered legacy bookkeeping tables, after durable full-field archival. */
+/** 仅清理明确登记的六张旧辅助表，先完整归档全部字段并确保持久化。 */
 public final class LegacySyncMetadataRetirement {
     public static final List<String> TABLES=List.of("cashflow_period_meta","express_period_meta",
             "fina_indicator_period_meta","forecast_period_meta","income_period_meta","etf_market_overview_mv_refresh");
@@ -23,7 +23,7 @@ public final class LegacySyncMetadataRetirement {
     private record Snapshot(String table,List<Map<String,Object>> identity,Map<String,Object> document,byte[] bytes,String sha256) {}
 
     public Map<String,Object> retire() throws Exception {
-        // Never remove the old ETF authority before its replacement is already usable.
+        // 先确认 ETF 的新校验机制可用，再移除旧的校验依据。
         if(!existing("etf_market_overview_mv_refresh").isEmpty()
                 && EtfMarketOverviewMaterializedViewReadGuard.versionIfActivated(jdbc,ledger)==null)
             throw new IllegalStateException("Activate and certify the ETF native MV before retirement");
@@ -39,7 +39,7 @@ public final class LegacySyncMetadataRetirement {
                     throw new IllegalStateException("Legacy table is still referenced by "+dependency.get("view_name"));
             snapshots.add(capture(name));
         }
-        // Archive the complete set before issuing even the first DROP.
+        // 整组归档全部成功后，才能执行第一条 DROP。
         for(var snapshot:snapshots)archive(snapshot);
         var removed=new ArrayList<String>();long rows=0;
         for(var saved:snapshots) {

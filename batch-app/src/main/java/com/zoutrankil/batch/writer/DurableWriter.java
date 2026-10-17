@@ -6,8 +6,9 @@ import com.zoutrankil.batch.support.Json;
 import java.nio.file.*;
 import java.util.*;
 
-/** Cross-database write protocol. Unknown delivery is reconciled, never automatically resent. */
+/** 跨数据库写入协议；投递结果未决时先核对实际结果，不自动重发。 */
 public final class DurableWriter {
+    // 意图已登记 → 投递结果未决 → 已收到确认 → 回读已验证；阻塞态须显式排查。
     public enum Delivery { INTENT, UNKNOWN, ACKNOWLEDGED, VERIFIED, BLOCKED }
     public record Intent(String batchId, String instanceId, String target, String owner,
                          String sourceFingerprint, String artifact, long expectedRows) {
@@ -29,7 +30,7 @@ public final class DurableWriter {
     public interface Port {
         void preflight(Intent intent) throws Exception;
         void send(Intent intent) throws Exception;
-        /** One bounded probe for this batch's keys/content/boundary; not global WAL equality. */
+        /** 只对本批次的业务键、内容和可见边界进行有界探测，不要求全库 WAL 计数相等。 */
         Proof inspect(Intent intent) throws Exception;
     }
     private final SqliteLedger ledger;
@@ -45,7 +46,7 @@ public final class DurableWriter {
                 verifyRetainedArtifact(intent);
                 port.preflight(intent);
                 guard.requireAlive();
-                // Committed UNKNOWN *before* network I/O closes the send/ledger crash gap.
+                // 网络操作之前先提交 UNKNOWN，避免“已经发送但账本未记录”的崩溃窗口。
                 int claimed = ledger.claimWriteUnknown(intent.batchId());
                 if (claimed != 1) throw new IllegalStateException("Write intent no longer sendable");
                 guard.requireAlive();
@@ -61,6 +62,7 @@ public final class DurableWriter {
                 ledger.acknowledgeWrite(intent.batchId());
                 state=Delivery.ACKNOWLEDGED;
             }
+            // UNKNOWN 只核查原批次，不重发；确认精确内容、可见边界及发送方状态后才能完成。
             Proof proof=port.inspect(intent);
             if (proof.suspended()) {
                 ledger.blockWrite(intent.batchId(), Json.write(proof));

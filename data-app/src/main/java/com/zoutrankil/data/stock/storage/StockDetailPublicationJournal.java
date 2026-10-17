@@ -10,8 +10,9 @@ import java.sql.*;
 import java.time.Instant;
 import java.util.*;
 
-/** Immutable static-publication intent plus optimistic persisted phases in the existing run ledger. */
+/** 在现有运行账本中保存不可变静态发布意图，并用乐观版本校验推进持久化阶段。 */
 public final class StockDetailPublicationJournal {
+    // 换表过程分阶段留痕；中断恢复必须结合真实表身份，不能仅凭阶段名重复执行重命名。
     public enum State { PREPARED, OLD_RENAMED, NEW_RENAMED, VERIFIED, IN_DOUBT, RESTORING_OLD, ROLLED_BACK, RESUMING }
     public record Intent(String id,String runId,String target,String backup,String stage,
                          long oldTableId,long newTableId,String beforeFingerprint,String afterFingerprint) {
@@ -80,6 +81,7 @@ public final class StockDetailPublicationJournal {
             }
         }
     }
+    /** 同时检查合法状态迁移和旧版本号，防止两个恢复者推进同一条发布记录。 */
     public Entry advance(Entry prior,State next) throws Exception {
         boolean valid=next==State.IN_DOUBT && prior.state()!=State.VERIFIED && prior.state()!=State.ROLLED_BACK
                 || prior.state()==State.PREPARED && next==State.OLD_RENAMED

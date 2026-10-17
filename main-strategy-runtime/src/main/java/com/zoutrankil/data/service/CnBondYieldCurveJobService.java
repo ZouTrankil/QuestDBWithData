@@ -23,8 +23,9 @@ import java.util.concurrent.CancellationException;
 import java.util.function.BooleanSupplier;
 import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 
-/** Bounded formal ChinaBond owner using the existing verified WebFlux source and native mapping.
- * It certifies SSE open dates within the frozen window. It never derives a checkpoint from MAX(date).
+/**
+ * 基于已有 WebFlux 来源和原生映射的有界中债正式同步执行组件。
+ * 只核验冻结窗口内的 SSE 开市日期，不使用 MAX(date) 推导检查点。
  */
 @Service
 public final class CnBondYieldCurveJobService implements SyncJobOwner {
@@ -43,7 +44,7 @@ public final class CnBondYieldCurveJobService implements SyncJobOwner {
     }
     public String tableName(){return DATASET;}
     public String targetId(){return CnBondYieldCurveWritePort.targetId(jdbc);}
-    /** Fresh source and exact readback only; the recovery consumer never sends rows. */
+    /** 只重新读取来源并精确回读核验；恢复消费者不发送数据行。 */
     public String revalidate(String priorRunId)throws Exception{
         var saved=FrozenRunRequest.restoreCompleted(ledgerPath,priorRunId,jobDefinition());
         var request=saved.request();
@@ -54,8 +55,8 @@ public final class CnBondYieldCurveJobService implements SyncJobOwner {
                             ||!encodeDates(current.openDates).equals(request.parameters().get("trade_dates")))
                         throw new IllegalStateException("ChinaBond frozen calendar changed before revalidation");
                     var port=new CnBondYieldCurveWritePort(jdbc,questdb,DATASET,identity);
-                    // The original pre-write hash cannot describe the completed target. Capture
-                    // the current window for preflight; fetch still checks every source value.
+                    // 写入前的原摘要不能描述已完成的目标，先获取
+                    // 当前窗口用于预检；抓取阶段仍会逐项核对来源值。
                     var snapshot=new Plan(request,identity,
                             CnBondYieldCurveWritePort.fingerprint(port.readWindow(request.from(),request.to())),
                             current.openDates,current.hash);

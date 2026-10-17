@@ -9,7 +9,7 @@ import org.springframework.boot.logging.LoggingInitializationContext;
 import org.springframework.boot.logging.LoggingSystem;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-/** Applies the shared Boot logging configuration to standalone process entry points. */
+/** 为独立进程入口应用共享的 Boot 日志配置。 */
 public final class ProjectLogging {
     private ProjectLogging() {}
 

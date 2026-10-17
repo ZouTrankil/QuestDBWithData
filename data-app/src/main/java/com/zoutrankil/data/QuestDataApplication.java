@@ -25,7 +25,7 @@ public class QuestDataApplication {
         if (exitCode != 0) System.exit(exitCode);
     }
 
-    /** Shared data owners; each persistent entry point supplies its own process profile. */
+    /** 共享数据执行组件；各常驻进程入口自行选择对应的配置环境。 */
     public static SpringApplication application(boolean persistent, String... profiles) {
         var application = new SpringApplication(QuestDataApplication.class);
         application.setAdditionalProfiles(profiles);

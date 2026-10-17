@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-/** Java owns source preparation, accepted-weight scoring, paired publication and official data storage. */
+/** Java 负责来源准备、按已验收权重评分、成对发布及正式方案存储。 */
 @Service @Lazy
 public final class MainStrategyDataService {
     private final QuestDbStrategyInputs reader;
@@ -47,6 +47,10 @@ public final class MainStrategyDataService {
         try {var p=publisher.latest(null);result.put("scores",p);result.put("marketInputPackage",marketPackages.requireLatest(p));}catch(Exception e){result.put("dataReadiness",Objects.toString(e.getMessage(),e.getClass().getSimpleName()));}
         return result;
     }
+    /**
+     * 读取有界原始输入，使用摘要固定的已验收方案计算评分，并发布评分、覆盖率和市场输入包。
+     * 提交产物前重查来源版本及方案摘要，防止计算过程中发生的数据变化被悄然发布。
+     */
     public Publication prepareScores(LocalDate target,String runId)throws Exception {
         FrozenPromotedRecipe frozen=recipe();
         var raw=reader.read(start,target,460);

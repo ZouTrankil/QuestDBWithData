@@ -6,12 +6,12 @@ import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Objects;
 
-/** Durable capture identity refers to one received envelope, never a guessed business-event identity. */
+/** 持久化采集标识只代表一次收到的报文，不猜测其业务事件身份。 */
 public record RawCapture(String captureId,long sequence,String sessionId,String topic,String payloadBase64,
         Instant recvTs,LocalDate captureDate,int qos,boolean retained,boolean duplicate,boolean subscriptionAuthorized) {
     public static final ZoneId SHANGHAI=ZoneId.of("Asia/Shanghai");
     public static final int MAX_PAYLOAD_BYTES=1_048_576;
-    /** Compatibility constructor for explicit offline captures; live capture supplies its observed SUBACK proof. */
+    /** 兼容显式离线采集；实时采集须提供实际观测到的 SUBACK 授权证据。 */
     public RawCapture(String captureId,long sequence,String sessionId,String topic,String payloadBase64,
             Instant recvTs,LocalDate captureDate,int qos,boolean retained,boolean duplicate) {
         this(captureId,sequence,sessionId,topic,payloadBase64,recvTs,captureDate,qos,retained,duplicate,true);

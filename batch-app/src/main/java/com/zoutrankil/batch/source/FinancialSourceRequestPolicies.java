@@ -7,7 +7,7 @@ import com.zoutrankil.data.service.PageExecutor;
 import java.time.LocalDate;
 import java.util.*;
 
-/** Publication and report-period request rules with their original narrow scopes. */
+/** 按原有业务范围构造公告日期和报告期请求规则。 */
 final class MainBusinessSourceRequestPolicy extends PerEntitySourceRequestPolicy {
     @Override protected void validateLogicalDate(SourceContract c,LocalDate date) {
         if(!SourcePeriods.isQuarterEnd(date)) throw new IllegalArgumentException("fina_mainbz logical date must be a quarter end");

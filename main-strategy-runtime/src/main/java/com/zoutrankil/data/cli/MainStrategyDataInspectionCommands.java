@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebAppli
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
-/** Read-only inspection of configured production artifacts without starting the Web scheduler. */
+/** 只读检查已配置的正式产物，不启动 Web 调度器。 */
 @Component
 @ConditionalOnNotWebApplication
 public final class MainStrategyDataInspectionCommands implements CliCommandFamily {

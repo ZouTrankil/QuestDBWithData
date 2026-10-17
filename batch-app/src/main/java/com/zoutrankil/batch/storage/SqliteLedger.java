@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-/** SQLite-backed metadata ledger. Metadata commits happen before any external side effect. */
+/** SQLite 元数据账本；外部副作用发生之前，先提交对应的元数据。 */
 public final class SqliteLedger {
     public record WriteIntentRecord(String batchId,String instanceId,String target,String owner,
                                     String sourceFingerprint,String artifact,long expectedRows) {}
@@ -40,7 +40,7 @@ public final class SqliteLedger {
                 UUID.randomUUID().toString().replace("-","").substring(0,16));
         return jdbc.queryForObject("SELECT namespace FROM runtime_identity WHERE singleton=1",String.class);
     }
-    /** The immutable intent and its durable target reservation are committed together. */
+    /** 不可变写入意图与目标占用记录在同一事务中提交。 */
     public void reserveWriteIntent(WriteIntentRecord intent) {
         transactions.executeWithoutResult(tx -> {
             jdbc.update("""
@@ -61,7 +61,7 @@ public final class SqliteLedger {
     public String writeDelivery(String batchId) {
         return jdbc.queryForObject("SELECT delivery FROM write_intent WHERE batch_id=?", String.class, batchId);
     }
-    /** Call outside a surrounding transaction so UNKNOWN is committed before any send or flush. */
+    /** 须在外围事务之外调用，确保发送或刷新缓冲区之前，UNKNOWN 已经持久化。 */
     public int claimWriteUnknown(String batchId) {
         return jdbc.update("UPDATE write_intent SET delivery='UNKNOWN',attempt=attempt+1,updated_at=current_timestamp WHERE batch_id=? AND delivery='INTENT'", batchId);
     }
@@ -71,7 +71,7 @@ public final class SqliteLedger {
     public void blockWrite(String batchId,String proofJson) {
         jdbc.update("UPDATE write_intent SET delivery='BLOCKED',proof=? WHERE batch_id=?", proofJson, batchId);
     }
-    /** Verification and release cannot become visible independently. */
+    /** “验证成功”和“释放占用”必须同时可见，避免其他运行过早进入。 */
     public void verifyWriteAndRelease(String batchId,String target,String proofJson) {
         transactions.executeWithoutResult(tx -> {
             jdbc.update("UPDATE write_intent SET delivery='VERIFIED',proof=?,updated_at=current_timestamp WHERE batch_id=?", proofJson, batchId);
@@ -144,7 +144,7 @@ public final class SqliteLedger {
     public RunRequest request(String id) {
         return Json.read(jdbc.queryForObject("SELECT request_json FROM business_instance WHERE instance_id=?", String.class, id), RunRequest.class);
     }
-    /** Returns the sole unsuperseded post-close revision for a date; competing revision branches fail closed. */
+    /** 返回某日唯一且未被后续修订取代的收盘后版本；出现竞争分支时拒绝使用。 */
     public Optional<RecoveryCandidate> latestPostCloseCandidate(LocalDate date) {
         var rows=jdbc.query("""
                 SELECT bi.request_json,bi.business_state FROM business_instance bi
@@ -164,11 +164,11 @@ public final class SqliteLedger {
                 .stream().findFirst().orElse(null);
         return next==null?null:Instant.ofEpochMilli(next);
     }
-    /** Atomically persists a bounded attempt before its launch side effect. Duplicate Quartz fire IDs cannot claim twice. */
+    /** 启动前原子记录受限的执行尝试；同一 Quartz 触发标识只能领取一次。 */
     public OptionalInt claimRecoveryAttempt(String instanceId,String triggerId,Instant now,Duration minimumInterval,int maximumAttempts) {
         return claimRecoveryAttempt(instanceId,triggerId,now,minimumInterval,maximumAttempts,false);
     }
-    /** An explicit operator retry skips the existing cooldown, but starts the next automatic cooldown. */
+    /** 操作员显式重试可跳过当前冷却期，但会重新开始下一轮自动冷却。 */
     public OptionalInt claimMainStrategyOperatorRecoveryAttempt(String instanceId,String triggerId,Instant now,
                                                                Duration minimumInterval,int maximumAttempts) {
         if(triggerId==null||!triggerId.startsWith("manual:")||!"main_strategy_daily".equals(request(instanceId).job()))
@@ -204,7 +204,7 @@ public final class SqliteLedger {
         result.put("auditEvents", jdbc.queryForList("SELECT action,detail,occurred_at FROM audit_event WHERE instance_id=? ORDER BY event_id", id));
         return result;
     }
-    /** Latest per-source outcome for a logical date, including failed newer revisions that must supersede older certificates. */
+    /** 查询某逻辑日期下各来源的最新结果；较新修订即使失败，也必须取代旧就绪证书。 */
     public Map<String,SourceCertificateState> latestSourceCertificates(LocalDate logicalDate) {
         var rows=jdbc.query("""
             SELECT bi.job,bi.business_state,bi.request_json,sr.evidence_json
@@ -220,7 +220,7 @@ public final class SqliteLedger {
     public List<Map<String,Object>> recent() {
         return jdbc.queryForList("SELECT instance_id,job,logical_date,business_state,reason,batch_execution_id FROM business_instance ORDER BY created_at DESC LIMIT 100");
     }
-    /** Read-only operator queue; resolution still requires inspection of the physical side effect. */
+    /** 只读查询待处理队列；解决未决项仍须核查实际副作用。 */
     public Map<String,List<Map<String,Object>>> reconciliationQueue() {
         var writes=jdbc.queryForList("""
             SELECT wi.batch_id,wi.instance_id,bi.job,bi.logical_date,wi.target,wi.owner,wi.source_fingerprint,
@@ -278,19 +278,19 @@ public final class SqliteLedger {
         }, id);
         return result;
     }
-    /** Read one immutable ready certificate without exposing the ledger's JDBC handle. */
+    /** 读取一份不可变就绪证书，不向调用方暴露账本的 JDBC 连接。 */
     public Optional<CompletionEvidence> readyStageEvidence(String instanceId,String stage) {
         return jdbc.query("SELECT evidence_json FROM stage_result WHERE instance_id=? AND stage=? AND business_state IN ('VERIFIED','VERIFIED_EMPTY')",
                 (rs,index) -> Json.read(rs.getString(1),CompletionEvidence.class),instanceId,stage).stream().findFirst();
     }
-    /** Read all ready certificates for an owner as one immutable snapshot. */
+    /** 在同一个快照中读取某执行方的全部就绪证书。 */
     public Map<String,CompletionEvidence> readyStageEvidence(String instanceId) {
         var result=new LinkedHashMap<String,CompletionEvidence>();
         jdbc.query("SELECT stage,evidence_json FROM stage_result WHERE instance_id=? AND business_state IN ('VERIFIED','VERIFIED_EMPTY')",
                 (org.springframework.jdbc.core.RowCallbackHandler)rs -> result.put(rs.getString(1),Json.read(rs.getString(2),CompletionEvidence.class)),instanceId);
         return Collections.unmodifiableMap(result);
     }
-    /** Latest unsuperseded owner revision for a job/date; competing revision branches fail closed. */
+    /** 查询某作业、某日期唯一且未被取代的最新版本；出现竞争分支时拒绝使用。 */
     public Optional<RecoveryCandidate> latestCandidate(String job,LocalDate target) {
         var rows=jdbc.query("""
                 SELECT b.request_json,b.business_state FROM business_instance b
@@ -302,7 +302,7 @@ public final class SqliteLedger {
         if(rows.size()>1) throw new IllegalStateException("Ambiguous unsuperseded revisions for "+job+"/"+target);
         return rows.stream().findFirst();
     }
-    /** Install an immutable scheduler definition and return its persisted enabled state. */
+    /** 安装不可变调度定义，并返回已经持久化的启用状态。 */
     public boolean installScheduleDefinition(String id,String cron,String zone,String calendarVersion,boolean enabled) {
         jdbc.update("""
                 INSERT INTO schedule_definition(id,cron,zone,calendar_version,enabled,version)
@@ -333,7 +333,7 @@ public final class SqliteLedger {
             WHERE stage_result.business_state NOT IN ('VERIFIED','VERIFIED_EMPTY')
             """, request.instanceId(), stage, state.name(), evidence == null ? null : Json.write(evidence), reason);
     }
-    /** Atomically publishes periodic-source readiness and its observations, so watermarks cannot outrun certificates. */
+    /** 周期来源的就绪证书与观测记录原子发布，防止进度水位超前于证书。 */
     public void completeSource(RunRequest request,StageExecutor.Result result,Long executionId) {
         if(!request.job().startsWith("source_")) throw new IllegalArgumentException("Source job required");
         String dataset=request.job().substring("source_".length()),stage="Source:"+dataset;
@@ -382,7 +382,7 @@ public final class SqliteLedger {
             }
         });
     }
-    /** Verified continuity is reported as separate ranges; later periods never bridge an earlier gap. */
+    /** 已验证的连续覆盖按区间分别报告；较晚周期不能填补早期缺口。 */
     public List<MonthlyCoverage> monthlyCoverage() {
         var rows=jdbc.queryForList("""
             SELECT dataset,definition_version,scope_identity,observation_month FROM monthly_source_coverage
@@ -428,7 +428,7 @@ public final class SqliteLedger {
     public void audit(String id, String action, String detail) {
         jdbc.update("INSERT INTO audit_event(instance_id,action,detail) VALUES(?,?,?)", id, action, detail);
     }
-    /** Local OS file locks are released by the kernel if a process exits. */
+    /** 本机操作系统文件锁由内核在进程退出时释放。 */
     public Optional<Guard> tryLock(String resource) throws SQLException {
         String database;
         try(Connection connection=dataSource.getConnection()) { database=connection.getMetaData().getURL(); }

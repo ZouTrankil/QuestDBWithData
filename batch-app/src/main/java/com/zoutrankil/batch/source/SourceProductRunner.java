@@ -16,7 +16,7 @@ import java.net.URI;
 import java.time.*;
 import java.util.*;
 
-/** Publishes a typed, immutable per-instance source snapshot only after every batch is physically verified. */
+/** 每个写入批次都经实际落库核验后，才发布该运行实例的类型化、不可变来源快照。 */
 public final class SourceProductRunner {
     private final SqliteLedger ledger; private final SourceCollector collector; private final Path archive;
     private final URI endpoint; private final String authorization;
@@ -42,8 +42,8 @@ public final class SourceProductRunner {
             if(!row.keySet().equals(new HashSet<>(contract.businessColumns().stream().map(SourceContract.Column::target).toList())))
                 throw new IllegalArgumentException("Frozen schema mismatch");
             if(!keys.add(contract.key(row))) throw new IllegalArgumentException("Duplicate frozen business key");
-            // fut_basic is a static exchange snapshot whose legacy QuestDB timestamp is a fixed
-            // epoch deduplication sentinel; request.logicalDate records when it was observed.
+            // fut_basic 是静态交易所快照，旧 QuestDB 时间戳使用固定的纪元值
+            // 作为去重占位；真正的观测日期由 request.logicalDate 记录。
             if(!SourceContract.MONTHLY_AGGREGATES.contains(dataset)&&!SourceContract.QUARTERLY_AGGREGATES.contains(dataset)
                     && !Set.of("fut_basic","etf_basic","ths_index").contains(dataset)) {
                 String value=Objects.toString(row.get(contract.logicalDateColumn()),"");
@@ -91,6 +91,7 @@ public final class SourceProductRunner {
             }
             written+=rows.size();
         }
+        // 各批次成功后仍复查完整快照，防止漏批、额外行或尚未应用的 WAL 被当成完整结果。
         var finalProbe=new QuestDbTablePort(endpoint,authorization,contract,target,
                 physicalRows.subList(0,Math.min(contract.writeBatchSize(),physicalRows.size())));
         if(!finalProbe.completeSnapshot(frozen.rows().size()))

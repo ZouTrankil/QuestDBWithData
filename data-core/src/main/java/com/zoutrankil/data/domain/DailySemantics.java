@@ -3,7 +3,7 @@ package com.zoutrankil.data.domain;
 import java.util.List;
 import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
-/** Shared daily field meanings; each runtime supplies its own physical and collection policy. */
+/** 共享日频字段语义；各运行时分别提供自己的存储和采集规则。 */
 public final class DailySemantics {
     private DailySemantics() {}
 

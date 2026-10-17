@@ -8,7 +8,7 @@ import java.sql.*;
 import java.time.*;
 import java.util.*;
 
-/** Local SQLite transactional authority. JSON is an immutable payload, never a second status authority. */
+/** 本地 SQLite 是事务状态的唯一依据；JSON 仅保存不可变载荷，不另行决定状态。 */
 public final class SyncRunLedger {
     public enum Kind { RUN, ATTEMPT, SLICE }
     public record Entry(String id, Kind kind, String runId, String parentId, SyncRunState state,
@@ -22,11 +22,12 @@ public final class SyncRunLedger {
     public SyncRunLedger(Path path) throws IOException, SQLException {
         this(path, false, true);
     }
-    /** Resolved local authority path for delegates that verify durable submission directly. */
+    /** 返回本地账本的规范路径，供委托执行方直接核验持久化的提交记录。 */
     public Path path() { return path.toAbsolutePath().normalize(); }
 
-    /** Keep SQLite open across a finite job, avoiding a last-connection checkpoint per transaction.
-     * The anchor holds no transaction; normal independent FULL-synchronous commits remain unchanged.
+    /**
+     * 有限作业期间保留一个连接，避免每次事务结束、最后连接关闭时都触发检查点。
+     * 锚定连接不持有事务；其他连接仍按 FULL 同步级别独立提交。
      */
     public AutoCloseable keepOpen() throws SQLException {
         var anchor=connect();
@@ -36,7 +37,7 @@ public final class SyncRunLedger {
     public static SyncRunLedger openReadOnly(Path path) throws IOException, SQLException {
         return new SyncRunLedger(path, true, false);
     }
-    /** Operational commands must not run schema initialization against an active writer. */
+    /** 运维命令不能在写入方仍活动时初始化或迁移账本结构。 */
     public static SyncRunLedger openExisting(Path path) throws IOException, SQLException {
         return new SyncRunLedger(path, false, false);
     }
@@ -116,7 +117,7 @@ public final class SyncRunLedger {
     }
 
     public record GroupMember(int ordinal, String jobId, int jobVersion, String childRunId) {}
-    /** Group parent and ordered member slots are committed together. */
+    /** 组合任务的父记录与有序子任务槽位在同一事务中提交。 */
     public void createGroupRun(Run run, List<com.zoutrankil.data.domain.SyncJobDefinition.JobRef> members)
             throws SQLException {
         id(run.id()); id(run.jobId()); id(run.targetId());
@@ -152,7 +153,7 @@ public final class SyncRunLedger {
             return List.copyOf(result);
         }
     }
-    /** Reserve the exact child ID before invoking its single-job runner. */
+    /** 调用单任务执行器前，先持久化预留其准确的子运行标识。 */
     public void assignGroupMember(String parentRunId, int ordinal, String childRunId) throws SQLException {
         id(parentRunId); id(childRunId);
         transaction(c -> {
@@ -185,7 +186,7 @@ public final class SyncRunLedger {
         }
         appendEvent(c, id, 0, SyncRunState.PENDING, "{}", now);
     }
-    /** Compare-and-set update and immutable event append commit together. */
+    /** 基于版本的条件更新与不可变事件追加在同一事务中提交。 */
     public void transition(String id, long expectedRevision, SyncRunState next, String payloadJson) throws SQLException {
         id(id); json(payloadJson);
         transaction(c -> {
@@ -249,15 +250,15 @@ public final class SyncRunLedger {
         }
     }
     public Entry get(String id) throws SQLException { id(id); try (var c = connect()) { return require(c, id); } }
-    /** Durable cancellation request; it never changes delivery evidence or releases interval locks. */
+    /** 持久化取消请求；取消本身不改变投递证据，也不释放日期区间锁。 */
     public boolean requestCancellation(String runId) throws SQLException {
         id(runId);
         if(readOnly)throw new IllegalStateException("Read-only ledger");
         var run=get(runId);
         if(run.kind()!=Kind.RUN)throw new IllegalArgumentException("Cancellation requires a run ID");
         if(run.state().terminal())return false;
-        // A single write statement avoids upgrading a deferred read snapshot while the runner commits pages.
-        // Recheck terminal state atomically, and preserve the first cancellation timestamp on repeated requests.
+        // 使用单条写语句，避免执行器提交分页结果时再将延迟读快照升级为写事务。
+        // 原子复查终态；重复取消请求保留首次取消的时间。
         try(var c=connect();var s=c.prepareStatement("INSERT INTO sync_cancellations(run_id,requested_at) "
                 +"SELECT id,? FROM sync_entries WHERE id=? AND kind='RUN' "
                 +"AND state NOT IN ('VERIFIED','VERIFIED_EMPTY','PARTIAL','FAILED','CANCELLED') "
@@ -273,7 +274,7 @@ public final class SyncRunLedger {
             try (var r = s.executeQuery()) { return r.next(); }
         }
     }
-    /** Verify the durable revision4 event and every owner in its bounded cancellation chain. */
+    /** 核验已持久化的 revision4 事件及其有界取消链上的全部执行方。 */
     public void requireUncancelledRevision4SubmissionEvent(String runId, String sliceId, String expectedPayloadJson)
             throws SQLException {
         try (var c = connect(); var statement = c.prepareStatement(
@@ -333,7 +334,7 @@ public final class SyncRunLedger {
                              String logicalDate, String targetId, SyncRunState state,
                              long revision, String updatedAt) {}
 
-    /** Bounded keyset browse ordered by immutable run ID, not by mutable update time. */
+    /** 按不可变运行标识进行有界键集分页，不按可能变化的更新时间排序。 */
     public List<RunSummary> history(String jobId, String afterId, int limit) throws SQLException {
         if (limit < 1 || limit > 1000) throw new IllegalArgumentException("History limit must be 1..1000");
         if (jobId != null) id(jobId);
@@ -369,9 +370,9 @@ public final class SyncRunLedger {
         }
     }
     /**
-     * Candidate source runs whose frozen data interval covers the requested day, including later backfills.
-     * This does not certify readiness: callers must check state, slices, source evidence and physical rows.
-     * Exact target identity is mandatory so isolated and formal targets cannot be mixed.
+     * 寻找冻结数据区间覆盖指定日期的候选运行，也包含较晚执行的历史回补。
+     * 这不代表数据就绪；调用方仍须核查状态、分片、来源证据和实际行。
+     * 必须匹配准确的目标身份，防止混用隔离目标和正式目标。
      */
     public List<RunSummary> coveringHistory(String jobId,String targetId,LocalDate dataDate,
             String afterId,int limit)throws SQLException {

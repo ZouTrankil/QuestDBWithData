@@ -12,7 +12,7 @@ import java.util.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-/** Finite native data commands, without starting the scheduler or trading engine. */
+/** 有限的原生数据命令；不启动调度器或交易引擎。 */
 public final class MainStrategyDataCli {
     private MainStrategyDataCli() {}
     public static void main(String[] args)throws Exception {

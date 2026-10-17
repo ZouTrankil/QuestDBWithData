@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-/** Python v1 model defaults and json.dumps(sort_keys=True, ensure_ascii=False) semantics. */
+/** 对齐 Python 第 1 版模型默认值，以及 json.dumps(sort_keys=True, ensure_ascii=False) 语义。 */
 final class CanonicalPlanJson {
     static final ObjectMapper JSON = new ObjectMapper(JsonFactory.builder()
             .enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION).build())
@@ -162,7 +162,7 @@ final class CanonicalPlanJson {
         else throw invalid("unsupported canonical JSON value");
     }
 
-    /** Choose the shortest round-tripping decimal, then Python's exponent presentation. */
+    /** 先选择可无损往返的最短十进制，再按 Python 规则表示指数。 */
     static String pythonDouble(double value) {
         if (!Double.isFinite(value)) throw invalid("non-finite plan numbers are forbidden");
         if (value == 0) return Double.doubleToRawLongBits(value) < 0 ? "-0.0" : "0.0";

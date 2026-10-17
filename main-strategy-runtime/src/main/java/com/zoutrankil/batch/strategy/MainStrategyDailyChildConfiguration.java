@@ -29,7 +29,7 @@ import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
-/** Local names shadow only the child context; the parent QuestDB DataSource remains separate. */
+/** 本地名称只覆盖子上下文；父上下文的 QuestDB 数据源仍保持独立。 */
 @Configuration(proxyBeanMethods=false)
 @EnableBatchProcessing(taskExecutorRef="mainStrategyBatchTaskExecutor",transactionManagerRef="transactionManager")
 @EnableJdbcJobRepository(tablePrefix="BATCH_",dataSourceRef="dataSource",transactionManagerRef="transactionManager")
@@ -48,7 +48,7 @@ public class MainStrategyDailyChildConfiguration {
         return new JdbcTransactionManager(dataSource);
     }
     @Bean TaskExecutor mainStrategyBatchTaskExecutor() {
-        // LaunchService owns its file lease until the synchronous Batch operator returns.
+        // LaunchService 持有文件租约，直到同步 Batch 操作返回。
         return new SyncTaskExecutor();
     }
     @Bean @DependsOn("metadataMigrations") SqliteLedger ledger(DataSource dataSource) {

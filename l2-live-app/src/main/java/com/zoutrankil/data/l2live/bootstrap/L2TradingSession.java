@@ -9,7 +9,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.*;
 
-/** One bounded daily session, admitted by the platform's authoritative exchange calendar. */
+/** 以平台交易日历准入、且限定在单日时间窗口内的采集会话。 */
 record L2TradingSession(LocalDate date, Instant start, Instant stop, boolean open) {
     boolean expired(Clock clock) { return !clock.instant().isBefore(stop); }
     boolean waiting(Clock clock) { return clock.instant().isBefore(start); }
@@ -18,7 +18,7 @@ record L2TradingSession(LocalDate date, Instant start, Instant stop, boolean ope
         var date = LocalDate.now(clock.withZone(config.sessionZone));
         var start = date.atTime(config.sessionStart).atZone(config.sessionZone).toInstant();
         var stop = date.atTime(config.sessionStop).atZone(config.sessionZone).toInstant();
-        // Calendar dates are UTC date markers, independently of the wall-clock session zone.
+        // 日历日期使用 UTC 日期标记，与会话墙上时间所用时区相互独立。
         String sql = "SELECT is_open FROM exchange_calendar WHERE exchange='" + config.sessionExchange
                 + "' AND cal_date>='" + date + "T00:00:00.000000Z' AND cal_date<'"
                 + date.plusDays(1) + "T00:00:00.000000Z' LIMIT 2";

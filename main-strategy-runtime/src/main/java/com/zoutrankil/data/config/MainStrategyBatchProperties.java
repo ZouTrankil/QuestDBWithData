@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import org.quartz.CronExpression;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/** Main Web runtime only; credentials and the isolated delivery runtime have separate configuration. */
+/** 仅供主策略 Web 运行时使用；凭据及隔离交付运行时分别配置。 */
 @ConfigurationProperties(prefix="app.sync.batch")
 public record MainStrategyBatchProperties(Boolean enabled, Boolean startupCatchup, String ledgerPath,
         String cron, String retryCron, LocalTime completionCutoff, Integer maximumRecoveryAttempts) {

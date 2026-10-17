@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 
-/** Durable, bounded launches; unknown owner outcomes are exposed for reconciliation, never replayed. */
+/** 有持久化记录且有界的启动协调；执行结果未决时留待核对，不自动重放。 */
 public final class MainStrategyDailyCoordinator implements AutoCloseable {
     public static final String GROUP="main-strategy";
     private static final ZoneId ZONE=ZoneId.of("Asia/Shanghai");
@@ -49,7 +49,7 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
                 .withIdentity(jobKey).storeDurably().build(),false);
         addTrigger(jobKey,"daily",properties.cron());
         addTrigger(jobKey,"recovery",properties.retryCron());
-        // A Quartz pause made before shutdown must remain authoritative after restart.
+        // 关闭前对 Quartz 的暂停设置，在重启后仍须生效。
         if(!fresh && enabled && scheduler.getTriggersOfJob(jobKey).stream().anyMatch(trigger -> {
             try { return scheduler.getTriggerState(trigger.getKey())==Trigger.TriggerState.PAUSED; }
             catch(SchedulerException error) { throw new IllegalStateException(error); }
@@ -77,7 +77,7 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
     private boolean enabled() {
         return ledger.scheduleEnabled(MainStrategyDailyWork.JOB);
     }
-    /** Returns immediately; a single bounded slot services startup and operator catch-up. */
+    /** 立即返回；启动补跑和操作员补跑共用一个有界执行槽位。 */
     public Map<String,Object> catchup(String requestId) {
         if(closing.get())return Map.of("disposition","shutting-down");
         if(!enabled()) return Map.of("disposition","paused");
@@ -115,7 +115,7 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
             }
             if(prior.isPresent() && !RECOVERABLE.contains(prior.get().state())) {
                 var candidate=prior.get();
-                // The runtime lease and job lease are held here: a RUNNING marker belongs to a lost execution.
+                // 此处同时持有运行时和作业租约；遗留的 RUNNING 标记属于已经失联的执行。
                 if(candidate.state()==BusinessState.RUNNING || candidate.state()==BusinessState.VERIFYING)
                     ledger.state(candidate.request().instanceId(),BusinessState.IN_DOUBT,null,
                             "Prior main-strategy execution lost its runtime owner; reconcile before replay");
@@ -156,7 +156,7 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
     public synchronized Map<String,Object> setEnabled(boolean enabled) throws Exception {
         if(closing.get())throw new IllegalStateException("Main-strategy runtime is shutting down");
         var key=new JobKey(MainStrategyDailyWork.JOB,GROUP);
-        // Pause first, then commit the durable operator preference before a later resume.
+        // 先暂停调度，再持久化操作员偏好，防止后续意外恢复。
         scheduler.pauseJob(key);
         ledger.setScheduleEnabled(MainStrategyDailyWork.JOB,enabled);
         ledger.audit(null,"main-strategy-schedule-control",enabled?"resumed":"paused");
@@ -187,7 +187,7 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
         if(!MainStrategyDailyWork.JOB.equals(request.job())) throw new IllegalArgumentException("Not a main-strategy instance");
         return ledger.detail(instance);
     }
-    /** Operator-only original-run recovery. The five-stage parent is not marked complete here. */
+    /** 仅供操作员恢复原始运行；这里不把整个父任务标记为完成。 */
     public Map<String,Object> reconcilePublication(String instance,String stage,String runId,boolean writerStopped,String requestId)throws Exception {
         if(instance==null||!instance.matches("[a-f0-9]{64}")||runId==null||!runId.matches("[A-Za-z0-9-]{1,128}")||stage==null||!Set.of("MarketSentimentDaily","RegimeFeaturesMonitorDaily","BacktestDaily").contains(stage))throw new IllegalArgumentException("Exact instance, native stage and bounded original run required");
         if(!writerStopped)throw new IllegalArgumentException("Explicit stopped-writer proof required");
@@ -211,7 +211,7 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
     }
     @Override public void close() {
         if(!closing.compareAndSet(false,true))return;
-        // Neither SQLite metadata nor its runtime lease may disappear while an owner can still write.
+        // 执行方仍可能写入时，不能销毁 SQLite 元数据或其运行时租约。
         try {scheduler.standby();}catch(SchedulerException error){lastError="Scheduler standby: "+error.getMessage();}
         asynchronous.shutdown();
         boolean interrupted=Thread.interrupted();

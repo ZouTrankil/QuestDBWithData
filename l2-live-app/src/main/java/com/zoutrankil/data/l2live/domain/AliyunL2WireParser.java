@@ -16,10 +16,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-/** Pure, versioned wire decoder. Sequence scope is deliberately not inferred from subscribed symbols. */
+/** 无副作用、带版本的报文解码器；不根据订阅证券推测供应商序列号的有效范围。 */
 public final class AliyunL2WireParser {
     public static final String VERSION="v2";
-    /** Raw capture has a larger retention bound; admitted vendor text is bounded separately. */
+    /** 原始采集允许保留更大报文；可进入供应商文本解析的大小另行设限。 */
     public static final int MAX_WIRE_PAYLOAD_BYTES=64*1024;
     public static final Map<String,String> FIELD_TYPES=fieldTypes();
     private static final Set<String> CHANNELS=Set.of("trans","order","market");

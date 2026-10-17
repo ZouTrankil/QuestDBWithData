@@ -9,7 +9,7 @@ import java.security.MessageDigest;
 import java.time.Duration;
 import java.util.*;
 
-/** Read-only admission of the database-owned MV. No result-table writes or refresh commands. */
+/** 只读核验数据库维护的物化视图；不写入结果表，也不主动发送刷新命令。 */
 public final class BacktestDailyMaterializedViewPort {
     public static final String NAME="mv_backtest_daily", BASE="stk_limit";
     public static final List<String> SOURCES=List.of("stk_factor","stk_limit","stk_suspend","stk_st_daily");
@@ -86,7 +86,7 @@ public final class BacktestDailyMaterializedViewPort {
             if(!actual.equals(Set.of(name.equals("stk_suspend")||name.equals("stk_st_daily")?"timestamp":"trade_date","ts_code")))
                 throw new IllegalStateException("Backtest raw source date/stock uniqueness changed: "+name);
         }
-        // QuestDB listens to one base table. Reject a late side-table commit instead of serving stale enrichment.
+        // QuestDB 仅监听一个基表；关联表若在刷新后才提交，须拒绝读取，避免返回过期的补充字段。
         for(String name:SOURCES){
             var tx=jdbc.queryForList("SELECT sequencerTxn,cast(timestamp AS LONG) AS committed FROM wal_transactions('"+name+"') LIMIT -1");
             if(tx.size()!=1||number(tx.getFirst(),"sequencerTxn")!=number(before.get(name),"sequencerTxn"))throw pending("Backtest raw source transaction changed: "+name);

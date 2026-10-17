@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-/** Existing Web API authentication protects these controls; all work enters the same coordinator. */
+/** 复用已有 Web API 鉴权保护；全部控制操作进入同一个协调器。 */
 @RestController
 @RequestMapping(path="/api/v1/batch/main-strategy",produces=MediaType.APPLICATION_JSON_VALUE)
 @ConditionalOnWebApplication(type=ConditionalOnWebApplication.Type.REACTIVE)

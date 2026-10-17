@@ -5,7 +5,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-/** Both first launch and recovery use this one durable Quartz job identity. */
+/** 首次启动和恢复均使用这一个持久化 Quartz 作业身份。 */
 @DisallowConcurrentExecution
 public final class MainStrategyDailyScheduledLaunch implements Job {
     @Override public void execute(JobExecutionContext execution) throws JobExecutionException {

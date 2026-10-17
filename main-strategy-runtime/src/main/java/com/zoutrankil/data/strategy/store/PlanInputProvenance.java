@@ -2,7 +2,7 @@ package com.zoutrankil.data.strategy.store;
 
 import java.time.LocalDate;
 
-/** Frozen score/recipe identities supplied by the verified input publisher. */
+/** 由已验证输入发布器提供的冻结评分与方案身份。 */
 public record PlanInputProvenance(String scoreRunId, String scorePanelSha256,
         String scoreCoverageSha256, String recipeSha256, LocalDate maxCompleteDate,
         String recipeCodeRevision) {

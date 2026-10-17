@@ -2,7 +2,7 @@ package com.zoutrankil.data.client.dto;
 
 import java.util.*;
 
-/** Credentials are injected only at the transport boundary, never stored in this DTO. */
+/** 凭据只在传输边界注入，不保存在此请求对象中。 */
 public record TushareRequest(String apiName, Map<String, Object> params, List<String> fields, int maxRows) {
     public TushareRequest {
         if (apiName == null || !apiName.matches("[a-z][a-z0-9_]*")) throw new IllegalArgumentException("Invalid API name");

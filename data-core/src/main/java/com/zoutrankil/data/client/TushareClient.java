@@ -27,7 +27,7 @@ public class TushareClient {
         this.budget = budget;
     }
 
-    /** Cancellation propagates to quota wait, retry backoff and the HTTP subscription. */
+    /** 取消信号会传递到配额等待、重试退避和 HTTP 请求订阅。 */
     public CompletableFuture<TusharePage> requestAsync(TushareRequest request) {
         return requestMono(request).toFuture();
     }
@@ -42,7 +42,7 @@ public class TushareClient {
         }
     }
 
-    /** All callers, including the legacy stock_basic entry, share the same credential budget. */
+    /** 所有调用方，包括旧 stock_basic 入口，都共用同一凭据预算。 */
     public Mono<TusharePage> requestMono(TushareRequest request) {
         Objects.requireNonNull(request);
         return budget.execute(request.apiName(), properties.getToken(), () -> transportAttempt(request));

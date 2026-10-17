@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-/** Same authenticated Web runtime; numerical production runs entirely in Java. */
+/** 复用受鉴权保护的 Web 运行时；数值计算全部由 Java 执行。 */
 @RestController
 @RequestMapping(path="/api/v1/main-strategy/data",produces=MediaType.APPLICATION_JSON_VALUE)
 @ConditionalOnWebApplication(type=ConditionalOnWebApplication.Type.REACTIVE)

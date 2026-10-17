@@ -5,7 +5,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-/** Compatibility name for the existing persistent main-strategy Quartz job. */
+/** 兼容现有持久化主策略 Quartz 作业的旧类名。 */
 @Deprecated
 @DisallowConcurrentExecution
 public final class MainStrategyDailyScheduledLaunch implements Job {

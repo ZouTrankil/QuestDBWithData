@@ -9,7 +9,7 @@ import java.sql.*;
 import java.time.*;
 import java.util.*;
 
-/** Complete bounded source reads, stable schema/WAL identities and trading-calendar evidence. */
+/** 完整读取有界来源，并核验表结构、WAL 身份稳定性和交易日历证据。 */
 public final class QuestDbStrategyInputs {
     public record Snapshot(LocalDate start,LocalDate end,List<LocalDate> signalDates,
             Map<String,List<Map<String,Object>>> tables,Map<String,String> sourceVersions,
@@ -57,8 +57,8 @@ public final class QuestDbStrategyInputs {
         data.put("etf_reference",readStatic("SELECT * FROM etf_basic ORDER BY ts_code","etf_reference",10_000));
         data.put("etf_factor",readRows("SELECT * FROM etf_factor WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP) ORDER BY trade_date,ts_code",warmup,end,"etf_factor"));
         data.put("etf_daily",readRows("SELECT * FROM etf_daily WHERE timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP) ORDER BY timestamp,ts_code",warmup.minusDays(5),end,"etf_daily"));
-        // Keep the last disclosure before the signal span and every subsequent announcement.
-        // Comparing ann_date <= signalDate is deferred to the exact PIT scorer.
+        // 保留信号区间开始前最后一次披露，以及此后的全部公告。
+        // ann_date <= signalDate 的时点筛选由后续精确时点评分器执行。
         data.put("etf_portfolio",readSql("""
             SELECT * FROM (SELECT p.* FROM etf_portfolio p
             JOIN (SELECT ts_code,max(ann_date) AS a FROM etf_portfolio WHERE ann_date<cast(? AS TIMESTAMP) GROUP BY ts_code) prior

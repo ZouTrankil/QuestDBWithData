@@ -6,7 +6,7 @@ import com.zoutrankil.data.repository.SyncRunLedger;
 import java.security.MessageDigest;
 import java.util.*;
 
-/** Verified ledger slices are checkpoints; old offset cursors never skip fresh source reads. */
+/** 已验证的账本分片才是检查点；旧 offset 游标不能用于跳过本轮来源读取。 */
 public final class VerifiedSliceRecovery {
     public record Checkpoint(String runId,String sliceId,String sourceFingerprint,int rows) {}
     public record Readback(Checkpoint checkpoint,String valueDigest) {}
@@ -47,7 +47,7 @@ public final class VerifiedSliceRecovery {
         }
         return new VerifiedSliceRecovery(checkpoints);
     }
-    /** Re-fetched source and current target values must both match before skipping a write. */
+    /** 重新抓取的来源与当前目标值同时匹配后，才允许跳过写入。 */
     public <T,K> Readback revalidate(SyncJobRunner.Page<T> page,VerifiedBatchExecutor.Codec<T,K> codec,
                                     VerifiedBatchExecutor.Port<T,K> port) throws Exception {
         var checkpoint=byFingerprint.get(page.sourceFingerprint());
@@ -103,7 +103,7 @@ public final class VerifiedSliceRecovery {
         return new Readback(checkpoint,HexFormat.of().formatHex(hash.digest()));
     }
 
-    /** Re-fetch every bounded page and verify current target values before reusing a child. */
+    /** 复用子任务前，重新抓取每个有界分页并核验当前目标值。 */
     public static <T,K> CompleteRevalidation verifyWhole(SyncRunLedger ledger,String priorRun,
             SyncJobDefinition.FrozenRequest request,String targetId,SyncJobRunner.Adapter<T,K> adapter,
             java.util.function.BooleanSupplier cancelled) throws Exception {

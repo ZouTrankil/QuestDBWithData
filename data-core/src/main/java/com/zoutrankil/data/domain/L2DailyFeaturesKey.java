@@ -3,7 +3,7 @@ package com.zoutrankil.data.domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
-/** The L2 daily business identity is the calendar date carried by ts plus symbol. */
+/** 日频 L2 的业务身份由 ts 承载的日历日期和证券代码共同确定。 */
 public record L2DailyFeaturesKey(LocalDate tradeDate, String symbol) {
     public L2DailyFeaturesKey {
         Objects.requireNonNull(tradeDate, "trade date required");

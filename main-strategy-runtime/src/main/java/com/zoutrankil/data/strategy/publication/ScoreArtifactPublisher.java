@@ -18,7 +18,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-/** Immutable, Python-compatible Research artifacts; both aliases advance in one SQLite transaction. */
+/** 发布与 Python 兼容的不可变研究产物；两个别名在同一 SQLite 事务中推进。 */
 public final class ScoreArtifactPublisher {
     private static final ObjectMapper JSON = new ObjectMapper().findAndRegisterModules()
             .disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
@@ -38,6 +38,10 @@ public final class ScoreArtifactPublisher {
             List<LocalDate> signalDates, String recipeSha256, Map<String,Object> provenance) throws Exception {
         return publish(runId,panel,coverage,signalDates,recipeSha256,provenance,()->{});
     }
+    /**
+     * 先写不可变文件，再在目录事务中同时推进评分和覆盖率别名。
+     * 中途失败可以留下未引用文件，但不能让读取方看见只更新了一半的产物组合。
+     */
     public Publication publish(String runId, List<Map<String,Object>> panel, List<Map<String,Object>> coverage,
             List<LocalDate> signalDates, String recipeSha256, Map<String,Object> provenance,PublicationGate gate) throws Exception {
         if (runId == null || !runId.matches("[A-Za-z0-9_.-]{1,128}")) throw new IllegalArgumentException("Bounded score run ID required");
@@ -95,16 +99,16 @@ public final class ScoreArtifactPublisher {
         return observed;
     }
 
-    /** One read transaction binds both roles, receipt and immutable bytes. */
+    /** 一次读取事务同时绑定两个角色、回执和不可变字节内容。 */
     public Publication latest(LocalDate required) throws Exception {
         return load(null,required);
     }
-    /** Weekly plans retain their original immutable scoring run after daily aliases advance. */
+    /** 每日别名推进后，周计划仍保留最初绑定的不可变评分运行。 */
     public Publication byRun(String runId)throws Exception {
         if(runId==null||!runId.matches("[A-Za-z0-9_.-]{1,128}"))throw new IllegalArgumentException("Bounded historical score run required");
         return load(runId,null);
     }
-    /** Resolve an already frozen daily run for a weekly signal without moving daily aliases. */
+    /** 为周信号解析已冻结的日频运行，不移动每日别名。 */
     public Publication forDate(LocalDate signal)throws Exception {
         if(signal==null||!Files.isRegularFile(database))throw new IllegalStateException("Exact historical Java score date is unavailable");
         String run;

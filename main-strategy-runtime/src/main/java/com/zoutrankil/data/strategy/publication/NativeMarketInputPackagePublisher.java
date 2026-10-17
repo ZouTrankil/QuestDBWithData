@@ -20,7 +20,7 @@ import org.apache.parquet.io.LocalInputFile;
 import org.apache.parquet.io.ColumnIOFactory;
 import org.apache.parquet.example.data.simple.convert.GroupRecordConverter;
 
-/** The three frozen market roles required by ETF_ONLY_TOP2, published without invoking Python. */
+/** 为 ETF_ONLY_TOP2 发布三个已冻结的市场输入角色，不调用 Python。 */
 public final class NativeMarketInputPackagePublisher {
     public static final String PRODUCT_ID = "market.etf.rotation.input_package";
     private static final String ALIAS = "data.product." + PRODUCT_ID + "@latest";
@@ -148,7 +148,7 @@ public final class NativeMarketInputPackagePublisher {
                 verifySource(sourceProof, "calendar", calendar);
                 verifySource(sourceProof, "etf_daily", etfDaily);
                 verifySource(sourceProof, "market_context", marketContext);
-                // Recheck the pair on this same catalog snapshot, before the package alias commits.
+                // 提交输入包别名前，在同一目录快照上重新核验成对评分产物。
                 requireScoreAliases(connection, scores);
                 ScoreArtifactPublisher.registerAlias(connection, ALIAS, selectedManifest, PRODUCER);
                 gate.check();connection.commit();
@@ -159,12 +159,12 @@ public final class NativeMarketInputPackagePublisher {
         return observed;
     }
 
-    /** Read-only: a package cannot borrow readiness or source identity from another score run. */
+    /** 只读核验；输入包不能借用其他评分运行的就绪状态或来源身份。 */
     public Publication requireLatest(ScoreArtifactPublisher.Publication scores) throws Exception {
         return load(scores, true);
     }
 
-    /** Read the original complete bundle without following either current score or package aliases. */
+    /** 读取原始完整输入包，不跟随当前评分别名或输入包别名。 */
     public Publication requireByRun(ScoreArtifactPublisher.Publication scores) throws Exception {
         return load(scores, false);
     }
@@ -183,7 +183,7 @@ public final class NativeMarketInputPackagePublisher {
                     if (!recorded.sourceProofSha256().equals(publication.sourceProofRef().contentHash())) throw invalid("native package receipt source proof differs");
                     return publication;
                 }
-                // Compatibility for catalogs created before the unique run receipt. An alias is never consulted.
+                // 兼容尚未保存唯一运行回执的旧目录；不查询当前别名。
                 String prefix = "quant://artifact/data/product_packages/market/etf/rotation/input_package/java/" + scores.producerRunId() + "/";
                 Publication selected = null; int count = 0;
                 try (var statement = connection.prepareStatement("SELECT uri,version,content_hash,schema_digest,row_count,data_start_date,data_end_date,run_id FROM resource_metadata WHERE substr(uri,1,?)=? AND role='data_product_package' AND producer_capability=? ORDER BY uri LIMIT 33")) {
@@ -371,7 +371,7 @@ public final class NativeMarketInputPackagePublisher {
         var keys = new HashSet<String>();
         for (var row : rows) if (!keys.add(day(row.get("trade_date")) + ":" + symbol(row.get("ts_code")))) throw invalid("duplicate score candidate key");
         var observed = new HashSet<String>();
-        // LocalInputFile avoids Hadoop filesystem/user resolution, which is incompatible with Java 24 Subject removal.
+        // LocalInputFile 避免触发 Hadoop 文件系统及用户解析，兼容 Java 24 移除 Subject 旧机制的变化。
         try (var reader = ParquetFileReader.open(new LocalInputFile(panel.path()))) {
             var schema = reader.getFileMetaData().getSchema();
             if (schema.getType("trade_date").asPrimitiveType().getPrimitiveTypeName() != org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.INT32
@@ -471,7 +471,7 @@ public final class NativeMarketInputPackagePublisher {
         return HexFormat.of().formatHex(digest.digest());
     }
     private static String digest(Object value) throws Exception { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(jsonBytes(value))); }
-    /** Match json.dumps(ensure_ascii=False, sort_keys=True) separators used by the Python product identity. */
+    /** 与 Python 产品身份所用的 json.dumps(ensure_ascii=False, sort_keys=True) 分隔格式保持一致。 */
     private static byte[] jsonBytes(Object value) throws Exception {
         StringBuilder text = new StringBuilder(); append(JSON.valueToTree(value), text); return text.toString().getBytes(StandardCharsets.UTF_8);
     }

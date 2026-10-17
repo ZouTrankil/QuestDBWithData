@@ -3,7 +3,7 @@ package com.zoutrankil.data.repository;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-/** Read admission uses QuestDB MV/raw-table state, with no Java publication ledger. */
+/** 依据 QuestDB 原生物化视图及原始表状态判断能否读取，不依赖 Java 发布账本。 */
 public final class BacktestDailyMaterializationReadGuard {
     private BacktestDailyMaterializationReadGuard() {}
     public static final class NotReadyException extends IllegalStateException {

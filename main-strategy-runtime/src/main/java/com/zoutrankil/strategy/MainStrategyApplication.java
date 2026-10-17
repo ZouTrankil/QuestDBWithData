@@ -4,7 +4,7 @@ import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.bootstrap.QuestDataStartup;
 import java.util.TimeZone;
 
-/** Independent strategy process, including its authenticated control API. */
+/** 独立策略进程，包含受鉴权保护的控制 API。 */
 public final class MainStrategyApplication {
     private MainStrategyApplication() {}
 

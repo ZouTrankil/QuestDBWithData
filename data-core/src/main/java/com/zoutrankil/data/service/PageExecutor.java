@@ -7,7 +7,7 @@ import java.security.MessageDigest;
 import java.util.*;
 import java.util.function.BooleanSupplier;
 
-/** Processes one page at a time. A failed slice never returns a completion/checkpoint receipt. */
+/** 逐页处理来源数据；分片失败时不返回完成回执或检查点。 */
 public final class PageExecutor {
     public record Page(List<Map<String, JsonNode>> rows, String nextCursor, boolean explicitEnd, String sourceVersion) {
         public Page { rows = rows.stream().map(Map::copyOf).toList(); }
@@ -65,6 +65,7 @@ public final class PageExecutor {
             int count = page.rows().size();
             int bound = contract.paging() == PageContract.Paging.NONE ? contract.sourceRowCap() : contract.pageSize();
             if (count > bound || (long) rows + count > contract.maxRows()) throw new Incomplete("Page or row bound exceeded", pages, rows);
+            // 同一窗口的分页必须属于同一来源版本，否则页间可能出现漏行或重复行。
             if (pages == 0) version = page.sourceVersion();
             else if (!Objects.equals(version, page.sourceVersion())) throw new Incomplete("Source version changed between pages", pages, rows);
             String digest = digest(page.rows().stream().map(TreeMap::new).toList());
@@ -84,8 +85,9 @@ public final class PageExecutor {
                 catch (Exception failure) { throw new Incomplete("Row outside declared slice or invalid (" + failure.getClass().getSimpleName() + ")", pages, rows, failure); }
             }
             if (contract.paging() == PageContract.Paging.NONE && count >= contract.sourceRowCap() && !page.explicitEnd()) {
-                throw new Truncated(pages, rows); // No rows delivered from a potentially truncated window.
+                throw new Truncated(pages, rows); // 可能被截断的窗口不能向下游交付任何行。
             }
+            // 结束条件由来源契约决定；不能把“达到预算”或“收到了某一页”当成抓取完整。
             boolean complete = contract.completion() == PageContract.Completion.EXPLICIT_END
                     ? page.explicitEnd() : count < bound;
             if (contract.paging() == PageContract.Paging.CURSOR) {

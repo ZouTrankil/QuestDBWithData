@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/** One observed row. Missing numbers remain NaN; source adapters must not impute missing dates. */
+/** 一条实际观测记录；缺失数值保持 NaN，来源适配器不能补造缺失日期。 */
 public record ScoreRow(LocalDate tradeDate, String symbol, Map<String, Object> values) {
     public ScoreRow {
         Objects.requireNonNull(tradeDate, "tradeDate");

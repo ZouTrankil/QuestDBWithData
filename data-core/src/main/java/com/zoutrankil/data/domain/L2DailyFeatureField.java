@@ -8,7 +8,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import static com.zoutrankil.data.domain.DatasetDefinition.StorageType;
 
-/** Frozen, typed Python model fields for D086; source nulls remain null. */
+/** D086 对应的固定类型化 Python 模型字段；来源空值保持为空。 */
 public enum L2DailyFeatureField {
     TS("ts", StorageType.TIMESTAMP, false, "交易日期时间戳", true),
     SYMBOL("symbol", StorageType.SYMBOL, false, "股票代码", false),

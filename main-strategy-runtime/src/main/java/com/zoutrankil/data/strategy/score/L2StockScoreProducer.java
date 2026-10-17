@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.*;
 import static com.zoutrankil.data.strategy.score.ScoreMath.*;
 
-/** Label-free deterministic feature-rank path used by the promoted daily scorer. */
+/** 供已验收日频评分器使用的确定性特征排名流程，不使用标签。 */
 public final class L2StockScoreProducer {
     public static final List<String> POSITIVE_FACTORS = List.of("q2_accum_alpha", "orderbook_breadth_alpha", "auction_flow_alpha", "activity_alpha", "crowding_context_alpha", "liquidity_alpha");
     public static final Map<String, Double> RISK_FACTORS;
@@ -30,7 +30,7 @@ public final class L2StockScoreProducer {
             var diag = dailyByKey.get(new Key(raw.date, raw.symbol));
             if (diag == null) throw new IllegalArgumentException("L2 daily diagnostics missing: " + raw.date + "/" + raw.symbol);
             var row = new MutableRow(raw.freeze()); row.values.putAll(diag.values);
-            // build_daily_diagnostics does not expose daily turnover_rate to the base scorer.
+            // build_daily_diagnostics 不会向基础评分器暴露日频 turnover_rate。
             if (raw.values.containsKey("turnover_rate")) row.put("turnover_rate", raw.values.get("turnover_rate"));
             else row.values.remove("turnover_rate");
             var meta = metadata.get(raw.symbol);
@@ -109,7 +109,7 @@ public final class L2StockScoreProducer {
             row.put("feature_rank_v2_dynamic_score", row.s("filter_reason").equals("Clean") ? finalScore : 0);
             row.put("final_score", row.n("feature_rank_v2_dynamic_score"));
         }
-        // Candidate percentile includes non-Clean zero scores, before masking final_score to NaN.
+        // 候选百分位先包含非 Clean 样本的零分，再将其 final_score 屏蔽为 NaN。
         rank(scored, "final_score", "__candidate_pct", true, Double.NaN);
         for (var row : scored) {
             boolean clean = row.s("filter_reason").equals("Clean"); row.put("clean", clean);

@@ -116,7 +116,7 @@ public final class L2DailyFeatureBatchService {
             int received = 0;
             try (var progress = store.log(output.resolve("progress.jsonl"));
                 var errors = store.log(output.resolve("errors.jsonl"))) {
-                // Never retain more than workers jobs, parsed tables, or completed futures in flight.
+                // 同时在途的作业、已解析表和已完成异步结果均不超过 workers，防止任务堆积占满内存。
                 while (submitted < Math.min(workers, jobs.size())) {
                     submit(completed, jobs.get(submitted++), output, date, maxBytes, resume, computeFingerprint, session.publication);
                 }
@@ -210,7 +210,7 @@ public final class L2DailyFeatureBatchService {
         List<String> sourceNames = job.sources().stream().map(p -> p.getFileName().toString()).toList();
         try {
             SourceFingerprint fingerprint = sourceReader.fingerprint(job.sources().getFirst(), maxBytes);
-            // Identical aliases select a deterministic source; conflicting aliases fail this canonical symbol.
+            // 相同别名对应同一内容时确定性地选择来源；别名内容冲突时拒绝该标准证券代码。
             for (int i = 1; i < job.sources().size(); i++) {
                 SourceFingerprint alias = sourceReader.fingerprint(job.sources().get(i), maxBytes);
                 if (!alias.sha256().equals(fingerprint.sha256()))
@@ -285,7 +285,7 @@ public final class L2DailyFeatureBatchService {
                 resultHash, rows, 0, null);
         }
         catch (Exception invalidCheckpoint) {
-            // An unreadable or stale checkpoint is recomputed from CSV, never silently accepted.
+            // 检查点不可读或已过期时，从 CSV 重新计算，不能直接视为有效结果。
             return null;
         }
     }

@@ -15,7 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import static com.zoutrankil.data.repository.EtfMarketOverviewMaterializedViewReadGuard.*;
 
-/** Native incremental refresh for share changes; a right-side revision requires a full JOIN rebuild. */
+/** 份额变动使用原生增量刷新；JOIN 右侧数据修订时，须全量重建关联结果。 */
 @Service @Lazy
 public final class EtfOverviewMaintenance {
     private final JdbcTemplate jdbc;
@@ -35,13 +35,17 @@ public final class EtfOverviewMaintenance {
         if(timeout.isNegative()||timeout.isZero())throw new IllegalArgumentException("Positive refresh timeout required");
     }
 
-    /** Background checks do not install objects in a database that has never used this product. */
+    /** 数据库尚未使用该产品时，后台检查不会自行安装相关对象。 */
     public Map<String,Object> refreshIfInstalled() throws Exception {
         if(jdbc.queryForList("SELECT view_name FROM materialized_views() WHERE view_name='"+OUTPUT+"'").isEmpty())
             return Map.of("status","ABSENT");
         return refresh();
     }
 
+    /**
+     * 先根据两侧来源和输出身份选择刷新方式，再逐窗核验整个历史，最后保存本地证书。
+     * 校验期间任何来源或输出变化，均不得把检查点推进到未经验证的版本。
+     */
     public Map<String,Object> refresh() throws Exception {
         Files.createDirectories(ledger.getParent());
         try(var channel=FileChannel.open(ledger.resolveSibling(ledger.getFileName()+".etf-mv.lock"),
@@ -55,9 +59,11 @@ public final class EtfOverviewMaintenance {
             String output=snapshot(jdbc,OUTPUT);
             if(old.isPresent() && current(old.get(),left,right,output,view))
                 return Map.of("status","CURRENT","output",OUTPUT,"mode","REUSED");
+            // 右表修订不会由基表增量自动覆盖；证书缺失、定义变化或输出重建也须全量重算。
             boolean full=old.isEmpty() || !old.get().definitionHash().equals(definitionHash())
                     || !old.get().rightVersion().equals(right) || !generation(old.get().outputVersion()).equals(generation(output))
                     || !"valid".equals(view.get("view_status")) || nonempty(view.get("invalidation_reason"));
+            // 原生增量若已追平基表，直接核验现有结果，避免等待一个实际不会发生的空刷新。
             boolean nativeCurrent=!full && "valid".equals(view.get("view_status")) && !nonempty(view.get("invalidation_reason"))
                     && Objects.equals(view.get("refresh_base_table_txn"),view.get("base_table_txn"))
                     && !Objects.toString(view.get("last_refresh_finish_timestamp"),"").isBlank();
@@ -96,7 +102,7 @@ public final class EtfOverviewMaintenance {
                 throw new IllegalStateException("ETF output is an ordinary table; preserve and migrate its data explicitly");
             jdbc.execute("CREATE MATERIALIZED VIEW "+OUTPUT+" WITH BASE etf_share REFRESH MANUAL DEFERRED AS ("+SQL+") PARTITION BY MONTH");
         } else requireDefinition(existing.getFirst());
-        // QuestDB maintains base-table increments. The Java checker covers secondary-table revisions.
+        // QuestDB 维护基表增量；Java 检查器额外处理关联表的版本变化。
         if(!"immediate".equals(view(jdbc).get("refresh_type")))
             jdbc.execute("ALTER MATERIALIZED VIEW "+OUTPUT+" SET REFRESH IMMEDIATE");
     }
@@ -121,6 +127,7 @@ public final class EtfOverviewMaintenance {
         if(outputBounds.get("lo")!=null && (date(outputBounds.get("lo")).isBefore(start)||!date(outputBounds.get("hi")).isBefore(end)))
             throw new IllegalStateException("ETF output contains dates outside source history");
         long count=0;
+        // 双侧 JOIN 都施加日期边界，将全历史核验拆成有限窗口，避免单次扫描整个关联历史。
         for(LocalDate lo=start;lo.isBefore(end);lo=lo.plusDays(31)) {
             LocalDate hi=lo.plusDays(31).isBefore(end)?lo.plusDays(31):end;
             String direct=SQL.replace("SAMPLE BY","WHERE s.timestamp>=cast(? AS TIMESTAMP) AND s.timestamp<cast(? AS TIMESTAMP) "

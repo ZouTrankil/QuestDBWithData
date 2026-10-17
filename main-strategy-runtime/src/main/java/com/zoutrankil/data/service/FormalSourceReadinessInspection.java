@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.*;
 
-/** Inventory and optional serial owner revalidation; this never issues a DataReady certificate. */
+/** 清点来源并可选地串行复核各执行组件；本检查本身不签发 DataReady 证书。 */
 public final class FormalSourceReadinessInspection {
     @FunctionalInterface public interface Identity { String get()throws Exception; }
     @FunctionalInterface public interface Revalidator { String run(String runId)throws Exception; }
@@ -45,8 +45,8 @@ public final class FormalSourceReadinessInspection {
                 if(chosen.isEmpty()){item.put("status",candidates.isEmpty()?"NO_COVERING_RUN":"NO_COMPLETED_CANDIDATE");continue;}
                 item.put("selectedRunId",chosen.get().id());
                 if(!revalidate){item.put("status","REVALIDATION_REQUIRED");continue;}
-                // All adapters use the original frozen interval and freshly fetch their complete source.
-                // Serial execution respects the shared credential-budget lease.
+                // 全部适配器使用原冻结区间，并重新获取该区间的完整来源数据。
+                // 串行执行以遵守共用凭据预算的租约约束。
                 String receipt=source.revalidator().run(chosen.get().id());
                 if(!target.equals(source.target().get()))throw new IllegalStateException("Source target changed after revalidation");
                 item.put("receipt",receipt);item.put("status","SOURCE_REVALIDATED");

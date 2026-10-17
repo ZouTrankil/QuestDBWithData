@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-/** Existing shared HTTP/rate-budget path, serial page consumption and cancellable source calls. */
+/** 复用共享 HTTP 和配额通道，串行消费分页，并支持取消来源请求。 */
 @Service
 public class TusharePageService {
     private final TushareClient client;
@@ -22,8 +22,8 @@ public class TusharePageService {
         return new PageExecutor().execute(contract, baseParams, fetcher(contract, cancelled), consumer, validator, cancelled);
     }
     public PageExecutor.Fetcher fetcher(PageContract contract, BooleanSupplier cancelled) {
-        // The legacy cursor owner starts at its history anchor. A declared nonpaged annual
-        // request must retain its own start/end parameters and use the existing generic client.
+        // 旧游标执行组件从历史锚点开始；明确声明不分页的年度请求
+        // 必须保留自身的起止日期参数，并使用现有通用客户端。
         if (contract.endpoint().equals("namechange") && contract.paging() == PageContract.Paging.CURSOR)
             return params -> fetchNamechange(contract, params, cancelled);
         if (contract.paging() == PageContract.Paging.CURSOR || contract.completion() == PageContract.Completion.EXPLICIT_END) {
@@ -39,7 +39,7 @@ public class TusharePageService {
                     try {
                         var page = future.get(100, TimeUnit.MILLISECONDS);
                         return new PageExecutor.Page(page.rows(), null, false, null);
-                    } catch (TimeoutException waiting) { /* F005 bounds total wait; periodically observe cancellation. */ }
+                    } catch (TimeoutException waiting) { /* F005 限制总等待时间；等待期间定期检查取消状态。 */ }
                 }
             } finally { if (!future.isDone()) future.cancel(true); }
         };

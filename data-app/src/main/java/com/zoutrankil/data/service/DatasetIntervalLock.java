@@ -4,7 +4,7 @@ import com.zoutrankil.data.domain.IntervalLockStore;
 import com.zoutrankil.data.repository.SqliteIntervalLockStore;
 import java.nio.file.Path;
 
-/** Compatible application facade for the persistent interval lock store. */
+/** 持久化日期区间锁存储的兼容应用接口。 */
 public final class DatasetIntervalLock implements IntervalLockStore {
     private final IntervalLockStore store;
 

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/** Serial, bounded write batches. An acknowledgement is never a visibility receipt. */
+/** 串行执行有界写入批次；收到发送确认不等于数据已可读取。 */
 public final class VerifiedBatchExecutor<T, K> {
     public record Policy(int maxRowsPerBatch, int maxBytesPerBatch, int maxBatches,
                          Duration visibilityTimeout, Duration pollInterval) {
@@ -39,18 +39,18 @@ public final class VerifiedBatchExecutor<T, K> {
         public Result { receipts = List.copyOf(receipts); }
     }
     public interface Codec<T, K> {
-        /** Full business key, including period/version/category dimensions. */
+        /** 完整业务键必须包含报告期、版本、类别等维度。 */
         K key(T row);
-        /** Deterministic encoding of all business columns, including null markers. */
+        /** 确定性编码全部业务列，包含显式的空值标记。 */
         byte[] canonicalBytes(T row);
-        /** Dataset value comparison; exact bytes remain the default for ordinary writes. */
+        /** 按数据集规则比较值；普通写入默认仍要求编码字节完全一致。 */
         default boolean equivalent(T expected, T actual) {
             return Arrays.equals(canonicalBytes(expected), canonicalBytes(actual));
         }
-        /** Application byte budget including adapter overhead; not an exact wire-byte measurement. */
+        /** 应用侧字节预算包含适配器开销，不等于精确的网络报文大小。 */
         default int estimatedTransportBytes(T row, byte[] canonical) { return canonical.length; }
     }
-    /** Context supplied only after the shared SQLite submission transaction commits. */
+    /** 共享 SQLite 提交事务完成后，才向执行方提供此上下文。 */
     public record Submission(java.nio.file.Path ledgerPath, String runId, String sliceId,
                              long revision, String sourceFingerprint) {
         public Submission {
@@ -61,20 +61,20 @@ public final class VerifiedBatchExecutor<T, K> {
         }
     }
     public interface Port<T, K> {
-        /** Delegates independently inspect this SQLite authority before starting external publication. */
+        /** 委托方启动外部发布前，须独立核验此 SQLite 账本。 */
         default void submissionRecorded(Submission submission) throws Exception {}
 
-        /** Must fail before sending if schema, WAL, target or ownership is not ready. */
+        /** 表结构、WAL、目标身份或占用归属未准备好时，必须在发送前失败。 */
         void preflight() throws Exception;
-        /** One finite batch. An exception after the call begins has unknown delivery. */
+        /** 只发送一个有限批次；调用开始后若抛出异常，投递结果视为未决。 */
         void send(List<T> rows) throws Exception;
-        /** Actual rows by the exact requested keys; duplicates must remain observable. */
+        /** 按请求的准确业务键读取实际行；不能在接口内隐藏重复记录。 */
         List<T> readback(List<K> keys) throws Exception;
-        /** Explicit bounded capacity for checkpoint revalidation; conservative for existing ports. */
+        /** 显式限定检查点复核容量；现有存储端口默认使用保守上限。 */
         default int recoveryReadbackBatchRows() { return 100; }
-        /** True only after the relevant WAL frontier is settled. */
+        /** 只有相关 WAL 进度已经稳定时，才返回 true。 */
         boolean walSettled() throws Exception;
-        /** Explicit proof that an uncertain sender cannot deliver additional writes. */
+        /** 显式证明结果未决的发送方不会继续追加写入。 */
         default boolean uncertainSenderStopped() throws Exception { return false; }
     }
 
@@ -146,6 +146,7 @@ public final class VerifiedBatchExecutor<T, K> {
                         "pre-send preflight failed: " + error.getClass().getSimpleName());
             }
             String digest = digest(keys, expected);
+            // 发送后不再走普通失败重试：异常可能发生在服务端已接收数据之后。
             boolean acknowledged = true;
             try {
                 port.send(List.copyOf(rows));
@@ -158,6 +159,7 @@ public final class VerifiedBatchExecutor<T, K> {
             boolean matched = false;
             do {
                 try {
+                    // 三个条件缺一不可：发送已确认或已停止、业务键和值精确匹配、相关 WAL 已稳定。
                     matched = (acknowledged || port.uncertainSenderStopped())
                             && exactMatch(keys, expectedRows, port.readback(keys)) && port.walSettled();
                 } catch (Exception transientReadFailure) {
@@ -195,6 +197,7 @@ public final class VerifiedBatchExecutor<T, K> {
         return new Result(Status.PARTIAL, submitted, verified, receipts, "maximum batch count reached");
     }
 
+    /** 行数相等仍可能包含重复键或错误值，因此逐键核对，且每个预期键只能出现一次。 */
     private boolean exactMatch(List<K> keys, Map<K, T> expected, List<T> actual) {
         if (actual == null || actual.size() != keys.size()) return false;
         var found = new HashSet<K>();

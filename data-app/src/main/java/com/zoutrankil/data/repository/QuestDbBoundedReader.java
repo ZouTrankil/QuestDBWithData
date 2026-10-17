@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.function.Function;
 import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
-/** One bounded SELECT per page plus schema preflight; never relies on JDBC full-table buffering. */
+/** 每页执行一次有界 SELECT，并预先校验表结构；不依赖 JDBC 缓冲整张表。 */
 @Repository
 public class QuestDbBoundedReader {
     private static final ObjectMapper JSON = new ObjectMapper();
@@ -44,6 +44,7 @@ public class QuestDbBoundedReader {
         validateEtfAggregateQuery(definition, query);
         DerivedMonthlyReadGuards.validateEquityStyle(definition, query);
         DerivedMonthlyReadGuards.validateMacroCore(definition, query);
+        // 将本页绑定到读取前的来源版本；读取后再次核验，拒绝跨版本混合结果。
         String guardedBefore = guardedSourceVersion(definition);
         String effectiveSourceVersion = guardedBefore == null ? sourceVersion : guardedBefore;
         var prepared = prepare(definition, query, effectiveSourceVersion);
@@ -83,7 +84,7 @@ public class QuestDbBoundedReader {
                 selected.stream().map(mapper).toList(), cursor);
     }
 
-    /** Date bounds limit output buckets; LIMIT is not evidence that the native JOIN scans only that many source rows. */
+    /** 日期条件限制输出桶范围；LIMIT 本身不能证明原生 JOIN 只扫描这些源行。 */
     private static void validateEtfAggregateQuery(DatasetDefinition definition, DatasetReadQuery query) {
         if (!GUARDED_ETF_AGGREGATE_VIEW.equals(definition.objectName())) return;
         if (definition.objectKind() != ObjectKind.MATERIALIZED_VIEW || !definition.dependencies().equals(GUARDED_ETF_AGGREGATE_SOURCES))
@@ -130,8 +131,8 @@ public class QuestDbBoundedReader {
                                          long refreshTxn, long viewTableId, long viewPhysicalTxn,
                                          long viewSeqTxn) {
         String sourceVersion() {
-            // RANGE/FULL refresh can replace MV values without advancing the base checkpoint.
-            // Table identity also prevents a drop/recreate from reusing an old cursor's counters.
+            // RANGE 或 FULL 刷新可能改写物化结果，而基表检查点保持不变。
+            // 同时绑定表身份，防止删除重建后误用旧游标中的事务计数。
             return "base-id:" + baseTableId + ":base-txn:" + basePhysicalTxn + ":base-seq-txn:" + baseSeqTxn
                     + ":refresh-txn:" + refreshTxn + ":mv-id:" + viewTableId + ":mv-txn:" + viewPhysicalTxn
                     + ":mv-seq-txn:" + viewSeqTxn;
@@ -139,9 +140,9 @@ public class QuestDbBoundedReader {
     }
 
     private MaterializedViewState requireCurrentMaterializedView(String objectName) {
-        // DatasetDefinition validates objectName as an identifier, so this fixed metadata lookup is safe.
-        // tables().table_txn is the data version; WAL application uses wal_tables() counters.
-        // These counter domains can differ after FULL/TRUNCATE and must not be compared to one another.
+        // objectName 已由 DatasetDefinition 校验为合法标识符，可用于此固定元数据查询。
+        // tables().table_txn 表示数据版本；WAL 应用进度使用 wal_tables() 的计数。
+        // FULL 或 TRUNCATE 后两类计数可能不同，不能直接互相比较。
         return jdbc.query("SELECT m.view_status,m.refresh_base_table_txn,m.base_table_txn,m.base_table_name,m.view_sql,"
                 + "b.id AS base_table_id,b.table_txn AS base_physical_txn,"
                 + "bw.writerTxn AS base_writer_txn,bw.sequencerTxn AS base_seq_txn,"
@@ -262,13 +263,13 @@ public class QuestDbBoundedReader {
         if (!conditions.isEmpty()) sql.append(" WHERE ").append(String.join(" AND ", conditions));
         sql.append(" ORDER BY ").append(String.join(", ", definition.businessKey().stream()
                 .map(name -> quoted(columns.get(name).storageName()) + " ASC").toList()));
-        sql.append(" LIMIT ").append(query.pageSize() + 1); // Validated bounded integer, not user SQL.
+        sql.append(" LIMIT ").append(query.pageSize() + 1); // 这里拼接的是经过边界校验的整数，不是用户提供的 SQL。
         return new PreparedRead(sql.toString(), parameters, fingerprint);
     }
 
     private void verifySchema(DatasetDefinition definition, List<String> projection, Map<String, Column> columns) {
         var required = new HashSet<>(projection);
-        // Validate every declared column so filter-only fields cannot silently change their physical type.
+        // 校验所有声明列，防止仅用于过滤的字段悄然改变存储类型。
         required.addAll(columns.keySet());
         Map<String, String> actual = jdbc.query(connection -> {
             var statement = connection.prepareStatement("SELECT \"column\", \"type\" FROM table_columns('"

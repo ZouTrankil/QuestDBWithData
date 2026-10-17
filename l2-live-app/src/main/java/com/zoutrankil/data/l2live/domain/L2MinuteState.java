@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/** Availability is captured once while processing; this is a partial observation, not a finalized bar. */
+/** 可用时间在处理时只记录一次；结果是部分分钟观察，不是已完结的分钟行情。 */
 public record L2MinuteState(String symbol,LocalDate tradeDate,Instant minuteStart,Instant availableAt,
         long revision,Map<String,Object> metrics) {
     public L2MinuteState {

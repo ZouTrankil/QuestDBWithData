@@ -7,7 +7,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Import;
 
-/** Separate entry point in the existing project; does not scan legacy QuestDB CLI beans. */
+/** 独立的批处理入口；不扫描旧 QuestDB 命令行组件，避免启动无关任务。 */
 @SpringBootConfiguration
 @Import(RuntimeConfiguration.class)
 public class BatchApplication {

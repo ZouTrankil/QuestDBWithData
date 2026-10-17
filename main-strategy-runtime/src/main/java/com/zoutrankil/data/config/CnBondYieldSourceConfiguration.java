@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
-/** Imports only the existing native ChinaBond WebFlux source, without isolated batch jobs or writers. */
+/** 仅导入现有原生中债 WebFlux 来源，不加载隔离的 Batch 作业或写入器。 */
 @Configuration(proxyBeanMethods=false)
 public class CnBondYieldSourceConfiguration {
-    /** A holder avoids adding another unqualified SharedRequestBudget candidate to TushareClient. */
+    /** 通过包装对象注入，避免 TushareClient 出现多个未限定的 SharedRequestBudget 候选。 */
     public static final class PublicBudget implements AutoCloseable {
         private final SharedRequestBudget budget;
         PublicBudget(TushareProperties properties){budget=SourceRuntimeConfiguration.createChinabondRequestBudget(properties);}

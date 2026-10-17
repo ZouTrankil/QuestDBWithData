@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.HexFormat;
 
-/** Synchronous source callbacks provide backpressure: the next page follows verified persistence. */
+/** 来源回调同步执行：本页完成持久化和回读核验后，才获取下一页，形成背压。 */
 public final class SyncJobRunner<T, K> {
     public record Page<T>(List<T> rows, String sourceFingerprint, String responseEvidence, String cursor) {
         public Page {
@@ -34,16 +34,16 @@ public final class SyncJobRunner<T, K> {
         SourceCompletion fetch(FrozenRequest request, PageConsumer<T> consumer, BooleanSupplier cancelled) throws Exception;
         VerifiedBatchExecutor.Codec<T, K> codec();
         VerifiedBatchExecutor.Port<T, K> port();
-        /** Conflict exclusion may cover more dates than the bounded source request. */
+        /** 为防止写入冲突，加锁日期范围可以大于本次来源请求的范围。 */
         default DatasetIntervalLock.Scope conflictScope(FrozenRequest request) {
             return request.from() == null ? DatasetIntervalLock.Scope.allDates(request.definition().datasetId())
                     : new DatasetIntervalLock.Scope(request.definition().datasetId(), request.from(), request.to());
         }
-        /** Native asynchronous materialization can request a longer bounded visibility wait. */
+        /** 原生异步物化可显式申请更长、但仍有上限的可见性等待时间。 */
         default Duration visibilityTimeout() { return Duration.ofSeconds(20); }
-        /** Opt-in transport capacity; adapters must derive changed layouts from the frozen request. */
+        /** 按需指定传输容量；适配器改变批次布局时，必须依据已冻结的请求。 */
         default int maxWriteBatchRows(FrozenRequest request) { return 250; }
-        /** True when the dataset has a durable side effect that needs explicit reconciliation before retry. */
+        /** 数据集存在持久化副作用、重试前必须显式核对时，返回 true。 */
         default boolean recoveryRequired(String runId) throws Exception { return false; }
     }
     private final SyncRunLedger ledger;
@@ -65,6 +65,10 @@ public final class SyncJobRunner<T, K> {
         var recovery=VerifiedSliceRecovery.load(ledger,priorRunId,request,targetId);
         return execute(runId,parentRunId,targetId,request,adapter,cancelled,recovery);
     }
+    /**
+     * 一次运行依次登记意图、预检、领取区间锁，再逐页写入和核验。
+     * 来源完整性与全部批次验证同时通过才进入成功终态；未决结果保留锁等待核对。
+     */
     private Result execute(String runId,String parentRunId,String targetId,FrozenRequest request,
                            Adapter<T,K> adapter,BooleanSupplier cancelled,VerifiedSliceRecovery recovery) throws Exception {
         if (!request.definition().enabled()) throw new IllegalArgumentException("Job is disabled");
@@ -117,6 +121,7 @@ public final class SyncJobRunner<T, K> {
                 }, stopped);
             } finally { accepting.set(false); }
             check(stopped);
+            // 空页不能单独证明没有数据；页数、行数及来源终止证据必须覆盖实际交付的全部分页。
             if (completion == null || !completion.complete() || completion.pages() != progress.pages
                     || completion.rows() != progress.sourceRows || completion.evidence() == null || completion.evidence().isBlank())
                 throw new IllegalStateException("Source completion does not cover emitted pages");
@@ -133,7 +138,7 @@ public final class SyncJobRunner<T, K> {
             locks.releaseVerified(lease);
             return new Result(runId, state, progress.sourceRows, progress.verifiedRows, null,progress.reusedRows);
         } catch (Exception failure) {
-            // A submitted or unrecorded outcome retains exclusion; elapsed time never releases a writer.
+            // 已经提交或无法确认的结果仍须保留互斥占用；超时不代表写入方已经停止。
             boolean uncertain = progress.uncertain;
             boolean recoveryRequired = false;
             try {
@@ -163,8 +168,8 @@ public final class SyncJobRunner<T, K> {
                     failure.addSuppressed(persistenceFailure);
                 }
             }
-            // Preserve FETCHED/VALIDATED slices when IN_DOUBT is not a legal slice transition,
-            // but always try to put the owning attempt and run in doubt independently.
+            // 分片状态不允许转为 IN_DOUBT 时，保留 FETCHED 或 VALIDATED 原状态，
+            // 但仍分别尝试将所属执行尝试和整次运行标记为结果未决。
             SyncRunState ownerState = uncertain ? SyncRunState.IN_DOUBT : state;
             try { finishFailure(attempt, ownerState, failure); }
             catch (Exception persistenceFailure) {
@@ -178,8 +183,8 @@ public final class SyncJobRunner<T, K> {
                 failure.addSuppressed(persistenceFailure);
             }
             if (uncertain) {
-                // A publication adapter may already have retained this same lease while recording
-                // its durable journal. Re-read ownership before applying the idempotent outcome.
+                // 发布适配器记录持久化日志时，可能已将同一租约标记为未决。
+                // 先重新读取归属，再幂等更新租约状态。
                 var currentLease = locks.findOwned(runId, lease.scope());
                 if (currentLease == null || !currentLease.id().equals(lease.id()))
                     throw new IllegalStateException("Uncertain run no longer owns its original interval lease", failure);
@@ -309,8 +314,8 @@ public final class SyncJobRunner<T, K> {
     private String error(Exception failure) throws Exception {
         var detail = new LinkedHashMap<String,Object>();
         detail.put("errorCode", failure.getClass().getSimpleName());
-        // Code locations make local preflight failures diagnosable without persisting
-        // provider messages, request bodies or credentials.
+        // 记录本地代码位置以便排查预检失败，
+        // 不持久化供应商消息、请求体或凭据。
         detail.put("errorOrigin", Arrays.stream(failure.getStackTrace()).limit(12)
                 .map(StackTraceElement::toString).toList());
         var causes = new ArrayList<Map<String,Object>>();
@@ -318,7 +323,7 @@ public final class SyncJobRunner<T, K> {
             causes.add(Map.of("errorCode", cause.getClass().getSimpleName(), "origin",
                     Arrays.stream(cause.getStackTrace()).limit(8).map(StackTraceElement::toString).toList()));
         if (!causes.isEmpty()) detail.put("causeOrigins", causes);
-        // PageExecutor reasons are generated locally and contain only classifications, never request credentials.
+        // PageExecutor 的原因由本地生成，只含错误分类，不含请求凭据。
         if (failure instanceof PageExecutor.Incomplete incomplete) {
             detail.put("sourceReason", incomplete.getMessage());
             detail.put("consumedPages", incomplete.consumedPages());

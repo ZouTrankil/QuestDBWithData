@@ -2,7 +2,7 @@ package com.zoutrankil.data.domain;
 
 import java.util.*;
 
-/** Versioned business-to-storage contract. A schema projection is not a dataset definition. */
+/** 带版本的业务与存储契约；表结构投影不等同于完整数据集定义。 */
 public record DatasetDefinition(
         String datasetId, int schemaVersion, String provider, String owner, String objectName,
         ObjectKind objectKind, List<Column> columns, List<String> businessKey,
@@ -16,7 +16,7 @@ public record DatasetDefinition(
         VARCHAR, SYMBOL, UUID, LONG256, BINARY, IPV4, DATE, TIMESTAMP, TIMESTAMP_NS }
     public enum TemporalKind { BUSINESS_DATE, INSTANT, TECHNICAL }
 
-    /** Format includes epoch unit where applicable; zone and precision are never inferred. */
+    /** 适用时格式需包含纪元单位；不隐式推断时区或精度。 */
     public record TemporalContract(TemporalKind kind, String sourceFormat, String zone,
                                    String precision, String meaning) {
         public TemporalContract {

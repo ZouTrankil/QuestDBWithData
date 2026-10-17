@@ -19,6 +19,7 @@ import java.util.Set;
 import com.zoutrankil.data.domain.SyncJobOwner;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 
+/** 股票基础快照同步入口：获取来源、映射业务字段、写入并核验 QuestDB 可见行。 */
 @Service
 public class StockBasicSyncService implements SyncJobOwner {
     @Override public String datasetId() { return "stock_basic_snapshot"; }
@@ -47,6 +48,7 @@ public class StockBasicSyncService implements SyncJobOwner {
         this.schemaMigrationService = schemaMigrationService;
     }
 
+    /** 提交行数与可见行数不一致即失败，不能仅凭发送成功报告同步完成。 */
     public StockBasicSyncReport syncToQuestDb()
             throws IOException, InterruptedException {
         schemaMigrationService.migrate();

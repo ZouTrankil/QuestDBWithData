@@ -6,7 +6,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 
-/** Typed key and frozen field map for the 108 nullable daily L2 feature values. */
+/** 类型化业务键及固定字段映射，承载 108 个可为空的日频 L2 特征值。 */
 public record L2DailyFeatures(LocalDate tradeDate, String symbol,
                               Map<L2DailyFeatureField, Object> features) {
     public L2DailyFeatures {

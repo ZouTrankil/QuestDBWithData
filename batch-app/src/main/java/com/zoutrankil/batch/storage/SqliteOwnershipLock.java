@@ -12,7 +12,7 @@ import java.nio.file.StandardOpenOption;
 import java.sql.SQLException;
 import java.util.Optional;
 
-/** Same-host process locks; SQLite metadata must remain on a local filesystem. */
+/** 同一主机内的进程互斥锁；SQLite 元数据必须保存在本地文件系统。 */
 public final class SqliteOwnershipLock {
     private SqliteOwnershipLock() {}
 

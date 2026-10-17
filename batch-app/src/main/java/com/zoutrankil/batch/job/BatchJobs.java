@@ -21,6 +21,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
 import org.springframework.transaction.TransactionDefinition;
 
+/**
+ * 定义 Batch 步骤和业务完成门槛。框架步骤执行结束不等于数据已经就绪，
+ * 必须同时检查业务账本中的状态和完成证据。
+ */
 public final class BatchJobs {
     private BatchJobs() {}
     public static Job postClose(JobRepository repository, PlatformTransactionManager transactionManager,
@@ -38,6 +42,7 @@ public final class BatchJobs {
         },transactionManager).build();
         return builder.next(verification).build();
     }
+    /** 来源采集和外部落库不共用 SQLite 长事务，避免网络等待阻塞元数据提交。 */
     public static Job source(JobRepository repository, PlatformTransactionManager transactionManager,
                              SqliteLedger ledger, SourceProductRunner runner, String dataset) {
         SourceContract.load(dataset);
@@ -107,6 +112,7 @@ public final class BatchJobs {
             RunRequest request=ledger.request(instance);
             var states=ledger.stages(instance);
             if (states.getOrDefault(stage.id(),BusinessState.WAITING_UPSTREAM).ready()) return RepeatStatus.FINISHED;
+            // 上游必须满足业务就绪条件；仅有执行记录或框架成功标记还不足以继续。
             if (stage.dependencies().stream().anyMatch(d -> !states.getOrDefault(d,BusinessState.WAITING_UPSTREAM).ready())) {
                 ledger.stage(request,stage.id(),BusinessState.WAITING_UPSTREAM,null,"upstream-not-ready");
                 throw new IllegalStateException("upstream-not-ready:"+stage.id());
@@ -114,6 +120,7 @@ public final class BatchJobs {
             ledger.stage(request,stage.id(),BusinessState.RUNNING,null,null);
             StageExecutor.Result result;
             try { result=executor.execute(request,stage); }
+            // 调用已开始后抛异常，无法据此断言外部没有写入，统一交给未决恢复流程。
             catch (Exception error) {
                 result=new StageExecutor.Result(BusinessState.IN_DOUBT,null,"executor-outcome-unknown:"+error.getClass().getSimpleName());
             }
