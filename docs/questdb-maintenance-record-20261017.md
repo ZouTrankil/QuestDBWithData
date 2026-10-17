@@ -12,7 +12,11 @@
 ./gradlew questdbMaintenance --args='retire-sync-metadata'
 ```
 
-`mv_etf_market_overview_daily_v1`、`mv_market_breadth_daily_v1`、`mv_retail_sentiment_daily_v1` 是 QuestDB 原生 `MATERIALIZED VIEW`。它们在 `tables()` 中也会出现，因为物化结果需要物理存储；类型应通过 `materialized_views()` 或 `information_schema.tables.table_type` 判断。Java 和 Python 直接读取上述原生 MV；原有重复 `v_*` 普通视图已在 2026-10-17 清理，不再安装或读取。
+`mv_etf_market_overview_daily`、`mv_market_breadth_daily`、`mv_retail_sentiment_daily` 是 QuestDB 原生 `MATERIALIZED VIEW`。它们在 `tables()` 中也会出现，因为物化结果需要物理存储；类型应通过 `materialized_views()` 或 `information_schema.tables.table_type` 判断。Java 和 Python 直接读取上述原生 MV；原有重复 `v_*` 普通视图已在 2026-10-17 清理，不再安装或读取。
+
+2026-10-17 已移除这三个对象名末尾的 `_v1`。当前实例拒绝对物化视图执行原地 `RENAME TABLE`，因此按原定义建立新名字，完成首次自动计算，再逐字段核对全部 2,117 / 2,226 / 914 条历史聚合结果后删除旧名字。ETF 保持即时刷新，市场广度和散户情绪保持每分钟定时刷新；ETF 本地检查点已迁移至新名称及新物理对象身份。Java/Python 查询、任务定义和分类 CSV 已同步，运行中的应用需重启加载新引用。迁移记录保存在 `var/mv-canonical-names/20261017T010618Z/`。
+
+同日将市场广度和散户情绪实现中的 `V1` 类名、文件名及引用一并改为无版本名称，包括实体、映射、读取仓储、物化接口、任务入口和相关测试。它们继续使用上述无版本数据库名称，历史数据、计算字段及刷新策略保持原契约。
 
 ETF MV 使用 `REFRESH IMMEDIATE` 处理 `etf_share` 基表增量。它还有 `etf_daily` JOIN 来源，QuestDB 不会仅因右侧历史修正就自动重算所有旧桶。因此 Java 检查两侧的物理身份、事务和 WAL 状态：右侧修正、输出重建或缺失证书执行 `FULL`，仅左侧修订执行 `INCREMENTAL`。刷新完成后按最多 31 天的窗口比对整个历史的业务日期、计数和聚合值；来源或输出在核验中变化时不推进检查点。未变化时复用原证书。
 

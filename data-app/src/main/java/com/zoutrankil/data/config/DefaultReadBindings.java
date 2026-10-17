@@ -9,8 +9,8 @@ import com.zoutrankil.data.derived.mapper.BacktestDailyViewMapper;
 import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
 import com.zoutrankil.data.derived.mapper.EtfMarketOverviewDailyViewMapper;
 import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
-import com.zoutrankil.data.derived.mapper.MarketBreadthDailyV1Mapper;
-import com.zoutrankil.data.derived.mapper.RetailSentimentDailyV1Mapper;
+import com.zoutrankil.data.derived.mapper.MarketBreadthDailyMapper;
+import com.zoutrankil.data.derived.mapper.RetailSentimentDailyMapper;
 
 import com.zoutrankil.data.domain.*;
 
@@ -33,9 +33,9 @@ final class DefaultReadBindings {
             typed("mv_backtest_daily", 1, BacktestDailyViewValue.class, new BacktestDailyViewMapper()::fromValues),
             typed("macro_core_monthly", 1, MacroCoreMonthly.class, new MacroCoreMonthlyMapper()::fromValues),
             typed("equity_style_monthly", 1, EquityStyleMonthly.class, new EquityStyleMonthlyMapper()::fromValues),
-            typed("mv_etf_market_overview_daily_v1", 1, EtfMarketOverviewDailyView.class, new EtfMarketOverviewDailyViewMapper()::fromValues),
-            typed("mv_retail_sentiment_daily_v1", 1, RetailSentimentDailyV1.class, new RetailSentimentDailyV1Mapper()::fromValues),
-            typed("mv_market_breadth_daily_v1", 1, MarketBreadthDailyV1.class, new MarketBreadthDailyV1Mapper()::fromValues),
+            typed("mv_etf_market_overview_daily", 1, EtfMarketOverviewDailyView.class, new EtfMarketOverviewDailyViewMapper()::fromValues),
+            typed("mv_retail_sentiment_daily", 1, RetailSentimentDaily.class, new RetailSentimentDailyMapper()::fromValues),
+            typed("mv_market_breadth_daily", 1, MarketBreadthDaily.class, new MarketBreadthDailyMapper()::fromValues),
 
             // Explicit generic contracts from the registered repository definitions, not a catch-all fallback.
             generic("cn_bond_yield_curve", 1),

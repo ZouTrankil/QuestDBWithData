@@ -73,9 +73,9 @@ class CacheDatasetRetirementTest {
 
             var retained = Map.of(
                     "mv_backtest_daily", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
-                    "mv_market_breadth_daily_v1", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
-                    "mv_retail_sentiment_daily_v1", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
-                    "mv_etf_market_overview_daily_v1", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
+                    "mv_market_breadth_daily", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
+                    "mv_retail_sentiment_daily", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
+                    "mv_etf_market_overview_daily", DatasetDefinition.ObjectKind.MATERIALIZED_VIEW,
                     "cn_bond_yield_curve", DatasetDefinition.ObjectKind.TABLE);
             var bindings = catalog.bind(datasets);
             for (var entry : retained.entrySet()) {

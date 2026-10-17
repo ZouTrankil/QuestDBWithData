@@ -14,9 +14,9 @@ class PrivateQuestDbAttestationsContractTest {
         var specs = new ArrayList<PrivateQuestDbInstanceAttestor.Spec>();
         try (var constructors = mockConstruction(PrivateQuestDbInstanceAttestor.class,
                 (attestor, context) -> specs.add((PrivateQuestDbInstanceAttestor.Spec) context.arguments().getFirst()))) {
-            var first = PrivateQuestDbAttestations.marketBreadthV1();
-            var second = PrivateQuestDbAttestations.marketBreadthV1();
-            var third = PrivateQuestDbAttestations.retailSentimentV1(root -> fail("Construction must not read the fixture"));
+            var first = PrivateQuestDbAttestations.marketBreadth();
+            var second = PrivateQuestDbAttestations.marketBreadth();
+            var third = PrivateQuestDbAttestations.retailSentiment(root -> fail("Construction must not read the fixture"));
             assertEquals(3, constructors.constructed().size());
             constructors.constructed().forEach(attestor -> verifyNoInteractions(attestor));
             first.attest();first.attest();second.attest();third.attest();
@@ -38,7 +38,7 @@ class PrivateQuestDbAttestationsContractTest {
         Path expected = Path.of("fixture");
         try (var constructors = mockConstruction(PrivateQuestDbInstanceAttestor.class,
                 (attestor, context) -> callbacks.add((PrivateQuestDbInstanceAttestor.RootCheck) context.arguments().get(1)))) {
-            PrivateQuestDbAttestations.retailSentimentV1(root -> {visited.add(root);throw failure;});
+            PrivateQuestDbAttestations.retailSentiment(root -> {visited.add(root);throw failure;});
             assertTrue(visited.isEmpty());
             assertSame(failure, assertThrows(IOException.class, () -> callbacks.getFirst().verify(expected)));
             assertEquals(List.of(expected), visited);
@@ -48,7 +48,7 @@ class PrivateQuestDbAttestationsContractTest {
 
     @Test void retailFactoryCannotOmitItsFixtureCallback() {
         try (var constructors = mockConstruction(PrivateQuestDbInstanceAttestor.class)) {
-            assertThrows(NullPointerException.class, () -> PrivateQuestDbAttestations.retailSentimentV1(null));
+            assertThrows(NullPointerException.class, () -> PrivateQuestDbAttestations.retailSentiment(null));
             assertTrue(constructors.constructed().isEmpty());
         }
     }

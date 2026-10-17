@@ -13,7 +13,7 @@ import com.zoutrankil.data.maintenance.storage.MaterializedViewCheckpoints;
 
 /** JOIN 两侧输入版本必须同时匹配本地运行账本中已经验证的证书。 */
 public final class EtfMarketOverviewMaterializedViewReadGuard {
-    public static final String OUTPUT = "mv_etf_market_overview_daily_v1";
+    public static final String OUTPUT = "mv_etf_market_overview_daily";
     public static final String SQL = """
             SELECT
                 s.timestamp AS trade_date,

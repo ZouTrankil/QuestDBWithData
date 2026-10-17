@@ -38,7 +38,7 @@ class EtfMarketOverviewMaterializedViewReadGuardTest {
                 tables.put(table, row);
             }
             alias.put("view_sql", "SELECT * FROM " + OUTPUT); alias.put("view_status", "valid");
-            alias.put("view_table_dir_name", "mv_etf_market_overview_daily_v1~4");
+            alias.put("view_table_dir_name", "mv_etf_market_overview_daily~4");
             view.put("base_table_name", "etf_share"); view.put("refresh_type", "manual");
             view.put("view_status", "valid"); view.put("view_sql", EtfMarketOverviewMaterializedViewReadGuard.SQL);
             view.put("refresh_base_table_txn", 7L); view.put("base_table_txn", 7L);

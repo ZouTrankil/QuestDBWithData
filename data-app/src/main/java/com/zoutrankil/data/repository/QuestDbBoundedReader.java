@@ -3,8 +3,8 @@ package com.zoutrankil.data.repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.storage.DerivedMonthlyReadGuards;
-import com.zoutrankil.data.derived.storage.MarketBreadthDailyV1MaterializationPort;
-import com.zoutrankil.data.derived.storage.RetailSentimentDailyV1MaterializationPort;
+import com.zoutrankil.data.derived.storage.MarketBreadthDailyMaterializationPort;
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -157,14 +157,14 @@ public class QuestDbBoundedReader {
                 + "JOIN wal_tables() vw ON vw.name=m.view_name "
                 + "WHERE m.view_name='" + objectName + "'", rs -> {
             if (!rs.next()) throw new IllegalStateException("Materialized view is absent");
-            if (MarketBreadthDailyV1MaterializationPort.OUTPUT.equals(objectName)
-                    && (!MarketBreadthDailyV1MaterializationPort.SOURCE.equals(rs.getString("base_table_name"))
-                        || !normalizedSql(MarketBreadthDailyV1MaterializationPort.DEFINITION_SQL)
+            if (MarketBreadthDailyMaterializationPort.OUTPUT.equals(objectName)
+                    && (!MarketBreadthDailyMaterializationPort.SOURCE.equals(rs.getString("base_table_name"))
+                        || !normalizedSql(MarketBreadthDailyMaterializationPort.DEFINITION_SQL)
                                 .equals(normalizedSql(rs.getString("view_sql")))))
                 throw new IllegalStateException("Breadth MV differs from its fixed base-table or aggregation definition");
-            if (RetailSentimentDailyV1MaterializationPort.OUTPUT.equals(objectName)
-                    && (!RetailSentimentDailyV1MaterializationPort.SOURCE.equals(rs.getString("base_table_name"))
-                        || !normalizedSql(RetailSentimentDailyV1MaterializationPort.DEFINITION_SQL)
+            if (RetailSentimentDailyMaterializationPort.OUTPUT.equals(objectName)
+                    && (!RetailSentimentDailyMaterializationPort.SOURCE.equals(rs.getString("base_table_name"))
+                        || !normalizedSql(RetailSentimentDailyMaterializationPort.DEFINITION_SQL)
                                 .equals(normalizedSql(rs.getString("view_sql")))))
                 throw new IllegalStateException("Retail sentiment MV differs from its fixed base-table or aggregation definition");
             String status = rs.getString("view_status");

@@ -76,7 +76,7 @@ class ReadBindingApplicationTest {
 
     @Test void completeApplicationRegistersEveryActiveReaderWithoutDatabaseAccess() throws Exception {
         var expectedTyped = originalTypedRows();
-        expectedTyped.put("mv_etf_market_overview_daily_v1", expectedTyped.get("v_etf_market_overview_daily"));
+        expectedTyped.put("mv_etf_market_overview_daily", expectedTyped.get("v_etf_market_overview_daily"));
         expectedTyped.put("mv_backtest_daily", expectedTyped.get("v_backtest_daily"));
         expectedTyped.keySet().removeAll(CacheDatasetRetirementTest.RETIRED);
         assertEquals(10, expectedTyped.size());

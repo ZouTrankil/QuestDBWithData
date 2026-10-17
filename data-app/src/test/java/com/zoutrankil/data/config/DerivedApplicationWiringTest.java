@@ -46,9 +46,9 @@ class DerivedApplicationWiringTest {
         try (var context = application.run("list-sync-jobs")) {
             for (var type : List.of(EquityStyleMonthlySourceReadPort.class, EquityStyleMonthlyTarget.class,
                     MacroCoreMonthlySourceReadPort.class, MacroCoreMonthlyTarget.class,
-                    MarketBreadthDailyV1Target.class, RetailSentimentDailyV1Target.class,
+                    MarketBreadthDailyTarget.class, RetailSentimentDailyTarget.class,
                     EquityStyleMonthlyJobService.class, MacroCoreMonthlyJobService.class,
-                    MarketBreadthDailyV1JobService.class, RetailSentimentDailyV1JobService.class)) {
+                    MarketBreadthDailyJobService.class, RetailSentimentDailyJobService.class)) {
                 assertEquals(1, context.getBeansOfType(type).size(), type.getName());
             }
             assertEquals(override ? "java_d103_index_monthly_wiring" : "index_monthly",
@@ -58,8 +58,8 @@ class DerivedApplicationWiringTest {
             assertEquals(override ? "java_d104_macro_core_monthly_wiring" : "",
                     context.getBean(MacroCoreMonthlyTarget.class).table());
             var owners = context.getBeansOfType(SyncJobOwner.class).values();
-            for (var dataset : List.of("equity_style_monthly", "macro_core_monthly", "mv_market_breadth_daily_v1",
-                    "mv_retail_sentiment_daily_v1")) {
+            for (var dataset : List.of("equity_style_monthly", "macro_core_monthly", "mv_market_breadth_daily",
+                    "mv_retail_sentiment_daily")) {
                 assertEquals(1, owners.stream().filter(owner -> owner.datasetId().equals(dataset)).count(), dataset);
             }
             var datasets = context.getBean(DatasetRegistry.class);

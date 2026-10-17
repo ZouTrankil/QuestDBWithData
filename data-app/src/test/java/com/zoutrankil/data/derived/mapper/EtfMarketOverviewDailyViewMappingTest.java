@@ -110,7 +110,7 @@ class EtfMarketOverviewDailyViewMappingTest {
 
     @Test void viewDefinitionHasOnlyDateIdentityAndTwoExactBaseDependencies() {
         var definition = EtfMarketOverviewDailyViewDataset.DEFINITION;
-        assertEquals("mv_etf_market_overview_daily_v1", definition.datasetId());
+        assertEquals("mv_etf_market_overview_daily", definition.datasetId());
         assertEquals(definition.datasetId(), definition.objectName());
         assertEquals(DatasetDefinition.ObjectKind.MATERIALIZED_VIEW, definition.objectKind());
         assertEquals(FIELDS, definition.storageColumns());

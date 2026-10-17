@@ -13,8 +13,8 @@ public final class EtfMarketOverviewDailyViewDataset {
             "SAMPLE BY 1d ALIGN TO CALENDAR aggregate date carried at exact UTC midnight; not an event timestamp");
 
     public static final DatasetDefinition DEFINITION = new DatasetDefinition(
-            "mv_etf_market_overview_daily_v1", 1, "python.derived.market_barometer_views",
-            "java.etf_overview_maintenance", "mv_etf_market_overview_daily_v1", ObjectKind.MATERIALIZED_VIEW,
+            "mv_etf_market_overview_daily", 1, "python.derived.market_barometer_views",
+            "java.etf_overview_maintenance", "mv_etf_market_overview_daily", ObjectKind.MATERIALIZED_VIEW,
             List.of(
                     new Column("etf_share.timestamp", "trade_date", "trade_date",
                             StorageType.TIMESTAMP, false, "Calendar-day identity of the direct join aggregate", TRADE_DATE),

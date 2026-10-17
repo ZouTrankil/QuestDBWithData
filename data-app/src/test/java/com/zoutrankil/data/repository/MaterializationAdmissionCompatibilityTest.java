@@ -1,8 +1,8 @@
 package com.zoutrankil.data.repository;
 
-import com.zoutrankil.data.derived.storage.RetailSentimentDailyV1MaterializationPort;
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
 
-import com.zoutrankil.data.derived.storage.MarketBreadthDailyV1MaterializationPort;
+import com.zoutrankil.data.derived.storage.MarketBreadthDailyMaterializationPort;
 
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.JobDefinitionJson;
@@ -67,8 +67,8 @@ class MaterializationAdmissionCompatibilityTest {
         try(var constructors=mockConstruction(PrivateQuestDbInstanceAttestor.class)) {
             for(boolean retail:new boolean[]{false,true}) {
                 var jdbc=mock(JdbcTemplate.class);var port=spy(port(retail,jdbc,properties(retail),true,TARGET));
-                if(port instanceof RetailSentimentDailyV1MaterializationPort p)doReturn(TARGET).when(p).targetId();
-                else doReturn(TARGET).when((MarketBreadthDailyV1MaterializationPort)port).targetId();
+                if(port instanceof RetailSentimentDailyMaterializationPort p)doReturn(TARGET).when(p).targetId();
+                else doReturn(TARGET).when((MarketBreadthDailyMaterializationPort)port).targetId();
                 var attestor=constructors.constructed().getLast();
                 call(port,"requireAdmittedMutation");verifyNoInteractions(attestor,jdbc);
                 var rejection=new IllegalStateException("private proof rejected");
@@ -87,22 +87,22 @@ class MaterializationAdmissionCompatibilityTest {
             port(true,mock(JdbcTemplate.class),properties(true),true,null);
             var check=callbacks.getFirst();assertNotNull(check);
             Path root=Files.createDirectory(temporary.resolve("d098")).toRealPath();
-            writeMarker(root,"D098",root,List.of(RetailSentimentDailyV1MaterializationPort.SOURCE,
-                    RetailSentimentDailyV1MaterializationPort.OUTPUT));
+            writeMarker(root,"D098",root,List.of(RetailSentimentDailyMaterializationPort.SOURCE,
+                    RetailSentimentDailyMaterializationPort.OUTPUT));
             assertDoesNotThrow(()->check.verify(root));
-            writeMarker(root,"D095",root,List.of("l2_daily_features","mv_retail_sentiment_daily_v1"));
+            writeMarker(root,"D095",root,List.of("l2_daily_features","mv_retail_sentiment_daily"));
             assertEquals("D098 private fixture marker differs from the admitted source and MV",
                     assertThrows(IllegalStateException.class,()->check.verify(root)).getMessage());
             writeMarker(root,"D098",root,List.of("l2_daily_features","l2_daily_features"));
             assertThrows(IllegalArgumentException.class,()->check.verify(root));
-            writeMarker(root,"D098",temporary.toRealPath(),List.of("l2_daily_features","mv_retail_sentiment_daily_v1"));
+            writeMarker(root,"D098",temporary.toRealPath(),List.of("l2_daily_features","mv_retail_sentiment_daily"));
             assertThrows(IllegalStateException.class,()->check.verify(root));
         }
     }
 
     private static Object port(boolean retail,JdbcTemplate jdbc,QuestDbProperties properties,boolean enabled,String expected) {
-        return retail?new RetailSentimentDailyV1MaterializationPort(jdbc,properties,enabled,expected)
-                :new MarketBreadthDailyV1MaterializationPort(jdbc,properties,enabled,expected);
+        return retail?new RetailSentimentDailyMaterializationPort(jdbc,properties,enabled,expected)
+                :new MarketBreadthDailyMaterializationPort(jdbc,properties,enabled,expected);
     }
     private static QuestDbProperties properties(boolean retail) {
         var result=new QuestDbProperties();result.setPgPort(retail?18822:18812);result.setQwpPort(retail?19010:19000);return result;

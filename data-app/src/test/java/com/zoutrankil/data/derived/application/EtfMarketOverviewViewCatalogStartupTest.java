@@ -37,10 +37,10 @@ class EtfMarketOverviewViewCatalogStartupTest {
             var datasets = context.getBean(DatasetRegistry.class);
             var jobs = context.getBean(SyncJobRegistry.class);
             assertEquals(EtfMarketOverviewDailyViewDataset.DEFINITION,
-                    datasets.require("mv_etf_market_overview_daily_v1").definition());
+                    datasets.require("mv_etf_market_overview_daily").definition());
             assertNotNull(context.getBean(EtfMarketOverviewDailyViewReadRepository.class));
-            assertEquals(Set.of(DatasetDefinition.Capability.READ), datasets.require("mv_etf_market_overview_daily_v1").definition().capabilities());
-            assertTrue(jobs.definitions().stream().noneMatch(job -> job.datasetId().equals("mv_etf_market_overview_daily_v1")));
+            assertEquals(Set.of(DatasetDefinition.Capability.READ), datasets.require("mv_etf_market_overview_daily").definition().capabilities());
+            assertTrue(jobs.definitions().stream().noneMatch(job -> job.datasetId().equals("mv_etf_market_overview_daily")));
             assertNotNull(jobs.require("data.etf_share", 3)); assertNotNull(jobs.require("data.etf_daily", 1));
             assertTrue(jobs.definitions().stream().noneMatch(job -> job.datasetId().equals("etf_market_overview_daily_cache")));
             assertTrue(datasets.definitions().stream().noneMatch(dataset -> Set.of("etf_market_overview_daily_cache", "market_barometer_cache_coverage").contains(dataset.objectName())));

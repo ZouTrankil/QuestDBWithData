@@ -1,6 +1,6 @@
 package com.zoutrankil.data.repository;
 
-import com.zoutrankil.data.derived.storage.RetailSentimentDailyV1MaterializationPort;
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.*;
 
 /** A refreshed MV may have new physical values while its base checkpoint is unchanged. */
 class QuestDbRetailSentimentMvReadGuardTest {
-    private static final DatasetDefinition DEFINITION = RetailSentimentDailyV1Dataset.DEFINITION;
+    private static final DatasetDefinition DEFINITION = RetailSentimentDailyDataset.DEFINITION;
 
     private record State(String status, long baseId, long baseSeqTxn, long refreshTxn, long viewId,
                          long viewSeqTxn, long basePhysicalTxn, long viewPhysicalTxn) {
@@ -31,8 +31,8 @@ class QuestDbRetailSentimentMvReadGuardTest {
 
         Map<String, Object> columns() {
             return Map.ofEntries(Map.entry("view_status", status), Map.entry("base_table_id", baseId),
-                    Map.entry("base_table_name", RetailSentimentDailyV1MaterializationPort.SOURCE),
-                    Map.entry("view_sql", RetailSentimentDailyV1MaterializationPort.DEFINITION_SQL),
+                    Map.entry("base_table_name", RetailSentimentDailyMaterializationPort.SOURCE),
+                    Map.entry("view_sql", RetailSentimentDailyMaterializationPort.DEFINITION_SQL),
                     Map.entry("base_table_txn", baseSeqTxn), Map.entry("refresh_base_table_txn", refreshTxn),
                     Map.entry("base_physical_txn", basePhysicalTxn), Map.entry("base_writer_txn", baseSeqTxn),
                     Map.entry("base_seq_txn", baseSeqTxn), Map.entry("base_buffered_txns", 0L),
@@ -143,7 +143,7 @@ class QuestDbRetailSentimentMvReadGuardTest {
 
     @Test void sameNameFreshMvWithWrongBaseOrAggregationFailsOnItsFirstPage() throws Exception {
         for (var change : List.of(Map.entry("base_table_name", "another_factor"),
-                Map.entry("view_sql", RetailSentimentDailyV1MaterializationPort.DEFINITION_SQL
+                Map.entry("view_sql", RetailSentimentDailyMaterializationPort.DEFINITION_SQL
                         .replace("avg(gmm_retail_ratio)", "sum(gmm_retail_ratio)")))) {
             var state = new LinkedHashMap<>(CURRENT.columns());
             state.put(change.getKey(), change.getValue());
@@ -155,7 +155,7 @@ class QuestDbRetailSentimentMvReadGuardTest {
 
     @Test void fixedNativeMvSqlAllowsOnlyWhitespaceAndCaseNormalization() throws Exception {
         var state = new LinkedHashMap<>(CURRENT.columns());
-        state.put("view_sql", "  " + RetailSentimentDailyV1MaterializationPort.DEFINITION_SQL
+        state.put("view_sql", "  " + RetailSentimentDailyMaterializationPort.DEFINITION_SQL
                 .toLowerCase(Locale.ROOT).replace(" ", "  ") + "  ");
         var fixture = new Fixture(List.of(state));
         assertEquals(1, fixture.read(null).rows().size());

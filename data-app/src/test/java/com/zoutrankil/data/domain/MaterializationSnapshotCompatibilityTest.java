@@ -21,8 +21,8 @@ class MaterializationSnapshotCompatibilityTest {
     }
     static Stream<Arguments> dailyTypes() {
         return Stream.of(
-                Arguments.of(MarketBreadthDailyV1Snapshot.class, LegacyBreadthSnapshot.class),
-                Arguments.of(RetailSentimentDailyV1Snapshot.class, LegacyRetailSnapshot.class));
+                Arguments.of(MarketBreadthDailySnapshot.class, LegacyBreadthSnapshot.class),
+                Arguments.of(RetailSentimentDailySnapshot.class, LegacyRetailSnapshot.class));
     }
 
     @ParameterizedTest @MethodSource("monthlyTypes")

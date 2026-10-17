@@ -1,6 +1,6 @@
 package com.zoutrankil.data.repository;
 
-import com.zoutrankil.data.derived.storage.MarketBreadthDailyV1MaterializationPort;
+import com.zoutrankil.data.derived.storage.MarketBreadthDailyMaterializationPort;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -17,7 +17,7 @@ import org.springframework.jdbc.core.*;
 
 /** A refreshed MV may have new physical values while its base checkpoint is unchanged. */
 class QuestDbMaterializedViewReadGuardTest {
-    private static final DatasetDefinition DEFINITION = MarketBreadthDailyV1Dataset.DEFINITION;
+    private static final DatasetDefinition DEFINITION = MarketBreadthDailyDataset.DEFINITION;
 
     private record State(String status, long baseId, long baseSeqTxn, long refreshTxn, long viewId,
                          long viewSeqTxn, long basePhysicalTxn, long viewPhysicalTxn) {
@@ -31,8 +31,8 @@ class QuestDbMaterializedViewReadGuardTest {
 
         Map<String, Object> columns() {
             return Map.ofEntries(Map.entry("view_status", status), Map.entry("base_table_id", baseId),
-                    Map.entry("base_table_name", MarketBreadthDailyV1MaterializationPort.SOURCE),
-                    Map.entry("view_sql", MarketBreadthDailyV1MaterializationPort.DEFINITION_SQL),
+                    Map.entry("base_table_name", MarketBreadthDailyMaterializationPort.SOURCE),
+                    Map.entry("view_sql", MarketBreadthDailyMaterializationPort.DEFINITION_SQL),
                     Map.entry("base_table_txn", baseSeqTxn), Map.entry("refresh_base_table_txn", refreshTxn),
                     Map.entry("base_physical_txn", basePhysicalTxn), Map.entry("base_writer_txn", baseSeqTxn),
                     Map.entry("base_seq_txn", baseSeqTxn), Map.entry("base_buffered_txns", 0L),
@@ -143,7 +143,7 @@ class QuestDbMaterializedViewReadGuardTest {
 
     @Test void sameNameFreshMvWithWrongBaseOrAggregationFailsOnItsFirstPage() throws Exception {
         for (var change : List.of(Map.entry("base_table_name", "another_factor"),
-                Map.entry("view_sql", MarketBreadthDailyV1MaterializationPort.DEFINITION_SQL
+                Map.entry("view_sql", MarketBreadthDailyMaterializationPort.DEFINITION_SQL
                         .replace("avg(pct_change)", "sum(pct_change)")))) {
             var state = new LinkedHashMap<>(CURRENT.columns());
             state.put(change.getKey(), change.getValue());
@@ -155,7 +155,7 @@ class QuestDbMaterializedViewReadGuardTest {
 
     @Test void fixedNativeMvSqlAllowsOnlyWhitespaceAndCaseNormalization() throws Exception {
         var state = new LinkedHashMap<>(CURRENT.columns());
-        state.put("view_sql", "  " + MarketBreadthDailyV1MaterializationPort.DEFINITION_SQL
+        state.put("view_sql", "  " + MarketBreadthDailyMaterializationPort.DEFINITION_SQL
                 .toLowerCase(Locale.ROOT).replace(" ", "  ") + "  ");
         var fixture = new Fixture(List.of(state));
         assertEquals(1, fixture.read(null).rows().size());
