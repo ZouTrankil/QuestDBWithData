@@ -1,5 +1,7 @@
 # QuestDBWithData
 
+文档统一从[文档目录](docs/README.md)看。开发或交给 AI 扩展前，先读 [AI 开发入口](AGENTS.md) 和 [项目结构与开发规范](docs/project-structure-and-standards.md)。规范区分当前六模块工程与三市场迁移目标，统一时间语义、模块职责和数据发布规则。
+
 简单说，这是一个用 Java 写的数据采集和计算项目。QuestDB 放业务数据，SQLite 记运行状态和恢复进度。
 
 ## 这几个目录是干什么的
@@ -12,11 +14,11 @@
 
 ## 怎么启动
 
-需要 JDK 24。先在 [`config/application.yml`](config/application.yml) 配好 Tushare 和 QuestDB。项目根目录的 `.env` 不会自动读取。
+需要 JDK 24。[`config/application.yml`](config/application.yml) 已提供本项目的运行默认值，数据库、来源 token 和管理 API token 都在这里查看或修改。项目根目录的 `.env` 不会自动读取。
 
 ```sh
 # 数据 API，默认 8080
-APP_API_TOKEN='replace-with-at-least-24-characters' ./gradlew webRun
+./gradlew webRun
 
 # 看看有哪些同步任务
 ./gradlew run --args='show-sync-job-definitions'
@@ -43,7 +45,7 @@ APP_API_TOKEN='replace-with-at-least-24-characters' ./gradlew webRun
 
 - `sync-stock-basic-questdb` 是写隔离测试表的示例，需要 Tushare 和 QuestDB；接入已有 QuestDB 前先看 [Flyway 说明](docs/flyway-schema-management.md)。
 - [模型和字段约定](docs/model-schema-conventions.md)、[QuestDB 使用说明](docs/questdb-usage.md)、[实时 L2 部署说明](deploy/l2-live/README.md)。
-- 数据库维护记录单独放在[这里](docs/questdb-maintenance-record-20261017.md)，刚开始看代码可以先跳过。
+- [同步和因子计算](docs/data-pipeline.md)、[Batch 说明](docs/batch.md)、[QuestDB 维护](docs/questdb-maintenance.md)。
 
 本地验证命令：
 

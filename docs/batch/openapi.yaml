@@ -1,0 +1,297 @@
+openapi: 3.1.0
+info:
+  title: "Java 独立批处理管理接口"
+  version: 0.1.0
+  description: "业务完成状态与 Spring Batch 执行状态分别判断。所有接口需要 Bearer token，只监听本机。"
+servers:
+  - url: http://localhost:9085
+security:
+  - bearerAuth: []
+paths:
+  /v1/health:
+    get:
+      summary: "检查本地运行记录和调度状态"
+      responses:
+        '200': {description: "健康状态；始终报告正式生产执行关闭"}
+        '401': {description: "缺少 token 或 token 无效"}
+        '503': {description: "运行记录或调度状态不可用"}
+  /v1/metrics:
+    get:
+      summary: "查询业务、来源探测和持久写入状态"
+      responses:
+        '200': {description: "只读返回状态计数和调度状态"}
+        '401': {description: "缺少 token 或 token 无效"}
+  /v1/metrics/prometheus:
+    get:
+      summary: "以 Prometheus 文本返回业务、来源、写入、月季覆盖和运行指标"
+      responses:
+        '200': {description: "只读返回 Prometheus 0.0.4 文本"}
+        '401': {description: "缺少 token 或 token 无效"}
+  /v1/coverage/monthly:
+    get:
+      summary: "查询已经实际读回验证的月度覆盖区间"
+      responses:
+        '200': {description: "按数据集、版本和固定范围分组返回连续覆盖；缺口保持分开"}
+        '401': {description: "缺少 token 或 token 无效"}
+  /v1/coverage/quarterly:
+    get:
+      summary: "查询已经实际读回验证的季度覆盖区间"
+      responses:
+        '200': {description: "按数据集、版本和固定范围分组返回连续覆盖；缺口保持分开"}
+        '401': {description: "缺少 token 或 token 无效"}
+  /v1/backfills/plan:
+    post:
+      summary: "仅预览有限范围的回补分区；日频按指定日历，月频按月初，季度按季末，不提交执行"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [job, start, end, maxPartitions, calendarVersion]
+              properties:
+                job: {type: string, pattern: '^source_[a-z0-9_]+$'}
+                start: {type: string, format: date}
+                end: {type: string, format: date}
+                maxPartitions: {type: integer, minimum: 1, maximum: 2000}
+                calendarVersion: {type: string, minLength: 1}
+      responses:
+        '200': {description: "返回分区列表，dryRun=true、enqueued=false"}
+        '400': {description: "任务、日期、预算或日历不正确"}
+        '401': {description: "缺少 token 或 token 无效"}
+        '413': {description: "请求超过 4 KiB"}
+  /v1/tasks:
+    get:
+      summary: "列出注册任务，不启动生产任务"
+      responses:
+        '200': {description: "返回注册任务及正式生产执行关闭标志"}
+  /v1/sources:
+    get:
+      summary: "列出来源契约、字段、业务键和请求限制"
+      responses:
+        '200': {description: "返回已注册来源，不请求供应商"}
+  /v1/sources/collect:
+    post:
+      summary: "采集并保存单个逻辑日或连续月季范围的来源，不写 QuestDB"
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: {type: string, minLength: 1, maxLength: 256}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [dataset, logicalDate, rangeStart, rangeEnd, expectedCodes, universeVersion]
+              properties:
+                dataset: {type: string, enum: [daily, daily_basic, etf_daily, stk_limit, etf_adj, moneyflow, etf_factor, margin_detail, moneyflow_hsgt, stk_suspend, etf_portfolio, stk_factor, stk_st_daily, cn_bond_yield_curve, cyq_perf, index_daily_market, index_daily_basic, exchange_calendar, fina_mainbz, dividend, shibor, shibor_lpr, hibor, cn_cpi, cn_ppi, cn_pmi, cn_m, cn_gdp]}
+                logicalDate: {type: string, format: date}
+                rangeStart: {type: string, format: date, description: "可选，包含起点；月频从月初开始，GDP 季频从季末开始"}
+                rangeEnd: {type: string, format: date, description: "可选，包含终点；必须等于 logicalDate"}
+                expectedCodes:
+                  type: array
+                  minItems: 0
+                  maxItems: 20000
+                  uniqueItems: true
+                  items: {type: string, pattern: '^([0-9]{6}\.(SH|SZ|BJ|OF)|SSE|SZSE)$'}
+                universeVersion: {type: string, minLength: 1}
+                tsCode: {type: [string, 'null']}
+              allOf:
+                - if:
+                    properties:
+                      dataset: {enum: [moneyflow_hsgt, cn_bond_yield_curve]}
+                  then:
+                    properties:
+                      expectedCodes: {maxItems: 0}
+                      tsCode: {type: 'null'}
+                  else:
+                    properties:
+                      expectedCodes: {minItems: 1}
+                - if:
+                    properties:
+                      dataset: {const: etf_portfolio}
+                  then:
+                    properties:
+                      expectedCodes:
+                        items: {type: string, pattern: '^[0-9]{6}\.(SH|SZ|BJ|OF)$'}
+                  else:
+                    properties:
+                      expectedCodes:
+                        items: {type: string, pattern: '^[0-9]{6}\.(SH|SZ|BJ)$'}
+      responses:
+        '200': {description: "返回已保存的探测、内容指纹和文件路径；VERIFYING 不算就绪，同一请求键复用原探测"}
+        '400': {description: "请求范围或契约错误，或同一幂等键的内容冲突"}
+        '401': {description: "缺少 token 或 token 无效"}
+        '413': {description: "来源请求超过 1 MiB"}
+        '503': {description: "供应商或运行记录不可用；错误不当作空来源"}
+  /v1/l2/archives/inspect:
+    post:
+      summary: "检查一个 DFCF ZIP 或 7z 归档的完整性和字段含义，暂存压缩 JSONL，不写 QuestDB"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [path]
+              properties:
+                path: {type: string, minLength: 1, maxLength: 2048, description: "配置的归档根目录内的绝对路径"}
+      responses:
+        '200': {description: "返回执行编号、固定归档路径、完整性检查、解析版本、分表行数、不可变清单和重复修订状态，并保存到 SQLite"}
+        '400': {description: "请求或路径无效"}
+        '401': {description: "缺少 token 或 token 无效"}
+        '409': {description: "保留原执行；归档尚未稳定足够时间，等待配置的稳定间隔后重试"}
+        '413': {description: "请求超过 4 KiB"}
+        '422': {description: "归档损坏、不完整或超过限制"}
+        '503': {description: "SQLite 归档记录不可用"}
+  /v1/l2/subscription/transfer:
+    post:
+      summary: "预览或把指定日期归档从百度分享转存到自己网盘；不下载或导入本地"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [date, dryRun]
+              properties:
+                date: {type: string, format: date}
+                dryRun: {type: boolean, description: "必须明确提供；true 时不执行远端写入"}
+      responses:
+        '200': {description: "返回 WAITING、PLANNED、PRESENT 或 SAVED 及远端路径；SAVED 只表示自有网盘大小已核验，未下载或导入"}
+        '400': {description: "适配器未启用、日期无效或请求错误"}
+        '401': {description: "缺少 token 或 token 无效"}
+        '413': {description: "请求超过 4 KiB"}
+        '503': {description: "供应商、鉴权或转存结果不明；先检查再重试"}
+  /v1/l2/subscription/download:
+    post:
+      summary: "按需转存后下载到唯一的 .incoming/baidu 暂存目录；归档检查仍需单独等待文件稳定后执行"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [date, dryRun]
+              properties:
+                date: {type: string, format: date}
+                dryRun: {type: boolean, description: "必须明确提供；true 时不执行远端或本地写入"}
+      responses:
+        '200': {description: "返回 WAITING、PLANNED、PRESENT 或 DOWNLOADED_UNVALIDATED，以及暂存路径和大小；之后还要检查归档才能使用"}
+        '400': {description: "适配器未启用、日期无效、账号不匹配或请求错误"}
+        '401': {description: "缺少 token 或 token 无效"}
+        '413': {description: "请求超过 4 KiB"}
+        '503': {description: "供应商、进程、转存或下载结果不明；重试前检查原意图和暂存目录"}
+  /v1/runs:
+    get:
+      summary: "列出最近 100 个业务实例"
+      responses:
+        '200': {description: "返回业务状态、阻塞原因和对应 Batch 执行"}
+    post:
+      summary: "通过统一入口运行或恢复同一业务实例"
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: {type: string}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/RunRequest'}
+      responses:
+        '200': {description: "返回当前结果或仍在运行的状态；HTTP 200 不等于数据就绪"}
+        '400': {description: "契约无效，或幂等键、输入身份冲突"}
+        '401': {description: "缺少 Bearer token 或 token 无效"}
+        '413': {description: "请求超过 64 KiB"}
+        '503': {description: "操作不可用或提交结果不确定；先查询再重试"}
+  /v1/reconciliation:
+    get:
+      summary: "列出未决写入、失去业务关联的来源或盘后执行及外部执行，供人工核对实际影响；不修改或重发"
+      responses:
+        '200': {description: "最多分别返回 500 条未决写入、500 条失去关联的 Batch 执行，以及 500 条未终止或阻塞的外部执行"}
+        '401': {description: "缺少 token 或 token 无效"}
+  /v1/runs/{instance}:
+    get:
+      summary: "查询实例、步骤证据、触发历史和审计记录"
+      parameters:
+        - in: path
+          name: instance
+          required: true
+          schema: {type: string, pattern: '^[a-f0-9]{64}$'}
+      responses:
+        '200': {description: "返回已保存的业务状态和步骤凭证"}
+        '404': {description: "实例不存在"}
+  /v1/schedules:
+    get:
+      summary: "查询已保存的触发状态和下次执行时间"
+      responses:
+        '200': {description: "返回 Quartz 状态；查询不触发执行"}
+  /v1/schedules/{job}/pause:
+    post:
+      summary: "暂停后续触发，不取消正在运行的进程"
+      parameters:
+        - in: path
+          name: job
+          required: true
+          schema: {type: string, enum: [post_close, source_cyq_perf, post_close_recovery, post_close_recovery_final]}
+      responses:
+        '200': {description: "暂停状态已保存"}
+        '404': {description: "定时任务不存在"}
+  /v1/schedules/{job}/resume:
+    post:
+      summary: "恢复后续触发；需要调度器已启用并有明确日历"
+      parameters:
+        - in: path
+          name: job
+          required: true
+          schema: {type: string, enum: [post_close, source_cyq_perf, post_close_recovery, post_close_recovery_final]}
+      responses:
+        '200': {description: "恢复状态已保存"}
+        '400': {description: "缺少日历或调度未启用"}
+        '404': {description: "定时任务不存在"}
+components:
+  securitySchemes:
+    bearerAuth: {type: http, scheme: bearer}
+  schemas:
+    BusinessState:
+      type: string
+      enum: [WAITING_SOURCE, WAITING_UPSTREAM, RUNNING, VERIFYING, VERIFIED, VERIFIED_EMPTY, PARTIAL, BLOCKED, FAILED, IN_DOUBT]
+    RunRequest:
+      type: object
+      additionalProperties: false
+      required: [requestId, job, logicalDate, rangeStart, rangeEnd, definitionVersion, revision, inputFingerprint, calendarVersion, zone, scheduledAt, triggeredAt]
+      properties:
+        requestId: {type: string, minLength: 1, maxLength: 256}
+        job: {type: string, enum: [post_close, pre_open_acceptance, source_daily, source_daily_basic, source_etf_daily, source_stk_limit, source_etf_adj, source_moneyflow, source_etf_factor, source_margin_detail, source_moneyflow_hsgt, source_stk_suspend, source_etf_portfolio, source_stk_factor, source_stk_st_daily, source_cn_bond_yield_curve, source_cyq_perf, source_index_daily_market, source_index_daily_basic, source_exchange_calendar, source_fina_mainbz, source_fina_audit, source_dividend, source_share_float, source_shibor, source_shibor_lpr, source_hibor, source_cn_cpi, source_cn_ppi, source_cn_pmi, source_cn_m, source_cn_gdp, source_fut_daily, source_fut_settle, source_fut_mapping, source_ft_limit, source_fut_holding, source_fut_basic, source_etf_basic, source_disclosure_date, source_ths_index, source_etf_share, source_us_tbr]}
+        logicalDate: {type: string, format: date}
+        rangeStart: {type: string, format: date}
+        rangeEnd: {type: string, format: date}
+        definitionVersion: {type: string, minLength: 1, maxLength: 256}
+        revision: {type: string, minLength: 1, maxLength: 256}
+        supersedes: {type: [string, 'null']}
+        revisionReason: {type: [string, 'null']}
+        inputFingerprint: {type: string, minLength: 1, maxLength: 256, description: "post_close 使用核心来源计划原始文件字节的 SHA-256"}
+        scopeIdentity: {type: string, pattern: '^[a-f0-9]{64}$', description: "post_close 必填，等于计划文件 SHA-256；来源任务可提供数据集、证券范围版本和预期实体集合的摘要，由服务从来源文件计算并核验"}
+        calendarVersion: {type: string, minLength: 1, maxLength: 256}
+        zone: {type: string}
+        scheduledAt: {type: string, format: date-time}
+        triggeredAt: {type: string, format: date-time}
+      allOf:
+        - if:
+            properties:
+              job: {const: post_close}
+          then:
+            required: [scopeIdentity]
+            properties:
+              rangeStart: {description: "单日核心来源计划必须等于 logicalDate"}
+              rangeEnd: {description: "单日核心来源计划必须等于 logicalDate"}
+              inputFingerprint: {type: string, pattern: '^[a-f0-9]{64}$'}
+              scopeIdentity: {type: string, pattern: '^[a-f0-9]{64}$'}

@@ -1,5 +1,7 @@
 # 代码从哪看
 
+开发规范和按 A 股、美股、BTC 拆分的目标结构见 [项目结构与开发规范](project-structure-and-standards.md)。本页只介绍当前已存在的代码。
+
 项目里有六个 Gradle 模块，主要是为了让不同程序分开启动：
 
 - `data-app`：数据 API、CLI 和 QuestDB 访问。
@@ -29,7 +31,7 @@
 
 `batch-app` 从 `com.zoutrankil.batch.BatchApplication` 启动。想看作业怎么跑，先看 `job/`；想看数据怎么采集和写入，再看 `source/`、`writer/`；运行状态和检查点主要在 `storage/`，保存在 SQLite。
 
-`main-strategy-runtime` 是单独的启动程序，会组合数据模块和 Batch。`l2-live-app` 则只管实时 MQTT 采集，清洗状态保存在本地 SQLite。
+`main-strategy-runtime` 是单独的启动程序，会组合数据模块和 Batch。`l2-live-app` 则只管实时 MQTT 采集，归一化数据和累计检查点保存在类型化 Parquet，SQLite 保存原始接收 WAL、状态和提交引用。
 
 ## 建议阅读顺序
 

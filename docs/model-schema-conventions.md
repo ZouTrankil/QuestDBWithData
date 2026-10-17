@@ -1,148 +1,60 @@
-# 模型、时间与主键约定
+# 模型和新增数据集
 
-## 分清三种模型
+新增数据时，先把字段和业务键说清楚，再写 Java 模型、映射和数据库 SQL。跨市场规则见[时间规范](project-structure-and-standards.md#时间怎么处理)。
 
-同一组数据经过外部 API、业务逻辑和数据库时，不建议强行共用一个 Java 类：
+## 三种模型各管一段
 
-1. **API DTO** 表示 Pydantic/Tushare 对外字段和 JSON 表示法，负责入站字段名、必填项及格式校验。
-2. **Domain model** 表示 Java 业务语义，不依赖 JSON、Spring 或 QuestDB。当前 `StockBasic` 用 `LocalDate` 表示上市日期。
-3. **Persistence row/schema** 表示 QuestDB 表字段、designated timestamp 与 UPSERT KEYS。当前快照记录由 `StockBasicSnapshot` 表示，列名和 QuestDB 类型在 Flyway SQL 中定义。
+| 模型 | 管什么 | 股票资料例子 |
+| --- | --- | --- |
+| 来源 DTO | 外部字段名和原始格式 | `TushareStockBasicDto`，上市日还是 `YYYYMMDD` 字符串 |
+| 业务模型 | 程序里真正使用的含义 | `StockBasic`，上市日用 `LocalDate` |
+| 存储模型和 SQL | 表字段、类型、时间列和去重键 | `StockBasicSnapshot` 和 Flyway SQL |
 
-DTO 到 domain、domain 到 persistence 的转换放在 client/service/repository 边界，不把数据库专用注解放进 domain model。
+`StockBasicMapper` 做明确转换。Java 的 record 或 key 类型不替数据库实现去重，也不用加 JPA `@Entity`。项目用显式 SQL 和读写适配器，不靠 ORM 自动建表。
 
-## 时间类型
+## 日期和时间别混
 
-| 语义 | Python / Pydantic | JSON Schema | Java domain | QuestDB |
-| --- | --- | --- | --- | --- |
-| 仅日期，例如上市日期 | `datetime.date` | `string`, `format: date` | `LocalDate` | `DATE`；当前 QWP Java Sender 无 `DATE` 写入 setter，本项目暂存为 `STRING` (`yyyyMMdd`) |
-| 全球事件时间 | `AwareDatetime` / 带时区的 `datetime` | `string`, `format: date-time` | `Instant` | designated `TIMESTAMP` (UTC，微秒精度) |
-| 无时区本地营业时间 | `datetime` + 明确业务时区 | 通常也是 `date-time`，需额外约定时区 | 先解析成 `ZonedDateTime`/`OffsetDateTime`，再转 `Instant` | `TIMESTAMP` |
+- 只有日期用 `LocalDate`，比如上市日、交易日、报告期。
+- 真正发生的时刻用 `Instant`，存 UTC。
+- 来源只给本地时刻时，先确定时区再转换。
+- 明确精度、空值和超精度处理，不能悄悄截断。
 
-不要把 `LocalDate` 转成 UTC 零点的事件时间；它是日期语义。也不要把 `Instant` 存成不带偏移量的字符串。JSON Schema 的 `format: date-time` 表示字符串格式，并不自动决定业务时区规则；Python 端应使用 `AwareDatetime` 或显式校验时区，Java 端统一转为 `Instant`。Pydantic 对 `date` 和 `datetime` 分别生成 `date` 与 `date-time` 格式。[Pydantic JSON Schema 文档](https://pydantic.dev/docs/validation/latest/concepts/json_schema/)
+股票快照的行身份是 `(snapshotTimestamp, tsCode)`。其中 `snapshot_ts` 是逻辑日期的 UTC 零点标记：`2026-09-29` 编码为 `2026-09-29T00:00:00Z`，不代表采集时刻，也不代表上海当天零点。
 
-`StockBasic.listDate` 已按语义建模为 `LocalDate`。Tushare `YYYYMMDD` 在 client 边界解析；导出 CSV 时再格式化回 `YYYYMMDD`。因为 QWP Sender 暂无 DATE setter，repository 边界把它序列化为 STRING；业务模型不因此降成字符串。
-
-## 主键与 QuestDB 去重键
-
-QuestDB 的 designated timestamp 是时间排序、分区和时序查询所需的时间列，不是关系型数据库的主键，也不保证唯一。QuestDB 表默认允许重复行；需要幂等写入时，用 WAL 表的 `DEDUP UPSERT KEYS` 定义去重规则，且 designated timestamp 必须包含在 UPSERT KEYS 中。[QuestDB designated timestamp](https://questdb.com/docs/concepts/designated-timestamp/), [QuestDB deduplication](https://questdb.com/docs/concepts/deduplication/)
-
-本项目区分两种身份：
-
-- `StockBasicKey(tsCode)`：一只股票在源系统中的自然标识，`ts_code`。
-- `StockBasicSnapshotKey(snapshotTimestamp, tsCode)`：历史快照表中的行身份，对应 SQL `DEDUP UPSERT KEYS(snapshot_ts, ts_code)`。
-
-`snapshot_ts` 是逻辑快照日期的 UTC 零点编码，不代表实际采集时刻或北京时间零点。同一逻辑日期中每个 `ts_code` 只保留一行，而不同日期的快照可以同时存在。直接同步入口按 `app.time.business-zone` 确定今天；任务入口使用冻结请求的 `logicalDate`，重试时不能重新计算今天。若改成“当前状态表”，去重语义和时间设计需要重新评估，不能直接套用这个组合键。
-
-### 统一业务时间入口
-
-通过构造器注入 Spring 管理的 `BusinessTime`，业务代码无需重复写时区：
-
-```yaml
-app:
-  time:
-    business-zone: Asia/Shanghai
-```
+日期标记用 `TemporalValues.CalendarTimestamp` 编解码。直接同步入口由 `BusinessTime` 按 `app.time.business-zone` 选业务日期；任务入口使用原请求的 `logicalDate`，重试不重新取今天。
 
 ```java
-businessTime.now();                  // 实际当前时刻，Instant
-businessTime.today();                // 配置时区下的今天，LocalDate
-businessTime.startOfDay(date);       // 业务日零点对应的 Instant
-businessTime.inBusinessZone(instant);// 转为业务时区供展示
-businessTime.todaySnapshotMarker();  // 当前快照表专用的日期标记
+businessTime.now();                  // 当前实际时刻
+businessTime.today();                // 业务时区下的今天
+businessTime.startOfDay(date);       // 业务日零点对应的真实时刻
+businessTime.todaySnapshotMarker();  // 快照表使用的日期标记
 ```
 
-日期标记统一使用 `new TemporalValues.CalendarTimestamp(date).storageCarrier()` 编解码。例如逻辑日期 `2026-09-29` 编码为 `2026-09-29T00:00:00Z`；北京时间当天实际零点则是 `2026-09-28T16:00:00Z`。两者用途不同，不可互换。实际事件时间应使用 `Instant`，不可截到零点。
+`BusinessTime` 支持注入固定 `Clock`，方便检查跨日边界。当前单一业务时区不代表三市场时钟已经拆好。
 
-本次保留历史日期标记编码和去重键形式。直接同步入口默认按北京时间选日期，因此凌晨 00:00–08:00 将选北京时间当天，不再选 UTC 前一天；历史记录不会自动重标日期。任务定义自己的时区属于任务契约，不随此默认配置修改；显式 `logicalDate` 始终优先。修改业务时区会影响未来默认日期的选择，应作为业务规则变更处理。
+## 业务键和数据库去重
 
-JVM/JDBC 的 UTC 设置继续保留，它与业务日期的时区配置职责不同。日期型字段（上市日、交易日）仍使用 `LocalDate`，不按展示时区平移。`BusinessTime` 接受 `Clock`，需要验证时间边界时可传入固定时钟。
+指定时间列用于排序、分区和时序查询，本身不保证唯一。需要防止重复时，在 WAL 表的 `DEDUP UPSERT KEYS` 里写完整业务键，并包含指定时间列。
 
-## Spring `@Entity` 是否适用
+例如 `StockBasicKey(tsCode)` 表示一只股票；快照键还要带逻辑快照日期。同一只股票的多日快照可以同时存在。名称、价格等会修正的字段不要随便塞进身份键。
 
-`@Entity` 是 Jakarta Persistence/JPA 的 ORM 映射注解，不是所有 Spring 数据模型都要加的注解。本项目使用 QWP `Sender` 写入、`JdbcTemplate` 执行 SQL，没有使用 JPA/Hibernate；`StockBasic` 和 `StockBasicSnapshot` 是普通 Java domain record，Flyway 迁移 SQL 是 QuestDB 表结构定义。
+代码保留前导零和市场后缀。null、空串和零是否相同，要由来源契约决定。当前示例通过 QWP 把上市日期存成 `STRING` 的 `yyyyMMdd`，业务模型仍使用 `LocalDate`。
 
-即使 PGWire 能让 PostgreSQL JDBC 客户端连接，也不表示 QuestDB 等同 PostgreSQL。QuestDB 不支持传统 `PRIMARY KEY`、`FOREIGN KEY`、`NOT NULL` 约束；JPA 的 `@Id` 也不会生成或配置 QuestDB `DEDUP UPSERT KEYS`。因此本项目用显式的 `StockBasicKey` / `StockBasicSnapshotKey` 表达 Java 侧身份，并在 QuestDB DDL 中声明去重键。[QuestDB PostgreSQL compatibility](https://questdb.com/docs/schema-design-essentials/)
+## 新增数据集按这几步做
 
-若将来确实引入 JPA，必须单独验证 Hibernate 生成 SQL 与 QuestDB 支持范围，并避免依赖自动建表、关系约束和 ORM 冲突更新行为。对当前时序写入路径，保留 domain record + 显式 repository 更清晰。
+1. **定归属**：市场、来源、消费者、唯一写入方、正式存储。自己的策略订单和成交记录用本地 SQLite，不按行情表建到 QuestDB。
+2. **写字段表**：来源名、Java 类型、存储列、单位、空值、时间和业务键。说清分页上限、结束依据、预期日期和证券范围。
+3. **写模型和 mapper**：外部字符串在边界解析；非法日期、错范围、重复键要明确处理，不拿请求日期或当前时间补造缺失来源。
+4. **写结构变更**：适用 Flyway 的表新增下一个迁移版本；不要改已执行的脚本。任务自带 DDL 按所属契约验证结构。见[迁移说明](flyway-schema-management.md)。
+5. **接读写端口**：显式列映射，查询限定范围、排序、条数和超时，值参数使用绑定，动态表名用白名单。
+6. **验收**：检查正常、缺失、重复、历史修订、重复运行和失败恢复；正式写入比较完整键和值，并确认 WAL 和版本稳定。
 
-## Pydantic → JSON Schema → Java
+行数相同只能说明数量相同，不能证明旧值已更新。覆盖缩小时，UPSERT 也不会自动删除没有再次出现的证券；要单独说明删除语义。
 
-数据库 schema 的版本演进交由迁移工具管理，参见 [Flyway schema 管理](flyway-schema-management.md)。模型契约可辅助生成 SQL，Flyway 负责执行和记录迁移历史。
+## 生成模型时怎么做
 
-建议把 Pydantic 作为数据契约来源，JSON Schema 作为可审阅、可校验、可生成 DTO 的交换格式；生成结果不要直接当作 domain 或 QuestDB entity。
+现有生成工具是 [generate_domain_models.py](../tools/generate_domain_models.py)，需要用 `--catalog` 提供自己准备的 catalog JSON。生成的 record 只说明数据库字段，不自动包含单位、业务含义和源校验。
 
-```python
-from datetime import date
-from pydantic import BaseModel, ConfigDict, Field
+如果以后接入 Python/Pydantic，先提供真实模型和带版本的 JSON Schema，再确定 DTO 生成方式。当前没有完整的 Pydantic → Java 自动流水线，不要把建议写成已实现能力。
 
-class StockBasic(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    ts_code: str = Field(json_schema_extra={
-        "x-business-key": True,
-        "x-questdb-type": "SYMBOL",
-    })
-    symbol: str
-    name: str
-    area: str | None = None
-    industry: str | None = None
-    list_date: date | None = None
-
-schema = StockBasic.model_json_schema(mode="validation", by_alias=True)
-```
-
-Pydantic 可由 `model_json_schema()` 生成 JSON Schema。该 schema 可表达字段类型、required、nullable、约束和字段别名，但标准 JSON Schema 没有关系型主键、QuestDB designated timestamp、SYMBOL 或 UPSERT KEYS 语义。[Pydantic schema 生成](https://pydantic.dev/docs/validation/latest/api/pydantic/json_schema/)
-
-把数据库元数据作为 JSON Schema vendor extension（`x-...`）或独立 manifest 维护，例如：
-
-```json
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "properties": {
-    "snapshot_ts": {
-      "type": "string",
-      "format": "date-time",
-      "x-questdb-type": "TIMESTAMP",
-      "x-questdb-designated-timestamp": true,
-      "x-questdb-upsert-key": true
-    },
-    "ts_code": {
-      "type": "string",
-      "x-questdb-type": "SYMBOL",
-      "x-business-key": true,
-      "x-questdb-upsert-key": true
-    }
-  }
-}
-```
-
-推荐流水线：
-
-1. 用 Pydantic 定义并校验来源契约；选择 `mode="validation"` 或 `mode="serialization"`，并固定 `by_alias` 约定。
-2. 导出带版本控制的 JSON Schema；检查时间格式、别名、required、nullable、`$ref` 和 `additionalProperties`。
-3. 从 JSON Schema 生成 Java **DTO**，生成代码标记为不可手改。
-4. 编写或生成 DTO → domain mapper；Java domain 使用 `LocalDate`/`Instant` 等语义类型。
-5. 单独维护 QuestDB DDL/元数据；由 repository 负责 domain → QWP/JDBC 转换和写入。
-
-主键不要从 JSON Schema 的 `required` 推断：必填不等于唯一。`x-business-key` 是源实体身份；`x-questdb-upsert-key` 是特定表的去重规则；二者可能相同，也可能不同。JSON Schema 负责描述数据契约，QuestDB DDL 负责持久化约束。
-
-## 本项目当前对应关系
-
-| 层 | 类型/定义 |
-| --- | --- |
-| 外部 API DTO | `client.dto.TushareStockBasicDto`，保留来源的 `YYYYMMDD` 字符串 |
-| DTO 映射 | `mapper.StockBasicMapper`，将 `list_date` 解析为 `LocalDate` |
-| Java domain | `StockBasic`、`StockBasicKey` |
-| 快照 domain | `StockBasicSnapshot`、`StockBasicSnapshotKey` |
-| QuestDB schema | `db/migration/questdb/V1__create_stock_basic_table.sql` 的 DDL 与 UPSERT KEYS |
-
-拿到实际 Python/Pydantic 模型后，应以模型和真实响应为准生成 schema，再确定 DTO 生成器、字段别名和 vendor extension；不要凭当前 Java 类反推缺失的源契约。
-
-新模型的逐步落地示例见 [新增模型与读写流程](model-development-workflow.md)。
-
-## Schema catalog
-
-历史 QuestDB schema 导出不再保存在仓库中。运行 [`generate_domain_models.py`](../tools/generate_domain_models.py) 时，通过 `--catalog` 提供单独准备的 catalog JSON。
-
-生成的 record 只表示数据库字段，不等于经过业务确认的 domain。DDL 本身不能可靠说明字段单位、业务含义或 API 校验规则；以真实 API 契约为准，并在需要时通过 Mapper 转换。
+生成契约要明确别名、必填与可空、日期格式、精度和版本。必填不等于唯一；数据库时间列、分区和去重键另外维护。自定义 Python 校验也不一定能由 JSON Schema 完整表达，需要在 Java 边界补齐。
