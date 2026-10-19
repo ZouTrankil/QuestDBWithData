@@ -2,13 +2,16 @@ param(
     [ValidateSet('plan','start','status','stop','replay','export')][string]$Action = 'status',
     [string]$Symbols = '',
     [string]$CredentialsFile = '',
+    [string]$RuntimeDirectory = '',
+    [long]$JournalMaxBytes = 8589934592,
     [int]$Seconds = 0,
     [switch]$Foreground,
     [switch]$NoBuild
 )
 $ErrorActionPreference = 'Stop'
 $workspace = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
-$runtimeRoot = Join-Path $workspace 'var/l2-live'
+$buildRoot = Join-Path $workspace 'var/l2-live'
+$runtimeRoot = if ($RuntimeDirectory) { [IO.Path]::GetFullPath($RuntimeDirectory) } else { $buildRoot }
 $statusFile = Join-Path $runtimeRoot 'status.json'
 if ($Action -eq 'status') {
     if (Test-Path -LiteralPath $statusFile) {
@@ -56,10 +59,10 @@ try {
     finally { Pop-Location }
 } finally { $env:JAVA_HOME = $priorJavaHome }
 }
-$javaPath = [IO.File]::ReadAllText((Join-Path $runtimeRoot 'java-path.txt')).Trim()
-$classpath = [IO.File]::ReadAllText((Join-Path $runtimeRoot 'runtime-classpath.txt')).Trim()
+$javaPath = [IO.File]::ReadAllText((Join-Path $buildRoot 'java-path.txt')).Trim()
+$classpath = [IO.File]::ReadAllText((Join-Path $buildRoot 'runtime-classpath.txt')).Trim()
 $command = if ($Action -eq 'start') { 'session' } else { $Action }
-$launchArgs = @('-Xms128m','-Xmx1g','-cp',$classpath,'com.zoutrankil.data.l2live.bootstrap.AliyunL2LiveMain',$command,'--root',$runtimeRoot)
+$launchArgs = @('-Xms128m','-Xmx1g','-cp',$classpath,'com.zoutrankil.data.l2live.bootstrap.AliyunL2LiveMain',$command,'--root',$runtimeRoot,'--journal-max-bytes',[string]$JournalMaxBytes)
 if ($Symbols) { $launchArgs += @('--symbols',$Symbols) }
 if ($CredentialsFile) { $launchArgs += @('--credentials',[IO.Path]::GetFullPath($CredentialsFile)) }
 if ($Seconds) { $launchArgs += @('--seconds',[string]$Seconds) }

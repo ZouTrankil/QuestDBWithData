@@ -41,7 +41,7 @@ public final class QuestDbMoneyflowHsgtTables implements MoneyflowHsgtStagingPor
   jdbc.execute("RENAME TABLE \""+source+"\" TO \""+target+"\"");
  }
  public void awaitWal(String table,BooleanSupplier cancelled)throws Exception {
-        long deadline=System.nanoTime()+Duration.ofMinutes(2).toNanos();while(!QuestDbWriteChecks.walSettled(jdbc,table)){
+        long deadline=System.nanoTime()+Duration.ofMinutes(5).toNanos();while(!QuestDbWriteChecks.walSettled(jdbc,table)){
             check(cancelled);if(System.nanoTime()>deadline)throw new IllegalStateException("D027 stage WAL unresolved; retain it for recovery");Thread.sleep(50);}
     }
  private static void check(BooleanSupplier cancelled){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new java.util.concurrent.CancellationException("D027 stage operation cancelled; retain artifacts");}

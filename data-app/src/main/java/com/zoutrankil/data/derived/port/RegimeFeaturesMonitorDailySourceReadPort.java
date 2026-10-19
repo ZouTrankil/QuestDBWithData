@@ -10,7 +10,10 @@ import com.zoutrankil.data.domain.policy.RegimeFeaturesMonitorDailyCalculation.*
 import com.zoutrankil.data.derived.domain.RegimeFeaturesMonitorDailySourceData.*;
 /** Source rows stream in their original cancellation, budget and hashing order. */
 public interface RegimeFeaturesMonitorDailySourceReadPort {
-    @FunctionalInterface interface PanelDayConsumer {void accept(LocalDate date,List<Stock> stocks,Set<String> codes,int basic,int limits);}
+    @FunctionalInterface interface PanelDayConsumer {
+        void accept(LocalDate date,List<Stock> stocks,Set<String> codes,int basic,int limits);
+        default void stockScopeAudit(Map<String,Object> proof) {}
+    }
     void readPanelMonth(LocalDate lower,LocalDate upper,Set<LocalDate> calendar,long[] panelRows,MessageDigest hash,BooleanSupplier cancelled,PanelDayConsumer complete);
     void readValuations(LocalDate from,LocalDate upper,Set<LocalDate> calendar,Map<LocalDate,Valuation> result,long[] rawRows,MessageDigest hash,BooleanSupplier cancelled);
     NavigableSet<LocalDate> calendar(LocalDate from,LocalDate to,MessageDigest hash);

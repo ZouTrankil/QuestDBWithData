@@ -63,6 +63,26 @@ class NativeMarketInputPackagePublisherTest {
         assertEquals(3, product.components().get(1).rowCount());
     }
 
+    @Test void broaderMarketSourceRetainsNoncandidateFundsWithoutApplyingCandidateCodeRulesToThem()throws Exception {
+        var original=inputs();var market=new ArrayList<>(original.market);
+        market.add(marketRow(END,"158008.OF"));market.add(marketRow(START.minusDays(1),"NON_CANDIDATE"));
+        var broader=new Inputs(original.calendar,market,original.context,original.panel);
+        var scores=scores("broader_source",broader);
+        var product=publish(new NativeMarketInputPackagePublisher(root),"broader_source",broader,scores);
+        assertEquals(original.market.size(),product.components().get(1).rowCount());
+        assertEquals(4,broader.market.size());
+        assertEquals(proof(broader).get("sources"),JSON.readValue(Files.readAllBytes(product.sourceProofRef().path()),Map.class).get("sources"));
+    }
+
+    @Test void selectingCandidatesStillRejectsInvalidCandidatePrices()throws Exception {
+        var original=inputs();var market=new ArrayList<>(original.market);
+        var bad=new LinkedHashMap<String,Object>(market.getFirst());bad.put("close",0.0);market.set(0,bad);
+        market.add(marketRow(END,"158008.OF"));
+        var invalid=new Inputs(original.calendar,market,original.context,original.panel);var scores=scores("bad_candidate_price",invalid);
+        assertThrows(IllegalStateException.class,()->publish(new NativeMarketInputPackagePublisher(root),"bad_candidate_price",invalid,scores));
+        assertEquals(0,packageAliasCount());
+    }
+
     @Test void calendarLookaheadAndCandidatePriceGapsRejectPackageWithoutChangingScoreAliases() throws Exception {
         var original = inputs(); var truncated = new Inputs(original.calendar.subList(0, original.calendar.size() - 1), original.market, original.context, original.panel);
         var scores = scores("shortcalendar", truncated); var publisher = new NativeMarketInputPackagePublisher(root);

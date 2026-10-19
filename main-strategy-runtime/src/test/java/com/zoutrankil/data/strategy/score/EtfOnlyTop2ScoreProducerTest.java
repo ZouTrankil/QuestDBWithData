@@ -75,8 +75,28 @@ class EtfOnlyTop2ScoreProducerTest {
             }
         }
     }
+    @Test void boundedStockAggregationMatchesEveryConsumedValueOfTheFullHistoricalScorerExactly()throws Exception {
+        var fixture=golden();var input=inputs(fixture);var scorer=new L2StockScoreProducer();
+        var stock=new ArrayList<>(input.stockDaily());
+        // Nontradable BSE names remain in the diagnostic cross-section and its ranks.
+        String copied=input.stockDaily().getFirst().symbol();
+        for(var row:input.stockDaily())if(row.symbol().equals(copied)) {
+            var values=new LinkedHashMap<>(row.values());values.put("pb",13.);values.put("turnover_rate",37.);
+            stock.add(new ScoreRow(row.tradeDate(),"920999.BJ",values));
+        }
+        for(var l2:List.of(input.l2Raw(),input.l2Raw().stream().filter(row->!row.tradeDate().isBefore(input.signalDates().get(input.signalDates().size()/2))).toList())) {
+            var full=index(scorer.produce(l2,stock,input.stockMetadata(),input.chipRows(),true,promoted(fixture)));
+            var bounded=index(scorer.produceForEtfAggregation(l2,stock,input.stockMetadata(),input.chipRows(),true,promoted(fixture)));
+            assertEquals(full.keySet(),bounded.keySet());
+            for(var entry:full.entrySet())for(String field:L2StockScoreProducer.ETF_AGGREGATION)
+                assertEquals(entry.getValue().values().get(field),bounded.get(entry.getKey()).values().get(field),entry.getKey()+" "+field);
+        }
+    }
     @Test void stockCoreAndPromotedFactorsMatchOriginalPython() throws Exception {
-        var fixture = golden(); var input = inputs(fixture);
+        assertStockMatchesPython(golden());
+    }
+    private void assertStockMatchesPython(JsonNode fixture) {
+        var input = inputs(fixture);
         var output = new L2StockScoreProducer().produce(input.l2Raw(), input.stockDaily(), input.stockMetadata(), input.chipRows(), true, promoted(fixture));
         var featureFields = new ArrayList<>(List.of("prob_acc", "prob_risk", "exp_ret_rank", "filter_reason", "base_score_rank", "crowding_score", "positive_alpha_static", "risk_penalty_static", "regime_positive_alpha", "dynamic_guard_penalty", "feature_rank_v2_dynamic_score"));
         featureFields.addAll(L2StockScoreProducer.POSITIVE_FACTORS); featureFields.addAll(L2StockScoreProducer.RISK_FACTORS.keySet());
@@ -84,7 +104,10 @@ class EtfOnlyTop2ScoreProducerTest {
         assertFields(output, fixture.get("expected_stock"), "symbol", List.of("final_score", "l2_rank", "l2_buy_candidate", "clean", "filter_reason", "guard_ret_20d", "guard_ret_60d", "guard_ret_120d", "guard_pos_60d", "guard_limit_up_flag", "guard_limit_touch_20d", "guard_hard_no_buy", "guard_soft_overheat", "guard_risk_flag_count", "component_vol60", "component_ret20", "component_turnover", "component_limit_touch20", "component_high_vol_flag", "component_high_turnover_flag"));
     }
     @Test void pitEtfAggregatesCoverageMetadataAndOverlayMatchOriginalPython() throws Exception {
-        var fixture = golden(); var input = inputs(fixture); var output = new EtfOnlyTop2ScoreProducer().produce(input, promoted(fixture));
+        assertEtfMatchesPython(golden());
+    }
+    private void assertEtfMatchesPython(JsonNode fixture) {
+        var input = inputs(fixture); var output = new EtfOnlyTop2ScoreProducer().produce(input, promoted(fixture));
         var fields = new ArrayList<>(List.of("name", "etf_category", "broad_family", "annual_fee", "etf_is_lof", "etf_is_active_lof", "component_n", "hit_n", "component_symbols", "component_l2_score", "component_buy_breadth", "component_l2_score_smooth", "component_buy_breadth_smooth", "component_hit_rate", "top30_l2_weight", "top100_l2_weight", "top_component_contrib", "component_valid_vol_weight", "weighted_component_vol60", "weighted_component_ret20", "top10_component_vol60", "top10_high_vol_weight", "top10_high_turnover_weight", "top10_limit_touch_weight", "top3_weight_concentration", "ret_3", "ret_5", "ret_20", "ret_std_20", "ret_std_60", "pos_60", "liquidity_amount", "liquidity_score", "liquidity_ok", "trend_score", "stability_score", "component_risk_budget_score", "broad_eligible", "broad_adjusted_score", "regime", "etf_score", "etf_score_legacy", "etf_score_smooth", "etf_score_smooth_quality", "active_lof_score", "etf_quality_ok", "component_crowding_score", "component_crowding_flag", "self_overheat_flag", "overheat_score", "component_l2_match_rate", "component_activity_top20_weight", "component_chase_top20_weight", "component_breakdown_top10_weight", "component_executable_breadth", "component_accumulation_score", "component_chase_risk_score", "component_distribution_risk_score", "component_downside_risk_score", "score_quality_penalty", "optimized_score_smooth", "regime_weighted_score_raw", "regime_weighted_score", "dynamic_overlay", "etf_factor_score_base", "optimized_score_quality", "weight_spec"));
         for (String factor : EtfOnlyTop2ScoreProducer.FACTOR_COLUMNS.keySet()) fields.add(factor + "_rank");
         for (String name : List.of("invvol60", "component_invvol60", "component_risk_budget")) { fields.add(name + "_raw_weight"); fields.add(name + "_target_weight"); }
@@ -92,6 +115,20 @@ class EtfOnlyTop2ScoreProducerTest {
         assertFields(output.coverage(), fixture.get("expected_coverage"), "symbol", List.of("etf_universe_n", "etf_with_portfolio_n", "etf_scored_n", "component_hit_rate", "liquidity_filtered_n", "liquidity_window", "liquidity_min_periods", "liquidity_min_amount"));
         assertEquals(input.signalDates().getLast(), output.maxCompleteDate()); assertEquals(input.signalDates().size(), output.factorWeights().size());
         assertEquals("frozen-oracle", output.provenance().get("code_revision"));
+    }
+    @Test void nullableMarketAndMetadataLeftJoinsMatchOriginalPythonWithoutDroppingRankRows() throws Exception {
+        JsonNode fixture;
+        try (var stream = getClass().getResourceAsStream("/score/python-promoted-nullable-golden.json")) {
+            fixture = JSON.readTree(Objects.requireNonNull(stream));
+        }
+        assertStockMatchesPython(fixture);
+        assertEtfMatchesPython(fixture);
+        var input = inputs(fixture); var scorer = new L2StockScoreProducer();
+        var full = index(scorer.produce(input.l2Raw(), input.stockDaily(), input.stockMetadata(), input.chipRows(), true, promoted(fixture)));
+        var bounded = index(scorer.produceForEtfAggregation(input.l2Raw(), input.stockDaily(), input.stockMetadata(), input.chipRows(), true, promoted(fixture)));
+        assertEquals(full.keySet(), bounded.keySet());
+        for (var entry : full.entrySet()) for (String field : L2StockScoreProducer.ETF_AGGREGATION)
+            assertEquals(entry.getValue().values().get(field), bounded.get(entry.getKey()).values().get(field), entry.getKey() + " " + field);
     }
     @Test void sentimentQuintilesAndReferenceClassificationMatchOriginalPython() throws Exception {
         var fixture = golden(); var input = inputs(fixture);

@@ -109,6 +109,31 @@ public final class OfficialPlanStore {
         catch (Exception e) { throw new PlanStoreException("cannot read official plan authority " + path, e); }
     }
 
+    /** Same plan-root scope as Python's latest_official_weekly; retain the stored recipe strategy identity. */
+    public Optional<StoredOfficialPlan> latestOfficialWeekly() {
+        if (!Files.isRegularFile(path)) return Optional.empty();
+        try (Connection connection = reader()) {
+            requireSchema(connection);verifyCurrentUniqueness(connection);
+            String id,strategy,execution,signal;
+            try (var statement=connection.prepareStatement("SELECT plan_id,strategy,execution_date,signal_date FROM strategy_plans WHERE plan_kind=? AND is_current=1 ORDER BY execution_date DESC,signal_date DESC,plan_id LIMIT 2")) {
+                bind(statement,KIND);
+                try(var rows=statement.executeQuery()) {
+                    if(!rows.next()) {
+                        if(exists(connection,"SELECT 1 FROM strategy_plan_aliases WHERE plan_kind=? AND alias='latest'",KIND))throw new PlanStoreException("official alias has no current authority");
+                        return Optional.empty();
+                    }
+                    id=rows.getString(1);strategy=rows.getString(2);execution=rows.getString(3);signal=rows.getString(4);
+                    if(rows.next()&&execution.equals(rows.getString(3))&&signal.equals(rows.getString(4)))
+                        throw new PlanStoreException("ambiguous official strategies at the same plan-root frontier");
+                }
+            }
+            var selected=latest(connection,strategy);
+            if(selected.isEmpty()||!selected.get().planId().equals(id))throw new PlanStoreException("plan-root latest authority alias is missing or stale");
+            return selected;
+        } catch(PlanStoreException e){throw e;}
+        catch(Exception e){throw new PlanStoreException("cannot read latest official plan authority "+path,e);}
+    }
+
     /** Legacy v3 rows can be inspected, but cannot pass this executable evidence gate without an explicit JSON import. */
     public StoredOfficialPlan requireLatest(String strategy, LocalDate expectedSignalDate, String expectedScoreRunId) {
         StoredOfficialPlan stored = latest(strategy).orElseThrow(() -> new PlanStoreException("authoritative official weekly plan is missing: " + path));

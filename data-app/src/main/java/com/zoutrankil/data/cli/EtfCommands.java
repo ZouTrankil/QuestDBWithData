@@ -18,7 +18,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebAppli
 public final class EtfCommands implements CliCommandFamily {
     private static final java.util.Set<String> COMMANDS = java.util.Set.of(
             "plan-etf-daily-job", "run-etf-daily-job", "reconcile-etf-daily-job", "plan-etf-adj-job",
-            "run-etf-adj-job", "plan-etf-share-job", "run-etf-share-job",
+            "run-etf-adj-job", "reconcile-etf-adj-job", "plan-etf-share-job", "run-etf-share-job",
             "plan-etf-factor-job", "run-etf-factor-job", "plan-etf-portfolio-job",
             "run-etf-portfolio-job", "plan-etf-basic-job", "run-etf-basic-job");
     private final com.zoutrankil.data.etf.application.EtfDailyJobService etfDailyService;
@@ -46,6 +46,12 @@ public final class EtfCommands implements CliCommandFamily {
 
     @Override public void execute(String command, Map<String, String> options) throws Exception {
         switch (command) {
+            case "reconcile-etf-adj-job" -> {
+                if(etfAdjService==null || !options.keySet().equals(java.util.Set.of("--run","--writer-log")))
+                    throw new IllegalArgumentException("Recovery requires --run RUN_ID --writer-log PATH");
+                CliOutput.printJson(etfAdjService.reconcile(options.get("--run"),java.nio.file.Path.of(options.get("--writer-log"))),
+                        CliOutput.Profile.JOB_DEFINITION,true);
+            }
             case "reconcile-etf-daily-job" -> {
                 if(etfDailyService==null || !options.keySet().equals(java.util.Set.of("--run","--writer-log")))
                     throw new IllegalArgumentException("Recovery requires --run RUN_ID --writer-log PATH");

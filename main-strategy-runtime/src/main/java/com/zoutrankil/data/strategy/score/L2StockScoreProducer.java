@@ -6,6 +6,7 @@ import static com.zoutrankil.data.strategy.score.ScoreMath.*;
 
 /** Label-free deterministic feature-rank path used by the promoted daily scorer. */
 public final class L2StockScoreProducer {
+    private static final org.slf4j.Logger LOG=org.slf4j.LoggerFactory.getLogger(L2StockScoreProducer.class);
     public static final List<String> POSITIVE_FACTORS = List.of("q2_accum_alpha", "orderbook_breadth_alpha", "auction_flow_alpha", "activity_alpha", "crowding_context_alpha", "liquidity_alpha");
     public static final Map<String, Double> RISK_FACTORS;
     static {
@@ -23,18 +24,27 @@ public final class L2StockScoreProducer {
     public List<ScoreRow> produce(List<ScoreRow> rawL2, List<ScoreRow> stockDaily,
             Map<String, StockMetadata> metadata, List<ScoreRow> chipRows, boolean sentimentPresent,
             FrozenPromotedRecipe promoted) {
-        var daily = dailyFeatures(stockDaily, sentimentPresent); var dailyByKey = index(daily);
+        return producePrepared(rawL2,dailyFeatures(stockDaily,sentimentPresent),metadata,chipRows,promoted);
+    }
+    private List<ScoreRow> producePrepared(List<ScoreRow> rawL2,List<MutableRow> daily,
+            Map<String,StockMetadata> metadata,List<ScoreRow> chipRows,FrozenPromotedRecipe promoted) {
+        var dailyByKey = index(daily);
         var chipByKey = index(mutable(chipRows)); var base = new ArrayList<MutableRow>();
         for (var raw : mutable(rawL2)) {
             if (!tradable(raw.symbol)) continue;
             var diag = dailyByKey.get(new Key(raw.date, raw.symbol));
-            if (diag == null) throw new IllegalArgumentException("L2 daily diagnostics missing: " + raw.date + "/" + raw.symbol);
+            // The original scorer uses a left join. Non-observed market rows stay
+            // missing and receive DeadWater; never manufacture prices or flags.
+            if (diag == null) {
+                diag=new MutableRow(new ScoreRow(raw.date,raw.symbol,Map.of()));
+                dailyByKey.put(new Key(raw.date,raw.symbol),diag);
+            }
             var row = new MutableRow(raw.freeze()); row.values.putAll(diag.values);
             // build_daily_diagnostics does not expose daily turnover_rate to the base scorer.
             if (raw.values.containsKey("turnover_rate")) row.put("turnover_rate", raw.values.get("turnover_rate"));
             else row.values.remove("turnover_rate");
             var meta = metadata.get(raw.symbol);
-            if (meta == null) throw new IllegalArgumentException("L2 stock metadata missing: " + raw.symbol);
+            if (meta == null) meta=new StockMetadata("","");
             row.put("name", Objects.toString(meta.name(), "")); row.put("industry_l2", Objects.toString(meta.industry(), ""));
             if (raw.values.containsKey("main_funds_buy_amount")) row.put("buy_aggressiveness", raw.n("main_funds_buy_amount") / (diag.n("amount") == 0 ? Double.NaN : diag.n("amount")));
             row.put("daily_amount", diag.n("amount")); row.put("pct_chg", diag.n("ret") * 100);
@@ -128,8 +138,11 @@ public final class L2StockScoreProducer {
     private static Map<Key, MutableRow> index(List<MutableRow> rows) {
         var result = new HashMap<Key, MutableRow>(); for (var row : rows) result.put(new Key(row.date, row.symbol), row); return result;
     }
-    static boolean tradable(String symbol) { return (symbol.endsWith(".SH") || symbol.endsWith(".SZ")) && Set.of('0', '3', '6').contains(symbol.charAt(0)); }
+    public static boolean tradable(String symbol) { return (symbol.endsWith(".SH") || symbol.endsWith(".SZ")) && Set.of('0', '3', '6').contains(symbol.charAt(0)); }
     private static List<MutableRow> dailyFeatures(List<ScoreRow> source, boolean sentimentPresent) {
+        var rows=dailySeries(source);completeCrossSection(rows,sentimentPresent);return rows;
+    }
+    private static List<MutableRow> dailySeries(List<ScoreRow> source) {
         var rows = mutable(source);
         for (var row : rows) for (String column : List.of("price", "raw_close", "amount", "turnover_rate", "pb", "up_limit", "down_limit", "is_suspended", "is_st"))
             if (!row.values.containsKey(column)) throw new IllegalArgumentException("Canonical stock daily source lacks " + column);
@@ -151,12 +164,15 @@ public final class L2StockScoreProducer {
             row.put("guard_pos_60d", denominator == 0 ? Double.NaN : (row.n("price") - row.n("__low60")) / denominator);
             row.put("guard_limit_touch_20d", row.n("__touch_mean20") * Math.min(20, i + 1));
         }
-        rank(rows, "guard_ret_20d", "guard_ret20_rank", true, Double.NaN); rank(rows, "turnover_rate", "guard_turnover_rank", true, Double.NaN);
         rolling(rows, "ret", "component_vol60", 60, 30, true); rolling(rows, "guard_limit_up_flag", "component_limit_touch20", 20, 10, false);
         for (var row : rows) row.put("component_ret20", row.n("guard_ret_20d"));
-        rank(rows, "component_vol60", "__component_vol_rank", true, Double.NaN); rank(rows, "component_turnover", "__turnover_rank", true, Double.NaN);
         change(rows, "price", "__crowd_ret1", 1, true); rolling(rows, "__crowd_ret1", "__crowd_vol20", 20, 10, true);
         rolling(rows, "guard_limit_up_flag", "__crowd_touch", 20, 10, false);
+        return rows;
+    }
+    private static void completeCrossSection(List<MutableRow> rows,boolean sentimentPresent) {
+        rank(rows, "guard_ret_20d", "guard_ret20_rank", true, Double.NaN); rank(rows, "turnover_rate", "guard_turnover_rank", true, Double.NaN);
+        rank(rows, "component_vol60", "__component_vol_rank", true, Double.NaN); rank(rows, "component_turnover", "__turnover_rank", true, Double.NaN);
         var crowdSources = List.of("pb", "turnover_rate", "__crowd_vol20", "guard_ret_20d", "__crowd_touch");
         for (int i = 0; i < crowdSources.size(); i++) rank(rows, crowdSources.get(i), "__crowd_rank" + i, true, Double.NaN);
         double[] crowdWeights = {.25, .25, .20, .20, .10};
@@ -167,6 +183,47 @@ public final class L2StockScoreProducer {
             for (int i = 0; i < crowdWeights.length; i++) if (!Double.isNaN(row.n("__crowd_rank" + i))) { sum += crowdWeights[i] * row.n("__crowd_rank" + i); available += crowdWeights[i]; }
             row.put("crowding_score", sentimentPresent && available > 0 ? sum / available : Double.NaN);
         }
-        return rows;
+    }
+
+    private static final List<String> SERIES_DIAGNOSTICS=List.of("price","raw_close","amount","turnover_rate","pb",
+            "up_limit","down_limit","is_suspended","is_st","ret","5d_chg","prev_ret","5d_volatility","5d_turnover_mean",
+            "guard_ret_20d","guard_ret_60d","guard_ret_120d","guard_pos_60d","guard_limit_up_flag","guard_limit_touch_20d",
+            "component_turnover","component_vol60","component_limit_touch20","component_ret20","__crowd_vol20","__crowd_touch");
+    static final List<String> ETF_AGGREGATION=List.of("final_score","l2_buy_candidate","l2_rank","component_vol60",
+            "component_ret20","component_high_vol_flag","component_high_turnover_flag","component_limit_touch20");
+
+    /** Keep full per-symbol time series, then score one complete cross-section at a time. */
+    public List<ScoreRow> produceForEtfAggregation(List<ScoreRow> rawL2,List<ScoreRow> stockDaily,
+            Map<String,StockMetadata> metadata,List<ScoreRow> chipRows,boolean sentimentPresent,FrozenPromotedRecipe promoted) {
+        if(rawL2.isEmpty())throw new IllegalArgumentException("No tradable L2 observations");
+        var rawByDate=new TreeMap<LocalDate,List<ScoreRow>>();
+        for(var row:rawL2)rawByDate.computeIfAbsent(row.tradeDate(),ignored->new ArrayList<>()).add(row);
+        var bySymbol=new TreeMap<String,List<ScoreRow>>();
+        for(var row:stockDaily)bySymbol.computeIfAbsent(row.symbol(),ignored->new ArrayList<>()).add(row);
+        var diagnostics=new TreeMap<LocalDate,List<ScoreRow>>();
+        // Series rolling state starts at the original warmup boundary for every symbol.
+        // No window is truncated or reinitialized at a month or signal boundary.
+        int symbolCount=0;
+        for(var group:bySymbol.values()) {
+            for(var row:dailySeries(group))if(rawByDate.containsKey(row.date)) {
+                var values=new LinkedHashMap<String,Object>();for(String column:SERIES_DIAGNOSTICS)values.put(column,row.values.get(column));
+                diagnostics.computeIfAbsent(row.date,ignored->new ArrayList<>()).add(new ScoreRow(row.date,row.symbol,values));
+            }
+            if(++symbolCount%500==0)LOG.info("Prepared full-history stock series: {}/{} symbols",symbolCount,bySymbol.size());
+        }
+        var chips=new TreeMap<LocalDate,List<ScoreRow>>();
+        for(var row:chipRows)chips.computeIfAbsent(row.tradeDate(),ignored->new ArrayList<>()).add(row);
+        var result=new ArrayList<ScoreRow>();
+        int dateCount=0;
+        for(var entry:rawByDate.entrySet()) {
+            var observed=diagnostics.remove(entry.getKey());var day=mutable(observed==null?List.of():observed);
+            completeCrossSection(day,sentimentPresent);
+            for(var scored:producePrepared(entry.getValue(),day,metadata,chips.getOrDefault(entry.getKey(),List.of()),promoted)) {
+                var values=new LinkedHashMap<String,Object>();for(String column:ETF_AGGREGATION)values.put(column,scored.values().get(column));
+                result.add(new ScoreRow(scored.tradeDate(),scored.symbol(),values));
+            }
+            if(++dateCount%20==0||dateCount==rawByDate.size())LOG.info("Completed exact stock score cross-sections: {}/{} dates; rows={}",dateCount,rawByDate.size(),result.size());
+        }
+        return List.copyOf(result);
     }
 }

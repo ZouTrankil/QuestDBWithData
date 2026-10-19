@@ -254,9 +254,19 @@ class MarketSentimentDailyPublicationContractTest {
         MarketSentimentDailyTargetSnapshot snapshot(String name){snapshots++;var p=Objects.requireNonNull(tables.get(name),name);var rows=p.rows.stream().sorted(Comparator.comparing(MarketSentimentDailyRow::tradeDate)).toList();return new MarketSentimentDailyTargetSnapshot(com.zoutrankil.data.domain.policy.StaticTargetIdentity.identify("jdbc:postgresql://127.0.0.1:8812/qdb",name,p.id,p.directory),p.id,p.directory,true,rows,MarketSentimentDailyRows.digest(rows));}
     }
     private static final class Session implements MarketSentimentDailyWriteSession {
-        final Target target;String stage;int prepares,sends;
-        Session(Target target){this.target=target;}
-        public NativeDailyWindowSession<MarketSentimentDailyRow> nativePort(){throw new UnsupportedOperationException("Market owner uses the specialized session");}
+        final Target target;final NativeDailyWindowSession<MarketSentimentDailyRow> nativeSession;String stage;int prepares,sends;
+        @SuppressWarnings("unchecked") Session(Target target){
+            this.target=target;
+            // Production now verifies physical identity after each rename. Keep that guard in the offline port.
+            nativeSession=mock(NativeDailyWindowSession.class,call->{
+                if(!call.getMethod().getName().equals("awaitPublished"))throw new UnsupportedOperationException(call.getMethod().getName());
+                if(((java.util.function.BooleanSupplier)call.getArgument(3)).getAsBoolean())throw new java.util.concurrent.CancellationException();
+                var actual=target.snapshot(call.getArgument(0));
+                assertEquals((long)call.getArgument(1),actual.tableId());assertEquals(call.getArgument(2),actual.directory());assertTrue(actual.wal());
+                return null;
+            });
+        }
+        public NativeDailyWindowSession<MarketSentimentDailyRow> nativePort(){return nativeSession;}
         public String table(){return TABLE;}public String stage(){return Objects.requireNonNull(stage);}
         public MarketSentimentDailyTargetSnapshot snapshot(String table){return target.snapshot(table);}public MarketSentimentDailyTargetSnapshot formalSnapshot(){return snapshot(TABLE);}
         public void requireSame(MarketSentimentDailyTargetSnapshot before){assertEquals(before,formalSnapshot());}

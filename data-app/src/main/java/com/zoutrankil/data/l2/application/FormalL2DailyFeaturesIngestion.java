@@ -90,9 +90,8 @@ public final class FormalL2DailyFeaturesIngestion {
                     throw new IOException("Formal L2 gap changed before source-certified submission");
                 sendStarted = true;
                 writer.send(batch);
-                while (!writer.walSettled()) { control.run(); Thread.sleep(20); }
-                verifyBatch(batch);
             }
+            if (sendStarted) awaitWalSettled(control);
             var finalFrontier = frontier.read();
             if (!compare(expected, control).isEmpty()) throw new IOException("Formal L2 gap remains after bounded ingestion");
             if (!finalFrontier.equals(frontier.read())) throw new IOException("Formal L2 changed during final verification");
@@ -134,13 +133,12 @@ public final class FormalL2DailyFeaturesIngestion {
                 control.run();
                 if (!writer.readback(batch.stream().map(L2DailyFeatures::key).toList()).isEmpty())
                     throw new IOException("Formal L2 gap changed before source-certified submission");
-                // Rows are already parsed and receipt-hash checked; recheck the full source after delivery,
+                // Rows are already parsed and receipt-hash checked; verify the full day after delivery,
                 // not once per bounded batch.
                 sendStarted = true;
                 writer.send(batch);
-                while (!writer.walSettled()) { control.run(); Thread.sleep(20); }
-                verifyBatch(batch);
             }
+            if (sendStarted) awaitWalSettled(control);
             var finalFrontier = frontier.read();
             if (!compare(expected, control).isEmpty()) throw new IOException("Formal L2 gap remains after bounded ingestion");
             if (!finalFrontier.equals(frontier.read())) throw new IOException("Formal L2 changed during final verification");
@@ -271,12 +269,8 @@ public final class FormalL2DailyFeaturesIngestion {
         }
         return actual;
     }
-    private void verifyBatch(List<L2DailyFeatures> expected) throws Exception {
-        var actual = read(expected);
-        if (actual.size() != expected.size()) throw new IOException("Formal L2 submitted keys are not physically visible");
-        for (var row : expected) if (!Arrays.equals(L2DailyFeaturesRows.canonicalBytes(row),
-                L2DailyFeaturesRows.canonicalBytes(actual.get(row.key()))))
-            throw new IOException("Formal L2 submitted values differ from readback");
+    private void awaitWalSettled(NativeL2DailyParquetReader.Control control) throws Exception {
+        while (!writer.walSettled()) { control.run(); Thread.sleep(20); }
     }
 
     private static Evidence evidence(LocalDate day, L2DailyFeaturesParquetSource.Inspection inspection,

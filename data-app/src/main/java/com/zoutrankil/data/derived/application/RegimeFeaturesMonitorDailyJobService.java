@@ -28,7 +28,7 @@ public final class RegimeFeaturesMonitorDailyJobService implements DatasetImplem
     public static final String JOB_ID="data.regime_features_monitor_daily";
     public static final String PRODUCER="java.regime_features_monitor_daily";
     private static final String FORMAL="regime_features_monitor_daily",PREFIX="java_regime_features_monitor_daily";
-    public static final List<String> SOURCES=List.of("stk_factor","daily_basic","stk_limit","stk_suspend","stk_st_daily","margin_detail","moneyflow_hsgt","cn_bond_yield_curve","exchange_calendar");
+    public static final List<String> SOURCES=List.of("stk_factor","daily","daily_basic","stk_limit","stk_suspend","stk_st_daily","margin_detail","moneyflow_hsgt","cn_bond_yield_curve","exchange_calendar");
     // Every required input now has a registered Java owner, including ChinaBond.
     public static final List<String> REGISTERED_DEPENDENCIES=SOURCES;
     public record Plan(FrozenRequest request,String targetId,LocalDate warmupFrom,List<String> dependencies,String sourcePin,
@@ -36,7 +36,7 @@ public final class RegimeFeaturesMonitorDailyJobService implements DatasetImplem
     public record MaterializationResult(SyncJobRunner.Result result,int historyDates,long sourceRawRows,String sourceFingerprint,String fullTargetFingerprint,String evidence) {}
     private record Computed(List<RegimeFeaturesMonitorDailyRow> rows,int historyDates,long panelRows,long valuationRows,String fingerprint,
                             List<Map<String,Object>> panelCoverage,List<Map<String,Object>> marginAvailability,List<LocalDate> expectedDates,
-                            List<LocalDate> ignoredGovDates,int northboundDates,int valuationDates,int govDates) {}
+                            List<LocalDate> ignoredGovDates,int northboundDates,int valuationDates,int govDates,List<Map<String,Object>> stockScopeAudits) {}
     private final RegimeFeaturesMonitorDailySourceReadPort storage;
     private final RegimeFeaturesMonitorDailyTarget target;
     private final java.util.function.Function<NativeDailyWindowSession<RegimeFeaturesMonitorDailyRow>,NativeDailyWindowPublication<RegimeFeaturesMonitorDailyRow>> publications;
@@ -106,7 +106,7 @@ public final class RegimeFeaturesMonitorDailyJobService implements DatasetImplem
             writeEvidence(evidence,Map.ofEntries(Map.entry("producer",PRODUCER),Map.entry("algorithmVersion",ALGORITHM_VERSION),Map.entry("warmupFrom",plan.warmupFrom),
                     Map.entry("from",request.from()),Map.entry("to",request.to()),Map.entry("historyDates",historyDates),Map.entry("sourceRawRows",rawRows),Map.entry("valuationRawRows",source.valuationRows),
                     Map.entry("sourceFingerprint",sourceFingerprint),Map.entry("sources",SOURCES),Map.entry("externalReadOnlySources",List.of("cn_bond_yield_curve")),
-                    Map.entry("panelCoverage",source.panelCoverage),Map.entry("marginAvailability",source.marginAvailability),Map.entry("expectedSseTradingDates",source.expectedDates),
+                    Map.entry("panelCoverage",source.panelCoverage),Map.entry("stockScopeAudits",source.stockScopeAudits),Map.entry("marginAvailability",source.marginAvailability),Map.entry("expectedSseTradingDates",source.expectedDates),
                     Map.entry("requiredContextFields",REQUIRED_CONTEXT_FIELDS),Map.entry("qualityPolicy","proxy_style describes stock-bucket proxies; optional partial-market margin is null and separately evidenced"),
                     Map.entry("northboundObservedDates",source.northboundDates),Map.entry("valuationObservedDates",source.valuationDates),Map.entry("gov10YObservedDates",source.govDates),
                     Map.entry("ignoredGovNonValuationDates",source.ignoredGovDates),Map.entry("rows",source.rows)));
@@ -125,14 +125,17 @@ public final class RegimeFeaturesMonitorDailyJobService implements DatasetImplem
         MessageDigest hash=MessageDigest.getInstance("SHA-256");var calendar=storage.calendar(plan.warmupFrom,plan.request.to(),hash);
         var expectedOutput=new TreeSet<>(calendar.subSet(plan.request.from(),true,plan.request.to(),true));
         if(expectedOutput.isEmpty())throw new IllegalStateException("Requested window has no authoritative SSE trading dates");
-        var stockDays=new ArrayList<Day>();var observedPanelDates=new TreeSet<LocalDate>();var panelCoverage=new ArrayList<Map<String,Object>>();long[] panelRows={0},valuationRows={0};
+        var stockDays=new ArrayList<Day>();var observedPanelDates=new TreeSet<LocalDate>();var panelCoverage=new ArrayList<Map<String,Object>>();var stockScopeAudits=new ArrayList<Map<String,Object>>();long[] panelRows={0},valuationRows={0};
         var valuations=new TreeMap<LocalDate,Valuation>();
         for(LocalDate lower=plan.warmupFrom;!lower.isAfter(plan.request.to());){
             check(cancelled);LocalDate upper=lower.withDayOfMonth(1).plusMonths(1);if(upper.isAfter(plan.request.to().plusDays(1)))upper=plan.request.to().plusDays(1);
-            storage.readPanelMonth(lower,upper,calendar,panelRows,hash,cancelled,
-                    (date,stocks,codes,basic,limits)->finishPanelDay(date,stocks,codes,basic,limits,stockDays,observedPanelDates,panelCoverage));
+            storage.readPanelMonth(lower,upper,calendar,panelRows,hash,cancelled,new RegimeFeaturesMonitorDailySourceReadPort.PanelDayConsumer(){
+                @Override public void stockScopeAudit(Map<String,Object> proof){stockScopeAudits.add(proof);}
+                @Override public void accept(LocalDate date,List<Stock> stocks,Set<String> codes,int basic,int limits){finishPanelDay(date,stocks,codes,basic,limits,stockDays,observedPanelDates,panelCoverage);}
+            });
             storage.readValuations(lower,upper,calendar,valuations,valuationRows,hash,cancelled);lower=upper;
         }
+        hash.update(canonicalBytes(stockScopeAudits));
         if(!observedPanelDates.equals(calendar))throw new IllegalStateException("Warmup/output panel missing SSE trading dates: "+difference(calendar,observedPanelDates));
         styleAndBreadth(stockDays);check(cancelled);
         var north=storage.readNorthbound(plan.warmupFrom,plan.request.to(),hash);var margin=storage.readMargins(plan.warmupFrom,plan.request.to(),hash);
@@ -148,7 +151,7 @@ public final class RegimeFeaturesMonitorDailyJobService implements DatasetImplem
         if(!outputDates.equals(expectedOutput))throw new IllegalStateException("Missing requested derived output dates: "+difference(expectedOutput,outputDates));
         var ignoredGov=bonds.keySet().stream().filter(d->!valuations.containsKey(d)).toList();
         return new Computed(List.copyOf(output),stockDays.size(),panelRows[0],valuationRows[0],HexFormat.of().formatHex(hash.digest()),List.copyOf(panelCoverage),List.copyOf(availability),
-                List.copyOf(expectedOutput),ignoredGov,north.size(),valuations.size(),bonds.size());
+                List.copyOf(expectedOutput),ignoredGov,north.size(),valuations.size(),bonds.size(),List.copyOf(stockScopeAudits));
     }
     private void finishPanelDay(LocalDate date,List<Stock> stocks,Set<String> codes,int basic,int limits,List<Day> days,Set<LocalDate> observed,List<Map<String,Object>> evidence){
         if(codes.isEmpty()||basic!=codes.size()||limits!=codes.size()||stocks.isEmpty()||!observed.add(date))throw new IllegalStateException("Incomplete/duplicate stock panel on "+date+": factor="+codes.size()+", basic="+basic+", limits="+limits+", tradable="+stocks.size());

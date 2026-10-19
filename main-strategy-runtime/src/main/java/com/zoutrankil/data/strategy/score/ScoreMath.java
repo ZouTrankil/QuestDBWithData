@@ -105,8 +105,8 @@ final class ScoreMath {
         return result;
     }
     static final class MutableRow {
-        final LocalDate date; final String symbol; final LinkedHashMap<String, Object> values;
-        MutableRow(ScoreRow row) { date = row.tradeDate(); symbol = row.symbol(); values = new LinkedHashMap<>(row.values()); }
+        final LocalDate date; final String symbol; final Map<String, Object> values;
+        MutableRow(ScoreRow row) { date = row.tradeDate(); symbol = row.symbol(); values = new MutableScalarValues(row.values()); }
         double n(String key) { return number(values.get(key)); }
         double f(String key, double fallback) { return fill(n(key), fallback); }
         String s(String key) { return Objects.toString(values.get(key), ""); }

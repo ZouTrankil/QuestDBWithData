@@ -31,7 +31,7 @@ class MoneyflowHsgtAdmissionContractTest {
         var failure=assertThrows(IllegalStateException.class,()->f.adapter.fetch(f.request,p->fail("Unproven formal coverage cannot write"),()->false));
         assertTrue(failure.getMessage().contains(switch(fault){case "missing"->"Missing SSE";case "duplicate"->"Duplicate SSE";default->"SOURCE_INCOMPLETE";}));
         verify(f.port,never()).readWindow(anyString(),any(),any());verify(f.staging,never()).verify(any(),any(),any());
-        verify(f.port).useStage(f.prepared.stage(),f.prepared.stagePhysicalTarget());
+        verify(f.port,never()).useStage(anyString(),anyString());
     }
     @ParameterizedTest @ValueSource(booleans={false,true})
     void formalCoveredOpenDateAndCertifiedClosedEmptyDayReachConsumer(boolean empty)throws Exception {

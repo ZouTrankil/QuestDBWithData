@@ -19,6 +19,7 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 
 /** Sequential date-sliced fetch adapter with full-key checks and durable source-completion evidence. */
 public final class MarginDetailSyncAdapter implements SyncJobRunner.Adapter<MarginDetail,MarginDetailKey> {
+    @Override public java.time.Duration visibilityTimeout(){return java.time.Duration.ofMinutes(3);}
     private final MarginDetailSource source;private final MarginDetailTradingDates calendar;private final MarginDetailWriteSession port;private final Path evidenceRoot;private final String targetId;private final boolean resume;
     public MarginDetailSyncAdapter(MarginDetailSource source,MarginDetailTradingDates calendar,MarginDetailWriteSession port,Path evidenceRoot,String targetId,boolean resume){
         this.source=Objects.requireNonNull(source);this.calendar=Objects.requireNonNull(calendar);this.port=Objects.requireNonNull(port);this.evidenceRoot=Objects.requireNonNull(evidenceRoot).toAbsolutePath().normalize();this.targetId=Objects.requireNonNull(targetId);this.resume=resume;

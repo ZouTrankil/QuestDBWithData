@@ -11,6 +11,16 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class BacktestDailyMaterializedViewPortTest {
+    @Test void canonicalQueryExtractionAcceptsWindowsAndUnixLineEndings(){
+        String unix=BacktestDailyMaterializedViewPort.CREATE_SQL.replace("\r\n","\n").replace('\r','\n');
+        String query=BacktestDailyMaterializedViewPort.QUERY_SQL;
+        assertEquals(query,BacktestDailyMaterializedViewPort.querySql(unix));
+        assertEquals(query,BacktestDailyMaterializedViewPort.querySql(unix.replace("\n","\r\n")));
+        assertEquals(query,BacktestDailyMaterializedViewPort.querySql(unix.replace('\n','\r')));
+        assertTrue(query.stripLeading().startsWith("SELECT trade_date"));
+        assertTrue(query.stripTrailing().endsWith("SAMPLE BY 1d"));
+        assertThrows(IllegalStateException.class,()->BacktestDailyMaterializedViewPort.querySql("SELECT 1"));
+    }
     private final Map<String,Object> view=new HashMap<>(Map.of(
             "base_table_name","stk_limit","refresh_type","immediate","view_status","valid",
             "view_sql",BacktestDailyMaterializedViewPort.QUERY_SQL,"view_table_dir_name","mv_backtest_daily~90",

@@ -16,6 +16,7 @@ import reactor.core.scheduler.Schedulers;
 @RequestMapping(path="/api/v1/main-strategy/data",produces=MediaType.APPLICATION_JSON_VALUE)
 @ConditionalOnWebApplication(type=ConditionalOnWebApplication.Type.REACTIVE)
 public final class MainStrategyDataController {
+    private static final org.slf4j.Logger LOG=org.slf4j.LoggerFactory.getLogger(MainStrategyDataController.class);
     private final MainStrategyDataService data;
     public MainStrategyDataController(MainStrategyDataService data){this.data=data;}
     public record ScoreRequest(LocalDate target,LocalDate startDate) {}
@@ -32,5 +33,5 @@ public final class MainStrategyDataController {
         if(request==null||request.sourcePath()==null||request.sourceSha256()==null)throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Canonical source path and SHA256 required");
         return call(()->data.importPlan(java.nio.file.Path.of(request.sourcePath()),request.sourceSha256(),request.scoreRunId()));
     }
-    private static Mono<?> call(java.util.concurrent.Callable<?> work){return Mono.fromCallable(work).subscribeOn(Schedulers.boundedElastic()).onErrorMap(IllegalArgumentException.class,e->new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage(),e)).onErrorMap(IllegalStateException.class,e->new ResponseStatusException(HttpStatus.CONFLICT,e.getMessage(),e)).onErrorMap(com.zoutrankil.data.strategy.store.PlanStoreException.class,e->new ResponseStatusException(HttpStatus.CONFLICT,e.getMessage(),e));}
+    private static Mono<?> call(java.util.concurrent.Callable<?> work){return Mono.fromCallable(work).subscribeOn(Schedulers.boundedElastic()).doOnError(error->LOG.error("Main strategy data request failed",error)).onErrorMap(IllegalArgumentException.class,e->new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage(),e)).onErrorMap(IllegalStateException.class,e->new ResponseStatusException(HttpStatus.CONFLICT,e.getMessage(),e)).onErrorMap(com.zoutrankil.data.strategy.store.PlanStoreException.class,e->new ResponseStatusException(HttpStatus.CONFLICT,e.getMessage(),e));}
 }

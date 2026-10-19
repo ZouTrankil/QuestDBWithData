@@ -18,7 +18,8 @@ public final class FlowCommands implements CliCommandFamily {
             "plan-margin-detail-job", "run-margin-detail-job",
             "plan-moneyflow-hsgt-job", "run-moneyflow-hsgt-job", "plan-moneyflow-dc-job",
             "run-moneyflow-dc-job", "plan-moneyflow-ths-job", "run-moneyflow-ths-job",
-            "plan-moneyflow-job", "run-moneyflow-job", "finish-moneyflow-hsgt-publication");
+            "plan-moneyflow-job", "run-moneyflow-job", "reconcile-moneyflow-job", "finish-moneyflow-hsgt-publication",
+            "discard-moneyflow-hsgt-stage");
     private final com.zoutrankil.data.flow.application.MoneyflowHsgtJobService moneyflowHsgtService;
     private final com.zoutrankil.data.flow.application.MoneyflowDcJobService moneyflowDcService;
     private final com.zoutrankil.data.flow.application.MoneyflowThsJobService moneyflowThsService;
@@ -50,6 +51,20 @@ public final class FlowCommands implements CliCommandFamily {
 
     @Override public void execute(String command, Map<String, String> options) throws Exception {
         switch (command) {
+            case "discard-moneyflow-hsgt-stage" -> {
+                if(moneyflowHsgtService==null || !options.keySet().equals(java.util.Set.of("--run","--writer-stopped"))
+                        || !"true".equals(options.get("--writer-stopped")))
+                    throw new IllegalArgumentException("Explicit --run and --writer-stopped true required");
+                moneyflowHsgtService.discardUnpublished(options.get("--run"),true);
+                CliOutput.printJson(Map.of("runId",options.get("--run"),"unpublishedStageDiscarded",true,
+                        "formalPlanOrDataPublished",false),CliOutput.Profile.JOB_DEFINITION,true);
+            }
+            case "reconcile-moneyflow-job" -> {
+                if(moneyflowService==null || !options.keySet().equals(java.util.Set.of("--run","--writer-log")))
+                    throw new IllegalArgumentException("Recovery requires --run RUN_ID --writer-log PATH");
+                CliOutput.printJson(moneyflowService.reconcile(options.get("--run"),java.nio.file.Path.of(options.get("--writer-log"))),
+                        CliOutput.Profile.JOB_DEFINITION,true);
+            }
             case "plan-margin-detail-job", "run-margin-detail-job" -> {
                 if (marginDetailService == null) throw new IllegalStateException("Margin detail owner unavailable");
                 if (options.containsKey("--resume-from")) {

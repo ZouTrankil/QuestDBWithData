@@ -22,6 +22,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import javax.sql.PooledConnection;
+import org.sqlite.javax.SQLiteConnectionPoolDataSource;
+import org.sqlite.javax.SQLitePooledConnection;
 
 /** Original wire bytes and frozen normalization transactions survive collector/process failures. */
 public final class RawJournal implements AutoCloseable {
@@ -31,6 +34,7 @@ public final class RawJournal implements AutoCloseable {
     private static final long DEFAULT_RAW_BYTES = 8L * 1024 * 1024 * 1024;
     private final Path database;
     private final long maxRawBytes;
+    private PooledConnection connectionPool;
     private volatile boolean closed;
 
     public record StoredBatch(String id, List<L2CleanEvent> events, List<L2MinuteState> states,
@@ -66,15 +70,32 @@ public final class RawJournal implements AutoCloseable {
                     }
                 }
             }
+            connectionPool=createPool();
             initialize();
-        } catch(RuntimeException e) { throw e; }
-        catch(Exception e) { throw new IllegalStateException("Cannot initialize live raw journal",e); }
+        } catch(RuntimeException e) { closeFailedInitialization(e);throw e; }
+        catch(Exception e) { closeFailedInitialization(e);throw new IllegalStateException("Cannot initialize live raw journal",e); }
     }
 
     public Path databasePath() { return database; }
     private Connection open() throws Exception {
         if(closed) throw new IllegalStateException("Raw journal is closed");
-        var c=DriverManager.getConnection("jdbc:sqlite:"+database);
+        // All operations are serialized by this owner. Logical handles reset
+        // abandoned transactions while keeping one physical WAL writer alive.
+        if(connectionPool==null)connectionPool=createPool();
+        return connectionPool.getConnection();
+    }
+    private PooledConnection createPool() throws Exception {
+        var source=new SQLiteConnectionPoolDataSource();
+        source.setUrl("jdbc:sqlite:"+database);
+        var pool=source.getPooledConnection();
+        try(var c=pool.getConnection()) { configure(c); }
+        catch(Exception error) {
+            try {closePool(pool);}catch(Exception cleanup) {error.addSuppressed(cleanup);}
+            throw error;
+        }
+        return pool;
+    }
+    private void configure(Connection c) throws Exception {
         try(var s=c.createStatement()) {
             s.execute("PRAGMA busy_timeout=5000"); s.execute("PRAGMA foreign_keys=ON"); s.execute("PRAGMA synchronous=FULL");
             long pageSize;
@@ -83,8 +104,7 @@ public final class RawJournal implements AutoCloseable {
             try(var rows=s.executeQuery("PRAGMA max_page_count="+maxPages)) {
                 if(!rows.next()||rows.getLong(1)>maxPages)throw new IllegalStateException("Existing raw/outbox journal exceeds its configured page quota");
             }
-        } catch(Exception e) {c.close();throw e;}
-        return c;
+        }
     }
     private void initialize() throws Exception {
         try(var c=open();var s=c.createStatement()) {
@@ -314,8 +334,14 @@ public final class RawJournal implements AutoCloseable {
         if(bytes==null || !LiveStorageJson.sha256(bytes).equals(hash)) throw new IllegalStateException("Retained raw/checkpoint hash mismatch");
     }
     public synchronized Status status() {
-        try(var c=open();var s=c.createStatement();var r=s.executeQuery("SELECT count(*),coalesce(sum(1-completed),0),coalesce(sum(completed),0),coalesce(sum(length(payload)),0) FROM raw_capture")) {
-            r.next();return new Status(database,r.getLong(1),r.getLong(2),r.getLong(3),r.getLong(4),active(c).map(StoredBatch::id).orElse(""));
+        // Captures are append-only and receive a contiguous sequence in the same
+        // transaction that updates these totals. Scan only the pending index;
+        // scanning retained raw payloads here blocks MQTT append on this monitor.
+        try(var c=open();var s=c.createStatement();var r=s.executeQuery("SELECT next_sequence,(SELECT count(*) FROM raw_capture WHERE completed=0),raw_bytes,coalesce((SELECT batch_id FROM prepared_batch WHERE active=1),'') FROM journal_totals WHERE singleton=1")) {
+            if(!r.next())throw new IllegalStateException("Raw journal totals are missing");
+            long captures=r.getLong(1),pending=r.getLong(2),bytes=r.getLong(3);
+            if(captures<0||pending<0||pending>captures||bytes<0)throw new IllegalStateException("Raw journal totals are inconsistent");
+            return new Status(database,captures,pending,captures-pending,bytes,r.getString(4));
         } catch(Exception e) { throw failure("Cannot read raw journal status",e); }
     }
     public synchronized ExportEvidence exportJsonl(Path destination) {
@@ -346,9 +372,34 @@ public final class RawJournal implements AutoCloseable {
         catch(Exception e) { throw failure("Cannot export immutable raw JSONL",e); }
         finally { if(temporary!=null) try { Files.deleteIfExists(temporary); } catch(Exception ignored) {} }
     }
-    @Override public void close() { closed=true; }
-    private static void rollback(Connection connection,Exception original) {
-        try {connection.rollback();}catch(Exception rollbackFailure) {original.addSuppressed(rollbackFailure);}
+    @Override public synchronized void close() {
+        if(closed)return;
+        closed=true;
+        try {if(connectionPool!=null)closePool(connectionPool);}
+        catch(Exception error) {throw failure("Cannot close raw journal writer",error);}
+    }
+    private void closeFailedInitialization(Exception original) {
+        closed=true;
+        try {if(connectionPool!=null)closePool(connectionPool);}
+        catch(Exception error) {original.addSuppressed(error);}
+    }
+    private static void closePool(PooledConnection pool) throws Exception {
+        try {pool.close();}
+        finally {
+            // A SQLite auto-rollback (e.g. SQLITE_FULL) can leave a logical
+            // handle unable to reset. Always release its physical file handle.
+            if(pool instanceof SQLitePooledConnection sqlite && sqlite.getPhysicalConn()!=null)
+                sqlite.getPhysicalConn().close();
+        }
+    }
+    private void rollback(Connection connection,Exception original) {
+        try {connection.rollback();}
+        catch(Exception rollbackFailure) {
+            original.addSuppressed(rollbackFailure);
+            var broken=connectionPool;connectionPool=null;
+            try {if(broken!=null)closePool(broken);}
+            catch(Exception cleanup) {original.addSuppressed(cleanup);}
+        }
     }
     private static IllegalStateException failure(String message,Exception error) { return new IllegalStateException(message,error); }
 }

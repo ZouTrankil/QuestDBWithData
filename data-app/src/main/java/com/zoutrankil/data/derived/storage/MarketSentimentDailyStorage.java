@@ -29,6 +29,7 @@ public final class MarketSentimentDailyStorage implements MarketSentimentDailySo
     public void requireTarget(){MarketSentimentDailyWritePort.requireTarget(table);}
     public MarketSentimentDailyWritePort newWriter(){return new MarketSentimentDailyWritePort(jdbc,table);}
     public int readPanelMonth(LocalDate lower,LocalDate upper,Runnable checkCancellation,PanelConsumer consumer) {
+        var aliases=BseLegacyFactorAliases.prepare(jdbc,lower,upper);consumer.stockScopeAudit(aliases.evidence());
         LocalDate[] date={null};var rawCodes=new HashSet<String>();int[] basicCount={0},limitCount={0},batchRows={0};
         String sql="SELECT cast(sf.trade_date AS long) AS trade_micros,sf.ts_code,sf.close,sf.pre_close,sf.amount,db.turnover_rate,db.circ_mv,db.total_mv,db.pb,sl.up_limit,sl.down_limit,ss.is_suspended,st.is_st,db.ts_code AS basic_code,sl.ts_code AS limit_code"
                 +" FROM "+bounded("stk_factor","trade_date,ts_code,close,pre_close,amount","trade_date")+" sf"
@@ -42,8 +43,9 @@ public final class MarketSentimentDailyStorage implements MarketSentimentDailySo
             // The shared cancellation supplier consults SQLite; keep it outside the per-row hot path.
             if(batchRows[0]==1 || (batchRows[0]&1023)==0)checkCancellation.run();
             LocalDate current=date(rs);
+            String code=rs.getString("ts_code");if(aliases.excludes(current,code))return;
             if(date[0]!=null&&!date[0].equals(current)){consumer.completeDay(date[0],rawCodes,basicCount[0],limitCount[0]);rawCodes.clear();basicCount[0]=limitCount[0]=0;}
-            date[0]=current;String code=rs.getString("ts_code");if(code==null||!rawCodes.add(code))throw new IllegalStateException("Duplicate stock panel business key on "+current);
+            date[0]=current;if(code==null||!rawCodes.add(code))throw new IllegalStateException("Duplicate stock panel business key on "+current);
             if(rs.getString("basic_code")!=null)basicCount[0]++;if(rs.getString("limit_code")!=null)limitCount[0]++;
             double close=number(rs,"close"),previous=number(rs,"pre_close"),amount=number(rs,"amount"),turnover=number(rs,"turnover_rate"),circ=number(rs,"circ_mv"),mv=number(rs,"total_mv"),pb=number(rs,"pb"),up=number(rs,"up_limit"),down=number(rs,"down_limit");
             boolean suspended=flag(rs.getObject("is_suspended")),st=flag(rs.getObject("is_st"));
@@ -79,7 +81,7 @@ public final class MarketSentimentDailyStorage implements MarketSentimentDailySo
         return flows;
     }
     public String sourcePin(List<String> sources)throws Exception{
-        var pins=new ArrayList<Object>();for(String source:sources){var metadata=jdbc.queryForList("SELECT id,directoryName,walEnabled,table_txn,table_row_count FROM tables() WHERE table_name=?",source);
+        var pins=new ArrayList<Object>();pins.add(BseLegacyFactorAliases.identity());for(String source:sources){var metadata=jdbc.queryForList("SELECT id,directoryName,walEnabled,table_txn,table_row_count FROM tables() WHERE table_name=?",source);
             if(metadata.size()!=1)throw new IllegalStateException("Required source table missing: "+source);var item=new LinkedHashMap<String,Object>(metadata.getFirst());item.put("table",source);
             if(Boolean.TRUE.equals(item.get("walEnabled"))){var frontier=jdbc.queryForList("SELECT suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name=?",source);
                 if(frontier.size()!=1)throw new IllegalStateException("Source WAL metadata missing: "+source);var wal=frontier.getFirst();

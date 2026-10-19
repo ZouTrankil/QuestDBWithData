@@ -159,6 +159,11 @@ public class MoneyflowHsgtJobService {
         if(new MoneyflowHsgtPublication(target.newTables(),ledgerPath).findForRun(runId).isEmpty())MoneyflowHsgtRunRecovery.finishStageOnly(target.newTables(),ledgerPath,table,runId,writerStopped);
         var result=new MoneyflowHsgtPublication(target.newTables(),ledgerPath).finish(runId,writerStopped);completeRecoveredLedger(runId,result);return result;
     }
+    /** Discard only an owned unpublished stage; a new bounded request must fetch and verify the source again. */
+    public void discardUnpublished(String runId,boolean writerStopped)throws Exception {
+        if(!writerStopped)throw new IllegalStateException("D027 stopped-writer confirmation required");
+        new MoneyflowHsgtPublication(target.newTables(),ledgerPath).discardStageOnly(table,runId,true);
+    }
     public LedgerReadModels.Entry status(String runId)throws Exception{return LedgerReadModels.entry(SyncRunLedger.openReadOnly(ledgerPath).get(runId));}
     public List<SyncRunLedger.Entry> entries(String runId,String afterId,int limit)throws Exception{return SyncRunLedger.openReadOnly(ledgerPath).entries(runId,afterId,limit);}
     public boolean cancel(String runId)throws Exception{return new SyncRunLedger(ledgerPath).requestCancellation(runId);}

@@ -17,6 +17,83 @@ class RawJournalTest {
     @TempDir Path root;
     private static final Instant TIME=Instant.parse("2026-10-13T16:00:00.123456789Z");
 
+    @Test void statusDoesNotScanCompletedHistoryOrHoldTheWriterForItsSize() throws Exception {
+        var open=RawJournal.class.getDeclaredMethod("open");open.setAccessible(true);
+        try(var journal=new RawJournal(root)) {
+            // Seed a large, append-only history in one isolated fixture transaction.
+            // All payload and receive-envelope hashes remain real.
+            try(var c=(java.sql.Connection)open.invoke(journal)) {
+                c.setAutoCommit(false);
+                try(var insert=c.prepareStatement("INSERT INTO raw_capture(sequence,capture_id,session_id,topic,payload,payload_sha256,envelope_sha256,recv_ts,capture_date,qos,retained,duplicate,subscription_authorized,completed) VALUES(?,?,?,?,?,?,?,?,?,0,0,0,1,1)")) {
+                    byte[] payload={1,2,3};
+                    for(int i=1;i<=20_000;i++) {
+                        var raw=new com.zoutrankil.data.l2live.domain.RawCapture("history_"+i,i,"fixture","fixture/topic",
+                                java.util.Base64.getEncoder().encodeToString(payload),TIME,TIME.atZone(com.zoutrankil.data.l2live.domain.RawCapture.SHANGHAI).toLocalDate(),0,false,false,true);
+                        insert.setLong(1,i);insert.setString(2,raw.captureId());insert.setString(3,raw.sessionId());insert.setString(4,raw.topic());
+                        insert.setBytes(5,payload);insert.setString(6,LiveStorageJson.sha256(payload));
+                        insert.setString(7,LiveStorageJson.sha256(LiveStorageJson.bytes(raw)));insert.setString(8,TIME.toString());
+                        insert.setString(9,raw.captureDate().toString());insert.addBatch();
+                    }
+                    insert.executeBatch();
+                }
+                try(var s=c.createStatement()) {s.executeUpdate("UPDATE journal_totals SET next_sequence=20000,raw_bytes=60000 WHERE singleton=1");}
+                c.commit();
+            }
+            event(journal);
+            try(var c=(java.sql.Connection)open.invoke(journal)) {
+                var physical=c.unwrap(org.sqlite.SQLiteConnection.class);
+                var steps=new java.util.concurrent.atomic.AtomicInteger();
+                org.sqlite.ProgressHandler.setHandler(physical,1000,new org.sqlite.ProgressHandler() {
+                    @Override protected int progress() {return steps.incrementAndGet()>20?1:0;}
+                });
+                try {
+                    var state=journal.status();
+                    assertEquals(20001,state.captures());assertEquals(20000,state.completed());assertEquals(1,state.pending());
+                    assertEquals(60000+"original-wire".length(),state.rawBytes());
+                    assertEquals("",state.preparedBatchId());
+                } finally {org.sqlite.ProgressHandler.clearHandler(physical);}
+            }
+        }
+    }
+
+    @Test void operationsReusePhysicalWriterAndResetUncommittedTransactions() throws Exception {
+        var open=RawJournal.class.getDeclaredMethod("open");open.setAccessible(true);
+        org.sqlite.SQLiteConnection physical;
+        try(var journal=new RawJournal(root)) {
+            try(var first=(java.sql.Connection)open.invoke(journal)) {
+                physical=first.unwrap(org.sqlite.SQLiteConnection.class);
+                try(var statement=first.createStatement();var result=statement.executeQuery("PRAGMA synchronous")) {
+                    assertTrue(result.next());assertEquals(2,result.getInt(1));
+                }
+                first.setAutoCommit(false);
+                try(var statement=first.createStatement()) {statement.executeUpdate("UPDATE journal_totals SET next_sequence=100 WHERE singleton=1");}
+            }
+            assertFalse(physical.isClosed(),"A logical operation must not close/checkpoint the physical writer");
+            try(var second=(java.sql.Connection)open.invoke(journal)) {
+                assertSame(physical,second.unwrap(org.sqlite.SQLiteConnection.class));
+                assertTrue(second.getAutoCommit());
+            }
+            assertEquals(1,event(journal).capture().sequence(),"An abandoned transaction must be rolled back");
+        }
+        assertTrue(physical.isClosed(),"The owner must release the physical writer on close");
+    }
+
+    @Test void committedRawRemainsVisibleWithoutClosingWalBetweenOperations() throws Exception {
+        Path database;
+        try(var journal=new RawJournal(root)) {
+            database=journal.databasePath();
+            for(int count=1;count<=3;count++) {
+                event(journal);
+                assertTrue(Files.exists(Path.of(database+"-wal")),"WAL must stay open across raw operations");
+                try(var c=DriverManager.getConnection("jdbc:sqlite:"+database.toUri().toASCIIString()+"?mode=ro");
+                        var s=c.createStatement();var r=s.executeQuery("SELECT count(*) FROM raw_capture")) {
+                    assertTrue(r.next());assertEquals(count,r.getInt(1));
+                }
+            }
+        }
+        try(var journal=new RawJournal(root)) {assertEquals(3,journal.status().captures());}
+    }
+
     @Test void originalBytesIdentityAndNanosecondsSurviveRestart() {
         byte[] bytes={0,(byte)255,10,13,34,92};String id;
         try(var journal=new RawJournal(root)) {
@@ -66,12 +143,14 @@ class RawJournalTest {
         try(var journal=new RawJournal(root)) {
             var event=event(journal);var snapshot=new LinkedHashMap<String,Object>();snapshot.put("count",1L);
             var batch=journal.prepareBatch(List.of(event),List.of(),snapshot);id=batch.id();snapshot.put("count",99L);
+            assertEquals(id,journal.status().preparedBatchId());
             assertEquals(1L,batch.accumulatorState().get("count"));assertEquals(batch.id(),journal.prepareBatch(List.of(event),List.of(),Map.of("count",1L)).id());
             assertThrows(IllegalStateException.class,()->journal.completeBatch(batch.id()));
             assertTrue(journal.committedAccumulatorState().isEmpty());assertEquals(1,journal.status().pending());
         }
         try(var journal=new RawJournal(root)) {
             var batch=journal.preparedBatch().orElseThrow();assertEquals(id,batch.id());assertEquals(1L,batch.accumulatorState().get("count"));
+            assertEquals(id,journal.status().preparedBatchId());
             assertTrue(batch.events().getFirst().isValid());assertEquals(1,journal.pending(2).size());
         }
     }

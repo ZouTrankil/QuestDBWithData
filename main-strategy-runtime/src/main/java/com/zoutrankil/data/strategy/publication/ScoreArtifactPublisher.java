@@ -20,6 +20,8 @@ import java.util.*;
 
 /** Immutable, Python-compatible Research artifacts; both aliases advance in one SQLite transaction. */
 public final class ScoreArtifactPublisher {
+    private static final org.slf4j.Logger LOG=org.slf4j.LoggerFactory.getLogger(ScoreArtifactPublisher.class);
+    private static final java.util.regex.Pattern COLUMN_NAME=java.util.regex.Pattern.compile("[A-Za-z_][A-Za-z0-9_]*");
     private static final ObjectMapper JSON = new ObjectMapper().findAndRegisterModules()
             .disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     private static final String PRODUCER = "java.research.etf_only_top2.prepare_inputs";
@@ -108,8 +110,15 @@ public final class ScoreArtifactPublisher {
     public Publication forDate(LocalDate signal)throws Exception {
         if(signal==null||!Files.isRegularFile(database))throw new IllegalStateException("Exact historical Java score date is unavailable");
         String run;
-        try(var c=DriverManager.getConnection("jdbc:sqlite:"+database.toUri()+"?mode=ro");var q=c.prepareStatement("SELECT p.run_id FROM java_score_publications p JOIN resource_metadata m ON m.uri=p.panel_uri AND m.run_id=p.run_id WHERE p.end_date=? AND m.role='score_panel' AND m.producer_capability=? ORDER BY m.created_at DESC,p.run_id DESC LIMIT 1")){
-            q.setString(1,signal.toString());q.setString(2,PRODUCER);try(var r=q.executeQuery()){if(!r.next())throw new IllegalStateException("No verified Java score publication has exact weekly signal frontier: "+signal);run=r.getString(1);}
+        try(var c=DriverManager.getConnection("jdbc:sqlite:"+database.toUri()+"?mode=ro")){
+            // A migrated Python catalog may precede the first Java publication.
+            // Keep this lookup read-only and report the normal unavailable state.
+            try(var q=c.prepareStatement("SELECT 1 FROM sqlite_master WHERE type='table' AND name='java_score_publications'");var r=q.executeQuery()) {
+                if(!r.next())throw new IllegalStateException("No verified Java score publication has exact weekly signal frontier: "+signal);
+            }
+            try(var q=c.prepareStatement("SELECT p.run_id FROM java_score_publications p JOIN resource_metadata m ON m.uri=p.panel_uri AND m.run_id=p.run_id WHERE p.end_date=? AND m.role='score_panel' AND m.producer_capability=? ORDER BY m.created_at DESC,p.run_id DESC LIMIT 1")) {
+                q.setString(1,signal.toString());q.setString(2,PRODUCER);try(var r=q.executeQuery()){if(!r.next())throw new IllegalStateException("No verified Java score publication has exact weekly signal frontier: "+signal);run=r.getString(1);}
+            }
         }
         var p=byRun(run);if(!signal.equals(p.resolvedEndDate()))throw new IllegalStateException("Historical Java score frontier changed");return p;
     }
@@ -155,14 +164,15 @@ public final class ScoreArtifactPublisher {
         if(prefix==null||!prefix.endsWith("/")||role==null||!role.matches("[A-Za-z0-9_]{1,64}"))throw new IllegalArgumentException("Canonical frame prefix and role required");
         Path directory=artifact("quant://artifact/"+prefix);
         if(rows==null||rows.isEmpty())throw new IllegalArgumentException("Nonempty frozen frame required");
+        LOG.info("Inferring complete published frame: role={}, rows={}",role,rows.size());
         var fields=new LinkedHashMap<String,Kind>();
         rows.forEach(row->row.forEach((name,value)-> {
             if(name.equals("component_set")) return;
-            if(!name.matches("[A-Za-z_][A-Za-z0-9_]*")) throw new IllegalArgumentException("Invalid frame column: "+name);
+            if(!fields.containsKey(name)&&!COLUMN_NAME.matcher(name).matches()) throw new IllegalArgumentException("Invalid frame column: "+name);
             if(value==null) {fields.putIfAbsent(name,null);return;}
             Kind k=value instanceof LocalDate || name.equals(dateColumn)?Kind.DATE:value instanceof Boolean?Kind.BOOLEAN:value instanceof Float || value instanceof Double?Kind.DOUBLE:value instanceof Number?Kind.LONG:Kind.STRING;
             Kind old=fields.get(name);if(old!=null && old!=k) {
-                if(Set.of(Kind.DOUBLE,Kind.LONG).contains(old) && Set.of(Kind.DOUBLE,Kind.LONG).contains(k)) k=Kind.DOUBLE;
+                if((old==Kind.DOUBLE||old==Kind.LONG)&&(k==Kind.DOUBLE||k==Kind.LONG)) k=Kind.DOUBLE;
                 else throw new IllegalArgumentException("Frame has mixed column types: "+name);
             } fields.put(name,k);
         }));
@@ -177,8 +187,10 @@ public final class ScoreArtifactPublisher {
         String schemaDigest=sha(("["+String.join(", ",schemaCards)+"]").getBytes(java.nio.charset.StandardCharsets.UTF_8));
         var range=dates(rows,false,dateColumn);
         var schema=new MessageType("research_frame",types);var factory=new SimpleGroupFactory(schema);
+        LOG.info("Writing complete published frame: role={}, rows={}, columns={}",role,rows.size(),fields.size());
         Files.createDirectories(directory);Path temp=directory.resolve("."+role+"-"+UUID.randomUUID()+".parquet");
         try(var writer=ExampleParquetWriter.builder(new LocalOutputFile(temp)).withConf(new Configuration()).withType(schema).withExtraMetaData(Map.of("java.research.schema_digest",schemaDigest,"java.research.start",range.first().toString(),"java.research.end",range.last().toString(),"java.research.row_count",Long.toString(rows.size()))).withCompressionCodec(CompressionCodecName.SNAPPY).build()) {
+            int written=0;
             for(var row:rows) {Group group=factory.newGroup();for(var field:fields.entrySet()) {
                 Object value=row.get(field.getKey());if(value==null)continue;
                 switch(field.getValue()) {
@@ -188,10 +200,11 @@ public final class ScoreArtifactPublisher {
                     case LONG->group.add(field.getKey(),((Number)value).longValue());
                     case DOUBLE->{double d=((Number)value).doubleValue();if(Double.isInfinite(d))throw new IllegalArgumentException("Infinite published value");if(!Double.isNaN(d))group.add(field.getKey(),d);}
                 }
-            }writer.write(group);}
+            }writer.write(group);if(++written%25000==0)LOG.info("Published frame write progress: role={}, rows={}/{}",role,written,rows.size());}
         }
         try {String digest=sha(temp), relative=prefix+role+"-"+digest.substring(0,16)+".parquet";Path target=root.resolve(relative);
             if(Files.exists(target)) {if(!sha(target).equals(digest))throw new IllegalStateException("Immutable artifact collision");} else Files.move(temp,target,StandardCopyOption.ATOMIC_MOVE);
+            LOG.info("Completed immutable published frame: role={}, rows={}, sha256={}",role,rows.size(),digest);
             return new Ref("quant://artifact/"+relative,digest.substring(0,16),digest,schemaDigest,rows.size(),target,range.first(),range.last());
         } finally {Files.deleteIfExists(temp);}
     }

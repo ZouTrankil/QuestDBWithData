@@ -20,7 +20,7 @@ import org.springframework.core.env.Environment;
 public final class L2LiveConfiguration {
     private static final Set<String> COMMANDS = Set.of("plan", "run", "session", "replay", "status", "export");
     private static final Set<String> OPTIONS = Set.of("root", "credentials", "broker", "symbols", "overrides",
-            "questdb", "seconds", "batch-size", "poll-ms", "visibility-ms", "lateness-ms", "retained-minutes", "wait-credentials");
+            "questdb", "seconds", "batch-size", "poll-ms", "visibility-ms", "lateness-ms", "retained-minutes", "wait-credentials", "journal-max-bytes");
     final String command;
     final Path root;
     final String brokerUri;
@@ -30,6 +30,7 @@ public final class L2LiveConfiguration {
     final String questDb;
     final String questDbAuthorization;
     final long seconds;
+    final long journalMaxBytes;
     final int batchSize;
     final Duration pollInterval;
     final Duration visibilityTimeout;
@@ -87,6 +88,7 @@ public final class L2LiveConfiguration {
             throw new IllegalArgumentException("INVALID_QUESTDB_URI");
         questDbAuthorization = values.getOrDefault("L2_LIVE_QUESTDB_AUTHORIZATION", "");
         seconds = bounded(options, "seconds", 0, 0, 86400 * 7);
+        journalMaxBytes = bounded(options, "journal-max-bytes", 8L << 30, 1L << 20, 64L << 30);
         batchSize = (int) bounded(options, "batch-size", 100, 1, 200);
         pollInterval = Duration.ofMillis(bounded(options, "poll-ms", 100, 10, 10_000));
         visibilityTimeout = Duration.ofMillis(bounded(options, "visibility-ms", 10_000, 100, 60_000));
@@ -137,6 +139,7 @@ public final class L2LiveConfiguration {
         result.put("topics", symbols.stream().flatMap(symbol -> List.of("trans/", "order/", "market/").stream()
                 .map(prefix -> prefix + symbol.substring(0, 6))).toList());
         result.put("rawRoot", root.toString());
+        result.put("journalMaxBytes", journalMaxBytes);
         result.put("calendarQuestDb", questDb);
         result.put("storage", "local_sqlite");
         result.put("database", root.resolve("raw-journal.sqlite3").toString());

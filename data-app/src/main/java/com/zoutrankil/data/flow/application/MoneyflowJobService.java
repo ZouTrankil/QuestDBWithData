@@ -45,6 +45,9 @@ public final class MoneyflowJobService {
         String table=target.tableName();MoneyflowDataset.requireExecutionTable(table);this.table=table;
     }
     public String tableName(){return table;}public static void requireIsolatedTableName(String table){MoneyflowDataset.requireIsolatedTable(table);}
+    public Map<String,Object> reconcile(String runId,Path writerLog)throws Exception {
+        return MoneyflowRunRecovery.reconcile(ledgerPath,runId,writerLog,target);
+    }
     /** Permits the exact preexisting formal table without relaxing isolated-table DDL. */
     public static void requireExecutionTableName(String table){MoneyflowDataset.requireExecutionTable(table);}
     private boolean formalTarget(){return "moneyflow".equals(table);}

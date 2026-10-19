@@ -238,4 +238,7 @@ public final class EtfAdjJobService {
                     new EtfAdjSource(pages,new EtfAdjMapper(),evidence.resolve("source")),
                     tradingDates,target.newWriter(identity),evidence));
     }
+    public Map<String,Object> reconcile(String runId,Path writerLog)throws Exception {
+        return EtfAdjRunRecovery.reconcile(ledgerPath,runId,writerLog,target);
+    }
 }

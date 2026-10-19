@@ -86,7 +86,7 @@ public final class AliyunL2LiveMain {
                         configuration = awaitCredentials(configuration, args, env, session, clock);
                         if (configuration == null) return 0;
                     }
-                    try (RawJournal journal = new RawJournal(configuration.root)) {
+                    try (RawJournal journal = new RawJournal(configuration.root, configuration.journalMaxBytes)) {
                     if (configuration.command.equals("export")) {
                         Path output = configuration.root.resolve("raw-export.jsonl");
                         var evidence = journal.exportJsonl(output);
@@ -254,10 +254,23 @@ public final class AliyunL2LiveMain {
 
     private static void status(Path root, Object value) throws Exception {
         Path pending = root.resolve("status.json.tmp");
-        Files.writeString(pending, JSON.writeValueAsString(value), StandardCharsets.UTF_8);
-        try { Files.move(pending, root.resolve("status.json"), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING); }
-        catch (java.nio.file.AtomicMoveNotSupportedException error) {
-            Files.move(pending, root.resolve("status.json"), StandardCopyOption.REPLACE_EXISTING);
+        String serialized = JSON.writeValueAsString(value);
+        for (int attempt = 0; ; attempt++) {
+            try {
+                Files.writeString(pending, serialized, StandardCharsets.UTF_8);
+                try { Files.move(pending, root.resolve("status.json"), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING); }
+                catch (java.nio.file.AtomicMoveNotSupportedException error) {
+                    Files.move(pending, root.resolve("status.json"), StandardCopyOption.REPLACE_EXISTING);
+                }
+                return;
+            } catch (java.nio.file.FileSystemException busyReader) {
+                // Windows readers need not grant FILE_SHARE_DELETE. A short
+                // status or pending-file read can also raise FileSystemException
+                // for a sharing violation; protect writing and renaming alike.
+                // Permanent permissions failures remain bounded and visible.
+                if (attempt >= 40) throw busyReader;
+                Thread.sleep(25);
+            }
         }
     }
 }
