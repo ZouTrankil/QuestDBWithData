@@ -1,0 +1,86 @@
+# 美股与跨资产基础行情
+
+目标是保存可复核的基础数据：美股约 20 年日线、核心标的当年分钟线、六只参照 ETF、BTC/ETH 现货和合约日线及小时线，以及一段 Nasdaq 原始 ITCH。数据不足时按实际上市或来源日期记录，不补造历史。
+
+## 当前入口和表
+
+独立入口在 `markets/us/data-app`，不会启动 A 股 API、Batch 或主策略。业务字段定义在 `UsMarketDatasets`，目录说明由 US 的 `DataCatalogProvider` 注册。
+
+| 表 | 完整业务键 | 时间含义 | 内容 |
+| --- | --- | --- | --- |
+| `us_equity_daily` | `trade_date,symbol,provider` | 纽约交易日编码为 UTC 零点 | 未复权及调整 OHLCV、现金分红、当日拆股因子、币种、来源摘要和取得时间 |
+| `us_equity_intraday` | `ts,symbol,provider,interval_minutes` | `ts` 是真实 UTC 起点；`trade_date` 是纽约日期 | 1 分钟行情，以及按实有分钟合并的 5 分钟行情 |
+| `us_security_universe` | `observed_at,symbol,directory` | 取得快照的真实 UTC 时间 | 官方挂牌原文范围、明确的候选与排除原因；不是历史成分表 |
+| `us_etf_equity_holdings` | `asof_date,fund,symbol` | 发行人持仓日期，UTC 零点编码 | SPY/QQQ 发行人的股票及 ADR 持仓，标记 `ETF_HOLDINGS_PROXY` |
+| `us_nasdaq_itch_messages` | `ts,source_sha256,message_index` | 真实 UTC 纳秒 | 部分文件中完整消息、源字节偏移和原始十六进制 payload |
+| `crypto_ohlcv` | `ts,exchange,symbol,instrument,interval_minutes` | UTC 小时或日线起点 | Binance、Bybit 的 BTC/ETH 现货、USDT 永续；日线由齐备的小时线合成 |
+
+两表使用 WAL、明确分区和 DEDUP。来源隔离，不能用不同供应商的数据互相静默覆盖。调整价采用当前来源调整基准，不表示历史当时已经可用的价格。
+
+Tiingo 日线同时保留 `close` 与 `adj_close`，不能只存复权价。`dividend` 是来源除息日每股现金额，`split_factor` 无事件时为 1。IEX 分钟量仅代表该场所，不能据此计算全美股的成交份额。
+
+## 配置和命令
+
+公开配置在 `config/apps/us-data.yml`。凭据在被忽略的 `config/application-local.yml`，使用 `app.market-data.tiingo-token`、`app.market-data.fred-key`。不将 key 放进 URL 日志、运行参数、Git 或发行包。
+
+```powershell
+# 查看字段、时间及键定义。
+.\gradlew.bat usMarketData --args='definitions'
+
+# 查看实库覆盖和 WAL。
+.\gradlew.bat usMarketData --args='status'
+
+# 核心 16 只证券：约 20 年日线、今年按月切分的 1/5 分钟。
+.\gradlew.bat usMarketData --args='collect-core --through 2026-10-16'
+
+# 当前官方挂牌的股票候选；共享正式账本，先等核心日线结束。
+.\gradlew.bat usMarketData --args='collect-broad --through 2026-10-16'
+
+# BTC 独立入口，2021-10-01 起，最后一天必须是已结束的 UTC 日。
+.\gradlew.bat cryptoMarketData --args='collect --through 2026-10-18'
+
+# 导入已取得并冻结的真实来源响应。
+.\gradlew.bat usMarketData --args='import-tiingo-daily --source var/market-data/probes/tiingo-spy-daily.response --symbol SPY --through 2026-10-16'
+.\gradlew.bat usMarketData --args='import-tiingo-minute --source var/market-data/probes/tiingo-spy-minute.response --symbol SPY --from 2026-01-02 --through 2026-01-02'
+```
+
+有限写入先检查来源摘要、重复业务键和目标结构，再冻结规范化文件，复用 `SyncJobRunner` 登记意图及区间锁。完整键和值回读、WAL 结清后才写成功终态；未决发送保留原账本和锁。原始响应、规范化输入和运行回执保存在 `var/market-data/`。导入冻结响应成功只证明该响应中的键和值，不等于全市场来源已经齐备。
+
+QuestDB 10 的正式发送使用 QWP，保留 INT 和纳秒时间类型。运行记录原进程 PID 与启动时间。`reconcile-undelivered` 只接受已停止的原发送进程、相同冻结摘要、仍为空且 WAL 为零的原物理表、单一未决切片和原锁；其他未决情况必须继续核对，不能用此入口重发。
+
+`reconcile-frozen` 是明确的首切片恢复操作，要求原进程已停止、冻结摘要及原物理表不变、原未决锁仍存在。它逐键检查现有值；显式 `--repair-missing true` 才补已证实缺失的键，遇到不同值或重复键立即停止。完整来源、补缺意图、回读文件和摘要均保留；全部核对通过才完成原运行和释放原锁。`reconcile-core-task` / `reconcile-broad-task` 另行核验原队列归属和全部频率的字段，之后才推进队列。
+
+同一行情目录的发布通过 `ledger-writer.lock` 串行执行，避免两个采集进程同时升级 SQLite 读事务。来源请求和配额等待在该锁之外进行。Bybit 的 HTTP 200 还必须检查 `retCode`；服务超时、服务错误和限流在任何正式发布之前有界重试，最多三次，权限错误保留为来源缺口。
+
+请求预算放在 `api-budget.sqlite3`，先预留再请求；失败也计请求，未取得完整响应时保留带宽预留。来源队列的 `FETCHED` 可以继续使用同一冻结文件；`PUBLISHING` 不自动重发。SQLite 和不可变回执决定验收，状态 JSON 只用于观察。Windows 状态页被读者短暂占用时有界等待，不改变已验收结果。
+
+BTC 的原始文件、队列、预算、账本及回执在 `var/crypto-market-data/`。对运行中的采集器，分别写入 `var/market-data/us-stop.request`、`us-broad-stop.request` 或 `var/crypto-market-data/stop.request`，会在当前完整任务验收后停止。再次执行命令继续未完成任务；未决发布仍阻止继续。
+
+## 已核实的来源边界
+
+- Tiingo key 已通过真实日线和历史 IEX 请求，SPY、AAPL 的 2006 年以来日线可读取。
+- IEX 大范围请求实测会只返回最后 10000 根，必须按月切分，达到边界则拒绝验收。不能把 HTTP 200 或返回 10000 行当成全年完整。
+- [Tiingo 公开 Starter 配额](https://www.tiingo.com/about/pricing)是 50 次/小时、1000 次/日、500 标的/月和 1 GB/月。未取得账户套餐页面前按这个保守上限执行；来源响应没有给出可证明套餐等级的配额头。
+- [Tiingo IEX 说明](https://www.tiingo.com/documentation/iex)明确分钟成交量为 IEX 场所量，且必须显式请求 `volume`。
+- Yahoo 报价是拆股调整基准。通过响应中该交易日之后的全部拆股还原 OHLC、股数及现金分红，使用 `RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED` 标明来源；`adj_close` 保留 Yahoo 当前调整值。AAPL 2006-01-03 的 Yahoo 收盘价乘 28 后约为 74.75，接近 Tiingo 原始 74.75；不同来源的盘中 OHLC 仍有差异，不能混合覆盖。缺失数值拒收，不补零。
+- [Nasdaq 公共 ITCH 目录](https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/)存在真实二进制文件；部分文件达数 GB 至十余 GB。部分采集需明确文件、日期、压缩字节或消息边界，不能宣称完整交易日。
+- [Binance 公共归档](https://github.com/binance/binance-public-data)提供现货及合约数据和校验和；2025 年以来现货归档时间单位为微秒，不能沿用毫秒解释。
+
+## 全目标验收清单
+
+下面各项都需真实来源和实库证据，不能用本文、字段定义或小样本代替：
+
+- [ ] 全美股证券范围及标普 500、纳指 100 覆盖；保留范围快照、上市和退市边界。
+- [ ] 日线约 20 年，来源较短的至少检查约 5 年或真实上市日期；未复权、调整价、分红和拆股逐项齐备。
+- [x] SPY、QQQ、IWM、TLT、GLD、USO 历史全部落库并逐字段核验至 2026-10-16；USO 自 2006-04-10，其余自 2006-01-03。
+- [ ] 核心 ETF 和股票的当年 1 分钟及 5 分钟数据，按月份核对日期和截断边界。
+- [x] Nasdaq `S061226-v50.txt.gz` 前 8 MiB 的 SHA-256 与范围元数据已保留；原消息序号 309047–359046 共 50000 条已逐字段回读。真实时间 2026-06-12 08:00:00.000425736Z–08:00:05.055189073Z；这段约 5 秒的盘前数据不代表全日订单流。
+- [ ] BTC/ETH 在头部交易所的现货、永续合约日线及小时线，保留交易所、币对、合约和时间单位。
+- [x] 来源请求频率、配额及重试预算持久化；429 不绕过限流。实际账户等级未得到证明，Tiingo 按 Starter 上限运行。
+- [ ] 各产物结构、完整业务键和值、WAL、恢复和最终覆盖报告通过。
+
+这份清单仍在推进，不能因为两个新表已建立就判定目标完成。
+
+当前挂牌范围来自 Nasdaq Trader 两份官方列表。候选之外的 ETF、测试证券、权证、优先股等仍保留排除原因。历史退市证券、OTC 和历史指数成分尚需独立补齐；目前队列不能代表这部分全市场历史已经完成。
+
+[SPY 官方持仓](https://www.ssga.com/library-content/products/fund-data/etfs/us/holdings-daily-us-en-spy.xlsx)和 [QQQ 官方持仓](https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/QQQ/holdings/fund?idType=ticker&interval=monthly&productType=ETF)的 2026-10-16 股票范围已取得，分别为 503、101 只，并已逐字段验收。基金中的现金、CVR 和衍生品不纳入股票范围。挂牌队列优先这组证券，并补入当前挂牌清单之外的基金股票；这只是当前覆盖参照，不是官方历史指数成分。

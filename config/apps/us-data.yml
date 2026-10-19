@@ -1,0 +1,19 @@
+# 美股采集使用独立入口，不启动 A 股调度器。私密值只放 application-local.yml。
+spring.config.activate.on-profile: us-data
+spring.application.name: us-market-data
+app.market-data:
+  root: var/market-data
+  tiingo-token: ""
+  fred-key: ""
+  history-start: 2006-01-01
+  minute-start: 2026-01-01
+  benchmark-symbols: [SPY, QQQ, IWM, TLT, GLD, USO]
+  core-stock-symbols: [AAPL, MSFT, NVDA, AMZN, GOOGL, META, TSLA, AVGO, JPM, WMT]
+  tiingo-hourly-requests: 50
+  tiingo-daily-requests: 1000
+  tiingo-monthly-symbols: 500
+  tiingo-monthly-bytes: 1073741824
+  yahoo-requests-per-hour: 1800
+  yahoo-requests-per-day: 20000
+  yahoo-monthly-bytes: 21474836480
+  yahoo-request-spacing-ms: 2000

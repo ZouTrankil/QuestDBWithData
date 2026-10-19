@@ -11,6 +11,21 @@ public final class UsDataDescriptions {
     private UsDataDescriptions() {}
     public static List<DataObjectDescription> all() {
         return List.of(
+            new DataObjectDescription("us_etf_equity_holdings", "SPY/QQQ 发行人股票持仓", "当前股票及 ADR 持仓，用于覆盖核对", Set.of(DataObjectDescription.Market.US),
+                    "美股证券范围", SourceType.COLLECTED, "State Street 与 Invesco 官方完整持仓", List.of(),
+                    "java.market.us", "ETF_HOLDINGS_PROXY，不是官方历史指数成分；现金、CVR、衍生品保留在来源原文中。", "UsFundHoldings.EQUITIES；发行人原文和完整键值回读", Set.of(COLLECTED, ETF, EQUITY, US)),
+            new DataObjectDescription("us_security_universe", "美国当前官方挂牌范围", "完整原始目录及候选或排除原因", Set.of(DataObjectDescription.Market.US),
+                    "美股证券范围", SourceType.COLLECTED, "Nasdaq Trader nasdaqlisted/otherlisted", List.of(),
+                    "java.market.us", "当前挂牌快照，不能替代历史退市和 OTC 范围。", "UsUniverseSnapshot.SECURITIES；官方原文及完整键值回读", Set.of(COLLECTED, EQUITY, US)),
+            new DataObjectDescription("us_nasdaq_itch_messages", "Nasdaq ITCH 部分原始订单流", "ITCH 5 完整消息的明确局部范围，保留原始 payload", Set.of(DataObjectDescription.Market.US),
+                    "美股高频订单流", SourceType.COLLECTED, "Nasdaq 官方历史 ITCH gzip 文件的有界前缀", List.of(),
+                    "java.market.us", "保留真实纳秒与原始消息序号；source_complete=false，不能解释为完整交易日或完整订单簿。", "NasdaqItchDataset.MESSAGES；压缩前缀、取得元数据、原始 payload 及逐字段回读", Set.of(COLLECTED, EQUITY, US)),
+            new DataObjectDescription("us_equity_daily", "美股及核心 ETF 日线", "原始及复权 OHLCV、分红与拆股", Set.of(DataObjectDescription.Market.US),
+                    "美股行情", SourceType.COLLECTED, "Tiingo EOD；来源列保留实际提供者", List.of(),
+                    "java.market.us", "纽约业务日期；当前调整价不代表历史当时可见的价格。", "UsMarketDatasets.DAILY；完整来源响应、SQLite 账本、逐字段回读和 WAL", Set.of(COLLECTED, DAILY, EQUITY, ETF, US)),
+            new DataObjectDescription("us_equity_intraday", "美股及核心 ETF 分钟线", "1 分钟来源行情及 5 分钟合并", Set.of(DataObjectDescription.Market.US),
+                    "美股日内行情", SourceType.COLLECTED, "Tiingo IEX 历史分钟线；5 分钟由同源分钟合并", List.of(),
+                    "java.market.us", "ts 为真实 UTC；IEX 场所量不能解释为全美股成交量。", "UsMarketDatasets.MINUTE；冻结来源及完整键值回读", Set.of(COLLECTED, MINUTE, EQUITY, ETF, US)),
             new DataObjectDescription("us_tbr", "美国短期国债利率", "美国短期国债利率", Set.of(DataObjectDescription.Market.US),
                     "美国国债/利率", SourceType.COLLECTED, "Tushare 同名美国利率接口", List.of(),
                     "来源采集/文件导入", "", "项目外部源合同及数据模型；实库 tables()", Set.of(COLLECTED, DAILY, MACRO, RATES, US)),

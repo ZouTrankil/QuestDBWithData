@@ -9,7 +9,7 @@
 ## 这几个目录是干什么的
 
 - `markets/cn`：A 股模型、采集、清洗、特征和批处理；主策略与实时 L2 在下面分别启动。
-- `markets/us`：美国表投影和现有利率来源。`markets/btc`：BTC 时间和扩展入口，目前没有采集链路。
+- `markets/us`：美国利率、日线/分钟行情、挂牌快照和部分 ITCH；`markets/btc`：BTC/ETH 现货及永续行情。各自的 `data-app` 是有限采集入口，真实覆盖与剩余验收见[基础行情](docs/us-market-data.md)。
 - `platform/core`：纯 Java 模型、契约和市场时间接口。
 - `platform/engine`：通用客户端、来源执行、存储核验和恢复。
 - `platform/runtime-support`：配置、日志和启动支持。

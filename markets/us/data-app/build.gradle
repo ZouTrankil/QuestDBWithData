@@ -1,0 +1,14 @@
+plugins { id 'application' }
+
+dependencies {
+    implementation project(':markets:us')
+    implementation project(':platform:engine:questdb')
+    implementation project(':platform:runtime-support')
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    runtimeOnly 'org.yaml:snakeyaml'
+}
+application {
+    applicationName = 'us-data'
+    mainClass = 'com.zoutrankil.market.us.app.UsMarketDataMain'
+    applicationDefaultJvmArgs = ['-Xms128m', '-Xmx2g']
+}
