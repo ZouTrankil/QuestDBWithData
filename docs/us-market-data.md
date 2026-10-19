@@ -95,6 +95,8 @@ BTC 的原始文件、队列、预算、账本及回执在 `var/crypto-market-da
 - Yahoo 报价是拆股调整基准。通过响应中该交易日之后的全部拆股还原 OHLC、股数及现金分红，使用 `RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED` 标明来源；`adj_close` 保留 Yahoo 当前调整值。AAPL 2006-01-03 的 Yahoo 收盘价乘 28 后约为 74.75，接近 Tiingo 原始 74.75；不同来源的盘中 OHLC 仍有差异，不能混合覆盖。缺失数值拒收，不补零。
 - 本机 2026-10-20 核验 FISV 时，Yahoo 两个主机均缺少 2025-11-12 的 OHLCV。已用独立 Tiingo 来源补入 2006-01-03 至 2026-10-16 共 5230 条日线并验收；保留 Yahoo 原文和 `FAILED_SOURCE`，来源之间不拼值或覆盖。
 - AMTD 的 Yahoo 原文只有截止日之后的记录。按[官方清单字段定义](https://www.nasdaqtrader.com/trader.aspx?id=symboldirdefs)核对挂牌代码 `N` 为 NYSE，并与 Tiingo 的 AMTD IDEA Group 名称及 2019 年起始窗口匹配后，独立补入 2019-08-05 至 2026-10-16 共 1811 条日线，字段、实有日期及 WAL 验收通过。原 Yahoo 拒收保留；目录中 1997–2020 年 NASDAQ 同代码窗口仍需单独核实，不能用当前公司的价格判为已覆盖。
+- 2026-10-20 按当前官方名称、场所及 Tiingo 身份原文核对后，独立补入 ATLQ（JAB Acquisition Corp I）2026-08-05 起的 52 条、ATTT（Atlas Trinity Tech）2024-05-15 起的 608 条日线，均截至 2026-10-16。两组实有日期与已验收 SPY/Tiingo 参照一致；短于五年的范围保留实际来源起点，不填造上市前价格。
+- ATLX 的 Tiingo 实有日线为 2013-02-28 至 2026-10-16 共 3428 条。2018-04-03、2018-05-03 缺记录，精确日期请求也返回空数组；这只能证明供应商缺口，不能推断停市或全市场无成交。最近五年（2021-10-16 起）实有 1255 个参照交易日，逐日一致；早年缺口保留，整段历史不判为满网格。上述三组共 4088 条的全部 20 列、原运行及 WAL 验收通过，独立回读一致；发布 ATLX 前已验收的另两组共 660 条未变，Yahoo 原拒收不改写。
 - [Nasdaq 公共 ITCH 目录](https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/)存在真实二进制文件；部分文件达数 GB 至十余 GB。部分采集需明确文件、日期、压缩字节或消息边界，不能宣称完整交易日。
 - [Binance 公共归档](https://github.com/binance/binance-public-data)提供现货及合约数据和校验和；2025 年以来现货归档时间单位为微秒，不能沿用毫秒解释。
 - Binance 2023-03-24 现货归档及 REST 均缺少 13:00Z 小时。只有取得[官方停市事实](https://www.binance.com/en/blog/from-our-ceo/6789340645608890113)、原归档及原生日线的官方摘要、精确小时 REST 空记录，并核对全部日线 OHLCV 与实际小时成交一致后，才登记独立缺口。实际 23 根小时记录保留，不能填造第 24 根。
