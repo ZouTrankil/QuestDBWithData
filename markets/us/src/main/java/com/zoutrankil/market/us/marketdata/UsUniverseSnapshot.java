@@ -26,7 +26,8 @@ public final class UsUniverseSnapshot {
             var cells=lines[i].split("\\|",-1);if(cells.length!=headings.size())throw new IllegalArgumentException("官方证券列表字段数量不符");var record=new HashMap<String,String>();for(int j=0;j<cells.length;j++)record.put(headings.get(j),cells[j]);
             String symbol=record.get(nasdaq?"Symbol":"ACT Symbol"),name=record.get("Security Name");if(symbol.isBlank()||name.isBlank()||!seen.add(symbol))throw new IllegalArgumentException("官方挂牌代码缺失或重复");
             boolean etf=flag(record.get("ETF")),test=flag(record.get("Test Issue"));String upper=name.toUpperCase(Locale.ROOT);
-            boolean other=upper.matches(".*(WARRANT|RIGHTS|UNITS| UNIT$|PREFERRED|PREFERENCE|DEBENTURE| NOTES| BONDS).*"),mapping=symbol.matches("[A-Z0-9]+(?:[.-][A-Z0-9]+)?");
+            // 单数 Right 也可能是证券类型；只补认末尾类型词，不能误伤 Bright/Wright 或 ADR 的解释文字。
+            boolean other=upper.matches(".*(WARRANT|RIGHTS|UNITS| UNIT$|PREFERRED|PREFERENCE|DEBENTURE| NOTES| BONDS).*")||upper.endsWith(" RIGHT"),mapping=symbol.matches("[A-Z0-9]+(?:[.-][A-Z0-9]+)?");
             boolean candidate=!etf&&!test&&!other&&mapping;String reason=test?"TEST_SECURITY":etf?"ETF_SEPARATE_SCOPE":other?"NON_COMMON_SECURITY":!mapping?"SYMBOL_MAPPING_REQUIRED":"EQUITY_CANDIDATE";
             var row=new LinkedHashMap<String,Object>();row.put("observed_at",observed.toString());row.put("symbol",symbol);row.put("directory",nasdaq?"NASDAQ_LISTED":"OTHER_LISTED");row.put("security_name",name);row.put("exchange",nasdaq?"NASDAQ":record.get("Exchange"));
             row.put("is_etf",etf);row.put("is_test",test);row.put("daily_candidate",candidate);row.put("scope_reason",reason);row.put("yahoo_symbol",mapping?symbol.replace('.','-'):null);row.put("source_sha256",sha);rows.add(row);

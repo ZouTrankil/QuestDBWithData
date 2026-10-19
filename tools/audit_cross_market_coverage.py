@@ -3,6 +3,7 @@
 
 import argparse
 import bisect
+from contextlib import closing
 import datetime as dt
 import hashlib
 import html
@@ -56,7 +57,8 @@ def queue(path, table):
         connection.row_factory = sqlite3.Row
         phases = {row[0]: row[1] for row in connection.execute("select phase,count(*) from " + table + " group by phase")}
         errors = [dict(row) for row in connection.execute("select id,symbol,phase from " + table + " where phase='FAILED_SOURCE' limit 30")]
-    return {"exists": True, "phases": phases, "sourceGapSamples": errors, "allPlannedTasksVerified": bool(phases) and set(phases) == {"VERIFIED"}}
+        review = [dict(row) for row in connection.execute("select id,symbol,phase from " + table + " where phase='SCOPE_REVIEW_REQUIRED' limit 30")]
+    return {"exists": True, "phases": phases, "sourceGapSamples": errors, "scopeReviewSamples": review, "allPlannedTasksVerified": bool(phases) and set(phases) == {"VERIFIED"}}
 
 
 def ledger(path):
@@ -89,14 +91,17 @@ def publication_groups(path):
 def verified_daily_sources(root):
     """来源组的行摘要与运行 ZIP 摘要不同，必须沿成功的原组回执核对成员。"""
     folder = root / "var/market-data"
-    with sqlite3.connect("file:" + (folder / "sync-ledger.sqlite3").resolve().as_posix() + "?mode=ro", uri=True) as connection:
+    with closing(sqlite3.connect("file:" + (folder / "sync-ledger.sqlite3").resolve().as_posix() + "?mode=ro", uri=True)) as connection:
         verified = set()
         for row in connection.execute("select r.frozen_json from sync_runs r join sync_entries e on r.id=e.id where e.kind='RUN' and e.state='VERIFIED'"):
             request = json.loads(row[0])
             if request["definition"]["datasetId"] == "us_equity_daily":
                 verified.add(request["parameters"]["source_sha256"])
     native = set(verified)
-    with sqlite3.connect("file:" + (folder / "broad-queue.sqlite3").resolve().as_posix() + "?mode=ro", uri=True) as connection:
+    broad = folder / "broad-queue.sqlite3"
+    if not broad.is_file():
+        return native
+    with closing(sqlite3.connect("file:" + broad.resolve().as_posix() + "?mode=ro", uri=True)) as connection:
         if connection.execute("select 1 from sqlite_master where name='broad_bundles'").fetchone():
             for source_sha, bundle_sha in connection.execute("select t.sha,b.sha from broad_tasks t join broad_bundles b on t.bundle_id=b.id where t.kind='DAILY' and t.phase='VERIFIED' and b.phase='VERIFIED'"):
                 if bundle_sha in verified:
