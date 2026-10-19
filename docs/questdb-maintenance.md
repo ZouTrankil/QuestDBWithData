@@ -47,7 +47,7 @@ ETF MV 以 `etf_share` 为基表，还关联 `etf_daily`。左侧新增由即时
 
 ## 清理和备份注意什么
 
-策略运行、订单、成交等记录已迁往相邻 Python 项目的本地 SQLite。市场行情和历史 L2 特征属于数据产品，不按交易记录清理。历史归档可在 `var/questdb-record-cleanup/`、`var/retired-sync-metadata/`、`var/unused-object-cleanup/` 等操作产物目录中查找。
+策略运行、订单、成交等记录已迁往相邻 Python 项目的本地 SQLite。这次迁移使用的一次性快照、迁移和消费端核验工具已移除，原始快照、SQLite 备份和核验回执保留。市场行情和历史 L2 特征属于数据产品，不按交易记录清理。历史归档可在 `var/questdb-record-cleanup/`、`var/retired-sync-metadata/`、`var/unused-object-cleanup/` 等操作产物目录中查找。
 
 `java_*backup*` 是否可删要查实际依赖；`java_*stage*` 可能仍属于未完成发布，不能按前缀批量删除。普通视图查询为空也不代表底表无用。
 

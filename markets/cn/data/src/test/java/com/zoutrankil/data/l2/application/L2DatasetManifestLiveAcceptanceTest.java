@@ -98,9 +98,7 @@ class L2DatasetManifestLiveAcceptanceTest {
                 "253a804be11f8ab50c2a8facdcd7d9ad6775e9b6043cdcf12244abd12a3c20e5",
                 "l2-dataset-manifest-parquet-v1", true, false);
         var source = new L2DatasetManifestParquetSource(
-                Path.of("D:/work/fund_2/back-monitor/artifacts/level2_t0_dataset"),
-                Path.of("tools/read_l2_dataset_manifest.py"),
-                "D:/work/fund_2/back-monitor/.venv/Scripts/python.exe");
+                Path.of("D:/work/fund_2/back-monitor/artifacts/level2_t0_dataset"));
         assertThrows(CancellationException.class, () -> source.stream(expected, List.of(SYMBOL),
                 300_000, 25_000, page -> fail("Cancelled D085 source must not emit a page"),
                 () -> true, Duration.ofMinutes(2)));

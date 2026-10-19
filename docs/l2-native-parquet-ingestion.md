@@ -12,7 +12,7 @@ A 股数据应用（`markets/cn/data-app`）直接用 Java 读取本地 Parquet�
 | `app.sync.l2-event-response-features` | 事件响应，D088 |
 | `app.sync.l2-t0-training-labels` | T0 训练标签，D089 |
 
-各项使用 `dataset-root`。默认跟随根配置里的 `app.paths.l2-dataset-root`，位于研究目录下的 `artifacts/level2_t0_dataset`。旧的 `python-executable`、`reader-script` 不再生效。
+各项使用 `dataset-root`。默认跟随根配置里的 `app.paths.l2-dataset-root`，位于研究目录下的 `artifacts/level2_t0_dataset`。旧的 `python-executable`、`reader-script` 不再生效，`tools/` 中对应的五个 Python 读取脚本已移除。
 
 ## 读文件时检查什么
 
