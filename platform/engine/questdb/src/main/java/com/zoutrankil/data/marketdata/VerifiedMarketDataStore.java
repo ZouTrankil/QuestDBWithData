@@ -18,6 +18,10 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 /** 复用正式同步账本及未决锁协议；外部市场负责来源规则，本类只负责有界写入和逐字段回读。 */
 public final class VerifiedMarketDataStore {
     private static final ObjectMapper JSON=new ObjectMapper();
+    public record PublicationPage(int rows,int bytes) {
+        public static final PublicationPage DEFAULT=new PublicationPage(5000,4*1024*1024);
+        public PublicationPage {if(rows<1||rows>10000||bytes<1||bytes>8*1024*1024)throw new IllegalArgumentException("发布分页须为 1–10000 行且不超过 8 MiB");}
+    }
     private final URI endpoint;
     private final String authorization,username,password;
     private final Path root,ledgerPath;
@@ -89,13 +93,17 @@ public final class VerifiedMarketDataStore {
     }
 
     public SyncJobRunner.Result publish(DatasetDefinition d,List<Map<String,Object>> source,Path raw,String expectedSha,Map<String,Object> evidence) throws Exception {
+        return publish(d,source,raw,expectedSha,evidence,PublicationPage.DEFAULT);
+    }
+    /** 批次布局单独冻结；扩大一次发送不扩大单次 HTTP 回读，也不跳过完整键值与 WAL 验证。 */
+    public SyncJobRunner.Result publish(DatasetDefinition d,List<Map<String,Object>> source,Path raw,String expectedSha,Map<String,Object> evidence,PublicationPage page) throws Exception {
         try(var lease=MarketPublisherLease.acquire(root.resolve("ledger-writer.lock"),Duration.ofMinutes(15))) {
-            return publishInside(d,source,raw,expectedSha,evidence,false);
+            return publishInside(d,source,raw,expectedSha,evidence,false,Objects.requireNonNull(page));
         }
     }
     /** 补缺专用：调用方给出确认缺失的键，实际发送前再次拒绝任何已出现的键。 */
     public SyncJobRunner.Result publishMissing(DatasetDefinition d,List<Map<String,Object>> source,Path raw,String expectedSha,Map<String,Object> evidence)throws Exception {
-        try(var lease=MarketPublisherLease.acquire(root.resolve("ledger-writer.lock"),Duration.ofMinutes(15))) {return publishInside(d,source,raw,expectedSha,evidence,true);}
+        try(var lease=MarketPublisherLease.acquire(root.resolve("ledger-writer.lock"),Duration.ofMinutes(15))) {return publishInside(d,source,raw,expectedSha,evidence,true,PublicationPage.DEFAULT);}
     }
     public void requireNoUnresolved(String dataset)throws Exception {
         if(!Files.isRegularFile(ledgerPath))return;
@@ -103,9 +111,10 @@ public final class VerifiedMarketDataStore {
             statement.setString(1,dataset);try(var rows=statement.executeQuery()){if(rows.next()&&rows.getLong(1)!=0)throw new IllegalStateException("该数据集有未结束运行或未决锁，先核对原运行");}
         }
     }
-    private SyncJobRunner.Result publishInside(DatasetDefinition d,List<Map<String,Object>> source,Path raw,String expectedSha,Map<String,Object> evidence,boolean missingOnly) throws Exception {
+    private SyncJobRunner.Result publishInside(DatasetDefinition d,List<Map<String,Object>> source,Path raw,String expectedSha,Map<String,Object> evidence,boolean missingOnly,PublicationPage page) throws Exception {
         d.requireCapability(DatasetDefinition.Capability.WRITE);if(d.objectKind()!=DatasetDefinition.ObjectKind.TABLE)throw new IllegalArgumentException("正式发送只接受可写普通表");
         if(source.isEmpty()||source.size()>100_000)throw new IllegalArgumentException("来源必须明确非空且不超过十万行");
+        if((source.size()+page.rows()-1)/page.rows()>100)throw new IllegalArgumentException("发布分页超过冻结的一百页预算");
         if(!sha(Files.readAllBytes(raw)).equals(expectedSha))throw new IllegalStateException("冻结的来源响应摘要已改变");
         var rows=source.stream().map(row->normalize(d,row)).toList();
         var codec=codec(d);var wanted=new LinkedHashMap<String,Map<String,Object>>();
@@ -113,15 +122,17 @@ public final class VerifiedMarketDataStore {
         ensure(d);String target=identity(d),run="market-"+UUID.randomUUID();
         var prepared=root.resolve("prepared").resolve(run+".json");Files.createDirectories(prepared.getParent());
         byte[] bytes=JSON.writeValueAsBytes(Map.of("definition",d,"raw",raw.toAbsolutePath().toString(),"sourceSha256",expectedSha,"evidence",evidence,"rows",rows,
-                "writerPid",ProcessHandle.current().pid(),"writerStartedAt",ProcessHandle.current().info().startInstant().orElseThrow().toString()));
+                "writerPid",ProcessHandle.current().pid(),"writerStartedAt",ProcessHandle.current().info().startInstant().orElseThrow().toString(),"publicationPage",page));
         Files.write(prepared,bytes,StandardOpenOption.CREATE_NEW);String preparedSha=sha(bytes);
         var first=rows.stream().map(row->Instant.parse(row.get(d.designatedTimestamp()).toString()).atZone(ZoneOffset.UTC).toLocalDate()).min(Comparator.naturalOrder()).orElseThrow();
         var last=rows.stream().map(row->Instant.parse(row.get(d.designatedTimestamp()).toString()).atZone(ZoneOffset.UTC).toLocalDate()).max(Comparator.naturalOrder()).orElseThrow();
         var parameter=new Parameter(ParameterType.STRING,true,4096,1,Set.of());
-        var job=new SyncJobDefinition("market."+d.datasetId(),1,d.datasetId(),d.schemaVersion(),d.owner(),Set.of(Mode.INGEST),Mode.INGEST,
-                Map.of("prepared_sha256",parameter,"source_sha256",parameter),"market.external.frozen","market.source.pages","market.full_key_values",
-                new RetryPolicy(1,Duration.ofSeconds(1),Duration.ofSeconds(1)),Duration.ofMinutes(15),new Budget(36600,100,100,100000,4*1024*1024),0,List.of(),Frequency.MANUAL,ZoneOffset.UTC,true,false);
-        var frozen=job.freeze(Mode.INGEST,Map.of("prepared_sha256",preparedSha,"source_sha256",expectedSha),first,last,LocalDate.now(ZoneOffset.UTC));
+        var parameters=new TreeMap<String,Parameter>(Map.of("prepared_sha256",parameter,"source_sha256",parameter));var values=new TreeMap<String,Object>(Map.of("prepared_sha256",preparedSha,"source_sha256",expectedSha));boolean custom=!page.equals(PublicationPage.DEFAULT);
+        if(custom){var integer=new Parameter(ParameterType.INTEGER,true,20,1,Set.of());parameters.put("publication_page_rows",integer);parameters.put("publication_page_bytes",integer);values.put("publication_page_rows",page.rows());values.put("publication_page_bytes",page.bytes());}
+        var job=new SyncJobDefinition("market."+d.datasetId(),custom?2:1,d.datasetId(),d.schemaVersion(),d.owner(),Set.of(Mode.INGEST),Mode.INGEST,
+                parameters,"market.external.frozen",custom?"market.source.pages.v2":"market.source.pages","market.full_key_values",
+                new RetryPolicy(1,Duration.ofSeconds(1),Duration.ofSeconds(1)),Duration.ofMinutes(15),new Budget(36600,100,100,100000,page.bytes()),0,List.of(),Frequency.MANUAL,ZoneOffset.UTC,true,false);
+        var frozen=job.freeze(Mode.INGEST,values,first,last,LocalDate.now(ZoneOffset.UTC));
         var port=new VerifiedBatchExecutor.Port<Map<String,Object>,String>() {
             private volatile boolean senderStopped=true;
             public void preflight() throws Exception {
@@ -137,22 +148,7 @@ public final class VerifiedMarketDataStore {
                 try {sendRows(d,batch,run);} finally {senderStopped=true;}
             }
             public List<Map<String,Object>> readback(List<String> keys) throws Exception {
-                if(keys.isEmpty()||keys.size()>5000||!wanted.keySet().containsAll(keys))throw new IllegalArgumentException("回读键不属于冻结来源");
-                // 多证券或 ITCH 序号会产生很长的 IN 列表，分段查询避免超出 HTTP 请求头限制。
-                if(keys.size()>1000&&d.dedupKey().stream().filter(k->!k.equals(d.designatedTimestamp())).anyMatch(k->keys.stream().map(wanted::get).map(r->r.get(k)).distinct().count()>1000)) {
-                    var parts=new ArrayList<Map<String,Object>>();for(int i=0;i<keys.size();i+=1000)parts.addAll(readback(keys.subList(i,Math.min(i+1000,keys.size()))));return parts;
-                }
-                if(!identity(d).equals(target))throw new IllegalStateException("回读物理目标已改变");
-                var expected=keys.stream().map(wanted::get).toList();
-                String ts=d.designatedTimestamp();var times=expected.stream().map(row->Instant.parse(row.get(ts).toString())).sorted().map(Instant::toString).toList();
-                var predicates=new ArrayList<String>();predicates.add(q(ts)+">="+literal(times.getFirst()));predicates.add(q(ts)+"<="+literal(times.getLast()));
-                for(String key:d.dedupKey())if(!key.equals(ts)) {
-                    var values=expected.stream().map(row->row.get(key)).distinct().map(v->v instanceof Number?v.toString():literal(v.toString())).toList();
-                    predicates.add(q(key)+" IN ("+String.join(",",values)+")");
-                }
-                var found=query("SELECT "+String.join(",",d.storageColumns().stream().map(VerifiedMarketDataStore::q).toList())+" FROM "+q(d.objectName())+" WHERE "+String.join(" AND ",predicates)+" LIMIT 10001");
-                if(found.size()>10000)throw new IllegalStateException("回读范围超过明确上限");
-                var requested=new HashSet<>(keys);return found.stream().map(row->normalize(d,row)).filter(row->requested.contains(codec.key(row))).toList();
+                return readbackRows(d,wanted,target,keys,page);
             }
             public boolean walSettled() throws Exception{return identity(d).equals(target)&&settled(d.objectName());}
             public boolean uncertainSenderStopped(){return senderStopped;}
@@ -160,17 +156,18 @@ public final class VerifiedMarketDataStore {
         var adapter=new SyncJobRunner.Adapter<Map<String,Object>,String>() {
             public void preflight(FrozenRequest request)throws Exception{port.preflight();}
             public SyncJobRunner.SourceCompletion fetch(FrozenRequest request,SyncJobRunner.PageConsumer<Map<String,Object>> consumer,java.util.function.BooleanSupplier cancelled)throws Exception {
-                int pages=0;for(int i=0;i<rows.size();i+=5000) {
+                var original=publicationPage(request.definition().version(),JSON.valueToTree(request.parameters()),request.definition().budget().maxBatchBytes());if(!original.equals(page))throw new IllegalStateException("冻结发布分页与本次布局不符");
+                int pages=0;for(int i=0;i<rows.size();i+=original.rows()) {
                     if(cancelled.getAsBoolean())throw new java.util.concurrent.CancellationException();
                     if(!sha(Files.readAllBytes(prepared)).equals(preparedSha))throw new IllegalStateException("规范化冻结文件已变化");
-                    consumer.accept(new SyncJobRunner.Page<>(rows.subList(i,Math.min(i+5000,rows.size())),expectedSha,prepared.toString(),Integer.toString(i)));pages++;
+                    consumer.accept(new SyncJobRunner.Page<>(rows.subList(i,Math.min(i+original.rows(),rows.size())),expectedSha,prepared.toString(),Integer.toString(i)));pages++;
                 }
                 return new SyncJobRunner.SourceCompletion(pages,rows.size(),true,prepared.toString());
             }
             public VerifiedBatchExecutor.Codec<Map<String,Object>,String> codec(){return codec;}
             public VerifiedBatchExecutor.Port<Map<String,Object>,String> port(){return port;}
-            // 一页最多五千行，仍受四 MiB 规范化字节预算约束；减少长历史的网络往返。
-            public int maxWriteBatchRows(FrozenRequest request){return 5000;}
+            // 容量取自原请求，不随当前配置漂移；原默认五千行及四 MiB 保持兼容。
+            public int maxWriteBatchRows(FrozenRequest request){return publicationPage(request.definition().version(),JSON.valueToTree(request.parameters()),request.definition().budget().maxBatchBytes()).rows();}
             public Duration visibilityTimeout(){return Duration.ofMinutes(2);}
         };
         var ledger=new SyncRunLedger(ledgerPath);SyncJobRunner.Result result;
@@ -179,6 +176,30 @@ public final class VerifiedMarketDataStore {
         Files.write(receipt,JSON.writeValueAsBytes(Map.of("result",result,"dataset",d.datasetId(),"prepared",prepared.toString(),"preparedSha256",preparedSha,"sourceSha256",expectedSha,"targetId",target)),StandardOpenOption.CREATE_NEW);
         if(result.state()!=SyncRunState.VERIFIED)throw new IllegalStateException("市场发布未验收，保留原运行和锁："+run+" "+result.state()+" "+result.errorCode());
         return result;
+    }
+
+    static PublicationPage publicationPage(int version,JsonNode parameters,int bytes) {
+        if(version==1&&!parameters.has("publication_page_rows")&&!parameters.has("publication_page_bytes")&&bytes==PublicationPage.DEFAULT.bytes())return PublicationPage.DEFAULT;
+        if(version!=2||!parameters.path("publication_page_rows").isIntegralNumber()||!parameters.path("publication_page_bytes").isIntegralNumber()||!parameters.path("publication_page_rows").canConvertToInt()||!parameters.path("publication_page_bytes").canConvertToInt())throw new IllegalStateException("原冻结发布分页缺失或版本不符");
+        var page=new PublicationPage(parameters.path("publication_page_rows").intValue(),parameters.path("publication_page_bytes").intValue());if(page.bytes()!=bytes)throw new IllegalStateException("原冻结发布字节预算不符");return page;
+    }
+    static PublicationPage restoredPublicationPage(JsonNode document,JsonNode request)throws Exception {
+        var declared=publicationPage(request.path("definition").path("version").asInt(),request.path("parameters"),request.path("definition").path("budget").path("maxBatchBytes").asInt());
+        if(document.has("publicationPage")&&(!document.path("publicationPage").path("rows").isIntegralNumber()||!document.path("publicationPage").path("bytes").isIntegralNumber()))throw new IllegalStateException("原 prepared 发布分页必须是整数");
+        var stored=document.has("publicationPage")?JSON.treeToValue(document.path("publicationPage"),PublicationPage.class):PublicationPage.DEFAULT;
+        if(!stored.equals(declared))throw new IllegalStateException("原 prepared 与冻结发布分页不符");return stored;
+    }
+    List<Map<String,Object>> readbackRows(DatasetDefinition d,Map<String,Map<String,Object>> wanted,String target,List<String> keys,PublicationPage page)throws Exception {
+        if(keys.isEmpty()||keys.size()>page.rows()||!wanted.keySet().containsAll(keys))throw new IllegalArgumentException("回读键不属于冻结来源");
+        int partSize=5000;
+        if(keys.size()>1000&&d.dedupKey().stream().filter(k->!k.equals(d.designatedTimestamp())).anyMatch(k->keys.stream().map(wanted::get).map(r->r.get(k)).distinct().count()>1000))partSize=1000;
+        if(keys.size()>partSize){var parts=new ArrayList<Map<String,Object>>();for(int i=0;i<keys.size();i+=partSize)parts.addAll(readbackRows(d,wanted,target,keys.subList(i,Math.min(i+partSize,keys.size())),page));return parts;}
+        if(!identity(d).equals(target))throw new IllegalStateException("回读物理目标已改变");
+        var expected=keys.stream().map(wanted::get).toList();String ts=d.designatedTimestamp();var times=expected.stream().map(row->Instant.parse(row.get(ts).toString())).sorted().map(Instant::toString).toList();
+        var predicates=new ArrayList<String>();predicates.add(q(ts)+">="+literal(times.getFirst()));predicates.add(q(ts)+"<="+literal(times.getLast()));
+        for(String key:d.dedupKey())if(!key.equals(ts)){var values=expected.stream().map(row->row.get(key)).distinct().map(v->v instanceof Number?v.toString():literal(v.toString())).toList();predicates.add(q(key)+" IN ("+String.join(",",values)+")");}
+        var found=query("SELECT "+String.join(",",d.storageColumns().stream().map(VerifiedMarketDataStore::q).toList())+" FROM "+q(d.objectName())+" WHERE "+String.join(" AND ",predicates)+" LIMIT 10001");if(found.size()>10000)throw new IllegalStateException("回读范围超过明确上限");
+        var codec=codec(d);var requested=new HashSet<>(keys);return found.stream().map(row->normalize(d,row)).filter(row->requested.contains(codec.key(row))).toList();
     }
 
     private void sendRows(DatasetDefinition d,List<Map<String,Object>> batch,String run)throws Exception {
@@ -207,14 +228,17 @@ public final class VerifiedMarketDataStore {
                     boolean nanos=d.columns().stream().anyMatch(c->c.storageName().equals(d.designatedTimestamp())&&c.storageType()==StorageType.TIMESTAMP_NS);
                     if(nanos)sender.at(epochNanos(timestamp),ChronoUnit.NANOS);else sender.at(timestamp);
             }
-            long sequence=sender.flushAndGetSequence();
-            if(sequence<0||!sender.awaitAckedFsn(sequence,30000))throw new IllegalStateException("QWP 未确认；保留原意图并核对实库");
+            awaitPublication(sender);
         } catch(Exception failure) {
             var diagnostics=root.resolve("transport-errors");Files.createDirectories(diagnostics);
             // 只记录类型，不复制可能含账号的底层异常正文。
             Files.write(diagnostics.resolve(run+"-"+UUID.randomUUID()+".json"),JSON.writeValueAsBytes(Map.of("runId",run,"exception",failure.getClass().getName(),"at",Instant.now().toString())),StandardOpenOption.CREATE_NEW);
             throw failure;
         }
+    }
+    /** drain 覆盖已自动刷新的序号；空 flush 不产生新序号，不能因此误判已经发送的整批。 */
+    static void awaitPublication(Sender sender) {
+        if(!sender.drain(30000))throw new IllegalStateException("QWP 未确认；保留原意图并核对实库");
     }
 
     /** 仅处理原进程已停止、整张目标表仍为零事务且零行的单切片；不自动重发任何部分可见的写入。 */
@@ -301,6 +325,7 @@ public final class VerifiedMarketDataStore {
             if(!original.targetId().equals(identity(d))||!receipt.path("targetId").asText().equals(original.targetId())||!request.path("parameters").path("prepared_sha256").asText().equals(preparedSha)
                     ||!request.path("parameters").path("source_sha256").asText().equals(sourceSha)||entries.size()!=3||entries.stream().filter(e->e.kind()==SyncRunLedger.Kind.SLICE).count()!=1
                     ||entries.stream().anyMatch(e->!Set.of(SyncRunState.RUNNING,SyncRunState.IN_DOUBT).contains(e.state())))throw new IllegalStateException("原账本、物理目标或首切片恢复条件不符");
+            var page=restoredPublicationPage(document,request);
             var locks=new DatasetIntervalLock(ledgerPath);var lease=locks.findOwned(run,new IntervalLockStore.Scope(d.datasetId(),LocalDate.parse(request.path("from").asText()),LocalDate.parse(request.path("to").asText())));
             if(lease==null||!lease.inDoubt()||!settled(d.objectName()))throw new IllegalStateException("原未决锁缺失或 WAL 尚未结清");
             var before=compareExisting(d,rows,original.targetId());if(!repairMissing&&!before.missing().isEmpty())throw new IllegalStateException("存在 "+before.missing().size()+" 个已证实缺失键；只读核对不会补写");
@@ -318,9 +343,9 @@ public final class VerifiedMarketDataStore {
             Path readback=folder.resolve("readback.json");Files.write(readback,JSON.writeValueAsBytes(Map.of("rows",after.actual(),"sourceSha256",sourceSha,"targetId",original.targetId(),"walSettled",true)),StandardOpenOption.CREATE_NEW);
             String reference=readback+"#"+sha(Files.readAllBytes(readback));
             for(var kind:List.of(SyncRunLedger.Kind.SLICE,SyncRunLedger.Kind.ATTEMPT,SyncRunLedger.Kind.RUN))for(var entry:entries)if(entry.kind()==kind) {
-                int size=kind==SyncRunLedger.Kind.SLICE?Math.min(5000,rows.size()):rows.size();
+                int size=kind==SyncRunLedger.Kind.SLICE?Math.min(page.rows(),rows.size()):rows.size();
                 var proof=Map.of("passed",true,"expectedRows",size,"actualRows",size,"matchedRows",size,"mismatchedRows",0,"duplicateKeys",0,"missingKeys",0,"sourceFingerprint",sourceSha,"readbackEvidence",reference,"writerStopped",true);
-                ledger.transition(entry.id(),entry.revision(),SyncRunState.VERIFIED,JSON.writeValueAsString(Map.of("verification",proof,"sourceComplete",true,"returnedRows",rows.size(),"supplementalFrozenRows",Math.max(0,rows.size()-5000),"reconciliationIntent",folder.resolve("intent.json").toString())));
+                ledger.transition(entry.id(),entry.revision(),SyncRunState.VERIFIED,JSON.writeValueAsString(Map.of("verification",proof,"sourceComplete",true,"returnedRows",rows.size(),"supplementalFrozenRows",Math.max(0,rows.size()-page.rows()),"reconciliationIntent",folder.resolve("intent.json").toString())));
             }
             locks.releaseAfterReconciliation(lease,true,true);
             var result=Map.<String,Object>of("runId",run,"state","VERIFIED","rows",rows.size(),"repairedMissingRows",before.missing().size(),"reconciliation",folder.toString());

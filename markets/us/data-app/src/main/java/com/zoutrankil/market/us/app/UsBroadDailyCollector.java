@@ -97,6 +97,7 @@ final class UsBroadDailyCollector {
     }
     private boolean publishDailyGroup(Connection db,FrozenHttpSource source,PersistentMarketApiBudget budget,LocalDate through)throws Exception {
         int capacity=env.getProperty("app.market-data.broad-publication-symbols",Integer.class,12);if(capacity<1||capacity>16)throw new IllegalArgumentException("股票日线来源组容量须为 1 至 16");
+        var page=publicationPage(env);
         var selected=tasks(db,"kind='DAILY' AND phase IN ('PLANNED','FETCHED')",capacity);var sources=new ArrayList<UsYahooDailyBundle.Source>();LocalDate from=LocalDate.parse(env.getProperty("app.market-data.history-start","2006-01-01"));
         for(var task:selected) {
             if(Files.exists(root.resolve("us-broad-stop.request"))){status(db,budget,"STOPPED",null);return false;}
@@ -128,8 +129,11 @@ final class UsBroadDailyCollector {
         // 组和全部成员一起进入发布态；网络调用始终在 SQLite 事务外，崩溃后不会自动另起发送。
         beginBundle(db,parsed,raw,sha);
         status(db,budget,"PUBLISHING_GROUP",bundle);
-        var result=store.publish(UsMarketDatasets.DAILY,parsed.rows(),raw,sha,Map.of("bundle",bundle,"memberTasks",parsed.members().stream().map(UsYahooDailyBundle.Member::task).toList(),"requestedFrom",from.toString(),"requestedThrough",through.toString(),"scope","完整原始响应及清单冻结在同一 ZIP；按日期排序发布，全部字段与 WAL 验收后一起推进成员"));
+        var result=store.publish(UsMarketDatasets.DAILY,parsed.rows(),raw,sha,Map.of("bundle",bundle,"memberTasks",parsed.members().stream().map(UsYahooDailyBundle.Member::task).toList(),"requestedFrom",from.toString(),"requestedThrough",through.toString(),"scope","完整原始响应及清单冻结在同一 ZIP；按日期排序发布，全部字段与 WAL 验收后一起推进成员"),page);
         finishBundle(db,parsed,Map.of("result",result));status(db,budget,"VERIFIED_GROUP",bundle);return true;
+    }
+    static VerifiedMarketDataStore.PublicationPage publicationPage(Environment environment) {
+        return new VerifiedMarketDataStore.PublicationPage(environment.getProperty("app.market-data.broad-publication-page-rows",Integer.class,10000),environment.getProperty("app.market-data.broad-publication-page-bytes",Integer.class,8*1024*1024));
     }
     static void beginBundle(Connection db,UsYahooDailyBundle.Parsed parsed,Path raw,String sha)throws Exception {
         db.setAutoCommit(false);try {
