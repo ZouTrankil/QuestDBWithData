@@ -1,0 +1,2088 @@
+{
+  "cashflow": [
+    {
+      "name": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "name": "ann_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "name": "f_ann_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "end_date",
+      "type": "STRING",
+      "key": true
+    },
+    {
+      "name": "comp_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "report_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "end_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "net_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "finan_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_fr_sale_sg",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "recp_tax_rends",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_depos_incr_fi",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_incr_loans_cb",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_inc_borr_oth_fi",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "prem_fr_orig_contr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_incr_insured_dep",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_reinsur_prem",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_incr_disp_tfa",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ifc_cash_incr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_incr_disp_faas",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_incr_loans_oth_bank",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_cap_incr_repur",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_fr_oth_operate_a",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_inf_fr_operate_a",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_paid_goods_s",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_paid_to_for_empl",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_paid_for_taxes",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_incr_clt_loan_adv",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_incr_dep_cbob",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_pay_claims_orig_inco",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "pay_handling_chrg",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "pay_comm_insur_plcy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_cash_pay_oper_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "st_cash_out_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_cashflow_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_recp_ral_inv_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_disp_withdrwl_invest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_recp_return_invest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_recp_disp_fiolta",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_recp_disp_sobu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "stot_inflows_inv_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_pay_acq_const_fiolta",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_paid_invest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_disp_subs_oth_biz",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_pay_ral_inv_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_incr_pledge_loan",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "stot_out_inv_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_cashflow_inv_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_recp_borrow",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "proc_issue_bonds",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_cash_recp_ral_fnc_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "stot_cash_in_fnc_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "free_cashflow",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_prepay_amt_borr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_pay_dist_dpcp_int_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "incl_dvd_profit_paid_sc_ms",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_cashpay_ral_fnc_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "stot_cashout_fnc_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_cash_flows_fnc_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "eff_fx_flu_cash",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_incr_cash_cash_equ",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_cash_equ_beg_period",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_cash_equ_end_period",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "c_recp_cap_contrib",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "incl_cash_rec_saims",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "uncon_invest_loss",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "prov_depr_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "depr_fa_coga_dpba",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "amort_intang_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "lt_amort_deferred_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "decr_deferred_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "incr_acc_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "loss_disp_fiolta",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "loss_scr_fa",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "loss_fv_chg",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "invest_loss",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "decr_def_inc_tax_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "incr_def_inc_tax_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "decr_inventories",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "decr_oper_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "incr_oper_payable",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "others",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "im_net_cashflow_oper_act",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "conv_debt_into_cap",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "conv_copbonds_due_within_1y",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fa_fnc_leases",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "im_n_incr_cash_equ",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "net_dism_capital_add",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "net_cash_rece_sec",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "credit_impa_loss",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "use_right_asset_dep",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_loss_asset",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "end_bal_cash",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "beg_bal_cash",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "end_bal_cash_equ",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "beg_bal_cash_equ",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "update_flag",
+      "type": "STRING",
+      "key": false
+    }
+  ],
+  "income": [
+    {
+      "name": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "name": "ann_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "name": "f_ann_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "end_date",
+      "type": "STRING",
+      "key": true
+    },
+    {
+      "name": "report_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "comp_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "end_type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "basic_eps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "diluted_eps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_revenue",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "revenue",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "int_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "prem_earned",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "comm_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_commis_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_oth_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_oth_b_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "prem_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "out_prem",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "une_prem_reser",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "reins_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_sec_tb_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_sec_uw_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_asset_mg_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_b_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fv_value_chg_gain",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "invest_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ass_invest_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "forex_gain",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_cogs",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oper_cost",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "int_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "comm_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "biz_tax_surchg",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "sell_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "admin_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fin_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "assets_impair_loss",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "prem_refund",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "compens_payout",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "reser_insur_liab",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "div_payt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "reins_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oper_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "compens_payout_refu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "insur_reser_refu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "reins_cost_refund",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "other_bus_cost",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "operate_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "non_oper_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "non_oper_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "nca_disploss",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "income_tax",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_income_attr_p",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "minority_gain",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_compr_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "t_compr_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "compr_inc_attr_p",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "compr_inc_attr_m_s",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ebit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ebitda",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "insurance_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "undist_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "distable_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "rd_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fin_exp_int_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fin_exp_int_inc",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "transfer_surplus_rese",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "transfer_housing_imprest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "transfer_oth",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "adj_lossgain",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "withdra_legal_surplus",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "withdra_legal_pubfund",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "withdra_biz_devfund",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "withdra_rese_fund",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "withdra_oth_ersu",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "workers_welfare",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "distr_profit_shrhder",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "prfshare_payable_dvd",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "comshare_payable_dvd",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "capit_comstock_div",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "net_after_nr_lp_correct",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "credit_impa_loss",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "net_expo_hedging_benefits",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_impair_loss_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_opcost",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "amodcost_fin_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "oth_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "asset_disp_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "continued_net_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "end_net_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "update_flag",
+      "type": "STRING",
+      "key": false
+    }
+  ],
+  "express": [
+    {
+      "name": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "name": "ann_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "name": "end_date",
+      "type": "STRING",
+      "key": true
+    },
+    {
+      "name": "revenue",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "operate_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_hldr_eqy_exc_min_int",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "diluted_eps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "diluted_roe",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "yoy_net_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "bps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "yoy_sales",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "yoy_op",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "yoy_tp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "yoy_dedu_np",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "yoy_eps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "yoy_roe",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "growth_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "yoy_equity",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "growth_bps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "open_net_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "open_bps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "or_last_year",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "op_last_year",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "tp_last_year",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "np_last_year",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "eps_last_year",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "perf_summary",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "is_audit",
+      "type": "INT",
+      "key": false
+    },
+    {
+      "name": "remark",
+      "type": "STRING",
+      "key": false
+    }
+  ],
+  "forecast": [
+    {
+      "name": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "name": "ann_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "name": "end_date",
+      "type": "STRING",
+      "key": true
+    },
+    {
+      "name": "type",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "p_change_min",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "p_change_max",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "net_profit_min",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "net_profit_max",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "last_parent_net",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "first_ann_date",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "summary",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "change_reason",
+      "type": "STRING",
+      "key": false
+    }
+  ],
+  "fina_indicator": [
+    {
+      "name": "ts_code",
+      "type": "SYMBOL",
+      "key": true
+    },
+    {
+      "name": "ann_date",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "name": "end_date",
+      "type": "STRING",
+      "key": true
+    },
+    {
+      "name": "eps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "dt_eps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_revenue_ps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "revenue_ps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "capital_rese_ps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "surplus_rese_ps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "undist_profit_ps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "extra_item",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "profit_dedt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "gross_margin",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "current_ratio",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "quick_ratio",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cash_ratio",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "invturn_days",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "arturn_days",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "inv_turn",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ar_turn",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ca_turn",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fa_turn",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "assets_turn",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "op_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "valuechange_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "interst_income",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "daa",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ebit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ebitda",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fcff",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fcfe",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "current_exint",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "noncurrent_exint",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "interestdebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "netdebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "tangible_asset",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "working_capital",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "networking_capital",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "invest_capital",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "retained_earnings",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "diluted2_eps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "bps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ocfps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "retainedps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cfps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ebit_ps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fcff_ps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fcfe_ps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "netprofit_margin",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "grossprofit_margin",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cogs_of_sales",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "expense_of_sales",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "profit_to_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "saleexp_to_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "adminexp_of_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "finaexp_of_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "impai_ttm",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "gc_of_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "op_of_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ebit_of_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roe",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roe_waa",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roe_dt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roa",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "npta",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roic",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roe_yearly",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roa2_yearly",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roe_avg",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "opincome_of_ebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "investincome_of_ebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "n_op_profit_of_ebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "tax_to_ebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "dtprofit_to_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "salescash_to_or",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ocf_to_or",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ocf_to_opincome",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "capitalized_to_da",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "debt_to_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "assets_to_eqt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "dp_assets_to_eqt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ca_to_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "nca_to_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "tbassets_to_totalassets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "int_to_talcap",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "eqt_to_talcapital",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "currentdebt_to_debt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "longdeb_to_debt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ocf_to_shortdebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "debt_to_eqt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "eqt_to_debt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "eqt_to_interestdebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "tangibleasset_to_debt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "tangasset_to_intdebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "tangibleasset_to_netdebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ocf_to_debt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ocf_to_interestdebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ocf_to_netdebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ebit_to_interest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "longdebt_to_workingcapital",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ebitda_to_debt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "turn_days",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roa_yearly",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roa_dp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "fixed_assets",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "profit_prefin_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "non_op_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "op_to_ebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "nop_to_ebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ocf_to_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cash_to_liqdebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cash_to_liqdebt_withinterest",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "op_to_liqdebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "op_to_debt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roic_yearly",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "total_fa_trun",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "profit_to_op",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_opincome",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_investincome",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_dtprofit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_eps",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_netprofit_margin",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_gsprofit_margin",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_exp_to_sales",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_profit_to_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_saleexp_to_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_adminexp_to_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_finaexp_to_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_impair_to_gr_ttm",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_gc_to_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_op_to_gr",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_roe",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_dt_roe",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_npta",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_opincome_to_ebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_investincome_to_ebt",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_dtprofit_to_profit",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_salescash_to_or",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_ocf_to_sales",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_ocf_to_or",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "basic_eps_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "dt_eps_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "cfps_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "op_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ebt_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "netprofit_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "dt_netprofit_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "ocf_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "roe_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "bps_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "assets_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "eqt_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "tr_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "or_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_gr_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_gr_qoq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_sales_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_sales_qoq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_op_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_op_qoq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_profit_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_profit_qoq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_netprofit_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "q_netprofit_qoq",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "equity_yoy",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "rd_exp",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "name": "update_flag",
+      "type": "STRING",
+      "key": false
+    },
+    {
+      "name": "yoy_equity",
+      "type": "DOUBLE",
+      "key": false,
+      "source": "legacy:preserve"
+    },
+    {
+      "name": "growth_assets",
+      "type": "DOUBLE",
+      "key": false,
+      "source": "legacy:preserve"
+    },
+    {
+      "name": "yoy_bps",
+      "type": "DOUBLE",
+      "key": false,
+      "source": "legacy:preserve"
+    },
+    {
+      "name": "growth_profit",
+      "type": "DOUBLE",
+      "key": false,
+      "source": "legacy:preserve"
+    },
+    {
+      "name": "yoy_eps",
+      "type": "DOUBLE",
+      "key": false,
+      "source": "legacy:preserve"
+    },
+    {
+      "name": "yoy_roe",
+      "type": "DOUBLE",
+      "key": false,
+      "source": "legacy:preserve"
+    },
+    {
+      "name": "yoy_netprofit_margin",
+      "type": "DOUBLE",
+      "key": false,
+      "source": "legacy:preserve"
+    },
+    {
+      "name": "yoy_netprofit",
+      "type": "DOUBLE",
+      "key": false,
+      "source": "legacy:preserve"
+    },
+    {
+      "name": "yoy_assets",
+      "type": "DOUBLE",
+      "key": false,
+      "source": "legacy:preserve"
+    },
+    {
+      "name": "yoy_tr",
+      "type": "DOUBLE",
+      "key": false,
+      "source": "legacy:preserve"
+    },
+    {
+      "name": "yoy_or",
+      "type": "DOUBLE",
+      "key": false,
+      "source": "legacy:preserve"
+    }
+  ]
+}

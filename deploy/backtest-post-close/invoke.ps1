@@ -48,11 +48,34 @@ function Wait-Dependencies {
     } while ($true)
 }
 function Table-State {
-    Query "select t.id,t.table_name,t.directoryName,w.writerTxn,w.sequencerTxn,w.bufferedTxnSize,w.suspended from tables() t join wal_tables() w on w.name=t.table_name where t.table_name in ('daily','daily_basic','stk_factor','stk_limit','stk_suspend','stk_st_daily','backtest_daily','v_backtest_daily') order by t.table_name"
+    Query "select t.id,t.table_name,t.directoryName,w.writerTxn,w.sequencerTxn,w.bufferedTxnSize,w.suspended from tables() t join wal_tables() w on w.name=t.table_name where t.table_name in ('daily','daily_basic','stk_factor','stk_limit','stk_suspend','stk_st_daily','mv_backtest_daily') order by t.table_name"
 }
 function Assert-Settled($State) {
-    if (@($State.dataset).Count -ne 8) { throw 'All eight formal WAL objects are required' }
-    foreach ($row in $State.dataset) { if ($row[3] -ne $row[4] -or $row[5] -ne 0 -or $row[6]) { throw ('Unsettled WAL: '+$row[1]) } }
+    if (@($State.dataset).Count -ne 7) { throw 'All seven formal WAL objects are required' }
+    foreach ($row in $State.dataset) { if ($null -eq $row[0] -or $null -eq $row[2] -or $null -eq $row[3] -or $null -eq $row[4] -or
+        $null -eq $row[5] -or $null -eq $row[6] -or $row[3] -ne $row[4] -or $row[5] -ne 0 -or $row[6]) { throw ('Unsettled WAL: '+$row[1]) } }
+}
+function Assert-BacktestCurrent {
+    $views=Query "select refresh_type,base_table_name,view_status,invalidation_reason,refresh_base_table_txn,base_table_txn,cast(last_refresh_start_timestamp as LONG) from materialized_views() where view_name='mv_backtest_daily'"
+    if (@($views.dataset).Count -ne 1) { throw 'Canonical native backtest MV is required' }
+    $view=$views.dataset[0]
+    if ($view[0] -ne 'immediate' -or $view[1] -ne 'stk_limit' -or $view[2] -ne 'valid' -or $null -ne $view[3] -or
+        $null -eq $view[4] -or $view[4] -lt 0 -or $view[4] -ne $view[5] -or $null -eq $view[6]) { throw 'Backtest MV refresh is not current' }
+    foreach ($table in @('stk_factor','stk_limit','stk_suspend','stk_st_daily')) {
+        $tx=Query ("select sequencerTxn,cast(timestamp as LONG) from wal_transactions('"+$table+"') limit -1")
+        if (@($tx.dataset).Count -ne 1) { throw ('Source commit evidence is missing: '+$table) }
+        $seq=Scalar ("select sequencerTxn from wal_tables() where name='"+$table+"'")
+        if ($null -eq $seq -or $null -eq $tx.dataset[0][0] -or $null -eq $tx.dataset[0][1] -or
+            $tx.dataset[0][0] -ne $seq -or ($table -eq 'stk_limit' -and $seq -ne $view[4]) -or
+            ($table -ne 'stk_limit' -and $tx.dataset[0][1] -gt $view[6])) { throw ('Source changed after native MV refresh: '+$table) }
+    }
+}
+function Wait-BacktestCurrent {
+    $deadline=[datetime]::UtcNow.AddMinutes(5)
+    do {
+        try { Assert-Settled (Table-State);Assert-BacktestCurrent;return }
+        catch { if ([datetime]::UtcNow -ge $deadline) { throw };Start-Sleep -Seconds 1 }
+    } while ($true)
 }
 function Invoke-Owner([string]$Command,[datetime]$Lo,[datetime]$Hi) {
     $tag=$Command+'-'+(Date-Text $Lo)+'-'+(Date-Text $Hi)
@@ -63,7 +86,7 @@ function Invoke-Owner([string]$Command,[datetime]$Lo,[datetime]$Hi) {
         ('-Dapp.sync.ledger-path='+(Join-Path $workspace 'var/sync-ledger.sqlite3')),
         '-cp',$runtime.classpath,'com.zoutrankil.data.QuestDataApplication',$Command,
         '--from',(Date-Text $Lo),'--to',(Date-Text $Hi),'--logical-date',(Date-Text $now.Date))
-    if ($Command -ne 'run-backtest-daily-job') { $arguments+=@('--mode','BACKFILL') }
+    $arguments+=@('--mode','BACKFILL')
     if ($Command -eq 'run-exchange-calendar') { $arguments+=@('--exchanges','SSE,SZSE') }
     $argfile=Join-Path $logs ($tag+'.args')
     [IO.File]::WriteAllLines($argfile,@($arguments | ForEach-Object {'"'+$_.Replace('\','/').Replace('"','\"')+'"'}),$utf8)
@@ -81,8 +104,9 @@ function Test-Window([datetime]$Lo,[datetime]$Hi,[string[]]$Dates) {
     $source='('+$sql+')'
     $fields='trade_date,ts_code,open,high,low,close,vol,amount,adj_factor,up_limit,down_limit,cast(is_suspended as LONG) is_suspended,is_st'
     $predicate="trade_date>='"+(Date-Text $Lo)+"' and trade_date<'"+(Date-Text $Hi.AddDays(1))+"'"
+    Assert-BacktestCurrent
     $before=Table-State;Assert-Settled $before;$counts=@()
-    foreach ($table in @('backtest_daily','v_backtest_daily')) {
+    foreach ($table in @('mv_backtest_daily')) {
         $actual='select '+$fields+' from '+$table+' where '+$predicate
         $differences=@();$differences+='select * from '+$source+' except all '+$actual
         $differences+=$actual+' except all select * from '+$source
@@ -92,9 +116,9 @@ function Test-Window([datetime]$Lo,[datetime]$Hi,[string[]]$Dates) {
         for ($i=0;$i -lt $Dates.Count;$i++) { if ((Date-Text (Day $rows.dataset[$i][0])) -ne $Dates[$i] -or $rows.dataset[$i][1] -lt 1 -or $rows.dataset[$i][1] -ne $rows.dataset[$i][2]) { throw ('Date/key coverage failed: '+$table) } }
         $counts+=[ordered]@{table=$table;from=(Date-Text $Lo);through=(Date-Text $Hi);counts=$rows.dataset}
     }
-    $after=Table-State;Assert-Settled $after
+    $after=Table-State;Assert-Settled $after;Assert-BacktestCurrent
     if (($before.dataset | ConvertTo-Json -Depth 8 -Compress) -ne ($after.dataset | ConvertTo-Json -Depth 8 -Compress)) { throw 'Source or target changed during physical audit' }
-    $missing=Query ('select trade_date,ts_code from daily where '+$predicate+' except select trade_date,ts_code from v_backtest_daily where '+$predicate)
+    $missing=Query ('select trade_date,ts_code from daily where '+$predicate+' except select trade_date,ts_code from mv_backtest_daily where '+$predicate)
     [pscustomobject]@{physicalAudit=$counts;dailyUniverseMissing=@($missing.dataset)}
 }
 try {
@@ -116,7 +140,7 @@ try {
         $check['javaReady']=$true;Save-Check
     }
     $prior=if (Test-Path -LiteralPath $statusPath) {Get-Content -LiteralPath $statusPath -Raw | ConvertFrom-Json} else {$null}
-    $dense=@('daily','daily_basic','stk_factor','stk_limit','backtest_daily','v_backtest_daily')
+    $dense=@('daily','daily_basic','stk_factor','stk_limit','mv_backtest_daily')
     $frontiers=@($dense | ForEach-Object {$latest=Scalar ('select max(trade_date) from '+$_);if (!$latest) {throw ('Historical bootstrap required: '+$_)};Day $latest})
     $oldest=($frontiers | Sort-Object | Select-Object -First 1)
     if (Test-Path -LiteralPath $anchorPath) {$anchor=Day ((Get-Content -LiteralPath $anchorPath -Raw | ConvertFrom-Json).from)}
@@ -145,7 +169,7 @@ try {
     $planAnchor=if ($From -and (Day $From) -lt $anchor) {$From} else {Date-Text $anchor}
     $plan=New-BacktestCatchupPlan -Anchor $planAnchor -Target $target -OpenDates $openDates -Coverage $coverage -ExplicitFrom $From
     if ($PlanOnly) {$plan | ConvertTo-Json -Depth 12;exit 0}
-    Save-Json $anchorPath ([ordered]@{from=(Date-Text $anchor);scope='Managed post-close trading dates; dates are checked in all six dense formal objects'})
+    Save-Json $anchorPath ([ordered]@{from=(Date-Text $anchor);scope='Managed post-close trading dates; dates are checked in all five dense formal objects'})
     $check['plan']=$plan;Save-Check
     $current=Table-State;Assert-Settled $current
     if (!$From -and $prior -and $prior.phase -eq 'VERIFIED' -and $prior.through -eq $target -and !$plan.missingTradeDates.Count -and
@@ -158,11 +182,12 @@ try {
     $dataRunStarted=$true;Save-Json (Join-Path $runRoot 'plan.json') $plan;Save-Json $statusPath $status
     foreach ($chunk in $plan.chunks) {
         $lo=Day $chunk.from;$hi=Day $chunk.through
-        foreach ($command in @('run-daily-job','run-daily-basic-job','run-stk-limit-job','run-stk-suspend-job','run-stk-st-daily-job','run-stk-factor-job')) {
+        foreach ($command in @('run-daily-job','run-daily-basic-job','run-stk-suspend-job','run-stk-st-daily-job','run-stk-factor-job','run-stk-limit-job')) {
             if ($command -eq 'run-stk-factor-job') {foreach ($day in $chunk.tradeDates) {Invoke-Owner $command (Day $day) (Day $day)}}
             else {Invoke-Owner $command $lo $hi}
         }
-        Invoke-Owner 'run-backtest-daily-job' $lo $hi
+        # stk_limit 最后提交，原生 MV 才能看到其他来源的本轮修订。
+        Wait-BacktestCurrent
         $status.completedChunks+=$chunk;Save-Json $statusPath $status
     }
     $counts=@();$universeMissing=@();$beforeAudit=Table-State;Assert-Settled $beforeAudit

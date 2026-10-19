@@ -1,0 +1,15 @@
+plugins { id 'application' }
+
+dependencies {
+    implementation project(':markets:cn:data')
+    implementation project(':markets:cn:batch')
+    implementation project(':markets:cn:source')
+    // A 股应用读取现有美国利率产品；不在这里实现美股清洗。
+    runtimeOnly project(':markets:us')
+    implementation project(':platform:runtime-support')
+    testImplementation project(':markets:us')
+}
+application {
+    applicationName = 'cn-data'
+    mainClass = 'com.zoutrankil.data.QuestDataApplication'
+}

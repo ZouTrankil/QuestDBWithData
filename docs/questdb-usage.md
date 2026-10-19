@@ -1,140 +1,55 @@
-# QuestDB 使用规范
+# QuestDB 使用说明
 
-本文记录本项目连接 QuestDB 的协议选择、时间处理、写入、查询和运行约定。应用由 Spring Boot 管理配置和客户端生命周期，命令行入口运行在非 Web 模式。
+QuestDB 主要放市场原始数据和共享时序产品。自己的策略、订单、成交记录放本地 SQLite。连接值统一在 [config/application.yml](../config/application.yml)，修改方法见[配置说明](configuration.md)。
 
-## 协议分工
+## 哪种连接做什么
 
-| 操作 | 客户端 | 协议 | 默认端口 | 本项目用途 |
-| --- | --- | --- | ---: | --- |
-| 高吞吐写入 | `org.questdb:questdb-client` | QWP / WebSocket | 9000 | 同步股票快照行 |
-| SQL、DDL、查询 | Spring `JdbcTemplate` + HikariCP | PGWire | 8812 | 建表、探活、读取和写后可见性确认 |
-| 兼容性写入（当前不用） | ILP/TCP 客户端 | ILP over TCP | 9009 | 仅在复用现有 ILP/Telegraf 写入端时使用 |
+| 操作 | 当前做法 | 默认端口 |
+| --- | --- | --- |
+| A 股数据应用的批量写入 | Java Sender，通过 QWP / WebSocket | 9000 |
+| Batch 来源产品写入 | typed HTTP / ILP 适配器 | 9000 |
+| SQL、建表、查询和写后核验 | JDBC / PGWire；部分维护走 HTTP SQL | 8812 / 9000 |
 
-写入使用 QWP 原生 Java `Sender`；SQL 读取使用 `JdbcTemplate`。JDBC 在本项目中负责表结构和查询，不用于逐行写入。`QuestDB` 客户端作为 Spring 单例 Bean 在应用关闭时释放；PGWire 连接由 HikariCP 复用。
+不要把两套写入协议混成一个。A 股数据应用当前 QWP 写入不需要 `QUESTDB_ILP_PORT`，也没有靠这个变量启用 TCP 9009。
 
-当前 Java 客户端连接 `ws::addr=...:9000` 使用 QWP，因此**本项目不需要 `QUESTDB_ILP_PORT`**。9009 是 QuestDB ILP/TCP listener 的默认端口；本项目没有 ILP sender，也没有绑定/读取这个环境变量。QuestDB 官方将 ILP 定位为兼容协议，新 Java 接入建议用 QWP。只有要接现有 ILP/TCP 客户端时，才需要配置并开放 TCP 9009；ILP/HTTP 使用 HTTP listener 的 9000 端口，不是 9009。`QUESTDB_ILP_PORT` 是应用侧自定义名称，不会因设置环境变量就自动改变 QuestDB 服务端监听端口。
+数据库主机、端口、用户和密码在 `app.questdb`；URL 引用这组参数。已有实际默认值，不需要再复制一份占位配置。凭据只在配置里查看和修改，不写入文档或日志。
 
-## 配置
+## 表、视图、物化视图怎么选
 
-在 `config/application.yml` 中配置 Tushare 和 QuestDB 参数：
+| 类型 | 简单理解 | 适合放什么 |
+| --- | --- | --- |
+| 普通表 | 保存数据本身 | 来源行情、规范化后的基础数据 |
+| 普通视图 `VIEW` | 查询时执行那段 SQL | 轻量字段整理、动态关联 |
+| 原生物化视图 `MATERIALIZED VIEW` | 保存预先计算的结果，后台刷新 | 经常读取的时间聚合 |
 
-```yaml
-app:
-  tushare:
-    token: "your-tushare-token"
-    api-url: "https://api.tushare.pro"
-  questdb:
-    host: 127.0.0.1
-    pg-port: 8812
-    qwp-port: 9000
-    username: admin
-    password: "your-questdb-password"
-    database: qdb
-```
+ASOF JOIN 是“给当前记录找不晚于它的最近一条数据”的关联规则，不是刷新方式。普通视图查询时重新执行 SQL，不用单独同步 ASOF。
 
-应用属性由 `@ConfigurationProperties` 绑定，PGWire 的 `DataSource` 由 Spring Boot 自动配置并使用 HikariCP。当前 YAML 中的 token 和密码是占位值，请按实际部署环境填写。生产环境应使用 TLS (`wss`)、受限账户和受保护的配置文件；不要把凭据写入日志。
+MV 有刷新延迟，也不是任意查询都能物化。关联右侧的历史修订不保证触发全部重算；具体产品要定义刷新和核验。MV 在 `tables()` 里出现不代表它是普通表，检查类型要看 `materialized_views()` 等类型信息。
 
-## 写入约定
+## 写入怎么做
 
-表和 view 由 Flyway 版本化 SQL 管理，执行方式见 [Flyway schema 管理](flyway-schema-management.md)。同步和 latest 查询由 service 先迁移再执行，repository 不再运行建表 DDL。
+- 表结构由对应迁移或任务维护，写入前检查类型、时间列、分区、WAL 和去重键，不能悄悄改未知表。
+- Sender 不跨线程共享。每次并发写入使用独立会话，批量结束后按协议提交。
+- 真正的时间点使用 `Instant`；逻辑日期标记按原编码保存。不要统一加 8 小时，见[模型说明](model-schema-conventions.md)。
+- 列名、单位、精度和 null 显式映射，不依赖 Java 字段顺序。字符串、SYMBOL 和时间列使用匹配的写入方法。
+- 需要重复执行时，DDL 定义完整 `DEDUP UPSERT KEYS`。有去重键也不能直接重发未知结果；先核对原运行。
 
-1. 通过 QWP 客户端批量构造行，并在批次结束时关闭 `Sender` 或显式 `flush()`。`Sender` 不可跨线程共享；每个并发生产线程独立借用一个 sender。
-2. 时间列使用明确的 `Instant`，避免依赖隐式时区。本项目启动时将 JVM 默认时区设为 UTC；快照按 UTC 当日零点生成，并作为指定时间列 `snapshot_ts` 写入。
-3. 时间序列应尽量按时间顺序写入。需要重试或去重时，先定义业务去重键；本示例使用 `(snapshot_ts, ts_code)`。
-4. 建表 DDL 明确指定分区、WAL 和去重键。正式业务表应由迁移/初始化步骤管理，避免生产写入路径自行改变未知表结构。
-5. QWP 客户端当前没有 `DATE` setter。本示例把 Tushare 的 `list_date` (`YYYYMMDD`) 按 STRING 保存，避免将 DATE 错写成不兼容类型。
+`sync-stock-basic-questdb` 是隔离测试表 `java_tushare_stock_basic_qwp_test` 的示例，不代表所有生产同步。其表结构由 [Flyway](flyway-schema-management.md) 管理。
 
-本项目将数据写入隔离表 `java_tushare_stock_basic_qwp_test`，不会覆盖正式表。首次创建的表结构如下：
+## 发送成功以后还要检查
 
-```sql
-CREATE TABLE IF NOT EXISTS java_tushare_stock_basic_qwp_test (
-    snapshot_ts TIMESTAMP,
-    ts_code SYMBOL,
-    symbol SYMBOL,
-    name STRING,
-    area SYMBOL,
-    industry SYMBOL,
-    list_date STRING
-) TIMESTAMP(snapshot_ts) PARTITION BY DAY WAL
-  DEDUP UPSERT KEYS(snapshot_ts, ts_code);
-```
+服务端 WAL 日志可能还没应用，发送确认不等于查询已可见。生产任务按完整业务键和字段值读回，并检查来源、物理对象和版本稳定后才提交检查点。不要固定睡几秒就算成功。
 
-## 写后读与异步可见性
+股票资料直接同步示例仍主要通过快照行数轮询，不能证明同一天所有旧值都已被替换。其他严格核验任务不能退化成这种数量检查。
 
-QWP flush/关闭 sender 不等于数据已经可查询：WAL 会由服务端异步应用。不要用固定时长 `Thread.sleep()` 后假定成功，也不要在立即读取为空时直接判定写入丢失。
+项目也还没有在所有入口统一补齐业务键非空、单批去重和阻塞查询的总截止时间；新增正式同步要把这些边界一起处理。UPSERT 不会删除本次来源里没有的旧记录，范围缩小时要另定规则。
 
-本项目通过 PGWire/JDBC 对该快照执行 `count()` 轮询，间隔 100ms，最多等待 10 秒；达到提交行数才成功，超时抛错。生产代码应根据业务 SLA 设置截止时间和轮询间隔，并记录提交行数、可见行数、等待耗时及超时状态。大批量数据还应通过稳定的业务键或批次标识核验，而不只检查整表总数。
+## 查询怎么写
 
-## 查询约定
+值用参数绑定，动态表名和列名用白名单。明确列集合、时间范围、排序、条数限制和超时；JOIN 两边也要限制扫描范围。`LATEST ON`、`SAMPLE BY` 等语法放在存储实现里。
 
-- 使用 JDBC 参数绑定用户输入，避免把请求参数拼入 SQL。
-- 常规时序查询利用时间范围过滤和 designated timestamp；适合时可用 QuestDB 的 `LATEST ON ... PARTITION BY ...` 获取每个分区最新记录，用 `SAMPLE BY` 做时间桶聚合。
-- 列名、表名通常不能像值一样通过 `?` 绑定；动态标识符应采用白名单映射。
-- `SELECT *` 适合探索，不适合作为长期 API 查询；明确列集合并映射到领域模型。
+Tushare HTTP 200 后仍要检查响应中的业务错误码。分页到上限、权限失败、空响应和完整空结果分别处理；请求成功不等于来源完整。
 
-例如，按股票代码查最近数据：
+历史研究还要保留公告可用时间和修订含义，不能把今天看到的最新版本倒推成当时已经知道。
 
-```sql
-SELECT snapshot_ts, ts_code, symbol, name, list_date
-FROM java_tushare_stock_basic_qwp_test
-WHERE ts_code = ?
-ORDER BY snapshot_ts DESC
-LIMIT ?;
-```
-
-## WebClient 与 Tushare
-
-外部 Tushare 请求使用 Spring WebClient，并从 `TushareProperties` 读取连接、响应和整体请求超时。HTTP 状态码成功后仍检查 Tushare JSON 的 `code` 字段，因为业务错误可能仍以 HTTP 200 返回。令牌只从 Spring 配置读取，不写入请求日志。
-
-当前命令行程序会用 `block()` 等待 WebClient 响应，因此保持简单的同步 CLI 入口；若将来改为 Spring Boot WebFlux 服务，应贯穿使用响应式链，避免在 WebFlux 请求线程上调用 `block()`。
-
-`LATEST ON`、`SAMPLE BY` 等 QuestDB SQL 是数据库特有语法，应封装在 repository 层并通过真实 QuestDB 版本验证。
-
-## 规范覆盖与当前限制
-
-| 项目 | 当前状态 |
-| --- | --- |
-| YAML、客户端生命周期、JDBC 连接池 | 已实现 |
-| QWP 写入 / JDBC 参数化查询 | 已实现 |
-| UTC 时间点、LocalDate 日期、显式 mapper | 已实现 |
-| WAL、快照组合去重键 | V1 SQL 定义；真实实例尚待验证 |
-| table/view 版本化管理 | Flyway 已接入；V1/V2 尚未在真实实例执行 |
-| 写后轮询 | 已实现行数核验，有下面列出的边界 |
-| Pydantic → Schema → Java | 已有约定，尚未接入真实 Pydantic 源模型或生成器 |
-
-读写规范还应遵循以下规则，当前代码未覆盖的部分不能当作已完成的生产保证：
-
-- 行数达到预期只能检查数量。同日旧快照行数相同的情况下，轮询可能在新值应用前成功。严格核验应比较本批业务键及字段值，或设计批次标识并在该标识下核验；不能用整表或日期内总数证明重写完成。
-- 直接同步的快照日期由 `BusinessTime` 按 `app.time.business-zone`（默认 `Asia/Shanghai`）确定，仍编码为 UTC 零点日期标记；跨业务日重新执行会形成另一份快照。任务入口使用冻结的 `logicalDate`，恢复时保持该日期。日期标记不是实际采集时刻，详见 [模型规范](model-schema-conventions.md#统一业务时间入口)。
-- 入站业务 key 应非空、单批唯一，非法日期应拒绝，缺失日期应映射为 null。当前 mapper 已校验日期格式，但 key 非空/单批去重检查还未统一落地。
-- 轮询 deadline 控制再次查询的时机，不保证一个阻塞 JDBC 调用一定在 deadline 内返回。正式部署还要统一连接获取、socket、SQL 查询超时，细分可重试异常，并接入 QWP 异步错误监控。
-- latest 命令当前全量载入结果；大表查询应要求时间范围、限制条数或分批读取。
-- 上市状态删除、空批次和同一天源集合缩小需要明确业务语义；UPSERT 不会自动删除旧快照中未再次出现的代码。
-
-定义新模型时按 [新增模型与读写流程](model-development-workflow.md) 填写字段契约，并把对应 SQL 纳入 Flyway。
-
-## 业务账本迁出与旧表退役（2026-10-16）
-
-本轮从 `100.64.153.106` 迁出 26 张交易、券商和策略记录表，共 72,847 条记录，发布到本机 `/Users/Apple/zq/fun/back-monitor/artifacts/quant_platform/` 下的五个现有 SQLite 仓储。Python 项目的 `.env` 中 `QUESTDB_HOST` 同步修正为该地址，凭据未改动。
-
-| 数据 | 表数 | 记录数 | 持久化账本相对路径 |
-| --- | ---: | ---: | --- |
-| 信号、委托、成交和配对计划 | 4 | 1,818 | `best_trader/trade_evidence/records.sqlite3` |
-| 券商对账单和 QMT 账户记录 | 6 | 6,121 | `best_trader/broker_records/records.sqlite3` |
-| 历史回测与每日策略结果 | 7 | 57,768 | `research/strategy_runs/records.sqlite3` |
-| 策略生产结果和产物清单 | 7 | 6,989 | `research/strategy_production/records.sqlite3` |
-| 策略模板与实例修订 | 2 | 151 | `research/strategy_identity/records.sqlite3` |
-
-这些 SQLite 文件是业务数据，不能随临时 `artifacts/` 输出一起清理。Git 忽略规则不等于文件可删除；应与应用配置和研究产物一起持久化备份。
-
-迁移通过 JDBC 保存原始 schema、DDL 和完整字段，导出前后核对物理 ID、事务号和 WAL 状态。发布后逐字段核对行多重集和内容摘要，检查 SQLite 完整性，并通过实际消费者在新进程中读回全部记录。26 张旧表和两张空表 `orders`、`order_fills` 已退役；正式行情、因子、L2 数据与读取视图保留。
-
-原清单中的 13 张 staging/backup 表保留：本机没有可确认其可退役的原发布/恢复凭证。执行期间又观察到一张新生成的停牌 staging 表，同样未操作。后续只能由原任务 owner 核实完成状态和恢复引用后清理，不能按表名前缀批量删除。
-
-本轮原始快照、独立 SQLite 备份、逐表摘要、消费者读回和删除回执保存在 `var/questdb-record-cleanup/20261016T150229Z/`，该目录不纳入 Git，应保留用于审计和恢复。精确快照及受凭证约束的退役入口为 `tools/QuestDbRecordSnapshot.java`；本地发布和消费者验证分别使用 `tools/migrate_questdb_record_archives.py`、`tools/verify_record_archive_consumers.py`。发布工具拒绝覆盖已有业务账本。
-
-## 官方参考
-
-- [QuestDB Java 客户端与 QWP](https://questdb.com/docs/connect/clients/java/)
-- [QuestDB Java 客户端写后读说明](https://questdb.com/docs/connect/clients/java/#read-after-write)
-- [QuestDB PostgreSQL JDBC / PGWire](https://questdb.com/docs/connect/compatibility/pgwire/java/)
+数据库结构变更见[迁移说明](flyway-schema-management.md)，MV 和旧表清理见[维护说明](questdb-maintenance.md)。

@@ -1,38 +1,36 @@
 # 代码从哪看
 
-项目里有六个 Gradle 模块，主要是为了让不同程序分开启动：
+业务按 A 股、美股、BTC 分目录，通用执行和启动支持单独放。完整规则看[项目规范](project-structure-and-standards.md)。
 
-- `data-app`：数据 API、CLI 和 QuestDB 访问。
-- `batch-app`：批处理和离线 Level2 计算。
-- `main-strategy-runtime`：把数据和 Batch 能力接起来，单独运行主策略。
-- `l2-live-app`：实时 MQTT 采集。
-- `data-core`、`runtime-support`：给其他模块共用的基础代码。
+| 想看什么 | 去哪里 |
+| --- | --- |
+| 通用字段契约、业务键和时间类型 | `platform/core/src/main/java` |
+| 配置、日志和启动支持 | `platform/runtime-support/src/main/java` |
+| 通用客户端、配额和分页 | `platform/engine/src/main/java` |
+| 来源契约和通用采集 | `platform/engine/source/` |
+| 共享写入核验、运行记录和恢复 | `platform/engine/questdb/` |
+| Batch 元数据和持久写入协议 | `platform/engine/batch/` |
+| 公共鉴权、目录接口和 schema 配置 | `platform/app-support/`，这是库，不单独启动 |
+| A 股数据 API / CLI 启动和 Batch 生命周期 | `markets/cn/data-app/` |
+| A 股表模型、DTO、L2 共享字段 | `markets/cn/src/main/java`；domain 按[数据类别](model-schema-conventions.md#模型目录怎么分)分目录 |
+| A 股来源字段、请求、转换和质量规则 | `markets/cn/source/` |
+| 股票、ETF、指数、资金流、因子和衍生计算 | `markets/cn/data/src/main/java/com/zoutrankil/data/` |
+| 盘后任务图、离线 L2 和归档 | `markets/cn/batch/` |
+| 主策略数据准备、评分和正式计划 | `markets/cn/main-strategy-runtime/` |
+| 实时 MQTT、解析和 Parquet 保存 | `markets/cn/l2-live-app/` |
+| 美国表模型与现有美国利率来源 | `markets/us/` |
+| BTC 时间和后续扩展入口 | `markets/btc/`，目前没有采集任务 |
 
-大概的依赖关系是：数据和 Batch 共用 `data-core`；主策略组合这两边；实时 L2 单独运行，只用共享启动支持。
+`platform/app-support` 只提供跨市场公共 API 支持，数据库执行能力在 `platform/engine`。市场自己的命令、清洗和业务 API 放在市场库，启动入口放在市场目录下。主策略可以复用 A 股库，不加载 `markets/cn/data-app` 的入口 jar。根 `batch-app` 已移除。Batch 的 Job、管理接口和装配归 `markets/cn/batch`，由 `markets/cn/data-app` 的常驻服务按配置托管；有限 CLI 不启动 Batch。
 
-## 数据采集怎么走
+## 跟一条数据流程
 
-从 `data-app/src/main/java/com/zoutrankil/data/` 开始找。`stock/`、`etf/`、`index/`、`factor/`、`flow/` 这些目录按业务分开。
+先看 `markets/cn/data-app` 的 `QuestDataApplication`，再看 A 股数据模块里的 `StockBasicSyncService`。顺着来源客户端、mapper、写入端口和读回检查看下去。
 
-可以先看 `stock/application/StockBasicSyncService`。它拿数据、做格式转换、调用写入，再检查 QuestDB 有没有读到结果。顺着这条线，你会看到来源客户端、Mapper 和存储代码是怎么配合的。
+功能包里面，domain 放数据和纯规则，application 串流程，port 定义接口，storage/client 做实际访问。旧 Java 包名为兼容暂时保留，实际归属看所在模块。
 
-新一些的功能通常把代码分成几层：
+## 运行状态放哪里
 
-- `domain`：业务里的数据和规则。
-- `application`：把一次业务流程串起来。
-- `mapper`：转换外部数据和业务数据。
-- `port`、`storage`：定义存储接口和具体实现。
+通用运行记录和恢复进度主要在本地 SQLite。实时 L2 的事件、分钟数据和累计状态在类型化 Parquet，SQLite 保存原始接收日志、状态和提交引用；备份两边一起保留。
 
-老一些的功能还会用 `service/`、`repository/` 这种通用目录，所以别假设每个业务都长得一模一样。
-
-## Batch 和主策略
-
-`batch-app` 从 `com.zoutrankil.batch.BatchApplication` 启动。想看作业怎么跑，先看 `job/`；想看数据怎么采集和写入，再看 `source/`、`writer/`；运行状态和检查点主要在 `storage/`，保存在 SQLite。
-
-`main-strategy-runtime` 是单独的启动程序，会组合数据模块和 Batch。`l2-live-app` 则只管实时 MQTT 采集，清洗状态保存在本地 SQLite。
-
-## 建议阅读顺序
-
-先看 `QuestDataApplication`，弄清楚程序怎么启动；再沿一个 `stock/` 同步流程往下读；之后看 Batch，最后再看主策略和实时 L2。
-
-配置放在 [`config/application.yml`](../config/application.yml)。怎么启动各程序，见[配置说明](configuration.md)。
+配置和日志仍统一在根 `config/`。怎么启动看[配置说明](configuration.md)，业务时间看[市场时间](market-time.md)。

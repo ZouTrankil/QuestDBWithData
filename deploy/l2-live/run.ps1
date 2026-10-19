@@ -1,8 +1,10 @@
 param(
-    [ValidateSet('plan','start','status','stop','replay','export')][string]$Action = 'status',
+    [ValidateSet('plan','start','status','stop','replay','export','migrate-parquet','archive','verify-storage','files')][string]$Action = 'status',
+    [string]$Date = '',
     [string]$Symbols = '',
     [string]$CredentialsFile = '',
     [string]$RuntimeDirectory = '',
+    [string]$ClasspathFile = '',
     [long]$JournalMaxBytes = 8589934592,
     [int]$Seconds = 0,
     [switch]$Foreground,
@@ -60,12 +62,14 @@ try {
 } finally { $env:JAVA_HOME = $priorJavaHome }
 }
 $javaPath = [IO.File]::ReadAllText((Join-Path $buildRoot 'java-path.txt')).Trim()
-$classpath = [IO.File]::ReadAllText((Join-Path $buildRoot 'runtime-classpath.txt')).Trim()
+$classpathPath = if ($ClasspathFile) { [IO.Path]::GetFullPath($ClasspathFile) } else { Join-Path $buildRoot 'runtime-classpath.txt' }
+$classpath = [IO.File]::ReadAllText($classpathPath).Trim()
 $command = if ($Action -eq 'start') { 'session' } else { $Action }
 $launchArgs = @('-Xms128m','-Xmx1g','-cp',$classpath,'com.zoutrankil.data.l2live.bootstrap.AliyunL2LiveMain',$command,'--root',$runtimeRoot,'--journal-max-bytes',[string]$JournalMaxBytes)
 if ($Symbols) { $launchArgs += @('--symbols',$Symbols) }
 if ($CredentialsFile) { $launchArgs += @('--credentials',[IO.Path]::GetFullPath($CredentialsFile)) }
 if ($Seconds) { $launchArgs += @('--seconds',[string]$Seconds) }
+if ($Date) { $launchArgs += @('--date',$Date) }
 if ($Action -eq 'start') { $launchArgs += @('--wait-credentials','true') }
 # Use a Java argfile so long Windows classpaths and paths containing spaces remain exact.
 $argFile = Join-Path $runtimeRoot ('launch-' + [Guid]::NewGuid().ToString('N') + '.args')

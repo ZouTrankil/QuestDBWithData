@@ -1,0 +1,14 @@
+plugins { id 'java-library' }
+dependencies {
+    api project(':platform:engine:source')
+    api 'org.xerial:sqlite-jdbc:3.53.4.0'
+    api 'org.springframework.boot:spring-boot-starter-jdbc'
+    api 'org.springframework.batch:spring-batch-core'
+    api 'org.springframework:spring-context-support'
+    api 'org.quartz-scheduler:quartz'
+    api('org.flywaydb:flyway-core') { version { strictly '11.9.0' } }
+}
+
+// 与独立 Batch 服务原来的依赖版本保持一致。
+configurations.named('runtimeClasspath') { resolutionStrategy.force 'commons-io:commons-io:2.20.0' }
+configurations.matching { it.name in ['compileClasspath','testCompileClasspath','testRuntimeClasspath'] }.configureEach { resolutionStrategy.force 'commons-io:commons-io:2.21.0' }

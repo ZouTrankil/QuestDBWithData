@@ -1,77 +1,38 @@
-# Flyway 管理 QuestDB schema
+# 数据库结构怎么迁移
 
-本项目已接入 Flyway：Spring 管理 Flyway Bean，复用 YAML 配置的 PGWire DataSource，由 service 在数据库业务操作前执行迁移。表和 view 定义位于 `data-app/src/main/resources/db/migration/questdb/`，repository 只负责数据读写。
+Flyway 在这里负责带版本的 SQL 迁移，不负责推断业务模型，也不覆盖所有数据集的运行时建表。当前这一条迁移链主要管理股票资料隔离示例的表和视图。
 
-## 依赖与版本
+## 脚本放哪里
 
-```groovy
-dependencies {
-    implementation('org.flywaydb:flyway-core') {
-        version { strictly '11.9.0' }
-    }
-    runtimeOnly 'org.flywaydb:flyway-database-questdb:10.26.0'
-}
-```
+[markets/cn/data/src/main/resources/db/migration/questdb](../markets/cn/data/src/main/resources/db/migration/questdb/) 目前包含：
 
-这是应用运行依赖，放在顶层 `dependencies`。`buildscript.dependencies` 管理 Gradle 构建类路径，应使用 `classpath`，不是 `implementation`。
+- `V1__create_stock_basic_table.sql`：股票资料 WAL 快照表，按日分区，去重键是 `(snapshot_ts, ts_code)`。
+- `V2__create_stock_basic_latest_view.sql`：最新快照视图。
 
-QuestDB 社区模块 10.26.0 的父 POM 声明 core 11.9.0；本项目 Boot 4.1.1 BOM 默认管理 core 12.4.0，因此显式锁定模块声明的组合。采用 Flyway Java API 和自定义 Spring 配置，未引入 Flyway starter 或 Gradle 插件。模块注册与类路径已通过单元测试，但不等同于真实 QuestDB 服务端兼容性验证。
+结构变更新增下一个版本，已经在环境里执行过的 SQL 不改。不能靠改 Java record 或加 `@Entity` 自动改表。
 
-依据：[Flyway QuestDB 支持](https://documentation.red-gate.com/fd/questdb-305791448.html)、[模块父 POM](https://repo.maven.apache.org/maven2/org/flywaydb/flyway-community-db-support/10.26.0/flyway-community-db-support-10.26.0.pom)、[Gradle 插件类路径](https://documentation.red-gate.com/flyway/reference/usage/gradle-task)。升级时应成组核对模块、core 和目标 QuestDB 版本。
+## 怎么执行
 
-## YAML 和执行时机
-
-`application.yml` 中：
-
-```yaml
-app:
-  migration:
-    location: classpath:db/migration/questdb
-    history-table: java_tushare_schema_history
-```
-
-连接地址和凭据复用 `spring.datasource`，通过 PGWire 8812 执行 DDL。`SchemaMigrationConfiguration` 固定启用校验，禁用自动 baseline 和 clean，并关闭迁移事务包裹；QuestDB DDL 不应假定能事务回滚。这是项目自定义 `app.migration` 配置，`spring.flyway.*` 不控制这条执行路径。
-
-| 命令 | 是否迁移 |
-| --- | --- |
-| `migrate-questdb-schema` | 执行待应用迁移；旧 `create-questdb-schema` 是别名 |
-| `sync-stock-basic-questdb` | 先迁移，再获取数据和写入 |
-| `show-stock-basic-latest` | 先迁移，再查询 view |
-| `verify-questdb-jdbc` | 仅 SELECT 1，不创建数据库对象 |
-
-```bash
+```sh
 ./gradlew run --args='migrate-questdb-schema'
-./gradlew run --args='sync-stock-basic-questdb'
-./gradlew run --args='show-stock-basic-latest'
 ```
 
-`SchemaMigrationService` 在同一进程内只记录成功的迁移；异常向上传递，阻止后续业务读写。不同进程仍由 Flyway 检查迁移历史。部署时安排一个迁移执行者，不把本地进程内同步当作跨进程锁保证。
+`sync-stock-basic-questdb` 和 `show-stock-basic-latest` 也会先执行这条迁移。`verify-questdb-jdbc` 只执行连通性查询，不建表。
 
-## 版本化 SQL
+连接使用配置里的 `spring.datasource`。自定义选项在 `app.migration`，例如脚本路径和历史表 `java_tushare_schema_history`；`spring.flyway.*` 不控制这条调用链。
 
-```text
-data-app/src/main/resources/db/migration/questdb/
-├── V1__create_stock_basic_table.sql
-└── V2__create_stock_basic_latest_view.sql
-```
+`SchemaMigrationService` 只记成功的迁移；失败就阻止后续操作。一个进程内的保护不代替跨进程协调，部署时安排一个迁移执行者。
 
-V1 建立 WAL 快照表，指定 `snapshot_ts` 时间列、DAY 分区及 `(snapshot_ts, ts_code)` 去重键。V2 创建 latest view。新字段或 view 定义变更新增 V3、V4 等迁移；已经在环境中执行过的脚本保持不变。
+## 已有库怎么接
 
-迁移历史和校验和用于跟踪脚本执行；Flyway 不会自动从 Entity/Pydantic 生成 SQL，也不会发现所有人工 schema 漂移。模型契约可生成待审阅 SQL，再作为迁移文件提交。
+1. 核对列、类型、指定时间列、分区、WAL、去重键和视图定义。
+2. 已有对象与某个版本完全相同，才显式 baseline 到该版本。baseline 只登记历史，不创建或修复对象。
+3. 结构不同时先做迁移方案，不自动删表，也不靠自动 baseline 绕过检查。
 
-## 接管已有数据库
+当前配置启用校验，禁用自动 baseline 和 clean。QuestDB DDL 不按可事务回滚处理，迁移失败先查哪些语句已经生效。`repair` 修历史记录，不恢复业务数据。
 
-当前 V1/V2 面向空库，使用明确的 CREATE，避免 `IF NOT EXISTS` 掩盖旧对象与迁移定义不一致。已有测试表/view、但没有迁移历史的实例，不能直接假定可用：
+## 依赖和验证范围
 
-1. 核对现有表列名、类型、designated timestamp、WAL、分区和 UPSERT KEYS，以及 view 定义。
-2. 若已有对象完全等价于 V1 和 V2，可通过受控 Flyway 运维流程显式 baseline 到版本 2；baseline 只记账，不创建或修复对象。
-3. 若仅存在等价的 V1 表，可核对后 baseline 到版本 1，再迁移 V2。若结构不同，先制定数据迁移方案。
-4. 不开启自动 baseline 跳过检查，不为绕过异常自动删除旧表或修改历史。
+目前数据服务依赖中锁定 Flyway core `11.9.0` 和 QuestDB 社区模块 `10.26.0`，以模块构建和锁文件为准。升级时一起检查模块、core、Boot 管理版本和服务端兼容性，不只改一个版本号。
 
-迁移失败时检查已生效的 DDL 后再修复。`repair` 修复迁移历史元数据，不会恢复业务数据或撤销 DDL。旧 `QuestDbSchemaInitializer` 已移除，schema 统一由 Flyway 管理。
-
-## 已验证与待验证
-
-- 已验证：Java 编译、实际解析的依赖版本、QuestDB 插件可被 core 发现、迁移资源进入类路径、迁移失败不会标记成功。
-- 尚未执行：真实 QuestDB 空库的 V1/V2 首次迁移与再次迁移、旧库 baseline 接管、迁移后的 QWP 写入及 JDBC 查询。需要可用测试实例和正确凭据后验证。
-- Flyway 接管 schema 不改变 QWP/WAL 异步可见性；读写限制见 [读写规范](questdb-usage.md)，模型定义步骤见 [模型规范](model-schema-conventions.md)。
+编译或插件加载通过，不能替代真实空库首次迁移、重复迁移、旧库接管以及迁移后的读写验证。现有旧文档里的测试快照不再作为本次环境的成功证明。

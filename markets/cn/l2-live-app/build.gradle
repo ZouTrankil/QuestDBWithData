@@ -1,0 +1,21 @@
+plugins { id 'application' }
+
+dependencies {
+    implementation project(':platform:core')
+    implementation project(':platform:runtime-support')
+    implementation platform('org.springframework.boot:spring-boot-dependencies:4.1.1')
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3'
+    implementation 'org.xerial:sqlite-jdbc:3.53.4.0'
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
+    implementation 'org.apache.parquet:parquet-hadoop:1.17.1'
+    implementation 'org.apache.hadoop:hadoop-client-api:3.4.2'
+    runtimeOnly 'org.apache.hadoop:hadoop-client-runtime:3.4.2'
+    runtimeOnly 'org.yaml:snakeyaml'
+}
+application {
+    applicationName = 'l2-live'
+    mainClass = 'com.zoutrankil.data.l2live.bootstrap.AliyunL2LiveMain'
+    applicationDefaultJvmArgs = ['-Xms128m', '-Xmx1g']
+}

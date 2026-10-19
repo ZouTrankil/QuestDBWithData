@@ -1,0 +1,63 @@
+# 主服务 / 数据 CLI（不影响原有 CLI 的隔离目标表规则）
+spring:
+  application:
+    name: questdb-data
+  config:
+    activate:
+      on-profile: data
+  datasource:
+    # 默认 jdbc:postgresql://100.64.153.106:8812/qdb?sslmode=disable。
+    url: "jdbc:postgresql://${app.questdb.host}:${app.questdb.pg-port}/${app.questdb.database}?sslmode=disable"
+    username: ${app.questdb.username}
+    password: ${app.questdb.password}
+    hikari:
+      connection-timeout: 5000
+      maximum-pool-size: 4
+
+server:
+  port: 8080
+
+app:
+  web:
+    enabled: true
+    # 访问令牌在本机覆盖中设置；请求使用 Authorization: Bearer <配置值>。
+    api-token: ""
+    allowed-origins: "*"
+  materialized-views:
+    etf-overview:
+      enabled: true
+      check-interval: 1m
+      refresh-timeout: 2m
+  maintenance:
+    legacy-metadata-archive: var/retired-sync-metadata
+  migration:
+    location: classpath:db/migration/questdb
+    history-table: java_tushare_schema_history
+  sync:
+    l2-manifest:
+      dataset-root: ${app.paths.l2-dataset-root}
+    l2-daily-features:
+      dataset-root: ${app.paths.l2-dataset-root}
+    l2-intraday-bar-features:
+      dataset-root: ${app.paths.l2-dataset-root}
+    l2-event-response-features:
+      dataset-root: ${app.paths.l2-dataset-root}
+    l2-t0-training-labels:
+      dataset-root: ${app.paths.l2-dataset-root}
+
+
+---
+
+spring.config.activate.on-profile: data
+app.sync.batch.coverage-inputs: ""
+app.sync.batch.coverage-inputs-sha256: ""
+app.sync.financial:
+  enabled: false
+  cron: "0 30 19 * * *"
+  scope-file: ""
+  scope-sha256: ""
+  earliest-period: 2018-03-31
+
+# 常驻数据 API 可托管 Batch；启用后仍遵守 Quartz 已保存的暂停状态。
+jdb:
+  enabled: false

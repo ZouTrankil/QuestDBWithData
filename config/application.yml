@@ -1,36 +1,36 @@
-# 唯一配置源。公共配置只定义一次；下方 profile 只配置各入口的差异。
-# IDE / Gradle 请使用项目根目录作为 working directory。
-# 启动入口自动选择 data / main-strategy / batch / l2，可叠加自定义环境 profile。
+# 公共默认值；市场设置在 markets/，各进程设置在 apps/。
+# 入口自动选择 profile，环境变量和命令行仍可覆盖。
 spring:
   profiles:
     default: data
+    group:
+      data: [market-cn]
+      main-strategy: [data, market-cn]
+      batch: [market-cn]
+      l2: [market-cn]
 
 logging:
-  config: ${LOGGING_CONFIG:classpath:logback-spring.xml}
+  config: classpath:logback-spring.xml
   level:
-    root: ${LOG_LEVEL:INFO}
+    root: INFO
   file:
-    path: ${LOG_DIR:logs/${spring.application.name:questdb-data}}
-    name: ${LOG_FILE:${logging.file.path}/application.log}
+    path: logs/${spring.application.name:questdb-data}
+    name: ${logging.file.path}/application.log
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n"
     file: "${logging.pattern.console}"
   logback:
     rollingpolicy:
-      file-name-pattern: ${LOG_ARCHIVE_PATTERN:${logging.file.path}/application.%d{yyyy-MM-dd}.%i.log.gz}
-      max-file-size: ${LOG_MAX_FILE_SIZE:100MB}
-      max-history: ${LOG_MAX_HISTORY:30}
-      total-size-cap: ${LOG_TOTAL_SIZE_CAP:1GB}
+      file-name-pattern: ${logging.file.path}/application.%d{yyyy-MM-dd}.%i.log.gz
+      max-file-size: 100MB
+      max-history: 30
+      total-size-cap: 1GB
       clean-history-on-start: true
 
 app:
-  time:
-    business-zone: Asia/Shanghai
-  paths:
-    research-root: ${RESEARCH_ROOT:F:/repo/engine/back-monitor}
-    l2-dataset-root: ${L2_DATASET_ROOT:${app.paths.research-root}/artifacts/level2_t0_dataset}
   tushare:
-    token: "${TUSHARE_TOKEN:43748a5da1339b43a4956da729ae791f4e25ce9a15a356060658ffe6}"
+    # 数据源 token 使用本机覆盖或 APP_TUSHARE_TOKEN。
+    token: ""
     api-url: https://api.tushare.pro
     connect-timeout: 15s
     response-timeout: 45s
@@ -45,189 +45,42 @@ app:
     retry-base: 1s
     retry-max: 10s
     retryable-business-codes: []
+  data-catalog:
+    query-timeout-seconds: 10
+
   questdb:
-    host: ${QUESTDB_HOST:100.64.153.106}
-    pg-port: ${APP_QUESTDB_PG_PORT:8812}
-    qwp-port: ${APP_QUESTDB_QWP_PORT:9000}
+    # 当前数据库：HTTP http://100.64.153.106:9000；PGWire 100.64.153.106:8812。
+    host: 100.64.153.106
+    # JDBC 查询端口。
+    pg-port: 8812
+    # HTTP 查询及写入端口。
+    qwp-port: 9000
     username: admin
-    password: quest
+    password: ""
     database: qdb
+    # 默认让本数据库绕过 HTTP / SOCKS 全局代理；其他网站仍使用原代理。
+    direct-connection: true
+    # 默认解析为 http://100.64.153.106:9000；无需另找 URL 配置。
     http-url: http://${app.questdb.host}:${app.questdb.qwp-port}
-    http-authorization: ${QUESTDB_HTTP_AUTHORIZATION:}
+    # 当前实例 HTTP 无需 Authorization；空字符串是有效配置，不是待填占位。
+    http-authorization: ""
     visibility-timeout: 10s
     poll-interval: 100ms
     write-batch-rows: 250
     write-batch-bytes: 1048576
     write-max-batches: 100
   sync:
-    ledger-path: ${APP_SYNC_LEDGER_PATH:var/sync-ledger.sqlite3}
+    ledger-path: var/sync-ledger.sqlite3
+
 
 ---
-# 主服务 / 数据 CLI（不影响原有 CLI 的隔离目标表规则）
-spring:
-  application:
-    name: questdb-data
-  config:
-    activate:
-      on-profile: data
-  datasource:
-    url: "jdbc:postgresql://${app.questdb.host}:${app.questdb.pg-port}/${app.questdb.database}?sslmode=disable"
-    username: ${app.questdb.username}
-    password: ${app.questdb.password}
-    hikari:
-      connection-timeout: 5000
-      maximum-pool-size: 4
-
-server:
-  port: ${APP_PORT:8080}
-
-app:
-  web:
-    enabled: true
-    api-token: ${APP_API_TOKEN:}
-    allowed-origins: ${APP_ALLOWED_ORIGINS:*}
-  materialized-views:
-    etf-overview:
-      enabled: ${ETF_OVERVIEW_REFRESH_ENABLED:true}
-      check-interval: ${ETF_OVERVIEW_REFRESH_CHECK_INTERVAL:1m}
-      refresh-timeout: ${ETF_OVERVIEW_REFRESH_TIMEOUT:2m}
-  maintenance:
-    legacy-metadata-archive: ${LEGACY_METADATA_ARCHIVE:var/retired-sync-metadata}
-  migration:
-    location: classpath:db/migration/questdb
-    history-table: java_tushare_schema_history
-  sync:
-    batch:
-      enabled: ${APP_SYNC_BATCH_ENABLED:false}
-      startup-catchup: ${APP_SYNC_BATCH_STARTUP_CATCHUP:true}
-      ledger-path: ${APP_SYNC_BATCH_LEDGER_PATH:var/main-strategy-batch.sqlite}
-      artifact-root: var/main-strategy-batch
-      cron: "${APP_SYNC_BATCH_CRON:0 35 20 * * ?}"
-      retry-cron: "${APP_SYNC_BATCH_RETRY_CRON:0 0/15 21-23 * * ?}"
-      completion-cutoff: "20:30"
-      maximum-recovery-attempts: 12
-      target-etfs: ""
-      research-root: ${app.paths.research-root}/artifacts/quant_platform
-      promoted-artifact-root: ${app.paths.research-root}
-      promoted-recipe: ${app.paths.research-root}/artifacts/factor_research/l2/etf_only_top2_promoted_recipe/promoted_recipe.json
-      promoted-recipe-pins: ${app.paths.research-root}/artifacts/factor_research/l2/etf_only_top2_promoted_recipe/accepted-sha256.json
-      official-plan-db: ${app.paths.research-root}/artifacts/factor_research/l2/etf_only_fusion_main_daily/etf_only_paper/main_strategy_plans.sqlite3
-      score-start-date: "2025-07-01"
-      score-source-row-budget: 5000000
-    l2-manifest:
-      dataset-root: ${app.paths.l2-dataset-root}
-    l2-daily-features:
-      dataset-root: ${app.paths.l2-dataset-root}
-    l2-intraday-bar-features:
-      dataset-root: ${app.paths.l2-dataset-root}
-    l2-event-response-features:
-      dataset-root: ${app.paths.l2-dataset-root}
-    l2-t0-training-labels:
-      dataset-root: ${app.paths.l2-dataset-root}
-
----
-# 独立 Batch（SQLite 元数据，不启用主服务的 PGWire DataSource）
-spring:
-  application:
-    name: questdb-batch
-  config:
-    activate:
-      on-profile: batch
-  main:
-    web-application-type: none
-    banner-mode: off
-jdb:
-  metadata-url: ${JDB_METADATA_URL:jdbc:sqlite:./var/jdb-metadata.sqlite}
-  api-token: ${JDB_API_TOKEN:}
-  api-port: ${JDB_API_PORT:9085}
-  api-url: ${JDB_API_URL:http://localhost:${jdb.api-port}}
-  archive-root: ${JDB_ARCHIVE_ROOT:./var/jdb-isolated}
-  l2-settle-age: ${JDB_L2_SETTLE_AGE:5m}
-  l2-max-archive-bytes: ${JDB_L2_MAX_ARCHIVE_BYTES:8589934592}
-  l2-max-expanded-bytes: ${JDB_L2_MAX_EXPANDED_BYTES:34359738368}
-  l2-max-materialized-bytes: ${JDB_L2_MAX_MATERIALIZED_BYTES:34359738368}
-  calendar-file: ${JDB_CALENDAR_FILE:}
-  scheduling-enabled: ${JDB_SCHEDULING_ENABLED:false}
-  # Initial definitions only. Existing Quartz triggers and pause state survive restarts.
-  schedules:
-    "[post_close]": "${JDB_POST_CLOSE_CRON:0 30 18 ? * MON-FRI}"
-    "[source_cyq_perf]": "${JDB_SOURCE_CYQ_PERF_CRON:0 10 21 ? * MON-FRI}"
-    "[source_us_tbr]": "${JDB_SOURCE_US_TBR_CRON:0 35 21 ? * MON-FRI}"
-    "[post_close_recovery]": "${JDB_POST_CLOSE_RECOVERY_CRON:0 0/15 19-23 ? * MON-FRI}"
-    "[post_close_recovery_final]": "${JDB_POST_CLOSE_RECOVERY_FINAL_CRON:0 55 23 ? * MON-FRI}"
-  core-source-fanout-enabled: ${JDB_CORE_SOURCE_FANOUT_ENABLED:true}
-  production-enabled: false
-  external:
-    # Empty command catalog keeps research stages BLOCKED until a reviewed fixed argv is configured.
-    commands-json: ${JDB_EXTERNAL_COMMANDS_JSON:{}}
-    environment-json: ${JDB_EXTERNAL_ENVIRONMENT_JSON:{}}
-    timeout: ${JDB_EXTERNAL_TIMEOUT:12h}
-  tushare-token: ${JDB_TUSHARE_TOKEN:${app.tushare.token}}
-  questdb-http-url: ${JDB_QUESTDB_HTTP_URL:${app.questdb.http-url}}
-  questdb-http-authorization: ${JDB_QUESTDB_HTTP_AUTHORIZATION:${app.questdb.http-authorization}}
-  questdb-visibility-timeout: ${JDB_QUESTDB_VISIBILITY_TIMEOUT:${app.questdb.visibility-timeout}}
-  questdb-poll-interval: ${JDB_QUESTDB_POLL_INTERVAL:${app.questdb.poll-interval}}
-  baidu:
-    enabled: ${JDB_BAIDU_ENABLED:false}
-    download-enabled: ${JDB_BAIDU_DOWNLOAD_ENABLED:false}
-    cookie-file: ${JDB_BAIDU_COOKIE_FILE:}
-    share-url: ${JDB_BAIDU_SHARE_URL:}
-    share-password: ${JDB_BAIDU_SHARE_PASSWORD:}
-    source-path: ${JDB_BAIDU_SOURCE_PATH:}
-    unwrap-single-folder: ${JDB_BAIDU_UNWRAP_SINGLE_FOLDER:false}
-    remote-root: ${JDB_BAIDU_REMOTE_ROOT:/}
-    minimum-size-bytes: ${JDB_BAIDU_MINIMUM_SIZE_BYTES:1000000000}
-    pcs-executable: ${JDB_BAIDUPCS_GO_EXECUTABLE:}
-    pcs-config-directory: ${JDB_BAIDUPCS_GO_CONFIG_DIRECTORY:}
-    expected-account-uid: ${JDB_BAIDUPCS_GO_EXPECTED_UID:}
-    download-timeout: ${JDB_BAIDUPCS_GO_DOWNLOAD_TIMEOUT:12h}
-
----
-# L2 独立采集器（只加载配置，不启动 Spring 容器 / 调度器）
-spring:
-  application:
-    name: questdb-l2
-  config:
-    activate:
-      on-profile: l2
-
-l2:
-  root: var/l2-live
-  username: ${ALIYUN_L2_USERNAME:}
-  password: ${ALIYUN_L2_PASSWORD:}
-  broker: ${ALIYUN_L2_BROKER:lv2.base32.cn}
-  port: ${ALIYUN_L2_PORT:1883}
-  questdb-url: ${L2_LIVE_QUESTDB_URL:${app.questdb.http-url}}
-  questdb-authorization: ${L2_LIVE_QUESTDB_AUTHORIZATION:${app.questdb.http-authorization}}
-  symbols: ""
-  overrides: ${app.paths.research-root}/config/trading/aliyun_l2_subscription_overrides.json
-  seconds: 0
-  batch-size: 100
-  poll-interval: ${app.questdb.poll-interval}
-  visibility-timeout: ${app.questdb.visibility-timeout}
-  lateness-ms: 2000
-  retained-minutes: 10
-  wait-credentials: false
-  session:
-    zone: Asia/Shanghai
-    exchange: SSE
-    start: "09:00"
-    stop: "15:05"
-
----
-# 主策略独立进程：数据 API 不再默认承载该调度器。
-spring:
-  application:
-    name: main-strategy
-  config:
-    activate:
-      on-profile: main-strategy
-server:
-  port: ${MAIN_STRATEGY_PORT:8081}
-app:
-  materialized-views:
-    etf-overview:
-      enabled: false
-  sync:
-    batch:
-      enabled: ${APP_SYNC_BATCH_ENABLED:true}
+# 相对路径同时适用于项目目录和发行包；后面的本机覆盖优先于公开默认值。
+spring.config.import:
+  - markets/cn.yml
+  - markets/us.yml
+  - markets/btc.yml
+  - apps/cn-data.yml
+  - apps/cn-batch.yml
+  - apps/cn-l2-live.yml
+  - apps/cn-main-strategy.yml
+  - "${APP_LOCAL_CONFIG:optional:file:./config/application-local.yml}"

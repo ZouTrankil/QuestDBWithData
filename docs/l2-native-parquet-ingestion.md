@@ -1,36 +1,51 @@
-# Native Java L2 Parquet ingestion
+# L2 文件怎么导入
 
-The five `data-app` L2 Parquet sources read local files in-process using Apache Parquet 1.17.1. Their Spring configuration requires only `dataset-root`; `python-executable` and `reader-script` are no longer bound or used. The old three-argument Java constructors remain as compatibility entrypoints and delegate to the native reader.
+A 股数据应用（`markets/cn/data-app`）直接用 Java 读取本地 Parquet，不再通过 Python 子进程读取。五类来源分别是清单、日特征、分钟特征、事件响应和 T0 训练标签。
 
-| Configuration prefix | Source contract |
+## 配置在哪里
+
+| 配置前缀 | 内容 |
 | --- | --- |
-| `app.sync.l2-manifest` | 15-field D085 manifest |
-| `app.sync.l2-daily-features` | 110-field D086 daily features |
-| `app.sync.l2-intraday-bar-features` | 60-field D087 minute features |
-| `app.sync.l2-event-response-features` | 73-field D088 event response |
-| `app.sync.l2-t0-training-labels` | 62-field D089 training labels |
+| `app.sync.l2-manifest` | 数据集清单，D085 |
+| `app.sync.l2-daily-features` | 日特征，D086 |
+| `app.sync.l2-intraday-bar-features` | 分钟特征，D087 |
+| `app.sync.l2-event-response-features` | 事件响应，D088 |
+| `app.sync.l2-t0-training-labels` | T0 训练标签，D089 |
 
-Each prefix accepts `.dataset-root`, defaulting to `F:/repo/engine/back-monitor/artifacts/level2_t0_dataset`. The native reader preserves null metrics, signed int64 values, naive timestamp nanoseconds and the existing exchange-time mapping. It rejects nested/repeated fields, schema/order drift, infinity, malformed manifest JSON, unsafe linked paths and duplicate complete business keys. Existing source row, file, byte, page, cancellation and deadline bounds remain enforced. Frozen inspections bind content hashes, schemas and source roots; source inventories are rechecked before the first consumer callback. D087/D088/D089 choose the latest receipt per symbol and reject an unsuccessful latest receipt instead of falling back to an older successful batch.
+各项使用 `dataset-root`。默认跟随根配置里的 `app.paths.l2-dataset-root`，位于研究目录下的 `artifacts/level2_t0_dataset`。旧的 `python-executable`、`reader-script` 不再生效，`tools/` 中对应的五个 Python 读取脚本已移除。
 
-The isolated D085–D089 job owners retain their target and ledger contracts. `FormalL2DailyFeaturesIngestion` adds a separate fixed-table path for the existing `l2_daily_features`:
+## 读文件时检查什么
 
-- `validate(day[, cancelled])` reads the currently available certified daily source and compares all 110 canonical fields with bounded target-key reads. It requires exact daily row coverage and a stable, settled physical WAL frontier. It performs no writes or local-ledger initialization.
-- `ingestAndValidate(day, cancelled)` acquires the shared persistent date lock and fills only keys proven missing from that source. Existing value conflicts and target keys absent from the source stop ingestion. Batches obey both the 200-row ceiling and the actual 1 MiB transport-byte budget. Every submitted batch and the whole requested date must pass readback.
-- The public `Evidence` record supplies source/schema/root fingerprints, row counts, verified field count, physical target identity/version and readback digest. New execution evidence is recorded in the existing SQLite run ledger; earlier table history is never assigned synthetic receipts. Unknown delivery retains an `IN_DOUBT` date lock for explicit reconciliation.
+保留合法 null、64 位整数和原有时间精度。拒绝字段或顺序漂移、重复完整业务键、不支持的嵌套字段、无穷值、损坏清单和不安全路径。
 
-The formal writer cannot create/drop tables, overwrite a confirmed existing value or enumerate all historical dates. A table row or an older receipt cannot substitute for missing current Parquet/manifest input. Source certification here proves coverage of the selected manifest universe; broader strategy universe and calendar coverage remain the responsibility of the caller's input acceptance gate.
+读取仍有行数、文件、字节、分页、取消和截止时间限制。开始消费前复查来源文件和摘要。分钟、事件、标签来源选择每只证券最新的回执；最新失败时不会偷偷回退旧成功批次。
 
-Single-date CLI entrypoints expose the same formal service:
+## 正式日特征怎么导入
 
-```text
-validate-formal-l2-day --date YYYY-MM-DD
-ingest-formal-l2-day --date YYYY-MM-DD
+正式表 `l2_daily_features` 有单独的 `FormalL2DailyFeaturesIngestion`：
+
+```sh
+./gradlew run --args='validate-formal-l2-day --date YYYY-MM-DD'
+./gradlew run --args='ingest-formal-l2-day --date YYYY-MM-DD'
 ```
 
-The native archive batch also emits a day-level JSONL with a `COMPLETE` manifest and aggregate SHA-256. Once that pair is verified, `ingest-formal-l2-jsonl-day --date YYYY-MM-DD --source-root PATH` can publish that day through the same formal writer, date lock, conflict checks, WAL settlement, and exact readback. It checks every row against the manifest's successful symbol receipt and per-symbol result SHA-256 before submission; it still fills only confirmed missing `(ts,symbol)` keys.
+把日期换成真实的已完成日期，未来日期不接受。
 
-For a completed archive batch, `tools/ingest_l2_native_jsonl_formal.ps1` first verifies every requested day's manifest/hash, then invokes the single-day command serially and saves per-day writer evidence plus a post-ingestion `SELECT * FROM l2_daily_features ORDER by ts desc;` result.
+- `validate`：只读来源和目标，比较全部 110 个正式字段、当天完整键、WAL 和物理版本；不写数据，也不初始化本地运行记录。
+- `ingest`：取得持久日期锁，只补当前完整来源中已证明缺失的键。已有值冲突或目标多出来源没有的键就停止。
 
-Validation is read-only. Ingestion fills certified missing keys under the existing persistent date lock. Both reject future dates and require the configured Parquet/manifest source for the requested date. Successful output includes the native evidence and keeps `factorReady=false`: this command does not certify the broader factor or strategy universe. If delivery becomes uncertain, reconcile the original retained lock before retrying ingestion.
+写入每批最多 200 行，并限制实际传输不超过 1 MiB；每批和整个日期都要读回。它不能建删表、覆盖已确认的旧值或把历史行补记成假成功回执。
 
-`NativeL2ParquetReaderTest` includes a checked-in Parquet 2.6/Snappy reference generated independently with PyArrow 21.0.0. Generation used Python once; production ingestion and the interoperability test read the bytes using Java only. Hadoop's shaded client API/runtime supplies the Parquet library's compatibility classes; local reads use `LocalInputFile` and a plain Parquet configuration.
+结果不确定时保留 `IN_DOUBT` 和日期锁，先核对原运行再重试。缺少当天清单或 Parquet，不能拿旧回执或数据库已有行代替。
+
+## 离线归档的 JSONL 也能导入
+
+原生归档计算会生成每日 JSONL 和 `COMPLETE` 清单。确认两者完整后可以执行：
+
+```sh
+./gradlew run --args='ingest-formal-l2-jsonl-day --date YYYY-MM-DD --source-root PATH'
+```
+
+日期和目录替换成真实值。导入检查整包摘要、每只证券的成功回执和结果摘要，继续使用同一正式写入器、日期锁、冲突检查和完整读回。
+
+这些命令证明的是所选清单范围，不自动证明整个策略所需证券和日历都完整，因此成功也保留 `factorReady=false`。是否满足主策略输入要求，由调用方另外验收。

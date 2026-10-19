@@ -1,0 +1,42 @@
+# 正式策略数据命令与策略进程共用这些参数；数据 CLI 不启用调度。
+spring.config.activate.on-profile: "data | main-strategy"
+app:
+  sync:
+    batch:
+      enabled: false
+      startup-catchup: true
+      ledger-path: var/main-strategy-batch.sqlite
+      artifact-root: var/main-strategy-batch
+      cron: "0 35 20 * * ?"
+      retry-cron: "0 0/15 21-23 * * ?"
+      completion-cutoff: "20:30"
+      maximum-recovery-attempts: 12
+      target-etfs: ""
+      research-root: ${app.paths.research-root}/artifacts/quant_platform
+      promoted-artifact-root: ${app.paths.research-root}
+      promoted-recipe: ${app.paths.research-root}/artifacts/factor_research/l2/etf_only_top2_promoted_recipe/promoted_recipe.json
+      promoted-recipe-pins: ${app.paths.research-root}/artifacts/factor_research/l2/etf_only_top2_promoted_recipe/accepted-sha256.json
+      official-plan-db: ${app.paths.research-root}/artifacts/factor_research/l2/etf_only_fusion_main_daily/etf_only_paper/main_strategy_plans.sqlite3
+      score-start-date: "2025-07-01"
+      score-source-row-budget: 5000000
+      # 从独立来源核验记录生成并批准；缺少证明时评分停止发布。
+      source-coverage: ""
+      source-coverage-sha256: ""
+
+---
+# 主策略独立进程：数据 API 不再默认承载该调度器。
+spring:
+  application:
+    name: main-strategy
+  config:
+    activate:
+      on-profile: main-strategy
+server:
+  port: 8081
+app:
+  materialized-views:
+    etf-overview:
+      enabled: false
+  sync:
+    batch:
+      enabled: true

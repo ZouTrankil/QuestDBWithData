@@ -1,70 +1,119 @@
 # 独立实时 Level2 应用
 
-This process directly consumes the existing vendor MQTT feed and runs no trading actions. It uses three topics per symbol: `trans/<code>`, `order/<code>`, and `market/<code>`. The current limit is 16 SH/SZ symbols and 48 topics. The provider requires client ID to equal username and allows one terminal per account. Stop the previous collector through its runtime control before taking over that account.
+`l2-live-app` 直接消费供应商 MQTT，负责原始报文采集、协议解析和部分分钟观察。它独立于数据 API、主策略和离线 Batch 进程，不执行交易动作。每个标的订阅 `trans/<code>`、`order/<code>`、`market/<code>`，最多 16 个 SH/SZ 标的、48 个 topic。供应商账号只允许单终端；接管前通过原采集器的控制入口停止旧进程。
 
-Configure `l2.username` and `l2.password` in the `l2` profile of the shared `config/application.yml`; the collector automatically selects this profile and inherits the shared QuestDB endpoint. See [configuration usage](../../docs/configuration.md). Existing `var/l2-live/credentials.env` files are still accepted as literal overrides, followed by process environment variables. The collector does not print credentials.
+## Parquet 数据格式
 
-```powershell
-./deploy/l2-live/run.ps1 -Action plan
-./deploy/l2-live/run.ps1 -Action start
-./deploy/l2-live/run.ps1 -Action status
-./deploy/l2-live/run.ps1 -Action stop
+行情落地使用 Apache Parquet，GZIP 压缩；逻辑类型遵循 [Parquet 类型规范](https://parquet.apache.org/docs/file-format/types/logicaltypes/)。每个不可变批次包含四个文件：
+
+```text
+var/l2-live/
+├── raw-journal.sqlite3               # 原始接收 WAL、批次提交与文件摘要
+└── parquet/
+    ├── .pending/<batch_id>/           # 已冻结、尚未发布的恢复批次
+    └── batches/<batch_id>/
+        ├── raw.parquet               # 原始报文及接收证据
+        ├── events.parquet            # 解析后的事件和无效报文审计
+        ├── minutes.parquet           # 部分分钟观察，保留修订及可用时间
+        └── checkpoint.parquet        # 类型化状态树，用于精确恢复累计器
 ```
 
-`start` 构建独立的 `l2-live-app` 并启动 `session`。该模块只依赖配置/日志公共库，不再加载数据 API、主策略、PGWire、Parquet 或离线计算组件。主类和原始日志路径保持兼容。每次启动使用独立 argfile 与 `var/l2-live/runtime/<id>/lib` 下的固定 JAR 快照，manifest 保存 SHA256，后续构建不替换正在运行的 classpath。已构建过可加 `-NoBuild`。
+`events.parquet` 和 `minutes.parquet` 将价格、数量、十档深度、质量标记直接保存为列，不放 JSON 字符串或 JSON BLOB。原始报价及累计金额使用精确 `DECIMAL(38,4)`，中间价使用 `DECIMAL(38,5)`，衍生比率和加权指标使用 `DOUBLE`；数量和供应商子序号使用整数，可能超过整数范围的订单标识使用字符串。时间使用 UTC `TIMESTAMP(NANOS,true)`，业务日期使用 `DATE`。原始报文在 `raw.parquet.payload` 中使用二进制，保留任意字节与纳秒接收时间，不转 Base64。
 
-`session` 每次仅运行当天，先通过 QuestDB HTTP 只读查询 `exchange_calendar`（默认交易所 `SSE`）。`is_open=0` 以 `non_trading_day` 正常结束；缺失、重复、非法标记和查询失败均报错退出，不接触 MQTT。真实交易日会在上海时间 09:00 前等待，到 15:05 断开、排空可处理消息并结束；午间保持连接。时区、交易所和启停时间配置于 `l2.session`。已过收盘时间的补触发直接结束，不跨天采集。
+事件通过 `capture_id` 关联同批次的原始报文。不同证券共用固定 schema，缺失字段保持 NULL。文件元数据保存格式版本、数据集名称和批次 ID。检查点文件使用 `path: LIST<STRING>`、节点种类及类型化标量列表示状态树，保留空容器、NULL 和精确十进制状态。
 
-缺少凭据时进入 `awaiting_credentials`，每秒重新加载配置；到收盘仍缺少凭据也会结束。启动成功不等于订阅成功：检查 `collector.ready`、全部 topic 的 SUBACK、持续增长的接收数与验证写入数。手工 `run` 保留不检查日历的诊断语义；日常部署使用 `session`。
+分析前停止采集并用 `./deploy/l2-live/run.sh files > /实际路径/files.json` 导出已提交文件清单，再用 PyArrow 读取。归档后不再用批次目录的 glob 充当完整历史清单：
+
+```python
+import json
+import pyarrow.dataset as ds
+
+with open('/实际路径/files.json', encoding='utf-8') as stream:
+    files = json.load(stream)
+events = ds.dataset(files['events'], format='parquet')
+print(events.to_table(columns=['symbol', 'exchange_ts', 'price', 'volume']))
+```
+
+SQLite 保留原始接收日志和提交账本，保证刚收到但尚未形成 Parquet 批次的报文可恢复。新批次的 `prepared_batch.payload` 和 `committed_accumulator.payload` 为空，仅通过 `parquet_batches` 中的 SHA256 引用 Parquet。日志、文件摘要和控制状态不替代行情文件。`status.json` 与命令行 JSON 仅用于进程管理。
+
+四个文件写完、同步并逐列回读核验后，才冻结提交引用。发布通过同一文件系统中的目录原子移动完成；文件缺失、schema 或摘要变化会阻止推进原始接收检查点。发布后、账本提交前崩溃，重启复用同一批次，不重复计入成交或改写分钟可用时间。单批最多 200 条事件；SQLite 与 Parquet 的容量上限各由 `l2.storage.max-bytes` 设置，默认 8 GiB，也可用 `--storage-bytes` 覆盖。实际磁盘余量不足 64 MiB 时停止接收。
+
+## 配置和启动
+
+`--journal-max-bytes` 兼容旧参数，最大 64 GiB，与 `--storage-bytes` 绑定同一容量；同时提供时值必须相同。
+
+通过根 `config/apps/cn-l2-live.yml` 设置标的、路径和会话；入口自动启用 `l2` 与 `market-cn`，公共连接从 `config/application.yml` 继承，供应商账号放 `config/application-local.yml`。既有 `var/l2-live/credentials.env` 仍作为字面量覆盖，随后由进程环境变量和显式 CLI 参数覆盖。账号和密码不会写入计划输出。
+
+```sh
+./gradlew aliyunL2Live --args='plan --symbols 563360'
+./gradlew writeL2LiveRuntime --offline
+./deploy/l2-live/run.sh start --wait-credentials true
+./deploy/l2-live/run.sh status
+./deploy/l2-live/run.sh stop
+```
+
+Windows 可使用 `./deploy/l2-live/run.ps1 -Action plan|start|status|stop`；分别执行其中一个 action。`start` 构建独立运行快照；已构建过可加 `-NoBuild`。每次使用固定 JAR 快照，后续构建不替换正在运行的 classpath。私有凭据缺失时进入 `awaiting_credentials`，每秒重新加载。
+
+默认标的来自 Python override 文件中未过期的 `force_symbols`，再应用 allow/block 策略；allow 条目本身不会创建订阅。可显式传入 `--symbols 563360.SH` 或 PowerShell 的 `-Symbols '563360.SH'`。运行期间冻结订阅范围，变更后需停止并重启，不延长过期配置。
+
+`session` 只运行当天，通过 QuestDB HTTP 只读查询 `exchange_calendar`，默认交易所 `SSE`。休市正常退出；日历缺失、重复、非法标记或不可读则报错退出。上海时间 09:00 前等待、15:05 停止接收并排空可处理消息，午间保持连接，时间由 `l2.session` 配置。收盘后补启动直接退出。`run` 保留手工诊断语义，不检查交易日历。
+
+订阅成功需检查 `collector.ready`、全部 topic 的 SUBACK、持续增长的接收数和验证行数。QoS 0 不能补回断线期间未收到的报文，原始重放只能恢复本地已提交的采集；供应商序列号的业务范围仍未验证。
+
+## 历史迁移、重放和导出
+
+先停止采集器，再执行：
+
+```sh
+./gradlew aliyunL2Live --args='migrate-parquet'
+./deploy/l2-live/run.sh replay
+./deploy/l2-live/run.sh export
+```
+
+`migrate-parquet` 将 schema 2 的历史 SQLite JSON 批次逐个迁为 Parquet，核验内容后才清空旧 JSON 载荷。操作可重复执行，保留原始 capture 和 batch ID，已完成报文不会重新计数。尚未完成的旧本地批次也会在重放时迁移。旧远端目标的未决 outbox 不会被自动改写为本地成功，遇到它会停止并要求先对账。
+
+`replay` 使用原冻结值完成待处理批次。`export` 将全部原始报文流式导出为不可变 `raw-export.parquet` 并报告摘要，不覆盖既有导出文件。它包含尚未完成归一化的原始报文；常规 Parquet 批次在处理和发布后可见。升级时应保留整个 `var/l2-live/`，仅复制 SQLite 会丢失其引用的 Parquet 文件。
 
 ## 每日自动启动
 
-先构建一次快照，再由操作系统每天 08:55 启动前台会话。机器时区应设为 `Asia/Shanghai`，应用按同一时区判断窗口。真实交易日由数据库判定，任务本身可以每日触发。
+先构建运行快照，再由操作系统每日 08:55 运行前台 `session`。机器时区设为 `Asia/Shanghai`，真实交易日由数据库判定。
 
-Windows（当前用户的任务计划程序）：
+Windows：
 
 ```powershell
 ./gradlew.bat writeL2LiveRuntime --offline
 ./deploy/l2-live/register-task.ps1
 ```
 
-任务直接托管前台进程，禁止并发实例，错过触发后补启动，失败最多重试 3 次；每日不重新编译。当前用户需处于登录状态。更新代码后重新构建快照，下一次触发使用新版本。
+任务托管前台进程，禁止并发实例，错过触发后补启动，失败最多重试 3 次，每日不重新编译；当前用户需登录。更新代码后重建快照。
 
-macOS / Linux 的前台入口：
+macOS：将 `com.zoutrankil.l2-live.plist.example` 中 `/ABSOLUTE/QuestDBWithData` 全部替换为真实路径，保存至 `~/Library/LaunchAgents/com.zoutrankil.l2-live.plist`，再用 `launchctl bootstrap gui/$(id -u) <plist绝对路径>` 注册。Linux 可用 `55 8 * * * /实际路径/deploy/l2-live/run.sh start --wait-credentials true`。这些文件不会自动注册系统任务。
+
+## 接收落盘
+
+接收线程复用 SQLite 连接和预编译语句，原始报文仍逐条以 FULL 事务提交；提交成功才算已保存。Parquet 编码不持有接收锁。状态计数与接收、提交处于同一事务，状态查询不再全表扫描 payload；完整内容另由存储核验检查。
+
+## 分日归档与存储检查
+
+停止采集器后运行：
 
 ```sh
-./gradlew writeL2LiveRuntime --offline
-./deploy/l2-live/run.sh plan --symbols 563360
-./deploy/l2-live/run.sh start --wait-credentials true
-./deploy/l2-live/run.sh status
-./deploy/l2-live/run.sh stop
+./gradlew aliyunL2Live --args='archive --root var/l2-live --date 2026-10-14'
+./gradlew aliyunL2Live --args='verify-storage --root var/l2-live'
 ```
 
-macOS 提供 `com.zoutrankil.l2-live.plist.example`：将其中 `/ABSOLUTE/QuestDBWithData` 全部换成实际项目路径，保存到 `~/Library/LaunchAgents/com.zoutrankil.l2-live.plist`，执行 `launchctl bootstrap gui/$(id -u) <plist绝对路径>`。它每天 08:55 触发；登录用户和机器需可运行任务，不会自动唤醒关机机器。Linux 可用 cron 的 `55 8 * * * /实际路径/deploy/l2-live/run.sh start --wait-credentials true`，时区同上。
+只接受已经结束的接收日期；有待处理报文或活动批次时拒绝封存。混合日期批次及当前恢复检查点批次保留原文件。归档在 `parquet/archives/YYYY-MM-DD/`，含四个同类型文件及清单。
 
-本次迁移提供并验证应用与部署文件，不自动注册系统任务或连接真实供应商。主策略通过 `./gradlew mainStrategyRun` 独立启动，管理 API 默认端口 8081；旧 Web 进程应先停掉，避免旧调度器继续持有共享账本。
+先复制原行组，再逐批回读全部值，最后原子发布并提交 SQLite 引用。提交引用后才删除对应旧小文件；中断后先核验归档，再继续清理。重放和 `storedBatch` 都能读取已归档批次，重复命令不会重算或重复累计。单次最多扫描 200,000 个候选批次、清单 128 MiB，超过上限明确失败，须先封存较早日期。`files` 从提交索引列出有效批次及归档，忽略未提交和已被归档接管的旧文件，避免漏历史或重复读取。
 
-Default symbols come from unexpired `force_symbols` in the existing Python override file, filtered by allow/block policy. Allow entries alone do not create subscriptions. An explicit symbol list is also supported:
+本地日志升级到 schema 4，旧 schema 2、3 自动兼容；使用了归档的目录不交给旧程序恢复。原始 SQLite 接收日志没有删除，仍须与全部 Parquet 一起备份。`verify-storage` 核对 SQLite、全部原始报文摘要、批次和归档，并报告积压、空间及可用磁盘；该命令可能较慢。
 
-```powershell
-./deploy/l2-live/run.ps1 -Action start -Symbols '563360.SH'
+## 可复现负载
+
+```sh
+./gradlew aliyunL2Live --args='benchmark --root var/l2-load-new --messages 960 --rate 100 --batch-size 200'
 ```
 
-A running process freezes its startup symbol list. Apply a changed subscription scope by graceful stop and start. No expired override is extended automatically. Private credentials are necessary to activate a real subscription; this implementation does not purchase a provider account.
+只允许新目录。工具生成 16 标的、48 topic 的合成负载，经过真实 FULL 日志、解析、累计及 Parquet 核验，报告落盘延迟、峰值积压、空间和重启耗时；原始持久化要求未降低。可增加 `--messages`、`--seconds`、`--rate` 运行长负载。上限及磁盘压力会明确失败，已提交报文保留供重放。
 
-原始字节与精确接收时间先提交到 `var/l2-live/raw-journal.sqlite3`，再执行标准化。标准化事件、分钟观察和累加器检查点冻结在 `prepared_batch` 的 JSON payload 中；本地读回并校验 SHA256 后完成批次。当前使用本地 SQLite 存储，不再向 QuestDB 的两张旧实时结果表写入；QuestDB HTTP 在 `session` 中只用于读取交易日历。原始数据上限和整个 SQLite 页上限均为 8 GiB，不自动删除历史或预留磁盘空间。
-
-Within the admitted 1 MiB raw-envelope bound, protocol frames above 64 KiB are audited as `oversized_wire_payload`: their exact bytes remain in the journal/export, while QuestDB audit rows retain the capture ID/hash instead of inline large Base64. The raw envelope records whether all SUBACKs were confirmed when the message arrived. Unconfirmed subscription, scope/QoS rejection and `aggregation_overflow` produce invalid audit events and never enter minute aggregation.
-
-分钟结果保留十档深度，使用 UTC 盘中时间、解析器版本和本地 capture identity，表示处理时可见的局部观察。现有外部读取器需要显式接入本地 SQLite 批次结果；独立进程拆分不代表主策略已经消费这份实时输出。
-
-MQTT QoS 0 cannot recover messages never received during a disconnection. Local raw replay recovers committed captures only. Vendor sequence scope remains unverified; the implementation does not assume per-symbol continuous sequence numbers or hash away identical trade payloads.
-
-```powershell
-./deploy/l2-live/run.ps1 -Action replay
-./deploy/l2-live/run.ps1 -Action export
-```
-
-Replay requires the live process to be stopped and publishes pending frozen captures through the same verification path. Export writes an immutable raw JSONL snapshot and reports its hash. Stop uses `stop.request` and waits for graceful draining; it does not kill an unrelated process.
-
-原始报文、解析事件、分钟观察和累计检查点均保存在 `var/l2-live/raw-journal.sqlite3`。`prepared_batch.payload` 保存带 SHA256 的完整不可变批次；本地验证后原子推进完成状态，重启复用已冻结批次。实时采集不再创建或写入 QuestDB 事件/分钟表；QuestDB 仅用于读取交易日历。SQLite 仍受原有 8 GiB 配额限制。
+本轮 960 条合成负载全部核验、最终无积压，并验证了强杀发布中子进程后只恢复一次。短测不能证明供应商真实高峰或全天容量够用；实际订阅、全天流量与成对备份恢复仍需现场验收。

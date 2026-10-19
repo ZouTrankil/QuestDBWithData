@@ -92,7 +92,7 @@ try {
         $isoDate = [datetime]::ParseExact($date, 'yyyyMMdd', [System.Globalization.CultureInfo]::InvariantCulture).ToString('yyyy-MM-dd')
         $dayLog = Join-Path $LogRoot "formal-ingest-$date-$runId.log"
         $appArguments = "ingest-formal-l2-jsonl-day --date $isoDate --source-root `"$OutputRoot`""
-        $gradleArguments = @('--no-daemon', '--console=plain', ':data-app:run', '--args', $appArguments)
+        $gradleArguments = @('--no-daemon', '--console=plain', ':markets:cn:data-app:run', '--args', $appArguments)
         Write-Host "Ingesting verified L2 JSONL for $date into formal l2_daily_features; log: $dayLog"
         $previousErrorActionPreference = $ErrorActionPreference
         Push-Location -LiteralPath $repoRoot

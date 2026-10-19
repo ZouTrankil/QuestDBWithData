@@ -1,0 +1,59 @@
+# batch profile 只供控制 CLI 和隔离测试读取旧配置。
+spring:
+  application:
+    name: questdb-batch
+  config:
+    activate:
+      on-profile: batch
+  main:
+    web-application-type: none
+    banner-mode: off
+---
+# Batch 参数供市场常驻应用和控制 CLI 共用，不改变数据 API 的进程名及 Web 模式。
+spring.config.activate.on-profile: "data | batch"
+jdb:
+  metadata-url: jdbc:sqlite:./var/jdb-metadata.sqlite
+  # Batch 管理令牌至少 24 位，在本机覆盖中设置；batchControl 读取同一项。
+  api-token: ""
+  api-port: 9085
+  api-url: http://localhost:${jdb.api-port}
+  archive-root: ./var/jdb-isolated
+  l2-settle-age: 5m
+  l2-max-archive-bytes: 8589934592
+  l2-max-expanded-bytes: 34359738368
+  l2-max-materialized-bytes: 34359738368
+  calendar-file: ""
+  scheduling-enabled: false
+  # 仅用于首次登记；已持久化的 Quartz 触发器及暂停状态在重启后保留。
+  schedules:
+    "[post_close]": "0 30 18 ? * MON-FRI"
+    "[source_cyq_perf]": "0 10 21 ? * MON-FRI"
+    "[source_us_tbr]": "0 35 21 ? * MON-FRI"
+    "[post_close_recovery]": "0 0/15 19-23 ? * MON-FRI"
+    "[post_close_recovery_final]": "0 55 23 ? * MON-FRI"
+  core-source-fanout-enabled: true
+  production-enabled: false
+  external:
+    # 尚未配置外部研究命令；依赖这些命令的阶段会保持 BLOCKED，不会误报完成。
+    commands-json: "{}"
+    environment-json: "{}"
+    timeout: 12h
+  tushare-token: ${app.tushare.token}
+  questdb-http-url: ${app.questdb.http-url}
+  questdb-http-authorization: ${app.questdb.http-authorization}
+  questdb-visibility-timeout: ${app.questdb.visibility-timeout}
+  questdb-poll-interval: ${app.questdb.poll-interval}
+  baidu:
+    enabled: false
+    download-enabled: false
+    cookie-file: ""
+    share-url: ""
+    share-password: ""
+    source-path: ""
+    unwrap-single-folder: false
+    remote-root: /
+    minimum-size-bytes: 1000000000
+    pcs-executable: ""
+    pcs-config-directory: ""
+    expected-account-uid: ""
+    download-timeout: 12h
