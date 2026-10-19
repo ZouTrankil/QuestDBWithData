@@ -89,10 +89,20 @@ public final class VerifiedMarketDataStore {
 
     public SyncJobRunner.Result publish(DatasetDefinition d,List<Map<String,Object>> source,Path raw,String expectedSha,Map<String,Object> evidence) throws Exception {
         try(var lease=MarketPublisherLease.acquire(root.resolve("ledger-writer.lock"),Duration.ofMinutes(15))) {
-            return publishInside(d,source,raw,expectedSha,evidence);
+            return publishInside(d,source,raw,expectedSha,evidence,false);
         }
     }
-    private SyncJobRunner.Result publishInside(DatasetDefinition d,List<Map<String,Object>> source,Path raw,String expectedSha,Map<String,Object> evidence) throws Exception {
+    /** 补缺专用：调用方给出确认缺失的键，实际发送前再次拒绝任何已出现的键。 */
+    public SyncJobRunner.Result publishMissing(DatasetDefinition d,List<Map<String,Object>> source,Path raw,String expectedSha,Map<String,Object> evidence)throws Exception {
+        try(var lease=MarketPublisherLease.acquire(root.resolve("ledger-writer.lock"),Duration.ofMinutes(15))) {return publishInside(d,source,raw,expectedSha,evidence,true);}
+    }
+    public void requireNoUnresolved(String dataset)throws Exception {
+        if(!Files.isRegularFile(ledgerPath))return;
+        try(var connection=java.sql.DriverManager.getConnection("jdbc:sqlite:file:"+ledgerPath.toString().replace('\\','/')+"?mode=ro");var statement=connection.prepareStatement("SELECT count(*) FROM sync_interval_locks WHERE dataset_id=?")) {
+            statement.setString(1,dataset);try(var rows=statement.executeQuery()){if(rows.next()&&rows.getLong(1)!=0)throw new IllegalStateException("该数据集有未结束运行或未决锁，先核对原运行");}
+        }
+    }
+    private SyncJobRunner.Result publishInside(DatasetDefinition d,List<Map<String,Object>> source,Path raw,String expectedSha,Map<String,Object> evidence,boolean missingOnly) throws Exception {
         if(source.isEmpty()||source.size()>100_000)throw new IllegalArgumentException("来源必须明确非空且不超过十万行");
         if(!sha(Files.readAllBytes(raw)).equals(expectedSha))throw new IllegalStateException("冻结的来源响应摘要已改变");
         var rows=source.stream().map(row->normalize(d,row)).toList();
@@ -119,7 +129,9 @@ public final class VerifiedMarketDataStore {
                 if(!settled(d.objectName()))throw new IllegalStateException("市场目标 WAL 尚未结清，禁止继续发送");
             }
             public void send(List<Map<String,Object>> batch) throws Exception {
-                preflight();senderStopped=false;
+                preflight();
+                if(missingOnly&&!presentKeys(d,batch).isEmpty())throw new IllegalStateException("补缺键在发送前已存在，停止发送并核对原运行");
+                senderStopped=false;
                 try {sendRows(d,batch,run);} finally {senderStopped=true;}
             }
             public List<Map<String,Object>> readback(List<String> keys) throws Exception {
@@ -314,6 +326,18 @@ public final class VerifiedMarketDataStore {
         }
     }
     private record Comparison(List<Map<String,Object>> actual,List<Map<String,Object>> missing) {}
+    private Set<String> presentKeys(DatasetDefinition d,List<Map<String,Object>> expected)throws Exception {
+        var codec=codec(d);var found=new HashSet<String>();String ts=d.designatedTimestamp();
+        for(int i=0;i<expected.size();i+=1000) {
+            var part=expected.subList(i,Math.min(i+1000,expected.size()));var times=part.stream().map(r->Instant.parse(r.get(ts).toString())).sorted().toList();var conditions=new ArrayList<String>();
+            conditions.add(q(ts)+">="+literal(times.getFirst().toString()));conditions.add(q(ts)+"<="+literal(times.getLast().toString()));
+            for(String key:d.dedupKey())if(!key.equals(ts))conditions.add(q(key)+" IN ("+String.join(",",part.stream().map(r->r.get(key)).distinct().map(v->v instanceof Number?v.toString():literal(v.toString())).toList())+")");
+            var wanted=new HashSet<String>();for(var r:part)wanted.add(codec.key(r));
+            var visible=query("SELECT "+String.join(",",d.storageColumns().stream().map(VerifiedMarketDataStore::q).toList())+" FROM "+q(d.objectName())+" WHERE "+String.join(" AND ",conditions)+" LIMIT 10001");
+            if(visible.size()>=10001)throw new IllegalStateException("补缺前存在性查询达到边界，禁止用截断结果判定缺失");
+            for(var row:visible){String key=codec.key(normalize(d,row));if(wanted.contains(key))found.add(key);}
+        }return found;
+    }
     private Comparison compareExisting(DatasetDefinition d,List<Map<String,Object>> expected,String target)throws Exception {
         var codec=codec(d);var wanted=new LinkedHashMap<String,Map<String,Object>>();for(var r:expected)if(wanted.put(codec.key(r),r)!=null)throw new IllegalArgumentException("冻结来源有重复业务键");
         var actual=new ArrayList<Map<String,Object>>();var found=new HashSet<String>();

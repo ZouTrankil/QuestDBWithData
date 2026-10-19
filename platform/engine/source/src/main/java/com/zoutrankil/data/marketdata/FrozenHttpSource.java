@@ -27,13 +27,18 @@ public final class FrozenHttpSource implements AutoCloseable {
         client=builder.build();
     }
     public Response get(String provider,String account,String symbol,URI uri,Map<String,String> headers,int maximumBytes)throws Exception {
+        return get(provider,account,symbol,uri,headers,maximumBytes,null);
+    }
+    /** 个别公开接口需要固定 HTTP 版本；预算、冻结和截止时间仍沿用同一流程。 */
+    public Response get(String provider,String account,String symbol,URI uri,Map<String,String> headers,int maximumBytes,HttpClient.Version version)throws Exception {
         if(!Set.of("https","http").contains(uri.getScheme())||uri.getUserInfo()!=null||maximumBytes<1||maximumBytes>64*1024*1024)
             throw new IllegalArgumentException("来源必须是无明文账号的 HTTP(S) 地址，单响应不超过 64 MiB");
         if(!provider.matches("[a-z][a-z0-9_-]{0,63}"))throw new IllegalArgumentException("来源标识符非法");
         String id=budget.reserve(provider,account,symbol,maximumBytes+1);var started=Instant.now();
         if(!id.matches("[A-Za-z0-9_-]{1,100}"))throw new IllegalArgumentException("来源预算返回了非法请求标识");
         var request=HttpRequest.newBuilder(uri).timeout(Duration.ofSeconds(60)).header("User-Agent","QuestDBWithData/market-data").GET();
-        headers.forEach(request::header);
+        if(version!=null)request.version(version);
+        headers.forEach(request::setHeader);
         try {
             var response=client.send(request.build(),HttpResponse.BodyHandlers.ofInputStream());
             byte[] bytes;

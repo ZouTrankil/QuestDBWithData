@@ -22,6 +22,7 @@ public final class UsMarketDataMain {
         var store=new VerifiedMarketDataStore(URI.create(env.getRequiredProperty("app.questdb.http-url")),env.getProperty("app.questdb.http-authorization",""),
                 env.getProperty("app.questdb.username","admin"),env.getProperty("app.questdb.password",""),root);
         switch(args[0]) {
+            case "collect-fred" -> {if(!Set.of("through").containsAll(options.keySet()))throw new IllegalArgumentException("未知 FRED 参数");LocalDate through=LocalDate.parse(required(options,"through"));if(!through.isBefore(LocalDate.now(ZoneId.of("America/New_York"))))throw new IllegalArgumentException("FRED 有限回补只使用已结束的纽约日期");FredMacroCollector.collect(env,root,store,through);}
             case "reconcile-frozen" -> {
                 if(!Set.of("run","prepared-sha256","stopped-evidence","repair-missing").containsAll(options.keySet())||!Set.of("true","false").contains(options.getOrDefault("repair-missing","false")))throw new IllegalArgumentException("未知核对参数或补缺标志");
                 print(store.reconcileFrozen(required(options,"run"),required(options,"prepared-sha256"),Path.of(required(options,"stopped-evidence")),Boolean.parseBoolean(options.getOrDefault("repair-missing","false"))));
@@ -60,7 +61,7 @@ public final class UsMarketDataMain {
                 if(args[0].equals("collect-core"))new UsCoreCollector(env,root,store).run(through,maximum);
                 else new UsBroadDailyCollector(env,root,store).run(through);
             }
-            case "definitions" -> print(List.of(UsMarketDatasets.DAILY,UsMarketDatasets.MINUTE,UsUniverseSnapshot.SECURITIES,UsFundHoldings.EQUITIES,NasdaqItchDataset.MESSAGES));
+            case "definitions" -> print(List.of(UsMarketDatasets.DAILY,UsMarketDatasets.MINUTE,UsUniverseSnapshot.SECURITIES,UsHistoricalSecurityCatalog.SECURITIES,UsFundHoldings.EQUITIES,NasdaqItchDataset.MESSAGES,FredMarketDaily.DEFINITION));
             case "status" -> {
                 var result=new ArrayList<Object>();
                 for(var d:List.of(UsMarketDatasets.DAILY,UsMarketDatasets.MINUTE)) {

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.marketdata.*;
 import com.zoutrankil.market.btc.marketdata.*;
 import org.springframework.core.env.Environment;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.boot.context.properties.bind.Bindable;
 import java.net.URI;
 import java.nio.file.*;
 import java.nio.channels.FileChannel;
@@ -14,9 +16,9 @@ import java.util.*;
 /** Binance 校验归档和 Bybit 月窗口逐个落库；每项仅在小时、日线全部回读后推进。 */
 final class CryptoHistoryCollector {
     private static final ObjectMapper JSON=new ObjectMapper();
-    private final Environment env;private final Path root;private final VerifiedMarketDataStore store;
+    private final Environment env;private final Path root;private final VerifiedMarketDataStore store;private final List<CryptoTradingClosure> closures;
     private record Task(String id,String source,String symbol,String instrument,LocalDate from,LocalDate through,String phase,String raw,String sha,String observed,String proof) {}
-    CryptoHistoryCollector(Environment env,Path root,VerifiedMarketDataStore store){this.env=env;this.root=root.toAbsolutePath().normalize();this.store=store;}
+    CryptoHistoryCollector(Environment env,Path root,VerifiedMarketDataStore store){this.env=env;this.root=root.toAbsolutePath().normalize();this.store=store;closures=Binder.get(env).bind("app.crypto-data.venue-closures",Bindable.listOf(CryptoTradingClosure.class)).orElse(List.of());}
     void run(LocalDate through)throws Exception {
         Files.createDirectories(root);
         try(var channel=FileChannel.open(root.resolve("collector.lock"),StandardOpenOption.CREATE,StandardOpenOption.WRITE);var lock=channel.tryLock()) {
@@ -68,17 +70,61 @@ final class CryptoHistoryCollector {
                     }
                     try {
                         byte[] bytes=Files.readAllBytes(response.path());if(!VerifiedMarketDataStore.sha(bytes).equals(response.sha256()))throw new IllegalStateException("BTC 冻结响应摘要变化");
-                        var rows=task.source().startsWith("BINANCE")?CryptoPriceMapper.binance(bytes,task.symbol(),!task.instrument().equals("SPOT"),response.sha256(),response.observedAt(),task.from(),task.through()):bybit(bytes,task,response);
-                        var daily=CryptoPriceMapper.daily(rows);var all=new ArrayList<>(rows);all.addAll(daily);
+                        var rows=task.source().startsWith("BINANCE")?CryptoPriceMapper.binance(bytes,task.symbol(),!task.instrument().equals("SPOT"),response.sha256(),response.observedAt(),task.from(),task.through(),60,closures):bybit(bytes,task,response);
+                        var missing=CryptoPriceMapper.missingHours(rows,task.from(),task.through());
+                        var gap=missing.isEmpty()?null:prepareClosureMonth(task,rows,response,missing,source,budget,db);
+                        var all=new ArrayList<>(rows);if(gap==null)all.addAll(CryptoPriceMapper.daily(rows));
                         update(db,task,"PUBLISHING",response,proof);
-                        var result=store.publish(CryptoMarketDataset.BARS,all,response.path(),response.sha256(),Map.of("task",task.id(),"sourceProof",JSON.readTree(proof),"dailyConstruction","每个 UTC 日必须有连续 24 根真实小时线；OHLC 和成交量由这些小时线合成"));
-                        update(db,task,"VERIFIED",response,JSON.writeValueAsString(Map.of("result",result,"sourceProof",JSON.readTree(proof),"hourlyRows",rows.size(),"dailyRows",daily.size())));status(db,budget,"VERIFIED_TASK",task.id());
+                        var result=store.publish(CryptoMarketDataset.BARS,all,response.path(),response.sha256(),Map.of("task",task.id(),"sourceProof",JSON.readTree(proof),"dailyConstruction",gap==null?"每个 UTC 日必须有连续 24 根真实小时线；OHLC 和成交量由这些小时线合成":"本次仅发布实际小时记录；经核对的原生日线及官方停市缺口分别发布"));
+                        var results=new ArrayList<Object>();results.add(result);
+                        if(gap!=null) {
+                            results.add(store.publish(CryptoMarketDataset.BARS,gap.daily(),gap.source().path(),gap.source().sha256(),Map.of("task",task.id(),"dailyConstruction","官方原生日线，已与实际小时成交及停市窗口核对","closureProof",gap.proof().toString())));
+                            results.add(store.publish(CryptoMarketDataset.GAPS,gap.gaps(),gap.proof(),VerifiedMarketDataStore.sha(Files.readAllBytes(gap.proof())),Map.of("task",task.id(),"scope","原归档和 REST 均无记录的官方停市小时；没有生成价格 K 线")));
+                        }
+                        update(db,task,"VERIFIED",response,JSON.writeValueAsString(Map.of("results",results,"sourceProof",JSON.readTree(proof),"hourlyRows",rows.size(),"dailyRows",gap==null?all.size()-rows.size():gap.daily().size(),"closureGapRows",missing.size())));status(db,budget,"VERIFIED_TASK",task.id());
                     } catch(Exception failed){status(db,budget,"PUBLICATION_REQUIRES_RECONCILIATION",task.id());throw failed;}
                 }
             }
         }
     }
     static boolean retryableBybit(int code){return Set.of(10000,10006,10016,10018).contains(code);}
+    private record ClosureMonth(FrozenHttpSource.Response source,List<Map<String,Object>> daily,List<Map<String,Object>> gaps,Path proof) {}
+    private ClosureMonth prepareClosureMonth(Task task,List<Map<String,Object>> hourly,FrozenHttpSource.Response source,List<Instant> missing,FrozenHttpSource http,PersistentMarketApiBudget budget,Connection db)throws Exception {
+        if(!task.source().startsWith("BINANCE"))throw new IllegalArgumentException("没有实现此场所的停市核对，禁止补造 K 线");
+        Path folder=root.resolve("gap-preparations");Files.createDirectories(folder);Path proofFile=folder.resolve(task.id()+".json");JsonNode proof;
+        if(Files.isRegularFile(proofFile))proof=JSON.readTree(Files.readAllBytes(proofFile));
+        else {
+            String dailyUrl=binanceUrl(task).replace("/1h/","/1d/").replace("-1h-","-1d-");
+            var checksum=get(http,"binance",URI.create(dailyUrl+".CHECKSUM"),task.symbol(),1024,budget,db);String expected=Files.readString(checksum.path()).trim().split("\\s+")[0];
+            var daily=get(http,"binance",URI.create(dailyUrl),task.symbol(),2*1024*1024,budget,db);if(!expected.equals(daily.sha256()))throw new IllegalArgumentException("停市月份原生日线的官方摘要不符");
+            var events=new ArrayList<Map<String,Object>>();
+            for(var hour:missing) {
+                var closure=closures.stream().filter(c->c.containsHour("BINANCE",task.instrument(),hour)).findFirst().orElseThrow(()->new IllegalArgumentException("缺口不在已核对官方窗口中"));
+                Path evidence=root.resolve("venue-closure-evidence/"+VerifiedMarketDataStore.sha(closure.evidenceUrl().getBytes(java.nio.charset.StandardCharsets.UTF_8))+".json");byte[] evidenceBytes=Files.readAllBytes(evidence);var fact=JSON.readTree(evidenceBytes);
+                if(!fact.path("sourceUrl").asText().equals(closure.evidenceUrl())||!fact.path("exchange").asText().equals(closure.exchange())||!fact.path("instrument").asText().equals(closure.instrument())||!Instant.parse(fact.path("from").asText()).equals(closure.from())||!Instant.parse(fact.path("until").asText()).equals(closure.until()))throw new IllegalArgumentException("停市配置和已核对官方事实不符");
+                String url="https://data-api.binance.vision/api/v3/klines?symbol="+task.symbol()+"&interval=1h&startTime="+hour.toEpochMilli()+"&endTime="+(hour.plusSeconds(3600).toEpochMilli()-1)+"&limit=2";
+                var empty=get(http,"binance",URI.create(url),task.symbol(),64*1024,budget,db);var body=JSON.readTree(Files.readAllBytes(empty.path()));if(!body.isArray()||!body.isEmpty())throw new IllegalArgumentException("归档缺口在 REST 中存在数据，应先恢复真实来源");
+                events.add(Map.of("hour",hour.toString(),"closureFrom",closure.from().toString(),"closureUntil",closure.until().toString(),"officialUrl",closure.evidenceUrl(),"officialEvidencePath",evidence.toString(),"officialEvidenceSha256",VerifiedMarketDataStore.sha(evidenceBytes),"restEmpty",reference(empty)));
+            }
+            var nativeRows=CryptoPriceMapper.binance(Files.readAllBytes(daily.path()),task.symbol(),!task.instrument().equals("SPOT"),daily.sha256(),daily.observedAt(),task.from(),task.through(),1440,List.of());
+            CryptoPriceMapper.reconcileNativeDaily(hourly,nativeRows);
+            Files.write(proofFile,JSON.writeValueAsBytes(Map.of("task",task.id(),"hourArchive",reference(source),"nativeDaily",reference(daily),"nativeDailyChecksum",reference(checksum),"missingHours",events,"observedAt",Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS).toString(),"nativeDailyReconciled",true)),StandardOpenOption.CREATE_NEW);
+            proof=JSON.readTree(Files.readAllBytes(proofFile));
+        }
+        var original=restore(proof.path("hourArchive"));if(!original.sha256().equals(source.sha256())||!proof.path("task").asText().equals(task.id()))throw new IllegalStateException("停市核对文件不属于当前冻结来源");
+        var daily=restore(proof.path("nativeDaily"));var checksum=restore(proof.path("nativeDailyChecksum"));String dailyUrl=binanceUrl(task).replace("/1h/","/1d/").replace("-1h-","-1d-");
+        if(!daily.sourceUrl().equals(dailyUrl)||!checksum.sourceUrl().equals(dailyUrl+".CHECKSUM")||!Files.readString(checksum.path()).trim().split("\\s+")[0].equals(daily.sha256()))throw new IllegalStateException("原生日线地址或官方摘要变化");
+        var nativeRows=CryptoPriceMapper.binance(Files.readAllBytes(daily.path()),task.symbol(),!task.instrument().equals("SPOT"),daily.sha256(),daily.observedAt(),task.from(),task.through(),1440,List.of());CryptoPriceMapper.reconcileNativeDaily(hourly,nativeRows);
+        var gaps=new ArrayList<Map<String,Object>>();var recorded=new HashSet<Instant>();String proofSha=VerifiedMarketDataStore.sha(Files.readAllBytes(proofFile));
+        for(var event:proof.path("missingHours")) {
+            var hour=Instant.parse(event.path("hour").asText());if(!recorded.add(hour)||!missing.contains(hour)||closures.stream().noneMatch(c->c.containsHour("BINANCE",task.instrument(),hour)))throw new IllegalStateException("停市缺口核对范围变化");
+            Path evidence=Path.of(event.path("officialEvidencePath").asText());if(!VerifiedMarketDataStore.sha(Files.readAllBytes(evidence)).equals(event.path("officialEvidenceSha256").asText()))throw new IllegalStateException("官方事实摘录变化");var empty=restore(event.path("restEmpty"));var body=JSON.readTree(Files.readAllBytes(empty.path()));if(!body.isArray()||!body.isEmpty())throw new IllegalStateException("原 REST 空记录证据变化");
+            var r=new LinkedHashMap<String,Object>();r.put("ts",hour.toString());r.put("gap_until",hour.plusSeconds(3600).toString());r.put("exchange","BINANCE");r.put("symbol",task.symbol());r.put("instrument",task.instrument());r.put("interval_minutes",60);r.put("reason","OFFICIAL_VENUE_CLOSURE");r.put("closure_from",event.path("closureFrom").asText());r.put("closure_until",event.path("closureUntil").asText());r.put("official_url",event.path("officialUrl").asText());r.put("official_evidence_sha256",event.path("officialEvidenceSha256").asText());r.put("hour_archive_sha256",source.sha256());r.put("native_daily_sha256",daily.sha256());r.put("rest_empty_sha256",empty.sha256());r.put("source_sha256",proofSha);r.put("observed_at",proof.path("observedAt").asText());gaps.add(r);
+        }
+        if(recorded.size()!=missing.size())throw new IllegalStateException("停市证据没有覆盖全部缺口");return new ClosureMonth(daily,nativeRows,gaps,proofFile);
+    }
+    private static Map<String,Object> reference(FrozenHttpSource.Response source){return Map.of("rawPath",source.path().toString(),"sha256",source.sha256(),"observedAt",source.observedAt().toString(),"sourceUrl",source.sourceUrl(),"bytes",source.bytes());}
+    private static FrozenHttpSource.Response restore(JsonNode source)throws Exception {Path path=Path.of(source.path("rawPath").asText());String sha=source.path("sha256").asText();if(!VerifiedMarketDataStore.sha(Files.readAllBytes(path)).equals(sha))throw new IllegalStateException("停市核对依赖来源变化");return new FrozenHttpSource.Response(path,sha,Instant.parse(source.path("observedAt").asText()),source.path("sourceUrl").asText(),source.path("bytes").asInt());}
     private FrozenHttpSource.Response get(FrozenHttpSource source,String provider,URI uri,String symbol,int max,PersistentMarketApiBudget budget,Connection db)throws Exception {
         while(true) {
             try{return source.get(provider,"public",symbol,uri,Map.of(),max);}

@@ -5,6 +5,9 @@ app.market-data:
   root: var/market-data
   tiingo-token: ""
   fred-key: ""
+  fred-proxy-url: ""
+  # 仅为已验证的接口请求头兼容值，正式采集和写入均由 Java 执行。
+  fred-user-agent: python-requests/2.32.5
   history-start: 2006-01-01
   minute-start: 2026-01-01
   benchmark-symbols: [SPY, QQQ, IWM, TLT, GLD, USO]

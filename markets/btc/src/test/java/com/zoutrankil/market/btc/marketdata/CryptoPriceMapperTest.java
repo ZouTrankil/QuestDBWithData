@@ -28,4 +28,13 @@ class CryptoPriceMapperTest {
         assertEquals("USDT_PERPETUAL",rows.getFirst().get("instrument"));var changed=new ArrayList<>(rows);var other=new LinkedHashMap<>(rows.getFirst());other.put("exchange","BYBIT");changed.set(0,other);
         assertThrows(IllegalArgumentException.class,()->CryptoPriceMapper.daily(changed));
     }
+    @Test void anExplicitClosureDoesNotGenerateAnHourAndNativeDailyMustReconcileTheActualTrades()throws Exception {
+        var day=LocalDate.of(2026,1,2);var closure=new CryptoTradingClosure("BINANCE","SPOT",Instant.parse("2026-01-02T12:00:00Z"),Instant.parse("2026-01-02T13:00:00Z"),"https://www.binance.com/en/support/test-fixture");
+        var sparse=CryptoPriceMapper.binance(archive(true,true),"BTCUSDT",false,"sha",Instant.EPOCH,day,day,60,List.of(closure));assertEquals(23,sparse.size());assertEquals(List.of(Instant.parse("2026-01-02T12:00:00Z")),CryptoPriceMapper.missingHours(sparse,day,day));
+        var complete=CryptoPriceMapper.binance(archive(true,false),"BTCUSDT",false,"sha",Instant.EPOCH,day,day);var nativeDay=CryptoPriceMapper.daily(complete);
+        assertThrows(IllegalArgumentException.class,()->CryptoPriceMapper.reconcileNativeDaily(sparse,nativeDay));
+        var noTrade=new ArrayList<>(complete);var hour=new LinkedHashMap<>(noTrade.get(12));hour.put("volume",0.);hour.put("quote_volume",0.);noTrade.set(12,hour);
+        assertDoesNotThrow(()->CryptoPriceMapper.reconcileNativeDaily(sparse,CryptoPriceMapper.daily(noTrade)));
+        assertFalse(closure.containsHour("BINANCE","USDT_PERPETUAL",Instant.parse("2026-01-02T12:00:00Z")));
+    }
 }

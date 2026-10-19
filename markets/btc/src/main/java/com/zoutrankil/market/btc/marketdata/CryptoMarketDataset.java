@@ -20,4 +20,13 @@ public final class CryptoMarketDataset {
     private static Column field(String name,StorageType type,String meaning) {
         return new Column(name,name,name,type,false,meaning,type==StorageType.TIMESTAMP?new TemporalContract(TemporalKind.INSTANT,"ISO-8601","UTC","MICROS",meaning):null);
     }
+    public static final DatasetDefinition GAPS=new DatasetDefinition("crypto_data_gap_events",1,"exchange.reference","java.market.btc","crypto_data_gap_events",ObjectKind.TABLE,List.of(
+            field("ts",StorageType.TIMESTAMP,"没有来源 K 线的 UTC 小时起点"),field("gap_until",StorageType.TIMESTAMP,"缺口结束时刻，不含本时刻"),
+            field("exchange",StorageType.SYMBOL,"交易所"),field("symbol",StorageType.SYMBOL,"交易所币对"),field("instrument",StorageType.SYMBOL,"产品类别"),field("interval_minutes",StorageType.INT,"缺口 K 线周期"),
+            field("reason",StorageType.SYMBOL,"有官方证据的场所停市"),field("closure_from",StorageType.TIMESTAMP,"官方说明的停市起点"),field("closure_until",StorageType.TIMESTAMP,"官方说明的恢复时刻"),
+            field("official_url",StorageType.VARCHAR,"官方停市证据地址"),field("official_evidence_sha256",StorageType.SYMBOL,"官方事实摘录文件摘要"),
+            field("hour_archive_sha256",StorageType.SYMBOL,"有缺口的官方小时归档摘要"),field("native_daily_sha256",StorageType.SYMBOL,"经核对的官方原生日线归档摘要"),
+            field("rest_empty_sha256",StorageType.SYMBOL,"同小时 REST 空数组响应摘要"),field("source_sha256",StorageType.SYMBOL,"完整核对证据文件摘要"),field("observed_at",StorageType.TIMESTAMP,"本次缺口核对时间")),
+            List.of("ts","exchange","symbol","instrument","interval_minutes"),List.of("ts","exchange","symbol","instrument","interval_minutes"),"ts",Partition.MONTH,true,Set.of(Capability.READ,Capability.WRITE),List.of(),
+            "缺口只在官方停市窗口、REST 无记录及原生日线与实际小时成交核对一致时登记；不生成空价格 K 线。");
 }

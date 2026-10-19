@@ -11,6 +11,9 @@ public final class UsDataDescriptions {
     private UsDataDescriptions() {}
     public static List<DataObjectDescription> all() {
         return List.of(
+            new DataObjectDescription("us_security_history_catalog", "美国历史证券来源目录", "Stock/ETF 及 OTC 代码、来源窗口和映射原因", Set.of(DataObjectDescription.Market.US),
+                    "美股证券范围", SourceType.COLLECTED, "Tiingo supported_tickers 完整目录的美国场所范围", List.of(),
+                    "java.market.us", "来源窗口不等于正式上市退市日；目录包含预留代码，实际价格需单独验收。", "UsHistoricalSecurityCatalog.SECURITIES；完整 ZIP 摘要及逐字段回读", Set.of(COLLECTED, EQUITY, ETF, US)),
             new DataObjectDescription("us_etf_equity_holdings", "SPY/QQQ 发行人股票持仓", "当前股票及 ADR 持仓，用于覆盖核对", Set.of(DataObjectDescription.Market.US),
                     "美股证券范围", SourceType.COLLECTED, "State Street 与 Invesco 官方完整持仓", List.of(),
                     "java.market.us", "ETF_HOLDINGS_PROXY，不是官方历史指数成分；现金、CVR、衍生品保留在来源原文中。", "UsFundHoldings.EQUITIES；发行人原文和完整键值回读", Set.of(COLLECTED, ETF, EQUITY, US)),
@@ -43,7 +46,7 @@ public final class UsDataDescriptions {
                     "来源采集/文件导入", "", "项目外部源合同及数据模型；实库 tables()", Set.of(COLLECTED, DAILY, MACRO, RATES, US)),
             new DataObjectDescription("us_market_daily", "纳斯达克综合、标普500及VIX日收盘序列", "纳斯达克综合、标普500及VIX日收盘序列", Set.of(DataObjectDescription.Market.US),
                     "美股指数/波动率", SourceType.COLLECTED, "FRED：NASDAQCOM、SP500、VIXCLS", List.of(),
-                    "来源采集/文件导入", "本表是指数与波动率数据，不是美股个股行情。", "实库序列代码和 source_id/source_url；项目 UsMarketDaily 模型", Set.of(COLLECTED, DAILY, INDEX, US))
+                    "java.market.us", "指数与波动率收盘点位；只补缺失键，保留旧行，FRED 缺值不补零。", "FredMarketDaily.DEFINITION；原始响应、旧行快照、完整键值回读和 WAL", Set.of(COLLECTED, DAILY, INDEX, US))
         );
     }
 }

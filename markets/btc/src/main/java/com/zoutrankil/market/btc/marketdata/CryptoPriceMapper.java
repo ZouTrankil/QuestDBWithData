@@ -10,6 +10,9 @@ import java.util.zip.ZipInputStream;
 public final class CryptoPriceMapper {
     private CryptoPriceMapper() {}
     public static List<Map<String,Object>> binance(byte[] zip,String symbol,boolean perpetual,String sha,Instant observed,LocalDate from,LocalDate through)throws Exception {
+        return binance(zip,symbol,perpetual,sha,observed,from,through,60,List.of());
+    }
+    public static List<Map<String,Object>> binance(byte[] zip,String symbol,boolean perpetual,String sha,Instant observed,LocalDate from,LocalDate through,int minutes,List<CryptoTradingClosure> closures)throws Exception {
         byte[] csv;
         try(var input=new ZipInputStream(new ByteArrayInputStream(zip))) {
             var entry=input.getNextEntry();if(entry==null||!entry.getName().endsWith(".csv"))throw new IllegalArgumentException("Binance 归档不是单 CSV");
@@ -22,9 +25,31 @@ public final class CryptoPriceMapper {
             Instant ts=micros?Instant.ofEpochSecond(epoch/1_000_000,(epoch%1_000_000)*1000):Instant.ofEpochMilli(epoch);
             boolean expectedMicros=!perpetual&&!ts.isBefore(Instant.parse("2025-01-01T00:00:00Z"));
             if(micros!=expectedMicros)throw new IllegalArgumentException("Binance 时间单位与现货/合约日期不符");
-            rows.add(row(ts,"BINANCE",symbol,perpetual?"USDT_PERPETUAL":"SPOT",60,Arrays.asList(c[1],c[2],c[3],c[4],c[5],c[7]),sha,observed));
+            rows.add(row(ts,"BINANCE",symbol,perpetual?"USDT_PERPETUAL":"SPOT",minutes,Arrays.asList(c[1],c[2],c[3],c[4],c[5],c[7]),sha,observed));
         }
-        requireContinuous(rows,from,through,60);return rows;
+        if(minutes==60&&!closures.isEmpty()) {
+            for(var missing:missingHours(rows,from,through))if(closures.stream().noneMatch(c->c.containsHour("BINANCE",perpetual?"USDT_PERPETUAL":"SPOT",missing)))throw new IllegalArgumentException("缺失小时没有对应的官方停市窗口");
+        }else requireContinuous(rows,from,through,minutes);return rows;
+    }
+    public static List<Instant> missingHours(List<Map<String,Object>> rows,LocalDate from,LocalDate through) {
+        var actual=new HashSet<Instant>();Instant first=from.atStartOfDay(ZoneOffset.UTC).toInstant(),until=through.plusDays(1).atStartOfDay(ZoneOffset.UTC).toInstant();
+        if(!until.isAfter(first))throw new IllegalArgumentException("小时窗口倒置");
+        for(var row:rows){var ts=Instant.parse(row.get("ts").toString());if(((Number)row.get("interval_minutes")).intValue()!=60||ts.isBefore(first)||!ts.isBefore(until)||ts.getNano()!=0||ts.getEpochSecond()%3600!=0||!actual.add(ts))throw new IllegalArgumentException("小时源越界、重复或不在整小时");}
+        var missing=new ArrayList<Instant>();for(var time=first;time.isBefore(until);time=time.plusSeconds(3600))if(!actual.contains(time))missing.add(time);return missing;
+    }
+    public static void reconcileNativeDaily(List<Map<String,Object>> hourly,List<Map<String,Object>> nativeDaily) {
+        var grouped=new HashMap<LocalDate,List<Map<String,Object>>>();for(var row:hourly)grouped.computeIfAbsent(Instant.parse(row.get("ts").toString()).atZone(ZoneOffset.UTC).toLocalDate(),k->new ArrayList<>()).add(row);
+        if(grouped.size()!=nativeDaily.size())throw new IllegalArgumentException("原生日线与实际小时覆盖日期不同");
+        for(var day:nativeDaily) {
+            if(((Number)day.get("interval_minutes")).intValue()!=1440)throw new IllegalArgumentException("对照来源不是 UTC 日线");
+            var date=Instant.parse(day.get("ts").toString()).atZone(ZoneOffset.UTC).toLocalDate();var rows=grouped.getOrDefault(date,List.of()).stream().sorted(Comparator.comparing(r->r.get("ts").toString())).toList();
+            if(rows.isEmpty())throw new IllegalArgumentException("原生日线没有可核对的小时记录");
+            for(var row:rows)for(String key:List.of("exchange","symbol","instrument"))if(!Objects.equals(row.get(key),day.get(key)))throw new IllegalArgumentException("日线对照不能混合交易所或产品");
+            var derived=new LinkedHashMap<String,Object>();derived.put("open",rows.getFirst().get("open"));derived.put("close",rows.getLast().get("close"));
+            derived.put("high",rows.stream().mapToDouble(r->((Number)r.get("high")).doubleValue()).max().orElseThrow());derived.put("low",rows.stream().mapToDouble(r->((Number)r.get("low")).doubleValue()).min().orElseThrow());
+            for(String field:List.of("volume","quote_volume"))derived.put(field,rows.stream().mapToDouble(r->((Number)r.get(field)).doubleValue()).sum());
+            for(String field:List.of("open","high","low","close","volume","quote_volume")){double actual=((Number)derived.get(field)).doubleValue(),expected=((Number)day.get(field)).doubleValue();if(Math.abs(actual-expected)>Math.max(1e-8,Math.abs(expected)*1e-12))throw new IllegalArgumentException("缺口月份的原生日线与实际小时成交不符："+date+" "+field);}
+        }
     }
     public static Map<String,Object> row(Instant ts,String exchange,String symbol,String instrument,int minutes,List<String> numbers,String sha,Instant observed) {
         if(!Set.of(60,1440).contains(minutes)||ts.getNano()!=0||ts.getEpochSecond()%(minutes*60L)!=0||!Set.of("BTCUSDT","ETHUSDT").contains(symbol)

@@ -8,3 +8,10 @@ app.crypto-data:
   requests-per-day: 20000
   request-spacing-ms: 400
   bytes-per-31-days: 5368709120
+  # 官方说明 11:27 停市、14:00 恢复；归档和 REST 都没有 13:00 的小时线。
+  venue-closures:
+    - exchange: BINANCE
+      instrument: SPOT
+      from: "2023-03-24T11:27:00Z"
+      until: "2023-03-24T14:00:00Z"
+      evidence-url: https://www.binance.com/en/blog/from-our-ceo/6789340645608890113
