@@ -20,6 +20,8 @@ app.market-data:
   yahoo-requests-per-day: 20000
   yahoo-monthly-bytes: 21474836480
   yahoo-request-spacing-ms: 2000
+  broad-prefetch-enabled: true
+  broad-prefetch-buffer-symbols: 256
   broad-publication-symbols: 12
   broad-publication-page-rows: 10000
   broad-publication-page-bytes: 8388608

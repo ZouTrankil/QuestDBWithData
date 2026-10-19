@@ -57,13 +57,28 @@ final class UsBroadDailyCollector {
                 var references=references(source,budget,through);
                 db.setAutoCommit(false);try {plan(db,through,references);db.commit();}catch(Exception failure){db.rollback();throw failure;}finally{db.setAutoCommit(true);}
                 if(!tasks(db,"phase='PUBLISHING'").isEmpty())throw new IllegalStateException("挂牌来源原发布未核对，禁止另起运行重发");
+                // 只有持有原队列锁且规划完成后才启动单一生产者；正式写入仍只有当前线程。
+                boolean pipelined=env.getProperty("app.market-data.broad-prefetch-enabled",Boolean.class,true);
+                try(var prefetch=pipelined?new UsBroadDailyPrefetch(env,root,through):null) {
                 while(true) {
+                    if(prefetch!=null)prefetch.check();
                     if(Files.exists(root.resolve("us-broad-stop.request"))){status(db,budget,"STOPPED",null);return;}
-                    var pending=tasks(db,"phase IN ('PLANNED','FETCHED')");if(pending.isEmpty()){status(db,budget,tasks(db,"phase!='VERIFIED'").isEmpty()?"COMPLETE_PLANNED_SOURCE_SCOPE":"COMPLETE_WITH_GAPS",null);return;}
+                    var pending=tasks(db,pipelined?"((kind!='DAILY' AND phase IN ('PLANNED','FETCHED')) OR (kind='DAILY' AND phase='FETCHED'))":"phase IN ('PLANNED','FETCHED')");
+                    if(pending.isEmpty()) {
+                        if(prefetch!=null&&!prefetch.finished()){status(db,budget,"WAITING_PREFETCH",null);Thread.sleep(1000);continue;}
+                        if(prefetch!=null)prefetch.check();
+                        // 生产者可能刚在本次查询后保存最后一个来源，不能漏掉尾组便宣布结束。
+                        if(pipelined&&!tasks(db,"kind='DAILY' AND phase='FETCHED'").isEmpty())continue;
+                        status(db,budget,tasks(db,"phase!='VERIFIED'").isEmpty()?"COMPLETE_PLANNED_SOURCE_SCOPE":"COMPLETE_WITH_GAPS",null);return;
+                    }
                     var task=pending.getFirst();status(db,budget,"WORKING",task.id());
                     // 与核心队列共用正式账本；先让核心日线结束，之后可与分钟采集并行。
                     if(task.kind().equals("DAILY")&&coreDailyPending()){status(db,budget,"WAITING_CORE_DAILY",null);Thread.sleep(10000);continue;}
-                    if(task.kind().equals("DAILY")) {if(!publishDailyGroup(db,source,budget,through))return;continue;}
+                    if(task.kind().equals("DAILY")) {
+                        int groupSize=publicationSymbols(env);
+                        if(prefetch!=null&&!UsBroadDailyPrefetch.groupReady(db,groupSize,prefetch.finished())){status(db,budget,"WAITING_PREFETCH_GROUP",null);Thread.sleep(1000);continue;}
+                        if(!publishDailyGroup(db,source,budget,through,pipelined))return;continue;
+                    }
                     FrozenHttpSource.Response response;
                     if(task.phase().equals("FETCHED"))response=new FrozenHttpSource.Response(Path.of(task.raw()),task.sha(),Instant.parse(task.observed()),task.proof(),(int)Files.size(Path.of(task.raw())));
                     else {
@@ -92,13 +107,14 @@ final class UsBroadDailyCollector {
                         update(db,task,"VERIFIED",response,JSON.writeValueAsString(Map.of("result",result)));status(db,budget,"VERIFIED_TASK",task.id());
                     }catch(Exception failure){status(db,budget,"PUBLICATION_REQUIRES_RECONCILIATION",task.id());throw failure;}
                 }
+                }
             }
         }
     }
-    private boolean publishDailyGroup(Connection db,FrozenHttpSource source,PersistentMarketApiBudget budget,LocalDate through)throws Exception {
-        int capacity=env.getProperty("app.market-data.broad-publication-symbols",Integer.class,12);if(capacity<1||capacity>16)throw new IllegalArgumentException("股票日线来源组容量须为 1 至 16");
+    private boolean publishDailyGroup(Connection db,FrozenHttpSource source,PersistentMarketApiBudget budget,LocalDate through,boolean prefetchedOnly)throws Exception {
+        int capacity=publicationSymbols(env);
         var page=publicationPage(env);
-        var selected=tasks(db,"kind='DAILY' AND phase IN ('PLANNED','FETCHED')",capacity);var sources=new ArrayList<UsYahooDailyBundle.Source>();LocalDate from=LocalDate.parse(env.getProperty("app.market-data.history-start","2006-01-01"));
+        var selected=tasks(db,prefetchedOnly?"kind='DAILY' AND phase='FETCHED'":"kind='DAILY' AND phase IN ('PLANNED','FETCHED')",capacity);var sources=new ArrayList<UsYahooDailyBundle.Source>();LocalDate from=LocalDate.parse(env.getProperty("app.market-data.history-start","2006-01-01"));
         for(var task:selected) {
             if(Files.exists(root.resolve("us-broad-stop.request"))){status(db,budget,"STOPPED",null);return false;}
             status(db,budget,"FETCHING_GROUP",task.id());FrozenHttpSource.Response response;
@@ -134,6 +150,9 @@ final class UsBroadDailyCollector {
     }
     static VerifiedMarketDataStore.PublicationPage publicationPage(Environment environment) {
         return new VerifiedMarketDataStore.PublicationPage(environment.getProperty("app.market-data.broad-publication-page-rows",Integer.class,10000),environment.getProperty("app.market-data.broad-publication-page-bytes",Integer.class,8*1024*1024));
+    }
+    private static int publicationSymbols(Environment environment) {
+        int capacity=environment.getProperty("app.market-data.broad-publication-symbols",Integer.class,12);if(capacity<1||capacity>16)throw new IllegalArgumentException("股票日线来源组容量须为 1 至 16");return capacity;
     }
     static void beginBundle(Connection db,UsYahooDailyBundle.Parsed parsed,Path raw,String sha)throws Exception {
         db.setAutoCommit(false);try {
