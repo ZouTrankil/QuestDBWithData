@@ -1,8 +1,8 @@
 package com.zoutrankil.data.etf.storage;
 
-import com.zoutrankil.data.domain.EtfDaily;
-import com.zoutrankil.data.domain.EtfDailyKey;
-import com.zoutrankil.data.domain.EtfDailyDataset;
+import com.zoutrankil.data.domain.fund.EtfDaily;
+import com.zoutrankil.data.domain.fund.EtfDailyKey;
+import com.zoutrankil.data.domain.fund.EtfDailyDataset;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
 import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.port.EtfWriteSession;

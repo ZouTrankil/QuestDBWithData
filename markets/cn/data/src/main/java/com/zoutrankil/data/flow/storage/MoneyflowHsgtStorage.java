@@ -1,17 +1,13 @@
 package com.zoutrankil.data.flow.storage;
 
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtLimits;
-
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtState.*;
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtRows;
-
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.MoneyflowHsgt;
-import com.zoutrankil.data.domain.MoneyflowHsgtDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgt;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.flow.mapper.MoneyflowHsgtMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

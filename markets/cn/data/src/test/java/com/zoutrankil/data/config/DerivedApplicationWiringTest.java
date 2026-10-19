@@ -4,7 +4,7 @@ import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.derived.application.*;
 import com.zoutrankil.data.derived.port.*;
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.service.DatasetRegistry;
 import com.zoutrankil.data.service.ReadBindingCatalog;
 import java.nio.file.Files;

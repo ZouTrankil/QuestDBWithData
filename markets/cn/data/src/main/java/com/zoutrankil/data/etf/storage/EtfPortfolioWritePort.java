@@ -1,12 +1,11 @@
 package com.zoutrankil.data.etf.storage;
 
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.EtfPortfolio;
-import com.zoutrankil.data.domain.EtfPortfolioDataset;
-import com.zoutrankil.data.domain.EtfPortfolioKey;
+import com.zoutrankil.data.domain.fund.EtfPortfolio;
+import com.zoutrankil.data.domain.fund.EtfPortfolioDataset;
+import com.zoutrankil.data.domain.fund.EtfPortfolioKey;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.etf.mapper.EtfPortfolioMapper;

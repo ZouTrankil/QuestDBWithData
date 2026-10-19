@@ -1,15 +1,13 @@
 package com.zoutrankil.data.margin.storage;
 
+import com.zoutrankil.data.domain.stock.margin.MarginDetailKey;
+import com.zoutrankil.data.domain.stock.margin.MarginDetailDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginDetail;
 import com.zoutrankil.data.margin.domain.MarginDetailLimits;
-
 import com.zoutrankil.data.margin.domain.MarginDetailTargetRange;
-
 import com.zoutrankil.data.margin.port.MarginDetailWriteSession;
-
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.margin.mapper.MarginDetailMapper;

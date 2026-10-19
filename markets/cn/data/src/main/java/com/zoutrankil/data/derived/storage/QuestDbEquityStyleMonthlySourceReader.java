@@ -1,4 +1,6 @@
 package com.zoutrankil.data.derived.storage;
+
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.derived.domain.EquityStyleMonthlySourceData.*;

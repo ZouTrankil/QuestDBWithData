@@ -4,18 +4,16 @@ import com.zoutrankil.data.derived.port.*;
 import com.zoutrankil.data.derived.domain.*;
 import com.zoutrankil.data.derived.domain.RegimeFeaturesMonitorDailySourceData.*;
 import com.zoutrankil.data.repository.*;
-
-
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.RegimeFeaturesMonitorDailyRow;
+import com.zoutrankil.data.domain.derived.table.RegimeFeaturesMonitorDailyRow;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.security.MessageDigest;
 import java.sql.*;
 import java.time.*;
 import java.util.*;
 import java.util.function.BooleanSupplier;
-import static com.zoutrankil.data.domain.policy.RegimeFeaturesMonitorDailyCalculation.*;
-import static com.zoutrankil.data.domain.policy.MarketSentimentDailyCalculation.finite;
+import static com.zoutrankil.data.domain.derived.policy.RegimeFeaturesMonitorDailyCalculation.*;
+import static com.zoutrankil.data.domain.derived.policy.MarketSentimentDailyCalculation.finite;
 
 /** Bounded streaming reads and physical target construction for the native regime product. */
 public final class RegimeFeaturesMonitorDailyStorage implements RegimeFeaturesMonitorDailySourceReadPort,RegimeFeaturesMonitorDailyTarget {

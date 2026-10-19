@@ -1,7 +1,9 @@
 package com.zoutrankil.data.index.storage;
 
+import com.zoutrankil.data.domain.index.IndexMembershipDataset;
+import com.zoutrankil.data.domain.index.IndexCatalogEntry;
+import com.zoutrankil.data.domain.index.IndexCatalogDataset;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.*;
 import com.zoutrankil.data.index.domain.IndexCatalogState;
 import com.zoutrankil.data.index.domain.IndexMembershipState;
 import com.zoutrankil.data.index.domain.policy.IndexCatalogMerge;

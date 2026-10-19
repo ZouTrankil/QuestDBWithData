@@ -1,6 +1,6 @@
 package com.zoutrankil.data.stock.port;
 
-import com.zoutrankil.data.domain.StockStDaily;
+import com.zoutrankil.data.domain.stock.basic.StockStDaily;
 import com.zoutrankil.data.stock.domain.StockStDailyState.*;
 import java.nio.file.Path;
 import java.time.LocalDate;

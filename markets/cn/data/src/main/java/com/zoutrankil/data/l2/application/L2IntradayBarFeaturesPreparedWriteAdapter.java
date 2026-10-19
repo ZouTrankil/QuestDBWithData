@@ -1,8 +1,7 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.L2IntradayBarFeatures;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
 import com.zoutrankil.data.l2.mapper.L2IntradayBarFeaturesMapper;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Path;
@@ -14,12 +13,12 @@ import java.util.function.BooleanSupplier;
 public final class L2IntradayBarFeaturesPreparedWriteAdapter implements WriteGroupMemberAdapter {
     private final L2IntradayBarFeaturesJobService owner;
     private final PreparedWriteAdapter<L2IntradayBarFeatures,
-            com.zoutrankil.data.domain.L2IntradayBarFeaturesKey> delegate;
+            com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey> delegate;
     private final L2IntradayBarFeaturesMapper mapper = new L2IntradayBarFeaturesMapper();
 
     public L2IntradayBarFeaturesPreparedWriteAdapter(L2IntradayBarFeaturesJobService owner,
             PreparedWriteAdapter<L2IntradayBarFeatures,
-                    com.zoutrankil.data.domain.L2IntradayBarFeaturesKey> delegate) {
+                    com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey> delegate) {
         this.owner = Objects.requireNonNull(owner);
         this.delegate = Objects.requireNonNull(delegate);
     }

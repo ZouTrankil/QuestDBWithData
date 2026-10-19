@@ -1,6 +1,7 @@
 package com.zoutrankil.data.derived.mapper;
 
-
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyKey;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
 import static org.junit.jupiter.api.Assertions.*;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.storage.MacroCoreMonthlyWritePort;

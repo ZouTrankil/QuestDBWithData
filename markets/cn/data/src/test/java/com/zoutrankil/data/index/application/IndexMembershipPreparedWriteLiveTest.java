@@ -1,16 +1,14 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.stock.concept.ThsIndexDataset;
+import com.zoutrankil.data.domain.index.IndexMembershipDataset;
 import com.zoutrankil.data.index.storage.QuestDbIndexMembershipTarget;
-
 import com.zoutrankil.data.index.storage.IndexMembershipStorage;
 import com.zoutrankil.data.index.storage.ThsIndexStorage;
 import com.zoutrankil.data.index.storage.QuestDbThsIndexTarget;
 import com.zoutrankil.data.index.mapper.ThsIndexMapper;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.stock.application.StockBasicJobService;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.mapper.IndexMembershipMapper;

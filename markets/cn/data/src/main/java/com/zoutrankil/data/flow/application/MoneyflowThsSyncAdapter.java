@@ -1,14 +1,12 @@
 package com.zoutrankil.data.flow.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
-
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.MoneyflowThs;
-import com.zoutrankil.data.domain.MoneyflowThsDataset;
-import com.zoutrankil.data.domain.MoneyflowThsKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThs;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;

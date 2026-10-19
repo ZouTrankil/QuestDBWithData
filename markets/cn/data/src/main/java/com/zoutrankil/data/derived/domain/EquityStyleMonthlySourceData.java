@@ -1,4 +1,7 @@
 package com.zoutrankil.data.derived.domain;
+
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthly;
 import com.zoutrankil.data.domain.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;

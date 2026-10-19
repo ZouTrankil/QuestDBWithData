@@ -1,7 +1,7 @@
 package com.zoutrankil.data.stock.storage;
 
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.table.StockDetailInfoRow;
+import com.zoutrankil.data.domain.stock.basic.table.StockDetailInfoRow;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
 import com.zoutrankil.data.stock.domain.StockDetailState.Identity;
 import com.zoutrankil.data.stock.port.StockDetailNameReadPort;

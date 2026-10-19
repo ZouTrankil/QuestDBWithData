@@ -1,16 +1,12 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.stock.concept.ThsIndexDataset;
 import com.zoutrankil.data.index.storage.QuestDbThsIndexTables;
-
 import com.zoutrankil.data.index.domain.ThsIndexState;
-
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.index.storage.ThsIndexStaging;
 import com.zoutrankil.data.index.storage.ThsIndexStorage;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.client.dto.TushareThsIndexDto;
 import com.zoutrankil.data.domain.*;

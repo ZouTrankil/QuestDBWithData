@@ -1,8 +1,10 @@
 package com.zoutrankil.data.derived.mapper;
 
-
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyKey;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthly;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.EquityStyleMonthlyRow;
+import com.zoutrankil.data.domain.derived.table.EquityStyleMonthlyRow;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;

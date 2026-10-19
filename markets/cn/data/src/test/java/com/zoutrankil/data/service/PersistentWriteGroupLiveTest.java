@@ -1,8 +1,9 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshotKey;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshot;
 import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
 import com.zoutrankil.data.stock.storage.StockBasicWritePort;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.StockBasicMapper;

@@ -1,7 +1,9 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyKey;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
 import java.time.LocalDate;

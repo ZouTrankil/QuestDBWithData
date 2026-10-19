@@ -1,12 +1,11 @@
 package com.zoutrankil.data.index.storage;
 
+import com.zoutrankil.data.domain.stock.concept.ThsIndexDataset;
 import com.zoutrankil.data.index.domain.ThsIndexState.*;
 import com.zoutrankil.data.index.domain.ThsIndexState;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.ThsIndexRow;
+import com.zoutrankil.data.domain.stock.concept.table.ThsIndexRow;
 import com.zoutrankil.data.index.mapper.ThsIndexMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.security.MessageDigest;

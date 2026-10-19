@@ -1,8 +1,10 @@
 package com.zoutrankil.data.derived.mapper;
 
-
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyKey;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.MacroCoreMonthlyRow;
+import com.zoutrankil.data.domain.derived.table.MacroCoreMonthlyRow;
 import java.time.LocalDate;
 import java.util.*;
 

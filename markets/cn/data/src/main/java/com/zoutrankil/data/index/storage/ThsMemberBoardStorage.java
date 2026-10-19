@@ -1,12 +1,13 @@
 package com.zoutrankil.data.index.storage;
 
+import com.zoutrankil.data.domain.stock.concept.ThsMemberDataset;
+import com.zoutrankil.data.domain.stock.concept.ThsMember;
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
 import com.zoutrankil.data.index.domain.ThsMemberState.*;
 import com.zoutrankil.data.index.domain.ThsMemberState;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.ThsMemberRow;
+import com.zoutrankil.data.domain.stock.concept.table.ThsMemberRow;
 import com.zoutrankil.data.index.mapper.ThsMemberMapper;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

@@ -1,22 +1,20 @@
 package com.zoutrankil.data.stock.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.client.TushareClient;
-import com.zoutrankil.data.domain.StockBasic;
-import com.zoutrankil.data.domain.StockBasicLatest;
-import com.zoutrankil.data.domain.StockBasicSyncReport;
+import com.zoutrankil.data.domain.stock.basic.StockBasic;
+import com.zoutrankil.data.domain.stock.basic.StockBasicLatest;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSyncReport;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.stock.mapper.StockBasicMapper;
 import com.zoutrankil.data.stock.port.StockBasicLatestRepository;
 import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 
 /** 股票基础快照同步入口：获取来源、映射业务字段、写入并核验 QuestDB 可见行。 */

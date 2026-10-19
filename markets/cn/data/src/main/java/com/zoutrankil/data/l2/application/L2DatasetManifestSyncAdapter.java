@@ -1,9 +1,8 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.L2DatasetManifest;
-import com.zoutrankil.data.domain.L2DatasetManifestKey;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2DatasetManifestKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.l2.port.L2DatasetManifestWriteSession;
 import java.time.Duration;

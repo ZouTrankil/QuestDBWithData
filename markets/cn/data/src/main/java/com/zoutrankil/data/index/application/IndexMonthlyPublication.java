@@ -2,18 +2,14 @@ package com.zoutrankil.data.index.application;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.IndexMonthlyState.*;
-
-
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.IndexMonthly;
-import com.zoutrankil.data.domain.IndexMonthlyKey;
+import com.zoutrankil.data.domain.index.IndexMonthly;
+import com.zoutrankil.data.domain.index.IndexMonthlyKey;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.repository.*;
-
 import java.nio.channels.*;
 import java.nio.file.*;
 import java.time.Duration;

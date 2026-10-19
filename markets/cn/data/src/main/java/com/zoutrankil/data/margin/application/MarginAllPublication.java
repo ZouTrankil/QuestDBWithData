@@ -4,11 +4,8 @@ import com.zoutrankil.data.margin.domain.MarginAllState;
 import com.zoutrankil.data.margin.domain.MarginAllState.*;
 import com.zoutrankil.data.margin.domain.MarginAllRows;
 import com.zoutrankil.data.margin.port.MarginAllTables;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
@@ -66,7 +63,7 @@ public final class MarginAllPublication {
                 ||!tables.physicalTargetId(prepared.stage(),stage.identity()).equals(prepared.stagePhysicalTarget()))
             throw new IllegalStateException("D028 target or verified stage changed before publication");
         verifyStageReceipt(verified);
-        String backup=com.zoutrankil.data.domain.MarginAllDataset.ISOLATED_PREFIX+"backup_"+UUID.randomUUID().toString().replace("-","");
+        String backup=com.zoutrankil.data.domain.stock.margin.MarginAllDataset.ISOLATED_PREFIX+"backup_"+UUID.randomUUID().toString().replace("-","");
         String stageReceiptHash=sha(FileEvidenceStore.readBounded(Path.of(verified.receipt()), 4 * 1024 * 1024, () -> new IllegalStateException("D028 verified stage receipt escaped its run evidence root")));
         String scope=JobDefinitionJson.mapper().writeValueAsString(java.util.Map.of("stageReceipt",verified.receipt(),
                 "stageReceiptFingerprint",stageReceiptHash,"requestFingerprint",prepared.requestFingerprint(),
@@ -187,7 +184,7 @@ public final class MarginAllPublication {
         LocalDate from=LocalDate.parse(proof.path("windowFrom").asText()),to=LocalDate.parse(proof.path("windowTo").asText()),next=from;
         JsonNode refs=proof.path("sourceReceipts");if(!refs.isArray()||refs.size()!=java.time.temporal.ChronoUnit.DAYS.between(from,to)+1)
             throw new IllegalStateException("D028 publication receipt lacks one source proof per date");
-        var sourceRows=new java.util.ArrayList<com.zoutrankil.data.domain.MarginAll>();Path runRoot=ledgerPath.getParent().resolve("sync-evidence").resolve(entry.intent().runId()).toRealPath();
+        var sourceRows=new java.util.ArrayList<com.zoutrankil.data.domain.stock.margin.MarginAll>();Path runRoot=ledgerPath.getParent().resolve("sync-evidence").resolve(entry.intent().runId()).toRealPath();
         for(JsonNode ref:refs){LocalDate day=LocalDate.parse(ref.path("fromInclusive").asText());
             if(!day.equals(next)||!day.equals(LocalDate.parse(ref.path("toInclusive").asText())))throw new IllegalStateException("D028 journal source slices are not one-date contiguous");
             Path sourceReceipt=Path.of(ref.path("responseEvidence").asText()).toAbsolutePath().normalize();

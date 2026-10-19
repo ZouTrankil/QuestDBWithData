@@ -1,8 +1,7 @@
 package com.zoutrankil.data.index.domain.policy;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.IndexMembership;
+import com.zoutrankil.data.domain.index.IndexMembership;
 import java.util.*;
 
 /** Incremental membership-period updates. Neither source absence nor a later observation implies deletion. */

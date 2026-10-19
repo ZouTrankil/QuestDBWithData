@@ -1,17 +1,15 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockStDailyKey;
+import com.zoutrankil.data.domain.stock.basic.StockStDaily;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.stock.domain.StockExecutionTables;
-
 import com.zoutrankil.data.stock.port.StockStDailyTarget;
 import com.zoutrankil.data.stock.domain.StockTargetRange;
-
 import com.zoutrankil.data.stock.mapper.StockStDailyMapper;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
-
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
-
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.repository.*;

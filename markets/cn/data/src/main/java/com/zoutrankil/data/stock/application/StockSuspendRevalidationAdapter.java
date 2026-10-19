@@ -1,5 +1,7 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.market.StockSuspendKey;
+import com.zoutrankil.data.domain.stock.market.StockSuspend;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.domain.StockSuspendState;
 import com.zoutrankil.data.stock.port.*;

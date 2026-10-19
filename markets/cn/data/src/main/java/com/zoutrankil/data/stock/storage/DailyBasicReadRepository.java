@@ -1,7 +1,9 @@
 package com.zoutrankil.data.stock.storage;
 
+import com.zoutrankil.data.domain.stock.market.DailyBasicKey;
+import com.zoutrankil.data.domain.stock.market.DailyBasicDataset;
+import com.zoutrankil.data.domain.stock.market.DailyBasic;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.DailyBasicMapper;
 import org.springframework.stereotype.Repository;

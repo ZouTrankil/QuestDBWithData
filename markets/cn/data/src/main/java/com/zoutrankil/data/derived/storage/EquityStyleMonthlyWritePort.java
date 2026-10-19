@@ -1,11 +1,13 @@
 package com.zoutrankil.data.derived.storage;
+
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyTargetSnapshot;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyKey;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthly;
 import com.zoutrankil.data.derived.port.EquityStyleMonthlyWriteSession;
 import com.zoutrankil.data.derived.domain.EquityStyleMonthlyRows;
-
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;

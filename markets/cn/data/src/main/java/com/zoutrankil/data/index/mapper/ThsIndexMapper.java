@@ -1,9 +1,9 @@
 package com.zoutrankil.data.index.mapper;
 
-
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
 import com.zoutrankil.data.client.dto.TushareThsIndexDto;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.ThsIndexRow;
+import com.zoutrankil.data.domain.stock.concept.table.ThsIndexRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.*;
 import java.util.LinkedHashMap;

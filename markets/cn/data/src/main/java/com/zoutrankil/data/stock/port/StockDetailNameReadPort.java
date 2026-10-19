@@ -1,6 +1,6 @@
 package com.zoutrankil.data.stock.port;
 
-import com.zoutrankil.data.domain.table.StockDetailInfoRow;
+import com.zoutrankil.data.domain.stock.basic.table.StockDetailInfoRow;
 import com.zoutrankil.data.stock.domain.StockDetailState.Identity;
 import java.util.List;
 

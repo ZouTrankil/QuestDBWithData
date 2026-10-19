@@ -1,9 +1,7 @@
 package com.zoutrankil.data.index.domain.policy;
 
 import com.zoutrankil.data.index.domain.ThsIndexState;
-
-
-import com.zoutrankil.data.domain.ThsIndex;
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
 import java.util.*;
 
 /** Content-incremental directory merge; observation clocks never decide which business values win. */

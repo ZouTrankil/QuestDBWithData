@@ -1,4 +1,7 @@
 package com.zoutrankil.data.stock.storage;
+
+import com.zoutrankil.data.domain.stock.market.StockSuspendDataset;
+import com.zoutrankil.data.domain.stock.market.StockSuspend;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import com.zoutrankil.data.repository.StaticTargetIdentity;

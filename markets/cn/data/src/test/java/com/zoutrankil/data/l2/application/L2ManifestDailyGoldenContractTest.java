@@ -1,5 +1,12 @@
 package com.zoutrankil.data.l2.application;
 
+import com.zoutrankil.data.domain.l2.L2DatasetManifestKey;
+import com.zoutrankil.data.domain.l2.L2DatasetManifestDataset;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2DailyFeaturesKey;
+import com.zoutrankil.data.domain.l2.L2DailyFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2DailyFeatures;
+import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
 import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.l2.mapper.*;

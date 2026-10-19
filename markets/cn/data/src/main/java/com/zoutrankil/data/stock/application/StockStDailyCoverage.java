@@ -2,11 +2,10 @@ package com.zoutrankil.data.stock.application;
 
 import com.zoutrankil.data.service.*;
 import com.zoutrankil.data.domain.SyncJobDefinition;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.StockStDaily;
-import com.zoutrankil.data.domain.StockStDailyKey;
+import com.zoutrankil.data.domain.stock.basic.StockStDaily;
+import com.zoutrankil.data.domain.stock.basic.StockStDailyKey;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.repository.FileEvidenceStore;

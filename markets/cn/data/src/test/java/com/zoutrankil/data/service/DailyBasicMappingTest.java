@@ -1,7 +1,9 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.stock.market.DailyBasicKey;
+import com.zoutrankil.data.domain.stock.market.DailyBasicDataset;
+import com.zoutrankil.data.domain.stock.market.DailyBasic;
 import com.zoutrankil.data.stock.application.DailyBasicSource;
-
 import com.zoutrankil.data.client.dto.TushareDailyBasicDto;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.DailyBasicMapper;

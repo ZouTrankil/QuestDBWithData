@@ -2,9 +2,9 @@ package com.zoutrankil.data.stock.mapper;
 
 
 import com.zoutrankil.data.client.dto.TushareDailyDto;
-import com.zoutrankil.data.domain.DailyMarketBar;
+import com.zoutrankil.data.domain.stock.market.DailyMarketBar;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.table.DailyRow;
+import com.zoutrankil.data.domain.stock.market.table.DailyRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;

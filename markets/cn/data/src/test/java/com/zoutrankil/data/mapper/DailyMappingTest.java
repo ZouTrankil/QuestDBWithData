@@ -1,10 +1,9 @@
 package com.zoutrankil.data.mapper;
 
 import com.zoutrankil.data.stock.mapper.DailyMapper;
-
 import com.zoutrankil.data.client.dto.TushareDailyDto;
-import com.zoutrankil.data.domain.DailyDataset;
-import com.zoutrankil.data.domain.DailyMarketBar;
+import com.zoutrankil.data.domain.stock.market.DailyDataset;
+import com.zoutrankil.data.domain.stock.market.DailyMarketBar;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,7 @@ class DailyMappingTest {
                 null, null, null, null, null, null, null, null, null, null, null)));
         assertThrows(IllegalArgumentException.class, () -> new DailyMarketBar("000001.SZ",
                 LocalDate.of(2026, 9, 28), Double.NaN, null, null, null, null, null, null, null, null, null, null));
-        assertThrows(IllegalArgumentException.class, () -> mapper.fromStorage(new com.zoutrankil.data.domain.table.DailyRow(
+        assertThrows(IllegalArgumentException.class, () -> mapper.fromStorage(new com.zoutrankil.data.domain.stock.market.table.DailyRow(
                 "000001.SZ", Instant.parse("2026-09-28T00:00:00.000001Z"), null, null, null, null,
                 null, null, null, null, null, null, null)));
         assertEquals(LocalDate.of(2026, 9, 28), TemporalValues.CalendarTimestamp.fromStorage(

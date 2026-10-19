@@ -1,9 +1,7 @@
 package com.zoutrankil.data.index.application;
 
 import com.zoutrankil.data.index.domain.policy.IndexCatalogMerge;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.index.storage.IndexCatalogStorage;
@@ -30,7 +28,7 @@ class IndexCatalogMergeLiveTest {
             assertEquals(2274,before.rows().size());assertEquals(2343,source.rows().size());
             assertEquals(529,merged.inserted());assertEquals(460,merged.retainedAbsent());assertEquals(2803,merged.rows().size());
             assertEquals(source.rows().size(),merged.inserted()+merged.revised()+merged.unchanged());
-            var current=new HashMap<String,com.zoutrankil.data.domain.IndexCatalogEntry>();
+            var current=new HashMap<String,com.zoutrankil.data.domain.index.IndexCatalogEntry>();
             merged.rows().forEach(row->current.put(row.indexCode(),row));
             for(var row:source.rows()) assertTrue(IndexCatalogMerge.sameBusinessValues(row,current.get(row.indexCode())));
             var repeated=IndexCatalogMerge.merge(merged.rows(),source.rows());

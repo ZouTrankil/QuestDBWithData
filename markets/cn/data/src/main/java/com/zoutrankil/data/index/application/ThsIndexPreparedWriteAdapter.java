@@ -1,7 +1,8 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.stock.concept.ThsIndexDataset;
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.mapper.ThsIndexMapper;
 import com.zoutrankil.data.repository.*;

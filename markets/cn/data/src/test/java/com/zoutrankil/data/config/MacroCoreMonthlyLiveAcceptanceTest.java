@@ -1,16 +1,18 @@
 package com.zoutrankil.data.config;
+
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyKey;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData.*;
 import com.zoutrankil.data.derived.port.MacroCoreMonthlySourceReadPort;
 import com.zoutrankil.data.derived.storage.QuestDbMacroCoreMonthlySourceReader;
 import com.zoutrankil.data.derived.storage.QuestDbMacroCoreMonthlyTarget;
-
 import com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService;
 import com.zoutrankil.data.derived.application.MacroCoreMonthlyMaterializeAdapter;
 import com.zoutrankil.data.derived.application.MacroCoreMonthlySource;
 import com.zoutrankil.data.derived.storage.MacroCoreMonthlyReadRepository;
 import com.zoutrankil.data.derived.storage.MacroCoreMonthlyWritePort;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.*;
 import com.zoutrankil.data.domain.*;

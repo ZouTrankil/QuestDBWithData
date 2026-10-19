@@ -3,13 +3,12 @@ package com.zoutrankil.data.repository;
 import com.zoutrankil.data.stock.storage.StockDetailInfoReadRepository;
 import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
 import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.ReadGroupRequest;
-import com.zoutrankil.data.domain.StockDetailInfoDataset;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
 import com.zoutrankil.data.service.ReadGroupReader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;

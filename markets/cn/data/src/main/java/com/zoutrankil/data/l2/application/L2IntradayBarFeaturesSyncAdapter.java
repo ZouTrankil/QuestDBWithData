@@ -1,10 +1,9 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.L2IntradayBarFeatures;
-import com.zoutrankil.data.domain.L2IntradayBarFeaturesDataset;
-import com.zoutrankil.data.domain.L2IntradayBarFeaturesKey;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.l2.mapper.L2IntradayBarFeaturesMapper;
 import com.zoutrankil.data.l2.port.L2IntradayBarFeaturesWriteSession;

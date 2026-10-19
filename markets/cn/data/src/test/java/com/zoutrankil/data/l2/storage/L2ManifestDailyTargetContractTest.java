@@ -1,5 +1,8 @@
 package com.zoutrankil.data.l2.storage;
 
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2DailyFeatures;
+import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.l2.port.*;

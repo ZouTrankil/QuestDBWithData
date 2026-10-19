@@ -1,12 +1,11 @@
 package com.zoutrankil.data.etf.mapper;
 
-import com.zoutrankil.data.domain.EtfShareDataset;
-
+import com.zoutrankil.data.domain.fund.EtfShareDataset;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.TushareEtfShareDto;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.EtfShare;
-import com.zoutrankil.data.domain.EtfShareKey;
+import com.zoutrankil.data.domain.fund.EtfShare;
+import com.zoutrankil.data.domain.fund.EtfShareKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.Instant;
 import java.time.LocalDate;

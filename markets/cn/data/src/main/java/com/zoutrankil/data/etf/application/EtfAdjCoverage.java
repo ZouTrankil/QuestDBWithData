@@ -1,7 +1,8 @@
 package com.zoutrankil.data.etf.application;
 
+import com.zoutrankil.data.domain.fund.EtfAdjKey;
+import com.zoutrankil.data.domain.fund.EtfAdj;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.etf.port.EtfWriteSession;

@@ -2,7 +2,7 @@ package com.zoutrankil.data.stock.mapper;
 
 
 import com.zoutrankil.data.client.dto.TushareDailyBasicDto;
-import com.zoutrankil.data.domain.DailyBasic;
+import com.zoutrankil.data.domain.stock.market.DailyBasic;
 import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.io.IOException;

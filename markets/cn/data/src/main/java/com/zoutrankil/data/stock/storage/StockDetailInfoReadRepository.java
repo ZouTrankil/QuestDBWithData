@@ -1,13 +1,12 @@
 package com.zoutrankil.data.stock.storage;
 
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetImplementation;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
-import com.zoutrankil.data.domain.StockDetailInfo;
-import com.zoutrankil.data.domain.StockDetailInfoDataset;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
 import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
 import java.util.HashSet;
 import org.springframework.stereotype.Repository;

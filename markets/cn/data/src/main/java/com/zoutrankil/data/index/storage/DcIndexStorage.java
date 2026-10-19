@@ -1,12 +1,13 @@
 package com.zoutrankil.data.index.storage;
+
+import com.zoutrankil.data.domain.stock.concept.DcIndexKey;
+import com.zoutrankil.data.domain.stock.concept.DcIndexDataset;
+import com.zoutrankil.data.domain.stock.concept.DcIndex;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.DcIndexState.*;
-
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import org.springframework.jdbc.core.JdbcTemplate;

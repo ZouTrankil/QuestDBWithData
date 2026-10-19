@@ -1,5 +1,6 @@
 package com.zoutrankil.data.flow.domain;
 
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgt;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtState.*;
 import java.util.*;

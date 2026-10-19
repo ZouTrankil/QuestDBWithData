@@ -1,10 +1,9 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.L2T0TrainingLabels;
-import com.zoutrankil.data.domain.L2T0TrainingLabelsDataset;
-import com.zoutrankil.data.domain.L2T0TrainingLabelsKey;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsDataset;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.l2.port.L2T0TrainingLabelsWriteSession;
 import java.time.Duration;

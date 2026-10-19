@@ -1,5 +1,5 @@
 package com.zoutrankil.data.stock.port;
-import com.zoutrankil.data.domain.StockDetailInfo;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.zoutrankil.data.stock.domain.StockDetailState.*;
 import java.nio.file.Path;
 import java.util.List;

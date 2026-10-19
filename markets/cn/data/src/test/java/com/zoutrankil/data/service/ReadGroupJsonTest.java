@@ -1,5 +1,6 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.*;

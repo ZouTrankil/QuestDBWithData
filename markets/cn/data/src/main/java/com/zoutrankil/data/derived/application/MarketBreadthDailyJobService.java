@@ -1,14 +1,15 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.data.domain.derived.MarketBreadthDailyDataset;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.stock.application.StockFactorSyncJobOwner;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.port.MarketBreadthDailySession;
 import com.zoutrankil.data.derived.port.MarketBreadthDailyTarget;
-import com.zoutrankil.data.domain.MarketBreadthDailySnapshot;
+import com.zoutrankil.data.domain.derived.MarketBreadthDailySnapshot;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Path;
 import java.time.*;

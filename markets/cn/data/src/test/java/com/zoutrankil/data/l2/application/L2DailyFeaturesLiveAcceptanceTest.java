@@ -1,14 +1,12 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.config.QuestDbProperties;
-import com.zoutrankil.data.domain.L2DailyFeatureField;
-import com.zoutrankil.data.domain.L2DailyFeatures;
+import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
+import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRunState;
@@ -27,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.DefaultApplicationArguments;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-
 import java.nio.file.Path;
 import java.nio.charset.StandardCharsets;
 import java.io.ByteArrayOutputStream;
@@ -40,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.io.IOException;
 import java.util.concurrent.CancellationException;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -182,7 +178,7 @@ class L2DailyFeaturesLiveAcceptanceTest {
         }
     }
 
-    private static List<com.zoutrankil.data.domain.L2DailyFeatures> readBack(
+    private static List<com.zoutrankil.data.domain.l2.L2DailyFeatures> readBack(
             QuestDbBoundedReader reader, String target) {
         return new L2DailyFeaturesReadRepository(reader, target)
                 .findRange(FROM, INCREMENTAL_TO.plusDays(1), 10, null).rows();

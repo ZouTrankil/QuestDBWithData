@@ -1,17 +1,14 @@
 package com.zoutrankil.data.margin.application;
 
 import com.zoutrankil.data.margin.port.MarginAllTarget;
-
 import com.zoutrankil.data.margin.domain.MarginAllState;
 import com.zoutrankil.data.margin.domain.MarginAllState.*;
 import com.zoutrankil.data.margin.domain.MarginAllRows;
 import com.zoutrankil.data.margin.port.MarginAllTables;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.SyncJobDefinition;
-import com.zoutrankil.data.domain.MarginAll;
-import com.zoutrankil.data.domain.MarginAllDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginAll;
+import com.zoutrankil.data.domain.stock.margin.MarginAllDataset;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.ReferencePublicationJournal;
@@ -134,7 +131,7 @@ public class MarginAllJobService {
         if(cp!=null)MarginAllCoverage.validateTarget(ledgerPath,logical,actual);else if(!actual.rows().isEmpty())throw new IllegalStateException("D028 nonempty bootstrap target has no verified receipt chain");
     }
     private SyncJobRunner.Result execute(String runId,String parentId,String priorRunId,String logical,String physical,SyncJobDefinition.FrozenRequest request)throws Exception {
-        requireTarget(logical,physical);var ledger=new SyncRunLedger(ledgerPath);var adapter=adapter(table,physical,ledgerPath.getParent().resolve("sync-evidence").resolve(runId),logical);var runner=new SyncJobRunner<MarginAll,com.zoutrankil.data.domain.MarginAllKey>(ledger,new DatasetIntervalLock(ledgerPath));
+        requireTarget(logical,physical);var ledger=new SyncRunLedger(ledgerPath);var adapter=adapter(table,physical,ledgerPath.getParent().resolve("sync-evidence").resolve(runId),logical);var runner=new SyncJobRunner<MarginAll,com.zoutrankil.data.domain.stock.margin.MarginAllKey>(ledger,new DatasetIntervalLock(ledgerPath));
         return priorRunId==null?runner.run(runId,parentId,logical,request,adapter,()->Thread.currentThread().isInterrupted()):runner.resume(runId,parentId,priorRunId,logical,request,adapter,()->Thread.currentThread().isInterrupted());
     }
     private MarginAllSyncAdapter adapter(String table,String physical,Path evidence,String logical)throws Exception{var port=target.newWriter(physical);return new MarginAllSyncAdapter(new MarginAllSource(pages,evidence.resolve("source")),port,new MarginAllStaging(target.newStaging()),new MarginAllPublication(target.newPublicationTables(),ledgerPath),evidence,target);}

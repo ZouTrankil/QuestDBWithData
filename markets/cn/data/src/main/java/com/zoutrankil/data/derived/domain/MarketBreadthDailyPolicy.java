@@ -1,6 +1,6 @@
 package com.zoutrankil.data.derived.domain;
 
-import com.zoutrankil.data.domain.MarketBreadthDaily;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;

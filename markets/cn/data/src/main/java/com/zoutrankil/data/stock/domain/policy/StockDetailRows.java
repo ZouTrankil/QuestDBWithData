@@ -1,6 +1,6 @@
 package com.zoutrankil.data.stock.domain.policy;
-import com.zoutrankil.data.domain.StockDetailInfo;
-import com.zoutrankil.data.domain.table.StockDetailInfoRow;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
+import com.zoutrankil.data.domain.stock.basic.table.StockDetailInfoRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.LocalDate;
 /** Legacy physical reference values decoded without changing their business meaning. */

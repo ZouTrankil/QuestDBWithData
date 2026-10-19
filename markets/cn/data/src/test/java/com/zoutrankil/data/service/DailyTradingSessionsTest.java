@@ -1,6 +1,6 @@
 package com.zoutrankil.data.service;
 
-import com.zoutrankil.data.domain.ExchangeCalendar;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import org.junit.jupiter.api.Test;
 import java.time.*;
 import java.util.*;

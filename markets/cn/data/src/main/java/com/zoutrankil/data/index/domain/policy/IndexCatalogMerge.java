@@ -1,8 +1,7 @@
 package com.zoutrankil.data.index.domain.policy;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.IndexCatalogEntry;
+import com.zoutrankil.data.domain.index.IndexCatalogEntry;
 import java.util.*;
 
 /** Content revisions from an explicitly selected file; absence is never a deletion instruction. */
@@ -23,11 +22,11 @@ public final class IndexCatalogMerge {
             if(prior==null) inserted++;else revised++;
             target.put(entry.getKey(),next);changed.add(next);
         }
-        if(target.size()>com.zoutrankil.data.domain.IndexCatalogDataset.MAX_ROWS) throw new IllegalArgumentException("Merged catalog exceeds row bound");
+        if(target.size()>com.zoutrankil.data.domain.index.IndexCatalogDataset.MAX_ROWS) throw new IllegalArgumentException("Merged catalog exceeds row bound");
         return new Result(new ArrayList<>(target.values()),changed,inserted,revised,unchanged,retained);
     }
     private static NavigableMap<String,IndexCatalogEntry> index(List<IndexCatalogEntry> rows) {
-        if(rows.size()>com.zoutrankil.data.domain.IndexCatalogDataset.MAX_ROWS) throw new IllegalArgumentException("Catalog exceeds row bound");
+        if(rows.size()>com.zoutrankil.data.domain.index.IndexCatalogDataset.MAX_ROWS) throw new IllegalArgumentException("Catalog exceeds row bound");
         var result=new TreeMap<String,IndexCatalogEntry>();
         for(var row:rows) if(result.putIfAbsent(row.indexCode(),row)!=null)
             throw new IllegalArgumentException("Duplicate catalog business identity");

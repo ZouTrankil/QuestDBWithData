@@ -1,4 +1,7 @@
 package com.zoutrankil.data.index.port;
+
+import com.zoutrankil.data.domain.index.IndexMonthlyKey;
+import com.zoutrankil.data.domain.index.IndexMonthly;
 import com.zoutrankil.data.domain.*;
 import java.util.*;
 import java.time.*;

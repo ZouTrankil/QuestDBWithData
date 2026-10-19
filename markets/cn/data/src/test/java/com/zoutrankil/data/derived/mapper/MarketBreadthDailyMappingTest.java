@@ -1,10 +1,10 @@
 package com.zoutrankil.data.derived.mapper;
 
-
+import com.zoutrankil.data.domain.derived.MarketBreadthDailyDataset;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
 import static org.junit.jupiter.api.Assertions.*;
-
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.materializedview.MarketBreadthDailyMaterializedView;
+import com.zoutrankil.data.domain.derived.materializedview.MarketBreadthDailyMaterializedView;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;

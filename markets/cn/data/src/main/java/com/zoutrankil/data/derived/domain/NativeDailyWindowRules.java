@@ -1,7 +1,7 @@
 package com.zoutrankil.data.derived.domain;
 
+
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.*;
 import java.time.*;
 import java.util.*;
 

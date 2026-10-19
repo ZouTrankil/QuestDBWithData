@@ -1,11 +1,11 @@
 package com.zoutrankil.data.margin.application;
 
+import com.zoutrankil.data.domain.stock.margin.MarginDetailKey;
+import com.zoutrankil.data.domain.stock.margin.MarginDetailDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginDetail;
 import com.zoutrankil.data.margin.mapper.MarginDetailMapper;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.margin.port.MarginDetailWriteSession;
 import java.nio.file.*;

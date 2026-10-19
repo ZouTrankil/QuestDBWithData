@@ -1,5 +1,9 @@
 package com.zoutrankil.data.flow.storage;
 
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgt;
+import com.zoutrankil.data.domain.stock.margin.MarginSecsKey;
+import com.zoutrankil.data.domain.stock.margin.MarginSecs;
 import com.zoutrankil.data.calendar.storage.QuestDbSseCalendarWindowReadPort;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtRows;

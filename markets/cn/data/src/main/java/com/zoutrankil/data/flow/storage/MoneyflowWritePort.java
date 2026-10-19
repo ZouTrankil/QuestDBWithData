@@ -1,17 +1,13 @@
 package com.zoutrankil.data.flow.storage;
 
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowKey;
+import com.zoutrankil.data.domain.stock.moneyflow.Moneyflow;
 import com.zoutrankil.data.flow.domain.MoneyflowLimits;
-
 import com.zoutrankil.data.flow.domain.MoneyflowTargetRange;
-
 import com.zoutrankil.data.flow.port.MoneyflowWriteSession;
-
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.MoneyflowDataset;
-
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDataset;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.flow.mapper.MoneyflowMapper;

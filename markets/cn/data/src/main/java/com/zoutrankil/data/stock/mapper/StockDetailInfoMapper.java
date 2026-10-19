@@ -1,9 +1,9 @@
 package com.zoutrankil.data.stock.mapper;
 
-
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.zoutrankil.data.client.dto.TushareStockDetailDto;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.StockDetailInfoRow;
+import com.zoutrankil.data.domain.stock.basic.table.StockDetailInfoRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.*;
 import java.util.LinkedHashMap;

@@ -1,5 +1,6 @@
 package com.zoutrankil.data.stock.storage;
 
+import com.zoutrankil.data.domain.stock.feature.StockFactorDataset;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import com.zoutrankil.data.repository.StaticTargetIdentity;

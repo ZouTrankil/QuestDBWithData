@@ -1,10 +1,8 @@
 package com.zoutrankil.data.repository;
 import com.zoutrankil.data.stock.domain.StockDetailState;
-
 import com.zoutrankil.data.stock.storage.StockDetailInfoStaging;
 import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
-
-import com.zoutrankil.data.domain.StockDetailInfo;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

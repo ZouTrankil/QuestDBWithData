@@ -12,7 +12,7 @@
 | Batch 元数据和持久写入协议 | `platform/engine/batch/` |
 | 公共鉴权、目录接口和 schema 配置 | `platform/app-support/`，这是库，不单独启动 |
 | A 股数据 API / CLI 启动和 Batch 生命周期 | `markets/cn/data-app/` |
-| A 股表模型、DTO、L2 共享字段 | `markets/cn/src/main/java` |
+| A 股表模型、DTO、L2 共享字段 | `markets/cn/src/main/java`；domain 按[数据类别](model-schema-conventions.md#模型目录怎么分)分目录 |
 | A 股来源字段、请求、转换和质量规则 | `markets/cn/source/` |
 | 股票、ETF、指数、资金流、因子和衍生计算 | `markets/cn/data/src/main/java/com/zoutrankil/data/` |
 | 盘后任务图、离线 L2 和归档 | `markets/cn/batch/` |

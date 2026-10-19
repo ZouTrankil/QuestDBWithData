@@ -1,16 +1,14 @@
 package com.zoutrankil.data.etf.storage;
 
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
-
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetImplementation;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetReadCursor;
-import com.zoutrankil.data.domain.EtfAdj;
-import com.zoutrankil.data.domain.EtfAdjDataset;
-import com.zoutrankil.data.domain.EtfAdjKey;
+import com.zoutrankil.data.domain.fund.EtfAdj;
+import com.zoutrankil.data.domain.fund.EtfAdjDataset;
+import com.zoutrankil.data.domain.fund.EtfAdjKey;
 import com.zoutrankil.data.etf.mapper.EtfAdjMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;

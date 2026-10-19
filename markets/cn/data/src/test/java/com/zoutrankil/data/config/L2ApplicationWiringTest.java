@@ -1,5 +1,10 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.l2.application.*;

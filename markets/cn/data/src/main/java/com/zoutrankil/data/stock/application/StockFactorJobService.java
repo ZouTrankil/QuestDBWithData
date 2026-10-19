@@ -1,11 +1,10 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.feature.StockFactorKey;
+import com.zoutrankil.data.domain.stock.feature.StockFactor;
 import com.zoutrankil.data.stock.port.StockFactorTarget;
 import com.zoutrankil.data.stock.domain.StockTargetRange;
-
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;

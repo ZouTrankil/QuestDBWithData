@@ -3,15 +3,12 @@ package com.zoutrankil.data.index.storage;
 import com.zoutrankil.data.index.domain.IndexWeightTargetRange;
 import com.zoutrankil.data.index.port.IndexWeightWriteSession;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
-
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.IndexWeight;
-import com.zoutrankil.data.domain.IndexWeightDataset;
-import com.zoutrankil.data.domain.IndexWeightKey;
+import com.zoutrankil.data.domain.index.IndexWeight;
+import com.zoutrankil.data.domain.index.IndexWeightDataset;
+import com.zoutrankil.data.domain.index.IndexWeightKey;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.index.mapper.IndexWeightMapper;

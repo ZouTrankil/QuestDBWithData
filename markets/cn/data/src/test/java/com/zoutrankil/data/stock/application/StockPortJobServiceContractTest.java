@@ -1,5 +1,7 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;

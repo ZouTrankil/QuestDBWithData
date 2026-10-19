@@ -1,13 +1,11 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.derived.NativeDailyWindowSnapshot;
 import com.zoutrankil.data.derived.port.*;
 import com.zoutrankil.data.derived.domain.*;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
-
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import java.nio.file.*;
 import java.security.MessageDigest;

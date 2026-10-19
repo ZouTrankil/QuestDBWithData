@@ -3,7 +3,7 @@ package com.zoutrankil.data.config;
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.index.application.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.service.DatasetRegistry;

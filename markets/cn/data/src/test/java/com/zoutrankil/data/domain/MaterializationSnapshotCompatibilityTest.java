@@ -1,5 +1,9 @@
 package com.zoutrankil.data.domain;
 
+import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
+import com.zoutrankil.data.domain.derived.MarketBreadthDailySnapshot;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyTargetSnapshot;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyTargetSnapshot;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.RecordComponent;
 import java.util.Arrays;
@@ -9,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /** Frozen pre-extraction records characterize fields, JSON and the four distinct snapshot policies. */

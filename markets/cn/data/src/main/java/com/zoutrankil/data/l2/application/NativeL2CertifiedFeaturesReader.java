@@ -2,9 +2,9 @@ package com.zoutrankil.data.l2.application;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.DatasetDefinition.StorageType;
-import com.zoutrankil.data.domain.L2EventResponseFeatureField;
-import com.zoutrankil.data.domain.L2IntradayBarFeatureField;
-import com.zoutrankil.data.domain.L2T0TrainingLabelField;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeatureField;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatureField;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelField;
 import com.zoutrankil.data.l2.mapper.L2EventResponseFeaturesMapper;
 import com.zoutrankil.data.l2.mapper.L2IntradayBarFeaturesMapper;
 import com.zoutrankil.data.l2.mapper.L2T0TrainingLabelsMapper;

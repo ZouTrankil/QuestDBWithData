@@ -1,18 +1,15 @@
 package com.zoutrankil.data.stock.storage;
 
 import com.zoutrankil.data.stock.port.StockBasicLatestRepository;
-
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.StockBasicLatest;
+import com.zoutrankil.data.domain.stock.basic.StockBasicLatest;
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.StockBasicDataset;
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.domain.DatasetImplementation;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;

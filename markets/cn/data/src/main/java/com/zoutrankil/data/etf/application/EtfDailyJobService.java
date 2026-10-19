@@ -1,19 +1,18 @@
 package com.zoutrankil.data.etf.application;
 
+import com.zoutrankil.data.domain.fund.EtfDailyKey;
+import com.zoutrankil.data.domain.fund.EtfDailyDataset;
+import com.zoutrankil.data.domain.fund.EtfDaily;
 import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
-
 import com.zoutrankil.data.etf.mapper.EtfDailyMapper;
-
 import com.zoutrankil.data.service.DailySyncEndDate;
 import com.zoutrankil.data.service.FrozenRunRequest;
 import com.zoutrankil.data.service.SyncJobRegistry;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.SyncRunExecution;
 import com.zoutrankil.data.service.TusharePageService;
-
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
-
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;

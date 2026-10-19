@@ -1,7 +1,7 @@
 package com.zoutrankil.data.etf.port;
 
-import com.zoutrankil.data.domain.EtfAdj;
-import com.zoutrankil.data.domain.EtfAdjKey;
+import com.zoutrankil.data.domain.fund.EtfAdj;
+import com.zoutrankil.data.domain.fund.EtfAdjKey;
 import java.time.LocalDate;
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.zoutrankil.data.index.domain;
 
-import com.zoutrankil.data.domain.ThsIndex;
-import com.zoutrankil.data.domain.table.ThsIndexRow;
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
+import com.zoutrankil.data.domain.stock.concept.table.ThsIndexRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.LocalDate;
 

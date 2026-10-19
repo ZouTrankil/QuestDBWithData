@@ -6,13 +6,10 @@ import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.derived.port.MarketBreadthDailySession;
 import com.zoutrankil.data.derived.domain.MarketBreadthDailyFullSourceScope;
 import com.zoutrankil.data.derived.domain.MarketBreadthDailyPolicy;
-
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
-
-import com.zoutrankil.data.domain.MarketBreadthDailySnapshot;
-
+import com.zoutrankil.data.domain.derived.MarketBreadthDailySnapshot;
 import com.zoutrankil.data.config.QuestDbProperties;
-import com.zoutrankil.data.domain.MarketBreadthDaily;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.PreparedStatement;

@@ -1,10 +1,10 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshotKey;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshot;
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.stock.port.StockBasicTarget;
-
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.StockBasicMapper;
 import com.zoutrankil.data.repository.*;

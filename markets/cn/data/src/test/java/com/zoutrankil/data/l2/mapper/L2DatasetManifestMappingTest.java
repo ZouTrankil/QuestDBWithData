@@ -1,12 +1,11 @@
 package com.zoutrankil.data.l2.mapper;
 
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.L2DatasetManifest;
-import com.zoutrankil.data.domain.L2DatasetManifestDataset;
-import com.zoutrankil.data.domain.L2DatasetManifestKey;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2DatasetManifestDataset;
+import com.zoutrankil.data.domain.l2.L2DatasetManifestKey;
 import com.zoutrankil.data.l2.mapper.L2DatasetManifestMapper;
 import com.zoutrankil.data.l2.storage.L2DatasetManifestWritePort;
 import java.time.Instant;

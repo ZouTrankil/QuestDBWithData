@@ -1,9 +1,11 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.client.dto.TushareStockDetailDto;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.StockDetailInfoRow;
+import com.zoutrankil.data.domain.stock.basic.table.StockDetailInfoRow;
 import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
 import org.junit.jupiter.api.Test;
 import java.nio.file.Path;

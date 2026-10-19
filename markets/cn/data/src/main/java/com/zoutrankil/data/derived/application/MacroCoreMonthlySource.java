@@ -1,13 +1,13 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyKey;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData.*;
 import static com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData.*;
 import com.zoutrankil.data.derived.port.MacroCoreMonthlySourceReadPort;
-
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;

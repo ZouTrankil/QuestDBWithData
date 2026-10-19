@@ -1,16 +1,15 @@
 package com.zoutrankil.data.stock.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.PageContract;
-import com.zoutrankil.data.domain.StockStDaily;
-import com.zoutrankil.data.domain.StockStDailyKey;
-import com.zoutrankil.data.domain.StockStPeriod;
+import com.zoutrankil.data.domain.stock.basic.StockStDaily;
+import com.zoutrankil.data.domain.stock.basic.StockStDailyKey;
+import com.zoutrankil.data.domain.stock.basic.StockStPeriod;
 import com.zoutrankil.data.stock.mapper.StockStDailyMapper;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +25,7 @@ import java.util.function.BooleanSupplier;
  * the daily writer as if they were daily records.
  */
 public final class StockStDailySource {
-    public static final LocalDate HISTORY_ANCHOR = com.zoutrankil.data.domain.StockStDailyDataset.HISTORY_ANCHOR;
+    public static final LocalDate HISTORY_ANCHOR = com.zoutrankil.data.domain.stock.basic.StockStDailyDataset.HISTORY_ANCHOR;
     public static final int API_ROW_CAP = 5000;
     public static final int MAX_RESPONSE_BYTES = 16 * 1024 * 1024;
     public static final int MAX_HISTORY_PERIODS = 100_000;

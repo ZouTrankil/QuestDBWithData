@@ -1,6 +1,6 @@
 package com.zoutrankil.data.config;
 
-import com.zoutrankil.data.domain.StockBasicDataset;
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.stock.port.*;
 import com.zoutrankil.data.stock.storage.*;
 import io.questdb.client.QuestDB;

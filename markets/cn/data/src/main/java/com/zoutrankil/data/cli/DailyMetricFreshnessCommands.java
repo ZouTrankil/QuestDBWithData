@@ -1,7 +1,7 @@
 package com.zoutrankil.data.cli;
 
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.table.FactorDailyMetricRow;
+import com.zoutrankil.data.domain.derived.table.FactorDailyMetricRow;
 import com.zoutrankil.data.factor.application.DailyMetricFreshness;
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import java.nio.file.Path;

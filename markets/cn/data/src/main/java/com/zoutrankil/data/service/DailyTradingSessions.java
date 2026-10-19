@@ -2,8 +2,8 @@ package com.zoutrankil.data.service;
 
 import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadQuery;
-import com.zoutrankil.data.domain.ExchangeCalendar;
-import com.zoutrankil.data.domain.ExchangeCalendarDataset;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendarDataset;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import java.time.LocalDate;

@@ -1,12 +1,12 @@
 package com.zoutrankil.data.service;
-import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
 
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
+import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
 import com.zoutrankil.data.stock.application.StockBasicJobService;
 import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
 import com.zoutrankil.data.stock.domain.policy.StockDetailInfoMerge;
 import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
 import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
@@ -17,10 +17,8 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.*;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.nio.file.*;
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

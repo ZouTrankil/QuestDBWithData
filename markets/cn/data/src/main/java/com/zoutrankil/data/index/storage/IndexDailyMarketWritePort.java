@@ -1,13 +1,13 @@
 package com.zoutrankil.data.index.storage;
 
+import com.zoutrankil.data.domain.index.IndexDailyMarketKey;
+import com.zoutrankil.data.domain.index.IndexDailyMarketDataset;
+import com.zoutrankil.data.domain.index.IndexDailyMarket;
 import com.zoutrankil.data.index.domain.IndexDailyMarketTargetRange;
 import com.zoutrankil.data.index.port.IndexDailyMarketWriteSession;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
-
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.index.mapper.IndexDailyMarketMapper;
@@ -163,7 +163,7 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
                 + "cast(update_time AS long) AS update_time_micros FROM \"" + table + "\"";
     }
     private static void requireKnownCode(String code) {
-        if (!com.zoutrankil.data.domain.policy.IndexDailyMarketUniverse.valid(code))
+        if (!com.zoutrankil.data.domain.index.policy.IndexDailyMarketUniverse.valid(code))
             throw new IllegalArgumentException("Known frozen D019 source ts_code required");
     }
     private void requireExpectedTarget() {

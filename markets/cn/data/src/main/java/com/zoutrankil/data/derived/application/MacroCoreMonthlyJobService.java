@@ -1,7 +1,10 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyTargetSnapshot;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.derived.port.*;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData;

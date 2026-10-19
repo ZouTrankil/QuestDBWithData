@@ -1,7 +1,7 @@
 package com.zoutrankil.data.index.storage;
 
-import com.zoutrankil.data.domain.IndexWeightDataset;
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+import com.zoutrankil.data.domain.index.IndexWeightDataset;
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.index.port.IndexWeightTarget;
 import com.zoutrankil.data.index.port.IndexWeightWriteSession;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;

@@ -1,5 +1,6 @@
 package com.zoutrankil.data.financial.application;
 
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.financial.client.FinancialSource;
 import com.zoutrankil.data.financial.domain.FinancialContract;

@@ -1,18 +1,15 @@
 package com.zoutrankil.data.derived.application;
 
 import com.zoutrankil.data.l2.application.L2DailyFeaturesJobService;
-
 import com.zoutrankil.data.derived.port.RetailSentimentDailySession;
-
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.RetailSentimentDaily;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
-import com.zoutrankil.data.domain.RetailSentimentDailySnapshot;
+import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

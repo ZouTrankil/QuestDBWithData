@@ -1,5 +1,6 @@
 package com.zoutrankil.data.flow.application;
 
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgt;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;

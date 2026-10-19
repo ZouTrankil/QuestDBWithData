@@ -1,13 +1,12 @@
 package com.zoutrankil.data.stock.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.PageContract;
-import com.zoutrankil.data.domain.StockFactor;
+import com.zoutrankil.data.domain.stock.feature.StockFactor;
 import com.zoutrankil.data.stock.mapper.StockFactorMapper;
 import java.nio.file.*;
 import java.time.LocalDate;

@@ -3,10 +3,8 @@ package com.zoutrankil.data.derived.storage;
 import com.zoutrankil.data.derived.port.*;
 import com.zoutrankil.data.derived.domain.*;
 import com.zoutrankil.data.repository.*;
-
-
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.NativeDailyWindowSnapshot;
+import com.zoutrankil.data.domain.derived.NativeDailyWindowSnapshot;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;

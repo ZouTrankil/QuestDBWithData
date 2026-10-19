@@ -1,13 +1,11 @@
 package com.zoutrankil.data.repository;
 
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
 import com.zoutrankil.data.config.QuestDbProperties;
-import com.zoutrankil.data.domain.RetailSentimentDaily;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -235,7 +233,7 @@ class RetailSentimentDailyMaterializationPortTest {
                 sourceTypes.put(column, "DOUBLE");
             for (String column : List.of("q1_count", "q3_count", "spoof_count", "fake_support_count", "fake_pressure_count"))
                 sourceTypes.put(column, "LONG");
-            com.zoutrankil.data.domain.RetailSentimentDailyDataset.DEFINITION.columns()
+            com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset.DEFINITION.columns()
                     .forEach(column -> outputTypes.put(column.storageName(), column.storageType().name()));
             refresh.put("view_status", "valid");
             refresh.put("invalidation_reason", null);

@@ -1,18 +1,14 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import com.zoutrankil.data.l2.storage.L2DailyFeaturesReadRepository;
 import com.zoutrankil.data.l2.storage.L2DatasetManifestReadRepository;
-
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
-
 import com.zoutrankil.data.derived.application.RetailSentimentDailyJobService;
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyReadRepository;
-
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.mapper.RetailSentimentDailyMapper;
 import com.zoutrankil.data.repository.*;

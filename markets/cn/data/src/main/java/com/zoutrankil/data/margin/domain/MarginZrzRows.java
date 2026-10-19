@@ -1,4 +1,6 @@
 package com.zoutrankil.data.margin.domain;
+
+import com.zoutrankil.data.domain.stock.margin.MarginZrz;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.margin.domain.MarginZrzState.Snapshot;
 import java.util.*;

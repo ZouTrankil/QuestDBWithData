@@ -1,7 +1,9 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
+import com.zoutrankil.data.domain.index.IndexCatalogDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import java.nio.file.*;
 import java.time.LocalDate;

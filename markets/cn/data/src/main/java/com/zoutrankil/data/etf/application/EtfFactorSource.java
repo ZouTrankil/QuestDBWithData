@@ -3,14 +3,13 @@ package com.zoutrankil.data.etf.application;
 import com.zoutrankil.data.service.PageExecutor;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.TusharePageService;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.zoutrankil.data.domain.EtfFactor;
-import com.zoutrankil.data.domain.EtfFactorDataset;
-import com.zoutrankil.data.domain.EtfFactorKey;
+import com.zoutrankil.data.domain.fund.EtfFactor;
+import com.zoutrankil.data.domain.fund.EtfFactorDataset;
+import com.zoutrankil.data.domain.fund.EtfFactorKey;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.etf.mapper.EtfFactorMapper;

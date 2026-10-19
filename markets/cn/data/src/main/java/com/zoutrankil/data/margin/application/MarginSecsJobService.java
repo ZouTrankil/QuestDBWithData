@@ -1,13 +1,10 @@
 package com.zoutrankil.data.margin.application;
 
 import com.zoutrankil.data.margin.port.MarginSecsTarget;
-
 import com.zoutrankil.data.margin.domain.MarginSecsState;
-
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.MarginSecs;
-import com.zoutrankil.data.domain.MarginSecsDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginSecs;
+import com.zoutrankil.data.domain.stock.margin.MarginSecsDataset;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
@@ -117,7 +114,7 @@ public final class MarginSecsJobService {
                     ||!now.fingerprint().equals(plan.request().parameters().get("targetFingerprint")))throw new IllegalStateException("D030 frozen target baseline changed after planning");}
         Path evidence=ledgerPath.getParent().resolve("sync-evidence").resolve(runId);var ledger=new SyncRunLedger(ledgerPath);
         var adapter=new MarginSecsSyncAdapter(new MarginSecsSource(pages,evidence.resolve("source")),calendars,port,evidence);
-        var runner=new SyncJobRunner<MarginSecs,com.zoutrankil.data.domain.MarginSecsKey>(ledger,new DatasetIntervalLock(ledgerPath));
+        var runner=new SyncJobRunner<MarginSecs,com.zoutrankil.data.domain.stock.margin.MarginSecsKey>(ledger,new DatasetIntervalLock(ledgerPath));
         java.util.function.BooleanSupplier cancelled=()->{if(Thread.currentThread().isInterrupted())return true;try{return ledger.cancellationRequested(runId);}catch(java.sql.SQLException failure){throw new IllegalStateException("Cannot read D030 cancellation state",failure);}};
         return priorRunId==null?runner.run(runId,parent,plan.targetId(),plan.request(),adapter,cancelled):runner.resume(runId,parent,priorRunId,plan.targetId(),plan.request(),adapter,cancelled);
     }

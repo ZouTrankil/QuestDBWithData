@@ -1,7 +1,8 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyTargetSnapshot;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
 import com.zoutrankil.data.derived.port.MacroCoreMonthlyWriteSession;

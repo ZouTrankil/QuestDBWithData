@@ -1,13 +1,13 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.data.domain.derived.NativeDailyWindowSnapshot;
 import com.zoutrankil.data.derived.port.*;
 import com.zoutrankil.data.derived.domain.*;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
-
-
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.RegimeFeaturesMonitorDailyRow;
+import com.zoutrankil.data.domain.derived.table.RegimeFeaturesMonitorDailyRow;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.derived.domain.RegimeFeaturesMonitorDailySourceData.Margins;
 import java.nio.file.*;
@@ -17,8 +17,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.BooleanSupplier;
 import static com.zoutrankil.data.domain.SyncJobDefinition.*;
-import static com.zoutrankil.data.domain.policy.RegimeFeaturesMonitorDailyCalculation.*;
-import static com.zoutrankil.data.domain.policy.MarketSentimentDailyCalculation.finite;
+import static com.zoutrankil.data.domain.derived.policy.RegimeFeaturesMonitorDailyCalculation.*;
+import static com.zoutrankil.data.domain.derived.policy.MarketSentimentDailyCalculation.finite;
 
 /** Native Java owner for the existing 21-field proxy-style context table.
  * The persistent batch synchronizes dependencies before invoking this calculation.

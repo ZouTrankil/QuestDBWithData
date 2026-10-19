@@ -1,17 +1,17 @@
 package com.zoutrankil.data.index.storage;
 
+import com.zoutrankil.data.domain.index.IndexDailyBasicKey;
+import com.zoutrankil.data.domain.index.IndexDailyBasicDataset;
+import com.zoutrankil.data.domain.index.IndexDailyBasic;
 import com.zoutrankil.data.index.domain.IndexDailyBasicTargetRange;
 import com.zoutrankil.data.index.port.IndexDailyBasicWriteSession;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
-
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.index.mapper.IndexDailyBasicMapper;
-import com.zoutrankil.data.domain.policy.IndexDailyBasicUniverse;
+import com.zoutrankil.data.domain.index.policy.IndexDailyBasicUniverse;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;

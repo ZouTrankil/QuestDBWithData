@@ -2,14 +2,11 @@ package com.zoutrankil.data.index.application;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.IndexMonthlyState.*;
-
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.IndexMonthlyDataset;
-
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zoutrankil.data.domain.IndexMonthly;
-import com.zoutrankil.data.domain.IndexMonthlyKey;
+import com.zoutrankil.data.domain.index.IndexMonthly;
+import com.zoutrankil.data.domain.index.IndexMonthlyKey;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
@@ -17,8 +14,6 @@ import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.index.application.IndexMonthlySource;
 import com.zoutrankil.data.index.application.IndexMonthlySyncJobOwner;
 import com.zoutrankil.data.service.SyncJobRunner;
-
-
 import java.io.IOException;
 import java.nio.file.*;
 import java.security.MessageDigest;
@@ -436,7 +431,7 @@ public final class IndexMonthlyStaging {
 
 
     private static void requireWindow(String code, LocalDate from, LocalDate to) {
-        if (!com.zoutrankil.data.domain.policy.IndexMonthlyUniverse.validProviderCode(code)
+        if (!com.zoutrankil.data.domain.index.policy.IndexMonthlyUniverse.validProviderCode(code)
                 || from == null || to == null || from.isAfter(to)) throw new IllegalArgumentException("Bounded D022 window required");
     }
 

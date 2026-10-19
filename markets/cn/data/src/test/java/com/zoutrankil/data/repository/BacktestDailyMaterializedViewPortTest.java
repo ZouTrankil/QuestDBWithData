@@ -1,5 +1,6 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.domain.derived.BacktestDailyViewDataset;
 import com.zoutrankil.data.domain.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;

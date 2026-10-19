@@ -1,7 +1,10 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyTargetSnapshot;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyKey;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthly;
 import com.zoutrankil.data.repository.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -119,9 +122,9 @@ class EquityStyleMonthlyWritePortTest {
         assertTrue(size<EquityStyleMonthlyWritePort.MAX_BYTES);assertDoesNotThrow(()->EquityStyleMonthlyWritePort.requireBatch(rows));
         assertEquals(12,rows.stream().map(EquityStyleMonthlyWritePort.CODEC::key).distinct().count());
     }
-    private com.zoutrankil.data.domain.EquityStyleMonthlyTargetSnapshot snapshot(Long txn,Long wal,long seq,long writer,long pending,long buffered,
+    private com.zoutrankil.data.domain.derived.EquityStyleMonthlyTargetSnapshot snapshot(Long txn,Long wal,long seq,long writer,long pending,long buffered,
                                                            boolean suspended,long count,Long metadataRows) {
-        return new com.zoutrankil.data.domain.EquityStyleMonthlyTargetSnapshot("bound-id",3,"target~3","schema-sha",txn,wal,seq,writer,pending,buffered,suspended,count,metadataRows);
+        return new com.zoutrankil.data.domain.derived.EquityStyleMonthlyTargetSnapshot("bound-id",3,"target~3","schema-sha",txn,wal,seq,writer,pending,buffered,suspended,count,metadataRows);
     }
     @Test void emptyPhysicalTxnRemainsNullAndRequiresIndependentZeroRowsAndZeroWal() {
         var empty=snapshot(null,null,0,0,0,0,false,0,null);

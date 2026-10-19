@@ -1,14 +1,13 @@
 package com.zoutrankil.data.etf.application;
 
+import com.zoutrankil.data.domain.fund.EtfShareKey;
+import com.zoutrankil.data.domain.fund.EtfShareDataset;
+import com.zoutrankil.data.domain.fund.EtfShare;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
-
 import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
-
 import com.zoutrankil.data.etf.mapper.EtfShareMapper;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.repository.*;

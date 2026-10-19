@@ -1,6 +1,6 @@
 package com.zoutrankil.data.stock.domain;
-import com.zoutrankil.data.domain.StockSuspend;
-import com.zoutrankil.data.domain.StockSuspendKey;
+import com.zoutrankil.data.domain.stock.market.StockSuspend;
+import com.zoutrankil.data.domain.stock.market.StockSuspendKey;
 import java.time.LocalDate;
 import java.util.*;
 /** Frozen D011 snapshots and stage receipts, independent of the database adapter. */

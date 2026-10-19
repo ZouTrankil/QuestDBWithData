@@ -1,15 +1,13 @@
 package com.zoutrankil.data.margin.application;
 
+import com.zoutrankil.data.domain.stock.margin.MarginDetailKey;
+import com.zoutrankil.data.domain.stock.margin.MarginDetailDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginDetail;
 import com.zoutrankil.data.margin.domain.MarginDetailTargetRange;
-
 import com.zoutrankil.data.margin.port.MarginDetailTarget;
-
 import com.zoutrankil.data.margin.port.MarginDetailWriteSession;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import java.nio.file.Path;

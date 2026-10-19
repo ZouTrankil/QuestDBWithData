@@ -2,16 +2,12 @@ package com.zoutrankil.data.etf.application;
 
 import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
-
 import com.zoutrankil.data.etf.mapper.EtfPortfolioMapper;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.SyncRequestIdentity;
-
-import com.zoutrankil.data.domain.EtfPortfolio;
-import com.zoutrankil.data.domain.EtfPortfolioDataset;
-import com.zoutrankil.data.domain.EtfPortfolioKey;
+import com.zoutrankil.data.domain.fund.EtfPortfolio;
+import com.zoutrankil.data.domain.fund.EtfPortfolioDataset;
+import com.zoutrankil.data.domain.fund.EtfPortfolioKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.SyncRunLedger;

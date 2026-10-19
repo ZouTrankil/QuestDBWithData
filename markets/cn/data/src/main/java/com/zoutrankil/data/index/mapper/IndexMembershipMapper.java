@@ -2,8 +2,8 @@ package com.zoutrankil.data.index.mapper;
 
 
 import com.zoutrankil.data.client.dto.TushareIndexMembershipDto;
-import com.zoutrankil.data.domain.IndexMembership;
-import com.zoutrankil.data.domain.table.IndexMemberRow;
+import com.zoutrankil.data.domain.index.IndexMembership;
+import com.zoutrankil.data.domain.index.table.IndexMemberRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.*;
 import java.util.Objects;

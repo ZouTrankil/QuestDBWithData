@@ -1,11 +1,9 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.index.IndexMembership;
 import com.zoutrankil.data.index.domain.IndexMembershipState;
 import com.zoutrankil.data.index.port.IndexMembershipTarget;
-
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import java.nio.file.*;

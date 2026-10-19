@@ -1,6 +1,6 @@
 package com.zoutrankil.data.flow.storage;
 
-import com.zoutrankil.data.domain.MoneyflowDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDataset;
 import com.zoutrankil.data.flow.port.MoneyflowTarget;
 import com.zoutrankil.data.flow.port.MoneyflowWriteSession;
 import com.zoutrankil.data.repository.StaticTargetIdentity;

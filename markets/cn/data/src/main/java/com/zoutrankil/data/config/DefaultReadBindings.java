@@ -1,22 +1,28 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2DailyFeatures;
+import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyView;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthly;
+import com.zoutrankil.data.domain.derived.BacktestDailyViewValue;
 import com.zoutrankil.data.l2.mapper.L2DailyFeaturesMapper;
 import com.zoutrankil.data.l2.mapper.L2DatasetManifestMapper;
 import com.zoutrankil.data.l2.mapper.L2IntradayBarFeaturesMapper;
 import com.zoutrankil.data.l2.mapper.L2T0TrainingLabelsMapper;
-
 import com.zoutrankil.data.derived.mapper.BacktestDailyViewMapper;
 import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
 import com.zoutrankil.data.derived.mapper.EtfMarketOverviewDailyViewMapper;
 import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
 import com.zoutrankil.data.derived.mapper.MarketBreadthDailyMapper;
 import com.zoutrankil.data.derived.mapper.RetailSentimentDailyMapper;
-
 import com.zoutrankil.data.domain.*;
-
 import com.zoutrankil.data.service.ReadBindingCatalog;
 import java.util.List;
-
 import static com.zoutrankil.data.service.ReadBindingCatalog.generic;
 import static com.zoutrankil.data.service.ReadBindingCatalog.typed;
 

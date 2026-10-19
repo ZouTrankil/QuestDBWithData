@@ -1,14 +1,13 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.L2EventResponseFeaturesDataset;
-import com.zoutrankil.data.domain.L2EventResponseFeatures;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeatures;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.l2.port.L2EventResponseFeaturesTarget;
@@ -175,7 +174,7 @@ public final class L2EventResponseFeaturesJobService implements SyncJobOwner {
         LocalDate to = rows.stream().map(L2EventResponseFeatures::tradeDate).max(LocalDate::compareTo).orElseThrow();
         if (java.time.temporal.ChronoUnit.DAYS.between(from, to) >= 31)
             throw new IllegalArgumentException("D088 prepared write exceeds its 31-day source bound");
-        var expectedByKey = new LinkedHashMap<com.zoutrankil.data.domain.L2EventResponseFeaturesKey,
+        var expectedByKey = new LinkedHashMap<com.zoutrankil.data.domain.l2.L2EventResponseFeaturesKey,
                 L2EventResponseFeatures>();
         for (var row : rows) {
             if (expectedByKey.putIfAbsent(row.key(), row) != null)
@@ -248,8 +247,8 @@ public final class L2EventResponseFeaturesJobService implements SyncJobOwner {
         var writer = port();
         var adapter = new L2EventResponseFeaturesSyncAdapter(source, plan.source(), symbols, definition(), writer);
         var ledger = new SyncRunLedger(ledgerPath);
-        var runner = new SyncJobRunner<com.zoutrankil.data.domain.L2EventResponseFeatures,
-                com.zoutrankil.data.domain.L2EventResponseFeaturesKey>(ledger, new DatasetIntervalLock(ledgerPath));
+        var runner = new SyncJobRunner<com.zoutrankil.data.domain.l2.L2EventResponseFeatures,
+                com.zoutrankil.data.domain.l2.L2EventResponseFeaturesKey>(ledger, new DatasetIntervalLock(ledgerPath));
         String runId = "d088-" + RUN_STAMP.format(java.time.Instant.now().atZone(ZoneId.of("UTC")))
                 + "-" + UUID.randomUUID();
         java.util.function.BooleanSupplier cancelled = () -> {

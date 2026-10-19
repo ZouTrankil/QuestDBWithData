@@ -1,6 +1,6 @@
 package com.zoutrankil.data.repository;
 
-import com.zoutrankil.data.domain.BacktestDailyViewDataset;
+import com.zoutrankil.data.domain.derived.BacktestDailyViewDataset;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.io.IOException;

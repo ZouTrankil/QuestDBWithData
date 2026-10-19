@@ -1,5 +1,7 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.feature.StockFactorKey;
+import com.zoutrankil.data.domain.stock.feature.StockFactor;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.stock.mapper.StockFactorMapper;

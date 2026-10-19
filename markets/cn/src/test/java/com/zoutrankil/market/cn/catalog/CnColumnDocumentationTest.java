@@ -36,7 +36,7 @@ class CnColumnDocumentationTest {
         try (var input = getClass().getResourceAsStream("/model-docs/collected-fields.json")) {
             var root = new ObjectMapper().readTree(input);
             for (var object : root.required("objects")) {
-                var type = Class.forName("com.zoutrankil.data.domain.table." + object.required("modelClass").asText());
+                var type = Class.forName(object.required("modelPackage").asText() + "." + object.required("modelClass").asText());
                 assertTrue(type.isRecord());
                 var components = Arrays.stream(type.getRecordComponents())
                         .collect(Collectors.toMap(java.lang.reflect.RecordComponent::getName, component -> component.getType().getSimpleName()));

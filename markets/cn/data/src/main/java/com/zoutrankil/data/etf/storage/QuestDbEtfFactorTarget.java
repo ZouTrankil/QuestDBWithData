@@ -1,8 +1,8 @@
 package com.zoutrankil.data.etf.storage;
 
-import com.zoutrankil.data.domain.EtfFactor;
-import com.zoutrankil.data.domain.EtfFactorKey;
-import com.zoutrankil.data.domain.EtfFactorDataset;
+import com.zoutrankil.data.domain.fund.EtfFactor;
+import com.zoutrankil.data.domain.fund.EtfFactorKey;
+import com.zoutrankil.data.domain.fund.EtfFactorDataset;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
 import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.port.EtfWriteSession;

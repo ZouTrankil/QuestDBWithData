@@ -1,6 +1,6 @@
 package com.zoutrankil.data.web;
 
-import com.zoutrankil.data.domain.StockBasicLatest;
+import com.zoutrankil.data.domain.stock.basic.StockBasicLatest;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;

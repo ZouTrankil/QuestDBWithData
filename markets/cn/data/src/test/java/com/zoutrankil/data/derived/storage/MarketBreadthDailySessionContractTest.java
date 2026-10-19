@@ -1,5 +1,7 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.derived.MarketBreadthDailySnapshot;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.derived.application.MarketBreadthDailyMaterializeAdapter;
 import com.zoutrankil.data.derived.domain.MarketBreadthDailyFullSourceScope;

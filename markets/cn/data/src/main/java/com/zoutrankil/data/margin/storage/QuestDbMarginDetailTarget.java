@@ -1,6 +1,6 @@
 package com.zoutrankil.data.margin.storage;
 
-import com.zoutrankil.data.domain.MarginDetailDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginDetailDataset;
 import com.zoutrankil.data.margin.port.MarginDetailTarget;
 import com.zoutrankil.data.margin.port.MarginDetailWriteSession;
 import com.zoutrankil.data.repository.StaticTargetIdentity;

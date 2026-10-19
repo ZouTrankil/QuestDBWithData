@@ -2,15 +2,12 @@ package com.zoutrankil.data.index.storage;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.IndexMonthlyState.*;
-
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.IndexMonthly;
-import com.zoutrankil.data.domain.IndexMonthlyDataset;
-import com.zoutrankil.data.domain.IndexMonthlyKey;
+import com.zoutrankil.data.domain.index.IndexMonthly;
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
+import com.zoutrankil.data.domain.index.IndexMonthlyKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.security.MessageDigest;
@@ -103,7 +100,7 @@ public final class IndexMonthlyStorage implements IndexMonthlyTables.Table {
     }
     private static long micros(LocalDate day) { return new TemporalValues.CalendarTimestamp(day).storageEpoch(TemporalValues.EpochUnit.MICROS); }
     private static void requireWindow(String code, LocalDate from, LocalDate to) {
-        if (!com.zoutrankil.data.domain.policy.IndexMonthlyUniverse.validProviderCode(code)
+        if (!com.zoutrankil.data.domain.index.policy.IndexMonthlyUniverse.validProviderCode(code)
                 || from == null || to == null || from.isAfter(to)) throw new IllegalArgumentException("Bounded D022 code/month window required");
     }
 }

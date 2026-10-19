@@ -4,7 +4,7 @@ import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.calendar.port.SseCalendarWindowReadPort;
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.flow.application.*;
 import com.zoutrankil.data.flow.port.*;
 import com.zoutrankil.data.margin.application.*;

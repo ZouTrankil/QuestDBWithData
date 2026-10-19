@@ -1,5 +1,8 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.index.IndexWeightKey;
+import com.zoutrankil.data.domain.index.IndexWeightDataset;
+import com.zoutrankil.data.domain.index.IndexWeight;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.storage.IndexWeightWritePort;
 import com.zoutrankil.data.repository.*;

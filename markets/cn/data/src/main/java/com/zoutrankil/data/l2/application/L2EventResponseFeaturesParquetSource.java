@@ -1,11 +1,10 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.L2EventResponseFeatures;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeatures;
 import com.zoutrankil.data.l2.mapper.L2EventResponseFeaturesMapper;
 import com.zoutrankil.data.l2.domain.L2EventResponseFeaturesRows;
 import java.io.BufferedReader;
@@ -111,7 +110,7 @@ public final class L2EventResponseFeaturesParquetSource {
         JsonNode completion = null;
         Set<String> selected = Set.copyOf(symbols);
         Set<String> cursors = new HashSet<>();
-        Set<com.zoutrankil.data.domain.L2EventResponseFeaturesKey> keys = new HashSet<>();
+        Set<com.zoutrankil.data.domain.l2.L2EventResponseFeaturesKey> keys = new HashSet<>();
         try (BufferedReader reader = Files.newBufferedReader(output, StandardCharsets.UTF_8)) {
             String line;
             while ((line = reader.readLine()) != null) {

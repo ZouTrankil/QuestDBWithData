@@ -2,8 +2,8 @@ package com.zoutrankil.data.l2.application;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.L2DailyFeatureField;
-import com.zoutrankil.data.domain.L2DailyFeatures;
+import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
+import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

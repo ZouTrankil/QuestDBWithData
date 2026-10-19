@@ -2,13 +2,11 @@ package com.zoutrankil.data.index.mapper;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.DcIndexState.*;
-
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.TushareDcIndexDto;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.DcIndex;
-import com.zoutrankil.data.domain.DcIndexKey;
+import com.zoutrankil.data.domain.stock.concept.DcIndex;
+import com.zoutrankil.data.domain.stock.concept.DcIndexKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.math.BigDecimal;
 import java.time.LocalDate;

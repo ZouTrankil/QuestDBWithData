@@ -2,7 +2,7 @@ package com.zoutrankil.data.derived.storage;
 
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadQuery;
-import com.zoutrankil.data.domain.EquityStyleMonthlyDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;

@@ -1,9 +1,9 @@
 package com.zoutrankil.data.service;
-import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
 
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
+import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
 import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
 import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;

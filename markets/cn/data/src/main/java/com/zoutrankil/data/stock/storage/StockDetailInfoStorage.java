@@ -1,11 +1,12 @@
 package com.zoutrankil.data.stock.storage;
+
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.zoutrankil.data.stock.domain.StockDetailState;
 import com.zoutrankil.data.stock.domain.StockDetailState.*;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.StockDetailInfoRow;
+import com.zoutrankil.data.domain.stock.basic.table.StockDetailInfoRow;
 import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
 import com.zoutrankil.data.stock.domain.policy.StockDetailInfoMerge;
 import org.springframework.jdbc.core.JdbcTemplate;

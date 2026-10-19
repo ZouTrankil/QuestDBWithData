@@ -1,4 +1,5 @@
 package com.zoutrankil.data.stock.storage;
+
 import com.zoutrankil.data.stock.port.*;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.domain.DailyBasicTargetRange;
@@ -20,7 +21,7 @@ public final class DailyQuestDbTarget implements DailyTarget {
     @Override public String tableName() { return table; }
     @Override public String targetId() throws Exception {
         DatasetDefinition.identifier(table);
-        if(!"daily".equals(table)) com.zoutrankil.data.domain.policy.IsolatedTablePolicy.DAILY.require(table);
+        if(!"daily".equals(table)) com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy.DAILY.require(table);
         var rows = jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name=?", table);
         if (rows.size() != 1 || !(rows.getFirst().get("id") instanceof Number)
                 || rows.getFirst().get("directoryName") == null) {

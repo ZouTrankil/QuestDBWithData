@@ -1,113 +1,57 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
-
-
 import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
-
-
-
 import com.fasterxml.jackson.databind.JsonNode;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.fasterxml.jackson.databind.node.ArrayNode;
-
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import com.zoutrankil.data.cli.CommandLineRunner;
-
 import com.zoutrankil.data.cli.CatalogCommands;
-
 import com.zoutrankil.data.cli.CliCommandRegistry;
-
 import com.zoutrankil.data.cli.L2Commands;
-
 import com.zoutrankil.data.config.QuestDbProperties;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
-
 import com.zoutrankil.data.domain.DatasetReadQuery;
-
 import com.zoutrankil.data.domain.JobDefinitionJson;
-
-import com.zoutrankil.data.domain.L2IntradayBarFeatureField;
-
-import com.zoutrankil.data.domain.L2IntradayBarFeatures;
-
-import com.zoutrankil.data.domain.L2IntradayBarFeaturesDataset;
-
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatureField;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesDataset;
 import com.zoutrankil.data.domain.ReadGroupRequest;
-
 import com.zoutrankil.data.domain.SyncJobDefinition;
-
 import com.zoutrankil.data.domain.SyncRunState;
-
 import com.zoutrankil.data.domain.WriteGroupRequest;
-
 import com.zoutrankil.data.l2.mapper.L2IntradayBarFeaturesMapper;
-
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
-
 import com.zoutrankil.data.l2.storage.L2DatasetManifestReadRepository;
-
 import com.zoutrankil.data.l2.storage.L2IntradayBarFeaturesReadRepository;
-
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
-
 import io.questdb.client.QuestDB;
-
 import java.io.ByteArrayOutputStream;
-
 import java.io.IOException;
-
 import java.io.PrintStream;
-
 import java.nio.charset.StandardCharsets;
-
 import java.nio.file.Files;
-
 import java.nio.file.Path;
-
 import java.time.Duration;
-
 import java.time.Instant;
-
 import java.time.LocalDate;
-
 import java.time.ZoneId;
-
 import java.util.ArrayList;
-
 import java.util.Comparator;
-
 import java.util.HashSet;
-
 import java.util.LinkedHashMap;
-
 import java.util.List;
-
 import java.util.Map;
-
 import java.util.Set;
-
 import java.util.UUID;
-
 import java.util.concurrent.CancellationException;
-
 import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.Test;
-
 import org.springframework.boot.DefaultApplicationArguments;
-
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-
 import static org.junit.jupiter.api.Assertions.*;
-
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 
@@ -598,7 +542,7 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
         var rows = new ArrayList<L2IntradayBarFeatures>();
 
-        Set<com.zoutrankil.data.domain.L2IntradayBarFeaturesKey> keys = new HashSet<>();
+        Set<com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey> keys = new HashSet<>();
 
         int completions = 0;
 

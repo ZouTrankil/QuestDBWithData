@@ -1,8 +1,7 @@
 package com.zoutrankil.data.index.port;
 
 import com.zoutrankil.data.index.domain.ThsIndexState;
-
-import com.zoutrankil.data.domain.ThsIndex;
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
 import com.zoutrankil.data.index.domain.ThsIndexState.*;
 import java.nio.file.Path;
 import java.util.List;

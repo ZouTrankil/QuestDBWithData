@@ -1,7 +1,9 @@
 package com.zoutrankil.data.margin.storage;
 
+import com.zoutrankil.data.domain.stock.margin.MarginZrzKey;
+import com.zoutrankil.data.domain.stock.margin.MarginZrzDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginZrz;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.margin.mapper.MarginZrzMapper;

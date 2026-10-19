@@ -2,8 +2,8 @@ package com.zoutrankil.data.derived.mapper;
 
 
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.MarketBreadthDaily;
-import com.zoutrankil.data.domain.materializedview.MarketBreadthDailyMaterializedView;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
+import com.zoutrankil.data.domain.derived.materializedview.MarketBreadthDailyMaterializedView;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;

@@ -1,7 +1,9 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyViewKey;
+import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyViewDataset;
+import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyView;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.mapper.EtfMarketOverviewDailyViewMapper;
 import java.time.LocalDate;

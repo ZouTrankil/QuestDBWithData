@@ -1,5 +1,7 @@
 package com.zoutrankil.data.flow.application;
 
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThs;
+import com.zoutrankil.data.domain.stock.margin.MarginDetail;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.flow.port.*;
 import com.zoutrankil.data.flow.storage.*;

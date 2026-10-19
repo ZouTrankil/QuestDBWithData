@@ -1,4 +1,7 @@
 package com.zoutrankil.data.index.port;
+
+import com.zoutrankil.data.domain.stock.concept.DcIndexKey;
+import com.zoutrankil.data.domain.stock.concept.DcIndex;
 import com.zoutrankil.data.domain.*;
 import java.util.*;
 import java.time.*;

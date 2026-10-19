@@ -2,6 +2,8 @@
 
 Batch 由 A 股数据 API 常驻进程托管，用 SQLite 记录任务、写入和恢复状态。`jdb.enabled` 默认关闭；启用后管理 API、Quartz 和任务随市场进程启动及关闭，有限 CLI 不启动。启动和配置看[配置说明](configuration.md)，请求字段看[接口定义](batch/openapi.yaml)。同一运行记录库只允许一个持有者。迁移时先停旧独立 Batch，再启市场托管，继续使用原数据库和归档目录。
 
+当前 `source_*` 写入固定使用 `jdb_test_*` 隔离目标；`jdb.production-enabled=true` 会被启动校验拒绝。启用 Batch 托管或调度不等于接管正式表。正式 `data.*` owner、默认目标和接管步骤见[清单](formal-sync-takeover.md)。
+
 ## 先采集，再写入
 
 ```sh

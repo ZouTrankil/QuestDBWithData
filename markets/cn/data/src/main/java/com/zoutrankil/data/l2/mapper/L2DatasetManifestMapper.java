@@ -2,9 +2,9 @@ package com.zoutrankil.data.l2.mapper;
 
 import com.zoutrankil.data.client.dto.L2DatasetManifestParquetDto;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.L2DatasetManifest;
-import com.zoutrankil.data.domain.L2DatasetManifestDataset;
-import com.zoutrankil.data.domain.table.L2DatasetManifestRow;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2DatasetManifestDataset;
+import com.zoutrankil.data.domain.l2.table.L2DatasetManifestRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.time.Instant;

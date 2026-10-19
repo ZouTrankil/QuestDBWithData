@@ -2,7 +2,7 @@ package com.zoutrankil.data.l2.application;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.zoutrankil.data.domain.L2IntradayBarFeatures;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
 import com.zoutrankil.data.service.SyncJobRunner;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

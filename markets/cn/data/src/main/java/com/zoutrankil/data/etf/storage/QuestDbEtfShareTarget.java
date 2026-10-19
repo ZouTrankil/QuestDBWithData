@@ -1,8 +1,8 @@
 package com.zoutrankil.data.etf.storage;
 
-import com.zoutrankil.data.domain.EtfShare;
-import com.zoutrankil.data.domain.EtfShareKey;
-import com.zoutrankil.data.domain.EtfShareDataset;
+import com.zoutrankil.data.domain.fund.EtfShare;
+import com.zoutrankil.data.domain.fund.EtfShareKey;
+import com.zoutrankil.data.domain.fund.EtfShareDataset;
 import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.port.EtfWriteSession;
 import com.zoutrankil.data.repository.StaticTargetIdentity;

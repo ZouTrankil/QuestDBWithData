@@ -1,11 +1,9 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.index.IndexCatalogDataset;
 import com.zoutrankil.data.index.storage.QuestDbIndexCatalogTarget;
-
 import com.zoutrankil.data.index.storage.IndexCatalogStorage;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.mapper.IndexCatalogMapper;

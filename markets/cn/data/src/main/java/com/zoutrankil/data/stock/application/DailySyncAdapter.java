@@ -1,7 +1,9 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.market.DailyMarketBar;
+import com.zoutrankil.data.domain.stock.market.DailyDataset;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 import com.zoutrankil.data.stock.port.DailyWriteSession;

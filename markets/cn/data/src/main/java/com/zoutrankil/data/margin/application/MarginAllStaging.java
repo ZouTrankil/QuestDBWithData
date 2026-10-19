@@ -1,18 +1,15 @@
 package com.zoutrankil.data.margin.application;
 
 import com.zoutrankil.data.margin.port.MarginAllStagingPort;
-
 import com.zoutrankil.data.margin.domain.MarginAllState;
 import com.zoutrankil.data.margin.domain.MarginAllState.*;
 import com.zoutrankil.data.margin.domain.MarginAllRows;
 import com.zoutrankil.data.margin.port.MarginAllTables;
-
 import com.zoutrankil.data.repository.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.MarginAll;
-import com.zoutrankil.data.domain.MarginAllKey;
+import com.zoutrankil.data.domain.stock.margin.MarginAll;
+import com.zoutrankil.data.domain.stock.margin.MarginAllKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.margin.application.MarginAllSource;
@@ -35,7 +32,7 @@ public final class MarginAllStaging {
 
     public Prepared prepare(String target,String logicalTargetId,String physicalTargetId,String runId,
             SyncJobDefinition.FrozenRequest request,Path runEvidence,BooleanSupplier cancelled)throws Exception {
-        com.zoutrankil.data.domain.MarginAllDataset.requireIsolatedTable(target);
+        com.zoutrankil.data.domain.stock.margin.MarginAllDataset.requireIsolatedTable(target);
         Objects.requireNonNull(request);check(cancelled);Path root=runEvidence.toAbsolutePath().normalize();
         Files.createDirectories(root);if(Files.isSymbolicLink(root))throw new IOException("D028 evidence root cannot be symlinked");
         String requestFingerprint=SyncRequestIdentity.fingerprint(request,logicalTargetId);
@@ -50,7 +47,7 @@ public final class MarginAllStaging {
         if(!tables.physicalTargetId(target,before.identity()).equals(physicalTargetId))
             throw new IllegalStateException("D028 physical target changed before full-snapshot stage preparation");
         var outside=targetStorage.outside(request.from(),request.to());
-        String stage=com.zoutrankil.data.domain.MarginAllDataset.ISOLATED_PREFIX+"stage_"+UUID.randomUUID().toString().replace("-","");
+        String stage=com.zoutrankil.data.domain.stock.margin.MarginAllDataset.ISOLATED_PREFIX+"stage_"+UUID.randomUUID().toString().replace("-","");
         var stageIntent=root.resolve("stage").resolve(stage+"-intent.json");Files.createDirectories(stageIntent.getParent());
         if(Files.isSymbolicLink(stageIntent.getParent())||Files.exists(stageIntent,LinkOption.NOFOLLOW_LINKS))throw new IOException("D028 unique stage-intent path required");
         var body=new LinkedHashMap<String,Object>();body.put("dataset","margin_all");body.put("phase","PREPARING");

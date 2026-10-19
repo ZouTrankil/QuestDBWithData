@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.L2T0TrainingLabelField;
-import com.zoutrankil.data.domain.L2T0TrainingLabelsDataset;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelField;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsDataset;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -60,11 +60,11 @@ class L2T0TrainingLabelsMappingTest {
     @Test
     void completeKeyRequiresCanonicalSymbolAndWholeMinute() {
         assertThrows(IllegalArgumentException.class,
-                () -> new com.zoutrankil.data.domain.L2T0TrainingLabelsKey("000001", MINUTE));
+                () -> new com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey("000001", MINUTE));
         assertThrows(IllegalArgumentException.class,
-                () -> new com.zoutrankil.data.domain.L2T0TrainingLabelsKey("000001.SZ", MINUTE.plusSeconds(1)));
-        assertNotEquals(new com.zoutrankil.data.domain.L2T0TrainingLabelsKey("000001.SZ", MINUTE),
-                new com.zoutrankil.data.domain.L2T0TrainingLabelsKey("000001.SZ", MINUTE.plusSeconds(60)));
+                () -> new com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey("000001.SZ", MINUTE.plusSeconds(1)));
+        assertNotEquals(new com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey("000001.SZ", MINUTE),
+                new com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey("000001.SZ", MINUTE.plusSeconds(60)));
     }
 
     private static ObjectNode sourceRow() {

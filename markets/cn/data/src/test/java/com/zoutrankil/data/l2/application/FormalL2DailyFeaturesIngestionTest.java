@@ -1,9 +1,9 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.domain.IntervalLockStore;
-import com.zoutrankil.data.domain.L2DailyFeatureField;
-import com.zoutrankil.data.domain.L2DailyFeatures;
-import com.zoutrankil.data.domain.L2DailyFeaturesKey;
+import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
+import com.zoutrankil.data.domain.l2.L2DailyFeatures;
+import com.zoutrankil.data.domain.l2.L2DailyFeaturesKey;
 import com.zoutrankil.data.l2.port.L2DailyFeaturesWriteSession;
 import com.zoutrankil.data.l2.domain.FormalL2Frontier;
 import com.zoutrankil.data.l2.storage.PersistentFormalL2IntervalAuthority;

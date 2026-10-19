@@ -1,14 +1,13 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.market.DailyMarketBar;
+import com.zoutrankil.data.domain.stock.market.DailyDataset;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.stock.port.DailyTarget;
-
 import com.zoutrankil.data.stock.storage.StockDetailInfoReadRepository;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
-
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
-
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import java.nio.file.*;

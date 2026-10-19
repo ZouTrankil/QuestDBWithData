@@ -1,9 +1,7 @@
 package com.zoutrankil.data.stock.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.stock.storage.DailyWritePort;
-
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import org.junit.jupiter.api.Test;
 import java.time.*;
@@ -21,8 +19,8 @@ class DailyCheckpointTest {
         assertFalse(DailyCheckpoint.sameRows(List.of(first, second), List.of(first), DailyWritePort.CODEC));
     }
 
-    private static com.zoutrankil.data.domain.DailyMarketBar row(String code, Double close) {
-        return new com.zoutrankil.data.domain.DailyMarketBar(code, LocalDate.of(2026, 9, 28),
+    private static com.zoutrankil.data.domain.stock.market.DailyMarketBar row(String code, Double close) {
+        return new com.zoutrankil.data.domain.stock.market.DailyMarketBar(code, LocalDate.of(2026, 9, 28),
                 9.0, 11.0, 8.0, close, 9.5, 0.5, 5.0, 100.0, 1000.0, null, null);
     }
 

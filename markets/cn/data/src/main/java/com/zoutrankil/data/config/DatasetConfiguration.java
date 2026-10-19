@@ -4,7 +4,7 @@ import com.zoutrankil.data.service.DatasetRegistry;
 import com.zoutrankil.data.domain.DatasetImplementation;
 import org.springframework.context.annotation.*;
 import java.util.*;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.service.SyncJobRegistry;
 

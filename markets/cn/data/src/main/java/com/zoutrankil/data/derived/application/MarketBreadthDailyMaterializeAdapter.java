@@ -1,13 +1,12 @@
 package com.zoutrankil.data.derived.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.MarketBreadthDaily;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.derived.port.MarketBreadthDailySession;
 import com.zoutrankil.data.derived.domain.MarketBreadthDailyPolicy;
-import com.zoutrankil.data.domain.MarketBreadthDailySnapshot;
+import com.zoutrankil.data.domain.derived.MarketBreadthDailySnapshot;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

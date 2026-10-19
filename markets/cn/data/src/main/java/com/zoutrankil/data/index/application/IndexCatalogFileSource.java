@@ -3,10 +3,9 @@ package com.zoutrankil.data.index.application;
 
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.client.dto.IndexCatalogSourceRow;
-import com.zoutrankil.data.domain.IndexCatalogEntry;
-import com.zoutrankil.data.domain.IndexCatalogDataset;
+import com.zoutrankil.data.domain.index.IndexCatalogEntry;
+import com.zoutrankil.data.domain.index.IndexCatalogDataset;
 import com.zoutrankil.data.index.mapper.IndexCatalogMapper;
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import java.nio.*;

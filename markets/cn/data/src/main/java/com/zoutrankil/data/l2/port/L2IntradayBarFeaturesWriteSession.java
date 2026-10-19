@@ -1,5 +1,7 @@
 package com.zoutrankil.data.l2.port;
 
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.l2.domain.L2IntradayBarFeaturesRows;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;

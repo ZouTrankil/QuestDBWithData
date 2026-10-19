@@ -1,7 +1,7 @@
 package com.zoutrankil.data.stock.domain.policy;
 
 
-import com.zoutrankil.data.domain.StockDetailInfo;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import java.util.*;
 
 /** Bounded incremental merge for the non-deduplicating current-reference table. No missing-row deletion. */

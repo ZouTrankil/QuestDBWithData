@@ -1,11 +1,10 @@
 package com.zoutrankil.data.domain;
 
+import com.zoutrankil.data.domain.stock.market.DailySemantics;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import java.util.*;
-
 import static com.zoutrankil.data.domain.DatasetDefinition.*;
 import static org.junit.jupiter.api.Assertions.*;
 

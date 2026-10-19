@@ -1,14 +1,11 @@
 package com.zoutrankil.data.index.application;
 
+
 import com.zoutrankil.data.index.port.IndexDailyMarketTarget;
 import com.zoutrankil.data.index.domain.IndexDailyMarketTargetRange;
-
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.policy.IndexDailyMarketUniverse;
-
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
-
+import com.zoutrankil.data.domain.index.policy.IndexDailyMarketUniverse;
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.index.mapper.IndexDailyMarketMapper;

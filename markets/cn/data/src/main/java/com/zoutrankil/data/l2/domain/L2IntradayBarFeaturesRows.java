@@ -1,5 +1,8 @@
 package com.zoutrankil.data.l2.domain;
 
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatureField;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.*;

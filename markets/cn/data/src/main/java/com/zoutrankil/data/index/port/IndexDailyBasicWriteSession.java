@@ -1,7 +1,7 @@
 package com.zoutrankil.data.index.port;
 
-import com.zoutrankil.data.domain.IndexDailyBasic;
-import com.zoutrankil.data.domain.IndexDailyBasicKey;
+import com.zoutrankil.data.domain.index.IndexDailyBasic;
+import com.zoutrankil.data.domain.index.IndexDailyBasicKey;
 import com.zoutrankil.data.index.domain.IndexDailyBasicTargetRange;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 import java.time.LocalDate;

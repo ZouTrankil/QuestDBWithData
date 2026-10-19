@@ -1,10 +1,8 @@
 package com.zoutrankil.data.index.application;
 
 import com.zoutrankil.data.index.domain.policy.IndexMembershipMerge;
-
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.IndexMembership;
+import com.zoutrankil.data.domain.index.IndexMembership;
 import org.junit.jupiter.api.Test;
 import java.time.*;
 import java.util.*;

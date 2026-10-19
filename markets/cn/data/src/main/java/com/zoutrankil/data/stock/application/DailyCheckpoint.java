@@ -1,7 +1,8 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.market.DailyMarketBar;
+import com.zoutrankil.data.domain.stock.market.DailyDataset;
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.port.DailyWriteSession;

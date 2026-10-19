@@ -1,5 +1,7 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockStDailyKey;
+import com.zoutrankil.data.domain.stock.basic.StockStDaily;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.service.*;
 import com.zoutrankil.data.repository.FileEvidenceStore;

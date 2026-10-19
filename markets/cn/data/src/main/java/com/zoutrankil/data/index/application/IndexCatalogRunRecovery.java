@@ -1,13 +1,11 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.index.IndexCatalogEntry;
 import com.zoutrankil.data.index.domain.IndexCatalogState;
 import com.zoutrankil.data.index.domain.policy.IndexCatalogMerge;
 import com.zoutrankil.data.index.port.IndexCatalogTarget;
-
 import com.zoutrankil.data.index.mapper.IndexCatalogMapper;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import java.nio.file.*;
@@ -124,7 +122,7 @@ public final class IndexCatalogRunRecovery {
                 intent.id(),receipt.toString(),null);
     }
 
-    private static String fingerprint(List<com.zoutrankil.data.domain.table.IndexRow> rows) throws Exception {
+    private static String fingerprint(List<com.zoutrankil.data.domain.index.table.IndexRow> rows) throws Exception {
         byte[] bytes=JobDefinitionJson.mapper().writeValueAsBytes(rows);
         return FileEvidenceStore.sha256(bytes);
     }

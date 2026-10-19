@@ -1,5 +1,7 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.domain.*;

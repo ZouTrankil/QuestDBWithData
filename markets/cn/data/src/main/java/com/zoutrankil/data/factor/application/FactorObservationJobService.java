@@ -1,7 +1,7 @@
 package com.zoutrankil.data.factor.application;
 
 import com.zoutrankil.data.domain.SyncJobDefinition;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.factor.domain.GlobalFactorObservation;
 import com.zoutrankil.data.service.SyncJobRunner;
 import java.nio.file.Path;

@@ -1,6 +1,6 @@
 package com.zoutrankil.data.index.port;
 
-import com.zoutrankil.data.domain.IndexMembership;
+import com.zoutrankil.data.domain.index.IndexMembership;
 import com.zoutrankil.data.index.domain.IndexMembershipState.*;
 import java.util.List;
 

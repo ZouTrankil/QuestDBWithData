@@ -4,8 +4,8 @@ package com.zoutrankil.data.l2.mapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.L2IntradayBarFeatureField;
-import com.zoutrankil.data.domain.L2IntradayBarFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatureField;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesDataset;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -66,7 +66,7 @@ class L2IntradayBarFeaturesMappingTest {
         var mapper = new L2IntradayBarFeaturesMapper();
         var row = mapper.fromParquet(sourceRow(), DAY);
         assertThrows(IllegalArgumentException.class,
-                () -> new com.zoutrankil.data.domain.L2IntradayBarFeaturesKey(
+                () -> new com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey(
                         "000001.SZ", MINUTE.plusSeconds(1)));
         var values = new LinkedHashMap<>(mapper.values(row).asMap());
         values.put("symbol", "000001");

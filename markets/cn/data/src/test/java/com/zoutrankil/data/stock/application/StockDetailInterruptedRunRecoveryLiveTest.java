@@ -1,8 +1,8 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
 import com.zoutrankil.data.service.*;
 import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
-
 import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
 import com.zoutrankil.data.stock.application.StockDetailInfoPublication;
 import com.zoutrankil.data.stock.application.StockDetailInfoSource;
@@ -10,7 +10,6 @@ import com.zoutrankil.data.stock.storage.StockDetailInfoStaging;
 import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
 import com.zoutrankil.data.stock.application.StockDetailRecoveryEvidence;
 import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
@@ -19,11 +18,9 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.*;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /** Simulate an escaped Error after the first rename and recover the entire owner ledger. */

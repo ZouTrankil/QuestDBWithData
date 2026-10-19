@@ -1,5 +1,40 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDcDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDataset;
+import com.zoutrankil.data.domain.stock.market.StockSuspendDataset;
+import com.zoutrankil.data.domain.stock.market.StockLimitDataset;
+import com.zoutrankil.data.domain.stock.market.DailyDataset;
+import com.zoutrankil.data.domain.stock.market.DailyBasicDataset;
+import com.zoutrankil.data.domain.stock.feature.StockFactorDataset;
+import com.zoutrankil.data.domain.stock.concept.ThsMemberDataset;
+import com.zoutrankil.data.domain.stock.concept.ThsIndexDataset;
+import com.zoutrankil.data.domain.stock.concept.DcIndexDataset;
+import com.zoutrankil.data.domain.stock.basic.StockStDailyDataset;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshot;
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
+import com.zoutrankil.data.domain.stock.basic.StockBasic;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendarDataset;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsDataset;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeaturesDataset;
+import com.zoutrankil.data.domain.index.IndexWeightDataset;
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
+import com.zoutrankil.data.domain.index.IndexMembershipDataset;
+import com.zoutrankil.data.domain.index.IndexDailyMarketDataset;
+import com.zoutrankil.data.domain.index.IndexDailyBasicDataset;
+import com.zoutrankil.data.domain.index.IndexCatalogDataset;
+import com.zoutrankil.data.domain.fund.EtfShareDataset;
+import com.zoutrankil.data.domain.fund.EtfPortfolioDataset;
+import com.zoutrankil.data.domain.fund.EtfFactorDataset;
+import com.zoutrankil.data.domain.fund.EtfDailyDataset;
+import com.zoutrankil.data.domain.fund.EtfBasicDataset;
+import com.zoutrankil.data.domain.fund.EtfAdjDataset;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
 import com.zoutrankil.data.l2.application.L2EventResponseFeaturesJobService;
 import com.zoutrankil.data.l2.application.L2EventResponseFeaturesPreparedWriteAdapter;
 import com.zoutrankil.data.l2.application.L2IntradayBarFeaturesJobService;
@@ -9,12 +44,10 @@ import com.zoutrankil.data.l2.application.L2T0TrainingLabelsPreparedWriteAdapter
 import com.zoutrankil.data.l2.mapper.L2EventResponseFeaturesMapper;
 import com.zoutrankil.data.l2.mapper.L2IntradayBarFeaturesMapper;
 import com.zoutrankil.data.l2.mapper.L2T0TrainingLabelsMapper;
-
 import com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService;
 import com.zoutrankil.data.derived.application.MacroCoreMonthlyJobService;
 import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
 import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
-
 import com.zoutrankil.data.flow.application.MoneyflowJobService;
 import com.zoutrankil.data.flow.mapper.MoneyflowMapper;
 import com.zoutrankil.data.flow.application.MoneyflowThsJobService;
@@ -24,7 +57,6 @@ import com.zoutrankil.data.flow.mapper.MoneyflowDcMapper;
 import com.zoutrankil.data.flow.application.MoneyflowHsgtJobService;
 import com.zoutrankil.data.flow.application.MoneyflowHsgtPublication;
 import com.zoutrankil.data.flow.mapper.MoneyflowHsgtMapper;
-
 import com.zoutrankil.data.index.application.DcIndexJobService;
 import com.zoutrankil.data.index.application.IndexCatalogJobService;
 import com.zoutrankil.data.index.application.IndexCatalogPreparedWriteAdapter;
@@ -44,7 +76,6 @@ import com.zoutrankil.data.index.mapper.IndexDailyBasicMapper;
 import com.zoutrankil.data.index.mapper.IndexDailyMarketMapper;
 import com.zoutrankil.data.index.mapper.IndexMonthlyMapper;
 import com.zoutrankil.data.index.mapper.IndexWeightMapper;
-
 import com.zoutrankil.data.stock.application.DailyJobService;
 import com.zoutrankil.data.stock.application.DailyBasicJobService;
 import com.zoutrankil.data.stock.application.StockBasicJobService;
@@ -61,21 +92,18 @@ import com.zoutrankil.data.stock.mapper.StockStDailyMapper;
 import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
 import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
 import com.zoutrankil.data.stock.application.StaticStockDetailWriteAdapter;
-
 import com.zoutrankil.data.etf.application.EtfBasicJobService;
 import com.zoutrankil.data.etf.mapper.EtfBasicMapper;
 import com.zoutrankil.data.etf.application.EtfPortfolioJobService;
 import com.zoutrankil.data.etf.mapper.EtfPortfolioMapper;
 import com.zoutrankil.data.etf.application.EtfShareJobService;
 import com.zoutrankil.data.etf.mapper.EtfShareMapper;
-
 import com.zoutrankil.data.etf.application.EtfDailyJobService;
 import com.zoutrankil.data.etf.mapper.EtfDailyMapper;
 import com.zoutrankil.data.etf.application.EtfAdjJobService;
 import com.zoutrankil.data.etf.mapper.EtfAdjMapper;
 import com.zoutrankil.data.etf.application.EtfFactorJobService;
 import com.zoutrankil.data.etf.mapper.EtfFactorMapper;
-
 import com.zoutrankil.data.group.port.WriteGroupWriters;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.calendar.mapper.ExchangeCalendarMapper;

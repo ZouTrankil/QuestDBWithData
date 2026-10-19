@@ -72,4 +72,4 @@ Python 默认通过 `JAVA_DATA_API_URL`、`JAVA_DATA_API_TOKEN` 读取 Java 已�
 
 ## 新评分的来源清单
 
-新评分需要批准的来源覆盖清单和 SHA-256，缺少时停止发布。配置和限制见[来源核验](strategy-source-coverage.md)。上游自动出具清单仍待接入。
+新评分需要批准的来源覆盖清单和 SHA-256，缺少时停止发布。已支持用独立批准的预期键和真实上游运行自动组装清单；生产批准材料和历史原件仍需齐备。配置和限制见[来源核验](strategy-source-coverage.md)，正式来源接管见[清单](formal-sync-takeover.md)。

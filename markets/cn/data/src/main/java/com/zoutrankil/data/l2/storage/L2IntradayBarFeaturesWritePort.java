@@ -3,13 +3,12 @@ package com.zoutrankil.data.l2.storage;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.l2.port.L2IntradayBarFeaturesWriteSession;
 import com.zoutrankil.data.l2.domain.L2IntradayBarFeaturesRows;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.L2IntradayBarFeatureField;
-import com.zoutrankil.data.domain.L2IntradayBarFeatures;
-import com.zoutrankil.data.domain.L2IntradayBarFeaturesDataset;
-import com.zoutrankil.data.domain.L2IntradayBarFeaturesKey;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatureField;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.l2.mapper.L2IntradayBarFeaturesMapper;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;

@@ -1,12 +1,11 @@
 package com.zoutrankil.data.calendar.storage;
 
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendarDataset;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
-
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.ExchangeCalendarRow;
+import com.zoutrankil.data.domain.stock.basic.table.ExchangeCalendarRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.calendar.mapper.ExchangeCalendarMapper;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;

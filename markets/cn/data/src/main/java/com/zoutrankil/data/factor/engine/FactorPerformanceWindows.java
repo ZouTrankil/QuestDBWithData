@@ -1,6 +1,6 @@
 package com.zoutrankil.data.factor.engine;
 
-import com.zoutrankil.data.domain.table.FactorDailyMetricRow;
+import com.zoutrankil.data.domain.derived.table.FactorDailyMetricRow;
 import java.time.*;
 import java.util.*;
 import java.util.function.ToDoubleFunction;

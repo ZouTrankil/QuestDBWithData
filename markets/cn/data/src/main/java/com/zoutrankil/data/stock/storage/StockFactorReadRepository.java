@@ -1,7 +1,9 @@
 package com.zoutrankil.data.stock.storage;
 
+import com.zoutrankil.data.domain.stock.feature.StockFactorKey;
+import com.zoutrankil.data.domain.stock.feature.StockFactorDataset;
+import com.zoutrankil.data.domain.stock.feature.StockFactor;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.StockFactorMapper;
 import org.springframework.stereotype.Repository;

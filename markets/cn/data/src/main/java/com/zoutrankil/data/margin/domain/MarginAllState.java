@@ -1,5 +1,5 @@
 package com.zoutrankil.data.margin.domain;
-import com.zoutrankil.data.domain.MarginAll;
+import com.zoutrankil.data.domain.stock.margin.MarginAll;
 import java.time.LocalDate;
 import java.nio.file.Path;
 import java.util.*;

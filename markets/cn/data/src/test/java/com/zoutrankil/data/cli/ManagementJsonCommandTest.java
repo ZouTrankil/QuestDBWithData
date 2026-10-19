@@ -1,13 +1,12 @@
 package com.zoutrankil.data.cli;
 
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.index.application.IndexCatalogJobService;
-
 import com.zoutrankil.data.stock.application.StockBasicJobService;
 import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
 import com.zoutrankil.data.stock.application.StockBasicSyncService;
 import com.zoutrankil.data.stock.application.StockDetailInfoJobService;
 import com.zoutrankil.data.calendar.application.ExchangeCalendarJobService;
-
 import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.SyncRunLedger;

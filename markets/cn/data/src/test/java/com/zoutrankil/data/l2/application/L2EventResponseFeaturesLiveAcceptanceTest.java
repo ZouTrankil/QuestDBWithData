@@ -1,9 +1,7 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -16,9 +14,9 @@ import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.L2EventResponseFeatureField;
-import com.zoutrankil.data.domain.L2EventResponseFeatures;
-import com.zoutrankil.data.domain.L2EventResponseFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeatureField;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeatures;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeaturesDataset;
 import com.zoutrankil.data.domain.ReadGroupRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
@@ -305,7 +303,7 @@ class L2EventResponseFeaturesLiveAcceptanceTest {
     private static List<L2EventResponseFeatures> parseIndependentCapture(Path path) throws Exception {
         var mapper = new L2EventResponseFeaturesMapper();
         var rows = new ArrayList<L2EventResponseFeatures>();
-        Set<com.zoutrankil.data.domain.L2EventResponseFeaturesKey> keys = new HashSet<>();
+        Set<com.zoutrankil.data.domain.l2.L2EventResponseFeaturesKey> keys = new HashSet<>();
         int completions = 0;
         for (String line : Files.readAllLines(path, StandardCharsets.UTF_8)) {
             JsonNode record = JSON.readTree(line);

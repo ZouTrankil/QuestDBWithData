@@ -1,13 +1,12 @@
 package com.zoutrankil.data.stock.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.zoutrankil.data.client.dto.TushareDailyDto;
-import com.zoutrankil.data.domain.DailyMarketBar;
-import com.zoutrankil.data.domain.DailySemantics;
+import com.zoutrankil.data.domain.stock.market.DailyMarketBar;
+import com.zoutrankil.data.domain.stock.market.DailySemantics;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.stock.mapper.DailyMapper;
@@ -71,7 +70,7 @@ public final class DailySource {
             completion[1] = 0;
             List<String> codes = List.copyOf(Objects.requireNonNull(inventory.get(), "D002 code inventory required on cap"));
             if (codes.isEmpty() || codes.size() > 10000 || new HashSet<>(codes).size() != codes.size()
-                    || codes.stream().anyMatch(code -> !com.zoutrankil.data.domain.StockDetailInfo.validCode(code))) {
+                    || codes.stream().anyMatch(code -> !com.zoutrankil.data.domain.stock.basic.StockDetailInfo.validCode(code))) {
                 throw new IllegalStateException("Bounded unique D002 stock-code inventory required for capped daily response");
             }
             inventoryFingerprint = sha256(String.join("\n", codes).getBytes(java.nio.charset.StandardCharsets.UTF_8));
@@ -93,7 +92,7 @@ public final class DailySource {
             // The 6000-row response was available in memory, but a larger collection still needs full coverage.
             List<String> codes = List.copyOf(Objects.requireNonNull(inventory.get(), "D002 code inventory required on cap"));
             if (codes.isEmpty() || codes.size() > 10000 || new HashSet<>(codes).size() != codes.size()
-                    || codes.stream().anyMatch(code -> !com.zoutrankil.data.domain.StockDetailInfo.validCode(code))) {
+                    || codes.stream().anyMatch(code -> !com.zoutrankil.data.domain.stock.basic.StockDetailInfo.validCode(code))) {
                 throw new IllegalStateException("Bounded unique D002 stock-code inventory required for capped daily response");
             }
             inventoryFingerprint = sha256(String.join("\n", codes).getBytes(java.nio.charset.StandardCharsets.UTF_8));
@@ -176,7 +175,7 @@ public final class DailySource {
                 if (!group.isArray() || group.isEmpty() || group.size() > CODE_GROUP_SIZE)
                     throw new IllegalStateException("Invalid daily fallback code group");
                 for (var code : group) {
-                    if (!code.isTextual() || !com.zoutrankil.data.domain.StockDetailInfo.validCode(code.asText()))
+                    if (!code.isTextual() || !com.zoutrankil.data.domain.stock.basic.StockDetailInfo.validCode(code.asText()))
                         throw new IllegalStateException("Invalid code in daily fallback receipt");
                     allCodes.add(code.asText());
                 }

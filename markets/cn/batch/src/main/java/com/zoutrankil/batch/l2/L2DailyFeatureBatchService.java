@@ -6,7 +6,7 @@ import com.zoutrankil.batch.l2.archive.DfcfCsvParser;
 import com.zoutrankil.batch.l2.L2BatchState.Job;
 import com.zoutrankil.batch.l2.L2BatchState.Outcome;
 import com.zoutrankil.batch.l2.L2BatchState.SourceFingerprint;
-import com.zoutrankil.data.domain.L2DailyFeatureField;
+import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

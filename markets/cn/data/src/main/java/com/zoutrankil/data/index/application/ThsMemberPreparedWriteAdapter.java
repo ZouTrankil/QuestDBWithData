@@ -1,10 +1,9 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.stock.concept.ThsMemberDataset;
+import com.zoutrankil.data.domain.stock.concept.ThsMember;
 import com.zoutrankil.data.index.domain.ThsMemberState;
-
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.mapper.ThsMemberMapper;
 import com.zoutrankil.data.repository.*;

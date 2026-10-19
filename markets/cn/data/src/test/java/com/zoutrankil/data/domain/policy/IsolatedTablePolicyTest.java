@@ -1,7 +1,8 @@
 package com.zoutrankil.data.domain.policy;
 
-import com.zoutrankil.data.domain.EtfFactorDataset;
-import com.zoutrankil.data.domain.IndexMonthlyDataset;
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
+import com.zoutrankil.data.domain.fund.EtfFactorDataset;
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,15 +1,14 @@
 package com.zoutrankil.data.etf.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.zoutrankil.data.domain.EtfShare;
-import com.zoutrankil.data.domain.EtfShareDataset;
-import com.zoutrankil.data.domain.EtfShareKey;
+import com.zoutrankil.data.domain.fund.EtfShare;
+import com.zoutrankil.data.domain.fund.EtfShareDataset;
+import com.zoutrankil.data.domain.fund.EtfShareKey;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.domain.temporal.TemporalValues;

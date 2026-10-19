@@ -1,6 +1,6 @@
 package com.zoutrankil.data.stock.domain;
 
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 
 /** Physical table admission; bounded execution-mode restrictions remain with each job. */
 public final class StockExecutionTables {

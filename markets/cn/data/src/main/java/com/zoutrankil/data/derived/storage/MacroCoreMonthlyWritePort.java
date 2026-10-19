@@ -1,11 +1,13 @@
 package com.zoutrankil.data.derived.storage;
+
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyTargetSnapshot;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyKey;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
 import com.zoutrankil.data.derived.port.MacroCoreMonthlyWriteSession;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlyRows;
-
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;

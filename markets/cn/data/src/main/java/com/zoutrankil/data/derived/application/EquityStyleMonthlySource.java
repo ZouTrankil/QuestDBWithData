@@ -1,13 +1,11 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.derived.EquityStyleMonthly;
 import com.zoutrankil.data.derived.domain.EquityStyleMonthlySourceData;
 import com.zoutrankil.data.derived.domain.EquityStyleMonthlySourceData.*;
 import static com.zoutrankil.data.derived.domain.EquityStyleMonthlySourceData.*;
 import com.zoutrankil.data.derived.port.EquityStyleMonthlySourceReadPort;
-
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;

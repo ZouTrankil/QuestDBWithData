@@ -1,6 +1,6 @@
 package com.zoutrankil.data.flow.storage;
 
-import com.zoutrankil.data.domain.MoneyflowHsgtDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset;
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtState.Snapshot;
 import com.zoutrankil.data.flow.port.*;
 import com.zoutrankil.data.repository.StaticTargetIdentity;

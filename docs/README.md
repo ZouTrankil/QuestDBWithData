@@ -5,8 +5,10 @@
 | 想了解什么 | 看哪篇 |
 | --- | --- |
 | 各模块做什么，代码从哪里看 | [代码结构](code-structure.md) |
+| A 股模块的目录、模型、入口和当前能力 | [markets/cn 介绍](../markets/cn/README.md) |
 | 数据库地址、账号、日志、启动命令在哪里配 | [配置和启动](configuration.md) |
 | 数据同步在哪做，怎么判断增量完成 | [同步和因子计算](data-pipeline.md) |
+| 哪些正式同步已经接通、接管还缺什么 | [A 股正式同步接管清单](formal-sync-takeover.md) |
 | 三个市场怎样处理日期和时间 | [市场时间](market-time.md)、[数据集归属](dataset-markets.md) |
 | 给自己或 AI 扩展项目时要守哪些规则 | [项目规范](project-structure-and-standards.md)、[AI 入口](../AGENTS.md) |
 | 怎么分包，怎么检查依赖 | [分包和依赖检查](architecture-rules.md) |

@@ -1,13 +1,12 @@
 package com.zoutrankil.data.derived.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.RetailSentimentDaily;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.derived.port.RetailSentimentDailySession;
 import com.zoutrankil.data.derived.domain.RetailSentimentDailyPolicy;
-import com.zoutrankil.data.domain.RetailSentimentDailySnapshot;
+import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

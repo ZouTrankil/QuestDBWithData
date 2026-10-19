@@ -1,16 +1,14 @@
 package com.zoutrankil.data.margin.application;
 
 import com.zoutrankil.data.margin.domain.MarginDetailLimits;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.MarginDetail;
-import com.zoutrankil.data.domain.MarginDetailKey;
+import com.zoutrankil.data.domain.stock.margin.MarginDetail;
+import com.zoutrankil.data.domain.stock.margin.MarginDetailKey;
 import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.margin.mapper.MarginDetailMapper;
 import java.math.BigDecimal;

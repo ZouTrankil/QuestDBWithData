@@ -1,7 +1,7 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
-
 import com.zoutrankil.data.domain.*;
 import java.lang.reflect.Proxy;
 import java.sql.*;

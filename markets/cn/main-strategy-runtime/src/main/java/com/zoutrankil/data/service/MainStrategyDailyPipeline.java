@@ -1,11 +1,11 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import com.zoutrankil.batch.domain.BusinessState;
 import com.zoutrankil.batch.domain.CompletionEvidence;
 import com.zoutrankil.batch.domain.RunRequest;
 import com.zoutrankil.batch.job.MainStrategyDailyWork;
 import com.zoutrankil.batch.job.StageExecutor;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.derived.application.*;

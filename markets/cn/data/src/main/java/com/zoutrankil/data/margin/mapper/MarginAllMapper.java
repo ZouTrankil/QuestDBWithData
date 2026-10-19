@@ -1,13 +1,11 @@
 package com.zoutrankil.data.margin.mapper;
 
 import com.zoutrankil.data.margin.domain.MarginAllRows;
-
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.TushareMarginAllDto;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.MarginAll;
-import com.zoutrankil.data.domain.MarginAllKey;
+import com.zoutrankil.data.domain.stock.margin.MarginAll;
+import com.zoutrankil.data.domain.stock.margin.MarginAllKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.math.BigDecimal;
 import java.time.LocalDate;

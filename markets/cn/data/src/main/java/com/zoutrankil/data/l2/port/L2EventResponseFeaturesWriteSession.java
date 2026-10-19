@@ -1,7 +1,7 @@
 package com.zoutrankil.data.l2.port;
 
-import com.zoutrankil.data.domain.L2EventResponseFeatures;
-import com.zoutrankil.data.domain.L2EventResponseFeaturesKey;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeatures;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeaturesKey;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 import java.time.LocalDate;
 

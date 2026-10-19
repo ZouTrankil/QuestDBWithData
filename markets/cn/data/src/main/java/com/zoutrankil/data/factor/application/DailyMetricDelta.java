@@ -1,6 +1,6 @@
 package com.zoutrankil.data.factor.application;
 
-import com.zoutrankil.data.domain.table.FactorDailyMetricRow;
+import com.zoutrankil.data.domain.derived.table.FactorDailyMetricRow;
 import java.time.Instant;
 import java.util.*;
 

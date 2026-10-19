@@ -1,6 +1,6 @@
 package com.zoutrankil.data.index.port;
 
-import com.zoutrankil.data.domain.IndexCatalogEntry;
+import com.zoutrankil.data.domain.index.IndexCatalogEntry;
 import com.zoutrankil.data.index.domain.IndexCatalogState.*;
 import java.util.List;
 

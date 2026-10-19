@@ -2,11 +2,7 @@ package com.zoutrankil.data.index.application;
 
 import com.zoutrankil.data.index.domain.IndexCatalogState;
 import com.zoutrankil.data.index.port.IndexCatalogTarget;
-
-
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import java.nio.file.*;
@@ -37,7 +33,7 @@ final class IndexCatalogStageRecovery {
             if(!intent.getFileName().toString().equals(stage+"-intent.json")
                     || !prepared.before().equals(json.treeToValue(proof.path("before"),IndexCatalogState.Snapshot.class))
                     || !prepared.rows().equals(Arrays.asList(json.treeToValue(proof.path("rows"),
-                            com.zoutrankil.data.domain.table.IndexRow[].class))))
+                            com.zoutrankil.data.domain.index.table.IndexRow[].class))))
                 throw new IllegalStateException("Stage intent differs from frozen preparation");
             if(!backend.exists(stage)) continue;
             long deadline=System.nanoTime()+Duration.ofSeconds(20).toNanos();

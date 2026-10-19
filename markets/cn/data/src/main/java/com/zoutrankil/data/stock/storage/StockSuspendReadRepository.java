@@ -1,7 +1,9 @@
 package com.zoutrankil.data.stock.storage;
 
+import com.zoutrankil.data.domain.stock.market.StockSuspendKey;
+import com.zoutrankil.data.domain.stock.market.StockSuspendDataset;
+import com.zoutrankil.data.domain.stock.market.StockSuspend;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
 import org.springframework.stereotype.Repository;

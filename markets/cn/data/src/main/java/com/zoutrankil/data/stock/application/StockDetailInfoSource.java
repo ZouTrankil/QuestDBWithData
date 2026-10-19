@@ -1,7 +1,7 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.*;
 import com.zoutrankil.data.client.dto.TushareStockDetailDto;

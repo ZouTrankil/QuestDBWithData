@@ -1,5 +1,13 @@
 package com.zoutrankil.data.flow.storage;
 
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDcKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDcDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginDetailKey;
+import com.zoutrankil.data.domain.stock.margin.MarginDetailDataset;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.flow.mapper.*;
 import com.zoutrankil.data.margin.mapper.MarginDetailMapper;

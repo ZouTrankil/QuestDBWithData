@@ -1,4 +1,6 @@
 package com.zoutrankil.data.derived.domain;
+
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
 import com.zoutrankil.data.domain.*;
 import java.time.*;
 import java.time.temporal.ChronoUnit;

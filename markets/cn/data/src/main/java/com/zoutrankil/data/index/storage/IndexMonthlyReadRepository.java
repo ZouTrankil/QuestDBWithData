@@ -1,10 +1,12 @@
 package com.zoutrankil.data.index.storage;
+
+import com.zoutrankil.data.domain.index.IndexMonthlyKey;
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
+import com.zoutrankil.data.domain.index.IndexMonthly;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.IndexMonthlyState.*;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.mapper.IndexMonthlyMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +28,7 @@ public class IndexMonthlyReadRepository implements DatasetImplementation {
         Objects.requireNonNull(key);return find(new DatasetReadQuery(COLUMNS,Map.of("ts_code",key.tsCode(),"trade_date",key.tradeDate()),null,null,null,1,null));
     }
     public DatasetReadPage<IndexMonthly> findRange(String code,LocalDate fromInclusive,LocalDate toExclusive,int pageSize,DatasetReadCursor cursor) {
-        if(!com.zoutrankil.data.domain.policy.IndexMonthlyUniverse.validProviderCode(code)||fromInclusive==null||toExclusive==null
+        if(!com.zoutrankil.data.domain.index.policy.IndexMonthlyUniverse.validProviderCode(code)||fromInclusive==null||toExclusive==null
                 ||!fromInclusive.isBefore(toExclusive))throw new IllegalArgumentException("Known monthly code and increasing half-open range required");
         return find(new DatasetReadQuery(COLUMNS,Map.of("ts_code",code),"trade_date",fromInclusive,toExclusive,pageSize,cursor));
     }

@@ -1,15 +1,11 @@
 package com.zoutrankil.data.flow.application;
 
 import com.zoutrankil.data.flow.port.MoneyflowHsgtStagingPort;
-
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtState;
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtState.*;
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtRows;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
@@ -66,13 +62,13 @@ public final class MoneyflowHsgtPublication {
                 ||!tables.physicalTargetId(prepared.stage(),stage.identity()).equals(prepared.stagePhysicalTarget()))
             throw new IllegalStateException("D027 target or verified stage changed before publication");
         verifyStageReceipt(verified);
-        String backup=com.zoutrankil.data.domain.MoneyflowHsgtDataset.ISOLATED_PREFIX+"backup_"+UUID.randomUUID().toString().replace("-","");
+        String backup=com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset.ISOLATED_PREFIX+"backup_"+UUID.randomUUID().toString().replace("-","");
         String stageReceiptHash=sha(FileEvidenceStore.readBounded(Path.of(verified.receipt()), 4 * 1024 * 1024, () -> new IllegalStateException("D027 verified stage receipt escaped its run evidence root")));
         String scope=JobDefinitionJson.mapper().writeValueAsString(java.util.Map.of("stageReceipt",verified.receipt(),
                 "stageReceiptFingerprint",stageReceiptHash,"requestFingerprint",prepared.requestFingerprint(),
                 "windowFrom",prepared.from(),"windowTo",prepared.to(),"sourceRows",verified.authoritativeRows().size(),
                 "replacementDirectory",stage.identity().directory(),
-                "dedup",com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(prepared.target())));
+                "dedup",com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset.formalDedupLayout(prepared.target())));
         var intent=new ReferencePublicationJournal.Intent("moneyflow-hsgt-publication-"+UUID.randomUUID(),"moneyflow_hsgt",
                 prepared.runId(),prepared.target(),backup,prepared.stage(),prepared.physicalTargetBefore(),
                 original.identity().id(),original.identity().directory(),stage.identity().id(),original.fingerprint(),stage.fingerprint(),scope);
@@ -191,7 +187,7 @@ public final class MoneyflowHsgtPublication {
         JsonNode stageIdentity=proof.path("stageAfter").path("identity"),beforeIdentity=proof.path("before").path("identity");
         if(!proof.path("sourceComplete").asBoolean(false)||!matchesLayout(proof,entry.intent().target())
                 ||scope.has("dedup")&&!matchesLayout(scope,entry.intent().target())
-                ||!scope.has("dedup")&&com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(entry.intent().target())
+                ||!scope.has("dedup")&&com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset.formalDedupLayout(entry.intent().target())
                 ||!entry.intent().runId().equals(proof.path("runId").asText())||!entry.intent().stage().equals(proof.path("stage").asText())
                 ||!entry.intent().target().equals(proof.path("target").asText())
                 ||!entry.intent().afterFingerprint().equals(proof.path("stageAfter").path("fingerprint").asText())
@@ -219,7 +215,7 @@ public final class MoneyflowHsgtPublication {
     }
     private static boolean matchesLayout(JsonNode proof,String owningTarget) {
         return proof.path("dedup").isBoolean()
-                &&proof.path("dedup").asBoolean()==com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(owningTarget);
+                &&proof.path("dedup").asBoolean()==com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset.formalDedupLayout(owningTarget);
     }
     private void rename(String source,String target){tables.rename(source,target);}
     private LockHolder acquireLock()throws Exception {

@@ -1,7 +1,8 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.derived.MarketBreadthDailyDataset;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.mapper.MarketBreadthDailyMapper;
 import java.time.LocalDate;

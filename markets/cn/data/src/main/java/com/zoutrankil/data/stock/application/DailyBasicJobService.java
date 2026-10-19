@@ -1,12 +1,12 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.market.DailyBasicKey;
+import com.zoutrankil.data.domain.stock.market.DailyBasic;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.stock.port.DailyBasicTarget;
-
 import com.zoutrankil.data.stock.mapper.DailyBasicMapper;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.repository.*;

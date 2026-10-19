@@ -1,7 +1,7 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.storage.MacroCoreMonthlyReadRepository;

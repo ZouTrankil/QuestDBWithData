@@ -2,7 +2,7 @@ package com.zoutrankil.data.l2.application;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.zoutrankil.data.domain.L2DailyFeatureField;
+import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
 import com.zoutrankil.data.l2.mapper.L2DailyFeaturesMapper;
 import java.io.BufferedWriter;
 import java.io.IOException;

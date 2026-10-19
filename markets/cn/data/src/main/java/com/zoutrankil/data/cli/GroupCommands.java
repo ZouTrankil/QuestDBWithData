@@ -4,7 +4,7 @@ import com.zoutrankil.data.service.SyncJobRegistry;
 import com.zoutrankil.data.service.ReadGroupReader;
 import com.zoutrankil.data.domain.ReadGroupRequest;
 import com.zoutrankil.data.domain.DatasetReadQuery;
-import com.zoutrankil.data.domain.StockBasicDataset;
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import java.nio.file.Path;
 import java.util.Map;
 import org.springframework.stereotype.Component;

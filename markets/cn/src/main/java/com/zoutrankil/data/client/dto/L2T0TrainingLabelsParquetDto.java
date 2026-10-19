@@ -1,7 +1,7 @@
 package com.zoutrankil.data.client.dto;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zoutrankil.data.domain.L2T0TrainingLabelField;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelField;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

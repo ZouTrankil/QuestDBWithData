@@ -1,7 +1,9 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.derived.BacktestDailyViewValue;
+import com.zoutrankil.data.domain.derived.BacktestDailyViewDataset;
+import com.zoutrankil.data.domain.derived.BacktestDailyKey;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.mapper.BacktestDailyViewMapper;
 import java.time.LocalDate;

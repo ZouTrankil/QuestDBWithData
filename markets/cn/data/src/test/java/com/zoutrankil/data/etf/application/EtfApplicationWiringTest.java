@@ -1,5 +1,6 @@
 package com.zoutrankil.data.etf.application;
 
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.etf.port.EtfTarget;
@@ -10,12 +11,10 @@ import org.junit.jupiter.api.io.TempDir;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.core.env.MapPropertySource;
-
 import javax.sql.DataSource;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

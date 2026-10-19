@@ -3,7 +3,7 @@ package com.zoutrankil.data.stock.storage;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarQuestDbTarget;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarWritePort;
 import com.zoutrankil.data.config.QuestDbProperties;
-import com.zoutrankil.data.domain.StockBasicDataset;
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.stock.domain.DailyBasicTargetRange;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 import io.questdb.client.QuestDB;
@@ -12,7 +12,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

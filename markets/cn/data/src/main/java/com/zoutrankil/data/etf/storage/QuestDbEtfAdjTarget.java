@@ -1,8 +1,8 @@
 package com.zoutrankil.data.etf.storage;
 
-import com.zoutrankil.data.domain.EtfAdj;
-import com.zoutrankil.data.domain.EtfAdjKey;
-import com.zoutrankil.data.domain.EtfAdjDataset;
+import com.zoutrankil.data.domain.fund.EtfAdj;
+import com.zoutrankil.data.domain.fund.EtfAdjKey;
+import com.zoutrankil.data.domain.fund.EtfAdjDataset;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
 import com.zoutrankil.data.etf.port.EtfAdjTarget;
 import com.zoutrankil.data.etf.port.EtfAdjWriteSession;

@@ -1,12 +1,10 @@
 package com.zoutrankil.data.index.application;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
-
-import com.zoutrankil.data.domain.IndexWeight;
-import com.zoutrankil.data.domain.IndexWeightDataset;
-import com.zoutrankil.data.domain.IndexWeightKey;
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
+import com.zoutrankil.data.domain.index.IndexWeight;
+import com.zoutrankil.data.domain.index.IndexWeightDataset;
+import com.zoutrankil.data.domain.index.IndexWeightKey;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;

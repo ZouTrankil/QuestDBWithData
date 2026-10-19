@@ -1,10 +1,9 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.L2EventResponseFeatures;
-import com.zoutrankil.data.domain.L2EventResponseFeaturesDataset;
-import com.zoutrankil.data.domain.L2EventResponseFeaturesKey;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeatures;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeaturesKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.l2.port.L2EventResponseFeaturesWriteSession;
 import java.time.Duration;

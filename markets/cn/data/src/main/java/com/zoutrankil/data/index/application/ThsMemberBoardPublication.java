@@ -1,13 +1,8 @@
 package com.zoutrankil.data.index.application;
 
 import com.zoutrankil.data.index.port.ThsMemberTables;
-
 import com.zoutrankil.data.index.domain.ThsMemberState;
-
-
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.*;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -127,7 +122,7 @@ public final class ThsMemberBoardPublication {
     }
 
     private void requireEndpoint(ReferencePublicationJournal.Intent intent) throws Exception {
-        if (!com.zoutrankil.data.domain.ThsIndex.validCode(intent.scope()))
+        if (!com.zoutrankil.data.domain.stock.concept.ThsIndex.validCode(intent.scope()))
             throw new IllegalStateException("Publication board scope missing");
         String identity = targetAccess.identify( intent.target(),
                 intent.originalId(), intent.originalDirectory());

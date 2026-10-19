@@ -1,9 +1,8 @@
 package com.zoutrankil.data.index.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.client.dto.TushareThsMemberDto;
-import com.zoutrankil.data.domain.ThsMemberDataset;
+import com.zoutrankil.data.domain.stock.concept.ThsMemberDataset;
 import com.zoutrankil.data.index.mapper.ThsMemberMapper;
 import java.time.Instant;
 import java.time.LocalDate;

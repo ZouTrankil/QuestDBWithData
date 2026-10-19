@@ -1,7 +1,8 @@
 package com.zoutrankil.data.index.storage;
 
+
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.policy.IndexDailyBasicUniverse;
+import com.zoutrankil.data.domain.index.policy.IndexDailyBasicUniverse;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import com.zoutrankil.data.repository.StaticTargetIdentity;

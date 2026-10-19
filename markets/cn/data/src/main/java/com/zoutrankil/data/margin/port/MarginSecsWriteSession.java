@@ -1,7 +1,7 @@
 package com.zoutrankil.data.margin.port;
 
-import com.zoutrankil.data.domain.MarginSecs;
-import com.zoutrankil.data.domain.MarginSecsKey;
+import com.zoutrankil.data.domain.stock.margin.MarginSecs;
+import com.zoutrankil.data.domain.stock.margin.MarginSecsKey;
 import com.zoutrankil.data.margin.domain.MarginSecsState.TargetRange;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 import java.time.LocalDate;

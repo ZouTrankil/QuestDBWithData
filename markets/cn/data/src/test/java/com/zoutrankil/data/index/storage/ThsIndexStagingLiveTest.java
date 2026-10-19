@@ -1,9 +1,9 @@
 package com.zoutrankil.data.index.storage;
 
+import com.zoutrankil.data.domain.stock.concept.ThsIndexDataset;
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
 import com.zoutrankil.data.index.domain.ThsIndexState;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.client.dto.TushareThsIndexDto;
 import com.zoutrankil.data.domain.*;

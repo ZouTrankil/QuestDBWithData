@@ -1,10 +1,10 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.index.IndexDailyBasicKey;
+import com.zoutrankil.data.domain.index.IndexDailyBasic;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
-import com.zoutrankil.data.domain.policy.IndexDailyBasicUniverse;
-
+import com.zoutrankil.data.domain.index.policy.IndexDailyBasicUniverse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;

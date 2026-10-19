@@ -1,10 +1,11 @@
 package com.zoutrankil.data.index.application;
+
+import com.zoutrankil.data.domain.stock.concept.DcIndexKey;
+import com.zoutrankil.data.domain.stock.concept.DcIndex;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.DcIndexState.*;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;

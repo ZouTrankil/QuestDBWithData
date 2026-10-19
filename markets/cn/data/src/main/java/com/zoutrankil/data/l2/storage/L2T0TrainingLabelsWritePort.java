@@ -1,13 +1,12 @@
 package com.zoutrankil.data.l2.storage;
 
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.L2T0TrainingLabelField;
-import com.zoutrankil.data.domain.L2T0TrainingLabels;
-import com.zoutrankil.data.domain.L2T0TrainingLabelsDataset;
-import com.zoutrankil.data.domain.L2T0TrainingLabelsKey;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelField;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsDataset;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.l2.mapper.L2T0TrainingLabelsMapper;
 import com.zoutrankil.data.l2.domain.L2T0TrainingLabelsRows;

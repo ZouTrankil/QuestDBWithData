@@ -3,7 +3,7 @@ package com.zoutrankil.data.config;
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.StockBasicDataset;
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import com.zoutrankil.data.service.DatasetRegistry;
 import com.zoutrankil.data.service.ReadBindingCatalog;
@@ -79,6 +79,19 @@ class ReadBindingApplicationTest {
         expectedTyped.put("mv_etf_market_overview_daily", expectedTyped.get("v_etf_market_overview_daily"));
         expectedTyped.put("mv_backtest_daily", expectedTyped.get("v_backtest_daily"));
         expectedTyped.keySet().removeAll(CacheDatasetRetirementTest.RETIRED);
+        // 保留历史绑定原件，只对本次迁包后的类型名称做显式对应。
+        var relocated = Map.of(
+                "EquityStyleMonthly", com.zoutrankil.data.domain.derived.EquityStyleMonthly.class,
+                "L2DailyFeatures", com.zoutrankil.data.domain.l2.L2DailyFeatures.class,
+                "L2DatasetManifest", com.zoutrankil.data.domain.l2.L2DatasetManifest.class,
+                "L2IntradayBarFeatures", com.zoutrankil.data.domain.l2.L2IntradayBarFeatures.class,
+                "L2T0TrainingLabels", com.zoutrankil.data.domain.l2.L2T0TrainingLabels.class,
+                "MacroCoreMonthly", com.zoutrankil.data.domain.derived.MacroCoreMonthly.class,
+                "MarketBreadthDaily", com.zoutrankil.data.domain.derived.MarketBreadthDaily.class,
+                "RetailSentimentDaily", com.zoutrankil.data.domain.derived.RetailSentimentDaily.class,
+                "BacktestDailyViewValue", com.zoutrankil.data.domain.derived.BacktestDailyViewValue.class,
+                "EtfMarketOverviewDailyView", com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyView.class);
+        expectedTyped.replaceAll((id, oldType) -> relocated.get(oldType.substring(oldType.lastIndexOf('.') + 1)).getName());
         assertEquals(10, expectedTyped.size());
         var dataSource = mock(DataSource.class);
         var ledger = temp.resolve("not-created.sqlite");

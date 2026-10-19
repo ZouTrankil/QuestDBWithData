@@ -1,10 +1,10 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.stock.concept.ThsIndexDataset;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.client.dto.TushareThsIndexDto;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.ThsIndexRow;
+import com.zoutrankil.data.domain.stock.concept.table.ThsIndexRow;
 import com.zoutrankil.data.index.mapper.ThsIndexMapper;
 import org.junit.jupiter.api.Test;
 import java.nio.file.Path;

@@ -1,8 +1,9 @@
 package com.zoutrankil.data.etf.storage;
 
+import com.zoutrankil.data.domain.fund.EtfDailyKey;
+import com.zoutrankil.data.domain.fund.EtfDailyDataset;
+import com.zoutrankil.data.domain.fund.EtfDaily;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
-
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.etf.mapper.EtfDailyMapper;
 import org.springframework.beans.factory.annotation.Value;

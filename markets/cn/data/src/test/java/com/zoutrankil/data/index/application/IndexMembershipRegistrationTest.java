@@ -1,7 +1,7 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.index.IndexMembershipDataset;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import org.junit.jupiter.api.Test;

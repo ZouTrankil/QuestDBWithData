@@ -1,9 +1,8 @@
 package com.zoutrankil.data.index.storage;
 
 import com.zoutrankil.data.index.domain.ThsIndexState;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.ThsIndex;
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
 import com.zoutrankil.data.index.domain.ThsIndexState.*;
 import com.zoutrankil.data.index.port.ThsIndexTarget;
 import com.zoutrankil.data.index.port.ThsIndexTables;

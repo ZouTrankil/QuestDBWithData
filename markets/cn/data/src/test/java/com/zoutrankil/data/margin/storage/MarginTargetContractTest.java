@@ -1,5 +1,9 @@
 package com.zoutrankil.data.margin.storage;
 
+import com.zoutrankil.data.domain.stock.margin.MarginZrzKey;
+import com.zoutrankil.data.domain.stock.margin.MarginZrz;
+import com.zoutrankil.data.domain.stock.margin.MarginAllKey;
+import com.zoutrankil.data.domain.stock.margin.MarginAll;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.margin.domain.*;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;

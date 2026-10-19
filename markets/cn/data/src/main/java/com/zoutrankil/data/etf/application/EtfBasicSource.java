@@ -2,14 +2,13 @@ package com.zoutrankil.data.etf.application;
 
 import com.zoutrankil.data.service.PageExecutor;
 import com.zoutrankil.data.service.TusharePageService;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.PageContract;
-import com.zoutrankil.data.domain.EtfBasic;
+import com.zoutrankil.data.domain.fund.EtfBasic;
 import com.zoutrankil.data.etf.mapper.EtfBasicMapper;
 import java.nio.file.*;
 import java.time.Instant;

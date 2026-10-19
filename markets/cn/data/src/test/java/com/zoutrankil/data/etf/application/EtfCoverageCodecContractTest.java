@@ -1,9 +1,9 @@
 package com.zoutrankil.data.etf.application;
 
-import com.zoutrankil.data.domain.EtfPortfolio;
-import com.zoutrankil.data.domain.EtfPortfolioKey;
-import com.zoutrankil.data.domain.EtfShare;
-import com.zoutrankil.data.domain.EtfShareKey;
+import com.zoutrankil.data.domain.fund.EtfPortfolio;
+import com.zoutrankil.data.domain.fund.EtfPortfolioKey;
+import com.zoutrankil.data.domain.fund.EtfShare;
+import com.zoutrankil.data.domain.fund.EtfShareKey;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import java.time.LocalDate;
 import java.util.List;

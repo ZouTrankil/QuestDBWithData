@@ -1,5 +1,5 @@
 package com.zoutrankil.data.stock.port;
-import com.zoutrankil.data.domain.StockSuspend;
+import com.zoutrankil.data.domain.stock.market.StockSuspend;
 import com.zoutrankil.data.stock.domain.StockSuspendState.*;
 import java.time.LocalDate;
 import java.util.List;

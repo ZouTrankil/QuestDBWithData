@@ -1,9 +1,8 @@
 package com.zoutrankil.data.integration;
 
 import com.zoutrankil.data.stock.mapper.StockBasicMapper;
-
 import com.zoutrankil.data.QuestDataApplication;
-import com.zoutrankil.data.domain.StockBasic;
+import com.zoutrankil.data.domain.stock.basic.StockBasic;
 import com.zoutrankil.data.stock.storage.QuestDbStockBasicRepository;
 import com.zoutrankil.data.stock.application.StockBasicSyncService;
 import io.questdb.client.QuestDB;
@@ -14,13 +13,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.BooleanSupplier;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 /** Explicit opt-in: contacts configured Tushare/QuestDB and cleans only owned test objects. */

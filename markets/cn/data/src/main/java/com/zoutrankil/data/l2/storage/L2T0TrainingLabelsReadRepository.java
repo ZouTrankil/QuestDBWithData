@@ -1,15 +1,14 @@
 package com.zoutrankil.data.l2.storage;
 
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetImplementation;
 import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
-import com.zoutrankil.data.domain.L2T0TrainingLabels;
-import com.zoutrankil.data.domain.L2T0TrainingLabelsDataset;
-import com.zoutrankil.data.domain.L2T0TrainingLabelsKey;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsDataset;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey;
 import com.zoutrankil.data.l2.mapper.L2T0TrainingLabelsMapper;
 import java.time.Instant;
 import java.time.LocalDate;

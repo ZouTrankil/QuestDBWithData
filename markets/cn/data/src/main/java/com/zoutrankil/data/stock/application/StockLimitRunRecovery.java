@@ -1,5 +1,7 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.market.StockLimitKey;
+import com.zoutrankil.data.domain.stock.market.StockLimit;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;

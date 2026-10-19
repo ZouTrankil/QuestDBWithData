@@ -1,13 +1,12 @@
 package com.zoutrankil.data.l2.storage;
 
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.L2EventResponseFeatureField;
-import com.zoutrankil.data.domain.L2EventResponseFeatures;
-import com.zoutrankil.data.domain.L2EventResponseFeaturesDataset;
-import com.zoutrankil.data.domain.L2EventResponseFeaturesKey;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeatureField;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeatures;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeaturesKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.l2.mapper.L2EventResponseFeaturesMapper;
 import com.zoutrankil.data.l2.domain.L2EventResponseFeaturesRows;

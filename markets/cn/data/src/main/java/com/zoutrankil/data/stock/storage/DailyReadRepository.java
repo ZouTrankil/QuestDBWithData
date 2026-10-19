@@ -1,7 +1,8 @@
 package com.zoutrankil.data.stock.storage;
 
+import com.zoutrankil.data.domain.stock.market.DailyMarketBar;
+import com.zoutrankil.data.domain.stock.market.DailyDataset;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.DailyMapper;
 import java.time.LocalDate;

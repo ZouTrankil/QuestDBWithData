@@ -1,7 +1,7 @@
 package com.zoutrankil.data.client.dto;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zoutrankil.data.domain.L2DailyFeatureField;
+import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;

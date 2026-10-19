@@ -1,10 +1,10 @@
 package com.zoutrankil.data.etf.application;
 
+import com.zoutrankil.data.domain.fund.EtfBasicKey;
+import com.zoutrankil.data.domain.fund.EtfBasicDataset;
+import com.zoutrankil.data.domain.fund.EtfBasic;
 import com.zoutrankil.data.etf.port.EtfWriteTarget;
-
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.*;
 import com.zoutrankil.data.repository.*;

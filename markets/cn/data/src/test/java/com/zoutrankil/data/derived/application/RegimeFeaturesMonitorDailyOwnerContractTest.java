@@ -1,8 +1,9 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.derived.NativeDailyWindowSnapshot;
 import com.zoutrankil.data.derived.port.*;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.RegimeFeaturesMonitorDailyRow;
+import com.zoutrankil.data.domain.derived.table.RegimeFeaturesMonitorDailyRow;
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;

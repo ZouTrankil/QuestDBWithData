@@ -1,7 +1,8 @@
 package com.zoutrankil.data.index.domain;
 
+import com.zoutrankil.data.domain.index.table.IndexMemberRow;
+import com.zoutrankil.data.domain.index.IndexMembership;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.*;
 import com.zoutrankil.data.index.domain.policy.IndexMembershipMerge;
 import com.zoutrankil.data.index.domain.policy.IndexMembershipValues;
 import java.util.*;

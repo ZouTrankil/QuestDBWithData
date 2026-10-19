@@ -1,9 +1,11 @@
 package com.zoutrankil.data.index.application;
 
+
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
-import com.zoutrankil.data.domain.policy.IndexDailyMarketUniverse;
+import com.zoutrankil.data.domain.index.policy.IndexDailyMarketUniverse;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.repository.SqliteLedgerSchema;

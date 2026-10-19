@@ -1,14 +1,11 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.stock.concept.ThsMember;
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
 import com.zoutrankil.data.index.port.ThsMemberTarget;
-
 import com.zoutrankil.data.index.domain.ThsMemberState;
-
-
 import com.zoutrankil.data.index.mapper.ThsMemberMapper;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import java.nio.file.*;
@@ -125,7 +122,7 @@ public final class ThsMemberRunRecovery {
         }
         var actual = targetAccess.open(table).snapshot(board);
         var expected = source.rows().stream().map(new com.zoutrankil.data.index.mapper.ThsMemberMapper()::toStorage)
-                .sorted(Comparator.comparing(com.zoutrankil.data.domain.table.ThsMemberRow::conCode)).toList();
+                .sorted(Comparator.comparing(com.zoutrankil.data.domain.stock.concept.table.ThsMemberRow::conCode)).toList();
         if (actual.otherRows() != prepared.before().otherRows()
                 || !actual.otherFingerprint().equals(prepared.before().otherFingerprint())
                 || staging.requiresWrite(prepared) && !actual.boardRows().equals(expected)

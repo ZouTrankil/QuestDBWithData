@@ -1,9 +1,8 @@
 package com.zoutrankil.data.stock.storage;
 
 import com.zoutrankil.data.stock.domain.StockExecutionTables;
-
-import com.zoutrankil.data.domain.StockStDaily;
-import com.zoutrankil.data.domain.StockStDailyKey;
+import com.zoutrankil.data.domain.stock.basic.StockStDaily;
+import com.zoutrankil.data.domain.stock.basic.StockStDailyKey;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
 import com.zoutrankil.data.stock.domain.StockTargetRange;
 import com.zoutrankil.data.stock.domain.StockStDailyState.Content;

@@ -1,6 +1,6 @@
 package com.zoutrankil.data.margin.port;
-import com.zoutrankil.data.domain.MarginAll;
-import com.zoutrankil.data.domain.MarginAllKey;
+import com.zoutrankil.data.domain.stock.margin.MarginAll;
+import com.zoutrankil.data.domain.stock.margin.MarginAllKey;
 import com.zoutrankil.data.margin.domain.MarginAllState.TargetRange;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 import com.zoutrankil.data.sync.port.DateSliceReadPort;

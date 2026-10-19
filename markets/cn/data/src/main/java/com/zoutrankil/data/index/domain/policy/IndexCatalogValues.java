@@ -1,7 +1,8 @@
 package com.zoutrankil.data.index.domain.policy;
 
+import com.zoutrankil.data.domain.index.table.IndexRow;
+import com.zoutrankil.data.domain.index.IndexCatalogEntry;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.*;
 

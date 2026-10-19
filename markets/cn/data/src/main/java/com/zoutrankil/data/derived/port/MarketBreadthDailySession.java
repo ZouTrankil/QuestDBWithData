@@ -1,7 +1,7 @@
 package com.zoutrankil.data.derived.port;
 
-import com.zoutrankil.data.domain.MarketBreadthDaily;
-import com.zoutrankil.data.domain.MarketBreadthDailySnapshot;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
+import com.zoutrankil.data.domain.derived.MarketBreadthDailySnapshot;
 import com.zoutrankil.data.derived.domain.MarketBreadthDailyFullSourceScope;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;

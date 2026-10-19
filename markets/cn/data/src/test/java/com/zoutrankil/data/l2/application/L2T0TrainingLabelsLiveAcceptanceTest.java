@@ -1,9 +1,7 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -12,9 +10,9 @@ import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.L2T0TrainingLabelField;
-import com.zoutrankil.data.domain.L2T0TrainingLabels;
-import com.zoutrankil.data.domain.L2T0TrainingLabelsDataset;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelField;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsDataset;
 import com.zoutrankil.data.domain.ReadGroupRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
@@ -236,7 +234,7 @@ class L2T0TrainingLabelsLiveAcceptanceTest {
     private static List<L2T0TrainingLabels> parseIndependentCapture(Path path) throws Exception {
         var mapper = new L2T0TrainingLabelsMapper();
         var rows = new ArrayList<L2T0TrainingLabels>();
-        Set<com.zoutrankil.data.domain.L2T0TrainingLabelsKey> keys = new HashSet<>();
+        Set<com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey> keys = new HashSet<>();
         int completions = 0;
         for (String line : Files.readAllLines(path, StandardCharsets.UTF_8)) {
             JsonNode record = JSON.readTree(line);

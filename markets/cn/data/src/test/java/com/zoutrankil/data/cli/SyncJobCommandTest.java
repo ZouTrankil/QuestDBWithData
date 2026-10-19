@@ -2,11 +2,10 @@ package com.zoutrankil.data.cli;
 
 import com.zoutrankil.data.stock.application.StockBasicJobService;
 import com.zoutrankil.data.stock.application.StockBasicSyncService;
-
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.domain.ReadGroupRequest;
 import com.zoutrankil.data.domain.DatasetReadPage;
-import com.zoutrankil.data.domain.StockBasicSnapshot;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshot;
 import com.zoutrankil.data.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.DefaultApplicationArguments;

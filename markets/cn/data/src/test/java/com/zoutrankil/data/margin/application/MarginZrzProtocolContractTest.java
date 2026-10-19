@@ -1,5 +1,7 @@
 package com.zoutrankil.data.margin.application;
 
+import com.zoutrankil.data.domain.stock.margin.MarginZrzKey;
+import com.zoutrankil.data.domain.stock.margin.MarginZrz;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.margin.domain.MarginZrzRows;

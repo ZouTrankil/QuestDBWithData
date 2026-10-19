@@ -1,5 +1,6 @@
 package com.zoutrankil.data.index.storage;
 
+import com.zoutrankil.data.domain.index.IndexMembership;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.domain.IndexMembershipState.*;
 import com.zoutrankil.data.index.port.*;

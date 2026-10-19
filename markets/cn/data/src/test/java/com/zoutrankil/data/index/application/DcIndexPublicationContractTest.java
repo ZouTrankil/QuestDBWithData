@@ -1,5 +1,6 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.stock.concept.DcIndex;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.domain.*;

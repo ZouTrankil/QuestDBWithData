@@ -1,14 +1,13 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.L2IntradayBarFeaturesDataset;
-import com.zoutrankil.data.domain.L2IntradayBarFeatures;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.l2.port.*;
@@ -171,7 +170,7 @@ public final class L2IntradayBarFeaturesJobService implements SyncJobOwner {
         LocalDate to = rows.stream().map(L2IntradayBarFeatures::tradeDate).max(LocalDate::compareTo).orElseThrow();
         if (java.time.temporal.ChronoUnit.DAYS.between(from, to) >= 31)
             throw new IllegalArgumentException("D087 prepared write exceeds its 31-day source bound");
-        var expectedByKey = new LinkedHashMap<com.zoutrankil.data.domain.L2IntradayBarFeaturesKey,
+        var expectedByKey = new LinkedHashMap<com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey,
                 L2IntradayBarFeatures>();
         for (var row : rows) {
             if (expectedByKey.putIfAbsent(row.key(), row) != null)
@@ -244,8 +243,8 @@ public final class L2IntradayBarFeaturesJobService implements SyncJobOwner {
         var writer = port();
         var adapter = new L2IntradayBarFeaturesSyncAdapter(source, plan.source(), symbols, definition(), writer);
         var ledger = new SyncRunLedger(ledgerPath);
-        var runner = new SyncJobRunner<com.zoutrankil.data.domain.L2IntradayBarFeatures,
-                com.zoutrankil.data.domain.L2IntradayBarFeaturesKey>(ledger, new DatasetIntervalLock(ledgerPath));
+        var runner = new SyncJobRunner<com.zoutrankil.data.domain.l2.L2IntradayBarFeatures,
+                com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey>(ledger, new DatasetIntervalLock(ledgerPath));
         String runId = "d087-" + RUN_STAMP.format(java.time.Instant.now().atZone(ZoneId.of("UTC")))
                 + "-" + UUID.randomUUID();
         java.util.function.BooleanSupplier cancelled = () -> {

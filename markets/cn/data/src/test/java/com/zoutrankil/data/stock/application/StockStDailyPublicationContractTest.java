@@ -1,5 +1,6 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockStDaily;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.FileEvidenceStore;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.security.MessageDigest;
@@ -23,7 +23,6 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Stream;
-
 import static com.zoutrankil.data.stock.application.StockStDailyPublication.State;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;

@@ -1,5 +1,8 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.stock.market.DailyDataset;
+import com.zoutrankil.data.domain.stock.market.DailyBasicDataset;
+import com.zoutrankil.data.domain.stock.feature.StockFactorDataset;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.QuestDataApplication;

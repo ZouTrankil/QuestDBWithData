@@ -1,21 +1,17 @@
 package com.zoutrankil.data.stock.storage;
 
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
-
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.StockBasic;
-import com.zoutrankil.data.domain.StockBasicDataset;
-import com.zoutrankil.data.domain.StockBasicSnapshot;
-import com.zoutrankil.data.domain.StockBasicSnapshotKey;
+import com.zoutrankil.data.domain.stock.basic.StockBasic;
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshot;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshotKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

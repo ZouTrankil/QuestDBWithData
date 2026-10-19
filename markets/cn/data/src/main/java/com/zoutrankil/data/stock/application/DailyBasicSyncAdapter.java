@@ -1,11 +1,11 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.market.DailyBasicKey;
+import com.zoutrankil.data.domain.stock.market.DailyBasic;
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
-
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;

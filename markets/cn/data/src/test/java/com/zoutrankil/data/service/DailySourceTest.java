@@ -1,12 +1,11 @@
 package com.zoutrankil.data.service;
 
 import com.zoutrankil.data.stock.application.DailySource;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.zoutrankil.data.client.TushareClient;
 import com.zoutrankil.data.domain.PageContract;
-import com.zoutrankil.data.domain.StockDetailInfo;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.Path;

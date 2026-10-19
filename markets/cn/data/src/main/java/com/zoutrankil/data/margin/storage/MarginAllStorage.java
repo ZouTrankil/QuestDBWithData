@@ -4,15 +4,12 @@ import com.zoutrankil.data.margin.domain.MarginAllState;
 import com.zoutrankil.data.margin.domain.MarginAllState.*;
 import com.zoutrankil.data.margin.domain.MarginAllRows;
 import com.zoutrankil.data.margin.port.MarginAllTables;
-
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.MarginAll;
-import com.zoutrankil.data.domain.MarginAllDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginAll;
+import com.zoutrankil.data.domain.stock.margin.MarginAllDataset;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.margin.mapper.MarginAllMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

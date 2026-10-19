@@ -1,11 +1,9 @@
 package com.zoutrankil.data.margin.application;
 
 import com.zoutrankil.data.margin.domain.MarginDetailLimits;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.SyncJobDefinition;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.util.List;

@@ -1,12 +1,11 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.index.IndexMembershipDataset;
+import com.zoutrankil.data.domain.index.IndexMembership;
 import com.zoutrankil.data.index.storage.QuestDbIndexMembershipTarget;
-
 import com.zoutrankil.data.index.storage.IndexMembershipStaging;
 import com.zoutrankil.data.index.storage.IndexMembershipStorage;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;

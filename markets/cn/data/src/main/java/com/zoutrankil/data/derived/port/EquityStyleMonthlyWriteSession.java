@@ -1,4 +1,7 @@
 package com.zoutrankil.data.derived.port;
+
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyTargetSnapshot;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthly;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.domain.EquityStyleMonthlyRows;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;

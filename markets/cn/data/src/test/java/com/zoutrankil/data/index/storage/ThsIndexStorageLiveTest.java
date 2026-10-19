@@ -1,10 +1,9 @@
 package com.zoutrankil.data.index.storage;
 
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.table.ThsIndexRow;
+import com.zoutrankil.data.domain.stock.concept.table.ThsIndexRow;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;

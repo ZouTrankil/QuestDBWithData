@@ -1,6 +1,8 @@
 package com.zoutrankil.data.stock.mapper;
 
-
+import com.zoutrankil.data.domain.stock.market.StockSuspendKey;
+import com.zoutrankil.data.domain.stock.market.StockSuspendDataset;
+import com.zoutrankil.data.domain.stock.market.StockSuspend;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.StockSuspendDto;
 import com.zoutrankil.data.domain.*;

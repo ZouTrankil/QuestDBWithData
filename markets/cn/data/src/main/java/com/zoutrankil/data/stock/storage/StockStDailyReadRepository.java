@@ -1,10 +1,10 @@
 package com.zoutrankil.data.stock.storage;
 
+import com.zoutrankil.data.domain.stock.basic.StockStDailyKey;
+import com.zoutrankil.data.domain.stock.basic.StockStDailyDataset;
+import com.zoutrankil.data.domain.stock.basic.StockStDaily;
 import com.zoutrankil.data.stock.domain.StockExecutionTables;
-
 import com.zoutrankil.data.repository.*;
-
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.StockStDailyMapper;
 import org.springframework.beans.factory.annotation.Value;

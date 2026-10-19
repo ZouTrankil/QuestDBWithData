@@ -1,14 +1,15 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import com.zoutrankil.data.l2.application.L2DailyFeaturesJobService;
-
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.port.RetailSentimentDailySession;
 import com.zoutrankil.data.derived.port.RetailSentimentDailyTarget;
-import com.zoutrankil.data.domain.RetailSentimentDailySnapshot;
+import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Path;
 import java.time.*;

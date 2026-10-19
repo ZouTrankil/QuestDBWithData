@@ -1,5 +1,5 @@
 package com.zoutrankil.data.margin.storage;
-import com.zoutrankil.data.domain.MarginAllDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginAllDataset;
 import com.zoutrankil.data.margin.port.*;
 import io.questdb.client.QuestDB;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -1,22 +1,18 @@
 package com.zoutrankil.data.derived.application;
 
 import com.zoutrankil.data.derived.port.MarketBreadthDailySession;
-
 import com.zoutrankil.data.derived.domain.MarketBreadthDailyFullSourceScope;
-
 import com.zoutrankil.data.service.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
 import com.zoutrankil.data.config.QuestDbProperties;
-import com.zoutrankil.data.domain.MarketBreadthDaily;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.derived.storage.MarketBreadthDailyMaterializationPort;
-import com.zoutrankil.data.domain.MarketBreadthDailySnapshot;
+import com.zoutrankil.data.domain.derived.MarketBreadthDailySnapshot;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Path;
 import java.time.LocalDate;

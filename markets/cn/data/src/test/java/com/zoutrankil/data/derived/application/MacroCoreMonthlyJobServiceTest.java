@@ -1,12 +1,12 @@
 package com.zoutrankil.data.derived.application;
+
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData.*;
 import com.zoutrankil.data.derived.port.MacroCoreMonthlySourceReadPort;
 import com.zoutrankil.data.derived.storage.QuestDbMacroCoreMonthlySourceReader;
 import com.zoutrankil.data.derived.storage.QuestDbMacroCoreMonthlyTarget;
-
 import com.zoutrankil.data.service.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import com.zoutrankil.data.config.QuestDbProperties;

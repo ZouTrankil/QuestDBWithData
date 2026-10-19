@@ -2,7 +2,6 @@ package com.zoutrankil.data.index.application;
 
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.stock.port.StockDetailNameReadPort;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -35,7 +34,7 @@ public final class IndexWeightNameResolver implements IndexWeightSource.NameLook
         if (!expectedTargetId.equals(actualTarget))
             throw new IllegalStateException("D021 name enrichment D002 target differs from frozen identity");
         var codes = constituentCodes.stream().sorted().toList();
-        var rows = new ArrayList<com.zoutrankil.data.domain.table.StockDetailInfoRow>(codes.size());
+        var rows = new ArrayList<com.zoutrankil.data.domain.stock.basic.table.StockDetailInfoRow>(codes.size());
         for (int offset = 0; offset < codes.size(); offset += 250) {
             if (!expectedTargetId.equals(targetId()))
                 throw new IllegalStateException("D002 target changed between bounded name-reference reads");

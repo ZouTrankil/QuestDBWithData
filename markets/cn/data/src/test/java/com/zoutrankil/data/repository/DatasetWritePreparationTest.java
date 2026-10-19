@@ -1,5 +1,6 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.domain.*;
 import org.junit.jupiter.api.Test;
 import java.time.*;

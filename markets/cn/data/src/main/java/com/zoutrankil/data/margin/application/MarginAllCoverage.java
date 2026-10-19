@@ -4,13 +4,11 @@ import com.zoutrankil.data.margin.domain.MarginAllState;
 import com.zoutrankil.data.margin.domain.MarginAllState.*;
 import com.zoutrankil.data.margin.domain.MarginAllRows;
 import com.zoutrankil.data.margin.port.MarginAllTables;
-
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.MarginAll;
-import com.zoutrankil.data.domain.MarginAllKey;
+import com.zoutrankil.data.domain.stock.margin.MarginAll;
+import com.zoutrankil.data.domain.stock.margin.MarginAllKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.ReferencePublicationJournal;

@@ -1,13 +1,13 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
 import com.zoutrankil.data.repository.DatasetWritePreparation;
 import org.junit.jupiter.api.Test;
-
 import java.time.Instant;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class StockDetailStaticWriteContractTest {

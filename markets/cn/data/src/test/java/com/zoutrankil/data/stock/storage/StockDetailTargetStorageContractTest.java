@@ -1,7 +1,7 @@
 package com.zoutrankil.data.stock.storage;
 
-import com.zoutrankil.data.domain.StockDetailInfoDataset;
-import com.zoutrankil.data.domain.table.StockDetailInfoRow;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
+import com.zoutrankil.data.domain.stock.basic.table.StockDetailInfoRow;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.ResultSet;

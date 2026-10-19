@@ -1,4 +1,7 @@
 package com.zoutrankil.data.stock.port;
+
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshotKey;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshot;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 public interface StockBasicTarget {

@@ -1,8 +1,7 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.L2T0TrainingLabels;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
 import com.zoutrankil.data.l2.mapper.L2T0TrainingLabelsMapper;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Path;
@@ -14,12 +13,12 @@ import java.util.function.BooleanSupplier;
 public final class L2T0TrainingLabelsPreparedWriteAdapter implements WriteGroupMemberAdapter {
     private final L2T0TrainingLabelsJobService owner;
     private final PreparedWriteAdapter<L2T0TrainingLabels,
-            com.zoutrankil.data.domain.L2T0TrainingLabelsKey> delegate;
+            com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey> delegate;
     private final L2T0TrainingLabelsMapper mapper = new L2T0TrainingLabelsMapper();
 
     public L2T0TrainingLabelsPreparedWriteAdapter(L2T0TrainingLabelsJobService owner,
             PreparedWriteAdapter<L2T0TrainingLabels,
-                    com.zoutrankil.data.domain.L2T0TrainingLabelsKey> delegate) {
+                    com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey> delegate) {
         this.owner = Objects.requireNonNull(owner);
         this.delegate = Objects.requireNonNull(delegate);
     }

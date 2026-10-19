@@ -1,8 +1,7 @@
 package com.zoutrankil.data.calendar.application;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.ExchangeCalendar;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;

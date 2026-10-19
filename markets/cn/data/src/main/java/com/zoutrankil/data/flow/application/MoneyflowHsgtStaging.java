@@ -1,22 +1,17 @@
 package com.zoutrankil.data.flow.application;
 
 import com.zoutrankil.data.flow.port.MoneyflowHsgtStagingPort;
-
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtLimits;
-
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtState;
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtState.*;
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtRows;
-
 import com.zoutrankil.data.repository.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.MoneyflowHsgt;
-import com.zoutrankil.data.domain.MoneyflowHsgtKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgt;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
-
 import com.zoutrankil.data.flow.application.MoneyflowHsgtSyncJobOwner;
 import com.zoutrankil.data.service.SyncJobRunner;
 import java.io.IOException;
@@ -35,7 +30,7 @@ public final class MoneyflowHsgtStaging {
 
     public Prepared prepare(String target,String logicalTargetId,String physicalTargetId,String runId,
             SyncJobDefinition.FrozenRequest request,Path runEvidence,BooleanSupplier cancelled)throws Exception {
-        com.zoutrankil.data.domain.MoneyflowHsgtDataset.requireAdmittedTable(target);
+        com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset.requireAdmittedTable(target);
         Objects.requireNonNull(request);check(cancelled);Path root=runEvidence.toAbsolutePath().normalize();
         Files.createDirectories(root);if(Files.isSymbolicLink(root))throw new IOException("D027 evidence root cannot be symlinked");
         String requestFingerprint=SyncRequestIdentity.fingerprint(request,logicalTargetId);
@@ -50,14 +45,14 @@ public final class MoneyflowHsgtStaging {
         if(!tables.physicalTargetId(target,before.identity()).equals(physicalTargetId))
             throw new IllegalStateException("D027 physical target changed before full-snapshot stage preparation");
         var outside=targetStorage.outside(request.from(),request.to());
-        String stage=com.zoutrankil.data.domain.MoneyflowHsgtDataset.ISOLATED_PREFIX+"stage_"+UUID.randomUUID().toString().replace("-","");
+        String stage=com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset.ISOLATED_PREFIX+"stage_"+UUID.randomUUID().toString().replace("-","");
         var stageIntent=root.resolve("stage").resolve(stage+"-intent.json");Files.createDirectories(stageIntent.getParent());
         if(Files.isSymbolicLink(stageIntent.getParent())||Files.exists(stageIntent,LinkOption.NOFOLLOW_LINKS))throw new IOException("D027 unique stage-intent path required");
         var body=new LinkedHashMap<String,Object>();body.put("dataset","moneyflow_hsgt");body.put("phase","PREPARING");
         body.put("runId",runId);body.put("target",target);body.put("logicalTargetId",logicalTargetId);
         body.put("physicalTargetBefore",physicalTargetId);body.put("stage",stage);body.put("requestFingerprint",requestFingerprint);
         body.put("mode",request.mode());body.put("logicalDate",request.logicalDate());body.put("windowFrom",request.from());
-        body.put("windowTo",request.to());body.put("before",proof(before));body.put("preservedOutside",proof(outside));body.put("dedup",com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(target));
+        body.put("windowTo",request.to());body.put("before",proof(before));body.put("preservedOutside",proof(outside));body.put("dedup",com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset.formalDedupLayout(target));
         writeNew(stageIntent,body);
         if(tables.tableCount(stage)!=0)throw new IllegalStateException("D027 generated stage table already exists");
         tables.createOutsideStage(target,stage,request.from(),request.to());tables.awaitWal(stage,cancelled);
@@ -109,7 +104,7 @@ public final class MoneyflowHsgtStaging {
         body.put("target",prepared.target());body.put("logicalTargetId",prepared.logicalTargetId());
         body.put("physicalTargetBefore",prepared.physicalTargetBefore());body.put("stage",prepared.stage());
         body.put("stagePhysicalTarget",prepared.stagePhysicalTarget());body.put("requestFingerprint",prepared.requestFingerprint());
-        body.put("windowFrom",prepared.from());body.put("windowTo",prepared.to());body.put("dedup",com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(prepared.target()));
+        body.put("windowFrom",prepared.from());body.put("windowTo",prepared.to());body.put("dedup",com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset.formalDedupLayout(prepared.target()));
         body.put("before",proof(prepared.before()));body.put("preservedOutside",proof(outsideNow));body.put("authoritativeWindow",proof(windowNow));
         body.put("sourceRows",expected.size());body.put("sourceReceipts",receiptRefs);body.put("sourceComplete",true);
         body.put("stageAfter",proof(actual));
@@ -139,7 +134,7 @@ public final class MoneyflowHsgtStaging {
         Path intentPath=intents.getFirst();if(Files.isSymbolicLink(intentPath)||!Files.isRegularFile(intentPath,LinkOption.NOFOLLOW_LINKS)||Files.size(intentPath)>MAX_INTENT_BYTES)throw new IOException("D027 stage intent is invalid");
         var json=JobDefinitionJson.mapper();JsonNode intent=json.readTree(FileEvidenceStore.readBounded(intentPath,MAX_INTENT_BYTES,()->new IOException("D027 stage intent is invalid")));
         if(!"moneyflow_hsgt".equals(intent.path("dataset").asText())||!runId.equals(intent.path("runId").asText())
-                ||!intent.path("dedup").isBoolean()||intent.path("dedup").asBoolean()!=com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(target)
+                ||!intent.path("dedup").isBoolean()||intent.path("dedup").asBoolean()!=com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset.formalDedupLayout(target)
                 ||!target.equals(intent.path("target").asText()))throw new IllegalStateException("D027 stage intent belongs to another run/target");
         if("DISCARDED".equals(intent.path("phase").asText()))return;
         if(!Set.of("PREPARING","READY").contains(intent.path("phase").asText()))throw new IllegalStateException("D027 stage intent phase is not discardable");

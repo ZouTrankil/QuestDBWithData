@@ -1,16 +1,13 @@
 package com.zoutrankil.data.stock.application;
 import com.zoutrankil.data.stock.domain.policy.StockDetailInfoMerge;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.client.dto.TushareStockDetailDto;
 import com.zoutrankil.data.domain.PageContract;
-import com.zoutrankil.data.domain.StockDetailInfo;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
 import java.nio.file.Files;
 import java.nio.file.Path;

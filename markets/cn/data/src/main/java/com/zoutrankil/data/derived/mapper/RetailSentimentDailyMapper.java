@@ -2,8 +2,8 @@ package com.zoutrankil.data.derived.mapper;
 
 
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.RetailSentimentDaily;
-import com.zoutrankil.data.domain.materializedview.RetailSentimentDailyMaterializedView;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
+import com.zoutrankil.data.domain.derived.materializedview.RetailSentimentDailyMaterializedView;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;

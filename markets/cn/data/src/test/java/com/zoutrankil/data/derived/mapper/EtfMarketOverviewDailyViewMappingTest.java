@@ -1,8 +1,9 @@
 package com.zoutrankil.data.derived.mapper;
 
-
+import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyViewKey;
+import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyViewDataset;
+import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyView;
 import static org.junit.jupiter.api.Assertions.*;
-
 import com.zoutrankil.data.domain.*;
 import java.math.BigInteger;
 import java.time.Instant;
@@ -23,7 +24,7 @@ class EtfMarketOverviewDailyViewMappingTest {
 
     @Test void fourPhysicalFieldsMapExplicitlyAndRoundTripWithoutNumericChanges() {
         var expected = populated();
-        var stored = new com.zoutrankil.data.domain.view.EtfMarketOverviewDailyView(
+        var stored = new com.zoutrankil.data.domain.fund.view.EtfMarketOverviewDailyView(
                 Instant.parse("2026-09-17T00:00:00Z"), expected.etfCount(), expected.totalShare(), expected.totalSizeYi());
         var actual = mapper.fromStorage(stored);
         assertEquals(expected, actual);
@@ -35,7 +36,7 @@ class EtfMarketOverviewDailyViewMappingTest {
     }
 
     @Test void nullableSumsStayNullAndExactRequiredZeroCountIsNotAReplacementForNull() {
-        var stored = new com.zoutrankil.data.domain.view.EtfMarketOverviewDailyView(
+        var stored = new com.zoutrankil.data.domain.fund.view.EtfMarketOverviewDailyView(
                 Instant.parse("2026-09-17T00:00:00Z"), 0L, null, null);
         var actual = mapper.fromStorage(stored);
         assertEquals(0L, actual.etfCount()); assertNull(actual.totalShare()); assertNull(actual.totalSizeYi());
@@ -43,7 +44,7 @@ class EtfMarketOverviewDailyViewMappingTest {
         assertTrue(mapper.values(actual).asMap().containsKey("total_share"));
         assertTrue(mapper.values(actual).asMap().containsKey("total_size_yi"));
         assertThrows(NullPointerException.class, () -> mapper.fromStorage(
-                new com.zoutrankil.data.domain.view.EtfMarketOverviewDailyView(
+                new com.zoutrankil.data.domain.fund.view.EtfMarketOverviewDailyView(
                         Instant.parse("2026-09-17T00:00:00Z"), null, null, null)));
         var values = new LinkedHashMap<>(mapper.values(actual).asMap()); values.put("etf_count", null);
         assertThrows(NullPointerException.class, () -> mapper.fromValues(new DatasetValues(values)));
@@ -64,10 +65,10 @@ class EtfMarketOverviewDailyViewMappingTest {
                 Instant.parse("2026-09-17T00:00:00.000001Z"), Instant.parse("2026-09-17T16:00:00Z"),
                 Instant.parse("2026-09-16T16:00:00Z"))) {
             assertThrows(IllegalArgumentException.class, () -> mapper.fromStorage(
-                    new com.zoutrankil.data.domain.view.EtfMarketOverviewDailyView(carrier, 1L, null, null)));
+                    new com.zoutrankil.data.domain.fund.view.EtfMarketOverviewDailyView(carrier, 1L, null, null)));
         }
         assertThrows(NullPointerException.class, () -> mapper.fromStorage(
-                new com.zoutrankil.data.domain.view.EtfMarketOverviewDailyView(null, 1L, null, null)));
+                new com.zoutrankil.data.domain.fund.view.EtfMarketOverviewDailyView(null, 1L, null, null)));
         assertThrows(NullPointerException.class, () -> new EtfMarketOverviewDailyViewKey(null));
         assertThrows(NullPointerException.class, () -> new EtfMarketOverviewDailyView(null, 1L, null, null));
     }

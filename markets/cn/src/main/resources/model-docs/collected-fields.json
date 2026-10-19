@@ -2809,7 +2809,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "stock.financial",
+      "modelPackage": "com.zoutrankil.data.domain.stock.financial.table"
     },
     {
       "objectName": "block_trade",
@@ -2926,7 +2928,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.reference",
+      "modelPackage": "com.zoutrankil.data.domain.stock.reference.table"
     },
     {
       "objectName": "broker_recommend",
@@ -2998,7 +3002,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.feature",
+      "modelPackage": "com.zoutrankil.data.domain.stock.feature.table"
     },
     {
       "objectName": "cashflow",
@@ -4465,7 +4471,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.financial",
+      "modelPackage": "com.zoutrankil.data.domain.stock.financial.table"
     },
     {
       "objectName": "cn_cpi",
@@ -4672,7 +4680,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "macro.domestic",
+      "modelPackage": "com.zoutrankil.data.domain.macro.domestic.table"
     },
     {
       "objectName": "cn_gdp",
@@ -4834,7 +4844,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "macro.domestic",
+      "modelPackage": "com.zoutrankil.data.domain.macro.domestic.table"
     },
     {
       "objectName": "cn_m",
@@ -4996,7 +5008,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "macro.domestic",
+      "modelPackage": "com.zoutrankil.data.domain.macro.domestic.table"
     },
     {
       "objectName": "cn_pmi",
@@ -5908,7 +5922,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "macro.domestic",
+      "modelPackage": "com.zoutrankil.data.domain.macro.domestic.table"
     },
     {
       "objectName": "cn_ppi",
@@ -6385,7 +6401,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "macro.domestic",
+      "modelPackage": "com.zoutrankil.data.domain.macro.domestic.table"
     },
     {
       "objectName": "cyq_chips",
@@ -6457,7 +6475,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.feature",
+      "modelPackage": "com.zoutrankil.data.domain.stock.feature.table"
     },
     {
       "objectName": "cyq_perf",
@@ -6634,7 +6654,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.feature",
+      "modelPackage": "com.zoutrankil.data.domain.stock.feature.table"
     },
     {
       "objectName": "daily_basic",
@@ -6916,7 +6938,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.market",
+      "modelPackage": "com.zoutrankil.data.domain.stock.market.table"
     },
     {
       "objectName": "daily",
@@ -7123,7 +7147,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.market",
+      "modelPackage": "com.zoutrankil.data.domain.stock.market.table"
     },
     {
       "objectName": "dc_index",
@@ -7300,7 +7326,9 @@
           "status": "UNVERIFIED",
           "notes": "现有链路调用 dc_index，但当前官方页面为 dc_daily；接口与字段不等价，不能据此认证旧字段。"
         }
-      ]
+      ],
+      "category": "stock.concept",
+      "modelPackage": "com.zoutrankil.data.domain.stock.concept.table"
     },
     {
       "objectName": "disclosure_date",
@@ -7417,7 +7445,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "stock.financial",
+      "modelPackage": "com.zoutrankil.data.domain.stock.financial.table"
     },
     {
       "objectName": "dividend",
@@ -7684,7 +7714,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "stock.financial",
+      "modelPackage": "com.zoutrankil.data.domain.stock.financial.table"
     },
     {
       "objectName": "eco_cal",
@@ -7816,7 +7848,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "macro.domestic",
+      "modelPackage": "com.zoutrankil.data.domain.macro.domestic.table"
     },
     {
       "objectName": "etf_adj",
@@ -7873,7 +7907,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": "来源字符串在历史模型中以 Instant 承载；须按现有时间契约区分日期标记与真实时刻，不能直接加 8 小时。 本地存储列 timestamp 对应来源字段 trade_date。"
         }
-      ]
+      ],
+      "category": "fund",
+      "modelPackage": "com.zoutrankil.data.domain.fund.table"
     },
     {
       "objectName": "etf_basic",
@@ -8290,7 +8326,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "fund",
+      "modelPackage": "com.zoutrankil.data.domain.fund.table"
     },
     {
       "objectName": "etf_daily",
@@ -8467,7 +8505,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "fund",
+      "modelPackage": "com.zoutrankil.data.domain.fund.table"
     },
     {
       "objectName": "etf_factor",
@@ -9814,7 +9854,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "fund",
+      "modelPackage": "com.zoutrankil.data.domain.fund.table"
     },
     {
       "objectName": "etf_portfolio",
@@ -9961,7 +10003,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "fund",
+      "modelPackage": "com.zoutrankil.data.domain.fund.table"
     },
     {
       "objectName": "etf_share",
@@ -10063,7 +10107,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "fund",
+      "modelPackage": "com.zoutrankil.data.domain.fund.table"
     },
     {
       "objectName": "exchange_calendar",
@@ -10135,7 +10181,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": " 来源格式同时对照现有解析契约；不代表数据库存储格式。"
         }
-      ]
+      ],
+      "category": "stock.basic",
+      "modelPackage": "com.zoutrankil.data.domain.stock.basic.table"
     },
     {
       "objectName": "express",
@@ -10627,7 +10675,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.financial",
+      "modelPackage": "com.zoutrankil.data.domain.stock.financial.table"
     },
     {
       "objectName": "fina_audit",
@@ -10744,7 +10794,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.financial",
+      "modelPackage": "com.zoutrankil.data.domain.stock.financial.table"
     },
     {
       "objectName": "fina_indicator",
@@ -13437,7 +13489,9 @@
           "notes": "当前官方输出参数未列出该字段；保留原模型，需来源原件或项目契约继续核实。",
           "localContractMeaning": "历史本地列；增量保留原值，不推断计算含义"
         }
-      ]
+      ],
+      "category": "stock.financial",
+      "modelPackage": "com.zoutrankil.data.domain.stock.financial.table"
     },
     {
       "objectName": "fina_mainbz",
@@ -13584,7 +13638,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.financial",
+      "modelPackage": "com.zoutrankil.data.domain.stock.financial.table"
     },
     {
       "objectName": "forecast",
@@ -13776,7 +13832,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.financial",
+      "modelPackage": "com.zoutrankil.data.domain.stock.financial.table"
     },
     {
       "objectName": "ft_limit",
@@ -13923,7 +13981,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "futures",
+      "modelPackage": "com.zoutrankil.data.domain.futures.table"
     },
     {
       "objectName": "fut_basic",
@@ -14175,7 +14235,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "futures",
+      "modelPackage": "com.zoutrankil.data.domain.futures.table"
     },
     {
       "objectName": "fut_daily",
@@ -14442,7 +14504,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "futures",
+      "modelPackage": "com.zoutrankil.data.domain.futures.table"
     },
     {
       "objectName": "fut_holding",
@@ -14619,7 +14683,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "futures",
+      "modelPackage": "com.zoutrankil.data.domain.futures.table"
     },
     {
       "objectName": "fut_mapping",
@@ -14691,7 +14757,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "futures",
+      "modelPackage": "com.zoutrankil.data.domain.futures.table"
     },
     {
       "objectName": "fut_settle",
@@ -14898,7 +14966,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "futures",
+      "modelPackage": "com.zoutrankil.data.domain.futures.table"
     },
     {
       "objectName": "hibor",
@@ -15045,7 +15115,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "macro.interest",
+      "modelPackage": "com.zoutrankil.data.domain.macro.interest.table"
     },
     {
       "objectName": "income",
@@ -16467,7 +16539,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.financial",
+      "modelPackage": "com.zoutrankil.data.domain.stock.financial.table"
     },
     {
       "objectName": "index_daily_basic",
@@ -16659,7 +16733,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "index",
+      "modelPackage": "com.zoutrankil.data.domain.index.table"
     },
     {
       "objectName": "index_daily_market",
@@ -16851,7 +16927,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "index",
+      "modelPackage": "com.zoutrankil.data.domain.index.table"
     },
     {
       "objectName": "index_member",
@@ -17073,7 +17151,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "index",
+      "modelPackage": "com.zoutrankil.data.domain.index.table"
     },
     {
       "objectName": "index_monthly",
@@ -17295,7 +17375,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "index",
+      "modelPackage": "com.zoutrankil.data.domain.index.table"
     },
     {
       "objectName": "index_weight",
@@ -17472,7 +17554,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "index",
+      "modelPackage": "com.zoutrankil.data.domain.index.table"
     },
     {
       "objectName": "margin_all",
@@ -17619,7 +17703,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.margin",
+      "modelPackage": "com.zoutrankil.data.domain.stock.margin.table"
     },
     {
       "objectName": "margin_detail",
@@ -17796,7 +17882,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.margin",
+      "modelPackage": "com.zoutrankil.data.domain.stock.margin.table"
     },
     {
       "objectName": "margin_secs",
@@ -17868,7 +17956,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.margin",
+      "modelPackage": "com.zoutrankil.data.domain.stock.margin.table"
     },
     {
       "objectName": "margin_zrz",
@@ -17970,7 +18060,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.margin",
+      "modelPackage": "com.zoutrankil.data.domain.stock.margin.table"
     },
     {
       "objectName": "moneyflow_dc",
@@ -18207,7 +18299,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.moneyflow",
+      "modelPackage": "com.zoutrankil.data.domain.stock.moneyflow.table"
     },
     {
       "objectName": "moneyflow_hsgt",
@@ -18331,7 +18425,9 @@
           "notes": "原官方文档 doc_id=47 当前返回 404；保留已有来源契约，不猜单位或披露规则。",
           "localContractMeaning": "Total southbound aggregate, million CNY; source null remains null"
         }
-      ]
+      ],
+      "category": "stock.moneyflow",
+      "modelPackage": "com.zoutrankil.data.domain.stock.moneyflow.table"
     },
     {
       "objectName": "moneyflow",
@@ -18643,7 +18739,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.moneyflow",
+      "modelPackage": "com.zoutrankil.data.domain.stock.moneyflow.table"
     },
     {
       "objectName": "moneyflow_ths",
@@ -18850,7 +18948,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.moneyflow",
+      "modelPackage": "com.zoutrankil.data.domain.stock.moneyflow.table"
     },
     {
       "objectName": "pledge_stat",
@@ -18967,7 +19067,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.reference",
+      "modelPackage": "com.zoutrankil.data.domain.stock.reference.table"
     },
     {
       "objectName": "repurchase",
@@ -19114,7 +19216,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.reference",
+      "modelPackage": "com.zoutrankil.data.domain.stock.reference.table"
     },
     {
       "objectName": "rmb_index_daily",
@@ -19231,7 +19335,9 @@
           "status": "UNVERIFIED",
           "notes": "尚未找到与该本地组合字段对应的 Tushare 官方接口；不能仅按目录原分类认定来源。"
         }
-      ]
+      ],
+      "category": "forex",
+      "modelPackage": "com.zoutrankil.data.domain.forex.table"
     },
     {
       "objectName": "sf_month",
@@ -19303,7 +19409,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "macro.domestic",
+      "modelPackage": "com.zoutrankil.data.domain.macro.domestic.table"
     },
     {
       "objectName": "sge_daily",
@@ -19525,7 +19633,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "spot",
+      "modelPackage": "com.zoutrankil.data.domain.spot.table"
     },
     {
       "objectName": "share_float",
@@ -19642,7 +19752,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.reference",
+      "modelPackage": "com.zoutrankil.data.domain.stock.reference.table"
     },
     {
       "objectName": "shibor_lpr",
@@ -19699,7 +19811,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "macro.interest",
+      "modelPackage": "com.zoutrankil.data.domain.macro.interest.table"
     },
     {
       "objectName": "shibor",
@@ -19846,7 +19960,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "macro.interest",
+      "modelPackage": "com.zoutrankil.data.domain.macro.interest.table"
     },
     {
       "objectName": "stk_alert",
@@ -19933,7 +20049,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.reference",
+      "modelPackage": "com.zoutrankil.data.domain.stock.reference.table"
     },
     {
       "objectName": "stk_factor",
@@ -20470,7 +20588,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.feature",
+      "modelPackage": "com.zoutrankil.data.domain.stock.feature.table"
     },
     {
       "objectName": "stk_high_shock",
@@ -20572,7 +20692,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.reference",
+      "modelPackage": "com.zoutrankil.data.domain.stock.reference.table"
     },
     {
       "objectName": "stk_holdernumber",
@@ -20644,7 +20766,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.reference",
+      "modelPackage": "com.zoutrankil.data.domain.stock.reference.table"
     },
     {
       "objectName": "stk_holdertrade",
@@ -20851,7 +20975,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.reference",
+      "modelPackage": "com.zoutrankil.data.domain.stock.reference.table"
     },
     {
       "objectName": "stk_limit",
@@ -20923,7 +21049,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.market",
+      "modelPackage": "com.zoutrankil.data.domain.stock.market.table"
     },
     {
       "objectName": "stk_shock",
@@ -21025,7 +21153,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.reference",
+      "modelPackage": "com.zoutrankil.data.domain.stock.reference.table"
     },
     {
       "objectName": "stk_st_daily",
@@ -21082,7 +21212,9 @@
           "status": "LOCAL_RULE",
           "notes": "将更名有效区间展开到交易日历中的开市日；不是 namechange 返回的 trade_date。"
         }
-      ]
+      ],
+      "category": "stock.basic",
+      "modelPackage": "com.zoutrankil.data.domain.stock.basic.table"
     },
     {
       "objectName": "stk_suspend",
@@ -21139,7 +21271,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": "来源字符串在历史模型中以 Instant 承载；须按现有时间契约区分日期标记与真实时刻，不能直接加 8 小时。 本地存储列 timestamp 对应来源字段 trade_date。 来源格式同时对照现有解析契约；不代表数据库存储格式。"
         }
-      ]
+      ],
+      "category": "stock.market",
+      "modelPackage": "com.zoutrankil.data.domain.stock.market.table"
     },
     {
       "objectName": "stock_detail_info",
@@ -21421,7 +21555,9 @@
           "status": "VERIFIED_SOURCE",
           "notes": ""
         }
-      ]
+      ],
+      "category": "stock.basic",
+      "modelPackage": "com.zoutrankil.data.domain.stock.basic.table"
     },
     {
       "objectName": "ths_index",
@@ -21538,7 +21674,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "stock.concept",
+      "modelPackage": "com.zoutrankil.data.domain.stock.concept.table"
     },
     {
       "objectName": "ths_member",
@@ -21670,7 +21808,9 @@
           "status": "LOCAL_RULE",
           "notes": "由现有 Java 写入或发布流程产生，不是该接口返回的行情或公告时间。"
         }
-      ]
+      ],
+      "category": "stock.concept",
+      "modelPackage": "com.zoutrankil.data.domain.stock.concept.table"
     }
   ]
 }

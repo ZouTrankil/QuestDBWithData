@@ -3,16 +3,14 @@ package com.zoutrankil.data.service;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.StockBasicDataset;
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataRetrievalFailureException;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;

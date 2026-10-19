@@ -3,12 +3,11 @@ package com.zoutrankil.data.l2.storage;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.l2.domain.L2DatasetManifestRows;
 import com.zoutrankil.data.l2.port.L2DatasetManifestWriteSession;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.L2DatasetManifest;
-import com.zoutrankil.data.domain.L2DatasetManifestDataset;
-import com.zoutrankil.data.domain.L2DatasetManifestKey;
-import com.zoutrankil.data.domain.table.L2DatasetManifestRow;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2DatasetManifestDataset;
+import com.zoutrankil.data.domain.l2.L2DatasetManifestKey;
+import com.zoutrankil.data.domain.l2.table.L2DatasetManifestRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.l2.mapper.L2DatasetManifestMapper;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;

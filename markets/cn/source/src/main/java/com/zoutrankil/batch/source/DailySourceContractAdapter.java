@@ -1,6 +1,6 @@
 package com.zoutrankil.batch.source;
 
-import com.zoutrankil.data.domain.DailySemantics;
+import com.zoutrankil.data.domain.stock.market.DailySemantics;
 import java.util.List;
 import java.util.Objects;
 

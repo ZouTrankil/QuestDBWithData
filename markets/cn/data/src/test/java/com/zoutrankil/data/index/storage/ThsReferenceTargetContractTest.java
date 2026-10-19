@@ -1,7 +1,9 @@
 package com.zoutrankil.data.index.storage;
 
+import com.zoutrankil.data.domain.stock.concept.table.ThsMemberRow;
+import com.zoutrankil.data.domain.stock.concept.table.ThsIndexRow;
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.*;
 import com.zoutrankil.data.index.domain.ThsIndexRows;
 import com.zoutrankil.data.index.domain.ThsIndexState;
 import com.zoutrankil.data.index.domain.ThsMemberState;

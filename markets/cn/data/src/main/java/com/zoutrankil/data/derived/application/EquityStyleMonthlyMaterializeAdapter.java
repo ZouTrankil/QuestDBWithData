@@ -1,7 +1,8 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyTargetSnapshot;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthly;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
 import com.zoutrankil.data.derived.port.EquityStyleMonthlyWriteSession;

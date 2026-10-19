@@ -1,8 +1,10 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendarDataset;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import com.zoutrankil.data.client.dto.TushareTradeCalendarDto;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.ExchangeCalendarRow;
+import com.zoutrankil.data.domain.stock.basic.table.ExchangeCalendarRow;
 import com.zoutrankil.data.calendar.mapper.ExchangeCalendarMapper;
 import org.junit.jupiter.api.Test;
 import java.time.*;

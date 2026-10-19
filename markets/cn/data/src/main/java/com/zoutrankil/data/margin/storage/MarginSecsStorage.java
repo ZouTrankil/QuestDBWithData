@@ -1,17 +1,13 @@
 package com.zoutrankil.data.margin.storage;
 
 import com.zoutrankil.data.margin.domain.MarginSecsLimits;
-
 import com.zoutrankil.data.margin.domain.MarginSecsState.*;
 import com.zoutrankil.data.margin.domain.MarginSecsRows;
-
 import com.zoutrankil.data.margin.mapper.MarginSecsMapper;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.MarginSecs;
-import com.zoutrankil.data.domain.MarginSecsDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginSecs;
+import com.zoutrankil.data.domain.stock.margin.MarginSecsDataset;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.sql.ResultSet;
 import java.sql.SQLException;

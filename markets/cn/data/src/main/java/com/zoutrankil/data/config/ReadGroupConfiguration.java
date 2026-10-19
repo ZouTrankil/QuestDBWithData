@@ -1,7 +1,7 @@
 package com.zoutrankil.data.config;
 
 import com.zoutrankil.data.domain.DatasetImplementation;
-import com.zoutrankil.data.domain.StockBasicDataset;
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import com.zoutrankil.data.repository.CnBondYieldCurveWritePort;
 import com.zoutrankil.data.service.DatasetRegistry;

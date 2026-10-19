@@ -1,12 +1,11 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.DatasetReadQuery;
-import com.zoutrankil.data.domain.L2DatasetManifest;
-import com.zoutrankil.data.domain.L2DatasetManifestDataset;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2DatasetManifestDataset;
 import com.zoutrankil.data.l2.mapper.L2DatasetManifestMapper;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import java.nio.file.Files;

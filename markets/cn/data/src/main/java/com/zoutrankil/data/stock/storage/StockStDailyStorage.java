@@ -3,15 +3,12 @@ package com.zoutrankil.data.stock.storage;
 import com.zoutrankil.data.stock.domain.StockStDailyState;
 import com.zoutrankil.data.stock.domain.StockStDailyState.*;
 import com.zoutrankil.data.stock.port.StockStDailyTables;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.StockStDaily;
-import com.zoutrankil.data.domain.StockStDailyDataset;
-import com.zoutrankil.data.domain.StockStDailyKey;
+import com.zoutrankil.data.domain.stock.basic.StockStDaily;
+import com.zoutrankil.data.domain.stock.basic.StockStDailyDataset;
+import com.zoutrankil.data.domain.stock.basic.StockStDailyKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import java.security.MessageDigest;

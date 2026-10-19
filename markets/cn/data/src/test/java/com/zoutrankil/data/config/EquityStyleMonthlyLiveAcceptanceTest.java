@@ -1,12 +1,15 @@
 package com.zoutrankil.data.config;
+
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
+import com.zoutrankil.data.domain.index.IndexCatalogDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthly;
 import com.zoutrankil.data.derived.storage.QuestDbEquityStyleMonthlySourceReader;
 import com.zoutrankil.data.derived.storage.QuestDbEquityStyleMonthlyTarget;
-
 import com.zoutrankil.data.derived.application.EquityStyleMonthlyJobService;
 import com.zoutrankil.data.derived.application.EquityStyleMonthlyMaterializeAdapter;
 import com.zoutrankil.data.derived.storage.EquityStyleMonthlyReadRepository;
 import com.zoutrankil.data.derived.storage.EquityStyleMonthlyWritePort;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.*;
 import com.zoutrankil.data.domain.*;

@@ -1,13 +1,12 @@
 package com.zoutrankil.data.index.storage;
 
+import com.zoutrankil.data.domain.index.IndexCatalogDataset;
 import com.zoutrankil.data.index.domain.IndexCatalogState.*;
 import com.zoutrankil.data.index.port.IndexCatalogTables;
 import com.zoutrankil.data.index.port.IndexCatalogStagingPort;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.IndexRow;
+import com.zoutrankil.data.domain.index.table.IndexRow;
 import com.zoutrankil.data.index.mapper.IndexCatalogMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.security.MessageDigest;

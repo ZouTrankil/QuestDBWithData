@@ -4,11 +4,8 @@ import com.zoutrankil.data.margin.domain.MarginZrzState;
 import com.zoutrankil.data.margin.domain.MarginZrzState.*;
 import com.zoutrankil.data.margin.domain.MarginZrzRows;
 import com.zoutrankil.data.margin.port.MarginZrzTables;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
@@ -66,7 +63,7 @@ public final class MarginZrzPublication {
                 ||!tables.physicalTargetId(prepared.stage(),stage.identity()).equals(prepared.stagePhysicalTarget()))
             throw new IllegalStateException("D031 target or verified stage changed before publication");
         verifyStageReceipt(verified);
-        String backup=com.zoutrankil.data.domain.MarginZrzDataset.ISOLATED_PREFIX+"backup_"+UUID.randomUUID().toString().replace("-","");
+        String backup=com.zoutrankil.data.domain.stock.margin.MarginZrzDataset.ISOLATED_PREFIX+"backup_"+UUID.randomUUID().toString().replace("-","");
         String stageReceiptHash=sha(FileEvidenceStore.readBounded(Path.of(verified.receipt()), 4 * 1024 * 1024, () -> new IllegalStateException("D031 verified stage receipt escaped its run evidence root")));
         String scope=JobDefinitionJson.mapper().writeValueAsString(java.util.Map.of("stageReceipt",verified.receipt(),
                 "stageReceiptFingerprint",stageReceiptHash,"requestFingerprint",prepared.requestFingerprint(),

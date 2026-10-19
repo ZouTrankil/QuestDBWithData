@@ -1,14 +1,13 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
 import com.zoutrankil.data.service.*;
 import com.zoutrankil.data.stock.storage.QuestDbStockDetailTarget;
-
 import com.zoutrankil.data.stock.application.StockDetailInfoPublication;
 import com.zoutrankil.data.stock.application.StockDetailInfoSource;
 import com.zoutrankil.data.stock.storage.StockDetailInfoStaging;
 import com.zoutrankil.data.stock.storage.StockDetailInfoStorage;
 import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;

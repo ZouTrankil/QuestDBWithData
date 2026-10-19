@@ -1,14 +1,13 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.stock.concept.ThsMemberDataset;
+import com.zoutrankil.data.domain.stock.concept.ThsMember;
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.index.port.ThsMemberTarget;
-
 import com.zoutrankil.data.index.domain.ThsMemberState;
-
-
 import com.zoutrankil.data.index.mapper.ThsMemberMapper;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import java.nio.file.*;
@@ -226,7 +225,7 @@ public final class ThsMemberJobService implements SyncJobOwner {
                     || !actual.otherFingerprint().equals(prepared.before().otherFingerprint()))
                 throw new IllegalStateException("Unaffected THS boards changed");
             var expected = source.rows().stream().map(new com.zoutrankil.data.index.mapper.ThsMemberMapper()::toStorage)
-                    .sorted(Comparator.comparing(com.zoutrankil.data.domain.table.ThsMemberRow::conCode)).toList();
+                    .sorted(Comparator.comparing(com.zoutrankil.data.domain.stock.concept.table.ThsMemberRow::conCode)).toList();
             if (staging.requiresWrite(prepared) && !actual.boardRows().equals(expected))
                 throw new IllegalStateException("Final THS member source-key full values differ");
             if (!staging.requiresWrite(prepared) && actual.boardRows().size() != sourceCount)

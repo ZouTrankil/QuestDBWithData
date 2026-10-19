@@ -1,17 +1,15 @@
 package com.zoutrankil.data.index.storage;
 
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
-
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetImplementation;
-import com.zoutrankil.data.domain.IndexWeight;
-import com.zoutrankil.data.domain.IndexWeightDataset;
-import com.zoutrankil.data.domain.IndexWeightKey;
+import com.zoutrankil.data.domain.index.IndexWeight;
+import com.zoutrankil.data.domain.index.IndexWeightDataset;
+import com.zoutrankil.data.domain.index.IndexWeightKey;
 import com.zoutrankil.data.index.mapper.IndexWeightMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,6 @@
 package com.zoutrankil.data.index.application;
 
-import com.zoutrankil.data.domain.table.StockDetailInfoRow;
+import com.zoutrankil.data.domain.stock.basic.table.StockDetailInfoRow;
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.stock.domain.StockDetailState.Identity;
 import com.zoutrankil.data.stock.port.StockDetailNameReadPort;

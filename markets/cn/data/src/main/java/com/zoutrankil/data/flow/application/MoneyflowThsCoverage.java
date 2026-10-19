@@ -1,11 +1,10 @@
 package com.zoutrankil.data.flow.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.MoneyflowThs;
-import com.zoutrankil.data.domain.MoneyflowThsKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThs;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;

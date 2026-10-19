@@ -1,10 +1,10 @@
 package com.zoutrankil.data.etf.storage;
 
 import com.zoutrankil.data.domain.DatasetDefinition;
-import com.zoutrankil.data.domain.EtfBasicDataset;
-import com.zoutrankil.data.domain.EtfPortfolio;
-import com.zoutrankil.data.domain.EtfPortfolioDataset;
-import com.zoutrankil.data.domain.EtfShareDataset;
+import com.zoutrankil.data.domain.fund.EtfBasicDataset;
+import com.zoutrankil.data.domain.fund.EtfPortfolio;
+import com.zoutrankil.data.domain.fund.EtfPortfolioDataset;
+import com.zoutrankil.data.domain.fund.EtfShareDataset;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
 import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.port.EtfWriteTarget;
@@ -16,7 +16,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.time.LocalDate;
@@ -24,7 +23,6 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

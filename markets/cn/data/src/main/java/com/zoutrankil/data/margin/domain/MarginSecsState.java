@@ -1,6 +1,6 @@
 package com.zoutrankil.data.margin.domain;
 
-import com.zoutrankil.data.domain.MarginSecs;
+import com.zoutrankil.data.domain.stock.margin.MarginSecs;
 import java.util.*;
 import java.time.LocalDate;
 

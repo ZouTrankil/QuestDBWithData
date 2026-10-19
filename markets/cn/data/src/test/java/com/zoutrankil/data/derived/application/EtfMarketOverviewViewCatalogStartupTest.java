@@ -1,10 +1,9 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyViewDataset;
 import com.zoutrankil.data.service.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.storage.EtfMarketOverviewDailyViewReadRepository;

@@ -1,20 +1,15 @@
 package com.zoutrankil.data.stock.storage;
 
 import com.zoutrankil.data.stock.domain.StockExecutionTables;
-
 import com.zoutrankil.data.stock.domain.StockStDailyState;
 import com.zoutrankil.data.stock.domain.StockStDailyState.*;
 import com.zoutrankil.data.stock.port.StockStDailyStagingPort;
-
-
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
-
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.StockStDaily;
-import com.zoutrankil.data.domain.StockStDailyKey;
+import com.zoutrankil.data.domain.stock.basic.StockStDaily;
+import com.zoutrankil.data.domain.stock.basic.StockStDailyKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import io.questdb.client.QuestDB;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -42,7 +37,7 @@ public final class StockStDailyStaging implements StockStDailyStagingPort {
     public Prepared prepare(String target, String expectedPhysicalTarget, LocalDate from, LocalDate to) throws Exception {
         StockExecutionTables.requireStockStDaily(target);
         Objects.requireNonNull(expectedPhysicalTarget); Objects.requireNonNull(from); Objects.requireNonNull(to);
-        if (from.isAfter(to) || from.isBefore(com.zoutrankil.data.domain.StockStDailyDataset.HISTORY_ANCHOR)
+        if (from.isAfter(to) || from.isBefore(com.zoutrankil.data.domain.stock.basic.StockStDailyDataset.HISTORY_ANCHOR)
                 || java.time.temporal.ChronoUnit.DAYS.between(from, to) + 1 > 366)
             throw new IllegalArgumentException("D012 replacement window must be explicit and bounded to 366 days");
         var storage = new StockStDailyStorage(jdbc, target);

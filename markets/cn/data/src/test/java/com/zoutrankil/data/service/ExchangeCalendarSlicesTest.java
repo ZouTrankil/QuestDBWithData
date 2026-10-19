@@ -1,8 +1,7 @@
 package com.zoutrankil.data.service;
 
 import com.zoutrankil.data.calendar.application.ExchangeCalendarSlices;
-
-import com.zoutrankil.data.domain.ExchangeCalendar;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.*;

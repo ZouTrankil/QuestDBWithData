@@ -1,17 +1,14 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.market.StockLimitKey;
+import com.zoutrankil.data.domain.stock.market.StockLimit;
 import com.zoutrankil.data.stock.domain.StockExecutionTables;
-
 import com.zoutrankil.data.stock.port.StockLimitTarget;
 import com.zoutrankil.data.stock.domain.StockTargetRange;
-
 import com.zoutrankil.data.stock.mapper.StockLimitMapper;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
-
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
-
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.repository.*;

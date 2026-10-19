@@ -2,8 +2,8 @@ package com.zoutrankil.data.index.mapper;
 
 
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.IndexCatalogEntry;
-import com.zoutrankil.data.domain.table.IndexRow;
+import com.zoutrankil.data.domain.index.IndexCatalogEntry;
+import com.zoutrankil.data.domain.index.table.IndexRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.LocalDate;
 

@@ -1,12 +1,13 @@
 package com.zoutrankil.data.stock.application;
+
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.stock.domain.StockDetailState;
 import com.zoutrankil.data.stock.domain.policy.StockDetailInfoMerge;
-
 import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
 import com.zoutrankil.data.stock.storage.StockDetailPublicationJournal;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.stock.port.StockDetailTarget;

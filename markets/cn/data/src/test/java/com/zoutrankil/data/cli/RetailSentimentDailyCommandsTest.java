@@ -1,11 +1,9 @@
 package com.zoutrankil.data.cli;
 
-import com.zoutrankil.data.domain.RetailSentimentDailySnapshot;
-
+import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;

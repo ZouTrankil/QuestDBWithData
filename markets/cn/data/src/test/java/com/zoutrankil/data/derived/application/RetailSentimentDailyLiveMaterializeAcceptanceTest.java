@@ -1,16 +1,14 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
+import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import com.zoutrankil.data.derived.storage.QuestDbRetailSentimentDailyTarget;
-
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
-
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyReadRepository;
-
 import com.zoutrankil.data.service.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.HikariDataSource;

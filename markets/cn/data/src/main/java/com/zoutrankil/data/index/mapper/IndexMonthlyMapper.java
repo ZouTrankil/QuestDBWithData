@@ -2,15 +2,13 @@ package com.zoutrankil.data.index.mapper;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.IndexMonthlyState.*;
-
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.TushareIndexMonthlyDto;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.IndexMonthly;
-import com.zoutrankil.data.domain.IndexMonthlyKey;
+import com.zoutrankil.data.domain.index.IndexMonthly;
+import com.zoutrankil.data.domain.index.IndexMonthlyKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-import com.zoutrankil.data.domain.policy.IndexMonthlyUniverse;
+import com.zoutrankil.data.domain.index.policy.IndexMonthlyUniverse;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;

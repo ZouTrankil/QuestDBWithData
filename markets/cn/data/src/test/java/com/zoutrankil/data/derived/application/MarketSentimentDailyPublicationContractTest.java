@@ -1,12 +1,13 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.derived.MarketSentimentDailyTargetSnapshot;
 import com.zoutrankil.data.client.TushareClient;
 import com.zoutrankil.data.derived.domain.MarketSentimentDailyRows;
 import com.zoutrankil.data.derived.domain.MarketSentimentDailySourceData.*;
 import com.zoutrankil.data.derived.port.*;
 import com.zoutrankil.data.derived.storage.MarketSentimentDailyStorage;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.MarketSentimentDailyRow;
+import com.zoutrankil.data.domain.derived.table.MarketSentimentDailyRow;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
 import java.nio.file.*;

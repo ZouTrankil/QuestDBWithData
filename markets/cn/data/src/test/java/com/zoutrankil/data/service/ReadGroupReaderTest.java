@@ -1,5 +1,6 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import org.junit.jupiter.api.Test;

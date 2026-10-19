@@ -1,8 +1,8 @@
 package com.zoutrankil.batch.l2;
 
 import com.zoutrankil.batch.l2.archive.DfcfCsvParser;
-import com.zoutrankil.data.domain.L2DailyFeatureField;
-import com.zoutrankil.data.domain.L2DailyFeatures;
+import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
+import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Path;

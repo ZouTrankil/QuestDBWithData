@@ -2,17 +2,15 @@ package com.zoutrankil.data.etf.application;
 
 import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
-
 import com.zoutrankil.data.service.DailySyncEndDate;
 import com.zoutrankil.data.service.FrozenRunRequest;
 import com.zoutrankil.data.service.SyncJobRegistry;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.SyncRunExecution;
 import com.zoutrankil.data.service.TusharePageService;
-
-import com.zoutrankil.data.domain.EtfFactor;
-import com.zoutrankil.data.domain.EtfFactorDataset;
-import com.zoutrankil.data.domain.EtfFactorKey;
+import com.zoutrankil.data.domain.fund.EtfFactor;
+import com.zoutrankil.data.domain.fund.EtfFactorDataset;
+import com.zoutrankil.data.domain.fund.EtfFactorKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
@@ -23,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;

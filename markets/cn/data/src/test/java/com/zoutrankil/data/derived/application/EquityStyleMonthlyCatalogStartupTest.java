@@ -1,9 +1,8 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.index.application.IndexMonthlySyncJobOwner;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.storage.EquityStyleMonthlyReadRepository;

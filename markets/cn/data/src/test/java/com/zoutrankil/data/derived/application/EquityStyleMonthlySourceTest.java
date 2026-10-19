@@ -1,12 +1,12 @@
 package com.zoutrankil.data.derived.application;
+
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
 import com.zoutrankil.data.derived.domain.EquityStyleMonthlySourceData;
 import com.zoutrankil.data.derived.domain.EquityStyleMonthlySourceData.*;
 import com.zoutrankil.data.derived.port.EquityStyleMonthlySourceReadPort;
 import com.zoutrankil.data.derived.storage.QuestDbEquityStyleMonthlySourceReader;
 import com.zoutrankil.data.derived.storage.QuestDbEquityStyleMonthlyTarget;
-
 import com.zoutrankil.data.service.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.*;

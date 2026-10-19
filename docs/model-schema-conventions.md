@@ -12,6 +12,37 @@
 
 `StockBasicMapper` 做明确转换。Java 的 record 或 key 类型不替数据库实现去重，也不用加 JPA `@Entity`。项目用显式 SQL 和读写适配器，不靠 ORM 自动建表。
 
+## 模型目录怎么分
+
+CN 的 `com.zoutrankil.data.domain` 按数据类别分包，参考 [Tushare 目录](https://tushare.pro/document/2)，只创建已有条目的分类。模型、业务键和 Dataset 契约放在对应类别；存储投影继续放在类别下的 `table`、`view`、`materializedview`，规则放 `policy`。
+
+```text
+domain/
+├── stock/
+│   ├── basic/       基础资料、交易日历、ST
+│   ├── market/      日线、每日指标、涨跌停、停复牌
+│   ├── financial/   财务报表、指标、分红和披露计划
+│   ├── reference/   股东、质押、回购、解禁、大宗和异动
+│   ├── feature/     筹码、技术因子、券商荐股
+│   ├── margin/      两融和转融资
+│   ├── moneyflow/   资金流向
+│   └── concept/     THS、DC 概念和行业板块
+├── fund/            ETF 与公募基金
+├── index/           指数目录、行情、成分和权重
+├── futures/         期货合约、行情、持仓和结算
+├── spot/            黄金现货
+├── bond/            债券收益率；当前来自 ChinaBond
+├── forex/           人民币指数历史模型，来源仍待确认
+├── macro/
+│   ├── domestic/    国内经济、社融和财经日历
+│   └── interest/    Shibor、LPR、Hibor
+├── derived/         本地衍生计算和回测投影
+├── l2/              L2 特征、标签和归档契约
+└── shared/          跨类别的任务身份与隔离目标规则
+```
+
+这是代码导航分类，不表示每个对象都来自 Tushare；基金合并 ETF 与公募条目，本地衍生计算和 L2 单列。`stock/market/DailyDataset` 是执行契约，`stock/market/table/DailyRow` 是存储投影，不是两张表。只迁模型包与引用，任务、Quartz 类名、物理表名和恢复协议保持原样。
+
 ## 日期和时间别混
 
 - 只有日期用 `LocalDate`，比如上市日、交易日、报告期。
@@ -58,6 +89,10 @@ businessTime.todaySnapshotMarker();  // 快照表使用的日期标记
 如果以后接入 Python/Pydantic，先提供真实模型和带版本的 JSON Schema，再确定 DTO 生成方式。当前没有完整的 Pydantic → Java 自动流水线，不要把建议写成已实现能力。
 
 生成契约要明确别名、必填与可空、日期格式、精度和版本。必填不等于唯一；数据库时间列、分区和去重键另外维护。自定义 Python 校验也不一定能由 JSON Schema 完整表达，需要在 Java 边界补齐。
+
+生成目录只保留采集字段资料需要或现有代码实际使用的投影，不把实库发现的每个对象都生成 Java 类。CN 已移除 47 个无人引用的旧快照投影壳；这不代表删除同名数据产品或数据库对象。`*Dataset` 是执行契约，`*Key` 是业务键，`*Snapshot` 可能是核验输入，它们不能当作临时表批量清理。
+
+`java_d*` 多数是隔离验收目标，`java_tushare_stock_basic_*` 是 API/CLI 仍使用的旧示例。它们与正式同步目标分别核对，不能靠改名或删模型宣称已完成接管。stage/backup 的删除仍按发布和恢复归属判断。
 
 ## 采集字段的官方说明
 

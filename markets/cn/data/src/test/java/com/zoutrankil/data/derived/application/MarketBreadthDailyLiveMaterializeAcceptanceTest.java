@@ -1,13 +1,10 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
 import com.zoutrankil.data.derived.storage.QuestDbMarketBreadthDailyTarget;
-
 import com.zoutrankil.data.derived.storage.MarketBreadthDailyMaterializationPort;
-
 import com.zoutrankil.data.derived.storage.MarketBreadthDailyReadRepository;
-
 import com.zoutrankil.data.service.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import com.zoutrankil.data.config.QuestDbProperties;

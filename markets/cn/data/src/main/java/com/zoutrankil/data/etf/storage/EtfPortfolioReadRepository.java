@@ -1,15 +1,14 @@
 package com.zoutrankil.data.etf.storage;
 
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetImplementation;
 import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
-import com.zoutrankil.data.domain.EtfPortfolio;
-import com.zoutrankil.data.domain.EtfPortfolioDataset;
-import com.zoutrankil.data.domain.EtfPortfolioKey;
+import com.zoutrankil.data.domain.fund.EtfPortfolio;
+import com.zoutrankil.data.domain.fund.EtfPortfolioDataset;
+import com.zoutrankil.data.domain.fund.EtfPortfolioKey;
 import com.zoutrankil.data.etf.mapper.EtfPortfolioMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;

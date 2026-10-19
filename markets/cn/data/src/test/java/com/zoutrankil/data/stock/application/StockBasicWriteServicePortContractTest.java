@@ -1,23 +1,21 @@
 package com.zoutrankil.data.stock.application;
 
 import com.zoutrankil.data.config.QuestDbProperties;
-import com.zoutrankil.data.domain.StockBasic;
-import com.zoutrankil.data.domain.StockBasicSnapshot;
-import com.zoutrankil.data.domain.StockBasicSnapshotKey;
+import com.zoutrankil.data.domain.stock.basic.StockBasic;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshot;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshotKey;
 import com.zoutrankil.data.domain.temporal.BusinessTime;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import com.zoutrankil.data.stock.port.StockBasicTarget;
 import com.zoutrankil.data.stock.storage.StockBasicWritePort;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 import org.junit.jupiter.api.Test;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

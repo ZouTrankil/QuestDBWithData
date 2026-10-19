@@ -1,7 +1,7 @@
 package com.zoutrankil.data.flow.port;
 
-import com.zoutrankil.data.domain.MoneyflowHsgt;
-import com.zoutrankil.data.domain.MoneyflowHsgtKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgt;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtKey;
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtState.TargetRange;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 import java.time.LocalDate;

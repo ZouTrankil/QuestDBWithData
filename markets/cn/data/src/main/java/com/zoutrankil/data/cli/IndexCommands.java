@@ -9,7 +9,6 @@ import com.zoutrankil.data.index.application.IndexMonthlyJobService;
 import com.zoutrankil.data.index.application.IndexWeightJobService;
 import com.zoutrankil.data.index.application.ThsIndexJobService;
 import com.zoutrankil.data.index.application.ThsMemberJobService;
-
 import java.nio.file.Path;
 import java.util.Map;
 import org.springframework.stereotype.Component;
@@ -334,8 +333,8 @@ public final class IndexCommands implements CliCommandFamily {
             case "list-index-daily-market-universe" -> {
                 if(!options.isEmpty())throw new IllegalArgumentException("Universe listing accepts no options");
                 CliOutput.printJson(Map.of(
-                        "CORE57",com.zoutrankil.data.domain.policy.IndexDailyMarketUniverse.CORE57,
-                        "SW2021_L1_31",com.zoutrankil.data.domain.policy.IndexDailyMarketUniverse.SW2021_L1_31), CliOutput.Profile.JOB_DEFINITION, true);
+                        "CORE57",com.zoutrankil.data.domain.index.policy.IndexDailyMarketUniverse.CORE57,
+                        "SW2021_L1_31",com.zoutrankil.data.domain.index.policy.IndexDailyMarketUniverse.SW2021_L1_31), CliOutput.Profile.JOB_DEFINITION, true);
             }
             case "finish-index-monthly-publication", "finish-dc-index-publication" -> {
                 if(!options.keySet().equals(java.util.Set.of("--run","--writer-stopped")) || !"true".equals(options.get("--writer-stopped")))

@@ -1,7 +1,7 @@
 package com.zoutrankil.data.config;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarTarget;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarQuestDbTarget;
-import com.zoutrankil.data.domain.ExchangeCalendarDataset;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendarDataset;
 import io.questdb.client.QuestDB;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

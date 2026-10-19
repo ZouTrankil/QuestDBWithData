@@ -1,6 +1,9 @@
 package com.zoutrankil.data.stock.mapper;
 
-
+import com.zoutrankil.data.domain.stock.feature.StockFactorKey;
+import com.zoutrankil.data.domain.stock.feature.StockFactorFields;
+import com.zoutrankil.data.domain.stock.feature.StockFactorDataset;
+import com.zoutrankil.data.domain.stock.feature.StockFactor;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.TushareStockFactorDto;
 import com.zoutrankil.data.domain.*;

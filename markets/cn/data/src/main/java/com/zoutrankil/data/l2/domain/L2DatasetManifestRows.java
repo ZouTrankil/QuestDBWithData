@@ -1,5 +1,7 @@
 package com.zoutrankil.data.l2.domain;
 
+import com.zoutrankil.data.domain.l2.L2DatasetManifestKey;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
 import com.zoutrankil.data.domain.*;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

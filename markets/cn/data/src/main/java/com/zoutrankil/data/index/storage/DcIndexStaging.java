@@ -1,10 +1,11 @@
 package com.zoutrankil.data.index.storage;
+
+import com.zoutrankil.data.domain.stock.concept.DcIndexDataset;
+import com.zoutrankil.data.domain.stock.concept.DcIndex;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.DcIndexState.*;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import java.nio.file.*;
 import java.time.*;

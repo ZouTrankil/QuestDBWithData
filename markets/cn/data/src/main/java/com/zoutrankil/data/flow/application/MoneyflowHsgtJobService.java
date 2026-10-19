@@ -2,18 +2,14 @@ package com.zoutrankil.data.flow.application;
 
 import com.zoutrankil.data.flow.port.MoneyflowHsgtTarget;
 import com.zoutrankil.data.calendar.port.SseCalendarWindowReadPort;
-
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtLimits;
-
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtState;
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtRows;
-
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.MoneyflowHsgt;
-import com.zoutrankil.data.domain.MoneyflowHsgtDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgt;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.SyncRunLedger;
@@ -94,7 +90,7 @@ public class MoneyflowHsgtJobService {
         var checkpoint=MoneyflowHsgtCoverage.checkpoint(ledgerPath,logical);
         if(!"moneyflow_hsgt".equals(table))MoneyflowHsgtCoverage.validateTarget(ledgerPath,logical,before);
         else {
-            var keys=new java.util.HashSet<com.zoutrankil.data.domain.MoneyflowHsgtKey>();
+            var keys=new java.util.HashSet<com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtKey>();
             for(var row:before.rows())if(!keys.add(row.key()))throw new IllegalStateException("Formal moneyflow_hsgt has duplicate existing business dates");
         }
         LocalDate from=bootstrapFrom,anchor=null,checkpointBefore=null;boolean bootstrap=false;
@@ -182,7 +178,7 @@ public class MoneyflowHsgtJobService {
         Path evidence=ledgerPath.getParent().resolve("sync-evidence").resolve(runId);
         var adapter=new MoneyflowHsgtSyncAdapter(new MoneyflowHsgtSource(pages,evidence.resolve("source")),port,
                 new MoneyflowHsgtStaging(target.newTables()),new MoneyflowHsgtPublication(target.newTables(),ledgerPath),evidence,target.newTables(),calendars);
-        var runner=new SyncJobRunner<MoneyflowHsgt,com.zoutrankil.data.domain.MoneyflowHsgtKey>(ledger,new DatasetIntervalLock(ledgerPath));
+        var runner=new SyncJobRunner<MoneyflowHsgt,com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtKey>(ledger,new DatasetIntervalLock(ledgerPath));
         java.util.function.BooleanSupplier cancelled=()->{if(Thread.currentThread().isInterrupted())return true;try{return ledger.cancellationRequested(runId);}catch(java.sql.SQLException failure){throw new IllegalStateException("Cannot read D027 cancellation state",failure);}};
         return priorRunId==null?runner.run(runId,parentRunId,plan.targetId(),plan.request(),adapter,cancelled)
                 :runner.resume(runId,parentRunId,priorRunId,plan.targetId(),plan.request(),adapter,cancelled);

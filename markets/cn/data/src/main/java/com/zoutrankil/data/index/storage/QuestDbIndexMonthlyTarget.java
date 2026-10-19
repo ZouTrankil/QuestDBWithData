@@ -1,4 +1,6 @@
 package com.zoutrankil.data.index.storage;
+
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;

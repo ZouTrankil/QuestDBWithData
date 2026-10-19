@@ -1,5 +1,9 @@
 package com.zoutrankil.data.domain.policy;
 
+import com.zoutrankil.data.domain.index.policy.IndexWeightUniverse;
+import com.zoutrankil.data.domain.index.policy.IndexMonthlyUniverse;
+import com.zoutrankil.data.domain.index.policy.IndexDailyMarketUniverse;
+import com.zoutrankil.data.domain.index.policy.IndexDailyBasicUniverse;
 import com.zoutrankil.data.index.mapper.IndexWeightMapper;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;

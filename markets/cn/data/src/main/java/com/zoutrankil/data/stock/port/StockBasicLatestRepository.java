@@ -1,11 +1,9 @@
 package com.zoutrankil.data.stock.port;
 
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.StockBasicLatest;
+import com.zoutrankil.data.domain.stock.basic.StockBasicLatest;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
-
 import java.util.List;
 
 /**

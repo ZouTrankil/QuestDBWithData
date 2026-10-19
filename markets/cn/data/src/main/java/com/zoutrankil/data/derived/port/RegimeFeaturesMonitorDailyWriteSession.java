@@ -1,7 +1,8 @@
 package com.zoutrankil.data.derived.port;
 
+import com.zoutrankil.data.domain.derived.table.RegimeFeaturesMonitorDailyRow;
+import com.zoutrankil.data.domain.derived.RegimeFeaturesMonitorDailyTargetSnapshot;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.*;
 import java.time.*;
 import java.util.*;
 import com.zoutrankil.data.derived.domain.RegimeFeaturesMonitorDailyRows;

@@ -1,9 +1,9 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshotKey;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshot;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.client.TushareClient;
 import com.zoutrankil.data.client.dto.TushareStockBasicDto;
@@ -11,7 +11,6 @@ import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.StockBasicMapper;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
-
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;

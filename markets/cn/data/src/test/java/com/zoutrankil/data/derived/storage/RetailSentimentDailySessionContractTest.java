@@ -1,5 +1,7 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.derived.application.RetailSentimentDailyMaterializeAdapter;
 import com.zoutrankil.data.derived.domain.RetailSentimentDailyFullSourceScope;

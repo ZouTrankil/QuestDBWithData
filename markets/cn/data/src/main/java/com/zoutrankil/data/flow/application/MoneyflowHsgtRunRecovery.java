@@ -1,11 +1,9 @@
 package com.zoutrankil.data.flow.application;
 
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset;
 import com.zoutrankil.data.flow.port.MoneyflowHsgtStagingPort;
-
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtState;
-
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
@@ -35,7 +33,7 @@ public final class MoneyflowHsgtRunRecovery {
   if(intentFile==null||Files.isSymbolicLink(intentFile)||!Files.isRegularFile(intentFile)||Files.size(intentFile)>4*1024*1024||!intentFile.toRealPath().startsWith(root.toRealPath()))throw new IllegalStateException("D027 bounded owned intent required");
   JsonNode intent=json.readTree(FileEvidenceStore.readBounded(intentFile, 4 * 1024 * 1024, () -> new IllegalStateException("D027 bounded owned intent required")));String stage=intent.path("stage").asText();
   if(!stage.matches("java_d027_moneyflow_hsgt_stage_[0-9a-f]{32}")||!"READY".equals(intent.path("phase").asText())||!"moneyflow_hsgt".equals(intent.path("dataset").asText())
-    ||!intent.path("dedup").isBoolean()||intent.path("dedup").asBoolean()!=com.zoutrankil.data.domain.MoneyflowHsgtDataset.formalDedupLayout(table)
+    ||!intent.path("dedup").isBoolean()||intent.path("dedup").asBoolean()!=com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset.formalDedupLayout(table)
     ||!runId.equals(intent.path("runId").asText())||!table.equals(intent.path("target").asText())||!saved.targetId().equals(intent.path("logicalTargetId").asText())
     ||!fingerprint.equals(intent.path("requestFingerprint").asText())||!request.from().toString().equals(intent.path("windowFrom").asText())||!request.to().toString().equals(intent.path("windowTo").asText())
     ||!request.logicalDate().toString().equals(intent.path("logicalDate").asText())||!request.mode().name().equals(intent.path("mode").asText()))throw new IllegalStateException("D027 intent differs from frozen request");

@@ -1,7 +1,9 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.index.table.IndexMemberRow;
+import com.zoutrankil.data.domain.index.IndexMembershipDataset;
+import com.zoutrankil.data.domain.index.IndexMembership;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.*;
 import com.zoutrankil.data.index.domain.IndexMembershipState.*;
 import com.zoutrankil.data.index.mapper.IndexMembershipMapper;
 import com.zoutrankil.data.index.port.*;

@@ -1,8 +1,8 @@
 package com.zoutrankil.data.index.domain;
 
-import com.zoutrankil.data.domain.ThsMember;
+import com.zoutrankil.data.domain.stock.concept.ThsMember;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.table.ThsMemberRow;
+import com.zoutrankil.data.domain.stock.concept.table.ThsMemberRow;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;

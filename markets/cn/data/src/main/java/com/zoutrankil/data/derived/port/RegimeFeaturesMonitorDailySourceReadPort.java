@@ -1,12 +1,11 @@
 package com.zoutrankil.data.derived.port;
 
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.*;
 import java.time.*;
 import java.util.*;
 import java.security.MessageDigest;
 import java.util.function.BooleanSupplier;
-import com.zoutrankil.data.domain.policy.RegimeFeaturesMonitorDailyCalculation.*;
+import com.zoutrankil.data.domain.derived.policy.RegimeFeaturesMonitorDailyCalculation.*;
 import com.zoutrankil.data.derived.domain.RegimeFeaturesMonitorDailySourceData.*;
 /** Source rows stream in their original cancellation, budget and hashing order. */
 public interface RegimeFeaturesMonitorDailySourceReadPort {

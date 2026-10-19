@@ -1,16 +1,14 @@
 package com.zoutrankil.data.index.storage;
+
+import com.zoutrankil.data.domain.index.IndexMonthlyKey;
+import com.zoutrankil.data.domain.index.IndexMonthly;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.IndexMonthlyState.*;
-
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.IndexMonthlyDataset;
-
-import com.zoutrankil.data.domain.policy.IndexMonthlyUniverse;
-
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
+import com.zoutrankil.data.domain.index.policy.IndexMonthlyUniverse;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.index.mapper.IndexMonthlyMapper;

@@ -1,13 +1,12 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.L2DailyFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2DailyFeaturesDataset;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.l2.port.L2DailyFeaturesTarget;
@@ -200,8 +199,8 @@ public final class L2DailyFeaturesJobService implements SyncJobOwner {
         var writer = port();
         var adapter = new L2DailyFeaturesSyncAdapter(source, plan.source(), symbols, definition(), writer);
         var ledger = new SyncRunLedger(ledgerPath);
-        var runner = new SyncJobRunner<com.zoutrankil.data.domain.L2DailyFeatures,
-                com.zoutrankil.data.domain.L2DailyFeaturesKey>(ledger, new DatasetIntervalLock(ledgerPath));
+        var runner = new SyncJobRunner<com.zoutrankil.data.domain.l2.L2DailyFeatures,
+                com.zoutrankil.data.domain.l2.L2DailyFeaturesKey>(ledger, new DatasetIntervalLock(ledgerPath));
         String runId = "d086-" + RUN_STAMP.format(java.time.Instant.now().atZone(ZoneId.of("UTC")))
                 + "-" + UUID.randomUUID();
         java.util.function.BooleanSupplier cancelled = () -> {

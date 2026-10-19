@@ -1,7 +1,8 @@
 package com.zoutrankil.data.index.storage;
 
+import com.zoutrankil.data.domain.index.IndexCatalogEntry;
+import com.zoutrankil.data.domain.index.IndexCatalogDataset;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.service.ReadGroupReader;

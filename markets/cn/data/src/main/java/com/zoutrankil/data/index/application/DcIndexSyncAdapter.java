@@ -1,11 +1,12 @@
 package com.zoutrankil.data.index.application;
+
+import com.zoutrankil.data.domain.stock.concept.DcIndexKey;
+import com.zoutrankil.data.domain.stock.concept.DcIndexDataset;
+import com.zoutrankil.data.domain.stock.concept.DcIndex;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.DcIndexState.*;
-
-
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.*;

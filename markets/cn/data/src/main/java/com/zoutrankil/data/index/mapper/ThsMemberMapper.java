@@ -3,8 +3,8 @@ package com.zoutrankil.data.index.mapper;
 
 import com.zoutrankil.data.client.dto.TushareThsMemberDto;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.ThsMember;
-import com.zoutrankil.data.domain.table.ThsMemberRow;
+import com.zoutrankil.data.domain.stock.concept.ThsMember;
+import com.zoutrankil.data.domain.stock.concept.table.ThsMemberRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.Instant;
 import java.time.LocalDate;

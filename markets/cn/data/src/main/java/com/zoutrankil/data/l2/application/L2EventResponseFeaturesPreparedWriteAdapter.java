@@ -1,8 +1,7 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.L2EventResponseFeatures;
+import com.zoutrankil.data.domain.l2.L2EventResponseFeatures;
 import com.zoutrankil.data.l2.mapper.L2EventResponseFeaturesMapper;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Path;
@@ -14,12 +13,12 @@ import java.util.function.BooleanSupplier;
 public final class L2EventResponseFeaturesPreparedWriteAdapter implements WriteGroupMemberAdapter {
     private final L2EventResponseFeaturesJobService owner;
     private final PreparedWriteAdapter<L2EventResponseFeatures,
-            com.zoutrankil.data.domain.L2EventResponseFeaturesKey> delegate;
+            com.zoutrankil.data.domain.l2.L2EventResponseFeaturesKey> delegate;
     private final L2EventResponseFeaturesMapper mapper = new L2EventResponseFeaturesMapper();
 
     public L2EventResponseFeaturesPreparedWriteAdapter(L2EventResponseFeaturesJobService owner,
             PreparedWriteAdapter<L2EventResponseFeatures,
-                    com.zoutrankil.data.domain.L2EventResponseFeaturesKey> delegate) {
+                    com.zoutrankil.data.domain.l2.L2EventResponseFeaturesKey> delegate) {
         this.owner = Objects.requireNonNull(owner);
         this.delegate = Objects.requireNonNull(delegate);
     }

@@ -8,7 +8,7 @@ import com.zoutrankil.data.derived.port.NativeDailyWindowSession;
 import com.zoutrankil.data.derived.storage.NativeDailyWindowPublicationStorage;
 import com.zoutrankil.data.domain.IntervalLockStore;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.NativeDailyWindowSnapshot;
+import com.zoutrankil.data.domain.derived.NativeDailyWindowSnapshot;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.ReferencePublicationJournal;

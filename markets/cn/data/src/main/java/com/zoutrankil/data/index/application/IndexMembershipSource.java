@@ -1,9 +1,7 @@
 package com.zoutrankil.data.index.application;
 
-
-
+import com.zoutrankil.data.domain.index.IndexMembership;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.TushareIndexMembershipDto;

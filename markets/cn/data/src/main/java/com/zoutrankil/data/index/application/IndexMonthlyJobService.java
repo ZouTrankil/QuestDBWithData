@@ -1,13 +1,13 @@
 package com.zoutrankil.data.index.application;
+
+import com.zoutrankil.data.domain.index.IndexMonthlyKey;
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
+import com.zoutrankil.data.domain.index.IndexMonthly;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.IndexMonthlyState.*;
-
-
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.policy.IndexMonthlyUniverse;
-
+import com.zoutrankil.data.domain.index.policy.IndexMonthlyUniverse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;

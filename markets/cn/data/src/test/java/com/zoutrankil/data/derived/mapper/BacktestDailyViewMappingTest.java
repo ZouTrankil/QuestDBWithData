@@ -1,8 +1,9 @@
 package com.zoutrankil.data.derived.mapper;
 
-
+import com.zoutrankil.data.domain.derived.BacktestDailyViewValue;
+import com.zoutrankil.data.domain.derived.BacktestDailyViewDataset;
+import com.zoutrankil.data.domain.derived.BacktestDailyKey;
 import static org.junit.jupiter.api.Assertions.*;
-
 import com.zoutrankil.data.domain.*;
 import java.time.LocalDate;
 import java.util.List;

@@ -2,13 +2,10 @@ package com.zoutrankil.data.index.application;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.IndexMonthlyState.*;
-
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.policy.IndexMonthlyUniverse;
-
+import com.zoutrankil.data.domain.index.policy.IndexMonthlyUniverse;
 import com.zoutrankil.data.domain.SyncJobDefinition;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.util.*;

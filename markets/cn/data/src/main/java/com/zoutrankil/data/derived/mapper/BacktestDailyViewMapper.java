@@ -1,10 +1,10 @@
 package com.zoutrankil.data.derived.mapper;
 
 
-import com.zoutrankil.data.domain.BacktestDailyViewValue;
+import com.zoutrankil.data.domain.derived.BacktestDailyViewValue;
 import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-import com.zoutrankil.data.domain.view.BacktestDailyView;
+import com.zoutrankil.data.domain.derived.view.BacktestDailyView;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 

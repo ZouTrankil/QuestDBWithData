@@ -1,8 +1,9 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.derived.table.RegimeFeaturesMonitorDailyRow;
+import com.zoutrankil.data.domain.derived.table.MarketSentimentDailyRow;
 import com.zoutrankil.data.derived.domain.*;
 import com.zoutrankil.data.derived.port.*;
-import com.zoutrankil.data.domain.table.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.*;

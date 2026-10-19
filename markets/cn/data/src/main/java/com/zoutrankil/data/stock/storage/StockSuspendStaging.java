@@ -1,9 +1,9 @@
 package com.zoutrankil.data.stock.storage;
+
+import com.zoutrankil.data.domain.stock.market.StockSuspend;
 import com.zoutrankil.data.stock.domain.StockSuspendState;
 import com.zoutrankil.data.stock.domain.StockSuspendState.*;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import org.springframework.jdbc.core.*;

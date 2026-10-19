@@ -1,5 +1,6 @@
 package com.zoutrankil.data.index.application;
 
+
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.domain.IndexCatalogState.*;
 import com.zoutrankil.data.index.port.*;
@@ -133,7 +134,7 @@ class IndexCatalogOwnerPortContractTest {
         var file=temp.resolve("source.csv");Files.writeString(file,String.join(",",IndexCatalogFileSource.HEADERS)+"\r\n"
                 +"000300,"+name+",full,2004-12-31,1000,series,300,4598.32,-6.95,stock,,CNY,no,yes,IOSCO,size,2005-04-08\r\n");return file;
     }
-    private static Snapshot snapshot(long id,List<com.zoutrankil.data.domain.table.IndexRow> rows)throws Exception{
+    private static Snapshot snapshot(long id,List<com.zoutrankil.data.domain.index.table.IndexRow> rows)throws Exception{
         byte[] bytes=JobDefinitionJson.mapper().writeValueAsBytes(rows);return new Snapshot(new Identity(id,"generation-"+id),rows,FileEvidenceStore.sha256(bytes),bytes.length);
     }
     private static String identify(String table,long id,String directory){

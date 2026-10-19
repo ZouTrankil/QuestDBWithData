@@ -1,7 +1,7 @@
 package com.zoutrankil.data.l2.port;
 
-import com.zoutrankil.data.domain.L2DatasetManifest;
-import com.zoutrankil.data.domain.L2DatasetManifestKey;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2DatasetManifestKey;
 import com.zoutrankil.data.l2.domain.L2DatasetManifestRows;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;

@@ -1,16 +1,14 @@
 package com.zoutrankil.data.index.application;
+
+import com.zoutrankil.data.domain.stock.concept.DcIndex;
 import com.zoutrankil.data.index.domain.*;
 import com.zoutrankil.data.index.port.*;
 import com.zoutrankil.data.index.domain.DcIndexState.*;
-
 import com.zoutrankil.data.index.storage.DcIndexTargetTransitionStore;
-
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;
-
 import java.nio.channels.*;
 import java.nio.file.*;
 import java.security.MessageDigest;

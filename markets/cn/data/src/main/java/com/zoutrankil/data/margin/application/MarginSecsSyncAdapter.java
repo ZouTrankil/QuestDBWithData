@@ -1,17 +1,13 @@
 package com.zoutrankil.data.margin.application;
 
 import com.zoutrankil.data.margin.port.MarginSecsWriteSession;
-
 import com.zoutrankil.data.margin.domain.MarginSecsRows;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
-
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.MarginSecs;
-import com.zoutrankil.data.domain.MarginSecsDataset;
-import com.zoutrankil.data.domain.MarginSecsKey;
+import com.zoutrankil.data.domain.stock.margin.MarginSecs;
+import com.zoutrankil.data.domain.stock.margin.MarginSecsDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginSecsKey;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import java.nio.file.Files;

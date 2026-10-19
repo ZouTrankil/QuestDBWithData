@@ -1,11 +1,9 @@
 package com.zoutrankil.data.index.application;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.policy.IndexDailyBasicUniverse;
-
+import com.zoutrankil.data.domain.index.policy.IndexDailyBasicUniverse;
 import com.zoutrankil.data.domain.SyncJobDefinition;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.util.*;

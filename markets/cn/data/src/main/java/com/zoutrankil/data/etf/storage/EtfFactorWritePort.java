@@ -2,12 +2,10 @@ package com.zoutrankil.data.etf.storage;
 
 import java.util.Comparator;
 import java.util.Collections;
-
 import com.zoutrankil.data.repository.*;
-
-import com.zoutrankil.data.domain.EtfFactor;
-import com.zoutrankil.data.domain.EtfFactorDataset;
-import com.zoutrankil.data.domain.EtfFactorKey;
+import com.zoutrankil.data.domain.fund.EtfFactor;
+import com.zoutrankil.data.domain.fund.EtfFactorDataset;
+import com.zoutrankil.data.domain.fund.EtfFactorKey;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.etf.mapper.EtfFactorMapper;

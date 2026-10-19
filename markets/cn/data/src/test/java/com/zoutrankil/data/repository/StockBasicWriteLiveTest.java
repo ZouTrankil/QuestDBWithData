@@ -1,11 +1,10 @@
 package com.zoutrankil.data.repository;
 
 import com.zoutrankil.data.stock.storage.StockBasicWritePort;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.QuestDataApplication;
-import com.zoutrankil.data.domain.StockBasic;
-import com.zoutrankil.data.domain.StockBasicSnapshot;
+import com.zoutrankil.data.domain.stock.basic.StockBasic;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshot;
 import com.zoutrankil.data.client.TushareClient;
 import com.zoutrankil.data.client.dto.TushareRequest;
 import com.zoutrankil.data.client.dto.TushareStockBasicDto;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -27,7 +25,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnabledIfEnvironmentVariable(named = "QUESTDB_WRITE_LIVE", matches = "1")

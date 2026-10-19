@@ -6,14 +6,11 @@ import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.derived.port.RetailSentimentDailySession;
 import com.zoutrankil.data.derived.domain.RetailSentimentDailyFullSourceScope;
 import com.zoutrankil.data.derived.domain.RetailSentimentDailyPolicy;
-
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
-
-import com.zoutrankil.data.domain.RetailSentimentDailySnapshot;
-
+import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.config.QuestDbProperties;
-import com.zoutrankil.data.domain.RetailSentimentDaily;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;

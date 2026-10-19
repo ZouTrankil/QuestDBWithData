@@ -1,11 +1,10 @@
 package com.zoutrankil.data.etf.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.zoutrankil.data.domain.EtfPortfolio;
-import com.zoutrankil.data.domain.EtfPortfolioDataset;
-import com.zoutrankil.data.domain.EtfPortfolioKey;
+import com.zoutrankil.data.domain.fund.EtfPortfolio;
+import com.zoutrankil.data.domain.fund.EtfPortfolioDataset;
+import com.zoutrankil.data.domain.fund.EtfPortfolioKey;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;

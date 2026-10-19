@@ -1,6 +1,6 @@
 package com.zoutrankil.data.cli;
 
-import com.zoutrankil.data.domain.StockBasicSyncReport;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSyncReport;
 import com.zoutrankil.data.stock.application.StockBasicSyncService;
 import java.util.Map;
 import org.springframework.stereotype.Component;

@@ -1,9 +1,8 @@
 package com.zoutrankil.data.index.application;
 
-
-
+import com.zoutrankil.data.domain.index.IndexCatalogEntry;
+import com.zoutrankil.data.domain.index.IndexCatalogDataset;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.mapper.IndexCatalogMapper;
 import com.zoutrankil.data.repository.*;

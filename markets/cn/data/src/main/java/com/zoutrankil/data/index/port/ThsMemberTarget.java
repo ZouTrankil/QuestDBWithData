@@ -1,8 +1,7 @@
 package com.zoutrankil.data.index.port;
 
 import com.zoutrankil.data.index.domain.ThsMemberState;
-
-import com.zoutrankil.data.domain.ThsMember;
+import com.zoutrankil.data.domain.stock.concept.ThsMember;
 import com.zoutrankil.data.index.domain.ThsMemberState.*;
 import java.nio.file.Path;
 import java.util.List;

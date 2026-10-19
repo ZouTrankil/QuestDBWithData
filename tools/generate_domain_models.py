@@ -55,6 +55,16 @@ def require_class_name(value: str) -> None:
         raise ValueError(f"Invalid Java class name: {value!r}")
 
 
+def category_path(value: str = '') -> Path:
+    # 分类是显式维护的 Java 子包，拒绝路径逃逸和非法包名。
+    if not isinstance(value, str):
+        raise ValueError('模型分类必须是字符串')
+    for part in value.split('.') if value else ():
+        if not re.fullmatch(r'[a-z][a-z0-9_]*', part) or part in JAVA_KEYWORDS:
+            raise ValueError('非法模型分类：' + value)
+    return Path(*value.split('.')) if value else Path()
+
+
 def java_source(package: str, class_name: str, obj: dict) -> str:
     require_class_name(class_name)
     name = obj.get("name")
@@ -147,19 +157,25 @@ def plan_generation(catalog: dict, output_root: Path) -> GenerationPlan:
         if not isinstance(kind, str) or kind not in PACKAGE_BY_TYPE:
             raise ValueError(f"Unsupported object type for {class_name}: {kind!r}")
         folder, _ = PACKAGE_BY_TYPE[kind]
-        relative = Path(folder) / f"{class_name}.java"
+        category = original.get('category', '')
+        relative = category_path(category) / folder / f"{class_name}.java"
         # Case-fold on every platform so a catalog cannot overwrite files on Windows.
         identity = relative.as_posix().casefold()
         if identity in names:
             raise ValueError(f"Duplicate generated class: {relative}")
         names.add(identity)
         obj = dict(original, snapshotDate=snapshot)
-        source = java_source(f"com.zoutrankil.data.domain.{folder}", class_name, obj)
+        package = 'com.zoutrankil.data.domain.' + (category + '.' if category else '') + folder
+        source = java_source(package, class_name, obj)
         outputs.append((root / relative, source))
 
     stale = []
-    for folder, _ in PACKAGE_BY_TYPE.values():
-        package_dir = root / folder
+    folders = {folder for folder, _ in PACKAGE_BY_TYPE.values()}
+    package_dirs = {root / folder for folder in folders}
+    # 分类下仍只清理 table/view/materializedview 的直接生成文件，不动手写业务模型。
+    if root.exists():
+        package_dirs.update(path for path in root.rglob('*') if path.name in folders)
+    for package_dir in sorted(package_dirs):
         require_contained(package_dir, root)
         if package_dir.exists() and not package_dir.is_dir():
             raise ValueError(f"Output package is not a directory: {package_dir}")
@@ -201,6 +217,11 @@ def load_documentation(path: Path) -> dict:
             raise ValueError(f'重复的对象说明：{name}')
         names.add(name)
         require_class_name(obj['modelClass'])
+        category = obj.get('category', '')
+        category_path(category)
+        expected_package = 'com.zoutrankil.data.domain.' + (category + '.' if category else '') + 'table'
+        if obj.get('modelPackage', expected_package) != expected_package:
+            raise ValueError('模型包与分类不一致：' + name)
         if obj['modelClass'] in classes:
             raise ValueError('重复的模型说明：' + obj['modelClass'])
         classes.add(obj['modelClass'])
@@ -250,6 +271,8 @@ def annotate_source(path: Path, text: str, obj: dict) -> str:
     # 只替换本工具生成的说明，不改字段、类型、顺序、原结构日期或其他代码。
     if f'Schema projection for QuestDB object `{obj["objectName"]}`;' not in text:
         raise ValueError(f'模型对象与说明不一致：{path.name}')
+    if obj.get('modelPackage') and not text.startswith('package ' + obj['modelPackage'] + ';'):
+        raise ValueError(f'模型包与说明不一致：{path.name}')
     text = re.sub(r'^[ ]*/\*\* 来源说明：[^\n]*\*/\r?\n', '', text, flags=re.M)
     fields = {field['javaField']: field for field in obj['fields']}
     observed = set()
@@ -279,7 +302,9 @@ def plan_documentation(root: Path, documentation: dict) -> GenerationPlan:
     root = root.resolve()
     outputs = []
     models = {obj['modelClass']: obj for obj in documentation['objects']}
-    for path in sorted(root.glob('table/*.java')):
+    for path in sorted(root.rglob('*.java')):
+        if path.parent.name != 'table':
+            continue
         if path.stem not in models:
             continue
         if not is_generated(path):
@@ -299,11 +324,11 @@ def export_documentation(destination: Path, documentation: dict) -> None:
         json.dumps(documentation, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     with (destination / 'CN字段说明.csv').open('w', encoding='utf-8-sig', newline='') as stream:
         writer = csv.writer(stream)
-        writer.writerow(['对象名', '模型类', '存储字段', 'Java字段', 'Java类型', '提供方', '来源接口', '来源字段',
+        writer.writerow(['分类', '模型包', '对象名', '模型类', '存储字段', 'Java字段', 'Java类型', '提供方', '来源接口', '来源字段',
                          '来源类型', '字段说明', '来源单位', '来源格式', '核验状态', '本地规则及限制', '官方链接', '核对日期'])
         for obj in documentation['objects']:
             for field in obj['fields']:
-                writer.writerow([obj['objectName'], obj['modelClass'], field['name'], field['javaField'], field['javaType'],
+                writer.writerow([obj.get('category', ''), obj.get('modelPackage', ''), obj['objectName'], obj['modelClass'], field['name'], field['javaField'], field['javaType'],
                                  field['provider'], obj.get('endpoint', ''), field.get('sourceField', ''),
                                  field.get('sourceType', ''), field['description'], field.get('unit', ''),
                                  field.get('sourceFormat', ''), field['status'], field.get('notes', ''),
@@ -366,9 +391,16 @@ def main(argv: list[str] | None = None) -> None:
             parser.error("所选市场没有模型，停止生成，不清理已有文件")
         catalog = dict(catalog, objects=selected)
     output_root = args.output_root or Path(f"markets/{args.market}/src/main/java/com/zoutrankil/data/domain")
-    plan = plan_generation(catalog, output_root)
+    documentation = None
     if args.market == 'cn' and args.documentation.is_file():
-        plan = with_documentation(plan, load_documentation(args.documentation))
+        documentation = load_documentation(args.documentation)
+        categories = {obj['modelClass']: obj.get('category', '') for obj in documentation['objects']}
+        # 来源模型始终按同一份分类资料生成，旧 catalog 也不会把它们写回平铺目录。
+        catalog = dict(catalog, objects=[dict(obj, category=categories[obj['domainClass']])
+                       if obj.get('domainClass') in categories else obj for obj in catalog['objects']])
+    plan = plan_generation(catalog, output_root)
+    if documentation is not None:
+        plan = with_documentation(plan, documentation)
     apply_generation(plan)
     print(f"Generated {len(plan.outputs)} schema projection records from {args.catalog}")
 

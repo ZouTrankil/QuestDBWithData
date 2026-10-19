@@ -1,4 +1,7 @@
 package com.zoutrankil.data.derived.port;
+
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyTargetSnapshot;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlyRows;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;

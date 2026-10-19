@@ -1,5 +1,8 @@
 package com.zoutrankil.data.etf.mapper;
 
+import com.zoutrankil.data.domain.fund.EtfBasicKey;
+import com.zoutrankil.data.domain.fund.EtfBasicDataset;
+import com.zoutrankil.data.domain.fund.EtfBasic;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.TushareEtfBasicDto;
 import com.zoutrankil.data.domain.*;

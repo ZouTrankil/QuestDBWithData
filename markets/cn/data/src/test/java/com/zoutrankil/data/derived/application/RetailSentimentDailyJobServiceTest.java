@@ -1,24 +1,19 @@
 package com.zoutrankil.data.derived.application;
 
 import com.zoutrankil.data.l2.application.L2DailyFeaturesJobService;
-
 import com.zoutrankil.data.derived.port.RetailSentimentDailySession;
-
 import com.zoutrankil.data.derived.domain.RetailSentimentDailyFullSourceScope;
-
 import com.zoutrankil.data.service.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
 import com.zoutrankil.data.config.QuestDbProperties;
-import com.zoutrankil.data.domain.RetailSentimentDaily;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
-import com.zoutrankil.data.domain.RetailSentimentDailySnapshot;
+import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import java.nio.file.Path;
 import java.time.LocalDate;

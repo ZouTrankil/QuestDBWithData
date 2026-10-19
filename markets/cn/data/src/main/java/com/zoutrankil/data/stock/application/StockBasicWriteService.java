@@ -1,5 +1,9 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockBasicSyncReport;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshot;
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
+import com.zoutrankil.data.domain.stock.basic.StockBasic;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.BusinessTime;

@@ -1,9 +1,10 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.index.IndexDailyBasicKey;
+import com.zoutrankil.data.domain.index.IndexDailyBasicDataset;
+import com.zoutrankil.data.domain.index.IndexDailyBasic;
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.policy.IndexDailyBasicUniverse;
-
+import com.zoutrankil.data.domain.index.policy.IndexDailyBasicUniverse;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.port.IndexDailyBasicWriteSession;

@@ -1,7 +1,8 @@
 package com.zoutrankil.data.stock.storage;
 
+import com.zoutrankil.data.domain.stock.market.StockLimitKey;
+import com.zoutrankil.data.domain.stock.market.StockLimit;
 import com.zoutrankil.data.stock.domain.StockExecutionTables;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
 import com.zoutrankil.data.stock.domain.StockTargetRange;

@@ -1,15 +1,12 @@
 package com.zoutrankil.data.index.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
-
-import com.zoutrankil.data.domain.policy.IndexWeightUniverse;
-
+import com.zoutrankil.data.domain.index.policy.IndexWeightUniverse;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.zoutrankil.data.domain.IndexWeight;
-import com.zoutrankil.data.domain.IndexWeightDataset;
-import com.zoutrankil.data.domain.IndexWeightKey;
+import com.zoutrankil.data.domain.index.IndexWeight;
+import com.zoutrankil.data.domain.index.IndexWeightDataset;
+import com.zoutrankil.data.domain.index.IndexWeightKey;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;

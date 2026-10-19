@@ -1,7 +1,7 @@
 package com.zoutrankil.data.flow.port;
 
-import com.zoutrankil.data.domain.MoneyflowThs;
-import com.zoutrankil.data.domain.MoneyflowThsKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThs;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsKey;
 import com.zoutrankil.data.flow.domain.MoneyflowThsTargetRange;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 import com.zoutrankil.data.sync.port.DateSliceReadPort;

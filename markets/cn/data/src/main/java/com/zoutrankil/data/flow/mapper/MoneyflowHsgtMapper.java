@@ -1,13 +1,11 @@
 package com.zoutrankil.data.flow.mapper;
 
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtRows;
-
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.TushareMoneyflowHsgtDto;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.MoneyflowHsgt;
-import com.zoutrankil.data.domain.MoneyflowHsgtKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgt;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.math.BigDecimal;
 import java.time.LocalDate;

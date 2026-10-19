@@ -4,16 +4,13 @@ import com.zoutrankil.data.margin.domain.MarginZrzState;
 import com.zoutrankil.data.margin.domain.MarginZrzState.*;
 import com.zoutrankil.data.margin.domain.MarginZrzRows;
 import com.zoutrankil.data.margin.port.MarginZrzTables;
-
 import com.zoutrankil.data.repository.StaticTargetIdentity;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.MarginZrz;
-import com.zoutrankil.data.domain.MarginZrzDataset;
-import com.zoutrankil.data.domain.MarginZrzKey;
+import com.zoutrankil.data.domain.stock.margin.MarginZrz;
+import com.zoutrankil.data.domain.stock.margin.MarginZrzDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginZrzKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.margin.mapper.MarginZrzMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

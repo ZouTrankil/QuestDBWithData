@@ -1,7 +1,9 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyKey;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthly;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
 import java.time.LocalDate;

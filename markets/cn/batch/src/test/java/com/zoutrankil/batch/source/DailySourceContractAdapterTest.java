@@ -1,18 +1,15 @@
 package com.zoutrankil.batch.source;
 
 import com.zoutrankil.batch.support.Json;
-
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.zoutrankil.data.domain.DailySemantics;
+import com.zoutrankil.data.domain.stock.market.DailySemantics;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import java.util.*;
 import java.util.stream.Stream;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class DailySourceContractAdapterTest {

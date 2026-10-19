@@ -1,7 +1,9 @@
 package com.zoutrankil.data.stock.storage;
 
+import com.zoutrankil.data.domain.stock.feature.StockFactorKey;
+import com.zoutrankil.data.domain.stock.feature.StockFactor;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
 import com.zoutrankil.data.stock.domain.StockTargetRange;
 import com.zoutrankil.data.stock.port.StockFactorTarget;

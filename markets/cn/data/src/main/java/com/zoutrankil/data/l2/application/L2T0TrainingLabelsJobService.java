@@ -1,14 +1,13 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.L2T0TrainingLabelsDataset;
-import com.zoutrankil.data.domain.L2T0TrainingLabels;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsDataset;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.l2.port.L2T0TrainingLabelsTarget;
@@ -175,7 +174,7 @@ public final class L2T0TrainingLabelsJobService implements SyncJobOwner {
         LocalDate to = rows.stream().map(L2T0TrainingLabels::tradeDate).max(LocalDate::compareTo).orElseThrow();
         if (java.time.temporal.ChronoUnit.DAYS.between(from, to) >= 31)
             throw new IllegalArgumentException("D089 prepared write exceeds its 31-day source bound");
-        var expectedByKey = new LinkedHashMap<com.zoutrankil.data.domain.L2T0TrainingLabelsKey,
+        var expectedByKey = new LinkedHashMap<com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey,
                 L2T0TrainingLabels>();
         for (var row : rows) {
             if (expectedByKey.putIfAbsent(row.key(), row) != null)
@@ -248,8 +247,8 @@ public final class L2T0TrainingLabelsJobService implements SyncJobOwner {
         var writer = port();
         var adapter = new L2T0TrainingLabelsSyncAdapter(source, plan.source(), symbols, definition(), writer);
         var ledger = new SyncRunLedger(ledgerPath);
-        var runner = new SyncJobRunner<com.zoutrankil.data.domain.L2T0TrainingLabels,
-                com.zoutrankil.data.domain.L2T0TrainingLabelsKey>(ledger, new DatasetIntervalLock(ledgerPath));
+        var runner = new SyncJobRunner<com.zoutrankil.data.domain.l2.L2T0TrainingLabels,
+                com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey>(ledger, new DatasetIntervalLock(ledgerPath));
         String runId = "d089-" + RUN_STAMP.format(java.time.Instant.now().atZone(ZoneId.of("UTC")))
                 + "-" + UUID.randomUUID();
         java.util.function.BooleanSupplier cancelled = () -> {

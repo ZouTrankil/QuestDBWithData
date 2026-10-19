@@ -1,14 +1,14 @@
 package com.zoutrankil.data.derived.application;
+
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyTargetSnapshot;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData.*;
 import com.zoutrankil.data.derived.port.MacroCoreMonthlySourceReadPort;
 import com.zoutrankil.data.derived.storage.QuestDbMacroCoreMonthlySourceReader;
 import com.zoutrankil.data.derived.storage.QuestDbMacroCoreMonthlyTarget;
-
 import com.zoutrankil.data.derived.mapper.MacroCoreMonthlyMapper;
-
 import com.zoutrankil.data.service.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import com.zoutrankil.data.config.QuestDbProperties;
@@ -30,7 +30,7 @@ class MacroCoreMonthlyMaterializeAdapterTest {
         @Override public String table(){return "java_d104_macro_core_monthly_unit";}
         @Override public synchronized void preflight(){preflights++;if(unknown)throw new IllegalStateException("Original unknown sender requires reconciliation");}
         @Override public String targetId(){return target;}
-        @Override public com.zoutrankil.data.domain.MacroCoreMonthlyTargetSnapshot targetSnapshot(){return new com.zoutrankil.data.domain.MacroCoreMonthlyTargetSnapshot(target,19,"java_d104_macro_core_monthly_unit~19","c".repeat(64),txn,txn,txn,txn,0,0,false,values.size(),(long)values.size());}
+        @Override public com.zoutrankil.data.domain.derived.MacroCoreMonthlyTargetSnapshot targetSnapshot(){return new com.zoutrankil.data.domain.derived.MacroCoreMonthlyTargetSnapshot(target,19,"java_d104_macro_core_monthly_unit~19","c".repeat(64),txn,txn,txn,txn,0,0,false,values.size(),(long)values.size());}
         @Override public void send(List<MacroCoreMonthly> rows)throws Exception{
             sends++;rows.forEach(r->values.put(r.month(),r));txn++;stopped=true;afterSend.run();
             if(interruptUnknown){unknown=true;stopped=false;Thread.currentThread().interrupt();throw new IllegalStateException("Unknown ACK");}

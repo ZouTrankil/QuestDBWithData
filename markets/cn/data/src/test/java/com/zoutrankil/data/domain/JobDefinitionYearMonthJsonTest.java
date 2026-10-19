@@ -1,5 +1,7 @@
 package com.zoutrankil.data.domain;
 
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyTargetSnapshot;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
 import static org.junit.jupiter.api.Assertions.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zoutrankil.data.derived.mapper.EquityStyleMonthlyMapper;
@@ -35,7 +37,7 @@ class JobDefinitionYearMonthJsonTest {
     @Test void actualD103MaterializationResultHasCanonicalNestedMonthAndStableRoundTrip()throws Exception{
         var json=JobDefinitionJson.mapper();var result=new EquityStyleMonthlyJobService.MaterializationResult(
                 new SyncJobRunner.Result("d103-json-unit",SyncRunState.VERIFIED,1,1,null),16,batch(),
-                new com.zoutrankil.data.domain.EquityStyleMonthlyTargetSnapshot("d103-"+"b".repeat(64),7,"java_d103_equity_style_monthly_json~7","c".repeat(64),1L,1L,1,1,0,0,false,1,1L),null);
+                new com.zoutrankil.data.domain.derived.EquityStyleMonthlyTargetSnapshot("d103-"+"b".repeat(64),7,"java_d103_equity_style_monthly_json~7","c".repeat(64),1L,1L,1,1,0,0,false,1,1L),null);
         String encoded=json.writeValueAsString(result);var tree=json.readTree(encoded);
         assertEquals("VERIFIED",tree.path("result").path("state").textValue());assertEquals("2026-06",tree.path("source").path("rows").get(0).path("month").textValue());
         assertEquals(result,json.readValue(encoded,EquityStyleMonthlyJobService.MaterializationResult.class));

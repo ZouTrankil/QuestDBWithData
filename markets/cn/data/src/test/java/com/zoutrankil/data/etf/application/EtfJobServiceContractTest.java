@@ -2,7 +2,7 @@ package com.zoutrankil.data.etf.application;
 
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
-import com.zoutrankil.data.domain.ExchangeCalendar;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;

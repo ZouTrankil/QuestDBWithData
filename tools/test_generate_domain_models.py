@@ -81,24 +81,25 @@ class GeneratorTest(unittest.TestCase):
         package_path = Path("com/zoutrankil/data/domain")
         self.assertEqual(package_path.parts, generator.PACKAGE_ROOT.parts[-len(package_path.parts):])
 
-    def test_full_catalog_generates_184_models_and_repeats_identically(self):
-        value = json.loads((REPOSITORY / "schema-export/questdb-qdb-2026-09-28/domain-catalog.json")
-                           .read_text(encoding="utf-8"))
-        original = deepcopy(value)
-        plan = self.generate(value)
-        self.assertEqual(184, len(plan.outputs))
+    def test_category_moves_generated_projection_without_touching_business_models(self):
+        self.generate(catalog(object_definition()))
+        handwritten = self.write('stock/market/Daily.java', 'package user;\npublic record Daily() {}\n')
+        plan = self.generate(catalog(object_definition(category='stock.market')))
+        self.assertFalse((self.output / 'table/ExampleRow.java').exists())
+        target = self.output / 'stock/market/table/ExampleRow.java'
+        self.assertTrue(target.read_text().startswith('package com.zoutrankil.data.domain.stock.market.table;'))
+        self.assertEqual('package user;\npublic record Daily() {}\n', handwritten.read_text())
         first = self.snapshot()
-        self.assertEqual({"table": 172, "view": 10, "materializedview": 2},
-                         {folder: sum(path.startswith(folder + "/") for path in first)
-                          for folder in ("table", "view", "materializedview")})
-        for relative, content in first.items():
-            folder = relative.split("/")[0]
-            self.assertTrue(content.startswith(f"package com.zoutrankil.data.domain.{folder};\n".encode()))
-            self.assertNotIn(b"\r", content)
-        self.generate(value)
+        self.generate(catalog(object_definition(category='stock.market')))
         self.assertEqual(first, self.snapshot())
-        self.assertEqual(original, value)
-        self.assertFalse((self.folder / "questdbwithdata").exists())
+
+    def test_invalid_category_cannot_write_or_remove_existing_models(self):
+        self.generate(catalog(object_definition()))
+        before = self.snapshot()
+        for category in ('../outside', 'stock/market', '.stock', 'stock..market', 'class', None):
+            with self.subTest(category=category), self.assertRaises(ValueError):
+                self.generate(catalog(object_definition(category=category)))
+            self.assertEqual(before, self.snapshot())
 
     def test_cleanup_is_limited_to_direct_generated_java_files(self):
         self.generate(catalog(object_definition("OldRow")))
@@ -248,6 +249,21 @@ class DocumentationTest(unittest.TestCase):
         self.assertIn('来源字段 trade_date', enriched.outputs[0][1])
         generator.apply_generation(enriched)
         self.assertEqual(enriched.outputs[0][1], (self.output / 'table/ExampleRow.java').read_text())
+
+    def test_cn_cli_uses_documentation_category_even_with_an_old_flat_catalog(self):
+        self.documentation['objects'][0].update(category='stock.market',
+                modelPackage='com.zoutrankil.data.domain.stock.market.table')
+        source = self.root / 'catalog.json'
+        source.write_text(json.dumps(catalog(dict(self.definition, market='cn'))))
+        documentation = self.root / 'documentation.json'
+        documentation.write_text(json.dumps(self.documentation))
+        result = subprocess.run([sys.executable, str(SCRIPT), '--catalog', str(source), '--market', 'cn',
+                                 '--output-root', str(self.output), '--documentation', str(documentation)],
+                                capture_output=True, text=True)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertFalse((self.output / 'table/ExampleRow.java').exists())
+        self.assertIn('来源字段 trade_date',
+                      (self.output / 'stock/market/table/ExampleRow.java').read_text())
 
     def test_same_class_cannot_receive_another_objects_documentation(self):
         self.documentation['objects'][0]['objectName'] = 'another_object'

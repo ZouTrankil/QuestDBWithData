@@ -1,5 +1,6 @@
 package com.zoutrankil.data.domain;
 
+import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.config.QuestDbProperties;

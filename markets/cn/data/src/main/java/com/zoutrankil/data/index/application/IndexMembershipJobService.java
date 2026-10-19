@@ -1,10 +1,9 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.data.domain.index.IndexMembership;
 import com.zoutrankil.data.index.port.IndexMembershipTarget;
-
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import org.springframework.beans.factory.annotation.Value;

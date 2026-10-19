@@ -1,8 +1,9 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.StockDetailInfoRow;
+import com.zoutrankil.data.domain.stock.basic.table.StockDetailInfoRow;
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.DatasetIntervalLock;
@@ -16,11 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;
-
 import static com.zoutrankil.data.stock.storage.StockDetailPublicationJournal.State;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;

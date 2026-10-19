@@ -1,12 +1,9 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockStDaily;
 import com.zoutrankil.data.stock.port.StockStDailyTarget;
-
 import com.zoutrankil.data.stock.domain.StockStDailyState;
-
-
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.repository.*;

@@ -1,7 +1,7 @@
 package com.zoutrankil.data.index.port;
 
-import com.zoutrankil.data.domain.IndexWeight;
-import com.zoutrankil.data.domain.IndexWeightKey;
+import com.zoutrankil.data.domain.index.IndexWeight;
+import com.zoutrankil.data.domain.index.IndexWeightKey;
 import com.zoutrankil.data.index.domain.IndexWeightTargetRange;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 import java.time.LocalDate;

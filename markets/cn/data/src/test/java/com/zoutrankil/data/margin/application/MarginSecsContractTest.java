@@ -1,5 +1,8 @@
 package com.zoutrankil.data.margin.application;
 
+import com.zoutrankil.data.domain.stock.margin.MarginSecsKey;
+import com.zoutrankil.data.domain.stock.margin.MarginSecs;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.domain.*;

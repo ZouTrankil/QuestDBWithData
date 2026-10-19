@@ -1,6 +1,6 @@
 package com.zoutrankil.data.flow.domain;
 
-import com.zoutrankil.data.domain.MoneyflowHsgt;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgt;
 import java.util.*;
 import java.time.LocalDate;
 import java.nio.file.Path;

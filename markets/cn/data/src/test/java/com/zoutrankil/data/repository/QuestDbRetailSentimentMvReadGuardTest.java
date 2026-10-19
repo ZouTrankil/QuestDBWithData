@@ -1,11 +1,10 @@
 package com.zoutrankil.data.repository;
 
+import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
 import com.zoutrankil.data.domain.*;
 import java.sql.ResultSet;
 import java.time.LocalDate;

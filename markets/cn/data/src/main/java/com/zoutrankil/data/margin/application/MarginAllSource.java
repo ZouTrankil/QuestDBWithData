@@ -1,16 +1,14 @@
 package com.zoutrankil.data.margin.application;
 
 import com.zoutrankil.data.margin.domain.MarginAllState;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.MarginAll;
-import com.zoutrankil.data.domain.MarginAllKey;
+import com.zoutrankil.data.domain.stock.margin.MarginAll;
+import com.zoutrankil.data.domain.stock.margin.MarginAllKey;
 import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.margin.mapper.MarginAllMapper;
 import java.nio.file.Files;

@@ -6,7 +6,7 @@ CN 的来源字段说明维护在 [collected-fields.json](../markets/cn/src/main
 
 ## 在代码里看
 
-例如 [DailyRow](../markets/cn/src/main/java/com/zoutrankil/data/domain/table/DailyRow.java)：类上记录接口和官方链接，字段上记录中文含义、来源字段、来源类型、明确公开的单位、日期格式和本地转换限制。`daily.vol` 为手，`daily.amount` 为千元；未明确的单位留空，不凭字段名补成元或百分比。
+例如 [DailyRow](../markets/cn/src/main/java/com/zoutrankil/data/domain/stock/market/table/DailyRow.java)：类上记录接口和官方链接，字段上记录中文含义、来源字段、来源类型、明确公开的单位、日期格式和本地转换限制。`daily.vol` 为手，`daily.amount` 为千元；未明确的单位留空，不凭字段名补成元或百分比。
 
 现有 `Instant`、字段名、字段顺序和原 schema 快照日期都保留。文档的来源类型不等于 Java 类型或数据库类型；来源日期也不一定是真实事件时刻。`update_time` 等本地列不能冒充官方输出字段。
 
@@ -24,6 +24,8 @@ python3 tools/generate_domain_models.py --market cn \
 ```
 
 完整模型重生成仍需 `--catalog` 和明确的 `--market`。选中 CN 后会在写入前一并校验字段说明，避免生成后丢失注释或只改完一半。模型和说明不一致时整批停止。
+
+每个对象的 `category` 和 `modelPackage` 记录分类与 Java 包。CN 来源模型按这份分类生成；CSV 同时导出分类和模型包，方便从官网条目定位代码。没有来源字段资料的模型，catalog 要显式提供 `category`。目录分类不改变来源、表名或业务契约。分类对应见[模型目录](model-schema-conventions.md#模型目录怎么分)。
 
 ## 三种核验状态
 
@@ -57,4 +59,4 @@ python3 tools/generate_domain_models.py --market cn \
 
 2026-10-19：20 个生成器离线用例通过；字段资源加载、目录服务、公共装配和 CN 入口相关测试通过。70 个模型去掉注释后与原代码一致，导出 JSON 和 1360 行 CSV 与维护资料一致。模块边界、依赖兼容、Batch 驱动隔离和根/CN 数据/主策略/实时 L2 发行包构建通过。
 
-`architectureTest` 被当前仓库缺少根架构测试源码拦截，本轮没有绕过检查。生成器原有的 184 模型快照用例依赖已缺失的 `schema-export/questdb-qdb-2026-09-28/domain-catalog.json`，未执行；其余 20 个用例已执行。没有进行真实来源采集或数据完整性验收。
+`architectureTest` 被当前仓库缺少根架构测试源码拦截，本轮没有绕过检查。依赖已删除历史快照的 184 模型生成用例已清理；当前生成器全部 20 个用例通过。没有进行真实来源采集或数据完整性验收。

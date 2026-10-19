@@ -1,5 +1,7 @@
 package com.zoutrankil.data.l2.application;
 
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.*;

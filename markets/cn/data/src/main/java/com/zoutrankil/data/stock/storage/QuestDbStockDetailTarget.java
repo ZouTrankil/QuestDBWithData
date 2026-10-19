@@ -1,4 +1,6 @@
 package com.zoutrankil.data.stock.storage;
+
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.domain.StockDetailState.*;
 import com.zoutrankil.data.stock.port.StockDetailTarget;

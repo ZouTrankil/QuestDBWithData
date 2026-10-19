@@ -1,9 +1,9 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.domain.DatasetDefinition.StorageType;
-import com.zoutrankil.data.domain.L2DatasetManifest;
-import com.zoutrankil.data.domain.L2IntradayBarFeatures;
-import com.zoutrankil.data.domain.L2T0TrainingLabels;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
 import com.zoutrankil.data.service.SyncJobRunner;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -114,14 +114,14 @@ class NativeL2OtherSourcesTest {
         var product = NativeL2CertifiedFeaturesReader.Product.EVENT;
         fixture(product, List.of(SYMBOL), List.of(0), true, false, false);
         var schema = featureSchema(product, false);
-        var events = com.zoutrankil.data.domain.L2EventResponseFeatureField.EVENT_TYPE_ALLOWED.stream().sorted().toList();
+        var events = com.zoutrankil.data.domain.l2.L2EventResponseFeatureField.EVENT_TYPE_ALLOWED.stream().sorted().toList();
         write(partition(product.dataset).resolve("part-00000.parquet"), schema, List.of(
                 feature(schema, product, SYMBOL, Map.of("event_type", events.get(0))),
                 feature(schema, product, SYMBOL, Map.of("event_type", events.get(1)))));
         var source = new L2EventResponseFeaturesParquetSource(root);
         var inspection = source.inspect(DAY, DAY, List.of(SYMBOL), 10, 10);
         assertEquals(2, inspection.selectedRows());
-        var pages = new ArrayList<SyncJobRunner.Page<com.zoutrankil.data.domain.L2EventResponseFeatures>>();
+        var pages = new ArrayList<SyncJobRunner.Page<com.zoutrankil.data.domain.l2.L2EventResponseFeatures>>();
         source.stream(inspection, List.of(SYMBOL), 10, 10, pages::add, () -> false, Duration.ofSeconds(30));
         var rows = pages.getFirst().rows();
         assertEquals(rows.get(0).minute(), rows.get(1).minute());
@@ -221,7 +221,7 @@ class NativeL2OtherSourcesTest {
                 case STRING, SYMBOL -> row.append(name, switch (name) {
                     case "trade_date" -> "20260921"; case "symbol" -> symbol; case "market" -> "SZ"; case "board" -> "MAIN";
                     case "event_type" -> (String) overrides.getOrDefault(name,
-                            com.zoutrankil.data.domain.L2EventResponseFeatureField.EVENT_TYPE_ALLOWED.iterator().next());
+                            com.zoutrankil.data.domain.l2.L2EventResponseFeatureField.EVENT_TYPE_ALLOWED.iterator().next());
                     case "executability_reason" -> "wide_spread_or_thin_depth"; case "policy_label" -> "rule_data_missing";
                     case "policy_reason" -> "needs_inventory_limit_st_price_cage_inputs"; case "primary_t0_side" -> "sell_first_inventory_required";
                     default -> "native-reference";

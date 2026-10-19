@@ -1,10 +1,9 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.stock.concept.ThsIndex;
 import com.zoutrankil.data.index.domain.ThsIndexState;
 import com.zoutrankil.data.index.domain.policy.ThsIndexMerge;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.client.dto.TushareThsIndexDto;
 import com.zoutrankil.data.domain.*;

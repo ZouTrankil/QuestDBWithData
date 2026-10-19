@@ -1,10 +1,9 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
-import com.zoutrankil.data.domain.L2DailyFeatures;
-import com.zoutrankil.data.domain.L2DailyFeaturesDataset;
-import com.zoutrankil.data.domain.L2DailyFeaturesKey;
+import com.zoutrankil.data.domain.l2.L2DailyFeatures;
+import com.zoutrankil.data.domain.l2.L2DailyFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2DailyFeaturesKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.l2.mapper.L2DailyFeaturesMapper;
 import com.zoutrankil.data.l2.port.L2DailyFeaturesWriteSession;

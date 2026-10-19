@@ -1,15 +1,13 @@
 package com.zoutrankil.data.flow.application;
 
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtLimits;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.MoneyflowHsgt;
-import com.zoutrankil.data.domain.MoneyflowHsgtKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgt;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtKey;
 import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.flow.mapper.MoneyflowHsgtMapper;
 import java.nio.file.Files;

@@ -2,7 +2,7 @@ package com.zoutrankil.data.derived.mapper;
 
 
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.EtfMarketOverviewDailyView;
+import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyView;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
@@ -11,7 +11,7 @@ import java.util.Objects;
 /** Explicit four-column direct-view mapping, with no rounding, scaling or null filling. */
 public final class EtfMarketOverviewDailyViewMapper {
     public EtfMarketOverviewDailyView fromStorage(
-            com.zoutrankil.data.domain.view.EtfMarketOverviewDailyView row) {
+            com.zoutrankil.data.domain.fund.view.EtfMarketOverviewDailyView row) {
         Objects.requireNonNull(row, "ETF overview view row required");
         return new EtfMarketOverviewDailyView(TemporalValues.CalendarTimestamp.fromStorage(
                 Objects.requireNonNull(row.tradeDate(), "trade date required")).date(),

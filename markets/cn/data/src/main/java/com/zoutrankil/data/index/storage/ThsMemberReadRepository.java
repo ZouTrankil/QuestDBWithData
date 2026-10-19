@@ -1,7 +1,8 @@
 package com.zoutrankil.data.index.storage;
 
+import com.zoutrankil.data.domain.stock.concept.ThsMemberDataset;
+import com.zoutrankil.data.domain.stock.concept.ThsMember;
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.mapper.ThsMemberMapper;
 import java.util.HashSet;

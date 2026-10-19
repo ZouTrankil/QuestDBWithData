@@ -1,9 +1,9 @@
 package com.zoutrankil.data.calendar.mapper;
 
-
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import com.zoutrankil.data.client.dto.TushareTradeCalendarDto;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.ExchangeCalendarRow;
+import com.zoutrankil.data.domain.stock.basic.table.ExchangeCalendarRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;

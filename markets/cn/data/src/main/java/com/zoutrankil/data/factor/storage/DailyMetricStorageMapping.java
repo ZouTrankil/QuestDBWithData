@@ -1,6 +1,6 @@
 package com.zoutrankil.data.factor.storage;
 
-import com.zoutrankil.data.domain.table.FactorDailyMetricRow;
+import com.zoutrankil.data.domain.derived.table.FactorDailyMetricRow;
 import java.lang.reflect.*;
 import java.sql.ResultSet;
 import java.time.Instant;

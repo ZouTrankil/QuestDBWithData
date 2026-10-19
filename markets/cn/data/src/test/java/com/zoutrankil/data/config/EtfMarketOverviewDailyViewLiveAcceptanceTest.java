@@ -1,10 +1,12 @@
 package com.zoutrankil.data.config;
 
+import com.zoutrankil.data.domain.fund.EtfShareDataset;
+import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyViewKey;
+import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyView;
+import com.zoutrankil.data.domain.fund.EtfDailyDataset;
 import com.zoutrankil.data.derived.storage.EtfMarketOverviewDailyViewReadRepository;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zoutrankil.data.domain.*;

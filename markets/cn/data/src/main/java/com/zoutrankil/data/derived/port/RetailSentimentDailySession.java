@@ -1,7 +1,7 @@
 package com.zoutrankil.data.derived.port;
 
-import com.zoutrankil.data.domain.RetailSentimentDaily;
-import com.zoutrankil.data.domain.RetailSentimentDailySnapshot;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
+import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
 import com.zoutrankil.data.derived.domain.RetailSentimentDailyFullSourceScope;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;

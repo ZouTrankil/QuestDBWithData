@@ -1,9 +1,8 @@
 package com.zoutrankil.data.flow.application;
 
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.flow.domain.MoneyflowLimits;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import java.time.Duration;
 import java.time.ZoneId;

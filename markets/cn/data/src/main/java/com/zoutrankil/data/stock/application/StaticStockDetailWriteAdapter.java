@@ -1,16 +1,15 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
+import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
 import com.zoutrankil.data.repository.*;
-
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;
 import java.util.function.BooleanSupplier;
-
 import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 
 /** Prepared full rows enter the static owner through the same ledger and publication protocol as source sync. */

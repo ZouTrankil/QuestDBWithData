@@ -1,4 +1,7 @@
 package com.zoutrankil.data.derived.domain;
+
+import com.zoutrankil.data.domain.derived.MacroCoreMonthlyDataset;
+import com.zoutrankil.data.domain.derived.MacroCoreMonthly;
 import com.zoutrankil.data.domain.*;
 import java.time.*;
 import java.util.*;

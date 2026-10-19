@@ -2,17 +2,13 @@ package com.zoutrankil.data.flow.application;
 
 import com.zoutrankil.data.flow.port.*;
 import com.zoutrankil.data.calendar.port.SseCalendarWindowReadPort;
-
 import com.zoutrankil.data.flow.domain.MoneyflowHsgtRows;
-
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
-
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.MoneyflowHsgt;
-import com.zoutrankil.data.domain.MoneyflowHsgtDataset;
-import com.zoutrankil.data.domain.MoneyflowHsgtKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgt;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtKey;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import java.nio.file.Path;
 import java.time.LocalDate;

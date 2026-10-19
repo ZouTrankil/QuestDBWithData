@@ -1,4 +1,6 @@
 package com.zoutrankil.data.calendar.storage;
+
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.domain.*;
 import java.util.Objects;

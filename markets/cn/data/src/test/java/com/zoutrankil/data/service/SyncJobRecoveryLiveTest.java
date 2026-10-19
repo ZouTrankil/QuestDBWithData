@@ -1,8 +1,9 @@
 package com.zoutrankil.data.service;
 
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshotKey;
+import com.zoutrankil.data.domain.stock.basic.StockBasicSnapshot;
 import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
 import com.zoutrankil.data.stock.storage.StockBasicWritePort;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.QuestDataApplication;
 import com.zoutrankil.data.domain.*;
@@ -14,12 +15,10 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.*;
 import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.nio.file.*;
 import java.time.*;
 import java.util.*;
 import java.util.function.BooleanSupplier;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @EnabledIfEnvironmentVariable(named = "QUESTDB_WRITE_LIVE", matches = "1")

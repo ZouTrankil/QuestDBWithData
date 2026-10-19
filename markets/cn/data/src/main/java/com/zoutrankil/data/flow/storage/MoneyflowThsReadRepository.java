@@ -1,15 +1,14 @@
 package com.zoutrankil.data.flow.storage;
 
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetImplementation;
 import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
-import com.zoutrankil.data.domain.MoneyflowThs;
-import com.zoutrankil.data.domain.MoneyflowThsDataset;
-import com.zoutrankil.data.domain.MoneyflowThsKey;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThs;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsDataset;
+import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.flow.mapper.MoneyflowThsMapper;
 import com.zoutrankil.data.flow.domain.MoneyflowThsLimits;

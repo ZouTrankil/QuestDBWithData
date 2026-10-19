@@ -1,6 +1,6 @@
 package com.zoutrankil.data.index.storage;
 
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.index.port.IndexDailyBasicTarget;
 import com.zoutrankil.data.index.port.IndexDailyBasicWriteSession;
 import com.zoutrankil.data.repository.StaticTargetIdentity;

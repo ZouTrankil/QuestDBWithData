@@ -1,12 +1,12 @@
 package com.zoutrankil.data.derived.mapper;
 
-
+import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.materializedview.RetailSentimentDailyMaterializedView;
+import com.zoutrankil.data.domain.derived.materializedview.RetailSentimentDailyMaterializedView;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyReadRepository;
 import java.math.BigInteger;

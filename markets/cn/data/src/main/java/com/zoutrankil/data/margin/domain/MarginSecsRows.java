@@ -1,5 +1,6 @@
 package com.zoutrankil.data.margin.domain;
 
+import com.zoutrankil.data.domain.stock.margin.MarginSecs;
 import com.zoutrankil.data.domain.*;
 import java.util.*;
 import java.security.MessageDigest;

@@ -1,21 +1,18 @@
 package com.zoutrankil.data.margin.storage;
 
 import com.zoutrankil.data.margin.domain.MarginSecsLimits;
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetImplementation;
 import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.MarginSecs;
-import com.zoutrankil.data.domain.MarginSecsDataset;
-import com.zoutrankil.data.domain.MarginSecsKey;
+import com.zoutrankil.data.domain.stock.margin.MarginSecs;
+import com.zoutrankil.data.domain.stock.margin.MarginSecsDataset;
+import com.zoutrankil.data.domain.stock.margin.MarginSecsKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.margin.mapper.MarginSecsMapper;
-
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashMap;

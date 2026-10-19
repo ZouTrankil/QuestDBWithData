@@ -1,11 +1,10 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.L2DailyFeatures;
+import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import com.zoutrankil.data.l2.mapper.L2DailyFeaturesMapper;
 import com.zoutrankil.data.l2.domain.L2DailyFeaturesRows;
 import java.io.BufferedReader;

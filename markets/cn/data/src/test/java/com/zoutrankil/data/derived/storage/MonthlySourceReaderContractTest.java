@@ -1,5 +1,6 @@
 package com.zoutrankil.data.derived.storage;
 
+import com.zoutrankil.data.domain.index.IndexMonthlyDataset;
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.domain.MacroCoreMonthlySourceData;
 import java.sql.*;

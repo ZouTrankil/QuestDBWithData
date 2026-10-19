@@ -1,22 +1,18 @@
 package com.zoutrankil.data.derived.application;
 
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.data.domain.derived.MarketSentimentDailyTargetSnapshot;
 import com.zoutrankil.data.derived.port.*;
 import com.zoutrankil.data.derived.domain.*;
 import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.service.*;
-
-
-
-
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.MarketSentimentDailyRow;
+import com.zoutrankil.data.domain.derived.table.MarketSentimentDailyRow;
 import com.zoutrankil.data.client.TushareClient;
 import com.zoutrankil.data.client.dto.TushareRequest;
-
 import com.zoutrankil.data.repository.ReferencePublicationJournal;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.stereotype.Service;
 import java.nio.file.*;
 import java.security.MessageDigest;
@@ -25,7 +21,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.BooleanSupplier;
 import static com.zoutrankil.data.domain.SyncJobDefinition.*;
-import static com.zoutrankil.data.domain.policy.MarketSentimentDailyCalculation.*;
+import static com.zoutrankil.data.domain.derived.policy.MarketSentimentDailyCalculation.*;
 
 /** Native Java calculation, used by the persistent main-strategy batch and explicit recovery. */
 @Service

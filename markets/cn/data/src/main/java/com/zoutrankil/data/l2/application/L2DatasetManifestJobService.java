@@ -1,14 +1,13 @@
 package com.zoutrankil.data.l2.application;
 
 import com.zoutrankil.data.service.*;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.L2DatasetManifest;
-import com.zoutrankil.data.domain.L2DatasetManifestDataset;
+import com.zoutrankil.data.domain.l2.L2DatasetManifest;
+import com.zoutrankil.data.domain.l2.L2DatasetManifestDataset;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
-import com.zoutrankil.data.domain.SyncJobOwner;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.l2.port.L2DatasetManifestTarget;
@@ -206,7 +205,7 @@ public final class L2DatasetManifestJobService implements SyncJobOwner {
         var writer = port();
         var adapter = new L2DatasetManifestSyncAdapter(source, plan.source(), symbols, definition(), writer);
         var ledger = new SyncRunLedger(ledgerPath);
-        var runner = new SyncJobRunner<L2DatasetManifest, com.zoutrankil.data.domain.L2DatasetManifestKey>(
+        var runner = new SyncJobRunner<L2DatasetManifest, com.zoutrankil.data.domain.l2.L2DatasetManifestKey>(
                 ledger, new DatasetIntervalLock(ledgerPath));
         String runId = "d085-" + RUN_STAMP.format(java.time.Instant.now().atZone(ZoneId.of("UTC")))
                 + "-" + UUID.randomUUID();

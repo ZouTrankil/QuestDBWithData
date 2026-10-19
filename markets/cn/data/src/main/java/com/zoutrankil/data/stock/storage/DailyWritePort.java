@@ -1,17 +1,17 @@
 package com.zoutrankil.data.stock.storage;
 
+import com.zoutrankil.data.domain.stock.market.DailySemantics;
+import com.zoutrankil.data.domain.stock.market.DailyMarketBar;
+import com.zoutrankil.data.domain.stock.market.DailyDataset;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 import com.zoutrankil.data.stock.port.DailyWriteSession;
-
-
 import com.zoutrankil.data.repository.*;
-
 import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-import com.zoutrankil.data.domain.table.DailyRow;
+import com.zoutrankil.data.domain.stock.market.table.DailyRow;
 import com.zoutrankil.data.stock.mapper.DailyMapper;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
-import com.zoutrankil.data.domain.policy.IsolatedTablePolicy;
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
 import java.io.ByteArrayOutputStream;

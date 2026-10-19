@@ -1,7 +1,9 @@
 package com.zoutrankil.data.index.application;
 
+import com.zoutrankil.data.domain.index.table.IndexRow;
+import com.zoutrankil.data.domain.index.IndexCatalogEntry;
+import com.zoutrankil.data.domain.index.IndexCatalogDataset;
 import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.domain.table.*;
 import com.zoutrankil.data.index.domain.IndexCatalogState.*;
 import com.zoutrankil.data.index.mapper.IndexCatalogMapper;
 import com.zoutrankil.data.index.port.*;
