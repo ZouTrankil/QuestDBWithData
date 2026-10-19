@@ -10,6 +10,7 @@
 | --- | --- | --- | --- |
 | `us_equity_daily` | `trade_date,symbol,provider` | 纽约交易日编码为 UTC 零点 | 未复权及调整 OHLCV、现金分红、当日拆股因子、币种、来源摘要和取得时间 |
 | `us_equity_intraday` | `ts,symbol,provider,interval_minutes` | `ts` 是真实 UTC 起点；`trade_date` 是纽约日期 | 1 分钟行情，以及按实有分钟合并的 5 分钟行情 |
+| `us_equity_intraday_regular` | 与分钟原表相同 | 原时间和原价不变，另给出 `calendar_version` | 正常交易时段只读视图；按已核对的 2026 年日历排除休市、盘外及时间不匹配记录 |
 | `us_security_universe` | `observed_at,symbol,directory` | 取得快照的真实 UTC 时间 | 官方挂牌原文范围、明确的候选与排除原因；不是历史成分表 |
 | `us_security_history_catalog` | `observed_at,source_sha256,source_row` | 来源窗口日期用 UTC 零点；取得时间用真实 UTC | Tiingo 美国 Stock/ETF、OTC 目录；原始行号保留同代码的不同历史窗口 |
 | `us_etf_equity_holdings` | `asof_date,fund,symbol` | 发行人持仓日期，UTC 零点编码 | SPY/QQQ 发行人的股票及 ADR 持仓，标记 `ETF_HOLDINGS_PROXY` |
@@ -18,7 +19,7 @@
 | `crypto_ohlcv` | `ts,exchange,symbol,instrument,interval_minutes` | UTC 小时或日线起点 | Binance、Bybit 的 BTC/ETH 现货、USDT 永续；通常由齐备小时线合成日线，官方停市月份另核对原生日线 |
 | `crypto_data_gap_events` | `ts,exchange,symbol,instrument,interval_minutes` | 缺失小时及官方停市区间，真实 UTC | 归档、REST 空记录、官方事实和原生日线核对证据；不生成价格 K 线 |
 
-这些表使用 WAL、明确分区和 DEDUP。来源隔离，不能用不同供应商的数据互相静默覆盖。调整价采用当前来源调整基准，不表示历史当时已经可用的价格。
+正式表使用 WAL、明确分区和 DEDUP；普通视图依赖原表，不单独写入。来源隔离，不能用不同供应商的数据互相静默覆盖。调整价采用当前来源调整基准，不表示历史当时已经可用的价格。
 
 Tiingo 日线同时保留 `close` 与 `adj_close`，不能只存复权价。`dividend` 是来源除息日每股现金额，`split_factor` 无事件时为 1。IEX 分钟量仅代表该场所，不能据此计算全美股的成交份额。
 
@@ -41,6 +42,9 @@ FRED 需要本机代理时，配置 `app.market-data.fred-proxy-url`；留空时
 # 当前挂牌及供应商历史股票候选；优先发行人持仓范围，先等核心日线结束。
 .\gradlew.bat usMarketData --args='collect-broad --through 2026-10-16'
 
+# 用已保留且与版本化日历相符的官方原文创建正常时段视图。
+.\gradlew.bat usMarketData --args='create-regular-view --calendar-source var/market-data/probes/nasdaq-calendar-2026.response --hours-source var/market-data/probes/nyse-hours.response'
+
 # FRED 三个指数序列；保留所有旧行及旧值，只写已确认缺失的键。
 .\gradlew.bat usMarketData --args='collect-fred --through 2026-10-16'
 
@@ -60,6 +64,12 @@ QuestDB 10 的正式发送使用 QWP，保留 INT 和纳秒时间类型。运行
 
 同一行情目录的发布通过 `ledger-writer.lock` 串行执行，避免两个采集进程同时升级 SQLite 读事务。来源请求和配额等待在该锁之外进行。Bybit 的 HTTP 200 还必须检查 `retCode`；服务超时、服务错误和限流在任何正式发布之前有界重试，最多三次，权限错误保留为来源缺口。
 
+全市场股票默认每组最多 12 个来源，`app.market-data.broad-publication-symbols` 可设为 1–16。全部原始响应和清单先放入同一个不可变 ZIP，再按业务日期和证券代码排序发布，减少跨二十年回填时重复合并旧分区。每行的 `source_sha256` 仍指向对应原始响应；运行指纹使用完整 ZIP 摘要。清单保留每个来源的完整队列 ID、代码映射、URL、摘要和取得时间。
+
+来源组及全部成员在同一 SQLite 事务中进入 `PUBLISHING`，全部字段回读及 WAL 通过后再一起进入 `VERIFIED`。未决组阻止重新发送。原正式运行已为 `VERIFIED`、但队列尚未推进时，可用 `reconcile-broad-bundle --bundle <原组ID> --run <原运行ID>` 重新解析冻结 ZIP 并逐字段核对后推进；该命令不会重发或解开未决写入锁。旧单证券任务仍使用 `reconcile-broad-task`。
+
+IEX 实测在 2026-07-03 等休市日返回整日零量平价记录；这些是供应商补齐值，不能计作真实交易时段。原文及原表全部保留，研究读取 `us_equity_intraday_regular`。日历资源在 `markets/us/src/main/resources/market-us/calendars/us-equities-2026.json`，保留官方 URL、原文摘要、休市及半日市日期。创建视图时再核对完整官方原文与资源事实；未知同名视图不覆盖。视图按纽约夏令时筛选实际开闭市时刻，只投影原值，不补造缺失分钟。当前版本只覆盖 2026 年，不能拿它推算下一年。
+
 FRED 沿用正式 `us_market_daily` 的结构。请求先固定完整观测数量，`.` 作为来源缺值统计。补缺前保存旧行快照，实际发送前再次拒绝任何已存在的业务键；补缺后核对全部旧行未变、新行完整可见及 WAL。已有未决运行时停止，不重新抓取后覆盖原任务。SP500 的来源窗口较短时，旧表中更早的日期仍保留。
 
 2026-10-20 实际补入 NASDAQCOM 2676 条、SP500 21 条、VIXCLS 2678 条，原有 7691 条记录全部逐字段保持不变；同一截止日重跑三组均为零新增，WAL 已结清。NASDAQCOM 来源最后有效值为 2026-10-15，16 日缺值未填造；另两组有效至 16 日。FRED 默认 HTTP/2 和应用 UA 在本机实测出现重置或超时，入口只对该来源使用已验证的 HTTP/1.1 兼容请求头。
@@ -75,6 +85,7 @@ BTC 的原始文件、队列、预算、账本及回执在 `var/crypto-market-da
 - [Tiingo 公开 Starter 配额](https://www.tiingo.com/about/pricing)是 50 次/小时、1000 次/日、500 标的/月和 1 GB/月。未取得账户套餐页面前按这个保守上限执行；来源响应没有给出可证明套餐等级的配额头。
 - [Tiingo IEX 说明](https://www.tiingo.com/documentation/iex)明确分钟成交量为 IEX 场所量，且必须显式请求 `volume`。
 - Yahoo 报价是拆股调整基准。通过响应中该交易日之后的全部拆股还原 OHLC、股数及现金分红，使用 `RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED` 标明来源；`adj_close` 保留 Yahoo 当前调整值。AAPL 2006-01-03 的 Yahoo 收盘价乘 28 后约为 74.75，接近 Tiingo 原始 74.75；不同来源的盘中 OHLC 仍有差异，不能混合覆盖。缺失数值拒收，不补零。
+- 本机 2026-10-20 核验 FISV 时，Yahoo 两个主机均缺少 2025-11-12 的 OHLCV。已用独立 Tiingo 来源补入 2006-01-03 至 2026-10-16 共 5230 条日线并验收；保留 Yahoo 原文和 `FAILED_SOURCE`，来源之间不拼值或覆盖。
 - [Nasdaq 公共 ITCH 目录](https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/)存在真实二进制文件；部分文件达数 GB 至十余 GB。部分采集需明确文件、日期、压缩字节或消息边界，不能宣称完整交易日。
 - [Binance 公共归档](https://github.com/binance/binance-public-data)提供现货及合约数据和校验和；2025 年以来现货归档时间单位为微秒，不能沿用毫秒解释。
 - Binance 2023-03-24 现货归档及 REST 均缺少 13:00Z 小时。只有取得[官方停市事实](https://www.binance.com/en/blog/from-our-ceo/6789340645608890113)、原归档及原生日线的官方摘要、精确小时 REST 空记录，并核对全部日线 OHLCV 与实际小时成交一致后，才登记独立缺口。实际 23 根小时记录保留，不能填造第 24 根。
@@ -105,3 +116,7 @@ python tools/audit_cross_market_coverage.py --through 2026-10-16 --crypto-throug
 ```
 
 结果保存在 `var/market-data/coverage-audit.json`，包括来源队列、未决锁、WAL、证券目录及持仓覆盖、分钟范围、ITCH 局部范围和加密时间网格。加密小时线另独立聚合 OHLCV 与日线对比；官方停市减计只接受完整本地证据及仍不存在的价格键。原始 UTC 满网格和扣除已核对停市后的场所网格分别报告。首尾日期或行数吻合不替代逐字段回执，也不证明美股中间交易日全部齐备。
+
+分钟覆盖另用保留的 Nasdaq 当年日历原文和 NYSE 交易时间原文逐日核对，分别报告原表的休市日补齐记录、正常时段视图的缺日及稀疏分钟。2026-01-01 至 2026-10-16 应有 199 个交易日；排除休市日不等于把尚未采集的交易日判为完整。
+
+5 分钟字段另由实库 1 分钟数据按 UTC 五分钟桶独立聚合核对 OHLCV，同时报告缺少派生行、多余派生行及不足五根的来源桶；不只比较数量。首批 SPY 2026-01-02 的冻结样本已补入缺少的 78 根派生行，原有 390 根分钟线逐字段未变。

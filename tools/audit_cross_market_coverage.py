@@ -4,13 +4,16 @@
 import argparse
 import datetime as dt
 import hashlib
+import html
 import itertools
 import json
 import math
 import pathlib
+import re
 import sqlite3
 import urllib.parse
 import urllib.request
+from zoneinfo import ZoneInfo
 
 import yaml
 
@@ -64,6 +67,139 @@ def ledger(path):
     return {"exists": True, "entryStates": [{"kind": kind, "state": state, "count": count} for kind, state, count in rows],
             "intervalLocks": [{"dataset": dataset, "inDoubt": bool(uncertain), "count": count} for dataset, uncertain, count in locks],
             "inDoubtEntries": sum(count for _, state, count in rows if state == "IN_DOUBT")}
+
+
+def publication_groups(path):
+    if not path.is_file():
+        return {"exists": False}
+    with sqlite3.connect("file:" + path.resolve().as_posix() + "?mode=ro", uri=True) as connection:
+        if not connection.execute("select 1 from sqlite_master where name='broad_bundles'").fetchone():
+            return {"exists": False}
+        phases = dict(connection.execute("select phase,count(*) from broad_bundles group by phase"))
+        failures = []
+        for group_id, phase, proof, count, wrong in connection.execute("select b.id,b.phase,b.proof,count(t.id),sum(case when t.phase=b.phase then 0 else 1 end) from broad_bundles b left join broad_tasks t on t.bundle_id=b.id group by b.id,b.phase,b.proof"):
+            expected = json.loads(proof)["members"] if proof is not None else None
+            if not count or wrong or expected is not None and expected != count:
+                failures.append({"bundle": group_id, "phase": phase, "memberCount": count, "expectedMembers": expected, "membersInWrongPhase": wrong})
+    return {"exists": True, "phases": phases, "memberStateConsistencyFailures": failures,
+            "allGroupsVerified": bool(phases) and set(phases) == {"VERIFIED"} and not failures}
+
+
+def us_session_calendar(root, year):
+    """从保留的官方页面读取当年休市及半日市；不以工作日单独充当交易日历。"""
+    sources = []
+    bodies = []
+    for name, url in ((f"nasdaq-calendar-{year}", "https://nasdaqtrader.com/Trader.aspx?id=Calendar"),
+                      ("nyse-hours", "https://www.nyse.com/trade/hours-calendars")):
+        raw = root / "var/market-data/probes" / (name + ".response")
+        card = json.loads(raw.with_suffix(".json").read_text(encoding="utf-8"))
+        body = raw.read_bytes()
+        if len(body) > 2 * 1024 * 1024 or hashlib.sha256(body).hexdigest() != card["sha256"] or card["sourceUrl"] != url:
+            raise ValueError("官方日历或交易时间页面摘要、来源不符")
+        sources.append({"sourceUrl": url, "sha256": card["sha256"], "observedAt": card["observedAt"], "rawPath": str(raw)})
+        bodies.append(body.decode("utf-8"))
+    clean = lambda s: re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]*>", " ", s))).strip()
+    if not re.search(r"Core Trading Session:\s*9:30 a\.m\. to 4:00 p\.m\. ET", clean(bodies[1])):
+        raise ValueError("官方正常交易时段未得到核对")
+    heading = f"U.S. Equity and Options Markets Holiday Schedule {year}"
+    if heading not in bodies[0]:
+        raise ValueError("官方日历年份不符")
+    table = re.search(r"<table\b[^>]*>(.*?)</table>", bodies[0].split(heading, 1)[1], re.S | re.I)
+    if table is None:
+        raise ValueError("官方日历表格缺失")
+    months = {m: i for i, m in enumerate("January February March April May June July August September October November December".split(), 1)}
+    closed, early = {}, {}
+    for row in re.findall(r"<tr\b[^>]*>(.*?)</tr>", table.group(1), re.S | re.I):
+        cells = [clean(c) for c in re.findall(r"<td\b[^>]*>(.*?)</td>", row, re.S | re.I)]
+        if not cells:
+            continue
+        if len(cells) != 3:
+            raise ValueError("官方日历字段数变化")
+        match = re.fullmatch(r"([A-Za-z]+) ([0-9]{1,2}), ([0-9]{4})", cells[0])
+        if not match or int(match[3]) != year:
+            raise ValueError("官方日历日期非法或跨年")
+        day = dt.date(year, months[match[1]], int(match[2])).isoformat()
+        if day in closed or day in early:
+            raise ValueError("官方日历日期重复")
+        if cells[2] == "Closed":
+            closed[day] = cells[1]
+        elif cells[2] == "1:00 p.m.":
+            early[day] = "13:00"
+        else:
+            raise ValueError("官方日历出现未核对的状态")
+    if year != 2026 or len(closed) != 10 or len(early) != 2:
+        raise ValueError("当年日历需核对完整年度范围，不能沿用旧年规则")
+    return {"verified": True, "year": year, "zone": "America/New_York", "regularOpen": "09:30", "regularClose": "16:00",
+            "closedDates": closed, "earlyCloseDates": early, "sources": sources}
+
+
+def intraday_sessions(qdb, config, calendar, through, table="us_equity_intraday"):
+    if table not in {"us_equity_intraday", "us_equity_intraday_regular"}:
+        raise ValueError("未知分钟产物")
+    start = dt.date.fromisoformat(str(config["minute-start"]))
+    if start.year != through.year or start.year != calendar["year"]:
+        raise ValueError("分钟覆盖窗口须由同一年度的已核对日历覆盖")
+    symbols = set(config["benchmark-symbols"] + config["core-stock-symbols"])
+    source = qdb.query("select symbol,interval_minutes,trade_date,count() rows,count_distinct(ts) distinct_ts,min(ts) first_ts,max(ts) last_ts,sum(case when volume is null then 1 else 0 end) null_volume,sum(case when volume is null or volume<>0 or open<>high or high<>low or low<>close then 1 else 0 end) non_flat_zero,sum(case when (cast(ts as long) % (cast(interval_minutes as long)*60000000))=0 then 0 else 1 end) off_grid from " + table + " where provider='TIINGO_IEX' and trade_date >= " + literal(start) + " and trade_date <= " + literal(through) + " and symbol in (" + ",".join(literal(s) for s in sorted(symbols)) + ") group by symbol,interval_minutes,trade_date")
+    actual = {(r["symbol"], r["interval_minutes"], r["trade_date"][:10]): r for r in source}
+    dates = [start + dt.timedelta(days=i) for i in range((through - start).days + 1)]
+    opened = [d for d in dates if d.weekday() < 5 and d.isoformat() not in calendar["closedDates"]]
+    opened_set = {d.isoformat() for d in opened}
+    unexpected = [r for r in source if r["trade_date"][:10] not in opened_set or r["interval_minutes"] not in (1, 5)]
+    result = []
+    zone = ZoneInfo(calendar["zone"])
+    for symbol, minutes in itertools.product(sorted(symbols), (1, 5)):
+        missing, sparse = [], []
+        for day in opened:
+            opening = dt.datetime.combine(day, dt.time.fromisoformat(calendar["regularOpen"]), zone).astimezone(dt.timezone.utc)
+            closing = dt.datetime.combine(day, dt.time.fromisoformat(calendar["earlyCloseDates"].get(day.isoformat(), calendar["regularClose"])), zone).astimezone(dt.timezone.utc)
+            expected = int((closing - opening).total_seconds()) // (60 * minutes)
+            row = actual.get((symbol, minutes, day.isoformat()))
+            if row is None:
+                missing.append(day.isoformat())
+            elif not (row["rows"] == row["distinct_ts"] == expected and row["off_grid"] == 0 and instant(row["first_ts"]) == opening and instant(row["last_ts"]) == closing - dt.timedelta(minutes=minutes)):
+                sparse.append({"date": day.isoformat(), "expectedRegularSessionBars": expected, "actual": row})
+        result.append({"symbol": symbol, "intervalMinutes": minutes, "expectedTradingDays": len(opened), "missingTradingDays": missing,
+                       "nonFullRegularSessionDays": sparse, "allCalendarSessionsPresent": not missing,
+                       "fullRegularSessionGrid": not missing and not sparse, "scope": "只核对实际来源场所；稀疏成交不能补成价格或零量 K 线。"})
+    return {"table": table, "from": str(start), "through": str(through), "expectedTradingDays": len(opened), "series": result, "unexpectedSessionRows": unexpected,
+            "allCoreCalendarSessionsPresent": all(r["allCalendarSessionsPresent"] for r in result) and not unexpected,
+            "allCoreRegularSessionGridsComplete": all(r["fullRegularSessionGrid"] for r in result) and not unexpected,
+            "collectedBarsWithUnknownVolume": sum(r["null_volume"] for r in source),
+            "zeroVolumeFlatBarsOnOfficialClosedDates": sum(r["rows"] for r in unexpected if r["non_flat_zero"] == 0),
+            "nonFlatOrNonZeroBarsOnOfficialClosedDates": sum(r["non_flat_zero"] for r in unexpected)}
+
+
+def five_minute_values(qdb, config, through):
+    """用数据库独立聚合实际 1 分钟，核对正常时段视图中的 5 分钟 OHLCV；按月限制返回量。"""
+    start = dt.date.fromisoformat(str(config["minute-start"]))
+    month = start.replace(day=1)
+    checked, partial, extra, bad = 0, 0, 0, []
+    symbols = sorted(set(config["benchmark-symbols"] + config["core-stock-symbols"]))
+    while month <= through:
+        next_month = (month.replace(day=28) + dt.timedelta(days=4)).replace(day=1)
+        lower, upper = max(start, month), min(through + dt.timedelta(days=1), next_month)
+        scope = " from us_equity_intraday_regular where provider='TIINGO_IEX' and trade_date >= " + literal(lower) + " and trade_date < " + literal(upper) + " and symbol in (" + ",".join(literal(s) for s in symbols) + ")"
+        aggregate = qdb.query("select symbol,provider,timestamp_floor('5m',ts) bucket_ts,count() minute_rows,first(open) open,max(high) high,min(low) low,last(close) close,sum(volume) volume,sum(case when volume is null then 1 else 0 end) null_volume" + scope + " and interval_minutes=1 group by symbol,provider,bucket_ts")
+        actual = qdb.query("select symbol,provider,ts bucket_ts,open,high,low,close,volume" + scope + " and interval_minutes=5 limit 100001")
+        key = lambda r: (r["symbol"], r["provider"], r["bucket_ts"])
+        by_key = {key(r): r for r in actual}
+        if len(by_key) != len(actual):
+            raise ValueError("五分钟视图中发现重复完整业务键")
+        for row in aggregate:
+            found = by_key.pop(key(row), None)
+            expected_volume = None if row["null_volume"] else row["volume"]
+            matched_volume = found is not None and ((expected_volume is None and found["volume"] is None) or expected_volume is not None and found["volume"] is not None and math.isclose(expected_volume, found["volume"], rel_tol=1e-12, abs_tol=1e-8))
+            if found is None or not matched_volume or any(row[f] != found[f] for f in ("open", "high", "low", "close")):
+                bad.append({"key": key(row), "minuteAggregate": row, "fiveMinute": found})
+            partial += row["minute_rows"] != 5
+        checked += len(aggregate)
+        extra += len(by_key)
+        month = next_month
+    return {"collectedBucketsChecked": checked, "mismatchedBuckets": len(bad), "fiveMinuteWithoutConstituents": extra,
+            "bucketsWithFewerThanFiveSourceMinutes": partial, "mismatchSamples": bad[:30],
+            "allCollectedFiveMinuteValuesMatchOneMinute": bool(checked) and not bad and not extra,
+            "scope": "OHLC 精确比较；成交量允许 1e-12 相对及 1e-8 绝对浮点累计误差。缺交易日仍单独报告，采集中未完成的月份可能暂时只有一种频率。"}
 
 
 def instant(value):
@@ -134,6 +270,7 @@ def main():
                          "broad": queue(root / "var/market-data/broad-queue.sqlite3", "broad_tasks"),
                          "crypto": queue(root / "var/crypto-market-data/queue.sqlite3", "crypto_tasks")}
     report["ledgers"] = {"us": ledger(root / "var/market-data/sync-ledger.sqlite3"), "crypto": ledger(root / "var/crypto-market-data/sync-ledger.sqlite3")}
+    report["broadPublicationGroups"] = publication_groups(root / "var/market-data/broad-queue.sqlite3")
     report["wal"] = qdb.query("select name,writerTxn,sequencerTxn,bufferedTxnSize,suspended from wal_tables() where name in ('us_equity_daily','us_equity_intraday','us_security_universe','us_security_history_catalog','us_etf_equity_holdings','us_nasdaq_itch_messages','us_market_daily','crypto_ohlcv','crypto_data_gap_events')")
     for row in report["wal"]:
         row["settled"] = not row["suspended"] and row["writerTxn"] == row["sequencerTxn"] and row["bufferedTxnSize"] == 0
@@ -190,6 +327,16 @@ def main():
         report["indexProxyCoverage"] = [{"fund": fund, "basis": "ETF_HOLDINGS_PROXY", "stockRows": len(group), "withoutAnyPrices": sorted({r["symbol"] for r in group} - present)} for fund, it in itertools.groupby(sorted(holdings, key=lambda x: x["fund"]), key=lambda x: x["fund"]) for group in [list(it)]]
     if qdb.exists("us_equity_intraday"):
         report["intradayRanges"] = qdb.query("select symbol,provider,interval_minutes,count() rows,count_distinct(trade_date) trade_days,min(ts) first_ts,max(ts) last_ts from us_equity_intraday group by symbol,provider,interval_minutes order by symbol,provider,interval_minutes")
+        try:
+            calendar = us_session_calendar(root, args.through.year)
+            report["usSessionCalendar"] = calendar
+            report["coreIntradaySessionCoverage"] = intraday_sessions(qdb, us_config, calendar, args.through)
+            if qdb.exists("us_equity_intraday_regular"):
+                report["coreRegularViewSessionCoverage"] = intraday_sessions(qdb, us_config, calendar, args.through, "us_equity_intraday_regular")
+                report["regularViewCalendarVersions"] = qdb.query("select calendar_version,count() rows from us_equity_intraday_regular group by calendar_version")
+                report["coreFiveMinuteValueReconciliation"] = five_minute_values(qdb, us_config, args.through)
+        except (OSError, ValueError, KeyError) as error:
+            report["usSessionCalendar"] = {"verified": False, "error": str(error), "scope": "缺少或未核对官方当年日历时，不能用工作日补推完整性。"}
     if qdb.exists("us_nasdaq_itch_messages"):
         report["itchPartial"] = qdb.query("select source_sha256,source_complete,count() rows,count_distinct(message_index) distinct_indexes,min(message_index) first_index,max(message_index) last_index,min(ts) first_ts,max(ts) last_ts from us_nasdaq_itch_messages group by source_sha256,source_complete")
     if qdb.exists("crypto_ohlcv"):

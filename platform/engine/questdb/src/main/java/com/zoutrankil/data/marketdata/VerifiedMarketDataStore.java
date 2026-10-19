@@ -49,6 +49,7 @@ public final class VerifiedMarketDataStore {
     }
 
     public void ensure(DatasetDefinition definition) throws Exception {
+        if(definition.objectKind()!=DatasetDefinition.ObjectKind.TABLE)throw new IllegalArgumentException("视图不能通过普通表初始化入口建表");
         var columns=definition.columns().stream().map(c->q(c.storageName())+" "+c.storageType()).toList();
         query("CREATE TABLE IF NOT EXISTS "+q(definition.objectName())+" ("+String.join(",",columns)+") TIMESTAMP("+
                 q(definition.designatedTimestamp())+") PARTITION BY "+definition.partition()+" WAL DEDUP UPSERT KEYS("+
@@ -103,6 +104,7 @@ public final class VerifiedMarketDataStore {
         }
     }
     private SyncJobRunner.Result publishInside(DatasetDefinition d,List<Map<String,Object>> source,Path raw,String expectedSha,Map<String,Object> evidence,boolean missingOnly) throws Exception {
+        d.requireCapability(DatasetDefinition.Capability.WRITE);if(d.objectKind()!=DatasetDefinition.ObjectKind.TABLE)throw new IllegalArgumentException("正式发送只接受可写普通表");
         if(source.isEmpty()||source.size()>100_000)throw new IllegalArgumentException("来源必须明确非空且不超过十万行");
         if(!sha(Files.readAllBytes(raw)).equals(expectedSha))throw new IllegalStateException("冻结的来源响应摘要已改变");
         var rows=source.stream().map(row->normalize(d,row)).toList();
@@ -353,10 +355,18 @@ public final class VerifiedMarketDataStore {
         return new Comparison(actual,wanted.entrySet().stream().filter(e->!found.contains(e.getKey())).map(Map.Entry::getValue).toList());
     }
     public Map<String,Object> verifyExisting(String run,DatasetDefinition d,List<Map<String,Object>> expected,Path raw,String sourceSha,String queueTask)throws Exception {
+        return verifyExistingSource(run,d,expected,raw,sourceSha,queueTask,false);
+    }
+    /** 来源组只能核对原组的成功运行，不能借用某个成员或另一次发布的回执。 */
+    public Map<String,Object> verifyExistingBundle(String run,DatasetDefinition d,List<Map<String,Object>> expected,Path raw,String sourceSha,String bundle)throws Exception {
+        return verifyExistingSource(run,d,expected,raw,sourceSha,bundle,true);
+    }
+    private Map<String,Object> verifyExistingSource(String run,DatasetDefinition d,List<Map<String,Object>> expected,Path raw,String sourceSha,String sourceId,boolean bundle)throws Exception {
         try(var publisher=MarketPublisherLease.acquire(root.resolve("ledger-writer.lock"),Duration.ofMinutes(15))) {
             var ledger=SyncRunLedger.openExisting(ledgerPath);var original=ledger.getRun(run);var request=JSON.readTree(original.frozenJson());
             byte[] prepared=Files.readAllBytes(root.resolve("prepared/"+run+".json"));var document=JSON.readTree(prepared);
-            if(!sha(prepared).equals(request.path("parameters").path("prepared_sha256").asText())||!List.of(document.path("evidence").path("queueTask").asText(),document.path("evidence").path("task").asText()).contains(queueTask))throw new IllegalStateException("原运行不属于本次来源队列");
+            boolean belongs=bundle?document.path("evidence").path("bundle").asText().equals(sourceId):List.of(document.path("evidence").path("queueTask").asText(),document.path("evidence").path("task").asText()).contains(sourceId);
+            if(sourceId==null||sourceId.isBlank()||!sha(prepared).equals(request.path("parameters").path("prepared_sha256").asText())||!belongs)throw new IllegalStateException("原运行不属于本次来源队列");
             if(ledger.get(run).state()!=SyncRunState.VERIFIED||!original.targetId().equals(identity(d))||!request.path("parameters").path("source_sha256").asText().equals(sourceSha)||!sha(Files.readAllBytes(raw)).equals(sourceSha))throw new IllegalStateException("原运行或冻结来源尚未验收");
             var normalized=expected.stream().map(r->normalize(d,r)).toList();var result=compareExisting(d,normalized,original.targetId());
             if(!result.missing().isEmpty()||!settled(d.objectName()))throw new IllegalStateException("队列来源尚未完全可见");

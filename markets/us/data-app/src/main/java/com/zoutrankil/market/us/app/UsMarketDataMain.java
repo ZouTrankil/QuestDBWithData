@@ -22,6 +22,7 @@ public final class UsMarketDataMain {
         var store=new VerifiedMarketDataStore(URI.create(env.getRequiredProperty("app.questdb.http-url")),env.getProperty("app.questdb.http-authorization",""),
                 env.getProperty("app.questdb.username","admin"),env.getProperty("app.questdb.password",""),root);
         switch(args[0]) {
+            case "create-regular-view" -> {if(!Set.of("calendar-source","hours-source").containsAll(options.keySet()))throw new IllegalArgumentException("未知交易日历参数");print(UsRegularSessionView.install(root,store,Path.of(required(options,"calendar-source")),Path.of(required(options,"hours-source"))));}
             case "collect-fred" -> {if(!Set.of("through").containsAll(options.keySet()))throw new IllegalArgumentException("未知 FRED 参数");LocalDate through=LocalDate.parse(required(options,"through"));if(!through.isBefore(LocalDate.now(ZoneId.of("America/New_York"))))throw new IllegalArgumentException("FRED 有限回补只使用已结束的纽约日期");FredMacroCollector.collect(env,root,store,through);}
             case "reconcile-frozen" -> {
                 if(!Set.of("run","prepared-sha256","stopped-evidence","repair-missing").containsAll(options.keySet())||!Set.of("true","false").contains(options.getOrDefault("repair-missing","false")))throw new IllegalArgumentException("未知核对参数或补缺标志");
@@ -29,6 +30,7 @@ public final class UsMarketDataMain {
             }
             case "reconcile-core-task" -> {if(!Set.of("task","run").containsAll(options.keySet()))throw new IllegalArgumentException("未知队列核对参数");new UsCoreCollector(env,root,store).reconcileTask(required(options,"task"),required(options,"run"));}
             case "reconcile-broad-task" -> {if(!Set.of("task","run","through").containsAll(options.keySet()))throw new IllegalArgumentException("未知队列核对参数");new UsBroadDailyCollector(env,root,store).reconcileTask(required(options,"task"),required(options,"run"),LocalDate.parse(required(options,"through")));}
+            case "reconcile-broad-bundle" -> {if(!Set.of("bundle","run").containsAll(options.keySet()))throw new IllegalArgumentException("未知来源组核对参数");new UsBroadDailyCollector(env,root,store).reconcileBundle(required(options,"bundle"),required(options,"run"));}
             case "import-fund-holdings" -> {
                 if(!Set.of("source","fund").containsAll(options.keySet()))throw new IllegalArgumentException("未知基金持仓参数");
                 Path raw=Path.of(required(options,"source"));byte[] bytes=Files.readAllBytes(raw);String sha=VerifiedMarketDataStore.sha(bytes),fund=required(options,"fund");
@@ -61,7 +63,7 @@ public final class UsMarketDataMain {
                 if(args[0].equals("collect-core"))new UsCoreCollector(env,root,store).run(through,maximum);
                 else new UsBroadDailyCollector(env,root,store).run(through);
             }
-            case "definitions" -> print(List.of(UsMarketDatasets.DAILY,UsMarketDatasets.MINUTE,UsUniverseSnapshot.SECURITIES,UsHistoricalSecurityCatalog.SECURITIES,UsFundHoldings.EQUITIES,NasdaqItchDataset.MESSAGES,FredMarketDaily.DEFINITION));
+            case "definitions" -> print(List.of(UsMarketDatasets.DAILY,UsMarketDatasets.MINUTE,UsEquitySessionCalendar.REGULAR,UsUniverseSnapshot.SECURITIES,UsHistoricalSecurityCatalog.SECURITIES,UsFundHoldings.EQUITIES,NasdaqItchDataset.MESSAGES,FredMarketDaily.DEFINITION));
             case "status" -> {
                 var result=new ArrayList<Object>();
                 for(var d:List.of(UsMarketDatasets.DAILY,UsMarketDatasets.MINUTE)) {

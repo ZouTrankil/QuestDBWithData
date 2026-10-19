@@ -26,6 +26,9 @@ class VerifiedMarketDataStoreTest {
         var rows=List.<Map<String,Object>>of(Map.of("ts","2026-01-01T00:00:00Z","symbol","X","price",1.));
         assertThrows(IllegalStateException.class,()->store.publish(definition,rows,file,"a".repeat(64),Map.of()));
         assertThrows(IllegalArgumentException.class,()->store.publish(definition,List.of(rows.getFirst(),rows.getFirst()),file,VerifiedMarketDataStore.sha(Files.readAllBytes(file)),Map.of()));
+        var view=new DatasetDefinition("market_view",1,"test","test","market_view",ObjectKind.VIEW,definition.columns(),definition.businessKey(),List.of(),"ts",Partition.NONE,false,Set.of(Capability.READ),List.of("market_test"),"只读视图不能进入正式发送");
+        assertThrows(IllegalArgumentException.class,()->store.publish(view,rows,file,VerifiedMarketDataStore.sha(Files.readAllBytes(file)),Map.of()));
+        assertThrows(IllegalArgumentException.class,()->store.ensure(view));
     }
     @Test void aClaimedStoppedWriterCannotReconcileWhileTheOriginalProcessIsStillAlive()throws Exception {
         var json=new com.fasterxml.jackson.databind.ObjectMapper();String run="market-00000000-0000-0000-0000-000000000001";
