@@ -64,11 +64,17 @@ QuestDB 10 的正式发送使用 QWP，保留 INT 和纳秒时间类型。发送
 
 同一行情目录的发布通过 `ledger-writer.lock` 串行执行，避免两个采集进程同时升级 SQLite 读事务。来源请求和配额等待在该锁之外进行。Bybit 的 HTTP 200 还必须检查 `retCode`；服务超时、服务错误和限流在任何正式发布之前有界重试，最多三次，权限错误保留为来源缺口。
 
-全市场股票默认每组最多 12 个来源，`app.market-data.broad-publication-symbols` 可设为 1–16。全部原始响应和清单先放入同一个不可变 ZIP，再按业务日期和证券代码排序发布，减少跨二十年回填时重复合并旧分区。每行的 `source_sha256` 仍指向对应原始响应；运行指纹使用完整 ZIP 摘要。清单保留每个来源的完整队列 ID、代码映射、URL、摘要和取得时间。
+全市场股票默认采用年度来源组：`broad-annual-enabled=true`，`broad-annual-symbols=128`，来源数不能超过预取缓存。完整原文和清单一起冻结，压缩及解压内容均不超过 64 MiB，单响应不超过 4 MiB；达到字节边界时按实际来源数成组。完整响应先验证所有字段并重算逐年行数，再按 QuestDB 年分区逐段发布，每段仍不超过正式十万行上限。原始 OHLCV、后续拆股、分红、来源摘要及取得时间不变；不会一次构建全部证券二十年的行对象。
+
+关闭年度模式或关闭预取时，仍使用原版本 1 来源组，默认每组最多 12 个来源，`broad-publication-symbols` 可设为 1–16。两种 ZIP 都保留完整队列 ID、映射、URL 和摘要，每行的 `source_sha256` 指向对应原始响应，运行指纹使用整个 ZIP 摘要。
 
 全市场日线每次发送默认最多 10000 行，规范化字节预算为 8 MiB，分别由 `broad-publication-page-rows`、`broad-publication-page-bytes` 配置。单次 HTTP 回读仍最多请求 5000 个完整键，逐字段验证覆盖整批；来源请求配额不变。自定义分页作为版本 2 写入请求参数及 prepared，恢复只能使用原冻结预算。其他入口及旧请求仍按原有 5000 行、4 MiB 执行，未决写入不自动重发。
 
 来源组及全部成员在同一 SQLite 事务中进入 `PUBLISHING`，全部字段回读及 WAL 通过后再一起进入 `VERIFIED`。未决组阻止重新发送。原正式运行已为 `VERIFIED`、但队列尚未推进时，可用 `reconcile-broad-bundle --bundle <原组ID> --run <原运行ID>` 重新解析冻结 ZIP 并逐字段核对后推进；该命令不会重发或解开未决写入锁。旧单证券任务仍使用 `reconcile-broad-task`。
+
+年度清单使用版本 2，同时冻结连续窗口、每年行数及发送页。`broad_bundle_windows` 先保存全部 `PLANNED`，每段发送前提交 `PUBLISHING` 意图；成功段保存原运行，来源确无记录的空年份只保存零行证据，不生成价格。所有段再沿原成功运行逐字段回读、核对原物理表及 WAL，全部通过才原子推进来源组和证券成员。
+
+年度模式可在段间响应停止请求，状态为 `STOPPED_BETWEEN_WINDOWS`。重启时先按原冻结输入重验成功段，再仅继续未发送的 `PLANNED`；不使用当前配置重算窗口或发送页。任何原 `PUBLISHING` 段都会阻止自动继续。先处理原正式运行，再用 `reconcile-broad-window --bundle <原组ID> --window <原窗口序号> --run <原运行ID>` 核对完整原段，之后重新执行同一截止日的 `collect-broad`。这个命令只回读，不重发；不能拿另一年或部分行的成功运行推进检查点。版本 1 来源组仍沿原核对命令处理。
 
 IEX 实测在 2026-07-03 等休市日返回整日零量平价记录；这些是供应商补齐值，不能计作真实交易时段。原文及原表全部保留，研究读取 `us_equity_intraday_regular`。日历资源在 `markets/us/src/main/resources/market-us/calendars/us-equities-2026.json`，保留官方 URL、原文摘要、休市及半日市日期。创建视图时再核对完整官方原文与资源事实；未知同名视图不覆盖。视图按纽约夏令时筛选实际开闭市时刻，只投影原值，不补造缺失分钟。当前版本只覆盖 2026 年，不能拿它推算下一年。
 
@@ -88,6 +94,7 @@ BTC 的原始文件、队列、预算、账本及回执在 `var/crypto-market-da
 - [Tiingo IEX 说明](https://www.tiingo.com/documentation/iex)明确分钟成交量为 IEX 场所量，且必须显式请求 `volume`。
 - Yahoo 报价是拆股调整基准。通过响应中该交易日之后的全部拆股还原 OHLC、股数及现金分红，使用 `RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED` 标明来源；`adj_close` 保留 Yahoo 当前调整值。AAPL 2006-01-03 的 Yahoo 收盘价乘 28 后约为 74.75，接近 Tiingo 原始 74.75；不同来源的盘中 OHLC 仍有差异，不能混合覆盖。缺失数值拒收，不补零。
 - 本机 2026-10-20 核验 FISV 时，Yahoo 两个主机均缺少 2025-11-12 的 OHLCV。已用独立 Tiingo 来源补入 2006-01-03 至 2026-10-16 共 5230 条日线并验收；保留 Yahoo 原文和 `FAILED_SOURCE`，来源之间不拼值或覆盖。
+- AMTD 的 Yahoo 原文只有截止日之后的记录。按[官方清单字段定义](https://www.nasdaqtrader.com/trader.aspx?id=symboldirdefs)核对挂牌代码 `N` 为 NYSE，并与 Tiingo 的 AMTD IDEA Group 名称及 2019 年起始窗口匹配后，独立补入 2019-08-05 至 2026-10-16 共 1811 条日线，字段、实有日期及 WAL 验收通过。原 Yahoo 拒收保留；目录中 1997–2020 年 NASDAQ 同代码窗口仍需单独核实，不能用当前公司的价格判为已覆盖。
 - [Nasdaq 公共 ITCH 目录](https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/)存在真实二进制文件；部分文件达数 GB 至十余 GB。部分采集需明确文件、日期、压缩字节或消息边界，不能宣称完整交易日。
 - [Binance 公共归档](https://github.com/binance/binance-public-data)提供现货及合约数据和校验和；2025 年以来现货归档时间单位为微秒，不能沿用毫秒解释。
 - Binance 2023-03-24 现货归档及 REST 均缺少 13:00Z 小时。只有取得[官方停市事实](https://www.binance.com/en/blog/from-our-ceo/6789340645608890113)、原归档及原生日线的官方摘要、精确小时 REST 空记录，并核对全部日线 OHLCV 与实际小时成交一致后，才登记独立缺口。实际 23 根小时记录保留，不能填造第 24 根。

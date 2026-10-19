@@ -34,8 +34,20 @@ final class UsBroadDailyCollector {
         try(var channel=FileChannel.open(root.resolve("us-broad.lock"),StandardOpenOption.CREATE,StandardOpenOption.WRITE);var lock=channel.tryLock();var db=DriverManager.getConnection("jdbc:sqlite:"+root.resolve("broad-queue.sqlite3"))) {
             if(lock==null)throw new IllegalStateException("挂牌采集器仍在运行");String raw,sha;
             try(var s=db.prepareStatement("SELECT raw,sha FROM broad_bundles WHERE id=? AND phase='PUBLISHING'")){s.setString(1,bundle);try(var r=s.executeQuery()){if(!r.next())throw new IllegalArgumentException("需要原始未推进检查点的来源组");raw=r.getString(1);sha=r.getString(2);}}
-            byte[] bytes=Files.readAllBytes(Path.of(raw));if(!VerifiedMarketDataStore.sha(bytes).equals(sha))throw new IllegalStateException("日线组冻结文件变化");var parsed=UsYahooDailyBundle.parse(bytes);if(!parsed.bundle().equals(bundle))throw new IllegalStateException("日线组身份不符");
+            byte[] bytes=Files.readAllBytes(Path.of(raw));if(!VerifiedMarketDataStore.sha(bytes).equals(sha))throw new IllegalStateException("日线组冻结文件变化");if(UsYahooAnnualBundle.annual(bytes))throw new IllegalArgumentException("年度组请用 reconcile-broad-window 指定原窗口及运行");var parsed=UsYahooDailyBundle.parse(bytes);if(!parsed.bundle().equals(bundle))throw new IllegalStateException("日线组身份不符");
             var proof=store.verifyExistingBundle(run,UsMarketDatasets.DAILY,parsed.rows(),Path.of(raw),sha,bundle);finishBundle(db,parsed,Map.of("verifiedRun",run,"fullReadbackProof",proof));System.out.println(JSON.writeValueAsString(Map.of("bundle",bundle,"phase","VERIFIED","proof",proof)));
+        }
+    }
+    void reconcileWindow(String bundle,int window,String run)throws Exception {
+        if(!bundle.matches("broad-[a-f0-9-]{36}"))throw new IllegalArgumentException("原年度组标识非法");
+        try(var channel=FileChannel.open(root.resolve("us-broad.lock"),StandardOpenOption.CREATE,StandardOpenOption.WRITE);var lock=channel.tryLock();var db=DriverManager.getConnection("jdbc:sqlite:"+root.resolve("broad-queue.sqlite3"))) {
+            if(lock==null)throw new IllegalStateException("挂牌采集器仍在运行");
+            Path raw;String sha;
+            try(var s=db.prepareStatement("SELECT raw,sha FROM broad_bundles WHERE id=? AND phase='PUBLISHING'")) {
+                s.setString(1,bundle);try(var r=s.executeQuery()){if(!r.next())throw new IllegalArgumentException("需要原发布态年度组");raw=Path.of(r.getString(1));sha=r.getString(2);}
+            }
+            byte[] frozen=Files.readAllBytes(raw);if(!VerifiedMarketDataStore.sha(frozen).equals(sha))throw new IllegalStateException("原年度 ZIP 变化");var parsed=UsYahooAnnualBundle.parse(frozen);if(!parsed.bundle().equals(bundle))throw new IllegalStateException("原年度组身份不符");new UsAnnualDailyPublication(root,store).reconcile(db,parsed,window,run,raw,sha);
+            System.out.println(JSON.writeValueAsString(Map.of("bundle",bundle,"window",window,"phase","VERIFIED","run",run,"scope","仅核对原窗口；collect-broad 将继续未发送的其余窗口")));
         }
     }
     void run(LocalDate through)throws Exception {
@@ -53,9 +65,14 @@ final class UsBroadDailyCollector {
                 if(!hasPriority)try(var s=db.createStatement()){s.execute("ALTER TABLE broad_tasks ADD COLUMN priority INT NOT NULL DEFAULT 10");}
                 boolean hasBundle=false;try(var s=db.createStatement();var r=s.executeQuery("PRAGMA table_info(broad_tasks)")){while(r.next())if(r.getString("name").equals("bundle_id"))hasBundle=true;}
                 if(!hasBundle)try(var s=db.createStatement()){s.execute("ALTER TABLE broad_tasks ADD COLUMN bundle_id TEXT");}
+                // 范围复核按证券反复查原任务；加索引避免数千次扫描整个历史队列。
+                try(var s=db.createStatement()){s.execute("CREATE INDEX IF NOT EXISTS broad_tasks_security_phase ON broad_tasks(kind,symbol,phase)");}
                 try(var s=db.createStatement()){s.execute("CREATE TABLE IF NOT EXISTS broad_bundles(id TEXT PRIMARY KEY,raw TEXT NOT NULL,sha TEXT NOT NULL,phase TEXT NOT NULL,proof TEXT,updated_at TEXT NOT NULL)");}
+                UsAnnualDailyPublication.createTables(db);
                 var references=references(source,budget,through);
+                status(db,budget,"PLANNING",null);
                 db.setAutoCommit(false);try {plan(db,through,references);db.commit();}catch(Exception failure){db.rollback();throw failure;}finally{db.setAutoCommit(true);}
+                if(!resumeAnnual(db,budget,through))return;
                 if(!tasks(db,"phase='PUBLISHING'").isEmpty())throw new IllegalStateException("挂牌来源原发布未核对，禁止另起运行重发");
                 // 只有持有原队列锁且规划完成后才启动单一生产者；正式写入仍只有当前线程。
                 boolean pipelined=env.getProperty("app.market-data.broad-prefetch-enabled",Boolean.class,true);
@@ -75,8 +92,10 @@ final class UsBroadDailyCollector {
                     // 与核心队列共用正式账本；先让核心日线结束，之后可与分钟采集并行。
                     if(task.kind().equals("DAILY")&&coreDailyPending()){status(db,budget,"WAITING_CORE_DAILY",null);Thread.sleep(10000);continue;}
                     if(task.kind().equals("DAILY")) {
-                        int groupSize=publicationSymbols(env);
+                        boolean annual=pipelined&&env.getProperty("app.market-data.broad-annual-enabled",Boolean.class,true);
+                        int groupSize=annual?annualSymbols(env):publicationSymbols(env);
                         if(prefetch!=null&&!UsBroadDailyPrefetch.groupReady(db,groupSize,prefetch.finished())){status(db,budget,"WAITING_PREFETCH_GROUP",null);Thread.sleep(1000);continue;}
+                        if(annual){if(!publishAnnualGroup(db,budget,through))return;continue;}
                         if(!publishDailyGroup(db,source,budget,through,pipelined))return;continue;
                     }
                     FrozenHttpSource.Response response;
@@ -110,6 +129,38 @@ final class UsBroadDailyCollector {
                 }
             }
         }
+    }
+    static int annualSymbols(Environment environment) {
+        int symbols=environment.getProperty("app.market-data.broad-annual-symbols",Integer.class,128);
+        if(symbols<1||symbols>UsYahooAnnualBundle.MAX_MEMBERS||symbols>UsBroadDailyPrefetch.capacity(environment))throw new IllegalArgumentException("年度组须为 1 至 128 个来源，且不得超过预取缓存");return symbols;
+    }
+    private boolean publishAnnualGroup(Connection db,PersistentMarketApiBudget budget,LocalDate through)throws Exception {
+        var page=publicationPage(env);var sources=new ArrayList<UsYahooDailyBundle.Source>();int bytes=UsYahooAnnualBundle.MANIFEST_BYTES;
+        for(var task:tasks(db,"kind='DAILY' AND phase='FETCHED'",annualSymbols(env))) {
+            if(Files.exists(root.resolve("us-broad-stop.request"))){status(db,budget,"STOPPED",null);return false;}
+            byte[] body=Files.readAllBytes(Path.of(task.raw()));if(!VerifiedMarketDataStore.sha(body).equals(task.sha()))throw new IllegalStateException("原年度成员摘要变化");
+            if(bytes+body.length>UsYahooAnnualBundle.MAX_BYTES)break;
+            sources.add(new UsYahooDailyBundle.Source(task.id(),task.symbol(),task.yahoo(),task.proof(),task.sha(),Instant.parse(task.observed()),body));bytes+=body.length;
+        }
+        if(sources.isEmpty())throw new IllegalStateException("年度组没有可发布的有界来源");
+        String bundle="broad-"+UUID.randomUUID();var from=LocalDate.parse(env.getProperty("app.market-data.history-start","2006-01-01"));
+        byte[] frozen=UsYahooAnnualBundle.freeze(bundle,from,through,new UsYahooAnnualBundle.Page(page.rows(),page.bytes()),sources);var parsed=UsYahooAnnualBundle.parse(frozen);
+        Path folder=root.resolve("broad-bundles");Files.createDirectories(folder);Path raw=folder.resolve(bundle+".zip");Files.write(raw,frozen,StandardOpenOption.CREATE_NEW);try(var file=FileChannel.open(raw,StandardOpenOption.WRITE)){file.force(true);}String sha=VerifiedMarketDataStore.sha(frozen);
+        UsAnnualDailyPublication.begin(db,parsed,raw,sha);
+        return publishAnnual(db,budget,parsed,raw,sha);
+    }
+    private boolean resumeAnnual(Connection db,PersistentMarketApiBudget budget,LocalDate through)throws Exception {
+        var pending=new ArrayList<String[]>();try(var s=db.createStatement();var r=s.executeQuery("SELECT id,raw,sha FROM broad_bundles WHERE phase='PUBLISHING' ORDER BY updated_at")){while(r.next())pending.add(new String[]{r.getString(1),r.getString(2),r.getString(3)});}
+        for(var old:pending) {
+            Path raw=Path.of(old[1]);byte[] frozen=Files.readAllBytes(raw);if(!VerifiedMarketDataStore.sha(frozen).equals(old[2]))throw new IllegalStateException("原来源组 ZIP 变化");
+            if(!UsYahooAnnualBundle.annual(frozen))throw new IllegalStateException("原非年度来源组尚未核对，禁止自动重发");var parsed=UsYahooAnnualBundle.parse(frozen);
+            if(!parsed.bundle().equals(old[0])||!parsed.through().equals(through)||!parsed.from().equals(LocalDate.parse(env.getProperty("app.market-data.history-start","2006-01-01"))))throw new IllegalStateException("年度恢复须保持原组身份和原请求日期");
+            if(!publishAnnual(db,budget,parsed,raw,old[2]))return false;
+        }return true;
+    }
+    private boolean publishAnnual(Connection db,PersistentMarketApiBudget budget,UsYahooAnnualBundle.Parsed parsed,Path raw,String sha)throws Exception {
+        boolean completed=new UsAnnualDailyPublication(root,store).publishRemaining(db,parsed,raw,sha,()->Files.exists(root.resolve("us-broad-stop.request")),(phase,detail)->status(db,budget,phase,detail));
+        if(!completed)status(db,budget,"STOPPED_BETWEEN_WINDOWS",parsed.bundle());return completed;
     }
     private boolean publishDailyGroup(Connection db,FrozenHttpSource source,PersistentMarketApiBudget budget,LocalDate through,boolean prefetchedOnly)throws Exception {
         int capacity=publicationSymbols(env);
@@ -247,7 +298,7 @@ final class UsBroadDailyCollector {
         return tasks(db,predicate,1);
     }
     private static List<Task> tasks(Connection db,String predicate,int maximum)throws Exception {
-        if(maximum<1||maximum>16)throw new IllegalArgumentException("队列读取容量超限");
+        if(maximum<1||maximum>UsYahooAnnualBundle.MAX_MEMBERS)throw new IllegalArgumentException("队列读取容量超限");
         // 核对旧队列时只读旧结构，不要求先启动新采集器做结构迁移。
         boolean hasBundle=false;try(var s=db.createStatement();var r=s.executeQuery("PRAGMA table_info(broad_tasks)")){while(r.next())if(r.getString("name").equals("bundle_id"))hasBundle=true;}
         var out=new ArrayList<Task>();try(var s=db.createStatement();var r=s.executeQuery("SELECT id,kind,symbol,yahoo,phase,raw,sha,observed,proof,"+(hasBundle?"bundle_id":"NULL")+" FROM broad_tasks WHERE "+predicate+" ORDER BY CASE WHEN kind='DAILY' THEN 1 ELSE 0 END,priority,rowid LIMIT "+maximum)){while(r.next())out.add(new Task(r.getString(1),r.getString(2),r.getString(3),r.getString(4),r.getString(5),r.getString(6),r.getString(7),r.getString(8),r.getString(9),r.getString(10)));}return out;

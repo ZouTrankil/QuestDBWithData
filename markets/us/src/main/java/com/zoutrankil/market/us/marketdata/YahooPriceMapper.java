@@ -10,6 +10,12 @@ public final class YahooPriceMapper {
     private static final ZoneId NY=ZoneId.of("America/New_York");
     private YahooPriceMapper() {}
     public static List<Map<String,Object>> daily(byte[] bytes,String symbol,String yahooSymbol,String sha,Instant observed,LocalDate from,LocalDate through)throws Exception {
+        var rows=dailyWindow(bytes,symbol,yahooSymbol,sha,observed,from,through);
+        if(rows.isEmpty())throw new IllegalArgumentException("Yahoo 请求区间没有可用日线");return rows;
+    }
+    /** 完整响应已经验收后按年份投影；空年份不造行，后续拆股仍取完整响应。 */
+    public static List<Map<String,Object>> dailyWindow(byte[] bytes,String symbol,String yahooSymbol,String sha,Instant observed,LocalDate from,LocalDate through)throws Exception {
+        if(through.isBefore(from))throw new IllegalArgumentException("Yahoo 日期窗口倒置");
         var chart=JSON.readTree(bytes).path("chart");if(!chart.path("error").isNull()||chart.path("result").size()!=1)throw new IllegalArgumentException("Yahoo 未返回唯一成功序列");
         var result=chart.path("result").get(0);var meta=result.path("meta");
         if(!meta.path("symbol").asText().equals(yahooSymbol)||!meta.path("currency").asText().equals("USD")||!meta.path("exchangeTimezoneName").asText().equals("America/New_York")
@@ -35,7 +41,6 @@ public final class YahooPriceMapper {
             row.put("dividend",dividends.getOrDefault(date,0.)*factor);row.put("split_factor",splits.getOrDefault(date,1.));row.put("currency","USD");row.put("raw_price_basis","RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED");
             row.put("source_sha256",sha);row.put("observed_at",observed.toString());output.add(row);
         }
-        if(output.isEmpty())throw new IllegalArgumentException("Yahoo 请求区间没有可用日线");
         return output.stream().sorted(Comparator.comparing(r->r.get("trade_date").toString())).toList();
     }
     private static LocalDate day(long seconds){return Instant.ofEpochSecond(seconds).atZone(NY).toLocalDate();}

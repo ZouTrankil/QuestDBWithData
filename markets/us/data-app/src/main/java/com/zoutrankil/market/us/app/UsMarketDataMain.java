@@ -31,6 +31,7 @@ public final class UsMarketDataMain {
             case "reconcile-core-task" -> {if(!Set.of("task","run").containsAll(options.keySet()))throw new IllegalArgumentException("未知队列核对参数");new UsCoreCollector(env,root,store).reconcileTask(required(options,"task"),required(options,"run"));}
             case "reconcile-broad-task" -> {if(!Set.of("task","run","through").containsAll(options.keySet()))throw new IllegalArgumentException("未知队列核对参数");new UsBroadDailyCollector(env,root,store).reconcileTask(required(options,"task"),required(options,"run"),LocalDate.parse(required(options,"through")));}
             case "reconcile-broad-bundle" -> {if(!Set.of("bundle","run").containsAll(options.keySet()))throw new IllegalArgumentException("未知来源组核对参数");new UsBroadDailyCollector(env,root,store).reconcileBundle(required(options,"bundle"),required(options,"run"));}
+            case "reconcile-broad-window" -> {if(!Set.of("bundle","window","run").containsAll(options.keySet()))throw new IllegalArgumentException("未知年度窗口核对参数");new UsBroadDailyCollector(env,root,store).reconcileWindow(required(options,"bundle"),Integer.parseInt(required(options,"window")),required(options,"run"));}
             case "import-fund-holdings" -> {
                 if(!Set.of("source","fund").containsAll(options.keySet()))throw new IllegalArgumentException("未知基金持仓参数");
                 Path raw=Path.of(required(options,"source"));byte[] bytes=Files.readAllBytes(raw);String sha=VerifiedMarketDataStore.sha(bytes),fund=required(options,"fund");
