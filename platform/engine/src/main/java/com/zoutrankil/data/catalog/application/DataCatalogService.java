@@ -23,10 +23,20 @@ public final class DataCatalogService {
     private final Map<String, DataObjectDescription> descriptions;
     private final Map<String, DatasetDefinition> definitions;
     private final Map<String, String> dependencyObjects;
+    private final Map<String, Map<String, DataCatalog.SourceField>> columnDocumentation;
 
     public DataCatalogService(DataCatalogMetadataPort metadata, Collection<DataObjectDescription> descriptions,
                               Collection<DatasetDefinition> definitions) {
+        this(metadata, descriptions, definitions, Map.of());
+    }
+
+    public DataCatalogService(DataCatalogMetadataPort metadata, Collection<DataObjectDescription> descriptions,
+                              Collection<DatasetDefinition> definitions,
+                              Map<String, Map<String, DataCatalog.SourceField>> columnDocumentation) {
         this.metadata = Objects.requireNonNull(metadata);
+        var immutableDocumentation = new HashMap<String, Map<String, DataCatalog.SourceField>>();
+        columnDocumentation.forEach((name, columns) -> immutableDocumentation.put(name, Map.copyOf(columns)));
+        this.columnDocumentation = Map.copyOf(immutableDocumentation);
         var byName = new TreeMap<String, DataObjectDescription>();
         for (var description : descriptions) {
             if (byName.putIfAbsent(description.objectName(), description) != null)
@@ -94,8 +104,14 @@ public final class DataCatalogService {
         List<DataCatalog.Column> columns = entry.presence() == DataCatalog.Presence.MISSING ? List.of()
                 : metadata.columns(name).stream().map(column -> {
                     var contract = meanings.get(column.name());
+                    var documentation = columnDocumentation.getOrDefault(name, Map.of()).get(column.name());
+                    // 本地契约优先；官方说明只补缺，不改变本地日期、类型或换算语义。
+                    String fallback = documentation != null
+                            && documentation.status() != DataCatalog.DocumentationStatus.UNVERIFIED
+                            ? documentation.description() : "待补充";
                     return new DataCatalog.Column(column.name(), column.storageType(), column.nullable(),
-                            contract == null ? "待补充" : contract.meaning(), contract == null ? null : contract.temporal());
+                            contract == null ? fallback : contract.meaning(), contract == null ? null : contract.temporal(),
+                            documentation);
                 }).toList();
         return new DataCatalog.Detail(all.databaseId(), all.observedAt(), entry, columns,
                 definition == null ? List.of() : definition.businessKey());

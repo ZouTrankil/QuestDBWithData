@@ -41,3 +41,5 @@
 - [盘后因子来源认证](factor-source-certification.md)
 - [L2 日归档、空间检查和负载工具](../deploy/l2-live/README.md#分日归档与存储检查)
 - [来源认证和 L2 归档的设计决定](decisions/2026-10-17-来源认证与L2归档.md)
+
+- [采集模型字段注释与导出](collected-field-documentation.md)

@@ -96,6 +96,35 @@ class DataCatalogServiceTest {
         assertEquals(List.of("code"), detail.businessKey());
         assertThrows(DataCatalogService.ObjectNotFoundException.class, () -> service.detail("unknown"));
     }
+    @Test void sourceDocumentationAddsFactsWithoutOverridingLocalContractsOrPhysicalTypes() {
+        var metadata = new Metadata(); metadata.objects = List.of(physical("etf"));
+        var source = new DataCatalog.SourceField("Tushare", "raw_code", "str", "来源证券编号", "", "",
+                "https://tushare.pro/document/2?doc_id=27", java.time.LocalDate.parse("2026-10-19"), DataCatalog.DocumentationStatus.VERIFIED_SOURCE,
+                "来源说明不改变本地证券代码契约");
+        var extra = new DataCatalog.SourceField("Tushare", "vol", "float", "成交量", "手", "",
+                source.documentationUrl(), source.reviewedOn(), source.status(), "");
+        var service = new DataCatalogService(metadata, List.of(),
+                List.of(definition("etf_id", "etf", DatasetDefinition.ObjectKind.TABLE)),
+                java.util.Map.of("etf", java.util.Map.of("code", source, "new_field", extra)));
+        var detail = service.detail("etf");
+        assertEquals("证券代码", detail.columns().getFirst().meaning());
+        assertEquals(source, detail.columns().getFirst().sourceDocumentation());
+        assertEquals("成交量", detail.columns().get(1).meaning());
+        assertEquals("double", detail.columns().get(1).storageType());
+        assertNull(detail.columns().get(1).nullable());
+        assertEquals("手", detail.columns().get(1).sourceDocumentation().unit());
+        assertEquals(List.of("code"), detail.businessKey());
+    }
+    @Test void unverifiedSourceFactsRemainExplicitAndCannotFillUnknownMeanings() {
+        var metadata = new Metadata(); metadata.objects = List.of(physical("etf"));
+        var uncertain = new DataCatalog.SourceField("待确认", "new_field", "", "尚未核实", "", "", "", java.time.LocalDate.parse("2026-10-19"),
+                DataCatalog.DocumentationStatus.UNVERIFIED, "文档不可用");
+        var service = new DataCatalogService(metadata, List.of(), List.of(),
+                java.util.Map.of("etf", java.util.Map.of("new_field", uncertain)));
+        var column = service.detail("etf").columns().get(1);
+        assertEquals("待补充", column.meaning());
+        assertEquals(DataCatalog.DocumentationStatus.UNVERIFIED, column.sourceDocumentation().status());
+    }
     @Test void registeredMissingObjectHasNoInventedColumnsOrRowCount() {
         var service = new DataCatalogService(new Metadata(), List.of(description("gone", CatalogTag.CN)), List.of());
         var detail = service.detail("gone");

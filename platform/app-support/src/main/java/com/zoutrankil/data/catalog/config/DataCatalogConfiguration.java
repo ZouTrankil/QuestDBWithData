@@ -11,6 +11,9 @@ import java.util.List;
 import org.springframework.beans.factory.ObjectProvider;
 import java.time.Clock;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import com.zoutrankil.data.catalog.domain.DataCatalog;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -25,10 +28,17 @@ public class DataCatalogConfiguration {
     }
     @Bean DataCatalogService dataCatalogService(DataCatalogMetadataPort metadata, ObjectProvider<DatasetRegistry> datasets) {
         var descriptions = new ArrayList<DataObjectDescription>();
+        var columns = new HashMap<String, Map<String, DataCatalog.SourceField>>();
         // SPI 只读取说明；缺席的市场不创建客户端或启动应用。
-        ServiceLoader.load(DataCatalogProvider.class).forEach(provider -> descriptions.addAll(provider.descriptions()));
+        ServiceLoader.load(DataCatalogProvider.class).forEach(provider -> {
+            descriptions.addAll(provider.descriptions());
+            provider.columnDocumentation().forEach((name, fields) -> {
+                if (columns.putIfAbsent(name, fields) != null)
+                    throw new IllegalArgumentException("重复的字段来源说明：" + name);
+            });
+        });
         descriptions.addAll(SharedDataDescriptions.all());
         var registry = datasets.getIfAvailable();
-        return new DataCatalogService(metadata, descriptions, registry == null ? List.of() : registry.definitions());
+        return new DataCatalogService(metadata, descriptions, registry == null ? List.of() : registry.definitions(), columns);
     }
 }

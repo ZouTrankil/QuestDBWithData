@@ -58,3 +58,7 @@ businessTime.todaySnapshotMarker();  // 快照表使用的日期标记
 如果以后接入 Python/Pydantic，先提供真实模型和带版本的 JSON Schema，再确定 DTO 生成方式。当前没有完整的 Pydantic → Java 自动流水线，不要把建议写成已实现能力。
 
 生成契约要明确别名、必填与可空、日期格式、精度和版本。必填不等于唯一；数据库时间列、分区和去重键另外维护。自定义 Python 校验也不一定能由 JSON Schema 完整表达，需要在 Java 边界补齐。
+
+## 采集字段的官方说明
+
+CN 的来源字段说明维护在 `markets/cn/src/main/resources/model-docs/collected-fields.json`。更新后用生成器的 `--annotate-existing` 刷新代码注释，用 `--export-documentation 新目录` 导出 JSON 和 CSV。完整重生成也会读取同一份说明。接口、字段、单位与来源格式须有明确出处；本地补充列和文档缺项分别标记，不改动既有模型类型及业务规则。具体操作与未核实范围见[采集字段注释](collected-field-documentation.md)。

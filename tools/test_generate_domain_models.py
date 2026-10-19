@@ -195,5 +195,114 @@ class GeneratorTest(unittest.TestCase):
         self.assertFalse(self.output.exists())
 
 
+class DocumentationTest(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory(prefix='model-documentation-test-')
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name)
+        self.output = self.root / 'domain'
+        self.definition = object_definition('ExampleRow', columns=[{'name': 'trade_date', 'javaType': 'Instant'}])
+        generator.apply_generation(generator.plan_generation(catalog(self.definition), self.output))
+        self.field = {'name': 'trade_date', 'javaField': 'tradeDate', 'javaType': 'Instant',
+                      'provider': 'Tushare', 'sourceField': 'trade_date', 'sourceType': 'str',
+                      'description': '交易日期', 'unit': '', 'sourceFormat': 'YYYYMMDD',
+                      'documentationUrl': 'https://tushare.pro/document/2?doc_id=27',
+                      'reviewedAt': '2026-10-19', 'status': 'VERIFIED_SOURCE',
+                      'notes': '日期标记不是事件时间，不能整体加 8 小时。'}
+        self.documentation = {'schemaVersion': 1, 'objects': [{'objectName': 'example', 'modelClass': 'ExampleRow',
+                              'endpoint': 'daily', 'title': '日线行情', 'reviewedAt': '2026-10-19',
+                              'documentationUrl': self.field['documentationUrl'], 'fields': [self.field]}]}
+
+    def test_annotation_is_idempotent_and_preserves_record_signature(self):
+        target = self.output / 'table/ExampleRow.java'
+        before = target.read_text()
+        plan = generator.plan_documentation(self.output, self.documentation)
+        generator.apply_generation(plan)
+        after = target.read_text()
+        self.assertIn('来源字段 trade_date', after)
+        self.assertIn('YYYYMMDD', after)
+        self.assertIn('不能整体加 8 小时', after)
+        import re
+        signature = lambda source: re.sub(r'\s+', '', re.sub(r'/\*\*.*?\*/', '',
+                            source[source.index('public record'):], flags=re.S))
+        self.assertEqual(signature(before), signature(after))
+        generator.apply_generation(generator.plan_documentation(self.output, self.documentation))
+        self.assertEqual(after, target.read_text())
+
+    def test_invalid_later_model_stops_all_writes(self):
+        extra = object_definition('SecondRow', columns=[{'name': 'trade_date', 'javaType': 'Instant'}])
+        extra['name'] = 'second'
+        generator.apply_generation(generator.plan_generation(catalog(self.definition, extra), self.output))
+        original = {p: p.read_bytes() for p in self.output.rglob('*.java')}
+        invalid = deepcopy(self.documentation['objects'][0])
+        invalid.update(objectName='second', modelClass='SecondRow')
+        invalid['fields'][0]['javaType'] = 'String'
+        self.documentation['objects'].append(invalid)
+        with self.assertRaisesRegex(ValueError, '模型字段与说明不一致'):
+            generator.plan_documentation(self.output, self.documentation)
+        self.assertEqual(original, {p: p.read_bytes() for p in self.output.rglob('*.java')})
+
+    def test_normal_generation_receives_the_same_documentation_before_writing(self):
+        plan = generator.plan_generation(catalog(self.definition), self.output)
+        enriched = generator.with_documentation(plan, self.documentation)
+        self.assertIn('来源字段 trade_date', enriched.outputs[0][1])
+        generator.apply_generation(enriched)
+        self.assertEqual(enriched.outputs[0][1], (self.output / 'table/ExampleRow.java').read_text())
+
+    def test_same_class_cannot_receive_another_objects_documentation(self):
+        self.documentation['objects'][0]['objectName'] = 'another_object'
+        target = self.output / 'table/ExampleRow.java'
+        before = target.read_bytes()
+        with self.assertRaisesRegex(ValueError, '模型对象与说明不一致'):
+            generator.plan_documentation(self.output, self.documentation)
+        self.assertEqual(before, target.read_bytes())
+
+    def test_cli_validates_annotations_before_overwriting_or_removing_models(self):
+        stale = object_definition('StaleRow')
+        stale['name'] = 'stale'
+        generator.apply_generation(generator.plan_generation(catalog(self.definition, stale), self.output))
+        original = {p: p.read_bytes() for p in self.output.rglob('*.java')}
+        source = self.root / 'catalog.json'
+        source.write_text(json.dumps(catalog(dict(self.definition, market='cn'))))
+        self.field['javaType'] = 'String'
+        documentation = self.root / 'documentation.json'
+        documentation.write_text(json.dumps(self.documentation))
+        result = subprocess.run([sys.executable, str(SCRIPT), '--catalog', str(source), '--market', 'cn',
+                                 '--output-root', str(self.output), '--documentation', str(documentation)],
+                                capture_output=True, text=True)
+        self.assertNotEqual(0, result.returncode)
+        self.assertEqual(original, {p: p.read_bytes() for p in self.output.rglob('*.java')})
+
+    def test_export_preserves_empty_units_and_rejects_existing_output(self):
+        import csv
+        destination = self.root / 'export'
+        generator.export_documentation(destination, self.documentation)
+        with (destination / 'CN字段说明.csv').open(encoding='utf-8-sig', newline='') as stream:
+            rows = list(csv.DictReader(stream))
+        self.assertEqual('', rows[0]['来源单位'])
+        self.assertEqual('VERIFIED_SOURCE', rows[0]['核验状态'])
+        self.assertEqual(self.field['documentationUrl'], rows[0]['官方链接'])
+        with self.assertRaisesRegex(ValueError, '导出目录已存在'):
+            generator.export_documentation(destination, self.documentation)
+
+    def test_unverified_fields_cannot_lose_their_warning(self):
+        self.field.update(status='UNVERIFIED', documentationUrl='', sourceFormat='', notes='原官方文档不可用。')
+        result = generator.plan_documentation(self.output, self.documentation)
+        self.assertIn('未获官方字段核验', result.outputs[0][1])
+
+    def test_checked_in_models_match_the_maintained_documentation(self):
+        documentation = generator.load_documentation(REPOSITORY / generator.DOCUMENTATION_PATH)
+        plan = generator.plan_documentation(REPOSITORY / generator.PACKAGE_ROOT, documentation)
+        for path, expected in plan.outputs:
+            self.assertEqual(expected, path.read_text(encoding='utf-8'), str(path))
+
+    def test_official_status_requires_a_documented_source_and_review_date(self):
+        path = self.root / 'documentation.json'
+        self.field['documentationUrl'] = ''
+        path.write_text(json.dumps(self.documentation))
+        with self.assertRaisesRegex(ValueError, '已核验字段缺少官方来源'):
+            generator.load_documentation(path)
+
+
 if __name__ == "__main__":
     unittest.main()

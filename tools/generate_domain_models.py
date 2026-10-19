@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import csv
+import html
 from dataclasses import dataclass
 from datetime import date
 import json
@@ -182,6 +184,140 @@ def apply_generation(plan: GenerationPlan) -> None:
         path.unlink()
 
 
+# 字段说明与生成逻辑分开维护；更新注释和导出均读取同一份已核验资料。
+DOCUMENTATION_PATH = Path('markets/cn/src/main/resources/model-docs/collected-fields.json')
+DOCUMENTATION_STATUSES = {'VERIFIED_SOURCE', 'LOCAL_RULE', 'UNVERIFIED'}
+
+
+def load_documentation(path: Path) -> dict:
+    value = json.loads(path.read_text(encoding='utf-8'))
+    if value.get('schemaVersion') != 1 or not isinstance(value.get('objects'), list):
+        raise ValueError('不支持的字段说明格式')
+    names = set()
+    classes = set()
+    for obj in value['objects']:
+        name = obj['objectName']
+        if name in names:
+            raise ValueError(f'重复的对象说明：{name}')
+        names.add(name)
+        require_class_name(obj['modelClass'])
+        if obj['modelClass'] in classes:
+            raise ValueError('重复的模型说明：' + obj['modelClass'])
+        classes.add(obj['modelClass'])
+        seen = set()
+        java_names = set()
+        for field in obj['fields']:
+            if field['name'] in seen or field['javaField'] in java_names:
+                raise ValueError(f'重复的字段说明：{name}')
+            seen.add(field['name']); java_names.add(field['javaField'])
+            if not field.get('description') or field.get('status') not in DOCUMENTATION_STATUSES:
+                raise ValueError(f'缺少字段说明或核验状态：{name}.{field["name"]}')
+            date.fromisoformat(field['reviewedAt'])
+            if field['status'] == 'VERIFIED_SOURCE' and (not field.get('sourceField')
+                    or not field.get('documentationUrl', '').startswith('https://tushare.pro/document/2?doc_id=')):
+                raise ValueError(f'已核验字段缺少官方来源：{name}.{field["name"]}')
+    return value
+
+
+def documentation_comment(field: dict, indent: str = '        ') -> str:
+    parts = [field['description']]
+    if field.get('sourceField'):
+        parts.append('来源字段 ' + field['sourceField'])
+    if field.get('sourceType'):
+        parts.append('来源类型 ' + field['sourceType'])
+    parts.append('单位：' + (field.get('unit') or ('本地字段，按本地契约' if field['status'] == 'LOCAL_RULE' else '官方未单独说明')))
+    if field.get('sourceFormat'):
+        parts.append('来源格式：' + field['sourceFormat'])
+    if field.get('notes'):
+        parts.append(field['notes'])
+    if field['status'] == 'UNVERIFIED':
+        parts.append('未获官方字段核验，不作为正式语义凭证')
+    body = '；'.join(' '.join(str(part).rstrip('。；').split()) for part in parts)
+    return indent + '/** 来源说明：' + html.escape(body).replace('*/', '*&#47;') + '。 */\n'
+
+
+def object_documentation_comment(obj: dict) -> str:
+    parts = [obj['title'], '来源接口：' + (obj.get('endpoint') or '尚未确认'), '核对日期：' + obj['reviewedAt']]
+    if obj.get('notes'):
+        parts.append(obj['notes'])
+    body = html.escape('；'.join(parts)).replace('*/', '*&#47;')
+    url = obj.get('documentationUrl', '')
+    link = '；<a href="' + html.escape(url, quote=True) + '">来源文档</a>' if url else ''
+    return '/** 来源说明：' + body + link + '。 */\n'
+
+
+def annotate_source(path: Path, text: str, obj: dict) -> str:
+    # 只替换本工具生成的说明，不改字段、类型、顺序、原结构日期或其他代码。
+    if f'Schema projection for QuestDB object `{obj["objectName"]}`;' not in text:
+        raise ValueError(f'模型对象与说明不一致：{path.name}')
+    text = re.sub(r'^[ ]*/\*\* 来源说明：[^\n]*\*/\r?\n', '', text, flags=re.M)
+    fields = {field['javaField']: field for field in obj['fields']}
+    observed = set()
+    def annotate(match):
+        java_type, java_name = match[1], match[2]
+        field = fields.get(java_name)
+        if field is None or field['javaType'] != java_type:
+            raise ValueError(f'模型字段与说明不一致：{path.name}.{java_name}')
+        observed.add(java_name)
+        return documentation_comment(field) + match[0]
+    text = re.sub(r'^        (Boolean|Double|double\[\]|Instant|Integer|Long|String) (\w+)(?=[,)])', annotate, text, flags=re.M)
+    if observed != fields.keys():
+        raise ValueError(f'模型字段缺失：{path.name}')
+    return text.replace('\npublic record ', '\n' + object_documentation_comment(obj) + 'public record ', 1)
+
+
+def with_documentation(plan: GenerationPlan, documentation: dict) -> GenerationPlan:
+    models = {obj['modelClass']: obj for obj in documentation['objects']}
+    outputs = tuple((path, annotate_source(path, text, models[path.stem]) if path.stem in models else text)
+                    for path, text in plan.outputs)
+    updated = GenerationPlan(plan.root, outputs, plan.stale)
+    validate_plan_paths(updated)
+    return updated
+
+
+def plan_documentation(root: Path, documentation: dict) -> GenerationPlan:
+    root = root.resolve()
+    outputs = []
+    models = {obj['modelClass']: obj for obj in documentation['objects']}
+    for path in sorted(root.glob('table/*.java')):
+        if path.stem not in models:
+            continue
+        if not is_generated(path):
+            raise ValueError(f'不能改写非生成模型：{path}')
+        outputs.append((path, path.read_text(encoding='utf-8')))
+    if len(outputs) != len(models):
+        raise ValueError('字段说明包含缺失模型，停止整批更新')
+    return with_documentation(GenerationPlan(root, tuple(outputs), ()), documentation)
+
+
+def export_documentation(destination: Path, documentation: dict) -> None:
+    # 导出到新目录，避免覆盖已有核验材料；不连接数据库或外部来源。
+    if destination.exists():
+        raise ValueError(f'导出目录已存在：{destination}')
+    destination.mkdir(parents=True)
+    (destination / 'CN-model-documentation.json').write_text(
+        json.dumps(documentation, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    with (destination / 'CN字段说明.csv').open('w', encoding='utf-8-sig', newline='') as stream:
+        writer = csv.writer(stream)
+        writer.writerow(['对象名', '模型类', '存储字段', 'Java字段', 'Java类型', '提供方', '来源接口', '来源字段',
+                         '来源类型', '字段说明', '来源单位', '来源格式', '核验状态', '本地规则及限制', '官方链接', '核对日期'])
+        for obj in documentation['objects']:
+            for field in obj['fields']:
+                writer.writerow([obj['objectName'], obj['modelClass'], field['name'], field['javaField'], field['javaType'],
+                                 field['provider'], obj.get('endpoint', ''), field.get('sourceField', ''),
+                                 field.get('sourceType', ''), field['description'], field.get('unit', ''),
+                                 field.get('sourceFormat', ''), field['status'], field.get('notes', ''),
+                                 field.get('documentationUrl', ''), field['reviewedAt']])
+    counts = {status: sum(field['status'] == status for obj in documentation['objects'] for field in obj['fields'])
+              for status in sorted(DOCUMENTATION_STATUSES)}
+    (destination / 'README.md').write_text(
+        '# CN 采集模型字段说明\n\n'
+        + f'共 {len(documentation["objects"])} 个模型，字段状态：{json.dumps(counts, ensure_ascii=False)}。\n\n'
+        + '用表格软件打开 [CN字段说明.csv](CN字段说明.csv)，完整资料在 [JSON](CN-model-documentation.json)。\n\n'
+        + 'VERIFIED_SOURCE 表示来源字段已在官方文档中找到；LOCAL_RULE 为本地产生或转换的字段；UNVERIFIED 表示官方缺项或来源尚未确认。单位和格式属于来源，不能当成本地存储类型、单位换算或时间转换规则。未公开的单位保留空值。\n\n'
+        + '本文件只导出仓库中的字段说明，不采集行情，不连接数据库，也不证明现有数据完整或源接口当前可用。\n', encoding='utf-8')
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -194,7 +330,24 @@ def main(argv: list[str] | None = None) -> None:
         "--output-root", type=Path,
         help="显式输出 domain 目录；用于已经分好市场的独立 catalog 或临时检查",
     )
+    parser.add_argument('--documentation', type=Path, default=DOCUMENTATION_PATH,
+                        help='与模型和目录接口共用的来源字段说明')
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument('--annotate-existing', action='store_true', help='只更新现有生成模型的来源注释')
+    actions.add_argument('--export-documentation', type=Path, help='离线导出字段说明 JSON 和 CSV 到新目录')
     args = parser.parse_args(argv)
+    if args.annotate_existing or args.export_documentation is not None:
+        if args.market not in (None, 'cn'):
+            parser.error('当前来源字段说明只适用于 cn')
+        documentation = load_documentation(args.documentation)
+        if args.annotate_existing:
+            plan = plan_documentation(args.output_root or PACKAGE_ROOT, documentation)
+            apply_generation(plan)
+            print(f'已更新 {len(plan.outputs)} 个模型的来源字段注释')
+        else:
+            export_documentation(args.export_documentation, documentation)
+            print('字段说明已导出：' + str(args.export_documentation))
+        return
     if args.output_root is None and args.market is None:
         parser.error("先指定 --market 或 --output-root，不能把跨市场模型默认写回 A 股")
     catalog = json.loads(args.catalog.read_text(encoding="utf-8"))
@@ -214,6 +367,8 @@ def main(argv: list[str] | None = None) -> None:
         catalog = dict(catalog, objects=selected)
     output_root = args.output_root or Path(f"markets/{args.market}/src/main/java/com/zoutrankil/data/domain")
     plan = plan_generation(catalog, output_root)
+    if args.market == 'cn' and args.documentation.is_file():
+        plan = with_documentation(plan, load_documentation(args.documentation))
     apply_generation(plan)
     print(f"Generated {len(plan.outputs)} schema projection records from {args.catalog}")
 

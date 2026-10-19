@@ -2,6 +2,7 @@ package com.zoutrankil.data.catalog.domain;
 
 import com.zoutrankil.data.domain.DatasetDefinition;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -20,8 +21,18 @@ public final class DataCatalog {
     public record Snapshot(String databaseId, Instant observedAt, List<PhysicalObject> objects) {
         public Snapshot { objects = List.copyOf(objects); }
     }
+    public enum DocumentationStatus { VERIFIED_SOURCE, LOCAL_RULE, UNVERIFIED }
+    /** 来源说明单独保存，不能把来源类型、单位或日期格式当成本地存储规则。 */
+    public record SourceField(String provider, String sourceField, String sourceType, String description,
+            String unit, String sourceFormat, String documentationUrl, LocalDate reviewedOn,
+            DocumentationStatus status, String notes) {}
     public record Column(String name, String storageType, Boolean nullable, String meaning,
-            DatasetDefinition.TemporalContract temporal) {}
+            DatasetDefinition.TemporalContract temporal, SourceField sourceDocumentation) {
+        public Column(String name, String storageType, Boolean nullable, String meaning,
+                DatasetDefinition.TemporalContract temporal) {
+            this(name, storageType, nullable, meaning, temporal, null);
+        }
+    }
     public record Entry(String objectName, String datasetId, DataObjectDescription description,
             DatasetDefinition.ObjectKind objectKind, Presence presence, ClassificationStatus classificationStatus,
             Long rowCount, Instant minTimestamp, Instant maxTimestamp, String designatedTimestamp,
