@@ -229,7 +229,7 @@ final class UsBroadDailyCollector {
             var rows=UsUniverseSnapshot.rows(bytes,nasdaq,reference.sha256(),reference.observedAt());String kind=nasdaq?"UNIVERSE_NASDAQ":"UNIVERSE_OTHER";
             insert(db,kind,kind,"",through,reference);
             for(var row:rows)if(Boolean.TRUE.equals(row.get("daily_candidate"))) {String original=row.get("symbol").toString(),mapped=row.get("yahoo_symbol").toString();var previous=candidates.putIfAbsent(original,mapped);if(previous!=null&&!previous.equals(mapped))throw new IllegalStateException("挂牌目录之间来源代码冲突");}
-            for(var row:rows)if("NON_COMMON_SECURITY".equals(row.get("scope_reason")))nonCommon.put(row.get("symbol").toString(),row);
+            for(var row:rows)if(scopeReviewReason(row)!=null)nonCommon.put(row.get("symbol").toString(),row);
         }
         for(var candidate:candidates.entrySet())insert(db,"DAILY",candidate.getKey(),candidate.getValue(),through,null);
         // 发行人股票持仓只用于当前覆盖优先级；不把基金快照注册为官方历史指数成分。
@@ -255,14 +255,21 @@ final class UsBroadDailyCollector {
     /** 当前明确是非普通股票，但历史 Stock 标签不能排除代码复用；保留任务待分段复核，不删历史范围。 */
     static void holdNonCommonCandidates(Connection db,Collection<Map<String,Object>> officialRows)throws Exception {
         for(var row:officialRows) {
-            if(!Boolean.FALSE.equals(row.get("daily_candidate"))||!"NON_COMMON_SECURITY".equals(row.get("scope_reason")))throw new IllegalArgumentException("范围复核必须有官方非普通股票记录");
+            String reason=scopeReviewReason(row);if(reason==null)throw new IllegalArgumentException("范围复核必须有官方非普通股票或 ETF 记录");
             var selected=new ArrayList<String[]>();
             try(var s=db.prepareStatement("SELECT id,phase,proof FROM broad_tasks WHERE kind='DAILY' AND symbol=? AND phase IN ('PLANNED','FETCHED','FAILED_SOURCE') AND bundle_id IS NULL")){s.setString(1,row.get("symbol").toString());try(var r=s.executeQuery()){while(r.next())selected.add(new String[]{r.getString(1),r.getString(2),r.getString(3)});}}
             for(var task:selected) {
-                String proof=JSON.writeValueAsString(Map.of("reason","CURRENT_NON_COMMON_REQUIRES_HISTORY_REVIEW","officialSnapshot",row,"sourcePhaseBeforeReview",task[1],"priorProof",Objects.toString(task[2],""),"scope","保留原文及历史目录窗口；先确认历史证券类别和代码复用，不能当作普通股票价格缺失或已完成"));
+                String proof=JSON.writeValueAsString(Map.of("reason",reason,"officialSnapshot",row,"sourcePhaseBeforeReview",task[1],"priorProof",Objects.toString(task[2],""),"scope","保留原文及历史目录窗口；先确认历史证券类别和代码复用，不能用当前基金或非普通证券的价格判定旧股票历史已完成"));
                 try(var s=db.prepareStatement("UPDATE broad_tasks SET phase='SCOPE_REVIEW_REQUIRED',proof=?,updated_at=? WHERE id=? AND phase=? AND bundle_id IS NULL")){s.setString(1,proof);s.setString(2,Instant.now().toString());s.setString(3,task[0]);s.setString(4,task[1]);if(s.executeUpdate()!=1)throw new IllegalStateException("范围复核期间来源任务状态变化");}
             }
         }
+    }
+    private static String scopeReviewReason(Map<String,Object> row) {
+        if(!Boolean.FALSE.equals(row.get("daily_candidate")))return null;
+        if("NON_COMMON_SECURITY".equals(row.get("scope_reason")))return "CURRENT_NON_COMMON_REQUIRES_HISTORY_REVIEW";
+        // 官方 ETF 标记只决定当前类别；历史同代码可能是普通股票，必须保留原窗口待核对。
+        if("ETF_SEPARATE_SCOPE".equals(row.get("scope_reason"))&&Boolean.TRUE.equals(row.get("is_etf")))return "CURRENT_ETF_REQUIRES_HISTORY_REVIEW";
+        return null;
     }
     private static String taskId(String kind,String symbol,LocalDate through,String sha){return VerifiedMarketDataStore.sha(("v1|"+kind+"|"+symbol+"|"+through+"|"+Objects.toString(sha,"")).getBytes(java.nio.charset.StandardCharsets.UTF_8));}
     private static boolean insert(Connection db,String kind,String symbol,String yahoo,LocalDate through,FrozenHttpSource.Response reference)throws Exception {

@@ -120,11 +120,17 @@ BTC 的原始文件、队列、预算、账本及回执在 `var/crypto-market-da
 
 当前挂牌范围来自 Nasdaq Trader 两份官方列表。候选之外的 ETF、测试证券、权证、优先股等仍保留排除原因。历史范围另保留 Tiingo 完整 ZIP 中美国场所的 51629 条 Stock/ETF 记录，按原始行号保存重复代码的不同窗口。候选证券继续逐个请求价格；目录中的日期只是供应商声称的可用范围，不能当作正式上市退市事件。历史退市证券、OTC 的实际价格及历史指数成分尚未齐备。
 
-官方名称末尾的单数 `Right` 也属于非普通股票，不能误识别成普通股；含 Bright、Wright 的公司名及 ADR 解释里的 right 不受这条规则影响。当前官方明确为非普通证券、但历史目录笼统标作 Stock 的未发布候选进入 `SCOPE_REVIEW_REQUIRED`，保留原文、原拒收原因及历史窗口，待核实历史类别和代码复用。已经验收或发送未决的任务不会被该规则改写。
+官方名称末尾的单数 `Right` 也属于非普通股票，不能误识别成普通股；含 Bright、Wright 的公司名及 ADR 解释里的 right 不受这条规则影响。当前官方明确为非普通证券或 ETF、但历史目录笼统标作 Stock 的未发布候选进入 `SCOPE_REVIEW_REQUIRED`，保留原文、原拒收原因及历史窗口，待核实历史类别和代码复用。ETF 还须有官方 `is_etf=true`，不能只按名字猜测。已经验收、发送未决或绑定来源组的任务不会被该规则改写；六只已验收参照 ETF 的来源保持原样。
 
 [SPY 官方持仓](https://www.ssga.com/library-content/products/fund-data/etfs/us/holdings-daily-us-en-spy.xlsx)和 [QQQ 官方持仓](https://dng-api.invesco.com/cache/v1/accounts/en_US/shareclasses/QQQ/holdings/fund?idType=ticker&interval=monthly&productType=ETF)的 2026-10-16 股票范围已取得，分别为 503、101 只，并已逐字段验收。基金中的现金、CVR 和衍生品不纳入股票范围。挂牌队列优先这组证券，并补入当前挂牌清单之外的基金股票；这只是当前覆盖参照，不是官方历史指数成分。
 
 ## 独立只读覆盖核对
+
+```powershell
+python tools/audit_us_security_identity.py --from 2006-01-01 --through 2026-10-16
+```
+
+身份报告保留每条历史目录行、当前官方类别及重叠窗口。同代码可能来自转板、类别变化或不同发行人；当前有价格不能证明每个历史窗口已覆盖。当前 ETF 的旧 Stock 窗口不删除，也不拿基金价格替代；没有冲突标记同样不能单独证明目标完成。
 
 ```powershell
 python tools/audit_cross_market_coverage.py --through 2026-10-16 --crypto-through 2026-10-18
