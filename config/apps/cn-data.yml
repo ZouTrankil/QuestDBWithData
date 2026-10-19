@@ -57,3 +57,7 @@ app.sync.financial:
   scope-file: ""
   scope-sha256: ""
   earliest-period: 2018-03-31
+
+# 常驻数据 API 可托管 Batch；启用后仍遵守 Quartz 已保存的暂停状态。
+jdb:
+  enabled: false

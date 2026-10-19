@@ -6,7 +6,7 @@
 
 `income`、`cashflow` 只接 `report_type=1`，现有 `ts_code,ann_date,end_date` 业务键无法同时容纳其他类别。`update_flag=1` 优先于 `0`，同优先级冲突时停止。[利润表约定](https://tushare.pro/document/2?doc_id=33)、[修订标记说明](https://tushare.pro/document/1?doc_id=122)。
 
-指标表中 11 个历史本地列没有供应商映射。已有行保留原值，新行保持 NULL；不猜公式，也不清空已有值。显式列契约在 `market-cn/data/src/main/resources/financial/schemas.json`。
+指标表中 11 个历史本地列没有供应商映射。已有行保留原值，新行保持 NULL；不猜公式，也不清空已有值。显式列契约在 `markets/cn/data/src/main/resources/financial/schemas.json`。
 
 ```sh
 ./gradlew run --args='plan-financial-sync --dataset income --codes 600000.SH --periods 2026-06-30 --logical-date 2026-10-17'

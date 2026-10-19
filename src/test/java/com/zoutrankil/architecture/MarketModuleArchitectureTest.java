@@ -36,25 +36,25 @@ class MarketModuleArchitectureTest {
     }
     @Test void coreBytecodeUsesOnlyJdkAndCoreContracts() throws Exception {
         var owners=compiledOwners();int checked=0;
-        for (var entry:owners.entrySet()) if (normalized(entry.getValue()).contains("/modules/data-core/")) {
+        for (var entry:owners.entrySet()) if (normalized(entry.getValue()).contains("/modules/platform/core/")) {
             checked++;
             for (String ref:references(entry.getValue(),entry.getKey())) {
                 var owner=owners.get(ref);
                 assertTrue(owner==null ? ref.startsWith("java/")||ref.startsWith("javax/")||ref.startsWith("jdk/")
-                        : normalized(owner).contains("/modules/data-core/"),"core 引用了外部实现："+ref);
+                        : normalized(owner).contains("/modules/platform/core/"),"core 引用了外部实现："+ref);
             }
         }
         assertTrue(checked>0);
-        assertFalse(owners.entrySet().stream().anyMatch(e->normalized(e.getValue()).contains("/modules/data-core/")
+        assertFalse(owners.entrySet().stream().anyMatch(e->normalized(e.getValue()).contains("/modules/platform/core/")
                 &&(e.getKey().contains("Tushare")||e.getKey().contains("L2Daily")||e.getKey().contains("DailySemantics"))));
     }
     @Test void engineBytecodeDoesNotDependOnMarketOrApplicationClasses() throws Exception {
         var owners=compiledOwners();int checked=0;
-        for (var entry:owners.entrySet()) if (normalized(entry.getValue()).contains("/modules/data-engine/")) {
+        for (var entry:owners.entrySet()) if (normalized(entry.getValue()).contains("/modules/platform/engine/")) {
             checked++;
             for (String ref:references(entry.getValue(),entry.getKey())) {
                 var owner=owners.get(ref);
-                if (owner!=null) assertFalse(normalized(owner).matches(".*?/modules/(market-[^/]+|data-app|batch-app)/.*"),
+                if (owner!=null) assertFalse(normalized(owner).matches(".*?/modules/(markets/[^/]+|platform/app-support)/.*"),
                         "引擎反向引用市场或入口："+entry.getKey()+" -> "+ref);
             }
         }
@@ -62,19 +62,19 @@ class MarketModuleArchitectureTest {
     }
     @Test void commonApiLibraryDoesNotReferenceMarketsOrOwnTheirEntrypoints() throws Exception {
         var owners = compiledOwners(); int checked = 0;
-        for (var entry : owners.entrySet()) if (normalized(entry.getValue()).contains("/modules/data-app/")) {
+        for (var entry : owners.entrySet()) if (normalized(entry.getValue()).contains("/modules/platform/app-support/")) {
             checked++;
             assertNotEquals("com/zoutrankil/data/QuestDataApplication", entry.getKey());
             for (String ref : references(entry.getValue(), entry.getKey())) {
                 var owner = owners.get(ref);
-                if (owner != null) assertFalse(normalized(owner).matches(".*?/modules/(market-[^/]+|batch-app)/.*"),
+                if (owner != null) assertFalse(normalized(owner).matches(".*?/modules/markets/[^/]+/.*"),
                         "公共 API 反向引用市场或应用：" + entry.getKey() + " -> " + ref);
             }
         }
         assertTrue(checked > 0);
         var entrypoint = owners.get("com/zoutrankil/data/QuestDataApplication");
         assertNotNull(entrypoint);
-        assertTrue(normalized(entrypoint).contains("/modules/market-cn/data-app/"));
+        assertTrue(normalized(entrypoint).contains("/modules/markets/cn/data-app/"));
     }
     @Test void marketImplementationsDoNotCallEachOther() throws Exception {
         var owners=compiledOwners();
@@ -87,7 +87,7 @@ class MarketModuleArchitectureTest {
         }
     }
     private String market(String path) {
-        var matcher=java.util.regex.Pattern.compile("/modules/(market-(?:cn|us|btc))/").matcher(path);
+        var matcher=java.util.regex.Pattern.compile("/modules/markets/(cn|us|btc)/").matcher(path);
         return matcher.find()?matcher.group(1):null;
     }
     @Test void persistedQuartzClassNamesRemainLoadableWithoutInitializingApps() throws Exception {

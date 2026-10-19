@@ -1,6 +1,6 @@
 # 数据目录接口
 
-启动 A 股数据 App（`market-cn/data-app`，兼容下方根级命令）后，可以调用接口查看当前 QuestDB 有哪些表和视图、各自有什么用、带哪些标签，并下载目录 CSV。
+启动 A 股数据 App（`markets/cn/data-app`，兼容下方根级命令）后，可以调用接口查看当前 QuestDB 有哪些表和视图、各自有什么用、带哪些标签，并下载目录 CSV。
 
 ```sh
 ./gradlew webRun
@@ -56,7 +56,7 @@ CSV 为带 BOM 的 UTF-8，保留原分类清单的 12 列并追加“标签”�
 - A 股及国内数据：`market-cn` 的 `CnDataDescriptions`。
 - 美股数据：`market-us` 的 `UsDataDescriptions`。
 - 共用数据：App 的 `SharedDataDescriptions`。
-- 标签 ID 和中文名：`data-core` 的 `CatalogTag`。
+- 标签 ID 和中文名：`platform/core` 的 `CatalogTag`。
 
 一个对象可以有多个标签。添加说明时登记对象名、用途、来源分类、市场、上游和标签。市场实现 `DataCatalogProvider`，通过 `META-INF/services` 注册，公共库通过 SPI 组装，重复登记会报错。后续 BTC 有实际数据时按同样方式注册。
 

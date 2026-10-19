@@ -4,15 +4,17 @@
 
 简单说，这是一个用 Java 写的数据采集和计算项目。QuestDB 放业务数据，SQLite 记运行状态和恢复进度。
 
+业务代码收拢为两个父工程：`platform/` 放公共能力，`markets/` 放 A 股、美股和 BTC。根级启动命令保留。
+
 ## 这几个目录是干什么的
 
-- `market-cn`：A 股模型、采集、清洗、特征和批处理；主策略与实时 L2 在下面分别启动。
-- `market-us`：美国表投影和现有利率来源。`market-btc`：BTC 时间和扩展入口，目前没有采集链路。
-- `data-core`：纯 Java 模型、契约和市场时间接口。
-- `data-engine`：通用客户端、来源执行、存储核验和恢复。
-- `runtime-support`：配置、日志和启动支持。
-- `data-app`：公共鉴权、数据目录和 schema 配置支持库，没有市场启动入口。
-- `market-cn/data-app`：A 股数据 API / CLI 入口；`batch-app`：现有批处理入口。
+- `markets/cn`：A 股模型、采集、清洗、特征和批处理；主策略与实时 L2 在下面分别启动。
+- `markets/us`：美国表投影和现有利率来源。`markets/btc`：BTC 时间和扩展入口，目前没有采集链路。
+- `platform/core`：纯 Java 模型、契约和市场时间接口。
+- `platform/engine`：通用客户端、来源执行、存储核验和恢复。
+- `platform/runtime-support`：配置、日志和启动支持。
+- `platform/app-support`：公共鉴权、数据目录和 schema 配置支持库，没有市场启动入口。
+- `markets/cn/data-app`：A 股数据 API / CLI 入口，常驻服务按配置托管 Batch；`markets/cn/batch` 保存任务与管理能力。
 
 ## 怎么启动
 
@@ -35,11 +37,11 @@
 ./gradlew aliyunL2Live --args='plan --symbols 563360'
 ```
 
-这几个程序各自启动。只开数据 API，不会顺带启动主策略或 Batch。
+数据 API、主策略和实时 L2 分别启动。Batch 由数据 API 按配置托管；`batchRun` 是启用托管的兼容命令，不要与同一个数据 API 实例重复启动。
 
 ## 从哪里开始看代码
 
-先从 `market-cn/data-app` 的 `QuestDataApplication` 看程序怎么启动。然后挑 `market-cn/data` 里的一个业务，比如 `stock/`：跟着“命令 → 应用服务 → 数据来源和转换 → QuestDB 写入”往下看就行。
+先从 `markets/cn/data-app` 的 `QuestDataApplication` 看程序怎么启动。然后挑 `markets/cn/data` 里的一个业务，比如 `stock/`：跟着“命令 → 应用服务 → 数据来源和转换 → QuestDB 写入”往下看就行。
 
 批处理和主策略稍复杂，等熟悉一条普通采集流程后再看。目录说明在[代码结构](docs/code-structure.md)，配置说明在[这里](docs/configuration.md)。
 

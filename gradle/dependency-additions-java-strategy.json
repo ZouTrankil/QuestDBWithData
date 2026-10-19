@@ -1,10 +1,10 @@
 {
   "reason": "原有 Parquet、训练文件与 MQTT 依赖随市场模块迁移，固定版本不变。",
   "projects": [
-    ":market-cn:data",
-    ":market-cn:main-strategy-runtime",
-    ":market-cn:l2-live-app",
-    ":market-cn:data-app"
+    ":markets:cn:data",
+    ":markets:cn:main-strategy-runtime",
+    ":markets:cn:l2-live-app",
+    ":markets:cn:data-app"
   ],
   "configurations": [
     "compileClasspath",

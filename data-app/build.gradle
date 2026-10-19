@@ -1,8 +1,0 @@
-plugins { id 'java-library' }
-
-// 公共 API 支持库没有市场入口，也不反向依赖任一市场。
-dependencies {
-    api project(':data-engine:questdb')
-    api project(':runtime-support')
-    api 'org.springframework.boot:spring-boot-starter-webflux'
-}

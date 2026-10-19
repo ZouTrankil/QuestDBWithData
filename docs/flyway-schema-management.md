@@ -4,7 +4,7 @@ Flyway 在这里负责带版本的 SQL 迁移，不负责推断业务模型，�
 
 ## 脚本放哪里
 
-[market-cn/data/src/main/resources/db/migration/questdb](../market-cn/data/src/main/resources/db/migration/questdb/) 目前包含：
+[markets/cn/data/src/main/resources/db/migration/questdb](../markets/cn/data/src/main/resources/db/migration/questdb/) 目前包含：
 
 - `V1__create_stock_basic_table.sql`：股票资料 WAL 快照表，按日分区，去重键是 `(snapshot_ts, ts_code)`。
 - `V2__create_stock_basic_latest_view.sql`：最新快照视图。

@@ -5,12 +5,12 @@
 | 文件 | 放什么 | 自动加载条件 |
 | --- | --- | --- |
 | `application.yml` | QuestDB、Tushare、公共日志、profile 分组和配置导入 | 所有入口 |
-| `markets/cn.yml` | A 股时区、研究目录、离线 L2 数据目录 | `market-cn`；现有四个进程自动带上 |
+| `markets/cn.yml` | A 股时区、研究目录、离线 L2 数据目录 | `market-cn`；现有市场进程自动带上 |
 | `markets/us.yml` | 美股时区及后续市场设置 | `market-us` |
 | `markets/btc.yml` | BTC 时区及后续来源切分设置 | `market-btc` |
-| `apps/cn-data.yml` | A 股数据 API、schema 位置、离线 L2 读取和财务日批 | `data` |
+| `apps/cn-data.yml` | A 股数据 API、schema 位置、离线 L2 读取、财务日批和 Batch 托管开关 | `data` |
 | `apps/cn-main-strategy.yml` | 主策略参数、端口和日批开关 | 参数供 `data` / `main-strategy` 使用；仅策略 profile 默认启用策略日批 |
-| `apps/cn-batch.yml` | Batch 端口、SQLite、归档和任务计划 | `batch` |
+| `apps/cn-batch.yml` | Batch 端口、SQLite、归档和任务计划 | `data`；`batch` 供控制 CLI 和隔离测试使用 |
 | `apps/cn-l2-live.yml` | 实时 L2 订阅、会话和本地存储 | `l2` |
 
 美股和 BTC 目前没有独立应用，所以先放市场设置，不复制 A 股应用或 L2 配置。core、engine、公共 API 库也不单独放一份运行配置。
@@ -33,16 +33,17 @@
 # 主策略管理 API，默认 8081
 ./gradlew mainStrategyRun
 
-# Batch 管理 API，默认本机 9085
+# 兼容命令：启动同一个 A 股数据服务，同时启用 Batch 托管
+# 数据 API 默认 8080，Batch 管理 API 默认本机 9085
 ./gradlew batchRun
 
 # 只看实时 L2 计划，不连接 MQTT
 ./gradlew aliyunL2Live --args='plan --symbols 563360'
 ```
 
-这几个是独立进程。只启动数据 API，不会顺带启动主策略或 Batch。
+数据 API、主策略、实时 L2 各自启动。Batch 合入数据 API 进程，`jdb.enabled` 默认 `false`；启用后随进程启动和关闭。`batchRun` 是启用 Batch 的兼容启动命令，不要再与同一个数据 API 实例重复启动。
 
-数据入口实际在 `market-cn/data-app`，也可以直接用 `./gradlew :market-cn:data-app:run` 启动。顶层 `data-app` 是公共支持库，没有 run 任务；未来美股、BTC 的应用在各自市场里装配。
+数据入口实际在 `markets/cn/data-app`，也可以直接用 `./gradlew :markets:cn:data-app:run` 启动。根 `batch-app` 已删除。`platform/app-support` 是公共支持库，没有 run 任务；未来美股、BTC 的应用在各自市场里装配。
 
 ## 常改的值在哪里
 
@@ -54,6 +55,7 @@
 | 数据 API 和主策略 API 的 token | `app.web.api-token` |
 | Batch 管理 API 的 token | 本机覆盖中的 `jdb.api-token` |
 | 主策略方案、文件路径和日批 | `apps/cn-main-strategy.yml` 的 `app.sync.batch` |
+| 是否在数据 API 托管 Batch | `apps/cn-data.yml` 的 `jdb.enabled`，也可用 `JDB_ENABLED=true` |
 | Batch 定时任务 | `apps/cn-batch.yml` 的 `jdb.schedules` |
 | 实时 L2 本地目录和会话 | `apps/cn-l2-live.yml` 的 `l2.root`、`l2.session`；账号放本机覆盖 |
 | 日志目录和级别 | `logging.file.path`、`logging.level.root` |
@@ -99,8 +101,30 @@ app:
 
 ## 日志和运行文件
 
-日志默认分别在 `logs/questdb-data/`、`logs/main-strategy/`、`logs/questdb-batch/`、`logs/questdb-l2/`。可改 `logging.file.path` 和 `logging.level.root`，或对应环境变量 `LOGGING_FILE_PATH`、`LOGGING_LEVEL_ROOT`。
+日志默认分别在 `logs/questdb-data/`、`logs/main-strategy/`、`logs/questdb-l2/`。可改 `logging.file.path` 和 `logging.level.root`，或对应环境变量 `LOGGING_FILE_PATH`、`LOGGING_LEVEL_ROOT`。
 
 `var/` 保存 SQLite 运行记录、恢复进度和提交索引。实时 L2 的解析结果和累计检查点在 `l2.root/parquet/batches/`，SQLite 保存原始接收日志、状态和文件引用；备份、恢复时两边一起保留。
 
 Batch 已保存到 SQLite 的定时任务设置，不会自动被 YAML 重置。修改已有任务要走管理操作或迁移。更多操作见[批处理说明](batch.md)和[数据库维护](questdb-maintenance.md)。
+
+启用托管前配置 `jdb.api-token`（至少 24 位），继续使用原 `jdb.metadata-url` 和 `jdb.archive-root`。先停止旧 Batch 服务，再启动托管，不能让两个进程同时占用账本。`jdb.scheduling-enabled` 仍控制 Quartz 是否运行；新登记的触发器仍暂停，已有触发器保留原状态。有限 CLI 即使传 `--jdb.enabled=true` 也不会启动 Batch。
+
+`batchDistZip` 保留旧发行文件名和控制脚本，内部已改用统一 A 股入口，包含数据 API 的驱动和配置。旧 `questdb-batch` 脚本现在也会启动数据 API，端口和依赖按市场应用处理。
+
+## 按父子工程构建
+
+顶层业务工程只有 `platform` 和 `markets`，配置仍统一在根 `config/`。Gradle 子项目路径与目录一致，旧模块路径不再使用；根级 `webRun`、`batchRun`、`mainStrategyRun` 和 `aliyunL2Live` 不变。
+
+```sh
+# 只构建公共模块及其检查
+./gradlew :platform:build
+
+# 构建全部市场模块，或只构建 A 股
+./gradlew :markets:build
+./gradlew :markets:cn:build
+
+# 日常开发只验证涉及的子模块
+./gradlew :markets:cn:data-app:test --tests '*CnBatchConfigurationTest'
+```
+
+父工程的 `build`、`check`、`assemble` 聚合所属子模块；`platform:test` 和 `markets:test` 聚合各自测试。`markets:cn:test`、`platform:engine:test` 仍只测试本模块，整组检查用对应的 `check`。`clean` 只删除对应模块自己的输出；全部产物在 `build/modules/<完整模块路径>/_output/`，父子目录互不覆盖。目录迁移后的首次构建需要重新编译，后续继续使用 Gradle 增量检查。

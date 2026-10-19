@@ -17,9 +17,9 @@
 
 ## 当前结构
 
-- 业务已经按 `market-cn`、`market-us`、`market-btc` 划分。A 股下面的主策略、实时 L2 仍独立启动，实际 Gradle 路径见 `settings.gradle`。
-- `data-core` 主代码只用 JDK；Tushare、分页和执行能力在 `data-engine`，A 股模型和 L2 类型在市场库。引擎的 source、questdb、batch 子项目分别隔离来源、数据读写和批处理依赖。
-- `data-app` 是公共 API 支持库，无市场依赖、无启动入口。A 股数据入口在 `market-cn/data-app`；主策略不依赖这个入口包或 batch-app 入口包。
+- 顶层业务工程为 `platform`、`markets`；市场位于 `markets/cn`、`markets/us`、`markets/btc`。A 股数据与 Batch 共用常驻入口，主策略、实时 L2 仍独立启动，实际 Gradle 路径见 `settings.gradle`。
+- `platform/core` 主代码只用 JDK；Tushare、分页和执行能力在 `platform/engine`，A 股模型和 L2 类型在市场库。引擎的 source、questdb、batch 子项目分别隔离来源、数据读写和批处理依赖。
+- `platform/app-support` 是公共 API 支持库，无市场依赖、无启动入口。A 股数据入口在 `markets/cn/data-app`；Batch 由这个入口的常驻进程按配置托管；主策略不依赖入口包。
 - 市场通过 `SourcePolicyProvider` 注册来源、`DataCatalogProvider` 注册目录说明，不互调业务实现；市场应用按需复用公共鉴权、目录和 schema 配置。
 - 美股目前有美国利率来源和表投影；BTC 目前只有时间与扩展入口，不能说完整业务已接通。
 - 新模块须接入 Gradle、测试、资源、运行入口及边界检查；所有构建产物仍在根 build。

@@ -7,7 +7,7 @@
 | 要看什么 | 入口 |
 | --- | --- |
 | 当前有哪些数据同步任务 | `./gradlew run --args='show-sync-job-definitions'` |
-| 股票、ETF、指数等同步流程 | `market-cn/data` 下对应业务的 `application` |
+| 股票、ETF、指数等同步流程 | `markets/cn/data` 下对应业务的 `application` |
 | 通用运行记录、锁和恢复 | `SyncRunExecution`、`SyncJobRunner` 及相关端口 |
 | Batch 来源采集 | `SourceCollector`、`SourceStrategies` |
 | Batch 来源写入 | `SourceProductRunner`、`DurableWriter` |

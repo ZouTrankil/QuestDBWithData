@@ -1,6 +1,6 @@
 # 项目结构与开发规范
 
-这篇给开发者和后续接手的 AI 看。业务已经按 A 股、美股、BTC 分目录；主策略和实时 L2 放在 A 股下面，仍是独立进程。美股目前只有部分利率数据，BTC 还没有采集链路。
+这篇给开发者和后续接手的 AI 看。业务已经按 A 股、美股、BTC 分目录；A 股数据和 Batch 共用市场常驻入口，主策略和实时 L2 仍是独立进程。美股目前只有部分利率数据，BTC 还没有采集链路。
 
 ## 怎么用这份规范
 
@@ -10,47 +10,49 @@
 
 ## 现在的模块
 
-实际项目清单看 [settings.gradle](../settings.gradle)。顶层按职责分，里面少量子项目用来隔离数据库驱动和批处理依赖：
+实际项目清单看 [settings.gradle](../settings.gradle)。顶层业务工程只有 `platform` 和 `markets` 两个父工程，子模块隔离市场职责、数据库驱动和批处理依赖：
 
 ```text
 QuestDBWithData/
-├── config/                         统一配置入口和日志格式
-│   ├── markets/                    各市场共用设置
-│   └── apps/                       各进程自己的设置
-├── data-core/                      纯 Java 通用模型、契约、时间接口
-├── runtime-support/                配置、日志、启动和市场时钟装配
-├── data-engine/                    通用请求、配额、分页
-│   ├── source/                     来源契约、采集、校验接口和市场注册
-│   ├── questdb/                    共享写入核验、SQLite 运行记录和恢复
-│   └── batch/                      Batch 元数据、持久写入、Quartz 存储支持
-├── market-cn/                      A 股表模型、DTO 和共享字段语义
-│   ├── source/                     A 股和中国宏观来源规则
-│   ├── data/                       清洗、同步、特征、市场数据 API 和组件装配
-│   ├── data-app/                   A 股数据 API / CLI 独立启动入口
-│   ├── batch/                      盘后任务图、离线 L2 和归档业务
-│   ├── main-strategy-runtime/      独立主策略入口和正式评分链路
-│   └── l2-live-app/                独立实时 L2 入口与采集业务
-├── market-us/                      美国表投影、现有利率来源和时间入口
-├── market-btc/                     BTC 时间入口；尚无真实来源任务
-├── data-app/                       公共 Web/API 支持库，没有市场启动入口
-├── batch-app/                      批处理启动、管理 API 和调度装配
-└── build/                          所有模块的构建产物
+├── platform/                       公共父工程，只聚合构建
+│   ├── core/                       纯 Java 通用模型、契约和时间接口
+│   ├── runtime-support/            配置、日志、启动和时钟装配
+│   ├── app-support/                公共 Web/API 支持库，没有启动入口
+│   └── engine/                     通用请求、配额和分页
+│       ├── source/                 来源契约、采集和市场注册
+│       ├── questdb/                数据读写、核验和恢复
+│       └── batch/                  Batch 元数据、写入和 Quartz 支持
+├── markets/                        市场父工程，只聚合构建
+│   ├── cn/                         A 股模型和共享字段
+│   │   ├── source/                 A 股和中国宏观来源
+│   │   ├── data/                   清洗、同步、特征和市场 API
+│   │   ├── data-app/               A 股入口，常驻时托管 Batch
+│   │   ├── batch/                  盘后任务、离线 L2、管理和调度
+│   │   ├── main-strategy-runtime/  主策略独立入口
+│   │   └── l2-live-app/            实时 L2 独立入口
+│   ├── us/                         美国表投影、现有利率来源和时间入口
+│   └── btc/                        BTC 时间入口，尚无采集任务
+├── config/                         公共、市场和应用配置
+├── docs/                           规范和使用说明
+├── deploy/                         部署脚本与示例
+├── tools/                          生成与检查工具
+└── build/                          全部构建产物
 ```
 
-`market-cn/data` 与 `market-cn/batch` 分开，是为了让 Batch 不加载 PGWire、QuestDB Sender、POI 和数据 API。实时 L2 只使用 core 和启动支持，不加载整个 A 股业务库。
+`markets/cn/data` 与 `markets/cn/batch` 分开，Batch 库自身不依赖 PGWire、QuestDB Sender、POI 和数据 API。统一市场发行包同时包含数据与 Batch 的依赖，Batch 使用独立 Spring 容器，SQLite 数据源和事务不与 QuestDB 混用。实时 L2 只使用 core 和启动支持，不加载整个 A 股业务库。
 
-根工程不放生产代码，只做聚合检查和兼容打包。Gradle 使用完整路径，例如 `:market-cn:main-strategy-runtime`；根级 `mainStrategyRun`、`aliyunL2Live` 等启动命令继续保留。
+根工程不放生产代码，只做聚合检查和兼容打包。`platform`、`markets` 也不放源码或业务 jar；`engine` 和 `cn` 继续保留原有模型或执行代码及子模块。Gradle 使用完整路径，例如 `:markets:cn:main-strategy-runtime`；根级 `mainStrategyRun`、`aliyunL2Live` 等启动命令继续保留。
 
 ## 代码应该放哪里
 
-- **data-core**：跨市场通用模型、数据契约、业务键、时间范围和市场时间接口。主代码只用 JDK，不引入 Spring、Jackson 或数据库。
-- **data-engine**：通用执行、分页、配额、来源归档、读写核验和恢复。市场通过接口注册规则，引擎不能反向调用市场实现。
+- **platform/core**：跨市场通用模型、数据契约、业务键、时间范围和市场时间接口。主代码只用 JDK，不引入 Spring、Jackson 或数据库。
+- **platform/engine**：通用执行、分页、配额、来源归档、读写核验和恢复。市场通过接口注册规则，引擎不能反向调用市场实现。
 - **市场模块**：表模型、来源字段、单位、日期规则、清洗、特征、质量检查和应用。美国利率不能因为被 A 股使用就搬进 A 股清洗代码。
-- **data-app**：公共鉴权、数据目录查询/导出和 schema 迁移配置。它是库，没有 main 方法，不依赖任何市场；市场应用按需导入 `DataApiConfiguration`。实际数据库操作在通用引擎，迁移 SQL 跟着所属市场维护。
-- **市场应用入口**：放在各市场目录下，负责参数、市场 API/CLI 分发和组件装配。A 股入口是 `market-cn/data-app`；美股、BTC 有真实应用后再建各自入口，不复制 A 股或 L2。
-- **runtime-support**：配置、日志、网络和启动支持。有限 CLI 不顺带启动调度、采集或其他常驻服务。
+- **platform/app-support**：公共鉴权、数据目录查询/导出和 schema 迁移配置。它是库，没有 main 方法，不依赖任何市场；市场应用按需导入 `DataApiConfiguration`。实际数据库操作在通用引擎，迁移 SQL 跟着所属市场维护。
+- **市场应用入口**：放在各市场目录下，负责参数、市场 API/CLI 分发和组件装配。A 股入口是 `markets/cn/data-app`；美股、BTC 有真实应用后再建各自入口，不复制 A 股或 L2。
+- **platform/runtime-support**：配置、日志、网络和启动支持。有限 CLI 不顺带启动调度、采集或其他常驻服务。
 
-依赖方向是“市场运行入口 → 市场业务 / 公共 API 支持库 → 通用引擎 → core”。市场之间读取明确的数据产品，不互调清洗或策略实现。主策略直接使用 A 股业务库，不依赖 `market-cn/data-app` 或 `batch-app` 的入口 jar。公共 `data-app` 是可复用的库。
+依赖方向是“市场运行入口 → 市场业务 / 公共 API 支持库 → 通用引擎 → core”。市场之间读取明确的数据产品，不互调清洗或策略实现。主策略直接使用 A 股业务库，不依赖 `markets/cn/data-app` 的入口 jar。公共 `platform/app-support` 是可复用的库。
 
 市场的数据目录说明通过 core 的 `DataCatalogProvider` 接口和 `META-INF/services` 注册。公共 API 只发现当前 classpath 中的说明，不硬编码 CN/US/BTC 实现。没有市场登记时也能展示实库元数据，缺少说明的对象标为未分类；没有读取实现时不宣称支持读取。
 
@@ -89,7 +91,7 @@ A 股业务日和会话用 `Asia/Shanghai`。美股交易日和会话用 `Americ
 
 所以，美股和 BTC 的事件也统一存 UTC，但“哪天开盘”由各自的业务规则决定。美国宏观发布日期不套用美股交易日历。
 
-现在用 `MarketId`、`MarketTime`、`MarketClock` 和 `MarketTimes` 明确区分三个市场，由 `runtime-support` 从 `app.time.markets` 装配。A 股的旧 `BusinessTime` 继续适配同一个 A 股时钟，`app.time.business-zone` 只作为兼容配置，冲突时拒绝启动。JVM/JDBC 继续使用 UTC。
+现在用 `MarketId`、`MarketTime`、`MarketClock` 和 `MarketTimes` 明确区分三个市场，由 `platform/runtime-support` 从 `app.time.markets` 装配。A 股的旧 `BusinessTime` 继续适配同一个 A 股时钟，`app.time.business-zone` 只作为兼容配置，冲突时拒绝启动。JVM/JDBC 继续使用 UTC。
 
 夏令时缺失或重复的本地时刻不自动猜测；重复时刻需要来源明确给偏移量。开市日仍查询版本化交易日历，不能用“周一到周五”替代。具体用法见[市场时间](market-time.md)，来源归属见[数据集归属](dataset-markets.md)。
 
@@ -200,14 +202,18 @@ Java 调用失败时，Python 不能偷偷启用另一套正式计算或写入�
 
 运行 `python3 tools/run_offline_tests.py`，Windows 可用 `python` 或 PowerShell 包装脚本。覆盖当前全部模块，报告在 `.gradle/offline-checks/`，`latest.txt` 指向本次结果。真实来源和数据库验收另跑。
 
-保留历史原件的对照验收运行 `./gradlew :market-cn:data:retainedParityTest`；缺原件会报错，不能用普通离线通过代替。
+保留历史原件的对照验收运行 `./gradlew :markets:cn:data:retainedParityTest`；缺原件会报错，不能用普通离线通过代替。
 
 新评分发布前必须核验独立批准的来源范围清单，不能仅凭日期和当前行数标记完整。见[设计决定](decisions/2026-10-17-评分来源清单.md)。
 
 ## 本轮运行约定
 
-公开默认值仍统一在根 `config/`，由 `application.yml` 导入 `markets/` 和 `apps/`；私密覆盖在被 Git 忽略的 `config/application-local.yml`，不随发行包分发。财务日批只在指定数据 API 持久进程启用，主策略和有限 CLI 不启动该调度。
+公开默认值仍统一在根 `config/`，由 `application.yml` 导入 `markets/` 和 `apps/`；私密覆盖在被 Git 忽略的 `config/application-local.yml`，不随发行包分发。财务日批只在指定数据 API 持久进程启用，主策略和有限 CLI 不启动该调度。Batch 也只由数据 API 常驻入口按 `jdb.enabled` 托管，默认关闭；主策略不导入，有限 CLI 强制不启动。保留原 SQLite、Job ID、Quartz 暂停状态和恢复协议。
 
 历史评分按业务生效区间和真实可用时间选择名称、行业与市场状态；没有原件不得用当前资料填历史。正式因子凭证独立于旧 partial 回执，须同时核验来源批准、完整键矩阵和实际值。L2 schema 4 在归档核验及 SQLite 引用提交后才清理旧文件，原始接收日志继续保留。
 
 范围与兼容性见[本轮设计决定](decisions/2026-10-17-来源认证与L2归档.md)。
+
+Batch 入口合并与兼容命令见[设计决定](decisions/2026-10-19-Batch合并市场入口.md)。
+
+父子工程的构建范围与路径变更见[设计决定](decisions/2026-10-19-父子工程归组.md)。

@@ -60,7 +60,7 @@ class GeneratorTest(unittest.TestCase):
                                 cwd=self.folder, capture_output=True, text=True)
         self.assertNotEqual(0, result.returncode)
         self.assertIn("--market", result.stderr)
-        self.assertFalse((self.folder / "market-cn").exists())
+        self.assertFalse((self.folder / "markets/cn").exists())
 
     def test_cli_routes_only_explicit_market_rows_and_rejects_unknown_ownership(self):
         source = self.folder / "catalog.json"
@@ -69,9 +69,9 @@ class GeneratorTest(unittest.TestCase):
         args = [sys.executable, str(SCRIPT), "--catalog", str(source), "--market", "us"]
         result = subprocess.run(args, cwd=self.folder, capture_output=True, text=True)
         self.assertEqual(0, result.returncode, result.stderr)
-        output = self.folder / "market-us/src/main/java/com/zoutrankil/data/domain/table"
+        output = self.folder / "markets/us/src/main/java/com/zoutrankil/data/domain/table"
         saved = (output / "UsExampleRow.java").read_bytes()
-        self.assertFalse((self.folder / "market-cn").exists())
+        self.assertFalse((self.folder / "markets/cn").exists())
         source.write_text(json.dumps(catalog(object_definition())), encoding="utf-8")
         result = subprocess.run(args, cwd=self.folder, capture_output=True, text=True)
         self.assertNotEqual(0, result.returncode)

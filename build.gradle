@@ -32,23 +32,40 @@ allprojects {
     }
 }
 
-// Resolve project models, not dependencies, before wiring aggregate task outputs.
-['data-core', 'runtime-support', 'data-engine', 'data-engine:source', 'data-engine:questdb', 'data-engine:batch', 'market-cn', 'market-cn:source', 'market-cn:data', 'market-cn:data-app', 'market-cn:batch', 'market-cn:main-strategy-runtime', 'market-cn:l2-live-app', 'market-us', 'market-btc', 'data-app', 'batch-app'].each { evaluationDependsOn(":${it}") }
-def core = project(':data-core')
-def data = project(':market-cn:data-app')
-def batch = project(':batch-app')
-def strategy = project(':market-cn:main-strategy-runtime')
-def support = project(':runtime-support')
-def live = project(':market-cn:l2-live-app')
-def modules = ['data-core', 'runtime-support', 'data-engine', 'data-engine:source', 'data-engine:questdb', 'data-engine:batch', 'market-cn', 'market-cn:source', 'market-cn:data', 'market-cn:data-app', 'market-cn:batch', 'market-cn:main-strategy-runtime', 'market-cn:l2-live-app', 'market-us', 'market-btc', 'data-app', 'batch-app'].collect { project(":${it}") }
-def cnData = project(':market-cn:data')
-def cnBatch = project(':market-cn:batch')
+// 先装配父工程，再读取实际 Java 子模块，父工程本身不进入源码或 jar 清单。
+['platform', 'markets'].each { evaluationDependsOn(":${it}") }
+def modulePaths = ['platform:core', 'platform:runtime-support', 'platform:engine', 'platform:engine:source', 'platform:engine:questdb', 'platform:engine:batch', 'markets:cn', 'markets:cn:source', 'markets:cn:data', 'markets:cn:data-app', 'markets:cn:batch', 'markets:cn:main-strategy-runtime', 'markets:cn:l2-live-app', 'markets:us', 'markets:btc', 'platform:app-support']
+modulePaths.each { evaluationDependsOn(":${it}") }
+def core = project(':platform:core')
+def data = project(':markets:cn:data-app')
+def batch = project(':markets:cn:batch')
+def strategy = project(':markets:cn:main-strategy-runtime')
+def support = project(':platform:runtime-support')
+def live = project(':markets:cn:l2-live-app')
+def modules = modulePaths.collect { project(":${it}") }
+def cnData = project(':markets:cn:data')
+def cnBatch = project(':markets:cn:batch')
+
+// 父工程的 build/check/assemble 覆盖所属子模块；clean 仍只清理自己的输出。
+[project(':platform'), project(':markets'), project(':platform:engine'), project(':markets:cn')].each { parent ->
+    def children = modules.findAll { it.path.startsWith(parent.path + ':') }
+    ['assemble', 'check'].each { name ->
+        parent.tasks.named(name) { dependsOn children.collect { it.tasks.named(name) } }
+    }
+    if (!parent.plugins.hasPlugin('java')) {
+        parent.tasks.register('test') {
+            group = 'verification'
+            description = '运行本父工程下各 Java 子模块的测试。'
+            dependsOn children.collect { it.tasks.named('test') }
+        }
+    }
+}
 // Runtime configuration has one editable source, shared by the independent distributions.
 // 只分发公开运行配置；本机覆盖和示例文件不进入 jar 或发行包。
 def runtimeConfigFiles = fileTree('config') {
     include 'application.yml', 'logback-spring.xml', 'markets/*.yml', 'apps/*.yml'
 }.files.collect { file('config').toPath().relativize(it.toPath()).toString().replace('\\', '/') }.sort()
-[data, batch, strategy, live].each { module ->
+[data, strategy, live].each { module ->
     module.tasks.named('processResources') {
         from(rootProject.file('config')) { include runtimeConfigFiles }
     }
@@ -69,7 +86,7 @@ modules.each { module ->
         onlyIf('Root aggregate already executes the module test classes') { !gradle.taskGraph.hasTask(':test') }
     }
 }
-[data, batch, strategy, live].each { module ->
+[data, strategy, live].each { module ->
     module.tasks.named('run', JavaExec).configure {
         onlyIf('Root run is the legacy single data application entrypoint') { !gradle.taskGraph.hasTask(':run') }
     }
@@ -188,10 +205,8 @@ tasks.named('test', Test) {
 tasks.withType(Test).configureEach {
     systemProperty 'l2.preview.source-root', cnBatch.file('src/main/java').absolutePath
 }
-[batch, cnBatch].each { module ->
-    module.tasks.withType(Test).configureEach {
-        systemProperty 'l2.preview.source-root', cnBatch.file('src/main/java').absolutePath
-    }
+cnBatch.tasks.withType(Test).configureEach {
+    systemProperty 'l2.preview.source-root', cnBatch.file('src/main/java').absolutePath
 }
 cnData.tasks.withType(Test).configureEach {
     systemProperty 'cli.runtimeClasspath', data.sourceSets.main.runtimeClasspath.asPath
@@ -231,15 +246,16 @@ tasks.register('webRun', JavaExec) {
 }
 tasks.register('batchRun', JavaExec) {
     group = 'application'
-    description = 'Start the isolated SQLite-backed batch runtime (no legacy components).'
-    dependsOn batch.tasks.named('classes')
-    classpath = batch.sourceSets.main.runtimeClasspath
-    mainClass = 'com.zoutrankil.batch.BatchApplication'
+    description = '启动 A 股数据服务并托管 Batch，保留旧命令。'
+    dependsOn data.tasks.named('classes')
+    classpath = data.sourceSets.main.runtimeClasspath
+    mainClass = 'com.zoutrankil.data.QuestDataApplication'
+    systemProperty 'jdb.enabled', 'true'
 }
 tasks.register('batchControl', JavaExec) {
     group = 'application'
-    dependsOn batch.tasks.named('classes')
-    classpath = batch.sourceSets.main.runtimeClasspath
+    dependsOn data.tasks.named('classes')
+    classpath = data.sourceSets.main.runtimeClasspath
     mainClass = 'com.zoutrankil.batch.cli.BatchControl'
 }
 tasks.register('l2DailyFeatureCompute', JavaExec) {
@@ -360,28 +376,24 @@ tasks.register('writeL2LiveRuntime') {
     }
 }
 
-// 根兼容 jar 包含 A 股入口；公共 data-app 库仍正常进入 lib。
+// 根兼容 jar 包含 A 股入口；公共 API 支持库仍正常进入 lib。
 def mainDistributionRuntime = data.configurations.runtimeClasspath.filter {
     it != data.tasks.named('jar').get().archiveFile.get().asFile
 }
 tasks.named('startScripts', CreateStartScripts) {
     classpath = files(tasks.named('jar').flatMap { it.archiveFile }) + mainDistributionRuntime
 }
-tasks.register('batchRuntimeJar', Jar) {
-    dependsOn batch.tasks.named('classes')
-    archiveClassifier = 'batch'
-    from(batch.sourceSets.main.output)
-}
 tasks.register('batchStartScripts', CreateStartScripts) {
     applicationName = 'questdb-batch'
-    mainClass = 'com.zoutrankil.batch.BatchApplication'
-    classpath = files(tasks.named('batchRuntimeJar').flatMap { it.archiveFile }) + batch.configurations.runtimeClasspath
+    mainClass = 'com.zoutrankil.data.QuestDataApplication'
+    defaultJvmOpts = ['-Djdb.enabled=true']
+    classpath = files(tasks.named('jar').flatMap { it.archiveFile }) + mainDistributionRuntime
     outputDir = layout.buildDirectory.dir('batch-scripts').get().asFile
 }
 tasks.register('batchControlScripts', CreateStartScripts) {
     applicationName = 'questdb-batch-control'
     mainClass = 'com.zoutrankil.batch.cli.BatchControl'
-    classpath = files(tasks.named('batchRuntimeJar').flatMap { it.archiveFile }) + batch.configurations.runtimeClasspath
+    classpath = files(tasks.named('jar').flatMap { it.archiveFile }) + mainDistributionRuntime
     outputDir = layout.buildDirectory.dir('batch-control-scripts').get().asFile
 }
 distributions {
@@ -398,8 +410,8 @@ distributions {
         contents {
             from(tasks.named('batchStartScripts')) { into 'bin'; fileMode = 0755 }
             from(tasks.named('batchControlScripts')) { into 'bin'; fileMode = 0755 }
-            from(tasks.named('batchRuntimeJar')) { into 'lib' }
-            from(batch.configurations.runtimeClasspath) { into 'lib' }
+            from(tasks.named('jar')) { into 'lib' }
+            from(mainDistributionRuntime) { into 'lib' }
             from('config') { include runtimeConfigFiles; into 'config' }
             from('deploy/batch') { into 'config-examples' }
         }
@@ -408,27 +420,32 @@ distributions {
 
 tasks.register('verifyModuleBoundaries') {
     group = 'verification'
-    dependsOn(modules.collect { it.tasks.named('jar') }, tasks.named('jar'), tasks.named('batchRuntimeJar'))
+    dependsOn(modules.collect { it.tasks.named('jar') }, tasks.named('jar'))
     doLast {
         def requireCondition = { condition, message -> if (!condition) throw new GradleException(message) }
+        [project(':platform'), project(':markets')].each { parent ->
+            requireCondition(!parent.plugins.hasPlugin('java') && fileTree(parent.file('src')).files.empty,
+                    "聚合父工程不能放业务代码或生成业务 jar：${parent.path}")
+        }
+        requireCondition(subprojects.findAll { it.plugins.hasPlugin('java') }.toSet() == modules.toSet(),
+                '实际 Java 子模块与聚合检查清单不同步')
         def expected = [
-            ':data-core': [],
-            ':runtime-support': [':data-core'],
-            ':data-engine': [':data-core'],
-            ':data-engine:source': [':data-engine'],
-            ':data-engine:questdb': [':data-engine'],
-            ':data-engine:batch': [':data-engine:source'],
-            ':market-cn': [':data-core'],
-            ':market-cn:source': [':market-cn', ':data-engine:source'],
-            ':market-cn:data': [':data-app', ':market-cn', ':data-engine:questdb', ':runtime-support'],
-            ':market-cn:data-app': [':market-cn:data', ':market-cn:source', ':market-us', ':runtime-support'],
-            ':market-cn:batch': [':market-cn:source', ':data-engine:batch'],
-            ':market-us': [':data-engine:source'],
-            ':market-btc': [':data-core'],
-            ':data-app': [':data-engine:questdb', ':runtime-support'],
-            ':batch-app': [':market-cn:batch', ':market-us', ':runtime-support'],
-            ':market-cn:main-strategy-runtime': [':market-cn:data', ':market-cn:batch', ':market-us', ':runtime-support'],
-            ':market-cn:l2-live-app': [':data-core', ':runtime-support']
+            ':platform:core': [],
+            ':platform:runtime-support': [':platform:core'],
+            ':platform:engine': [':platform:core'],
+            ':platform:engine:source': [':platform:engine'],
+            ':platform:engine:questdb': [':platform:engine'],
+            ':platform:engine:batch': [':platform:engine:source'],
+            ':markets:cn': [':platform:core'],
+            ':markets:cn:source': [':markets:cn', ':platform:engine:source'],
+            ':markets:cn:data': [':platform:app-support', ':markets:cn', ':platform:engine:questdb', ':platform:runtime-support'],
+            ':markets:cn:data-app': [':markets:cn:data', ':markets:cn:batch', ':markets:cn:source', ':markets:us', ':platform:runtime-support'],
+            ':markets:cn:batch': [':markets:cn:source', ':platform:engine:batch', ':platform:runtime-support'],
+            ':markets:us': [':platform:engine:source'],
+            ':markets:btc': [':platform:core'],
+            ':platform:app-support': [':platform:engine:questdb', ':platform:runtime-support'],
+            ':markets:cn:main-strategy-runtime': [':markets:cn:data', ':markets:cn:batch', ':markets:us', ':platform:runtime-support'],
+            ':markets:cn:l2-live-app': [':platform:core', ':platform:runtime-support']
         ]
         def ownDependencies = { p ->
             p.configurations.findAll { it.name in ['api', 'implementation', 'runtimeOnly', 'compileOnly'] }
@@ -478,23 +495,21 @@ tasks.register('verifyModuleBoundaries') {
         }
         requireCondition(core.configurations.runtimeClasspath.files.empty, 'core 运行时不能引入框架或数据库依赖')
         requireCondition(!entriesByModule[core.path].any { it in runtimeConfigFiles || it.startsWith('db/') || it.startsWith('contracts/') }, 'core 夹带应用配置或数据库资源')
-        [':data-engine', ':data-engine:source', ':data-engine:questdb', ':data-engine:batch'].each { path ->
+        [':platform:engine', ':platform:engine:source', ':platform:engine:questdb', ':platform:engine:batch'].each { path ->
             project(path).sourceSets.main.java.files.each { source ->
                 requireCondition(!(source.text =~ /(?:import\s+(?:static\s+)?)com\.zoutrankil\.market\./).find(), "通用引擎反向依赖市场实现：${source}")
             }
         }
         requireCondition(entriesByModule[live.path].contains('com/zoutrankil/data/l2live/bootstrap/AliyunL2LiveMain.class'), '实时 L2 独立入口缺失')
-        requireCondition(!live.configurations.runtimeClasspath.files.any { f -> ['postgresql-', 'questdb-client-', 'flyway-', 'poi-', 'spring-web', 'spring-batch', 'quartz-', 'market-cn-data-', 'market-cn-batch-'].any { f.name.startsWith(it) } }, '实时 L2 混入数据 API 或离线任务依赖')
+        requireCondition(!live.configurations.runtimeClasspath.files.any { f -> ['postgresql-', 'questdb-client-', 'flyway-', 'poi-', 'spring-web', 'spring-batch', 'quartz-', 'markets-cn-data-', 'markets-cn-batch-'].any { f.name.startsWith(it) } }, '实时 L2 混入数据 API 或离线任务依赖')
         [data, strategy].each { module ->
             requireCondition(!module.configurations.runtimeClasspath.files.any { it.name.contains('mqtt') }, "MQTT 混入 ${module.path}")
         }
         requireCondition(!strategy.configurations.runtimeClasspath.files.contains(data.tasks.named('jar').get().archiveFile.get().asFile), '主策略不能依赖数据 API 入口包')
-        requireCondition(!strategy.configurations.runtimeClasspath.files.contains(batch.tasks.named('jar').get().archiveFile.get().asFile), '主策略不能依赖 Batch 入口包')
         requireCondition(readEntries(tasks.named('jar').get().archiveFile.get().asFile) == entriesByModule[data.path], '根兼容 jar 与数据入口不一致')
-        requireCondition(readEntries(tasks.named('batchRuntimeJar').get().archiveFile.get().asFile) == entriesByModule[batch.path], '根 Batch 兼容 jar 与 Batch 入口不一致')
-        requireCondition(!entriesByModule[':data-app'].contains('com/zoutrankil/data/QuestDataApplication.class'), '公共 API 库夹带市场启动入口')
-        requireCondition(!entriesByModule[':data-app'].any { it in runtimeConfigFiles || it.startsWith('db/') }, '公共 API 库夹带市场配置或迁移脚本')
-        [data, batch, strategy, live].each { module ->
+        requireCondition(!entriesByModule[':platform:app-support'].contains('com/zoutrankil/data/QuestDataApplication.class'), '公共 API 库夹带市场启动入口')
+        requireCondition(!entriesByModule[':platform:app-support'].any { it in runtimeConfigFiles || it.startsWith('db/') }, '公共 API 库夹带市场配置或迁移脚本')
+        [data, strategy, live].each { module ->
             new java.util.zip.ZipFile(module.tasks.named('jar').get().archiveFile.get().asFile).withCloseable { zip ->
                 runtimeConfigFiles.each { name ->
                     def entry = zip.getEntry(name)
@@ -503,10 +518,10 @@ tasks.register('verifyModuleBoundaries') {
                 }
             }
         }
-        def forbidden = ['postgresql-', 'questdb-client-', 'flyway-database-questdb-', 'poi-', 'market-cn-data-', 'data-engine-questdb-']
-        requireCondition(!batch.configurations.runtimeClasspath.files.any { f -> forbidden.any { f.name.startsWith(it) } }, 'Batch 包混入数据服务或 PGWire 驱动')
-        requireCondition(entriesByModule[':market-cn:source'].contains('trust/cfca-ev-root.pem'), '中国债券证书资源丢失')
-        requireCondition(entriesByModule[':market-cn:batch'].contains('META-INF/LICENSE-numpy-l2.txt'), '离线 L2 许可证资源丢失')
+        def forbidden = ['postgresql-', 'questdb-client-', 'flyway-database-questdb-', 'poi-', 'markets-cn-data-', 'platform-engine-questdb-']
+        requireCondition(!batch.configurations.runtimeClasspath.files.any { f -> forbidden.any { f.name.startsWith(it) } }, '离线 Batch 库混入数据服务或 PGWire 驱动')
+        requireCondition(entriesByModule[':markets:cn:source'].contains('trust/cfca-ev-root.pem'), '中国债券证书资源丢失')
+        requireCondition(entriesByModule[':markets:cn:batch'].contains('META-INF/LICENSE-numpy-l2.txt'), '离线 L2 许可证资源丢失')
         def report = layout.buildDirectory.file('reports/modules/market-boundaries.json').get().asFile
         report.parentFile.mkdirs()
         report.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson([
@@ -516,15 +531,15 @@ tasks.register('verifyModuleBoundaries') {
 }
 tasks.register('verifyBatchDistributionDatabaseDrivers') {
     group = 'verification'
-    description = 'Assert the standalone Batch distribution contains SQLite and no data-app/PG/QuestDB/POI artifacts.'
+    description = '核对兼容 Batch 发行包使用统一 A 股入口，且同时包含 SQLite 和 QuestDB 驱动。'
     dependsOn tasks.named('batchDistZip'), tasks.named('verifyModuleBoundaries')
     doLast {
         def archive = tasks.named('batchDistZip').get().archiveFile.get().asFile
         def entries = zipTree(archive).matching { include '**/*.jar' }.files.collect { it.name }
         if (!entries.any { it.startsWith('sqlite-jdbc-') }) throw new GradleException("Batch distribution is missing SQLite JDBC: ${archive}")
-        if (entries.any { name -> ['postgresql-', 'questdb-client-', 'flyway-database-questdb-', 'poi-'].any { name.startsWith(it) } })
-            throw new GradleException("Batch distribution contains data-only dependencies: ${archive}")
-        if (entries.contains("QuestDBWithData-${project.version}.jar")) throw new GradleException('Batch distribution contains data-app jar')
+        if (!entries.any { it.startsWith('postgresql-') }) throw new GradleException('统一市场发行包缺少 PGWire 驱动')
+        if (!entries.contains("QuestDBWithData-${project.version}.jar".toString())) throw new GradleException('兼容发行包缺少 A 股入口')
+        if (entries.any { it.startsWith('batch-app-') }) throw new GradleException('兼容发行包仍包含旧 Batch 入口')
     }
 }
 tasks.register('verifyDependencyVersionCompatibility') {
@@ -538,7 +553,7 @@ tasks.register('verifyDependencyVersionCompatibility') {
         def differences = []
         allprojects.each { p ->
             p.configurations.findAll { it.canBeResolved && it.name in configurationsToCheck }.each { configuration ->
-                def oldName = p.path in [':batch-app', ':market-cn:batch', ':data-engine:batch'] && configuration.name == 'runtimeClasspath' ? 'batchRuntimeClasspath'
+                def oldName = p.path in [':markets:cn:batch', ':platform:engine:batch'] && configuration.name == 'runtimeClasspath' ? 'batchRuntimeClasspath'
                     : configuration.name == 'l2RuntimeClasspath' ? 'runtimeClasspath' : configuration.name
                 def expected = baseline.configurations[oldName]
                 if (expected == null) throw new GradleException("Missing captured configuration: ${oldName}")

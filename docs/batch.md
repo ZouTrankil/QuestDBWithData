@@ -1,6 +1,6 @@
 # Batch 采集和恢复
 
-Batch 独立运行，用 SQLite 记录任务、写入和恢复状态。启动和配置看[配置说明](configuration.md)，请求字段看[接口定义](batch/openapi.yaml)。同一运行记录库只允许一个 Batch 服务进程使用。
+Batch 由 A 股数据 API 常驻进程托管，用 SQLite 记录任务、写入和恢复状态。`jdb.enabled` 默认关闭；启用后管理 API、Quartz 和任务随市场进程启动及关闭，有限 CLI 不启动。启动和配置看[配置说明](configuration.md)，请求字段看[接口定义](batch/openapi.yaml)。同一运行记录库只允许一个持有者。迁移时先停旧独立 Batch，再启市场托管，继续使用原数据库和归档目录。
 
 ## 先采集，再写入
 

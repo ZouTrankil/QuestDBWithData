@@ -1,4 +1,4 @@
-# 独立 Batch（SQLite 元数据，不启用主服务的 PGWire DataSource）
+# batch profile 只供控制 CLI 和隔离测试读取旧配置。
 spring:
   application:
     name: questdb-batch
@@ -8,6 +8,9 @@ spring:
   main:
     web-application-type: none
     banner-mode: off
+---
+# Batch 参数供市场常驻应用和控制 CLI 共用，不改变数据 API 的进程名及 Web 模式。
+spring.config.activate.on-profile: "data | batch"
 jdb:
   metadata-url: jdbc:sqlite:./var/jdb-metadata.sqlite
   # Batch 管理令牌至少 24 位，在本机覆盖中设置；batchControl 读取同一项。

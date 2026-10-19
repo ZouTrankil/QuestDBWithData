@@ -1,6 +1,0 @@
-plugins { id 'java-library' }
-dependencies {
-    api project(':market-cn')
-    api project(':data-engine:source')
-    api 'org.springframework.boot:spring-boot-starter-webclient'
-}

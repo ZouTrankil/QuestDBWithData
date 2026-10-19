@@ -5,15 +5,14 @@
 ## 现在的依赖
 
 ```text
-A 股数据入口 ──→ A 股数据 / 来源 + 美国利率来源
+A 股数据入口 ──→ A 股数据 / 来源 + A 股批处理 + 美国利率来源
 公共 data-app ─→ 通用数据引擎 + runtime-support
-Batch 入口 ────→ A 股批处理 / 来源 + 美国来源
 主策略入口 ────→ A 股数据 + A 股批处理 + 美国来源
 实时 L2 ───────→ core + runtime-support
 市场业务 ──────→ 对应通用引擎 ──→ core
 ```
 
-主策略不依赖 A 股数据入口或 Batch 入口；公共 `data-app` 是支持库，可被市场业务复用，它不依赖任何市场。core 主代码只用 JDK。数据、来源和 Batch 引擎分成子项目，避免把 PGWire、MQTT 或定时器带到不需要的进程。
+主策略不依赖 A 股数据入口；公共 `platform/app-support` 是支持库，可被市场业务复用，它不依赖任何市场。core 主代码只用 JDK。数据、来源和 Batch 引擎分成子项目，避免把 PGWire、MQTT 或定时器带到不需要的进程。
 
 ## 分包时怎么放
 
@@ -60,6 +59,8 @@ Batch 入口 ────→ A 股批处理 / 来源 + 美国来源
 
 `verifyModuleBoundaries` 核对声明依赖、jar 归属、重复类、旧构建残留和配置打包，报告在 `build/reports/modules/market-boundaries.json`。`architectureTest` 读取实际 class 文件检查引用；`architecture-exceptions.tsv` 保留原格式，不用它跳过新的模块边界。
 
-模块和发行包检查另外验证依赖隔离：实时 L2 不加载数据 API、PGWire 或主策略，数据 API 和主策略不带 MQTT，Batch 包按允许的数据库驱动打包。通过包检查不等于通过了发行包检查，更不等于真实数据已经就绪。
+模块和发行包检查另外验证依赖隔离：实时 L2 不加载数据 API、PGWire 或主策略，数据 API 和主策略不带 MQTT，统一市场发行包包含 SQLite 和 PGWire 驱动，Batch 库本身仍隔离数据服务依赖。通过包检查不等于通过了发行包检查，更不等于真实数据已经就绪。
 
 构建输出为 `build/modules/<完整模块路径>/_output/`，父模块输出不会包含子模块输出，单独 clean 不会连带删除子模块。每个模块的 `verifyTestOwnership` 检查测试 class 和资源归属，聚合测试不能借用旧构建产物。
+
+Batch 的管理和调度装配在 `markets/cn/batch`，生命周期在 `markets/cn/data-app`。两个容器共用进程和已解析的配置，不共享 Bean；有限 CLI 不创建 Batch 容器。
