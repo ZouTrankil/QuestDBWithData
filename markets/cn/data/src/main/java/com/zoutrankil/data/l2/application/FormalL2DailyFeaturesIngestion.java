@@ -71,6 +71,10 @@ public final class FormalL2DailyFeaturesIngestion {
         this.writer = Objects.requireNonNull(writer);
         this.frontier = Objects.requireNonNull(frontier);
         this.locks = Objects.requireNonNull(locks);
+        // 正式摄取尚未迁移；显式新版存储会话不能绕过原协议。
+        if (writer instanceof L2DailyFeaturesWriteSession.Versioned selected
+                && selected.datasetVersion() != 1)
+            throw new IllegalArgumentException("正式 L2 摄取仍只接受 v1 会话");
         if (!TABLE.equals(writer.tableName()))
             throw new IllegalArgumentException("Fixed formal L2 table required");
     }

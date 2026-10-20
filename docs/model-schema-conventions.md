@@ -54,7 +54,7 @@ domain/
 
 日期标记用 `TemporalValues.CalendarTimestamp` 编解码。直接同步入口由 `BusinessTime` 按 `app.time.business-zone` 选业务日期；任务入口使用原请求的 `logicalDate`，重试不重新取今天。
 
-已核定的六个交易日物理别名使用 `CnTradeDateLayout` 显式分版；不能根据当前列名自动改用另一版。当前 `etf_adj`、`etf_daily`、`etf_share` 的 v2 读写端口完成隔离验收，控制服务、配置与写入组可按原冻结版本执行和恢复；公开默认仍是 v1。日线保留 TIMESTAMP_NS 纳秒，复权和份额保留 TIMESTAMP 微秒；份额的独立 `update_time` 不随交易日迁移改值。ST 与停牌的显式发布、恢复和配置入口也已接通；L2 端口、Batch 独立来源、正式调度及正式迁移仍待完成。版本选择不改变 UTC 午夜日期载体或精度，见[布局分版](decisions/2026-10-21-交易日存储布局分版.md)。
+已核定的六个交易日物理别名使用 `CnTradeDateLayout` 显式分版；不能根据当前列名自动改用另一版。当前 `etf_adj`、`etf_daily`、`etf_share` 的 v2 读写端口完成隔离验收，控制服务、配置与写入组可按原冻结版本执行和恢复；公开默认仍是 v1。日线保留 TIMESTAMP_NS 纳秒，复权和份额保留 TIMESTAMP 微秒；份额的独立 `update_time` 不随交易日迁移改值。ST 与停牌的显式发布、恢复和配置入口也已接通；L2 已接显式存储端口，来源及入口、Batch 独立来源、正式调度和正式迁移仍待完成。版本选择不改变 UTC 午夜日期载体或精度，见[布局分版](decisions/2026-10-21-交易日存储布局分版.md)。
 
 ```java
 businessTime.now();                  // 当前实际时刻
@@ -128,3 +128,5 @@ ST 的 v2 stage/发布日志显式固定 `datasetSchemaVersion` 和 `rowEncoding
 
 
 停牌来源和控制流程现可显式按冻结布局执行及恢复，原始来源和逻辑行编码不改。追加完成证明须关联页面、全窗及 WAL；旧缺证记录不能自动升级。再验证固定原物理代际或原运行自身的已验证发布代际，重复核对沿用原完成证明，不重写原件。配置与公共注册已接通，默认 v1；读写表名独立保留原默认，见[来源与控制决定](decisions/2026-10-21-交易日存储布局分版.md#停牌来源执行与原版本控制)。
+
+L2 日特征的 v2 显式存储使用 `trade_date`，来源 Parquet 仍用 `ts`；原 110 列和 TIMESTAMP 微秒保留。新版 canonical JSON 的日期键单独分版，旧 `ts` 字节不改。当前来源、正式摄取和配置仍保持 v1，不能把显式存储能力视为完成迁移，见[L2 存储决定](decisions/2026-10-21-交易日存储布局分版.md#l2-日特征显式存储分版)。

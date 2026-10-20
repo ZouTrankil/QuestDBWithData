@@ -5,30 +5,42 @@ import com.zoutrankil.data.domain.l2.L2DailyFeaturesKey;
 import com.zoutrankil.data.l2.domain.L2DailyFeaturesRows;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 /** A fresh bounded D086 writer and its full-key encoding/readback contract. */
 public interface L2DailyFeaturesWriteSession
         extends VerifiedWriteSession<L2DailyFeatures, L2DailyFeaturesKey> {
     VerifiedBatchExecutor.Codec<L2DailyFeatures, L2DailyFeaturesKey> CODEC =
-            new VerifiedBatchExecutor.Codec<>() {
-                @Override
-                public L2DailyFeaturesKey key(L2DailyFeatures row) {
-                    return L2DailyFeaturesRows.key(row);
-                }
+            codec(CnTradeDateLayout.LEGACY_V1);
 
-                @Override
-                public byte[] canonicalBytes(L2DailyFeatures row) {
-                    return L2DailyFeaturesRows.canonicalBytes(row);
-                }
+    interface Versioned extends L2DailyFeaturesWriteSession {
+        int datasetVersion();
+    }
 
-                @Override
-                public int estimatedTransportBytes(L2DailyFeatures row, byte[] canonical) {
-                    return L2DailyFeaturesRows.estimatedTransportBytes(row, canonical);
-                }
-            };
+    static VerifiedBatchExecutor.Codec<L2DailyFeatures, L2DailyFeaturesKey> codec(
+            CnTradeDateLayout layout) {
+        Objects.requireNonNull(layout);
+        return new VerifiedBatchExecutor.Codec<>() {
+            @Override
+            public L2DailyFeaturesKey key(L2DailyFeatures row) {
+                return L2DailyFeaturesRows.key(row);
+            }
+
+            @Override
+            public byte[] canonicalBytes(L2DailyFeatures row) {
+                return L2DailyFeaturesRows.canonicalBytes(row, layout);
+            }
+
+            @Override
+            public int estimatedTransportBytes(L2DailyFeatures row, byte[] canonical) {
+                return L2DailyFeaturesRows.estimatedTransportBytes(row, canonical);
+            }
+        };
+    }
 
     String tableName();
 

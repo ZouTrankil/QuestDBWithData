@@ -36,6 +36,10 @@ final class L2DailyFeaturesSyncAdapter
         this.maxFiles = definition.budget().maxSlices();
         this.timeout = definition.timeout();
         this.port = Objects.requireNonNull(port);
+        // 当前来源协议仍是 v1，不能借相同行值接收新版编码与物理列。
+        if (port instanceof L2DailyFeaturesWriteSession.Versioned selected
+                && selected.datasetVersion() != definition.datasetVersion())
+            throw new IllegalArgumentException("L2 来源会话布局与冻结契约不同");
     }
 
     @Override

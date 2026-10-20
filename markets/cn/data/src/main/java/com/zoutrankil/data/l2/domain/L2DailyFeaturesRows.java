@@ -6,6 +6,7 @@ import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
 import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import com.zoutrankil.data.domain.l2.L2DailyFeaturesKey;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,8 +27,13 @@ public final class L2DailyFeaturesRows {
     }
 
     public static byte[] canonicalBytes(L2DailyFeatures row) {
+        return canonicalBytes(row, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    /** v1 原 JSON 字节保持不动；v2 日期键单独编码，不能互借完成摘要。 */
+    public static byte[] canonicalBytes(L2DailyFeatures row, CnTradeDateLayout layout) {
         try {
-            return JSON.writeValueAsBytes(canonicalMap(row));
+            return JSON.writeValueAsBytes(canonicalMap(row, layout));
         } catch (JsonProcessingException failure) {
             throw new IllegalStateException("Cannot encode D086 row", failure);
         }
@@ -45,9 +51,9 @@ public final class L2DailyFeaturesRows {
                     "D086 writes require java_d086_l2_daily_features_<suffix>");
     }
 
-    private static Map<String, Object> canonicalMap(L2DailyFeatures row) {
+    private static Map<String, Object> canonicalMap(L2DailyFeatures row, CnTradeDateLayout layout) {
         var values = new LinkedHashMap<String, Object>();
-        values.put("ts", row.tradeDate().toString());
+        values.put(layout.physicalDateColumn("l2_daily_features"), row.tradeDate().toString());
         values.put("symbol", row.symbol());
         for (var field : L2DailyFeatureField.values())
             if (!field.identity()) values.put(field.fieldName(), row.features().get(field));

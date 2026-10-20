@@ -7,6 +7,8 @@ import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
 import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import com.zoutrankil.data.domain.l2.L2DailyFeaturesDataset;
+import com.zoutrankil.data.domain.temporal.TemporalValues;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -26,8 +28,12 @@ public final class L2DailyFeaturesMapper {
     }
 
     public DatasetValues values(L2DailyFeatures row) {
+        return values(row, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public DatasetValues values(L2DailyFeatures row, CnTradeDateLayout layout) {
         var values = new LinkedHashMap<String, Object>();
-        values.put("ts", row.tradeDate());
+        values.put(layout.physicalDateColumn("l2_daily_features"), row.tradeDate());
         values.put("symbol", row.symbol());
         for (var field : L2DailyFeatureField.values())
             if (!field.identity()) values.put(field.fieldName(), row.features().get(field));
@@ -35,7 +41,14 @@ public final class L2DailyFeaturesMapper {
     }
 
     public L2DailyFeatures fromValues(DatasetValues values) {
-        LocalDate day = businessDate(values.get("ts", Object.class));
+        return fromValues(values, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public L2DailyFeatures fromValues(DatasetValues values, CnTradeDateLayout layout) {
+        LocalDate day =
+                businessDate(
+                        values.get(layout.physicalDateColumn("l2_daily_features"), Object.class),
+                        layout);
         String symbol = values.get("symbol", String.class);
         var features = new EnumMap<L2DailyFeatureField, Object>(L2DailyFeatureField.class);
         for (var field : L2DailyFeatureField.values()) {
@@ -46,7 +59,11 @@ public final class L2DailyFeaturesMapper {
     }
 
     public static List<String> columns() {
-        return L2DailyFeaturesDataset.DEFINITION.columns().stream()
+        return columns(CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public static List<String> columns(CnTradeDateLayout layout) {
+        return L2DailyFeaturesDataset.definition("l2_daily_features", layout).columns().stream()
                 .map(DatasetDefinition.Column::logicalName)
                 .toList();
     }
@@ -63,7 +80,20 @@ public final class L2DailyFeaturesMapper {
         };
     }
 
-    private static LocalDate businessDate(Object value) {
+    private static LocalDate businessDate(Object value, CnTradeDateLayout layout) {
+        // 新版日期载体须是 UTC 午夜，不能截断时刻掩盖来源错误；v1 解码保持原样。
+        if (layout == CnTradeDateLayout.TRADE_DATE_V2 && !(value instanceof LocalDate)) {
+            Instant carrier;
+            if (value instanceof Instant instant) carrier = instant;
+            else if (value instanceof Timestamp timestamp) carrier = timestamp.toInstant();
+            else if (value instanceof LocalDateTime local)
+                carrier = local.toInstant(ZoneOffset.UTC);
+            else if (value instanceof String text && text.length() == 10)
+                return LocalDate.parse(text);
+            else if (value instanceof String text) carrier = Instant.parse(text);
+            else throw new IllegalArgumentException("L2 trade_date 日期载体类型不支持");
+            return TemporalValues.CalendarTimestamp.fromStorage(carrier).date();
+        }
         if (value instanceof LocalDate date) return date;
         if (value instanceof Instant instant) return instant.atZone(ZoneOffset.UTC).toLocalDate();
         if (value instanceof LocalDateTime dateTime) return dateTime.toLocalDate();

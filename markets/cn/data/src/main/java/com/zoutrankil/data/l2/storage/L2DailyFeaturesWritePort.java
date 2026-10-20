@@ -12,6 +12,7 @@ import com.zoutrankil.data.l2.port.L2DailyFeaturesWriteSession;
 import com.zoutrankil.data.repository.DatasetWritePreparation;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
@@ -34,12 +35,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /** Bounded D086 QWP writer with isolated targets and an explicit fixed formal-table factory. */
-public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSession {
+public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSession.Versioned {
     public static final String ISOLATED_TABLE_PREFIX = L2DailyFeaturesRows.ISOLATED_TABLE_PREFIX;
     public static final int MAX_BATCH_ROWS = L2DailyFeaturesRows.MAX_BATCH_ROWS;
     public static final int MAX_BATCH_BYTES = L2DailyFeaturesRows.MAX_BATCH_BYTES;
     public static final int MAX_READBACK_KEYS = L2DailyFeaturesRows.MAX_READBACK_KEYS;
-    private static final List<String> SELECT_COLUMNS = L2DailyFeaturesMapper.columns();
 
     public static final VerifiedBatchExecutor.Codec<L2DailyFeatures, L2DailyFeaturesKey> CODEC =
             L2DailyFeaturesWriteSession.CODEC;
@@ -50,13 +50,32 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
     private final L2DailyFeaturesMapper mapper = new L2DailyFeaturesMapper();
     private final AtomicBoolean senderActive = new AtomicBoolean();
     private final boolean formal;
+    private final CnTradeDateLayout layout;
+    private final String dateColumn;
+    private final VerifiedBatchExecutor.Codec<L2DailyFeatures, L2DailyFeaturesKey> selectedCodec;
 
     public L2DailyFeaturesWritePort(String table, JdbcTemplate jdbc, QuestDB questdb) {
-        this(table, jdbc, questdb, false);
+        this(table, jdbc, questdb, false, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    /** 新布局只由显式构造选择，不从现有表结构猜测。 */
+    public L2DailyFeaturesWritePort(
+            String table, JdbcTemplate jdbc, QuestDB questdb, CnTradeDateLayout layout) {
+        this(table, jdbc, questdb, false, layout);
     }
 
     private L2DailyFeaturesWritePort(
-            String table, JdbcTemplate jdbc, QuestDB questdb, boolean formal) {
+            String table,
+            JdbcTemplate jdbc,
+            QuestDB questdb,
+            boolean formal,
+            CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
+        this.dateColumn = layout.physicalDateColumn("l2_daily_features");
+        this.selectedCodec =
+                layout == CnTradeDateLayout.LEGACY_V1
+                        ? CODEC
+                        : L2DailyFeaturesWriteSession.codec(layout);
         if (formal) {
             if (!"l2_daily_features".equals(table))
                 throw new IllegalArgumentException("Exact formal L2 table required");
@@ -70,12 +89,18 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
 
     /** Admit only the existing canonical table; this method performs no DDL or history repair. */
     public static L2DailyFeaturesWritePort formal(JdbcTemplate jdbc, QuestDB questdb) {
-        return new L2DailyFeaturesWritePort("l2_daily_features", jdbc, questdb, true);
+        return new L2DailyFeaturesWritePort(
+                "l2_daily_features", jdbc, questdb, true, CnTradeDateLayout.LEGACY_V1);
     }
 
     @Override
     public VerifiedBatchExecutor.Codec<L2DailyFeatures, L2DailyFeaturesKey> codec() {
-        return CODEC;
+        return selectedCodec;
+    }
+
+    @Override
+    public int datasetVersion() {
+        return layout.schemaVersion();
     }
 
     public String tableName() {
@@ -88,21 +113,25 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
                 L2DailyFeatureField.values().length == 0
                         ? ""
                         : Arrays.stream(L2DailyFeatureField.values())
-                                .map(L2DailyFeaturesWritePort::ddlColumn)
+                                .map(this::ddlColumn)
                                 .collect(Collectors.joining(", "));
         jdbc.execute(
                 "CREATE TABLE IF NOT EXISTS \""
                         + table
                         + "\" ("
                         + columns
-                        + ") TIMESTAMP(ts) PARTITION BY DAY WAL DEDUP UPSERT KEYS(ts,symbol)");
+                        + ") TIMESTAMP("
+                        + dateColumn
+                        + ") PARTITION BY DAY WAL DEDUP UPSERT KEYS("
+                        + dateColumn
+                        + ",symbol)");
         preflight();
     }
 
     @Override
     public void preflight() {
         if (!formal) requireIsolatedTableName(table);
-        QuestDbWriteChecks.preflight(jdbc, table, L2DailyFeaturesDataset.DEFINITION);
+        QuestDbWriteChecks.preflight(jdbc, table, L2DailyFeaturesDataset.definition(table, layout));
     }
 
     @Override
@@ -112,17 +141,17 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
         long byteBudget = formal ? L2DailyFeaturesRows.MAX_FORMAL_BATCH_BYTES : MAX_BATCH_BYTES;
         var normalized =
                 DatasetWritePreparation.prepare(
-                        L2DailyFeaturesDataset.DEFINITION,
+                        L2DailyFeaturesDataset.definition(table, layout),
                         rows,
-                        mapper::values,
+                        row -> mapper.values(row, layout),
                         new DatasetWritePreparation.Limits(
                                 MAX_BATCH_ROWS, Math.toIntExact(byteBudget)));
         long estimated =
                 rows.stream()
                         .mapToLong(
                                 row ->
-                                        CODEC.estimatedTransportBytes(
-                                                row, CODEC.canonicalBytes(row)))
+                                        selectedCodec.estimatedTransportBytes(
+                                                row, selectedCodec.canonicalBytes(row)))
                         .sum();
         if (normalized.empty() || estimated > byteBudget)
             throw new IllegalArgumentException(
@@ -173,11 +202,13 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
         String projection =
                 String.join(
                         ", ",
-                        SELECT_COLUMNS.stream()
+                        L2DailyFeaturesMapper.columns(layout).stream()
                                 .map(
                                         column ->
-                                                column.equals("ts")
-                                                        ? "cast(ts as long) AS ts_micros"
+                                                column.equals(dateColumn)
+                                                        ? "cast("
+                                                                + dateColumn
+                                                                + " as long) AS ts_micros"
                                                         : column)
                                 .toList());
         var keysByDate = new TreeMap<LocalDate, List<L2DailyFeaturesKey>>();
@@ -197,10 +228,14 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
                             + projection
                             + " FROM \""
                             + table
-                            + "\" WHERE ts=cast(? as TIMESTAMP)"
+                            + "\" WHERE "
+                            + dateColumn
+                            + "=cast(? as TIMESTAMP)"
                             + " AND symbol IN ("
                             + symbols
-                            + ") ORDER BY ts,symbol LIMIT "
+                            + ") ORDER BY "
+                            + dateColumn
+                            + ",symbol LIMIT "
                             + (dateKeys.size() + 1);
             rows.addAll(
                     jdbc.query(
@@ -219,7 +254,7 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
                                 }
                                 return statement;
                             },
-                            (rs, index) -> mapper.fromValues(readValues(rs))));
+                            (rs, index) -> mapper.fromValues(readValues(rs), layout)));
         }
         return List.copyOf(rows);
     }
@@ -228,14 +263,23 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
         if (formal)
             throw new IllegalStateException(
                     "Formal L2 history must be inspected by an explicit bounded date");
-        String sql = "SELECT ts FROM \"" + table + "\" GROUP BY ts ORDER BY ts LIMIT 32";
+        String sql =
+                "SELECT "
+                        + dateColumn
+                        + " FROM \""
+                        + table
+                        + "\" GROUP BY "
+                        + dateColumn
+                        + " ORDER BY "
+                        + dateColumn
+                        + " LIMIT 32";
         return jdbc.query(
                 sql,
                 (rs, index) -> {
                     if (index > 31)
                         throw new IllegalStateException(
                                 "D086 checkpoint date scan exceeded its bound");
-                    String timestamp = rs.getString("ts");
+                    String timestamp = rs.getString(dateColumn);
                     if (timestamp == null || timestamp.length() < 10)
                         throw new SQLException("D086 target ts is malformed");
                     return LocalDate.parse(timestamp.substring(0, 10));
@@ -245,7 +289,11 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
     public int countRows(LocalDate date) {
         Long count =
                 jdbc.queryForObject(
-                        "SELECT count() FROM \"" + table + "\" WHERE ts=cast(? as TIMESTAMP)",
+                        "SELECT count() FROM \""
+                                + table
+                                + "\" WHERE "
+                                + dateColumn
+                                + "=cast(? as TIMESTAMP)",
                         Long.class,
                         new TemporalValues.CalendarTimestamp(date)
                                 .storageEpoch(TemporalValues.EpochUnit.MICROS));
@@ -272,6 +320,10 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
     private DatasetValues readValues(ResultSet rs) throws SQLException {
         long micros = rs.getLong("ts_micros");
         if (rs.wasNull()) throw new SQLException("D086 designated timestamp is null");
+        // 新版只接 UTC 午夜日期载体，非午夜不能截断后冒充同一交易日。
+        if (layout == CnTradeDateLayout.TRADE_DATE_V2
+                && Math.floorMod(micros, 86_400_000_000L) != 0)
+            throw new SQLException("L2 trade_date 不是 UTC 午夜日期载体");
         LocalDate date =
                 TemporalValues.epoch(
                                 micros,
@@ -280,7 +332,7 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
                         .atZone(ZoneOffset.UTC)
                         .toLocalDate();
         var values = new LinkedHashMap<String, Object>();
-        values.put("ts", date);
+        values.put(dateColumn, date);
         for (var field : L2DailyFeatureField.values()) {
             if (field == L2DailyFeatureField.TS) continue;
             Object value = rs.getObject(field.fieldName());
@@ -299,7 +351,7 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
         }
     }
 
-    private static String ddlColumn(L2DailyFeatureField field) {
+    private String ddlColumn(L2DailyFeatureField field) {
         String type =
                 switch (field.storageType()) {
                     case TIMESTAMP -> "TIMESTAMP";
@@ -312,6 +364,6 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
                             throw new IllegalArgumentException(
                                     "Unsupported D086 QuestDB type: " + field.fieldName());
                 };
-        return field.fieldName() + " " + type;
+        return (field == L2DailyFeatureField.TS ? dateColumn : field.fieldName()) + " " + type;
     }
 }

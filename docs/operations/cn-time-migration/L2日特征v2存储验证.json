@@ -1,0 +1,86 @@
+{
+  "基线提交": "4af4d5142add8283c26631aa00b471e62ac81b20",
+  "范围": "L2 日特征显式 v2 契约、mapper、行编码、类型化读取及隔离 writer；旧来源与正式摄取错版保护",
+  "最终源码摘要": {
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/l2/L2DailyFeaturesDataset.java": "013f7ba948a8e1a65afbf0e5e759805e35b03c66c9cea29c08b201c24f772a20",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/mapper/L2DailyFeaturesMapper.java": "fe93babe5542038b6568e4ece1fd13244d097ebfdca6e8b2940a48dab905d9f6",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/domain/L2DailyFeaturesRows.java": "df05925928926850986296c2054af3e89827f338e3f17f25d6fcfb17ebec8fba",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/port/L2DailyFeaturesWriteSession.java": "37e4b60ddc3f4de1bbb32104cab0bbc4814cd04f1d0c48bf5144205f827e71d8",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/storage/L2DailyFeaturesWritePort.java": "c24b340c92fbd4e677d64d03155761698192d3d84b2c3d357084e8bb9bfae991",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/storage/L2DailyFeaturesReadRepository.java": "4199b523e770595c2dd335502f62c45cae6d1b6d11736323dd54f49388154e74",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/application/L2DailyFeaturesSyncAdapter.java": "e23117b7e06cbfe821604aaa4c17a6063fb867fb64d1692f62f41a1ad4483011",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/application/FormalL2DailyFeaturesIngestion.java": "1de66b49a1c16cbe4033314d50a623252314ee9e9a6b18a750d65af7232d0319",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/l2/storage/L2DailyFeaturesLayoutTest.java": "5486565f00e87246aab4496b5786770071dbe8519b054cca6cc385cd66405f58",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/l2/application/L2DailyFeaturesLayoutGuardTest.java": "6eab9d83ef3d74a505b6a86ff18274b319fb5aad8060bb0e5c615a2f151125f4"
+  },
+  "完整回归": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2381,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 145
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "完整回归命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "完整回归结果": "通过；之后仅整理等价 import，另做最终定向回归和格式检查",
+  "格式检查": {
+    "命令": "python3 tools/format_java.py --imports --check",
+    "Java文件": 2046,
+    "结果": "格式、import、字面量值核对通过"
+  },
+  "最终定向回归": {
+    "命令": "./gradlew :markets:cn:data:test --tests '*L2DailyFeaturesLayout*' --tests '*L2ManifestDaily*' --tests '*FormalL2DailyFeaturesIngestionTest' :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+    "结果": {
+      "tests": 106,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "公开配置检查": "cn-data 与 main-strategy 两个发行 ZIP 均通过",
+  "契约": {
+    "来源日期": "ts",
+    "v1逻辑及物理日期": "ts",
+    "v2逻辑及物理日期": "trade_date",
+    "字段数": 110,
+    "精度": "TIMESTAMP 微秒",
+    "分区": "DAY",
+    "WAL": true,
+    "v2业务及去重键": [
+      "trade_date",
+      "symbol"
+    ],
+    "日期载体": "UTC 午夜；不是上海事件时刻",
+    "默认版本": 1
+  },
+  "验收": [
+    "原 D085/D086 独立 golden 中 v1 契约、mapper 和 canonical bytes 保持不变",
+    "两个布局的全部 110 字段及 null 映射，键与来源/物理列分离",
+    "v2 JDBC 完整字段回读、日期/证券绑定、LIMIT 与负纪元日期",
+    "v2 完整指标发送、UTC 午夜及原 QWP ACK 边界",
+    "v2 非午夜日期载体拒绝，避免截断冒充日期",
+    "v2 隔离 DDL 的日期列、DAY/WAL 与完整去重键；预检另走原 metadata 检查",
+    "日期枚举和单日计数均用所选物理列",
+    "原来源及正式摄取在 I/O 前拒绝新版会话"
+  ],
+  "验证材料": "有界合成行、真实 JdbcTemplate 生成/绑定/解码、模拟 JDBC 和 Sender、原独立 golden；没有连接真实来源或 QuestDB。",
+  "限制": [
+    "尚未新增真实 L2 v2 存储实库验收；原六表两行迁移演练不代表这些端口已实库验收",
+    "当前 target factory、作业/来源、控制恢复、公共注册、根配置与正式摄取仍保留 v1",
+    "未改原请求、旧摘要、身份、检查点或恢复协议",
+    "没有正式表、MV、消费者、旧 stage/backup 或历史数据迁移",
+    "不修改实时 L2 的类型化 Parquet、SQLite WAL 与恢复规则"
+  ]
+}
