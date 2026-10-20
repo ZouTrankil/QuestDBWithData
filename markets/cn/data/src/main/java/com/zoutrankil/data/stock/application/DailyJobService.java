@@ -23,7 +23,6 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 /** D007 registered owner: bounded planning, checkpoint validation, manual run and run-history integration. */
 @Service
 public final class DailyJobService implements SyncJobOwner {
-    static final String ISOLATED_TABLE_PREFIX = IsolatedTablePolicy.DAILY.prefix();
     public record Plan(FrozenRequest request, String targetId, LocalDate verifiedThrough,
                        int checkedCheckpointSessions) {
         public Plan {
