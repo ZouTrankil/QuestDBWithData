@@ -24,7 +24,7 @@ domain/
 │   ├── financial/   财务报表、指标、分红和披露计划
 │   ├── reference/   股东、质押、回购、解禁、大宗和异动
 │   ├── feature/     筹码、技术因子、券商荐股
-│   ├── margin/      两融和转融资
+│   ├── margin/      两融汇总、明细及标的
 │   ├── moneyflow/   资金流向
 │   └── concept/     THS、DC 概念和行业板块
 ├── fund/            ETF 与公募基金

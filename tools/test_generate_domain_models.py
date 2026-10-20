@@ -281,6 +281,23 @@ class DocumentationTest(unittest.TestCase):
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertEqual(['ExampleRow.java'], sorted(p.name for p in self.output.rglob('*.java')))
 
+    def test_explicit_cn_output_root_cannot_restore_retired_models_without_market_flag(self):
+        payload = catalog(self.definition)
+        payload['objects'].append(dict(self.definition, name='margin_zrz', domainClass='MarginZrzRow'))
+        filtered = generator.without_retired_cn(payload, None, generator.PACKAGE_ROOT)
+        self.assertEqual(['example'], [obj['name'] for obj in filtered['objects']])
+        with self.assertRaisesRegex(ValueError, '没有活动模型'):
+            generator.without_retired_cn(catalog(dict(self.definition, name='margin_zrz')),
+                                          None, generator.PACKAGE_ROOT)
+
+    def test_declared_cn_catalog_is_filtered_even_for_temporary_output(self):
+        payload = catalog(dict(self.definition, market='cn'))
+        payload['objects'].append(dict(self.definition, market='cn', name='moneyflow_dc', domainClass='MoneyflowDcRow'))
+        filtered = generator.without_retired_cn(payload, None, self.output)
+        self.assertEqual(['example'], [obj['name'] for obj in filtered['objects']])
+        plan = generator.plan_generation(payload, self.output)
+        self.assertEqual(['ExampleRow.java'], [p.name for p, _ in plan.outputs])
+
     def test_same_class_cannot_receive_another_objects_documentation(self):
         self.documentation['objects'][0]['objectName'] = 'another_object'
         target = self.output / 'table/ExampleRow.java'

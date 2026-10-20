@@ -20,9 +20,8 @@ import com.zoutrankil.data.repository.SyncRunLedger;
 
 import io.questdb.client.QuestDB;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.nio.file.Files;
@@ -42,10 +41,8 @@ class MarginStageDiscardContractTest {
     @TempDir Path temp;
 
     /** Real durable authority and owned proof; mocks replace only physical QuestDB operations. */
-    @ParameterizedTest
-    @ValueSource(booleans = {false})
-    void validFrozenLogicalIdentityAllowsOwnedUnpublishedStageDiscard(boolean zrz)
-            throws Exception {
+    @Test
+    void validFrozenLogicalIdentityAllowsOwnedUnpublishedStageDiscard() throws Exception {
         String prefix = "java_d028_margin_all_",
                 target = prefix + "contract",
                 stage = prefix + "stage_" + "1".repeat(32),

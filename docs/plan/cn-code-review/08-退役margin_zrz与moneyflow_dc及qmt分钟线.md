@@ -27,13 +27,13 @@
 
 ### margin_zrz
 
-从 [MarginZrzJobService](../../../markets/cn/data/src/main/java/com/zoutrankil/data/margin/application/MarginZrzJobService.java) 与同功能的 `MarginZrzSyncJobOwner`、`MarginZrzSyncAdapter`、恢复/换表及存储实现追踪，清理来源 DTO、模型、键、Dataset、装配、CLI、读取绑定、目录及字段说明维护资料。
+从 原 `MarginZrzJobService`（本轮已删除） 与同功能的 `MarginZrzSyncJobOwner`、`MarginZrzSyncAdapter`、恢复/换表及存储实现追踪，清理来源 DTO、模型、键、Dataset、装配、CLI、读取绑定、目录及字段说明维护资料。
 
 生成模型从维护中的资源或生成器入口移除，不手改生成文件后让下一次生成恢复。逐项核对业务和测试依赖，删除仅为该来源服务的代码，共享分页、锁和核验设施继续保留。
 
 ### moneyflow_dc
 
-从 [MoneyflowDcJobService](../../../markets/cn/data/src/main/java/com/zoutrankil/data/flow/application/MoneyflowDcJobService.java) 与同功能的 owner、source、adapter、mapper、port、storage 追踪。清理 `FlowCommands` 中该来源命令、装配、读取绑定、模型及来源说明；移除 `TushareProperties` 中该来源专属配额设置。
+从 原 `MoneyflowDcJobService`（本轮已删除） 与同功能的 owner、source、adapter、mapper、port、storage 追踪。清理 `FlowCommands` 中该来源命令、装配、读取绑定、模型及来源说明；移除 `TushareProperties` 中该来源专属配额设置。
 
 相邻 `back-monitor` 的 [资金流查询](../../../../back-monitor/src/quant_platform/data/adapters/questdb/moneyflow.py) 和 [资金流应用服务](../../../../back-monitor/src/quant_platform/data/application/moneyflow.py) 已有具体消费者，需移除东财来源专属入口与排名选项。保留其他资金流来源，不将不同来源数据静默冒充东财结果。
 

@@ -23,9 +23,8 @@ import com.zoutrankil.data.service.SyncJobRegistry;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.TusharePageService;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,13 +40,11 @@ class MarginSourceOwnerContractTest {
     static final LocalDate DAY = LocalDate.of(2025, 7, 1);
     @TempDir Path temp;
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false})
-    void sourceUsesExactEndpointParametersAndReopensTheSameImmutableBytes(boolean zrz)
-            throws Exception {
+    @Test
+    void sourceUsesExactEndpointParametersAndReopensTheSameImmutableBytes() throws Exception {
         var pages = mock(TusharePageService.class);
         var cancelled = (BooleanSupplier) () -> false;
-        var raw = row(zrz, "20250701");
+        var raw = row("20250701");
         var params = new ArrayList<Map<String, Object>>();
         when(pages.fetcher(eq(MarginAllSource.CONTRACT), same(cancelled)))
                 .thenReturn(
@@ -77,9 +74,8 @@ class MarginSourceOwnerContractTest {
                 });
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false})
-    void cancellationAfterFetchRetainsTheAlreadyReceivedRawRows(boolean zrz) throws Exception {
+    @Test
+    void cancellationAfterFetchRetainsTheAlreadyReceivedRawRows() throws Exception {
         var pages = mock(TusharePageService.class);
         var cancel = new AtomicBoolean();
         BooleanSupplier cancelled = cancel::get;
@@ -88,7 +84,7 @@ class MarginSourceOwnerContractTest {
                         request -> {
                             cancel.set(true);
                             return new PageExecutor.Page(
-                                    List.of(row(zrz, "20250701")), null, false, null);
+                                    List.of(row("20250701")), null, false, null);
                         });
         assertThrows(
                 PageExecutor.Incomplete.class,
@@ -106,11 +102,10 @@ class MarginSourceOwnerContractTest {
         }
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false})
-    void invalidProviderRowsAreRetainedBeforeValidationFailure(boolean zrz) throws Exception {
+    @Test
+    void invalidProviderRowsAreRetainedBeforeValidationFailure() throws Exception {
         var pages = mock(TusharePageService.class);
-        var raw = row(zrz, "20250630");
+        var raw = row("20250630");
         when(pages.fetcher(any(), any()))
                 .thenReturn(request -> new PageExecutor.Page(List.of(raw), null, false, null));
         assertThrows(
@@ -126,10 +121,8 @@ class MarginSourceOwnerContractTest {
         }
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false})
-    void ownerConstructionOnlyReadsConfiguredTableAndRunValidationPrecedesIo(boolean zrz)
-            throws Exception {
+    @Test
+    void ownerConstructionOnlyReadsConfiguredTableAndRunValidationPrecedesIo() throws Exception {
         var jobs = mock(SyncJobRegistry.class);
         var pages = mock(TusharePageService.class);
         Path ledger = temp.resolve("ledger.sqlite3");
@@ -146,7 +139,7 @@ class MarginSourceOwnerContractTest {
         assertFalse(Files.exists(ledger));
     }
 
-    static Map<String, JsonNode> row(boolean zrz, String day) {
+    static Map<String, JsonNode> row(String day) {
         var result = new LinkedHashMap<String, JsonNode>();
         for (String field : MarginAllSource.FIELDS)
             result.put(

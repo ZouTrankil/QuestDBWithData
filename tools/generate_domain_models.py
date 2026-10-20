@@ -145,6 +145,7 @@ def plan_generation(catalog: dict, output_root: Path) -> GenerationPlan:
     snapshot = catalog.get("snapshotDate")
     if not isinstance(snapshot, str) or date.fromisoformat(snapshot).isoformat() != snapshot:
         raise ValueError("Catalog snapshotDate must be an ISO calendar date")
+    catalog = without_retired_cn(catalog, None, output_root)
     root = output_root.resolve()
     outputs = []
     names = set()
@@ -355,6 +356,26 @@ def export_documentation(destination: Path, documentation: dict) -> None:
         + '本文件只导出仓库中的字段说明，不采集行情，不连接数据库，也不证明现有数据完整或源接口当前可用。\n', encoding='utf-8')
 
 
+def without_retired_cn(catalog: dict, market: str | None, output_root: Path | None) -> dict:
+    # 显式输出到 CN 正式源码目录也受退役约束，不能靠省略 --market 恢复旧模型。
+    if not isinstance(catalog, dict) or not isinstance(catalog.get('objects'), list):
+        raise ValueError('生成目录必须包含对象列表')
+    if any(not isinstance(obj, dict) for obj in catalog['objects']):
+        raise ValueError('生成目录的对象必须是映射')
+    canonical_cn = output_root is not None and output_root.resolve() == PACKAGE_ROOT.resolve()
+    active = []
+    removed = False
+    for obj in catalog.get('objects', []):
+        cn = canonical_cn or market == 'cn' or obj.get('market', catalog.get('market')) == 'cn'
+        if cn and obj.get('name') in RETIRED_CN_OBJECTS:
+            removed = True
+        else:
+            active.append(obj)
+    if removed and not any(obj.get('domainClass') for obj in active):
+        raise ValueError('没有活动模型，停止生成，不清理已有文件')
+    return dict(catalog, objects=active)
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -388,6 +409,10 @@ def main(argv: list[str] | None = None) -> None:
     if args.output_root is None and args.market is None:
         parser.error("先指定 --market 或 --output-root，不能把跨市场模型默认写回 A 股")
     catalog = json.loads(args.catalog.read_text(encoding="utf-8"))
+    try:
+        catalog = without_retired_cn(catalog, args.market, args.output_root)
+    except ValueError as failure:
+        parser.error(str(failure))
     if args.market is not None:
         # 没有归属就拒绝生成，避免错市场输出和随后清理旧文件。
         selected = []
@@ -398,8 +423,6 @@ def main(argv: list[str] | None = None) -> None:
             if market not in ("cn", "us", "btc"):
                 parser.error("生成模型前，请在 catalog 或对象中明确声明 market=cn/us/btc")
             if market == args.market:
-                if market == "cn" and obj.get("name") in RETIRED_CN_OBJECTS:
-                    continue
                 selected.append(obj)
         if not selected:
             parser.error("所选市场没有模型，停止生成，不清理已有文件")

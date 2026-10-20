@@ -28,8 +28,6 @@ import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import io.questdb.client.QuestDB;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -48,9 +46,8 @@ class MarginTargetContractTest {
     static final String PHYSICAL = "static-v2-" + "a".repeat(64);
     static final LocalDate DAY = LocalDate.of(2025, 7, 1);
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false})
-    void constructionHasNoIoAndEveryWriterAndProtocolClientIsIndependent(boolean zrz) {
+    @Test
+    void constructionHasNoIoAndEveryWriterAndProtocolClientIsIndependent() {
         var jdbc = mock(JdbcTemplate.class);
         when(jdbc.getDataSource()).thenReturn(mock(DataSource.class));
         var quest = mock(QuestDB.class);
@@ -79,10 +76,8 @@ class MarginTargetContractTest {
         verifyNoInteractions(quest);
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false})
-    void targetRejectsFormalTablesAndWriterRejectsDirectFormalSendBeforeIo(boolean zrz)
-            throws Exception {
+    @Test
+    void targetRejectsFormalTablesAndWriterRejectsDirectFormalSendBeforeIo() throws Exception {
         var jdbc = mock(JdbcTemplate.class);
         var quest = mock(QuestDB.class);
         when(jdbc.getDataSource()).thenReturn(mock(DataSource.class));
@@ -117,9 +112,8 @@ class MarginTargetContractTest {
         verifyNoInteractions(quest);
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false})
-    void storageKeepsMicrosecondWindowSqlAndSnapshotSettings(boolean zrz) throws Exception {
+    @Test
+    void storageKeepsMicrosecondWindowSqlAndSnapshotSettings() throws Exception {
         var source = mock(JdbcTemplate.class);
         when(source.getDataSource()).thenReturn(mock(DataSource.class));
         String table = "java_d028_margin_all_contract";
@@ -173,9 +167,8 @@ class MarginTargetContractTest {
         }
     }
 
-    @ParameterizedTest
-    @ValueSource(booleans = {false})
-    void tableDdlUsesExactYearWalOutsideWindowAndDefaultDiscardClient(boolean zrz) {
+    @Test
+    void tableDdlUsesExactYearWalOutsideWindowAndDefaultDiscardClient() {
         var source = mock(JdbcTemplate.class);
         when(source.getDataSource()).thenReturn(mock(DataSource.class));
         String prefix = "java_d028_margin_all_",
