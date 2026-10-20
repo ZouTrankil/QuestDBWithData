@@ -24,6 +24,7 @@ import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.DailyTradingSessions;
 import com.zoutrankil.data.service.DatasetIntervalLock;
 import com.zoutrankil.data.service.SyncJobRunner;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -128,16 +129,26 @@ public final class L2DailyFeaturesJobService implements SyncJobOwner {
     }
 
     public static SyncJobDefinition definition() {
+        return definition(1);
+    }
+
+    /** 原定义字节及预算保持不动；新版定义只供显式来源装配，当前控制入口仍为 v1。 */
+    public static SyncJobDefinition definition(int version) {
+        CnTradeDateLayout.fromVersion(version);
         var parameters = new LinkedHashMap<String, Parameter>();
         parameters.put(
                 "source_root_id", new Parameter(ParameterType.STRING, true, 64, 1, Set.of()));
         parameters.put(
                 "symbols", new Parameter(ParameterType.STRING_LIST, false, 16, 1000, Set.of()));
+        if (version == 2)
+            parameters.put(
+                    "source_inspection",
+                    new Parameter(ParameterType.STRING, true, 4096, 1, Set.of()));
         return new SyncJobDefinition(
                 JOB_ID,
-                1,
+                version,
                 L2DailyFeaturesDataset.DEFINITION.datasetId(),
-                1,
+                version,
                 "l2_daily_features_owner",
                 Set.of(Mode.INCREMENTAL, Mode.BACKFILL, Mode.RECONCILE, Mode.INGEST),
                 Mode.INCREMENTAL,
@@ -328,7 +339,13 @@ public final class L2DailyFeaturesJobService implements SyncJobOwner {
     }
 
     private L2DailyFeaturesWriteSession port() {
-        return target.newWriter();
+        var writer = target.newWriter();
+        // 当前控制入口尚未按版本恢复，不能提前把新版目标交给原 v1 计划。
+        if (L2DailyFeaturesTarget.versionOf(target) != 1
+                || writer instanceof L2DailyFeaturesWriteSession.Versioned selected
+                        && selected.datasetVersion() != 1)
+            throw new IllegalArgumentException("当前 L2 日特征控制入口只接 v1");
+        return writer;
     }
 
     private LocalDate latestVerifiedThrough(

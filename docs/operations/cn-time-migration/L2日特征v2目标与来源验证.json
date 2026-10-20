@@ -1,0 +1,59 @@
+{
+  "基线提交": "760d63cac1447c006efe20742281118e388a6707",
+  "范围": "L2 日特征显式同版目标作用域、独立身份、canonical 来源定义与冻结 inspection；当前控制入口保留 v1",
+  "最终源码摘要": {
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/port/L2DailyFeaturesTarget.java": "36adc94168b5d71d0ef71ba5a68a645fba50274715dec7038ed35a63e1ef12b1",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/storage/QuestDbL2DailyFeaturesTarget.java": "109dcd7e20aab3a8fd7c868e33315193555c6d5590cb626aa631e3c4aa902446",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/application/L2DailyFeaturesJobService.java": "c5438cc12ade6c6cfd805366568df3e7d382aaaa473eeceeda3e6e6a0bd38499",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/application/L2DailyFeaturesSyncAdapter.java": "18979b97eabf100f9b420506db1a277c0b525d2892e5da0f430ea8e8f5d58430",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/l2/storage/L2DailyFeaturesTargetLayoutTest.java": "030ba62f30fe74c7d585349dd53e5ae4c17968b24c853e541cf0553e34ec2a91",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/l2/application/L2DailyFeaturesVersionedSourceTest.java": "4ddd32d62d96916b28073041c8f036eee19a604588108e33ff7917da4cfc34f9"
+  },
+  "完整回归": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2389,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 145
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "验证状态": "通过",
+  "验收": [
+    "旧身份算法、原定义、Parquet parser、manifest v1 依赖和预算保持不变",
+    "两个方向的独立原版本目标作用域，表名保持一致，新会话同版",
+    "v2 物理身份只接正整数 ID 与非空目录，使用独立摘要域",
+    "实际通用 runner 与临时 SQLite 运行原版本来源适配器，冻结 JSON 原样写入账本",
+    "v2 请求固定完整 source_inspection，缺失或变化在外部 I/O 前拒绝",
+    "原请求不能配新版 writer；无版本标记的会话不能冒充 v2",
+    "当前控制服务在计划阶段拒绝新版会话，不创建账本或读取来源"
+  ],
+  "冻结来源": "v2 source_inspection 为 JobDefinitionJson canonical JSON 字符串，最多 4096 字符；包括窗口、日期、行数、源/schema 摘要、parser、来源根与完整性。v1 不补字段。",
+  "验证材料": "临时 SQLite、原独立来源夹具、真实 DTO/mapper 和通用 runner；来源流、物理目标和 writer 由端口替代，没有真实来源、QuestDB 写入或正式发布。",
+  "限制": [
+    "当前控制服务、恢复、检查点、Spring 配置及公开注册仍为 v1",
+    "未添加或执行正式 L2 摄取 v2，原正式 factory 仍为 v1",
+    "未新增实库验收，不能把原六表演练或离线 runner 当成真实来源/发布验收",
+    "原请求、旧身份和旧检查点不补写或重绑",
+    "正式表、MV、消费者和完整模型验收仍待完成"
+  ],
+  "本地构建记录": "一次隔离 data JAR 缺少入口类，未认作验证通过；移除该隔离产物后已重建完整 JAR。检查发现参数上限超过公共协议，已改为 4096，新增 8 项定向测试通过；完整最终结果另列。",
+  "完整回归命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "格式检查": {
+    "命令": "python3 tools/format_java.py --imports --check",
+    "Java文件": 2048,
+    "结果": "格式、import、字面量核对通过；在完整回归结束后顺序执行"
+  },
+  "公开配置检查": "cn-data 与 main-strategy 两个发行 ZIP 均通过"
+}

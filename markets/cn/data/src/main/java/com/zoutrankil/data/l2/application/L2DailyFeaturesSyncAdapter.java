@@ -1,5 +1,6 @@
 package com.zoutrankil.data.l2.application;
 
+import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import com.zoutrankil.data.domain.l2.L2DailyFeaturesKey;
@@ -22,6 +23,7 @@ final class L2DailyFeaturesSyncAdapter
     private final int maxFiles;
     private final Duration timeout;
     private final L2DailyFeaturesWriteSession port;
+    private final SyncJobDefinition definition;
 
     L2DailyFeaturesSyncAdapter(
             L2DailyFeaturesParquetSource source,
@@ -29,6 +31,9 @@ final class L2DailyFeaturesSyncAdapter
             List<String> symbols,
             SyncJobDefinition definition,
             L2DailyFeaturesWriteSession port) {
+        this.definition = Objects.requireNonNull(definition);
+        if (!definition.equals(L2DailyFeaturesJobService.definition(definition.version())))
+            throw new IllegalArgumentException("L2 日特征来源只接 canonical 原版本定义");
         this.source = Objects.requireNonNull(source);
         this.inspection = Objects.requireNonNull(inspection);
         this.symbols = List.copyOf(symbols);
@@ -36,19 +41,28 @@ final class L2DailyFeaturesSyncAdapter
         this.maxFiles = definition.budget().maxSlices();
         this.timeout = definition.timeout();
         this.port = Objects.requireNonNull(port);
-        // 当前来源协议仍是 v1，不能借相同行值接收新版编码与物理列。
-        if (port instanceof L2DailyFeaturesWriteSession.Versioned selected
-                && selected.datasetVersion() != definition.datasetVersion())
+        // 无版本标记的旧会话只属于 v1；显式新会话必须匹配原定义。
+        int writerVersion =
+                port instanceof L2DailyFeaturesWriteSession.Versioned selected
+                        ? selected.datasetVersion()
+                        : 1;
+        if (writerVersion != definition.datasetVersion())
             throw new IllegalArgumentException("L2 来源会话布局与冻结契约不同");
     }
 
     @Override
     public void preflight(SyncJobDefinition.FrozenRequest request) throws Exception {
-        if (!request.definition().equals(L2DailyFeaturesJobService.definition())
+        if (!request.definition().equals(definition)
                 || !inspection.from().equals(request.from())
                 || !inspection.to().equals(request.to()))
             throw new IllegalArgumentException(
                     "Frozen D086 request differs from its Parquet interval");
+        // v2 计划把完整 inspection 固定在请求里；旧请求不补字段或换身份。
+        if (definition.version() == 2
+                && !JobDefinitionJson.mapper()
+                        .writeValueAsString(inspection)
+                        .equals(request.parameters().get("source_inspection")))
+            throw new IllegalStateException("L2 原冻结来源 inspection 已变化");
         String expectedRoot = request.parameters().get("source_root_id").toString();
         if (!expectedRoot.equals(source.sourceRootIdentity()))
             throw new IllegalStateException("D086 source root changed after planning");
