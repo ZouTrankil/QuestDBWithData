@@ -154,6 +154,8 @@ class ProjectConfigurationTest {
         assertEquals("true", env.getRequiredProperty("app.sync.batch.enabled"));
         assertEquals("false", env.getRequiredProperty("app.materialized-views.etf-overview.enabled"));
         assertEquals("false", env.getRequiredProperty("app.sync.financial.enabled"));
+        assertEquals("1000", env.getRequiredProperty("app.sync.financial.max-request-attempts"));
+        assertEquals("PT4H", env.getRequiredProperty("app.sync.financial.execution-window"));
         assertEquals("Asia/Shanghai", env.getRequiredProperty("app.time.markets.cn"));
         assertNotNull(env.getProperty("spring.datasource.url"));
         assertFalse(env.containsProperty("l2.root"));

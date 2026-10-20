@@ -41,7 +41,11 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 @Lazy
 public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
     private static final long MAX_WINDOW_ROWS=1_000_000;
-    private static final List<String> CORE=List.of("daily","daily_basic","stk_factor","stk_limit");
+    // 这里只列每个开市日都应有数据的来源；停牌、ST、持仓披露不能按日历猜缺口。
+    private static final Map<String,String> DAILY_SOURCES=Map.of(
+            "daily","trade_date","daily_basic","trade_date","stk_factor","trade_date","stk_limit","trade_date",
+            "moneyflow","trade_date","moneyflow_hsgt","trade_date","etf_daily","timestamp",
+            "etf_adj","timestamp","etf_factor","trade_date");
     private static final List<String> REGIME_REQUIRED=List.of("all_a_ret_mtd","small_large_ret_mtd","growth_value_ret_mtd","avg_up_down_ratio_5d","avg_turnover_rate_5d","northbound_net_buy_mtd","all_a_pe_ttm_percentile_latest","all_a_pb_percentile_latest","erp_latest");
     private final JdbcTemplate jdbc; private final SyncJobRegistry registry; private final Path ledger,root;
     private final ObjectMapper json=JobDefinitionJson.mapper(); private final List<Owner> owners;
@@ -220,8 +224,20 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         Path path=instance(r).resolve("plan.json");
         if(Files.isRegularFile(path)){var p=json.readValue(Files.readAllBytes(path),PipelinePlan.class);if(!p.instance().equals(r.instanceId())||!p.input().equals(r.inputFingerprint())||!p.to().equals(r.logicalDate())||p.sourceLogicalDate()==null||ChronoUnit.DAYS.between(p.from(),p.to())>30)throw new Gate(BusinessState.BLOCKED,"Frozen bounded pipeline plan changed");if(!p.tradeDates().equals(calendar(p.from(),p.to())))throw new Gate(BusinessState.BLOCKED,"Frozen SSE calendar changed");return p;}
         var target=r.logicalDate();LocalDate from=target.minusDays(2);
-        for(String table:CORE){var max=jdbc.queryForObject("SELECT cast(max(trade_date) AS LONG) FROM \""+table+"\"",Long.class);if(max==null)throw new Gate(BusinessState.BLOCKED,"Core source requires explicit historical bootstrap: "+table);var latest=date(max);if(latest.isBefore(target)&&latest.plusDays(1).isBefore(from))from=latest.plusDays(1);}
-        if(ChronoUnit.DAYS.between(from,target)>30)throw new Gate(BusinessState.BLOCKED,"Core catchup exceeds 31 natural days; explicit bounded backfill required");
+        var horizon=target.minusDays(30);var expected=calendar(horizon,target);
+        // 最大日期只用于发现无基线/超限，不能证明中间日期完整。逐源查最近 31 天的缺日，
+        // 再交给原 owner 重新采集、完整键值回读和 WAL 核验；这里不签发完成凭证。
+        for(var source:new TreeMap<>(DAILY_SOURCES).entrySet()) {
+            String table=source.getKey(),column=source.getValue();
+            var max=jdbc.queryForObject("SELECT cast(max(\""+column+"\") AS LONG) FROM \""+table+"\" WHERE \""+column+"\"<cast(? AS TIMESTAMP)",Long.class,micros(target.plusDays(1)));
+            if(max==null)throw new Gate(BusinessState.BLOCKED,"Source requires explicit historical bootstrap: "+table);
+            // 日期字段可能为微秒或纳秒；grid 已按表结构处理精度，最大日期也遵守同一契约。
+            boolean nanos=columns(table).stream().anyMatch(c->column.equals(c.get("column"))&&"TIMESTAMP_NS".equals(c.get("type")));
+            var latest=nanos?dateNanos(max):date(max);
+            if(latest.plusDays(1).isBefore(horizon))throw new Gate(BusinessState.BLOCKED,"Source catchup exceeds 31 natural days; explicit bounded backfill required: "+table);
+            var present=grid(table,column,horizon,target);
+            for(var day:expected)if(!present.contains(day)&&day.isBefore(from))from=day;
+        }
         var dates=calendar(from,target);if(!dates.contains(target))throw new Gate(BusinessState.BLOCKED,"Target is not a verified open SSE date");
         // 新计划绑定请求日期；已有计划继续使用原先保存的来源日期，不在重试时重取今天。
         var p=new PipelinePlan(r.instanceId(),r.inputFingerprint(),from,target,r.logicalDate(),dates);write(path,p);return p;

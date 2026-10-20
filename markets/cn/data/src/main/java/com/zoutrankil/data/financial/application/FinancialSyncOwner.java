@@ -42,12 +42,18 @@ public final class FinancialSyncOwner implements DatasetImplementation,SyncJobOw
         int recent=Math.max(0,all.size()-4);var result=new TreeSet<>(all.subList(recent,all.size()));
         if(recent>0)result.add(all.get(Math.floorMod(logical.toEpochDay(),recent)));return List.copyOf(result);
     }
-    public SyncJobRunner.Result run(FrozenRequest request)throws Exception{return execute(request,null);}
+    public SyncJobRunner.Result run(FrozenRequest request)throws Exception{return execute(request,null,Duration.ofHours(12));}
+    /** 日批共享剩余时间；沿用同一冻结请求和恢复身份，不修改持久化任务定义。 */
+    public SyncJobRunner.Result runWithin(FrozenRequest request,Duration remaining)throws Exception {
+        if(remaining.isNegative()||remaining.isZero()||remaining.compareTo(Duration.ofHours(12))>0)throw new IllegalArgumentException("财务执行剩余时间需在 0 到 12 小时内");
+        return execute(request,null,remaining);
+    }
     public SyncJobRunner.Result resume(String previous)throws Exception {
         var saved=FrozenRunRequest.restore(ledger,previous,job());if(!target.targetId().equals(saved.targetId()))throw new IllegalStateException("财务恢复目标已重建");
-        return execute(saved.request(),previous);
+        return execute(saved.request(),previous,Duration.ofHours(12));
     }
-    private SyncJobRunner.Result execute(FrozenRequest request,String previous)throws Exception {
+    private SyncJobRunner.Result execute(FrozenRequest request,String previous,Duration remaining)throws Exception {
+        final long deadline=System.nanoTime()+remaining.toNanos();
         if(!request.definition().equals(job()))throw new IllegalArgumentException("财务任务定义不匹配");
         @SuppressWarnings("unchecked") var codes=(List<String>)request.parameters().get("codes");
         @SuppressWarnings("unchecked") var textPeriods=(List<String>)request.parameters().get("periods");
@@ -69,9 +75,11 @@ public final class FinancialSyncOwner implements DatasetImplementation,SyncJobOw
                 public boolean walSettled()throws Exception{stable();return target.walSettled();}
             };}
             public SyncJobRunner.SourceCompletion fetch(FrozenRequest r,SyncJobRunner.PageConsumer<Row> consumer,BooleanSupplier stopped)throws Exception {
+                // 只停止后续采集；已投递的写入仍由原协议核验或保留未决状态。
+                BooleanSupplier limited=()->stopped.getAsBoolean()||System.nanoTime()-deadline>=0;
                 int count=0,total=0;var receipts=new ArrayList<String>();
-                for(var period:periods)for(var code:codes){if(stopped.getAsBoolean())throw new java.util.concurrent.CancellationException();
-                    var page=source.fetch(code,period,r.logicalDate(),stopped);var preserved=target.preserveLocalColumns(page.rows());
+                for(var period:periods)for(var code:codes){if(limited.getAsBoolean())throw new java.util.concurrent.CancellationException();
+                    var page=source.fetch(code,period,r.logicalDate(),limited);var preserved=target.preserveLocalColumns(page.rows());
                     Path frozen=evidence.resolve("write-input-"+UUID.randomUUID()+".json");byte[] values=JobDefinitionJson.canonicalMapper().writeValueAsBytes(preserved);
                     FileEvidenceStore.writeNewDurable(frozen,JobDefinitionJson.canonicalMapper().writeValueAsBytes(Map.of("source",page.responseEvidence(),"sourceSha256",page.sourceFingerprint(),"preservedLocalColumns",true,"rows",preserved)));
                     consumer.accept(new SyncJobRunner.Page<>(preserved,FileEvidenceStore.sha256(values),frozen.toString(),null));count++;total+=preserved.size();receipts.add(frozen.toString());}

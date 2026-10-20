@@ -81,6 +81,28 @@ class FinancialSyncTest {
         for(int i=0;i<200;i++){var periods=FinancialSyncOwner.dailyPeriods(DAY.plusDays(i),first);assertTrue(periods.size()<=5);seen.addAll(periods);}
         for(LocalDate p=first;p.isBefore(LocalDate.parse("2025-09-30"));p=p.plusMonths(3).with(java.time.temporal.TemporalAdjusters.lastDayOfMonth()))assertTrue(seen.contains(p),p.toString());
     }
+    @Test void dailyBudgetRejectsFullMarketBeforeAnySourceOrTargetAccess() throws Exception {
+        var pages=mock(TusharePageService.class);var target=mock(FinancialTarget.class);
+        var owners=FinancialContract.DATASETS.stream().map(name->new FinancialSyncOwner(
+                FinancialSyncConfiguration.contract(name),target,pages,root.resolve("ledger.sqlite3"))).toList();
+        var codes=java.util.stream.IntStream.range(0,5000).mapToObj(i->String.format(java.util.Locale.ROOT,"%06d.SH",i)).toList();
+        byte[] scope=JobDefinitionJson.mapper().writeValueAsBytes(Map.of("schema","java.financial.scope.v1",
+                "validFrom",DAY.toString(),"validThrough",DAY.toString(),"codes",codes));
+        var file=root.resolve("scope.json");Files.write(file,scope);
+        var scheduler=new com.zoutrankil.data.financial.application.FinancialDailySync(owners,file.toString(),
+                com.zoutrankil.data.repository.FileEvidenceStore.sha256(scope),"2018-03-31",new com.zoutrankil.data.config.TushareProperties(),1000,Duration.ofHours(4));
+        var error=assertThrows(IllegalStateException.class,()->scheduler.runAt(DAY));
+        assertTrue(error.getMessage().contains("超过预算"));verifyNoInteractions(pages,target);
+        assertFalse(Files.exists(root.resolve("ledger.sqlite3")));
+    }
+    @Test void exhaustedSharedWindowDoesNotStartARequestOrWrite() throws Exception {
+        var pages=mock(TusharePageService.class);var target=spy(new Memory());
+        var owner=new FinancialSyncOwner(FinancialSyncConfiguration.contract("income"),target,pages,root.resolve("deadline.sqlite3"));
+        var plan=owner.plan(List.of("600000.SH"),List.of(PERIOD),DAY,SyncJobDefinition.Mode.INCREMENTAL);
+        var result=owner.runWithin(plan,Duration.ofNanos(1));
+        assertFalse(Set.of(SyncRunState.VERIFIED,SyncRunState.VERIFIED_EMPTY).contains(result.state()));
+        verifyNoInteractions(pages);verify(target,never()).send(anyList());
+    }
     static class Memory implements FinancialTarget {
         final Map<Key,Row> rows=new HashMap<>();
         public String targetId(){return "fixture-financial-target";}

@@ -33,6 +33,8 @@ class MainStrategyFrozenSourceDateTest {
         // 隔离旧构造器中的真实依赖，实际执行原来的计划读写与恢复方法，不启动外部服务。
         var value=mock(MainStrategyDailyPipeline.class,CALLS_REAL_METHODS);
         field(value,"root",root);field(value,"jdbc",jdbc);field(value,"json",JobDefinitionJson.mapper());
+        when(jdbc.queryForList(anyString())).thenReturn(List.of(
+                Map.of("column","trade_date","type","TIMESTAMP"),Map.of("column","timestamp","type","TIMESTAMP")));
         doAnswer(call->{
             RowCallbackHandler rows=call.getArgument(1);
             long from=call.getArgument(2);long end=call.getArgument(3);
@@ -40,7 +42,8 @@ class MainStrategyFrozenSourceDateTest {
                 var day=LocalDate.ofEpochDay(cursor/86_400_000_000L);var rs=mock(ResultSet.class);
                 when(rs.getObject(1)).thenReturn(cursor);
                 when(rs.getObject(2)).thenReturn(day.getDayOfWeek()==DayOfWeek.SATURDAY||day.getDayOfWeek()==DayOfWeek.SUNDAY?0:1);
-                rows.processRow(rs);
+                String sql=call.getArgument(0);
+                if(sql.contains("exchange_calendar") || (day.getDayOfWeek()!=DayOfWeek.SATURDAY && day.getDayOfWeek()!=DayOfWeek.SUNDAY))rows.processRow(rs);
             }
             return null;
         }).when(jdbc).query(anyString(),any(RowCallbackHandler.class),anyLong(),anyLong());
@@ -54,12 +57,41 @@ class MainStrategyFrozenSourceDateTest {
         JobDefinitionJson.mapper().writeValue(file.toFile(),plan);return file;
     }
     @Test void newPlanUsesTheRequestedDateInsteadOfTheMachinesCurrentDate() throws Exception {
-        var jdbc=mock(JdbcTemplate.class);when(jdbc.queryForObject(anyString(),eq(Long.class))).thenReturn(micros(TARGET));
+        var jdbc=mock(JdbcTemplate.class);when(jdbc.queryForObject(anyString(),eq(Long.class),anyLong())).thenReturn(micros(TARGET));
         var pipeline=pipeline(jdbc);var request=request();
         var plan=(MainStrategyDailyPipeline.PipelinePlan)invoke(pipeline,"plan",new Class<?>[]{RunRequest.class},request);
         assertEquals(TARGET,plan.sourceLogicalDate());
         assertEquals(List.of(TARGET),plan.tradeDates());
         assertTrue(Files.isRegularFile(root.resolve(request.instanceId()).resolve("plan.json")));
+    }
+    @Test void etfLagAndInteriorHoleExtendThePlanEvenWhenStockMaximumIsCurrent() throws Exception {
+        var jdbc=mock(JdbcTemplate.class);var pipeline=pipeline(jdbc);
+        when(jdbc.queryForObject(anyString(),eq(Long.class),anyLong())).thenReturn(micros(TARGET));
+        doAnswer(call->{
+            RowCallbackHandler rows=call.getArgument(1);
+            long from=call.getArgument(2),end=call.getArgument(3);String sql=call.getArgument(0);
+            for(long cursor=from;cursor<end;cursor+=86_400_000_000L) {
+                var day=LocalDate.ofEpochDay(cursor/86_400_000_000L);
+                boolean open=day.getDayOfWeek()!=DayOfWeek.SATURDAY&&day.getDayOfWeek()!=DayOfWeek.SUNDAY;
+                if(!sql.contains("exchange_calendar")&&(!open || (sql.contains("\"etf_daily\"")&&day.equals(TARGET.minusDays(7)))
+                        || (sql.contains("\"moneyflow\"")&&day.equals(TARGET.minusDays(10)))))continue;
+                var rs=mock(ResultSet.class);when(rs.getObject(1)).thenReturn(cursor);when(rs.getObject(2)).thenReturn(open?1:0);rows.processRow(rs);
+            }
+            return null;
+        }).when(jdbc).query(anyString(),any(RowCallbackHandler.class),anyLong(),anyLong());
+        var plan=(MainStrategyDailyPipeline.PipelinePlan)invoke(pipeline,"plan",new Class<?>[]{RunRequest.class},request());
+        assertEquals(TARGET.minusDays(10),plan.from());
+        assertEquals(TARGET,plan.to());
+    }
+    @Test void etfWithoutBaselineOrWithExcessiveLagBlocksBeforeSavingPlan() throws Exception {
+        for(Long latest:Arrays.asList(null,micros(TARGET.minusDays(40)))) {
+            var jdbc=mock(JdbcTemplate.class);var pipeline=pipeline(jdbc);
+            when(jdbc.queryForObject(anyString(),eq(Long.class),anyLong())).thenReturn(micros(TARGET));
+            when(jdbc.queryForObject(contains("FROM \"etf_daily\""),eq(Long.class),anyLong())).thenReturn(latest);
+            var failure=assertThrows(InvocationTargetException.class,()->invoke(pipeline,"plan",new Class<?>[]{RunRequest.class},request()));
+            assertTrue(failure.getCause().getMessage().contains("etf_daily"));
+            assertFalse(Files.exists(root.resolve(request().instanceId()).resolve("plan.json")));
+        }
     }
     @Test void retryPassesTheSavedSourceDateToTheOwnerWithoutRewritingThePlan() throws Exception {
         var jdbc=mock(JdbcTemplate.class);var pipeline=pipeline(jdbc);var request=request();

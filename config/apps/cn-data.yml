@@ -57,6 +57,9 @@ app.sync.financial:
   scope-file: ""
   scope-sha256: ""
   earliest-period: 2018-03-31
+  # 含客户端重试的整轮请求预算；超限在采集前阻断，不静默截断证券。
+  max-request-attempts: 1000
+  execution-window: PT4H
 
 # 常驻数据 API 可托管 Batch；启用后仍遵守 Quartz 已保存的暂停状态。
 jdb:
