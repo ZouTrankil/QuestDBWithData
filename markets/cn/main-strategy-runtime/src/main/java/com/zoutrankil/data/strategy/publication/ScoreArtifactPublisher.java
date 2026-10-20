@@ -1,7 +1,9 @@
 package com.zoutrankil.data.strategy.publication;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.zoutrankil.data.strategy.input.StrategyInputSchema;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.parquet.example.data.Group;
@@ -70,7 +72,29 @@ public final class ScoreArtifactPublisher {
             Ref panelRef,
             Ref coverageRef,
             String provenanceSha256,
-            String recipeSha256) {}
+            String recipeSha256,
+            StrategyInputSchema inputSchema) {
+        public Publication {
+            Objects.requireNonNull(inputSchema);
+        }
+
+        public Publication(
+                String producerRunId,
+                LocalDate resolvedEndDate,
+                Ref panelRef,
+                Ref coverageRef,
+                String provenanceSha256,
+                String recipeSha256) {
+            this(
+                    producerRunId,
+                    resolvedEndDate,
+                    panelRef,
+                    coverageRef,
+                    provenanceSha256,
+                    recipeSha256,
+                    StrategyInputSchema.V1);
+        }
+    }
 
     private enum Kind {
         DATE,
@@ -124,6 +148,8 @@ public final class ScoreArtifactPublisher {
         if (expected.isEmpty() || expected.size() != signalDates.size())
             throw new IllegalArgumentException("Unique complete signal dates required");
         var sourceProof = JSON.valueToTree(provenance);
+        StrategyInputSchema schema = proofSchema(sourceProof);
+        String codeColumn = schema == StrategyInputSchema.V2 ? "instrument_code" : "ts_code";
         if (!sourceProof.path("sourceComplete").asBoolean()
                 || !recipeSha256.equals(sourceProof.path("recipeHashes").path("recipe").asText())
                 || !expected.last().toString().equals(sourceProof.path("end").asText()))
@@ -134,7 +160,9 @@ public final class ScoreArtifactPublisher {
                     "Score panel/coverage does not cover exactly the frozen signal grid");
         var keys = new HashSet<String>();
         for (var row : panel) {
-            String code = Objects.toString(row.get("ts_code"), "");
+            if (row.containsKey(schema == StrategyInputSchema.V2 ? "ts_code" : "instrument_code"))
+                throw new IllegalStateException("评分身份列与声明版本不符");
+            String code = Objects.toString(row.get(codeColumn), "");
             if (!code.matches("[0-9]{6}\\.(SH|SZ|BJ)")
                     || !keys.add(day(row.get("trade_date")) + ":" + code))
                 throw new IllegalStateException("Invalid or duplicate score panel key");
@@ -175,8 +203,8 @@ public final class ScoreArtifactPublisher {
                         }
                     }
                 }
-                metadata(c, "score_panel", runId, panelRef);
-                metadata(c, "score_coverage", runId, coverageRef);
+                metadata(c, "score_panel", runId, panelRef, schema);
+                metadata(c, "score_coverage", runId, coverageRef, schema);
                 alias(c, "score_panel", panelRef);
                 alias(c, "score_coverage", coverageRef);
                 try (var s =
@@ -280,11 +308,12 @@ public final class ScoreArtifactPublisher {
             c.setAutoCommit(false);
             var refs = new LinkedHashMap<String, Ref>();
             String run = null;
+            String schemaVersion = null;
             for (String role : List.of("score_panel", "score_coverage")) {
                 String query =
                         selectedRun == null
-                                ? "SELECT m.uri,m.version,m.content_hash,m.schema_digest,m.row_count,m.data_start_date,m.data_end_date,m.run_id FROM resource_aliases a JOIN resource_metadata m ON m.uri=a.target_uri AND m.version=a.target_version AND m.content_hash=a.target_content_hash WHERE a.alias=? AND m.role=? AND m.producer_capability=?"
-                                : "SELECT m.uri,m.version,m.content_hash,m.schema_digest,m.row_count,m.data_start_date,m.data_end_date,m.run_id FROM resource_metadata m WHERE m.run_id=? AND m.role=? AND m.producer_capability=?";
+                                ? "SELECT m.uri,m.version,m.content_hash,m.schema_digest,m.row_count,m.data_start_date,m.data_end_date,m.run_id,m.schema_version FROM resource_aliases a JOIN resource_metadata m ON m.uri=a.target_uri AND m.version=a.target_version AND m.content_hash=a.target_content_hash WHERE a.alias=? AND m.role=? AND m.producer_capability=?"
+                                : "SELECT m.uri,m.version,m.content_hash,m.schema_digest,m.row_count,m.data_start_date,m.data_end_date,m.run_id,m.schema_version FROM resource_metadata m WHERE m.run_id=? AND m.role=? AND m.producer_capability=?";
                 try (var q = c.prepareStatement(query)) {
                     q.setString(
                             1,
@@ -315,6 +344,11 @@ public final class ScoreArtifactPublisher {
                         if (run != null && !run.equals(rs.getString(8)))
                             throw new IllegalStateException("Scores have different producer runs");
                         run = rs.getString(8);
+                        String declared = rs.getString(9);
+                        if (!("v1".equals(declared) || "v2".equals(declared))
+                                || schemaVersion != null && !schemaVersion.equals(declared))
+                            throw new IllegalStateException("评分对的 schema 版本不一致或未知");
+                        schemaVersion = declared;
                         refs.put(role, ref);
                         if (rs.next())
                             throw new IllegalStateException(
@@ -349,6 +383,9 @@ public final class ScoreArtifactPublisher {
                     if (!sha(proof).equals(rs.getString(2)))
                         throw new IllegalStateException("Score source proof changed");
                     var sourceProof = JSON.readTree(Files.readAllBytes(proof));
+                    StrategyInputSchema schema = proofSchema(sourceProof);
+                    if (!artifactVersion(schema).equals(schemaVersion))
+                        throw new IllegalStateException("评分目录版本与不可变证明不符");
                     if (!sourceProof.path("sourceComplete").asBoolean()
                             || !rs.getString(1)
                                     .equals(
@@ -360,10 +397,40 @@ public final class ScoreArtifactPublisher {
                         throw new IllegalStateException(
                                 "Score complete date/recipe proof is inconsistent with publication receipt");
                     return new Publication(
-                            run, cov.end(), panel, cov, rs.getString(2), rs.getString(1));
+                            run, cov.end(), panel, cov, rs.getString(2), rs.getString(1), schema);
                 }
             }
         }
+    }
+
+    private static String artifactVersion(StrategyInputSchema schema) {
+        return schema == StrategyInputSchema.V2 ? "v2" : "v1";
+    }
+
+    /** 旧证明没有输入版本；显式声明必须精确匹配，不接受换个版本号的旧键证明。 */
+    private static StrategyInputSchema proofSchema(JsonNode proof) {
+        if (!proof.has("inputSchema")) {
+            var coverage = proof.path("coverage");
+            if (coverage.has("inputSchema")
+                    || coverage.has("keyEncoding")
+                    || coverage.has("schema")
+                            && !StrategyInputSchema.V1
+                                    .coverageSchema()
+                                    .equals(coverage.path("schema").asText()))
+                throw new IllegalStateException("旧评分证明不能混入另一版覆盖声明");
+            return StrategyInputSchema.V1;
+        }
+        String declared = proof.path("inputSchema").asText();
+        if (!StrategyInputSchema.V2.inputSchema().equals(declared))
+            throw new IllegalStateException("未知评分输入版本");
+        var coverage = proof.path("coverage");
+        if (!StrategyInputSchema.V2.coverageSchema().equals(coverage.path("schema").asText())
+                || !declared.equals(coverage.path("inputSchema").asText())
+                || !StrategyInputSchema.V2
+                        .keyEncoding()
+                        .equals(coverage.path("keyEncoding").asText()))
+            throw new IllegalStateException("v2 评分缺少对应标准键覆盖证明");
+        return StrategyInputSchema.V2;
     }
 
     public Path provenancePath(Publication p) {
@@ -690,7 +757,9 @@ public final class ScoreArtifactPublisher {
                 end);
     }
 
-    private static void metadata(Connection c, String role, String run, Ref ref) throws Exception {
+    private static void metadata(
+            Connection c, String role, String run, Ref ref, StrategyInputSchema schema)
+            throws Exception {
         registerMetadata(
                 c,
                 role,
@@ -698,7 +767,8 @@ public final class ScoreArtifactPublisher {
                 ref,
                 "quant_platform.research.etf_only_top2." + role,
                 PRODUCER,
-                List.of());
+                List.of(),
+                artifactVersion(schema));
     }
 
     public static void registerMetadata(
@@ -710,16 +780,36 @@ public final class ScoreArtifactPublisher {
             String producer,
             List<Ref> parents)
             throws Exception {
+        registerMetadata(c, role, run, ref, schemaId, producer, parents, "v1");
+    }
+
+    /** 版本进入目录不可变身份，不能用同一文件重新盖成另一版。 */
+    public static void registerMetadata(
+            Connection c,
+            String role,
+            String run,
+            Ref ref,
+            String schemaId,
+            String producer,
+            List<Ref> parents,
+            String schemaVersion)
+            throws Exception {
+        if (!("v1".equals(schemaVersion) || "v2".equals(schemaVersion)))
+            throw new IllegalArgumentException("未知产物 schema 版本");
         try (var q =
                 c.prepareStatement(
-                        "SELECT content_hash,schema_digest,run_id FROM resource_metadata WHERE uri=? AND version=?")) {
+                        "SELECT content_hash,schema_digest,run_id,schema_version,role,schema_id,producer_capability FROM resource_metadata WHERE uri=? AND version=?")) {
             q.setString(1, ref.uri());
             q.setString(2, ref.version());
             try (var rs = q.executeQuery()) {
                 if (rs.next()) {
                     if (!ref.contentHash().equals(rs.getString(1))
                             || !ref.schemaDigest().equals(rs.getString(2))
-                            || !run.equals(rs.getString(3)))
+                            || !run.equals(rs.getString(3))
+                            || !schemaVersion.equals(rs.getString(4))
+                            || !role.equals(rs.getString(5))
+                            || !schemaId.equals(rs.getString(6))
+                            || !producer.equals(rs.getString(7)))
                         throw new IllegalStateException("Immutable metadata collision");
                     return;
                 }
@@ -735,7 +825,7 @@ public final class ScoreArtifactPublisher {
                 mediaType(ref),
                 role,
                 schemaId,
-                "v1",
+                schemaVersion,
                 ref.schemaDigest(),
                 Files.size(ref.path()),
                 producer,

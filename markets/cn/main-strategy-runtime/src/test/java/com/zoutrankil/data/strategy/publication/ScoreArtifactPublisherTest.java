@@ -6,9 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.zoutrankil.data.strategy.input.StrategyInputSchema;
 import com.zoutrankil.data.strategy.score.FrozenScalarValues;
 
+import org.apache.parquet.example.data.simple.convert.GroupRecordConverter;
 import org.apache.parquet.hadoop.ParquetFileReader;
+import org.apache.parquet.io.ColumnIOFactory;
 import org.apache.parquet.io.LocalInputFile;
 import org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName;
 import org.junit.jupiter.api.Test;
@@ -60,6 +63,150 @@ class ScoreArtifactPublisherTest {
     private ScoreArtifactPublisher.Publication publish(String run, LocalDate day) throws Exception {
         return new ScoreArtifactPublisher(root)
                 .publish(run, panel(day), coverage(day), List.of(day), RECIPE, proof(day));
+    }
+
+    private Map<String, Object> v2Proof(LocalDate day) {
+        var result = new LinkedHashMap<String, Object>(proof(day));
+        result.put("inputSchema", StrategyInputSchema.V2.inputSchema());
+        result.put(
+                "coverage",
+                Map.of(
+                        "schema",
+                        StrategyInputSchema.V2.coverageSchema(),
+                        "inputSchema",
+                        StrategyInputSchema.V2.inputSchema(),
+                        "keyEncoding",
+                        StrategyInputSchema.V2.keyEncoding()));
+        return result;
+    }
+
+    private List<Map<String, Object>> v2Panel(LocalDate day) {
+        return panel(day).stream()
+                .map(row -> FrozenScalarValues.renaming(row, Map.of("ts_code", "instrument_code")))
+                .toList();
+    }
+
+    @Test
+    void standardIdentityRoundTripsThroughActualParquetAndCatalogWithoutRebindingOldRun()
+            throws Exception {
+        var old = publish("legacy", D);
+        var publisher = new ScoreArtifactPublisher(root);
+        var current =
+                publisher.publish(
+                        "standard",
+                        v2Panel(D.plusDays(1)),
+                        coverage(D.plusDays(1)),
+                        List.of(D.plusDays(1)),
+                        RECIPE,
+                        v2Proof(D.plusDays(1)));
+        assertEquals(StrategyInputSchema.V2, current.inputSchema());
+        assertEquals(current, publisher.byRun("standard"));
+        assertEquals(old, publisher.byRun("legacy"));
+        assertEquals(StrategyInputSchema.V1, old.inputSchema());
+        try (var reader = ParquetFileReader.open(new LocalInputFile(current.panelRef().path()))) {
+            var schema = reader.getFooter().getFileMetaData().getSchema();
+            assertTrue(schema.containsField("instrument_code"));
+            assertFalse(schema.containsField("ts_code"));
+            assertEquals(
+                    PrimitiveTypeName.INT32,
+                    schema.getType("trade_date").asPrimitiveType().getPrimitiveTypeName());
+            var records =
+                    new ColumnIOFactory()
+                            .getColumnIO(schema)
+                            .getRecordReader(
+                                    reader.readNextRowGroup(), new GroupRecordConverter(schema));
+            var row = records.read();
+            assertEquals("510300.SH", row.getString("instrument_code", 0));
+            assertEquals(D.plusDays(1).toEpochDay(), row.getInteger("trade_date", 0));
+            assertEquals(.625, row.getDouble("etf_factor_score_base", 0));
+            assertFalse(row.getBoolean("self_overheat_flag", 0));
+        }
+        try (var c = publisher.openCatalogWriter();
+                var q = c.createStatement();
+                var rs =
+                        q.executeQuery(
+                                "SELECT count(*) FROM resource_metadata WHERE run_id='standard' AND schema_version='v2'")) {
+            assertTrue(rs.next());
+            assertEquals(2, rs.getInt(1));
+        }
+        try (var c = publisher.openCatalogWriter()) {
+            assertThrows(
+                    IllegalStateException.class,
+                    () ->
+                            ScoreArtifactPublisher.registerMetadata(
+                                    c,
+                                    "score_panel",
+                                    "standard",
+                                    current.panelRef(),
+                                    "quant_platform.research.etf_only_top2.score_panel",
+                                    "java.research.etf_only_top2.prepare_inputs",
+                                    List.of(),
+                                    "v1"));
+        }
+    }
+
+    @Test
+    void mismatchedIdentityOrIncompleteVersionProofCannotAdvanceAliases() throws Exception {
+        var old = publish("legacy", D);
+        var publisher = new ScoreArtifactPublisher(root);
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        publisher.publish(
+                                "wrong_columns",
+                                panel(D),
+                                coverage(D),
+                                List.of(D),
+                                RECIPE,
+                                v2Proof(D)));
+        var relabeled = new LinkedHashMap<String, Object>(proof(D));
+        relabeled.put("inputSchema", StrategyInputSchema.V2.inputSchema());
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        publisher.publish(
+                                "relabeled",
+                                v2Panel(D),
+                                coverage(D),
+                                List.of(D),
+                                RECIPE,
+                                relabeled));
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        publisher.publish(
+                                "wrong_legacy",
+                                v2Panel(D),
+                                coverage(D),
+                                List.of(D),
+                                RECIPE,
+                                proof(D)));
+        var missingHeader = new LinkedHashMap<String, Object>(v2Proof(D));
+        missingHeader.remove("inputSchema");
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        publisher.publish(
+                                "missing_header",
+                                panel(D),
+                                coverage(D),
+                                List.of(D),
+                                RECIPE,
+                                missingHeader));
+        assertEquals(old, publisher.latest(D));
+    }
+
+    @Test
+    void directoryVersionTamperingFailsEvenWhenBothRolesWereRelabeled() throws Exception {
+        var publisher = new ScoreArtifactPublisher(root);
+        publisher.publish("standard", v2Panel(D), coverage(D), List.of(D), RECIPE, v2Proof(D));
+        try (var c = publisher.openCatalogWriter();
+                var q = c.createStatement()) {
+            q.executeUpdate(
+                    "UPDATE resource_metadata SET schema_version='v1' WHERE run_id='standard'");
+            c.commit();
+        }
+        assertThrows(IllegalStateException.class, () -> publisher.byRun("standard"));
     }
 
     @Test
