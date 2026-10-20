@@ -13,18 +13,10 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
 
-/** Commands and service dependencies for this CLI family. */
+/** 股票命令按目录分发；具体参数与同步恢复规则由原执行分支校验。 */
 @Component
 @ConditionalOnNotWebApplication
 public final class StockCommands implements CliCommandFamily {
-    private static final java.util.Set<String> COMMANDS = java.util.Set.of(
-            "plan-daily-job", "run-daily-job", "plan-daily-basic-job",
-            "run-daily-basic-job", "plan-stk-factor-job", "run-stk-factor-job", "recover-stk-factor-job",
-            "plan-stk-limit-job", "run-stk-limit-job", "plan-stk-st-daily-job",
-            "run-stk-st-daily-job", "plan-stk-suspend-job", "run-stk-suspend-job",
-            "finish-stk-suspend-publication", "finish-stk-st-daily-publication", "run-stock-basic-job",
-            "plan-stock-detail-job", "run-stock-detail-job", "reconcile-stock-detail-run",
-            "finish-stock-detail-publication");
     private final com.zoutrankil.data.stock.application.StockBasicJobService jobService;
     private final com.zoutrankil.data.stock.application.StockDetailInfoJobService stockDetailService;
     private final com.zoutrankil.data.stock.application.DailyJobService dailyService;
@@ -52,17 +44,17 @@ public final class StockCommands implements CliCommandFamily {
         this.stockSuspendService = stockSuspendService;
     }
 
-    @Override public java.util.Set<String> commands() { return COMMANDS; }
+    @Override public java.util.Set<String> commands() { return StockCommand.commands(); }
 
     @Override public void execute(String command, Map<String, String> options) throws Exception {
-        switch (command) {
-            case "recover-stk-factor-job" -> {
+        switch (StockCommand.require(command)) {
+            case RECOVER_STK_FACTOR_JOB -> {
                 if(stockFactorService==null || !options.keySet().equals(java.util.Set.of("--run-id","--writer-log")))
                     throw new IllegalArgumentException("Stock factor recovery requires --run-id and --writer-log");
                 CliOutput.printJson(stockFactorService.recover(options.get("--run-id"),java.nio.file.Path.of(options.get("--writer-log"))),
                         CliOutput.Profile.JOB_DEFINITION,true);
             }
-            case "plan-daily-job", "run-daily-job" -> {
+            case PLAN_DAILY_JOB, RUN_DAILY_JOB -> {
                 if(options.containsKey("--resume-from")) {
                     if(dailyService==null || !command.equals("run-daily-job")
                             || !options.keySet().equals(java.util.Set.of("--resume-from")))
@@ -99,7 +91,7 @@ public final class StockCommands implements CliCommandFamily {
                         throw new IncompleteCommandException("daily sync incomplete: " + result.state() + "; run=" + result.runId());
                 }
             }
-            case "plan-daily-basic-job", "run-daily-basic-job" -> {
+            case PLAN_DAILY_BASIC_JOB, RUN_DAILY_BASIC_JOB -> {
                 if(options.containsKey("--resume-from")) {
                     if(dailyBasicService==null || !command.equals("run-daily-basic-job")
                             || !options.keySet().equals(java.util.Set.of("--resume-from")))
@@ -137,7 +129,7 @@ public final class StockCommands implements CliCommandFamily {
                         throw new IncompleteCommandException("daily_basic sync incomplete: " + result.state() + "; run=" + result.runId());
                 }
             }
-            case "plan-stk-factor-job", "run-stk-factor-job" -> {
+            case PLAN_STK_FACTOR_JOB, RUN_STK_FACTOR_JOB -> {
                 if(options.containsKey("--resume-from")) {
                     if(stockFactorService==null || !command.equals("run-stk-factor-job")
                             || !options.keySet().equals(java.util.Set.of("--resume-from")))
@@ -176,7 +168,7 @@ public final class StockCommands implements CliCommandFamily {
                         throw new IncompleteCommandException("stk_factor sync incomplete: " + result.state() + "; run=" + result.runId());
                 }
             }
-            case "plan-stk-limit-job", "run-stk-limit-job" -> {
+            case PLAN_STK_LIMIT_JOB, RUN_STK_LIMIT_JOB -> {
                 if(options.containsKey("--resume-from")) {
                     if(stockLimitService==null || !command.equals("run-stk-limit-job")
                             || !options.keySet().equals(java.util.Set.of("--resume-from")))
@@ -214,7 +206,7 @@ public final class StockCommands implements CliCommandFamily {
                         throw new IncompleteCommandException("stk_limit sync incomplete: " + result.state() + "; run=" + result.runId());
                 }
             }
-            case "plan-stk-st-daily-job", "run-stk-st-daily-job" -> {
+            case PLAN_STK_ST_DAILY_JOB, RUN_STK_ST_DAILY_JOB -> {
                 if(options.containsKey("--resume-from")) {
                     if(stockStDailyService==null || !command.equals("run-stk-st-daily-job")
                             || !options.keySet().equals(java.util.Set.of("--resume-from")))
@@ -255,7 +247,7 @@ public final class StockCommands implements CliCommandFamily {
                         throw new IncompleteCommandException("stk_st_daily sync incomplete: " + result.state() + "; run=" + result.runId());
                 }
             }
-            case "plan-stk-suspend-job", "run-stk-suspend-job" -> {
+            case PLAN_STK_SUSPEND_JOB, RUN_STK_SUSPEND_JOB -> {
                 if(stockSuspendService==null) throw new IllegalArgumentException("Stock suspension service unavailable");
                 if(options.containsKey("--resume-from")) {
                     if(!command.equals("run-stk-suspend-job") || !options.keySet().equals(java.util.Set.of("--resume-from")))
@@ -286,7 +278,7 @@ public final class StockCommands implements CliCommandFamily {
                         throw new IncompleteCommandException("stk_suspend incomplete: "+result.state()+"; run="+result.runId());
                 }
             }
-            case "finish-stk-suspend-publication", "finish-stk-st-daily-publication" -> {
+            case FINISH_STK_SUSPEND_PUBLICATION, FINISH_STK_ST_DAILY_PUBLICATION -> {
                 if(!options.keySet().equals(java.util.Set.of("--run","--writer-stopped"))
                         ||!"true".equals(options.get("--writer-stopped")))
                     throw new IllegalArgumentException("Explicit --run and --writer-stopped true required");
@@ -299,7 +291,7 @@ public final class StockCommands implements CliCommandFamily {
                     CliOutput.printJson(stockStDailyService.finishInterrupted(options.get("--run"),true), CliOutput.Profile.JOB_DEFINITION, true);
                 }
             }
-            case "run-stock-basic-job" -> {
+            case RUN_STOCK_BASIC_JOB -> {
                 if (!options.keySet().containsAll(java.util.Set.of("--codes", "--logical-date"))
                         || !java.util.Set.of("--codes", "--logical-date", "--resume-from").containsAll(options.keySet()))
                     throw new IllegalArgumentException("Explicit --codes and --logical-date are required");
@@ -312,7 +304,7 @@ public final class StockCommands implements CliCommandFamily {
                         && result.state() != com.zoutrankil.data.domain.SyncRunState.VERIFIED_EMPTY)
                     throw new IncompleteCommandException("Sync did not complete: " + result.state() + "; run=" + result.runId());
             }
-            case "plan-stock-detail-job", "run-stock-detail-job" -> {
+            case PLAN_STOCK_DETAIL_JOB, RUN_STOCK_DETAIL_JOB -> {
                 if (!options.containsKey("--logical-date")
                         || !java.util.Set.of("--logical-date","--codes","--discover","--resume-from").containsAll(options.keySet())
                         || options.containsKey("--codes") == options.containsKey("--discover"))
@@ -340,7 +332,7 @@ public final class StockCommands implements CliCommandFamily {
                         throw new IncompleteCommandException("Stock-detail sync incomplete: "+result.state()+"; run="+result.runId());
                 }
             }
-            case "reconcile-stock-detail-run", "finish-stock-detail-publication" -> {
+            case RECONCILE_STOCK_DETAIL_RUN, FINISH_STOCK_DETAIL_PUBLICATION -> {
                 if (!options.keySet().equals(java.util.Set.of("--run","--writer-stopped"))
                         || !"true".equals(options.get("--writer-stopped")))
                     throw new IllegalArgumentException("Explicit --run and --writer-stopped true required");
