@@ -315,4 +315,18 @@ Yahoo 的 PRTA 原响应在 2012-12-18 至 20 日返回三根全零价格。[发
 
 3475 行二十列已独立从 PGWire 回读一致，原 87717 行价格与 17 条映射未变；本次不新增永久映射。锁内确认价格和映射表 WAL 结清、缓冲为零、未挂起，物理表和结构未变，上市前三根零价格及截止日后的行情仍未入库。原文、身份和边界核对、Native 回执及验证记录在 `var/market-data/scope-review/prta-recovery-20261020/`。
 
-该目录的 `main-progress-independent-verification.json` 还核对两个主采集年度组：共 256 个来源、744038 行、42 个年度窗口，均为新增行。每个成员原文和 ZIP 内容、Native prepared 与回读文件摘要已对照，全部二十列另经 PGWire 逐年重读一致，核对前后已完成队列不变。主进程继续处理后续来源；RCAT 原 Yahoo 响应早年含零价，仍待独立来源核对。上述已验收范围不代表全市场及全部历史已完成。
+该目录的 `main-progress-independent-verification.json` 还核对两个主采集年度组：共 256 个来源、744038 行、42 个年度窗口，均为新增行。每个成员原文和 ZIP 内容、Native prepared 与回读文件摘要已对照，全部二十列另经 PGWire 逐年重读一致，核对前后已完成队列不变。主进程继续处理后续来源；RCAT 后续合法窗口及剩余九日缺口见下文。上述已验收范围不代表全市场及全部历史已完成。
+
+### RCAT 合法历史窗口与九日缺口
+
+原 Yahoo 响应在 2006-01-03 至 2026-10-16 有 5230 个日期，与 SPY 实有参照一致，但九天含十二个非法零价字段。保留原响应及 `FAILED_SOURCE` 任务，将其余日期分成十个连续窗口，已写入并逐字段验收 5221 行；九天仍待补全，不把原任务标成完整成功。缺口为 2008-01-31、08-27、11-07，2009-04-14、05-28、09-16、11-30，2010-01-05 和 2012-12-28。
+
+这些行使用 `raw_price_basis=RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED`，按完整响应中的后续合股还原价格和股数，保留来源精度。5221 行中有 2796 行来源量为零，不能当作这些日期有实际成交的证据，也不能据此判定当日无成交；其余 2425 行为来源正量报价。
+
+历史主体先后为 Broadleaf、EnergyTek、Timefire，2019 年再与 Red Cat 合并，不能把早期报价解释成无人机业务历史。[2014 年申报](https://ir.redcatholdings.com/sec-filings/all-sec-filings/content/0001445866-14-000925/energytekcorp07302014.htm)确认 7 月 23 日一百五十合一，[2016 年发行人公告](https://www.globenewswire.com/news-release/2016/11/21/1126262/0/en/TimefireVR-Announces-Name-Change-Symbol-Change-and-Reverse-Stock-Split.html)确认 11 月 22 日十合一，[2019 年申报](https://ir.redcatholdings.com/sec-filings/all-sec-filings/content/0001554795-19-000332/rcat0919form10q.htm)确认 8 月 1 日一千二百合一，均与 Yahoo 事件一致。2016 年公告经网页核读，本机 HTTP 403 回执保留；另外四份发行人 HTML 已完整冻结，包括旧主体、更名合并和 2021 年计划升板资料。
+
+另请求的 Tiingo 全历史只返回 2262 行，自其首日 2008-01-31 起相对 SPY 参照仍少 2446 天，响应仅包含 2019 年合股行。九条早期调整收盘价与 Yahoo 相差 1500 倍，等于前两次合股比例乘积；这只是诊断，未独立证明供应商的比例形成原因，不修改两份原件，也不把这份稀疏响应当作完整替代，本次不将其写入正式价格。
+
+十段 Native 运行均已验收，全部二十列另由 PGWire 独立重建并回读一致；原 91192 行价格和 17 条映射未变。锁内确认两表 WAL 结清、缓冲为零、未挂起，结构和物理表未变，九个非法日期与截止日后的价格仍未写入。证据在 `var/market-data/scope-review/rcat-recovery-20261020/`，含原文关联、发行人资料、十段意图和回执、供应商差异、独立回读及 WAL。
+
+同目录 `main-progress-independent-verification.json` 另对一个新完成的主采集组核对了 128 个来源、391046 行、21 个年度窗口，均为新增行。ZIP 成员、原件和 Native 证据摘要全部通过，二十列经 PGWire 逐年回读一致，已完成队列前后未变；全市场采集继续推进。
