@@ -49,3 +49,7 @@
 保留原运行、来源文件、日志、锁和物理目标身份，先确认原写入进程是否已经结束，再按该任务的恢复入口处理。等待超时不等于进程已退出；结果不确定时不要另开任务重发。
 
 ETF 的特定恢复方式见 [ETF 行情恢复](etf-daily-recovery.md)。Batch 的状态和恢复见[批处理说明](batch.md)。五条财务源已补同步及恢复入口，生产接管验收见[维护说明](questdb-maintenance.md#五条财务增量接管)。
+
+## 已退役来源
+
+`margin_zrz`、`moneyflow_dc`、`qmt_1m_bars` 的本地代码入口已移除。正式数据清理状态和操作条件见[退役记录](operations/cn-retirement/README.md)。其他两融、资金流、QMT 原生交易和实时 L2 不在删除范围。

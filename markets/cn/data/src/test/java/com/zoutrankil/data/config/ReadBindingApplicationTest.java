@@ -46,7 +46,7 @@ class ReadBindingApplicationTest {
             context.register(ReadGroupConfiguration.class);
             context.refresh();
             var catalog = context.getBean(ReadBindingCatalog.class);
-            assertEquals(48, catalog.registrations().size());
+            assertEquals(46, catalog.registrations().size());
             var binding = catalog.bind(context.getBean(DatasetRegistry.class)).getFirst();
             assertSame(definition, binding.definition());
             assertEquals(String.class, binding.rowType());
@@ -118,12 +118,13 @@ class ReadBindingApplicationTest {
             var historicalIds = new LinkedHashSet<>(expectedTyped.keySet());
             historicalIds.addAll(originalGenericIds());
             assertEquals(44, historicalIds.size(), "The canonical contract has 10 typed and 34 generic readers");
+            historicalIds.removeAll(Set.of("margin_zrz", "moneyflow_dc"));
             var addedIds = Set.of("market_sentiment_daily", "regime_features_monitor_daily", "cn_bond_yield_curve", "cashflow", "income", "express", "forecast", "fina_indicator");
             var readableIds = readable.stream().map(DatasetDefinition::datasetId).collect(Collectors.toSet());
             assertEquals(historicalIds, readableIds.stream().filter(id -> !addedIds.contains(id)).collect(Collectors.toSet()));
             assertTrue(readableIds.containsAll(addedIds));
-            assertEquals(52, readable.size());
-            assertEquals(52, catalog.registrations().size());
+            assertEquals(50, readable.size());
+            assertEquals(50, catalog.registrations().size());
             assertEquals(readable.size(), bound.size());
             for (var id : addedIds) {
                 var registration = catalog.registrations().stream().filter(value -> value.datasetId().equals(id))

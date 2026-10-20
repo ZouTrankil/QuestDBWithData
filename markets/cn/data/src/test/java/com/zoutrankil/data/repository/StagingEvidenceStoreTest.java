@@ -2,7 +2,7 @@ package com.zoutrankil.data.repository;
 
 import com.zoutrankil.data.flow.application.MoneyflowHsgtStaging;
 import com.zoutrankil.data.margin.application.MarginAllStaging;
-import com.zoutrankil.data.margin.application.MarginZrzStaging;
+
 
 import com.zoutrankil.data.index.storage.DcIndexStaging;
 import com.zoutrankil.data.index.application.IndexMonthlyStaging;
@@ -37,8 +37,7 @@ class StagingEvidenceStoreTest {
                     "D022 stage READY intent requires an atomic durable replace"),
             new DurableStage(MarginAllStaging.class, "margin_all", "writeNew",
                     "D028 READY intent requires atomic durable replace"),
-            new DurableStage(MarginZrzStaging.class, "margin_zrz", "writeNew",
-                    "D031 READY intent requires atomic durable replace"),
+
             new DurableStage(MoneyflowHsgtStaging.class, "moneyflow_hsgt", "writeNew",
                     "D027 READY intent requires atomic durable replace"));
 
@@ -79,7 +78,7 @@ class StagingEvidenceStoreTest {
     }
 
     @Test void monthlyAndMarginReceiptsRemainStrictlyImmutable() throws Exception {
-        for (var stage : DURABLE_STAGES.subList(0, 3)) {
+        for (var stage : DURABLE_STAGES.subList(0, 2)) {
             Path receipt = root.resolve(stage.dataset() + "-receipt.json");
             var body = body(stage.dataset(), "READY");
             invoke(stage.type(), stage.writeMethod(), receipt, body);
@@ -138,7 +137,7 @@ class StagingEvidenceStoreTest {
         Files.write(folder.resolve("test-intent.json"), new byte[4 * 1024 * 1024 + 1]);
         Path run = folder.getParent();
         var messages = List.of("D022 stage intent is symlinked or outside its bounded file size",
-                "D028 stage intent invalid", "D031 stage intent invalid", "D027 stage intent invalid");
+                "D028 stage intent invalid", "D027 stage intent invalid");
         for (int i = 0; i < DURABLE_STAGES.size(); i++) {
             var stage = DURABLE_STAGES.get(i);
             assertEquals(messages.get(i), assertThrowsExactly(IOException.class,
@@ -162,7 +161,6 @@ class StagingEvidenceStoreTest {
     private static boolean hasStageIntent(DurableStage stage, Path run) throws Exception {
         if (stage.type() == IndexMonthlyStaging.class) return IndexMonthlyStaging.hasStageIntent(run);
         if (stage.type() == MarginAllStaging.class) return MarginAllStaging.hasStageIntent(run);
-        if (stage.type() == MarginZrzStaging.class) return MarginZrzStaging.hasStageIntent(run);
         return MoneyflowHsgtStaging.hasStageIntent(run);
     }
 

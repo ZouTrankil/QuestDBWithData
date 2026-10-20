@@ -21,10 +21,10 @@ class MarginStageDiscardContractTest {
     @TempDir Path temp;
 
     /** Real durable authority and owned proof; mocks replace only physical QuestDB operations. */
-    @ParameterizedTest @ValueSource(booleans={false,true})
+    @ParameterizedTest @ValueSource(booleans={false})
     void validFrozenLogicalIdentityAllowsOwnedUnpublishedStageDiscard(boolean zrz)throws Exception {
-        String prefix=zrz?"java_d031_margin_zrz_":"java_d028_margin_all_",target=prefix+"contract",stage=prefix+"stage_"+"1".repeat(32),run="owned-run";
-        var definition=zrz?MarginZrzSyncJobOwner.DEFINITION:MarginAllSyncJobOwner.DEFINITION;
+        String prefix="java_d028_margin_all_",target=prefix+"contract",stage=prefix+"stage_"+"1".repeat(32),run="owned-run";
+        var definition=MarginAllSyncJobOwner.DEFINITION;
         LocalDate day=LocalDate.of(2025,7,1);
         var request=definition.freeze(SyncJobDefinition.Mode.BACKFILL,Map.of("targetId",LOGICAL,"physicalTargetId",PHYSICAL,"targetRowsBefore",0,"targetFingerprint",HASH),day,day,day);
         Path ledgerPath=temp.resolve("ledger.sqlite3"),root=temp.resolve("sync-evidence").resolve(run),intentPath=root.resolve("stage").resolve(stage+"-intent.json");
@@ -34,14 +34,7 @@ class MarginStageDiscardContractTest {
         Files.createDirectories(intentPath.getParent());Files.write(intentPath,JobDefinitionJson.canonicalMapper().writeValueAsBytes(proof));
         var source=mock(JdbcTemplate.class);when(source.getDataSource()).thenReturn(mock(DataSource.class));
         try(var jdbc=mockConstruction(JdbcTemplate.class,(client,ctx)->when(client.queryForList("SELECT id,directoryName FROM tables() WHERE table_name=?",stage)).thenReturn(List.of(Map.of("id",2,"directoryName","g2"))))) {
-            if(zrz) {
-                var before=new MarginZrzState.Snapshot(new MarginZrzState.Identity(1,"g1",7),List.of(),HASH,0);
-                var staged=new MarginZrzState.Snapshot(new MarginZrzState.Identity(2,"g2",8),List.of(),HASH,0);
-                try(var stores=mockConstruction(MarginZrzStorage.class,(store,ctx)->when(store.snapshot()).thenReturn(target.equals(ctx.arguments().get(1))?before:staged));var ids=mockStatic(MarginZrzStorage.class)) {
-                    ids.when(()->MarginZrzStorage.physicalTargetId(source,target,before.identity())).thenReturn(PHYSICAL);ids.when(()->MarginZrzStorage.physicalTargetId(source,stage,staged.identity())).thenReturn(STAGED);
-                    assertDoesNotThrow(()->MarginZrzStaging.discardUnpublished(new QuestDbMarginZrzTarget(target,source,mock(QuestDB.class)),target,run,root,ledgerPath,true));
-                }
-            } else {
+            {
                 var before=new MarginAllState.Snapshot(new MarginAllState.Identity(1,"g1",7),List.of(),HASH,0);
                 var staged=new MarginAllState.Snapshot(new MarginAllState.Identity(2,"g2",8),List.of(),HASH,0);
                 try(var stores=mockConstruction(MarginAllStorage.class,(store,ctx)->when(store.snapshot()).thenReturn(target.equals(ctx.arguments().get(1))?before:staged));var ids=mockStatic(MarginAllStorage.class)) {

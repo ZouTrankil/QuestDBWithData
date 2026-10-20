@@ -2,7 +2,7 @@ package com.zoutrankil.data.service;
 
 import com.zoutrankil.data.flow.application.MoneyflowHsgtPublication;
 import com.zoutrankil.data.margin.application.MarginAllPublication;
-import com.zoutrankil.data.margin.application.MarginZrzPublication;
+
 
 import com.zoutrankil.data.index.application.IndexMonthlyPublication;
 
@@ -31,15 +31,14 @@ class PublicationSummaryCompatibilityTest {
         var jdbc=new JdbcTemplate(new DriverManagerDataSource("jdbc:sqlite:"+root.resolve("unused-target.sqlite3")));
         var monthly=new IndexMonthlyPublication(org.mockito.Mockito.mock(com.zoutrankil.data.index.port.IndexMonthlyTables.class),path);
         var all=new MarginAllPublication(org.mockito.Mockito.mock(com.zoutrankil.data.margin.port.MarginAllStagingPort.class),path);
-        var zrz=new MarginZrzPublication(org.mockito.Mockito.mock(com.zoutrankil.data.margin.port.MarginZrzStagingPort.class),path);
+
         var moneyflow=new MoneyflowHsgtPublication(org.mockito.Mockito.mock(com.zoutrankil.data.flow.port.MoneyflowHsgtStagingPort.class),path);
         var gates=List.of(
                 new Gate("index_monthly","Unresolved D022 publication requires finish: run",
                         monthly::requireNoPendingPublication,monthly::beginStageRecoveryOperation),
                 new Gate("margin_all","Unresolved D028 publication requires finish: run",
                         all::requireNoPendingPublication,all::beginOperation),
-                new Gate("margin_zrz","Unresolved D031 publication requires finish: run",
-                        zrz::requireNoPendingPublication,zrz::beginOperation),
+
                 new Gate("moneyflow_hsgt","D027 publication or owning ledger run requires recovery/finalization: run",
                         moneyflow::requireNoPendingPublication,moneyflow::beginOperation));
         for(var gate:gates){

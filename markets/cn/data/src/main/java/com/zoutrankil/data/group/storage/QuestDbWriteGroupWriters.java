@@ -73,9 +73,7 @@ public final class QuestDbWriteGroupWriters implements WriteGroupWriters {
     @Override public com.zoutrankil.data.etf.port.EtfWriteSession<EtfFactor, EtfFactorKey> etfFactor(String table, String targetId) {
         return new EtfFactorWritePort(table,targetId,jdbc,questdb);
     }
-    @Override public MoneyflowDcWriteSession moneyflowDc(String table, String targetId) {
-        return new MoneyflowDcWritePort(table,targetId,jdbc,questdb);
-    }
+
     @Override public MoneyflowThsWriteSession moneyflowThs(String table, String targetId) {
         return new MoneyflowThsWritePort(table,targetId,jdbc,questdb);
     }

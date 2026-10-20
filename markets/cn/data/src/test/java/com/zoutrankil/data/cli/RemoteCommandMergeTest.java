@@ -14,7 +14,7 @@ import static org.mockito.Mockito.*;
 class RemoteCommandMergeTest {
     @Test void marginResumeRejectsUnfrozenOptionsBeforeOwnerIo() {
         var owner = mock(MarginDetailJobService.class);
-        var family = new FlowCommands(null, null, null, null, owner);
+        var family = new FlowCommands(null, null, null, owner);
         assertThrows(IllegalArgumentException.class, () -> family.execute("run-margin-detail-job",
                 Map.of("--resume-from", "run", "--from", "2026-01-01")));
         assertThrows(IllegalArgumentException.class, () -> family.execute("plan-margin-detail-job",

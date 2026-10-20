@@ -2,7 +2,7 @@ package com.zoutrankil.data.service;
 
 import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsDataset;
 import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowHsgtDataset;
-import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDcDataset;
+
 import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDataset;
 import com.zoutrankil.data.domain.stock.market.StockSuspendDataset;
 import com.zoutrankil.data.domain.stock.market.StockLimitDataset;
@@ -52,8 +52,8 @@ import com.zoutrankil.data.flow.application.MoneyflowJobService;
 import com.zoutrankil.data.flow.mapper.MoneyflowMapper;
 import com.zoutrankil.data.flow.application.MoneyflowThsJobService;
 import com.zoutrankil.data.flow.mapper.MoneyflowThsMapper;
-import com.zoutrankil.data.flow.application.MoneyflowDcJobService;
-import com.zoutrankil.data.flow.mapper.MoneyflowDcMapper;
+
+
 import com.zoutrankil.data.flow.application.MoneyflowHsgtJobService;
 import com.zoutrankil.data.flow.application.MoneyflowHsgtPublication;
 import com.zoutrankil.data.flow.mapper.MoneyflowHsgtMapper;
@@ -152,8 +152,7 @@ public class StockBasicWriteGroupService {
     private DcIndexJobService dcIndexTarget;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
     private MoneyflowHsgtJobService moneyflowHsgtTarget;
-    @org.springframework.beans.factory.annotation.Autowired(required = false)
-    private MoneyflowDcJobService moneyflowDcTarget;
+
     @org.springframework.beans.factory.annotation.Autowired(required = false)
     private MoneyflowThsJobService moneyflowThsTarget;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
@@ -295,9 +294,6 @@ public class StockBasicWriteGroupService {
             } else if(member.datasetId().equals(EtfFactorDataset.DEFINITION.datasetId()) && etfFactorTarget!=null) {
                 if(priorRun==null) targets.put(member.datasetId(),etfFactorTarget.targetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.etf_factor"));
-            } else if(member.datasetId().equals(MoneyflowDcDataset.DEFINITION.datasetId()) && moneyflowDcTarget!=null) {
-                if(priorRun==null) targets.put(member.datasetId(),moneyflowDcTarget.targetId());
-                else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.moneyflow_dc"));
             } else if(member.datasetId().equals(MoneyflowThsDataset.DEFINITION.datasetId()) && moneyflowThsTarget!=null) {
                 if(priorRun==null) targets.put(member.datasetId(),moneyflowThsTarget.targetId());
                 else targets.put(member.datasetId(),SyncGroupTargetIdentity.frozen(ledger,priorRun,"write.moneyflow_ths"));
@@ -499,15 +495,6 @@ public class StockBasicWriteGroupService {
                         port.codec(),port,()->{
                             try { return etfFactorTarget.targetId(); }
                             catch(Exception failure) { throw new IllegalStateException("Cannot resolve etf_factor target",failure); }
-                        },evidence.resolve(run).resolve(member.memberId())));
-            } else if(member.definition().datasetId().equals(MoneyflowDcDataset.DEFINITION.datasetId())) {
-                var mapper=new com.zoutrankil.data.flow.mapper.MoneyflowDcMapper();
-                var port=writers.moneyflowDc(moneyflowDcTarget.tableName(),member.targetId());
-                adapters.put(member.memberId(),new PreparedWriteAdapter<>(plan,member.memberId(),
-                        mapper::fromValues,mapper::values,
-                        port.codec(),port,()->{
-                            try { return moneyflowDcTarget.targetId(); }
-                            catch(Exception failure) { throw new IllegalStateException("Cannot resolve moneyflow_dc target",failure); }
                         },evidence.resolve(run).resolve(member.memberId())));
             } else if(member.definition().datasetId().equals(MoneyflowThsDataset.DEFINITION.datasetId())) {
                 var mapper=new com.zoutrankil.data.flow.mapper.MoneyflowThsMapper();

@@ -3,8 +3,8 @@ package com.zoutrankil.data.flow.storage;
 import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsKey;
 import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowThsDataset;
 import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowKey;
-import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDcKey;
-import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDcDataset;
+
+
 import com.zoutrankil.data.domain.stock.moneyflow.MoneyflowDataset;
 import com.zoutrankil.data.domain.stock.margin.MarginDetailKey;
 import com.zoutrankil.data.domain.stock.margin.MarginDetailDataset;
@@ -44,25 +44,25 @@ class UpsertTargetContractTest {
     static final String ID_SQL="SELECT id,directoryName FROM tables() WHERE table_name=?";
     enum Family {
         MONEYFLOW("java_d024_moneyflow_contract",30001,6000),
-        DC("java_d026_moneyflow_dc_contract",50001,10000),
+
         THS("java_d025_moneyflow_ths_contract",6001,6000),
         DETAIL("java_d029_margin_detail_contract",84001,6000);
         final String table;final int queryCap,dateCap;
         Family(String table,int queryCap,int dateCap){this.table=table;this.queryCap=queryCap;this.dateCap=dateCap;}
         View target(String table,JdbcTemplate jdbc,QuestDB questdb){return switch(this){
             case MONEYFLOW->{var t=new QuestDbMoneyflowTarget(table,jdbc,questdb);yield new View(t.tableName(),t::targetId,t::newWriter);}
-            case DC->{var t=new QuestDbMoneyflowDcTarget(table,jdbc,questdb);yield new View(t.tableName(),t::targetId,t::newWriter);}
+
             case THS->{var t=new QuestDbMoneyflowThsTarget(table,jdbc,questdb);yield new View(t.tableName(),t::targetId,t::newWriter);}
             case DETAIL->{var t=new QuestDbMarginDetailTarget(table,jdbc,questdb);yield new View(t.tableName(),t::targetId,t::newWriter);}
         };}
-        DatasetDefinition definition(){return switch(this){case MONEYFLOW->MoneyflowDataset.definition(table);case DC->MoneyflowDcDataset.definition(table);case THS->MoneyflowThsDataset.definition(table);case DETAIL->MarginDetailDataset.definition(table);};}
+        DatasetDefinition definition(){return switch(this){case MONEYFLOW->MoneyflowDataset.definition(table);case THS->MoneyflowThsDataset.definition(table);case DETAIL->MarginDetailDataset.definition(table);};}
         Object row(){
             var values=new LinkedHashMap<String,Object>();definition().columns().forEach(c->values.put(c.logicalName(),1D));
             values.put("ts_code","000001.SZ");values.put("trade_date",DAY);if(values.containsKey("name"))values.put("name","测试");
             if(this==MONEYFLOW)values.keySet().stream().filter(k->k.endsWith("_vol")).toList().forEach(k->values.put(k,1L));
-            var v=new DatasetValues(values);return switch(this){case MONEYFLOW->new MoneyflowMapper().fromValues(v);case DC->new MoneyflowDcMapper().fromValues(v);case THS->new MoneyflowThsMapper().fromValues(v);case DETAIL->new MarginDetailMapper().fromValues(v);};
+            var v=new DatasetValues(values);return switch(this){case MONEYFLOW->new MoneyflowMapper().fromValues(v);case THS->new MoneyflowThsMapper().fromValues(v);case DETAIL->new MarginDetailMapper().fromValues(v);};
         }
-        Object key(String code,LocalDate date){return switch(this){case MONEYFLOW->new MoneyflowKey(code,date);case DC->new MoneyflowDcKey(code,date);case THS->new MoneyflowThsKey(code,date);case DETAIL->new MarginDetailKey(code,date);};}
+        Object key(String code,LocalDate date){return switch(this){case MONEYFLOW->new MoneyflowKey(code,date);case THS->new MoneyflowThsKey(code,date);case DETAIL->new MarginDetailKey(code,date);};}
     }
     record View(String table,Callable<String> identity,Function<String,? extends VerifiedWriteSession<?,?>> writers){}
 
@@ -151,7 +151,7 @@ class UpsertTargetContractTest {
     @Test void formalTableAdmissionIsLimitedToMoneyflowAndDetail() {
         var jdbc=mock(JdbcTemplate.class);var qdb=mock(QuestDB.class);
         assertEquals("moneyflow",Family.MONEYFLOW.target("moneyflow",jdbc,qdb).table());assertEquals("margin_detail",Family.DETAIL.target("margin_detail",jdbc,qdb).table());
-        assertThrows(IllegalStateException.class,()->Family.DC.target("moneyflow_dc",jdbc,qdb));assertThrows(IllegalStateException.class,()->Family.THS.target("moneyflow_ths",jdbc,qdb));verifyNoInteractions(jdbc,qdb);
+        assertThrows(IllegalStateException.class,()->Family.THS.target("moneyflow_ths",jdbc,qdb));verifyNoInteractions(jdbc,qdb);
     }
 
     static long micros(LocalDate day){return day.atStartOfDay(ZoneOffset.UTC).toEpochSecond()*1_000_000L;}

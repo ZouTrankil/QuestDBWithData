@@ -26,7 +26,6 @@ class WriteGroupWritersContractTest {
                 Arguments.of("etfAdj", "etf", "EtfAdj", "java_d015_etf_adj_factory"),
                 Arguments.of("etfShare", "etf", "EtfShare", "java_d016_etf_share_factory"),
                 Arguments.of("etfFactor", "etf", "EtfFactor", "java_d017_etf_factor_factory"),
-                Arguments.of("moneyflowDc", "flow", "MoneyflowDc", "java_d026_moneyflow_dc_factory"),
                 Arguments.of("moneyflowThs", "flow", "MoneyflowThs", "java_d025_moneyflow_ths_factory"),
                 Arguments.of("moneyflow", "flow", "Moneyflow", "java_d024_moneyflow_factory"),
                 Arguments.of("indexDailyMarket", "index", "IndexDailyMarket", "java_d019_index_daily_market_factory"),

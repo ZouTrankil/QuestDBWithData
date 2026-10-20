@@ -1,0 +1,569 @@
+{
+  "checkedAt": "2026-10-20T11:16:25.872874+00:00",
+  "database": "qdb",
+  "host": "100.64.153.106",
+  "mode": "只读；未执行删除",
+  "queries": {
+    "tables": {
+      "sql": "SELECT * FROM tables() WHERE table_name IN ('margin_zrz','moneyflow_dc','qmt_1m_bars')",
+      "result": {
+        "query": "SELECT * FROM tables() WHERE table_name IN ('margin_zrz','moneyflow_dc','qmt_1m_bars')",
+        "columns": [
+          {
+            "name": "id",
+            "type": "INT"
+          },
+          {
+            "name": "table_name",
+            "type": "STRING"
+          },
+          {
+            "name": "designatedTimestamp",
+            "type": "STRING"
+          },
+          {
+            "name": "partitionBy",
+            "type": "STRING"
+          },
+          {
+            "name": "walEnabled",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "dedup",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "ttlValue",
+            "type": "INT"
+          },
+          {
+            "name": "ttlUnit",
+            "type": "STRING"
+          },
+          {
+            "name": "matView",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "directoryName",
+            "type": "STRING"
+          },
+          {
+            "name": "maxUncommittedRows",
+            "type": "INT"
+          },
+          {
+            "name": "o3MaxLag",
+            "type": "LONG"
+          },
+          {
+            "name": "table_suspended",
+            "type": "BOOLEAN"
+          },
+          {
+            "name": "table_type",
+            "type": "CHAR"
+          },
+          {
+            "name": "table_row_count",
+            "type": "LONG"
+          },
+          {
+            "name": "table_min_timestamp",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "table_max_timestamp",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "table_last_write_timestamp",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "table_txn",
+            "type": "LONG"
+          },
+          {
+            "name": "table_memory_pressure_level",
+            "type": "INT"
+          },
+          {
+            "name": "table_write_amp_count",
+            "type": "LONG"
+          },
+          {
+            "name": "table_write_amp_p50",
+            "type": "DOUBLE"
+          },
+          {
+            "name": "table_write_amp_p90",
+            "type": "DOUBLE"
+          },
+          {
+            "name": "table_write_amp_p99",
+            "type": "DOUBLE"
+          },
+          {
+            "name": "table_write_amp_max",
+            "type": "DOUBLE"
+          },
+          {
+            "name": "table_merge_rate_count",
+            "type": "LONG"
+          },
+          {
+            "name": "table_merge_rate_p50",
+            "type": "LONG"
+          },
+          {
+            "name": "table_merge_rate_p90",
+            "type": "LONG"
+          },
+          {
+            "name": "table_merge_rate_p99",
+            "type": "LONG"
+          },
+          {
+            "name": "table_merge_rate_max",
+            "type": "LONG"
+          },
+          {
+            "name": "wal_pending_row_count",
+            "type": "LONG"
+          },
+          {
+            "name": "wal_dedup_row_count_since_start",
+            "type": "LONG"
+          },
+          {
+            "name": "wal_txn",
+            "type": "LONG"
+          },
+          {
+            "name": "wal_max_timestamp",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "wal_tx_count",
+            "type": "LONG"
+          },
+          {
+            "name": "wal_tx_size_p50",
+            "type": "LONG"
+          },
+          {
+            "name": "wal_tx_size_p90",
+            "type": "LONG"
+          },
+          {
+            "name": "wal_tx_size_p99",
+            "type": "LONG"
+          },
+          {
+            "name": "wal_tx_size_max",
+            "type": "LONG"
+          },
+          {
+            "name": "replica_batch_count",
+            "type": "LONG"
+          },
+          {
+            "name": "replica_batch_size_p50",
+            "type": "LONG"
+          },
+          {
+            "name": "replica_batch_size_p90",
+            "type": "LONG"
+          },
+          {
+            "name": "replica_batch_size_p99",
+            "type": "LONG"
+          },
+          {
+            "name": "replica_batch_size_max",
+            "type": "LONG"
+          },
+          {
+            "name": "replica_more_pending",
+            "type": "BOOLEAN"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            217,
+            "margin_zrz",
+            "trade_date",
+            "YEAR",
+            true,
+            false,
+            0,
+            "HOUR",
+            false,
+            "margin_zrz~217",
+            500000,
+            600000000,
+            false,
+            "T",
+            1238,
+            "2023-01-03T00:00:00.000000Z",
+            "2025-07-25T00:00:00.000000Z",
+            "2025-07-25T00:00:00.000000Z",
+            2,
+            0,
+            0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            "2025-07-25T00:00:00.000000Z",
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            false
+          ],
+          [
+            158,
+            "moneyflow_dc",
+            "trade_date",
+            "YEAR",
+            true,
+            true,
+            0,
+            "HOUR",
+            false,
+            "moneyflow_dc~158",
+            500000,
+            600000000,
+            false,
+            "T",
+            3478841,
+            "2023-09-11T00:00:00.000000Z",
+            "2026-03-20T00:00:00.000000Z",
+            "2026-03-20T00:00:00.000000Z",
+            3625,
+            0,
+            0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3625,
+            "2026-03-20T00:00:00.000000Z",
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            false
+          ],
+          [
+            311,
+            "qmt_1m_bars",
+            "bar_time",
+            "DAY",
+            true,
+            true,
+            0,
+            "HOUR",
+            false,
+            "qmt_1m_bars~311",
+            500000,
+            600000000,
+            false,
+            "T",
+            4873,
+            "2026-03-27T10:08:00.000000Z",
+            "2026-07-06T09:46:00.000000Z",
+            "2026-07-06T09:46:00.000000Z",
+            59121,
+            0,
+            0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            59121,
+            "2026-07-06T09:46:00.000000Z",
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            false
+          ]
+        ],
+        "count": 3
+      }
+    },
+    "materializedViews": {
+      "sql": "SELECT * FROM materialized_views()",
+      "result": {
+        "query": "SELECT * FROM materialized_views()",
+        "columns": [
+          {
+            "name": "view_name",
+            "type": "STRING"
+          },
+          {
+            "name": "refresh_type",
+            "type": "STRING"
+          },
+          {
+            "name": "base_table_name",
+            "type": "STRING"
+          },
+          {
+            "name": "last_refresh_start_timestamp",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "last_refresh_finish_timestamp",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "view_sql",
+            "type": "STRING"
+          },
+          {
+            "name": "view_table_dir_name",
+            "type": "STRING"
+          },
+          {
+            "name": "invalidation_reason",
+            "type": "STRING"
+          },
+          {
+            "name": "view_status",
+            "type": "STRING"
+          },
+          {
+            "name": "refresh_period_hi",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "refresh_base_table_txn",
+            "type": "LONG"
+          },
+          {
+            "name": "base_table_txn",
+            "type": "LONG"
+          },
+          {
+            "name": "refresh_limit",
+            "type": "INT"
+          },
+          {
+            "name": "refresh_limit_unit",
+            "type": "STRING"
+          },
+          {
+            "name": "timer_time_zone",
+            "type": "STRING"
+          },
+          {
+            "name": "timer_start",
+            "type": "TIMESTAMP"
+          },
+          {
+            "name": "timer_interval",
+            "type": "INT"
+          },
+          {
+            "name": "timer_interval_unit",
+            "type": "STRING"
+          },
+          {
+            "name": "period_length",
+            "type": "INT"
+          },
+          {
+            "name": "period_length_unit",
+            "type": "STRING"
+          },
+          {
+            "name": "period_delay",
+            "type": "INT"
+          },
+          {
+            "name": "period_delay_unit",
+            "type": "STRING"
+          },
+          {
+            "name": "refresh_avg_commit_nanos",
+            "type": "LONG"
+          },
+          {
+            "name": "refresh_avg_scan_sample_nanos",
+            "type": "LONG"
+          },
+          {
+            "name": "refresh_avg_scan_range_ts_units",
+            "type": "LONG"
+          },
+          {
+            "name": "refresh_gap_threshold_ts_units",
+            "type": "LONG"
+          }
+        ],
+        "timestamp": -1,
+        "dataset": [
+          [
+            "mv_backtest_daily",
+            "immediate",
+            "stk_limit",
+            "2026-10-18T20:36:42.817221Z",
+            "2026-10-18T20:39:18.252980Z",
+            "\nSELECT trade_date,cast(ts_code AS SYMBOL) AS ts_code,last(open) AS open,last(high) AS high,last(low) AS low,last(close) AS close,last(vol) AS vol,last(amount) AS amount,last(adj_factor) AS adj_factor,last(up_limit) AS up_limit,last(down_limit) AS down_limit,cast(last(is_suspended) AS LONG) AS is_suspended,last(is_st) AS is_st FROM (SELECT /*+ asof_dense(x f) */ x.trade_date,x.ts_code,CASE WHEN f.trade_date=x.trade_date THEN f.open ELSE f.close END open,CASE WHEN f.trade_date=x.trade_date THEN f.high ELSE f.close END high,CASE WHEN f.trade_date=x.trade_date THEN f.low ELSE f.close END low,CASE WHEN f.trade_date=x.trade_date THEN f.close ELSE f.close END close,CASE WHEN f.trade_date=x.trade_date THEN f.vol ELSE 0.0 END vol,CASE WHEN f.trade_date=x.trade_date THEN f.amount ELSE 0.0 END amount,CASE WHEN f.trade_date=x.trade_date THEN f.adj_factor ELSE f.adj_factor END adj_factor,l.up_limit,l.down_limit,coalesce(s.is_suspended,0) is_suspended,coalesce(st.is_st,0) is_st\n FROM ((SELECT d.trade_date,u.ts_code FROM ((SELECT DISTINCT trade_date FROM stk_limit ORDER BY trade_date) TIMESTAMP(trade_date)) d\n CROSS JOIN (SELECT DISTINCT ts_code FROM stk_factor) u ORDER BY d.trade_date) TIMESTAMP(trade_date)) x\n ASOF JOIN stk_factor f ON (x.ts_code=f.ts_code)\n LEFT JOIN stk_suspend s ON x.trade_date=s.timestamp AND x.ts_code=s.ts_code\n LEFT JOIN stk_limit l ON x.trade_date=l.trade_date AND x.ts_code=l.ts_code\n LEFT JOIN stk_st_daily st ON x.trade_date=st.timestamp AND x.ts_code=st.ts_code\n JOIN (SELECT DISTINCT trade_date FROM stk_factor) fd ON x.trade_date=fd.trade_date\n WHERE f.trade_date=x.trade_date OR (s.timestamp IS NOT NULL AND f.trade_date<x.trade_date)) SAMPLE BY 1d\n",
+            "mv_backtest_daily~3184",
+            null,
+            "valid",
+            null,
+            745,
+            745,
+            0,
+            null,
+            null,
+            null,
+            0,
+            null,
+            0,
+            null,
+            0,
+            null,
+            244815,
+            25315091346,
+            67759255377225,
+            655124940
+          ],
+          [
+            "mv_retail_sentiment_daily",
+            "timer",
+            "l2_daily_features",
+            "2026-10-17T01:11:07.451032Z",
+            "2026-10-17T01:12:21.147621Z",
+            "\nSELECT\n    ts AS trade_date,\n    avg(gmm_retail_ratio) AS avg_retail_ratio,\n    avg(mean_retail_entropy) AS avg_retail_entropy,\n    sum(retail_total_amount) / 100000000.0 AS total_retail_amount_yi,\n    sum(retail_funds_net_inflow) / 100000000.0 AS total_retail_net_inflow_yi,\n    avg(mean_rel_aggro) AS avg_rel_aggro,\n    sum(q1_count) AS total_q1,\n    sum(q3_count) AS total_q3,\n    avg(wash_trade_ratio) AS avg_wash_trade_ratio,\n    sum(spoof_count) AS total_spoof_count,\n    sum(fake_support_count + fake_pressure_count) AS total_manipulation_count,\n    avg(mfi_score) AS avg_mfi_score,\n    sum(main_net_inflow) / 100000000.0 AS total_main_net_yi\nFROM l2_daily_features\n\nSAMPLE BY 1d ALIGN TO CALENDAR\n",
+            "mv_retail_sentiment_daily~3194",
+            null,
+            "valid",
+            null,
+            11679,
+            11679,
+            0,
+            null,
+            null,
+            "2026-09-18T15:32:22.955712Z",
+            1,
+            "MINUTE",
+            0,
+            null,
+            0,
+            null,
+            371200,
+            73686880600,
+            119491200000000,
+            601715200
+          ],
+          [
+            "mv_market_breadth_daily",
+            "timer",
+            "stk_factor",
+            "2026-10-18T20:37:22.870295Z",
+            "2026-10-18T20:37:22.876882Z",
+            "\nSELECT\n    trade_date,\n    count() AS stock_count,\n    sum(CASE WHEN pct_change > 0 THEN 1 ELSE 0 END) AS up_count,\n    sum(CASE WHEN pct_change < 0 THEN 1 ELSE 0 END) AS down_count,\n    sum(CASE WHEN pct_change = 0 THEN 1 ELSE 0 END) AS flat_count,\n    avg(pct_change) AS avg_pct_change,\n    sum(amount) / 100000.0 AS total_amount_yi\nFROM stk_factor\n\nSAMPLE BY 1d ALIGN TO CALENDAR\n",
+            "mv_market_breadth_daily~3193",
+            null,
+            "valid",
+            null,
+            703,
+            703,
+            0,
+            null,
+            null,
+            "2026-09-18T15:32:22.866888Z",
+            1,
+            "MINUTE",
+            0,
+            null,
+            0,
+            null,
+            139478,
+            8899846,
+            180156283431,
+            2823401449
+          ],
+          [
+            "mv_etf_market_overview_daily",
+            "immediate",
+            "etf_share",
+            "2026-10-20T06:53:42.436751Z",
+            "2026-10-20T06:55:02.496633Z",
+            "\nSELECT\n    s.timestamp AS trade_date,\n    count_distinct(s.ts_code) AS etf_count,\n    sum(s.fd_share) AS total_share,\n    sum(s.fd_share * d.close) / 10000.0 AS total_size_yi\nFROM etf_share s\nJOIN etf_daily d ON s.ts_code = d.ts_code AND s.timestamp = d.timestamp\n\nSAMPLE BY 1d ALIGN TO CALENDAR\n",
+            "mv_etf_market_overview_daily~3192",
+            null,
+            "valid",
+            null,
+            8,
+            8,
+            0,
+            null,
+            null,
+            null,
+            0,
+            null,
+            0,
+            null,
+            0,
+            null,
+            514406,
+            49242561509,
+            275184000000000,
+            2874500728
+          ]
+        ],
+        "count": 4
+      }
+    }
+  }
+}

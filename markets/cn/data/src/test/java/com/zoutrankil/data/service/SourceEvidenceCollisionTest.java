@@ -2,12 +2,12 @@ package com.zoutrankil.data.service;
 
 import com.zoutrankil.data.flow.application.MoneyflowSource;
 import com.zoutrankil.data.flow.application.MoneyflowThsSource;
-import com.zoutrankil.data.flow.application.MoneyflowDcSource;
+
 import com.zoutrankil.data.flow.application.MoneyflowHsgtSource;
 import com.zoutrankil.data.margin.application.MarginAllSource;
 import com.zoutrankil.data.margin.application.MarginDetailSource;
 import com.zoutrankil.data.margin.application.MarginSecsSource;
-import com.zoutrankil.data.margin.application.MarginZrzSource;
+
 
 import com.zoutrankil.data.index.application.DcIndexSource;
 import com.zoutrankil.data.index.application.IndexWeightSource;
@@ -45,8 +45,8 @@ class SourceEvidenceCollisionTest {
             new Writer(MarginAllSource.class, "persist", "Conflicting immutable D028 receipt", true),
             new Writer(MarginDetailSource.class, "persist", "Conflicting immutable D029 source receipt", true),
             new Writer(MarginSecsSource.class, "persist", "Conflicting immutable D030 receipt", true),
-            new Writer(MarginZrzSource.class, "persist", "Conflicting immutable D031 receipt", true),
-            new Writer(MoneyflowDcSource.class, "persist", "Conflicting deterministic moneyflow_dc receipt", true),
+
+
             new Writer(MoneyflowHsgtSource.class, "persist", "Conflicting immutable D027 receipt", true),
             new Writer(MoneyflowSource.class, "persist", "Conflicting deterministic moneyflow receipt", true),
             new Writer(MoneyflowThsSource.class, "persist", "Conflicting immutable D025 receipt", true),

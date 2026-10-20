@@ -78,7 +78,7 @@ class UpsertAdapterEvidenceContractTest {
     static SyncJobDefinition.FrozenRequest request(Family f){return UpsertOwnerPortContractTest.request(UpsertOwnerPortContractTest.Family.valueOf(f.name()));}
     SyncJobRunner.Adapter adapter(Family f,TusharePageService pages,List<?> existing){var root=temp.resolve("run");return switch(f){
         case MONEYFLOW->{var p=mock(MoneyflowWriteSession.class);when(p.readDate(DAY)).thenReturn((List)existing);yield new MoneyflowSyncAdapter(pages,new MoneyflowTradingDates(UpsertOwnerPortContractTest.calendar()),p,root,UpsertOwnerPortContractTest.ID);}
-        case DC->{var p=mock(MoneyflowDcWriteSession.class);when(p.readDate(DAY)).thenReturn((List)existing);yield new MoneyflowDcSyncAdapter(pages,new MoneyflowDcTradingDates(UpsertOwnerPortContractTest.calendar()),p,root,UpsertOwnerPortContractTest.ID);}
+
         case THS->{var p=mock(MoneyflowThsWriteSession.class);when(p.readDate(DAY)).thenReturn((List)existing);yield new MoneyflowThsSyncAdapter(new MoneyflowThsSource(pages,root.resolve("source")),UpsertOwnerPortContractTest.calendar(),p,root);}
         case DETAIL->{var p=mock(MarginDetailWriteSession.class);when(p.readDate(DAY)).thenReturn((List)existing);yield new MarginDetailSyncAdapter(new MarginDetailSource(pages,root.resolve("source")),new MarginDetailTradingDates(UpsertOwnerPortContractTest.calendar()),p,root,UpsertOwnerPortContractTest.ID,false);}
     };}

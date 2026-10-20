@@ -265,6 +265,22 @@ class DocumentationTest(unittest.TestCase):
         self.assertIn('来源字段 trade_date',
                       (self.output / 'stock/market/table/ExampleRow.java').read_text())
 
+    def test_cn_cli_does_not_recreate_retired_models_from_old_snapshot(self):
+        active = dict(self.definition, market='cn')
+        retired = [dict(active, name=name, domainClass='Retired' + str(i))
+                   for i, name in enumerate(generator.RETIRED_CN_OBJECTS)]
+        payload = catalog(active)
+        payload['objects'].extend(retired)
+        source = self.root / 'catalog.json'
+        source.write_text(json.dumps(payload))
+        documentation = self.root / 'documentation.json'
+        documentation.write_text(json.dumps(self.documentation))
+        result = subprocess.run([sys.executable, str(SCRIPT), '--catalog', str(source), '--market', 'cn',
+                                 '--output-root', str(self.output), '--documentation', str(documentation)],
+                                capture_output=True, text=True)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual(['ExampleRow.java'], sorted(p.name for p in self.output.rglob('*.java')))
+
     def test_same_class_cannot_receive_another_objects_documentation(self):
         self.documentation['objects'][0]['objectName'] = 'another_object'
         target = self.output / 'table/ExampleRow.java'

@@ -24,8 +24,5 @@ public class MarginConfiguration {
             @Value("${app.sync.margin-secs-table:java_d030_margin_secs_acceptance}") String table) {
         return new QuestDbMarginSecsTarget(table, jdbc, questdb);
     }
-    @Bean MarginZrzTarget marginZrzTarget(JdbcTemplate jdbc, @Lazy QuestDB questdb,
-            @Value("${app.sync.margin-zrz-table:java_d031_margin_zrz_acceptance}") String table) {
-        return new QuestDbMarginZrzTarget(table, jdbc, questdb);
-    }
+
 }

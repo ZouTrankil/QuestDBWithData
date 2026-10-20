@@ -22,10 +22,7 @@ public class FlowConfiguration {
             @Value("${app.sync.moneyflow-ths-table:java_d025_moneyflow_ths_acceptance}") String table) {
         return new QuestDbMoneyflowThsTarget(table, jdbc, questdb);
     }
-    @Bean MoneyflowDcTarget moneyflowDcTarget(JdbcTemplate jdbc, @Lazy QuestDB questdb,
-            @Value("${app.sync.moneyflow-dc-table:java_d026_moneyflow_dc_acceptance}") String table) {
-        return new QuestDbMoneyflowDcTarget(table, jdbc, questdb);
-    }
+
     @Bean MoneyflowHsgtTarget moneyflowHsgtTarget(JdbcTemplate jdbc, @Lazy QuestDB questdb,
             @Value("${app.sync.moneyflow-hsgt-table:java_d027_moneyflow_hsgt_acceptance}") String table) {
         return new QuestDbMoneyflowHsgtTarget(table, jdbc, questdb);

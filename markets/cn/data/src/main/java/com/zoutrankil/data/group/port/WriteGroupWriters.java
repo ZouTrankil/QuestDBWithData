@@ -40,7 +40,7 @@ public interface WriteGroupWriters {
     com.zoutrankil.data.etf.port.EtfAdjWriteSession etfAdj(String table, String targetId);
     EtfWriteSession<EtfShare, EtfShareKey> etfShare(String table, String targetId);
     com.zoutrankil.data.etf.port.EtfWriteSession<EtfFactor, EtfFactorKey> etfFactor(String table, String targetId);
-    MoneyflowDcWriteSession moneyflowDc(String table, String targetId);
+
     MoneyflowThsWriteSession moneyflowThs(String table, String targetId);
     MoneyflowWriteSession moneyflow(String table, String targetId);
     IndexDailyMarketWriteSession indexDailyMarket(String table, String targetId);

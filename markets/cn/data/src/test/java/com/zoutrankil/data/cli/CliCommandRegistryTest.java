@@ -34,8 +34,17 @@ class CliCommandRegistryTest {
                 "resume-etf-market-overview-cache-run","run-etf-market-overview-cache-job"));
         expected.addAll(Set.of("reconcile-etf-daily-job","recover-stk-factor-job",
                 "reconcile-etf-adj-job","reconcile-moneyflow-job","discard-moneyflow-hsgt-stage"));
-        assertEquals(168, families.stream().mapToInt(family -> family.commands().size()).sum());
+        expected.removeAll(Set.of("plan-moneyflow-dc-job", "run-moneyflow-dc-job"));
+        assertEquals(166, families.stream().mapToInt(family -> family.commands().size()).sum());
         assertEquals(expected, new TreeSet<>(new CliCommandRegistry(families).commands()));
+    }
+
+    @Test void retiredCommandsAreRejectedBeforeTouchingServices() {
+        var registry = new CliCommandRegistry(allFamilies());
+        for (var command : Set.of("plan-moneyflow-dc-job", "run-moneyflow-dc-job")) {
+            assertFalse(registry.commands().contains(command));
+            assertThrows(IllegalArgumentException.class, () -> registry.execute(command, Map.of()));
+        }
     }
 
     @Test void duplicateCommandRegistrationFailsBeforeAnyExecution() {
@@ -144,7 +153,7 @@ class CliCommandRegistryTest {
                 new CalendarCommands(null),
                 new EtfCommands(null, null, null, null, null, null),
                 new IndexCommands(null, null, null, null, null, null, null, null, null),
-                new FlowCommands(null, null, null, null),
+                new FlowCommands(null, null, null),
                 new L2Commands(null, null, null, null, null),
                 new MaterializationCommands(null, null, null, null));
     }

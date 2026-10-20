@@ -35,7 +35,7 @@ class UpsertOwnerPortContractTest {
     static final String ID="static-v2-"+"a".repeat(64),OTHER="static-v2-"+"b".repeat(64);
     enum Family {
         MONEYFLOW(MoneyflowSyncJobOwner.DEFINITION,"java_d024_moneyflow_owner",MoneyflowSource.class),
-        DC(MoneyflowDcSyncJobOwner.DEFINITION,"java_d026_moneyflow_dc_owner",MoneyflowDcSource.class),
+
         THS(MoneyflowThsSyncJobOwner.DEFINITION,"java_d025_moneyflow_ths_owner",MoneyflowThsSource.class),
         DETAIL(MarginDetailSyncJobOwner.DEFINITION,"java_d029_margin_detail_owner",MarginDetailSource.class);
         final SyncJobDefinition definition;final String table;final Class<?> source;
@@ -53,7 +53,7 @@ class UpsertOwnerPortContractTest {
         } else {
             FrozenRequest request=switch(family){
                 case MONEYFLOW->{var p=((MoneyflowJobService)h.job).planDetailed(Mode.INCREMENTAL,DAY,DAY.plusDays(20),DAY.plusDays(21));assertTrue(p.cappedByBudget());assertTrue(p.bootstrap());assertEquals(new MoneyflowTargetRange(null,null,0),p.targetBefore());yield p.request();}
-                case DC->{var p=((MoneyflowDcJobService)h.job).planDetailed(Mode.INCREMENTAL,DAY,DAY.plusDays(20),DAY.plusDays(21));assertTrue(p.cappedByBudget());assertTrue(p.bootstrap());assertEquals(new MoneyflowDcTargetRange(null,null,0),p.targetBefore());yield p.request();}
+
                 case DETAIL->{var p=((MarginDetailJobService)h.job).planDetailed(Mode.INCREMENTAL,DAY,DAY.plusDays(20),DAY.plusDays(21));assertTrue(p.cappedByBudget());assertTrue(p.bootstrap());assertEquals(new MarginDetailTargetRange(null,null,0),p.physicalRange());yield p.request();}
                 default->throw new AssertionError();};
             assertEquals(DAY.plusDays(family==Family.DETAIL?13:4),request.to());assertEquals(DAY,request.parameters().get("checkpointAnchor"));
@@ -171,7 +171,7 @@ class UpsertOwnerPortContractTest {
                     .thenAnswer(i->f.definition.freeze(i.getArgument(2),i.getArgument(3),i.getArgument(4),i.getArgument(5),i.getArgument(6)));
             job=switch(f){
                 case MONEYFLOW->{var t=mock(MoneyflowTarget.class);when(t.tableName()).thenReturn(table);when(t.targetId()).thenAnswer(i->identity());when(t.newWriter(ID)).thenAnswer(i->writer());yield new MoneyflowJobService(jobs,pages,calendar(),t,ledger);}
-                case DC->{var t=mock(MoneyflowDcTarget.class);when(t.tableName()).thenReturn(table);when(t.targetId()).thenAnswer(i->identity());when(t.newWriter(ID)).thenAnswer(i->writer());yield new MoneyflowDcJobService(jobs,pages,calendar(),t,ledger);}
+
                 case THS->{var t=mock(MoneyflowThsTarget.class);when(t.tableName()).thenReturn(table);when(t.targetId()).thenAnswer(i->identity());when(t.newWriter(ID)).thenAnswer(i->writer());yield new MoneyflowThsJobService(jobs,pages,calendar(),t,ledger);}
                 case DETAIL->{var t=mock(MarginDetailTarget.class);when(t.tableName()).thenReturn(table);when(t.targetId()).thenAnswer(i->identity());when(t.newWriter(ID)).thenAnswer(i->writer());yield new MarginDetailJobService(jobs,pages,calendar(),t,ledger);}
             };
@@ -180,7 +180,7 @@ class UpsertOwnerPortContractTest {
         VerifiedWriteSession writer()throws Exception {
             VerifiedWriteSession w=switch(family){
                 case MONEYFLOW->{var x=mock(MoneyflowWriteSession.class);when(x.readTargetRange()).thenReturn(new MoneyflowTargetRange(null,null,0));when(x.codec()).thenReturn(MoneyflowWritePort.CODEC);yield x;}
-                case DC->{var x=mock(MoneyflowDcWriteSession.class);when(x.readTargetRange()).thenReturn(new MoneyflowDcTargetRange(null,null,0));when(x.codec()).thenReturn(MoneyflowDcWritePort.CODEC);yield x;}
+
                 case THS->{var x=mock(MoneyflowThsWriteSession.class);when(x.readTargetRange()).thenReturn(new MoneyflowThsTargetRange(null,null));when(x.codec()).thenReturn(MoneyflowThsWritePort.CODEC);yield x;}
                 case DETAIL->{var x=mock(MarginDetailWriteSession.class);when(x.readTargetRange()).thenReturn(new MarginDetailTargetRange(null,null,0));when(x.codec()).thenReturn(MarginDetailWritePort.CODEC);yield x;}
             };
@@ -196,8 +196,8 @@ class UpsertOwnerPortContractTest {
                 return null;
             }).when(w).preflight();writers.add(w);return w;
         }
-        SyncJobRunner.Result run(FrozenRequest request)throws Exception{return switch(family){case MONEYFLOW->((MoneyflowJobService)job).run(request);case DC->((MoneyflowDcJobService)job).run(request);case THS->((MoneyflowThsJobService)job).run(new MoneyflowThsJobService.Plan(request,ID,null,DAY,new MoneyflowThsTargetRange(null,null),true,0));case DETAIL->((MarginDetailJobService)job).run(request);};}
-        SyncJobRunner.Result resume(String prior)throws Exception{return switch(family){case MONEYFLOW->((MoneyflowJobService)job).resume(prior);case DC->((MoneyflowDcJobService)job).resume(prior);case THS->((MoneyflowThsJobService)job).resume(prior);case DETAIL->((MarginDetailJobService)job).resume(prior);};}
-        SyncJobRunner.Result group(String run,String parent,FrozenRequest request)throws Exception{return switch(family){case MONEYFLOW->((MoneyflowJobService)job).runAsGroupChild(run,parent,null,ID,request);case DC->((MoneyflowDcJobService)job).runAsGroupChild(run,parent,null,ID,request);case THS->((MoneyflowThsJobService)job).runAsGroupChild(run,parent,ID,request);case DETAIL->((MarginDetailJobService)job).runAsGroupChild(run,parent,null,ID,request);};}
+        SyncJobRunner.Result run(FrozenRequest request)throws Exception{return switch(family){case MONEYFLOW->((MoneyflowJobService)job).run(request);case THS->((MoneyflowThsJobService)job).run(new MoneyflowThsJobService.Plan(request,ID,null,DAY,new MoneyflowThsTargetRange(null,null),true,0));case DETAIL->((MarginDetailJobService)job).run(request);};}
+        SyncJobRunner.Result resume(String prior)throws Exception{return switch(family){case MONEYFLOW->((MoneyflowJobService)job).resume(prior);case THS->((MoneyflowThsJobService)job).resume(prior);case DETAIL->((MarginDetailJobService)job).resume(prior);};}
+        SyncJobRunner.Result group(String run,String parent,FrozenRequest request)throws Exception{return switch(family){case MONEYFLOW->((MoneyflowJobService)job).runAsGroupChild(run,parent,null,ID,request);case THS->((MoneyflowThsJobService)job).runAsGroupChild(run,parent,ID,request);case DETAIL->((MarginDetailJobService)job).runAsGroupChild(run,parent,null,ID,request);};}
     }
 }

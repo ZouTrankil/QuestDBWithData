@@ -2,7 +2,7 @@ package com.zoutrankil.data.cli;
 
 import com.zoutrankil.data.flow.application.MoneyflowJobService;
 import com.zoutrankil.data.flow.application.MoneyflowThsJobService;
-import com.zoutrankil.data.flow.application.MoneyflowDcJobService;
+
 import com.zoutrankil.data.flow.application.MoneyflowHsgtJobService;
 import com.zoutrankil.data.margin.application.MarginDetailJobService;
 
@@ -16,12 +16,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebAppli
 public final class FlowCommands implements CliCommandFamily {
     private static final java.util.Set<String> COMMANDS = java.util.Set.of(
             "plan-margin-detail-job", "run-margin-detail-job",
-            "plan-moneyflow-hsgt-job", "run-moneyflow-hsgt-job", "plan-moneyflow-dc-job",
-            "run-moneyflow-dc-job", "plan-moneyflow-ths-job", "run-moneyflow-ths-job",
+            "plan-moneyflow-hsgt-job", "run-moneyflow-hsgt-job", "plan-moneyflow-ths-job", "run-moneyflow-ths-job",
             "plan-moneyflow-job", "run-moneyflow-job", "reconcile-moneyflow-job", "finish-moneyflow-hsgt-publication",
             "discard-moneyflow-hsgt-stage");
     private final com.zoutrankil.data.flow.application.MoneyflowHsgtJobService moneyflowHsgtService;
-    private final com.zoutrankil.data.flow.application.MoneyflowDcJobService moneyflowDcService;
+
     private final com.zoutrankil.data.flow.application.MoneyflowThsJobService moneyflowThsService;
     private final com.zoutrankil.data.flow.application.MoneyflowJobService moneyflowService;
 
@@ -29,22 +28,19 @@ public final class FlowCommands implements CliCommandFamily {
 
     @org.springframework.beans.factory.annotation.Autowired
     public FlowCommands(@org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowHsgtJobService moneyflowHsgtService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowDcJobService moneyflowDcService,
             @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowThsJobService moneyflowThsService,
             @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowJobService moneyflowService,
             @org.springframework.lang.Nullable com.zoutrankil.data.margin.application.MarginDetailJobService marginDetailService) {
         this.moneyflowHsgtService = moneyflowHsgtService;
-        this.moneyflowDcService = moneyflowDcService;
         this.moneyflowThsService = moneyflowThsService;
         this.moneyflowService = moneyflowService;
         this.marginDetailService = marginDetailService;
     }
 
     public FlowCommands(@org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowHsgtJobService moneyflowHsgtService,
-            @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowDcJobService moneyflowDcService,
             @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowThsJobService moneyflowThsService,
             @org.springframework.lang.Nullable com.zoutrankil.data.flow.application.MoneyflowJobService moneyflowService) {
-        this(moneyflowHsgtService, moneyflowDcService, moneyflowThsService, moneyflowService, null);
+        this(moneyflowHsgtService, moneyflowThsService, moneyflowService, null);
     }
 
     @Override public java.util.Set<String> commands() { return COMMANDS; }
@@ -136,43 +132,7 @@ public final class FlowCommands implements CliCommandFamily {
                         throw new IncompleteCommandException("moneyflow_hsgt sync incomplete: " + result.state() + "; run=" + result.runId());
                 }
             }
-            case "plan-moneyflow-dc-job", "run-moneyflow-dc-job" -> {
-                if(options.containsKey("--resume-from")) {
-                    if(moneyflowDcService==null || !command.equals("run-moneyflow-dc-job")
-                            || !options.keySet().equals(java.util.Set.of("--resume-from")))
-                        throw new IllegalArgumentException("Resume requires only --resume-from; the original frozen scope is restored");
-                    var restored=moneyflowDcService.resume(options.get("--resume-from"));
-                    CliOutput.printJson(restored, CliOutput.Profile.JOB_DEFINITION, true);
-                    if(restored.errorCode()!=null || !java.util.Set.of(com.zoutrankil.data.domain.SyncRunState.VERIFIED,
-                            com.zoutrankil.data.domain.SyncRunState.VERIFIED_EMPTY).contains(restored.state()))
-                        throw new IncompleteCommandException("moneyflow-dc resume incomplete: "+restored.state()+"; run="+restored.runId());
-                    return;
-                }
-                if (moneyflowDcService == null || !options.keySet().containsAll(java.util.Set.of("--to", "--logical-date"))
-                        || !java.util.Set.of("--from", "--to", "--logical-date", "--mode", "--resume-from").containsAll(options.keySet()))
-                    throw new IllegalArgumentException("Explicit --to and --logical-date required; optional --from for bootstrap/backfill, --mode, and run-only --resume-from");
-                boolean planOnly = command.equals("plan-moneyflow-dc-job");
-                if (planOnly && options.containsKey("--resume-from")) throw new IllegalArgumentException("Planning cannot resume a run");
-                var mode = options.containsKey("--mode")
-                        ? com.zoutrankil.data.domain.SyncJobDefinition.Mode.valueOf(options.get("--mode").toUpperCase(java.util.Locale.ROOT))
-                        : null;
-                var plan = moneyflowDcService.planDetailed(mode,
-                        options.containsKey("--from") ? java.time.LocalDate.parse(options.get("--from")) : null,
-                        java.time.LocalDate.parse(options.get("--to")),
-                        java.time.LocalDate.parse(options.get("--logical-date")));
-                if (planOnly) {
-                    CliOutput.printJson(Map.of(
-                            "status", "PLANNED", "executed", false, "dataVerified", false,
-                            "targetId", plan.targetId(), "plan", plan,
-                            "request", CliOutput.readTree(com.zoutrankil.data.domain.SyncRequestIdentity.snapshotJson(plan.request()), CliOutput.Profile.JOB_DEFINITION)), CliOutput.Profile.JOB_DEFINITION, true);
-                } else {
-                    var result = moneyflowDcService.run(plan);
-                    CliOutput.printJson(result, CliOutput.Profile.JOB_DEFINITION, true);
-                    if (result.errorCode() != null || result.state() != com.zoutrankil.data.domain.SyncRunState.VERIFIED
-                            && result.state() != com.zoutrankil.data.domain.SyncRunState.VERIFIED_EMPTY)
-                        throw new IncompleteCommandException("moneyflow_dc sync incomplete: " + result.state() + "; run=" + result.runId());
-                }
-            }
+
             case "plan-moneyflow-ths-job", "run-moneyflow-ths-job" -> {
                 if(options.containsKey("--resume-from")) {
                     if(moneyflowThsService==null || !command.equals("run-moneyflow-ths-job")

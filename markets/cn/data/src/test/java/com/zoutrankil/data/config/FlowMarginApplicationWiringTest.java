@@ -32,15 +32,14 @@ class FlowMarginApplicationWiringTest {
     private static final List<Binding> BINDINGS = List.of(
             new Binding(MoneyflowTarget.class, "moneyflow", "java_d024_moneyflow_acceptance"),
             new Binding(MoneyflowThsTarget.class, "moneyflow-ths", "java_d025_moneyflow_ths_acceptance"),
-            new Binding(MoneyflowDcTarget.class, "moneyflow-dc", "java_d026_moneyflow_dc_acceptance"),
+
             new Binding(MoneyflowHsgtTarget.class, "moneyflow-hsgt", "java_d027_moneyflow_hsgt_acceptance"),
             new Binding(MarginAllTarget.class, "margin-all", "java_d028_margin_all_acceptance"),
             new Binding(MarginDetailTarget.class, "margin-detail", "java_d029_margin_detail_acceptance"),
-            new Binding(MarginSecsTarget.class, "margin-secs", "java_d030_margin_secs_acceptance"),
-            new Binding(MarginZrzTarget.class, "margin-zrz", "java_d031_margin_zrz_acceptance"));
+            new Binding(MarginSecsTarget.class, "margin-secs", "java_d030_margin_secs_acceptance"));
 
     @ParameterizedTest @ValueSource(booleans = {false, true})
-    void eightTargetsAndOwnersAssembleWithDefaultOrOverriddenTablesWithoutStorageIo(boolean override) throws Exception {
+    void sixTargetsAndOwnersAssembleWithDefaultOrOverriddenTablesWithoutStorageIo(boolean override) throws Exception {
         var dataSource = mock(DataSource.class);
         Path ledger = temp.resolve("must-not-exist.sqlite3");
         Map<String, Object> properties = new LinkedHashMap<>();
@@ -62,22 +61,22 @@ class FlowMarginApplicationWiringTest {
                 assertEquals(expected, binding.type().getMethod("tableName").invoke(context.getBean(binding.type())));
             }
             for (var type : List.of(MoneyflowJobService.class, MoneyflowThsJobService.class,
-                    MoneyflowDcJobService.class, MoneyflowHsgtJobService.class, MarginAllJobService.class,
-                    MarginDetailJobService.class, MarginSecsJobService.class, MarginZrzJobService.class,
+                     MoneyflowHsgtJobService.class, MarginAllJobService.class,
+                    MarginDetailJobService.class, MarginSecsJobService.class,
                     ExchangeCalendarReadPort.class, SseCalendarWindowReadPort.class)) {
                 assertEquals(1, context.getBeansOfType(type).size(), type.getName());
             }
             var owners = context.getBeansOfType(SyncJobOwner.class).values();
-            for (var dataset : List.of("moneyflow", "moneyflow_ths", "moneyflow_dc", "moneyflow_hsgt",
-                    "margin_all", "margin_detail", "margin_secs", "margin_zrz")) {
+            for (var dataset : List.of("moneyflow", "moneyflow_ths", "moneyflow_hsgt",
+                    "margin_all", "margin_detail", "margin_secs")) {
                 assertEquals(1, owners.stream().filter(owner -> owner.datasetId().equals(dataset)).count(), dataset);
             }
-            assertFalse(MarginZrzSyncJobOwner.DEFINITION.enabled());
-            assertFalse(MarginZrzSyncJobOwner.DEFINITION.dailyEligible());
+
+
             var datasets = context.getBean(DatasetRegistry.class);
-            assertEquals(52, datasets.definitions().stream()
+            assertEquals(50, datasets.definitions().stream()
                     .filter(value -> value.capabilities().contains(DatasetDefinition.Capability.READ)).count());
-            assertEquals(52, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
+            assertEquals(50, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
             assertFalse(context.getBeanFactory().containsSingleton("questDbClient"));
             verify(dataSource, never()).getConnection();
             verify(dataSource, never()).getConnection(anyString(), anyString());

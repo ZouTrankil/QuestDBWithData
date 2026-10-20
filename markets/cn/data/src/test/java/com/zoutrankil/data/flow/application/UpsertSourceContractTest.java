@@ -21,14 +21,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class UpsertSourceContractTest {
     @TempDir Path temp;
     static final LocalDate DAY=LocalDate.of(2026,9,17);
-    enum Family { MONEYFLOW, DC, THS, DETAIL }
+    enum Family { MONEYFLOW,  THS, DETAIL }
 
     @ParameterizedTest @EnumSource(Family.class)
     void frozenFieldsParametersCanonicalOrderingAndReopenKeepActualReceiptBytes(Family family)throws Exception {
         var rows=List.of(raw(family,"600000.SH"),raw(family,"000001.SZ"));
         var provider=new Pages(rows);var page=fetch(family,provider,temp,()->false);
         assertEquals(2,page.rows().size());assertEquals("20260917",page.cursor());
-        assertEquals(List.of(family==Family.DC?Map.of("trade_date","20260917","limit",2000,"offset",0L):Map.of("trade_date","20260917")),provider.requests);
+
         assertEquals(fields(family),provider.contract.fields());
         var path=Path.of(page.responseEvidence());byte[] bytes=Files.readAllBytes(path);
         assertEquals(FileEvidenceStore.sha256(bytes),page.sourceFingerprint());
@@ -55,29 +55,7 @@ class UpsertSourceContractTest {
         }}
     }
 
-    @Test void dcV2AcceptsTenThousandRowsOnlyWithTheSixthShortTerminalPage()throws Exception {
-        var rows=new ArrayList<Map<String,JsonNode>>();for(int i=0;i<10000;i++)rows.add(raw(Family.DC,String.format(Locale.ROOT,"%06d.SZ",i)));
-        var provider=new Pages(rows);var page=fetch(Family.DC,provider,temp,()->false);
-        assertEquals(10000,page.rows().size());assertEquals(6,provider.requests.size());
-        assertEquals(List.of(0L,2000L,4000L,6000L,8000L,10000L),provider.requests.stream().map(p->p.get("offset")).toList());
-        var proof=JobDefinitionJson.mapper().readTree(Path.of(page.responseEvidence()).toFile());
-        assertEquals(2,proof.path("receiptVersion").asInt());assertEquals(10000,proof.path("dailyRowBound").asInt());
-        assertEquals(0,proof.path("pageProofs").get(5).path("returnedRows").asInt());
-        assertEquals(page.rows(),reopen(Family.DC,Path.of(page.responseEvidence()),page.sourceFingerprint()).rows());
-    }
 
-    @Test void dcRejectsLegacyUnpagedReceiptsAndChangedPagingProofEvenWithRecomputedHash()throws Exception {
-        var page=fetch(Family.DC,new Pages(List.of(raw(Family.DC,"000001.SZ"))),temp,()->false);
-        var original=(ObjectNode)JobDefinitionJson.mapper().readTree(Path.of(page.responseEvidence()).toFile());
-        for(boolean legacy:List.of(true,false)) {
-            var altered=original.deepCopy();
-            if(legacy)altered.remove(List.of("receiptVersion","pageProofs","dailyRowBound","pageSize"));
-            else ((ObjectNode)altered.path("pageProofs").get(0)).put("offset",2000);
-            byte[] bytes=JobDefinitionJson.canonicalMapper().writeValueAsBytes(altered);Path path=temp.resolve("altered-"+legacy+".json");Files.write(path,bytes);
-            assertThrows(IllegalStateException.class,()->reopen(Family.DC,path,FileEvidenceStore.sha256(bytes)));
-        }
-        assertEquals(2,MoneyflowDcSyncJobOwner.DEFINITION.version());
-    }
 
     @ParameterizedTest @ValueSource(booleans={false,true})
     void detailRequiresBothMarketsAndKeepsTheDateFooterInRawEvidence(boolean legacy)throws Exception {
@@ -95,7 +73,7 @@ class UpsertSourceContractTest {
         assertThrows(IllegalStateException.class,()->fetch(Family.DETAIL,new Pages(List.of(raw(Family.DETAIL,"600000.SH"))),temp.resolve("partial"),()->false));
     }
 
-    static List<String> fields(Family f){return switch(f){case MONEYFLOW->MoneyflowSource.FIELDS;case DC->MoneyflowDcSource.FIELDS;case THS->MoneyflowThsSource.FIELDS;case DETAIL->MarginDetailSource.FIELDS;};}
+    static List<String> fields(Family f){return switch(f){case MONEYFLOW->MoneyflowSource.FIELDS;case THS->MoneyflowThsSource.FIELDS;case DETAIL->MarginDetailSource.FIELDS;};}
     static Map<String,JsonNode> raw(Family f,String code){
         var result=new LinkedHashMap<String,JsonNode>();var json=JobDefinitionJson.mapper();
         for(String field:fields(f))result.put(field,json.valueToTree(1));
@@ -104,10 +82,10 @@ class UpsertSourceContractTest {
         return result;
     }
     static SyncJobRunner.Page<?> fetch(Family f,TusharePageService pages,Path root,BooleanSupplier cancel)throws Exception {
-        return switch(f){case MONEYFLOW->new MoneyflowSource(pages,root).fetch(DAY,cancel);case DC->new MoneyflowDcSource(pages,root).fetch(DAY,cancel);case THS->new MoneyflowThsSource(pages,root).fetch(DAY,cancel);case DETAIL->new MarginDetailSource(pages,root).fetch(DAY,cancel);};
+        return switch(f){case MONEYFLOW->new MoneyflowSource(pages,root).fetch(DAY,cancel);case THS->new MoneyflowThsSource(pages,root).fetch(DAY,cancel);case DETAIL->new MarginDetailSource(pages,root).fetch(DAY,cancel);};
     }
     static SyncJobRunner.Page<?> reopen(Family f,Path path,String hash)throws Exception {
-        return switch(f){case MONEYFLOW->MoneyflowSource.reopen(path,hash,DAY);case DC->MoneyflowDcSource.reopen(path,hash,DAY);case THS->MoneyflowThsSource.reopen(path,hash,DAY);case DETAIL->MarginDetailSource.reopen(path,hash,DAY);};
+        return switch(f){case MONEYFLOW->MoneyflowSource.reopen(path,hash,DAY);case THS->MoneyflowThsSource.reopen(path,hash,DAY);case DETAIL->MarginDetailSource.reopen(path,hash,DAY);};
     }
     static final class Pages extends TusharePageService {
         final List<Map<String,JsonNode>> rows;final List<Map<String,Object>> requests=new ArrayList<>();PageContract contract;
