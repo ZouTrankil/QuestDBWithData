@@ -216,3 +216,9 @@ DEC 的九日断点来自临时代码 `DECPD`。原目录保留了这段 OTCQX/U
 本次新增前两段 1297 行，三个独立来源的日期并集与 SPY 的 2007 个参照日一致，无缺日或重叠。各段二十列原值独立验收，原有 68084 行价格未变；各自调整价继续分开，不构造跨代码连续复权序列，也不改原 Yahoo 失败和历史候选状态。名称中的 GBP 面值文字不当作报价币种，报价仍按原目录的 USD 保存。
 
 新增两条永久映射，十八列已独立核对，原八条未变，总数为 10。DECPD 的 FIGI 保留真实 null；搜索中的 `isActive=true` 只是供应商声明，不能据此认定这个九日临时代码现在仍交易。锁内检查确认两张原表和 WAL 有效。新原件、三段日期证据、价格及映射回执在 `var/market-data/scope-review/dec-temporary-window-20261020/`；早前失败诊断继续作为当时证据保留，全市场剩余采集与身份复核继续推进。
+
+### AAAP 历史股票与现行 ETF
+
+旧 AAAP 是 Advanced Accelerator Applications S.A.，已按 Tiingo 实际接受的永久代码 `US000000013210` 写入 2015-11-11 至 2018-02-09 的 566 行日线。[Nasdaq 首次挂牌公告](https://www.globenewswire.com/news-release/2015/11/13/787188/0/en/Nasdaq-Welcomes-Advanced-Accelerator-Applications-S-A-Nasdaq-AAAP-to-The-Nasdaq-Stock-Market.html)确认起点；[发行人退市条款](https://www.sec.gov/Archives/edgar/data/1611787/000110465918003180/a18-3541_2ex99d1.htm)与[收购方申报](https://www.sec.gov/Archives/edgar/data/1114448/000110465918005861/a18-3997_2sc13d.htm)显示 Form 25 于 2018-02-01 提交，十日后生效。末个交易日据此推定为 2 月 9 日，并与原文正量记录吻合；不是另有交易所终止日期公告。原文完整保留 572 行，2 月 12–20 日的六根零量平价记录未写入。
+
+价格二十列及新增永久映射十八列独立回读一致，原有 69381 行价格和十条映射未变，映射累计 11 条；FIGI 继续保留来源真实 null。同一发布锁内确认两表 WAL 结清、缓冲为零、未挂起，原物理对象未变。[当前 AAAP 的 Nasdaq 通函](https://www.nasdaqtrader.com/content/newsalerts/2026/InfoCircular/AAAP_Circular_NQ.pdf)对应 2026-06-23 起的 Pacer Barings CLO Market Flex ETF，不能替代旧股票历史。原范围复核任务和两类目录行保留。历史公告经网页读取核对，本机 HTML 下载的 403 回执及事实摘录另存，不冒充完整 HTML 原件；现行 ETF 的完整 PDF、价格原文、Native 回执及独立核对在 `var/market-data/scope-review/aaap-historical-stock-20261020/`。这次补充不代表全市场已齐备。
