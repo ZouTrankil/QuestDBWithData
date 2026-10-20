@@ -330,3 +330,15 @@ Yahoo 的 PRTA 原响应在 2012-12-18 至 20 日返回三根全零价格。[发
 十段 Native 运行均已验收，全部二十列另由 PGWire 独立重建并回读一致；原 91192 行价格和 17 条映射未变。锁内确认两表 WAL 结清、缓冲为零、未挂起，结构和物理表未变，九个非法日期与截止日后的价格仍未写入。证据在 `var/market-data/scope-review/rcat-recovery-20261020/`，含原文关联、发行人资料、十段意图和回执、供应商差异、独立回读及 WAL。
 
 同目录 `main-progress-independent-verification.json` 另对一个新完成的主采集组核对了 128 个来源、391046 行、21 个年度窗口，均为新增行。ZIP 成员、原件和 Native 证据摘要全部通过，二十列经 PGWire 逐年回读一致，已完成队列前后未变；全市场采集继续推进。
+
+### 当前持仓范围的日期验收与 NBIS 旧窗口
+
+按 SPY/QQQ 的 2026-10-16 股票持仓，共 604 条持仓、518 个不同代码，补录 NBIS 前独立读回 528 条供应商序列、2486410 行日期键。518 个代码都有已验收价格，全部序列到达 2026-10-16，各自已采集首尾间无 SPY 参照缺日、重复键或参照外日期。持仓、来源集合及物理表在核对前后稳定。这是日期和来源状态验收，字段值仍沿各自原 Native 回执；当前持仓继续标记 `ETF_HOLDINGS_PROXY`。
+
+首尾之间没有缺日，仍不能证明历史起点已齐备。此次发现 NBIS 的目录声称始于 2011 年，Yahoo 却只有 2024 年复牌后的 499 行。已通过 Tiingo 当前 `NBIS` 请求键补入 2011-05-24 至 2022-02-25 的 2709 行旧 Yandex 日线，窗口内量均为正，原始与调整 OHLCV 一致，来源分红为 0、拆股因子为 1；未改写已有 Yahoo 段。
+
+[Nasdaq 公告](https://www.nasdaq.com/press-release/nasdaq-resumes-trading-nebius-group-nv-2024-10-18)确认原 `YNDX` 于 2022-02-28 美东 6:38 停牌，2024-10-21 美东 9:00 以 `NBIS` 复牌。[发行人说明](https://group.nebius.com/newsroom/nebius-group-announces-planned-resumption-of-trading-on-nasdaq-and-provides-investor-update)确认同一 Class A 股份更名及俄罗斯资产剥离；另有复牌当日确认公告，三份完整 HTML 已冻结。停牌区间包含 665 个 SPY 常规交易日参照，均未补造价格；补入前段与原后段合计 3208 个不同日期，恰好覆盖 3873 个参照日扣除这段停牌后的集合。旧 Yandex 业务与目前 AI 基础设施业务属于不同阶段，两个供应商的调整价仍分开，不自动拼接成连续复权收益。
+
+新增 2709 行二十列独立重建并经 PGWire 回读一致，原保护组 96912 行价格（含 NBIS 原 499 行）及 17 条映射未变，原成功 Yahoo 队列未改。锁内核对 WAL 结清、缓冲为零、未挂起，原物理表与结构保持。持仓日期验收及首尾诊断在 `var/market-data/scope-review/index-proxy-coverage-20261020/`，NBIS 原文、身份、停牌参照集合、Native、独立回读及 WAL 在 `nbis-history-20261020/`。
+
+前一目录另验收主采集的一组 128 个来源、360948 行、21 个年度窗口：从原 Yahoo 响应独立重建全部二十列，对照原 Native prepared、回读文件和当前 PGWire 行均一致，已完成队列前后稳定。匿名试取 WIKI 历史档案返回 HTTP 403，未取得价格；回执在 `var/market-data/scope-review/wiki-access-20261020/`，该渠道不计入覆盖。全市场及剩余历史缺口继续推进。
