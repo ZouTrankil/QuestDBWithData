@@ -136,6 +136,8 @@ BTC 的原始文件、队列、预算、账本及回执在 `var/crypto-market-da
 
 预取的 `broad-source-max-attempts` 默认 3（允许 1 至 5），`broad-source-retry-delay-ms` 默认 5000（允许 1000 至 60000）。尚未绑定原文的 I/O 错误和 HTTP 5xx 可重试，等待从失败时刻起递增，默认五秒、十秒，单次退避最多六十秒，并遵守更晚的 `Retry-After`。每次请求仍计入原共享配额；429、配额等待和取消不消耗该错误次数。SQLite 的 `broad_source_retries` 保留尝试历史、原 proof 和下次时刻；重启不清零，等待时状态页显示 `WAITING_SOURCE_RETRY`，不会提前显示来源范围完成。其他证券可继续下载。4xx、响应超限及已冻结原文的校验失败直接留证；旧失败任务、范围复核和正式未决状态不自动重置。关闭预取时不启用这项重试。
 
+2026-10-20 已核对 IRD、IRDM 两次真实来源 I/O 失败后的自动恢复：沿原任务、原截止日取得有效冻结原文，退避时刻、失败历史及两次共享预算请求都保留，无人工重排。证据在 `var/market-data/scope-review/source-retry-v23-20261020/automatic-real-io-recovery.json`；这里只证明来源恢复，正式价格仍需原发布验收。
+
 当前挂牌范围来自 Nasdaq Trader 两份官方列表。候选之外的 ETF、测试证券、权证、优先股等仍保留排除原因。历史范围另保留 Tiingo 完整 ZIP 中美国场所的 51629 条 Stock/ETF 记录，按原始行号保存重复代码的不同窗口。候选证券继续逐个请求价格；目录中的日期只是供应商声称的可用范围，不能当作正式上市退市事件。历史退市证券、OTC 的实际价格及历史指数成分尚未齐备。
 
 官方名称末尾的单数 `Right` 也属于非普通股票，不能误识别成普通股；含 Bright、Wright 的公司名及 ADR 解释里的 right 不受这条规则影响。当前官方明确为非普通证券或 ETF、但历史目录笼统标作 Stock 的未发布候选进入 `SCOPE_REVIEW_REQUIRED`，保留原文、原拒收原因及历史窗口，待核实历史类别和代码复用。ETF 还须有官方 `is_etf=true`，不能只按名字猜测。已经验收、发送未决或绑定来源组的任务不会被该规则改写；六只已验收参照 ETF 的来源保持原样。
@@ -198,3 +200,17 @@ python tools/audit_cross_market_coverage.py --through 2026-10-16 --crypto-throug
 [FTEL 改名为 GMEX](https://www.sec.gov/Archives/edgar/data/1928581/000149315226009687/ex99-1.htm)，两段仍按供应商实际请求代码和各自调整口径保存，3 月 11 日的重叠原文保留，不拼成连续复权序列。[HLSQ 原为 BiomX/PHGE](https://www.sec.gov/Archives/edgar/data/1739174/000121390026100156/ea0305538-8k_tessera.htm)，不能把此前价格解释成同一国防业务历史。[IGR 是封闭式基金](https://www.cbreim.com/strategies-and-solutions/investment/listed-real-assets/global-real-estate-income-fund)，现金分配沿用来源，不据此推断税务性质，也不计作普通经营公司覆盖。
 
 本轮 20 次 Tiingo 请求均成功，最短间隔 2000 毫秒，使用原共享持久预算。本机近 31 天记录涉及 49 个请求代码，不能据此断定账户在其他位置的剩余额度。本机原文、身份材料、日期诊断、Native 回执、独立核对和 WAL 证据保存在 `var/market-data/scope-review/newest-six-20261020/`。这些补充不代表全市场、全部历史身份及剩余来源缺口已完成。
+
+### DEC 合股前后窗口
+
+DEC 的九日断点来自临时代码 `DECPD`。原目录保留了这段 OTCQX/USD 窗口，实际 Tiingo 原文首日 `splitFactor=0.05`，与[发行人的 SEC 回函](https://www.sec.gov/Archives/edgar/data/1922446/000110465923125440/filename1.htm)确认的 2023-12-05 二十合一一致；发行人原始 HTML 也已冻结。
+
+| 供应商请求键 | 行数 | 实有来源窗口 |
+| --- | ---: | --- |
+| US000000087028 | 1288 | 2018-10-22 至 2023-12-04 |
+| DECPD | 9 | 2023-12-05 至 2023-12-15 |
+| DEC | 710 | 2023-12-18 至 2026-10-16，原已验收 NYSE 段 |
+
+本次新增前两段 1297 行，三个独立来源的日期并集与 SPY 的 2007 个参照日一致，无缺日或重叠。各段二十列原值独立验收，原有 68084 行价格未变；各自调整价继续分开，不构造跨代码连续复权序列，也不改原 Yahoo 失败和历史候选状态。名称中的 GBP 面值文字不当作报价币种，报价仍按原目录的 USD 保存。
+
+新增两条永久映射，十八列已独立核对，原八条未变，总数为 10。DECPD 的 FIGI 保留真实 null；搜索中的 `isActive=true` 只是供应商声明，不能据此认定这个九日临时代码现在仍交易。锁内检查确认两张原表和 WAL 有效。新原件、三段日期证据、价格及映射回执在 `var/market-data/scope-review/dec-temporary-window-20261020/`；早前失败诊断继续作为当时证据保留，全市场剩余采集与身份复核继续推进。
