@@ -38,6 +38,7 @@ import com.zoutrankil.data.stock.application.StockLimitJobService;
 import com.zoutrankil.data.stock.application.StockStDailyJobService;
 import com.zoutrankil.data.stock.application.StockSuspendJobService;
 import com.zoutrankil.data.strategy.application.MainStrategyDataService;
+import com.zoutrankil.data.strategy.input.StrategyInputSchema;
 import com.zoutrankil.data.strategy.publication.ScoreArtifactPublisher.Publication;
 import com.zoutrankil.data.strategy.store.StoredOfficialPlan;
 import com.zoutrankil.market.cn.time.CnMarketTime;
@@ -1525,7 +1526,9 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
     private CompletionEvidence scores(RunRequest r, PipelinePlan p) throws Exception {
         Publication publication;
         try {
-            publication = strategyData.prepareScores(p.to(), "java_scores_" + r.instanceId());
+            publication =
+                    strategyData.prepareScores(
+                            p.to(), "java_scores_" + r.instanceId(), StrategyInputSchema.V1);
         } catch (Exception unavailable) {
             throw planningGate("ScoreInputs", unavailable);
         }

@@ -68,6 +68,48 @@ class NativeMarketInputPackagePublisherTest {
     }
 
     @Test
+    void preflightRejectsMissingMarketOrAvailabilityWithoutCreatingAnyArtifact() throws Exception {
+        var input = standardInputs();
+        var publisher = new NativeMarketInputPackagePublisher(root.resolve("uncreated"));
+        publisher.preflight(
+                StrategyInputSchema.V2,
+                START,
+                END,
+                input.calendar,
+                input.market,
+                input.context,
+                input.panel);
+        assertFalse(Files.exists(root.resolve("uncreated")));
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        publisher.preflight(
+                                StrategyInputSchema.V2,
+                                START,
+                                END,
+                                input.calendar,
+                                List.of(),
+                                input.context,
+                                input.panel));
+        var missing =
+                input.context.stream()
+                        .map(row -> FrozenScalarValues.excluding(row, Set.of("available_at")))
+                        .toList();
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        publisher.preflight(
+                                StrategyInputSchema.V2,
+                                START,
+                                END,
+                                input.calendar,
+                                input.market,
+                                missing,
+                                input.panel));
+        assertFalse(Files.exists(root.resolve("uncreated")));
+    }
+
+    @Test
     void standardPackageReadsActualCanonicalColumnsAndKeepsEvidenceAvailabilitySeparate()
             throws Exception {
         var input = standardInputs();

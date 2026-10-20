@@ -179,6 +179,12 @@ public final class MainStrategyDataService {
      * 提交产物前重查来源版本及方案摘要，防止计算过程中发生的数据变化被悄然发布。
      */
     public Publication prepareScores(LocalDate target, String runId) throws Exception {
+        return prepareScores(target, runId, null);
+    }
+
+    /** 旧 Batch 请求显式绑定 v1；当前配置变更不能让同一冻结运行升级产物协议。 */
+    public Publication prepareScores(
+            LocalDate target, String runId, StrategyInputSchema requiredSchema) throws Exception {
         FrozenPromotedRecipe frozen = recipe();
         StrategySourceCoverage coverage;
         if (coverageInputs.isBlank())
@@ -193,9 +199,8 @@ public final class MainStrategyDataService {
                             reader.clocks());
             coverage = new StrategySourceCoverage(assembled.path().toString(), assembled.sha256());
         }
-        // v2 读取可独立核验；发布端未完成前，不能先推进旧评分别名再在市场包阶段失败。
-        if (coverage.inputSchema() == StrategyInputSchema.V2)
-            throw new IllegalStateException("v2 发布端仍在接入，当前不推进评分或市场包别名");
+        if (requiredSchema != null && coverage.inputSchema() != requiredSchema)
+            throw new IllegalStateException("覆盖协议与原冻结任务不符，不能将旧运行升级为新版产物");
         var prepared = calculateScores(target, frozen, coverage);
         var output = prepared.output();
         ScoreArtifactPublisher.PublicationGate gate =
@@ -219,7 +224,16 @@ public final class MainStrategyDataService {
         proof.put("optionalChip", "Empty input permitted by existing contract");
         proof.put("appliedFactorWeights", applied(output.factorWeights()));
         proof.put("appliedFactorStates", applied(output.factorStates()));
-        var panel = legacyV1Frames(output.panel(), true);
+        var panel = frames(output.panel(), true, coverage.inputSchema());
+        // 缺日历、行情或历史可用时刻时，在推进评分别名前停止。
+        marketPackages.preflight(
+                coverage.inputSchema(),
+                start,
+                target,
+                prepared.calendar(),
+                prepared.etfDaily(),
+                prepared.marketContext(),
+                panel);
         LOG.info(
                 "Publishing complete Java score pair: panel rows={}, coverage rows={}",
                 panel.size(),
@@ -228,7 +242,7 @@ public final class MainStrategyDataService {
                 publisher.publish(
                         runId,
                         panel,
-                        legacyV1Frames(output.coverage(), false),
+                        frames(output.coverage(), false, coverage.inputSchema()),
                         prepared.signalDates(),
                         frozen.artifactSha256().get("recipe"),
                         proof,
@@ -459,7 +473,7 @@ public final class MainStrategyDataService {
                 signal,
                 LocalDate.parse(sourceDocument.path("execution_date").asText()),
                 signal,
-                calendarOpenDates(packageProof));
+                calendarOpenDates(packageProof, p.inputSchema()));
         if (!frozen.artifactSha256().equals(recipe().artifactSha256()))
             throw new IllegalStateException(
                     "Accepted recipe changed while importing official authority");
@@ -516,7 +530,7 @@ public final class MainStrategyDataService {
                 plan.plan().signalDate(),
                 plan.plan().executionDate(),
                 day,
-                calendarOpenDates(packageProof));
+                calendarOpenDates(packageProof, p.inputSchema()));
         return plan;
     }
 
@@ -534,7 +548,8 @@ public final class MainStrategyDataService {
     }
 
     private static List<LocalDate> calendarOpenDates(
-            NativeMarketInputPackagePublisher.Publication product) throws Exception {
+            NativeMarketInputPackagePublisher.Publication product, StrategyInputSchema inputSchema)
+            throws Exception {
         var calendar =
                 product.components().stream()
                         .filter(ref -> ref.uri().contains("/calendar-"))
@@ -557,7 +572,10 @@ public final class MainStrategyDataService {
                 var rows = columns.getRecordReader(pages, new GroupRecordConverter(schema));
                 for (long i = 0; i < pages.getRowCount(); i++) {
                     var row = rows.read();
-                    LocalDate date = LocalDate.ofEpochDay(row.getInteger("cal_date", 0));
+                    // 日历字段跟随原评分的协议，不从当前配置或列名猜版本。
+                    String dateColumn =
+                            inputSchema == StrategyInputSchema.V2 ? "calendar_date" : "cal_date";
+                    LocalDate date = LocalDate.ofEpochDay(row.getInteger(dateColumn, 0));
                     int flag = (int) row.getLong("is_open", 0);
                     if (++count > 1500
                             || !"SSE".equals(row.getString("exchange", 0))
@@ -661,14 +679,32 @@ public final class MainStrategyDataService {
 
     static List<Map<String, Object>> legacyV1Frames(
             List<ScoreRow> rows, boolean includeInstrumentCode) {
+        return frames(rows, includeInstrumentCode, StrategyInputSchema.V1);
+    }
+
+    static List<Map<String, Object>> frames(
+            List<ScoreRow> rows, boolean includeInstrumentCode, StrategyInputSchema schema) {
+        Objects.requireNonNull(schema);
         return rows.stream()
                 .map(
                         row -> {
+                            if (schema == StrategyInputSchema.V2
+                                    && row.values().keySet().stream()
+                                            .anyMatch(
+                                                    field ->
+                                                            !field.equals("trade_date")
+                                                                    && SCORE_IDENTITIES.contains(
+                                                                            field)))
+                                throw new IllegalStateException("v2 模型结果不能夹带证券或汇总身份列");
                             var identities = new LinkedHashMap<String, Object>();
                             identities.put("trade_date", row.tradeDate());
-                            // 旧产物继续使用 v1 的 ts_code；证券和汇总身份不能在这里混用。
+                            // 身份列跟随产物版本；汇总标签不能发布为证券代码。
                             if (includeInstrumentCode)
-                                identities.put("ts_code", row.requireInstrumentCode());
+                                identities.put(
+                                        schema == StrategyInputSchema.V2
+                                                ? "instrument_code"
+                                                : "ts_code",
+                                        row.requireInstrumentCode());
                             return FrozenScalarValues.merging(row.values(), identities);
                         })
                 .toList();

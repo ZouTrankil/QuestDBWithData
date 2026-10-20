@@ -10,9 +10,12 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.zoutrankil.data.strategy.input.StrategyInputRows;
+import com.zoutrankil.data.strategy.input.StrategyInputSchema;
 import com.zoutrankil.data.strategy.publication.NativeMarketInputPackagePublisher;
 import com.zoutrankil.data.strategy.publication.ScoreArtifactPublisher;
 import com.zoutrankil.data.strategy.score.EtfOnlyTop2ScoreProducer;
+import com.zoutrankil.data.strategy.score.FrozenScalarValues;
 import com.zoutrankil.data.strategy.store.OfficialPlanStore;
 import com.zoutrankil.data.strategy.store.PlanInputProvenance;
 import com.zoutrankil.data.strategy.store.StoredOfficialPlan;
@@ -64,7 +67,13 @@ class MainStrategyDataServiceTest {
 
     private ScoreArtifactPublisher.Publication publish(
             String run, LocalDate day, boolean packageToo) throws Exception {
-        var calendar = new ArrayList<Map<String, Object>>();
+        return publish(run, day, packageToo, StrategyInputSchema.V1);
+    }
+
+    private ScoreArtifactPublisher.Publication publish(
+            String run, LocalDate day, boolean packageToo, StrategyInputSchema schema)
+            throws Exception {
+        List<Map<String, Object>> calendar = new ArrayList<>();
         LocalDate prior = day.minusDays(1);
         for (LocalDate d = day; !d.isAfter(day.plusDays(14)); d = d.plusDays(1)) {
             boolean open =
@@ -124,6 +133,25 @@ class MainStrategyDataServiceTest {
         var panel =
                 List.<Map<String, Object>>of(
                         Map.of("trade_date", day, "ts_code", "510300.SH", "score", .5));
+        if (schema == StrategyInputSchema.V2) {
+            calendar = StrategyInputRows.standard("calendar", calendar);
+            market = StrategyInputRows.standard("etf_daily", market);
+            context =
+                    context.stream()
+                            .map(
+                                    row ->
+                                            FrozenScalarValues.merging(
+                                                    row,
+                                                    Map.of("available_at", day + "T08:00:00Z")))
+                            .toList();
+            panel =
+                    panel.stream()
+                            .map(
+                                    row ->
+                                            FrozenScalarValues.renaming(
+                                                    row, Map.of("ts_code", "instrument_code")))
+                            .toList();
+        }
         var sources = new LinkedHashMap<String, Object>();
         sources.put("calendar", Map.of("rows", calendar.size(), "sha256", rowHash(calendar)));
         sources.put("etf_daily", Map.of("rows", market.size(), "sha256", rowHash(market)));
@@ -150,20 +178,25 @@ class MainStrategyDataServiceTest {
                             0L,
                             "schema",
                             List.of(Map.of("column", "date", "type", "TIMESTAMP"))));
-        var proof =
-                Map.<String, Object>of(
-                        "sourceComplete",
-                        true,
-                        "end",
-                        day.toString(),
-                        "recipeHashes",
-                        hashes,
-                        "sources",
-                        sources,
-                        "sourceClocks",
-                        clocks,
-                        "scoreProvenance",
-                        Map.of("score_recipe_id", "test-only-service"));
+        var proof = new LinkedHashMap<String, Object>();
+        proof.put("sourceComplete", true);
+        proof.put("end", day.toString());
+        proof.put("recipeHashes", hashes);
+        proof.put("sources", sources);
+        proof.put("sourceClocks", clocks);
+        proof.put("scoreProvenance", Map.of("score_recipe_id", "test-only-service"));
+        if (schema == StrategyInputSchema.V2) {
+            proof.put("inputSchema", schema.inputSchema());
+            proof.put(
+                    "coverage",
+                    Map.of(
+                            "schema",
+                            schema.coverageSchema(),
+                            "inputSchema",
+                            schema.inputSchema(),
+                            "keyEncoding",
+                            schema.keyEncoding()));
+        }
         var score =
                 new ScoreArtifactPublisher(root.resolve("artifacts"))
                         .publish(
@@ -256,6 +289,24 @@ class MainStrategyDataServiceTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    void standardWeeklyPlanReadsItsOriginalCalendarAfterLegacyDailyAliasesAdvance()
+            throws Exception {
+        var weekly = publish("java_scores_standard_weekly", SIGNAL, true, StrategyInputSchema.V2);
+        Path source = canonical();
+        var original = importInitial(source, weekly);
+        publish("java_scores_legacy_daily", SIGNAL.plusDays(5));
+        var service = service();
+        var accepted = service.requirePlan(SIGNAL.plusDays(5));
+        assertEquals(original.provenance(), accepted.provenance());
+        var repeated = service.importPlan(source, ScoreArtifactPublisher.sha(source));
+        assertEquals(original.planId(), repeated.planId());
+        assertFalse(repeated.created());
+        assertEquals(original.provenance(), repeated.provenance());
+        assertTrue(service.planEvidence(repeated).stream().allMatch(Files::isRegularFile));
+        verifyNoInteractions(jdbc);
     }
 
     @Test

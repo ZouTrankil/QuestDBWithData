@@ -235,28 +235,13 @@ public final class NativeMarketInputPackagePublisher {
         verifySource(sourceProof, "calendar", calendar);
         verifySource(sourceProof, "etf_daily", etfDaily);
         verifySource(sourceProof, "market_context", marketContext);
-        List<Map<String, Object>> calendarRows = calendar(calendar, start, end, layout);
-        SortedSet<LocalDate> openDates = new TreeSet<>();
-        for (var row : calendarRows) {
-            LocalDate day = layout.date(row.get(layout.calendarDate()));
-            if (!day.isAfter(end) && ((Number) row.get("is_open")).intValue() == 1)
-                openDates.add(day);
-        }
-        if (openDates.isEmpty() || !openDates.last().equals(end))
-            throw invalid("product target is not an open calendar date");
-        Set<String> scoreKeys = scoreKeys(scorePanel, scores.panelRef(), layout);
-        SortedSet<LocalDate> scoreDates = new TreeSet<>();
-        SortedSet<String> symbols = new TreeSet<>();
-        for (var row : scorePanel) {
-            scoreDates.add(layout.date(row.get("trade_date")));
-            symbols.add(symbol(row.get(layout.code())));
-        }
-        if (!scoreDates.equals(openDates))
-            throw invalid("frozen score grid differs from the product calendar");
-        List<Map<String, Object>> marketRows =
-                market(etfDaily, start, end, symbols, scoreKeys, layout);
-        List<Map<String, Object>> contextRows =
-                context(marketContext, start, end, openDates, layout);
+        scoreKeys(scorePanel, scores.panelRef(), layout);
+        var prepared =
+                prepareRows(start, end, calendar, etfDaily, marketContext, scorePanel, layout);
+        var calendarRows = prepared.calendar();
+        var marketRows = prepared.market();
+        var contextRows = prepared.context();
+        var symbols = prepared.symbols();
         String prefix =
                 "data/product_packages/market/etf/rotation/input_package/java/" + runId + "/";
         Ref calendarRef = artifacts.frame(prefix, "calendar", calendarRows, layout.calendarDate());
@@ -730,6 +715,71 @@ public final class NativeMarketInputPackagePublisher {
         return List.copyOf(paths);
     }
 
+    /** 评分别名更新前先核对三角色可发布性；不写目录，也不代替发布时的证据重查。 */
+    public void preflight(
+            StrategyInputSchema schema,
+            LocalDate start,
+            LocalDate end,
+            List<Map<String, Object>> calendar,
+            List<Map<String, Object>> etfDaily,
+            List<Map<String, Object>> marketContext,
+            List<Map<String, Object>> scorePanel) {
+        prepareRows(start, end, calendar, etfDaily, marketContext, scorePanel, new Layout(schema));
+    }
+
+    private record PreparedRows(
+            List<Map<String, Object>> calendar,
+            List<Map<String, Object>> market,
+            List<Map<String, Object>> context,
+            SortedSet<String> symbols) {}
+
+    private static PreparedRows prepareRows(
+            LocalDate start,
+            LocalDate end,
+            List<Map<String, Object>> calendar,
+            List<Map<String, Object>> etfDaily,
+            List<Map<String, Object>> marketContext,
+            List<Map<String, Object>> scorePanel,
+            Layout layout) {
+        if (start == null
+                || end == null
+                || end.isBefore(start)
+                || end.toEpochDay() - start.toEpochDay() > 730) throw invalid("市场包预检要求有界日期范围");
+        List<Map<String, Object>> calendarRows = calendar(calendar, start, end, layout);
+        SortedSet<LocalDate> openDates = new TreeSet<>();
+        for (var row : calendarRows) {
+            LocalDate day = layout.date(row.get(layout.calendarDate()));
+            if (!day.isAfter(end) && ((Number) row.get("is_open")).intValue() == 1)
+                openDates.add(day);
+        }
+        if (openDates.isEmpty() || !openDates.last().equals(end))
+            throw invalid("product target is not an open calendar date");
+        Set<String> scoreKeys = candidateKeys(scorePanel, layout);
+        SortedSet<LocalDate> scoreDates = new TreeSet<>();
+        SortedSet<String> symbols = new TreeSet<>();
+        for (var row : scorePanel) {
+            scoreDates.add(layout.date(row.get("trade_date")));
+            symbols.add(symbol(row.get(layout.code())));
+        }
+        if (!scoreDates.equals(openDates))
+            throw invalid("frozen score grid differs from the product calendar");
+        List<Map<String, Object>> marketRows =
+                market(etfDaily, start, end, symbols, scoreKeys, layout);
+        List<Map<String, Object>> contextRows =
+                context(marketContext, start, end, openDates, layout);
+        return new PreparedRows(calendarRows, marketRows, contextRows, symbols);
+    }
+
+    private static Set<String> candidateKeys(List<Map<String, Object>> rows, Layout layout) {
+        if (rows == null || rows.isEmpty() || rows.size() > 5_000_000) throw invalid("评分候选超出预算或为空");
+        var keys = new HashSet<String>();
+        for (var row : rows)
+            if (!keys.add(
+                    layout.date(row.get("trade_date")) + ":" + symbol(row.get(layout.code()))))
+                throw invalid("评分候选业务键重复");
+        return keys;
+    }
+
     private static void requireSchema(Connection connection, Ref ref, String version)
             throws Exception {
         try (var query =
@@ -894,11 +944,7 @@ public final class NativeMarketInputPackagePublisher {
             throws Exception {
         if (rows == null || rows.size() != panel.rowCount() || rows.size() > 5_000_000)
             throw invalid("provided score candidate row count differs from frozen panel");
-        var keys = new HashSet<String>();
-        for (var row : rows)
-            if (!keys.add(
-                    layout.date(row.get("trade_date")) + ":" + symbol(row.get(layout.code()))))
-                throw invalid("duplicate score candidate key");
+        var keys = candidateKeys(rows, layout);
         var observed = new HashSet<String>();
         // LocalInputFile 避免触发 Hadoop 文件系统及用户解析，兼容 Java 24 移除 Subject 旧机制的变化。
         try (var reader = ParquetFileReader.open(new LocalInputFile(panel.path()))) {

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zoutrankil.data.strategy.input.StrategyInputSchema;
 import com.zoutrankil.data.strategy.score.ScoreRow;
 
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,42 @@ import java.util.List;
 import java.util.Map;
 
 class MainStrategyDataFramesTest {
+    @Test
+    void standardFramesKeepModelValuesAndPublishOnlyCanonicalIdentity() {
+        var day = LocalDate.of(2026, 10, 16);
+        var values = new LinkedHashMap<String, Object>();
+        values.put("score", .625);
+        values.put("missing", null);
+        values.put("not_finite", Double.NaN);
+        var row = new ScoreRow(day, "000001.SZ", values);
+        var frame =
+                MainStrategyDataService.frames(List.of(row), true, StrategyInputSchema.V2)
+                        .getFirst();
+        var expected = new LinkedHashMap<>(values);
+        expected.put("trade_date", day);
+        expected.put("instrument_code", "000001.SZ");
+        assertEquals(expected, frame);
+        assertFalse(frame.containsKey("ts_code"));
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        MainStrategyDataService.frames(
+                                List.of(
+                                        new ScoreRow(
+                                                day, "000001.SZ", Map.of("ts_code", "another"))),
+                                true,
+                                StrategyInputSchema.V2));
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        MainStrategyDataService.frames(
+                                List.of(
+                                        ScoreRow.aggregate(
+                                                day, ScoreRow.AggregationScope.MARKET, values)),
+                                true,
+                                StrategyInputSchema.V2));
+    }
+
     @Test
     void completeScoreFramesRetainExactOrderedValuesAndReplaceOnlyIdentityValues()
             throws Exception {
