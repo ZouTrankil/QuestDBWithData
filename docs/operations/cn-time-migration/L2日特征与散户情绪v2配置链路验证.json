@@ -1,0 +1,86 @@
+{
+  "基线提交": "9ac957c376abc42e6c6f72f3ec42b334c9c4ead4",
+  "范围": "L2 日特征公开配置与散户情绪 MV 同版来源、SQL、恢复、读取及当前完整前缀证明；正式默认不切换",
+  "最终源码摘要": {
+    "config/markets/cn.yml": "40e7671346148464cf25a1f62421f5499d1c4f4a97ab2f2e3e0cf6ea74d72b50",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/L2Configuration.java": "f536d8eb56e418ff40d33dd57d26f42df496fbb541c224643053d8ed912befb4",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/storage/L2DailyFeaturesReadRepository.java": "c330a90cb753fa199e789f2b57fb84f9cf7361e6dadcd37dc08c2dde19755419",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/DefaultReadBindings.java": "23937f9afd1fa79386dd151f2ea6643313329381ce1d644ce0a2bd6e52f48b2f",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java": "fa8a1f7ad9cc10287606205f060020c0d2aeee544162420e19122f9b017a6620",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/bootstrap/ProjectConfigurationTest.java": "5aeb2adfa501e49a9e1dd9d8733092529c6c95a97608d07db9ee32714db16fc5",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/config/L2DailyFeaturesConfiguredLayoutTest.java": "b802dc6dbe36c79f3429ddca0af15b7c701890600f3f5e2da4d3895425bfb34e",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/derived/storage/RetailSentimentDailyMaterializationPort.java": "c860202b16fbee7d9394297c17dfcec23e538ed2090f999759cc9cc13cf3d4e0",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/derived/domain/RetailSentimentDailyLayout.java": "8cdc9d19586aab937738cf68052b1c8045618ae535aae6b66083bab8589cced5",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/repository/RetailSentimentDailyMaterializationPortTest.java": "0a448bd843d5db635eafcfbf72d1533bfa5a4459ab22404b4d835d5312dbfac6",
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/derived/RetailSentimentDailyDataset.java": "423524006714763044ed670e789a2fb1832fb4f3f64cadd013c820fe9ac6a8b2",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/derived/port/RetailSentimentDailySession.java": "a4700a0a56614837e6db2c6824d59a3796ae81dfcfce9e87080db4dae6db94ca",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/derived/port/RetailSentimentDailyTarget.java": "674cc160a04c11fc493a5bfb00aa6b7110456be06c3b32067fb908c6a9ad1478",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/derived/storage/QuestDbRetailSentimentDailyTarget.java": "676ee56fcbc2e8e566c34f3a4380bfeb7470a27101f7739e39c0e5e879b303e5",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/DerivedMvConfiguration.java": "dba7e09835e2b07940cf8ac4117c98443b680269fdf97d0732f4cd4de73a564c",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/derived/storage/RetailSentimentDailyReadRepository.java": "f3805ce421f0747cad61eafd948cf6dbba5fd280ebdbfdb779bae57afb7cf71c",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/derived/application/RetailSentimentDailyJobService.java": "df3687a5f14851c086725ee1120b1e30810051bb5c2754febfbfd84621d83d5c",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/derived/application/RetailSentimentDailyMaterializeAdapter.java": "fe89a2c2605e391dcbb65bc426b846f63caecf09f6ad23060bd82162ad30442b",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java": "4ec656495fc0aef8ea9826835ff53972c03361461b5894c777f86406e9b8919d",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/derived/application/RetailSentimentDailyJobServiceTest.java": "690b677b239f568b78cb07189f790668aa41668b2a287fc83fdf88e56948ce14",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/repository/QuestDbRetailSentimentMvReadGuardTest.java": "75de32a6826c0bca9bbd8ff6dcd33cf09dc3deea632e2e9de92e5d7ec157c370",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/derived/application/RetailSentimentDailyVersionedLifecycleTest.java": "710970bf85f3dcdb5b802de6308ae38aac608e562906b24c8efe96df839240e5"
+  },
+  "完整回归": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2424,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 145
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "完整回归命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "架构边界与两个发行包": "通过",
+  "格式检查": "完成：2054 个 Java 文件；字面量值核对通过",
+  "公开配置检查": "cn-data 与 main-strategy 两个发行 ZIP 均通过",
+  "配置": {
+    "版本": "app.sync.l2-daily-features-schema-version 默认1；只支持1/2；L2 目标/作业/读取/组 mapper 与散户情绪 MV 同版",
+    "L2目标": "app.sync.l2-daily-features.target-table 默认空；读取默认 l2_daily_features，显式目标也覆盖读取，保留原行为",
+    "MV目标": "app.sync.retail-sentiment-daily.v2-target-table 默认 java_d098_mv_retail_sentiment_daily_v2，支持标准 ENV 覆盖",
+    "正式摄取": "FormalL2DailyFeaturesIngestion 仍固定 v1/formal table；配置不建表或迁移"
+  },
+  "新增验证": [
+    "实际 Spring 1/2 公共任务图、同版依赖、Dataset、typed reader 与 readGroup mapper 无外部 IO 启动；默认配置和标准环境覆盖",
+    "v2 MV 来源只允许 D086 隔离表、目标只允许 D098 隔离 MV；完整 SQL 只改日期映射，13列、AVG/SUM、金额单位与null保持",
+    "v2 CREATE 先核对全来源范围、精确计数、完整键和稳定WAL；200001行在DDL前拒绝，零行须空边界",
+    "真实 JdbcTemplate+模拟 JDBC 校验原生 MV 来源/SQL/物理布局、精确LONG census及溢出；v2契约不接受v1元数据",
+    "公共 reader 按显式scope核对原生MV完整SQL与稳定版本；旧游标不跨作用域；伪造通用dataset不能绕过v2保留目标守卫",
+    "真实runner+临时SQLite：默认切版后原v2恢复仍用原表/原定义，不改冻结JSON；原来源变化时拒绝发送",
+    "未知响应保留原allDates锁；普通resume拒绝；显式确认发送停止后只读reconcile验完整值并释放原锁，不重发",
+    "工厂按原scope克隆时保留当前mutation开关和expectedTargetId部署准入；旧functional factory只接v1",
+    "旧完整成功窗口只确定范围，当前来源发生修订/追加后重新逐值核验；独立新证据关联原run并记录verifiedAt，原JSON/原payload不改",
+    "旧检查点连续/缺口/旧bootstrap测试也使用当前完整值回读，未决子项不因父项成功跳过"
+  ],
+  "验证材料": "有限合成数据、真实通用执行器和临时 SQLite，QuestDB/JDBC/Sender由模拟端口替代；不是实库或真实来源验收。",
+  "保持": [
+    "v1 canonical 定义、来源和目标身份字节与行编码不重标",
+    "原 31 自然日/200000 行 MV 预算、MONTH/WAL 与定时刷新策略",
+    "正式摄取与默认配置仍 v1，FULL 私有实例准入保留",
+    "原历史可用时刻不从当前验证时间或来源版本推断"
+  ],
+  "限制": [
+    "真实 L2 文件完整范围、真实 MV 创建/刷新/恢复及正式消费者未验收",
+    "MV 无效或未追平时当前前缀复核拒绝，须等待原定时刷新或明确有界materialize后重试",
+    "当前前缀复核必须有原完整父项/子项证据；旧缺证记录不补造，也不自动接管",
+    "v2安装只证明有限隔离来源；空表安装不证明来源齐备，不推进检查点",
+    "未自动删除旧表、stage/backup，不自动重发未知写入或解锁",
+    "停牌早前实库SQLState00000的根因仍未确认，本批测试不代表已修复",
+    "正式表/MV协调迁移、Batch独立来源、完整模型/训练批准材料及全消费者验收仍未完成"
+  ]
+}

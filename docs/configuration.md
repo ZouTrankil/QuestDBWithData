@@ -143,3 +143,6 @@ ETF 份额使用 `app.sync.etf-share-schema-version`，默认 `1`，仅支持 `1
 ST 日频的 `app.sync.stk-st-daily-schema-version` 位于 `config/markets/cn.yml`，默认 `1`，仅接受 `1/2`；环境变量为 `APP_SYNC_STK_ST_DAILY_SCHEMA_VERSION`。它统一当前任务、目标和读取布局，配置本身不迁表；旧恢复请求及组成员仍用原冻结版本。范围见[布局决定](decisions/2026-10-21-交易日存储布局分版.md#st-配置读取与-prepared-写入组)。
 
 停牌用 `app.sync.stk-suspend-schema-version` 选择当前作业和读取布局，默认 `1`，只支持 `1/2`；环境覆盖为 `APP_SYNC_STK_SUSPEND_SCHEMA_VERSION`。同步表 `app.sync.stk-suspend-table` 默认 `stk_suspend_d011_isolated`，读取表 `app.read.stk-suspend-table` 默认 `stk_suspend`，可分别用 `APP_SYNC_STK_SUSPEND_TABLE`、`APP_READ_STK_SUSPEND_TABLE` 覆盖。选择 v2 时须指向同版物理表；配置不迁表，历史恢复与组成员仍按原版本执行。见[入口决定](decisions/2026-10-21-交易日存储布局分版.md#停牌配置读取与-prepared-写入组)。
+
+
+L2 日特征与散户情绪 MV 共用 `app.sync.l2-daily-features-schema-version`，默认 `1`，环境覆盖为 `APP_SYNC_L2_DAILY_FEATURES_SCHEMA_VERSION`。L2 同步目标 `app.sync.l2-daily-features.target-table` 默认空，读取默认正式 `l2_daily_features`；显式设置该目标也会覆盖读取，保留原行为。v2 须指向 `java_d086_l2_daily_features_` 加非空后缀的隔离表。MV v2 目标 `app.sync.retail-sentiment-daily.v2-target-table` 默认 `java_d098_mv_retail_sentiment_daily_v2`，可用 `APP_SYNC_RETAIL_SENTIMENT_DAILY_V2_TARGET_TABLE` 覆盖。默认 v1 的 MV 仍绑定原正式来源和目标；正式 L2 摄取仍为 v1。配置不建表、不迁移数据、不替代写入准入，见[同版决定](decisions/2026-10-21-交易日存储布局分版.md#l2-配置与散户情绪-mv-同版)。

@@ -450,6 +450,40 @@ class ProjectConfigurationTest {
                         .containsProperty("app.sync.stk-suspend-schema-version"));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "main-strategy"})
+    void l2DailyFeaturesLayoutUsesTheMarketDefaultAndEnvironmentOverride(String profile)
+            throws Exception {
+        var file = configuration("");
+        var variables = new HashMap<String, String>();
+        variables.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        variables.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        assertEquals(
+                "1",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.l2-daily-features-schema-version"));
+        assertEquals(
+                "java_d098_mv_retail_sentiment_daily_v2",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.retail-sentiment-daily.v2-target-table"));
+        variables.put(
+                "APP_SYNC_RETAIL_SENTIMENT_DAILY_V2_TARGET_TABLE",
+                "java_d098_mv_retail_sentiment_daily_custom");
+        assertEquals(
+                "java_d098_mv_retail_sentiment_daily_custom",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.retail-sentiment-daily.v2-target-table"));
+        variables.put("APP_SYNC_L2_DAILY_FEATURES_SCHEMA_VERSION", "2");
+        assertEquals(
+                "2",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.l2-daily-features-schema-version"));
+        variables.remove("APP_SYNC_L2_DAILY_FEATURES_SCHEMA_VERSION");
+        assertFalse(
+                ProjectConfiguration.load("market-us", variables)
+                        .containsProperty("app.sync.l2-daily-features-schema-version"));
+    }
+
     @Test
     void changingOneAppFileDoesNotChangeAnotherProcess() throws Exception {
         var file = configuration("");

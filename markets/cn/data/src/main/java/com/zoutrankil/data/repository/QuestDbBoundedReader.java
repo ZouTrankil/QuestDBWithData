@@ -1,6 +1,7 @@
 package com.zoutrankil.data.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zoutrankil.data.derived.domain.RetailSentimentDailyLayout;
 import com.zoutrankil.data.derived.storage.DerivedMonthlyReadGuards;
 import com.zoutrankil.data.derived.storage.MarketBreadthDailyMaterializationPort;
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
@@ -15,7 +16,9 @@ import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetStorageValues;
 import com.zoutrankil.data.domain.DatasetValues;
+import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -197,7 +200,7 @@ public class QuestDbBoundedReader {
         if (GUARDED_ETF_AGGREGATE_VIEW.equals(definition.objectName()))
             return EtfMarketOverviewMaterializedViewReadGuard.versionIfActivated(jdbc, ledgerPath);
         if (definition.objectKind() == ObjectKind.MATERIALIZED_VIEW)
-            return requireCurrentMaterializedView(definition.objectName()).sourceVersion();
+            return requireCurrentMaterializedView(definition).sourceVersion();
         return null;
     }
 
@@ -233,7 +236,30 @@ public class QuestDbBoundedReader {
         }
     }
 
-    private MaterializedViewState requireCurrentMaterializedView(String objectName) {
+    private MaterializedViewState requireCurrentMaterializedView(DatasetDefinition definition) {
+        String objectName = definition.objectName();
+        RetailSentimentDailyLayout retail = null;
+        if ("mv_retail_sentiment_daily".equals(definition.datasetId())) {
+            if (definition.schemaVersion() == 1) retail = RetailSentimentDailyLayout.LEGACY;
+            else if (definition.schemaVersion() == 2) {
+                String source = definition.columns().getFirst().sourceName();
+                if (!source.endsWith(".trade_date"))
+                    throw new IllegalArgumentException("MV v2 日期来源不明确");
+                retail =
+                        new RetailSentimentDailyLayout(
+                                CnTradeDateLayout.TRADE_DATE_V2,
+                                source.substring(0, source.length() - ".trade_date".length()),
+                                objectName);
+            } else throw new IllegalArgumentException("未知 MV 契约版本");
+            if (!RetailSentimentDailyDataset.definition(
+                            retail.outputTable(), retail.sourceTable(), retail.layout())
+                    .equals(definition)) throw new IllegalArgumentException("MV 读取契约与显式作用域不同");
+        }
+        if (retail == null && RetailSentimentDailyMaterializationPort.OUTPUT.equals(objectName))
+            retail = RetailSentimentDailyLayout.LEGACY;
+        if (retail == null && objectName.startsWith(RetailSentimentDailyLayout.V2_OUTPUT_PREFIX))
+            throw new IllegalArgumentException("隔离 MV 读取必须使用明确的散户情绪契约");
+        final var retailScope = retail;
         // objectName 已由 DatasetDefinition 校验为合法标识符，可用于此固定元数据查询。
         // tables().table_txn 表示数据版本；WAL 应用进度使用 wal_tables() 的计数。
         // FULL 或 TRUNCATE 后两类计数可能不同，不能直接互相比较。
@@ -264,15 +290,13 @@ public class QuestDbBoundedReader {
                                             .equals(normalizedSql(rs.getString("view_sql")))))
                         throw new IllegalStateException(
                                 "Breadth MV differs from its fixed base-table or aggregation definition");
-                    if (RetailSentimentDailyMaterializationPort.OUTPUT.equals(objectName)
-                            && (!RetailSentimentDailyMaterializationPort.SOURCE.equals(
-                                            rs.getString("base_table_name"))
+                    if (retailScope != null
+                            && (!retailScope.sourceTable().equals(rs.getString("base_table_name"))
                                     || !normalizedSql(
                                                     RetailSentimentDailyMaterializationPort
-                                                            .DEFINITION_SQL)
+                                                            .definitionSql(retailScope))
                                             .equals(normalizedSql(rs.getString("view_sql")))))
-                        throw new IllegalStateException(
-                                "Retail sentiment MV differs from its fixed base-table or aggregation definition");
+                        throw new IllegalStateException("散户情绪 MV 与显式来源或聚合 SQL 不同");
                     String status = rs.getString("view_status");
                     long refreshTxn = requiredCounter(rs, "refresh_base_table_txn");
                     long baseTxn = requiredCounter(rs, "base_table_txn");

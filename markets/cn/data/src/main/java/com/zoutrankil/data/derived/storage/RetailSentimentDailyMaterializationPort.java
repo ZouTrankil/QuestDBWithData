@@ -5,6 +5,7 @@ import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.derived.domain.RetailSentimentDailyFullSourceScope;
+import com.zoutrankil.data.derived.domain.RetailSentimentDailyLayout;
 import com.zoutrankil.data.derived.domain.RetailSentimentDailyPolicy;
 import com.zoutrankil.data.derived.port.RetailSentimentDailySession;
 import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
@@ -44,7 +45,8 @@ import java.util.concurrent.CancellationException;
 import java.util.function.BooleanSupplier;
 
 /** One explicitly enabled native refresh, followed by bounded real QuestDB readback. */
-public final class RetailSentimentDailyMaterializationPort implements RetailSentimentDailySession {
+public final class RetailSentimentDailyMaterializationPort
+        implements RetailSentimentDailySession.Versioned {
     private static final ObjectMapper FIXTURE_JSON = new ObjectMapper();
     public static final String SOURCE = RetailSentimentDailyPolicy.SOURCE;
     public static final String OUTPUT = RetailSentimentDailyPolicy.OUTPUT;
@@ -96,6 +98,8 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
     private record Metadata(
             Physical source, Wal sourceWal, Physical output, Wal outputWal, Refresh refresh) {}
 
+    private final RetailSentimentDailyLayout layout;
+    private final String sourceTable, outputTable, dateColumn, aggregates, definitionSql;
     private final JdbcTemplate jdbc;
     private final QuestDbProperties properties;
     private final boolean mutationsEnabled;
@@ -119,6 +123,28 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
             QuestDbProperties properties,
             boolean mutationsEnabled,
             String expectedTargetId) {
+        this(
+                jdbc,
+                properties,
+                mutationsEnabled,
+                expectedTargetId,
+                RetailSentimentDailyLayout.LEGACY);
+    }
+
+    /** v2 只能由明确的隔离作用域装配，原构造和原 SQL/身份字节不变。 */
+    public RetailSentimentDailyMaterializationPort(
+            JdbcTemplate jdbc,
+            QuestDbProperties properties,
+            boolean mutationsEnabled,
+            String expectedTargetId,
+            RetailSentimentDailyLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
+        this.sourceTable = layout.sourceTable();
+        this.outputTable = layout.outputTable();
+        this.dateColumn = layout.dateColumn();
+        this.aggregates =
+                AGGREGATES.replaceFirst("^ts AS trade_date", dateColumn + " AS trade_date");
+        this.definitionSql = definitionSql(layout);
         this.jdbc = Objects.requireNonNull(jdbc);
         this.properties = Objects.requireNonNull(properties);
         this.mutationsEnabled = mutationsEnabled;
@@ -128,6 +154,34 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
         this.expectedTargetId = expectedTargetId;
         this.privateInstanceAttestor =
                 PrivateQuestDbAttestations.retailSentiment(this::verifyPrivateFixture);
+    }
+
+    /** 读取和发布共用同一份显式 SQL，原 v1 常量不重写。 */
+    public static String definitionSql(RetailSentimentDailyLayout layout) {
+        Objects.requireNonNull(layout);
+        if (layout.version() == 1) return DEFINITION_SQL;
+        return "SELECT "
+                + AGGREGATES.replaceFirst(
+                        "^ts AS trade_date", layout.dateColumn() + " AS trade_date")
+                + " FROM "
+                + layout.sourceTable()
+                + " SAMPLE BY 1d ALIGN TO CALENDAR";
+    }
+
+    public static String definitionSha(RetailSentimentDailyLayout layout) {
+        return sha(normalized(definitionSql(layout)));
+    }
+
+    public int datasetVersion() {
+        return layout.version();
+    }
+
+    public RetailSentimentDailyLayout layout() {
+        return layout;
+    }
+
+    public String definitionSql() {
+        return definitionSql;
     }
 
     public RetailSentimentDailySnapshot snapshot() {
@@ -153,11 +207,11 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
                 || !output.wal
                 || output.dedup)
             throw new IllegalStateException("D098 source or MV physical contract differs");
-        if (!SOURCE.equals(refresh.source)
+        if (!sourceTable.equals(refresh.source)
                 || !"timer".equalsIgnoreCase(refresh.type)
                 || refresh.interval != 1
                 || !"MINUTE".equalsIgnoreCase(refresh.unit)
-                || !normalized(DEFINITION_SQL).equals(normalized(refresh.sql)))
+                || !normalized(definitionSql).equals(normalized(refresh.sql)))
             throw new IllegalStateException(
                     "D098 MV definition or timer policy differs from authoritative SQL");
         boolean sourceSettled =
@@ -207,7 +261,8 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
         RetailSentimentDailySnapshot state = snapshot();
         return "questdb-"
                 + sha(
-                        properties.getHost()
+                        (layout.version() == 1 ? "" : "retail-sentiment-layout-v2:")
+                                + properties.getHost()
                                 + ":"
                                 + properties.getPgPort()
                                 + ":"
@@ -215,13 +270,13 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
                                 + ":"
                                 + properties.getDatabase()
                                 + ":"
-                                + SOURCE
+                                + sourceTable
                                 + ":"
                                 + state.sourceId()
                                 + ":"
                                 + state.sourceDirectory()
                                 + ":"
-                                + OUTPUT
+                                + outputTable
                                 + ":"
                                 + state.mvId()
                                 + ":"
@@ -292,8 +347,12 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
                             var statement =
                                     connection.prepareStatement(
                                             "SELECT count() FROM "
-                                                    + SOURCE
-                                                    + " WHERE ts >= ? AND ts < ?");
+                                                    + sourceTable
+                                                    + " WHERE "
+                                                    + dateColumn
+                                                    + " >= ? AND "
+                                                    + dateColumn
+                                                    + " < ?");
                             bounds(statement, start, end);
                             return statement;
                         },
@@ -313,12 +372,24 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
                         connection -> {
                             var statement =
                                     connection.prepareStatement(
-                                            "SELECT ts,symbol,key_rows FROM ("
-                                                    + "SELECT ts,symbol,count() AS key_rows FROM "
-                                                    + SOURCE
-                                                    + " WHERE ts >= ? AND ts < ? GROUP BY ts,symbol) "
+                                            "SELECT "
+                                                    + dateColumn
+                                                    + ",symbol,key_rows FROM ("
+                                                    + "SELECT "
+                                                    + dateColumn
+                                                    + ",symbol,count() AS key_rows FROM "
+                                                    + sourceTable
+                                                    + " WHERE "
+                                                    + dateColumn
+                                                    + " >= ? AND "
+                                                    + dateColumn
+                                                    + " < ? GROUP BY "
+                                                    + dateColumn
+                                                    + ",symbol) "
                                                     + "WHERE key_rows <> 1 OR symbol IS NULL OR symbol = '' "
-                                                    + "OR cast(ts AS long) % 86400000000 <> 0 LIMIT 1");
+                                                    + "OR cast("
+                                                    + dateColumn
+                                                    + " AS long) % 86400000000 <> 0 LIMIT 1");
                             bounds(statement, start, end);
                             statement.setMaxRows(1);
                             return statement;
@@ -349,10 +420,18 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
                         connection -> {
                             var statement =
                                     connection.prepareStatement(
-                                            "SELECT ts,q1_count,q3_count,spoof_count,"
+                                            "SELECT "
+                                                    + (layout.version() == 1
+                                                            ? "ts"
+                                                            : dateColumn + " AS ts")
+                                                    + ",q1_count,q3_count,spoof_count,"
                                                     + "fake_support_count,fake_pressure_count FROM "
-                                                    + SOURCE
-                                                    + " WHERE ts >= ? AND ts < ? LIMIT 200001");
+                                                    + sourceTable
+                                                    + " WHERE "
+                                                    + dateColumn
+                                                    + " >= ? AND "
+                                                    + dateColumn
+                                                    + " < ? LIMIT 200001");
                             bounds(statement, start, end);
                             statement.setMaxRows(200001);
                             statement.setFetchSize(1000);
@@ -445,10 +524,14 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
         sourceRawRows(start, end);
         return rows(
                 "SELECT "
-                        + AGGREGATES
+                        + aggregates
                         + " FROM "
-                        + SOURCE
-                        + " WHERE ts >= ? AND ts < ? SAMPLE BY 1d ALIGN TO CALENDAR"
+                        + sourceTable
+                        + " WHERE "
+                        + dateColumn
+                        + " >= ? AND "
+                        + dateColumn
+                        + " < ? SAMPLE BY 1d ALIGN TO CALENDAR"
                         + " ORDER BY trade_date LIMIT 32",
                 start,
                 end);
@@ -461,7 +544,7 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
                 "SELECT "
                         + COLUMNS
                         + " FROM "
-                        + OUTPUT
+                        + outputTable
                         + " WHERE trade_date >= ? AND trade_date < ? ORDER BY trade_date LIMIT 32",
                 start,
                 end);
@@ -470,7 +553,7 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
     public long outputRowCount() {
         Long count =
                 jdbc.query(
-                        "SELECT count() FROM " + OUTPUT,
+                        "SELECT count() FROM " + outputTable,
                         rs -> {
                             if (!rs.next())
                                 throw new IllegalStateException(
@@ -505,29 +588,75 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
     public void createIsolatedTarget() {
         verifyPrivateInstance();
         requireInstallSourceReady();
+        if (layout.version() == 2) requireBoundedInstallSource();
         var found =
                 jdbc.queryForList(
                         "SELECT view_name FROM materialized_views() WHERE view_name='"
-                                + OUTPUT
+                                + outputTable
                                 + "'");
         if (found.size() > 1) throw new IllegalStateException("Duplicate D098 MV identity");
         if (found.isEmpty())
             jdbc.execute(
                     "CREATE MATERIALIZED VIEW "
-                            + OUTPUT
+                            + outputTable
                             + " REFRESH EVERY 1m AS ("
-                            + DEFINITION_SQL
+                            + definitionSql
                             + ") PARTITION BY MONTH");
         else snapshot();
+    }
+
+    private record InstallScope(LocalDate from, LocalDate to, long rows) {}
+
+    /** CREATE 本身会聚合来源；v2 必须先核对整个隔离来源的预算和稳定版本。 */
+    private void requireBoundedInstallSource() {
+        var before = physical(sourceTable);
+        var beforeWal = wal(sourceTable);
+        InstallScope scope =
+                jdbc.query(
+                        "SELECT count() AS n,min("
+                                + dateColumn
+                                + ") AS lo,max("
+                                + dateColumn
+                                + ") AS hi FROM "
+                                + sourceTable,
+                        rs -> {
+                            if (!rs.next()) throw new IllegalStateException("MV 安装缺少全来源范围");
+                            long count = requiredLong(rs, "n");
+                            var first = rs.getTimestamp("lo", utc());
+                            var last = rs.getTimestamp("hi", utc());
+                            if (count < 0 || count > MAX_SOURCE_ROWS || rs.next())
+                                throw new IllegalStateException("MV 安装全来源超过预算或不唯一");
+                            if (count == 0) {
+                                if (first != null || last != null)
+                                    throw new IllegalStateException("MV 空来源边界不一致");
+                                return new InstallScope(null, null, 0);
+                            }
+                            if (first == null || last == null)
+                                throw new IllegalStateException("MV 安装全来源日期缺失");
+                            var from = first.toInstant().atOffset(ZoneOffset.UTC).toLocalDate();
+                            var to = last.toInstant().atOffset(ZoneOffset.UTC).toLocalDate();
+                            window(from, to);
+                            return new InstallScope(from, to, count);
+                        });
+        if (scope == null) throw new IllegalStateException("MV 安装全来源证明缺失");
+        if (scope.rows() > 0) {
+            if (sourceRawRows(scope.from(), scope.to()) != scope.rows())
+                throw new IllegalStateException("MV 安装全来源行数变化");
+            requireSourceCoverage(
+                    scope.from(), scope.to(), scope.rows(), expected(scope.from(), scope.to()));
+        }
+        if (!before.equals(physical(sourceTable)) || !beforeWal.equals(wal(sourceTable)))
+            throw new IllegalStateException("MV 安装前来源版本变化");
+        requireInstallSourceReady();
     }
 
     /** Source preflight must work before the MV exists, so no DDL can precede the physical contract check. */
     private void requireInstallSourceReady() {
         requireSourceSchema();
-        Physical before = physical(SOURCE);
-        Wal walBefore = wal(SOURCE);
-        Physical after = physical(SOURCE);
-        Wal walAfter = wal(SOURCE);
+        Physical before = physical(sourceTable);
+        Wal walBefore = wal(sourceTable);
+        Physical after = physical(sourceTable);
+        Wal walAfter = wal(sourceTable);
         if (!before.equals(after)
                 || !walBefore.equals(walAfter)
                 || !"DAY".equalsIgnoreCase(after.partition)
@@ -557,7 +686,12 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
         RetailSentimentDailySnapshot before = snapshot();
         RetailSentimentDailyFullSourceScope scope =
                 jdbc.query(
-                        "SELECT count() AS n,min(ts) AS lo,max(ts) AS hi FROM " + SOURCE,
+                        "SELECT count() AS n,min("
+                                + dateColumn
+                                + ") AS lo,max("
+                                + dateColumn
+                                + ") AS hi FROM "
+                                + sourceTable,
                         rs -> {
                             if (!rs.next())
                                 throw new IllegalStateException(
@@ -608,7 +742,13 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
     private void requireFinitePendingRefresh(RetailSentimentDailySnapshot current) {
         if (current.caughtUp()) return;
         var scope =
-                jdbc.queryForMap("SELECT count() AS n,min(ts) AS lo,max(ts) AS hi FROM " + SOURCE);
+                jdbc.queryForMap(
+                        "SELECT count() AS n,min("
+                                + dateColumn
+                                + ") AS lo,max("
+                                + dateColumn
+                                + ") AS hi FROM "
+                                + sourceTable);
         long count = ((Number) scope.get("n")).longValue();
         if (count < 0 || count > MAX_SOURCE_ROWS)
             throw new IllegalStateException(
@@ -647,7 +787,9 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
         // Do not work around this by treating a refreshing view as valid or by issuing a formal
         // FULL.
         jdbc.execute(
-                "REFRESH MATERIALIZED VIEW " + OUTPUT + (fullIsolated ? " FULL" : " INCREMENTAL"));
+                "REFRESH MATERIALIZED VIEW "
+                        + outputTable
+                        + (fullIsolated ? " FULL" : " INCREMENTAL"));
         acknowledged = true;
     }
 
@@ -786,7 +928,7 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
                                 .toRealPath())
                 || !marker.path("fixture_tables").isArray()
                 || marker.path("fixture_tables").size() != 2
-                || !Set.of(SOURCE, OUTPUT)
+                || !Set.of(sourceTable, outputTable)
                         .equals(
                                 Set.of(
                                         marker.path("fixture_tables").get(0).asText(),
@@ -797,7 +939,11 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
 
     private Metadata metadata() {
         return new Metadata(
-                physical(SOURCE), wal(SOURCE), physical(OUTPUT), wal(OUTPUT), refresh());
+                physical(sourceTable),
+                wal(sourceTable),
+                physical(outputTable),
+                wal(outputTable),
+                refresh());
     }
 
     private Physical physical(String name) {
@@ -850,7 +996,7 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
                 "SELECT view_status,invalidation_reason,base_table_name,view_sql,refresh_type,"
                         + "timer_interval,timer_interval_unit,refresh_base_table_txn,base_table_txn,"
                         + "last_refresh_start_timestamp,last_refresh_finish_timestamp FROM materialized_views() WHERE view_name='"
-                        + OUTPUT
+                        + outputTable
                         + "'",
                 rs -> {
                     if (!rs.next())
@@ -875,9 +1021,9 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
     }
 
     private void requireSourceSchema() {
-        var schema = schema(SOURCE);
+        var schema = schema(sourceTable);
         var expected = new LinkedHashMap<String, String>();
-        expected.put("ts", "TIMESTAMP");
+        expected.put(dateColumn, "TIMESTAMP");
         expected.put("symbol", "SYMBOL");
         for (String name :
                 List.of(
@@ -903,7 +1049,7 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
         var keys =
                 jdbc.queryForList(
                         "SELECT \"column\",designated,upsertKey FROM table_columns('"
-                                + SOURCE
+                                + sourceTable
                                 + "')");
         var upsertKeys = new HashSet<String>();
         var designated = new HashSet<String>();
@@ -913,7 +1059,8 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
             if (Boolean.TRUE.equals(column.get("designated")))
                 designated.add(column.get("column").toString());
         }
-        if (!upsertKeys.equals(Set.of("ts", "symbol")) || !designated.equals(Set.of("ts")))
+        if (!upsertKeys.equals(Set.of(dateColumn, "symbol"))
+                || !designated.equals(Set.of(dateColumn)))
             throw new IllegalStateException(
                     "D098 source complete UPSERT key or designated timestamp differs");
     }
@@ -935,12 +1082,12 @@ public final class RetailSentimentDailyMaterializationPort implements RetailSent
         expected.put("total_manipulation_count", "LONG");
         expected.put("avg_mfi_score", "DOUBLE");
         expected.put("total_main_net_yi", "DOUBLE");
-        if (!expected.equals(schema(OUTPUT)))
+        if (!expected.equals(schema(outputTable)))
             throw new IllegalStateException("D098 MV thirteen-column schema differs");
         var metadata =
                 jdbc.queryForList(
                         "SELECT \"column\",designated,upsertKey FROM table_columns('"
-                                + OUTPUT
+                                + outputTable
                                 + "')");
         var designated = new HashSet<String>();
         for (var column : metadata) {

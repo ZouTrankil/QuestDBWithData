@@ -156,6 +156,19 @@ final class DefaultReadBindings {
             int etfShareVersion,
             int stDailyVersion,
             int suspendVersion) {
+        return registrations(
+                etfAdjVersion, etfDailyVersion, etfShareVersion, stDailyVersion, suspendVersion, 1);
+    }
+
+    static List<ReadBindingCatalog.Registration<?>> registrations(
+            int etfAdjVersion,
+            int etfDailyVersion,
+            int etfShareVersion,
+            int stDailyVersion,
+            int suspendVersion,
+            int l2DailyVersion) {
+        var l2Layout = CnTradeDateLayout.fromVersion(l2DailyVersion);
+        var l2Mapper = new L2DailyFeaturesMapper();
         int suspend = CnTradeDateLayout.fromVersion(suspendVersion).schemaVersion();
         int stVersion = CnTradeDateLayout.fromVersion(stDailyVersion).schemaVersion();
         int shareVersion = CnTradeDateLayout.fromVersion(etfShareVersion).schemaVersion();
@@ -170,6 +183,25 @@ final class DefaultReadBindings {
                                     case "etf_share" -> generic("etf_share", shareVersion);
                                     case "stk_st_daily" -> generic("stk_st_daily", stVersion);
                                     case "stk_suspend" -> generic("stk_suspend", suspend);
+                                    case "l2_daily_features" ->
+                                            l2Layout == CnTradeDateLayout.LEGACY_V1
+                                                    ? registration
+                                                    : typed(
+                                                            "l2_daily_features",
+                                                            l2Layout.schemaVersion(),
+                                                            L2DailyFeatures.class,
+                                                            values ->
+                                                                    l2Mapper.fromValues(
+                                                                            values, l2Layout));
+                                    case "mv_retail_sentiment_daily" ->
+                                            l2Layout == CnTradeDateLayout.LEGACY_V1
+                                                    ? registration
+                                                    : typed(
+                                                            "mv_retail_sentiment_daily",
+                                                            2,
+                                                            RetailSentimentDaily.class,
+                                                            new RetailSentimentDailyMapper()
+                                                                    ::fromValues);
                                     default -> registration;
                                 })
                 .toList();

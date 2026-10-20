@@ -15,6 +15,7 @@ import com.zoutrankil.data.l2.storage.QuestDbL2DatasetManifestTarget;
 import com.zoutrankil.data.l2.storage.QuestDbL2EventResponseFeaturesTarget;
 import com.zoutrankil.data.l2.storage.QuestDbL2IntradayBarFeaturesTarget;
 import com.zoutrankil.data.l2.storage.QuestDbL2T0TrainingLabelsTarget;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 
@@ -51,8 +52,10 @@ public class L2Configuration {
             JdbcTemplate jdbc,
             @Lazy QuestDB questdb,
             QuestDbProperties properties,
-            @Value("${app.sync.l2-daily-features.target-table:}") String table) {
-        return new QuestDbL2DailyFeaturesTarget(table, jdbc, questdb, properties);
+            @Value("${app.sync.l2-daily-features.target-table:}") String table,
+            @Value("${app.sync.l2-daily-features-schema-version:1}") int version) {
+        return new QuestDbL2DailyFeaturesTarget(
+                table, jdbc, questdb, properties, CnTradeDateLayout.fromVersion(version));
     }
 
     @Bean

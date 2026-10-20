@@ -8,8 +8,11 @@ import com.zoutrankil.data.domain.DatasetDefinition.Partition;
 import com.zoutrankil.data.domain.DatasetDefinition.StorageType;
 import com.zoutrankil.data.domain.DatasetDefinition.TemporalContract;
 import com.zoutrankil.data.domain.DatasetDefinition.TemporalKind;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /** D098 native MV contract; refresh belongs to the canonical materialization job. */
@@ -148,4 +151,54 @@ public final class RetailSentimentDailyDataset {
                             + "Direct row writes and replacements are forbidden; the canonical job provides bounded native MATERIALIZE. "
                             + "Read requires valid, caught-up refresh state and stable source and MV physical versions. "
                             + "Nullable SUM/AVG results are retained without zero filling or additional unit conversion.");
+
+    /** 输出日期和聚合值不变；v2 明确绑定新物理来源，旧契约原样保留。 */
+    public static DatasetDefinition definition(
+            String output, String source, CnTradeDateLayout layout) {
+        DatasetDefinition.identifier(output);
+        DatasetDefinition.identifier(source);
+        if (layout == CnTradeDateLayout.LEGACY_V1) {
+            if (!DEFINITION.objectName().equals(output) || !"l2_daily_features".equals(source))
+                throw new IllegalArgumentException("MV v1 使用原正式来源和输出");
+            return DEFINITION;
+        }
+        Objects.requireNonNull(layout);
+        var columns = new ArrayList<>(DEFINITION.columns());
+        var date = columns.getFirst();
+        var temporal =
+                new TemporalContract(
+                        TemporalKind.BUSINESS_DATE,
+                        "UTC午夜日期载体",
+                        "calendar",
+                        "DAY",
+                        "对显式 L2 trade_date 来源按日聚合，日期值不做事件时区转换");
+        columns.set(
+                0,
+                new Column(
+                        source + "." + layout.physicalDateColumn("l2_daily_features"),
+                        date.logicalName(),
+                        date.storageName(),
+                        date.storageType(),
+                        date.nullable(),
+                        date.meaning(),
+                        temporal,
+                        date.legacyNullSentinels(),
+                        date.numeric()));
+        return new DatasetDefinition(
+                DEFINITION.datasetId(),
+                2,
+                DEFINITION.provider(),
+                DEFINITION.owner(),
+                output,
+                DEFINITION.objectKind(),
+                columns,
+                DEFINITION.businessKey(),
+                DEFINITION.dedupKey(),
+                DEFINITION.designatedTimestamp(),
+                DEFINITION.partition(),
+                DEFINITION.wal(),
+                DEFINITION.capabilities(),
+                DEFINITION.dependencies(),
+                "显式 v2 L2 隔离来源与原生 MV；保留原13列、单位、null和聚合规则，读取须核对对应 SQL 及稳定版本。");
+    }
 }

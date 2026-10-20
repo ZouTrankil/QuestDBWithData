@@ -22,9 +22,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.zoutrankil.data.config.QuestDbProperties;
+import com.zoutrankil.data.derived.domain.RetailSentimentDailyLayout;
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
 import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -59,13 +61,18 @@ class RetailSentimentDailyMaterializationPortTest {
     private static final class Census {
         final JdbcTemplate jdbc = mock(JdbcTemplate.class);
         final PreparedStatement statement = mock(PreparedStatement.class);
-        final RetailSentimentDailyMaterializationPort port =
-                spy(
-                        new RetailSentimentDailyMaterializationPort(
-                                jdbc, new QuestDbProperties(), false));
+        final RetailSentimentDailyMaterializationPort port;
         final List<String> sql = new ArrayList<>();
 
         Census(List<Map<String, Object>> rows) throws Exception {
+            this(rows, RetailSentimentDailyLayout.LEGACY);
+        }
+
+        Census(List<Map<String, Object>> rows, RetailSentimentDailyLayout layout) throws Exception {
+            port =
+                    spy(
+                            new RetailSentimentDailyMaterializationPort(
+                                    jdbc, new QuestDbProperties(), false, null, layout));
             var connection = mock(Connection.class);
             when(connection.prepareStatement(anyString()))
                     .thenAnswer(
@@ -103,6 +110,140 @@ class RetailSentimentDailyMaterializationPortTest {
     private static RetailSentimentDaily counts(Long q1, Long q3, Long spoof, Long manipulation) {
         return new RetailSentimentDaily(
                 DATE, null, null, null, null, null, q1, q3, null, spoof, manipulation, null, null);
+    }
+
+    private static RetailSentimentDailyLayout version2() {
+        return new RetailSentimentDailyLayout(
+                CnTradeDateLayout.TRADE_DATE_V2,
+                "java_d086_l2_daily_features_mv_scope",
+                "java_d098_mv_retail_sentiment_daily_scope");
+    }
+
+    @Test
+    void v2ScopeUsesIndependentSourceDateAndKeepsTheAggregationExpressions() {
+        var jdbc = mock(JdbcTemplate.class);
+        var layout = version2();
+        var port =
+                new RetailSentimentDailyMaterializationPort(
+                        jdbc, new QuestDbProperties(), false, null, layout);
+        assertEquals(2, port.datasetVersion());
+        assertEquals(layout, port.layout());
+        assertEquals(
+                RetailSentimentDailyMaterializationPort.DEFINITION_SQL
+                        .replaceFirst("ts AS trade_date", "trade_date AS trade_date")
+                        .replace(" FROM l2_daily_features ", " FROM " + layout.sourceTable() + " "),
+                port.definitionSql());
+        assertEquals(
+                RetailSentimentDailyMaterializationPort.DEFINITION_SQL,
+                RetailSentimentDailyMaterializationPort.definitionSql(
+                        RetailSentimentDailyLayout.LEGACY));
+        assertFalse(
+                RetailSentimentDailyMaterializationPort.DEFINITION_SHA.equals(
+                        RetailSentimentDailyMaterializationPort.definitionSha(layout)));
+        verify(jdbc, never()).execute(anyString());
+    }
+
+    @Test
+    void v2ScopeCannotUseFormalObjectsOrUnadmittedNames() {
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        new RetailSentimentDailyLayout(
+                                CnTradeDateLayout.TRADE_DATE_V2,
+                                "l2_daily_features",
+                                version2().outputTable()));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        new RetailSentimentDailyLayout(
+                                CnTradeDateLayout.TRADE_DATE_V2,
+                                version2().sourceTable(),
+                                "mv_retail_sentiment_daily"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        new RetailSentimentDailyLayout(
+                                CnTradeDateLayout.LEGACY_V1,
+                                version2().sourceTable(),
+                                version2().outputTable()));
+    }
+
+    @Test
+    void v2SnapshotChecksPhysicalDateAndExactSqlWithoutAdoptingLegacyIdentity() throws Exception {
+        var legacy = new Metadata();
+        var v2 = new Metadata(version2());
+        assertTrue(v2.port.snapshot().caughtUp());
+        assertEquals(
+                RetailSentimentDailyMaterializationPort.definitionSha(version2()),
+                v2.port.snapshot().definitionSha());
+        assertFalse(legacy.port.targetId().equals(v2.port.targetId()));
+        v2.refresh.put("view_sql", RetailSentimentDailyMaterializationPort.DEFINITION_SQL);
+        assertThrows(IllegalStateException.class, v2.port::snapshot);
+        v2.refresh.put(
+                "view_sql", RetailSentimentDailyMaterializationPort.definitionSql(version2()));
+        v2.sourceTypes.remove("trade_date");
+        v2.sourceTypes.put("ts", "TIMESTAMP");
+        assertThrows(IllegalStateException.class, v2.port::snapshot);
+        verify(v2.jdbc, never()).execute(anyString());
+    }
+
+    @Test
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    void v2InstallChecksGlobalBudgetBeforeCreateAndAllowsAProvenEmptySource() throws Exception {
+        var fixture = new Metadata(version2());
+        doNothing().when(fixture.port).verifyPrivateInstance();
+        var global = new LinkedHashMap<String, Object>();
+        global.put("n", 200001L);
+        global.put("lo", Timestamp.from(DATE.atStartOfDay().toInstant(ZoneOffset.UTC)));
+        global.put("hi", global.get("lo"));
+        when(fixture.jdbc.query(
+                        contains("SELECT count() AS n,min(trade_date)"),
+                        any(ResultSetExtractor.class)))
+                .thenAnswer(
+                        call ->
+                                ((ResultSetExtractor<?>) call.getArgument(1))
+                                        .extractData(resultSet(List.of(global))));
+        assertThrows(IllegalStateException.class, fixture.port::createIsolatedTarget);
+        verify(fixture.jdbc, never()).execute(anyString());
+        global.put("n", 0L);
+        global.put("lo", null);
+        global.put("hi", null);
+        when(fixture.jdbc.queryForList(
+                        "SELECT view_name FROM materialized_views() WHERE view_name='"
+                                + version2().outputTable()
+                                + "'"))
+                .thenReturn(List.of());
+        fixture.port.createIsolatedTarget();
+        verify(fixture.jdbc)
+                .execute(
+                        "CREATE MATERIALIZED VIEW "
+                                + version2().outputTable()
+                                + " REFRESH EVERY 1m AS ("
+                                + RetailSentimentDailyMaterializationPort.definitionSql(version2())
+                                + ") PARTITION BY MONTH");
+    }
+
+    @Test
+    void v2CensusUsesTheSelectedPhysicalDateAndPreservesExactCountRules() throws Exception {
+        var census = new Census(List.of(source(2L, 3L, 1L, 2L, 4L)), version2());
+        census.verify(1, counts(2L, 3L, 1L, 6L));
+        assertTrue(census.sql.getFirst().startsWith("SELECT trade_date AS ts,q1_count"));
+        assertTrue(
+                census.sql
+                        .getFirst()
+                        .contains(
+                                " FROM "
+                                        + version2().sourceTable()
+                                        + " WHERE trade_date >= ? AND trade_date < ? LIMIT 200001"));
+        verify(census.statement).setMaxRows(200001);
+        verify(census.statement).setFetchSize(1000);
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        new Census(
+                                        List.of(source(Long.MAX_VALUE, 0L, 0L, Long.MAX_VALUE, 1L)),
+                                        version2())
+                                .verify(1, counts(0L, 0L, 0L, 0L)));
     }
 
     @Test
@@ -361,10 +502,7 @@ class RetailSentimentDailyMaterializationPortTest {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static final class Metadata {
         final JdbcTemplate jdbc = mock(JdbcTemplate.class);
-        final RetailSentimentDailyMaterializationPort port =
-                spy(
-                        new RetailSentimentDailyMaterializationPort(
-                                jdbc, new QuestDbProperties(), false));
+        final RetailSentimentDailyMaterializationPort port;
         final Map<String, String> sourceTypes = new LinkedHashMap<>();
         final Map<String, String> outputTypes = new LinkedHashMap<>();
         final Map<String, Object> source = physical(11, "l2_daily_features~11", "DAY", true);
@@ -375,7 +513,17 @@ class RetailSentimentDailyMaterializationPortTest {
         final Map<String, Object> outputWal = wal(4);
 
         Metadata() throws Exception {
-            sourceTypes.put("ts", "TIMESTAMP");
+            this(RetailSentimentDailyLayout.LEGACY);
+        }
+
+        Metadata(RetailSentimentDailyLayout layout) throws Exception {
+            port =
+                    spy(
+                            new RetailSentimentDailyMaterializationPort(
+                                    jdbc, new QuestDbProperties(), false, null, layout));
+            source.put("directoryName", layout.sourceTable() + "~11");
+            output.put("directoryName", layout.outputTable() + "~12");
+            sourceTypes.put(layout.dateColumn(), "TIMESTAMP");
             sourceTypes.put("symbol", "SYMBOL");
             for (String column :
                     List.of(
@@ -402,8 +550,8 @@ class RetailSentimentDailyMaterializationPortTest {
                                             column.storageName(), column.storageType().name()));
             refresh.put("view_status", "valid");
             refresh.put("invalidation_reason", null);
-            refresh.put("base_table_name", RetailSentimentDailyMaterializationPort.SOURCE);
-            refresh.put("view_sql", RetailSentimentDailyMaterializationPort.DEFINITION_SQL);
+            refresh.put("base_table_name", layout.sourceTable());
+            refresh.put("view_sql", RetailSentimentDailyMaterializationPort.definitionSql(layout));
             refresh.put("refresh_type", "timer");
             refresh.put("timer_interval", 1L);
             refresh.put("timer_interval_unit", "MINUTE");
@@ -416,7 +564,7 @@ class RetailSentimentDailyMaterializationPortTest {
                             call -> {
                                 String sql = call.getArgument(0);
                                 var types =
-                                        sql.contains("('l2_daily_features')")
+                                        sql.contains("('" + layout.sourceTable() + "')")
                                                 ? sourceTypes
                                                 : outputTypes;
                                 var rs = mock(ResultSet.class);
@@ -433,11 +581,11 @@ class RetailSentimentDailyMaterializationPortTest {
                     .thenAnswer(
                             call -> {
                                 String sql = call.getArgument(0);
-                                if (sql.contains("('l2_daily_features')"))
+                                if (sql.contains("('" + layout.sourceTable() + "')"))
                                     return List.of(
                                             Map.of(
                                                     "column",
-                                                    "ts",
+                                                    layout.dateColumn(),
                                                     "designated",
                                                     true,
                                                     "upsertKey",
@@ -466,12 +614,15 @@ class RetailSentimentDailyMaterializationPortTest {
                                 if (sql.contains("FROM materialized_views()")) row = refresh;
                                 else if (sql.contains("FROM wal_tables()"))
                                     row =
-                                            sql.contains("name='l2_daily_features'")
+                                            sql.contains("name='" + layout.sourceTable() + "'")
                                                     ? sourceWal
                                                     : outputWal;
                                 else
                                     row =
-                                            sql.contains("table_name='l2_daily_features'")
+                                            sql.contains(
+                                                            "table_name='"
+                                                                    + layout.sourceTable()
+                                                                    + "'")
                                                     ? source
                                                     : output;
                                 return ((ResultSetExtractor<?>) call.getArgument(1))

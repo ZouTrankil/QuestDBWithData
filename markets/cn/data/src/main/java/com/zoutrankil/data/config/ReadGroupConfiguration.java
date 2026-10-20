@@ -66,7 +66,8 @@ public class ReadGroupConfiguration {
             @Value("${app.sync.etf-daily-schema-version:1}") int etfDailyVersion,
             @Value("${app.sync.etf-share-schema-version:1}") int etfShareVersion,
             @Value("${app.sync.stk-st-daily-schema-version:1}") int stDailyVersion,
-            @Value("${app.sync.stk-suspend-schema-version:1}") int suspendVersion) {
+            @Value("${app.sync.stk-suspend-schema-version:1}") int suspendVersion,
+            @Value("${app.sync.l2-daily-features-schema-version:1}") int l2DailyVersion) {
         var registrations =
                 new ArrayList<>(
                         DefaultReadBindings.registrations(
@@ -74,7 +75,8 @@ public class ReadGroupConfiguration {
                                 etfDailyVersion,
                                 etfShareVersion,
                                 stDailyVersion,
-                                suspendVersion));
+                                suspendVersion,
+                                l2DailyVersion));
         extensions.orderedStream().forEach(registrations::add);
         return new ReadBindingCatalog(registrations);
     }

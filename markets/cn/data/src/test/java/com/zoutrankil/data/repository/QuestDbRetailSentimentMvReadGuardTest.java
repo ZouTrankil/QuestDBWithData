@@ -9,6 +9,7 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.zoutrankil.data.derived.domain.RetailSentimentDailyLayout;
 import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadCursor;
@@ -16,6 +17,7 @@ import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -144,9 +146,13 @@ class QuestDbRetailSentimentMvReadGuardTest {
         }
 
         DatasetReadPage<LocalDate> read(DatasetReadCursor cursor) {
+            return read(cursor, DEFINITION);
+        }
+
+        DatasetReadPage<LocalDate> read(DatasetReadCursor cursor, DatasetDefinition definition) {
             var query =
                     new DatasetReadQuery(
-                            DEFINITION.storageColumns(),
+                            definition.storageColumns(),
                             Map.of(),
                             "trade_date",
                             LocalDate.of(2026, 9, 17),
@@ -154,7 +160,7 @@ class QuestDbRetailSentimentMvReadGuardTest {
                             1,
                             cursor);
             return reader.read(
-                    DEFINITION,
+                    definition,
                     query,
                     "caller-version",
                     row -> row.get("trade_date", LocalDate.class));
@@ -163,6 +169,76 @@ class QuestDbRetailSentimentMvReadGuardTest {
 
     private static DatasetValues row(LocalDate date) {
         return new DatasetValues(Map.of("trade_date", date));
+    }
+
+    private static final RetailSentimentDailyLayout V2 =
+            new RetailSentimentDailyLayout(
+                    CnTradeDateLayout.TRADE_DATE_V2,
+                    "java_d086_l2_daily_features_read_scope",
+                    "java_d098_mv_retail_sentiment_daily_read_scope");
+
+    private static DatasetDefinition version2() {
+        return RetailSentimentDailyDataset.definition(
+                V2.outputTable(), V2.sourceTable(), V2.layout());
+    }
+
+    private static Map<String, Object> state2() {
+        var result = new LinkedHashMap<>(CURRENT.columns());
+        result.put("base_table_name", V2.sourceTable());
+        result.put("view_sql", RetailSentimentDailyMaterializationPort.definitionSql(V2));
+        return result;
+    }
+
+    @Test
+    void version2ChecksItsExactSourceAndSqlBeforeReadingRows() throws Exception {
+        var good = new Fixture(List.of(state2()));
+        assertEquals(1, good.read(null, version2()).rows().size());
+        for (var change :
+                List.of(
+                        Map.entry(
+                                "base_table_name", RetailSentimentDailyMaterializationPort.SOURCE),
+                        Map.entry(
+                                "view_sql",
+                                RetailSentimentDailyMaterializationPort.DEFINITION_SQL))) {
+            var state = state2();
+            state.put(change.getKey(), change.getValue());
+            var bad = new Fixture(List.of(state));
+            assertThrows(IllegalStateException.class, () -> bad.read(null, version2()));
+            assertEquals(0, bad.rowReads.get());
+        }
+    }
+
+    @Test
+    void oldCursorCannotAdoptNewLayoutEvenWhenPhysicalCountersCoincide() throws Exception {
+        var old = new Fixture(CURRENT).read(null).nextCursor();
+        var current = new Fixture(List.of(state2()));
+        assertThrows(IllegalArgumentException.class, () -> current.read(old, version2()));
+        assertEquals(0, current.rowReads.get());
+    }
+
+    @Test
+    void genericDatasetCannotBypassAnExplicitVersion2ViewGuard() throws Exception {
+        var d = version2();
+        var generic =
+                new DatasetDefinition(
+                        "unrelated_view",
+                        2,
+                        d.provider(),
+                        d.owner(),
+                        d.objectName(),
+                        d.objectKind(),
+                        d.columns(),
+                        d.businessKey(),
+                        d.dedupKey(),
+                        d.designatedTimestamp(),
+                        d.partition(),
+                        d.wal(),
+                        d.capabilities(),
+                        d.dependencies(),
+                        d.storageRationale());
+        var fixture = new Fixture(List.of(state2()));
+        assertThrows(IllegalArgumentException.class, () -> fixture.read(null, generic));
+        assertEquals(0, fixture.rowReads.get());
     }
 
     @Test

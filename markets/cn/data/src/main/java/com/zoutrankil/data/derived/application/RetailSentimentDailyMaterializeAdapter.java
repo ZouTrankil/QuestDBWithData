@@ -223,7 +223,8 @@ public final class RetailSentimentDailyMaterializeAdapter
     private void requireRequest(SyncJobDefinition.FrozenRequest request) {
         if (request == null
                 || !"mv_retail_sentiment_daily".equals(request.definition().datasetId())
-                || request.definition().datasetVersion() != 1
+                || request.definition().datasetVersion()
+                        != RetailSentimentDailySession.layoutOf(port).version()
                 || !Set.of(
                                 SyncJobDefinition.Mode.INCREMENTAL,
                                 SyncJobDefinition.Mode.MATERIALIZE,
@@ -238,6 +239,9 @@ public final class RetailSentimentDailyMaterializeAdapter
                 || full(request) && request.mode() != SyncJobDefinition.Mode.MATERIALIZE)
             throw new IllegalArgumentException(
                     "Exact D098 frozen definition, source version and physical target required");
+        if (!RetailSentimentDailyJobService.frozenLayout(request)
+                .equals(RetailSentimentDailySession.layoutOf(port)))
+            throw new IllegalArgumentException("MV 原冻结来源和输出与会话不同");
     }
 
     private void requireSourceReady(RetailSentimentDailySnapshot state, boolean repair) {
@@ -274,8 +278,13 @@ public final class RetailSentimentDailyMaterializeAdapter
             throws Exception {
         var details = new LinkedHashMap<String, Object>();
         details.put("nativeRefresh", full(request) ? "FULL_ISOLATED" : "INCREMENTAL");
-        details.put("source", RetailSentimentDailyPolicy.SOURCE);
-        details.put("materializedView", RetailSentimentDailyPolicy.OUTPUT);
+        details.put("source", RetailSentimentDailySession.layoutOf(port).sourceTable());
+        details.put("materializedView", RetailSentimentDailySession.layoutOf(port).outputTable());
+        if (request.definition().version() == 2) {
+            details.put("protocolVersion", 2);
+            details.put("datasetSchemaVersion", 2);
+            details.put("definitionSha", frozen.definitionSha());
+        }
         details.put("fromInclusive", request.from().toString());
         details.put("toExclusive", request.to().plusDays(1).toString());
         details.put("sourceRawRows", sourceRawRows);

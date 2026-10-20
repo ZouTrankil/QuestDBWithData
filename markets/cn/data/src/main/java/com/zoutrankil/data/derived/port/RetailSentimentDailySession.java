@@ -2,6 +2,7 @@ package com.zoutrankil.data.derived.port;
 
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.derived.domain.RetailSentimentDailyFullSourceScope;
+import com.zoutrankil.data.derived.domain.RetailSentimentDailyLayout;
 import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
@@ -14,6 +15,16 @@ import java.util.function.BooleanSupplier;
 /** One physical native-refresh operation and its pinned source/readback state. */
 public interface RetailSentimentDailySession
         extends VerifiedBatchExecutor.Port<RetailSentimentDaily, LocalDate> {
+    interface Versioned extends RetailSentimentDailySession {
+        RetailSentimentDailyLayout layout();
+    }
+
+    static RetailSentimentDailyLayout layoutOf(RetailSentimentDailySession session) {
+        return session instanceof Versioned selected
+                ? selected.layout()
+                : RetailSentimentDailyLayout.LEGACY;
+    }
+
     RetailSentimentDailySnapshot snapshot();
 
     String targetId();

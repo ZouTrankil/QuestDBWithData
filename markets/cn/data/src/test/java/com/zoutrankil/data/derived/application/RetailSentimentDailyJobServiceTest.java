@@ -196,6 +196,7 @@ class RetailSentimentDailyJobServiceTest {
     @Test
     void checkpointCannotCrossAnUnverifiedCalendarGap() throws Exception {
         var setup = setup();
+        configureFreshPrefix(setup.port);
         var anchor = LocalDate.of(2026, 9, 1);
         verified(
                 setup.ledger,
@@ -221,6 +222,7 @@ class RetailSentimentDailyJobServiceTest {
     @Test
     void verifiedBridgeAdvancesContiguousCoverageButOtherTargetsAndModesDoNot() throws Exception {
         var setup = setup();
+        configureFreshPrefix(setup.port);
         var anchor = LocalDate.of(2026, 9, 1);
         verified(
                 setup.ledger,
@@ -272,6 +274,7 @@ class RetailSentimentDailyJobServiceTest {
     @Test
     void oldBootstrapAnchorAllowsANewFiniteIncrementalOverlap() throws Exception {
         var setup = setup();
+        configureFreshPrefix(setup.port);
         var anchor = LocalDate.of(2026, 7, 1);
         verified(
                 setup.ledger,
@@ -765,6 +768,55 @@ class RetailSentimentDailyJobServiceTest {
         when(port.fullSourceScope())
                 .thenReturn(new RetailSentimentDailyFullSourceScope(START, START, 2));
         when(port.outputRowCount()).thenReturn(1L);
+    }
+
+    // 区间拼接测试的当前来源由完整有限日历与实际窗口行组成，不靠成功状态跳过回读。
+    private static void configureFreshPrefix(RetailSentimentDailySession port) {
+        when(port.newCalendarReader())
+                .thenReturn(
+                        query -> {
+                            LocalDate from = (LocalDate) query.fromInclusive(),
+                                    to = (LocalDate) query.toExclusive();
+                            return MaterializationCalendarFixture.page(
+                                    query, from.datesUntil(to).toList());
+                        });
+        when(port.expected(any(LocalDate.class), any(LocalDate.class)))
+                .thenAnswer(call -> prefixRows(call.getArgument(0), call.getArgument(1)));
+        when(port.sourceRawRows(any(LocalDate.class), any(LocalDate.class)))
+                .thenAnswer(
+                        call -> 2L * prefixRows(call.getArgument(0), call.getArgument(1)).size());
+        when(port.readback(anyList()))
+                .thenAnswer(
+                        call -> {
+                            List<LocalDate> dates = call.getArgument(0);
+                            return dates.stream()
+                                    .map(RetailSentimentDailyJobServiceTest::prefixRow)
+                                    .toList();
+                        });
+    }
+
+    private static List<RetailSentimentDaily> prefixRows(LocalDate from, LocalDate to) {
+        return from.datesUntil(to.plusDays(1))
+                .map(RetailSentimentDailyJobServiceTest::prefixRow)
+                .toList();
+    }
+
+    private static RetailSentimentDaily prefixRow(LocalDate day) {
+        var r = ROWS.getFirst();
+        return new RetailSentimentDaily(
+                day,
+                r.avgRetailRatio(),
+                r.avgRetailEntropy(),
+                r.totalRetailAmountYi(),
+                r.totalRetailNetInflowYi(),
+                r.avgRelAggro(),
+                r.totalQ1(),
+                r.totalQ3(),
+                r.avgWashTradeRatio(),
+                r.totalSpoofCount(),
+                r.totalManipulationCount(),
+                r.avgMfiScore(),
+                r.totalMainNetYi());
     }
 
     private static SyncJobDefinition.FrozenRequest request(

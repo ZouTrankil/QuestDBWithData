@@ -8,6 +8,10 @@ app:
     etf-share-schema-version: 1
     stk-st-daily-schema-version: 1
     stk-suspend-schema-version: 1
+    l2-daily-features-schema-version: 1
+    retail-sentiment-daily:
+      # 只供 v2 隔离链路；v1 继续使用原正式 MV。
+      v2-target-table: java_d098_mv_retail_sentiment_daily_v2
     stk-suspend-table: stk_suspend_d011_isolated
   read:
     # 读取保留正式表默认值；隔离验收时可单独覆盖，不跟随同步目标换表。
