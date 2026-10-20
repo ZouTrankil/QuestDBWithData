@@ -23,6 +23,8 @@
 
 Tiingo 日线同时保留 `close` 与 `adj_close`，不能只存复权价。`dividend` 是来源除息日每股现金额，`split_factor` 无事件时为 1。IEX 分钟量仅代表该场所，不能据此计算全美股的成交份额。
 
+需要固定到某个已验收窗口末日的价格基准时，可将供应商调整 OHLC 乘同一证券、供应商、来源摘要和末日记录的 `close / adj_close`。这项查询只统一价格基准，原始值和供应商调整量继续保留各自口径；证券身份、公司行动及历史当时的可用性仍须分别核对。下文 ULTI 留有实库逐行核对过的例子。
+
 ## 配置和命令
 
 公开配置在 `config/apps/us-data.yml`。凭据在被忽略的 `config/application-local.yml`，使用 `app.market-data.tiingo-token`、`app.market-data.fred-key`。不将 key 放进 URL 日志、运行参数、Git 或发行包。
@@ -274,6 +276,33 @@ OBAI 的 Yahoo 响应没有目标区间行情，原失败任务保留。已核�
 
 两段相对 SPY 实有日期无缺日，窗口内成交量均为正。价格二十列及两条永久映射十八列独立回读一致，原 78373 行价格、14 条映射未变，映射累计 16 条；两条 FIGI 都保留来源真实 null。NFX 搜索中的 `isActive=true` 只是供应商声明，不能据此认定旧股票现在仍上市。原范围复核任务及当前 ETF 类别不改；锁内确认两表 WAL 结清、缓冲为零、未挂起，原物理表及结构未变。
 
-USG 的旧 Stock 搜索记录却显示现行基金名称，公司名搜索返回空，身份仍待核。ULTI 改用公司名搜索后身份唯一，但三次价格请求及一次 HTTP/1.1 补取都连接失败，尚无完整价格原文，未发布价格或映射。其[交易所并购通函](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2019-83)完整 HTML 已冻结；暂停生效日为 2019-05-06，不能直接等同最后成交日。
+USG 的旧 Stock 搜索记录却显示现行基金名称，公司名搜索返回空，身份仍待核。ULTI 改用公司名搜索后身份唯一，首轮三次价格请求及一次 HTTP/1.1 补取均连接失败，失败回执保留；后续取得的完整响应及复权基准核对见下文。其[交易所并购通函](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2019-83)完整 HTML 已冻结；暂停生效日为 2019-05-06，不能直接等同最后成交日。
 
 证据在 `var/market-data/scope-review/historical-large-caps-20261020/`，包括两份完整价格原文、原始身份搜索、目录关联、Native 回执、全字段回读、WAL、ULTI 失败请求和 USG 身份冲突。EMC、NFX 的一手申报及 Dell 公告经网页读取，本机下载的 403/404 回执和事实摘录另存，不冒充完整本地原件。全市场采集与剩余历史来源继续推进。
+
+### ULTI 历史窗口及供应商复权基准
+
+先取得 2019 年短窗口，再次完整请求取得 3356 行原文；两个响应重叠的 85 行全部原始字段一致。已按实际永久价格键 `US000000002862` 写入 2006-01-03 至 2019-05-02 的 3355 行，窗口内成交量均为正，相对 SPY 实有日期无缺日。5 月 3 日零量平价行留在原文中，未写入；5 月 2 日作为本次窗口末日，不另声称有独立交易所最后成交日公告。旧永久代码在 2019-05-04 至 2026-10-16 的查询返回空数组；现行 `ULTI` 则返回 2025-10-31 起的 REX ETF 行情，两者不混写。
+
+来源窗口的分红全为 0、拆股因子全为 1，原始量与调整量逐行相同；调整 OHLC 与原价约差固定比例 `0.63351033257`。逐日收益最大差异约 `1.2e-11`，这只能证明窗口内的相对价格一致，比例形成原因仍未解释。数据库保留全部供应商原值；末日原始收盘价为 331.36，供应商调整收盘价为 209.9199838006，不能把后者当作已归一化到该末日的价格。
+
+以下只读查询将价格统一到 2019-05-02 基准。完整四个 OHLC 版本在 `var/market-data/scope-review/ulti-recovery-20261020/window-normalization.sql`，已用实库 3355 行逐项核对，归一化四价与该窗口原价的最大误差约 `1.2e-10`。它不回写来源字段，也不证明这些值在 2019 年当时已经可知。
+
+```sql
+WITH anchor AS (
+    SELECT close / adj_close AS scale_factor
+    FROM us_equity_daily
+    WHERE symbol = 'US000000002862' AND provider = 'TIINGO'
+      AND trade_date = '2019-05-02'
+      AND source_sha256 = 'cf8b515bb2f2f5754a43f95208ccc65280b37c0c2e559a68ab85c286b0d9cf5e'
+)
+SELECT p.trade_date, p.close AS raw_close, p.adj_close AS vendor_adj_close,
+       p.adj_close * a.scale_factor AS window_adj_close
+FROM us_equity_daily p CROSS JOIN anchor a
+WHERE p.symbol = 'US000000002862' AND p.provider = 'TIINGO'
+  AND p.trade_date >= '2006-01-03' AND p.trade_date <= '2019-05-02'
+  AND p.source_sha256 = 'cf8b515bb2f2f5754a43f95208ccc65280b37c0c2e559a68ab85c286b0d9cf5e'
+ORDER BY p.trade_date;
+```
+
+价格二十列与新增永久映射十八列独立回读一致，原 84362 行价格及 16 条映射未变，映射累计 17 条；FIGI 保留真实 null。锁内确认两表 WAL 结清、缓冲为零、未挂起，原物理表和结构未变，原 `ULTI` 范围复核任务与当前 ETF 类别保持。完整原文、固定比例核对、末日归一化查询与回执、Native 运行、映射及 WAL 证据在 `var/market-data/scope-review/ulti-recovery-20261020/`，较短响应和终止后查询另在 `ulti-bounded-20261020/`、`ulti-source-audit-20261020/`。全市场及未解释的来源口径继续核对。
