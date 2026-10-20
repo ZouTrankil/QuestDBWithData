@@ -120,12 +120,12 @@ final class CryptoHistoryCollector {
                         s.execute(
                                 "ALTER TABLE crypto_tasks ADD COLUMN source_failures INT NOT NULL DEFAULT 0");
                     }
+                if (!tasks(db, "phase='PUBLISHING'").isEmpty())
+                    throw new IllegalStateException("BTC 原发布未核对，禁止自动重发");
                 plan(
                         db,
                         LocalDate.parse(env.getRequiredProperty("app.crypto-data.history-start")),
                         through);
-                if (!tasks(db, "phase='PUBLISHING'").isEmpty())
-                    throw new IllegalStateException("BTC 原发布未核对，禁止自动重发");
                 Files.deleteIfExists(root.resolve("stop.request"));
                 while (true) {
                     if (Files.exists(root.resolve("stop.request"))) {
@@ -730,10 +730,20 @@ final class CryptoHistoryCollector {
                 + ".zip";
     }
 
-    private static void plan(Connection db, LocalDate from, LocalDate through) throws Exception {
+    static void plan(Connection db, LocalDate from, LocalDate through) throws Exception {
+        plan(db, from, through, YearMonth.now(ZoneOffset.UTC));
+    }
+
+    /** 原任务区间保留身份与状态；扩窗只规划未登记日期，不把已抓日归档换成整月重抓。 */
+    static void plan(Connection db, LocalDate from, LocalDate through, YearMonth current)
+            throws Exception {
         if (!from.equals(from.withDayOfMonth(1)) || through.isBefore(from))
             throw new IllegalArgumentException("BTC 历史从整月第一天开始");
-        var current = YearMonth.now(ZoneOffset.UTC);
+        var existing = tasks(db, "1=1");
+        for (var task : existing)
+            if (!Set.of("BINANCE_MONTH", "BINANCE_DAY", "BYBIT_MONTH").contains(task.source())
+                    || task.through().isBefore(task.from()))
+                throw new IllegalStateException("BTC 原来源任务类别或日期区间非法");
         for (var month = YearMonth.from(through);
                 !month.isBefore(YearMonth.from(from));
                 month = month.minusMonths(1))
@@ -742,13 +752,66 @@ final class CryptoHistoryCollector {
                     var start = month.atDay(1);
                     var end = month.atEndOfMonth();
                     if (end.isAfter(through)) end = through;
-                    insert(db, "BYBIT_MONTH", symbol, instrument, start, end);
-                    if (month.isBefore(current) && end.equals(month.atEndOfMonth()))
-                        insert(db, "BINANCE_MONTH", symbol, instrument, start, end);
-                    else
-                        for (var day = start; !day.isAfter(end); day = day.plusDays(1))
-                            insert(db, "BINANCE_DAY", symbol, instrument, day, day);
+                    for (var window : unplanned(existing, "BYBIT", symbol, instrument, start, end))
+                        insert(
+                                db,
+                                "BYBIT_MONTH",
+                                symbol,
+                                instrument,
+                                window.from(),
+                                window.through());
+                    for (var window :
+                            unplanned(existing, "BINANCE", symbol, instrument, start, end)) {
+                        if (month.isBefore(current)
+                                && window.from().equals(month.atDay(1))
+                                && window.through().equals(month.atEndOfMonth()))
+                            insert(
+                                    db,
+                                    "BINANCE_MONTH",
+                                    symbol,
+                                    instrument,
+                                    window.from(),
+                                    window.through());
+                        else
+                            for (var day = window.from();
+                                    !day.isAfter(window.through());
+                                    day = day.plusDays(1))
+                                insert(db, "BINANCE_DAY", symbol, instrument, day, day);
+                    }
                 }
+    }
+
+    private record Window(LocalDate from, LocalDate through) {}
+
+    /** 按每个实际日期取区间并集的补集；失败、待发及未决任务也占原范围，不能另开任务绕过。 */
+    private static List<Window> unplanned(
+            List<Task> existing,
+            String provider,
+            String symbol,
+            String instrument,
+            LocalDate from,
+            LocalDate through) {
+        var covered = new HashSet<LocalDate>();
+        for (var task : existing) {
+            if (!task.source().startsWith(provider)
+                    || !task.symbol().equals(symbol)
+                    || !task.instrument().equals(instrument)) continue;
+            var first = task.from().isBefore(from) ? from : task.from();
+            var last = task.through().isAfter(through) ? through : task.through();
+            for (var day = first; !day.isAfter(last); day = day.plusDays(1)) covered.add(day);
+        }
+        var windows = new ArrayList<Window>();
+        LocalDate first = null;
+        for (var day = from; !day.isAfter(through); day = day.plusDays(1)) {
+            if (!covered.contains(day)) {
+                if (first == null) first = day;
+            } else if (first != null) {
+                windows.add(new Window(first, day.minusDays(1)));
+                first = null;
+            }
+        }
+        if (first != null) windows.add(new Window(first, through));
+        return List.copyOf(windows);
     }
 
     private static void insert(
