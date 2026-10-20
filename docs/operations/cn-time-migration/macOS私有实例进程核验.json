@@ -1,0 +1,120 @@
+{
+  "基线提交": "c2902916ebe7c363163a856bc808256de7e41bf3",
+  "范围": "在保持原私有根目录、配置、fixture和Windows流程的前提下，增加macOS真实监听/进程/原始参数/启动代际核验；不触发MV或来源写入",
+  "最终源码摘要": {
+    "platform/engine/questdb/src/main/java/com/zoutrankil/data/repository/MacPrivateQuestDbProcessProbe.java": "c74cf494264db6c1abaeb57cd924292ef02abc5ac484685756f02f8550ee8046",
+    "platform/engine/questdb/src/main/java/com/zoutrankil/data/repository/PrivateQuestDbInstanceAttestor.java": "5661383e073c23dffcb71c57e3dfed1dcc9c545d1174d49b0e40e295acdd7f8e",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/repository/MacPrivateQuestDbProcessProbeTest.java": "28d745fd4b51b54283ae0c70e26ebed34bee41398213e378d3abb53fa6931b8c"
+  },
+  "完整回归": {
+    "platform/engine/questdb": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2445,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 147
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "完整回归命令": "./gradlew :platform:engine:questdb:test :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "完整回归结果": "2658项零失败、147项跳过；包括engine QuestDB 11项；147项仍按原外部环境/原件要求跳过，不代表通过",
+  "最终定向回归": {
+    "范围": "完整回归后只补D095端口参数化测试；生产代码未再变。最终71项含macOS20、原进程核验48、公共桥接3，零失败零跳过",
+    "命令": "./gradlew :markets:cn:data:test --tests '*PrivateQuestDb*Test' --tests '*MacPrivateQuestDb*Test' --offline",
+    "结果": {
+      "tests": 71,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "格式检查": "完成：2057 个 Java 文件；字面量值核对通过",
+  "架构边界及两个发行包": "通过",
+  "公开配置检查": "cn-data与main-strategy发行ZIP均通过",
+  "单元及真实本机检查": [
+    "两套固定任务端口的重复观察、同一会话固定完整进程身份",
+    "通配地址、IPv6、错端口、重复监听、多个PID、缺失或超预算系统输出拒绝",
+    "错Java可执行文件、缺启动时刻、PID不符、进程观察期间换代及PID复用拒绝",
+    "明确主类或module启动、原始带空格路径、绝对-d与同一真实路径符号链接",
+    "伪主类藏在业务参数、未核定jar或argfile、重复/相对/错目录拒绝",
+    "fixture和配置在真实系统查询前核验；超时或中断终止lsof；外层延用中断恢复",
+    "真实本机两个Java TCP监听器可被lsof/ProcessHandle发现，并因不是QuestDB主类而拒绝"
+  ],
+  "真实私有实例探针": {
+    "schema": "java.mac_private_questdb_attestation.v1",
+    "verifiedAt": "2026-10-20T22:16:33.308062Z",
+    "pid": 52667,
+    "processStartedAt": "2026-10-20T22:10:36.872Z",
+    "dataRoot": "/private/var/folders/v9/lmymfpps33j9hlck8wsfc_s80000gn/T/cn-mac-attest-e6_jxacy/repo/var/d098-isolated-questdb",
+    "markerSha256": "da61989da08e4a8e3cdef515009a099b6d3a6b3fd67e9701271ab35a5ecdae58",
+    "sameSessionRepeated": true,
+    "wrongMarkerRejected": true,
+    "source": "java_d086_l2_daily_features_native_v2_e9483e77abad4ea48bf0f4cd796a5d74",
+    "output": "java_d098_mv_retail_sentiment_daily_native_v2_e9483e77abad4ea48bf0f4cd796a5d74",
+    "businessTablesCreated": false,
+    "sourceCoverageVerified": false,
+    "mvMaterializationVerified": false,
+    "passed": true
+  },
+  "私有实例停止证明": {
+    "checkedAt": "2026-10-20T22:17:49.108948+00:00",
+    "pid": 52667,
+    "exitCode": 143,
+    "processPresent": false,
+    "listenersPresent": false,
+    "businessTablesCreated": false
+  },
+  "真实服务器版本": [
+    [
+      "Build Information: QuestDB 10.0.1, JDK 25.0.2, Commit Hash 7a391566ac827e0d8c269b91f2415c16b0a32a84"
+    ]
+  ],
+  "原件目录": "var/cn-mac-private-attestation-20261021/0b3ef1f0138847e8a8e016638bd5567e",
+  "原件摘要": {
+    "CnNativePrivateProof.java": "328bcb2e7b2accf0422a1e9e81b38e2f019d192235593faaae97f3116882575f",
+    "attestation.json": "26014dc6ceda175e98a23d540baa026284d0f63e0022f6528f4c953e1309ca8c",
+    "d098-fixture.json": "da61989da08e4a8e3cdef515009a099b6d3a6b3fd67e9701271ab35a5ecdae58",
+    "downloads.json": "f4f01f72679de314a1990f664d11d6fe6912e74ec408120530634837ffadbbd1",
+    "final-targeted-stats.json": "d8491b411a6adc5aa813158c215899624f2618de80a70c5d81363122b6ebecd4",
+    "format-final.log": "edf014d28cb06802e75096e3d0ff6c37442d999f08adadb8b5e4d6a980c316b5",
+    "full-stats.json": "341c236a928805737efdccf80fa99a18c888402e5296abb257f0f6ba8c680fe9",
+    "gradle-final-targeted.log": "0c4c1dece111125d3664449361dee174f7d5218c41b9f86ff6bd89c53559e78e",
+    "gradle-full.log": "adb461edeb0bdae8aca81640cb892c6d139c80387e0b4714e26c9076869666df",
+    "helper-classes/com/zoutrankil/data/repository/CnNativePrivateProof.class": "85d08b53a223e40f2174abb91bff7435d8c8b0d0e9e52820005404f8dd7eefc4",
+    "server-lifecycle.log": "90d74315a41c2a04be06749c1badc522347f76895ce96c769fd75a86598237ce",
+    "server-readonly-state.json": "ce4c9eaad4a6b73d9eb353294149979ebc369562e9a1394a30619cdb0d13609c",
+    "server-stop.json": "456f39285db5b9379185b8d0b877666a14e30fb4ddad5b961b67cf2779d5bd14",
+    "server.conf": "3049b5c5db40643b89de2902a52cea3c268ea6f4c8910031b564859f4eef8b33"
+  },
+  "隔离运行时": "QuestDB10.0.1与Temurin25.0.2+10仅下载/解包到本任务var目录，资产SHA与官方GitHub release摘要一致。应用和Gradle继续用原JDK24，未安装或替换系统默认JDK。来源与摘要保留在downloads.json。",
+  "保持": [
+    "Windows原PowerShell/CIM流程和公共factory作用域不改；本批Windows验证为离线模拟，不是实际Windows机验收",
+    "D095/D098原固定目录、端口、配置与D098 marker约束继续执行",
+    "没有新增跳过核验配置，没有根据端口或同名目录自动认领实例",
+    "同会话拒绝换进程；历史恢复仍另核对原物理目标、原请求与完整来源/WAL",
+    "显式部署身份准入与默认写入开关、FULL私有实例要求不变"
+  ],
+  "限制": [
+    "本批真实私有实例只验证D098进程准入；未创建业务表或MV，未验证来源同步、刷新、恢复、完整值或正式消费者",
+    "服务器初始化的系统表不作为业务来源覆盖证据；只查询本任务localhost私有实例，没有访问或写入正式QuestDB",
+    "macOS探针需要可见进程信息与/usr/sbin/lsof；缺失、权限不足或未知输出均拒绝，Linux等未知平台仍不支持隐式私有准入",
+    "只接已核定的明确JVM主类启动；未知选项/argfile/jar manifest不自动推断放行",
+    "真实L2 Parquet目录/manifest缺失，整条真实来源链路仍未验收；MV实际刷新、Batch、正式表/消费者及完整批准模型材料仍未完成"
+  ]
+}

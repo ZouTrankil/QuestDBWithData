@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 import java.util.regex.Pattern;
 
-/** Binds one operation to a checked local data root and one Windows QuestDB process. */
+/** 固定私有数据目录与真实监听进程；每个会话独立记录进程身份。 */
 final class PrivateQuestDbInstanceAttestor {
     private static final ObjectReader JSON_READER = new ObjectMapper().reader();
     private static final Pattern DATA_ROOT_ARGUMENT =
@@ -47,13 +47,22 @@ final class PrivateQuestDbInstanceAttestor {
     private final BooleanSupplier windows;
     private final ProcessStarter processStarter;
     private Long privateProcessId;
+    private final NativeProcessCheck nativeProcessCheck;
+
+    @FunctionalInterface
+    interface NativeProcessCheck {
+        void verify(Spec spec, Path root) throws IOException, InterruptedException;
+    }
 
     PrivateQuestDbInstanceAttestor(Spec spec, RootCheck rootCheck) {
         this(
                 spec,
                 rootCheck,
                 () -> System.getProperty("os.name", "").toLowerCase(Locale.ROOT).contains("win"),
-                PrivateQuestDbInstanceAttestor::startPowerShell);
+                PrivateQuestDbInstanceAttestor::startPowerShell,
+                System.getProperty("os.name", "").equals("Mac OS X")
+                        ? new MacPrivateQuestDbProcessProbe()::verify
+                        : null);
     }
 
     /** Package-local seam for deterministic tests; production always uses the system process checks. */
@@ -62,15 +71,27 @@ final class PrivateQuestDbInstanceAttestor {
             RootCheck rootCheck,
             BooleanSupplier windows,
             ProcessStarter processStarter) {
+        this(spec, rootCheck, windows, processStarter, null);
+    }
+
+    /** 测试可替换系统探针，生产入口只创建固定的本机探针。 */
+    PrivateQuestDbInstanceAttestor(
+            Spec spec,
+            RootCheck rootCheck,
+            BooleanSupplier windows,
+            ProcessStarter processStarter,
+            NativeProcessCheck nativeProcessCheck) {
         this.spec = Objects.requireNonNull(spec);
         this.rootCheck = rootCheck == null ? NO_ROOT_CHECK : rootCheck;
         this.windows = Objects.requireNonNull(windows);
         this.processStarter = Objects.requireNonNull(processStarter);
+        this.nativeProcessCheck = nativeProcessCheck;
     }
 
     void attest() {
         String code = spec.datasetCode();
-        if (!windows.getAsBoolean())
+        boolean useWindows = windows.getAsBoolean();
+        if (!useWindows && nativeProcessCheck == null)
             throw new IllegalStateException(
                     code
                             + " implicit private-instance admission requires Windows process attestation");
@@ -93,6 +114,11 @@ final class PrivateQuestDbInstanceAttestor {
                     || !("127.0.0.1:" + spec.pgPort()).equals(config.get("pg.net.bind.to")))
                 throw new IllegalStateException(
                         code + " private data root does not bind the expected loopback listeners");
+            if (!useWindows) {
+                // 两条系统探针共用真实目录、配置和 fixture 准入，不能只凭端口认领。
+                nativeProcessCheck.verify(spec, root);
+                return;
+            }
             String script =
                     String.format(
                             Locale.ROOT,
