@@ -84,6 +84,14 @@ public final class StockStDailyCoverage {
 
     public static Optional<Coverage> checkpoint(
             Path ledgerPath, String targetId, StockStTradingDates tradingDates) throws Exception {
+        return checkpoint(ledgerPath, targetId, tradingDates, 1);
+    }
+
+    /** 只拼接原作业同版回执；来源原件保留旧编码，不能据此混用存储布局。 */
+    public static Optional<Coverage> checkpoint(
+            Path ledgerPath, String targetId, StockStTradingDates tradingDates, int jobVersion)
+            throws Exception {
+        var definition = StockStDailySyncJobOwner.definition(jobVersion);
         Objects.requireNonNull(ledgerPath);
         Objects.requireNonNull(targetId);
         Objects.requireNonNull(tradingDates);
@@ -91,7 +99,7 @@ public final class StockStDailyCoverage {
             return Optional.empty();
         var ledger = SyncRunLedger.openReadOnly(ledgerPath);
         var json = JobDefinitionJson.mapper();
-        JsonNode expectedDefinition = json.valueToTree(StockStDailySyncJobOwner.DEFINITION);
+        JsonNode expectedDefinition = json.valueToTree(definition);
         var intervals = new ArrayList<Interval>();
         String after = null;
         int seen = 0;
@@ -103,11 +111,11 @@ public final class StockStDailyCoverage {
                 if (!Set.of(SyncRunState.VERIFIED, SyncRunState.VERIFIED_EMPTY)
                                 .contains(summary.state())
                         || !targetId.equals(summary.targetId())
-                        || summary.jobVersion() != 1) continue;
+                        || summary.jobVersion() != jobVersion) continue;
                 var run = ledger.getRun(summary.id());
                 if (!targetId.equals(run.targetId())
                         || !"data.stk_st_daily".equals(run.jobId())
-                        || run.jobVersion() != 1) continue;
+                        || run.jobVersion() != jobVersion) continue;
                 JsonNode frozen = json.readTree(run.frozenJson());
                 if (!sameDefinition(expectedDefinition, frozen.path("definition"))) continue;
                 if (!"INCREMENTAL".equals(frozen.path("mode").asText())) continue;

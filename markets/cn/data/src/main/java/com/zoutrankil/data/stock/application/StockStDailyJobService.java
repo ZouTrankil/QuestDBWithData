@@ -21,6 +21,7 @@ import com.zoutrankil.data.stock.domain.StockExecutionTables;
 import com.zoutrankil.data.stock.domain.StockTargetRange;
 import com.zoutrankil.data.stock.mapper.StockStDailyMapper;
 import com.zoutrankil.data.stock.port.StockStDailyTarget;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -111,7 +112,29 @@ public final class StockStDailyJobService implements SyncJobOwner {
 
     @Override
     public List<SyncJobDefinition> syncJobDefinitions() {
-        return List.of(StockStDailySyncJobOwner.DEFINITION);
+        return List.of(currentDefinition());
+    }
+
+    private SyncJobDefinition currentDefinition() {
+        return StockStDailySyncJobOwner.definition(StockStDailyTarget.versionOf(target));
+    }
+
+    private StockStDailyTarget frozenTarget(int version) {
+        return StockStDailyTarget.forFrozenVersion(target, version);
+    }
+
+    private StockStDailyPublication publisher(StockStDailyTarget scoped) throws Exception {
+        return new StockStDailyPublication(
+                scoped.newPublicationTables(),
+                ledgerPath,
+                CnTradeDateLayout.fromVersion(StockStDailyTarget.versionOf(scoped)));
+    }
+
+    private SyncJobDefinition savedDefinition(String runId) throws Exception {
+        var run = SyncRunLedger.openReadOnly(ledgerPath).getRun(Objects.requireNonNull(runId));
+        if (run == null || !"data.stk_st_daily".equals(run.jobId()))
+            throw new IllegalArgumentException("原记录不是 ST 日频任务");
+        return StockStDailySyncJobOwner.definition(run.jobVersion());
     }
 
     public String tableName() {
@@ -153,7 +176,7 @@ public final class StockStDailyJobService implements SyncJobOwner {
             throws Exception {
         Objects.requireNonNull(logicalDate, "Frozen stk_st_daily logical date required");
         requireNoPendingPublication();
-        var definition = StockStDailySyncJobOwner.DEFINITION;
+        var definition = currentDefinition();
         Mode mode = requestedMode == null ? definition.defaultMode() : requestedMode;
         if (!definition.supportedModes().contains(mode))
             throw new IllegalArgumentException("Unsupported stk_st_daily mode");
@@ -201,7 +224,9 @@ public final class StockStDailyJobService implements SyncJobOwner {
         Optional<StockStDailyCoverage.Coverage> saved = Optional.empty();
         if (mode == Mode.INCREMENTAL) {
             if (StockStDailyCoverage.hasHistorySchema(ledgerPath))
-                saved = StockStDailyCoverage.checkpoint(ledgerPath, target, tradingDates);
+                saved =
+                        StockStDailyCoverage.checkpoint(
+                                ledgerPath, target, tradingDates, definition.version());
             StockStDailyCoverage.validateExistingTarget(saved.orElse(null), tradingDates, writer);
             if (saved.isEmpty()) {
                 if (bootstrapFrom == null)
@@ -231,7 +256,9 @@ public final class StockStDailyJobService implements SyncJobOwner {
             if (physical.min() != null && !"stk_st_daily".equals(table)) {
                 if (saved.isEmpty()) {
                     if (StockStDailyCoverage.hasHistorySchema(ledgerPath))
-                        saved = StockStDailyCoverage.checkpoint(ledgerPath, target, tradingDates);
+                        saved =
+                                StockStDailyCoverage.checkpoint(
+                                        ledgerPath, target, tradingDates, definition.version());
                 }
                 StockStDailyCoverage.validateExistingTarget(
                         saved.orElse(null), tradingDates, writer);
@@ -298,9 +325,7 @@ public final class StockStDailyJobService implements SyncJobOwner {
     }
 
     public void requireNoPendingPublication() throws Exception {
-        if (Files.isRegularFile(ledgerPath))
-            new StockStDailyPublication(target.newPublicationTables(), ledgerPath)
-                    .requireNoPendingPublication();
+        if (Files.isRegularFile(ledgerPath)) publisher(target).requireNoPendingPublication();
     }
 
     public SyncJobRunner.Result run(Plan plan) throws Exception {
@@ -311,10 +336,11 @@ public final class StockStDailyJobService implements SyncJobOwner {
         var ledger = SyncRunLedger.openReadOnly(ledgerPath);
         var prior = ledger.getRun(priorRunId);
         var priorState = ledger.get(priorRunId).state();
+        var originalTarget = frozenTarget(plan.request().definition().version());
         if (!Set.of(SyncRunState.FAILED, SyncRunState.CANCELLED, SyncRunState.PARTIAL)
                         .contains(priorState)
                 || !prior.jobId().equals(StockStDailySyncJobOwner.DEFINITION.jobId())
-                || prior.jobVersion() != 1
+                || prior.jobVersion() != plan.request().definition().version()
                 || !SyncRequestIdentity.fingerprint(prior.frozenJson(), prior.targetId())
                         .equals(SyncRequestIdentity.fingerprint(plan.request(), plan.targetId()))
                 || !prior.targetId().equals(plan.targetId())
@@ -326,9 +352,7 @@ public final class StockStDailyJobService implements SyncJobOwner {
                                                 plan.request().from(),
                                                 plan.request().to()))
                         != null
-                || new StockStDailyPublication(target.newPublicationTables(), ledgerPath)
-                        .findForRun(priorRunId)
-                        .isPresent())
+                || publisher(originalTarget).findForRun(priorRunId).isPresent())
             throw new IllegalStateException(
                     "D012 resume requires the exact failed/cancelled frozen request and no unresolved publication");
         return execute(
@@ -343,17 +367,15 @@ public final class StockStDailyJobService implements SyncJobOwner {
         if (!Set.of(SyncRunState.FAILED, SyncRunState.CANCELLED, SyncRunState.PARTIAL)
                         .contains(state)
                 || !"data.stk_st_daily".equals(run.jobId())
-                || run.jobVersion() != 1)
+                || !Set.of(1, 2).contains(run.jobVersion()))
             throw new IllegalStateException(
                     "Only a terminal failed/cancelled D012 request can be resumed");
-        if (new StockStDailyPublication(target.newPublicationTables(), ledgerPath)
-                .findForRun(priorRunId)
-                .isPresent())
+        var originalTarget = frozenTarget(run.jobVersion());
+        if (publisher(originalTarget).findForRun(priorRunId).isPresent())
             throw new IllegalStateException(
                     "D012 publication intent requires finishInterrupted before resume");
         var restored =
-                FrozenRunRequest.restore(
-                        ledgerPath, priorRunId, StockStDailySyncJobOwner.DEFINITION);
+                FrozenRunRequest.restore(ledgerPath, priorRunId, savedDefinition(priorRunId));
         var request = restored.request();
         StockStDailySyncAdapter.validateFrozenRequest(request);
         if (new DatasetIntervalLock(ledgerPath)
@@ -367,11 +389,11 @@ public final class StockStDailyJobService implements SyncJobOwner {
         String logicalTarget = request.parameters().get("targetId").toString();
         String physicalTarget = request.parameters().get("physicalTargetId").toString();
         if (!logicalTarget.equals(run.targetId())
-                || !logicalTarget.equals(targetId())
-                || !physicalTarget.equals(physicalTargetId()))
+                || !logicalTarget.equals(originalTarget.targetId())
+                || !physicalTarget.equals(originalTarget.physicalTargetId()))
             throw new IllegalStateException(
                     "D012 exact frozen target generation changed; resume is unsafe");
-        var writer = this.target.newWriter(physicalTarget);
+        var writer = originalTarget.newWriter(physicalTarget);
         var adapter =
                 new StockStDailySyncAdapter(
                         new StockStDailySource(
@@ -411,16 +433,21 @@ public final class StockStDailyJobService implements SyncJobOwner {
     private SyncJobRunner.Result execute(String runId, String priorRunId, Plan plan)
             throws Exception {
         requireAdmittedMode(plan.request().mode());
-        if (!plan.request().definition().equals(StockStDailySyncJobOwner.DEFINITION)
+        var definition = StockStDailySyncJobOwner.definition(plan.request().definition().version());
+        var originalTarget = frozenTarget(definition.datasetVersion());
+        // 新运行用当前配置；恢复沿用原版本，不能因配置变化重绑。
+        if (priorRunId == null && !definition.equals(currentDefinition()))
+            throw new IllegalArgumentException("ST 新运行必须使用当前选定布局");
+        if (!plan.request().definition().equals(definition)
                 || !plan.targetId().equals(plan.request().parameters().get("targetId"))
                 || !plan.physicalTargetId()
                         .equals(plan.request().parameters().get("physicalTargetId"))
-                || !plan.targetId().equals(targetId())
-                || !plan.physicalTargetId().equals(physicalTargetId()))
+                || !plan.targetId().equals(originalTarget.targetId())
+                || !plan.physicalTargetId().equals(originalTarget.physicalTargetId()))
             throw new IllegalStateException(
                     "Frozen stk_st_daily request or isolated target changed before run");
         var ledger = new SyncRunLedger(ledgerPath);
-        var writer = target.newWriter(plan.physicalTargetId());
+        var writer = originalTarget.newWriter(plan.physicalTargetId());
         Path evidence = ledgerPath.getParent().resolve("sync-evidence").resolve(runId);
         var adapter =
                 new StockStDailySyncAdapter(
@@ -433,7 +460,7 @@ public final class StockStDailyJobService implements SyncJobOwner {
                         ledgerPath,
                         table,
                         plan.targetId(),
-                        target);
+                        originalTarget);
         var runner =
                 new SyncJobRunner<StockStDaily, StockStDailyKey>(
                         ledger, new DatasetIntervalLock(ledgerPath));
@@ -472,11 +499,13 @@ public final class StockStDailyJobService implements SyncJobOwner {
     }
 
     public String revalidate(String priorRunId) throws Exception {
+        var definition = savedDefinition(priorRunId);
+        var originalTarget = frozenTarget(definition.datasetVersion());
         return CompletedSourceRevalidation.revalidate(
                 ledgerPath,
                 priorRunId,
-                StockStDailySyncJobOwner.DEFINITION,
-                this::targetId,
+                definition,
+                originalTarget::targetId,
                 (evidence, identity) ->
                         new StockStDailyRevalidationAdapter(
                                 new StockStDailySource(
@@ -484,7 +513,7 @@ public final class StockStDailyJobService implements SyncJobOwner {
                                         new StockStDailyMapper(),
                                         evidence.resolve("source")),
                                 tradingDates,
-                                target,
+                                originalTarget,
                                 evidence));
     }
 }

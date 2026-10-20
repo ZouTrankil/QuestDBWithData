@@ -1,0 +1,52 @@
+{
+  "基线提交": "7a37d84b2506c2bf05b00e9a9fcaba323b6e9cf6",
+  "范围": "ST 显式控制服务：当前目标选择新计划；原账本选择恢复和再验证；同版检查点隔离",
+  "源码摘要": {
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailyJobService.java": "c36d56dda951fad2c32a8c31a2235d22be8f7cd5254e339fd93b247886c2c379",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailyCoverage.java": "7a9912e08474cc7144ca7a4b5f8ee8b7c6340c0b6c24e06bf382afcae5fbd2ca",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockStDailyVersionedLifecycleTest.java": "d0b519e73b1c3057c8fd373a25fe41432508bd346733b529d3829e6682d50f44"
+  },
+  "隔离测试": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2298,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 144
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "结果": "通过",
+  "格式检查": {
+    "命令": "python3 tools/format_java.py --imports --check",
+    "Java文件": 2034,
+    "结果": "格式、import、字面量核对通过"
+  },
+  "公开配置检查": "cn-data、main-strategy 两个 ZIP 通过",
+  "新增测试覆盖": [
+    "v2 新计划及当前定义选择",
+    "两个方向的原版本恢复，预检主动停止，原 JSON 不变",
+    "物理换代、未决状态和错版新计划阻断",
+    "再验证选择原作用域，物理检查主动停止",
+    "相同目标身份下同版连续检查点隔离"
+  ],
+  "外部验收": "未执行远端读写、真实来源或真实账本恢复；此前实库发布演练不代替本批新控制流程验收",
+  "当前公开默认": 1,
+  "仍未接通": [
+    "根配置 v2 入口",
+    "当前 Dataset 定义和公共读取绑定 v2",
+    "写入组入口 v2",
+    "正式表、MV、旧 stage/backup 迁移"
+  ]
+}
