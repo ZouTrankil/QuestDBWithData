@@ -184,7 +184,11 @@ public final class DataCatalogService {
                                                             ? fallback
                                                             : contract.meaning(),
                                                     contract == null ? null : contract.temporal(),
-                                                    documentation);
+                                                    documentation,
+                                                    contract == null ? null : contract.sourceName(),
+                                                    contract == null
+                                                            ? null
+                                                            : contract.logicalName());
                                         })
                                 .toList();
         return new DataCatalog.Detail(

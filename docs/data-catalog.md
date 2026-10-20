@@ -16,6 +16,7 @@
 | `GET /api/v1/data-catalog/objects/mv_backtest_daily` | 指定对象的详情、字段含义、时间语义和业务键 |
 | `GET /api/v1/data-catalog/tags` | 标签 ID、中文名及当前对象数量 |
 | `GET /api/v1/data-catalog/export?format=csv` | 下载完整目录 CSV，每个对象一行 |
+| `GET /api/v1/data-catalog/objects/stk_shock/columns/export` | 下载该对象字段映射、时间语义及来源单位，每字段一行 |
 
 JSON 中 `items[].description` 保存中文说明、市场、来源分类和多个标签；行数、对象类型和刷新状态是同一条目录记录的动态字段。返回的 `observedAt` 表示采集元数据的时间。
 
@@ -69,3 +70,19 @@ CSV 为带 BOM 的 UTF-8，保留原分类清单的 12 列并追加“标签”�
 查询超时配置为 `app.data-catalog.query-timeout-seconds`，默认 10 秒，允许 1～60 秒。数据库不可用返回 `503`，无效筛选返回 `400`，完全未知的对象详情返回 `404`。
 
 对象详情中 `columns[].sourceDocumentation` 提供已登记的来源字段、中文说明、单位、来源格式、文档链接、核对日期和核验状态。它与本地 `meaning`、`temporal`、实际存储类型分开，不用官方文档覆盖本地转换规则。目录 CSV 仍每个对象一行；逐列 JSON/CSV 可离线导出，见[采集字段注释](collected-field-documentation.md)。
+
+## 核对来源名、逻辑名和物理名
+
+详情中的 `columns[].name` 保留物理名，`sourceName` 是契约来源名，`logicalName` 是 API 读取名。没有已登记契约时，后两项为 null，不从裸列名猜日期角色。字段 CSV 复用相同详情，未知映射留空并标“待核”；原对象清单 CSV 不变。
+
+例如 `stk_shock` 的日期映射节选：
+
+```json
+{
+  "name": "trade_date",
+  "sourceName": "trade_date",
+  "logicalName": "announcement_date"
+}
+```
+
+`GET /api/v1/datasets/stk_shock/sample?limit=2` 的只读 v2 行使用 `announcement_date`；Shibor/Hibor/LPR 使用 `observation_date`。这些是日期，不是精确可用时刻；物理列和旧来源写入还未迁移。日期、完整键及样本限制见[读取决定](decisions/2026-10-20-公告与利率逻辑日期读取.md)。

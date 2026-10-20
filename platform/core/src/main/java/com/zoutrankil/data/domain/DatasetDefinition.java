@@ -119,7 +119,7 @@ public record DatasetDefinition(
         public Column {
             requireText(sourceName, "source mapping (use derived:... for computed values)");
             identifier(logicalName);
-            identifier(storageName);
+            storageIdentifier(storageName);
             Objects.requireNonNull(storageType);
             requireText(meaning, "column meaning");
             if (Set.of(StorageType.DATE, StorageType.TIMESTAMP, StorageType.TIMESTAMP_NS)
@@ -257,6 +257,12 @@ public record DatasetDefinition(
         if (new HashSet<>(key).size() != key.size() || !known.containsAll(key)) {
             throw new IllegalArgumentException("Duplicate or unknown " + name + " field");
         }
+    }
+
+    /** 物理列允许 1w 这类既有名称；SQL 必须引用，表名和逻辑名仍用 identifier。 */
+    public static void storageIdentifier(String value) {
+        if (value == null || !value.matches("[A-Za-z0-9_]+"))
+            throw new IllegalArgumentException("Invalid storage column identifier");
     }
 
     public static void identifier(String value) {

@@ -1,0 +1,536 @@
+{
+  "objects": [
+    {
+      "dataset": "stk_shock",
+      "definitionVersion": 2,
+      "mapping": [
+        {
+          "sourceName": "ts_code",
+          "logicalName": "instrument_code",
+          "storageName": "ts_code",
+          "storageType": "SYMBOL",
+          "nullable": false,
+          "meaning": "来源完整证券代码，保留前导零和交易所后缀",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "trade_date",
+          "logicalName": "announcement_date",
+          "storageName": "trade_date",
+          "storageType": "TIMESTAMP",
+          "nullable": false,
+          "meaning": "来源公告日期，不是证券行情交易日或精确可用时刻",
+          "temporal": {
+            "kind": "BUSINESS_DATE",
+            "sourceFormat": "BASIC",
+            "zone": "calendar",
+            "precision": "DAY",
+            "meaning": "公告日期；物理 UTC 午夜仅为日期载体，不加减时差"
+          },
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "name",
+          "logicalName": "name",
+          "storageName": "name",
+          "storageType": "STRING",
+          "nullable": true,
+          "meaning": "来源证券名称",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "trade_market",
+          "logicalName": "trade_market",
+          "storageName": "trade_market",
+          "storageType": "SYMBOL",
+          "nullable": true,
+          "meaning": "来源交易市场或板块原文，不直接当作标准交易所代码",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "reason",
+          "logicalName": "reason",
+          "storageName": "reason",
+          "storageType": "STRING",
+          "nullable": false,
+          "meaning": "来源异常说明；保留既有去重身份",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "period",
+          "logicalName": "period",
+          "storageName": "period",
+          "storageType": "STRING",
+          "nullable": false,
+          "meaning": "来源异常期间原文；不猜测区间格式或公告可用时刻",
+          "temporal": null,
+          "legacyNullSentinels": []
+        }
+      ],
+      "physicalIdentity": {
+        "id": 1726,
+        "directoryName": "stk_shock~1726",
+        "walEnabled": true,
+        "designatedTimestamp": "trade_date",
+        "partitionBy": "YEAR"
+      },
+      "rows": [
+        {
+          "instrument_code": "000004.SZ",
+          "announcement_date": "2026-04-16",
+          "name": "*ST国华",
+          "trade_market": "深市主板",
+          "reason": "连续三个交易日涨跌幅偏离值累计达到12%的ST证券,*ST证券和未完成股改证券",
+          "period": "2026-04-14-2026-04-16"
+        },
+        {
+          "instrument_code": "000004.SZ",
+          "announcement_date": "2026-04-22",
+          "name": "*ST国华",
+          "trade_market": "深市主板",
+          "reason": "连续三个交易日涨跌幅偏离值累计达到12%的ST证券,*ST证券和未完成股改证券",
+          "period": "2026-04-20-2026-04-22"
+        }
+      ],
+      "state": "LIMITED_READ_SUCCEEDED"
+    },
+    {
+      "dataset": "stk_high_shock",
+      "definitionVersion": 2,
+      "mapping": [
+        {
+          "sourceName": "ts_code",
+          "logicalName": "instrument_code",
+          "storageName": "ts_code",
+          "storageType": "SYMBOL",
+          "nullable": false,
+          "meaning": "来源完整证券代码，保留前导零和交易所后缀",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "trade_date",
+          "logicalName": "announcement_date",
+          "storageName": "trade_date",
+          "storageType": "TIMESTAMP",
+          "nullable": false,
+          "meaning": "来源公告日期，不是证券行情交易日或精确可用时刻",
+          "temporal": {
+            "kind": "BUSINESS_DATE",
+            "sourceFormat": "BASIC",
+            "zone": "calendar",
+            "precision": "DAY",
+            "meaning": "公告日期；物理 UTC 午夜仅为日期载体，不加减时差"
+          },
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "name",
+          "logicalName": "name",
+          "storageName": "name",
+          "storageType": "STRING",
+          "nullable": true,
+          "meaning": "来源证券名称",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "trade_market",
+          "logicalName": "trade_market",
+          "storageName": "trade_market",
+          "storageType": "SYMBOL",
+          "nullable": true,
+          "meaning": "来源交易市场或板块原文，不直接当作标准交易所代码",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "reason",
+          "logicalName": "reason",
+          "storageName": "reason",
+          "storageType": "STRING",
+          "nullable": false,
+          "meaning": "来源异常说明；保留既有去重身份",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "period",
+          "logicalName": "period",
+          "storageName": "period",
+          "storageType": "STRING",
+          "nullable": false,
+          "meaning": "来源异常期间原文；不猜测区间格式或公告可用时刻",
+          "temporal": null,
+          "legacyNullSentinels": []
+        }
+      ],
+      "physicalIdentity": {
+        "id": 1578,
+        "directoryName": "stk_high_shock~1578",
+        "walEnabled": true,
+        "designatedTimestamp": "trade_date",
+        "partitionBy": "YEAR"
+      },
+      "rows": [
+        {
+          "instrument_code": "000004.SZ",
+          "announcement_date": "2026-02-25",
+          "name": "*ST国华",
+          "trade_market": "深市主板",
+          "reason": "连续10个交易日内4次出现同负向异常波动的证券",
+          "period": "2026022520260311"
+        },
+        {
+          "instrument_code": "000017.SZ",
+          "announcement_date": "2026-09-02",
+          "name": "深中华A",
+          "trade_market": "深交所",
+          "reason": "连续10个交易日内收盘价格涨幅偏离值累计达100%",
+          "period": "2026090220260916"
+        }
+      ],
+      "state": "LIMITED_READ_SUCCEEDED"
+    },
+    {
+      "dataset": "shibor",
+      "definitionVersion": 2,
+      "mapping": [
+        {
+          "sourceName": "date",
+          "logicalName": "observation_date",
+          "storageName": "timestamp",
+          "storageType": "TIMESTAMP",
+          "nullable": false,
+          "meaning": "来源利率观测日；不等于股票交易日或真实可用时刻",
+          "temporal": {
+            "kind": "BUSINESS_DATE",
+            "sourceFormat": "BASIC",
+            "zone": "calendar",
+            "precision": "DAY",
+            "meaning": "保留来源日期；UTC 午夜为日期载体，不套 SSE 日历，不加 8 小时"
+          },
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "on",
+          "logicalName": "overnight_rate",
+          "storageName": "on",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 on 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "1w",
+          "logicalName": "rate_1w",
+          "storageName": "1w",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 1w 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "2w",
+          "logicalName": "rate_2w",
+          "storageName": "2w",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 2w 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "1m",
+          "logicalName": "rate_1m",
+          "storageName": "1m",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 1m 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "3m",
+          "logicalName": "rate_3m",
+          "storageName": "3m",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 3m 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "6m",
+          "logicalName": "rate_6m",
+          "storageName": "6m",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 6m 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "9m",
+          "logicalName": "rate_9m",
+          "storageName": "9m",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 9m 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "1y",
+          "logicalName": "rate_1y",
+          "storageName": "1y",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 1y 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        }
+      ],
+      "physicalIdentity": {
+        "id": 1839,
+        "directoryName": "shibor_stage_20260928_174105_840230~1839",
+        "walEnabled": true,
+        "designatedTimestamp": "timestamp",
+        "partitionBy": "YEAR"
+      },
+      "rows": [
+        {
+          "observation_date": "2025-10-20",
+          "overnight_rate": 1.317,
+          "rate_1w": 1.418,
+          "rate_2w": 1.468,
+          "rate_1m": 1.557,
+          "rate_3m": 1.582,
+          "rate_6m": 1.64,
+          "rate_9m": 1.66,
+          "rate_1y": 1.67
+        },
+        {
+          "observation_date": "2025-10-21",
+          "overnight_rate": 1.317,
+          "rate_1w": 1.426,
+          "rate_2w": 1.504,
+          "rate_1m": 1.557,
+          "rate_3m": 1.586,
+          "rate_6m": 1.641,
+          "rate_9m": 1.662,
+          "rate_1y": 1.675
+        }
+      ],
+      "state": "LIMITED_READ_SUCCEEDED"
+    },
+    {
+      "dataset": "hibor",
+      "definitionVersion": 2,
+      "mapping": [
+        {
+          "sourceName": "date",
+          "logicalName": "observation_date",
+          "storageName": "timestamp",
+          "storageType": "TIMESTAMP",
+          "nullable": false,
+          "meaning": "来源利率观测日；不等于股票交易日或真实可用时刻",
+          "temporal": {
+            "kind": "BUSINESS_DATE",
+            "sourceFormat": "BASIC",
+            "zone": "calendar",
+            "precision": "DAY",
+            "meaning": "保留来源日期；UTC 午夜为日期载体，不套 SSE 日历，不加 8 小时"
+          },
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "on",
+          "logicalName": "overnight_rate",
+          "storageName": "on",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 on 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "1w",
+          "logicalName": "rate_1w",
+          "storageName": "1w",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 1w 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "2w",
+          "logicalName": "rate_2w",
+          "storageName": "2w",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 2w 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "1m",
+          "logicalName": "rate_1m",
+          "storageName": "1m",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 1m 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "2m",
+          "logicalName": "rate_2m",
+          "storageName": "2m",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 2m 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "3m",
+          "logicalName": "rate_3m",
+          "storageName": "3m",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 3m 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "6m",
+          "logicalName": "rate_6m",
+          "storageName": "6m",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 6m 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "12m",
+          "logicalName": "rate_12m",
+          "storageName": "12m",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 12m 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        }
+      ],
+      "physicalIdentity": {
+        "id": 1837,
+        "directoryName": "hibor_stage_20260928_174101_121465~1837",
+        "walEnabled": true,
+        "designatedTimestamp": "timestamp",
+        "partitionBy": "YEAR"
+      },
+      "rows": [
+        {
+          "observation_date": "2025-10-20",
+          "overnight_rate": 3.78393,
+          "rate_1w": 3.69976,
+          "rate_2w": 3.71238,
+          "rate_1m": 3.57857,
+          "rate_2m": 3.54714,
+          "rate_3m": 3.60613,
+          "rate_6m": 3.4306,
+          "rate_12m": 3.54714
+        },
+        {
+          "observation_date": "2025-10-21",
+          "overnight_rate": 3.84191,
+          "rate_1w": 3.74607,
+          "rate_2w": 3.77744,
+          "rate_1m": 3.66411,
+          "rate_2m": 3.65452,
+          "rate_3m": 3.68679,
+          "rate_6m": 3.44435,
+          "rate_12m": 3.65452
+        }
+      ],
+      "state": "LIMITED_READ_SUCCEEDED"
+    },
+    {
+      "dataset": "shibor_lpr",
+      "definitionVersion": 2,
+      "mapping": [
+        {
+          "sourceName": "date",
+          "logicalName": "observation_date",
+          "storageName": "date",
+          "storageType": "TIMESTAMP",
+          "nullable": false,
+          "meaning": "来源利率观测日；不等于股票交易日或真实可用时刻",
+          "temporal": {
+            "kind": "BUSINESS_DATE",
+            "sourceFormat": "BASIC",
+            "zone": "calendar",
+            "precision": "DAY",
+            "meaning": "保留来源日期；UTC 午夜为日期载体，不套 SSE 日历，不加 8 小时"
+          },
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "1y",
+          "logicalName": "rate_1y",
+          "storageName": "1y",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 1y 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        },
+        {
+          "sourceName": "5y",
+          "logicalName": "rate_5y",
+          "storageName": "5y",
+          "storageType": "DOUBLE",
+          "nullable": true,
+          "meaning": "来源期限 5y 的利率原值；读取不缩放，单位按来源证据另验收",
+          "temporal": null,
+          "legacyNullSentinels": []
+        }
+      ],
+      "physicalIdentity": {
+        "id": 1647,
+        "directoryName": "shibor_lpr~1647",
+        "walEnabled": true,
+        "designatedTimestamp": "date",
+        "partitionBy": "YEAR"
+      },
+      "rows": [
+        {
+          "observation_date": "2025-10-20",
+          "rate_1y": 3.0,
+          "rate_5y": 3.5
+        },
+        {
+          "observation_date": "2025-11-20",
+          "rate_1y": 3.0,
+          "rate_5y": 3.5
+        }
+      ],
+      "state": "LIMITED_READ_SUCCEEDED"
+    }
+  ],
+  "observedAt": "2026-10-20T14:41:47.694213Z",
+  "sourceCoverageVerified": false,
+  "toExclusive": "2026-10-21",
+  "physicalMigrationExecuted": false,
+  "allLimitedReadsSucceeded": true,
+  "fromInclusive": "2025-10-20"
+}

@@ -65,6 +65,29 @@ public final class DataCatalogController {
         return call(() -> catalog.detail(name));
     }
 
+    @GetMapping(path = "/objects/{objectName}/columns/export", produces = "text/csv")
+    public Mono<ResponseEntity<byte[]>> exportColumns(@PathVariable("objectName") String name) {
+        return call(
+                () -> {
+                    var detail = catalog.detail(name);
+                    return ResponseEntity.ok()
+                            .contentType(MediaType.parseMediaType("text/csv; charset=UTF-8"))
+                            .header(
+                                    "Content-Disposition",
+                                    ContentDisposition.attachment()
+                                            .filename(
+                                                    "questdb-columns-"
+                                                            + name
+                                                            + "-"
+                                                            + FILE_TIME.format(detail.observedAt())
+                                                            + ".csv")
+                                            .build()
+                                            .toString())
+                            .header("X-Data-Catalog-Observed-At", detail.observedAt().toString())
+                            .body(DataCatalogCsv.encodeColumns(detail));
+                });
+    }
+
     @GetMapping(path = "/export", produces = "text/csv")
     public Mono<ResponseEntity<byte[]>> export(
             @RequestParam(name = "format", defaultValue = "csv") String format,

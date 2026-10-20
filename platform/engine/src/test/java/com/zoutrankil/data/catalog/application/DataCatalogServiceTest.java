@@ -89,6 +89,45 @@ class DataCatalogServiceTest {
     }
 
     @Test
+    void sourceLogicalAndPhysicalMappingsStayDistinctInDirectoryDetails() {
+        var metadata = new Metadata();
+        metadata.objects = List.of(physical("etf"));
+        var base = definition("etf_id", "etf", DatasetDefinition.ObjectKind.TABLE);
+        var mapped =
+                new DatasetDefinition(
+                        base.datasetId(),
+                        2,
+                        base.provider(),
+                        base.owner(),
+                        base.objectName(),
+                        base.objectKind(),
+                        List.of(
+                                new DatasetDefinition.Column(
+                                        "raw_code",
+                                        "instrument_code",
+                                        "code",
+                                        DatasetDefinition.StorageType.SYMBOL,
+                                        false,
+                                        "原值不变",
+                                        null)),
+                        List.of("instrument_code"),
+                        base.dedupKey(),
+                        base.designatedTimestamp(),
+                        base.partition(),
+                        base.wal(),
+                        base.capabilities(),
+                        base.dependencies(),
+                        base.storageRationale());
+        var detail = new DataCatalogService(metadata, List.of(), List.of(mapped)).detail("etf");
+        var column = detail.columns().getFirst();
+        assertEquals("code", column.name());
+        assertEquals("raw_code", column.sourceName());
+        assertEquals("instrument_code", column.logicalName());
+        assertEquals(List.of("instrument_code"), detail.businessKey());
+        assertNull(detail.columns().get(1).logicalName());
+    }
+
+    @Test
     void newAndDeletedObjectsFollowEachLiveSnapshot() {
         var metadata = new Metadata();
         metadata.objects = List.of(physical("fresh-table"), physical("etf"));
@@ -213,6 +252,9 @@ class DataCatalogServiceTest {
                         List.of(definition("etf_id", "etf", DatasetDefinition.ObjectKind.TABLE)));
         var detail = service.detail("etf");
         assertEquals("证券代码", detail.columns().getFirst().meaning());
+        assertEquals("code", detail.columns().getFirst().logicalName());
+        assertEquals("code", detail.columns().getFirst().sourceName());
+        assertNull(detail.columns().get(1).logicalName());
         assertEquals("待补充", detail.columns().get(1).meaning());
         assertNull(detail.columns().get(1).nullable());
         assertEquals(List.of("code"), detail.businessKey());

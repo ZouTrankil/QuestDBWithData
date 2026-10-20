@@ -34,6 +34,11 @@ final class DefaultReadBindings {
     // Active typed mappings use the native derived views; the retired cache adapters are absent.
     private static final List<ReadBindingCatalog.Registration<?>> REGISTRATIONS =
             List.of(
+                    generic("stk_shock", 2),
+                    generic("stk_high_shock", 2),
+                    generic("shibor", 2),
+                    generic("hibor", 2),
+                    generic("shibor_lpr", 2),
                     typed(
                             "l2_dataset_manifest",
                             1,

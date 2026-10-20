@@ -105,3 +105,5 @@ CN 的来源字段说明维护在 `markets/cn/src/main/resources/model-docs/coll
 主策略内部证券身份是 `ScoreRow.instrumentCode`，汇总身份是 `AggregationScope`；同一行只允许一种。ETF 持仓用 `etfCode/constituentCode` 表达两侧角色。旧产物仍有显式 v1 适配，新版对外字段尚未切换，见[设计决定](decisions/2026-10-20-主策略内部身份角色.md)。
 
 主策略读取时间按角色绑定现有 Dataset 定义，不根据裸 `timestamp/ts` 猜测日期。情绪和市场状态的契约由 CN 模型库统一提供；v1 编码与新版迁移状态见[设计决定](decisions/2026-10-20-主策略按来源契约解码时间.md)。
+
+CN 异动公告的只读 v2 使用 `announcement_date`，Shibor/Hibor/LPR 使用 `observation_date`；两者都解码为 `LocalDate`。物理列和旧来源投影仍保留，不能当作已完成迁移。数字开头的物理期限列必须显式引用，逻辑名与表名仍使用原标识校验，见[日期读取决定](decisions/2026-10-20-公告与利率逻辑日期读取.md)。

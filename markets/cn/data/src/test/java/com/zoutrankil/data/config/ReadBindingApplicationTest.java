@@ -96,7 +96,7 @@ class ReadBindingApplicationTest {
             context.register(ReadGroupConfiguration.class);
             context.refresh();
             var catalog = context.getBean(ReadBindingCatalog.class);
-            assertEquals(46, catalog.registrations().size());
+            assertEquals(51, catalog.registrations().size());
             var binding = catalog.bind(context.getBean(DatasetRegistry.class)).getFirst();
             assertSame(definition, binding.definition());
             assertEquals(String.class, binding.rowType());
@@ -220,16 +220,19 @@ class ReadBindingApplicationTest {
                             "express",
                             "forecast",
                             "fina_indicator");
+            var referenceIds =
+                    Set.of("stk_shock", "stk_high_shock", "shibor", "hibor", "shibor_lpr");
             var readableIds =
                     readable.stream().map(DatasetDefinition::datasetId).collect(Collectors.toSet());
             assertEquals(
                     historicalIds,
                     readableIds.stream()
-                            .filter(id -> !addedIds.contains(id))
+                            .filter(id -> !addedIds.contains(id) && !referenceIds.contains(id))
                             .collect(Collectors.toSet()));
             assertTrue(readableIds.containsAll(addedIds));
-            assertEquals(50, readable.size());
-            assertEquals(50, catalog.registrations().size());
+            assertTrue(readableIds.containsAll(referenceIds));
+            assertEquals(55, readable.size());
+            assertEquals(55, catalog.registrations().size());
             assertEquals(readable.size(), bound.size());
             for (var id : addedIds) {
                 var registration =
@@ -242,6 +245,15 @@ class ReadBindingApplicationTest {
                 var row = new DatasetValues(Map.of("explicit-generic", id));
                 assertSame(row, registration.mapper().apply(row));
                 assertNull(registration.sourceVersion().get());
+            }
+            for (var id : referenceIds) {
+                var registration =
+                        catalog.registrations().stream()
+                                .filter(r -> r.datasetId().equals(id))
+                                .findFirst()
+                                .orElseThrow();
+                assertEquals(2, registration.schemaVersion());
+                assertEquals(DatasetValues.class, registration.rowType());
             }
             for (var definition : readable) {
                 var binding =

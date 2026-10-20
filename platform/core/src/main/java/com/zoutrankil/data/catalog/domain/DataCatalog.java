@@ -75,7 +75,19 @@ public final class DataCatalog {
             Boolean nullable,
             String meaning,
             DatasetDefinition.TemporalContract temporal,
-            SourceField sourceDocumentation) {
+            SourceField sourceDocumentation,
+            String sourceName,
+            String logicalName) {
+        public Column(
+                String name,
+                String storageType,
+                Boolean nullable,
+                String meaning,
+                DatasetDefinition.TemporalContract temporal,
+                SourceField sourceDocumentation) {
+            this(name, storageType, nullable, meaning, temporal, sourceDocumentation, null, null);
+        }
+
         public Column(
                 String name,
                 String storageType,

@@ -8,12 +8,15 @@
 
 ```sh
 ./gradlew questdbMaintenance --args='status'
+./gradlew questdbMaintenance --args='inspect-cn-reference-dates --output var/cn-reference-dates-新编号.json'
 ./gradlew questdbMaintenance --args='refresh-etf-overview'
 ./gradlew questdbMaintenance --args='retire-sync-metadata'
 ./gradlew questdbMaintenance --args='rehearse-cn-time-columns --output var/cn-time-rehearsal-新编号.json'
 ```
 
 `status` 看状态；刷新和退役旧元数据命令会实际改库。`rehearse-cn-time-columns` 只在本轮随机创建的隔离副本上演练六项指定日期列的新布局，验证后按物理身份清理；正式表只读，不迁移原账本、不刷新 MV。输出文件不能已存在，任一对象失败返回非零。实际范围和限制见[时间迁移记录](operations/cn-time-migration/README.md)。该入口不启动全量同步应用。
+
+`inspect-cn-reference-dates` 只读五项公告/利率标准日期，窗口为上海当前日期前一年至明日，每表返回两行样本。不启动来源、不执行迁移或写入；它不验证来源全量覆盖。失败或缺样本返回非零，输出不覆盖旧文件，见[执行记录](operations/cn-time-migration/README.md)。
 
 ## ETF 物化视图怎样更新
 

@@ -1,0 +1,70 @@
+{
+  "verificationBase": "128679a3",
+  "scope": "隔离工作区：基线加本批文件，不包含共享目录里的其他未提交修改",
+  "modules": {
+    "platform/core": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "platform/engine": {
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "platform/app-support": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 159,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "checks": [
+    "architectureTest",
+    "verifyModuleBoundaries",
+    ":markets:cn:data-app:distZip",
+    ":markets:cn:main-strategy-runtime:distZip"
+  ],
+  "javaFilesFormatted": 1985,
+  "files": {
+    "platform/core/src/main/java/com/zoutrankil/data/domain/DatasetDefinition.java": "5bae0c6e0b55a372863a9d81a08fb9c07b331138379f763c65e6fbd188289443",
+    "platform/core/src/main/java/com/zoutrankil/data/catalog/domain/DataCatalog.java": "437b2b08bd5f3ca9f670d372965f6f373b34d692589ca82dc53d192078331fc1",
+    "platform/engine/src/main/java/com/zoutrankil/data/catalog/application/DataCatalogService.java": "7191cda1f2c893c691a0fdddfff6be6845b1146890c86dcaeb91a102901f602d",
+    "platform/engine/src/test/java/com/zoutrankil/data/catalog/application/DataCatalogServiceTest.java": "683f719270ab7c73aefcb3a4bf71403e1bc658835cb3196e31a4dc6610436874",
+    "platform/app-support/src/main/java/com/zoutrankil/data/catalog/web/DataCatalogController.java": "daa42a1d0914c22ae6c8c668f7871bae3437664932643ce03b23f042487c2c02",
+    "platform/app-support/src/main/java/com/zoutrankil/data/catalog/web/DataCatalogCsv.java": "221a08f95aec5c1144a21d39cdf6a80c748d642b74dda8df739fef0aa8fe9a3b",
+    "platform/app-support/src/test/java/com/zoutrankil/data/catalog/web/DataCatalogHttpTest.java": "0f2858f4628e29526be39a2778c3b179a9b75389f4d4ba6cd2ce6abaa75871da",
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/stock/reference/StockShockDatasets.java": "ae5babae11bbb59c46c016c89f2a58a631e739778e378e36ce196ed0fea7601b",
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/macro/interest/InterestRateDatasets.java": "3444f7592496d7da121cfba9e54e347d0b0e076ad56d0189fc46a74e287e967c",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java": "77b91a829a4601b5de23d49372eb1579112ff30c70ba6660297a48181842dd19",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/DefaultReadBindings.java": "840e74f97dc4007a04fbdc1aba294eb44360bcc770dd045c28a3727b8cc779ff",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/repository/QuestDbBoundedReader.java": "b0b3d9dcadcdb9f3371dc22e78ba36b178d11b3b61e6fc11d468faaee4c866a6",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/maintenance/cli/QuestDbMaintenanceCli.java": "e43e1f8a95b436ecca11c32ba0d46f273537c14d53dcfae47df91d928e5261c9",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/maintenance/application/CnReferenceDateReadInspection.java": "36bd05732174a82c40f2f3eddf56a010c4ebffb03fd9ab5561ba15a718160731",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/repository/CnReferenceDateReadTest.java": "283e6f87124a9508e8e44c82086dd81777a5aca8692d88c77513feb59f5d4c1d",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/config/ReadBindingApplicationTest.java": "e35f81b2a9466f915abd0521d532dd7c6d41f8647882057bfa32317cb845e7a5",
+    "platform/app-support/src/test/java/com/zoutrankil/data/catalog/web/DataCatalogColumnCsvTest.java": "6998805e3f18240129d089765c0d1349f1a8c86dbaaf43898a4b9b24fec3a495"
+  },
+  "testSelection": {
+    "markets/cn/data": [
+      "CnReferenceDateReadTest",
+      "ReadBindingApplicationTest",
+      "QuestDbBoundedReaderTest"
+    ],
+    "otherListedModules": "完整模块测试"
+  }
+}

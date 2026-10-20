@@ -13,11 +13,11 @@ cn_gdp,保留其他语义,保留现状，尚未完成全链路验收,quarter 是
 cn_m,保留其他语义,保留现状，尚未完成全链路验收,month 是统计月份，不是交易日。
 cn_pmi,保留其他语义,保留现状，尚未完成全链路验收,month 是统计月份，不是交易日。
 cn_ppi,保留其他语义,保留现状，尚未完成全链路验收,month 是统计月份，不是交易日。
-hibor,保留其他语义,保留现状，尚未完成全链路验收,timestamp → observation_date；香港同业利率观测日期，不套用 A 股交易日历。
+hibor,保留其他语义,只读 v2 逻辑映射及实库两行样本通过；写入和物理迁移未切换,timestamp → observation_date；香港同业利率观测日期，不套用 A 股交易日历。
 rmb_index_daily,待核,待实施；不声称物理迁移完成,保留 trade_date；维护字典明确标注官方来源未核实，暂不认证为标准交易日。
 sf_month,保留其他语义,保留现状，尚未完成全链路验收,month 是社融统计月份，不是交易日。
-shibor,保留其他语义,保留现状，尚未完成全链路验收,timestamp → observation_date；利率观测日期，不因是工作日就改为交易日。
-shibor_lpr,保留其他语义,保留现状，尚未完成全链路验收,date → observation_date；来源利率观测日期，不能当作股票交易日或自动当作数据可用时刻。
+shibor,保留其他语义,只读 v2 逻辑映射及实库两行样本通过；写入和物理迁移未切换,timestamp → observation_date；利率观测日期，不因是工作日就改为交易日。
+shibor_lpr,保留其他语义,只读 v2 逻辑映射及实库两行样本通过；写入和物理迁移未切换,date → observation_date；来源利率观测日期，不能当作股票交易日或自动当作数据可用时刻。
 l2_live_normalized_events,已用 trade_date,保留现状，尚未完成全链路验收,保留 trade_date；recv_ts 是接收时间，exchange_ts 是交易所事件时间角色，updated_at 分开保留；历史时钟真实性须原接收证据核验。
 dc_index,待核,待实施；不声称物理迁移完成,保留 trade_date；维护字典尚未核实来源字段，不能仅凭名称和午夜值认证语义。
 index,保留其他语义,保留现状，尚未完成全链路验收,base_date 是基日，publish_date 是发布日期，import_time 是导入时刻；均不是交易日。
@@ -36,10 +36,10 @@ pledge_stat,保留其他语义,保留现状，尚未完成全链路验收,end_da
 repurchase,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，end_date 是统计截止日，exp_date 是到期日；不能统一为交易日。
 share_float,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，float_date 是解禁日期；解禁日和交易日不是可互换的数据元。
 stk_alert,保留其他语义,保留现状，尚未完成全链路验收,start_date、end_date 是重点提示的起止日期；保留有效期语义。
-stk_high_shock,需纠偏,待实施；不声称物理迁移完成,来源输出 trade_date 实为公告日期；标准逻辑名应为 announcement_date，来源名与物理名暂保留。
+stk_high_shock,需纠偏,只读 v2 逻辑映射及实库两行样本通过；写入和物理迁移未切换,来源输出 trade_date 实为公告日期；标准逻辑名应为 announcement_date，来源名与物理名暂保留。
 stk_holdernumber,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，end_date 是股东人数统计截止日；不能合并。
 stk_holdertrade,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，begin_date、close_date 是增减持区间；区间边界继续按来源契约处理。
-stk_shock,需纠偏,待实施；不声称物理迁移完成,来源输出 trade_date 实为公告日期；标准逻辑名应为 announcement_date，不能因来源输入参数称交易日就忽略输出说明。
+stk_shock,需纠偏,只读 v2 逻辑映射及实库两行样本通过；写入和物理迁移未切换,来源输出 trade_date 实为公告日期；标准逻辑名应为 announcement_date，不能因来源输入参数称交易日就忽略输出说明。
 ft_limit,已用 trade_date,保留现状，尚未完成全链路验收,期货涨跌停价格所属交易日；update_time 分开保留。
 fut_basic,保留其他语义,保留现状，尚未完成全链路验收,timestamp 是固定 1970-01-01 技术占位；list_date、delist_date、last_ddate、d_month 分别是上市日、最后交易日、最后交割日、交割月。
 fut_daily,已用 trade_date,保留现状，尚未完成全链路验收,期货日行情所属交易日；夜盘归属由来源会话定义，不取 UTC 日期替代。

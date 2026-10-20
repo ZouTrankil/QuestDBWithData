@@ -2,9 +2,11 @@ package com.zoutrankil.data.maintenance.cli;
 
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.domain.JobDefinitionJson;
+import com.zoutrankil.data.maintenance.application.CnReferenceDateReadInspection;
 import com.zoutrankil.data.maintenance.application.CnTimeColumnRehearsal;
 import com.zoutrankil.data.maintenance.application.EtfOverviewMaintenance;
 import com.zoutrankil.data.maintenance.application.LegacySyncMetadataRetirement;
+import com.zoutrankil.market.cn.time.CnMarketTime;
 import com.zoutrankil.runtime.ProjectConfiguration;
 import com.zoutrankil.runtime.ProjectLogging;
 
@@ -29,17 +31,19 @@ public final class QuestDbMaintenanceCli {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         boolean withReport =
                 args.length == 3
-                        && args[0].equals("rehearse-cn-time-columns")
+                        && Set.of("rehearse-cn-time-columns", "inspect-cn-reference-dates")
+                                .contains(args[0])
                         && args[1].equals("--output");
         if ((args.length != 1 && !withReport)
                 || !Set.of(
                                 "status",
                                 "refresh-etf-overview",
                                 "retire-sync-metadata",
-                                "rehearse-cn-time-columns")
+                                "rehearse-cn-time-columns",
+                                "inspect-cn-reference-dates")
                         .contains(args[0])) {
             throw new IllegalArgumentException(
-                    "维护命令：status|refresh-etf-overview|retire-sync-metadata|rehearse-cn-time-columns [--output 新文件]");
+                    "维护命令：status|refresh-etf-overview|retire-sync-metadata|rehearse-cn-time-columns|inspect-cn-reference-dates [--output 新文件]");
         }
         Path reportPath = withReport ? Path.of(args[2]).toAbsolutePath().normalize() : null;
         if (reportPath != null && Files.exists(reportPath))
@@ -78,6 +82,11 @@ public final class QuestDbMaintenanceCli {
                                                                 LegacySyncMetadataRetirement.TABLES)
                                                         + "')"));
                         case "rehearse-cn-time-columns" -> new CnTimeColumnRehearsal(jdbc).run();
+                        case "inspect-cn-reference-dates" -> {
+                            var day = CnMarketTime.system().today();
+                            yield new CnReferenceDateReadInspection(jdbc)
+                                    .inspect(day.minusYears(1), day.plusDays(1));
+                        }
                         case "refresh-etf-overview" -> maintenance.refresh();
                         case "retire-sync-metadata" -> {
                             var refresh = maintenance.refresh();
@@ -103,6 +112,10 @@ public final class QuestDbMaintenanceCli {
                 Files.writeString(reportPath, json + "\n", StandardOpenOption.CREATE_NEW);
             }
             System.out.println(json);
+            if (args[0].equals("inspect-cn-reference-dates")
+                    && result instanceof Map<?, ?> report
+                    && !Boolean.TRUE.equals(report.get("allLimitedReadsSucceeded")))
+                throw new IllegalStateException("只读日期检查未全部取得有效样本，详见逐对象结果；未修改表");
             if (args[0].equals("rehearse-cn-time-columns")
                     && result instanceof Map<?, ?> report
                     && !Boolean.TRUE.equals(report.get("isolatedRehearsalVerified"))) {

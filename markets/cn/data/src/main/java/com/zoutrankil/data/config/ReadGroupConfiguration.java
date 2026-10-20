@@ -1,7 +1,9 @@
 package com.zoutrankil.data.config;
 
 import com.zoutrankil.data.domain.DatasetImplementation;
+import com.zoutrankil.data.domain.macro.interest.InterestRateDatasets;
 import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
+import com.zoutrankil.data.domain.stock.reference.StockShockDatasets;
 import com.zoutrankil.data.repository.CnBondYieldCurveWritePort;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import com.zoutrankil.data.service.DatasetRegistry;
@@ -28,6 +30,32 @@ public class ReadGroupConfiguration {
     @Bean
     DatasetImplementation cnBondYieldCurveDataset() {
         return CnBondYieldCurveWritePort::definition;
+    }
+
+    // 只接现有表的明确读取契约，不注册新的同步 owner 或 writer。
+    @Bean
+    DatasetImplementation stockShockDataset() {
+        return () -> StockShockDatasets.SHOCK;
+    }
+
+    @Bean
+    DatasetImplementation stockHighShockDataset() {
+        return () -> StockShockDatasets.HIGH_SHOCK;
+    }
+
+    @Bean
+    DatasetImplementation shiborObservationDataset() {
+        return () -> InterestRateDatasets.SHIBOR;
+    }
+
+    @Bean
+    DatasetImplementation hiborObservationDataset() {
+        return () -> InterestRateDatasets.HIBOR;
+    }
+
+    @Bean
+    DatasetImplementation lprObservationDataset() {
+        return () -> InterestRateDatasets.LPR;
     }
 
     @Bean

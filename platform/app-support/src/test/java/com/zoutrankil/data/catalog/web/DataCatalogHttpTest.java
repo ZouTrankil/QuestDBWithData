@@ -168,6 +168,20 @@ class DataCatalogHttpTest {
     }
 
     @Test
+    void columnExportUsesTheSameDetailAndLeavesUnknownMappingsBlank() throws Exception {
+        var response = get("/api/v1/data-catalog/objects/new_table/columns/export", true);
+        assertEquals(200, response.statusCode());
+        assertTrue(
+                response.headers().firstValue("Content-Type").orElseThrow().contains("text/csv"));
+        assertTrue(response.body().startsWith("\uFEFF对象名,物理字段,逻辑字段,来源字段"));
+        assertTrue(response.body().contains("new_table,price,,,double"));
+        assertTrue(response.body().contains("待核"));
+        assertEquals(
+                401,
+                get("/api/v1/data-catalog/objects/new_table/columns/export", false).statusCode());
+    }
+
+    @Test
     void unclassifiedObjectsKeepUnknownCountsAndDetailsExposeColumns() throws Exception {
         var list = json.readTree(get("/api/v1/data-catalog?keyword=new_table", true).body());
         assertEquals(

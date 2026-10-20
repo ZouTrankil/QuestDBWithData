@@ -454,7 +454,8 @@ public class QuestDbBoundedReader {
     }
 
     private static String quoted(String identifier) {
-        DatasetDefinition.identifier(identifier);
+        // 定义已分别校验表名、逻辑名；物理列还可能是明确登记的 1w/1m。
+        DatasetDefinition.storageIdentifier(identifier);
         return '"' + identifier + '"';
     }
 

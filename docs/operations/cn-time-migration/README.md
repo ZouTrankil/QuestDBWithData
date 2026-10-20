@@ -1,6 +1,6 @@
 # CN 时间迁移执行状态
 
-任务 07 尚未完成。已修正 `index_daily_market` 正式/隔离契约混用，并完成六组新布局小样本演练；没有更改正式表、主策略 schema 或正式别名。
+任务 07 尚未完成。已修正 `index_daily_market` 正式/隔离契约混用，并完成六组新布局小样本演练；没有更改正式表或正式别名；代码中的新版逻辑读取与产物协议见下方分项记录。
 
 本次只读复查确认正式表指定列为 `trade_date`，YEAR/WAL，去重键 `(ts_code,trade_date)`。`IndexDailyMarketDataset.DEFINITION` 现在是 v2；`legacyIsolatedDefinition` 明确提供 v1 的 `timestamp` 布局，且拒绝正式表名。现有 D019 writer/read repository 与 adapter 仍显式绑定 v1，旧冻结请求、Job 版本和恢复流程未变。不能把正式契约 v2 当作生产作业已接管。
 
@@ -106,3 +106,19 @@
 主策略模块 159 项回归全部通过；Batch 模块 2200 项零失败、4 项跳过；配置加载 15 项通过。架构、模块边界、主策略及 CN 数据发行包通过。固定 v3 向量由原提交 `a26c4cba` 的方法独立执行取得；临时 SQLite 验证了新请求保存 v4，旧 BLOCKED 请求仍保留原定义、指纹与实例身份。新计划协议缺失或变化会拒绝恢复且不覆盖原件。全项目 1980 个 Java 文件格式/import/字面量检查及变更文档链接检查通过。
 
 本批没有开启来源、生产评分或正式迁移；真实批准、训练、历史原件、独立参考及远端原账本仍需验收。日期列/MV 切换和三项退役表的正式删除未执行。规则见[Batch 协议冻结](../../decisions/2026-10-20-主策略Batch冻结输入协议.md)。
+
+## 公告日与利率观测日已接入只读 v2
+
+五项只读契约已接入实际读取注册：`stk_shock/stk_high_shock` 返回 `announcement_date`，`shibor/hibor/shibor_lpr` 返回 `observation_date`。目录详情同时给出 sourceName/logicalName/name，逐字段 CSV 使用同一映射。利率的数字开头物理列只允许受限标识并始终引用；表名和逻辑名的原限制不放宽。
+
+```sh
+./gradlew questdbMaintenance --args='inspect-cn-reference-dates --output var/cn-reference-dates-新编号.json'
+```
+
+窗口为上海当前日期前一年至明日，左闭右开；每表返回两行，底层最多多读一行判断下一页。输出文件必须是新文件，空样本、读取失败或物理身份变化都会返回非零。命令不启动来源、写表、刷新 MV 或推进检查点。
+
+[实库样本](公告与利率逻辑日期只读样本.json)五项全部成功，包含实际日期、原利率值和物理身份；公告的 reason/period 仍保留原键。样本不是完整来源或全历史验收，报告明确标记 sourceCoverageVerified=false、physicalMigrationExecuted=false。
+
+[离线验证记录](公告与利率读取验证.json)来自隔离工作区：`128679a3` 加本批文件，不包含共享目录里的其他未提交修改。core 6 项、engine 24 项、公共 API 16 项、相关 CN 读取 10 项、主策略 159 项均通过；架构、模块边界、CN 数据及主策略发行包通过。1985 个 Java 文件的 import、格式及字面量核对通过。共享目录首次综合检查发生并发测试输出文件缺失，隔离验证避免复用该结果。
+
+[五项对象状态](对象状态.csv)已更新为逻辑读取及小样本通过，正式物理改名、写入与恢复切换仍未完成。旧来源合同和原表投影未升级；来源覆盖、单位尺度、实际 writer 和原账本继续待核。详见[设计决定](../../decisions/2026-10-20-公告与利率逻辑日期读取.md)。

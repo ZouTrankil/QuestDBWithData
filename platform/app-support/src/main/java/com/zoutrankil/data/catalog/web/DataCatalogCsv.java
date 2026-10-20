@@ -49,6 +49,42 @@ public final class DataCatalogCsv {
         return output.toString().getBytes(StandardCharsets.UTF_8);
     }
 
+    /** 逐字段导出复用目录详情；未登记的逻辑映射留空，不拿物理列名冒充。 */
+    public static byte[] encodeColumns(DataCatalog.Detail detail) {
+        var output =
+                new StringBuilder(
+                        "\uFEFF对象名,物理字段,逻辑字段,来源字段,存储类型,时间角色,来源编码,日期或时区,精度,业务键,字段说明,来源单位\r\n");
+        for (var column : detail.columns()) {
+            var time = column.temporal();
+            var fields =
+                    Arrays.asList(
+                            detail.object().objectName(),
+                            column.name(),
+                            column.logicalName(),
+                            column.sourceName(),
+                            column.storageType(),
+                            time == null ? null : time.kind(),
+                            time == null ? null : time.sourceFormat(),
+                            time == null ? null : time.zone(),
+                            time == null ? null : time.precision(),
+                            column.logicalName() == null
+                                    ? "待核"
+                                    : detail.businessKey().contains(column.logicalName())
+                                            ? "是"
+                                            : "否",
+                            column.meaning(),
+                            column.sourceDocumentation() == null
+                                    ? null
+                                    : column.sourceDocumentation().unit());
+            output.append(
+                            fields.stream()
+                                    .map(value -> quote(value == null ? "" : value.toString()))
+                                    .collect(Collectors.joining(",")))
+                    .append("\r\n");
+        }
+        return output.toString().getBytes(StandardCharsets.UTF_8);
+    }
+
     private static String kind(DataCatalog.Entry entry) {
         if (entry.objectKind() == null) return "待补充";
         return switch (entry.objectKind()) {
