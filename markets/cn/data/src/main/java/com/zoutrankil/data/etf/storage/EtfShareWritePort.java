@@ -6,11 +6,12 @@ import com.zoutrankil.data.domain.fund.EtfShareDataset;
 import com.zoutrankil.data.domain.fund.EtfShareKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.etf.mapper.EtfShareMapper;
-import com.zoutrankil.data.etf.port.EtfWriteSession;
+import com.zoutrankil.data.etf.port.EtfShareWriteSession;
 import com.zoutrankil.data.repository.DatasetWritePreparation;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** Bounded WAL writer and full-row isolated readback for the provider's nullable extension fields. */
-public final class EtfShareWritePort implements EtfWriteSession<EtfShare, EtfShareKey> {
+public final class EtfShareWritePort implements EtfShareWriteSession.Versioned {
     public static final int MAX_BATCH_ROWS = 250;
     public static final int MAX_BATCH_BYTES = 1024 * 1024;
     public static final int MAX_ROWS_PER_DATE = EtfShareDataset.MAX_ROWS_PER_DATE;
@@ -55,6 +56,8 @@ public final class EtfShareWritePort implements EtfWriteSession<EtfShare, EtfSha
                 }
             };
 
+    private final CnTradeDateLayout layout;
+    private final String dateColumn;
     private final String table;
     private final String expectedTargetId;
     private final JdbcTemplate jdbc;
@@ -64,6 +67,17 @@ public final class EtfShareWritePort implements EtfWriteSession<EtfShare, EtfSha
 
     public EtfShareWritePort(
             String table, String expectedTargetId, JdbcTemplate jdbc, QuestDB questdb) {
+        this(table, expectedTargetId, jdbc, questdb, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public EtfShareWritePort(
+            String table,
+            String expectedTargetId,
+            JdbcTemplate jdbc,
+            QuestDB questdb,
+            CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
+        this.dateColumn = layout.physicalDateColumn("etf_share");
         EtfShareDataset.requireIsolatedTable(table);
         if (expectedTargetId == null || !expectedTargetId.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException(
@@ -77,9 +91,14 @@ public final class EtfShareWritePort implements EtfWriteSession<EtfShare, EtfSha
     }
 
     @Override
+    public int datasetVersion() {
+        return layout.schemaVersion();
+    }
+
+    @Override
     public void preflight() {
         requireExpectedTarget();
-        QuestDbWriteChecks.preflight(jdbc, table, EtfShareDataset.definition(table));
+        QuestDbWriteChecks.preflight(jdbc, table, EtfShareDataset.definition(table, layout));
         requireExpectedTarget();
     }
 
@@ -91,7 +110,7 @@ public final class EtfShareWritePort implements EtfWriteSession<EtfShare, EtfSha
         preflight();
         uncertainSenderStopped = false;
         DatasetWritePreparation.prepare(
-                EtfShareDataset.definition(table),
+                EtfShareDataset.definition(table, layout),
                 rows,
                 mapper::values,
                 new DatasetWritePreparation.Limits(MAX_BATCH_ROWS, MAX_BATCH_BYTES));
@@ -113,6 +132,7 @@ public final class EtfShareWritePort implements EtfWriteSession<EtfShare, EtfSha
                 // DEDUP replaces the row.
                 if (value.fundType() != null) line.stringColumn("fund_type", value.fundType());
                 line.symbol("market", value.market());
+                // 只由布局选择指定日期列；原 update_time 不重算、不随日期平移。
                 line.timestampColumn("update_time", value.updateTime())
                         .at(
                                 new TemporalValues.CalendarTimestamp(value.tradeDate())
@@ -143,19 +163,23 @@ public final class EtfShareWritePort implements EtfWriteSession<EtfShare, EtfSha
         var clauses = new ArrayList<String>();
         var parameters = new ArrayList<Object>();
         for (var key : keys) {
-            clauses.add("(ts_code = ? AND timestamp = cast(? AS TIMESTAMP))");
+            clauses.add("(ts_code = ? AND " + dateColumn + " = cast(? AS TIMESTAMP))");
             parameters.add(key.tsCode());
             parameters.add(
                     new TemporalValues.CalendarTimestamp(key.tradeDate())
                             .storageEpoch(TemporalValues.EpochUnit.MICROS));
         }
         String sql =
-                "SELECT ts_code, cast(timestamp AS long) AS trade_date_micros, fd_share, fund_type, market, "
+                "SELECT ts_code, cast("
+                        + dateColumn
+                        + " AS long) AS trade_date_micros, fd_share, fund_type, market, "
                         + "cast(update_time AS long) AS update_time_micros FROM \""
                         + table
                         + "\" WHERE "
                         + String.join(" OR ", clauses)
-                        + " ORDER BY timestamp, ts_code LIMIT "
+                        + " ORDER BY "
+                        + dateColumn
+                        + ", ts_code LIMIT "
                         + (keys.size() + 1);
         return jdbc.query(sql, (rs, index) -> physical(rs), parameters.toArray());
     }
@@ -164,7 +188,9 @@ public final class EtfShareWritePort implements EtfWriteSession<EtfShare, EtfSha
         requireExpectedTarget();
         var dates =
                 jdbc.query(
-                        "SELECT DISTINCT cast(timestamp AS long) AS trade_date_micros FROM \""
+                        "SELECT DISTINCT cast("
+                                + dateColumn
+                                + " AS long) AS trade_date_micros FROM \""
                                 + table
                                 + "\" ORDER BY trade_date_micros LIMIT 10001",
                         (rs, index) -> date(rs));
@@ -181,10 +207,14 @@ public final class EtfShareWritePort implements EtfWriteSession<EtfShare, EtfSha
                 new TemporalValues.CalendarTimestamp(date)
                         .storageEpoch(TemporalValues.EpochUnit.MICROS);
         String sql =
-                "SELECT ts_code, cast(timestamp AS long) AS trade_date_micros, fd_share, fund_type, market, "
+                "SELECT ts_code, cast("
+                        + dateColumn
+                        + " AS long) AS trade_date_micros, fd_share, fund_type, market, "
                         + "cast(update_time AS long) AS update_time_micros FROM \""
                         + table
-                        + "\" WHERE timestamp = cast(? AS TIMESTAMP) ORDER BY ts_code LIMIT "
+                        + "\" WHERE "
+                        + dateColumn
+                        + " = cast(? AS TIMESTAMP) ORDER BY ts_code LIMIT "
                         + (MAX_ROWS_PER_DATE + 1);
         var rows = jdbc.query(sql, (rs, index) -> physical(rs), micros);
         if (rows.size() > MAX_ROWS_PER_DATE)

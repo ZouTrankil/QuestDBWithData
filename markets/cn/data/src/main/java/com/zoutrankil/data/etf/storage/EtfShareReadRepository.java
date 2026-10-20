@@ -10,7 +10,9 @@ import com.zoutrankil.data.domain.fund.EtfShareDataset;
 import com.zoutrankil.data.domain.fund.EtfShareKey;
 import com.zoutrankil.data.etf.mapper.EtfShareMapper;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -27,13 +29,26 @@ public class EtfShareReadRepository implements DatasetImplementation {
             EtfShareDataset.DEFINITION.columns().stream()
                     .map(DatasetDefinition.Column::logicalName)
                     .toList();
+    private final CnTradeDateLayout layout;
     private final QuestDbBoundedReader reader;
     private final String table;
     private final EtfShareMapper mapper = new EtfShareMapper();
 
+    @Autowired
     public EtfShareReadRepository(
             QuestDbBoundedReader reader,
-            @Value("${app.sync.etf-share-table:java_d016_etf_share_acceptance}") String table) {
+            @Value("${app.sync.etf-share-table:java_d016_etf_share_acceptance}") String table,
+            @Value("${app.sync.etf-share-schema-version:1}") int version) {
+        this(reader, table, CnTradeDateLayout.fromVersion(version));
+    }
+
+    public EtfShareReadRepository(QuestDbBoundedReader reader, String table) {
+        this(reader, table, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public EtfShareReadRepository(
+            QuestDbBoundedReader reader, String table, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.reader = Objects.requireNonNull(reader);
         EtfShareDataset.requireIsolatedTable(table);
         this.table = table;
@@ -41,7 +56,12 @@ public class EtfShareReadRepository implements DatasetImplementation {
 
     @Override
     public DatasetDefinition definition() {
-        return EtfShareDataset.definition(table);
+        return EtfShareDataset.definition(table, layout);
+    }
+
+    @Override
+    public DatasetDefinition definition(int version) {
+        return EtfShareDataset.definition(table, CnTradeDateLayout.fromVersion(version));
     }
 
     public DatasetReadPage<EtfShare> findByKey(EtfShareKey key) {

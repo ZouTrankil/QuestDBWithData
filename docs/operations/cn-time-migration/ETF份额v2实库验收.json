@@ -1,0 +1,64 @@
+{
+  "说明": "独立 v2 表真实 Java QWP 两轮写入、完整六列与业务键、类型化读取、WAL、稳定身份及回读 prepared 指纹验收；仅正式表两行只读样本，非来源完整性或正式迁移验收。",
+  "原件目录": "var/cn-etf-share-layout-v2-20261021/d5a9f9d70fcc41fe86156c1e658483a6",
+  "原件摘要": {
+    "report.json": "f40b73364993e104a507889912620857c7d7ae06737b358bbcd84783dc6f3746",
+    "expected.json": "31e68a1d6f54aedfd313c327991ce6b2f6536ab371dac6873a63d223684070f4",
+    "request.json": "6dfd6dd235b92e2091c2d87b182f4f9f6fceb982d7e45b8225cd3fd56f5af3ea"
+  },
+  "两行原观察时刻": [
+    "2026-09-21T18:32:41.645659Z",
+    "2026-09-21T18:32:41.646740Z"
+  ],
+  "观察时刻逐行保留": true,
+  "请求类型": "prepared-write-layout-sample",
+  "来源同步作业实际执行": false,
+  "成功报告": {
+    "schemaVersion": 1,
+    "observedAt": "2026-10-20T17:44:26.651896Z",
+    "table": "java_d016_etf_share_layout2_d5a9f9d70fcc41fe86156c1e658483a6",
+    "sourceCoverageVerified": false,
+    "modelAcceptanceVerified": false,
+    "requestIsProductionApproved": false,
+    "physicalMigrationExecuted": false,
+    "checkpointAdvanced": false,
+    "state": "VERIFIED_AND_CLEANED",
+    "sampleDate": "2026-09-21",
+    "sourceState": [
+      {
+        "id": 1850,
+        "directoryName": "etf_share_stage_20260928_174145_144587~1850",
+        "table_txn": 8
+      }
+    ],
+    "requestKind": "prepared-write-layout-sample",
+    "requestFingerprint": "c2a3239a7f2aa58c622d32851a2a388dc9537e57b8b82bba1b7d26d29f0a3ce9",
+    "sourceSyncJobExecuted": false,
+    "targetId": "static-v2-6a10a9446c16e853e213c62e7955ae4406405f1e87f876a3e69543afd6f44e3e",
+    "verifiedPasses": 2,
+    "rows": [
+      {
+        "key": {
+          "tsCode": "158000.SZ",
+          "tradeDate": "2026-09-21"
+        },
+        "fdShare": 6392.5835,
+        "fundType": "ETF",
+        "market": "SZ",
+        "updateTime": "2026-09-21T18:32:41.645659Z"
+      },
+      {
+        "key": {
+          "tsCode": "158001.SZ",
+          "tradeDate": "2026-09-21"
+        },
+        "fdShare": 12039.2624,
+        "fundType": "ETF",
+        "market": "SZ",
+        "updateTime": "2026-09-21T18:32:41.646740Z"
+      }
+    ],
+    "javaTypedReadExercised": true,
+    "legacyLayoutRejected": true
+  }
+}

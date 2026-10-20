@@ -81,13 +81,20 @@ public final class EtfShareCoverage {
 
     public static Optional<Coverage> checkpoint(
             Path path, String targetId, EtfShareTradingDates calendars) throws Exception {
+        return checkpoint(path, targetId, calendars, 3);
+    }
+
+    /** 布局各自接续原完整回执；作业 v3/v4 不能共享连续前缀或修订值凭证。 */
+    public static Optional<Coverage> checkpoint(
+            Path path, String targetId, EtfShareTradingDates calendars, int jobVersion)
+            throws Exception {
+        SyncJobDefinition expectedDefinition = EtfShareSyncJobOwner.definition(jobVersion);
         Objects.requireNonNull(path);
         Objects.requireNonNull(targetId);
         Objects.requireNonNull(calendars);
         if (!Files.isRegularFile(path) || !hasHistorySchema(path)) return Optional.empty();
         var ledger = SyncRunLedger.openReadOnly(path);
         var json = JobDefinitionJson.mapper();
-        SyncJobDefinition expectedDefinition = EtfShareSyncJobOwner.DEFINITION;
         var intervals = new ArrayList<Interval>();
         var latestValueReceipts = new HashMap<LocalDate, TimedReceipt>();
         String after = null;

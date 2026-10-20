@@ -6,6 +6,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.fund.EtfShare;
 import com.zoutrankil.data.domain.fund.EtfShareDataset;
 import com.zoutrankil.data.domain.fund.EtfShareKey;
+import com.zoutrankil.data.etf.port.EtfShareWriteSession;
 import com.zoutrankil.data.etf.port.EtfWriteSession;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
@@ -95,11 +96,16 @@ public final class EtfShareSyncAdapter implements SyncJobRunner.Adapter<EtfShare
 
     @Override
     public void preflight(FrozenRequest request) {
+        // 在日历、来源和物理访问前核对原作业定义及会话布局。
+        int portVersion =
+                port instanceof EtfShareWriteSession.Versioned selected
+                        ? selected.datasetVersion()
+                        : 1;
         if (request == null
-                || !request.definition().equals(EtfShareSyncJobOwner.DEFINITION)
+                || !request.definition()
+                        .equals(EtfShareSyncJobOwner.definition(request.definition().version()))
                 || !request.definition().datasetId().equals(EtfShareDataset.DEFINITION.datasetId())
-                || request.definition().datasetVersion()
-                        != EtfShareDataset.DEFINITION.schemaVersion()
+                || request.definition().datasetVersion() != portVersion
                 || !Set.of(Mode.INCREMENTAL, Mode.BACKFILL, Mode.RECONCILE).contains(request.mode())
                 || request.from() == null
                 || request.to() == null

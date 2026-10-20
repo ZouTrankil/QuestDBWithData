@@ -10,7 +10,9 @@ import com.zoutrankil.data.domain.fund.EtfShareDataset;
 import com.zoutrankil.data.domain.fund.EtfShareKey;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
 import com.zoutrankil.data.etf.mapper.EtfShareMapper;
+import com.zoutrankil.data.etf.port.EtfShareTarget;
 import com.zoutrankil.data.etf.port.EtfTarget;
+import com.zoutrankil.data.etf.port.EtfWriteSession;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.DailySyncEndDate;
 import com.zoutrankil.data.service.FrozenRunRequest;
@@ -18,6 +20,7 @@ import com.zoutrankil.data.service.SyncJobRegistry;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.SyncRunExecution;
 import com.zoutrankil.data.service.TusharePageService;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,6 +64,8 @@ public final class EtfShareJobService {
         }
     }
 
+    // 当前布局只用于新计划；恢复从原账本选择作业版本。
+    private final CnTradeDateLayout layout;
     private final SyncJobRegistry jobs;
     private final TusharePageService pages;
     private final EtfShareTradingDates tradingDates;
@@ -68,7 +73,6 @@ public final class EtfShareJobService {
     private final Path ledgerPath;
     private final String table;
 
-    @Autowired
     public EtfShareJobService(
             @Lazy SyncJobRegistry jobs,
             TusharePageService pages,
@@ -78,12 +82,40 @@ public final class EtfShareJobService {
         this(jobs, pages, calendars, target, Path.of(ledgerPath));
     }
 
+    @Autowired
+    public EtfShareJobService(
+            @Lazy SyncJobRegistry jobs,
+            TusharePageService pages,
+            ExchangeCalendarReadRepository calendars,
+            EtfTarget<EtfShare, EtfShareKey> target,
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath,
+            @Value("${app.sync.etf-share-schema-version:1}") int version) {
+        this(
+                jobs,
+                pages,
+                calendars,
+                target,
+                Path.of(ledgerPath),
+                CnTradeDateLayout.fromVersion(version));
+    }
+
     public EtfShareJobService(
             SyncJobRegistry jobs,
             TusharePageService pages,
             ExchangeCalendarReadRepository calendars,
             EtfTarget<EtfShare, EtfShareKey> target,
             Path ledgerPath) {
+        this(jobs, pages, calendars, target, ledgerPath, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public EtfShareJobService(
+            SyncJobRegistry jobs,
+            TusharePageService pages,
+            ExchangeCalendarReadRepository calendars,
+            EtfTarget<EtfShare, EtfShareKey> target,
+            Path ledgerPath,
+            CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.jobs = Objects.requireNonNull(jobs);
         this.pages = Objects.requireNonNull(pages);
         this.tradingDates = new EtfShareTradingDates(calendars);
@@ -123,7 +155,7 @@ public final class EtfShareJobService {
         LocalDate requestedLimit = requestedThrough == null ? logicalDate : requestedThrough;
         LocalDate resolvedThrough = DailySyncEndDate.resolve(requestedLimit, sourceNow);
         if (resolvedThrough.isAfter(logicalDate)) resolvedThrough = logicalDate;
-        SyncJobDefinition definition = EtfShareSyncJobOwner.DEFINITION;
+        SyncJobDefinition definition = EtfShareSyncJobOwner.forLayout(layout.schemaVersion());
         Mode mode = requestedMode == null ? definition.defaultMode() : requestedMode;
         if (!definition.supportedModes().contains(mode))
             throw new IllegalArgumentException("Unsupported etf_share mode");
@@ -145,9 +177,9 @@ public final class EtfShareJobService {
             throw new IllegalArgumentException("etf_share --from is after --to");
 
         String target = targetId();
-        var port = this.target.newWriter(target);
+        var port = writer(target, definition.datasetVersion());
         port.preflight();
-        EtfTargetRange physical = readTargetRange();
+        EtfTargetRange physical = readTargetRange(definition.datasetVersion());
         if (physical.max() != null && physical.max().isAfter(logicalDate))
             throw new IllegalStateException(
                     "etf_share target contains a date after frozen logical date");
@@ -159,7 +191,9 @@ public final class EtfShareJobService {
         boolean bootstrap = false;
         Optional<EtfShareCoverage.Coverage> saved = Optional.empty();
         if (mode == Mode.INCREMENTAL) {
-            saved = EtfShareCoverage.checkpoint(ledgerPath, target, tradingDates);
+            saved =
+                    EtfShareCoverage.checkpoint(
+                            ledgerPath, target, tradingDates, definition.version());
             if (saved.isEmpty()) {
                 if (bootstrapFrom == null)
                     throw new IllegalArgumentException(
@@ -217,8 +251,7 @@ public final class EtfShareJobService {
         }
         if (physical.min() != null) params.put("targetMinBefore", physical.min());
         if (physical.max() != null) params.put("targetMaxBefore", physical.max());
-        // Freeze the Python model's datetime.now()-style technical update_time so resume replays
-        // identical rows.
+        // 新计划固定来源观察时刻；恢复沿用原 observedAt，不重新生成 update_time。
         params.put("observedAt", Instant.now().truncatedTo(ChronoUnit.MICROS).toString());
         var request =
                 jobs.prepare(
@@ -253,8 +286,22 @@ public final class EtfShareJobService {
                 bootstrap);
     }
 
-    private EtfTargetRange readTargetRange() {
+    private EtfTargetRange readTargetRange(int version) {
+        if (target instanceof EtfShareTarget.Versioned selected) return selected.range(version);
+        if (version != 1) throw new IllegalArgumentException("旧 ETF 份额目标没有新版范围读取能力");
         return target.range();
+    }
+
+    private EtfWriteSession<EtfShare, EtfShareKey> writer(String identity, int version) {
+        return EtfShareTarget.writerForFrozenVersion(target, identity, version);
+    }
+
+    private FrozenRunRequest.Restored restore(String runId) throws Exception {
+        var saved = SyncRunLedger.openReadOnly(ledgerPath).getRun(Objects.requireNonNull(runId));
+        if (saved == null || !EtfShareSyncJobOwner.DEFINITION.jobId().equals(saved.jobId()))
+            throw new IllegalArgumentException("原记录不是 ETF 份额任务");
+        return FrozenRunRequest.restore(
+                ledgerPath, runId, EtfShareSyncJobOwner.definition(saved.jobVersion()));
     }
 
     public SyncJobRunner.Result run(Plan plan) throws Exception {
@@ -262,8 +309,7 @@ public final class EtfShareJobService {
     }
 
     public SyncJobRunner.Result resume(String priorRunId) throws Exception {
-        var saved =
-                FrozenRunRequest.restore(ledgerPath, priorRunId, EtfShareSyncJobOwner.DEFINITION);
+        var saved = restore(priorRunId);
         var parameters = saved.request().parameters();
         var plan =
                 new Plan(
@@ -280,8 +326,7 @@ public final class EtfShareJobService {
 
     public SyncJobRunner.Result resume(Plan plan, String priorRunId) throws Exception {
         Objects.requireNonNull(priorRunId);
-        var saved =
-                FrozenRunRequest.restore(ledgerPath, priorRunId, EtfShareSyncJobOwner.DEFINITION);
+        var saved = restore(priorRunId);
         if (!SyncRequestIdentity.fingerprint(saved.request(), saved.targetId())
                 .equals(SyncRequestIdentity.fingerprint(plan.request(), plan.targetId())))
             throw new IllegalArgumentException(
@@ -305,7 +350,10 @@ public final class EtfShareJobService {
 
     private SyncJobRunner.Result execute(String runId, String priorRunId, Plan plan)
             throws Exception {
-        if (!plan.request().definition().equals(EtfShareSyncJobOwner.DEFINITION)
+        var expected = EtfShareSyncJobOwner.definition(plan.request().definition().version());
+        if (!plan.request().definition().equals(expected)
+                || priorRunId == null
+                        && !expected.equals(EtfShareSyncJobOwner.forLayout(layout.schemaVersion()))
                 || !plan.targetId().equals(plan.request().parameters().get("targetId"))
                 || !plan.targetId().equals(targetId()))
             throw new IllegalStateException(
@@ -319,7 +367,8 @@ public final class EtfShareJobService {
                 plan.request(),
                 "Cannot read etf_share cancellation state",
                 () -> {
-                    var port = target.newWriter(plan.targetId());
+                    var port =
+                            writer(plan.targetId(), plan.request().definition().datasetVersion());
                     var evidence = ledgerPath.getParent().resolve("sync-evidence").resolve(runId);
                     return new EtfShareSyncAdapter(
                             new EtfShareSource(
@@ -332,20 +381,25 @@ public final class EtfShareJobService {
 
     /** A preview cannot be reused after target rows or the verified incremental baseline have changed. */
     private void validateCurrentBaseline(Plan plan) throws Exception {
-        EtfTargetRange current = readTargetRange();
+        EtfTargetRange current = readTargetRange(plan.request().definition().datasetVersion());
         if (!Objects.equals(current.min(), plan.targetMinDate())
                 || !Objects.equals(current.max(), plan.targetMaxDate()))
             throw new IllegalStateException(
                     "etf_share physical date range changed after plan; create a fresh frozen plan");
         if (plan.request().mode() != Mode.INCREMENTAL) return;
-        var saved = EtfShareCoverage.checkpoint(ledgerPath, plan.targetId(), tradingDates);
+        var saved =
+                EtfShareCoverage.checkpoint(
+                        ledgerPath,
+                        plan.targetId(),
+                        tradingDates,
+                        plan.request().definition().version());
         if (saved.isPresent() != (plan.checkpointBefore() != null)
                 || saved.isPresent()
                         && (!saved.get().through().equals(plan.checkpointBefore())
                                 || !saved.get().anchor().equals(plan.checkpointAnchor())))
             throw new IllegalStateException(
                     "etf_share verified checkpoint changed after plan; create a fresh frozen plan");
-        var port = target.newWriter(plan.targetId());
+        var port = writer(plan.targetId(), plan.request().definition().datasetVersion());
         EtfShareCoverage.validateExistingTarget(
                 ledgerPath, saved.orElse(null), plan.targetId(), tradingDates, port);
     }

@@ -7,9 +7,11 @@ import com.zoutrankil.data.domain.fund.EtfShareKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues.CalendarTimestamp;
 import com.zoutrankil.data.domain.temporal.TemporalValues.EpochUnit;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
-import com.zoutrankil.data.etf.port.EtfTarget;
+import com.zoutrankil.data.etf.port.EtfShareTarget;
+import com.zoutrankil.data.etf.port.EtfShareWriteSession;
 import com.zoutrankil.data.etf.port.EtfWriteSession;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 
@@ -19,12 +21,19 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /** Configured physical target; each execution obtains an independent write session. */
-public final class QuestDbEtfShareTarget implements EtfTarget<EtfShare, EtfShareKey> {
+public final class QuestDbEtfShareTarget implements EtfShareTarget.Versioned {
+    private final CnTradeDateLayout layout;
     private final String table;
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
 
     public QuestDbEtfShareTarget(String table, JdbcTemplate jdbc, QuestDB questdb) {
+        this(table, jdbc, questdb, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public QuestDbEtfShareTarget(
+            String table, JdbcTemplate jdbc, QuestDB questdb, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb);
         requireIsolatedTableName(table);
@@ -57,8 +66,23 @@ public final class QuestDbEtfShareTarget implements EtfTarget<EtfShare, EtfShare
 
     @Override
     public EtfTargetRange range() {
+        return range(layout.schemaVersion());
+    }
+
+    @Override
+    public int datasetVersion() {
+        return layout.schemaVersion();
+    }
+
+    @Override
+    public EtfTargetRange range(int version) {
+        String dateColumn = CnTradeDateLayout.fromVersion(version).physicalDateColumn("etf_share");
         String sql =
-                "SELECT cast(min(timestamp) AS long) AS min_micros, cast(max(timestamp) AS long) AS max_micros FROM \""
+                "SELECT cast(min("
+                        + dateColumn
+                        + ") AS long) AS min_micros, cast(max("
+                        + dateColumn
+                        + ") AS long) AS max_micros FROM \""
                         + table
                         + "\"";
         return jdbc.query(
@@ -92,6 +116,12 @@ public final class QuestDbEtfShareTarget implements EtfTarget<EtfShare, EtfShare
 
     @Override
     public EtfWriteSession<EtfShare, EtfShareKey> newWriter(String frozenTargetId) {
-        return new EtfShareWritePort(table, frozenTargetId, jdbc, questdb);
+        return newWriter(frozenTargetId, layout.schemaVersion());
+    }
+
+    @Override
+    public EtfShareWriteSession newWriter(String frozenTargetId, int version) {
+        return new EtfShareWritePort(
+                table, frozenTargetId, jdbc, questdb, CnTradeDateLayout.fromVersion(version));
     }
 }

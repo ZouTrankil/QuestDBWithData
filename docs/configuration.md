@@ -5,7 +5,7 @@
 | 文件 | 放什么 | 自动加载条件 |
 | --- | --- | --- |
 | `application.yml` | QuestDB、Tushare、公共日志、profile 分组和配置导入 | 所有入口 |
-| `markets/cn.yml` | A 股时区、研究目录、离线 L2 数据目录、ETF 复权与日线新计划布局 | `market-cn`；现有市场进程自动带上 |
+| `markets/cn.yml` | A 股时区、研究目录、离线 L2 数据目录、ETF 复权、日线与份额新计划布局 | `market-cn`；现有市场进程自动带上 |
 | `markets/us.yml` | 美股时区及后续市场设置 | `market-us` |
 | `markets/btc.yml` | BTC 时区及后续来源切分设置 | `market-btc` |
 | `apps/cn-data.yml` | A 股数据 API、schema 位置、离线 L2 读取、财务日批和 Batch 托管开关 | `data` |
@@ -136,3 +136,5 @@ Batch 已保存到 SQLite 的定时任务设置，不会自动被 YAML 重置。
 ETF 复权存储布局由 `app.sync.etf-adj-schema-version` 选择，公开默认值在 `config/markets/cn.yml`，默认 `1`，仅支持 `1/2`；环境覆盖用 `APP_SYNC_ETF_ADJ_SCHEMA_VERSION`。它同时装配数据应用的新作业、计划、目标和读取注册，不自动迁移旧表。旧单表请求和组成员仍按原冻结版本恢复。Batch 独立来源任务与正式调度尚未切换，见[布局分版决定](decisions/2026-10-21-交易日存储布局分版.md#配置与组入口)。
 
 ETF 日线使用独立的 `app.sync.etf-daily-schema-version`，默认 `1`，只支持 `1/2`；环境覆盖为 `APP_SYNC_ETF_DAILY_SCHEMA_VERSION`。它保留纳秒日期载体，与复权表的微秒布局分开。新作业和读取同步选择，旧请求按原账本恢复；不自动迁表或改 Batch 独立来源任务。
+
+ETF 份额使用 `app.sync.etf-share-schema-version`，默认 `1`，仅支持 `1/2`；环境覆盖为 `APP_SYNC_ETF_SHARE_SCHEMA_VERSION`。布局 v1 对应原作业 v3，布局 v2 对应作业 v4。旧请求的 `observedAt` 与各行已存 `update_time` 分别保留，不用新时间覆盖历史。生产端口仍限 D016 隔离目标，不自动接管正式表。

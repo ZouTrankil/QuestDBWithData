@@ -72,6 +72,13 @@ public interface WriteGroupWriters {
 
     EtfWriteSession<EtfShare, EtfShareKey> etfShare(String table, String targetId);
 
+    /** 旧工厂只支持 v1；新布局不能降级发送。 */
+    default EtfWriteSession<EtfShare, EtfShareKey> etfShare(
+            String table, String targetId, int version) {
+        if (version != 1) throw new IllegalArgumentException("ETF 份额工厂不支持新版布局");
+        return etfShare(table, targetId);
+    }
+
     EtfWriteSession<EtfFactor, EtfFactorKey> etfFactor(String table, String targetId);
 
     MoneyflowThsWriteSession moneyflowThs(String table, String targetId);

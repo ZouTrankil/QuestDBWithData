@@ -54,7 +54,7 @@ domain/
 
 日期标记用 `TemporalValues.CalendarTimestamp` 编解码。直接同步入口由 `BusinessTime` 按 `app.time.business-zone` 选业务日期；任务入口使用原请求的 `logicalDate`，重试不重新取今天。
 
-已核定的六个交易日物理别名使用 `CnTradeDateLayout` 显式分版；不能根据当前列名自动改用另一版。当前 `etf_adj`、`etf_daily` 的 v2 读写端口完成隔离验收，控制服务、配置与写入组可按原冻结版本执行和恢复；公开默认仍是 v1。日线保留 TIMESTAMP_NS 纳秒，复权保留 TIMESTAMP 微秒；Batch 独立来源、正式调度、其余四表端口及正式迁移待接通。版本选择不改变 UTC 午夜日期载体或精度，见[布局分版](decisions/2026-10-21-交易日存储布局分版.md)。
+已核定的六个交易日物理别名使用 `CnTradeDateLayout` 显式分版；不能根据当前列名自动改用另一版。当前 `etf_adj`、`etf_daily`、`etf_share` 的 v2 读写端口完成隔离验收，控制服务、配置与写入组可按原冻结版本执行和恢复；公开默认仍是 v1。日线保留 TIMESTAMP_NS 纳秒，复权和份额保留 TIMESTAMP 微秒；份额的独立 `update_time` 不随交易日迁移改值。Batch 独立来源、正式调度、其余三表端口及正式迁移待接通。版本选择不改变 UTC 午夜日期载体或精度，见[布局分版](decisions/2026-10-21-交易日存储布局分版.md)。
 
 ```java
 businessTime.now();                  // 当前实际时刻

@@ -81,7 +81,9 @@ public class EtfConfiguration {
     EtfTarget<EtfShare, EtfShareKey> etfShareTarget(
             JdbcTemplate jdbc,
             @Lazy QuestDB questdb,
-            @Value("${app.sync.etf-share-table:java_d016_etf_share_acceptance}") String table) {
-        return new QuestDbEtfShareTarget(table, jdbc, questdb);
+            @Value("${app.sync.etf-share-table:java_d016_etf_share_acceptance}") String table,
+            @Value("${app.sync.etf-share-schema-version:1}") int version) {
+        return new QuestDbEtfShareTarget(
+                table, jdbc, questdb, CnTradeDateLayout.fromVersion(version));
     }
 }

@@ -9,7 +9,10 @@ import com.zoutrankil.data.domain.SyncJobDefinition.Parameter;
 import com.zoutrankil.data.domain.SyncJobDefinition.ParameterType;
 import com.zoutrankil.data.domain.SyncJobDefinition.RetryPolicy;
 import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -68,6 +71,55 @@ public final class EtfShareSyncJobOwner implements SyncJobOwner {
                     true,
                     true);
 
+    private final CnTradeDateLayout layout;
+
+    public EtfShareSyncJobOwner() {
+        this(1);
+    }
+
+    @Autowired
+    public EtfShareSyncJobOwner(@Value("${app.sync.etf-share-schema-version:1}") int version) {
+        layout = CnTradeDateLayout.fromVersion(version);
+    }
+
+    public static SyncJobDefinition forLayout(int version) {
+        return definition(
+                CnTradeDateLayout.fromVersion(version) == CnTradeDateLayout.LEGACY_V1 ? 3 : 4);
+    }
+
+    /** 作业 v3 对应布局 v1，作业 v4 对应布局 v2；不把两个版本号混用。 */
+    public static SyncJobDefinition definition(int jobVersion) {
+        var layout =
+                switch (jobVersion) {
+                    case 3 -> CnTradeDateLayout.LEGACY_V1;
+                    case 4 -> CnTradeDateLayout.TRADE_DATE_V2;
+                    default -> throw new IllegalArgumentException("未登记的 ETF 份额作业版本");
+                };
+        if (layout == CnTradeDateLayout.LEGACY_V1) return DEFINITION;
+        var old = DEFINITION;
+        return new SyncJobDefinition(
+                old.jobId(),
+                jobVersion,
+                old.datasetId(),
+                layout.schemaVersion(),
+                old.owner(),
+                old.supportedModes(),
+                old.defaultMode(),
+                old.parameters(),
+                old.ratePolicyRef(),
+                old.slicePolicyRef(),
+                old.verificationPolicyRef(),
+                old.retry(),
+                old.timeout(),
+                old.budget(),
+                old.revisionDays(),
+                old.dependencies(),
+                old.frequency(),
+                old.zone(),
+                old.enabled(),
+                old.dailyEligible());
+    }
+
     @Override
     public String datasetId() {
         return "etf_share";
@@ -80,6 +132,6 @@ public final class EtfShareSyncJobOwner implements SyncJobOwner {
 
     @Override
     public List<SyncJobDefinition> syncJobDefinitions() {
-        return List.of(DEFINITION);
+        return List.of(forLayout(layout.schemaVersion()));
     }
 }

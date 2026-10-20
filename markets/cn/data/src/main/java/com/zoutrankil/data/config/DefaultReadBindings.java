@@ -137,16 +137,23 @@ final class DefaultReadBindings {
 
     static List<ReadBindingCatalog.Registration<?>> registrations(
             int etfAdjVersion, int etfDailyVersion) {
+        return registrations(etfAdjVersion, etfDailyVersion, 1);
+    }
+
+    static List<ReadBindingCatalog.Registration<?>> registrations(
+            int etfAdjVersion, int etfDailyVersion, int etfShareVersion) {
+        int shareVersion = CnTradeDateLayout.fromVersion(etfShareVersion).schemaVersion();
         int dailyVersion = CnTradeDateLayout.fromVersion(etfDailyVersion).schemaVersion();
         int version = CnTradeDateLayout.fromVersion(etfAdjVersion).schemaVersion();
         return REGISTRATIONS.stream()
                 .<ReadBindingCatalog.Registration<?>>map(
                         registration ->
-                                registration.datasetId().equals("etf_adj")
-                                        ? generic("etf_adj", version)
-                                        : registration.datasetId().equals("etf_daily")
-                                                ? generic("etf_daily", dailyVersion)
-                                                : registration)
+                                switch (registration.datasetId()) {
+                                    case "etf_adj" -> generic("etf_adj", version);
+                                    case "etf_daily" -> generic("etf_daily", dailyVersion);
+                                    case "etf_share" -> generic("etf_share", shareVersion);
+                                    default -> registration;
+                                })
                 .toList();
     }
 

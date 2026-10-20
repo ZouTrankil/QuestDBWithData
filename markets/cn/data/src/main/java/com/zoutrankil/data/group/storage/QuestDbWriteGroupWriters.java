@@ -140,6 +140,13 @@ public final class QuestDbWriteGroupWriters implements WriteGroupWriters {
     }
 
     @Override
+    public EtfWriteSession<EtfShare, EtfShareKey> etfShare(
+            String table, String targetId, int version) {
+        return new EtfShareWritePort(
+                table, targetId, jdbc, questdb, CnTradeDateLayout.fromVersion(version));
+    }
+
+    @Override
     public EtfWriteSession<EtfFactor, EtfFactorKey> etfFactor(String table, String targetId) {
         return new EtfFactorWritePort(table, targetId, jdbc, questdb);
     }

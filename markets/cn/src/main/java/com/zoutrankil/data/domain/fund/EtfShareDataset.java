@@ -10,6 +10,7 @@ import com.zoutrankil.data.domain.DatasetDefinition.TemporalContract;
 import com.zoutrankil.data.domain.DatasetDefinition.TemporalKind;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.domain.temporal.TemporalValues.Precision;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.time.Instant;
 import java.util.List;
@@ -39,10 +40,16 @@ public final class EtfShareDataset {
     public static final DatasetDefinition DEFINITION = definition("etf_share");
 
     public static DatasetDefinition definition(String table) {
+        return definition(table, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    /** 只改交易日物理列；update_time 的来源观察时刻和值独立保留。 */
+    public static DatasetDefinition definition(String table, CnTradeDateLayout layout) {
+        String dateColumn = layout.physicalDateColumn("etf_share");
         DatasetDefinition.identifier(table);
         return new DatasetDefinition(
                 "etf_share",
-                1,
+                layout.schemaVersion(),
                 "tushare.fund_share",
                 "etf_share_owner",
                 table,
@@ -59,11 +66,18 @@ public final class EtfShareDataset {
                         new Column(
                                 "trade_date",
                                 "trade_date",
-                                "timestamp",
+                                dateColumn,
                                 StorageType.TIMESTAMP,
                                 false,
                                 "Provider calendar date YYYYMMDD, stored as UTC-midnight carrier rather than event instant",
-                                TRADE_DATE),
+                                layout == CnTradeDateLayout.LEGACY_V1
+                                        ? TRADE_DATE
+                                        : new TemporalContract(
+                                                TRADE_DATE.kind(),
+                                                TRADE_DATE.sourceFormat(),
+                                                TRADE_DATE.zone(),
+                                                TRADE_DATE.precision(),
+                                                "来源交易日，trade_date 仅使用 UTC 午夜日期载体，不是事件时刻")),
                         new Column(
                                 "fd_share",
                                 "fd_share",
@@ -97,19 +111,26 @@ public final class EtfShareDataset {
                                 "Frozen UTC observation timestamp at microsecond precision; technical metadata, not source revision time",
                                 UPDATE_TIME)),
                 List.of("ts_code", "trade_date"),
-                List.of("ts_code", "timestamp"),
-                "timestamp",
+                List.of("ts_code", dateColumn),
+                dateColumn,
                 Partition.YEAR,
                 true,
                 Set.of(Capability.READ, Capability.WRITE),
                 List.of("exchange_calendar"),
-                "Retain audited YEAR/WAL/DEDUP key (ts_code,timestamp). timestamp carries trade_date at UTC midnight and TIMESTAMP microsecond precision. No formal-table Flyway DDL; acceptance DDL is D016-isolated only. fund_type and market are explicit provider fields confirmed by the bounded D016 source probe; update_time remains frozen technical observation metadata.");
+                layout == CnTradeDateLayout.LEGACY_V1
+                        ? "Retain audited YEAR/WAL/DEDUP key (ts_code,timestamp). timestamp carries trade_date at UTC midnight and TIMESTAMP microsecond precision. No formal-table Flyway DDL; acceptance DDL is D016-isolated only. fund_type and market are explicit provider fields confirmed by the bounded D016 source probe; update_time remains frozen technical observation metadata."
+                        : "交易日布局 v2 保留 YEAR/WAL、TIMESTAMP 微秒、完整业务键及六列值；update_time 仍为独立冻结观察时刻，不自动迁移或接管正式表。");
     }
 
     public static String createIsolatedTableSql(String table) {
+        return createIsolatedTableSql(table, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public static String createIsolatedTableSql(String table, CnTradeDateLayout layout) {
+        String dateColumn = layout.physicalDateColumn("etf_share");
         requireIsolatedTable(table);
         var definitions =
-                DEFINITION.columns().stream()
+                definition(table, layout).columns().stream()
                         .map(
                                 column ->
                                         "\""
@@ -121,7 +142,11 @@ public final class EtfShareDataset {
                 + table
                 + " ("
                 + String.join(", ", definitions)
-                + ") TIMESTAMP(timestamp) PARTITION BY YEAR WAL DEDUP UPSERT KEYS(ts_code, timestamp)";
+                + ") TIMESTAMP("
+                + dateColumn
+                + ") PARTITION BY YEAR WAL DEDUP UPSERT KEYS(ts_code, "
+                + dateColumn
+                + ")";
     }
 
     public static void requireIsolatedTable(String table) {
