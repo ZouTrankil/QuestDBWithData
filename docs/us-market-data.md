@@ -222,3 +222,19 @@ DEC 的九日断点来自临时代码 `DECPD`。原目录保留了这段 OTCQX/U
 旧 AAAP 是 Advanced Accelerator Applications S.A.，已按 Tiingo 实际接受的永久代码 `US000000013210` 写入 2015-11-11 至 2018-02-09 的 566 行日线。[Nasdaq 首次挂牌公告](https://www.globenewswire.com/news-release/2015/11/13/787188/0/en/Nasdaq-Welcomes-Advanced-Accelerator-Applications-S-A-Nasdaq-AAAP-to-The-Nasdaq-Stock-Market.html)确认起点；[发行人退市条款](https://www.sec.gov/Archives/edgar/data/1611787/000110465918003180/a18-3541_2ex99d1.htm)与[收购方申报](https://www.sec.gov/Archives/edgar/data/1114448/000110465918005861/a18-3997_2sc13d.htm)显示 Form 25 于 2018-02-01 提交，十日后生效。末个交易日据此推定为 2 月 9 日，并与原文正量记录吻合；不是另有交易所终止日期公告。原文完整保留 572 行，2 月 12–20 日的六根零量平价记录未写入。
 
 价格二十列及新增永久映射十八列独立回读一致，原有 69381 行价格和十条映射未变，映射累计 11 条；FIGI 继续保留来源真实 null。同一发布锁内确认两表 WAL 结清、缓冲为零、未挂起，原物理对象未变。[当前 AAAP 的 Nasdaq 通函](https://www.nasdaqtrader.com/content/newsalerts/2026/InfoCircular/AAAP_Circular_NQ.pdf)对应 2026-06-23 起的 Pacer Barings CLO Market Flex ETF，不能替代旧股票历史。原范围复核任务和两类目录行保留。历史公告经网页读取核对，本机 HTML 下载的 403 回执及事实摘录另存，不冒充完整 HTML 原件；现行 ETF 的完整 PDF、价格原文、Native 回执及独立核对在 `var/market-data/scope-review/aaap-historical-stock-20261020/`。这次补充不代表全市场已齐备。
+
+### ACOM、BREW、BUFF 历史窗口及公司行动缺口
+
+2026-10-20 又补入三段旧股票价格，共 5197 行；当前同代码 ETF 与原范围复核任务保留。价格二十列及三条永久映射十八列独立回读一致，原 69947 行价格、11 条映射未变，映射累计 14 条。同一发布锁内确认原物理表及 WAL 有效。
+
+| 历史市场代码 | 实际永久价格键 | 行数 | 已验收来源窗口 |
+| --- | --- | ---: | --- |
+| ACOM | `US000000008464` | 791 | 2009-11-05 至 2012-12-27 |
+| BREW | `US000000001185` | 3711 | 2006-01-03 至 2020-09-29 |
+| BUFF | `US000000009668` | 695 | 2015-07-22 至 2018-04-24 |
+
+[BREW 交易所公告](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2020-172)明确最后交易日为 2020-09-29，次日零量平价原文不计入价格；2006 年窗口内三根来源零量记录按原值保留，日期覆盖不证明这三天实际有成交。[BUFF 交易所公告](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2018-64)明确停牌生效日为 2018-04-25，因此保留 24 日的正量记录，排除其后八根平价记录。两份完整公告及 SHA-256 已冻结。[ACOM 发行人](https://www.sec.gov/Archives/edgar/data/1469433/000119312512517358/d459290dex991.htm)称于 2012-12-28 停止交易，未给出具体时刻；该日正量原文仍待核，另十根后续平价原文完整保留。ACOM 搜索中的 `isActive=true` 仅保留供应商声明，不当作当前仍上市的证明。
+
+AIQ 旧股票原文已取得，但 2012-12-27 的 `splitFactor` 仍为 1，与[发行人已实施的一比五合股](https://www.sec.gov/Archives/edgar/data/817135/000119312513105726/d502254dex991.htm)不符，尚未写入。ARIA 的代码搜索达到上限，返回的旧 Stock 永久代码名称却是现行 ETF；名称搜索也未找到旧公司，因此仍需独立身份来源。对 32 份补验与探针 Tiingo 日线原文、65686 行做调整股数比例与拆股字段跳变检查，仅发现上述 AIQ 疑点；这项诊断不覆盖全部来源，也不生成拆股事件。
+
+原文、三段成功运行、三条映射、字段回读、锁内 WAL 和待核事项在 `var/market-data/scope-review/historical-four-20261020/`。全市场采集和这些缺口继续推进，不能将已取得的原文或部分历史窗口视作全部完成。
