@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.util.HexFormat;
+import javax.sql.DataSource;
 
 class MainStrategyConfiguredProtocolTest {
     @TempDir Path root;
@@ -20,17 +21,17 @@ class MainStrategyConfiguredProtocolTest {
     }
     @Test
     void protocolSelectionUsesExactApprovedBytesWithoutDatabaseOrArtifactWrites() throws Exception {
-        var jdbc=mock(JdbcTemplate.class);
+        var source=mock(DataSource.class); var jdbc=new JdbcTemplate(source);
         Path file=Files.writeString(root.resolve("header.json"),"{\"schema\":\"java.strategy.source_coverage.v2\",\"inputSchema\":\"java.strategy.inputs.v2\",\"keyEncoding\":\"java.strategy.source_keys.v2\"}");
         var service=service(jdbc,file,sha(file));
         assertEquals(StrategyInputSchema.V2,service.configuredInputSchema());
         Files.writeString(file,"{\"schema\":\"java.strategy.source_coverage.v1\"}");
         assertThrows(IllegalStateException.class,service::configuredInputSchema);
-        assertFalse(Files.exists(root.resolve("artifacts"))); verifyNoInteractions(jdbc);
+        assertFalse(Files.exists(root.resolve("artifacts"))); verifyNoInteractions(source);
     }
     @Test
     void approvedAssemblyHeaderTakesPrecedenceButIncompleteOrUnknownHeadersFail() throws Exception {
-        var jdbc=mock(JdbcTemplate.class);
+        var source=mock(DataSource.class); var jdbc=new JdbcTemplate(source);
         var service=service(jdbc,root.resolve("missing"),"0".repeat(64));
         Path file=Files.writeString(root.resolve("approved.json"),"{\"schema\":\"java.strategy.coverage_inputs.v1\"}");
         service.configureCoverageAssembly(file.toString(),sha(file));
@@ -39,6 +40,6 @@ class MainStrategyConfiguredProtocolTest {
             Files.writeString(file,header); service.configureCoverageAssembly(file.toString(),sha(file));
             assertThrows(IllegalStateException.class,service::configuredInputSchema);
         }
-        verifyNoInteractions(jdbc);
+        verifyNoInteractions(source);
     }
 }
