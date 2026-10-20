@@ -8,6 +8,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncJobDefinition.Parameter;
 import com.zoutrankil.data.domain.SyncJobDefinition.ParameterType;
 import com.zoutrankil.data.domain.SyncJobDefinition.RetryPolicy;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.time.Duration;
 import java.time.ZoneId;
@@ -67,4 +68,32 @@ public final class StockStDailySyncJobOwner {
                     ZoneId.of("Asia/Shanghai"),
                     true,
                     true);
+
+    /** v1 原对象保持不动；新计划按显式配置注册，旧请求另按原版本恢复。 */
+    public static SyncJobDefinition definition(int version) {
+        var layout = CnTradeDateLayout.fromVersion(version);
+        if (layout == CnTradeDateLayout.LEGACY_V1) return DEFINITION;
+        var old = DEFINITION;
+        return new SyncJobDefinition(
+                old.jobId(),
+                version,
+                old.datasetId(),
+                layout.schemaVersion(),
+                old.owner(),
+                old.supportedModes(),
+                old.defaultMode(),
+                old.parameters(),
+                old.ratePolicyRef(),
+                old.slicePolicyRef(),
+                old.verificationPolicyRef(),
+                old.retry(),
+                old.timeout(),
+                old.budget(),
+                old.revisionDays(),
+                old.dependencies(),
+                old.frequency(),
+                old.zone(),
+                old.enabled(),
+                old.dailyEligible());
+    }
 }

@@ -13,6 +13,7 @@ import com.zoutrankil.data.stock.domain.StockStDailyState;
 import com.zoutrankil.data.stock.domain.StockStDailyState.Prepared;
 import com.zoutrankil.data.stock.domain.StockStDailyState.Verified;
 import com.zoutrankil.data.stock.port.StockStDailyStagingPort;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 
@@ -30,6 +31,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.HexFormat;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -40,10 +42,18 @@ import java.util.function.BooleanSupplier;
 /** Builds an authoritative daily ST window while preserving and fingerprinting every row outside it. */
 public final class StockStDailyStaging implements StockStDailyStagingPort {
 
+    private final CnTradeDateLayout layout;
+    private final String dateColumn;
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
 
     public StockStDailyStaging(JdbcTemplate jdbc, QuestDB questdb) {
+        this(jdbc, questdb, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public StockStDailyStaging(JdbcTemplate jdbc, QuestDB questdb, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
+        dateColumn = layout.physicalDateColumn("stk_st_daily");
         this.jdbc = new JdbcTemplate(Objects.requireNonNull(jdbc.getDataSource()));
         this.jdbc.setQueryTimeout(120);
         this.questdb = Objects.requireNonNull(questdb);
@@ -61,7 +71,7 @@ public final class StockStDailyStaging implements StockStDailyStagingPort {
                 || ChronoUnit.DAYS.between(from, to) + 1 > 366)
             throw new IllegalArgumentException(
                     "D012 replacement window must be explicit and bounded to 366 days");
-        var storage = new StockStDailyStorage(jdbc, target);
+        var storage = new StockStDailyStorage(jdbc, target, layout);
         var before = storage.snapshot();
         if (!StockStDailyStorage.targetId(jdbc, target, before.identity())
                 .equals(expectedPhysicalTarget))
@@ -86,12 +96,12 @@ public final class StockStDailyStaging implements StockStDailyStagingPort {
                 || !sourceFingerprint.matches("[0-9a-f]{64}"))
             throw new IllegalArgumentException(
                     "Bounded complete D012 authoritative output required");
-        var expectedWindow = fingerprintWindow(rows, prepared.from(), prepared.to());
+        var expectedWindow = fingerprintWindow(rows, prepared.from(), prepared.to(), layout);
         if (expectedWindow.rows() != rows.size())
             throw new IllegalArgumentException(
                     "D012 authoritative rows differ from bounded window");
         check(cancelled);
-        var current = new StockStDailyStorage(jdbc, prepared.target()).snapshot();
+        var current = new StockStDailyStorage(jdbc, prepared.target(), layout).snapshot();
         if (!current.equals(prepared.before())
                 || !StockStDailyStorage.targetId(jdbc, prepared.target(), current.identity())
                         .equals(prepared.beforePhysicalTarget()))
@@ -105,28 +115,29 @@ public final class StockStDailyStaging implements StockStDailyStagingPort {
         Files.createDirectories(evidence);
         Path intent = evidence.resolve(stage + "-intent.json");
         var json = JobDefinitionJson.mapper();
-        FileEvidenceStore.writeNew(
+        FileEvidenceStore.writeNewDurable(
                 intent,
                 json.writeValueAsBytes(
-                        Map.of(
-                                "target",
-                                prepared.target(),
-                                "stage",
-                                stage,
-                                "windowFrom",
-                                prepared.from(),
-                                "windowTo",
-                                prepared.to(),
-                                "before",
-                                prepared.before(),
-                                "outside",
-                                prepared.outside(),
-                                "sourceFingerprint",
-                                sourceFingerprint,
-                                "sourceRows",
-                                rows.size(),
-                                "sourceReceipts",
-                                sourceReceipts)));
+                        proofForLayout(
+                                Map.of(
+                                        "target",
+                                        prepared.target(),
+                                        "stage",
+                                        stage,
+                                        "windowFrom",
+                                        prepared.from(),
+                                        "windowTo",
+                                        prepared.to(),
+                                        "before",
+                                        prepared.before(),
+                                        "outside",
+                                        prepared.outside(),
+                                        "sourceFingerprint",
+                                        sourceFingerprint,
+                                        "sourceRows",
+                                        rows.size(),
+                                        "sourceReceipts",
+                                        sourceReceipts))));
 
         String start = timestampLiteral(prepared.from());
         String end = timestampLiteral(prepared.to().plusDays(1));
@@ -134,17 +145,27 @@ public final class StockStDailyStaging implements StockStDailyStagingPort {
         jdbc.execute(
                 "CREATE TABLE "
                         + stageName
-                        + " AS (SELECT ts_code,is_st,timestamp FROM "
+                        + " AS (SELECT ts_code,is_st,"
+                        + dateColumn
+                        + " FROM "
                         + target
-                        + " WHERE timestamp<cast('"
+                        + " WHERE "
+                        + dateColumn
+                        + "<cast('"
                         + start
-                        + "' AS TIMESTAMP) OR timestamp>=cast('"
+                        + "' AS TIMESTAMP) OR "
+                        + dateColumn
+                        + ">=cast('"
                         + end
                         + "' AS TIMESTAMP)) "
-                        + "TIMESTAMP(timestamp) PARTITION BY YEAR WAL DEDUP UPSERT KEYS(ts_code,timestamp)");
+                        + "TIMESTAMP("
+                        + dateColumn
+                        + ") PARTITION BY YEAR WAL DEDUP UPSERT KEYS(ts_code,"
+                        + dateColumn
+                        + ")");
         awaitWal(stage, cancelled);
 
-        var stageStorage = new StockStDailyStorage(jdbc, stage);
+        var stageStorage = new StockStDailyStorage(jdbc, stage, layout);
         var stageIdentity = stageStorage.preflight();
         String stageTarget = StockStDailyStorage.targetId(jdbc, stage, stageIdentity);
         var copiedOutside = stageStorage.outside(prepared.from(), prepared.to());
@@ -152,7 +173,7 @@ public final class StockStDailyStaging implements StockStDailyStagingPort {
             throw new IllegalStateException(
                     "D012 stage failed to preserve exact rows outside the authoritative window");
 
-        var port = new StockStDailyWritePort(stage, stageTarget, jdbc, questdb);
+        var port = new StockStDailyWritePort(stage, stageTarget, jdbc, questdb, layout);
         int batches = 0;
         for (int offset = 0; offset < rows.size(); offset += 250) {
             check(cancelled);
@@ -160,7 +181,7 @@ public final class StockStDailyStaging implements StockStDailyStagingPort {
             port.send(batch);
             awaitWal(stage, cancelled);
             var keys = batch.stream().map(StockStDaily::key).toList();
-            if (!sameRows(batch, port.readback(keys)))
+            if (!sameRows(batch, port.readback(keys), layout))
                 throw new IllegalStateException(
                         "D012 staged batch full-key/all-field readback mismatch");
             batches++;
@@ -176,25 +197,28 @@ public final class StockStDailyStaging implements StockStDailyStagingPort {
             throw new IllegalStateException(
                     "D012 full stage differs from preserved outside rows plus authoritative window");
         Path receipt = evidence.resolve(stage + "-verified.json");
-        FileEvidenceStore.writeNew(
+        FileEvidenceStore.writeNewDurable(
                 receipt,
                 json.writeValueAsBytes(
-                        Map.ofEntries(
-                                Map.entry("target", prepared.target()),
-                                Map.entry("stage", stage),
-                                Map.entry("beforePhysicalTarget", prepared.beforePhysicalTarget()),
-                                Map.entry("stagePhysicalTarget", stageTarget),
-                                Map.entry("before", prepared.before()),
-                                Map.entry("after", full),
-                                Map.entry("windowFrom", prepared.from()),
-                                Map.entry("windowTo", prepared.to()),
-                                Map.entry("preservedOutside", actualOutside),
-                                Map.entry("authoritativeWindow", actualWindow),
-                                Map.entry("sourceRows", rows.size()),
-                                Map.entry("batches", batches),
-                                Map.entry("sourceFingerprint", sourceFingerprint),
-                                Map.entry("sourceReceipts", sourceReceipts),
-                                Map.entry("sourceComplete", true))));
+                        proofForLayout(
+                                Map.ofEntries(
+                                        Map.entry("target", prepared.target()),
+                                        Map.entry("stage", stage),
+                                        Map.entry(
+                                                "beforePhysicalTarget",
+                                                prepared.beforePhysicalTarget()),
+                                        Map.entry("stagePhysicalTarget", stageTarget),
+                                        Map.entry("before", prepared.before()),
+                                        Map.entry("after", full),
+                                        Map.entry("windowFrom", prepared.from()),
+                                        Map.entry("windowTo", prepared.to()),
+                                        Map.entry("preservedOutside", actualOutside),
+                                        Map.entry("authoritativeWindow", actualWindow),
+                                        Map.entry("sourceRows", rows.size()),
+                                        Map.entry("batches", batches),
+                                        Map.entry("sourceFingerprint", sourceFingerprint),
+                                        Map.entry("sourceReceipts", sourceReceipts),
+                                        Map.entry("sourceComplete", true)))));
         return new Verified(
                 stage,
                 stageTarget,
@@ -209,6 +233,12 @@ public final class StockStDailyStaging implements StockStDailyStagingPort {
 
     public static StockStDailyState.Content fingerprintWindow(
             List<StockStDaily> rows, LocalDate from, LocalDate to) throws Exception {
+        return fingerprintWindow(rows, from, to, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public static StockStDailyState.Content fingerprintWindow(
+            List<StockStDaily> rows, LocalDate from, LocalDate to, CnTradeDateLayout layout)
+            throws Exception {
         var ordered = new ArrayList<>(rows);
         ordered.sort(
                 Comparator.comparing(StockStDaily::timestamp).thenComparing(StockStDaily::tsCode));
@@ -221,11 +251,20 @@ public final class StockStDailyStaging implements StockStDailyStagingPort {
                     || !keys.add(row.key()))
                 throw new IllegalArgumentException(
                         "D012 authoritative window has a duplicate or out-of-range key");
-            digest.update(StockStDailyWritePort.CODEC.canonicalBytes(row));
+            digest.update(StockStDailyWritePort.codec(layout).canonicalBytes(row));
             digest.update((byte) '\n');
         }
         return new StockStDailyState.Content(
                 ordered.size(), HexFormat.of().formatHex(digest.digest()));
+    }
+
+    /** v1 原件不补字段；v2 显式固定布局，空窗口也不能混用旧摘要。 */
+    private Map<String, Object> proofForLayout(Map<String, Object> proof) {
+        if (layout == CnTradeDateLayout.LEGACY_V1) return proof;
+        var result = new LinkedHashMap<>(proof);
+        result.put("datasetSchemaVersion", layout.schemaVersion());
+        result.put("rowEncoding", "trade_date-v2");
+        return result;
     }
 
     private void awaitWal(String table, BooleanSupplier cancelled) throws Exception {
@@ -247,16 +286,18 @@ public final class StockStDailyStaging implements StockStDailyStagingPort {
         return "\"" + identifier + "\"";
     }
 
-    private static boolean sameRows(List<StockStDaily> expected, List<StockStDaily> actual) {
+    private static boolean sameRows(
+            List<StockStDaily> expected, List<StockStDaily> actual, CnTradeDateLayout layout) {
         if (actual == null || expected.size() != actual.size()) return false;
         var expectedByKey = new HashMap<StockStDailyKey, byte[]>();
         var actualByKey = new HashMap<StockStDailyKey, byte[]>();
         for (var row : expected)
             if (expectedByKey.putIfAbsent(
-                            row.key(), StockStDailyWritePort.CODEC.canonicalBytes(row))
+                            row.key(), StockStDailyWritePort.codec(layout).canonicalBytes(row))
                     != null) return false;
         for (var row : actual)
-            if (actualByKey.putIfAbsent(row.key(), StockStDailyWritePort.CODEC.canonicalBytes(row))
+            if (actualByKey.putIfAbsent(
+                            row.key(), StockStDailyWritePort.codec(layout).canonicalBytes(row))
                     != null) return false;
         return expectedByKey.keySet().equals(actualByKey.keySet())
                 && expectedByKey.keySet().stream()

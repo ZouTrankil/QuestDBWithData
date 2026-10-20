@@ -8,6 +8,10 @@ import java.time.LocalDate;
 
 /** Physical table operations; publication state transitions remain in the application. */
 public interface StockStDailyTables {
+    interface Versioned extends StockStDailyTables {
+        int datasetVersion();
+    }
+
     interface Table {
         Snapshot snapshot() throws Exception;
 

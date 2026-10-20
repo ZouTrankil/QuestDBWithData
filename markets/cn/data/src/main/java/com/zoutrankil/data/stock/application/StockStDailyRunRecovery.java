@@ -9,6 +9,7 @@ import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.DatasetIntervalLock;
 import com.zoutrankil.data.stock.domain.StockStDailyState;
 import com.zoutrankil.data.stock.port.StockStDailyTarget;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -49,18 +50,26 @@ public final class StockStDailyRunRecovery {
         var run = ledger.getRun(runId);
         if (!Set.of(SyncRunState.RUNNING, SyncRunState.IN_DOUBT).contains(root.state())
                 || !"data.stk_st_daily".equals(run.jobId())
-                || run.jobVersion() != 1)
+                || !Set.of(1, 2).contains(run.jobVersion()))
             throw new IllegalStateException("Recoverable D012 source run required");
         var json = JobDefinitionJson.mapper();
         var request =
                 StockStDailySyncAdapter.restoreFrozenRequest(run.frozenJson(), run.targetId());
         StockStDailySyncAdapter.validateFrozenRequest(request);
+        if (run.jobVersion() != request.definition().version())
+            throw new IllegalStateException("ST 原账本与冻结作业版本不同");
+        // 当前配置不能选择恢复布局；只按原冻结定义建立作用域。
+        target = StockStDailyTarget.forFrozenVersion(target, request.definition().datasetVersion());
         String logicalTarget = request.parameters().get("targetId").toString();
         String physicalBefore = request.parameters().get("physicalTargetId").toString();
         if (!logicalTarget.equals(run.targetId()))
             throw new IllegalStateException("D012 recovery logical target differs from run ledger");
 
-        var publication = new StockStDailyPublication(target.newPublicationTables(), ledgerPath);
+        var publication =
+                new StockStDailyPublication(
+                        target.newPublicationTables(),
+                        ledgerPath,
+                        CnTradeDateLayout.fromVersion(request.definition().datasetVersion()));
         var beforeFinish = publication.forRun(runId);
         var intent = beforeFinish.intent();
         if (!intent.target().equals(table)
@@ -97,6 +106,8 @@ public final class StockStDailyRunRecovery {
                                 () ->
                                         new IllegalStateException(
                                                 "D012 verified stage receipt is absent, escaped, oversized or changed")));
+        if (request.definition().datasetVersion() == 2)
+            StockStDailyPublication.requireProofVersion(stageProof);
         if (!stageProof.path("sourceComplete").asBoolean(false)
                 || !intent.windowFrom().toString().equals(stageProof.path("windowFrom").asText())
                 || !intent.windowTo().toString().equals(stageProof.path("windowTo").asText())

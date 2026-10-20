@@ -117,3 +117,5 @@ CN 的来源字段说明维护在 `markets/cn/src/main/resources/model-docs/coll
 CN 异动公告的只读 v2 使用 `announcement_date`，Shibor/Hibor/LPR 使用 `observation_date`；两者都解码为 `LocalDate`。物理列和旧来源投影仍保留，不能当作已完成迁移。数字开头的物理期限列必须显式引用，逻辑名与表名仍使用原标识校验，见[日期读取决定](decisions/2026-10-20-公告与利率逻辑日期读取.md)。
 
 `stk_st_daily` 的显式存储布局 v2 使用 `trade_date` 逻辑键和物理列，v1 行编码仍保留 `timestamp`。新编码、完整键回读和快照摘要单独验证；名称变更原文及模型仍按旧编码解释。生产发布、stage/backup 与恢复尚未贯通 v2，不能只靠存储端口切换默认值，见[ST 存储分版](decisions/2026-10-21-交易日存储布局分版.md#st-存储分版)。
+
+ST 的 v2 stage/发布日志显式固定 `datasetSchemaVersion` 和 `rowEncoding`，SQLite 新发布记录另有协议包装；旧日志保持原形。恢复按原冻结版本建立目标作用域，空摘要也不能跨布局复用。当前生产入口仍为 v1，实际范围及区间锁回调修复见[发布分版](decisions/2026-10-21-交易日存储布局分版.md#st-显式发布与恢复分版)。

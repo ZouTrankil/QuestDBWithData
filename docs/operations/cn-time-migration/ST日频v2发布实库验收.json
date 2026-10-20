@@ -1,0 +1,227 @@
+{
+  "说明": "专属两行隔离夹具，真实 SSE 闭市日历，实际 stage CTAS 与两次 rename。确认丢失后不重发数据，验证窗口外一行保留、闭市日旧行撤销、原 JSON 不变及锁归属。未请求真实 namechange，不证明正式迁移或全历史来源。",
+  "完整修复后演练": {
+    "原件目录": "var/cn-st-publication-v2-20261021/2eade8c2f0ee40ee8a71b276282892c0",
+    "报告": {
+      "schemaVersion": 1,
+      "observedAt": "2026-10-20T18:23:15.648141Z",
+      "table": "java_d012_stk_st_daily_pub2_2eade8c2f0ee40ee8a71b276282892c0",
+      "runId": "stk-st-v2-live-21f10f8d-28ce-4488-a0d0-0a06ebb56730",
+      "scope": "isolated-two-row-closed-session-fixture",
+      "productionMigration": false,
+      "realNamechangeRequests": 0,
+      "state": "VERIFIED_AND_CLEANED",
+      "closedSession": "2026-09-26",
+      "calendarState": [
+        {
+          "id": 296,
+          "directoryName": "exchange_calendar~296",
+          "table_txn": 9
+        }
+      ],
+      "physicalBefore": "static-v2-d5bb7bfc2ef728cdf7917422c7220436077a4ddfaf456367ea1a230ff10d1377",
+      "logicalTarget": "d012-logical-v2-5766f21951e59c460f2bbdb72b62b78bb885bfda76bd27f136dff115148a20e3",
+      "before": {
+        "identity": {
+          "id": 3256,
+          "directory": "java_d012_stk_st_daily_pub2_2eade8c2f0ee40ee8a71b276282892c0~3256",
+          "writerTxn": 1
+        },
+        "content": {
+          "rows": 2,
+          "fingerprint": "33c20bd29144626e7e8ebc16539df15be0fd0735a687512a8c662650fee91dbe"
+        }
+      },
+      "publication": {
+        "intent": {
+          "id": "stk-st-publication-9d124d3e-313e-4d43-aa32-c662a55893ab",
+          "runId": "stk-st-v2-live-21f10f8d-28ce-4488-a0d0-0a06ebb56730",
+          "logicalTarget": "d012-logical-v2-5766f21951e59c460f2bbdb72b62b78bb885bfda76bd27f136dff115148a20e3",
+          "frozenPhysicalTarget": "static-v2-d5bb7bfc2ef728cdf7917422c7220436077a4ddfaf456367ea1a230ff10d1377",
+          "target": "java_d012_stk_st_daily_pub2_2eade8c2f0ee40ee8a71b276282892c0",
+          "backup": "java_d012_stk_st_daily_backup_230ad9559cb04251b3ce40078f12bb88",
+          "stage": "java_d012_stk_st_daily_stage_9d5c48a324674283a7fd1ddabc371c58",
+          "beforeIdentity": {
+            "id": 3256,
+            "directory": "java_d012_stk_st_daily_pub2_2eade8c2f0ee40ee8a71b276282892c0~3256",
+            "writerTxn": 1
+          },
+          "before": {
+            "rows": 2,
+            "fingerprint": "33c20bd29144626e7e8ebc16539df15be0fd0735a687512a8c662650fee91dbe"
+          },
+          "stageIdentity": {
+            "id": 3257,
+            "directory": "java_d012_stk_st_daily_stage_9d5c48a324674283a7fd1ddabc371c58~3257",
+            "writerTxn": 1
+          },
+          "after": {
+            "rows": 1,
+            "fingerprint": "b472906b7a5769203d1421a9a4f857bba8a6d6f109f82a1e125d712ab6559e06"
+          },
+          "preservedOutside": {
+            "rows": 1,
+            "fingerprint": "b472906b7a5769203d1421a9a4f857bba8a6d6f109f82a1e125d712ab6559e06"
+          },
+          "authoritativeWindow": {
+            "rows": 0,
+            "fingerprint": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "windowFrom": "2026-09-26",
+          "windowTo": "2026-09-26",
+          "sourceRows": 0,
+          "sourceFingerprint": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stageReceipt": "/Users/Apple/zq/fun/QuestDBWithData/var/cn-st-publication-v2-20261021/2eade8c2f0ee40ee8a71b276282892c0/sync-evidence/stk-st-v2-live-21f10f8d-28ce-4488-a0d0-0a06ebb56730/java_d012_stk_st_daily_stage_9d5c48a324674283a7fd1ddabc371c58-verified.json",
+          "stageReceiptFingerprint": "0c75ebb2041e45b565824a108cb1ed4b8255f2831b8a757f2c1bc85bbad79dbc"
+        },
+        "state": "VERIFIED",
+        "revision": 4
+      },
+      "after": {
+        "identity": {
+          "id": 3257,
+          "directory": "java_d012_stk_st_daily_stage_9d5c48a324674283a7fd1ddabc371c58~3257",
+          "writerTxn": 2
+        },
+        "content": {
+          "rows": 1,
+          "fingerprint": "b472906b7a5769203d1421a9a4f857bba8a6d6f109f82a1e125d712ab6559e06"
+        }
+      },
+      "renames": 2,
+      "outsideRowsPreserved": 1,
+      "closedSessionRowsRemoved": 1,
+      "namechangeHistoryAccepted": false
+    },
+    "原件摘要": {
+      "fixture.json": "3e7999560d3f243d5e62547580386a30f6930ebeb67c0bd394350a8a8de3b1d3",
+      "request.json": "3875da2a8d9cd2d0e5a769902e91bccc2e2b3047bbee6c7e982d89952c879f54",
+      "report.json": "fcdd5fe863d4c8058dba91d18010256a4c07858082c9aeee4144f08c4ff89b58"
+    }
+  },
+  "首次失败及原协议恢复": [
+    {
+      "原件目录": "var/cn-st-publication-v2-20261021/93ad575f16ab4aadb5fc03632d73d68a",
+      "报告": {
+        "schemaVersion": 1,
+        "observedAt": "2026-10-20T18:13:16.192803Z",
+        "table": "java_d012_stk_st_daily_pub2_93ad575f16ab4aadb5fc03632d73d68a",
+        "runId": "stk-st-v2-live-8d9577d1-5cd4-4008-8553-6c60895fff85",
+        "scope": "isolated-two-row-closed-session-fixture",
+        "productionMigration": false,
+        "realNamechangeRequests": 0,
+        "state": "VERIFIED_AND_CLEANED",
+        "closedSession": "2026-09-26",
+        "calendarState": [
+          {
+            "id": 296,
+            "directoryName": "exchange_calendar~296",
+            "table_txn": 9
+          }
+        ],
+        "physicalBefore": "static-v2-1e3170fa20667b37bbfec8648bf2d8163680a8d4a784aee20e435ba361f9f7e0",
+        "logicalTarget": "d012-logical-v2-3a39b3911dfce8ac8e3e5f62cf7e5c6ac8cd5269eb6a44c8128b3006c66f0150",
+        "before": {
+          "identity": {
+            "id": 3254,
+            "directory": "java_d012_stk_st_daily_pub2_93ad575f16ab4aadb5fc03632d73d68a~3254",
+            "writerTxn": 1
+          },
+          "content": {
+            "rows": 2,
+            "fingerprint": "33c20bd29144626e7e8ebc16539df15be0fd0735a687512a8c662650fee91dbe"
+          }
+        },
+        "failedAt": "FIXTURE_VERIFIED",
+        "failureType": "org.opentest4j.AssertionFailedError",
+        "originalTestExecutionStopped": true,
+        "originalToolSession": 26626,
+        "originalToolExitCode": 1,
+        "initialIntervalLeaseLost": true,
+        "noIntervalLeaseRecreated": true,
+        "publication": {
+          "intent": {
+            "id": "stk-st-publication-90d263f5-6724-4592-8980-aa80eb32f9a3",
+            "runId": "stk-st-v2-live-8d9577d1-5cd4-4008-8553-6c60895fff85",
+            "logicalTarget": "d012-logical-v2-3a39b3911dfce8ac8e3e5f62cf7e5c6ac8cd5269eb6a44c8128b3006c66f0150",
+            "frozenPhysicalTarget": "static-v2-1e3170fa20667b37bbfec8648bf2d8163680a8d4a784aee20e435ba361f9f7e0",
+            "target": "java_d012_stk_st_daily_pub2_93ad575f16ab4aadb5fc03632d73d68a",
+            "backup": "java_d012_stk_st_daily_backup_2179b0a589c946a2904d8cba5c68f923",
+            "stage": "java_d012_stk_st_daily_stage_3df6a3afc5c6439897457ea7af32a902",
+            "beforeIdentity": {
+              "id": 3254,
+              "directory": "java_d012_stk_st_daily_pub2_93ad575f16ab4aadb5fc03632d73d68a~3254",
+              "writerTxn": 1
+            },
+            "before": {
+              "rows": 2,
+              "fingerprint": "33c20bd29144626e7e8ebc16539df15be0fd0735a687512a8c662650fee91dbe"
+            },
+            "stageIdentity": {
+              "id": 3255,
+              "directory": "java_d012_stk_st_daily_stage_3df6a3afc5c6439897457ea7af32a902~3255",
+              "writerTxn": 1
+            },
+            "after": {
+              "rows": 1,
+              "fingerprint": "b472906b7a5769203d1421a9a4f857bba8a6d6f109f82a1e125d712ab6559e06"
+            },
+            "preservedOutside": {
+              "rows": 1,
+              "fingerprint": "b472906b7a5769203d1421a9a4f857bba8a6d6f109f82a1e125d712ab6559e06"
+            },
+            "authoritativeWindow": {
+              "rows": 0,
+              "fingerprint": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            },
+            "windowFrom": "2026-09-26",
+            "windowTo": "2026-09-26",
+            "sourceRows": 0,
+            "sourceFingerprint": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "stageReceipt": "/Users/Apple/zq/fun/QuestDBWithData/var/cn-st-publication-v2-20261021/93ad575f16ab4aadb5fc03632d73d68a/sync-evidence/stk-st-v2-live-8d9577d1-5cd4-4008-8553-6c60895fff85/java_d012_stk_st_daily_stage_3df6a3afc5c6439897457ea7af32a902-verified.json",
+            "stageReceiptFingerprint": "221d70569a5d250df83916d6c8954973e0b3af57ca549073410f1d50767a23c1"
+          },
+          "state": "VERIFIED",
+          "revision": 4
+        },
+        "recoveredOriginalRun": true,
+        "freshFixedCallbackAcceptance": false,
+        "initialAcceptanceFailed": true,
+        "manualOriginalRecoveryAt": "2026-10-20T18:21:50.055247Z"
+      },
+      "原件摘要": {
+        "fixture.json": "3e7999560d3f243d5e62547580386a30f6930ebeb67c0bd394350a8a8de3b1d3",
+        "request.json": "c673960e38af628965e426a4822ca72781e2c9d734fa918ea5dc5231ec698036",
+        "report.json": "7a2351e1ad3b5c7cd4942cd9b7e113852c1289da5e9464fbf2a017fafb29aae8",
+        "original-recovery-intent.json": "eb9c1efda1acec8ead657a2fc04d167e560c8deb50e9084e430a8c2170171fb9",
+        "original-recovery-complete.json": "fece1eace4c070295d97866c4b327b0edde3871e551ce7d9a15c552efb104f9c"
+      }
+    }
+  ],
+  "实库执行源码摘要": {
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailyPublication.java": "6f692b87fba845197fcbdf4c863254a4b5b3a2119421293f70d1610f6aeb92a8",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailyRevalidationAdapter.java": "1e4338ed1d58e2f3c45b74478235f14d3e02d63f3a59c89223da568cf86df735",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailyRunRecovery.java": "b57086ecbb40c92f4542b27ed9bac4199076c7133d7c786cad5fd2a0f7555336",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailySyncAdapter.java": "a1106a0817757a490f4fe7b3179b04ae996bc46dcbb86f35dcb985ce7c69e786",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailySyncJobOwner.java": "43b6c61719e5cd4ef6e880b083a83a3e63950c314e169d61d06ab2116a33828a",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/port/StockStDailyTables.java": "4f82b23f7002ff432a8283c733803c2a8e3e404638419b5fa7bbd775455ed713",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/port/StockStDailyTarget.java": "4f722c06cca15082a3b2b4949845bfe023e812ee2b704742a19b0039dd618267",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/QuestDbStockStDailyTables.java": "716ea084a8e8265ec969b896dc84ab089f7e0dfc6b690aa07bdf305eb3071fc5",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/QuestDbStockStDailyTarget.java": "02d30d5f7565ff2ce6fba5f6b65854c7712e7016fe9119eef9bc54e35c07abb1",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockStDailyPublicationStore.java": "44cc2a6c9d39a22f4380d73ec4582490f10abdcd36225a928a94c4a632ea0d65",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockStDailyStaging.java": "7d0074281fc5e8228bf8acf1a07d1a263c6bbf5dc99ee3941a783767615f181b"
+  },
+  "演练后调整": [
+    "副作用归属探测改为只读 SQLite；另对原实库验收账本验证当前运行存在、外部运行不存在、原账本摘要不变",
+    "stage 意图与回执使用现有 writeNewDurable 接口，JSON 字节结构不变；不声称断电验收"
+  ],
+  "只读原账本探测": {
+    "结果": "原实库验收账本只读探测通过；当前运行存在，外部运行不存在，账本摘要未变",
+    "日志摘要": "58165b62e9fcc47704ca4ea96bcd09c6ab16702f1b3378d67caee7f3c3ba9e16"
+  },
+  "清理范围": "只清理本验收原日志明确归属且身份、全值核验通过的目标和备份；账本与原件保留",
+  "生产默认切换": false,
+  "正式名称变更历史验收": false,
+  "正式表迁移": false,
+  "append未决恢复器新增": false
+}

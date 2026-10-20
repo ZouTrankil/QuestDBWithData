@@ -1,0 +1,55 @@
+{
+  "基线提交": "596f87ceda5a1f62988c710241255095a5392b85",
+  "范围": "ST 日频显式 v2 staging、发布、原日志恢复与再验证；修复原适配器未报告副作用造成的区间锁释放",
+  "源码摘要": {
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailyPublication.java": "6f692b87fba845197fcbdf4c863254a4b5b3a2119421293f70d1610f6aeb92a8",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailyRevalidationAdapter.java": "1e4338ed1d58e2f3c45b74478235f14d3e02d63f3a59c89223da568cf86df735",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailyRunRecovery.java": "b57086ecbb40c92f4542b27ed9bac4199076c7133d7c786cad5fd2a0f7555336",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailySyncAdapter.java": "a84233d5b5133878b9b8002cbae05c24b531246a128b4095761cc1199f9ee840",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailySyncJobOwner.java": "43b6c61719e5cd4ef6e880b083a83a3e63950c314e169d61d06ab2116a33828a",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/port/StockStDailyTables.java": "4f82b23f7002ff432a8283c733803c2a8e3e404638419b5fa7bbd775455ed713",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/port/StockStDailyTarget.java": "4f722c06cca15082a3b2b4949845bfe023e812ee2b704742a19b0039dd618267",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/QuestDbStockStDailyTables.java": "716ea084a8e8265ec969b896dc84ab089f7e0dfc6b690aa07bdf305eb3071fc5",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/QuestDbStockStDailyTarget.java": "02d30d5f7565ff2ce6fba5f6b65854c7712e7016fe9119eef9bc54e35c07abb1",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockStDailyPublicationStore.java": "9cbe04b7ecd155730cce9bce2e2b92bbf6e3e52d2631bca5066a45df5237a40d",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockStDailyStaging.java": "ee49490db5f7f92829e407cacde91f7e228f179f1483a541a10bbc353be50b5d",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockStDailyPublicationContractTest.java": "02cda2884db81b2ed0d81fbc0bf202c572b33f5d14e02fff81490e747c0a4b29",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockStDailyV2PublicationLiveAcceptanceTest.java": "4cbcf5d4ae72e526ab3391a2909909dc99fa66d65188e43369f9477f5fc83c77"
+  },
+  "隔离测试": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2293,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 144
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "结果": "通过",
+  "格式检查": {
+    "命令": "python3 tools/format_java.py --imports --check",
+    "Java文件": 2033,
+    "结果": "格式、import、字面量核对通过"
+  },
+  "公开配置检查": "cn-data 与 main-strategy 两个 ZIP 均通过",
+  "实库范围": "闭市日两行隔离夹具已验证中断、保锁及原运行恢复；详见 ST日频v2发布实库验收.json。其后只读探测以原账本单独核验，durable 写入改动经最终离线回归；未再次执行远端发布，未做断电验收。",
+  "仍未完成": [
+    "ST 当前注册和配置 v2 入口",
+    "ST 检查点、公开读取绑定和写入组入口",
+    "append 未决自动恢复器",
+    "正式名称变更全历史证据",
+    "正式表与 MV 迁移"
+  ]
+}

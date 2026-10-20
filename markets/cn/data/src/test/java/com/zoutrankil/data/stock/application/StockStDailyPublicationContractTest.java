@@ -17,6 +17,7 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -38,9 +39,11 @@ import com.zoutrankil.data.stock.domain.StockStDailyState.Prepared;
 import com.zoutrankil.data.stock.domain.StockStDailyState.Snapshot;
 import com.zoutrankil.data.stock.domain.StockStDailyState.Verified;
 import com.zoutrankil.data.stock.mapper.StockStDailyMapper;
+import com.zoutrankil.data.stock.port.StockDateWriteSession;
 import com.zoutrankil.data.stock.port.StockStDailyTables;
 import com.zoutrankil.data.stock.port.StockStDailyTarget;
 import com.zoutrankil.data.stock.storage.StockStDailyStaging;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -103,14 +106,22 @@ class StockStDailyPublicationContractTest {
                 .flatMap(
                         input ->
                                 Arrays.stream(RenameFault.values())
-                                        .map(fault -> Arguments.of(input, fault)));
+                                        .flatMap(
+                                                fault ->
+                                                        Stream.of(1, 2)
+                                                                .map(
+                                                                        version ->
+                                                                                Arguments.of(
+                                                                                        input,
+                                                                                        fault,
+                                                                                        version))));
     }
 
     @ParameterizedTest
     @MethodSource("recoveryCases")
     void receiptBackedRecoveryFinishesOnlyMissingRenamesAndReleasesLocksInOrder(
-            Input input, RenameFault fault) throws Exception {
-        var f = new Fixture(temp, input, false);
+            Input input, RenameFault fault, int version) throws Exception {
+        var f = new Fixture(temp, input, false, version);
         f.tables.fault = fault;
         var failure = assertThrows(StockStDailyPublication.Uncertain.class, f::publish);
         assertEquals(f.publisher.forRun(RUN).intent().id(), failure.publicationId());
@@ -365,13 +376,130 @@ class StockStDailyPublicationContractTest {
         assertEquals(2, f.tables.renames.size());
     }
 
+    @Test
+    void v2JournalCannotBeReadAsLegacyAndLegacyJournalCannotBeRelabeledV2() throws Exception {
+        for (int version : List.of(1, 2)) {
+            var root = Files.createDirectory(temp.resolve("version-" + version));
+            var f = new Fixture(root, Input.NO_SESSIONS, false, version);
+            f.tables.fault = RenameFault.BEFORE_FIRST;
+            assertThrows(StockStDailyPublication.Uncertain.class, f::publish);
+            var raw = intentJson(f.path);
+            var node = JobDefinitionJson.mapper().readTree(raw);
+            assertEquals(version == 2, node.has("protocolVersion"));
+            var opposite = mock(StockStDailyTables.Versioned.class);
+            when(opposite.datasetVersion()).thenReturn(3 - version);
+            var publisher =
+                    new StockStDailyPublication(
+                            opposite, f.path, CnTradeDateLayout.fromVersion(3 - version));
+            assertThrows(IllegalArgumentException.class, () -> publisher.forRun(RUN));
+            assertEquals(raw, intentJson(f.path));
+            assertEquals(0, f.tables.renames.size());
+            assertEquals(RUN, f.mutexOwner());
+        }
+    }
+
+    @Test
+    void missingV2StageEncodingFailsBeforePublicationIntentOrRename() throws Exception {
+        var f = new Fixture(temp, Input.EMPTY, false, 2);
+        var path = Path.of(f.stage.receipt());
+        var node = (ObjectNode) JobDefinitionJson.mapper().readTree(Files.readAllBytes(path));
+        node.remove("rowEncoding");
+        Files.write(path, JobDefinitionJson.mapper().writeValueAsBytes(node));
+        assertThrows(IllegalArgumentException.class, f::publish);
+        assertTrue(f.publisher.findForRun(RUN).isEmpty());
+        assertTrue(f.tables.renames.isEmpty());
+        assertNull(f.mutexOwner());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2})
+    void unresolvedPublicationIsReportedToTheGenericRunnerEvenWithoutSourcePages(int version)
+            throws Exception {
+        var f = new Fixture(temp, Input.NO_SESSIONS, false, version);
+        f.tables.fault = RenameFault.AFTER_FIRST;
+        assertThrows(StockStDailyPublication.Uncertain.class, f::publish);
+        var source = mock(StockStDailySource.class);
+        var calendar = mock(StockStTradingDates.class);
+        var session = mock(StockDateWriteSession.class);
+        var adapter =
+                new StockStDailySyncAdapter(
+                        source,
+                        calendar,
+                        session,
+                        f.evidence,
+                        RUN,
+                        f.path,
+                        TABLE,
+                        f.logical,
+                        f.target);
+        assertTrue(adapter.recoveryRequired(RUN));
+        assertThrows(IllegalArgumentException.class, () -> adapter.recoveryRequired("foreign"));
+        assertEquals(RUN, f.mutexOwner());
+        assertNotNull(f.ownedLease());
+    }
+
+    @Test
+    void recoveryProbeReadsOnlyExistingOwnedEffectsAndDoesNotCreatePublicationTables()
+            throws Exception {
+        var path = temp.resolve("probe.sqlite");
+        new SyncRunLedger(path);
+        var source = mock(StockStDailySource.class);
+        var calendar = mock(StockStTradingDates.class);
+        var session = mock(StockDateWriteSession.class);
+        var target = mock(StockStDailyTarget.class);
+        var adapter =
+                new StockStDailySyncAdapter(
+                        source, calendar, session, temp, RUN, path, TABLE, LOGICAL, target);
+        assertFalse(adapter.recoveryRequired(RUN));
+        try (var db = DriverManager.getConnection("jdbc:sqlite:" + path);
+                var query = db.createStatement();
+                var rows =
+                        query.executeQuery(
+                                "SELECT count(*) FROM sqlite_master WHERE name LIKE 'stk_st_daily_publication%'")) {
+            assertTrue(rows.next());
+            assertEquals(0, rows.getInt(1));
+        }
+        Files.writeString(temp.resolve("append-intent.json"), "{}");
+        assertTrue(adapter.recoveryRequired(RUN));
+        verifyNoInteractions(target, source, calendar, session);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"\"2\"", "2.0", "4294967298"})
+    void v2ProofVersionMustBeAnExactBoundedInteger(String version) throws Exception {
+        var json =
+                JobDefinitionJson.mapper()
+                        .readTree(
+                                "{\"datasetSchemaVersion\":"
+                                        + version
+                                        + ",\"rowEncoding\":\"trade_date-v2\"}");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> StockStDailyPublication.requireProofVersion(json));
+    }
+
+    private static String intentJson(Path path) throws Exception {
+        try (var db = DriverManager.getConnection("jdbc:sqlite:" + path);
+                var query =
+                        db.prepareStatement(
+                                "SELECT intent_json FROM stk_st_daily_publications WHERE run_id=?")) {
+            query.setString(1, RUN);
+            try (var rows = query.executeQuery()) {
+                assertTrue(rows.next());
+                return rows.getString(1);
+            }
+        }
+    }
+
     private static final class Fixture {
         final Path path, evidence;
         final SyncRunLedger ledger;
         final DatasetIntervalLock locks;
         final DatasetIntervalLock.Lease lease;
         final FakeTables tables;
-        final StockStDailyTarget target = mock(StockStDailyTarget.class);
+        final StockStDailyTarget target;
+        final CnTradeDateLayout layout;
+        final String logical;
         final StockStDailyPublication publisher;
         final OfflinePages pages;
         final List<SyncJobRunner.Page<StockStDaily>> sourcePages = new ArrayList<>();
@@ -383,11 +511,24 @@ class StockStDailyPublicationContractTest {
         final Verified stage;
 
         Fixture(Path temp, Input input, boolean leaveFetched) throws Exception {
+            this(temp, input, leaveFetched, 1);
+        }
+
+        Fixture(Path temp, Input input, boolean leaveFetched, int version) throws Exception {
+            layout = CnTradeDateLayout.fromVersion(version);
+            logical = "d012-logical-v" + version + "-" + "a".repeat(64);
+            if (version == 1) target = mock(StockStDailyTarget.class);
+            else {
+                var scoped = mock(StockStDailyTarget.Versioned.class);
+                when(scoped.datasetVersion()).thenReturn(version);
+                when(scoped.forVersion(version)).thenReturn(scoped);
+                target = scoped;
+            }
             path = temp.resolve("ledger.sqlite").toAbsolutePath();
             evidence = temp.resolve("sync-evidence").resolve(RUN);
             ledger = new SyncRunLedger(path);
             locks = new DatasetIntervalLock(path);
-            tables = new FakeTables(path);
+            tables = new FakeTables(path, layout);
             var outsideRows = List.of(new StockStDaily("600001.SH", DAY.minusDays(1)));
             var beforeRows = new ArrayList<>(outsideRows);
             beforeRows.add(new StockStDaily("600000.SH", DAY));
@@ -397,19 +538,20 @@ class StockStDailyPublicationContractTest {
             physical = tables.targetId(TABLE, before.identity());
             var dates = input == Input.NO_SESSIONS ? List.<LocalDate>of() : List.of(DAY);
             var request =
-                    StockStDailySyncJobOwner.DEFINITION.freeze(
-                            SyncJobDefinition.Mode.BACKFILL,
-                            Map.of(
-                                    "targetId",
-                                    LOGICAL,
-                                    "physicalTargetId",
-                                    physical,
-                                    "trade_dates",
-                                    StockStDailySyncAdapter.encodeTradeDates(dates)),
-                            DAY,
-                            DAY,
-                            DAY);
-            ledger.createRun(RUN, null, LOGICAL, request);
+                    StockStDailySyncJobOwner.definition(version)
+                            .freeze(
+                                    SyncJobDefinition.Mode.BACKFILL,
+                                    Map.of(
+                                            "targetId",
+                                            logical,
+                                            "physicalTargetId",
+                                            physical,
+                                            "trade_dates",
+                                            StockStDailySyncAdapter.encodeTradeDates(dates)),
+                                    DAY,
+                                    DAY,
+                                    DAY);
+            ledger.createRun(RUN, null, logical, request);
             transition(RUN, SyncRunState.RUNNING, "{}");
             ledger.createChild(RUN + "-attempt", SyncRunLedger.Kind.ATTEMPT, RUN, RUN);
             transition(RUN + "-attempt", SyncRunState.RUNNING, "{}");
@@ -422,8 +564,8 @@ class StockStDailyPublicationContractTest {
             afterRows.addAll(sourceRows);
             tables.tables.put(STAGE, new Physical(new Identity(22, "new-directory", 3), afterRows));
             after = tables.snapshot(STAGE);
-            outside = content(outsideRows);
-            var window = content(sourceRows);
+            outside = content(outsideRows, layout);
+            var window = content(sourceRows, layout);
             var refs =
                     sourcePages.stream()
                             .map(
@@ -466,6 +608,14 @@ class StockStDailyPublicationContractTest {
                                             Map.entry("sourceFingerprint", combined),
                                             Map.entry("sourceReceipts", refs),
                                             Map.entry("sourceComplete", true))));
+            if (version == 2) {
+                var node =
+                        (ObjectNode)
+                                JobDefinitionJson.mapper().readTree(Files.readAllBytes(receipt));
+                node.put("datasetSchemaVersion", 2);
+                node.put("rowEncoding", "trade_date-v2");
+                Files.write(receipt, JobDefinitionJson.mapper().writeValueAsBytes(node));
+            }
             prepared = new Prepared(TABLE, physical, DAY, DAY, before, outside);
             stage =
                     new Verified(
@@ -527,7 +677,8 @@ class StockStDailyPublicationContractTest {
                                                                     !r.timestamp().isBefore(from)
                                                                             && !r.timestamp()
                                                                                     .isAfter(to))
-                                                    .toList());
+                                                    .toList(),
+                                            layout);
                                 }
 
                                 public Content outside(LocalDate from, LocalDate to)
@@ -539,7 +690,8 @@ class StockStDailyPublicationContractTest {
                                                                     r.timestamp().isBefore(from)
                                                                             || r.timestamp()
                                                                                     .isAfter(to))
-                                                    .toList());
+                                                    .toList(),
+                                            layout);
                                 }
                             });
             when(target.fingerprintWindow(anyList(), any(), any()))
@@ -548,13 +700,14 @@ class StockStDailyPublicationContractTest {
                                     StockStDailyStaging.fingerprintWindow(
                                             call.getArgument(0),
                                             call.getArgument(1),
-                                            call.getArgument(2)));
-            publisher = new StockStDailyPublication(tables, path);
+                                            call.getArgument(2),
+                                            layout));
+            publisher = new StockStDailyPublication(tables, path, layout);
             installAudit();
         }
 
         StockStDailyPublication.Result publish() throws Exception {
-            return publisher.publish(RUN, LOGICAL, physical, TABLE, prepared, stage, () -> false);
+            return publisher.publish(RUN, logical, physical, TABLE, prepared, stage, () -> false);
         }
 
         void transition(String id, SyncRunState state, String payload) throws Exception {
@@ -663,11 +816,16 @@ class StockStDailyPublicationContractTest {
         }
 
         Snapshot snapshot() throws Exception {
-            return new Snapshot(identity, content(rows));
+            return snapshot(CnTradeDateLayout.LEGACY_V1);
+        }
+
+        Snapshot snapshot(CnTradeDateLayout layout) throws Exception {
+            return new Snapshot(identity, content(rows, layout));
         }
     }
 
-    private static final class FakeTables implements StockStDailyTables {
+    private static final class FakeTables implements StockStDailyTables.Versioned {
+        final CnTradeDateLayout layout;
         final Map<String, Physical> tables = new HashMap<>();
         final List<String> renames = new ArrayList<>();
         final List<State> renameStates = new ArrayList<>();
@@ -676,11 +834,20 @@ class StockStDailyPublicationContractTest {
         boolean hardStop;
 
         FakeTables(Path ledger) {
+            this(ledger, CnTradeDateLayout.LEGACY_V1);
+        }
+
+        FakeTables(Path ledger, CnTradeDateLayout layout) {
             this.ledger = ledger;
+            this.layout = layout;
+        }
+
+        public int datasetVersion() {
+            return layout.schemaVersion();
         }
 
         public Snapshot snapshot(String table) throws Exception {
-            return Objects.requireNonNull(tables.get(table), table).snapshot();
+            return Objects.requireNonNull(tables.get(table), table).snapshot(layout);
         }
 
         public Snapshot snapshotIfPresent(String table) throws Exception {
@@ -694,7 +861,7 @@ class StockStDailyPublicationContractTest {
         public void rename(String from, String to) {
             if (fault == RenameFault.BEFORE_FIRST && renames.isEmpty()) fail();
             try {
-                var entry = new StockStDailyPublication(this, ledger).forRun(RUN);
+                var entry = new StockStDailyPublication(this, ledger, layout).forRun(RUN);
                 assertNotNull(
                         new DatasetIntervalLock(ledger)
                                 .findOwned(
@@ -756,8 +923,13 @@ class StockStDailyPublicationContractTest {
     }
 
     private static Content content(List<StockStDaily> rows) throws Exception {
+        return content(rows, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    private static Content content(List<StockStDaily> rows, CnTradeDateLayout layout)
+            throws Exception {
         return StockStDailyStaging.fingerprintWindow(
-                rows, LocalDate.of(2000, 1, 1), LocalDate.of(2100, 1, 1));
+                rows, LocalDate.of(2000, 1, 1), LocalDate.of(2100, 1, 1), layout);
     }
 
     private static String combinedFingerprint(List<String> fingerprints) throws Exception {

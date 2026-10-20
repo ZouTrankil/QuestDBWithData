@@ -10,6 +10,7 @@ import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import com.zoutrankil.data.stock.domain.StockStDailyState;
 import com.zoutrankil.data.stock.port.StockDateWriteSession;
 import com.zoutrankil.data.stock.port.StockStDailyTarget;
+import com.zoutrankil.data.stock.port.StockStDailyWriteSession;
 
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -53,6 +54,13 @@ public final class StockStDailyRevalidationAdapter
     @Override
     public void preflight(SyncJobDefinition.FrozenRequest request) throws Exception {
         StockStDailySyncAdapter.validateFrozenRequest(request);
+        int version =
+                reader instanceof StockStDailyWriteSession.Versioned selected
+                        ? selected.datasetVersion()
+                        : 1;
+        if (StockStDailyTarget.versionOf(target) != request.definition().datasetVersion()
+                || version != request.definition().datasetVersion())
+            throw new IllegalArgumentException("ST 再验证作用域与原冻结布局不同");
         if (!target.targetId().equals(request.parameters().get("targetId")))
             throw new IllegalStateException("ST logical target changed");
         if (!StockStDailySyncAdapter.decodeTradeDates(request)

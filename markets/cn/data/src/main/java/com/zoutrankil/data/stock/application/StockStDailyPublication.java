@@ -1,5 +1,6 @@
 package com.zoutrankil.data.stock.application;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
@@ -9,11 +10,13 @@ import com.zoutrankil.data.stock.domain.StockExecutionTables;
 import com.zoutrankil.data.stock.domain.StockStDailyState;
 import com.zoutrankil.data.stock.port.StockStDailyTables;
 import com.zoutrankil.data.stock.storage.StockStDailyPublicationStore;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -115,11 +118,24 @@ public final class StockStDailyPublication {
         }
     }
 
+    private final CnTradeDateLayout layout;
     private final StockStDailyTables tables;
     private final Path ledgerPath;
     private final StockStDailyPublicationStore store;
 
     public StockStDailyPublication(StockStDailyTables tables, Path ledgerPath) throws Exception {
+        this(tables, ledgerPath, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public StockStDailyPublication(
+            StockStDailyTables tables, Path ledgerPath, CnTradeDateLayout layout) throws Exception {
+        this.layout = Objects.requireNonNull(layout);
+        int version =
+                tables instanceof StockStDailyTables.Versioned selected
+                        ? selected.datasetVersion()
+                        : 1;
+        if (version != layout.schemaVersion())
+            throw new IllegalArgumentException("ST 发布表端口与布局版本不同");
         this.tables = Objects.requireNonNull(tables);
         this.ledgerPath = Objects.requireNonNull(ledgerPath).toAbsolutePath().normalize();
         this.store = new StockStDailyPublicationStore(this.ledgerPath);
@@ -168,6 +184,25 @@ public final class StockStDailyPublication {
                                 () ->
                                         new IllegalStateException(
                                                 "D012 stage receipt is outside its bounded run evidence root")));
+        if (layout == CnTradeDateLayout.TRADE_DATE_V2) {
+            var proof =
+                    JobDefinitionJson.mapper()
+                            .readTree(
+                                    FileEvidenceStore.readBounded(
+                                            realReceipt,
+                                            32 * 1024 * 1024,
+                                            () -> new IllegalStateException("ST stage 凭证不可用")));
+            requireProofVersion(proof);
+            if (!stage.table().equals(proof.path("stage").asText())
+                    || !target.equals(proof.path("target").asText())
+                    || !frozenPhysicalTarget.equals(proof.path("beforePhysicalTarget").asText())
+                    || !prepared.from().toString().equals(proof.path("windowFrom").asText())
+                    || !prepared.to().toString().equals(proof.path("windowTo").asText())
+                    || stage.sourceRows() != proof.path("sourceRows").asInt(-1)
+                    || !stage.sourceFingerprint().equals(proof.path("sourceFingerprint").asText())
+                    || !proof.path("sourceComplete").asBoolean(false))
+                throw new IllegalStateException("ST v2 stage 凭证与原发布输入不同");
+        }
         String backup =
                 StockStDailyJobService.ISOLATED_TABLE_PREFIX
                         + "backup_"
@@ -219,6 +254,12 @@ public final class StockStDailyPublication {
             throw new IllegalStateException(
                     "Stopped D012 writer proof required before publication recovery");
         Entry entry = forRun(runId);
+        if (layout == CnTradeDateLayout.TRADE_DATE_V2)
+            verifyRunBinding(
+                    runId,
+                    entry.intent().logicalTarget(),
+                    entry.intent().frozenPhysicalTarget(),
+                    entry.intent().target());
         if (entry.state() == State.VERIFIED) {
             var verified = verifyPublished(entry);
             releaseIfOwned(entry);
@@ -257,10 +298,7 @@ public final class StockStDailyPublication {
         return store.findForRun(
                 runId,
                 (json, state, revision) ->
-                        new Entry(
-                                JobDefinitionJson.mapper().readValue(json, Intent.class),
-                                State.valueOf(state),
-                                revision));
+                        new Entry(decodeIntent(json), State.valueOf(state), revision));
     }
 
     public void requireNoPendingPublication() throws Exception {
@@ -294,10 +332,7 @@ public final class StockStDailyPublication {
     }
 
     private Entry reserve(Intent intent) throws Exception {
-        store.reserve(
-                intent.runId(),
-                intent.id(),
-                () -> JobDefinitionJson.mapper().writeValueAsString(intent));
+        store.reserve(intent.runId(), intent.id(), () -> encodeIntent(intent));
         return new Entry(intent, State.PREPARED, 0);
     }
 
@@ -324,7 +359,8 @@ public final class StockStDailyPublication {
                 StockStDailySyncAdapter.restoreFrozenRequest(run.frozenJson(), run.targetId());
         StockStDailySyncAdapter.validateFrozenRequest(request);
         if (!"data.stk_st_daily".equals(run.jobId())
-                || run.jobVersion() != 1
+                || run.jobVersion() != request.definition().version()
+                || request.definition().datasetVersion() != layout.schemaVersion()
                 || !logicalTarget.equals(run.targetId())
                 || !logicalTarget.equals(frozen.path("parameters").path("targetId").asText())
                 || !physicalTarget.equals(
@@ -336,6 +372,48 @@ public final class StockStDailyPublication {
                 || "stk_st_daily".equals(target) && request.mode() != Mode.BACKFILL)
             throw new IllegalStateException(
                     "D012 publication differs from frozen logical/physical target binding");
+    }
+
+    /** v1 日志不补字段；v2 通过外层协议拒绝空表摘要相同造成的跨版误认。 */
+    private String encodeIntent(Intent intent) throws Exception {
+        var json = JobDefinitionJson.mapper();
+        return layout == CnTradeDateLayout.LEGACY_V1
+                ? json.writeValueAsString(intent)
+                : json.writeValueAsString(
+                        Map.of(
+                                "protocolVersion",
+                                2,
+                                "datasetSchemaVersion",
+                                2,
+                                "rowEncoding",
+                                "trade_date-v2",
+                                "intent",
+                                intent));
+    }
+
+    private Intent decodeIntent(String text) throws Exception {
+        var json = JobDefinitionJson.mapper();
+        var root = json.readTree(text);
+        if (layout == CnTradeDateLayout.LEGACY_V1) {
+            if (root.has("protocolVersion") || root.has("datasetSchemaVersion"))
+                throw new IllegalArgumentException("旧 ST 发布不能读取新版日志");
+            return json.treeToValue(root, Intent.class);
+        }
+        if (!root.path("protocolVersion").isIntegralNumber()
+                || !root.path("protocolVersion").canConvertToInt()
+                || root.path("protocolVersion").asInt(-1) != 2
+                || !root.path("intent").isObject())
+            throw new IllegalArgumentException("ST v2 发布缺少原版本包装");
+        requireProofVersion(root);
+        return json.treeToValue(root.path("intent"), Intent.class);
+    }
+
+    static void requireProofVersion(JsonNode proof) {
+        if (!proof.path("datasetSchemaVersion").isIntegralNumber()
+                || !proof.path("datasetSchemaVersion").canConvertToInt()
+                || proof.path("datasetSchemaVersion").asInt(-1) != 2
+                || !"trade_date-v2".equals(proof.path("rowEncoding").asText()))
+            throw new IllegalArgumentException("ST v2 凭证缺少或不匹配原布局编码");
     }
 
     private void requireMutex(Entry entry) throws SQLException {

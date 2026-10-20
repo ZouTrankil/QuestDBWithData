@@ -18,6 +18,8 @@ import com.zoutrankil.data.stock.domain.StockStDailyState;
 import com.zoutrankil.data.stock.port.StockDateWriteSession;
 import com.zoutrankil.data.stock.port.StockStDailyTarget;
 import com.zoutrankil.data.stock.port.StockStDailyWriteSession;
+import com.zoutrankil.data.stock.storage.StockStDailyPublicationStore;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -183,12 +185,12 @@ public final class StockStDailySyncAdapter
 
     public static void validateFrozenRequest(SyncJobDefinition.FrozenRequest request) {
         if (request == null
-                || !request.definition().equals(StockStDailySyncJobOwner.DEFINITION)
+                || !request.definition()
+                        .equals(StockStDailySyncJobOwner.definition(request.definition().version()))
                 || !request.definition()
                         .datasetId()
                         .equals(StockStDailyDataset.DEFINITION.datasetId())
-                || request.definition().datasetVersion()
-                        != StockStDailyDataset.DEFINITION.schemaVersion()
+                || request.definition().datasetVersion() != request.definition().version()
                 || !Set.of(Mode.INCREMENTAL, Mode.BACKFILL).contains(request.mode())
                 || request.from() == null
                 || request.to() == null
@@ -208,7 +210,8 @@ public final class StockStDailySyncAdapter
                 || !allowed.containsAll(params.keySet()))
             throw new IllegalArgumentException("Unexpected or missing stk_st_daily parameters");
         if (!(params.get("targetId") instanceof String logicalTarget)
-                || !logicalTarget.matches("d012-logical-v1-[0-9a-f]{64}")
+                || !logicalTarget.matches(
+                        "d012-logical-v" + request.definition().datasetVersion() + "-[0-9a-f]{64}")
                 || !(params.get("physicalTargetId") instanceof String physicalTarget)
                 || !physicalTarget.matches("static-v2-[0-9a-f]{64}"))
             throw new IllegalArgumentException(
@@ -255,12 +258,13 @@ public final class StockStDailySyncAdapter
     @Override
     public void preflight(SyncJobDefinition.FrozenRequest request) {
         validateFrozenRequest(request);
-        // 发布与恢复仍按旧协议运行，不能把新版存储会话塞进旧冻结作业。
+        // 原请求同时固定会话和完整发布目标作用域，不能只换 writer 编码。
         int version =
                 originalPort instanceof StockStDailyWriteSession.Versioned selected
                         ? selected.datasetVersion()
                         : 1;
-        if (version != request.definition().datasetVersion())
+        if (version != request.definition().datasetVersion()
+                || target != null && StockStDailyTarget.versionOf(target) != version)
             throw new IllegalArgumentException("ST 会话布局与原冻结定义不同");
         if (runId != null && !logicalTarget.equals(request.parameters().get("targetId")))
             throw new IllegalArgumentException("D012 logical target differs from frozen request");
@@ -285,7 +289,11 @@ public final class StockStDailySyncAdapter
                 || target == null)
             throw new IllegalStateException(
                     "D012 source execution requires its staging publication context");
-        var publisher = new StockStDailyPublication(target.newPublicationTables(), ledgerPath);
+        var publisher =
+                new StockStDailyPublication(
+                        target.newPublicationTables(),
+                        ledgerPath,
+                        CnTradeDateLayout.fromVersion(request.definition().datasetVersion()));
         publisher.requireNoPendingPublication();
         var receipts = new ArrayList<Map<String, Object>>();
         var pages = new ArrayList<SyncJobRunner.Page<StockStDaily>>();
@@ -355,7 +363,9 @@ public final class StockStDailySyncAdapter
                             .writeValueAsBytes(
                                     Map.of(
                                             "schema",
-                                            "java.stk_st_daily_append.v1",
+                                            request.definition().datasetVersion() == 1
+                                                    ? "java.stk_st_daily_append.v1"
+                                                    : "java.stk_st_daily_append.v2",
                                             "runId",
                                             runId,
                                             "prepared",
@@ -440,6 +450,19 @@ public final class StockStDailySyncAdapter
         if (Files.size(completion) > StockStDailySource.MAX_RESPONSE_BYTES)
             throw new IllegalArgumentException("D012 completion evidence exceeds 16 MiB");
         return new SyncJobRunner.SourceCompletion(emitted[0], rows[0], true, completion.toString());
+    }
+
+    /** 发布状态由适配器持久化时，runner 仍须保留原区间锁，不能按空页误判失败可重试。 */
+    @Override
+    public boolean recoveryRequired(String ownerRunId) throws Exception {
+        if (runId == null) return false;
+        if (!runId.equals(ownerRunId)) throw new IllegalArgumentException("ST 恢复检查运行归属不同");
+        if (StockStDailyPublicationStore.hasForRun(ledgerPath, runId)) return true;
+        if (!Files.isDirectory(evidenceRoot)) return false;
+        // append 或私有 stage 已有耐久意图，同样不能自动重发或遗忘原目标。
+        try (var intents = Files.newDirectoryStream(evidenceRoot, "*-intent.json")) {
+            return intents.iterator().hasNext();
+        }
     }
 
     @Override

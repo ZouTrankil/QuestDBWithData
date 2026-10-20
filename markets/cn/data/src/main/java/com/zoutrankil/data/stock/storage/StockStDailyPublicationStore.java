@@ -1,5 +1,7 @@
 package com.zoutrankil.data.stock.storage;
 
+import com.zoutrankil.data.repository.SqliteLedgerSchema;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -31,6 +33,23 @@ public final class StockStDailyPublicationStore {
                     "INSERT OR IGNORE INTO stk_st_daily_publication_mutex(singleton,run_id,publication_id) VALUES(1,NULL,NULL)");
             statement.execute(
                     "CREATE TABLE IF NOT EXISTS stk_st_daily_publications(run_id TEXT PRIMARY KEY REFERENCES sync_runs(id),publication_id TEXT NOT NULL UNIQUE,intent_json TEXT NOT NULL,state TEXT NOT NULL,revision INTEGER NOT NULL,updated_at TEXT NOT NULL)");
+        }
+    }
+
+    /** 只读检查副作用归属，不为一次普通预检失败创建发布表或依赖物理端口。 */
+    public static boolean hasForRun(Path path, String runId) throws Exception {
+        if (!Files.isRegularFile(path)
+                || !SqliteLedgerSchema.tableNames(path).contains("stk_st_daily_publications"))
+            return false;
+        String uri = path.toAbsolutePath().normalize().toUri().toString();
+        try (var db = DriverManager.getConnection("jdbc:sqlite:" + uri + "?mode=ro");
+                var query =
+                        db.prepareStatement(
+                                "SELECT 1 FROM stk_st_daily_publications WHERE run_id=?")) {
+            query.setString(1, runId);
+            try (var rows = query.executeQuery()) {
+                return rows.next();
+            }
         }
     }
 

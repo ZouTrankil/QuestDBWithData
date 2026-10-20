@@ -4,23 +4,35 @@ import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import com.zoutrankil.data.stock.domain.StockStDailyState;
 import com.zoutrankil.data.stock.port.StockStDailyTables;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.time.Duration;
 import java.util.Objects;
 
-public final class QuestDbStockStDailyTables implements StockStDailyTables {
+public final class QuestDbStockStDailyTables implements StockStDailyTables.Versioned {
+    private final CnTradeDateLayout layout;
     private final JdbcTemplate jdbc;
 
     public QuestDbStockStDailyTables(JdbcTemplate jdbc) {
+        this(jdbc, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public QuestDbStockStDailyTables(JdbcTemplate jdbc, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.jdbc = new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());
         this.jdbc.setQueryTimeout(120);
     }
 
     @Override
+    public int datasetVersion() {
+        return layout.schemaVersion();
+    }
+
+    @Override
     public StockStDailyState.Snapshot snapshot(String table) throws Exception {
-        return new StockStDailyStorage(jdbc, table).snapshot();
+        return new StockStDailyStorage(jdbc, table, layout).snapshot();
     }
 
     @Override
@@ -39,7 +51,7 @@ public final class QuestDbStockStDailyTables implements StockStDailyTables {
                         "D012 renamed table WAL did not settle; publication remains locked");
             Thread.sleep(50);
         }
-        return new StockStDailyStorage(jdbc, table).snapshot();
+        return new StockStDailyStorage(jdbc, table, layout).snapshot();
     }
 
     @Override
