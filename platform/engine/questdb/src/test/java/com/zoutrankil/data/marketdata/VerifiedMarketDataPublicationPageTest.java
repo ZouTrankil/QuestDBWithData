@@ -173,8 +173,7 @@ class VerifiedMarketDataPublicationPageTest {
     }
 
     @Test
-    void tenThousandRowsStillReadInBoundedPartsAndDetectValueChangesAndDuplicates()
-            throws Exception {
+    void tenThousandRowsRequireReadyWalBoundedReadsAndExactValues() throws Exception {
         var rows = new ArrayList<Map<String, Object>>();
         Instant start = Instant.parse("2026-01-01T00:00:00Z");
         for (int i = 0; i < 10000; i++) {
@@ -189,6 +188,8 @@ class VerifiedMarketDataPublicationPageTest {
         rows.forEach(row -> wanted.put(codec.key(row), row));
         var mode = new AtomicInteger();
         var reads = new AtomicInteger();
+        var walStage = new AtomicInteger();
+        var walReads = new AtomicInteger();
         var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
         server.createContext(
                 "/exec",
@@ -202,6 +203,27 @@ class VerifiedMarketDataPublicationPageTest {
                     if (sql.startsWith("SELECT id,directoryName")) {
                         names = List.of("id", "directoryName");
                         values.add(List.of(1, "page_test~1"));
+                    } else if (sql.contains("wal_tables()")) {
+                        int count = walReads.incrementAndGet();
+                        // 状态5模拟前两次仍在追WAL，随后正常可读。
+                        if (walStage.get() == 5 && count > 2) walStage.set(0);
+                        int stage = walStage.get();
+                        names =
+                                List.of(
+                                        "walEnabled",
+                                        "table_suspended",
+                                        "writerTxn",
+                                        "sequencerTxn",
+                                        "suspended",
+                                        "bufferedTxnSize");
+                        values.add(
+                                List.of(
+                                        true,
+                                        false,
+                                        1,
+                                        stage == 1 || stage == 5 ? 2 : 1,
+                                        stage == 2,
+                                        stage == 3 ? 1 : 0));
                     } else {
                         reads.incrementAndGet();
                         assertTrue(sql.endsWith("LIMIT 10001"));
@@ -224,6 +246,8 @@ class VerifiedMarketDataPublicationPageTest {
                                 values.add(Arrays.asList(row.get("ts"), "X", price));
                         }
                         values.add(Arrays.asList(from.toString(), "UNREQUESTED", 123.));
+                        // 最后一段读完才出现新WAL，检验值匹配后的WAL门槛仍生效。
+                        if (to.equals(start.plusSeconds(9999))) walStage.compareAndSet(4, 1);
                     }
                     byte[] body =
                             json.writeValueAsBytes(
@@ -265,8 +289,8 @@ class VerifiedMarketDataPublicationPageTest {
                             return store.readbackRows(definition, wanted, target, keys, page);
                         }
 
-                        public boolean walSettled() {
-                            return true;
+                        public boolean walSettled() throws Exception {
+                            return store.settled("page_test");
                         }
 
                         public boolean uncertainSenderStopped() {
@@ -283,6 +307,49 @@ class VerifiedMarketDataPublicationPageTest {
             var negative =
                     new VerifiedBatchExecutor.Policy(
                             10000, 8388608, 1, Duration.ofMillis(50), Duration.ofMillis(1));
+            for (int stage : List.of(1, 2, 3)) {
+                walStage.set(stage);
+                reads.set(0);
+                assertThrows(
+                        IllegalStateException.class,
+                        () ->
+                                store.readbackRows(
+                                        definition,
+                                        wanted,
+                                        "wrong-target",
+                                        List.copyOf(wanted.keySet()),
+                                        page));
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () ->
+                                store.readbackRows(
+                                        definition, wanted, target, List.of("unknown-key"), page));
+                assertEquals(
+                        VerifiedBatchExecutor.Status.IN_DOUBT,
+                        new VerifiedBatchExecutor<>(negative, codec, port)
+                                .execute(rows.iterator())
+                                .status());
+                assertEquals(0, reads.get(), "WAL未就绪时不能反复扫描数据行，状态=" + stage);
+            }
+            walStage.set(5);
+            walReads.set(0);
+            reads.set(0);
+            assertEquals(
+                    VerifiedBatchExecutor.Status.VERIFIED,
+                    new VerifiedBatchExecutor<>(policy, codec, port)
+                            .execute(rows.iterator())
+                            .status());
+            assertEquals(2, reads.get());
+            assertTrue(walReads.get() > 2);
+            walStage.set(4);
+            reads.set(0);
+            assertEquals(
+                    VerifiedBatchExecutor.Status.IN_DOUBT,
+                    new VerifiedBatchExecutor<>(negative, codec, port)
+                            .execute(rows.iterator())
+                            .status());
+            assertEquals(2, reads.get());
+            walStage.set(0);
             mode.set(1);
             assertEquals(
                     VerifiedBatchExecutor.Status.IN_DOUBT,

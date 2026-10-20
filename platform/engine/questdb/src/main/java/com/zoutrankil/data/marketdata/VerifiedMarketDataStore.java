@@ -591,6 +591,8 @@ public final class VerifiedMarketDataStore {
             return parts;
         }
         if (!identity(d).equals(target)) throw new IllegalStateException("回读物理目标已改变");
+        // WAL追赶期间只查状态，避免反复扫描大批价格；值匹配后仍由执行器再次核对WAL。
+        if (!settled(d.objectName())) return List.of();
         var expected = keys.stream().map(wanted::get).toList();
         String ts = d.designatedTimestamp();
         var times =
