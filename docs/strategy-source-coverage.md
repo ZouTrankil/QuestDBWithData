@@ -2,7 +2,7 @@
 
 新评分必须提供独立核验过的覆盖清单。没有清单、缺证券、重复键或凭证变化，都会停止发布。服务和评分 CLI 共用这项检查。
 
-配置放在根 `config/application.yml` 的 `app.sync.batch`：
+默认配置放在根 `config/apps/cn-main-strategy.yml` 的 `app.sync.batch`，个人覆盖仍用标准配置覆盖方式：
 
 ```yaml
 source-coverage: /绝对路径/coverage.json
@@ -49,3 +49,32 @@ CLI 对应 `--source-coverage`、`--source-coverage-sha256`。清单属于运行
 ```
 
 配置 `app.sync.batch.coverage-inputs`、`coverage-inputs-sha256` 后，主策略在评分前自动组装；独立 CLI 使用同名参数。未配置时仍读取原 `source-coverage`。两种方式都会检查[历史时点输入](strategy-point-in-time.md)，并在发布前重查原批准文件和账本。
+
+## v2 覆盖协议
+
+覆盖工具已支持 v2。主策略新版读取、评分产物和 Python 消费者仍在贯通，当前不切换正式配置。旧文件继续按 v1 核验，不能只换版本号或沿用旧键摘要。
+
+v2 清单使用 `java.strategy.source_coverage.v2`，批准输入使用 `java.strategy.coverage_inputs.v2`。两者还须明确：
+
+```json
+{
+  "inputSchema": "java.strategy.inputs.v2",
+  "keyEncoding": "java.strategy.source_keys.v2"
+}
+```
+
+每个来源的 `businessKeys` 必须是下表对应的有序数组；其他证书、范围、上游和摘要要求保留。
+
+| 输入 | v2 完整业务键 |
+| --- | --- |
+| stock_daily、l2_raw、etf_factor、etf_daily | trade_date, instrument_code |
+| stock_metadata、etf_reference | instrument_code |
+| etf_portfolio | etf_code, announcement_date, report_period_end_date, constituent_code |
+| sentiment、market_context | trade_date |
+| calendar | exchange, calendar_date |
+
+v2 日期键只能是规范 `yyyy-MM-dd`，Java 调用也可提供 `LocalDate`；不接收 `YYYYMMDD`、时间戳或猜测时区。标识必须是非空、无首尾空白的文本。ETF 与成分证券不能压成一个键。
+
+先把 `["java.strategy.source_keys.v2", 来源角色, 有序字段名数组]` 编码为紧凑 JSON，写入 4 字节大端长度和 UTF-8 内容；随后按 v1 同样方式写入排序去重后的键值数组，再算 SHA-256。即使值相同或来源为空，不同角色、字段或版本也不能复用摘要。
+
+`build-coverage` 根据批准输入版本生成相同版本的清单。v2 必须提供新的独立批准输入及摘要，原 v1 文件不覆盖、不重签；发布前仍重查新批准文件、原证书、历史证据与账本。单元样本不是生产批准材料，协议测试通过不证明真实源覆盖已完成。

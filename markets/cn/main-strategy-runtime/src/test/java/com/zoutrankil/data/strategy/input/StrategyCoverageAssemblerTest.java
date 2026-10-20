@@ -1,6 +1,8 @@
 package com.zoutrankil.data.strategy.input;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -242,5 +244,44 @@ class StrategyCoverageAssemblerTest {
                                 root.resolve("result.json"),
                                 new StrategySourceCoverageTest().clocks));
         assertFalse(Files.exists(root.resolve("result.json")));
+    }
+
+    @Test
+    void versionTwoAssemblyUsesNewKeysWithoutRewritingTheApprovedV1Input() throws Exception {
+        Path legacy = prepare();
+        byte[] original = Files.readAllBytes(legacy);
+        var document = json.readTree(original);
+        var object = (ObjectNode) document;
+        object.put("schema", StrategyInputSchema.V2.approvalSchema());
+        object.put("inputSchema", StrategyInputSchema.V2.inputSchema());
+        object.put("keyEncoding", StrategyInputSchema.V2.keyEncoding());
+        for (var entry : StrategyInputSchema.V2.keys().entrySet()) {
+            ((ObjectNode) document.path("sources").path(entry.getKey()))
+                    .set("businessKeys", json.valueToTree(entry.getValue()));
+        }
+        byte[] bytes = json.writeValueAsBytes(document);
+        Path input = Files.write(root.resolve("v2-approved-unit-input.json"), bytes);
+        var fixture = new StrategySourceCoverageTest();
+        fixture.root = root;
+        var publication =
+                StrategyCoverageAssembler.assemble(
+                        input,
+                        StrategySourceCoverage.sha(bytes),
+                        root.resolve("v2-coverage.json"),
+                        fixture.clocks);
+        var coverage =
+                new StrategySourceCoverage(publication.path().toString(), publication.sha256());
+        assertEquals(StrategyInputSchema.V2, coverage.inputSchema());
+        assertDoesNotThrow(
+                () ->
+                        coverage.verify(
+                                fixture.day,
+                                fixture.day,
+                                fixture.warmup,
+                                fixture.standardTables(),
+                                fixture.clocks));
+        assertArrayEquals(original, Files.readAllBytes(legacy));
+        Files.writeString(input, "单元样本：批准输入被替换");
+        assertThrows(IllegalStateException.class, coverage::revalidate);
     }
 }

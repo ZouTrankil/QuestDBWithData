@@ -1,6 +1,7 @@
 package com.zoutrankil.data.strategy.input;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.FileEvidenceStore;
@@ -55,23 +56,33 @@ public final class StrategyCoverageAssembler {
             throw new IllegalStateException("独立覆盖输入摘要不符");
         var json = JobDefinitionJson.mapper();
         JsonNode document = json.readTree(bytes);
-        if (!"java.strategy.coverage_inputs.v1".equals(document.path("schema").asText())
-                || !StrategySourceCoverage.objectSha(currentClocks)
-                        .equals(document.path("sourceClocksSha256").asText()))
+        var schema = StrategyInputSchema.fromApproval(document.path("schema").asText());
+        if (!StrategySourceCoverage.objectSha(currentClocks)
+                .equals(document.path("sourceClocksSha256").asText()))
             throw new IllegalStateException("来源版本与批准输入不同");
         var names = new HashSet<String>();
         document.required("sources").fieldNames().forEachRemaining(names::add);
-        if (!names.equals(StrategySourceCoverage.KEYS.keySet()))
-            throw new IllegalStateException("覆盖输入缺来源");
+        if (!names.equals(schema.keys().keySet())) throw new IllegalStateException("覆盖输入缺来源");
         var manifest = new LinkedHashMap<String, Object>();
-        manifest.put("schema", "java.strategy.source_coverage.v1");
+        manifest.put("schema", schema.coverageSchema());
+        if (schema == StrategyInputSchema.V2) {
+            if (!schema.inputSchema().equals(document.path("inputSchema").asText())
+                    || !schema.keyEncoding().equals(document.path("keyEncoding").asText()))
+                throw new IllegalStateException("v2 批准输入缺输入及键编码版本");
+            manifest.put("inputSchema", schema.inputSchema());
+            manifest.put("keyEncoding", schema.keyEncoding());
+        }
         for (String key : List.of("start", "end", "warmupStart", "sourceClocksSha256"))
             manifest.put(key, document.required(key).asText());
         var sources = new TreeMap<String, Object>();
-        var boundRuns = new LinkedHashMap<String, Object>();
-        for (var entry : StrategySourceCoverage.KEYS.entrySet()) {
+        Map<String, Object> boundRuns =
+                schema == StrategyInputSchema.V2 ? new TreeMap<>() : new LinkedHashMap<>();
+        for (var entry : schema.keys().entrySet()) {
             String name = entry.getKey();
             var item = document.path("sources").path(name);
+            if (schema == StrategyInputSchema.V2
+                    && !json.valueToTree(entry.getValue()).equals(item.path("businessKeys")))
+                throw new IllegalStateException("v2 批准输入键名不符：" + name);
             var keys = item.required("expectedKeys");
             if (!keys.isArray() || keys.size() > 5000000)
                 throw new IllegalStateException("预期键必须为有界数组");
@@ -127,17 +138,19 @@ public final class StrategyCoverageAssembler {
             if (!digest.matches("[a-f0-9]{64}")
                     || !FileEvidenceStore.sha256(receipt).equals(digest))
                 throw new IllegalStateException("上游凭证摘要不符：" + name);
-            sources.put(
-                    name,
-                    Map.of(
-                            "expectedRows",
-                            rows.size(),
-                            "expectedKeysSha256",
-                            StrategySourceCoverage.keySha(rows, entry.getValue()),
-                            "certificate",
-                            certificate.toAbsolutePath().toString(),
-                            "certificateSha256",
-                            digest));
+            var source =
+                    new LinkedHashMap<String, Object>(
+                            Map.of(
+                                    "expectedRows",
+                                    rows.size(),
+                                    "expectedKeysSha256",
+                                    schema.keySha(name, rows),
+                                    "certificate",
+                                    certificate.toAbsolutePath().toString(),
+                                    "certificateSha256",
+                                    digest));
+            if (schema == StrategyInputSchema.V2) source.put("businessKeys", entry.getValue());
+            sources.put(name, source);
         }
         manifest.put("sources", sources);
         manifest.put("upstreamRuns", List.copyOf(boundRuns.values()));
@@ -155,7 +168,12 @@ public final class StrategyCoverageAssembler {
                                 128 * 1024 * 1024,
                                 () -> new IllegalStateException("覆盖输入变大")))
                 .equals(approvedSha)) throw new IllegalStateException("覆盖输入已改变");
-        byte[] published = json.writeValueAsBytes(manifest);
+        byte[] published =
+                schema == StrategyInputSchema.V2
+                        ? json.copy()
+                                .enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS)
+                                .writeValueAsBytes(manifest)
+                        : json.writeValueAsBytes(manifest);
         Path target = output.toAbsolutePath().normalize();
         Files.createDirectories(target.getParent());
         FileEvidenceStore.writeNewDurable(target, published);
