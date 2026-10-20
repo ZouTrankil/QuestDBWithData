@@ -3,10 +3,14 @@ package com.zoutrankil.data.group.storage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
+import com.zoutrankil.data.etf.port.EtfAdjWriteSession;
 import com.zoutrankil.data.group.port.WriteGroupWriters;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
 
@@ -80,7 +84,10 @@ class WriteGroupWritersContractTest {
         var factory = new QuestDbWriteGroupWriters(new JdbcTemplate(dataSource), questdb);
         var entry =
                 Arrays.stream(WriteGroupWriters.class.getMethods())
-                        .filter(value -> value.getName().equals(method))
+                        .filter(
+                                value ->
+                                        value.getName().equals(method)
+                                                && value.getParameterCount() <= 2)
                         .findFirst()
                         .orElseThrow();
         String targetId = "static-v2-" + "a".repeat(64);
@@ -106,6 +113,28 @@ class WriteGroupWritersContractTest {
         assertTrue(strings.contains(table));
         if (arguments.length == 2) assertTrue(strings.contains(targetId));
         verifyNoInteractions(dataSource, questdb);
+    }
+
+    @Test
+    void etfAdjustmentVersionsRequireExplicitSupportAndConstructionHasNoIo() {
+        var source = mock(DataSource.class);
+        var questdb = mock(QuestDB.class);
+        var factory = new QuestDbWriteGroupWriters(new JdbcTemplate(source), questdb);
+        String table = "java_d015_etf_adj_factory";
+        String target = "static-v2-" + "a".repeat(64);
+        var first = (EtfAdjWriteSession.Versioned) factory.etfAdj(table, target, 2);
+        var second = (EtfAdjWriteSession.Versioned) factory.etfAdj(table, target, 2);
+        assertEquals(2, first.datasetVersion());
+        assertNotSame(first, second);
+        assertEquals(
+                1, ((EtfAdjWriteSession.Versioned) factory.etfAdj(table, target)).datasetVersion());
+        assertThrows(IllegalArgumentException.class, () -> factory.etfAdj(table, target, 3));
+        var legacy = mock(WriteGroupWriters.class, CALLS_REAL_METHODS);
+        var session = mock(EtfAdjWriteSession.class);
+        when(legacy.etfAdj(table, target)).thenReturn(session);
+        assertSame(session, legacy.etfAdj(table, target, 1));
+        assertThrows(IllegalArgumentException.class, () -> legacy.etfAdj(table, target, 2));
+        verifyNoInteractions(source, questdb);
     }
 
     @Test

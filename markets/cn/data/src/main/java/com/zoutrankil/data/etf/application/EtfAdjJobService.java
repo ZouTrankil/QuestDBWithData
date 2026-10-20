@@ -77,6 +77,22 @@ public final class EtfAdjJobService {
             TusharePageService pages,
             ExchangeCalendarReadRepository calendars,
             EtfAdjTarget target,
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath,
+            @Value("${app.sync.etf-adj-schema-version:1}") int schemaVersion) {
+        this(
+                jobs,
+                pages,
+                calendars,
+                target,
+                Path.of(ledgerPath),
+                CnTradeDateLayout.fromVersion(schemaVersion));
+    }
+
+    public EtfAdjJobService(
+            @Lazy SyncJobRegistry jobs,
+            TusharePageService pages,
+            ExchangeCalendarReadRepository calendars,
+            EtfAdjTarget target,
             @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath) {
         this(jobs, pages, calendars, target, Path.of(ledgerPath));
     }

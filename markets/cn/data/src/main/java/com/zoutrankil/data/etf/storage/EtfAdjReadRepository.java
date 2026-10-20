@@ -37,7 +37,12 @@ public class EtfAdjReadRepository implements DatasetImplementation {
     @Autowired
     public EtfAdjReadRepository(
             QuestDbBoundedReader reader,
-            @Value("${app.sync.etf-adj-table:java_d015_etf_adj_acceptance}") String table) {
+            @Value("${app.sync.etf-adj-table:java_d015_etf_adj_acceptance}") String table,
+            @Value("${app.sync.etf-adj-schema-version:1}") int schemaVersion) {
+        this(reader, table, CnTradeDateLayout.fromVersion(schemaVersion));
+    }
+
+    public EtfAdjReadRepository(QuestDbBoundedReader reader, String table) {
         this(reader, table, CnTradeDateLayout.LEGACY_V1);
     }
 
@@ -52,6 +57,11 @@ public class EtfAdjReadRepository implements DatasetImplementation {
     @Override
     public DatasetDefinition definition() {
         return EtfAdjDataset.definition(table, layout);
+    }
+
+    @Override
+    public DatasetDefinition definition(int schemaVersion) {
+        return EtfAdjDataset.definition(table, CnTradeDateLayout.fromVersion(schemaVersion));
     }
 
     public DatasetReadPage<EtfAdj> findByKey(EtfAdjKey key) {

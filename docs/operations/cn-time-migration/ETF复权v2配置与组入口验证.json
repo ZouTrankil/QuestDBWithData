@@ -1,0 +1,82 @@
+{
+  "说明": "隔离工作目录按本批源码验证，排除共享工作区其他修改。组执行使用合成单行和临时 SQLite，不代表真实来源、正式迁移或生产恢复验收。",
+  "baseCommit": "f23af815cc90ca3170885cd3c76cdeec6599a42e",
+  "源码摘要": {
+    "config/markets/cn.yml": "8d2bff289af6353b16752e17b8b154dce3e7898cdae0c3df3943ab8e18a6372e",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/DefaultReadBindings.java": "a521489f9283cea6958a66bbd6b03e0ee1e02f671198dfe48872e7a0fd57206d",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/EtfConfiguration.java": "247b4320eba624f4b4ecffb41a603ec9a963e442c7a2c2a1184286e595cf483b",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java": "e77e788fb1b4dd817b00f2c5f51c5652d1cba348bcb7f681efbe9c4fc832cae8",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfAdjJobService.java": "33a94319665d52c23c4d231c649d194e0518e6819ae48a13a1f80d634bd65d0f",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfAdjSyncJobOwner.java": "3d5fda3d23f92b5f7254ca8ea9e624a87c9beafd4d6ec639da83f69d1006c846",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/storage/EtfAdjReadRepository.java": "509b6394469f7cd52b7beebcca0b4a243a2846811e44c4f674fc9ecbf3fb186b",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/group/port/WriteGroupWriters.java": "717a309bbede7c059a0ac9fea3e5e9f7823ccb80a5d05827879103e2305b4d44",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/group/storage/QuestDbWriteGroupWriters.java": "3bd1ead2c7c51e7e8455cb4360a252439a1580432058603ab7d523ba2e1f2773",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java": "1ad5006949efa2f3b85664cc0b66d05aa40777ffa86d51bbfb881106e4e4ae5f",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/service/WriteGroupJson.java": "9b517912978da96ee70f2d05edb38bd78cddd15813f6bf8a541a4b3971fe84a4",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/bootstrap/ProjectConfigurationTest.java": "a17bf4e85d21fd55413384ae9e61fcad46cb33907b60771ec377daa36f1aaaf7",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/application/EtfAdjConfiguredLayoutTest.java": "3c6b2a890a6befc32ab5494e1299eaff12228f35f649f36a0a7c730d232e3b66",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/group/storage/WriteGroupWritersContractTest.java": "0c5561fca7160f9ebc949f8de81f3e0a324cfe46fcca7c838998ce44e675bd9c",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/service/EtfAdjWriteGroupLayoutTest.java": "f5a20bedba905f7447076f41221af3b6dc1627f32492a32b7b99078bbce0318c",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/service/VersionedDatasetRegistrationTest.java": "175e998142b2ffdbe6026bb9a2c64e5ffd6c0b2c4a15117dcc3b230189ee830d",
+    "platform/core/src/main/java/com/zoutrankil/data/domain/DatasetImplementation.java": "328f82a0b739806247dbd06e37332ad3742004296c1fd527c0d64217eba1bb23",
+    "platform/engine/questdb/src/main/java/com/zoutrankil/data/service/DatasetRegistry.java": "6c8baec76e282b50bf96283573b8f4100ba939d6a26b82e8c9533f13ad358038",
+    "platform/engine/questdb/src/main/java/com/zoutrankil/data/service/SyncJobRegistry.java": "7281d66de37e961264880aa85ff013c9539a3bfecd685ee45e9ff1caf50a33e3",
+    "platform/engine/questdb/src/main/java/com/zoutrankil/data/service/WriteGroupPlan.java": "39e767deb8782f3fcbd6ae93a408363a00c06cfe052e0df19f21d18b49d03159"
+  },
+  "检查命令": "./gradlew :platform:core:test :platform:engine:questdb:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "模块结果": {
+    "platform/core": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "platform/engine/questdb": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2224,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 140
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "架构与模块边界": "通过",
+  "CN数据与主策略发行包": "通过",
+  "Java格式与import及字面量核对": {
+    "文件数": 2007,
+    "结果": "通过"
+  },
+  "验证分支": [
+    "根市场配置默认 1 及 data/main-strategy 环境覆盖 2",
+    "两种配置同时装配当前作业、读取仓库、目标和公共读取绑定；不创建连接或账本",
+    "v1 组在当前 v2 读取下保持原定义和指纹，反向同样保持原版本",
+    "组 JSON、计划、作业注册与实际执行全路径按成员版本选择",
+    "真实会话与请求错版时在 preflight 和 send 前停止",
+    "旧 writer 工厂不能自动接受 v2，v2 创建独立会话",
+    "普通 owner 拒绝未声明版本，分版 owner 不能换对象或谎报版本"
+  ],
+  "默认配置": 1,
+  "新增配置": "app.sync.etf-adj-schema-version",
+  "环境覆盖": "APP_SYNC_ETF_ADJ_SCHEMA_VERSION",
+  "真实来源验收": false,
+  "真实恢复": false,
+  "正式迁移": false,
+  "Batch独立来源切换": false,
+  "正式调度切换": false,
+  "其余五表端口完成": false,
+  "公开配置与发行文件检查": {
+    "命令": "python tools/check_public_config.py --package <发行 ZIP>",
+    "结果": "CN data 与主策略两个发行包分别通过；使用隔离 Python 环境的 PyYAML，不修改项目依赖。"
+  },
+  "文档本地链接": "通过"
+}

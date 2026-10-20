@@ -24,6 +24,7 @@ import com.zoutrankil.data.l2.mapper.L2DatasetManifestMapper;
 import com.zoutrankil.data.l2.mapper.L2IntradayBarFeaturesMapper;
 import com.zoutrankil.data.l2.mapper.L2T0TrainingLabelsMapper;
 import com.zoutrankil.data.service.ReadBindingCatalog;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.util.List;
 
@@ -129,6 +130,17 @@ final class DefaultReadBindings {
                     generic("ths_member", 1),
                     generic("market_sentiment_daily", 1),
                     generic("regime_features_monitor_daily", 1));
+
+    static List<ReadBindingCatalog.Registration<?>> registrations(int etfAdjVersion) {
+        int version = CnTradeDateLayout.fromVersion(etfAdjVersion).schemaVersion();
+        return REGISTRATIONS.stream()
+                .<ReadBindingCatalog.Registration<?>>map(
+                        registration ->
+                                registration.datasetId().equals("etf_adj")
+                                        ? generic("etf_adj", version)
+                                        : registration)
+                .toList();
+    }
 
     static List<ReadBindingCatalog.Registration<?>> registrations() {
         return REGISTRATIONS;

@@ -58,6 +58,22 @@ public final class DatasetRegistry {
         return entry;
     }
 
+    /** 分版仍归同一 owner 和逻辑对象；原物理身份由运行账本另行核对。 */
+    public DatasetDefinition requireDefinition(String id, int schemaVersion) {
+        var entry = require(id);
+        var current = entry.definition();
+        var selected = Objects.requireNonNull(entry.definition(schemaVersion));
+        if (!id.equals(selected.datasetId())
+                || schemaVersion != selected.schemaVersion()
+                || !current.provider().equals(selected.provider())
+                || !current.owner().equals(selected.owner())
+                || !current.objectName().equals(selected.objectName())
+                || current.objectKind() != selected.objectKind())
+            throw new IllegalArgumentException(
+                    "Dataset version changed its registered owner or object");
+        return selected;
+    }
+
     public List<DatasetDefinition> definitions() {
         return entries.values().stream().map(DatasetImplementation::definition).toList();
     }

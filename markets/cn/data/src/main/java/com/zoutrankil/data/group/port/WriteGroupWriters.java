@@ -56,6 +56,13 @@ public interface WriteGroupWriters {
 
     EtfAdjWriteSession etfAdj(String table, String targetId);
 
+    /** 旧实现只支持 v1；v2 必须由存储端口显式声明，不能降级发送。 */
+    default EtfAdjWriteSession etfAdj(String table, String targetId, int schemaVersion) {
+        if (schemaVersion != 1)
+            throw new IllegalArgumentException("ETF adjustment writer version is not supported");
+        return etfAdj(table, targetId);
+    }
+
     EtfWriteSession<EtfShare, EtfShareKey> etfShare(String table, String targetId);
 
     EtfWriteSession<EtfFactor, EtfFactorKey> etfFactor(String table, String targetId);

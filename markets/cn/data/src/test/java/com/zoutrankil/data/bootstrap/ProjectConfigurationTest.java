@@ -320,6 +320,29 @@ class ProjectConfigurationTest {
                         .containsProperty("app.sync.batch.coverage-inputs"));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "main-strategy"})
+    void etfAdjustmentLayoutUsesTheMarketDefaultAndEnvironmentOverride(String profile)
+            throws Exception {
+        var file = configuration("");
+        var variables = new HashMap<String, String>();
+        variables.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        variables.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        assertEquals(
+                "1",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.etf-adj-schema-version"));
+        variables.put("APP_SYNC_ETF_ADJ_SCHEMA_VERSION", "2");
+        assertEquals(
+                "2",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.etf-adj-schema-version"));
+        variables.remove("APP_SYNC_ETF_ADJ_SCHEMA_VERSION");
+        assertFalse(
+                ProjectConfiguration.load("market-us", variables)
+                        .containsProperty("app.sync.etf-adj-schema-version"));
+    }
+
     @Test
     void changingOneAppFileDoesNotChangeAnotherProcess() throws Exception {
         var file = configuration("");

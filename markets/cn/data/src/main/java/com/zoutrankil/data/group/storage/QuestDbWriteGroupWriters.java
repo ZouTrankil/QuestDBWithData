@@ -62,6 +62,7 @@ import com.zoutrankil.data.stock.storage.StockLimitWritePort;
 import com.zoutrankil.data.stock.storage.StockStDailyWritePort;
 import com.zoutrankil.data.stock.storage.StockSuspendWritePort;
 import com.zoutrankil.data.sync.port.VerifiedWriteSession;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 
@@ -118,6 +119,12 @@ public final class QuestDbWriteGroupWriters implements WriteGroupWriters {
     @Override
     public EtfAdjWriteSession etfAdj(String table, String targetId) {
         return new EtfAdjWritePort(table, targetId, jdbc, questdb);
+    }
+
+    @Override
+    public EtfAdjWriteSession etfAdj(String table, String targetId, int schemaVersion) {
+        return new EtfAdjWritePort(
+                table, targetId, jdbc, questdb, CnTradeDateLayout.fromVersion(schemaVersion));
     }
 
     @Override

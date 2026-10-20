@@ -36,9 +36,8 @@ public class SyncJobRegistry {
             Objects.requireNonNull(job);
             if (entries.putIfAbsent(job.jobId(), job) != null)
                 throw new IllegalArgumentException("Duplicate job ID: " + job.jobId());
-            var dataset = datasets.require(job.datasetId()).definition();
-            if (dataset.schemaVersion() != job.datasetVersion())
-                throw new IllegalArgumentException("Dataset version differs from job binding");
+            // 注册冻结作业时也核对其原版本，不能由当前读取布局替代。
+            datasets.requireDefinition(job.datasetId(), job.datasetVersion());
             if (!adapterModes
                     .getOrDefault(job.datasetId(), Set.of())
                     .containsAll(job.supportedModes()))

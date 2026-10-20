@@ -19,6 +19,7 @@ import com.zoutrankil.data.etf.storage.QuestDbEtfDailyTarget;
 import com.zoutrankil.data.etf.storage.QuestDbEtfFactorTarget;
 import com.zoutrankil.data.etf.storage.QuestDbEtfPortfolioTarget;
 import com.zoutrankil.data.etf.storage.QuestDbEtfShareTarget;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 
@@ -43,8 +44,10 @@ public class EtfConfiguration {
     EtfAdjTarget etfAdjTarget(
             JdbcTemplate jdbc,
             @Lazy QuestDB questdb,
-            @Value("${app.sync.etf-adj-table:java_d015_etf_adj_acceptance}") String table) {
-        return new QuestDbEtfAdjTarget(table, jdbc, questdb);
+            @Value("${app.sync.etf-adj-table:java_d015_etf_adj_acceptance}") String table,
+            @Value("${app.sync.etf-adj-schema-version:1}") int schemaVersion) {
+        return new QuestDbEtfAdjTarget(
+                table, jdbc, questdb, CnTradeDateLayout.fromVersion(schemaVersion));
     }
 
     @Bean

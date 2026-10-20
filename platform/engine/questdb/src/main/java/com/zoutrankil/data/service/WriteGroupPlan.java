@@ -52,10 +52,9 @@ public final class WriteGroupPlan {
         var members = new ArrayList<Member>();
         long bytes = 0;
         for (var member : request.members()) {
-            var definition = datasets.require(member.datasetId()).definition();
-            if (definition.schemaVersion() != member.definitionVersion())
-                throw new IllegalArgumentException(
-                        "Write dataset version differs from registered owner");
+            // 组请求固定原版本；当前默认变化不能改写旧组的定义和指纹。
+            var definition =
+                    datasets.requireDefinition(member.datasetId(), member.definitionVersion());
             String target = ownerTargets.get(member.datasetId());
             SyncJobDefinition.name(target);
             var limits = new DatasetWritePreparation.Limits(10_000, 16 * 1024 * 1024);

@@ -11,6 +11,8 @@ import com.zoutrankil.data.domain.SyncJobDefinition.RetryPolicy;
 import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -66,7 +68,18 @@ public final class EtfAdjSyncJobOwner implements SyncJobOwner {
                     true,
                     true);
 
-    /** v1 原对象保持不动；v2 仅供显式装配，当前调度仍只登记 v1。 */
+    private final CnTradeDateLayout layout;
+
+    public EtfAdjSyncJobOwner() {
+        this(1);
+    }
+
+    @Autowired
+    public EtfAdjSyncJobOwner(@Value("${app.sync.etf-adj-schema-version:1}") int schemaVersion) {
+        layout = CnTradeDateLayout.fromVersion(schemaVersion);
+    }
+
+    /** v1 原对象保持不动；新计划按显式配置注册，旧请求另按原版本恢复。 */
     public static SyncJobDefinition definition(int version) {
         var layout = CnTradeDateLayout.fromVersion(version);
         if (layout == CnTradeDateLayout.LEGACY_V1) return DEFINITION;
@@ -106,6 +119,6 @@ public final class EtfAdjSyncJobOwner implements SyncJobOwner {
 
     @Override
     public List<SyncJobDefinition> syncJobDefinitions() {
-        return List.of(DEFINITION);
+        return List.of(definition(layout.schemaVersion()));
     }
 }

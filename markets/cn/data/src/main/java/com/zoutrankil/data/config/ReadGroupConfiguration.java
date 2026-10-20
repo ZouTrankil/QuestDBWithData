@@ -11,6 +11,7 @@ import com.zoutrankil.data.service.ReadBindingCatalog;
 import com.zoutrankil.data.service.ReadGroupReader;
 
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -60,8 +61,9 @@ public class ReadGroupConfiguration {
 
     @Bean
     ReadBindingCatalog readBindingCatalog(
-            ObjectProvider<ReadBindingCatalog.Registration<?>> extensions) {
-        var registrations = new ArrayList<>(DefaultReadBindings.registrations());
+            ObjectProvider<ReadBindingCatalog.Registration<?>> extensions,
+            @Value("${app.sync.etf-adj-schema-version:1}") int etfAdjVersion) {
+        var registrations = new ArrayList<>(DefaultReadBindings.registrations(etfAdjVersion));
         extensions.orderedStream().forEach(registrations::add);
         return new ReadBindingCatalog(registrations);
     }

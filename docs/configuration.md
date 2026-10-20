@@ -5,7 +5,7 @@
 | 文件 | 放什么 | 自动加载条件 |
 | --- | --- | --- |
 | `application.yml` | QuestDB、Tushare、公共日志、profile 分组和配置导入 | 所有入口 |
-| `markets/cn.yml` | A 股时区、研究目录、离线 L2 数据目录 | `market-cn`；现有市场进程自动带上 |
+| `markets/cn.yml` | A 股时区、研究目录、离线 L2 数据目录、ETF 复权新计划布局 | `market-cn`；现有市场进程自动带上 |
 | `markets/us.yml` | 美股时区及后续市场设置 | `market-us` |
 | `markets/btc.yml` | BTC 时区及后续来源切分设置 | `market-btc` |
 | `apps/cn-data.yml` | A 股数据 API、schema 位置、离线 L2 读取、财务日批和 Batch 托管开关 | `data` |
@@ -132,3 +132,5 @@ Batch 已保存到 SQLite 的定时任务设置，不会自动被 YAML 重置。
 父工程的 `build`、`check`、`assemble` 聚合所属子模块；`platform:test` 和 `markets:test` 聚合各自测试。`markets:cn:test`、`platform:engine:test` 仍只测试本模块，整组检查用对应的 `check`。`clean` 只删除对应模块自己的输出；全部产物在 `build/modules/<完整模块路径>/_output/`，父子目录互不覆盖。目录迁移后的首次构建需要重新编译，后续继续使用 Gradle 增量检查。
 
 主策略的 `app.sync.batch.input-schema` 默认 `v1`，只支持 `v1/v2`，标准环境覆盖为 `APP_SYNC_BATCH_INPUT_SCHEMA`。新 Batch v4 请求冻结该值；CLI/Web 和评分阶段要求批准清单与选择一致。`coverage-inputs/coverage-inputs-sha256` 是可选的覆盖组装输入，根配置保留空默认值；两项须成对配置，不表示来源已验收。旧 v3 任务不随协议配置自动升级，见[主策略数据说明](main-strategy-java-data.md)。
+
+ETF 复权存储布局由 `app.sync.etf-adj-schema-version` 选择，公开默认值在 `config/markets/cn.yml`，默认 `1`，仅支持 `1/2`；环境覆盖用 `APP_SYNC_ETF_ADJ_SCHEMA_VERSION`。它同时装配数据应用的新作业、计划、目标和读取注册，不自动迁移旧表。旧单表请求和组成员仍按原冻结版本恢复。Batch 独立来源任务与正式调度尚未切换，见[布局分版决定](decisions/2026-10-21-交易日存储布局分版.md#配置与组入口)。

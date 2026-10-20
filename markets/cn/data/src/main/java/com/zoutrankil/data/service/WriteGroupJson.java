@@ -42,10 +42,9 @@ public final class WriteGroupJson {
             ReadGroupJson.fields(
                     member, "memberId", "datasetId", "definitionVersion", "batchId", "rows");
             String dataset = ReadGroupJson.text(member.required("datasetId"));
-            var definition = datasets.require(dataset).definition();
             int version = ReadGroupJson.integer(member.required("definitionVersion"));
-            if (version != definition.schemaVersion())
-                throw new IllegalArgumentException("Write definition version differs");
+            // 按文件冻结的契约解析字段，不能先套当前默认布局再恢复旧组。
+            var definition = datasets.requireDefinition(dataset, version);
             var input = member.required("rows");
             if (!input.isArray() || input.size() > 10000)
                 throw new IllegalArgumentException("Bounded full rows required");

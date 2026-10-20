@@ -55,6 +55,7 @@ import com.zoutrankil.data.etf.mapper.EtfDailyMapper;
 import com.zoutrankil.data.etf.mapper.EtfFactorMapper;
 import com.zoutrankil.data.etf.mapper.EtfPortfolioMapper;
 import com.zoutrankil.data.etf.mapper.EtfShareMapper;
+import com.zoutrankil.data.etf.port.EtfAdjWriteSession;
 import com.zoutrankil.data.flow.application.MoneyflowHsgtJobService;
 import com.zoutrankil.data.flow.application.MoneyflowHsgtPublication;
 import com.zoutrankil.data.flow.application.MoneyflowJobService;
@@ -889,7 +890,20 @@ public class StockBasicWriteGroupService {
                     .datasetId()
                     .equals(EtfAdjDataset.DEFINITION.datasetId())) {
                 var mapper = new EtfAdjMapper();
-                var port = writers.etfAdj(etfAdjTarget.tableName(), member.targetId());
+                int version = member.definition().schemaVersion();
+                var port =
+                        version == 1
+                                ? writers.etfAdj(etfAdjTarget.tableName(), member.targetId())
+                                : writers.etfAdj(
+                                        etfAdjTarget.tableName(), member.targetId(), version);
+                // 先核对实际会话，旧包装器不能隐藏新版或把新版请求降成 v1。
+                int actualVersion =
+                        port instanceof EtfAdjWriteSession.Versioned selected
+                                ? selected.datasetVersion()
+                                : 1;
+                if (actualVersion != version)
+                    throw new IllegalArgumentException(
+                            "ETF adjustment group writer version mismatch");
                 adapters.put(
                         member.memberId(),
                         new PreparedWriteAdapter<>(
