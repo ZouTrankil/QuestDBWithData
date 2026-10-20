@@ -1,0 +1,61 @@
+{
+  "说明": "验证基于原提交与下列源码，未包含共享工作区其他未提交修改；v2 入口/恢复/调度切换未完成。",
+  "baseCommit": "8e604a082190b68914a61a5644d3cc5926d0fdd8",
+  "源码摘要": {
+    "markets/cn/src/main/java/com/zoutrankil/market/cn/model/CnTradeDateLayout.java": "c3a17ee504d5063fdd2d77beb5a7caf8f3d3865dbc35d1b675ce587987b8784c",
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/fund/EtfAdjDataset.java": "dfeff22bb0fb033760fd78dada4a11b7006f3bed782dbdd6b782d4f667b878a9",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/port/EtfAdjWriteSession.java": "a8278a089b513b5309394308b442902746a9616186d7ae39fbb2e11012780936",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/port/EtfAdjTarget.java": "0514df8ac1a1359362b95188dd6b2f935eca4b8166ca610d2c473ad1c48a4ec3",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/storage/EtfAdjWritePort.java": "0b0dac74c4a2bd95db15f40a4777e3d76a83dc0b8e6b0a3a6507b4f737d65295",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/storage/QuestDbEtfAdjTarget.java": "d88db570af9ced5c7b2f41ac237da1c99d54d382513bf7b97e883e5323dade63",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/storage/EtfAdjReadRepository.java": "1075993dc367ad96a39d8a755db66e64eb5d3dc45809a35e6b3ed5f1b4236cde",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfAdjSyncJobOwner.java": "386da5a5f5ba33d1172f50e1c5ceb9b60cfbcb285a9ddd0ff9d9b111d95d3d88",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfAdjSyncAdapter.java": "2065e0ff421fc66c07f9a59b72ca89767fad06cb30d1b1789b13bdc172f2ba9b",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/storage/EtfTargetTest.java": "85731d2a2af48be27db68cab5bd773e9ece443753caa1ac53ec201c1a7c2cb10",
+    "markets/cn/src/test/java/com/zoutrankil/market/cn/model/CnTradeDateLayoutTest.java": "53701b4cfaed8023078446d4dbd1b81b478ce29de1eb81b2976f26588752aa61",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/application/EtfAdjVersionedAdapterTest.java": "ae6e6124df327db7bf3d49f064a06867da98c4c5177f2324388679d68a442f82",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/storage/EtfAdjVersionedStorageTest.java": "220125f3739a1b3e053c4b701403b7eade25bde796f52ed4193e2cec1044030b",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/storage/EtfAdjLayoutLiveAcceptanceTest.java": "5d122e21bc1f66484e59659b37b6c2ffd6a2faeb83928a6842c397bb71d79a1d"
+  },
+  "模块结果": {
+    "modules/markets/cn/_output/test-results/test": {
+      "tests": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules/markets/cn/main-strategy-runtime/_output/test-results/test": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules/markets/cn/data/_output/test-results/test": {
+      "tests": 2206,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 140
+    }
+  },
+  "架构与模块边界": "通过",
+  "CN数据与主策略发行包": "通过",
+  "Java格式与import及字面量核对": {
+    "文件数": 2002,
+    "结果": "通过"
+  },
+  "单独实库验收": {
+    "tests": 1,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "重复完整核验写入次数": 2,
+    "样本行数": 2,
+    "隔离表已清理": true
+  },
+  "默认调度版本": 1,
+  "其余五表端口已完成": false,
+  "正式迁移": false,
+  "生产模型验收": false,
+  "检查命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "实库复跑入口": "D015_LAYOUT_LIVE_ACCEPTANCE=true ./gradlew :markets:cn:data:test --tests \"*EtfAdjLayoutLiveAcceptanceTest\"（私密配置和证据目录按决定记录覆盖）"
+}

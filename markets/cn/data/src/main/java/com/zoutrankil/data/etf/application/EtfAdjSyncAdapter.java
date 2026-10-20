@@ -101,10 +101,16 @@ public final class EtfAdjSyncAdapter implements SyncJobRunner.Adapter<EtfAdj, Et
 
     @Override
     public void preflight(FrozenRequest request) {
+        // 布局由原冻结定义和会话双向核对，不能探测到哪列就改用哪一版。
+        int portVersion =
+                port instanceof EtfAdjWriteSession.Versioned versioned
+                        ? versioned.datasetVersion()
+                        : 1;
         if (request == null
-                || !request.definition().equals(EtfAdjSyncJobOwner.DEFINITION)
+                || !request.definition()
+                        .equals(EtfAdjSyncJobOwner.definition(request.definition().version()))
                 || !request.definition().datasetId().equals(EtfAdjDataset.DEFINITION.datasetId())
-                || request.definition().datasetVersion() != EtfAdjDataset.DEFINITION.schemaVersion()
+                || request.definition().datasetVersion() != portVersion
                 || !Set.of(Mode.INCREMENTAL, Mode.BACKFILL, Mode.RECONCILE).contains(request.mode())
                 || request.from() == null
                 || request.to() == null

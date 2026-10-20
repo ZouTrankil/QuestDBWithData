@@ -10,7 +10,9 @@ import com.zoutrankil.data.domain.fund.EtfAdjDataset;
 import com.zoutrankil.data.domain.fund.EtfAdjKey;
 import com.zoutrankil.data.etf.mapper.EtfAdjMapper;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -27,13 +29,21 @@ public class EtfAdjReadRepository implements DatasetImplementation {
             EtfAdjDataset.DEFINITION.columns().stream()
                     .map(DatasetDefinition.Column::logicalName)
                     .toList();
+    private final CnTradeDateLayout layout;
     private final QuestDbBoundedReader reader;
     private final String table;
     private final EtfAdjMapper mapper = new EtfAdjMapper();
 
+    @Autowired
     public EtfAdjReadRepository(
             QuestDbBoundedReader reader,
             @Value("${app.sync.etf-adj-table:java_d015_etf_adj_acceptance}") String table) {
+        this(reader, table, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public EtfAdjReadRepository(
+            QuestDbBoundedReader reader, String table, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.reader = Objects.requireNonNull(reader);
         EtfAdjDataset.requireExecutionTable(table);
         this.table = table;
@@ -41,7 +51,7 @@ public class EtfAdjReadRepository implements DatasetImplementation {
 
     @Override
     public DatasetDefinition definition() {
-        return EtfAdjDataset.definition(table);
+        return EtfAdjDataset.definition(table, layout);
     }
 
     public DatasetReadPage<EtfAdj> findByKey(EtfAdjKey key) {

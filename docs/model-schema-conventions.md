@@ -54,6 +54,8 @@ domain/
 
 日期标记用 `TemporalValues.CalendarTimestamp` 编解码。直接同步入口由 `BusinessTime` 按 `app.time.business-zone` 选业务日期；任务入口使用原请求的 `logicalDate`，重试不重新取今天。
 
+已核定的六个交易日物理别名使用 `CnTradeDateLayout` 显式分版；不能根据当前列名自动改用另一版。当前仅 `etf_adj` 的 v2 读写端口完成隔离验收，默认入口仍是 v1；其余端口和正式迁移待接通。版本选择不改变 UTC 午夜日期载体或精度，见[布局分版](decisions/2026-10-21-交易日存储布局分版.md)。
+
 ```java
 businessTime.now();                  // 当前实际时刻
 businessTime.today();                // 业务时区下的今天

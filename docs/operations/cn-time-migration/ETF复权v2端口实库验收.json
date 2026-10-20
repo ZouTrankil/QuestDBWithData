@@ -1,0 +1,158 @@
+{
+  "说明": "原件仅用于隔离端口验收；不是来源完整或生产批准材料。",
+  "原件摘要": {
+    "report.json": "be48aae7cf3e910ba5c40d0a102f3abb724709cda60de08dff3deef5aa224e40",
+    "expected.json": "c5975c7c14aae848714b51c7e1165ac17d7294e102797cc371a159014ce8047a",
+    "request.json": "53eb0cd91ad39469a54a0daa0dac7435fc11a609da7c5fdf8d26c7ceb2eeb984"
+  },
+  "原件": {
+    "report.json": {
+      "schemaVersion": 1,
+      "observedAt": "2026-10-20T16:20:43.829371Z",
+      "table": "java_d015_etf_adj_layout2_8727bc2cb433496b802f8ef2accc16c3",
+      "sourceCoverageVerified": false,
+      "modelAcceptanceVerified": false,
+      "requestIsProductionApproved": false,
+      "physicalMigrationExecuted": false,
+      "checkpointAdvanced": false,
+      "state": "VERIFIED_AND_CLEANED",
+      "sourceState": [
+        {
+          "id": 1818,
+          "directoryName": "etf_adj~1818",
+          "table_txn": 96
+        }
+      ],
+      "targetId": "static-v2-9e37204ace90194be8c3fa2b28de8068e084cb998433fec4cbe7eda8491ed923",
+      "verifiedPasses": 2,
+      "rows": [
+        {
+          "key": {
+            "tsCode": "158000.SZ",
+            "tradeDate": "2026-08-26"
+          },
+          "adjFactor": 1.0
+        },
+        {
+          "key": {
+            "tsCode": "158000.SZ",
+            "tradeDate": "2026-08-27"
+          },
+          "adjFactor": 1.0
+        }
+      ],
+      "javaTypedReadExercised": true,
+      "legacyLayoutRejected": true
+    },
+    "expected.json": [
+      {
+        "key": {
+          "tsCode": "158000.SZ",
+          "tradeDate": "2026-08-26"
+        },
+        "adjFactor": 1.0
+      },
+      {
+        "key": {
+          "tsCode": "158000.SZ",
+          "tradeDate": "2026-08-27"
+        },
+        "adjFactor": 1.0
+      }
+    ],
+    "request.json": {
+      "definition": {
+        "jobId": "data.etf_adj",
+        "version": 2,
+        "datasetId": "etf_adj",
+        "datasetVersion": 2,
+        "owner": "etf_adj_owner",
+        "supportedModes": [
+          "BACKFILL",
+          "RECONCILE",
+          "INCREMENTAL"
+        ],
+        "defaultMode": "INCREMENTAL",
+        "parameters": {
+          "targetMinBefore": {
+            "type": "DATE",
+            "required": false,
+            "maxLength": 10,
+            "maxItems": 1,
+            "choices": []
+          },
+          "trade_dates": {
+            "type": "STRING",
+            "required": true,
+            "maxLength": 4000,
+            "maxItems": 1,
+            "choices": []
+          },
+          "checkpointBefore": {
+            "type": "DATE",
+            "required": false,
+            "maxLength": 10,
+            "maxItems": 1,
+            "choices": []
+          },
+          "targetId": {
+            "type": "STRING",
+            "required": true,
+            "maxLength": 128,
+            "maxItems": 1,
+            "choices": []
+          },
+          "checkpointAnchor": {
+            "type": "DATE",
+            "required": false,
+            "maxLength": 10,
+            "maxItems": 1,
+            "choices": []
+          },
+          "targetMaxBefore": {
+            "type": "DATE",
+            "required": false,
+            "maxLength": 10,
+            "maxItems": 1,
+            "choices": []
+          }
+        },
+        "ratePolicyRef": "tushare.shared",
+        "slicePolicyRef": "etf_adj.trade_date",
+        "verificationPolicyRef": "questdb.full_key_values",
+        "retry": {
+          "maxAttempts": 3,
+          "backoff": "PT1S",
+          "maxElapsed": "PT2M"
+        },
+        "timeout": "PT12H",
+        "budget": {
+          "maxWindowDays": 366,
+          "maxSlices": 366,
+          "maxPages": 2196,
+          "maxRows": 3660000,
+          "maxBatchBytes": 1048576
+        },
+        "revisionDays": 5,
+        "dependencies": [
+          {
+            "jobId": "data.exchange_calendar",
+            "version": 1
+          }
+        ],
+        "frequency": "DAILY",
+        "zone": "Asia/Shanghai",
+        "enabled": true,
+        "dailyEligible": true
+      },
+      "mode": "BACKFILL",
+      "parameters": {
+        "targetId": "static-v2-9e37204ace90194be8c3fa2b28de8068e084cb998433fec4cbe7eda8491ed923",
+        "trade_dates": "20260826,20260827"
+      },
+      "from": "2026-08-26",
+      "to": "2026-08-27",
+      "logicalDate": "2026-10-21"
+    }
+  }
+}

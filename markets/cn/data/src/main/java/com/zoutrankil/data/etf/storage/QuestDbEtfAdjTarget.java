@@ -7,6 +7,7 @@ import com.zoutrankil.data.etf.domain.EtfTargetRange;
 import com.zoutrankil.data.etf.port.EtfAdjTarget;
 import com.zoutrankil.data.etf.port.EtfAdjWriteSession;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 
@@ -17,15 +18,27 @@ import java.util.Objects;
 
 /** Configured physical target; each execution obtains an independent write session. */
 public final class QuestDbEtfAdjTarget implements EtfAdjTarget {
+    private final CnTradeDateLayout layout;
     private final String table;
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
 
     public QuestDbEtfAdjTarget(String table, JdbcTemplate jdbc, QuestDB questdb) {
+        this(table, jdbc, questdb, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public QuestDbEtfAdjTarget(
+            String table, JdbcTemplate jdbc, QuestDB questdb, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb);
         EtfAdjDataset.requireExecutionTable(table);
         this.table = table;
+    }
+
+    @Override
+    public int datasetVersion() {
+        return layout.schemaVersion();
     }
 
     @Override
@@ -49,8 +62,13 @@ public final class QuestDbEtfAdjTarget implements EtfAdjTarget {
 
     @Override
     public EtfTargetRange range() {
+        String dateColumn = layout.physicalDateColumn("etf_adj");
         String sql =
-                "SELECT cast(min(timestamp) AS long) AS min_micros, cast(max(timestamp) AS long) AS max_micros FROM \""
+                "SELECT cast(min("
+                        + dateColumn
+                        + ") AS long) AS min_micros, cast(max("
+                        + dateColumn
+                        + ") AS long) AS max_micros FROM \""
                         + table
                         + "\"";
         return jdbc.query(
@@ -84,6 +102,16 @@ public final class QuestDbEtfAdjTarget implements EtfAdjTarget {
 
     @Override
     public EtfAdjWriteSession newWriter(String frozenTargetId) {
-        return new EtfAdjWritePort(table, frozenTargetId, jdbc, questdb);
+        return newWriter(frozenTargetId, layout.schemaVersion());
+    }
+
+    @Override
+    public EtfAdjWriteSession newWriter(String frozenTargetId, int datasetVersion) {
+        return new EtfAdjWritePort(
+                table,
+                frozenTargetId,
+                jdbc,
+                questdb,
+                CnTradeDateLayout.fromVersion(datasetVersion));
     }
 }

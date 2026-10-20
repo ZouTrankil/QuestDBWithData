@@ -17,6 +17,7 @@ import static org.mockito.Mockito.when;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
 import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 
@@ -48,6 +49,15 @@ class EtfTargetTest {
         ADJ(
                 "java_d015_etf_adj_t14",
                 "timestamp",
+                "micros",
+                1_000_000L,
+                "Exact isolated etf_adj QuestDB target identity required",
+                "QuestDB did not return etf_adj date range",
+                "QuestDB etf_adj date range has invalid types",
+                "Invalid etf_adj physical range"),
+        ADJ_V2(
+                "java_d015_etf_adj_t14",
+                "trade_date",
                 "micros",
                 1_000_000L,
                 "Exact isolated etf_adj QuestDB target identity required",
@@ -93,6 +103,9 @@ class EtfTargetTest {
             return switch (this) {
                 case DAILY -> new QuestDbEtfDailyTarget(table, jdbc, quest);
                 case ADJ -> new QuestDbEtfAdjTarget(table, jdbc, quest);
+                case ADJ_V2 ->
+                        new QuestDbEtfAdjTarget(
+                                table, jdbc, quest, CnTradeDateLayout.TRADE_DATE_V2);
                 case FACTOR -> new QuestDbEtfFactorTarget(table, jdbc, quest);
             };
         }
@@ -119,7 +132,7 @@ class EtfTargetTest {
         Object codec() {
             return switch (this) {
                 case DAILY -> EtfDailyWritePort.CODEC;
-                case ADJ -> EtfAdjWritePort.CODEC;
+                case ADJ, ADJ_V2 -> EtfAdjWritePort.CODEC;
                 case FACTOR -> EtfFactorWritePort.CODEC;
             };
         }
@@ -259,7 +272,10 @@ class EtfTargetTest {
             Family family) {
         var jdbc = mock(JdbcTemplate.class);
         var quest = mock(QuestDB.class);
-        String admitted = "etf_" + family.name().toLowerCase(Locale.ROOT);
+        String admitted =
+                family == Family.ADJ_V2
+                        ? "etf_adj"
+                        : "etf_" + family.name().toLowerCase(Locale.ROOT);
         for (String table : List.of("etf_daily", "etf_adj", "etf_factor", "unrelated")) {
             if (table.equals(admitted))
                 assertEquals(table, family.target(table, jdbc, quest).tableName());

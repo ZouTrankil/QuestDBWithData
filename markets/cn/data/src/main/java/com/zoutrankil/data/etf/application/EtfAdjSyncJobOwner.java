@@ -9,6 +9,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition.Parameter;
 import com.zoutrankil.data.domain.SyncJobDefinition.ParameterType;
 import com.zoutrankil.data.domain.SyncJobDefinition.RetryPolicy;
 import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.stereotype.Service;
 
@@ -64,6 +65,34 @@ public final class EtfAdjSyncJobOwner implements SyncJobOwner {
                     ZoneId.of("Asia/Shanghai"),
                     true,
                     true);
+
+    /** v1 原对象保持不动；v2 仅供显式装配，当前调度仍只登记 v1。 */
+    public static SyncJobDefinition definition(int version) {
+        var layout = CnTradeDateLayout.fromVersion(version);
+        if (layout == CnTradeDateLayout.LEGACY_V1) return DEFINITION;
+        var old = DEFINITION;
+        return new SyncJobDefinition(
+                old.jobId(),
+                version,
+                old.datasetId(),
+                layout.schemaVersion(),
+                old.owner(),
+                old.supportedModes(),
+                old.defaultMode(),
+                old.parameters(),
+                old.ratePolicyRef(),
+                old.slicePolicyRef(),
+                old.verificationPolicyRef(),
+                old.retry(),
+                old.timeout(),
+                old.budget(),
+                old.revisionDays(),
+                old.dependencies(),
+                old.frequency(),
+                old.zone(),
+                old.enabled(),
+                old.dailyEligible());
+    }
 
     @Override
     public String datasetId() {

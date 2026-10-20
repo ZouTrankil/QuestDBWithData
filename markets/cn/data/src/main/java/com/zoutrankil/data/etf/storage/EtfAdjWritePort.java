@@ -10,6 +10,7 @@ import com.zoutrankil.data.etf.port.EtfAdjWriteSession;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** Bounded WAL/QWP writer with exact full-key/all-column readback and frozen-target checks. */
-public final class EtfAdjWritePort implements EtfAdjWriteSession {
+public final class EtfAdjWritePort implements EtfAdjWriteSession.Versioned {
     private static final int MAX_ROWS = 250;
     private static final int MAX_BYTES = 1024 * 1024;
     private static final int MAX_ROWS_PER_DATE = 10_000;
@@ -59,6 +60,8 @@ public final class EtfAdjWritePort implements EtfAdjWriteSession {
         return CODEC;
     }
 
+    private final CnTradeDateLayout layout;
+    private final String dateColumn;
     private final String table;
     private final String expectedTargetId;
     private final JdbcTemplate jdbc;
@@ -67,6 +70,17 @@ public final class EtfAdjWritePort implements EtfAdjWriteSession {
 
     public EtfAdjWritePort(
             String table, String expectedTargetId, JdbcTemplate jdbc, QuestDB questdb) {
+        this(table, expectedTargetId, jdbc, questdb, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public EtfAdjWritePort(
+            String table,
+            String expectedTargetId,
+            JdbcTemplate jdbc,
+            QuestDB questdb,
+            CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
+        this.dateColumn = layout.physicalDateColumn("etf_adj");
         EtfAdjDataset.requireExecutionTable(table);
         if (expectedTargetId == null || !expectedTargetId.startsWith("static-v2-"))
             throw new IllegalArgumentException("Frozen isolated etf_adj target identity required");
@@ -79,9 +93,14 @@ public final class EtfAdjWritePort implements EtfAdjWriteSession {
     }
 
     @Override
+    public int datasetVersion() {
+        return layout.schemaVersion();
+    }
+
+    @Override
     public void preflight() {
         requireExpectedTarget();
-        QuestDbWriteChecks.preflight(jdbc, table, EtfAdjDataset.definition(table));
+        QuestDbWriteChecks.preflight(jdbc, table, EtfAdjDataset.definition(table, layout));
         requireExpectedTarget();
     }
 
@@ -107,8 +126,7 @@ public final class EtfAdjWritePort implements EtfAdjWriteSession {
             for (var value : rows) {
                 var line = sender.table(table).symbol("ts_code", value.tsCode());
                 if (value.adjFactor() != null) line.doubleColumn("adj_factor", value.adjFactor());
-                // timestamp is a UTC-midnight calendar carrier, physically TIMESTAMP (microsecond
-                // precision).
+                // 两版都用 UTC 午夜承载业务日期；指定列名由冻结布局的预检确认，仍保留微秒精度。
                 line.at(new TemporalValues.CalendarTimestamp(value.tradeDate()).storageCarrier());
             }
             long sequence = sender.flushAndGetSequence();
@@ -147,21 +165,29 @@ public final class EtfAdjWritePort implements EtfAdjWriteSession {
         var codes = keys.stream().map(EtfAdjKey::tsCode).distinct().sorted().toList();
         parameters.addAll(codes);
         for (var key : keys) {
-            clauses.add("(ts_code = ? AND timestamp = cast(? as TIMESTAMP))");
+            clauses.add("(ts_code = ? AND " + dateColumn + " = cast(? as TIMESTAMP))");
             parameters.add(key.tsCode());
             parameters.add(
                     new TemporalValues.CalendarTimestamp(key.tradeDate())
                             .storageEpoch(TemporalValues.EpochUnit.MICROS));
         }
         String sql =
-                "SELECT ts_code, adj_factor, cast(timestamp as long) AS trade_date_micros FROM \""
+                "SELECT ts_code, adj_factor, cast("
+                        + dateColumn
+                        + " as long) AS trade_date_micros FROM \""
                         + table
-                        + "\" WHERE timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP) AND ts_code IN ("
+                        + "\" WHERE "
+                        + dateColumn
+                        + ">=cast(? AS TIMESTAMP) AND "
+                        + dateColumn
+                        + "<cast(? AS TIMESTAMP) AND ts_code IN ("
                         + String.join(",", codes.stream().map(code -> "?").toList())
                         + ") AND ("
                         + String.join(" OR ", clauses)
                         + ")"
-                        + " ORDER BY timestamp, ts_code LIMIT "
+                        + " ORDER BY "
+                        + dateColumn
+                        + ", ts_code LIMIT "
                         + (keys.size() + 1);
         return jdbc.query(sql, (rs, index) -> physical(rs), parameters.toArray());
     }
@@ -171,7 +197,9 @@ public final class EtfAdjWritePort implements EtfAdjWriteSession {
         requireExpectedTarget();
         var rows =
                 jdbc.query(
-                        "SELECT DISTINCT cast(timestamp as long) AS trade_date_micros FROM \""
+                        "SELECT DISTINCT cast("
+                                + dateColumn
+                                + " as long) AS trade_date_micros FROM \""
                                 + table
                                 + "\" ORDER BY trade_date_micros LIMIT 10001",
                         (rs, index) -> date(rs));
@@ -189,9 +217,13 @@ public final class EtfAdjWritePort implements EtfAdjWriteSession {
                 new TemporalValues.CalendarTimestamp(date)
                         .storageEpoch(TemporalValues.EpochUnit.MICROS);
         String sql =
-                "SELECT ts_code, adj_factor, cast(timestamp as long) AS trade_date_micros FROM \""
+                "SELECT ts_code, adj_factor, cast("
+                        + dateColumn
+                        + " as long) AS trade_date_micros FROM \""
                         + table
-                        + "\" WHERE timestamp = cast(? as TIMESTAMP) ORDER BY ts_code LIMIT 10001";
+                        + "\" WHERE "
+                        + dateColumn
+                        + " = cast(? as TIMESTAMP) ORDER BY ts_code LIMIT 10001";
         var result = jdbc.query(sql, (rs, index) -> physical(rs), micros);
         if (result.size() > MAX_ROWS_PER_DATE)
             throw new IllegalStateException("etf_adj date exceeds bounded 10000-row readback cap");
