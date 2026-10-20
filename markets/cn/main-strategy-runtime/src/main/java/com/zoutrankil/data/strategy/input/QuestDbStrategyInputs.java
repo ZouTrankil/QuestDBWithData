@@ -81,37 +81,6 @@ public final class QuestDbStrategyInputs {
                     "market_sentiment_daily",
                     "regime_features_monitor_daily",
                     "exchange_calendar");
-    private static final List<String> L2_SCORE_COLUMNS =
-            List.of(
-                    "ts",
-                    "symbol",
-                    "clean_amount",
-                    "q2_count",
-                    "q2_accumulation",
-                    "q2_accumulation_ratio",
-                    "active_buy_ratio",
-                    "gmm_main_force_net_inflow",
-                    "obi_top5_std",
-                    "orderbook_replenish_speed",
-                    "depth_slope",
-                    "continuous_auction_ratio",
-                    "close_auction_net_inflow",
-                    "open_close_vol_ratio",
-                    "q3_count",
-                    "q4_count",
-                    "q4_distribution",
-                    "q4_distribution_ratio",
-                    "active_sell_ratio",
-                    "large_active_sell_amount",
-                    "depth_top5_mean",
-                    "ofi_persistence",
-                    "ofi_std",
-                    "mfi_escort",
-                    "mean_obi_top5",
-                    "main_funds_buy_amount",
-                    "daily_amount",
-                    "amount",
-                    "turnover_rate");
     private final JdbcTemplate jdbc;
     private final long rowBudget;
     private final String coverageFile, coverageSha256;
@@ -412,8 +381,11 @@ public final class QuestDbStrategyInputs {
                         false));
         var snapshotTables =
                 new LinkedHashMap<>(StrategyInputRows.standardTables(coverage.inputSchema(), data));
-        if (coverage.inputSchema() == StrategyInputSchema.V2)
+        if (coverage.inputSchema() == StrategyInputSchema.V2) {
             proofs.put("inputSchema", coverage.inputSchema().inputSchema());
+            // 列存在、值可用和模型批准分开记录；审计不补值，也不改变旧 v1 证明。
+            proofs.put("l2FieldAudit", L2ScoringInputContract.inspect(before, data.get("l2_raw")));
+        }
         proofs.put("coverage", coverage.verify(start, end, warmup, snapshotTables, before));
         var history = coverage.history();
         snapshotTables.put(
@@ -818,24 +790,7 @@ public final class QuestDbStrategyInputs {
     }
 
     static String l2Projection(Map<String, Object> clocks) {
-        if (!(clocks.get("l2_daily_features") instanceof Map<?, ?> card)
-                || !(card.get("schema") instanceof List<?> schema))
-            throw new IllegalStateException("Pinned L2 schema required");
-        var names = new HashSet<String>();
-        for (Object column : schema)
-            if (column instanceof Map<?, ?> row) names.add(Objects.toString(row.get("column"), ""));
-        if (!names.containsAll(
-                List.of(
-                        "ts",
-                        "symbol",
-                        "clean_amount",
-                        "q2_count",
-                        "q2_accumulation",
-                        "q3_count",
-                        "q4_count",
-                        "main_funds_buy_amount")))
-            throw new IllegalStateException("Required formal L2 scoring schema is missing");
-        return String.join(",", L2_SCORE_COLUMNS.stream().filter(names::contains).toList());
+        return L2ScoringInputContract.projection(clocks);
     }
 
     private static void requireGrid(
