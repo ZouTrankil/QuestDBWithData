@@ -1,0 +1,744 @@
+{
+  "核查时刻": "2026-10-20T13:22:32.627618+00:00",
+  "当前CN代码登记数": 102,
+  "原105对象缺失项": [],
+  "原登记对象元数据": [
+    {
+      "table_name": "balance",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 173145,
+      "table_max_timestamp": "2026-08-28T00:00:00.000000Z"
+    },
+    {
+      "table_name": "block_trade",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 239985,
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z"
+    },
+    {
+      "table_name": "broker_recommend",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 13696,
+      "table_max_timestamp": "2026-09-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "cashflow",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 164525,
+      "table_max_timestamp": "2026-08-28T00:00:00.000000Z"
+    },
+    {
+      "table_name": "cn_bond_yield_curve",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 96189,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "cn_cpi",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 200,
+      "table_max_timestamp": "2026-08-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "cn_gdp",
+      "table_type": "T",
+      "designatedTimestamp": "report_date",
+      "table_row_count": 66,
+      "table_max_timestamp": "2026-06-30T00:00:00.000000Z"
+    },
+    {
+      "table_name": "cn_m",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 200,
+      "table_max_timestamp": "2026-08-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "cn_pmi",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 200,
+      "table_max_timestamp": "2026-08-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "cn_ppi",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 200,
+      "table_max_timestamp": "2026-08-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "company_intrinsic_valuation_consensus",
+      "table_type": "T",
+      "designatedTimestamp": "valuation_date",
+      "table_row_count": 4573049,
+      "table_max_timestamp": "2026-08-07T00:00:00.000000Z"
+    },
+    {
+      "table_name": "company_intrinsic_valuation_model",
+      "table_type": "T",
+      "designatedTimestamp": "valuation_date",
+      "table_row_count": 15888188,
+      "table_max_timestamp": "2026-08-07T00:00:00.000000Z"
+    },
+    {
+      "table_name": "cyq_chips",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 1090577,
+      "table_max_timestamp": "2026-09-11T00:00:00.000000Z"
+    },
+    {
+      "table_name": "cyq_perf",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 9704106,
+      "table_max_timestamp": "2026-09-30T00:00:00.000000Z"
+    },
+    {
+      "table_name": "daily",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 9849042,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "daily_basic",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 10013500,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "daily_stock_analysis",
+      "table_type": "T",
+      "designatedTimestamp": "updated_at",
+      "table_row_count": 5399,
+      "table_max_timestamp": "2026-04-15T18:01:12.814883Z"
+    },
+    {
+      "table_name": "dc_index",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 186622,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "disclosure_date",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 326396,
+      "table_max_timestamp": "2026-09-24T00:00:00.000000Z"
+    },
+    {
+      "table_name": "dividend",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 115186,
+      "table_max_timestamp": "2026-09-05T00:00:00.000000Z"
+    },
+    {
+      "table_name": "equity_style_monthly",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 198,
+      "table_max_timestamp": "2026-08-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "etf_adj",
+      "table_type": "T",
+      "designatedTimestamp": "timestamp",
+      "table_row_count": 1600130,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "etf_basic",
+      "table_type": "T",
+      "designatedTimestamp": "timestamp",
+      "table_row_count": 2958,
+      "table_max_timestamp": "1970-01-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "etf_daily",
+      "table_type": "T",
+      "designatedTimestamp": "timestamp",
+      "table_row_count": 2150066,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "etf_factor",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 1098976,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "etf_portfolio",
+      "table_type": "T",
+      "designatedTimestamp": "end_date",
+      "table_row_count": 6512523,
+      "table_max_timestamp": "2026-07-06T00:00:00.000000Z"
+    },
+    {
+      "table_name": "etf_share",
+      "table_type": "T",
+      "designatedTimestamp": "timestamp",
+      "table_row_count": 326396,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "express",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 14205,
+      "table_max_timestamp": "2026-08-25T00:00:00.000000Z"
+    },
+    {
+      "table_name": "fina_audit",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 77060,
+      "table_max_timestamp": "2026-05-29T00:00:00.000000Z"
+    },
+    {
+      "table_name": "fina_indicator",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 197174,
+      "table_max_timestamp": "2026-09-23T00:00:00.000000Z"
+    },
+    {
+      "table_name": "fina_mainbz",
+      "table_type": "T",
+      "designatedTimestamp": "end_date",
+      "table_row_count": 364757,
+      "table_max_timestamp": "2026-06-30T00:00:00.000000Z"
+    },
+    {
+      "table_name": "forecast",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 57417,
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z"
+    },
+    {
+      "table_name": "ft_limit",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 2128,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "fut_basic",
+      "table_type": "T",
+      "designatedTimestamp": "timestamp",
+      "table_row_count": 720,
+      "table_max_timestamp": "1970-01-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "fut_daily",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 4712,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "fut_holding",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 56692,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "fut_index_conclusion_daily",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 528,
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z"
+    },
+    {
+      "table_name": "fut_index_daily_snapshot",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 528,
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z"
+    },
+    {
+      "table_name": "fut_index_signal_daily",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 528,
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z"
+    },
+    {
+      "table_name": "fut_mapping",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 532,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "fut_settle",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 2000,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "hibor",
+      "table_type": "T",
+      "designatedTimestamp": "timestamp",
+      "table_row_count": 2138,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "income",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 177762,
+      "table_max_timestamp": "2026-08-29T00:00:00.000000Z"
+    },
+    {
+      "table_name": "index",
+      "table_type": "T",
+      "designatedTimestamp": "import_time",
+      "table_row_count": 2274,
+      "table_max_timestamp": "2026-04-02T13:14:45.221299Z"
+    },
+    {
+      "table_name": "index_daily_basic",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 42588,
+      "table_max_timestamp": "2026-08-03T00:00:00.000000Z"
+    },
+    {
+      "table_name": "index_daily_market",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 234292,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "index_member",
+      "table_type": "T",
+      "designatedTimestamp": "update_time",
+      "table_row_count": 5902,
+      "table_max_timestamp": "2026-09-11T19:54:57.559719Z"
+    },
+    {
+      "table_name": "index_monthly",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 6506,
+      "table_max_timestamp": "2026-08-31T00:00:00.000000Z"
+    },
+    {
+      "table_name": "index_weight",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 261221,
+      "table_max_timestamp": "2026-09-30T00:00:00.000000Z"
+    },
+    {
+      "table_name": "industry_intrinsic_valuation_state",
+      "table_type": "T",
+      "designatedTimestamp": "valuation_date",
+      "table_row_count": 114101,
+      "table_max_timestamp": "2026-08-07T00:00:00.000000Z"
+    },
+    {
+      "table_name": "industry_valuation_materialization_run",
+      "table_type": "T",
+      "designatedTimestamp": "created_at",
+      "table_row_count": 91,
+      "table_max_timestamp": "2026-08-08T14:21:43.516195Z"
+    },
+    {
+      "table_name": "industry_valuation_membership_conflict",
+      "table_type": "T",
+      "designatedTimestamp": "valuation_date",
+      "table_row_count": 2428,
+      "table_max_timestamp": "2026-08-07T00:00:00.000000Z"
+    },
+    {
+      "table_name": "industry_valuation_route_assignment",
+      "table_type": "T",
+      "designatedTimestamp": "effective_from",
+      "table_row_count": 465,
+      "table_max_timestamp": "2023-01-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "l2_daily_features",
+      "table_type": "T",
+      "designatedTimestamp": "ts",
+      "table_row_count": 5004000,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "l2_dataset_manifest",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date_ts",
+      "table_row_count": 657003,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "l2_event_response_features",
+      "table_type": "T",
+      "designatedTimestamp": "minute",
+      "table_row_count": 114123728,
+      "table_max_timestamp": "2026-09-21T07:00:00.000000Z"
+    },
+    {
+      "table_name": "l2_intraday_bar_features",
+      "table_type": "T",
+      "designatedTimestamp": "minute",
+      "table_row_count": 158752546,
+      "table_max_timestamp": "2026-09-21T07:00:00.000000Z"
+    },
+    {
+      "table_name": "l2_live_normalized_events",
+      "table_type": "T",
+      "designatedTimestamp": "recv_ts",
+      "table_row_count": 26531701,
+      "table_max_timestamp": "2026-10-14T15:01:39.571501Z"
+    },
+    {
+      "table_name": "l2_t0_training_labels",
+      "table_type": "T",
+      "designatedTimestamp": "minute",
+      "table_row_count": 181049686,
+      "table_max_timestamp": "2026-09-21T07:00:00.000000Z"
+    },
+    {
+      "table_name": "macro_core_monthly",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 200,
+      "table_max_timestamp": "2026-08-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "macro_liquidity_credit_monthly",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 201,
+      "table_max_timestamp": "2026-09-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "margin_all",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 4722,
+      "table_max_timestamp": "2026-03-19T00:00:00.000000Z"
+    },
+    {
+      "table_name": "margin_detail",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 3625975,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "margin_secs",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 1618079,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "margin_trading",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 181140,
+      "table_max_timestamp": "2026-03-11T00:00:00.000000Z"
+    },
+    {
+      "table_name": "margin_zrz",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 1238,
+      "table_max_timestamp": "2025-07-25T00:00:00.000000Z"
+    },
+    {
+      "table_name": "market_breadth_monthly",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 201,
+      "table_max_timestamp": "2026-09-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "market_sentiment_daily",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": null,
+      "table_max_timestamp": null
+    },
+    {
+      "table_name": "moneyflow",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 4670285,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "moneyflow_dc",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 3478841,
+      "table_max_timestamp": "2026-03-20T00:00:00.000000Z"
+    },
+    {
+      "table_name": "moneyflow_hsgt",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": null,
+      "table_max_timestamp": null
+    },
+    {
+      "table_name": "moneyflow_ths",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 2136439,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "mv_backtest_daily",
+      "table_type": "M",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 10439533,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "mv_etf_market_overview_daily",
+      "table_type": "M",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 2117,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "mv_market_breadth_daily",
+      "table_type": "M",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 2226,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "mv_retail_sentiment_daily",
+      "table_type": "M",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 914,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "pledge_stat",
+      "table_type": "T",
+      "designatedTimestamp": "end_date",
+      "table_row_count": 1328794,
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z"
+    },
+    {
+      "table_name": "qmt_1m_bars",
+      "table_type": "T",
+      "designatedTimestamp": "bar_time",
+      "table_row_count": 4873,
+      "table_max_timestamp": "2026-07-06T09:46:00.000000Z"
+    },
+    {
+      "table_name": "regime_display_materialization_run",
+      "table_type": "T",
+      "designatedTimestamp": "started_at",
+      "table_row_count": 16,
+      "table_max_timestamp": "2026-08-04T03:45:36.000000Z"
+    },
+    {
+      "table_name": "regime_erp_source_status_daily",
+      "table_type": "T",
+      "designatedTimestamp": "evaluation_date",
+      "table_row_count": 1,
+      "table_max_timestamp": "2026-08-04T00:00:00.000000Z"
+    },
+    {
+      "table_name": "regime_features_monitor_daily",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": null,
+      "table_max_timestamp": null
+    },
+    {
+      "table_name": "regime_features_monthly",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 201,
+      "table_max_timestamp": "2026-09-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "regime_margin_leverage_daily",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 866,
+      "table_max_timestamp": "2026-07-31T00:00:00.000000Z"
+    },
+    {
+      "table_name": "regime_market_monthly",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 201,
+      "table_max_timestamp": "2026-09-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "regime_stock_return_distribution_daily",
+      "table_type": "T",
+      "designatedTimestamp": "as_of",
+      "table_row_count": 14,
+      "table_max_timestamp": "2026-08-03T00:00:00.000000Z"
+    },
+    {
+      "table_name": "repurchase",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 64498,
+      "table_max_timestamp": "2026-09-19T00:00:00.000000Z"
+    },
+    {
+      "table_name": "rmb_index_daily",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 4413,
+      "table_max_timestamp": "2026-09-22T00:00:00.000000Z"
+    },
+    {
+      "table_name": "sf_month",
+      "table_type": "T",
+      "designatedTimestamp": "month",
+      "table_row_count": 200,
+      "table_max_timestamp": "2026-08-01T00:00:00.000000Z"
+    },
+    {
+      "table_name": "sge_daily",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 177640,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "share_float",
+      "table_type": "T",
+      "designatedTimestamp": "float_date",
+      "table_row_count": 5203572,
+      "table_max_timestamp": "2035-10-29T00:00:00.000000Z"
+    },
+    {
+      "table_name": "shibor",
+      "table_type": "T",
+      "designatedTimestamp": "timestamp",
+      "table_row_count": 4119,
+      "table_max_timestamp": "2026-09-21T00:00:00.000000Z"
+    },
+    {
+      "table_name": "shibor_lpr",
+      "table_type": "T",
+      "designatedTimestamp": "date",
+      "table_row_count": 1532,
+      "table_max_timestamp": "2026-08-20T00:00:00.000000Z"
+    },
+    {
+      "table_name": "stk_alert",
+      "table_type": "T",
+      "designatedTimestamp": "start_date",
+      "table_row_count": 233,
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z"
+    },
+    {
+      "table_name": "stk_factor",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 10321471,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "stk_high_shock",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 109,
+      "table_max_timestamp": "2026-09-22T00:00:00.000000Z"
+    },
+    {
+      "table_name": "stk_holdernumber",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 365062,
+      "table_max_timestamp": "2026-09-20T00:00:00.000000Z"
+    },
+    {
+      "table_name": "stk_holdertrade",
+      "table_type": "T",
+      "designatedTimestamp": "ann_date",
+      "table_row_count": 83397,
+      "table_max_timestamp": "2026-09-19T00:00:00.000000Z"
+    },
+    {
+      "table_name": "stk_limit",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 12395228,
+      "table_max_timestamp": "2026-10-16T00:00:00.000000Z"
+    },
+    {
+      "table_name": "stk_shock",
+      "table_type": "T",
+      "designatedTimestamp": "trade_date",
+      "table_row_count": 2757,
+      "table_max_timestamp": "2026-09-18T00:00:00.000000Z"
+    },
+    {
+      "table_name": "stk_st_daily",
+      "table_type": "T",
+      "designatedTimestamp": "timestamp",
+      "table_row_count": null,
+      "table_max_timestamp": null
+    },
+    {
+      "table_name": "stk_suspend",
+      "table_type": "T",
+      "designatedTimestamp": "timestamp",
+      "table_row_count": null,
+      "table_max_timestamp": null
+    },
+    {
+      "table_name": "stock_detail_info",
+      "table_type": "T",
+      "designatedTimestamp": null,
+      "table_row_count": null,
+      "table_max_timestamp": null
+    },
+    {
+      "table_name": "stock_minute_bars",
+      "table_type": "T",
+      "designatedTimestamp": "bar_time",
+      "table_row_count": 543683520,
+      "table_max_timestamp": "2026-09-11T07:00:00.000000Z"
+    },
+    {
+      "table_name": "ths_index",
+      "table_type": "T",
+      "designatedTimestamp": "update_time",
+      "table_row_count": 2517,
+      "table_max_timestamp": "2026-09-11T18:20:59.807013Z"
+    },
+    {
+      "table_name": "ths_member",
+      "table_type": "T",
+      "designatedTimestamp": "update_time",
+      "table_row_count": 416612,
+      "table_max_timestamp": "2026-09-15T16:09:12.595230Z"
+    }
+  ],
+  "本机状态限制": "默认端口健康接口不可达；主策略和隔离Batch默认运行库不存在；已见同步SQLite不含正式运行和锁表。不代表远端无服务或原账本。",
+  "操作范围": "只读元数据、配置和代码核查；未启动应用、调度、采集、刷新或删表。"
+}

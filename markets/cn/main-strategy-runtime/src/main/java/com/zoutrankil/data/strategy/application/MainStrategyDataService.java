@@ -33,7 +33,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.util.HexFormat;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
@@ -141,6 +144,23 @@ public final class MainStrategyDataService {
         return coverageInputs.isBlank()
                 ? base
                 : RunRequest.hash(base, coverageInputs, coverageInputsSha256);
+    }
+
+    /** 只读取批准文件的版本头；完整来源、历史证据和训练核验仍在执行及提交前进行。 */
+    public StrategyInputSchema configuredInputSchema() throws Exception {
+        boolean assembled = !coverageInputs.isBlank();
+        String file = assembled ? coverageInputs : coverageFile;
+        String expected = assembled ? coverageInputsSha256 : coverageSha256;
+        if (file == null || file.isBlank() || expected == null || !expected.matches("[a-f0-9]{64}")) throw new IllegalStateException("新主策略任务需要已批准的输入清单和摘要");
+        Path path = Path.of(file).toAbsolutePath().normalize();
+        if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS) || Files.size(path) > 1024 * 1024) throw new IllegalStateException("批准输入清单缺失或超过 1 MiB");
+        byte[] bytes;
+        try (var input = Files.newInputStream(path)) { bytes = input.readNBytes(1024 * 1024 + 1); }
+        if (bytes.length > 1024 * 1024 || !HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)).equals(expected)) throw new IllegalStateException("批准输入清单摘要不符");
+        var header = new ObjectMapper().readTree(bytes);
+        var schema = assembled ? StrategyInputSchema.fromApproval(header.path("schema").asText()) : StrategyInputSchema.fromCoverage(header.path("schema").asText());
+        if (schema == StrategyInputSchema.V2 && (!schema.inputSchema().equals(header.path("inputSchema").asText()) || !schema.keyEncoding().equals(header.path("keyEncoding").asText()))) throw new IllegalStateException("新版批准输入缺少协议和键编码声明");
+        return schema;
     }
 
     public Map<String, Object> status() throws Exception {

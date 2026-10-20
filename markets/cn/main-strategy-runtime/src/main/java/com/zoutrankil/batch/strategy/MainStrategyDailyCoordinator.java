@@ -121,7 +121,7 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
                 "main-strategy-schedule-installed",
                 MainStrategyDailyWork.JOB
                         + ":v"
-                        + MainStrategyDailyWork.DEFINITION_VERSION
+                        + work.definitionVersion()
                         + ":"
                         + (enabled ? "enabled" : "paused"));
         scheduler.start();
@@ -243,7 +243,8 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
                             "state",
                             ledger.state(candidate.request().instanceId()).name());
                 }
-                String input = work.inputFingerprint(target);
+                String version = prior.isPresent() ? prior.get().request().definitionVersion() : work.definitionVersion();
+                String input = work.inputFingerprint(target, version);
                 RunRequest request;
                 if (prior.isPresent()) {
                     var canonical = prior.get().request();
@@ -275,7 +276,7 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
                                     target,
                                     target,
                                     target,
-                                    MainStrategyDailyWork.DEFINITION_VERSION,
+                                    version,
                                     "0",
                                     null,
                                     null,

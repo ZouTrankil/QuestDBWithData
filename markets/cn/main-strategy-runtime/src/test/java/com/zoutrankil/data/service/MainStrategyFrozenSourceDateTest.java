@@ -24,6 +24,8 @@ import static org.mockito.Mockito.when;
 import com.zoutrankil.batch.domain.RunRequest;
 import com.zoutrankil.batch.job.MainStrategyDailyWork;
 import com.zoutrankil.data.domain.JobDefinitionJson;
+import com.zoutrankil.data.strategy.application.MainStrategyDataService;
+import com.zoutrankil.data.strategy.input.StrategyInputSchema;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -52,14 +54,16 @@ class MainStrategyFrozenSourceDateTest {
         return Math.multiplyExact(day.toEpochDay(), 86_400_000_000L);
     }
 
-    private RunRequest request() {
+    private RunRequest request() { return request(MainStrategyDailyWork.DEFINITION_VERSION); }
+
+    private RunRequest request(String version) {
         return new RunRequest(
                 "frozen-date",
                 MainStrategyDailyWork.JOB,
                 TARGET,
                 TARGET,
                 TARGET,
-                MainStrategyDailyWork.DEFINITION_VERSION,
+                version,
                 "0",
                 null,
                 null,
@@ -129,6 +133,40 @@ class MainStrategyFrozenSourceDateTest {
         Files.createDirectories(file.getParent());
         JobDefinitionJson.mapper().writeValue(file.toFile(), plan);
         return file;
+    }
+
+    @Test
+    void newDefinitionFreezesProtocolAndRejectsChangedOrMissingSelectionWithoutRewriting() throws Exception {
+        var jdbc = mock(JdbcTemplate.class);
+        when(jdbc.queryForObject(anyString(), eq(Long.class), anyLong())).thenReturn(micros(TARGET));
+        var pipeline = pipeline(jdbc);
+        var data = mock(MainStrategyDataService.class);
+        when(data.configuredInputSchema()).thenReturn(StrategyInputSchema.V2);
+        field(pipeline, "strategyData", data);
+        var request = request(MainStrategyDailyWork.INPUT_PROTOCOL_DEFINITION_VERSION);
+        var plan = (MainStrategyDailyPipeline.PipelinePlan) invoke(pipeline, "plan", new Class<?>[]{RunRequest.class}, request);
+        assertEquals(StrategyInputSchema.V2.inputSchema(), plan.inputSchema());
+        Path path = root.resolve(request.instanceId()).resolve("plan.json");
+        byte[] bytes = Files.readAllBytes(path);
+        assertEquals(plan, invoke(pipeline, "plan", new Class<?>[]{RunRequest.class}, request));
+        when(data.configuredInputSchema()).thenReturn(StrategyInputSchema.V1);
+        assertThrows(InvocationTargetException.class, () -> invoke(pipeline, "plan", new Class<?>[]{RunRequest.class}, request));
+        assertArrayEquals(bytes, Files.readAllBytes(path));
+        when(data.configuredInputSchema()).thenReturn(StrategyInputSchema.V2);
+        save(new MainStrategyDailyPipeline.PipelinePlan(plan.instance(), plan.input(), plan.from(), plan.to(), plan.sourceLogicalDate(), plan.tradeDates()));
+        byte[] missing = Files.readAllBytes(path);
+        assertThrows(InvocationTargetException.class, () -> invoke(pipeline, "plan", new Class<?>[]{RunRequest.class}, request));
+        assertArrayEquals(missing, Files.readAllBytes(path));
+    }
+
+    @Test
+    void legacyPlanBytesKeepTheOriginalSixFields() throws Exception {
+        var request = request();
+        var plan = new MainStrategyDailyPipeline.PipelinePlan(request.instanceId(), request.inputFingerprint(), TARGET, TARGET, TARGET, List.of(TARGET));
+        var json = JobDefinitionJson.mapper();
+        String expected = "{\"instance\":\"" + request.instanceId() + "\",\"input\":\"frozen-input\",\"from\":\"2026-09-28\",\"to\":\"2026-09-28\",\"sourceLogicalDate\":\"2026-09-28\",\"tradeDates\":[\"2026-09-28\"]}";
+        assertEquals(expected, json.writeValueAsString(plan));
+        assertEquals(plan, json.readValue(expected, MainStrategyDailyPipeline.PipelinePlan.class));
     }
 
     @Test
