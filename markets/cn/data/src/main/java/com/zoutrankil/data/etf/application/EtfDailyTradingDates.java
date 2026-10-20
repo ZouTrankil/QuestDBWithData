@@ -1,8 +1,8 @@
 package com.zoutrankil.data.etf.application;
 
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.service.DailyTradingSessions;
 
-import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -12,15 +12,20 @@ import java.util.Objects;
 public final class EtfDailyTradingDates {
     public static final int MAX_WINDOW_DAYS = 366;
     private final ExchangeCalendarReadRepository calendars;
+
     public EtfDailyTradingDates(ExchangeCalendarReadRepository calendars) {
         this.calendars = Objects.requireNonNull(calendars);
     }
+
     public List<LocalDate> read(LocalDate fromInclusive, LocalDate toInclusive) {
-        Objects.requireNonNull(fromInclusive); Objects.requireNonNull(toInclusive);
+        Objects.requireNonNull(fromInclusive);
+        Objects.requireNonNull(toInclusive);
         long days = ChronoUnit.DAYS.between(fromInclusive, toInclusive) + 1;
         if (days < 1 || days > MAX_WINDOW_DAYS)
-            throw new IllegalArgumentException("etf_daily calendar window must contain 1..366 calendar days");
-        // Match Python fund_daily scheduling using the complete SSE master calendar; no source-code filtering.
+            throw new IllegalArgumentException(
+                    "etf_daily calendar window must contain 1..366 calendar days");
+        // Match Python fund_daily scheduling using the complete SSE master calendar; no source-code
+        // filtering.
         return List.copyOf(DailyTradingSessions.read(calendars, fromInclusive, toInclusive));
     }
 }

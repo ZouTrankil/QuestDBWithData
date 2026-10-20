@@ -9,21 +9,31 @@ import com.zoutrankil.data.domain.JobDefinitionJson;
 
 /** Shared JSON configuration retaining each command's existing representation. */
 public final class CliOutput {
-    public enum Profile { PLAIN, MODULES, MODULES_ISO, JOB_DEFINITION }
+    public enum Profile {
+        PLAIN,
+        MODULES,
+        MODULES_ISO,
+        JOB_DEFINITION
+    }
 
     private static final Codec PLAIN = new Codec(new ObjectMapper());
     private static final Codec MODULES = new Codec(new ObjectMapper().findAndRegisterModules());
-    private static final Codec MODULES_ISO = new Codec(new ObjectMapper().findAndRegisterModules()
-            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS));
+    private static final Codec MODULES_ISO =
+            new Codec(
+                    new ObjectMapper()
+                            .findAndRegisterModules()
+                            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS));
     private static final Codec JOB_DEFINITION = new Codec(JobDefinitionJson.mapper());
 
     private CliOutput() {}
 
-    public static void printJson(Object value, Profile profile, boolean pretty) throws JsonProcessingException {
+    public static void printJson(Object value, Profile profile, boolean pretty)
+            throws JsonProcessingException {
         System.out.println(json(value, profile, pretty));
     }
 
-    public static String json(Object value, Profile profile, boolean pretty) throws JsonProcessingException {
+    public static String json(Object value, Profile profile, boolean pretty)
+            throws JsonProcessingException {
         Codec codec = codec(profile);
         return (pretty ? codec.pretty : codec.compact).writeValueAsString(value);
     }

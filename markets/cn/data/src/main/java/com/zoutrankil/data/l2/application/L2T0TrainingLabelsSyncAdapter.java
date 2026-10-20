@@ -1,11 +1,12 @@
 package com.zoutrankil.data.l2.application;
 
-import com.zoutrankil.data.service.*;
-import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
-import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsDataset;
-import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey;
 import com.zoutrankil.data.domain.SyncJobDefinition;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey;
 import com.zoutrankil.data.l2.port.L2T0TrainingLabelsWriteSession;
+import com.zoutrankil.data.service.SyncJobRunner;
+import com.zoutrankil.data.service.VerifiedBatchExecutor;
+
 import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
@@ -22,9 +23,12 @@ final class L2T0TrainingLabelsSyncAdapter
     private final Duration timeout;
     private final L2T0TrainingLabelsWriteSession port;
 
-    L2T0TrainingLabelsSyncAdapter(L2T0TrainingLabelsParquetSource source,
-            L2T0TrainingLabelsParquetSource.Inspection inspection, List<String> symbols,
-            SyncJobDefinition definition, L2T0TrainingLabelsWriteSession port) {
+    L2T0TrainingLabelsSyncAdapter(
+            L2T0TrainingLabelsParquetSource source,
+            L2T0TrainingLabelsParquetSource.Inspection inspection,
+            List<String> symbols,
+            SyncJobDefinition definition,
+            L2T0TrainingLabelsWriteSession port) {
         this.source = Objects.requireNonNull(source);
         this.inspection = Objects.requireNonNull(inspection);
         this.symbols = List.copyOf(symbols);
@@ -34,26 +38,38 @@ final class L2T0TrainingLabelsSyncAdapter
         this.port = Objects.requireNonNull(port);
     }
 
-    @Override public void preflight(SyncJobDefinition.FrozenRequest request) throws Exception {
+    @Override
+    public void preflight(SyncJobDefinition.FrozenRequest request) throws Exception {
         if (!request.definition().equals(L2T0TrainingLabelsJobService.definition())
-                || !inspection.from().equals(request.from()) || !inspection.to().equals(request.to()))
-            throw new IllegalArgumentException("Frozen D089 request differs from its Parquet interval");
+                || !inspection.from().equals(request.from())
+                || !inspection.to().equals(request.to()))
+            throw new IllegalArgumentException(
+                    "Frozen D089 request differs from its Parquet interval");
         String expectedRoot = request.parameters().get("source_root_id").toString();
         if (!expectedRoot.equals(source.sourceRootIdentity()))
             throw new IllegalStateException("D089 source root changed after planning");
         port.preflight();
         var current = source.inspect(request.from(), request.to(), symbols, maxRows, maxFiles);
-        if (!inspection.equals(current)) throw new IllegalStateException("D089 source changed after planning");
+        if (!inspection.equals(current))
+            throw new IllegalStateException("D089 source changed after planning");
     }
 
-    @Override public SyncJobRunner.SourceCompletion fetch(SyncJobDefinition.FrozenRequest request,
-            SyncJobRunner.PageConsumer<L2T0TrainingLabels> consumer, BooleanSupplier cancelled) throws Exception {
+    @Override
+    public SyncJobRunner.SourceCompletion fetch(
+            SyncJobDefinition.FrozenRequest request,
+            SyncJobRunner.PageConsumer<L2T0TrainingLabels> consumer,
+            BooleanSupplier cancelled)
+            throws Exception {
         return source.stream(inspection, symbols, maxRows, maxFiles, consumer, cancelled, timeout);
     }
 
-    @Override public VerifiedBatchExecutor.Codec<L2T0TrainingLabels, L2T0TrainingLabelsKey> codec() {
+    @Override
+    public VerifiedBatchExecutor.Codec<L2T0TrainingLabels, L2T0TrainingLabelsKey> codec() {
         return port.codec();
     }
 
-    @Override public VerifiedBatchExecutor.Port<L2T0TrainingLabels, L2T0TrainingLabelsKey> port() { return port; }
+    @Override
+    public VerifiedBatchExecutor.Port<L2T0TrainingLabels, L2T0TrainingLabelsKey> port() {
+        return port;
+    }
 }

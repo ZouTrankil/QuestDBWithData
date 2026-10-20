@@ -1,14 +1,21 @@
 package com.zoutrankil.data.domain;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.zoutrankil.data.domain.index.IndexDailyMarketDataset;
-import java.util.List;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
 
 class IndexDailyMarketLayoutTest {
-    @Test void formalV2MatchesTradeDateWhileLegacyIsolatedV1KeepsOriginalLayout() {
+    @Test
+    void formalV2MatchesTradeDateWhileLegacyIsolatedV1KeepsOriginalLayout() {
         var formal = IndexDailyMarketDataset.DEFINITION;
-        var legacy = IndexDailyMarketDataset.legacyIsolatedDefinition("java_d019_index_daily_market_contract");
+        var legacy =
+                IndexDailyMarketDataset.legacyIsolatedDefinition(
+                        "java_d019_index_daily_market_contract");
         assertEquals(2, formal.schemaVersion());
         assertEquals("trade_date", formal.designatedTimestamp());
         assertEquals(List.of("ts_code", "trade_date"), formal.dedupKey());
@@ -19,7 +26,8 @@ class IndexDailyMarketLayoutTest {
         assertEquals("timestamp", legacy.columns().get(1).storageName());
         assertEquals(formal.businessKey(), legacy.businessKey());
         assertEquals(formal.columns().get(1).temporal(), legacy.columns().get(1).temporal());
-        assertThrows(IllegalStateException.class,
+        assertThrows(
+                IllegalStateException.class,
                 () -> IndexDailyMarketDataset.legacyIsolatedDefinition("index_daily_market"));
     }
 }

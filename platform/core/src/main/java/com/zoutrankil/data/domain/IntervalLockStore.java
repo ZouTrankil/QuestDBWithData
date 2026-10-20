@@ -9,9 +9,11 @@ public interface IntervalLockStore {
         public Scope {
             if (datasetId == null || !datasetId.matches("[A-Za-z][A-Za-z0-9_.-]{0,127}"))
                 throw new IllegalArgumentException("Valid dataset ID required");
-            Objects.requireNonNull(from); Objects.requireNonNull(to);
+            Objects.requireNonNull(from);
+            Objects.requireNonNull(to);
             if (to.isBefore(from)) throw new IllegalArgumentException("Reversed conflict interval");
         }
+
         public static Scope allDates(String datasetId) {
             return new Scope(datasetId, LocalDate.MIN, LocalDate.MAX);
         }
@@ -21,8 +23,12 @@ public interface IntervalLockStore {
 
     /** Returns null on overlap. */
     Lease acquire(String runId, Scope scope);
+
     Lease findOwned(String runId, Scope scope);
+
     void retainInDoubt(Lease lease);
+
     void releaseVerified(Lease lease);
+
     void releaseAfterReconciliation(Lease lease, boolean writerStopped, boolean exactReadback);
 }

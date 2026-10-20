@@ -1,9 +1,9 @@
 package com.zoutrankil.data.derived.mapper;
 
-
 import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.fund.EtfMarketOverviewDailyView;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
+
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Objects;
@@ -13,10 +13,13 @@ public final class EtfMarketOverviewDailyViewMapper {
     public EtfMarketOverviewDailyView fromStorage(
             com.zoutrankil.data.domain.fund.view.EtfMarketOverviewDailyView row) {
         Objects.requireNonNull(row, "ETF overview view row required");
-        return new EtfMarketOverviewDailyView(TemporalValues.CalendarTimestamp.fromStorage(
-                Objects.requireNonNull(row.tradeDate(), "trade date required")).date(),
+        return new EtfMarketOverviewDailyView(
+                TemporalValues.CalendarTimestamp.fromStorage(
+                                Objects.requireNonNull(row.tradeDate(), "trade date required"))
+                        .date(),
                 Objects.requireNonNull(row.etfCount(), "etf_count required"),
-                row.totalShare(), row.totalSizeYi());
+                row.totalShare(),
+                row.totalSizeYi());
     }
 
     public DatasetValues values(EtfMarketOverviewDailyView row) {
@@ -31,8 +34,10 @@ public final class EtfMarketOverviewDailyViewMapper {
 
     public EtfMarketOverviewDailyView fromValues(DatasetValues values) {
         Objects.requireNonNull(values, "ETF overview view values required");
-        return new EtfMarketOverviewDailyView(values.get("trade_date", LocalDate.class),
+        return new EtfMarketOverviewDailyView(
+                values.get("trade_date", LocalDate.class),
                 Objects.requireNonNull(values.get("etf_count", Long.class), "etf_count required"),
-                values.get("total_share", Double.class), values.get("total_size_yi", Double.class));
+                values.get("total_share", Double.class),
+                values.get("total_size_yi", Double.class));
     }
 }

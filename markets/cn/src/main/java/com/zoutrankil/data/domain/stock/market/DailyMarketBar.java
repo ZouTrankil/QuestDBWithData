@@ -1,6 +1,7 @@
 package com.zoutrankil.data.domain.stock.market;
 
 import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
+
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -25,17 +26,23 @@ public record DailyMarketBar(
             throw new IllegalArgumentException("Explicit Tushare stock code required");
         }
         Objects.requireNonNull(tradeDate, "Trade date required");
-        if (Stream.of(open, high, low, close, preClose, change, pctChg, vol, amount, ahVol, ahAmount)
-                .filter(Objects::nonNull).anyMatch(value -> !Double.isFinite(value))) {
+        if (Stream.of(
+                        open, high, low, close, preClose, change, pctChg, vol, amount, ahVol,
+                        ahAmount)
+                .filter(Objects::nonNull)
+                .anyMatch(value -> !Double.isFinite(value))) {
             throw new IllegalArgumentException("Daily numeric values must be finite or null");
         }
     }
 
-    public Key key() { return new Key(tsCode, tradeDate); }
+    public Key key() {
+        return new Key(tsCode, tradeDate);
+    }
 
     public record Key(String tsCode, LocalDate tradeDate) {
         public Key {
-            if (!StockDetailInfo.validCode(tsCode)) throw new IllegalArgumentException("Explicit Tushare stock code required");
+            if (!StockDetailInfo.validCode(tsCode))
+                throw new IllegalArgumentException("Explicit Tushare stock code required");
             Objects.requireNonNull(tradeDate, "Trade date required");
         }
     }

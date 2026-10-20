@@ -1,6 +1,5 @@
 package com.zoutrankil.data.etf.mapper;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.TushareEtfFactorDto;
 import com.zoutrankil.data.domain.DatasetValues;
@@ -8,6 +7,7 @@ import com.zoutrankil.data.domain.fund.EtfFactor;
 import com.zoutrankil.data.domain.fund.EtfFactorDataset;
 import com.zoutrankil.data.domain.fund.EtfFactorKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
@@ -23,30 +23,43 @@ public final class EtfFactorMapper {
     public TushareEtfFactorDto dto(Map<String, JsonNode> source) {
         Objects.requireNonNull(source);
         if (!source.keySet().containsAll(SOURCE_FIELDS))
-            throw new IllegalArgumentException("fund_factor_pro response lacks one or more frozen physical fields");
+            throw new IllegalArgumentException(
+                    "fund_factor_pro response lacks one or more frozen physical fields");
         var factors = new LinkedHashMap<String, Double>();
         for (String field : NUMERIC_FIELDS) factors.put(field, number(source.get(field), field));
-        return new TushareEtfFactorDto(text(source, "ts_code"), text(source, "trade_date"), factors);
+        return new TushareEtfFactorDto(
+                text(source, "ts_code"), text(source, "trade_date"), factors);
     }
 
     public EtfFactor fromSource(TushareEtfFactorDto source) {
         Objects.requireNonNull(source);
-        return new EtfFactor(new EtfFactorKey(source.tsCode(),
-                TemporalValues.businessDate(source.tradeDate(), TemporalValues.DateFormat.BASIC)), source.factors());
+        return new EtfFactor(
+                new EtfFactorKey(
+                        source.tsCode(),
+                        TemporalValues.businessDate(
+                                source.tradeDate(), TemporalValues.DateFormat.BASIC)),
+                source.factors());
     }
 
     public DatasetValues values(EtfFactor row) {
         Objects.requireNonNull(row);
         var values = new LinkedHashMap<String, Object>();
-        values.put("ts_code", row.tsCode()); values.put("trade_date", row.tradeDate());
+        values.put("ts_code", row.tsCode());
+        values.put("trade_date", row.tradeDate());
         values.putAll(row.factors());
         if (values.size() != EtfFactorDataset.DEFINITION.columns().size())
-            throw new IllegalStateException("etf_factor mapper must cover all " + EtfFactorDataset.DEFINITION.columns().size() + " columns");
+            throw new IllegalStateException(
+                    "etf_factor mapper must cover all "
+                            + EtfFactorDataset.DEFINITION.columns().size()
+                            + " columns");
         return new DatasetValues(values);
     }
 
     public EtfFactor fromValues(DatasetValues values) {
-        var key = new EtfFactorKey(values.get("ts_code", String.class), values.get("trade_date", LocalDate.class));
+        var key =
+                new EtfFactorKey(
+                        values.get("ts_code", String.class),
+                        values.get("trade_date", LocalDate.class));
         var factors = new LinkedHashMap<String, Double>();
         for (String field : NUMERIC_FIELDS) factors.put(field, values.get(field, Double.class));
         return new EtfFactor(key, factors);
@@ -58,16 +71,23 @@ public final class EtfFactorMapper {
             throw new IllegalArgumentException("Required nonblank fund_factor_pro field: " + field);
         return value.textValue();
     }
+
     private static Double number(JsonNode value, String field) {
         if (value == null || value.isNull()) return null;
         if (!value.isNumber() && !value.isTextual())
-            throw new IllegalArgumentException("Numeric fund_factor_pro scalar or null required: " + field);
+            throw new IllegalArgumentException(
+                    "Numeric fund_factor_pro scalar or null required: " + field);
         String raw = value.asText();
-        if (raw.isBlank()) throw new IllegalArgumentException("Blank nonnull fund_factor_pro number: " + field);
+        if (raw.isBlank())
+            throw new IllegalArgumentException("Blank nonnull fund_factor_pro number: " + field);
         double parsed;
-        try { parsed = new BigDecimal(raw).doubleValue(); }
-        catch (NumberFormatException invalid) { throw new IllegalArgumentException("Invalid fund_factor_pro number: " + field, invalid); }
-        if (!Double.isFinite(parsed)) throw new IllegalArgumentException("Non-finite fund_factor_pro number: " + field);
+        try {
+            parsed = new BigDecimal(raw).doubleValue();
+        } catch (NumberFormatException invalid) {
+            throw new IllegalArgumentException("Invalid fund_factor_pro number: " + field, invalid);
+        }
+        if (!Double.isFinite(parsed))
+            throw new IllegalArgumentException("Non-finite fund_factor_pro number: " + field);
         return parsed;
     }
 }

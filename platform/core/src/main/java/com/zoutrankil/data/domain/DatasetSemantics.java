@@ -4,12 +4,16 @@ import java.util.HashSet;
 import java.util.List;
 
 /** 声明字段顺序和业务身份语义，与运行时存储、采集规则解耦。 */
-public record DatasetSemantics(String datasetId, int semanticVersion,
-                               List<DatasetDefinition.Column> fields, List<String> businessKey,
-                               String businessDateColumn) {
+public record DatasetSemantics(
+        String datasetId,
+        int semanticVersion,
+        List<DatasetDefinition.Column> fields,
+        List<String> businessKey,
+        String businessDateColumn) {
     public DatasetSemantics {
         DatasetDefinition.identifier(datasetId);
-        if (semanticVersion < 1) throw new IllegalArgumentException("Semantic version must be positive");
+        if (semanticVersion < 1)
+            throw new IllegalArgumentException("Semantic version must be positive");
         fields = List.copyOf(fields);
         businessKey = List.copyOf(businessKey);
         DatasetDefinition.identifier(businessDateColumn);
@@ -23,19 +27,36 @@ public record DatasetSemantics(String datasetId, int semanticVersion,
             if (businessKey.contains(field.logicalName()) && field.nullable())
                 throw new IllegalArgumentException("Business key field cannot be nullable");
         }
-        if (new HashSet<>(businessKey).size() != businessKey.size() || !logicalNames.containsAll(businessKey))
+        if (new HashSet<>(businessKey).size() != businessKey.size()
+                || !logicalNames.containsAll(businessKey))
             throw new IllegalArgumentException("Duplicate or unknown business key field");
-        var dateField = fields.stream().filter(field -> field.logicalName().equals(businessDateColumn))
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("Unknown business date field"));
+        var dateField =
+                fields.stream()
+                        .filter(field -> field.logicalName().equals(businessDateColumn))
+                        .findFirst()
+                        .orElseThrow(
+                                () -> new IllegalArgumentException("Unknown business date field"));
         if (dateField.temporal() == null
                 || dateField.temporal().kind() != DatasetDefinition.TemporalKind.BUSINESS_DATE)
             throw new IllegalArgumentException("Business date field requires calendar semantics");
     }
 
-    public List<String> sourceFields() { return fields.stream().map(DatasetDefinition.Column::sourceName).toList(); }
-    public List<String> logicalFields() { return fields.stream().map(DatasetDefinition.Column::logicalName).toList(); }
-    public List<String> storageFields() { return fields.stream().map(DatasetDefinition.Column::storageName).toList(); }
+    public List<String> sourceFields() {
+        return fields.stream().map(DatasetDefinition.Column::sourceName).toList();
+    }
+
+    public List<String> logicalFields() {
+        return fields.stream().map(DatasetDefinition.Column::logicalName).toList();
+    }
+
+    public List<String> storageFields() {
+        return fields.stream().map(DatasetDefinition.Column::storageName).toList();
+    }
+
     public DatasetDefinition.Column businessDateField() {
-        return fields.stream().filter(field -> field.logicalName().equals(businessDateColumn)).findFirst().orElseThrow();
+        return fields.stream()
+                .filter(field -> field.logicalName().equals(businessDateColumn))
+                .findFirst()
+                .orElseThrow();
     }
 }

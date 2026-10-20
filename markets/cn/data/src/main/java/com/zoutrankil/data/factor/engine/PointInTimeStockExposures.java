@@ -1,14 +1,26 @@
 package com.zoutrankil.data.factor.engine;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /** Shared stock exposures matching Python build_stock_exposures interval semantics. */
 public final class PointInTimeStockExposures {
     private PointInTimeStockExposures() {}
 
-    public record Membership(String symbol, LocalDate inDate, LocalDate outDate,
-            String level, String l1Name, String l2Name) {}
+    public record Membership(
+            String symbol,
+            LocalDate inDate,
+            LocalDate outDate,
+            String level,
+            String l1Name,
+            String l2Name) {}
+
     public record Exposures(double[] logMarketCap, String[] industry) {}
 
     /** Build once per source snapshot, then resolve every requested date against the same index.
@@ -26,17 +38,20 @@ public final class PointInTimeStockExposures {
                 if (industryName(member) == null) continue;
                 grouped.computeIfAbsent(member.symbol(), ignored -> new ArrayList<>()).add(member);
             }
-            var order = Comparator.comparing(Membership::inDate,
-                    Comparator.nullsFirst(Comparator.naturalOrder()));
+            var order =
+                    Comparator.comparing(
+                            Membership::inDate, Comparator.nullsFirst(Comparator.naturalOrder()));
             var frozen = new HashMap<String, List<Membership>>();
-            grouped.forEach((symbol, rows) -> {
-                rows.sort(order);
-                frozen.put(symbol, List.copyOf(rows));
-            });
+            grouped.forEach(
+                    (symbol, rows) -> {
+                        rows.sort(order);
+                        frozen.put(symbol, List.copyOf(rows));
+                    });
             bySymbol = Map.copyOf(frozen);
         }
 
-        public Exposures resolve(LocalDate date, String[] symbols, double[] circMv, double[] totalMv) {
+        public Exposures resolve(
+                LocalDate date, String[] symbols, double[] circMv, double[] totalMv) {
             Objects.requireNonNull(date);
             if (symbols.length != circMv.length || symbols.length != totalMv.length)
                 throw new IllegalArgumentException("Misaligned market capitalization");

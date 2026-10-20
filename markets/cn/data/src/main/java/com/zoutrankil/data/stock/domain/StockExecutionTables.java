@@ -15,7 +15,11 @@ public final class StockExecutionTables {
     }
 
     public static boolean admitsStockStDaily(String table) {
-        try { requireStockStDaily(table); return true; }
-        catch (IllegalArgumentException | IllegalStateException invalid) { return false; }
+        try {
+            requireStockStDaily(table);
+            return true;
+        } catch (IllegalArgumentException | IllegalStateException invalid) {
+            return false;
+        }
     }
 }

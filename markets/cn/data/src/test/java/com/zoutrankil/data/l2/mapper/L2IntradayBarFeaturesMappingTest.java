@@ -1,18 +1,25 @@
 package com.zoutrankil.data.l2.mapper;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.l2.L2IntradayBarFeatureField;
 import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey;
+
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class L2IntradayBarFeaturesMappingTest {
     private static final ObjectMapper JSON = new ObjectMapper();
@@ -33,10 +40,14 @@ class L2IntradayBarFeaturesMappingTest {
         assertEquals(0L, row.feature("tick_count"));
         assertEquals(0.0d, row.feature("bid_depth_1"));
         assertNull(row.feature("vwap"));
-        assertEquals(List.of("symbol", "minute"), L2IntradayBarFeaturesDataset.DEFINITION.businessKey());
-        assertEquals(List.of("symbol", "minute"), L2IntradayBarFeaturesDataset.DEFINITION.dedupKey());
+        assertEquals(
+                List.of("symbol", "minute"), L2IntradayBarFeaturesDataset.DEFINITION.businessKey());
+        assertEquals(
+                List.of("symbol", "minute"), L2IntradayBarFeaturesDataset.DEFINITION.dedupKey());
         assertEquals("minute", L2IntradayBarFeaturesDataset.DEFINITION.designatedTimestamp());
-        assertEquals(DatasetDefinition.Partition.DAY, L2IntradayBarFeaturesDataset.DEFINITION.partition());
+        assertEquals(
+                DatasetDefinition.Partition.DAY,
+                L2IntradayBarFeaturesDataset.DEFINITION.partition());
         assertTrue(L2IntradayBarFeaturesDataset.DEFINITION.wal());
 
         var roundTrip = mapper.fromValues(mapper.values(row));
@@ -54,7 +65,8 @@ class L2IntradayBarFeaturesMappingTest {
 
         var drift = sourceRow();
         drift.put("trade_date", "20260922");
-        assertThrows(IOException.class, () -> mapper.fromParquet(drift, LocalDate.parse("2026-09-22")));
+        assertThrows(
+                IOException.class, () -> mapper.fromParquet(drift, LocalDate.parse("2026-09-22")));
 
         var missing = sourceRow();
         missing.remove("symbol");
@@ -65,13 +77,13 @@ class L2IntradayBarFeaturesMappingTest {
     void completeKeyRequiresCanonicalSymbolAndWholeMinute() throws Exception {
         var mapper = new L2IntradayBarFeaturesMapper();
         var row = mapper.fromParquet(sourceRow(), DAY);
-        assertThrows(IllegalArgumentException.class,
-                () -> new com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey(
-                        "000001.SZ", MINUTE.plusSeconds(1)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new L2IntradayBarFeaturesKey("000001.SZ", MINUTE.plusSeconds(1)));
         var values = new LinkedHashMap<>(mapper.values(row).asMap());
         values.put("symbol", "000001");
-        assertThrows(IllegalArgumentException.class,
-                () -> mapper.fromValues(new com.zoutrankil.data.domain.DatasetValues(values)));
+        assertThrows(
+                IllegalArgumentException.class, () -> mapper.fromValues(new DatasetValues(values)));
     }
 
     @Test
@@ -100,7 +112,9 @@ class L2IntradayBarFeaturesMappingTest {
                 case VOLUME, AMOUNT -> row.put(field.fieldName(), 0.0d);
                 case TICK_COUNT, HAS_TRADE_1M -> row.put(field.fieldName(), 0L);
                 default -> {
-                    if (!field.nullable()) throw new AssertionError("Unexpected required D087 field: " + field.fieldName());
+                    if (!field.nullable())
+                        throw new AssertionError(
+                                "Unexpected required D087 field: " + field.fieldName());
                     if ("bid_depth_1".equals(field.fieldName())) row.put(field.fieldName(), 0L);
                     else row.putNull(field.fieldName());
                 }

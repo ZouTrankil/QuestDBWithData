@@ -1,24 +1,55 @@
 package com.zoutrankil.data.repository;
 
-import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.contains;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.zoutrankil.data.config.QuestDbProperties;
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyMaterializationPort;
 import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
+import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.jdbc.core.*;
 
 /** Independent bounded source census, nullable native counts, and exact physical contract guards. */
 class RetailSentimentDailyMaterializationPortTest {
@@ -29,19 +60,27 @@ class RetailSentimentDailyMaterializationPortTest {
         final JdbcTemplate jdbc = mock(JdbcTemplate.class);
         final PreparedStatement statement = mock(PreparedStatement.class);
         final RetailSentimentDailyMaterializationPort port =
-                spy(new RetailSentimentDailyMaterializationPort(jdbc, new QuestDbProperties(), false));
+                spy(
+                        new RetailSentimentDailyMaterializationPort(
+                                jdbc, new QuestDbProperties(), false));
         final List<String> sql = new ArrayList<>();
 
         Census(List<Map<String, Object>> rows) throws Exception {
             var connection = mock(Connection.class);
-            when(connection.prepareStatement(anyString())).thenAnswer(call -> {
-                sql.add(call.getArgument(0));
-                return statement;
-            });
-            when(jdbc.query(any(PreparedStatementCreator.class), any(ResultSetExtractor.class))).thenAnswer(call -> {
-                ((PreparedStatementCreator) call.getArgument(0)).createPreparedStatement(connection);
-                return ((ResultSetExtractor<?>) call.getArgument(1)).extractData(resultSet(rows));
-            });
+            when(connection.prepareStatement(anyString()))
+                    .thenAnswer(
+                            call -> {
+                                sql.add(call.getArgument(0));
+                                return statement;
+                            });
+            when(jdbc.query(any(PreparedStatementCreator.class), any(ResultSetExtractor.class)))
+                    .thenAnswer(
+                            call -> {
+                                ((PreparedStatementCreator) call.getArgument(0))
+                                        .createPreparedStatement(connection);
+                                return ((ResultSetExtractor<?>) call.getArgument(1))
+                                        .extractData(resultSet(rows));
+                            });
         }
 
         void verify(long count, RetailSentimentDaily expected) {
@@ -49,7 +88,8 @@ class RetailSentimentDailyMaterializationPortTest {
         }
     }
 
-    private static Map<String, Object> source(Long q1, Long q3, Long spoof, Long support, Long pressure) {
+    private static Map<String, Object> source(
+            Long q1, Long q3, Long spoof, Long support, Long pressure) {
         var result = new LinkedHashMap<String, Object>();
         result.put("ts", Timestamp.from(DATE.atStartOfDay().toInstant(ZoneOffset.UTC)));
         result.put("q1_count", q1);
@@ -61,139 +101,239 @@ class RetailSentimentDailyMaterializationPortTest {
     }
 
     private static RetailSentimentDaily counts(Long q1, Long q3, Long spoof, Long manipulation) {
-        return new RetailSentimentDaily(DATE, null, null, null, null, null,
-                q1, q3, null, spoof, manipulation, null, null);
+        return new RetailSentimentDaily(
+                DATE, null, null, null, null, null, q1, q3, null, spoof, manipulation, null, null);
     }
 
-    @Test void allNullSourceCountsRemainNullWithoutZeroFill() throws Exception {
-        var census = new Census(List.of(source(null, null, null, null, null), source(null, null, null, null, null)));
+    @Test
+    void allNullSourceCountsRemainNullWithoutZeroFill() throws Exception {
+        var census =
+                new Census(
+                        List.of(
+                                source(null, null, null, null, null),
+                                source(null, null, null, null, null)));
         assertDoesNotThrow(() -> census.verify(2, counts(null, null, null, null)));
         assertEquals(1, census.sql.size());
-        assertTrue(census.sql.getFirst().contains("SELECT ts,q1_count,q3_count,spoof_count,fake_support_count,fake_pressure_count"));
+        assertTrue(
+                census.sql
+                        .getFirst()
+                        .contains(
+                                "SELECT ts,q1_count,q3_count,spoof_count,fake_support_count,fake_pressure_count"));
         assertTrue(census.sql.getFirst().contains("WHERE ts >= ? AND ts < ? LIMIT 200001"));
         verify(census.statement).setMaxRows(200001);
         verify(census.statement).setFetchSize(1000);
         verify(census.statement).setQueryTimeout(20);
-        verify(census.statement).setTimestamp(eq(1), eq(Timestamp.from(DATE.atStartOfDay().toInstant(ZoneOffset.UTC))), any(Calendar.class));
-        verify(census.statement).setTimestamp(eq(2), eq(Timestamp.from(DATE.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC))), any(Calendar.class));
+        verify(census.statement)
+                .setTimestamp(
+                        eq(1),
+                        eq(Timestamp.from(DATE.atStartOfDay().toInstant(ZoneOffset.UTC))),
+                        any(Calendar.class));
+        verify(census.statement)
+                .setTimestamp(
+                        eq(2),
+                        eq(
+                                Timestamp.from(
+                                        DATE.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC))),
+                        any(Calendar.class));
     }
 
-    @Test void manipulationUsesNullablePairBeforeSumRatherThanSeparateCoalescedSums() throws Exception {
-        var census = new Census(List.of(source(1L, null, 0L, 5L, 1L),
-                source(2L, 4L, null, 100L, null), source(null, null, null, null, 90L)));
+    @Test
+    void manipulationUsesNullablePairBeforeSumRatherThanSeparateCoalescedSums() throws Exception {
+        var census =
+                new Census(
+                        List.of(
+                                source(1L, null, 0L, 5L, 1L),
+                                source(2L, 4L, null, 100L, null),
+                                source(null, null, null, null, 90L)));
         assertDoesNotThrow(() -> census.verify(3, counts(3L, 4L, 0L, 6L)));
         assertThrows(IllegalStateException.class, () -> census.verify(3, counts(3L, 4L, 0L, 196L)));
     }
 
-    @Test void pairWithMissingOperandDoesNotOverflowOrBecomeZero() throws Exception {
+    @Test
+    void pairWithMissingOperandDoesNotOverflowOrBecomeZero() throws Exception {
         var census = new Census(List.of(source(null, null, null, Long.MAX_VALUE, null)));
         assertDoesNotThrow(() -> census.verify(1, counts(null, null, null, null)));
     }
 
-    @Test void negativeSupportCannotBeHiddenByPositivePressure() throws Exception {
+    @Test
+    void negativeSupportCannotBeHiddenByPositivePressure() throws Exception {
         var census = new Census(List.of(source(0L, 0L, 0L, -1L, 1L)));
-        var error = assertThrows(IllegalStateException.class,
-                () -> census.verify(1, counts(0L, 0L, 0L, 0L)));
+        var error =
+                assertThrows(
+                        IllegalStateException.class,
+                        () -> census.verify(1, counts(0L, 0L, 0L, 0L)));
         assertTrue(error.getMessage().contains("fake_support_count"));
     }
 
-    @Test void negativePressureCannotBeHiddenByPositiveSupport() throws Exception {
+    @Test
+    void negativePressureCannotBeHiddenByPositiveSupport() throws Exception {
         var census = new Census(List.of(source(0L, 0L, 0L, 1L, -1L)));
-        var error = assertThrows(IllegalStateException.class,
-                () -> census.verify(1, counts(0L, 0L, 0L, 0L)));
+        var error =
+                assertThrows(
+                        IllegalStateException.class,
+                        () -> census.verify(1, counts(0L, 0L, 0L, 0L)));
         assertTrue(error.getMessage().contains("fake_pressure_count"));
     }
 
-    @Test void negativeSupportIsRejectedBeforeNullPressureExcludesThePair() throws Exception {
+    @Test
+    void negativeSupportIsRejectedBeforeNullPressureExcludesThePair() throws Exception {
         var census = new Census(List.of(source(0L, 0L, 0L, -1L, null)));
-        var error = assertThrows(IllegalStateException.class,
-                () -> census.verify(1, counts(0L, 0L, 0L, null)));
+        var error =
+                assertThrows(
+                        IllegalStateException.class,
+                        () -> census.verify(1, counts(0L, 0L, 0L, null)));
         assertTrue(error.getMessage().contains("fake_support_count"));
     }
 
-    @Test void negativePressureIsRejectedBeforeNullSupportExcludesThePair() throws Exception {
+    @Test
+    void negativePressureIsRejectedBeforeNullSupportExcludesThePair() throws Exception {
         var census = new Census(List.of(source(0L, 0L, 0L, null, -1L)));
-        var error = assertThrows(IllegalStateException.class,
-                () -> census.verify(1, counts(0L, 0L, 0L, null)));
+        var error =
+                assertThrows(
+                        IllegalStateException.class,
+                        () -> census.verify(1, counts(0L, 0L, 0L, null)));
         assertTrue(error.getMessage().contains("fake_pressure_count"));
     }
-    @Test void longMaxIsPreservedExactly() throws Exception {
-        var census = new Census(List.of(source(Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, 0L)));
-        assertDoesNotThrow(() -> census.verify(1, counts(Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE, Long.MAX_VALUE)));
+
+    @Test
+    void longMaxIsPreservedExactly() throws Exception {
+        var census =
+                new Census(
+                        List.of(
+                                source(
+                                        Long.MAX_VALUE,
+                                        Long.MAX_VALUE,
+                                        Long.MAX_VALUE,
+                                        Long.MAX_VALUE,
+                                        0L)));
+        assertDoesNotThrow(
+                () ->
+                        census.verify(
+                                1,
+                                counts(
+                                        Long.MAX_VALUE,
+                                        Long.MAX_VALUE,
+                                        Long.MAX_VALUE,
+                                        Long.MAX_VALUE)));
     }
 
-    @Test void overflowingPerRowPairFailsBeforeNativeSumCouldWrap() throws Exception {
+    @Test
+    void overflowingPerRowPairFailsBeforeNativeSumCouldWrap() throws Exception {
         var census = new Census(List.of(source(0L, 0L, 0L, Long.MAX_VALUE, 1L)));
-        var error = assertThrows(IllegalStateException.class, () -> census.verify(1, counts(0L, 0L, 0L, 0L)));
+        var error =
+                assertThrows(
+                        IllegalStateException.class,
+                        () -> census.verify(1, counts(0L, 0L, 0L, 0L)));
         assertTrue(error.getMessage().contains("per-row manipulation LONG addition overflows"));
     }
 
-    @Test void overflowingPositiveDailySumsFailEvenWhenNativeValueCouldWrapToPositive() throws Exception {
-        // 2*MAX + 3 wraps to 1; a native nonnegative DTO or SQL parity check would accept the wrapped value.
-        var census = new Census(List.of(source(Long.MAX_VALUE, 0L, 0L, 0L, 0L),
-                source(Long.MAX_VALUE, 0L, 0L, 0L, 0L), source(3L, 0L, 0L, 0L, 0L)));
-        var error = assertThrows(IllegalStateException.class, () -> census.verify(3, counts(1L, 0L, 0L, 0L)));
+    @Test
+    void overflowingPositiveDailySumsFailEvenWhenNativeValueCouldWrapToPositive() throws Exception {
+        // 2*MAX + 3 wraps to 1; a native nonnegative DTO or SQL parity check would accept the
+        // wrapped value.
+        var census =
+                new Census(
+                        List.of(
+                                source(Long.MAX_VALUE, 0L, 0L, 0L, 0L),
+                                source(Long.MAX_VALUE, 0L, 0L, 0L, 0L),
+                                source(3L, 0L, 0L, 0L, 0L)));
+        var error =
+                assertThrows(
+                        IllegalStateException.class,
+                        () -> census.verify(3, counts(1L, 0L, 0L, 0L)));
         assertTrue(error.getMessage().contains("complete daily LONG sum overflows"));
     }
 
-    @Test void overflowingManipulationDailySumAlsoFails() throws Exception {
-        var census = new Census(List.of(source(0L, 0L, 0L, Long.MAX_VALUE, 0L),
-                source(0L, 0L, 0L, Long.MAX_VALUE, 0L), source(0L, 0L, 0L, 3L, 0L)));
+    @Test
+    void overflowingManipulationDailySumAlsoFails() throws Exception {
+        var census =
+                new Census(
+                        List.of(
+                                source(0L, 0L, 0L, Long.MAX_VALUE, 0L),
+                                source(0L, 0L, 0L, Long.MAX_VALUE, 0L),
+                                source(0L, 0L, 0L, 3L, 0L)));
         assertThrows(IllegalStateException.class, () -> census.verify(3, counts(0L, 0L, 0L, 1L)));
     }
 
-    @Test void nullAndZeroAggregateAreDifferent() throws Exception {
+    @Test
+    void nullAndZeroAggregateAreDifferent() throws Exception {
         var census = new Census(List.of(source(null, null, null, null, null)));
-        assertThrows(IllegalStateException.class, () -> census.verify(1, counts(0L, null, null, null)));
+        assertThrows(
+                IllegalStateException.class, () -> census.verify(1, counts(0L, null, null, null)));
     }
 
-    @Test void missingRowsAndBucketsCannotClaimCompleteSource() throws Exception {
+    @Test
+    void missingRowsAndBucketsCannotClaimCompleteSource() throws Exception {
         var census = new Census(List.of(source(1L, 2L, 3L, 4L, 5L)));
         assertThrows(IllegalStateException.class, () -> census.verify(2, counts(1L, 2L, 3L, 9L)));
-        assertThrows(IllegalStateException.class, () -> census.port.requireSourceCoverage(DATE, DATE, 1, List.of()));
+        assertThrows(
+                IllegalStateException.class,
+                () -> census.port.requireSourceCoverage(DATE, DATE, 1, List.of()));
         assertThrows(IllegalStateException.class, () -> census.verify(1, counts(1L, 2L, 3L, 8L)));
     }
 
-    @Test void negativeCountsAndNonMidnightSourceTimestampsAreRejected() throws Exception {
+    @Test
+    void negativeCountsAndNonMidnightSourceTimestampsAreRejected() throws Exception {
         var census = new Census(List.of(source(-1L, 0L, 0L, 0L, 0L)));
         assertThrows(IllegalStateException.class, () -> census.verify(1, counts(0L, 0L, 0L, 0L)));
         var row = source(1L, 2L, 3L, 4L, 5L);
         row.put("ts", Timestamp.from(DATE.atStartOfDay().plusSeconds(1).toInstant(ZoneOffset.UTC)));
         var offMidnight = new Census(List.of(row));
-        assertThrows(IllegalStateException.class, () -> offMidnight.verify(1, counts(1L, 2L, 3L, 9L)));
+        assertThrows(
+                IllegalStateException.class, () -> offMidnight.verify(1, counts(1L, 2L, 3L, 9L)));
     }
 
-    @Test void censusBudgetAndCancellationFailBeforeAnyAcceptedEvidence() throws Exception {
+    @Test
+    void censusBudgetAndCancellationFailBeforeAnyAcceptedEvidence() throws Exception {
         var census = new Census(List.of(source(1L, 2L, 3L, 4L, 5L)));
-        assertThrows(IllegalStateException.class, () -> census.verify(200001, counts(1L, 2L, 3L, 9L)));
+        assertThrows(
+                IllegalStateException.class, () -> census.verify(200001, counts(1L, 2L, 3L, 9L)));
         assertTrue(census.sql.isEmpty());
         census.port.cancellationProbe(() -> true);
-        assertThrows(java.util.concurrent.CancellationException.class, () -> census.verify(1, counts(1L, 2L, 3L, 9L)));
+        assertThrows(CancellationException.class, () -> census.verify(1, counts(1L, 2L, 3L, 9L)));
     }
 
-    @Test @SuppressWarnings({"unchecked", "rawtypes"})
-    void actualReadbackPreservesAllNullableFieldsAndExplicitThirteenColumnProjection() throws Exception {
+    @Test
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    void actualReadbackPreservesAllNullableFieldsAndExplicitThirteenColumnProjection()
+            throws Exception {
         var jdbc = mock(JdbcTemplate.class);
         var connection = mock(Connection.class);
         var statement = mock(PreparedStatement.class);
         var sql = new ArrayList<String>();
-        when(connection.prepareStatement(anyString())).thenAnswer(call -> {
-            sql.add(call.getArgument(0));
-            return statement;
-        });
+        when(connection.prepareStatement(anyString()))
+                .thenAnswer(
+                        call -> {
+                            sql.add(call.getArgument(0));
+                            return statement;
+                        });
         var storage = new LinkedHashMap<String, Object>();
         storage.put("trade_date", Timestamp.from(DATE.atStartOfDay().toInstant(ZoneOffset.UTC)));
-        when(jdbc.query(any(PreparedStatementCreator.class), any(RowMapper.class))).thenAnswer(call -> {
-            ((PreparedStatementCreator) call.getArgument(0)).createPreparedStatement(connection);
-            var rows = resultSet(List.of(storage));
-            assertTrue(rows.next());
-            return List.of(((RowMapper<?>) call.getArgument(1)).mapRow(rows, 0));
-        });
-        var port = spy(new RetailSentimentDailyMaterializationPort(jdbc, new QuestDbProperties(), false));
+        when(jdbc.query(any(PreparedStatementCreator.class), any(RowMapper.class)))
+                .thenAnswer(
+                        call -> {
+                            ((PreparedStatementCreator) call.getArgument(0))
+                                    .createPreparedStatement(connection);
+                            var rows = resultSet(List.of(storage));
+                            assertTrue(rows.next());
+                            return List.of(((RowMapper<?>) call.getArgument(1)).mapRow(rows, 0));
+                        });
+        var port =
+                spy(
+                        new RetailSentimentDailyMaterializationPort(
+                                jdbc, new QuestDbProperties(), false));
         assertEquals(List.of(counts(null, null, null, null)), port.actual(DATE, DATE));
-        assertTrue(sql.getFirst().startsWith("SELECT trade_date,avg_retail_ratio,avg_retail_entropy,"));
-        assertTrue(sql.getFirst().contains("total_q1,total_q3,avg_wash_trade_ratio,total_spoof_count,total_manipulation_count,"));
-        assertTrue(sql.getFirst().contains("FROM mv_retail_sentiment_daily WHERE trade_date >= ? AND trade_date < ?"));
+        assertTrue(
+                sql.getFirst()
+                        .startsWith("SELECT trade_date,avg_retail_ratio,avg_retail_entropy,"));
+        assertTrue(
+                sql.getFirst()
+                        .contains(
+                                "total_q1,total_q3,avg_wash_trade_ratio,total_spoof_count,total_manipulation_count,"));
+        assertTrue(
+                sql.getFirst()
+                        .contains(
+                                "FROM mv_retail_sentiment_daily WHERE trade_date >= ? AND trade_date < ?"));
         verify(statement).setMaxRows(32);
         storage.put("total_q1", 0L);
         assertEquals(0L, port.actual(DATE, DATE).getFirst().totalQ1().longValue());
@@ -202,10 +342,15 @@ class RetailSentimentDailyMaterializationPortTest {
         storage.put("avg_mfi_score", Double.POSITIVE_INFINITY);
         assertThrows(IllegalStateException.class, () -> port.actual(DATE, DATE));
     }
-    @Test void authoritativeSqlRetainsAllThirteenExpressionsAndYuanConversion() {
-        String sql = RetailSentimentDailyMaterializationPort.DEFINITION_SQL.toLowerCase(Locale.ROOT);
+
+    @Test
+    void authoritativeSqlRetainsAllThirteenExpressionsAndYuanConversion() {
+        String sql =
+                RetailSentimentDailyMaterializationPort.DEFINITION_SQL.toLowerCase(Locale.ROOT);
         assertTrue(sql.startsWith("select ts as trade_date, avg(gmm_retail_ratio)"));
-        assertTrue(sql.contains("sum(fake_support_count + fake_pressure_count) as total_manipulation_count"));
+        assertTrue(
+                sql.contains(
+                        "sum(fake_support_count + fake_pressure_count) as total_manipulation_count"));
         assertFalse(sql.contains("coalesce"));
         assertTrue(sql.contains("sum(retail_total_amount) / 100000000.0"));
         assertTrue(sql.contains("sum(retail_funds_net_inflow) / 100000000.0"));
@@ -217,83 +362,181 @@ class RetailSentimentDailyMaterializationPortTest {
     private static final class Metadata {
         final JdbcTemplate jdbc = mock(JdbcTemplate.class);
         final RetailSentimentDailyMaterializationPort port =
-                spy(new RetailSentimentDailyMaterializationPort(jdbc, new QuestDbProperties(), false));
+                spy(
+                        new RetailSentimentDailyMaterializationPort(
+                                jdbc, new QuestDbProperties(), false));
         final Map<String, String> sourceTypes = new LinkedHashMap<>();
         final Map<String, String> outputTypes = new LinkedHashMap<>();
         final Map<String, Object> source = physical(11, "l2_daily_features~11", "DAY", true);
-        final Map<String, Object> output = physical(12, "mv_retail_sentiment_daily~12", "MONTH", false);
+        final Map<String, Object> output =
+                physical(12, "mv_retail_sentiment_daily~12", "MONTH", false);
         final Map<String, Object> refresh = new LinkedHashMap<>();
         final Map<String, Object> sourceWal = wal(7);
         final Map<String, Object> outputWal = wal(4);
 
         Metadata() throws Exception {
-            sourceTypes.put("ts", "TIMESTAMP"); sourceTypes.put("symbol", "SYMBOL");
-            for (String column : List.of("gmm_retail_ratio", "mean_retail_entropy", "retail_total_amount",
-                    "retail_funds_net_inflow", "mean_rel_aggro", "wash_trade_ratio", "mfi_score", "main_net_inflow"))
-                sourceTypes.put(column, "DOUBLE");
-            for (String column : List.of("q1_count", "q3_count", "spoof_count", "fake_support_count", "fake_pressure_count"))
-                sourceTypes.put(column, "LONG");
-            com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset.DEFINITION.columns()
-                    .forEach(column -> outputTypes.put(column.storageName(), column.storageType().name()));
+            sourceTypes.put("ts", "TIMESTAMP");
+            sourceTypes.put("symbol", "SYMBOL");
+            for (String column :
+                    List.of(
+                            "gmm_retail_ratio",
+                            "mean_retail_entropy",
+                            "retail_total_amount",
+                            "retail_funds_net_inflow",
+                            "mean_rel_aggro",
+                            "wash_trade_ratio",
+                            "mfi_score",
+                            "main_net_inflow")) sourceTypes.put(column, "DOUBLE");
+            for (String column :
+                    List.of(
+                            "q1_count",
+                            "q3_count",
+                            "spoof_count",
+                            "fake_support_count",
+                            "fake_pressure_count")) sourceTypes.put(column, "LONG");
+            RetailSentimentDailyDataset.DEFINITION
+                    .columns()
+                    .forEach(
+                            column ->
+                                    outputTypes.put(
+                                            column.storageName(), column.storageType().name()));
             refresh.put("view_status", "valid");
             refresh.put("invalidation_reason", null);
             refresh.put("base_table_name", RetailSentimentDailyMaterializationPort.SOURCE);
             refresh.put("view_sql", RetailSentimentDailyMaterializationPort.DEFINITION_SQL);
-            refresh.put("refresh_type", "timer"); refresh.put("timer_interval", 1L);
-            refresh.put("timer_interval_unit", "MINUTE"); refresh.put("refresh_base_table_txn", 7L);
+            refresh.put("refresh_type", "timer");
+            refresh.put("timer_interval", 1L);
+            refresh.put("timer_interval_unit", "MINUTE");
+            refresh.put("refresh_base_table_txn", 7L);
             refresh.put("base_table_txn", 7L);
             refresh.put("last_refresh_start_timestamp", "2026-10-06T00:00:00Z");
             refresh.put("last_refresh_finish_timestamp", "2026-10-06T00:00:01Z");
 
-            doAnswer(call -> {
-                String sql = call.getArgument(0);
-                var types = sql.contains("('l2_daily_features')") ? sourceTypes : outputTypes;
-                var rs = mock(ResultSet.class);
-                for (var column : types.entrySet()) {
-                    when(rs.getString(1)).thenReturn(column.getKey());
-                    when(rs.getString(2)).thenReturn(column.getValue());
-                    ((RowCallbackHandler) call.getArgument(1)).processRow(rs);
-                }
-                return null;
-            }).when(jdbc).query(anyString(), any(RowCallbackHandler.class));
-            when(jdbc.queryForList(anyString())).thenAnswer(call -> {
-                String sql = call.getArgument(0);
-                if (sql.contains("('l2_daily_features')"))
-                    return List.of(Map.of("column", "ts", "designated", true, "upsertKey", true),
-                            Map.of("column", "symbol", "designated", false, "upsertKey", true));
-                return List.of(Map.of("column", "trade_date", "designated", true, "upsertKey", false));
-            });
-            when(jdbc.query(anyString(), any(ResultSetExtractor.class))).thenAnswer(call -> {
-                String sql = call.getArgument(0);
-                Map<String, Object> row;
-                if (sql.contains("FROM materialized_views()")) row = refresh;
-                else if (sql.contains("FROM wal_tables()")) row = sql.contains("name='l2_daily_features'") ? sourceWal : outputWal;
-                else row = sql.contains("table_name='l2_daily_features'") ? source : output;
-                return ((ResultSetExtractor<?>) call.getArgument(1)).extractData(resultSet(List.of(row)));
-            });
+            doAnswer(
+                            call -> {
+                                String sql = call.getArgument(0);
+                                var types =
+                                        sql.contains("('l2_daily_features')")
+                                                ? sourceTypes
+                                                : outputTypes;
+                                var rs = mock(ResultSet.class);
+                                for (var column : types.entrySet()) {
+                                    when(rs.getString(1)).thenReturn(column.getKey());
+                                    when(rs.getString(2)).thenReturn(column.getValue());
+                                    ((RowCallbackHandler) call.getArgument(1)).processRow(rs);
+                                }
+                                return null;
+                            })
+                    .when(jdbc)
+                    .query(anyString(), any(RowCallbackHandler.class));
+            when(jdbc.queryForList(anyString()))
+                    .thenAnswer(
+                            call -> {
+                                String sql = call.getArgument(0);
+                                if (sql.contains("('l2_daily_features')"))
+                                    return List.of(
+                                            Map.of(
+                                                    "column",
+                                                    "ts",
+                                                    "designated",
+                                                    true,
+                                                    "upsertKey",
+                                                    true),
+                                            Map.of(
+                                                    "column",
+                                                    "symbol",
+                                                    "designated",
+                                                    false,
+                                                    "upsertKey",
+                                                    true));
+                                return List.of(
+                                        Map.of(
+                                                "column",
+                                                "trade_date",
+                                                "designated",
+                                                true,
+                                                "upsertKey",
+                                                false));
+                            });
+            when(jdbc.query(anyString(), any(ResultSetExtractor.class)))
+                    .thenAnswer(
+                            call -> {
+                                String sql = call.getArgument(0);
+                                Map<String, Object> row;
+                                if (sql.contains("FROM materialized_views()")) row = refresh;
+                                else if (sql.contains("FROM wal_tables()"))
+                                    row =
+                                            sql.contains("name='l2_daily_features'")
+                                                    ? sourceWal
+                                                    : outputWal;
+                                else
+                                    row =
+                                            sql.contains("table_name='l2_daily_features'")
+                                                    ? source
+                                                    : output;
+                                return ((ResultSetExtractor<?>) call.getArgument(1))
+                                        .extractData(resultSet(List.of(row)));
+                            });
         }
 
-        private static Map<String, Object> physical(long id, String directory, String partition, boolean dedup) {
-            return new LinkedHashMap<>(Map.of("id", id, "directoryName", directory, "table_txn", 10L,
-                    "table_suspended", false, "wal_pending_row_count", 0L, "partitionBy", partition,
-                    "walEnabled", true, "dedup", dedup));
+        private static Map<String, Object> physical(
+                long id, String directory, String partition, boolean dedup) {
+            return new LinkedHashMap<>(
+                    Map.of(
+                            "id",
+                            id,
+                            "directoryName",
+                            directory,
+                            "table_txn",
+                            10L,
+                            "table_suspended",
+                            false,
+                            "wal_pending_row_count",
+                            0L,
+                            "partitionBy",
+                            partition,
+                            "walEnabled",
+                            true,
+                            "dedup",
+                            dedup));
         }
 
         private static Map<String, Object> wal(long txn) {
-            return new LinkedHashMap<>(Map.of("sequencerTxn", txn, "writerTxn", txn,
-                    "bufferedTxnSize", 0L, "suspended", false));
+            return new LinkedHashMap<>(
+                    Map.of(
+                            "sequencerTxn",
+                            txn,
+                            "writerTxn",
+                            txn,
+                            "bufferedTxnSize",
+                            0L,
+                            "suspended",
+                            false));
         }
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"partition", "non-wal", "non-dedup", "table-suspended", "pending-rows",
-            "wal-suspended", "buffered-wal", "writer-behind"})
+    @ValueSource(
+            strings = {
+                "partition",
+                "non-wal",
+                "non-dedup",
+                "table-suspended",
+                "pending-rows",
+                "wal-suspended",
+                "buffered-wal",
+                "writer-behind"
+            })
     void installationRejectsWrongPhysicalSourceBeforeAnyCreate(String fault) throws Exception {
         var fixture = new Metadata();
-        // Mock only process admission; the installation and its schema/physical/WAL checks remain real.
+        // Mock only process admission; the installation and its schema/physical/WAL checks remain
+        // real.
         doNothing().when(fixture.port).verifyPrivateInstance();
-        when(fixture.jdbc.queryForList("SELECT view_name FROM materialized_views() WHERE view_name='"
-                + RetailSentimentDailyMaterializationPort.OUTPUT + "'")).thenReturn(List.of());
+        when(fixture.jdbc.queryForList(
+                        "SELECT view_name FROM materialized_views() WHERE view_name='"
+                                + RetailSentimentDailyMaterializationPort.OUTPUT
+                                + "'"))
+                .thenReturn(List.of());
         switch (fault) {
             case "partition" -> fixture.source.put("partitionBy", "MONTH");
             case "non-wal" -> fixture.source.put("walEnabled", false);
@@ -307,43 +550,67 @@ class RetailSentimentDailyMaterializationPortTest {
         }
         assertThrows(IllegalStateException.class, fixture.port::createIsolatedTarget);
         verify(fixture.jdbc, never()).execute(anyString());
-        verify(fixture.jdbc, never()).queryForList(
-                "SELECT view_name FROM materialized_views() WHERE view_name='" + RetailSentimentDailyMaterializationPort.OUTPUT + "'");
+        verify(fixture.jdbc, never())
+                .queryForList(
+                        "SELECT view_name FROM materialized_views() WHERE view_name='"
+                                + RetailSentimentDailyMaterializationPort.OUTPUT
+                                + "'");
     }
 
-    @Test @SuppressWarnings({"unchecked", "rawtypes"})
+    @Test
+    @SuppressWarnings({"unchecked", "rawtypes"})
     void installationRejectsAChangedSourcePhysicalVersionBeforeCreate() throws Exception {
         var fixture = new Metadata();
         doNothing().when(fixture.port).verifyPrivateInstance();
         var reads = new AtomicInteger();
-        when(fixture.jdbc.query(contains("FROM tables() WHERE table_name='l2_daily_features'"),
-                any(ResultSetExtractor.class))).thenAnswer(call -> {
-            var source = new LinkedHashMap<>(fixture.source);
-            if (reads.incrementAndGet() > 1) source.put("table_txn", 11L);
-            return ((ResultSetExtractor<?>) call.getArgument(1)).extractData(resultSet(List.of(source)));
-        });
+        when(fixture.jdbc.query(
+                        contains("FROM tables() WHERE table_name='l2_daily_features'"),
+                        any(ResultSetExtractor.class)))
+                .thenAnswer(
+                        call -> {
+                            var source = new LinkedHashMap<>(fixture.source);
+                            if (reads.incrementAndGet() > 1) source.put("table_txn", 11L);
+                            return ((ResultSetExtractor<?>) call.getArgument(1))
+                                    .extractData(resultSet(List.of(source)));
+                        });
         assertThrows(IllegalStateException.class, fixture.port::createIsolatedTarget);
         assertEquals(2, reads.get());
         verify(fixture.jdbc, never()).execute(anyString());
     }
-    @Test void installationChecksStableSourceIdentityWithoutAnExistingMv() throws Exception {
+
+    @Test
+    void installationChecksStableSourceIdentityWithoutAnExistingMv() throws Exception {
         var fixture = new Metadata();
         doNothing().when(fixture.port).verifyPrivateInstance();
-        when(fixture.jdbc.queryForList("SELECT view_name FROM materialized_views() WHERE view_name='"
-                + RetailSentimentDailyMaterializationPort.OUTPUT + "'")).thenReturn(List.of());
+        when(fixture.jdbc.queryForList(
+                        "SELECT view_name FROM materialized_views() WHERE view_name='"
+                                + RetailSentimentDailyMaterializationPort.OUTPUT
+                                + "'"))
+                .thenReturn(List.of());
         assertDoesNotThrow(fixture.port::createIsolatedTarget);
-        verify(fixture.jdbc).execute("CREATE MATERIALIZED VIEW " + RetailSentimentDailyMaterializationPort.OUTPUT
-                + " REFRESH EVERY 1m AS (" + RetailSentimentDailyMaterializationPort.DEFINITION_SQL + ") PARTITION BY MONTH");
-    }
-    @Test void actualLongTypesAndPhysicalTransactionsAreIndependentFromWalFrontiers() throws Exception {
-        var fixture = new Metadata();
-        var snapshot = fixture.port.snapshot();
-        assertTrue(snapshot.valid()); assertTrue(snapshot.caughtUp());
-        assertEquals(7, snapshot.sourceSeqTxn()); assertEquals(10, snapshot.sourceTableTxn());
-        assertEquals(4, snapshot.mvSeqTxn()); assertEquals(10, snapshot.mvTxn());
+        verify(fixture.jdbc)
+                .execute(
+                        "CREATE MATERIALIZED VIEW "
+                                + RetailSentimentDailyMaterializationPort.OUTPUT
+                                + " REFRESH EVERY 1m AS ("
+                                + RetailSentimentDailyMaterializationPort.DEFINITION_SQL
+                                + ") PARTITION BY MONTH");
     }
 
-    @Test void wrongBaseColumnTypesPartitionAndDefinitionAreRejected() throws Exception {
+    @Test
+    void actualLongTypesAndPhysicalTransactionsAreIndependentFromWalFrontiers() throws Exception {
+        var fixture = new Metadata();
+        var snapshot = fixture.port.snapshot();
+        assertTrue(snapshot.valid());
+        assertTrue(snapshot.caughtUp());
+        assertEquals(7, snapshot.sourceSeqTxn());
+        assertEquals(10, snapshot.sourceTableTxn());
+        assertEquals(4, snapshot.mvSeqTxn());
+        assertEquals(10, snapshot.mvTxn());
+    }
+
+    @Test
+    void wrongBaseColumnTypesPartitionAndDefinitionAreRejected() throws Exception {
         var fixture = new Metadata();
         fixture.sourceTypes.put("fake_pressure_count", "INT");
         assertThrows(IllegalStateException.class, fixture.port::snapshot);
@@ -351,12 +618,16 @@ class RetailSentimentDailyMaterializationPortTest {
         fixture.source.put("partitionBy", "MONTH");
         assertThrows(IllegalStateException.class, fixture.port::snapshot);
         fixture.source.put("partitionBy", "DAY");
-        fixture.refresh.put("view_sql", RetailSentimentDailyMaterializationPort.DEFINITION_SQL.replace(
-                "sum(fake_support_count + fake_pressure_count)", "sum(fake_support_count) + sum(fake_pressure_count)"));
+        fixture.refresh.put(
+                "view_sql",
+                RetailSentimentDailyMaterializationPort.DEFINITION_SQL.replace(
+                        "sum(fake_support_count + fake_pressure_count)",
+                        "sum(fake_support_count) + sum(fake_pressure_count)"));
         assertThrows(IllegalStateException.class, fixture.port::snapshot);
     }
 
-    @Test void outputThirteenColumnTypesMustMatchExactly() throws Exception {
+    @Test
+    void outputThirteenColumnTypesMustMatchExactly() throws Exception {
         var fixture = new Metadata();
         fixture.outputTypes.put("total_q1", "DOUBLE");
         assertThrows(IllegalStateException.class, fixture.port::snapshot);
@@ -365,7 +636,8 @@ class RetailSentimentDailyMaterializationPortTest {
         assertThrows(IllegalStateException.class, fixture.port::snapshot);
     }
 
-    @Test void invalidLaggingAndSuspendedMetadataCannotCertifyCaughtUpValues() throws Exception {
+    @Test
+    void invalidLaggingAndSuspendedMetadataCannotCertifyCaughtUpValues() throws Exception {
         var fixture = new Metadata();
         fixture.refresh.put("view_status", "invalid");
         assertFalse(fixture.port.snapshot().valid());
@@ -385,31 +657,41 @@ class RetailSentimentDailyMaterializationPortTest {
         var index = new AtomicInteger(-1);
         var wasNull = new AtomicBoolean();
         when(rs.next()).thenAnswer(call -> index.incrementAndGet() < rows.size());
-        when(rs.getString(anyString())).thenAnswer(call -> {
-            Object value = rows.get(index.get()).get(call.getArgument(0));
-            wasNull.set(value == null);
-            return value == null ? null : value.toString();
-        });
-        when(rs.getLong(anyString())).thenAnswer(call -> {
-            Object value = rows.get(index.get()).get(call.getArgument(0));
-            wasNull.set(value == null);
-            return value == null ? 0L : ((Number) value).longValue();
-        });
-        when(rs.getDouble(anyString())).thenAnswer(call -> {
-            Object value = rows.get(index.get()).get(call.getArgument(0));
-            wasNull.set(value == null);
-            return value == null ? 0.0 : ((Number) value).doubleValue();
-        });
-        when(rs.getBoolean(anyString())).thenAnswer(call -> {
-            Object value = rows.get(index.get()).get(call.getArgument(0));
-            wasNull.set(value == null);
-            return Boolean.TRUE.equals(value);
-        });
-        when(rs.getTimestamp(anyString(), any(Calendar.class))).thenAnswer(call -> {
-            Object value = rows.get(index.get()).get(call.getArgument(0));
-            wasNull.set(value == null);
-            return value;
-        });
+        when(rs.getString(anyString()))
+                .thenAnswer(
+                        call -> {
+                            Object value = rows.get(index.get()).get(call.getArgument(0));
+                            wasNull.set(value == null);
+                            return value == null ? null : value.toString();
+                        });
+        when(rs.getLong(anyString()))
+                .thenAnswer(
+                        call -> {
+                            Object value = rows.get(index.get()).get(call.getArgument(0));
+                            wasNull.set(value == null);
+                            return value == null ? 0L : ((Number) value).longValue();
+                        });
+        when(rs.getDouble(anyString()))
+                .thenAnswer(
+                        call -> {
+                            Object value = rows.get(index.get()).get(call.getArgument(0));
+                            wasNull.set(value == null);
+                            return value == null ? 0.0 : ((Number) value).doubleValue();
+                        });
+        when(rs.getBoolean(anyString()))
+                .thenAnswer(
+                        call -> {
+                            Object value = rows.get(index.get()).get(call.getArgument(0));
+                            wasNull.set(value == null);
+                            return Boolean.TRUE.equals(value);
+                        });
+        when(rs.getTimestamp(anyString(), any(Calendar.class)))
+                .thenAnswer(
+                        call -> {
+                            Object value = rows.get(index.get()).get(call.getArgument(0));
+                            wasNull.set(value == null);
+                            return value;
+                        });
         when(rs.wasNull()).thenAnswer(call -> wasNull.get());
         return rs;
     }

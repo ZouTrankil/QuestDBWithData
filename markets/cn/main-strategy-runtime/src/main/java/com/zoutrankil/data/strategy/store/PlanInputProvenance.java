@@ -3,8 +3,12 @@ package com.zoutrankil.data.strategy.store;
 import java.time.LocalDate;
 
 /** 由已验证输入发布器提供的冻结评分与方案身份。 */
-public record PlanInputProvenance(String scoreRunId, String scorePanelSha256,
-        String scoreCoverageSha256, String recipeSha256, LocalDate maxCompleteDate,
+public record PlanInputProvenance(
+        String scoreRunId,
+        String scorePanelSha256,
+        String scoreCoverageSha256,
+        String recipeSha256,
+        LocalDate maxCompleteDate,
         String recipeCodeRevision) {
     public PlanInputProvenance {
         if (scoreRunId == null || scoreRunId.isBlank())
@@ -12,12 +16,17 @@ public record PlanInputProvenance(String scoreRunId, String scorePanelSha256,
         requireSha256(scorePanelSha256, "score panel");
         requireSha256(scoreCoverageSha256, "score coverage");
         requireSha256(recipeSha256, "recipe");
-        if (maxCompleteDate == null) throw new PlanStoreException("official plan requires a complete score date");
+        if (maxCompleteDate == null)
+            throw new PlanStoreException("official plan requires a complete score date");
         recipeCodeRevision = recipeCodeRevision == null ? "" : recipeCodeRevision;
     }
 
-    public PlanInputProvenance(String scoreRunId, String panelSha256, String coverageSha256,
-            String recipeSha256, LocalDate maxCompleteDate) {
+    public PlanInputProvenance(
+            String scoreRunId,
+            String panelSha256,
+            String coverageSha256,
+            String recipeSha256,
+            LocalDate maxCompleteDate) {
         this(scoreRunId, panelSha256, coverageSha256, recipeSha256, maxCompleteDate, "");
     }
 

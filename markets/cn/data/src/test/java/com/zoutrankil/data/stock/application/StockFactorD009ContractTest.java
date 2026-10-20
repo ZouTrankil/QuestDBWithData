@@ -1,26 +1,34 @@
 package com.zoutrankil.data.stock.application;
 
-import com.zoutrankil.data.service.*;
+import static com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 
-import com.zoutrankil.data.stock.application.StockFactorJobService;
-import com.zoutrankil.data.stock.application.StockFactorSource;
-import com.zoutrankil.data.stock.application.StockFactorSyncAdapter;
-import com.zoutrankil.data.stock.application.StockFactorSyncJobOwner;
-import com.zoutrankil.data.stock.mapper.StockFactorMapper;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.PageContract;
+import com.zoutrankil.data.service.PageExecutor;
+import com.zoutrankil.data.service.TusharePageService;
+import com.zoutrankil.data.stock.mapper.StockFactorMapper;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
-import static com.zoutrankil.data.domain.SyncJobDefinition.Mode;
-import static org.junit.jupiter.api.Assertions.*;
 
 class StockFactorD009ContractTest {
     private static final ObjectMapper JSON = new ObjectMapper();
@@ -28,62 +36,107 @@ class StockFactorD009ContractTest {
     private static final String TARGET = "static-v2-" + "a".repeat(64);
     @TempDir Path evidence;
 
-    @Test void routesAreMutuallyExclusiveAndBounded() {
+    @Test
+    void routesAreMutuallyExclusiveAndBounded() {
         var allMarket = new StockFactorSource.Query(DAY, DAY, null);
         assertEquals(Map.of("trade_date", "20260928"), allMarket.parameters());
 
         var exactCode = new StockFactorSource.Query(DAY, DAY.plusDays(4), "000001.SZ");
         assertEquals(Set.of("ts_code", "start_date", "end_date"), exactCode.parameters().keySet());
         assertEquals("000001.SZ", exactCode.parameters().get("ts_code"));
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(
+                IllegalArgumentException.class,
                 () -> new StockFactorSource.Query(DAY, DAY.plusDays(5), "000001.SZ"));
     }
 
-    @Test void bootstrapCeilingIncludesPhysicalMaximumButKeepsFiveDayWindow() {
-        var window = StockFactorJobService.resolveBootstrapWindow(
-                LocalDate.of(2026, 9, 21), LocalDate.of(2026, 9, 25),
-                LocalDate.of(2026, 9, 29), LocalDate.of(2026, 9, 29), 5);
+    @Test
+    void bootstrapCeilingIncludesPhysicalMaximumButKeepsFiveDayWindow() {
+        var window =
+                StockFactorJobService.resolveBootstrapWindow(
+                        LocalDate.of(2026, 9, 21),
+                        LocalDate.of(2026, 9, 25),
+                        LocalDate.of(2026, 9, 29),
+                        LocalDate.of(2026, 9, 29),
+                        5);
         assertEquals(LocalDate.of(2026, 9, 21), window.from());
         assertEquals(LocalDate.of(2026, 9, 25), window.to());
         assertTrue(window.cappedByBudget());
 
-        var withinWindow = StockFactorJobService.resolveBootstrapWindow(
-                LocalDate.of(2026, 9, 21), LocalDate.of(2026, 9, 25),
-                LocalDate.of(2026, 9, 23), LocalDate.of(2026, 9, 29), 5);
+        var withinWindow =
+                StockFactorJobService.resolveBootstrapWindow(
+                        LocalDate.of(2026, 9, 21),
+                        LocalDate.of(2026, 9, 25),
+                        LocalDate.of(2026, 9, 23),
+                        LocalDate.of(2026, 9, 29),
+                        5);
         assertFalse(withinWindow.cappedByBudget());
-        assertThrows(IllegalStateException.class, () -> StockFactorJobService.resolveBootstrapWindow(
-                LocalDate.of(2026, 9, 21), LocalDate.of(2026, 9, 25),
-                LocalDate.of(2026, 9, 30), LocalDate.of(2026, 9, 29), 5));
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        StockFactorJobService.resolveBootstrapWindow(
+                                LocalDate.of(2026, 9, 21),
+                                LocalDate.of(2026, 9, 25),
+                                LocalDate.of(2026, 9, 30),
+                                LocalDate.of(2026, 9, 29),
+                                5));
     }
 
-    @Test void targetIdentityIsRequiredFrozenAndComparedBeforeExecution() {
+    @Test
+    void targetIdentityIsRequiredFrozenAndComparedBeforeExecution() {
         var from = LocalDate.of(2026, 9, 28);
         var parameters = Map.<String, Object>of("targetId", TARGET, "checkpointAnchor", from);
-        var request = StockFactorSyncJobOwner.DEFINITION.freeze(Mode.INCREMENTAL, parameters, from, from, from);
+        var request =
+                StockFactorSyncJobOwner.DEFINITION.freeze(
+                        Mode.INCREMENTAL, parameters, from, from, from);
         StockFactorSyncAdapter.validateRequest(request);
-        assertThrows(IllegalArgumentException.class, () -> StockFactorSyncJobOwner.DEFINITION.freeze(
-                Mode.INCREMENTAL, Map.of("checkpointAnchor", from), from, from, from));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        StockFactorSyncJobOwner.DEFINITION.freeze(
+                                Mode.INCREMENTAL,
+                                Map.of("checkpointAnchor", from),
+                                from,
+                                from,
+                                from));
         assertDoesNotThrow(() -> StockFactorJobService.requireSameTarget(TARGET, TARGET));
-        assertThrows(IllegalStateException.class, () -> StockFactorJobService.requireSameTarget(
-                TARGET, "static-v2-" + "b".repeat(64)));
-        assertThrows(IllegalArgumentException.class, () -> new StockFactorJobService.Plan(
-                request, "static-v2-" + "b".repeat(64), null, from, null, null, from, true, false));
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        StockFactorJobService.requireSameTarget(
+                                TARGET, "static-v2-" + "b".repeat(64)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        new StockFactorJobService.Plan(
+                                request,
+                                "static-v2-" + "b".repeat(64),
+                                null,
+                                from,
+                                null,
+                                null,
+                                from,
+                                true,
+                                false));
     }
 
-    @Test void capResponseIsRejectedAndRetainedAsUnverifiedRawEvidence() throws Exception {
+    @Test
+    void capResponseIsRejectedAndRetainedAsUnverifiedRawEvidence() throws Exception {
         var rows = new ArrayList<Map<String, JsonNode>>(StockFactorSource.SOURCE_ROW_CAP);
         for (int i = 0; i < StockFactorSource.SOURCE_ROW_CAP; i++)
             rows.add(row(String.format(Locale.ROOT, "%06d.SZ", i), "20260928"));
         var pages = new StubPages(page(rows));
         var source = new StockFactorSource(pages, evidence);
 
-        assertThrows(PageExecutor.Truncated.class,
+        assertThrows(
+                PageExecutor.Truncated.class,
                 () -> source.fetch(new StockFactorSource.Query(DAY, DAY, null), () -> false));
 
         Path retained;
         try (var files = Files.list(evidence)) {
-            retained = files.filter(path -> path.getFileName().toString().startsWith("incomplete-"))
-                    .findFirst().orElseThrow();
+            retained =
+                    files.filter(path -> path.getFileName().toString().startsWith("incomplete-"))
+                            .findFirst()
+                            .orElseThrow();
         }
         JsonNode receipt = JSON.readTree(retained.toFile());
         assertFalse(receipt.path("sourceComplete").asBoolean());
@@ -101,7 +154,7 @@ class StockFactorD009ContractTest {
         ObjectNode row = JSON.createObjectNode();
         row.put("ts_code", code);
         row.put("trade_date", date);
-        for (String field : com.zoutrankil.data.stock.mapper.StockFactorMapper.SOURCE_FIELDS) {
+        for (String field : StockFactorMapper.SOURCE_FIELDS) {
             if (!field.equals("ts_code") && !field.equals("trade_date")) row.putNull(field);
         }
         var result = new LinkedHashMap<String, JsonNode>();
@@ -111,8 +164,14 @@ class StockFactorD009ContractTest {
 
     private static final class StubPages extends TusharePageService {
         private final PageExecutor.Page response;
-        StubPages(PageExecutor.Page response) { super(null); this.response = response; }
-        @Override public PageExecutor.Fetcher fetcher(PageContract contract, BooleanSupplier cancelled) {
+
+        StubPages(PageExecutor.Page response) {
+            super(null);
+            this.response = response;
+        }
+
+        @Override
+        public PageExecutor.Fetcher fetcher(PageContract contract, BooleanSupplier cancelled) {
             return parameters -> {
                 assertFalse(cancelled.getAsBoolean());
                 assertEquals("stk_factor", contract.endpoint());

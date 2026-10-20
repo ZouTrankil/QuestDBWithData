@@ -1,0 +1,19 @@
+// 仅导出已有源码集和实际编译 classpath；不改变应用依赖。
+gradle.projectsEvaluated {
+    def modules = rootProject.allprojects.findAll { it.plugins.hasPlugin('java') }
+    rootProject.tasks.register('exportJavaFormatInputs') {
+        dependsOn modules.collectMany { [it.tasks.named('classes'), it.tasks.named('testClasses')] }
+        doLast {
+            def groups = modules.collectMany { p ->
+                ['main', 'test'].collect { name ->
+                    def source = p.sourceSets.getByName(name)
+                    [id: p.path + ':' + name, classpath: source.compileClasspath.asPath,
+                     files: source.allJava.files.collect { it.absolutePath }.sort()]
+                }.findAll { !it.files.empty }
+            }
+            def target = rootProject.file('.gradle/java-format/inputs.json')
+            target.parentFile.mkdirs()
+            target.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(groups))
+        }
+    }
+}

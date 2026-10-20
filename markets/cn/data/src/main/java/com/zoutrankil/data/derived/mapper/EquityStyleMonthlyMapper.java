@@ -1,22 +1,28 @@
 package com.zoutrankil.data.derived.mapper;
 
-import com.zoutrankil.data.domain.derived.EquityStyleMonthlyKey;
-import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
+import com.zoutrankil.data.derived.domain.EquityStyleMonthlyRows;
+import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.derived.EquityStyleMonthly;
-import com.zoutrankil.data.domain.*;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyDataset;
+import com.zoutrankil.data.domain.derived.EquityStyleMonthlyKey;
 import com.zoutrankil.data.domain.derived.table.EquityStyleMonthlyRow;
+
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 /** Complete 30-column mapping with no percentage conversion, rounding or null filling. */
 public final class EquityStyleMonthlyMapper {
-    public List<String> columns() { return EquityStyleMonthlyDataset.STORAGE_COLUMNS; }
+    public List<String> columns() {
+        return EquityStyleMonthlyDataset.STORAGE_COLUMNS;
+    }
+
     public EquityStyleMonthly fromStorage(EquityStyleMonthlyRow row) {
         Objects.requireNonNull(row, "equity style storage row required");
-        return new EquityStyleMonthly(EquityStyleMonthlyKey.fromStorage(row.month()).month(),
+        return new EquityStyleMonthly(
+                EquityStyleMonthlyKey.fromStorage(row.month()).month(),
                 row.hs300Ret1m(),
                 row.zz500Ret1m(),
                 row.allARet1m(),
@@ -47,9 +53,11 @@ public final class EquityStyleMonthlyMapper {
                 row.telecomVsAllA1m(),
                 row.utilitiesVsAllA1m());
     }
+
     public EquityStyleMonthlyRow toStorage(EquityStyleMonthly row) {
         Objects.requireNonNull(row, "equity style row required");
-        return new EquityStyleMonthlyRow(row.key().storageCarrier(),
+        return new EquityStyleMonthlyRow(
+                row.key().storageCarrier(),
                 row.hs300Ret1m(),
                 row.zz500Ret1m(),
                 row.allARet1m(),
@@ -80,13 +88,21 @@ public final class EquityStyleMonthlyMapper {
                 row.telecomVsAllA1m(),
                 row.utilitiesVsAllA1m());
     }
-    public DatasetValues values(EquityStyleMonthly row) {return com.zoutrankil.data.derived.domain.EquityStyleMonthlyRows.values(row); }
-    public EquityStyleMonthly fromValues(Map<String, Object> values) { return fromValues(new DatasetValues(values)); }
+
+    public DatasetValues values(EquityStyleMonthly row) {
+        return EquityStyleMonthlyRows.values(row);
+    }
+
+    public EquityStyleMonthly fromValues(Map<String, Object> values) {
+        return fromValues(new DatasetValues(values));
+    }
+
     public EquityStyleMonthly fromValues(DatasetValues values) {
         Objects.requireNonNull(values, "equity style values required");
-        if (!values.columns().equals(new java.util.LinkedHashSet<>(columns())))
+        if (!values.columns().equals(new LinkedHashSet<>(columns())))
             throw new IllegalArgumentException("Exactly the 30 equity style columns required");
-        return new EquityStyleMonthly(EquityStyleMonthlyKey.fromDate(values.get("month", LocalDate.class)).month(),
+        return new EquityStyleMonthly(
+                EquityStyleMonthlyKey.fromDate(values.get("month", LocalDate.class)).month(),
                 values.get("hs300_ret_1m", Double.class),
                 values.get("zz500_ret_1m", Double.class),
                 values.get("all_a_ret_1m", Double.class),
@@ -118,4 +134,3 @@ public final class EquityStyleMonthlyMapper {
                 values.get("utilities_vs_all_a_1m", Double.class));
     }
 }
-

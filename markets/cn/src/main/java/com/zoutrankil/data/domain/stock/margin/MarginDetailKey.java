@@ -7,7 +7,8 @@ import java.util.Objects;
 public record MarginDetailKey(String tsCode, LocalDate tradeDate) {
     public MarginDetailKey {
         if (tsCode == null || !tsCode.matches("[0-9]{6}\\.(SH|SZ|BJ)"))
-            throw new IllegalArgumentException("margin_detail ts_code must be a mainland security code");
+            throw new IllegalArgumentException(
+                    "margin_detail ts_code must be a mainland security code");
         Objects.requireNonNull(tradeDate, "margin_detail trade_date required");
     }
 }

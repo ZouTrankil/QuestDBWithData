@@ -24,11 +24,31 @@ public record DailyBasic(
         Double circMv) {
     public DailyBasic {
         new DailyBasicKey(tsCode, tradeDate);
-        for (Double value : new Double[]{close, turnoverRate, turnoverRateF, volumeRatio, pe, peTtm, pb,
-                ps, psTtm, dvRatio, dvTtm, totalShare, floatShare, freeShare, totalMv, circMv}) {
+        for (Double value :
+                new Double[] {
+                    close,
+                    turnoverRate,
+                    turnoverRateF,
+                    volumeRatio,
+                    pe,
+                    peTtm,
+                    pb,
+                    ps,
+                    psTtm,
+                    dvRatio,
+                    dvTtm,
+                    totalShare,
+                    floatShare,
+                    freeShare,
+                    totalMv,
+                    circMv
+                }) {
             if (value != null && !Double.isFinite(value))
                 throw new IllegalArgumentException("daily_basic numeric values must be finite");
         }
     }
-    public DailyBasicKey key() { return new DailyBasicKey(tsCode, tradeDate); }
+
+    public DailyBasicKey key() {
+        return new DailyBasicKey(tsCode, tradeDate);
+    }
 }

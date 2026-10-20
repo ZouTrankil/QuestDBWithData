@@ -1,58 +1,91 @@
 package com.zoutrankil.market.cn.app;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
+
 import com.zoutrankil.batch.api.ManagementServer;
 import com.zoutrankil.batch.schedule.ScheduleCatalog;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import javax.sql.DataSource;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.quartz.TriggerKey;
+import org.springframework.boot.convert.ApplicationConversionService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.transaction.PlatformTransactionManager;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyNoInteractions;
+
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.sql.DataSource;
 
 class CnBatchConfigurationTest {
     @TempDir Path directory;
 
-    private AnnotationConfigApplicationContext host(boolean persistent, boolean enabled, String token) {
+    private AnnotationConfigApplicationContext host(
+            boolean persistent, boolean enabled, String token) {
         var host = new AnnotationConfigApplicationContext();
-        host.getEnvironment().setConversionService(new org.springframework.boot.convert.ApplicationConversionService());
-        var values = new HashMap<String, Object>(Map.of(
-                "app.runtime.persistent", persistent, "jdb.enabled", enabled,
-                "jdb.metadata-url", "jdbc:sqlite:" + directory.resolve("batch.sqlite"),
-                "jdb.archive-root", directory.resolve("archive").toString(),
-                "jdb.api-port", 0, "jdb.api-token", token, "jdb.scheduling-enabled", true));
+        host.getEnvironment().setConversionService(new ApplicationConversionService());
+        var values =
+                new HashMap<String, Object>(
+                        Map.of(
+                                "app.runtime.persistent",
+                                persistent,
+                                "jdb.enabled",
+                                enabled,
+                                "jdb.metadata-url",
+                                "jdbc:sqlite:" + directory.resolve("batch.sqlite"),
+                                "jdb.archive-root",
+                                directory.resolve("archive").toString(),
+                                "jdb.api-port",
+                                0,
+                                "jdb.api-token",
+                                token,
+                                "jdb.scheduling-enabled",
+                                true));
         values.put("jdb.l2-settle-age", "5m");
         values.put("jdb.questdb-visibility-timeout", "10s");
         values.put("jdb.questdb-http-url", "");
         values.put("jdb.tushare-token", "");
-        ScheduleCatalog.SCHEDULE_IDS.forEach(id -> values.put("jdb.schedules[" + id + "]", "0 0 0 * * ?"));
-        host.getEnvironment().getPropertySources().addFirst(new MapPropertySource("fixture", values));
+        ScheduleCatalog.SCHEDULE_IDS.forEach(
+                id -> values.put("jdb.schedules[" + id + "]", "0 0 0 * * ?"));
+        host.getEnvironment()
+                .getPropertySources()
+                .addFirst(new MapPropertySource("fixture", values));
         host.register(CnBatchConfiguration.class);
         return host;
     }
 
-    @Test void disabledRuntimeAndFiniteCliDoNotCreateDatabaseOrBackgroundBeans() {
-        for (var switches : new boolean[][]{{true, false}, {false, true}, {false, false}}) {
+    @Test
+    void disabledRuntimeAndFiniteCliDoNotCreateDatabaseOrBackgroundBeans() {
+        for (var switches : new boolean[][] {{true, false}, {false, true}, {false, false}}) {
             try (var host = host(switches[0], switches[1], "")) {
                 host.refresh();
-                assertTrue(host.getBeansOfType(CnBatchConfiguration.ManagedBatchRuntime.class).isEmpty());
+                assertTrue(
+                        host.getBeansOfType(CnBatchConfiguration.ManagedBatchRuntime.class)
+                                .isEmpty());
                 assertFalse(Files.exists(directory.resolve("batch.sqlite")));
                 assertFalse(Files.exists(directory.resolve("archive")));
             }
         }
     }
 
-    @Test void marketHostOwnsIsolatedRuntimeAndReleasesDatabaseOnShutdown() throws Exception {
+    @Test
+    void marketHostOwnsIsolatedRuntimeAndReleasesDatabaseOnShutdown() throws Exception {
         var parentSource = mock(DataSource.class);
         var parentTransaction = mock(PlatformTransactionManager.class);
         CnBatchConfiguration.ManagedBatchRuntime runtime;
@@ -75,7 +108,9 @@ class CnBatchConfigurationTest {
             assertTrue(scheduler.isStarted());
             for (String id : ScheduleCatalog.SCHEDULE_IDS) {
                 assertTrue(scheduler.checkExists(new JobKey(id, "jdb")));
-                assertEquals(Trigger.TriggerState.PAUSED, scheduler.getTriggerState(new TriggerKey(id, "jdb")));
+                assertEquals(
+                        Trigger.TriggerState.PAUSED,
+                        scheduler.getTriggerState(new TriggerKey(id, "jdb")));
             }
             runtime.start();
             assertSame(child, runtime.context());
@@ -83,24 +118,33 @@ class CnBatchConfigurationTest {
         }
         assertFalse(runtime.isRunning());
         assertTrue(scheduler.isShutdown());
-        try (var socket = new java.net.ServerSocket(management.port(), 1, java.net.InetAddress.getLoopbackAddress())) {
+        try (var socket =
+                new ServerSocket(management.port(), 1, InetAddress.getLoopbackAddress())) {
             assertTrue(socket.isBound());
         }
         // 同一 SQLite 再启动成功，证明宿主退出已释放租约，并保留暂停状态。
         try (var restarted = host(true, true, "fixture-token-with-at-least-24-characters")) {
             restarted.refresh();
-            var restored = restarted.getBean(CnBatchConfiguration.ManagedBatchRuntime.class).context().getBean(Scheduler.class);
-            assertEquals(Trigger.TriggerState.PAUSED, restored.getTriggerState(new TriggerKey("post_close", "jdb")));
+            var restored =
+                    restarted
+                            .getBean(CnBatchConfiguration.ManagedBatchRuntime.class)
+                            .context()
+                            .getBean(Scheduler.class);
+            assertEquals(
+                    Trigger.TriggerState.PAUSED,
+                    restored.getTriggerState(new TriggerKey("post_close", "jdb")));
         }
     }
 
-    @Test void startupFailureReleasesLeaseForCorrectedConfiguration() {
+    @Test
+    void startupFailureReleasesLeaseForCorrectedConfiguration() {
         try (var broken = host(true, true, "")) {
             assertThrows(RuntimeException.class, broken::refresh);
         }
         try (var corrected = host(true, true, "fixture-token-with-at-least-24-characters")) {
             corrected.refresh();
-            assertTrue(corrected.getBean(CnBatchConfiguration.ManagedBatchRuntime.class).isRunning());
+            assertTrue(
+                    corrected.getBean(CnBatchConfiguration.ManagedBatchRuntime.class).isRunning());
         }
     }
 }

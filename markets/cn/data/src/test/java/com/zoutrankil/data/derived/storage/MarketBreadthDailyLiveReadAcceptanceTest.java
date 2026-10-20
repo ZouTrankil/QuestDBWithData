@@ -1,42 +1,53 @@
 package com.zoutrankil.data.derived.storage;
 
-import com.zoutrankil.data.domain.derived.MarketBreadthDailyDataset;
-import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
-import com.zoutrankil.data.repository.*;
-import com.zoutrankil.data.stock.storage.StockFactorReadRepository;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.derived.mapper.MarketBreadthDailyMapper;
+import com.zoutrankil.data.domain.DatasetReadQuery;
+import com.zoutrankil.data.domain.ReadGroupRequest;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
+import com.zoutrankil.data.domain.derived.MarketBreadthDailyDataset;
+import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import com.zoutrankil.data.service.DatasetRegistry;
 import com.zoutrankil.data.service.ReadGroupReader;
+import com.zoutrankil.data.stock.storage.StockFactorReadRepository;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 /** Real isolated QuestDB MV values, dynamic physical versions and typed read groups. */
 class MarketBreadthDailyLiveReadAcceptanceTest {
-    private static final Path INPUT = Path.of(
-            "artifacts/java-migration/D095/commands/isolated-acceptance-20261006.json");
+    private static final Path INPUT =
+            Path.of("artifacts/java-migration/D095/commands/isolated-acceptance-20261006.json");
 
-    @Test void isolatedValidMvTypedReadsMatchPythonSourceAggregatesAndGroup() throws Exception {
+    @Test
+    void isolatedValidMvTypedReadsMatchPythonSourceAggregatesAndGroup() throws Exception {
         assumeTrue("true".equalsIgnoreCase(System.getenv("D095_LIVE_READ")));
-        Map<String, Object> audit = new ObjectMapper().readValue(Files.newInputStream(INPUT), new TypeReference<>() {});
+        Map<String, Object> audit =
+                new ObjectMapper().readValue(Files.newInputStream(INPUT), new TypeReference<>() {});
         var jdbc = jdbc("127.0.0.1", "18812", "admin", "quest");
         var repository = new MarketBreadthDailyReadRepository(new QuestDbBoundedReader(jdbc));
-        var page = repository.findRange(LocalDate.of(2026, 9, 17), LocalDate.of(2026, 9, 19), 1, null);
+        var page =
+                repository.findRange(LocalDate.of(2026, 9, 17), LocalDate.of(2026, 9, 19), 1, null);
         assertEquals(1, page.rows().size());
         assertNotNull(page.nextCursor());
-        var second = repository.findRange(LocalDate.of(2026, 9, 17), LocalDate.of(2026, 9, 19),
-                1, page.nextCursor());
+        var second =
+                repository.findRange(
+                        LocalDate.of(2026, 9, 17), LocalDate.of(2026, 9, 19), 1, page.nextCursor());
         assertEquals(1, second.rows().size());
         assertNull(second.nextCursor());
         assertTrue(page.sourceVersion().startsWith("base-id:"));
@@ -47,23 +58,57 @@ class MarketBreadthDailyLiveReadAcceptanceTest {
         for (int i = 0; i < expected.size(); i++) {
             var row = actual.get(i);
             var source = expected.get(i);
-            assertEquals(source.get("trade_date").toString().substring(0, 10), row.tradeDate().toString());
+            assertEquals(
+                    source.get("trade_date").toString().substring(0, 10),
+                    row.tradeDate().toString());
             for (String field : List.of("stock_count", "up_count", "down_count", "flat_count")) {
-                assertEquals(((Number) source.get(field)).longValue(),
-                        ((Number) new MarketBreadthDailyMapper().values(row).get(field, Long.class)).longValue());
+                assertEquals(
+                        ((Number) source.get(field)).longValue(),
+                        ((Number) new MarketBreadthDailyMapper().values(row).get(field, Long.class))
+                                .longValue());
             }
-            assertEquals(((Number) source.get("avg_pct_change")).doubleValue(), row.avgPctChange(), 1e-10);
-            assertEquals(((Number) source.get("total_amount_yi")).doubleValue(), row.totalAmountYi(), 1e-8);
+            assertEquals(
+                    ((Number) source.get("avg_pct_change")).doubleValue(),
+                    row.avgPctChange(),
+                    1e-10);
+            assertEquals(
+                    ((Number) source.get("total_amount_yi")).doubleValue(),
+                    row.totalAmountYi(),
+                    1e-8);
         }
         var mapper = new MarketBreadthDailyMapper();
         var reader = new QuestDbBoundedReader(jdbc);
-        var group = new ReadGroupReader(new DatasetRegistry(List.of(repository, new StockFactorReadRepository(reader))), reader,
-                List.of(new ReadGroupReader.Binding<>(MarketBreadthDailyDataset.DEFINITION,
-                        MarketBreadthDaily.class, mapper::fromValues, () -> null)));
-        var query = new DatasetReadQuery(repository.definition().storageColumns(), Map.of(), "trade_date",
-                LocalDate.of(2026, 9, 17), LocalDate.of(2026, 9, 19), 2, null);
-        var result = group.read(new ReadGroupRequest(List.of(new ReadGroupRequest.Member(
-                "breadth", repository.definition().datasetId(), 1, query)), Duration.ofSeconds(30)), () -> false);
+        var group =
+                new ReadGroupReader(
+                        new DatasetRegistry(
+                                List.of(repository, new StockFactorReadRepository(reader))),
+                        reader,
+                        List.of(
+                                new ReadGroupReader.Binding<>(
+                                        MarketBreadthDailyDataset.DEFINITION,
+                                        MarketBreadthDaily.class,
+                                        mapper::fromValues,
+                                        () -> null)));
+        var query =
+                new DatasetReadQuery(
+                        repository.definition().storageColumns(),
+                        Map.of(),
+                        "trade_date",
+                        LocalDate.of(2026, 9, 17),
+                        LocalDate.of(2026, 9, 19),
+                        2,
+                        null);
+        var result =
+                group.read(
+                        new ReadGroupRequest(
+                                List.of(
+                                        new ReadGroupRequest.Member(
+                                                "breadth",
+                                                repository.definition().datasetId(),
+                                                1,
+                                                query)),
+                                Duration.ofSeconds(30)),
+                        () -> false);
         assertTrue(result.complete());
         assertEquals(actual, result.require("breadth").typedPage(MarketBreadthDaily.class).rows());
     }
@@ -81,7 +126,8 @@ class MarketBreadthDailyLiveReadAcceptanceTest {
 
     private static String required(String name) {
         var value = System.getenv(name);
-        if (value == null || value.isBlank()) throw new IllegalStateException("Missing setting: " + name);
+        if (value == null || value.isBlank())
+            throw new IllegalStateException("Missing setting: " + name);
         return value;
     }
 }

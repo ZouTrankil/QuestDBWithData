@@ -2,9 +2,15 @@ package com.zoutrankil.data.config;
 
 import com.zoutrankil.data.calendar.port.SseCalendarWindowReadPort;
 import com.zoutrankil.data.calendar.storage.QuestDbSseCalendarWindowReadPort;
-import com.zoutrankil.data.flow.port.*;
-import com.zoutrankil.data.flow.storage.*;
+import com.zoutrankil.data.flow.port.MoneyflowHsgtTarget;
+import com.zoutrankil.data.flow.port.MoneyflowTarget;
+import com.zoutrankil.data.flow.port.MoneyflowThsTarget;
+import com.zoutrankil.data.flow.storage.QuestDbMoneyflowHsgtTarget;
+import com.zoutrankil.data.flow.storage.QuestDbMoneyflowTarget;
+import com.zoutrankil.data.flow.storage.QuestDbMoneyflowThsTarget;
+
 import io.questdb.client.QuestDB;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,20 +20,34 @@ import org.springframework.jdbc.core.JdbcTemplate;
 /** Configures the four moneyflow targets and bounded physical calendar reader. */
 @Configuration(proxyBeanMethods = false)
 public class FlowConfiguration {
-    @Bean MoneyflowTarget moneyflowTarget(JdbcTemplate jdbc, @Lazy QuestDB questdb,
+    @Bean
+    MoneyflowTarget moneyflowTarget(
+            JdbcTemplate jdbc,
+            @Lazy QuestDB questdb,
             @Value("${app.sync.moneyflow-table:java_d024_moneyflow_acceptance}") String table) {
         return new QuestDbMoneyflowTarget(table, jdbc, questdb);
     }
-    @Bean MoneyflowThsTarget moneyflowThsTarget(JdbcTemplate jdbc, @Lazy QuestDB questdb,
-            @Value("${app.sync.moneyflow-ths-table:java_d025_moneyflow_ths_acceptance}") String table) {
+
+    @Bean
+    MoneyflowThsTarget moneyflowThsTarget(
+            JdbcTemplate jdbc,
+            @Lazy QuestDB questdb,
+            @Value("${app.sync.moneyflow-ths-table:java_d025_moneyflow_ths_acceptance}")
+                    String table) {
         return new QuestDbMoneyflowThsTarget(table, jdbc, questdb);
     }
 
-    @Bean MoneyflowHsgtTarget moneyflowHsgtTarget(JdbcTemplate jdbc, @Lazy QuestDB questdb,
-            @Value("${app.sync.moneyflow-hsgt-table:java_d027_moneyflow_hsgt_acceptance}") String table) {
+    @Bean
+    MoneyflowHsgtTarget moneyflowHsgtTarget(
+            JdbcTemplate jdbc,
+            @Lazy QuestDB questdb,
+            @Value("${app.sync.moneyflow-hsgt-table:java_d027_moneyflow_hsgt_acceptance}")
+                    String table) {
         return new QuestDbMoneyflowHsgtTarget(table, jdbc, questdb);
     }
-    @Bean SseCalendarWindowReadPort sseCalendarWindowReadPort(JdbcTemplate jdbc) {
+
+    @Bean
+    SseCalendarWindowReadPort sseCalendarWindowReadPort(JdbcTemplate jdbc) {
         return new QuestDbSseCalendarWindowReadPort(jdbc);
     }
 }

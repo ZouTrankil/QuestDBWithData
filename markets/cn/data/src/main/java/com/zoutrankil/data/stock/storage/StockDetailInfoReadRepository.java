@@ -1,15 +1,17 @@
 package com.zoutrankil.data.stock.storage;
 
-import com.zoutrankil.data.repository.*;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetImplementation;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
 import com.zoutrankil.data.domain.stock.basic.StockDetailInfoDataset;
+import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import com.zoutrankil.data.stock.mapper.StockDetailInfoMapper;
-import java.util.HashSet;
+
 import org.springframework.stereotype.Repository;
+
+import java.util.HashSet;
 
 /** Typed full-row reference read; the registered read group also supports partial projections. */
 @Repository
@@ -17,15 +19,22 @@ public class StockDetailInfoReadRepository implements DatasetImplementation {
     private final QuestDbBoundedReader reader;
     private final StockDetailInfoMapper mapper = new StockDetailInfoMapper();
 
-    public StockDetailInfoReadRepository(QuestDbBoundedReader reader) { this.reader = reader; }
+    public StockDetailInfoReadRepository(QuestDbBoundedReader reader) {
+        this.reader = reader;
+    }
 
-    @Override public DatasetDefinition definition() { return StockDetailInfoDataset.DEFINITION; }
+    @Override
+    public DatasetDefinition definition() {
+        return StockDetailInfoDataset.DEFINITION;
+    }
 
     public DatasetReadPage<StockDetailInfo> findPage(DatasetReadQuery query) {
-        var declared = definition().columns().stream().map(DatasetDefinition.Column::logicalName).toList();
+        var declared =
+                definition().columns().stream().map(DatasetDefinition.Column::logicalName).toList();
         if (query.columns().size() != declared.size()
                 || !new HashSet<>(query.columns()).equals(new HashSet<>(declared)))
-            throw new IllegalArgumentException("Typed stock detail row requires all declared columns");
+            throw new IllegalArgumentException(
+                    "Typed stock detail row requires all declared columns");
         return reader.read(definition(), query, null, mapper::fromValues);
     }
 }

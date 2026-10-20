@@ -2,8 +2,10 @@ package com.zoutrankil.data.strategy.store;
 
 /** 兼容第 3 版类型化正式账本表，并增加 Java 导入校验回执。 */
 final class OfficialPlanSchema {
-    private OfficialPlanSchema() { }
-    static final String V3 = """
+    private OfficialPlanSchema() {}
+
+    static final String V3 =
+"""
 CREATE TABLE IF NOT EXISTS strategy_plan_schema_versions (
                 version INTEGER PRIMARY KEY,
                 applied_at TEXT NOT NULL
@@ -165,7 +167,8 @@ CREATE TABLE IF NOT EXISTS strategy_plan_schema_versions (
         INSERT OR IGNORE INTO strategy_plan_schema_versions(version, applied_at) VALUES (3, CURRENT_TIMESTAMP);
         PRAGMA user_version=3;
         """;
-    static final String IMPORT_RECEIPTS = """
+    static final String IMPORT_RECEIPTS =
+            """
         CREATE TABLE IF NOT EXISTS strategy_plan_import_receipts (
             plan_id TEXT PRIMARY KEY REFERENCES strategy_plans(plan_id) ON DELETE CASCADE,
             canonical_payload TEXT NOT NULL,

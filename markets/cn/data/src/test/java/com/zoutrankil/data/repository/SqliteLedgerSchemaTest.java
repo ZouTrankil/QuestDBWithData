@@ -1,5 +1,11 @@
 package com.zoutrankil.data.repository;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -9,12 +15,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class SqliteLedgerSchemaTest {
     @TempDir Path root;
 
-    @Test void readOnlyProbeDoesNotCreateMissingFilesAndPropagatesCorruptDatabaseFailures() throws Exception {
+    @Test
+    void readOnlyProbeDoesNotCreateMissingFilesAndPropagatesCorruptDatabaseFailures()
+            throws Exception {
         var missing = root.resolve("missing.sqlite3");
         assertThrows(SQLException.class, () -> SqliteLedgerSchema.tableNames(missing));
         assertFalse(Files.exists(missing));
@@ -25,10 +31,11 @@ class SqliteLedgerSchemaTest {
         assertArrayEquals(before, Files.readAllBytes(corrupt));
     }
 
-    @Test void probesOnlyTablesAndKeepsTheSingleTableRefreshGate() throws Exception {
+    @Test
+    void probesOnlyTablesAndKeepsTheSingleTableRefreshGate() throws Exception {
         var path = root.resolve("tables.sqlite3");
         try (var connection = DriverManager.getConnection("jdbc:sqlite:" + path);
-             var statement = connection.createStatement()) {
+                var statement = connection.createStatement()) {
             statement.execute("CREATE TABLE schedule_jobs(id TEXT)");
             statement.execute("CREATE VIEW sync_runs AS SELECT id FROM schedule_jobs");
         }
@@ -37,7 +44,7 @@ class SqliteLedgerSchemaTest {
         assertFalse(SqliteLedgerSchema.hasRunHistoryTable(path));
         assertArrayEquals(before, Files.readAllBytes(path));
         try (var connection = DriverManager.getConnection("jdbc:sqlite:" + path);
-             var statement = connection.createStatement()) {
+                var statement = connection.createStatement()) {
             assertFalse(SqliteLedgerSchema.tableExists(connection, "sync_runs"));
             assertTrue(SqliteLedgerSchema.tableExists(connection, "schedule_jobs"));
             assertFalse(SqliteLedgerSchema.tableExists(connection, "schedule_jobs' OR 1=1 --"));
@@ -48,7 +55,8 @@ class SqliteLedgerSchemaTest {
         assertEquals(Set.of("schedule_jobs", "sync_runs"), SqliteLedgerSchema.tableNames(path));
     }
 
-    @Test void suppliedConnectionRemainsOpenAndKeepsItsTransaction() throws Exception {
+    @Test
+    void suppliedConnectionRemainsOpenAndKeepsItsTransaction() throws Exception {
         var path = root.resolve("transaction.sqlite3");
         try (var connection = DriverManager.getConnection("jdbc:sqlite:" + path)) {
             connection.setAutoCommit(false);

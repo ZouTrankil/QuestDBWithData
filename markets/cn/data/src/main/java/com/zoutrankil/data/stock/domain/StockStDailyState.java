@@ -17,25 +17,45 @@ public final class StockStDailyState {
     }
 
     public record Snapshot(Identity identity, Content content) {
-        public Snapshot { Objects.requireNonNull(identity); Objects.requireNonNull(content); }
+        public Snapshot {
+            Objects.requireNonNull(identity);
+            Objects.requireNonNull(content);
+        }
     }
 
-    public record Prepared(String target, String beforePhysicalTarget, LocalDate from, LocalDate to,
-                           Snapshot before, Content outside) {
+    public record Prepared(
+            String target,
+            String beforePhysicalTarget,
+            LocalDate from,
+            LocalDate to,
+            Snapshot before,
+            Content outside) {
         public Prepared {
-            Objects.requireNonNull(target); Objects.requireNonNull(beforePhysicalTarget);
-            Objects.requireNonNull(from); Objects.requireNonNull(to);
-            Objects.requireNonNull(before); Objects.requireNonNull(outside);
+            Objects.requireNonNull(target);
+            Objects.requireNonNull(beforePhysicalTarget);
+            Objects.requireNonNull(from);
+            Objects.requireNonNull(to);
+            Objects.requireNonNull(before);
+            Objects.requireNonNull(outside);
             if (from.isAfter(to)) throw new IllegalArgumentException("Invalid D012 stage window");
         }
     }
 
-    public record Verified(String table, String physicalTarget, Snapshot snapshot,
-                           Content outside, Content window,
-                           int sourceRows, int batches, String sourceFingerprint, String receipt) {}
+    public record Verified(
+            String table,
+            String physicalTarget,
+            Snapshot snapshot,
+            Content outside,
+            Content window,
+            int sourceRows,
+            int batches,
+            String sourceFingerprint,
+            String receipt) {}
 
     public static boolean sameContent(Content left, Content right) {
-        return left != null && right != null && left.rows() == right.rows()
+        return left != null
+                && right != null
+                && left.rows() == right.rows()
                 && left.fingerprint().equals(right.fingerprint());
     }
 }

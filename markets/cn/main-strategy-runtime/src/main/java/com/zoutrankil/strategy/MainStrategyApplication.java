@@ -1,7 +1,11 @@
 package com.zoutrankil.strategy;
 
-import com.zoutrankil.market.cn.bootstrap.CnDataConfiguration;
 import com.zoutrankil.data.bootstrap.QuestDataStartup;
+import com.zoutrankil.data.bootstrap.StartupArguments;
+import com.zoutrankil.market.cn.bootstrap.CnDataConfiguration;
+
+import org.springframework.boot.SpringApplication;
+
 import java.util.TimeZone;
 
 /** 独立策略进程，包含受鉴权保护的控制 API。 */
@@ -10,14 +14,15 @@ public final class MainStrategyApplication {
 
     public static void main(String[] args) {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        QuestDataStartup.run(application(!com.zoutrankil.data.bootstrap.StartupArguments.parse(args).hasCommand()), args);
+        QuestDataStartup.run(application(!StartupArguments.parse(args).hasCommand()), args);
     }
 
-    public static org.springframework.boot.SpringApplication application() {
+    public static SpringApplication application() {
         return application(true);
     }
 
-    private static org.springframework.boot.SpringApplication application(boolean persistent) {
-        return CnDataConfiguration.application(CnDataConfiguration.class,persistent, "data", "main-strategy");
+    private static SpringApplication application(boolean persistent) {
+        return CnDataConfiguration.application(
+                CnDataConfiguration.class, persistent, "data", "main-strategy");
     }
 }

@@ -1,6 +1,10 @@
 package com.zoutrankil.batch.l2;
 
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
+import static java.nio.file.StandardOpenOption.WRITE;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -13,13 +17,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
 import java.util.UUID;
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
-import static java.nio.file.StandardOpenOption.WRITE;
 
 final class L2FeatureFiles {
     private static final ObjectMapper JSON = new ObjectMapper();
-    private L2FeatureFiles() {
-    }
+
+    private L2FeatureFiles() {}
 
     static void atomicJson(Path target, Object value) throws IOException {
         atomicText(target, JSON.writerWithDefaultPrettyPrinter().writeValueAsString(value) + "\n");
@@ -33,9 +35,12 @@ final class L2FeatureFiles {
                 while (bytes.hasRemaining()) channel.write(bytes);
                 channel.force(true);
             }
-            Files.move(temp, target, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
-        }
-        finally {
+            Files.move(
+                    temp,
+                    target,
+                    StandardCopyOption.ATOMIC_MOVE,
+                    StandardCopyOption.REPLACE_EXISTING);
+        } finally {
             Files.deleteIfExists(temp);
         }
     }
@@ -60,14 +65,13 @@ final class L2FeatureFiles {
 
     static void transferDigest(InputStream input, MessageDigest digest) throws IOException {
         byte[] bytes = new byte[65536];
-        for (int count; (count = input.read(bytes)) != -1;) digest.update(bytes, 0, count);
+        for (int count; (count = input.read(bytes)) != -1; ) digest.update(bytes, 0, count);
     }
 
     static MessageDigest digest() {
         try {
             return MessageDigest.getInstance("SHA-256");
-        }
-        catch (NoSuchAlgorithmException impossible) {
+        } catch (NoSuchAlgorithmException impossible) {
             throw new AssertionError(impossible);
         }
     }

@@ -8,8 +8,10 @@ public final class StockSuspendTablePolicy {
 
     public static void requireExecutionTarget(String table) {
         DatasetDefinition.identifier(table);
-        if (!"stk_suspend".equals(table) && !table.matches("(?:java_d011_stk_suspend_|stk_suspend_d011_)[A-Za-z0-9_]+"))
-            throw new IllegalArgumentException("D011 target must be exact formal stk_suspend or an explicitly isolated suspension target");
+        if (!"stk_suspend".equals(table)
+                && !table.matches("(?:java_d011_stk_suspend_|stk_suspend_d011_)[A-Za-z0-9_]+"))
+            throw new IllegalArgumentException(
+                    "D011 target must be exact formal stk_suspend or an explicitly isolated suspension target");
     }
 
     public static void requireStagingTable(String table) {

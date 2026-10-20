@@ -1,11 +1,12 @@
 package com.zoutrankil.data.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.zoutrankil.data.config.TushareProperties;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class StockDailyRatePolicyTest {
     @Test

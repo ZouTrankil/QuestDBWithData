@@ -1,10 +1,11 @@
 package com.zoutrankil.data.stock.mapper;
 
-
 import com.zoutrankil.data.client.dto.TushareStockBasicDto;
 import com.zoutrankil.data.domain.stock.basic.StockBasic;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
+
 import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

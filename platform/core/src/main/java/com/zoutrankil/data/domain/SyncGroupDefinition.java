@@ -1,10 +1,14 @@
 package com.zoutrankil.data.domain;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Objects;
 
 /** Versioned composition of existing single-dataset jobs; no connector logic lives here. */
-public record SyncGroupDefinition(String groupId, int version, List<Member> members,
-                                  boolean enabled, boolean dailyEligible) {
+public record SyncGroupDefinition(
+        String groupId, int version, List<Member> members, boolean enabled, boolean dailyEligible) {
     public record Member(SyncJobDefinition.JobRef job, List<SyncJobDefinition.JobRef> after) {
         public Member {
             Objects.requireNonNull(job);
@@ -17,7 +21,8 @@ public record SyncGroupDefinition(String groupId, int version, List<Member> memb
     public SyncGroupDefinition {
         SyncJobDefinition.name(groupId);
         if (version < 1) throw new IllegalArgumentException("Positive group version required");
-        if (dailyEligible && !enabled) throw new IllegalArgumentException("Disabled group cannot be daily eligible");
+        if (dailyEligible && !enabled)
+            throw new IllegalArgumentException("Disabled group cannot be daily eligible");
         var unique = new LinkedHashMap<String, Member>();
         for (var member : members) {
             Objects.requireNonNull(member);
@@ -28,16 +33,19 @@ public record SyncGroupDefinition(String groupId, int version, List<Member> memb
         if (unique.isEmpty() || unique.size() > 1000)
             throw new IllegalArgumentException("Finite nonempty group required");
         members = List.copyOf(unique.values());
-        for (var member : members) for (var dependency : member.after()) {
-            var required = unique.get(dependency.jobId());
-            if (required == null || !required.job().equals(dependency))
-                throw new IllegalArgumentException("Unknown group dependency or version");
-        }
+        for (var member : members)
+            for (var dependency : member.after()) {
+                var required = unique.get(dependency.jobId());
+                if (required == null || !required.job().equals(dependency))
+                    throw new IllegalArgumentException("Unknown group dependency or version");
+            }
         ordered(members); // Detect cycles when definition is frozen.
     }
 
     /** Stable topological order: explicit dependencies first, original order for peers. */
-    public List<Member> orderedMembers() { return ordered(members); }
+    public List<Member> orderedMembers() {
+        return ordered(members);
+    }
 
     private static List<Member> ordered(List<Member> members) {
         var remaining = new ArrayList<>(members);
@@ -45,10 +53,13 @@ public record SyncGroupDefinition(String groupId, int version, List<Member> memb
         var result = new ArrayList<Member>();
         while (!remaining.isEmpty()) {
             boolean advanced = false;
-            for (var iterator = remaining.iterator(); iterator.hasNext();) {
+            for (var iterator = remaining.iterator(); iterator.hasNext(); ) {
                 var member = iterator.next();
                 if (complete.containsAll(member.after())) {
-                    result.add(member); complete.add(member.job()); iterator.remove(); advanced = true;
+                    result.add(member);
+                    complete.add(member.job());
+                    iterator.remove();
+                    advanced = true;
                     break; // Reconsider earlier members newly made ready before later peers.
                 }
             }

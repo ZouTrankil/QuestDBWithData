@@ -1,62 +1,94 @@
 package com.zoutrankil.data.service;
 
-import com.zoutrankil.data.stock.application.DailySource;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.zoutrankil.data.client.TushareClient;
+import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.PageContract;
 import com.zoutrankil.data.domain.stock.basic.StockDetailInfo;
+import com.zoutrankil.data.stock.application.DailySource;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.Mockito;
+
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.util.*;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BooleanSupplier;
-import static org.junit.jupiter.api.Assertions.*;
 
 class DailySourceTest {
     @TempDir Path temp;
 
-    @Test void exact6000RowResponseFallsBackToBoundedD002CodeGroupsAndReceiptCanBeReopened() throws Exception {
+    @Test
+    void exact6000RowResponseFallsBackToBoundedD002CodeGroupsAndReceiptCanBeReopened()
+            throws Exception {
         var day = LocalDate.of(2026, 9, 28);
         var codes = new ArrayList<String>(6000);
         for (int i = 0; i < 6000; i++) codes.add(String.format(Locale.ROOT, "%06d.SZ", i));
         assertTrue(codes.stream().allMatch(StockDetailInfo::validCode));
         var calls = new AtomicInteger();
-        var fake = new TusharePageService(org.mockito.Mockito.mock(TushareClient.class)) {
-            @Override public PageExecutor.Completed execute(PageContract contract, Map<String, Object> parameters,
-                    PageExecutor.Consumer consumer, PageExecutor.Validator validator, BooleanSupplier cancelled) throws Exception {
-                calls.incrementAndGet();
-                var selected = contract == DailySource.BY_DATE ? codes
-                        : Arrays.asList(((String) parameters.get("ts_code")).split(",", -1));
-                var rows = selected.stream().map(code -> row(code, "20260928")).toList();
-                for (var row : rows) validator.validate(row);
-                consumer.accept(new PageExecutor.Page(rows, null, false, null),
-                        new PageExecutor.Receipt(1, 0, null, rows.size(), "test-page", null));
-                return new PageExecutor.Completed(1, rows.size(), null);
-            }
-        };
+        var fake =
+                new TusharePageService(Mockito.mock(TushareClient.class)) {
+                    @Override
+                    public PageExecutor.Completed execute(
+                            PageContract contract,
+                            Map<String, Object> parameters,
+                            PageExecutor.Consumer consumer,
+                            PageExecutor.Validator validator,
+                            BooleanSupplier cancelled)
+                            throws Exception {
+                        calls.incrementAndGet();
+                        var selected =
+                                contract == DailySource.BY_DATE
+                                        ? codes
+                                        : Arrays.asList(
+                                                ((String) parameters.get("ts_code"))
+                                                        .split(",", -1));
+                        var rows = selected.stream().map(code -> row(code, "20260928")).toList();
+                        for (var row : rows) validator.validate(row);
+                        consumer.accept(
+                                new PageExecutor.Page(rows, null, false, null),
+                                new PageExecutor.Receipt(
+                                        1, 0, null, rows.size(), "test-page", null));
+                        return new PageExecutor.Completed(1, rows.size(), null);
+                    }
+                };
         var source = new DailySource(fake, temp);
         var page = source.fetch(day, () -> codes, () -> false);
         assertEquals(6000, page.rows().size());
         assertEquals(7, calls.get());
-        assertEquals(day.format(java.time.format.DateTimeFormatter.BASIC_ISO_DATE), page.cursor());
-        var reopened = DailySource.reopen(Path.of(page.responseEvidence()), page.sourceFingerprint(), day);
+        assertEquals(day.format(DateTimeFormatter.BASIC_ISO_DATE), page.cursor());
+        var reopened =
+                DailySource.reopen(Path.of(page.responseEvidence()), page.sourceFingerprint(), day);
         assertEquals(page.rows(), reopened.rows());
-        var receipt = com.zoutrankil.data.domain.JobDefinitionJson.mapper()
-                .readTree(Path.of(page.responseEvidence()).toFile());
+        var receipt =
+                JobDefinitionJson.mapper().readTree(Path.of(page.responseEvidence()).toFile());
         assertTrue(receipt.path("splitByCode").asBoolean());
         assertEquals(6000, receipt.path("initialCappedRowCount").asInt());
         assertEquals(6, receipt.path("fallbackGroups").size());
         assertEquals(6000, receipt.path("returnedRows").asInt());
     }
 
-    @Test void endpointRequestBoundsRemainAtTheTushareCapAndDoNotInventOffsetPaging() {
+    @Test
+    void endpointRequestBoundsRemainAtTheTushareCapAndDoNotInventOffsetPaging() {
         assertEquals("daily", DailySource.BY_DATE.endpoint());
         assertEquals(6001, DailySource.BY_DATE.sourceRowCap());
         assertEquals(PageContract.Paging.NONE, DailySource.BY_DATE.paging());
-        assertTrue(DailySource.BY_DATE.allowedParameters().containsAll(Set.of("trade_date", "ts_code")));
+        assertTrue(
+                DailySource.BY_DATE
+                        .allowedParameters()
+                        .containsAll(Set.of("trade_date", "ts_code")));
         assertEquals(1000, DailySource.CODE_GROUP_SIZE);
     }
 
@@ -69,4 +101,3 @@ class DailySourceTest {
         return Map.copyOf(row);
     }
 }
-

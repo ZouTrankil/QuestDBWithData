@@ -8,10 +8,20 @@ import java.util.Objects;
 public record ScoreRow(LocalDate tradeDate, String symbol, Map<String, Object> values) {
     public ScoreRow {
         Objects.requireNonNull(tradeDate, "tradeDate");
-        if (symbol == null || symbol.isBlank()) throw new IllegalArgumentException("Row symbol required");
+        if (symbol == null || symbol.isBlank())
+            throw new IllegalArgumentException("Row symbol required");
         values = FrozenScalarValues.copyOf(Objects.requireNonNull(values));
     }
-    public double number(String key) { return ScoreMath.number(values.get(key)); }
-    public String text(String key) { return Objects.toString(values.get(key), ""); }
-    public boolean flag(String key) { return ScoreMath.flag(values.get(key)); }
+
+    public double number(String key) {
+        return ScoreMath.number(values.get(key));
+    }
+
+    public String text(String key) {
+        return Objects.toString(values.get(key), "");
+    }
+
+    public boolean flag(String key) {
+        return ScoreMath.flag(values.get(key));
+    }
 }

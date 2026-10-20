@@ -1,28 +1,43 @@
 package com.zoutrankil.data.l2.application;
 
-import com.zoutrankil.data.service.*;
-import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.config.QuestDbProperties;
-import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.l2.L2T0TrainingLabelField;
-import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
-import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsDataset;
 import com.zoutrankil.data.domain.ReadGroupRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelField;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabels;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey;
 import com.zoutrankil.data.l2.mapper.L2T0TrainingLabelsMapper;
-import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.l2.storage.L2DatasetManifestReadRepository;
 import com.zoutrankil.data.l2.storage.L2IntradayBarFeaturesReadRepository;
 import com.zoutrankil.data.l2.storage.L2T0TrainingLabelsReadRepository;
+import com.zoutrankil.data.l2.storage.QuestDbL2T0TrainingLabelsTarget;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
+import com.zoutrankil.data.service.DatasetRegistry;
+import com.zoutrankil.data.service.ReadGroupReader;
+import com.zoutrankil.data.service.SyncJobRegistry;
+import com.zoutrankil.data.service.SyncJobRunner;
+
 import io.questdb.client.QuestDB;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -31,6 +46,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -38,14 +54,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import java.util.concurrent.TimeoutException;
 
 /** Opt-in live D089 check; every write is confined to its explicit java_d089_* acceptance table. */
 class L2T0TrainingLabelsLiveAcceptanceTest {
@@ -58,8 +69,10 @@ class L2T0TrainingLabelsLiveAcceptanceTest {
     private static final ObjectMapper JSON = JobDefinitionJson.mapper();
 
     @Test
-    void certifiedParquetBackfillIsIdempotentAndIncrementalResumeMatchesEveryField() throws Exception {
-        assumeTrue("true".equalsIgnoreCase(System.getenv("D089_LIVE_ACCEPTANCE")),
+    void certifiedParquetBackfillIsIdempotentAndIncrementalResumeMatchesEveryField()
+            throws Exception {
+        assumeTrue(
+                "true".equalsIgnoreCase(System.getenv("D089_LIVE_ACCEPTANCE")),
                 "Set D089_LIVE_ACCEPTANCE=true for the bounded local QuestDB and Parquet acceptance run");
         String username = requiredEnv("APP_QUESTDB_USERNAME");
         String password = requiredEnv("APP_QUESTDB_PASSWORD");
@@ -75,8 +88,14 @@ class L2T0TrainingLabelsLiveAcceptanceTest {
 
         var dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://" + properties.getHost() + ":" + properties.getPgPort()
-                + "/" + database + "?sslmode=disable");
+        dataSource.setUrl(
+                "jdbc:postgresql://"
+                        + properties.getHost()
+                        + ":"
+                        + properties.getPgPort()
+                        + "/"
+                        + database
+                        + "?sslmode=disable");
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         var jdbc = new JdbcTemplate(dataSource);
@@ -91,29 +110,70 @@ class L2T0TrainingLabelsLiveAcceptanceTest {
         Instant started = Instant.now();
 
         try (QuestDB questdb = QuestDB.connect(properties.qwpConfig())) {
-            var service = new L2T0TrainingLabelsJobService(calendars::findPage,
-                    new com.zoutrankil.data.l2.storage.QuestDbL2T0TrainingLabelsTarget(target, jdbc, questdb, properties),
-                    new L2T0TrainingLabelsParquetSource(datasetRoot, helper, python), ledger);
+            var service =
+                    new L2T0TrainingLabelsJobService(
+                            calendars::findPage,
+                            new QuestDbL2T0TrainingLabelsTarget(target, jdbc, questdb, properties),
+                            new L2T0TrainingLabelsParquetSource(datasetRoot, helper, python),
+                            ledger);
             service.createIsolatedTarget(target);
-            var firstPlan = service.plan(FROM, BACKFILL_TO, LOGICAL_DATE, SyncJobDefinition.Mode.BACKFILL,
-                    List.of(SYMBOL));
-            assertTrue(firstPlan.source().selectedRows() > 0, "acceptance must include real source rows");
+            var firstPlan =
+                    service.plan(
+                            FROM,
+                            BACKFILL_TO,
+                            LOGICAL_DATE,
+                            SyncJobDefinition.Mode.BACKFILL,
+                            List.of(SYMBOL));
+            assertTrue(
+                    firstPlan.source().selectedRows() > 0,
+                    "acceptance must include real source rows");
             assertEquals(List.of(FROM, FROM.plusDays(1), BACKFILL_TO), firstPlan.source().dates());
 
             var source = new L2T0TrainingLabelsParquetSource(datasetRoot, helper, python);
-            assertThrows(CancellationException.class, () -> source.stream(firstPlan.source(), List.of(SYMBOL),
-                    L2T0TrainingLabelsJobService.definition().budget().maxRows(),
-                    L2T0TrainingLabelsJobService.definition().budget().maxSlices(),
-                    page -> fail("cancelled D089 stream emitted a page"), () -> true, Duration.ofMinutes(2)));
+            assertThrows(
+                    CancellationException.class,
+                    () ->
+                            source.stream(
+                                    firstPlan.source(),
+                                    List.of(SYMBOL),
+                                    L2T0TrainingLabelsJobService.definition().budget().maxRows(),
+                                    L2T0TrainingLabelsJobService.definition().budget().maxSlices(),
+                                    page -> fail("cancelled D089 stream emitted a page"),
+                                    () -> true,
+                                    Duration.ofMinutes(2)));
             var stale = firstPlan.source();
-            var staleFingerprint = new L2T0TrainingLabelsParquetSource.Inspection(stale.from(), stale.to(),
-                    stale.dates(), stale.sourceRows(), stale.selectedRows(), stale.files(), stale.pages(),
-                    stale.sourceBytes(), "0".repeat(64), stale.schemaFingerprint(), stale.parserVersion(),
-                    stale.rootIdentity(), stale.completeForSelectedSymbols(), stale.outcomeCoverageByHorizon());
-            IOException staleFailure = assertThrows(IOException.class, () -> source.stream(staleFingerprint,
-                    List.of(SYMBOL), L2T0TrainingLabelsJobService.definition().budget().maxRows(),
-                    L2T0TrainingLabelsJobService.definition().budget().maxSlices(),
-                    page -> fail("stale D089 fingerprint emitted a page"), () -> false, Duration.ofMinutes(2)));
+            var staleFingerprint =
+                    new L2T0TrainingLabelsParquetSource.Inspection(
+                            stale.from(),
+                            stale.to(),
+                            stale.dates(),
+                            stale.sourceRows(),
+                            stale.selectedRows(),
+                            stale.files(),
+                            stale.pages(),
+                            stale.sourceBytes(),
+                            "0".repeat(64),
+                            stale.schemaFingerprint(),
+                            stale.parserVersion(),
+                            stale.rootIdentity(),
+                            stale.completeForSelectedSymbols(),
+                            stale.outcomeCoverageByHorizon());
+            IOException staleFailure =
+                    assertThrows(
+                            IOException.class,
+                            () ->
+                                    source.stream(
+                                            staleFingerprint,
+                                            List.of(SYMBOL),
+                                            L2T0TrainingLabelsJobService.definition()
+                                                    .budget()
+                                                    .maxRows(),
+                                            L2T0TrainingLabelsJobService.definition()
+                                                    .budget()
+                                                    .maxSlices(),
+                                            page -> fail("stale D089 fingerprint emitted a page"),
+                                            () -> false,
+                                            Duration.ofMinutes(2)));
             assertTrue(staleFailure.getMessage().contains("reader failed"));
 
             var firstRun = service.run(firstPlan);
@@ -121,17 +181,32 @@ class L2T0TrainingLabelsLiveAcceptanceTest {
             var firstRows = readBack(reader, target, FROM, BACKFILL_TO);
             assertEquals(firstPlan.source().selectedRows(), firstRows.size());
 
-            var repeatPlan = service.plan(FROM, BACKFILL_TO, LOGICAL_DATE,
-                    SyncJobDefinition.Mode.BACKFILL, List.of(SYMBOL));
+            var repeatPlan =
+                    service.plan(
+                            FROM,
+                            BACKFILL_TO,
+                            LOGICAL_DATE,
+                            SyncJobDefinition.Mode.BACKFILL,
+                            List.of(SYMBOL));
             var repeatRun = service.run(repeatPlan);
             assertVerified(repeatRun, firstRows.size());
-            assertEquals(firstRows, readBack(reader, target, FROM, BACKFILL_TO),
+            assertEquals(
+                    firstRows,
+                    readBack(reader, target, FROM, BACKFILL_TO),
                     "replaying the bounded D089 backfill must be idempotent");
 
-            var incrementalPlan = service.plan(FROM, INCREMENTAL_TO, LOGICAL_DATE,
-                    SyncJobDefinition.Mode.INCREMENTAL, List.of(SYMBOL));
+            var incrementalPlan =
+                    service.plan(
+                            FROM,
+                            INCREMENTAL_TO,
+                            LOGICAL_DATE,
+                            SyncJobDefinition.Mode.INCREMENTAL,
+                            List.of(SYMBOL));
             assertEquals(BACKFILL_TO, incrementalPlan.verifiedThrough());
-            assertEquals(FROM, incrementalPlan.request().from(), "the three calendar day revision window is replayed");
+            assertEquals(
+                    FROM,
+                    incrementalPlan.request().from(),
+                    "the three calendar day revision window is replayed");
             assertEquals(INCREMENTAL_TO, incrementalPlan.request().to());
             assertEquals(4, incrementalPlan.source().dates().size());
             var incrementalRun = service.run(incrementalPlan);
@@ -144,97 +219,222 @@ class L2T0TrainingLabelsLiveAcceptanceTest {
             assertVerified(resumed, incrementalPlan.source().selectedRows());
             assertTrue(resumed.reusedRows() > 0, "exact D089 resume must reuse verified slices");
             assertEquals(incrementalRows, readBack(reader, target, FROM, INCREMENTAL_TO));
-            assertFalse(service.cancel(incrementalRun.runId()), "a verified run must not accept a late cancellation");
+            assertFalse(
+                    service.cancel(incrementalRun.runId()),
+                    "a verified run must not accept a late cancellation");
 
-            Path independentCapture = evidenceRoot.resolve("commands/source-parquet-20260921-24.jsonl");
-            captureIndependentSource(python, helper, datasetRoot, incrementalPlan.source(), independentCapture);
+            Path independentCapture =
+                    evidenceRoot.resolve("commands/source-parquet-20260921-24.jsonl");
+            captureIndependentSource(
+                    python, helper, datasetRoot, incrementalPlan.source(), independentCapture);
             var expectedRows = parseIndependentCapture(independentCapture);
             assertEquals(incrementalPlan.source().selectedRows(), expectedRows.size());
             var sortedTargetRows = sort(incrementalRows);
-            assertEquals(sort(expectedRows), sortedTargetRows,
+            assertEquals(
+                    sort(expectedRows),
+                    sortedTargetRows,
                     "all 62 D089 fields must match the independently captured Parquet rows");
-            assertEquals(expectedRows.size() * L2T0TrainingLabelField.values().length,
-                    expectedRows.size() * 62, "field comparison count must cover the complete 62-column contract");
+            assertEquals(
+                    expectedRows.size() * L2T0TrainingLabelField.values().length,
+                    expectedRows.size() * 62,
+                    "field comparison count must cover the complete 62-column contract");
 
             var readRepo = new L2T0TrainingLabelsReadRepository(reader, target);
-            var datasetRegistry = new DatasetRegistry(List.of(calendars,
-                    new L2DatasetManifestReadRepository(reader, "l2_dataset_manifest"), new L2IntradayBarFeaturesReadRepository(reader, "l2_intraday_bar_features"), readRepo));
+            var datasetRegistry =
+                    new DatasetRegistry(
+                            List.of(
+                                    calendars,
+                                    new L2DatasetManifestReadRepository(
+                                            reader, "l2_dataset_manifest"),
+                                    new L2IntradayBarFeaturesReadRepository(
+                                            reader, "l2_intraday_bar_features"),
+                                    readRepo));
             var d089Mapper = new L2T0TrainingLabelsMapper();
-            var readGroup = new ReadGroupReader(datasetRegistry, reader, List.of(
-                    new ReadGroupReader.Binding<>(readRepo.definition(), L2T0TrainingLabels.class,
-                            d089Mapper::fromValues, () -> null)));
+            var readGroup =
+                    new ReadGroupReader(
+                            datasetRegistry,
+                            reader,
+                            List.of(
+                                    new ReadGroupReader.Binding<>(
+                                            readRepo.definition(),
+                                            L2T0TrainingLabels.class,
+                                            d089Mapper::fromValues,
+                                            () -> null)));
             Instant rangeFrom = FROM.atStartOfDay(EXCHANGE_ZONE).toInstant();
             Instant rangeTo = INCREMENTAL_TO.plusDays(1).atStartOfDay(EXCHANGE_ZONE).toInstant();
-            var typedQuery = new DatasetReadQuery(L2T0TrainingLabelsMapper.columns(), Map.of(), "minute",
-                    rangeFrom, rangeTo, 200, null);
-            var typedRead = readGroup.read(new ReadGroupRequest(List.of(new ReadGroupRequest.Member(
-                    "d089-typed-page", readRepo.definition().datasetId(), readRepo.definition().schemaVersion(),
-                    typedQuery)), Duration.ofMinutes(1)), () -> false);
+            var typedQuery =
+                    new DatasetReadQuery(
+                            L2T0TrainingLabelsMapper.columns(),
+                            Map.of(),
+                            "minute",
+                            rangeFrom,
+                            rangeTo,
+                            200,
+                            null);
+            var typedRead =
+                    readGroup.read(
+                            new ReadGroupRequest(
+                                    List.of(
+                                            new ReadGroupRequest.Member(
+                                                    "d089-typed-page",
+                                                    readRepo.definition().datasetId(),
+                                                    readRepo.definition().schemaVersion(),
+                                                    typedQuery)),
+                                    Duration.ofMinutes(1)),
+                            () -> false);
             assertTrue(typedRead.complete());
             assertEquals(L2T0TrainingLabels.class, typedRead.require("d089-typed-page").rowType());
-            assertEquals(200, typedRead.require("d089-typed-page").typedPage(L2T0TrainingLabels.class).rows().size());
+            assertEquals(
+                    200,
+                    typedRead
+                            .require("d089-typed-page")
+                            .typedPage(L2T0TrainingLabels.class)
+                            .rows()
+                            .size());
 
-            var manifestReadRepo = new L2DatasetManifestReadRepository(reader, "l2_dataset_manifest");
-            var barReadRepo = new L2IntradayBarFeaturesReadRepository(reader, "l2_intraday_bar_features");
-            var registeredDatasets = new DatasetRegistry(List.of(calendars, manifestReadRepo, barReadRepo, readRepo));
+            var manifestReadRepo =
+                    new L2DatasetManifestReadRepository(reader, "l2_dataset_manifest");
+            var barReadRepo =
+                    new L2IntradayBarFeaturesReadRepository(reader, "l2_intraday_bar_features");
+            var registeredDatasets =
+                    new DatasetRegistry(
+                            List.of(calendars, manifestReadRepo, barReadRepo, readRepo));
             var calendarDefinition = ExchangeCalendarSyncAdapter.definition(true);
             var manifestDefinition = L2DatasetManifestJobService.definition();
             var barDefinition = L2IntradayBarFeaturesJobService.definition();
             var featureDefinition = L2T0TrainingLabelsJobService.definition();
-            var registeredJobs = new SyncJobRegistry(List.of(calendarDefinition, manifestDefinition, barDefinition, featureDefinition),
-                    registeredDatasets, Map.of(calendarDefinition.datasetId(), calendarDefinition.supportedModes(),
-                    manifestDefinition.datasetId(), manifestDefinition.supportedModes(),
-                    barDefinition.datasetId(), barDefinition.supportedModes(),
-                    featureDefinition.datasetId(), featureDefinition.supportedModes()),
-                    new SyncJobRegistry.Policies(Set.of("file.bounded", "tushare.shared"),
-                            Set.of("exchange_calendar.year", "l2_manifest.parquet_date",
-                                    "l2_intraday_bar_features.parquet_date", "l2_t0_training_labels.parquet_date"),
-                            Set.of("questdb.full_key_values")));
-            assertEquals("l2_t0_training_labels", registeredDatasets.require("l2_t0_training_labels")
-                    .definition().datasetId());
-            assertEquals("data.l2_t0_training_labels", registeredJobs.require("data.l2_t0_training_labels", 1).jobId());
-            var registryPreview = registeredJobs.prepare("data.l2_t0_training_labels", 1,
-                    SyncJobDefinition.Mode.BACKFILL, incrementalPlan.request().parameters(),
-                    FROM, INCREMENTAL_TO, LOGICAL_DATE);
+            var registeredJobs =
+                    new SyncJobRegistry(
+                            List.of(
+                                    calendarDefinition,
+                                    manifestDefinition,
+                                    barDefinition,
+                                    featureDefinition),
+                            registeredDatasets,
+                            Map.of(
+                                    calendarDefinition.datasetId(),
+                                    calendarDefinition.supportedModes(),
+                                    manifestDefinition.datasetId(),
+                                    manifestDefinition.supportedModes(),
+                                    barDefinition.datasetId(),
+                                    barDefinition.supportedModes(),
+                                    featureDefinition.datasetId(),
+                                    featureDefinition.supportedModes()),
+                            new SyncJobRegistry.Policies(
+                                    Set.of("file.bounded", "tushare.shared"),
+                                    Set.of(
+                                            "exchange_calendar.year",
+                                            "l2_manifest.parquet_date",
+                                            "l2_intraday_bar_features.parquet_date",
+                                            "l2_t0_training_labels.parquet_date"),
+                                    Set.of("questdb.full_key_values")));
+            assertEquals(
+                    "l2_t0_training_labels",
+                    registeredDatasets.require("l2_t0_training_labels").definition().datasetId());
+            assertEquals(
+                    "data.l2_t0_training_labels",
+                    registeredJobs.require("data.l2_t0_training_labels", 1).jobId());
+            var registryPreview =
+                    registeredJobs.prepare(
+                            "data.l2_t0_training_labels",
+                            1,
+                            SyncJobDefinition.Mode.BACKFILL,
+                            incrementalPlan.request().parameters(),
+                            FROM,
+                            INCREMENTAL_TO,
+                            LOGICAL_DATE);
             assertEquals(INCREMENTAL_TO, registryPreview.to());
             assertEquals(SyncRunState.VERIFIED, service.status(incrementalRun.runId()).state());
             var visibleStatus = service.status(incrementalRun.runId());
-            assertTrue(visibleStatus.verifiedSlices() > 0,
+            assertTrue(
+                    visibleStatus.verifiedSlices() > 0,
                     "verified run slices must be visible through the D089 job owner");
 
-            writeAcceptanceEvidence(target, service.targetId(), incrementalPlan, firstRun, repeatRun,
-                    incrementalRun, resumed, expectedRows.size(), incrementalRows.size(),
-                    Map.of("typedWriterPort", "VERIFIED", "writeGroupSourceCertification", "registered; runtime path statically reviewed"),
-                    true, true, true, true, true, started,
+            writeAcceptanceEvidence(
+                    target,
+                    service.targetId(),
+                    incrementalPlan,
+                    firstRun,
+                    repeatRun,
+                    incrementalRun,
+                    resumed,
+                    expectedRows.size(),
+                    incrementalRows.size(),
+                    Map.of(
+                            "typedWriterPort",
+                            "VERIFIED",
+                            "writeGroupSourceCertification",
+                            "registered; runtime path statically reviewed"),
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
+                    started,
                     evidenceRoot.resolve("live-acceptance-20260930.json"));
         }
     }
 
-    private static void captureIndependentSource(String python, Path helper, Path root,
-            L2T0TrainingLabelsParquetSource.Inspection inspection, Path output) throws Exception {
+    private static void captureIndependentSource(
+            String python,
+            Path helper,
+            Path root,
+            L2T0TrainingLabelsParquetSource.Inspection inspection,
+            Path output)
+            throws Exception {
         Path error = output.resolveSibling("source-parquet-20260921-24.stderr.txt");
-        var command = new ArrayList<String>(List.of(Path.of(python).toAbsolutePath().normalize().toString(),
-                helper.toAbsolutePath().normalize().toString(), "--dataset-root", root.toAbsolutePath().normalize().toString(),
-                "--from-date", "20260921", "--to-date", "20260924", "--page-rows", "200",
-                "--max-files", "10000", "--max-rows", "300000", "--max-bytes", "67108864",
-                "--max-output-bytes", "67108864", "--symbol", SYMBOL, "--stream",
-                "--expected-fingerprint", inspection.sourceFingerprint()));
-        var processBuilder = new ProcessBuilder(command).redirectOutput(output.toFile()).redirectError(error.toFile());
-        processBuilder.environment().keySet().removeIf(key -> key.startsWith("QUESTDB_")
-                || key.startsWith("APP_QUESTDB_") || key.contains("TUSHARE"));
+        var command =
+                new ArrayList<String>(
+                        List.of(
+                                Path.of(python).toAbsolutePath().normalize().toString(),
+                                helper.toAbsolutePath().normalize().toString(),
+                                "--dataset-root",
+                                root.toAbsolutePath().normalize().toString(),
+                                "--from-date",
+                                "20260921",
+                                "--to-date",
+                                "20260924",
+                                "--page-rows",
+                                "200",
+                                "--max-files",
+                                "10000",
+                                "--max-rows",
+                                "300000",
+                                "--max-bytes",
+                                "67108864",
+                                "--max-output-bytes",
+                                "67108864",
+                                "--symbol",
+                                SYMBOL,
+                                "--stream",
+                                "--expected-fingerprint",
+                                inspection.sourceFingerprint()));
+        var processBuilder =
+                new ProcessBuilder(command)
+                        .redirectOutput(output.toFile())
+                        .redirectError(error.toFile());
+        processBuilder
+                .environment()
+                .keySet()
+                .removeIf(
+                        key ->
+                                key.startsWith("QUESTDB_")
+                                        || key.startsWith("APP_QUESTDB_")
+                                        || key.contains("TUSHARE"));
         Process process = processBuilder.start();
         if (!process.waitFor(3, TimeUnit.MINUTES)) {
             process.destroyForcibly();
-            throw new java.util.concurrent.TimeoutException("Independent D089 Parquet capture exceeded three minutes");
+            throw new TimeoutException("Independent D089 Parquet capture exceeded three minutes");
         }
         if (process.exitValue() != 0)
-            throw new IOException("Independent D089 Parquet capture failed; evidence retained at " + error);
+            throw new IOException(
+                    "Independent D089 Parquet capture failed; evidence retained at " + error);
     }
 
     private static List<L2T0TrainingLabels> parseIndependentCapture(Path path) throws Exception {
         var mapper = new L2T0TrainingLabelsMapper();
         var rows = new ArrayList<L2T0TrainingLabels>();
-        Set<com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey> keys = new HashSet<>();
+        Set<L2T0TrainingLabelsKey> keys = new HashSet<>();
         int completions = 0;
         for (String line : Files.readAllLines(path, StandardCharsets.UTF_8)) {
             JsonNode record = JSON.readTree(line);
@@ -244,25 +444,30 @@ class L2T0TrainingLabelsLiveAcceptanceTest {
                 completions++;
             }
             if (!"page".equals(record.path("kind").asText())) continue;
-            LocalDate date = LocalDate.parse(record.path("responseEvidence").path("date").asText(),
-                    java.time.format.DateTimeFormatter.BASIC_ISO_DATE);
+            LocalDate date =
+                    LocalDate.parse(
+                            record.path("responseEvidence").path("date").asText(),
+                            DateTimeFormatter.BASIC_ISO_DATE);
             for (JsonNode row : record.path("rows")) {
                 var typed = mapper.fromParquet(row, date);
-                assertTrue(keys.add(typed.key()), "independent source capture repeated a business key");
+                assertTrue(
+                        keys.add(typed.key()),
+                        "independent source capture repeated a business key");
                 rows.add(typed);
             }
         }
-        assertEquals(1, completions, "independent source capture needs exactly one completion record");
+        assertEquals(
+                1, completions, "independent source capture needs exactly one completion record");
         return sort(rows);
     }
 
-    private static List<L2T0TrainingLabels> readBack(QuestDbBoundedReader reader, String table,
-            LocalDate from, LocalDate toInclusive) {
+    private static List<L2T0TrainingLabels> readBack(
+            QuestDbBoundedReader reader, String table, LocalDate from, LocalDate toInclusive) {
         var repository = new L2T0TrainingLabelsReadRepository(reader, table);
         Instant start = from.atStartOfDay(EXCHANGE_ZONE).toInstant();
         Instant end = toInclusive.plusDays(1).atStartOfDay(EXCHANGE_ZONE).toInstant();
         var result = new ArrayList<L2T0TrainingLabels>();
-        com.zoutrankil.data.domain.DatasetReadCursor cursor = null;
+        DatasetReadCursor cursor = null;
         do {
             var page = repository.findRange(start, end, 200, cursor);
             result.addAll(page.rows());
@@ -272,24 +477,41 @@ class L2T0TrainingLabelsLiveAcceptanceTest {
     }
 
     private static List<L2T0TrainingLabels> sort(List<L2T0TrainingLabels> rows) {
-        return rows.stream().sorted(Comparator.comparing(L2T0TrainingLabels::symbol)
-                .thenComparing(L2T0TrainingLabels::minute)).toList();
+        return rows.stream()
+                .sorted(
+                        Comparator.comparing(L2T0TrainingLabels::symbol)
+                                .thenComparing(L2T0TrainingLabels::minute))
+                .toList();
     }
 
     private static void assertVerified(SyncJobRunner.Result run, int expectedRows) {
-        assertTrue(run.state() == SyncRunState.VERIFIED || run.state() == SyncRunState.VERIFIED_EMPTY,
+        assertTrue(
+                run.state() == SyncRunState.VERIFIED || run.state() == SyncRunState.VERIFIED_EMPTY,
                 "D089 run failed: " + run.state() + " " + run.errorCode());
         assertEquals(expectedRows, run.sourceRows());
         assertEquals(expectedRows, run.verifiedRows());
     }
 
-    private static void writeAcceptanceEvidence(String target, String targetId,
-            L2T0TrainingLabelsJobService.Plan plan, SyncJobRunner.Result backfill,
-            SyncJobRunner.Result repeated, SyncJobRunner.Result incremental,
-            SyncJobRunner.Result resumed, int sourceRows, int readbackRows, Map<String,Object> writeGroup,
-            boolean sourceCancellation, boolean staleRejected, boolean registered,
-            boolean management, boolean runVisibility, Instant started, Path path) throws Exception {
-        var output = new LinkedHashMap<String,Object>();
+    private static void writeAcceptanceEvidence(
+            String target,
+            String targetId,
+            L2T0TrainingLabelsJobService.Plan plan,
+            SyncJobRunner.Result backfill,
+            SyncJobRunner.Result repeated,
+            SyncJobRunner.Result incremental,
+            SyncJobRunner.Result resumed,
+            int sourceRows,
+            int readbackRows,
+            Map<String, Object> writeGroup,
+            boolean sourceCancellation,
+            boolean staleRejected,
+            boolean registered,
+            boolean management,
+            boolean runVisibility,
+            Instant started,
+            Path path)
+            throws Exception {
+        var output = new LinkedHashMap<String, Object>();
         output.put("status", "VERIFIED");
         output.put("humanReview", "pending_review");
         output.put("targetTable", target);
@@ -307,8 +529,9 @@ class L2T0TrainingLabelsLiveAcceptanceTest {
         output.put("fieldCount", L2T0TrainingLabelField.values().length);
         output.put("outcomeCoverageByHorizon", plan.source().outcomeCoverageByHorizon());
         output.put("missingOutcomeLabelsAreNotNegativeOutcome", true);
-        output.put("independentFullFieldComparisons", Math.multiplyExact(sourceRows,
-                L2T0TrainingLabelField.values().length));
+        output.put(
+                "independentFullFieldComparisons",
+                Math.multiplyExact(sourceRows, L2T0TrainingLabelField.values().length));
         output.put("sourceCancellationObserved", sourceCancellation);
         output.put("staleFingerprintRejected", staleRejected);
         output.put("datasetAndJobRegistered", registered);
@@ -317,32 +540,69 @@ class L2T0TrainingLabelsLiveAcceptanceTest {
         output.put("targetReadbackRows", readbackRows);
         output.put("targetReadbackFullFieldEquality", true);
         output.put("writeGroup", writeGroup);
-        output.put("retryPolicy", "maxAttempts=1; deterministic local Parquet errors remain visible for explicit reconciliation");
-        output.put("rateLimit", "not applicable: local manifest/Parquet source; process, page, file, row and byte budgets are finite");
-        output.put("runEvidence", Map.of("backfill", runEvidence(backfill), "idempotentBackfill", runEvidence(repeated),
-                "incremental", runEvidence(incremental), "resume", runEvidence(resumed)));
-        output.put("checkpoint", Map.of("beforeIncremental", plan.verifiedThrough() == null
-                        ? BACKFILL_TO.toString() : plan.verifiedThrough().toString(),
-                "replayedFrom", plan.request().from().toString(), "through", plan.request().to().toString(),
-                "revisionOverlapCalendarDays", 3));
+        output.put(
+                "retryPolicy",
+                "maxAttempts=1; deterministic local Parquet errors remain visible for explicit reconciliation");
+        output.put(
+                "rateLimit",
+                "not applicable: local manifest/Parquet source; process, page, file, row and byte budgets are finite");
+        output.put(
+                "runEvidence",
+                Map.of(
+                        "backfill",
+                        runEvidence(backfill),
+                        "idempotentBackfill",
+                        runEvidence(repeated),
+                        "incremental",
+                        runEvidence(incremental),
+                        "resume",
+                        runEvidence(resumed)));
+        output.put(
+                "checkpoint",
+                Map.of(
+                        "beforeIncremental",
+                        plan.verifiedThrough() == null
+                                ? BACKFILL_TO.toString()
+                                : plan.verifiedThrough().toString(),
+                        "replayedFrom",
+                        plan.request().from().toString(),
+                        "through",
+                        plan.request().to().toString(),
+                        "revisionOverlapCalendarDays",
+                        3));
         output.put("startedAt", started.toString());
         output.put("finishedAt", Instant.now().toString());
-        output.put("evidence", List.of("commands/preflight-source-20260930.json",
-                "commands/source-parquet-20260921-24.jsonl", "live-acceptance-20260930.json"));
-        Files.writeString(path, JSON.writerWithDefaultPrettyPrinter().writeValueAsString(output)
-                + System.lineSeparator(), StandardCharsets.UTF_8);
+        output.put(
+                "evidence",
+                List.of(
+                        "commands/preflight-source-20260930.json",
+                        "commands/source-parquet-20260921-24.jsonl",
+                        "live-acceptance-20260930.json"));
+        Files.writeString(
+                path,
+                JSON.writerWithDefaultPrettyPrinter().writeValueAsString(output)
+                        + System.lineSeparator(),
+                StandardCharsets.UTF_8);
     }
 
-    private static Map<String,Object> runEvidence(SyncJobRunner.Result run) {
-        return Map.of("runId", run.runId(), "state", run.state(), "sourceRows", run.sourceRows(),
-                "verifiedRows", run.verifiedRows(), "reusedRows", run.reusedRows());
+    private static Map<String, Object> runEvidence(SyncJobRunner.Result run) {
+        return Map.of(
+                "runId",
+                run.runId(),
+                "state",
+                run.state(),
+                "sourceRows",
+                run.sourceRows(),
+                "verifiedRows",
+                run.verifiedRows(),
+                "reusedRows",
+                run.reusedRows());
     }
 
     private static String requiredEnv(String name) {
         String value = System.getenv(name);
-        if (value == null || value.isBlank()) throw new IllegalStateException("Missing acceptance setting " + name);
+        if (value == null || value.isBlank())
+            throw new IllegalStateException("Missing acceptance setting " + name);
         return value;
     }
 }
-
-

@@ -11,11 +11,13 @@ public record EtfPortfolioKey(String tsCode, LocalDate annDate, LocalDate endDat
         Objects.requireNonNull(endDate, "report-period calendar date required");
         requireCode(symbol, "holding security");
         if (endDate.isAfter(annDate))
-            throw new IllegalArgumentException("Portfolio report period cannot be after its announcement date");
+            throw new IllegalArgumentException(
+                    "Portfolio report period cannot be after its announcement date");
     }
 
     private static void requireCode(String value, String label) {
         if (value == null || !value.matches("[A-Za-z0-9]{1,16}\\.[A-Z]{2,3}"))
-            throw new IllegalArgumentException("Complete " + label + " code with exchange suffix required");
+            throw new IllegalArgumentException(
+                    "Complete " + label + " code with exchange suffix required");
     }
 }

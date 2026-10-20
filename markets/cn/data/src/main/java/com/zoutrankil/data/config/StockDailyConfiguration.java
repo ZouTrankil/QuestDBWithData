@@ -1,9 +1,15 @@
 package com.zoutrankil.data.config;
 
 import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
-import com.zoutrankil.data.stock.port.*;
-import com.zoutrankil.data.stock.storage.*;
+import com.zoutrankil.data.stock.port.DailyBasicTarget;
+import com.zoutrankil.data.stock.port.DailyTarget;
+import com.zoutrankil.data.stock.port.StockBasicTarget;
+import com.zoutrankil.data.stock.storage.DailyBasicQuestDbTarget;
+import com.zoutrankil.data.stock.storage.DailyQuestDbTarget;
+import com.zoutrankil.data.stock.storage.StockBasicQuestDbTarget;
+
 import io.questdb.client.QuestDB;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,15 +18,28 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
 public class StockDailyConfiguration {
-    @Bean public DailyTarget dailyTarget(JdbcTemplate jdbc, @Lazy QuestDB questdb, QuestDbProperties properties,
+    @Bean
+    public DailyTarget dailyTarget(
+            JdbcTemplate jdbc,
+            @Lazy QuestDB questdb,
+            QuestDbProperties properties,
             @Value("${app.sync.daily-table:daily}") String table) {
-        return new DailyQuestDbTarget(table,jdbc,questdb,properties);
+        return new DailyQuestDbTarget(table, jdbc, questdb, properties);
     }
-    @Bean public DailyBasicTarget dailyBasicTarget(JdbcTemplate jdbc, @Lazy QuestDB questdb, QuestDbProperties properties,
+
+    @Bean
+    public DailyBasicTarget dailyBasicTarget(
+            JdbcTemplate jdbc,
+            @Lazy QuestDB questdb,
+            QuestDbProperties properties,
             @Value("${app.sync.daily-basic-table:daily_basic}") String table) {
-        return new DailyBasicQuestDbTarget(table,jdbc,questdb,properties);
+        return new DailyBasicQuestDbTarget(table, jdbc, questdb, properties);
     }
-    @Bean public StockBasicTarget stockBasicTarget(JdbcTemplate jdbc, @Lazy QuestDB questdb, QuestDbProperties properties) {
-        return new StockBasicQuestDbTarget(StockBasicDataset.DEFINITION.objectName(),jdbc,questdb,properties);
+
+    @Bean
+    public StockBasicTarget stockBasicTarget(
+            JdbcTemplate jdbc, @Lazy QuestDB questdb, QuestDbProperties properties) {
+        return new StockBasicQuestDbTarget(
+                StockBasicDataset.DEFINITION.objectName(), jdbc, questdb, properties);
     }
 }

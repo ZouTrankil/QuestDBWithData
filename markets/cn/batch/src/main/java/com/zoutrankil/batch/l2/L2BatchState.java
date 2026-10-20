@@ -6,25 +6,51 @@ import java.util.List;
 import java.util.Map;
 
 final class L2BatchState {
-    private L2BatchState() {
-    }
+    private L2BatchState() {}
 
-    record Job(String symbol, List<Path> sources) {
-    }
+    record Job(String symbol, List<Path> sources) {}
 
-    record SourceFingerprint(String sha256, Map<String, Object> files) {
-    }
+    record SourceFingerprint(String sha256, Map<String, Object> files) {}
 
-    record Outcome(String symbol, String status, boolean resumed, List<String> sourceDirectories,
-        String inputFingerprint, Map<String, Object> inputFiles, String resultSha256,
-        Map<String, Long> rows, double elapsedSeconds, String error) {
+    record Outcome(
+            String symbol,
+            String status,
+            boolean resumed,
+            List<String> sourceDirectories,
+            String inputFingerprint,
+            Map<String, Object> inputFiles,
+            String resultSha256,
+            Map<String, Long> rows,
+            double elapsedSeconds,
+            String error) {
         static Outcome failure(String symbol, List<String> sources, Exception failure) {
-            return new Outcome(symbol, "FAILED", false, sources, null, Map.of(), null, Map.of(), 0,
-                failure.getClass().getSimpleName() + ": " + failure.getMessage());
+            return new Outcome(
+                    symbol,
+                    "FAILED",
+                    false,
+                    sources,
+                    null,
+                    Map.of(),
+                    null,
+                    Map.of(),
+                    0,
+                    failure.getClass().getSimpleName() + ": " + failure.getMessage());
         }
+
         Outcome withElapsed(double seconds) {
-            return new Outcome(symbol, status, resumed, sourceDirectories, inputFingerprint, inputFiles, resultSha256, rows, seconds, error);
+            return new Outcome(
+                    symbol,
+                    status,
+                    resumed,
+                    sourceDirectories,
+                    inputFingerprint,
+                    inputFiles,
+                    resultSha256,
+                    rows,
+                    seconds,
+                    error);
         }
+
         Map<String, Object> record() {
             var map = new LinkedHashMap<String, Object>();
             map.put("symbol", symbol);

@@ -1,59 +1,93 @@
 package com.zoutrankil.data.index.application;
 
-import com.zoutrankil.data.service.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.PageContract;
-import java.nio.file.*;
-import java.time.Instant;
-import java.util.*;
-import java.util.function.BooleanSupplier;
+import com.zoutrankil.data.service.PageExecutor;
+import com.zoutrankil.data.service.TusharePageService;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import static org.junit.jupiter.api.Assertions.*;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BooleanSupplier;
 
 class ThsMemberSourceBoundaryTest {
     @TempDir Path folder;
     private static final ObjectMapper JSON = new ObjectMapper();
     private static final Instant OBSERVED = Instant.parse("2026-09-29T01:02:03.123456Z");
 
-    @Test void responseAtUnpagedCapIsIncompleteAndWritesNoReceipt() throws Exception {
+    @Test
+    void responseAtUnpagedCapIsIncompleteAndWritesNoReceipt() throws Exception {
         var rows = new ArrayList<Map<String, JsonNode>>(10000);
         for (int i = 0; i < 10000; i++) rows.add(row("700001.TI", String.format("%06d.SZ", i)));
         var source = new ThsMemberSource(fake(rows), folder);
-        assertThrows(PageExecutor.Truncated.class,
+        assertThrows(
+                PageExecutor.Truncated.class,
                 () -> source.fetchBoard("700001.TI", OBSERVED, () -> false));
         assertFalse(Files.exists(folder.resolve("source-review.json")));
-        try (var files = Files.list(folder)) { assertEquals(0, files.count()); }
+        try (var files = Files.list(folder)) {
+            assertEquals(0, files.count());
+        }
     }
 
-    @Test void duplicateOrOutOfBoardRowCannotComplete() throws Exception {
-        var duplicate = new ThsMemberSource(fake(List.of(row("700001.TI", "000001.SZ"),
-                row("700001.TI", "000001.SZ"))), folder);
-        assertThrows(PageExecutor.Incomplete.class,
+    @Test
+    void duplicateOrOutOfBoardRowCannotComplete() throws Exception {
+        var duplicate =
+                new ThsMemberSource(
+                        fake(List.of(row("700001.TI", "000001.SZ"), row("700001.TI", "000001.SZ"))),
+                        folder);
+        assertThrows(
+                PageExecutor.Incomplete.class,
                 () -> duplicate.fetchBoard("700001.TI", OBSERVED, () -> false));
         var outside = new ThsMemberSource(fake(List.of(row("885800.TI", "000001.SZ"))), folder);
-        assertThrows(PageExecutor.Incomplete.class,
+        assertThrows(
+                PageExecutor.Incomplete.class,
                 () -> outside.fetchBoard("700001.TI", OBSERVED, () -> false));
-        try (var files = Files.list(folder)) { assertEquals(0, files.count()); }
+        try (var files = Files.list(folder)) {
+            assertEquals(0, files.count());
+        }
     }
 
-    @Test void cancellationBeforeFetchCannotWriteReceipt() throws Exception {
+    @Test
+    void cancellationBeforeFetchCannotWriteReceipt() throws Exception {
         var source = new ThsMemberSource(fake(List.of(row("700001.TI", "000001.SZ"))), folder);
-        assertThrows(PageExecutor.Incomplete.class,
+        assertThrows(
+                PageExecutor.Incomplete.class,
                 () -> source.fetchBoard("700001.TI", OBSERVED, () -> true));
-        try (var files = Files.list(folder)) { assertEquals(0, files.count()); }
+        try (var files = Files.list(folder)) {
+            assertEquals(0, files.count());
+        }
     }
 
     private static TusharePageService fake(List<Map<String, JsonNode>> rows) {
         return new TusharePageService(null) {
-            @Override public PageExecutor.Completed execute(PageContract contract, Map<String, Object> baseParams,
-                    PageExecutor.Consumer consumer, PageExecutor.Validator validator,
-                    BooleanSupplier cancelled) throws Exception {
-                return new PageExecutor().execute(contract, baseParams,
-                        ignored -> new PageExecutor.Page(rows, null, false, null),
-                        consumer, validator, cancelled);
+            @Override
+            public PageExecutor.Completed execute(
+                    PageContract contract,
+                    Map<String, Object> baseParams,
+                    PageExecutor.Consumer consumer,
+                    PageExecutor.Validator validator,
+                    BooleanSupplier cancelled)
+                    throws Exception {
+                return new PageExecutor()
+                        .execute(
+                                contract,
+                                baseParams,
+                                ignored -> new PageExecutor.Page(rows, null, false, null),
+                                consumer,
+                                validator,
+                                cancelled);
             }
         };
     }

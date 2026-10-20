@@ -1,22 +1,54 @@
 package com.zoutrankil.data.etf.application;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyMap;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyMap;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.clearInvocations;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockConstruction;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
-import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRunState;
+import com.zoutrankil.data.domain.stock.basic.ExchangeCalendar;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
-import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.port.EtfAdjTarget;
 import com.zoutrankil.data.etf.port.EtfAdjWriteSession;
+import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.port.EtfWriteSession;
-import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.SyncJobRegistry;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.TusharePageService;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
@@ -26,13 +58,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 /** Characterizes the distinct admission rules in the three pre-T14 job services. */
 class EtfJobServiceContractTest {
@@ -42,59 +67,93 @@ class EtfJobServiceContractTest {
     @TempDir Path temp;
 
     enum Family {
-        DAILY(EtfDailySyncJobOwner.DEFINITION, "java_d014_etf_daily_contract", EtfDailySource.class),
+        DAILY(
+                EtfDailySyncJobOwner.DEFINITION,
+                "java_d014_etf_daily_contract",
+                EtfDailySource.class),
         ADJ(EtfAdjSyncJobOwner.DEFINITION, "java_d015_etf_adj_contract", EtfAdjSource.class),
-        FACTOR(EtfFactorSyncJobOwner.DEFINITION, "java_d017_etf_factor_contract", EtfFactorSource.class);
+        FACTOR(
+                EtfFactorSyncJobOwner.DEFINITION,
+                "java_d017_etf_factor_contract",
+                EtfFactorSource.class);
 
         final SyncJobDefinition definition;
         final String table;
         final Class<?> sourceClass;
+
         Family(SyncJobDefinition definition, String table, Class<?> sourceClass) {
-            this.definition = definition; this.table = table; this.sourceClass = sourceClass;
+            this.definition = definition;
+            this.table = table;
+            this.sourceClass = sourceClass;
         }
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
+    @ParameterizedTest
+    @EnumSource(Family.class)
     void everyPlanRequiresItsFrozenTarget(Family family) {
         var request = request(family, DATE, Mode.BACKFILL, Map.of());
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(
+                IllegalArgumentException.class,
                 () -> plan(family, request, OTHER_TARGET, null, null, null, null));
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
+    @ParameterizedTest
+    @EnumSource(Family.class)
     void dailyPlanAllowsPhysicalMetadataThatAdjAndFactorReject(Family family) {
-        var request = request(family, DATE, Mode.BACKFILL,
-                Map.of("targetMinBefore", DATE, "targetMaxBefore", DATE));
+        var request =
+                request(
+                        family,
+                        DATE,
+                        Mode.BACKFILL,
+                        Map.of("targetMinBefore", DATE, "targetMaxBefore", DATE));
         if (family == Family.DAILY) {
             assertDoesNotThrow(() -> plan(family, request, TARGET, null, null, null, null));
         } else {
-            assertThrows(IllegalArgumentException.class,
+            assertThrows(
+                    IllegalArgumentException.class,
                     () -> plan(family, request, TARGET, null, null, null, null));
         }
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
+    @ParameterizedTest
+    @EnumSource(Family.class)
     void onlyFactorPlanChecksCheckpointMetadataAndRequiresIncrementalAnchor(Family family) {
-        var request = request(family, DATE, Mode.INCREMENTAL,
-                Map.of("checkpointBefore", DATE, "checkpointAnchor", DATE));
+        var request =
+                request(
+                        family,
+                        DATE,
+                        Mode.INCREMENTAL,
+                        Map.of("checkpointBefore", DATE, "checkpointAnchor", DATE));
         var noAnchor = request(family, DATE, Mode.INCREMENTAL, Map.of());
         if (family == Family.FACTOR) {
-            assertThrows(IllegalArgumentException.class,
+            assertThrows(
+                    IllegalArgumentException.class,
                     () -> plan(family, request, TARGET, DATE.minusDays(1), DATE, null, null));
-            assertThrows(IllegalArgumentException.class,
+            assertThrows(
+                    IllegalArgumentException.class,
                     () -> plan(family, noAnchor, TARGET, null, null, null, null));
         } else {
-            assertDoesNotThrow(() -> plan(family, request, TARGET, DATE.minusDays(1), DATE, null, null));
+            assertDoesNotThrow(
+                    () -> plan(family, request, TARGET, DATE.minusDays(1), DATE, null, null));
             assertDoesNotThrow(() -> plan(family, noAnchor, TARGET, null, null, null, null));
         }
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
-    void invalidDefinitionKeepsItsOriginalExceptionTypeAndHasNoBackendEffects(Family family) throws Exception {
+    @ParameterizedTest
+    @EnumSource(Family.class)
+    void invalidDefinitionKeepsItsOriginalExceptionTypeAndHasNoBackendEffects(Family family)
+            throws Exception {
         var h = new Harness(family, temp.resolve("invalid.sqlite3"));
         var other = family == Family.DAILY ? Family.ADJ : Family.DAILY;
-        var invalid = plan(family, request(other, DATE, Mode.BACKFILL, Map.of()), TARGET,
-                null, null, null, null);
+        var invalid =
+                plan(
+                        family,
+                        request(other, DATE, Mode.BACKFILL, Map.of()),
+                        TARGET,
+                        null,
+                        null,
+                        null,
+                        null);
         if (family == Family.FACTOR) {
             assertThrows(IllegalArgumentException.class, () -> h.run(invalid));
         } else {
@@ -104,7 +163,8 @@ class EtfJobServiceContractTest {
         assertFalse(Files.exists(h.ledger));
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
+    @ParameterizedTest
+    @EnumSource(Family.class)
     void changedTargetFailsBeforeRangeWriterOrLedgerCreation(Family family) throws Exception {
         var h = new Harness(family, temp.resolve("target.sqlite3"));
         when(h.target.targetId()).thenReturn(OTHER_TARGET);
@@ -115,7 +175,8 @@ class EtfJobServiceContractTest {
         assertFalse(Files.exists(h.ledger));
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
+    @ParameterizedTest
+    @EnumSource(Family.class)
     void onlyAdjAndFactorRecheckPhysicalRangeBeforeFreshRun(Family family) throws Exception {
         var h = new Harness(family, temp.resolve("range.sqlite3"));
         h.closedCalendar();
@@ -134,14 +195,17 @@ class EtfJobServiceContractTest {
         }
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
+    @ParameterizedTest
+    @EnumSource(Family.class)
     void onlyFactorRechecksTargetIdentityAfterReadingFreshBaseline(Family family) throws Exception {
         var h = new Harness(family, temp.resolve("identity-after-range.sqlite3"));
         h.closedCalendar();
         when(h.target.targetId()).thenReturn(TARGET, OTHER_TARGET);
         if (family == Family.FACTOR) {
             var failure = assertThrows(IllegalStateException.class, () -> h.run(h.backfillPlan()));
-            assertEquals("etf_factor physical target identity changed after planning", failure.getMessage());
+            assertEquals(
+                    "etf_factor physical target identity changed after planning",
+                    failure.getMessage());
             var order = inOrder(h.target);
             order.verify(h.target).targetId();
             order.verify(h.target).range();
@@ -158,12 +222,18 @@ class EtfJobServiceContractTest {
         }
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
-    void onlyAdjAndFactorRecheckVerifiedCheckpointBeforeFreshIncrementalRun(Family family) throws Exception {
+    @ParameterizedTest
+    @EnumSource(Family.class)
+    void onlyAdjAndFactorRecheckVerifiedCheckpointBeforeFreshIncrementalRun(Family family)
+            throws Exception {
         var h = new Harness(family, temp.resolve("checkpoint.sqlite3"));
         h.closedCalendar();
-        var request = request(family, DATE, Mode.INCREMENTAL,
-                Map.of("checkpointBefore", DATE, "checkpointAnchor", DATE));
+        var request =
+                request(
+                        family,
+                        DATE,
+                        Mode.INCREMENTAL,
+                        Map.of("checkpointBefore", DATE, "checkpointAnchor", DATE));
         var plan = plan(family, request, TARGET, DATE, DATE, null, null);
         if (family == Family.DAILY) {
             assertEquals(SyncRunState.VERIFIED_EMPTY, h.run(plan).state());
@@ -177,30 +247,45 @@ class EtfJobServiceContractTest {
         }
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
+    @ParameterizedTest
+    @EnumSource(Family.class)
     void resumeSkipsFreshBaselineAndKeepsSavedRequestAndParent(Family family) throws Exception {
         var h = new Harness(family, temp.resolve("resume.sqlite3"));
         h.closedCalendar();
         var request = request(family, DATE, Mode.BACKFILL, Map.of());
         failedRun(h.ledger, "prior", request);
-        when(h.target.range()).thenThrow(new AssertionError("Resume must not read today's physical range"));
+        when(h.target.range())
+                .thenThrow(new AssertionError("Resume must not read today's physical range"));
         var result = h.resume(plan(family, request, TARGET, null, null, null, null), "prior");
         assertEquals(SyncRunState.VERIFIED_EMPTY, result.state());
         verify(h.target, never()).range();
         verify(h.target).newWriter(TARGET);
-        assertEquals("prior", SyncRunLedger.openReadOnly(h.ledger).getRun(result.runId()).parentRunId());
+        assertEquals(
+                "prior", SyncRunLedger.openReadOnly(h.ledger).getRun(result.runId()).parentRunId());
         verifyNoInteractions(h.pages, h.jobs);
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
-    void resumeFingerprintMismatchIsEarlyForAdjAndFactorButRunnerOwnedForDaily(Family family) throws Exception {
+    @ParameterizedTest
+    @EnumSource(Family.class)
+    void resumeFingerprintMismatchIsEarlyForAdjAndFactorButRunnerOwnedForDaily(Family family)
+            throws Exception {
         var h = new Harness(family, temp.resolve("mismatch.sqlite3"));
         failedRun(h.ledger, "prior", request(family, DATE, Mode.BACKFILL, Map.of()));
-        var changed = plan(family, request(family, DATE.plusDays(1), Mode.BACKFILL, Map.of()), TARGET,
-                null, null, null, null);
-        var failure = assertThrows(IllegalArgumentException.class, () -> h.resume(changed, "prior"));
+        var changed =
+                plan(
+                        family,
+                        request(family, DATE.plusDays(1), Mode.BACKFILL, Map.of()),
+                        TARGET,
+                        null,
+                        null,
+                        null,
+                        null);
+        var failure =
+                assertThrows(IllegalArgumentException.class, () -> h.resume(changed, "prior"));
         if (family == Family.DAILY) {
-            assertEquals("Recovery definition, parameters, logical date or target changed", failure.getMessage());
+            assertEquals(
+                    "Recovery definition, parameters, logical date or target changed",
+                    failure.getMessage());
             verify(h.target).targetId();
             verify(h.target).newWriter(TARGET);
             verifyNoMoreInteractions(h.target);
@@ -211,30 +296,53 @@ class EtfJobServiceContractTest {
         verifyNoInteractions(h.calendars, h.pages, h.jobs, h.session);
     }
 
-    @ParameterizedTest @EnumSource(Family.class)
-    void eachRunGetsFreshWriterAndSourceAfterLedgerWithItsOwnEvidencePath(Family family) throws Exception {
+    @ParameterizedTest
+    @EnumSource(Family.class)
+    void eachRunGetsFreshWriterAndSourceAfterLedgerWithItsOwnEvidencePath(Family family)
+            throws Exception {
         var h = new Harness(family, temp.resolve("fresh.sqlite3"));
         h.closedCalendar();
         var first = session(family);
         var second = session(family);
         var created = new AtomicInteger();
         var writers = List.of(first, second);
-        when(h.target.newWriter(TARGET)).thenAnswer(invocation -> {
-            assertTrue(Files.isRegularFile(h.ledger), "Ledger is constructed before the run writer");
-            return writers.get(created.getAndIncrement());
-        });
+        when(h.target.newWriter(TARGET))
+                .thenAnswer(
+                        invocation -> {
+                            assertTrue(
+                                    Files.isRegularFile(h.ledger),
+                                    "Ledger is constructed before the run writer");
+                            return writers.get(created.getAndIncrement());
+                        });
         var sourcePaths = new ArrayList<Path>();
-        try (var sources = mockConstruction(family.sourceClass, (source, context) -> {
-            assertEquals(sourcePaths.size() + 1, created.get(), "Writer precedes source construction");
-            sourcePaths.add((Path) context.arguments().get(2));
-        })) {
+        try (var sources =
+                mockConstruction(
+                        family.sourceClass,
+                        (source, context) -> {
+                            assertEquals(
+                                    sourcePaths.size() + 1,
+                                    created.get(),
+                                    "Writer precedes source construction");
+                            sourcePaths.add((Path) context.arguments().get(2));
+                        })) {
             var firstResult = h.run(h.backfillPlan());
             var secondResult = h.run(h.backfillPlan());
             assertEquals(SyncRunState.VERIFIED_EMPTY, firstResult.state());
             assertEquals(SyncRunState.VERIFIED_EMPTY, secondResult.state());
             assertNotEquals(firstResult.runId(), secondResult.runId());
-            assertEquals(List.of(h.ledger.getParent().resolve("sync-evidence").resolve(firstResult.runId()).resolve("source"),
-                    h.ledger.getParent().resolve("sync-evidence").resolve(secondResult.runId()).resolve("source")), sourcePaths);
+            assertEquals(
+                    List.of(
+                            h.ledger
+                                    .getParent()
+                                    .resolve("sync-evidence")
+                                    .resolve(firstResult.runId())
+                                    .resolve("source"),
+                            h.ledger
+                                    .getParent()
+                                    .resolve("sync-evidence")
+                                    .resolve(secondResult.runId())
+                                    .resolve("source")),
+                    sourcePaths);
             assertEquals(2, sources.constructed().size());
             assertNotSame(sources.constructed().getFirst(), sources.constructed().getLast());
         }
@@ -250,8 +358,13 @@ class EtfJobServiceContractTest {
         LocalDate through = DATE.plusYears(2);
         for (var family : List.of(Family.DAILY, Family.ADJ)) {
             var h = new Harness(family, temp.resolve(family + ".sqlite3"));
-            var failure = assertThrows(IllegalArgumentException.class, () -> h.planIncremental(DATE, through));
-            assertEquals("Explicit etf_" + family.name().toLowerCase() + " bootstrap exceeds the 366-day budget",
+            var failure =
+                    assertThrows(
+                            IllegalArgumentException.class, () -> h.planIncremental(DATE, through));
+            assertEquals(
+                    "Explicit etf_"
+                            + family.name().toLowerCase()
+                            + " bootstrap exceeds the 366-day budget",
                     failure.getMessage());
             verifyNoInteractions(h.target, h.calendars, h.pages, h.jobs);
             assertFalse(Files.exists(h.ledger));
@@ -259,8 +372,14 @@ class EtfJobServiceContractTest {
         var h = new Harness(Family.FACTOR, temp.resolve("factor.sqlite3"));
         h.closedCalendar();
         when(h.jobs.prepare(anyString(), anyInt(), any(), anyMap(), any(), any(), any()))
-                .thenAnswer(invocation -> Family.FACTOR.definition.freeze(invocation.getArgument(2),
-                        invocation.getArgument(3), invocation.getArgument(4), invocation.getArgument(5), invocation.getArgument(6)));
+                .thenAnswer(
+                        invocation ->
+                                Family.FACTOR.definition.freeze(
+                                        invocation.getArgument(2),
+                                        invocation.getArgument(3),
+                                        invocation.getArgument(4),
+                                        invocation.getArgument(5),
+                                        invocation.getArgument(6)));
         var plan = (EtfFactorJobService.Plan) h.planIncremental(DATE, through);
         assertTrue(plan.bootstrap());
         assertTrue(plan.cappedByBudget());
@@ -275,18 +394,40 @@ class EtfJobServiceContractTest {
         assertFalse(Files.exists(h.ledger), "Planning does not create a run ledger");
     }
 
-    private static FrozenRequest request(Family family, LocalDate date, Mode mode, Map<String, ?> extra) {
+    private static FrozenRequest request(
+            Family family, LocalDate date, Mode mode, Map<String, ?> extra) {
         var parameters = new LinkedHashMap<String, Object>();
-        parameters.put("targetId", TARGET); parameters.put("trade_dates", "NONE"); parameters.putAll(extra);
+        parameters.put("targetId", TARGET);
+        parameters.put("trade_dates", "NONE");
+        parameters.putAll(extra);
         return family.definition.freeze(mode, parameters, date, date, date);
     }
 
-    private static Object plan(Family family, FrozenRequest request, String target,
-                               LocalDate checkpoint, LocalDate anchor, LocalDate min, LocalDate max) {
+    private static Object plan(
+            Family family,
+            FrozenRequest request,
+            String target,
+            LocalDate checkpoint,
+            LocalDate anchor,
+            LocalDate min,
+            LocalDate max) {
         return switch (family) {
-            case DAILY -> new EtfDailyJobService.Plan(request, target, checkpoint, anchor, min, max, false);
-            case ADJ -> new EtfAdjJobService.Plan(request, target, checkpoint, anchor, min, max, false);
-            case FACTOR -> new EtfFactorJobService.Plan(request, target, checkpoint, anchor, min, max, request.to(), false, false);
+            case DAILY ->
+                    new EtfDailyJobService.Plan(
+                            request, target, checkpoint, anchor, min, max, false);
+            case ADJ ->
+                    new EtfAdjJobService.Plan(request, target, checkpoint, anchor, min, max, false);
+            case FACTOR ->
+                    new EtfFactorJobService.Plan(
+                            request,
+                            target,
+                            checkpoint,
+                            anchor,
+                            min,
+                            max,
+                            request.to(),
+                            false,
+                            false);
         };
     }
 
@@ -298,8 +439,11 @@ class EtfJobServiceContractTest {
 
     @SuppressWarnings("unchecked")
     private static EtfWriteSession<Object, Object> session(Family family) {
-        return (EtfWriteSession<Object, Object>) (EtfWriteSession<?, ?>)
-                (family == Family.ADJ ? mock(EtfAdjWriteSession.class) : mock(EtfWriteSession.class));
+        return (EtfWriteSession<Object, Object>)
+                (EtfWriteSession<?, ?>)
+                        (family == Family.ADJ
+                                ? mock(EtfAdjWriteSession.class)
+                                : mock(EtfWriteSession.class));
     }
 
     private static final class Harness {
@@ -314,28 +458,53 @@ class EtfJobServiceContractTest {
 
         @SuppressWarnings("unchecked")
         Harness(Family family, Path ledger) {
-            this.family = family; this.ledger = ledger;
-            target = (EtfTarget<Object, Object>) (EtfTarget<?, ?>)
-                    (family == Family.ADJ ? mock(EtfAdjTarget.class) : mock(EtfTarget.class));
+            this.family = family;
+            this.ledger = ledger;
+            target =
+                    (EtfTarget<Object, Object>)
+                            (EtfTarget<?, ?>)
+                                    (family == Family.ADJ
+                                            ? mock(EtfAdjTarget.class)
+                                            : mock(EtfTarget.class));
             session = session(family);
             when(target.tableName()).thenReturn(family.table);
             when(target.targetId()).thenReturn(TARGET);
             when(target.range()).thenReturn(new EtfTargetRange(null, null));
             when(target.newWriter(TARGET)).thenReturn(session);
             when(session.readExistingDates()).thenReturn(List.of());
-            service = switch (family) {
-                case DAILY -> new EtfDailyJobService(jobs, pages, calendars, typedTarget(), ledger);
-                case ADJ -> new EtfAdjJobService(jobs, pages, calendars, (EtfAdjTarget) (EtfTarget<?, ?>) target, ledger);
-                case FACTOR -> new EtfFactorJobService(jobs, pages, calendars, typedTarget(), ledger);
-            };
+            service =
+                    switch (family) {
+                        case DAILY ->
+                                new EtfDailyJobService(
+                                        jobs, pages, calendars, typedTarget(), ledger);
+                        case ADJ ->
+                                new EtfAdjJobService(
+                                        jobs,
+                                        pages,
+                                        calendars,
+                                        (EtfAdjTarget) (EtfTarget<?, ?>) target,
+                                        ledger);
+                        case FACTOR ->
+                                new EtfFactorJobService(
+                                        jobs, pages, calendars, typedTarget(), ledger);
+                    };
             clearInvocations(target);
         }
 
         @SuppressWarnings("unchecked")
-        private <T, K> EtfTarget<T, K> typedTarget() { return (EtfTarget<T, K>) (EtfTarget<?, ?>) target; }
+        private <T, K> EtfTarget<T, K> typedTarget() {
+            return (EtfTarget<T, K>) (EtfTarget<?, ?>) target;
+        }
 
         Object backfillPlan() {
-            return plan(family, request(family, DATE, Mode.BACKFILL, Map.of()), TARGET, null, null, null, null);
+            return plan(
+                    family,
+                    request(family, DATE, Mode.BACKFILL, Map.of()),
+                    TARGET,
+                    null,
+                    null,
+                    null,
+                    null);
         }
 
         SyncJobRunner.Result run(Object plan) throws Exception {
@@ -348,27 +517,46 @@ class EtfJobServiceContractTest {
 
         SyncJobRunner.Result resume(Object plan, String prior) throws Exception {
             return switch (family) {
-                case DAILY -> ((EtfDailyJobService) service).resume((EtfDailyJobService.Plan) plan, prior);
-                case ADJ -> ((EtfAdjJobService) service).resume((EtfAdjJobService.Plan) plan, prior);
-                case FACTOR -> ((EtfFactorJobService) service).resume((EtfFactorJobService.Plan) plan, prior);
+                case DAILY ->
+                        ((EtfDailyJobService) service)
+                                .resume((EtfDailyJobService.Plan) plan, prior);
+                case ADJ ->
+                        ((EtfAdjJobService) service).resume((EtfAdjJobService.Plan) plan, prior);
+                case FACTOR ->
+                        ((EtfFactorJobService) service)
+                                .resume((EtfFactorJobService.Plan) plan, prior);
             };
         }
 
         Object planIncremental(LocalDate from, LocalDate through) throws Exception {
             return switch (family) {
-                case DAILY -> ((EtfDailyJobService) service).plan(Mode.INCREMENTAL, from, through, through);
-                case ADJ -> ((EtfAdjJobService) service).plan(Mode.INCREMENTAL, from, through, through);
-                case FACTOR -> ((EtfFactorJobService) service).planDetailed(Mode.INCREMENTAL, from, through, through);
+                case DAILY ->
+                        ((EtfDailyJobService) service)
+                                .plan(Mode.INCREMENTAL, from, through, through);
+                case ADJ ->
+                        ((EtfAdjJobService) service).plan(Mode.INCREMENTAL, from, through, through);
+                case FACTOR ->
+                        ((EtfFactorJobService) service)
+                                .planDetailed(Mode.INCREMENTAL, from, through, through);
             };
         }
 
         void closedCalendar() {
-            when(calendars.findPage(any())).thenAnswer(invocation -> {
-                DatasetReadQuery query = invocation.getArgument(0);
-                var rows = ((LocalDate) query.fromInclusive()).datesUntil((LocalDate) query.toExclusive())
-                        .map(date -> new ExchangeCalendar("SSE", date, false, null)).toList();
-                return new DatasetReadPage<>("exchange_calendar", 1, null, Instant.EPOCH, rows, null);
-            });
+            when(calendars.findPage(any()))
+                    .thenAnswer(
+                            invocation -> {
+                                DatasetReadQuery query = invocation.getArgument(0);
+                                var rows =
+                                        ((LocalDate) query.fromInclusive())
+                                                .datesUntil((LocalDate) query.toExclusive())
+                                                .map(
+                                                        date ->
+                                                                new ExchangeCalendar(
+                                                                        "SSE", date, false, null))
+                                                .toList();
+                                return new DatasetReadPage<>(
+                                        "exchange_calendar", 1, null, Instant.EPOCH, rows, null);
+                            });
         }
     }
 }

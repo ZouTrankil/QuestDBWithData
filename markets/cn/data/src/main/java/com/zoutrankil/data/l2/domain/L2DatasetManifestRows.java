@@ -1,22 +1,27 @@
 package com.zoutrankil.data.l2.domain;
 
-import com.zoutrankil.data.domain.l2.L2DatasetManifestKey;
+import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.l2.L2DatasetManifest;
-import com.zoutrankil.data.domain.*;
+import com.zoutrankil.data.domain.l2.L2DatasetManifestKey;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /** Pure D085 canonical row encoding, bounds and explicit target admission. */
 public final class L2DatasetManifestRows {
     private L2DatasetManifestRows() {}
+
     public static final String ISOLATED_TABLE_PREFIX = "java_d085_l2_dataset_manifest_";
     public static final int MAX_BATCH_ROWS = 200;
     public static final int MAX_BATCH_BYTES = 1024 * 1024;
     public static final int MAX_READBACK_KEYS = 200;
     public static final int MAX_DATE_ROWS = 100_000;
 
-    public static L2DatasetManifestKey key(L2DatasetManifest row) { return row.key(); }
+    public static L2DatasetManifestKey key(L2DatasetManifest row) {
+        return row.key();
+    }
 
     public static byte[] canonicalBytes(L2DatasetManifest row) {
         try {
@@ -40,7 +45,9 @@ public final class L2DatasetManifestRows {
                 writeString(output, row.tradeDateTs().toString());
             }
             return bytes.toByteArray();
-        } catch (java.io.IOException impossible) { throw new IllegalStateException(impossible); }
+        } catch (IOException impossible) {
+            throw new IllegalStateException(impossible);
+        }
     }
 
     public static int estimatedTransportBytes(L2DatasetManifest row, byte[] canonical) {
@@ -49,21 +56,25 @@ public final class L2DatasetManifestRows {
 
     public static void requireIsolatedTableName(String table) {
         DatasetDefinition.identifier(table);
-        if (!table.startsWith(ISOLATED_TABLE_PREFIX) || table.length() <= ISOLATED_TABLE_PREFIX.length())
-            throw new IllegalStateException("D085 writes require a java_d085_l2_dataset_manifest_<suffix> target");
+        if (!table.startsWith(ISOLATED_TABLE_PREFIX)
+                || table.length() <= ISOLATED_TABLE_PREFIX.length())
+            throw new IllegalStateException(
+                    "D085 writes require a java_d085_l2_dataset_manifest_<suffix> target");
     }
 
-    private static void writeNullableString(DataOutputStream output, String value) throws java.io.IOException {
+    private static void writeNullableString(DataOutputStream output, String value)
+            throws IOException {
         output.writeBoolean(value != null);
         if (value != null) writeString(output, value);
     }
 
-    private static void writeNullableBoolean(DataOutputStream output, Boolean value) throws java.io.IOException {
+    private static void writeNullableBoolean(DataOutputStream output, Boolean value)
+            throws IOException {
         output.writeBoolean(value != null);
         if (value != null) output.writeBoolean(value);
     }
 
-    private static void writeString(DataOutputStream output, String value) throws java.io.IOException {
+    private static void writeString(DataOutputStream output, String value) throws IOException {
         byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
         output.writeInt(bytes.length);
         output.write(bytes);

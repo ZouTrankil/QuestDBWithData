@@ -1,12 +1,16 @@
 package com.zoutrankil.data.derived.application;
 
-import com.zoutrankil.data.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
-import com.zoutrankil.data.domain.SyncJobDefinition;
-import com.zoutrankil.data.derived.port.MarketBreadthDailySession;
 import com.zoutrankil.data.derived.domain.MarketBreadthDailyPolicy;
+import com.zoutrankil.data.derived.port.MarketBreadthDailySession;
+import com.zoutrankil.data.domain.SyncJobDefinition;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
 import com.zoutrankil.data.domain.derived.MarketBreadthDailySnapshot;
+import com.zoutrankil.data.service.DailyTradingSessions;
+import com.zoutrankil.data.service.DatasetIntervalLock;
+import com.zoutrankil.data.service.SyncJobRunner;
+import com.zoutrankil.data.service.VerifiedBatchExecutor;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -26,18 +30,29 @@ public final class MarketBreadthDailyMaterializeAdapter
     private static final ObjectMapper JSON = new ObjectMapper();
     public static final VerifiedBatchExecutor.Codec<MarketBreadthDaily, LocalDate> CODEC =
             new VerifiedBatchExecutor.Codec<>() {
-                @Override public LocalDate key(MarketBreadthDaily row) { return row.tradeDate(); }
-                @Override public byte[] canonicalBytes(MarketBreadthDaily row) {
+                @Override
+                public LocalDate key(MarketBreadthDaily row) {
+                    return row.tradeDate();
+                }
+
+                @Override
+                public byte[] canonicalBytes(MarketBreadthDaily row) {
                     var value = ByteBuffer.allocate(58);
-                    value.putLong(row.tradeDate().toEpochDay()).putLong(row.stockCount()).putLong(row.upCount())
-                            .putLong(row.downCount()).putLong(row.flatCount());
+                    value.putLong(row.tradeDate().toEpochDay())
+                            .putLong(row.stockCount())
+                            .putLong(row.upCount())
+                            .putLong(row.downCount())
+                            .putLong(row.flatCount());
                     number(value, row.avgPctChange());
                     number(value, row.totalAmountYi());
                     return value.array();
                 }
-                @Override public boolean equivalent(MarketBreadthDaily left, MarketBreadthDaily right) {
+
+                @Override
+                public boolean equivalent(MarketBreadthDaily left, MarketBreadthDaily right) {
                     return MarketBreadthDailyPolicy.equivalent(left, right);
                 }
+
                 private void number(ByteBuffer output, Double value) {
                     output.put((byte) (value == null ? 0 : 1)).putDouble(value == null ? 0 : value);
                 }
@@ -48,17 +63,20 @@ public final class MarketBreadthDailyMaterializeAdapter
     private long sourceRawRows;
     private MarketBreadthDailySnapshot lastVerificationSnapshot;
 
-    public MarketBreadthDailyMaterializeAdapter(MarketBreadthDailySession port, MarketBreadthDailySnapshot frozen) {
+    public MarketBreadthDailyMaterializeAdapter(
+            MarketBreadthDailySession port, MarketBreadthDailySnapshot frozen) {
         this.port = Objects.requireNonNull(port);
         this.frozen = Objects.requireNonNull(frozen);
     }
 
-    @Override public DatasetIntervalLock.Scope conflictScope(SyncJobDefinition.FrozenRequest request) {
+    @Override
+    public DatasetIntervalLock.Scope conflictScope(SyncJobDefinition.FrozenRequest request) {
         // Native refresh affects the complete physical MV, even for a bounded verification window.
         return DatasetIntervalLock.Scope.allDates(request.definition().datasetId());
     }
 
-    @Override public void preflight(SyncJobDefinition.FrozenRequest request) {
+    @Override
+    public void preflight(SyncJobDefinition.FrozenRequest request) {
         requireRequest(request);
         if (full(request)) port.configureFullIsolated();
         port.bind(request.from(), request.to(), frozen);
@@ -68,8 +86,12 @@ public final class MarketBreadthDailyMaterializeAdapter
         requireCalendarVersion(request);
     }
 
-    @Override public SyncJobRunner.SourceCompletion fetch(SyncJobDefinition.FrozenRequest request,
-            SyncJobRunner.PageConsumer<MarketBreadthDaily> consumer, BooleanSupplier cancelled) throws Exception {
+    @Override
+    public SyncJobRunner.SourceCompletion fetch(
+            SyncJobDefinition.FrozenRequest request,
+            SyncJobRunner.PageConsumer<MarketBreadthDaily> consumer,
+            BooleanSupplier cancelled)
+            throws Exception {
         requireRequest(request);
         check(cancelled);
         port.cancellationProbe(cancelled);
@@ -80,31 +102,38 @@ public final class MarketBreadthDailyMaterializeAdapter
         var expected = port.expected(request.from(), request.to());
         if (request.mode() == SyncJobDefinition.Mode.INCREMENTAL) {
             requireCalendarVersion(request);
-            requireCalendarCoverage(request.from(), request.to(),
+            requireCalendarCoverage(
+                    request.from(),
+                    request.to(),
                     expected.stream().map(MarketBreadthDaily::tradeDate).toList());
             requireCalendarVersion(request);
         }
         MarketBreadthDailySnapshot sourceAfter = port.snapshot();
         if (!before.sourceUnchanged(sourceAfter))
-            throw new IllegalStateException("D095 source changed while reading its complete bounded aggregation");
+            throw new IllegalStateException(
+                    "D095 source changed while reading its complete bounded aggregation");
         if ((sourceRawRows == 0) != expected.isEmpty()
-                || expected.stream().mapToLong(MarketBreadthDaily::stockCount).sum() != sourceRawRows)
-            throw new IllegalStateException("D095 daily output does not cover all source rows in the frozen interval");
+                || expected.stream().mapToLong(MarketBreadthDaily::stockCount).sum()
+                        != sourceRawRows)
+            throw new IllegalStateException(
+                    "D095 daily output does not cover all source rows in the frozen interval");
         if (full(request) && expected.isEmpty())
             throw new IllegalStateException("D095 FULL repair requires real nonempty source rows");
         if (expected.isEmpty()) {
             var actual = port.actual(request.from(), request.to());
             MarketBreadthDailySnapshot afterEmptyRead = port.snapshot();
             if (!actual.isEmpty() || !before.equals(afterEmptyRead))
-                throw new IllegalStateException("D095 empty source has stale output or its MV version changed");
+                throw new IllegalStateException(
+                        "D095 empty source has stale output or its MV version changed");
             requireReady(afterEmptyRead);
             lastVerificationSnapshot = afterEmptyRead;
         }
         String fingerprint = fingerprint(expected, request);
         String evidence = evidence(request, expected.size(), fingerprint, sourceAfter);
         check(cancelled);
-        consumer.accept(new SyncJobRunner.Page<>(expected, fingerprint, evidence,
-                request.from() + "/" + request.to()));
+        consumer.accept(
+                new SyncJobRunner.Page<>(
+                        expected, fingerprint, evidence, request.from() + "/" + request.to()));
         check(cancelled);
         MarketBreadthDailySnapshot completed = port.snapshot();
         requireReady(completed);
@@ -112,73 +141,126 @@ public final class MarketBreadthDailyMaterializeAdapter
             throw new IllegalStateException("D095 source changed before verification was complete");
         if (!expected.isEmpty()) lastVerificationSnapshot = port.verifiedSnapshot();
         if (lastVerificationSnapshot == null || !lastVerificationSnapshot.equals(completed))
-            throw new IllegalStateException("D095 MV version changed after its actual readback verification");
-        if (full(request) && (port.outputRowCount() != expected.size() || !completed.equals(port.snapshot())))
-            throw new IllegalStateException("D095 FULL output still contains rows outside the complete verified source window");
+            throw new IllegalStateException(
+                    "D095 MV version changed after its actual readback verification");
+        if (full(request)
+                && (port.outputRowCount() != expected.size() || !completed.equals(port.snapshot())))
+            throw new IllegalStateException(
+                    "D095 FULL output still contains rows outside the complete verified source window");
         requireCalendarVersion(request);
-        return new SyncJobRunner.SourceCompletion(1, expected.size(), true,
+        return new SyncJobRunner.SourceCompletion(
+                1,
+                expected.size(),
+                true,
                 evidence(request, expected.size(), fingerprint, completed));
     }
 
-    @Override public VerifiedBatchExecutor.Codec<MarketBreadthDaily, LocalDate> codec() { return CODEC; }
-
-    /** Reconciliation verifies the original window without submitting another native refresh. */
-    public SyncJobRunner.SourceCompletion revalidateOnly(SyncJobDefinition.FrozenRequest request,
-                                                          BooleanSupplier cancelled) throws Exception {
-        return fetch(request, page -> {
-            if (page.rows().isEmpty()) return;
-            var expected = page.rows();
-            var actual = port.readback(expected.stream().map(MarketBreadthDaily::tradeDate).toList());
-            if (actual.size() != expected.size()) throw new IllegalStateException("D095 reconciliation date coverage differs");
-            for (int index = 0; index < expected.size(); index++)
-                if (!CODEC.equivalent(expected.get(index), actual.get(index)))
-                    throw new IllegalStateException("D095 reconciliation actual field values differ");
-            if (!port.walSettled()) throw new IllegalStateException("D095 reconciliation MV changed or WAL is unsettled");
-        }, cancelled);
+    @Override
+    public VerifiedBatchExecutor.Codec<MarketBreadthDaily, LocalDate> codec() {
+        return CODEC;
     }
 
-    @Override public MarketBreadthDailySession port() { return port; }
-    @Override public boolean recoveryRequired(String runId) { return port.unresolved(); }
-    @Override public Duration visibilityTimeout() {
+    /** Reconciliation verifies the original window without submitting another native refresh. */
+    public SyncJobRunner.SourceCompletion revalidateOnly(
+            SyncJobDefinition.FrozenRequest request, BooleanSupplier cancelled) throws Exception {
+        return fetch(
+                request,
+                page -> {
+                    if (page.rows().isEmpty()) return;
+                    var expected = page.rows();
+                    var actual =
+                            port.readback(
+                                    expected.stream().map(MarketBreadthDaily::tradeDate).toList());
+                    if (actual.size() != expected.size())
+                        throw new IllegalStateException(
+                                "D095 reconciliation date coverage differs");
+                    for (int index = 0; index < expected.size(); index++)
+                        if (!CODEC.equivalent(expected.get(index), actual.get(index)))
+                            throw new IllegalStateException(
+                                    "D095 reconciliation actual field values differ");
+                    if (!port.walSettled())
+                        throw new IllegalStateException(
+                                "D095 reconciliation MV changed or WAL is unsettled");
+                },
+                cancelled);
+    }
+
+    @Override
+    public MarketBreadthDailySession port() {
+        return port;
+    }
+
+    @Override
+    public boolean recoveryRequired(String runId) {
+        return port.unresolved();
+    }
+
+    @Override
+    public Duration visibilityTimeout() {
         var timeout = port.visibilityTimeout();
         return timeout == null ? Duration.ofMinutes(3) : timeout;
     }
-    public long sourceRawRows() { return sourceRawRows; }
-    public MarketBreadthDailySnapshot lastVerificationSnapshot() { return lastVerificationSnapshot; }
+
+    public long sourceRawRows() {
+        return sourceRawRows;
+    }
+
+    public MarketBreadthDailySnapshot lastVerificationSnapshot() {
+        return lastVerificationSnapshot;
+    }
 
     private void requireRequest(SyncJobDefinition.FrozenRequest request) {
-        if (request == null || !"mv_market_breadth_daily".equals(request.definition().datasetId())
+        if (request == null
+                || !"mv_market_breadth_daily".equals(request.definition().datasetId())
                 || request.definition().datasetVersion() != 1
-                || !Set.of(SyncJobDefinition.Mode.INCREMENTAL, SyncJobDefinition.Mode.MATERIALIZE,
-                           SyncJobDefinition.Mode.RECONCILE).contains(request.mode())
-                || request.from() == null || request.to() == null
+                || !Set.of(
+                                SyncJobDefinition.Mode.INCREMENTAL,
+                                SyncJobDefinition.Mode.MATERIALIZE,
+                                SyncJobDefinition.Mode.RECONCILE)
+                        .contains(request.mode())
+                || request.from() == null
+                || request.to() == null
                 || !frozen.sourceVersion().equals(request.parameters().get("source_version"))
                 || !port.targetId().equals(request.parameters().get("target_id"))
                 || request.mode() == SyncJobDefinition.Mode.INCREMENTAL
-                    && !(request.parameters().get("calendar_version") instanceof String)
+                        && !(request.parameters().get("calendar_version") instanceof String)
                 || full(request) && request.mode() != SyncJobDefinition.Mode.MATERIALIZE)
-            throw new IllegalArgumentException("Exact D095 frozen definition, source version and physical target required");
+            throw new IllegalArgumentException(
+                    "Exact D095 frozen definition, source version and physical target required");
     }
 
     private void requireSourceReady(MarketBreadthDailySnapshot state, boolean repair) {
-        if ((!repair && !state.valid()) || "refreshing".equalsIgnoreCase(state.viewStatus())
-                || !state.sourceSettled() || !state.mvSettled()
-                || !frozen.sourceUnchanged(state) || frozen.mvId() != state.mvId()
+        if ((!repair && !state.valid())
+                || "refreshing".equalsIgnoreCase(state.viewStatus())
+                || !state.sourceSettled()
+                || !state.mvSettled()
+                || !frozen.sourceUnchanged(state)
+                || frozen.mvId() != state.mvId()
                 || !frozen.mvDirectory().equals(state.mvDirectory())
                 || !frozen.definitionSha().equals(state.definitionSha()))
-            throw new IllegalStateException("D095 source/MV is invalid, refreshing, unsettled or changed");
+            throw new IllegalStateException(
+                    "D095 source/MV is invalid, refreshing, unsettled or changed");
     }
 
     private void requireReady(MarketBreadthDailySnapshot state) {
-        if (!state.valid() || !state.caughtUp() || !state.sourceSettled() || !state.mvSettled()
-                || !frozen.sourceUnchanged(state) || frozen.mvId() != state.mvId()
+        if (!state.valid()
+                || !state.caughtUp()
+                || !state.sourceSettled()
+                || !state.mvSettled()
+                || !frozen.sourceUnchanged(state)
+                || frozen.mvId() != state.mvId()
                 || !frozen.mvDirectory().equals(state.mvDirectory())
                 || !frozen.definitionSha().equals(state.definitionSha()))
-            throw new IllegalStateException("D095 source/MV is invalid, lagging, unsettled or differs from the frozen target");
+            throw new IllegalStateException(
+                    "D095 source/MV is invalid, lagging, unsettled or differs from the frozen target");
     }
 
-    private String evidence(SyncJobDefinition.FrozenRequest request, int rows, String fingerprint,
-                            MarketBreadthDailySnapshot state) throws Exception {
+    private String evidence(
+            SyncJobDefinition.FrozenRequest request,
+            int rows,
+            String fingerprint,
+            MarketBreadthDailySnapshot state)
+            throws Exception {
         var details = new LinkedHashMap<String, Object>();
         details.put("nativeRefresh", full(request) ? "FULL_ISOLATED" : "INCREMENTAL");
         details.put("source", MarketBreadthDailyPolicy.SOURCE);
@@ -191,35 +273,49 @@ public final class MarketBreadthDailyMaterializeAdapter
         details.put("calendarVersion", request.parameters().get("calendar_version"));
         details.put("snapshot", state);
         details.put("sourceComplete", true);
-        details.put("completenessMeaning", "all rows of the frozen physical base-table interval, aggregated without filtering");
+        details.put(
+                "completenessMeaning",
+                "all rows of the frozen physical base-table interval, aggregated without filtering");
         return JSON.writeValueAsString(details);
     }
 
-    private void requireCalendarCoverage(LocalDate start, LocalDate end, List<LocalDate> expectedDates) {
+    private void requireCalendarCoverage(
+            LocalDate start, LocalDate end, List<LocalDate> expectedDates) {
         MarketBreadthDailyPolicy.window(start, end);
         Objects.requireNonNull(expectedDates);
         String before = port.calendarVersion();
         var calendars = port.newCalendarReader();
         List<LocalDate> sessions = DailyTradingSessions.read(calendars, start, end);
         if (!sessions.equals(expectedDates))
-            throw new IllegalStateException("D095 source daily buckets do not cover the complete real SSE trading calendar");
+            throw new IllegalStateException(
+                    "D095 source daily buckets do not cover the complete real SSE trading calendar");
         if (!before.equals(port.calendarVersion()))
-            throw new IllegalStateException("D095 exchange calendar changed during coverage verification");
+            throw new IllegalStateException(
+                    "D095 exchange calendar changed during coverage verification");
     }
 
     private void requireCalendarVersion(SyncJobDefinition.FrozenRequest request) {
         if (request.mode() == SyncJobDefinition.Mode.INCREMENTAL
                 && !port.calendarVersion().equals(request.parameters().get("calendar_version")))
-            throw new IllegalStateException("D095 real exchange calendar differs from the frozen incremental version");
+            throw new IllegalStateException(
+                    "D095 real exchange calendar differs from the frozen incremental version");
     }
 
-    private String fingerprint(List<MarketBreadthDaily> expected,
-                               SyncJobDefinition.FrozenRequest request) throws Exception {
+    private String fingerprint(
+            List<MarketBreadthDaily> expected, SyncJobDefinition.FrozenRequest request)
+            throws Exception {
         var digest = MessageDigest.getInstance("SHA-256");
-        for (String part : List.of(frozen.sourceVersion(), frozen.definitionSha(), request.from().toString(),
-                request.to().toString(), Long.toString(sourceRawRows),
-                Objects.toString(request.parameters().get("calendar_version"), "not-incremental"),
-                Objects.toString(request.parameters().get("native_refresh"), "INCREMENTAL"))) {
+        for (String part :
+                List.of(
+                        frozen.sourceVersion(),
+                        frozen.definitionSha(),
+                        request.from().toString(),
+                        request.to().toString(),
+                        Long.toString(sourceRawRows),
+                        Objects.toString(
+                                request.parameters().get("calendar_version"), "not-incremental"),
+                        Objects.toString(
+                                request.parameters().get("native_refresh"), "INCREMENTAL"))) {
             digest.update(part.getBytes(StandardCharsets.UTF_8));
             digest.update((byte) 0);
         }
@@ -231,7 +327,9 @@ public final class MarketBreadthDailyMaterializeAdapter
         if (cancelled.getAsBoolean() || Thread.currentThread().isInterrupted())
             throw new CancellationException("D095 materialization cancelled");
     }
+
     private static boolean full(SyncJobDefinition.FrozenRequest request) {
-        return request != null && "FULL_ISOLATED".equals(request.parameters().get("native_refresh"));
+        return request != null
+                && "FULL_ISOLATED".equals(request.parameters().get("native_refresh"));
     }
 }

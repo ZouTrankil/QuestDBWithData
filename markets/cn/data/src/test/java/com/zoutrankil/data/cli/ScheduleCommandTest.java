@@ -1,36 +1,71 @@
 package com.zoutrankil.data.cli;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.zoutrankil.data.service.DatasetRegistry;
+import com.zoutrankil.data.service.ReadGroupReader;
+import com.zoutrankil.data.service.StockBasicGroupService;
+import com.zoutrankil.data.service.StockBasicScheduleService;
+import com.zoutrankil.data.service.StockBasicScheduleService.History;
+import com.zoutrankil.data.service.StockBasicScheduleService.State;
+import com.zoutrankil.data.service.StockBasicWriteGroupService;
+import com.zoutrankil.data.service.SyncJobRegistry;
 import com.zoutrankil.data.stock.application.StockBasicJobService;
 import com.zoutrankil.data.stock.application.StockBasicSyncService;
 
-import com.zoutrankil.data.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.DefaultApplicationArguments;
+
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class ScheduleCommandTest {
-    private final StockBasicScheduleService schedule=mock(StockBasicScheduleService.class);
+    private final StockBasicScheduleService schedule = mock(StockBasicScheduleService.class);
+
     private CommandLineRunner cli() {
-        return new CommandLineRunner(mock(StockBasicSyncService.class),mock(DatasetRegistry.class),
-                mock(SyncJobRegistry.class),mock(StockBasicJobService.class),mock(StockBasicGroupService.class),
-                mock(ReadGroupReader.class),mock(StockBasicWriteGroupService.class),schedule);
+        return new CommandLineRunner(
+                mock(StockBasicSyncService.class),
+                mock(DatasetRegistry.class),
+                mock(SyncJobRegistry.class),
+                mock(StockBasicJobService.class),
+                mock(StockBasicGroupService.class),
+                mock(ReadGroupReader.class),
+                mock(StockBasicWriteGroupService.class),
+                schedule);
     }
-    @Test void putAndTickUseExplicitCommandsOnly() throws Exception {
-        cli().run(new DefaultApplicationArguments("schedule-put","--request","schedule.json"));
+
+    @Test
+    void putAndTickUseExplicitCommandsOnly() throws Exception {
+        cli().run(new DefaultApplicationArguments("schedule-put", "--request", "schedule.json"));
         verify(schedule).put(Path.of("schedule.json"));
         when(schedule.tick()).thenReturn(List.of());
         cli().run(new DefaultApplicationArguments("schedule-tick"));
         verify(schedule).tick();
-        assertThrows(IllegalArgumentException.class,() -> cli().run(
-                new DefaultApplicationArguments("schedule-tick","--now","2026-09-29")));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        cli().run(
+                                        new DefaultApplicationArguments(
+                                                "schedule-tick", "--now", "2026-09-29")));
     }
-    @Test void incompleteScheduledResultMakesCliFail() throws Exception {
-        when(schedule.tick()).thenReturn(List.of(new com.zoutrankil.data.service.StockBasicScheduleService.History(
-                "sample",java.time.Instant.parse("2026-09-29T01:30:00Z"),
-                com.zoutrankil.data.service.StockBasicScheduleService.State.IN_DOUBT,null,"unknown")));
-        assertThrows(IllegalStateException.class,() -> cli().run(new DefaultApplicationArguments("schedule-tick")));
+
+    @Test
+    void incompleteScheduledResultMakesCliFail() throws Exception {
+        when(schedule.tick())
+                .thenReturn(
+                        List.of(
+                                new History(
+                                        "sample",
+                                        Instant.parse("2026-09-29T01:30:00Z"),
+                                        State.IN_DOUBT,
+                                        null,
+                                        "unknown")));
+        assertThrows(
+                IllegalStateException.class,
+                () -> cli().run(new DefaultApplicationArguments("schedule-tick")));
     }
 }

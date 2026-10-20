@@ -7,9 +7,18 @@ import java.util.Set;
 
 public interface SourceCoveragePolicy {
     boolean isMarketAggregate(SourceContract contract);
+
     boolean validCode(SourceContract contract, String code);
-    Set<String> observedCodes(SourceContract contract, List<Map<String,Object>> rows);
-    boolean covers(SourceContract contract, List<Map<String,Object>> rows, Set<String> expectedCodes);
-    boolean coversRange(SourceContract contract, List<Map<String,Object>> rows, Set<String> expectedCodes,
-            LocalDate start, LocalDate end);
+
+    Set<String> observedCodes(SourceContract contract, List<Map<String, Object>> rows);
+
+    boolean covers(
+            SourceContract contract, List<Map<String, Object>> rows, Set<String> expectedCodes);
+
+    boolean coversRange(
+            SourceContract contract,
+            List<Map<String, Object>> rows,
+            Set<String> expectedCodes,
+            LocalDate start,
+            LocalDate end);
 }

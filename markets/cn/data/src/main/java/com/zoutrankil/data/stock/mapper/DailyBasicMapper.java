@@ -1,12 +1,13 @@
 package com.zoutrankil.data.stock.mapper;
 
-
 import com.zoutrankil.data.client.dto.TushareDailyBasicDto;
-import com.zoutrankil.data.domain.stock.market.DailyBasic;
 import com.zoutrankil.data.domain.DatasetValues;
+import com.zoutrankil.data.domain.stock.market.DailyBasic;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
+
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.LinkedHashMap;
 
@@ -14,15 +15,25 @@ import java.util.LinkedHashMap;
 public final class DailyBasicMapper {
     public DailyBasic fromSource(TushareDailyBasicDto source) throws IOException {
         try {
-            return new DailyBasic(source.tsCode(),
-                    TemporalValues.businessDate(source.tradeDate(), TemporalValues.DateFormat.BASIC),
-                    number(source.close(), "close"), number(source.turnoverRate(), "turnover_rate"),
-                    number(source.turnoverRateF(), "turnover_rate_f"), number(source.volumeRatio(), "volume_ratio"),
-                    number(source.pe(), "pe"), number(source.peTtm(), "pe_ttm"), number(source.pb(), "pb"),
-                    number(source.ps(), "ps"), number(source.psTtm(), "ps_ttm"),
-                    number(source.dvRatio(), "dv_ratio"), number(source.dvTtm(), "dv_ttm"),
-                    number(source.totalShare(), "total_share"), number(source.floatShare(), "float_share"),
-                    number(source.freeShare(), "free_share"), number(source.totalMv(), "total_mv"),
+            return new DailyBasic(
+                    source.tsCode(),
+                    TemporalValues.businessDate(
+                            source.tradeDate(), TemporalValues.DateFormat.BASIC),
+                    number(source.close(), "close"),
+                    number(source.turnoverRate(), "turnover_rate"),
+                    number(source.turnoverRateF(), "turnover_rate_f"),
+                    number(source.volumeRatio(), "volume_ratio"),
+                    number(source.pe(), "pe"),
+                    number(source.peTtm(), "pe_ttm"),
+                    number(source.pb(), "pb"),
+                    number(source.ps(), "ps"),
+                    number(source.psTtm(), "ps_ttm"),
+                    number(source.dvRatio(), "dv_ratio"),
+                    number(source.dvTtm(), "dv_ttm"),
+                    number(source.totalShare(), "total_share"),
+                    number(source.floatShare(), "float_share"),
+                    number(source.freeShare(), "free_share"),
+                    number(source.totalMv(), "total_mv"),
                     number(source.circMv(), "circ_mv"));
         } catch (DateTimeParseException | IllegalArgumentException invalid) {
             throw new IOException("Invalid Tushare daily_basic row", invalid);
@@ -53,14 +64,24 @@ public final class DailyBasicMapper {
     }
 
     public DailyBasic fromValues(DatasetValues values) {
-        return new DailyBasic(values.get("ts_code", String.class), values.get("trade_date", java.time.LocalDate.class),
-                values.get("close", Double.class), values.get("turnover_rate", Double.class),
-                values.get("turnover_rate_f", Double.class), values.get("volume_ratio", Double.class),
-                values.get("pe", Double.class), values.get("pe_ttm", Double.class), values.get("pb", Double.class),
-                values.get("ps", Double.class), values.get("ps_ttm", Double.class),
-                values.get("dv_ratio", Double.class), values.get("dv_ttm", Double.class),
-                values.get("total_share", Double.class), values.get("float_share", Double.class),
-                values.get("free_share", Double.class), values.get("total_mv", Double.class),
+        return new DailyBasic(
+                values.get("ts_code", String.class),
+                values.get("trade_date", LocalDate.class),
+                values.get("close", Double.class),
+                values.get("turnover_rate", Double.class),
+                values.get("turnover_rate_f", Double.class),
+                values.get("volume_ratio", Double.class),
+                values.get("pe", Double.class),
+                values.get("pe_ttm", Double.class),
+                values.get("pb", Double.class),
+                values.get("ps", Double.class),
+                values.get("ps_ttm", Double.class),
+                values.get("dv_ratio", Double.class),
+                values.get("dv_ttm", Double.class),
+                values.get("total_share", Double.class),
+                values.get("float_share", Double.class),
+                values.get("free_share", Double.class),
+                values.get("total_mv", Double.class),
                 values.get("circ_mv", Double.class));
     }
 
@@ -69,7 +90,8 @@ public final class DailyBasicMapper {
         if (value.isBlank()) return null;
         try {
             double parsed = new BigDecimal(value).doubleValue();
-            if (!Double.isFinite(parsed)) throw new NumberFormatException("outside finite DOUBLE range");
+            if (!Double.isFinite(parsed))
+                throw new NumberFormatException("outside finite DOUBLE range");
             return parsed;
         } catch (NumberFormatException invalid) {
             throw new IOException("Invalid daily_basic numeric field " + field, invalid);

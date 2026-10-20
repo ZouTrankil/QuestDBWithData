@@ -7,7 +7,8 @@ import java.util.Objects;
 public record EtfAdjKey(String tsCode, LocalDate tradeDate) {
     public EtfAdjKey {
         if (tsCode == null || !tsCode.matches("[0-9]{6}\\.(?:SH|SZ|OF)"))
-            throw new IllegalArgumentException("Six-digit exchange-qualified Tushare fund code required");
+            throw new IllegalArgumentException(
+                    "Six-digit exchange-qualified Tushare fund code required");
         Objects.requireNonNull(tradeDate, "trade_date required");
     }
 }

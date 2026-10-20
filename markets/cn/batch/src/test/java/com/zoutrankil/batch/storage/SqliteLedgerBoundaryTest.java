@@ -1,24 +1,29 @@
 package com.zoutrankil.batch.storage;
 
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import javax.sql.DataSource;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.JdbcAccessor;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+
+import javax.sql.DataSource;
 
 class SqliteLedgerBoundaryTest {
-    @Test void ledgerDoesNotExposeSqlExecutionOrDataSourceHandles() {
-        var leaks = Arrays.stream(SqliteLedger.class.getDeclaredMethods())
-                .filter(method -> !Modifier.isPrivate(method.getModifiers()))
-                .filter(method -> exposesStorageHandle(method.getReturnType()))
-                .map(method -> method.getName() + " -> " + method.getReturnType().getName())
-                .sorted()
-                .toList();
-        assertTrue(leaks.isEmpty(), () -> "Ledger callers must use its storage operations: " + leaks);
+    @Test
+    void ledgerDoesNotExposeSqlExecutionOrDataSourceHandles() {
+        var leaks =
+                Arrays.stream(SqliteLedger.class.getDeclaredMethods())
+                        .filter(method -> !Modifier.isPrivate(method.getModifiers()))
+                        .filter(method -> exposesStorageHandle(method.getReturnType()))
+                        .map(method -> method.getName() + " -> " + method.getReturnType().getName())
+                        .sorted()
+                        .toList();
+        assertTrue(
+                leaks.isEmpty(), () -> "Ledger callers must use its storage operations: " + leaks);
     }
 
     private static boolean exposesStorageHandle(Class<?> type) {

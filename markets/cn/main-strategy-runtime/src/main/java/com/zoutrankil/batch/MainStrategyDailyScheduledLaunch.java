@@ -9,7 +9,8 @@ import org.quartz.JobExecutionException;
 @Deprecated
 @DisallowConcurrentExecution
 public final class MainStrategyDailyScheduledLaunch implements Job {
-    @Override public void execute(JobExecutionContext context) throws JobExecutionException {
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
         new com.zoutrankil.batch.strategy.MainStrategyDailyScheduledLaunch().execute(context);
     }
 }

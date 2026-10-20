@@ -69,9 +69,17 @@ public enum StockCommand {
         this.desc = desc;
     }
 
-    public String command() { return command; }
-    public String desc() { return desc; }
-    public static Set<String> commands() { return BY_COMMAND.keySet(); }
+    public String command() {
+        return command;
+    }
+
+    public String desc() {
+        return desc;
+    }
+
+    public static Set<String> commands() {
+        return BY_COMMAND.keySet();
+    }
 
     /** 只按原命令精确解析，不把枚举名或大小写变体当作兼容别名。 */
     public static StockCommand require(String command) {
@@ -81,7 +89,8 @@ public enum StockCommand {
     }
 
     public static String help() {
-        return Arrays.stream(values()).map(value -> value.command + "：" + value.desc)
+        return Arrays.stream(values())
+                .map(value -> value.command + "：" + value.desc)
                 .collect(Collectors.joining("\n"));
     }
 }

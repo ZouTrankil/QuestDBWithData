@@ -1,14 +1,20 @@
 package com.zoutrankil.data.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+
 import com.zoutrankil.data.flow.application.MoneyflowHsgtPublication;
-import com.zoutrankil.data.margin.application.MarginAllPublication;
-
-
+import com.zoutrankil.data.flow.port.MoneyflowHsgtStagingPort;
 import com.zoutrankil.data.index.application.IndexMonthlyPublication;
-
+import com.zoutrankil.data.index.port.IndexMonthlyTables;
+import com.zoutrankil.data.margin.application.MarginAllPublication;
+import com.zoutrankil.data.margin.port.MarginAllStagingPort;
 import com.zoutrankil.data.repository.ReferencePublicationJournal;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.Mockito;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
@@ -17,69 +23,119 @@ import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class PublicationSummaryCompatibilityTest {
     @TempDir Path root;
 
-    @FunctionalInterface private interface Check { void run() throws Exception; }
-    @FunctionalInterface private interface Recovery { AutoCloseable open(String run) throws Exception; }
-    private record Gate(String dataset,String message,Check check,Recovery recovery) {}
+    @FunctionalInterface
+    private interface Check {
+        void run() throws Exception;
+    }
 
-    @Test void pendingFailuresAndRecoveryExceptionsKeepTheirDatasetSpecificContracts() throws Exception {
-        var path=root.resolve("pending.sqlite3");
-        var jdbc=new JdbcTemplate(new DriverManagerDataSource("jdbc:sqlite:"+root.resolve("unused-target.sqlite3")));
-        var monthly=new IndexMonthlyPublication(org.mockito.Mockito.mock(com.zoutrankil.data.index.port.IndexMonthlyTables.class),path);
-        var all=new MarginAllPublication(org.mockito.Mockito.mock(com.zoutrankil.data.margin.port.MarginAllStagingPort.class),path);
+    @FunctionalInterface
+    private interface Recovery {
+        AutoCloseable open(String run) throws Exception;
+    }
 
-        var moneyflow=new MoneyflowHsgtPublication(org.mockito.Mockito.mock(com.zoutrankil.data.flow.port.MoneyflowHsgtStagingPort.class),path);
-        var gates=List.of(
-                new Gate("index_monthly","Unresolved D022 publication requires finish: run",
-                        monthly::requireNoPendingPublication,monthly::beginStageRecoveryOperation),
-                new Gate("margin_all","Unresolved D028 publication requires finish: run",
-                        all::requireNoPendingPublication,all::beginOperation),
+    private record Gate(String dataset, String message, Check check, Recovery recovery) {}
 
-                new Gate("moneyflow_hsgt","D027 publication or owning ledger run requires recovery/finalization: run",
-                        moneyflow::requireNoPendingPublication,moneyflow::beginOperation));
-        for(var gate:gates){
-            insertPublication(path,gate.dataset(),"run","UNKNOWN_STATE");
-            var failure=assertThrowsExactly(IllegalStateException.class,gate.check()::run);
-            assertEquals(gate.message(),failure.getMessage());assertNull(failure.getCause());
-            try(var ignored=gate.recovery().open("run")){}
+    @Test
+    void pendingFailuresAndRecoveryExceptionsKeepTheirDatasetSpecificContracts() throws Exception {
+        var path = root.resolve("pending.sqlite3");
+        var jdbc =
+                new JdbcTemplate(
+                        new DriverManagerDataSource(
+                                "jdbc:sqlite:" + root.resolve("unused-target.sqlite3")));
+        var monthly = new IndexMonthlyPublication(Mockito.mock(IndexMonthlyTables.class), path);
+        var all = new MarginAllPublication(Mockito.mock(MarginAllStagingPort.class), path);
+
+        var moneyflow =
+                new MoneyflowHsgtPublication(Mockito.mock(MoneyflowHsgtStagingPort.class), path);
+        var gates =
+                List.of(
+                        new Gate(
+                                "index_monthly",
+                                "Unresolved D022 publication requires finish: run",
+                                monthly::requireNoPendingPublication,
+                                monthly::beginStageRecoveryOperation),
+                        new Gate(
+                                "margin_all",
+                                "Unresolved D028 publication requires finish: run",
+                                all::requireNoPendingPublication,
+                                all::beginOperation),
+                        new Gate(
+                                "moneyflow_hsgt",
+                                "D027 publication or owning ledger run requires recovery/finalization: run",
+                                moneyflow::requireNoPendingPublication,
+                                moneyflow::beginOperation));
+        for (var gate : gates) {
+            insertPublication(path, gate.dataset(), "run", "UNKNOWN_STATE");
+            var failure = assertThrowsExactly(IllegalStateException.class, gate.check()::run);
+            assertEquals(gate.message(), failure.getMessage());
+            assertNull(failure.getCause());
+            try (var ignored = gate.recovery().open("run")) {}
         }
     }
 
-    @Test void moneyflowCountsThe1001stRowBeforeSkippingItsRecoveryRun() throws Exception {
-        var path=root.resolve("bounded.sqlite3");
-        var jdbc=new JdbcTemplate(new DriverManagerDataSource("jdbc:sqlite:"+root.resolve("unused-target.sqlite3")));
-        var publication=new MoneyflowHsgtPublication(org.mockito.Mockito.mock(com.zoutrankil.data.flow.port.MoneyflowHsgtStagingPort.class),path);
-        try(var db=DriverManager.getConnection("jdbc:sqlite:"+path);
-            var run=db.prepareStatement("INSERT INTO sync_runs VALUES(?,NULL,'job',1,'2026-10-07','target','{}')");
-            var entry=db.prepareStatement("INSERT INTO sync_entries VALUES(?,'RUN',?,NULL,'VERIFIED',0,'{}','2026-10-07T00:00:00Z')");
-            var intent=db.prepareStatement("INSERT INTO reference_publications VALUES(?,'moneyflow_hsgt',?,'{}','VERIFIED',0,'2026-10-07T00:00:00Z')")){
+    @Test
+    void moneyflowCountsThe1001stRowBeforeSkippingItsRecoveryRun() throws Exception {
+        var path = root.resolve("bounded.sqlite3");
+        var jdbc =
+                new JdbcTemplate(
+                        new DriverManagerDataSource(
+                                "jdbc:sqlite:" + root.resolve("unused-target.sqlite3")));
+        var publication =
+                new MoneyflowHsgtPublication(Mockito.mock(MoneyflowHsgtStagingPort.class), path);
+        try (var db = DriverManager.getConnection("jdbc:sqlite:" + path);
+                var run =
+                        db.prepareStatement(
+                                "INSERT INTO sync_runs VALUES(?,NULL,'job',1,'2026-10-07','target','{}')");
+                var entry =
+                        db.prepareStatement(
+                                "INSERT INTO sync_entries VALUES(?,'RUN',?,NULL,'VERIFIED',0,'{}','2026-10-07T00:00:00Z')");
+                var intent =
+                        db.prepareStatement(
+                                "INSERT INTO reference_publications VALUES(?,'moneyflow_hsgt',?,'{}','VERIFIED',0,'2026-10-07T00:00:00Z')")) {
             db.setAutoCommit(false);
-            for(int i=0;i<1001;i++){
-                String id="run-"+i;
-                run.setString(1,id);run.executeUpdate();
-                entry.setString(1,id);entry.setString(2,id);entry.executeUpdate();
-                intent.setString(1,id);intent.setString(2,id);intent.executeUpdate();
+            for (int i = 0; i < 1001; i++) {
+                String id = "run-" + i;
+                run.setString(1, id);
+                run.executeUpdate();
+                entry.setString(1, id);
+                entry.setString(2, id);
+                entry.executeUpdate();
+                intent.setString(1, id);
+                intent.setString(2, id);
+                intent.executeUpdate();
             }
             db.commit();
         }
-        var order=new ArrayList<String>();
-        new ReferencePublicationJournal(path,"moneyflow_hsgt").visitSummaries(1001,false,
-                ReferencePublicationJournal.ConnectionPolicy.DRIVER_DEFAULTS,(summary,rowNumber)->order.add(summary.runId()));
-        assertEquals(1001,order.size());
-        var failure=assertThrowsExactly(IllegalStateException.class,()->{
-            try(var ignored=publication.beginOperation(order.getLast())){}
-        });
-        assertEquals("D027 publication journal scan exceeds 1000 rows",failure.getMessage());
+        var order = new ArrayList<String>();
+        new ReferencePublicationJournal(path, "moneyflow_hsgt")
+                .visitSummaries(
+                        1001,
+                        false,
+                        ReferencePublicationJournal.ConnectionPolicy.DRIVER_DEFAULTS,
+                        (summary, rowNumber) -> order.add(summary.runId()));
+        assertEquals(1001, order.size());
+        var failure =
+                assertThrowsExactly(
+                        IllegalStateException.class,
+                        () -> {
+                            try (var ignored = publication.beginOperation(order.getLast())) {}
+                        });
+        assertEquals("D027 publication journal scan exceeds 1000 rows", failure.getMessage());
     }
 
-    private static void insertPublication(Path path,String dataset,String run,String state) throws Exception {
-        try(var db=DriverManager.getConnection("jdbc:sqlite:"+path);
-            var insert=db.prepareStatement("INSERT INTO reference_publications VALUES(?,?,?,'{}',?,0,'2026-10-07T00:00:00Z')")){
-            insert.setString(1,dataset+"-"+run);insert.setString(2,dataset);insert.setString(3,run);insert.setString(4,state);
+    private static void insertPublication(Path path, String dataset, String run, String state)
+            throws Exception {
+        try (var db = DriverManager.getConnection("jdbc:sqlite:" + path);
+                var insert =
+                        db.prepareStatement(
+                                "INSERT INTO reference_publications VALUES(?,?,?,'{}',?,0,'2026-10-07T00:00:00Z')")) {
+            insert.setString(1, dataset + "-" + run);
+            insert.setString(2, dataset);
+            insert.setString(3, run);
+            insert.setString(4, state);
             insert.executeUpdate();
         }
     }

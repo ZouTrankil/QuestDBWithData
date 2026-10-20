@@ -1,8 +1,9 @@
 package com.zoutrankil.data.config;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 import java.time.ZoneId;
 import java.util.Objects;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "app.time")
 public record TimeProperties(ZoneId businessZone) {

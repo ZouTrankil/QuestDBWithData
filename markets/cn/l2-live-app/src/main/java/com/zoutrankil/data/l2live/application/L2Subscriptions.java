@@ -2,6 +2,7 @@ package com.zoutrankil.data.l2live.application;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -10,7 +11,15 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
 
 /** 读取已有的显式订阅规则，不自行扩大允许名单。 */
 public final class L2Subscriptions {
@@ -19,6 +28,7 @@ public final class L2Subscriptions {
     public static final List<String> CHANNELS = List.of("trans", "order", "market");
     private static final ZoneId EXCHANGE_ZONE = ZoneId.of("Asia/Shanghai");
     private static final ObjectMapper JSON = new ObjectMapper();
+
     private record Candidate(String symbol, int priority) {}
 
     private L2Subscriptions() {}
@@ -35,11 +45,14 @@ public final class L2Subscriptions {
         JsonNode document;
         try {
             byte[] bytes = Files.readAllBytes(path);
-            if (bytes.length > 1_048_576) throw new IOException("L2 subscription config exceeds bounded read");
+            if (bytes.length > 1_048_576)
+                throw new IOException("L2 subscription config exceeds bounded read");
             document = JSON.readTree(bytes);
+        } catch (IOException invalid) {
+            throw new IOException("Invalid L2 subscription JSON");
         }
-        catch (IOException invalid) { throw new IOException("Invalid L2 subscription JSON"); }
-        if (document == null || !document.isObject()) throw new IOException("L2 subscription config must be an object");
+        if (document == null || !document.isObject())
+            throw new IOException("L2 subscription config must be an object");
         Set<String> allowed = symbolSet(document.get("allow_symbols"));
         Set<String> blocked = symbolSet(document.get("block_symbols"));
         JsonNode forced = document.get("force_symbols");
@@ -47,30 +60,49 @@ public final class L2Subscriptions {
         if (!forced.isArray()) throw new IOException("L2 force_symbols must be an array");
         var candidates = new HashMap<String, Candidate>();
         for (JsonNode node : forced) {
-            if (!node.isObject() && !node.isTextual()) throw new IOException("Invalid L2 force entry");
+            if (!node.isObject() && !node.isTextual())
+                throw new IOException("Invalid L2 force entry");
             JsonNode symbol = node.isTextual() ? node : node.get("symbol");
-            if (symbol == null || !symbol.isTextual()) throw new IOException("Explicit L2 force symbol required");
+            if (symbol == null || !symbol.isTextual())
+                throw new IOException("Explicit L2 force symbol required");
             String normalized;
-            try { normalized = normalizeSymbol(symbol.asText()); }
-            catch (IllegalArgumentException invalid) { throw new IOException("Unsupported L2 force symbol"); }
+            try {
+                normalized = normalizeSymbol(symbol.asText());
+            } catch (IllegalArgumentException invalid) {
+                throw new IOException("Unsupported L2 force symbol");
+            }
             if (node.isObject() && node.hasNonNull("expires_at")) {
                 JsonNode expires = node.get("expires_at");
-                if (!expires.isTextual()) throw new IOException("L2 expiry must be an offset timestamp");
+                if (!expires.isTextual())
+                    throw new IOException("L2 expiry must be an offset timestamp");
                 Instant expiry;
-                try { expiry = OffsetDateTime.parse(expires.asText()).toInstant(); }
-                catch (RuntimeException invalid) { throw new IOException("L2 expiry must be an offset timestamp"); }
+                try {
+                    expiry = OffsetDateTime.parse(expires.asText()).toInstant();
+                } catch (RuntimeException invalid) {
+                    throw new IOException("L2 expiry must be an offset timestamp");
+                }
                 if (!expiry.isAfter(asOf)) continue;
             }
-            if (blocked.contains(normalized) || !allowed.isEmpty() && !allowed.contains(normalized)) continue;
+            if (blocked.contains(normalized) || !allowed.isEmpty() && !allowed.contains(normalized))
+                continue;
             JsonNode priorityNode = node.isObject() ? node.get("priority") : null;
-            if (priorityNode != null && !priorityNode.isNull() && (!priorityNode.isIntegralNumber() || !priorityNode.canConvertToInt()))
+            if (priorityNode != null
+                    && !priorityNode.isNull()
+                    && (!priorityNode.isIntegralNumber() || !priorityNode.canConvertToInt()))
                 throw new IOException("L2 priority must be an integer");
             int priority = priorityNode == null ? 0 : priorityNode.asInt(0);
             Candidate old = candidates.get(normalized);
-            if (old == null || priority > old.priority()) candidates.put(normalized, new Candidate(normalized, priority));
+            if (old == null || priority > old.priority())
+                candidates.put(normalized, new Candidate(normalized, priority));
         }
-        return candidates.values().stream().sorted(Comparator.comparingInt(Candidate::priority).reversed()
-                .thenComparing(Candidate::symbol)).limit(MAX_SYMBOLS).map(Candidate::symbol).toList();
+        return candidates.values().stream()
+                .sorted(
+                        Comparator.comparingInt(Candidate::priority)
+                                .reversed()
+                                .thenComparing(Candidate::symbol))
+                .limit(MAX_SYMBOLS)
+                .map(Candidate::symbol)
+                .toList();
     }
 
     private static Set<String> symbolSet(JsonNode node) throws IOException {
@@ -79,8 +111,11 @@ public final class L2Subscriptions {
         var result = new HashSet<String>();
         for (JsonNode item : node) {
             if (!item.isTextual()) throw new IOException("L2 symbol filters require strings");
-            try { result.add(normalizeSymbol(item.asText())); }
-            catch (IllegalArgumentException invalid) { throw new IOException("Unsupported L2 symbol filter"); }
+            try {
+                result.add(normalizeSymbol(item.asText()));
+            } catch (IllegalArgumentException invalid) {
+                throw new IOException("Unsupported L2 symbol filter");
+            }
         }
         return Set.copyOf(result);
     }
@@ -89,12 +124,22 @@ public final class L2Subscriptions {
     public static String normalizeSymbol(String symbol) {
         if (symbol == null) throw new IllegalArgumentException("Unsupported L2 symbol");
         String code = symbol.strip().toUpperCase(Locale.ROOT).split("\\.", -1)[0];
-        if (!code.matches("[0-9]{1,6}")) throw new IllegalArgumentException("Unsupported L2 symbol");
+        if (!code.matches("[0-9]{1,6}"))
+            throw new IllegalArgumentException("Unsupported L2 symbol");
         code = "0".repeat(6 - code.length()) + code;
         for (String prefix : List.of("110", "111", "113", "118", "123", "127", "128"))
-            if (code.startsWith(prefix)) throw new IllegalArgumentException("Convertible bonds are outside the L2 subscription policy");
-        if (code.startsWith("5") || code.startsWith("6") || code.startsWith("9") || code.startsWith("11")) return code + ".SH";
-        if (code.startsWith("00") || code.startsWith("12") || code.startsWith("15") || code.startsWith("16") || code.startsWith("30")) return code + ".SZ";
+            if (code.startsWith(prefix))
+                throw new IllegalArgumentException(
+                        "Convertible bonds are outside the L2 subscription policy");
+        if (code.startsWith("5")
+                || code.startsWith("6")
+                || code.startsWith("9")
+                || code.startsWith("11")) return code + ".SH";
+        if (code.startsWith("00")
+                || code.startsWith("12")
+                || code.startsWith("15")
+                || code.startsWith("16")
+                || code.startsWith("30")) return code + ".SZ";
         throw new IllegalArgumentException("Only supported SH/SZ L2 symbols are permitted");
     }
 

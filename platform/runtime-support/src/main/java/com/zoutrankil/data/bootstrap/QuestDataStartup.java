@@ -1,5 +1,7 @@
 package com.zoutrankil.data.bootstrap;
 
+import com.zoutrankil.runtime.ProjectConfiguration;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -8,11 +10,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 public final class QuestDataStartup {
     private QuestDataStartup() {}
 
-    public static ConfigurableApplicationContext run(SpringApplication application, String... arguments) {
+    public static ConfigurableApplicationContext run(
+            SpringApplication application, String... arguments) {
         var parsed = StartupArguments.parse(arguments);
         application.addListeners(new RuntimeModeListener(parsed));
-        application.addInitializers(context -> com.zoutrankil.runtime.ProjectConfiguration
-                .configureDatabaseNetwork(context.getEnvironment()));
+        application.addInitializers(
+                context -> ProjectConfiguration.configureDatabaseNetwork(context.getEnvironment()));
         var context = application.run(arguments);
         if (application.getWebApplicationType() == WebApplicationType.NONE) context.close();
         return context;

@@ -9,6 +9,7 @@ public record MoneyflowKey(String tsCode, LocalDate tradeDate) {
         Objects.requireNonNull(tsCode, "moneyflow ts_code required");
         Objects.requireNonNull(tradeDate, "moneyflow trade_date required");
         if (!tsCode.matches("[0-9]{6}\\.(SZ|SH|BJ)"))
-            throw new IllegalArgumentException("moneyflow requires a mainland SZ/SH/BJ A-share code");
+            throw new IllegalArgumentException(
+                    "moneyflow requires a mainland SZ/SH/BJ A-share code");
     }
 }

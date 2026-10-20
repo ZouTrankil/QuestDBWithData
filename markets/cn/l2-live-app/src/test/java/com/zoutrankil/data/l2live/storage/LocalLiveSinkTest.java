@@ -1,17 +1,23 @@
 package com.zoutrankil.data.l2live.storage;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
 import java.nio.file.Path;
 import java.sql.DriverManager;
 import java.util.List;
 import java.util.Map;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-import static org.junit.jupiter.api.Assertions.*;
 
 class LocalLiveSinkTest {
     @TempDir Path root;
 
-    @Test void frozenNormalizationSurvivesRestartAndCommitsWithoutRemoteStorage() throws Exception {
+    @Test
+    void frozenNormalizationSurvivesRestartAndCommitsWithoutRemoteStorage() throws Exception {
         String batchId;
         try (var journal = new RawJournal(root)) {
             var event = RawJournalTest.event(journal);
@@ -27,9 +33,9 @@ class LocalLiveSinkTest {
             assertEquals(1, journal.status().completed());
         }
         try (var journal = new RawJournal(root);
-             var c = DriverManager.getConnection("jdbc:sqlite:" + journal.databasePath());
-             var s = c.createStatement();
-             var r = s.executeQuery("SELECT payload FROM prepared_batch WHERE active=0")) {
+                var c = DriverManager.getConnection("jdbc:sqlite:" + journal.databasePath());
+                var s = c.createStatement();
+                var r = s.executeQuery("SELECT payload FROM prepared_batch WHERE active=0")) {
             assertEquals(1L, journal.committedAccumulatorState().get("count"));
             assertTrue(r.next());
             assertEquals(0, r.getBytes(1).length);
@@ -40,10 +46,15 @@ class LocalLiveSinkTest {
         }
     }
 
-    @Test void mismatchedValuesNeverAdvanceTheRawCheckpoint() {
+    @Test
+    void mismatchedValuesNeverAdvanceTheRawCheckpoint() {
         try (var journal = new RawJournal(root)) {
-            var batch = journal.prepareBatch(List.of(RawJournalTest.event(journal)), List.of(), Map.of());
-            assertThrows(IllegalStateException.class, () -> new LocalLiveSink(journal).write(List.of(), List.of()));
+            var batch =
+                    journal.prepareBatch(
+                            List.of(RawJournalTest.event(journal)), List.of(), Map.of());
+            assertThrows(
+                    IllegalStateException.class,
+                    () -> new LocalLiveSink(journal).write(List.of(), List.of()));
             assertThrows(IllegalStateException.class, () -> journal.completeBatch(batch.id()));
             assertEquals(1, journal.status().pending());
         }

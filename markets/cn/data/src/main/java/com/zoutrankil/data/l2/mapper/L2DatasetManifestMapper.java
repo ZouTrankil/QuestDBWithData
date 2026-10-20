@@ -1,15 +1,18 @@
 package com.zoutrankil.data.l2.mapper;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.client.dto.L2DatasetManifestParquetDto;
+import com.zoutrankil.data.domain.DatasetDefinition.Column;
 import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.l2.L2DatasetManifest;
 import com.zoutrankil.data.domain.l2.L2DatasetManifestDataset;
 import com.zoutrankil.data.domain.l2.table.L2DatasetManifestRow;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
-import com.fasterxml.jackson.databind.JsonNode;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /** Explicit Parquet DTO -> business model -> QuestDB projection mapping for D085. */
 public final class L2DatasetManifestMapper {
@@ -18,27 +21,68 @@ public final class L2DatasetManifestMapper {
     }
 
     public L2DatasetManifest fromSource(L2DatasetManifestParquetDto row) {
-        LocalDate day = TemporalValues.businessDate(row.tradeDate(), TemporalValues.DateFormat.BASIC);
-        return new L2DatasetManifest(day, row.symbol(), row.market(), row.board(), row.sourceRoot(),
-                row.outputRoot(), row.featureVersion(), row.dailyFeatureOk(), row.t0Ok(),
-                row.rawRowCounts(), row.outputPaths(), row.costConfig(), row.horizonsMin(),
-                row.errors(), row.batchId(), day);
+        LocalDate day =
+                TemporalValues.businessDate(row.tradeDate(), TemporalValues.DateFormat.BASIC);
+        return new L2DatasetManifest(
+                day,
+                row.symbol(),
+                row.market(),
+                row.board(),
+                row.sourceRoot(),
+                row.outputRoot(),
+                row.featureVersion(),
+                row.dailyFeatureOk(),
+                row.t0Ok(),
+                row.rawRowCounts(),
+                row.outputPaths(),
+                row.costConfig(),
+                row.horizonsMin(),
+                row.errors(),
+                row.batchId(),
+                day);
     }
 
     public L2DatasetManifest fromStorage(L2DatasetManifestRow row) {
-        LocalDate tradeDate = TemporalValues.businessDate(row.tradeDate(), TemporalValues.DateFormat.BASIC);
-        LocalDate timestampDate = TemporalValues.CalendarTimestamp.fromStorage(row.tradeDateTs()).date();
-        return new L2DatasetManifest(tradeDate, row.symbol(), row.market(), row.board(), row.sourceRoot(),
-                row.outputRoot(), row.featureVersion(), row.dailyFeatureOk(), row.t0Ok(),
-                row.rawRowCounts(), row.outputPaths(), row.costConfig(), row.horizonsMin(),
-                row.errors(), row.batchId(), timestampDate);
+        LocalDate tradeDate =
+                TemporalValues.businessDate(row.tradeDate(), TemporalValues.DateFormat.BASIC);
+        LocalDate timestampDate =
+                TemporalValues.CalendarTimestamp.fromStorage(row.tradeDateTs()).date();
+        return new L2DatasetManifest(
+                tradeDate,
+                row.symbol(),
+                row.market(),
+                row.board(),
+                row.sourceRoot(),
+                row.outputRoot(),
+                row.featureVersion(),
+                row.dailyFeatureOk(),
+                row.t0Ok(),
+                row.rawRowCounts(),
+                row.outputPaths(),
+                row.costConfig(),
+                row.horizonsMin(),
+                row.errors(),
+                row.batchId(),
+                timestampDate);
     }
 
     public L2DatasetManifestRow toStorage(L2DatasetManifest row) {
-        return new L2DatasetManifestRow(TemporalValues.formatDate(row.tradeDate(), TemporalValues.DateFormat.BASIC),
-                row.symbol(), row.market(), row.board(), row.sourceRoot(), row.outputRoot(),
-                row.featureVersion(), row.dailyFeatureOk(), row.t0Ok(), row.rawRowCounts(),
-                row.outputPaths(), row.costConfig(), row.horizonsMin(), row.errors(), row.batchId(),
+        return new L2DatasetManifestRow(
+                TemporalValues.formatDate(row.tradeDate(), TemporalValues.DateFormat.BASIC),
+                row.symbol(),
+                row.market(),
+                row.board(),
+                row.sourceRoot(),
+                row.outputRoot(),
+                row.featureVersion(),
+                row.dailyFeatureOk(),
+                row.t0Ok(),
+                row.rawRowCounts(),
+                row.outputPaths(),
+                row.costConfig(),
+                row.horizonsMin(),
+                row.errors(),
+                row.batchId(),
                 new TemporalValues.CalendarTimestamp(row.tradeDate()).storageCarrier());
     }
 
@@ -87,8 +131,9 @@ public final class L2DatasetManifestMapper {
         return new TemporalValues.CalendarTimestamp(row.tradeDate()).storageCarrier();
     }
 
-    public static java.util.List<String> columns() {
+    public static List<String> columns() {
         return L2DatasetManifestDataset.DEFINITION.columns().stream()
-                .map(com.zoutrankil.data.domain.DatasetDefinition.Column::logicalName).toList();
+                .map(Column::logicalName)
+                .toList();
     }
 }

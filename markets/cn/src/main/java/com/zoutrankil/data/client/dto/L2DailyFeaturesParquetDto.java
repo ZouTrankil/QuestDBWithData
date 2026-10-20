@@ -2,6 +2,7 @@ package com.zoutrankil.data.client.dto;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -9,13 +10,14 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /** Parsed source DTO; physical ts is validated against the source trade-date partition. */
-public record L2DailyFeaturesParquetDto(LocalDate tradeDate, String symbol,
-                                        Map<L2DailyFeatureField, Object> features) {
+public record L2DailyFeaturesParquetDto(
+        LocalDate tradeDate, String symbol, Map<L2DailyFeatureField, Object> features) {
     public L2DailyFeaturesParquetDto {
         features = Collections.unmodifiableMap(new EnumMap<>(features));
     }
 
-    public static L2DailyFeaturesParquetDto decode(JsonNode row, LocalDate expectedDate) throws IOException {
+    public static L2DailyFeaturesParquetDto decode(JsonNode row, LocalDate expectedDate)
+            throws IOException {
         if (row == null || !row.isObject() || row.size() != L2DailyFeatureField.values().length)
             throw new IOException("D086 row field count differs from the frozen 110-column schema");
         JsonNode ts = row.get("ts");
@@ -25,9 +27,13 @@ public record L2DailyFeaturesParquetDto(LocalDate tradeDate, String symbol,
         String text = ts.textValue();
         if (text.length() < 10) throw new IOException("D086 ts is not a date timestamp");
         LocalDate day;
-        try { day = LocalDate.parse(text.substring(0, 10)); }
-        catch (RuntimeException failure) { throw new IOException("D086 ts is not an ISO date", failure); }
-        if (!expectedDate.equals(day)) throw new IOException("D086 ts differs from its manifest trade date");
+        try {
+            day = LocalDate.parse(text.substring(0, 10));
+        } catch (RuntimeException failure) {
+            throw new IOException("D086 ts is not an ISO date", failure);
+        }
+        if (!expectedDate.equals(day))
+            throw new IOException("D086 ts differs from its manifest trade date");
         var features = new EnumMap<L2DailyFeatureField, Object>(L2DailyFeatureField.class);
         for (var field : L2DailyFeatureField.values()) {
             JsonNode value = row.get(field.fieldName());

@@ -8,6 +8,7 @@ final class L2BatchExecutionSession {
     final ExecutorService pool;
     final L2PublicationGate publication = new L2PublicationGate();
     private InterruptedException interrupted;
+
     L2BatchExecutionSession(int workers) {
         pool = Executors.newFixedThreadPool(workers);
     }
@@ -27,8 +28,7 @@ final class L2BatchExecutionSession {
             try {
                 pool.awaitTermination(remaining, TimeUnit.NANOSECONDS);
                 return;
-            }
-            catch (InterruptedException failure) {
+            } catch (InterruptedException failure) {
                 interrupted(failure);
             }
         }

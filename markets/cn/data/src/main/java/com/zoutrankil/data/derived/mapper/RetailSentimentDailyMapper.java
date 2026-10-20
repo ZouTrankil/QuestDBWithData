@@ -1,10 +1,10 @@
 package com.zoutrankil.data.derived.mapper;
 
-
 import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import com.zoutrankil.data.domain.derived.materializedview.RetailSentimentDailyMaterializedView;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
+
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 
@@ -13,10 +13,18 @@ public final class RetailSentimentDailyMapper {
     public RetailSentimentDaily fromStorage(RetailSentimentDailyMaterializedView row) {
         return new RetailSentimentDaily(
                 TemporalValues.CalendarTimestamp.fromStorage(row.tradeDate()).date(),
-                row.avgRetailRatio(), row.avgRetailEntropy(), row.totalRetailAmountYi(),
-                row.totalRetailNetInflowYi(), row.avgRelAggro(), row.totalQ1(), row.totalQ3(),
-                row.avgWashTradeRatio(), row.totalSpoofCount(), row.totalManipulationCount(),
-                row.avgMfiScore(), row.totalMainNetYi());
+                row.avgRetailRatio(),
+                row.avgRetailEntropy(),
+                row.totalRetailAmountYi(),
+                row.totalRetailNetInflowYi(),
+                row.avgRelAggro(),
+                row.totalQ1(),
+                row.totalQ3(),
+                row.avgWashTradeRatio(),
+                row.totalSpoofCount(),
+                row.totalManipulationCount(),
+                row.avgMfiScore(),
+                row.totalMainNetYi());
     }
 
     public DatasetValues values(RetailSentimentDaily row) {
@@ -38,12 +46,19 @@ public final class RetailSentimentDailyMapper {
     }
 
     public RetailSentimentDaily fromValues(DatasetValues values) {
-        return new RetailSentimentDaily(values.get("trade_date", LocalDate.class),
-                values.get("avg_retail_ratio", Double.class), values.get("avg_retail_entropy", Double.class),
-                values.get("total_retail_amount_yi", Double.class), values.get("total_retail_net_inflow_yi", Double.class),
-                values.get("avg_rel_aggro", Double.class), values.get("total_q1", Long.class), values.get("total_q3", Long.class),
-                values.get("avg_wash_trade_ratio", Double.class), values.get("total_spoof_count", Long.class),
-                values.get("total_manipulation_count", Long.class), values.get("avg_mfi_score", Double.class),
+        return new RetailSentimentDaily(
+                values.get("trade_date", LocalDate.class),
+                values.get("avg_retail_ratio", Double.class),
+                values.get("avg_retail_entropy", Double.class),
+                values.get("total_retail_amount_yi", Double.class),
+                values.get("total_retail_net_inflow_yi", Double.class),
+                values.get("avg_rel_aggro", Double.class),
+                values.get("total_q1", Long.class),
+                values.get("total_q3", Long.class),
+                values.get("avg_wash_trade_ratio", Double.class),
+                values.get("total_spoof_count", Long.class),
+                values.get("total_manipulation_count", Long.class),
+                values.get("avg_mfi_score", Double.class),
                 values.get("total_main_net_yi", Double.class));
     }
 }

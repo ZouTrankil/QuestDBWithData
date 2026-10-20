@@ -1,10 +1,10 @@
 package com.zoutrankil.data.derived.mapper;
 
-
-import com.zoutrankil.data.domain.derived.BacktestDailyViewValue;
 import com.zoutrankil.data.domain.DatasetValues;
-import com.zoutrankil.data.domain.temporal.TemporalValues;
+import com.zoutrankil.data.domain.derived.BacktestDailyViewValue;
 import com.zoutrankil.data.domain.derived.view.BacktestDailyView;
+import com.zoutrankil.data.domain.temporal.TemporalValues;
+
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 
@@ -12,9 +12,19 @@ import java.util.LinkedHashMap;
 public final class BacktestDailyViewMapper {
     public BacktestDailyViewValue fromStorage(BacktestDailyView row) {
         return new BacktestDailyViewValue(
-                TemporalValues.CalendarTimestamp.fromStorage(row.tradeDate()).date(), row.tsCode(),
-                row.open(), row.high(), row.low(), row.close(), row.vol(), row.amount(), row.adjFactor(),
-                row.upLimit(), row.downLimit(), row.isSuspended(), row.isSt());
+                TemporalValues.CalendarTimestamp.fromStorage(row.tradeDate()).date(),
+                row.tsCode(),
+                row.open(),
+                row.high(),
+                row.low(),
+                row.close(),
+                row.vol(),
+                row.amount(),
+                row.adjFactor(),
+                row.upLimit(),
+                row.downLimit(),
+                row.isSuspended(),
+                row.isSt());
     }
 
     public DatasetValues values(BacktestDailyViewValue row) {
@@ -36,12 +46,19 @@ public final class BacktestDailyViewMapper {
     }
 
     public BacktestDailyViewValue fromValues(DatasetValues values) {
-        return new BacktestDailyViewValue(values.get("trade_date", LocalDate.class), values.get("ts_code", String.class),
-                values.get("open", Double.class), values.get("high", Double.class),
-                values.get("low", Double.class), values.get("close", Double.class),
-                values.get("vol", Double.class), values.get("amount", Double.class),
-                values.get("adj_factor", Double.class), values.get("up_limit", Double.class),
-                values.get("down_limit", Double.class), values.get("is_suspended", Long.class),
+        return new BacktestDailyViewValue(
+                values.get("trade_date", LocalDate.class),
+                values.get("ts_code", String.class),
+                values.get("open", Double.class),
+                values.get("high", Double.class),
+                values.get("low", Double.class),
+                values.get("close", Double.class),
+                values.get("vol", Double.class),
+                values.get("amount", Double.class),
+                values.get("adj_factor", Double.class),
+                values.get("up_limit", Double.class),
+                values.get("down_limit", Double.class),
+                values.get("is_suspended", Long.class),
                 values.get("is_st", Integer.class));
     }
 }

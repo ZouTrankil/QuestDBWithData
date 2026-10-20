@@ -22,11 +22,15 @@ public record BacktestDailyViewValue(
     public BacktestDailyViewValue {
         Objects.requireNonNull(tradeDate, "trade_date required");
         new BacktestDailyKey(tradeDate, tsCode);
-        for (var value : new Double[]{open, high, low, close, vol, amount, adjFactor, upLimit, downLimit}) {
+        for (var value :
+                new Double[] {open, high, low, close, vol, amount, adjFactor, upLimit, downLimit}) {
             if (value != null && !Double.isFinite(value))
-                throw new IllegalArgumentException("Backtest view numeric value must be finite or null");
+                throw new IllegalArgumentException(
+                        "Backtest view numeric value must be finite or null");
         }
     }
 
-    public BacktestDailyKey key() { return new BacktestDailyKey(tradeDate, tsCode); }
+    public BacktestDailyKey key() {
+        return new BacktestDailyKey(tradeDate, tsCode);
+    }
 }

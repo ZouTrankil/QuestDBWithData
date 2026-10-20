@@ -1,12 +1,19 @@
 package com.zoutrankil.data.config;
 
-import com.zoutrankil.data.service.DatasetRegistry;
 import com.zoutrankil.data.domain.DatasetImplementation;
-import org.springframework.context.annotation.*;
-import java.util.*;
-import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.data.domain.SyncJobDefinition;
+import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.data.service.DatasetRegistry;
 import com.zoutrankil.data.service.SyncJobRegistry;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 @Configuration
 public class DatasetConfiguration {
@@ -14,23 +21,79 @@ public class DatasetConfiguration {
     DatasetRegistry datasetRegistry(List<DatasetImplementation> implementations) {
         return new DatasetRegistry(implementations);
     }
+
     @Bean
     @Lazy
-    SyncJobRegistry syncJobRegistry(
-            DatasetRegistry datasets, List<SyncJobOwner> owners) {
+    SyncJobRegistry syncJobRegistry(DatasetRegistry datasets, List<SyncJobOwner> owners) {
         var modes = new HashMap<String, Set<SyncJobDefinition.Mode>>();
         var jobs = new ArrayList<SyncJobDefinition>();
         for (var owner : owners) {
             if (modes.putIfAbsent(owner.datasetId(), owner.supportedSyncModes()) != null)
                 throw new IllegalArgumentException("Duplicate sync owner for dataset");
             for (var job : owner.syncJobDefinitions()) {
-                if (!job.datasetId().equals(owner.datasetId())) throw new IllegalArgumentException("Job owner dataset mismatch");
+                if (!job.datasetId().equals(owner.datasetId()))
+                    throw new IllegalArgumentException("Job owner dataset mismatch");
                 jobs.add(job);
             }
         }
-        return new SyncJobRegistry(jobs, datasets, modes,
+        return new SyncJobRegistry(
+                jobs,
+                datasets,
+                modes,
                 new SyncJobRegistry.Policies(
-                        Set.of("tushare.shared","chinabond.shared","file.bounded","questdb.materialize"), Set.of("financial.code_period","cn_bond_yield_curve.range31","stock_basic.snapshot","exchange_calendar.year","stock_detail_info.identity","index_catalog.file","ths_index.complete","index_member.l2_explicit","ths_member.board","daily.trade_date","daily_basic.trade_date","stk_factor.daily","stk_limit.trade_date","etf_daily.trade_date","etf_adj.trade_date","etf_share.trade_date","etf_factor.trade_date","index_daily_market.trade_date","index_daily_basic.trade_date","index_weight.index_month","index_monthly.month_window","equity_style_monthly.month_window","macro_core_monthly.month_window","dc_index.trade_date","moneyflow_hsgt.range31","moneyflow_ths.trade_date","moneyflow.trade_date","fund_portfolio.ann_date","etf_basic.market_snapshot","l2_manifest.parquet_date","l2_daily_features.parquet_date","l2_intraday_bar_features.parquet_date","l2_event_response_features.parquet_date","l2_t0_training_labels.parquet_date","stk_st_daily.namechange_year_trade_dates","market_breadth_daily.range31","retail_sentiment_daily.range31","market_sentiment_daily.range366","regime_features_monitor_daily.range366","etf_market_overview_daily.range31","margin.trade_date.daily","margin_detail.trade_date"),
-                        Set.of("questdb.full_key_values","questdb.full_row_stage_replace","questdb.year_wal_dedup","questdb.year_wal_full_row_stage_replace","questdb.full_key_values_and_receipt_backed_checkpoint")));
+                        Set.of(
+                                "tushare.shared",
+                                "chinabond.shared",
+                                "file.bounded",
+                                "questdb.materialize"),
+                        Set.of(
+                                "financial.code_period",
+                                "cn_bond_yield_curve.range31",
+                                "stock_basic.snapshot",
+                                "exchange_calendar.year",
+                                "stock_detail_info.identity",
+                                "index_catalog.file",
+                                "ths_index.complete",
+                                "index_member.l2_explicit",
+                                "ths_member.board",
+                                "daily.trade_date",
+                                "daily_basic.trade_date",
+                                "stk_factor.daily",
+                                "stk_limit.trade_date",
+                                "etf_daily.trade_date",
+                                "etf_adj.trade_date",
+                                "etf_share.trade_date",
+                                "etf_factor.trade_date",
+                                "index_daily_market.trade_date",
+                                "index_daily_basic.trade_date",
+                                "index_weight.index_month",
+                                "index_monthly.month_window",
+                                "equity_style_monthly.month_window",
+                                "macro_core_monthly.month_window",
+                                "dc_index.trade_date",
+                                "moneyflow_hsgt.range31",
+                                "moneyflow_ths.trade_date",
+                                "moneyflow.trade_date",
+                                "fund_portfolio.ann_date",
+                                "etf_basic.market_snapshot",
+                                "l2_manifest.parquet_date",
+                                "l2_daily_features.parquet_date",
+                                "l2_intraday_bar_features.parquet_date",
+                                "l2_event_response_features.parquet_date",
+                                "l2_t0_training_labels.parquet_date",
+                                "stk_st_daily.namechange_year_trade_dates",
+                                "market_breadth_daily.range31",
+                                "retail_sentiment_daily.range31",
+                                "market_sentiment_daily.range366",
+                                "regime_features_monitor_daily.range366",
+                                "etf_market_overview_daily.range31",
+                                "margin.trade_date.daily",
+                                "margin_detail.trade_date"),
+                        Set.of(
+                                "questdb.full_key_values",
+                                "questdb.full_row_stage_replace",
+                                "questdb.year_wal_dedup",
+                                "questdb.year_wal_full_row_stage_replace",
+                                "questdb.full_key_values_and_receipt_backed_checkpoint")));
     }
 }

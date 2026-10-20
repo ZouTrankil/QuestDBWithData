@@ -27,7 +27,7 @@ public final class CliOptions {
         return options;
     }
 
-    private static void putOption(Map<String,String> options, String key, String value) {
+    private static void putOption(Map<String, String> options, String key, String value) {
         if (!key.matches("--[a-z][a-z0-9-]*") || value.isBlank())
             throw new IllegalArgumentException("Invalid or empty option: " + key);
         if (options.putIfAbsent(key, value) != null)

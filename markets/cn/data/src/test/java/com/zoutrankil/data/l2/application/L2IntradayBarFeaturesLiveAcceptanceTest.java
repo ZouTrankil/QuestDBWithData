@@ -1,32 +1,52 @@
 package com.zoutrankil.data.l2.application;
 
-import com.zoutrankil.data.service.*;
-import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.zoutrankil.data.cli.CommandLineRunner;
+import com.zoutrankil.data.calendar.application.ExchangeCalendarSyncAdapter;
+import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.cli.CatalogCommands;
 import com.zoutrankil.data.cli.CliCommandRegistry;
+import com.zoutrankil.data.cli.CommandLineRunner;
 import com.zoutrankil.data.cli.L2Commands;
 import com.zoutrankil.data.config.QuestDbProperties;
-import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.JobDefinitionJson;
-import com.zoutrankil.data.domain.l2.L2IntradayBarFeatureField;
-import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
-import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesDataset;
 import com.zoutrankil.data.domain.ReadGroupRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
-import com.zoutrankil.data.domain.WriteGroupRequest;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatureField;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeatures;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesDataset;
+import com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey;
+import com.zoutrankil.data.group.storage.QuestDbWriteGroupWriters;
 import com.zoutrankil.data.l2.mapper.L2IntradayBarFeaturesMapper;
-import com.zoutrankil.data.calendar.storage.ExchangeCalendarReadRepository;
 import com.zoutrankil.data.l2.storage.L2DatasetManifestReadRepository;
 import com.zoutrankil.data.l2.storage.L2IntradayBarFeaturesReadRepository;
+import com.zoutrankil.data.l2.storage.QuestDbL2IntradayBarFeaturesTarget;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
+import com.zoutrankil.data.service.DatasetRegistry;
+import com.zoutrankil.data.service.ReadGroupReader;
+import com.zoutrankil.data.service.StockBasicWriteGroupService;
+import com.zoutrankil.data.service.SyncJobRegistry;
+import com.zoutrankil.data.service.SyncJobRunner;
+
 import io.questdb.client.QuestDB;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.DefaultApplicationArguments;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -37,6 +57,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -44,20 +65,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.DefaultApplicationArguments;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
-
-
+import java.util.concurrent.TimeoutException;
 
 /** Opt-in live D087 check; every write is confined to its explicit java_d087_* acceptance table. */
-
 class L2IntradayBarFeaturesLiveAcceptanceTest {
 
     private static final LocalDate FROM = LocalDate.parse("2026-09-21");
@@ -74,14 +86,12 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
     private static final ObjectMapper JSON = JobDefinitionJson.mapper();
 
-
-
     @Test
+    void certifiedParquetBackfillIsIdempotentAndIncrementalResumeMatchesEveryField()
+            throws Exception {
 
-    void certifiedParquetBackfillIsIdempotentAndIncrementalResumeMatchesEveryField() throws Exception {
-
-        assumeTrue("true".equalsIgnoreCase(System.getenv("D087_LIVE_ACCEPTANCE")),
-
+        assumeTrue(
+                "true".equalsIgnoreCase(System.getenv("D087_LIVE_ACCEPTANCE")),
                 "Set D087_LIVE_ACCEPTANCE=true for the bounded local QuestDB and Parquet acceptance run");
 
         String username = requiredEnv("APP_QUESTDB_USERNAME");
@@ -106,15 +116,18 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
         properties.setDatabase(database);
 
-
-
         var dataSource = new DriverManagerDataSource();
 
         dataSource.setDriverClassName("org.postgresql.Driver");
 
-        dataSource.setUrl("jdbc:postgresql://" + properties.getHost() + ":" + properties.getPgPort()
-
-                + "/" + database + "?sslmode=disable");
+        dataSource.setUrl(
+                "jdbc:postgresql://"
+                        + properties.getHost()
+                        + ":"
+                        + properties.getPgPort()
+                        + "/"
+                        + database
+                        + "?sslmode=disable");
 
         dataSource.setUsername(username);
 
@@ -140,57 +153,84 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
         Instant started = Instant.now();
 
-
-
         try (QuestDB questdb = QuestDB.connect(properties.qwpConfig())) {
 
-            var service = new L2IntradayBarFeaturesJobService(calendars::findPage,
-                    new com.zoutrankil.data.l2.storage.QuestDbL2IntradayBarFeaturesTarget(target, jdbc, questdb, properties),
-                    new L2IntradayBarFeaturesParquetSource(datasetRoot, helper, python), ledger.toString());
+            var service =
+                    new L2IntradayBarFeaturesJobService(
+                            calendars::findPage,
+                            new QuestDbL2IntradayBarFeaturesTarget(
+                                    target, jdbc, questdb, properties),
+                            new L2IntradayBarFeaturesParquetSource(datasetRoot, helper, python),
+                            ledger.toString());
 
             service.createIsolatedTarget(target);
 
-            var firstPlan = service.plan(FROM, BACKFILL_TO, LOGICAL_DATE, SyncJobDefinition.Mode.BACKFILL,
+            var firstPlan =
+                    service.plan(
+                            FROM,
+                            BACKFILL_TO,
+                            LOGICAL_DATE,
+                            SyncJobDefinition.Mode.BACKFILL,
+                            List.of(SYMBOL));
 
-                    List.of(SYMBOL));
-
-            assertTrue(firstPlan.source().selectedRows() > 0, "acceptance must include real source rows");
+            assertTrue(
+                    firstPlan.source().selectedRows() > 0,
+                    "acceptance must include real source rows");
 
             assertEquals(List.of(FROM, FROM.plusDays(1), BACKFILL_TO), firstPlan.source().dates());
 
-
-
             var source = new L2IntradayBarFeaturesParquetSource(datasetRoot, helper, python);
 
-            assertThrows(CancellationException.class, () -> source.stream(firstPlan.source(), List.of(SYMBOL),
-
-                    L2IntradayBarFeaturesJobService.definition().budget().maxRows(),
-
-                    L2IntradayBarFeaturesJobService.definition().budget().maxSlices(),
-
-                    page -> fail("cancelled D087 stream emitted a page"), () -> true, Duration.ofMinutes(2)));
+            assertThrows(
+                    CancellationException.class,
+                    () ->
+                            source.stream(
+                                    firstPlan.source(),
+                                    List.of(SYMBOL),
+                                    L2IntradayBarFeaturesJobService.definition().budget().maxRows(),
+                                    L2IntradayBarFeaturesJobService.definition()
+                                            .budget()
+                                            .maxSlices(),
+                                    page -> fail("cancelled D087 stream emitted a page"),
+                                    () -> true,
+                                    Duration.ofMinutes(2)));
 
             var stale = firstPlan.source();
 
-            var staleFingerprint = new L2IntradayBarFeaturesParquetSource.Inspection(stale.from(), stale.to(),
+            var staleFingerprint =
+                    new L2IntradayBarFeaturesParquetSource.Inspection(
+                            stale.from(),
+                            stale.to(),
+                            stale.dates(),
+                            stale.sourceRows(),
+                            stale.selectedRows(),
+                            stale.files(),
+                            stale.pages(),
+                            stale.sourceBytes(),
+                            "0".repeat(64),
+                            stale.schemaFingerprint(),
+                            stale.parserVersion(),
+                            stale.rootIdentity(),
+                            stale.completeForSelectedSymbols());
 
-                    stale.dates(), stale.sourceRows(), stale.selectedRows(), stale.files(), stale.pages(),
-
-                    stale.sourceBytes(), "0".repeat(64), stale.schemaFingerprint(), stale.parserVersion(),
-
-                    stale.rootIdentity(), stale.completeForSelectedSymbols());
-
-            IOException staleFailure = assertThrows(IOException.class, () -> source.stream(staleFingerprint,
-
-                    List.of(SYMBOL), L2IntradayBarFeaturesJobService.definition().budget().maxRows(),
-
-                    L2IntradayBarFeaturesJobService.definition().budget().maxSlices(),
-
-                    page -> fail("stale D087 fingerprint emitted a page"), () -> false, Duration.ofMinutes(2)));
+            IOException staleFailure =
+                    assertThrows(
+                            IOException.class,
+                            () ->
+                                    source.stream(
+                                            staleFingerprint,
+                                            List.of(SYMBOL),
+                                            L2IntradayBarFeaturesJobService.definition()
+                                                    .budget()
+                                                    .maxRows(),
+                                            L2IntradayBarFeaturesJobService.definition()
+                                                    .budget()
+                                                    .maxSlices(),
+                                            page -> fail("stale D087 fingerprint emitted a page"),
+                                            () -> false,
+                                            Duration.ofMinutes(2)));
 
             assertTrue(staleFailure.getMessage().contains("reader failed"));
-
-
 
             var firstRun = service.run(firstPlan);
 
@@ -200,29 +240,37 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
             assertEquals(firstPlan.source().selectedRows(), firstRows.size());
 
-
-
-            var repeatPlan = service.plan(FROM, BACKFILL_TO, LOGICAL_DATE,
-
-                    SyncJobDefinition.Mode.BACKFILL, List.of(SYMBOL));
+            var repeatPlan =
+                    service.plan(
+                            FROM,
+                            BACKFILL_TO,
+                            LOGICAL_DATE,
+                            SyncJobDefinition.Mode.BACKFILL,
+                            List.of(SYMBOL));
 
             var repeatRun = service.run(repeatPlan);
 
             assertVerified(repeatRun, firstRows.size());
 
-            assertEquals(firstRows, readBack(reader, target, FROM, BACKFILL_TO),
-
+            assertEquals(
+                    firstRows,
+                    readBack(reader, target, FROM, BACKFILL_TO),
                     "replaying the bounded D087 backfill must be idempotent");
 
-
-
-            var incrementalPlan = service.plan(FROM, INCREMENTAL_TO, LOGICAL_DATE,
-
-                    SyncJobDefinition.Mode.INCREMENTAL, List.of(SYMBOL));
+            var incrementalPlan =
+                    service.plan(
+                            FROM,
+                            INCREMENTAL_TO,
+                            LOGICAL_DATE,
+                            SyncJobDefinition.Mode.INCREMENTAL,
+                            List.of(SYMBOL));
 
             assertEquals(BACKFILL_TO, incrementalPlan.verifiedThrough());
 
-            assertEquals(FROM, incrementalPlan.request().from(), "the three calendar day revision window is replayed");
+            assertEquals(
+                    FROM,
+                    incrementalPlan.request().from(),
+                    "the three calendar day revision window is replayed");
 
             assertEquals(INCREMENTAL_TO, incrementalPlan.request().to());
 
@@ -238,8 +286,6 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
             assertEquals(SyncRunState.VERIFIED, service.status(incrementalRun.runId()).state());
 
-
-
             var resumed = service.resume(incrementalPlan, incrementalRun.runId());
 
             assertVerified(resumed, incrementalPlan.source().selectedRows());
@@ -248,13 +294,15 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
             assertEquals(incrementalRows, readBack(reader, target, FROM, INCREMENTAL_TO));
 
-            assertFalse(service.cancel(incrementalRun.runId()), "a verified run must not accept a late cancellation");
+            assertFalse(
+                    service.cancel(incrementalRun.runId()),
+                    "a verified run must not accept a late cancellation");
 
+            Path independentCapture =
+                    evidenceRoot.resolve("commands/source-parquet-20260921-24.jsonl");
 
-
-            Path independentCapture = evidenceRoot.resolve("commands/source-parquet-20260921-24.jsonl");
-
-            captureIndependentSource(python, helper, datasetRoot, incrementalPlan.source(), independentCapture);
+            captureIndependentSource(
+                    python, helper, datasetRoot, incrementalPlan.source(), independentCapture);
 
             var expectedRows = parseIndependentCapture(independentCapture);
 
@@ -262,61 +310,98 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
             var sortedTargetRows = sort(incrementalRows);
 
-            assertEquals(sort(expectedRows), sortedTargetRows,
-
+            assertEquals(
+                    sort(expectedRows),
+                    sortedTargetRows,
                     "all sixty D087 fields must match the independently captured Parquet rows");
 
-            assertEquals(expectedRows.size() * L2IntradayBarFeatureField.values().length,
-
-                    expectedRows.size() * 60, "field comparison count must cover the complete sixty-column contract");
-
-
+            assertEquals(
+                    expectedRows.size() * L2IntradayBarFeatureField.values().length,
+                    expectedRows.size() * 60,
+                    "field comparison count must cover the complete sixty-column contract");
 
             var readRepo = new L2IntradayBarFeaturesReadRepository(reader, target);
 
-            var datasetRegistry = new DatasetRegistry(List.of(calendars,
-
-                    new L2DatasetManifestReadRepository(reader, "l2_dataset_manifest"), readRepo));
+            var datasetRegistry =
+                    new DatasetRegistry(
+                            List.of(
+                                    calendars,
+                                    new L2DatasetManifestReadRepository(
+                                            reader, "l2_dataset_manifest"),
+                                    readRepo));
 
             var d087Mapper = new L2IntradayBarFeaturesMapper();
 
-            var readGroup = new ReadGroupReader(datasetRegistry, reader, List.of(
-
-                    new ReadGroupReader.Binding<>(readRepo.definition(), L2IntradayBarFeatures.class,
-
-                            d087Mapper::fromValues, () -> null)));
+            var readGroup =
+                    new ReadGroupReader(
+                            datasetRegistry,
+                            reader,
+                            List.of(
+                                    new ReadGroupReader.Binding<>(
+                                            readRepo.definition(),
+                                            L2IntradayBarFeatures.class,
+                                            d087Mapper::fromValues,
+                                            () -> null)));
 
             Instant rangeFrom = FROM.atStartOfDay(EXCHANGE_ZONE).toInstant();
 
             Instant rangeTo = INCREMENTAL_TO.plusDays(1).atStartOfDay(EXCHANGE_ZONE).toInstant();
 
-            var typedQuery = new DatasetReadQuery(L2IntradayBarFeaturesMapper.columns(), Map.of(), "minute",
+            var typedQuery =
+                    new DatasetReadQuery(
+                            L2IntradayBarFeaturesMapper.columns(),
+                            Map.of(),
+                            "minute",
+                            rangeFrom,
+                            rangeTo,
+                            200,
+                            null);
 
-                    rangeFrom, rangeTo, 200, null);
-
-            var typedRead = readGroup.read(new ReadGroupRequest(List.of(new ReadGroupRequest.Member(
-
-                    "d087-typed-page", readRepo.definition().datasetId(), readRepo.definition().schemaVersion(),
-
-                    typedQuery)), Duration.ofMinutes(1)), () -> false);
+            var typedRead =
+                    readGroup.read(
+                            new ReadGroupRequest(
+                                    List.of(
+                                            new ReadGroupRequest.Member(
+                                                    "d087-typed-page",
+                                                    readRepo.definition().datasetId(),
+                                                    readRepo.definition().schemaVersion(),
+                                                    typedQuery)),
+                                    Duration.ofMinutes(1)),
+                            () -> false);
 
             assertTrue(typedRead.complete());
 
-            assertEquals(L2IntradayBarFeatures.class, typedRead.require("d087-typed-page").rowType());
+            assertEquals(
+                    L2IntradayBarFeatures.class, typedRead.require("d087-typed-page").rowType());
 
-            assertEquals(200, typedRead.require("d087-typed-page").typedPage(L2IntradayBarFeatures.class).rows().size());
+            assertEquals(
+                    200,
+                    typedRead
+                            .require("d087-typed-page")
+                            .typedPage(L2IntradayBarFeatures.class)
+                            .rows()
+                            .size());
 
+            var writeGroupEvidence =
+                    verifyWriteGroupIntegration(
+                            datasetRegistry,
+                            reader,
+                            jdbc,
+                            questdb,
+                            service,
+                            target,
+                            ledger,
+                            expectedRows,
+                            incrementalRows,
+                            evidenceRoot);
 
-
-            var writeGroupEvidence = verifyWriteGroupIntegration(datasetRegistry, reader, jdbc, questdb,
-
-                    service, target, ledger, expectedRows, incrementalRows, evidenceRoot);
-
-
-
-            var registeredDatasets = new DatasetRegistry(List.of(calendars,
-
-                    new L2DatasetManifestReadRepository(reader, "l2_dataset_manifest"), readRepo));
+            var registeredDatasets =
+                    new DatasetRegistry(
+                            List.of(
+                                    calendars,
+                                    new L2DatasetManifestReadRepository(
+                                            reader, "l2_dataset_manifest"),
+                                    readRepo));
 
             var calendarDefinition = ExchangeCalendarSyncAdapter.definition(true);
 
@@ -324,103 +409,138 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
             var featureDefinition = L2IntradayBarFeaturesJobService.definition();
 
-            var registeredJobs = new SyncJobRegistry(List.of(calendarDefinition, manifestDefinition, featureDefinition),
+            var registeredJobs =
+                    new SyncJobRegistry(
+                            List.of(calendarDefinition, manifestDefinition, featureDefinition),
+                            registeredDatasets,
+                            Map.of(
+                                    calendarDefinition.datasetId(),
+                                    calendarDefinition.supportedModes(),
+                                    manifestDefinition.datasetId(),
+                                    manifestDefinition.supportedModes(),
+                                    featureDefinition.datasetId(),
+                                    featureDefinition.supportedModes()),
+                            new SyncJobRegistry.Policies(
+                                    Set.of("file.bounded", "tushare.shared"),
+                                    Set.of(
+                                            "exchange_calendar.year",
+                                            "l2_manifest.parquet_date",
+                                            "l2_intraday_bar_features.parquet_date"),
+                                    Set.of("questdb.full_key_values")));
 
-                    registeredDatasets, Map.of(calendarDefinition.datasetId(), calendarDefinition.supportedModes(),
-
-                    manifestDefinition.datasetId(), manifestDefinition.supportedModes(),
-
-                    featureDefinition.datasetId(), featureDefinition.supportedModes()),
-
-                    new SyncJobRegistry.Policies(Set.of("file.bounded", "tushare.shared"),
-
-                            Set.of("exchange_calendar.year", "l2_manifest.parquet_date",
-
-                                    "l2_intraday_bar_features.parquet_date"), Set.of("questdb.full_key_values")));
-
-            var dispatcher = new CommandLineRunner(new CliCommandRegistry(List.of(
-
-                    new CatalogCommands(registeredDatasets, registeredJobs),
-
-                    new L2Commands(null, null, service, null, null))));
+            var dispatcher =
+                    new CommandLineRunner(
+                            new CliCommandRegistry(
+                                    List.of(
+                                            new CatalogCommands(registeredDatasets, registeredJobs),
+                                            new L2Commands(null, null, service, null, null))));
 
             String jobList = invoke(dispatcher, "list-sync-jobs");
 
             String datasetList = invoke(dispatcher, "show-dataset-definitions");
 
-            String jobDetails = invoke(dispatcher, "show-sync-job", "--job=data.l2_intraday_bar_features", "--version=1");
+            String jobDetails =
+                    invoke(
+                            dispatcher,
+                            "show-sync-job",
+                            "--job=data.l2_intraday_bar_features",
+                            "--version=1");
 
-            String preview = invoke(dispatcher, "plan-l2-intraday-bar-features-job", "--from=" + FROM,
+            String preview =
+                    invoke(
+                            dispatcher,
+                            "plan-l2-intraday-bar-features-job",
+                            "--from=" + FROM,
+                            "--to=" + INCREMENTAL_TO,
+                            "--logical-date=" + LOGICAL_DATE,
+                            "--mode=backfill",
+                            "--symbols=" + SYMBOL);
 
-                    "--to=" + INCREMENTAL_TO, "--logical-date=" + LOGICAL_DATE,
+            String runStatus =
+                    invoke(
+                            dispatcher,
+                            "l2-intraday-bar-features-job-status",
+                            "--run=" + incrementalRun.runId());
 
-                    "--mode=backfill", "--symbols=" + SYMBOL);
+            String runSlices =
+                    invoke(
+                            dispatcher,
+                            "show-sync-run",
+                            "--run=" + incrementalRun.runId(),
+                            "--ledger=" + ledger,
+                            "--limit=100");
 
-            String runStatus = invoke(dispatcher, "l2-intraday-bar-features-job-status",
+            boolean registered =
+                    jobList.contains("data.l2_intraday_bar_features")
+                            && datasetList.contains("l2_intraday_bar_features");
 
-                    "--run=" + incrementalRun.runId());
+            boolean management =
+                    jobDetails.contains("l2_intraday_bar_features_owner")
+                            && preview.contains("PLANNED");
 
-            String runSlices = invoke(dispatcher, "show-sync-run", "--run=" + incrementalRun.runId(),
+            boolean runVisibility =
+                    runStatus.contains("VERIFIED")
+                            && runSlices.contains("\"entries\"")
+                            && runSlices.contains("VERIFIED");
 
-                    "--ledger=" + ledger, "--limit=100");
-
-            boolean registered = jobList.contains("data.l2_intraday_bar_features")
-
-                    && datasetList.contains("l2_intraday_bar_features");
-
-            boolean management = jobDetails.contains("l2_intraday_bar_features_owner")
-
-                    && preview.contains("PLANNED");
-
-            boolean runVisibility = runStatus.contains("VERIFIED") && runSlices.contains("\"entries\"")
-
-                    && runSlices.contains("VERIFIED");
-
-            assertTrue(registered && management && runVisibility,
-
+            assertTrue(
+                    registered && management && runVisibility,
                     "D087 job, plan preview, status and slice evidence must be visible through management CLI");
 
-
-
-            writeAcceptanceEvidence(target, service.targetId(), incrementalPlan, firstRun, repeatRun,
-
-                    incrementalRun, resumed, expectedRows.size(), incrementalRows.size(),
-
-                    writeGroupEvidence, true, true, registered, management, runVisibility, started,
-
+            writeAcceptanceEvidence(
+                    target,
+                    service.targetId(),
+                    incrementalPlan,
+                    firstRun,
+                    repeatRun,
+                    incrementalRun,
+                    resumed,
+                    expectedRows.size(),
+                    incrementalRows.size(),
+                    writeGroupEvidence,
+                    true,
+                    true,
+                    registered,
+                    management,
+                    runVisibility,
+                    started,
                     evidenceRoot.resolve("live-acceptance-20260930.json"));
-
         }
-
     }
 
-
-
-    private static Map<String, Object> verifyWriteGroupIntegration(DatasetRegistry datasets,
-
-            QuestDbBoundedReader reader, JdbcTemplate jdbc, QuestDB questdb,
-
-            L2IntradayBarFeaturesJobService owner, String target, Path ledger,
-
-            List<L2IntradayBarFeatures> independentRows, List<L2IntradayBarFeatures> before,
-
-            Path evidenceRoot) throws Exception {
+    private static Map<String, Object> verifyWriteGroupIntegration(
+            DatasetRegistry datasets,
+            QuestDbBoundedReader reader,
+            JdbcTemplate jdbc,
+            QuestDB questdb,
+            L2IntradayBarFeaturesJobService owner,
+            String target,
+            Path ledger,
+            List<L2IntradayBarFeatures> independentRows,
+            List<L2IntradayBarFeatures> before,
+            Path evidenceRoot)
+            throws Exception {
 
         var dayRows = independentRows.stream().filter(row -> row.tradeDate().equals(FROM)).toList();
 
         assertTrue(dayRows.size() > 1);
 
-        var service = new StockBasicWriteGroupService(datasets, null,new com.zoutrankil.data.group.storage.QuestDbWriteGroupWriters( jdbc, questdb), ledger.toString());
+        var service =
+                new StockBasicWriteGroupService(
+                        datasets,
+                        null,
+                        new QuestDbWriteGroupWriters(jdbc, questdb),
+                        ledger.toString());
 
-        var ownerField = StockBasicWriteGroupService.class.getDeclaredField("l2IntradayBarFeaturesTarget");
+        var ownerField =
+                StockBasicWriteGroupService.class.getDeclaredField("l2IntradayBarFeaturesTarget");
 
         ownerField.setAccessible(true);
 
         ownerField.set(service, owner);
 
-
-
-        Path fullRequest = evidenceRoot.resolve("commands/write-group-certified-sample-20260921.json");
+        Path fullRequest =
+                evidenceRoot.resolve("commands/write-group-certified-sample-20260921.json");
 
         writeGroupRequest(fullRequest, dayRows);
 
@@ -430,41 +550,49 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
         assertEquals(dayRows.size(), result.members().getFirst().verifiedRows());
 
-        assertEquals(before, readBack(reader, target, FROM, INCREMENTAL_TO),
-
+        assertEquals(
+                before,
+                readBack(reader, target, FROM, INCREMENTAL_TO),
                 "writing the same certified day through the write group must be idempotent");
 
-
-
-        Path incompleteRequest = evidenceRoot.resolve("commands/write-group-incomplete-rejected-20260921.json");
+        Path incompleteRequest =
+                evidenceRoot.resolve("commands/write-group-incomplete-rejected-20260921.json");
 
         writeGroupRequest(incompleteRequest, dayRows.subList(0, dayRows.size() - 1));
 
-        assertThrows(IllegalArgumentException.class, () -> service.run(incompleteRequest, null),
-
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> service.run(incompleteRequest, null),
                 "the D087 write group must reject a prepared payload that omits certified source keys");
 
-        assertEquals(before, readBack(reader, target, FROM, INCREMENTAL_TO),
-
+        assertEquals(
+                before,
+                readBack(reader, target, FROM, INCREMENTAL_TO),
                 "rejected write group input must leave QuestDB unchanged");
 
-        return Map.of("state", result.state(), "verifiedRows", result.members().getFirst().verifiedRows(),
-
-                "omittedSourceKeyRejected", true, "targetUnchangedAfterRejection", true,
-
-                "acceptedInput", evidenceRoot.relativize(fullRequest.toAbsolutePath().normalize()).toString(),
-
-                "rejectedInput", evidenceRoot.relativize(incompleteRequest.toAbsolutePath().normalize()).toString());
-
+        return Map.of(
+                "state",
+                result.state(),
+                "verifiedRows",
+                result.members().getFirst().verifiedRows(),
+                "omittedSourceKeyRejected",
+                true,
+                "targetUnchangedAfterRejection",
+                true,
+                "acceptedInput",
+                evidenceRoot.relativize(fullRequest.toAbsolutePath().normalize()).toString(),
+                "rejectedInput",
+                evidenceRoot.relativize(incompleteRequest.toAbsolutePath().normalize()).toString());
     }
 
-
-
-    private static void writeGroupRequest(Path path, List<L2IntradayBarFeatures> rows) throws Exception {
+    private static void writeGroupRequest(Path path, List<L2IntradayBarFeatures> rows)
+            throws Exception {
 
         ObjectNode root = JSON.createObjectNode();
 
-        root.put("batchId", "d087-sample-" + path.getFileName().toString().replaceAll("[^A-Za-z0-9_.-]", "-"));
+        root.put(
+                "batchId",
+                "d087-sample-" + path.getFileName().toString().replaceAll("[^A-Za-z0-9_.-]", "-"));
 
         root.put("logicalDate", LOGICAL_DATE.toString());
 
@@ -486,37 +614,63 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
         for (var row : rows) inputRows.add(JSON.valueToTree(mapper.values(row).asMap()));
 
-        Files.writeString(path, JSON.writerWithDefaultPrettyPrinter().writeValueAsString(root) + System.lineSeparator(),
-
+        Files.writeString(
+                path,
+                JSON.writerWithDefaultPrettyPrinter().writeValueAsString(root)
+                        + System.lineSeparator(),
                 StandardCharsets.UTF_8);
-
     }
 
-
-
-    private static void captureIndependentSource(String python, Path helper, Path root,
-
-            L2IntradayBarFeaturesParquetSource.Inspection inspection, Path output) throws Exception {
+    private static void captureIndependentSource(
+            String python,
+            Path helper,
+            Path root,
+            L2IntradayBarFeaturesParquetSource.Inspection inspection,
+            Path output)
+            throws Exception {
 
         Path error = output.resolveSibling("source-parquet-20260921-24.stderr.txt");
 
-        var command = new ArrayList<String>(List.of(Path.of(python).toAbsolutePath().normalize().toString(),
+        var command =
+                new ArrayList<String>(
+                        List.of(
+                                Path.of(python).toAbsolutePath().normalize().toString(),
+                                helper.toAbsolutePath().normalize().toString(),
+                                "--dataset-root",
+                                root.toAbsolutePath().normalize().toString(),
+                                "--from-date",
+                                "20260921",
+                                "--to-date",
+                                "20260924",
+                                "--page-rows",
+                                "200",
+                                "--max-files",
+                                "10000",
+                                "--max-rows",
+                                "300000",
+                                "--max-bytes",
+                                "67108864",
+                                "--max-output-bytes",
+                                "67108864",
+                                "--symbol",
+                                SYMBOL,
+                                "--stream",
+                                "--expected-fingerprint",
+                                inspection.sourceFingerprint()));
 
-                helper.toAbsolutePath().normalize().toString(), "--dataset-root", root.toAbsolutePath().normalize().toString(),
+        var processBuilder =
+                new ProcessBuilder(command)
+                        .redirectOutput(output.toFile())
+                        .redirectError(error.toFile());
 
-                "--from-date", "20260921", "--to-date", "20260924", "--page-rows", "200",
-
-                "--max-files", "10000", "--max-rows", "300000", "--max-bytes", "67108864",
-
-                "--max-output-bytes", "67108864", "--symbol", SYMBOL, "--stream",
-
-                "--expected-fingerprint", inspection.sourceFingerprint()));
-
-        var processBuilder = new ProcessBuilder(command).redirectOutput(output.toFile()).redirectError(error.toFile());
-
-        processBuilder.environment().keySet().removeIf(key -> key.startsWith("QUESTDB_")
-
-                || key.startsWith("APP_QUESTDB_") || key.contains("TUSHARE"));
+        processBuilder
+                .environment()
+                .keySet()
+                .removeIf(
+                        key ->
+                                key.startsWith("QUESTDB_")
+                                        || key.startsWith("APP_QUESTDB_")
+                                        || key.contains("TUSHARE"));
 
         Process process = processBuilder.start();
 
@@ -524,17 +678,13 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
             process.destroyForcibly();
 
-            throw new java.util.concurrent.TimeoutException("Independent D087 Parquet capture exceeded three minutes");
-
+            throw new TimeoutException("Independent D087 Parquet capture exceeded three minutes");
         }
 
         if (process.exitValue() != 0)
-
-            throw new IOException("Independent D087 Parquet capture failed; evidence retained at " + error);
-
+            throw new IOException(
+                    "Independent D087 Parquet capture failed; evidence retained at " + error);
     }
-
-
 
     private static List<L2IntradayBarFeatures> parseIndependentCapture(Path path) throws Exception {
 
@@ -542,7 +692,7 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
         var rows = new ArrayList<L2IntradayBarFeatures>();
 
-        Set<com.zoutrankil.data.domain.l2.L2IntradayBarFeaturesKey> keys = new HashSet<>();
+        Set<L2IntradayBarFeaturesKey> keys = new HashSet<>();
 
         int completions = 0;
 
@@ -557,38 +707,35 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
                 assertTrue(record.path("completeForSelectedSymbols").asBoolean());
 
                 completions++;
-
             }
 
             if (!"page".equals(record.path("kind").asText())) continue;
 
-            LocalDate date = LocalDate.parse(record.path("responseEvidence").path("date").asText(),
-
-                    java.time.format.DateTimeFormatter.BASIC_ISO_DATE);
+            LocalDate date =
+                    LocalDate.parse(
+                            record.path("responseEvidence").path("date").asText(),
+                            DateTimeFormatter.BASIC_ISO_DATE);
 
             for (JsonNode row : record.path("rows")) {
 
                 var typed = mapper.fromParquet(row, date);
 
-                assertTrue(keys.add(typed.key()), "independent source capture repeated a business key");
+                assertTrue(
+                        keys.add(typed.key()),
+                        "independent source capture repeated a business key");
 
                 rows.add(typed);
-
             }
-
         }
 
-        assertEquals(1, completions, "independent source capture needs exactly one completion record");
+        assertEquals(
+                1, completions, "independent source capture needs exactly one completion record");
 
         return sort(rows);
-
     }
 
-
-
-    private static List<L2IntradayBarFeatures> readBack(QuestDbBoundedReader reader, String table,
-
-            LocalDate from, LocalDate toInclusive) {
+    private static List<L2IntradayBarFeatures> readBack(
+            QuestDbBoundedReader reader, String table, LocalDate from, LocalDate toInclusive) {
 
         var repository = new L2IntradayBarFeaturesReadRepository(reader, table);
 
@@ -598,7 +745,7 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
         var result = new ArrayList<L2IntradayBarFeatures>();
 
-        com.zoutrankil.data.domain.DatasetReadCursor cursor = null;
+        DatasetReadCursor cursor = null;
 
         do {
 
@@ -611,20 +758,16 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
         } while (cursor != null);
 
         return sort(result);
-
     }
-
-
 
     private static List<L2IntradayBarFeatures> sort(List<L2IntradayBarFeatures> rows) {
 
-        return rows.stream().sorted(Comparator.comparing(L2IntradayBarFeatures::symbol)
-
-                .thenComparing(L2IntradayBarFeatures::minute)).toList();
-
+        return rows.stream()
+                .sorted(
+                        Comparator.comparing(L2IntradayBarFeatures::symbol)
+                                .thenComparing(L2IntradayBarFeatures::minute))
+                .toList();
     }
-
-
 
     private static String invoke(CommandLineRunner runner, String... args) throws Exception {
 
@@ -640,39 +783,43 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
             return output.toString(StandardCharsets.UTF_8);
 
-        } finally { System.setOut(previous); }
-
+        } finally {
+            System.setOut(previous);
+        }
     }
-
-
 
     private static void assertVerified(SyncJobRunner.Result run, int expectedRows) {
 
-        assertTrue(run.state() == SyncRunState.VERIFIED || run.state() == SyncRunState.VERIFIED_EMPTY,
-
+        assertTrue(
+                run.state() == SyncRunState.VERIFIED || run.state() == SyncRunState.VERIFIED_EMPTY,
                 "D087 run failed: " + run.state() + " " + run.errorCode());
 
         assertEquals(expectedRows, run.sourceRows());
 
         assertEquals(expectedRows, run.verifiedRows());
-
     }
 
+    private static void writeAcceptanceEvidence(
+            String target,
+            String targetId,
+            L2IntradayBarFeaturesJobService.Plan plan,
+            SyncJobRunner.Result backfill,
+            SyncJobRunner.Result repeated,
+            SyncJobRunner.Result incremental,
+            SyncJobRunner.Result resumed,
+            int sourceRows,
+            int readbackRows,
+            Map<String, Object> writeGroup,
+            boolean sourceCancellation,
+            boolean staleRejected,
+            boolean registered,
+            boolean management,
+            boolean runVisibility,
+            Instant started,
+            Path path)
+            throws Exception {
 
-
-    private static void writeAcceptanceEvidence(String target, String targetId,
-
-            L2IntradayBarFeaturesJobService.Plan plan, SyncJobRunner.Result backfill,
-
-            SyncJobRunner.Result repeated, SyncJobRunner.Result incremental,
-
-            SyncJobRunner.Result resumed, int sourceRows, int readbackRows, Map<String,Object> writeGroup,
-
-            boolean sourceCancellation, boolean staleRejected, boolean registered,
-
-            boolean management, boolean runVisibility, Instant started, Path path) throws Exception {
-
-        var output = new LinkedHashMap<String,Object>();
+        var output = new LinkedHashMap<String, Object>();
 
         output.put("status", "VERIFIED");
 
@@ -704,9 +851,9 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
         output.put("fieldCount", L2IntradayBarFeatureField.values().length);
 
-        output.put("independentFullFieldComparisons", Math.multiplyExact(sourceRows,
-
-                L2IntradayBarFeatureField.values().length));
+        output.put(
+                "independentFullFieldComparisons",
+                Math.multiplyExact(sourceRows, L2IntradayBarFeatureField.values().length));
 
         output.put("sourceCancellationObserved", sourceCancellation);
 
@@ -724,56 +871,80 @@ class L2IntradayBarFeaturesLiveAcceptanceTest {
 
         output.put("writeGroup", writeGroup);
 
-        output.put("retryPolicy", "maxAttempts=1; deterministic local Parquet errors remain visible for explicit reconciliation");
+        output.put(
+                "retryPolicy",
+                "maxAttempts=1; deterministic local Parquet errors remain visible for explicit reconciliation");
 
-        output.put("rateLimit", "not applicable: local manifest/Parquet source; process, page, file, row and byte budgets are finite");
+        output.put(
+                "rateLimit",
+                "not applicable: local manifest/Parquet source; process, page, file, row and byte budgets are finite");
 
-        output.put("runEvidence", Map.of("backfill", runEvidence(backfill), "idempotentBackfill", runEvidence(repeated),
+        output.put(
+                "runEvidence",
+                Map.of(
+                        "backfill",
+                        runEvidence(backfill),
+                        "idempotentBackfill",
+                        runEvidence(repeated),
+                        "incremental",
+                        runEvidence(incremental),
+                        "resume",
+                        runEvidence(resumed)));
 
-                "incremental", runEvidence(incremental), "resume", runEvidence(resumed)));
-
-        output.put("checkpoint", Map.of("beforeIncremental", plan.verifiedThrough() == null
-
-                        ? BACKFILL_TO.toString() : plan.verifiedThrough().toString(),
-
-                "replayedFrom", plan.request().from().toString(), "through", plan.request().to().toString(),
-
-                "revisionOverlapCalendarDays", 3));
+        output.put(
+                "checkpoint",
+                Map.of(
+                        "beforeIncremental",
+                        plan.verifiedThrough() == null
+                                ? BACKFILL_TO.toString()
+                                : plan.verifiedThrough().toString(),
+                        "replayedFrom",
+                        plan.request().from().toString(),
+                        "through",
+                        plan.request().to().toString(),
+                        "revisionOverlapCalendarDays",
+                        3));
 
         output.put("startedAt", started.toString());
 
         output.put("finishedAt", Instant.now().toString());
 
-        output.put("evidence", List.of("commands/preflight-source-20260930.json",
+        output.put(
+                "evidence",
+                List.of(
+                        "commands/preflight-source-20260930.json",
+                        "commands/source-parquet-20260921-24.jsonl",
+                        "live-acceptance-20260930.json"));
 
-                "commands/source-parquet-20260921-24.jsonl", "live-acceptance-20260930.json"));
-
-        Files.writeString(path, JSON.writerWithDefaultPrettyPrinter().writeValueAsString(output)
-
-                + System.lineSeparator(), StandardCharsets.UTF_8);
-
+        Files.writeString(
+                path,
+                JSON.writerWithDefaultPrettyPrinter().writeValueAsString(output)
+                        + System.lineSeparator(),
+                StandardCharsets.UTF_8);
     }
 
+    private static Map<String, Object> runEvidence(SyncJobRunner.Result run) {
 
-
-    private static Map<String,Object> runEvidence(SyncJobRunner.Result run) {
-
-        return Map.of("runId", run.runId(), "state", run.state(), "sourceRows", run.sourceRows(),
-
-                "verifiedRows", run.verifiedRows(), "reusedRows", run.reusedRows());
-
+        return Map.of(
+                "runId",
+                run.runId(),
+                "state",
+                run.state(),
+                "sourceRows",
+                run.sourceRows(),
+                "verifiedRows",
+                run.verifiedRows(),
+                "reusedRows",
+                run.reusedRows());
     }
-
-
 
     private static String requiredEnv(String name) {
 
         String value = System.getenv(name);
 
-        if (value == null || value.isBlank()) throw new IllegalStateException("Missing acceptance setting " + name);
+        if (value == null || value.isBlank())
+            throw new IllegalStateException("Missing acceptance setting " + name);
 
         return value;
-
     }
-
 }

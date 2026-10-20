@@ -10,6 +10,7 @@ public record EtfBasicKey(String tsCode, Instant timestamp) {
             throw new IllegalArgumentException("ETF fund code with exchange suffix required");
         Objects.requireNonNull(timestamp, "technical timestamp required");
         if (!Instant.EPOCH.equals(timestamp))
-            throw new IllegalArgumentException("etf_basic timestamp must remain the fixed 1970 technical carrier");
+            throw new IllegalArgumentException(
+                    "etf_basic timestamp must remain the fixed 1970 technical carrier");
     }
 }

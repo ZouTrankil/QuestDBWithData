@@ -6,12 +6,20 @@ import java.time.LocalDate;
 public record StockLimit(StockLimitKey key, Double upLimit, Double downLimit) {
     public StockLimit {
         if (key == null) throw new IllegalArgumentException("Complete stk_limit key required");
-        if (upLimit != null && !Double.isFinite(upLimit) || downLimit != null && !Double.isFinite(downLimit))
+        if (upLimit != null && !Double.isFinite(upLimit)
+                || downLimit != null && !Double.isFinite(downLimit))
             throw new IllegalArgumentException("stk_limit values must be finite or null");
     }
+
     public StockLimit(String tsCode, LocalDate tradeDate, Double upLimit, Double downLimit) {
         this(new StockLimitKey(tsCode, tradeDate), upLimit, downLimit);
     }
-    public String tsCode() { return key.tsCode(); }
-    public LocalDate tradeDate() { return key.tradeDate(); }
+
+    public String tsCode() {
+        return key.tsCode();
+    }
+
+    public LocalDate tradeDate() {
+        return key.tradeDate();
+    }
 }

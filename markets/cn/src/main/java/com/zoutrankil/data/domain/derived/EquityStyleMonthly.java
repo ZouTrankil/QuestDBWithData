@@ -67,10 +67,13 @@ public record EquityStyleMonthly(
         finite(telecomVsAllA1m, "telecom_vs_all_a_1m");
         finite(utilitiesVsAllA1m, "utilities_vs_all_a_1m");
     }
-    public EquityStyleMonthlyKey key() { return new EquityStyleMonthlyKey(month); }
+
+    public EquityStyleMonthlyKey key() {
+        return new EquityStyleMonthlyKey(month);
+    }
+
     private static void finite(Double value, String field) {
         if (value != null && !Double.isFinite(value))
             throw new IllegalArgumentException("Finite nullable DOUBLE required: " + field);
     }
 }
-

@@ -2,6 +2,7 @@ package com.zoutrankil.data.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -48,14 +49,19 @@ final class PrivateQuestDbInstanceAttestor {
     private Long privateProcessId;
 
     PrivateQuestDbInstanceAttestor(Spec spec, RootCheck rootCheck) {
-        this(spec, rootCheck,
+        this(
+                spec,
+                rootCheck,
                 () -> System.getProperty("os.name", "").toLowerCase(Locale.ROOT).contains("win"),
                 PrivateQuestDbInstanceAttestor::startPowerShell);
     }
 
     /** Package-local seam for deterministic tests; production always uses the system process checks. */
-    PrivateQuestDbInstanceAttestor(Spec spec, RootCheck rootCheck, BooleanSupplier windows,
-                                 ProcessStarter processStarter) {
+    PrivateQuestDbInstanceAttestor(
+            Spec spec,
+            RootCheck rootCheck,
+            BooleanSupplier windows,
+            ProcessStarter processStarter) {
         this.spec = Objects.requireNonNull(spec);
         this.rootCheck = rootCheck == null ? NO_ROOT_CHECK : rootCheck;
         this.windows = Objects.requireNonNull(windows);
@@ -65,15 +71,19 @@ final class PrivateQuestDbInstanceAttestor {
     void attest() {
         String code = spec.datasetCode();
         if (!windows.getAsBoolean())
-            throw new IllegalStateException(code + " implicit private-instance admission requires Windows process attestation");
+            throw new IllegalStateException(
+                    code
+                            + " implicit private-instance admission requires Windows process attestation");
         try {
             Path root = spec.dataRoot().toAbsolutePath().normalize().toRealPath();
             Path workspaceVar = spec.workspaceVar().toAbsolutePath().normalize().toRealPath();
             if (!root.startsWith(workspaceVar))
-                throw new IllegalStateException(code + " private data root is outside workspace var");
+                throw new IllegalStateException(
+                        code + " private data root is outside workspace var");
             rootCheck.verify(root);
             var config = new LinkedHashMap<String, String>();
-            for (String line : Files.readAllLines(root.resolve("conf/server.conf"), StandardCharsets.UTF_8)) {
+            for (String line :
+                    Files.readAllLines(root.resolve("conf/server.conf"), StandardCharsets.UTF_8)) {
                 String text = line.replace("\uFEFF", "").trim();
                 int equal = text.indexOf('=');
                 if (equal > 0 && !text.startsWith("#"))
@@ -81,8 +91,12 @@ final class PrivateQuestDbInstanceAttestor {
             }
             if (!("127.0.0.1:" + spec.qwpPort()).equals(config.get("http.net.bind.to"))
                     || !("127.0.0.1:" + spec.pgPort()).equals(config.get("pg.net.bind.to")))
-                throw new IllegalStateException(code + " private data root does not bind the expected loopback listeners");
-            String script = String.format(Locale.ROOT, """
+                throw new IllegalStateException(
+                        code + " private data root does not bind the expected loopback listeners");
+            String script =
+                    String.format(
+                            Locale.ROOT,
+                            """
                     $ErrorActionPreference='Stop'
                     $listeners=@(Get-NetTCPConnection -LocalPort %d,%d -State Listen -ErrorAction Stop)
                     $records=@(foreach($port in @(%d,%d)) {
@@ -93,7 +107,11 @@ final class PrivateQuestDbInstanceAttestor {
                       [pscustomobject]@{port=$port;address=$listener.LocalAddress;pid=$proc.ProcessId;name=$proc.Name;command=$proc.CommandLine}
                     })
                     ConvertTo-Json -InputObject $records -Compress
-                    """, spec.qwpPort(), spec.pgPort(), spec.qwpPort(), spec.pgPort());
+                    """,
+                            spec.qwpPort(),
+                            spec.pgPort(),
+                            spec.qwpPort(),
+                            spec.pgPort());
             Process process = processStarter.start(script);
             if (!process.waitFor(10, TimeUnit.SECONDS)) {
                 process.destroyForcibly();
@@ -110,35 +128,51 @@ final class PrivateQuestDbInstanceAttestor {
             for (var record : records) {
                 long processId = record.path("pid").asLong(-1);
                 String name = record.path("name").asText("").toLowerCase(Locale.ROOT);
-                if (!"127.0.0.1".equals(record.path("address").asText()) || processId < 1
+                if (!"127.0.0.1".equals(record.path("address").asText())
+                        || processId < 1
                         || !Set.of("questdb.exe", "java.exe").contains(name)
                         || observedPid != null && observedPid != processId
                         || !observedPorts.add(record.path("port").asInt(-1)))
-                    throw new IllegalStateException(code + " private listeners do not belong to one loopback QuestDB process");
+                    throw new IllegalStateException(
+                            code
+                                    + " private listeners do not belong to one loopback QuestDB process");
                 var argument = DATA_ROOT_ARGUMENT.matcher(record.path("command").asText(""));
                 if (!argument.find())
-                    throw new IllegalStateException(code + " private process has no explicit data root");
-                String directory = argument.group(1) == null ? argument.group(2) : argument.group(1);
-                if (!root.equals(Path.of(directory).toAbsolutePath().normalize().toRealPath()) || argument.find())
-                    throw new IllegalStateException(code + " private process belongs to a different data root");
+                    throw new IllegalStateException(
+                            code + " private process has no explicit data root");
+                String directory =
+                        argument.group(1) == null ? argument.group(2) : argument.group(1);
+                if (!root.equals(Path.of(directory).toAbsolutePath().normalize().toRealPath())
+                        || argument.find())
+                    throw new IllegalStateException(
+                            code + " private process belongs to a different data root");
                 observedPid = processId;
             }
             if (!observedPorts.equals(Set.of(spec.qwpPort(), spec.pgPort()))
                     || privateProcessId != null && !privateProcessId.equals(observedPid))
-                throw new IllegalStateException(code + " private QuestDB process changed during this operation");
+                throw new IllegalStateException(
+                        code + " private QuestDB process changed during this operation");
             privateProcessId = observedPid;
         } catch (InterruptedException cancelled) {
             Thread.currentThread().interrupt();
             throw new CancellationException(code + " private listener attestation cancelled");
         } catch (IOException failure) {
-            throw new IllegalStateException("Cannot attest " + code + " private QuestDB data root and process", failure);
+            throw new IllegalStateException(
+                    "Cannot attest " + code + " private QuestDB data root and process", failure);
         }
     }
 
     private static Process startPowerShell(String script) throws IOException {
-        Path powershell = Path.of(Objects.requireNonNull(System.getenv("SystemRoot")),
-                "System32", "WindowsPowerShell", "v1.0", "powershell.exe");
-        return new ProcessBuilder(powershell.toString(), "-NoProfile", "-NonInteractive", "-Command", script)
-                .redirectErrorStream(true).start();
+        Path powershell =
+                Path.of(
+                        Objects.requireNonNull(System.getenv("SystemRoot")),
+                        "System32",
+                        "WindowsPowerShell",
+                        "v1.0",
+                        "powershell.exe");
+        return new ProcessBuilder(
+                        powershell.toString(), "-NoProfile", "-NonInteractive", "-Command", script)
+                .redirectErrorStream(true)
+                .start();
     }
 }

@@ -1,13 +1,14 @@
 package com.zoutrankil.data.cli;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
+import org.springframework.stereotype.Component;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
-import org.springframework.stereotype.Component;
 
 /** Immutable exact-name routing; ambiguous registrations fail before a command can execute. */
 @Component
@@ -32,7 +33,9 @@ public final class CliCommandRegistry {
         commands = Collections.unmodifiableMap(registered);
     }
 
-    public Set<String> commands() { return commands.keySet(); }
+    public Set<String> commands() {
+        return commands.keySet();
+    }
 
     public void execute(String command, Map<String, String> options) throws Exception {
         var family = commands.get(command);

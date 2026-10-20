@@ -1,14 +1,35 @@
 package com.zoutrankil.data.derived.mapper;
 
-import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.clearInvocations;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.isNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+
+import com.zoutrankil.data.derived.storage.RetailSentimentDailyReadRepository;
+import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.DatasetReadCursor;
+import com.zoutrankil.data.domain.DatasetReadQuery;
+import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import com.zoutrankil.data.domain.*;
+import com.zoutrankil.data.domain.derived.RetailSentimentDailyDataset;
 import com.zoutrankil.data.domain.derived.materializedview.RetailSentimentDailyMaterializedView;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
-import com.zoutrankil.data.derived.storage.RetailSentimentDailyReadRepository;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+
 import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -16,56 +37,107 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
 class RetailSentimentDailyMappingTest {
     private static final LocalDate DAY = LocalDate.of(2026, 9, 17);
-    private static final List<String> FIELDS = List.of("trade_date", "avg_retail_ratio", "avg_retail_entropy",
-            "total_retail_amount_yi", "total_retail_net_inflow_yi", "avg_rel_aggro", "total_q1", "total_q3",
-            "avg_wash_trade_ratio", "total_spoof_count", "total_manipulation_count", "avg_mfi_score", "total_main_net_yi");
-    private static final Set<String> COUNT_FIELDS = Set.of("total_q1", "total_q3", "total_spoof_count", "total_manipulation_count");
+    private static final List<String> FIELDS =
+            List.of(
+                    "trade_date",
+                    "avg_retail_ratio",
+                    "avg_retail_entropy",
+                    "total_retail_amount_yi",
+                    "total_retail_net_inflow_yi",
+                    "avg_rel_aggro",
+                    "total_q1",
+                    "total_q3",
+                    "avg_wash_trade_ratio",
+                    "total_spoof_count",
+                    "total_manipulation_count",
+                    "avg_mfi_score",
+                    "total_main_net_yi");
+    private static final Set<String> COUNT_FIELDS =
+            Set.of("total_q1", "total_q3", "total_spoof_count", "total_manipulation_count");
     private final RetailSentimentDailyMapper mapper = new RetailSentimentDailyMapper();
 
     private RetailSentimentDaily populated() {
-        return new RetailSentimentDaily(DAY, 0.23123456789012345, 2.1532465789012346,
-                53.123456789012345, -4.234567890123456, 0.5312345678901234, 101L, 202L,
-                0.07123456789012345, 303L, 404L, 1.2512345678901234, -9.876543210123456);
+        return new RetailSentimentDaily(
+                DAY,
+                0.23123456789012345,
+                2.1532465789012346,
+                53.123456789012345,
+                -4.234567890123456,
+                0.5312345678901234,
+                101L,
+                202L,
+                0.07123456789012345,
+                303L,
+                404L,
+                1.2512345678901234,
+                -9.876543210123456);
     }
 
     private RetailSentimentDaily emptyAggregates() {
-        return new RetailSentimentDaily(DAY, null, null, null, null, null,
-                null, null, null, null, null, null, null);
+        return new RetailSentimentDaily(
+                DAY, null, null, null, null, null, null, null, null, null, null, null, null);
     }
 
-    @Test void everyPhysicalFieldHasAnExplicitLosslessMappingInCardOrder() {
+    @Test
+    void everyPhysicalFieldHasAnExplicitLosslessMappingInCardOrder() {
         var expected = populated();
-        var stored = new RetailSentimentDailyMaterializedView(Instant.parse("2026-09-17T00:00:00Z"),
-                expected.avgRetailRatio(), expected.avgRetailEntropy(), expected.totalRetailAmountYi(),
-                expected.totalRetailNetInflowYi(), expected.avgRelAggro(), expected.totalQ1(), expected.totalQ3(),
-                expected.avgWashTradeRatio(), expected.totalSpoofCount(), expected.totalManipulationCount(),
-                expected.avgMfiScore(), expected.totalMainNetYi());
+        var stored =
+                new RetailSentimentDailyMaterializedView(
+                        Instant.parse("2026-09-17T00:00:00Z"),
+                        expected.avgRetailRatio(),
+                        expected.avgRetailEntropy(),
+                        expected.totalRetailAmountYi(),
+                        expected.totalRetailNetInflowYi(),
+                        expected.avgRelAggro(),
+                        expected.totalQ1(),
+                        expected.totalQ3(),
+                        expected.avgWashTradeRatio(),
+                        expected.totalSpoofCount(),
+                        expected.totalManipulationCount(),
+                        expected.avgMfiScore(),
+                        expected.totalMainNetYi());
         assertEquals(expected, mapper.fromStorage(stored));
         assertEquals(expected, mapper.fromValues(mapper.values(expected)));
         assertEquals(FIELDS, mapper.values(expected).columns().stream().toList());
         var values = mapper.values(mapper.fromStorage(stored));
         for (var field : FIELDS.subList(1, FIELDS.size())) {
             if (COUNT_FIELDS.contains(field)) {
-                assertEquals(mapper.values(expected).get(field, Long.class), values.get(field, Long.class));
+                assertEquals(
+                        mapper.values(expected).get(field, Long.class),
+                        values.get(field, Long.class));
             } else {
-                assertEquals(Double.doubleToLongBits(mapper.values(expected).get(field, Double.class)),
+                assertEquals(
+                        Double.doubleToLongBits(mapper.values(expected).get(field, Double.class)),
                         Double.doubleToLongBits(values.get(field, Double.class)));
             }
         }
     }
 
-    @Test void allNullableSumAndAverageFieldsStayNullRatherThanBecomingZero() {
-        var stored = new RetailSentimentDailyMaterializedView(Instant.parse("2026-09-17T00:00:00Z"),
-                null, null, null, null, null, null, null, null, null, null, null, null);
+    @Test
+    void allNullableSumAndAverageFieldsStayNullRatherThanBecomingZero() {
+        var stored =
+                new RetailSentimentDailyMaterializedView(
+                        Instant.parse("2026-09-17T00:00:00Z"),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null);
         var row = mapper.fromStorage(stored);
         assertEquals(emptyAggregates(), row);
         assertEquals(row, mapper.fromValues(mapper.values(row)));
-        for (var field : FIELDS.subList(1, FIELDS.size())) assertNull(mapper.values(row).asMap().get(field));
+        for (var field : FIELDS.subList(1, FIELDS.size()))
+            assertNull(mapper.values(row).asMap().get(field));
         var zeroValues = new LinkedHashMap<>(mapper.values(row).asMap());
         COUNT_FIELDS.forEach(field -> zeroValues.put(field, 0L));
         var zeroCounts = mapper.fromValues(new DatasetValues(zeroValues));
@@ -73,7 +145,8 @@ class RetailSentimentDailyMappingTest {
         assertEquals(0L, zeroCounts.totalManipulationCount());
     }
 
-    @Test void nativeAggregateUnitsAndSignedFlowsPassThroughWithoutExtraScalingOrClamping() {
+    @Test
+    void nativeAggregateUnitsAndSignedFlowsPassThroughWithoutExtraScalingOrClamping() {
         var values = new LinkedHashMap<>(mapper.values(populated()).asMap());
         values.put("total_retail_amount_yi", -123.0);
         values.put("avg_retail_ratio", 1.25);
@@ -90,59 +163,99 @@ class RetailSentimentDailyMappingTest {
         assertEquals(3.5, row.avgMfiScore());
     }
 
-    @Test void nullableLongCountsRejectNegativeOrOverflowedValuesAndRetainExactMaxLong() {
+    @Test
+    void nullableLongCountsRejectNegativeOrOverflowedValuesAndRetainExactMaxLong() {
         for (var field : COUNT_FIELDS) {
             for (var invalid : List.of(-1L, Long.MIN_VALUE)) {
                 var values = new LinkedHashMap<>(mapper.values(populated()).asMap());
                 values.put(field, invalid);
-                assertThrows(IllegalArgumentException.class, () -> mapper.fromValues(new DatasetValues(values)), field);
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> mapper.fromValues(new DatasetValues(values)),
+                        field);
             }
         }
         var maximum = new LinkedHashMap<>(mapper.values(populated()).asMap());
         COUNT_FIELDS.forEach(field -> maximum.put(field, Long.MAX_VALUE));
-        assertEquals(Long.MAX_VALUE, mapper.fromValues(new DatasetValues(maximum)).totalManipulationCount());
+        assertEquals(
+                Long.MAX_VALUE,
+                mapper.fromValues(new DatasetValues(maximum)).totalManipulationCount());
         maximum.put("total_q1", BigInteger.valueOf(Long.MAX_VALUE).add(BigInteger.ONE));
-        assertThrows(IllegalArgumentException.class, () -> mapper.fromValues(new DatasetValues(maximum)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> mapper.fromValues(new DatasetValues(maximum)));
     }
 
-    @Test void everyDoubleAggregateRejectsNanAndEitherInfinity() {
+    @Test
+    void everyDoubleAggregateRejectsNanAndEitherInfinity() {
         for (var field : FIELDS.subList(1, FIELDS.size())) {
             if (COUNT_FIELDS.contains(field)) continue;
-            for (var invalid : List.of(Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY)) {
+            for (var invalid :
+                    List.of(Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY)) {
                 var values = new LinkedHashMap<>(mapper.values(populated()).asMap());
                 values.put(field, invalid);
-                assertThrows(IllegalArgumentException.class, () -> mapper.fromValues(new DatasetValues(values)), field);
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> mapper.fromValues(new DatasetValues(values)),
+                        field);
             }
         }
     }
 
-    @Test void onlyExactUtcMidnightIsAcceptedAsTheCalendarDateCarrier() {
-        for (var carrier : List.of(Instant.parse("2026-09-17T00:00:00.000001Z"),
-                Instant.parse("2026-09-17T16:00:00Z"), Instant.parse("2026-09-16T16:00:00Z"))) {
-            assertThrows(IllegalArgumentException.class, () -> mapper.fromStorage(new RetailSentimentDailyMaterializedView(
-                    carrier, null, null, null, null, null, null, null, null, null, null, null, null)));
+    @Test
+    void onlyExactUtcMidnightIsAcceptedAsTheCalendarDateCarrier() {
+        for (var carrier :
+                List.of(
+                        Instant.parse("2026-09-17T00:00:00.000001Z"),
+                        Instant.parse("2026-09-17T16:00:00Z"),
+                        Instant.parse("2026-09-16T16:00:00Z"))) {
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () ->
+                            mapper.fromStorage(
+                                    new RetailSentimentDailyMaterializedView(
+                                            carrier, null, null, null, null, null, null, null, null,
+                                            null, null, null, null)));
         }
-        assertThrows(NullPointerException.class, () -> mapper.fromStorage(new RetailSentimentDailyMaterializedView(
-                null, null, null, null, null, null, null, null, null, null, null, null, null)));
+        assertThrows(
+                NullPointerException.class,
+                () ->
+                        mapper.fromStorage(
+                                new RetailSentimentDailyMaterializedView(
+                                        null, null, null, null, null, null, null, null, null, null,
+                                        null, null, null)));
         var noDate = new LinkedHashMap<>(mapper.values(emptyAggregates()).asMap());
         noDate.put("trade_date", null);
-        assertThrows(NullPointerException.class, () -> mapper.fromValues(new DatasetValues(noDate)));
+        assertThrows(
+                NullPointerException.class, () -> mapper.fromValues(new DatasetValues(noDate)));
     }
 
-    @Test void absentFieldsAndCoercedNumericOrDateTypesAreRejected() {
+    @Test
+    void absentFieldsAndCoercedNumericOrDateTypesAreRejected() {
         for (var field : FIELDS) {
             var missing = new LinkedHashMap<>(mapper.values(populated()).asMap());
             missing.remove(field);
-            assertThrows(IllegalArgumentException.class, () -> mapper.fromValues(new DatasetValues(missing)), field);
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> mapper.fromValues(new DatasetValues(missing)),
+                    field);
             var wrong = new LinkedHashMap<>(mapper.values(populated()).asMap());
-            Object invalid = field.equals("trade_date") ? Instant.parse("2026-09-17T00:00:00Z")
-                    : COUNT_FIELDS.contains(field) ? (Object) Integer.valueOf(1) : Float.valueOf(0.5f);
+            Object invalid =
+                    field.equals("trade_date")
+                            ? Instant.parse("2026-09-17T00:00:00Z")
+                            : COUNT_FIELDS.contains(field)
+                                    ? (Object) Integer.valueOf(1)
+                                    : Float.valueOf(0.5f);
             wrong.put(field, invalid);
-            assertThrows(IllegalArgumentException.class, () -> mapper.fromValues(new DatasetValues(wrong)), field);
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> mapper.fromValues(new DatasetValues(wrong)),
+                    field);
         }
     }
 
-    @Test void nativeDefinitionHasThirteenColumnsAndTwelveNullableAggregatesWithExactSourceExpressions() {
+    @Test
+    void nativeDefinitionHasThirteenColumnsAndTwelveNullableAggregatesWithExactSourceExpressions() {
         var definition = RetailSentimentDailyDataset.DEFINITION;
         assertEquals("mv_retail_sentiment_daily", definition.datasetId());
         assertEquals(definition.datasetId(), definition.objectName());
@@ -155,9 +268,13 @@ class RetailSentimentDailyMappingTest {
         assertTrue(definition.wal());
         assertEquals(List.of("l2_daily_features"), definition.dependencies());
         assertEquals(Set.of(DatasetDefinition.Capability.READ), definition.capabilities());
-        for (var capability : List.of(DatasetDefinition.Capability.WRITE, DatasetDefinition.Capability.STATIC_REPLACE,
-                DatasetDefinition.Capability.WAL_REPLACE)) {
-            assertThrows(IllegalArgumentException.class, () -> definition.requireCapability(capability));
+        for (var capability :
+                List.of(
+                        DatasetDefinition.Capability.WRITE,
+                        DatasetDefinition.Capability.STATIC_REPLACE,
+                        DatasetDefinition.Capability.WAL_REPLACE)) {
+            assertThrows(
+                    IllegalArgumentException.class, () -> definition.requireCapability(capability));
         }
         var date = definition.columns().getFirst();
         assertEquals("l2_daily_features.ts", date.sourceName());
@@ -168,27 +285,46 @@ class RetailSentimentDailyMappingTest {
         for (var field : definition.columns().subList(1, definition.columns().size())) {
             assertTrue(field.nullable(), field.storageName());
             assertEquals(field.storageName(), field.logicalName());
-            assertEquals(COUNT_FIELDS.contains(field.storageName()) ? DatasetDefinition.StorageType.LONG
-                    : DatasetDefinition.StorageType.DOUBLE, field.storageType());
+            assertEquals(
+                    COUNT_FIELDS.contains(field.storageName())
+                            ? DatasetDefinition.StorageType.LONG
+                            : DatasetDefinition.StorageType.DOUBLE,
+                    field.storageType());
         }
-        assertEquals("derived:sum(fake_support_count+fake_pressure_count)", definition.columns().get(10).sourceName());
-        for (var index : List.of(3, 4, 12)) assertTrue(definition.columns().get(index).sourceName().endsWith("/100000000.0"));
+        assertEquals(
+                "derived:sum(fake_support_count+fake_pressure_count)",
+                definition.columns().get(10).sourceName());
+        for (var index : List.of(3, 4, 12))
+            assertTrue(definition.columns().get(index).sourceName().endsWith("/100000000.0"));
     }
 
-    @Test void repositoryForwardsCompleteDateKeyAndFiniteExclusiveRangeAndTheCursor() {
+    @Test
+    void repositoryForwardsCompleteDateKeyAndFiniteExclusiveRangeAndTheCursor() {
         var reader = mock(QuestDbBoundedReader.class);
         var repository = new RetailSentimentDailyReadRepository(reader);
         var queries = ArgumentCaptor.forClass(DatasetReadQuery.class);
         repository.findForDate(DAY);
-        verify(reader).read(eq(RetailSentimentDailyDataset.DEFINITION), queries.capture(), isNull(), any());
+        verify(reader)
+                .read(
+                        eq(RetailSentimentDailyDataset.DEFINITION),
+                        queries.capture(),
+                        isNull(),
+                        any());
         assertEquals(FIELDS, queries.getValue().columns());
         assertEquals(Map.of("trade_date", DAY), queries.getValue().equalities());
         assertEquals(1, queries.getValue().pageSize());
         assertNull(queries.getValue().rangeColumn());
         clearInvocations(reader);
-        var cursor = new DatasetReadCursor("retail-query", List.of(DAY), "frozen-source-mv-physical-version");
+        var cursor =
+                new DatasetReadCursor(
+                        "retail-query", List.of(DAY), "frozen-source-mv-physical-version");
         repository.findRange(DAY, DAY.plusDays(5), 2, cursor);
-        verify(reader).read(eq(RetailSentimentDailyDataset.DEFINITION), queries.capture(), isNull(), any());
+        verify(reader)
+                .read(
+                        eq(RetailSentimentDailyDataset.DEFINITION),
+                        queries.capture(),
+                        isNull(),
+                        any());
         var range = queries.getValue();
         assertEquals(FIELDS, range.columns());
         assertTrue(range.equalities().isEmpty());
@@ -199,16 +335,23 @@ class RetailSentimentDailyMappingTest {
         assertEquals(cursor, range.cursor());
     }
 
-    @Test void repositoryRejectsInvalidDatesRangesAndPageBudgetsBeforeReads() {
+    @Test
+    void repositoryRejectsInvalidDatesRangesAndPageBudgetsBeforeReads() {
         var reader = mock(QuestDbBoundedReader.class);
         var repository = new RetailSentimentDailyReadRepository(reader);
         assertThrows(NullPointerException.class, () -> repository.findForDate(null));
         assertThrows(NullPointerException.class, () -> repository.findRange(null, DAY, 1, null));
         assertThrows(NullPointerException.class, () -> repository.findRange(DAY, null, 1, null));
         assertThrows(IllegalArgumentException.class, () -> repository.findRange(DAY, DAY, 1, null));
-        assertThrows(IllegalArgumentException.class, () -> repository.findRange(DAY, DAY.minusDays(1), 1, null));
-        assertThrows(IllegalArgumentException.class, () -> repository.findRange(DAY, DAY.plusDays(1), 0, null));
-        assertThrows(IllegalArgumentException.class, () -> repository.findRange(DAY, DAY.plusDays(1), 10_001, null));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> repository.findRange(DAY, DAY.minusDays(1), 1, null));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> repository.findRange(DAY, DAY.plusDays(1), 0, null));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> repository.findRange(DAY, DAY.plusDays(1), 10_001, null));
         verifyNoInteractions(reader);
     }
 }

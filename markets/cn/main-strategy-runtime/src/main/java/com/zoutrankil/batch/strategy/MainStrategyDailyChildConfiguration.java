@@ -1,20 +1,15 @@
 package com.zoutrankil.batch.strategy;
 
-import com.zoutrankil.batch.storage.BatchMetadataStore;
-
 import com.zoutrankil.batch.job.LaunchService;
 import com.zoutrankil.batch.job.MainStrategyDailyWork;
+import com.zoutrankil.batch.storage.BatchMetadataStore;
 import com.zoutrankil.batch.storage.SqliteLedger;
 import com.zoutrankil.batch.storage.SqliteOwnershipLock;
 import com.zoutrankil.batch.storage.SqliteQuartzDelegate;
-
 import com.zoutrankil.data.config.MainStrategyBatchProperties;
-import java.time.Clock;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import javax.sql.DataSource;
+
 import org.flywaydb.core.Flyway;
+import org.quartz.Scheduler;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.EnableJdbcJobRepository;
 import org.springframework.batch.core.job.Job;
@@ -29,57 +24,108 @@ import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.nio.file.Path;
+import java.time.Clock;
+import java.util.List;
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
 /** 本地名称只覆盖子上下文；父上下文的 QuestDB 数据源仍保持独立。 */
-@Configuration(proxyBeanMethods=false)
-@EnableBatchProcessing(taskExecutorRef="mainStrategyBatchTaskExecutor",transactionManagerRef="transactionManager")
-@EnableJdbcJobRepository(tablePrefix="BATCH_",dataSourceRef="dataSource",transactionManagerRef="transactionManager")
+@Configuration(proxyBeanMethods = false)
+@EnableBatchProcessing(
+        taskExecutorRef = "mainStrategyBatchTaskExecutor",
+        transactionManagerRef = "transactionManager")
+@EnableJdbcJobRepository(
+        tablePrefix = "BATCH_",
+        dataSourceRef = "dataSource",
+        transactionManagerRef = "transactionManager")
 public class MainStrategyDailyChildConfiguration {
-    @Bean(destroyMethod="close") DataSource dataSource(MainStrategyBatchProperties properties) {
-        return BatchMetadataStore.metadataDataSource("jdbc:sqlite:"+
-                java.nio.file.Path.of(properties.ledgerPath()).toAbsolutePath().normalize());
+    @Bean(destroyMethod = "close")
+    DataSource dataSource(MainStrategyBatchProperties properties) {
+        return BatchMetadataStore.metadataDataSource(
+                "jdbc:sqlite:" + Path.of(properties.ledgerPath()).toAbsolutePath().normalize());
     }
-    @Bean(destroyMethod="close") SqliteOwnershipLock.Handle sqliteRuntimeLease(DataSource dataSource) throws Exception {
+
+    @Bean(destroyMethod = "close")
+    SqliteOwnershipLock.Handle sqliteRuntimeLease(DataSource dataSource) throws Exception {
         return BatchMetadataStore.metadataRuntimeLease(dataSource);
     }
-    @Bean(initMethod="migrate") Flyway metadataMigrations(DataSource dataSource,SqliteOwnershipLock.Handle sqliteRuntimeLease) {
+
+    @Bean(initMethod = "migrate")
+    Flyway metadataMigrations(
+            DataSource dataSource, SqliteOwnershipLock.Handle sqliteRuntimeLease) {
         return BatchMetadataStore.metadataFlyway(dataSource);
     }
-    @Bean PlatformTransactionManager transactionManager(DataSource dataSource) {
+
+    @Bean
+    PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new JdbcTransactionManager(dataSource);
     }
-    @Bean TaskExecutor mainStrategyBatchTaskExecutor() {
+
+    @Bean
+    TaskExecutor mainStrategyBatchTaskExecutor() {
         // LaunchService 持有文件租约，直到同步 Batch 操作返回。
         return new SyncTaskExecutor();
     }
-    @Bean @DependsOn("metadataMigrations") SqliteLedger ledger(DataSource dataSource) {
+
+    @Bean
+    @DependsOn("metadataMigrations")
+    SqliteLedger ledger(DataSource dataSource) {
         return new SqliteLedger(dataSource);
     }
-    @Bean Job mainStrategyDaily(JobRepository repository,PlatformTransactionManager manager,
-            SqliteLedger ledger,MainStrategyDailyWork work) {
-        return MainStrategyDailyBatchJob.build(repository,manager,ledger,work);
+
+    @Bean
+    Job mainStrategyDaily(
+            JobRepository repository,
+            PlatformTransactionManager manager,
+            SqliteLedger ledger,
+            MainStrategyDailyWork work) {
+        return MainStrategyDailyBatchJob.build(repository, manager, ledger, work);
     }
-    @Bean LaunchService launchService(SqliteLedger ledger,JobOperator operator,Job mainStrategyDaily) {
-        return new LaunchService(ledger,operator,List.of(mainStrategyDaily),null,null);
+
+    @Bean
+    LaunchService launchService(SqliteLedger ledger, JobOperator operator, Job mainStrategyDaily) {
+        return new LaunchService(ledger, operator, List.of(mainStrategyDaily), null, null);
     }
-    @Bean @DependsOn("metadataMigrations") SchedulerFactoryBean quartzScheduler(DataSource dataSource) {
-        var factory=new SchedulerFactoryBean();factory.setDataSource(dataSource);
-        factory.setSchedulerName("main-strategy-daily");factory.setAutoStartup(false);
-        factory.setWaitForJobsToCompleteOnShutdown(true);factory.setOverwriteExistingJobs(false);
-        var properties=new Properties();
-        properties.setProperty("org.quartz.scheduler.instanceId","AUTO");
-        properties.setProperty("org.quartz.jobStore.driverDelegateClass",SqliteQuartzDelegate.class.getName());
-        properties.setProperty("org.quartz.jobStore.tablePrefix","QRTZ_");
-        properties.setProperty("org.quartz.jobStore.isClustered","false");
-        properties.setProperty("org.quartz.jobStore.acquireTriggersWithinLock","true");
-        properties.setProperty("org.quartz.jobStore.selectWithLockSQL","SELECT * FROM {0}LOCKS WHERE SCHED_NAME = {1} AND LOCK_NAME = ?");
-        properties.setProperty("org.quartz.jobStore.useProperties","true");
-        properties.setProperty("org.quartz.threadPool.threadCount","1");
-        factory.setQuartzProperties(properties);return factory;
+
+    @Bean
+    @DependsOn("metadataMigrations")
+    SchedulerFactoryBean quartzScheduler(DataSource dataSource) {
+        var factory = new SchedulerFactoryBean();
+        factory.setDataSource(dataSource);
+        factory.setSchedulerName("main-strategy-daily");
+        factory.setAutoStartup(false);
+        factory.setWaitForJobsToCompleteOnShutdown(true);
+        factory.setOverwriteExistingJobs(false);
+        var properties = new Properties();
+        properties.setProperty("org.quartz.scheduler.instanceId", "AUTO");
+        properties.setProperty(
+                "org.quartz.jobStore.driverDelegateClass", SqliteQuartzDelegate.class.getName());
+        properties.setProperty("org.quartz.jobStore.tablePrefix", "QRTZ_");
+        properties.setProperty("org.quartz.jobStore.isClustered", "false");
+        properties.setProperty("org.quartz.jobStore.acquireTriggersWithinLock", "true");
+        properties.setProperty(
+                "org.quartz.jobStore.selectWithLockSQL",
+                "SELECT * FROM {0}LOCKS WHERE SCHED_NAME = {1} AND LOCK_NAME = ?");
+        properties.setProperty("org.quartz.jobStore.useProperties", "true");
+        properties.setProperty("org.quartz.threadPool.threadCount", "1");
+        factory.setQuartzProperties(properties);
+        return factory;
     }
-    @Bean(destroyMethod="close") MainStrategyDailyCoordinator coordinator(SqliteLedger ledger,LaunchService launches,
-            MainStrategyDailyWork work,MainStrategyBatchProperties properties,org.quartz.Scheduler scheduler) throws Exception {
-        var coordinator=new MainStrategyDailyCoordinator(ledger,launches,work,properties,scheduler,Clock.systemUTC());
-        scheduler.getContext().put("mainStrategyCoordinator",coordinator);
+
+    @Bean(destroyMethod = "close")
+    MainStrategyDailyCoordinator coordinator(
+            SqliteLedger ledger,
+            LaunchService launches,
+            MainStrategyDailyWork work,
+            MainStrategyBatchProperties properties,
+            Scheduler scheduler)
+            throws Exception {
+        var coordinator =
+                new MainStrategyDailyCoordinator(
+                        ledger, launches, work, properties, scheduler, Clock.systemUTC());
+        scheduler.getContext().put("mainStrategyCoordinator", coordinator);
         return coordinator;
     }
 }

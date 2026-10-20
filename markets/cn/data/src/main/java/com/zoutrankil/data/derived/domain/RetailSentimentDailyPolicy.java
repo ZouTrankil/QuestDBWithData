@@ -1,6 +1,7 @@
 package com.zoutrankil.data.derived.domain;
 
 import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -11,11 +12,15 @@ public final class RetailSentimentDailyPolicy {
     public static final String OUTPUT = "mv_retail_sentiment_daily";
     public static final int MAX_WINDOW_DAYS = 31;
     public static final long MAX_SOURCE_ROWS = 200_000;
+
     private RetailSentimentDailyPolicy() {}
 
     public static boolean equivalent(RetailSentimentDaily left, RetailSentimentDaily right) {
-        return left != null && right != null && left.tradeDate().equals(right.tradeDate())
-                && Objects.equals(left.totalQ1(), right.totalQ1()) && Objects.equals(left.totalQ3(), right.totalQ3())
+        return left != null
+                && right != null
+                && left.tradeDate().equals(right.tradeDate())
+                && Objects.equals(left.totalQ1(), right.totalQ1())
+                && Objects.equals(left.totalQ3(), right.totalQ3())
                 && Objects.equals(left.totalSpoofCount(), right.totalSpoofCount())
                 && Objects.equals(left.totalManipulationCount(), right.totalManipulationCount())
                 && close(left.avgRetailRatio(), right.avgRetailRatio())
@@ -27,14 +32,20 @@ public final class RetailSentimentDailyPolicy {
                 && close(left.avgMfiScore(), right.avgMfiScore())
                 && close(left.totalMainNetYi(), right.totalMainNetYi());
     }
+
     private static boolean close(Double expected, Double actual) {
         if (expected == null || actual == null) return expected == actual;
-        return Double.isFinite(expected) && Double.isFinite(actual)
+        return Double.isFinite(expected)
+                && Double.isFinite(actual)
                 && Math.abs(actual - expected) <= 1e-8 + 1e-10 * Math.abs(expected);
     }
+
     public static void window(LocalDate start, LocalDate end) {
-        if (start == null || end == null || end.isBefore(start)
+        if (start == null
+                || end == null
+                || end.isBefore(start)
                 || ChronoUnit.DAYS.between(start, end) + 1 > MAX_WINDOW_DAYS)
-            throw new IllegalArgumentException("D098 requires an explicit nonempty window of at most 31 days");
+            throw new IllegalArgumentException(
+                    "D098 requires an explicit nonempty window of at most 31 days");
     }
 }

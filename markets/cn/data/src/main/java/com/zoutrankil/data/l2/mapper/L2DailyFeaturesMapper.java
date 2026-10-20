@@ -7,7 +7,9 @@ import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
 import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import com.zoutrankil.data.domain.l2.L2DailyFeaturesDataset;
+
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,7 +47,8 @@ public final class L2DailyFeaturesMapper {
 
     public static List<String> columns() {
         return L2DailyFeaturesDataset.DEFINITION.columns().stream()
-                .map(DatasetDefinition.Column::logicalName).toList();
+                .map(DatasetDefinition.Column::logicalName)
+                .toList();
     }
 
     private static Object value(DatasetValues values, L2DailyFeatureField field) {
@@ -54,7 +57,9 @@ public final class L2DailyFeaturesMapper {
             case LONG -> values.get(field.fieldName(), Long.class);
             case DOUBLE -> values.get(field.fieldName(), Double.class);
             case STRING, SYMBOL -> values.get(field.fieldName(), String.class);
-            default -> throw new IllegalArgumentException("Unexpected D086 feature type: " + field.fieldName());
+            default ->
+                    throw new IllegalArgumentException(
+                            "Unexpected D086 feature type: " + field.fieldName());
         };
     }
 
@@ -62,7 +67,8 @@ public final class L2DailyFeaturesMapper {
         if (value instanceof LocalDate date) return date;
         if (value instanceof Instant instant) return instant.atZone(ZoneOffset.UTC).toLocalDate();
         if (value instanceof LocalDateTime dateTime) return dateTime.toLocalDate();
-        if (value instanceof java.sql.Timestamp timestamp) return timestamp.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+        if (value instanceof Timestamp timestamp)
+            return timestamp.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
         if (value instanceof String text) return LocalDate.parse(text.substring(0, 10));
         throw new IllegalArgumentException("Unsupported D086 business timestamp read type");
     }

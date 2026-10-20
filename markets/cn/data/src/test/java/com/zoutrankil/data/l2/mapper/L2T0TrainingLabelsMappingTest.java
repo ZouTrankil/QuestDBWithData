@@ -1,5 +1,10 @@
 package com.zoutrankil.data.l2.mapper;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -7,17 +12,20 @@ import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.l2.L2T0TrainingLabelField;
 import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsDataset;
+import com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey;
+
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class L2T0TrainingLabelsMappingTest {
     private static final LocalDate DAY = LocalDate.parse("2026-09-21");
-    private static final Instant MINUTE = DAY.atTime(9, 15).atZone(ZoneId.of("Asia/Shanghai")).toInstant();
+    private static final Instant MINUTE =
+            DAY.atTime(9, 15).atZone(ZoneId.of("Asia/Shanghai")).toInstant();
     private static final ObjectMapper JSON = JobDefinitionJson.mapper();
 
     @Test
@@ -26,10 +34,12 @@ class L2T0TrainingLabelsMappingTest {
         var row = mapper.fromParquet(sourceRow(), DAY);
         assertEquals(62, L2T0TrainingLabelField.values().length);
         assertEquals(62, L2T0TrainingLabelsMapper.columns().size());
-        assertEquals(List.of("symbol", "minute"), L2T0TrainingLabelsDataset.DEFINITION.businessKey());
+        assertEquals(
+                List.of("symbol", "minute"), L2T0TrainingLabelsDataset.DEFINITION.businessKey());
         assertEquals(List.of("symbol", "minute"), L2T0TrainingLabelsDataset.DEFINITION.dedupKey());
         assertEquals("minute", L2T0TrainingLabelsDataset.DEFINITION.designatedTimestamp());
-        assertEquals(DatasetDefinition.Partition.DAY, L2T0TrainingLabelsDataset.DEFINITION.partition());
+        assertEquals(
+                DatasetDefinition.Partition.DAY, L2T0TrainingLabelsDataset.DEFINITION.partition());
         assertTrue(L2T0TrainingLabelsDataset.DEFINITION.wal());
         assertEquals(MINUTE, row.minute());
         assertEquals(1L, row.label("sell_first_opportunity_label_1m"));
@@ -43,28 +53,37 @@ class L2T0TrainingLabelsMappingTest {
     @Test
     void rejectsOffsetTimestampsDateDriftAndInvalidSourceSemantics() throws Exception {
         var mapper = new L2T0TrainingLabelsMapper();
-        var offset = sourceRow(); offset.put("minute", "2026-09-21T09:15:00+08:00");
+        var offset = sourceRow();
+        offset.put("minute", "2026-09-21T09:15:00+08:00");
         assertThrows(IOException.class, () -> mapper.fromParquet(offset, DAY));
-        var drift = sourceRow(); drift.put("trade_date", "20260922");
-        assertThrows(IOException.class, () -> mapper.fromParquet(drift, LocalDate.parse("2026-09-22")));
-        var missing = sourceRow(); missing.remove("symbol");
+        var drift = sourceRow();
+        drift.put("trade_date", "20260922");
+        assertThrows(
+                IOException.class, () -> mapper.fromParquet(drift, LocalDate.parse("2026-09-22")));
+        var missing = sourceRow();
+        missing.remove("symbol");
         assertThrows(IOException.class, () -> mapper.fromParquet(missing, DAY));
-        var fractionalLabel = sourceRow(); fractionalLabel.put("sell_first_opportunity_label_1m", 0.5d);
+        var fractionalLabel = sourceRow();
+        fractionalLabel.put("sell_first_opportunity_label_1m", 0.5d);
         assertThrows(IOException.class, () -> mapper.fromParquet(fractionalLabel, DAY));
-        var badPolicy = sourceRow(); badPolicy.put("policy_label", "approved");
+        var badPolicy = sourceRow();
+        badPolicy.put("policy_label", "approved");
         assertThrows(IOException.class, () -> mapper.fromParquet(badPolicy, DAY));
-        var badNet = sourceRow(); badNet.put("sell_first_net_alpha_1m", 0.5d);
+        var badNet = sourceRow();
+        badNet.put("sell_first_net_alpha_1m", 0.5d);
         assertThrows(IOException.class, () -> mapper.fromParquet(badNet, DAY));
     }
 
     @Test
     void completeKeyRequiresCanonicalSymbolAndWholeMinute() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey("000001", MINUTE));
-        assertThrows(IllegalArgumentException.class,
-                () -> new com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey("000001.SZ", MINUTE.plusSeconds(1)));
-        assertNotEquals(new com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey("000001.SZ", MINUTE),
-                new com.zoutrankil.data.domain.l2.L2T0TrainingLabelsKey("000001.SZ", MINUTE.plusSeconds(60)));
+        assertThrows(
+                IllegalArgumentException.class, () -> new L2T0TrainingLabelsKey("000001", MINUTE));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new L2T0TrainingLabelsKey("000001.SZ", MINUTE.plusSeconds(1)));
+        assertNotEquals(
+                new L2T0TrainingLabelsKey("000001.SZ", MINUTE),
+                new L2T0TrainingLabelsKey("000001.SZ", MINUTE.plusSeconds(60)));
     }
 
     private static ObjectNode sourceRow() {

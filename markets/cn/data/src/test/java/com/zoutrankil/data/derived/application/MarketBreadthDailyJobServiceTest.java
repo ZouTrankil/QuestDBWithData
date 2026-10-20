@@ -1,28 +1,50 @@
 package com.zoutrankil.data.derived.application;
 
-import com.zoutrankil.data.derived.port.MarketBreadthDailySession;
-import com.zoutrankil.data.derived.domain.MarketBreadthDailyFullSourceScope;
-import com.zoutrankil.data.service.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyList;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
 import com.zoutrankil.data.config.QuestDbProperties;
-import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
+import com.zoutrankil.data.derived.domain.MarketBreadthDailyFullSourceScope;
+import com.zoutrankil.data.derived.port.MarketBreadthDailySession;
+import com.zoutrankil.data.derived.storage.MarketBreadthDailyMaterializationPort;
+import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
 import com.zoutrankil.data.domain.SyncRunState;
-import com.zoutrankil.data.derived.storage.MarketBreadthDailyMaterializationPort;
+import com.zoutrankil.data.domain.derived.MarketBreadthDaily;
 import com.zoutrankil.data.domain.derived.MarketBreadthDailySnapshot;
 import com.zoutrankil.data.repository.SyncRunLedger;
-import java.nio.file.Path;
-import java.time.LocalDate;
-import java.time.Duration;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import com.zoutrankil.data.service.DatasetIntervalLock;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 /** Actual SQLite durability and exclusion tests; the native database boundary is deliberately mocked. */
 class MarketBreadthDailyJobServiceTest {
@@ -33,14 +55,27 @@ class MarketBreadthDailyJobServiceTest {
     private static final String CALENDAR = "calendar-31:8:8:" + "b".repeat(64);
     private static final String OTHER_TARGET = "questdb-" + "c".repeat(64);
     private static final MarketBreadthDailySnapshot CURRENT = snapshot(7, 10);
-    private static final List<MarketBreadthDaily> ROWS = List.of(
-            new MarketBreadthDaily(START, 2, 1, 1, 0, 0.0, 10.0));
+    private static final List<MarketBreadthDaily> ROWS =
+            List.of(new MarketBreadthDaily(START, 2, 1, 1, 0, 0.0, 10.0));
 
-    @Test void checkpointCannotCrossAnUnverifiedCalendarGap() throws Exception {
+    @Test
+    void checkpointCannotCrossAnUnverifiedCalendarGap() throws Exception {
         var setup = setup();
         var anchor = LocalDate.of(2026, 9, 1);
-        verified(setup.ledger, "prefix", request(anchor, anchor, anchor.plusDays(4), SyncJobDefinition.Mode.INCREMENTAL), TARGET);
-        verified(setup.ledger, "after-gap", request(anchor, anchor.plusDays(6), anchor.plusDays(9), SyncJobDefinition.Mode.INCREMENTAL), TARGET);
+        verified(
+                setup.ledger,
+                "prefix",
+                request(anchor, anchor, anchor.plusDays(4), SyncJobDefinition.Mode.INCREMENTAL),
+                TARGET);
+        verified(
+                setup.ledger,
+                "after-gap",
+                request(
+                        anchor,
+                        anchor.plusDays(6),
+                        anchor.plusDays(9),
+                        SyncJobDefinition.Mode.INCREMENTAL),
+                TARGET);
         var plan = setup.owner.plan(anchor, anchor.plusDays(9), LOGICAL, null);
         assertEquals(anchor.plusDays(4), plan.request().parameters().get("checkpoint_before"));
         assertEquals(anchor.plusDays(2), plan.request().from());
@@ -48,43 +83,117 @@ class MarketBreadthDailyJobServiceTest {
         verify(setup.port, never()).send(anyList());
     }
 
-    @Test void verifiedBridgeAdvancesContiguousCoverageButOtherTargetsAndModesDoNot() throws Exception {
+    @Test
+    void verifiedBridgeAdvancesContiguousCoverageButOtherTargetsAndModesDoNot() throws Exception {
         var setup = setup();
         var anchor = LocalDate.of(2026, 9, 1);
-        verified(setup.ledger, "prefix", request(anchor, anchor, anchor.plusDays(4), SyncJobDefinition.Mode.INCREMENTAL), TARGET);
-        verified(setup.ledger, "suffix", request(anchor, anchor.plusDays(6), anchor.plusDays(9), SyncJobDefinition.Mode.INCREMENTAL), TARGET);
-        verified(setup.ledger, "bridge", request(anchor, anchor.plusDays(4), anchor.plusDays(6), SyncJobDefinition.Mode.INCREMENTAL), TARGET);
-        verified(setup.ledger, "wrong-target", request(anchor, anchor, anchor.plusDays(19), SyncJobDefinition.Mode.INCREMENTAL), OTHER_TARGET);
-        verified(setup.ledger, "materialize", request(anchor, anchor, anchor.plusDays(20), SyncJobDefinition.Mode.MATERIALIZE), TARGET);
-        verified(setup.ledger, "other-anchor", request(anchor.plusDays(1), anchor.plusDays(1), anchor.plusDays(20), SyncJobDefinition.Mode.INCREMENTAL), TARGET);
+        verified(
+                setup.ledger,
+                "prefix",
+                request(anchor, anchor, anchor.plusDays(4), SyncJobDefinition.Mode.INCREMENTAL),
+                TARGET);
+        verified(
+                setup.ledger,
+                "suffix",
+                request(
+                        anchor,
+                        anchor.plusDays(6),
+                        anchor.plusDays(9),
+                        SyncJobDefinition.Mode.INCREMENTAL),
+                TARGET);
+        verified(
+                setup.ledger,
+                "bridge",
+                request(
+                        anchor,
+                        anchor.plusDays(4),
+                        anchor.plusDays(6),
+                        SyncJobDefinition.Mode.INCREMENTAL),
+                TARGET);
+        verified(
+                setup.ledger,
+                "wrong-target",
+                request(anchor, anchor, anchor.plusDays(19), SyncJobDefinition.Mode.INCREMENTAL),
+                OTHER_TARGET);
+        verified(
+                setup.ledger,
+                "materialize",
+                request(anchor, anchor, anchor.plusDays(20), SyncJobDefinition.Mode.MATERIALIZE),
+                TARGET);
+        verified(
+                setup.ledger,
+                "other-anchor",
+                request(
+                        anchor.plusDays(1),
+                        anchor.plusDays(1),
+                        anchor.plusDays(20),
+                        SyncJobDefinition.Mode.INCREMENTAL),
+                TARGET);
         var plan = setup.owner.plan(anchor, anchor.plusDays(12), LOGICAL, null);
         assertEquals(anchor.plusDays(9), plan.request().parameters().get("checkpoint_before"));
         assertEquals(anchor.plusDays(7), plan.request().from());
     }
 
-    @Test void oldBootstrapAnchorAllowsANewFiniteIncrementalOverlap() throws Exception {
+    @Test
+    void oldBootstrapAnchorAllowsANewFiniteIncrementalOverlap() throws Exception {
         var setup = setup();
         var anchor = LocalDate.of(2026, 7, 1);
-        verified(setup.ledger, "july", request(anchor, anchor, LocalDate.of(2026, 7, 31), SyncJobDefinition.Mode.INCREMENTAL), TARGET);
-        verified(setup.ledger, "august", request(anchor, LocalDate.of(2026, 8, 1), LocalDate.of(2026, 8, 31), SyncJobDefinition.Mode.INCREMENTAL), TARGET);
-        verified(setup.ledger, "september", request(anchor, LocalDate.of(2026, 9, 1), LocalDate.of(2026, 9, 2), SyncJobDefinition.Mode.INCREMENTAL), TARGET);
+        verified(
+                setup.ledger,
+                "july",
+                request(
+                        anchor,
+                        anchor,
+                        LocalDate.of(2026, 7, 31),
+                        SyncJobDefinition.Mode.INCREMENTAL),
+                TARGET);
+        verified(
+                setup.ledger,
+                "august",
+                request(
+                        anchor,
+                        LocalDate.of(2026, 8, 1),
+                        LocalDate.of(2026, 8, 31),
+                        SyncJobDefinition.Mode.INCREMENTAL),
+                TARGET);
+        verified(
+                setup.ledger,
+                "september",
+                request(
+                        anchor,
+                        LocalDate.of(2026, 9, 1),
+                        LocalDate.of(2026, 9, 2),
+                        SyncJobDefinition.Mode.INCREMENTAL),
+                TARGET);
         var plan = setup.owner.plan(anchor, LocalDate.of(2026, 9, 3), LOGICAL, null);
         assertEquals(anchor, plan.request().parameters().get("bootstrap_from"));
-        assertEquals(LocalDate.of(2026, 9, 2), plan.request().parameters().get("checkpoint_before"));
+        assertEquals(
+                LocalDate.of(2026, 9, 2), plan.request().parameters().get("checkpoint_before"));
         assertEquals(LocalDate.of(2026, 8, 31), plan.request().from());
         assertEquals(LocalDate.of(2026, 9, 3), plan.request().to());
     }
 
-    @Test void unanchoredHistoryCannotAuthorizeAnUnboundedFirstRun() throws Exception {
+    @Test
+    void unanchoredHistoryCannotAuthorizeAnUnboundedFirstRun() throws Exception {
         var setup = setup();
         var anchor = LocalDate.of(2026, 7, 1);
-        verified(setup.ledger, "unanchored", request(anchor, LocalDate.of(2026, 8, 1), LocalDate.of(2026, 8, 31), SyncJobDefinition.Mode.INCREMENTAL), TARGET);
-        assertThrows(IllegalArgumentException.class,
+        verified(
+                setup.ledger,
+                "unanchored",
+                request(
+                        anchor,
+                        LocalDate.of(2026, 8, 1),
+                        LocalDate.of(2026, 8, 31),
+                        SyncJobDefinition.Mode.INCREMENTAL),
+                TARGET);
+        assertThrows(
+                IllegalArgumentException.class,
                 () -> setup.owner.plan(anchor, LocalDate.of(2026, 9, 3), LOGICAL, null));
         verify(setup.port, never()).send(anyList());
     }
 
-    @Test void failedRunResumesItsExactFrozenWindowLogicalDateAndTarget() throws Exception {
+    @Test
+    void failedRunResumesItsExactFrozenWindowLogicalDateAndTarget() throws Exception {
         var setup = setup();
         var plan = setup.owner.plan(START, START, LOGICAL, SyncJobDefinition.Mode.MATERIALIZE);
         doThrow(new IllegalStateException("not admitted yet")).when(setup.port).preflight();
@@ -100,12 +209,14 @@ class MarketBreadthDailyJobServiceTest {
         assertEquals(original.id(), restored.parentRunId());
         assertEquals(original.logicalDate(), restored.logicalDate());
         assertEquals(original.targetId(), restored.targetId());
-        assertEquals(SyncRequestIdentity.fingerprint(original.frozenJson(), original.targetId()),
+        assertEquals(
+                SyncRequestIdentity.fingerprint(original.frozenJson(), original.targetId()),
                 SyncRequestIdentity.fingerprint(restored.frozenJson(), restored.targetId()));
         verify(setup.port).send(ROWS);
     }
 
-    @Test void resumeRejectsChangedSourceRatherThanReplanningAgainstTodaysVersion() throws Exception {
+    @Test
+    void resumeRejectsChangedSourceRatherThanReplanningAgainstTodaysVersion() throws Exception {
         var setup = setup();
         var plan = setup.owner.plan(START, START, LOGICAL, SyncJobDefinition.Mode.MATERIALIZE);
         doThrow(new IllegalStateException("disabled")).when(setup.port).preflight();
@@ -116,14 +227,23 @@ class MarketBreadthDailyJobServiceTest {
         var resumed = setup.owner.resume(failed.result().runId());
         assertEquals(SyncRunState.FAILED, resumed.result().state());
         assertEquals(0, resumed.result().verifiedRows());
-        assertEquals(SyncRequestIdentity.fingerprint(setup.ledger.getRun(failed.result().runId()).frozenJson(), TARGET),
-                SyncRequestIdentity.fingerprint(setup.ledger.getRun(resumed.result().runId()).frozenJson(), TARGET));
+        assertEquals(
+                SyncRequestIdentity.fingerprint(
+                        setup.ledger.getRun(failed.result().runId()).frozenJson(), TARGET),
+                SyncRequestIdentity.fingerprint(
+                        setup.ledger.getRun(resumed.result().runId()).frozenJson(), TARGET));
         verify(setup.port, never()).send(anyList());
     }
 
-    @Test void terminalCancellationIsRejectedWithoutChangingVerificationOrAddingACancellation() throws Exception {
+    @Test
+    void terminalCancellationIsRejectedWithoutChangingVerificationOrAddingACancellation()
+            throws Exception {
         var setup = setup();
-        verified(setup.ledger, "completed", request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE), TARGET);
+        verified(
+                setup.ledger,
+                "completed",
+                request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE),
+                TARGET);
         long revision = setup.ledger.get("completed").revision();
         assertFalse(setup.owner.cancel("completed"));
         assertFalse(setup.ledger.cancellationRequested("completed"));
@@ -132,9 +252,14 @@ class MarketBreadthDailyJobServiceTest {
         verifyNoInteractions(setup.port);
     }
 
-    @Test void activeCancellationIsDurableAndDoesNotFalselyCompleteTheRun() throws Exception {
+    @Test
+    void activeCancellationIsDurableAndDoesNotFalselyCompleteTheRun() throws Exception {
         var setup = setup();
-        setup.ledger.createRun("active", null, TARGET, request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE));
+        setup.ledger.createRun(
+                "active",
+                null,
+                TARGET,
+                request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE));
         setup.ledger.transition("active", 0, SyncRunState.RUNNING, "{}");
         assertTrue(setup.owner.cancel("active"));
         assertTrue(SyncRunLedger.openReadOnly(setup.path).cancellationRequested("active"));
@@ -143,12 +268,14 @@ class MarketBreadthDailyJobServiceTest {
         assertEquals(1, setup.ledger.get("active").revision());
     }
 
-    @Test void uncertainRunRetainsIntervalExclusionAndCannotBeResumedOrReplayed() throws Exception {
+    @Test
+    void uncertainRunRetainsIntervalExclusionAndCannotBeResumedOrReplayed() throws Exception {
         var setup = setup();
         var request = request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE);
         var uncertain = uncertain(setup, "uncertain", request);
         assertThrows(IllegalStateException.class, () -> setup.owner.resume("uncertain"));
-        var refused = setup.owner.run(new MarketBreadthDailyJobService.Plan(request, TARGET, CURRENT));
+        var refused =
+                setup.owner.run(new MarketBreadthDailyJobService.Plan(request, TARGET, CURRENT));
         assertEquals(SyncRunState.FAILED, refused.result().state());
         assertEquals("DATASET_INTERVAL_BUSY", refused.result().errorCode());
         var retained = uncertain.locks.findOwned("uncertain", uncertain.lease.scope());
@@ -158,25 +285,40 @@ class MarketBreadthDailyJobServiceTest {
         verify(setup.port, never()).send(anyList());
     }
 
-    @Test void uncertainNativeRefreshBlocksANonOverlappingWindowWithoutSending() throws Exception {
+    @Test
+    void uncertainNativeRefreshBlocksANonOverlappingWindowWithoutSending() throws Exception {
         var setup = setup();
-        var uncertain = uncertain(setup, "uncertain", request(START, START, START, SyncJobDefinition.Mode.INCREMENTAL));
+        var uncertain =
+                uncertain(
+                        setup,
+                        "uncertain",
+                        request(START, START, START, SyncJobDefinition.Mode.INCREMENTAL));
         LocalDate otherDate = START.plusDays(10);
         var disjoint = request(otherDate, otherDate, otherDate, SyncJobDefinition.Mode.INCREMENTAL);
-        var refused = setup.owner.run(new MarketBreadthDailyJobService.Plan(disjoint, TARGET, CURRENT));
+        var refused =
+                setup.owner.run(new MarketBreadthDailyJobService.Plan(disjoint, TARGET, CURRENT));
         assertEquals(SyncRunState.FAILED, refused.result().state());
         assertEquals("DATASET_INTERVAL_BUSY", refused.result().errorCode());
-        assertEquals(DatasetIntervalLock.Scope.allDates("mv_market_breadth_daily"), uncertain.lease.scope());
+        assertEquals(
+                DatasetIntervalLock.Scope.allDates("mv_market_breadth_daily"),
+                uncertain.lease.scope());
         assertTrue(uncertain.locks.findOwned("uncertain", uncertain.lease.scope()).inDoubt());
         assertEquals(SyncRunState.IN_DOUBT, setup.ledger.get("uncertain").state());
         verify(setup.port, never()).expected(any(LocalDate.class), any(LocalDate.class));
         verify(setup.port, never()).send(anyList());
     }
 
-    @Test void stoppedWriterReconciliationVerifiesActualValuesAndReleasesTheRetainedLeaseWithoutWriting() throws Exception {
+    @Test
+    void stoppedWriterReconciliationVerifiesActualValuesAndReleasesTheRetainedLeaseWithoutWriting()
+            throws Exception {
         var setup = setup();
-        var uncertain = uncertain(setup, "uncertain", request(START, START, START, SyncJobDefinition.Mode.INCREMENTAL));
-        assertThrows(IllegalArgumentException.class, () -> setup.owner.reconcile("uncertain", false));
+        var uncertain =
+                uncertain(
+                        setup,
+                        "uncertain",
+                        request(START, START, START, SyncJobDefinition.Mode.INCREMENTAL));
+        assertThrows(
+                IllegalArgumentException.class, () -> setup.owner.reconcile("uncertain", false));
         var status = setup.owner.reconcile("uncertain", true);
         assertEquals(SyncRunState.VERIFIED, status.state());
         assertEquals(1, status.verifiedRows());
@@ -184,10 +326,14 @@ class MarketBreadthDailyJobServiceTest {
         assertNull(uncertain.locks.findOwned("uncertain", uncertain.lease.scope()));
         assertEquals(SyncRunState.VERIFIED, setup.ledger.get(uncertain.slice).state());
         assertEquals(SyncRunState.VERIFIED, setup.ledger.get(uncertain.attempt).state());
-        var proof = com.zoutrankil.data.domain.JobDefinitionJson.mapper()
-                .readTree(setup.ledger.get("uncertain").payloadJson()).path("verification");
+        var proof =
+                JobDefinitionJson.mapper()
+                        .readTree(setup.ledger.get("uncertain").payloadJson())
+                        .path("verification");
         assertTrue(proof.path("writerStopped").asBoolean());
-        assertEquals("d095-reconcile:" + CURRENT.stableVersion(), proof.path("readbackEvidence").asText());
+        assertEquals(
+                "d095-reconcile:" + CURRENT.stableVersion(),
+                proof.path("readbackEvidence").asText());
         verify(setup.port).readback(List.of(START));
         verify(setup.port, never()).preflight();
         verify(setup.port, never()).send(anyList());
@@ -195,9 +341,15 @@ class MarketBreadthDailyJobServiceTest {
         verify(setup.port, never()).configureFullIsolated();
     }
 
-    @Test void alreadyVerifiedRunWithRetainedLeaseCanFinishAfterCrashBeforeLockRelease() throws Exception {
+    @Test
+    void alreadyVerifiedRunWithRetainedLeaseCanFinishAfterCrashBeforeLockRelease()
+            throws Exception {
         var setup = setup();
-        var uncertain = uncertain(setup, "uncertain", request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE));
+        var uncertain =
+                uncertain(
+                        setup,
+                        "uncertain",
+                        request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE));
         completeUncertain(setup.ledger, uncertain);
         long ownerRevision = setup.ledger.get("uncertain").revision();
         assertNotNull(uncertain.locks.findOwned("uncertain", uncertain.lease.scope()));
@@ -209,7 +361,8 @@ class MarketBreadthDailyJobServiceTest {
         verify(setup.port, never()).preflight();
     }
 
-    @Test void legacyWindowLeaseRequiresRealReadbackBeforeItCanBeReleased() throws Exception {
+    @Test
+    void legacyWindowLeaseRequiresRealReadbackBeforeItCanBeReleased() throws Exception {
         var setup = setup();
         var frozen = request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE);
         var legacyScope = new DatasetIntervalLock.Scope("mv_market_breadth_daily", START, START);
@@ -220,7 +373,8 @@ class MarketBreadthDailyJobServiceTest {
         verify(setup.port, never()).send(anyList());
     }
 
-    @Test void legacyWindowLeaseRemainsRetainedWhenRealReadbackVersionChanges() throws Exception {
+    @Test
+    void legacyWindowLeaseRemainsRetainedWhenRealReadbackVersionChanges() throws Exception {
         var setup = setup();
         var frozen = request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE);
         var legacyScope = new DatasetIntervalLock.Scope("mv_market_breadth_daily", START, START);
@@ -233,25 +387,35 @@ class MarketBreadthDailyJobServiceTest {
         verify(setup.port, never()).send(anyList());
     }
 
-    @Test void sourceDriftAfterReadbackCannotAdvanceTheRunOrReleaseItsLease() throws Exception {
+    @Test
+    void sourceDriftAfterReadbackCannotAdvanceTheRunOrReleaseItsLease() throws Exception {
         assertPostReadbackDrift(snapshot(8, 10));
     }
 
-    @Test void materializedOutputDriftAfterReadbackCannotAdvanceTheRunOrReleaseItsLease() throws Exception {
+    @Test
+    void materializedOutputDriftAfterReadbackCannotAdvanceTheRunOrReleaseItsLease()
+            throws Exception {
         assertPostReadbackDrift(snapshot(7, 11));
     }
 
-    @Test void calendarDriftAfterReadbackCannotAdvanceTheIncrementalCheckpoint() throws Exception {
+    @Test
+    void calendarDriftAfterReadbackCannotAdvanceTheIncrementalCheckpoint() throws Exception {
         var setup = setup();
-        var uncertain = uncertain(setup, "uncertain", request(START, START, START, SyncJobDefinition.Mode.INCREMENTAL));
-        when(setup.port.calendarVersion()).thenReturn(CALENDAR, CALENDAR, CALENDAR, CALENDAR, CALENDAR, "calendar-changed");
+        var uncertain =
+                uncertain(
+                        setup,
+                        "uncertain",
+                        request(START, START, START, SyncJobDefinition.Mode.INCREMENTAL));
+        when(setup.port.calendarVersion())
+                .thenReturn(CALENDAR, CALENDAR, CALENDAR, CALENDAR, CALENDAR, "calendar-changed");
         assertThrows(IllegalStateException.class, () -> setup.owner.reconcile("uncertain", true));
         assertEquals(SyncRunState.IN_DOUBT, setup.ledger.get("uncertain").state());
         assertTrue(uncertain.locks.findOwned("uncertain", uncertain.lease.scope()).inDoubt());
         verify(setup.port, never()).send(anyList());
     }
 
-    @Test void aDisabledOrUnadmittedFormalPortRejectsBeforeQueryingOrSending() {
+    @Test
+    void aDisabledOrUnadmittedFormalPortRejectsBeforeQueryingOrSending() {
         var jdbc = mock(JdbcTemplate.class);
         var properties = new QuestDbProperties();
         var disabled = new MarketBreadthDailyMaterializationPort(jdbc, properties, false);
@@ -263,34 +427,65 @@ class MarketBreadthDailyJobServiceTest {
         verifyNoInteractions(jdbc);
     }
 
-    @Test void isolatedFullRepairRunsThroughCanonicalFrozenMaterializationAndLedger() throws Exception {
+    @Test
+    void isolatedFullRepairRunsThroughCanonicalFrozenMaterializationAndLedger() throws Exception {
         var setup = setup();
-        MarketBreadthDailySnapshot invalid = new MarketBreadthDailySnapshot(CURRENT.sourceId(), CURRENT.sourceDirectory(), CURRENT.sourceTableTxn(),
-                CURRENT.sourceSeqTxn(), CURRENT.sourceWriterTxn(), true, CURRENT.mvId(), CURRENT.mvDirectory(),
-                CURRENT.mvTxn(), CURRENT.mvSeqTxn(), CURRENT.mvWriterTxn(), true, false, false,
-                CURRENT.definitionSha(), CURRENT.refreshStarted(), CURRENT.refreshFinished(),
-                CURRENT.refreshBaseTxn(), CURRENT.reportedBaseTxn(), CURRENT.sourcePartition(), "invalid");
-        var observed = new java.util.concurrent.atomic.AtomicReference<>(invalid);
+        MarketBreadthDailySnapshot invalid =
+                new MarketBreadthDailySnapshot(
+                        CURRENT.sourceId(),
+                        CURRENT.sourceDirectory(),
+                        CURRENT.sourceTableTxn(),
+                        CURRENT.sourceSeqTxn(),
+                        CURRENT.sourceWriterTxn(),
+                        true,
+                        CURRENT.mvId(),
+                        CURRENT.mvDirectory(),
+                        CURRENT.mvTxn(),
+                        CURRENT.mvSeqTxn(),
+                        CURRENT.mvWriterTxn(),
+                        true,
+                        false,
+                        false,
+                        CURRENT.definitionSha(),
+                        CURRENT.refreshStarted(),
+                        CURRENT.refreshFinished(),
+                        CURRENT.refreshBaseTxn(),
+                        CURRENT.reportedBaseTxn(),
+                        CURRENT.sourcePartition(),
+                        "invalid");
+        var observed = new AtomicReference<>(invalid);
         when(setup.port.snapshot()).thenAnswer(call -> observed.get());
-        doAnswer(call -> { observed.set(CURRENT); return null; }).when(setup.port).send(ROWS);
+        doAnswer(
+                        call -> {
+                            observed.set(CURRENT);
+                            return null;
+                        })
+                .when(setup.port)
+                .send(ROWS);
         var repaired = setup.owner.repairIsolated();
         assertEquals(SyncRunState.VERIFIED, repaired.result().state());
         assertEquals(2, repaired.sourceRawRows());
         assertEquals(CURRENT, repaired.target());
         assertNull(repaired.targetSnapshotError());
-        var frozen = com.zoutrankil.data.domain.JobDefinitionJson.mapper()
-                .readTree(setup.ledger.getRun(repaired.result().runId()).frozenJson());
+        var frozen =
+                JobDefinitionJson.mapper()
+                        .readTree(setup.ledger.getRun(repaired.result().runId()).frozenJson());
         assertEquals("MATERIALIZE", frozen.path("mode").asText());
         assertEquals("FULL_ISOLATED", frozen.path("parameters").path("native_refresh").asText());
         assertEquals(START.toString(), frozen.path("from").asText());
         assertEquals(START.toString(), frozen.path("to").asText());
-        assertEquals(1, setup.ledger.entries(repaired.result().runId(), null, 100).stream()
-                .filter(entry -> entry.kind() == SyncRunLedger.Kind.SLICE).count());
+        assertEquals(
+                1,
+                setup.ledger.entries(repaired.result().runId(), null, 100).stream()
+                        .filter(entry -> entry.kind() == SyncRunLedger.Kind.SLICE)
+                        .count());
         verify(setup.port).configureFullIsolated();
         verify(setup.port).send(ROWS);
     }
 
-    @Test void acknowledgedFullRefreshVisibilityTimeoutRetainsLeaseAndCannotBeRepeated() throws Exception {
+    @Test
+    void acknowledgedFullRefreshVisibilityTimeoutRetainsLeaseAndCannotBeRepeated()
+            throws Exception {
         var setup = setup();
         when(setup.port.walSettled()).thenReturn(false);
         when(setup.port.unresolved()).thenReturn(true);
@@ -298,9 +493,13 @@ class MarketBreadthDailyJobServiceTest {
         assertFullUncertaintyBlocksReplay(setup, uncertain);
     }
 
-    @Test void lostFullRefreshAcknowledgementRetainsDurableSubmittedIntentAndCannotBeRepeated() throws Exception {
+    @Test
+    void lostFullRefreshAcknowledgementRetainsDurableSubmittedIntentAndCannotBeRepeated()
+            throws Exception {
         var setup = setup();
-        doThrow(new IllegalStateException("simulated lost native refresh acknowledgement")).when(setup.port).send(ROWS);
+        doThrow(new IllegalStateException("simulated lost native refresh acknowledgement"))
+                .when(setup.port)
+                .send(ROWS);
         when(setup.port.uncertainSenderStopped()).thenReturn(false);
         when(setup.port.unresolved()).thenReturn(true);
         var uncertain = setup.owner.repairIsolated();
@@ -308,30 +507,40 @@ class MarketBreadthDailyJobServiceTest {
         verify(setup.port, never()).readback(anyList());
     }
 
-    @Test void defaultDisabledFullRepairCannotRunAFormalStatement() {
+    @Test
+    void defaultDisabledFullRepairCannotRunAFormalStatement() {
         var jdbc = mock(JdbcTemplate.class);
-        var disabled = new MarketBreadthDailyMaterializationPort(jdbc, new QuestDbProperties(), false);
+        var disabled =
+                new MarketBreadthDailyMaterializationPort(jdbc, new QuestDbProperties(), false);
         assertThrows(IllegalStateException.class, disabled::configureFullIsolated);
         assertThrows(IllegalStateException.class, disabled::fullSourceScope);
-        var admittedFormal = new MarketBreadthDailyMaterializationPort(jdbc, new QuestDbProperties(), true, TARGET);
+        var admittedFormal =
+                new MarketBreadthDailyMaterializationPort(
+                        jdbc, new QuestDbProperties(), true, TARGET);
         assertThrows(IllegalStateException.class, admittedFormal::configureFullIsolated);
         verifyNoInteractions(jdbc);
     }
 
-    @Test void fullRepairRejectsEmptyAndUnboundedWholeSourceScopes() {
-        assertThrows(IllegalArgumentException.class,
+    @Test
+    void fullRepairRejectsEmptyAndUnboundedWholeSourceScopes() {
+        assertThrows(
+                IllegalArgumentException.class,
                 () -> new MarketBreadthDailyFullSourceScope(START, START, 0));
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(
+                IllegalArgumentException.class,
                 () -> new MarketBreadthDailyFullSourceScope(START, START, 200_001));
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(
+                IllegalArgumentException.class,
                 () -> new MarketBreadthDailyFullSourceScope(START, START.plusDays(31), 2));
     }
 
-    @Test void durableRunResultRemainsVisibleWhenItsDecorativeSnapshotCannotBeRead() throws Exception {
+    @Test
+    void durableRunResultRemainsVisibleWhenItsDecorativeSnapshotCannotBeRead() throws Exception {
         var setup = setup();
         doThrow(new IllegalStateException("not admitted")).when(setup.port).preflight();
         // Planning has already fixed its source, so failure here is only the post-run decoration.
-        when(setup.port.snapshot()).thenThrow(new IllegalStateException("private metadata unavailable"));
+        when(setup.port.snapshot())
+                .thenThrow(new IllegalStateException("private metadata unavailable"));
         var saved = request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE);
         var failed = setup.owner.run(new MarketBreadthDailyJobService.Plan(saved, TARGET, CURRENT));
         assertEquals(SyncRunState.FAILED, failed.result().state());
@@ -345,8 +554,9 @@ class MarketBreadthDailyJobServiceTest {
         assertEquals("IllegalStateException", status.currentTargetError());
     }
 
-    private static void assertFullUncertaintyBlocksReplay(Setup setup,
-            MarketBreadthDailyJobService.MaterializationResult uncertain) throws Exception {
+    private static void assertFullUncertaintyBlocksReplay(
+            Setup setup, MarketBreadthDailyJobService.MaterializationResult uncertain)
+            throws Exception {
         assertEquals(SyncRunState.IN_DOUBT, uncertain.result().state());
         String id = uncertain.result().runId();
         var lock = new DatasetIntervalLock(setup.path);
@@ -354,12 +564,16 @@ class MarketBreadthDailyJobServiceTest {
         var lease = lock.findOwned(id, scope);
         assertNotNull(lease);
         assertTrue(lease.inDoubt());
-        var slice = setup.ledger.entries(id, null, 100).stream()
-                .filter(entry -> entry.kind() == SyncRunLedger.Kind.SLICE).findFirst().orElseThrow();
+        var slice =
+                setup.ledger.entries(id, null, 100).stream()
+                        .filter(entry -> entry.kind() == SyncRunLedger.Kind.SLICE)
+                        .findFirst()
+                        .orElseThrow();
         assertEquals(SyncRunState.IN_DOUBT, slice.state());
-        assertTrue(setup.ledger.events(slice.id(), -1, 20).stream()
-                .anyMatch(event -> event.state() == SyncRunState.SUBMITTED));
-        var frozen = com.zoutrankil.data.domain.JobDefinitionJson.mapper().readTree(setup.ledger.getRun(id).frozenJson());
+        assertTrue(
+                setup.ledger.events(slice.id(), -1, 20).stream()
+                        .anyMatch(event -> event.state() == SyncRunState.SUBMITTED));
+        var frozen = JobDefinitionJson.mapper().readTree(setup.ledger.getRun(id).frozenJson());
         assertEquals("FULL_ISOLATED", frozen.path("parameters").path("native_refresh").asText());
         assertThrows(IllegalStateException.class, () -> setup.owner.resume(id));
         var replay = setup.owner.repairIsolated();
@@ -371,7 +585,11 @@ class MarketBreadthDailyJobServiceTest {
 
     private void assertPostReadbackDrift(MarketBreadthDailySnapshot changed) throws Exception {
         var setup = setup();
-        var uncertain = uncertain(setup, "uncertain", request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE));
+        var uncertain =
+                uncertain(
+                        setup,
+                        "uncertain",
+                        request(START, START, START, SyncJobDefinition.Mode.MATERIALIZE));
         when(setup.port.snapshot()).thenReturn(CURRENT, CURRENT, CURRENT, CURRENT, changed);
         assertThrows(IllegalStateException.class, () -> setup.owner.reconcile("uncertain", true));
         assertEquals(SyncRunState.IN_DOUBT, setup.ledger.get("uncertain").state());
@@ -380,10 +598,14 @@ class MarketBreadthDailyJobServiceTest {
         verify(setup.port, never()).send(anyList());
     }
 
-    private record Setup(Path path, SyncRunLedger ledger, MarketBreadthDailySession port,
-                         MarketBreadthDailyJobService owner) {}
+    private record Setup(
+            Path path,
+            SyncRunLedger ledger,
+            MarketBreadthDailySession port,
+            MarketBreadthDailyJobService owner) {}
+
     private Setup setup() throws Exception {
-        Path path = temporary.resolve("ledger-" + java.util.UUID.randomUUID() + ".sqlite3");
+        Path path = temporary.resolve("ledger-" + UUID.randomUUID() + ".sqlite3");
         var ledger = new SyncRunLedger(path);
         var port = mock(MarketBreadthDailySession.class);
         configure(port);
@@ -394,7 +616,8 @@ class MarketBreadthDailyJobServiceTest {
         when(port.snapshot()).thenReturn(CURRENT);
         when(port.targetId()).thenReturn(TARGET);
         when(port.calendarVersion()).thenReturn(CALENDAR);
-        when(port.newCalendarReader()).thenReturn(query -> MaterializationCalendarFixture.page(query, List.of(START)));
+        when(port.newCalendarReader())
+                .thenReturn(query -> MaterializationCalendarFixture.page(query, List.of(START)));
         when(port.sourceRawRows(any(LocalDate.class), any(LocalDate.class))).thenReturn(2L);
         when(port.expected(any(LocalDate.class), any(LocalDate.class))).thenReturn(ROWS);
         when(port.actual(any(LocalDate.class), any(LocalDate.class))).thenReturn(ROWS);
@@ -403,35 +626,53 @@ class MarketBreadthDailyJobServiceTest {
         when(port.verifiedSnapshot()).thenReturn(CURRENT);
         when(port.unresolved()).thenReturn(false);
         when(port.visibilityTimeout()).thenReturn(Duration.ofMillis(20));
-        when(port.fullSourceScope()).thenReturn(new MarketBreadthDailyFullSourceScope(START, START, 2));
+        when(port.fullSourceScope())
+                .thenReturn(new MarketBreadthDailyFullSourceScope(START, START, 2));
         when(port.outputRowCount()).thenReturn(1L);
     }
 
-    private static SyncJobDefinition.FrozenRequest request(LocalDate anchor, LocalDate from, LocalDate to,
-                                                            SyncJobDefinition.Mode mode) {
+    private static SyncJobDefinition.FrozenRequest request(
+            LocalDate anchor, LocalDate from, LocalDate to, SyncJobDefinition.Mode mode) {
         var parameters = new LinkedHashMap<String, Object>();
         parameters.put("source_version", CURRENT.sourceVersion());
         parameters.put("target_id", TARGET);
         parameters.put("bootstrap_from", anchor);
-        if (mode == SyncJobDefinition.Mode.INCREMENTAL) parameters.put("calendar_version", CALENDAR);
-        return MarketBreadthDailyJobService.definition().freeze(mode, parameters, from, to, LOGICAL);
+        if (mode == SyncJobDefinition.Mode.INCREMENTAL)
+            parameters.put("calendar_version", CALENDAR);
+        return MarketBreadthDailyJobService.definition()
+                .freeze(mode, parameters, from, to, LOGICAL);
     }
 
-    private static void verified(SyncRunLedger ledger, String runId, SyncJobDefinition.FrozenRequest request,
-                                 String targetId) throws Exception {
+    private static void verified(
+            SyncRunLedger ledger,
+            String runId,
+            SyncJobDefinition.FrozenRequest request,
+            String targetId)
+            throws Exception {
         ledger.createRun(runId, null, targetId, request);
         ledger.transition(runId, 0, SyncRunState.RUNNING, "{}");
         ledger.transition(runId, 1, SyncRunState.VERIFIED, proof(false));
     }
 
-    private record Uncertain(String runId, String attempt, String slice, DatasetIntervalLock locks,
-                             DatasetIntervalLock.Lease lease) {}
-    private static Uncertain uncertain(Setup setup, String id, SyncJobDefinition.FrozenRequest request) throws Exception {
-        return uncertain(setup, id, request, DatasetIntervalLock.Scope.allDates("mv_market_breadth_daily"));
+    private record Uncertain(
+            String runId,
+            String attempt,
+            String slice,
+            DatasetIntervalLock locks,
+            DatasetIntervalLock.Lease lease) {}
+
+    private static Uncertain uncertain(
+            Setup setup, String id, SyncJobDefinition.FrozenRequest request) throws Exception {
+        return uncertain(
+                setup, id, request, DatasetIntervalLock.Scope.allDates("mv_market_breadth_daily"));
     }
 
-    private static Uncertain uncertain(Setup setup, String id, SyncJobDefinition.FrozenRequest request,
-                                       DatasetIntervalLock.Scope scope) throws Exception {
+    private static Uncertain uncertain(
+            Setup setup,
+            String id,
+            SyncJobDefinition.FrozenRequest request,
+            DatasetIntervalLock.Scope scope)
+            throws Exception {
         var ledger = setup.ledger;
         ledger.createRun(id, null, TARGET, request);
         ledger.transition(id, 0, SyncRunState.RUNNING, "{}");
@@ -453,23 +694,75 @@ class MarketBreadthDailyJobServiceTest {
         return new Uncertain(id, attempt, slice, locks, locks.findOwned(id, lease.scope()));
     }
 
-    private static void completeUncertain(SyncRunLedger ledger, Uncertain uncertain) throws Exception {
-        ledger.transition(uncertain.slice, ledger.get(uncertain.slice).revision(), SyncRunState.VERIFIED, proof(true));
-        ledger.transition(uncertain.attempt, ledger.get(uncertain.attempt).revision(), SyncRunState.VERIFIED, proof(true));
-        ledger.transition(uncertain.runId, ledger.get(uncertain.runId).revision(), SyncRunState.VERIFIED, proof(true));
+    private static void completeUncertain(SyncRunLedger ledger, Uncertain uncertain)
+            throws Exception {
+        ledger.transition(
+                uncertain.slice,
+                ledger.get(uncertain.slice).revision(),
+                SyncRunState.VERIFIED,
+                proof(true));
+        ledger.transition(
+                uncertain.attempt,
+                ledger.get(uncertain.attempt).revision(),
+                SyncRunState.VERIFIED,
+                proof(true));
+        ledger.transition(
+                uncertain.runId,
+                ledger.get(uncertain.runId).revision(),
+                SyncRunState.VERIFIED,
+                proof(true));
     }
 
     private static String proof(boolean stopped) throws Exception {
-        return com.zoutrankil.data.domain.JobDefinitionJson.mapper().writeValueAsString(Map.of("verification", Map.of(
-                "passed", true, "expectedRows", 1, "actualRows", 1, "matchedRows", 1,
-                "mismatchedRows", 0, "duplicateKeys", 0, "missingKeys", 0,
-                "sourceFingerprint", "unit-source", "readbackEvidence", "unit-native-readback", "writerStopped", stopped)));
+        return JobDefinitionJson.mapper()
+                .writeValueAsString(
+                        Map.of(
+                                "verification",
+                                Map.of(
+                                        "passed",
+                                        true,
+                                        "expectedRows",
+                                        1,
+                                        "actualRows",
+                                        1,
+                                        "matchedRows",
+                                        1,
+                                        "mismatchedRows",
+                                        0,
+                                        "duplicateKeys",
+                                        0,
+                                        "missingKeys",
+                                        0,
+                                        "sourceFingerprint",
+                                        "unit-source",
+                                        "readbackEvidence",
+                                        "unit-native-readback",
+                                        "writerStopped",
+                                        stopped)));
     }
 
     private static MarketBreadthDailySnapshot snapshot(long sourceTxn, long outputTxn) {
-        return new MarketBreadthDailySnapshot(11, "stk_factor~11", sourceTxn, sourceTxn, sourceTxn, true,
-                12, "mv_market_breadth_daily~12", outputTxn, outputTxn, outputTxn, true, true, true,
-                MarketBreadthDailyMaterializationPort.DEFINITION_SHA, "2026-10-06T00:00:00Z", "2026-10-06T00:00:01Z",
-                sourceTxn, sourceTxn, "YEAR", "valid");
+        return new MarketBreadthDailySnapshot(
+                11,
+                "stk_factor~11",
+                sourceTxn,
+                sourceTxn,
+                sourceTxn,
+                true,
+                12,
+                "mv_market_breadth_daily~12",
+                outputTxn,
+                outputTxn,
+                outputTxn,
+                true,
+                true,
+                true,
+                MarketBreadthDailyMaterializationPort.DEFINITION_SHA,
+                "2026-10-06T00:00:00Z",
+                "2026-10-06T00:00:01Z",
+                sourceTxn,
+                sourceTxn,
+                "YEAR",
+                "valid");
     }
 }

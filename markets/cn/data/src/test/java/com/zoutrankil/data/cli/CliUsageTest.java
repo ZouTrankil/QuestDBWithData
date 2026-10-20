@@ -1,12 +1,15 @@
 package com.zoutrankil.data.cli;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
 class CliUsageTest {
-    @Test void usageKeepsActiveCommandsAndDropsRetiredBacktestPublisher() throws Exception {
+    @Test
+    void usageKeepsActiveCommandsAndDropsRetiredBacktestPublisher() throws Exception {
         String current = CliUsage.text();
         String usage = current.substring(0, current.indexOf(" OR sync-run-status"));
         assertFalse(current.contains("plan-backtest-daily-job"));
@@ -14,8 +17,11 @@ class CliUsageTest {
         assertTrue(usage.startsWith("Usage: "));
         assertTrue(usage.contains("run-exchange-calendar|plan-exchange-calendar "));
         assertTrue(usage.endsWith("cancel-sync-run --run ID [--ledger PATH]"));
-        for (String command : java.util.List.of("sync-run-status", "plan-margin-detail-job",
-                "finish-market-sentiment-publication", "finish-regime-monitor-publication"))
-            assertTrue(current.contains(command));
+        for (String command :
+                List.of(
+                        "sync-run-status",
+                        "plan-margin-detail-job",
+                        "finish-market-sentiment-publication",
+                        "finish-regime-monitor-publication")) assertTrue(current.contains(command));
     }
 }

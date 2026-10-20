@@ -1,36 +1,79 @@
 package com.zoutrankil.data.domain.fund;
 
 import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.DatasetDefinition.Capability;
+import com.zoutrankil.data.domain.DatasetDefinition.Column;
+import com.zoutrankil.data.domain.DatasetDefinition.ObjectKind;
+import com.zoutrankil.data.domain.DatasetDefinition.Partition;
+import com.zoutrankil.data.domain.DatasetDefinition.StorageType;
+import com.zoutrankil.data.domain.DatasetDefinition.TemporalContract;
+import com.zoutrankil.data.domain.DatasetDefinition.TemporalKind;
+import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
 /** D015 definition for the externally owned, audited etf_adj table. */
 public final class EtfAdjDataset {
     private EtfAdjDataset() {}
-    private static final TemporalContract TRADE_DATE = new TemporalContract(
-            TemporalKind.BUSINESS_DATE, "BASIC", "calendar", "DAY", "Tushare fund adjustment trade date");
+
+    private static final TemporalContract TRADE_DATE =
+            new TemporalContract(
+                    TemporalKind.BUSINESS_DATE,
+                    "BASIC",
+                    "calendar",
+                    "DAY",
+                    "Tushare fund adjustment trade date");
 
     public static final DatasetDefinition DEFINITION = definition("etf_adj");
 
     public static DatasetDefinition definition(String table) {
         DatasetDefinition.identifier(table);
-        return new DatasetDefinition("etf_adj", 1, "tushare.fund_adj", "etf_adj_owner", table,
-                ObjectKind.TABLE, columns(), List.of("ts_code", "trade_date"), List.of("ts_code", "timestamp"),
-                "timestamp", Partition.YEAR, true, Set.of(Capability.READ, Capability.WRITE),
+        return new DatasetDefinition(
+                "etf_adj",
+                1,
+                "tushare.fund_adj",
+                "etf_adj_owner",
+                table,
+                ObjectKind.TABLE,
+                columns(),
+                List.of("ts_code", "trade_date"),
+                List.of("ts_code", "timestamp"),
+                "timestamp",
+                Partition.YEAR,
+                true,
+                Set.of(Capability.READ, Capability.WRITE),
                 List.of("exchange_calendar"),
                 "Retain YEAR/WAL/dedup (ts_code,timestamp) with TIMESTAMP microsecond storage. Source trade_date maps explicitly to a UTC-midnight business-date carrier; no precision loss and no formal-table DDL.");
     }
 
     public static List<Column> columns() {
         return List.of(
-                new Column("ts_code", "ts_code", "ts_code", StorageType.SYMBOL, false,
-                        "Tushare fund identity with exchange suffix", null),
-                new Column("trade_date", "trade_date", "timestamp", StorageType.TIMESTAMP, false,
-                        "Business trading date stored as UTC-midnight carrier, not an instant", TRADE_DATE),
-                new Column("adj_factor", "adj_factor", "adj_factor", StorageType.DOUBLE, true,
-                        "Unscaled Tushare fund adjustment factor", null));
+                new Column(
+                        "ts_code",
+                        "ts_code",
+                        "ts_code",
+                        StorageType.SYMBOL,
+                        false,
+                        "Tushare fund identity with exchange suffix",
+                        null),
+                new Column(
+                        "trade_date",
+                        "trade_date",
+                        "timestamp",
+                        StorageType.TIMESTAMP,
+                        false,
+                        "Business trading date stored as UTC-midnight carrier, not an instant",
+                        TRADE_DATE),
+                new Column(
+                        "adj_factor",
+                        "adj_factor",
+                        "adj_factor",
+                        StorageType.DOUBLE,
+                        true,
+                        "Unscaled Tushare fund adjustment factor",
+                        null));
     }
 
     /** DDL for a task-owned acceptance table only; never applied to the externally owned formal table. */
@@ -40,13 +83,17 @@ public final class EtfAdjDataset {
         if (!table.startsWith(prefix) || table.length() <= prefix.length())
             throw new IllegalArgumentException("D015 isolated table name required");
         var definitions = new ArrayList<String>();
-        for (var column : columns()) definitions.add("\"" + column.storageName() + "\" " + column.storageType().name());
-        return "CREATE TABLE " + table + " (" + String.join(", ", definitions)
+        for (var column : columns())
+            definitions.add("\"" + column.storageName() + "\" " + column.storageType().name());
+        return "CREATE TABLE "
+                + table
+                + " ("
+                + String.join(", ", definitions)
                 + ") TIMESTAMP(timestamp) PARTITION BY YEAR WAL DEDUP UPSERT KEYS(ts_code, timestamp)";
     }
 
     /** Admits the existing formal table or the original isolated execution namespace. */
     public static void requireExecutionTable(String table) {
-        if (!"etf_adj".equals(table)) com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy.ETF_ADJ.require(table);
+        if (!"etf_adj".equals(table)) IsolatedTablePolicy.ETF_ADJ.require(table);
     }
 }

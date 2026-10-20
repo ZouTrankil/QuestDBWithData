@@ -1,12 +1,28 @@
 package com.zoutrankil.data.derived.domain;
 
-import com.zoutrankil.data.domain.*;
-import java.time.*;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.Map;
+import java.util.NavigableMap;
 
 public final class MarketSentimentDailySourceData {
     private MarketSentimentDailySourceData() {}
-    public record PanelRow(LocalDate date,String code,double close,double previous,double amount,double turnover,
-                           double circ,double mv,double pb,double up,double down,boolean suspended,boolean st) {}
-    public record MarginData(NavigableMap<LocalDate,double[]> margins,NavigableMap<LocalDate,Map<String,Long>> exchanges) {}
+
+    public record PanelRow(
+            LocalDate date,
+            String code,
+            double close,
+            double previous,
+            double amount,
+            double turnover,
+            double circ,
+            double mv,
+            double pb,
+            double up,
+            double down,
+            boolean suspended,
+            boolean st) {}
+
+    public record MarginData(
+            NavigableMap<LocalDate, double[]> margins,
+            NavigableMap<LocalDate, Map<String, Long>> exchanges) {}
 }

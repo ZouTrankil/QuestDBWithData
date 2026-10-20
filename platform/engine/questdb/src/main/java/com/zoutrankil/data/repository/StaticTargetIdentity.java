@@ -8,7 +8,11 @@ public final class StaticTargetIdentity {
     private StaticTargetIdentity() {}
 
     public static String identify(JdbcTemplate jdbc, String table, long id, String directory) {
-        String url = jdbc.execute((ConnectionCallback<String>) connection -> connection.getMetaData().getURL());
-        return com.zoutrankil.data.domain.policy.StaticTargetIdentity.identify(url, table, id, directory);
+        String url =
+                jdbc.execute(
+                        (ConnectionCallback<String>)
+                                connection -> connection.getMetaData().getURL());
+        return com.zoutrankil.data.domain.policy.StaticTargetIdentity.identify(
+                url, table, id, directory);
     }
 }

@@ -1,45 +1,83 @@
 package com.zoutrankil.data.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.stock.application.StockBasicSyncAdapter;
-import com.zoutrankil.data.domain.*;
+
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDate;
-import java.util.*;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 class SyncJobPlanningTest {
     private SyncJobRegistry registry() {
         var d = StockBasicSyncAdapter.definition(true);
-        return new SyncJobRegistry(List.of(d), new DatasetRegistry(List.of(() -> StockBasicDataset.DEFINITION)),
-                Map.of(d.datasetId(), d.supportedModes()), new SyncJobRegistry.Policies(Set.of(d.ratePolicyRef()),
-                Set.of(d.slicePolicyRef()), Set.of(d.verificationPolicyRef())));
+        return new SyncJobRegistry(
+                List.of(d),
+                new DatasetRegistry(List.of(() -> StockBasicDataset.DEFINITION)),
+                Map.of(d.datasetId(), d.supportedModes()),
+                new SyncJobRegistry.Policies(
+                        Set.of(d.ratePolicyRef()),
+                        Set.of(d.slicePolicyRef()),
+                        Set.of(d.verificationPolicyRef())));
     }
-    private Map<String,String> options(String parameters) {
-        return new HashMap<>(Map.of("--job", "data.stock_basic", "--version", "2",
-                "--logical-date", "2026-09-29", "--parameters", parameters));
+
+    private Map<String, String> options(String parameters) {
+        return new HashMap<>(
+                Map.of(
+                        "--job",
+                        "data.stock_basic",
+                        "--version",
+                        "2",
+                        "--logical-date",
+                        "2026-09-29",
+                        "--parameters",
+                        parameters));
     }
-    @Test void freezesCatalogDefaultAndTypedParametersWithoutRuntimeDependencies() throws Exception {
+
+    @Test
+    void freezesCatalogDefaultAndTypedParametersWithoutRuntimeDependencies() throws Exception {
         var frozen = SyncJobPlanning.prepare(registry(), options("{\"codes\":[\"000001.SZ\"]}"));
         assertEquals(SyncJobDefinition.Mode.SNAPSHOT, frozen.mode());
         assertEquals(List.of("000001.SZ"), frozen.parameters().get("codes"));
-        assertEquals(LocalDate.of(2026,9,29), frozen.logicalDate());
+        assertEquals(LocalDate.of(2026, 9, 29), frozen.logicalDate());
         assertNull(frozen.from());
     }
-    @Test void rejectsAmbiguousJsonUnsupportedModesAndMissingWindowBound() {
-        for (var input : List.of("null", "[]", "{}", "{\"codes\":\"000001.SZ\"}",
-                "{\"codes\":[1]}", "{\"codes\":[\"000001.SZ\",\"000001.SZ\"]}",
-                "{\"codes\":[\"000001.SZ\"],\"codes\":[\"600000.SH\"]}",
-                "{\"codes\":[\"000001.SZ\"]} {}", "{\"unexpected\":true}"))
-            assertThrows(Exception.class, () -> SyncJobPlanning.prepare(registry(), options(input)));
+
+    @Test
+    void rejectsAmbiguousJsonUnsupportedModesAndMissingWindowBound() {
+        for (var input :
+                List.of(
+                        "null",
+                        "[]",
+                        "{}",
+                        "{\"codes\":\"000001.SZ\"}",
+                        "{\"codes\":[1]}",
+                        "{\"codes\":[\"000001.SZ\",\"000001.SZ\"]}",
+                        "{\"codes\":[\"000001.SZ\"],\"codes\":[\"600000.SH\"]}",
+                        "{\"codes\":[\"000001.SZ\"]} {}",
+                        "{\"unexpected\":true}"))
+            assertThrows(
+                    Exception.class, () -> SyncJobPlanning.prepare(registry(), options(input)));
         var mode = options("{\"codes\":[\"000001.SZ\"]}");
         mode.put("--mode", "incremental");
-        assertThrows(IllegalArgumentException.class, () -> SyncJobPlanning.prepare(registry(), mode));
+        assertThrows(
+                IllegalArgumentException.class, () -> SyncJobPlanning.prepare(registry(), mode));
         var window = options("{\"codes\":[\"000001.SZ\"]}");
         window.put("--from", "2026-09-29");
-        assertThrows(IllegalArgumentException.class, () -> SyncJobPlanning.prepare(registry(), window));
+        assertThrows(
+                IllegalArgumentException.class, () -> SyncJobPlanning.prepare(registry(), window));
         var hiddenWrite = options("{\"codes\":[\"000001.SZ\"]}");
         hiddenWrite.put("--run", "true");
-        assertThrows(IllegalArgumentException.class, () -> SyncJobPlanning.prepare(registry(), hiddenWrite));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> SyncJobPlanning.prepare(registry(), hiddenWrite));
     }
 }

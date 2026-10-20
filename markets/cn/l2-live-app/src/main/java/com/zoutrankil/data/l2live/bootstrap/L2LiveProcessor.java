@@ -4,13 +4,15 @@ import com.zoutrankil.data.l2live.domain.AliyunL2WireParser;
 import com.zoutrankil.data.l2live.domain.L2CleanEvent;
 import com.zoutrankil.data.l2live.domain.L2MinuteAccumulator;
 import com.zoutrankil.data.l2live.domain.L2MinuteState;
-import com.zoutrankil.data.l2live.storage.RawJournal;
 import com.zoutrankil.data.l2live.storage.LocalLiveSink;
+import com.zoutrankil.data.l2live.storage.RawJournal;
+
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.time.Clock;
 
 /** 串联持久化采集、纯函数归一化和经核验的 Parquet 存储。 */
 public final class L2LiveProcessor {
@@ -23,27 +25,50 @@ public final class L2LiveProcessor {
     private final Set<String> expectedSymbols;
     private final Clock clock;
 
-    public L2LiveProcessor(RawJournal journal, LocalLiveSink sink, AliyunL2WireParser parser,
-            L2MinuteAccumulator accumulator, int batchSize) throws Exception {
+    public L2LiveProcessor(
+            RawJournal journal,
+            LocalLiveSink sink,
+            AliyunL2WireParser parser,
+            L2MinuteAccumulator accumulator,
+            int batchSize)
+            throws Exception {
         this(journal, sink, parser, accumulator, batchSize, Set.of());
     }
 
-    public L2LiveProcessor(RawJournal journal, LocalLiveSink sink, AliyunL2WireParser parser,
-            L2MinuteAccumulator accumulator, int batchSize, Set<String> expectedTopics) throws Exception {
+    public L2LiveProcessor(
+            RawJournal journal,
+            LocalLiveSink sink,
+            AliyunL2WireParser parser,
+            L2MinuteAccumulator accumulator,
+            int batchSize,
+            Set<String> expectedTopics)
+            throws Exception {
         this(journal, sink, parser, accumulator, batchSize, expectedTopics, Clock.systemUTC());
     }
 
-    public L2LiveProcessor(RawJournal journal, LocalLiveSink sink, AliyunL2WireParser parser,
-            L2MinuteAccumulator accumulator, int batchSize, Set<String> expectedTopics, Clock clock) throws Exception {
+    public L2LiveProcessor(
+            RawJournal journal,
+            LocalLiveSink sink,
+            AliyunL2WireParser parser,
+            L2MinuteAccumulator accumulator,
+            int batchSize,
+            Set<String> expectedTopics,
+            Clock clock)
+            throws Exception {
         this.journal = journal;
         this.sink = sink;
         this.parser = parser;
         this.accumulator = accumulator;
         this.batchSize = batchSize;
         this.expectedTopics = Set.copyOf(expectedTopics);
-        this.clock = java.util.Objects.requireNonNull(clock);
-        this.expectedSymbols = expectedTopics.stream().map(topic ->
-                AliyunL2WireParser.normalizeSymbol(topic.substring(topic.indexOf('/') + 1))).collect(Collectors.toUnmodifiableSet());
+        this.clock = Objects.requireNonNull(clock);
+        this.expectedSymbols =
+                expectedTopics.stream()
+                        .map(
+                                topic ->
+                                        AliyunL2WireParser.normalizeSymbol(
+                                                topic.substring(topic.indexOf('/') + 1)))
+                        .collect(Collectors.toUnmodifiableSet());
         var checkpoint = journal.committedAccumulatorState();
         if (!checkpoint.isEmpty()) accumulator.restore(checkpoint);
     }
@@ -67,37 +92,61 @@ public final class L2LiveProcessor {
                     // Parquet 的逐文件上限和逻辑内容摘要仍负责最终限额。
                     // 旧 JSON 的 400 KB 预算只容许约 48 条小报文，机械盘上
                     // 会反复同步小批次；这里允许完整的 200 条有界批次。
-                    if (!events.isEmpty() && captureBytes + estimatedBytes > 2L * 1024 * 1024) break;
+                    if (!events.isEmpty() && captureBytes + estimatedBytes > 2L * 1024 * 1024)
+                        break;
                     captureBytes += estimatedBytes;
                     L2CleanEvent event = parser.parse(capture);
-                    if (capture.qos() != 0) event = rejected(event, "qos_rejected", "Expected subscription QoS 0");
+                    if (capture.qos() != 0)
+                        event = rejected(event, "qos_rejected", "Expected subscription QoS 0");
                     else if (!capture.subscriptionAuthorized())
-                        event = rejected(event, "subscription_unconfirmed", "Full topic subscription was not confirmed when this capture arrived");
-                    else if (!expectedTopics.isEmpty() && (!expectedTopics.contains(capture.topic())
-                            || event.isValid() && !expectedSymbols.contains(event.symbol())))
-                        event = rejected(event, "scope_rejected", "Capture differs from the configured subscription scope");
+                        event =
+                                rejected(
+                                        event,
+                                        "subscription_unconfirmed",
+                                        "Full topic subscription was not confirmed when this capture arrived");
+                    else if (!expectedTopics.isEmpty()
+                            && (!expectedTopics.contains(capture.topic())
+                                    || event.isValid()
+                                            && !expectedSymbols.contains(event.symbol())))
+                        event =
+                                rejected(
+                                        event,
+                                        "scope_rejected",
+                                        "Capture differs from the configured subscription scope");
                     events.add(event);
                 }
                 var now = clock.instant();
-                for (var event : events) if (event.isValid()) {
-                    var admitAfter = event.exchangeTs().minus(L2MinuteAccumulator.EVENT_CLOCK_TOLERANCE);
-                    if (event.capture().recvTs().isAfter(admitAfter)) admitAfter = event.capture().recvTs();
-                    // Keep a slightly early frame durable and pending until real time
-                    // catches up. Never widen the accumulator's future-time gate.
-                    // Bad timestamps beyond this bounded wait still reach that gate.
-                    if (admitAfter.isAfter(now) && !admitAfter.isAfter(now.plusSeconds(5))) return 0;
-                }
+                for (var event : events)
+                    if (event.isValid()) {
+                        var admitAfter =
+                                event.exchangeTs().minus(L2MinuteAccumulator.EVENT_CLOCK_TOLERANCE);
+                        if (event.capture().recvTs().isAfter(admitAfter))
+                            admitAfter = event.capture().recvTs();
+                        // Keep a slightly early frame durable and pending until real time
+                        // catches up. Never widen the accumulator's future-time gate.
+                        // Bad timestamps beyond this bounded wait still reach that gate.
+                        if (admitAfter.isAfter(now) && !admitAfter.isAfter(now.plusSeconds(5)))
+                            return 0;
+                    }
                 for (int index = 0; index < events.size(); index++) {
                     var event = events.get(index);
                     if (event.isValid()) {
-                        try { accumulator.accept(event).ifPresent(states::add); }
-                        catch (ArithmeticException overflow) {
+                        try {
+                            accumulator.accept(event).ifPresent(states::add);
+                        } catch (ArithmeticException overflow) {
                             // 批次尚未冻结；恢复到计算前状态，再重算此前已接纳的报文，
                             // 将本条溢出报文仅保留为审计事件，不影响分钟累计。
                             accumulator.restore(beforeCalculation);
                             states.clear();
-                            events.set(index, rejected(event, "aggregation_overflow", "Minute totals exceed exact numeric bounds"));
-                            for (var prior : events.subList(0, index)) if (prior.isValid()) accumulator.accept(prior).ifPresent(states::add);
+                            events.set(
+                                    index,
+                                    rejected(
+                                            event,
+                                            "aggregation_overflow",
+                                            "Minute totals exceed exact numeric bounds"));
+                            for (var prior : events.subList(0, index))
+                                if (prior.isValid())
+                                    accumulator.accept(prior).ifPresent(states::add);
                         }
                     }
                 }
@@ -107,13 +156,25 @@ public final class L2LiveProcessor {
                 throw error;
             }
         }
-        if (batch.events().stream().anyMatch(event -> event.isValid()
-                && (event.capture().qos() != 0 || !event.capture().subscriptionAuthorized())))
+        if (batch.events().stream()
+                .anyMatch(
+                        event ->
+                                event.isValid()
+                                        && (event.capture().qos() != 0
+                                                || !event.capture().subscriptionAuthorized())))
             throw new IllegalStateException("FROZEN_BATCH_AUTHORIZATION_MISMATCH");
-        if (!expectedTopics.isEmpty() && (batch.events().stream().anyMatch(event -> event.isValid()
-                && (event.capture().qos() != 0 || !expectedTopics.contains(event.capture().topic())
-                    || !expectedSymbols.contains(event.symbol())))
-                || batch.states().stream().anyMatch(state -> !expectedSymbols.contains(state.symbol()))))
+        if (!expectedTopics.isEmpty()
+                && (batch.events().stream()
+                                .anyMatch(
+                                        event ->
+                                                event.isValid()
+                                                        && (event.capture().qos() != 0
+                                                                || !expectedTopics.contains(
+                                                                        event.capture().topic())
+                                                                || !expectedSymbols.contains(
+                                                                        event.symbol())))
+                        || batch.states().stream()
+                                .anyMatch(state -> !expectedSymbols.contains(state.symbol()))))
             throw new IllegalStateException("FROZEN_BATCH_SCOPE_MISMATCH");
         // 写入失败或结果未决时复用已持久化的准确值，不重新累加。
         sink.write(batch.events(), batch.states());
@@ -125,8 +186,18 @@ public final class L2LiveProcessor {
     private static L2CleanEvent rejected(L2CleanEvent event, String status, String error) {
         var fields = new LinkedHashMap<>(event.fields());
         Object quality = fields.get("quality_flags");
-        fields.put("quality_flags", quality == null || quality.toString().isEmpty() ? status : quality + "|" + status);
-        return new L2CleanEvent(event.capture(), event.symbol(), event.exchange(), event.channel(), event.tradeDate(),
-                event.exchangeTs(), status, error, fields);
+        fields.put(
+                "quality_flags",
+                quality == null || quality.toString().isEmpty() ? status : quality + "|" + status);
+        return new L2CleanEvent(
+                event.capture(),
+                event.symbol(),
+                event.exchange(),
+                event.channel(),
+                event.tradeDate(),
+                event.exchangeTs(),
+                status,
+                error,
+                fields);
     }
 }

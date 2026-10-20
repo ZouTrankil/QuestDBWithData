@@ -1,17 +1,22 @@
 package com.zoutrankil.data.service;
 
-import com.zoutrankil.data.stock.application.StockBasicSyncService;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import com.zoutrankil.data.client.TushareClient;
-import com.zoutrankil.data.stock.mapper.StockBasicMapper;
+import com.zoutrankil.data.stock.application.StockBasicSyncService;
 import com.zoutrankil.data.stock.application.StockBasicWriteService;
+import com.zoutrankil.data.stock.mapper.StockBasicMapper;
 import com.zoutrankil.data.stock.port.StockBasicLatestRepository;
+
 import org.flywaydb.core.api.FlywayException;
 import org.junit.jupiter.api.Test;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import java.util.List;
 
 class StockBasicSyncServiceMigrationTest {
     private final TushareClient client = mock(TushareClient.class);

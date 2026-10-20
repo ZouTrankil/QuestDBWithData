@@ -1,82 +1,247 @@
 package com.zoutrankil.data.margin.storage;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockConstruction;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
-
-import com.zoutrankil.data.domain.stock.margin.MarginAllKey;
 import com.zoutrankil.data.domain.stock.margin.MarginAll;
-import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.margin.domain.*;
+import com.zoutrankil.data.domain.stock.margin.MarginAllKey;
+import com.zoutrankil.data.margin.domain.MarginAllRows;
+import com.zoutrankil.data.margin.domain.MarginAllTargetIdentity;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
+
 import io.questdb.client.QuestDB;
-import java.nio.charset.StandardCharsets;
-import java.sql.ResultSet;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-import javax.sql.DataSource;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HexFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+
+import javax.sql.DataSource;
 
 class MarginTargetContractTest {
-    static final String PHYSICAL="static-v2-"+"a".repeat(64);
-    static final LocalDate DAY=LocalDate.of(2025,7,1);
+    static final String PHYSICAL = "static-v2-" + "a".repeat(64);
+    static final LocalDate DAY = LocalDate.of(2025, 7, 1);
 
-    @ParameterizedTest @ValueSource(booleans={false})
-    void constructionHasNoIoAndEveryWriterAndProtocolClientIsIndependent(boolean zrz){
-        var jdbc=mock(JdbcTemplate.class);when(jdbc.getDataSource()).thenReturn(mock(DataSource.class));var quest=mock(QuestDB.class);
-        Object target=new QuestDbMarginAllTarget("java_d028_margin_all_contract",jdbc,quest);verifyNoInteractions(quest);verify(jdbc,never()).getDataSource();
-        try(var clients=mockConstruction(JdbcTemplate.class)){
-            {var t=(QuestDbMarginAllTarget)target;var a=t.newWriter(PHYSICAL);var b=t.newWriter(PHYSICAL);assertNotSame(a,b);assertSame(MarginAllWritePort.CODEC,a.codec());assertNotSame(t.newStaging(),t.newPublicationTables());}
-            assertEquals(4,clients.constructed().size());for(int i=0;i<2;i++){verify(clients.constructed().get(i)).setQueryTimeout(20);verify(clients.constructed().get(i)).setMaxRows(100001);}for(int i=2;i<4;i++){verify(clients.constructed().get(i)).setQueryTimeout(120);verify(clients.constructed().get(i),never()).setMaxRows(anyInt());}
+    @ParameterizedTest
+    @ValueSource(booleans = {false})
+    void constructionHasNoIoAndEveryWriterAndProtocolClientIsIndependent(boolean zrz) {
+        var jdbc = mock(JdbcTemplate.class);
+        when(jdbc.getDataSource()).thenReturn(mock(DataSource.class));
+        var quest = mock(QuestDB.class);
+        Object target = new QuestDbMarginAllTarget("java_d028_margin_all_contract", jdbc, quest);
+        verifyNoInteractions(quest);
+        verify(jdbc, never()).getDataSource();
+        try (var clients = mockConstruction(JdbcTemplate.class)) {
+            {
+                var t = (QuestDbMarginAllTarget) target;
+                var a = t.newWriter(PHYSICAL);
+                var b = t.newWriter(PHYSICAL);
+                assertNotSame(a, b);
+                assertSame(MarginAllWritePort.CODEC, a.codec());
+                assertNotSame(t.newStaging(), t.newPublicationTables());
+            }
+            assertEquals(4, clients.constructed().size());
+            for (int i = 0; i < 2; i++) {
+                verify(clients.constructed().get(i)).setQueryTimeout(20);
+                verify(clients.constructed().get(i)).setMaxRows(100001);
+            }
+            for (int i = 2; i < 4; i++) {
+                verify(clients.constructed().get(i)).setQueryTimeout(120);
+                verify(clients.constructed().get(i), never()).setMaxRows(anyInt());
+            }
         }
         verifyNoInteractions(quest);
     }
-    @ParameterizedTest @ValueSource(booleans={false})
-    void targetRejectsFormalTablesAndWriterRejectsDirectFormalSendBeforeIo(boolean zrz)throws Exception {
-        var jdbc=mock(JdbcTemplate.class);var quest=mock(QuestDB.class);when(jdbc.getDataSource()).thenReturn(mock(DataSource.class));
-        assertThrows(IllegalArgumentException.class,()->{new QuestDbMarginAllTarget("margin_all",jdbc,quest);});
-        try(var clients=mockConstruction(JdbcTemplate.class)){
-            {var writer=new QuestDbMarginAllTarget("java_d028_margin_all_contract",jdbc,quest).newWriter(PHYSICAL);assertThrows(IllegalStateException.class,()->writer.send(List.of(new MarginAll(new MarginAllKey(DAY,"SSE"),1d,2d,3d,4d,5d,6d,7d))));}
-            verify(clients.constructed().getFirst(),never()).queryForList(anyString(),any(Object[].class));
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false})
+    void targetRejectsFormalTablesAndWriterRejectsDirectFormalSendBeforeIo(boolean zrz)
+            throws Exception {
+        var jdbc = mock(JdbcTemplate.class);
+        var quest = mock(QuestDB.class);
+        when(jdbc.getDataSource()).thenReturn(mock(DataSource.class));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> {
+                    new QuestDbMarginAllTarget("margin_all", jdbc, quest);
+                });
+        try (var clients = mockConstruction(JdbcTemplate.class)) {
+            {
+                var writer =
+                        new QuestDbMarginAllTarget("java_d028_margin_all_contract", jdbc, quest)
+                                .newWriter(PHYSICAL);
+                assertThrows(
+                        IllegalStateException.class,
+                        () ->
+                                writer.send(
+                                        List.of(
+                                                new MarginAll(
+                                                        new MarginAllKey(DAY, "SSE"),
+                                                        1d,
+                                                        2d,
+                                                        3d,
+                                                        4d,
+                                                        5d,
+                                                        6d,
+                                                        7d))));
+            }
+            verify(clients.constructed().getFirst(), never())
+                    .queryForList(anyString(), any(Object[].class));
         }
         verifyNoInteractions(quest);
     }
-    @ParameterizedTest @ValueSource(booleans={false})
-    void storageKeepsMicrosecondWindowSqlAndSnapshotSettings(boolean zrz)throws Exception {
-        var source=mock(JdbcTemplate.class);when(source.getDataSource()).thenReturn(mock(DataSource.class));String table="java_d028_margin_all_contract";var sql=new AtomicReference<String>();var args=new AtomicReference<Object[]>();
-        try(var checks=mockStatic(QuestDbWriteChecks.class);var clients=mockConstruction(JdbcTemplate.class,(jdbc,ctx)->{
-            when(jdbc.queryForList("SELECT id,directoryName FROM tables() WHERE table_name=?",table)).thenReturn(List.of(Map.of("id",1,"directoryName","generation")));
-            when(jdbc.queryForList("SELECT writerTxn FROM wal_tables() WHERE name=?",table)).thenReturn(List.of(Map.of("writerTxn",7)));
-            doAnswer(call->{sql.set(call.getArgument(0));args.set(Arrays.copyOfRange(call.getArguments(),2,call.getArguments().length));return List.of();}).when(jdbc).query(anyString(),any(RowMapper.class),any(Object[].class));
-        })){
-            assertTrue(new MarginAllStorage(source,table).window(DAY,DAY).rows().isEmpty());
-            assertTrue(sql.get().contains(" WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP)"));assertTrue(sql.get().endsWith("LIMIT 100001"));
-            assertArrayEquals(new Object[]{1751328000000000L,1751414400000000L},args.get());verify(clients.constructed().getFirst()).setQueryTimeout(120);verify(clients.constructed().getFirst()).setMaxRows(100001);
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false})
+    void storageKeepsMicrosecondWindowSqlAndSnapshotSettings(boolean zrz) throws Exception {
+        var source = mock(JdbcTemplate.class);
+        when(source.getDataSource()).thenReturn(mock(DataSource.class));
+        String table = "java_d028_margin_all_contract";
+        var sql = new AtomicReference<String>();
+        var args = new AtomicReference<Object[]>();
+        try (var checks = mockStatic(QuestDbWriteChecks.class);
+                var clients =
+                        mockConstruction(
+                                JdbcTemplate.class,
+                                (jdbc, ctx) -> {
+                                    when(jdbc.queryForList(
+                                                    "SELECT id,directoryName FROM tables() WHERE table_name=?",
+                                                    table))
+                                            .thenReturn(
+                                                    List.of(
+                                                            Map.of(
+                                                                    "id",
+                                                                    1,
+                                                                    "directoryName",
+                                                                    "generation")));
+                                    when(jdbc.queryForList(
+                                                    "SELECT writerTxn FROM wal_tables() WHERE name=?",
+                                                    table))
+                                            .thenReturn(List.of(Map.of("writerTxn", 7)));
+                                    doAnswer(
+                                                    call -> {
+                                                        sql.set(call.getArgument(0));
+                                                        args.set(
+                                                                Arrays.copyOfRange(
+                                                                        call.getArguments(),
+                                                                        2,
+                                                                        call.getArguments()
+                                                                                .length));
+                                                        return List.of();
+                                                    })
+                                            .when(jdbc)
+                                            .query(
+                                                    anyString(),
+                                                    any(RowMapper.class),
+                                                    any(Object[].class));
+                                })) {
+            assertTrue(new MarginAllStorage(source, table).window(DAY, DAY).rows().isEmpty());
+            assertTrue(
+                    sql.get()
+                            .contains(
+                                    " WHERE trade_date>=cast(? AS TIMESTAMP) AND trade_date<cast(? AS TIMESTAMP)"));
+            assertTrue(sql.get().endsWith("LIMIT 100001"));
+            assertArrayEquals(new Object[] {1751328000000000L, 1751414400000000L}, args.get());
+            verify(clients.constructed().getFirst()).setQueryTimeout(120);
+            verify(clients.constructed().getFirst()).setMaxRows(100001);
         }
     }
-    @ParameterizedTest @ValueSource(booleans={false})
-    void tableDdlUsesExactYearWalOutsideWindowAndDefaultDiscardClient(boolean zrz){
-        var source=mock(JdbcTemplate.class);when(source.getDataSource()).thenReturn(mock(DataSource.class));String prefix="java_d028_margin_all_",stage=prefix+"stage_"+"1".repeat(32),target=prefix+"contract";
-        try(var clients=mockConstruction(JdbcTemplate.class)){
-            var tables=new QuestDbMarginAllTables(source);
-            {var t=(QuestDbMarginAllTables)tables;t.createOutsideStage(stage,target,"2025-07-01T00:00:00.000000Z","2025-07-02T00:00:00.000000Z");var discard=t.newDiscardSession();discard.namedStageCount(stage);discard.dropStage(stage);discard.stageExists(stage);t.rename(stage,target);}
-            String fields="trade_date,exchange_id,rzye,rzmre,rzche,rqye,rqmcl,rzrqye,rqyl";
-            verify(clients.constructed().getFirst()).execute("CREATE TABLE \""+stage+"\" AS (SELECT "+fields+" FROM \""+target+"\" WHERE trade_date<cast('2025-07-01T00:00:00.000000Z' AS TIMESTAMP) OR trade_date>=cast('2025-07-02T00:00:00.000000Z' AS TIMESTAMP)) TIMESTAMP(trade_date) PARTITION BY YEAR WAL");
-            verify(clients.constructed().getFirst()).execute("RENAME TABLE \""+stage+"\" TO \""+target+"\"");var discard=clients.constructed().get(1);verify(discard,never()).setQueryTimeout(anyInt());verify(discard,never()).setMaxRows(anyInt());verify(discard).execute("DROP TABLE \""+stage+"\"");
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false})
+    void tableDdlUsesExactYearWalOutsideWindowAndDefaultDiscardClient(boolean zrz) {
+        var source = mock(JdbcTemplate.class);
+        when(source.getDataSource()).thenReturn(mock(DataSource.class));
+        String prefix = "java_d028_margin_all_",
+                stage = prefix + "stage_" + "1".repeat(32),
+                target = prefix + "contract";
+        try (var clients = mockConstruction(JdbcTemplate.class)) {
+            var tables = new QuestDbMarginAllTables(source);
+            {
+                var t = (QuestDbMarginAllTables) tables;
+                t.createOutsideStage(
+                        stage,
+                        target,
+                        "2025-07-01T00:00:00.000000Z",
+                        "2025-07-02T00:00:00.000000Z");
+                var discard = t.newDiscardSession();
+                discard.namedStageCount(stage);
+                discard.dropStage(stage);
+                discard.stageExists(stage);
+                t.rename(stage, target);
+            }
+            String fields = "trade_date,exchange_id,rzye,rzmre,rzche,rqye,rqmcl,rzrqye,rqyl";
+            verify(clients.constructed().getFirst())
+                    .execute(
+                            "CREATE TABLE \""
+                                    + stage
+                                    + "\" AS (SELECT "
+                                    + fields
+                                    + " FROM \""
+                                    + target
+                                    + "\" WHERE trade_date<cast('2025-07-01T00:00:00.000000Z' AS TIMESTAMP) OR trade_date>=cast('2025-07-02T00:00:00.000000Z' AS TIMESTAMP)) TIMESTAMP(trade_date) PARTITION BY YEAR WAL");
+            verify(clients.constructed().getFirst())
+                    .execute("RENAME TABLE \"" + stage + "\" TO \"" + target + "\"");
+            var discard = clients.constructed().get(1);
+            verify(discard, never()).setQueryTimeout(anyInt());
+            verify(discard, never()).setMaxRows(anyInt());
+            verify(discard).execute("DROP TABLE \"" + stage + "\"");
         }
     }
-    @Test void domainRowBytesKeepNullsDeclaredFieldOrderAndEndpointAwareIdentity()throws Exception {
-        var all=new MarginAll(new MarginAllKey(DAY,"SSE"),1d,2d,3d,4d,5d,6d,7d);
-        String a="{\"trade_date\":\"2025-07-01\",\"exchange_id\":\"SSE\",\"rzye\":1.0,\"rzmre\":2.0,\"rzche\":3.0,\"rqye\":4.0,\"rqmcl\":5.0,\"rzrqye\":6.0,\"rqyl\":7.0}";
-        String z="{\"trade_date\":\"2025-07-01\",\"ob\":1.0,\"auc_amount\":null,\"repo_amount\":2.0,\"repay_amount\":null,\"cb\":3.0}";
-        assertArrayEquals(a.getBytes(StandardCharsets.UTF_8),MarginAllRows.canonicalBytes(all));assertArrayEquals(MarginAllRows.canonicalBytes(all),MarginAllWritePort.CODEC.canonicalBytes(all));
-        String endpoint="jdbc:postgresql://HOST:8812/qdb?user=secret";assertEquals(MarginAllTargetIdentity.logical(endpoint,"java_d028_margin_all_contract"),MarginAllTargetIdentity.logical("jdbc:postgresql://host:8812/qdb?user=other","java_d028_margin_all_contract"));
-        String raw="host:8812/qdb\njava_d028_margin_all_contract\n0\nd028-logical-target-v1";assertEquals("static-v2-"+HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(raw.getBytes(StandardCharsets.UTF_8))),MarginAllTargetIdentity.logical(endpoint,"java_d028_margin_all_contract"));
-        assertNotEquals(MarginAllTargetIdentity.logical(endpoint,"java_d028_margin_all_contract"),MarginAllTargetIdentity.logical("jdbc:postgresql://other:8812/qdb","java_d028_margin_all_contract"));
+
+    @Test
+    void domainRowBytesKeepNullsDeclaredFieldOrderAndEndpointAwareIdentity() throws Exception {
+        var all = new MarginAll(new MarginAllKey(DAY, "SSE"), 1d, 2d, 3d, 4d, 5d, 6d, 7d);
+        String a =
+                "{\"trade_date\":\"2025-07-01\",\"exchange_id\":\"SSE\",\"rzye\":1.0,\"rzmre\":2.0,\"rzche\":3.0,\"rqye\":4.0,\"rqmcl\":5.0,\"rzrqye\":6.0,\"rqyl\":7.0}";
+        String z =
+                "{\"trade_date\":\"2025-07-01\",\"ob\":1.0,\"auc_amount\":null,\"repo_amount\":2.0,\"repay_amount\":null,\"cb\":3.0}";
+        assertArrayEquals(a.getBytes(StandardCharsets.UTF_8), MarginAllRows.canonicalBytes(all));
+        assertArrayEquals(
+                MarginAllRows.canonicalBytes(all), MarginAllWritePort.CODEC.canonicalBytes(all));
+        String endpoint = "jdbc:postgresql://HOST:8812/qdb?user=secret";
+        assertEquals(
+                MarginAllTargetIdentity.logical(endpoint, "java_d028_margin_all_contract"),
+                MarginAllTargetIdentity.logical(
+                        "jdbc:postgresql://host:8812/qdb?user=other",
+                        "java_d028_margin_all_contract"));
+        String raw = "host:8812/qdb\njava_d028_margin_all_contract\n0\nd028-logical-target-v1";
+        assertEquals(
+                "static-v2-"
+                        + HexFormat.of()
+                                .formatHex(
+                                        MessageDigest.getInstance("SHA-256")
+                                                .digest(raw.getBytes(StandardCharsets.UTF_8))),
+                MarginAllTargetIdentity.logical(endpoint, "java_d028_margin_all_contract"));
+        assertNotEquals(
+                MarginAllTargetIdentity.logical(endpoint, "java_d028_margin_all_contract"),
+                MarginAllTargetIdentity.logical(
+                        "jdbc:postgresql://other:8812/qdb", "java_d028_margin_all_contract"));
     }
 }

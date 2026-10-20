@@ -5,13 +5,15 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /** Unscaled Tushare ETF technical indicators; null means the source returned no value. */
 public record EtfFactor(EtfFactorKey key, Map<String, Double> factors) {
     public EtfFactor {
         Objects.requireNonNull(key, "Complete etf_factor key required");
         if (factors == null || !factors.keySet().equals(SetHolder.FIELDS))
-            throw new IllegalArgumentException("Every frozen etf_factor field, and no others, is required");
+            throw new IllegalArgumentException(
+                    "Every frozen etf_factor field, and no others, is required");
         var copy = new LinkedHashMap<String, Double>();
         for (String field : EtfFactorDataset.NUMERIC_FIELDS) {
             Double value = factors.get(field);
@@ -21,13 +23,20 @@ public record EtfFactor(EtfFactorKey key, Map<String, Double> factors) {
         }
         factors = Collections.unmodifiableMap(copy);
     }
+
     public EtfFactor(String tsCode, LocalDate tradeDate, Map<String, Double> factors) {
         this(new EtfFactorKey(tsCode, tradeDate), factors);
     }
-    public String tsCode() { return key.tsCode(); }
-    public LocalDate tradeDate() { return key.tradeDate(); }
+
+    public String tsCode() {
+        return key.tsCode();
+    }
+
+    public LocalDate tradeDate() {
+        return key.tradeDate();
+    }
 
     private static final class SetHolder {
-        private static final java.util.Set<String> FIELDS = java.util.Set.copyOf(EtfFactorDataset.NUMERIC_FIELDS);
+        private static final Set<String> FIELDS = Set.copyOf(EtfFactorDataset.NUMERIC_FIELDS);
     }
 }

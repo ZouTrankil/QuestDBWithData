@@ -1,6 +1,15 @@
 package com.zoutrankil.batch.source;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.zoutrankil.batch.testsupport.NativeSourceFixtures;
+import com.zoutrankil.data.domain.temporal.MarketId;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,19 +17,25 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.constantpool.StringEntry;
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 class SourceStrategiesTest {
-    @Test void explicitRegistryCoversEverySupportedDatasetAndCannotBeMutated() {
+    @Test
+    void explicitRegistryCoversEverySupportedDatasetAndCannotBeMutated() {
         assertEquals(40, SourceStrategies.datasets().size());
         assertEquals(41, SourceStrategyRegistry.datasets().size());
-        var all=new TreeSet<>(SourceStrategies.datasets());all.add("us_tbr");
-        assertEquals(SourceContract.SUPPORTED,all);
-        assertEquals(com.zoutrankil.data.domain.temporal.MarketId.US,SourceStrategyRegistry.provider("us_tbr").market());
+        var all = new TreeSet<>(SourceStrategies.datasets());
+        all.add("us_tbr");
+        assertEquals(SourceContract.SUPPORTED, all);
+        assertEquals(MarketId.US, SourceStrategyRegistry.provider("us_tbr").market());
         assertFalse(SourceStrategies.datasets().contains("us_tbr"));
-        assertThrows(UnsupportedOperationException.class, () -> SourceStrategies.datasets().remove("daily"));
+        assertThrows(
+                UnsupportedOperationException.class,
+                () -> SourceStrategies.datasets().remove("daily"));
         for (String dataset : SourceStrategies.datasets()) {
             var strategy = SourceStrategies.require(dataset);
             assertSame(strategy, SourceStrategies.require(dataset));
@@ -31,37 +46,65 @@ class SourceStrategiesTest {
         }
     }
 
-    @Test void genericCollectorAndItsRequestRecordsContainNoDatasetDispatchLiterals() throws Exception {
-        for (Class<?> type : List.of(SourceCollector.class, SourceCollector.Request.class, SourceCollector.Frozen.class,
-                SourceCollector.Collected.class, SourceCollector.ContractFetcher.class)) {
-            try (var stream = type.getResourceAsStream("/" + type.getName().replace('.', '/') + ".class")) {
+    @Test
+    void genericCollectorAndItsRequestRecordsContainNoDatasetDispatchLiterals() throws Exception {
+        for (Class<?> type :
+                List.of(
+                        SourceCollector.class,
+                        SourceCollector.Request.class,
+                        SourceCollector.Frozen.class,
+                        SourceCollector.Collected.class,
+                        SourceCollector.ContractFetcher.class)) {
+            try (var stream =
+                    type.getResourceAsStream("/" + type.getName().replace('.', '/') + ".class")) {
                 assertNotNull(stream, type.getName());
                 var matches = new TreeSet<String>();
                 for (var entry : ClassFile.of().parse(stream.readAllBytes()).constantPool()) {
-                    if (entry instanceof StringEntry literal && SourceStrategies.datasets().contains(literal.stringValue())) {
+                    if (entry instanceof StringEntry literal
+                            && SourceStrategies.datasets().contains(literal.stringValue())) {
                         matches.add(literal.stringValue());
                     }
                 }
-                assertTrue(matches.isEmpty(), () -> type.getName() + " embeds dataset dispatch literals: " + matches);
+                assertTrue(
+                        matches.isEmpty(),
+                        () -> type.getName() + " embeds dataset dispatch literals: " + matches);
             }
         }
     }
 
-    @ParameterizedTest @ValueSource(strings = {"", "DAILY", "unregistered", "daily-v1", "daily "})
+    @ParameterizedTest
+    @ValueSource(strings = {"", "DAILY", "unregistered", "daily-v1", "daily "})
     void unknownDatasetCannotFallBackToAGenericStrategy(String dataset) {
         assertThrows(IllegalArgumentException.class, () -> SourceStrategies.require(dataset));
-        assertThrows(IllegalArgumentException.class, () -> SourceStrategies.index(List.of(
-                new SourceStrategies.Registration(dataset, SourceStrategies.require("daily")))));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        SourceStrategies.index(
+                                List.of(
+                                        new SourceStrategies.Registration(
+                                                dataset, SourceStrategies.require("daily")))));
     }
 
-    @Test void duplicateRegistrationIsRejectedEvenWhenTheStrategyIsIdentical() {
-        var registration = new SourceStrategies.Registration("daily", SourceStrategies.require("daily"));
-        assertThrows(IllegalArgumentException.class, () -> SourceStrategies.index(List.of(registration, registration)));
-        assertThrows(IllegalArgumentException.class, () -> SourceStrategies.index(List.of(registration,
-                new SourceStrategies.Registration("daily", SourceStrategies.require("stk_st_daily")))));
+    @Test
+    void duplicateRegistrationIsRejectedEvenWhenTheStrategyIsIdentical() {
+        var registration =
+                new SourceStrategies.Registration("daily", SourceStrategies.require("daily"));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> SourceStrategies.index(List.of(registration, registration)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        SourceStrategies.index(
+                                List.of(
+                                        registration,
+                                        new SourceStrategies.Registration(
+                                                "daily",
+                                                SourceStrategies.require("stk_st_daily")))));
     }
 
-    @Test void registryIndexCopiesItsInputAndExposesAnImmutableMap() {
+    @Test
+    void registryIndexCopiesItsInputAndExposesAnImmutableMap() {
         var strategy = SourceStrategies.require("daily");
         var input = new ArrayList<>(List.of(new SourceStrategies.Registration("daily", strategy)));
         var index = SourceStrategies.index(input);
@@ -72,32 +115,51 @@ class SourceStrategiesTest {
         assertThrows(UnsupportedOperationException.class, () -> index.remove("daily"));
     }
 
-    @Test void registryRejectsNullInputsAndIncompleteRegistrations() {
+    @Test
+    void registryRejectsNullInputsAndIncompleteRegistrations() {
         assertThrows(NullPointerException.class, () -> SourceStrategies.index(null));
-        assertThrows(NullPointerException.class, () -> SourceStrategies.index(Collections.singletonList(null)));
-        assertThrows(NullPointerException.class, () -> new SourceStrategies.Registration(null, SourceStrategies.require("daily")));
-        assertThrows(NullPointerException.class, () -> new SourceStrategies.Registration("daily", null));
+        assertThrows(
+                NullPointerException.class,
+                () -> SourceStrategies.index(Collections.singletonList(null)));
+        assertThrows(
+                NullPointerException.class,
+                () -> new SourceStrategies.Registration(null, SourceStrategies.require("daily")));
+        assertThrows(
+                NullPointerException.class, () -> new SourceStrategies.Registration("daily", null));
         assertThrows(IllegalArgumentException.class, () -> SourceStrategies.require(null));
     }
 
-    @ParameterizedTest @ValueSource(strings = {"request", "rows", "coverage", "storage"})
+    @ParameterizedTest
+    @ValueSource(strings = {"request", "rows", "coverage", "storage"})
     void completeStrategyRequiresEveryPolicy(String absent) {
         var daily = SourceStrategies.require("daily");
-        assertThrows(NullPointerException.class, () -> new SourceStrategy(
-                absent.equals("request") ? null : daily.request(),
-                absent.equals("rows") ? null : daily.rows(),
-                absent.equals("coverage") ? null : daily.coverage(),
-                absent.equals("storage") ? null : daily.storage()));
+        assertThrows(
+                NullPointerException.class,
+                () ->
+                        new SourceStrategy(
+                                absent.equals("request") ? null : daily.request(),
+                                absent.equals("rows") ? null : daily.rows(),
+                                absent.equals("coverage") ? null : daily.coverage(),
+                                absent.equals("storage") ? null : daily.storage()));
     }
 
-    @Test void eachRegisteredPolicyOpensAFreshCollectionSession() {
+    @Test
+    void eachRegisteredPolicyOpensAFreshCollectionSession() {
         for (String dataset : SourceStrategies.datasets()) {
             var contract = SourceContract.load(dataset);
-            Set<String> codes = switch (dataset) {
-                case "exchange_calendar", "fut_daily", "fut_settle", "fut_mapping", "ft_limit", "fut_holding", "fut_basic" -> Set.of();
-                case "etf_basic" -> Set.of("E");
-                default -> contract.isMarketAggregate() ? Set.of() : Set.of("000001.SZ");
-            };
+            Set<String> codes =
+                    switch (dataset) {
+                        case "exchange_calendar",
+                                "fut_daily",
+                                "fut_settle",
+                                "fut_mapping",
+                                "ft_limit",
+                                "fut_holding",
+                                "fut_basic" ->
+                                Set.of();
+                        case "etf_basic" -> Set.of("E");
+                        default -> contract.isMarketAggregate() ? Set.of() : Set.of("000001.SZ");
+                    };
             var request = NativeSourceFixtures.request(dataset, codes);
             var strategy = SourceStrategies.require(dataset);
             var first = strategy.request().openSession(contract, request, strategy.rows());

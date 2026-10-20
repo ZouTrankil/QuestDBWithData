@@ -2,7 +2,14 @@ package com.zoutrankil.data.service;
 
 import com.zoutrankil.data.domain.SyncGroupDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition;
-import java.util.*;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /** Validates group membership against the single-job catalog before any run starts. */
 public final class SyncGroupRegistry {
@@ -33,10 +40,15 @@ public final class SyncGroupRegistry {
             throw new IllegalArgumentException("Unknown group or version");
         return group;
     }
-    public List<SyncGroupDefinition> definitions() { return List.copyOf(groups.values()); }
+
+    public List<SyncGroupDefinition> definitions() {
+        return List.copyOf(groups.values());
+    }
+
     public List<SyncJobDefinition> allEnabledJobs() {
         return jobs.definitions().stream().filter(SyncJobDefinition::enabled).toList();
     }
+
     public List<SyncJobDefinition> dailyEligibleJobs() {
         return jobs.definitions().stream().filter(j -> j.enabled() && j.dailyEligible()).toList();
     }

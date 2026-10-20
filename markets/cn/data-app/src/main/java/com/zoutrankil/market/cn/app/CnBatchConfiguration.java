@@ -1,6 +1,7 @@
 package com.zoutrankil.market.cn.app;
 
 import com.zoutrankil.batch.config.RuntimeConfiguration;
+
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.DefaultApplicationArguments;
@@ -14,9 +15,12 @@ import org.springframework.core.env.StandardEnvironment;
 
 /** 只有常驻 A 股入口可以托管 Batch，主策略和有限 CLI 不导入这套装配。 */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(name = {"app.runtime.persistent", "jdb.enabled"}, havingValue = "true")
+@ConditionalOnProperty(
+        name = {"app.runtime.persistent", "jdb.enabled"},
+        havingValue = "true")
 public class CnBatchConfiguration {
-    @Bean ManagedBatchRuntime managedBatchRuntime(ConfigurableEnvironment environment) {
+    @Bean
+    ManagedBatchRuntime managedBatchRuntime(ConfigurableEnvironment environment) {
         return new ManagedBatchRuntime(environment);
     }
 
@@ -25,16 +29,21 @@ public class CnBatchConfiguration {
         private final ConfigurableEnvironment environment;
         private AnnotationConfigApplicationContext context;
 
-        ManagedBatchRuntime(ConfigurableEnvironment environment) { this.environment = environment; }
+        ManagedBatchRuntime(ConfigurableEnvironment environment) {
+            this.environment = environment;
+        }
 
-        @Override public synchronized void start() {
+        @Override
+        public synchronized void start() {
             if (context != null) return;
             var next = new AnnotationConfigApplicationContext();
             // 复用已解析的 YAML、环境变量和 CLI 覆盖，不另启 SpringApplication 改写全局日志。
             // 不设置 parent，避免 Batch 的来源客户端、事务管理器误用 QuestDB 容器里的 Bean。
             var isolated = new StandardEnvironment();
-            isolated.getPropertySources().remove(StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME);
-            isolated.getPropertySources().remove(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME);
+            isolated.getPropertySources()
+                    .remove(StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME);
+            isolated.getPropertySources()
+                    .remove(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME);
             isolated.merge(environment);
             isolated.setConversionService(environment.getConversionService());
             next.setEnvironment(isolated);
@@ -51,15 +60,26 @@ public class CnBatchConfiguration {
             }
         }
 
-        @Override public synchronized void stop() {
+        @Override
+        public synchronized void stop() {
             if (context == null) return;
             var previous = context;
             context = null;
             previous.close();
         }
 
-        @Override public synchronized boolean isRunning() { return context != null && context.isActive(); }
-        @Override public void destroy() { stop(); }
-        synchronized AnnotationConfigApplicationContext context() { return context; }
+        @Override
+        public synchronized boolean isRunning() {
+            return context != null && context.isActive();
+        }
+
+        @Override
+        public void destroy() {
+            stop();
+        }
+
+        synchronized AnnotationConfigApplicationContext context() {
+            return context;
+        }
     }
 }

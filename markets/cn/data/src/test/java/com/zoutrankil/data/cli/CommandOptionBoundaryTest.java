@@ -1,46 +1,87 @@
 package com.zoutrankil.data.cli;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+
+import com.zoutrankil.data.service.DatasetRegistry;
+import com.zoutrankil.data.service.ReadGroupReader;
+import com.zoutrankil.data.service.StockBasicGroupService;
+import com.zoutrankil.data.service.StockBasicScheduleService;
+import com.zoutrankil.data.service.StockBasicWriteGroupService;
+import com.zoutrankil.data.service.SyncJobRegistry;
 import com.zoutrankil.data.stock.application.StockBasicJobService;
 import com.zoutrankil.data.stock.application.StockBasicSyncService;
 
-import com.zoutrankil.data.service.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.DefaultApplicationArguments;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class CommandOptionBoundaryTest {
-    @Test void springConfigurationOptionsAreRemovedBeforeCommandDispatch() throws Exception {
+    @Test
+    void springConfigurationOptionsAreRemovedBeforeCommandDispatch() throws Exception {
         var legacy = mock(StockBasicSyncService.class);
-        var cli = new CommandLineRunner(legacy, mock(DatasetRegistry.class), mock(SyncJobRegistry.class),
-                mock(StockBasicJobService.class), mock(StockBasicGroupService.class), mock(ReadGroupReader.class),
-                mock(StockBasicWriteGroupService.class), mock(StockBasicScheduleService.class));
-        cli.run(new DefaultApplicationArguments("--spring.profiles.active=offline", "verify-questdb-jdbc",
-                "--app.web.enabled=true", "--logging.level.root=ERROR"));
+        var cli =
+                new CommandLineRunner(
+                        legacy,
+                        mock(DatasetRegistry.class),
+                        mock(SyncJobRegistry.class),
+                        mock(StockBasicJobService.class),
+                        mock(StockBasicGroupService.class),
+                        mock(ReadGroupReader.class),
+                        mock(StockBasicWriteGroupService.class),
+                        mock(StockBasicScheduleService.class));
+        cli.run(
+                new DefaultApplicationArguments(
+                        "--spring.profiles.active=offline",
+                        "verify-questdb-jdbc",
+                        "--app.web.enabled=true",
+                        "--logging.level.root=ERROR"));
         verify(legacy).verifyQuestDbConnection();
         verifyNoMoreInteractions(legacy);
     }
 
-    @Test void ambiguousInputsAreRejectedBeforeAnyRunnerOrLegacyWrite() {
+    @Test
+    void ambiguousInputsAreRejectedBeforeAnyRunnerOrLegacyWrite() {
         var legacy = mock(StockBasicSyncService.class);
         var jobs = mock(StockBasicJobService.class);
         var groups = mock(StockBasicGroupService.class);
         var write = mock(StockBasicWriteGroupService.class);
         var schedule = mock(StockBasicScheduleService.class);
-        var cli = new CommandLineRunner(legacy, mock(DatasetRegistry.class), mock(SyncJobRegistry.class),
-                jobs, groups, mock(ReadGroupReader.class), write, schedule);
-        for (String[] args : new String[][] {
-                {"run-stock-basic-job", "--codes", "000001.SZ", "--codes=600000.SH", "--logical-date", "2026-09-29"},
-                {"write-dataset-group", "--request=a.json", "--request=b.json"},
-                {"schedule-enable", "--id", "sample", "--enabled=true", "--enabled=false"},
-                {"write-dataset-group", "--request="},
-                {"write-dataset-group", "--request", "   "},
-                {"sync-stock-basic-questdb", "--=invalid"},
-                {"sync-stock-basic-questdb", "--unexpected", "value"},
-                {"migrate-questdb-schema", "--unexpected", "value"},
-                {"show-stock-basic-latest", "--unexpected", "value"},
-                {"verify-questdb-jdbc", "--unexpected", "value"}
-        }) assertThrows(IllegalArgumentException.class, () -> cli.run(new DefaultApplicationArguments(args)));
+        var cli =
+                new CommandLineRunner(
+                        legacy,
+                        mock(DatasetRegistry.class),
+                        mock(SyncJobRegistry.class),
+                        jobs,
+                        groups,
+                        mock(ReadGroupReader.class),
+                        write,
+                        schedule);
+        for (String[] args :
+                new String[][] {
+                    {
+                        "run-stock-basic-job",
+                        "--codes",
+                        "000001.SZ",
+                        "--codes=600000.SH",
+                        "--logical-date",
+                        "2026-09-29"
+                    },
+                    {"write-dataset-group", "--request=a.json", "--request=b.json"},
+                    {"schedule-enable", "--id", "sample", "--enabled=true", "--enabled=false"},
+                    {"write-dataset-group", "--request="},
+                    {"write-dataset-group", "--request", "   "},
+                    {"sync-stock-basic-questdb", "--=invalid"},
+                    {"sync-stock-basic-questdb", "--unexpected", "value"},
+                    {"migrate-questdb-schema", "--unexpected", "value"},
+                    {"show-stock-basic-latest", "--unexpected", "value"},
+                    {"verify-questdb-jdbc", "--unexpected", "value"}
+                })
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> cli.run(new DefaultApplicationArguments(args)));
         verifyNoInteractions(legacy, jobs, groups, write, schedule);
     }
 }

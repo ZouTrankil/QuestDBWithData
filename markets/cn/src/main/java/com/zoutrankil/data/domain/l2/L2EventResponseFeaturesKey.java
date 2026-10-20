@@ -11,7 +11,8 @@ public record L2EventResponseFeaturesKey(String symbol, Instant minute, String e
         Objects.requireNonNull(minute, "D088 minute instant required");
         if (minute.getNano() != 0 || Math.floorMod(minute.getEpochSecond(), 60) != 0)
             throw new IllegalArgumentException("D088 key must be aligned to a whole minute");
-        if (eventType == null || !L2EventResponseFeatureField.EVENT_TYPE_ALLOWED.contains(eventType))
+        if (eventType == null
+                || !L2EventResponseFeatureField.EVENT_TYPE_ALLOWED.contains(eventType))
             throw new IllegalArgumentException("Unknown D088 event type");
     }
 }

@@ -20,8 +20,17 @@ public record RetailSentimentDaily(
         Double totalMainNetYi) {
     public RetailSentimentDaily {
         Objects.requireNonNull(tradeDate, "trade date required");
-        for (var value : new Double[]{avgRetailRatio, avgRetailEntropy, totalRetailAmountYi,
-                totalRetailNetInflowYi, avgRelAggro, avgWashTradeRatio, avgMfiScore, totalMainNetYi}) {
+        for (var value :
+                new Double[] {
+                    avgRetailRatio,
+                    avgRetailEntropy,
+                    totalRetailAmountYi,
+                    totalRetailNetInflowYi,
+                    avgRelAggro,
+                    avgWashTradeRatio,
+                    avgMfiScore,
+                    totalMainNetYi
+                }) {
             if (value != null && !Double.isFinite(value)) {
                 throw new IllegalArgumentException("Finite retail sentiment aggregates required");
             }

@@ -1,63 +1,163 @@
 package com.zoutrankil.data.margin.application;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.clearInvocations;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.same;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.zoutrankil.data.domain.*;
-import com.zoutrankil.data.margin.port.*;
+import com.zoutrankil.data.domain.JobDefinitionJson;
+import com.zoutrankil.data.margin.port.MarginAllTarget;
 import com.zoutrankil.data.repository.FileEvidenceStore;
-import com.zoutrankil.data.service.*;
-import java.nio.file.*;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.BooleanSupplier;
-import org.junit.jupiter.api.Test;
+import com.zoutrankil.data.service.PageExecutor;
+import com.zoutrankil.data.service.SyncJobRegistry;
+import com.zoutrankil.data.service.SyncJobRunner;
+import com.zoutrankil.data.service.TusharePageService;
+
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BooleanSupplier;
 
 class MarginSourceOwnerContractTest {
-    static final LocalDate DAY=LocalDate.of(2025,7,1);
+    static final LocalDate DAY = LocalDate.of(2025, 7, 1);
     @TempDir Path temp;
 
-    @ParameterizedTest @ValueSource(booleans={false})
-    void sourceUsesExactEndpointParametersAndReopensTheSameImmutableBytes(boolean zrz)throws Exception {
-        var pages=mock(TusharePageService.class);var cancelled=(BooleanSupplier)()->false;
-        var raw=row(zrz,"20250701");var params=new ArrayList<Map<String,Object>>();
-        when(pages.fetcher(eq(MarginAllSource.CONTRACT),same(cancelled))).thenReturn(request->{params.add(request);return new PageExecutor.Page(List.of(raw),null,false,"fixture-v1");});
-        SyncJobRunner.Page<?> first=new MarginAllSource(pages,temp).fetch(DAY,cancelled);
-        assertEquals(List.of(Map.of("trade_date","20250701")),params);
-        assertEquals(1,first.rows().size());Path path=Path.of(first.responseEvidence());byte[] bytes=Files.readAllBytes(path);
-        assertEquals(FileEvidenceStore.sha256(bytes),first.sourceFingerprint());var body=JobDefinitionJson.mapper().readTree(bytes);
-        assertEquals("margin",body.path("endpoint").asText());assertEquals("fixture-v1",body.path("sourceVersion").asText());assertTrue(body.path("sourceComplete").asBoolean());
-        var again=MarginAllSource.reopen(path,first.sourceFingerprint(),DAY);
-        assertEquals(first,again);assertArrayEquals(bytes,Files.readAllBytes(path));
+    @ParameterizedTest
+    @ValueSource(booleans = {false})
+    void sourceUsesExactEndpointParametersAndReopensTheSameImmutableBytes(boolean zrz)
+            throws Exception {
+        var pages = mock(TusharePageService.class);
+        var cancelled = (BooleanSupplier) () -> false;
+        var raw = row(zrz, "20250701");
+        var params = new ArrayList<Map<String, Object>>();
+        when(pages.fetcher(eq(MarginAllSource.CONTRACT), same(cancelled)))
+                .thenReturn(
+                        request -> {
+                            params.add(request);
+                            return new PageExecutor.Page(List.of(raw), null, false, "fixture-v1");
+                        });
+        SyncJobRunner.Page<?> first = new MarginAllSource(pages, temp).fetch(DAY, cancelled);
+        assertEquals(List.of(Map.of("trade_date", "20250701")), params);
+        assertEquals(1, first.rows().size());
+        Path path = Path.of(first.responseEvidence());
+        byte[] bytes = Files.readAllBytes(path);
+        assertEquals(FileEvidenceStore.sha256(bytes), first.sourceFingerprint());
+        var body = JobDefinitionJson.mapper().readTree(bytes);
+        assertEquals("margin", body.path("endpoint").asText());
+        assertEquals("fixture-v1", body.path("sourceVersion").asText());
+        assertTrue(body.path("sourceComplete").asBoolean());
+        var again = MarginAllSource.reopen(path, first.sourceFingerprint(), DAY);
+        assertEquals(first, again);
+        assertArrayEquals(bytes, Files.readAllBytes(path));
 
-        Files.writeString(path,"{}");assertThrows(IllegalStateException.class,()->{MarginAllSource.reopen(path,first.sourceFingerprint(),DAY);});
-    }
-    @ParameterizedTest @ValueSource(booleans={false})
-    void cancellationAfterFetchRetainsTheAlreadyReceivedRawRows(boolean zrz)throws Exception {
-        var pages=mock(TusharePageService.class);var cancel=new AtomicBoolean();BooleanSupplier cancelled=cancel::get;
-        when(pages.fetcher(any(),same(cancelled))).thenReturn(request->{cancel.set(true);return new PageExecutor.Page(List.of(row(zrz,"20250701")),null,false,null);});
-        assertThrows(PageExecutor.Incomplete.class,()->{new MarginAllSource(pages,temp).fetch(DAY,cancelled);});
-        try(var files=Files.list(temp)){var receipts=files.toList();assertEquals(1,receipts.size());assertTrue(receipts.getFirst().getFileName().toString().startsWith("incomplete-"));var proof=JobDefinitionJson.mapper().readTree(receipts.getFirst().toFile());assertFalse(proof.path("sourceComplete").asBoolean());assertEquals(1,proof.path("returnedRows").asInt());assertEquals(1,proof.path("rawRows").size());}
-    }
-    @ParameterizedTest @ValueSource(booleans={false})
-    void invalidProviderRowsAreRetainedBeforeValidationFailure(boolean zrz)throws Exception {
-        var pages=mock(TusharePageService.class);var raw=row(zrz,"20250630");when(pages.fetcher(any(),any())).thenReturn(request->new PageExecutor.Page(List.of(raw),null,false,null));
-        assertThrows(PageExecutor.Incomplete.class,()->{new MarginAllSource(pages,temp).fetch(DAY,()->false);});
-        try(var files=Files.list(temp)){var proof=JobDefinitionJson.mapper().readTree(files.findFirst().orElseThrow().toFile());assertEquals("20250630",proof.path("rawRows").get(0).path("trade_date").asText());assertFalse(proof.path("sourceComplete").asBoolean());}
+        Files.writeString(path, "{}");
+        assertThrows(
+                IllegalStateException.class,
+                () -> {
+                    MarginAllSource.reopen(path, first.sourceFingerprint(), DAY);
+                });
     }
 
-    @ParameterizedTest @ValueSource(booleans={false})
-    void ownerConstructionOnlyReadsConfiguredTableAndRunValidationPrecedesIo(boolean zrz)throws Exception {
-        var jobs=mock(SyncJobRegistry.class);var pages=mock(TusharePageService.class);Path ledger=temp.resolve("ledger.sqlite3");
-        {var target=mock(MarginAllTarget.class);when(target.tableName()).thenReturn("java_d028_margin_all_contract");var owner=new MarginAllJobService(jobs,pages,target,ledger);verify(target).tableName();clearInvocations(target);assertThrows(IllegalArgumentException.class,()->owner.runRequest(null,null));verifyNoInteractions(target);}
-        verifyNoInteractions(jobs,pages);assertFalse(Files.exists(ledger));
+    @ParameterizedTest
+    @ValueSource(booleans = {false})
+    void cancellationAfterFetchRetainsTheAlreadyReceivedRawRows(boolean zrz) throws Exception {
+        var pages = mock(TusharePageService.class);
+        var cancel = new AtomicBoolean();
+        BooleanSupplier cancelled = cancel::get;
+        when(pages.fetcher(any(), same(cancelled)))
+                .thenReturn(
+                        request -> {
+                            cancel.set(true);
+                            return new PageExecutor.Page(
+                                    List.of(row(zrz, "20250701")), null, false, null);
+                        });
+        assertThrows(
+                PageExecutor.Incomplete.class,
+                () -> {
+                    new MarginAllSource(pages, temp).fetch(DAY, cancelled);
+                });
+        try (var files = Files.list(temp)) {
+            var receipts = files.toList();
+            assertEquals(1, receipts.size());
+            assertTrue(receipts.getFirst().getFileName().toString().startsWith("incomplete-"));
+            var proof = JobDefinitionJson.mapper().readTree(receipts.getFirst().toFile());
+            assertFalse(proof.path("sourceComplete").asBoolean());
+            assertEquals(1, proof.path("returnedRows").asInt());
+            assertEquals(1, proof.path("rawRows").size());
+        }
     }
-    static Map<String,JsonNode> row(boolean zrz,String day){
-        var result=new LinkedHashMap<String,JsonNode>();for(String field:MarginAllSource.FIELDS)result.put(field,JobDefinitionJson.mapper().valueToTree(field.equals("trade_date")?day:field.equals("exchange_id")?"SSE":field.equals("repo_amount")?null:5.25));return result;
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false})
+    void invalidProviderRowsAreRetainedBeforeValidationFailure(boolean zrz) throws Exception {
+        var pages = mock(TusharePageService.class);
+        var raw = row(zrz, "20250630");
+        when(pages.fetcher(any(), any()))
+                .thenReturn(request -> new PageExecutor.Page(List.of(raw), null, false, null));
+        assertThrows(
+                PageExecutor.Incomplete.class,
+                () -> {
+                    new MarginAllSource(pages, temp).fetch(DAY, () -> false);
+                });
+        try (var files = Files.list(temp)) {
+            var proof =
+                    JobDefinitionJson.mapper().readTree(files.findFirst().orElseThrow().toFile());
+            assertEquals("20250630", proof.path("rawRows").get(0).path("trade_date").asText());
+            assertFalse(proof.path("sourceComplete").asBoolean());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false})
+    void ownerConstructionOnlyReadsConfiguredTableAndRunValidationPrecedesIo(boolean zrz)
+            throws Exception {
+        var jobs = mock(SyncJobRegistry.class);
+        var pages = mock(TusharePageService.class);
+        Path ledger = temp.resolve("ledger.sqlite3");
+        {
+            var target = mock(MarginAllTarget.class);
+            when(target.tableName()).thenReturn("java_d028_margin_all_contract");
+            var owner = new MarginAllJobService(jobs, pages, target, ledger);
+            verify(target).tableName();
+            clearInvocations(target);
+            assertThrows(IllegalArgumentException.class, () -> owner.runRequest(null, null));
+            verifyNoInteractions(target);
+        }
+        verifyNoInteractions(jobs, pages);
+        assertFalse(Files.exists(ledger));
+    }
+
+    static Map<String, JsonNode> row(boolean zrz, String day) {
+        var result = new LinkedHashMap<String, JsonNode>();
+        for (String field : MarginAllSource.FIELDS)
+            result.put(
+                    field,
+                    JobDefinitionJson.mapper()
+                            .valueToTree(
+                                    field.equals("trade_date")
+                                            ? day
+                                            : field.equals("exchange_id")
+                                                    ? "SSE"
+                                                    : field.equals("repo_amount") ? null : 5.25));
+        return result;
     }
 }

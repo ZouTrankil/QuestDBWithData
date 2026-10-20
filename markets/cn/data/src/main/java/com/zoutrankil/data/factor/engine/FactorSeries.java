@@ -15,17 +15,21 @@ public final class FactorSeries {
     }
 
     public static double[] combine(double[] left, double[] right, DoubleBinaryOperator operation) {
-        if (left.length != right.length) throw new IllegalArgumentException("Series lengths differ");
+        if (left.length != right.length)
+            throw new IllegalArgumentException("Series lengths differ");
         double[] result = new double[left.length];
-        for (int i = 0; i < left.length; i++) result[i] = operation.applyAsDouble(left[i], right[i]);
+        for (int i = 0; i < left.length; i++)
+            result[i] = operation.applyAsDouble(left[i], right[i]);
         return result;
     }
 
     public static double[] shift(double[] values, int periods) {
-        if (periods < 0) throw new IllegalArgumentException("Forward-looking shifts are not features");
+        if (periods < 0)
+            throw new IllegalArgumentException("Forward-looking shifts are not features");
         double[] result = new double[values.length];
         Arrays.fill(result, Double.NaN);
-        if (periods < values.length) System.arraycopy(values, 0, result, periods, values.length - periods);
+        if (periods < values.length)
+            System.arraycopy(values, 0, result, periods, values.length - periods);
         return result;
     }
 
@@ -51,8 +55,11 @@ public final class FactorSeries {
         for (int i = 0; i < values.length; i++) {
             if (i >= window && Double.isFinite(values[i - window])) {
                 double old = values[i - window];
-                if (count == 1) { count = 0; mean = 0; m2 = 0; }
-                else {
+                if (count == 1) {
+                    count = 0;
+                    mean = 0;
+                    m2 = 0;
+                } else {
                     double nextMean = mean + (mean - old) / (count - 1);
                     m2 -= (old - mean) * (old - nextMean);
                     mean = nextMean;
@@ -71,9 +78,14 @@ public final class FactorSeries {
             // Once every finite member is identical, reset remove/add roundoff.
             // Otherwise a constant price can acquire nonzero volatility and a
             // zero volume denominator can incorrectly produce a finite ratio.
-            if (count > 0 && identicalRun >= count) { mean = lastFinite; m2 = 0; }
-            result[i] = count < minimum || (std && count < 2) ? Double.NaN
-                    : std ? Math.sqrt(Math.max(0, m2) / (count - 1)) : mean;
+            if (count > 0 && identicalRun >= count) {
+                mean = lastFinite;
+                m2 = 0;
+            }
+            result[i] =
+                    count < minimum || (std && count < 2)
+                            ? Double.NaN
+                            : std ? Math.sqrt(Math.max(0, m2) / (count - 1)) : mean;
         }
         return result;
     }

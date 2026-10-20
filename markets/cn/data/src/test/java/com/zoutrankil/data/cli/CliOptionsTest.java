@@ -1,39 +1,54 @@
 package com.zoutrankil.data.cli;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class CliOptionsTest {
-    @Test void acceptsBothValueFormsAndSplitsOnlyTheFirstEquals() {
-        assertEquals(Map.of("--from", "2026-10-01", "--parameters", "a=b=c", "--offset", "-2"),
-                CliOptions.parse(new String[]{"plan", "--from", "2026-10-01", "--parameters=a=b=c", "--offset", "-2"}));
+    @Test
+    void acceptsBothValueFormsAndSplitsOnlyTheFirstEquals() {
+        assertEquals(
+                Map.of("--from", "2026-10-01", "--parameters", "a=b=c", "--offset", "-2"),
+                CliOptions.parse(
+                        new String[] {
+                            "plan", "--from", "2026-10-01", "--parameters=a=b=c", "--offset", "-2"
+                        }));
     }
 
-    @Test void retainsWhitespaceAndExplicitDashValuesWithoutMutatingArguments() {
+    @Test
+    void retainsWhitespaceAndExplicitDashValuesWithoutMutatingArguments() {
         String[] arguments = {"plan", "--file=  path with spaces  ", "--literal=--next"};
         String[] original = arguments.clone();
-        assertEquals(Map.of("--file", "  path with spaces  ", "--literal", "--next"), CliOptions.parse(arguments));
+        assertEquals(
+                Map.of("--file", "  path with spaces  ", "--literal", "--next"),
+                CliOptions.parse(arguments));
         assertArrayEquals(original, arguments);
     }
 
-    @Test void commandTokenIsOutsideTheOptionsParserAndReturnedMapsAreIndependent() {
-        assertTrue(CliOptions.parse(new String[]{}).isEmpty());
-        var first = CliOptions.parse(new String[]{"unknown-command"});
+    @Test
+    void commandTokenIsOutsideTheOptionsParserAndReturnedMapsAreIndependent() {
+        assertTrue(CliOptions.parse(new String[] {}).isEmpty());
+        var first = CliOptions.parse(new String[] {"unknown-command"});
         first.put("--added", "value");
-        assertTrue(CliOptions.parse(new String[]{"unknown-command"}).isEmpty());
+        assertTrue(CliOptions.parse(new String[] {"unknown-command"}).isEmpty());
     }
 
     @ParameterizedTest
     @MethodSource("invalidArguments")
     void preservesExactLexicalFailureMessages(String[] arguments, String message) {
-        assertEquals(message, assertThrows(IllegalArgumentException.class, () -> CliOptions.parse(arguments)).getMessage());
+        assertEquals(
+                message,
+                assertThrows(IllegalArgumentException.class, () -> CliOptions.parse(arguments))
+                        .getMessage());
     }
 
     static Stream<Arguments> invalidArguments() {

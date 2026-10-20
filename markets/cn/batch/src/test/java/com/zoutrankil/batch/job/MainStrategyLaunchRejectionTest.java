@@ -1,13 +1,22 @@
 package com.zoutrankil.batch.job;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+
 import com.zoutrankil.batch.domain.BusinessState;
 import com.zoutrankil.batch.domain.RunRequest;
 import com.zoutrankil.batch.testsupport.BatchLedgerTestDatabase;
 
-import java.nio.file.Path;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.batch.core.BatchStatus;
@@ -15,9 +24,10 @@ import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.JobExecution;
 import org.springframework.batch.core.launch.JobOperator;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import java.nio.file.Path;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
 
 class MainStrategyLaunchRejectionTest {
     @TempDir Path temp;
@@ -33,12 +43,15 @@ class MainStrategyLaunchRejectionTest {
 
         assertEquals("Unregistered executable job", error.getMessage());
         assertEquals(BusinessState.IN_DOUBT, database.reopen().ledger.state(request.instanceId()));
-        assertNotEquals(BusinessState.VERIFIED.name(), database.ledger.detail(request.instanceId()).get("business_state"));
+        assertNotEquals(
+                BusinessState.VERIFIED.name(),
+                database.ledger.detail(request.instanceId()).get("business_state"));
         verifyNoInteractions(operator);
     }
 
     @Test
-    void completedOperatorCannotVerifyAJobWithoutItsAuthoritativeCompletionProtocol() throws Exception {
+    void completedOperatorCannotVerifyAJobWithoutItsAuthoritativeCompletionProtocol()
+            throws Exception {
         var database = BatchLedgerTestDatabase.create(temp);
         var job = mock(Job.class);
         when(job.getName()).thenReturn("main_strategy_daily");
@@ -64,7 +77,20 @@ class MainStrategyLaunchRejectionTest {
     private static RunRequest request() {
         var day = LocalDate.of(2026, 9, 29);
         var at = Instant.parse("2026-09-29T10:30:00Z");
-        return new RunRequest("main-strategy-test", "main_strategy_daily", day, day, day,
-                MainStrategyDailyWork.DEFINITION_VERSION, "0", null, null, "source-v1", "calendar-v1", "Asia/Shanghai", at, at);
+        return new RunRequest(
+                "main-strategy-test",
+                "main_strategy_daily",
+                day,
+                day,
+                day,
+                MainStrategyDailyWork.DEFINITION_VERSION,
+                "0",
+                null,
+                null,
+                "source-v1",
+                "calendar-v1",
+                "Asia/Shanghai",
+                at,
+                at);
     }
 }

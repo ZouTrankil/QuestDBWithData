@@ -1,12 +1,16 @@
 package com.zoutrankil.data.derived.application;
 
-import com.zoutrankil.data.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
-import com.zoutrankil.data.domain.SyncJobDefinition;
-import com.zoutrankil.data.derived.port.RetailSentimentDailySession;
 import com.zoutrankil.data.derived.domain.RetailSentimentDailyPolicy;
+import com.zoutrankil.data.derived.port.RetailSentimentDailySession;
+import com.zoutrankil.data.domain.SyncJobDefinition;
+import com.zoutrankil.data.domain.derived.RetailSentimentDaily;
 import com.zoutrankil.data.domain.derived.RetailSentimentDailySnapshot;
+import com.zoutrankil.data.service.DailyTradingSessions;
+import com.zoutrankil.data.service.DatasetIntervalLock;
+import com.zoutrankil.data.service.SyncJobRunner;
+import com.zoutrankil.data.service.VerifiedBatchExecutor;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -26,8 +30,13 @@ public final class RetailSentimentDailyMaterializeAdapter
     private static final ObjectMapper JSON = new ObjectMapper();
     public static final VerifiedBatchExecutor.Codec<RetailSentimentDaily, LocalDate> CODEC =
             new VerifiedBatchExecutor.Codec<>() {
-                @Override public LocalDate key(RetailSentimentDaily row) { return row.tradeDate(); }
-                @Override public byte[] canonicalBytes(RetailSentimentDaily row) {
+                @Override
+                public LocalDate key(RetailSentimentDaily row) {
+                    return row.tradeDate();
+                }
+
+                @Override
+                public byte[] canonicalBytes(RetailSentimentDaily row) {
                     var value = ByteBuffer.allocate(116);
                     value.putLong(row.tradeDate().toEpochDay());
                     number(value, row.avgRetailRatio());
@@ -44,12 +53,16 @@ public final class RetailSentimentDailyMaterializeAdapter
                     number(value, row.totalMainNetYi());
                     return value.array();
                 }
-                @Override public boolean equivalent(RetailSentimentDaily left, RetailSentimentDaily right) {
+
+                @Override
+                public boolean equivalent(RetailSentimentDaily left, RetailSentimentDaily right) {
                     return RetailSentimentDailyPolicy.equivalent(left, right);
                 }
+
                 private void integer(ByteBuffer output, Long value) {
                     output.put((byte) (value == null ? 0 : 1)).putLong(value == null ? 0 : value);
                 }
+
                 private void number(ByteBuffer output, Double value) {
                     output.put((byte) (value == null ? 0 : 1)).putDouble(value == null ? 0 : value);
                 }
@@ -60,17 +73,20 @@ public final class RetailSentimentDailyMaterializeAdapter
     private long sourceRawRows;
     private RetailSentimentDailySnapshot lastVerificationSnapshot;
 
-    public RetailSentimentDailyMaterializeAdapter(RetailSentimentDailySession port, RetailSentimentDailySnapshot frozen) {
+    public RetailSentimentDailyMaterializeAdapter(
+            RetailSentimentDailySession port, RetailSentimentDailySnapshot frozen) {
         this.port = Objects.requireNonNull(port);
         this.frozen = Objects.requireNonNull(frozen);
     }
 
-    @Override public DatasetIntervalLock.Scope conflictScope(SyncJobDefinition.FrozenRequest request) {
+    @Override
+    public DatasetIntervalLock.Scope conflictScope(SyncJobDefinition.FrozenRequest request) {
         // Native refresh affects the complete physical MV, even for a bounded verification window.
         return DatasetIntervalLock.Scope.allDates(request.definition().datasetId());
     }
 
-    @Override public void preflight(SyncJobDefinition.FrozenRequest request) {
+    @Override
+    public void preflight(SyncJobDefinition.FrozenRequest request) {
         requireRequest(request);
         if (full(request)) port.configureFullIsolated();
         port.bind(request.from(), request.to(), frozen);
@@ -80,8 +96,12 @@ public final class RetailSentimentDailyMaterializeAdapter
         requireCalendarVersion(request);
     }
 
-    @Override public SyncJobRunner.SourceCompletion fetch(SyncJobDefinition.FrozenRequest request,
-            SyncJobRunner.PageConsumer<RetailSentimentDaily> consumer, BooleanSupplier cancelled) throws Exception {
+    @Override
+    public SyncJobRunner.SourceCompletion fetch(
+            SyncJobDefinition.FrozenRequest request,
+            SyncJobRunner.PageConsumer<RetailSentimentDaily> consumer,
+            BooleanSupplier cancelled)
+            throws Exception {
         requireRequest(request);
         check(cancelled);
         port.cancellationProbe(cancelled);
@@ -92,31 +112,37 @@ public final class RetailSentimentDailyMaterializeAdapter
         var expected = port.expected(request.from(), request.to());
         if (request.mode() == SyncJobDefinition.Mode.INCREMENTAL) {
             requireCalendarVersion(request);
-            requireCalendarCoverage(request.from(), request.to(),
+            requireCalendarCoverage(
+                    request.from(),
+                    request.to(),
                     expected.stream().map(RetailSentimentDaily::tradeDate).toList());
             requireCalendarVersion(request);
         }
         port.requireSourceCoverage(request.from(), request.to(), sourceRawRows, expected);
         RetailSentimentDailySnapshot sourceAfter = port.snapshot();
         if (!before.sourceUnchanged(sourceAfter))
-            throw new IllegalStateException("D098 source changed while reading its complete bounded aggregation");
+            throw new IllegalStateException(
+                    "D098 source changed while reading its complete bounded aggregation");
         if ((sourceRawRows == 0) != expected.isEmpty())
-            throw new IllegalStateException("D098 daily output does not cover all source rows in the frozen interval");
+            throw new IllegalStateException(
+                    "D098 daily output does not cover all source rows in the frozen interval");
         if (full(request) && expected.isEmpty())
             throw new IllegalStateException("D098 FULL repair requires real nonempty source rows");
         if (expected.isEmpty()) {
             var actual = port.actual(request.from(), request.to());
             RetailSentimentDailySnapshot afterEmptyRead = port.snapshot();
             if (!actual.isEmpty() || !before.equals(afterEmptyRead))
-                throw new IllegalStateException("D098 empty source has stale output or its MV version changed");
+                throw new IllegalStateException(
+                        "D098 empty source has stale output or its MV version changed");
             requireReady(afterEmptyRead);
             lastVerificationSnapshot = afterEmptyRead;
         }
         String fingerprint = fingerprint(expected, request);
         String evidence = evidence(request, expected.size(), fingerprint, sourceAfter);
         check(cancelled);
-        consumer.accept(new SyncJobRunner.Page<>(expected, fingerprint, evidence,
-                request.from() + "/" + request.to()));
+        consumer.accept(
+                new SyncJobRunner.Page<>(
+                        expected, fingerprint, evidence, request.from() + "/" + request.to()));
         check(cancelled);
         RetailSentimentDailySnapshot completed = port.snapshot();
         requireReady(completed);
@@ -124,73 +150,128 @@ public final class RetailSentimentDailyMaterializeAdapter
             throw new IllegalStateException("D098 source changed before verification was complete");
         if (!expected.isEmpty()) lastVerificationSnapshot = port.verifiedSnapshot();
         if (lastVerificationSnapshot == null || !lastVerificationSnapshot.equals(completed))
-            throw new IllegalStateException("D098 MV version changed after its actual readback verification");
-        if (full(request) && (port.outputRowCount() != expected.size() || !completed.equals(port.snapshot())))
-            throw new IllegalStateException("D098 FULL output still contains rows outside the complete verified source window");
+            throw new IllegalStateException(
+                    "D098 MV version changed after its actual readback verification");
+        if (full(request)
+                && (port.outputRowCount() != expected.size() || !completed.equals(port.snapshot())))
+            throw new IllegalStateException(
+                    "D098 FULL output still contains rows outside the complete verified source window");
         requireCalendarVersion(request);
-        return new SyncJobRunner.SourceCompletion(1, expected.size(), true,
+        return new SyncJobRunner.SourceCompletion(
+                1,
+                expected.size(),
+                true,
                 evidence(request, expected.size(), fingerprint, completed));
     }
 
-    @Override public VerifiedBatchExecutor.Codec<RetailSentimentDaily, LocalDate> codec() { return CODEC; }
-
-    /** Reconciliation verifies the original window without submitting another native refresh. */
-    public SyncJobRunner.SourceCompletion revalidateOnly(SyncJobDefinition.FrozenRequest request,
-                                                          BooleanSupplier cancelled) throws Exception {
-        return fetch(request, page -> {
-            if (page.rows().isEmpty()) return;
-            var expected = page.rows();
-            var actual = port.readback(expected.stream().map(RetailSentimentDaily::tradeDate).toList());
-            if (actual.size() != expected.size()) throw new IllegalStateException("D098 reconciliation date coverage differs");
-            for (int index = 0; index < expected.size(); index++)
-                if (!CODEC.equivalent(expected.get(index), actual.get(index)))
-                    throw new IllegalStateException("D098 reconciliation actual field values differ");
-            if (!port.walSettled()) throw new IllegalStateException("D098 reconciliation MV changed or WAL is unsettled");
-        }, cancelled);
+    @Override
+    public VerifiedBatchExecutor.Codec<RetailSentimentDaily, LocalDate> codec() {
+        return CODEC;
     }
 
-    @Override public RetailSentimentDailySession port() { return port; }
-    @Override public boolean recoveryRequired(String runId) { return port.unresolved(); }
-    @Override public Duration visibilityTimeout() {
+    /** Reconciliation verifies the original window without submitting another native refresh. */
+    public SyncJobRunner.SourceCompletion revalidateOnly(
+            SyncJobDefinition.FrozenRequest request, BooleanSupplier cancelled) throws Exception {
+        return fetch(
+                request,
+                page -> {
+                    if (page.rows().isEmpty()) return;
+                    var expected = page.rows();
+                    var actual =
+                            port.readback(
+                                    expected.stream()
+                                            .map(RetailSentimentDaily::tradeDate)
+                                            .toList());
+                    if (actual.size() != expected.size())
+                        throw new IllegalStateException(
+                                "D098 reconciliation date coverage differs");
+                    for (int index = 0; index < expected.size(); index++)
+                        if (!CODEC.equivalent(expected.get(index), actual.get(index)))
+                            throw new IllegalStateException(
+                                    "D098 reconciliation actual field values differ");
+                    if (!port.walSettled())
+                        throw new IllegalStateException(
+                                "D098 reconciliation MV changed or WAL is unsettled");
+                },
+                cancelled);
+    }
+
+    @Override
+    public RetailSentimentDailySession port() {
+        return port;
+    }
+
+    @Override
+    public boolean recoveryRequired(String runId) {
+        return port.unresolved();
+    }
+
+    @Override
+    public Duration visibilityTimeout() {
         var timeout = port.visibilityTimeout();
         return timeout == null ? Duration.ofMinutes(3) : timeout;
     }
-    public long sourceRawRows() { return sourceRawRows; }
-    public RetailSentimentDailySnapshot lastVerificationSnapshot() { return lastVerificationSnapshot; }
+
+    public long sourceRawRows() {
+        return sourceRawRows;
+    }
+
+    public RetailSentimentDailySnapshot lastVerificationSnapshot() {
+        return lastVerificationSnapshot;
+    }
 
     private void requireRequest(SyncJobDefinition.FrozenRequest request) {
-        if (request == null || !"mv_retail_sentiment_daily".equals(request.definition().datasetId())
+        if (request == null
+                || !"mv_retail_sentiment_daily".equals(request.definition().datasetId())
                 || request.definition().datasetVersion() != 1
-                || !Set.of(SyncJobDefinition.Mode.INCREMENTAL, SyncJobDefinition.Mode.MATERIALIZE,
-                           SyncJobDefinition.Mode.RECONCILE).contains(request.mode())
-                || request.from() == null || request.to() == null
+                || !Set.of(
+                                SyncJobDefinition.Mode.INCREMENTAL,
+                                SyncJobDefinition.Mode.MATERIALIZE,
+                                SyncJobDefinition.Mode.RECONCILE)
+                        .contains(request.mode())
+                || request.from() == null
+                || request.to() == null
                 || !frozen.sourceVersion().equals(request.parameters().get("source_version"))
                 || !port.targetId().equals(request.parameters().get("target_id"))
                 || request.mode() == SyncJobDefinition.Mode.INCREMENTAL
-                    && !(request.parameters().get("calendar_version") instanceof String)
+                        && !(request.parameters().get("calendar_version") instanceof String)
                 || full(request) && request.mode() != SyncJobDefinition.Mode.MATERIALIZE)
-            throw new IllegalArgumentException("Exact D098 frozen definition, source version and physical target required");
+            throw new IllegalArgumentException(
+                    "Exact D098 frozen definition, source version and physical target required");
     }
 
     private void requireSourceReady(RetailSentimentDailySnapshot state, boolean repair) {
-        if ((!repair && !state.valid()) || "refreshing".equalsIgnoreCase(state.viewStatus())
-                || !state.sourceSettled() || !state.mvSettled()
-                || !frozen.sourceUnchanged(state) || frozen.mvId() != state.mvId()
+        if ((!repair && !state.valid())
+                || "refreshing".equalsIgnoreCase(state.viewStatus())
+                || !state.sourceSettled()
+                || !state.mvSettled()
+                || !frozen.sourceUnchanged(state)
+                || frozen.mvId() != state.mvId()
                 || !frozen.mvDirectory().equals(state.mvDirectory())
                 || !frozen.definitionSha().equals(state.definitionSha()))
-            throw new IllegalStateException("D098 source/MV is invalid, refreshing, unsettled or changed");
+            throw new IllegalStateException(
+                    "D098 source/MV is invalid, refreshing, unsettled or changed");
     }
 
     private void requireReady(RetailSentimentDailySnapshot state) {
-        if (!state.valid() || !state.caughtUp() || !state.sourceSettled() || !state.mvSettled()
-                || !frozen.sourceUnchanged(state) || frozen.mvId() != state.mvId()
+        if (!state.valid()
+                || !state.caughtUp()
+                || !state.sourceSettled()
+                || !state.mvSettled()
+                || !frozen.sourceUnchanged(state)
+                || frozen.mvId() != state.mvId()
                 || !frozen.mvDirectory().equals(state.mvDirectory())
                 || !frozen.definitionSha().equals(state.definitionSha()))
-            throw new IllegalStateException("D098 source/MV is invalid, lagging, unsettled or differs from the frozen target");
+            throw new IllegalStateException(
+                    "D098 source/MV is invalid, lagging, unsettled or differs from the frozen target");
     }
 
-    private String evidence(SyncJobDefinition.FrozenRequest request, int rows, String fingerprint,
-                            RetailSentimentDailySnapshot state) throws Exception {
+    private String evidence(
+            SyncJobDefinition.FrozenRequest request,
+            int rows,
+            String fingerprint,
+            RetailSentimentDailySnapshot state)
+            throws Exception {
         var details = new LinkedHashMap<String, Object>();
         details.put("nativeRefresh", full(request) ? "FULL_ISOLATED" : "INCREMENTAL");
         details.put("source", RetailSentimentDailyPolicy.SOURCE);
@@ -203,35 +284,49 @@ public final class RetailSentimentDailyMaterializeAdapter
         details.put("calendarVersion", request.parameters().get("calendar_version"));
         details.put("snapshot", state);
         details.put("sourceComplete", true);
-        details.put("completenessMeaning", "all rows of the frozen physical base-table interval, aggregated without filtering");
+        details.put(
+                "completenessMeaning",
+                "all rows of the frozen physical base-table interval, aggregated without filtering");
         return JSON.writeValueAsString(details);
     }
 
-    private void requireCalendarCoverage(LocalDate start, LocalDate end, List<LocalDate> expectedDates) {
+    private void requireCalendarCoverage(
+            LocalDate start, LocalDate end, List<LocalDate> expectedDates) {
         RetailSentimentDailyPolicy.window(start, end);
         Objects.requireNonNull(expectedDates);
         String before = port.calendarVersion();
         var calendars = port.newCalendarReader();
         List<LocalDate> sessions = DailyTradingSessions.read(calendars, start, end);
         if (!sessions.equals(expectedDates))
-            throw new IllegalStateException("D098 source daily buckets do not cover the complete real SSE trading calendar");
+            throw new IllegalStateException(
+                    "D098 source daily buckets do not cover the complete real SSE trading calendar");
         if (!before.equals(port.calendarVersion()))
-            throw new IllegalStateException("D098 exchange calendar changed during coverage verification");
+            throw new IllegalStateException(
+                    "D098 exchange calendar changed during coverage verification");
     }
 
     private void requireCalendarVersion(SyncJobDefinition.FrozenRequest request) {
         if (request.mode() == SyncJobDefinition.Mode.INCREMENTAL
                 && !port.calendarVersion().equals(request.parameters().get("calendar_version")))
-            throw new IllegalStateException("D098 real exchange calendar differs from the frozen incremental version");
+            throw new IllegalStateException(
+                    "D098 real exchange calendar differs from the frozen incremental version");
     }
 
-    private String fingerprint(List<RetailSentimentDaily> expected,
-                               SyncJobDefinition.FrozenRequest request) throws Exception {
+    private String fingerprint(
+            List<RetailSentimentDaily> expected, SyncJobDefinition.FrozenRequest request)
+            throws Exception {
         var digest = MessageDigest.getInstance("SHA-256");
-        for (String part : List.of(frozen.sourceVersion(), frozen.definitionSha(), request.from().toString(),
-                request.to().toString(), Long.toString(sourceRawRows),
-                Objects.toString(request.parameters().get("calendar_version"), "not-incremental"),
-                Objects.toString(request.parameters().get("native_refresh"), "INCREMENTAL"))) {
+        for (String part :
+                List.of(
+                        frozen.sourceVersion(),
+                        frozen.definitionSha(),
+                        request.from().toString(),
+                        request.to().toString(),
+                        Long.toString(sourceRawRows),
+                        Objects.toString(
+                                request.parameters().get("calendar_version"), "not-incremental"),
+                        Objects.toString(
+                                request.parameters().get("native_refresh"), "INCREMENTAL"))) {
             digest.update(part.getBytes(StandardCharsets.UTF_8));
             digest.update((byte) 0);
         }
@@ -243,7 +338,9 @@ public final class RetailSentimentDailyMaterializeAdapter
         if (cancelled.getAsBoolean() || Thread.currentThread().isInterrupted())
             throw new CancellationException("D098 materialization cancelled");
     }
+
     private static boolean full(SyncJobDefinition.FrozenRequest request) {
-        return request != null && "FULL_ISOLATED".equals(request.parameters().get("native_refresh"));
+        return request != null
+                && "FULL_ISOLATED".equals(request.parameters().get("native_refresh"));
     }
 }

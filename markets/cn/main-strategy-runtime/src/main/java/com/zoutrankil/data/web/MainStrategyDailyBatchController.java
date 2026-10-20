@@ -1,48 +1,110 @@
 package com.zoutrankil.data.web;
 
 import com.zoutrankil.batch.strategy.MainStrategyDailyBatchRuntime;
-import java.util.Map;
-import java.util.UUID;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+
 /** 复用已有 Web API 鉴权保护；全部控制操作进入同一个协调器。 */
 @RestController
-@RequestMapping(path="/api/v1/batch/main-strategy",produces=MediaType.APPLICATION_JSON_VALUE)
-@ConditionalOnWebApplication(type=ConditionalOnWebApplication.Type.REACTIVE)
-@ConditionalOnProperty(prefix="app.sync.batch",name="enabled",havingValue="true",matchIfMissing=true)
+@RequestMapping(path = "/api/v1/batch/main-strategy", produces = MediaType.APPLICATION_JSON_VALUE)
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+@ConditionalOnProperty(
+        prefix = "app.sync.batch",
+        name = "enabled",
+        havingValue = "true",
+        matchIfMissing = true)
 public class MainStrategyDailyBatchController {
     private final MainStrategyDailyBatchRuntime runtime;
-    public MainStrategyDailyBatchController(MainStrategyDailyBatchRuntime runtime) { this.runtime=runtime; }
-    @GetMapping public Mono<?> status() { return call(runtime::status); }
-    @GetMapping("/instances/{instance}") public Mono<?> detail(@PathVariable("instance")String instance) {
-        if(!instance.matches("[a-f0-9]{64}")) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid instance identity");
-        return call(()->runtime.detail(instance));
+
+    public MainStrategyDailyBatchController(MainStrategyDailyBatchRuntime runtime) {
+        this.runtime = runtime;
     }
-    @PostMapping("/catch-up") public Mono<?> catchup(@RequestHeader(name="Idempotency-Key",required=false)String key) {
-        String request=key==null?"manual:"+UUID.randomUUID():"manual:"+key;
-        if(request.length()>256||request.isBlank()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Bounded idempotency key required");
-        return call(()->runtime.catchup(request));
+
+    @GetMapping
+    public Mono<?> status() {
+        return call(runtime::status);
     }
-    @PostMapping("/pause") public Mono<?> pause() { return call(()->runtime.setEnabled(false)); }
-    public record PublicationReconciliation(String stage,String runId,boolean writerStopped){}
-    @PostMapping("/instances/{instance}/reconcile-publication") public Mono<?> reconcilePublication(@PathVariable("instance")String instance,
-            @RequestBody PublicationReconciliation body,@RequestHeader(name="Idempotency-Key",required=false)String key) {
-        if(body==null)throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Original publication request required");
-        String request=key==null?"reconcile:"+UUID.randomUUID():"reconcile:"+key;
-        if(request.length()>256||request.isBlank())throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Bounded idempotency key required");
-        return call(()->runtime.reconcilePublication(instance,body.stage(),body.runId(),body.writerStopped(),request));
+
+    @GetMapping("/instances/{instance}")
+    public Mono<?> detail(@PathVariable("instance") String instance) {
+        if (!instance.matches("[a-f0-9]{64}"))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid instance identity");
+        return call(() -> runtime.detail(instance));
     }
-    @PostMapping("/resume") public Mono<?> resume() { return call(()->runtime.setEnabled(true)); }
-    private static Mono<?> call(java.util.concurrent.Callable<Map<String,Object>> action) {
-        return Mono.fromCallable(action).subscribeOn(Schedulers.boundedElastic())
-                .onErrorMap(IllegalStateException.class,error -> new ResponseStatusException(HttpStatus.CONFLICT,error.getMessage(),error))
-                .onErrorMap(IllegalArgumentException.class,error -> new ResponseStatusException(HttpStatus.BAD_REQUEST,error.getMessage(),error));
+
+    @PostMapping("/catch-up")
+    public Mono<?> catchup(@RequestHeader(name = "Idempotency-Key", required = false) String key) {
+        String request = key == null ? "manual:" + UUID.randomUUID() : "manual:" + key;
+        if (request.length() > 256 || request.isBlank())
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Bounded idempotency key required");
+        return call(() -> runtime.catchup(request));
+    }
+
+    @PostMapping("/pause")
+    public Mono<?> pause() {
+        return call(() -> runtime.setEnabled(false));
+    }
+
+    public record PublicationReconciliation(String stage, String runId, boolean writerStopped) {}
+
+    @PostMapping("/instances/{instance}/reconcile-publication")
+    public Mono<?> reconcilePublication(
+            @PathVariable("instance") String instance,
+            @RequestBody PublicationReconciliation body,
+            @RequestHeader(name = "Idempotency-Key", required = false) String key) {
+        if (body == null)
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Original publication request required");
+        String request = key == null ? "reconcile:" + UUID.randomUUID() : "reconcile:" + key;
+        if (request.length() > 256 || request.isBlank())
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Bounded idempotency key required");
+        return call(
+                () ->
+                        runtime.reconcilePublication(
+                                instance,
+                                body.stage(),
+                                body.runId(),
+                                body.writerStopped(),
+                                request));
+    }
+
+    @PostMapping("/resume")
+    public Mono<?> resume() {
+        return call(() -> runtime.setEnabled(true));
+    }
+
+    private static Mono<?> call(Callable<Map<String, Object>> action) {
+        return Mono.fromCallable(action)
+                .subscribeOn(Schedulers.boundedElastic())
+                .onErrorMap(
+                        IllegalStateException.class,
+                        error ->
+                                new ResponseStatusException(
+                                        HttpStatus.CONFLICT, error.getMessage(), error))
+                .onErrorMap(
+                        IllegalArgumentException.class,
+                        error ->
+                                new ResponseStatusException(
+                                        HttpStatus.BAD_REQUEST, error.getMessage(), error));
     }
 }

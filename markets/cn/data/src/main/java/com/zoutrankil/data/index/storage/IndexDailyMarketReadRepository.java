@@ -1,46 +1,93 @@
 package com.zoutrankil.data.index.storage;
 
-import com.zoutrankil.data.domain.index.IndexDailyMarketKey;
-import com.zoutrankil.data.domain.index.IndexDailyMarketDataset;
+import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.DatasetImplementation;
+import com.zoutrankil.data.domain.DatasetReadCursor;
+import com.zoutrankil.data.domain.DatasetReadPage;
+import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.index.IndexDailyMarket;
-import com.zoutrankil.data.repository.*;
+import com.zoutrankil.data.domain.index.IndexDailyMarketDataset;
+import com.zoutrankil.data.domain.index.IndexDailyMarketKey;
+import com.zoutrankil.data.domain.index.policy.IndexDailyMarketUniverse;
 import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
-import com.zoutrankil.data.domain.*;
 import com.zoutrankil.data.index.mapper.IndexDailyMarketMapper;
+import com.zoutrankil.data.repository.QuestDbBoundedReader;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+
 import java.time.LocalDate;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /** Bounded typed reads for an explicitly isolated D019 target. */
 @Repository
 public class IndexDailyMarketReadRepository implements DatasetImplementation {
-    private static final List<String> COLUMNS = IndexDailyMarketDataset.DEFINITION.columns().stream()
-            .map(DatasetDefinition.Column::logicalName).toList();
+    private static final List<String> COLUMNS =
+            IndexDailyMarketDataset.DEFINITION.columns().stream()
+                    .map(DatasetDefinition.Column::logicalName)
+                    .toList();
     private final QuestDbBoundedReader reader;
     private final String table;
     private final IndexDailyMarketMapper mapper = new IndexDailyMarketMapper();
-    public IndexDailyMarketReadRepository(QuestDbBoundedReader reader,
-            @Value("${app.sync.index-daily-market-table:java_d019_index_daily_market_acceptance}") String table) {
+
+    public IndexDailyMarketReadRepository(
+            QuestDbBoundedReader reader,
+            @Value("${app.sync.index-daily-market-table:java_d019_index_daily_market_acceptance}")
+                    String table) {
         this.reader = Objects.requireNonNull(reader);
         IsolatedTablePolicy.INDEX_DAILY_MARKET.require(table);
         this.table = table;
     }
-    @Override public DatasetDefinition definition() { return IndexDailyMarketDataset.legacyIsolatedDefinition(table); }
+
+    @Override
+    public DatasetDefinition definition() {
+        return IndexDailyMarketDataset.legacyIsolatedDefinition(table);
+    }
+
     public DatasetReadPage<IndexDailyMarket> findByKey(IndexDailyMarketKey key) {
         Objects.requireNonNull(key);
-        return find(new DatasetReadQuery(COLUMNS, Map.of("ts_code", key.tsCode(), "trade_date", key.tradeDate()), null, null, null, 1, null));
+        return find(
+                new DatasetReadQuery(
+                        COLUMNS,
+                        Map.of("ts_code", key.tsCode(), "trade_date", key.tradeDate()),
+                        null,
+                        null,
+                        null,
+                        1,
+                        null));
     }
-    public DatasetReadPage<IndexDailyMarket> findRange(String tsCode, LocalDate fromInclusive,
-            LocalDate toExclusive, int pageSize, DatasetReadCursor cursor) {
-        if (!com.zoutrankil.data.domain.index.policy.IndexDailyMarketUniverse.valid(tsCode) || fromInclusive == null || toExclusive == null
-                || !fromInclusive.isBefore(toExclusive)) throw new IllegalArgumentException("Known index and increasing half-open range required");
-        return find(new DatasetReadQuery(COLUMNS, Map.of("ts_code", tsCode), "trade_date",
-                fromInclusive, toExclusive, pageSize, cursor));
+
+    public DatasetReadPage<IndexDailyMarket> findRange(
+            String tsCode,
+            LocalDate fromInclusive,
+            LocalDate toExclusive,
+            int pageSize,
+            DatasetReadCursor cursor) {
+        if (!IndexDailyMarketUniverse.valid(tsCode)
+                || fromInclusive == null
+                || toExclusive == null
+                || !fromInclusive.isBefore(toExclusive))
+            throw new IllegalArgumentException(
+                    "Known index and increasing half-open range required");
+        return find(
+                new DatasetReadQuery(
+                        COLUMNS,
+                        Map.of("ts_code", tsCode),
+                        "trade_date",
+                        fromInclusive,
+                        toExclusive,
+                        pageSize,
+                        cursor));
     }
+
     public DatasetReadPage<IndexDailyMarket> find(DatasetReadQuery query) {
-        if (query.columns().size() != COLUMNS.size() || !new HashSet<>(query.columns()).equals(new HashSet<>(COLUMNS)))
-            throw new IllegalArgumentException("Typed index_daily_market reads require all twelve fields");
+        if (query.columns().size() != COLUMNS.size()
+                || !new HashSet<>(query.columns()).equals(new HashSet<>(COLUMNS)))
+            throw new IllegalArgumentException(
+                    "Typed index_daily_market reads require all twelve fields");
         return reader.read(definition(), query, null, mapper::fromValues);
     }
 }

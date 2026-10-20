@@ -291,13 +291,23 @@ def annotate_source(path: Path, text: str, obj: dict) -> str:
     return text.replace('\npublic record ', '\n' + object_documentation_comment(obj) + 'public record ', 1)
 
 
+def formatted_plan(plan: GenerationPlan) -> GenerationPlan:
+    # 先完成路径与全部模型验证，再在临时目录排版，最后才改目标目录。
+    try:
+        from tools.format_java import format_outputs
+    except ModuleNotFoundError:
+        from format_java import format_outputs
+    validate_plan_paths(plan)
+    return GenerationPlan(plan.root, format_outputs(plan.outputs), plan.stale)
+
+
 def with_documentation(plan: GenerationPlan, documentation: dict) -> GenerationPlan:
     models = {obj['modelClass']: obj for obj in documentation['objects']}
     outputs = tuple((path, annotate_source(path, text, models[path.stem]) if path.stem in models else text)
                     for path, text in plan.outputs)
     updated = GenerationPlan(plan.root, outputs, plan.stale)
     validate_plan_paths(updated)
-    return updated
+    return formatted_plan(updated)
 
 
 def plan_documentation(root: Path, documentation: dict) -> GenerationPlan:
@@ -405,6 +415,7 @@ def main(argv: list[str] | None = None) -> None:
     plan = plan_generation(catalog, output_root)
     if documentation is not None:
         plan = with_documentation(plan, documentation)
+    plan = formatted_plan(plan)
     apply_generation(plan)
     print(f"Generated {len(plan.outputs)} schema projection records from {args.catalog}")
 

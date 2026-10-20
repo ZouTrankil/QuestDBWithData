@@ -2,6 +2,7 @@ package com.zoutrankil.data.derived.storage;
 
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.DatasetReadQuery;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /** Narrow entry points for shared bounded reads; concrete guard helpers stay private to storage. */
@@ -11,9 +12,11 @@ public final class DerivedMonthlyReadGuards {
     public static void validateEquityStyle(DatasetDefinition definition, DatasetReadQuery query) {
         QuestDbEquityStyleReadGuard.validate(definition, query);
     }
+
     public static boolean appliesEquityStyle(DatasetDefinition definition) {
         return QuestDbEquityStyleReadGuard.applies(definition);
     }
+
     public static String versionEquityStyle(JdbcTemplate jdbc, DatasetDefinition definition) {
         return QuestDbEquityStyleReadGuard.version(jdbc, definition);
     }
@@ -21,11 +24,12 @@ public final class DerivedMonthlyReadGuards {
     public static void validateMacroCore(DatasetDefinition definition, DatasetReadQuery query) {
         QuestDbMacroCoreReadGuard.validate(definition, query);
     }
+
     public static boolean appliesMacroCore(DatasetDefinition definition) {
         return QuestDbMacroCoreReadGuard.applies(definition);
     }
+
     public static String versionMacroCore(JdbcTemplate jdbc, DatasetDefinition definition) {
         return QuestDbMacroCoreReadGuard.version(jdbc, definition);
     }
-
 }
