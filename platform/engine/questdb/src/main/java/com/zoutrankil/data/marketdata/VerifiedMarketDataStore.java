@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.HexFormat;
 import java.util.LinkedHashMap;
@@ -1139,6 +1140,262 @@ public final class VerifiedMarketDataStore {
                     StandardOpenOption.CREATE_NEW);
             return result;
         }
+    }
+
+    /** 全部分页都已提交时，只核对原运行；缺键或错值均保留原锁，不发送任何行情。 */
+    public Map<String, Object> reconcileCompleteFrozen(
+            String run, String preparedSha, Path stoppedEvidence) throws Exception {
+        try (var publisher =
+                MarketPublisherLease.acquire(
+                        root.resolve("ledger-writer.lock"), Duration.ofMinutes(15))) {
+            if (!run.matches("market-[a-f0-9-]{36}")) throw new IllegalArgumentException("原运行标识非法");
+            Path prepared = root.resolve("prepared/" + run + ".json");
+            byte[] bytes = Files.readAllBytes(prepared),
+                    stopBytes = Files.readAllBytes(stoppedEvidence);
+            var document = JSON.readTree(bytes);
+            var stop = JSON.readTree(stopBytes);
+            var receipt =
+                    JSON.readTree(Files.readAllBytes(root.resolve("receipts/" + run + ".json")));
+            Instant inspected = Instant.parse(stop.path("inspectedAt").asText());
+            if (!sha(bytes).equals(preparedSha)
+                    || !receipt.path("preparedSha256").asText().equals(preparedSha)
+                    || !stop.path("writerStopped").asBoolean(false)
+                    || !run.equals(stop.path("runId").asText())
+                    || stop.path("evidence").asText().isBlank()
+                    || inspected.isBefore(Instant.now().minusSeconds(300))
+                    || inspected.isAfter(Instant.now().plusSeconds(5))
+                    || document.path("writerPid").asLong() <= 0)
+                throw new IllegalArgumentException("原摘要或新鲜的原进程停止证据不符");
+            Instant started = Instant.parse(document.path("writerStartedAt").asText());
+            var process = ProcessHandle.of(document.path("writerPid").asLong());
+            if (process.isPresent()
+                    && process.get().isAlive()
+                    && process.get().info().startInstant().map(started::equals).orElse(true))
+                throw new IllegalStateException("原发送进程仍在运行");
+            var d = JSON.treeToValue(document.path("definition"), DatasetDefinition.class);
+            var rows = new ArrayList<Map<String, Object>>();
+            for (var row : document.path("rows"))
+                rows.add(normalize(d, JSON.convertValue(row, Map.class)));
+            Path raw = Path.of(document.path("raw").asText());
+            String sourceSha = document.path("sourceSha256").asText();
+            if (!sha(Files.readAllBytes(raw)).equals(sourceSha))
+                throw new IllegalStateException("原来源文件变化");
+            requireSchema(d);
+            var ledger = SyncRunLedger.openExisting(ledgerPath);
+            var original = ledger.getRun(run);
+            var request = JSON.readTree(original.frozenJson());
+            var budget = request.path("definition").path("budget");
+            var entries = ledger.entries(run, null, 1000);
+            var page = restoredPublicationPage(document, request);
+            if (rows.isEmpty()
+                    || rows.size() > 100000
+                    || rows.size() > budget.path("maxRows").asInt()
+                    || (rows.size() + page.rows() - 1) / page.rows()
+                            > Math.min(
+                                    100,
+                                    Math.min(
+                                            budget.path("maxPages").asInt(),
+                                            budget.path("maxSlices").asInt())))
+                throw new IllegalStateException("来源超出原冻结行数或分页预算");
+            if (!d.datasetId().equals(request.path("definition").path("datasetId").asText())
+                    || d.schemaVersion()
+                            != request.path("definition").path("datasetVersion").asInt()
+                    || !original.targetId().equals(identity(d))
+                    || !receipt.path("targetId").asText().equals(original.targetId())
+                    || !request.path("parameters")
+                            .path("prepared_sha256")
+                            .asText()
+                            .equals(preparedSha)
+                    || !request.path("parameters").path("source_sha256").asText().equals(sourceSha))
+                throw new IllegalStateException("原账本、来源或物理目标不符");
+            var slices =
+                    CompleteFrozenSlices.require(
+                            ledger, run, prepared, d, rows, sourceSha, page, entries);
+            var locks = new DatasetIntervalLock(ledgerPath);
+            var lease =
+                    locks.findOwned(
+                            run,
+                            new IntervalLockStore.Scope(
+                                    d.datasetId(),
+                                    LocalDate.parse(request.path("from").asText()),
+                                    LocalDate.parse(request.path("to").asText())));
+            if (lease == null || !lease.inDoubt()) throw new IllegalStateException("原未决锁缺失");
+            var frontier = reconciliationFrontier(d);
+            var compared = compareExisting(d, rows, original.targetId());
+            if (!compared.missing().isEmpty())
+                throw new IllegalStateException("完整来源仍有缺失键；只读核对不会补写");
+            if (!frontier.equals(reconciliationFrontier(d))
+                    || !original.targetId().equals(identity(d))
+                    || !preparedSha.equals(sha(Files.readAllBytes(prepared)))
+                    || !sourceSha.equals(sha(Files.readAllBytes(raw)))
+                    || !entries.equals(ledger.entries(run, null, 1000)))
+                throw new IllegalStateException("核对期间来源、账本或 WAL 版本变化");
+            Path folder = root.resolve("reconciliations/" + run + "-" + UUID.randomUUID());
+            Files.createDirectories(folder);
+            Files.write(
+                    folder.resolve("intent.json"),
+                    JSON.writeValueAsBytes(
+                            Map.of(
+                                    "runId",
+                                    run,
+                                    "preparedSha256",
+                                    preparedSha,
+                                    "sourceSha256",
+                                    sourceSha,
+                                    "targetId",
+                                    original.targetId(),
+                                    "stoppedEvidenceSha256",
+                                    sha(stopBytes),
+                                    "readOnly",
+                                    true,
+                                    "walFrontier",
+                                    frontier,
+                                    "rows",
+                                    rows.size(),
+                                    "at",
+                                    Instant.now().toString())),
+                    StandardOpenOption.CREATE_NEW);
+            var actual = new HashMap<String, Map<String, Object>>();
+            var codec = codec(d);
+            for (var row : compared.actual()) actual.put(codec.key(row), row);
+            String full =
+                    writeReconciliationReadback(
+                            folder.resolve("readback.json"),
+                            rows.stream().map(r -> actual.get(codec.key(r))).toList(),
+                            sourceSha,
+                            original.targetId());
+            var proofs = new HashMap<String, String>();
+            for (var slice : slices)
+                if (slice.entry().state() != SyncRunState.VERIFIED) {
+                    var part =
+                            rows.subList(slice.offset(), slice.offset() + slice.rows()).stream()
+                                    .map(r -> actual.get(codec.key(r)))
+                                    .toList();
+                    proofs.put(
+                            slice.entry().id(),
+                            writeReconciliationReadback(
+                                    folder.resolve(slice.entry().id() + ".json"),
+                                    part,
+                                    sourceSha,
+                                    original.targetId()));
+                }
+            // 证明先落盘，最后再次检查稳定版本；已成功页保持原修订和原证明。
+            if (!frontier.equals(reconciliationFrontier(d))
+                    || !original.targetId().equals(identity(d))
+                    || !entries.equals(ledger.entries(run, null, 1000))
+                    || !preparedSha.equals(sha(Files.readAllBytes(prepared)))
+                    || !sourceSha.equals(sha(Files.readAllBytes(raw))))
+                throw new IllegalStateException("推进检查点前版本变化");
+            for (var slice : slices)
+                if (slice.entry().state() != SyncRunState.VERIFIED)
+                    ledger.transition(
+                            slice.entry().id(),
+                            slice.entry().revision(),
+                            SyncRunState.VERIFIED,
+                            reconciliationProof(
+                                    slice.rows(),
+                                    sourceSha,
+                                    proofs.get(slice.entry().id()),
+                                    folder));
+            for (var kind : List.of(SyncRunLedger.Kind.ATTEMPT, SyncRunLedger.Kind.RUN))
+                for (var entry : entries)
+                    if (entry.kind() == kind && entry.state() != SyncRunState.VERIFIED)
+                        ledger.transition(
+                                entry.id(),
+                                entry.revision(),
+                                SyncRunState.VERIFIED,
+                                reconciliationProof(rows.size(), sourceSha, full, folder));
+            locks.releaseAfterReconciliation(lease, true, true);
+            var result =
+                    Map.<String, Object>of(
+                            "runId",
+                            run,
+                            "state",
+                            "VERIFIED",
+                            "rows",
+                            rows.size(),
+                            "pages",
+                            slices.size(),
+                            "repairedMissingRows",
+                            0,
+                            "reconciliation",
+                            folder.toString());
+            Files.write(
+                    folder.resolve("receipt.json"),
+                    JSON.writeValueAsBytes(result),
+                    StandardOpenOption.CREATE_NEW);
+            return result;
+        }
+    }
+
+    private Map<String, Object> reconciliationFrontier(DatasetDefinition d) throws Exception {
+        if (!settled(d.objectName())) throw new IllegalStateException("原目标 WAL 尚未结清");
+        var rows =
+                query(
+                        "SELECT writerTxn,sequencerTxn,suspended,bufferedTxnSize FROM wal_tables() WHERE name="
+                                + literal(d.objectName()));
+        if (rows.size() != 1
+                || !Boolean.FALSE.equals(rows.getFirst().get("suspended"))
+                || !(rows.getFirst().get("writerTxn") instanceof Number a)
+                || !(rows.getFirst().get("sequencerTxn") instanceof Number b)
+                || a.longValue() != b.longValue()
+                || !(rows.getFirst().get("bufferedTxnSize") instanceof Number c)
+                || c.longValue() != 0) throw new IllegalStateException("原目标 WAL 版本不稳定");
+        return rows.getFirst();
+    }
+
+    private String writeReconciliationReadback(
+            Path path, List<Map<String, Object>> rows, String sourceSha, String target)
+            throws Exception {
+        byte[] bytes =
+                JSON.writeValueAsBytes(
+                        Map.of(
+                                "rows",
+                                rows,
+                                "sourceSha256",
+                                sourceSha,
+                                "targetId",
+                                target,
+                                "walSettled",
+                                true));
+        Files.write(path, bytes, StandardOpenOption.CREATE_NEW);
+        return path + "#" + sha(bytes);
+    }
+
+    private String reconciliationProof(int rows, String sourceSha, String evidence, Path folder)
+            throws Exception {
+        var proof =
+                Map.of(
+                        "passed",
+                        true,
+                        "expectedRows",
+                        rows,
+                        "actualRows",
+                        rows,
+                        "matchedRows",
+                        rows,
+                        "mismatchedRows",
+                        0,
+                        "duplicateKeys",
+                        0,
+                        "missingKeys",
+                        0,
+                        "sourceFingerprint",
+                        sourceSha,
+                        "readbackEvidence",
+                        evidence,
+                        "writerStopped",
+                        true);
+        return JSON.writeValueAsString(
+                Map.of(
+                        "verification",
+                        proof,
+                        "sourceComplete",
+                        true,
+                        "returnedRows",
+                        rows,
+                        "reconciliationIntent",
+                        folder.resolve("intent.json").toString()));
     }
 
     private record Comparison(
