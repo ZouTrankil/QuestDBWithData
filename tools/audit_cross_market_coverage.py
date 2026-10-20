@@ -15,6 +15,7 @@ import re
 import sqlite3
 import urllib.parse
 import urllib.request
+import zipfile
 from zoneinfo import ZoneInfo
 
 import yaml
@@ -88,16 +89,87 @@ def publication_groups(path):
             "allGroupsVerified": bool(phases) and set(phases) == {"VERIFIED"} and not failures}
 
 
+def verified_core_day_members(folder, run_id, request):
+    """单日原运行可能冻结整个 ZIP；只有原文件、原 prepared 与叶子价格都一致才追溯叶子摘要。"""
+    if not request.get("from") or request.get("from") != request.get("to"):
+        return set()
+    path = folder / "prepared" / (run_id + ".json")
+    if not path.is_file():
+        return set()
+    prepared_bytes = path.read_bytes()
+    prepared = json.loads(prepared_bytes)
+    evidence = prepared.get("evidence", {})
+    child = evidence.get("child", {})
+    if child.get("id") != "DAILY" or child.get("dataset") != "us_equity_daily":
+        return set()
+    params = request["parameters"]
+    source_sha = params["source_sha256"]
+    if (hashlib.sha256(prepared_bytes).hexdigest() != params.get("prepared_sha256")
+            or prepared.get("definition", {}).get("datasetId") != "us_equity_daily"
+            or prepared.get("sourceSha256") != source_sha or evidence.get("packageSha256") != source_sha):
+        raise ValueError("核心单日原 prepared 或 ZIP 声明摘要不符")
+    raw = pathlib.Path(prepared["raw"])
+    if not raw.is_absolute():
+        raw = folder.parent.parent / raw
+    if hashlib.sha256(raw.read_bytes()).hexdigest() != source_sha:
+        raise ValueError("核心单日 ZIP 摘要不符")
+    day = str(request["from"])[:10]
+    symbols = child.get("symbols", [])
+    if (not symbols or len(symbols) != len(set(symbols)) or child.get("rows") != len(symbols)
+            or evidence.get("day") != day):
+        raise ValueError("核心单日子运行证券范围不符")
+    expected = []
+    daily_sources = set()
+    normalize = lambda row: {k: instant(v).isoformat() if k in ("trade_date", "observed_at") else v for k, v in row.items()}
+    with zipfile.ZipFile(raw) as archive:
+        names = archive.namelist()
+        manifest = json.loads(archive.read("manifest.json"))
+        members = manifest.get("members", [])
+        if (manifest.get("version") != 1 or manifest.get("kind") != "TIINGO_CORE_DAY"
+                or manifest.get("from") != day or manifest.get("through") != day
+                or len(names) != len(set(names)) or len(members) != 2 * len(symbols)
+                or {(m.get("symbol"), m.get("kind")) for m in members} != {(s, k) for s in symbols for k in ("DAILY", "MINUTE")}
+                or len({m.get("entry") for m in members}) != len(members)
+                or set(names) != {"manifest.json"} | {m.get("entry") for m in members}):
+            raise ValueError("核心单日 ZIP 成员范围或布局不符")
+        for member in members:
+            body = archive.read(member["entry"])
+            if hashlib.sha256(body).hexdigest() != member["sha256"]:
+                raise ValueError("核心单日叶子原文摘要不符")
+            if member["kind"] != "DAILY":
+                continue
+            points = json.loads(body)
+            if (not isinstance(points, list) or len(points) != 1 or not isinstance(points[0], dict)
+                    or not isinstance(points[0].get("date"), str)
+                    or instant(points[0]["date"]) != dt.datetime.combine(dt.date.fromisoformat(day), dt.time(), dt.timezone.utc)):
+                raise ValueError("核心单日日线原文日期或数量不符")
+            point = points[0]
+            row = {"trade_date": day + "T00:00:00Z", "symbol": member["symbol"], "provider": "TIINGO", "venue": "US_COMPOSITE"}
+            for field in ("open", "high", "low", "close", "volume"):
+                row[field] = float(point[field])
+                row["adj_" + field] = float(point["adj" + field.title()])
+            row.update(dividend=float(point["divCash"]), split_factor=float(point["splitFactor"]), currency="USD",
+                       raw_price_basis="VENDOR_UNADJUSTED", source_sha256=member["sha256"], observed_at=member["observedAt"])
+            expected.append(normalize(row))
+            daily_sources.add(member["sha256"])
+    key = lambda row: (row["trade_date"], row["symbol"], row["provider"])
+    if sorted(map(normalize, prepared.get("rows", [])), key=key) != sorted(expected, key=key):
+        raise ValueError("核心单日叶子原文与原 prepared 全部二十列不一致")
+    return daily_sources
+
+
 def verified_daily_sources(root):
     """来源组的行摘要与运行 ZIP 摘要不同，必须沿成功的原组回执核对成员。"""
     folder = root / "var/market-data"
     with closing(sqlite3.connect("file:" + (folder / "sync-ledger.sqlite3").resolve().as_posix() + "?mode=ro", uri=True)) as connection:
         verified = set()
-        for row in connection.execute("select r.frozen_json from sync_runs r join sync_entries e on r.id=e.id where e.kind='RUN' and e.state='VERIFIED'"):
-            request = json.loads(row[0])
+        leaves = set()
+        for run_id, frozen in connection.execute("select r.id,r.frozen_json from sync_runs r join sync_entries e on r.id=e.id where e.kind='RUN' and e.state='VERIFIED'"):
+            request = json.loads(frozen)
             if request["definition"]["datasetId"] == "us_equity_daily":
                 verified.add(request["parameters"]["source_sha256"])
-    native = set(verified)
+                leaves.update(verified_core_day_members(folder, run_id, request))
+    native = verified | leaves
     broad = folder / "broad-queue.sqlite3"
     if not broad.is_file():
         return native
@@ -130,19 +202,33 @@ def equity_daily_dates(qdb, root, start, through):
     dates = [dt.date.fromisoformat(row["ref_date"][:10]) for row in reference]
     if not dates or len(dates) != len(set(dates)) or any(row["source_sha256"] not in successful for row in reference):
         raise ValueError("SPY 参照日期为空、重复或原来源未验收")
-    missing, extra = {}, {}
+    extra = {}
     for year in range(start.year, through.year + 1):
         lower, upper = max(start, dt.date(year, 1, 1)), min(through + dt.timedelta(days=1), dt.date(year + 1, 1, 1))
         year_bounds = "trade_date>=" + literal(lower) + " and trade_date<" + literal(upper)
-        # 按年找反连接缺口，只返回诊断日期；不把数百万个证券日期组合拉回客户端。
-        cte = "WITH s AS (" + inventory_sql + "), d AS (SELECT trade_date ref_date FROM us_equity_daily WHERE symbol='SPY' AND provider='TIINGO' AND " + year_bounds + "), p AS (SELECT symbol p_symbol,provider p_provider,trade_date p_date FROM us_equity_daily WHERE " + year_bounds + ") "
-        holes = qdb.query(cte + "SELECT s.symbol,s.provider,d.ref_date FROM s CROSS JOIN d LEFT JOIN p ON s.symbol=p.p_symbol AND s.provider=p.p_provider AND d.ref_date=p.p_date WHERE d.ref_date>=s.first_date AND d.ref_date<=s.last_date AND p.p_symbol IS NULL LIMIT 100001")
-        outside = qdb.query(cte + "SELECT p.p_symbol symbol,p.p_provider provider,p.p_date ref_date FROM p LEFT JOIN d ON p.p_date=d.ref_date WHERE d.ref_date IS NULL LIMIT 100001")
-        for rows, target in ((holes, missing), (outside, extra)):
-            for row in rows:
-                if key(row) in eligible:
-                    target.setdefault(key(row), set()).add(row["ref_date"][:10])
-    # 采集中只核对开始时已成功的来源；结束时这些行和参照集合必须保持稳定。
+        # 逐年先证明所有实有日期都属于参照集合，再用唯一键数量证明集合相等。
+        # 仅对数量或成员不一致的证券读日期明细，避免全证券与全日期的笛卡尔积。
+        year_dates = dates[bisect.bisect_left(dates, lower):bisect.bisect_left(dates, upper)]
+        membership = "trade_date NOT IN (" + ",".join(literal(day) for day in year_dates) + ")" if year_dates else "true"
+        outside = qdb.query("SELECT symbol,provider,trade_date ref_date FROM us_equity_daily WHERE " + year_bounds + " AND " + membership + " LIMIT 100001")
+        for row in outside:
+            if key(row) in eligible:
+                extra.setdefault(key(row), set()).add(row["ref_date"][:10])
+    series = []
+    for k, row in sorted(eligible.items()):
+        first, last = (dt.date.fromisoformat(row[name][:10]) for name in ("first_date", "last_date"))
+        expected = bisect.bisect_right(dates, last) - bisect.bisect_left(dates, first)
+        absent, unexpected = [], sorted(extra.get(k, set()))
+        if row["rows"] != expected or row["distinct_dates"] != expected or unexpected:
+            actual_rows = qdb.query("SELECT trade_date FROM us_equity_daily WHERE symbol=" + literal(k[0]) + " AND provider=" + literal(k[1]) + " AND " + bounds + " ORDER BY trade_date LIMIT 100001")
+            actual_dates = {instant(point["trade_date"]) for point in actual_rows}
+            expected_dates = {dt.datetime.combine(day, dt.time(), dt.timezone.utc) for day in dates[bisect.bisect_left(dates, first):bisect.bisect_right(dates, last)]}
+            absent = sorted(point.date().isoformat() for point in expected_dates - actual_dates)
+            unexpected = sorted({point.date().isoformat() for point in actual_dates - expected_dates})
+        passed = row["rows"] == row["distinct_dates"] == expected and not absent and not unexpected
+        series.append({**row, "expectedReferenceDatesWithinCollectedRange": expected, "missingReferenceDates": absent,
+                       "datesOutsideReference": unexpected, "collectedDateSetMatchesReference": passed})
+    # 明细核对也必须落在同一稳定性检查内；采集中新增的其他未验收证券不影响原集合。
     after_sources = qdb.query(source_sql)
     after_inventory = {key(row): row for row in qdb.query(inventory_sql)}
     stable = (identity == qdb.query(identity_sql) and reference == qdb.query(reference_sql)
@@ -150,14 +236,6 @@ def equity_daily_dates(qdb, root, start, through):
               and [r for r in sources if key(r) in eligible] == [r for r in after_sources if key(r) in eligible])
     if not stable:
         raise ValueError("日线日期核对期间，已验收来源范围、SPY 参照或原物理表发生变化")
-    series = []
-    for k, row in sorted(eligible.items()):
-        first, last = (dt.date.fromisoformat(row[name][:10]) for name in ("first_date", "last_date"))
-        expected = bisect.bisect_right(dates, last) - bisect.bisect_left(dates, first)
-        absent, unexpected = sorted(missing.get(k, set())), sorted(extra.get(k, set()))
-        passed = row["rows"] == row["distinct_dates"] == expected and not absent and not unexpected
-        series.append({**row, "expectedReferenceDatesWithinCollectedRange": expected, "missingReferenceDates": absent,
-                       "datesOutsideReference": unexpected, "collectedDateSetMatchesReference": passed})
     return {"reference": {"symbol": "SPY", "provider": "TIINGO", "rows": len(dates), "firstDate": str(dates[0]), "lastDate": str(dates[-1]),
                            "sourceSha256": sorted({row["source_sha256"] for row in reference})},
             "stableSourceInventory": stable, "checkedSeries": len(series), "excludedUnverifiedSources": excluded,
