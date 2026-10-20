@@ -11,6 +11,9 @@ public final class UsDataDescriptions {
     private UsDataDescriptions() {}
     public static List<DataObjectDescription> all() {
         return List.of(
+            new DataObjectDescription("us_security_identifiers", "美国证券永久代码映射", "原市场代码、独立证券标识和已验收价格键", Set.of(DataObjectDescription.Market.US),
+                    "美股证券范围", SourceType.DERIVED, "供应商永久代码搜索、历史目录行及已验收价格运行", List.of("us_security_history_catalog","us_equity_daily"),
+                    "java.market.us", "不合并同名发行人，不改写价格；已验收价格窗口不是正式上市退市登记。", "UsSecurityIdentifiers.IDENTIFIERS；原件摘要、原成功运行和完整字段回读", Set.of(DERIVED, EQUITY, US)),
             new DataObjectDescription("us_security_history_catalog", "美国历史证券来源目录", "Stock/ETF 及 OTC 代码、来源窗口和映射原因", Set.of(DataObjectDescription.Market.US),
                     "美股证券范围", SourceType.COLLECTED, "Tiingo supported_tickers 完整目录的美国场所范围", List.of(),
                     "java.market.us", "来源窗口不等于正式上市退市日；目录包含预留代码，实际价格需单独验收。", "UsHistoricalSecurityCatalog.SECURITIES；完整 ZIP 摘要及逐字段回读", Set.of(COLLECTED, EQUITY, ETF, US)),

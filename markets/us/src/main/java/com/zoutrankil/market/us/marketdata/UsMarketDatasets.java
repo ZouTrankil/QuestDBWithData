@@ -9,7 +9,7 @@ public final class UsMarketDatasets {
     private UsMarketDatasets() {}
     public static final DatasetDefinition DAILY=definition("us_equity_daily","trade_date",false,List.of("trade_date","symbol","provider"),List.of(
             field("trade_date",StorageType.TIMESTAMP,false,"纽约交易日，编码为 UTC 零点",true),
-            field("symbol",StorageType.SYMBOL,false,"来源证券代码；类别股不丢失后缀",false),
+            field("symbol",StorageType.SYMBOL,false,"来源实际请求代码；复用代码可用已核对的供应商永久代码隔离，映射见 us_security_identifiers",false),
             field("provider",StorageType.SYMBOL,false,"实际价格来源",false),
             field("venue",StorageType.SYMBOL,false,"价格覆盖场所或复合市场",false),
             field("open",StorageType.DOUBLE,false,"未复权开盘价，原币种",false),

@@ -94,7 +94,8 @@ BTC 的原始文件、队列、预算、账本及回执在 `var/crypto-market-da
 - [Tiingo IEX 说明](https://www.tiingo.com/documentation/iex)明确分钟成交量为 IEX 场所量，且必须显式请求 `volume`。
 - Yahoo 报价是拆股调整基准。通过响应中该交易日之后的全部拆股还原 OHLC、股数及现金分红，使用 `RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED` 标明来源；`adj_close` 保留 Yahoo 当前调整值。AAPL 2006-01-03 的 Yahoo 收盘价乘 28 后约为 74.75，接近 Tiingo 原始 74.75；不同来源的盘中 OHLC 仍有差异，不能混合覆盖。缺失数值拒收，不补零。
 - 本机 2026-10-20 核验 FISV 时，Yahoo 两个主机均缺少 2025-11-12 的 OHLCV。已用独立 Tiingo 来源补入 2006-01-03 至 2026-10-16 共 5230 条日线并验收；保留 Yahoo 原文和 `FAILED_SOURCE`，来源之间不拼值或覆盖。
-- AMTD 的 Yahoo 原文只有截止日之后的记录。按[官方清单字段定义](https://www.nasdaqtrader.com/trader.aspx?id=symboldirdefs)核对挂牌代码 `N` 为 NYSE，并与 Tiingo 的 AMTD IDEA Group 名称及 2019 年起始窗口匹配后，独立补入 2019-08-05 至 2026-10-16 共 1811 条日线，字段、实有日期及 WAL 验收通过。原 Yahoo 拒收保留；目录中 1997–2020 年 NASDAQ 同代码窗口仍需单独核实，不能用当前公司的价格判为已覆盖。
+- AMTD 的 Yahoo 原文只有截止日之后的记录。按[官方清单字段定义](https://www.nasdaqtrader.com/trader.aspx?id=symboldirdefs)核对挂牌代码 `N` 为 NYSE，并与 Tiingo 的 AMTD IDEA Group 名称及 2019 年起始窗口匹配后，独立补入 2019-08-05 至 2026-10-16 共 1811 条日线，字段、实有日期及 WAL 验收通过。原 Yahoo 拒收保留，当前公司价格不替代旧 NASDAQ 发行人。
+- 旧 TD Ameritrade 经 Tiingo 搜索确定为永久代码 `US000000000721`，与当前 IDEA 的 `US000000080416` 不同。永久代码元数据请求返回 404，但价格请求实际成功；已按真实请求代码 `US000000000721` 验收 2006-01-03 至 2020-10-05 的 3715 条日线，完整 20 列与原文一致，当前 IDEA 的 1811 条逐字段未变。[Nasdaq 公告](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2020-175)确认最后交易日为 10 月 5 日；探针原文中 6–7 日的零量平价不计作交易历史。两家公司的独立映射共 2 条已写入 `us_security_identifiers`，18 列回读一致，重复导入后仍为 2 条；原目录行及 1997 年起的来源声明保留，2006 年之前不在本次价格请求范围。
 - 2026-10-20 按当前官方名称、场所及 Tiingo 身份原文核对后，独立补入 ATLQ（JAB Acquisition Corp I）2026-08-05 起的 52 条、ATTT（Atlas Trinity Tech）2024-05-15 起的 608 条日线，均截至 2026-10-16。两组实有日期与已验收 SPY/Tiingo 参照一致；短于五年的范围保留实际来源起点，不填造上市前价格。
 - ATLX 的 Tiingo 实有日线为 2013-02-28 至 2026-10-16 共 3428 条。2018-04-03、2018-05-03 缺记录，精确日期请求也返回空数组；这只能证明供应商缺口，不能推断停市或全市场无成交。最近五年（2021-10-16 起）实有 1255 个参照交易日，逐日一致；早年缺口保留，整段历史不判为满网格。上述三组共 4088 条的全部 20 列、原运行及 WAL 验收通过，独立回读一致；发布 ATLX 前已验收的另两组共 660 条未变，Yahoo 原拒收不改写。
 - 同日继续补入 BRTX 3378 条、BTLN 1330 条、BTOC 609 条、CAPS 3818 条、CBIO 337 条、CECO 5230 条 Tiingo 日线，共 14702 条，均截至 2026-10-16。来源分别自 2013-05-14、2021-07-01、2024-05-14、2011-07-21、2025-06-16、2006-01-03 起。除 CAPS 的 15 个早年缺日外，各请求窗口与 SPY/Tiingo 参照逐日一致；CAPS 最近五年的 1255 个参照交易日齐全，早年缺口仍保留。六组全部 20 列与原文独立核对一致，原运行及 WAL 通过；此前三组的 4088 条也再次核对未变。
@@ -137,6 +138,21 @@ python tools/audit_us_security_identity.py --from 2006-01-01 --through 2026-10-1
 ```
 
 身份报告保留每条历史目录行、当前官方类别及重叠窗口。同代码可能来自转板、类别变化或不同发行人；当前有价格不能证明每个历史窗口已覆盖。当前 ETF 的旧 Stock 窗口不删除，也不拿基金价格替代；没有冲突标记同样不能单独证明目标完成。
+
+复用代码取得独立价格后，用 `us_security_identifiers` 查询原市场代码与实际价格键。日线表 `symbol` 可以是供应商真正接受的永久请求代码；原市场代码保存在映射的 `source_ticker`，当前发行人的价格键保持原样。价格先完成原文、字段与 WAL 验收，再导入映射：
+
+```powershell
+.\gradlew.bat usMarketData --args='import-security-identifiers --source var/market-data/scope-review/symbol-disambiguation-20261020/amtd-identifiers-manifest.json'
+```
+
+清单版本为 1，包含 `records` 和 `sources`。每条记录指向实际的搜索原文、历史目录原文与原成功价格运行；不能只提供证券名称和日期。入口逐字段回读完整价格窗口，拒绝未决、错误物理对象、不同发行人或只覆盖部分价格的清单。该映射不是完整上市退市登记，搜索原文也不能单独证明数据可用。
+
+```sql
+select security_id, source_ticker, security_name, price_symbol, price_from, price_through
+from us_security_identifiers
+where source_ticker = 'AMTD'
+latest on observed_at partition by provider, security_id;
+```
 
 ```powershell
 python tools/audit_cross_market_coverage.py --through 2026-10-16 --crypto-through 2026-10-18

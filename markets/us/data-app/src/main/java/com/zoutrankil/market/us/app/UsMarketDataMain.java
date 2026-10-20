@@ -64,7 +64,8 @@ public final class UsMarketDataMain {
                 if(args[0].equals("collect-core"))new UsCoreCollector(env,root,store).run(through,maximum);
                 else new UsBroadDailyCollector(env,root,store).run(through);
             }
-            case "definitions" -> print(List.of(UsMarketDatasets.DAILY,UsMarketDatasets.MINUTE,UsEquitySessionCalendar.REGULAR,UsUniverseSnapshot.SECURITIES,UsHistoricalSecurityCatalog.SECURITIES,UsFundHoldings.EQUITIES,NasdaqItchDataset.MESSAGES,FredMarketDaily.DEFINITION));
+            case "import-security-identifiers" -> {if(!Set.of("source").containsAll(options.keySet()))throw new IllegalArgumentException("未知永久代码映射参数");print(UsSecurityIdentifierImporter.publish(root,store,Path.of(required(options,"source")).toAbsolutePath().normalize()));}
+            case "definitions" -> print(List.of(UsMarketDatasets.DAILY,UsMarketDatasets.MINUTE,UsEquitySessionCalendar.REGULAR,UsUniverseSnapshot.SECURITIES,UsHistoricalSecurityCatalog.SECURITIES,UsSecurityIdentifiers.IDENTIFIERS,UsFundHoldings.EQUITIES,NasdaqItchDataset.MESSAGES,FredMarketDaily.DEFINITION));
             case "status" -> {
                 var result=new ArrayList<Object>();
                 for(var d:List.of(UsMarketDatasets.DAILY,UsMarketDatasets.MINUTE)) {
