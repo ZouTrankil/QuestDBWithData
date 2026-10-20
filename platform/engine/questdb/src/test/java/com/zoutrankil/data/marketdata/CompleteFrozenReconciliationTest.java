@@ -24,6 +24,7 @@ import com.zoutrankil.data.service.DatasetIntervalLock;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -36,6 +37,7 @@ import java.sql.DriverManager;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -117,6 +119,200 @@ class CompleteFrozenReconciliationTest {
             byte[] readback = Files.readAllBytes(Path.of(parts[0]));
             assertEquals(parts[1], VerifiedMarketDataStore.sha(readback));
             assertEquals(1, JSON.readTree(readback).path("rows").size());
+        }
+    }
+
+    @Test
+    void submittedPrefixKeepsCompleteReadOnlyRecoveryClosedForUnsubmittedTail() throws Exception {
+        try (var f = new Fixture(root.resolve("prefix"), false, 20850)) {
+            var before = f.ledger.entries(RUN, null, 100);
+            var firstEvents = f.ledger.events("slice-0", -1, 100);
+            var prefix = f.submittedPrefix();
+            assertEquals(
+                    List.of(0, 10000),
+                    prefix.stream().map(CompleteFrozenSlices.Slice::offset).toList());
+            assertEquals(
+                    List.of(10000, 10000),
+                    prefix.stream().map(CompleteFrozenSlices.Slice::rows).toList());
+            assertThrows(IllegalStateException.class, f::reconcile);
+            assertEquals(before, f.ledger.entries(RUN, null, 100));
+            assertEquals(firstEvents, f.ledger.events("slice-0", -1, 100));
+            assertEquals(0, f.writes.get());
+        }
+    }
+
+    @Test
+    void submittedPrefixRejectsCompleteRunCancellationAndChangedReceipt() throws Exception {
+        try (var f = new Fixture(root.resolve("no-tail"))) {
+            assertThrows(IllegalStateException.class, f::submittedPrefix);
+        }
+        try (var f = new Fixture(root.resolve("cancelled-prefix"), false, 20850)) {
+            f.ledger.requestCancellation(RUN);
+            assertThrows(IllegalStateException.class, f::submittedPrefix);
+        }
+        try (var f = new Fixture(root.resolve("bad-prefix-receipt"), false, 20850)) {
+            var event = f.ledger.events("slice-1", 4, 1).getFirst();
+            var document = (ObjectNode) JSON.readTree(event.payloadJson());
+            ((ObjectNode) document.path("writeResult").path("receipts").get(0))
+                    .put("digest", "b".repeat(64));
+            try (var c = DriverManager.getConnection("jdbc:sqlite:" + f.ledgerFile);
+                    var update =
+                            c.prepareStatement(
+                                    "UPDATE sync_events SET payload_json=? WHERE entry_id='slice-1' AND revision=5")) {
+                update.setString(1, JSON.writeValueAsString(document));
+                update.executeUpdate();
+            }
+            assertThrows(IllegalStateException.class, f::submittedPrefix);
+            assertEquals(0, f.writes.get());
+        }
+    }
+
+    @Test
+    void tailRecoverySendsOnlyUnsubmittedRowsAndPreservesOriginalVerifiedEvents() throws Exception {
+        try (var f = new Fixture(root.resolve("tail-success"), false, 20850)) {
+            f.tailOnly = true;
+            var first = f.ledger.get("slice-0");
+            var events = f.ledger.events("slice-0", -1, 100);
+            byte[] source = Files.readAllBytes(f.prepared);
+            var result = f.reconcileTail(true, false);
+            assertEquals("VERIFIED", result.get("state"));
+            assertEquals(850, result.get("appendedUnsubmittedRows"));
+            assertEquals(0, result.get("replayedSubmittedRows"));
+            assertEquals(f.rows.subList(20000, 20850), f.receivedTail);
+            assertEquals(1, f.writes.get());
+            assertEquals(first, f.ledger.get("slice-0"));
+            assertEquals(events, f.ledger.events("slice-0", -1, 100));
+            assertEquals(VerifiedMarketDataStore.sha(source), f.preparedSha);
+            assertEquals(
+                    f.preparedSha, VerifiedMarketDataStore.sha(Files.readAllBytes(f.prepared)));
+            assertTrue(
+                    f.ledger.entries(RUN, null, 100).stream()
+                            .allMatch(e -> e.state() == SyncRunState.VERIFIED));
+            assertEquals(
+                    3,
+                    f.ledger.entries(RUN, null, 100).stream()
+                            .filter(e -> e.kind() == SyncRunLedger.Kind.SLICE)
+                            .count());
+            assertNull(f.locks.findOwned(RUN, f.scope));
+        }
+    }
+
+    @Test
+    void tailRecoveryKeepsOriginalPageGeometryAcrossMultipleNewPages() throws Exception {
+        try (var f = new Fixture(root.resolve("tail-multiple"), false, 30850)) {
+            f.tailOnly = true;
+            var result = f.reconcileTail(true, false);
+            assertEquals(10850, result.get("appendedUnsubmittedRows"));
+            assertEquals(2, f.writes.get());
+            assertEquals(f.rows.subList(20000, 30850), f.receivedTail);
+            assertEquals(
+                    4,
+                    f.ledger.entries(RUN, null, 100).stream()
+                            .filter(e -> e.kind() == SyncRunLedger.Kind.SLICE)
+                            .count());
+            assertNull(f.locks.findOwned(RUN, f.scope));
+        }
+    }
+
+    @Test
+    void tailRecoveryCanReconcileUncertainAcknowledgmentWithoutReplaying() throws Exception {
+        try (var f = new Fixture(root.resolve("tail-unknown"), false, 20850)) {
+            f.tailOnly = true;
+            assertEquals("VERIFIED", f.reconcileTail(true, true).get("state"));
+            assertEquals(1, f.writes.get());
+            assertEquals(850, f.receivedTail.size());
+        }
+    }
+
+    @Test
+    void tailRecoveryRejectsAuthorizationPrefixMismatchExistingTailAndCancellation()
+            throws Exception {
+        for (String mode :
+                List.of(
+                        "authorization",
+                        "missing",
+                        "changed",
+                        "duplicate",
+                        "existing-tail",
+                        "cancelled",
+                        "unsettled",
+                        "moving-wal",
+                        "moving-target")) {
+            try (var f = new Fixture(root.resolve("tail-reject-" + mode), false, 20850)) {
+                f.tailOnly = !mode.equals("existing-tail");
+                f.mode = mode;
+                if (mode.equals("cancelled")) f.ledger.requestCancellation(RUN);
+                var before = f.ledger.entries(RUN, null, 100);
+                assertThrows(
+                        Exception.class,
+                        () -> f.reconcileTail(!mode.equals("authorization"), false));
+                assertEquals(before, f.ledger.entries(RUN, null, 100));
+                assertEquals(0, f.writes.get());
+                assertTrue(f.locks.findOwned(RUN, f.scope).inDoubt());
+            }
+        }
+    }
+
+    @Test
+    void tailRegistrationRejectsUnverifiedOrStaleSnapshotAndCancellation() throws Exception {
+        try (var f = new Fixture(root.resolve("tail-register"), false, 20850)) {
+            var before = f.ledger.entries(RUN, null, 100);
+            String authorization =
+                    JSON.writeValueAsString(
+                            Map.of(
+                                    "preparedSha256",
+                                    f.preparedSha,
+                                    "sourceSha256",
+                                    f.sourceSha,
+                                    "sourceRows",
+                                    20850,
+                                    "submittedRows",
+                                    20000,
+                                    "cursor",
+                                    "20000",
+                                    "tailRows",
+                                    850,
+                                    "readbackEvidence",
+                                    "proof#digest",
+                                    "reconciliationIntent",
+                                    "intent"));
+            assertThrows(
+                    IllegalStateException.class,
+                    () ->
+                            f.ledger.createFrozenTailSlice(
+                                    "tail",
+                                    RUN,
+                                    ATTEMPT,
+                                    f.ledger.getRun(RUN).frozenJson(),
+                                    before,
+                                    authorization));
+            var proof = (ObjectNode) JSON.readTree(f.ledger.get("slice-0").payloadJson());
+            ((ObjectNode) proof.path("verification")).put("writerStopped", true);
+            f.ledger.transition(
+                    "slice-1", 5, SyncRunState.VERIFIED, JSON.writeValueAsString(proof));
+            assertThrows(
+                    IllegalStateException.class,
+                    () ->
+                            f.ledger.createFrozenTailSlice(
+                                    "tail",
+                                    RUN,
+                                    ATTEMPT,
+                                    f.ledger.getRun(RUN).frozenJson(),
+                                    before,
+                                    authorization));
+            var verified = f.ledger.entries(RUN, null, 100);
+            f.ledger.requestCancellation(RUN);
+            assertThrows(
+                    IllegalStateException.class,
+                    () ->
+                            f.ledger.createFrozenTailSlice(
+                                    "tail",
+                                    RUN,
+                                    ATTEMPT,
+                                    f.ledger.getRun(RUN).frozenJson(),
+                                    verified,
+                                    authorization));
+            assertEquals(verified, f.ledger.entries(RUN, null, 100));
         }
     }
 
@@ -236,6 +432,9 @@ class CompleteFrozenReconciliationTest {
         final VerifiedMarketDataStore store;
         final String preparedSha, sourceSha;
         String mode = "complete";
+        boolean tailOnly;
+        final List<Map<String, Object>> receivedTail = new ArrayList<>();
+        final Set<Object> receivedTailTimes = new HashSet<>();
         int walReads, targetReads;
 
         Fixture() throws Exception {
@@ -247,12 +446,16 @@ class CompleteFrozenReconciliationTest {
         }
 
         Fixture(Path folder, boolean live) throws Exception {
+            this(folder, live, 10001);
+        }
+
+        Fixture(Path folder, boolean live, int rowCount) throws Exception {
             this.folder = Files.createDirectories(folder);
             ledgerFile = folder.resolve("sync-ledger.sqlite3");
             ledger = new SyncRunLedger(ledgerFile);
             raw = Files.writeString(folder.resolve("source.json"), "original frozen source");
             sourceSha = VerifiedMarketDataStore.sha(Files.readAllBytes(raw));
-            for (int i = 0; i < 10001; i++)
+            for (int i = 0; i < rowCount; i++)
                 rows.add(
                         Map.of(
                                 "ts",
@@ -529,6 +732,10 @@ class CompleteFrozenReconciliationTest {
                             Instant from = Instant.parse(matcher.group(1)),
                                     to = Instant.parse(matcher.group(2));
                             for (int i = 0; i < rows.size(); i++) {
+                                if (tailOnly
+                                        && i >= 20000
+                                        && !receivedTailTimes.contains(rows.get(i).get("ts")))
+                                    continue;
                                 var row = rows.get(i);
                                 Instant time = Instant.parse(row.get("ts").toString());
                                 if (time.isBefore(from)
@@ -574,6 +781,40 @@ class CompleteFrozenReconciliationTest {
 
         Map<String, Object> reconcile() throws Exception {
             return store.reconcileCompleteFrozen(RUN, preparedSha, stopped);
+        }
+
+        Map<String, Object> reconcileTail(boolean authorized, boolean uncertain) throws Exception {
+            return store.reconcileFrozenTail(
+                    RUN,
+                    preparedSha,
+                    stopped,
+                    authorized,
+                    (definition, batch, run) -> {
+                        assertEquals(RUN, run);
+                        Instant tailStart = Instant.parse(rows.get(20000).get("ts").toString());
+                        assertTrue(
+                                batch.stream()
+                                        .allMatch(
+                                                row ->
+                                                        !Instant.parse(row.get("ts").toString())
+                                                                .isBefore(tailStart)));
+                        writes.incrementAndGet();
+                        receivedTail.addAll(batch);
+                        batch.forEach(row -> receivedTailTimes.add(row.get("ts")));
+                        if (uncertain) throw new IOException("测试发送确认丢失，数据已经可见");
+                    });
+        }
+
+        List<CompleteFrozenSlices.Slice> submittedPrefix() throws Exception {
+            return CompleteFrozenSlices.requireSubmittedPrefix(
+                    ledger,
+                    RUN,
+                    prepared,
+                    DEFINITION,
+                    rows,
+                    sourceSha,
+                    new VerifiedMarketDataStore.PublicationPage(10000, 8388608),
+                    ledger.entries(RUN, null, 100));
         }
 
         void assertRejected() throws Exception {

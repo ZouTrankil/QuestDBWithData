@@ -31,6 +31,34 @@ final class CompleteFrozenSlices {
             VerifiedMarketDataStore.PublicationPage page,
             List<SyncRunLedger.Entry> entries)
             throws Exception {
+        return require(ledger, run, prepared, definition, rows, sourceSha, page, entries, true);
+    }
+
+    /** 只识别完整连续的已提交前缀；尾部必须尚无分页，原只读入口仍要求全部页齐备。 */
+    static List<Slice> requireSubmittedPrefix(
+            SyncRunLedger ledger,
+            String run,
+            Path prepared,
+            DatasetDefinition definition,
+            List<Map<String, Object>> rows,
+            String sourceSha,
+            VerifiedMarketDataStore.PublicationPage page,
+            List<SyncRunLedger.Entry> entries)
+            throws Exception {
+        return require(ledger, run, prepared, definition, rows, sourceSha, page, entries, false);
+    }
+
+    private static List<Slice> require(
+            SyncRunLedger ledger,
+            String run,
+            Path prepared,
+            DatasetDefinition definition,
+            List<Map<String, Object>> rows,
+            String sourceSha,
+            VerifiedMarketDataStore.PublicationPage page,
+            List<SyncRunLedger.Entry> entries,
+            boolean complete)
+            throws Exception {
         var roots = entries.stream().filter(e -> e.kind() == SyncRunLedger.Kind.RUN).toList();
         var attempts =
                 entries.stream().filter(e -> e.kind() == SyncRunLedger.Kind.ATTEMPT).toList();
@@ -44,8 +72,15 @@ final class CompleteFrozenSlices {
                 || !run.equals(attempts.getFirst().parentId())
                 || !Set.of(SyncRunState.RUNNING, SyncRunState.IN_DOUBT, SyncRunState.VERIFIED)
                         .contains(attempts.getFirst().state())
-                || slices.size() != (rows.size() + page.rows() - 1) / page.rows())
+                || slices.isEmpty()
+                || (complete
+                        ? slices.size() != (rows.size() + page.rows() - 1) / page.rows()
+                        : slices.size() >= (rows.size() + page.rows() - 1) / page.rows()))
             throw new IllegalStateException("原账本必须覆盖同一次尝试的全部冻结分页");
+        if (!complete
+                && (roots.getFirst().state() != SyncRunState.IN_DOUBT
+                        || attempts.getFirst().state() != SyncRunState.IN_DOUBT))
+            throw new IllegalStateException("尾部续接只接受保留原未决状态的运行及尝试");
         var codec = VerifiedMarketDataStore.codec(definition);
         var result = new TreeMap<Integer, Slice>();
         for (var entry : slices) {
@@ -131,7 +166,8 @@ final class CompleteFrozenSlices {
             if (entry.state() == SyncRunState.VERIFIED)
                 requireProof(JSON.readTree(entry.payloadJson()), count, sourceSha);
         }
-        for (int offset = 0; offset < rows.size(); offset += page.rows())
+        int submittedRows = complete ? rows.size() : slices.size() * page.rows();
+        for (int offset = 0; offset < submittedRows; offset += page.rows())
             if (!result.containsKey(offset)) throw new IllegalStateException("完整来源中存在未发送页");
         if (attempts.getFirst().state() == SyncRunState.VERIFIED)
             requireProof(JSON.readTree(attempts.getFirst().payloadJson()), rows.size(), sourceSha);
