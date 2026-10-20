@@ -9,7 +9,9 @@ import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import com.zoutrankil.data.stock.domain.StockSuspendState;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Prepared;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Verified;
+import com.zoutrankil.data.stock.mapper.StockSuspendLayoutMapper;
 import com.zoutrankil.data.stock.port.StockSuspendStagingPort;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,10 +40,16 @@ public final class StockSuspendStaging implements StockSuspendStagingPort {
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.ROOT)
                     .withZone(ZoneOffset.UTC);
 
+    private final CnTradeDateLayout layout;
     private final JdbcTemplate jdbc;
     private final String target;
 
     public StockSuspendStaging(JdbcTemplate source, String target) {
+        this(source, target, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public StockSuspendStaging(JdbcTemplate source, String target, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         DatasetDefinition.identifier(target);
         this.target = target;
         jdbc = new JdbcTemplate(Objects.requireNonNull(source).getDataSource());
@@ -103,37 +111,48 @@ public final class StockSuspendStaging implements StockSuspendStagingPort {
         writeStageEvidence(
                 evidenceFolder.resolve(stage + "-intent.json"),
                 json.writeValueAsBytes(
-                        Map.of(
-                                "target",
-                                target,
-                                "stage",
-                                stage,
-                                "prepared",
-                                prepared,
-                                "windowSemantics",
-                                "[fromInclusive,toInclusive]",
-                                "sourceRows",
-                                prepared.source().size(),
-                                "maxRows",
-                                StockSuspendStorage.MAX_ROWS,
-                                "maxBytes",
-                                StockSuspendStorage.MAX_BYTES)));
+                        StockSuspendLayoutMapper.bind(
+                                Map.of(
+                                        "target",
+                                        target,
+                                        "stage",
+                                        stage,
+                                        "prepared",
+                                        prepared,
+                                        "windowSemantics",
+                                        "[fromInclusive,toInclusive]",
+                                        "sourceRows",
+                                        prepared.source().size(),
+                                        "maxRows",
+                                        StockSuspendStorage.MAX_ROWS,
+                                        "maxBytes",
+                                        StockSuspendStorage.MAX_BYTES),
+                                layout)));
         LocalDate toExclusive = prepared.toInclusive().plusDays(1);
         String fromLiteral = timestampLiteral(prepared.fromInclusive()),
                 toLiteral = timestampLiteral(toExclusive);
+        String dateColumn = layout.physicalDateColumn("stk_suspend");
         String ddl =
                 "CREATE TABLE \""
                         + stage
                         + "\" AS (SELECT * FROM \""
                         + target
-                        + "\" WHERE timestamp < cast('"
+                        + "\" WHERE "
+                        + dateColumn
+                        + " < cast('"
                         + fromLiteral
-                        + "' AS TIMESTAMP) OR timestamp >= cast('"
+                        + "' AS TIMESTAMP) OR "
+                        + dateColumn
+                        + " >= cast('"
                         + toLiteral
-                        + "' AS TIMESTAMP)) TIMESTAMP(timestamp) PARTITION BY DAY WAL "
-                        + "DEDUP UPSERT KEYS(ts_code,timestamp)";
+                        + "' AS TIMESTAMP)) TIMESTAMP("
+                        + dateColumn
+                        + ") PARTITION BY DAY WAL "
+                        + "DEDUP UPSERT KEYS(ts_code,"
+                        + dateColumn
+                        + ")";
         jdbc.execute(ddl);
-        var storage = new StockSuspendStorage(jdbc, stage);
+        var storage = new StockSuspendStorage(jdbc, stage, layout);
         awaitWal(stage, cancelled);
         storage.preflight();
         var copied = storage.snapshot();
@@ -146,7 +165,9 @@ public final class StockSuspendStaging implements StockSuspendStagingPort {
         String insert =
                 "INSERT INTO \""
                         + stage
-                        + "\" (ts_code,is_suspended,timestamp) VALUES (?,?,cast(? AS TIMESTAMP))";
+                        + "\" (ts_code,is_suspended,"
+                        + dateColumn
+                        + ") VALUES (?,?,cast(? AS TIMESTAMP))";
         int batches = 0;
         for (int start = 0; start < prepared.source().size(); start += 250) {
             check(cancelled);
@@ -185,23 +206,25 @@ public final class StockSuspendStaging implements StockSuspendStagingPort {
         writeStageEvidence(
                 receipt,
                 json.writeValueAsBytes(
-                        Map.of(
-                                "target",
-                                target,
-                                "stage",
-                                stage,
-                                "actual",
-                                actual,
-                                "batches",
-                                batches,
-                                "sourceRows",
-                                prepared.source().size(),
-                                "windowFrom",
-                                prepared.fromInclusive().toString(),
-                                "windowTo",
-                                prepared.toInclusive().toString(),
-                                "preservedOutsideRows",
-                                expectedOutside.size())));
+                        StockSuspendLayoutMapper.bind(
+                                Map.of(
+                                        "target",
+                                        target,
+                                        "stage",
+                                        stage,
+                                        "actual",
+                                        actual,
+                                        "batches",
+                                        batches,
+                                        "sourceRows",
+                                        prepared.source().size(),
+                                        "windowFrom",
+                                        prepared.fromInclusive().toString(),
+                                        "windowTo",
+                                        prepared.toInclusive().toString(),
+                                        "preservedOutsideRows",
+                                        expectedOutside.size()),
+                                layout)));
         return new Verified(stage, actual, batches, receipt.toString());
     }
 
@@ -212,7 +235,7 @@ public final class StockSuspendStaging implements StockSuspendStagingPort {
     private static void writeStageEvidence(Path path, byte[] content) throws Exception {
         if (content.length > MAX_STAGE_EVIDENCE_BYTES)
             throw new IllegalStateException("stk_suspend stage evidence exceeds 64 MiB");
-        FileEvidenceStore.writeNew(path, content);
+        FileEvidenceStore.writeNewDurable(path, content);
     }
 
     private void awaitWal(String table, BooleanSupplier cancelled) throws Exception {

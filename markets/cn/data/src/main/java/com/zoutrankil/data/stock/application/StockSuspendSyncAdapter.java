@@ -19,6 +19,7 @@ import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import com.zoutrankil.data.stock.domain.StockSuspendState;
 import com.zoutrankil.data.stock.port.StockSuspendTarget;
 import com.zoutrankil.data.stock.port.StockSuspendWriteSession;
+import com.zoutrankil.data.stock.storage.StockSuspendTargetTransitionStore;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -580,6 +581,20 @@ public final class StockSuspendSyncAdapter
         else if (attempt.state() != SyncRunState.IN_DOUBT)
             throw new IllegalStateException(
                     "D011 attempt is no longer active during publication recovery");
+    }
+
+    @Override
+    public boolean recoveryRequired(String ownerRunId) throws Exception {
+        if (!runId.equals(ownerRunId)) throw new IllegalArgumentException("停牌恢复检查运行归属不同");
+        if (new StockSuspendTargetTransitionStore(ledgerPath).hasPublicationForRun(runId))
+            return true;
+        if (Files.isRegularFile(evidenceRoot.resolve("append-intent.json"))) return true;
+        Path publication = evidenceRoot.resolve("publication");
+        if (!Files.isDirectory(publication)) return false;
+        // stage 已有耐久意图也不能遗忘原对象；这里不创建表、不访问物理目标或重发。
+        try (var intents = Files.newDirectoryStream(publication, "*-intent.json")) {
+            return intents.iterator().hasNext();
+        }
     }
 
     @Override

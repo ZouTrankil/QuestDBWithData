@@ -12,9 +12,11 @@ import com.zoutrankil.data.repository.ReferencePublicationJournal;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.DatasetIntervalLock;
 import com.zoutrankil.data.stock.domain.StockSuspendState;
+import com.zoutrankil.data.stock.mapper.StockSuspendLayoutMapper;
 import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
 import com.zoutrankil.data.stock.port.StockSuspendTarget;
 import com.zoutrankil.data.stock.storage.StockSuspendStaging;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -72,9 +74,15 @@ public final class StockSuspendRunRecovery {
         var ledger = new SyncRunLedger(ledgerPath);
         var run = ledger.getRun(runId);
         var rootEntry = ledger.get(runId);
+        var definition = StockSuspendSyncJobOwner.definition(run.jobVersion());
+        var dateLayout = CnTradeDateLayout.fromVersion(definition.datasetVersion());
+        target = StockSuspendTarget.forFrozenVersion(target, definition.datasetVersion());
         if (!"data.stk_suspend".equals(run.jobId())
-                || run.jobVersion() != StockSuspendSyncJobOwner.DEFINITION.version()
-                || !Set.of(SyncRunState.RUNNING, SyncRunState.IN_DOUBT).contains(rootEntry.state()))
+                || run.jobVersion() != definition.version()
+                || !(Set.of(SyncRunState.RUNNING, SyncRunState.IN_DOUBT).contains(rootEntry.state())
+                        || dateLayout == CnTradeDateLayout.TRADE_DATE_V2
+                                && Set.of(SyncRunState.VERIFIED, SyncRunState.VERIFIED_EMPTY)
+                                        .contains(rootEntry.state())))
             throw new IllegalStateException(
                     "Only an active or uncertain D011 run can be reconciled");
 
@@ -82,7 +90,7 @@ public final class StockSuspendRunRecovery {
         SyncJobDefinition frozenDefinition =
                 JobDefinitionJson.mapper()
                         .treeToValue(frozen.path("definition"), SyncJobDefinition.class);
-        if (!StockSuspendSyncJobOwner.DEFINITION.equals(frozenDefinition)
+        if (!definition.equals(frozenDefinition)
                 || !run.targetId().equals(frozen.path("parameters").path("targetId").asText())) {
             throw new IllegalStateException(
                     "Frozen D011 definition or logical target differs from the run ledger");
@@ -108,7 +116,7 @@ public final class StockSuspendRunRecovery {
                 || expectedDays < 1
                 || expectedDays > StockSuspendSyncJobOwner.MAX_WINDOW_DAYS
                 || to.isAfter(logicalDate)
-                || !StockSuspendSyncJobOwner.DEFINITION.supportedModes().stream()
+                || !definition.supportedModes().stream()
                         .anyMatch(mode -> mode.name().equals(frozen.path("mode").asText())))
             throw new IllegalStateException(
                     "Frozen D011 recovery interval is outside its bounded contract");
@@ -126,6 +134,7 @@ public final class StockSuspendRunRecovery {
             throw new IllegalStateException(
                     "D011 frozen logical target differs from the configured PGWire endpoint/table");
         JsonNode scope = JobDefinitionJson.mapper().readTree(intent.scope());
+        StockSuspendLayoutMapper.require(scope, dateLayout);
         if (!logicalTarget.equals(scope.path("logicalTargetId").asText())
                 || !physicalBefore.equals(scope.path("physicalTargetBefore").asText())
                 || !from.toString().equals(scope.path("fromInclusive").asText())
@@ -156,6 +165,15 @@ public final class StockSuspendRunRecovery {
                         StockSuspendStaging.MAX_STAGE_EVIDENCE_BYTES);
 
         var stageProof = readStageProof(stageReceipt, intent, table, from, to);
+        StockSuspendLayoutMapper.require(stageProof, dateLayout);
+        if (dateLayout == CnTradeDateLayout.TRADE_DATE_V2
+                && !FileEvidenceStore.sha256(
+                                FileEvidenceStore.readBounded(
+                                        stageReceipt,
+                                        StockSuspendStaging.MAX_STAGE_EVIDENCE_BYTES,
+                                        () -> new IllegalStateException("停牌 stage 凭证过大")))
+                        .equals(scope.path("stageReceiptFingerprint").asText()))
+            throw new IllegalStateException("停牌原 stage 凭证摘要改变");
         var publication =
                 new StockSuspendPublication(
                         target.newPublicationTables(),
@@ -163,7 +181,8 @@ public final class StockSuspendRunRecovery {
                         runEvidence,
                         table,
                         logicalTarget,
-                        runId);
+                        runId,
+                        dateLayout);
         StockSuspendPublication.Layout layout = publication.inspect(runId);
         if (layout == StockSuspendPublication.Layout.CONFLICT)
             throw new IllegalStateException(
@@ -237,7 +256,9 @@ public final class StockSuspendRunRecovery {
                     "D011 verified stage differs from receipt-backed source and outside rows");
 
         // All immutable receipts and the verified stage are now proven before any recovery rename.
-        StockSuspendPublication.finish(ledgerPath, target, runId, true);
+        if (dateLayout == CnTradeDateLayout.TRADE_DATE_V2)
+            publication.finishAfterSourceValidation(runId, true);
+        else StockSuspendPublication.finish(ledgerPath, target, runId, true);
         var after = target.openTable(table).snapshot();
         if (after.identity().id() != intent.replacementId()
                 || !after.rows().equals(prepared.expected())
@@ -259,7 +280,9 @@ public final class StockSuspendRunRecovery {
             return new Result(
                     runId, currentRoot.state(), 0, completionPath.toString(), after.fingerprint());
         }
-        if (!Set.of(SyncRunState.RUNNING, SyncRunState.IN_DOUBT).contains(currentRoot.state()))
+        if (!Set.of(SyncRunState.RUNNING, SyncRunState.IN_DOUBT).contains(currentRoot.state())
+                && !(dateLayout == CnTradeDateLayout.TRADE_DATE_V2
+                        && currentRoot.state() == SyncRunState.VERIFIED))
             throw new IllegalStateException(
                     "D011 published run became terminal before nonempty recovery");
 
@@ -331,7 +354,8 @@ public final class StockSuspendRunRecovery {
                 physicalBefore,
                 physicalAfter,
                 sourceFingerprint,
-                after.fingerprint());
+                after.fingerprint(),
+                dateLayout);
         for (Slice slice : slices)
             attachPublication(slice.pagePath(), completionPath, publicationEvidence);
 
@@ -619,12 +643,13 @@ public final class StockSuspendRunRecovery {
                     || Files.size(real) > StockSuspendSource.MAX_EVIDENCE_BYTES)
                 throw new IllegalStateException(
                         "D011 existing completion evidence escapes its run directory or exceeds its byte bound");
-            return real;
+            // 真实路径只用于安全校验，引用继续使用原冻结路径，避免 /var 与 /private/var 换写。
+            return candidate;
         }
         return candidate;
     }
 
-    private static void writeOrValidateCompletion(
+    static void writeOrValidateCompletion(
             Path path,
             Map<String, ?> complete,
             LocalDate from,
@@ -634,7 +659,8 @@ public final class StockSuspendRunRecovery {
             String physicalBefore,
             String physicalAfter,
             String sourceFingerprint,
-            String targetFingerprint)
+            String targetFingerprint,
+            CnTradeDateLayout layout)
             throws Exception {
         var json = JobDefinitionJson.mapper();
         if (Files.exists(path)) {
@@ -646,6 +672,7 @@ public final class StockSuspendRunRecovery {
                                     () ->
                                             new IllegalStateException(
                                                     "D011 recovery evidence escapes its run directory or exceeds its byte bound")));
+            StockSuspendLayoutMapper.require(old, layout);
             JsonNode publication = old.path("publication");
             if (!"suspend_d".equals(old.path("endpoint").asText())
                     || !old.path("complete").asBoolean(false)
@@ -680,7 +707,8 @@ public final class StockSuspendRunRecovery {
             return;
         }
         Files.createDirectories(path.getParent());
-        FileEvidenceStore.writeNew(path, json.writeValueAsBytes(complete));
+        FileEvidenceStore.writeNewDurable(
+                path, json.writeValueAsBytes(StockSuspendLayoutMapper.bind(complete, layout)));
     }
 
     private static void attachPublication(

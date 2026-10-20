@@ -17,25 +17,32 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.domain.stock.market.StockSuspend;
 import com.zoutrankil.data.domain.stock.market.StockSuspendKey;
+import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.repository.ReferencePublicationJournal;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.DatasetIntervalLock;
+import com.zoutrankil.data.service.TusharePageService;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Identity;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Prepared;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Snapshot;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Verified;
+import com.zoutrankil.data.stock.mapper.StockSuspendLayoutMapper;
 import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
 import com.zoutrankil.data.stock.port.StockSuspendTables;
 import com.zoutrankil.data.stock.port.StockSuspendTarget;
+import com.zoutrankil.data.stock.port.StockSuspendWriteSession;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -66,10 +73,28 @@ class StockSuspendPublicationContractTest {
     @TempDir Path root;
 
     @ParameterizedTest
-    @CsvSource({"1,false,ORIGINAL", "1,true,OLD_MOVED", "2,false,OLD_MOVED", "2,true,PUBLISHED"})
+    @CsvSource({
+        "1,false,ORIGINAL,1,false",
+        "1,true,OLD_MOVED,1,false",
+        "2,false,OLD_MOVED,1,false",
+        "2,true,PUBLISHED,1,false",
+        "1,false,ORIGINAL,1,true",
+        "1,true,OLD_MOVED,1,true",
+        "2,false,OLD_MOVED,1,true",
+        "2,true,PUBLISHED,1,true",
+        "1,false,ORIGINAL,2,false",
+        "1,true,OLD_MOVED,2,false",
+        "2,false,OLD_MOVED,2,false",
+        "2,true,PUBLISHED,2,false",
+        "1,false,ORIGINAL,2,true",
+        "1,true,OLD_MOVED,2,true",
+        "2,false,OLD_MOVED,2,true",
+        "2,true,PUBLISHED,2,true"
+    })
     void everyRenameFaultRetainsItsJournalAndRecoveryCompletesTheExactGeneration(
-            int failAt, boolean after, String layout) throws Exception {
-        var f = new Fixture(false);
+            int failAt, boolean after, String layout, int version, boolean empty) throws Exception {
+        var f = new Fixture(empty, version);
+        String frozen = f.ledger.getRun(RUN).frozenJson();
         f.tables.failAt = failAt;
         f.tables.failAfter = after;
         var failure = assertThrows(IllegalStateException.class, () -> f.publish(() -> false));
@@ -81,7 +106,8 @@ class StockSuspendPublicationContractTest {
         assertEquals(StockSuspendPublication.Layout.valueOf(layout), f.publisher.inspect(RUN));
         assertNotNull(f.locks.findOwned(RUN, f.scope));
         f.tables.failAt = 0;
-        f.publisher.finish(RUN, true);
+        if (version == 1) f.publisher.finish(RUN, true);
+        else StockSuspendRunRecovery.finishInterrupted(f.target(), f.ledgerPath, RUN, true);
         assertEquals(ReferencePublicationJournal.State.VERIFIED, f.journal().forRun(RUN).state());
         assertEquals(StockSuspendPublication.Layout.PUBLISHED, f.publisher.inspect(RUN));
         assertEquals(f.stage.snapshot(), f.tables.values.get(TABLE));
@@ -90,15 +116,22 @@ class StockSuspendPublicationContractTest {
                 StockSuspendPublication.authorizesResume(
                         f.ledgerPath, RUN, LOGICAL, f.physicalBefore, f.physicalAfter));
         int renames = f.tables.renames;
-        f.publisher.finish(RUN, true);
+        if (version == 1) f.publisher.finish(RUN, true);
+        else StockSuspendRunRecovery.finishInterrupted(f.target(), f.ledgerPath, RUN, true);
         assertEquals(renames, f.tables.renames);
+        assertEquals(frozen, f.ledger.getRun(RUN).frozenJson());
     }
 
     @ParameterizedTest
-    @CsvSource({"false,VERIFIED", "true,VERIFIED_EMPTY"})
+    @CsvSource({
+        "false,VERIFIED,1",
+        "true,VERIFIED_EMPTY,1",
+        "false,VERIFIED,2",
+        "true,VERIFIED_EMPTY,2"
+    })
     void receiptBackedRunRecoveryFinishesNonemptyAndAuthoritativeEmptyReplacement(
-            boolean empty, String state) throws Exception {
-        var f = new Fixture(empty);
+            boolean empty, String state, int version) throws Exception {
+        var f = new Fixture(empty, version);
         f.tables.failAt = 2;
         assertThrows(IllegalStateException.class, () -> f.publish(() -> false));
         f.tables.failAt = 0;
@@ -118,9 +151,10 @@ class StockSuspendPublicationContractTest {
                 f.physicalAfter, proof.path("publication").path("physicalTargetAfter").asText());
     }
 
-    @Test
-    void changedRawReceiptBlocksRecoveryBeforeAnyFurtherRename() throws Exception {
-        var f = new Fixture(false);
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2})
+    void changedRawReceiptBlocksRecoveryBeforeAnyFurtherRename(int version) throws Exception {
+        var f = new Fixture(false, version);
         f.tables.failAt = 1;
         assertThrows(IllegalStateException.class, () -> f.publish(() -> false));
         f.tables.failAt = 0;
@@ -228,6 +262,132 @@ class StockSuspendPublicationContractTest {
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2})
+    void journalCannotBeRelabelledEvenThoughItsLogicalRowHashesAreIdentical(int version)
+            throws Exception {
+        var f = new Fixture(true, version);
+        f.tables.failAt = 1;
+        assertThrows(IllegalStateException.class, () -> f.publish(() -> false));
+        String frozen = f.ledger.getRun(RUN).frozenJson();
+        String originalScope = f.journal().forRun(RUN).intent().scope();
+        f.tables.version = 3 - version;
+        var wrong =
+                new StockSuspendPublication(
+                        f.tables,
+                        f.ledgerPath,
+                        f.evidence,
+                        TABLE,
+                        LOGICAL,
+                        RUN,
+                        CnTradeDateLayout.fromVersion(3 - version));
+        f.tables.calls.clear();
+        assertThrows(IllegalStateException.class, () -> wrong.inspect(RUN));
+        assertTrue(f.tables.calls.isEmpty());
+        assertEquals(frozen, f.ledger.getRun(RUN).frozenJson());
+        assertEquals(originalScope, f.journal().forRun(RUN).intent().scope());
+        assertNotNull(f.locks.findOwned(RUN, f.scope));
+    }
+
+    @Test
+    void newPublisherCannotBypassSourceValidationAndChangedStageDigestBlocksBeforePhysicalReads()
+            throws Exception {
+        var f = new Fixture(false, 2);
+        f.tables.failAt = 1;
+        assertThrows(IllegalStateException.class, () -> f.publish(() -> false));
+        f.tables.failAt = 0;
+        int renames = f.tables.renames;
+        assertThrows(IllegalStateException.class, () -> f.publisher.finish(RUN, true));
+        Files.writeString(Path.of(f.stage.receipt()), " ", StandardOpenOption.APPEND);
+        f.tables.calls.clear();
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        StockSuspendRunRecovery.finishInterrupted(
+                                f.target(), f.ledgerPath, RUN, true));
+        assertTrue(f.tables.calls.isEmpty());
+        assertEquals(renames, f.tables.renames);
+        assertNotNull(f.locks.findOwned(RUN, f.scope));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"null", "\"2\"", "2.0", "4294967298", "-4294967294", "1"})
+    void newStageProofRequiresAnExactIntegralLayoutBeforeJournalOrRename(String raw)
+            throws Exception {
+        var f = new Fixture(false, 2);
+        var proof =
+                (ObjectNode)
+                        JobDefinitionJson.mapper().readTree(Path.of(f.stage.receipt()).toFile());
+        proof.set("datasetSchemaVersion", JobDefinitionJson.mapper().readTree(raw));
+        JobDefinitionJson.mapper().writeValue(Path.of(f.stage.receipt()).toFile(), proof);
+        assertThrows(IllegalStateException.class, () -> f.publish(() -> false));
+        assertTrue(f.journal().findForRun(RUN).isEmpty());
+        assertEquals(0, f.tables.renames);
+    }
+
+    @Test
+    void sourceAdapterReportsAnOwnedPublicationWithoutTouchingPhysicalTargets() throws Exception {
+        var f = new Fixture(true);
+        f.tables.failAt = 1;
+        assertThrows(IllegalStateException.class, () -> f.publish(() -> false));
+        var pages = mock(TusharePageService.class);
+        var target = mock(StockSuspendTarget.class);
+        var writer = mock(StockSuspendWriteSession.class);
+        var adapter =
+                new StockSuspendSyncAdapter(
+                        pages,
+                        writer,
+                        f.evidence,
+                        f.ledgerPath,
+                        TABLE,
+                        RUN,
+                        LOGICAL,
+                        f.physicalBefore,
+                        target);
+        String before = FileEvidenceStore.sha256(Files.readAllBytes(f.ledgerPath));
+        assertTrue(adapter.recoveryRequired(RUN));
+        assertEquals(before, FileEvidenceStore.sha256(Files.readAllBytes(f.ledgerPath)));
+        verifyNoInteractions(pages, target, writer);
+    }
+
+    @Test
+    void currentPhysicalIdentityCheckDoesNotBorrowAnotherVersionsVerifiedHistory()
+            throws Exception {
+        var f = new Fixture(false, 2);
+        var old =
+                StockSuspendSyncJobOwner.DEFINITION.freeze(
+                        Mode.BACKFILL,
+                        Map.of("targetId", LOGICAL, "physicalTargetId", physical(99)),
+                        DATE,
+                        DATE,
+                        DATE);
+        f.ledger.createRun("old-version", null, LOGICAL, old);
+        f.transition("old-version", SyncRunState.RUNNING, "{}");
+        f.transition(
+                "old-version",
+                SyncRunState.VERIFIED_EMPTY,
+                "{\"sourceComplete\":true,\"returnedRows\":0,\"submittedRows\":0,\"responseEvidence\":\"offline-version-filter\"}");
+        try (var lock = f.publisher.acquire()) {
+            assertNotNull(lock);
+            assertEquals(0, f.tables.renames);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"sourceRows", "rowFlag"})
+    void newStageCannotRelyOnOverflowOrFloatingPointCoercion(String field) throws Exception {
+        var f = new Fixture(false, 2);
+        var proof =
+                (ObjectNode)
+                        JobDefinitionJson.mapper().readTree(Path.of(f.stage.receipt()).toFile());
+        if (field.equals("sourceRows")) proof.put("sourceRows", 4_294_967_297L);
+        else ((ObjectNode) proof.path("actual").path("rows").get(0)).put("isSuspended", 1.5);
+        JobDefinitionJson.mapper().writeValue(Path.of(f.stage.receipt()).toFile(), proof);
+        assertThrows(IllegalStateException.class, () -> f.publish(() -> false));
+        assertTrue(f.journal().findForRun(RUN).isEmpty());
+        assertEquals(0, f.tables.renames);
+    }
+
     private final class Fixture {
         final Path ledgerPath = root.resolve("ledger.sqlite"),
                 evidence = root.resolve("sync-evidence").resolve(RUN);
@@ -244,7 +404,15 @@ class StockSuspendPublicationContractTest {
         final String physicalBefore, physicalAfter, sourceFingerprint;
         final StockSuspendPublication publisher;
 
+        final int version;
+
         Fixture(boolean empty) throws Exception {
+            this(empty, 1);
+        }
+
+        Fixture(boolean empty, int version) throws Exception {
+            this.version = version;
+            tables.version = version;
             Files.createDirectories(rawReceipt.getParent());
             ledger = new SyncRunLedger(ledgerPath);
             before =
@@ -262,12 +430,13 @@ class StockSuspendPublicationContractTest {
             physicalBefore = physical(1);
             physicalAfter = physical(2);
             var request =
-                    StockSuspendSyncJobOwner.DEFINITION.freeze(
-                            Mode.BACKFILL,
-                            Map.of("targetId", LOGICAL, "physicalTargetId", physicalBefore),
-                            DATE,
-                            DATE,
-                            DATE);
+                    StockSuspendSyncJobOwner.definition(version)
+                            .freeze(
+                                    Mode.BACKFILL,
+                                    Map.of("targetId", LOGICAL, "physicalTargetId", physicalBefore),
+                                    DATE,
+                                    DATE,
+                                    DATE);
             ledger.createRun(RUN, null, LOGICAL, request);
             transition(RUN, SyncRunState.RUNNING, "{}");
             ledger.createChild("attempt", SyncRunLedger.Kind.ATTEMPT, RUN, RUN);
@@ -338,28 +507,37 @@ class StockSuspendPublicationContractTest {
             JobDefinitionJson.mapper()
                     .writeValue(
                             stageReceipt.toFile(),
-                            Map.of(
-                                    "target",
-                                    TABLE,
-                                    "stage",
-                                    STAGE,
-                                    "actual",
-                                    staged,
-                                    "sourceRows",
-                                    source.size(),
-                                    "windowFrom",
-                                    DATE.toString(),
-                                    "windowTo",
-                                    DATE.toString(),
-                                    "preservedOutsideRows",
-                                    2));
+                            StockSuspendLayoutMapper.bind(
+                                    Map.of(
+                                            "target",
+                                            TABLE,
+                                            "stage",
+                                            STAGE,
+                                            "actual",
+                                            staged,
+                                            "sourceRows",
+                                            source.size(),
+                                            "windowFrom",
+                                            DATE.toString(),
+                                            "windowTo",
+                                            DATE.toString(),
+                                            "preservedOutsideRows",
+                                            2),
+                                    CnTradeDateLayout.fromVersion(version)));
             stage = new Verified(STAGE, staged, empty ? 0 : 1, stageReceipt.toString());
             tables.values.put(TABLE, before);
             tables.values.put(STAGE, staged);
             locks = new DatasetIntervalLock(ledgerPath);
             locks.acquire(RUN, scope);
             publisher =
-                    new StockSuspendPublication(tables, ledgerPath, evidence, TABLE, LOGICAL, RUN);
+                    new StockSuspendPublication(
+                            tables,
+                            ledgerPath,
+                            evidence,
+                            TABLE,
+                            LOGICAL,
+                            RUN,
+                            CnTradeDateLayout.fromVersion(version));
         }
 
         void transition(String id, SyncRunState state, String json) throws Exception {
@@ -384,7 +562,14 @@ class StockSuspendPublicationContractTest {
         }
 
         StockSuspendTarget target() throws Exception {
-            var target = mock(StockSuspendTarget.class);
+            var target =
+                    version == 1
+                            ? mock(StockSuspendTarget.class)
+                            : mock(StockSuspendTarget.Versioned.class);
+            if (target instanceof StockSuspendTarget.Versioned selected) {
+                when(selected.datasetVersion()).thenReturn(version);
+                when(selected.forVersion(version)).thenReturn(target);
+            }
             when(target.tableName()).thenReturn(TABLE);
             when(target.targetId()).thenReturn(LOGICAL);
             when(target.newPublicationTables()).thenReturn(tables);
@@ -405,7 +590,13 @@ class StockSuspendPublicationContractTest {
         }
     }
 
-    private static final class MemoryTables implements StockSuspendTables {
+    private static final class MemoryTables implements StockSuspendTables.Versioned {
+        int version = 1;
+
+        public int datasetVersion() {
+            return version;
+        }
+
         final Map<String, Snapshot> values = new HashMap<>();
         final List<String> calls = new ArrayList<>();
         final IllegalStateException fault = new IllegalStateException("injected rename fault");

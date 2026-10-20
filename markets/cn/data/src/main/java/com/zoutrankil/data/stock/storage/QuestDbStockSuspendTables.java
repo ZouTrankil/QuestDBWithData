@@ -6,6 +6,7 @@ import com.zoutrankil.data.stock.domain.StockSuspendState.Identity;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Prepared;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Snapshot;
 import com.zoutrankil.data.stock.port.StockSuspendTables;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -15,22 +16,35 @@ import java.util.List;
 import java.util.Objects;
 
 /** D011 publication queries use their original independent JDBC settings. */
-public final class QuestDbStockSuspendTables implements StockSuspendTables {
+public final class QuestDbStockSuspendTables implements StockSuspendTables.Versioned {
+    private final CnTradeDateLayout layout;
     private final JdbcTemplate jdbc;
 
     public QuestDbStockSuspendTables(JdbcTemplate jdbc) {
+        this(jdbc, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public QuestDbStockSuspendTables(JdbcTemplate jdbc, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.jdbc = new JdbcTemplate(Objects.requireNonNull(jdbc).getDataSource());
         this.jdbc.setQueryTimeout(20);
     }
 
     @Override
+    public int datasetVersion() {
+        return layout.schemaVersion();
+    }
+
+    @Override
     public Table openTable(String table) {
-        return new StockSuspendStorage(jdbc, table);
+        return layout == CnTradeDateLayout.LEGACY_V1
+                ? new StockSuspendStorage(jdbc, table)
+                : new StockSuspendStorage(jdbc, table, layout);
     }
 
     @Override
     public String logicalTargetId(String table) {
-        return StockSuspendTargetIdentity.logical(jdbc, table);
+        return StockSuspendTargetIdentity.logical(jdbc, table, layout);
     }
 
     @Override
@@ -60,7 +74,10 @@ public final class QuestDbStockSuspendTables implements StockSuspendTables {
                         "Renamed stk_suspend WAL unresolved; keep publication journal");
             Thread.sleep(50);
         }
-        return new StockSuspendStorage(jdbc, tableName).snapshot();
+        return (layout == CnTradeDateLayout.LEGACY_V1
+                        ? new StockSuspendStorage(jdbc, tableName)
+                        : new StockSuspendStorage(jdbc, tableName, layout))
+                .snapshot();
     }
 
     @Override

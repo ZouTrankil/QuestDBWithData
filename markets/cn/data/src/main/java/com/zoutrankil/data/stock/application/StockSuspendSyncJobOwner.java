@@ -8,6 +8,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition.Parameter;
 import com.zoutrankil.data.domain.SyncJobDefinition.ParameterType;
 import com.zoutrankil.data.domain.SyncJobDefinition.RetryPolicy;
 import com.zoutrankil.data.domain.shared.SyncJobOwner;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.stereotype.Service;
 
@@ -61,6 +62,34 @@ public final class StockSuspendSyncJobOwner implements SyncJobOwner {
                     ZoneId.of("Asia/Shanghai"),
                     true,
                     true);
+
+    /** v1 原定义保持不动；显式分版供原请求核验，当前注册仍保持旧版。 */
+    public static SyncJobDefinition definition(int version) {
+        var layout = CnTradeDateLayout.fromVersion(version);
+        if (layout == CnTradeDateLayout.LEGACY_V1) return DEFINITION;
+        var old = DEFINITION;
+        return new SyncJobDefinition(
+                old.jobId(),
+                version,
+                old.datasetId(),
+                layout.schemaVersion(),
+                old.owner(),
+                old.supportedModes(),
+                old.defaultMode(),
+                old.parameters(),
+                old.ratePolicyRef(),
+                old.slicePolicyRef(),
+                old.verificationPolicyRef(),
+                old.retry(),
+                old.timeout(),
+                old.budget(),
+                old.revisionDays(),
+                old.dependencies(),
+                old.frequency(),
+                old.zone(),
+                old.enabled(),
+                old.dailyEligible());
+    }
 
     @Override
     public String datasetId() {

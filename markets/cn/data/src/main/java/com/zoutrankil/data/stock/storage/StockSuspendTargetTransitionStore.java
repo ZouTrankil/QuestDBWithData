@@ -1,5 +1,7 @@
 package com.zoutrankil.data.stock.storage;
 
+import com.zoutrankil.data.repository.SqliteLedgerSchema;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -35,6 +37,24 @@ public final class StockSuspendTargetTransitionStore {
 
     public StockSuspendTargetTransitionStore(Path path) {
         this.path = path.toAbsolutePath().normalize();
+    }
+
+    /** 只读探测原运行；发布已核验但通用完成确认失败时，也必须保留原区间锁。 */
+    public boolean hasPublicationForRun(String runId) throws Exception {
+        if (!Files.isRegularFile(path)
+                || !SqliteLedgerSchema.tableNames(path).contains("reference_publications"))
+            return false;
+        try (var db =
+                        DriverManager.getConnection(
+                                "jdbc:sqlite:" + path.toUri().toASCIIString() + "?mode=ro");
+                var query =
+                        db.prepareStatement(
+                                "SELECT 1 FROM reference_publications WHERE dataset='stk_suspend' AND run_id=? LIMIT 1")) {
+            query.setString(1, runId);
+            try (var rows = query.executeQuery()) {
+                return rows.next();
+            }
+        }
     }
 
     public void initialize() throws SQLException {

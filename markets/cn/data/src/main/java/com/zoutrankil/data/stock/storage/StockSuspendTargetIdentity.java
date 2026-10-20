@@ -1,6 +1,7 @@
 package com.zoutrankil.data.stock.storage;
 
 import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,6 +18,11 @@ public final class StockSuspendTargetIdentity {
     private StockSuspendTargetIdentity() {}
 
     public static String logical(JdbcTemplate jdbc, String table) {
+        return logical(jdbc, table, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public static String logical(JdbcTemplate jdbc, String table, CnTradeDateLayout layout) {
+        Objects.requireNonNull(layout);
         DatasetDefinition.identifier(table);
         Objects.requireNonNull(jdbc);
         String url =
@@ -36,7 +42,13 @@ public final class StockSuspendTargetIdentity {
                             + ":"
                             + (address.getPort() < 0 ? 5432 : address.getPort())
                             + address.getRawPath();
-            String value = "stk_suspend-logical-v1\n" + endpoint + "\n" + table;
+            String value =
+                    "stk_suspend-logical-v"
+                            + layout.schemaVersion()
+                            + "\n"
+                            + endpoint
+                            + "\n"
+                            + table;
             return "static-v2-"
                     + HexFormat.of()
                             .formatHex(

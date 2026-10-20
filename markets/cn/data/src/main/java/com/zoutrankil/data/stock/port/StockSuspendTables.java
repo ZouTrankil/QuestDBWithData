@@ -10,6 +10,10 @@ import java.util.List;
 
 /** Physical operations used by the application-owned D011 publication state machine. */
 public interface StockSuspendTables {
+    interface Versioned extends StockSuspendTables {
+        int datasetVersion();
+    }
+
     interface Table {
         Identity preflight();
 

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.DatasetDefinition;
 import com.zoutrankil.data.domain.JobDefinitionJson;
+import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.domain.stock.market.StockSuspend;
 import com.zoutrankil.data.repository.FileEvidenceStore;
@@ -13,10 +14,12 @@ import com.zoutrankil.data.repository.ReferencePublicationJournal;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.DatasetIntervalLock;
 import com.zoutrankil.data.stock.domain.StockSuspendState;
+import com.zoutrankil.data.stock.mapper.StockSuspendLayoutMapper;
 import com.zoutrankil.data.stock.port.StockSuspendTables;
 import com.zoutrankil.data.stock.port.StockSuspendTarget;
 import com.zoutrankil.data.stock.storage.StockSuspendStaging;
 import com.zoutrankil.data.stock.storage.StockSuspendTargetTransitionStore;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
@@ -70,6 +73,7 @@ public final class StockSuspendPublication {
 
     private record Scope(LocalDate from, LocalDate to) {}
 
+    private final CnTradeDateLayout dateLayout;
     private final StockSuspendTables tables;
     private final Path ledgerPath;
     private final Path evidenceRoot;
@@ -88,6 +92,31 @@ public final class StockSuspendPublication {
             String logicalTargetId,
             String runId)
             throws Exception {
+        this(
+                tables,
+                ledgerPath,
+                evidenceRoot,
+                table,
+                logicalTargetId,
+                runId,
+                CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public StockSuspendPublication(
+            StockSuspendTables tables,
+            Path ledgerPath,
+            Path evidenceRoot,
+            String table,
+            String logicalTargetId,
+            String runId,
+            CnTradeDateLayout layout)
+            throws Exception {
+        this.dateLayout = Objects.requireNonNull(layout);
+        int actual =
+                tables instanceof StockSuspendTables.Versioned selected
+                        ? selected.datasetVersion()
+                        : 1;
+        if (actual != layout.schemaVersion()) throw new IllegalArgumentException("停牌发布端口布局不同");
         this.tables = Objects.requireNonNull(tables);
         this.ledgerPath = ledgerPath.toAbsolutePath().normalize();
         this.evidenceRoot = evidenceRoot.toAbsolutePath().normalize();
@@ -151,6 +180,7 @@ public final class StockSuspendPublication {
             BooleanSupplier cancelled)
             throws Exception {
         check(cancelled);
+        requireRunBinding(runId, from, to, expectedPhysicalTarget);
         if (!logicalTargetId.equals(tables.logicalTargetId(table)))
             throw new IllegalStateException(
                     "stk_suspend logical target changed during the frozen run");
@@ -181,6 +211,30 @@ public final class StockSuspendPublication {
                 || Files.size(stageReceipt) > StockSuspendStaging.MAX_STAGE_EVIDENCE_BYTES)
             throw new IllegalStateException(
                     "stk_suspend verified stage receipt is absent, oversized or outside the run evidence directory");
+        byte[] frozenStageBytes = null;
+        if (dateLayout == CnTradeDateLayout.TRADE_DATE_V2) {
+            frozenStageBytes =
+                    FileEvidenceStore.readBounded(
+                            stageReceipt,
+                            StockSuspendStaging.MAX_STAGE_EVIDENCE_BYTES,
+                            () -> new IllegalStateException("停牌 stage 凭证过大"));
+            var proof = JobDefinitionJson.mapper().readTree(frozenStageBytes);
+            StockSuspendLayoutMapper.require(proof, dateLayout);
+            if (!table.equals(proof.path("target").asText())
+                    || !stage.table().equals(proof.path("stage").asText())
+                    || !from.toString().equals(proof.path("windowFrom").asText())
+                    || !to.toString().equals(proof.path("windowTo").asText())
+                    || !proof.path("sourceRows").isIntegralNumber()
+                    || !proof.path("sourceRows").canConvertToInt()
+                    || proof.path("sourceRows").intValue() != source.size()
+                    || !proof.path("actual")
+                            .equals(
+                                    JobDefinitionJson.mapper()
+                                            .readTree(
+                                                    JobDefinitionJson.mapper()
+                                                            .writeValueAsBytes(stage.snapshot()))))
+                throw new IllegalStateException("停牌 stage 凭证与原冻结发布不同");
+        }
         var stageAgain = tables.openTable(stage.table()).snapshot();
         if (!stage.snapshot().equals(stageAgain) || !stageAgain.rows().equals(prepared.expected()))
             throw new IllegalStateException(
@@ -213,6 +267,14 @@ public final class StockSuspendPublication {
                                         sourceFingerprint,
                                         "completionEvidence",
                                         completion.toString()));
+        if (dateLayout == CnTradeDateLayout.TRADE_DATE_V2) {
+            var scoped = (ObjectNode) JobDefinitionJson.mapper().readTree(scopeJson);
+            scoped.put("protocolVersion", 2);
+            scoped.put("datasetSchemaVersion", 2);
+            scoped.put("rowEncoding", "trade_date-v1");
+            scoped.put("stageReceiptFingerprint", FileEvidenceStore.sha256(frozenStageBytes));
+            scopeJson = JobDefinitionJson.mapper().writeValueAsString(scoped);
+        }
         var entry =
                 journal.create(
                         new ReferencePublicationJournal.Intent(
@@ -279,6 +341,13 @@ public final class StockSuspendPublication {
     public Layout inspect(String publicationRun) throws Exception {
         var entry = journal.forRun(publicationRun);
         var intent = entry.intent();
+        var frozenScope = parseScope(intent.scope());
+        requireRunBinding(
+                publicationRun,
+                frozenScope.from(),
+                frozenScope.to(),
+                parsePhysicalBefore(intent.scope()));
+        requireStageProof(intent);
         if (!intent.target().equals(table)
                 || !intent.dataset().equals("stk_suspend")
                 || !SyncRunLedger.openReadOnly(ledgerPath)
@@ -320,6 +389,16 @@ public final class StockSuspendPublication {
     public void finish(String publicationRun, boolean writerStopped) throws Exception {
         if (!writerStopped)
             throw new IllegalStateException("Stopped stk_suspend writer proof required");
+        if (dateLayout == CnTradeDateLayout.TRADE_DATE_V2)
+            throw new IllegalStateException("停牌 v2 恢复须先完整核验来源，请使用 finishInterrupted");
+        finishAfterSourceValidation(publicationRun, writerStopped);
+    }
+
+    /** v2 仅由完整来源恢复流程进入；先证明原件和全窗，再允许补 rename。 */
+    void finishAfterSourceValidation(String publicationRun, boolean writerStopped)
+            throws Exception {
+        if (!writerStopped)
+            throw new IllegalStateException("Stopped stk_suspend writer proof required");
         try (var lock = acquireRecoveryLock()) {
             var publication = journal.forRun(publicationRun);
             var intent = publication.intent();
@@ -328,6 +407,9 @@ public final class StockSuspendPublication {
                 throw new IllegalStateException(
                         "stk_suspend publication intent does not bind this logical target");
             Scope scope = parseScope(intent.scope());
+            requireRunBinding(
+                    publicationRun, scope.from(), scope.to(), parsePhysicalBefore(intent.scope()));
+            requireStageProof(intent);
             var run = SyncRunLedger.openReadOnly(ledgerPath).getRun(publicationRun);
             if (!run.jobId().equals("data.stk_suspend")
                     || !run.targetId().equals(intent.initialTarget()))
@@ -375,7 +457,8 @@ public final class StockSuspendPublication {
                                 .resolve("sync-evidence"),
                         target.tableName(),
                         logicalTargetId,
-                        "identity-check");
+                        "identity-check",
+                        CnTradeDateLayout.fromVersion(StockSuspendTarget.versionOf(target)));
         publication.verifyCurrentTarget(logicalTargetId, currentPhysicalId);
     }
 
@@ -405,6 +488,10 @@ public final class StockSuspendPublication {
             Path ledgerPath, StockSuspendTarget target, String runId, boolean writerStopped)
             throws Exception {
         var run = SyncRunLedger.openReadOnly(ledgerPath).getRun(runId);
+        if (run.jobVersion() == 2) {
+            StockSuspendRunRecovery.finishInterrupted(target, ledgerPath, runId, writerStopped);
+            return;
+        }
         var intent =
                 new ReferencePublicationJournal(ledgerPath, "stk_suspend").forRun(runId).intent();
         var publisher =
@@ -511,8 +598,11 @@ public final class StockSuspendPublication {
         var runEntry = ledger.get(publicationRun);
         if (!run.jobId().equals("data.stk_suspend") || !run.targetId().equals(logicalTargetId))
             throw new IllegalStateException("stk_suspend recovery run identity changed");
-        if (runEntry.state().terminal()) return;
-        if (!Set.of(SyncRunState.RUNNING, SyncRunState.IN_DOUBT).contains(runEntry.state()))
+        boolean alreadyComplete = runEntry.state().terminal();
+        if (alreadyComplete && dateLayout == CnTradeDateLayout.LEGACY_V1) return;
+        if (!Set.of(SyncRunState.RUNNING, SyncRunState.IN_DOUBT).contains(runEntry.state())
+                && !(dateLayout == CnTradeDateLayout.TRADE_DATE_V2
+                        && runEntry.state() == SyncRunState.VERIFIED_EMPTY))
             throw new IllegalStateException(
                     "stk_suspend recovery run is not in a reconcilable state");
 
@@ -708,7 +798,21 @@ public final class StockSuspendPublication {
                         Map.entry("complete", true),
                         Map.entry("publication", publicationEvidence));
         Files.createDirectories(evidenceRoot);
-        JobDefinitionJson.mapper().writeValue(completionPath.toFile(), complete);
+        if (dateLayout == CnTradeDateLayout.TRADE_DATE_V2) {
+            StockSuspendRunRecovery.writeOrValidateCompletion(
+                    completionPath,
+                    complete,
+                    scope.from(),
+                    scope.to(),
+                    0,
+                    logicalTargetId,
+                    physicalBefore,
+                    physicalAfter,
+                    recomputedSource,
+                    after.fingerprint(),
+                    dateLayout);
+            if (alreadyComplete) return;
+        } else JobDefinitionJson.mapper().writeValue(completionPath.toFile(), complete);
         for (Path pagePath : pagePaths) {
             var page =
                     (ObjectNode)
@@ -884,7 +988,11 @@ public final class StockSuspendPublication {
                     || prior != null && !prior.equals(intent.previousPhysicalId()))
                 throw new IllegalStateException(
                         "stk_suspend physical identity lineage is incomplete or discontinuous");
-            if (journal.forRun(intent.runId()).state() != State.VERIFIED)
+            var lineagePublication = journal.forRun(intent.runId());
+            StockSuspendLayoutMapper.require(
+                    JobDefinitionJson.mapper().readTree(lineagePublication.intent().scope()),
+                    dateLayout);
+            if (lineagePublication.state() != State.VERIFIED)
                 throw new IllegalStateException(
                         "stk_suspend transition lacks a VERIFIED publication journal");
             prior = intent.nextPhysicalId();
@@ -894,14 +1002,16 @@ public final class StockSuspendPublication {
                 throw new IllegalStateException(
                         "stk_suspend physical target changed outside its verified publication chain");
         } else {
-            String lastFrozenPhysical = lastVerifiedPhysical(ledgerPath, logical);
+            String lastFrozenPhysical =
+                    lastVerifiedPhysical(ledgerPath, logical, dateLayout.schemaVersion());
             if (lastFrozenPhysical != null && !lastFrozenPhysical.equals(physical))
                 throw new IllegalStateException(
                         "stk_suspend physical target changed without a journaled replacement transition");
         }
     }
 
-    private static String lastVerifiedPhysical(Path ledgerPath, String logical) throws Exception {
+    private static String lastVerifiedPhysical(Path ledgerPath, String logical, int version)
+            throws Exception {
         var ledger = SyncRunLedger.openReadOnly(ledgerPath);
         String after = null;
         long seen = 0;
@@ -915,7 +1025,8 @@ public final class StockSuspendPublication {
                             "stk_suspend physical identity history exceeds bounded scan");
                 if (!Set.of(SyncRunState.VERIFIED, SyncRunState.VERIFIED_EMPTY)
                                 .contains(run.state())
-                        || !logical.equals(run.targetId())) continue;
+                        || !logical.equals(run.targetId())
+                        || run.jobVersion() != version) continue;
                 var frozen =
                         JobDefinitionJson.mapper().readTree(ledger.getRun(run.id()).frozenJson());
                 var id = frozen.path("parameters").path("physicalTargetId");
@@ -979,14 +1090,58 @@ public final class StockSuspendPublication {
         }
     }
 
-    private static Scope parseScope(String text) throws Exception {
+    private Scope parseScope(String text) throws Exception {
         JsonNode json = JobDefinitionJson.mapper().readTree(text);
+        StockSuspendLayoutMapper.require(json, dateLayout);
         if (!json.path("fromInclusive").isTextual() || !json.path("toInclusive").isTextual())
             throw new IllegalStateException("stk_suspend journal scope absent");
         LocalDate from = LocalDate.parse(json.path("fromInclusive").asText()),
                 to = LocalDate.parse(json.path("toInclusive").asText());
         if (from.isAfter(to)) throw new IllegalStateException("stk_suspend journal scope reversed");
         return new Scope(from, to);
+    }
+
+    private void requireRunBinding(String id, LocalDate from, LocalDate to, String physical)
+            throws Exception {
+        if (dateLayout == CnTradeDateLayout.LEGACY_V1) return;
+        var run = SyncRunLedger.openReadOnly(ledgerPath).getRun(id);
+        var frozen = JobDefinitionJson.mapper().readTree(run.frozenJson());
+        if (!"data.stk_suspend".equals(run.jobId())
+                || run.jobVersion() != 2
+                || !logicalTargetId.equals(run.targetId())
+                || !logicalTargetId.equals(frozen.path("parameters").path("targetId").asText())
+                || !physical.equals(frozen.path("parameters").path("physicalTargetId").asText())
+                || !from.toString().equals(frozen.path("from").asText())
+                || !to.toString().equals(frozen.path("to").asText())
+                || !StockSuspendSyncJobOwner.definition(2)
+                        .equals(
+                                JobDefinitionJson.mapper()
+                                        .treeToValue(
+                                                frozen.path("definition"),
+                                                SyncJobDefinition.class)))
+            throw new IllegalStateException("停牌发布布局或窗口与原冻结定义不同");
+    }
+
+    private void requireStageProof(ReferencePublicationJournal.Intent intent) throws Exception {
+        if (dateLayout == CnTradeDateLayout.LEGACY_V1) return;
+        var scope = JobDefinitionJson.mapper().readTree(intent.scope());
+        Path receipt =
+                Path.of(requiredScopeText(intent.scope(), "stageReceipt"))
+                        .toAbsolutePath()
+                        .normalize();
+        if (!receipt.startsWith(evidenceRoot)
+                || !Files.isRegularFile(receipt)
+                || !receipt.toRealPath().startsWith(evidenceRoot.toRealPath())
+                || !receipt.getFileName().toString().equals(intent.stage() + "-verified.json"))
+            throw new IllegalStateException("停牌 stage 凭证越界或缺失");
+        byte[] bytes =
+                FileEvidenceStore.readBounded(
+                        receipt,
+                        StockSuspendStaging.MAX_STAGE_EVIDENCE_BYTES,
+                        () -> new IllegalStateException("停牌 stage 凭证过大"));
+        if (!FileEvidenceStore.sha256(bytes).equals(scope.path("stageReceiptFingerprint").asText()))
+            throw new IllegalStateException("停牌原 stage 凭证摘要改变");
+        StockSuspendLayoutMapper.require(JobDefinitionJson.mapper().readTree(bytes), dateLayout);
     }
 
     private static String parsePhysicalBefore(String text) throws Exception {

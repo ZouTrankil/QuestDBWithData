@@ -1,6 +1,7 @@
 package com.zoutrankil.data.stock.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -24,6 +25,10 @@ import com.zoutrankil.data.repository.StaticTargetIdentity;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Identity;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Range;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Snapshot;
+import com.zoutrankil.data.stock.port.StockSuspendTables;
+import com.zoutrankil.data.stock.port.StockSuspendTarget;
+import com.zoutrankil.data.stock.port.StockSuspendWriteSession;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 
@@ -77,6 +82,50 @@ class StockSuspendTargetContractTest {
         assertNotSame(target.newPublicationTables(), target.newPublicationTables());
         assertNotSame(target.newStaging(), target.newStaging());
         verifyNoInteractions(ds, quest);
+    }
+
+    @Test
+    void explicitScopeKeepsWriterTablesStagingRangeAndLogicalIdentityOnOneVersion()
+            throws Exception {
+        var jdbc = mock(JdbcTemplate.class);
+        var source = mock(DataSource.class);
+        var quest = mock(QuestDB.class);
+        when(jdbc.getDataSource()).thenReturn(source);
+        var v1 = new QuestDbStockSuspendTarget(TABLE, jdbc, quest);
+        var v2 = StockSuspendTarget.forFrozenVersion(v1, 2);
+        assertEquals(TABLE, v2.tableName());
+        assertEquals(2, StockSuspendTarget.versionOf(v2));
+        assertSame(v2, StockSuspendTarget.forFrozenVersion(v2, 2));
+        assertEquals(1, StockSuspendTarget.versionOf(StockSuspendTarget.forFrozenVersion(v2, 1)));
+        assertEquals(2, ((StockSuspendWriteSession.Versioned) v2.newWriter(ID)).datasetVersion());
+        assertEquals(
+                2, ((StockSuspendTables.Versioned) v2.newPublicationTables()).datasetVersion());
+        assertEquals(CnTradeDateLayout.TRADE_DATE_V2, field(v2.newStaging(), "layout"));
+        when(jdbc.query(anyString(), any(ResultSetExtractor.class)))
+                .thenReturn(new Range(null, null));
+        assertEquals(new Range(null, null), v2.range());
+        verify(jdbc)
+                .query(
+                        eq(
+                                "SELECT cast(min(trade_date) AS long) AS min_micros,cast(max(trade_date) AS long) AS max_micros FROM \""
+                                        + TABLE
+                                        + "\""),
+                        any(ResultSetExtractor.class));
+        when(jdbc.execute(any(ConnectionCallback.class)))
+                .thenReturn("jdbc:postgresql://HOST.example/db%20name?user=ignored");
+        String text = "stk_suspend-logical-v2\nhost.example:5432/db%20name\n" + TABLE;
+        assertEquals(
+                "static-v2-"
+                        + HexFormat.of()
+                                .formatHex(
+                                        MessageDigest.getInstance("SHA-256")
+                                                .digest(text.getBytes(StandardCharsets.UTF_8))),
+                v2.targetId());
+        assertNotEquals(v1.targetId(), v2.targetId());
+        var old = mock(StockSuspendTarget.class);
+        assertThrows(
+                IllegalArgumentException.class, () -> StockSuspendTarget.forFrozenVersion(old, 2));
+        verifyNoInteractions(old, source, quest);
     }
 
     @Test

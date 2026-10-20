@@ -1,0 +1,77 @@
+{
+  "基线提交": "55c8a557190bc894eb4ad70d823295baaadf2da3",
+  "范围": "停牌显式布局作用域、stage SQL、发布凭证及完整来源先行恢复；原完成路径与只读副作用保锁回调",
+  "最终源码摘要": {
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/mapper/StockSuspendLayoutMapper.java": "41caf3ac23c94efbca0c6f8ea00951ad1d370af153332a9f68ad0c57e085e4c3",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/port/StockSuspendTarget.java": "47aecbb5446607e64bcf1b28935ea8e1044fcfe4d7e2dacc44f18311210b485e",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/port/StockSuspendTables.java": "94b3c7683f9c97a1f5209145f7a17e21eb6d7f0589d91ab99f76c9a7c6fecd4e",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendTargetIdentity.java": "f4c0f3c11fea833770067f0a458a7707df94815025d50a03410e231bf6a6eb6e",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/QuestDbStockSuspendTarget.java": "e9941f562ddc4c58def948b4c36455eb7e31eadb2d615a98faab87a5cd332afb",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/QuestDbStockSuspendTables.java": "a20eb58e246a20625b6430e4b7a59a6988e6ef79016aff2a713bfba38d5d8d65",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendStaging.java": "9c222deaa001c697fdc666c2dc9c35940e16093b2b53d7178e0264d23a0d918b",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendSyncJobOwner.java": "bfaa80dc5523da206f509169158f309a9f080f9701517ea206cde0b3378817ce",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendPublication.java": "2b52d3e4f3953e4285d9ca3b18923825fc8ce9f27887cd926c685597f1bb67e4",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendRunRecovery.java": "669180a2981c9b5ed57b831fc260516a812eef4152bd6b48940ead4943c17079",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockSuspendPublicationContractTest.java": "b5a87a565bae10dbda9149e225ab6754021dea69eb0b393619768bdd64ea8224",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/storage/StockSuspendVersionedStagingTest.java": "3eb9685473481c5858b8ecfa161b5ebb16d3cdada43323a2892a50ddfe9c4bc4",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/storage/StockSuspendTargetContractTest.java": "087eb21cbee66d6f714511869e06c6dbb2a82fce5b137fa8decdc87dec7a6c00",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendTargetTransitionStore.java": "0a7052d05024b976daf2eb16322e32d42228b2b9a426b229c09991a51ec6d191",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendSyncAdapter.java": "8a1f27df7afdda9a4f9a02e987e64a9337ca942ba9953970c72dd29c0d1e0227",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockSuspendLayoutAdmissionTest.java": "e1e81404f4feed5a187fac4396ed62e9697a5b7f32aacc9b4b2a65e3823ef1f1"
+  },
+  "完整回归": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2344,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 145
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "完整命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "最后整理": "完整回归后仅把一个完整限定类名整理为等价 import，没有修改字符串、请求或业务行为。随后通过下列最终定向、架构、边界和发行包检查。",
+  "最终定向": {
+    "tests": 74,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1
+  },
+  "最终定向命令": "./gradlew :markets:cn:data:test --tests '*StockSuspend*' --tests '*StockPortJobServiceContractTest' architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "格式检查": {
+    "命令": "python3 tools/format_java.py --imports --check",
+    "Java文件": 2041,
+    "结果": "格式、import、字面量值核对通过"
+  },
+  "公开配置检查": "最终 cn-data 与 main-strategy 两个 ZIP 均通过",
+  "关键验收": [
+    "16 种新旧布局、空窗/非空窗和 rename 前后故障，原 JSON 不变，重复恢复不重复 rename",
+    "v2 先完整核验原始来源及全窗，低层 finish 不可绕过",
+    "stage 原件 SHA 绑定；跨版日志、错误整数版本、溢出计数和浮点 LONG 伪装拒绝",
+    "实际 staging 生成器的 CTAS、INSERT、DAY/WAL 和 UTC 微秒参数",
+    "当前逻辑身份与工厂同版，同目标不同版本历史不混用",
+    "macOS 路径别名不换写原冻结完成引用",
+    "只读探测原发布归属和耐久意图，普通预检不创建发布表"
+  ],
+  "外部验收": "本批无外部来源请求、远端写入或真实 QuestDB rename；临时 SQLite、来源原件夹具、内存物理表和模拟 JDBC 不代替正式来源或实库发布验收。",
+  "原日志及数据": "旧 JSON、来源原文、行编码和 SQLite 表结构保持；stage/完成原件使用现有耐久接口；正式表、MV、旧 stage/backup 未迁移。",
+  "当前默认": 1,
+  "尚未完成": [
+    "当前来源执行器、owner 注册、控制计划、检查点、根配置和组 v2 入口",
+    "真实 staging/发布故障与恢复验收",
+    "append 和未发布 stage 的恢复器",
+    "L2 v2 端口与 Batch 独立来源",
+    "正式表、MV、消费者、调度及完整模型验收",
+    "上批存储验收 JDBC SQLState 00000 根因仍未确认，本批未声称修复"
+  ]
+}
