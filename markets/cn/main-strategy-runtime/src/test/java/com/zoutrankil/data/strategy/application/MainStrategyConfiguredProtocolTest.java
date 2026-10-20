@@ -1,45 +1,59 @@
 package com.zoutrankil.data.strategy.application;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import com.zoutrankil.data.strategy.input.StrategyInputSchema;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.jdbc.core.JdbcTemplate;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.util.HexFormat;
+
 import javax.sql.DataSource;
 
 class MainStrategyConfiguredProtocolTest {
     @TempDir Path root;
-    private String sha(Path path) throws Exception { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(path))); }
-    private MainStrategyDataService service(JdbcTemplate jdbc, Path coverage, String hash) {
-        return new MainStrategyDataService(jdbc,root.resolve("artifacts").toString(),root.resolve("recipe.json").toString(),root.resolve("pins.json").toString(),root.toString(),root.resolve("plans.sqlite3").toString(),"2025-07-01",10000,coverage.toString(),hash);
+
+    private MainStrategyDataService service(DataSource source) {
+        return new MainStrategyDataService(
+                new JdbcTemplate(source),
+                root.resolve("artifacts").toString(),
+                root.resolve("recipe.json").toString(),
+                root.resolve("pins.json").toString(),
+                root.toString(),
+                root.resolve("plans.sqlite3").toString(),
+                "2025-07-01",
+                10000);
     }
+
     @Test
-    void protocolSelectionUsesExactApprovedBytesWithoutDatabaseOrArtifactWrites() throws Exception {
-        var source=mock(DataSource.class); var jdbc=new JdbcTemplate(source);
-        Path file=Files.writeString(root.resolve("header.json"),"{\"schema\":\"java.strategy.source_coverage.v2\",\"inputSchema\":\"java.strategy.inputs.v2\",\"keyEncoding\":\"java.strategy.source_keys.v2\"}");
-        var service=service(jdbc,file,sha(file));
-        assertEquals(StrategyInputSchema.V2,service.configuredInputSchema());
-        Files.writeString(file,"{\"schema\":\"java.strategy.source_coverage.v1\"}");
-        assertThrows(IllegalStateException.class,service::configuredInputSchema);
-        assertFalse(Files.exists(root.resolve("artifacts"))); verifyNoInteractions(source);
+    void defaultProtocolCanBeFrozenBeforeTheCurrentSourceApprovalExists() {
+        var source = mock(DataSource.class);
+        var service = service(source);
+        assertEquals(StrategyInputSchema.V1, service.configuredInputSchema());
+        service.configureBatchInputSchema("v2");
+        assertEquals(StrategyInputSchema.V2, service.configuredInputSchema());
+        assertFalse(Files.exists(root.resolve("artifacts")));
+        assertFalse(Files.exists(root.resolve("recipe.json")));
+        verifyNoInteractions(source);
     }
+
     @Test
-    void approvedAssemblyHeaderTakesPrecedenceButIncompleteOrUnknownHeadersFail() throws Exception {
-        var source=mock(DataSource.class); var jdbc=new JdbcTemplate(source);
-        var service=service(jdbc,root.resolve("missing"),"0".repeat(64));
-        Path file=Files.writeString(root.resolve("approved.json"),"{\"schema\":\"java.strategy.coverage_inputs.v1\"}");
-        service.configureCoverageAssembly(file.toString(),sha(file));
-        assertEquals(StrategyInputSchema.V1,service.configuredInputSchema());
-        for(String header: new String[]{"{\"schema\":\"java.strategy.coverage_inputs.v2\"}","{\"schema\":\"java.strategy.coverage_inputs.v9\"}"}) {
-            Files.writeString(file,header); service.configureCoverageAssembly(file.toString(),sha(file));
-            assertThrows(IllegalStateException.class,service::configuredInputSchema);
-        }
+    void unknownProtocolCannotReplaceTheExplicitSelection() {
+        var source = mock(DataSource.class);
+        var service = service(source);
+        service.configureBatchInputSchema("v2");
+        for (String invalid : new String[] {"v3", "V2", " v2", ""})
+            assertThrows(
+                    IllegalArgumentException.class,
+                    () -> service.configureBatchInputSchema(invalid));
+        assertEquals(StrategyInputSchema.V2, service.configuredInputSchema());
         verifyNoInteractions(source);
     }
 }

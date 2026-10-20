@@ -13,6 +13,7 @@ import java.util.Optional;
 /** Parent-context Java owners supply physical certificates to the isolated Batch repository. */
 public interface MainStrategyDailyWork {
     String JOB = "main_strategy_daily";
+    // v3 保留历史指纹；v4 在新请求中明确冻结产物输入协议。
     String DEFINITION_VERSION = "3";
     String INPUT_PROTOCOL_DEFINITION_VERSION = "4";
     List<String> STAGES =
@@ -31,11 +32,14 @@ public interface MainStrategyDailyWork {
     String inputFingerprint(LocalDate target) throws Exception;
 
     /** 原实现仍默认使用 v3；新版 owner 明确选择自己的新请求版本。 */
-    default String definitionVersion() { return DEFINITION_VERSION; }
+    default String definitionVersion() {
+        return DEFINITION_VERSION;
+    }
 
     /** 恢复按原请求版本算指纹，不能用当前默认版本重绑历史任务。 */
     default String inputFingerprint(LocalDate target, String version) throws Exception {
-        if (!definitionVersion().equals(version)) throw new IllegalArgumentException("不支持的主策略任务版本：" + version);
+        if (!definitionVersion().equals(version))
+            throw new IllegalArgumentException("不支持的主策略任务版本：" + version);
         return inputFingerprint(target);
     }
 

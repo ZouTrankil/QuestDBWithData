@@ -1,9 +1,8 @@
 package com.zoutrankil.data.service;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import static com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.batch.domain.BusinessState;
@@ -173,7 +172,13 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
             LocalDate sourceLogicalDate,
             List<LocalDate> tradeDates,
             @JsonInclude(JsonInclude.Include.NON_NULL) String inputSchema) {
-        public PipelinePlan(String instance, String input, LocalDate from, LocalDate to, LocalDate sourceLogicalDate, List<LocalDate> tradeDates) {
+        public PipelinePlan(
+                String instance,
+                String input,
+                LocalDate from,
+                LocalDate to,
+                LocalDate sourceLogicalDate,
+                List<LocalDate> tradeDates) {
             this(instance, input, from, to, sourceLogicalDate, tradeDates, null);
         }
     }
@@ -464,7 +469,9 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
     }
 
     @Override
-    public String definitionVersion() { return INPUT_PROTOCOL_DEFINITION_VERSION; }
+    public String definitionVersion() {
+        return INPUT_PROTOCOL_DEFINITION_VERSION;
+    }
 
     @Override
     public String inputFingerprint(LocalDate target) throws Exception {
@@ -493,21 +500,27 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
                         SyncRequestIdentity.definitionJson(
                                 definition("regime_features_monitor_daily"))));
         bindings.put("backtestMvSql", BacktestDailyMaterializedViewPort.CREATE_SQL);
-        String legacy = RunRequest.hash(
-                "java.main_strategy_daily.v3",
-                target.toString(),
-                json.writeValueAsString(bindings),
-                "range=3;catchup<=31;sourceSlices<=3;SSE-calendar;cutoff>=20:30;optionalMarginWholeMarket;nativeL2;questdbBacktestMv;stkLimitLast;pairedJavaScores;canonicalOfficialPlan",
-                ledger.toString(),
-                targetEtfs.toString(),
-                strategyData.definitionFingerprint());
+        String legacy =
+                RunRequest.hash(
+                        "java.main_strategy_daily.v3",
+                        target.toString(),
+                        json.writeValueAsString(bindings),
+                        "range=3;catchup<=31;sourceSlices<=3;SSE-calendar;cutoff>=20:30;optionalMarginWholeMarket;nativeL2;questdbBacktestMv;stkLimitLast;pairedJavaScores;canonicalOfficialPlan",
+                        ledger.toString(),
+                        targetEtfs.toString(),
+                        strategyData.definitionFingerprint());
         if (DEFINITION_VERSION.equals(version)) return legacy;
         // v3 原字节不变；新指纹同时绑定任务版本、批准材料和输入协议。
-        return RunRequest.hash("java.main_strategy_daily.v4", legacy, strategyData.configuredInputSchema().inputSchema());
+        return RunRequest.hash(
+                "java.main_strategy_daily.v4",
+                legacy,
+                strategyData.configuredInputSchema().inputSchema());
     }
 
     private static void requireDefinitionVersion(String version) {
-        if (!DEFINITION_VERSION.equals(version) && !INPUT_PROTOCOL_DEFINITION_VERSION.equals(version)) throw new IllegalArgumentException("不支持的主策略任务定义版本：" + version);
+        if (!DEFINITION_VERSION.equals(version)
+                && !INPUT_PROTOCOL_DEFINITION_VERSION.equals(version))
+            throw new IllegalArgumentException("不支持的主策略任务定义版本：" + version);
     }
 
     private SyncJobDefinition definition(String dataset) {
@@ -543,18 +556,21 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
     @Override
     public void execute(RunRequest request, StageSink sink) throws Exception {
         if (!JOB.equals(request.job())
-                || !(DEFINITION_VERSION.equals(request.definitionVersion()) || INPUT_PROTOCOL_DEFINITION_VERSION.equals(request.definitionVersion()))
+                || !(DEFINITION_VERSION.equals(request.definitionVersion())
+                        || INPUT_PROTOCOL_DEFINITION_VERSION.equals(request.definitionVersion()))
                 || !request.rangeStart().equals(request.logicalDate())
                 || !request.rangeEnd().equals(request.logicalDate()))
-            throw new IllegalArgumentException(
-                    "主策略仅接受 v3/v4 定义及单个已完成交易日");
+            throw new IllegalArgumentException("主策略仅接受 v3/v4 定义及单个已完成交易日");
         activeDate = request.logicalDate();
         var completed = new LinkedHashMap<String, CompletionEvidence>();
         for (String stage : STAGES) {
             activeStage = stage;
             CompletionEvidence evidence;
             try {
-                if (!request.inputFingerprint().equals(inputFingerprint(request.logicalDate(), request.definitionVersion())))
+                if (!request.inputFingerprint()
+                        .equals(
+                                inputFingerprint(
+                                        request.logicalDate(), request.definitionVersion())))
                     throw new Gate(
                             BusinessState.BLOCKED,
                             "Frozen pipeline definitions/configuration changed; explicit revision required");
@@ -610,7 +626,8 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
     public void validateCompleted(RunRequest request, Map<String, CompletionEvidence> stages)
             throws Exception {
         requireDefinitionVersion(request.definitionVersion());
-        if (!inputFingerprint(request.logicalDate(), request.definitionVersion()).equals(request.inputFingerprint()))
+        if (!inputFingerprint(request.logicalDate(), request.definitionVersion())
+                .equals(request.inputFingerprint()))
             throw new Gate(BusinessState.BLOCKED, "Pipeline definition/configuration changed");
         for (String stage : STAGES) {
             var e = stages.get(stage);
@@ -637,7 +654,8 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         requireDefinitionVersion(request.definitionVersion());
         String dataset = nativeDataset(stage);
         var range = plan(request);
-        if (!inputFingerprint(request.logicalDate(), request.definitionVersion()).equals(request.inputFingerprint()))
+        if (!inputFingerprint(request.logicalDate(), request.definitionVersion())
+                .equals(request.inputFingerprint()))
             throw new Gate(
                     BusinessState.BLOCKED,
                     "Frozen pipeline configuration changed; revision required");
@@ -910,14 +928,17 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         return recovered;
     }
 
-    private StrategyInputSchema scoreInputSchema(RunRequest request, PipelinePlan plan) throws Exception {
+    private StrategyInputSchema scoreInputSchema(RunRequest request, PipelinePlan plan)
+            throws Exception {
         requireDefinitionVersion(request.definitionVersion());
         if (DEFINITION_VERSION.equals(request.definitionVersion())) {
-            if (plan.inputSchema() != null) throw new Gate(BusinessState.BLOCKED, "旧任务计划不能夹带新版输入协议");
+            if (plan.inputSchema() != null)
+                throw new Gate(BusinessState.BLOCKED, "旧任务计划不能夹带新版输入协议");
             return StrategyInputSchema.V1;
         }
         var configured = strategyData.configuredInputSchema();
-        if (!configured.inputSchema().equals(plan.inputSchema())) throw new Gate(BusinessState.BLOCKED, "冻结计划的输入协议缺失或与批准材料不符");
+        if (!configured.inputSchema().equals(plan.inputSchema()))
+            throw new Gate(BusinessState.BLOCKED, "冻结计划的输入协议缺失或与配置不符");
         return configured;
     }
 
@@ -925,10 +946,10 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         // v3 按原协议核验，不给旧完成证书补造新的计划字段或额外恢复要求。
         if (DEFINITION_VERSION.equals(request.definitionVersion())) return StrategyInputSchema.V1;
         Path file = instance(request).resolve("plan.json");
-        if (!Files.isRegularFile(file)) throw new Gate(BusinessState.BLOCKED, "冻结计划缺失，不能重建已完成评分的协议绑定");
-        var plan = json.readValue(Files.readAllBytes(file), PipelinePlan.class);
-        if (!request.instanceId().equals(plan.instance()) || !request.inputFingerprint().equals(plan.input())) throw new Gate(BusinessState.BLOCKED, "冻结计划的运行身份已改变");
-        return scoreInputSchema(request, plan);
+        if (!Files.isRegularFile(file))
+            throw new Gate(BusinessState.BLOCKED, "冻结计划缺失，不能重建已完成评分的协议绑定");
+        // 已有计划复用正常恢复校验；上面的存在性检查阻止重建丢失的完成证据。
+        return scoreInputSchema(request, plan(request));
     }
 
     private PipelinePlan plan(RunRequest r) throws Exception {
@@ -991,8 +1012,15 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
         // 新计划绑定请求日期；已有计划继续使用原先保存的来源日期，不在重试时重取今天。
         var p =
                 new PipelinePlan(
-                        r.instanceId(), r.inputFingerprint(), from, target, r.logicalDate(), dates,
-                        INPUT_PROTOCOL_DEFINITION_VERSION.equals(r.definitionVersion()) ? strategyData.configuredInputSchema().inputSchema() : null);
+                        r.instanceId(),
+                        r.inputFingerprint(),
+                        from,
+                        target,
+                        r.logicalDate(),
+                        dates,
+                        INPUT_PROTOCOL_DEFINITION_VERSION.equals(r.definitionVersion())
+                                ? strategyData.configuredInputSchema().inputSchema()
+                                : null);
         write(path, p);
         return p;
     }
@@ -1855,7 +1883,8 @@ public final class MainStrategyDailyPipeline implements MainStrategyDailyWork {
                 throw new Gate(
                         BusinessState.BLOCKED,
                         "Java score alias advanced to a different frozen run");
-            if (current.inputSchema() != savedScoreInputSchema(r)) throw new Gate(BusinessState.BLOCKED, "评分协议与原冻结计划不一致");
+            if (current.inputSchema() != savedScoreInputSchema(r))
+                throw new Gate(BusinessState.BLOCKED, "评分协议与原冻结计划不一致");
             requireScoreSources(current);
         }
         if (stage.equals("OfficialPlanData") || stage.equals("MainStrategyAcceptance")) {

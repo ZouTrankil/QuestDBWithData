@@ -292,6 +292,35 @@ class ProjectConfigurationTest {
     }
 
     @Test
+    void coverageAssemblyDefaultsAndOverridesFollowTheMainStrategyAppConfig() throws Exception {
+        var file = configuration("");
+        var variables = new HashMap<String, String>();
+        variables.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        variables.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        var defaults = ProjectConfiguration.load("main-strategy", variables);
+        assertEquals("v1", defaults.getRequiredProperty("app.sync.batch.input-schema"));
+        assertEquals("", defaults.getRequiredProperty("app.sync.batch.coverage-inputs"));
+        assertEquals("", defaults.getRequiredProperty("app.sync.batch.coverage-inputs-sha256"));
+        variables.put("APP_SYNC_BATCH_INPUT_SCHEMA", "v2");
+        variables.put("APP_SYNC_BATCH_COVERAGE_INPUTS", "/fixture/approved-inputs.json");
+        variables.put("APP_SYNC_BATCH_COVERAGE_INPUTS_SHA256", "a".repeat(64));
+        var custom = ProjectConfiguration.load("main-strategy", variables);
+        assertEquals("v2", custom.getRequiredProperty("app.sync.batch.input-schema"));
+        assertEquals(
+                "/fixture/approved-inputs.json",
+                custom.getRequiredProperty("app.sync.batch.coverage-inputs"));
+        assertEquals(
+                "a".repeat(64),
+                custom.getRequiredProperty("app.sync.batch.coverage-inputs-sha256"));
+        variables.remove("APP_SYNC_BATCH_INPUT_SCHEMA");
+        variables.remove("APP_SYNC_BATCH_COVERAGE_INPUTS");
+        variables.remove("APP_SYNC_BATCH_COVERAGE_INPUTS_SHA256");
+        assertFalse(
+                ProjectConfiguration.load("batch", variables)
+                        .containsProperty("app.sync.batch.coverage-inputs"));
+    }
+
+    @Test
     void changingOneAppFileDoesNotChangeAnotherProcess() throws Exception {
         var file = configuration("");
         Files.writeString(

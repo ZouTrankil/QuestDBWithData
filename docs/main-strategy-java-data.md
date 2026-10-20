@@ -15,7 +15,7 @@
 7. `OfficialPlanData`：读取或导入正式周计划，绑定原评分来源。
 8. `MainStrategyAcceptance`：检查日期、来源、评分、输入包和正式计划是否完整匹配。
 
-当前批定义为版本 3，以 `MainStrategyDailyWork.DEFINITION_VERSION` 为准，旧版记录不能直接冒充新版完成证据。每个阶段要看实际结果，不是执行过就算通过。
+新批任务由 `MainStrategyDailyPipeline.definitionVersion()` 选择定义 v4；`MainStrategyDailyWork.DEFINITION_VERSION=3` 专门保留历史请求。两者按各自指纹与计划恢复，旧记录不能冒充新版完成证据。每个阶段要看实际结果，不是执行过就算通过。
 
 ## 各部分由谁负责
 
@@ -84,10 +84,10 @@ Python 默认通过 `JAVA_DATA_API_URL`、`JAVA_DATA_API_TOKEN` 读取 Java 已�
 
 证券评分行使用 `ScoreRow.instrumentCode`，市场与 ETF 汇总使用 `AggregationScope`；持仓明确区分 ETF、成分、公告日和报告期。读取器按批准覆盖清单选择 v1/v2 快照，再在模型边界适配原特征，不改训练列或数值尺度。
 
-CLI/Web 的 `produce-scores` 已接通 v2 字段、评分和市场包发布。v2 使用标准身份，旧 v1 保留原列与摘要；目录版本须与不可变证明一致。评分别名推进前先预检三角色市场包，提交时仍重查来源和训练摘要。市场状态的 `available_at` 来自原历史证据，`updated_at` 只表示计算更新。
+CLI/Web 的 `produce-scores` 已接通 v2 字段、评分和市场包发布；`app.sync.batch.input-schema` 的选择必须与批准覆盖清单一致。v2 使用标准身份，旧 v1 保留原列与摘要；目录版本须与不可变证明一致。评分别名推进前先预检三角色市场包，提交时仍重查来源和训练摘要。市场状态的 `available_at` 来自原历史证据，`updated_at` 只表示计算更新。
 
 正式计划按原评分运行的协议读取冻结日历；每日别名推进到另一版本，也不重绑旧计划。计划 JSON/SQLite 的权威协议仍是 v1，本次没有改变其字段或升级原记录。Python 已有显式产物版本边界，实际文件保持标准列，原研究模型通过适配读取。
 
-旧 Batch 请求明确只允许 v1，不能因全局覆盖配置换成 v2 就升级同一个冻结运行。新版 Batch 的协议冻结还未接入；实库日期列/MV 迁移和生产批准、训练、历史原件及独立数值验收也未完成。CLI/Web 代码接通不表示生产已切换。
+新 Batch 请求使用 v4，在指纹和计划中冻结目标协议；旧 v3 请求继续要求 v1，不能因全局配置变化就升级同一个运行。`app.sync.batch.input-schema` 默认 `v1`，可通过 `APP_SYNC_BATCH_INPUT_SCHEMA=v2` 选择新版，必须配套新的批准材料。实库日期列/MV 迁移及生产批准、训练、历史原件和独立数值验收仍未完成，代码接通不表示生产已切换。
 
-设计说明见[输入适配](decisions/2026-10-20-主策略标准输入与模型适配.md)、[产物分版](decisions/2026-10-20-市场包与Python输入分版.md)和[计划与入口](decisions/2026-10-20-主策略新版入口与历史计划.md)。
+设计说明见[输入适配](decisions/2026-10-20-主策略标准输入与模型适配.md)、[产物分版](decisions/2026-10-20-市场包与Python输入分版.md)、[计划与入口](decisions/2026-10-20-主策略新版入口与历史计划.md)和[Batch 协议冻结](decisions/2026-10-20-主策略Batch冻结输入协议.md)。

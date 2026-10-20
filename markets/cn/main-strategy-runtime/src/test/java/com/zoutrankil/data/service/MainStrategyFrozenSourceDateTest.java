@@ -54,7 +54,9 @@ class MainStrategyFrozenSourceDateTest {
         return Math.multiplyExact(day.toEpochDay(), 86_400_000_000L);
     }
 
-    private RunRequest request() { return request(MainStrategyDailyWork.DEFINITION_VERSION); }
+    private RunRequest request() {
+        return request(MainStrategyDailyWork.DEFINITION_VERSION);
+    }
 
     private RunRequest request(String version) {
         return new RunRequest(
@@ -136,35 +138,88 @@ class MainStrategyFrozenSourceDateTest {
     }
 
     @Test
-    void newDefinitionFreezesProtocolAndRejectsChangedOrMissingSelectionWithoutRewriting() throws Exception {
+    void newDefinitionFreezesProtocolAndRejectsChangedOrMissingSelectionWithoutRewriting()
+            throws Exception {
         var jdbc = mock(JdbcTemplate.class);
-        when(jdbc.queryForObject(anyString(), eq(Long.class), anyLong())).thenReturn(micros(TARGET));
+        when(jdbc.queryForObject(anyString(), eq(Long.class), anyLong()))
+                .thenReturn(micros(TARGET));
         var pipeline = pipeline(jdbc);
         var data = mock(MainStrategyDataService.class);
         when(data.configuredInputSchema()).thenReturn(StrategyInputSchema.V2);
         field(pipeline, "strategyData", data);
         var request = request(MainStrategyDailyWork.INPUT_PROTOCOL_DEFINITION_VERSION);
-        var plan = (MainStrategyDailyPipeline.PipelinePlan) invoke(pipeline, "plan", new Class<?>[]{RunRequest.class}, request);
+        var plan =
+                (MainStrategyDailyPipeline.PipelinePlan)
+                        invoke(pipeline, "plan", new Class<?>[] {RunRequest.class}, request);
         assertEquals(StrategyInputSchema.V2.inputSchema(), plan.inputSchema());
         Path path = root.resolve(request.instanceId()).resolve("plan.json");
         byte[] bytes = Files.readAllBytes(path);
-        assertEquals(plan, invoke(pipeline, "plan", new Class<?>[]{RunRequest.class}, request));
+        assertEquals(plan, invoke(pipeline, "plan", new Class<?>[] {RunRequest.class}, request));
         when(data.configuredInputSchema()).thenReturn(StrategyInputSchema.V1);
-        assertThrows(InvocationTargetException.class, () -> invoke(pipeline, "plan", new Class<?>[]{RunRequest.class}, request));
+        assertThrows(
+                InvocationTargetException.class,
+                () -> invoke(pipeline, "plan", new Class<?>[] {RunRequest.class}, request));
         assertArrayEquals(bytes, Files.readAllBytes(path));
         when(data.configuredInputSchema()).thenReturn(StrategyInputSchema.V2);
-        save(new MainStrategyDailyPipeline.PipelinePlan(plan.instance(), plan.input(), plan.from(), plan.to(), plan.sourceLogicalDate(), plan.tradeDates()));
+        save(
+                new MainStrategyDailyPipeline.PipelinePlan(
+                        plan.instance(),
+                        plan.input(),
+                        plan.from(),
+                        plan.to(),
+                        plan.sourceLogicalDate(),
+                        plan.tradeDates()));
         byte[] missing = Files.readAllBytes(path);
-        assertThrows(InvocationTargetException.class, () -> invoke(pipeline, "plan", new Class<?>[]{RunRequest.class}, request));
+        assertThrows(
+                InvocationTargetException.class,
+                () -> invoke(pipeline, "plan", new Class<?>[] {RunRequest.class}, request));
         assertArrayEquals(missing, Files.readAllBytes(path));
+    }
+
+    @Test
+    void oldPlanStillRequiresV1AfterTheCurrentProtocolSelectionChanges() throws Exception {
+        var jdbc = mock(JdbcTemplate.class);
+        var pipeline = pipeline(jdbc);
+        var data = mock(MainStrategyDataService.class);
+        field(pipeline, "strategyData", data);
+        var request = request();
+        var plan =
+                new MainStrategyDailyPipeline.PipelinePlan(
+                        request.instanceId(),
+                        request.inputFingerprint(),
+                        TARGET,
+                        TARGET,
+                        TARGET,
+                        List.of(TARGET));
+        assertEquals(
+                StrategyInputSchema.V1,
+                invoke(
+                        pipeline,
+                        "scoreInputSchema",
+                        new Class<?>[] {
+                            RunRequest.class, MainStrategyDailyPipeline.PipelinePlan.class
+                        },
+                        request,
+                        plan));
+        verifyNoInteractions(data);
     }
 
     @Test
     void legacyPlanBytesKeepTheOriginalSixFields() throws Exception {
         var request = request();
-        var plan = new MainStrategyDailyPipeline.PipelinePlan(request.instanceId(), request.inputFingerprint(), TARGET, TARGET, TARGET, List.of(TARGET));
+        var plan =
+                new MainStrategyDailyPipeline.PipelinePlan(
+                        request.instanceId(),
+                        request.inputFingerprint(),
+                        TARGET,
+                        TARGET,
+                        TARGET,
+                        List.of(TARGET));
         var json = JobDefinitionJson.mapper();
-        String expected = "{\"instance\":\"" + request.instanceId() + "\",\"input\":\"frozen-input\",\"from\":\"2026-09-28\",\"to\":\"2026-09-28\",\"sourceLogicalDate\":\"2026-09-28\",\"tradeDates\":[\"2026-09-28\"]}";
+        String expected =
+                "{\"instance\":\""
+                        + request.instanceId()
+                        + "\",\"input\":\"frozen-input\",\"from\":\"2026-09-28\",\"to\":\"2026-09-28\",\"sourceLogicalDate\":\"2026-09-28\",\"tradeDates\":[\"2026-09-28\"]}";
         assertEquals(expected, json.writeValueAsString(plan));
         assertEquals(plan, json.readValue(expected, MainStrategyDailyPipeline.PipelinePlan.class));
     }

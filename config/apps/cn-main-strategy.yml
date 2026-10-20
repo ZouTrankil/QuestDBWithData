@@ -19,9 +19,14 @@ app:
       official-plan-db: ${app.paths.research-root}/artifacts/factor_research/l2/etf_only_fusion_main_daily/etf_only_paper/main_strategy_plans.sqlite3
       score-start-date: "2025-07-01"
       score-source-row-budget: 5000000
+      # 新 Batch 请求冻结该协议；改为 v2 需使用新的批准材料，不升级旧请求。
+      input-schema: v1
       # 从独立来源核验记录生成并批准；缺少证明时评分停止发布。
       source-coverage: ""
       source-coverage-sha256: ""
+      # 可选：使用批准的组装输入生成覆盖清单，不能替代完整来源核验。
+      coverage-inputs: ""
+      coverage-inputs-sha256: ""
 
 ---
 # 主策略独立进程：数据 API 不再默认承载该调度器。

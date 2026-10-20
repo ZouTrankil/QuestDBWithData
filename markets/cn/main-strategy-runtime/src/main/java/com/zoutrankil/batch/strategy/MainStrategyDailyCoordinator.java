@@ -243,7 +243,10 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
                             "state",
                             ledger.state(candidate.request().instanceId()).name());
                 }
-                String version = prior.isPresent() ? prior.get().request().definitionVersion() : work.definitionVersion();
+                String version =
+                        prior.isPresent()
+                                ? prior.get().request().definitionVersion()
+                                : work.definitionVersion();
                 String input = work.inputFingerprint(target, version);
                 RunRequest request;
                 if (prior.isPresent()) {
@@ -349,6 +352,7 @@ public final class MainStrategyDailyCoordinator implements AutoCloseable {
     public Map<String, Object> status() throws Exception {
         var result = new LinkedHashMap<String, Object>();
         result.put("job", MainStrategyDailyWork.JOB);
+        result.put("definitionVersion", work.definitionVersion());
         result.put("enabled", enabled());
         result.put("startupCatchup", properties.startupCatchup());
         result.put("queued", queued.get());

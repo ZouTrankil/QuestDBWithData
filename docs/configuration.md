@@ -130,3 +130,5 @@ Batch 已保存到 SQLite 的定时任务设置，不会自动被 YAML 重置。
 ```
 
 父工程的 `build`、`check`、`assemble` 聚合所属子模块；`platform:test` 和 `markets:test` 聚合各自测试。`markets:cn:test`、`platform:engine:test` 仍只测试本模块，整组检查用对应的 `check`。`clean` 只删除对应模块自己的输出；全部产物在 `build/modules/<完整模块路径>/_output/`，父子目录互不覆盖。目录迁移后的首次构建需要重新编译，后续继续使用 Gradle 增量检查。
+
+主策略的 `app.sync.batch.input-schema` 默认 `v1`，只支持 `v1/v2`，标准环境覆盖为 `APP_SYNC_BATCH_INPUT_SCHEMA`。新 Batch v4 请求冻结该值；CLI/Web 和评分阶段要求批准清单与选择一致。`coverage-inputs/coverage-inputs-sha256` 是可选的覆盖组装输入，根配置保留空默认值；两项须成对配置，不表示来源已验收。旧 v3 任务不随协议配置自动升级，见[主策略数据说明](main-strategy-java-data.md)。

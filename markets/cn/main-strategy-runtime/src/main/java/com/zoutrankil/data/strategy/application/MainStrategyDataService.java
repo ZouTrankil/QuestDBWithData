@@ -33,10 +33,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.util.HexFormat;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
@@ -71,6 +68,7 @@ public final class MainStrategyDataService {
     private final LocalDate start;
     private final String coverageFile, coverageSha256;
     private String coverageInputs = "", coverageInputsSha256 = "";
+    private StrategyInputSchema batchInputSchema = StrategyInputSchema.V1;
 
     @Autowired
     public void configureCoverageAssembly(
@@ -146,27 +144,27 @@ public final class MainStrategyDataService {
                 : RunRequest.hash(base, coverageInputs, coverageInputsSha256);
     }
 
-    /** 只读取批准文件的版本头；完整来源、历史证据和训练核验仍在执行及提交前进行。 */
-    public StrategyInputSchema configuredInputSchema() throws Exception {
-        boolean assembled = !coverageInputs.isBlank();
-        String file = assembled ? coverageInputs : coverageFile;
-        String expected = assembled ? coverageInputsSha256 : coverageSha256;
-        if (file == null || file.isBlank() || expected == null || !expected.matches("[a-f0-9]{64}")) throw new IllegalStateException("新主策略任务需要已批准的输入清单和摘要");
-        Path path = Path.of(file).toAbsolutePath().normalize();
-        if (!Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS) || Files.size(path) > 1024 * 1024) throw new IllegalStateException("批准输入清单缺失或超过 1 MiB");
-        byte[] bytes;
-        try (var input = Files.newInputStream(path)) { bytes = input.readNBytes(1024 * 1024 + 1); }
-        if (bytes.length > 1024 * 1024 || !HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)).equals(expected)) throw new IllegalStateException("批准输入清单摘要不符");
-        var header = new ObjectMapper().readTree(bytes);
-        var schema = assembled ? StrategyInputSchema.fromApproval(header.path("schema").asText()) : StrategyInputSchema.fromCoverage(header.path("schema").asText());
-        if (schema == StrategyInputSchema.V2 && (!schema.inputSchema().equals(header.path("inputSchema").asText()) || !schema.keyEncoding().equals(header.path("keyEncoding").asText()))) throw new IllegalStateException("新版批准输入缺少协议和键编码声明");
-        return schema;
+    /** Batch 先固定目标协议；来源和批准材料在评分阶段照常完整核验。 */
+    @Autowired
+    public void configureBatchInputSchema(
+            @Value("${app.sync.batch.input-schema:v1}") String version) {
+        batchInputSchema =
+                switch (version) {
+                    case "v1" -> StrategyInputSchema.V1;
+                    case "v2" -> StrategyInputSchema.V2;
+                    default -> throw new IllegalArgumentException("主策略输入协议只支持 v1/v2：" + version);
+                };
+    }
+
+    public StrategyInputSchema configuredInputSchema() {
+        return batchInputSchema;
     }
 
     public Map<String, Object> status() throws Exception {
         var result = new LinkedHashMap<String, Object>();
         result.put("producer", "java.main_strategy.data");
         result.put("scoreStart", start);
+        result.put("configuredInputSchema", configuredInputSchema().inputSchema());
         result.put("promotedRecipe", recipe.toString());
         result.put("recipePins", pins.toString());
         result.put("planDatabase", planDatabase.toString());
@@ -199,7 +197,7 @@ public final class MainStrategyDataService {
      * 提交产物前重查来源版本及方案摘要，防止计算过程中发生的数据变化被悄然发布。
      */
     public Publication prepareScores(LocalDate target, String runId) throws Exception {
-        return prepareScores(target, runId, null);
+        return prepareScores(target, runId, configuredInputSchema());
     }
 
     /** 旧 Batch 请求显式绑定 v1；当前配置变更不能让同一冻结运行升级产物协议。 */
@@ -219,7 +217,7 @@ public final class MainStrategyDataService {
                             reader.clocks());
             coverage = new StrategySourceCoverage(assembled.path().toString(), assembled.sha256());
         }
-        if (requiredSchema != null && coverage.inputSchema() != requiredSchema)
+        if (coverage.inputSchema() != requiredSchema)
             throw new IllegalStateException("覆盖协议与原冻结任务不符，不能将旧运行升级为新版产物");
         var prepared = calculateScores(target, frozen, coverage);
         var output = prepared.output();
