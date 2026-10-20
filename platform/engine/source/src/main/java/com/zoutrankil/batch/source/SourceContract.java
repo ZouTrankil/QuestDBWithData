@@ -96,6 +96,12 @@ public record SourceContract(
         }
     }
 
+    public SourceStorageLayout writeLayout(String definitionVersion) {
+        return new SourceStorageLayout(
+                this,
+                SourceStrategyRegistry.provider(dataset).writeContract(this, definitionVersion));
+    }
+
     private SourceStrategy strategy() {
         return SourceStrategyRegistry.require(dataset);
     }

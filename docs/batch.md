@@ -40,3 +40,21 @@ questdb-batch-control detail <instance-id>
 美国利率回补预览使用 `calendarVersion=source-date-v1`，逐个查询来源日期；不会用 SSE 开市日筛掉美国日期。它只是有限日期计划，不自动提交执行，也不代表已接通完整美股交易日历。
 
 主策略独立运行时的新日批使用定义 v4，固定输入协议；历史 v3 请求按原指纹和计划恢复，未决写入与调度暂停状态不变。根配置选择不能替代来源或训练验收，见[协议决定](decisions/2026-10-20-主策略Batch冻结输入协议.md)。
+
+## 独立来源怎么选择日期布局
+
+`collect` 仍按原来源合同保存 v1 归档，不加布局参数。随后在 `run` 请求的 `definitionVersion` 明确选择写入布局：
+
+| 来源 | 原定义 | 新定义 |
+| --- | --- | --- |
+| ETF 复权 | `etf_adj-v1` | `etf_adj-trade-date-v2` |
+| ETF 日线 | `etf_daily-v1` | `etf_daily-trade-date-v2` |
+| ETF 份额 | `etf_share-v1` | `etf_share-trade-date-v2` |
+| ST 日频 | `stk_st_daily-v1` | `stk_st_daily-trade-date-v2` |
+| 停牌 | `stk_suspend-v1` | `stk_suspend-trade-date-v2` |
+
+例如 `job=source_etf_adj`，先正常采集，取得 `fingerprint`，再用 `definitionVersion=etf_adj-trade-date-v2` 发起运行。它从原归档读取 `timestamp` 日期，向当前实例的 `jdb_test_*` 目标写 `trade_date`，回读也使用 `trade_date`。业务日期不做时区换算；ETF 日线保留纳秒类型，其他类型及分区不变。
+
+盘后计划的来源项也能填写这些新定义。验收凭证必须匹配冻结计划，不能借用另一布局的最新记录；不匹配时阻断。旧请求恢复仍用原定义和原目标，未决批次不会自动重发或解锁。正式 `data.*` 的根配置不控制这些 Batch 隔离来源。
+
+这是可选的新布局入口；原定义、采集归档和正式默认保持原样。具体边界见[设计决定](decisions/2026-10-21-Batch独立来源日期布局.md)。

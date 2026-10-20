@@ -55,6 +55,14 @@ public final class DataReadiness implements StageExecutor {
                 || !request.rangeEnd().equals(request.logicalDate()))
             return new Result(
                     BusinessState.BLOCKED, null, "data-ready-requires-one-post-close-logical-date");
+        final PostCloseSourcePlan.Manifest plan;
+        try {
+            plan = new PostCloseSourcePlan(archiveRoot).read(request);
+        } catch (Exception invalid) {
+            return new Result(BusinessState.BLOCKED, null, "data-ready-invalid-frozen-plan");
+        }
+        var planned = new TreeMap<String, PostCloseSourcePlan.Source>();
+        plan.sources().forEach(source -> planned.put(source.dataset(), source));
         var latest = ledger.latestSourceCertificates(request.logicalDate());
         var missing = new TreeSet<String>();
         var sources = new TreeMap<String, VerifiedEvidence>();
@@ -70,7 +78,26 @@ public final class DataReadiness implements StageExecutor {
             try {
                 var sourceRequest = Json.read(observed.requestJson(), RunRequest.class);
                 var evidence = Json.read(observed.evidenceJson(), CompletionEvidence.class);
-                var contract = SourceContract.load(dataset);
+                var expected = planned.get(dataset);
+                // 当前最新凭证也必须属于原计划的版本、修订和证券范围，不能跨布局借用。
+                String expectedScope =
+                        RunRequest.hash(
+                                dataset,
+                                expected.universeVersion(),
+                                String.join("\n", expected.expectedCodes()));
+                if (!sourceRequest.definitionVersion().equals(expected.definitionVersion())
+                        || !sourceRequest.revision().equals(expected.revision())
+                        || !Objects.equals(sourceRequest.supersedes(), expected.supersedes())
+                        || !Objects.equals(
+                                sourceRequest.revisionReason(), expected.revisionReason())
+                        || !sourceRequest.scopeIdentity().equals(expectedScope)) {
+                    missing.add(dataset + ":certificate-does-not-match-frozen-plan");
+                    continue;
+                }
+                var contract =
+                        SourceContract.load(dataset)
+                                .writeLayout(sourceRequest.definitionVersion())
+                                .target();
                 Path artifact = Path.of(evidence.artifact()).toAbsolutePath().normalize();
                 Path archiveReal = archiveRoot.toRealPath();
                 if (!artifact.startsWith(archiveRoot)

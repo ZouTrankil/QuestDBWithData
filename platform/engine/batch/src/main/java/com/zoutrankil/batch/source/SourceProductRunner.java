@@ -51,10 +51,11 @@ public final class SourceProductRunner {
     public StageExecutor.Result execute(RunRequest request, String dataset) throws Exception {
         var contract = SourceContract.load(dataset);
         var frozen = collector.read(request.inputFingerprint());
+        var layout = contract.writeLayout(request.definitionVersion());
+        var writeContract = layout.target();
         if (!request.job().equals("source_" + dataset)
                 || !frozen.dataset().equals(dataset)
                 || !frozen.definitionVersion().equals(contract.version())
-                || !request.definitionVersion().equals(contract.version())
                 || !frozen.logicalDate().equals(request.logicalDate())
                 || !frozen.rangeStart().equals(request.rangeStart())
                 || !frozen.rangeEnd().equals(request.rangeEnd())
@@ -119,7 +120,7 @@ public final class SourceProductRunner {
                     BusinessState.BLOCKED, null, "source-writer-not-configured");
         Instant createdAt = ledger.businessCreatedAt(request.instanceId());
         var physicalRows =
-                frozen.rows().stream().map(row -> contract.physicalRow(row, createdAt)).toList();
+                frozen.rows().stream().map(row -> layout.physicalRow(row, createdAt)).toList();
         String target =
                 "jdb_test_"
                         + ledger.environmentNamespace()
@@ -134,12 +135,12 @@ public final class SourceProductRunner {
         var batches = new ArrayList<String>();
         for (int offset = 0;
                 offset < Math.max(1, physicalRows.size());
-                offset += contract.writeBatchSize()) {
+                offset += writeContract.writeBatchSize()) {
             var rows =
                     physicalRows.subList(
                             offset,
-                            Math.min(offset + contract.writeBatchSize(), physicalRows.size()));
-            byte[] bytes = QuestDbTablePort.encode(contract, target, rows);
+                            Math.min(offset + writeContract.writeBatchSize(), physicalRows.size()));
+            byte[] bytes = QuestDbTablePort.encode(writeContract, target, rows);
             String digest =
                     HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
             String batch = RunRequest.hash(request.instanceId(), Integer.toString(offset), digest);
@@ -169,7 +170,8 @@ public final class SourceProductRunner {
             var delivery =
                     writer.execute(
                             intent,
-                            new QuestDbTablePort(endpoint, authorization, contract, target, rows));
+                            new QuestDbTablePort(
+                                    endpoint, authorization, writeContract, target, rows));
             batches.add(batch);
             if (delivery != DurableWriter.Delivery.VERIFIED) {
                 BusinessState state =
@@ -187,10 +189,10 @@ public final class SourceProductRunner {
                 new QuestDbTablePort(
                         endpoint,
                         authorization,
-                        contract,
+                        writeContract,
                         target,
                         physicalRows.subList(
-                                0, Math.min(contract.writeBatchSize(), physicalRows.size())));
+                                0, Math.min(writeContract.writeBatchSize(), physicalRows.size())));
         if (!finalProbe.completeSnapshot(frozen.rows().size()))
             return new StageExecutor.Result(
                     BusinessState.BLOCKED, null, "snapshot-row-count-or-WAL-state-mismatch");
@@ -208,7 +210,7 @@ public final class SourceProductRunner {
                                 "sourceFingerprint",
                                 request.inputFingerprint(),
                                 "definitionVersion",
-                                contract.version(),
+                                writeContract.version(),
                                 "expectedCodes",
                                 frozen.expectedCodes(),
                                 "universeVersion",
@@ -233,7 +235,7 @@ public final class SourceProductRunner {
                         request.rangeEnd(),
                         request.rangeStart(),
                         request.rangeEnd(),
-                        contract.version(),
+                        writeContract.version(),
                         request.inputFingerprint(),
                         request.inputFingerprint(),
                         frozen.rows().size(),

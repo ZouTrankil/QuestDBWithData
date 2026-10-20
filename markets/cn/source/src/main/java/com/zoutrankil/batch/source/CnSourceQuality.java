@@ -99,7 +99,8 @@ final class CnSourceQuality {
                     && List.of("on", "1w", "2w", "1m", "2m", "3m", "6m", "12m").stream()
                             .noneMatch(field -> row.get(field) != null))
                 failures.add("completeness:hibor-rates");
-            if (dataset.equals("stk_st_daily") && !Long.valueOf(1).equals(row.get("is_st")))
+            // JSON 归档回读可能把 1L 解成 Integer；标志按数值判断，不按装箱类判断。
+            if (dataset.equals("stk_st_daily") && !Double.valueOf(1).equals(number(row, "is_st")))
                 failures.add("domain:is_st");
             if (dataset.equals("daily")
                     || dataset.equals("etf_daily")

@@ -33,5 +33,13 @@ public interface SourcePolicyProvider {
         return contract;
     }
 
+    /** 写入布局由请求定义版本选择，不能随当前应用配置改变旧请求。 */
+    default SourceContract writeContract(SourceContract source, String definitionVersion) {
+        if (!source.version().equals(definitionVersion))
+            throw new IllegalArgumentException(
+                    "Unsupported source write definition: " + definitionVersion);
+        return source;
+    }
+
     List<String> qualityFailures(String dataset, List<Map<String, Object>> rows);
 }

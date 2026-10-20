@@ -5,6 +5,7 @@ import com.zoutrankil.batch.domain.RunRequest;
 import com.zoutrankil.batch.postclose.CoreSourceFanout;
 import com.zoutrankil.batch.postclose.PostCloseGraph;
 import com.zoutrankil.batch.source.SourceCollector;
+import com.zoutrankil.batch.source.SourceContract;
 import com.zoutrankil.batch.storage.SqliteLedger;
 
 import org.springframework.batch.core.BatchStatus;
@@ -72,6 +73,10 @@ public final class LaunchService {
                     || !frozen.rangeEnd().equals(request.rangeEnd()))
                 throw new IllegalArgumentException(
                         "Source artifact and requested business scope do not match");
+            var source = SourceContract.load(dataset);
+            if (!source.version().equals(frozen.definitionVersion()))
+                throw new IllegalArgumentException("Frozen source definition is not supported");
+            source.writeLayout(request.definitionVersion());
             String scope = SourceCollector.scopeIdentity(frozen);
             if (!request.scopeIdentity().isBlank() && !request.scopeIdentity().equals(scope))
                 throw new IllegalArgumentException(

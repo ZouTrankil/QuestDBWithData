@@ -17,6 +17,8 @@ import com.zoutrankil.batch.support.Json;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -28,6 +30,8 @@ import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 class DataReadinessTest {
     @TempDir Path archive;
@@ -35,7 +39,7 @@ class DataReadinessTest {
     private static final Instant AT = Instant.parse("2026-09-28T12:00:00Z");
 
     @Test
-    void dataReadyBlocksUntilEveryCoreSourceHasMatchingVerifiedCertificate() {
+    void dataReadyBlocksUntilEveryCoreSourceHasMatchingVerifiedCertificate() throws Exception {
         var ledger = mock(SqliteLedger.class);
         var root = rootRequest();
         when(ledger.latestSourceCertificates(DAY)).thenReturn(Map.of());
@@ -53,11 +57,12 @@ class DataReadinessTest {
         assertTrue(result.reason().contains("daily:missing"));
     }
 
-    @Test
-    void dataReadyEmitsImmutableAggregateCertificateOnlyForDateAndCalendarAlignedSources()
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void dataReadyEmitsImmutableAggregateCertificateOnlyForDateAndCalendarAlignedSources(boolean v2)
             throws Exception {
         var ledger = mock(SqliteLedger.class);
-        var root = rootRequest();
+        var root = rootRequest(v2);
         when(ledger.environmentNamespace()).thenReturn("fixture");
         var certificates = new LinkedHashMap<String, SqliteLedger.SourceCertificateState>();
         for (String dataset : DataReadiness.REQUIRED_SOURCES) {
@@ -66,7 +71,12 @@ class DataReadinessTest {
             String inputFingerprint =
                     HexFormat.of()
                             .formatHex(MessageDigest.getInstance("SHA-256").digest(frozenBytes));
-            var source = sourceRequest(dataset, root.calendarVersion(), inputFingerprint);
+            var source =
+                    sourceRequest(
+                            dataset,
+                            root.calendarVersion(),
+                            inputFingerprint,
+                            version(dataset, v2));
             var artifact = archive.resolve("writes").resolve(dataset).resolve("certificate.json");
             Files.createDirectories(artifact.getParent());
             Files.writeString(artifact, "{}");
@@ -86,7 +96,7 @@ class DataReadinessTest {
                             DAY,
                             DAY,
                             DAY,
-                            SourceContract.load(dataset).version(),
+                            source.definitionVersion(),
                             "source-v1",
                             source.inputFingerprint(),
                             verifiedEmpty ? 0 : 1,
@@ -114,7 +124,7 @@ class DataReadinessTest {
                                     "sourceFingerprint",
                                     source.inputFingerprint(),
                                     "definitionVersion",
-                                    SourceContract.load(dataset).version(),
+                                    source.definitionVersion(),
                                     "verifiedRows",
                                     verifiedEmpty ? 0 : 1,
                                     "batches",
@@ -142,6 +152,13 @@ class DataReadinessTest {
         assertTrue(result.evidence().matches(root, "DataReady"));
         assertEquals(DataReadiness.REQUIRED_SOURCES.size() - 1, result.evidence().writtenRows());
         assertTrue(Files.isRegularFile(Path.of(result.evidence().artifact())));
+        if (v2) {
+            var mismatched =
+                    new DataReadiness(ledger, archive, (r, st) -> null)
+                            .execute(rootRequest(false), PostCloseGraph.STAGES.getFirst());
+            assertEquals(BusinessState.BLOCKED, mismatched.state());
+            assertTrue(mismatched.reason().contains("certificate-does-not-match-frozen-plan"));
+        }
         var revisedCalendar =
                 new RunRequest(
                         "post-close-v2",
@@ -163,10 +180,37 @@ class DataReadinessTest {
                 new DataReadiness(ledger, archive, (r, s) -> null)
                         .execute(revisedCalendar, PostCloseGraph.STAGES.getFirst());
         assertEquals(BusinessState.BLOCKED, stale.state());
-        assertTrue(stale.reason().contains("certificate-scope-or-artifact-mismatch"));
+        assertEquals("data-ready-invalid-frozen-plan", stale.reason());
     }
 
-    private static RunRequest rootRequest() {
+    private RunRequest rootRequest() throws Exception {
+        return rootRequest(false);
+    }
+
+    private RunRequest rootRequest(boolean v2) throws Exception {
+        var sources =
+                PostCloseSourcePlan.REQUIRED.stream()
+                        .sorted()
+                        .map(
+                                dataset ->
+                                        new PostCloseSourcePlan.Source(
+                                                dataset,
+                                                version(dataset, v2),
+                                                codes(dataset),
+                                                "fixture-universe-v1",
+                                                "0",
+                                                null,
+                                                null))
+                        .toList();
+        byte[] bytes =
+                Json.MAPPER.writeValueAsBytes(
+                        new PostCloseSourcePlan.Manifest(
+                                1, DAY, "calendar-v1", "Asia/Shanghai", sources));
+        String digest =
+                HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));
+        Path file = archive.resolve("post-close-plans").resolve(digest + ".json");
+        Files.createDirectories(file.getParent());
+        Files.write(file, bytes);
         return new RunRequest(
                 "post-close",
                 "post_close",
@@ -177,23 +221,35 @@ class DataReadinessTest {
                 "0",
                 null,
                 null,
-                "root-input",
+                digest,
                 "calendar-v1",
                 "Asia/Shanghai",
                 AT,
                 AT,
-                RunRequest.hash("post-close-scope"));
+                digest);
+    }
+
+    private static String version(String dataset, boolean v2) {
+        return v2 && Set.of("etf_adj", "etf_daily", "stk_st_daily", "stk_suspend").contains(dataset)
+                ? dataset + "-trade-date-v2"
+                : SourceContract.load(dataset).version();
+    }
+
+    private static Set<String> codes(String dataset) {
+        return SourceContract.load(dataset).isMarketAggregate()
+                ? Set.of()
+                : dataset.equals("exchange_calendar") ? Set.of("SSE", "SZSE") : Set.of("000001.SZ");
     }
 
     private static RunRequest sourceRequest(
-            String dataset, String calendar, String inputFingerprint) {
+            String dataset, String calendar, String inputFingerprint, String definitionVersion) {
         return new RunRequest(
                 "source-" + dataset,
                 "source_" + dataset,
                 DAY,
                 DAY,
                 DAY,
-                SourceContract.load(dataset).version(),
+                definitionVersion,
                 "0",
                 null,
                 null,
@@ -202,6 +258,9 @@ class DataReadinessTest {
                 "Asia/Shanghai",
                 AT,
                 AT,
-                RunRequest.hash(dataset, "scope"));
+                RunRequest.hash(
+                        dataset,
+                        "fixture-universe-v1",
+                        String.join("\n", new TreeSet<>(codes(dataset)))));
     }
 }

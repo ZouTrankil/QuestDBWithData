@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "结论": "Batch 五项独立来源已接可选交易日写入布局，默认与正式目标未切换；只有离线验收，未完成实库与正式来源验收。",
+  "市场": "CN；业务日期不转换时区；指定时间列仍是原 UTC 零点日期载体。",
+  "写入方": "Java SourceProductRunner；只允许 jdb_test_* 隔离目标。",
+  "来源": [
+    "etf_adj",
+    "etf_daily",
+    "etf_share",
+    "stk_st_daily",
+    "stk_suspend"
+  ],
+  "来源归档": "原 v1 来源合同、冻结 JSON、源摘要和证券范围保留；未新增采集参数。",
+  "写入定义": [
+    "etf_adj-trade-date-v2",
+    "etf_daily-trade-date-v2",
+    "etf_share-trade-date-v2",
+    "stk_st_daily-trade-date-v2",
+    "stk_suspend-trade-date-v2"
+  ],
+  "映射": "只将指定物理列 timestamp 改为 trade_date。字段顺序、日期值、键含义、类型及分区保持原样，ETF 日线仍是 TIMESTAMP_NS。",
+  "恢复": "定义版本参与既有实例身份；新旧隔离目标不同；重开执行器和 SQLite 连接不重发原批次，UNKNOWN 保留原未决状态。",
+  "消费者": "写入、逐键逐值回读和完成凭证按请求布局运行；冻结盘后计划可选择新定义；DataReady 校验原计划定义、修订、证券范围及日历，错版或缺计划时阻断。",
+  "修复的实际问题": "ST 标志经 JSON 回读可能为 Integer(1)，旧质量检查与 Long(1) 比较会误阻断，现按数值判断；合同仍检查整数类型及范围。",
+  "验证": {
+    "离线": {
+      "tests": 4953,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4,
+      "exitCode": 0,
+      "failuresByCase": []
+    },
+    "外部范围": "外部 Live 与 retained-parity 已排除，不记成功。",
+    "格式": "2062 个 Java 文件 import、格式及字面量核对通过。",
+    "构建": "architectureTest、verifyModuleBoundaries、verifyDependencyVersionCompatibility、verifyBatchDistributionDatabaseDrivers 和 CN 数据、主策略、US、BTC 四个 distZip 通过。",
+    "文档": "本批新增链接及 105 对象 CSV 通过。主规范基线已有 3 个引用依赖其他未提交文档，未混入本批。",
+    "公开配置": "四个发行 ZIP 与公开配置、当前跟踪文件检查通过，未打印私密值。"
+  },
+  "证据": {
+    "目录": "var/cn-batch-layout-v2-20261021",
+    "离线归档": "offline-evidence.tar.gz",
+    "SHA256": "f323e914ff333b80c53180aa6b7511a67a73a220a8f806445fdb651a6e4273d9"
+  },
+  "剩余": "真实来源覆盖、Batch 实库回读与正式接管、正式表/MV/消费者迁移、L2 原始 Parquet/manifest、历史布尔值及独立批准模型材料仍未验收。"
+}

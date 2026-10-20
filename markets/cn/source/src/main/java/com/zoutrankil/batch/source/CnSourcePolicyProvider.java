@@ -42,6 +42,11 @@ public final class CnSourcePolicyProvider implements SourcePolicyProvider {
     }
 
     @Override
+    public SourceContract writeContract(SourceContract source, String definitionVersion) {
+        return CnSourceWriteLayouts.bind(source, definitionVersion);
+    }
+
+    @Override
     public List<String> qualityFailures(String dataset, List<Map<String, Object>> rows) {
         return CnSourceQuality.failures(dataset, rows);
     }

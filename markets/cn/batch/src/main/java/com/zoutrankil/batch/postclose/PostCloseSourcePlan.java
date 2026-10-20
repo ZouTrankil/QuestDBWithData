@@ -42,9 +42,7 @@ public final class PostCloseSourcePlan {
         public Source {
             if (dataset == null || !REQUIRED.contains(dataset))
                 throw new IllegalArgumentException("Unregistered core source: " + dataset);
-            if (!SourceContract.load(dataset).version().equals(definitionVersion))
-                throw new IllegalArgumentException(
-                        "Source definition version mismatch: " + dataset);
+            SourceContract.load(dataset).writeLayout(definitionVersion);
             expectedCodes =
                     expectedCodes == null
                             ? Set.of()
