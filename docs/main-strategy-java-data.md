@@ -83,3 +83,5 @@ Python 默认通过 `JAVA_DATA_API_URL`、`JAVA_DATA_API_TOKEN` 读取 Java 已�
 ## 内部身份与旧发布协议
 
 证券评分行使用 `ScoreRow.instrumentCode`；市场与 ETF 范围汇总使用 `AggregationScope`，不能把汇总标签发布为证券。ETF 持仓分别保留 ETF、成分证券、公告和报告期角色。现有产物经 `legacyV1Frames` 输出原 v1 的 `trade_date/ts_code`，新版 `instrument_code` 产物尚未切换，见[身份角色决定](decisions/2026-10-20-主策略内部身份角色.md)。
+
+读取端现已支持 v2 标准快照，历史时点及模型边界使用显式适配；新版发布器尚未接通，v2 正式发布会在更新别名前停止。旧 v1 路径保持原协议，见[输入适配决定](decisions/2026-10-20-主策略标准输入与模型适配.md)。

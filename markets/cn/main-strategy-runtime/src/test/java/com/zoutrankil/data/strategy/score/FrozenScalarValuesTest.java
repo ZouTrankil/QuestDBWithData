@@ -16,9 +16,40 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 class FrozenScalarValuesTest {
+    @Test
+    void renamedRowsKeepSnapshotNullsAndOrderWithoutExposingMutableInputs() {
+        var source = new LinkedHashMap<String, Object>();
+        source.put("ts", LocalDate.of(2026, 10, 16));
+        source.put("symbol", "000001.SZ");
+        source.put("missing", null);
+        var aliases = new HashMap<String, String>();
+        aliases.put("ts", "trade_date");
+        aliases.put("symbol", "instrument_code");
+        var renamed = FrozenScalarValues.renaming(source, aliases);
+        aliases.put("ts", "changed");
+        source.put("symbol", "changed");
+        assertEquals(
+                List.of("trade_date", "instrument_code", "missing"),
+                new ArrayList<>(renamed.keySet()));
+        assertEquals("000001.SZ", renamed.get("instrument_code"));
+        assertNull(renamed.get("missing"));
+        assertFalse(renamed.containsKey("ts"));
+        assertThrows(UnsupportedOperationException.class, () -> renamed.put("missing", 1));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        FrozenScalarValues.renaming(
+                                renamed, Map.of("instrument_code", "trade_date")));
+        var projected = FrozenScalarValues.excluding(renamed, Set.of("missing"));
+        assertEquals(
+                Map.of("date", LocalDate.of(2026, 10, 16), "instrument_code", "000001.SZ"),
+                FrozenScalarValues.renaming(projected, Map.of("trade_date", "date")));
+    }
+
     @Test
     void scalarTypesNullsColumnOrderAndJsonRemainIdentical() throws Exception {
         var original = new LinkedHashMap<String, Object>();

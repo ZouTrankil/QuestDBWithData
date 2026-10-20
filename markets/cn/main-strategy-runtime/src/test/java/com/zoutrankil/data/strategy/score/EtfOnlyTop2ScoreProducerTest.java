@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zoutrankil.data.strategy.input.StrategyInputRows;
 
 import org.junit.jupiter.api.Test;
 
@@ -201,6 +202,57 @@ class EtfOnlyTop2ScoreProducerTest {
                 else assertEquals(value.asText(), result.text(field), key + " " + field);
             }
         }
+    }
+
+    // 使用原保留参考输入走真实映射，再让同一个评分器检查全部输出是否一致。
+    private static List<ScoreRow> mappedRows(
+            String role, List<ScoreRow> rows, String dateField, String codeField) {
+        var physical =
+                rows.stream()
+                        .map(
+                                row -> {
+                                    var values = new LinkedHashMap<String, Object>(row.values());
+                                    values.put(dateField, row.tradeDate());
+                                    if (codeField != null)
+                                        values.put(codeField, row.requireInstrumentCode());
+                                    return (Map<String, Object>) values;
+                                })
+                        .toList();
+        var legacy =
+                StrategyInputRows.legacyModel(role, StrategyInputRows.standard(role, physical));
+        assertEquals(physical, legacy);
+        var result = new ArrayList<ScoreRow>();
+        for (int i = 0; i < rows.size(); i++) {
+            var cells = new LinkedHashMap<>(legacy.get(i));
+            cells.remove(dateField);
+            if (codeField != null) cells.remove(codeField);
+            result.add(rows.get(i).withValues(cells));
+        }
+        return result;
+    }
+
+    @Test
+    void canonicalRoundTripPreservesEveryScoreRankCoverageAndCandidate() throws Exception {
+        var fixture = golden();
+        var source = inputs(fixture);
+        var mapped =
+                new EtfOnlyTop2ScoreProducer.Inputs(
+                        mappedRows("stock_daily", source.stockDaily(), "trade_date", "ts_code"),
+                        mappedRows("l2_raw", source.l2Raw(), "ts", "symbol"),
+                        source.stockMetadata(),
+                        mappedRows("etf_factor", source.etfFactors(), "trade_date", "ts_code"),
+                        source.references(),
+                        source.holdings(),
+                        source.chipRows(),
+                        mappedRows("sentiment", source.marketSentiment(), "trade_date", null),
+                        source.signalDates(),
+                        source.sourceVersions(),
+                        source.maxCompleteDate(),
+                        source.sourceComplete());
+        var scorer = new EtfOnlyTop2ScoreProducer();
+        assertEquals(
+                scorer.produce(source, promoted(fixture)),
+                scorer.produce(mapped, promoted(fixture)));
     }
 
     @Test

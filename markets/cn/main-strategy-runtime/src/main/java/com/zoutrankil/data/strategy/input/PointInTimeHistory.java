@@ -90,6 +90,31 @@ public final class PointInTimeHistory {
         return cutoff;
     }
 
+    /** v2 行显式适配原历史证据；可用时刻仍取原件，不用计算或导出时间替代。 */
+    public List<Map<String, Object>> metadata(
+            StrategyInputSchema schema,
+            List<Map<String, Object>> l2,
+            List<Map<String, Object>> calendar) {
+        if (schema == StrategyInputSchema.V1) return metadata(l2, calendar);
+        return StrategyInputRows.standard(
+                "stock_metadata",
+                metadata(
+                        StrategyInputRows.legacyModel("l2_raw", l2),
+                        StrategyInputRows.legacyModel("calendar", calendar)));
+    }
+
+    public List<Map<String, Object>> context(
+            StrategyInputSchema schema,
+            List<Map<String, Object>> required,
+            List<Map<String, Object>> calendar) {
+        if (schema == StrategyInputSchema.V1) return context(required, calendar);
+        return StrategyInputRows.standard(
+                "market_context",
+                context(
+                        StrategyInputRows.legacyModel("market_context", required),
+                        StrategyInputRows.legacyModel("calendar", calendar)));
+    }
+
     public List<Map<String, Object>> metadata(
             List<Map<String, Object>> l2, List<Map<String, Object>> calendar) {
         var wanted = new TreeMap<String, Map.Entry<LocalDate, String>>();

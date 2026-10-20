@@ -72,6 +72,52 @@ class PointInTimeHistoryTest {
     }
 
     @Test
+    void canonicalInputsPreserveOriginalDecisionCutoffAndAvailableTime() throws Exception {
+        var h =
+                history(
+                        List.of(
+                                metadata("旧名", "银行", "2025-01-01T00:00:00Z"),
+                                metadata("新名", "证券", "2026-10-18T00:00:00Z")),
+                        List.of(
+                                Map.of(
+                                        "trade_date",
+                                        DAY.toString(),
+                                        "availableAt",
+                                        "2026-10-16T07:10:00Z",
+                                        "values",
+                                        Map.of("erp_latest", 1)),
+                                Map.of(
+                                        "trade_date",
+                                        DAY.toString(),
+                                        "availableAt",
+                                        "2026-10-18T10:00:00Z",
+                                        "values",
+                                        Map.of("erp_latest", 9))));
+        var canonicalCalendar = StrategyInputRows.standard("calendar", calendar());
+        var rows =
+                h.metadata(
+                        StrategyInputSchema.V2,
+                        StrategyInputRows.standard("l2_raw", l2()),
+                        canonicalCalendar);
+        assertEquals("600000.SH", rows.getFirst().get("instrument_code"));
+        assertEquals("旧名", rows.getFirst().get("name"));
+        assertEquals(
+                h.metadata(l2(), calendar()),
+                StrategyInputRows.legacyModel("stock_metadata", rows));
+        var required = List.<Map<String, Object>>of(Map.of("trade_date", DAY, "erp_latest", 9));
+        var context =
+                h.context(
+                        StrategyInputSchema.V2,
+                        StrategyInputRows.standard("market_context", required),
+                        canonicalCalendar);
+        assertEquals(1, context.getFirst().get("erp_latest"));
+        assertEquals(
+                h.context(required, calendar()),
+                StrategyInputRows.legacyModel("market_context", context));
+        h.revalidate();
+    }
+
+    @Test
     void laterNameStAndIndustryCorrectionsCannotAffectEarlierDecision() throws Exception {
         var h =
                 history(

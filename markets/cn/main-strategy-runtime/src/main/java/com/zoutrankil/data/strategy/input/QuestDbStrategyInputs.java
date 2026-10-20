@@ -49,7 +49,22 @@ public final class QuestDbStrategyInputs {
             List<LocalDate> signalDates,
             Map<String, List<Map<String, Object>>> tables,
             Map<String, String> sourceVersions,
-            Map<String, Object> proof) {}
+            Map<String, Object> proof,
+            StrategyInputSchema inputSchema) {
+        public Snapshot(
+                LocalDate start,
+                LocalDate end,
+                List<LocalDate> signalDates,
+                Map<String, List<Map<String, Object>>> tables,
+                Map<String, String> sourceVersions,
+                Map<String, Object> proof) {
+            this(start, end, signalDates, tables, sourceVersions, proof, StrategyInputSchema.V1);
+        }
+
+        public Map<String, List<Map<String, Object>>> legacyModelTables() {
+            return StrategyInputRows.legacyModelTables(inputSchema, tables);
+        }
+    }
 
     private static final ObjectMapper JSON = new ObjectMapper();
     private static final List<String> TABLES =
@@ -395,16 +410,28 @@ public final class QuestDbStrategyInputs {
                         observed.size(),
                         "pricesOrSuspensionFlagsInvented",
                         false));
-        proofs.put("coverage", coverage.verify(start, end, warmup, data, before));
+        var snapshotTables =
+                new LinkedHashMap<>(StrategyInputRows.standardTables(coverage.inputSchema(), data));
+        if (coverage.inputSchema() == StrategyInputSchema.V2)
+            proofs.put("inputSchema", coverage.inputSchema().inputSchema());
+        proofs.put("coverage", coverage.verify(start, end, warmup, snapshotTables, before));
         var history = coverage.history();
-        data.put("stock_metadata", history.metadata(data.get("l2_raw"), data.get("calendar")));
-        data.put(
+        snapshotTables.put(
+                "stock_metadata",
+                history.metadata(
+                        coverage.inputSchema(),
+                        snapshotTables.get("l2_raw"),
+                        snapshotTables.get("calendar")));
+        snapshotTables.put(
                 "market_context",
-                history.context(data.get("market_context"), data.get("calendar")));
+                history.context(
+                        coverage.inputSchema(),
+                        snapshotTables.get("market_context"),
+                        snapshotTables.get("calendar")));
         history.revalidate();
         proofs.put("pointInTimeSha256", history.sha256());
         var rows = new LinkedHashMap<String, Object>();
-        for (var e : data.entrySet()) {
+        for (var e : snapshotTables.entrySet()) {
             String hash = hashRows(e.getValue());
             versions.put(e.getKey(), hash);
             rows.put(e.getKey(), Map.of("rows", e.getValue().size(), "sha256", hash));
@@ -419,9 +446,10 @@ public final class QuestDbStrategyInputs {
                 start,
                 end,
                 List.copyOf(dates),
-                Collections.unmodifiableMap(data),
+                Collections.unmodifiableMap(snapshotTables),
                 Map.copyOf(versions),
-                Collections.unmodifiableMap(proofs));
+                Collections.unmodifiableMap(proofs),
+                coverage.inputSchema());
     }
 
     public Map<String, Object> clocks() throws Exception {

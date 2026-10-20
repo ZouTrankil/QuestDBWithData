@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.batch.domain.RunRequest;
 import com.zoutrankil.data.strategy.input.QuestDbStrategyInputs;
 import com.zoutrankil.data.strategy.input.StrategyCoverageAssembler;
+import com.zoutrankil.data.strategy.input.StrategyInputSchema;
 import com.zoutrankil.data.strategy.input.StrategySourceCoverage;
 import com.zoutrankil.data.strategy.publication.NativeMarketInputPackagePublisher;
 import com.zoutrankil.data.strategy.publication.ScoreArtifactPublisher;
@@ -192,6 +193,9 @@ public final class MainStrategyDataService {
                             reader.clocks());
             coverage = new StrategySourceCoverage(assembled.path().toString(), assembled.sha256());
         }
+        // v2 读取可独立核验；发布端未完成前，不能先推进旧评分别名再在市场包阶段失败。
+        if (coverage.inputSchema() == StrategyInputSchema.V2)
+            throw new IllegalStateException("v2 发布端仍在接入，当前不推进评分或市场包别名");
         var prepared = calculateScores(target, frozen, coverage);
         var output = prepared.output();
         ScoreArtifactPublisher.PublicationGate gate =
@@ -280,8 +284,9 @@ public final class MainStrategyDataService {
     private PreparedInputs prepareInputs(LocalDate target, StrategySourceCoverage coverage)
             throws Exception {
         var raw = reader.read(start, target, 460, coverage);
+        var modelTables = raw.legacyModelTables();
         var metadata = new LinkedHashMap<String, L2StockScoreProducer.StockMetadata>();
-        for (var row : raw.tables().get("stock_metadata")) {
+        for (var row : modelTables.get("stock_metadata")) {
             String code =
                     QuestDbStrategyInputs.date(row.get("trade_date")) + "|" + text(row, "ts_code");
             if (metadata.put(
@@ -292,7 +297,7 @@ public final class MainStrategyDataService {
                 throw new IllegalStateException("Duplicate dated stock metadata business key");
         }
         var holdings = new ArrayList<EtfOnlyTop2ScoreProducer.Holding>();
-        for (var row : raw.tables().get("etf_portfolio"))
+        for (var row : modelTables.get("etf_portfolio"))
             holdings.add(
                     // ts_code 是 ETF，symbol 是成分证券；mkv 为元，不能用 amount 股数代替。
                     new EtfOnlyTop2ScoreProducer.Holding(
@@ -304,7 +309,7 @@ public final class MainStrategyDataService {
                             number(row.get("mkv"))));
         var references =
                 EtfOnlyTop2ScoreProducer.prepareEtfReference(
-                        raw.tables().get("etf_reference"), false);
+                        modelTables.get("etf_reference"), false);
         var versions = new TreeMap<>(raw.sourceVersions());
         versions.put("l2", versions.get("l2_raw"));
         versions.put("market_sentiment", versions.get("sentiment"));
@@ -315,22 +320,22 @@ public final class MainStrategyDataService {
                         .collect(Collectors.toSet());
         LOG.info(
                 "Preparing complete ETF factor history: raw rows={}, eligible codes={}",
-                raw.tables().get("etf_factor").size(),
+                modelTables.get("etf_factor").size(),
                 codes.size());
         var factors =
                 EtfOnlyTop2ScoreProducer.prepareEtfFactor(
-                        rows(raw, "etf_factor", "trade_date", "ts_code"),
-                        rows(raw, "etf_daily", "timestamp", "ts_code"),
+                        rows(modelTables, "etf_factor", "trade_date", "ts_code"),
+                        rows(modelTables, "etf_daily", "timestamp", "ts_code"),
                         codes,
                         target);
         LOG.info("Prepared complete ETF factor history: rows={}", factors.size());
         var sentiment =
                 EtfOnlyTop2ScoreProducer.prepareMarketSentiment(
-                        rows(raw, "sentiment", "trade_date", null), start, target);
+                        rows(modelTables, "sentiment", "trade_date", null), start, target);
         var inputs =
                 new EtfOnlyTop2ScoreProducer.Inputs(
-                        rows(raw, "stock_daily", "trade_date", "ts_code"),
-                        rows(raw, "l2_raw", "ts", "symbol"),
+                        rows(modelTables, "stock_daily", "trade_date", "ts_code"),
+                        rows(modelTables, "l2_raw", "ts", "symbol"),
                         metadata,
                         factors,
                         references,
@@ -636,11 +641,11 @@ public final class MainStrategyDataService {
     }
 
     private static List<ScoreRow> rows(
-            QuestDbStrategyInputs.Snapshot raw,
+            Map<String, List<Map<String, Object>>> tables,
             String table,
             String date,
             String physicalInstrumentColumn) {
-        return raw.tables().get(table).stream()
+        return tables.get(table).stream()
                 .map(
                         row -> {
                             var day = QuestDbStrategyInputs.date(row.get(date));

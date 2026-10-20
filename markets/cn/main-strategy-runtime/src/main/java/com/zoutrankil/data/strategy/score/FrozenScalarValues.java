@@ -22,6 +22,7 @@ public final class FrozenScalarValues extends AbstractMap<String, Object> {
         private final Map<String, Integer> indices;
         private final List<String> sorted;
         private final Map<String, Layout> appended = new ConcurrentHashMap<>();
+        private final Map<Map<String, String>, Layout> renamed = new ConcurrentHashMap<>();
 
         private Layout(List<String> columns) {
             this.columns = columns;
@@ -123,6 +124,33 @@ public final class FrozenScalarValues extends AbstractMap<String, Object> {
         var values = new Object[layout.columns.size()];
         for (int i = 0; i < values.length; i++) values[i] = source.get(layout.columns.get(i));
         return row(layout, values);
+    }
+
+    private FrozenScalarValues(Layout layout, FrozenScalarValues source) {
+        if (layout.size() != source.layout.size()) throw new IllegalArgumentException("改名不能改变单元数量");
+        this.layout = layout;
+        // 原数组只属于不可变行，改名不复制数值，也不暴露可写引用。
+        this.values = source.values;
+    }
+
+    /** 只改列名；同名碰撞拒绝，不给宽表逐单元新增 Map 节点。 */
+    public static Map<String, Object> renaming(Map<String, ?> source, Map<String, String> names) {
+        var base = copyOf(source);
+        if (names.isEmpty()) return base;
+        var original = layoutOf(base);
+        var renamed =
+                original.renamed.computeIfAbsent(
+                        Map.copyOf(names),
+                        aliases ->
+                                layout(
+                                        original.columns.stream()
+                                                .map(name -> aliases.getOrDefault(name, name))
+                                                .toList()));
+        if (base instanceof FrozenScalarValues frozen)
+            return new FrozenScalarValues(renamed, frozen);
+        var cells = new Object[original.size()];
+        copyCells(base, original, cells);
+        return row(renamed, cells);
     }
 
     public List<String> sortedColumns() {
