@@ -52,7 +52,8 @@ class UsBroadDailyPrefetchTest {
             insert(db,"X","PLANNED",0);var rejected=response(true);
             assertEquals(UsBroadDailyPrefetch.Step.FAILED_SOURCE,UsBroadDailyPrefetch.step(db,16,FROM,THROUGH,t->rejected,()->false));
             try(var s=db.createStatement();var r=s.executeQuery("SELECT phase,raw,sha FROM broad_tasks WHERE symbol='X'")){assertTrue(r.next());assertEquals("FAILED_SOURCE",r.getString(1));assertEquals(rejected.path().toString(),r.getString(2));assertEquals(rejected.sha256(),r.getString(3));}
-            try(var s=db.createStatement()){s.executeUpdate("UPDATE broad_tasks SET phase='PLANNED' WHERE symbol='X'");}
+            try(var s=db.createStatement();var r=s.executeQuery("SELECT count(*) FROM broad_source_retries")){assertTrue(r.next());assertEquals(0,r.getInt(1));}
+            try(var s=db.createStatement()){s.executeUpdate("UPDATE broad_tasks SET phase='PLANNED',raw=NULL,sha=NULL,observed=NULL WHERE symbol='X'");}
             var stopped=new AtomicBoolean();
             assertEquals(UsBroadDailyPrefetch.Step.STOPPED,UsBroadDailyPrefetch.step(db,16,FROM,THROUGH,t->{stopped.set(true);throw new java.io.IOException("cancelled");},stopped::get));assertEquals("PLANNED",phase(db,"X"));
             var good=response(false);
@@ -84,7 +85,7 @@ class UsBroadDailyPrefetchTest {
     }
     private String url(){return "jdbc:sqlite:"+root.resolve("broad-queue.sqlite3");}
     private Connection database()throws Exception {
-        var db=DriverManager.getConnection(url());try(var s=db.createStatement()){s.execute("PRAGMA journal_mode=WAL");s.execute("PRAGMA busy_timeout=5000");s.execute("CREATE TABLE broad_tasks(id TEXT PRIMARY KEY,kind TEXT,symbol TEXT,yahoo TEXT,phase TEXT,raw TEXT,sha TEXT,observed TEXT,proof TEXT,updated_at TEXT,priority INT,bundle_id TEXT)");}return db;
+        var db=DriverManager.getConnection(url());try(var s=db.createStatement()){s.execute("PRAGMA journal_mode=WAL");s.execute("PRAGMA busy_timeout=5000");s.execute("CREATE TABLE broad_tasks(id TEXT PRIMARY KEY,kind TEXT,symbol TEXT,yahoo TEXT,phase TEXT,raw TEXT,sha TEXT,observed TEXT,proof TEXT,updated_at TEXT,priority INT,bundle_id TEXT)");}UsBroadSourceRetry.initialize(db);return db;
     }
     private static void insert(Connection db,String symbol,String phase,int priority)throws Exception {
         String id=VerifiedMarketDataStore.sha(("v1|DAILY|"+symbol+"|"+THROUGH+"|").getBytes(StandardCharsets.UTF_8));

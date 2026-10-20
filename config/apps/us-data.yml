@@ -22,6 +22,8 @@ app.market-data:
   yahoo-request-spacing-ms: 2000
   broad-prefetch-enabled: true
   broad-prefetch-buffer-symbols: 256
+  broad-source-max-attempts: 3
+  broad-source-retry-delay-ms: 5000
   broad-annual-enabled: true
   broad-annual-symbols: 128
   broad-publication-symbols: 12
