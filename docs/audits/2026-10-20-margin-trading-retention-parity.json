@@ -1,0 +1,69 @@
+{
+  "核查日期": "2026-10-20",
+  "范围": "2026-01-05 至 2026-03-11，右边界 2026-03-12 不含",
+  "用途": "只读替代关系初查，不是迁移或删除验收",
+  "检查": [
+    {
+      "check": "values",
+      "sql": "SELECT count() compared_rows,sum(CASE WHEN b.ts_code IS NULL THEN 1 ELSE 0 END) missing_keys,sum(CASE WHEN b.ts_code IS NOT NULL AND ((a.rzye!=b.rzye OR (a.rzye IS NULL AND b.rzye IS NOT NULL) OR (a.rzye IS NOT NULL AND b.rzye IS NULL)) OR (a.rzmre!=b.rzmre OR (a.rzmre IS NULL AND b.rzmre IS NOT NULL) OR (a.rzmre IS NOT NULL AND b.rzmre IS NULL)) OR (a.rzche!=b.rzche OR (a.rzche IS NULL AND b.rzche IS NOT NULL) OR (a.rzche IS NOT NULL AND b.rzche IS NULL)) OR (a.rqyl!=b.rqyl OR (a.rqyl IS NULL AND b.rqyl IS NOT NULL) OR (a.rqyl IS NOT NULL AND b.rqyl IS NULL)) OR (a.rqmcl!=b.rqmcl OR (a.rqmcl IS NULL AND b.rqmcl IS NOT NULL) OR (a.rqmcl IS NOT NULL AND b.rqmcl IS NULL)) OR (a.rqchl!=b.rqchl OR (a.rqchl IS NULL AND b.rqchl IS NOT NULL) OR (a.rqchl IS NOT NULL AND b.rqchl IS NULL)) OR (a.rqye!=b.rqye OR (a.rqye IS NULL AND b.rqye IS NOT NULL) OR (a.rqye IS NOT NULL AND b.rqye IS NULL)) OR (a.rzrqye!=b.rzrqye OR (a.rzrqye IS NULL AND b.rzrqye IS NOT NULL) OR (a.rzrqye IS NOT NULL AND b.rzrqye IS NULL))) THEN 1 ELSE 0 END) differing_rows FROM (SELECT * FROM margin_trading WHERE trade_date>='2026-01-05' AND trade_date<'2026-03-12') a LEFT JOIN (SELECT * FROM margin_detail WHERE trade_date>='2026-01-05' AND trade_date<'2026-03-12') b ON a.trade_date=b.trade_date AND a.ts_code=b.ts_code",
+      "result": [
+        [
+          181140,
+          25041,
+          157
+        ]
+      ],
+      "columns": [
+        {
+          "name": "compared_rows",
+          "type": "LONG"
+        },
+        {
+          "name": "missing_keys",
+          "type": "LONG"
+        },
+        {
+          "name": "differing_rows",
+          "type": "LONG"
+        }
+      ]
+    },
+    {
+      "check": "margin_trading-duplicate-keys",
+      "sql": "SELECT count() duplicate_keys FROM (SELECT trade_date,ts_code,count() n FROM margin_trading WHERE trade_date>='2026-01-05' AND trade_date<'2026-03-12' GROUP BY trade_date,ts_code) WHERE n>1",
+      "result": [
+        [
+          0
+        ]
+      ],
+      "columns": [
+        {
+          "name": "duplicate_keys",
+          "type": "LONG"
+        }
+      ]
+    },
+    {
+      "check": "margin_detail-duplicate-keys",
+      "sql": "SELECT count() duplicate_keys FROM (SELECT trade_date,ts_code,count() n FROM margin_detail WHERE trade_date>='2026-01-05' AND trade_date<'2026-03-12' GROUP BY trade_date,ts_code) WHERE n>1",
+      "result": [
+        [
+          0
+        ]
+      ],
+      "columns": [
+        {
+          "name": "duplicate_keys",
+          "type": "LONG"
+        }
+      ]
+    }
+  ],
+  "未匹配样本": [
+    "510050.SZ",
+    "510100.SZ",
+    "510150.SZ",
+    "510180.SZ",
+    "510210.SZ"
+  ]
+}
