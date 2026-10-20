@@ -1,0 +1,66 @@
+{
+  "说明": "隔离工作目录验证本批存储改动，未包含共享工作区其他修改。旧来源作业和正式发布继续 v1；不把显式 v2 存储当作同步入口或正式迁移完成。",
+  "baseCommit": "f2f367967e5b35980d8f5ad8537987c14d27c3c9",
+  "源码摘要": {
+    "markets/cn/data/src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java": "71c8ff5ead7638d147add42d25597ebd196b59ad92f17795471f0c2d71387bc4",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockStDailySyncAdapter.java": "ea4225bd59eb8e41e2be1a0419c29d654784cf1a0fb2a63615890ba71d55bed4",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/mapper/StockStDailyMapper.java": "e97a09e9bf6897c8930e95e0e68509fe2d9ba196fdf7b81025a64fdb01fedc33",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/port/StockStDailyWriteSession.java": "c5c577ba2a393723bb4ff5473d60bce8bf09db88364cf77ee4c34cbbbcee1647",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockStDailyReadRepository.java": "2d3f3b1a3a987d0f8531ca0fb791f129bbe06d0d81f185c753ae19a80cb60d77",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockStDailyStorage.java": "bf35fba85f484bec3dd36429c0cb2f4552fe94c1a43fd8ca7a480b765c788aad",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockStDailyWritePort.java": "536a93045b327b667503757a12f84c315cbbdf8e2bb3a3ccd2b228d4a571d5b1",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockStDailyLayoutAdmissionTest.java": "852b918ab5f65a16f611ade594d843d4190a705815f5706b2bf0312db6720d5d",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/storage/StockStDailyLayoutLiveAcceptanceTest.java": "bbe700365fe15c0be7297dc2c15917822696caaaaad83bcbaf4c33d415fbfb00",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/storage/StockStDailyVersionedCodecTest.java": "96734bfe20c57244ddf83e8cbea8387f1c61c33426d43ab9d37b75e8b3b8aa4c",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/storage/StockStDailyVersionedStorageTest.java": "45c635f306f3d8ae1681c6c0d7ecb2e7cf96b6e25de7ffc4e42a638f2cc727d8",
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/stock/basic/StockStDailyDataset.java": "482d3b063902464e8582782f6a25fe90638498327177f15cd0d9735466a96f1b",
+    "markets/cn/src/test/java/com/zoutrankil/market/cn/model/StockStDailyVersionedContractTest.java": "f29377073b2264b7a8b26bf1df24611aee4db924be8ffe4b6c27139b0c9eb543"
+  },
+  "检查命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "模块结果": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2275,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 143
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "架构与模块边界": "通过",
+  "CN数据与主策略发行包": "通过",
+  "Java格式与import及字面量核对": {
+    "文件数": 2032,
+    "结果": "通过"
+  },
+  "验证分支": [
+    "v1 原定义、逻辑 timestamp 和字面量行编码保留；v2 使用独立 trade_date 逻辑键、物理列和字节向量",
+    "三列值、微秒和完整业务键含义保持；SSE 名称变更展开代码未修改",
+    "显式类型化读取、完整键、整日、日期盘点按所选列；旧物理列或变化的身份在发送前拒绝",
+    "旧来源作业收到 v2 会话，在日历、来源和物理访问前拒绝；旧组会话也核对定义版本",
+    "实库两轮写入及全值回读、全表/窗口/窗口外快照、稳定 WAL 和独立字面量摘要通过"
+  ],
+  "实库验收": "ST日频v2存储实库验收.json",
+  "生产默认布局": 1,
+  "新增配置开关": false,
+  "新版作业已注册": false,
+  "原始名称变更证据及模型JSON重写": false,
+  "SSE算法或正ST规则修改": false,
+  "staging发布备份与恢复贯通v2": false,
+  "真实来源完整性验收": false,
+  "真实恢复": false,
+  "正式表或MV迁移": false,
+  "已有stage或backup清理": false,
+  "公开配置与发行文件检查": "CN data 与主策略两个 ZIP 分别通过 check_public_config.py；使用隔离 Python 环境的 PyYAML，未修改项目依赖。",
+  "文档本地链接": "通过"
+}

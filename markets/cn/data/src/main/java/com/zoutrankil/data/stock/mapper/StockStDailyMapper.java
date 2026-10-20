@@ -3,9 +3,11 @@ package com.zoutrankil.data.stock.mapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zoutrankil.data.domain.DatasetValues;
 import com.zoutrankil.data.domain.stock.basic.StockStDaily;
+import com.zoutrankil.data.domain.stock.basic.StockStDailyDataset;
 import com.zoutrankil.data.domain.stock.basic.StockStDailyKey;
 import com.zoutrankil.data.domain.stock.basic.StockStPeriod;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -38,19 +40,27 @@ public final class StockStDailyMapper {
     }
 
     public DatasetValues values(StockStDaily row) {
+        return values(row, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public DatasetValues values(StockStDaily row, CnTradeDateLayout layout) {
         if (row == null) throw new IllegalArgumentException("stk_st_daily row required");
         var values = new LinkedHashMap<String, Object>();
         values.put("ts_code", row.tsCode());
         values.put("is_st", row.isSt());
-        values.put("timestamp", row.timestamp());
+        values.put(StockStDailyDataset.logicalDateColumn(layout), row.timestamp());
         return new DatasetValues(values);
     }
 
     public StockStDaily fromValues(DatasetValues values) {
+        return fromValues(values, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public StockStDaily fromValues(DatasetValues values, CnTradeDateLayout layout) {
         return new StockStDaily(
                 new StockStDailyKey(
                         values.get("ts_code", String.class),
-                        values.get("timestamp", LocalDate.class)),
+                        values.get(StockStDailyDataset.logicalDateColumn(layout), LocalDate.class)),
                 values.get("is_st", Integer.class));
     }
 

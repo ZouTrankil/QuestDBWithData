@@ -17,6 +17,7 @@ import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import com.zoutrankil.data.stock.domain.StockStDailyState;
 import com.zoutrankil.data.stock.port.StockDateWriteSession;
 import com.zoutrankil.data.stock.port.StockStDailyTarget;
+import com.zoutrankil.data.stock.port.StockStDailyWriteSession;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -254,6 +255,13 @@ public final class StockStDailySyncAdapter
     @Override
     public void preflight(SyncJobDefinition.FrozenRequest request) {
         validateFrozenRequest(request);
+        // 发布与恢复仍按旧协议运行，不能把新版存储会话塞进旧冻结作业。
+        int version =
+                originalPort instanceof StockStDailyWriteSession.Versioned selected
+                        ? selected.datasetVersion()
+                        : 1;
+        if (version != request.definition().datasetVersion())
+            throw new IllegalArgumentException("ST 会话布局与原冻结定义不同");
         if (runId != null && !logicalTarget.equals(request.parameters().get("targetId")))
             throw new IllegalArgumentException("D012 logical target differs from frozen request");
         List<LocalDate> dates = decodeTradeDates(request);

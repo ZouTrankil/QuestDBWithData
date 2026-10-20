@@ -12,6 +12,7 @@ import com.zoutrankil.data.stock.domain.StockStDailyState.Content;
 import com.zoutrankil.data.stock.domain.StockStDailyState.Identity;
 import com.zoutrankil.data.stock.domain.StockStDailyState.Snapshot;
 import com.zoutrankil.data.stock.port.StockStDailyTables;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -27,10 +28,18 @@ import java.util.Objects;
 public final class StockStDailyStorage implements StockStDailyTables.Table {
     public static final int MAX_ROWS = 5_000_000;
 
+    private final CnTradeDateLayout layout;
+    private final String dateColumn;
     private final JdbcTemplate jdbc;
     private final String table;
 
     public StockStDailyStorage(JdbcTemplate source, String table) {
+        this(source, table, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public StockStDailyStorage(JdbcTemplate source, String table, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
+        dateColumn = layout.physicalDateColumn("stk_st_daily");
         DatasetDefinition.identifier(table);
         this.table = table;
         jdbc = new JdbcTemplate(Objects.requireNonNull(source.getDataSource()));
@@ -39,7 +48,7 @@ public final class StockStDailyStorage implements StockStDailyTables.Table {
     }
 
     public Identity preflight() {
-        QuestDbWriteChecks.preflight(jdbc, table, StockStDailyDataset.definition(table));
+        QuestDbWriteChecks.preflight(jdbc, table, StockStDailyDataset.definition(table, layout));
         var objects =
                 jdbc.queryForList(
                         "SELECT id,directoryName FROM tables() WHERE table_name=?", table);
@@ -60,7 +69,10 @@ public final class StockStDailyStorage implements StockStDailyTables.Table {
     public Content window(LocalDate fromInclusive, LocalDate toInclusive) throws Exception {
         requireWindow(fromInclusive, toInclusive);
         return snapshot(
-                        "timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP)",
+                        dateColumn
+                                + ">=cast(? AS TIMESTAMP) AND "
+                                + dateColumn
+                                + "<cast(? AS TIMESTAMP)",
                         micros(fromInclusive),
                         micros(toInclusive.plusDays(1)))
                 .content();
@@ -69,7 +81,11 @@ public final class StockStDailyStorage implements StockStDailyTables.Table {
     public Content outside(LocalDate fromInclusive, LocalDate toInclusive) throws Exception {
         requireWindow(fromInclusive, toInclusive);
         return snapshot(
-                        "(timestamp<cast(? AS TIMESTAMP) OR timestamp>=cast(? AS TIMESTAMP))",
+                        "("
+                                + dateColumn
+                                + "<cast(? AS TIMESTAMP) OR "
+                                + dateColumn
+                                + ">=cast(? AS TIMESTAMP))",
                         micros(fromInclusive),
                         micros(toInclusive.plusDays(1)))
                 .content();
@@ -81,11 +97,15 @@ public final class StockStDailyStorage implements StockStDailyTables.Table {
         long[] count = {0};
         StockStDailyKey[] previous = {null};
         String sql =
-                "SELECT ts_code,is_st,cast(timestamp AS long) AS timestamp_micros FROM \""
+                "SELECT ts_code,is_st,cast("
+                        + dateColumn
+                        + " AS long) AS timestamp_micros FROM \""
                         + table
                         + "\""
                         + (predicate.isBlank() ? "" : " WHERE " + predicate)
-                        + " ORDER BY timestamp,ts_code";
+                        + " ORDER BY "
+                        + dateColumn
+                        + ",ts_code";
         PreparedStatementCreator creator =
                 connection -> {
                     var statement = connection.prepareStatement(sql);
@@ -119,7 +139,8 @@ public final class StockStDailyStorage implements StockStDailyTables.Table {
                                     "D012 physical rows contain duplicate or unordered business keys");
                         previous[0] = value.key();
                         try {
-                            digest.update(StockStDailyWritePort.CODEC.canonicalBytes(value));
+                            digest.update(
+                                    StockStDailyWritePort.codec(layout).canonicalBytes(value));
                             digest.update((byte) '\n');
                         } catch (RuntimeException invalid) {
                             throw new SQLException("Invalid D012 physical row", invalid);

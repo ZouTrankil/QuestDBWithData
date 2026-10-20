@@ -115,3 +115,5 @@ CN 的来源字段说明维护在 `markets/cn/src/main/resources/model-docs/coll
 主策略读取时间按角色绑定现有 Dataset 定义，不根据裸 `timestamp/ts` 猜测日期。情绪和市场状态的契约由 CN 模型库统一提供；v1 编码与新版迁移状态见[设计决定](decisions/2026-10-20-主策略按来源契约解码时间.md)。
 
 CN 异动公告的只读 v2 使用 `announcement_date`，Shibor/Hibor/LPR 使用 `observation_date`；两者都解码为 `LocalDate`。物理列和旧来源投影仍保留，不能当作已完成迁移。数字开头的物理期限列必须显式引用，逻辑名与表名仍使用原标识校验，见[日期读取决定](decisions/2026-10-20-公告与利率逻辑日期读取.md)。
+
+`stk_st_daily` 的显式存储布局 v2 使用 `trade_date` 逻辑键和物理列，v1 行编码仍保留 `timestamp`。新编码、完整键回读和快照摘要单独验证；名称变更原文及模型仍按旧编码解释。生产发布、stage/backup 与恢复尚未贯通 v2，不能只靠存储端口切换默认值，见[ST 存储分版](decisions/2026-10-21-交易日存储布局分版.md#st-存储分版)。

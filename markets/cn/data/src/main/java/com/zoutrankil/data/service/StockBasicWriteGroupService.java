@@ -109,6 +109,7 @@ import com.zoutrankil.data.stock.mapper.StockFactorMapper;
 import com.zoutrankil.data.stock.mapper.StockLimitMapper;
 import com.zoutrankil.data.stock.mapper.StockStDailyMapper;
 import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
+import com.zoutrankil.data.stock.port.StockStDailyWriteSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -1240,6 +1241,13 @@ public class StockBasicWriteGroupService {
                     .equals(StockStDailyDataset.DEFINITION.datasetId())) {
                 var mapper = new StockStDailyMapper();
                 var port = writers.stockStDaily(stockStDailyTarget.tableName(), member.targetId());
+                // 组入口尚未接新版 ST 发布协议，不能把 v2 编码写进旧组回执。
+                int version =
+                        port instanceof StockStDailyWriteSession.Versioned selected
+                                ? selected.datasetVersion()
+                                : 1;
+                if (version != member.definition().schemaVersion())
+                    throw new IllegalArgumentException("ST 组会话布局与原契约不同");
                 adapters.put(
                         member.memberId(),
                         new PreparedWriteAdapter<>(

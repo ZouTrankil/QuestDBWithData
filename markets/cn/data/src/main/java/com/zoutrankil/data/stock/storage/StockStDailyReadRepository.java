@@ -11,7 +11,9 @@ import com.zoutrankil.data.domain.stock.basic.StockStDailyKey;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import com.zoutrankil.data.stock.domain.StockExecutionTables;
 import com.zoutrankil.data.stock.mapper.StockStDailyMapper;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -24,18 +26,22 @@ import java.util.Objects;
 /** Typed, explicit-column reads for the D012 isolated target. */
 @Repository
 public class StockStDailyReadRepository implements DatasetImplementation {
-    private static final List<String> COLUMNS =
-            StockStDailyDataset.DEFINITION.columns().stream()
-                    .map(DatasetDefinition.Column::logicalName)
-                    .toList();
+    private final CnTradeDateLayout layout;
     private final QuestDbBoundedReader reader;
     private final String table;
     private final StockStDailyMapper mapper = new StockStDailyMapper();
 
+    @Autowired
     public StockStDailyReadRepository(
             QuestDbBoundedReader reader,
             @Value("${app.sync.stk-st-daily-table:java_d012_stk_st_daily_acceptance}")
                     String table) {
+        this(reader, table, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public StockStDailyReadRepository(
+            QuestDbBoundedReader reader, String table, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.reader = Objects.requireNonNull(reader);
         StockExecutionTables.requireStockStDaily(table);
         this.table = table;
@@ -43,15 +49,23 @@ public class StockStDailyReadRepository implements DatasetImplementation {
 
     @Override
     public DatasetDefinition definition() {
-        return StockStDailyDataset.definition(table);
+        return StockStDailyDataset.definition(table, layout);
+    }
+
+    private List<String> columns() {
+        return definition().columns().stream().map(DatasetDefinition.Column::logicalName).toList();
     }
 
     public DatasetReadPage<StockStDaily> findByKey(StockStDailyKey key) {
         Objects.requireNonNull(key);
         return find(
                 new DatasetReadQuery(
-                        COLUMNS,
-                        Map.of("ts_code", key.tsCode(), "timestamp", key.timestamp()),
+                        columns(),
+                        Map.of(
+                                "ts_code",
+                                key.tsCode(),
+                                StockStDailyDataset.logicalDateColumn(layout),
+                                key.timestamp()),
                         null,
                         null,
                         null,
@@ -70,9 +84,9 @@ public class StockStDailyReadRepository implements DatasetImplementation {
             throw new IllegalArgumentException("Increasing half-open timestamp range required");
         return find(
                 new DatasetReadQuery(
-                        COLUMNS,
+                        columns(),
                         Map.of(),
-                        "timestamp",
+                        StockStDailyDataset.logicalDateColumn(layout),
                         fromInclusive,
                         toExclusive,
                         pageSize,
@@ -80,10 +94,10 @@ public class StockStDailyReadRepository implements DatasetImplementation {
     }
 
     public DatasetReadPage<StockStDaily> find(DatasetReadQuery query) {
-        if (query.columns().size() != COLUMNS.size()
-                || !new HashSet<>(query.columns()).equals(new HashSet<>(COLUMNS)))
+        if (query.columns().size() != columns().size()
+                || !new HashSet<>(query.columns()).equals(new HashSet<>(columns())))
             throw new IllegalArgumentException(
                     "Typed stk_st_daily reads require all three frozen fields");
-        return reader.read(definition(), query, null, mapper::fromValues);
+        return reader.read(definition(), query, null, values -> mapper.fromValues(values, layout));
     }
 }

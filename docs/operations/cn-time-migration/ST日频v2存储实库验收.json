@@ -1,0 +1,63 @@
+{
+  "说明": "正式表两行只读样本，独立 v2 表真实 Java QWP 两轮完整键值和类型化读取；验证全表/窗口/窗口外快照与独立字面量摘要。未执行名称变更来源、stage 发布、恢复或正式迁移。",
+  "原件目录": "var/cn-st-layout-v2-20261021/1c764b49946f40b8a38339e6c241f65e",
+  "原件摘要": {
+    "report.json": "ae2ee0221967068609ac4bf4f47536af9e50454e7c66419a976d266d08436f9d",
+    "expected.json": "5aaa78c85ed3448c822f6cbeb31f11c9142477792f0c1232ea615b25ab09f7d1",
+    "request.json": "0456408cd68e5964412e4e887313f2f2b8d0f73be137c62a589f6de6a3bdfb9e"
+  },
+  "成功报告": {
+    "schemaVersion": 1,
+    "observedAt": "2026-10-20T17:56:35.183025Z",
+    "table": "java_d012_stk_st_daily_layout2_1c764b49946f40b8a38339e6c241f65e",
+    "sourceCoverageVerified": false,
+    "modelAcceptanceVerified": false,
+    "requestIsProductionApproved": false,
+    "physicalMigrationExecuted": false,
+    "checkpointAdvanced": false,
+    "state": "VERIFIED_AND_CLEANED",
+    "sampleDate": "2026-10-16",
+    "sourceState": [
+      {
+        "id": 3132,
+        "directoryName": "java_d012_stk_st_daily_stage_df2f6244c38e4931af0330591f0cbc19~3132",
+        "table_txn": null
+      }
+    ],
+    "sourceSyncJobExecuted": false,
+    "targetId": "static-v2-9ff9d4ab60428c1a1c4d4325e59c7bd7e593db84a4e0a6bd97a92b880b93d1ac",
+    "snapshot": {
+      "identity": {
+        "id": 3253,
+        "directory": "java_d012_stk_st_daily_layout2_1c764b49946f40b8a38339e6c241f65e~3253",
+        "writerTxn": 2
+      },
+      "content": {
+        "rows": 2,
+        "fingerprint": "24b1ee5fffc9670e05cc2e9fb2d9eb7c50af91576d4aea020781cd5e127dfb5e"
+      }
+    },
+    "verifiedPasses": 2,
+    "rows": [
+      {
+        "key": {
+          "tsCode": "000005.SZ",
+          "timestamp": "2026-10-16"
+        },
+        "isSt": 1
+      },
+      {
+        "key": {
+          "tsCode": "000010.SZ",
+          "timestamp": "2026-10-16"
+        },
+        "isSt": 1
+      }
+    ],
+    "javaTypedReadExercised": true,
+    "legacyLayoutRejected": true
+  },
+  "生产默认切换": false,
+  "来源完整性验收": false,
+  "stage发布与恢复验收": false
+}
