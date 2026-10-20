@@ -267,7 +267,7 @@ class L2ManifestDailyTargetContractTest {
                                 + table(daily)
                                 + "\" GROUP BY "
                                 + (daily
-                                        ? "ts ORDER BY ts LIMIT 32"
+                                        ? "ts ORDER BY ts LIMIT 33"
                                         : "trade_date ORDER BY trade_date LIMIT 33"));
     }
 

@@ -1,7 +1,6 @@
 package com.zoutrankil.data.l2.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
@@ -13,7 +12,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
@@ -21,7 +19,6 @@ import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import com.zoutrankil.data.domain.l2.L2DailyFeaturesKey;
 import com.zoutrankil.data.l2.mapper.L2DailyFeaturesMapper;
-import com.zoutrankil.data.l2.port.L2DailyFeaturesTarget;
 import com.zoutrankil.data.l2.port.L2DailyFeaturesWriteSession;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.DatasetIntervalLock;
@@ -33,7 +30,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -75,6 +71,8 @@ class L2DailyFeaturesVersionedSourceTest {
                 .thenReturn(
                         L2DailyFeaturesWriteSession.codec(CnTradeDateLayout.fromVersion(version)));
         when(writer.walSettled()).thenReturn(true);
+        when(writer.stableVersion()).thenReturn("wal:1");
+        when(writer.countRows(any(), anyList())).thenReturn(1);
         when(writer.uncertainSenderStopped()).thenReturn(true);
         when(writer.readback(anyList())).thenReturn(List.of(row));
         var parameters = new LinkedHashMap<String, Object>();
@@ -162,27 +160,6 @@ class L2DailyFeaturesVersionedSourceTest {
         assertThrows(IllegalStateException.class, () -> adapter.preflight(request));
         verifyNoInteractions(source);
         verify(writer, never()).preflight();
-    }
-
-    @Test
-    void currentControllerRejectsNewLayoutBeforeSourceOrLedger() throws Exception {
-        var target = mock(L2DailyFeaturesTarget.Versioned.class);
-        var writer = mock(L2DailyFeaturesWriteSession.Versioned.class);
-        when(target.datasetVersion()).thenReturn(2);
-        when(target.newWriter()).thenReturn(writer);
-        when(target.targetId()).thenReturn("questdb-" + "a".repeat(64));
-        when(writer.datasetVersion()).thenReturn(2);
-        var source = mock(L2DailyFeaturesParquetSource.class);
-        var calendars = mock(ExchangeCalendarReadPort.class);
-        var path = root.resolve("absent.sqlite3");
-        var service = new L2DailyFeaturesJobService(calendars, target, source, path);
-        var day = L2ManifestDailySourceContractTest.DAY;
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> service.plan(day, day, day, SyncJobDefinition.Mode.BACKFILL, List.of()));
-        verifyNoInteractions(source, calendars);
-        verify(writer, never()).preflight();
-        assertFalse(Files.exists(path));
     }
 
     @Test

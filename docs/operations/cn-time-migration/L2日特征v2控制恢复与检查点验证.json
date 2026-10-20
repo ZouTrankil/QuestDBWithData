@@ -1,0 +1,78 @@
+{
+  "基线提交": "0f4f9e8d30ec26cd13c42d3327f70f6ee9bb6ea9",
+  "范围": "L2 日特征按原版本计划、运行、恢复及只读再验证；连续检查点、显式修订和稳定完整范围验收；CLI 原请求恢复",
+  "最终源码摘要": {
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/application/L2DailyFeaturesJobService.java": "cb9a8f11a77a3feb97973ac3f257209a43fa7474c395ec96ff165920f9c43970",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/application/L2DailyFeaturesSyncAdapter.java": "53a5b24f305be73aeef2892ac25e3ffbdb5ba1c303e0c123e45a735f56d2a891",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/port/L2DailyFeaturesWriteSession.java": "4debcde86987affb32fb2febf61b0d6192743483c631060369e8f1bf1619d2ce",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/storage/L2DailyFeaturesWritePort.java": "87e8e6f224d5fd4974b9e18da3ce44c9c24db88cac46c649ade8b58c647d6032",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/cli/L2Commands.java": "c9f39fc5c3c3768e3c2696ef707448d21df829ed21677e74f66eb1a56c461f12",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/l2/storage/L2ManifestDailyTargetContractTest.java": "f00a02ec7b31ffd1e15e6ae01cb3b15b6e7c87bfe13344bdf5f8a8d1c795b8e7",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/l2/storage/L2DailyFeaturesLayoutTest.java": "eccfd6904bacd81d50f452284418239416065ab18fa8d589ea16c92a37fd9b80",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/l2/application/L2DailyFeaturesVersionedSourceTest.java": "fefa4927f764fec96edae815d6a8494139b45307ec091d1f88283405d2149e15",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/l2/application/L2DailyFeaturesBoundSession.java": "ea64bd53450ba6f256c57840d0c06faa3d77263268ecfa5f5de7a8e80afabaf0",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/l2/application/L2DailyFeaturesVersionedLifecycleTest.java": "c1227615f20fd361df52f0df491c69e3e79327f5af5a0df3108e0e1a19de3fc8",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/l2/application/L2ManifestDailyOwnerPortContractTest.java": "ec720d2afff0b42c2a7de667e0d2933a3fbac7a5adc9b690302fa398d0137e35",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/l2/storage/L2DailyFeaturesScopeStorageTest.java": "d4b357b5cfb25fcd79eac34dd54e16a728978ca6451fc72d7ace165bf6b2b911",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/cli/CliFamilyContractTest.java": "b6d2e4dff398100718f4479b78b298a1492bb982e0c17cb575d718f16c344cc9"
+  },
+  "完整回归": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2404,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 145
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "完整回归命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "结果": "通过",
+  "格式检查": {
+    "命令": "python3 tools/format_java.py --imports --check",
+    "Java文件": 2051,
+    "结果": "格式、import、字面量值核对通过；在完整回归结束后顺序执行"
+  },
+  "公开配置检查": "cn-data 和 main-strategy 两个发行 ZIP 均通过",
+  "新增验证": [
+    "两个布局在默认版本切换后的原请求恢复、原版本续跑及已完成来源只读再验证，原 JSON 与原账本凭证不改",
+    "部分来源执行后失败，恢复核对原 FETCHED 页面，已验证行复用不重发",
+    "旧来源或物理代际变化时拒绝恢复，构造会话期间换代在写入前拒绝",
+    "连续窗口与孤立成功段分开，缺口不采用 MAX(to) 跳过",
+    "来源修订阻止增量，显式有界 RECONCILE 重新验收；新前缀与尾段证明可接替本次失效的旧范围，保留旧 JSON 并记录未采用运行",
+    "v2 最终逐键全值、同证券范围数量及稳定 WAL 版本验证，多余键和版本变化不能完成",
+    "其他证券的数据保留，不计入指定证券范围；只读会话拒绝发送",
+    "WAL 未决保留原区间锁，恢复拒绝且原租约不变",
+    "实际 JdbcTemplate 的所选证券计数 SQL、负纪元微秒与全部参数绑定、未知计数拒绝",
+    "实际 JdbcTemplate 的稳定整数 WAL 版本、浮点/缺失/暂停状态拒绝",
+    "原目标最多32日期的扫描读取第33行即拒绝，不静默截断",
+    "CLI 恢复不调用当前 plan，额外参数只核对原请求；不完整结果仍先打印再返回原退出状态"
+  ],
+  "验证材料": "真实通用 runner、原页面与冻结请求、临时 SQLite、有限来源/内存物理目标以及实际 JdbcTemplate 的模拟 JDBC；没有真实来源请求或 QuestDB 写入。",
+  "保持": [
+    "原 v1 定义、身份和行编码字节",
+    "原 Parquet ts 来源、manifest v1 依赖、31日预算及原业务日期",
+    "旧 JSON 不补 inspection、不改任务身份、不重绑原物理目标",
+    "原未决写入、区间锁和正式摄取保护"
+  ],
+  "限制": [
+    "Spring 根配置、公共读取注册和正式 L2 摄取仍为 v1，未开放公共 v2 配置",
+    "v1 原请求未冻结完整 inspection；恢复依赖原范围及仍可用的原来源/页面，不能补造旧文件",
+    "连续性按已验收自然日窗口；未覆盖的休市间隔不按星期补证，须用覆盖该区间的有界范围取得证据",
+    "32日上限仍针对原隔离目标，不代表正式历史能力；本批不扩展其准入范围",
+    "已有历史凭证只确认显式修订的目标归属，非增量计划不输出当前 verifiedThrough",
+    "多余键不会自动删除；没有新增未决发送的自动重发、解锁或清理流程",
+    "原来源修订且缺少可独立重验的完整前缀时，增量仍会阻断，需明确的新有界验收",
+    "真实 L2 v2 存储/发布/恢复、正式表、MV、消费者、Batch 及完整模型材料仍待验收"
+  ]
+}

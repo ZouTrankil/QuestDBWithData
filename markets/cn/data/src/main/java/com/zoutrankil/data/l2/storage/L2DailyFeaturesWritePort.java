@@ -263,6 +263,7 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
         if (formal)
             throw new IllegalStateException(
                     "Formal L2 history must be inspected by an explicit bounded date");
+        // 多取一行检测超出原32日上限，不能截断后当成完整目标范围。
         String sql =
                 "SELECT "
                         + dateColumn
@@ -272,11 +273,11 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
                         + dateColumn
                         + " ORDER BY "
                         + dateColumn
-                        + " LIMIT 32";
+                        + " LIMIT 33";
         return jdbc.query(
                 sql,
                 (rs, index) -> {
-                    if (index > 31)
+                    if (index >= 32)
                         throw new IllegalStateException(
                                 "D086 checkpoint date scan exceeded its bound");
                     String timestamp = rs.getString(dateColumn);
@@ -287,20 +288,61 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
     }
 
     public int countRows(LocalDate date) {
+        return countRows(date, List.of());
+    }
+
+    @Override
+    public int countRows(LocalDate date, List<String> symbols) {
+        Objects.requireNonNull(date);
+        if (symbols == null
+                || symbols.size() > 1000
+                || new HashSet<>(symbols).size() != symbols.size()
+                || symbols.stream()
+                        .anyMatch(
+                                value -> value == null || !value.matches("[0-9]{6}\\.(SH|SZ|BJ)")))
+            throw new IllegalArgumentException("L2 范围计数需要不重复的有界证券代码");
+        var parameters = new ArrayList<Object>();
+        parameters.add(
+                new TemporalValues.CalendarTimestamp(date)
+                        .storageEpoch(TemporalValues.EpochUnit.MICROS));
+        parameters.addAll(symbols);
+        String filter =
+                symbols.isEmpty()
+                        ? ""
+                        : " AND symbol IN ("
+                                + String.join(", ", Collections.nCopies(symbols.size(), "?"))
+                                + ")";
         Long count =
                 jdbc.queryForObject(
                         "SELECT count() FROM \""
                                 + table
                                 + "\" WHERE "
                                 + dateColumn
-                                + "=cast(? as TIMESTAMP)",
+                                + "=cast(? as TIMESTAMP)"
+                                + filter,
                         Long.class,
-                        new TemporalValues.CalendarTimestamp(date)
-                                .storageEpoch(TemporalValues.EpochUnit.MICROS));
-        if (count == null) return 0;
-        if (count > Integer.MAX_VALUE)
-            throw new IllegalStateException("D086 row count exceeds its bound");
+                        parameters.toArray());
+        if (count == null || count < 0 || count > Integer.MAX_VALUE)
+            throw new IllegalStateException("L2 日期范围计数无效或超过预算");
         return count.intValue();
+    }
+
+    @Override
+    public String stableVersion() {
+        // 只接完全应用的整数事务号，未知值不能冒充稳定版本。
+        if (!walSettled()) throw new IllegalStateException("L2 WAL 尚未稳定");
+        var rows =
+                jdbc.queryForList(
+                        "SELECT writerTxn,sequencerTxn FROM wal_tables() WHERE name=?", table);
+        if (rows.size() != 1) throw new IllegalStateException("L2 WAL 版本归属不唯一");
+        Object writer = rows.getFirst().get("writerTxn"),
+                sequencer = rows.getFirst().get("sequencerTxn");
+        if (!(writer instanceof Long || writer instanceof Integer)
+                || !(sequencer instanceof Long || sequencer instanceof Integer)
+                || ((Number) writer).longValue() < 0
+                || ((Number) writer).longValue() != ((Number) sequencer).longValue()
+                || !walSettled()) throw new IllegalStateException("L2 WAL 版本未知或仍在应用");
+        return "wal:" + ((Number) writer).longValue();
     }
 
     @Override

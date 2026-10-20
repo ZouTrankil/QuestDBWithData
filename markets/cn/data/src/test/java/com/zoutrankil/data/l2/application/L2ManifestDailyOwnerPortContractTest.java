@@ -248,6 +248,7 @@ class L2ManifestDailyOwnerPortContractTest {
                 when(s.stream(any(), anyList(), anyInt(), anyInt(), any(), any(), any()))
                         .thenAnswer(this::fetch);
                 var t = mock(L2DailyFeaturesTarget.class);
+                when(t.tableName()).thenReturn("java_d086_l2_daily_features_owner");
                 target = t;
                 when(t.targetId()).thenAnswer(i -> identity);
                 when(t.newWriter()).thenAnswer(i -> writer());
@@ -285,6 +286,7 @@ class L2ManifestDailyOwnerPortContractTest {
             VerifiedWriteSession writer;
             if (daily) {
                 var w = mock(L2DailyFeaturesWriteSession.class);
+                when(w.tableName()).thenReturn("java_d086_l2_daily_features_owner");
                 when(w.codec()).thenReturn(L2DailyFeaturesWriteSession.CODEC);
                 when(w.readExistingDates()).thenAnswer(i -> existing);
                 writer = w;

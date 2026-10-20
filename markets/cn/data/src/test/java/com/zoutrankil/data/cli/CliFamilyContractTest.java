@@ -194,7 +194,16 @@ class CliFamilyContractTest {
         var from = LocalDate.of(2026, 9, 21);
         var to = LocalDate.of(2026, 9, 22);
         var symbols = List.of("000001.SZ", "600000.SH");
-        when(service.plan(from, to, to, SyncJobDefinition.Mode.INGEST, symbols)).thenReturn(plan);
+        var request =
+                L2DailyFeaturesJobService.definition()
+                        .freeze(
+                                SyncJobDefinition.Mode.INGEST,
+                                Map.of("source_root_id", "c".repeat(64), "symbols", symbols),
+                                from,
+                                to,
+                                to);
+        when(plan.request()).thenReturn(request);
+        when(service.restorePlan("l2-before")).thenReturn(plan);
         var result =
                 new SyncJobRunner.Result(
                         "l2-resumed", SyncRunState.PARTIAL, 4, 2, "MissingRows", 0);
@@ -223,7 +232,7 @@ class CliFamilyContractTest {
                                 .writeValueAsString(result)
                         + System.lineSeparator(),
                 captured.output());
-        verify(service).plan(from, to, to, SyncJobDefinition.Mode.INGEST, symbols);
+        verify(service).restorePlan("l2-before");
         verify(service).resume(plan, "l2-before");
         verifyNoMoreInteractions(service);
     }

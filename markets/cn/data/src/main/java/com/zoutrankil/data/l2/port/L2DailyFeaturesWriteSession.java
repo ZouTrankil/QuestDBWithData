@@ -46,5 +46,16 @@ public interface L2DailyFeaturesWriteSession
 
     int countRows(LocalDate date);
 
+    /** 全量键值回读后，再核对同一证券范围的数量，不能单独用计数证明完成。 */
+    default int countRows(LocalDate date, List<String> symbols) {
+        if (!symbols.isEmpty()) throw new IllegalArgumentException("旧 L2 会话未提供证券范围计数");
+        return countRows(date);
+    }
+
+    /** 完整回读前后固定同一已应用 WAL 版本；未知版本不能冒充稳定。 */
+    default String stableVersion() {
+        throw new IllegalStateException("旧 L2 会话未提供稳定 WAL 版本");
+    }
+
     List<LocalDate> readExistingDates();
 }

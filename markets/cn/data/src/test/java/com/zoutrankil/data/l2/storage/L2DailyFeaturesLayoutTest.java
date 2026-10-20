@@ -266,7 +266,7 @@ class L2DailyFeaturesLayoutTest {
                 .executeQuery(
                         "SELECT trade_date FROM \""
                                 + TABLE
-                                + "\" GROUP BY trade_date ORDER BY trade_date LIMIT 32");
+                                + "\" GROUP BY trade_date ORDER BY trade_date LIMIT 33");
         // COUNT 的 JDBC 标量回读由独立代理返回，只检查原有界日期绑定。
         when(f.connection.prepareStatement(anyString()))
                 .thenAnswer(

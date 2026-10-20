@@ -223,7 +223,6 @@ public final class L2Commands implements CliCommandFamily {
             }
             case "plan-l2-daily-features-job", "run-l2-daily-features-job" -> {
                 if (l2DailyFeaturesService == null
-                        || !options.keySet().containsAll(Set.of("--from", "--to", "--logical-date"))
                         || !Set.of(
                                         "--from",
                                         "--to",
@@ -232,15 +231,8 @@ public final class L2Commands implements CliCommandFamily {
                                         "--symbols",
                                         "--resume-from")
                                 .containsAll(options.keySet()))
-                    throw new IllegalArgumentException(
-                            "Explicit D086 --from, --to and --logical-date required; "
-                                    + "optional --mode, --symbols, and run-only --resume-from");
+                    throw new IllegalArgumentException("L2 日特征参数不支持");
                 boolean planOnly = command.equals("plan-l2-daily-features-job");
-                if (planOnly && options.containsKey("--resume-from"))
-                    throw new IllegalArgumentException("Planning cannot resume a D086 run");
-                var from = LocalDate.parse(options.get("--from"));
-                var to = LocalDate.parse(options.get("--to"));
-                var logicalDate = LocalDate.parse(options.get("--logical-date"));
                 var mode =
                         options.containsKey("--mode")
                                 ? Mode.valueOf(options.get("--mode").toUpperCase(Locale.ROOT))
@@ -249,7 +241,42 @@ public final class L2Commands implements CliCommandFamily {
                         options.containsKey("--symbols")
                                 ? Arrays.asList(options.get("--symbols").split(",", -1))
                                 : List.<String>of();
-                var plan = l2DailyFeaturesService.plan(from, to, logicalDate, mode, symbols);
+                L2DailyFeaturesJobService.Plan plan;
+                if (options.containsKey("--resume-from")) {
+                    if (planOnly)
+                        throw new IllegalArgumentException("Planning cannot resume a D086 run");
+                    // 恢复先取原请求；可选旧参数只能核对，不能触发当前计划或扩大范围。
+                    plan = l2DailyFeaturesService.restorePlan(options.get("--resume-from"));
+                    var request = plan.request();
+                    if (options.containsKey("--from")
+                                    && !LocalDate.parse(options.get("--from"))
+                                            .equals(request.from())
+                            || options.containsKey("--to")
+                                    && !LocalDate.parse(options.get("--to")).equals(request.to())
+                            || options.containsKey("--logical-date")
+                                    && !LocalDate.parse(options.get("--logical-date"))
+                                            .equals(request.logicalDate())
+                            || mode != null && mode != request.mode()
+                            || options.containsKey("--symbols")
+                                    && !symbols.stream()
+                                            .sorted()
+                                            .toList()
+                                            .equals(
+                                                    request.parameters()
+                                                            .getOrDefault("symbols", List.of())))
+                        throw new IllegalArgumentException("L2 恢复参数必须等于原冻结请求");
+                } else {
+                    if (!options.keySet().containsAll(Set.of("--from", "--to", "--logical-date")))
+                        throw new IllegalArgumentException(
+                                "Explicit D086 --from, --to and --logical-date required");
+                    plan =
+                            l2DailyFeaturesService.plan(
+                                    LocalDate.parse(options.get("--from")),
+                                    LocalDate.parse(options.get("--to")),
+                                    LocalDate.parse(options.get("--logical-date")),
+                                    mode,
+                                    symbols);
+                }
                 if (planOnly) {
                     var output = new LinkedHashMap<String, Object>();
                     output.put("status", "PLANNED");
