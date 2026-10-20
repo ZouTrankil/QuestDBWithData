@@ -1,0 +1,106 @@
+﻿对象,原判断,本轮状态,限制
+etf_adj,可统一,待实施；不声称物理迁移完成,timestamp → trade_date；来源 fund_adj 的交易日。
+etf_basic,保留其他语义,保留现状，尚未完成全链路验收,timestamp 是固定 1970-01-01 技术占位；成立、上市、退市、申赎日期各自保留；update_time 不当作交易日。
+etf_daily,可统一,待实施；不声称物理迁移完成,timestamp → trade_date；保留现有 TIMESTAMP_NS 精度。
+etf_factor,已用 trade_date,保留现状，尚未完成全链路验收,来源交易日；不改名。
+etf_portfolio,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，end_date 是持仓报告截止日；update_time 是本地观测字段。
+etf_share,可统一,待实施；不声称物理迁移完成,timestamp → trade_date；份额变动所属交易日，update_time 分开保留。
+qmt_1m_bars,保留其他语义,代码退役，正式数据待清理,bar_time 是分钟K线时间，不能降成交易日；起止边界和历史时区须回查原生产方，updated_at 分开保留。
+stock_minute_bars,保留其他语义,保留现状，尚未完成全链路验收,bar_time 是分钟K线时间；目录说明部分时间来自交易时段和源行号映射，不能仅凭时间戳认定为原始事件时刻。
+cn_bond_yield_curve,已用 trade_date,保留现状，尚未完成全链路验收,现行契约为 ChinaBond 业务日期，并在已批准 SSE 会话范围核验；保留现有 trade_date，不等同于盘中报价时刻。
+cn_cpi,保留其他语义,保留现状，尚未完成全链路验收,month 是统计月份，以月初 UTC 零点承载，不是交易日或发布日期。
+cn_gdp,保留其他语义,保留现状，尚未完成全链路验收,quarter 是季度，report_date 是季度期末标记；建议逻辑名 report_period_end_date。
+cn_m,保留其他语义,保留现状，尚未完成全链路验收,month 是统计月份，不是交易日。
+cn_pmi,保留其他语义,保留现状，尚未完成全链路验收,month 是统计月份，不是交易日。
+cn_ppi,保留其他语义,保留现状，尚未完成全链路验收,month 是统计月份，不是交易日。
+hibor,保留其他语义,保留现状，尚未完成全链路验收,timestamp → observation_date；香港同业利率观测日期，不套用 A 股交易日历。
+rmb_index_daily,待核,待实施；不声称物理迁移完成,保留 trade_date；维护字典明确标注官方来源未核实，暂不认证为标准交易日。
+sf_month,保留其他语义,保留现状，尚未完成全链路验收,month 是社融统计月份，不是交易日。
+shibor,保留其他语义,保留现状，尚未完成全链路验收,timestamp → observation_date；利率观测日期，不因是工作日就改为交易日。
+shibor_lpr,保留其他语义,保留现状，尚未完成全链路验收,date → observation_date；来源利率观测日期，不能当作股票交易日或自动当作数据可用时刻。
+l2_live_normalized_events,已用 trade_date,保留现状，尚未完成全链路验收,保留 trade_date；recv_ts 是接收时间，exchange_ts 是交易所事件时间角色，updated_at 分开保留；历史时钟真实性须原接收证据核验。
+dc_index,待核,待实施；不声称物理迁移完成,保留 trade_date；维护字典尚未核实来源字段，不能仅凭名称和午夜值认证语义。
+index,保留其他语义,保留现状，尚未完成全链路验收,base_date 是基日，publish_date 是发布日期，import_time 是导入时刻；均不是交易日。
+index_daily_basic,已用 trade_date,保留现状，尚未完成全链路验收,指数每日指标的交易日；不改名。
+index_daily_market,已用 trade_date,正式契约v2已纠偏，隔离作业v1保持原协议,实库已经是 trade_date；Java 契约仍映射到 timestamp，存在结构漂移，迁移前先核对正式写入路径。
+index_member,保留其他语义,保留现状，尚未完成全链路验收,in_date、out_date 是成分纳入和剔除日期；update_time 是本地观测字段；字符串 None 须按原兼容规则处理。
+index_monthly,已用 trade_date,保留现状，尚未完成全链路验收,契约明确为月末交易观测日，样本为 2010-01-29；虽为月线也保留 trade_date，不能替换成月初月份标签。
+index_weight,已用 trade_date,保留现状，尚未完成全链路验收,成分权重所属交易日；update_time 不是权重生效交易日的替代字段。
+ths_index,保留其他语义,保留现状，尚未完成全链路验收,list_date 是板块上市日期，update_time 是本地观测字段。
+ths_member,保留其他语义,保留现状，尚未完成全链路验收,in_date、out_date 是成员关系日期；来源可能为空，update_time 不能冒充成员生效日。
+block_trade,已用 trade_date,保留现状，尚未完成全链路验收,大宗交易所属交易日；不改名。
+broker_recommend,保留其他语义,保留现状，尚未完成全链路验收,month 是荐股所属月份，不是交易日。
+cyq_chips,已用 trade_date,保留现状，尚未完成全链路验收,筹码分布所属交易日；不改名。
+cyq_perf,已用 trade_date,保留现状，尚未完成全链路验收,筹码指标所属交易日；不改名。
+pledge_stat,保留其他语义,保留现状，尚未完成全链路验收,end_date 是质押统计截止日；建议统计语义名 statistics_end_date，不是交易日。
+repurchase,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，end_date 是统计截止日，exp_date 是到期日；不能统一为交易日。
+share_float,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，float_date 是解禁日期；解禁日和交易日不是可互换的数据元。
+stk_alert,保留其他语义,保留现状，尚未完成全链路验收,start_date、end_date 是重点提示的起止日期；保留有效期语义。
+stk_high_shock,需纠偏,待实施；不声称物理迁移完成,来源输出 trade_date 实为公告日期；标准逻辑名应为 announcement_date，来源名与物理名暂保留。
+stk_holdernumber,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，end_date 是股东人数统计截止日；不能合并。
+stk_holdertrade,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，begin_date、close_date 是增减持区间；区间边界继续按来源契约处理。
+stk_shock,需纠偏,待实施；不声称物理迁移完成,来源输出 trade_date 实为公告日期；标准逻辑名应为 announcement_date，不能因来源输入参数称交易日就忽略输出说明。
+ft_limit,已用 trade_date,保留现状，尚未完成全链路验收,期货涨跌停价格所属交易日；update_time 分开保留。
+fut_basic,保留其他语义,保留现状，尚未完成全链路验收,timestamp 是固定 1970-01-01 技术占位；list_date、delist_date、last_ddate、d_month 分别是上市日、最后交易日、最后交割日、交割月。
+fut_daily,已用 trade_date,保留现状，尚未完成全链路验收,期货日行情所属交易日；夜盘归属由来源会话定义，不取 UTC 日期替代。
+fut_holding,已用 trade_date,保留现状，尚未完成全链路验收,期货持仓排名所属交易日；update_time 分开保留。
+fut_mapping,已用 trade_date,保留现状，尚未完成全链路验收,现行来源契约按连续合约和单一交易日取得映射；保留 trade_date，不擅自改为区间 effective_from。
+fut_settle,已用 trade_date,保留现状，尚未完成全链路验收,期货每日结算所属交易日；不改名。
+daily,已用 trade_date,保留现状，尚未完成全链路验收,A 股日行情交易日；不改名。
+daily_basic,已用 trade_date,保留现状，尚未完成全链路验收,A 股每日指标交易日；不改名。
+stk_factor,已用 trade_date,保留现状，尚未完成全链路验收,股票技术因子所属交易日；不改名。
+stk_limit,已用 trade_date,保留现状，尚未完成全链路验收,股票涨跌停价格所属交易日；不改名。
+stk_st_daily,可统一,待实施；不声称物理迁移完成,timestamp → trade_date；现行规则只展开到 SSE 开市日，不把整个名称有效期的日历日期混入。
+stk_suspend,可统一,待实施；不声称物理迁移完成,timestamp → trade_date；现行契约是 suspend_d 交易日，不代表全天停牌；旧字段说明中的连续日期不能代替现行规则。
+stock_detail_info,保留其他语义,保留现状，尚未完成全链路验收,list_date、delist_date 是上市和退市日期；update_time 是观测时刻；当前主数据不是按交易日生成的快照。
+balance,保留其他语义,保留现状，尚未完成全链路验收,ann_date、f_ann_date 是公告日期角色，end_date 是报告期末；update_time 单独保留。
+cashflow,保留其他语义,保留现状，尚未完成全链路验收,ann_date、f_ann_date 是公告日期角色，end_date 是报告期末。
+disclosure_date,保留其他语义,保留现状，尚未完成全链路验收,ann_date 为披露安排公告日；end_date 是报告期，pre_date、actual_date 为预计和实际披露日；modify_date 是修正记录，未核对格式前不强制解析成单一日期。
+dividend,保留其他语义,保留现状，尚未完成全链路验收,ann_date、record_date、ex_date、pay_date 等分别为公告、登记、除权除息、派息日期；end_date 表示分红年度所属报告期。
+express,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，end_date 是报告期末；不改为交易日。
+fina_audit,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，end_date 是审计报告期末。
+fina_indicator,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，end_date 是报告期末。
+fina_mainbz,保留其他语义,保留现状，尚未完成全链路验收,end_date 是主营业务报告期末；不是公告日或交易日。
+forecast,保留其他语义,保留现状，尚未完成全链路验收,ann_date、first_ann_date 是公告和首次公告日期；end_date 是报告期末。
+income,保留其他语义,保留现状，尚未完成全链路验收,ann_date、f_ann_date 是公告日期角色，end_date 是报告期末。
+margin_all,已用 trade_date,保留现状，尚未完成全链路验收,融资融券汇总所属交易日；不改名。
+margin_detail,已用 trade_date,保留现状，尚未完成全链路验收,融资融券明细所属交易日；不改名。
+margin_secs,已用 trade_date,保留现状，尚未完成全链路验收,融资融券标的清单所属交易日；不改名。
+margin_trading,已用 trade_date,保留现状，尚未完成全链路验收,现有目录为两融交易数据，保留 trade_date；缺现行生产契约，未据此认证来源全量语义。
+margin_zrz,已用 trade_date,代码退役，正式数据待清理,转融资所属交易日；不改名。
+moneyflow,已用 trade_date,保留现状，尚未完成全链路验收,资金流所属交易日；不改名。
+moneyflow_dc,已用 trade_date,代码退役，正式数据待清理,东财资金流所属交易日；不改名。
+moneyflow_hsgt,已用 trade_date,保留现状，尚未完成全链路验收,现行来源合同按 trade_date 取沪深港通资金流；维护字典的来源说明缺项不触发改名。
+moneyflow_ths,已用 trade_date,保留现状，尚未完成全链路验收,同花顺资金流所属交易日；不改名。
+sge_daily,已用 trade_date,保留现状，尚未完成全链路验收,黄金现货行情交易日；遵守来源交易会话，不改名。
+mv_etf_market_overview_daily,已用 trade_date,保留现状，尚未完成全链路验收,原生 MV 的 SQL 已将 etf_share.timestamp AS trade_date；改基表须同步重建或调整其依赖。
+mv_backtest_daily,已用 trade_date,保留现状，尚未完成全链路验收,原生 MV 使用交易日；SQL 仍连接 stk_suspend.timestamp 和 stk_st_daily.timestamp，需与基表迁移一起处理。
+mv_market_breadth_daily,已用 trade_date,保留现状，尚未完成全链路验收,原生 MV 沿用 stk_factor.trade_date；不改名。
+mv_retail_sentiment_daily,已用 trade_date,保留现状，尚未完成全链路验收,原生 MV 已将 l2_daily_features.ts AS trade_date；这是两字段同义的直接 SQL 证据。
+l2_daily_features,可统一,待实施；不声称物理迁移完成,"ts → trade_date；契约明确为交易日的午夜日期载体，现有键为 (ts,symbol)。"
+l2_event_response_features,已用 trade_date,保留现状，尚未完成全链路验收,保留 trade_date；minute 是事件所属分钟时刻，建议明确为 minute_time，不能合并到日期。
+l2_intraday_bar_features,已用 trade_date,保留现状，尚未完成全链路验收,保留 trade_date；minute 是分钟时刻，必须与按 Asia/Shanghai 解释的交易日一致。
+l2_t0_training_labels,已用 trade_date,保留现状，尚未完成全链路验收,保留 trade_date；minute 是分钟时刻，标签前视窗口不改变事件日期含义。
+l2_dataset_manifest,已用 trade_date,保留现状，尚未完成全链路验收,trade_date 是字符串业务日期；trade_date_ts 是其一对一 UTC 零点分区载体。逻辑字典关联两者，不直接改成同名列或删除载体。
+company_intrinsic_valuation_consensus,保留其他语义,保留现状，尚未完成全链路验收,valuation_date 是估值基准日期角色；历史生产契约不在当前仓库，不认定等于交易日。
+company_intrinsic_valuation_model,保留其他语义,保留现状，尚未完成全链路验收,valuation_date、report_end_date、report_ann_date 分别为估值基准日、报告期末、报告公告日；保留角色区别。
+daily_stock_analysis,保留其他语义,保留现状，尚未完成全链路验收,analysis_date 是分析所属日期，updated_at 是更新时间角色；没有规则证明分析日期必为交易日。
+industry_intrinsic_valuation_state,保留其他语义,保留现状，尚未完成全链路验收,valuation_date 是行业估值基准日期角色；不靠午夜样本改成交易日。
+industry_valuation_materialization_run,保留其他语义,保留现状，尚未完成全链路验收,created_at 是运行创建时刻，start_date、end_date 是请求范围；样本范围含 2023-01-01，不能当作交易日。
+industry_valuation_membership_conflict,保留其他语义,保留现状，尚未完成全链路验收,valuation_date 是冲突所属的估值基准日期角色；不认证为交易日。
+industry_valuation_route_assignment,保留其他语义,保留现状，尚未完成全链路验收,effective_from 是路由生效边界；样本为 2023-01-01；生产契约缺失，待确认日期还是精确时刻，不能改为交易日。
+equity_style_monthly,保留其他语义,保留现状，尚未完成全链路验收,month 是月度周期身份；契约明确为月初日期标记，与 index_monthly 的月末交易日不同。
+macro_core_monthly,保留其他语义,保留现状，尚未完成全链路验收,month 是宏观观测月份，契约明确不是发布日期或交易月末。
+macro_liquidity_credit_monthly,保留其他语义,保留现状，尚未完成全链路验收,month 是月度周期；当前目录和样本不足以把它当作交易日。
+market_breadth_monthly,保留其他语义,保留现状，尚未完成全链路验收,month 是市场广度的统计月份，样本为月初标记；不是交易日。
+market_sentiment_daily,已用 trade_date,保留现状，尚未完成全链路验收,现行 Java 契约把 trade_date 定为交易日期标记；month 是月份标签，updated_at 是计算观测时刻。
+regime_features_monitor_daily,已用 trade_date,保留现状，尚未完成全链路验收,现行 Java 契约区分交易日与计算观测时刻；month 和 updated_at 不合并。
+regime_features_monthly,保留其他语义,保留现状，尚未完成全链路验收,month 是月频状态的周期标签；不改为交易日。
+regime_market_monthly,保留其他语义,保留现状，尚未完成全链路验收,month 是月频市场状态的周期标签；不改为交易日。
+regime_display_materialization_run,保留其他语义,保留现状，尚未完成全链路验收,started_at、completed_at 是运行时刻，requested_* 是范围；source_as_of 为输入截止角色，缺生产契约时不认证为交易日。
+regime_erp_source_status_daily,保留其他语义,保留现状，尚未完成全链路验收,evaluation_date 是评估所属日期，evaluated_at 是评估时刻；source_as_of、bond_as_of 是来源截止角色，不能全部合并。
+regime_margin_leverage_daily,已用 trade_date,保留现状，尚未完成全链路验收,保留既有 trade_date；computed_at 单独保留。目录与样本支持日频结果角色，历史生产规则仍待原生产方补证。
+regime_stock_return_distribution_daily,待核,待实施；不声称物理迁移完成,as_of 看起来是收益分布截至日期，但缺现行生产规则；只有确认其严格等于收益窗口结束交易日后，才可考虑 trade_date；window_start_as_of 和 computed_at 不能跟着改。
+fut_index_conclusion_daily,已用 trade_date,保留现状，尚未完成全链路验收,保留既有 trade_date；updated_at 是结果更新时间角色；当前目录不替代历史生产方的完整时间契约。
+fut_index_daily_snapshot,已用 trade_date,保留现状，尚未完成全链路验收,保留既有 trade_date；updated_at 与快照所属交易日分开。
+fut_index_signal_daily,已用 trade_date,保留现状，尚未完成全链路验收,保留既有 trade_date；信号所属交易日不等于生成或可用时刻。

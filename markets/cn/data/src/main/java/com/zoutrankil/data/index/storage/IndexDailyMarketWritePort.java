@@ -55,14 +55,14 @@ public final class IndexDailyMarketWritePort implements IndexDailyMarketWriteSes
         this.questdb = Objects.requireNonNull(questdb);
     }
     @Override public void preflight() {
-        requireExpectedTarget(); QuestDbWriteChecks.preflight(jdbc, table, IndexDailyMarketDataset.definition(table));
+        requireExpectedTarget(); QuestDbWriteChecks.preflight(jdbc, table, IndexDailyMarketDataset.legacyIsolatedDefinition(table));
         requireExpectedTarget();
     }
     @Override public void send(List<IndexDailyMarket> rows) throws Exception {
         if (rows == null || rows.isEmpty() || rows.size() > MAX_BATCH_ROWS)
             throw new IllegalArgumentException("Nonempty D019 batch of at most 250 rows required");
         preflight(); uncertainSenderStopped = false;
-        DatasetWritePreparation.prepare(IndexDailyMarketDataset.definition(table), rows, mapper::values,
+        DatasetWritePreparation.prepare(IndexDailyMarketDataset.legacyIsolatedDefinition(table), rows, mapper::values,
                 new DatasetWritePreparation.Limits(MAX_BATCH_ROWS, MAX_BATCH_BYTES));
         long bytes = 0;
         for (var row : rows) {

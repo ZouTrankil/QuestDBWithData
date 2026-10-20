@@ -30,7 +30,7 @@ public final class IndexDailyMarketSyncAdapter implements SyncJobRunner.Adapter<
     @Override public void preflight(SyncJobDefinition.FrozenRequest request) {
         if (request == null || !request.definition().equals(IndexDailyMarketSyncJobOwner.DEFINITION)
                 || !request.definition().datasetId().equals(IndexDailyMarketDataset.DEFINITION.datasetId())
-                || request.definition().datasetVersion() != IndexDailyMarketDataset.DEFINITION.schemaVersion()
+                || request.definition().datasetVersion() != IndexDailyMarketDataset.LEGACY_ISOLATED_DEFINITION.schemaVersion()
                 || !Set.of(Mode.INCREMENTAL, Mode.BACKFILL, Mode.RECONCILE).contains(request.mode())
                 || request.from() == null || request.to() == null || request.to().isAfter(request.logicalDate())
                 || ChronoUnit.DAYS.between(request.from(), request.to()) + 1 > IndexDailyMarketSource.MAX_WINDOW_DAYS)

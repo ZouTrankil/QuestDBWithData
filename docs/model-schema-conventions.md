@@ -97,3 +97,7 @@ businessTime.todaySnapshotMarker();  // 快照表使用的日期标记
 ## 采集字段的官方说明
 
 CN 的来源字段说明维护在 `markets/cn/src/main/resources/model-docs/collected-fields.json`。更新后用生成器的 `--annotate-existing` 刷新代码注释，用 `--export-documentation 新目录` 导出 JSON 和 CSV。完整重生成也会读取同一份说明。接口、字段、单位与来源格式须有明确出处；本地补充列和文档缺项分别标记，不改动既有模型类型及业务规则。具体操作与未核实范围见[采集字段注释](collected-field-documentation.md)。
+
+## 指数日线正式与隔离布局
+
+`index_daily_market` 正式物理列为 `trade_date`，对应 `IndexDailyMarketDataset` v2。D019 现有作业仅允许隔离表，显式使用 `legacyIsolatedDefinition` v1 的 `timestamp`；不要将正式契约的版本改回 v1，也不要更改旧冻结请求来适配新布局。迁移状态见[执行记录](operations/cn-time-migration/README.md)。

@@ -26,7 +26,7 @@ public class IndexDailyMarketReadRepository implements DatasetImplementation {
         IsolatedTablePolicy.INDEX_DAILY_MARKET.require(table);
         this.table = table;
     }
-    @Override public DatasetDefinition definition() { return IndexDailyMarketDataset.definition(table); }
+    @Override public DatasetDefinition definition() { return IndexDailyMarketDataset.legacyIsolatedDefinition(table); }
     public DatasetReadPage<IndexDailyMarket> findByKey(IndexDailyMarketKey key) {
         Objects.requireNonNull(key);
         return find(new DatasetReadQuery(COLUMNS, Map.of("ts_code", key.tsCode(), "trade_date", key.tradeDate()), null, null, null, 1, null));

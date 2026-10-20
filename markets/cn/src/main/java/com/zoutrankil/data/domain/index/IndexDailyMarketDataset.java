@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import static com.zoutrankil.data.domain.DatasetDefinition.*;
 
-/** D019's explicit contract for the externally owned index_daily_market table. */
+/** 正式指数日线契约与旧隔离验收布局分开，避免实库和恢复版本混用。 */
 public final class IndexDailyMarketDataset {
     private IndexDailyMarketDataset() {}
     private static final TemporalContract TRADE_DATE = new TemporalContract(
@@ -13,22 +13,35 @@ public final class IndexDailyMarketDataset {
     private static final TemporalContract UPDATE_TIME = new TemporalContract(
             TemporalKind.INSTANT, "ISO_INSTANT", "UTC", "MICROS", "Frozen Java source-observation time (technical metadata)");
     public static final DatasetDefinition DEFINITION = definition("index_daily_market");
+    public static final DatasetDefinition LEGACY_ISOLATED_DEFINITION = legacyIsolatedDefinition(
+            "java_d019_index_daily_market_acceptance");
 
     public static DatasetDefinition definition(String table) {
         DatasetDefinition.identifier(table);
-        return new DatasetDefinition("index_daily_market", 1, "tushare.index_daily+sw_daily",
-                "index_daily_market_owner", table, ObjectKind.TABLE, columns(),
-                List.of("ts_code", "trade_date"), List.of("ts_code", "timestamp"), "timestamp",
+        return layout(table, 2, "trade_date");
+    }
+
+    /** 旧隔离作业的 v1 布局不改，冻结请求和恢复凭证继续绑定原物理列。 */
+    public static DatasetDefinition legacyIsolatedDefinition(String table) {
+        com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy.INDEX_DAILY_MARKET.require(table);
+        return layout(table, 1, "timestamp");
+    }
+
+    private static DatasetDefinition layout(String table, int version, String dateColumn) {
+        return new DatasetDefinition("index_daily_market", version, "tushare.index_daily+sw_daily",
+                "index_daily_market_owner", table, ObjectKind.TABLE, columns(dateColumn),
+                List.of("ts_code", "trade_date"), List.of("ts_code", dateColumn), dateColumn,
                 Partition.YEAR, true, Set.of(Capability.READ, Capability.WRITE),
                 List.of("index", "index_member"),
-                "Preserve the audited YEAR/WAL/DEDUP layout and (ts_code,timestamp) physical key. "
+                "保留 YEAR/WAL/DEDUP；v2 正式表使用 trade_date，v1 隔离表使用 timestamp。 "
                         + "trade_date is a calendar date carried at UTC midnight; update_time is a frozen technical observation. "
                         + "No formal-table DDL is applied because the table is externally owned.");
     }
-    public static List<Column> columns() {
+    public static List<Column> columns() { return columns("trade_date"); }
+    private static List<Column> columns(String dateColumn) {
         return List.of(
                 new Column("ts_code", "ts_code", "ts_code", StorageType.SYMBOL, false, "Frozen canonical Tushare index identity", null),
-                new Column("trade_date", "trade_date", "timestamp", StorageType.TIMESTAMP, false, "Index trading business date; UTC-midnight carrier", TRADE_DATE),
+                new Column("trade_date", "trade_date", dateColumn, StorageType.TIMESTAMP, false, "Index trading business date; UTC-midnight carrier", TRADE_DATE),
                 number("close", "Closing index points"), number("open", "Opening index points"),
                 number("high", "Highest index points"), number("low", "Lowest index points"),
                 number("pre_close", "Previous close index points"), number("change", "Point change"),
