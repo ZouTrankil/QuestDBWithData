@@ -65,4 +65,46 @@ class ScoreArtifactPublisherTest {
     @Test void frameRejectsRootTraversalBeforeCreatingFiles() {
         assertThrows(IllegalArgumentException.class,()->new ScoreArtifactPublisher(root).frame("../escape/","score_panel",panel(D)));
     }
+    @Test void migratedCatalogBeforeFirstJavaPublicationIsUnavailableAndUnchanged()throws Exception {
+        Path database=root.resolve("_catalog/resource_catalog.sqlite3");Files.createDirectories(database.getParent());
+        try(var c=DriverManager.getConnection("jdbc:sqlite:"+database);var s=c.createStatement()) {
+            s.execute("CREATE TABLE resource_metadata(uri TEXT,run_id TEXT,role TEXT,producer_capability TEXT,created_at TEXT)");
+            s.execute("INSERT INTO resource_metadata VALUES('legacy-resource','legacy-run','score_panel','python.producer','2026-09-30')");
+        }
+        byte[] before=Files.readAllBytes(database);
+        var error=assertThrows(IllegalStateException.class,()->new ScoreArtifactPublisher(root).forDate(D));
+        assertTrue(error.getMessage().contains("No verified Java score publication"));
+        assertArrayEquals(before,Files.readAllBytes(database));
+        try(var c=DriverManager.getConnection("jdbc:sqlite:"+database);var s=c.createStatement();var r=s.executeQuery("SELECT count(*) FROM sqlite_master WHERE name='java_score_publications'")) {
+            assertTrue(r.next());assertEquals(0,r.getInt(1));
+        }
+    }
+    @Test void laterColumnsAndValuesRemainValidatedAfterColumnNameCaching() {
+        var publisher=new ScoreArtifactPublisher(root);
+        var first=new LinkedHashMap<String,Object>();first.put("trade_date",D);first.put("value",null);
+        var invalid=new LinkedHashMap<String,Object>(first);invalid.put("invalid-name",1.0);
+        assertThrows(IllegalArgumentException.class,()->publisher.frame("invalid/","score_panel",List.of(first,invalid)));
+        var numeric=new LinkedHashMap<String,Object>(first);numeric.put("value",1.0);
+        var text=new LinkedHashMap<String,Object>(first);text.put("value","changed type");
+        assertThrows(IllegalArgumentException.class,()->publisher.frame("mixed/","score_panel",List.of(first,numeric,text)));
+        var infinite=new LinkedHashMap<String,Object>(first);infinite.put("value",Double.POSITIVE_INFINITY);
+        assertThrows(IllegalArgumentException.class,()->publisher.frame("infinite/","score_panel",List.of(numeric,infinite)));
+    }
+    @Test void compactFramesPreserveParquetBytesSchemaTypesNullsAndAllRows()throws Exception {
+        var rows=new ArrayList<Map<String,Object>>();
+        for(int i=0;i<3;i++) {
+            var row=new LinkedHashMap<String,Object>();row.put("trade_date",D.plusDays(i));row.put("ts_code","510300.SH");
+            row.put("mixed_numeric",i==1?(Object)2.5:(Object)(long)i);row.put("nullable",i==0?null:Double.NaN);row.put("eligible",i%2==0);row.put("name","ETF");
+            rows.add(row);
+        }
+        var compact=rows.stream().map(com.zoutrankil.data.strategy.score.FrozenScalarValues::copyOf).toList();
+        var publisher=new ScoreArtifactPublisher(root);var original=publisher.frame("original/","score_panel",rows);
+        var dense=publisher.frame("compact/","score_panel",compact);
+        assertEquals(original.contentHash(),dense.contentHash());assertEquals(original.schemaDigest(),dense.schemaDigest());
+        assertEquals(3,dense.rowCount());assertEquals(D,dense.start());assertEquals(D.plusDays(2),dense.end());
+        ScoreArtifactPublisher.validateFrame(dense);
+        try(var reader=org.apache.parquet.hadoop.ParquetFileReader.open(new org.apache.parquet.io.LocalInputFile(dense.path()))) {
+            assertEquals(org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.DOUBLE,reader.getFooter().getFileMetaData().getSchema().getType("mixed_numeric").asPrimitiveType().getPrimitiveTypeName());
+        }
+    }
 }

@@ -8,6 +8,8 @@ spring:
       main-strategy: [data, market-cn]
       batch: [market-cn]
       l2: [market-cn]
+      us-data: [market-us]
+      btc-data: [market-btc]
 
 logging:
   config: classpath:logback-spring.xml
@@ -83,4 +85,6 @@ spring.config.import:
   - apps/cn-batch.yml
   - apps/cn-l2-live.yml
   - apps/cn-main-strategy.yml
+  - apps/us-data.yml
+  - apps/btc-data.yml
   - "${APP_LOCAL_CONFIG:optional:file:./config/application-local.yml}"

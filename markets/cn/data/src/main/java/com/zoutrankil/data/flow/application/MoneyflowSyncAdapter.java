@@ -16,6 +16,7 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 
 /** Daily-source adapter; preserves complete receipts and refuses silent target key deletion. */
 public final class MoneyflowSyncAdapter implements SyncJobRunner.Adapter<Moneyflow,MoneyflowKey> {
+    @Override public Duration visibilityTimeout(){return Duration.ofMinutes(3);}
     private final MoneyflowSource source;private final MoneyflowTradingDates calendar;private final MoneyflowWriteSession port;private final Path evidenceRoot;private final String targetId;
     public MoneyflowSyncAdapter(TusharePageService pages,MoneyflowTradingDates calendar,MoneyflowWriteSession port,Path evidenceRoot,String targetId){this.source=new MoneyflowSource(pages,evidenceRoot.resolve("source"));this.calendar=Objects.requireNonNull(calendar);this.port=Objects.requireNonNull(port);this.evidenceRoot=evidenceRoot.toAbsolutePath().normalize();this.targetId=Objects.requireNonNull(targetId);}
     public static void validateRequest(SyncJobDefinition.FrozenRequest r){

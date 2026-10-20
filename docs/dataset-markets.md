@@ -64,9 +64,11 @@
 - `UsTrycrRow`
 - `UsTycrRow`
 
+美股基础行情另用 `markets/us/data-app` 的有限入口，保存 `us_equity_daily`、`us_equity_intraday`、`us_security_universe`、`us_etf_equity_holdings` 和 `us_nasdaq_itch_messages`。日线业务日期、真实 UTC 分钟和 ITCH 纳秒时间分别定义；这些有限任务不由 `source_us_tbr` 或 A 股 Batch 调度。字段及覆盖验收见[基础行情](us-market-data.md)。
+
 ## BTC
 
-目前只有市场时间和扩展入口，没有已注册的 BTC 数据集或采集任务。以后先明确交易所、币对、合约、周期和日线切分。
+`crypto_ohlcv` 保存 Binance、Bybit 的 BTC/ETH 现货、USDT 永续小时线及 UTC 日线；入口在 `markets/btc/data-app`。业务键包含真实 UTC 起点、交易所、币对、产品和分钟间隔。日线由连续 24 根小时线合成。来源完整、逐字段回读和 WAL 核验后才推进队列；当前实际范围见[基础行情](us-market-data.md)。
 
 ## A 股衍生和策略数据
 

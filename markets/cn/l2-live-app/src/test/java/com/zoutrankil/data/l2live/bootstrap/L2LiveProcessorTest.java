@@ -20,6 +20,47 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class L2LiveProcessorTest {
+    @Test void slightlyFutureRawRemainsPendingUntilRealClockAllowsIt() throws Exception {
+        var journal = mock(RawJournal.class);
+        var sink = mock(LocalLiveSink.class);
+        var result = new AtomicReference<RawJournal.StoredBatch>();
+        RawCapture base = capture();
+        RawCapture raw = new RawCapture(base.captureId(), base.sequence(), base.sessionId(), base.topic(),
+                base.payloadBase64(), base.recvTs().minusSeconds(2), base.captureDate(), 0, false, false);
+        stubNewBatch(journal, List.of(raw), result);
+        var time = new AtomicReference<>(raw.recvTs());
+        Clock clock = mock(Clock.class);
+        when(clock.instant()).thenAnswer(call -> time.get());
+        var accumulator = new L2MinuteAccumulator(Duration.ofSeconds(2), 10, clock);
+        var processor = new L2LiveProcessor(journal, sink, new AliyunL2WireParser(), accumulator,
+                100, Set.of(), clock);
+        var before = accumulator.snapshot();
+        assertEquals(0, processor.processOnce());
+        assertEquals(before, accumulator.snapshot());
+        assertNull(result.get());
+        verifyNoInteractions(sink);
+        time.set(raw.recvTs().plusSeconds(2).plusMillis(10));
+        assertEquals(1, processor.processOnce());
+        assertEquals(1, result.get().states().size());
+        assertEquals(time.get(), result.get().states().getFirst().availableAt());
+        verify(journal, times(1)).prepareBatch(anyList(), anyList(), anyMap());
+    }
+
+    @Test void implausibleFutureTimeStillFailsTheOriginalGateWithoutStallingTheJournal() throws Exception {
+        var journal = mock(RawJournal.class);
+        var sink = mock(LocalLiveSink.class);
+        var result = new AtomicReference<RawJournal.StoredBatch>();
+        var base = capture();
+        var raw = new RawCapture(base.captureId(), base.sequence(), base.sessionId(), base.topic(),
+                base.payloadBase64(), base.recvTs().minusSeconds(10), base.captureDate(), 0, false, false);
+        stubNewBatch(journal, List.of(raw), result);
+        var clock = Clock.fixed(raw.recvTs(), ZoneOffset.UTC);
+        var accumulator = new L2MinuteAccumulator(Duration.ofSeconds(2), 10, clock);
+        assertEquals(1, new L2LiveProcessor(journal, sink, new AliyunL2WireParser(), accumulator,
+                100, Set.of(), clock).processOnce());
+        assertTrue(result.get().states().isEmpty());
+        assertEquals(1L, accumulator.diagnosticCounters().get("future_event_time_rejected"));
+    }
     @Test void failedPublicationResumesExactFrozenBatchWithoutCountingTradeAgain() throws Exception {
         var journal = mock(RawJournal.class);
         var sink = mock(LocalLiveSink.class);

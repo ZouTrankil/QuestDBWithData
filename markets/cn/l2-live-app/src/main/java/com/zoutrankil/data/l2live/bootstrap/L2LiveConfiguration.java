@@ -20,7 +20,7 @@ import org.springframework.core.env.Environment;
 public final class L2LiveConfiguration {
     private static final Set<String> COMMANDS = Set.of("plan", "run", "session", "replay", "status", "export", "migrate-parquet", "archive", "verify-storage", "benchmark", "files");
     private static final Set<String> OPTIONS = Set.of("root", "credentials", "broker", "symbols", "overrides",
-            "questdb", "seconds", "batch-size", "poll-ms", "visibility-ms", "lateness-ms", "retained-minutes", "wait-credentials", "date", "messages", "rate", "storage-bytes");
+            "questdb", "seconds", "batch-size", "poll-ms", "visibility-ms", "lateness-ms", "retained-minutes", "wait-credentials", "date", "messages", "rate", "storage-bytes", "journal-max-bytes");
     final String command;
     final java.time.LocalDate archiveDate;
     final int benchmarkMessages,benchmarkRate;
@@ -33,6 +33,7 @@ public final class L2LiveConfiguration {
     final String questDb;
     final String questDbAuthorization;
     final long seconds;
+    final long journalMaxBytes;
     final int batchSize;
     final Duration pollInterval;
     final Duration visibilityTimeout;
@@ -47,7 +48,6 @@ public final class L2LiveConfiguration {
     private L2LiveConfiguration(String command, Map<String, String> options, Map<String, String> env, Environment config)
             throws IOException {
         this.command = command;
-        storageBytes=bounded(options,"storage-bytes",config.getProperty("l2.storage.max-bytes",Long.class,8589934592L),1048576L,1099511627776L);
         benchmarkMessages=(int)bounded(options,"messages",4800,48,100000000);
         benchmarkRate=(int)bounded(options,"rate",100,1,100000);
         if(!command.equals("benchmark")&&(options.containsKey("messages")||options.containsKey("rate")))throw new IllegalArgumentException("负载参数只用于 benchmark");
@@ -99,6 +99,12 @@ public final class L2LiveConfiguration {
             throw new IllegalArgumentException("INVALID_QUESTDB_URI");
         questDbAuthorization = values.getOrDefault("L2_LIVE_QUESTDB_AUTHORIZATION", "");
         seconds = bounded(options, "seconds", 0, 0, 86400 * 7);
+        // 兼容本地旧参数，两种名称始终绑定同一份 SQLite 和 Parquet 容量限制。
+        long legacyBytes = bounded(options, "journal-max-bytes", config.getProperty("l2.storage.max-bytes",Long.class,8589934592L), 1L << 20, options.containsKey("journal-max-bytes") ? 64L << 30 : 1L << 40);
+        storageBytes = bounded(options,"storage-bytes",legacyBytes,1L << 20,1L << 40);
+        if(options.containsKey("journal-max-bytes") && options.containsKey("storage-bytes") && legacyBytes != storageBytes)
+            throw new IllegalArgumentException("CONFLICTING_STORAGE_QUOTAS");
+        journalMaxBytes = storageBytes;
         batchSize = (int) bounded(options, "batch-size", 100, 1, 200);
         pollInterval = Duration.ofMillis(bounded(options, "poll-ms", 100, 10, 10_000));
         visibilityTimeout = Duration.ofMillis(bounded(options, "visibility-ms", 10_000, 100, 60_000));
@@ -149,6 +155,7 @@ public final class L2LiveConfiguration {
         result.put("topics", symbols.stream().flatMap(symbol -> List.of("trans/", "order/", "market/").stream()
                 .map(prefix -> prefix + symbol.substring(0, 6))).toList());
         result.put("rawRoot", root.toString());
+        result.put("journalMaxBytes", journalMaxBytes);
         result.put("calendarQuestDb", questDb);
         result.put("storage", "parquet");
         result.put("parquetRoot", root.resolve("parquet/batches").toString());

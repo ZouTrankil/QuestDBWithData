@@ -18,6 +18,9 @@ import static com.zoutrankil.data.domain.SyncJobDefinition.*;
 
 /** Executes exactly the frozen sequence of one-date all-market requests. */
 public final class EtfAdjSyncAdapter implements SyncJobRunner.Adapter<EtfAdj, EtfAdjKey> {
+    // Acknowledged batches can need longer than the shared default to become visible
+    // in the existing formal table; keep exact value and WAL checks throughout.
+    @Override public Duration visibilityTimeout(){return Duration.ofMinutes(3);}
     private final EtfAdjSource source;
     private final EtfAdjTradingDates tradingDates;
     private final EtfAdjWriteSession port;

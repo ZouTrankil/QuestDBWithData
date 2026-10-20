@@ -105,4 +105,22 @@ class L2LiveConfigurationTest {
         assertThrows(IllegalArgumentException.class, () -> L2LiveConfiguration.parse(
                 new String[]{"plan", "--root", root.toString(), "--symbols", "563360", "--symbols", "563360"}, Map.of()));
     }
+
+    @Test void journalQuotaIsExplicitBoundedAndVisibleInPlan() throws Exception {
+        var defaults = L2LiveConfiguration.parse(new String[]{"plan", "--root", root.toString()}, Map.of());
+        assertEquals(8L << 30, defaults.journalMaxBytes);
+        var larger = L2LiveConfiguration.parse(new String[]{"plan", "--root", root.toString(),
+                "--journal-max-bytes", "68719476736"}, Map.of());
+        assertEquals(64L << 30, larger.plan().get("journalMaxBytes"));
+        assertEquals(larger.journalMaxBytes, larger.storageBytes);
+        var storage = L2LiveConfiguration.parse(new String[]{"plan", "--root", root.toString(),
+                "--storage-bytes", "17179869184"}, Map.of());
+        assertEquals(16L << 30, storage.journalMaxBytes);
+        assertThrows(IllegalArgumentException.class, () -> L2LiveConfiguration.parse(new String[]{
+                "plan", "--root", root.toString(), "--journal-max-bytes", "8589934592",
+                "--storage-bytes", "17179869184"}, Map.of()));
+        for (String value : java.util.List.of("0", "-1", "68719476737"))
+            assertThrows(IllegalArgumentException.class, () -> L2LiveConfiguration.parse(new String[]{
+                    "plan", "--root", root.toString(), "--journal-max-bytes", value}, Map.of()));
+    }
 }

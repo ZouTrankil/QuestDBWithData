@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.time.Clock;
 
 /** 串联持久化采集、纯函数归一化和经核验的 Parquet 存储。 */
 public final class L2LiveProcessor {
@@ -20,6 +21,7 @@ public final class L2LiveProcessor {
     private final int batchSize;
     private final Set<String> expectedTopics;
     private final Set<String> expectedSymbols;
+    private final Clock clock;
 
     public L2LiveProcessor(RawJournal journal, LocalLiveSink sink, AliyunL2WireParser parser,
             L2MinuteAccumulator accumulator, int batchSize) throws Exception {
@@ -28,12 +30,18 @@ public final class L2LiveProcessor {
 
     public L2LiveProcessor(RawJournal journal, LocalLiveSink sink, AliyunL2WireParser parser,
             L2MinuteAccumulator accumulator, int batchSize, Set<String> expectedTopics) throws Exception {
+        this(journal, sink, parser, accumulator, batchSize, expectedTopics, Clock.systemUTC());
+    }
+
+    public L2LiveProcessor(RawJournal journal, LocalLiveSink sink, AliyunL2WireParser parser,
+            L2MinuteAccumulator accumulator, int batchSize, Set<String> expectedTopics, Clock clock) throws Exception {
         this.journal = journal;
         this.sink = sink;
         this.parser = parser;
         this.accumulator = accumulator;
         this.batchSize = batchSize;
         this.expectedTopics = Set.copyOf(expectedTopics);
+        this.clock = java.util.Objects.requireNonNull(clock);
         this.expectedSymbols = expectedTopics.stream().map(topic ->
                 AliyunL2WireParser.normalizeSymbol(topic.substring(topic.indexOf('/') + 1))).collect(Collectors.toUnmodifiableSet());
         var checkpoint = journal.committedAccumulatorState();
@@ -66,6 +74,18 @@ public final class L2LiveProcessor {
                             || event.isValid() && !expectedSymbols.contains(event.symbol())))
                         event = rejected(event, "scope_rejected", "Capture differs from the configured subscription scope");
                     events.add(event);
+                }
+                var now = clock.instant();
+                for (var event : events) if (event.isValid()) {
+                    var admitAfter = event.exchangeTs().minus(L2MinuteAccumulator.EVENT_CLOCK_TOLERANCE);
+                    if (event.capture().recvTs().isAfter(admitAfter)) admitAfter = event.capture().recvTs();
+                    // Keep a slightly early frame durable and pending until real time
+                    // catches up. Never widen the accumulator's future-time gate.
+                    // Bad timestamps beyond this bounded wait still reach that gate.
+                    if (admitAfter.isAfter(now) && !admitAfter.isAfter(now.plusSeconds(5))) return 0;
+                }
+                for (int index = 0; index < events.size(); index++) {
+                    var event = events.get(index);
                     if (event.isValid()) {
                         try { accumulator.accept(event).ifPresent(states::add); }
                         catch (ArithmeticException overflow) {
@@ -73,8 +93,8 @@ public final class L2LiveProcessor {
                             // 将本条溢出报文仅保留为审计事件，不影响分钟累计。
                             accumulator.restore(beforeCalculation);
                             states.clear();
-                            events.set(events.size() - 1, rejected(event, "aggregation_overflow", "Minute totals exceed exact numeric bounds"));
-                            for (var prior : events) if (prior.isValid()) accumulator.accept(prior).ifPresent(states::add);
+                            events.set(index, rejected(event, "aggregation_overflow", "Minute totals exceed exact numeric bounds"));
+                            for (var prior : events.subList(0, index)) if (prior.isValid()) accumulator.accept(prior).ifPresent(states::add);
                         }
                     }
                 }

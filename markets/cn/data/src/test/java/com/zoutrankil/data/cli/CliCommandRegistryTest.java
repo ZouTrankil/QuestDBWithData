@@ -32,8 +32,9 @@ class CliCommandRegistryTest {
         expected.removeAll(Set.of("cancel-etf-market-overview-cache-run","etf-market-overview-cache-job-status",
                 "plan-etf-market-overview-cache-job","reconcile-etf-market-overview-cache-run",
                 "resume-etf-market-overview-cache-run","run-etf-market-overview-cache-job"));
-        expected.addAll(Set.of("reconcile-etf-daily-job","recover-stk-factor-job"));
-        assertEquals(165, families.stream().mapToInt(family -> family.commands().size()).sum());
+        expected.addAll(Set.of("reconcile-etf-daily-job","recover-stk-factor-job",
+                "reconcile-etf-adj-job","reconcile-moneyflow-job","discard-moneyflow-hsgt-stage"));
+        assertEquals(168, families.stream().mapToInt(family -> family.commands().size()).sum());
         assertEquals(expected, new TreeSet<>(new CliCommandRegistry(families).commands()));
     }
 

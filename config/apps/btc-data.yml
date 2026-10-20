@@ -1,0 +1,17 @@
+# 独立、有限、只读公开行情来源；不加载任何交易或下单组件。
+spring.config.activate.on-profile: btc-data
+spring.application.name: crypto-market-data
+app.crypto-data:
+  root: var/crypto-market-data
+  history-start: 2021-10-01
+  requests-per-hour: 2000
+  requests-per-day: 20000
+  request-spacing-ms: 400
+  bytes-per-31-days: 5368709120
+  # 官方说明 11:27 停市、14:00 恢复；归档和 REST 都没有 13:00 的小时线。
+  venue-closures:
+    - exchange: BINANCE
+      instrument: SPOT
+      from: "2023-03-24T11:27:00Z"
+      until: "2023-03-24T14:00:00Z"
+      evidence-url: https://www.binance.com/en/blog/from-our-ceo/6789340645608890113

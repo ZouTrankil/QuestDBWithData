@@ -17,7 +17,7 @@ import static com.zoutrankil.data.domain.derived.policy.MarketSentimentDailyCalc
 
 /** Bounded streaming reads and physical target construction for the native regime product. */
 public final class RegimeFeaturesMonitorDailyStorage implements RegimeFeaturesMonitorDailySourceReadPort,RegimeFeaturesMonitorDailyTarget {
-    private static final List<String> SOURCES=List.of("stk_factor","daily_basic","stk_limit","stk_suspend","stk_st_daily","margin_detail","moneyflow_hsgt","cn_bond_yield_curve","exchange_calendar");
+    private static final List<String> SOURCES=List.of("stk_factor","daily","daily_basic","stk_limit","stk_suspend","stk_st_daily","margin_detail","moneyflow_hsgt","cn_bond_yield_curve","exchange_calendar");
     private final JdbcTemplate jdbc;
     public RegimeFeaturesMonitorDailyStorage(JdbcTemplate source) {
         jdbc=new JdbcTemplate(Objects.requireNonNull(source.getDataSource()));
@@ -29,6 +29,8 @@ public final class RegimeFeaturesMonitorDailyStorage implements RegimeFeaturesMo
 
 
     public void readPanelMonth(LocalDate lower,LocalDate upper,Set<LocalDate> calendar,long[] panelRows,MessageDigest hash,BooleanSupplier cancelled,PanelDayConsumer complete) {
+            int[] aliasReads={0};
+            var aliases=BseLegacyFactorAliases.prepare(jdbc,lower,upper,()->{if(++aliasReads[0]==1||(aliasReads[0]&1023)==0)check(cancelled);});complete.stockScopeAudit(aliases.evidence());
             LocalDate[] date={null};var stocks=new ArrayList<Stock>();var codes=new HashSet<String>();int[] basicCount={0},limitCount={0},count={0};
             String sql="SELECT cast(sf.trade_date AS long) AS trade_micros,sf.ts_code,sf.close,sf.pre_close,sf.amount,db.turnover_rate,db.total_mv,db.pb,db.pe_ttm,sl.up_limit,sl.down_limit,ss.is_suspended,st.is_st,db.ts_code AS basic_code,sl.ts_code AS limit_code"
                     +" FROM "+bounded("stk_factor","trade_date,ts_code,close,pre_close,amount","trade_date")+" sf"
@@ -39,9 +41,10 @@ public final class RegimeFeaturesMonitorDailyStorage implements RegimeFeaturesMo
                     +" ORDER BY sf.trade_date,sf.ts_code LIMIT 200001";
             jdbc.query(sql,(org.springframework.jdbc.core.RowCallbackHandler)rs->{
                 if(++count[0]>200000)throw new IllegalStateException("Stock source month exceeds 200000-row budget");if(count[0]==1||(count[0]&1023)==0)check(cancelled);panelRows[0]++;
-                LocalDate current=date(rs);if(!calendar.contains(current))throw new IllegalStateException("Stock panel contains non-SSE-trading date "+current);
+                LocalDate current=date(rs);String code=rs.getString("ts_code");if(aliases.excludes(current,code))return;
+                if(!calendar.contains(current))throw new IllegalStateException("Stock panel contains non-SSE-trading date "+current);
                 if(date[0]!=null&&!date[0].equals(current)){complete.accept(date[0],stocks,codes,basicCount[0],limitCount[0]);stocks.clear();codes.clear();basicCount[0]=limitCount[0]=0;}
-                date[0]=current;String code=rs.getString("ts_code");if(code==null||!codes.add(code))throw new IllegalStateException("Duplicate stock panel business key on "+current);
+                date[0]=current;if(code==null||!codes.add(code))throw new IllegalStateException("Duplicate stock panel business key on "+current);
                 if(rs.getString("basic_code")!=null)basicCount[0]++;if(rs.getString("limit_code")!=null)limitCount[0]++;
                 var stock=new Stock(code,number(rs,"close"),number(rs,"pre_close"),number(rs,"amount"),number(rs,"turnover_rate"),number(rs,"total_mv"),number(rs,"pb"),number(rs,"pe_ttm"),number(rs,"up_limit"),number(rs,"down_limit"));
                 boolean suspended=flag(rs.getObject("is_suspended")),st=flag(rs.getObject("is_st"));hashLine(hash,current+"|"+stock+"|"+suspended+"|"+st);
@@ -101,7 +104,7 @@ public final class RegimeFeaturesMonitorDailyStorage implements RegimeFeaturesMo
                     if(rows.size()>400)throw new IllegalStateException("Gov curve exceeds 400-date budget");hashLine(hash,"gov10Y|"+date+"|"+yield);},micros(from),micros(to.plusDays(1)));return rows;
     }
     public String sourcePin()throws Exception{
-        var pins=new ArrayList<Object>();for(String source:SOURCES){var metadata=jdbc.queryForList("SELECT id,directoryName,walEnabled,table_txn,table_row_count FROM tables() WHERE table_name=?",source);
+        var pins=new ArrayList<Object>();pins.add(BseLegacyFactorAliases.identity());for(String source:SOURCES){var metadata=jdbc.queryForList("SELECT id,directoryName,walEnabled,table_txn,table_row_count FROM tables() WHERE table_name=?",source);
             if(metadata.size()!=1)throw new IllegalStateException("Required existing source table missing: "+source);var item=new LinkedHashMap<String,Object>(metadata.getFirst());item.put("table",source);
             if(Boolean.TRUE.equals(item.get("walEnabled"))){var frontier=jdbc.queryForList("SELECT suspended,writerTxn,sequencerTxn,bufferedTxnSize FROM wal_tables() WHERE name=?",source);
                 if(frontier.size()!=1||!QuestDbWriteChecks.walSettled(jdbc,source))throw new IllegalStateException("Source WAL is unsettled: "+source);item.put("wal",frontier.getFirst());}

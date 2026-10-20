@@ -14,13 +14,19 @@ public final class BacktestDailyMaterializedViewPort {
     public static final String NAME="mv_backtest_daily", BASE="stk_limit";
     public static final List<String> SOURCES=List.of("stk_factor","stk_limit","stk_suspend","stk_st_daily");
     public static final String CREATE_SQL=loadSql();
-    public static final String QUERY_SQL=CREATE_SQL.substring(CREATE_SQL.indexOf("AS (\n")+5,CREATE_SQL.lastIndexOf("\n)\nPARTITION"));
+    public static final String QUERY_SQL=querySql(CREATE_SQL);
     private final JdbcTemplate jdbc;
     public record State(Map<String,Object> view,Map<String,Map<String,Object>> tables) {}
     public BacktestDailyMaterializedViewPort(JdbcTemplate jdbc){
         this.jdbc=new JdbcTemplate(Objects.requireNonNull(jdbc.getDataSource()));this.jdbc.setQueryTimeout(120);
     }
     public static String normalized(String sql){return sql.strip().replaceAll("\\s+"," ").toLowerCase(Locale.ROOT).replaceAll("\\s*([(),=<>])\\s*","$1");}
+    static String querySql(String sql){
+        String lines=sql.replace("\r\n","\n").replace('\r','\n');
+        int start=lines.indexOf("AS (\n"),end=lines.lastIndexOf("\n)\nPARTITION");
+        if(start<0||end<=start+5)throw new IllegalStateException("Canonical backtest MV SQL query boundary absent");
+        return lines.substring(start+5,end);
+    }
     private static String loadSql(){
         try(var in=BacktestDailyMaterializedViewPort.class.getResourceAsStream("/sql/mv_backtest_daily.sql")){
             if(in==null)throw new IllegalStateException("Canonical backtest MV SQL resource absent");

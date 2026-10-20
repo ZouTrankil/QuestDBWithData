@@ -47,7 +47,7 @@ public final class EtfSourcePreparation {
         int[] positions = new int[rows.size()]; for (int i = 0; i < ranks.size(); i++) positions[ranks.get(i)] = i + 1;
         var result = new ArrayList<ScoreRow>(); String[] labels = {"Q1_low", "Q2", "Q3", "Q4", "Q5_high"};
         for (int i = 0; i < rows.size(); i++) {
-            var row = rows.get(i); var values = new LinkedHashMap<>(row.values());
+            var row = rows.get(i); var values = new MutableScalarValues(row.values());
             int bin = Math.max(0, (int)Math.ceil(positions[i] * 5.0 / rows.size()) - 1);
             values.put("sentiment_score", row.number("sentiment_score")); values.put("sentiment_quintile", unique.size() < 5 ? "Q3" : labels[bin]);
             result.add(new ScoreRow(row.tradeDate(), row.symbol(), values));

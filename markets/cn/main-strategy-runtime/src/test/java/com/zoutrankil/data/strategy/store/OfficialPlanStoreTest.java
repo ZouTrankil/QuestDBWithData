@@ -25,9 +25,27 @@ class OfficialPlanStoreTest {
     @Test void missingAuthorityReadDoesNotCreateDirectoriesOrDatabase() {
         var store = new OfficialPlanStore(temporary.resolve("missing/root/" + OfficialPlanStore.DATABASE_NAME));
         assertTrue(store.latest("ETF_ONLY_TOP2").isEmpty());
+        assertTrue(store.latestOfficialWeekly().isEmpty());
         assertEquals("missing", store.inspect("ETF_ONLY_TOP2").integrityCheck());
         assertThrows(PlanStoreException.class, () -> store.requireLatest("ETF_ONLY_TOP2", SIGNAL, "run"));
         assertFalse(Files.exists(temporary.resolve("missing")));
+    }
+
+    @Test void planRootAuthorityRetainsCanonicalRecipeStrategyAndChecksItsLatestAlias()throws Exception {
+        var store=store();Path older=snapshot("old-name.json",SOURCE.replace("2026-09-25","2026-09-18").replace("2026-09-28","2026-09-21"));
+        store.importSnapshot(older,sha(older),provenance("old",SIGNAL.minusDays(7)));
+        Path current=snapshot("canonical-name.json",SOURCE.replace("ETF_ONLY_TOP2","fusion_dynamic_overlay_10_l2_weight_optimized_top2_50cap"));
+        var expected=store.importSnapshot(current,sha(current),provenance("current",SIGNAL));
+        assertEquals(expected.planId(),store.latestOfficialWeekly().orElseThrow().planId());
+        assertEquals("fusion_dynamic_overlay_10_l2_weight_optimized_top2_50cap",store.latestOfficialWeekly().orElseThrow().plan().strategy());
+        execute(store,"DELETE FROM strategy_plan_aliases WHERE strategy='fusion_dynamic_overlay_10_l2_weight_optimized_top2_50cap'");
+        assertThrows(PlanStoreException.class,store::latestOfficialWeekly);
+    }
+
+    @Test void differentStrategiesAtTheSamePlanRootFrontierRequireExplicitReconciliation()throws Exception {
+        var store=store();Path first=snapshot("first-name.json",SOURCE);store.importSnapshot(first,sha(first),provenance("one",SIGNAL));
+        Path second=snapshot("second-name.json",SOURCE.replace("ETF_ONLY_TOP2","promoted_recipe"));store.importSnapshot(second,sha(second),provenance("two",SIGNAL));
+        assertThrows(PlanStoreException.class,store::latestOfficialWeekly);
     }
 
     @Test void importHasPythonSemanticIdentityAndPreservesTargetValuationNull() throws Exception {

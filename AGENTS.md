@@ -21,7 +21,7 @@
 - `platform/core` 主代码只用 JDK；Tushare、分页和执行能力在 `platform/engine`，A 股模型和 L2 类型在市场库。引擎的 source、questdb、batch 子项目分别隔离来源、数据读写和批处理依赖。
 - `platform/app-support` 是公共 API 支持库，无市场依赖、无启动入口。A 股数据入口在 `markets/cn/data-app`；Batch 由这个入口的常驻进程按配置托管；主策略不依赖入口包。
 - 市场通过 `SourcePolicyProvider` 注册来源、`DataCatalogProvider` 注册目录说明，不互调业务实现；市场应用按需复用公共鉴权、目录和 schema 配置。
-- 美股目前有美国利率来源和表投影；BTC 目前只有时间与扩展入口，不能说完整业务已接通。
+- 美股保留利率来源，另有 `markets/us/data-app` 的有限日线、分钟线、挂牌快照和部分 ITCH 入口；BTC 的 `markets/btc/data-app` 采集公开现货及永续行情。字段、编译或少数样本成功不能代表全市场或全部历史已齐备，实际范围以来源队列及逐字段回读为准。
 - 新模块须接入 Gradle、测试、资源、运行入口及边界检查；所有构建产物仍在根 build。
 
 ## 必须保持的设计

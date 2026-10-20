@@ -34,7 +34,7 @@ allprojects {
 
 // 先装配父工程，再读取实际 Java 子模块，父工程本身不进入源码或 jar 清单。
 ['platform', 'markets'].each { evaluationDependsOn(":${it}") }
-def modulePaths = ['platform:core', 'platform:runtime-support', 'platform:engine', 'platform:engine:source', 'platform:engine:questdb', 'platform:engine:batch', 'markets:cn', 'markets:cn:source', 'markets:cn:data', 'markets:cn:data-app', 'markets:cn:batch', 'markets:cn:main-strategy-runtime', 'markets:cn:l2-live-app', 'markets:us', 'markets:btc', 'platform:app-support']
+def modulePaths = ['platform:core', 'platform:runtime-support', 'platform:engine', 'platform:engine:source', 'platform:engine:questdb', 'platform:engine:batch', 'markets:cn', 'markets:cn:source', 'markets:cn:data', 'markets:cn:data-app', 'markets:cn:batch', 'markets:cn:main-strategy-runtime', 'markets:cn:l2-live-app', 'markets:us', 'markets:us:data-app', 'markets:btc', 'markets:btc:data-app', 'platform:app-support']
 modulePaths.each { evaluationDependsOn(":${it}") }
 def core = project(':platform:core')
 def data = project(':markets:cn:data-app')
@@ -42,12 +42,14 @@ def batch = project(':markets:cn:batch')
 def strategy = project(':markets:cn:main-strategy-runtime')
 def support = project(':platform:runtime-support')
 def live = project(':markets:cn:l2-live-app')
+def usData = project(':markets:us:data-app')
+def btcData = project(':markets:btc:data-app')
 def modules = modulePaths.collect { project(":${it}") }
 def cnData = project(':markets:cn:data')
 def cnBatch = project(':markets:cn:batch')
 
 // 父工程的 build/check/assemble 覆盖所属子模块；clean 仍只清理自己的输出。
-[project(':platform'), project(':markets'), project(':platform:engine'), project(':markets:cn')].each { parent ->
+[project(':platform'), project(':markets'), project(':platform:engine'), project(':markets:cn'), project(':markets:us'), project(':markets:btc')].each { parent ->
     def children = modules.findAll { it.path.startsWith(parent.path + ':') }
     ['assemble', 'check'].each { name ->
         parent.tasks.named(name) { dependsOn children.collect { it.tasks.named(name) } }
@@ -65,7 +67,7 @@ def cnBatch = project(':markets:cn:batch')
 def runtimeConfigFiles = fileTree('config') {
     include 'application.yml', 'logback-spring.xml', 'markets/*.yml', 'apps/*.yml'
 }.files.collect { file('config').toPath().relativize(it.toPath()).toString().replace('\\', '/') }.sort()
-[data, strategy, live].each { module ->
+[data, strategy, live, usData, btcData].each { module ->
     module.tasks.named('processResources') {
         from(rootProject.file('config')) { include runtimeConfigFiles }
     }
@@ -86,7 +88,7 @@ modules.each { module ->
         onlyIf('Root aggregate already executes the module test classes') { !gradle.taskGraph.hasTask(':test') }
     }
 }
-[data, strategy, live].each { module ->
+[data, strategy, live, usData, btcData].each { module ->
     module.tasks.named('run', JavaExec).configure {
         onlyIf('Root run is the legacy single data application entrypoint') { !gradle.taskGraph.hasTask(':run') }
     }
@@ -295,6 +297,23 @@ tasks.register('mainStrategyData', JavaExec) {
     jvmArgs "-Xmx${providers.gradleProperty('mainStrategyDataHeap').getOrElse('16g')}"
 }
 
+tasks.register('usMarketData', JavaExec) {
+    group = 'application'
+    description = '美股独立行情定义、采集及完整键值验收入口。'
+    dependsOn usData.tasks.named('classes')
+    classpath = usData.sourceSets.main.runtimeClasspath
+    mainClass = 'com.zoutrankil.market.us.app.UsMarketDataMain'
+    jvmArgs '-Xms128m', '-Xmx2g'
+}
+
+tasks.register('cryptoMarketData', JavaExec) {
+    group = 'application'
+    description = 'BTC/ETH 现货、永续小时与 UTC 日线有限历史采集。'
+    dependsOn btcData.tasks.named('classes')
+    classpath = btcData.sourceSets.main.runtimeClasspath
+    mainClass = btcData.application.mainClass
+}
+
 tasks.register('questdbMaintenance', JavaExec) {
     group = 'application'
     description = 'Inspect native MVs, verify ETF refreshes, or archive and retire registered legacy sync metadata.'
@@ -442,7 +461,9 @@ tasks.register('verifyModuleBoundaries') {
             ':markets:cn:data-app': [':markets:cn:data', ':markets:cn:batch', ':markets:cn:source', ':markets:us', ':platform:runtime-support'],
             ':markets:cn:batch': [':markets:cn:source', ':platform:engine:batch', ':platform:runtime-support'],
             ':markets:us': [':platform:engine:source'],
+            ':markets:us:data-app': [':markets:us', ':platform:engine:questdb', ':platform:runtime-support'],
             ':markets:btc': [':platform:core'],
+            ':markets:btc:data-app': [':markets:btc', ':platform:engine:source', ':platform:engine:questdb', ':platform:runtime-support'],
             ':platform:app-support': [':platform:engine:questdb', ':platform:runtime-support'],
             ':markets:cn:main-strategy-runtime': [':markets:cn:data', ':markets:cn:batch', ':markets:us', ':platform:runtime-support'],
             ':markets:cn:l2-live-app': [':platform:core', ':platform:runtime-support']

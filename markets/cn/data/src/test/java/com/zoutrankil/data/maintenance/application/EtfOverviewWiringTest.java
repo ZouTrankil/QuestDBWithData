@@ -26,6 +26,14 @@ class EtfOverviewWiringTest {
             assertNotNull(context.getBean(EtfOverviewMaintenance.class));
             assertTrue(context.getBeansOfType(ThreadPoolTaskScheduler.class).isEmpty());
             verify(source,never()).getConnection();assertFalse(java.nio.file.Files.exists(root.resolve("uncreated.sqlite")));
+        } finally {
+            // 日志上下文由测试 JVM 共用；只关闭本用例的文件句柄，避免 Windows 无法清理临时目录。
+            var logger=(ch.qos.logback.classic.Logger)org.slf4j.LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
+            var appender=logger.getAppender("FILE");
+            if(appender instanceof ch.qos.logback.core.FileAppender<?> file && file.getFile()!=null
+                    && Path.of(file.getFile()).toAbsolutePath().normalize().equals(root.resolve("application.log").toAbsolutePath().normalize())) {
+                logger.detachAppender(appender);file.stop();
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ class RegimeFeaturesMonitorDailyOwnerContractTest {
         assertEquals(TABLE,owner.datasetId());assertEquals(21,owner.definition().columns().size());
         assertTrue(owner.definition().capabilities().contains(DatasetDefinition.Capability.WAL_REPLACE));
         assertTrue(owner.definition().dependencies().contains("cn_bond_yield_curve"));
+        assertTrue(owner.definition().dependencies().contains("daily"));
         assertThrows(IllegalArgumentException.class,()->owner.plan(DAY,DAY,DAY,SyncJobDefinition.Mode.INCREMENTAL));
         assertThrows(IllegalArgumentException.class,()->owner.plan(DAY,DAY.plusDays(366),DAY.plusDays(366)));
         assertFalse(Files.exists(ledger));verifyNoInteractions(reads,target);

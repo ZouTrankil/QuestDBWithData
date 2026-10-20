@@ -32,7 +32,7 @@ class MainStrategyDataServiceTest {
         var panel=List.<Map<String,Object>>of(Map.of("trade_date",day,"ts_code","510300.SH","score",.5));
         var sources=new LinkedHashMap<String,Object>();sources.put("calendar",Map.of("rows",calendar.size(),"sha256",rowHash(calendar)));sources.put("etf_daily",Map.of("rows",market.size(),"sha256",rowHash(market)));sources.put("market_context",Map.of("rows",context.size(),"sha256",rowHash(context)));
         var clocks=new TreeMap<String,Object>();for(String table:List.of("exchange_calendar","etf_daily","regime_features_monitor_daily"))clocks.put(table,Map.of("id",1L,"directoryName",table+"~1","walEnabled",true,"writerTxn",2L,"sequencerTxn",2L,"suspended",false,"bufferedTxnSize",0L,"schema",List.of(Map.of("column","date","type","TIMESTAMP"))));
-        var proof=Map.<String,Object>of("sourceComplete",true,"end",day.toString(),"recipeHashes",hashes,"sources",sources,"sourceClocks",clocks);
+        var proof=Map.<String,Object>of("sourceComplete",true,"end",day.toString(),"recipeHashes",hashes,"sources",sources,"sourceClocks",clocks,"scoreProvenance",Map.of("score_recipe_id","test-only-service"));
         var score=new ScoreArtifactPublisher(root.resolve("artifacts")).publish(run,panel,List.of(Map.of("trade_date",day,"etf_scored_n",1)),List.of(day),hashes.get("recipe"),proof);
         if(packageToo)new NativeMarketInputPackagePublisher(root.resolve("artifacts")).publish(run,day,day,calendar,market,context,panel,score,proof);
         return score;
@@ -60,6 +60,15 @@ class MainStrategyDataServiceTest {
         var repeated=service.importPlan(source,ScoreArtifactPublisher.sha(source));
         assertEquals(original.planId(),repeated.planId());assertFalse(repeated.created());assertEquals(original.provenance(),repeated.provenance());
         verifyNoInteractions(jdbc);
+    }
+    @Test void originalPythonRecipeStrategyIsTheSameFormalAuthorityThroughImportAndReadback()throws Exception {
+        accepted();var scores=publish("java_scores_recipe_identity",SIGNAL);
+        Path source=canonical();Files.writeString(source,Files.readString(source).replace("ETF_ONLY_TOP2","test-only-service"));
+        var service=service();var imported=service.importPlan(source,ScoreArtifactPublisher.sha(source),scores.producerRunId());
+        assertEquals("test-only-service",imported.plan().strategy());
+        assertEquals(imported.planId(),service.requirePlan(SIGNAL.plusDays(3)).planId());
+        assertEquals(imported.planId(),service.inspectPlans().latest().orElseThrow().planId());
+        assertEquals(scores.producerRunId(),imported.provenance().orElseThrow().scoreRunId());verifyNoInteractions(jdbc);
     }
     @Test void twoScoreFilesAloneCannotClaimThreeRoleInputReadiness()throws Exception {
         accepted();publish("java_scores_only",SIGNAL,false);assertThrows(IllegalStateException.class,()->service().scores(SIGNAL));verifyNoInteractions(jdbc);

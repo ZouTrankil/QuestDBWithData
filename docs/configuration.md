@@ -12,8 +12,10 @@
 | `apps/cn-main-strategy.yml` | 主策略参数、端口和日批开关 | 参数供 `data` / `main-strategy` 使用；仅策略 profile 默认启用策略日批 |
 | `apps/cn-batch.yml` | Batch 端口、SQLite、归档和任务计划 | `data`；`batch` 供控制 CLI 和隔离测试使用 |
 | `apps/cn-l2-live.yml` | 实时 L2 订阅、会话和本地存储 | `l2` |
+| `apps/us-data.yml` | 美股行情目录、核心证券列表、Tiingo/Yahoo 请求预算 | `us-data` |
+| `apps/btc-data.yml` | BTC/ETH 历史起点、目录及公开来源请求预算 | `btc-data` |
 
-美股和 BTC 目前没有独立应用，所以先放市场设置，不复制 A 股应用或 L2 配置。core、engine、公共 API 库也不单独放一份运行配置。
+美股和 BTC 分别通过 `us-data`、`btc-data` 带上 `market-us`、`market-btc`。入口仅运行明确的有限采集任务；命令和恢复约束见[基础行情](us-market-data.md)。core、engine、公共 API 库不单独放一份运行配置。
 
 私密值统一放本机 `config/application-local.yml`，已从公开 YAML 迁出。该文件被 Git 忽略，不进入 JAR 或通用发行包；本机原值保留，没有更换凭据。新环境复制[空白示例](../config/application-local.example.yml) 填写。API 缺 token 时拒绝受保护请求，健康检查仍公开。
 
@@ -43,7 +45,7 @@
 
 数据 API、主策略、实时 L2 各自启动。Batch 合入数据 API 进程，`jdb.enabled` 默认 `false`；启用后随进程启动和关闭。`batchRun` 是启用 Batch 的兼容启动命令，不要再与同一个数据 API 实例重复启动。
 
-数据入口实际在 `markets/cn/data-app`，也可以直接用 `./gradlew :markets:cn:data-app:run` 启动。根 `batch-app` 已删除。`platform/app-support` 是公共支持库，没有 run 任务；未来美股、BTC 的应用在各自市场里装配。
+数据入口实际在 `markets/cn/data-app`，也可以直接用 `./gradlew :markets:cn:data-app:run` 启动。根 `batch-app` 已删除。`platform/app-support` 是公共支持库，没有 run 任务；美股、BTC 在各自市场的 `data-app` 装配。
 
 ## 常改的值在哪里
 

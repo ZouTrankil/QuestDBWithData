@@ -49,6 +49,8 @@ public final class CliUsage {
                 + "plan-stk-limit-job|run-stk-limit-job --to YYYY-MM-DD --logical-date YYYY-MM-DD [--from YYYY-MM-DD] [--mode MODE] OR run-stk-limit-job --resume-from RUN_ID OR "
                 + "plan-etf-daily-job|run-etf-daily-job --to YYYY-MM-DD --logical-date YYYY-MM-DD [--from YYYY-MM-DD] [--mode MODE] OR run-etf-daily-job --resume-from RUN_ID OR "
                 + "reconcile-etf-daily-job --run RUN_ID --writer-log PATH OR "
+                + "reconcile-etf-adj-job|reconcile-moneyflow-job --run RUN_ID --writer-log PATH OR "
+                + "discard-moneyflow-hsgt-stage --run RUN_ID --writer-stopped true OR "
                 + "plan-etf-basic-job|run-etf-basic-job --logical-date YYYY-MM-DD OR run-etf-basic-job --resume-from RUN_ID OR "
                 + "plan-etf-portfolio-job|run-etf-portfolio-job --to YYYY-MM-DD --logical-date YYYY-MM-DD [--from YYYY-MM-DD] [--mode MODE] OR run-etf-portfolio-job --resume-from RUN_ID OR "
                 + "plan-etf-share-job|run-etf-share-job --to YYYY-MM-DD --logical-date YYYY-MM-DD [--from YYYY-MM-DD] [--mode MODE] OR run-etf-share-job --resume-from RUN_ID OR "

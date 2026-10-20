@@ -6,6 +6,7 @@ import static com.zoutrankil.data.strategy.score.ScoreMath.*;
 
 /** 用纯 Java 生成已验收方案的日频评分；不训练模型、不请求供应商，也不发布产物。 */
 public final class EtfOnlyTop2ScoreProducer {
+    private static final org.slf4j.Logger LOG=org.slf4j.LoggerFactory.getLogger(EtfOnlyTop2ScoreProducer.class);
     public static final Map<String, String> FACTOR_COLUMNS;
     private static final Set<String> NEGATIVE_FACTORS = Set.of("top10_limit_touch", "top3_concentration", "ret_std60", "chip_breakdown");
     static {
@@ -86,14 +87,16 @@ public final class EtfOnlyTop2ScoreProducer {
         var signalSet = new HashSet<>(inputs.signalDates());
         var l2 = inputs.l2Raw().stream().filter(row -> signalSet.contains(row.tradeDate())).toList();
         if (!new HashSet<>(l2.stream().map(ScoreRow::tradeDate).toList()).containsAll(signalSet)) throw new IllegalArgumentException("L2 source date grid incomplete");
-        var stock = new L2StockScoreProducer().produce(l2, inputs.stockDaily(), inputs.stockMetadata(), inputs.chipRows(), true, promoted);
+        var stock = new L2StockScoreProducer().produceForEtfAggregation(l2, inputs.stockDaily(), inputs.stockMetadata(), inputs.chipRows(), true, promoted);
         var stocksByDate = byDate(mutable(stock)); var factors = technical(inputs.etfFactors(), inputs.signalDates().getFirst(), settings); var etfsByDate = byDate(factors);
+        LOG.info("Prepared complete ETF technical history: rows={}; signal dates={}",factors.size(),inputs.signalDates().size());
         var reference = new LinkedHashMap<String, EtfReference>();
         for (var row : inputs.references()) if (reference.put(row.symbol(), row) != null) throw new IllegalArgumentException("Duplicate prepared ETF reference");
         var holdings = inputs.holdings().stream().filter(row -> reference.containsKey(row.etf()) && L2StockScoreProducer.tradable(row.stock())
                 && !row.announced().isAfter(inputs.signalDates().getLast())).toList();
         boolean ratioPresent = holdings.stream().anyMatch(row -> !Double.isNaN(row.marketValueRatio()));
         var scored = new ArrayList<MutableRow>(); var coverage = new ArrayList<ScoreRow>();
+        int completedDates=0;
         for (LocalDate date : inputs.signalDates()) {
             var allEtfs = etfsByDate.getOrDefault(date, List.of()).stream().filter(row -> reference.containsKey(row.symbol)).toList();
             var stockDay = stocksByDate.getOrDefault(date, List.of());
@@ -118,8 +121,10 @@ public final class EtfOnlyTop2ScoreProducer {
             values.put("liquidity_window", settings.liquidityWindow()); values.put("liquidity_min_periods", settings.liquidityMinPeriods()); values.put("liquidity_min_amount", settings.minAmount());
             coverage.add(new ScoreRow(date, "ETF_UNIVERSE", values));
             if (filtered.isEmpty()) throw new IllegalArgumentException("No eligible ETF score rows on " + date);
+            if(++completedDates%20==0||completedDates==inputs.signalDates().size())LOG.info("Completed full ETF score aggregation: {}/{} dates; rows={}",completedDates,inputs.signalDates().size(),scored.size());
         }
         smooth(scored, settings); comboDiagnostics(scored); chip(scored, inputs.chipRows()); overlay(scored, promoted);
+        LOG.info("Completed full ETF score postprocessing: rows={}",scored.size());
         scored.sort(Comparator.comparing((MutableRow row) -> row.symbol).thenComparing(row -> row.date));
         var appliedWeights = new ArrayList<FrozenPromotedRecipe.DatedValues>(); var appliedStates = new ArrayList<FrozenPromotedRecipe.DatedValues>();
         for (LocalDate date : inputs.signalDates()) {

@@ -1,8 +1,6 @@
 package com.zoutrankil.data.strategy.score;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -11,7 +9,7 @@ public record ScoreRow(LocalDate tradeDate, String symbol, Map<String, Object> v
     public ScoreRow {
         Objects.requireNonNull(tradeDate, "tradeDate");
         if (symbol == null || symbol.isBlank()) throw new IllegalArgumentException("Row symbol required");
-        values = Collections.unmodifiableMap(new LinkedHashMap<>(Objects.requireNonNull(values)));
+        values = FrozenScalarValues.copyOf(Objects.requireNonNull(values));
     }
     public double number(String key) { return ScoreMath.number(values.get(key)); }
     public String text(String key) { return Objects.toString(values.get(key), ""); }

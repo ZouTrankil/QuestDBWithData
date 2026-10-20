@@ -60,7 +60,8 @@ class SyncJobRunnerBoundaryTest {
             public VerifiedBatchExecutor.Codec<String, String> codec() { return CODEC; }
             public VerifiedBatchExecutor.Port<String, String> port() { return port; }
         };
-        var result = f.runner.run("run-unknown", null, "isolated", request(Duration.ofMillis(300)),
+        // 超时由 send 明确注入，整体预算留给 SQLite 初始化，避免在发送前就被慢盘取消。
+        var result = f.runner.run("run-unknown", null, "isolated", request(Duration.ofSeconds(5)),
                 adapter, () -> false);
         assertEquals(SyncRunState.IN_DOUBT, result.state());
         assertEquals(SyncRunState.IN_DOUBT, f.ledger.get("run-unknown").state());

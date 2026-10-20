@@ -18,8 +18,8 @@
 | 盘后任务图、离线 L2 和归档 | `markets/cn/batch/` |
 | 主策略数据准备、评分和正式计划 | `markets/cn/main-strategy-runtime/` |
 | 实时 MQTT、解析和 Parquet 保存 | `markets/cn/l2-live-app/` |
-| 美国表模型与现有美国利率来源 | `markets/us/` |
-| BTC 时间和后续扩展入口 | `markets/btc/`，目前没有采集任务 |
+| 美国利率、基础行情及来源映射 | `markets/us/`；有限采集入口在 `markets/us/data-app` |
+| BTC/ETH 时间、币价定义和映射 | `markets/btc/`；独立采集入口在 `markets/btc/data-app` |
 
 `platform/app-support` 只提供跨市场公共 API 支持，数据库执行能力在 `platform/engine`。市场自己的命令、清洗和业务 API 放在市场库，启动入口放在市场目录下。主策略可以复用 A 股库，不加载 `markets/cn/data-app` 的入口 jar。根 `batch-app` 已移除。Batch 的 Job、管理接口和装配归 `markets/cn/batch`，由 `markets/cn/data-app` 的常驻服务按配置托管；有限 CLI 不启动 Batch。
 

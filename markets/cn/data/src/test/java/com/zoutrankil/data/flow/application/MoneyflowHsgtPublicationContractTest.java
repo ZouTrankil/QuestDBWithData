@@ -98,7 +98,9 @@ class MoneyflowHsgtPublicationContractTest {
     }
     @Test void ownedUnpublishedStageDiscardKeepsOriginalAndReleasesLeaseAfterDurableIntent()throws Exception {
         var f=new Fixture(temp,false);f.transition(RUN,SyncRunState.FAILED,"{}");
-        f.publisher.discardStageOnly(TABLE,RUN,true);
+        assertThrows(IllegalStateException.class,()->f.job.discardUnpublished(RUN,false));
+        assertEquals(0,f.tables.drops);assertNotNull(f.locks.findOwned(RUN,f.scope()));
+        f.job.discardUnpublished(RUN,true);
         assertEquals(0,f.tables.renames);assertEquals(1,f.tables.drops);assertEquals(f.before.rows(),f.tables.rows.get(TABLE));
         assertFalse(MoneyflowHsgtStaging.hasStageIntent(f.evidence));assertNull(f.locks.findOwned(RUN,f.scope()));f.mutexFree();
     }
@@ -162,8 +164,11 @@ class MoneyflowHsgtPublicationContractTest {
         void mutexFree()throws Exception{try(var channel=FileChannel.open(path.resolveSibling(path.getFileName()+".d027-moneyflow-hsgt.lock"),StandardOpenOption.WRITE);var lock=channel.tryLock()){assertNotNull(lock);}}
     }
     static final class FakeTables implements MoneyflowHsgtStagingPort {
+        @Override public Table open(String table,String owningTarget) {
+            assertEquals(TABLE,owningTarget,"The physical copy must retain its original owner layout");
+            return open(table);
+        }
         final Map<String,List<MoneyflowHsgt>> rows=new HashMap<>();final Map<String,Identity> ids=new HashMap<>();int renames,drops,walWaits;Fault fault;boolean stopAfterStageProof;
-        public Table open(String name,String owningTarget){assertEquals(TABLE,owningTarget);return open(name);}
         public Table open(String name){return new Table(){
             public Identity preflight(){return Objects.requireNonNull(ids.get(name));}
             public Snapshot snapshot()throws Exception{return snapshotOf(rows.get(name));}

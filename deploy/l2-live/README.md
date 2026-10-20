@@ -40,6 +40,8 @@ SQLite 保留原始接收日志和提交账本，保证刚收到但尚未形成 
 
 ## 配置和启动
 
+`--journal-max-bytes` 兼容旧参数，最大 64 GiB，与 `--storage-bytes` 绑定同一容量；同时提供时值必须相同。
+
 通过根 `config/apps/cn-l2-live.yml` 设置标的、路径和会话；入口自动启用 `l2` 与 `market-cn`，公共连接从 `config/application.yml` 继承，供应商账号放 `config/application-local.yml`。既有 `var/l2-live/credentials.env` 仍作为字面量覆盖，随后由进程环境变量和显式 CLI 参数覆盖。账号和密码不会写入计划输出。
 
 ```sh

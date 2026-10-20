@@ -1,0 +1,15 @@
+plugins { id 'application' }
+
+dependencies {
+    implementation project(':markets:btc')
+    implementation project(':platform:engine:source')
+    implementation project(':platform:engine:questdb')
+    implementation project(':platform:runtime-support')
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    runtimeOnly 'org.yaml:snakeyaml'
+}
+application {
+    applicationName = 'btc-data'
+    mainClass = 'com.zoutrankil.market.btc.app.CryptoDataMain'
+    applicationDefaultJvmArgs = ['-Xms128m', '-Xmx2g']
+}

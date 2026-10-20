@@ -334,8 +334,9 @@ public final class NativeMarketInputPackagePublisher {
     private static List<Map<String,Object>> market(List<Map<String,Object>> source, LocalDate start, LocalDate end, Set<String> symbols, Set<String> expected) {
         var rows = new TreeMap<String,Map<String,Object>>();
         for (var input : source) {
-            LocalDate date = day(input.get("timestamp")); String symbol = symbol(input.get("ts_code"));
-            if (date.isBefore(start) || date.isAfter(end) || !symbols.contains(symbol)) continue;
+            LocalDate date = day(input.get("timestamp")); String code = Objects.toString(input.get("ts_code"), "");
+            if (date.isBefore(start) || date.isAfter(end) || !symbols.contains(code)) continue;
+            String symbol = symbol(code);
             var row = project(input, MARKET_COLUMNS); row.put("timestamp", date); row.put("ts_code", symbol);
             for (String field : List.of("open", "high", "low", "close", "amount")) {
                 if (!(row.get(field) instanceof Number number) || !Double.isFinite(number.doubleValue()) || number.doubleValue() < 0

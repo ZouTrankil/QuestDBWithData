@@ -50,7 +50,7 @@ def main():
     policy.write_text('''allprojects {
     tasks.withType(Test).configureEach {
         useJUnitPlatform { excludeTags 'retained-parity' }
-        def excluded = new groovy.json.JsonSlurper().parseText(System.getProperty('offline.excluded'))
+        def excluded = new groovy.json.JsonSlurper().parse(new File(System.getProperty('offline.excludedFile')))
         excluded.each { filter.excludeTestsMatching(it) }
         setEnvironment(environment.findAll { key, value ->
             !(key.toString() ==~ /(?i).*(LIVE|RECOVERY|JDB_QUESTDB_TEST_URL|TUSHARE_TOKEN).*/)
@@ -59,7 +59,8 @@ def main():
     }
 }
 ''')
-    command += ['-I', str(policy), '-Doffline.excluded=' + json.dumps(external)]
+    # Windows 的批处理命令行有长度上限；排除清单通过文件传给 Gradle。
+    command += ['-I', str(policy), '-Doffline.excludedFile=' + str(run / 'excluded.json')]
     # 每次写独立报告，避免把上一次的 XML 算进本次结果。
     report_policy = run / 'reports.init.gradle'
     report_policy.write_text('''allprojects {

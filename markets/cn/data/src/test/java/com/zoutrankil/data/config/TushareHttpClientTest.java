@@ -135,7 +135,14 @@ class TushareHttpClientTest {
         }
     }
 
-    @Test void oversizedResponseIsAContractFailure() {
+    @Test void oversizedResponseIsAContractFailure() throws Exception {
+        // 此处验证字节上限；首次网络初始化和 8 MiB 传输不应先耗尽测试预算。
+        properties.setRequestTimeout(Duration.ofSeconds(20));
+        budget.close();
+        budget = new SharedRequestBudget(new SharedRequestBudget.Policy(60000, 60000, Map.of(),
+                2, 16, 1, Duration.ofSeconds(30), Duration.ZERO, Duration.ZERO, Set.of()), leaseDirectory);
+        client = new TushareClient(new ClientConfiguration().tushareWebClient(
+                WebClient.builder(), properties, pool, observations), properties, budget);
         respond("x".repeat(8 * 1024 * 1024 + 1));
         assertEquals(TushareFailure.Kind.CONTRACT,
                 assertThrows(TushareFailure.class, () -> client.request(request)).kind());

@@ -103,7 +103,7 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
             evidence=ledgerPath.getParent().resolve("sync-evidence").resolve(run).resolve("source.json");Files.createDirectories(evidence.getParent());
             writeEvidence(evidence,Map.ofEntries(Map.entry("producer","java.market_sentiment_daily"),Map.entry("modelVersion",MODEL_VERSION),Map.entry("warmupFrom",plan.warmupFrom),
                     Map.entry("from",request.from()),Map.entry("to",request.to()),Map.entry("historyDates",historyDates),Map.entry("sourceRawRows",rawRows),
-                    Map.entry("sourceFingerprint",sourceFingerprint),Map.entry("dailyOnlyMissingFactor",source.gaps),Map.entry("marginAvailability",source.marginAvailability),Map.entry("rows",source.rows)));
+                    Map.entry("sourceFingerprint",sourceFingerprint),Map.entry("dailyOnlyMissingFactor",source.gaps),Map.entry("marginAvailability",source.marginAvailability),Map.entry("stockScopeAudits",source.stockScopeAudits),Map.entry("rows",source.rows)));
             if(!sourcePin().equals(plan.sourcePin))throw new IllegalStateException("Dependency source changed during calculation");
             port.prepare(plan.targetBefore,request.from(),request.to());
             consumer.accept(new SyncJobRunner.Page<>(source.rows,sourceFingerprint,evidence.toString(),null));
@@ -133,16 +133,18 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
             return new SyncJobRunner.SourceCompletion(1,source.rows.size(),true,evidence.resolveSibling("publication.json").toString());
         }
     }
-    private record Computed(List<MarketSentimentDailyRow> rows,int historyDates,long rawRows,String fingerprint,List<Map<String,Object>> gaps,List<Map<String,Object>> marginAvailability){}
+    private record Computed(List<MarketSentimentDailyRow> rows,int historyDates,long rawRows,String fingerprint,List<Map<String,Object>> gaps,List<Map<String,Object>> marginAvailability,List<Map<String,Object>> stockScopeAudits){}
     private Computed calculate(Plan plan,BooleanSupplier cancelled)throws Exception{
         var days=new ArrayList<Day>();var history=new HashMap<String,StockHistory>();long[] rawRows={0};
         var expected=expectedDates(plan.request.from(),plan.request.to());var seen=new HashSet<LocalDate>();
         var gaps=new ArrayList<Map<String,Object>>();
+        var stockScopeAudits=new ArrayList<Map<String,Object>>();
         MessageDigest sourceHash=MessageDigest.getInstance("SHA-256");
         for(LocalDate lower=plan.warmupFrom;!lower.isAfter(plan.request.to());){
             check(cancelled);LocalDate upper=lower.withDayOfMonth(1).plusMonths(1);if(upper.isAfter(plan.request.to().plusDays(1)))upper=plan.request.to().plusDays(1);
             var rows=new ArrayList<Stock>();
             rawRows[0]+=storage.readPanelMonth(lower,upper,()->check(cancelled),new MarketSentimentDailySourceReadPort.PanelConsumer(){
+                @Override public void stockScopeAudit(Map<String,Object> proof){stockScopeAudits.add(proof);}
                 @Override public void completeDay(LocalDate date,Set<String> codes,int basic,int limits){
                     finishDay(date,rows,codes,basic,limits,expected,seen,days,gaps);rows.clear();
                 }
@@ -166,7 +168,8 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
             values.put("model_version",MODEL_VERSION);values.put("updated_at",observed);if(!finite(day.get("sentiment_score")))throw new IllegalStateException("Requested sentiment score lacks sufficient history on "+day.date);
             output.add(MarketSentimentDailyRows.row(values));}
         sourceHash.update(canonicalBytes(gaps));
-        return new Computed(List.copyOf(output),days.size(),rawRows[0],HexFormat.of().formatHex(sourceHash.digest()),List.copyOf(gaps),marginAvailability);
+        sourceHash.update(canonicalBytes(stockScopeAudits));
+        return new Computed(List.copyOf(output),days.size(),rawRows[0],HexFormat.of().formatHex(sourceHash.digest()),List.copyOf(gaps),marginAvailability,List.copyOf(stockScopeAudits));
     }
     private void finishDay(LocalDate date,List<Stock> rows,Set<String> codes,int basic,int limits,Map<LocalDate,Set<String>> expected,Set<LocalDate> seen,List<Day> days,List<Map<String,Object>> gaps){
         if(expected.containsKey(date)){if(!expected.get(date).containsAll(codes)||basic!=codes.size()||limits!=codes.size())
