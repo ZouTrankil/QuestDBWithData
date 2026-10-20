@@ -90,7 +90,7 @@ BTC 的原始文件、队列、预算、账本及回执在 `var/crypto-market-da
 
 - Tiingo key 已通过真实日线和历史 IEX 请求，SPY、AAPL 的 2006 年以来日线可读取。
 - IEX 大范围请求实测会只返回最后 10000 根，必须按月切分，达到边界则拒绝验收。不能把 HTTP 200 或返回 10000 行当成全年完整。
-- [Tiingo 公开 Starter 配额](https://www.tiingo.com/about/pricing)是 50 次/小时、1000 次/日、500 标的/月和 1 GB/月。未取得账户套餐页面前按这个保守上限执行；来源响应没有给出可证明套餐等级的配额头。
+- 用户已确认当前账户为 Starter 免费套餐。[Tiingo 公开 Starter 配额](https://www.tiingo.com/about/pricing)是 50 次/小时、1000 次/日、500 标的/月和 1 GB/月，现有共享预算按这些上限执行。Tiingo 优先采集核心数据和补验失败项，全市场日线主要使用 Yahoo；本地账本不代表账户在其他应用中的剩余配额，来源响应也未提供可核实该余额的头。
 - [Tiingo IEX 说明](https://www.tiingo.com/documentation/iex)明确分钟成交量为 IEX 场所量，且必须显式请求 `volume`。
 - Yahoo 报价是拆股调整基准。通过响应中该交易日之后的全部拆股还原 OHLC、股数及现金分红，使用 `RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED` 标明来源；`adj_close` 保留 Yahoo 当前调整值。AAPL 2006-01-03 的 Yahoo 收盘价乘 28 后约为 74.75，接近 Tiingo 原始 74.75；不同来源的盘中 OHLC 仍有差异，不能混合覆盖。缺失数值拒收，不补零。
 - 本机 2026-10-20 核验 FISV 时，Yahoo 两个主机均缺少 2025-11-12 的 OHLCV。已用独立 Tiingo 来源补入 2006-01-03 至 2026-10-16 共 5230 条日线并验收；保留 Yahoo 原文和 `FAILED_SOURCE`，来源之间不拼值或覆盖。
