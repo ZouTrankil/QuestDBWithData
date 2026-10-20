@@ -5,6 +5,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.domain.fund.EtfAdj;
 import com.zoutrankil.data.domain.fund.EtfAdjKey;
+import com.zoutrankil.data.etf.port.EtfAdjTarget;
 import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.port.EtfWriteSession;
 import com.zoutrankil.data.repository.FileEvidenceStore;
@@ -69,7 +70,8 @@ public final class EtfAdjRunRecovery {
         var ledger = SyncRunLedger.openExisting(ledgerPath);
         var run = Objects.requireNonNull(ledger.getRun(runId));
         var frozen = json.readTree(run.frozenJson());
-        var definition = EtfAdjSyncJobOwner.DEFINITION;
+        // 原日志、账本版本和原冻结定义共同决定布局，不采用当前启动默认值。
+        var definition = EtfAdjSyncJobOwner.definition(run.jobVersion());
         if (!definition.jobId().equals(run.jobId())
                 || definition.version() != run.jobVersion()
                 || !definition.equals(
@@ -164,7 +166,9 @@ public final class EtfAdjRunRecovery {
                 throw new IllegalStateException("Invalid source size");
             var result = json.readTree(uncertain.getFirst().payloadJson()).path("writeResult");
             var receipts = result.path("receipts");
-            var port = target.newWriter(run.targetId());
+            var port =
+                    EtfAdjTarget.writerForFrozenVersion(
+                            target, run.targetId(), definition.datasetVersion());
             var codec = port.codec();
             if (!"IN_DOUBT".equals(result.path("status").asText())
                     || !receipts.isArray()

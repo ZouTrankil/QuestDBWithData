@@ -80,13 +80,20 @@ public final class EtfAdjCoverage {
 
     public static Optional<Coverage> checkpoint(
             Path path, String targetId, EtfAdjTradingDates calendars) throws Exception {
+        return checkpoint(path, targetId, calendars, 1);
+    }
+
+    /** 只接续同一冻结定义的回执；新旧布局即使目标身份相同也不能共用检查点。 */
+    public static Optional<Coverage> checkpoint(
+            Path path, String targetId, EtfAdjTradingDates calendars, int jobVersion)
+            throws Exception {
+        SyncJobDefinition expectedDefinition = EtfAdjSyncJobOwner.definition(jobVersion);
         Objects.requireNonNull(path);
         Objects.requireNonNull(targetId);
         Objects.requireNonNull(calendars);
         if (!Files.isRegularFile(path) || !hasHistorySchema(path)) return Optional.empty();
         var ledger = SyncRunLedger.openReadOnly(path);
         var json = JobDefinitionJson.mapper();
-        SyncJobDefinition expectedDefinition = EtfAdjSyncJobOwner.DEFINITION;
         var intervals = new ArrayList<Interval>();
         String after = null;
         int seen = 0;
@@ -99,11 +106,11 @@ public final class EtfAdjCoverage {
                 if (!Set.of(SyncRunState.VERIFIED, SyncRunState.VERIFIED_EMPTY)
                                 .contains(summary.state())
                         || !targetId.equals(summary.targetId())
-                        || summary.jobVersion() != 1) continue;
+                        || summary.jobVersion() != expectedDefinition.version()) continue;
                 var run = ledger.getRun(summary.id());
                 if (!targetId.equals(run.targetId())
                         || !"data.etf_adj".equals(run.jobId())
-                        || run.jobVersion() != 1) continue;
+                        || run.jobVersion() != expectedDefinition.version()) continue;
                 JsonNode frozen = json.readTree(run.frozenJson());
                 if (!sameDefinition(expectedDefinition, frozen.path("definition"))) continue;
                 if (!"INCREMENTAL".equals(frozen.path("mode").asText()))

@@ -1,0 +1,47 @@
+{
+  "说明": "隔离工作目录验证；未包含其他共享修改。SQLite 闭市日样本是合成测试，不是生产来源或真实恢复证据。",
+  "baseCommit": "465dd9efe1c2f6f68af9f900fd65154e162fcb4a",
+  "源码摘要": {
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/port/EtfAdjTarget.java": "2b42ec115d2f878aa4dec75387ce2449d09d3dbdf067d9536959b61171338dc8",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/storage/QuestDbEtfAdjTarget.java": "acc509aa8a3f5e3c67e2896ebdb8903b67fb5843fbec4fb18a590e8b78e01d27",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfAdjJobService.java": "e9931fb4c31827c7de5d0492bd8a71aac3bb68bc1077ad6f2d36c564b035d130",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfAdjCoverage.java": "2c9f26e75d9288fac14062fcd36243b97e74c430fcffda2e5db7c0234a5710ff",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfAdjRunRecovery.java": "ccc1eb7bdf184312c8c856f7031c5ba00a3d3fbf71ed72ef8b0504a00420536c",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/application/EtfAdjVersionedLifecycleTest.java": "5013fcee51c4b15af7bfc2b401e0c6e2253827a8595641b5ead98191ae305539",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/application/EtfAdjVersionedRecoveryAdmissionTest.java": "6388caaa99fcc450c1957414324b4e1cb2477303c6fe53fe6b92024ca1dc8c57"
+  },
+  "检查命令": "./gradlew :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "模块结果": {
+    "modules/markets/cn/main-strategy-runtime/_output/test-results/test": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules/markets/cn/data/_output/test-results/test": {
+      "tests": 2213,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 140
+    }
+  },
+  "架构与模块边界": "通过",
+  "CN数据与主策略发行包": "通过",
+  "Java格式与import及字面量核对": {
+    "文件数": 2004,
+    "结果": "通过"
+  },
+  "验证分支": [
+    "显式 v2 新计划及范围和会话",
+    "配置版本相反时按原账本恢复 v1/v2，原 JSON 不变",
+    "目标身份变化及错版新计划拒绝执行",
+    "未决 v2 不允许直接恢复",
+    "包装器不能隐藏会话版本",
+    "v2 不借用 v1 连续前缀检查点",
+    "v2 原日志定义识别后仍要求原区间锁"
+  ],
+  "真实恢复": false,
+  "默认注册版本": 1,
+  "读取组作业及调度切换已完成": false,
+  "正式迁移": false
+}

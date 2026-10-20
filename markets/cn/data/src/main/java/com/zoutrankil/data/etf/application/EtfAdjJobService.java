@@ -9,6 +9,7 @@ import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
 import com.zoutrankil.data.etf.mapper.EtfAdjMapper;
 import com.zoutrankil.data.etf.port.EtfAdjTarget;
+import com.zoutrankil.data.etf.port.EtfAdjWriteSession;
 import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.CompletedSourceRevalidation;
 import com.zoutrankil.data.service.DailySyncEndDate;
@@ -17,6 +18,7 @@ import com.zoutrankil.data.service.SyncJobRegistry;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.SyncRunExecution;
 import com.zoutrankil.data.service.TusharePageService;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +62,8 @@ public final class EtfAdjJobService {
         }
     }
 
+    // 只用于新计划；历史请求的布局必须取自原账本。
+    private final CnTradeDateLayout layout;
     private final SyncJobRegistry jobs;
     private final TusharePageService pages;
     private final EtfAdjTradingDates tradingDates;
@@ -83,6 +87,17 @@ public final class EtfAdjJobService {
             ExchangeCalendarReadRepository calendars,
             EtfAdjTarget target,
             Path ledgerPath) {
+        this(jobs, pages, calendars, target, ledgerPath, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public EtfAdjJobService(
+            SyncJobRegistry jobs,
+            TusharePageService pages,
+            ExchangeCalendarReadRepository calendars,
+            EtfAdjTarget target,
+            Path ledgerPath,
+            CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.jobs = Objects.requireNonNull(jobs);
         this.pages = Objects.requireNonNull(pages);
         this.tradingDates = new EtfAdjTradingDates(calendars);
@@ -132,7 +147,7 @@ public final class EtfAdjJobService {
         LocalDate requestedLimit = requestedThrough == null ? logicalDate : requestedThrough;
         LocalDate resolvedThrough = DailySyncEndDate.resolve(requestedLimit, sourceNow);
         if (resolvedThrough.isAfter(logicalDate)) resolvedThrough = logicalDate;
-        SyncJobDefinition definition = EtfAdjSyncJobOwner.DEFINITION;
+        SyncJobDefinition definition = EtfAdjSyncJobOwner.definition(layout.schemaVersion());
         Mode mode = requestedMode == null ? definition.defaultMode() : requestedMode;
         if (!definition.supportedModes().contains(mode))
             throw new IllegalArgumentException("Unsupported etf_adj mode");
@@ -160,9 +175,9 @@ public final class EtfAdjJobService {
             throw new IllegalArgumentException("etf_adj --from is after --to");
 
         String target = targetId();
-        var port = this.target.newWriter(target);
+        var port = writer(target, definition.datasetVersion());
         port.preflight();
-        EtfTargetRange physical = readTargetRange();
+        EtfTargetRange physical = readTargetRange(definition.datasetVersion());
         if (physical.max() != null && physical.max().isAfter(logicalDate))
             throw new IllegalStateException(
                     "etf_adj target contains a date after frozen logical date");
@@ -174,7 +189,9 @@ public final class EtfAdjJobService {
         boolean bootstrap = false;
         Optional<EtfAdjCoverage.Coverage> saved = Optional.empty();
         if (mode == Mode.INCREMENTAL) {
-            saved = EtfAdjCoverage.checkpoint(ledgerPath, target, tradingDates);
+            saved =
+                    EtfAdjCoverage.checkpoint(
+                            ledgerPath, target, tradingDates, definition.version());
             if (saved.isEmpty()) {
                 if (bootstrapFrom == null)
                     throw new IllegalArgumentException(
@@ -264,8 +281,27 @@ public final class EtfAdjJobService {
                 bootstrap);
     }
 
-    private EtfTargetRange readTargetRange() {
+    private EtfTargetRange readTargetRange(int datasetVersion) {
+        if (target instanceof EtfAdjTarget.Versioned versioned)
+            return versioned.range(datasetVersion);
+        if (datasetVersion != 1) throw new IllegalArgumentException("旧 ETF 复权目标没有新版范围读取能力");
         return target.range();
+    }
+
+    private EtfAdjWriteSession writer(String identity, int datasetVersion) {
+        return (EtfAdjWriteSession)
+                EtfAdjTarget.writerForFrozenVersion(target, identity, datasetVersion);
+    }
+
+    private SyncJobDefinition savedDefinition(String runId) throws Exception {
+        var run = SyncRunLedger.openReadOnly(ledgerPath).getRun(Objects.requireNonNull(runId));
+        if (run == null || !EtfAdjSyncJobOwner.DEFINITION.jobId().equals(run.jobId()))
+            throw new IllegalArgumentException("原记录不是 ETF 复权任务");
+        return EtfAdjSyncJobOwner.definition(run.jobVersion());
+    }
+
+    private FrozenRunRequest.Restored restore(String runId) throws Exception {
+        return FrozenRunRequest.restore(ledgerPath, runId, savedDefinition(runId));
     }
 
     public SyncJobRunner.Result run(Plan plan) throws Exception {
@@ -273,7 +309,7 @@ public final class EtfAdjJobService {
     }
 
     public SyncJobRunner.Result resume(String priorRunId) throws Exception {
-        var saved = FrozenRunRequest.restore(ledgerPath, priorRunId, EtfAdjSyncJobOwner.DEFINITION);
+        var saved = restore(priorRunId);
         var parameters = saved.request().parameters();
         var plan =
                 new Plan(
@@ -289,7 +325,7 @@ public final class EtfAdjJobService {
 
     public SyncJobRunner.Result resume(Plan plan, String priorRunId) throws Exception {
         Objects.requireNonNull(priorRunId);
-        var saved = FrozenRunRequest.restore(ledgerPath, priorRunId, EtfAdjSyncJobOwner.DEFINITION);
+        var saved = restore(priorRunId);
         if (!SyncRequestIdentity.fingerprint(saved.request(), saved.targetId())
                 .equals(SyncRequestIdentity.fingerprint(plan.request(), plan.targetId())))
             throw new IllegalArgumentException(
@@ -314,7 +350,11 @@ public final class EtfAdjJobService {
     private SyncJobRunner.Result execute(String runId, String priorRunId, Plan plan)
             throws Exception {
         requireAdmittedMode(plan.request().mode());
-        if (!plan.request().definition().equals(EtfAdjSyncJobOwner.DEFINITION)
+        // 新运行必须匹配当前选定版本；恢复允许原版本，但原目标身份仍须一致。
+        var expected = EtfAdjSyncJobOwner.definition(plan.request().definition().version());
+        if (!plan.request().definition().equals(expected)
+                || priorRunId == null
+                        && !expected.equals(EtfAdjSyncJobOwner.definition(layout.schemaVersion()))
                 || !plan.targetId().equals(plan.request().parameters().get("targetId"))
                 || !plan.targetId().equals(targetId()))
             throw new IllegalStateException(
@@ -328,7 +368,8 @@ public final class EtfAdjJobService {
                 plan.request(),
                 "Cannot read etf_adj cancellation state",
                 () -> {
-                    var port = target.newWriter(plan.targetId());
+                    var port =
+                            writer(plan.targetId(), plan.request().definition().datasetVersion());
                     var evidence = ledgerPath.getParent().resolve("sync-evidence").resolve(runId);
                     return new EtfAdjSyncAdapter(
                             new EtfAdjSource(pages, new EtfAdjMapper(), evidence.resolve("source")),
@@ -340,36 +381,42 @@ public final class EtfAdjJobService {
 
     /** A preview cannot be reused after target rows or the verified incremental baseline have changed. */
     private void validateCurrentBaseline(Plan plan) throws Exception {
-        EtfTargetRange current = readTargetRange();
+        EtfTargetRange current = readTargetRange(plan.request().definition().datasetVersion());
         if (!Objects.equals(current.min(), plan.targetMinDate())
                 || !Objects.equals(current.max(), plan.targetMaxDate()))
             throw new IllegalStateException(
                     "etf_adj physical date range changed after plan; create a fresh frozen plan");
         if (plan.request().mode() != Mode.INCREMENTAL) return;
-        var saved = EtfAdjCoverage.checkpoint(ledgerPath, plan.targetId(), tradingDates);
+        var saved =
+                EtfAdjCoverage.checkpoint(
+                        ledgerPath,
+                        plan.targetId(),
+                        tradingDates,
+                        plan.request().definition().version());
         if (saved.isPresent() != (plan.checkpointBefore() != null)
                 || saved.isPresent()
                         && (!saved.get().through().equals(plan.checkpointBefore())
                                 || !saved.get().anchor().equals(plan.checkpointAnchor())))
             throw new IllegalStateException(
                     "etf_adj verified checkpoint changed after plan; create a fresh frozen plan");
-        var port = target.newWriter(plan.targetId());
+        var port = writer(plan.targetId(), plan.request().definition().datasetVersion());
         EtfAdjCoverage.validateExistingTarget(
                 ledgerPath, saved.orElse(null), plan.targetId(), tradingDates, port);
     }
 
     public String revalidate(String priorRunId) throws Exception {
+        var definition = savedDefinition(priorRunId);
         return CompletedSourceRevalidation.revalidate(
                 ledgerPath,
                 priorRunId,
-                EtfAdjSyncJobOwner.DEFINITION,
+                definition,
                 this::targetId,
                 (evidence, identity) ->
                         new EtfAdjSyncAdapter(
                                 new EtfAdjSource(
                                         pages, new EtfAdjMapper(), evidence.resolve("source")),
                                 tradingDates,
-                                target.newWriter(identity),
+                                writer(identity, definition.datasetVersion()),
                                 evidence));
     }
 

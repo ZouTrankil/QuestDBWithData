@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /** Configured physical target; each execution obtains an independent write session. */
-public final class QuestDbEtfAdjTarget implements EtfAdjTarget {
+public final class QuestDbEtfAdjTarget implements EtfAdjTarget.Versioned {
     private final CnTradeDateLayout layout;
     private final String table;
     private final JdbcTemplate jdbc;
@@ -62,7 +62,13 @@ public final class QuestDbEtfAdjTarget implements EtfAdjTarget {
 
     @Override
     public EtfTargetRange range() {
-        String dateColumn = layout.physicalDateColumn("etf_adj");
+        return range(layout.schemaVersion());
+    }
+
+    @Override
+    public EtfTargetRange range(int datasetVersion) {
+        String dateColumn =
+                CnTradeDateLayout.fromVersion(datasetVersion).physicalDateColumn("etf_adj");
         String sql =
                 "SELECT cast(min("
                         + dateColumn

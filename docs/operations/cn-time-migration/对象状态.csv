@@ -1,5 +1,5 @@
 ﻿对象,原判断,本轮状态,限制
-etf_adj,可统一,v2 读写端口实库验收通过；默认 v1；v2 计划恢复调度及正式迁移未完成,timestamp → trade_date；来源 fund_adj 的交易日。
+etf_adj,可统一,v2 端口及显式控制服务已接通；默认 v1；注册组任务及正式迁移未完成,timestamp → trade_date；来源 fund_adj 的交易日。
 etf_basic,保留其他语义,保留现状，尚未完成全链路验收,timestamp 是固定 1970-01-01 技术占位；成立、上市、退市、申赎日期各自保留；update_time 不当作交易日。
 etf_daily,可统一,六组新布局两行演练通过；正式迁移和消费者切换未执行,timestamp → trade_date；保留现有 TIMESTAMP_NS 精度。
 etf_factor,已用 trade_date,保留现状，尚未完成全链路验收,来源交易日；不改名。
