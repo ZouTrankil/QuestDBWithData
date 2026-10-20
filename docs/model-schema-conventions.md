@@ -103,3 +103,5 @@ CN 的来源字段说明维护在 `markets/cn/src/main/resources/model-docs/coll
 `index_daily_market` 正式物理列为 `trade_date`，对应 `IndexDailyMarketDataset` v2。D019 现有作业仅允许隔离表，显式使用 `legacyIsolatedDefinition` v1 的 `timestamp`；不要将正式契约的版本改回 v1，也不要更改旧冻结请求来适配新布局。迁移状态见[执行记录](operations/cn-time-migration/README.md)。
 
 主策略内部证券身份是 `ScoreRow.instrumentCode`，汇总身份是 `AggregationScope`；同一行只允许一种。ETF 持仓用 `etfCode/constituentCode` 表达两侧角色。旧产物仍有显式 v1 适配，新版对外字段尚未切换，见[设计决定](decisions/2026-10-20-主策略内部身份角色.md)。
+
+主策略读取时间按角色绑定现有 Dataset 定义，不根据裸 `timestamp/ts` 猜测日期。情绪和市场状态的契约由 CN 模型库统一提供；v1 编码与新版迁移状态见[设计决定](decisions/2026-10-20-主策略按来源契约解码时间.md)。

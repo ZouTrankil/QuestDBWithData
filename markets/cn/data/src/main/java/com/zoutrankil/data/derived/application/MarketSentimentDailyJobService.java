@@ -25,6 +25,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition.Parameter;
 import com.zoutrankil.data.domain.SyncJobDefinition.ParameterType;
 import com.zoutrankil.data.domain.SyncJobDefinition.RetryPolicy;
 import com.zoutrankil.data.domain.SyncRunState;
+import com.zoutrankil.data.domain.derived.MarketSentimentDailyDataset;
 import com.zoutrankil.data.domain.derived.MarketSentimentDailyTargetSnapshot;
 import com.zoutrankil.data.domain.derived.policy.MarketSentimentDailyCalculation.Day;
 import com.zoutrankil.data.domain.derived.policy.MarketSentimentDailyCalculation.Stock;
@@ -140,65 +141,7 @@ public final class MarketSentimentDailyJobService implements DatasetImplementati
 
     @Override
     public DatasetDefinition definition() {
-        var columns = new ArrayList<DatasetDefinition.Column>();
-        var components = MarketSentimentDailyRow.class.getRecordComponents();
-        for (int i = 0; i < components.length; i++) {
-            String name = MarketSentimentDailyRows.COLUMNS.get(i);
-            Class<?> type = components[i].getType();
-            var storage =
-                    type == Instant.class
-                            ? DatasetDefinition.StorageType.TIMESTAMP
-                            : type == Double.class
-                                    ? DatasetDefinition.StorageType.DOUBLE
-                                    : type == Boolean.class
-                                            ? DatasetDefinition.StorageType.BOOLEAN
-                                            : DatasetDefinition.StorageType.SYMBOL;
-            var temporal =
-                    type != Instant.class
-                            ? null
-                            : new DatasetDefinition.TemporalContract(
-                                    i == 0
-                                            ? DatasetDefinition.TemporalKind.BUSINESS_DATE
-                                            : DatasetDefinition.TemporalKind.INSTANT,
-                                    "epochMicros",
-                                    i == 0 ? "calendar" : "UTC",
-                                    "MICROS",
-                                    i == 0
-                                            ? "Trading date encoded at exact UTC midnight"
-                                            : "Java calculation observation instant");
-            columns.add(
-                    new DatasetDefinition.Column(
-                            "derived:" + name,
-                            name,
-                            name,
-                            storage,
-                            i != 0,
-                            "Native v2 rule/PCA field " + name,
-                            temporal));
-        }
-        return new DatasetDefinition(
-                datasetId(),
-                1,
-                "derived.questdb",
-                "java.market_sentiment_daily",
-                table,
-                DatasetDefinition.ObjectKind.TABLE,
-                columns,
-                List.of("trade_date"),
-                List.of(),
-                "trade_date",
-                DatasetDefinition.Partition.MONTH,
-                true,
-                Set.of(DatasetDefinition.Capability.READ, DatasetDefinition.Capability.WAL_REPLACE),
-                List.of(
-                        "stk_factor",
-                        "daily_basic",
-                        "stk_limit",
-                        "stk_suspend",
-                        "stk_st_daily",
-                        "margin_detail",
-                        "moneyflow"),
-                "53 legacy fields; date-keyed bounded full-row window replacement retaining outside rows and backup. 1400-day warmup; shifted 756/120 rolling scores; full-window winsorization/PCA are inherited rebuild semantics, not a historical point-in-time PCA promise.");
+        return MarketSentimentDailyDataset.definition(table);
     }
 
     public static SyncJobDefinition jobDefinition() {

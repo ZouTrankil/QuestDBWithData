@@ -2,7 +2,6 @@ package com.zoutrankil.data.derived.application;
 
 import static com.zoutrankil.data.domain.derived.policy.MarketSentimentDailyCalculation.finite;
 import static com.zoutrankil.data.domain.derived.policy.RegimeFeaturesMonitorDailyCalculation.ALGORITHM_VERSION;
-import static com.zoutrankil.data.domain.derived.policy.RegimeFeaturesMonitorDailyCalculation.COLUMNS;
 import static com.zoutrankil.data.domain.derived.policy.RegimeFeaturesMonitorDailyCalculation.REQUIRED_CONTEXT_FIELDS;
 import static com.zoutrankil.data.domain.derived.policy.RegimeFeaturesMonitorDailyCalculation.aggregate;
 import static com.zoutrankil.data.domain.derived.policy.RegimeFeaturesMonitorDailyCalculation.margin;
@@ -30,6 +29,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition.Parameter;
 import com.zoutrankil.data.domain.SyncJobDefinition.ParameterType;
 import com.zoutrankil.data.domain.SyncJobDefinition.RetryPolicy;
 import com.zoutrankil.data.domain.derived.NativeDailyWindowSnapshot;
+import com.zoutrankil.data.domain.derived.RegimeFeaturesMonitorDailyDataset;
 import com.zoutrankil.data.domain.derived.policy.RegimeFeaturesMonitorDailyCalculation.Day;
 import com.zoutrankil.data.domain.derived.policy.RegimeFeaturesMonitorDailyCalculation.Stock;
 import com.zoutrankil.data.domain.derived.policy.RegimeFeaturesMonitorDailyCalculation.Valuation;
@@ -78,18 +78,7 @@ public final class RegimeFeaturesMonitorDailyJobService
     public static final String PRODUCER = "java.regime_features_monitor_daily";
     private static final String FORMAL = "regime_features_monitor_daily",
             PREFIX = "java_regime_features_monitor_daily";
-    public static final List<String> SOURCES =
-            List.of(
-                    "stk_factor",
-                    "daily",
-                    "daily_basic",
-                    "stk_limit",
-                    "stk_suspend",
-                    "stk_st_daily",
-                    "margin_detail",
-                    "moneyflow_hsgt",
-                    "cn_bond_yield_curve",
-                    "exchange_calendar");
+    public static final List<String> SOURCES = RegimeFeaturesMonitorDailyDataset.DEPENDENCIES;
     // Every required input now has a registered Java owner, including ChinaBond.
     public static final List<String> REGISTERED_DEPENDENCIES = SOURCES;
 
@@ -180,56 +169,7 @@ public final class RegimeFeaturesMonitorDailyJobService
 
     @Override
     public DatasetDefinition definition() {
-        var columns = new ArrayList<DatasetDefinition.Column>();
-        var components = RegimeFeaturesMonitorDailyRow.class.getRecordComponents();
-        for (int i = 0; i < components.length; i++) {
-            String name = COLUMNS.get(i);
-            Class<?> type = components[i].getType();
-            var storage =
-                    type == Instant.class
-                            ? DatasetDefinition.StorageType.TIMESTAMP
-                            : type == Double.class
-                                    ? DatasetDefinition.StorageType.DOUBLE
-                                    : DatasetDefinition.StorageType.SYMBOL;
-            var temporal =
-                    type != Instant.class
-                            ? null
-                            : new DatasetDefinition.TemporalContract(
-                                    i == 0
-                                            ? DatasetDefinition.TemporalKind.BUSINESS_DATE
-                                            : DatasetDefinition.TemporalKind.INSTANT,
-                                    "epochMicros",
-                                    i == 0 ? "calendar" : "UTC",
-                                    "MICROS",
-                                    i == 0
-                                            ? "Trading date encoded at exact UTC midnight"
-                                            : "Native calculation observation instant");
-            columns.add(
-                    new DatasetDefinition.Column(
-                            "derived:" + name,
-                            name,
-                            name,
-                            storage,
-                            i != 0,
-                            "Legacy proxy-style field " + name,
-                            temporal));
-        }
-        return new DatasetDefinition(
-                datasetId(),
-                1,
-                "derived.questdb",
-                PRODUCER,
-                table,
-                DatasetDefinition.ObjectKind.TABLE,
-                columns,
-                List.of("trade_date"),
-                List.of(),
-                "trade_date",
-                DatasetDefinition.Partition.MONTH,
-                true,
-                Set.of(DatasetDefinition.Capability.READ, DatasetDefinition.Capability.WAL_REPLACE),
-                REGISTERED_DEPENDENCIES,
-                "21 existing fields; bounded full-row window replacement retaining outside rows and backup. Warmup=min(month start,from-20 days); qcut size/PB proxy style, monthly compounds, rolling five observations, full warmup-window valuation ranks. Required input-package context fields are finite; optional incomplete-market margin is NULL with separate availability evidence, while the inherited data_quality_flag remains proxy_style. Gov/10Y cn_bond_yield_curve is a required pinned input synchronized by its registered ChinaBond owner before calculation.");
+        return RegimeFeaturesMonitorDailyDataset.definition(table);
     }
 
     public static SyncJobDefinition jobDefinition() {

@@ -19,11 +19,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
-import java.sql.Date;
 import java.sql.ResultSetMetaData;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -604,8 +602,9 @@ public final class QuestDbStrategyInputs {
         return readSql(sql, new Object[0], name, budget);
     }
 
-    private List<Map<String, Object>> readSql(String sql, Object[] params, String name, long budget)
+    List<Map<String, Object>> readSql(String sql, Object[] params, String name, long budget)
             throws Exception {
+        var temporal = StrategyInputTemporalMappings.binding(name);
         var rows = new ArrayList<Map<String, Object>>();
         var layout = new FrozenScalarValues.Layout[1];
         jdbc.query(
@@ -628,29 +627,10 @@ public final class QuestDbStrategyInputs {
                             for (int i = 1; i <= metadata.getColumnCount(); i++) {
                                 String column = metadata.getColumnLabel(i);
                                 Object value = rs.getObject(i);
-                                if (value instanceof Timestamp ts) {
-                                    var instant = ts.toInstant();
-                                    if (Set.of(
-                                                    "trade_date",
-                                                    "ts",
-                                                    "timestamp",
-                                                    "ann_date",
-                                                    "end_date",
-                                                    "cal_date",
-                                                    "pretrade_date")
-                                            .contains(column)) {
-                                        if (!instant.atZone(ZoneOffset.UTC)
-                                                .toLocalTime()
-                                                .equals(LocalTime.MIDNIGHT))
-                                            throw new IllegalStateException(
-                                                    "Business date must be UTC midnight: "
-                                                            + name
-                                                            + "."
-                                                            + column);
-                                        value = instant.atZone(ZoneOffset.UTC).toLocalDate();
-                                    } else value = instant.toString();
-                                } else if (value instanceof Date d) value = d.toLocalDate();
-                                else if (value instanceof Double d && Double.isNaN(d)) value = null;
+                                value =
+                                        StrategyInputTemporalMappings.decodeLegacyV1(
+                                                temporal, column, value);
+                                if (value instanceof Double d && Double.isNaN(d)) value = null;
                                 else if (value instanceof Float f && Float.isNaN(f)) value = null;
                                 else if (value instanceof Number n
                                         && !Double.isFinite(n.doubleValue()))
