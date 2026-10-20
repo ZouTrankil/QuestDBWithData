@@ -112,7 +112,8 @@ public final class PointInTimeHistory {
                 "market_context",
                 context(
                         StrategyInputRows.legacyModel("market_context", required),
-                        StrategyInputRows.legacyModel("calendar", calendar)));
+                        StrategyInputRows.legacyModel("calendar", calendar),
+                        true));
     }
 
     public List<Map<String, Object>> metadata(
@@ -163,6 +164,13 @@ public final class PointInTimeHistory {
 
     public List<Map<String, Object>> context(
             List<Map<String, Object>> required, List<Map<String, Object>> calendar) {
+        return context(required, calendar, false);
+    }
+
+    private List<Map<String, Object>> context(
+            List<Map<String, Object>> required,
+            List<Map<String, Object>> calendar,
+            boolean includeAvailability) {
         var out = new ArrayList<Map<String, Object>>();
         for (var current : required) {
             LocalDate date = QuestDbStrategyInputs.date(current.get("trade_date"));
@@ -189,6 +197,12 @@ public final class PointInTimeHistory {
             if (!values.keySet().equals(fields))
                 throw new IllegalStateException("历史市场状态列与正式契约不同：" + date);
             values.put("trade_date", date);
+            // v2 单独保留证据的可用时刻；updated_at 仍是原计算更新时间。
+            if (includeAvailability) {
+                if (values.containsKey("available_at"))
+                    throw new IllegalStateException("历史市场值不能覆盖证据可用时刻");
+                values.put("available_at", available.toString());
+            }
             out.add(Collections.unmodifiableMap(values));
         }
         return List.copyOf(out);

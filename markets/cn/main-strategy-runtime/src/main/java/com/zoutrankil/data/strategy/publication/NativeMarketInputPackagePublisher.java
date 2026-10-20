@@ -3,6 +3,7 @@ package com.zoutrankil.data.strategy.publication;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.zoutrankil.data.strategy.input.StrategyInputSchema;
 import com.zoutrankil.data.strategy.publication.ScoreArtifactPublisher.Ref;
 
 import org.apache.parquet.column.page.PageReadStore;
@@ -66,6 +67,75 @@ public final class NativeMarketInputPackagePublisher {
                     "avg_up_down_ratio_5d",
                     "data_quality_flag",
                     "updated_at");
+
+    /** 版本由已核验的评分运行确定，不根据行里碰巧存在的列猜测。 */
+    private record Layout(StrategyInputSchema schema) {
+        Layout {
+            Objects.requireNonNull(schema);
+        }
+
+        boolean standard() {
+            return schema == StrategyInputSchema.V2;
+        }
+
+        String version() {
+            return standard() ? "v2" : "v1";
+        }
+
+        String calendarDate() {
+            return standard() ? "calendar_date" : "cal_date";
+        }
+
+        String priorDate() {
+            return standard() ? "previous_trade_date" : "pretrade_date";
+        }
+
+        String marketDate() {
+            return standard() ? "trade_date" : "timestamp";
+        }
+
+        String code() {
+            return standard() ? "instrument_code" : "ts_code";
+        }
+
+        String available() {
+            return standard() ? "available_at" : "updated_at";
+        }
+
+        List<String> calendarColumns() {
+            if (!standard()) return CALENDAR_COLUMNS;
+            return List.of("exchange", calendarDate(), "is_open", priorDate());
+        }
+
+        List<String> marketColumns() {
+            if (!standard()) return MARKET_COLUMNS;
+            return List.of(code(), marketDate(), "open", "high", "low", "close", "amount");
+        }
+
+        List<String> contextColumns() {
+            if (!standard()) return CONTEXT_COLUMNS;
+            var columns = new ArrayList<>(CONTEXT_COLUMNS);
+            columns.add("available_at");
+            return List.copyOf(columns);
+        }
+
+        String proofSchema() {
+            return "java.main_strategy.sources." + version();
+        }
+
+        LocalDate date(Object value) {
+            if (!standard()) return day(value);
+            if (value instanceof LocalDate day) return day;
+            if (value instanceof String text && text.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) {
+                try {
+                    return LocalDate.parse(text);
+                } catch (RuntimeException ignored) {
+                }
+            }
+            throw invalid("v2 市场日期须为 LocalDate 或完整 ISO 日期，不截断时间戳");
+        }
+    }
+
     private final Path root, database;
     private final ScoreArtifactPublisher artifacts;
 
@@ -135,10 +205,25 @@ public final class NativeMarketInputPackagePublisher {
                 || !end.equals(scores.resolvedEndDate()))
             throw invalid("product must bind the same exact score producer run and complete date");
         verifyPublication(scores);
+        var layout = new Layout(scores.inputSchema());
         JsonNode scoreProof = JSON.readTree(readJson(artifacts.provenancePath(scores)));
         JsonNode providedProof = JSON.valueToTree(sourceProof);
         if (!providedProof.isObject())
             throw invalid("frozen product source proof must be an object");
+        if (layout.standard()
+                && (!layout.schema()
+                                .inputSchema()
+                                .equals(providedProof.path("inputSchema").asText())
+                        || !layout.schema()
+                                .coverageSchema()
+                                .equals(providedProof.path("coverage").path("schema").asText())
+                        || !layout.schema()
+                                .keyEncoding()
+                                .equals(
+                                        providedProof
+                                                .path("coverage")
+                                                .path("keyEncoding")
+                                                .asText()))) throw invalid("v2 市场包必须保留标准输入及覆盖版本证明");
         for (var fields = providedProof.fields(); fields.hasNext(); ) {
             var field = fields.next();
             if (!Arrays.equals(
@@ -150,30 +235,32 @@ public final class NativeMarketInputPackagePublisher {
         verifySource(sourceProof, "calendar", calendar);
         verifySource(sourceProof, "etf_daily", etfDaily);
         verifySource(sourceProof, "market_context", marketContext);
-        List<Map<String, Object>> calendarRows = calendar(calendar, start, end);
+        List<Map<String, Object>> calendarRows = calendar(calendar, start, end, layout);
         SortedSet<LocalDate> openDates = new TreeSet<>();
         for (var row : calendarRows) {
-            LocalDate day = day(row.get("cal_date"));
+            LocalDate day = layout.date(row.get(layout.calendarDate()));
             if (!day.isAfter(end) && ((Number) row.get("is_open")).intValue() == 1)
                 openDates.add(day);
         }
         if (openDates.isEmpty() || !openDates.last().equals(end))
             throw invalid("product target is not an open calendar date");
-        Set<String> scoreKeys = scoreKeys(scorePanel, scores.panelRef());
+        Set<String> scoreKeys = scoreKeys(scorePanel, scores.panelRef(), layout);
         SortedSet<LocalDate> scoreDates = new TreeSet<>();
         SortedSet<String> symbols = new TreeSet<>();
         for (var row : scorePanel) {
-            scoreDates.add(day(row.get("trade_date")));
-            symbols.add(symbol(row.get("ts_code")));
+            scoreDates.add(layout.date(row.get("trade_date")));
+            symbols.add(symbol(row.get(layout.code())));
         }
         if (!scoreDates.equals(openDates))
             throw invalid("frozen score grid differs from the product calendar");
-        List<Map<String, Object>> marketRows = market(etfDaily, start, end, symbols, scoreKeys);
-        List<Map<String, Object>> contextRows = context(marketContext, start, end, openDates);
+        List<Map<String, Object>> marketRows =
+                market(etfDaily, start, end, symbols, scoreKeys, layout);
+        List<Map<String, Object>> contextRows =
+                context(marketContext, start, end, openDates, layout);
         String prefix =
                 "data/product_packages/market/etf/rotation/input_package/java/" + runId + "/";
-        Ref calendarRef = artifacts.frame(prefix, "calendar", calendarRows, "cal_date");
-        Ref marketRef = artifacts.frame(prefix, "etf_market", marketRows, "timestamp");
+        Ref calendarRef = artifacts.frame(prefix, "calendar", calendarRows, layout.calendarDate());
+        Ref marketRef = artifacts.frame(prefix, "etf_market", marketRows, layout.marketDate());
         Ref contextRef = artifacts.frame(prefix, "market_context", contextRows, "trade_date");
         byte[] proofBytes = jsonBytes(sourceProof);
         Ref proofRef =
@@ -184,7 +271,7 @@ public final class NativeMarketInputPackagePublisher {
                         start,
                         end,
                         0,
-                        digest("java.main_strategy.sources.v1"));
+                        digest(layout.proofSchema()));
         String createdAt = Instant.now().toString();
         var components =
                 List.of(
@@ -194,21 +281,24 @@ public final class NativeMarketInputPackagePublisher {
                                 calendarRef,
                                 end,
                                 createdAt,
-                                CALENDAR_COLUMNS),
+                                layout.calendarColumns(),
+                                layout),
                         component(
                                 "etf_market",
                                 "market.etf.daily",
                                 marketRef,
                                 end,
                                 createdAt,
-                                MARKET_COLUMNS),
+                                layout.marketColumns(),
+                                layout),
                         component(
                                 "market_context",
                                 "market.regime.daily_context",
                                 contextRef,
                                 end,
                                 createdAt,
-                                CONTEXT_COLUMNS));
+                                layout.contextColumns(),
+                                layout));
         var parameters = new LinkedHashMap<String, Object>();
         parameters.put("start_date", start.format(DATE));
         parameters.put("max_rows", 5_000_000);
@@ -253,7 +343,7 @@ public final class NativeMarketInputPackagePublisher {
         var manifest = new LinkedHashMap<String, Object>();
         manifest.put("package_id", "pkg_" + inputDigest.substring(0, 20));
         manifest.put("product_id", PRODUCT_ID);
-        manifest.put("product_version", "v1");
+        manifest.put("product_version", layout.version());
         manifest.put("as_of", end.format(DATE));
         manifest.put("created_at", createdAt);
         manifest.put("schema_digest", schemaDigest);
@@ -277,7 +367,8 @@ public final class NativeMarketInputPackagePublisher {
                         calendarRef,
                         "quant_platform.data.market.calendar.daily",
                         PRODUCER,
-                        List.of(proofRef));
+                        List.of(proofRef),
+                        layout.version());
                 ScoreArtifactPublisher.registerMetadata(
                         connection,
                         "etf_market",
@@ -285,7 +376,8 @@ public final class NativeMarketInputPackagePublisher {
                         marketRef,
                         "quant_platform.data.market.etf.daily",
                         PRODUCER,
-                        List.of(proofRef));
+                        List.of(proofRef),
+                        layout.version());
                 ScoreArtifactPublisher.registerMetadata(
                         connection,
                         "market_context",
@@ -293,7 +385,8 @@ public final class NativeMarketInputPackagePublisher {
                         contextRef,
                         "quant_platform.data.market.regime.daily_context",
                         PRODUCER,
-                        List.of(proofRef));
+                        List.of(proofRef),
+                        layout.version());
                 ScoreArtifactPublisher.registerMetadata(
                         connection,
                         "source_proof",
@@ -301,7 +394,8 @@ public final class NativeMarketInputPackagePublisher {
                         proofRef,
                         "quant_platform.data.main_strategy.sources",
                         PRODUCER,
-                        List.of());
+                        List.of(),
+                        layout.version());
                 var previous = receipt(connection, runId);
                 if (previous != null) {
                     if (!inputDigest.equals(previous.inputDigest())
@@ -334,7 +428,8 @@ public final class NativeMarketInputPackagePublisher {
                                     contextRef,
                                     proofRef,
                                     scores.panelRef(),
-                                    scores.coverageRef()));
+                                    scores.coverageRef()),
+                            layout.version());
                     try (var statement =
                             connection.prepareStatement(
                                     "INSERT INTO java_market_package_publications VALUES(?,?,?,?,?,?)")) {
@@ -468,9 +563,11 @@ public final class NativeMarketInputPackagePublisher {
             ScoreArtifactPublisher.Publication scores)
             throws Exception {
         verifyRef(manifestRef);
+        var layout = new Layout(scores.inputSchema());
+        requireSchema(connection, manifestRef, layout.version());
         JsonNode document = JSON.readTree(readJson(manifestRef.path()));
         if (!PRODUCT_ID.equals(document.path("product_id").asText())
-                || !"v1".equals(document.path("product_version").asText())
+                || !layout.version().equals(document.path("product_version").asText())
                 || !inputDigest.equals(document.path("input_digest").asText())
                 || !manifestRef.schemaDigest().equals(document.path("schema_digest").asText())
                 || manifestRef.rowCount() != document.path("row_count").asLong(-1))
@@ -511,6 +608,9 @@ public final class NativeMarketInputPackagePublisher {
                             LocalDate.parse(part.path("data_start_date").asText(), DATE),
                             LocalDate.parse(part.path("data_end_date").asText(), DATE));
             verifyRef(ref);
+            requireSchema(connection, ref, layout.version());
+            if (!layout.version().equals(snapshot.path("schema_version").asText()))
+                throw invalid("市场组件 schema 版本与评分不符");
             ScoreArtifactPublisher.validateFrame(ref);
             if (!"frozen".equals(snapshot.path("materialization_mode").asText())
                     || !"complete".equals(snapshot.path("completeness_status").asText()))
@@ -527,12 +627,13 @@ public final class NativeMarketInputPackagePublisher {
                         proofResource.path("uri").asText(),
                         proofResource.path("version").asText(),
                         proofResource.path("content_hash").asText(),
-                        digest("java.main_strategy.sources.v1"),
+                        digest(layout.proofSchema()),
                         0,
                         artifact(proofResource.path("uri").asText()),
                         manifestRef.start(),
                         complete);
         verifyRef(proof);
+        requireSchema(connection, proof, layout.version());
         if (!proof.contentHash().equals(parameters.path("source_proof_sha256").asText())
                 || !JSON.readTree(readJson(proof.path())).path("sourceComplete").asBoolean())
             throw invalid("native package lacks a complete immutable source proof");
@@ -629,6 +730,21 @@ public final class NativeMarketInputPackagePublisher {
         return List.copyOf(paths);
     }
 
+    private static void requireSchema(Connection connection, Ref ref, String version)
+            throws Exception {
+        try (var query =
+                connection.prepareStatement(
+                        "SELECT schema_version FROM resource_metadata WHERE uri=? AND version=? AND content_hash=?")) {
+            query.setString(1, ref.uri());
+            query.setString(2, ref.version());
+            query.setString(3, ref.contentHash());
+            try (var row = query.executeQuery()) {
+                if (!row.next() || !version.equals(row.getString(1)) || row.next())
+                    throw invalid("市场产物目录 schema 与固定评分版本不符");
+            }
+        }
+    }
+
     private void verifyPublication(ScoreArtifactPublisher.Publication scores) throws Exception {
         var latest = artifacts.latest(scores.resolvedEndDate());
         if (!latest.equals(scores))
@@ -669,24 +785,24 @@ public final class NativeMarketInputPackagePublisher {
     }
 
     private static List<Map<String, Object>> calendar(
-            List<Map<String, Object>> source, LocalDate start, LocalDate end) {
+            List<Map<String, Object>> source, LocalDate start, LocalDate end, Layout layout) {
         LocalDate through = end.plusDays(14);
         var rows = new TreeMap<LocalDate, Map<String, Object>>();
         for (var input : source) {
-            LocalDate date = day(input.get("cal_date"));
+            LocalDate date = layout.date(input.get(layout.calendarDate()));
             if (date.isBefore(start) || date.isAfter(through)) continue;
             if (!"SSE".equals(Objects.toString(input.get("exchange"), "")))
                 throw invalid("SSE calendar required");
-            var row = project(input, CALENDAR_COLUMNS);
-            row.put("cal_date", date);
+            var row = project(input, layout.calendarColumns());
+            row.put(layout.calendarDate(), date);
             if (!(row.get("is_open") instanceof Number number)
                     || (number.doubleValue() != 0 && number.doubleValue() != 1))
                 throw invalid("typed open calendar flag required");
             row.put("is_open", number.longValue());
-            if (row.get("pretrade_date") != null) {
-                LocalDate prior = day(row.get("pretrade_date"));
+            if (row.get(layout.priorDate()) != null) {
+                LocalDate prior = layout.date(row.get(layout.priorDate()));
                 if (!prior.isBefore(date)) throw invalid("calendar pretrade date is not prior");
-                row.put("pretrade_date", prior);
+                row.put(layout.priorDate(), prior);
             }
             if (rows.put(date, Collections.unmodifiableMap(row)) != null)
                 throw invalid("duplicate calendar business key");
@@ -702,16 +818,17 @@ public final class NativeMarketInputPackagePublisher {
             LocalDate start,
             LocalDate end,
             Set<String> symbols,
-            Set<String> expected) {
+            Set<String> expected,
+            Layout layout) {
         var rows = new TreeMap<String, Map<String, Object>>();
         for (var input : source) {
-            LocalDate date = day(input.get("timestamp"));
-            String code = Objects.toString(input.get("ts_code"), "");
+            LocalDate date = layout.date(input.get(layout.marketDate()));
+            String code = Objects.toString(input.get(layout.code()), "");
             if (date.isBefore(start) || date.isAfter(end) || !symbols.contains(code)) continue;
             String symbol = symbol(code);
-            var row = project(input, MARKET_COLUMNS);
-            row.put("timestamp", date);
-            row.put("ts_code", symbol);
+            var row = project(input, layout.marketColumns());
+            row.put(layout.marketDate(), date);
+            row.put(layout.code(), symbol);
             for (String field : List.of("open", "high", "low", "close", "amount")) {
                 if (!(row.get(field) instanceof Number number)
                         || !Double.isFinite(number.doubleValue())
@@ -732,26 +849,27 @@ public final class NativeMarketInputPackagePublisher {
             List<Map<String, Object>> source,
             LocalDate start,
             LocalDate end,
-            Set<LocalDate> dates) {
+            Set<LocalDate> dates,
+            Layout layout) {
         var rows = new TreeMap<LocalDate, Map<String, Object>>();
         for (var input : source) {
-            LocalDate date = day(input.get("trade_date"));
+            LocalDate date = layout.date(input.get("trade_date"));
             if (date.isBefore(start) || date.isAfter(end)) continue;
-            var row = project(input, CONTEXT_COLUMNS);
+            var row = project(input, layout.contextColumns());
             row.put("trade_date", date);
             YearMonth month = month(row.get("month"));
             if (!month.equals(YearMonth.from(date)))
                 throw invalid("market context month label disagrees with trade date");
             row.put("month", month.format(DateTimeFormatter.ofPattern("uuuuMM")));
-            if (row.get("updated_at") == null
+            if (row.get(layout.available()) == null
                     || !Set.of("ok", "proxy_style")
                             .contains(Objects.toString(row.get("data_quality_flag"), "")))
                 throw invalid(
                         "market context requires recorded availability and canonical ok/proxy_style quality evidence");
             try {
-                Instant.parse(row.get("updated_at").toString());
+                Instant.parse(row.get(layout.available()).toString());
             } catch (Exception e) {
-                throw invalid("market context updated_at is not a recorded ISO timestamp");
+                throw invalid("市场状态缺少对应版本的真实可用时刻");
             }
             for (String field :
                     List.of(
@@ -772,13 +890,14 @@ public final class NativeMarketInputPackagePublisher {
         return List.copyOf(rows.values());
     }
 
-    private static Set<String> scoreKeys(List<Map<String, Object>> rows, Ref panel)
+    private static Set<String> scoreKeys(List<Map<String, Object>> rows, Ref panel, Layout layout)
             throws Exception {
         if (rows == null || rows.size() != panel.rowCount() || rows.size() > 5_000_000)
             throw invalid("provided score candidate row count differs from frozen panel");
         var keys = new HashSet<String>();
         for (var row : rows)
-            if (!keys.add(day(row.get("trade_date")) + ":" + symbol(row.get("ts_code"))))
+            if (!keys.add(
+                    layout.date(row.get("trade_date")) + ":" + symbol(row.get(layout.code()))))
                 throw invalid("duplicate score candidate key");
         var observed = new HashSet<String>();
         // LocalInputFile 避免触发 Hadoop 文件系统及用户解析，兼容 Java 24 移除 Subject 旧机制的变化。
@@ -797,7 +916,7 @@ public final class NativeMarketInputPackagePublisher {
                     String key =
                             LocalDate.ofEpochDay(group.getInteger("trade_date", 0))
                                     + ":"
-                                    + symbol(group.getString("ts_code", 0));
+                                    + symbol(group.getString(layout.code(), 0));
                     if (!observed.add(key) || observed.size() > 5_000_000)
                         throw invalid(
                                 "frozen score panel contains duplicate keys or exceeds budget");
@@ -851,14 +970,16 @@ public final class NativeMarketInputPackagePublisher {
             Ref ref,
             LocalDate asOf,
             String created,
-            List<String> columns) {
+            List<String> columns,
+            Layout layout) {
         var temporal = new LinkedHashMap<String, Object>();
         temporal.put(
                 "event_time_field",
                 role.equals("calendar")
-                        ? "cal_date"
-                        : role.equals("etf_market") ? "timestamp" : "trade_date");
-        temporal.put("available_time_field", role.equals("market_context") ? "updated_at" : null);
+                        ? layout.calendarDate()
+                        : role.equals("etf_market") ? layout.marketDate() : "trade_date");
+        temporal.put(
+                "available_time_field", role.equals("market_context") ? layout.available() : null);
         temporal.put("observation_frequency", "daily");
         temporal.put(
                 "period_label_rule",
@@ -870,7 +991,9 @@ public final class NativeMarketInputPackagePublisher {
                 role.equals("calendar")
                         ? "Calendar rows are reference data available before the session."
                         : role.equals("market_context")
-                                ? "A context row is observable only after updated_at; frozen current revisions do not prove historical availability."
+                                ? layout.standard()
+                                        ? "可用时刻来自固定历史证据，updated_at 只表示计算更新。"
+                                        : "A context row is observable only after updated_at; frozen current revisions do not prove historical availability."
                                 : "Daily ETF market data is observable after the session.");
         temporal.put("point_in_time", "declared");
         temporal.put("public_time_source", "unknown");
@@ -881,7 +1004,7 @@ public final class NativeMarketInputPackagePublisher {
         snapshot.put("snapshot_id", "snap_" + ref.version());
         snapshot.put("dataset_id", dataset);
         snapshot.put("as_of", asOf.format(DATE));
-        snapshot.put("schema_version", "v1");
+        snapshot.put("schema_version", layout.version());
         snapshot.put("artifact_uri", ref.uri());
         snapshot.put("row_count", ref.rowCount());
         snapshot.put("created_at", created);

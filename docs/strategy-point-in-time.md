@@ -14,3 +14,5 @@
 更名、ST、行业及事后市场修订的反例测试已覆盖。本轮没有生成生产历史包，实际评分区间仍需真实原件。
 
 主策略 v2 快照使用 `instrument_code`、`trade_date` 等标准身份。历史证据文件仍按原 v1 协议读取；`PointInTimeHistory` 在边界明确适配，保留原 `availableAt`、生效区间及决策截止。不能把标准字段改名当作新的历史来源证明。
+
+v2 市场状态把原证据 `availableAt` 输出为 `available_at`，并保留原计算字段 `updated_at`。市场包的可用时间元数据指向 `available_at`；缺失时拒绝发布，不能回退到更新时间。v1 文件和输出保持原编码。

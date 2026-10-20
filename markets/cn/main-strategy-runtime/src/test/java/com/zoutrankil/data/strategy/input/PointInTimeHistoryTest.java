@@ -12,6 +12,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -111,9 +112,12 @@ class PointInTimeHistoryTest {
                         StrategyInputRows.standard("market_context", required),
                         canonicalCalendar);
         assertEquals(1, context.getFirst().get("erp_latest"));
-        assertEquals(
-                h.context(required, calendar()),
-                StrategyInputRows.legacyModel("market_context", context));
+        assertEquals("2026-10-16T07:10:00Z", context.getFirst().get("available_at"));
+        var originalFields =
+                new LinkedHashMap<>(
+                        StrategyInputRows.legacyModel("market_context", context).getFirst());
+        originalFields.remove("available_at");
+        assertEquals(h.context(required, calendar()), List.of(originalFields));
         h.revalidate();
     }
 

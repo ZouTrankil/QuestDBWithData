@@ -1,12 +1,16 @@
 package com.zoutrankil.data.strategy.publication;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.zoutrankil.data.strategy.input.StrategyInputRows;
+import com.zoutrankil.data.strategy.input.StrategyInputSchema;
+import com.zoutrankil.data.strategy.score.FrozenScalarValues;
 
 import org.apache.parquet.example.data.simple.convert.GroupRecordConverter;
 import org.apache.parquet.hadoop.ParquetFileReader;
@@ -38,6 +42,122 @@ class NativeMarketInputPackagePublisherTest {
     private static final LocalDate START = LocalDate.of(2026, 9, 24),
             END = LocalDate.of(2026, 9, 25);
     private static final String RECIPE = "a".repeat(64);
+
+    private static Inputs standardInputs() {
+        var legacy = inputs();
+        var context =
+                legacy.context.stream()
+                        .map(
+                                row ->
+                                        FrozenScalarValues.merging(
+                                                row,
+                                                Map.of(
+                                                        "available_at",
+                                                        row.get("trade_date") + "T08:00:00Z")))
+                        .toList();
+        return new Inputs(
+                StrategyInputRows.standard("calendar", legacy.calendar),
+                StrategyInputRows.standard("etf_daily", legacy.market),
+                context,
+                legacy.panel.stream()
+                        .map(
+                                row ->
+                                        FrozenScalarValues.renaming(
+                                                row, Map.of("ts_code", "instrument_code")))
+                        .toList());
+    }
+
+    @Test
+    void standardPackageReadsActualCanonicalColumnsAndKeepsEvidenceAvailabilitySeparate()
+            throws Exception {
+        var input = standardInputs();
+        var scores = scores("standard", input);
+        var publisher = new NativeMarketInputPackagePublisher(root);
+        var product = publish(publisher, "standard", input, scores);
+        assertEquals(product, publisher.requireByRun(scores));
+        assertEquals(product, publisher.requireLatest(scores));
+        var document = JSON.readTree(Files.readAllBytes(product.manifestRef().path()));
+        assertEquals("v2", document.path("product_version").asText());
+        for (var component : document.path("components")) {
+            var snapshot = component.path("snapshot");
+            assertEquals("v2", snapshot.path("schema_version").asText());
+            if (component.path("role").asText().equals("market_context"))
+                assertEquals(
+                        "available_at",
+                        snapshot.path("temporal").path("available_time_field").asText());
+        }
+        try (var reader =
+                ParquetFileReader.open(new LocalInputFile(product.components().get(1).path()))) {
+            var schema = reader.getFileMetaData().getSchema();
+            assertTrue(schema.containsField("instrument_code"));
+            assertTrue(schema.containsField("trade_date"));
+            assertFalse(schema.containsField("timestamp"));
+            assertFalse(schema.containsField("ts_code"));
+            var records =
+                    new ColumnIOFactory()
+                            .getColumnIO(schema)
+                            .getRecordReader(
+                                    reader.readNextRowGroup(), new GroupRecordConverter(schema));
+            var row = records.read();
+            assertEquals("510300.SH", row.getString("instrument_code", 0));
+            assertEquals(START.toEpochDay(), row.getInteger("trade_date", 0));
+            assertEquals(1.1, row.getDouble("close", 0));
+        }
+        try (var reader =
+                ParquetFileReader.open(new LocalInputFile(product.components().get(2).path()))) {
+            var schema = reader.getFileMetaData().getSchema();
+            var row =
+                    new ColumnIOFactory()
+                            .getColumnIO(schema)
+                            .getRecordReader(
+                                    reader.readNextRowGroup(), new GroupRecordConverter(schema))
+                            .read();
+            assertEquals("2026-09-24T08:00:00Z", row.getString("available_at", 0));
+            assertEquals("2026-10-11T10:00:00Z", row.getString("updated_at", 0));
+        }
+        try (var c = scorePublisher().openCatalogWriter();
+                var query = c.createStatement();
+                var rs =
+                        query.executeQuery(
+                                "SELECT count(*) FROM resource_metadata WHERE producer_capability='java.data.product.build' AND schema_version='v2'")) {
+            assertTrue(rs.next());
+            assertEquals(5, rs.getInt(1));
+        }
+        assertEquals(
+                product.manifestRef(), publish(publisher, "standard", input, scores).manifestRef());
+    }
+
+    @Test
+    void standardPackageRefusesMissingEvidenceTimeAndDirectoryRelabeling() throws Exception {
+        var input = standardInputs();
+        var missing =
+                new Inputs(
+                        input.calendar,
+                        input.market,
+                        input.context.stream()
+                                .map(
+                                        row ->
+                                                FrozenScalarValues.excluding(
+                                                        row, Set.of("available_at")))
+                                .toList(),
+                        input.panel);
+        var scores = scores("missing", missing);
+        var publisher = new NativeMarketInputPackagePublisher(root);
+        assertThrows(
+                IllegalStateException.class, () -> publish(publisher, "missing", missing, scores));
+        assertEquals(0, packageAliasCount());
+        var good = scores("standard", input);
+        var product = publish(publisher, "standard", input, good);
+        try (var c = scorePublisher().openCatalogWriter();
+                var query =
+                        c.prepareStatement(
+                                "UPDATE resource_metadata SET schema_version='v1' WHERE uri=?")) {
+            query.setString(1, product.components().get(0).uri());
+            query.executeUpdate();
+            c.commit();
+        }
+        assertThrows(IllegalStateException.class, () -> publisher.requireByRun(good));
+    }
 
     @Test
     void publishesExactThreeFrozenRolesAndCompatibleManifestWithDeclaredPit() throws Exception {
@@ -712,6 +832,18 @@ class NativeMarketInputPackagePublisherTest {
         result.put("sourceClocks", clocks);
         result.put("end", END.toString());
         result.put("recipeHashes", Map.of("recipe", RECIPE));
+        if (inputs.panel.getFirst().containsKey("instrument_code")) {
+            result.put("inputSchema", StrategyInputSchema.V2.inputSchema());
+            result.put(
+                    "coverage",
+                    Map.of(
+                            "schema",
+                            StrategyInputSchema.V2.coverageSchema(),
+                            "inputSchema",
+                            StrategyInputSchema.V2.inputSchema(),
+                            "keyEncoding",
+                            StrategyInputSchema.V2.keyEncoding()));
+        }
         return result;
     }
 
