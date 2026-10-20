@@ -1,0 +1,91 @@
+{
+  "基线提交": "283e3b224de7d37af5175707f6eaffeda1cd3b3c",
+  "范围": "v2 Java Sender 写入、完整110列、完整键值、范围/分页及稳定版本；超时原发送只读核对；不包含真实来源同步或正式迁移",
+  "测试源码": "markets/cn/data/src/test/java/com/zoutrankil/data/l2/storage/L2DailyFeaturesLayoutLiveAcceptanceTest.java",
+  "测试源码SHA256": "221b431e9ca4d6e7e17e7220108eed0dbd6e9e87967d203a392231341aa43d60",
+  "原件根目录": "var/cn-l2-layout-v2-20261021",
+  "原件摘要": {
+    "2456f76c50014ee59328e70b053c34a7/expected.json": "c55c0a17d185dbbe2810c32e246b7808b4bb63f7c7ca4168abfc6425970e26fe",
+    "2456f76c50014ee59328e70b053c34a7/gradle-live-success.log": "0e6c5dc97f8e8ebe35ffd0b6d47e60ff30c5f8975765863f5199c2780ea3c568",
+    "2456f76c50014ee59328e70b053c34a7/report.json": "947a891637e952e0f53687cae422517d8ee77c193d98b6db19428716374b893f",
+    "2456f76c50014ee59328e70b053c34a7/request.json": "e6ff72de629b47d45f4a45571673462961e54d56de45b70a6f96cbe54ae7638c",
+    "347d2a7b44eb42358c81d68b703b323f/expected.json": "c55c0a17d185dbbe2810c32e246b7808b4bb63f7c7ca4168abfc6425970e26fe",
+    "347d2a7b44eb42358c81d68b703b323f/gradle-first-failure.log": "1079f6bf3a70dca540df6e405290901b4fae8f5a8ec3bb2d6e7e8c04b7dbcd8b",
+    "347d2a7b44eb42358c81d68b703b323f/gradle-reconciliation.log": "01cafba287b25d7c7524865539ce4cd1c1eba13a59c1f160e83f48ac91e2aeeb",
+    "347d2a7b44eb42358c81d68b703b323f/readonly-server-state.json": "d77c9f2fbf97dbf65c03114d4652636241f1dc1fd5bb4826de1b7df6a25b23d0",
+    "347d2a7b44eb42358c81d68b703b323f/reconciliation-predelete.json": "79c5f70d35c2068f2fcbb5e5adc5b2db47ad29341711a9508f9033f6dd9fb749",
+    "347d2a7b44eb42358c81d68b703b323f/reconciliation.json": "cdc98015d6d8f9e92f7da6c83e81fff4f3c6ed66a51949dc5e7b07c6ef863263",
+    "347d2a7b44eb42358c81d68b703b323f/report.json": "9842dbbe5b6b4cca0c75760fc1e72e363d2f11b8953f18da4108655d07e4cbb7",
+    "347d2a7b44eb42358c81d68b703b323f/request.json": "6144c103835959a452d6aef5ebcf292d4cead48feeeead9e105ec6a44ea94089",
+    "347d2a7b44eb42358c81d68b703b323f/wal-readonly-observations.json": "9d407a43c782b1ea6e975e08cdd97bdc85020340788d1bc35f2fb7d380c5898a",
+    "configured-source-probe.json": "870c7cb6bde1eb872f1011f4b2f00e10d9a72f9f67f0240f64accfafdd961260",
+    "post-cleanup.json": "4f1351fd2fd5ea1acf2597eecfab85fc5339f4fec234d1054461f5460d3d8835"
+  },
+  "首次验收": {
+    "结果": "1项失败并保留原件，未计入通过；随后独立只读核对完整结果。",
+    "原件": "var/cn-l2-layout-v2-20261021/347d2a7b44eb42358c81d68b703b323f/report.json",
+    "发送次数": 1,
+    "原因证据": "原报告只记录 IllegalStateException，不能区分 QWP ACK 未确认与回读可见性超时；失败后观察 writerTxn=0 / sequencerTxn=1，约85秒后只读观察追平1/1。根因未确认，没有重发或修改生产超时。",
+    "后续处理": "原测试已终止，用固定报告/期望/请求SHA只读核对完整值和当前稳定版本；先落清理凭证，再按原身份DROP；失败报告字节不改",
+    "原发送核对结果": "独立1项通过、0跳过，RECONCILED_AND_CLEANED；resent=false"
+  },
+  "独立两轮验收": {
+    "结果": "1项通过、0跳过；VERIFIED_AND_CLEANED",
+    "目标": "java_d086_l2_daily_features_layout2_2456f76c50014ee59328e70b053c34a7",
+    "targetId": "questdb-f5624d6338b05b220d3d70c54b3bf2ed03cc9ea511dafd6e820f8beb18853740",
+    "正式只读对象": "l2_daily_features",
+    "正式对象前后身份事务": [
+      {
+        "id": 1665,
+        "directoryName": "l2_daily_features_recovery_20260911~1665",
+        "table_txn": 11679
+      }
+    ],
+    "样本键": [
+      {
+        "tradeDate": "2026-08-24",
+        "symbol": "000001.SZ"
+      },
+      {
+        "tradeDate": "2026-08-24",
+        "symbol": "000002.SZ"
+      }
+    ],
+    "行数": 2,
+    "字段数": 110,
+    "特征列数": 108,
+    "已完整验收的写入轮数": 2,
+    "样本空值字段数": [
+      0,
+      0
+    ],
+    "核对项": [
+      "v2隔离DDL、DAY/WAL、TIMESTAMP微秒和完整去重键的真实preflight",
+      "每轮真实Sender发送后完整键值相等、全表两行、全部110列类型化回读",
+      "真实日期枚举、单日及同证券计数",
+      "两个单行分页完整拼接，游标无漏行或多行",
+      "回读前后同一稳定WAL版本、物理身份及事务，v1 writer/reader拒收v2",
+      "第二轮仅在第一轮完整验收后发送，仍为两行；客户端关闭后按原身份清理测试表"
+    ]
+  },
+  "执行命令": {
+    "独立两轮": "D086_LAYOUT_LIVE_ACCEPTANCE=true D086_LAYOUT_EVIDENCE_ROOT=<原件根目录> APP_LOCAL_CONFIG=<本机配置URI> ./gradlew :markets:cn:data:test --tests '*L2DailyFeaturesLayoutLiveAcceptanceTest.explicitV2*' --offline",
+    "原发送只读核对": "D086_LAYOUT_RECONCILE=true D086_LAYOUT_RECONCILE_REPORT=<原报告> D086_LAYOUT_RECONCILE_REPORT_SHA=<SHA> D086_LAYOUT_RECONCILE_EXPECTED_SHA=<SHA> D086_LAYOUT_RECONCILE_REQUEST_SHA=<SHA> APP_LOCAL_CONFIG=<本机配置URI> ./gradlew :markets:cn:data:test --tests '*L2DailyFeaturesLayoutLiveAcceptanceTest.originalTimedOutSendCanOnlyBeReadBackAndCleanedUnderPinnedEvidence' --offline"
+  },
+  "代码与边界": "仅新增显式启用的实库验收测试；生产代码/配置未改。相关真实测试、编译、architectureTest和verifyModuleBoundaries通过。未重复执行完整生产回归，基线283e3b22的2626项结果不冒充本批重新运行。",
+  "格式检查": "完成：2055 个 Java 文件；字面量值核对通过",
+  "来源目录探针": {
+    "directoryExists": false,
+    "configuredRoot": "../back-monitor/artifacts/level2_t0_dataset",
+    "sourceCoverageVerified": false,
+    "resolvedRoot": "/Users/Apple/zq/fun/back-monitor/artifacts/level2_t0_dataset"
+  },
+  "限制": [
+    "仅正式表两行存储样本，非来源完整性、全市场历史、批准模型或正式迁移验收",
+    "样本两行的108个特征均非null，null分支本批未做实库验证；原离线测试继续保留",
+    "完整回读等待120秒仅用于本验收测试；QWP ACK仍使用原10秒边界，失败保留原表/原件，不自动重发或清理。后续成功不能证明首次异常根因已修复。",
+    "实际配置的L2 Parquet目录不存在，真实文件及原manifest完整证据缺失，无法进行真实来源全链路验收",
+    "原生散户情绪MV真实创建/刷新/恢复、正式表与消费者/Batch/完整模型批准材料仍未完成",
+    "没有推进同步检查点、切换正式默认、写入正式表或删除历史stage/backup"
+  ]
+}
