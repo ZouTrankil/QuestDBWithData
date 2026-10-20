@@ -1,0 +1,199 @@
+{
+  "说明": "真实正式表两行只读样本，独立 DAY/WAL v2 表两轮 QWP 写入、全值回读、Java 类型化读取、稳定身份、独立逻辑摘要及 WAL 核验。正式表未写，不证明来源全历史或正式迁移。",
+  "完整独立演练": {
+    "原件目录": "var/cn-suspend-layout-v2-20261021/cec16242ba02458cb11068086a9069e0",
+    "报告": {
+      "schemaVersion": 1,
+      "observedAt": "2026-10-20T18:56:27.491600Z",
+      "table": "java_d011_stk_suspend_layout2_cec16242ba02458cb11068086a9069e0",
+      "sourceCoverageVerified": false,
+      "modelAcceptanceVerified": false,
+      "requestIsProductionApproved": false,
+      "physicalMigrationExecuted": false,
+      "checkpointAdvanced": false,
+      "state": "VERIFIED_AND_CLEANED",
+      "sampleDate": "2010-01-29",
+      "sourceState": [
+        {
+          "id": 3115,
+          "directoryName": "java_stk_suspend_stage_64f2b7909e3844139cac348fc284bd4a~3115",
+          "table_txn": null
+        }
+      ],
+      "sourceSyncJobExecuted": false,
+      "targetId": "static-v2-739ceb3ca16cae958bf386fb868e18e2de8696c51d254fd47d6efc2f4a055f3c",
+      "snapshot": {
+        "identity": {
+          "id": 3259,
+          "directory": "java_d011_stk_suspend_layout2_cec16242ba02458cb11068086a9069e0~3259"
+        },
+        "rows": [
+          {
+            "key": {
+              "tsCode": "000004.SZ",
+              "tradeDate": "2010-01-29"
+            },
+            "isSuspended": 1
+          },
+          {
+            "key": {
+              "tsCode": "000017.SZ",
+              "tradeDate": "2010-01-29"
+            },
+            "isSuspended": 1
+          }
+        ],
+        "fingerprint": "997e89a7070670f2a6181e87041bd17e436bc1ea6dd337ab8ec5bf0fe5eb3c0c",
+        "bytes": 140
+      },
+      "verifiedPasses": 2,
+      "rows": [
+        {
+          "key": {
+            "tsCode": "000004.SZ",
+            "tradeDate": "2010-01-29"
+          },
+          "isSuspended": 1
+        },
+        {
+          "key": {
+            "tsCode": "000017.SZ",
+            "tradeDate": "2010-01-29"
+          },
+          "isSuspended": 1
+        }
+      ],
+      "javaTypedReadExercised": true,
+      "legacyLayoutRejected": true
+    },
+    "原件摘要": {
+      "expected.json": "0c6c886e7590c7e7b8cafaafdc4dbf139e3d102d067a2ebb0b10709ddb7570ac",
+      "ddl-intent.json": "08b1cdefb12e50191293dc4c2c820541b8dcdabc8fe4217c6d83164b2064f0c3",
+      "request.json": "d742e1e0f1854494d8f105f9c26224c6e4ecd05b617d5d0472135ced3f7b924e",
+      "report.json": "34d884dd38af5d6cecfe890561d3046a2e4c816863a552cb99848e0ea41bccb3",
+      "cleanup-intent.json": "9c000f3025dbc2ed94e899fc52e438cea191f5faa1476b714e7c18dbe228c60f",
+      "pass-1-send-intent.json": "4ee9ce5ddd3cba3e30da09f82ed185c86fac380c87d15417b4557cddef035e5b",
+      "pass-2-send-intent.json": "455e32d407912c9263058f5ef5e8008e77ee24cc2c03f8074fd60e725177e6c5"
+    }
+  },
+  "首次失败后原运行核对": {
+    "原件目录": "var/cn-suspend-layout-v2-20261021/cef2a20eb1fe437fa499cf3f3933bdf9",
+    "报告": {
+      "schemaVersion": 1,
+      "observedAt": "2026-10-20T18:51:59.433539Z",
+      "table": "java_d011_stk_suspend_layout2_cef2a20eb1fe437fa499cf3f3933bdf9",
+      "sourceCoverageVerified": false,
+      "modelAcceptanceVerified": false,
+      "requestIsProductionApproved": false,
+      "physicalMigrationExecuted": false,
+      "checkpointAdvanced": false,
+      "state": "VERIFIED_AND_CLEANED",
+      "sampleDate": "2010-01-29",
+      "sourceState": [
+        {
+          "id": 3115,
+          "directoryName": "java_stk_suspend_stage_64f2b7909e3844139cac348fc284bd4a~3115",
+          "table_txn": null
+        }
+      ],
+      "sourceSyncJobExecuted": false,
+      "targetId": "static-v2-50c8d09dbc61325562bec0dab0cafd23a39107af83686ff406bca7122597a48a",
+      "snapshot": {
+        "identity": {
+          "id": 3258,
+          "directory": "java_d011_stk_suspend_layout2_cef2a20eb1fe437fa499cf3f3933bdf9~3258"
+        },
+        "rows": [
+          {
+            "key": {
+              "tsCode": "000004.SZ",
+              "tradeDate": "2010-01-29"
+            },
+            "isSuspended": 1
+          },
+          {
+            "key": {
+              "tsCode": "000017.SZ",
+              "tradeDate": "2010-01-29"
+            },
+            "isSuspended": 1
+          }
+        ],
+        "fingerprint": "997e89a7070670f2a6181e87041bd17e436bc1ea6dd337ab8ec5bf0fe5eb3c0c",
+        "bytes": 140
+      },
+      "verifiedPasses": 1,
+      "rows": [
+        {
+          "key": {
+            "tsCode": "000004.SZ",
+            "tradeDate": "2010-01-29"
+          },
+          "isSuspended": 1
+        },
+        {
+          "key": {
+            "tsCode": "000017.SZ",
+            "tradeDate": "2010-01-29"
+          },
+          "isSuspended": 1
+        }
+      ],
+      "failedAt": "PASS_VERIFIED",
+      "sqlState": "00000",
+      "sqlVendorCode": 0,
+      "failureType": "org.springframework.jdbc.UncategorizedSQLException",
+      "initialAcceptanceFailed": true,
+      "originalFreshTestPassed": false,
+      "recoveredOriginalDataWithoutResend": true,
+      "secondWriteOutcomeReconciled": true,
+      "finalTypedReadVerified": true
+    },
+    "原件摘要": {
+      "expected.json": "0c6c886e7590c7e7b8cafaafdc4dbf139e3d102d067a2ebb0b10709ddb7570ac",
+      "ddl-intent.json": "277f42f79c801956676be605252b45ab09c4c3e4892f42149b320eca3543a0c5",
+      "request.json": "13c49626f4dbd6bb32c708d1ff7ce288ae9d63befc19a31643e87096619848a7",
+      "report.json": "e7da0dedb7bebd7517aff5db32969679b2a622747077855d263b509033fa9516",
+      "original-failed-report.json": "51bf467337d7dae7033c7f1ef425c820e3786c3e6dd67e3512ea9156e97fd224",
+      "original-stopped-http-inspection.json": "660dec1b8c8043d114e42c82629d18c4513f5a8e3b520ebff33a9a3c9baaa657",
+      "original-reconciliation-cleanup-intent.json": "715d49c2918db20ff1c61b9a33b41d04ca6a6275c5e8f966a58d9a1d7f068372",
+      "original-reconciliation-complete.json": "373bb76b4ecb2b33e7338d7e19702d356720423013637d0b3e58fab629b5b881"
+    }
+  },
+  "首次失败处理": "原工具 19152 终止，退出码 1；原表全值及 WAL 经 HTTP 与独立 Java 进程核验，未重发，耐久记录清理意图后按原身份清理。首次验收仍为失败，不计入完整测试通过。",
+  "原运行核对工具": {
+    "工具会话": 81976,
+    "返回码": 0,
+    "源码摘要": "93688ae8e2c76dc1ff505e58c0bb83ed23e537954d47c85ee0e5b2ab91970d24",
+    "日志摘要": "b3a3643d557c19608a3b2cc52e34f51902460b765ff57c6e650a240e4660ceb7"
+  },
+  "首次实库执行源码摘要": {
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/stock/market/StockSuspendDataset.java": "f1ec8e1dc72d502629347c7af95724f31738d9f830a5fb70fde77196a1b7447c",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/port/StockSuspendWriteSession.java": "4710007f97a2fcf652cebf7c405516c567507364827e43ddc97b58a13a315f6d",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendWritePort.java": "4ff89ec0e572e4ad572f8cdf800511763a3b2721039a5408573eb281be0f5f4a",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendStorage.java": "d52c5d790ecff891ba87b3f9432b8c829c48b558074a85a191ebf6fd9b936a1f",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendReadRepository.java": "f01eb54d10f45dbd51463749f00f7fac93d01840bc0da5faacf9166e7affc8a1",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendSyncAdapter.java": "e30f71920bf06f2cb9d34439898f8efcc0057b8aec9070d173a3c346f1212631",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java": "e3b03b457d80c143c67d47e4c5af38a9d849bf97cf3742c5403a7d992641bbe9",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/storage/StockSuspendVersionedStorageTest.java": "a276dcac36e055808c296f41028647d365dc2d268e33dd99fea640df9154a5c8",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockSuspendLayoutAdmissionTest.java": "240bbb201b87e3f4a7f6a1e234c224e8e9a4e254e5572d65758a9badc19f3c82",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/storage/StockSuspendLayoutLiveAcceptanceTest.java": "1c9f758ba0b881713b7bade5f034107cbc45624dd8d397581568b3b28500c0e9"
+  },
+  "完整独立演练源码摘要": {
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/stock/market/StockSuspendDataset.java": "f1ec8e1dc72d502629347c7af95724f31738d9f830a5fb70fde77196a1b7447c",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/port/StockSuspendWriteSession.java": "4710007f97a2fcf652cebf7c405516c567507364827e43ddc97b58a13a315f6d",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendWritePort.java": "e8889aeacead9189439ccab540c3e0bcd9c2e69779080aba6fe9e749cd518fd5",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendStorage.java": "e658c7f253584f721952f7db5fb843bb3b97e5708a37bdcd36e6df3e6b105558",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendReadRepository.java": "f01eb54d10f45dbd51463749f00f7fac93d01840bc0da5faacf9166e7affc8a1",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendSyncAdapter.java": "91ba8ef5a44858dabe1702e8203d548bb86df402d6afec50ac234527a07c1b7d",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java": "e3b03b457d80c143c67d47e4c5af38a9d849bf97cf3742c5403a7d992641bbe9",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/storage/StockSuspendVersionedStorageTest.java": "e534afdc4e313f7c9a6f4a0d6d1b6881c8606440d352ea3766b5b094ea50764b",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockSuspendLayoutAdmissionTest.java": "240bbb201b87e3f4a7f6a1e234c224e8e9a4e254e5572d65758a9badc19f3c82",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/storage/StockSuspendLayoutLiveAcceptanceTest.java": "ae0d7d1f720a630865eaf5732c6e2255203a0becd9089dfea45e8639f2cc9981"
+  },
+  "演练后改动": "仅将测试中“名称变更来源作业”注释纠正为“停复牌来源作业”；无行为、字符串或请求变化，单文件格式检查通过。",
+  "JDBC异常状态": "首次 SQLState 00000 的根因未确认；未修改生产异常处理、吞错、自动重发或声称已修复。新测试增加发送和回读阶段记录。",
+  "正式迁移": false,
+  "来源同步作业执行": false,
+  "生产检查点推进": false
+}

@@ -54,7 +54,7 @@ domain/
 
 日期标记用 `TemporalValues.CalendarTimestamp` 编解码。直接同步入口由 `BusinessTime` 按 `app.time.business-zone` 选业务日期；任务入口使用原请求的 `logicalDate`，重试不重新取今天。
 
-已核定的六个交易日物理别名使用 `CnTradeDateLayout` 显式分版；不能根据当前列名自动改用另一版。当前 `etf_adj`、`etf_daily`、`etf_share` 的 v2 读写端口完成隔离验收，控制服务、配置与写入组可按原冻结版本执行和恢复；公开默认仍是 v1。日线保留 TIMESTAMP_NS 纳秒，复权和份额保留 TIMESTAMP 微秒；份额的独立 `update_time` 不随交易日迁移改值。Batch 独立来源、正式调度、其余三表端口及正式迁移待接通。版本选择不改变 UTC 午夜日期载体或精度，见[布局分版](decisions/2026-10-21-交易日存储布局分版.md)。
+已核定的六个交易日物理别名使用 `CnTradeDateLayout` 显式分版；不能根据当前列名自动改用另一版。当前 `etf_adj`、`etf_daily`、`etf_share` 的 v2 读写端口完成隔离验收，控制服务、配置与写入组可按原冻结版本执行和恢复；公开默认仍是 v1。日线保留 TIMESTAMP_NS 纳秒，复权和份额保留 TIMESTAMP 微秒；份额的独立 `update_time` 不随交易日迁移改值。ST 的显式发布、恢复和配置入口也已接通；停牌与 L2 端口、Batch 独立来源、正式调度及正式迁移仍待完成。版本选择不改变 UTC 午夜日期载体或精度，见[布局分版](decisions/2026-10-21-交易日存储布局分版.md)。
 
 ```java
 businessTime.now();                  // 当前实际时刻
@@ -119,3 +119,6 @@ CN 异动公告的只读 v2 使用 `announcement_date`，Shibor/Hibor/LPR 使用
 `stk_st_daily` 的显式存储布局 v2 使用 `trade_date` 逻辑键和物理列，v1 行编码仍保留 `timestamp`。新编码、完整键回读和快照摘要单独验证；名称变更原文及模型仍按旧编码解释。生产发布、stage/backup 与恢复尚未贯通 v2，不能只靠存储端口切换默认值，见[ST 存储分版](decisions/2026-10-21-交易日存储布局分版.md#st-存储分版)。
 
 ST 的 v2 stage/发布日志显式固定 `datasetSchemaVersion` 和 `rowEncoding`，SQLite 新发布记录另有协议包装；旧日志保持原形。恢复按原冻结版本建立目标作用域，空摘要也不能跨布局复用。当前生产入口仍为 v1，实际范围及区间锁回调修复见[发布分版](decisions/2026-10-21-交易日存储布局分版.md#st-显式发布与恢复分版)。
+
+
+停牌的逻辑日期已是 `trade_date`，新布局只更换物理列；原逻辑行编码及摘要不变，不能据此借用旧布局凭证。显式 writer、读取与快照保留 DAY/WAL、TIMESTAMP 微秒和 `suspend_d` 正记录含义；发布和配置入口尚待接通，见[停牌分版](decisions/2026-10-21-交易日存储布局分版.md#停牌存储分版)。

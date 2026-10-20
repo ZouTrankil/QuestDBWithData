@@ -10,7 +10,9 @@ import com.zoutrankil.data.domain.stock.market.StockSuspendDataset;
 import com.zoutrankil.data.domain.stock.market.StockSuspendKey;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -26,16 +28,27 @@ public class StockSuspendReadRepository implements DatasetImplementation {
             StockSuspendDataset.DEFINITION.columns().stream()
                     .map(DatasetDefinition.Column::logicalName)
                     .toList();
+    private final String table;
+    private final CnTradeDateLayout layout;
     private final QuestDbBoundedReader reader;
     private final StockSuspendMapper mapper = new StockSuspendMapper();
 
+    @Autowired
     public StockSuspendReadRepository(QuestDbBoundedReader reader) {
+        this(reader, StockSuspendDataset.DEFAULT_TABLE, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public StockSuspendReadRepository(
+            QuestDbBoundedReader reader, String table, CnTradeDateLayout layout) {
+        DatasetDefinition.identifier(table);
+        this.table = table;
+        this.layout = Objects.requireNonNull(layout);
         this.reader = Objects.requireNonNull(reader);
     }
 
     @Override
     public DatasetDefinition definition() {
-        return StockSuspendDataset.DEFINITION;
+        return StockSuspendDataset.definition(table, layout);
     }
 
     public DatasetReadPage<StockSuspend> findByKey(StockSuspendKey key) {

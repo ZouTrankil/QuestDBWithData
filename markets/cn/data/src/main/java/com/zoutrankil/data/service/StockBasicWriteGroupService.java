@@ -110,6 +110,7 @@ import com.zoutrankil.data.stock.mapper.StockLimitMapper;
 import com.zoutrankil.data.stock.mapper.StockStDailyMapper;
 import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
 import com.zoutrankil.data.stock.port.StockStDailyWriteSession;
+import com.zoutrankil.data.stock.port.StockSuspendWriteSession;
 import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1279,6 +1280,12 @@ public class StockBasicWriteGroupService {
                     .equals(StockSuspendDataset.DEFINITION.datasetId())) {
                 var mapper = new StockSuspendMapper();
                 var port = writers.stockSuspend(stockSuspendTarget.tableName(), member.targetId());
+                int version =
+                        port instanceof StockSuspendWriteSession.Versioned selected
+                                ? selected.datasetVersion()
+                                : 1;
+                if (version != member.definition().schemaVersion())
+                    throw new IllegalArgumentException("停牌组会话布局与原契约不同");
                 adapters.put(
                         member.memberId(),
                         new PreparedWriteAdapter<>(

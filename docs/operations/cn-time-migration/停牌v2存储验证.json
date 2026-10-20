@@ -1,0 +1,55 @@
+{
+  "基线提交": "9d4901a1fdab2c23450cf2e8e6f6f4c55d885ef2",
+  "范围": "停牌 v2 仅更换物理日期列，显式存储、writer、回读、类型化仓库及快照；旧请求/组拒绝错版实际会话",
+  "源码摘要": {
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/stock/market/StockSuspendDataset.java": "f1ec8e1dc72d502629347c7af95724f31738d9f830a5fb70fde77196a1b7447c",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/port/StockSuspendWriteSession.java": "4710007f97a2fcf652cebf7c405516c567507364827e43ddc97b58a13a315f6d",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendWritePort.java": "e8889aeacead9189439ccab540c3e0bcd9c2e69779080aba6fe9e749cd518fd5",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendStorage.java": "e658c7f253584f721952f7db5fb843bb3b97e5708a37bdcd36e6df3e6b105558",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendReadRepository.java": "f01eb54d10f45dbd51463749f00f7fac93d01840bc0da5faacf9166e7affc8a1",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendSyncAdapter.java": "91ba8ef5a44858dabe1702e8203d548bb86df402d6afec50ac234527a07c1b7d",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java": "e3b03b457d80c143c67d47e4c5af38a9d849bf97cf3742c5403a7d992641bbe9",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/storage/StockSuspendVersionedStorageTest.java": "e534afdc4e313f7c9a6f4a0d6d1b6881c8606440d352ea3766b5b094ea50764b",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockSuspendLayoutAdmissionTest.java": "240bbb201b87e3f4a7f6a1e234c224e8e9a4e254e5572d65758a9badc19f3c82",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/storage/StockSuspendLayoutLiveAcceptanceTest.java": "2cec4c9ece291a5fe9df07a8de43f34d6829bfbc0a1b6f8ec45947e096259e37"
+  },
+  "隔离测试": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2312,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 145
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "结果": "通过",
+  "格式检查": {
+    "命令": "python3 tools/format_java.py --imports --check",
+    "Java文件": 2039,
+    "结果": "格式、import、字面量核对通过；随后仅纠正实库测试一处来源名称注释，该文件格式另通过"
+  },
+  "公开配置检查": "cn-data 与 main-strategy 两个 ZIP 均通过",
+  "实库验收": "新的独立两行隔离表两轮写入通过并按原身份清理；首次失败单列原件，原运行未重发，最终全值/类型化/WAL 核对及清理通过。见 停牌v2存储实库验收.json。",
+  "JDBC查询异常": "首次验收出现 UncategorizedSQLException / SQLState 00000，根因未确认，不能声称已修复；未更改生产异常处理或自动重发。",
+  "逻辑行编码": "逻辑 trade_date 与原值不变，沿用原 CODEC 和长度前缀快照编码；布局版本必须另外冻结，不以相同行摘要认领旧布局凭证。",
+  "公开默认布局": 1,
+  "仍未完成": [
+    "停牌目标工厂与 staging 发布和恢复的 v2 协议",
+    "停牌控制服务、检查点、根配置和组 v2 入口",
+    "L2 v2 端口",
+    "Batch 独立来源与正式调度",
+    "正式表、MV、消费者切换与完整模型验收"
+  ]
+}

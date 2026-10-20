@@ -153,6 +153,13 @@ public final class StockSuspendSyncAdapter
     @Override
     public void preflight(FrozenRequest request) {
         validateRequest(request);
+        // 原请求不能套用另一布局的会话，避免写前检查被旧包装器绕过。
+        int version =
+                originalPort instanceof StockSuspendWriteSession.Versioned selected
+                        ? selected.datasetVersion()
+                        : 1;
+        if (version != request.definition().datasetVersion())
+            throw new IllegalArgumentException("停牌会话布局与冻结请求不同");
         originalPort.preflight();
     }
 

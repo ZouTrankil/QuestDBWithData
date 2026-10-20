@@ -51,7 +51,7 @@ daily_basic,已用 trade_date,保留现状，尚未完成全链路验收,A 股�
 stk_factor,已用 trade_date,保留现状，尚未完成全链路验收,股票技术因子所属交易日；不改名。
 stk_limit,已用 trade_date,保留现状，尚未完成全链路验收,股票涨跌停价格所属交易日；不改名。
 stk_st_daily,可统一,v2 存储发布恢复控制服务检查点配置与组入口已接通，默认v1；正式迁移未完成,timestamp → trade_date；现行规则只展开到 SSE 开市日，不把整个名称有效期的日历日期混入。
-stk_suspend,可统一,六组新布局两行演练通过；正式迁移和消费者切换未执行,timestamp → trade_date；现行契约是 suspend_d 交易日，不代表全天停牌；旧字段说明中的连续日期不能代替现行规则。
+stk_suspend,可统一,v2 存储端口显式接通，逻辑行编码保留；发布配置与正式迁移未完成,timestamp → trade_date；现行契约是 suspend_d 交易日，不代表全天停牌；旧字段说明中的连续日期不能代替现行规则。
 stock_detail_info,保留其他语义,保留现状，尚未完成全链路验收,list_date、delist_date 是上市和退市日期；update_time 是观测时刻；当前主数据不是按交易日生成的快照。
 balance,保留其他语义,保留现状，尚未完成全链路验收,ann_date、f_ann_date 是公告日期角色，end_date 是报告期末；update_time 单独保留。
 cashflow,保留其他语义,保留现状，尚未完成全链路验收,ann_date、f_ann_date 是公告日期角色，end_date 是报告期末。

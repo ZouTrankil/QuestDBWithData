@@ -11,6 +11,7 @@ import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import com.zoutrankil.data.stock.domain.policy.StockSuspendTablePolicy;
 import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
 import com.zoutrankil.data.stock.port.StockSuspendWriteSession;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
@@ -27,7 +28,8 @@ import java.util.List;
 import java.util.Objects;
 
 /** Typed WAL writer with complete-key and all-column readback; no schema creation or repair. */
-public final class StockSuspendWritePort implements StockSuspendWriteSession {
+public final class StockSuspendWritePort implements StockSuspendWriteSession.Versioned {
+    private final CnTradeDateLayout layout;
     private final String table;
     private final JdbcTemplate jdbc;
     private final QuestDB questDb;
@@ -38,7 +40,17 @@ public final class StockSuspendWritePort implements StockSuspendWriteSession {
 
     public StockSuspendWritePort(
             String table, JdbcTemplate jdbc, QuestDB questDb, String expectedTargetId) {
-        this(table, jdbc, questDb, expectedTargetId, false);
+        this(table, jdbc, questDb, expectedTargetId, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    /** 布局固定物理列，逻辑 trade_date 行编码和微秒日期载体保持原样。 */
+    public StockSuspendWritePort(
+            String table,
+            JdbcTemplate jdbc,
+            QuestDB questDb,
+            String expectedTargetId,
+            CnTradeDateLayout layout) {
+        this(table, jdbc, questDb, expectedTargetId, false, layout);
     }
 
     private StockSuspendWritePort(
@@ -46,7 +58,9 @@ public final class StockSuspendWritePort implements StockSuspendWriteSession {
             JdbcTemplate jdbc,
             QuestDB questDb,
             String expectedTargetId,
-            boolean staging) {
+            boolean staging,
+            CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         if (staging) StockSuspendTablePolicy.requireStagingTable(table);
         else StockSuspendTablePolicy.requireExecutionTarget(table);
         this.table = table;
@@ -60,7 +74,8 @@ public final class StockSuspendWritePort implements StockSuspendWriteSession {
 
     /** Creates a writer bound to a separately frozen D011 stage-table generation. */
     public StockSuspendWritePort forTarget(String stageTable, String stagePhysicalTargetId) {
-        return new StockSuspendWritePort(stageTable, jdbc, questDb, stagePhysicalTargetId, true);
+        return new StockSuspendWritePort(
+                stageTable, jdbc, questDb, stagePhysicalTargetId, true, layout);
     }
 
     public static final VerifiedBatchExecutor.Codec<StockSuspend, StockSuspendKey> CODEC =
@@ -91,13 +106,18 @@ public final class StockSuspendWritePort implements StockSuspendWriteSession {
             };
 
     @Override
+    public int datasetVersion() {
+        return layout.schemaVersion();
+    }
+
+    @Override
     public VerifiedBatchExecutor.Codec<StockSuspend, StockSuspendKey> codec() {
         return CODEC;
     }
 
     @Override
     public void preflight() {
-        QuestDbWriteChecks.preflight(jdbc, table, StockSuspendDataset.definition(table));
+        QuestDbWriteChecks.preflight(jdbc, table, StockSuspendDataset.definition(table, layout));
         requireExpectedTarget();
     }
 
@@ -152,6 +172,7 @@ public final class StockSuspendWritePort implements StockSuspendWriteSession {
         if (keys.size() > 250 || new HashSet<>(keys).size() != keys.size())
             throw new IllegalArgumentException(
                     "At most 250 unique full stock suspension keys per readback");
+        String dateColumn = layout.physicalDateColumn("stk_suspend");
         var clauses = new ArrayList<String>();
         var params = new ArrayList<Object>();
         LocalDate from =
@@ -173,20 +194,28 @@ public final class StockSuspendWritePort implements StockSuspendWriteSession {
         var codes = keys.stream().map(StockSuspendKey::tsCode).distinct().sorted().toList();
         params.addAll(codes);
         for (var key : keys) {
-            clauses.add("(ts_code=? AND timestamp=cast(? AS TIMESTAMP))");
+            clauses.add("(ts_code=? AND " + dateColumn + "=cast(? AS TIMESTAMP))");
             params.add(key.tsCode());
             params.add(
                     new TemporalValues.CalendarTimestamp(key.tradeDate())
                             .storageEpoch(TemporalValues.EpochUnit.MICROS));
         }
         String sql =
-                "SELECT \"ts_code\",\"is_suspended\",cast(\"timestamp\" as long) AS timestamp_micros FROM \""
+                "SELECT \"ts_code\",\"is_suspended\",cast(\""
+                        + dateColumn
+                        + "\" as long) AS timestamp_micros FROM \""
                         + table
-                        + "\" WHERE timestamp>=cast(? AS TIMESTAMP) AND timestamp<cast(? AS TIMESTAMP) AND ts_code IN ("
+                        + "\" WHERE "
+                        + dateColumn
+                        + ">=cast(? AS TIMESTAMP) AND "
+                        + dateColumn
+                        + "<cast(? AS TIMESTAMP) AND ts_code IN ("
                         + String.join(",", codes.stream().map(code -> "?").toList())
                         + ") AND ("
                         + String.join(" OR ", clauses)
-                        + ") ORDER BY ts_code,timestamp LIMIT "
+                        + ") ORDER BY ts_code,"
+                        + dateColumn
+                        + " LIMIT "
                         + (keys.size() + 1);
         return jdbc.query(sql, this::physical, params.toArray());
     }

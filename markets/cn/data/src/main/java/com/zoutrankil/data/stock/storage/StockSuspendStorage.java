@@ -11,6 +11,7 @@ import com.zoutrankil.data.stock.domain.StockSuspendState;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Identity;
 import com.zoutrankil.data.stock.domain.StockSuspendState.Snapshot;
 import com.zoutrankil.data.stock.port.StockSuspendTables.Table;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -29,10 +30,16 @@ import java.util.Objects;
 public final class StockSuspendStorage implements Table {
     public static final int MAX_ROWS = 200_000;
     public static final int MAX_BYTES = 32 * 1024 * 1024;
+    private final CnTradeDateLayout layout;
     private final JdbcTemplate jdbc;
     private final String table;
 
     public StockSuspendStorage(JdbcTemplate source, String table) {
+        this(source, table, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public StockSuspendStorage(JdbcTemplate source, String table, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         DatasetDefinition.identifier(table);
         this.table = table;
         this.jdbc = new JdbcTemplate(Objects.requireNonNull(source).getDataSource());
@@ -42,7 +49,7 @@ public final class StockSuspendStorage implements Table {
     }
 
     public Identity preflight() {
-        QuestDbWriteChecks.preflight(jdbc, table, StockSuspendDataset.definition(table));
+        QuestDbWriteChecks.preflight(jdbc, table, StockSuspendDataset.definition(table, layout));
         var values =
                 jdbc.queryForList(
                         "SELECT id,directoryName FROM tables() WHERE table_name=?", table);
@@ -63,11 +70,17 @@ public final class StockSuspendStorage implements Table {
     public Snapshot snapshot() throws Exception {
         Identity before = preflight();
         long txn = writerTxn();
+        // 只按显式布局读物理列；快照仍用原逻辑键编码，不推断或调整时区。
+        String dateColumn = layout.physicalDateColumn("stk_suspend");
         var rows =
                 jdbc.query(
-                        "SELECT \"ts_code\",\"is_suspended\",cast(\"timestamp\" AS long) AS timestamp_micros FROM \""
+                        "SELECT \"ts_code\",\"is_suspended\",cast(\""
+                                + dateColumn
+                                + "\" AS long) AS timestamp_micros FROM \""
                                 + table
-                                + "\" ORDER BY \"timestamp\",\"ts_code\" LIMIT "
+                                + "\" ORDER BY \""
+                                + dateColumn
+                                + "\",\"ts_code\" LIMIT "
                                 + (MAX_ROWS + 1),
                         (rs, rowNum) -> physical(rs, rowNum));
         if (rows.size() > MAX_ROWS)
