@@ -125,14 +125,14 @@ class StockCalendarApplicationWiringTest {
             }
             var datasets = context.getBean(DatasetRegistry.class);
             assertEquals(
-                    50,
+                    55,
                     datasets.definitions().stream()
                             .filter(
                                     value ->
                                             value.capabilities()
                                                     .contains(DatasetDefinition.Capability.READ))
                             .count());
-            assertEquals(50, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
+            assertEquals(55, context.getBean(ReadBindingCatalog.class).bind(datasets).size());
             assertFalse(context.getBeanFactory().containsSingleton("questDbClient"));
             verify(dataSource, never()).getConnection();
             verify(dataSource, never()).getConnection(anyString(), anyString());

@@ -8,13 +8,18 @@ import com.zoutrankil.data.domain.DatasetDefinition.Partition;
 import com.zoutrankil.data.domain.DatasetDefinition.StorageType;
 import com.zoutrankil.data.domain.DatasetDefinition.TemporalContract;
 import com.zoutrankil.data.domain.DatasetDefinition.TemporalKind;
+import com.zoutrankil.data.domain.NumericContract;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
 /** The native automatically refreshed backtest MV, built directly from the four raw sources. */
 public final class BacktestDailyViewDataset {
     private BacktestDailyViewDataset() {}
+
+    private static final String NUMERIC_EVIDENCE =
+            "markets/cn/data/src/main/resources/sql/mv_backtest_daily.sql";
 
     private static final TemporalContract TRADE_DATE =
             new TemporalContract(
@@ -77,21 +82,23 @@ public final class BacktestDailyViewDataset {
                                     "down_limit",
                                     "Lower daily price limit in CNY/share, copied from stk_limit when available"),
                             new Column(
-                                    "derived:stk_suspend",
-                                    "is_suspended",
-                                    "is_suspended",
-                                    StorageType.LONG,
-                                    true,
-                                    "Suspension indicator; coalesced to zero by the current view for normal rows",
-                                    null),
+                                            "derived:stk_suspend",
+                                            "is_suspended",
+                                            "is_suspended",
+                                            StorageType.LONG,
+                                            true,
+                                            "Suspension indicator; coalesced to zero by the current view for normal rows",
+                                            null)
+                                    .withNumeric(indicator("缺少停牌记录时按原 SQL coalesce 为零")),
                             new Column(
-                                    "derived:stk_st_daily",
-                                    "is_st",
-                                    "is_st",
-                                    StorageType.INT,
-                                    true,
-                                    "Special-treatment indicator; coalesced to zero by the current view when absent",
-                                    null)),
+                                            "derived:stk_st_daily",
+                                            "is_st",
+                                            "is_st",
+                                            StorageType.INT,
+                                            true,
+                                            "Special-treatment indicator; coalesced to zero by the current view when absent",
+                                            null)
+                                    .withNumeric(indicator("缺少 ST 记录时按原 SQL coalesce 为零"))),
                     List.of("trade_date", "ts_code"),
                     List.of(),
                     "trade_date",
@@ -105,12 +112,75 @@ public final class BacktestDailyViewDataset {
 
     private static Column metric(String name, String meaning) {
         return new Column(
-                "derived:mv_backtest_daily." + name,
-                name,
-                name,
-                StorageType.DOUBLE,
-                true,
-                meaning,
-                null);
+                        "derived:mv_backtest_daily." + name,
+                        name,
+                        name,
+                        StorageType.DOUBLE,
+                        true,
+                        meaning,
+                        null)
+                .withNumeric(numeric(name));
+    }
+
+    private static NumericContract numeric(String name) {
+        // 这里描述当前 MV 的合成停牌规则，不把原始来源的缺失规则套到派生行上。
+        return switch (name) {
+            case "amount" ->
+                    new NumericContract(
+                            "千元",
+                            "元",
+                            new BigDecimal("1000"),
+                            "CNY",
+                            "不适用",
+                            "stk_factor.amount 原值，不复权",
+                            "当日来源行保留原值和 null；原 SQL 的停牌补行金额为零",
+                            NUMERIC_EVIDENCE);
+            case "vol" ->
+                    new NumericContract(
+                            "手",
+                            "手",
+                            BigDecimal.ONE,
+                            "NONE",
+                            "不适用",
+                            "stk_factor.vol 原值，不推断每手股数",
+                            "当日来源行保留原值和 null；原 SQL 的停牌补行成交量为零",
+                            NUMERIC_EVIDENCE);
+            case "adj_factor" ->
+                    new NumericContract(
+                            "因子值",
+                            "因子值",
+                            BigDecimal.ONE,
+                            "NONE",
+                            "来源复权因子基准，不重新基准化",
+                            "stk_factor.adj_factor 原值",
+                            "按原 ASOF 行保留因子和 null，不用一补缺失",
+                            NUMERIC_EVIDENCE);
+            case "up_limit", "down_limit" ->
+                    new NumericContract(
+                            "元",
+                            "元",
+                            BigDecimal.ONE,
+                            "CNY",
+                            "一股",
+                            "stk_limit 当日未复权价格上限或下限",
+                            "原 LEFT JOIN 缺失时保持 null，不填前一日涨跌停价",
+                            NUMERIC_EVIDENCE);
+            case "open", "high", "low", "close" ->
+                    new NumericContract(
+                            "元",
+                            "元",
+                            BigDecimal.ONE,
+                            "CNY",
+                            "一股",
+                            "stk_factor 未复权价格；原 SQL 的停牌补行沿用 ASOF 收盘价",
+                            "原始 null 保留；停牌沿用价格仅由原 MV SQL 决定",
+                            NUMERIC_EVIDENCE);
+            default -> throw new IllegalArgumentException("未登记的回测 MV 数值字段：" + name);
+        };
+    }
+
+    private static NumericContract indicator(String missingPolicy) {
+        return new NumericContract(
+                "标志", "标志", BigDecimal.ONE, "NONE", "不适用", "不适用", missingPolicy, NUMERIC_EVIDENCE);
     }
 }

@@ -1,0 +1,145 @@
+{
+  "说明": "实际编译后的投影 SQL 与原提交中的 SQL 两行对照；仅验证本窗口原始查询结果，不是完整来源或模型验收。",
+  "baseCommit": "10ab7877565ac80d69348340dcb9628b65aff604",
+  "observedAt": "2026-10-20T15:46:13.725406+00:00",
+  "businessDateBounds": {
+    "from": "2026-09-01",
+    "toExclusive": "2026-10-21"
+  },
+  "limit": 2,
+  "generatedSql": "SELECT b.trade_date,b.ts_code,b.close AS price,b.open AS open_price,b.close AS raw_close,b.amount,b.up_limit,b.down_limit,b.is_suspended,b.is_st,d.pb,d.turnover_rate,d.total_mv,d.ts_code AS basic_present FROM mv_backtest_daily b LEFT JOIN daily_basic d ON b.trade_date=d.trade_date AND b.ts_code=d.ts_code WHERE b.trade_date>=cast(? AS TIMESTAMP) AND b.trade_date<cast(? AS TIMESTAMP) ORDER BY b.trade_date,b.ts_code",
+  "oldAndNewColumnSchemaEqual": true,
+  "oldAndNewRowsEqual": true,
+  "physicalIdentityAndTableVersionStable": true,
+  "sourceState": {
+    "columns": [
+      {
+        "name": "table_name",
+        "type": "STRING"
+      },
+      {
+        "name": "id",
+        "type": "INT"
+      },
+      {
+        "name": "directoryName",
+        "type": "STRING"
+      },
+      {
+        "name": "table_txn",
+        "type": "LONG"
+      }
+    ],
+    "dataset": [
+      [
+        "daily_basic",
+        1876,
+        "daily_basic_stage_20260928_185816_917214~1876",
+        688
+      ],
+      [
+        "mv_backtest_daily",
+        3184,
+        "mv_backtest_daily~3184",
+        34
+      ]
+    ]
+  },
+  "columns": [
+    {
+      "name": "trade_date",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "ts_code",
+      "type": "SYMBOL"
+    },
+    {
+      "name": "price",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "open_price",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "raw_close",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "amount",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "up_limit",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "down_limit",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "is_suspended",
+      "type": "LONG"
+    },
+    {
+      "name": "is_st",
+      "type": "INT"
+    },
+    {
+      "name": "pb",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "turnover_rate",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "total_mv",
+      "type": "DOUBLE"
+    },
+    {
+      "name": "basic_present",
+      "type": "SYMBOL"
+    }
+  ],
+  "rows": [
+    [
+      "2026-09-01T00:00:00.000000Z",
+      "000001.SZ",
+      11.92,
+      11.68,
+      11.92,
+      1807254.4,
+      12.89,
+      10.55,
+      0,
+      0,
+      0.494,
+      0.7849,
+      23131854.4944,
+      "000001.SZ"
+    ],
+    [
+      "2026-09-01T00:00:00.000000Z",
+      "000002.SZ",
+      3.16,
+      3.1,
+      3.16,
+      539724.3,
+      3.45,
+      2.83,
+      0,
+      0,
+      0.369,
+      1.7666,
+      3770104.202,
+      "000002.SZ"
+    ]
+  ],
+  "sourceCoverageVerified": false,
+  "modelAcceptanceVerified": false,
+  "javaRowDecoderExercised": false,
+  "physicalMigrationExecuted": false,
+  "checkpointAdvanced": false
+}

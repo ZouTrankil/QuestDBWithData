@@ -183,18 +183,7 @@ public final class QuestDbStrategyInputs {
                         "market_context"));
         data.put(
                 "stock_daily",
-                readRows(
-                        """
-            SELECT b.trade_date,b.ts_code,b.close AS price,b.open AS open_price,b.close AS raw_close,
-                   b.amount,b.up_limit,b.down_limit,b.is_suspended,b.is_st,
-                   d.pb,d.turnover_rate,d.total_mv,d.ts_code AS basic_present
-            FROM mv_backtest_daily b LEFT JOIN daily_basic d ON b.trade_date=d.trade_date AND b.ts_code=d.ts_code
-            WHERE b.trade_date>=cast(? AS TIMESTAMP) AND b.trade_date<cast(? AS TIMESTAMP)
-            ORDER BY b.trade_date,b.ts_code
-            """,
-                        warmup,
-                        end,
-                        "stock_daily"));
+                readRows(StrategyStockDailyProjection.querySql(), warmup, end, "stock_daily"));
         var stockScopes = new LinkedHashMap<LocalDate, BseLegacyFactorAliases.Scope>();
         for (LocalDate lower = warmup; !lower.isAfter(end); ) {
             LocalDate upper = lower.withDayOfMonth(1).plusMonths(1);

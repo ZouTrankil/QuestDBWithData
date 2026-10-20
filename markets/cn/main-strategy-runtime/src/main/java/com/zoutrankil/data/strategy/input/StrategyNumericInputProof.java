@@ -49,6 +49,8 @@ final class StrategyNumericInputProof {
                 false,
                 "unitContractsComplete",
                 false,
+                "stockDailyProjection",
+                StrategyStockDailyProjection.evidence(),
                 "modelAcceptanceVerified",
                 false);
     }

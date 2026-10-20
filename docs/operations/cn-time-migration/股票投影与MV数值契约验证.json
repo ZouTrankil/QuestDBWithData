@@ -1,0 +1,49 @@
+{
+  "说明": "验证基于原提交与下列源码，不含共享工作区其他未提交修改；离线回归与实库两行对照分别报告。",
+  "baseCommit": "10ab7877565ac80d69348340dcb9628b65aff604",
+  "源码摘要": {
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/derived/BacktestDailyViewDataset.java": "d8105c03395b55b36c4881e004e357bfd1d86101fa102b1687031dc77b8d24de",
+    "markets/cn/src/test/java/com/zoutrankil/market/cn/model/BacktestDailyNumericContractTest.java": "629c0fa0674d03403e4546cd0c677e5ada0df45313c7cd368dbc19342d0e8b72",
+    "markets/cn/main-strategy-runtime/src/main/java/com/zoutrankil/data/strategy/input/StrategyStockDailyProjection.java": "faa237adf62e7be8b2e4b71d6879adda828e99b7d70559775474b90709e450e8",
+    "markets/cn/main-strategy-runtime/src/main/java/com/zoutrankil/data/strategy/input/QuestDbStrategyInputs.java": "f5ac06af518c95af3740dd94f79a567924f34083a65d7f9507408dc9552bf3b4",
+    "markets/cn/main-strategy-runtime/src/main/java/com/zoutrankil/data/strategy/input/StrategyNumericInputProof.java": "54a1a721700fd7ce0b68bf92129eae55f1e7ef4baef30e7612aaafc4c9b410e6",
+    "markets/cn/main-strategy-runtime/src/test/java/com/zoutrankil/data/strategy/input/StrategyStockDailyProjectionTest.java": "7a4979f5d7daec57850f871dfae2a965f4eefb18b7244a723a783a9947d329c3",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/config/IndexApplicationWiringTest.java": "4a380bc5fb48d3c2b94bdc7f5dd1a0b398230979b9c8e17ef1030d889f7602a5",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/config/StockCalendarApplicationWiringTest.java": "4855c7310cfd77caa78b2d6c283536e08795e351302a51b16f712fb1234d5e48",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/config/L2ApplicationWiringTest.java": "19a8993206361af8596dab684c5796f1ccb177750282ad305709ff8b3b35138a",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/config/FlowMarginApplicationWiringTest.java": "6c5a72407dc368106e7fd8baa40c3e26a0ac5d41e473c7b3c46b1269ba1594ac",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/config/DerivedApplicationWiringTest.java": "05881b732b87ababe58c9332a3de5e5ce0627c376b79f3849484d4b22a91fdad",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/config/NativeDerivedApplicationWiringTest.java": "4bc7c8363306f910225cb726cae603012bb2196663bb48427d3b7a09cb55401d"
+  },
+  "检查命令": "./gradlew :markets:cn:test :markets:cn:main-strategy-runtime:test :markets:cn:data:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "模块结果": {
+    "modules/markets/cn/_output/test-results/test": {
+      "tests": 31,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules/markets/cn/main-strategy-runtime/_output/test-results/test": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules/markets/cn/data/_output/test-results/test": {
+      "tests": 2191,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 139
+    }
+  },
+  "架构与模块边界": "通过",
+  "CN数据与主策略发行包": "通过",
+  "Java格式与import及字面量核对": {
+    "文件数": 1997,
+    "结果": "通过"
+  },
+  "实库原始SQL两行对照": "股票投影实库两行对照.json",
+  "生产模型与独立参考验收": false,
+  "完整单位矩阵": false,
+  "正式迁移": false
+}
