@@ -8,6 +8,8 @@ import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.repository.FileEvidenceStore;
 import com.zoutrankil.data.repository.SqliteLedgerSchema;
 import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.stock.mapper.StockSuspendLayoutMapper;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,13 +46,19 @@ public final class StockSuspendCoverage {
     private record Interval(String runId, LocalDate anchor, LocalDate from, LocalDate to) {}
 
     public static Optional<Coverage> checkpoint(Path ledgerPath, String targetId) throws Exception {
+        return checkpoint(ledgerPath, targetId, 1);
+    }
+
+    /** 同目标也只合并原作业同版凭证，不用新版给旧完成记录换标签。 */
+    public static Optional<Coverage> checkpoint(Path ledgerPath, String targetId, int jobVersion)
+            throws Exception {
+        var expectedDefinition = StockSuspendSyncJobOwner.definition(jobVersion);
         Objects.requireNonNull(ledgerPath);
         Objects.requireNonNull(targetId);
         if (!Files.isRegularFile(ledgerPath) || !hasHistorySchema(ledgerPath))
             return Optional.empty();
         SyncRunLedger ledger = SyncRunLedger.openReadOnly(ledgerPath);
         ObjectMapper json = JobDefinitionJson.mapper();
-        SyncJobDefinition expectedDefinition = StockSuspendSyncJobOwner.DEFINITION;
         var intervals = new ArrayList<Interval>();
         String after = null;
         int seen = 0;
@@ -63,11 +71,11 @@ public final class StockSuspendCoverage {
                 if (!Set.of(SyncRunState.VERIFIED, SyncRunState.VERIFIED_EMPTY)
                                 .contains(summary.state())
                         || !targetId.equals(summary.targetId())
-                        || summary.jobVersion() != 1) continue;
+                        || summary.jobVersion() != jobVersion) continue;
                 var run = ledger.getRun(summary.id());
                 if (!targetId.equals(run.targetId())
                         || !"data.stk_suspend".equals(run.jobId())
-                        || run.jobVersion() != 1) continue;
+                        || run.jobVersion() != jobVersion) continue;
                 JsonNode frozen = json.readTree(run.frozenJson());
                 SyncJobDefinition frozenDefinition;
                 try {
@@ -349,6 +357,11 @@ public final class StockSuspendCoverage {
                                         () ->
                                                 new IllegalStateException(
                                                         "stk_suspend complete-window evidence is oversized or escapes evidence root")));
+        var run = ledger.getRun(runId);
+        StockSuspendLayoutMapper.require(complete, CnTradeDateLayout.fromVersion(run.jobVersion()));
+        if ("APPEND_NEW_DATES".equals(complete.path("publicationMode").asText())
+                && !complete.path("walSettled").asBoolean(false))
+            throw new IllegalStateException("停牌追加完成凭证缺少 WAL 核验，不能自动接管旧记录");
         JsonNode publication = complete.path("publication"),
                 verification = publication.path("verification");
         JsonNode frozen = JobDefinitionJson.mapper().readTree(ledger.getRun(runId).frozenJson());

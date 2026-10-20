@@ -356,8 +356,17 @@ public final class StockSuspendRunRecovery {
                 sourceFingerprint,
                 after.fingerprint(),
                 dateLayout);
+        // 已有完成凭证通过核验后，继续引用它的原证明，不用新算的回读标签覆盖旧链接。
+        JsonNode savedPublication =
+                JobDefinitionJson.mapper()
+                        .readTree(
+                                FileEvidenceStore.readBounded(
+                                        completionPath,
+                                        StockSuspendSource.MAX_EVIDENCE_BYTES,
+                                        () -> new IllegalStateException("停牌完成凭证超过读取上限")))
+                        .path("publication");
         for (Slice slice : slices)
-            attachPublication(slice.pagePath(), completionPath, publicationEvidence);
+            attachPublication(slice.pagePath(), completionPath, savedPublication);
 
         var rootProof = new LinkedHashMap<String, Object>();
         rootProof.put("sourceComplete", true);
@@ -711,8 +720,8 @@ public final class StockSuspendRunRecovery {
                 path, json.writeValueAsBytes(StockSuspendLayoutMapper.bind(complete, layout)));
     }
 
-    private static void attachPublication(
-            Path pagePath, Path completionPath, Map<String, ?> publication) throws Exception {
+    private static void attachPublication(Path pagePath, Path completionPath, JsonNode publication)
+            throws Exception {
         ObjectNode page =
                 (ObjectNode)
                         JobDefinitionJson.mapper()
@@ -727,8 +736,10 @@ public final class StockSuspendRunRecovery {
                 && !completionPath.toString().equals(page.path("completionEvidence").asText()))
             throw new IllegalStateException(
                     "D011 page receipt already references another completion");
+        if (completionPath.toString().equals(page.path("completionEvidence").asText())
+                && publication.equals(page.path("publication"))) return;
         page.put("completionEvidence", completionPath.toString());
-        page.set("publication", JobDefinitionJson.mapper().valueToTree(publication));
+        page.set("publication", publication);
         JobDefinitionJson.mapper().writeValue(pagePath.toFile(), page);
     }
 

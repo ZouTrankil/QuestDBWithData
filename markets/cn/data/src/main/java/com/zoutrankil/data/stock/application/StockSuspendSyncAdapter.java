@@ -17,9 +17,11 @@ import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.TusharePageService;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 import com.zoutrankil.data.stock.domain.StockSuspendState;
+import com.zoutrankil.data.stock.mapper.StockSuspendLayoutMapper;
 import com.zoutrankil.data.stock.port.StockSuspendTarget;
 import com.zoutrankil.data.stock.port.StockSuspendWriteSession;
 import com.zoutrankil.data.stock.storage.StockSuspendTargetTransitionStore;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -76,13 +78,14 @@ public final class StockSuspendSyncAdapter
     }
 
     public static void validateRequest(FrozenRequest request) {
-        if (request == null
-                || !request.definition().equals(StockSuspendSyncJobOwner.DEFINITION)
+        if (request == null)
+            throw new IllegalArgumentException("Frozen bounded stk_suspend request required");
+        var expected = StockSuspendSyncJobOwner.definition(request.definition().version());
+        if (!request.definition().equals(expected)
                 || !request.definition()
                         .datasetId()
                         .equals(StockSuspendDataset.DEFINITION.datasetId())
-                || request.definition().datasetVersion()
-                        != StockSuspendDataset.DEFINITION.schemaVersion()
+                || request.definition().datasetVersion() != expected.datasetVersion()
                 || !Set.of(Mode.INCREMENTAL, Mode.BACKFILL).contains(request.mode())
                 || request.from() == null
                 || request.to() == null
@@ -154,13 +157,9 @@ public final class StockSuspendSyncAdapter
     @Override
     public void preflight(FrozenRequest request) {
         validateRequest(request);
-        // 原请求不能套用另一布局的会话，避免写前检查被旧包装器绕过。
-        int version =
-                originalPort instanceof StockSuspendWriteSession.Versioned selected
-                        ? selected.datasetVersion()
-                        : 1;
-        if (version != request.definition().datasetVersion())
-            throw new IllegalArgumentException("停牌会话布局与冻结请求不同");
+        requireLayout(originalPort, request.definition().datasetVersion());
+        if (StockSuspendTarget.versionOf(target) != request.definition().datasetVersion())
+            throw new IllegalArgumentException("停牌目标作用域与冻结布局不同");
         originalPort.preflight();
     }
 
@@ -170,6 +169,11 @@ public final class StockSuspendSyncAdapter
             SyncJobRunner.PageConsumer<StockSuspend> consumer,
             BooleanSupplier cancelled)
             throws Exception {
+        validateRequest(request);
+        var layout = CnTradeDateLayout.fromVersion(request.definition().datasetVersion());
+        requireLayout(originalPort, layout.schemaVersion());
+        if (StockSuspendTarget.versionOf(target) != layout.schemaVersion())
+            throw new IllegalArgumentException("停牌目标作用域与冻结布局不同");
         var receipts = new ArrayList<String>();
         var pageEvidence = new ArrayList<Path>();
         var sourceFingerprints = new ArrayList<String>();
@@ -183,7 +187,8 @@ public final class StockSuspendSyncAdapter
                         evidenceRoot,
                         table,
                         logicalTargetId,
-                        runId);
+                        runId,
+                        layout);
         try (var publicationLock = publication.acquire()) {
             var before = target.openTable(table).snapshot();
             if (!physicalTargetId.equals(target.physicalTargetId(table, before.identity())))
@@ -235,30 +240,79 @@ public final class StockSuspendSyncAdapter
                 FileEvidenceStore.writeNewDurable(
                         intent,
                         json.writeValueAsBytes(
-                                Map.of(
-                                        "schema",
-                                        "java.stk_suspend_append.v1",
-                                        "runId",
-                                        runId,
-                                        "physicalTargetId",
-                                        physicalTargetId,
-                                        "before",
-                                        before,
-                                        "from",
-                                        request.from(),
-                                        "to",
-                                        request.to(),
-                                        "sourceFingerprint",
-                                        sourceFingerprint)));
+                                StockSuspendLayoutMapper.bind(
+                                        Map.of(
+                                                "schema",
+                                                layout == CnTradeDateLayout.LEGACY_V1
+                                                        ? "java.stk_suspend_append.v1"
+                                                        : "java.stk_suspend_append.v2",
+                                                "runId",
+                                                runId,
+                                                "physicalTargetId",
+                                                physicalTargetId,
+                                                "before",
+                                                before,
+                                                "from",
+                                                request.from(),
+                                                "to",
+                                                request.to(),
+                                                "sourceFingerprint",
+                                                sourceFingerprint),
+                                        layout)));
                 for (var page : bufferedPages) {
                     if (cancelled.getAsBoolean())
                         throw new CancellationException("stk_suspend append cancelled");
                     consumer.accept(page);
                 }
+                // 空页不会经过发送核验，也要先确认 WAL，不能只凭稳定行数或摘要完成。
+                if (!originalPort.walSettled())
+                    throw new IllegalStateException("停牌追加 WAL 未就绪，保留原意图");
                 var after = target.openTable(table).snapshot();
                 if (!after.identity().equals(before.identity()) || !after.rows().equals(canonical))
                     throw new IllegalStateException(
                             "stk_suspend append full-key readback differs; retain ledger and evidence");
+                if (!originalPort.walSettled())
+                    throw new IllegalStateException("停牌追加回读期间 WAL 改变，保留原意图");
+                var verification =
+                        Map.of(
+                                "passed",
+                                true,
+                                "writerStopped",
+                                true,
+                                "expectedRows",
+                                totals[1],
+                                "actualRows",
+                                totals[1],
+                                "matchedRows",
+                                totals[1],
+                                "mismatchedRows",
+                                0,
+                                "duplicateKeys",
+                                0,
+                                "missingKeys",
+                                0,
+                                "readbackEvidence",
+                                "questdb-full-snapshot:" + after.fingerprint(),
+                                "sourceFingerprint",
+                                sourceFingerprint);
+                var publicationProof =
+                        Map.of(
+                                "logicalTargetId",
+                                logicalTargetId,
+                                "physicalTargetBefore",
+                                physicalTargetId,
+                                "physicalTargetAfter",
+                                physicalTargetId,
+                                "fromInclusive",
+                                request.from().toString(),
+                                "toInclusive",
+                                request.to().toString(),
+                                "replacementPublished",
+                                false,
+                                "fullTargetFingerprint",
+                                after.fingerprint(),
+                                "verification",
+                                verification);
                 Path complete = evidenceRoot.resolve("complete-" + runId + ".json");
                 var proof = new LinkedHashMap<String, Object>();
                 proof.put("endpoint", "suspend_d");
@@ -279,11 +333,16 @@ public final class StockSuspendSyncAdapter
                 proof.put("outsideRowsPreserved", before.rows().size());
                 proof.put("sourceFingerprint", sourceFingerprint);
                 proof.put("appendIntent", intent.toString());
-                FileEvidenceStore.writeNewDurable(complete, json.writeValueAsBytes(proof));
+                proof.put("publication", publicationProof);
+                proof.put("walSettled", true);
+                FileEvidenceStore.writeNewDurable(
+                        complete,
+                        json.writeValueAsBytes(StockSuspendLayoutMapper.bind(proof, layout)));
                 for (Path receipt : pageEvidence) {
                     var page = (ObjectNode) json.readTree(receipt.toFile());
                     page.put("completionEvidence", complete.toString());
                     page.put("publicationMode", "APPEND_NEW_DATES");
+                    page.set("publication", json.valueToTree(publicationProof));
                     FileEvidenceStore.replaceDurable(receipt, json.writeValueAsBytes(page));
                 }
                 return new SyncJobRunner.SourceCompletion(
@@ -294,7 +353,9 @@ public final class StockSuspendSyncAdapter
                             .write(prepared, evidenceRoot.resolve("publication"), cancelled);
             String stagePhysical =
                     target.physicalTargetId(stage.table(), stage.snapshot().identity());
-            this.port = originalPort.forTarget(stage.table(), stagePhysical);
+            var stagedPort = originalPort.forTarget(stage.table(), stagePhysical);
+            requireLayout(stagedPort, layout.schemaVersion());
+            this.port = stagedPort;
             for (var page : bufferedPages) {
                 if (cancelled.getAsBoolean() || Thread.currentThread().isInterrupted())
                     throw new CancellationException(
@@ -372,20 +433,22 @@ public final class StockSuspendSyncAdapter
             String responseEvidence = String.join(";", receipts);
             json.writeValue(
                     complete.toFile(),
-                    Map.ofEntries(
-                            Map.entry("endpoint", "suspend_d"),
-                            Map.entry("mode", request.mode().name()),
-                            Map.entry("fromInclusive", request.from().toString()),
-                            Map.entry("toInclusive", request.to().toString()),
-                            Map.entry("completedDateSlices", totals[0]),
-                            Map.entry("sourceRows", totals[1]),
-                            Map.entry("returnedRows", totals[1]),
-                            Map.entry("submittedRows", totals[1]),
-                            Map.entry("responseEvidence", responseEvidence),
-                            Map.entry("sliceReceipts", receipts),
-                            Map.entry("sourceComplete", true),
-                            Map.entry("complete", true),
-                            Map.entry("publication", publicationEvidence)));
+                    StockSuspendLayoutMapper.bind(
+                            Map.ofEntries(
+                                    Map.entry("endpoint", "suspend_d"),
+                                    Map.entry("mode", request.mode().name()),
+                                    Map.entry("fromInclusive", request.from().toString()),
+                                    Map.entry("toInclusive", request.to().toString()),
+                                    Map.entry("completedDateSlices", totals[0]),
+                                    Map.entry("sourceRows", totals[1]),
+                                    Map.entry("returnedRows", totals[1]),
+                                    Map.entry("submittedRows", totals[1]),
+                                    Map.entry("responseEvidence", responseEvidence),
+                                    Map.entry("sliceReceipts", receipts),
+                                    Map.entry("sourceComplete", true),
+                                    Map.entry("complete", true),
+                                    Map.entry("publication", publicationEvidence)),
+                            layout));
             for (Path pageReceipt : pageEvidence) {
                 var pageJson = (ObjectNode) json.readTree(pageReceipt.toFile());
                 pageJson.put("completionEvidence", complete.toString());
@@ -581,6 +644,14 @@ public final class StockSuspendSyncAdapter
         else if (attempt.state() != SyncRunState.IN_DOUBT)
             throw new IllegalStateException(
                     "D011 attempt is no longer active during publication recovery");
+    }
+
+    static void requireLayout(StockSuspendWriteSession session, int version) {
+        int actual =
+                session instanceof StockSuspendWriteSession.Versioned selected
+                        ? selected.datasetVersion()
+                        : 1;
+        if (actual != version) throw new IllegalArgumentException("停牌会话布局与冻结请求不同");
     }
 
     @Override

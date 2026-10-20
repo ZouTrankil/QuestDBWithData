@@ -1,5 +1,6 @@
 package com.zoutrankil.data.stock.application;
 
+import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncJobDefinition.FrozenRequest;
 import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
@@ -108,14 +109,40 @@ public final class StockSuspendJobService {
         return table;
     }
 
+    private SyncJobDefinition currentDefinition() {
+        return StockSuspendSyncJobOwner.definition(StockSuspendTarget.versionOf(target));
+    }
+
+    private SyncJobDefinition savedDefinition(String runId) throws Exception {
+        var run = SyncRunLedger.openReadOnly(ledgerPath).getRun(Objects.requireNonNull(runId));
+        if (run == null || !"data.stk_suspend".equals(run.jobId()))
+            throw new IllegalArgumentException("原记录不是停牌任务");
+        return StockSuspendSyncJobOwner.definition(run.jobVersion());
+    }
+
+    private StockSuspendTarget originalTarget(FrozenRequest request) {
+        return StockSuspendTarget.forFrozenVersion(target, request.definition().datasetVersion());
+    }
+
     public String revalidate(String priorRunId) throws Exception {
+        var definition = savedDefinition(priorRunId);
+        var original = StockSuspendTarget.forFrozenVersion(target, definition.datasetVersion());
+        var saved = FrozenRunRequest.restoreCompleted(ledgerPath, priorRunId, definition);
+        String frozenPhysical = frozenPhysicalTargetId(saved.request());
+        String currentPhysical = original.physicalTargetId();
+        // 来源再验证也不能把原运行重绑到未经其发布链证明的物理对象。
+        if (!frozenPhysical.equals(currentPhysical)
+                && !StockSuspendPublication.authorizesResume(
+                        ledgerPath, priorRunId, saved.targetId(), frozenPhysical, currentPhysical))
+            throw new IllegalStateException("停牌再验证的物理代际没有原运行的发布证明");
         return CompletedSourceRevalidation.revalidate(
                 ledgerPath,
                 priorRunId,
-                StockSuspendSyncJobOwner.DEFINITION,
-                this::targetId,
+                definition,
+                original::targetId,
                 (evidence, identity) ->
-                        new StockSuspendRevalidationAdapter(pages, target, evidence));
+                        new StockSuspendRevalidationAdapter(
+                                pages, original, evidence, currentPhysical));
     }
 
     public void requireNoPendingPublication() throws Exception {
@@ -131,11 +158,9 @@ public final class StockSuspendJobService {
             throws Exception {
         Objects.requireNonNull(requestedThrough, "stk_suspend upper date required");
         Objects.requireNonNull(logicalDate, "stk_suspend logical date required");
-        Mode mode =
-                requestedMode == null
-                        ? StockSuspendSyncJobOwner.DEFINITION.defaultMode()
-                        : requestedMode;
-        if (!StockSuspendSyncJobOwner.DEFINITION.supportedModes().contains(mode))
+        var definition = currentDefinition();
+        Mode mode = requestedMode == null ? definition.defaultMode() : requestedMode;
+        if (!definition.supportedModes().contains(mode))
             throw new IllegalArgumentException("Unsupported stk_suspend sync mode");
         requireAdmittedMode(mode);
         if (requestedThrough.isAfter(logicalDate))
@@ -170,7 +195,7 @@ public final class StockSuspendJobService {
 
         if (mode == Mode.INCREMENTAL) {
             Optional<StockSuspendCoverage.Coverage> saved =
-                    StockSuspendCoverage.checkpoint(ledgerPath, target);
+                    StockSuspendCoverage.checkpoint(ledgerPath, target, definition.version());
             if (saved.isEmpty()) {
                 if (bootstrapFrom == null)
                     throw new IllegalArgumentException(
@@ -183,7 +208,7 @@ public final class StockSuspendJobService {
                                 requestedThrough,
                                 physical.max(),
                                 logicalDate,
-                                StockSuspendSyncJobOwner.DEFINITION.budget().maxWindowDays());
+                                definition.budget().maxWindowDays());
                 from = window.from();
                 to = window.to();
                 capped = window.cappedByBudget();
@@ -232,8 +257,8 @@ public final class StockSuspendJobService {
                     "Resolved stk_suspend window exceeds the five-day budget");
         FrozenRequest request =
                 jobs.prepare(
-                        StockSuspendSyncJobOwner.DEFINITION.jobId(),
-                        StockSuspendSyncJobOwner.DEFINITION.version(),
+                        definition.jobId(),
+                        definition.version(),
                         mode,
                         parameters,
                         from,
@@ -262,14 +287,12 @@ public final class StockSuspendJobService {
     public FrozenRequest restorePlan(String runId) throws Exception {
         var ledger = SyncRunLedger.openReadOnly(ledgerPath);
         var run = ledger.getRun(runId);
-        if (!run.jobId().equals(StockSuspendSyncJobOwner.DEFINITION.jobId())
-                || run.jobVersion() != StockSuspendSyncJobOwner.DEFINITION.version()
-                || !run.targetId().equals(targetId()))
+        var definition = savedDefinition(runId);
+        var original = StockSuspendTarget.forFrozenVersion(target, definition.datasetVersion());
+        if (!run.jobId().equals(definition.jobId()) || !run.targetId().equals(original.targetId()))
             throw new IllegalArgumentException(
                     "Run is not a frozen request for this logical stk_suspend target");
-        FrozenRequest request =
-                FrozenRunRequest.restore(ledgerPath, runId, StockSuspendSyncJobOwner.DEFINITION)
-                        .request();
+        FrozenRequest request = FrozenRunRequest.restore(ledgerPath, runId, definition).request();
         validate(request);
         requireSameTarget(run.targetId(), frozenTargetId(request));
         return request;
@@ -291,6 +314,8 @@ public final class StockSuspendJobService {
     public SyncJobRunner.Result run(FrozenRequest request) throws Exception {
         requireAdmittedMode(request.mode());
         validate(request);
+        if (!request.definition().equals(currentDefinition()))
+            throw new IllegalArgumentException("停牌新运行必须匹配当前选定布局");
         String expected = frozenTargetId(request);
         String expectedPhysical = frozenPhysicalTargetId(request);
         requireSameTarget(expected, targetId());
@@ -304,6 +329,7 @@ public final class StockSuspendJobService {
     public SyncJobRunner.Result resume(FrozenRequest request, String priorRun) throws Exception {
         requireAdmittedMode(request.mode());
         validate(request);
+        var original = originalTarget(request);
         SyncRunLedger ledger = SyncRunLedger.openReadOnly(ledgerPath);
         var prior = ledger.getRun(priorRun);
         var entry = ledger.get(priorRun);
@@ -325,19 +351,19 @@ public final class StockSuspendJobService {
                     "Reconcile uncertain stk_suspend writes before resuming");
         String frozenPhysical = frozenPhysicalTargetId(request);
         requireSameTarget(expected, prior.targetId());
-        requireSameTarget(expected, targetId());
-        StockSuspendPublication.recoverIfPresent(ledgerPath, target, priorRun, true);
-        String currentPhysical = physicalTargetId();
+        requireSameTarget(expected, original.targetId());
+        StockSuspendPublication.recoverIfPresent(ledgerPath, original, priorRun, true);
+        String currentPhysical = original.physicalTargetId();
         if (!frozenPhysical.equals(currentPhysical)) {
-            StockSuspendPublication.finish(ledgerPath, target, priorRun, true);
-            currentPhysical = physicalTargetId();
+            StockSuspendPublication.finish(ledgerPath, original, priorRun, true);
+            currentPhysical = original.physicalTargetId();
             if (!StockSuspendPublication.authorizesResume(
                     ledgerPath, priorRun, expected, frozenPhysical, currentPhysical))
                 throw new IllegalStateException(
                         "stk_suspend resume physical target transition is not journal verified");
         } else
             StockSuspendPublication.verifyCurrentTarget(
-                    ledgerPath, this.target, expected, currentPhysical);
+                    ledgerPath, original, expected, currentPhysical);
         String run = "stk-suspend-" + UUID.randomUUID();
         return execute(run, priorRun, priorRun, request, expected, currentPhysical);
     }
@@ -377,10 +403,15 @@ public final class StockSuspendJobService {
             String expectedPhysical)
             throws Exception {
         requireAdmittedMode(request.mode());
-        requireSameTarget(expectedLogical, targetId());
-        requireSameTarget(expectedPhysical, physicalTargetId());
+        validate(request);
+        var original = originalTarget(request);
+        // 新计划受当前选择约束，恢复始终按原账本选择目标和会话。
+        if (prior == null && !request.definition().equals(currentDefinition()))
+            throw new IllegalArgumentException("停牌新运行必须匹配当前选定布局");
+        requireSameTarget(expectedLogical, original.targetId());
+        requireSameTarget(expectedPhysical, original.physicalTargetId());
         var ledger = new SyncRunLedger(ledgerPath);
-        var port = target.newWriter(expectedPhysical);
+        var port = original.newWriter(expectedPhysical);
         var adapter =
                 new StockSuspendSyncAdapter(
                         pages,
@@ -391,7 +422,7 @@ public final class StockSuspendJobService {
                         run,
                         expectedLogical,
                         expectedPhysical,
-                        target);
+                        original);
         var runner =
                 new SyncJobRunner<StockSuspend, StockSuspendKey>(
                         ledger, new DatasetIntervalLock(ledgerPath));

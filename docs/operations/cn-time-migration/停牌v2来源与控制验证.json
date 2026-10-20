@@ -1,0 +1,64 @@
+{
+  "基线提交": "81ca7300a56d8bc20a007a6b7555bb2a8bb63b5f",
+  "范围": "停牌显式同版来源执行、计划与原请求恢复、检查点和已完成来源再验证；追加完成证明与重复核对原件一致性",
+  "最终源码摘要": {
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendSyncAdapter.java": "5eea14cf335dd41b9af00c265f5523aabea608af7aa7566650d2d1c55fdc137a",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendJobService.java": "a374c75c49f0d5d768a394d902d33b1f79c829edb51972d373af875841af475e",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendCoverage.java": "e311cd419f546524442f717a1dc23a1fa6fc1d1b6c64f5c356a7bd85e7f3c457",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendRevalidationAdapter.java": "313840b7ab7391d5129cba15a390a7329a626badb655aee86e85fab59c3ba557",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockSuspendVersionedLifecycleTest.java": "13bc87a7740aaf8aa76eac967d64d9a35c462ec91be1db2a3169a7814894407e",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendRunRecovery.java": "eaa3adcb0cb57667cd526b4343ce78ca1279bd1ae71d9a8d399c6d555dbb41a3"
+  },
+  "完整回归": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2362,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 145
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "结果": "通过",
+  "格式检查": {
+    "命令": "python3 tools/format_java.py --imports --check",
+    "Java文件": 2042,
+    "结果": "格式、import、字面量值核对通过"
+  },
+  "公开配置检查": "cn-data 和 main-strategy 两个发行 ZIP 均通过",
+  "新增执行验收": [
+    "两个布局的空/非空追加完成与同版检查点",
+    "相同逻辑身份下不同版本不互借检查点",
+    "两个方向的原版本恢复和只读来源再验证，原 JSON 与账本不变",
+    "两个布局的空/非空替换、正常发布后再次核对，页面及完成原件不改写",
+    "空追加 WAL 未就绪时 IN_DOUBT 并保留区间锁",
+    "未证明的物理换代、控制检查后换代、错版新计划和未决恢复均拒绝",
+    "缺少 WAL 证明的旧式完成记录不自动接管或补写"
+  ],
+  "验证材料": "临时 SQLite、真实来源解析与通用执行器、有界来源响应及内存物理表；没有请求真实来源或写入 QuestDB。",
+  "修复": [
+    "追加完成原缺少页面关联窗口证明，补齐全窗和 WAL 检查",
+    "再验证固定已核验物理代际，阻止换表重绑",
+    "恢复沿用已有完成凭证的 publication，避免改坏页面和完成证明的一致性"
+  ],
+  "默认布局": 1,
+  "限制": [
+    "当前 Spring owner、根配置、公共读取和组 v2 入口尚未开放",
+    "真实来源及 staging/发布/恢复实库验收未完成",
+    "旧目标若有缺证已完成增量记录，仍阻断；未添加自动认证或改写流程",
+    "append 与未发布 stage 未决恢复器仍未新增",
+    "L2、Batch 独立来源、正式表、MV、调度、消费者及完整模型验收仍待完成",
+    "此前实库 JDBC SQLState 00000 的根因仍未确认"
+  ]
+}
