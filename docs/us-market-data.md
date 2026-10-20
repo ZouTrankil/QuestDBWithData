@@ -342,3 +342,27 @@ Yahoo 的 PRTA 原响应在 2012-12-18 至 20 日返回三根全零价格。[发
 新增 2709 行二十列独立重建并经 PGWire 回读一致，原保护组 96912 行价格（含 NBIS 原 499 行）及 17 条映射未变，原成功 Yahoo 队列未改。锁内核对 WAL 结清、缓冲为零、未挂起，原物理表与结构保持。持仓日期验收及首尾诊断在 `var/market-data/scope-review/index-proxy-coverage-20261020/`，NBIS 原文、身份、停牌参照集合、Native、独立回读及 WAL 在 `nbis-history-20261020/`。
 
 前一目录另验收主采集的一组 128 个来源、360948 行、21 个年度窗口：从原 Yahoo 响应独立重建全部二十列，对照原 Native prepared、回读文件和当前 PGWire 行均一致，已完成队列前后稳定。匿名试取 WIKI 历史档案返回 HTTP 403，未取得价格；回执在 `var/market-data/scope-review/wiki-access-20261020/`，该渠道不计入覆盖。全市场及剩余历史缺口继续推进。
+
+### SKIN、SPRC、SRTM 合股来源及原运行恢复
+
+2026-10-20 从 Tiingo 取得三份完整价格响应，按免费 Starter 预算采集，共写入 3526 行，截止日保持 2026-10-16。原 Yahoo 失败响应和任务保留，未新增永久映射。
+
+| 当前来源请求键 | 已验收窗口 | 行数 | 保留的边界和缺口 |
+| --- | --- | ---: | --- |
+| SKIN | 2020-11-24 至 2026-10-16 | 1480 | 正量报价，窗口内相对 SPY 实有日期无缺日 |
+| SPRC | 2021-08-30 至 2026-10-16 | 1288 | 仍缺 2021-09-29；2021-11-16 的供应商零量报价保留，不证明实际成交 |
+| SRTM | 2023-10-10 至 2026-10-16 | 758 | 排除上市前 2023-10-09 的零量平价记录；合法窗口内正量报价、参照日期无缺日 |
+
+SKIN 的[交易所公告](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2026-728)确认 2026-10-14 二十合一。SPRC 的三次合股分别由 [2023 年公告](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2023-555)、[2025 年公告](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2025-344)和 [2026 年公告](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2026-126)确认，市场生效日为 2023-09-28、2025-07-03、2026-03-04，比例为二十六合一、二十一合一、九合一。来源因子按原精度保存。发行人 [3 月 2 日执行公告](https://www.sec.gov/Archives/edgar/data/1611746/000121390026022005/f6k0302202601ex99-1.htm)也写 3 月 4 日生效，但 [20-F/A 附注 18](https://www.sec.gov/Archives/edgar/data/1611746/000121390026091427/ea0302520-20fa1_scisparc.htm)另写 2 月 5 日；差异原因尚未查明，不修改财务原文，也不将其当作第二次市场合股。9 月 29 日缺口在两家来源均无合法报价，继续留缺，不推定停牌。
+
+SRTM 当前请求键返回原 La Rosa 的 LRHC 历史。[首次交易申报](https://www.sec.gov/Archives/edgar/data/1879403/000157587223001597/lrhc-20231009.htm)明确于 2023-10-10 开始交易，因此 9 日的供应商零量记录只留在原响应中。四次合股的交易所公告为 [2025-07-07 八十合一](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2025-350)、[2026-01-26 十合一](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2026-38)、[2026-04-20 十合一](https://www.nasdaqtrader.com/TraderNews.aspx?id=eca2026-249)和 [2026-09-08 六合一](https://www.nasdaqtrader.com/TraderNews.aspx?id=eca2026-641)，均与来源事件一致。[更名申报](https://www.sec.gov/Archives/edgar/data/1879403/000121390026110734/ea0309022-8k_stratum.htm)确认 2026-10-19 开盘改用 Stratum 名称和 SRTM 代码、CUSIP 未变；这晚于价格截止日，当前请求键不能当作截止日当时的市场代码或早期 AI 业务历史。
+
+八份完整 Nasdaq HTML 及摘要已冻结；首次交易、更名和财务附注经网页核读，本机 SEC 下载的 403 回执另存，不冒充完整本地 HTML。三段二十列从原响应独立重建并经 PGWire 回读一致；原保护组 99621 行价格及 17 条映射未变，保护组累计 103147 行。读取按年份和证券分块，逐块拒绝截断。锁内确认价格与映射表 WAL 结清、缓冲为零、未挂起，原物理表和结构不变。SPRC 缺日、SRTM 上市前记录及截止日后价格仍未入库；供应商调整值均为观察时版本，不证明历史当时可知。
+
+本次 SRTM 原运行曾在发送确认后超过两分钟可见性期限，进入 `IN_DOUBT`，原意图和锁保留。待 PGWire、HTTP 两路均确认 758 行全部字段与原冻结值一致、WAL 结清且原写入进程退出后，使用 `reconcile-frozen --repair-missing false` 核对原运行；补写行数为零。初始未决回执原样保留，另存当前状态及正式对账回执，没有重发 SRTM。
+
+主采集随后在 2023 年窗口初始 WAL 预检失败退出。原运行 `market-ec35b05f-0566-4e79-ab6d-b1e806a0da60` 只有一条失败 RUN，无 ATTEMPT、SLICE 和所属区间锁；原 26421 个完整键全部不存在。确认原进程停止、原件和物理表不变、WAL 结清后，保存一次恢复意图，沿同一完整原件和原分页建立新 Native 运行 `market-a2e1ceef-921e-4d76-83b9-2f6bdf73b535`，26421 行完整验收。另从 Yahoo 原文独立重建二十列并核对 PGWire、原生证明文件及摘要，通过后仅用 `reconcile-broad-window` 推进原窗口 17，未改原失败运行，也未重置原窗口为未发送。
+
+原 v24 发行包、两 GiB 堆和 2026-10-16 截止日不变，恢复进程 PID 为 39576。重启后先复核已完成原窗口，再完成 2024、2025、2026 三段共 82504 行；原组 128 个来源、383307 行、21 个年度窗口全部经原生协议逐字段再验，父组及成员已推进 `VERIFIED`。原失败账本保留，所有 prepared 和完整回读文件摘要已另核对，检查时无 `IN_DOUBT`，进程已继续后续来源。启动回执在 `var/market-data/us-broad-launch-v24-recovered.json`，恢复检查在该证据目录的 `main-resume-verification.json`。
+
+证据均在 `var/market-data/scope-review/three-split-sources-20261020/`。其中 `main-progress-independent-verification.json` 另核对三个已完成主采集组，共 384 个来源、1072131 行、63 个年度窗口，全部从原 Yahoo 响应独立重建二十列并对照原 Native、PGWire，已完成队列前后不变。这些验收不代表全市场、全部历史或剩余来源缺口已经完成。
