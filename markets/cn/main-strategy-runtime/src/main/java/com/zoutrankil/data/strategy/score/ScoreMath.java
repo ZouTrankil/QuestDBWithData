@@ -65,7 +65,7 @@ final class ScoreMath {
     static Map<String, List<MutableRow>> bySymbol(List<MutableRow> rows) {
         var result = new TreeMap<String, List<MutableRow>>();
         for (var row : rows)
-            result.computeIfAbsent(row.symbol, ignored -> new ArrayList<>()).add(row);
+            result.computeIfAbsent(row.groupingKey, ignored -> new ArrayList<>()).add(row);
         result.values().forEach(group -> group.sort(Comparator.comparing(row -> row.date)));
         return result;
     }
@@ -196,9 +196,16 @@ final class ScoreMath {
         var keys = new HashSet<List<Object>>();
         var result = new ArrayList<MutableRow>();
         for (var row : source) {
-            if (!keys.add(List.of(row.tradeDate(), row.symbol())))
+            if (!keys.add(
+                    List.of(
+                            row.tradeDate(),
+                            row.aggregationScope() == null ? "instrument" : "scope",
+                            row.algorithmGroupingKey())))
                 throw new IllegalArgumentException(
-                        "Duplicate observed key: " + row.tradeDate() + "/" + row.symbol());
+                        "Duplicate observed key: "
+                                + row.tradeDate()
+                                + "/"
+                                + row.algorithmGroupingKey());
             for (var value : row.values().values())
                 if (value instanceof Number n && Double.isInfinite(n.doubleValue()))
                     throw new IllegalArgumentException("Infinite source observation");
@@ -209,12 +216,15 @@ final class ScoreMath {
 
     static final class MutableRow {
         final LocalDate date;
-        final String symbol;
+        // 内部混合分组键；冻结时仍按证券或汇总角色还原。
+        final String groupingKey;
+        final ScoreRow.AggregationScope aggregationScope;
         final Map<String, Object> values;
 
         MutableRow(ScoreRow row) {
             date = row.tradeDate();
-            symbol = row.symbol();
+            groupingKey = row.algorithmGroupingKey();
+            aggregationScope = row.aggregationScope();
             values = new MutableScalarValues(row.values());
         }
 
@@ -239,7 +249,9 @@ final class ScoreMath {
         }
 
         ScoreRow freeze() {
-            return new ScoreRow(date, symbol, values);
+            return aggregationScope == null
+                    ? new ScoreRow(date, groupingKey, values)
+                    : ScoreRow.aggregate(date, aggregationScope, values);
         }
     }
 }

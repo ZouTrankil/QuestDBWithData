@@ -59,7 +59,7 @@ public final class EtfOnlyTop2ScoreProducer {
     }
 
     public record EtfReference(
-            String symbol,
+            String instrumentCode,
             String name,
             String category,
             String broadFamily,
@@ -67,8 +67,8 @@ public final class EtfOnlyTop2ScoreProducer {
             boolean lof,
             boolean activeLof) {
         public EtfReference {
-            if (symbol == null
-                    || symbol.isBlank()
+            if (instrumentCode == null
+                    || instrumentCode.isBlank()
                     || category == null
                     || category.isBlank()
                     || !Double.isFinite(annualFee))
@@ -76,18 +76,19 @@ public final class EtfOnlyTop2ScoreProducer {
         }
     }
 
+    /** ETF 与成分证券分开；市值为元，来源比例保留原尺度，只在篮子内归一化。 */
     public record Holding(
-            String etf,
-            String stock,
-            LocalDate announced,
-            LocalDate periodEnd,
-            double marketValueRatio,
-            double marketValue) {
+            String etfCode,
+            String constituentCode,
+            LocalDate announcementDate,
+            LocalDate reportPeriodEndDate,
+            double holdingMarketValueRatio,
+            double holdingMarketValue) {
         public Holding {
-            Objects.requireNonNull(etf);
-            Objects.requireNonNull(stock);
-            Objects.requireNonNull(announced);
-            Objects.requireNonNull(periodEnd);
+            Objects.requireNonNull(etfCode);
+            Objects.requireNonNull(constituentCode);
+            Objects.requireNonNull(announcementDate);
+            Objects.requireNonNull(reportPeriodEndDate);
         }
     }
 
@@ -264,26 +265,27 @@ public final class EtfOnlyTop2ScoreProducer {
                 inputs.signalDates().size());
         var reference = new LinkedHashMap<String, EtfReference>();
         for (var row : inputs.references())
-            if (reference.put(row.symbol(), row) != null)
+            if (reference.put(row.instrumentCode(), row) != null)
                 throw new IllegalArgumentException("Duplicate prepared ETF reference");
         var holdings =
                 inputs.holdings().stream()
                         .filter(
                                 row ->
-                                        reference.containsKey(row.etf())
-                                                && L2StockScoreProducer.tradable(row.stock())
-                                                && !row.announced()
+                                        reference.containsKey(row.etfCode())
+                                                && L2StockScoreProducer.tradable(
+                                                        row.constituentCode())
+                                                && !row.announcementDate()
                                                         .isAfter(inputs.signalDates().getLast()))
                         .toList();
         boolean ratioPresent =
-                holdings.stream().anyMatch(row -> !Double.isNaN(row.marketValueRatio()));
+                holdings.stream().anyMatch(row -> !Double.isNaN(row.holdingMarketValueRatio()));
         var scored = new ArrayList<MutableRow>();
         var coverage = new ArrayList<ScoreRow>();
         int completedDates = 0;
         for (LocalDate date : inputs.signalDates()) {
             var allEtfs =
                     etfsByDate.getOrDefault(date, List.of()).stream()
-                            .filter(row -> reference.containsKey(row.symbol))
+                            .filter(row -> reference.containsKey(row.groupingKey))
                             .toList();
             var stockDay = stocksByDate.getOrDefault(date, List.of());
             var baskets = baskets(holdings, date, ratioPresent);
@@ -293,8 +295,8 @@ public final class EtfOnlyTop2ScoreProducer {
                 throw new IllegalArgumentException("ETF score inputs do not cover " + date);
             for (var source : allEtfs) {
                 var row = new MutableRow(source.freeze());
-                var meta = reference.get(row.symbol);
-                var basket = aggregate.get(row.symbol);
+                var meta = reference.get(row.groupingKey);
+                var basket = aggregate.get(row.groupingKey);
                 if (basket != null) row.values.putAll(basket);
                 for (String name :
                         List.of(
@@ -345,7 +347,7 @@ public final class EtfOnlyTop2ScoreProducer {
             values.put("liquidity_window", settings.liquidityWindow());
             values.put("liquidity_min_periods", settings.liquidityMinPeriods());
             values.put("liquidity_min_amount", settings.minAmount());
-            coverage.add(new ScoreRow(date, "ETF_UNIVERSE", values));
+            coverage.add(ScoreRow.aggregate(date, ScoreRow.AggregationScope.ETF_UNIVERSE, values));
             if (filtered.isEmpty())
                 throw new IllegalArgumentException("No eligible ETF score rows on " + date);
             if (++completedDates % 20 == 0 || completedDates == inputs.signalDates().size())
@@ -361,7 +363,7 @@ public final class EtfOnlyTop2ScoreProducer {
         overlay(scored, promoted);
         LOG.info("Completed full ETF score postprocessing: rows={}", scored.size());
         scored.sort(
-                Comparator.comparing((MutableRow row) -> row.symbol)
+                Comparator.comparing((MutableRow row) -> row.groupingKey)
                         .thenComparing(row -> row.date));
         var appliedWeights = new ArrayList<FrozenPromotedRecipe.DatedValues>();
         var appliedStates = new ArrayList<FrozenPromotedRecipe.DatedValues>();
@@ -432,7 +434,7 @@ public final class EtfOnlyTop2ScoreProducer {
         return rows;
     }
 
-    private record Member(String stock, double weight) {}
+    private record Member(String constituentCode, double weight) {}
 
     /** 按信号日已公告的最近持仓构造成分篮子；整列选择权重口径，不能逐行混用比例与市值。 */
     private static Map<String, List<Member>> baskets(
@@ -440,25 +442,31 @@ public final class EtfOnlyTop2ScoreProducer {
         var latest = new HashMap<String, LocalDate>();
         // Python 先处理整列权重并删除缺失权重，再按最近公告选择记录。
         for (var row : source)
-            if (!row.announced().isAfter(date)
-                    && !Double.isNaN(ratioPresent ? row.marketValueRatio() : row.marketValue()))
-                latest.merge(row.etf(), row.announced(), (a, b) -> a.isAfter(b) ? a : b);
+            if (!row.announcementDate().isAfter(date)
+                    && !Double.isNaN(
+                            ratioPresent
+                                    ? row.holdingMarketValueRatio()
+                                    : row.holdingMarketValue()))
+                latest.merge(row.etfCode(), row.announcementDate(), (a, b) -> a.isAfter(b) ? a : b);
         var selected = new TreeMap<String, List<Holding>>();
         for (var row : source)
-            if (row.announced().equals(latest.get(row.etf()))
-                    && !Double.isNaN(ratioPresent ? row.marketValueRatio() : row.marketValue()))
-                selected.computeIfAbsent(row.etf(), ignored -> new ArrayList<>()).add(row);
+            if (row.announcementDate().equals(latest.get(row.etfCode()))
+                    && !Double.isNaN(
+                            ratioPresent
+                                    ? row.holdingMarketValueRatio()
+                                    : row.holdingMarketValue()))
+                selected.computeIfAbsent(row.etfCode(), ignored -> new ArrayList<>()).add(row);
         var result = new TreeMap<String, List<Member>>();
         selected.forEach(
                 (etf, rows) -> {
-                    rows.sort(Comparator.comparing(Holding::stock));
+                    rows.sort(Comparator.comparing(Holding::constituentCode));
                     double total =
                             rows.stream()
                                     .mapToDouble(
                                             row ->
                                                     ratioPresent
-                                                            ? row.marketValueRatio()
-                                                            : row.marketValue())
+                                                            ? row.holdingMarketValueRatio()
+                                                            : row.holdingMarketValue())
                                     .sum();
                     if (total > 0)
                         result.put(
@@ -467,11 +475,12 @@ public final class EtfOnlyTop2ScoreProducer {
                                         .map(
                                                 row ->
                                                         new Member(
-                                                                row.stock(),
+                                                                row.constituentCode(),
                                                                 (ratioPresent
                                                                                 ? row
-                                                                                        .marketValueRatio()
-                                                                                : row.marketValue())
+                                                                                        .holdingMarketValueRatio()
+                                                                                : row
+                                                                                        .holdingMarketValue())
                                                                         / total))
                                         .toList());
                 });
@@ -481,7 +490,7 @@ public final class EtfOnlyTop2ScoreProducer {
     private static Map<String, Map<String, Object>> aggregate(
             Map<String, List<Member>> baskets, List<MutableRow> stockDay) {
         var stocks = new HashMap<String, MutableRow>();
-        stockDay.forEach(row -> stocks.put(row.symbol, row));
+        stockDay.forEach(row -> stocks.put(row.groupingKey, row));
         var result = new TreeMap<String, Map<String, Object>>();
         baskets.forEach(
                 (etf, members) -> {
@@ -503,7 +512,7 @@ public final class EtfOnlyTop2ScoreProducer {
                     var topTouch = new GroupSum();
                     var top3 = new GroupSum();
                     for (var member : members) {
-                        var stock = stocks.get(member.stock());
+                        var stock = stocks.get(member.constituentCode());
                         double score = stock == null ? Double.NaN : stock.n("final_score"),
                                 weight = member.weight();
                         if (!Double.isNaN(score)) {
@@ -522,7 +531,7 @@ public final class EtfOnlyTop2ScoreProducer {
                     }
                     for (int i = 0; i < sorted.size(); i++) {
                         var member = sorted.get(i);
-                        var stock = stocks.get(member.stock());
+                        var stock = stocks.get(member.constituentCode());
                         if (i < 3) top3.add(member.weight());
                         if (i < 10 && stock != null) {
                             topVol.add(member.weight() * stock.f("component_vol60", 0));
@@ -550,7 +559,7 @@ public final class EtfOnlyTop2ScoreProducer {
                             String.join(
                                     "|",
                                     members.stream()
-                                            .map(Member::stock)
+                                            .map(Member::constituentCode)
                                             .distinct()
                                             .sorted()
                                             .toList()));
@@ -792,7 +801,7 @@ public final class EtfOnlyTop2ScoreProducer {
         rank(rows, "top10_limit_touch_weight", "__chip_touch", true, .5);
         var byKey = new HashMap<List<Object>, ScoreRow>();
         for (var row : chips)
-            if (byKey.put(List.of(row.tradeDate(), row.symbol()), row) != null)
+            if (byKey.put(List.of(row.tradeDate(), row.instrumentCode()), row) != null)
                 throw new IllegalArgumentException("Duplicate chip observation");
         for (var row : rows) {
             row.put(

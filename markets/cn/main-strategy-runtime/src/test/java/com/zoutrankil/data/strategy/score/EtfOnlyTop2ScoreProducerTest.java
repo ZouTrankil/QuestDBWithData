@@ -57,12 +57,17 @@ class EtfOnlyTop2ScoreProducerTest {
 
     static List<ScoreRow> rows(JsonNode data, String symbolColumn) {
         var result = new ArrayList<ScoreRow>();
-        for (var row : data)
+        for (var row : data) {
+            var day = LocalDate.parse(row.get("trade_date").asText());
+            var cells = values(row, Set.of("trade_date", symbolColumn));
+            String identity = row.has(symbolColumn) ? row.get(symbolColumn).asText() : "MARKET";
+            // 原样本保留 v1 标签；适配时显式分出汇总身份，不重写参考值。
             result.add(
-                    new ScoreRow(
-                            LocalDate.parse(row.get("trade_date").asText()),
-                            row.has(symbolColumn) ? row.get(symbolColumn).asText() : "MARKET",
-                            values(row, Set.of("trade_date", symbolColumn))));
+                    identity.equals("MARKET") || identity.equals("ETF_UNIVERSE")
+                            ? ScoreRow.aggregate(
+                                    day, ScoreRow.AggregationScope.valueOf(identity), cells)
+                            : new ScoreRow(day, identity, cells));
+        }
         return result;
     }
 
@@ -162,7 +167,11 @@ class EtfOnlyTop2ScoreProducerTest {
 
     private static Map<String, ScoreRow> index(List<ScoreRow> rows) {
         var result = new HashMap<String, ScoreRow>();
-        rows.forEach(row -> assertNull(result.put(row.tradeDate() + "/" + row.symbol(), row)));
+        rows.forEach(
+                row ->
+                        assertNull(
+                                result.put(
+                                        row.tradeDate() + "/" + row.algorithmGroupingKey(), row)));
         return result;
     }
 
@@ -202,9 +211,9 @@ class EtfOnlyTop2ScoreProducerTest {
         var scorer = new L2StockScoreProducer();
         var stock = new ArrayList<>(input.stockDaily());
         // Nontradable BSE names remain in the diagnostic cross-section and its ranks.
-        String copied = input.stockDaily().getFirst().symbol();
+        String copied = input.stockDaily().getFirst().instrumentCode();
         for (var row : input.stockDaily())
-            if (row.symbol().equals(copied)) {
+            if (row.instrumentCode().equals(copied)) {
                 var values = new LinkedHashMap<>(row.values());
                 values.put("pb", 13.);
                 values.put("turnover_rate", 37.);
@@ -466,7 +475,7 @@ class EtfOnlyTop2ScoreProducerTest {
                             .get(row.get("trade_date").asText() + "/MARKET")
                             .text("sentiment_quintile"));
         var references = new HashMap<String, EtfOnlyTop2ScoreProducer.EtfReference>();
-        input.references().forEach(row -> references.put(row.symbol(), row));
+        input.references().forEach(row -> references.put(row.instrumentCode(), row));
         assertEquals(fixture.get("etf_reference").size(), references.size());
         for (var row : fixture.get("etf_reference")) {
             var result = references.get(row.get("ts_code").asText());
@@ -578,9 +587,9 @@ class EtfOnlyTop2ScoreProducerTest {
         var source = new ArrayList<ScoreRow>();
         for (int i = 0; i < 10; i++)
             source.add(
-                    new ScoreRow(
+                    ScoreRow.aggregate(
                             start.plusDays(i),
-                            "MARKET",
+                            ScoreRow.AggregationScope.MARKET,
                             Map.of("sentiment_score", (double) (i / 2))));
         var cut = EtfOnlyTop2ScoreProducer.prepareMarketSentiment(source, start, start.plusDays(9));
         for (int i = 0; i < cut.size(); i++)

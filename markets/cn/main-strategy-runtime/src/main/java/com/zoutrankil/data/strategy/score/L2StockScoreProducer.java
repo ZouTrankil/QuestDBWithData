@@ -104,13 +104,13 @@ public final class L2StockScoreProducer {
         var chipByKey = index(mutable(chipRows));
         var base = new ArrayList<MutableRow>();
         for (var raw : mutable(rawL2)) {
-            if (!tradable(raw.symbol)) continue;
-            var diag = dailyByKey.get(new Key(raw.date, raw.symbol));
+            if (!tradable(raw.groupingKey)) continue;
+            var diag = dailyByKey.get(new Key(raw.date, raw.groupingKey));
             // 原评分器用左连接；未观察到行情的行保持空值，不补造价格或状态。
             boolean missingMarket = diag == null;
             if (diag == null) {
-                diag = new MutableRow(new ScoreRow(raw.date, raw.symbol, Map.of()));
-                dailyByKey.put(new Key(raw.date, raw.symbol), diag);
+                diag = new MutableRow(new ScoreRow(raw.date, raw.groupingKey, Map.of()));
+                dailyByKey.put(new Key(raw.date, raw.groupingKey), diag);
             }
             var row = new MutableRow(raw.freeze());
             row.values.putAll(diag.values);
@@ -119,11 +119,11 @@ public final class L2StockScoreProducer {
                 row.put("turnover_rate", raw.values.get("turnover_rate"));
             else row.values.remove("turnover_rate");
             // 正式历史输入按日期取名称和行业；旧的纯计算调用仍可提供固定元数据。
-            var meta = metadata.get(raw.date + "|" + raw.symbol);
-            if (meta == null) meta = metadata.get(raw.symbol);
+            var meta = metadata.get(raw.date + "|" + raw.groupingKey);
+            if (meta == null) meta = metadata.get(raw.groupingKey);
             if (meta == null && missingMarket) meta = new StockMetadata("", "");
             if (meta == null)
-                throw new IllegalArgumentException("L2 stock metadata missing: " + raw.symbol);
+                throw new IllegalArgumentException("L2 stock metadata missing: " + raw.groupingKey);
             row.put("name", Objects.toString(meta.name(), ""));
             row.put("industry_l2", Objects.toString(meta.industry(), ""));
             if (raw.values.containsKey("main_funds_buy_amount"))
@@ -205,7 +205,7 @@ public final class L2StockScoreProducer {
         var rawByKey = index(mutable(rawL2));
         var scored = new ArrayList<MutableRow>();
         for (var source : base) {
-            var row = new MutableRow(new ScoreRow(source.date, source.symbol, Map.of()));
+            var row = new MutableRow(new ScoreRow(source.date, source.groupingKey, Map.of()));
             for (String name :
                     List.of(
                             "name",
@@ -215,8 +215,8 @@ public final class L2StockScoreProducer {
                             "exp_ret_rank",
                             "final_score",
                             "filter_reason")) row.put(name, source.values.get(name));
-            var raw = rawByKey.get(new Key(row.date, row.symbol));
-            var diag = dailyByKey.get(new Key(row.date, row.symbol));
+            var raw = rawByKey.get(new Key(row.date, row.groupingKey));
+            var diag = dailyByKey.get(new Key(row.date, row.groupingKey));
             for (String name : ENRICHED_RAW)
                 if (raw.values.containsKey(name)) row.put(name, raw.values.get(name));
             double denominator = raw.n("clean_amount");
@@ -244,7 +244,7 @@ public final class L2StockScoreProducer {
                             "guard_limit_touch_20d",
                             "guard_ret20_rank",
                             "guard_turnover_rank")) row.put(name, diag.values.get(name));
-            var chip = chipByKey.get(new Key(row.date, row.symbol));
+            var chip = chipByKey.get(new Key(row.date, row.groupingKey));
             for (String name :
                     List.of("l2_activity_score", "l2_chase_risk_score", "l2_breakdown_risk_score"))
                 row.put(name, chip == null ? .5 : chip.f(name, .5));
@@ -378,7 +378,7 @@ public final class L2StockScoreProducer {
 
     private static Map<Key, MutableRow> index(List<MutableRow> rows) {
         var result = new HashMap<Key, MutableRow>();
-        for (var row : rows) result.put(new Key(row.date, row.symbol), row);
+        for (var row : rows) result.put(new Key(row.date, row.groupingKey), row);
         return result;
     }
 
@@ -530,7 +530,7 @@ public final class L2StockScoreProducer {
             rawByDate.computeIfAbsent(row.tradeDate(), ignored -> new ArrayList<>()).add(row);
         var bySymbol = new TreeMap<String, List<ScoreRow>>();
         for (var row : stockDaily)
-            bySymbol.computeIfAbsent(row.symbol(), ignored -> new ArrayList<>()).add(row);
+            bySymbol.computeIfAbsent(row.instrumentCode(), ignored -> new ArrayList<>()).add(row);
         var diagnostics = new TreeMap<LocalDate, List<ScoreRow>>();
         // Series rolling state starts at the original warmup boundary for every symbol.
         // No window is truncated or reinitialized at a month or signal boundary.
@@ -543,7 +543,7 @@ public final class L2StockScoreProducer {
                         values.put(column, row.values.get(column));
                     diagnostics
                             .computeIfAbsent(row.date, ignored -> new ArrayList<>())
-                            .add(new ScoreRow(row.date, row.symbol, values));
+                            .add(new ScoreRow(row.date, row.groupingKey, values));
                 }
             if (++symbolCount % 500 == 0)
                 LOG.info(
@@ -570,7 +570,7 @@ public final class L2StockScoreProducer {
                 var values = new LinkedHashMap<String, Object>();
                 for (String column : ETF_AGGREGATION)
                     values.put(column, scored.values().get(column));
-                result.add(new ScoreRow(scored.tradeDate(), scored.symbol(), values));
+                result.add(scored.withValues(values));
             }
             if (++dateCount % 20 == 0 || dateCount == rawByDate.size())
                 LOG.info(

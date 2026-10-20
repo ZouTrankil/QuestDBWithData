@@ -2,6 +2,7 @@ package com.zoutrankil.data.strategy.application;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.strategy.score.ScoreRow;
@@ -29,8 +30,8 @@ class MainStrategyDataFramesTest {
         var row = new ScoreRow(day, "510300.SH", values);
         var expected = new LinkedHashMap<String, Object>(values);
         expected.put("trade_date", day);
-        expected.put("ts_code", row.symbol());
-        var frame = MainStrategyDataService.frames(List.of(row), true).getFirst();
+        expected.put("ts_code", row.instrumentCode());
+        var frame = MainStrategyDataService.legacyV1Frames(List.of(row), true).getFirst();
         assertEquals(expected, frame);
         assertEquals(new ArrayList<>(expected.keySet()), new ArrayList<>(frame.keySet()));
         assertEquals(
@@ -43,12 +44,28 @@ class MainStrategyDataFramesTest {
     @Test
     void coverageFramesRetainEveryFieldAndAppendOnlyTheSignalDate() {
         var day = LocalDate.of(2026, 10, 16);
-        var row = new ScoreRow(day, "MARKET", Map.of("count", 243550L, "hit_rate", .9));
+        var row =
+                ScoreRow.aggregate(
+                        day,
+                        ScoreRow.AggregationScope.MARKET,
+                        Map.of("count", 243550L, "hit_rate", .9));
         var expected = new LinkedHashMap<String, Object>(row.values());
         expected.put("trade_date", day);
-        var actual = MainStrategyDataService.frames(List.of(row), false).getFirst();
+        var actual = MainStrategyDataService.legacyV1Frames(List.of(row), false).getFirst();
         assertEquals(expected, actual);
         assertEquals(new ArrayList<>(expected.keySet()), new ArrayList<>(actual.keySet()));
         assertFalse(actual.containsKey("ts_code"));
+    }
+
+    @Test
+    void aggregateScopeCannotBePublishedAsAV1SecurityIdentity() {
+        var aggregate =
+                ScoreRow.aggregate(
+                        LocalDate.of(2026, 9, 30),
+                        ScoreRow.AggregationScope.ETF_UNIVERSE,
+                        Map.of("count", 3));
+        assertThrows(
+                IllegalStateException.class,
+                () -> MainStrategyDataService.legacyV1Frames(List.of(aggregate), true));
     }
 }

@@ -114,7 +114,7 @@ public final class EtfSourcePreparation {
             int bin = Math.max(0, (int) Math.ceil(positions[i] * 5.0 / rows.size()) - 1);
             values.put("sentiment_score", row.number("sentiment_score"));
             values.put("sentiment_quintile", unique.size() < 5 ? "Q3" : labels[bin]);
-            result.add(new ScoreRow(row.tradeDate(), row.symbol(), values));
+            result.add(row.withValues(values));
         }
         return List.copyOf(result);
     }
@@ -185,7 +185,7 @@ public final class EtfSourcePreparation {
                         factor.stream()
                                 .filter(
                                         row ->
-                                                codes.contains(row.symbol())
+                                                codes.contains(row.instrumentCode())
                                                         && !row.tradeDate().isAfter(requestedEnd))
                                 .toList());
         if (rows.isEmpty()) return List.of();
@@ -194,20 +194,20 @@ public final class EtfSourcePreparation {
         var atEnd = new HashSet<String>();
         rows.stream()
                 .filter(row -> row.date.equals(requestedEnd))
-                .forEach(row -> atEnd.add(row.symbol));
+                .forEach(row -> atEnd.add(row.groupingKey));
         var technical = List.of("ma_bfq_20", "ma_bfq_60", "ma_bfq_250", "rsi_bfq_6");
         if (latest.isBefore(requestedEnd) || !atEnd.containsAll(codes)) {
             LocalDate from = (latest.isBefore(requestedEnd) ? latest : requestedEnd).minusDays(5);
             var keys = new HashSet<List<Object>>();
-            rows.forEach(row -> keys.add(List.of(row.date, row.symbol)));
+            rows.forEach(row -> keys.add(List.of(row.date, row.groupingKey)));
             var columns = new LinkedHashSet<String>();
             rows.forEach(row -> columns.addAll(row.values.keySet()));
             int appended = 0;
             for (var row : daily)
-                if (codes.contains(row.symbol())
+                if (codes.contains(row.instrumentCode())
                         && !row.tradeDate().isBefore(from)
                         && !row.tradeDate().isAfter(requestedEnd)
-                        && keys.add(List.of(row.tradeDate(), row.symbol()))) {
+                        && keys.add(List.of(row.tradeDate(), row.instrumentCode()))) {
                     var values = new LinkedHashMap<String, Object>();
                     for (String column : columns)
                         values.put(
@@ -217,7 +217,7 @@ public final class EtfSourcePreparation {
                                         : row.values().getOrDefault(column, Double.NaN));
                     if (columns.contains("pct_change") && !row.values().containsKey("pct_change"))
                         values.put("pct_change", row.values().getOrDefault("pct_chg", Double.NaN));
-                    rows.add(new MutableRow(new ScoreRow(row.tradeDate(), row.symbol(), values)));
+                    rows.add(new MutableRow(row.withValues(values)));
                     appended++;
                 }
             if (appended > 0)
@@ -232,7 +232,7 @@ public final class EtfSourcePreparation {
                     }
         }
         rows.sort(
-                Comparator.comparing((MutableRow row) -> row.symbol)
+                Comparator.comparing((MutableRow row) -> row.groupingKey)
                         .thenComparing(row -> row.date));
         return rows.stream().map(MutableRow::freeze).toList();
     }

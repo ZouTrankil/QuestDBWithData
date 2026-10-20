@@ -51,7 +51,14 @@ import java.util.stream.Collectors;
 public final class MainStrategyDataService {
     private static final Logger LOG = LoggerFactory.getLogger(MainStrategyDataService.class);
     private static final Set<String> SCORE_IDENTITIES =
-            Set.of("trade_date", "ts", "timestamp", "ts_code", "symbol");
+            Set.of(
+                    "trade_date",
+                    "ts",
+                    "timestamp",
+                    "ts_code",
+                    "symbol",
+                    "instrument_code",
+                    "aggregation_scope");
     private final QuestDbStrategyInputs reader;
     private final ScoreArtifactPublisher publisher;
     private final NativeMarketInputPackagePublisher marketPackages;
@@ -208,7 +215,7 @@ public final class MainStrategyDataService {
         proof.put("optionalChip", "Empty input permitted by existing contract");
         proof.put("appliedFactorWeights", applied(output.factorWeights()));
         proof.put("appliedFactorStates", applied(output.factorStates()));
-        var panel = frames(output.panel(), true);
+        var panel = legacyV1Frames(output.panel(), true);
         LOG.info(
                 "Publishing complete Java score pair: panel rows={}, coverage rows={}",
                 panel.size(),
@@ -217,7 +224,7 @@ public final class MainStrategyDataService {
                 publisher.publish(
                         runId,
                         panel,
-                        frames(output.coverage(), false),
+                        legacyV1Frames(output.coverage(), false),
                         prepared.signalDates(),
                         frozen.artifactSha256().get("recipe"),
                         proof,
@@ -287,6 +294,7 @@ public final class MainStrategyDataService {
         var holdings = new ArrayList<EtfOnlyTop2ScoreProducer.Holding>();
         for (var row : raw.tables().get("etf_portfolio"))
             holdings.add(
+                    // ts_code 是 ETF，symbol 是成分证券；mkv 为元，不能用 amount 股数代替。
                     new EtfOnlyTop2ScoreProducer.Holding(
                             text(row, "ts_code"),
                             text(row, "symbol"),
@@ -303,7 +311,7 @@ public final class MainStrategyDataService {
         versions.put("chip", "optional-empty-v1");
         var codes =
                 references.stream()
-                        .map(EtfOnlyTop2ScoreProducer.EtfReference::symbol)
+                        .map(EtfOnlyTop2ScoreProducer.EtfReference::instrumentCode)
                         .collect(Collectors.toSet());
         LOG.info(
                 "Preparing complete ETF factor history: raw rows={}, eligible codes={}",
@@ -628,24 +636,34 @@ public final class MainStrategyDataService {
     }
 
     private static List<ScoreRow> rows(
-            QuestDbStrategyInputs.Snapshot raw, String table, String date, String symbol) {
+            QuestDbStrategyInputs.Snapshot raw,
+            String table,
+            String date,
+            String physicalInstrumentColumn) {
         return raw.tables().get(table).stream()
                 .map(
-                        row ->
-                                new ScoreRow(
-                                        QuestDbStrategyInputs.date(row.get(date)),
-                                        symbol == null ? "MARKET" : text(row, symbol),
-                                        FrozenScalarValues.excluding(row, SCORE_IDENTITIES)))
+                        row -> {
+                            var day = QuestDbStrategyInputs.date(row.get(date));
+                            var values = FrozenScalarValues.excluding(row, SCORE_IDENTITIES);
+                            return physicalInstrumentColumn == null
+                                    ? ScoreRow.aggregate(
+                                            day, ScoreRow.AggregationScope.MARKET, values)
+                                    : new ScoreRow(
+                                            day, text(row, physicalInstrumentColumn), values);
+                        })
                 .toList();
     }
 
-    static List<Map<String, Object>> frames(List<ScoreRow> rows, boolean symbol) {
+    static List<Map<String, Object>> legacyV1Frames(
+            List<ScoreRow> rows, boolean includeInstrumentCode) {
         return rows.stream()
                 .map(
                         row -> {
                             var identities = new LinkedHashMap<String, Object>();
                             identities.put("trade_date", row.tradeDate());
-                            if (symbol) identities.put("ts_code", row.symbol());
+                            // 旧产物继续使用 v1 的 ts_code；证券和汇总身份不能在这里混用。
+                            if (includeInstrumentCode)
+                                identities.put("ts_code", row.requireInstrumentCode());
                             return FrozenScalarValues.merging(row.values(), identities);
                         })
                 .toList();
