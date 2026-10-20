@@ -10,9 +10,10 @@
 ./gradlew questdbMaintenance --args='status'
 ./gradlew questdbMaintenance --args='refresh-etf-overview'
 ./gradlew questdbMaintenance --args='retire-sync-metadata'
+./gradlew questdbMaintenance --args='rehearse-cn-time-columns --output var/cn-time-rehearsal-新编号.json'
 ```
 
-`status` 看状态，后两个命令会实际刷新或删除登记过的旧元数据对象；不是预览命令。该入口不启动全量同步应用。
+`status` 看状态；刷新和退役旧元数据命令会实际改库。`rehearse-cn-time-columns` 只在本轮随机创建的隔离副本上演练六项指定日期列的新布局，验证后按物理身份清理；正式表只读，不迁移原账本、不刷新 MV。输出文件不能已存在，任一对象失败返回非零。实际范围和限制见[时间迁移记录](operations/cn-time-migration/README.md)。该入口不启动全量同步应用。
 
 ## ETF 物化视图怎样更新
 

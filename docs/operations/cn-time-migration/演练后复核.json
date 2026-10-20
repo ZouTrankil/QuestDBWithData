@@ -1,0 +1,130 @@
+{
+  "checkedAt": "2026-10-20T11:49:24.960365+00:00",
+  "database": "qdb",
+  "host": "100.64.153.106",
+  "formalIdentitiesAndDatesUnchanged": true,
+  "remainingRehearsalTables": 0,
+  "results": {
+    "formal": {
+      "query": "SELECT id,table_name,designatedTimestamp,partitionBy,walEnabled,dedup FROM tables() WHERE table_name IN ('etf_adj','etf_daily','etf_share','stk_st_daily','stk_suspend','l2_daily_features','margin_zrz','moneyflow_dc','qmt_1m_bars')",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT"
+        },
+        {
+          "name": "table_name",
+          "type": "STRING"
+        },
+        {
+          "name": "designatedTimestamp",
+          "type": "STRING"
+        },
+        {
+          "name": "partitionBy",
+          "type": "STRING"
+        },
+        {
+          "name": "walEnabled",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "dedup",
+          "type": "BOOLEAN"
+        }
+      ],
+      "timestamp": -1,
+      "dataset": [
+        [
+          1818,
+          "etf_adj",
+          "timestamp",
+          "YEAR",
+          true,
+          true
+        ],
+        [
+          1686,
+          "etf_daily",
+          "timestamp",
+          "YEAR",
+          true,
+          true
+        ],
+        [
+          1850,
+          "etf_share",
+          "timestamp",
+          "YEAR",
+          true,
+          true
+        ],
+        [
+          1665,
+          "l2_daily_features",
+          "ts",
+          "DAY",
+          true,
+          true
+        ],
+        [
+          217,
+          "margin_zrz",
+          "trade_date",
+          "YEAR",
+          true,
+          false
+        ],
+        [
+          158,
+          "moneyflow_dc",
+          "trade_date",
+          "YEAR",
+          true,
+          true
+        ],
+        [
+          311,
+          "qmt_1m_bars",
+          "bar_time",
+          "DAY",
+          true,
+          true
+        ],
+        [
+          3132,
+          "stk_st_daily",
+          "timestamp",
+          "YEAR",
+          true,
+          true
+        ],
+        [
+          3115,
+          "stk_suspend",
+          "timestamp",
+          "DAY",
+          true,
+          true
+        ]
+      ],
+      "count": 9
+    },
+    "isolated": {
+      "query": "SELECT id,table_name FROM tables() WHERE table_name LIKE 'java_cn_time_rehearsal_%'",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT"
+        },
+        {
+          "name": "table_name",
+          "type": "STRING"
+        }
+      ],
+      "timestamp": -1,
+      "dataset": [],
+      "count": 0
+    }
+  }
+}

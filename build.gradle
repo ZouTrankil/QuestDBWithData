@@ -316,7 +316,7 @@ tasks.register('cryptoMarketData', JavaExec) {
 
 tasks.register('questdbMaintenance', JavaExec) {
     group = 'application'
-    description = 'Inspect native MVs, verify ETF refreshes, or archive and retire registered legacy sync metadata.'
+    description = '检查原生 MV、刷新 ETF、退役旧元数据或演练 CN 时间列隔离布局。'
     dependsOn data.tasks.named('classes')
     classpath = data.sourceSets.main.runtimeClasspath
     mainClass = 'com.zoutrankil.data.maintenance.cli.QuestDbMaintenanceCli'

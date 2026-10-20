@@ -1,0 +1,50 @@
+{
+  "checkedAt": "2026-10-20T11:36:43.373952Z",
+  "scope": "六个隔离副本，每表最多两行；不证明正式迁移或MV验收完成",
+  "runId": "a1b95b2097c940da8da64d62bc852d15",
+  "objects": [
+    {
+      "source": "etf_adj",
+      "isolated": "java_cn_time_rehearsal_a1b95b2097c940da8da64d62bc852d15_0",
+      "status": "FAILED",
+      "error": "UncategorizedSQLException: PreparedStatementCallback; uncategorized SQLException for SQL [SELECT * FROM table_columns(?)]; SQL state [00000]; error code [0]; ERROR: argument type mismatch for function `table_columns` at #1 expected: STRING constant, actual: STRING\n  Position: 29",
+      "isolatedRemoved": false
+    },
+    {
+      "source": "etf_daily",
+      "isolated": "java_cn_time_rehearsal_a1b95b2097c940da8da64d62bc852d15_1",
+      "status": "FAILED",
+      "error": "UncategorizedSQLException: PreparedStatementCallback; uncategorized SQLException for SQL [SELECT * FROM table_columns(?)]; SQL state [00000]; error code [0]; ERROR: argument type mismatch for function `table_columns` at #1 expected: STRING constant, actual: STRING\n  Position: 29",
+      "isolatedRemoved": false
+    },
+    {
+      "source": "etf_share",
+      "isolated": "java_cn_time_rehearsal_a1b95b2097c940da8da64d62bc852d15_2",
+      "status": "FAILED",
+      "error": "UncategorizedSQLException: PreparedStatementCallback; uncategorized SQLException for SQL [SELECT * FROM table_columns(?)]; SQL state [00000]; error code [0]; ERROR: argument type mismatch for function `table_columns` at #1 expected: STRING constant, actual: STRING\n  Position: 29",
+      "isolatedRemoved": false
+    },
+    {
+      "source": "l2_daily_features",
+      "isolated": "java_cn_time_rehearsal_a1b95b2097c940da8da64d62bc852d15_3",
+      "status": "FAILED",
+      "error": "UncategorizedSQLException: PreparedStatementCallback; uncategorized SQLException for SQL [SELECT * FROM table_columns(?)]; SQL state [00000]; error code [0]; ERROR: argument type mismatch for function `table_columns` at #1 expected: STRING constant, actual: STRING\n  Position: 29",
+      "isolatedRemoved": false
+    },
+    {
+      "source": "stk_st_daily",
+      "isolated": "java_cn_time_rehearsal_a1b95b2097c940da8da64d62bc852d15_4",
+      "status": "FAILED",
+      "error": "UncategorizedSQLException: PreparedStatementCallback; uncategorized SQLException for SQL [SELECT * FROM table_columns(?)]; SQL state [00000]; error code [0]; ERROR: argument type mismatch for function `table_columns` at #1 expected: STRING constant, actual: STRING\n  Position: 29",
+      "isolatedRemoved": false
+    },
+    {
+      "source": "stk_suspend",
+      "isolated": "java_cn_time_rehearsal_a1b95b2097c940da8da64d62bc852d15_5",
+      "status": "FAILED",
+      "error": "UncategorizedSQLException: PreparedStatementCallback; uncategorized SQLException for SQL [SELECT * FROM table_columns(?)]; SQL state [00000]; error code [0]; ERROR: argument type mismatch for function `table_columns` at #1 expected: STRING constant, actual: STRING\n  Position: 29",
+      "isolatedRemoved": false
+    }
+  ],
+  "formalTablesChanged": false
+}
