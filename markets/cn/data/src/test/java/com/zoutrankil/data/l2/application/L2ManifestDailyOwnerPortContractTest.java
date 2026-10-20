@@ -17,6 +17,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.calendar.port.ExchangeCalendarReadPort;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.SyncJobDefinition;
@@ -238,6 +239,13 @@ class L2ManifestDailyOwnerPortContractTest {
                                                     "SSE", DAY, true, DAY.minusDays(1))),
                                     null));
             var raw = L2ManifestDailySourceContractTest.stream(daily).get(1).path("rows").get(0);
+            // 只为本次写入夹具明确状态，不修改共用来源解析的 NULL 样本。
+            raw = raw.deepCopy();
+            for (String flag :
+                    daily
+                            ? List.of("has_deal", "has_order", "has_snapshot")
+                            : List.of("daily_feature_ok", "t0_ok"))
+                ((ObjectNode) raw).put(flag, false);
             if (daily) {
                 row = new L2DailyFeaturesMapper().fromParquet(raw, DAY);
                 var s = mock(L2DailyFeaturesParquetSource.class);

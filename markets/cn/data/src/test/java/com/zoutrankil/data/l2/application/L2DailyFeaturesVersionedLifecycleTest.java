@@ -342,6 +342,9 @@ class L2DailyFeaturesVersionedLifecycleTest {
         var values = new EnumMap<L2DailyFeatureField, Object>(L2DailyFeatureField.class);
         for (var field : L2DailyFeatureField.values())
             if (!field.identity()) values.put(field, null);
+        values.put(L2DailyFeatureField.HAS_DEAL, false);
+        values.put(L2DailyFeatureField.HAS_ORDER, false);
+        values.put(L2DailyFeatureField.HAS_SNAPSHOT, false);
         values.put(L2DailyFeatureField.MEAN_REL_AGGRO, 1.25);
         return new L2DailyFeatures(day, symbol, values);
     }

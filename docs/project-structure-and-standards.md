@@ -295,3 +295,6 @@ L2 配置须同时选择散户情绪 MV 的任务依赖、来源与读取契约�
 
 
 私有 MV 验收须同时核对真实数据目录、loopback 监听、唯一进程与 fixture。macOS 使用固定 lsof 与 ProcessHandle 连续观察并固定进程代际，Windows 保留原流程；来源、WAL 和完整键值仍另行验收，见[进程归属决定](decisions/2026-10-21-私有QuestDB进程归属核验.md)。
+
+
+QuestDB BOOLEAN 不能保存未知值；来源 DTO 可空不等于物理列可空。公共写入准备与 L2 行校验须在提交意图或借 Sender 前拒绝此类输入，不能补 false 或重标历史原件。正式摄取先验完整缺口再分批发送，见[布尔空值决定](decisions/2026-10-21-QuestDB布尔空值写入准入.md)。

@@ -31,6 +31,11 @@ public interface L2DailyFeaturesWriteSession
             }
 
             @Override
+            public void validateForWrite(L2DailyFeatures row) {
+                L2DailyFeaturesRows.requireWritable(row);
+            }
+
+            @Override
             public byte[] canonicalBytes(L2DailyFeatures row) {
                 return L2DailyFeaturesRows.canonicalBytes(row, layout);
             }

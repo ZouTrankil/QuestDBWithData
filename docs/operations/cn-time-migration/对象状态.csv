@@ -76,12 +76,12 @@ sge_daily,已用 trade_date,保留现状，尚未完成全链路验收,黄金现
 mv_etf_market_overview_daily,已用 trade_date,保留现状，尚未完成全链路验收,原生 MV 的 SQL 已将 etf_share.timestamp AS trade_date；改基表须同步重建或调整其依赖。
 mv_backtest_daily,已用 trade_date,保留现状，尚未完成全链路验收,原生 MV 使用交易日；SQL 仍连接 stk_suspend.timestamp 和 stk_st_daily.timestamp，需与基表迁移一起处理。
 mv_market_breadth_daily,已用 trade_date,保留现状，尚未完成全链路验收,原生 MV 沿用 stk_factor.trade_date；不改名。
-mv_retail_sentiment_daily,已用 trade_date,v2 来源与配置恢复及只读检查已接通；真实刷新与正式迁移待验收,原 v1 仍将 l2_daily_features.ts AS trade_date；v2 显式来源使用 trade_date，13 列算法与单位不改。
-l2_daily_features,可统一,v2 存储两轮实库及配置恢复已验收；真实来源与正式迁移仍待验收,"ts → trade_date；契约明确为交易日的午夜日期载体，现有键为 (ts,symbol)。"
+mv_retail_sentiment_daily,已用 trade_date,v2 有限夹具创建刷新修订恢复及FULL实库通过；正式来源与迁移待验收,原 v1 仍将 l2_daily_features.ts AS trade_date；v2 显式来源使用 trade_date，13 列算法与单位不改。
+l2_daily_features,可统一,v2 读写及关联MV有限实库通过；未知BOOLEAN发送前拒绝；正式来源与迁移待验收,"ts → trade_date；契约明确为交易日的午夜日期载体，现有键为 (ts,symbol)。"
 l2_event_response_features,已用 trade_date,保留现状，尚未完成全链路验收,保留 trade_date；minute 是事件所属分钟时刻，建议明确为 minute_time，不能合并到日期。
 l2_intraday_bar_features,已用 trade_date,保留现状，尚未完成全链路验收,保留 trade_date；minute 是分钟时刻，必须与按 Asia/Shanghai 解释的交易日一致。
 l2_t0_training_labels,已用 trade_date,保留现状，尚未完成全链路验收,保留 trade_date；minute 是分钟时刻，标签前视窗口不改变事件日期含义。
-l2_dataset_manifest,已用 trade_date,保留现状，尚未完成全链路验收,trade_date 是字符串业务日期；trade_date_ts 是其一对一 UTC 零点分区载体。逻辑字典关联两者，不直接改成同名列或删除载体。
+l2_dataset_manifest,已用 trade_date,两个质量BOOLEAN未知写入前拒绝；其余范围及正式全链路待验收,trade_date 是字符串业务日期；trade_date_ts 是其一对一 UTC 零点分区载体。逻辑字典关联两者，不直接改成同名列或删除载体。
 company_intrinsic_valuation_consensus,保留其他语义,保留现状，尚未完成全链路验收,valuation_date 是估值基准日期角色；历史生产契约不在当前仓库，不认定等于交易日。
 company_intrinsic_valuation_model,保留其他语义,保留现状，尚未完成全链路验收,valuation_date、report_end_date、report_ann_date 分别为估值基准日、报告期末、报告公告日；保留角色区别。
 daily_stock_analysis,保留其他语义,保留现状，尚未完成全链路验收,analysis_date 是分析所属日期，updated_at 是更新时间角色；没有规则证明分析日期必为交易日。

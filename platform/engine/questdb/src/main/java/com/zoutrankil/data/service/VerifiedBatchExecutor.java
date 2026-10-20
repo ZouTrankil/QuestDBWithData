@@ -81,6 +81,9 @@ public final class VerifiedBatchExecutor<T, K> {
         /** 完整业务键必须包含报告期、版本、类别等维度。 */
         K key(T row);
 
+        /** 写入前拒绝无法保真的行；默认不增加规则，也不改变原编码。 */
+        default void validateForWrite(T row) {}
+
         /** 确定性编码全部业务列，包含显式的空值标记。 */
         byte[] canonicalBytes(T row);
 
@@ -185,6 +188,7 @@ public final class VerifiedBatchExecutor<T, K> {
                     T row = pending != null ? pending : source.next();
                     pending = null;
                     K key = Objects.requireNonNull(codec.key(row), "complete key required");
+                    codec.validateForWrite(row);
                     byte[] encoded =
                             Objects.requireNonNull(
                                     codec.canonicalBytes(row), "canonical bytes required");

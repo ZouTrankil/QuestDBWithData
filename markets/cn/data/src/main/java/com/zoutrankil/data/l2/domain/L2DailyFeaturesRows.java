@@ -3,6 +3,7 @@ package com.zoutrankil.data.l2.domain;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.DatasetDefinition.StorageType;
 import com.zoutrankil.data.domain.l2.L2DailyFeatureField;
 import com.zoutrankil.data.domain.l2.L2DailyFeatures;
 import com.zoutrankil.data.domain.l2.L2DailyFeaturesKey;
@@ -10,6 +11,7 @@ import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /** Pure D086 canonical row encoding, bounds and explicit target admission. */
 public final class L2DailyFeaturesRows {
@@ -37,6 +39,14 @@ public final class L2DailyFeaturesRows {
         } catch (JsonProcessingException failure) {
             throw new IllegalStateException("Cannot encode D086 row", failure);
         }
+    }
+
+    /** QuestDB BOOLEAN 没有 NULL 载体；缺失状态不能在发送后变成 false。 */
+    public static void requireWritable(L2DailyFeatures row) {
+        Objects.requireNonNull(row, "L2 row required");
+        for (var field : L2DailyFeatureField.values())
+            if (field.storageType() == StorageType.BOOLEAN && row.features().get(field) == null)
+                throw new IllegalArgumentException("L2 BOOLEAN 不能保真写入 null：" + field.fieldName());
     }
 
     public static int estimatedTransportBytes(L2DailyFeatures row, byte[] canonical) {

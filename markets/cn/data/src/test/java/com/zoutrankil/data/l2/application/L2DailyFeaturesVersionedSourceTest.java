@@ -12,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zoutrankil.data.domain.JobDefinitionJson;
 import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRequestIdentity;
@@ -50,6 +51,10 @@ class L2DailyFeaturesVersionedSourceTest {
         when(source.sourceRootIdentity()).thenReturn(L2ManifestDailySourceContractTest.ROOT);
         when(source.inspect(any(), any(), anyList(), anyInt(), anyInt())).thenReturn(inspection);
         var raw = L2ManifestDailySourceContractTest.stream(true).get(1).path("rows").get(0);
+        // 这是写入成功夹具，布尔状态明确已知；原 NULL 来源解析用例不改。
+        raw = raw.deepCopy();
+        for (String flag : List.of("has_deal", "has_order", "has_snapshot"))
+            ((ObjectNode) raw).put(flag, false);
         var row = new L2DailyFeaturesMapper().fromParquet(raw, inspection.from());
         when(source.stream(any(), anyList(), anyInt(), anyInt(), any(), any(), any()))
                 .thenAnswer(

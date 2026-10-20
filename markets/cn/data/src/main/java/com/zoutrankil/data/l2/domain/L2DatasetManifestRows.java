@@ -23,6 +23,12 @@ public final class L2DatasetManifestRows {
         return row.key();
     }
 
+    /** 两个质量标记的未知值不能在 BOOLEAN 列里冒充 false。 */
+    public static void requireWritable(L2DatasetManifest row) {
+        if (row.dailyFeatureOk() == null || row.t0Ok() == null)
+            throw new IllegalArgumentException("L2 manifest BOOLEAN 不能保真写入 null");
+    }
+
     public static byte[] canonicalBytes(L2DatasetManifest row) {
         try {
             var bytes = new ByteArrayOutputStream(512);

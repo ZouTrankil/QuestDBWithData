@@ -20,6 +20,11 @@ public interface L2DatasetManifestWriteSession
                 }
 
                 @Override
+                public void validateForWrite(L2DatasetManifest row) {
+                    L2DatasetManifestRows.requireWritable(row);
+                }
+
+                @Override
                 public byte[] canonicalBytes(L2DatasetManifest row) {
                     return L2DatasetManifestRows.canonicalBytes(row);
                 }

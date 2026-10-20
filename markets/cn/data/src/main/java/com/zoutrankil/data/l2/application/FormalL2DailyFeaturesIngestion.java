@@ -288,6 +288,8 @@ public final class FormalL2DailyFeaturesIngestion {
         var batch = new ArrayList<L2DailyFeatures>();
         long bytes = 0;
         for (var row : rows) {
+            // 先验完整缺口的可写性，再启动第一批发送，未知 BOOLEAN 不能进入未决写入。
+            writer.codec().validateForWrite(row);
             byte[] canonical = writer.codec().canonicalBytes(row);
             long size = writer.codec().estimatedTransportBytes(row, canonical);
             if (size < 0 || size > L2DailyFeaturesRows.MAX_FORMAL_BATCH_BYTES)

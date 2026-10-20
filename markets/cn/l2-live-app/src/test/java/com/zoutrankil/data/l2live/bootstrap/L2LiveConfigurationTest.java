@@ -220,12 +220,19 @@ class L2LiveConfigurationTest {
     void journalQuotaIsExplicitBoundedAndVisibleInPlan() throws Exception {
         var defaults =
                 L2LiveConfiguration.parse(
-                        new String[] {"plan", "--root", root.toString()}, Map.of());
+                        new String[] {"plan", "--symbols", "563360", "--root", root.toString()},
+                        Map.of());
         assertEquals(8L << 30, defaults.journalMaxBytes);
         var larger =
                 L2LiveConfiguration.parse(
                         new String[] {
-                            "plan", "--root", root.toString(), "--journal-max-bytes", "68719476736"
+                            "plan",
+                            "--symbols",
+                            "563360",
+                            "--root",
+                            root.toString(),
+                            "--journal-max-bytes",
+                            "68719476736"
                         },
                         Map.of());
         assertEquals(64L << 30, larger.plan().get("journalMaxBytes"));
@@ -233,7 +240,13 @@ class L2LiveConfigurationTest {
         var storage =
                 L2LiveConfiguration.parse(
                         new String[] {
-                            "plan", "--root", root.toString(), "--storage-bytes", "17179869184"
+                            "plan",
+                            "--symbols",
+                            "563360",
+                            "--root",
+                            root.toString(),
+                            "--storage-bytes",
+                            "17179869184"
                         },
                         Map.of());
         assertEquals(16L << 30, storage.journalMaxBytes);
@@ -243,6 +256,8 @@ class L2LiveConfigurationTest {
                         L2LiveConfiguration.parse(
                                 new String[] {
                                     "plan",
+                                    "--symbols",
+                                    "563360",
                                     "--root",
                                     root.toString(),
                                     "--journal-max-bytes",
@@ -258,6 +273,8 @@ class L2LiveConfigurationTest {
                             L2LiveConfiguration.parse(
                                     new String[] {
                                         "plan",
+                                        "--symbols",
+                                        "563360",
                                         "--root",
                                         root.toString(),
                                         "--journal-max-bytes",

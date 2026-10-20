@@ -134,6 +134,11 @@ public final class DatasetWritePreparation {
                     if (value == null && !column.nullable())
                         throw new IllegalArgumentException(
                                 "Null required column: " + column.logicalName());
+                    // BOOLEAN 的缺失值会被 QuestDB 存成 false，不能按 nullable 直接跳过发送。
+                    if (value == null
+                            && column.storageType() == DatasetDefinition.StorageType.BOOLEAN)
+                        throw new IllegalArgumentException(
+                                "QuestDB BOOLEAN 不能保真写入 null：" + column.logicalName());
                     Object physical =
                             value == null ? null : DatasetStorageValues.storageValue(column, value);
                     Object normalized = canonical(physical);

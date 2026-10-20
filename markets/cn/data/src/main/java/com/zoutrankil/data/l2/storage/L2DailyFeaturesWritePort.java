@@ -138,6 +138,8 @@ public final class L2DailyFeaturesWritePort implements L2DailyFeaturesWriteSessi
     public void send(List<L2DailyFeatures> rows) {
         if (rows == null || rows.isEmpty() || rows.size() > MAX_BATCH_ROWS)
             throw new IllegalArgumentException("One nonempty bounded D086 batch is required");
+        // 直接写入也要在借 Sender 前检查；执行器另在提交意图前执行同一规则。
+        rows.forEach(L2DailyFeaturesRows::requireWritable);
         long byteBudget = formal ? L2DailyFeaturesRows.MAX_FORMAL_BATCH_BYTES : MAX_BATCH_BYTES;
         var normalized =
                 DatasetWritePreparation.prepare(

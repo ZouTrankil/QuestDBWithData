@@ -48,6 +48,26 @@ class FormalL2DailyFeaturesIngestionTest {
     @TempDir Path temporary;
 
     @Test
+    void unknownBooleanInALaterMissingRowFailsBeforeAnyFormalSubmission() throws Exception {
+        var first = row(DAY, "000001.SZ", 1.25);
+        var fields =
+                new EnumMap<L2DailyFeatureField, Object>(row(DAY, "000002.SZ", 2.0).features());
+        fields.put(L2DailyFeatureField.HAS_DEAL, null);
+        var unknown = new L2DailyFeatures(DAY, "000002.SZ", fields);
+        var writer = new Writer();
+        var locks = new Locks();
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        service(List.of(first, unknown), writer, locks)
+                                .ingestAndValidate(DAY, () -> false));
+        assertTrue(writer.sent.isEmpty());
+        assertEquals(0, writer.txn);
+        assertTrue(locks.released);
+        assertFalse(locks.inDoubt);
+    }
+
+    @Test
     void fillsOnlyConfirmedMissingKeysAndPreservesUncertifiedOlderHistory() throws Exception {
         var expected = List.of(row(DAY, "000001.SZ", 1.25), row(DAY, "000002.SZ", null));
         var writer = new Writer();
@@ -183,6 +203,10 @@ class FormalL2DailyFeaturesIngestionTest {
         var fields = new EnumMap<L2DailyFeatureField, Object>(L2DailyFeatureField.class);
         for (var field : L2DailyFeatureField.values())
             if (!field.identity()) fields.put(field, null);
+        // 成功写入夹具明确给出布尔值，其余缺失指标仍保持 null。
+        fields.put(L2DailyFeatureField.HAS_DEAL, false);
+        fields.put(L2DailyFeatureField.HAS_ORDER, false);
+        fields.put(L2DailyFeatureField.HAS_SNAPSHOT, false);
         fields.put(L2DailyFeatureField.MFI_SCORE, value);
         return new L2DailyFeatures(date, symbol, fields);
     }
@@ -205,6 +229,10 @@ class FormalL2DailyFeaturesIngestionTest {
             return new VerifiedBatchExecutor.Codec<>() {
                 public L2DailyFeaturesKey key(L2DailyFeatures row) {
                     return CODEC.key(row);
+                }
+
+                public void validateForWrite(L2DailyFeatures row) {
+                    CODEC.validateForWrite(row);
                 }
 
                 public byte[] canonicalBytes(L2DailyFeatures row) {

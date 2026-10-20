@@ -205,7 +205,7 @@ class L2ManifestDailyTargetContractTest {
                         })
                 .when(sender)
                 .flushAndGetSequence();
-        session.send(List.of(row(daily)));
+        session.send(List.of(writableRow(daily)));
         assertTrue(session.uncertainSenderStopped());
         var order = inOrder(sender);
         order.verify(sender).table(table(daily));
@@ -233,7 +233,9 @@ class L2ManifestDailyTargetContractTest {
         doThrow(close).when(sender).close();
         var session = session(daily, new JdbcTemplate(mock(DataSource.class)), qdb);
         var failure =
-                assertThrows(IllegalStateException.class, () -> session.send(List.of(row(daily))));
+                assertThrows(
+                        IllegalStateException.class,
+                        () -> session.send(List.of(writableRow(daily))));
         assertTrue(failure.getMessage().contains("QWP acknowledgement unknown"));
         assertArrayEquals(new Throwable[] {close}, failure.getSuppressed());
         assertTrue(session.uncertainSenderStopped());
@@ -302,6 +304,36 @@ class L2ManifestDailyTargetContractTest {
         return daily
                 ? new L2DailyFeaturesWritePort(table(true), jdbc, qdb)
                 : new L2DatasetManifestWritePort(table(false), jdbc, qdb);
+    }
+
+    /** 发送成功/确认丢失用例使用可表示的布尔值；原 NULL 行仍留给解码和编码测试。 */
+    private static Object writableRow(boolean daily) {
+        if (daily) {
+            var original = (L2DailyFeatures) row(true);
+            var values = new EnumMap<L2DailyFeatureField, Object>(original.features());
+            values.put(L2DailyFeatureField.HAS_DEAL, false);
+            values.put(L2DailyFeatureField.HAS_ORDER, false);
+            values.put(L2DailyFeatureField.HAS_SNAPSHOT, false);
+            return new L2DailyFeatures(original.tradeDate(), original.symbol(), values);
+        }
+        var original = (L2DatasetManifest) row(false);
+        return new L2DatasetManifest(
+                original.tradeDate(),
+                original.symbol(),
+                original.market(),
+                original.board(),
+                original.sourceRoot(),
+                original.outputRoot(),
+                original.featureVersion(),
+                false,
+                false,
+                original.rawRowCounts(),
+                original.outputPaths(),
+                original.costConfig(),
+                original.horizonsMin(),
+                original.errors(),
+                original.batchId(),
+                original.tradeDateTs());
     }
 
     static Object row(boolean daily) {

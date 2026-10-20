@@ -53,3 +53,6 @@ ETF 的特定恢复方式见 [ETF 行情恢复](etf-daily-recovery.md)。Batch �
 ## 已退役来源
 
 `margin_zrz`、`moneyflow_dc`、`qmt_1m_bars` 的本地代码入口已移除。正式数据清理状态和操作条件见[退役记录](operations/cn-retirement/README.md)。其他两融、资金流、QMT 原生交易和实时 L2 不在删除范围。
+
+
+BOOLEAN 未知值的断点看 `DatasetWritePreparation.prepareRows`、`VerifiedBatchExecutor.Codec.validateForWrite` 和两个 L2 Rows 的 `requireWritable`。BOOLEAN 不能持久保存 null，应在提交意图或 Sender 借用前失败，不能当成发送未决重试。正式摄取在 `boundedBatches` 先验完整缺口；旧不可保真数据仍按原件核对，见[准入决定](decisions/2026-10-21-QuestDB布尔空值写入准入.md)。
