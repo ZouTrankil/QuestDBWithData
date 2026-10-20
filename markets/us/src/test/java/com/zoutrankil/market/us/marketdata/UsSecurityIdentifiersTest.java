@@ -33,4 +33,15 @@ class UsSecurityIdentifiersTest {
         var row=record("AMTD","AMTD",false);assertThrows(IllegalArgumentException.class,()->rows(document(List.of(row))));
         row.put("security_id","US000000000721");row.put("price_from","2021-01-01");assertThrows(IllegalArgumentException.class,()->rows(document(List.of(row))));
     }
+    @Test void onlyVersionTwoCanPreserveAnExplicitNullFigiWithoutInventingAnIdentifier()throws Exception {
+        var row=record("US000000000721","US000000000721",false);row.put("openfigi_composite",null);var document=document(List.of(row));
+        assertThrows(IllegalArgumentException.class,()->rows(document));document.put("version",2);var actual=rows(document).getFirst();assertTrue(actual.containsKey("openfigi_composite"));assertNull(actual.get("openfigi_composite"));assertEquals(18,actual.size());
+        assertEquals(2,UsSecurityIdentifiers.IDENTIFIERS.schemaVersion());assertTrue(UsSecurityIdentifiers.IDENTIFIERS.columns().stream().filter(c->c.storageName().equals("openfigi_composite")).findFirst().orElseThrow().nullable());
+        row.remove("openfigi_composite");assertThrows(IllegalArgumentException.class,()->rows(document));
+    }
+    @Test void nullableFigiDoesNotAcceptWrongTypesOrAnAmbiguousManifestVersion() {
+        var row=record("US000000000721","US000000000721",false);var document=document(List.of(row));document.put("version",2);
+        for(Object value:List.of(123," ","null","NULL",List.of("BBG000BMFPK4"))){row.put("openfigi_composite",value);assertThrows(IllegalArgumentException.class,()->rows(document));}
+        row.put("openfigi_composite",null);for(Object version:List.of(3,2.5,"2",4294967298L)){document.put("version",version);assertThrows(IllegalArgumentException.class,()->rows(document));}
+    }
 }

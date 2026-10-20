@@ -56,7 +56,9 @@ final class UsSecurityIdentifierImporter {
     static void verifySearch(JsonNode search,Map<String,Object> row) {
         if(!search.isArray())throw new IllegalArgumentException("永久代码搜索原文不是数组");int found=0;
         for(var item:search)if(item.path("permaTicker").asText().equals(row.get("security_id"))) {
-            found++;if(!item.path("ticker").asText().equals(row.get("source_ticker"))||!item.path("name").asText().equals(row.get("security_name"))||!item.path("assetType").asText().equals(row.get("asset_type"))||!item.path("openFIGIComposite").asText().equals(row.get("openfigi_composite"))||!item.path("isActive").isBoolean()||!Boolean.valueOf(item.path("isActive").booleanValue()).equals(row.get("is_active")))throw new IllegalStateException("原搜索中的发行人、原代码或 FIGI 不符");
+            // 缺字段、文本 "null" 与明确的 JSON null 不能混同；FIGI 为空也不能跳过其他永久身份核对。
+            var figi=item.get("openFIGIComposite");boolean matchesFigi=figi!=null&&(figi.isNull()?row.get("openfigi_composite")==null:figi.isTextual()&&figi.asText().equals(row.get("openfigi_composite")));
+            found++;if(!item.path("ticker").asText().equals(row.get("source_ticker"))||!item.path("name").asText().equals(row.get("security_name"))||!item.path("assetType").asText().equals(row.get("asset_type"))||!matchesFigi||!item.path("isActive").isBoolean()||!Boolean.valueOf(item.path("isActive").booleanValue()).equals(row.get("is_active")))throw new IllegalStateException("原搜索中的发行人、原代码或 FIGI 不符");
         }if(found!=1)throw new IllegalStateException("原搜索没有唯一对应永久代码");
     }
     static void verifyHistory(Map<String,Object> original,Map<String,Object> row) {

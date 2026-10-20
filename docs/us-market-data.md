@@ -105,9 +105,12 @@ BTC 的原始文件、队列、预算、账本及回执在 `var/crypto-market-da
 - 同日再验收六组来源共 17703 条：DDS、DHY、当前 DCM 发行人的 Tiingo 日线各 5230 条，均覆盖 2006-01-03 至 2026-10-16；CNL/Tiingo 为 2026-08-11 起的 48 条，CNL/Yahoo 为最近五年的 1255 条；DEC/Tiingo 为 2023-12-18 起的 710 条。六组请求窗口都与已验收 SPY 参照逐日一致，全部 20 列与原文独立核对，原运行和 WAL 通过；此前 31344 条记录及原物理表未变。CNL 两个来源有日期重叠，不能把来源记录数当作不同交易日数。
 - DCM 的普通 Tiingo 元数据仍指向旧 NTT DoCoMo。[当前公司公告](https://www.sec.gov/Archives/edgar/data/102109/000110465926114373/tm2627199d1_ex99-1.htm)确认 Universal Safety Products 从 2026-10-19 更名换代码，CUSIP 不变；截至 16 日实际为 UUU 阶段。本次按搜索确认的永久代码 `US000000002893` 取得并保存当前法律主体的历史，不占用普通 `DCM` 价格键，也不把旧 NTT 历史或旧业务解释为当前数字资产业务。
 - [TXSE 公告](https://www.txse.com/alerts/adbdaf8a-27af-4643-9e6a-c0655cf92561)列明 DDS 普通股从 2026-10-05 转板，供应商仍保留 NYSE 名称；同份公告将 DDT 列为 `Trust Preferred`。DDT 原未发布任务已转为 `SCOPE_REVIEW_REQUIRED`，保留原响应、拒收原因和历史 Stock 标签，未写入普通股行情。
-- DHY 是封闭式基金普通份额，不能当作经营公司普通股；供应商搜索和历史目录的 `ETF` 原标签仍保留。[基金公告](https://www.prnewswire.com/news-releases/credit-suisse-high-yield-credit-fund-announces-board-approval-of-a-reverse-share-split-302854757.html)确认 2026-09-04 更名为 UBS Asset Management High Yield Credit Fund、9 月 30 日进行 10 股合为 1 股；正式记录保留该日 `split_factor=0.1` 及原复权字段。DDS、DHY、DCM 三条永久映射也已通过原搜索、目录行和成功价格运行核验，18 列独立回读一致；连同此前两条，映射表现有 5 条，原两条未变。
+- DHY 是封闭式基金普通份额，不能当作经营公司普通股；供应商搜索和历史目录的 `ETF` 原标签仍保留。[基金公告](https://www.prnewswire.com/news-releases/credit-suisse-high-yield-credit-fund-announces-board-approval-of-a-reverse-share-split-302854757.html)确认 2026-09-04 更名为 UBS Asset Management High Yield Credit Fund、9 月 30 日进行 10 股合为 1 股；正式记录保留该日 `split_factor=0.1` 及原复权字段。DDS、DHY、DCM 三条永久映射也已通过原搜索、目录行和成功价格运行核验，18 列独立回读一致，原有两条映射未变。
 - CNL 的[转板公告](https://www.nasdaqtrader.com/TraderNews.aspx?id=DTN2026-16)确认代码和 CUSIP 延续。原 Yahoo 全段在 2021-10-08 有非正价格，本次仅独立接受 2021-10-16 起、实际首日为 18 日的五年窗口，原全段拒收保留。旧永久代码虽取得 810 条，但少了 463 个参照日期，当前搜索还有多个同 FIGI 的永久代码；这份原文保留待核实，未发布或强选映射。
 - DEC 的[公司公告](https://ir.div.energy/news-events/us-press-releases/detail/161/diversified-energy-begins-trading-on-nyse)确认 NYSE 自 2023-12-18 开始交易；710 条只证明这段实有挂牌期。当前供应商名称和搜索 FIGI 缺失，尚未建立永久映射。旧 OTC 永久代码取得的 1288 条截至 2023-12-04，与请求末日之间少 9 个参照日期；原文保留待核实，不宣称整个五年网格齐备。
+- FRGT 补入 Tiingo 2017-08-08 至 2026-10-16 的 2311 条日线，全部 20 列与原文独立核对，原运行和 WAL 通过；此前 49047 条未变。其[公司年报](https://www.sec.gov/Archives/edgar/data/1687542/000149315226023206/form20-f.htm)说明初始代码为 CIFS，之后为 Hudson，2022-02-14 才完成货运业务合并；不能把整段都解释为同样的货运业务。供应商实际请求代码仍为 FRGT，永久代码 `US000000056595` 映射已独立验收，原 Yahoo 拒收保留。
+- ATLQ 的[分开交易公告](https://www.sec.gov/Archives/edgar/data/2128739/000121390026085025/ea0300385-8k_jabacq1.htm)确认普通股自 2026-08-05 才能独立交易，[更名公告](https://www.accessnewswire.com/newsroom/en/exchange-traded-funds/jab-acquisition-corp.-i-announces-ticker-symbol-change-1212869)确认 8 月 31 日从 JAB 换为 ATLQ、CUSIP 不变。52 条来源不拿此前单位证券补齐。ATTT 前身 Raytech [首次交易日为 2024-05-15](https://www.sec.gov/Archives/edgar/data/1948443/000121390024059478/ea0208984-6k_raytech.htm)，[2026-09-10 从 RAY 换为 ATTT](https://www.sec.gov/Archives/edgar/data/1948443/000121390026098242/ea030480301ex99-2.htm)，CUSIP 不变；608 条包含此前 RAY 阶段。两条永久映射已导入，ATTT 的来源 FIGI 明确保留 null；18 列独立回读一致，旧六条映射和两组 660 条价格未变，映射表累计 8 条。
+- 对原 18 个 Yahoo 失败代码的只读复核显示，均有 Native 成功的替代来源价格；13 个代码的最近五年参照日期齐全。ATLQ、ATTT、BTOC、CBIO、DEC 的短范围缺日都在本次实际来源起点以前，这不等于全市场或整个挂牌寿命已完成；ATLX、CAPS 的早年来源缺口及历史身份复核仍保留。
 - [Nasdaq 公共 ITCH 目录](https://emi.nasdaq.com/ITCH/Nasdaq%20ITCH/)存在真实二进制文件；部分文件达数 GB 至十余 GB。部分采集需明确文件、日期、压缩字节或消息边界，不能宣称完整交易日。
 - [Binance 公共归档](https://github.com/binance/binance-public-data)提供现货及合约数据和校验和；2025 年以来现货归档时间单位为微秒，不能沿用毫秒解释。
 - Binance 2023-03-24 现货归档及 REST 均缺少 13:00Z 小时。只有取得[官方停市事实](https://www.binance.com/en/blog/from-our-ceo/6789340645608890113)、原归档及原生日线的官方摘要、精确小时 REST 空记录，并核对全部日线 OHLCV 与实际小时成交一致后，才登记独立缺口。实际 23 根小时记录保留，不能填造第 24 根。
@@ -146,6 +149,8 @@ python tools/audit_us_security_identity.py --from 2006-01-01 --through 2026-10-1
 身份报告保留每条历史目录行、当前官方类别及重叠窗口。同代码可能来自转板、类别变化或不同发行人；当前有价格不能证明每个历史窗口已覆盖。当前 ETF 的旧 Stock 窗口不删除，也不拿基金价格替代；没有冲突标记同样不能单独证明目标完成。
 
 复用代码取得独立价格后，用 `us_security_identifiers` 查询原市场代码与实际价格键。日线表 `symbol` 可以是供应商真正接受的永久请求代码；原市场代码保存在映射的 `source_ticker`，当前发行人的价格键保持原样。价格先完成原文、字段与 WAL 验收，再导入映射：
+
+数据定义版本 2 的 `openfigi_composite` 可保留来源明确的 null，其余永久身份和价格证据仍须核对。清单的整数 `version=1` 仍要求非空 FIGI；`version=2` 才接受该列的 JSON null，字段不能省略，也不能写成文本 `"null"`。表名、十八列、业务键及已有快照不变。
 
 ```powershell
 .\gradlew.bat usMarketData --args='import-security-identifiers --source var/market-data/scope-review/symbol-disambiguation-20261020/amtd-identifiers-manifest.json'
