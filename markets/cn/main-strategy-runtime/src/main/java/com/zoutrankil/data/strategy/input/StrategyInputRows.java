@@ -23,6 +23,10 @@ public final class StrategyInputRows {
     private static final Map<String, Map<String, String>> FORWARD = mappings();
     private static final Map<String, Map<String, String>> REVERSE = inverse();
 
+    static String standardFieldName(String role, String field) {
+        return names(FORWARD, role).getOrDefault(field, field);
+    }
+
     public static Map<String, List<Map<String, Object>>> standardTables(
             StrategyInputSchema schema, Map<String, List<Map<String, Object>>> tables) {
         if (Objects.requireNonNull(schema) == StrategyInputSchema.V1) return tables;

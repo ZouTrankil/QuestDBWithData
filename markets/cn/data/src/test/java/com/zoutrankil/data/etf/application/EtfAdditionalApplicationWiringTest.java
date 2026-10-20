@@ -44,6 +44,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -162,9 +164,14 @@ class EtfAdditionalApplicationWiringTest {
             var jobs = context.getBean(SyncJobRegistry.class);
             var datasets = context.getBean(DatasetRegistry.class);
             var bindings = context.getBean(ReadBindingCatalog.class).bind(datasets);
-            assertEquals(50, bindings.size());
+            assertEquals(55, bindings.size());
+            // 新增的公告与利率契约只读，不能因此多出正式写入方。
+            for (var id : List.of("stk_shock", "stk_high_shock", "shibor", "hibor", "shibor_lpr"))
+                assertEquals(
+                        Set.of(DatasetDefinition.Capability.READ),
+                        datasets.require(id).definition().capabilities());
             assertEquals(
-                    50,
+                    55,
                     datasets.definitions().stream()
                             .filter(
                                     d ->

@@ -5,6 +5,7 @@ import com.zoutrankil.data.domain.DatasetDefinition.StorageType;
 import com.zoutrankil.data.domain.DatasetDefinition.TemporalContract;
 import com.zoutrankil.data.domain.DatasetDefinition.TemporalKind;
 import com.zoutrankil.data.domain.DatasetSemantics;
+import com.zoutrankil.market.cn.model.CnNumericContracts;
 
 import java.util.List;
 
@@ -24,40 +25,44 @@ public final class DailySemantics {
             new DatasetSemantics(
                     "daily",
                     1,
-                    List.of(
-                            new Column(
-                                    "ts_code",
-                                    "ts_code",
-                                    "ts_code",
-                                    StorageType.SYMBOL,
-                                    false,
-                                    "Tushare mainland equity code including exchange suffix",
-                                    null),
-                            new Column(
-                                    "trade_date",
-                                    "trade_date",
-                                    "trade_date",
-                                    StorageType.TIMESTAMP,
-                                    false,
-                                    "Exchange business date in YYYYMMDD; stored as UTC midnight carrier",
-                                    TRADE_DATE),
-                            metric("open", "Unadjusted open price; provider price unit"),
-                            metric("high", "Unadjusted high price; provider price unit"),
-                            metric("low", "Unadjusted low price; provider price unit"),
-                            metric("close", "Unadjusted close price; provider price unit"),
-                            metric(
-                                    "pre_close",
-                                    "Provider previous close price; provider adjustment semantics"),
-                            metric("change", "Provider daily price change; provider price unit"),
-                            metric(
-                                    "pct_chg",
-                                    "Provider percent change in percent points, not a fraction"),
-                            metric("vol", "Provider volume in lots (手)"),
-                            metric("amount", "Provider turnover in thousands of CNY (千元)"),
-                            metric("ah_vol", "Provider after-hours volume in lots (手)"),
-                            metric(
-                                    "ah_amount",
-                                    "Provider after-hours turnover in thousands of CNY (千元)")),
+                    CnNumericContracts.attach(
+                            "daily",
+                            List.of(
+                                    new Column(
+                                            "ts_code",
+                                            "ts_code",
+                                            "ts_code",
+                                            StorageType.SYMBOL,
+                                            false,
+                                            "Tushare mainland equity code including exchange suffix",
+                                            null),
+                                    new Column(
+                                            "trade_date",
+                                            "trade_date",
+                                            "trade_date",
+                                            StorageType.TIMESTAMP,
+                                            false,
+                                            "Exchange business date in YYYYMMDD; stored as UTC midnight carrier",
+                                            TRADE_DATE),
+                                    metric("open", "Unadjusted open price; provider price unit"),
+                                    metric("high", "Unadjusted high price; provider price unit"),
+                                    metric("low", "Unadjusted low price; provider price unit"),
+                                    metric("close", "Unadjusted close price; provider price unit"),
+                                    metric(
+                                            "pre_close",
+                                            "Provider previous close price; provider adjustment semantics"),
+                                    metric(
+                                            "change",
+                                            "Provider daily price change; provider price unit"),
+                                    metric(
+                                            "pct_chg",
+                                            "Provider percent change in percent points, not a fraction"),
+                                    metric("vol", "Provider volume in lots (手)"),
+                                    metric("amount", "Provider turnover in thousands of CNY (千元)"),
+                                    metric("ah_vol", "Provider after-hours volume in lots (手)"),
+                                    metric(
+                                            "ah_amount",
+                                            "Provider after-hours turnover in thousands of CNY (千元)"))),
                     List.of("ts_code", "trade_date"),
                     "trade_date");
 

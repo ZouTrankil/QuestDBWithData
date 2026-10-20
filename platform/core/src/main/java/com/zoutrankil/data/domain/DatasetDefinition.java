@@ -96,7 +96,29 @@ public record DatasetDefinition(
             boolean nullable,
             String meaning,
             TemporalContract temporal,
-            Set<String> legacyNullSentinels) {
+            Set<String> legacyNullSentinels,
+            NumericContract numeric) {
+        public Column(
+                String sourceName,
+                String logicalName,
+                String storageName,
+                StorageType storageType,
+                boolean nullable,
+                String meaning,
+                TemporalContract temporal,
+                Set<String> legacyNullSentinels) {
+            this(
+                    sourceName,
+                    logicalName,
+                    storageName,
+                    storageType,
+                    nullable,
+                    meaning,
+                    temporal,
+                    legacyNullSentinels,
+                    null);
+        }
+
         public Column(
                 String sourceName,
                 String logicalName,
@@ -122,6 +144,16 @@ public record DatasetDefinition(
             storageIdentifier(storageName);
             Objects.requireNonNull(storageType);
             requireText(meaning, "column meaning");
+            if (numeric != null
+                    && !Set.of(
+                                    StorageType.BYTE,
+                                    StorageType.SHORT,
+                                    StorageType.INT,
+                                    StorageType.LONG,
+                                    StorageType.FLOAT,
+                                    StorageType.DOUBLE)
+                            .contains(storageType))
+                throw new IllegalArgumentException("数值契约只能附在数值列上");
             if (Set.of(StorageType.DATE, StorageType.TIMESTAMP, StorageType.TIMESTAMP_NS)
                             .contains(storageType)
                     && temporal == null) {
@@ -141,6 +173,20 @@ public record DatasetDefinition(
                 throw new IllegalArgumentException(
                         "Legacy date null sentinels require a nullable text business date");
             }
+        }
+
+        /** 只补充现有原值的元数据，保留来源、键、时间和存储布局。 */
+        public Column withNumeric(NumericContract contract) {
+            return new Column(
+                    sourceName,
+                    logicalName,
+                    storageName,
+                    storageType,
+                    nullable,
+                    meaning,
+                    temporal,
+                    legacyNullSentinels,
+                    Objects.requireNonNull(contract));
         }
     }
 

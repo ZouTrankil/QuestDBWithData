@@ -9,6 +9,7 @@ import com.zoutrankil.data.domain.DatasetDefinition.StorageType;
 import com.zoutrankil.data.domain.DatasetDefinition.TemporalContract;
 import com.zoutrankil.data.domain.DatasetDefinition.TemporalKind;
 import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
+import com.zoutrankil.market.cn.model.CnNumericContracts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,61 +50,91 @@ public final class EtfDailyDataset {
     }
 
     public static List<Column> columns() {
-        return List.of(
-                new Column(
-                        "ts_code",
-                        "ts_code",
-                        "ts_code",
-                        StorageType.SYMBOL,
-                        false,
-                        "Tushare instrument identity with exchange suffix",
-                        null),
-                new Column(
-                        "trade_date",
-                        "trade_date",
-                        "timestamp",
-                        StorageType.TIMESTAMP_NS,
-                        false,
-                        "Business trading date stored as UTC-midnight carrier, not an instant",
-                        TRADE_DATE),
-                new Column(
-                        "pre_close",
-                        "pre_close",
-                        "pre_close",
-                        StorageType.DOUBLE,
-                        true,
-                        "Previous close in yuan",
-                        null),
-                new Column("open", "open", "open", StorageType.DOUBLE, true, "Open in yuan", null),
-                new Column("high", "high", "high", StorageType.DOUBLE, true, "High in yuan", null),
-                new Column("low", "low", "low", StorageType.DOUBLE, true, "Low in yuan", null),
-                new Column(
-                        "close", "close", "close", StorageType.DOUBLE, true, "Close in yuan", null),
-                new Column(
-                        "change",
-                        "change",
-                        "change",
-                        StorageType.DOUBLE,
-                        true,
-                        "Change in yuan",
-                        null),
-                new Column(
-                        "pct_chg",
-                        "pct_chg",
-                        "pct_chg",
-                        StorageType.DOUBLE,
-                        true,
-                        "Percent points, not a fraction",
-                        null),
-                new Column("vol", "vol", "vol", StorageType.DOUBLE, true, "Volume in lots", null),
-                new Column(
-                        "amount",
-                        "amount",
-                        "amount",
-                        StorageType.DOUBLE,
-                        true,
-                        "Turnover in thousand yuan",
-                        null));
+        return CnNumericContracts.attach(
+                "fund_daily",
+                List.of(
+                        new Column(
+                                "ts_code",
+                                "ts_code",
+                                "ts_code",
+                                StorageType.SYMBOL,
+                                false,
+                                "Tushare instrument identity with exchange suffix",
+                                null),
+                        new Column(
+                                "trade_date",
+                                "trade_date",
+                                "timestamp",
+                                StorageType.TIMESTAMP_NS,
+                                false,
+                                "Business trading date stored as UTC-midnight carrier, not an instant",
+                                TRADE_DATE),
+                        new Column(
+                                "pre_close",
+                                "pre_close",
+                                "pre_close",
+                                StorageType.DOUBLE,
+                                true,
+                                "Previous close in yuan",
+                                null),
+                        new Column(
+                                "open",
+                                "open",
+                                "open",
+                                StorageType.DOUBLE,
+                                true,
+                                "Open in yuan",
+                                null),
+                        new Column(
+                                "high",
+                                "high",
+                                "high",
+                                StorageType.DOUBLE,
+                                true,
+                                "High in yuan",
+                                null),
+                        new Column(
+                                "low", "low", "low", StorageType.DOUBLE, true, "Low in yuan", null),
+                        new Column(
+                                "close",
+                                "close",
+                                "close",
+                                StorageType.DOUBLE,
+                                true,
+                                "Close in yuan",
+                                null),
+                        new Column(
+                                "change",
+                                "change",
+                                "change",
+                                StorageType.DOUBLE,
+                                true,
+                                "Change in yuan",
+                                null),
+                        new Column(
+                                "pct_chg",
+                                "pct_chg",
+                                "pct_chg",
+                                StorageType.DOUBLE,
+                                true,
+                                "Percent points, not a fraction",
+                                null),
+                        new Column(
+                                "vol",
+                                "vol",
+                                "vol",
+                                StorageType.DOUBLE,
+                                true,
+                                "Volume in lots",
+                                null),
+                        new Column(
+                                "amount",
+                                "amount",
+                                "amount",
+                                StorageType.DOUBLE,
+                                true,
+                                "Turnover in thousand yuan",
+                                null)));
     }
 
     /** DDL for a task-owned acceptance table only; never applied to the externally owned formal table. */

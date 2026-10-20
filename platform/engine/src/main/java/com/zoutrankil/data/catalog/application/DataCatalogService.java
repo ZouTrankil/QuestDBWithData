@@ -188,7 +188,8 @@ public final class DataCatalogService {
                                                     contract == null ? null : contract.sourceName(),
                                                     contract == null
                                                             ? null
-                                                            : contract.logicalName());
+                                                            : contract.logicalName(),
+                                                    contract == null ? null : contract.numeric());
                                         })
                                 .toList();
         return new DataCatalog.Detail(

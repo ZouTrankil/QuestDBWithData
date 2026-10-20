@@ -63,6 +63,12 @@ businessTime.todaySnapshotMarker();  // 快照表使用的日期标记
 
 `BusinessTime` 支持注入固定 `Clock`，方便检查跨日边界。现在从 `MarketTimes` 按市场取得 `MarketTime`；旧 `BusinessTime` 只适配 A 股时钟。
 
+## 数值单位
+
+数值列可在 `DatasetDefinition.Column.numeric` 登记 `NumericContract`：来源单位、基准单位、原值到基准倍率、币种、分母、价格口径、缺失规则和依据。它描述现有原值，不执行换算。例如 `amount=2.5` 的单位为千元，元单位倍率为 `1000`，读取和模型输入仍保持 `2.5`。比例的百分数和小数须明确；未知尺度用 `sourceUnit=UNVERIFIED`、倍率为 null，不默认按百分数处理。非货币量用 `currency=NONE`，未知币种明确标为待核。
+
+目录详情和字段 CSV 复用该契约；旧 `JobDefinitionJson` 的 Dataset 列编码不增加 `numeric`，避免改变保存过的恢复协议。v2 主策略证明单独发布数值契约，保留原模型数值。今后真正缩放或更改字段含义时，仍须升级输入/产物协议并重新验收模型，不能只修改倍率说明。当前覆盖和限制见[数值契约决定](decisions/2026-10-20-主策略来源数值单位契约.md)。
+
 ## 业务键和数据库去重
 
 指定时间列用于排序、分区和时序查询，本身不保证唯一。需要防止重复时，在 WAL 表的 `DEDUP UPSERT KEYS` 里写完整业务键，并包含指定时间列。

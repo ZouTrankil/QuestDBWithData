@@ -385,6 +385,7 @@ public final class QuestDbStrategyInputs {
             proofs.put("inputSchema", coverage.inputSchema().inputSchema());
             // 列存在、值可用和模型批准分开记录；审计不补值，也不改变旧 v1 证明。
             proofs.put("l2FieldAudit", L2ScoringInputContract.inspect(before, data.get("l2_raw")));
+            proofs.put("numericFieldContracts", StrategyNumericInputProof.describe());
         }
         proofs.put("coverage", coverage.verify(start, end, warmup, snapshotTables, before));
         var history = coverage.history();

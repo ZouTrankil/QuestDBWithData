@@ -1,0 +1,84 @@
+{
+  "说明": "隔离工作目录的代码检查；不代表真实来源、完整模型或正式迁移验收。",
+  "baseCommit": "98c7b23bb2c463374c3b7bc95c959a96eee08aea",
+  "源码摘要": {
+    "platform/core/src/main/java/com/zoutrankil/data/domain/NumericContract.java": "a232e53fe5bd645924c1d5ecd2b985a409439c30d63bbd5f2ec9d5d8fd3222e3",
+    "platform/core/src/main/java/com/zoutrankil/data/domain/DatasetDefinition.java": "08ed641c233025176d1d9031293e26fbd3431802c0e94bf211ff9d073386644e",
+    "platform/core/src/main/java/com/zoutrankil/data/catalog/domain/DataCatalog.java": "2e9bc476a8597a9837d316b7a5a81cff6a6c0308c1ec962a44bd268f157d7506",
+    "platform/core/src/test/java/com/zoutrankil/data/domain/NumericContractTest.java": "d1ab84586c296b9ed930a6464f8b28482b6b315337cce0813b73dc41d33bb1c0",
+    "markets/cn/src/main/java/com/zoutrankil/market/cn/model/CnNumericContracts.java": "bb85ec595ab8b7a8a9cd41634e025fce9f117852c580a5764096125b967889d3",
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/stock/market/DailySemantics.java": "1e6c56de08327be1b9df4589936539f14dc462d3476e6fa3c2b8db6dc780302e",
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/stock/market/DailyBasicDataset.java": "9340b77e081cc8b8ded6bb10af985da8c8db1848b068977464001c4738c5ea86",
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/fund/EtfDailyDataset.java": "c54ad6fa51402c4cd93a75c97913b5de124848545bb623439ab8b4a0d32e572e",
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/fund/EtfPortfolioDataset.java": "8017b5dee435fb81aadd37fa4027743d186fcd8be1898a02db6218e1ef6ea4a3",
+    "markets/cn/src/test/java/com/zoutrankil/market/cn/model/CnNumericContractsTest.java": "cdfc2b2ce6469714ae01ce3dbd2e3b8be88bac127017fa31126ff195861966b8",
+    "platform/engine/src/main/java/com/zoutrankil/data/catalog/application/DataCatalogService.java": "6bad2af0c901bebbac138f072297df68203a734a72e24a2628786659839cbfc4",
+    "platform/engine/src/test/java/com/zoutrankil/data/catalog/application/DataCatalogServiceTest.java": "23f9230d8356e6abb509c4ff611bff8df120c2a0ef25e48b5b5376f94a920ece",
+    "platform/app-support/src/main/java/com/zoutrankil/data/catalog/web/DataCatalogCsv.java": "99b0ae17fc65f1e206ad9a075f17ea6a3917cd7ae399a99d8895c0f98ef7c41e",
+    "platform/app-support/src/test/java/com/zoutrankil/data/catalog/web/DataCatalogColumnCsvTest.java": "33889d5a6102847769c5531bf81b57ea8c12d2bd304b49e1530eefd5df075a98",
+    "markets/cn/main-strategy-runtime/src/main/java/com/zoutrankil/data/strategy/input/StrategyNumericInputProof.java": "4cc19c21393df155f27474783935c843bd5c48d7ee79e03642a485ab96fc7e94",
+    "markets/cn/main-strategy-runtime/src/main/java/com/zoutrankil/data/strategy/input/StrategyInputRows.java": "9202739a7c7f8be6b042235ccc576204906b87dfbdf1f7de897aad586c02d906",
+    "markets/cn/main-strategy-runtime/src/main/java/com/zoutrankil/data/strategy/input/QuestDbStrategyInputs.java": "80561757ea2316233f36771b59830f2699e11fe73001e38d235877789ff9d79c",
+    "markets/cn/main-strategy-runtime/src/test/java/com/zoutrankil/data/strategy/input/StrategyNumericInputProofTest.java": "315e641b7e9bda419cbf26f3d8dd1b2b0a77a56f506658a8aa4c06f19ab5326c",
+    "platform/engine/questdb/src/main/java/com/zoutrankil/data/domain/JobDefinitionJson.java": "bffe4f4111fa2e3c9dc93ceff038aef95f9de9d4e2cf0109a085883d1baa72f2",
+    "platform/engine/questdb/src/test/java/com/zoutrankil/data/domain/NumericContractJsonTest.java": "077ea2fbd7ee28d3f28f2bfd5ce92048defef0237db0144ad5f04b426e275329",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/application/EtfAdditionalApplicationWiringTest.java": "ce4a906c58eacb1c37e7d86b8bdf1e005abd20545edd28142585150e827134a9",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/application/EtfApplicationWiringTest.java": "b912aad9c12a9e4cae990c434f6a57f8b32ccfce24e7167a694fbd221ea8e248"
+  },
+  "检查命令": "./gradlew :platform:core:test :platform:engine:test :platform:engine:questdb:test :platform:app-support:test :markets:cn:test :markets:cn:main-strategy-runtime:test :markets:cn:data:test --tests \"*Daily*\" --tests \"*Etf*\" architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "模块结果": {
+    "modules/platform/core/_output/test-results/test": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules/platform/app-support/_output/test-results/test": {
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules/platform/engine/_output/test-results/test": {
+      "tests": 25,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules/platform/engine/questdb/_output/test-results/test": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules/markets/cn/_output/test-results/test": {
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules/markets/cn/main-strategy-runtime/_output/test-results/test": {
+      "tests": 163,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules/markets/cn/data/_output/test-results/test": {
+      "tests": 585,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 10
+    }
+  },
+  "架构与模块边界": "通过",
+  "CN数据发行包": "通过",
+  "主策略发行包": "通过",
+  "Java格式与import及字面量核对": {
+    "文件数": 1994,
+    "结果": "通过"
+  },
+  "生产来源验收": false,
+  "生产模型与独立参考验收": false,
+  "完整单位矩阵": false,
+  "正式迁移": false
+}

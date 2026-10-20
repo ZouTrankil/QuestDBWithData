@@ -1,5 +1,6 @@
 package com.zoutrankil.data.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -45,8 +46,15 @@ public final class JobDefinitionJson {
 
     private static ObjectMapper createMapper(boolean sortMapKeys) {
         var mapper = new ObjectMapper().registerModule(TEMPORAL_MODULE);
+        // 旧 Dataset JSON 是恢复协议；新增单位说明只从目录 DTO 和 v2 输入证明发布。
+        mapper.addMixIn(DatasetDefinition.Column.class, LegacyDatasetColumn.class);
         if (sortMapKeys) mapper.enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS);
         return mapper;
+    }
+
+    private abstract static class LegacyDatasetColumn {
+        @JsonIgnore
+        abstract NumericContract numeric();
     }
 
     private static SimpleModule temporalModule() {

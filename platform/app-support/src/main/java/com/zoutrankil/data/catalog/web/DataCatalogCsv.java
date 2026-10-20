@@ -53,9 +53,10 @@ public final class DataCatalogCsv {
     public static byte[] encodeColumns(DataCatalog.Detail detail) {
         var output =
                 new StringBuilder(
-                        "\uFEFF对象名,物理字段,逻辑字段,来源字段,存储类型,时间角色,来源编码,日期或时区,精度,业务键,字段说明,来源单位\r\n");
+                        "\uFEFF对象名,物理字段,逻辑字段,来源字段,存储类型,时间角色,来源编码,日期或时区,精度,业务键,字段说明,来源单位,数值原单位,基准单位,原值到基准倍率,币种,分母口径,价格口径,数值缺失规则,数值依据\r\n");
         for (var column : detail.columns()) {
             var time = column.temporal();
+            var numeric = column.numeric();
             var fields =
                     Arrays.asList(
                             detail.object().objectName(),
@@ -75,7 +76,15 @@ public final class DataCatalogCsv {
                             column.meaning(),
                             column.sourceDocumentation() == null
                                     ? null
-                                    : column.sourceDocumentation().unit());
+                                    : column.sourceDocumentation().unit(),
+                            numeric == null ? null : numeric.sourceUnit(),
+                            numeric == null ? null : numeric.baseUnit(),
+                            numeric == null ? null : numeric.multiplierToBaseUnit(),
+                            numeric == null ? null : numeric.currency(),
+                            numeric == null ? null : numeric.denominator(),
+                            numeric == null ? null : numeric.priceBasis(),
+                            numeric == null ? null : numeric.missingPolicy(),
+                            numeric == null ? null : numeric.evidence());
             output.append(
                             fields.stream()
                                     .map(value -> quote(value == null ? "" : value.toString()))

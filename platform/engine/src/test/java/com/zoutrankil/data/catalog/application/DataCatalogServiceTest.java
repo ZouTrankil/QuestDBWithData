@@ -11,16 +11,61 @@ import com.zoutrankil.data.catalog.domain.DataCatalog;
 import com.zoutrankil.data.catalog.domain.DataObjectDescription;
 import com.zoutrankil.data.catalog.port.DataCatalogMetadataPort;
 import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.NumericContract;
 
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 class DataCatalogServiceTest {
+    @Test
+    void detailReusesTheDatasetNumericContractWithoutInventingOneForUnknownColumns() {
+        var metadata = new Metadata();
+        metadata.objects = List.of(physical("etf"));
+        var base = definition("etf_id", "etf", DatasetDefinition.ObjectKind.TABLE);
+        var value =
+                new NumericContract(
+                        "千元", "元", new BigDecimal("1000"), "CNY", "不适用", "不适用", "保留 null", "测试来源");
+        var columns = new ArrayList<>(base.columns());
+        columns.add(
+                new DatasetDefinition.Column(
+                                "raw_amount",
+                                "turnover_amount",
+                                "new_field",
+                                DatasetDefinition.StorageType.DOUBLE,
+                                true,
+                                "成交额",
+                                null)
+                        .withNumeric(value));
+        var mapped =
+                new DatasetDefinition(
+                        base.datasetId(),
+                        base.schemaVersion(),
+                        base.provider(),
+                        base.owner(),
+                        base.objectName(),
+                        base.objectKind(),
+                        columns,
+                        base.businessKey(),
+                        base.dedupKey(),
+                        base.designatedTimestamp(),
+                        base.partition(),
+                        base.wal(),
+                        base.capabilities(),
+                        base.dependencies(),
+                        base.storageRationale());
+        var detail = new DataCatalogService(metadata, List.of(), List.of(mapped)).detail("etf");
+        assertNull(detail.columns().getFirst().numeric());
+        assertEquals(value, detail.columns().get(1).numeric());
+        assertEquals("turnover_amount", detail.columns().get(1).logicalName());
+    }
+
     private static final Instant NOW = Instant.parse("2026-10-17T02:00:00Z");
 
     private static final class Metadata implements DataCatalogMetadataPort {

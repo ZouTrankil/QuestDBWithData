@@ -1,6 +1,7 @@
 package com.zoutrankil.data.catalog.domain;
 
 import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.NumericContract;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -77,7 +78,29 @@ public final class DataCatalog {
             DatasetDefinition.TemporalContract temporal,
             SourceField sourceDocumentation,
             String sourceName,
-            String logicalName) {
+            String logicalName,
+            NumericContract numeric) {
+        public Column(
+                String name,
+                String storageType,
+                Boolean nullable,
+                String meaning,
+                DatasetDefinition.TemporalContract temporal,
+                SourceField sourceDocumentation,
+                String sourceName,
+                String logicalName) {
+            this(
+                    name,
+                    storageType,
+                    nullable,
+                    meaning,
+                    temporal,
+                    sourceDocumentation,
+                    sourceName,
+                    logicalName,
+                    null);
+        }
+
         public Column(
                 String name,
                 String storageType,
