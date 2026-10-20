@@ -88,6 +88,8 @@ FRED 沿用正式 `us_market_daily` 的结构。请求先固定完整观测数�
 
 2026-10-20 实际补入 NASDAQCOM 2676 条、SP500 21 条、VIXCLS 2678 条，原有 7691 条记录全部逐字段保持不变；同一截止日重跑三组均为零新增，WAL 已结清。NASDAQCOM 来源最后有效值为 2026-10-15，16 日缺值未填造；另两组有效至 16 日。FRED 默认 HTTP/2 和应用 UA 在本机实测出现重置或超时，入口只对该来源使用已验证的 HTTP/1.1 兼容请求头。
 
+2026-10-21 再补入四行，三个指数均至 10 月 19 日；其中 NASDAQCOM 来源本次已提供此前缺失的 16 日值。旧 13066 行六列保持，原文、prepared、HTTP 和 PGWire 独立一致，WAL 结清。同截止日实际重跑零新增、Native 与 WAL 事务不变；完整来源缺值和 SP500 当前窗口之外的旧历史均保留。见 [FRED 指数增量与历史保护](decisions/2026-10-21-FRED指数增量与历史保护.md)。
+
 请求预算放在 `api-budget.sqlite3`，先预留再请求；失败也计请求，未取得完整响应时保留带宽预留。来源队列的 `FETCHED` 可以继续使用同一冻结文件；`PUBLISHING` 不自动重发。SQLite 和不可变回执决定验收，状态 JSON 只用于观察。Windows 状态页被读者短暂占用时有界等待，不改变已验收结果。
 
 BTC 的原始文件、队列、预算、账本及回执在 `var/crypto-market-data/`。对运行中的采集器，分别写入 `var/market-data/us-stop.request`、`us-broad-stop.request` 或 `var/crypto-market-data/stop.request`，会在当前完整任务验收后停止。再次执行命令继续未完成任务；未决发布仍阻止继续。
