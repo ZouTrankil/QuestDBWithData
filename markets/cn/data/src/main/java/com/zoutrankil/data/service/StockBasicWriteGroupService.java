@@ -110,6 +110,7 @@ import com.zoutrankil.data.stock.mapper.StockLimitMapper;
 import com.zoutrankil.data.stock.mapper.StockStDailyMapper;
 import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
 import com.zoutrankil.data.stock.port.StockStDailyWriteSession;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -1240,21 +1241,27 @@ public class StockBasicWriteGroupService {
                     .datasetId()
                     .equals(StockStDailyDataset.DEFINITION.datasetId())) {
                 var mapper = new StockStDailyMapper();
-                var port = writers.stockStDaily(stockStDailyTarget.tableName(), member.targetId());
-                // 组入口尚未接新版 ST 发布协议，不能把 v2 编码写进旧组回执。
-                int version =
+                int version = member.definition().schemaVersion();
+                var layout = CnTradeDateLayout.fromVersion(version);
+                var port =
+                        version == 1
+                                ? writers.stockStDaily(
+                                        stockStDailyTarget.tableName(), member.targetId())
+                                : writers.stockStDaily(
+                                        stockStDailyTarget.tableName(), member.targetId(), version);
+                // prepared 组只按冻结成员写入，不替代来源整窗撤销；编码与实际会话都须同版。
+                int actual =
                         port instanceof StockStDailyWriteSession.Versioned selected
                                 ? selected.datasetVersion()
                                 : 1;
-                if (version != member.definition().schemaVersion())
-                    throw new IllegalArgumentException("ST 组会话布局与原契约不同");
+                if (actual != version) throw new IllegalArgumentException("ST 组会话布局与原契约不同");
                 adapters.put(
                         member.memberId(),
                         new PreparedWriteAdapter<>(
                                 plan,
                                 member.memberId(),
-                                mapper::fromValues,
-                                mapper::values,
+                                values -> mapper.fromValues(values, layout),
+                                row -> mapper.values(row, layout),
                                 port.codec(),
                                 port,
                                 () -> {

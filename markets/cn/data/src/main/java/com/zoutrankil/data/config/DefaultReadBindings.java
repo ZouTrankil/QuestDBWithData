@@ -142,6 +142,12 @@ final class DefaultReadBindings {
 
     static List<ReadBindingCatalog.Registration<?>> registrations(
             int etfAdjVersion, int etfDailyVersion, int etfShareVersion) {
+        return registrations(etfAdjVersion, etfDailyVersion, etfShareVersion, 1);
+    }
+
+    static List<ReadBindingCatalog.Registration<?>> registrations(
+            int etfAdjVersion, int etfDailyVersion, int etfShareVersion, int stDailyVersion) {
+        int stVersion = CnTradeDateLayout.fromVersion(stDailyVersion).schemaVersion();
         int shareVersion = CnTradeDateLayout.fromVersion(etfShareVersion).schemaVersion();
         int dailyVersion = CnTradeDateLayout.fromVersion(etfDailyVersion).schemaVersion();
         int version = CnTradeDateLayout.fromVersion(etfAdjVersion).schemaVersion();
@@ -152,6 +158,7 @@ final class DefaultReadBindings {
                                     case "etf_adj" -> generic("etf_adj", version);
                                     case "etf_daily" -> generic("etf_daily", dailyVersion);
                                     case "etf_share" -> generic("etf_share", shareVersion);
+                                    case "stk_st_daily" -> generic("stk_st_daily", stVersion);
                                     default -> registration;
                                 })
                 .toList();

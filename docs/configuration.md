@@ -138,3 +138,6 @@ ETF 复权存储布局由 `app.sync.etf-adj-schema-version` 选择，公开默�
 ETF 日线使用独立的 `app.sync.etf-daily-schema-version`，默认 `1`，只支持 `1/2`；环境覆盖为 `APP_SYNC_ETF_DAILY_SCHEMA_VERSION`。它保留纳秒日期载体，与复权表的微秒布局分开。新作业和读取同步选择，旧请求按原账本恢复；不自动迁表或改 Batch 独立来源任务。
 
 ETF 份额使用 `app.sync.etf-share-schema-version`，默认 `1`，仅支持 `1/2`；环境覆盖为 `APP_SYNC_ETF_SHARE_SCHEMA_VERSION`。布局 v1 对应原作业 v3，布局 v2 对应作业 v4。旧请求的 `observedAt` 与各行已存 `update_time` 分别保留，不用新时间覆盖历史。生产端口仍限 D016 隔离目标，不自动接管正式表。
+
+
+ST 日频的 `app.sync.stk-st-daily-schema-version` 位于 `config/markets/cn.yml`，默认 `1`，仅接受 `1/2`；环境变量为 `APP_SYNC_STK_ST_DAILY_SCHEMA_VERSION`。它统一当前任务、目标和读取布局，配置本身不迁表；旧恢复请求及组成员仍用原冻结版本。范围见[布局决定](decisions/2026-10-21-交易日存储布局分版.md#st-配置读取与-prepared-写入组)。

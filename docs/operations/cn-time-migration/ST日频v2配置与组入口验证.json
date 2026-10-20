@@ -1,0 +1,61 @@
+{
+  "基线提交": "8505e00602063cf38e3643e7a7c5a15b8465f675",
+  "范围": "ST 日频显式布局根配置、当前任务/目标/仓库/公共读取一致装配、prepared 写入组原成员编码",
+  "源码和配置摘要": {
+    "config/markets/cn.yml": "f9362a549ce88ca7c0b4920325b81d4c7bf125a4c563c49adaffa584d32fda63",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/StockMarketConfiguration.java": "a71a8324a85fb370dae34226c4249cdfa23dbad997bb4c165ae189fb161775f6",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockStDailyReadRepository.java": "fefe6d3f0ff24477fd9678c3d229359c8c6b0494583d9a8d8da40eced92baade",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java": "5fbac2a2ed6d93a3f9118758a5b1951d8625d2a44f414d3f51ba2242ae2ac6f7",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/DefaultReadBindings.java": "30e86750048497ef77613538c7a96c5332ea23df6ce0754151fed5385fafc012",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/group/port/WriteGroupWriters.java": "e59f7ba9105777dfb57c70ce79cc8438fcde1be4e99de9fa46bb73297e6ee56e",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/group/storage/QuestDbWriteGroupWriters.java": "9e6d13539b42ab7087a82851ff09ce1bc361d73a9057f57a789bbab8e42e2d67",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java": "2df76f8a3cf76357d4b31d679d87438516b9e5a487b91e793e2ded79eff7cfd9",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/service/StockStDailyWriteGroupLayoutTest.java": "4701f99cf549aaf4012b0e6c438ffa38870868e766babdb2d5749026e39ba435",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockStDailyConfiguredLayoutTest.java": "165b781cb1e087393b2d32fd7506fa2756f9f45bdc4050f86ae54bb7ffb2a84e",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/bootstrap/ProjectConfigurationTest.java": "05e494bf8d6d0dca0cc9d0b3cfb0fd24f94451563d0b4b68f6eda8a9718e9364"
+  },
+  "隔离测试": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2306,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 144
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "结果": "通过",
+  "格式检查": {
+    "命令": "python3 tools/format_java.py --imports --check",
+    "Java文件": 2036,
+    "结果": "格式、import、字面量核对通过"
+  },
+  "发行包公开配置检查": "cn-data、main-strategy 两个 ZIP 通过",
+  "新增验收": [
+    "布局 1/2 装配完整应用、注册任务和公共绑定，无数据库 I/O",
+    "data 与 main-strategy 根市场默认 1、标准环境覆盖 2，US 不加载 CN 配置",
+    "两个版本的 prepared 组在当前仓库相反版本时仍按原契约写入并回读",
+    "两个版本的错版实际会话都在预检和发送前停止"
+  ],
+  "默认配置": {
+    "app.sync.stk-st-daily-schema-version": 1,
+    "标准覆盖": "APP_SYNC_STK_ST_DAILY_SCHEMA_VERSION"
+  },
+  "限制": [
+    "未执行远端读写、真实来源或真实组写入",
+    "prepared 组仅追加冻结正记录，不代替名称区间修订整窗撤销",
+    "正式表、MV、旧 stage/backup 未迁移",
+    "Batch 独立来源、停牌/L2 端口、正式调度和完整模型材料待验收"
+  ]
+}

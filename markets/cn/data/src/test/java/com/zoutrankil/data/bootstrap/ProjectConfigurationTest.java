@@ -387,6 +387,29 @@ class ProjectConfigurationTest {
                         .containsProperty("app.sync.etf-share-schema-version"));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "main-strategy"})
+    void stockStDailyLayoutUsesTheMarketDefaultAndEnvironmentOverride(String profile)
+            throws Exception {
+        var file = configuration("");
+        var variables = new HashMap<String, String>();
+        variables.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        variables.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        assertEquals(
+                "1",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.stk-st-daily-schema-version"));
+        variables.put("APP_SYNC_STK_ST_DAILY_SCHEMA_VERSION", "2");
+        assertEquals(
+                "2",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.stk-st-daily-schema-version"));
+        variables.remove("APP_SYNC_STK_ST_DAILY_SCHEMA_VERSION");
+        assertFalse(
+                ProjectConfiguration.load("market-us", variables)
+                        .containsProperty("app.sync.stk-st-daily-schema-version"));
+    }
+
     @Test
     void changingOneAppFileDoesNotChangeAnotherProcess() throws Exception {
         var file = configuration("");

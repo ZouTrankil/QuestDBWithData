@@ -104,6 +104,13 @@ public interface WriteGroupWriters {
     StockDateWriteSession<StockStDaily, StockStDailyKey> stockStDaily(
             String table, String targetId);
 
+    /** 旧工厂只支持 v1，新布局须显式实现。 */
+    default StockDateWriteSession<StockStDaily, StockStDailyKey> stockStDaily(
+            String table, String targetId, int version) {
+        if (version != 1) throw new IllegalArgumentException("旧 ST 组工厂没有新版会话");
+        return stockStDaily(table, targetId);
+    }
+
     StockSuspendWriteSession stockSuspend(String table, String targetId);
 
     IndexMonthlyTables indexMonthlyTables();

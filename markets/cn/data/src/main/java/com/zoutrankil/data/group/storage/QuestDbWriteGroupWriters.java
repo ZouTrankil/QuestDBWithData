@@ -209,6 +209,13 @@ public final class QuestDbWriteGroupWriters implements WriteGroupWriters {
     }
 
     @Override
+    public StockDateWriteSession<StockStDaily, StockStDailyKey> stockStDaily(
+            String table, String targetId, int version) {
+        return new StockStDailyWritePort(
+                table, targetId, jdbc, questdb, CnTradeDateLayout.fromVersion(version));
+    }
+
+    @Override
     public StockSuspendWriteSession stockSuspend(String table, String targetId) {
         return new StockSuspendWritePort(table, jdbc, questdb, targetId);
     }

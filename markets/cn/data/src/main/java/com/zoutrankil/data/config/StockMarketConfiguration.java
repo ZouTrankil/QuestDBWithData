@@ -8,6 +8,7 @@ import com.zoutrankil.data.stock.storage.QuestDbStockFactorTarget;
 import com.zoutrankil.data.stock.storage.QuestDbStockLimitTarget;
 import com.zoutrankil.data.stock.storage.QuestDbStockStDailyTarget;
 import com.zoutrankil.data.stock.storage.QuestDbStockSuspendTarget;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 
@@ -39,9 +40,10 @@ public class StockMarketConfiguration {
     StockStDailyTarget stockStDailyTarget(
             JdbcTemplate jdbc,
             @Lazy QuestDB questdb,
-            @Value("${app.sync.stk-st-daily-table:java_d012_stk_st_daily_acceptance}")
-                    String table) {
-        return new QuestDbStockStDailyTarget(table, jdbc, questdb);
+            @Value("${app.sync.stk-st-daily-table:java_d012_stk_st_daily_acceptance}") String table,
+            @Value("${app.sync.stk-st-daily-schema-version:1}") int schemaVersion) {
+        return new QuestDbStockStDailyTarget(
+                table, jdbc, questdb, CnTradeDateLayout.fromVersion(schemaVersion));
     }
 
     @Bean

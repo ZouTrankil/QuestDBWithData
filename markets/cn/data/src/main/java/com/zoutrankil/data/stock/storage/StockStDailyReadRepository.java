@@ -34,8 +34,12 @@ public class StockStDailyReadRepository implements DatasetImplementation {
     @Autowired
     public StockStDailyReadRepository(
             QuestDbBoundedReader reader,
-            @Value("${app.sync.stk-st-daily-table:java_d012_stk_st_daily_acceptance}")
-                    String table) {
+            @Value("${app.sync.stk-st-daily-table:java_d012_stk_st_daily_acceptance}") String table,
+            @Value("${app.sync.stk-st-daily-schema-version:1}") int schemaVersion) {
+        this(reader, table, CnTradeDateLayout.fromVersion(schemaVersion));
+    }
+
+    public StockStDailyReadRepository(QuestDbBoundedReader reader, String table) {
         this(reader, table, CnTradeDateLayout.LEGACY_V1);
     }
 
@@ -50,6 +54,11 @@ public class StockStDailyReadRepository implements DatasetImplementation {
     @Override
     public DatasetDefinition definition() {
         return StockStDailyDataset.definition(table, layout);
+    }
+
+    @Override
+    public DatasetDefinition definition(int version) {
+        return StockStDailyDataset.definition(table, CnTradeDateLayout.fromVersion(version));
     }
 
     private List<String> columns() {
