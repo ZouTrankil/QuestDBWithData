@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "结论": "五项 Batch 独立来源的两布局与空窗完成私有同版 QuestDB 有限人工夹具验收；正式来源、迁移与接管未完成。",
+  "环境": "Build Information: QuestDB 10.0.1, JDK 25.0.2, Commit Hash 7a391566ac827e0d8c269b91f2415c16b0a32a84",
+  "输入范围": "人工单日 2026-09-28；股票 000001.SZ、ETF 510300.SH；不是行情来源或全市场覆盖。日期均为 UTC 零点业务日期载体，未覆盖非零纳秒历史值。",
+  "布局": "五来源各测原 v1 与 *-trade-date-v2；ST/停牌另测 v2 空窗，共12目标、10条非空行及2个空窗。原来源合同/JSON不改，日期值不换算时区，ETF日线保留TIMESTAMP_NS。",
+  "验证范围": [
+    "实际 SourceProductRunner、SourceCollector、DurableWriter、SQLite 和 QuestDB HTTP；没有行情来源网络请求。",
+    "逐字段值与完整键回读；检查指定列、类型、去重键、分区、WAL及dedup元数据；ETF份额为YEAR，其余为DAY。",
+    "每对象ID/目录身份不变；整值回读前后核对同一稳定WAL，非空writerTxn=sequencerTxn且非负，空窗另核对零行。",
+    "重建执行器及SQLite连接后回放已验证批次；每个原意图attempt仍为1，共12次意图尝试；空窗意图也计一次，未据此声称实际POST次数。",
+    "原请求JSON及来源归档字节保持不变；没有真实UNKNOWN恢复验收，不改旧未决协议。",
+    "所有写入意图VERIFIED后按原对象身份清理12个专属表；私有服务器退出143，端口19030/18842释放。"
+  ],
+  "首轮辅助查询失败": {
+    "原因": "验收SQL未给保留字column加双引号，HTTP400；原写入已VERIFIED。",
+    "处置": "固定原报告SHA，只读核对原ID、完整值和WAL，再清理原表；未重发、未修改原失败报告，也未把原失败改记成功。",
+    "原报告": {
+      "path": "var/cn-batch-layout-v2-live/1ab5cffb4bda45f78542e36c93f2cceb/report.json",
+      "SHA256": "c1bc0d895d8da352cd63969c88f9b77fbd9003bb1b4bd100e436f1080e2a5373"
+    },
+    "只读复核": {
+      "path": "var/cn-batch-layout-v2-live/1ab5cffb4bda45f78542e36c93f2cceb/readonly-reconciliation.json",
+      "SHA256": "60c58cff1182e7c2397d20c0ec6dd25d3090d0443c89297f024e654cf15e5316"
+    },
+    "辅助SQL响应": {
+      "path": "var/cn-batch-layout-v2-live/1ab5cffb4bda45f78542e36c93f2cceb/auxiliary-query-reproduction.json",
+      "SHA256": "1efb1825fdd48996e38181ffc064a79d7925fd832f71b5171f0da33f3f1a5977"
+    },
+    "原辅助类": {
+      "path": "var/cn-batch-layout-v2-live/1ab5cffb4bda45f78542e36c93f2cceb/readonly-helper.class",
+      "SHA256": "222ec8aca07e4a8d61d467e180d1adf3d143f757007978dfe0fa41201bd95ce7"
+    }
+  },
+  "最终原件": {
+    "报告": {
+      "path": "var/cn-batch-layout-v2-live/a609e07d649947839460eb4dc142fc93/report.json",
+      "SHA256": "f8713d989c966f37f626d9d0281bc3d0f12b40323d790bc1d6a3c8546cbbaeb1"
+    },
+    "JUnit": {
+      "path": "var/cn-batch-layout-v2-live/a609e07d649947839460eb4dc142fc93/full-test.xml",
+      "SHA256": "d87af5fea1c4d59cead72cd8ce0e9b4c99aaa2d2b36ae0c835eaf9eea02c5956"
+    },
+    "测试源码": {
+      "path": "var/cn-batch-layout-v2-live/a609e07d649947839460eb4dc142fc93/full-helper.java",
+      "SHA256": "74dfe483005acecf7a79fbcc269b2223845a831e13914840c4e26a2e2697385e"
+    },
+    "测试类": {
+      "path": "var/cn-batch-layout-v2-live/a609e07d649947839460eb4dc142fc93/full-helper.class",
+      "SHA256": "600d620d23b39cc4bc35984cb10a891dff1c2e4b341d185a070b30caead94edf"
+    },
+    "服务器": {
+      "path": "var/cn-batch-layout-v2-live/a609e07d649947839460eb4dc142fc93/server.json",
+      "SHA256": "53e2b85a0e1e48792f4d956df8c1a5382e5c9e4b976c4cabc6d51a3a6aec155a"
+    },
+    "停止": {
+      "path": "var/cn-batch-layout-v2-live/a609e07d649947839460eb4dc142fc93/stopped.json",
+      "SHA256": "9ac7fd2beff6d65674426c0545aa8d35c06247195b5aa1bd4de019579febe2f5"
+    }
+  },
+  "前次完整通过原件": {
+    "path": "var/cn-batch-layout-v2-live/f7a511f5bd884407a2ceb17408181200/report.json",
+    "SHA256": "7fe5b33e0408e3372f180493dcc6299127482e1ced3b4f0310ff96af3b2f9d29"
+  },
+  "检查": "最终实库单项通过；首轮后只读复核单项通过，辅助SQL失败单独留存。来源布局离线9项通过、实库入口按默认关闭跳过2项；architectureTest、verifyModuleBoundaries通过。2063个Java文件格式/import/字面量通过；随后补全同一测试的分区/WAL/dedup断言，最终文件再次单独核对并重新通过真实验收。生产代码及依赖未改，不重复全模块或发行包构建。",
+  "限制": "本批不证明全来源、生产批准模型、历史布尔值、正式MV或消费者切换。三项退役数据仍缺原部署/账本/停写与恢复归属；任务07/08仍未全部完成。"
+}

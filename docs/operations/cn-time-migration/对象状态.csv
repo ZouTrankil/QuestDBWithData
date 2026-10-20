@@ -1,10 +1,10 @@
 ﻿对象,原判断,本轮状态,限制
-etf_adj,可统一,v2 端口控制服务配置及写入组已接通；默认 v1；正式迁移未完成；Batch 已接显式 *-trade-date-v2 写入定义及冻结盘后计划，实库未验收,timestamp → trade_date；来源 fund_adj 的交易日。
+etf_adj,可统一,v2 端口控制服务配置及写入组已接通；默认 v1；正式迁移未完成；Batch 显式新布局与冻结计划已接通，私有实库有限夹具通过；真实来源及正式接管未验收,timestamp → trade_date；来源 fund_adj 的交易日。
 etf_basic,保留其他语义,保留现状，尚未完成全链路验收,timestamp 是固定 1970-01-01 技术占位；成立、上市、退市、申赎日期各自保留；update_time 不当作交易日。
-etf_daily,可统一,v2 纳秒端口控制服务配置及写入组已接通；默认 v1；正式迁移未完成；Batch 已接显式 *-trade-date-v2 写入定义及冻结盘后计划，实库未验收,timestamp → trade_date；保留现有 TIMESTAMP_NS 精度。
+etf_daily,可统一,v2 纳秒端口控制服务配置及写入组已接通；默认 v1；正式迁移未完成；Batch 显式新布局与冻结计划已接通，私有实库有限夹具通过；真实来源及正式接管未验收,timestamp → trade_date；保留现有 TIMESTAMP_NS 精度。
 etf_factor,已用 trade_date,保留现状，尚未完成全链路验收,来源交易日；不改名。
 etf_portfolio,保留其他语义,保留现状，尚未完成全链路验收,ann_date 是公告日，end_date 是持仓报告截止日；update_time 是本地观测字段。
-etf_share,可统一,v2 微秒端口控制服务配置及写入组已接通；原作业v3保留；正式迁移未完成；Batch 已接显式 *-trade-date-v2 写入定义及冻结盘后计划，实库未验收,timestamp → trade_date；份额变动所属交易日，update_time 分开保留。
+etf_share,可统一,v2 微秒端口控制服务配置及写入组已接通；原作业v3保留；正式迁移未完成；Batch 显式新布局与冻结计划已接通，私有实库有限夹具通过；真实来源及正式接管未验收,timestamp → trade_date；份额变动所属交易日，update_time 分开保留。
 qmt_1m_bars,保留其他语义,代码退役，正式数据待清理,bar_time 是分钟K线时间，不能降成交易日；起止边界和历史时区须回查原生产方，updated_at 分开保留。
 stock_minute_bars,保留其他语义,保留现状，尚未完成全链路验收,bar_time 是分钟K线时间；目录说明部分时间来自交易时段和源行号映射，不能仅凭时间戳认定为原始事件时刻。
 cn_bond_yield_curve,已用 trade_date,保留现状，尚未完成全链路验收,现行契约为 ChinaBond 业务日期，并在已批准 SSE 会话范围核验；保留现有 trade_date，不等同于盘中报价时刻。
@@ -50,8 +50,8 @@ daily,已用 trade_date,保留现状，尚未完成全链路验收,A 股日行�
 daily_basic,已用 trade_date,保留现状，尚未完成全链路验收,A 股每日指标交易日；不改名。
 stk_factor,已用 trade_date,保留现状，尚未完成全链路验收,股票技术因子所属交易日；不改名。
 stk_limit,已用 trade_date,保留现状，尚未完成全链路验收,股票涨跌停价格所属交易日；不改名。
-stk_st_daily,可统一,v2 存储发布恢复控制服务检查点配置与组入口已接通，默认v1；正式迁移未完成；Batch 已接显式 *-trade-date-v2 写入定义及冻结盘后计划，实库未验收,timestamp → trade_date；现行规则只展开到 SSE 开市日，不把整个名称有效期的日历日期混入。
-stk_suspend,可统一,v2 存储发布来源控制检查点及配置组入口显式接通，默认v1；真实发布与正式迁移未完成；Batch 已接显式 *-trade-date-v2 写入定义及冻结盘后计划，实库未验收,timestamp → trade_date；现行契约是 suspend_d 交易日，不代表全天停牌；旧字段说明中的连续日期不能代替现行规则。
+stk_st_daily,可统一,v2 存储发布恢复控制服务检查点配置与组入口已接通，默认v1；正式迁移未完成；Batch 显式新布局与冻结计划已接通，私有实库有限夹具通过；真实来源及正式接管未验收,timestamp → trade_date；现行规则只展开到 SSE 开市日，不把整个名称有效期的日历日期混入。
+stk_suspend,可统一,v2 存储发布来源控制检查点及配置组入口显式接通，默认v1；真实发布与正式迁移未完成；Batch 显式新布局与冻结计划已接通，私有实库有限夹具通过；真实来源及正式接管未验收,timestamp → trade_date；现行契约是 suspend_d 交易日，不代表全天停牌；旧字段说明中的连续日期不能代替现行规则。
 stock_detail_info,保留其他语义,保留现状，尚未完成全链路验收,list_date、delist_date 是上市和退市日期；update_time 是观测时刻；当前主数据不是按交易日生成的快照。
 balance,保留其他语义,保留现状，尚未完成全链路验收,ann_date、f_ann_date 是公告日期角色，end_date 是报告期末；update_time 单独保留。
 cashflow,保留其他语义,保留现状，尚未完成全链路验收,ann_date、f_ann_date 是公告日期角色，end_date 是报告期末。
