@@ -43,7 +43,7 @@ QuestDBWithData/
 
 `markets/cn/data` 与 `markets/cn/batch` 分开，Batch 库自身不依赖 PGWire、QuestDB Sender、POI 和数据 API。统一市场发行包同时包含数据与 Batch 的依赖，Batch 使用独立 Spring 容器，SQLite 数据源和事务不与 QuestDB 混用。实时 L2 只使用 core 和启动支持，不加载整个 A 股业务库。
 
-根工程不放生产代码，只做聚合检查和兼容打包。`platform`、`markets` 也不放源码或业务 jar；`engine` 和 `cn` 继续保留原有模型或执行代码及子模块。Gradle 使用完整路径，例如 `:markets:cn:main-strategy-runtime`；根级 `mainStrategyRun`、`aliyunL2Live` 等启动命令继续保留。
+根工程不放生产代码，只做聚合检查和兼容打包。`platform`、`markets` 也不放源码或业务 jar；`engine` 和三个市场根库继续保留源码并聚合子模块；`markets/cn/src` 属于 `:markets:cn`，不是独立的 src 子模块。市场根库的职责及不拆分原因见[设计决定](decisions/2026-10-20-市场根库保留源码.md)。Gradle 使用完整路径，例如 `:markets:cn:main-strategy-runtime`；根级 `mainStrategyRun`、`aliyunL2Live` 等启动命令继续保留。
 
 ## 代码应该放哪里
 
