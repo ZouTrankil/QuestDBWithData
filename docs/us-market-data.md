@@ -515,3 +515,32 @@ BMC 历史搜索唯一命中旧 BMC Software 普通股 `US000000008423`，但 Ti
 本轮 `tiingo-budget-verification.json` 于 12:36 UTC 核对 Starter 客户端配置及本地账本：最近一小时 6 次、一天 346 次；滚动 31 天 82 个请求键，接收 196537917 字节，另预留 58785799 字节，仍在本地预算内。失败请求计数，请求键与不同发行人数分开，服务端和其他客户端用量仍未知。
 
 原主 PID 33868 在 2020 年窗口完成后正常退出。补录验收后仅归档本轮停止标记，以 PID 33240 恢复原队列、同一 v24 发行包、两 GiB 堆及 2026-10-16 截止日，47 个 JAR 摘要一致；启动回执为 `var/market-data/us-broad-launch-v24-cash-mergers-resumed.json`。原组 `broad-909568a1-226c-424a-bafb-df7ba0abd57c` 前十五段的运行和证明保持，只续采原未发送的六段共 155055 行。原组 128 个来源、21 段、390029 行均为 `VERIFIED`；再从原 Yahoo 响应独立重建二十列，对照 prepared、完整回读及当前 PGWire 全部一致，来源和证明摘要、已完成队列前后稳定。检查时没有 `IN_DOUBT`，主采集已继续原队列；记录在同目录 `main-resume-verification.json`、`main-progress-independent-verification.json`。原组总量不重复计入本批补录的 7497 行；全市场及剩余来源缺口继续推进。
+
+### FISV、IMMP、BRTX 的缺值来源与早期前缀
+
+2026-10-20 复用已冻结的三份 Tiingo 原文，补入 12255 行及三条永久代码映射；另从 BRTX 的原 Yahoo 响应补入早期 109 行，共新增 12364 行。三条原 Yahoo 全窗口任务各有一条空值日，仍保持 `FAILED_SOURCE`，不把其他来源的成功改写成原任务成功。
+
+| 来源代码 | 来源及正式价格键 | 行数 | 已验收窗口 |
+| --- | --- | ---: | --- |
+| FISV | TIINGO / `US000000000280` | 5230 | 2006-01-03 至 2026-10-16 |
+| IMMP | TIINGO / `US000000064953` | 3647 | 2012-04-17 至 2026-10-16 |
+| BRTX | TIINGO / `US000000008591` | 3378 | 2013-05-14 至 2026-10-16 |
+| BRTX 前缀 | YAHOO / `BRTX` | 109 | 2012-12-05 至 2013-05-13 |
+
+每段窗口内的日期均与 SPY 实有参照日期一致。BRTX 两段保留独立来源和价格键；Yahoo 未复权 OHLCV 仍按其后续拆股反推，保留 `RECONSTRUCTED_FROM_YAHOO_SPLIT_ADJUSTED`，不把它伪装成 Tiingo 原价。原 Yahoo 后期空值没有补零、插值或沿用前收盘。
+
+FISV 选择美国股票，排除同名加拿大记录。原件保留 2013-12-17、2018-03-20 两次 1 拆 2；[2014 半年报](https://www.sec.gov/Archives/edgar/data/798354/000119312514286896/d732279d10q.htm)和[2020 年报](https://www.sec.gov/Archives/edgar/data/798354/000079835421000004/fisv-20201231.htm)分别确认市场生效日，不把登记、支付日写成第二次拆股。[发行人确认](https://investors.fiserv.com/news-releases/news-release-details/fiserv-completes-listing-transfer-new-york-stock-exchange) 2023-06-07 转 NYSE 并改为 FI；[2025 公告](https://investors.fiserv.com/news-releases/news-release-details/fiserv-announces-transfer-stock-exchange-listing-nasdaq)预计 11-11 转回 Nasdaq 并改回 FISV。公告计划与实际交易证据分开，转场不产生数量拆股；Tiingo 在 Yahoo 缺失的 2025-11-12 返回完整正量报价。
+
+IMMP 选择美国 ADS，排除 OTC 普通股 PRRUF 和澳洲 IMM。[Nasdaq 通函](https://www.nasdaqtrader.com/TraderNews.aspx?id=ETA2016-333)确认 PBMD 的 ADS 比率在 2016-12-28 从 1:30 改为 1:100，表述为 1 新换 3.333333 旧；数学数量比为 0.3。Tiingo 保留其近似因子 `0.30000003` 和对应调整价格，不静默改精度。[2020 年报](https://www.sec.gov/Archives/edgar/data/1506184/000119312520253940/d53581d20f.htm)确认 PBMD 更名为 IMMP，以及 2019 普通股合股与 ADS 比率变化相抵，未新增美国 ADS 数量拆股。年报记载 ADS 从 2012-04-16 交易，Tiingo 从 04-17、Yahoo 从 04-19 开始，因此前沿仍有来源缺口，不能称完整上市历史。[2026 公告](https://www.sec.gov/Archives/edgar/data/1506184/000119312526397189/d79097dex991.htm)确认 09-28 ADS 比率 10 改 200、旧 20 换新 1，普通股数量不变；来源该日的完整报价和 0.05 因子均保留。
+
+BRTX 的[2015 申报](https://www.sec.gov/Archives/edgar/data/1505497/000114420415063158/v423219_s1a.htm)确认 2013-04-15 旧 50 换新 1、2015-07-07 旧 20 换新 1。[2021 申报](https://www.sec.gov/Archives/edgar/data/1505497/000149315221026766/forms-1a.htm)确认 10-27 旧 4000 换新 1，当时仍为 OTC 的 BRTXD 报价，Nasdaq 上市尚在申请。[Nasdaq 通函](https://www.nasdaqtrader.com/TraderNews.aspx?id=eca2026-636)确认 2026-09-08 旧 20 换新 1，来源空值日的 Tiingo 完整报价和 0.05 因子保留。[2022 8-K](https://www.sec.gov/Archives/edgar/data/1505497/000102177123000002/form8kdtd12292022.htm)记载迁册协议签署 12-23、提交 12-29、12-31 生效；每股换一股 Nevada 普通股，没有增加数量拆股。
+
+BRTX 的[2020 最终年报](https://www.sec.gov/Archives/edgar/data/1505497/000149315221010062/form10-k.htm)记载重整 10-30 确认、11-16 生效。审计普通股滚存为 `77851633 + 1000000 + 1515799750 + 1049726797 + 217796200 = 2862174380`，保留期初并仅列增发，支持普通股经济权益延续的推断；这不是投票结果证明，也不把拟议的有条件注销写成已发生注销。
+
+三份 Tiingo 原件均无现金分红。用未来拆股累乘独立复算调整 OHLC，最大相对差低于 `2e-13`；全部调整成交量等于来源原量乘未来因子后向下取整。IMMP 的 96 条、BRTX 的 196 条原零量报价保持原值，只证明来源报价，不证明发生交易。原来源观察时间和精度不变，不据此证明历史当时可知。
+
+FISV、BRTX 和 Yahoo 前缀直接通过原运行。IMMP 原运行 `market-0a58e628-3095-4088-8bcd-44910a9b8949` 发送 3647 行后超时；确认原 PID 33564 已退出，全部二十列与原文、prepared、HTTP、PGWire 一致，旧数据和物理表未变、WAL 结清后，用 `reconcile-complete-frozen` 只读完成原运行，补写零行。原失败回执未改。全部新增价格二十列、三条映射十八列独立回读一致；原 144925 行价格、25 条映射保持，保护组累计 157289 行价格、28 条映射。
+
+证据在 `var/market-data/scope-review/single-gap-recovery-20261020/`，包括价格、身份决定、原运行核对及逐字段证明。两份 Nasdaq 通函完整下载，12 项发行人或交易所网页事实另行核读。Fiserv 公告第一次在本地请求间隔处暂缓，后续一次请求为 HTTP 403；两份回执均保留，未把网页核读当作完整本地下载。14:26 UTC 的本地 Tiingo 账本为最近一小时零次、一天 352 次、滚动 31 天 85 个请求键，接收 199249498 字节、另预留 58785799 字节；本批发布未新增 Tiingo 行情请求。这是客户端账本，服务端和其他客户端用量仍未知。
+
+主 PID 6936 完成 2021 年窗口后正常停止。原组 `broad-33f33540-9951-4ce2-a057-49c86e5f7069` 前 16 段共 168047 行从原 128 份 Yahoo 响应重新独立核验二十列，旧 13 段证明保持；停下时剩余五段共 114539 行仍是原 `PLANNED`。补录后只归档本轮停止标记，以同一 v25 发行包、47 个 JAR、两 GiB 堆及 2026-10-16 截止日恢复，启动回执为 `var/market-data/us-broad-launch-v25-single-gap-resumed.json`。14:29 UTC 按 PID 和启动时刻核验恢复进程仍存活，已进入 2023 年；前 16 段的运行和证明保持、五个手动发布原运行均为 `VERIFIED`，没有 `IN_DOUBT`。这批 12364 行不重复计入原年度组；全市场采集继续。
