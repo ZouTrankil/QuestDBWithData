@@ -1279,7 +1279,16 @@ public class StockBasicWriteGroupService {
                     .datasetId()
                     .equals(StockSuspendDataset.DEFINITION.datasetId())) {
                 var mapper = new StockSuspendMapper();
-                var port = writers.stockSuspend(stockSuspendTarget.tableName(), member.targetId());
+                int requested = member.definition().schemaVersion();
+                var port =
+                        requested == 1
+                                ? writers.stockSuspend(
+                                        stockSuspendTarget.tableName(), member.targetId())
+                                : writers.stockSuspend(
+                                        stockSuspendTarget.tableName(),
+                                        member.targetId(),
+                                        requested);
+                // prepared 组只写原正记录，不替代来源整窗撤销；会话须匹配原成员版本。
                 int version =
                         port instanceof StockSuspendWriteSession.Versioned selected
                                 ? selected.datasetVersion()

@@ -410,6 +410,46 @@ class ProjectConfigurationTest {
                         .containsProperty("app.sync.stk-st-daily-schema-version"));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "main-strategy"})
+    void stockSuspendLayoutUsesTheMarketDefaultAndEnvironmentOverride(String profile)
+            throws Exception {
+        var file = configuration("");
+        var variables = new HashMap<String, String>();
+        variables.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        variables.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        assertEquals(
+                "1",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.stk-suspend-schema-version"));
+        assertEquals(
+                "stk_suspend",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.read.stk-suspend-table"));
+        assertEquals(
+                "stk_suspend_d011_isolated",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.stk-suspend-table"));
+        variables.put("APP_READ_STK_SUSPEND_TABLE", "java_d011_stk_suspend_read_fixture");
+        assertEquals(
+                "java_d011_stk_suspend_read_fixture",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.read.stk-suspend-table"));
+        assertEquals(
+                "stk_suspend_d011_isolated",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.stk-suspend-table"));
+        variables.put("APP_SYNC_STK_SUSPEND_SCHEMA_VERSION", "2");
+        assertEquals(
+                "2",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.stk-suspend-schema-version"));
+        variables.remove("APP_SYNC_STK_SUSPEND_SCHEMA_VERSION");
+        assertFalse(
+                ProjectConfiguration.load("market-us", variables)
+                        .containsProperty("app.sync.stk-suspend-schema-version"));
+    }
+
     @Test
     void changingOneAppFileDoesNotChangeAnotherProcess() throws Exception {
         var file = configuration("");

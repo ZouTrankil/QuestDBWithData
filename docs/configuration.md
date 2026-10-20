@@ -141,3 +141,5 @@ ETF 份额使用 `app.sync.etf-share-schema-version`，默认 `1`，仅支持 `1
 
 
 ST 日频的 `app.sync.stk-st-daily-schema-version` 位于 `config/markets/cn.yml`，默认 `1`，仅接受 `1/2`；环境变量为 `APP_SYNC_STK_ST_DAILY_SCHEMA_VERSION`。它统一当前任务、目标和读取布局，配置本身不迁表；旧恢复请求及组成员仍用原冻结版本。范围见[布局决定](decisions/2026-10-21-交易日存储布局分版.md#st-配置读取与-prepared-写入组)。
+
+停牌用 `app.sync.stk-suspend-schema-version` 选择当前作业和读取布局，默认 `1`，只支持 `1/2`；环境覆盖为 `APP_SYNC_STK_SUSPEND_SCHEMA_VERSION`。同步表 `app.sync.stk-suspend-table` 默认 `stk_suspend_d011_isolated`，读取表 `app.read.stk-suspend-table` 默认 `stk_suspend`，可分别用 `APP_SYNC_STK_SUSPEND_TABLE`、`APP_READ_STK_SUSPEND_TABLE` 覆盖。选择 v2 时须指向同版物理表；配置不迁表，历史恢复与组成员仍按原版本执行。见[入口决定](decisions/2026-10-21-交易日存储布局分版.md#停牌配置读取与-prepared-写入组)。

@@ -7,6 +7,11 @@ app:
     etf-daily-schema-version: 1
     etf-share-schema-version: 1
     stk-st-daily-schema-version: 1
+    stk-suspend-schema-version: 1
+    stk-suspend-table: stk_suspend_d011_isolated
+  read:
+    # 读取保留正式表默认值；隔离验收时可单独覆盖，不跟随同步目标换表。
+    stk-suspend-table: stk_suspend
   time:
     # 旧入口继续表示 A 股业务日期；三个市场各用自己的时钟。
     business-zone: Asia/Shanghai

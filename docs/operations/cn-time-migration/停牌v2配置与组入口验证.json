@@ -1,0 +1,67 @@
+{
+  "基线提交": "70c35766be16ece0b0bff6005e1c031204991e65",
+  "范围": "停牌显式布局的当前 owner、同步目标、读取与公共绑定、根配置和原版本 prepared 组入口",
+  "最终源码及配置摘要": {
+    "config/markets/cn.yml": "72e9bd7b58ca841586426e5b20034fa423d5849ffa899a930b12385dee36e120",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/StockMarketConfiguration.java": "1e0f7e99e7013873e5c10d9433fd9ac092bc9de70fc407ebc302edf4708ea17b",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/storage/StockSuspendReadRepository.java": "55cb4bf6606e97beda6603b1fc1beb24a0552a8e9ff4884619e88da9717fb780",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/stock/application/StockSuspendSyncJobOwner.java": "1bff477b3e379cacc38e8e38289e6b0cd2dc729baf99361b19a9d83e64859be1",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java": "705f0664b1a9a52fd0a16298f084d86d40d9c3309ae50027777306a8037092ee",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/DefaultReadBindings.java": "b14996ec4d1b29bd6ce856621088a35a8726a2ccd8812c6302113a57b73a7f46",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/group/port/WriteGroupWriters.java": "b0d5e7dddeb119db052a8c59140735289754810315f6e656eb37b9aa38ef9d20",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/group/storage/QuestDbWriteGroupWriters.java": "650a4358dc0690b9a421bfc34cdc62138c57c3477b9b92e1728793fdefede12c",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java": "e0b22d3cb70dbf21c368d1ea7bd7f491f0f2dfb7dd069a3c4b7d663b1702daca",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/stock/application/StockSuspendConfiguredLayoutTest.java": "c19dac41085c048eb84548671a1c0da5954e5cb67471235394499bbe84402e03",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/service/StockSuspendWriteGroupLayoutTest.java": "5b703ab1a6ebcd93fc133f26487492d83fcb624a59f0d7ba24003323d5f277ea",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/bootstrap/ProjectConfigurationTest.java": "341013f671e51ff49dca7205e55a3a3fd1b2d98568ffd33516314038a3a877e6"
+  },
+  "完整回归": {
+    "markets/cn": {
+      "tests": 36,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2370,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 145
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "结果": "通过",
+  "格式检查": {
+    "命令": "python3 tools/format_java.py --imports --check",
+    "Java文件": 2044,
+    "结果": "格式、import、字面量值核对通过"
+  },
+  "公开配置检查": "cn-data 和 main-strategy 两个发行 ZIP 均通过",
+  "新增验收": [
+    "Spring 分别以布局 1/2 启动，当前作业、读取、公共绑定与写入目标同版；不创建账本、不初始化 QuestDB 客户端、不访问 DataSource",
+    "读取表与写入表分别覆盖，保留原默认正式读取和隔离写入",
+    "data 和 main-strategy 根配置导入、默认值、环境覆盖和 US 隔离",
+    "prepared 组两个方向按原成员版本执行，当前读取版本相反也不换版",
+    "错版会话在 preflight 和 send 前拒绝"
+  ],
+  "默认布局": 1,
+  "配置": {
+    "app.sync.stk-suspend-schema-version": 1,
+    "app.sync.stk-suspend-table": "stk_suspend_d011_isolated",
+    "app.read.stk-suspend-table": "stk_suspend"
+  },
+  "限制": [
+    "本批只有离线验证，没有真实来源请求或 QuestDB 写入、rename、正式迁移",
+    "选择 v2 不迁表；读取目标须显式覆盖为同版物理表",
+    "prepared 组只追加原正记录，不接管来源窗口撤销",
+    "旧缺证完成记录不自动补证；append 和未发布 stage 恢复器未新增",
+    "L2、Batch 独立来源、正式表、MV、调度、消费者及完整模型验收仍待完成",
+    "此前实库 JDBC SQLState 00000 的根因仍未确认"
+  ]
+}

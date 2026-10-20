@@ -10,17 +10,36 @@ import com.zoutrankil.data.domain.SyncJobDefinition.RetryPolicy;
 import com.zoutrankil.data.domain.shared.SyncJobOwner;
 import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /** The single bounded stk_suspend owner; actual execution remains explicitly invoked. */
 @Service
 public final class StockSuspendSyncJobOwner implements SyncJobOwner {
+    private final CnTradeDateLayout layout;
+
+    public StockSuspendSyncJobOwner() {
+        this(CnTradeDateLayout.LEGACY_V1);
+    }
+
+    @Autowired
+    public StockSuspendSyncJobOwner(
+            @Value("${app.sync.stk-suspend-schema-version:1}") int version) {
+        this(CnTradeDateLayout.fromVersion(version));
+    }
+
+    public StockSuspendSyncJobOwner(CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
+    }
+
     public static final int MAX_WINDOW_DAYS = 5;
     public static final int REVISION_DAYS = 2;
     public static final SyncJobDefinition DEFINITION =
@@ -63,7 +82,7 @@ public final class StockSuspendSyncJobOwner implements SyncJobOwner {
                     true,
                     true);
 
-    /** v1 原定义保持不动；显式分版供原请求核验，当前注册仍保持旧版。 */
+    /** v1 原定义保持不动；当前注册显式选版，恢复继续使用原账本版本。 */
     public static SyncJobDefinition definition(int version) {
         var layout = CnTradeDateLayout.fromVersion(version);
         if (layout == CnTradeDateLayout.LEGACY_V1) return DEFINITION;
@@ -103,6 +122,6 @@ public final class StockSuspendSyncJobOwner implements SyncJobOwner {
 
     @Override
     public List<SyncJobDefinition> syncJobDefinitions() {
-        return List.of(DEFINITION);
+        return List.of(definition(layout.schemaVersion()));
     }
 }

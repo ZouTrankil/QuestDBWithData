@@ -50,7 +50,9 @@ public class StockMarketConfiguration {
     StockSuspendTarget stockSuspendTarget(
             JdbcTemplate jdbc,
             @Lazy QuestDB questdb,
-            @Value("${app.sync.stk-suspend-table:stk_suspend_d011_isolated}") String table) {
-        return new QuestDbStockSuspendTarget(table, jdbc, questdb);
+            @Value("${app.sync.stk-suspend-table:stk_suspend_d011_isolated}") String table,
+            @Value("${app.sync.stk-suspend-schema-version:1}") int version) {
+        return new QuestDbStockSuspendTarget(
+                table, jdbc, questdb, CnTradeDateLayout.fromVersion(version));
     }
 }

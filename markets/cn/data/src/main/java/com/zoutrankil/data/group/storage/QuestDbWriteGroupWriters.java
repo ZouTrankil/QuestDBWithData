@@ -221,6 +221,12 @@ public final class QuestDbWriteGroupWriters implements WriteGroupWriters {
     }
 
     @Override
+    public StockSuspendWriteSession stockSuspend(String table, String targetId, int version) {
+        return new StockSuspendWritePort(
+                table, jdbc, questdb, targetId, CnTradeDateLayout.fromVersion(version));
+    }
+
+    @Override
     public IndexMonthlyTables indexMonthlyTables() {
         return new QuestDbIndexMonthlyTables(jdbc);
     }

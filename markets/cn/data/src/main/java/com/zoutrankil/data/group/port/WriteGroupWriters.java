@@ -113,6 +113,12 @@ public interface WriteGroupWriters {
 
     StockSuspendWriteSession stockSuspend(String table, String targetId);
 
+    /** 旧工厂不隐式接收新版物理布局。 */
+    default StockSuspendWriteSession stockSuspend(String table, String targetId, int version) {
+        if (version != 1) throw new IllegalArgumentException("旧停牌组工厂只支持 v1");
+        return stockSuspend(table, targetId);
+    }
+
     IndexMonthlyTables indexMonthlyTables();
 
     MoneyflowHsgtStagingPort moneyflowHsgtTables();

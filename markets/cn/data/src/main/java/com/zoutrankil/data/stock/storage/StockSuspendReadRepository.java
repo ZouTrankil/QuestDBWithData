@@ -13,6 +13,7 @@ import com.zoutrankil.data.stock.mapper.StockSuspendMapper;
 import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -34,6 +35,13 @@ public class StockSuspendReadRepository implements DatasetImplementation {
     private final StockSuspendMapper mapper = new StockSuspendMapper();
 
     @Autowired
+    public StockSuspendReadRepository(
+            QuestDbBoundedReader reader,
+            @Value("${app.read.stk-suspend-table:stk_suspend}") String table,
+            @Value("${app.sync.stk-suspend-schema-version:1}") int version) {
+        this(reader, table, CnTradeDateLayout.fromVersion(version));
+    }
+
     public StockSuspendReadRepository(QuestDbBoundedReader reader) {
         this(reader, StockSuspendDataset.DEFAULT_TABLE, CnTradeDateLayout.LEGACY_V1);
     }
@@ -49,6 +57,11 @@ public class StockSuspendReadRepository implements DatasetImplementation {
     @Override
     public DatasetDefinition definition() {
         return StockSuspendDataset.definition(table, layout);
+    }
+
+    @Override
+    public DatasetDefinition definition(int version) {
+        return StockSuspendDataset.definition(table, CnTradeDateLayout.fromVersion(version));
     }
 
     public DatasetReadPage<StockSuspend> findByKey(StockSuspendKey key) {
