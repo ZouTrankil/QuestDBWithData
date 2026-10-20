@@ -7,6 +7,7 @@
 | 各模块做什么，代码从哪里看 | [代码结构](code-structure.md) |
 | A 股模块的目录、模型、入口和当前能力 | [markets/cn 介绍](../markets/cn/README.md) |
 | 数据库地址、账号、日志、启动命令在哪里配 | [配置和启动](configuration.md) |
+| 用 IDEA 打断点，入口、参数和调用链怎么选 | [本地 Debug](debug.md) |
 | 数据同步在哪做，怎么判断增量完成 | [同步和因子计算](data-pipeline.md) |
 | 哪些正式同步已经接通、接管还缺什么 | [A 股正式同步接管清单](formal-sync-takeover.md) |
 | 三个市场怎样处理日期和时间 | [市场时间](market-time.md)、[数据集归属](dataset-markets.md) |
