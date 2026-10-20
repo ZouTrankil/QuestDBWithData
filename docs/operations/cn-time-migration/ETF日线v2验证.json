@@ -1,0 +1,84 @@
+{
+  "说明": "隔离工作目录验证本批变更，排除共享工作区其他修改。临时 SQLite 的闭市日、组写入和错版会话是合成测试；真实两行读写单独记录。",
+  "baseCommit": "93726f3420440363c8084ffed5bf0271160c32b9",
+  "源码摘要": {
+    "config/markets/cn.yml": "9a7c4d196668d1f6fdb7df2867870d1bf6cd6376b7f6ef551e5afa0068cbee7c",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/DefaultReadBindings.java": "954fee9e89dfb768261fc8cdeebb21935665d784559e866cecc9ced32dbf7c44",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/EtfConfiguration.java": "185e42b9bee7130720781024e95929090ccb98260a9e46cb945438a48a910a6a",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java": "aadb224a12e3f3bc83e9f9ef4b9145358fba724694ca1fe745b850eb72e8e23d",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfDailyCoverage.java": "bdb483818eee04420ba2cd6d90adaa1450732d676c43cd18a04d230fe39e9b06",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfDailyJobService.java": "e2f1247182b273efd29c24bb5d251ebeccf20beff4ed733a6719d51b1fcc51c2",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfDailyRunRecovery.java": "c18d050753a54509a36b4051460bcb6a76f896ee6e5fc1ee644e2792858ddd97",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfDailySyncAdapter.java": "a0f78b5b8dd51e78231acad83a4ab02098835c6c4942633b8767f7d8f95c01a9",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/application/EtfDailySyncJobOwner.java": "71431fb6a6409493a1758570067324e27655b2f8670954f5decf0a8e6361f6b0",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/port/EtfDailyTarget.java": "6d83e7e8291b7d58c7fe341a7db105594ab462e5e2dce29e48638b8526069926",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/port/EtfDailyWriteSession.java": "6fb18808614203cd11df140183b318c8e2be14aed45c59099503b54198f44833",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/storage/EtfDailyReadRepository.java": "06193321e0d248e22282f5c4e9f7208ce25a1d64264bd6c766717da59c6da7f1",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/storage/EtfDailyWritePort.java": "ca6eaf2dca8f4dc84965a680f95459a24b7cfe32227087746ba8f0eb36edc8ef",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/etf/storage/QuestDbEtfDailyTarget.java": "6f9f214d3bda0faf2e629e81fdfc707695a17fef2f4d6bf278b98ee5795e2d0e",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/group/port/WriteGroupWriters.java": "e9e32fc3baa5dcc4cd485512b2b1d95fcb16c0f95ed2f10e70011bd7f06c7502",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/group/storage/QuestDbWriteGroupWriters.java": "4c279a6e351405b65e3099cecc08600d7579ad657d3c9c7ab195532d92f007c5",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/service/StockBasicWriteGroupService.java": "6604d9f970267daf913a3db56edae16c59e801f2367960a780c2c9250815302e",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/bootstrap/ProjectConfigurationTest.java": "254da3ae154ee12a27254f8517e99256dbae4fde50052b0fe1def14e81583bee",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/application/EtfDailyConfiguredLayoutTest.java": "587a182c3659dccf9fbf53cf957e00a5d9b94025189889514b43457b094e4a2f",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/application/EtfDailyVersionedAdapterTest.java": "5776b78f19444e3123db7ef52c59e0c24bdde500826f619c3f2844e61b0f6d13",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/application/EtfDailyVersionedLifecycleTest.java": "f052680b82ca7f332f5769f74072ddcd4e8c4ebb4a507019371d10579cfa19e1",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/application/EtfDailyVersionedRecoveryAdmissionTest.java": "201bf50f0d1a2c673532786e4bf1ebb611e227211c922c37974d8d9ae2625575",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/storage/EtfDailyLayoutLiveAcceptanceTest.java": "d48413820cc367abd69f87d9969a9b07ed57b4d4416f990cad92b315237d9a12",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/etf/storage/EtfDailyVersionedStorageTest.java": "9d470954e7fdddac4328739e62e04926c67cc3f5a323e24e6ab4a90b74a937bd",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/service/EtfDailyWriteGroupLayoutTest.java": "1f3a5974c7fc4136cd3b57672e25b5f000bf8633d084e8e011b218585a7eab91",
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/fund/EtfDailyDataset.java": "f29e958a50c1cc44dcd4bee8d071eeeef49a67b5541d3692c284af0eb0c70d68",
+    "markets/cn/src/test/java/com/zoutrankil/market/cn/model/EtfDailyVersionedContractTest.java": "febd86b0ea5c9628782da51e9e39b71c4862790713f76e39591e977ff11d642e"
+  },
+  "检查命令": "./gradlew :markets:cn:test :markets:cn:data:test :markets:cn:main-strategy-runtime:test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip :markets:cn:main-strategy-runtime:distZip --offline",
+  "模块结果": {
+    "markets/cn": {
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "markets/cn/data": {
+      "tests": 2247,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 141
+    },
+    "markets/cn/main-strategy-runtime": {
+      "tests": 166,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "架构与模块边界": "通过",
+  "CN数据与主策略发行包": "通过",
+  "Java格式与import及字面量核对": {
+    "文件数": 2017,
+    "结果": "通过"
+  },
+  "验证分支": [
+    "契约及 DDL 保留纳秒、十一列值和逻辑键；v1 默认定义及行编码不变",
+    "完整键范围、整日及日期盘点使用所选列，Sender 不改变日期和值",
+    "当前配置为另一版本时仍按原账本恢复，原 JSON 不变",
+    "检查点不跨版本拼接，即使目标身份相同",
+    "原日志按原版本识别后仍要求原未决区间锁",
+    "恢复指纹保持日线原有 runner 校验时机",
+    "根配置导入、标准环境覆盖及当前 owner/reader/target/公共读取注册一致",
+    "写入组按成员原版本执行，错版会话先拒绝",
+    "旧物理列及物理身份变化在借 Sender 前拒绝"
+  ],
+  "实库验证": "ETF日线v2实库验收.json",
+  "默认配置": 1,
+  "新增配置": "app.sync.etf-daily-schema-version",
+  "环境覆盖": "APP_SYNC_ETF_DAILY_SCHEMA_VERSION",
+  "真实来源完整性验收": false,
+  "真实恢复": false,
+  "正式迁移": false,
+  "Batch独立来源切换": false,
+  "正式调度切换": false,
+  "其余四表端口完成": false,
+  "原读取失败原因已确认": false,
+  "公开配置与发行文件检查": "CN data 与主策略两个 ZIP 分别通过 check_public_config.py；使用隔离 Python 环境的 PyYAML，不修改项目依赖。",
+  "文档本地链接": "通过"
+}

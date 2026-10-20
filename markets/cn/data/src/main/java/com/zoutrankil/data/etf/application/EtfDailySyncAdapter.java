@@ -6,6 +6,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition.Mode;
 import com.zoutrankil.data.domain.fund.EtfDaily;
 import com.zoutrankil.data.domain.fund.EtfDailyDataset;
 import com.zoutrankil.data.domain.fund.EtfDailyKey;
+import com.zoutrankil.data.etf.port.EtfDailyWriteSession;
 import com.zoutrankil.data.etf.port.EtfWriteSession;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
@@ -100,11 +101,16 @@ public final class EtfDailySyncAdapter implements SyncJobRunner.Adapter<EtfDaily
 
     @Override
     public void preflight(FrozenRequest request) {
+        // 先核对冻结契约和实际会话，再访问日历、来源和物理目标。
+        int portVersion =
+                port instanceof EtfDailyWriteSession.Versioned selected
+                        ? selected.datasetVersion()
+                        : 1;
         if (request == null
-                || !request.definition().equals(EtfDailySyncJobOwner.DEFINITION)
+                || !request.definition()
+                        .equals(EtfDailySyncJobOwner.definition(request.definition().version()))
                 || !request.definition().datasetId().equals(EtfDailyDataset.DEFINITION.datasetId())
-                || request.definition().datasetVersion()
-                        != EtfDailyDataset.DEFINITION.schemaVersion()
+                || request.definition().datasetVersion() != portVersion
                 || !Set.of(Mode.INCREMENTAL, Mode.BACKFILL, Mode.RECONCILE).contains(request.mode())
                 || request.from() == null
                 || request.to() == null

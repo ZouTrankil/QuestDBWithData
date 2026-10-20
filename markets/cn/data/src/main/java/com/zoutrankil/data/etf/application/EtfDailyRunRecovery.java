@@ -5,6 +5,7 @@ import com.zoutrankil.data.domain.SyncJobDefinition;
 import com.zoutrankil.data.domain.SyncRunState;
 import com.zoutrankil.data.domain.fund.EtfDaily;
 import com.zoutrankil.data.domain.fund.EtfDailyKey;
+import com.zoutrankil.data.etf.port.EtfDailyTarget;
 import com.zoutrankil.data.etf.port.EtfTarget;
 import com.zoutrankil.data.etf.port.EtfWriteSession;
 import com.zoutrankil.data.repository.FileEvidenceStore;
@@ -66,7 +67,7 @@ public final class EtfDailyRunRecovery {
         var ledger = SyncRunLedger.openExisting(ledgerPath);
         var run = Objects.requireNonNull(ledger.getRun(runId));
         var frozen = json.readTree(run.frozenJson());
-        var definition = EtfDailySyncJobOwner.DEFINITION;
+        var definition = EtfDailySyncJobOwner.definition(run.jobVersion());
         if (!definition.jobId().equals(run.jobId())
                 || definition.version() != run.jobVersion()
                 || !definition.equals(
@@ -156,7 +157,9 @@ public final class EtfDailyRunRecovery {
                 throw new IllegalStateException("Invalid source size");
             var result = json.readTree(uncertain.getFirst().payloadJson()).path("writeResult");
             var receipts = result.path("receipts");
-            var port = target.newWriter(run.targetId());
+            var port =
+                    EtfDailyTarget.writerForFrozenVersion(
+                            target, run.targetId(), definition.datasetVersion());
             var codec = port.codec();
             if (!"IN_DOUBT".equals(result.path("status").asText())
                     || !receipts.isArray()

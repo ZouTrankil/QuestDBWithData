@@ -132,13 +132,21 @@ final class DefaultReadBindings {
                     generic("regime_features_monitor_daily", 1));
 
     static List<ReadBindingCatalog.Registration<?>> registrations(int etfAdjVersion) {
+        return registrations(etfAdjVersion, 1);
+    }
+
+    static List<ReadBindingCatalog.Registration<?>> registrations(
+            int etfAdjVersion, int etfDailyVersion) {
+        int dailyVersion = CnTradeDateLayout.fromVersion(etfDailyVersion).schemaVersion();
         int version = CnTradeDateLayout.fromVersion(etfAdjVersion).schemaVersion();
         return REGISTRATIONS.stream()
                 .<ReadBindingCatalog.Registration<?>>map(
                         registration ->
                                 registration.datasetId().equals("etf_adj")
                                         ? generic("etf_adj", version)
-                                        : registration)
+                                        : registration.datasetId().equals("etf_daily")
+                                                ? generic("etf_daily", dailyVersion)
+                                                : registration)
                 .toList();
     }
 

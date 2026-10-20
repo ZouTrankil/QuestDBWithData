@@ -54,6 +54,13 @@ public interface WriteGroupWriters {
 
     EtfWriteSession<EtfDaily, EtfDailyKey> etfDaily(String table, String targetId);
 
+    /** 新版必须显式支持，旧工厂不降级发送。 */
+    default EtfWriteSession<EtfDaily, EtfDailyKey> etfDaily(
+            String table, String targetId, int version) {
+        if (version != 1) throw new IllegalArgumentException("ETF 日线工厂不支持新版布局");
+        return etfDaily(table, targetId);
+    }
+
     EtfAdjWriteSession etfAdj(String table, String targetId);
 
     /** 旧实现只支持 v1；v2 必须由存储端口显式声明，不能降级发送。 */

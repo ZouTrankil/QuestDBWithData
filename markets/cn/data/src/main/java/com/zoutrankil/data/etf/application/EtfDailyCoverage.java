@@ -81,13 +81,21 @@ public final class EtfDailyCoverage {
 
     public static Optional<Coverage> checkpoint(
             Path path, String targetId, EtfDailyTradingDates calendars) throws Exception {
+        return checkpoint(path, targetId, calendars, 1);
+    }
+
+    /** 同一物理目标也不能用 v1 回执给 v2 拼接检查点。 */
+    public static Optional<Coverage> checkpoint(
+            Path path, String targetId, EtfDailyTradingDates calendars, int jobVersion)
+            throws Exception {
+        var definition = EtfDailySyncJobOwner.definition(jobVersion);
         Objects.requireNonNull(path);
         Objects.requireNonNull(targetId);
         Objects.requireNonNull(calendars);
         if (!Files.isRegularFile(path) || !hasHistorySchema(path)) return Optional.empty();
         var ledger = SyncRunLedger.openReadOnly(path);
         var json = JobDefinitionJson.mapper();
-        JsonNode expectedDefinition = json.valueToTree(EtfDailySyncJobOwner.DEFINITION);
+        JsonNode expectedDefinition = json.valueToTree(definition);
         var intervals = new ArrayList<Interval>();
         String after = null;
         int seen = 0;
@@ -100,11 +108,11 @@ public final class EtfDailyCoverage {
                 if (!Set.of(SyncRunState.VERIFIED, SyncRunState.VERIFIED_EMPTY)
                                 .contains(summary.state())
                         || !targetId.equals(summary.targetId())
-                        || summary.jobVersion() != 1) continue;
+                        || summary.jobVersion() != definition.version()) continue;
                 var run = ledger.getRun(summary.id());
                 if (!targetId.equals(run.targetId())
                         || !"data.etf_daily".equals(run.jobId())
-                        || run.jobVersion() != 1) continue;
+                        || run.jobVersion() != definition.version()) continue;
                 JsonNode frozen = json.readTree(run.frozenJson());
                 if (!sameDefinition(expectedDefinition, frozen.path("definition"))) continue;
                 if (!"INCREMENTAL".equals(frozen.path("mode").asText()))

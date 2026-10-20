@@ -4,6 +4,7 @@ app:
   sync:
     # 新任务和读取使用同版；旧请求按原账本恢复，正式迁移另验收。
     etf-adj-schema-version: 1
+    etf-daily-schema-version: 1
   time:
     # 旧入口继续表示 A 股业务日期；三个市场各用自己的时钟。
     business-zone: Asia/Shanghai

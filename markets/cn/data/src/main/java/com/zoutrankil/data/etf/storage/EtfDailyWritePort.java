@@ -6,10 +6,11 @@ import com.zoutrankil.data.domain.fund.EtfDailyDataset;
 import com.zoutrankil.data.domain.fund.EtfDailyKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues;
 import com.zoutrankil.data.etf.mapper.EtfDailyMapper;
-import com.zoutrankil.data.etf.port.EtfWriteSession;
+import com.zoutrankil.data.etf.port.EtfDailyWriteSession;
 import com.zoutrankil.data.repository.QuestDbWriteChecks;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 import io.questdb.client.Sender;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** Bounded WAL/QWP writer with exact full-key/all-column readback and frozen-target checks. */
-public final class EtfDailyWritePort implements EtfWriteSession<EtfDaily, EtfDailyKey> {
+public final class EtfDailyWritePort implements EtfDailyWriteSession.Versioned {
     private static final int MAX_ROWS = 250;
     private static final int MAX_BYTES = 1024 * 1024;
     private static final Duration ACK_TIMEOUT = Duration.ofSeconds(10);
@@ -60,6 +61,8 @@ public final class EtfDailyWritePort implements EtfWriteSession<EtfDaily, EtfDai
         return CODEC;
     }
 
+    private final CnTradeDateLayout layout;
+    private final String dateColumn;
     private final String table;
     private final String expectedTargetId;
     private final JdbcTemplate jdbc;
@@ -69,6 +72,17 @@ public final class EtfDailyWritePort implements EtfWriteSession<EtfDaily, EtfDai
 
     public EtfDailyWritePort(
             String table, String expectedTargetId, JdbcTemplate jdbc, QuestDB questdb) {
+        this(table, expectedTargetId, jdbc, questdb, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public EtfDailyWritePort(
+            String table,
+            String expectedTargetId,
+            JdbcTemplate jdbc,
+            QuestDB questdb,
+            CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
+        this.dateColumn = layout.physicalDateColumn("etf_daily");
         EtfDailyDataset.requireExecutionTable(table);
         if (expectedTargetId == null || !expectedTargetId.startsWith("static-v2-"))
             throw new IllegalArgumentException(
@@ -82,9 +96,14 @@ public final class EtfDailyWritePort implements EtfWriteSession<EtfDaily, EtfDai
     }
 
     @Override
+    public int datasetVersion() {
+        return layout.schemaVersion();
+    }
+
+    @Override
     public void preflight() {
         requireExpectedTarget();
-        QuestDbWriteChecks.preflight(jdbc, table, EtfDailyDataset.definition(table));
+        QuestDbWriteChecks.preflight(jdbc, table, EtfDailyDataset.definition(table, layout));
         requireExpectedTarget();
     }
 
@@ -144,8 +163,8 @@ public final class EtfDailyWritePort implements EtfWriteSession<EtfDaily, EtfDai
         requireExpectedTarget();
         var clauses = new ArrayList<String>();
         var parameters = new ArrayList<Object>();
-        // Expose the storage interval independently of the exact-pair OR predicate.
-        // Without it, a small readback can scan years of ETF history and time out.
+        // 时间区间独立于完整键条件，避免小批回读扫描多年历史。
+        // 日期列由请求布局固定，TIMESTAMP_NS 参数和精度保持不变。
         var firstDate =
                 keys.stream()
                         .map(EtfDailyKey::tradeDate)
@@ -165,22 +184,30 @@ public final class EtfDailyWritePort implements EtfWriteSession<EtfDaily, EtfDai
         var codes = keys.stream().map(EtfDailyKey::tsCode).distinct().sorted().toList();
         parameters.addAll(codes);
         for (var key : keys) {
-            clauses.add("(ts_code = ? AND timestamp = cast(? as TIMESTAMP_NS))");
+            clauses.add("(ts_code = ? AND " + dateColumn + " = cast(? as TIMESTAMP_NS))");
             parameters.add(key.tsCode());
             parameters.add(
                     new TemporalValues.CalendarTimestamp(key.tradeDate())
                             .storageEpoch(TemporalValues.EpochUnit.NANOS));
         }
         String sql =
-                "SELECT ts_code, cast(timestamp as long) AS trade_date_nanos, \"pre_close\", \"open\", \"high\", \"low\", \"close\", \"change\", \"pct_chg\", \"vol\", \"amount\" FROM \""
+                "SELECT ts_code, cast("
+                        + dateColumn
+                        + " as long) AS trade_date_nanos, \"pre_close\", \"open\", \"high\", \"low\", \"close\", \"change\", \"pct_chg\", \"vol\", \"amount\" FROM \""
                         + table
-                        + "\" WHERE timestamp >= cast(? AS TIMESTAMP_NS) AND timestamp < cast(? AS TIMESTAMP_NS)"
+                        + "\" WHERE "
+                        + dateColumn
+                        + " >= cast(? AS TIMESTAMP_NS) AND "
+                        + dateColumn
+                        + " < cast(? AS TIMESTAMP_NS)"
                         + " AND ts_code IN ("
                         + String.join(",", Collections.nCopies(codes.size(), "?"))
                         + ")"
                         + " AND ("
                         + String.join(" OR ", clauses)
-                        + ") ORDER BY timestamp, ts_code LIMIT "
+                        + ") ORDER BY "
+                        + dateColumn
+                        + ", ts_code LIMIT "
                         + (keys.size() + 1);
         return jdbc.query(sql, (rs, index) -> physical(rs), parameters.toArray());
     }
@@ -190,7 +217,9 @@ public final class EtfDailyWritePort implements EtfWriteSession<EtfDaily, EtfDai
         requireExpectedTarget();
         var rows =
                 jdbc.query(
-                        "SELECT DISTINCT cast(timestamp as long) AS trade_date_nanos FROM \""
+                        "SELECT DISTINCT cast("
+                                + dateColumn
+                                + " as long) AS trade_date_nanos FROM \""
                                 + table
                                 + "\" ORDER BY trade_date_nanos LIMIT 10001",
                         (rs, index) -> date(rs));
@@ -208,9 +237,13 @@ public final class EtfDailyWritePort implements EtfWriteSession<EtfDaily, EtfDai
                 new TemporalValues.CalendarTimestamp(date)
                         .storageEpoch(TemporalValues.EpochUnit.NANOS);
         String sql =
-                "SELECT ts_code, cast(timestamp as long) AS trade_date_nanos, \"pre_close\", \"open\", \"high\", \"low\", \"close\", \"change\", \"pct_chg\", \"vol\", \"amount\" FROM \""
+                "SELECT ts_code, cast("
+                        + dateColumn
+                        + " as long) AS trade_date_nanos, \"pre_close\", \"open\", \"high\", \"low\", \"close\", \"change\", \"pct_chg\", \"vol\", \"amount\" FROM \""
                         + table
-                        + "\" WHERE timestamp = cast(? as TIMESTAMP_NS) ORDER BY ts_code LIMIT 5001";
+                        + "\" WHERE "
+                        + dateColumn
+                        + " = cast(? as TIMESTAMP_NS) ORDER BY ts_code LIMIT 5001";
         var result = jdbc.query(sql, (rs, index) -> physical(rs), micros);
         if (result.size() > 5000)
             throw new IllegalStateException(

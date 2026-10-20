@@ -36,8 +36,10 @@ public class EtfConfiguration {
     EtfTarget<EtfDaily, EtfDailyKey> etfDailyTarget(
             JdbcTemplate jdbc,
             @Lazy QuestDB questdb,
-            @Value("${app.sync.etf-daily-table:java_d014_etf_daily_acceptance}") String table) {
-        return new QuestDbEtfDailyTarget(table, jdbc, questdb);
+            @Value("${app.sync.etf-daily-table:java_d014_etf_daily_acceptance}") String table,
+            @Value("${app.sync.etf-daily-schema-version:1}") int version) {
+        return new QuestDbEtfDailyTarget(
+                table, jdbc, questdb, CnTradeDateLayout.fromVersion(version));
     }
 
     @Bean

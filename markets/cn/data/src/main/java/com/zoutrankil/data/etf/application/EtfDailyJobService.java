@@ -9,7 +9,10 @@ import com.zoutrankil.data.domain.fund.EtfDailyKey;
 import com.zoutrankil.data.domain.shared.policy.IsolatedTablePolicy;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
 import com.zoutrankil.data.etf.mapper.EtfDailyMapper;
+import com.zoutrankil.data.etf.port.EtfDailyTarget;
 import com.zoutrankil.data.etf.port.EtfTarget;
+import com.zoutrankil.data.etf.port.EtfWriteSession;
+import com.zoutrankil.data.repository.SyncRunLedger;
 import com.zoutrankil.data.service.CompletedSourceRevalidation;
 import com.zoutrankil.data.service.DailySyncEndDate;
 import com.zoutrankil.data.service.FrozenRunRequest;
@@ -17,6 +20,7 @@ import com.zoutrankil.data.service.SyncJobRegistry;
 import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.SyncRunExecution;
 import com.zoutrankil.data.service.TusharePageService;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -55,6 +59,8 @@ public final class EtfDailyJobService {
         }
     }
 
+    // 当前配置只选新计划；恢复必须读取原账本版本。
+    private final CnTradeDateLayout layout;
     private final SyncJobRegistry jobs;
     private final TusharePageService pages;
     private final EtfDailyTradingDates tradingDates;
@@ -62,7 +68,6 @@ public final class EtfDailyJobService {
     private final Path ledgerPath;
     private final String table;
 
-    @Autowired
     public EtfDailyJobService(
             @Lazy SyncJobRegistry jobs,
             TusharePageService pages,
@@ -72,12 +77,40 @@ public final class EtfDailyJobService {
         this(jobs, pages, calendars, target, Path.of(ledgerPath));
     }
 
+    @Autowired
+    public EtfDailyJobService(
+            @Lazy SyncJobRegistry jobs,
+            TusharePageService pages,
+            ExchangeCalendarReadRepository calendars,
+            EtfTarget<EtfDaily, EtfDailyKey> target,
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledgerPath,
+            @Value("${app.sync.etf-daily-schema-version:1}") int schemaVersion) {
+        this(
+                jobs,
+                pages,
+                calendars,
+                target,
+                Path.of(ledgerPath),
+                CnTradeDateLayout.fromVersion(schemaVersion));
+    }
+
     public EtfDailyJobService(
             SyncJobRegistry jobs,
             TusharePageService pages,
             ExchangeCalendarReadRepository calendars,
             EtfTarget<EtfDaily, EtfDailyKey> target,
             Path ledgerPath) {
+        this(jobs, pages, calendars, target, ledgerPath, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public EtfDailyJobService(
+            SyncJobRegistry jobs,
+            TusharePageService pages,
+            ExchangeCalendarReadRepository calendars,
+            EtfTarget<EtfDaily, EtfDailyKey> target,
+            Path ledgerPath,
+            CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.jobs = Objects.requireNonNull(jobs);
         this.pages = Objects.requireNonNull(pages);
         this.tradingDates = new EtfDailyTradingDates(calendars);
@@ -131,7 +164,7 @@ public final class EtfDailyJobService {
         LocalDate requestedLimit = requestedThrough == null ? logicalDate : requestedThrough;
         LocalDate resolvedThrough = DailySyncEndDate.resolve(requestedLimit, sourceNow);
         if (resolvedThrough.isAfter(logicalDate)) resolvedThrough = logicalDate;
-        SyncJobDefinition definition = EtfDailySyncJobOwner.DEFINITION;
+        SyncJobDefinition definition = EtfDailySyncJobOwner.definition(layout.schemaVersion());
         Mode mode = requestedMode == null ? definition.defaultMode() : requestedMode;
         if (!definition.supportedModes().contains(mode))
             throw new IllegalArgumentException("Unsupported etf_daily mode");
@@ -153,9 +186,9 @@ public final class EtfDailyJobService {
             throw new IllegalArgumentException("etf_daily --from is after --to");
 
         String target = targetId();
-        var port = this.target.newWriter(target);
+        var port = writer(target, definition.datasetVersion());
         port.preflight();
-        EtfTargetRange physical = readTargetRange();
+        EtfTargetRange physical = readTargetRange(definition.datasetVersion());
         if (physical.max() != null && physical.max().isAfter(logicalDate))
             throw new IllegalStateException(
                     "etf_daily target contains a date after frozen logical date");
@@ -167,7 +200,9 @@ public final class EtfDailyJobService {
         boolean bootstrap = false;
         Optional<EtfDailyCoverage.Coverage> saved = Optional.empty();
         if (mode == Mode.INCREMENTAL) {
-            saved = EtfDailyCoverage.checkpoint(ledgerPath, target, tradingDates);
+            saved =
+                    EtfDailyCoverage.checkpoint(
+                            ledgerPath, target, tradingDates, definition.version());
             if (saved.isEmpty()) {
                 if (bootstrapFrom == null)
                     throw new IllegalArgumentException(
@@ -258,8 +293,25 @@ public final class EtfDailyJobService {
                 bootstrap);
     }
 
-    private EtfTargetRange readTargetRange() {
+    private EtfTargetRange readTargetRange(int version) {
+        if (target instanceof EtfDailyTarget.Versioned selected) return selected.range(version);
+        if (version != 1) throw new IllegalArgumentException("旧 ETF 日线目标没有新版范围读取能力");
         return target.range();
+    }
+
+    private EtfWriteSession<EtfDaily, EtfDailyKey> writer(String identity, int version) {
+        return EtfDailyTarget.writerForFrozenVersion(target, identity, version);
+    }
+
+    private SyncJobDefinition savedDefinition(String runId) throws Exception {
+        var run = SyncRunLedger.openReadOnly(ledgerPath).getRun(Objects.requireNonNull(runId));
+        if (run == null || !EtfDailySyncJobOwner.DEFINITION.jobId().equals(run.jobId()))
+            throw new IllegalArgumentException("原记录不是 ETF 日线任务");
+        return EtfDailySyncJobOwner.definition(run.jobVersion());
+    }
+
+    private FrozenRunRequest.Restored restore(String runId) throws Exception {
+        return FrozenRunRequest.restore(ledgerPath, runId, savedDefinition(runId));
     }
 
     public SyncJobRunner.Result run(Plan plan) throws Exception {
@@ -267,8 +319,7 @@ public final class EtfDailyJobService {
     }
 
     public SyncJobRunner.Result resume(String priorRunId) throws Exception {
-        var saved =
-                FrozenRunRequest.restore(ledgerPath, priorRunId, EtfDailySyncJobOwner.DEFINITION);
+        var saved = restore(priorRunId);
         var parameters = saved.request().parameters();
         var plan =
                 new Plan(
@@ -283,6 +334,7 @@ public final class EtfDailyJobService {
     }
 
     public SyncJobRunner.Result resume(Plan plan, String priorRunId) throws Exception {
+        // 原日线协议由 runner 核对恢复指纹；这里不改变原校验时机。
         return execute("etf-daily-" + UUID.randomUUID(), Objects.requireNonNull(priorRunId), plan);
     }
 
@@ -293,7 +345,11 @@ public final class EtfDailyJobService {
                 && plan.request().mode() != Mode.RECONCILE)
             throw new IllegalArgumentException(
                     "Formal etf_daily refresh requires bounded BACKFILL or RECONCILE");
-        if (!plan.request().definition().equals(EtfDailySyncJobOwner.DEFINITION)
+        // 新运行匹配当前配置；恢复仍使用原请求，不能重新规划或借用当前检查点。
+        var expected = EtfDailySyncJobOwner.definition(plan.request().definition().version());
+        if (!plan.request().definition().equals(expected)
+                || priorRunId == null
+                        && !expected.equals(EtfDailySyncJobOwner.definition(layout.schemaVersion()))
                 || !plan.targetId().equals(plan.request().parameters().get("targetId"))
                 || !plan.targetId().equals(targetId()))
             throw new IllegalStateException(
@@ -306,7 +362,8 @@ public final class EtfDailyJobService {
                 plan.request(),
                 "Cannot read etf_daily cancellation state",
                 () -> {
-                    var port = target.newWriter(plan.targetId());
+                    var port =
+                            writer(plan.targetId(), plan.request().definition().datasetVersion());
                     var evidence = ledgerPath.getParent().resolve("sync-evidence").resolve(runId);
                     return new EtfDailySyncAdapter(
                             new EtfDailySource(
@@ -319,17 +376,18 @@ public final class EtfDailyJobService {
 
     /** Re-fetch the original completed window and compare every current physical value. */
     public String revalidate(String priorRunId) throws Exception {
+        var definition = savedDefinition(priorRunId);
         return CompletedSourceRevalidation.revalidate(
                 ledgerPath,
                 priorRunId,
-                EtfDailySyncJobOwner.DEFINITION,
+                definition,
                 this::targetId,
                 (evidence, identity) ->
                         new EtfDailySyncAdapter(
                                 new EtfDailySource(
                                         pages, new EtfDailyMapper(), evidence.resolve("source")),
                                 tradingDates,
-                                target.newWriter(identity),
+                                writer(identity, definition.datasetVersion()),
                                 evidence));
     }
 }

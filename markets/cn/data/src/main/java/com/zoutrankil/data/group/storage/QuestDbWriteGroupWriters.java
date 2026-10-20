@@ -117,6 +117,13 @@ public final class QuestDbWriteGroupWriters implements WriteGroupWriters {
     }
 
     @Override
+    public EtfWriteSession<EtfDaily, EtfDailyKey> etfDaily(
+            String table, String targetId, int version) {
+        return new EtfDailyWritePort(
+                table, targetId, jdbc, questdb, CnTradeDateLayout.fromVersion(version));
+    }
+
+    @Override
     public EtfAdjWriteSession etfAdj(String table, String targetId) {
         return new EtfAdjWritePort(table, targetId, jdbc, questdb);
     }

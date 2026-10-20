@@ -6,9 +6,11 @@ import com.zoutrankil.data.domain.fund.EtfDailyKey;
 import com.zoutrankil.data.domain.temporal.TemporalValues.CalendarTimestamp;
 import com.zoutrankil.data.domain.temporal.TemporalValues.EpochUnit;
 import com.zoutrankil.data.etf.domain.EtfTargetRange;
-import com.zoutrankil.data.etf.port.EtfTarget;
+import com.zoutrankil.data.etf.port.EtfDailyTarget;
+import com.zoutrankil.data.etf.port.EtfDailyWriteSession;
 import com.zoutrankil.data.etf.port.EtfWriteSession;
 import com.zoutrankil.data.repository.StaticTargetIdentity;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
 import io.questdb.client.QuestDB;
 
@@ -18,12 +20,19 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /** Configured physical target; each execution obtains an independent write session. */
-public final class QuestDbEtfDailyTarget implements EtfTarget<EtfDaily, EtfDailyKey> {
+public final class QuestDbEtfDailyTarget implements EtfDailyTarget.Versioned {
+    private final CnTradeDateLayout layout;
     private final String table;
     private final JdbcTemplate jdbc;
     private final QuestDB questdb;
 
     public QuestDbEtfDailyTarget(String table, JdbcTemplate jdbc, QuestDB questdb) {
+        this(table, jdbc, questdb, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public QuestDbEtfDailyTarget(
+            String table, JdbcTemplate jdbc, QuestDB questdb, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.jdbc = Objects.requireNonNull(jdbc);
         this.questdb = Objects.requireNonNull(questdb);
         EtfDailyDataset.requireExecutionTable(table);
@@ -51,8 +60,24 @@ public final class QuestDbEtfDailyTarget implements EtfTarget<EtfDaily, EtfDaily
 
     @Override
     public EtfTargetRange range() {
+        return range(layout.schemaVersion());
+    }
+
+    @Override
+    public int datasetVersion() {
+        return layout.schemaVersion();
+    }
+
+    @Override
+    public EtfTargetRange range(int datasetVersion) {
+        String dateColumn =
+                CnTradeDateLayout.fromVersion(datasetVersion).physicalDateColumn("etf_daily");
         String sql =
-                "SELECT cast(min(timestamp) AS long) AS min_nanos, cast(max(timestamp) AS long) AS max_nanos FROM \""
+                "SELECT cast(min("
+                        + dateColumn
+                        + ") AS long) AS min_nanos, cast(max("
+                        + dateColumn
+                        + ") AS long) AS max_nanos FROM \""
                         + table
                         + "\"";
         return jdbc.query(
@@ -86,6 +111,16 @@ public final class QuestDbEtfDailyTarget implements EtfTarget<EtfDaily, EtfDaily
 
     @Override
     public EtfWriteSession<EtfDaily, EtfDailyKey> newWriter(String frozenTargetId) {
-        return new EtfDailyWritePort(table, frozenTargetId, jdbc, questdb);
+        return newWriter(frozenTargetId, layout.schemaVersion());
+    }
+
+    @Override
+    public EtfDailyWriteSession newWriter(String frozenTargetId, int datasetVersion) {
+        return new EtfDailyWritePort(
+                table,
+                frozenTargetId,
+                jdbc,
+                questdb,
+                CnTradeDateLayout.fromVersion(datasetVersion));
     }
 }

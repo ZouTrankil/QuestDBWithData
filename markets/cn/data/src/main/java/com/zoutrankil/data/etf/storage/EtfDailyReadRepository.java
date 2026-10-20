@@ -10,7 +10,9 @@ import com.zoutrankil.data.domain.fund.EtfDailyDataset;
 import com.zoutrankil.data.domain.fund.EtfDailyKey;
 import com.zoutrankil.data.etf.mapper.EtfDailyMapper;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
+import com.zoutrankil.market.cn.model.CnTradeDateLayout;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -27,13 +29,26 @@ public class EtfDailyReadRepository implements DatasetImplementation {
             EtfDailyDataset.DEFINITION.columns().stream()
                     .map(DatasetDefinition.Column::logicalName)
                     .toList();
+    private final CnTradeDateLayout layout;
     private final QuestDbBoundedReader reader;
     private final String table;
     private final EtfDailyMapper mapper = new EtfDailyMapper();
 
+    @Autowired
     public EtfDailyReadRepository(
             QuestDbBoundedReader reader,
-            @Value("${app.sync.etf-daily-table:java_d014_etf_daily_acceptance}") String table) {
+            @Value("${app.sync.etf-daily-table:java_d014_etf_daily_acceptance}") String table,
+            @Value("${app.sync.etf-daily-schema-version:1}") int schemaVersion) {
+        this(reader, table, CnTradeDateLayout.fromVersion(schemaVersion));
+    }
+
+    public EtfDailyReadRepository(QuestDbBoundedReader reader, String table) {
+        this(reader, table, CnTradeDateLayout.LEGACY_V1);
+    }
+
+    public EtfDailyReadRepository(
+            QuestDbBoundedReader reader, String table, CnTradeDateLayout layout) {
+        this.layout = Objects.requireNonNull(layout);
         this.reader = Objects.requireNonNull(reader);
         EtfDailyDataset.requireExecutionTable(table);
         this.table = table;
@@ -41,7 +56,12 @@ public class EtfDailyReadRepository implements DatasetImplementation {
 
     @Override
     public DatasetDefinition definition() {
-        return EtfDailyDataset.definition(table);
+        return EtfDailyDataset.definition(table, layout);
+    }
+
+    @Override
+    public DatasetDefinition definition(int version) {
+        return EtfDailyDataset.definition(table, CnTradeDateLayout.fromVersion(version));
     }
 
     public DatasetReadPage<EtfDaily> findByKey(EtfDailyKey key) {

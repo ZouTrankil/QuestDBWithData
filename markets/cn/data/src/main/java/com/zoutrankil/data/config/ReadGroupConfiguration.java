@@ -62,8 +62,10 @@ public class ReadGroupConfiguration {
     @Bean
     ReadBindingCatalog readBindingCatalog(
             ObjectProvider<ReadBindingCatalog.Registration<?>> extensions,
-            @Value("${app.sync.etf-adj-schema-version:1}") int etfAdjVersion) {
-        var registrations = new ArrayList<>(DefaultReadBindings.registrations(etfAdjVersion));
+            @Value("${app.sync.etf-adj-schema-version:1}") int etfAdjVersion,
+            @Value("${app.sync.etf-daily-schema-version:1}") int etfDailyVersion) {
+        var registrations =
+                new ArrayList<>(DefaultReadBindings.registrations(etfAdjVersion, etfDailyVersion));
         extensions.orderedStream().forEach(registrations::add);
         return new ReadBindingCatalog(registrations);
     }

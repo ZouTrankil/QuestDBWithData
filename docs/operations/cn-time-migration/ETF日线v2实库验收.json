@@ -1,0 +1,85 @@
+{
+  "说明": "正式表两行只读样本，独立 v2 表真实 Java QWP 两轮写入及全十一列、类型化回读、WAL 和稳定版本核对。测试表已清理；不是完整来源、正式迁移、模型批准或生产恢复验收。",
+  "成功原件目录": "var/cn-etf-daily-layout-v2-20261021/07a7ec139e2541e0b9564242d48b1084",
+  "原件摘要": {
+    "report.json": "39360d527225b5799c2c1142e2f1e799fcc100244a913485755fe844e7e5a320",
+    "expected.json": "273f673fc044b60b1af26e966cc09a7c1ce0702524cb1c37aa344d518cad4241",
+    "request.json": "29c23371ffaae49f870b8b457aa70f6d9795117c8df0ff2cce70d1b049a92d59"
+  },
+  "成功报告": {
+    "schemaVersion": 1,
+    "observedAt": "2026-10-20T17:29:41.165008Z",
+    "table": "java_d014_etf_daily_layout2_07a7ec139e2541e0b9564242d48b1084",
+    "sourceCoverageVerified": false,
+    "modelAcceptanceVerified": false,
+    "requestIsProductionApproved": false,
+    "physicalMigrationExecuted": false,
+    "checkpointAdvanced": false,
+    "state": "VERIFIED_AND_CLEANED",
+    "sampleDate": "2026-10-16",
+    "sourceState": [
+      {
+        "id": 1686,
+        "directoryName": "etf_daily~1686",
+        "table_txn": 131
+      }
+    ],
+    "targetId": "static-v2-20f130878b2980870d9b095533992faac8cd6d603d38f6fb30fbeecd97a314ee",
+    "verifiedPasses": 2,
+    "rows": [
+      {
+        "key": {
+          "tsCode": "158000.SZ",
+          "tradeDate": "2026-10-16"
+        },
+        "preClose": 1.017,
+        "open": 1.031,
+        "high": 1.031,
+        "low": 1.008,
+        "close": 1.012,
+        "change": -0.005,
+        "pctChg": -0.49,
+        "vol": 15490.06,
+        "amount": 1570.8775
+      },
+      {
+        "key": {
+          "tsCode": "158001.SZ",
+          "tradeDate": "2026-10-16"
+        },
+        "preClose": 0.977,
+        "open": 0.977,
+        "high": 0.991,
+        "low": 0.977,
+        "close": 0.984,
+        "change": 0.007,
+        "pctChg": 0.72,
+        "vol": 24309.01,
+        "amount": 2393.1269
+      }
+    ],
+    "javaTypedReadExercised": true,
+    "legacyLayoutRejected": true
+  },
+  "建表前失败记录": [
+    {
+      "原件": "var/cn-etf-daily-layout-v2-20261021/f985e3fb4af54820963f6d25482e3563/report.json",
+      "摘要": "1cfe14463f8f287c6718cfb6c87aa5fabb94cf1ff3ddca1981f434d99ba3bebb",
+      "状态": "FAILED_BEFORE_DDL",
+      "失败步骤": "SOURCE_DATE_SELECTED",
+      "异常类型": "org.springframework.jdbc.UncategorizedSQLException",
+      "SQL状态": "00000",
+      "原因已确认": false
+    },
+    {
+      "原件": "var/cn-etf-daily-layout-v2-20261021/e3bad3b70eef4a7fbb162d768d46e51c/report.json",
+      "摘要": "1a95efcdd63281ea36c596a45d26b688de9d607df4ca93bec6c99dc8658d956f",
+      "状态": "FAILED_BEFORE_DDL",
+      "失败步骤": "原测试未记步骤",
+      "异常类型": "org.springframework.jdbc.UncategorizedSQLException",
+      "SQL状态": null,
+      "原因已确认": false
+    }
+  ],
+  "限制": "前两次读取失败均在 DDL 和发送前，未确认根因。之后按近期单日选择样本完成验证，不据此声称旧宽区间读取问题已修复。"
+}

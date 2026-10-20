@@ -56,6 +56,7 @@ import com.zoutrankil.data.etf.mapper.EtfFactorMapper;
 import com.zoutrankil.data.etf.mapper.EtfPortfolioMapper;
 import com.zoutrankil.data.etf.mapper.EtfShareMapper;
 import com.zoutrankil.data.etf.port.EtfAdjWriteSession;
+import com.zoutrankil.data.etf.port.EtfDailyWriteSession;
 import com.zoutrankil.data.flow.application.MoneyflowHsgtJobService;
 import com.zoutrankil.data.flow.application.MoneyflowHsgtPublication;
 import com.zoutrankil.data.flow.application.MoneyflowJobService;
@@ -867,7 +868,18 @@ public class StockBasicWriteGroupService {
                     .datasetId()
                     .equals(EtfDailyDataset.DEFINITION.datasetId())) {
                 var mapper = new EtfDailyMapper();
-                var port = writers.etfDaily(etfDailyTarget.tableName(), member.targetId());
+                int version = member.definition().schemaVersion();
+                var port =
+                        version == 1
+                                ? writers.etfDaily(etfDailyTarget.tableName(), member.targetId())
+                                : writers.etfDaily(
+                                        etfDailyTarget.tableName(), member.targetId(), version);
+                // 实际会话也须匹配，不能用旧包装器隐藏版本。
+                int actual =
+                        port instanceof EtfDailyWriteSession.Versioned selected
+                                ? selected.datasetVersion()
+                                : 1;
+                if (actual != version) throw new IllegalArgumentException("ETF 日线组写入会话版本不一致");
                 adapters.put(
                         member.memberId(),
                         new PreparedWriteAdapter<>(

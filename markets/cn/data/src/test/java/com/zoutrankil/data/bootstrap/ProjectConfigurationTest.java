@@ -322,7 +322,7 @@ class ProjectConfigurationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"data", "main-strategy"})
-    void etfAdjustmentLayoutUsesTheMarketDefaultAndEnvironmentOverride(String profile)
+    void etfDailyustmentLayoutUsesTheMarketDefaultAndEnvironmentOverride(String profile)
             throws Exception {
         var file = configuration("");
         var variables = new HashMap<String, String>();
@@ -341,6 +341,28 @@ class ProjectConfigurationTest {
         assertFalse(
                 ProjectConfiguration.load("market-us", variables)
                         .containsProperty("app.sync.etf-adj-schema-version"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "main-strategy"})
+    void etfDailyLayoutUsesTheMarketDefaultAndEnvironmentOverride(String profile) throws Exception {
+        var file = configuration("");
+        var variables = new HashMap<String, String>();
+        variables.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        variables.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        assertEquals(
+                "1",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.etf-daily-schema-version"));
+        variables.put("APP_SYNC_ETF_DAILY_SCHEMA_VERSION", "2");
+        assertEquals(
+                "2",
+                ProjectConfiguration.load(profile, variables)
+                        .getRequiredProperty("app.sync.etf-daily-schema-version"));
+        variables.remove("APP_SYNC_ETF_DAILY_SCHEMA_VERSION");
+        assertFalse(
+                ProjectConfiguration.load("market-us", variables)
+                        .containsProperty("app.sync.etf-daily-schema-version"));
     }
 
     @Test
