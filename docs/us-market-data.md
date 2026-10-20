@@ -431,3 +431,28 @@ VATE 的 Yahoo 原件有 2729 根负调整收盘价，覆盖 2009-07-13 至 2020
 证据在 `var/market-data/scope-review/usbc-vate-recovery-20261020/`，包括四份完整 Tiingo 响应、两份原失败 Yahoo、五个窗口决定、字段回读、两源差异、旧数据保护和 WAL。完整年报、相关整页文字及渲染图已冻结；其余申报经网页核读，本机 403/404 下载回执保留，不冒充完整本地原文。全部门禁通过后，仅核对摘要并归档本轮自建的停止标记，沿原 v24 发行包、两 GiB 堆和原截止日恢复同一主采集队列。全市场及剩余历史缺口继续推进。
 
 恢复进程 PID 为 43696，启动回执在 `var/market-data/us-broad-launch-v24-usbc-vate-resumed.json`。原组 `broad-920a8584-0a33-4c56-8e0c-01155871655b` 的前十六个窗口保留原运行及回执，随后只发送原来未发送的五段共 129926 行。原组 128 个来源、372917 行、21 个年度窗口均完成原生完整回读，父组和成员为 `VERIFIED`；再从原 Yahoo 响应独立重建整组二十列，对照 prepared、原生回读文件和当前 PGWire 行均一致，来源及证明文件摘要、已完成队列前后不变。检查时无 `IN_DOUBT`，主进程已继续下一组。恢复核对在同目录 `main-resume-verification.json`，整组独立核对在 `main-progress-independent-verification.json`；整组行数不重复计入本批 6413 行补录。
+
+### WCT 上市以来行情与 WORX 停复牌边界
+
+2026-10-20 按 Starter 预算再取两份身份、两份价格原件，补入 2957 行，截止日保持 2026-10-16，没有新增永久映射。发布前，主进程 PID 43696 已在原组第十三个年度窗口验收后正常退出，活动和未决 Native 运行均为零，原队列保留。
+
+| 请求键 | 已验收窗口 | 行数 | 排除范围 |
+| --- | --- | ---: | --- |
+| WCT | 2024-10-02 至 2026-10-16 | 512 | 不补造上市前历史 |
+| WORX | 2016-10-06 至 2020-04-21；2020-08-10 至 2026-10-16 | 890 + 1555 | 排除 Nasdaq 停牌区间 2020-04-22 至 2020-08-07 的 76 根平价记录；其他场所覆盖仍待核 |
+
+WCT 的[首次交易披露](https://www.sec.gov/Archives/edgar/data/1990251/000121390024085035/ea021611502ex99-2_wellchange.htm)确认 2024-10-02 开始交易。两次合股由交易所确认：[2026-03-06 五十合一](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2026-131)、[2026-09-08 五合一](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2026-642)。完整 Tiingo 原件补齐 Yahoo 在 9 月 8 日的整行 null，512 行均为正量报价，日期与 SPY 实有参照一致。[7 月议案](https://www.sec.gov/Archives/edgar/data/1990251/000121390026067545/ea029375201ex99-4.htm)另列每股面值从 0.0025 减至 0.000005，股数保持；[表决结果](https://www.sec.gov/Archives/edgar/data/1990251/000121390026075209/ea0297092-6k_wellchange.htm)中的后续合股授权也不等于当日实际执行。没有因面值变化或授权上限增造拆股事件。
+
+WORX 当前请求键回溯原 Alliance MMA 的 AMMA 普通股，[原 IPO 披露](https://www.sec.gov/Archives/edgar/data/1674227/000114420416127480/v450341_ex99-1.htm)确认 2016-10-06 开始交易。[交易所合并通知](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2019-22)区分了 2019-02-01 法律完成和 2 月 4 日市场更名、改代码及十九合一。后续合股市场日为 [2023-10-11 十五合一](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2023-581)、[2026-04-10 十五合一](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2026-227)和 [2026-08-04 十二合一](https://ir.scworx.com/all-sec-filings/xbrl_doc_only/1907)。最后一次的修章法律生效时间为 8 月 3 日美东 23:59，[原 8-K](https://www.sec.gov/Archives/edgar/data/1674227/000121390026083096/ea0299755-8k_scworx.htm)及后续季报确认与次日市场日期的区别。来源事件日期及小数精度保留，旧体育业务阶段不标作医疗数据业务历史。
+
+[Nasdaq 停复牌公告](https://ir.nasdaq.com/news-releases/news-release-details/nasdaq-scheduled-resumption-scworx-corp)确认 WORX 于 2020-04-22 美东 09:25:05 停牌，8 月 10 日美东 07:00 复牌。[同期发行人披露](https://www.sec.gov/Archives/edgar/data/1674227/000121390020020840/ea125215-8k_scworxcorp.htm)另区分了 5 月 5 日届满的 SEC 暂停与随后 Nasdaq T12 停牌；其他场所在后续区间的实际成交覆盖仍待核。完整 Tiingo 原件有 76 根区间内 OHLC 都为 5.755 的记录；其中 4 月 22 日、6 月 29 日、7 月 23 日仍列 108514 股，8 月 5 日列 187 股，其余 72 根为零量。它们全部留在原件及排除清单中，不以非零量证明常规时段成交。两个已验收窗口均为正量报价，2445 个日期等于 2521 个 SPY 参照日扣除本次排除区间后的集合；该参照集合只证明本次窗口边界。
+
+2026 年的场所变化另行核对：[9 月披露](https://www.sec.gov/Archives/edgar/data/1674227/000121390026102644/ea0306457-8k_scworx.htm)说明 Nasdaq 自 4 月 14 日暂停后，WORX 继续在 OTCQB 报价；[发行人 10 月通知](https://ir.scworx.com/press-releases/detail/80/scworx-announces-nasdaq-trading-to-resume-october-7-2026)及[后续 S-3](https://ir.scworx.com/all-sec-filings/content/0001213900-26-110177/ea0308692-s3_scworx.htm)确认 10 月 7 日恢复 Nasdaq 交易。Yahoo 9 月 8 至 11 日的四个 null 日期可从完整 Tiingo 原件补齐，不能把 Nasdaq 暂停期间的全部 OTC 报价当成全市场停牌。Tiingo 身份原件仍写 `OTCMKTS`，这不证明截止日当时场所；正式价格沿用 `US_COMPOSITE`，不把全部历史标作 Nasdaq 成交。
+
+本批分红均为零，原始与调整 OHLC 及取整后的调整股数已按公告的精确整数合股比核对，来源值未改写。2957 行二十列从原件独立重建，Native 和 PGWire 回读一致；原保护组 124460 行价格、20 条映射及两条原 `FAILED_SOURCE` 任务保持，保护组累计 127417 行。按年和证券分块读取并拒绝截断，76 根排除记录仍未入库，锁内确认两表 WAL 结清、缓冲为零、未挂起，物理表及结构保持。调整值是观察时版本，不证明历史当时可知。
+
+完整原件、八份可下载的完整公开材料、其余七份下载失败回执、网页原始事实、窗口决定、不可覆盖的发布意图、独立回读及 WAL 在 `var/market-data/scope-review/wct-worx-recovery-20261020/`。正常停机、原队列快照和恢复前检查也在同目录；恢复继续使用原 v24 发行包、两 GiB 堆及原截止日。全市场和剩余历史缺口继续推进。
+
+同目录 `tiingo-budget-verification.json` 于 11:07 UTC 只读核对实际客户端限额和本地用量：最近一小时 4 次、一天 334 次；滚动 31 天 76 个请求键，接收 192468176 字节，另有 58785799 字节预留。实际配置为每小时 50 次、每天 1000 次、滚动月 500 个请求键及 1 GiB，均在本地预算内。失败请求也计入次数，请求键不等于不同发行人数；未查询服务端账户用量，其他客户端的用量未知。
+
+主采集已以 PID 41960 恢复，47 个 JAR 摘要与原 v24 发行包一致，启动回执为 `var/market-data/us-broad-launch-v24-wct-worx-resumed.json`。原组 `broad-d406d3db-0045-4b21-8747-83ea08700068` 的前十三个窗口保留原运行和回执，随后仅续采原来未发送的八段共 212285 行。原组 128 个来源、455186 行、21 个窗口已完成原生完整回读，父组和成员均为 `VERIFIED`；再从原 Yahoo 响应独立重建全部二十列，对照 prepared、回读文件及当前 PGWire 均一致，原件、证明文件摘要和已完成队列前后稳定。检查时无 `IN_DOUBT`，进程已继续下一组。完整核对分别在同目录 `main-resume-verification.json`、`main-progress-independent-verification.json`；整组总量不重复计入本批 2957 行补录。
