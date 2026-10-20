@@ -40,6 +40,22 @@ class UsYahooAnnualBundleTest {
         var s=source("X");byte[] huge=new byte[4*1024*1024+1];var oversized=new UsYahooDailyBundle.Source(s.task(),s.symbol(),s.yahooSymbol(),s.sourceUrl(),sha(huge),s.observedAt(),huge);
         assertThrows(IllegalArgumentException.class,()->UsYahooAnnualBundle.freeze(BUNDLE,FROM,THROUGH,PAGE,List.of(oversized)));
     }
+    @Test void cachedSourceStructureKeepsPublicSourcesImmutableAndNeverReusesMutableProjectedRows()throws Exception {
+        var parsed=UsYahooAnnualBundle.parse(UsYahooAnnualBundle.freeze(BUNDLE,FROM,THROUGH,PAGE,List.of(source("X"))));
+        var window=parsed.windows().getFirst();var before=parsed.rows(window);before.getFirst().put("close",999.);byte[] external=parsed.sources().getFirst().body();java.util.Arrays.fill(external,(byte)0);
+        assertEquals(20.,parsed.rows(window).getFirst().get("close"));assertThrows(UnsupportedOperationException.class,()->parsed.sources().clear());
+        // 旧七参数构造入口也可独立使用；并发读取只共享解析结构，不共享行。
+        var legacy=new UsYahooAnnualBundle.Parsed(parsed.bundle(),parsed.from(),parsed.through(),parsed.page(),List.copyOf(parsed.sources()),parsed.windows(),parsed.totalRows());
+        try(var workers=java.util.concurrent.Executors.newFixedThreadPool(4)) {
+            var futures=new ArrayList<java.util.concurrent.Future<List<Map<String,Object>>>>();for(int i=0;i<12;i++)futures.add(workers.submit(()->legacy.rows(window)));
+            for(var future:futures)assertEquals(parsed.rows(window),future.get());
+        }
+    }
+    @Test void sourceCacheDoesNotEnterTheExistingSevenFieldBundleSerialization()throws Exception {
+        var parsed=UsYahooAnnualBundle.parse(UsYahooAnnualBundle.freeze(BUNDLE,FROM,THROUGH,PAGE,List.of(source("X"))));parsed.rows(parsed.windows().getFirst());
+        var module=new com.fasterxml.jackson.databind.module.SimpleModule();module.addSerializer(Instant.class,com.fasterxml.jackson.databind.ser.std.ToStringSerializer.instance);module.addSerializer(LocalDate.class,com.fasterxml.jackson.databind.ser.std.ToStringSerializer.instance);
+        var tree=JSON.copy().registerModule(module).valueToTree(parsed);assertEquals(7,tree.size());assertEquals(1,tree.path("sources").size());assertEquals(7,tree.path("sources").get(0).size());assertFalse(tree.toString().contains("prepared"));assertFalse(tree.toString().contains("readers"));
+    }
     static UsYahooDailyBundle.Source source(String symbol)throws Exception {
         var quote=new HashMap<String,Object>();for(String f:List.of("open","high","low","close"))quote.put(f,List.of(10.,11.,12.));quote.put("volume",List.of(100,200,300));
         var dates=List.of("2006-01-03","2007-01-03","2009-01-05").stream().map(d->LocalDate.parse(d).atTime(14,30).toEpochSecond(ZoneOffset.UTC)).toList();

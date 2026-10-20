@@ -58,6 +58,13 @@ class UsAnnualDailyPublicationTest {
             evidence.put("window",0);document.put("rows",List.of());Files.write(prepared,JSON.writeValueAsBytes(document));assertThrows(IllegalStateException.class,()->actual.reconcile(db,bundle,0,run(0),raw,sha));assertEquals("PUBLISHING",phases(db).getFirst());
         }
     }
+    @Test void populatedProjectionCacheCannotBypassAChangedFrozenZipBeforeSending()throws Exception {
+        try(var db=database()) {
+            assertFalse(bundle.rows(bundle.windows().getFirst()).isEmpty());Files.write(raw,new byte[]{1,2,3});var port=new FakePort(db);
+            assertThrows(IllegalStateException.class,()->new UsAnnualDailyPublication(port).publishRemaining(db,bundle,raw,sha,()->false,(p,d)->{}));
+            assertTrue(port.sent.isEmpty());assertEquals(List.of("PLANNED","PLANNED","PLANNED","PLANNED"),phases(db));assertEquals("PUBLISHING",taskPhase(db));
+        }
+    }
     private static class FakePort implements UsAnnualDailyPublication.Port {
         final Connection db;final List<Integer> sent=new ArrayList<>(),verified=new ArrayList<>();final Map<String,List<Map<String,Object>>> written=new HashMap<>();int fail=-1;boolean changed;
         FakePort(Connection db){this.db=db;}
