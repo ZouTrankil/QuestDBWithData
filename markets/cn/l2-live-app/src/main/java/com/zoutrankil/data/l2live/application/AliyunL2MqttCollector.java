@@ -7,16 +7,17 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-/** 直接接收 MQTT 消息；监听回调成功返回表示原始报文已持久化。 */
+/** 直接接收 MQTT 消息；异步监听的完成凭证成功后才累计已持久化数。 */
 public final class AliyunL2MqttCollector implements AutoCloseable {
     // JUL 仅弱引用日志器；需在客户端整个生命周期内持有经过安全配置的父日志器。
     private static final java.util.logging.Logger PAHO_LOG_NAMESPACE =
             java.util.logging.Logger.getLogger("org.eclipse.paho.client.mqttv3");
     private final L2MqttSettings settings;
-    private final Consumer<ReceivedMessage> listener;
+    private final Function<ReceivedMessage,CompletionStage<Void>> listener;
     private final Clock clock;
     private final ScheduledExecutorService reconnectExecutor;
     private final Object lifecycle = new Object();
@@ -43,6 +44,19 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
     /** 离线测试替换点：注入的客户端和调度器不会建立真实网络连接。 */
     AliyunL2MqttCollector(L2MqttSettings settings, Consumer<ReceivedMessage> listener,
                          IMqttAsyncClient client, Clock clock, ScheduledExecutorService reconnectExecutor) {
+        this(settings,message->{listener.accept(message);return CompletableFuture.completedFuture(null);},
+                client,clock,reconnectExecutor,true);
+    }
+
+    /** 运行时使用持久化凭证；入队成功不表示磁盘提交完成。 */
+    public static AliyunL2MqttCollector durable(L2MqttSettings settings,
+            Function<ReceivedMessage,CompletionStage<Void>> listener) {
+        return new AliyunL2MqttCollector(settings,listener,null,Clock.systemUTC(),
+                Executors.newSingleThreadScheduledExecutor(task->{var thread=new Thread(task,"aliyun-l2-mqtt-reconnect");thread.setDaemon(true);return thread;}),true);
+    }
+
+    private AliyunL2MqttCollector(L2MqttSettings settings, Function<ReceivedMessage,CompletionStage<Void>> listener,
+                         IMqttAsyncClient client, Clock clock, ScheduledExecutorService reconnectExecutor,boolean asynchronous) {
         this.settings = Objects.requireNonNull(settings);
         this.listener = Objects.requireNonNull(listener);
         this.client = client;
@@ -204,12 +218,14 @@ public final class AliyunL2MqttCollector implements AutoCloseable {
                 receivedCount++; lastReceivedAt = received.receivedAt();
             }
             try {
-                listener.accept(received); // 运行时先持久化原始字节，再尝试清洗。
-                synchronized (lifecycle) {
-                    persistedCount++;
-                    if (!expectedTopics.contains(topic)) failLocked("mqtt_unexpected_topic", 0);
-                    else if (received.qos() != 0) failLocked("mqtt_unexpected_message_qos", 0);
-                }
+                listener.apply(received).whenComplete((unused,error)->{
+                    synchronized (lifecycle) {
+                        if(error!=null){captureFailures++;failLocked("raw_capture_failed",0);return;}
+                        persistedCount++;
+                        if (!expectedTopics.contains(topic)) failLocked("mqtt_unexpected_topic", 0);
+                        else if (received.qos() != 0) failLocked("mqtt_unexpected_message_qos", 0);
+                    }
+                });
             } catch (RuntimeException captureFailed) {
                 synchronized (lifecycle) { captureFailures++; failLocked("raw_capture_failed", 0); }
                 throw new MqttException(MqttException.REASON_CODE_CLIENT_EXCEPTION);

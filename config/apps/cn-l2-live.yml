@@ -18,7 +18,7 @@ l2:
   symbols: ""
   overrides: ${app.paths.research-root}/config/trading/aliyun_l2_subscription_overrides.json
   seconds: 0
-  batch-size: 100
+  batch-size: 200
   poll-interval: ${app.questdb.poll-interval}
   visibility-timeout: ${app.questdb.visibility-timeout}
   lateness-ms: 2000

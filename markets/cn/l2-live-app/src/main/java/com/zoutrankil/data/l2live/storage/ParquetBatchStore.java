@@ -17,6 +17,10 @@ final class ParquetBatchStore {
     private final Path root,pending,ready;
     private final long quota;
     private long bytes;
+    // 只保留最近一个已经逐字段回读的批次，避免同一次提交反复解码四个文件。
+    // 命中前仍重新计算所有文件的 SHA256；重启后缓存为空，引用变化也不能复用。
+    private record VerifiedBatch(String id,Receipt receipt,RawJournal.FrozenData data) {}
+    private VerifiedBatch verified;
     synchronized void recount() throws Exception {
         try(var files=Files.walk(root)){long total=0;for(Path p:files.filter(p->Files.isRegularFile(p,LinkOption.NOFOLLOW_LINKS)).toList())total=Math.addExact(total,Files.size(p));bytes=total;}
         if(bytes>quota)throw new IllegalStateException("Parquet archive byte quota exceeded");
@@ -43,13 +47,22 @@ final class ParquetBatchStore {
             long size=0;
             for(String file:FILES){Path p=temporary.resolve(file);size=Math.addExact(size,Files.size(p));try(var c=FileChannel.open(p,WRITE)){c.force(true);}}
             if(size>quota-bytes)throw new IllegalStateException("Parquet archive byte quota exceeded");
-            if(!logical.equals(LiveValueIdentity.batch(LiveParquetCodec.readBatch(temporary,id))))throw new IllegalStateException("Parquet readback values differ");
+            var receipt=receipt(temporary);
+            var readback=LiveParquetCodec.readBatch(temporary,id);
+            if(!logical.equals(LiveValueIdentity.batch(readback)))throw new IllegalStateException("Parquet readback values differ");
+            if(!receipt.equals(receipt(temporary)))throw new IllegalStateException("Parquet files changed during readback");
             syncDirectory(temporary);
-            var receipt=receipt(temporary);Files.move(temporary,path(pending,id),StandardCopyOption.ATOMIC_MOVE);temporary=null;bytes=Math.addExact(bytes,size);syncDirectory(pending);return receipt;
+            Files.move(temporary,path(pending,id),StandardCopyOption.ATOMIC_MOVE);temporary=null;bytes=Math.addExact(bytes,size);syncDirectory(pending);
+            verified=new VerifiedBatch(id,receipt,readback);return receipt;
         } finally {if(temporary!=null)removeTemporary(temporary);}
     }
-    RawJournal.FrozenData read(String id,Receipt expected) throws Exception {
-        Path dir=directory(id);if(!expected.equals(receipt(dir)))throw new IllegalStateException("Retained Parquet file hash changed");return LiveParquetCodec.readBatch(dir,id);
+    synchronized RawJournal.FrozenData read(String id,Receipt expected) throws Exception {
+        Path dir=directory(id);
+        if(!expected.equals(receipt(dir))){verified=null;throw new IllegalStateException("Retained Parquet file hash changed");}
+        if(verified!=null&&verified.id().equals(id)&&verified.receipt().equals(expected))return verified.data();
+        var data=LiveParquetCodec.readBatch(dir,id);
+        if(!expected.equals(receipt(dir))){verified=null;throw new IllegalStateException("Parquet files changed during readback");}
+        verified=new VerifiedBatch(id,expected,data);return data;
     }
     void publish(String id,Receipt receipt) throws Exception {
         read(id,receipt);

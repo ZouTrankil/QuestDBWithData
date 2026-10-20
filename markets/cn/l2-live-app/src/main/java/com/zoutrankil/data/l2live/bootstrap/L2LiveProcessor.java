@@ -64,7 +64,10 @@ public final class L2LiveProcessor {
                 long captureBytes = 0;
                 for (var capture : captures) {
                     long estimatedBytes = capture.payloadBase64().length() + 8192L;
-                    if (!events.isEmpty() && captureBytes + estimatedBytes > 400_000) break;
+                    // Parquet 的逐文件上限和逻辑内容摘要仍负责最终限额。
+                    // 旧 JSON 的 400 KB 预算只容许约 48 条小报文，机械盘上
+                    // 会反复同步小批次；这里允许完整的 200 条有界批次。
+                    if (!events.isEmpty() && captureBytes + estimatedBytes > 2L * 1024 * 1024) break;
                     captureBytes += estimatedBytes;
                     L2CleanEvent event = parser.parse(capture);
                     if (capture.qos() != 0) event = rejected(event, "qos_rejected", "Expected subscription QoS 0");

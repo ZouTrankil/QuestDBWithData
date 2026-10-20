@@ -31,18 +31,55 @@ public final class RawJournal implements AutoCloseable {
     private final ParquetBatchStore parquet;
     private volatile boolean closed;
     private final Object captureLock=new Object();
+    // 接收和提交使用不同连接，但 SQLite 只有一个写入者。公平排队可避免
+    // 连续原始报文抢占批次提交；Parquet 编码放在这把写锁之外。
+    private final java.util.concurrent.locks.ReentrantLock writeLock=new java.util.concurrent.locks.ReentrantLock(true);
+    private record WriteLease(java.util.concurrent.locks.ReentrantLock lock) implements AutoCloseable {
+        @Override public void close(){lock.unlock();}
+    }
+    private WriteLease writer(){writeLock.lock();return new WriteLease(writeLock);}
     private Connection captureConnection;
     private java.sql.PreparedStatement captureInsert,captureTotals;
 
 
     public record StoredBatch(String id, List<L2CleanEvent> events, List<L2MinuteState> states,
             Map<String, Object> accumulatorState) {
-        public StoredBatch { events=List.copyOf(events); states=List.copyOf(states); }
+        public StoredBatch { events=List.copyOf(events); states=List.copyOf(states); accumulatorState=freezeState(accumulatorState); }
     }
-    record FrozenData(List<L2CleanEvent> events, List<L2MinuteState> states, Map<String, Object> accumulatorState) {}
+    record FrozenData(List<L2CleanEvent> events, List<L2MinuteState> states, Map<String, Object> accumulatorState) {
+        FrozenData { events=List.copyOf(events); states=List.copyOf(states); accumulatorState=freezeState(accumulatorState); }
+    }
+    // Parquet 回读结果会在同一提交内复用，检查点必须连同嵌套容器一起冻结。
+    private static Map<String,Object> freezeState(Map<String,Object> state) {
+        var result=new java.util.LinkedHashMap<String,Object>();
+        state.forEach((key,value)->result.put(key,freezeStateValue(value)));
+        return java.util.Collections.unmodifiableMap(result);
+    }
+    private static Object freezeStateValue(Object value) {
+        if(value instanceof Map<?,?> map) {
+            var result=new java.util.LinkedHashMap<String,Object>();
+            map.forEach((key,item)->{
+                if(!(key instanceof String text))throw new IllegalArgumentException("String checkpoint key required");
+                result.put(text,freezeStateValue(item));
+            });
+            return java.util.Collections.unmodifiableMap(result);
+        }
+        if(value instanceof List<?> list) {
+            var result=new ArrayList<Object>(list.size());
+            list.forEach(item->result.add(freezeStateValue(item)));
+            return java.util.Collections.unmodifiableList(result);
+        }
+        return value;
+    }
     record Snapshot(Map<String, Object> accumulatorState) {}
     record Outbox(String batchId, String encodingSha256, String eventsIdentity,
             String statesIdentity, String delivery) {}
+    private record BatchReference(String id,String payloadSha,long payloadLength,boolean active,boolean verified,
+            String createdAt,String completedAt,ParquetBatchStore.Receipt files,Outbox outbox) {}
+    private record VerifiedActive(StoredBatch batch,BatchReference reference) {}
+    private record CaptureReference(String id,long sequence,String session,String topic,String payloadSha,String envelopeSha,
+            String received,String date,int qos,boolean retained,boolean duplicate,boolean authorized,long bytes,boolean completed) {}
+    private static final String CAPTURE_METADATA="capture_id,sequence,session_id,topic,payload_sha256,envelope_sha256,recv_ts,capture_date,qos,retained,duplicate,subscription_authorized,length(payload) AS payload_length,completed";
     public record Status(Path database, long captures, long pending, long completed, long rawBytes,
             String preparedBatchId) {}
     public record ExportEvidence(Path path, long captures, long lastSequence, long bytes, String sha256) {}
@@ -122,15 +159,25 @@ public final class RawJournal implements AutoCloseable {
         byte[] frozen=payload.clone();
         var proposed=new RawCapture("cap_"+UUID.randomUUID().toString().replace("-",""),0,sessionId,topic,
                 Base64.getEncoder().encodeToString(frozen),recvTs,recvTs.atZone(RawCapture.SHANGHAI).toLocalDate(),qos,retained,duplicate,subscriptionAuthorized);
+        return appendBatch(List.of(proposed)).getFirst();
+    }
+
+    /** 单条接口仍同步返回；运行时可将有序报文合并成一次 FULL 提交，提交前不报告已保存。 */
+    public List<RawCapture> appendBatch(List<RawCapture> proposed) {
+        proposed=List.copyOf(proposed);
+        if(proposed.isEmpty()||proposed.size()>MAX_BATCH_ROWS)throw new IllegalArgumentException("Bounded raw capture batch required");
+        var payloads=proposed.stream().map(RawCapture::payloadBytes).toList();
+        long bytes=payloads.stream().mapToLong(payload->payload.length).sum();
+        if(bytes>4L*1024*1024)throw new IllegalArgumentException("Raw capture batch exceeds byte budget");
         synchronized(captureLock) {
-            try {
+            try (var write=writer()) {
                 if(closed)throw new IllegalStateException("Raw journal is closed");
-                if(Files.getFileStore(database).getUsableSpace()<64L*1024*1024+frozen.length*4L)throw new IllegalStateException("L2_STORAGE_HEADROOM：磁盘余量不足，停止接收");
+                if(Files.getFileStore(database).getUsableSpace()<64L*1024*1024+bytes*4L)throw new IllegalStateException("L2_STORAGE_HEADROOM：磁盘余量不足，停止接收");
                 // 只复用原始接收连接；Parquet 编码仍可与后续报文落盘并行。
                 if(captureConnection==null) {
                     var connection=open();
                     try {
-                        var totals=connection.prepareStatement("UPDATE journal_totals SET raw_bytes=raw_bytes+?,next_sequence=next_sequence+1,captures=captures+1 WHERE singleton=1 AND raw_bytes<=?");
+                        var totals=connection.prepareStatement("UPDATE journal_totals SET raw_bytes=raw_bytes+?,next_sequence=next_sequence+?,captures=captures+? WHERE singleton=1 AND raw_bytes<=?");
                         var insert=connection.prepareStatement("INSERT INTO raw_capture(sequence,capture_id,session_id,topic,payload,payload_sha256,envelope_sha256,recv_ts,capture_date,qos,retained,duplicate,subscription_authorized) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
                         captureTotals=totals;captureInsert=insert;captureConnection=connection;
                     } catch(Exception failure) {
@@ -143,20 +190,24 @@ public final class RawJournal implements AutoCloseable {
                 try {
                     {
                         var s=captureTotals;
-                        s.setInt(1,frozen.length);s.setLong(2,maxRawBytes-frozen.length);
+                        s.setLong(1,bytes);s.setInt(2,proposed.size());s.setInt(3,proposed.size());s.setLong(4,maxRawBytes-bytes);
                         if(s.executeUpdate()!=1) throw new IllegalStateException("Raw journal quota reached; receive must stop before acknowledgement");
                     }
                     long sequence;
                     try(var s=c.createStatement();var r=s.executeQuery("SELECT next_sequence FROM journal_totals WHERE singleton=1")) { r.next();sequence=r.getLong(1); }
-                    var result=new RawCapture(proposed.captureId(),sequence,sessionId,topic,proposed.payloadBase64(),recvTs,proposed.captureDate(),qos,retained,duplicate,subscriptionAuthorized);
-                    {
+                    sequence-=proposed.size()-1;
+                    var results=new ArrayList<RawCapture>();
+                    for(int index=0;index<proposed.size();index++) {
+                        var input=proposed.get(index);var frozen=payloads.get(index);
+                        var result=new RawCapture(input.captureId(),sequence++,input.sessionId(),input.topic(),input.payloadBase64(),input.recvTs(),input.captureDate(),input.qos(),input.retained(),input.duplicate(),input.subscriptionAuthorized());
                         var s=captureInsert;
-                        s.setLong(1,sequence);s.setString(2,result.captureId());s.setString(3,sessionId);s.setString(4,topic);s.setBytes(5,frozen);
+                        s.setLong(1,result.sequence());s.setString(2,result.captureId());s.setString(3,result.sessionId());s.setString(4,result.topic());s.setBytes(5,frozen);
                         s.setString(6,LiveStorageJson.sha256(frozen));s.setString(7,LiveStorageJson.sha256(LiveStorageJson.bytes(result)));
-                        s.setString(8,recvTs.toString());s.setString(9,result.captureDate().toString());s.setInt(10,qos);s.setBoolean(11,retained);s.setBoolean(12,duplicate);s.setBoolean(13,subscriptionAuthorized);s.executeUpdate();
+                        s.setString(8,result.recvTs().toString());s.setString(9,result.captureDate().toString());s.setInt(10,result.qos());s.setBoolean(11,result.retained());s.setBoolean(12,result.duplicate());s.setBoolean(13,result.subscriptionAuthorized());s.executeUpdate();
+                        results.add(result);
                     }
                     c.commit();
-                    return result;
+                    return List.copyOf(results);
                 } catch(Exception e) { rollback(c,e);throw e; }
             } catch(RuntimeException e) { throw e; }
             catch(Exception e) { throw failure("Cannot persist raw capture",e); }
@@ -196,29 +247,51 @@ public final class RawJournal implements AutoCloseable {
                     throw new IllegalStateException("A different frozen live batch already owns the checkpoint");
                 return previous.get();
             }
-            validateCaptures(c,events);
+            var captures=validateCaptures(c,events);
             // 文件编码不持有 SQLite 写锁，接收线程可继续追加原始报文。
             var receipt=parquet.freeze(id,data);
-            c.setAutoCommit(false);
-            try {
-                try(var lock=c.createStatement()){lock.executeUpdate("UPDATE journal_totals SET raw_bytes=raw_bytes WHERE singleton=1");}
-                if(active(c).isPresent())throw new IllegalStateException("Another prepared batch owns the checkpoint");
-                validateCaptures(c,events);
-                try(var q=c.prepareStatement("INSERT INTO prepared_batch(batch_id,payload,payload_sha256,active,created_at) VALUES(?,X'',?,1,?)")) {
-                    q.setString(1,id);q.setString(2,hash);q.setString(3,Instant.now().toString());q.executeUpdate();
-                }
-                saveReceipt(c,id,receipt);c.commit();return storedBatch(id);
-            } catch(Exception e) { rollback(c,e);throw e; }
+            var readback=parquet.read(id,receipt);
+            if(!hash.equals(LiveValueIdentity.batch(readback)))throw new IllegalStateException("Frozen Parquet logical values changed");
+            var frozen=new StoredBatch(id,readback.events(),readback.states(),readback.accumulatorState());
+            try(var write=writer()) {
+                c.setAutoCommit(false);
+                try {
+                    lockJournal(c);
+                    if(activeId(c).isPresent())throw new IllegalStateException("Another prepared batch owns the checkpoint");
+                    // 原文和完整 envelope 已在锁外核验；事务内只比对同一份不可变原始引用。
+                    requireCapturesUnchanged(c,captures);
+                    try(var q=c.prepareStatement("INSERT INTO prepared_batch(batch_id,payload,payload_sha256,active,created_at) VALUES(?,X'',?,1,?)")) {
+                        q.setString(1,id);q.setString(2,hash);q.setString(3,Instant.now().toString());q.executeUpdate();
+                    }
+                    saveReceipt(c,id,receipt);c.commit();
+                } catch(Exception e) { rollback(c,e);throw e; }
+            }
+            return frozen;
         } catch(RuntimeException e) { throw e; }
         catch(Exception e) { throw failure("Cannot freeze Parquet normalization batch",e); }
     }
-    private static void validateCaptures(Connection c,List<L2CleanEvent> events) throws Exception {
-        var ids=new HashSet<String>();
-        for(var event:events) {
-            var raw=event.capture();if(!ids.add(raw.captureId()))throw new IllegalArgumentException("Duplicate capture in prepared batch");
-            try(var q=c.prepareStatement("SELECT * FROM raw_capture WHERE capture_id=?")) {
+    private static List<CaptureReference> validateCaptures(Connection c,List<L2CleanEvent> events) throws Exception {
+        var ids=new HashSet<String>();var references=new ArrayList<CaptureReference>();
+        try(var q=c.prepareStatement("SELECT *,length(payload) AS payload_length FROM raw_capture WHERE capture_id=?")) {
+            for(var event:events) {
+                var raw=event.capture();if(!ids.add(raw.captureId()))throw new IllegalArgumentException("Duplicate capture in prepared batch");
                 q.setString(1,raw.captureId());try(var r=q.executeQuery()) {
                     if(!r.next()||r.getBoolean("completed")||!capture(r).equals(raw))throw new IllegalArgumentException("Prepared event must bind an exact pending raw capture");
+                    references.add(captureReference(r));
+                }
+            }
+        }return List.copyOf(references);
+    }
+    private static CaptureReference captureReference(ResultSet r) throws Exception {
+        return new CaptureReference(r.getString("capture_id"),r.getLong("sequence"),r.getString("session_id"),r.getString("topic"),
+                r.getString("payload_sha256"),r.getString("envelope_sha256"),r.getString("recv_ts"),r.getString("capture_date"),r.getInt("qos"),
+                r.getBoolean("retained"),r.getBoolean("duplicate"),r.getBoolean("subscription_authorized"),r.getLong("payload_length"),r.getBoolean("completed"));
+    }
+    private static void requireCapturesUnchanged(Connection c,List<CaptureReference> expected) throws Exception {
+        try(var query=c.prepareStatement("SELECT "+CAPTURE_METADATA+" FROM raw_capture WHERE capture_id=?")) {
+            for(var reference:expected) {
+                query.setString(1,reference.id());try(var rows=query.executeQuery()) {
+                    if(!rows.next()||!reference.equals(captureReference(rows)))throw new IllegalStateException("Raw capture reference changed before freeze commit");
                 }
             }
         }
@@ -240,39 +313,44 @@ public final class RawJournal implements AutoCloseable {
      */
     public synchronized void completeBatch(String id) {
         try(var c=open()) {
-            c.setAutoCommit(false);
-            try {
-                try(var lock=c.createStatement()){lock.executeUpdate("UPDATE journal_totals SET raw_bytes=raw_bytes WHERE singleton=1");}
-                var active=active(c);
-                if(active.isEmpty()) {
-                    try(var q=c.prepareStatement("SELECT count(*) FROM prepared_batch p JOIN live_outbox o ON o.batch_id=p.batch_id WHERE p.batch_id=? AND p.active=0 AND p.write_verified=1 AND p.completed_at IS NOT NULL AND o.delivery='VERIFIED'")) {
-                        q.setString(1,id);try(var r=q.executeQuery()) {
-                            r.next();if(r.getInt(1)!=1)throw new IllegalStateException("No active or previously verified completed batch");
+            var active=verifiedActive(c);
+            StoredBatch batch=active.map(VerifiedActive::batch).orElse(null);
+            BatchReference expected=active.map(VerifiedActive::reference).orElse(null);
+            if(batch!=null) {
+                if(!batch.id().equals(id))throw new IllegalStateException("Prepared batch identity mismatch");
+                parquet.verifyPublished(id,expected.files());
+            }
+            try(var write=writer()) {
+                c.setAutoCommit(false);
+                try {
+                    lockJournal(c);
+                    if(batch==null) {
+                        if(activeId(c).isPresent())throw new IllegalStateException("Active batch changed before completion");
+                        try(var q=c.prepareStatement("SELECT count(*) FROM prepared_batch p JOIN live_outbox o ON o.batch_id=p.batch_id WHERE p.batch_id=? AND p.active=0 AND p.write_verified=1 AND p.completed_at IS NOT NULL AND o.delivery='VERIFIED'")) {
+                            q.setString(1,id);try(var r=q.executeQuery()) {
+                                r.next();if(r.getInt(1)!=1)throw new IllegalStateException("No active or previously verified completed batch");
+                            }
+                        }
+                        c.commit();return;
+                    }
+                    requireReferenceUnchanged(c,expected);requireVerified(c,id);
+                    try(var s=c.prepareStatement("UPDATE raw_capture SET completed=1 WHERE capture_id=? AND completed=0")) {
+                        for(var event:batch.events()) {
+                            s.setString(1,event.capture().captureId());
+                            if(s.executeUpdate()!=1) throw new IllegalStateException("Prepared capture checkpoint changed before commit");
                         }
                     }
-                    c.commit();return;
-                }
-                var batch=active.get();
-                if(!batch.id().equals(id)) throw new IllegalStateException("Prepared batch identity mismatch");
-                requireVerified(c,id);
-                for(var event:batch.events()) {
-                    try(var s=c.prepareStatement("UPDATE raw_capture SET completed=1 WHERE capture_id=? AND completed=0")) {
-                        s.setString(1,event.capture().captureId());
-                        if(s.executeUpdate()!=1) throw new IllegalStateException("Prepared capture checkpoint changed before commit");
+                    try(var s=c.prepareStatement("UPDATE journal_totals SET completed=completed+? WHERE singleton=1")){s.setInt(1,batch.events().size());if(s.executeUpdate()!=1)throw new IllegalStateException("原始日志统计缺失");}
+                    try(var s=c.prepareStatement("INSERT INTO committed_accumulator(singleton,payload,payload_sha256,batch_id) VALUES(1,?,?,?) ON CONFLICT(singleton) DO UPDATE SET payload=excluded.payload,payload_sha256=excluded.payload_sha256,batch_id=excluded.batch_id")) {
+                        s.setBytes(1,new byte[0]);s.setString(2,expected.files().checkpoint());s.setString(3,id);s.executeUpdate();
                     }
-                }
-                try(var s=c.prepareStatement("UPDATE journal_totals SET completed=completed+? WHERE singleton=1")){s.setInt(1,batch.events().size());if(s.executeUpdate()!=1)throw new IllegalStateException("原始日志统计缺失");}
-                var retained=receipt(c,id);
-                if(!parquet.published(id))throw new IllegalStateException("Parquet batch has not been published");
-                try(var s=c.prepareStatement("INSERT INTO committed_accumulator(singleton,payload,payload_sha256,batch_id) VALUES(1,?,?,?) ON CONFLICT(singleton) DO UPDATE SET payload=excluded.payload,payload_sha256=excluded.payload_sha256,batch_id=excluded.batch_id")) {
-                    s.setBytes(1,new byte[0]);s.setString(2,retained.checkpoint());s.setString(3,id);s.executeUpdate();
-                }
-                try(var s=c.prepareStatement("UPDATE prepared_batch SET active=0,completed_at=? WHERE batch_id=? AND active=1")) {
-                    s.setString(1,Instant.now().toString());s.setString(2,id);
-                    if(s.executeUpdate()!=1) throw new IllegalStateException("Prepared batch completion conflict");
-                }
-                c.commit();
-            } catch(Exception e) { rollback(c,e);throw e; }
+                    try(var s=c.prepareStatement("UPDATE prepared_batch SET active=0,completed_at=? WHERE batch_id=? AND active=1")) {
+                        s.setString(1,Instant.now().toString());s.setString(2,id);
+                        if(s.executeUpdate()!=1) throw new IllegalStateException("Prepared batch completion conflict");
+                    }
+                    c.commit();
+                } catch(Exception e) { rollback(c,e);throw e; }
+            }
         } catch(RuntimeException e) { throw e; }
         catch(Exception e) { throw failure("Cannot commit verified live checkpoint",e); }
     }
@@ -288,21 +366,29 @@ public final class RawJournal implements AutoCloseable {
         for(String value:List.of(encodingSha,eventsIdentity,statesIdentity))
             if(!value.matches("[a-f0-9]{64}")) throw new IllegalArgumentException("Complete frozen outbox SHA-256 identities required");
         try(var c=open()) {
-            if(active(c).filter(b->b.id().equals(batchId)).isEmpty()) throw new IllegalStateException("Outbox must bind the active prepared batch");
-            try(var s=c.prepareStatement("INSERT INTO live_outbox(batch_id,encoding_sha256,events_identity,states_identity,delivery) VALUES(?,?,?,?,'INTENT') ON CONFLICT(batch_id) DO NOTHING")) {
-                s.setString(1,batchId);s.setString(2,encodingSha);s.setString(3,eventsIdentity);s.setString(4,statesIdentity);s.executeUpdate();
+            var active=verifiedActive(c).filter(value->value.batch().id().equals(batchId))
+                    .orElseThrow(()->new IllegalStateException("Outbox must bind the active prepared batch"));
+            var expected=active.reference();
+            try(var write=writer()) {
+                c.setAutoCommit(false);
+                try {
+                    lockJournal(c);requireReferenceUnchanged(c,expected);
+                    try(var s=c.prepareStatement("INSERT INTO live_outbox(batch_id,encoding_sha256,events_identity,states_identity,delivery) VALUES(?,?,?,?,'INTENT') ON CONFLICT(batch_id) DO NOTHING")) {
+                        s.setString(1,batchId);s.setString(2,encodingSha);s.setString(3,eventsIdentity);s.setString(4,statesIdentity);s.executeUpdate();
+                    }
+                    var actual=outbox(c,batchId);
+                    if(!actual.encodingSha256().equals(encodingSha)||!actual.eventsIdentity().equals(eventsIdentity)||!actual.statesIdentity().equals(statesIdentity))
+                        throw new IllegalStateException("Frozen outbox encoding or physical target identity changed");
+                    c.commit();return actual;
+                } catch(Exception error){rollback(c,error);throw error;}
             }
-            var actual=outbox(c,batchId);
-            if(!actual.encodingSha256().equals(encodingSha)||!actual.eventsIdentity().equals(eventsIdentity)||!actual.statesIdentity().equals(statesIdentity))
-                throw new IllegalStateException("Frozen outbox encoding or physical target identity changed");
-            return actual;
         } catch(RuntimeException e) { throw e; }
         catch(Exception e) { throw failure("Cannot reserve live write outbox",e); }
     }
     synchronized void claimUnknown(String batchId) { delivery(batchId,"INTENT","UNKNOWN"); }
     synchronized void acknowledge(String batchId) { delivery(batchId,"UNKNOWN","ACKNOWLEDGED"); }
     private void delivery(String id,String before,String after) {
-        try(var c=open();var s=c.prepareStatement("UPDATE live_outbox SET delivery=? WHERE batch_id=? AND delivery=?")) {
+        try(var c=open();var write=writer();var s=c.prepareStatement("UPDATE live_outbox SET delivery=? WHERE batch_id=? AND delivery=?")) {
             s.setString(1,after);s.setString(2,id);s.setString(3,before);
             if(s.executeUpdate()!=1) throw new IllegalStateException("Live outbox delivery transition conflict");
         } catch(RuntimeException e) { throw e; }
@@ -310,25 +396,25 @@ public final class RawJournal implements AutoCloseable {
     }
     synchronized void markWriteVerified(String batchId) {
         try(var c=open()) {
-            c.setAutoCommit(false);
-            try {
-                try(var lock=c.createStatement()){lock.executeUpdate("UPDATE journal_totals SET raw_bytes=raw_bytes WHERE singleton=1");}
-                try(var check=c.prepareStatement("SELECT count(*) FROM prepared_batch WHERE batch_id=? AND active=1")) {
-                    check.setString(1,batchId);try(var r=check.executeQuery()){r.next();if(r.getInt(1)!=1)throw new IllegalStateException("No matching prepared batch");}
-                }
-                var files=receipt(c,batchId);
-                parquet.verifyPublished(batchId,files);
-                var intent=outbox(c,batchId);
-                if(!intent.encodingSha256().equals(files.fingerprint())||!intent.eventsIdentity().equals(files.events())||!intent.statesIdentity().equals(files.minutes()))
-                    throw new IllegalStateException("Parquet outbox receipt differs");
-                try(var s=c.prepareStatement("UPDATE live_outbox SET delivery='VERIFIED' WHERE batch_id=?")) {
-                    s.setString(1,batchId);if(s.executeUpdate()!=1) throw new IllegalStateException("Missing durable outbox");
-                }
-                try(var s=c.prepareStatement("UPDATE prepared_batch SET write_verified=1 WHERE batch_id=? AND active=1")) {
-                    s.setString(1,batchId);if(s.executeUpdate()!=1) throw new IllegalStateException("Missing active prepared batch");
-                }
-                c.commit();
-            } catch(Exception e) { rollback(c,e);throw e; }
+            var expected=batchReference(c,batchId);
+            if(!expected.active())throw new IllegalStateException("No matching prepared batch");
+            var files=expected.files();parquet.verifyPublished(batchId,files);
+            var intent=expected.outbox();
+            if(intent==null||!intent.encodingSha256().equals(files.fingerprint())||!intent.eventsIdentity().equals(files.events())||!intent.statesIdentity().equals(files.minutes()))
+                throw new IllegalStateException("Parquet outbox receipt differs");
+            try(var write=writer()) {
+                c.setAutoCommit(false);
+                try {
+                    lockJournal(c);requireReferenceUnchanged(c,expected);
+                    try(var s=c.prepareStatement("UPDATE live_outbox SET delivery='VERIFIED' WHERE batch_id=?")) {
+                        s.setString(1,batchId);if(s.executeUpdate()!=1) throw new IllegalStateException("Missing durable outbox");
+                    }
+                    try(var s=c.prepareStatement("UPDATE prepared_batch SET write_verified=1 WHERE batch_id=? AND active=1")) {
+                        s.setString(1,batchId);if(s.executeUpdate()!=1) throw new IllegalStateException("Missing active prepared batch");
+                    }
+                    c.commit();
+                } catch(Exception e) { rollback(c,e);throw e; }
+            }
         } catch(RuntimeException e) { throw e; }
         catch(Exception e) { throw failure("Cannot persist live write verification",e); }
     }
@@ -339,6 +425,44 @@ public final class RawJournal implements AutoCloseable {
                     throw new IllegalStateException("Raw checkpoint cannot advance without exact verified target values");
             }
         }
+    }
+    // 文件内容和业务值在锁外完整核验。拿到 SQLite 写事务后，只允许原批次引用原样提交。
+    // 单 JVM 的归一化入口仍由 synchronized 串行；原始接收不占这把监视器。
+    private static void lockJournal(Connection c) throws Exception {
+        try(var lock=c.createStatement()){lock.executeUpdate("UPDATE journal_totals SET raw_bytes=raw_bytes WHERE singleton=1");}
+    }
+    private static Optional<String> activeId(Connection c) throws Exception {
+        try(var query=c.createStatement();var rows=query.executeQuery("SELECT batch_id FROM prepared_batch WHERE active=1")) {
+            return rows.next()?Optional.of(rows.getString(1)):Optional.empty();
+        }
+    }
+    private static BatchReference batchReference(Connection c,String id) throws Exception {
+        String hash,created,completed;long length;boolean active,verified;
+        try(var query=c.prepareStatement("SELECT payload_sha256,length(payload),active,write_verified,created_at,completed_at FROM prepared_batch WHERE batch_id=?")) {
+            query.setString(1,id);try(var rows=query.executeQuery()) {
+                if(!rows.next())throw new IllegalStateException("Missing prepared batch reference");
+                hash=rows.getString(1);length=rows.getLong(2);active=rows.getBoolean(3);verified=rows.getBoolean(4);created=rows.getString(5);completed=rows.getString(6);
+            }
+        }
+        Outbox outbox=null;
+        try(var query=c.prepareStatement("SELECT encoding_sha256,events_identity,states_identity,delivery FROM live_outbox WHERE batch_id=?")) {
+            query.setString(1,id);try(var rows=query.executeQuery()) {
+                if(rows.next())outbox=new Outbox(id,rows.getString(1),rows.getString(2),rows.getString(3),rows.getString(4));
+            }
+        }
+        return new BatchReference(id,hash,length,active,verified,created,completed,length==0?receipt(c,id):null,outbox);
+    }
+    private static void requireReferenceUnchanged(Connection c,BatchReference expected) throws Exception {
+        if(!expected.active()||!expected.equals(batchReference(c,expected.id())))
+            throw new IllegalStateException("Prepared batch or publication reference changed before commit");
+    }
+    private Optional<VerifiedActive> verifiedActive(Connection c) throws Exception {
+        var id=activeId(c);if(id.isEmpty())return Optional.empty();
+        var before=batchReference(c,id.get());
+        var batch=active(c).filter(value->value.id().equals(id.get()))
+                .orElseThrow(()->new IllegalStateException("Active batch changed during value verification"));
+        if(!before.equals(batchReference(c,id.get())))throw new IllegalStateException("Batch reference changed during value verification");
+        return Optional.of(new VerifiedActive(batch,before));
     }
     private static Outbox outbox(Connection c,String id) throws Exception {
         try(var s=c.prepareStatement("SELECT * FROM live_outbox WHERE batch_id=?")) {

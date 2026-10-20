@@ -91,9 +91,40 @@ macOS：将 `com.zoutrankil.l2-live.plist.example` 中 `/ABSOLUTE/QuestDBWithDat
 
 ## 接收落盘
 
-接收线程复用 SQLite 连接和预编译语句，原始报文仍逐条以 FULL 事务提交；提交成功才算已保存。Parquet 编码不持有接收锁。状态计数与接收、提交处于同一事务，状态查询不再全表扫描 payload；完整内容另由存储核验检查。
+运行时使用有界接收队列，最多 4,096 条、16 MiB；每批最多 200 条、4 MiB，最多等待 25ms 凑批，再以一次 FULL 事务提交。每条原始报文仍保留独立序号、原文摘要和接收时间。`collector.receivedCount` 是收到回调的数量，`persistedCount` 只在 FULL 提交成功后增加；`rawWriter.pendingDurability` 和 `pendingBytes` 明示尚未持久化的队列。队列不是持久化日志，进程异常终止或断电可能丢失其中尚未提交的报文，不能把它算成完整落盘。
+
+队列满或提交失败会停止接收并明确失败，不静默丢弃后继续报告健康。正常停止先关闭 MQTT，再排空原始队列，最后提交可处理的 Parquet 批次；不强杀正在排空的线程。单条 `RawJournal.append` 接口仍在 FULL 提交后同步返回。
+
+原始提交与批次提交使用公平写锁，避免两个 SQLite 连接争抢唯一写入者；Parquet 编码放在写锁之外。批次使用配置中的 200 条上限，去掉旧 JSON 的约 48 条小批次限制，保留逻辑内容和文件大小核验。状态计数与提交处于同一事务，状态查询不再全表扫描 payload；完整内容另由存储核验检查。
+
+完整批次读取、原文/envelope 哈希、Parquet 全值回读和文件 SHA 均在 writer 锁外执行。
+取得 SQLite 写事务后，核对原始元数据及双 SHA、prepared 的身份与状态、四文件引用和
+完整 outbox 均未变化，再原子提交 completed、总计、累计检查点与关闭批次。
+此约束依赖 collector.lock 的唯一归一化进程、归一化入口串行和发布文件不可变。
+正常关闭拒绝新增后等待原始写线程真正退出，不能因启动器等待超时就提前关闭日志；
+原始提交失败或退出后计数不为零会明确报错。`rawWriter` 状态区分 closing、draining
+和 workerAlive；失败状态在排空后记录实际接收与持久化计数。
 
 ## 分日归档与存储检查
+
+### 独立实时盘口分钟产品
+
+实时会话另启 `l2-native-market-snapshots` 线程。它只读已经 FULL 落盘的原始 market，
+核验 payload/envelope SHA、原生解析、当前授权主题、当日日期与 180 秒时效；
+未来时间保留原有 1 秒容差及最多 5 秒等待。该产品使用真实累计成交额、量及盘口价格，
+可供消费者计算 session VWAP；不补造缺失逐分钟轨迹，不代表 trans/order 聚合已齐。
+
+文件位于同一 live root 的 `market-snapshots/batches/market_<identity>.parquet`，
+包含原始身份、二进制原文和原生解析字段。写入、force、全字段读回与 SHA 核验后
+原子发布，再 FULL 提交 `market-snapshots/index.sqlite3` 的引用；索引
+application_id=0x4c324d53/user_version=1。单批最多 200 行，单文件最多 16 MiB。
+原始 completed、完整检查点与逐笔积压保持不变；`marketSnapshots.fullMicroStateReady`
+固定为 false，消费者须独立核完整队列。备份须包含该目录；现有逐笔 archive 命令
+不负责归档或删除此产品。
+
+发布线程不等待完整归一化循环。短暂 SQLite BUSY/LOCKED 或 Windows 文件占用会
+恢复本轮游标后重试，已提交成员依索引去重；SHA/schema/原文等完整性异常为 failed。
+机械盘仍共享 IO，必须核真实 source 时间；单次 running 或文件存在不证明数据新鲜。
 
 停止采集器后运行：
 

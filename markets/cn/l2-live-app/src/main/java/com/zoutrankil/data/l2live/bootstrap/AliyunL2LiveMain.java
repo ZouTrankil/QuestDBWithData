@@ -10,6 +10,8 @@ import com.zoutrankil.data.l2live.domain.AliyunL2WireParser;
 import com.zoutrankil.data.l2live.domain.L2MinuteAccumulator;
 import com.zoutrankil.data.l2live.storage.RawJournal;
 import com.zoutrankil.data.l2live.storage.LocalLiveSink;
+import com.zoutrankil.data.l2live.storage.RawCaptureBatchWriter;
+import com.zoutrankil.data.l2live.storage.LiveMarketSnapshotStore;
 import com.zoutrankil.runtime.ProjectConfiguration;
 import com.zoutrankil.runtime.ProjectLogging;
 import java.nio.channels.FileChannel;
@@ -121,8 +123,20 @@ public final class AliyunL2LiveMain {
             }
             return 0;
         } catch (Exception error) {
-            var failure = Map.<String, Object>of("producer", "java.aliyun_l2_live", "phase", "failed",
-                    "failureCode", safeCode(error), "at", Instant.now().toString());
+            var failure = new LinkedHashMap<String,Object>();
+            if (ownsStatus && configuration != null) {
+                try {
+                    Path previous = configuration.root.resolve("status.json");
+                    if (Files.isRegularFile(previous) && Files.size(previous) <= 1_048_576) {
+                        var saved = JSON.readValue(Files.readString(previous), java.util.Map.class);
+                        if (saved.get("processId") instanceof Number pid && pid.longValue() == ProcessHandle.current().pid()
+                                && "failed".equals(saved.get("phase"))) saved.forEach((key,value) -> failure.put(String.valueOf(key),value));
+                    }
+                } catch (Exception ignored) { }
+            }
+            failure.put("producer", "java.aliyun_l2_live");failure.put("phase", "failed");
+            failure.put("processId", ProcessHandle.current().pid());
+            failure.put("failureCode", safeCode(error));failure.put("at", Instant.now().toString());
             if (ownsStatus && configuration != null && Files.isDirectory(configuration.root)) {
                 try { status(configuration.root, failure); } catch (Exception ignored) { }
             }
@@ -164,13 +178,12 @@ public final class AliyunL2LiveMain {
         AtomicLong received = new AtomicLong();
         AtomicLong written = new AtomicLong();
         var settings = new L2MqttSettings(config.brokerUri, config.username, config.password, config.symbols, 48, 20);
-        try (var collector = new AliyunL2MqttCollector(settings, message -> {
-            try {
-                journal.append(message.topic(), message.payload(), message.receivedAt(), message.sessionId(),
-                        message.qos(), message.retained(), message.duplicate(), message.subscriptionAuthorized());
-                received.incrementAndGet();
-            } catch (Exception error) { throw new IllegalStateException("RAW_CAPTURE_FAILED"); }
-        })) {
+        try (var marketSnapshots=new LiveMarketSnapshotStore(config.root, Set.copyOf(settings.topics()), clock);
+             var rawWriter=new RawCaptureBatchWriter(journal);
+             var collector = AliyunL2MqttCollector.durable(settings, message ->
+                rawWriter.submit(message.topic(), message.payload(), message.receivedAt(), message.sessionId(),
+                        message.qos(), message.retained(), message.duplicate(), message.subscriptionAuthorized())
+                        .thenRun(received::incrementAndGet))) {
             var finished = new java.util.concurrent.CountDownLatch(1);
             Thread hook = new Thread(() -> {
                 stopping.set(true);
@@ -182,6 +195,7 @@ public final class AliyunL2LiveMain {
             long nextStatus = 0;
             try {
                 status(config.root, snapshot(config, "connecting", received.get(), written.get(), collector.status(), journal.status()));
+                marketSnapshots.start();
                 collector.begin();
                 while (!stopping.get() && !Files.exists(config.root.resolve("stop.request"))
                         && (session == null || !session.expired(clock))
@@ -203,6 +217,8 @@ public final class AliyunL2LiveMain {
                         String phase = writeFailure != null ? "write_retry" : !Boolean.TRUE.equals(transport.get("ready"))
                                 ? "reconnecting" : received.get() == 0 ? "waiting_messages" : "running";
                         var state = new LinkedHashMap<String, Object>(snapshot(config, phase, received.get(), written.get(), transport, journal.status()));
+                        state.put("rawWriter",rawWriter.status());
+                        state.put("marketSnapshots",marketSnapshots.status());
                         if (writeFailure != null) state.put("writeFailureCode", writeFailure);
                         status(config.root, state);
                         nextStatus = now + Duration.ofSeconds(1).toNanos();
@@ -213,6 +229,7 @@ public final class AliyunL2LiveMain {
                 boolean drainAuthorized = Boolean.TRUE.equals(finalTransport.get("ready"))
                         && !Boolean.TRUE.equals(finalTransport.get("fatal"));
                 collector.close();
+                rawWriter.close();
                 Instant drainDeadline = Instant.now().plusSeconds(10);
                 while (drainAuthorized && Instant.now().isBefore(drainDeadline)) {
                     int n = processor.processOnce();
@@ -220,6 +237,16 @@ public final class AliyunL2LiveMain {
                     if (n == 0) break;
                 }
                 status(config.root, snapshot(config, "stopped", received.get(), written.get(), collector.status(), journal.status()));
+            } catch (Exception failure) {
+                // 先停止接收并排空所有已接受的报文，再记录失败时的实际持久化计数。
+                try { collector.close(); } catch (Exception closeFailure) { failure.addSuppressed(closeFailure); }
+                try { rawWriter.close(); } catch (Exception drainFailure) { failure.addSuppressed(drainFailure); }
+                try {
+                    var state = new LinkedHashMap<String,Object>(snapshot(config, "failed", received.get(), written.get(), collector.status(), journal.status()));
+                    state.put("rawWriter",rawWriter.status());state.put("marketSnapshots",marketSnapshots.status());
+                    state.put("failureCode",safeCode(failure));status(config.root,state);
+                } catch (Exception statusFailure) { failure.addSuppressed(statusFailure); }
+                throw failure;
             } finally {
                 finished.countDown();
                 try { Runtime.getRuntime().removeShutdownHook(hook); } catch (IllegalStateException ignored) { }
