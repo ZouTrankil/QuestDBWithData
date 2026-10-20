@@ -456,3 +456,29 @@ WORX 当前请求键回溯原 Alliance MMA 的 AMMA 普通股，[原 IPO 披露]
 同目录 `tiingo-budget-verification.json` 于 11:07 UTC 只读核对实际客户端限额和本地用量：最近一小时 4 次、一天 334 次；滚动 31 天 76 个请求键，接收 192468176 字节，另有 58785799 字节预留。实际配置为每小时 50 次、每天 1000 次、滚动月 500 个请求键及 1 GiB，均在本地预算内。失败请求也计入次数，请求键不等于不同发行人数；未查询服务端账户用量，其他客户端的用量未知。
 
 主采集已以 PID 41960 恢复，47 个 JAR 摘要与原 v24 发行包一致，启动回执为 `var/market-data/us-broad-launch-v24-wct-worx-resumed.json`。原组 `broad-d406d3db-0045-4b21-8747-83ea08700068` 的前十三个窗口保留原运行和回执，随后仅续采原来未发送的八段共 212285 行。原组 128 个来源、455186 行、21 个窗口已完成原生完整回读，父组和成员均为 `VERIFIED`；再从原 Yahoo 响应独立重建全部二十列，对照 prepared、回读文件及当前 PGWire 均一致，原件、证明文件摘要和已完成队列前后稳定。检查时无 `IN_DOUBT`，进程已继续下一组。完整核对分别在同目录 `main-resume-verification.json`、`main-progress-independent-verification.json`；整组总量不重复计入本批 2957 行补录。
+
+### Aetna、Celgene、Express Scripts 历史普通股
+
+2026-10-20 从未截断的 Tiingo 历史搜索确认三只非活跃美国普通股的永久请求键，补入 10011 行及三条永久映射。三段从 2006-01-03 开始，全部为正量来源报价，与 SPY 实有参照日期一致。
+
+| 历史代码 | 永久价格键 | 行数 | 最后验收日期 |
+| --- | --- | ---: | --- |
+| AET | `US000000000146` | 3250 | 2018-11-28 |
+| CELG | `US000000000276` | 3496 | 2019-11-20 |
+| ESRX | `US000000000425` | 3265 | 2018-12-20 |
+
+[Aetna 8-K](https://www.sec.gov/Archives/edgar/data/1122304/000112230418000178/form8-k.htm)明确请求 2018-11-29 开盘前暂停交易，28 日来源仍有正常价格幅度及正量。[Celgene 通函](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2019-65)明确最后交易日为 2019-11-20，21 日起暂停；原件在 22 日另给 OHLC 同为 108.24、量为 114302 的记录，按边界排除。[Express Scripts 通函](https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2018-152)明确 2018-12-21 起暂停，20 日来源仍有正常幅度及正量；请求涵盖 21 日，供应商只返回到 20 日，没有补造价格。
+
+三笔并购对价分别为 AET 每股 145 美元现金加 0.8378 股 CVS、CELG 每股 50 美元加一股 BMY 及一个新 CVR、ESRX 每股 48.75 美元加 0.2434 股 CI，均单独记录，没有生成普通现金分红、换股拆股或收购方续接。搜索另返回的 `CELGZ` 是旧权利证券，与 CELG 普通股及本次并购产生的 CVR 分开，未选作这段价格。
+
+日期类型分别保留：[Aetna 2006 申报](https://www.sec.gov/Archives/edgar/data/1122304/000095012306002054/y17756e8vk.htm)记一拆二股票股息在 2 月 17 日分派，供应商市场事件为 2 月 21 日；[公开拆股资料](https://www.stocksplithistory.com/aetna/)佐证该市场日期。[Celgene 2014 公告](https://www.sec.gov/Archives/edgar/data/816284/000119312514241821/d744699dex991.htm)明确 6 月 25 日分派、26 日 Nasdaq 按拆股价交易，也列出此前 2006-02-27 一拆二。[Express Scripts 2007 公告](https://www.sec.gov/Archives/edgar/data/885721/000088572107000034/stocksplit2007.htm)使用 6 月 22 日分派或生效口径，供应商事件为 25 日，由[同期盘前报道](https://247wallst.com/investing/2007/06/25/pre-market-st-2-8/)佐证；[2010 季报](https://www.sec.gov/Archives/edgar/data/885721/000095012310096652/c60119e10vq.htm)另确认 2010-06-08 一拆二。两个分派日之后的下一 SPY 参照日也分别为 2 月 21 日、6 月 25 日；这是日期交叉核对，未宣称两个市场日均取得独立交易所原件。没有把分派日重记为第二次拆股或挪动来源事件。
+
+AET 原件保留 36 条现金分红，最大每股 0.5 美元；CELG、ESRX 没有现金分红。各段调整股数与完整原件中的后续拆股比例一致，CELG、ESRX 的调整 OHLC 与纯拆股比例相符，AET 同日各 OHLC 的调整比例一致。价格、股数、分红、事件因子均保持供应商精度和观察时版本，不证明历史当时可知。
+
+10011 行价格二十列、三条映射十八列均独立核对；原保护组 127417 行价格和 20 条映射保持，保护组累计 137428 行价格、23 条映射。三只股票的 FIGI 均保留来源真实 null。三条原 Yahoo 任务保持 `PLANNED`，当前代码价格与历史永久键独立。按年和证券分块读取并拒绝截断，锁内确认两表 WAL 结清、缓冲为零、未挂起，原物理表和结构不变。
+
+证据在 `var/market-data/scope-review/legacy-healthcare-history-20261020/`，包括三份完整搜索、三份完整价格、两份完整 Nasdaq 通函、完整次级日期资料，以及其他六份下载失败回执、网页核读事实、发布意图、独立回读、映射与 WAL。发行人原文与次级佐证类别分开，失败下载不冒充完整本地原件。
+
+发布前原 PID 41960 已在年度窗口边界正常退出。验收后仅归档本轮停止标记，以 PID 33868 恢复原队列、同一 v24 发行包、两 GiB 堆及 2026-10-16 截止日，47 个 JAR 摘要一致。启动回执为 `var/market-data/us-broad-launch-v24-healthcare-resumed.json`。原组 `broad-71ee42ee-9c23-4131-b8e9-5a64eefe478a` 的前十七段运行及证明不变，随后只发送原来未发送的四段共 106708 行；128 个来源、21 个窗口、381154 行全部 `VERIFIED`。再从原 Yahoo 响应独立重建二十列，对照 prepared、完整回读文件及当前 PGWire 全部一致，来源、证明摘要和已完成队列前后稳定。检查时无 `IN_DOUBT`，主采集已进入下一组。记录分别在同目录 `main-resume-verification.json`、`main-progress-independent-verification.json`；整组总量不重复计入本批补录的 10011 行，全市场和剩余来源缺口继续推进。
+
+用户确认 Tiingo 为 Starter 免费套餐。本轮 `tiingo-budget-verification.json` 于 12:01 UTC 核对客户端限额及本地账本：最近一小时 6 次、一天 340 次；滚动 31 天 79 个请求键，接收 194802686 字节，另有 58785799 字节预留，未超出本地配置预算。失败请求计数，请求键不等于不同发行人数；没有查询服务端账户用量，其他客户端用量未知。
