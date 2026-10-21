@@ -1,0 +1,317 @@
+{
+  "observed_at": "2026-10-21T09:10:06.456033+00:00",
+  "read_only": true,
+  "data_completeness_verified": false,
+  "rows": [
+    {
+      "table": "cashflow",
+      "column": "ann_date",
+      "metadata_latest": "2026-08-28T00:00:00.000000Z",
+      "latest": "2026-08-28T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    },
+    {
+      "table": "cn_cpi",
+      "column": "month",
+      "metadata_latest": "2026-08-01T00:00:00.000000Z",
+      "latest": "2026-08-01T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-09-01",
+        "field": "month",
+        "archive": "var/cn-collection-probes/2026-10-20/sources/d8eb02225b1326c890f7235caff2d1fef5b74826b007a2106849b29f3dcfedc1.json",
+        "sha256": "d8eb02225b1326c890f7235caff2d1fef5b74826b007a2106849b29f3dcfedc1",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "cn_gdp",
+      "column": "report_date",
+      "metadata_latest": "2026-06-30T00:00:00.000000Z",
+      "latest": "2026-06-30T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-09-30",
+        "field": "report_date",
+        "archive": "var/cn-collection-probes/2026-10-20/sources/2042bf0cf4c2bf50c86c0c92330f28339faef3058734cd51b5f401c6061ffd11.json",
+        "sha256": "2042bf0cf4c2bf50c86c0c92330f28339faef3058734cd51b5f401c6061ffd11",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "cn_m",
+      "column": "month",
+      "metadata_latest": "2026-08-01T00:00:00.000000Z",
+      "latest": "2026-08-01T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-09-01",
+        "field": "month",
+        "archive": "var/cn-collection-probes/2026-10-20/sources/e6ee23263e84e2364e95cc45546577c142c24eced8cb4ccb31710fa05e094a40.json",
+        "sha256": "e6ee23263e84e2364e95cc45546577c142c24eced8cb4ccb31710fa05e094a40",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "cn_pmi",
+      "column": "month",
+      "metadata_latest": "2026-08-01T00:00:00.000000Z",
+      "latest": "2026-08-01T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-09-01",
+        "field": "month",
+        "archive": "var/cn-collection-probes/2026-10-20/sources/f39c046fd5125405383c1962882976535839f3b5039b47ceb31cecdd77430adf.json",
+        "sha256": "f39c046fd5125405383c1962882976535839f3b5039b47ceb31cecdd77430adf",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "cn_ppi",
+      "column": "month",
+      "metadata_latest": "2026-08-01T00:00:00.000000Z",
+      "latest": "2026-08-01T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-09-01",
+        "field": "month",
+        "archive": "var/cn-collection-probes/2026-10-20/sources/6de9a81c325ea0cb521e8dea144a9d1659b70f8a6094896708f511e6e9efb04c.json",
+        "sha256": "6de9a81c325ea0cb521e8dea144a9d1659b70f8a6094896708f511e6e9efb04c",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "cyq_perf",
+      "column": "trade_date",
+      "metadata_latest": "2026-09-30T00:00:00.000000Z",
+      "latest": "2026-09-30T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-10-16",
+        "field": "trade_date",
+        "archive": "var/sync-evidence/cyq-source-4b3628de-b899-4486-a129-6f132f618308/sources/c14ee35d18b4f4462af0069c831c40a51032a4bf85359a88a5edf45671ee31da.json",
+        "sha256": "c14ee35d18b4f4462af0069c831c40a51032a4bf85359a88a5edf45671ee31da",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "etf_adj",
+      "column": "timestamp",
+      "metadata_latest": "2026-10-16T00:00:00.000000Z",
+      "latest": "2026-10-16T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    },
+    {
+      "table": "etf_daily",
+      "column": "timestamp",
+      "metadata_latest": "2026-10-16T00:00:00.000000Z",
+      "latest": "2026-10-16T00:00:00.000000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    },
+    {
+      "table": "etf_share",
+      "column": "timestamp",
+      "metadata_latest": "2026-09-21T00:00:00.000000Z",
+      "latest": "2026-09-21T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    },
+    {
+      "table": "express",
+      "column": "ann_date",
+      "metadata_latest": "2026-08-25T00:00:00.000000Z",
+      "latest": "2026-08-25T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    },
+    {
+      "table": "fina_indicator",
+      "column": "ann_date",
+      "metadata_latest": "2026-09-23T00:00:00.000000Z",
+      "latest": "2026-09-23T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    },
+    {
+      "table": "forecast",
+      "column": "ann_date",
+      "metadata_latest": "2026-09-18T00:00:00.000000Z",
+      "latest": "2026-09-18T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    },
+    {
+      "table": "ft_limit",
+      "column": "trade_date",
+      "metadata_latest": "2026-09-21T00:00:00.000000Z",
+      "latest": "2026-09-21T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-10-16",
+        "field": "trade_date",
+        "archive": "var/sync-evidence/futures-source-7f809b2c-af3d-4b59-a227-2b845624e03c/sources/335248f91a65a34478c93ade5670ce64de8703794c115d955480b90996a82c11.json",
+        "sha256": "335248f91a65a34478c93ade5670ce64de8703794c115d955480b90996a82c11",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "fut_daily",
+      "column": "trade_date",
+      "metadata_latest": "2026-09-21T00:00:00.000000Z",
+      "latest": "2026-09-21T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-10-16",
+        "field": "trade_date",
+        "archive": "var/sync-evidence/futures-source-4bdaa60d-9d58-4264-a166-9179ffe030ed/sources/d7f6d274dcfd83a2a0c68bd0e14b6bbe3fd8b1ea8a0f0b1f60ac8ebb37616b76.json",
+        "sha256": "d7f6d274dcfd83a2a0c68bd0e14b6bbe3fd8b1ea8a0f0b1f60ac8ebb37616b76",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "fut_mapping",
+      "column": "trade_date",
+      "metadata_latest": "2026-09-21T00:00:00.000000Z",
+      "latest": "2026-09-21T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-10-16",
+        "field": "trade_date",
+        "archive": "var/sync-evidence/futures-source-c7b8334a-cef2-4a6b-866a-cffaafcd8388/sources/9d2c4e571095c873225f8e46ca17fa8e13a19c9aff8f591eb854a951d50f848e.json",
+        "sha256": "9d2c4e571095c873225f8e46ca17fa8e13a19c9aff8f591eb854a951d50f848e",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "fut_settle",
+      "column": "trade_date",
+      "metadata_latest": "2026-09-21T00:00:00.000000Z",
+      "latest": "2026-09-21T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-10-16",
+        "field": "trade_date",
+        "archive": "var/sync-evidence/futures-source-80b5bc55-9220-4662-8095-3e1d66481b75/sources/3ce82deceeabfdc7453e6d5ad7bd521d47130e0378cd8314c3f05b86c11ddc63.json",
+        "sha256": "3ce82deceeabfdc7453e6d5ad7bd521d47130e0378cd8314c3f05b86c11ddc63",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "hibor",
+      "column": "timestamp",
+      "metadata_latest": "2026-09-21T00:00:00.000000Z",
+      "latest": "2026-09-21T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-10-16",
+        "field": "timestamp",
+        "archive": "var/cn-collection-probes/2026-10-20/rates-followup/sources/8d4093f6d1f75bd6735b22205049d2bfde328449e3822c1b8b30faa5a8e02437.json",
+        "sha256": "8d4093f6d1f75bd6735b22205049d2bfde328449e3822c1b8b30faa5a8e02437",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "income",
+      "column": "ann_date",
+      "metadata_latest": "2026-08-29T00:00:00.000000Z",
+      "latest": "2026-08-29T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    },
+    {
+      "table": "l2_daily_features",
+      "column": "ts",
+      "metadata_latest": "2026-10-16T00:00:00.000000Z",
+      "latest": "2026-10-16T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    },
+    {
+      "table": "sf_month",
+      "column": "month",
+      "metadata_latest": "2026-08-01T00:00:00.000000Z",
+      "latest": "2026-08-01T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-09-01",
+        "field": "month",
+        "archive": "var/cn-collection-probes/2026-10-20/social-financing/sources/18cdfa4b69dd8f79abc5e992d270acb053fb0a8fb99bbe510938ed39118c1027.json",
+        "sha256": "18cdfa4b69dd8f79abc5e992d270acb053fb0a8fb99bbe510938ed39118c1027",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "shibor",
+      "column": "timestamp",
+      "metadata_latest": "2026-09-21T00:00:00.000000Z",
+      "latest": "2026-09-21T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": {
+        "date": "2026-10-19",
+        "field": "timestamp",
+        "archive": "var/cn-collection-probes/2026-10-20/sources/52039b8d7c74ea287c6631eb184cc09c1732232c8bf2536226497704e0292a0f.json",
+        "sha256": "52039b8d7c74ea287c6631eb184cc09c1732232c8bf2536226497704e0292a0f",
+        "scope": "已获取的限定范围正向来源；不是来源全市场最新水位"
+      },
+      "assessment": "已确认落后于已获取来源"
+    },
+    {
+      "table": "shibor_lpr",
+      "column": "date",
+      "metadata_latest": "2026-08-20T00:00:00.000000Z",
+      "latest": "2026-08-20T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    },
+    {
+      "table": "stk_st_daily",
+      "column": "timestamp",
+      "metadata_latest": null,
+      "latest": "2026-10-16T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    },
+    {
+      "table": "stk_suspend",
+      "column": "timestamp",
+      "metadata_latest": null,
+      "latest": "2026-10-16T00:00:00.000000Z",
+      "empty": false,
+      "positive_source_evidence": null,
+      "assessment": "尚未确认是否最新"
+    }
+  ],
+  "summary": {
+    "tables": 25,
+    "behindKnownSource": 13,
+    "freshnessUnconfirmed": 12,
+    "confirmedLatest": 0,
+    "note": "财务按公告日、宏观按统计期判断，不要求所有表更新到今天。最大日期只用于新鲜度初查，不证明缺日、证券和字段完整。"
+  }
+}
