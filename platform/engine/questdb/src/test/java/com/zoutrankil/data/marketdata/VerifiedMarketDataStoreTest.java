@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -280,6 +281,54 @@ class VerifiedMarketDataStoreTest {
             assertThrows(
                     IllegalStateException.class,
                     () -> store.requireNoUnresolved(definition.datasetId()));
+        } finally {
+            server.stop(0);
+        }
+    }
+
+    @Test
+    void revisionRejectsRecreatedTargetBeforeAnyDdlOrSend() throws Exception {
+        var calls = new ArrayList<String>();
+        var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+        server.createContext(
+                "/exec",
+                exchange -> {
+                    calls.add(
+                            URLDecoder.decode(
+                                    exchange.getRequestURI().getQuery(), StandardCharsets.UTF_8));
+                    byte[] result =
+                            "{\"columns\":[{\"name\":\"id\"},{\"name\":\"directoryName\"}],\"dataset\":[[999,\"new-target~999\"]]}"
+                                    .getBytes(StandardCharsets.UTF_8);
+                    exchange.sendResponseHeaders(200, result.length);
+                    exchange.getResponseBody().write(result);
+                    exchange.close();
+                });
+        server.start();
+        try {
+            var file = Files.writeString(root.resolve("revision.json"), "new source");
+            var store =
+                    new VerifiedMarketDataStore(
+                            URI.create("http://127.0.0.1:" + server.getAddress().getPort()),
+                            "",
+                            "",
+                            "",
+                            root);
+            var rows =
+                    List.<Map<String, Object>>of(
+                            Map.of("ts", "2026-01-01T00:00:00Z", "symbol", "X", "price", 1d));
+            assertThrows(
+                    IllegalStateException.class,
+                    () ->
+                            store.publishToOriginalTarget(
+                                    definition,
+                                    rows,
+                                    file,
+                                    VerifiedMarketDataStore.sha(Files.readAllBytes(file)),
+                                    Map.of(),
+                                    "market-" + "a".repeat(64)));
+            assertEquals(1, calls.size());
+            assertTrue(calls.stream().noneMatch(q -> q.contains("CREATE") || q.contains("INSERT")));
+            assertTrue(Files.notExists(root.resolve("prepared")));
         } finally {
             server.stop(0);
         }

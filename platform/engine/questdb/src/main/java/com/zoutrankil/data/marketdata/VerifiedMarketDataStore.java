@@ -241,6 +241,32 @@ public final class VerifiedMarketDataStore {
         }
     }
 
+    /** 历史修订绑定原物理目标；不建表，也不把旧范围悄悄写到重建后的对象。 */
+    public SyncJobRunner.Result publishToOriginalTarget(
+            DatasetDefinition d,
+            List<Map<String, Object>> source,
+            Path raw,
+            String expectedSha,
+            Map<String, Object> evidence,
+            String originalTarget)
+            throws Exception {
+        if (originalTarget == null || !originalTarget.matches("market-[a-f0-9]{64}"))
+            throw new IllegalArgumentException("历史修订需要原物理目标身份");
+        try (var lease =
+                MarketPublisherLease.acquire(
+                        root.resolve("ledger-writer.lock"), Duration.ofMinutes(15))) {
+            return publishInside(
+                    d,
+                    source,
+                    raw,
+                    expectedSha,
+                    evidence,
+                    false,
+                    PublicationPage.DEFAULT,
+                    originalTarget);
+        }
+    }
+
     /** 补缺专用：调用方给出确认缺失的键，实际发送前再次拒绝任何已出现的键。 */
     public SyncJobRunner.Result publishMissing(
             DatasetDefinition d,
@@ -284,6 +310,19 @@ public final class VerifiedMarketDataStore {
             boolean missingOnly,
             PublicationPage page)
             throws Exception {
+        return publishInside(d, source, raw, expectedSha, evidence, missingOnly, page, null);
+    }
+
+    private SyncJobRunner.Result publishInside(
+            DatasetDefinition d,
+            List<Map<String, Object>> source,
+            Path raw,
+            String expectedSha,
+            Map<String, Object> evidence,
+            boolean missingOnly,
+            PublicationPage page,
+            String originalTarget)
+            throws Exception {
         d.requireCapability(DatasetDefinition.Capability.WRITE);
         if (d.objectKind() != DatasetDefinition.ObjectKind.TABLE)
             throw new IllegalArgumentException("正式发送只接受可写普通表");
@@ -299,8 +338,15 @@ public final class VerifiedMarketDataStore {
         for (var row : rows)
             if (wanted.put(codec.key(row), row) != null)
                 throw new IllegalArgumentException("来源业务键重复");
-        ensure(d);
+        if (originalTarget == null) ensure(d);
+        else {
+            if (!originalTarget.equals(identity(d)))
+                throw new IllegalStateException("原物理目标已变化，停止历史修订");
+            requireSchema(d);
+        }
         String target = identity(d), run = "market-" + UUID.randomUUID();
+        if (originalTarget != null && !originalTarget.equals(target))
+            throw new IllegalStateException("原物理目标在预检期间变化");
         var prepared = root.resolve("prepared").resolve(run + ".json");
         Files.createDirectories(prepared.getParent());
         byte[] bytes =
