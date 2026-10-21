@@ -4,6 +4,8 @@ spring.application.name: crypto-market-data
 app.crypto-data:
   root: var/crypto-market-data
   history-start: 2021-10-01
+  # 六组原生 BTCUSDT 数据单独设起点，不改变旧 collect 的冻结任务。
+  archive-history-start: 2020-01-01
   requests-per-hour: 2000
   requests-per-day: 20000
   request-spacing-ms: 400

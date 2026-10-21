@@ -1,6 +1,7 @@
 package com.zoutrankil.market.btc.app;
 
 import com.zoutrankil.data.marketdata.VerifiedMarketDataStore;
+import com.zoutrankil.market.btc.archive.cli.BinanceArchiveCommands;
 import com.zoutrankil.runtime.ProjectConfiguration;
 
 import java.net.URI;
@@ -11,8 +12,9 @@ import java.time.ZoneOffset;
 /** BTC 的有限历史入口，与美股只共享通用请求预算和验收端口。 */
 public final class CryptoDataMain {
     public static void main(String[] args) throws Exception {
+        if (BinanceArchiveCommands.execute(args)) return;
         if (args.length != 3 || !args[0].equals("collect") || !args[1].equals("--through"))
-            throw new IllegalArgumentException("命令：collect --through YYYY-MM-DD");
+            throw new IllegalArgumentException("命令：collect --through YYYY-MM-DD 或 probe-binance");
         var env = ProjectConfiguration.load("btc-data");
         var through = LocalDate.parse(args[2]);
         if (!through.isBefore(LocalDate.now(ZoneOffset.UTC)))

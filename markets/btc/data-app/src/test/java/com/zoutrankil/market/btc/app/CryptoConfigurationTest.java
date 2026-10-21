@@ -20,6 +20,8 @@ class CryptoConfigurationTest {
         assertEquals("UTC", env.getRequiredProperty("app.time.markets.btc"));
         assertEquals("2021-10-01", env.getRequiredProperty("app.crypto-data.history-start"));
         assertEquals(
+                "2020-01-01", env.getRequiredProperty("app.crypto-data.archive-history-start"));
+        assertEquals(
                 400L, env.getRequiredProperty("app.crypto-data.request-spacing-ms", Long.class));
         var closures =
                 Binder.get(env)

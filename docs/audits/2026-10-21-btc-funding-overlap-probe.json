@@ -1,0 +1,37 @@
+{
+  "dataVerified": false,
+  "observedAt": "2026-10-20T16:20:20.636693Z",
+  "results": [
+    {
+      "url": "https://data.binance.vision/data/futures/um/daily/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-10-19.zip.CHECKSUM",
+      "reason": "SourceStatusException: 来源 HTTP 404：https://data.binance.vision/data/futures/um/daily/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-10-19.zip.CHECKSUM"
+    },
+    {
+      "url": "https://fapi.binance.com/fapi/v1/fundingRate?symbol=BTCUSDT&startTime=1790726400000&endTime=1790812799999&limit=1000",
+      "sha256": "646d3395064f3db06342b9b0435787c0d5f6d84a72f672363574a931ebee58e8",
+      "raw": "/Users/Apple/zq/fun/QuestDBWithData/var/crypto-market-data/binance-vision/raw/binance/3f11e16a-e7f8-4cb2-a3de-88b634e0f994.response",
+      "httpStatus": 200,
+      "rows": 3,
+      "first": {
+        "symbol": "BTCUSDT",
+        "fundingTime": 1790726400000,
+        "fundingRate": "0.00007697",
+        "markPrice": "83624.50000000",
+        "rateType": "Regular"
+      },
+      "last": {
+        "symbol": "BTCUSDT",
+        "fundingTime": 1790784000002,
+        "fundingRate": "0.00006606",
+        "markPrice": "84104.80000000",
+        "rateType": "Regular"
+      }
+    }
+  ],
+  "overlapComparison": {
+    "apiEvents": 3,
+    "archiveEvents": 3,
+    "sameEventTimeAndRate": true,
+    "dataVerified": false
+  }
+}

@@ -49,3 +49,5 @@
 - [来源认证和 L2 归档的设计决定](decisions/2026-10-17-来源认证与L2归档.md)
 
 - [采集模型字段注释与导出](collected-field-documentation.md)
+
+- [BTC 官方归档采集](btc-data.md)

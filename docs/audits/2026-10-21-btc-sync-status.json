@@ -1,0 +1,319 @@
+{
+  "observedAt" : "2026-10-20T16:53:26.523747Z",
+  "dataVerified" : false,
+  "fundingApiTails" : [ {
+    "from" : "2026-10-01",
+    "through" : "2026-10-19",
+    "phase" : "VERIFIED",
+    "runId" : "market-dc6fee92-d736-4e8e-a601-69f216b4fbb4",
+    "reason" : "原正式运行已核对完整键值、WAL 和原目标"
+  } ],
+  "queueCounts" : [ {
+    "dataset" : "funding",
+    "tasks" : 1,
+    "phase" : "SKIPPED_SOURCE"
+  }, {
+    "dataset" : "funding",
+    "tasks" : 81,
+    "phase" : "VERIFIED"
+  }, {
+    "dataset" : "index_1h",
+    "tasks" : 6,
+    "phase" : "PARTIAL_VERIFIED"
+  }, {
+    "dataset" : "index_1h",
+    "tasks" : 94,
+    "phase" : "VERIFIED"
+  }, {
+    "dataset" : "mark_1h",
+    "tasks" : 5,
+    "phase" : "PARTIAL_VERIFIED"
+  }, {
+    "dataset" : "mark_1h",
+    "tasks" : 95,
+    "phase" : "VERIFIED"
+  }, {
+    "dataset" : "perp_1h",
+    "tasks" : 100,
+    "phase" : "VERIFIED"
+  }, {
+    "dataset" : "spot_1d",
+    "tasks" : 100,
+    "phase" : "VERIFIED"
+  }, {
+    "dataset" : "spot_1h",
+    "tasks" : 13,
+    "phase" : "PARTIAL_VERIFIED"
+  }, {
+    "dataset" : "spot_1h",
+    "tasks" : 87,
+    "phase" : "VERIFIED"
+  } ],
+  "issues" : [ {
+    "task" : "890cc60a1180e2f81815bc2ddd698276ce4d995bc08dbf58eaf5482b8c6a702c",
+    "dataset" : "funding",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/fundingRate/BTCUSDT/BTCUSDT-fundingRate-2026-10.zip",
+    "phase" : "SKIPPED_SOURCE",
+    "runId" : "market-dc6fee92-d736-4e8e-a601-69f216b4fbb4",
+    "reason" : "{\"apiCoverageVerified\":true,\"apiRun\":\"market-dc6fee92-d736-4e8e-a601-69f216b4fbb4\",\"apiTask\":\"05ccdb82504527b8ab20aba4fef12a49adc1c1b85322e41713300fd3b04414ef\",\"archiveIssue\":\"截止月归档尚未覆盖此范围\"}"
+  }, {
+    "task" : "202ef36b74955e74ba0cde63e6c5bcbc49a37abc30f765c06b84d2f0db6c3a78",
+    "dataset" : "index_1h",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/indexPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2022-04.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-c9de94e9-7e2c-4b1b-b6f8-7b9d886951d1",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"fe8fcd5ff6d814d2dd94a4364b4c386c79938b450748ab5b5e163f3751792988\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/fe8fcd5ff6d814d2dd94a4364b4c386c79938b450748ab5b5e163f3751792988.json\\\",\\\"verifiedRows\\\":8568,\\\"runId\\\":\\\"market-c9de94e9-7e2c-4b1b-b6f8-7b9d886951d1\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2022-04-27T00:00:00Z\",\"2022-04-27T01:00:00Z\",\"2022-04-27T02:00:00Z\",\"2022-04-27T03:00:00Z\",\"2022-04-27T04:00:00Z\",\"2022-04-27T05:00:00Z\",\"2022-04-27T06:00:00Z\",\"2022-04-27T07:00:00Z\",\"2022-04-27T08:00:00Z\",\"2022-04-27T09:00:00Z\",\"2022-04-27T10:00:00Z\",\"2022-04-27T11:00:00Z\",\"2022-04-27T12:00:00Z\",\"2022-04-27T13:00:00Z\",\"2022-04-27T14:00:00Z\",\"2022-04-27T15:00:00Z\",\"2022-04-27T16:00:00Z\",\"2022-04-27T17:00:00Z\",\"2022-04-27T18:00:00Z\",\"2022-04-27T19:00:00Z\",\"2022-04-27T20:00:00Z\",\"2022-04-27T21:00:00Z\",\"2022-04-27T22:00:00Z\",\"2022-04-27T23:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "abaceb97e8b7da43af332c1a85fc8d5293579ee1a64d56da080012f53e560d2c",
+    "dataset" : "index_1h",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/indexPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2022-07.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-c9de94e9-7e2c-4b1b-b6f8-7b9d886951d1",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"fe8fcd5ff6d814d2dd94a4364b4c386c79938b450748ab5b5e163f3751792988\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/fe8fcd5ff6d814d2dd94a4364b4c386c79938b450748ab5b5e163f3751792988.json\\\",\\\"verifiedRows\\\":8568,\\\"runId\\\":\\\"market-c9de94e9-7e2c-4b1b-b6f8-7b9d886951d1\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2022-07-24T00:00:00Z\",\"2022-07-24T01:00:00Z\",\"2022-07-24T02:00:00Z\",\"2022-07-24T03:00:00Z\",\"2022-07-24T04:00:00Z\",\"2022-07-24T05:00:00Z\",\"2022-07-24T06:00:00Z\",\"2022-07-24T07:00:00Z\",\"2022-07-24T08:00:00Z\",\"2022-07-24T09:00:00Z\",\"2022-07-24T10:00:00Z\",\"2022-07-24T11:00:00Z\",\"2022-07-24T12:00:00Z\",\"2022-07-24T13:00:00Z\",\"2022-07-24T14:00:00Z\",\"2022-07-24T15:00:00Z\",\"2022-07-24T16:00:00Z\",\"2022-07-24T17:00:00Z\",\"2022-07-24T18:00:00Z\",\"2022-07-24T19:00:00Z\",\"2022-07-24T20:00:00Z\",\"2022-07-24T21:00:00Z\",\"2022-07-24T22:00:00Z\",\"2022-07-24T23:00:00Z\",\"2022-07-25T00:00:00Z\",\"2022-07-25T01:00:00Z\",\"2022-07-25T02:00:00Z\",\"2022-07-25T03:00:00Z\",\"2022-07-25T04:00:00Z\",\"2022-07-25T05:00:00Z\",\"2022-07-25T06:00:00Z\",\"2022-07-25T07:00:00Z\",\"2022-07-25T08:00:00Z\",\"2022-07-25T09:00:00Z\",\"2022-07-25T10:00:00Z\",\"2022-07-25T11:00:00Z\",\"2022-07-25T12:00:00Z\",\"2022-07-25T13:00:00Z\",\"2022-07-25T14:00:00Z\",\"2022-07-25T15:00:00Z\",\"2022-07-25T16:00:00Z\",\"2022-07-25T17:00:00Z\",\"2022-07-25T18:00:00Z\",\"2022-07-25T19:00:00Z\",\"2022-07-25T20:00:00Z\",\"2022-07-25T21:00:00Z\",\"2022-07-25T22:00:00Z\",\"2022-07-25T23:00:00Z\",\"2022-07-27T00:00:00Z\",\"2022-07-27T01:00:00Z\",\"2022-07-27T02:00:00Z\",\"2022-07-27T03:00:00Z\",\"2022-07-27T04:00:00Z\",\"2022-07-27T05:00:00Z\",\"2022-07-27T06:00:00Z\",\"2022-07-27T07:00:00Z\",\"2022-07-27T08:00:00Z\",\"2022-07-27T09:00:00Z\",\"2022-07-27T10:00:00Z\",\"2022-07-27T11:00:00Z\",\"2022-07-27T12:00:00Z\",\"2022-07-27T13:00:00Z\",\"2022-07-27T14:00:00Z\",\"2022-07-27T15:00:00Z\",\"2022-07-27T16:00:00Z\",\"2022-07-27T17:00:00Z\",\"2022-07-27T18:00:00Z\",\"2022-07-27T19:00:00Z\",\"2022-07-27T20:00:00Z\",\"2022-07-27T21:00:00Z\",\"2022-07-27T22:00:00Z\",\"2022-07-27T23:00:00Z\",\"2022-07-28T00:00:00Z\",\"2022-07-28T01:00:00Z\",\"2022-07-28T02:00:00Z\",\"2022-07-28T03:00:00Z\",\"2022-07-28T04:00:00Z\",\"2022-07-28T05:00:00Z\",\"2022-07-28T06:00:00Z\",\"2022-07-28T07:00:00Z\",\"2022-07-28T08:00:00Z\",\"2022-07-28T09:00:00Z\",\"2022-07-28T10:00:00Z\",\"2022-07-28T11:00:00Z\",\"2022-07-28T12:00:00Z\",\"2022-07-28T13:00:00Z\",\"2022-07-28T14:00:00Z\",\"2022-07-28T15:00:00Z\",\"2022-07-28T16:00:00Z\",\"2022-07-28T17:00:00Z\",\"2022-07-28T18:00:00Z\",\"2022-07-28T19:00:00Z\",\"2022-07-28T20:00:00Z\",\"2022-07-28T21:00:00Z\",\"2022-07-28T22:00:00Z\",\"2022-07-28T23:00:00Z\",\"2022-07-30T00:00:00Z\",\"2022-07-30T01:00:00Z\",\"2022-07-30T02:00:00Z\",\"2022-07-30T03:00:00Z\",\"2022-07-30T04:00:00Z\",\"2022-07-30T05:00:00Z\",\"2022-07-30T06:00:00Z\",\"2022-07-30T07:00:00Z\",\"2022-07-30T08:00:00Z\",\"2022-07-30T09:00:00Z\",\"2022-07-30T10:00:00Z\",\"2022-07-30T11:00:00Z\",\"2022-07-30T12:00:00Z\",\"2022-07-30T13:00:00Z\",\"2022-07-30T14:00:00Z\",\"2022-07-30T15:00:00Z\",\"2022-07-30T16:00:00Z\",\"2022-07-30T17:00:00Z\",\"2022-07-30T18:00:00Z\",\"2022-07-30T19:00:00Z\",\"2022-07-30T20:00:00Z\",\"2022-07-30T21:00:00Z\",\"2022-07-30T22:00:00Z\",\"2022-07-30T23:00:00Z\",\"2022-07-31T00:00:00Z\",\"2022-07-31T01:00:00Z\",\"2022-07-31T02:00:00Z\",\"2022-07-31T03:00:00Z\",\"2022-07-31T04:00:00Z\",\"2022-07-31T05:00:00Z\",\"2022-07-31T06:00:00Z\",\"2022-07-31T07:00:00Z\",\"2022-07-31T08:00:00Z\",\"2022-07-31T09:00:00Z\",\"2022-07-31T10:00:00Z\",\"2022-07-31T11:00:00Z\",\"2022-07-31T12:00:00Z\",\"2022-07-31T13:00:00Z\",\"2022-07-31T14:00:00Z\",\"2022-07-31T15:00:00Z\",\"2022-07-31T16:00:00Z\",\"2022-07-31T17:00:00Z\",\"2022-07-31T18:00:00Z\",\"2022-07-31T19:00:00Z\",\"2022-07-31T20:00:00Z\",\"2022-07-31T21:00:00Z\",\"2022-07-31T22:00:00Z\",\"2022-07-31T23:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "322e5e844161f948e71cf7299e4405535d415c14107e64bfb6666d2891c49a08",
+    "dataset" : "index_1h",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/indexPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2022-10.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-c9de94e9-7e2c-4b1b-b6f8-7b9d886951d1",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"fe8fcd5ff6d814d2dd94a4364b4c386c79938b450748ab5b5e163f3751792988\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/fe8fcd5ff6d814d2dd94a4364b4c386c79938b450748ab5b5e163f3751792988.json\\\",\\\"verifiedRows\\\":8568,\\\"runId\\\":\\\"market-c9de94e9-7e2c-4b1b-b6f8-7b9d886951d1\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2022-10-02T00:00:00Z\",\"2022-10-02T01:00:00Z\",\"2022-10-02T02:00:00Z\",\"2022-10-02T03:00:00Z\",\"2022-10-02T04:00:00Z\",\"2022-10-02T05:00:00Z\",\"2022-10-02T06:00:00Z\",\"2022-10-02T07:00:00Z\",\"2022-10-02T08:00:00Z\",\"2022-10-02T09:00:00Z\",\"2022-10-02T10:00:00Z\",\"2022-10-02T11:00:00Z\",\"2022-10-02T12:00:00Z\",\"2022-10-02T13:00:00Z\",\"2022-10-02T14:00:00Z\",\"2022-10-02T15:00:00Z\",\"2022-10-02T16:00:00Z\",\"2022-10-02T17:00:00Z\",\"2022-10-02T18:00:00Z\",\"2022-10-02T19:00:00Z\",\"2022-10-02T20:00:00Z\",\"2022-10-02T21:00:00Z\",\"2022-10-02T22:00:00Z\",\"2022-10-02T23:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "9149dde9eeaa00501d8dd957313f53191ec5e0b955cbfabbea4e8125eaf6ff18",
+    "dataset" : "index_1h",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/indexPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2023-02.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-c3c10313-0c15-451d-8c3c-8282261f01e8",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"6f4f2d1534bf9851283de08bcb92e5ad05afa24104e8d695abab32cd4974bd20\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/6f4f2d1534bf9851283de08bcb92e5ad05afa24104e8d695abab32cd4974bd20.json\\\",\\\"verifiedRows\\\":8664,\\\"runId\\\":\\\"market-c3c10313-0c15-451d-8c3c-8282261f01e8\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2023-02-13T00:00:00Z\",\"2023-02-13T01:00:00Z\",\"2023-02-13T02:00:00Z\",\"2023-02-13T03:00:00Z\",\"2023-02-13T04:00:00Z\",\"2023-02-13T05:00:00Z\",\"2023-02-13T06:00:00Z\",\"2023-02-13T07:00:00Z\",\"2023-02-13T08:00:00Z\",\"2023-02-13T09:00:00Z\",\"2023-02-13T10:00:00Z\",\"2023-02-13T11:00:00Z\",\"2023-02-13T12:00:00Z\",\"2023-02-13T13:00:00Z\",\"2023-02-13T14:00:00Z\",\"2023-02-13T15:00:00Z\",\"2023-02-13T16:00:00Z\",\"2023-02-13T17:00:00Z\",\"2023-02-13T18:00:00Z\",\"2023-02-13T19:00:00Z\",\"2023-02-13T20:00:00Z\",\"2023-02-13T21:00:00Z\",\"2023-02-13T22:00:00Z\",\"2023-02-13T23:00:00Z\",\"2023-02-24T00:00:00Z\",\"2023-02-24T01:00:00Z\",\"2023-02-24T02:00:00Z\",\"2023-02-24T03:00:00Z\",\"2023-02-24T04:00:00Z\",\"2023-02-24T05:00:00Z\",\"2023-02-24T06:00:00Z\",\"2023-02-24T07:00:00Z\",\"2023-02-24T08:00:00Z\",\"2023-02-24T09:00:00Z\",\"2023-02-24T10:00:00Z\",\"2023-02-24T11:00:00Z\",\"2023-02-24T12:00:00Z\",\"2023-02-24T13:00:00Z\",\"2023-02-24T14:00:00Z\",\"2023-02-24T15:00:00Z\",\"2023-02-24T16:00:00Z\",\"2023-02-24T17:00:00Z\",\"2023-02-24T18:00:00Z\",\"2023-02-24T19:00:00Z\",\"2023-02-24T20:00:00Z\",\"2023-02-24T21:00:00Z\",\"2023-02-24T22:00:00Z\",\"2023-02-24T23:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "15c870230a8c98dcfba539187670fd754f3641f02c825d3fe378c31aff894d3c",
+    "dataset" : "index_1h",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/indexPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2023-04.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-c3c10313-0c15-451d-8c3c-8282261f01e8",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"6f4f2d1534bf9851283de08bcb92e5ad05afa24104e8d695abab32cd4974bd20\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/6f4f2d1534bf9851283de08bcb92e5ad05afa24104e8d695abab32cd4974bd20.json\\\",\\\"verifiedRows\\\":8664,\\\"runId\\\":\\\"market-c3c10313-0c15-451d-8c3c-8282261f01e8\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2023-04-07T00:00:00Z\",\"2023-04-07T01:00:00Z\",\"2023-04-07T02:00:00Z\",\"2023-04-07T03:00:00Z\",\"2023-04-07T04:00:00Z\",\"2023-04-07T05:00:00Z\",\"2023-04-07T06:00:00Z\",\"2023-04-07T07:00:00Z\",\"2023-04-07T08:00:00Z\",\"2023-04-07T09:00:00Z\",\"2023-04-07T10:00:00Z\",\"2023-04-07T11:00:00Z\",\"2023-04-07T12:00:00Z\",\"2023-04-07T13:00:00Z\",\"2023-04-07T14:00:00Z\",\"2023-04-07T15:00:00Z\",\"2023-04-07T16:00:00Z\",\"2023-04-07T17:00:00Z\",\"2023-04-07T18:00:00Z\",\"2023-04-07T19:00:00Z\",\"2023-04-07T20:00:00Z\",\"2023-04-07T21:00:00Z\",\"2023-04-07T22:00:00Z\",\"2023-04-07T23:00:00Z\",\"2023-04-08T00:00:00Z\",\"2023-04-08T01:00:00Z\",\"2023-04-08T02:00:00Z\",\"2023-04-08T03:00:00Z\",\"2023-04-08T04:00:00Z\",\"2023-04-08T05:00:00Z\",\"2023-04-08T06:00:00Z\",\"2023-04-08T07:00:00Z\",\"2023-04-08T08:00:00Z\",\"2023-04-08T09:00:00Z\",\"2023-04-08T10:00:00Z\",\"2023-04-08T11:00:00Z\",\"2023-04-08T12:00:00Z\",\"2023-04-08T13:00:00Z\",\"2023-04-08T14:00:00Z\",\"2023-04-08T15:00:00Z\",\"2023-04-08T16:00:00Z\",\"2023-04-08T17:00:00Z\",\"2023-04-08T18:00:00Z\",\"2023-04-08T19:00:00Z\",\"2023-04-08T20:00:00Z\",\"2023-04-08T21:00:00Z\",\"2023-04-08T22:00:00Z\",\"2023-04-08T23:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "c126e9e5110b377b9464cc5c46b5a83fdd249d3e15780b38dc68156763f1ffe6",
+    "dataset" : "index_1h",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/indexPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-06.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-ac699d90-a3db-4bf4-8c36-38d513bb2657",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"5486013ad3fa88e6ce3e742ab4c56ceb4bac2be499de823ac0278608da5f79ad\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/5486013ad3fa88e6ce3e742ab4c56ceb4bac2be499de823ac0278608da5f79ad.json\\\",\\\"verifiedRows\\\":6984,\\\"runId\\\":\\\"market-ac699d90-a3db-4bf4-8c36-38d513bb2657\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2026-06-29T00:00:00Z\",\"2026-06-29T01:00:00Z\",\"2026-06-29T02:00:00Z\",\"2026-06-29T03:00:00Z\",\"2026-06-29T04:00:00Z\",\"2026-06-29T05:00:00Z\",\"2026-06-29T06:00:00Z\",\"2026-06-29T07:00:00Z\",\"2026-06-29T08:00:00Z\",\"2026-06-29T09:00:00Z\",\"2026-06-29T10:00:00Z\",\"2026-06-29T11:00:00Z\",\"2026-06-29T12:00:00Z\",\"2026-06-29T13:00:00Z\",\"2026-06-29T14:00:00Z\",\"2026-06-29T15:00:00Z\",\"2026-06-29T16:00:00Z\",\"2026-06-29T17:00:00Z\",\"2026-06-29T18:00:00Z\",\"2026-06-29T19:00:00Z\",\"2026-06-29T20:00:00Z\",\"2026-06-29T21:00:00Z\",\"2026-06-29T22:00:00Z\",\"2026-06-29T23:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "8b96e8d687ab6aa9646293fcefbc3d25e56dcfbc2a8b1beb06ebf0f7a19bd8e5",
+    "dataset" : "mark_1h",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2021-07.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-0c21f9bb-f1a1-41e9-bfb7-27f7bfe8a30f",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"8bafe34ba6569bd1c79c8ccace8b3ffe39b3b6169394084f930d81be5fdac215\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/8bafe34ba6569bd1c79c8ccace8b3ffe39b3b6169394084f930d81be5fdac215.json\\\",\\\"verifiedRows\\\":8640,\\\"runId\\\":\\\"market-0c21f9bb-f1a1-41e9-bfb7-27f7bfe8a30f\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2021-07-01T00:00:00Z\",\"2021-07-01T01:00:00Z\",\"2021-07-01T02:00:00Z\",\"2021-07-01T03:00:00Z\",\"2021-07-01T04:00:00Z\",\"2021-07-01T05:00:00Z\",\"2021-07-01T06:00:00Z\",\"2021-07-01T07:00:00Z\",\"2021-07-01T08:00:00Z\",\"2021-07-01T09:00:00Z\",\"2021-07-01T10:00:00Z\",\"2021-07-01T11:00:00Z\",\"2021-07-01T12:00:00Z\",\"2021-07-01T13:00:00Z\",\"2021-07-01T14:00:00Z\",\"2021-07-01T15:00:00Z\",\"2021-07-01T16:00:00Z\",\"2021-07-01T17:00:00Z\",\"2021-07-01T18:00:00Z\",\"2021-07-01T19:00:00Z\",\"2021-07-01T20:00:00Z\",\"2021-07-01T21:00:00Z\",\"2021-07-01T22:00:00Z\",\"2021-07-01T23:00:00Z\",\"2021-07-24T00:00:00Z\",\"2021-07-24T01:00:00Z\",\"2021-07-24T02:00:00Z\",\"2021-07-24T03:00:00Z\",\"2021-07-24T04:00:00Z\",\"2021-07-24T05:00:00Z\",\"2021-07-24T06:00:00Z\",\"2021-07-24T07:00:00Z\",\"2021-07-24T08:00:00Z\",\"2021-07-24T09:00:00Z\",\"2021-07-24T10:00:00Z\",\"2021-07-24T11:00:00Z\",\"2021-07-24T12:00:00Z\",\"2021-07-24T13:00:00Z\",\"2021-07-24T14:00:00Z\",\"2021-07-24T15:00:00Z\",\"2021-07-24T16:00:00Z\",\"2021-07-24T17:00:00Z\",\"2021-07-24T18:00:00Z\",\"2021-07-24T19:00:00Z\",\"2021-07-24T20:00:00Z\",\"2021-07-24T21:00:00Z\",\"2021-07-24T22:00:00Z\",\"2021-07-24T23:00:00Z\",\"2021-07-25T00:00:00Z\",\"2021-07-25T01:00:00Z\",\"2021-07-25T02:00:00Z\",\"2021-07-25T03:00:00Z\",\"2021-07-25T04:00:00Z\",\"2021-07-25T05:00:00Z\",\"2021-07-25T06:00:00Z\",\"2021-07-25T07:00:00Z\",\"2021-07-25T08:00:00Z\",\"2021-07-25T09:00:00Z\",\"2021-07-25T10:00:00Z\",\"2021-07-25T11:00:00Z\",\"2021-07-25T12:00:00Z\",\"2021-07-25T13:00:00Z\",\"2021-07-25T14:00:00Z\",\"2021-07-25T15:00:00Z\",\"2021-07-25T16:00:00Z\",\"2021-07-25T17:00:00Z\",\"2021-07-25T18:00:00Z\",\"2021-07-25T19:00:00Z\",\"2021-07-25T20:00:00Z\",\"2021-07-25T21:00:00Z\",\"2021-07-25T22:00:00Z\",\"2021-07-25T23:00:00Z\",\"2021-07-26T00:00:00Z\",\"2021-07-26T01:00:00Z\",\"2021-07-26T02:00:00Z\",\"2021-07-26T03:00:00Z\",\"2021-07-26T04:00:00Z\",\"2021-07-26T05:00:00Z\",\"2021-07-26T06:00:00Z\",\"2021-07-26T07:00:00Z\",\"2021-07-26T08:00:00Z\",\"2021-07-26T09:00:00Z\",\"2021-07-26T10:00:00Z\",\"2021-07-26T11:00:00Z\",\"2021-07-26T12:00:00Z\",\"2021-07-26T13:00:00Z\",\"2021-07-26T14:00:00Z\",\"2021-07-26T15:00:00Z\",\"2021-07-26T16:00:00Z\",\"2021-07-26T17:00:00Z\",\"2021-07-26T18:00:00Z\",\"2021-07-26T19:00:00Z\",\"2021-07-26T20:00:00Z\",\"2021-07-26T21:00:00Z\",\"2021-07-26T22:00:00Z\",\"2021-07-26T23:00:00Z\",\"2021-07-27T00:00:00Z\",\"2021-07-27T01:00:00Z\",\"2021-07-27T02:00:00Z\",\"2021-07-27T03:00:00Z\",\"2021-07-27T04:00:00Z\",\"2021-07-27T05:00:00Z\",\"2021-07-27T06:00:00Z\",\"2021-07-27T07:00:00Z\",\"2021-07-27T08:00:00Z\",\"2021-07-27T09:00:00Z\",\"2021-07-27T10:00:00Z\",\"2021-07-27T11:00:00Z\",\"2021-07-27T12:00:00Z\",\"2021-07-27T13:00:00Z\",\"2021-07-27T14:00:00Z\",\"2021-07-27T15:00:00Z\",\"2021-07-27T16:00:00Z\",\"2021-07-27T17:00:00Z\",\"2021-07-27T18:00:00Z\",\"2021-07-27T19:00:00Z\",\"2021-07-27T20:00:00Z\",\"2021-07-27T21:00:00Z\",\"2021-07-27T22:00:00Z\",\"2021-07-27T23:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "89af02c9e299109021378fe3584522a89ffd1609ea0edb08fc5d9dee2add5ff8",
+    "dataset" : "mark_1h",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2022-07.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-aa3d9b07-2ade-4546-868b-4370e344113d",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"cfb2c7fd498cb977b6aa56da9c995495b2b579acfae98b200261e5a28858fa57\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/cfb2c7fd498cb977b6aa56da9c995495b2b579acfae98b200261e5a28858fa57.json\\\",\\\"verifiedRows\\\":8712,\\\"runId\\\":\\\"market-aa3d9b07-2ade-4546-868b-4370e344113d\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2022-07-31T00:00:00Z\",\"2022-07-31T01:00:00Z\",\"2022-07-31T02:00:00Z\",\"2022-07-31T03:00:00Z\",\"2022-07-31T04:00:00Z\",\"2022-07-31T05:00:00Z\",\"2022-07-31T06:00:00Z\",\"2022-07-31T07:00:00Z\",\"2022-07-31T08:00:00Z\",\"2022-07-31T09:00:00Z\",\"2022-07-31T10:00:00Z\",\"2022-07-31T11:00:00Z\",\"2022-07-31T12:00:00Z\",\"2022-07-31T13:00:00Z\",\"2022-07-31T14:00:00Z\",\"2022-07-31T15:00:00Z\",\"2022-07-31T16:00:00Z\",\"2022-07-31T17:00:00Z\",\"2022-07-31T18:00:00Z\",\"2022-07-31T19:00:00Z\",\"2022-07-31T20:00:00Z\",\"2022-07-31T21:00:00Z\",\"2022-07-31T22:00:00Z\",\"2022-07-31T23:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "3c440a7efdc3e9af013da3f9d7f708bca4b88c837b6a4f18483f7c8ff047ad1b",
+    "dataset" : "mark_1h",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2022-10.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-aa3d9b07-2ade-4546-868b-4370e344113d",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"cfb2c7fd498cb977b6aa56da9c995495b2b579acfae98b200261e5a28858fa57\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/cfb2c7fd498cb977b6aa56da9c995495b2b579acfae98b200261e5a28858fa57.json\\\",\\\"verifiedRows\\\":8712,\\\"runId\\\":\\\"market-aa3d9b07-2ade-4546-868b-4370e344113d\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2022-10-02T00:00:00Z\",\"2022-10-02T01:00:00Z\",\"2022-10-02T02:00:00Z\",\"2022-10-02T03:00:00Z\",\"2022-10-02T04:00:00Z\",\"2022-10-02T05:00:00Z\",\"2022-10-02T06:00:00Z\",\"2022-10-02T07:00:00Z\",\"2022-10-02T08:00:00Z\",\"2022-10-02T09:00:00Z\",\"2022-10-02T10:00:00Z\",\"2022-10-02T11:00:00Z\",\"2022-10-02T12:00:00Z\",\"2022-10-02T13:00:00Z\",\"2022-10-02T14:00:00Z\",\"2022-10-02T15:00:00Z\",\"2022-10-02T16:00:00Z\",\"2022-10-02T17:00:00Z\",\"2022-10-02T18:00:00Z\",\"2022-10-02T19:00:00Z\",\"2022-10-02T20:00:00Z\",\"2022-10-02T21:00:00Z\",\"2022-10-02T22:00:00Z\",\"2022-10-02T23:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "de7637b35f902409c8dcf738b15772d8d457162676b540b8149e9391351a7df0",
+    "dataset" : "mark_1h",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2023-02.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-ea92cb67-88cd-4144-8a8a-a7af1928da4b",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"afa66a8af236a333bed9a38a009d94b467a72a96a776095c8ff3a2b3522c9c4e\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/afa66a8af236a333bed9a38a009d94b467a72a96a776095c8ff3a2b3522c9c4e.json\\\",\\\"verifiedRows\\\":8736,\\\"runId\\\":\\\"market-ea92cb67-88cd-4144-8a8a-a7af1928da4b\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2023-02-24T00:00:00Z\",\"2023-02-24T01:00:00Z\",\"2023-02-24T02:00:00Z\",\"2023-02-24T03:00:00Z\",\"2023-02-24T04:00:00Z\",\"2023-02-24T05:00:00Z\",\"2023-02-24T06:00:00Z\",\"2023-02-24T07:00:00Z\",\"2023-02-24T08:00:00Z\",\"2023-02-24T09:00:00Z\",\"2023-02-24T10:00:00Z\",\"2023-02-24T11:00:00Z\",\"2023-02-24T12:00:00Z\",\"2023-02-24T13:00:00Z\",\"2023-02-24T14:00:00Z\",\"2023-02-24T15:00:00Z\",\"2023-02-24T16:00:00Z\",\"2023-02-24T17:00:00Z\",\"2023-02-24T18:00:00Z\",\"2023-02-24T19:00:00Z\",\"2023-02-24T20:00:00Z\",\"2023-02-24T21:00:00Z\",\"2023-02-24T22:00:00Z\",\"2023-02-24T23:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "7cfb468b5c7067627816166aadf7709c2a2bc5258fc86ee17447ecbb79371130",
+    "dataset" : "mark_1h",
+    "url" : "https://data.binance.vision/data/futures/um/monthly/markPriceKlines/BTCUSDT/1h/BTCUSDT-1h-2026-06.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-460946f7-3841-4310-86fe-79116cef1b99",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"4373c5c11dc20045255db5f05f56143a2bd9619118ab7cbccad54b7fe7d2f668\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/4373c5c11dc20045255db5f05f56143a2bd9619118ab7cbccad54b7fe7d2f668.json\\\",\\\"verifiedRows\\\":6984,\\\"runId\\\":\\\"market-460946f7-3841-4310-86fe-79116cef1b99\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2026-06-29T00:00:00Z\",\"2026-06-29T01:00:00Z\",\"2026-06-29T02:00:00Z\",\"2026-06-29T03:00:00Z\",\"2026-06-29T04:00:00Z\",\"2026-06-29T05:00:00Z\",\"2026-06-29T06:00:00Z\",\"2026-06-29T07:00:00Z\",\"2026-06-29T08:00:00Z\",\"2026-06-29T09:00:00Z\",\"2026-06-29T10:00:00Z\",\"2026-06-29T11:00:00Z\",\"2026-06-29T12:00:00Z\",\"2026-06-29T13:00:00Z\",\"2026-06-29T14:00:00Z\",\"2026-06-29T15:00:00Z\",\"2026-06-29T16:00:00Z\",\"2026-06-29T17:00:00Z\",\"2026-06-29T18:00:00Z\",\"2026-06-29T19:00:00Z\",\"2026-06-29T20:00:00Z\",\"2026-06-29T21:00:00Z\",\"2026-06-29T22:00:00Z\",\"2026-06-29T23:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "afa7086b831a4cb1c5ec4be32114e1e669d7cbf7cf2942646392967d3573a1c9",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-02.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-92c570e4-1fbe-4074-8077-90a557e659db",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"0a15d56a7d1a899c55a1aa6ad050bcaee75f70e9f3bcac64dbdbd356be296e56\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/0a15d56a7d1a899c55a1aa6ad050bcaee75f70e9f3bcac64dbdbd356be296e56.json\\\",\\\"verifiedRows\\\":3587,\\\"runId\\\":\\\"market-92c570e4-1fbe-4074-8077-90a557e659db\\\"}\",\"shortenedBars\":[{\"close_time\":\"2020-02-19T11:35:32.286Z\",\"nominal_close_time\":\"2020-02-19T11:59:59.999Z\",\"open_time\":\"2020-02-19T11:00:00Z\"}],\"missingOpenTimes\":[\"2020-02-09T02:00:00Z\",\"2020-02-19T12:00:00Z\",\"2020-02-19T13:00:00Z\",\"2020-02-19T14:00:00Z\",\"2020-02-19T15:00:00Z\",\"2020-02-19T16:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "3635b2c74a9ba3260c1f769281353286ae1d2c4915a0e884e58c912ae6efe2ec",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-03.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-92c570e4-1fbe-4074-8077-90a557e659db",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"0a15d56a7d1a899c55a1aa6ad050bcaee75f70e9f3bcac64dbdbd356be296e56\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/0a15d56a7d1a899c55a1aa6ad050bcaee75f70e9f3bcac64dbdbd356be296e56.json\\\",\\\"verifiedRows\\\":3587,\\\"runId\\\":\\\"market-92c570e4-1fbe-4074-8077-90a557e659db\\\"}\",\"shortenedBars\":[{\"close_time\":\"2020-03-04T09:21:46.694Z\",\"nominal_close_time\":\"2020-03-04T09:59:59.999Z\",\"open_time\":\"2020-03-04T09:00:00Z\"}],\"missingOpenTimes\":[\"2020-03-04T10:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "a60b12d48a3870ada564601c53b59030f9825d01733abe18ac732469342c7627",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-04.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-92c570e4-1fbe-4074-8077-90a557e659db",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"0a15d56a7d1a899c55a1aa6ad050bcaee75f70e9f3bcac64dbdbd356be296e56\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/0a15d56a7d1a899c55a1aa6ad050bcaee75f70e9f3bcac64dbdbd356be296e56.json\\\",\\\"verifiedRows\\\":3587,\\\"runId\\\":\\\"market-92c570e4-1fbe-4074-8077-90a557e659db\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2020-04-25T02:00:00Z\",\"2020-04-25T03:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "698f724f0fbd5157a0191f56dcbc154ff3201c07570c84bd308fd2cf96f57002",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-06.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-92c570e4-1fbe-4074-8077-90a557e659db",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"0a15d56a7d1a899c55a1aa6ad050bcaee75f70e9f3bcac64dbdbd356be296e56\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/0a15d56a7d1a899c55a1aa6ad050bcaee75f70e9f3bcac64dbdbd356be296e56.json\\\",\\\"verifiedRows\\\":3587,\\\"runId\\\":\\\"market-92c570e4-1fbe-4074-8077-90a557e659db\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2020-06-28T02:00:00Z\",\"2020-06-28T03:00:00Z\",\"2020-06-28T04:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "10f968f82b90d1e604056188ed156a445062d52295e07db036e8dab957e2c48e",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-11.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-92c570e4-1fbe-4074-8077-90a557e659db",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"0a15d56a7d1a899c55a1aa6ad050bcaee75f70e9f3bcac64dbdbd356be296e56\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/0a15d56a7d1a899c55a1aa6ad050bcaee75f70e9f3bcac64dbdbd356be296e56.json\\\",\\\"verifiedRows\\\":3587,\\\"runId\\\":\\\"market-92c570e4-1fbe-4074-8077-90a557e659db\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2020-11-30T06:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "9a7de6ece93fb1dceeebbba0123780d33ba819089c2727fa84d52957845205d4",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2020-12.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-327626e2-c981-49e6-8bbf-70325f71f7bd",
+    "reason" : "{\"excludedRows\":[{\"reason\":\"来源零成交占位行的 close_time 早于 open_time，隔离该行，不写价格\",\"raw\":\"1608559200000,22646.53000000,22646.53000000,22646.53000000,22646.53000000,0.00000000,1608558440521,0.00000000,0,0.00000000,0.00000000,0\"}],\"shortenedBars\":[],\"publication\":\"{\\\"runId\\\":\\\"market-327626e2-c981-49e6-8bbf-70325f71f7bd\\\",\\\"verifiedRows\\\":739,\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/2793cbabb800b970f59a5655368297f0aa2e01141b5e6931ecb1e1857aeb5425.json\\\",\\\"bundleSha256\\\":\\\"2793cbabb800b970f59a5655368297f0aa2e01141b5e6931ecb1e1857aeb5425\\\"}\",\"missingOpenTimes\":[\"2020-12-21T14:00:00Z\",\"2020-12-21T15:00:00Z\",\"2020-12-21T16:00:00Z\",\"2020-12-21T17:00:00Z\",\"2020-12-25T02:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "523b0a124f65a385db700de42ae23dd75d8d8f2cd445a791887c35d6f7c45949",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-02.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-80c0a3f5-09a7-4edb-b180-d0993e472931",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84.json\\\",\\\"verifiedRows\\\":4331,\\\"runId\\\":\\\"market-80c0a3f5-09a7-4edb-b180-d0993e472931\\\"}\",\"shortenedBars\":[{\"close_time\":\"2021-02-11T03:40:54.773Z\",\"nominal_close_time\":\"2021-02-11T03:59:59.999Z\",\"open_time\":\"2021-02-11T03:00:00Z\"}],\"missingOpenTimes\":[\"2021-02-11T04:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "4daef51da3494deeef17300c2b2a287cfefe4e18d9f84cf6e63554b59c168da2",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-03.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-80c0a3f5-09a7-4edb-b180-d0993e472931",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84.json\\\",\\\"verifiedRows\\\":4331,\\\"runId\\\":\\\"market-80c0a3f5-09a7-4edb-b180-d0993e472931\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2021-03-06T02:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "8ad8c62b64988ef4c508878087c2e46cf5455dccab6fd7b8ed444424f7ac6e96",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-04.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-80c0a3f5-09a7-4edb-b180-d0993e472931",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84.json\\\",\\\"verifiedRows\\\":4331,\\\"runId\\\":\\\"market-80c0a3f5-09a7-4edb-b180-d0993e472931\\\"}\",\"shortenedBars\":[{\"close_time\":\"2021-04-25T04:00:58.146Z\",\"nominal_close_time\":\"2021-04-25T04:59:59.999Z\",\"open_time\":\"2021-04-25T04:00:00Z\"}],\"missingOpenTimes\":[\"2021-04-20T02:00:00Z\",\"2021-04-20T03:00:00Z\",\"2021-04-25T05:00:00Z\",\"2021-04-25T06:00:00Z\",\"2021-04-25T07:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "5eae19d4f43c2cec2a5cf4569850460a6d06f4c9748f074e5d5eff5c7784de73",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-08.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-80c0a3f5-09a7-4edb-b180-d0993e472931",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84.json\\\",\\\"verifiedRows\\\":4331,\\\"runId\\\":\\\"market-80c0a3f5-09a7-4edb-b180-d0993e472931\\\"}\",\"shortenedBars\":[{\"close_time\":\"2021-08-13T01:59:59Z\",\"nominal_close_time\":\"2021-08-13T01:59:59.999Z\",\"open_time\":\"2021-08-13T01:00:00Z\"}],\"missingOpenTimes\":[\"2021-08-13T02:00:00Z\",\"2021-08-13T03:00:00Z\",\"2021-08-13T04:00:00Z\",\"2021-08-13T05:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "658ebfebf2dacdf3b054fc4bd3c2b618b871412f11dba0bae96fbdb96b9fa55c",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-09.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-80c0a3f5-09a7-4edb-b180-d0993e472931",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84.json\\\",\\\"verifiedRows\\\":4331,\\\"runId\\\":\\\"market-80c0a3f5-09a7-4edb-b180-d0993e472931\\\"}\",\"shortenedBars\":[],\"missingOpenTimes\":[\"2021-09-29T07:00:00Z\",\"2021-09-29T08:00:00Z\"],\"rangeComplete\":false}"
+  }, {
+    "task" : "3d6522520e1d4d5344f91feee59bfb139aa3045b07dd5b818f38e320c0dbdc9b",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2021-12.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-80c0a3f5-09a7-4edb-b180-d0993e472931",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/de6284d6f701f1984431c514dc78089c510280e879db626b17a7a005d71e5b84.json\\\",\\\"verifiedRows\\\":4331,\\\"runId\\\":\\\"market-80c0a3f5-09a7-4edb-b180-d0993e472931\\\"}\",\"shortenedBars\":[{\"close_time\":\"2021-12-24T04:59:54.362Z\",\"nominal_close_time\":\"2021-12-24T04:59:59.999Z\",\"open_time\":\"2021-12-24T04:00:00Z\"}],\"missingOpenTimes\":[],\"rangeComplete\":false}"
+  }, {
+    "task" : "274bf9140823d6d89cdd07b7bc09690d74315ea46f4fa0c7f20f2f67a72d7158",
+    "dataset" : "spot_1h",
+    "url" : "https://data.binance.vision/data/spot/monthly/klines/BTCUSDT/1h/BTCUSDT-1h-2023-03.zip",
+    "phase" : "PARTIAL_VERIFIED",
+    "runId" : "market-2ce7f119-c83d-413c-9218-f61059866fea",
+    "reason" : "{\"publication\":\"{\\\"bundleSha256\\\":\\\"a123ae47a243ee648e476a14467b4ec3af7c681e3c0357afd92296fd560702ad\\\",\\\"bundle\\\":\\\"var/crypto-market-data/binance-vision/bundles/a123ae47a243ee648e476a14467b4ec3af7c681e3c0357afd92296fd560702ad.json\\\",\\\"verifiedRows\\\":743,\\\"runId\\\":\\\"market-2ce7f119-c83d-413c-9218-f61059866fea\\\"}\",\"shortenedBars\":[{\"close_time\":\"2023-03-24T12:39:41.646Z\",\"nominal_close_time\":\"2023-03-24T12:59:59.999Z\",\"open_time\":\"2023-03-24T12:00:00Z\"}],\"missingOpenTimes\":[\"2023-03-24T13:00:00Z\"],\"rangeComplete\":false}"
+  } ],
+  "tables" : [ {
+    "dataset" : "spot_1d",
+    "table" : "btc_spot_1d",
+    "metadata" : [ {
+      "id" : 3244,
+      "directoryName" : "btc_spot_1d~3244",
+      "walEnabled" : true,
+      "table_type" : "T"
+    } ],
+    "range" : [ {
+      "first_time" : "2020-01-01T00:00:00.000000Z",
+      "last_time" : "2026-10-19T00:00:00.000000Z",
+      "rows" : 2484
+    } ],
+    "walSettled" : true
+  }, {
+    "dataset" : "spot_1h",
+    "table" : "btc_spot_1h",
+    "metadata" : [ {
+      "id" : 3245,
+      "directoryName" : "btc_spot_1h~3245",
+      "walEnabled" : true,
+      "table_type" : "T"
+    } ],
+    "range" : [ {
+      "first_time" : "2020-01-01T00:00:00.000000Z",
+      "last_time" : "2026-10-19T23:00:00.000000Z",
+      "rows" : 59584
+    } ],
+    "walSettled" : true
+  }, {
+    "dataset" : "perp_1h",
+    "table" : "btc_perp_1h",
+    "metadata" : [ {
+      "id" : 3246,
+      "directoryName" : "btc_perp_1h~3246",
+      "walEnabled" : true,
+      "table_type" : "T"
+    } ],
+    "range" : [ {
+      "first_time" : "2020-01-01T00:00:00.000000Z",
+      "last_time" : "2026-10-19T23:00:00.000000Z",
+      "rows" : 59616
+    } ],
+    "walSettled" : true
+  }, {
+    "dataset" : "funding",
+    "table" : "btc_funding",
+    "metadata" : [ {
+      "id" : 3247,
+      "directoryName" : "btc_funding~3247",
+      "walEnabled" : true,
+      "table_type" : "T"
+    } ],
+    "range" : [ {
+      "first_time" : "2020-01-01T00:00:00.000000Z",
+      "last_time" : "2026-10-19T16:00:00.003000Z",
+      "rows" : 7452
+    } ],
+    "walSettled" : true
+  }, {
+    "dataset" : "mark_1h",
+    "table" : "btc_mark_1h",
+    "metadata" : [ {
+      "id" : 3248,
+      "directoryName" : "btc_mark_1h~3248",
+      "walEnabled" : true,
+      "table_type" : "T"
+    } ],
+    "range" : [ {
+      "first_time" : "2020-01-01T00:00:00.000000Z",
+      "last_time" : "2026-10-19T23:00:00.000000Z",
+      "rows" : 59400
+    } ],
+    "walSettled" : true
+  }, {
+    "dataset" : "index_1h",
+    "table" : "btc_index_1h",
+    "metadata" : [ {
+      "id" : 3249,
+      "directoryName" : "btc_index_1h~3249",
+      "walEnabled" : true,
+      "table_type" : "T"
+    } ],
+    "range" : [ {
+      "first_time" : "2020-01-01T00:00:00.000000Z",
+      "last_time" : "2026-10-19T23:00:00.000000Z",
+      "rows" : 59304
+    } ],
+    "walSettled" : true
+  } ]
+}

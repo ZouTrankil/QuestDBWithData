@@ -1,0 +1,41 @@
+{
+  "readOnly" : true,
+  "dataVerified" : false,
+  "checks" : [ {
+    "businessFieldsEqual" : true,
+    "runId" : "market-62492e59-2fce-4ecb-8112-59fb995f6fef",
+    "dataset" : "spot_1d",
+    "targetUnchanged" : true,
+    "rows" : 292
+  }, {
+    "businessFieldsEqual" : true,
+    "runId" : "market-327626e2-c981-49e6-8bbf-70325f71f7bd",
+    "dataset" : "spot_1h",
+    "targetUnchanged" : true,
+    "rows" : 739
+  }, {
+    "businessFieldsEqual" : true,
+    "runId" : "market-c4aede7d-1a25-4ca7-b89c-184881a95518",
+    "dataset" : "perp_1h",
+    "targetUnchanged" : true,
+    "rows" : 7008
+  }, {
+    "businessFieldsEqual" : true,
+    "runId" : "market-dc6fee92-d736-4e8e-a601-69f216b4fbb4",
+    "dataset" : "funding",
+    "targetUnchanged" : true,
+    "rows" : 57
+  }, {
+    "businessFieldsEqual" : true,
+    "runId" : "market-460946f7-3841-4310-86fe-79116cef1b99",
+    "dataset" : "mark_1h",
+    "targetUnchanged" : true,
+    "rows" : 6984
+  }, {
+    "businessFieldsEqual" : true,
+    "runId" : "market-ac699d90-a3db-4bf4-8c36-38d513bb2657",
+    "dataset" : "index_1h",
+    "targetUnchanged" : true,
+    "rows" : 6984
+  } ]
+}

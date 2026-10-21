@@ -1,0 +1,58 @@
+{
+  "observedAt": "2026-10-20T16:09:53.692519+00:00",
+  "from": "2020-01-01",
+  "through": "2020-01-31",
+  "coverage": {
+    "spot_1d": {
+      "rows": 31,
+      "first": "2020-01-01T00:00:00+00:00",
+      "last": "2020-01-31T00:00:00+00:00",
+      "missingOpenTimes": []
+    },
+    "spot_1h": {
+      "rows": 744,
+      "first": "2020-01-01T00:00:00+00:00",
+      "last": "2020-01-31T23:00:00+00:00",
+      "missingOpenTimes": []
+    },
+    "perp_1h": {
+      "rows": 744,
+      "first": "2020-01-01T00:00:00+00:00",
+      "last": "2020-01-31T23:00:00+00:00",
+      "missingOpenTimes": []
+    },
+    "funding": {
+      "rows": 93,
+      "first": "2020-01-01T00:00:00+00:00",
+      "last": "2020-01-31T16:00:00+00:00",
+      "说明": "事件级来源，不按固定八小时凑预期行数。"
+    },
+    "mark_1h": {
+      "rows": 744,
+      "first": "2020-01-01T00:00:00+00:00",
+      "last": "2020-01-31T23:00:00+00:00",
+      "missingOpenTimes": []
+    },
+    "index_1h": {
+      "rows": 744,
+      "first": "2020-01-01T00:00:00+00:00",
+      "last": "2020-01-31T23:00:00+00:00",
+      "missingOpenTimes": []
+    }
+  },
+  "spotReconciliation": {
+    "from": "2020-01-01",
+    "through": "2020-01-31",
+    "matchedDays": 31,
+    "incompleteDays": [],
+    "mismatches": [],
+    "dataVerified": false,
+    "说明": "只核对现货日小时关系；期现、标记与指数价差不要求为零。"
+  },
+  "fundingEvents": 93,
+  "fundingWithoutAllPrices": [
+    "2020-01-01T00:00:00+00:00"
+  ],
+  "dataVerified": false,
+  "说明": "范围、缺口与关联诊断；来源完整性和正式发布证据另看 Java 账本。历史修订价格不证明当时已知。"
+}
