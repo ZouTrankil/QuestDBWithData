@@ -61,6 +61,19 @@ app.sync.financial:
   max-request-attempts: 1000
   execution-window: PT4H
 
+# 逐日重查来源自己的报价日期，不用股票日历；原未决运行不自动重发。
+app.sync.interest-observations:
+  enabled: false
+  cron: "0 40 18 * * *"
+  revision-days: 31
+
+# 每天重查已结束的统计期；未公布的期次保留缺口，不用旧值填齐。
+app.sync.macro-observations:
+  enabled: false
+  cron: "0 10 19 * * *"
+  revision-months: 6
+  revision-quarters: 4
+
 # 常驻数据 API 可托管 Batch；启用后仍遵守 Quartz 已保存的暂停状态。
 jdb:
   enabled: false

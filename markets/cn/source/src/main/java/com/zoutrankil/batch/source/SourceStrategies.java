@@ -48,6 +48,7 @@ final class SourceStrategies {
                     "cn_ppi",
                     "cn_pmi",
                     "cn_m",
+                    "sf_month",
                     "cn_gdp",
                     "fut_daily",
                     "fut_settle",
@@ -392,6 +393,12 @@ final class SourceStrategies {
                                     BUSINESS_STORAGE),
                             entry(
                                     "cn_m",
+                                    SourceRequestPolicies.MONTHLY,
+                                    MONTH_ROWS,
+                                    MONTH_COVERAGE,
+                                    BUSINESS_STORAGE),
+                            entry(
+                                    "sf_month",
                                     SourceRequestPolicies.MONTHLY,
                                     MONTH_ROWS,
                                     MONTH_COVERAGE,

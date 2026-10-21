@@ -148,7 +148,7 @@ class DailySourceContractAdapterTest {
     }
 
     private static Stream<String> otherDatasets() {
-        assertEquals(41, SourceContract.SUPPORTED.size());
+        assertEquals(42, SourceContract.SUPPORTED.size());
         return SourceContract.SUPPORTED.stream()
                 .filter(dataset -> !dataset.equals("daily"))
                 .sorted();

@@ -2,16 +2,20 @@ package com.zoutrankil.market.cn.bootstrap;
 
 import com.zoutrankil.data.config.QuestDbProperties;
 import com.zoutrankil.data.config.TushareProperties;
+import com.zoutrankil.market.cn.macro.config.MacroObservationConfiguration;
+import com.zoutrankil.market.cn.rates.config.InterestObservationConfiguration;
 
 import org.springframework.boot.Banner.Mode;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Import;
 
 import java.util.Map;
 
 /** A 股数据组件装配；入口可复用它，但库本身不依赖任何启动应用。 */
 @SpringBootApplication(scanBasePackages = "com.zoutrankil.data")
+@Import({MacroObservationConfiguration.class, InterestObservationConfiguration.class})
 @EnableConfigurationProperties({TushareProperties.class, QuestDbProperties.class})
 public class CnDataConfiguration {
     /** 共享数据执行组件；各常驻进程入口自行选择对应的配置环境。 */

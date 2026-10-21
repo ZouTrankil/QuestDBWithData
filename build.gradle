@@ -457,7 +457,7 @@ tasks.register('verifyModuleBoundaries') {
             ':platform:engine:batch': [':platform:engine:source'],
             ':markets:cn': [':platform:core'],
             ':markets:cn:source': [':markets:cn', ':platform:engine:source'],
-            ':markets:cn:data': [':platform:app-support', ':markets:cn', ':platform:engine:questdb', ':platform:runtime-support'],
+            ':markets:cn:data': [':platform:app-support', ':markets:cn', ':markets:cn:source', ':platform:engine:questdb', ':platform:runtime-support'],
             ':markets:cn:data-app': [':markets:cn:data', ':markets:cn:batch', ':markets:cn:source', ':markets:us', ':platform:runtime-support'],
             ':markets:cn:batch': [':markets:cn:source', ':platform:engine:batch', ':platform:runtime-support'],
             ':markets:us': [':platform:engine:source'],

@@ -1420,6 +1420,7 @@ class NativeSourceTest {
                         case "cn_ppi" -> "ppi_yoy";
                         case "cn_pmi" -> "pmi010000";
                         case "cn_m" -> "m2_yoy";
+                        case "sf_month" -> "inc_month";
                         case "cn_gdp" -> "gdp_yoy";
                         case "etf_portfolio" -> "mkv";
                         case "etf_basic" -> "issue_amount";

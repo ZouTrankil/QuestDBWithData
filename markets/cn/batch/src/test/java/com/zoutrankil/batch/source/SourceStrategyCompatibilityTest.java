@@ -317,8 +317,11 @@ class SourceStrategyCompatibilityTest {
             var root = Json.MAPPER.readTree(input);
             var result = new ArrayList<JsonNode>();
             root.forEach(result::add);
+            var originalDatasets = new TreeSet<>(SourceContract.SUPPORTED);
+            assertTrue(originalDatasets.remove("sf_month"));
+            // 原 41 条来源仍逐字对照原件；新增社融另做真实样本和正式 owner 回归。
             assertEquals(
-                    SourceContract.SUPPORTED,
+                    originalDatasets,
                     new TreeSet<>(result.stream().map(n -> n.path("dataset").asText()).toList()));
             assertEquals(41, result.size());
             return List.copyOf(result);

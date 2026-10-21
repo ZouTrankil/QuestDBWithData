@@ -246,7 +246,7 @@ public final class NativeSourceFixtures {
                             "cnt_accu")) cpi.put(field, Json.MAPPER.valueToTree(102.25));
             return cpi;
         }
-        if (Set.of("cn_ppi", "cn_pmi", "cn_m").contains(dataset)) {
+        if (Set.of("cn_ppi", "cn_pmi", "cn_m", "sf_month").contains(dataset)) {
             var macro = new LinkedHashMap<String, JsonNode>();
             macro.put("month", Json.MAPPER.valueToTree("202609"));
             for (var column : SourceContract.load(dataset).businessColumns())

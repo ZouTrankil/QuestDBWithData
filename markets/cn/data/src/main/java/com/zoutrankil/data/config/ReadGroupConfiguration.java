@@ -1,7 +1,6 @@
 package com.zoutrankil.data.config;
 
 import com.zoutrankil.data.domain.DatasetImplementation;
-import com.zoutrankil.data.domain.macro.interest.InterestRateDatasets;
 import com.zoutrankil.data.domain.stock.basic.StockBasicDataset;
 import com.zoutrankil.data.domain.stock.reference.StockShockDatasets;
 import com.zoutrankil.data.repository.CnBondYieldCurveWritePort;
@@ -42,21 +41,6 @@ public class ReadGroupConfiguration {
     @Bean
     DatasetImplementation stockHighShockDataset() {
         return () -> StockShockDatasets.HIGH_SHOCK;
-    }
-
-    @Bean
-    DatasetImplementation shiborObservationDataset() {
-        return () -> InterestRateDatasets.SHIBOR;
-    }
-
-    @Bean
-    DatasetImplementation hiborObservationDataset() {
-        return () -> InterestRateDatasets.HIBOR;
-    }
-
-    @Bean
-    DatasetImplementation lprObservationDataset() {
-        return () -> InterestRateDatasets.LPR;
     }
 
     @Bean

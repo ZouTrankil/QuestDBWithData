@@ -20,7 +20,7 @@ public final class CnSourcePolicyProvider implements SourcePolicyProvider {
 
     @Override
     public Set<String> monthlyDatasets() {
-        return Set.of("cn_cpi", "cn_ppi", "cn_pmi", "cn_m");
+        return Set.of("cn_cpi", "cn_ppi", "cn_pmi", "cn_m", "sf_month");
     }
 
     @Override

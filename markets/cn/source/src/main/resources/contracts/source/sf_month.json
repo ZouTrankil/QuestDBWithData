@@ -1,0 +1,41 @@
+{
+  "dataset": "sf_month",
+  "version": "sf_month-v1",
+  "endpoint": "sf_month",
+  "dateParameter": "m",
+  "sourceDate": "month",
+  "timestampColumn": "month",
+  "pageSize": 2000,
+  "paged": false,
+  "emptyAllowed": true,
+  "maxRows": 2000,
+  "maxBytes": 8388608,
+  "sourceDocumentation": "https://tushare.pro/document/2?doc_id=310；按明确统计月份请求，单次上限 2000 行；增量单位亿元，存量单位万亿元，不做缩放。",
+  "partitionBy": "YEAR",
+  "columns": [
+    {
+      "source": "month",
+      "target": "month",
+      "type": "TIMESTAMP",
+      "key": true
+    },
+    {
+      "source": "inc_month",
+      "target": "inc_month",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "inc_cumval",
+      "target": "inc_cumval",
+      "type": "DOUBLE",
+      "key": false
+    },
+    {
+      "source": "stk_endval",
+      "target": "stk_endval",
+      "type": "DOUBLE",
+      "key": false
+    }
+  ]
+}

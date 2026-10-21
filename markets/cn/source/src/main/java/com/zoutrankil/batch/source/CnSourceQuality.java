@@ -29,6 +29,7 @@ final class CnSourceQuality {
                     case "cn_ppi" -> List.of("month", "ppi_yoy");
                     case "cn_pmi" -> List.of("month", "pmi010000");
                     case "cn_m" -> List.of("month", "m2", "m2_yoy");
+                    case "sf_month" -> List.of("month", "inc_month");
                     case "cn_gdp" -> List.of("quarter", "report_date", "gdp_yoy");
                     case "fut_daily", "fut_settle" -> List.of("ts_code", "trade_date");
                     case "fut_mapping" -> List.of("ts_code", "trade_date", "mapping_ts_code");

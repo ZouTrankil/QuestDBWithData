@@ -41,6 +41,8 @@
 ## 本轮补齐的入口
 
 - [财务增量同步](financial-sync.md)
+- [宏观统计期同步](macro-observation-sync.md)
+- [利率观测同步](interest-observation-sync.md)
 - [评分来源组装](strategy-source-coverage.md)和[历史时点输入](strategy-point-in-time.md)
 - [盘后因子来源认证](factor-source-certification.md)
 - [L2 日归档、空间检查和负载工具](../deploy/l2-live/README.md#分日归档与存储检查)

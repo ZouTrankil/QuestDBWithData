@@ -5,6 +5,7 @@ dependencies {
     testImplementation project(':markets:cn:data-app')
     api project(':platform:app-support')
     api project(':markets:cn')
+    implementation project(':markets:cn:source')
     api project(':platform:engine:questdb')
     api project(':platform:runtime-support')
     api platform('org.springframework.boot:spring-boot-dependencies:4.1.1')

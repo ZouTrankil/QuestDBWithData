@@ -26,8 +26,8 @@ import java.util.TreeSet;
 class SourceStrategiesTest {
     @Test
     void explicitRegistryCoversEverySupportedDatasetAndCannotBeMutated() {
-        assertEquals(40, SourceStrategies.datasets().size());
-        assertEquals(41, SourceStrategyRegistry.datasets().size());
+        assertEquals(41, SourceStrategies.datasets().size());
+        assertEquals(42, SourceStrategyRegistry.datasets().size());
         var all = new TreeSet<>(SourceStrategies.datasets());
         all.add("us_tbr");
         assertEquals(SourceContract.SUPPORTED, all);

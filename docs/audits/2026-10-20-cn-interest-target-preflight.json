@@ -1,0 +1,36 @@
+{
+  "rows" : [ {
+    "dataset" : "shibor",
+    "questdbWritten" : false,
+    "physicalTargetId" : "static-v2-ecc704468bcff4f236fb9847e3c227d0f239595a55c669ad0bb8d3e2a525888e",
+    "schemaAndWalChecked" : true,
+    "sourceDate" : "2026-10-19T00:00:00Z",
+    "readbackRows" : 0,
+    "fieldCount" : 9,
+    "allSampleValuesMatch" : false,
+    "targetStableAfterReadback" : true
+  }, {
+    "dataset" : "hibor",
+    "questdbWritten" : false,
+    "physicalTargetId" : "static-v2-f53bf3128c3f76903520e2882c7f4f3d2f9295ea80759e98c36c6c224b659a0a",
+    "schemaAndWalChecked" : true,
+    "sourceDate" : "2026-10-16T00:00:00Z",
+    "readbackRows" : 0,
+    "fieldCount" : 9,
+    "allSampleValuesMatch" : false,
+    "targetStableAfterReadback" : true
+  }, {
+    "dataset" : "shibor_lpr",
+    "questdbWritten" : false,
+    "physicalTargetId" : "static-v2-4209170b9afcf401fcf6cbd81946338b93e3fd3d00b6ed5cf9bebc59d12396b8",
+    "schemaAndWalChecked" : true,
+    "sourceDate" : "2026-08-20T00:00:00Z",
+    "readbackRows" : 1,
+    "fieldCount" : 3,
+    "allSampleValuesMatch" : true,
+    "targetStableAfterReadback" : true
+  } ],
+  "readOnly" : true,
+  "observedAt" : "2026-10-20T15:33:19.566267Z",
+  "dataVerified" : false
+}

@@ -48,6 +48,8 @@ public class DatasetConfiguration {
                                 "questdb.materialize"),
                         Set.of(
                                 "financial.code_period",
+                                "macro.observation_periods12",
+                                "interest.observation_days31",
                                 "cn_bond_yield_curve.range31",
                                 "stock_basic.snapshot",
                                 "exchange_calendar.year",

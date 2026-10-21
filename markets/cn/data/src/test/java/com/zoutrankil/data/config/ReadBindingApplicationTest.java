@@ -219,7 +219,13 @@ class ReadBindingApplicationTest {
                             "income",
                             "express",
                             "forecast",
-                            "fina_indicator");
+                            "fina_indicator",
+                            "cn_cpi",
+                            "cn_ppi",
+                            "cn_pmi",
+                            "cn_m",
+                            "cn_gdp",
+                            "sf_month");
             var referenceIds =
                     Set.of("stk_shock", "stk_high_shock", "shibor", "hibor", "shibor_lpr");
             var readableIds =
@@ -231,8 +237,8 @@ class ReadBindingApplicationTest {
                             .collect(Collectors.toSet()));
             assertTrue(readableIds.containsAll(addedIds));
             assertTrue(readableIds.containsAll(referenceIds));
-            assertEquals(55, readable.size());
-            assertEquals(55, catalog.registrations().size());
+            assertEquals(61, readable.size());
+            assertEquals(61, catalog.registrations().size());
             assertEquals(readable.size(), bound.size());
             for (var id : addedIds) {
                 var registration =
