@@ -1,0 +1,104 @@
+{
+  "observedAt": "2026-10-20T16:55:22.706548+00:00",
+  "datasets": [
+    {
+      "dataset": "spot_1d",
+      "rows": 2484,
+      "first": "2020-01-01 00:00:00+00:00",
+      "last": "2026-10-19 00:00:00+00:00",
+      "schema": "open_time: timestamp[us, tz=UTC] not null\nexchange: string not null\nsymbol: string not null\ninstrument: string not null\ninterval_minutes: int32 not null\nclose_time: timestamp[us, tz=UTC] not null\nopen: double not null\nhigh: double not null\nlow: double not null\nclose: double not null\nvolume: double not null\nquote_volume: double not null\ntrade_count: int64 not null\ntaker_buy_volume: double not null\ntaker_buy_quote_volume: double not null\nsource_sha256: string not null\nobserved_at: timestamp[us, tz=UTC] not null",
+      "sha256": "3e697d6bbd094eb7772e302f9644143290acd1abfcf340483c1cc867378c717e",
+      "file": "spot_1d-3e697d6bbd094eb7772e302f9644143290acd1abfcf340483c1cc867378c717e.parquet",
+      "readSnapshot": {
+        "tableId": 3244,
+        "directoryName": "btc_spot_1d~3244",
+        "writerTxn": 12,
+        "sequencerTxn": 12,
+        "originalLedgerAvailable": true
+      }
+    },
+    {
+      "dataset": "spot_1h",
+      "rows": 59584,
+      "first": "2020-01-01 00:00:00+00:00",
+      "last": "2026-10-19 23:00:00+00:00",
+      "schema": "open_time: timestamp[us, tz=UTC] not null\nexchange: string not null\nsymbol: string not null\ninstrument: string not null\ninterval_minutes: int32 not null\nclose_time: timestamp[us, tz=UTC] not null\nopen: double not null\nhigh: double not null\nlow: double not null\nclose: double not null\nvolume: double not null\nquote_volume: double not null\ntrade_count: int64 not null\ntaker_buy_volume: double not null\ntaker_buy_quote_volume: double not null\nsource_sha256: string not null\nobserved_at: timestamp[us, tz=UTC] not null",
+      "sha256": "c60d4b619817af3baede7491ce6c23f7a2882db22333931abe2fd30ad864b283",
+      "file": "spot_1h-c60d4b619817af3baede7491ce6c23f7a2882db22333931abe2fd30ad864b283.parquet",
+      "readSnapshot": {
+        "tableId": 3245,
+        "directoryName": "btc_spot_1h~3245",
+        "writerTxn": 17,
+        "sequencerTxn": 17,
+        "originalLedgerAvailable": true
+      }
+    },
+    {
+      "dataset": "perp_1h",
+      "rows": 59616,
+      "first": "2020-01-01 00:00:00+00:00",
+      "last": "2026-10-19 23:00:00+00:00",
+      "schema": "open_time: timestamp[us, tz=UTC] not null\nexchange: string not null\nsymbol: string not null\ninstrument: string not null\ninterval_minutes: int32 not null\nclose_time: timestamp[us, tz=UTC] not null\nopen: double not null\nhigh: double not null\nlow: double not null\nclose: double not null\nvolume: double not null\nquote_volume: double not null\ntrade_count: int64 not null\ntaker_buy_volume: double not null\ntaker_buy_quote_volume: double not null\nsource_sha256: string not null\nobserved_at: timestamp[us, tz=UTC] not null",
+      "sha256": "5db02d2fcca99cc6c2577c8224f335af1f23d38ed13cb42c8139c2e34ec7755b",
+      "file": "perp_1h-5db02d2fcca99cc6c2577c8224f335af1f23d38ed13cb42c8139c2e34ec7755b.parquet",
+      "readSnapshot": {
+        "tableId": 3246,
+        "directoryName": "btc_perp_1h~3246",
+        "writerTxn": 15,
+        "sequencerTxn": 15,
+        "originalLedgerAvailable": true
+      }
+    },
+    {
+      "dataset": "funding",
+      "rows": 7452,
+      "first": "2020-01-01 00:00:00+00:00",
+      "last": "2026-10-19 16:00:00.003000+00:00",
+      "schema": "funding_time: timestamp[us, tz=UTC] not null\nexchange: string not null\nsymbol: string not null\ninstrument: string not null\nfunding_rate: double not null\nfunding_interval_hours: int32\nsource_sha256: string not null\nobserved_at: timestamp[us, tz=UTC] not null",
+      "sha256": "c24d327edd072337c6722cc2027ca3a7375e8564e12c07492491b686505d88c6",
+      "file": "funding-c24d327edd072337c6722cc2027ca3a7375e8564e12c07492491b686505d88c6.parquet",
+      "readSnapshot": {
+        "tableId": 3247,
+        "directoryName": "btc_funding~3247",
+        "writerTxn": 9,
+        "sequencerTxn": 9,
+        "originalLedgerAvailable": true
+      }
+    },
+    {
+      "dataset": "mark_1h",
+      "rows": 59400,
+      "first": "2020-01-01 00:00:00+00:00",
+      "last": "2026-10-19 23:00:00+00:00",
+      "schema": "open_time: timestamp[us, tz=UTC] not null\nexchange: string not null\nsymbol: string not null\ninstrument: string not null\ninterval_minutes: int32 not null\nclose_time: timestamp[us, tz=UTC] not null\nopen: double not null\nhigh: double not null\nlow: double not null\nclose: double not null\nsource_sha256: string not null\nobserved_at: timestamp[us, tz=UTC] not null",
+      "sha256": "7004508a325d76325c60c7c946856bb95b215c4e6a9acb0f2800f8887d757111",
+      "file": "mark_1h-7004508a325d76325c60c7c946856bb95b215c4e6a9acb0f2800f8887d757111.parquet",
+      "readSnapshot": {
+        "tableId": 3248,
+        "directoryName": "btc_mark_1h~3248",
+        "writerTxn": 15,
+        "sequencerTxn": 15,
+        "originalLedgerAvailable": true
+      }
+    },
+    {
+      "dataset": "index_1h",
+      "rows": 59304,
+      "first": "2020-01-01 00:00:00+00:00",
+      "last": "2026-10-19 23:00:00+00:00",
+      "schema": "open_time: timestamp[us, tz=UTC] not null\nexchange: string not null\nsymbol: string not null\ninstrument: string not null\ninterval_minutes: int32 not null\nclose_time: timestamp[us, tz=UTC] not null\nopen: double not null\nhigh: double not null\nlow: double not null\nclose: double not null\nsource_sha256: string not null\nobserved_at: timestamp[us, tz=UTC] not null",
+      "sha256": "be620cc06096c672b1df953d0ffe2956ef27ceea6f6b769feea12018dc687091",
+      "file": "index_1h-be620cc06096c672b1df953d0ffe2956ef27ceea6f6b769feea12018dc687091.parquet",
+      "readSnapshot": {
+        "tableId": 3249,
+        "directoryName": "btc_index_1h~3249",
+        "writerTxn": 15,
+        "sequencerTxn": 15,
+        "originalLedgerAvailable": true
+      }
+    }
+  ],
+  "fundingEventsWithoutInterval": 57,
+  "dataVerified": false,
+  "说明": "六份最新 Parquet 的摘要、行数、UTC Schema、必需非空列和 DuckDB 查询均已核对；来源缺口另看全范围质量报告。"
+}
