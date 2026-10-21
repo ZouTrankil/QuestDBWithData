@@ -52,9 +52,14 @@ final class UsBroadDailyPrefetch implements AutoCloseable {
     private final UsBroadSourceRetry.Policy retryPolicy;
     private final Thread worker;
     private volatile boolean stopping, finished;
+    private volatile boolean started;
     private volatile Throwable failure;
 
     UsBroadDailyPrefetch(Environment env, Path root, LocalDate through) {
+        this(env, root, through, true);
+    }
+
+    UsBroadDailyPrefetch(Environment env, Path root, LocalDate through, boolean startImmediately) {
         this.env = env;
         this.root = root;
         this.through = through;
@@ -79,7 +84,19 @@ final class UsBroadDailyPrefetch implements AutoCloseable {
                         .name("us-broad-daily-prefetch")
                         .daemon(true)
                         .unstarted(this::run);
+        if (startImmediately) start();
+    }
+
+    synchronized void start() {
+        if (stopping) throw new IllegalStateException("预取已关闭，不能重新启动");
+        // 多个原组可能重复通知就绪，整个持锁进程只启动这一个生产者。
+        if (started) return;
+        started = true;
         worker.start();
+    }
+
+    boolean started() {
+        return started;
     }
 
     static int capacity(Environment env) {
@@ -337,8 +354,12 @@ final class UsBroadDailyPrefetch implements AutoCloseable {
     }
 
     @Override
-    public void close() throws InterruptedException {
+    public synchronized void close() throws InterruptedException {
         stopping = true;
+        if (!started) {
+            finished = true;
+            return;
+        }
         worker.interrupt();
         worker.join();
     }

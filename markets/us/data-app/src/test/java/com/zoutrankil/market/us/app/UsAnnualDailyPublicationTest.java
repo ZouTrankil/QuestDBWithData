@@ -108,6 +108,60 @@ class UsAnnualDailyPublicationTest {
     }
 
     @Test
+    void resumedPrefixSignalsReadyBeforeTheNextSendButNeverOnChangedOldValues() throws Exception {
+        try (var db = database()) {
+            var port = new FakePort(db);
+            var publisher = new UsAnnualDailyPublication(port);
+            var stop = new AtomicBoolean();
+            publisher.publishRemaining(
+                    db,
+                    bundle,
+                    raw,
+                    sha,
+                    stop::get,
+                    (phase, detail) -> {
+                        if (phase.equals("VERIFIED_WINDOW")) stop.set(true);
+                    });
+            assertEquals(List.of(0), port.sent);
+            var ready = new AtomicBoolean();
+            port.changed = true;
+            assertThrows(
+                    IllegalStateException.class,
+                    () ->
+                            publisher.publishRemaining(
+                                    db,
+                                    bundle,
+                                    raw,
+                                    sha,
+                                    () -> false,
+                                    (phase, detail) -> {
+                                        if (phase.equals("VERIFIED_ANNUAL_PREFIX")) ready.set(true);
+                                    }));
+            assertFalse(ready.get());
+            assertEquals(List.of(0), port.sent);
+            port.changed = false;
+            port.verified.clear();
+            assertTrue(
+                    publisher.publishRemaining(
+                            db,
+                            bundle,
+                            raw,
+                            sha,
+                            () -> false,
+                            (phase, detail) -> {
+                                if (phase.equals("VERIFIED_ANNUAL_PREFIX")) {
+                                    assertEquals(BUNDLE, detail);
+                                    assertEquals(List.of(0), port.sent);
+                                    assertEquals(List.of(0), port.verified);
+                                    ready.set(true);
+                                }
+                            }));
+            assertTrue(ready.get());
+            assertEquals(List.of(0, 1, 3), port.sent);
+        }
+    }
+
+    @Test
     void missingWindowsChangedMembershipAndChangedOldValuesStopBeforeAnotherSend()
             throws Exception {
         try (var db = database()) {

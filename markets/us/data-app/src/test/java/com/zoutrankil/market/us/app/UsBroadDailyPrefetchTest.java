@@ -288,6 +288,42 @@ class UsBroadDailyPrefetchTest {
         return "jdbc:sqlite:" + root.resolve("broad-queue.sqlite3");
     }
 
+    @Test
+    void deferredWorkerDoesNotOpenBudgetUntilReadyAndCannotRestartAfterClose() throws Exception {
+        var env = new StandardEnvironment();
+        env.getPropertySources()
+                .addFirst(
+                        new MapPropertySource(
+                                "test",
+                                Map.of(
+                                        "app.market-data.history-start",
+                                        FROM.toString(),
+                                        "app.market-data.broad-prefetch-buffer-symbols",
+                                        "16")));
+        try (var db = database()) {
+            for (int i = 0; i < 16; i++) insert(db, "C" + i, "FETCHED", 10);
+            var cancelled = new UsBroadDailyPrefetch(env, root, THROUGH, false);
+            assertFalse(cancelled.started());
+            assertFalse(Files.exists(root.resolve("api-budget.sqlite3")));
+            cancelled.close();
+            assertTrue(cancelled.finished());
+            assertThrows(IllegalStateException.class, cancelled::start);
+            assertFalse(Files.exists(root.resolve("api-budget.sqlite3")));
+            try (var worker = new UsBroadDailyPrefetch(env, root, THROUGH, false)) {
+                worker.start();
+                worker.start();
+                assertTrue(worker.started());
+                assertTimeoutPreemptively(
+                        Duration.ofSeconds(5),
+                        () -> {
+                            while (!Files.exists(root.resolve("api-budget.sqlite3")))
+                                Thread.sleep(10);
+                        });
+                worker.check();
+            }
+        }
+    }
+
     private Connection database() throws Exception {
         var db = DriverManager.getConnection(url());
         try (var s = db.createStatement()) {

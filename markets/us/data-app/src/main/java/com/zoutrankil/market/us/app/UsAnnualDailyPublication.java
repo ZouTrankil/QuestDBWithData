@@ -271,6 +271,8 @@ final class UsAnnualDailyPublication {
         for (var w : b.windows())
             if (states.get(w.number()).phase().equals("VERIFIED"))
                 verify(states.get(w.number()), b, w, raw, sha);
+        // 来源与原成功段都通过后才允许恢复预取；未决窗口和停止请求不会越过此门槛。
+        if (!stopped.getAsBoolean()) status.accept("VERIFIED_ANNUAL_PREFIX", b.bundle());
         for (var w : b.windows()) {
             if (states.get(w.number()).phase().equals("VERIFIED")) continue;
             if (stopped.getAsBoolean()) return false;
