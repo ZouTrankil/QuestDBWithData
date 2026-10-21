@@ -62,9 +62,16 @@ import java.util.function.BooleanSupplier;
 
 /** 复用正式同步账本及未决锁协议；外部市场负责来源规则，本类只负责有界写入和逐字段回读。 */
 public final class VerifiedMarketDataStore {
-    // 大年分区的WAL应用可能超过两分钟；只延长有界核验，不放宽值、版本或取消门槛。
-    private static final Duration PUBLICATION_VISIBILITY_TIMEOUT = Duration.ofMinutes(5);
     private static final ObjectMapper JSON = new ObjectMapper();
+
+    record PublicationPolicy(int visibilitySeconds, boolean transactional) {
+        static final PublicationPolicy LEGACY = new PublicationPolicy(300, false);
+        static final PublicationPolicy BULK = new PublicationPolicy(600, true);
+
+        Duration visibilityTimeout() {
+            return Duration.ofSeconds(visibilitySeconds);
+        }
+    }
 
     public record PublicationPage(int rows, int bytes) {
         public static final PublicationPage DEFAULT = new PublicationPage(5000, 4 * 1024 * 1024);
@@ -76,7 +83,7 @@ public final class VerifiedMarketDataStore {
 
         int requestVersion() {
             if (equals(DEFAULT)) return 1;
-            return rows <= 10000 && bytes <= 8 * 1024 * 1024 ? 2 : 3;
+            return rows <= 10000 && bytes <= 8 * 1024 * 1024 ? 2 : 4;
         }
     }
 
@@ -355,10 +362,13 @@ public final class VerifiedMarketDataStore {
         String target = identity(d), run = "market-" + UUID.randomUUID();
         if (originalTarget != null && !originalTarget.equals(target))
             throw new IllegalStateException("原物理目标在预检期间变化");
+        int publicationVersion = page.requestVersion();
+        var publicationPolicy =
+                publicationVersion == 4 ? PublicationPolicy.BULK : PublicationPolicy.LEGACY;
         var prepared = root.resolve("prepared").resolve(run + ".json");
         Files.createDirectories(prepared.getParent());
-        byte[] bytes =
-                JSON.writeValueAsBytes(
+        var document =
+                new LinkedHashMap<String, Object>(
                         Map.of(
                                 "definition",
                                 d,
@@ -380,6 +390,8 @@ public final class VerifiedMarketDataStore {
                                         .toString(),
                                 "publicationPage",
                                 page));
+        if (publicationVersion == 4) document.put("publicationPolicy", publicationPolicy);
+        byte[] bytes = JSON.writeValueAsBytes(document);
         Files.write(prepared, bytes, StandardOpenOption.CREATE_NEW);
         String preparedSha = sha(bytes);
         var first =
@@ -408,14 +420,23 @@ public final class VerifiedMarketDataStore {
                 new TreeMap<String, Object>(
                         Map.of("prepared_sha256", preparedSha, "source_sha256", expectedSha));
         boolean custom = !page.equals(PublicationPage.DEFAULT);
-        // v3 才允许合并完整年度的大页；旧 v1/v2 请求仍按原声明和旧容量上限恢复。
-        int publicationVersion = page.requestVersion();
+        // 新大页把事务分帧和等待时间一同冻结；旧 v1/v2/v3 恢复仍使用原策略。
         if (custom) {
             var integer = new Parameter(ParameterType.INTEGER, true, 20, 1, Set.of());
             parameters.put("publication_page_rows", integer);
             parameters.put("publication_page_bytes", integer);
             values.put("publication_page_rows", page.rows());
             values.put("publication_page_bytes", page.bytes());
+        }
+        if (publicationVersion == 4) {
+            parameters.put(
+                    "publication_visibility_seconds",
+                    new Parameter(ParameterType.INTEGER, true, 20, 1, Set.of()));
+            parameters.put(
+                    "publication_transactional",
+                    new Parameter(ParameterType.BOOLEAN, true, 5, 1, Set.of()));
+            values.put("publication_visibility_seconds", publicationPolicy.visibilitySeconds());
+            values.put("publication_transactional", publicationPolicy.transactional());
         }
         var job =
                 new SyncJobDefinition(
@@ -433,7 +454,7 @@ public final class VerifiedMarketDataStore {
                                 : "market.source.pages",
                         "market.full_key_values",
                         new RetryPolicy(1, Duration.ofSeconds(1), Duration.ofSeconds(1)),
-                        Duration.ofMinutes(15),
+                        Duration.ofMinutes(publicationVersion == 4 ? 60 : 15),
                         new Budget(36600, 100, 100, 100000, page.bytes()),
                         0,
                         List.of(),
@@ -462,7 +483,7 @@ public final class VerifiedMarketDataStore {
                             throw new IllegalStateException("补缺键在发送前已存在，停止发送并核对原运行");
                         senderStopped = false;
                         try {
-                            sendRows(d, batch, run);
+                            sendRows(d, batch, run, publicationPolicy);
                         } finally {
                             senderStopped = true;
                         }
@@ -534,7 +555,7 @@ public final class VerifiedMarketDataStore {
                     }
 
                     public Duration visibilityTimeout() {
-                        return PUBLICATION_VISIBILITY_TIMEOUT;
+                        return publicationPolicy.visibilityTimeout();
                     }
                 };
         var ledger = new SyncRunLedger(ledgerPath);
@@ -576,12 +597,47 @@ public final class VerifiedMarketDataStore {
         return result;
     }
 
+    static PublicationPolicy publicationPolicy(int version, JsonNode parameters) {
+        if (version >= 1
+                && version <= 3
+                && !parameters.has("publication_visibility_seconds")
+                && !parameters.has("publication_transactional")) return PublicationPolicy.LEGACY;
+        if (version == 4
+                && parameters.path("publication_visibility_seconds").isIntegralNumber()
+                && parameters.path("publication_visibility_seconds").canConvertToInt()
+                && parameters.path("publication_visibility_seconds").intValue() == 600
+                && parameters.path("publication_transactional").isBoolean()
+                && parameters.path("publication_transactional").booleanValue())
+            return PublicationPolicy.BULK;
+        throw new IllegalStateException("原冻结事务发送或可见性策略缺失、类型错误或版本不符");
+    }
+
+    static PublicationPolicy restoredPublicationPolicy(JsonNode document, JsonNode request) {
+        var declared =
+                publicationPolicy(
+                        request.path("definition").path("version").asInt(),
+                        request.path("parameters"));
+        var stored = document.path("publicationPolicy");
+        if (declared.transactional()) {
+            if (!stored.path("visibilitySeconds").isIntegralNumber()
+                    || !stored.path("visibilitySeconds").canConvertToInt()
+                    || stored.path("visibilitySeconds").intValue() != declared.visibilitySeconds()
+                    || !stored.path("transactional").isBoolean()
+                    || stored.path("transactional").booleanValue() != declared.transactional())
+                throw new IllegalStateException("原 prepared 与冻结发送策略不符");
+        } else if (document.has("publicationPolicy")) {
+            throw new IllegalStateException("旧 prepared 不能追加新的发送策略");
+        }
+        return declared;
+    }
+
     static PublicationPage publicationPage(int version, JsonNode parameters, int bytes) {
+        publicationPolicy(version, parameters);
         if (version == 1
                 && !parameters.has("publication_page_rows")
                 && !parameters.has("publication_page_bytes")
                 && bytes == PublicationPage.DEFAULT.bytes()) return PublicationPage.DEFAULT;
-        if ((version != 2 && version != 3)
+        if ((version != 2 && version != 3 && version != 4)
                 || !parameters.path("publication_page_rows").isIntegralNumber()
                 || !parameters.path("publication_page_bytes").isIntegralNumber()
                 || !parameters.path("publication_page_rows").canConvertToInt()
@@ -593,13 +649,14 @@ public final class VerifiedMarketDataStore {
                         parameters.path("publication_page_bytes").intValue());
         if (page.bytes() != bytes
                 || version == 2 && (page.rows() > 10000 || page.bytes() > 8 * 1024 * 1024)
-                || version == 3 && page.requestVersion() != 3)
+                || version >= 3 && page.rows() <= 10000 && page.bytes() <= 8 * 1024 * 1024)
             throw new IllegalStateException("原冻结发布字节预算或分页版本不符");
         return page;
     }
 
     static PublicationPage restoredPublicationPage(JsonNode document, JsonNode request)
             throws Exception {
+        restoredPublicationPolicy(document, request);
         var declared =
                 publicationPage(
                         request.path("definition").path("version").asInt(),
@@ -702,10 +759,21 @@ public final class VerifiedMarketDataStore {
 
     private void sendRows(DatasetDefinition d, List<Map<String, Object>> batch, String run)
             throws Exception {
+        sendRows(d, batch, run, PublicationPolicy.LEGACY);
+    }
+
+    private void sendRows(
+            DatasetDefinition d,
+            List<Map<String, Object>> batch,
+            String run,
+            PublicationPolicy policy)
+            throws Exception {
         var builder =
                 Sender.builder(Sender.Transport.WEBSOCKET)
                         .address(endpoint.getHost())
                         .port(endpoint.getPort() < 0 ? 80 : endpoint.getPort())
+                        // 自动分帧仍有界；v4 只在整批显式刷新时提交，并等待所有确认。
+                        .transactional(policy.transactional())
                         .autoFlushRows(10000)
                         .autoFlushBytes(4 * 1024 * 1024)
                         .autoFlushIntervalMillis(60000)
@@ -1058,6 +1126,7 @@ public final class VerifiedMarketDataStore {
                                                     .contains(e.state())))
                 throw new IllegalStateException("原账本、物理目标或首切片恢复条件不符");
             var page = restoredPublicationPage(document, request);
+            var publicationPolicy = restoredPublicationPolicy(document, request);
             var locks = new DatasetIntervalLock(ledgerPath);
             var lease =
                     locks.findOwned(
@@ -1105,8 +1174,14 @@ public final class VerifiedMarketDataStore {
                         || !sha(Files.readAllBytes(prepared)).equals(preparedSha)
                         || !sha(Files.readAllBytes(raw)).equals(sourceSha))
                     throw new IllegalStateException("补缺前来源或 WAL 变化");
-                sendRows(d, latest.missing(), run);
-                long deadline = System.nanoTime() + Duration.ofMinutes(2).toNanos();
+                // 少量缺键的显式修复也保留原事务模式；旧修复的两分钟上限保持。
+                sendRows(d, latest.missing(), run, publicationPolicy);
+                long deadline =
+                        System.nanoTime()
+                                + (publicationPolicy.transactional()
+                                                ? publicationPolicy.visibilityTimeout()
+                                                : Duration.ofMinutes(2))
+                                        .toNanos();
                 while (!settled(d.objectName())) {
                     if (System.nanoTime() > deadline)
                         throw new IllegalStateException("补缺 WAL 尚未结清，保留原锁");
@@ -1206,7 +1281,11 @@ public final class VerifiedMarketDataStore {
 
     @FunctionalInterface
     interface FrozenTailSender {
-        void send(DatasetDefinition definition, List<Map<String, Object>> rows, String run)
+        void send(
+                DatasetDefinition definition,
+                List<Map<String, Object>> rows,
+                String run,
+                PublicationPolicy policy)
                 throws Exception;
     }
 
@@ -1234,6 +1313,10 @@ public final class VerifiedMarketDataStore {
             var rows = context.rows();
             var ledger = context.ledger();
             var page = context.page();
+            var publicationPolicy =
+                    publicationPolicy(
+                            context.request().path("definition").path("version").asInt(),
+                            context.request().path("parameters"));
             String sourceSha = context.sourceSha(), target = context.original().targetId();
             var prefix =
                     CompleteFrozenSlices.requireSubmittedPrefix(
@@ -1420,7 +1503,7 @@ public final class VerifiedMarketDataStore {
                                         run, slice, source);
                                 senderStopped = false;
                                 try {
-                                    sender.send(d, batch, run);
+                                    sender.send(d, batch, run, publicationPolicy);
                                 } finally {
                                     senderStopped = true;
                                 }
@@ -1445,7 +1528,7 @@ public final class VerifiedMarketDataStore {
                                 capacity,
                                 page.bytes(),
                                 Math.min(100000 / capacity, tail.size()),
-                                PUBLICATION_VISIBILITY_TIMEOUT,
+                                publicationPolicy.visibilityTimeout(),
                                 Duration.ofMillis(100));
                 var result =
                         new VerifiedBatchExecutor<>(policy, codec, port).execute(tail.iterator());

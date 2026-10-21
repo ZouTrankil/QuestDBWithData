@@ -481,9 +481,9 @@ public final class SyncJobRunner<T, K> {
         if (requestedVisibility == null
                 || requestedVisibility.isZero()
                 || requestedVisibility.isNegative()
-                || requestedVisibility.compareTo(Duration.ofMinutes(5)) > 0)
+                || requestedVisibility.compareTo(VerifiedBatchExecutor.MAX_VISIBILITY_TIMEOUT) > 0)
             throw new IllegalArgumentException(
-                    "Positive visibility timeout of at most five minutes required");
+                    "Positive visibility timeout of at most ten minutes required");
         var visibilityTimeout =
                 Duration.ofNanos(Math.min(requestedVisibility.toNanos(), remainingNanos));
         var poll = Duration.ofMillis(Math.min(100, Math.max(1, visibilityTimeout.toMillis())));

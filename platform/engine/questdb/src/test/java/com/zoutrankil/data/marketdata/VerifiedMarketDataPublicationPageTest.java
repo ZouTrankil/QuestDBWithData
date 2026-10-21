@@ -182,14 +182,17 @@ class VerifiedMarketDataPublicationPageTest {
     }
 
     @Test
-    void largerPagesRequireVersionThreeAndCannotChangeAnOldFrozenBudget() throws Exception {
+    void restoresVersionThreeWithoutUpgradingItsOriginalPolicy() throws Exception {
         var request =
                 json.readTree(
                         "{\"definition\":{\"version\":3,\"budget\":{\"maxBatchBytes\":33554432}},\"parameters\":{\"publication_page_rows\":32768,\"publication_page_bytes\":33554432}}");
         var prepared = json.readTree("{\"publicationPage\":{\"rows\":32768,\"bytes\":33554432}}");
         var page = new VerifiedMarketDataStore.PublicationPage(32768, 33554432);
         assertEquals(page, VerifiedMarketDataStore.restoredPublicationPage(prepared, request));
-        assertEquals(3, page.requestVersion());
+        assertEquals(4, page.requestVersion());
+        assertEquals(
+                VerifiedMarketDataStore.PublicationPolicy.LEGACY,
+                VerifiedMarketDataStore.restoredPublicationPolicy(prepared, request));
         assertEquals(1, VerifiedMarketDataStore.PublicationPage.DEFAULT.requestVersion());
         assertEquals(
                 2, new VerifiedMarketDataStore.PublicationPage(10000, 8388608).requestVersion());
@@ -234,6 +237,65 @@ class VerifiedMarketDataPublicationPageTest {
     }
 
     @Test
+    void transactionalBulkPolicyMustBeTypedFrozenAndMatchPrepared() throws Exception {
+        var request =
+                json.readTree(
+                        "{\"definition\":{\"version\":4,\"budget\":{\"maxBatchBytes\":33554432}},\"parameters\":{\"publication_page_rows\":32768,\"publication_page_bytes\":33554432,\"publication_visibility_seconds\":600,\"publication_transactional\":true}}");
+        var prepared =
+                json.readTree(
+                        "{\"publicationPage\":{\"rows\":32768,\"bytes\":33554432},\"publicationPolicy\":{\"visibilitySeconds\":600,\"transactional\":true}}");
+        assertEquals(
+                32768, VerifiedMarketDataStore.restoredPublicationPage(prepared, request).rows());
+        assertEquals(
+                VerifiedMarketDataStore.PublicationPolicy.BULK,
+                VerifiedMarketDataStore.restoredPublicationPolicy(prepared, request));
+        for (String changed :
+                List.of(
+                        "{\"publication_page_rows\":32768,\"publication_page_bytes\":33554432}",
+                        "{\"publication_page_rows\":32768,\"publication_page_bytes\":33554432,\"publication_visibility_seconds\":600.0,\"publication_transactional\":true}",
+                        "{\"publication_page_rows\":32768,\"publication_page_bytes\":33554432,\"publication_visibility_seconds\":601,\"publication_transactional\":true}",
+                        "{\"publication_page_rows\":32768,\"publication_page_bytes\":33554432,\"publication_visibility_seconds\":600,\"publication_transactional\":\"true\"}",
+                        "{\"publication_page_rows\":32768,\"publication_page_bytes\":33554432,\"publication_visibility_seconds\":600,\"publication_transactional\":false}")) {
+            assertThrows(
+                    IllegalStateException.class,
+                    () ->
+                            VerifiedMarketDataStore.publicationPage(
+                                    4, json.readTree(changed), 33554432));
+        }
+        for (String changed :
+                List.of(
+                        "{}",
+                        "{\"publicationPolicy\":{\"visibilitySeconds\":600.0,\"transactional\":true}}",
+                        "{\"publicationPolicy\":{\"visibilitySeconds\":300,\"transactional\":true}}",
+                        "{\"publicationPolicy\":{\"visibilitySeconds\":600,\"transactional\":false}}")) {
+            assertThrows(
+                    IllegalStateException.class,
+                    () ->
+                            VerifiedMarketDataStore.restoredPublicationPolicy(
+                                    json.readTree(changed), request));
+        }
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        VerifiedMarketDataStore.publicationPage(
+                                3, request.path("parameters"), 33554432));
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        VerifiedMarketDataStore.restoredPublicationPolicy(
+                                prepared,
+                                json.readTree(
+                                        "{\"definition\":{\"version\":3},\"parameters\":{}}")));
+        var small = request.deepCopy();
+        ((com.fasterxml.jackson.databind.node.ObjectNode) small.path("parameters"))
+                .put("publication_page_rows", 10000)
+                .put("publication_page_bytes", 8388608);
+        assertThrows(
+                IllegalStateException.class,
+                () -> VerifiedMarketDataStore.restoredPublicationPage(prepared, small));
+    }
+
+    @Test
     void tenThousandRowsRequireReadyWalBoundedReadsAndExactValues() throws Exception {
         boundedPageRequiresReadyWalAndExactValues(10000, 8388608);
     }
@@ -262,7 +324,7 @@ class VerifiedMarketDataPublicationPageTest {
         var request =
                 new SyncJobDefinition(
                                 "test.bulk",
-                                3,
+                                4,
                                 "page_test",
                                 1,
                                 "test",
@@ -272,7 +334,16 @@ class VerifiedMarketDataPublicationPageTest {
                                         "publication_page_rows",
                                         integer,
                                         "publication_page_bytes",
-                                        integer),
+                                        integer,
+                                        "publication_visibility_seconds",
+                                        integer,
+                                        "publication_transactional",
+                                        new SyncJobDefinition.Parameter(
+                                                SyncJobDefinition.ParameterType.BOOLEAN,
+                                                true,
+                                                5,
+                                                1,
+                                                Set.of())),
                                 "test",
                                 "test",
                                 "test",
@@ -292,7 +363,11 @@ class VerifiedMarketDataPublicationPageTest {
                                         "publication_page_rows",
                                         count,
                                         "publication_page_bytes",
-                                        33554432),
+                                        33554432,
+                                        "publication_visibility_seconds",
+                                        600,
+                                        "publication_transactional",
+                                        true),
                                 LocalDate.of(2026, 1, 1),
                                 LocalDate.of(2026, 1, 1),
                                 LocalDate.of(2026, 1, 1));
@@ -359,6 +434,13 @@ class VerifiedMarketDataPublicationPageTest {
                                         json.valueToTree(frozen.parameters()),
                                         frozen.definition().budget().maxBatchBytes())
                                 .rows();
+                    }
+
+                    public Duration visibilityTimeout() {
+                        return VerifiedMarketDataStore.publicationPolicy(
+                                        request.definition().version(),
+                                        json.valueToTree(request.parameters()))
+                                .visibilityTimeout();
                     }
                 };
         var result =
@@ -505,7 +587,8 @@ class VerifiedMarketDataPublicationPageTest {
                     };
             var policy =
                     new VerifiedBatchExecutor.Policy(
-                            rowCount, byteLimit, 1, Duration.ofSeconds(3), Duration.ofMillis(1));
+                            // 正例包含多次完整 HTTP 回读，给慢盘及 WAL 追平后的重读留出余量。
+                            rowCount, byteLimit, 1, Duration.ofSeconds(30), Duration.ofMillis(1));
             var success = new VerifiedBatchExecutor<>(policy, codec, port).execute(rows.iterator());
             assertEquals(VerifiedBatchExecutor.Status.VERIFIED, success.status());
             assertEquals(rowCount, success.verifiedRows());
