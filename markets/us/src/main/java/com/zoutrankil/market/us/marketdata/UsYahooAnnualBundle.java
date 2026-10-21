@@ -38,7 +38,7 @@ public final class UsYahooAnnualBundle {
 
     public record Page(int rows, int bytes) {
         public Page {
-            if (rows < 1 || rows > 10000 || bytes < 1 || bytes > 8 * 1024 * 1024)
+            if (rows < 1 || rows > 32768 || bytes < 1 || bytes > 32 * 1024 * 1024)
                 throw new IllegalArgumentException("年度来源组的发送页超限");
         }
     }

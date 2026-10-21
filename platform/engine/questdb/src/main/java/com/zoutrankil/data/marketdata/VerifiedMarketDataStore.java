@@ -70,8 +70,13 @@ public final class VerifiedMarketDataStore {
         public static final PublicationPage DEFAULT = new PublicationPage(5000, 4 * 1024 * 1024);
 
         public PublicationPage {
-            if (rows < 1 || rows > 10000 || bytes < 1 || bytes > 8 * 1024 * 1024)
-                throw new IllegalArgumentException("发布分页须为 1–10000 行且不超过 8 MiB");
+            if (rows < 1 || rows > 32768 || bytes < 1 || bytes > 32 * 1024 * 1024)
+                throw new IllegalArgumentException("发布分页须为 1–32768 行且不超过 32 MiB");
+        }
+
+        int requestVersion() {
+            if (equals(DEFAULT)) return 1;
+            return rows <= 10000 && bytes <= 8 * 1024 * 1024 ? 2 : 3;
         }
     }
 
@@ -357,6 +362,8 @@ public final class VerifiedMarketDataStore {
                 new TreeMap<String, Object>(
                         Map.of("prepared_sha256", preparedSha, "source_sha256", expectedSha));
         boolean custom = !page.equals(PublicationPage.DEFAULT);
+        // v3 才允许合并完整年度的大页；旧 v1/v2 请求仍按原声明和旧容量上限恢复。
+        int publicationVersion = page.requestVersion();
         if (custom) {
             var integer = new Parameter(ParameterType.INTEGER, true, 20, 1, Set.of());
             parameters.put("publication_page_rows", integer);
@@ -367,7 +374,7 @@ public final class VerifiedMarketDataStore {
         var job =
                 new SyncJobDefinition(
                         "market." + d.datasetId(),
-                        custom ? 2 : 1,
+                        publicationVersion,
                         d.datasetId(),
                         d.schemaVersion(),
                         d.owner(),
@@ -375,7 +382,9 @@ public final class VerifiedMarketDataStore {
                         Mode.INGEST,
                         parameters,
                         "market.external.frozen",
-                        custom ? "market.source.pages.v2" : "market.source.pages",
+                        custom
+                                ? "market.source.pages.v" + publicationVersion
+                                : "market.source.pages",
                         "market.full_key_values",
                         new RetryPolicy(1, Duration.ofSeconds(1), Duration.ofSeconds(1)),
                         Duration.ofMinutes(15),
@@ -526,7 +535,7 @@ public final class VerifiedMarketDataStore {
                 && !parameters.has("publication_page_rows")
                 && !parameters.has("publication_page_bytes")
                 && bytes == PublicationPage.DEFAULT.bytes()) return PublicationPage.DEFAULT;
-        if (version != 2
+        if ((version != 2 && version != 3)
                 || !parameters.path("publication_page_rows").isIntegralNumber()
                 || !parameters.path("publication_page_bytes").isIntegralNumber()
                 || !parameters.path("publication_page_rows").canConvertToInt()
@@ -536,7 +545,10 @@ public final class VerifiedMarketDataStore {
                 new PublicationPage(
                         parameters.path("publication_page_rows").intValue(),
                         parameters.path("publication_page_bytes").intValue());
-        if (page.bytes() != bytes) throw new IllegalStateException("原冻结发布字节预算不符");
+        if (page.bytes() != bytes
+                || version == 2 && (page.rows() > 10000 || page.bytes() > 8 * 1024 * 1024)
+                || version == 3 && page.requestVersion() != 3)
+            throw new IllegalStateException("原冻结发布字节预算或分页版本不符");
         return page;
     }
 

@@ -785,11 +785,11 @@ final class UsBroadDailyCollector {
     static VerifiedMarketDataStore.PublicationPage publicationPage(Environment environment) {
         return new VerifiedMarketDataStore.PublicationPage(
                 environment.getProperty(
-                        "app.market-data.broad-publication-page-rows", Integer.class, 10000),
+                        "app.market-data.broad-publication-page-rows", Integer.class, 32768),
                 environment.getProperty(
                         "app.market-data.broad-publication-page-bytes",
                         Integer.class,
-                        8 * 1024 * 1024));
+                        32 * 1024 * 1024));
     }
 
     private static int publicationSymbols(Environment environment) {

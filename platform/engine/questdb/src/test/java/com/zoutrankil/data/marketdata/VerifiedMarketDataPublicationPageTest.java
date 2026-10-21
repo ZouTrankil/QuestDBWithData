@@ -15,6 +15,11 @@ import com.zoutrankil.data.domain.DatasetDefinition.Partition;
 import com.zoutrankil.data.domain.DatasetDefinition.StorageType;
 import com.zoutrankil.data.domain.DatasetDefinition.TemporalContract;
 import com.zoutrankil.data.domain.DatasetDefinition.TemporalKind;
+import com.zoutrankil.data.domain.SyncJobDefinition;
+import com.zoutrankil.data.domain.SyncRunState;
+import com.zoutrankil.data.repository.SyncRunLedger;
+import com.zoutrankil.data.service.DatasetIntervalLock;
+import com.zoutrankil.data.service.SyncJobRunner;
 import com.zoutrankil.data.service.VerifiedBatchExecutor;
 
 import io.questdb.client.Sender;
@@ -30,14 +35,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BooleanSupplier;
 import java.util.regex.Pattern;
 
 class VerifiedMarketDataPublicationPageTest {
@@ -169,14 +178,210 @@ class VerifiedMarketDataPublicationPageTest {
                                 request));
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new VerifiedMarketDataStore.PublicationPage(10001, 8388608));
+                () -> new VerifiedMarketDataStore.PublicationPage(32769, 33554432));
+    }
+
+    @Test
+    void largerPagesRequireVersionThreeAndCannotChangeAnOldFrozenBudget() throws Exception {
+        var request =
+                json.readTree(
+                        "{\"definition\":{\"version\":3,\"budget\":{\"maxBatchBytes\":33554432}},\"parameters\":{\"publication_page_rows\":32768,\"publication_page_bytes\":33554432}}");
+        var prepared = json.readTree("{\"publicationPage\":{\"rows\":32768,\"bytes\":33554432}}");
+        var page = new VerifiedMarketDataStore.PublicationPage(32768, 33554432);
+        assertEquals(page, VerifiedMarketDataStore.restoredPublicationPage(prepared, request));
+        assertEquals(3, page.requestVersion());
+        assertEquals(1, VerifiedMarketDataStore.PublicationPage.DEFAULT.requestVersion());
+        assertEquals(
+                2, new VerifiedMarketDataStore.PublicationPage(10000, 8388608).requestVersion());
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        VerifiedMarketDataStore.publicationPage(
+                                2, request.path("parameters"), 33554432));
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        VerifiedMarketDataStore.publicationPage(
+                                4, request.path("parameters"), 33554432));
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        VerifiedMarketDataStore.publicationPage(
+                                3, request.path("parameters"), 8388608));
+        assertThrows(
+                IllegalStateException.class,
+                () ->
+                        VerifiedMarketDataStore.restoredPublicationPage(
+                                json.readTree(
+                                        "{\"publicationPage\":{\"rows\":10000,\"bytes\":8388608}}"),
+                                request));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new VerifiedMarketDataStore.PublicationPage(32768, 33554433));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        new VerifiedBatchExecutor.Policy(
+                                32768, 33554432, 4, Duration.ofSeconds(1), Duration.ofMillis(1)));
+        assertThrows(
+                IllegalArgumentException.class,
+                () ->
+                        new SyncJobRunner.Page<>(
+                                Collections.nCopies(32769, Map.of("key", "value")),
+                                "source",
+                                "response",
+                                null));
     }
 
     @Test
     void tenThousandRowsRequireReadyWalBoundedReadsAndExactValues() throws Exception {
+        boundedPageRequiresReadyWalAndExactValues(10000, 8388608);
+    }
+
+    @Test
+    void thirtyTwoThousandRowsRetainEveryBoundedReadAndRejectAChangedOrDuplicateLastKey()
+            throws Exception {
+        boundedPageRequiresReadyWalAndExactValues(32768, 33554432);
+    }
+
+    @Test
+    void nativeRunnerCommitsBulkIntentBeforeOneSendAndVerifiesEveryRow() throws Exception {
+        int count = 32768;
         var rows = new ArrayList<Map<String, Object>>();
         Instant start = Instant.parse("2026-01-01T00:00:00Z");
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < count; i++) {
+            var row = new LinkedHashMap<String, Object>();
+            row.put("ts", start.plusSeconds(i).toString());
+            row.put("symbol", "X");
+            row.put("price", i / 10.);
+            rows.add(row);
+        }
+        var integer =
+                new SyncJobDefinition.Parameter(
+                        SyncJobDefinition.ParameterType.INTEGER, true, 20, 1, Set.of());
+        var request =
+                new SyncJobDefinition(
+                                "test.bulk",
+                                3,
+                                "page_test",
+                                1,
+                                "test",
+                                Set.of(SyncJobDefinition.Mode.INGEST),
+                                SyncJobDefinition.Mode.INGEST,
+                                Map.of(
+                                        "publication_page_rows",
+                                        integer,
+                                        "publication_page_bytes",
+                                        integer),
+                                "test",
+                                "test",
+                                "test",
+                                new SyncJobDefinition.RetryPolicy(
+                                        1, Duration.ofMillis(1), Duration.ofMillis(1)),
+                                Duration.ofSeconds(30),
+                                new SyncJobDefinition.Budget(1, 1, 1, 100000, 33554432),
+                                0,
+                                List.of(),
+                                SyncJobDefinition.Frequency.MANUAL,
+                                ZoneOffset.UTC,
+                                true,
+                                false)
+                        .freeze(
+                                null,
+                                Map.of(
+                                        "publication_page_rows",
+                                        count,
+                                        "publication_page_bytes",
+                                        33554432),
+                                LocalDate.of(2026, 1, 1),
+                                LocalDate.of(2026, 1, 1),
+                                LocalDate.of(2026, 1, 1));
+        Path path = root.resolve("bulk-native.sqlite3");
+        var ledger = new SyncRunLedger(path);
+        var stored = new LinkedHashMap<String, Map<String, Object>>();
+        var codec = VerifiedMarketDataStore.codec(definition);
+        var sends = new AtomicInteger();
+        var port =
+                new VerifiedBatchExecutor.Port<Map<String, Object>, String>() {
+                    public void preflight() {}
+
+                    public void send(List<Map<String, Object>> batch) throws Exception {
+                        assertEquals(count, batch.size());
+                        assertTrue(
+                                ledger.entries("bulk", null, 100).stream()
+                                        .anyMatch(
+                                                x ->
+                                                        x.kind() == SyncRunLedger.Kind.SLICE
+                                                                && x.state()
+                                                                        == SyncRunState.SUBMITTED));
+                        sends.incrementAndGet();
+                        batch.forEach(row -> stored.put(codec.key(row), row));
+                    }
+
+                    public List<Map<String, Object>> readback(List<String> keys) {
+                        return keys.stream().map(stored::get).toList();
+                    }
+
+                    public boolean walSettled() {
+                        return true;
+                    }
+
+                    public boolean uncertainSenderStopped() {
+                        return true;
+                    }
+                };
+        var adapter =
+                new SyncJobRunner.Adapter<Map<String, Object>, String>() {
+                    public void preflight(SyncJobDefinition.FrozenRequest frozen) {}
+
+                    public SyncJobRunner.SourceCompletion fetch(
+                            SyncJobDefinition.FrozenRequest frozen,
+                            SyncJobRunner.PageConsumer<Map<String, Object>> consumer,
+                            BooleanSupplier cancelled)
+                            throws Exception {
+                        consumer.accept(
+                                new SyncJobRunner.Page<>(
+                                        rows, "bulk-source", "bulk-response", null));
+                        return new SyncJobRunner.SourceCompletion(1, count, true, "bulk-complete");
+                    }
+
+                    public VerifiedBatchExecutor.Codec<Map<String, Object>, String> codec() {
+                        return codec;
+                    }
+
+                    public VerifiedBatchExecutor.Port<Map<String, Object>, String> port() {
+                        return port;
+                    }
+
+                    public int maxWriteBatchRows(SyncJobDefinition.FrozenRequest frozen) {
+                        return VerifiedMarketDataStore.publicationPage(
+                                        frozen.definition().version(),
+                                        json.valueToTree(frozen.parameters()),
+                                        frozen.definition().budget().maxBatchBytes())
+                                .rows();
+                    }
+                };
+        var result =
+                new SyncJobRunner<Map<String, Object>, String>(
+                                ledger, new DatasetIntervalLock(path))
+                        .run("bulk", null, "target", request, adapter, () -> false);
+        assertEquals(
+                SyncRunState.VERIFIED,
+                result.state(),
+                result + " " + ledger.get("bulk").payloadJson());
+        assertEquals(count, result.verifiedRows());
+        assertEquals(1, sends.get());
+        assertEquals(count, stored.size());
+        assertTrue(
+                ledger.entries("bulk", null, 100).stream()
+                        .allMatch(x -> x.state() == SyncRunState.VERIFIED));
+    }
+
+    private void boundedPageRequiresReadyWalAndExactValues(int rowCount, int byteLimit)
+            throws Exception {
+        var rows = new ArrayList<Map<String, Object>>();
+        Instant start = Instant.parse("2026-01-01T00:00:00Z");
+        for (int i = 0; i < rowCount; i++) {
             var row = new LinkedHashMap<String, Object>();
             row.put("ts", start.plusSeconds(i).toString());
             row.put("symbol", "X");
@@ -238,16 +443,17 @@ class VerifiedMarketDataPublicationPageTest {
                             Instant time = Instant.parse(row.get("ts").toString());
                             if (time.isBefore(from) || time.isAfter(to)) continue;
                             Object price =
-                                    mode.get() == 1 && time.equals(start.plusSeconds(9999))
+                                    mode.get() == 1 && time.equals(start.plusSeconds(rowCount - 1))
                                             ? -42.
                                             : row.get("price");
                             values.add(Arrays.asList(row.get("ts"), "X", price));
-                            if (mode.get() == 2 && time.equals(start.plusSeconds(9999)))
+                            if (mode.get() == 2 && time.equals(start.plusSeconds(rowCount - 1)))
                                 values.add(Arrays.asList(row.get("ts"), "X", price));
                         }
                         values.add(Arrays.asList(from.toString(), "UNREQUESTED", 123.));
                         // 最后一段读完才出现新WAL，检验值匹配后的WAL门槛仍生效。
-                        if (to.equals(start.plusSeconds(9999))) walStage.compareAndSet(4, 1);
+                        if (to.equals(start.plusSeconds(rowCount - 1)))
+                            walStage.compareAndSet(4, 1);
                     }
                     byte[] body =
                             json.writeValueAsBytes(
@@ -275,13 +481,13 @@ class VerifiedMarketDataPublicationPageTest {
                             "",
                             "",
                             root);
-            var page = new VerifiedMarketDataStore.PublicationPage(10000, 8388608);
+            var page = new VerifiedMarketDataStore.PublicationPage(rowCount, byteLimit);
             var port =
                     new VerifiedBatchExecutor.Port<Map<String, Object>, String>() {
                         public void preflight() {}
 
                         public void send(List<Map<String, Object>> batch) {
-                            assertEquals(10000, batch.size());
+                            assertEquals(rowCount, batch.size());
                         }
 
                         public List<Map<String, Object>> readback(List<String> keys)
@@ -299,14 +505,14 @@ class VerifiedMarketDataPublicationPageTest {
                     };
             var policy =
                     new VerifiedBatchExecutor.Policy(
-                            10000, 8388608, 1, Duration.ofSeconds(3), Duration.ofMillis(1));
+                            rowCount, byteLimit, 1, Duration.ofSeconds(3), Duration.ofMillis(1));
             var success = new VerifiedBatchExecutor<>(policy, codec, port).execute(rows.iterator());
             assertEquals(VerifiedBatchExecutor.Status.VERIFIED, success.status());
-            assertEquals(10000, success.verifiedRows());
-            assertEquals(2, reads.get());
+            assertEquals(rowCount, success.verifiedRows());
+            assertEquals((rowCount + 4999) / 5000, reads.get());
             var negative =
                     new VerifiedBatchExecutor.Policy(
-                            10000, 8388608, 1, Duration.ofMillis(50), Duration.ofMillis(1));
+                            rowCount, byteLimit, 1, Duration.ofMillis(50), Duration.ofMillis(1));
             for (int stage : List.of(1, 2, 3)) {
                 walStage.set(stage);
                 reads.set(0);
@@ -334,12 +540,12 @@ class VerifiedMarketDataPublicationPageTest {
             walStage.set(5);
             walReads.set(0);
             reads.set(0);
-            assertEquals(
-                    VerifiedBatchExecutor.Status.VERIFIED,
-                    new VerifiedBatchExecutor<>(policy, codec, port)
-                            .execute(rows.iterator())
-                            .status());
-            assertEquals(2, reads.get());
+            var afterWal =
+                    new VerifiedBatchExecutor<>(policy, codec, port).execute(rows.iterator());
+            assertEquals(VerifiedBatchExecutor.Status.VERIFIED, afterWal.status());
+            assertEquals(rowCount, afterWal.verifiedRows());
+            // WAL 在分段之间追平时，先前缺失的段仍需重读，不能要求每段恰好只查一次。
+            assertTrue(reads.get() >= (rowCount + 4999) / 5000);
             assertTrue(walReads.get() > 2);
             walStage.set(4);
             reads.set(0);
@@ -348,7 +554,7 @@ class VerifiedMarketDataPublicationPageTest {
                     new VerifiedBatchExecutor<>(negative, codec, port)
                             .execute(rows.iterator())
                             .status());
-            assertEquals(2, reads.get());
+            assertEquals((rowCount + 4999) / 5000, reads.get());
             walStage.set(0);
             mode.set(1);
             assertEquals(

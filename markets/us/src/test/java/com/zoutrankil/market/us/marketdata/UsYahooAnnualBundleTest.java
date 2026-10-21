@@ -43,6 +43,30 @@ class UsYahooAnnualBundleTest {
             new UsYahooAnnualBundle.Page(10000, 8388608);
 
     @Test
+    void largerDeclaredPagePreservesTheSameWindowsAndAllSourceFields() throws Exception {
+        var sources = List.of(source("X"), source("A"));
+        var large = new UsYahooAnnualBundle.Page(32768, 33554432);
+        var oldBundle =
+                UsYahooAnnualBundle.parse(
+                        UsYahooAnnualBundle.freeze(BUNDLE, FROM, THROUGH, PAGE, sources));
+        var newBundle =
+                UsYahooAnnualBundle.parse(
+                        UsYahooAnnualBundle.freeze(BUNDLE, FROM, THROUGH, large, sources));
+        assertEquals(large, newBundle.page());
+        assertEquals(PAGE, oldBundle.page());
+        assertEquals(oldBundle.windows(), newBundle.windows());
+        assertEquals(oldBundle.totalRows(), newBundle.totalRows());
+        for (var window : oldBundle.windows())
+            assertEquals(oldBundle.rows(window), newBundle.rows(window));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new UsYahooAnnualBundle.Page(32769, 33554432));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new UsYahooAnnualBundle.Page(32768, 33554433));
+    }
+
+    @Test
     void yearlyProjectionRetainsEveryFullResponseFieldIncludingSplitsAfterTheWindowAndEmptyYears()
             throws Exception {
         var sources = List.of(source("X"), source("A"));
