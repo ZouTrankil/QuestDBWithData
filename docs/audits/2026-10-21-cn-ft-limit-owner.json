@@ -1,0 +1,31 @@
+{
+  "dataset": "ft_limit",
+  "formalAcceptance": false,
+  "sourceOnlyResult": {
+    "manifest": "file:///Users/Apple/zq/fun/QuestDBWithData/var/sync-evidence/futures-source-7f809b2c-af3d-4b59-a227-2b845624e03c/completion.json",
+    "targetDataVerified": false,
+    "questdbWritten": false,
+    "dataset": "ft_limit",
+    "rows": 1,
+    "emptyDates": [],
+    "sourceCoverageVerified": true,
+    "targetId": "static-v2-5b0a28103238e75f56bae5650edc14766eeab8c262f0e3bd7adde7a47edb0d29"
+  },
+  "completion": "var/sync-evidence/futures-source-7f809b2c-af3d-4b59-a227-2b845624e03c/completion.json",
+  "completionSha256": "1d8baf4357c33c50ec26127159b40c5304198a85c835c17b3dc352fa34f41b99",
+  "sourceManifest": "var/sync-evidence/futures-source-7f809b2c-af3d-4b59-a227-2b845624e03c/source-manifest.json",
+  "sourceManifestSha256": "c8fd83daa11cea1d95e28b15506ae2f6f1ff341e3fcb59a67955751b4a364119",
+  "rawArtifact": "var/sync-evidence/futures-source-7f809b2c-af3d-4b59-a227-2b845624e03c/sources/335248f91a65a34478c93ade5670ce64de8703794c115d955480b90996a82c11.json",
+  "rawSha256": "335248f91a65a34478c93ade5670ce64de8703794c115d955480b90996a82c11",
+  "businessFieldCount": 8,
+  "physicalFieldCount": 9,
+  "frozenObservation": "2026-10-21T05:24:04.807381Z",
+  "relatedTests": 23,
+  "relatedTestsPassed": true,
+  "phaseChecks": "架构、边界及发行包在本期货批次结束统一执行；本条不是正式验收",
+  "initialPreflightAttempt": {
+    "passed": false,
+    "reason": "远端 table_columns 查询取消；未采集或发送正式写入",
+    "retryPassed": true
+  }
+}

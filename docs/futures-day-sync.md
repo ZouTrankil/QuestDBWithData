@@ -29,3 +29,5 @@
 `fut_mapping` 同样使用上述四个命令，替换 `--dataset fut_mapping`，连续合约示例为 `--code IF.CFX`。真实单日来源及目标预检通过，13 项相关回归通过；[证据](audits/2026-10-21-cn-fut-mapping-owner.json)仍属于有限范围检查，未正式写入。
 
 `fut_settle` 同样使用上述四个命令，替换 `--dataset fut_settle`，到期合约示例为 `--code IF2612.CFX`。真实单日来源及目标预检通过，18 项相关回归通过；[证据](audits/2026-10-21-cn-fut-settle-owner.json)仍属于有限范围检查，未正式写入。
+
+`ft_limit` 同样使用上述四个命令，替换 `--dataset ft_limit`，到期合约示例为 `--code IF2612.CFX`。真实单日来源及目标预检通过，23 项相关回归通过；[证据](audits/2026-10-21-cn-ft-limit-owner.json)仍属于有限范围检查，未正式写入。

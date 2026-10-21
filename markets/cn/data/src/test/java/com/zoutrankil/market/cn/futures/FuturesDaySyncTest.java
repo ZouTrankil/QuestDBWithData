@@ -77,6 +77,7 @@ class FuturesDaySyncTest {
                                                 : c.target().equals("mapping_ts_code")
                                                         ? price >= 200 ? "IF2701.CFX" : "IF2612.CFX"
                                                         : "CFFEX");
+                        case "STRING" -> new TextNode("沪深300股指期货" + (price >= 200 ? "修订" : ""));
                         case "TIMESTAMP" ->
                                 new TextNode(date.format(DateTimeFormatter.BASIC_ISO_DATE));
                         default ->
@@ -144,7 +145,7 @@ class FuturesDaySyncTest {
                 Object v = row.get(c.target());
                 if (c.type().equals("DOUBLE"))
                     assertEquals(expected.get(c.source()).doubleValue(), v, c.target());
-                if (c.type().equals("SYMBOL"))
+                if (Set.of("SYMBOL", "STRING").contains(c.type()))
                     assertEquals(expected.get(c.source()).textValue(), v, c.target());
             }
         }

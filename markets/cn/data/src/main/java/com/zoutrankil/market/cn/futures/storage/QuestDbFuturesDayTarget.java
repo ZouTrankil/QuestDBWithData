@@ -99,6 +99,8 @@ public final class QuestDbFuturesDayTarget implements FuturesDayTarget {
                             || name.equals(definition.designatedTimestamp())
                             || c.storageType() == StorageType.SYMBOL) continue;
                     switch (c.storageType()) {
+                        // 合约名称保留中文原值，不能作为 SYMBOL 或数值发送。
+                        case STRING -> sender.stringColumn(name, value.toString());
                         case DOUBLE -> sender.doubleColumn(name, ((Number) value).doubleValue());
                         case TIMESTAMP ->
                                 sender.timestampColumn(name, Instant.parse(value.toString()));
@@ -178,7 +180,7 @@ public final class QuestDbFuturesDayTarget implements FuturesDayTarget {
                                 String name = c.storageName();
                                 Object value;
                                 switch (c.storageType()) {
-                                    case SYMBOL -> value = rs.getString(name);
+                                    case SYMBOL, STRING -> value = rs.getString(name);
                                     case DOUBLE -> {
                                         Double d = rs.getObject(name, Double.class);
                                         value = d != null && Double.isNaN(d) ? null : d;

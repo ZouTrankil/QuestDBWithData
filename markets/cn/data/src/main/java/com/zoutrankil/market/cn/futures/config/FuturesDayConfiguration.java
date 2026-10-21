@@ -77,6 +77,24 @@ public class FuturesDayConfiguration {
     }
 
     @Bean
+    FuturesDaySyncOwner futuresLimitOwner(
+            JdbcTemplate jdbc,
+            @Lazy QuestDB questdb,
+            TusharePageService pages,
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledger) {
+        return new FuturesDaySyncOwner(
+                "ft_limit",
+                new QuestDbFuturesDayTarget("ft_limit", jdbc, questdb),
+                pages,
+                Path.of(ledger));
+    }
+
+    @Bean
+    ReadBindingCatalog.Registration<DatasetValues> futuresLimitRead() {
+        return ReadBindingCatalog.generic("ft_limit", 1);
+    }
+
+    @Bean
     @ConditionalOnNotWebApplication
     FuturesDayCommands futuresDayCommands(List<FuturesDaySyncOwner> owners) {
         return new FuturesDayCommands(owners);

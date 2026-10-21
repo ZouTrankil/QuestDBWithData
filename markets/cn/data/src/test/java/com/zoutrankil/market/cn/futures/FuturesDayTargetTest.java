@@ -81,6 +81,10 @@ class FuturesDayTargetTest {
                     order.verify(sender)
                             .symbol(c.storageName(), expected.get(c.storageName()).toString());
             for (var c : FuturesDayDefinition.from(dataset).columns()) {
+                if (c.storageType() == StorageType.STRING)
+                    verify(sender)
+                            .stringColumn(
+                                    c.storageName(), expected.get(c.storageName()).toString());
                 if (c.storageType() == StorageType.DOUBLE)
                     verify(sender)
                             .doubleColumn(c.storageName(), (Double) expected.get(c.storageName()));
