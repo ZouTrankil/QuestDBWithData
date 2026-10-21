@@ -309,6 +309,160 @@ public final class SyncRunLedger {
         appendEvent(c, id, 0, SyncRunState.PENDING, "{}", now);
     }
 
+    /**
+     * 仅供原冻结尾部恢复：所有既有分页已完整核验后，在同一未决尝试下登记新尾页。
+     * 普通 createChild 仍拒绝未决父记录；这里逐项比较完整版本快照，并保留父未决状态和原事件。
+     */
+    public void createFrozenTailSlice(
+            String id,
+            String runId,
+            String attemptId,
+            String expectedFrozenJson,
+            List<Entry> expectedEntries,
+            String authorizationJson)
+            throws SQLException {
+        id(id);
+        id(runId);
+        id(attemptId);
+        json(authorizationJson);
+        if (expectedEntries == null || expectedEntries.size() < 3 || expectedEntries.size() > 102)
+            throw new IllegalArgumentException("Bounded verified-prefix snapshot required");
+        final JsonNode authorization;
+        final JsonNode request;
+        try {
+            authorization = JSON.readTree(authorizationJson);
+            request = JSON.readTree(expectedFrozenJson);
+        } catch (IOException failure) {
+            throw new IllegalArgumentException(
+                    "Frozen continuation authorization is invalid", failure);
+        }
+        var parameters = request.path("parameters");
+        if (!authorization.path("preparedSha256").asText().matches("[a-f0-9]{64}")
+                || !authorization.path("sourceSha256").asText().matches("[a-f0-9]{64}")
+                || !parameters
+                        .path("prepared_sha256")
+                        .asText()
+                        .equals(authorization.path("preparedSha256").asText())
+                || !parameters
+                        .path("source_sha256")
+                        .asText()
+                        .equals(authorization.path("sourceSha256").asText())
+                || authorization.path("readbackEvidence").asText().isBlank()
+                || authorization.path("reconciliationIntent").asText().isBlank()
+                || authorization.path("submittedRows").asInt() < 1
+                || !Integer.toString(authorization.path("submittedRows").asInt())
+                        .equals(authorization.path("cursor").asText())
+                || authorization.path("tailRows").asInt() < 1
+                || authorization.path("tailRows").asInt() > 10000
+                || authorization.path("sourceRows").asInt()
+                        <= authorization.path("submittedRows").asInt()
+                || authorization.path("tailRows").asInt()
+                        > authorization.path("sourceRows").asInt()
+                                - authorization.path("submittedRows").asInt()
+                || authorization.path("sourceRows").asInt() > 100000
+                || authorization.path("sourceRows").asInt()
+                        > request.path("definition").path("budget").path("maxRows").asInt())
+            throw new IllegalArgumentException("Frozen continuation bounds or evidence differ");
+        transaction(
+                c -> {
+                    var current = new ArrayList<Entry>();
+                    try (var s =
+                            c.prepareStatement(
+                                    "SELECT * FROM sync_entries WHERE run_id=? ORDER BY id LIMIT 1001")) {
+                        s.setString(1, runId);
+                        try (var rows = s.executeQuery()) {
+                            while (rows.next()) current.add(entry(rows));
+                        }
+                    }
+                    if (!current.equals(expectedEntries))
+                        throw new IllegalStateException("Verified-prefix ledger changed");
+                    var owner = require(c, runId);
+                    var attempt = require(c, attemptId);
+                    if (owner.kind() != Kind.RUN
+                            || owner.state() != SyncRunState.IN_DOUBT
+                            || !runId.equals(owner.runId())
+                            || owner.parentId() != null
+                            || attempt.kind() != Kind.ATTEMPT
+                            || attempt.state() != SyncRunState.IN_DOUBT
+                            || !runId.equals(attempt.runId())
+                            || !runId.equals(attempt.parentId())
+                            || current.stream().filter(e -> e.kind() == Kind.ATTEMPT).count() != 1)
+                        throw new IllegalStateException(
+                                "Original uncertain run and single attempt required");
+                    int verifiedRows = 0;
+                    for (var entry : current)
+                        if (entry.kind() == Kind.SLICE) {
+                            if (entry.state() != SyncRunState.VERIFIED
+                                    || !attemptId.equals(entry.parentId()))
+                                throw new IllegalStateException(
+                                        "Every submitted-prefix slice must be verified");
+                            try {
+                                var proof = JSON.readTree(entry.payloadJson()).path("verification");
+                                if (!proof.path("passed").asBoolean()
+                                        || !authorization
+                                                .path("sourceSha256")
+                                                .asText()
+                                                .equals(proof.path("sourceFingerprint").asText()))
+                                    throw new IllegalStateException(
+                                            "Verified-prefix source proof differs");
+                                verifiedRows =
+                                        Math.addExact(
+                                                verifiedRows, proof.path("expectedRows").asInt());
+                            } catch (IOException failure) {
+                                throw new IllegalArgumentException(
+                                        "Verified-prefix proof is invalid", failure);
+                            }
+                        }
+                    if (verifiedRows != authorization.path("submittedRows").asInt())
+                        throw new IllegalStateException("Verified-prefix row bound differs");
+                    try (var s =
+                            c.prepareStatement("SELECT frozen_json FROM sync_runs WHERE id=?")) {
+                        s.setString(1, runId);
+                        try (var rows = s.executeQuery()) {
+                            if (!rows.next() || !expectedFrozenJson.equals(rows.getString(1)))
+                                throw new IllegalStateException("Original frozen request changed");
+                        }
+                    }
+                    var visited = new HashSet<String>();
+                    String chain = runId;
+                    while (chain != null) {
+                        if (visited.size() >= 64 || !visited.add(chain))
+                            throw new IllegalStateException("Invalid cancellation chain");
+                        try (var s =
+                                c.prepareStatement(
+                                        "SELECT count(*) FROM sync_cancellations WHERE run_id=?")) {
+                            s.setString(1, chain);
+                            try (var rows = s.executeQuery()) {
+                                if (!rows.next() || rows.getLong(1) != 0)
+                                    throw new IllegalStateException("Run or parent cancelled");
+                            }
+                        }
+                        try (var s =
+                                c.prepareStatement(
+                                        "SELECT parent_run_id FROM sync_runs WHERE id=?")) {
+                            s.setString(1, chain);
+                            try (var rows = s.executeQuery()) {
+                                if (!rows.next())
+                                    throw new IllegalStateException("Parent authority absent");
+                                chain = rows.getString(1);
+                            }
+                        }
+                    }
+                    insertEntry(c, id, Kind.SLICE, runId, attemptId);
+                    String now = Instant.now().toString();
+                    try (var s =
+                            c.prepareStatement(
+                                    "UPDATE sync_entries SET state='RUNNING',revision=1,payload_json=?,updated_at=? WHERE id=? AND revision=0")) {
+                        s.setString(1, authorizationJson);
+                        s.setString(2, now);
+                        s.setString(3, id);
+                        if (s.executeUpdate() != 1)
+                            throw new IllegalStateException("Tail slice registration changed");
+                    }
+                    appendEvent(c, id, 1, SyncRunState.RUNNING, authorizationJson, now);
+                });
+    }
+
     /** 基于版本的条件更新与不可变事件追加在同一事务中提交。 */
     public void transition(String id, long expectedRevision, SyncRunState next, String payloadJson)
             throws SQLException {
