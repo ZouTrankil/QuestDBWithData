@@ -666,3 +666,7 @@ LLTC 只返回 298 行，未达到五年要求，保留待补。主采集在原�
 ### CA、Citrix 与 Rockwell Collins 历史
 
 补入三个原发行人的 10696 条 Tiingo 日线及三条永久映射，价格二十列、映射十八列均与原文、prepared、HTTP 和 PGWire 独立一致，旧价格及原 49 条映射保持。旧 CA 与后来复用该代码的 ETF 分开；CA、CTXS 停牌边界后的九条原报价继续留存待核，其中两条仍有正量。COL 保留 2018-11-26 的供应商原报价，未推定当日停牌时刻；DTV 候选请求为空，仍待补。来源、已执行的[只读查询](../tools/sql/us-historical-c-pre-acquisition.sql)、正式运行和恢复证明见 [CA、Citrix 与 Rockwell Collins 历史验收](decisions/2026-10-21-CA与Citrix和Rockwell历史验收.md)。全市场仍在采集。
+
+### APSI、BWMG 与 BSPK 的五年报价
+
+复用三个原 Yahoo 拒收响应，按 2021-10-16 至 2026-10-16 的明确窗口新增 3765 条报价，全部二十列独立回读一致，旧价格、52 条映射和发布期间的 API 账本保持。1378 条原零量报价保留，BSPK 的 2023-01-13 反向拆股因子为 `1/45`；这些报价不证明每日成交或五年相同业务历史。原长区间失败任务保持，[只读查询](../tools/sql/us-numeric-otc-five-year-quotes.sql)单独标出正量记录。两个原年度组的 708036 行也已完成独立核对；来源筛选、DIRECTV 第二个空源、原运行和恢复证据见 [三个 OTC 普通股的五年原报价](decisions/2026-10-21-三个OTC普通股五年报价.md)。全市场仍有未验收任务。
