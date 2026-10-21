@@ -185,6 +185,27 @@ final class DefaultReadBindings {
             int suspendVersion,
             int l2DailyVersion,
             int etfOverviewVersion) {
+        return registrations(
+                etfAdjVersion,
+                etfDailyVersion,
+                etfShareVersion,
+                stDailyVersion,
+                suspendVersion,
+                l2DailyVersion,
+                etfOverviewVersion,
+                1);
+    }
+
+    static List<ReadBindingCatalog.Registration<?>> registrations(
+            int etfAdjVersion,
+            int etfDailyVersion,
+            int etfShareVersion,
+            int stDailyVersion,
+            int suspendVersion,
+            int l2DailyVersion,
+            int etfOverviewVersion,
+            int backtestVersion) {
+        CnTradeDateLayout.fromVersion(backtestVersion);
         CnTradeDateLayout.fromVersion(etfOverviewVersion);
         var l2Layout = CnTradeDateLayout.fromVersion(l2DailyVersion);
         var l2Mapper = new L2DailyFeaturesMapper();
@@ -197,6 +218,12 @@ final class DefaultReadBindings {
                 .<ReadBindingCatalog.Registration<?>>map(
                         registration ->
                                 switch (registration.datasetId()) {
+                                    case "mv_backtest_daily" ->
+                                            typed(
+                                                    "mv_backtest_daily",
+                                                    backtestVersion,
+                                                    BacktestDailyViewValue.class,
+                                                    new BacktestDailyViewMapper()::fromValues);
                                     case "etf_adj" -> generic("etf_adj", version);
                                     case "etf_daily" -> generic("etf_daily", dailyVersion);
                                     case "etf_share" -> generic("etf_share", shareVersion);

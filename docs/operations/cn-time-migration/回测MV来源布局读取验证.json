@@ -1,0 +1,85 @@
+{
+  "日期": "2026-10-21",
+  "基线": "7eeef063ad6e304241e9520753c37749b93b429b",
+  "结论": "回测 MV 显式停牌/ST 来源布局读取已接通；正式迁移未执行",
+  "布局组合": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      2
+    ]
+  ],
+  "验证范围": [
+    "原定义与 SQL 原件保留",
+    "四种来源布局完整定义往返与 SQL 逆映射逐字等价",
+    "当前作用域的类型化仓库与同版读取注册",
+    "真实 Spring 装配不访问数据库或创建账本",
+    "根配置默认值、标准环境覆盖和市场隔离",
+    "错版日期键、指定列、TIMESTAMP 精度变化拒绝",
+    "普通刷新不可伪装 canonical MV，关联表晚提交继续阻断",
+    "改名数据集不能跳过原生读取保护"
+  ],
+  "全项目离线": {
+    "tests": 5043,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 4,
+    "exitCode": 0,
+    "failuresByCase": []
+  },
+  "离线原报告": ".gradle/offline-checks/20261021T012828219834Z",
+  "本地归档": "var/cn-backtest-layout-verification-20261021/offline-reports.tar.gz",
+  "归档SHA256": "e6674b9dda931ffa63c15a997045482fe7311c825db009f8c1eed2cb011ab383",
+  "格式与import": {
+    "Java文件数": 2124,
+    "字面量值核对": "通过",
+    "日志": "var/cn-backtest-layout-verification-20261021/cn-backtest-layout-format.log"
+  },
+  "检查": {
+    "architectureTest": "通过",
+    "verifyModuleBoundaries": "通过",
+    "verifyDependencyVersionCompatibility": "通过",
+    "verifyBatchDistributionDatabaseDrivers": "通过",
+    "CN数据与主策略distZip": "通过",
+    "两份发行包公开配置扫描": "通过",
+    "修改文档链接与105对象CSV结构": "通过"
+  },
+  "原SQL路径": "markets/cn/data/src/main/resources/sql/mv_backtest_daily.sql",
+  "原SQLSHA256": "18c5c20b1da904d8a2bf3cfb1814974c71deb77315fff4d0777ed8cc45c858ba",
+  "本批Java文件": {
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/BacktestDailyLayoutConfiguration.java": "b79dedeaeb139598397fb6c283fbd1855f628df42eb6fb10ad57e2a0280233a3",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/DefaultReadBindings.java": "041ba4de6e8ad4101ae166577cff6116fededcf742c636b87f448a657af87cef",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/config/ReadGroupConfiguration.java": "7fe672e6006cf97db1f393685e342655c62f0954e9632243dfd262e6a6cb2720",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/derived/storage/BacktestDailyViewReadRepository.java": "b90be71acb56c66a8579c100cda85ada3e43cf6ddb70e20bef07ef349d81122a",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/repository/BacktestDailyMaterializationReadGuard.java": "298933eb3043d14877cad7f592885c7b507b5a15bcec9db078db1ac9ba812496",
+    "markets/cn/data/src/main/java/com/zoutrankil/data/repository/BacktestDailyMaterializedViewPort.java": "0a447a615a780db24f32175d4b7070bc0e1b6f6449f45de6d1a97d77cd9de61f",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/bootstrap/ProjectConfigurationTest.java": "b2fb4c96a13d88a508cbd425ef48194baaeb289437ace93a8b30f91b4ac8c459",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/config/BacktestDailyLayoutTest.java": "5278c72ce7138855c3c60887dc2fc2bcd88c1c8af1e73357fe8a553834e9ac89",
+    "markets/cn/data/src/test/java/com/zoutrankil/data/repository/BacktestDailyMaterializedViewPortTest.java": "4b423728643fcef6f17c4e333fb72f2053ebcc00596300208080ab5ef84b5cc5",
+    "markets/cn/src/main/java/com/zoutrankil/data/domain/derived/BacktestDailyScope.java": "d461f153e556c18b0d39509b875ae0c955a4d2424e7e9ee399f66e822c6f2468"
+  },
+  "发行包": {
+    "build/modules/markets/cn/data-app/_output/distributions/cn-data-0.1.0.zip": "6e9865c76f98832f940c536f7189ef5dc377f3dafecd843fe0f1fe6d4ae87a5d",
+    "build/modules/markets/cn/main-strategy-runtime/_output/distributions/main-strategy-0.1.0.zip": "85e0449bf358c4c63cf3aaea28b4930fbe122d4a6b2f4107b73ed3fdfca56880"
+  },
+  "nativeQuestDbExecuted": false,
+  "formalMigrationExecuted": false,
+  "formalSourceCoverageVerified": false,
+  "剩余": [
+    "Backtest MV 私有实库完整字段、关联修订与分页验收",
+    "因子、情绪和市场状态的直接读取及冻结恢复布局",
+    "完整来源与独立模型参考",
+    "原部署、账本/锁、消费者协调及正式物理迁移"
+  ]
+}

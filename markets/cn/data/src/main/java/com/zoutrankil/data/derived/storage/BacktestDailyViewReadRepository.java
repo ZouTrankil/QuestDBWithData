@@ -7,10 +7,11 @@ import com.zoutrankil.data.domain.DatasetReadCursor;
 import com.zoutrankil.data.domain.DatasetReadPage;
 import com.zoutrankil.data.domain.DatasetReadQuery;
 import com.zoutrankil.data.domain.derived.BacktestDailyKey;
-import com.zoutrankil.data.domain.derived.BacktestDailyViewDataset;
+import com.zoutrankil.data.domain.derived.BacktestDailyScope;
 import com.zoutrankil.data.domain.derived.BacktestDailyViewValue;
 import com.zoutrankil.data.repository.QuestDbBoundedReader;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -21,15 +22,22 @@ import java.util.Objects;
 @Repository
 public class BacktestDailyViewReadRepository implements DatasetImplementation {
     private final QuestDbBoundedReader reader;
+    private final BacktestDailyScope scope;
     private final BacktestDailyViewMapper mapper = new BacktestDailyViewMapper();
 
     public BacktestDailyViewReadRepository(QuestDbBoundedReader reader) {
+        this(reader, BacktestDailyScope.LEGACY);
+    }
+
+    @Autowired
+    public BacktestDailyViewReadRepository(QuestDbBoundedReader reader, BacktestDailyScope scope) {
         this.reader = Objects.requireNonNull(reader);
+        this.scope = Objects.requireNonNull(scope);
     }
 
     @Override
     public DatasetDefinition definition() {
-        return BacktestDailyViewDataset.DEFINITION;
+        return scope.definition();
     }
 
     public DatasetReadPage<BacktestDailyViewValue> findPage(DatasetReadQuery query) {

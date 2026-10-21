@@ -1,6 +1,7 @@
 package com.zoutrankil.data.repository;
 
 import com.zoutrankil.data.domain.DatasetDefinition;
+import com.zoutrankil.data.domain.derived.BacktestDailyScope;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -27,13 +28,17 @@ public final class BacktestDailyMaterializationReadGuard {
     }
 
     public static boolean applies(DatasetDefinition definition) {
-        return BacktestDailyMaterializedViewPort.NAME.equals(definition.objectName());
+        return BacktestDailyMaterializedViewPort.NAME.equals(definition.datasetId())
+                || BacktestDailyMaterializedViewPort.NAME.equals(definition.objectName())
+                || definition.objectName().startsWith(BacktestDailyScope.V2_OUTPUT_PREFIX);
     }
 
     public static String version(JdbcTemplate jdbc, DatasetDefinition definition) {
         if (!applies(definition)
                 || definition.objectKind() != DatasetDefinition.ObjectKind.MATERIALIZED_VIEW)
             throw new IllegalArgumentException("The native backtest MV is required");
-        return new BacktestDailyMaterializedViewPort(jdbc).sourceVersion();
+        return new BacktestDailyMaterializedViewPort(
+                        jdbc, BacktestDailyScope.fromDefinition(definition))
+                .sourceVersion();
     }
 }

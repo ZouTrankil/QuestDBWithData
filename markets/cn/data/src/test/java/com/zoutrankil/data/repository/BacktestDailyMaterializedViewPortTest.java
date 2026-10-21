@@ -16,6 +16,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.zoutrankil.data.domain.derived.BacktestDailyScope;
 import com.zoutrankil.data.domain.derived.BacktestDailyViewDataset;
 
 import org.junit.jupiter.api.Test;
@@ -72,21 +73,30 @@ class BacktestDailyMaterializedViewPortTest {
     private final Map<String, List<Map<String, Object>>> commits = new HashMap<>();
 
     private void fixture(BiConsumer<BacktestDailyMaterializedViewPort, JdbcTemplate> check) {
-        for (String name :
-                List.of(
-                        "mv_backtest_daily",
-                        "stk_factor",
-                        "stk_limit",
-                        "stk_suspend",
-                        "stk_st_daily")) {
+        fixture(BacktestDailyScope.LEGACY, check);
+    }
+
+    private void fixture(
+            BacktestDailyScope scope,
+            BiConsumer<BacktestDailyMaterializedViewPort, JdbcTemplate> check) {
+        clocks.clear();
+        commits.clear();
+        view.put(
+                "view_sql",
+                BacktestDailyMaterializedViewPort.querySql(
+                        BacktestDailyMaterializedViewPort.createSql(scope)));
+        view.put("view_table_dir_name", scope.outputTable() + "~90");
+        var names = new ArrayList<>(List.of(scope.outputTable()));
+        names.addAll(scope.sources());
+        for (String name : names) {
             var row = new HashMap<String, Object>();
             row.put("table_name", name);
             row.put("id", clocks.size() + 1L);
             row.put("directoryName", name + "~1");
-            row.put("table_type", name.equals("mv_backtest_daily") ? "M" : "T");
+            row.put("table_type", name.equals(scope.outputTable()) ? "M" : "T");
             row.put("walEnabled", true);
             row.put("table_suspended", false);
-            row.put("dedup", !name.equals("mv_backtest_daily"));
+            row.put("dedup", !name.equals(scope.outputTable()));
             row.put("writerTxn", 10L);
             row.put("sequencerTxn", 10L);
             row.put("bufferedTxnSize", 0L);
@@ -116,29 +126,43 @@ class BacktestDailyMaterializedViewPortTest {
                         (jdbc, context) -> {
                             when(jdbc.queryForList(
                                             contains("FROM materialized_views()"),
-                                            eq("mv_backtest_daily")))
+                                            eq(scope.outputTable())))
                                     .thenReturn(List.of(view));
                             when(jdbc.queryForList(contains("FROM tables()")))
                                     .thenAnswer(ignored -> clocks);
                             when(jdbc.queryForList(contains("FROM table_columns(")))
                                     .thenReturn(columns);
-                            for (String name : BacktestDailyMaterializedViewPort.SOURCES) {
+                            for (String name : scope.sources()) {
                                 when(jdbc.queryForList(
                                                 contains("wal_transactions('" + name + "')")))
                                         .thenAnswer(ignored -> commits.get(name));
                                 String date =
-                                        name.equals("stk_suspend") || name.equals("stk_st_daily")
-                                                ? "timestamp"
-                                                : "trade_date";
+                                        name.equals(scope.suspendTable())
+                                                ? scope.suspendDate()
+                                                : name.equals(scope.stTable())
+                                                        ? scope.stDate()
+                                                        : "trade_date";
                                 when(jdbc.queryForList(
                                                 contains("FROM table_columns('" + name + "')")))
                                         .thenReturn(
                                                 List.of(
-                                                        Map.of("column", date),
-                                                        Map.of("column", "ts_code")));
+                                                        Map.of(
+                                                                "column",
+                                                                date,
+                                                                "type",
+                                                                "TIMESTAMP",
+                                                                "designated",
+                                                                true),
+                                                        Map.of(
+                                                                "column",
+                                                                "ts_code",
+                                                                "type",
+                                                                "SYMBOL",
+                                                                "designated",
+                                                                false)));
                             }
                         })) {
-            var port = new BacktestDailyMaterializedViewPort(source);
+            var port = new BacktestDailyMaterializedViewPort(source, scope);
             check.accept(port, construction.constructed().getFirst());
         }
     }
@@ -239,6 +263,93 @@ class BacktestDailyMaterializedViewPortTest {
                     when(jdbc.queryForList(contains("FROM table_columns('stk_suspend')")))
                             .thenReturn(List.of(Map.of("column", "timestamp")));
                     assertThrows(IllegalStateException.class, port::sourceState);
+                    verify(jdbc, never()).execute(anyString());
+                });
+    }
+
+    @Test
+    void mixedSourceLayoutsUseTheirFrozenTablesAndRejectOldSqlOrLateCommits() {
+        for (int suspend : List.of(1, 2))
+            for (int st : List.of(1, 2)) {
+                var scope =
+                        new BacktestDailyScope(
+                                "java_d011_stk_suspend_scope",
+                                suspend,
+                                "java_d012_stk_st_daily_scope",
+                                st,
+                                "java_backtest_v2_scope");
+                fixture(
+                        scope,
+                        (port, jdbc) -> {
+                            assertEquals(5, port.sourceState().tables().size());
+                            assertTrue(
+                                    port.sourceVersion()
+                                            .startsWith("questdb-mv:" + scope.outputTable() + ":"));
+                            view.put("view_sql", BacktestDailyMaterializedViewPort.QUERY_SQL);
+                            assertThrows(IllegalStateException.class, port::sourceState);
+                            view.put(
+                                    "view_sql",
+                                    BacktestDailyMaterializedViewPort.querySql(
+                                            BacktestDailyMaterializedViewPort.createSql(scope)));
+                            commits.get(scope.stTable()).getFirst().put("committed", 1001L);
+                            var changed =
+                                    assertThrows(
+                                            BacktestDailyMaterializationReadGuard.NotReadyException
+                                                    .class,
+                                            port::sourceState);
+                            assertEquals(
+                                    BacktestDailyMaterializationReadGuard.NotReadyException.Reason
+                                            .SOURCES_CHANGED,
+                                    changed.reason());
+                            verify(jdbc, never()).execute(anyString());
+                        });
+            }
+    }
+
+    @Test
+    void datePrecisionDesignationAndOldLayoutKeysCannotPassTheNewScope() {
+        var scope =
+                new BacktestDailyScope(
+                        "stk_suspend", 2, "stk_st_daily", 2, "java_backtest_v2_keys");
+        fixture(
+                scope,
+                (port, jdbc) -> {
+                    for (var bad :
+                            List.<Map<String, Object>>of(
+                                    Map.of(
+                                            "column",
+                                            "trade_date",
+                                            "type",
+                                            "TIMESTAMP_NS",
+                                            "designated",
+                                            true),
+                                    Map.of(
+                                            "column",
+                                            "trade_date",
+                                            "type",
+                                            "TIMESTAMP",
+                                            "designated",
+                                            false),
+                                    Map.of(
+                                            "column",
+                                            "timestamp",
+                                            "type",
+                                            "TIMESTAMP",
+                                            "designated",
+                                            true))) {
+                        when(jdbc.queryForList(contains("FROM table_columns('stk_suspend')")))
+                                .thenReturn(
+                                        List.of(
+                                                bad,
+                                                Map.of(
+                                                        "column",
+                                                        "ts_code",
+                                                        "type",
+                                                        "SYMBOL",
+                                                        "designated",
+                                                        false)));
+                        assertThrows(IllegalStateException.class, port::sourceState);
+                    }
                     verify(jdbc, never()).execute(anyString());
                 });
     }

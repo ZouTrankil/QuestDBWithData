@@ -2,6 +2,14 @@
 spring.config.activate.on-profile: market-cn
 app:
   materialized-views:
+    backtest:
+      # 只选择已创建且核验通过的读取对象，不发送 DDL 或刷新。
+      layout-version: 1
+      suspend-table: stk_suspend
+      suspend-layout-version: 1
+      st-table: stk_st_daily
+      st-layout-version: 1
+      v2-output-table: java_backtest_v2_current
     etf-overview:
       # 新版单独保存输出；原正式 MV 和原刷新凭证不改。
       layout-version: 1

@@ -148,3 +148,5 @@ ST 日频的 `app.sync.stk-st-daily-schema-version` 位于 `config/markets/cn.ym
 L2 日特征与散户情绪 MV 共用 `app.sync.l2-daily-features-schema-version`，默认 `1`，环境覆盖为 `APP_SYNC_L2_DAILY_FEATURES_SCHEMA_VERSION`。L2 同步目标 `app.sync.l2-daily-features.target-table` 默认空，读取默认正式 `l2_daily_features`；显式设置该目标也会覆盖读取，保留原行为。v2 须指向 `java_d086_l2_daily_features_` 加非空后缀的隔离表。MV v2 目标 `app.sync.retail-sentiment-daily.v2-target-table` 默认 `java_d098_mv_retail_sentiment_daily_v2`，可用 `APP_SYNC_RETAIL_SENTIMENT_DAILY_V2_TARGET_TABLE` 覆盖。默认 v1 的 MV 仍绑定原正式来源和目标；正式 L2 摄取仍为 v1。配置不建表、不迁移数据、不替代写入准入，见[同版决定](decisions/2026-10-21-交易日存储布局分版.md#l2-配置与散户情绪-mv-同版)。
 
 ETF 概览默认 `app.materialized-views.etf-overview.layout-version=1`，保留原正式来源和输出。任一 ETF 来源选择日期布局 2，或概览显式选择 2，将逐侧读取配置中的源表，输出使用 `v2-output-table` 的专属命名空间。配置不代替实际表结构、来源或旧运行核验；改已安装 MV 的来源要选择新输出或协调迁移，见[布局与恢复规则](decisions/2026-10-21-ETF概览来源布局与日期核验证据.md)。
+
+回测 MV 的读取作用域由 `markets/cn.yml` 的 `app.materialized-views.backtest` 选择，默认 v1。需要读取独立新 MV 时显式选择 `layout-version: 2`，分别声明停牌/ST 的表与布局版本；配置不会创建或刷新 MV。同步目标改配置不会自动重绑原消费者，范围见[回测 MV 来源布局](decisions/2026-10-21-回测MV停牌与ST来源布局.md)。

@@ -389,6 +389,39 @@ class ProjectConfigurationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"data", "main-strategy"})
+    void backtestReadLayoutUsesMarketDefaultsAndStandardEnvironmentOverrides(String profile)
+            throws Exception {
+        var file = configuration("");
+        var variables = new HashMap<String, String>();
+        variables.put("SPRING_CONFIG_LOCATION", file.toUri().toString());
+        variables.put("APP_LOCAL_CONFIG", "optional:file:" + directory.resolve("absent.yml"));
+        var env = ProjectConfiguration.load(profile, variables);
+        assertEquals(
+                "1", env.getRequiredProperty("app.materialized-views.backtest.layout-version"));
+        assertEquals(
+                "stk_suspend",
+                env.getRequiredProperty("app.materialized-views.backtest.suspend-table"));
+        assertEquals(
+                "stk_st_daily",
+                env.getRequiredProperty("app.materialized-views.backtest.st-table"));
+        assertEquals(
+                "java_backtest_v2_current",
+                env.getRequiredProperty("app.materialized-views.backtest.v2-output-table"));
+        variables.put("APP_MATERIALIZED_VIEWS_BACKTEST_LAYOUT_VERSION", "2");
+        variables.put("APP_MATERIALIZED_VIEWS_BACKTEST_SUSPEND_LAYOUT_VERSION", "2");
+        env = ProjectConfiguration.load(profile, variables);
+        assertEquals(
+                "2", env.getRequiredProperty("app.materialized-views.backtest.layout-version"));
+        assertEquals(
+                "2",
+                env.getRequiredProperty("app.materialized-views.backtest.suspend-layout-version"));
+        assertFalse(
+                ProjectConfiguration.load("market-us", variables)
+                        .containsProperty("app.materialized-views.backtest.st-table"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"data", "main-strategy"})
     void stockStDailyLayoutUsesTheMarketDefaultAndEnvironmentOverride(String profile)
             throws Exception {
         var file = configuration("");
