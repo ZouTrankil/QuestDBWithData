@@ -662,3 +662,7 @@ LLTC 只返回 298 行，未达到五年要求，保留待补。主采集在原�
 ### BCR、BRCD、BMS 与旧 BID 历史
 
 补入四家原发行人的 12852 条正量日线及四条永久映射，分别覆盖 2006 年至 2017 或 2019 年，全部字段经独立回读一致。并购边界后的 23 条原报价保持待核，其中 BRCD 一条仍报告正量；没有把并购对价补成分红或拆股。旧 Sotheby’s 与当前 BID 的 64 条报价使用不同价格键，原记录保持；来源、已执行的[只读查询](../tools/sql/us-historical-b-pre-acquisition.sql)、写入保护和主队列恢复见 [四家历史发行人验收](decisions/2026-10-21-BCR与BRCD及BMS和旧BID历史.md)。全市场仍在采集。
+
+### CA、Citrix 与 Rockwell Collins 历史
+
+补入三个原发行人的 10696 条 Tiingo 日线及三条永久映射，价格二十列、映射十八列均与原文、prepared、HTTP 和 PGWire 独立一致，旧价格及原 49 条映射保持。旧 CA 与后来复用该代码的 ETF 分开；CA、CTXS 停牌边界后的九条原报价继续留存待核，其中两条仍有正量。COL 保留 2018-11-26 的供应商原报价，未推定当日停牌时刻；DTV 候选请求为空，仍待补。来源、已执行的[只读查询](../tools/sql/us-historical-c-pre-acquisition.sql)、正式运行和恢复证明见 [CA、Citrix 与 Rockwell Collins 历史验收](decisions/2026-10-21-CA与Citrix和Rockwell历史验收.md)。全市场仍在采集。
