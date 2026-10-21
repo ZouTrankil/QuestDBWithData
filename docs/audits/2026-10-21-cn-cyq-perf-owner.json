@@ -1,0 +1,218 @@
+{
+  "scope": "本轮确认九张表的代码及指定范围来源证据；不是正式全市场或全历史验收",
+  "formalTablesCompleted": 0,
+  "cyqPerf": {
+    "ownerImplemented": true,
+    "sourceOnlyResult": {
+      "rows": 2,
+      "sourceCoverageVerified": true,
+      "questdbWritten": false,
+      "targetDataVerified": false,
+      "manifest": "file:///Users/Apple/zq/fun/QuestDBWithData/var/sync-evidence/cyq-source-4b3628de-b899-4486-a129-6f132f618308/source-manifest.json",
+      "targetId": "static-v2-346c99704f3823070ef793e33ad26d9e11c6a1a9b98e46e4e6869125f012db34"
+    },
+    "manifest": "var/sync-evidence/cyq-source-4b3628de-b899-4486-a129-6f132f618308/source-manifest.json",
+    "manifestSha256": "d2490e4f374fe3ba427823aef25baf82f91034618d1a55dedd10c848876d85e0",
+    "sourceEvidence": [
+      {
+        "code": "000001.SZ",
+        "artifact": "var/sync-evidence/cyq-source-4b3628de-b899-4486-a129-6f132f618308/sources/c14ee35d18b4f4462af0069c831c40a51032a4bf85359a88a5edf45671ee31da.json",
+        "sha256": "c14ee35d18b4f4462af0069c831c40a51032a4bf85359a88a5edf45671ee31da",
+        "fields": 11,
+        "rows": 1,
+        "date": "2026-10-16"
+      },
+      {
+        "code": "600000.SH",
+        "artifact": "var/sync-evidence/cyq-source-4b3628de-b899-4486-a129-6f132f618308/sources/bc8941f652b74f6fa26aa324dbae6da4ce00619e339d72059c0ff49c62e6f13d.json",
+        "sha256": "bc8941f652b74f6fa26aa324dbae6da4ce00619e339d72059c0ff49c62e6f13d",
+        "fields": 11,
+        "rows": 1,
+        "date": "2026-10-16"
+      }
+    ],
+    "nativeMvInspection": [
+      {
+        "view": "mv_backtest_daily",
+        "base": "stk_limit",
+        "sqlSha256": "5b7a88f364d664f7127e8990a858bf3d594f3423f8019f18e0933c1ffd1b3b8b",
+        "referencesCyqPerf": false
+      },
+      {
+        "view": "mv_retail_sentiment_daily",
+        "base": "l2_daily_features",
+        "sqlSha256": "652e33ddf2ed67f9ab1b8aff06f72176a5ae9d556e51157d0d0f44e5b34eadc0",
+        "referencesCyqPerf": false
+      },
+      {
+        "view": "mv_market_breadth_daily",
+        "base": "stk_factor",
+        "sqlSha256": "f4cb5f33251bebacbd76f805973d7edb922549aec398ef0a8c13d107f70f7c88",
+        "referencesCyqPerf": false
+      },
+      {
+        "view": "mv_etf_market_overview_daily",
+        "base": "etf_share",
+        "sqlSha256": "4d94b690f6de43e6a8cb8b5605e24c4411ca55cd79effba67693158c02056c50",
+        "referencesCyqPerf": false
+      }
+    ],
+    "formalWritingExecuted": false,
+    "dailyScheduleImplemented": false
+  },
+  "existingSourceSnapshots": [
+    {
+      "dataset": "cn_cpi",
+      "requestedDate": "2026-09-01",
+      "artifact": "var/cn-collection-probes/2026-10-20/sources/d8eb02225b1326c890f7235caff2d1fef5b74826b007a2106849b29f3dcfedc1.json",
+      "artifactSha256": "d8eb02225b1326c890f7235caff2d1fef5b74826b007a2106849b29f3dcfedc1",
+      "rows": 1,
+      "fields": 13,
+      "sourceSnapshotChecked": true,
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "cn_ppi",
+      "requestedDate": "2026-09-01",
+      "artifact": "var/cn-collection-probes/2026-10-20/sources/6de9a81c325ea0cb521e8dea144a9d1659b70f8a6094896708f511e6e9efb04c.json",
+      "artifactSha256": "6de9a81c325ea0cb521e8dea144a9d1659b70f8a6094896708f511e6e9efb04c",
+      "rows": 1,
+      "fields": 31,
+      "sourceSnapshotChecked": true,
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "cn_pmi",
+      "requestedDate": "2026-09-01",
+      "artifact": "var/cn-collection-probes/2026-10-20/sources/f39c046fd5125405383c1962882976535839f3b5039b47ceb31cecdd77430adf.json",
+      "artifactSha256": "f39c046fd5125405383c1962882976535839f3b5039b47ceb31cecdd77430adf",
+      "rows": 1,
+      "fields": 60,
+      "sourceSnapshotChecked": true,
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "cn_m",
+      "requestedDate": "2026-09-01",
+      "artifact": "var/cn-collection-probes/2026-10-20/sources/e6ee23263e84e2364e95cc45546577c142c24eced8cb4ccb31710fa05e094a40.json",
+      "artifactSha256": "e6ee23263e84e2364e95cc45546577c142c24eced8cb4ccb31710fa05e094a40",
+      "rows": 1,
+      "fields": 10,
+      "sourceSnapshotChecked": true,
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "cn_gdp",
+      "requestedDate": "2026-09-30",
+      "artifact": "var/cn-collection-probes/2026-10-20/sources/2042bf0cf4c2bf50c86c0c92330f28339faef3058734cd51b5f401c6061ffd11.json",
+      "artifactSha256": "2042bf0cf4c2bf50c86c0c92330f28339faef3058734cd51b5f401c6061ffd11",
+      "rows": 1,
+      "fields": 10,
+      "sourceSnapshotChecked": true,
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "sf_month",
+      "requestedDate": "2026-09-01",
+      "artifact": "var/cn-collection-probes/2026-10-20/social-financing/sources/18cdfa4b69dd8f79abc5e992d270acb053fb0a8fb99bbe510938ed39118c1027.json",
+      "artifactSha256": "18cdfa4b69dd8f79abc5e992d270acb053fb0a8fb99bbe510938ed39118c1027",
+      "rows": 1,
+      "fields": 4,
+      "sourceSnapshotChecked": true,
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "shibor",
+      "requestedDate": "2026-10-19",
+      "artifact": "var/cn-collection-probes/2026-10-20/sources/52039b8d7c74ea287c6631eb184cc09c1732232c8bf2536226497704e0292a0f.json",
+      "artifactSha256": "52039b8d7c74ea287c6631eb184cc09c1732232c8bf2536226497704e0292a0f",
+      "rows": 1,
+      "fields": 9,
+      "sourceSnapshotChecked": true,
+      "formalAcceptance": false
+    },
+    {
+      "dataset": "hibor",
+      "requestedDate": "2026-10-16",
+      "artifact": "var/cn-collection-probes/2026-10-20/rates-followup/sources/8d4093f6d1f75bd6735b22205049d2bfde328449e3822c1b8b30faa5a8e02437.json",
+      "artifactSha256": "8d4093f6d1f75bd6735b22205049d2bfde328449e3822c1b8b30faa5a8e02437",
+      "rows": 1,
+      "fields": 9,
+      "sourceSnapshotChecked": true,
+      "formalAcceptance": false
+    }
+  ],
+  "tests": [
+    {
+      "class": "com.zoutrankil.market.cn.chips.CyqPerfConfigurationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.market.cn.macro.MacroObservationDailySyncTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.market.cn.chips.CyqPerfTargetTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.market.cn.chips.CyqPerfSyncTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.market.cn.macro.MacroObservationSyncTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.market.cn.rates.InterestObservationDailySyncTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.data.cli.CliCommandRegistryTest",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "class": "com.zoutrankil.market.cn.rates.InterestObservationSyncTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "architectureTest": true,
+  "verifyModuleBoundaries": true,
+  "localJavaFilesFormatted": 12,
+  "distribution": {
+    "path": "build/modules/markets/cn/data-app/_output/distributions/cn-data-0.1.0.zip",
+    "sha256": "f63fd8735e72df542cda6df3112566a9c7664525e9e8edf50e58531e44e56fdc",
+    "ownerAndCliClassesPresent": true,
+    "publicConfigScanPassed": true
+  },
+  "remaining": [
+    "cyq_perf 原 writer/账本/锁及调度归属尚未核对，正式写入未执行",
+    "两只证券单日成功不证明全市场、完整历史或连续更新",
+    "当前为有限单日 CLI，尚未实现自动日批，不能声称正式采集任务已全部完成",
+    "其他八张表核验的是既有来源归档，不是本轮重新请求全部历史"
+  ]
+}

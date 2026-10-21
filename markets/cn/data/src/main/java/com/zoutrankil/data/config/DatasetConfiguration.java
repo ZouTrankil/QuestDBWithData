@@ -50,6 +50,7 @@ public class DatasetConfiguration {
                                 "financial.code_period",
                                 "macro.observation_periods12",
                                 "interest.observation_days31",
+                                "cyq_perf.explicit_codes_day",
                                 "cn_bond_yield_curve.range31",
                                 "stock_basic.snapshot",
                                 "exchange_calendar.year",

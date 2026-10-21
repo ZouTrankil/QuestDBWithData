@@ -12,6 +12,7 @@ public final class CliUsage {
                 + "show-financial-daily-queue OR "
                 + "plan-interest-observations|run-interest-observations --dataset ID --from DATE --to DATE --logical-date DATE [--mode MODE] OR resume-interest-observations --dataset ID --run RUN_ID OR "
                 + "plan-macro-observations|run-macro-observations --dataset ID --from PERIOD --to PERIOD --logical-date DATE [--mode MODE] OR resume-macro-observations --dataset ID --run RUN_ID OR "
+                + "plan-cyq-perf|check-cyq-perf-source|run-cyq-perf --codes CODE[,CODE] --date DATE --logical-date DATE [--mode MODE] OR resume-cyq-perf --run RUN_ID OR "
                 + "plan-financial-growth-repair|run-financial-growth-repair --source CAPTURED_VIP_JSON --logical-date DATE --evidence-root NEW_DIRECTORY OR "
                 + "compute-l2-factor-panel --history-from DATE --from DATE --to DATE --factors ID,ID --output PATH [--pools ID,ID --receipt-directory DIRECTORY] [--evidence-output PATH | --evidence-directory DIRECTORY] OR "
                 + "record-factor-pool-coverage|inspect-factor-pool-coverage --artifact PATH --store DIRECTORY OR "
