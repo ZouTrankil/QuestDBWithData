@@ -1,0 +1,54 @@
+{
+  "formalAcceptance": false,
+  "questdbWritten": false,
+  "scope": "来源准备检查；不代表 owner 已实现或目标已验收",
+  "checks": [
+    {
+      "dataset": "fut_holding",
+      "code": "IF",
+      "date": "2026-10-16",
+      "questdbWritten": false,
+      "collected": {
+        "fingerprint": "0bf4cf850ba9d4c2558a37929791a6f414067b5e48d52cfe4d367a67a8330306",
+        "artifact": "var/cn-futures-source-check-20261021/sources/0bf4cf850ba9d4c2558a37929791a6f414067b5e48d52cfe4d367a67a8330306.json",
+        "rows": 0,
+        "pages": 1,
+        "completeCoverage": true,
+        "scopeIdentity": "8d2941ac00da26a8067ca399066a5dd9051a729dcf9dd9778d6f540cb359e2e5",
+        "state": "VERIFYING"
+      }
+    },
+    {
+      "dataset": "fut_holding",
+      "code": "IF",
+      "date": "2026-09-21",
+      "questdbWritten": false,
+      "collected": {
+        "fingerprint": "ee015597ef36d7bdba0312c3baa2f8de6e1c9bee15d9618b90af231ebcb3d73d",
+        "artifact": "var/cn-futures-source-check-20261021/sources/ee015597ef36d7bdba0312c3baa2f8de6e1c9bee15d9618b90af231ebcb3d73d.json",
+        "rows": 0,
+        "pages": 1,
+        "completeCoverage": true,
+        "scopeIdentity": "8d2941ac00da26a8067ca399066a5dd9051a729dcf9dd9778d6f540cb359e2e5",
+        "state": "VERIFYING"
+      }
+    },
+    {
+      "dataset": "fut_basic",
+      "code": "CFFEX",
+      "date": "2026-10-16",
+      "questdbWritten": false,
+      "collected": {
+        "fingerprint": "a551878d87f07f36c24ac0fa1b33cfe1cdd6a5140fc51c6222c04671870b2670",
+        "artifact": "var/cn-futures-source-check-20261021/sources/a551878d87f07f36c24ac0fa1b33cfe1cdd6a5140fc51c6222c04671870b2670.json",
+        "rows": 696,
+        "pages": 1,
+        "completeCoverage": true,
+        "scopeIdentity": "802a75faf4da22bb95dae05707a1d2a37f611ee407fc43afa4cf7c425a5f030a",
+        "state": "VERIFYING"
+      }
+    }
+  ],
+  "futHolding": "IF/CFFEX 两个日期都为空，保留空结果；缺正向记录以核对期货公司覆盖、三字段键和 LONG 数值，不算接通，不拿空源做正式迁移证明",
+  "futBasic": "CFFEX 当前标准合约快照 696 行；不是 2026-10-16 的历史挂牌快照。接口按 exchange 获取当前目录，不按 logicalDate 回溯，后续 owner 仍须实现；原 timestamp=1970-01-01 哨兵不能改成观察日期。"
+}

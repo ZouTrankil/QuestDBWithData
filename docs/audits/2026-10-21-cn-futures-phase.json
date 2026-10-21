@@ -1,0 +1,37 @@
+{
+  "scope": [
+    "fut_daily",
+    "fut_mapping",
+    "fut_settle",
+    "ft_limit"
+  ],
+  "formalAcceptance": false,
+  "questdbWritten": false,
+  "tests": {
+    "futures": 23,
+    "cyqPerf": 9,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "architectureTest": true,
+  "verifyModuleBoundaries": true,
+  "cnDataDistribution": true,
+  "packagedFuturesClasses": true,
+  "publicConfigScan": true,
+  "changedJavaFormatImportsLiteralsPassed": true,
+  "fullRegressionRun": false,
+  "globalFormatRun": false,
+  "nativeMv": {
+    "checked": 4,
+    "referencesToScope": [],
+    "artifact": "var/cn-futures-source-check-20261021/mv-inspection.json",
+    "sha256": "165a4db88d6ce999554495f57766228ada0049d906d3b5ed26cd15d3b7f600f0",
+    "refreshed": false
+  },
+  "consumerScope": "代码中的来源策略、模型、读绑定及旧 Batch；未找到仓内策略直接消费这四表，外部消费者和原部署归属仍未确认",
+  "distribution": "build/modules/markets/cn/data-app/_output/distributions/cn-data-0.1.0.zip",
+  "distributionSha256": "b316d7f29479d656e36ec98ed2e67130417a87b47385861c7bb247a1081a4da0",
+  "command": "./gradlew :markets:cn:data:test --tests *FuturesDay*Test --tests *CyqPerf*Test architectureTest verifyModuleBoundaries :markets:cn:data-app:distZip --offline --console=plain",
+  "next": "fut_holding 两次真实请求均为空，先不算接通验收；继续 fut_basic 的目录范围检查"
+}
