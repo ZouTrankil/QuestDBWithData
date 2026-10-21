@@ -18,7 +18,7 @@ import java.util.Set;
 
 /** 沿用期货原表与来源业务键；日期载体和技术观测时刻分别说明。 */
 public final class FuturesDayDefinition {
-    public static final Set<String> DATASETS = Set.of("fut_daily", "fut_mapping");
+    public static final Set<String> DATASETS = Set.of("fut_daily", "fut_mapping", "fut_settle");
 
     private FuturesDayDefinition() {}
 

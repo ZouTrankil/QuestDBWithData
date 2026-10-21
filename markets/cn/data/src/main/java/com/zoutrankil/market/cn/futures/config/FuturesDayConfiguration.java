@@ -59,6 +59,24 @@ public class FuturesDayConfiguration {
     }
 
     @Bean
+    FuturesDaySyncOwner futuresSettleOwner(
+            JdbcTemplate jdbc,
+            @Lazy QuestDB questdb,
+            TusharePageService pages,
+            @Value("${app.sync.ledger-path:var/sync-ledger.sqlite3}") String ledger) {
+        return new FuturesDaySyncOwner(
+                "fut_settle",
+                new QuestDbFuturesDayTarget("fut_settle", jdbc, questdb),
+                pages,
+                Path.of(ledger));
+    }
+
+    @Bean
+    ReadBindingCatalog.Registration<DatasetValues> futuresSettleRead() {
+        return ReadBindingCatalog.generic("fut_settle", 1);
+    }
+
+    @Bean
     @ConditionalOnNotWebApplication
     FuturesDayCommands futuresDayCommands(List<FuturesDaySyncOwner> owners) {
         return new FuturesDayCommands(owners);

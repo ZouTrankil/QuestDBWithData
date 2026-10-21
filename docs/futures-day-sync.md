@@ -27,3 +27,5 @@
 本轮 `IF2612.CFX` 单日真实来源 16 个业务字段、原表 17 列及 WAL 检查通过，未执行正式写入。8 项相关回归通过；架构、边界和发行包在本期货批次末统一检查。[证据](audits/2026-10-21-cn-fut-daily-owner.json)不代表全市场、全历史或正式接管完成。
 
 `fut_mapping` 同样使用上述四个命令，替换 `--dataset fut_mapping`，连续合约示例为 `--code IF.CFX`。真实单日来源及目标预检通过，13 项相关回归通过；[证据](audits/2026-10-21-cn-fut-mapping-owner.json)仍属于有限范围检查，未正式写入。
+
+`fut_settle` 同样使用上述四个命令，替换 `--dataset fut_settle`，到期合约示例为 `--code IF2612.CFX`。真实单日来源及目标预检通过，18 项相关回归通过；[证据](audits/2026-10-21-cn-fut-settle-owner.json)仍属于有限范围检查，未正式写入。
